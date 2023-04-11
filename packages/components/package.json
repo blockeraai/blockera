@@ -1,0 +1,25 @@
+{
+	"name": "@publisher/components",
+	"version": "1.0.0",
+	"description": "UI components for Publisher Core.",
+	"author": "The Publisher Contributors",
+	"license": "ISC",
+	"keywords": [
+		"publisher",
+		"gutenberg",
+		"components"
+	],
+	"homepage": "https://gitlab.com/better-projects/publisher-fse/publisher-core/packages/components/-/blob/main/README.md",
+	"repository": {
+		"type": "git",
+		"url": "https://gitlab.com/better-projects/publisher-fse/publisher-core",
+		"directory": "packages/components"
+	},
+	"bugs": {
+		"url": "https://gitlab.com/better-projects/publisher-fse/publisher-core/-/issues"
+	},
+	"engines": {
+		"node": ">=12"
+	},
+	"main": "src/index.js"
+}

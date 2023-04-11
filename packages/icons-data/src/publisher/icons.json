@@ -1,0 +1,37 @@
+[
+	{
+		"name": "publisher",
+		"iconType": "publisher",
+		"tags": [
+			"pub",
+			"publisher",
+			"theme",
+			"block",
+			"wordpress theme",
+			"gutenberg block",
+			"wordpress block editor"
+		]
+	},
+	{
+		"name": "publisherBlue",
+		"iconType": "publisher",
+		"tags": [
+			"pub",
+			"publisher blue",
+			"theme",
+			"blue",
+			"wordpress theme",
+			"gutenberg block",
+			"wordpress block editor",
+			"publisher blocks"
+		]
+	},
+	{
+		"name": "frame",
+		"iconType": "publisher",
+		"tags": [
+			"lines",
+			"berger"
+		]
+	}
+]
