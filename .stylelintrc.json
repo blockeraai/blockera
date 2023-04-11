@@ -1,0 +1,10 @@
+{
+	"extends": "@wordpress/stylelint-config",
+	"rules": {
+		"string-quotes": "double",
+		"function-url-quotes": "always",
+		"no-descending-specificity": null,
+		"selector-class-pattern": null,
+		"indentation": null
+	}
+}

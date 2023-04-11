@@ -1,0 +1,18 @@
+{
+    "name": "publisher/core",
+    "description": "A new Publisher editor experience base on Gutenberg core modules.",
+    "type": "library",
+    "license": "ISC",
+    "autoload": {
+        "psr-4": {
+            "Publisher\\Core\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "The Publisher Contributors"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

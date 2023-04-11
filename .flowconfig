@@ -1,0 +1,19 @@
+[ignore]
+.*/node_modules/.*/test/.*/
+.*/vendor/.*
+.*/libs/.*
+.*/dist/.*
+.*/tests/.*
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+
+react.runtime=automatic
+module.name_mapper='^Root' ->'<PROJECT_ROOT>/src'
+
+[strict]
