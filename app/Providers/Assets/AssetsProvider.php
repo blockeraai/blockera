@@ -7,7 +7,6 @@ class AssetsProvider {
 	protected static $assets= [
 		'icons',
 		'controls',
-		'icons-data',
 		'components',
 	];
 
