@@ -146,12 +146,16 @@ export function getRecommendation({
 
 		return Icon({
 			size,
+			icon: iconEntity,
 			iconname: row.name,
 			type: row.iconType,
-			icon: iconEntity,
-			datatype: row.name,
 			key: `recommended-icon-${index}`,
-			onClick: (event) => handleOnIconClick(event, row.iconType),
+			onClick: (event) =>
+				handleOnIconClick(event, {
+					type: 'UPDATE_ICON',
+					name: row.name,
+					iconType: row.iconType,
+				}),
 			className: classnames(
 				'p-blocks-icon-pointer',
 				`p-blocks-icon-${row.name}`
