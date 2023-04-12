@@ -3,6 +3,7 @@ export function iconReducer(iconInfo, action) {
 		case 'UPDATE_ICON':
 			return {
 				...iconInfo,
+				uploadSVG: '',
 				name: action.name,
 				type: action.iconType,
 			};
@@ -10,6 +11,8 @@ export function iconReducer(iconInfo, action) {
 		case 'UPDATE_SVG':
 			return {
 				...iconInfo,
+				name: null,
+				type: null,
 				uploadSVG: action.uploadSVG,
 			};
 
