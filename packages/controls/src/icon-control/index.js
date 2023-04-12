@@ -9,7 +9,7 @@ import {
 	__experimentalGrid as Grid,
 } from '@wordpress/components';
 import { MediaUpload } from '@wordpress/block-editor';
-import { useState } from '@wordpress/element';
+import { useState, useReducer } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { close } from '@wordpress/icons';
 
@@ -27,11 +27,11 @@ import './style.scss';
  * Internal dependencies
  */
 import { Modal, InspectElement, Icon } from '@publisher/components';
-import { getIcon } from '@publisher/icons';
-import { getRecommendation } from '@publisher/icons-data';
+import { getIcon, publisherBlue } from '@publisher/icons';
+import { getRecommendation } from './data';
 import { IconContextProvider } from './context';
-import { publisherBlue } from '@publisher/icons';
 import IconTabPanel from './components/icon-tab-panel';
+import { iconReducer } from './store/reducer';
 
 export default function IconControl({
 	value,
@@ -42,35 +42,35 @@ export default function IconControl({
 	label = 'icon',
 	advancedSearch = '',
 }) {
-	const [size, setSize] = useState(16);
-	const [isOpenModal, setOpenModal] = useState(false);
-	const handleOnIconClick = (event, iconType) => {
+	function handleOnIconClick(event, action) {
 		let target = event.target;
 
 		if ('SVG' !== target.nodeName) {
 			target = target.closest('svg');
 		}
 
-		setStates({ icon: target.getAttribute('datatype'), iconType });
-		closeModal();
-	};
+		dispatchActions(action);
+	}
+
 	const recommendationList = getRecommendation({
-		size,
 		limit: 6,
 		handleOnIconClick,
 		fixedSizing: true,
+		size: attributes.size,
 		search: advancedSearch,
 	});
-	const [icon, updateIcon] = useState(
-		recommendationList[0]
+	const [iconInfo, dispatch] = useReducer(iconReducer, {
+		name: recommendationList[0]
 			? recommendationList[0].props.iconname.name ?? value
-			: value
-	);
-	const [iconType, setIconType] = useState(
-		recommendationList[0]
+			: value,
+		size: attributes.size,
+		type: recommendationList[0]
 			? recommendationList[0].props.icon.iconType ?? 'wp'
-			: 'wp'
-	);
+			: 'wp',
+		uploadSVG: attributes.uploadSVG,
+	});
+
+	const [isOpenModal, setOpenModal] = useState(false);
 	const openModal = (event) => {
 		const target = event.target;
 		if (
@@ -83,27 +83,27 @@ export default function IconControl({
 		setOpenModal(true);
 	};
 	const closeModal = () => setOpenModal(false);
-	const setStates = ({ icon, iconType }) => {
-		updateIcon(icon);
-		setAttributes({
-			...attributes,
-			icon,
-			iconType,
-			uploadSVG: null,
-		});
-		setIconType(iconType);
-	};
-
 	const defaultIconState = {
-		size,
-		setSize,
+		iconInfo,
+		dispatch,
 		recommendationList: getRecommendation({
-			size,
+			size: iconInfo.size,
 			handleOnIconClick,
 			search: advancedSearch,
 		}),
 		handleOnIconClick,
 	};
+
+	function dispatchActions(action) {
+		dispatch(action);
+		setAttributes({
+			...attributes,
+			icon: iconInfo.name,
+			size: iconInfo.size,
+			iconType: iconInfo.type,
+		});
+		closeModal();
+	}
 
 	return (
 		<IconContextProvider {...defaultIconState}>
@@ -122,14 +122,14 @@ export default function IconControl({
 								size={24}
 								datatype="delete"
 								onClick={() =>
-									setStates({ icon: null, iconType: null })
+									dispatch({ type: 'DELETE_ICON' })
 								}
 							/>
 							<Icon
 								size={22}
-								type={iconType}
-								icon={getIcon(icon, iconType)}
-								uploadedSVG={attributes.uploadSVG}
+								type={iconInfo.type}
+								icon={getIcon(iconInfo.name, iconInfo.type)}
+								uploadedSVG={iconInfo.uploadSVG}
 								className={classnames('p-blocks-current-icon')}
 							/>
 						</FlexItem>
@@ -161,6 +161,15 @@ export default function IconControl({
 
 						<MediaUpload
 							onSelect={(media) => {
+								dispatch({
+									type: 'UPDATE_SVG',
+									uploadSVG: {
+										title: media.title,
+										filename: media.filename,
+										url: media.url,
+										updated: '',
+									},
+								});
 								setAttributes({
 									...attributes,
 									uploadSVG: {

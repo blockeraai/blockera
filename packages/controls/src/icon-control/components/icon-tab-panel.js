@@ -28,14 +28,17 @@ import classnames from 'classnames';
  */
 import { frame, publisher, getIconLibrary } from '@publisher/icons';
 import { Icon } from '@publisher/components';
-import { getRecommendation } from '@publisher/icons-data';
+import { getRecommendation } from '../data';
 import SizeControl from './size';
 import registerIcons from '../register';
 import { IconContext } from '../context';
 
 export default function IconTabPanel() {
-	const { size, handleOnIconClick, recommendationList } =
-		useContext(IconContext);
+	const {
+		iconInfo: { size },
+		handleOnIconClick,
+		recommendationList,
+	} = useContext(IconContext);
 	const [searchInput, setSearchInput] = useState('');
 	const [currentTab, setCurrentTab] = useState('all');
 	const onSelect = setCurrentTab;

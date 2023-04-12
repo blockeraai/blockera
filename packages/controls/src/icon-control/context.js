@@ -3,18 +3,21 @@
  */
 import { createContext } from '@wordpress/element';
 
-const IconContext = createContext( {
-	size: null,
-	setSize: () => {},
+const IconContext = createContext({
+	iconInfo: {
+		name: null,
+		size: null,
+		type: null,
+		uploadSVG: null,
+	},
+	dispatch: () => {},
 	recommendationList: [],
 	handleOnIconClick: () => {},
-} );
+});
 
-const IconContextProvider = ( { children, ...props } ) => {
+const IconContextProvider = ({ children, ...props }) => {
 	return (
-		<IconContext.Provider value={ props }>
-			{ children }
-		</IconContext.Provider>
+		<IconContext.Provider value={props}>{children}</IconContext.Provider>
 	);
 };
 

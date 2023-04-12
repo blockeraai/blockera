@@ -35,7 +35,12 @@ export default function registerIcons({
 			size,
 			key: Math.random(),
 			icon: icon[1],
-			onClick: (event) => handleOnIconClick(event, iconType),
+			onClick: (event) =>
+				handleOnIconClick(event, {
+					type: 'UPDATE_ICON',
+					name: icon[0],
+					iconType,
+				}),
 			datatype: icon[0],
 			className: classnames(
 				'p-blocks-icon-pointer',

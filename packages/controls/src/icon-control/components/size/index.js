@@ -15,15 +15,18 @@ import { IconContext } from '../../context';
  * @return {Object}
  */
 const SizeControl = () => {
-	const { size, setSize } = useContext( IconContext );
+	const {
+		iconInfo: { size },
+		dispatch,
+	} = useContext(IconContext);
 
 	return (
 		<RangeControl
 			className="p-blocks-size-control"
-			value={ size }
-			onChange={ ( value ) => setSize( value ) }
-			min={ 12 }
-			max={ 30 }
+			value={size}
+			onChange={(value) => dispatch({ type: 'UPDATE_SIZE', size: value })}
+			min={12}
+			max={30}
 		/>
 	);
 };
