@@ -49,6 +49,10 @@ export default function IconControl({
 			target = target.closest('svg');
 		}
 
+		if (target?.classList?.contains('publisher-core-is-pro-icon')) {
+			return;
+		}
+
 		dispatchActions(action);
 	}
 
@@ -117,7 +121,7 @@ export default function IconControl({
 						>
 							<Icon
 								type="wp"
-								className="p-blocks-icon-control__delete"
+								className="publisher-core-icon-control__delete"
 								icon={close}
 								size={24}
 								datatype="delete"
@@ -130,7 +134,9 @@ export default function IconControl({
 								type={iconInfo.type}
 								icon={getIcon(iconInfo.name, iconInfo.type)}
 								uploadedSVG={iconInfo.uploadSVG}
-								className={classnames('p-blocks-current-icon')}
+								className={classnames(
+									'publisher-core-current-icon'
+								)}
 							/>
 						</FlexItem>
 
@@ -210,7 +216,7 @@ export default function IconControl({
 							type="publisher"
 							size={22}
 							icon={publisherBlue}
-							className="p-blocks-m-header-icon"
+							className="publisher-core-m-header-icon"
 						/>
 					}
 				>

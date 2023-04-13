@@ -25,7 +25,6 @@ export default function registerIcons({
 		const icon = library[key];
 		const isFAIcon = -1 !== iconType.indexOf('fa');
 
-		//FIXME: refactor this validator!
 		if (isFAIcon && !icon[1]?.icon) {
 			continue;
 		}
@@ -43,8 +42,9 @@ export default function registerIcons({
 				}),
 			datatype: icon[0],
 			className: classnames(
-				'p-blocks-icon-pointer',
-				`p-blocks-icon-${icon[0]}`
+				'publisher-core-icon-pointer',
+				`publisher-core-icon-${icon[0]}`,
+				isFAIcon ? 'publisher-core-is-pro-icon' : ''
 			),
 		});
 

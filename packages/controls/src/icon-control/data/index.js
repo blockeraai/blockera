@@ -157,8 +157,11 @@ export function getRecommendation({
 					iconType: row.iconType,
 				}),
 			className: classnames(
-				'p-blocks-icon-pointer',
-				`p-blocks-icon-${row.name}`
+				'publisher-core-icon-pointer',
+				`publisher-core-icon-${row.name}`,
+				-1 !== row.iconType.indexOf('fa')
+					? 'publisher-core-is-pro-icon'
+					: ''
 			),
 			fixedSizing,
 		});

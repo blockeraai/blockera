@@ -22,7 +22,7 @@ const SizeControl = () => {
 
 	return (
 		<RangeControl
-			className="p-blocks-size-control"
+			className="publisher-core-size-control"
 			value={size}
 			onChange={(value) => dispatch({ type: 'UPDATE_SIZE', size: value })}
 			min={12}

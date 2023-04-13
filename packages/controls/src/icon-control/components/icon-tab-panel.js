@@ -83,7 +83,7 @@ export default function IconTabPanel() {
 	return (
 		<>
 			<TabPanel
-				className="p-blocks-tab-panel"
+				className="publisher-core-tab-panel"
 				activeClass="active-tab"
 				onSelect={onSelect}
 				tabs={[
@@ -100,10 +100,10 @@ export default function IconTabPanel() {
 							</HStack>
 						),
 						className: classnames(
-							'p-blocks-tab',
-							'p-blocks-all-icons',
+							'publisher-core-tab',
+							'publisher-core-all-icons',
 							currentTab === 'all'
-								? `p-blocks-current-tab tab-all`
+								? `publisher-core-current-tab tab-all`
 								: 'tab-all'
 						),
 					},
@@ -124,10 +124,10 @@ export default function IconTabPanel() {
 							</HStack>
 						),
 						className: classnames(
-							'p-blocks-tab',
-							'p-blocks-icons',
+							'publisher-core-tab',
+							'publisher-core-icons',
 							currentTab === 'publisher'
-								? `p-blocks-current-tab tab-publisher`
+								? `publisher-core-current-tab tab-publisher`
 								: 'tab-publisher'
 						),
 					},
@@ -148,10 +148,10 @@ export default function IconTabPanel() {
 							</HStack>
 						),
 						className: classnames(
-							'p-blocks-tab',
-							'p-blocks-wp-icons',
+							'publisher-core-tab',
+							'publisher-core-wp-icons',
 							currentTab === 'wp'
-								? `p-blocks-current-tab tab-wp`
+								? `publisher-core-current-tab tab-wp`
 								: 'tab-wp'
 						),
 					},
@@ -175,10 +175,10 @@ export default function IconTabPanel() {
 							</HStack>
 						),
 						className: classnames(
-							'p-blocks-tab',
-							'p-blocks-fa-regular-icons',
+							'publisher-core-tab',
+							'publisher-core-fa-regular-icons',
 							currentTab === 'far'
-								? `p-blocks-current-tab tab-far`
+								? `publisher-core-current-tab tab-far`
 								: 'tab-far'
 						),
 					},
@@ -202,17 +202,17 @@ export default function IconTabPanel() {
 							</HStack>
 						),
 						className: classnames(
-							'p-blocks-tab',
-							'p-blocks-solid-icons',
+							'publisher-core-tab',
+							'publisher-core-solid-icons',
 							currentTab === 'fas'
-								? `p-blocks-current-tab tab-fas`
+								? `publisher-core-current-tab tab-fas`
 								: 'tab-fas'
 						),
 					},
 				]}
 			>
 				{(tab) => (
-					<div className="p-blocks-tab-content">
+					<div className="publisher-core-tab-content">
 						<SearchControl
 							value={searchInput}
 							onChange={(value) => {
@@ -233,7 +233,7 @@ export default function IconTabPanel() {
 
 						{!searchInput && (
 							<Grid
-								className="p-blocks-recommended__icons"
+								className="publisher-core-recommended__icons"
 								columns={size >= 36 ? 8 : 10}
 								gap={5}
 							>
@@ -258,7 +258,7 @@ export default function IconTabPanel() {
 							</Notice>
 						) : (
 							<Grid
-								className="p-blocks-overflow-scroll"
+								className="publisher-core-overflow-scroll"
 								columns={size >= 36 ? 8 : 10}
 								gap={5}
 							>

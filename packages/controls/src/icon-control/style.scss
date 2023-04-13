@@ -4,8 +4,8 @@
 }
 
 :root {
-	--p-blocks-icon-control-border-color: #cccccc;
-	--p-blocks-icon-control-sidebar-bg-color: #f6f6f6;
+	--publisher-core-icon-control-border-color: #cccccc;
+	--publisher-core-icon-control-sidebar-bg-color: #f6f6f6;
 }
 
 .publisher-icon-transparent-bg {
@@ -28,7 +28,7 @@
 	margin: 0 auto;
 }
 
-.publisher-icon-recommended .p-blocks-current-icon {
+.publisher-icon-recommended .publisher-core-current-icon {
 	display: block;
 	width: 30px;
 	height: 30px;
@@ -55,39 +55,39 @@
 
 .publisher-modal-component .components-modal__header {
 	height: 50px;
-	border-bottom: solid 1px var(--p-blocks-icon-control-border-color);
+	border-bottom: solid 1px var(--publisher-core-icon-control-border-color);
 }
 
-.p-blocks-tab-panel {
+.publisher-core-tab-panel {
 	display: flex;
 	width: 870px;
 	height: 593px;
 	padding: 0;
 }
 
-.p-blocks-tab-panel .components-tab-panel__tabs {
+.publisher-core-tab-panel .components-tab-panel__tabs {
 	flex-direction: column;
 	width: 220px;
-	border-right: solid 1px var(--p-blocks-icon-control-border-color);
-	background-color: var(--p-blocks-icon-control-sidebar-bg-color);
+	border-right: solid 1px var(--publisher-core-icon-control-border-color);
+	background-color: var(--publisher-core-icon-control-sidebar-bg-color);
 }
 
-.p-blocks-tab-panel .p-blocks-tab-content {
+.publisher-core-tab-panel .publisher-core-tab-content {
 	width: 650px;
 	height: 100%;
 }
 
-.p-blocks-tab-content {
+.publisher-core-tab-content {
 	padding: 20px 40px;
 }
 
-.p-blocks-m-header-icon {
+.publisher-core-m-header-icon {
 	position: relative;
 	top: 5px;
 	margin-right: 10px;
 }
 
-.p-blocks-overflow-scroll {
+.publisher-core-overflow-scroll {
 	overflow-y: scroll;
 	height: 80%;
 }
@@ -105,26 +105,31 @@
 	border: solid 1px #0047eb;
 }
 
-.p-blocks-tab.active-tab {
+.publisher-core-tab.active-tab {
 	background-color: #ffffff;
 }
 
-.p-blocks-size-control {
+.publisher-core-size-control {
 	position: absolute;
 	bottom: 20px;
 	left: 4%;
 	width: 150px;
 }
 
-.p-blocks-size-control
+.publisher-core-size-control
 	.components-range-control__root
 	.components-base-control {
 	display: none !important;
 }
 
-.p-blocks-icon-control__delete {
+.publisher-core-icon-control__delete {
 	position: absolute;
 	right: 16px;
-	border: solid 1px var(--p-blocks-icon-control-border-color);
+	border: solid 1px var(--publisher-core-icon-control-border-color);
 	background: #ffffff;
+}
+
+.publisher-core-is-pro-icon {
+	opacity: 0.3;
+	cursor: not-allowed;
 }
