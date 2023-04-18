@@ -26,9 +26,9 @@
 		"ALLOW_EXPERIMENT_REREGISTRATION": true
 	},
 	"dependencies": {
-		"@publisher/icons": "file:packages/icons",
+		"@publisher/components": "file:packages/components",
 		"@publisher/controls": "file:packages/controls",
-		"@publisher/components": "file:packages/components"
+		"@publisher/icons": "file:packages/icons"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.21.0",
@@ -75,6 +75,7 @@
 		"pa11y": "^6.2.3",
 		"path": "^0.12.7",
 		"po2json": "^1.0.0-alpha",
+		"postcss-scss": "^4.0.6",
 		"prettier": "^2.5.1",
 		"prop-types": "^15.8.1",
 		"puppeteer": "^13.5.2",

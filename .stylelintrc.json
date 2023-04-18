@@ -1,5 +1,7 @@
 {
 	"extends": "@wordpress/stylelint-config",
+	"syntax": "postcss-scss",
+	"customSyntax": "postcss-scss",
 	"rules": {
 		"string-quotes": "double",
 		"function-url-quotes": "always",
@@ -7,6 +9,7 @@
 		"selector-class-pattern": null,
 		"indentation": null,
 		"color-hex-length": "long",
-		"rule-empty-line-before": "always"
+		"rule-empty-line-before": "always",
+		"comment-empty-line-before": "never"
 	}
 }
