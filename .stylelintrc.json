@@ -5,6 +5,8 @@
 		"function-url-quotes": "always",
 		"no-descending-specificity": null,
 		"selector-class-pattern": null,
-		"indentation": null
+		"indentation": null,
+		"color-hex-length": "long",
+		"rule-empty-line-before": "always"
 	}
 }
