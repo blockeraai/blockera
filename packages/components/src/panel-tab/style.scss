@@ -2,12 +2,12 @@
 	z-index: 999999;
 	border: 1px solid #d5dadf;
 
-	.publisher-core-panel-tab__header {
+	.header {
 		display: flex;
 		background: #ffffff;
 		border-bottom: none;
 
-		.publisher-core-panel-tab__header__label {
+		.header-label {
 			cursor: default;
 			flex-basis: 90%;
 			display: flex;
@@ -30,7 +30,7 @@
 		}
 	}
 
-	.publisher-core-panel-tab__content {
+	.content {
 		background: #ffffff;
 		padding: 0 15px;
 

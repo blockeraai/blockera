@@ -28,13 +28,10 @@ export default function PanelTab({
 		<div
 			className={classnames(getBaseClassNames(), 'panel-tab', className)}
 		>
-			<div className="publisher-core-panel-tab__header">
-				<div className="publisher-core-panel-tab__header__label">
-					{label}
-				</div>
+			<div className="header">
+				<div className="header-label">{label}</div>
 
 				<Button
-					className="publisher-component-panel-tab-delete"
 					icon={reset}
 					label={__('Delete', 'publisher-blocks')}
 					showTooltip={true}
@@ -42,7 +39,6 @@ export default function PanelTab({
 				/>
 
 				<Button
-					className="publisher-component-panel-tab-expand"
 					icon={isOpen ? 'arrow-up-alt2' : 'arrow-down-alt2'}
 					label={
 						isOpen
@@ -54,11 +50,7 @@ export default function PanelTab({
 				/>
 			</div>
 
-			{isOpen && (
-				<div className="publisher-core-panel-tab__content">
-					{children}
-				</div>
-			)}
+			{isOpen && <div className="content">{children}</div>}
 		</div>
 	);
 }
