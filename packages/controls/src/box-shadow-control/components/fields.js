@@ -4,12 +4,13 @@
 import { __ } from '@wordpress/i18n';
 import {
 	BaseControl,
-	TextControl,
 	ToggleControl,
 	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
+	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 import { useContext, useState, useEffect, memo } from '@wordpress/element';
+import { __experimentalUnitControl as UnitControl } from '@wordpress/block-editor';
 
 /**
  * External dependencies
@@ -25,7 +26,7 @@ import { PanelTab } from '@publisher/components';
 import { RepeaterContext } from '../../repeater-control/context';
 
 function BoxShadowFields({ item, itemId }) {
-	const classNames = classnames('publisher-control-box-shadow-text-field');
+	const [isPanelOpen, setPanelOpen] = useState(false);
 	const [isOpenColorPicker, setOpenColorPicker] = useState(false);
 
 	const { initialState, removeItem, changeItem } =
@@ -35,7 +36,18 @@ function BoxShadowFields({ item, itemId }) {
 		!Object.keys(item).length ? initialState : item
 	);
 
-	const { x, y, blur, spread, inset, color, isPanelOpen } = fields;
+	const { x, y, blur, spread, inset, color, unit } = fields;
+	const sharedProps = {
+		unit,
+		max: 32,
+		min: -32,
+		units: useCustomUnits({
+			availableUnits: ['px', '%', 'em'],
+			defaultValues: { px: 0 },
+		}),
+		className: classnames('publisher-control-box-shadow-text-field'),
+		onUnitChange: (unitValue) => handleUpdateFields('unit', unitValue),
+	};
 
 	useEffect(() => {
 		changeItem(itemId, fields);
@@ -56,55 +68,46 @@ function BoxShadowFields({ item, itemId }) {
 		<PanelTab
 			label={<Header {...fields} />}
 			isOpen={isPanelOpen}
-			setOpen={() =>
-				setFields({
-					...fields,
-					isPanelOpen: !isPanelOpen,
-				})
-			}
+			setOpen={() => setPanelOpen(!isPanelOpen)}
 			onDelete={() => removeItem(itemId)}
 		>
 			<>
 				<BaseControl id={`p-blocks-repeater-item-${itemId}`}>
 					<VStack>
 						<HStack justify="space-between">
-							<TextControl
-								className={classNames}
-								type="number"
-								label={__('X', 'publisher')}
+							<UnitControl
 								value={x}
+								{...sharedProps}
 								onChange={(xInput) =>
 									handleUpdateFields('x', xInput)
 								}
+								label={__('X', 'publisher')}
 							/>
-							<TextControl
-								className={classNames}
-								type="number"
-								label={__('Y', 'publisher')}
+							<UnitControl
 								value={y}
+								{...sharedProps}
 								onChange={(yInput) =>
 									handleUpdateFields('y', yInput)
 								}
+								label={__('Y', 'publisher')}
 							/>
 						</HStack>
 						<HStack justify="space-between">
-							<TextControl
-								className={classNames}
-								type="number"
-								label={__('BLUR', 'publisher')}
+							<UnitControl
 								value={blur}
+								{...sharedProps}
 								onChange={(blurInput) =>
 									handleUpdateFields('blur', blurInput)
 								}
+								label={__('BLUR', 'publisher')}
 							/>
-							<TextControl
-								className={classNames}
-								type="number"
-								label={__('SPREAD', 'publisher')}
+							<UnitControl
 								value={spread}
+								{...sharedProps}
 								onChange={(spreadInput) =>
 									handleUpdateFields('spread', spreadInput)
 								}
+								label={__('SPREAD', 'publisher')}
 							/>
 						</HStack>
 						<HStack justify="space-between">

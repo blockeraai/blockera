@@ -23,6 +23,7 @@ function BoxShadowControl(props) {
 				y: 0,
 				blur: 0,
 				spread: 0,
+				unit: 'px',
 				inset: false,
 				color: 'transparent',
 				isPanelOpen: false,
