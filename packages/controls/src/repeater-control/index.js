@@ -7,6 +7,7 @@ import { useEffect, useCallback } from '@wordpress/element';
 /**
  * External dependencies
  */
+import classnames from 'classnames';
 import { useImmerReducer } from 'use-immer';
 
 /**
@@ -23,6 +24,7 @@ import { InspectElement, Button, Icon } from '@publisher/components';
 
 //CSS dependencies
 import './style.scss';
+import { getBaseClassNames } from '../global-helpers';
 
 const RepeaterControl = ({
 	title,
@@ -71,14 +73,16 @@ const RepeaterControl = ({
 	return (
 		<RepeaterContextProvider {...defaultRepeaterState}>
 			<InspectElement title={title} initialOpen={true}>
-				<InnerComponents items={repeaterItems} />
-				<Button
-					className="p-blocks-add-new-item"
-					onClick={defaultRepeaterState.addNewItem}
-				>
-					<Icon type="wp" icon={plus} size={17} />
-					{label}
-				</Button>
+				<div className={classnames(getBaseClassNames(), 'repeater')}>
+					<InnerComponents items={repeaterItems} />
+					<Button
+						className="add-new-item"
+						onClick={defaultRepeaterState.addNewItem}
+					>
+						<Icon type="wp" icon={plus} size={17} />
+						{label}
+					</Button>
+				</div>
 			</InspectElement>
 		</RepeaterContextProvider>
 	);
