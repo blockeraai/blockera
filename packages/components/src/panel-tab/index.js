@@ -6,9 +6,15 @@ import { reset } from '@wordpress/icons';
 import { Button } from '@wordpress/components';
 
 /**
+ * External dependencies
+ */
+import classnames from 'classnames';
+
+/**
  * Internal dependencies
  */
 import './style.scss';
+import { getBaseClassNames } from '../global-helpers';
 
 export default function PanelTab({
 	label,
@@ -16,9 +22,12 @@ export default function PanelTab({
 	setOpen,
 	onDelete,
 	children,
+	className,
 }) {
 	return (
-		<div className="publisher-core-panel-tab">
+		<div
+			className={classnames(getBaseClassNames(), 'panel-tab', className)}
+		>
 			<div className="publisher-core-panel-tab__header">
 				<div className="publisher-core-panel-tab__header__label">
 					{label}

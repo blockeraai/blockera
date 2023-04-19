@@ -1,10 +1,6 @@
-.publisher-core-panel-tab {
+.publisher-core.publisher-component.panel-tab {
 	z-index: 999999;
 	border: 1px solid #d5dadf;
-
-	.component-color-indicator {
-		margin-right: 6px;
-	}
 
 	.publisher-core-panel-tab__header {
 		display: flex;
@@ -38,34 +34,16 @@
 		background: #ffffff;
 		padding: 0 15px;
 
-		.components-select-control {
-
-			label {
-				overflow: visible;
-				white-space: normal;
-			}
-		}
-
 		.components-base-control {
 			margin: 12px 0;
-
-			.components-dropdown {
-				width: 100%;
-
-				.components-button {
-					display: flex;
-					justify-content: center;
-					width: 100%;
-				}
-			}
-
-			.components-datetime__time-field-hours-input {
-				min-width: 60px;
-			}
-
-			.components-datetime__timezone {
-				display: inline-block;
-			}
 		}
 	}
+}
+
+.publisher-core.publisher-component.panel-tab.visible {
+	opacity: 1;
+}
+
+.publisher-core.publisher-component.panel-tab.invisible {
+	opacity: 0.5;
 }
