@@ -2,13 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import {
-	BaseControl,
-	ToggleControl,
-	__experimentalHStack as HStack,
-	__experimentalVStack as VStack,
-	__experimentalUseCustomUnits as useCustomUnits,
-} from '@wordpress/components';
+import { __experimentalUseCustomUnits as useCustomUnits } from '@wordpress/components';
 import { useContext, useState, useEffect, memo } from '@wordpress/element';
 
 /**
@@ -20,9 +14,12 @@ import classnames from 'classnames';
  * Internal dependencies
  */
 import Header from './header';
+import BaseControl from '../../base';
 import UnitControl from '../../unit-control';
 import ColorControl from '../../color-control';
-import { PanelTab } from '@publisher/components';
+import ToggleControl from '../../toggle-control';
+import { getBaseClassNames } from '../../global-helpers';
+import { PanelTab, VStack, HStack } from '@publisher/components';
 import { RepeaterContext } from '../../repeater-control/context';
 
 function BoxShadowFields({ item, itemId }) {
@@ -45,7 +42,11 @@ function BoxShadowFields({ item, itemId }) {
 			availableUnits: ['px', '%', 'em'],
 			defaultValues: { px: 0 },
 		}),
-		className: classnames('publisher-control-box-shadow-unit-control'),
+		className: classnames(
+			getBaseClassNames(),
+			'box-shadow',
+			'unit-control'
+		),
 		onUnitChange: (unitValue) => handleUpdateFields('unit', unitValue),
 	};
 
@@ -75,7 +76,7 @@ function BoxShadowFields({ item, itemId }) {
 			onDelete={() => removeItem(itemId)}
 		>
 			<>
-				<BaseControl id={`p-blocks-repeater-item-${itemId}`}>
+				<BaseControl id={`repeater-item-${itemId}`}>
 					<VStack>
 						<HStack justify="space-between">
 							<UnitControl
