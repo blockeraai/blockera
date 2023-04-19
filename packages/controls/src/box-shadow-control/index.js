@@ -25,8 +25,8 @@ function BoxShadowControl(props) {
 				spread: 0,
 				unit: 'px',
 				inset: false,
+				isVisible: true,
 				color: 'transparent',
-				isPanelOpen: false,
 			}}
 			name="boxShadowItems"
 			InnerComponents={BoxShadowItems}

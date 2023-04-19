@@ -14,9 +14,7 @@ function BoxShadowItems({ items }) {
 		() =>
 			items.map((item, itemId) => (
 				<Spacer key={`box-shadow-item-${itemId}`}>
-					<BoxShadowFields
-						{...{ item: { ...item, isPanelOpen: false }, itemId }}
-					/>
+					<BoxShadowFields {...{ item, itemId }} />
 				</Spacer>
 			)),
 		[items]

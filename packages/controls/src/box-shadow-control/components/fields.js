@@ -10,7 +10,6 @@ import {
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 import { useContext, useState, useEffect, memo } from '@wordpress/element';
-import { __experimentalUnitControl as UnitControl } from '@wordpress/block-editor';
 
 /**
  * External dependencies
@@ -21,6 +20,7 @@ import classnames from 'classnames';
  * Internal dependencies
  */
 import Header from './header';
+import UnitControl from '../../unit-control';
 import ColorControl from '../../color-control';
 import { PanelTab } from '@publisher/components';
 import { RepeaterContext } from '../../repeater-control/context';
@@ -36,7 +36,7 @@ function BoxShadowFields({ item, itemId }) {
 		!Object.keys(item).length ? initialState : item
 	);
 
-	const { x, y, blur, spread, inset, color, unit } = fields;
+	const { x, y, blur, spread, inset, color, unit, isVisible } = fields;
 	const sharedProps = {
 		unit,
 		max: 32,
@@ -45,7 +45,7 @@ function BoxShadowFields({ item, itemId }) {
 			availableUnits: ['px', '%', 'em'],
 			defaultValues: { px: 0 },
 		}),
-		className: classnames('publisher-control-box-shadow-text-field'),
+		className: classnames('publisher-control-box-shadow-unit-control'),
 		onUnitChange: (unitValue) => handleUpdateFields('unit', unitValue),
 	};
 
@@ -66,7 +66,10 @@ function BoxShadowFields({ item, itemId }) {
 
 	return (
 		<PanelTab
-			label={<Header {...fields} />}
+			className={isVisible ? 'visible' : 'invisible'}
+			label={
+				<Header {...fields} onChangeVisibility={handleUpdateFields} />
+			}
 			isOpen={isPanelOpen}
 			setOpen={() => setPanelOpen(!isPanelOpen)}
 			onDelete={() => removeItem(itemId)}
