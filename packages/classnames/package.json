@@ -1,0 +1,25 @@
+{
+	"name": "@publisher/classnames",
+	"version": "1.0.0",
+	"description": "Css classnames generator for Publisher Core.",
+	"author": "The Publisher Contributors",
+	"license": "ISC",
+	"keywords": [
+		"publisher",
+		"gutenberg",
+		"controls"
+	],
+	"homepage": "https://gitlab.com/better-projects/publisher-fse/publisher-core/packages/classnames/-/blob/main/README.md",
+	"repository": {
+		"type": "git",
+		"url": "https://gitlab.com/better-projects/publisher-fse/publisher-core",
+		"directory": "packages/classnames"
+	},
+	"bugs": {
+		"url": "https://gitlab.com/better-projects/publisher-fse/publisher-core/-/issues"
+	},
+	"engines": {
+		"node": ">=12"
+	},
+	"main": "src/index.js"
+}

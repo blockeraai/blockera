@@ -27,6 +27,7 @@
 	},
 	"dependencies": {
 		"@publisher/components": "file:packages/components",
+		"@publisher/classnames": "file:packages/classnames",
 		"@publisher/controls": "file:packages/controls",
 		"@publisher/icons": "file:packages/icons"
 	},
