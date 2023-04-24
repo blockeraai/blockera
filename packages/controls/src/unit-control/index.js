@@ -4,19 +4,14 @@
 import { __experimentalUnitControl as WordPressUnitControl } from '@wordpress/block-editor';
 
 /**
- * External dependencies
- */
-import classnames from 'classnames';
-
-/**
  * Internal dependencies
  */
-import { getBaseClassNames } from '../global-helpers';
+import classnames from '@publisher/classnames';
 
-export default function UnitControl({ className, ...props }) {
+export default function UnitControl({ className = 'uni', ...props }) {
 	return (
 		<WordPressUnitControl
-			className={classnames(getBaseClassNames(), 'uni-control')}
+			className={classnames('control', className)}
 			{...props}
 		/>
 	);
