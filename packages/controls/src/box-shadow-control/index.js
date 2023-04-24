@@ -7,6 +7,7 @@ import { useCallback } from '@wordpress/element';
 /**
  * Internal dependencies
  */
+import Header from './components/header';
 import classnames from '@publisher/classnames';
 import RepeaterControl from '../repeater-control';
 import { InspectElement } from '@publisher/components';
@@ -32,14 +33,17 @@ function BoxShadowControl({
 	const {
 		publisherAttributes: { boxShadowItems },
 	} = attributes;
-	const updateBlockAttributes = useCallback((boxShadowItems) => {
-		setAttributes({
-			...attributes,
-			publisherAttributes: {
-				boxShadowItems,
-			},
-		});
-	}, []);
+	const updateBlockAttributes = useCallback(
+		(newBoxShadowItems) => {
+			setAttributes({
+				...attributes,
+				publisherAttributes: {
+					boxShadowItems: newBoxShadowItems,
+				},
+			});
+		},
+		[attributes, setAttributes]
+	);
 
 	return (
 		<InspectElement
@@ -51,6 +55,7 @@ function BoxShadowControl({
 					label={__('Add Box Shadow', 'publisher')}
 					{...{
 						...props,
+						Header,
 						updateBlockAttributes,
 						savedItems: boxShadowItems,
 						InnerComponents: BoxShadowFields,

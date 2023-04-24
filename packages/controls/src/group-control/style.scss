@@ -10,9 +10,10 @@
 		.header-label {
 			display: flex;
 			align-items: center;
-			flex-wrap: wrap;
-			flex-basis: 100%;
-			padding: 0 0 0 10px;
+			flex-wrap: nowrap;
+			padding: 0 0 0 3px;
+			justify-content: space-between;
+			width: 100%;
 
 			&::selection {
 				background: none;

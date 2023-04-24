@@ -9,48 +9,39 @@ import { memo, useContext, useState } from '@wordpress/element';
  */
 import ActionsUI from './actions-ui';
 import { RepeaterContext } from '../context';
-import VisibleElement from './visible-element';
 import GroupControl from '../../group-control';
 
 const RepeaterItem = ({ item, itemId }) => {
 	const [isOpen, setOpen] = useState(false);
 	const [isVisible, setVisibility] = useState(true);
-	const { InnerComponents } = useContext(RepeaterContext);
+	const { InnerComponents, Header } = useContext(RepeaterContext);
+
+	const actionsProps = {
+		itemId,
+		isOpen,
+		setOpen,
+		isVisible,
+		setVisibility,
+	};
 
 	return (
 		<GroupControl
 			className={isVisible ? 'group activate' : 'group deactivate'}
-		>
-			{!InnerComponents && (
-				<>
-					<div className="header">
-						<div className="header-label">
-							{__('Item ', 'publisher') + itemId}
-							<VisibleElement {...{ setVisibility, isVisible }} />
-							<ActionsUI {...{ itemId, setOpen, isOpen }} />
-						</div>
-					</div>
-					{isOpen && (
-						<div className="content" {...{ item, itemId }}>
-							{`Item ${itemId}`}
-						</div>
-					)}
-				</>
-			)}
-
-			{InnerComponents && (
-				<InnerComponents
-					{...{
-						item,
-						itemId,
-						ActionsUI,
-						isVisible,
-						setVisibility,
-						VisibleElement,
-					}}
-				/>
-			)}
-		</GroupControl>
+			header={
+				!Header ? (
+					<>
+						{__('Item ', 'publisher') + itemId}
+						<ActionsUI {...{ ...actionsProps }} />
+					</>
+				) : (
+					<Header {...{ item, itemId }}>
+						<ActionsUI {...{ ...actionsProps }} />
+					</Header>
+				)
+			}
+			children={<InnerComponents {...{ item, itemId }} />}
+			isOpen={isOpen}
+		/>
 	);
 };
 

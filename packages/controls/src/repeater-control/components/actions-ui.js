@@ -9,13 +9,21 @@ import { useContext } from '@wordpress/element';
  * Internal dependencies
  */
 import { RepeaterContext } from '../context';
+import VisibleElement from './visible-element';
 import { Button } from '@publisher/components';
 
-export default function ActionsUI({ itemId, setOpen, isOpen }) {
+export default function ActionsUI({
+	itemId,
+	isOpen,
+	setOpen,
+	isVisible,
+	setVisibility,
+}) {
 	const { removeItem } = useContext(RepeaterContext);
 
 	return (
 		<>
+			<VisibleElement {...{ setVisibility, isVisible }} />
 			<Button
 				icon={reset}
 				showTooltip={true}

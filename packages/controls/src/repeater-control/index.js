@@ -24,6 +24,7 @@ import './style.scss';
 
 const RepeaterControl = ({
 	label,
+	Header,
 	clientId,
 	savedItems,
 	InnerComponents,
@@ -40,9 +41,10 @@ const RepeaterControl = ({
 		if (savedItems !== repeaterItems) {
 			updateBlockAttributes(repeaterItems);
 		}
-	}, [repeaterItems, updateBlockAttributes]);
+	}, [repeaterItems, savedItems, updateBlockAttributes]);
 
 	const defaultRepeaterState = {
+		Header,
 		clientId,
 		dispatch,
 		initialState,

@@ -4,6 +4,7 @@
 import { createContext } from '@wordpress/element';
 
 const RepeaterContext = createContext({
+	Header: null,
 	clientId: null,
 	attributes: {},
 	initialState: {},
