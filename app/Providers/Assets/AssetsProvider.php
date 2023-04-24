@@ -9,6 +9,7 @@ class AssetsProvider {
 		'controls',
 		'components',
 		'classnames',
+		'extensions',
 	];
 
 	public function __construct()

@@ -9,5 +9,6 @@ module.exports = {
 		],
 		'import/no-extraneous-dependencies': 'off',
 		'@wordpress/no-unsafe-wp-apis': 'off',
+		'jsdoc/check-line-alignment': 'off',
 	},
 };

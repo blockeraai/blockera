@@ -29,7 +29,8 @@
 		"@publisher/components": "file:packages/components",
 		"@publisher/classnames": "file:packages/classnames",
 		"@publisher/controls": "file:packages/controls",
-		"@publisher/icons": "file:packages/icons"
+		"@publisher/icons": "file:packages/icons",
+		"@publisher/extensions": "file:packages/extensions"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.21.0",
