@@ -1,0 +1,49 @@
+.publisher-core.control.group {
+	z-index: 999999;
+	border: 1px solid #d5dadf;
+
+	.header {
+		display: flex;
+		background: #ffffff;
+		border-bottom: none;
+
+		.header-label {
+			display: flex;
+			align-items: center;
+			flex-wrap: wrap;
+			flex-basis: 100%;
+			padding: 0 0 0 10px;
+
+			&::selection {
+				background: none;
+			}
+		}
+
+		.components-button {
+			height: auto;
+			flex-basis: 10%;
+			justify-content: center;
+
+			.dashicon {
+				margin: 2px;
+			}
+		}
+	}
+
+	.content {
+		background: #ffffff;
+		padding: 0 15px;
+
+		.components-base-control {
+			margin: 12px 0;
+		}
+	}
+}
+
+.publisher-core.control.group.activate {
+	opacity: 1;
+}
+
+.publisher-core.control.group.deactivate {
+	opacity: 0.5;
+}
