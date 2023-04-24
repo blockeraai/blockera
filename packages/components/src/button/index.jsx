@@ -4,20 +4,16 @@
 import { Button as WPButton } from '@wordpress/components';
 
 /**
- * External dependencies
- */
-import classnames from 'classnames';
-
-/**
  * Internal dependencies
- */
-import { getBaseClassNames } from '../global-helpers';
+*/
+import classnames from '@publisher/classnames';
+
 
 export default function Button({ children, className = 'button-component', ...props }) {
 	return (
 		<WPButton
 			className={classnames(
-				getBaseClassNames(),
+				'component',
 				className
 			)}
 			{...props}

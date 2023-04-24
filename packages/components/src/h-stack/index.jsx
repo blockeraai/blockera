@@ -4,20 +4,15 @@
 import { __experimentalHStack as WordPressHStack } from '@wordpress/components';
 
 /**
- * External dependencies
- */
-import classnames from 'classnames';
-
-/**
  * Internal dependencies
- */
-import { getBaseClassNames } from '../global-helpers';
+*/
+import classnames from '@publisher/classnames';
 
 export default function HStack({ children, className = 'horizontal-stack-component', ...props }) {
 	return (
 		<WordPressHStack
 			{...props}
-			className={classnames(getBaseClassNames(), className)}
+			className={classnames('component', className)}
 		>
 			{children}
 		</WordPressHStack>
