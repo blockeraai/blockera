@@ -1,15 +1,15 @@
-export const addRepeaterItem = (item) => ({
-	type: 'ADD_REPEATER_ITEM',
+export const addItem = (item) => ({
+	type: 'ADD',
 	payload: item,
 });
 
-export const removeRepeaterItem = (id) => ({
-	type: 'REMOVE_REPEATER_ITEM',
+export const removeItem = (id) => ({
+	type: 'REMOVE',
 	payload: id,
 });
 
-export const changeRepeaterItem = (id, item) => ({
-	type: 'MODIFY_REPEATER_ITEM',
+export const changeItem = (id, item) => ({
+	type: 'MODIFY',
 	payload: {
 		id,
 		item,

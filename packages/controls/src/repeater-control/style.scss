@@ -1,5 +1,12 @@
-.publisher-core.publisher-control.repeater {
+.publisher-core.control.repeater {
+	//
+
 	.add-new-item {
 		border: solid 1px #eeeeee;
+	}
+
+	.status {
+		margin-left: 8px;
+		margin-right: 16px;
 	}
 }

@@ -2,88 +2,69 @@
  * WordPress dependencies.
  */
 import { plus } from '@wordpress/icons';
-import { useEffect, useCallback } from '@wordpress/element';
+import { useEffect } from '@wordpress/element';
 
 /**
  * External dependencies
  */
-import classnames from 'classnames';
 import { useImmerReducer } from 'use-immer';
 
 /**
  * Internal dependencies.
  */
-import { RepeaterContextProvider } from './context';
+import classnames from '@publisher/classnames';
 import repeaterItemsReducer from './store/reducer';
-import {
-	addRepeaterItem,
-	removeRepeaterItem,
-	changeRepeaterItem,
-} from './store/actions';
-import { InspectElement, Button, Icon } from '@publisher/components';
+import { RepeaterContextProvider } from './context';
+import { Button, Icon } from '@publisher/components';
+import MappedItems from './components/mapped-items';
+import { addItem, removeItem, changeItem } from './store/actions';
 
 //CSS dependencies
 import './style.scss';
-import { getBaseClassNames } from '../global-helpers';
 
 const RepeaterControl = ({
-	title,
-	name,
 	label,
-	attributes,
-	setAttributes,
-	initialState,
+	clientId,
+	savedItems,
 	InnerComponents,
+	initialState = {},
+	className = 'repeater',
+	updateBlockAttributes = () => {},
 }) => {
-	const updateBlockAttributes = useCallback(
-		(boxShadowItems) => {
-			setAttributes({
-				...attributes,
-				publisherAttributes: {
-					boxShadowItems,
-				},
-			});
-		},
-		[setAttributes]
-	);
-	const { publisherAttributes } = attributes;
-
 	const [repeaterItems, dispatch] = useImmerReducer(
 		repeaterItemsReducer,
-		!publisherAttributes[name].length
-			? [initialState]
-			: publisherAttributes[name]
+		initialState
 	);
 
-	useEffect(
-		() => updateBlockAttributes(repeaterItems),
-		[repeaterItems, updateBlockAttributes]
-	);
+	useEffect(() => {
+		if (savedItems !== repeaterItems) {
+			updateBlockAttributes(repeaterItems);
+		}
+	}, [repeaterItems, updateBlockAttributes]);
 
 	const defaultRepeaterState = {
+		clientId,
 		dispatch,
 		initialState,
 		repeaterItems,
-		changeItem: (itemId, value) =>
-			dispatch(changeRepeaterItem(itemId, value)),
-		addNewItem: () => dispatch(addRepeaterItem(initialState)),
-		removeItem: (itemId) => dispatch(removeRepeaterItem(itemId)),
+		InnerComponents,
+		addNewItem: () => dispatch(addItem(initialState)),
+		removeItem: (itemId) => dispatch(removeItem(itemId)),
+		changeItem: (itemId, value) => dispatch(changeItem(itemId, value)),
 	};
 
 	return (
 		<RepeaterContextProvider {...defaultRepeaterState}>
-			<InspectElement title={title} initialOpen={true}>
-				<div className={classnames(getBaseClassNames(), 'repeater')}>
-					<InnerComponents items={repeaterItems} />
-					<Button
-						className="add-new-item"
-						onClick={defaultRepeaterState.addNewItem}
-					>
-						<Icon type="wp" icon={plus} size={17} />
-						{label}
-					</Button>
-				</div>
-			</InspectElement>
+			<div className={classnames('control', className)}>
+				<MappedItems items={repeaterItems} />
+				<Button
+					className="add-new-item"
+					onClick={defaultRepeaterState.addNewItem}
+				>
+					<Icon type="wp" icon={plus} size={17} />
+					{label}
+				</Button>
+			</div>
 		</RepeaterContextProvider>
 	);
 };

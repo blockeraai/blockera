@@ -4,23 +4,23 @@
 import { Popover, ColorPicker } from '@wordpress/components';
 
 export function ColorPickerPopover({
+	isOpen,
 	element,
-	onChange,
-	isOpenColorPicker,
 	onClose = () => {},
+	onChange = () => {},
 }) {
 	return (
 		<Popover
-			placement="left-start"
 			offset={20}
-			className="components-palette-edit__popover"
+			placement="left-start"
+			className="components-palette-edit-popover"
 			onClose={onClose}
 		>
-			{isOpenColorPicker && (
+			{isOpen && (
 				<ColorPicker
 					enableAlpha={false}
 					color={element.color}
-					onChange={(newColor) => onChange(newColor)}
+					onChangeComplete={(color) => onChange(color.hex)}
 				/>
 			)}
 		</Popover>

@@ -3,10 +3,12 @@
  */
 import { __ } from '@wordpress/i18n';
 import { ColorIndicator } from '@wordpress/components';
+import { useState } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
+import classnames from '@publisher/classnames';
 import { ColorPickerPopover } from './popover';
 
 /**
@@ -16,27 +18,25 @@ import './style.scss';
 
 export default function ColorControl({
 	color,
-	onChange,
-	isOpenColorPicker,
-	toggleOpenColorPicker,
+	className = 'color-control',
+	...props
 }) {
+	const [isOpen, setOpen] = useState(false);
+
 	return (
-		<>
-			<div className="publisher-core-color-picker-control">
+		<div className={classnames('control', className)}>
+			<div className="color-indicator-with-label">
 				<ColorIndicator
 					colorValue={color}
-					onClick={() => toggleOpenColorPicker(true)}
+					className="color-indicator"
+					onClick={() => setOpen(true)}
 				/>
 				{__('Color', 'publisher')}
 			</div>
 			<ColorPickerPopover
-				isOpenColorPicker={isOpenColorPicker}
-				onClose={() => {
-					toggleOpenColorPicker(false);
-				}}
-				element={{ color: 'transparent' }}
-				onChange={(color) => onChange('color', color)}
+				onClose={() => setOpen(false)}
+				{...{ ...props, isOpen, element: { color: color || 'transparent' } }}
 			/>
-		</>
+		</div>
 	);
 }

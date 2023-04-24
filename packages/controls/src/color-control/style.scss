@@ -1,5 +1,17 @@
-.publisher-core-color-picker-control {
-	border: solid 1px #e5e5e5;
-	padding: 5px 10px;
-	display: flex;
+.publisher-core.control.color-control {
+	//
+
+	.color-indicator-with-label {
+		border: solid 1px #e5e5e5;
+		padding: 5px 10px;
+		display: flex;
+	}
+}
+
+.publisher-core.control {
+	//
+
+	.color-indicator {
+		margin-right: 8px;
+	}
 }
