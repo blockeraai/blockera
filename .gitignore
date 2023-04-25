@@ -35,5 +35,5 @@ node_modules/
 # .idea directory of idea
 .idea
 
-# example or sudo codes
-example
+# .env file
+.env
