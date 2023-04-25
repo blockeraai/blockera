@@ -26,11 +26,11 @@
 		"ALLOW_EXPERIMENT_REREGISTRATION": true
 	},
 	"dependencies": {
-		"@publisher/components": "file:packages/components",
 		"@publisher/classnames": "file:packages/classnames",
+		"@publisher/components": "file:packages/components",
 		"@publisher/controls": "file:packages/controls",
-		"@publisher/icons": "file:packages/icons",
-		"@publisher/extensions": "file:packages/extensions"
+		"@publisher/extensions": "file:packages/extensions",
+		"@publisher/icons": "file:packages/icons"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.21.0",
@@ -50,6 +50,7 @@
 		"classnames": "^2.2.5",
 		"commander": "^8.3.0",
 		"copy-webpack-plugin": "^10.2.0",
+		"css-minimizer-webpack-plugin": "^5.0.0",
 		"cypress": "^12.7.0",
 		"cypress-log-to-output": "^1.1.2",
 		"esm": "^3.2.25",
@@ -87,19 +88,20 @@
 		"simple-git": "^3.16.0",
 		"source-map-loader": "3.0.0",
 		"style-loader": "^3.3.2",
+		"terser-webpack-plugin": "^5.3.7",
 		"tiny-swiper": "^2.2.0",
 		"use-immer": "^0.9.0",
 		"uuid": "^8.3.2",
 		"webpack": "^5.78.0"
 	},
 	"scripts": {
-		"build": "wp-scripts build",
+		"build": "wp-scripts build --mode production",
 		"format": "wp-scripts format",
 		"lint:js": "wp-scripts lint-js",
 		"lint:css": "wp-scripts lint-style",
 		"lint:php": "composer run lint",
 		"plugin-zip": "wp-scripts plugin-zip",
-		"start": "wp-scripts start --progress",
+		"start": "wp-scripts start --progress --mode development",
 		"start:debug": "DEBUG_MODE=on wp-scripts start --progress",
 		"packages-update": "wp-scripts packages-update",
 		"clean": "rm -rf build dist/* node_modules vendor wordpress",
