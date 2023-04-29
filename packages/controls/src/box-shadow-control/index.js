@@ -56,12 +56,10 @@ function BoxShadowControl({
 					{...{
 						...props,
 						Header,
+						initialState,
 						updateBlockAttributes,
-						savedItems: boxShadowItems,
+						value: boxShadowItems,
 						InnerComponents: BoxShadowFields,
-						initialState: boxShadowItems?.length
-							? boxShadowItems
-							: [initialState],
 					}}
 				/>
 			</div>

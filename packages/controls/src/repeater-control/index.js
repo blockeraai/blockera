@@ -24,9 +24,9 @@ import './style.scss';
 
 const RepeaterControl = ({
 	label,
+	value,
 	Header,
 	clientId,
-	savedItems,
 	InnerComponents,
 	initialState = {},
 	className = 'repeater',
@@ -34,14 +34,14 @@ const RepeaterControl = ({
 }) => {
 	const [repeaterItems, dispatch] = useImmerReducer(
 		repeaterItemsReducer,
-		initialState
+		value?.length ? value : [initialState]
 	);
 
 	useEffect(() => {
-		if (savedItems !== repeaterItems) {
+		if (value !== repeaterItems) {
 			updateBlockAttributes(repeaterItems);
 		}
-	}, [repeaterItems, savedItems, updateBlockAttributes]);
+	}, [repeaterItems, value, updateBlockAttributes]);
 
 	const defaultRepeaterState = {
 		Header,
@@ -52,7 +52,8 @@ const RepeaterControl = ({
 		InnerComponents,
 		addNewItem: () => dispatch(addItem(initialState)),
 		removeItem: (itemId) => dispatch(removeItem(itemId)),
-		changeItem: (itemId, value) => dispatch(changeItem(itemId, value)),
+		changeItem: (itemId, newValue) =>
+			dispatch(changeItem(itemId, newValue)),
 	};
 
 	return (
