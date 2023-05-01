@@ -1,15 +1,18 @@
 /**
  * WordPress dependencies
  */
-import { useMemo } from '@wordpress/element';
+import { useMemo, useContext } from '@wordpress/element';
 import { __experimentalSpacer as Spacer } from '@wordpress/components';
 
 /**
  * Internal dependencies
  */
 import RepeaterItem from './repeater-item';
+import { RepeaterContext } from '../context';
 
-const MappedItems = ({ items }) => {
+const MappedItems = () => {
+	const { repeaterItems: items } = useContext(RepeaterContext);
+
 	const cachedValue = useMemo(
 		() =>
 			items.map((item, itemId) => (

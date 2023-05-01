@@ -14,8 +14,12 @@ import GroupControl from '../../group-control';
 const RepeaterItem = ({ item, itemId }) => {
 	const [isOpen, setOpen] = useState(false);
 	const [isVisible, setVisibility] = useState(true);
-	const { InnerComponents, Header } = useContext(RepeaterContext);
-
+	const {
+		InnerComponents,
+		Header,
+		sortItems,
+		repeaterItems: items,
+	} = useContext(RepeaterContext);
 	const actionsProps = {
 		itemId,
 		isOpen,
@@ -25,23 +29,29 @@ const RepeaterItem = ({ item, itemId }) => {
 	};
 
 	return (
-		<GroupControl
-			className={isVisible ? 'group activate' : 'group deactivate'}
-			header={
-				!Header ? (
-					<>
-						{__('Item ', 'publisher') + itemId}
-						<ActionsUI {...{ ...actionsProps }} />
-					</>
-				) : (
-					<Header {...{ item, itemId }}>
-						<ActionsUI {...{ ...actionsProps }} />
-					</Header>
-				)
-			}
-			children={<InnerComponents {...{ item, itemId }} />}
-			isOpen={isOpen}
-		/>
+		<div className="repeater-item">
+			<GroupControl
+				isDraggable
+				groupId={itemId}
+				dropArgs={items}
+				dropCallback={sortItems}
+				className={`group${isVisible ? ' activate' : ' deactivate'}`}
+				header={
+					!Header ? (
+						<>
+							{__('Item ', 'publisher') + itemId}
+							<ActionsUI {...{ ...actionsProps }} />
+						</>
+					) : (
+						<Header {...{ item, itemId }}>
+							<ActionsUI {...{ ...actionsProps }} />
+						</Header>
+					)
+				}
+				children={<InnerComponents {...{ item, itemId }} />}
+				isOpen={isOpen}
+			/>
+		</div>
 	);
 };
 
