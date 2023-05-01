@@ -15,3 +15,12 @@ export const changeItem = (id, item) => ({
 		item,
 	},
 });
+
+export const sortItems = ({ args, toIndex, fromIndex }) => ({
+	type: 'SORT',
+	payload: {
+		args,
+		toIndex,
+		fromIndex,
+	},
+});

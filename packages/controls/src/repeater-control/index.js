@@ -17,7 +17,7 @@ import repeaterItemsReducer from './store/reducer';
 import { RepeaterContextProvider } from './context';
 import { Button, Icon } from '@publisher/components';
 import MappedItems from './components/mapped-items';
-import { addItem, removeItem, changeItem } from './store/actions';
+import { addItem, removeItem, changeItem, sortItems } from './store/actions';
 
 //CSS dependencies
 import './style.scss';
@@ -54,12 +54,13 @@ const RepeaterControl = ({
 		removeItem: (itemId) => dispatch(removeItem(itemId)),
 		changeItem: (itemId, newValue) =>
 			dispatch(changeItem(itemId, newValue)),
+		sortItems: (newValue) => dispatch(sortItems(newValue)),
 	};
 
 	return (
 		<RepeaterContextProvider {...defaultRepeaterState}>
 			<div className={classnames('control', className)}>
-				<MappedItems items={repeaterItems} />
+				<MappedItems />
 				<Button
 					className="add-new-item"
 					onClick={defaultRepeaterState.addNewItem}
