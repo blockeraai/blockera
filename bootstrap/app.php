@@ -8,5 +8,4 @@ $dotenv->safeLoad();
 
 
 #Assets Providing...
-$provider = new AssetsProvider();
-$provider->register();
+new AssetsProvider();

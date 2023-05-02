@@ -19,7 +19,8 @@ class AssetsProvider {
 
 	public function __construct() {
 
-		add_action( 'wp_enqueue_scripts', [ $this, 'register_assets' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'register_assets' ], 10 );
+		add_action( 'enqueue_block_editor_assets', [ $this, 'register_assets' ], 10 );
 	}
 
 	/**
@@ -27,7 +28,7 @@ class AssetsProvider {
 	 *
 	 * @return void
 	 */
-	public function register(): void {
+	public function register_assets(): void {
 
 		foreach ( self::$assets as $asset ) {
 
