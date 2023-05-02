@@ -1,13 +1,28 @@
 /**
  * External dependencies
  */
-import ExternalClassNames from 'classnames';
+import classnames from 'classnames';
 
 /**
  * Internal dependencies
  */
-import DEFAULTS from './defaults';
+import rootDefault from './defaults/root.json';
+import controlsDefault from './defaults/controls.json';
+import componentsDefault from './defaults/components.json';
+import extensionsDefault from './defaults/extensions.json';
 
-export default function classnames(...names) {
-	return ExternalClassNames(DEFAULTS, names);
+export function getClassNames(...names) {
+	return classnames(rootDefault, names);
+}
+
+export function controlClassNames(...names) {
+	return classnames(controlsDefault, names);
+}
+
+export function componentClassNames(...names) {
+	return classnames(componentsDefault, names);
+}
+
+export function extensionClassNames(...names) {
+	return classnames(extensionsDefault, names);
 }
