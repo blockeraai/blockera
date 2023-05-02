@@ -21,11 +21,13 @@ export default function GroupControl({
 	dropCallback = null,
 	className = 'group',
 }) {
-	const styleRef = useRef({});
+	const styleRef = useRef(null);
 	const [draggingIndex, setDraggingIndex] = useState(null);
 
 	useEffect(() => {
-		styleRef.current = { opacity: draggingIndex !== groupId ? 0.5 : 1 };
+		styleRef.current = {
+			opacity: draggingIndex && draggingIndex !== groupId ? 0.5 : 1,
+		};
 	}, [draggingIndex, groupId]);
 
 	const handleDragStart = (e, index) => {
