@@ -2,9 +2,13 @@
  * WordPress dependencies
  */
 import { applyFilters } from '@wordpress/hooks';
-import { cloneElement } from '@wordpress/element';
 
-const withCustomizeSaveElement = (element, blockType) => {
+/**
+ * Internal dependencies
+ */
+import { getBlockEditorProp } from './utils';
+
+const withCustomizeSaveElement = (element, blockType, attributes) => {
 	if (!element) {
 		return;
 	}
@@ -21,15 +25,14 @@ const withCustomizeSaveElement = (element, blockType) => {
 		return element;
 	}
 
-	const { children } = element.props;
+	const callbacks = getBlockEditorProp(blockType?.name);
+	const { saveElement } = callbacks;
 
-	return cloneElement(element, {
-		// children: concatChildren(
-		// children ? children : <></>,
-		// <Icon icon={getIcon(attributes.icon, 'wp')} />
-		// ),
-		children: children ? children : <></>,
-	});
+	if ('function' !== typeof saveElement) {
+		return element;
+	}
+
+	return saveElement({ element, blockType, attributes });
 };
 
 export default withCustomizeSaveElement;

@@ -9,7 +9,7 @@ import { createHigherOrderComponent } from '@wordpress/compose';
  * Internal dependencies
  */
 import { getBlockEditorProp } from './utils';
-import classnames from '@publisher/classnames';
+import { extensionClassNames } from '@publisher/classnames';
 
 /**
  * Add custom Publisher Extensions attributes to selected blocks
@@ -91,12 +91,14 @@ const withBlockControls = createHigherOrderComponent((BlockEdit) => {
 
 		return (
 			<>
-				<div
-					ref={blockEditRef}
-					className={classnames('extensions', 'block-edit-ref')}
-				>
-					<BlockEdit {...props} />
-				</div>
+				<BlockEdit
+					{...props}
+					className={extensionClassNames(
+						'block-edit-extension-ref',
+						`client-id-${props.clientId}`,
+						props.className
+					)}
+				/>
 				{'function' === typeof blockControls &&
 					blockControls(name, props)}
 			</>
