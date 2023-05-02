@@ -6,7 +6,7 @@ import { ToggleControl as WordPressToggleControl } from '@wordpress/components';
 /**
  * Internal dependencies
 */
-import classnames from '@publisher/classnames';
+import { controlClassNames } from '@publisher/classnames';
 
 
 export default function ToggleControl({
@@ -15,7 +15,7 @@ export default function ToggleControl({
 }) {
 	return (
 		<WordPressToggleControl
-			className={classnames('control', className)}
+			className={controlClassNames(className)}
 			{...props}
 		/>
 	);

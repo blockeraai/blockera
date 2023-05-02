@@ -6,14 +6,13 @@ import { Button as WPButton } from '@wordpress/components';
 /**
  * Internal dependencies
 */
-import classnames from '@publisher/classnames';
+import { componentClassNames } from '@publisher/classnames';
 
 
 export default function Button({ children, className = 'button-component', ...props }) {
 	return (
 		<WPButton
-			className={classnames(
-				'component',
+			className={componentClassNames(
 				className
 			)}
 			{...props}

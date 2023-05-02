@@ -12,7 +12,7 @@ import { useImmerReducer } from 'use-immer';
 /**
  * Internal dependencies.
  */
-import classnames from '@publisher/classnames';
+import { controlClassNames } from '@publisher/classnames';
 import repeaterItemsReducer from './store/reducer';
 import { RepeaterContextProvider } from './context';
 import { Button, Icon } from '@publisher/components';
@@ -59,7 +59,7 @@ const RepeaterControl = ({
 
 	return (
 		<RepeaterContextProvider {...defaultRepeaterState}>
-			<div className={classnames('control', className)}>
+			<div className={controlClassNames('control', className)}>
 				<MappedItems />
 				<Button
 					className="add-new-item"

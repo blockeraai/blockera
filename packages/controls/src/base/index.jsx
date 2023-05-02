@@ -6,7 +6,7 @@ import { BaseControl as WordPressBaseControl } from '@wordpress/components';
 /**
  * External dependencies
  */
-import classnames from '@publisher/classnames';
+import { controlClassNames } from '@publisher/classnames';
 
 export default function BaseControl({
 	className = 'base',
@@ -14,7 +14,7 @@ export default function BaseControl({
 }) {
 	return (
 		<WordPressBaseControl
-			className={classnames('control', className)}
+			className={controlClassNames(className)}
 			{...props}
 		/>
 	);

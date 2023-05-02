@@ -11,7 +11,6 @@ import { memo, useContext } from '@wordpress/element';
 import BaseControl from '../../base';
 import UnitControl from '../../unit-control';
 import ColorControl from '../../color-control';
-import classnames from '@publisher/classnames';
 import ToggleControl from '../../toggle-control';
 import { VStack, HStack } from '@publisher/components';
 import { RepeaterContext } from '../../repeater-control/context';
@@ -28,7 +27,6 @@ const BoxShadowFields = ({ item, itemId }) => {
 			availableUnits: ['px', '%', 'em'],
 			defaultValues: { px: 0 },
 		}),
-		className: classnames('control', 'box-shadow', 'unit-control'),
 		onUnitChange: (unitValue) =>
 			changeItem(itemId, { ...item, unit: unitValue }),
 	};

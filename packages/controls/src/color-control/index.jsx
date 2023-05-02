@@ -8,7 +8,7 @@ import { useState } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import classnames from '@publisher/classnames';
+import { controlClassNames } from '@publisher/classnames';
 import { ColorPickerPopover } from './popover';
 
 /**
@@ -24,7 +24,7 @@ export default function ColorControl({
 	const [isOpen, setOpen] = useState(false);
 
 	return (
-		<div className={classnames('control', className)}>
+		<div className={controlClassNames(className)}>
 			<div className="color-indicator-with-label">
 				<ColorIndicator
 					colorValue={color}

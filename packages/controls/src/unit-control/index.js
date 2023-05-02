@@ -6,12 +6,12 @@ import { __experimentalUnitControl as WordPressUnitControl } from '@wordpress/bl
 /**
  * Internal dependencies
  */
-import classnames from '@publisher/classnames';
+import { controlClassNames } from '@publisher/classnames';
 
-export default function UnitControl({ className = 'uni', ...props }) {
+export default function UnitControl({ className = 'unit-control', ...props }) {
 	return (
 		<WordPressUnitControl
-			className={classnames('control', className)}
+			className={controlClassNames(className)}
 			{...props}
 		/>
 	);

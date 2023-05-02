@@ -8,7 +8,7 @@ import { Popover } from '@wordpress/components';
  * Internal dependencies
  */
 import './style.scss';
-import classnames from '@publisher/classnames';
+import { controlClassNames } from '@publisher/classnames';
 
 export default function GroupControl({
 	isOpen,
@@ -57,7 +57,7 @@ export default function GroupControl({
 			draggable
 			onDragOver={handleDragOver}
 			onDrop={(e) => handleDrop(e, groupId)}
-			className={classnames('control', className)}
+			className={controlClassNames(className)}
 			onDragStart={(e) => handleDragStart(e, groupId)}
 			style={styleRef.current}
 		>

@@ -8,7 +8,7 @@ import { useCallback } from '@wordpress/element';
  * Internal dependencies
  */
 import Header from './components/header';
-import classnames from '@publisher/classnames';
+import { controlClassNames } from '@publisher/classnames';
 import RepeaterControl from '../repeater-control';
 import { InspectElement } from '@publisher/components';
 import BoxShadowFields from './components/box-shadow-fields';
@@ -50,7 +50,7 @@ function BoxShadowControl({
 			title={__('Box Shadow', 'publisher')}
 			initialOpen={true}
 		>
-			<div className={classnames('control', className)}>
+			<div className={controlClassNames('control', className)}>
 				<RepeaterControl
 					label={__('Add Box Shadow', 'publisher')}
 					{...{
