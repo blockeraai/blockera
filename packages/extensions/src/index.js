@@ -11,7 +11,7 @@ import {
 	withEditorProps,
 	withBlockControls,
 	withBlockAttributes,
-	withCustomizeSaveElement,
+	// withCustomizeSaveElement,
 } from './wrappers';
 
 export default function activateExtensions() {
@@ -39,9 +39,9 @@ export default function activateExtensions() {
 		withSaveProps
 	);
 
-	addFilter(
-		'blocks.getSaveElement',
-		'publisher/core/extensions/withAppliedCustomizeSaveElement',
-		withCustomizeSaveElement
-	);
+	// addFilter(
+	// 	'blocks.getSaveElement',
+	// 	'publisher/core/extensions/withAppliedCustomizeSaveElement',
+	// 	withCustomizeSaveElement
+	// );
 }
