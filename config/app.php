@@ -7,5 +7,5 @@ return [
 	'version'   => PB_CORE_VERSION,
 	'dist_url'  => PB_CORE_URI . '/dist/',
 	'dist_path' => PB_CORE_PATH . '/dist/',
-	'debug'     => pb_core_env( 'APP_MODE' ) ?? WP_DEBUG,
+	'debug'     => pb_core_env('APP_MODE') && 'development' === pb_core_env('APP_MODE') ? true : (defined('WP_DEBUG') ?? false),
 ];
