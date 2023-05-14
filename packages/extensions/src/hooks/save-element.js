@@ -1,38 +1,48 @@
 /**
  * WordPress dependencies
  */
-import { applyFilters } from '@wordpress/hooks';
+import { select } from '@wordpress/data';
 
 /**
  * Internal dependencies
  */
-// import { getBlockEditorProp } from './utils';
+import controlsExtensions from './controls';
+import { STORE_NAME } from '../store/constants';
 
 const withCustomizeSaveElement = (element, blockType, attributes) => {
-	if (!element) {
-		return;
-	}
-	return element;
-	/**
-	 * Allowed Block Types in Publisher Extensions Setup
-	 */
-	const allowedBlockTypes = applyFilters(
-		'publisher.core.extensions.allowedBlockTypes',
-		[]
+	const registeredBlockExtension = select(STORE_NAME).getBlockExtension(
+		blockType?.name
 	);
 
-	if (!allowedBlockTypes.includes(blockType?.name)) {
+	if (!registeredBlockExtension) {
 		return element;
 	}
 
-	const callbacks = getBlockEditorProp(blockType?.name);
-	const { saveElement } = callbacks;
+	let SaveElement = {};
+	const { Save, publisherSupports } = registeredBlockExtension;
 
-	if ('function' !== typeof saveElement) {
-		return element;
+	if ('function' === typeof Save) {
+		SaveElement = {
+			...Save(element, blockType, attributes),
+		};
 	}
 
-	return saveElement({ element, blockType, attributes });
+	Object.keys(controlsExtensions).forEach((support) => {
+		if (publisherSupports[support]) {
+			const { Save: controlSave } = controlsExtensions[support];
+
+			if ('function' !== typeof controlSave) {
+				return;
+			}
+
+			SaveElement = {
+				...SaveElement,
+				...controlSave(element, blockType, attributes),
+			};
+		}
+	});
+
+	return SaveElement;
 };
 
 export default withCustomizeSaveElement;

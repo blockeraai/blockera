@@ -2,7 +2,6 @@
  * WordPress dependencies
  */
 import { useEffect } from '@wordpress/element';
-import { applyFilters } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
 /**
  * External dependencies
@@ -12,8 +11,11 @@ import classnames from 'classnames';
 /**
  * Internal dependencies
  */
-import deprecateAllFeatures from './deprecated';
 import { enhance } from './utils';
+import { useExtendedProps } from './hooks';
+import controlsExtensions from './controls';
+import deprecateAllFeatures from './deprecated';
+import { STORE_NAME } from '../store/constants';
 
 /**
  * React hook function to override the default block element to add wrapper props.
@@ -24,16 +26,11 @@ import { enhance } from './utils';
  */
 const withEditorProps = createHigherOrderComponent((BlockListBlock) => {
 	return enhance(({ select, ...props }) => {
-		return <BlockListBlock {...props} />;
-		/**
-		 * Allowed Block Types in Publisher Extensions Setup
-		 */
-		const allowedBlockTypes = applyFilters(
-			'publisher.core.extensions.allowedBlockTypes',
-			[]
+		const registeredBlockExtension = select(STORE_NAME).getBlockExtension(
+			props?.name
 		);
 
-		if (!allowedBlockTypes.includes(props?.name)) {
+		if (!registeredBlockExtension) {
 			return <BlockListBlock {...props} />;
 		}
 
@@ -66,18 +63,30 @@ const withEditorProps = createHigherOrderComponent((BlockListBlock) => {
 		 * Group extensions in an array to minimize code duplication and
 		 * allow a source of truth for all applied extensions.
 		 */
-		const callbacks = getBlockEditorProp(props?.name);
-		const { editorProps } = callbacks;
+		const everyExtension = [];
+		const { publisherEditorProps, publisherSupports } =
+			registeredBlockExtension;
 
-		if ('function' !== typeof editorProps) {
-			return <BlockListBlock {...props} />;
+		if (publisherEditorProps) {
+			everyExtension.push(
+				useExtendedProps(props.wrapperProps, publisherEditorProps)
+			);
 		}
 
-		const everyExtension = editorProps({
-			block: parentBlock,
-			blockName: parentBlockName,
-			wrapperProps: props.wrapperProps,
+		Object.keys(controlsExtensions).forEach((support) => {
+			if (publisherSupports[support]) {
+				const { publisherEditorProps: editorProps } =
+					controlsExtensions[support];
+
+				everyExtension.push(
+					useExtendedProps(props.wrapperProps, editorProps)
+				);
+			}
 		});
+
+		if (!everyExtension?.length) {
+			return <BlockListBlock {...props} />;
+		}
 
 		/**
 		 * Merge classes from all extensions.
@@ -112,7 +121,7 @@ const withEditorProps = createHigherOrderComponent((BlockListBlock) => {
 		/**
 		 * Extended wrapperProps applied to BlockListBlock.
 		 * wrapperProps would be element attributes in the DOM
-		 * such as `[data-p-blocks-align-support: 1]` but should not contain the className.
+		 * such as `[data-publisher-align-support: 1]` but should not contain the className.
 		 */
 		const wrapperProps = {
 			...mergeProps(),

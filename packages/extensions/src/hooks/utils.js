@@ -3,7 +3,6 @@
  */
 import { compose } from '@wordpress/compose';
 import { withSelect } from '@wordpress/data';
-import { applyFilters } from '@wordpress/hooks';
 
 /**
  * Upper Case first character of word
@@ -39,16 +38,3 @@ export const enhance = compose(
 		};
 	})
 );
-
-/**
- * Extracts file as object included all exports of modules!
- *
- * @param {string} filePath the file path
- * @returns {Object} extracted file submodules.
- */
-export async function getFileExtracts(filePath: string): Object {
-	console.log('../../../../../../' + filePath);
-	const extracted = await import('../../../../../../' + filePath);
-
-	console.log(extracted);
-}

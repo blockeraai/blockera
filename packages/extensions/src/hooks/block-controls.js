@@ -1,18 +1,18 @@
 /**
  * WordPress dependencies
  */
+import { getBlockSupport } from '@wordpress/blocks';
 import { select } from '@wordpress/data';
-import { applyFilters } from '@wordpress/hooks';
 import { useEffect, useRef, useMemo } from '@wordpress/element';
 import { createHigherOrderComponent } from '@wordpress/compose';
 
 /**
  * Internal dependencies
  */
-import { hasAllProperties } from '../api';
+import controlsExtensions from './controls';
 import { STORE_NAME } from '../store/constants';
 import { extensionClassNames } from '@publisher/classnames';
-import { getFileExtracts } from './utils';
+import { CssGenerators } from '../api/css-generator';
 
 /**
  * Add custom Publisher Extensions attributes to selected blocks
@@ -21,7 +21,6 @@ import { getFileExtracts } from './utils';
  * @return {{}|Object} Block props extended with Publisher Extensions attributes.
  */
 const useAttributes = (props: Object): Object => {
-	const { name: blockName } = props;
 	const extendedProps = { ...props };
 
 	extendedProps.attributes.publisherAttributes =
@@ -50,6 +49,64 @@ const useAttributes = (props: Object): Object => {
 	return extendedProps;
 };
 
+const MappedControlsExtensions = (props: Object): Array<Object> => {
+	const mappedItems = [];
+
+	const blockSupport = getBlockSupport(
+		props.name,
+		'__experimentalPublisherDefaultControls'
+	);
+
+	//Mapped controls `Edit` component to rendering in WordPress current Block Type!
+	Object.keys(controlsExtensions).forEach((support, index) => {
+		if (blockSupport[support]) {
+			const { Edit } = controlsExtensions[support];
+
+			if ('function' !== typeof Edit) {
+				return;
+			}
+
+			mappedItems.push(<Edit key={`${support}-${index}`} {...props} />);
+		}
+	});
+
+	return mappedItems;
+};
+
+/**
+ * Retrieve css
+ *
+ * @param {Object} blockType The current block type
+ * @param {*} blockProps The current block properties
+ * @returns {string} The current block css output of css generators!
+ */
+export const getCss = (blockType: Object, blockProps: Object): string => {
+	let css = '';
+	const { publisherCssGenerators } = blockType;
+
+	for (const controlId in publisherCssGenerators) {
+		if (!Object.hasOwnProperty.call(publisherCssGenerators, controlId)) {
+			continue;
+		}
+
+		const generator = publisherCssGenerators[controlId];
+
+		if (!generator?.type) {
+			continue;
+		}
+
+		const cssGenerator = new CssGenerators(
+			controlId,
+			generator,
+			blockProps
+		);
+
+		css += cssGenerator.rules() + '\n';
+	}
+
+	return css;
+};
+
 /**
  * Add custom publisher extensions controls to selected blocks
  *
@@ -62,16 +119,11 @@ const withBlockControls = createHigherOrderComponent((BlockEdit) => {
 		const registeredBlockExtension =
 			select(STORE_NAME).getBlockExtension(name);
 
-		if (
-			!registeredBlockExtension ||
-			!registeredBlockExtension.hasOwnProperty('edit')
-		) {
+		if (!registeredBlockExtension) {
 			return <BlockEdit {...blockProps} />;
 		}
 
-		getFileExtracts(registeredBlockExtension.edit);
-
-		return <BlockEdit {...blockProps} />;
+		const blockType = select('core/blocks').getBlockType(name);
 
 		const props = useMemo(() => {
 			return {
@@ -80,7 +132,7 @@ const withBlockControls = createHigherOrderComponent((BlockEdit) => {
 		}, [blockProps]);
 
 		const blockEditRef = useRef();
-		const { edit: sideEffect, blockControls } = registeredBlockExtension;
+		const { Edit, sideEffect } = registeredBlockExtension;
 
 		useEffect(() => {
 			if ('function' !== typeof sideEffect) {
@@ -89,6 +141,8 @@ const withBlockControls = createHigherOrderComponent((BlockEdit) => {
 
 			sideEffect(blockEditRef, props);
 		}, [blockEditRef, props, sideEffect]);
+
+		const __css = getCss(blockType, props);
 
 		return (
 			<>
@@ -100,8 +154,15 @@ const withBlockControls = createHigherOrderComponent((BlockEdit) => {
 						props.className
 					)}
 				/>
-				{'function' === typeof blockControls &&
-					blockControls(name, props)}
+				<MappedControlsExtensions {...{ ...props, name }} />
+				{'function' === typeof Edit && <Edit {...{ ...props, name }} />}
+				{__css && (
+					<style
+						dangerouslySetInnerHTML={{
+							__html: __css,
+						}}
+					/>
+				)}
 			</>
 		);
 	};

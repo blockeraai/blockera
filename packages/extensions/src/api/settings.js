@@ -1,26 +1,27 @@
+import { hasAllProperties } from './utils';
+
 /**
- * Merge registered block settings, extending attributes to include
+ * Merge registered block attributes, extending attributes to include
  * `publisherAttributes` with all properties if needed
  *
- * @param {Object} blockSettings The WordPress default block settings
+ * @param {Object} attributes The WordPress default block attributes
  * @param {Object} properties The additional publisher attributes properties
  * @returns {Object} The block attributes includes publisher extensions attributes.
  */
-function addAttributes(blockSettings: Object, properties: Object): Object {
-	const attributes = blockSettings.attributes;
+function addAttributes(attributes: Object, properties: Object): Object {
+	if (!Object.keys(properties).length) {
+		return attributes;
+	}
 
 	return {
-		...blockSettings,
-		attributes: {
-			...attributes,
-			publisherAttributes: {
-				...attributes.publisherAttributes,
-				items: {
-					...attributes.publisherAttributes.items,
-					properties: {
-						...attributes.publisherAttributes.items.properties,
-						...properties,
-					},
+		...attributes,
+		publisherAttributes: {
+			...attributes.publisherAttributes,
+			items: {
+				...attributes.publisherAttributes.items,
+				properties: {
+					...attributes.publisherAttributes.items.properties,
+					...properties,
 				},
 			},
 		},
@@ -28,29 +29,60 @@ function addAttributes(blockSettings: Object, properties: Object): Object {
 }
 
 /**
- * Merge registered block settings, extending attributes to include
- * `publisherAttributes` with all properties if needed
+ * Merge registered block supports, extending attributes to include
+ * `__experimentalPublisherDefaultControls` with all properties if needed
  *
- * @param {Object} blockSettings The WordPress default block settings
+ * @param {Object} supports The WordPress default block supports
  * @param {Object} properties The additional publisher supports properties
  * @returns {Object} The block support includes publisher extensions supports.
  */
-function addSupports(blockSettings: Object, properties: Object): Object {
-	const supports = blockSettings.supports;
+function addSupports(supports: Object, properties: Object): Object {
+	if (!Object.keys(properties).length) {
+		return supports;
+	}
 
 	return {
-		...blockSettings,
+		...supports,
+		__experimentalPublisherDefaultControls: {
+			...supports.__experimentalPublisherDefaultControls,
+			...properties,
+		},
+	};
+}
+
+/**
+ * Merge registered block settings, with properties( `attributes`, `supports` ) passed!
+ *
+ * @param {Object} defaultSettings The WordPress default block settings
+ * @param {Object} properties The additional publisher properties( `attributes`, `supports` )
+ * @returns {Object} The block settings includes publisher extensions settings.
+ */
+function merge(defaultSettings: Object, properties: Object): Object {
+	if (!hasAllProperties(properties, ['attributes', 'supports'])) {
+		return defaultSettings;
+	}
+
+	return {
+		...defaultSettings,
 		supports: {
-			...supports,
-			__experimentalPublisherDefaultControls: {
-				...supports.__experimentalPublisherDefaultControls,
-				...properties,
-			},
+			...defaultSettings.supports,
+			...addSupports(defaultSettings.supports, properties.supports),
+		},
+		attributes: {
+			...defaultSettings.attributes,
+			...addAttributes(defaultSettings.attributes, properties.attributes),
+		},
+		publisherCssGenerators: {
+			...(defaultSettings?.publisherCssGenerators
+				? defaultSettings.publisherCssGenerators
+				: {}),
+			...properties.publisherCssGenerators,
 		},
 	};
 }
 
 export default {
+	merge,
 	addSupports,
 	addAttributes,
 };

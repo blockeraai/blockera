@@ -1,15 +1,18 @@
 /**
  * WordPress dependencies
  */
-import { applyFilters } from '@wordpress/hooks';
+import { select } from '@wordpress/data';
 
 /**
  * Internal dependencies
  */
-// import { getBlockEditorProp } from './utils';
+import controlsExtensions from './controls';
+import { STORE_NAME } from '../store/constants';
+import { useExtendedProps } from './hooks';
 
 /**
  * Override props assigned to save component to inject attributes
+ *
  *
  * @param {Object} extraProps Additional props applied to save element.
  * @param {Object} blockType  Block type.
@@ -17,27 +20,37 @@ import { applyFilters } from '@wordpress/hooks';
  * @return {Object} Filtered props applied to save element.
  */
 function withSaveProps(extraProps, blockType, attributes) {
-	return extraProps;
-	/**
-	 * Allowed Block Types in Publisher Extensions Setup
-	 */
-	const allowedBlockTypes = applyFilters(
-		'publisher.core.extensions.allowedBlockTypes',
-		[]
+	const registeredBlockExtension = select(STORE_NAME).getBlockExtension(
+		blockType?.name
 	);
 
-	if (!allowedBlockTypes.includes(blockType?.name)) {
+	if (!registeredBlockExtension) {
 		return extraProps;
 	}
 
-	const callbacks = getBlockEditorProp(blockType?.name);
-	const { extraProps: _extraProps } = callbacks;
+	const { publisherSaveProps, publisherSupports } = registeredBlockExtension;
 
-	if ('function' !== typeof _extraProps) {
-		return extraProps;
+	if (publisherSaveProps) {
+		extraProps = useExtendedProps(extraProps, publisherSaveProps);
 	}
 
-	return _extraProps({ extraProps, blockType, attributes });
+	//Register controls attributes and supports into WordPress Block Type!
+	Object.keys(controlsExtensions).forEach((support) => {
+		if (publisherSupports[support]) {
+			const { publisherSaveProps: saveProps } =
+				controlsExtensions[support];
+
+			extraProps = useExtendedProps(extraProps, saveProps);
+		}
+	});
+
+	if (attributes?.publisherAttributes?.id) {
+		extraProps = useExtendedProps(extraProps, {
+			className: `publisher-attrs-id-${attributes.publisherAttributes.id}`,
+		});
+	}
+
+	return extraProps;
 }
 
 export default withSaveProps;

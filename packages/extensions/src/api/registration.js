@@ -73,11 +73,12 @@ export function registerBlockExtension(
 
 	const blockExtension = {
 		name,
-		attributes: {},
-		supports: {},
-		cssGenerator: [],
-		cursorStatus: [],
-		deviceStatus: [],
+		publisherSupports: {},
+		publisherAttributes: {},
+		publisherEditorProps: {},
+		publisherCursorStatus: [],
+		publisherDeviceStatus: [],
+		publisherCssGenerators: [],
 		...settings,
 	};
 
