@@ -1,0 +1,27 @@
+{
+	"name": "@publisher/data-extractor",
+	"version": "1.0.0",
+	"description": "Publisher Data Extractor package to access all property value with tokenized string.",
+	"author": "The Publisher Contributors",
+	"license": "ISC",
+	"keywords": [
+		"publisher",
+		"wordpress",
+		"gutenberg",
+		"data-extractor"
+	],
+	"homepage": "https://gitlab.com/better-projects/publisher-fse/publisher-core/packages/data-extractor/-/blob/main/README.md",
+	"repository": {
+		"type": "git",
+		"url": "git+https://gitlab.com/better-projects/publisher-fse/publisher-core.git",
+		"directory": "packages/data-extractor"
+	},
+	"sideEffects": false,
+	"bugs": {
+		"url": "https://gitlab.com/better-projects/publisher-fse/publisher-core/-/issues"
+	},
+	"engines": {
+		"node": ">=12"
+	},
+	"main": "src/index.js"
+}
