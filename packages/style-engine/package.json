@@ -1,0 +1,28 @@
+{
+	"name": "@publisher/style-engine",
+	"version": "1.0.0",
+	"description": "Publisher Style Engine package to compile CSS.",
+	"author": "The Publisher Contributors",
+	"license": "ISC",
+	"keywords": [
+		"publisher",
+		"wordpress",
+		"gutenberg",
+		"style generator",
+		"css generator"
+	],
+	"homepage": "https://gitlab.com/better-projects/publisher-fse/publisher-core/packages/style-engine/-/blob/main/README.md",
+	"repository": {
+		"type": "git",
+		"url": "git+https://gitlab.com/better-projects/publisher-fse/publisher-core.git",
+		"directory": "packages/style-engine"
+	},
+	"sideEffects": false,
+	"bugs": {
+		"url": "https://gitlab.com/better-projects/publisher-fse/publisher-core/-/issues"
+	},
+	"engines": {
+		"node": ">=12"
+	},
+	"main": "src/index.js"
+}

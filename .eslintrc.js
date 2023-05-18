@@ -10,5 +10,14 @@ module.exports = {
 		'import/no-extraneous-dependencies': 'off',
 		'@wordpress/no-unsafe-wp-apis': 'off',
 		'jsdoc/check-line-alignment': 'off',
+		'no-console': 'off',
+		'no-restricted-syntax': [
+			'error',
+			{
+				selector:
+					"CallExpression[callee.object.name='console'][callee.property.name!=/^(log|warn|error|info|trace)$/]",
+				message: 'Unexpected property on console object was called',
+			},
+		],
 	},
 };
