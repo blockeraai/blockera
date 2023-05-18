@@ -8,9 +8,9 @@ import { useCallback } from '@wordpress/element';
  * Internal dependencies
  */
 import Header from './components/header';
-import { controlClassNames } from '@publisher/classnames';
 import RepeaterControl from '../repeater-control';
 import { InspectElement } from '@publisher/components';
+import { controlClassNames } from '@publisher/classnames';
 import BoxShadowFields from './components/box-shadow-fields';
 
 const initialState = {
@@ -30,16 +30,12 @@ function BoxShadowControl({
 	className = 'box-shadow',
 	...props
 }) {
-	const {
-		publisherAttributes: { boxShadowItems },
-	} = attributes;
+	const { boxShadowItems } = attributes;
 	const updateBlockAttributes = useCallback(
 		(newBoxShadowItems) => {
 			setAttributes({
 				...attributes,
-				publisherAttributes: {
-					boxShadowItems: newBoxShadowItems,
-				},
+				boxShadowItems: newBoxShadowItems,
 			});
 		},
 		[attributes, setAttributes]
