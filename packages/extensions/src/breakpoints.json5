@@ -1,0 +1,17 @@
+{
+	"desktop": {
+		"force": true,
+		"default": true,
+		"id": "desktop",
+		"label": "Desktop",
+		"min": "980px",
+		"max": "1800px",
+	},
+	"mobile": {
+		"force": false,
+		"id": "mobile",
+		"label": "Mobile",
+		"min": "",
+		"max": "680px",
+	}
+}

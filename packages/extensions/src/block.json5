@@ -1,0 +1,53 @@
+{
+	"publisherDefaultProps": {
+		"textColor": "",
+		"bgColor": "",
+		"borderColor": "#eee",
+	},
+	"publisherAdvancedProps": {
+		// Publisher Extension
+		// WP Supports
+		"width": true,
+	},
+	"publisherProps": {
+		"desktop": {
+			"type": "breakpoint",
+			"id": "desktop",
+			states: {
+				"hover": {
+					"status": "disable",
+					"props": {
+						"textColor": "black"
+					}
+				},
+				"custom-class-akbar": {
+					"type": "class",
+					"id": "custom-class-akbar",
+					"props": {
+						"textColor": "blue"
+					}
+				},
+			},
+		},
+		"mobile": {
+			"type": "breakpoint",
+			"id": "mobile",
+			"states": {
+				"normal": {
+					"type": "state",
+					"id": "normal",
+					"props": {
+						"textColor": "red",
+					}
+				},
+				"hover": {
+					"type": "state",
+					"id": "hover",
+					"props": {
+						"textColor": "green"
+					}
+				}
+			},
+		}
+	}
+}

@@ -1,0 +1,13 @@
+{
+	"normal": {
+		"default": true,
+		"force": false,
+		"id": "normal",
+		"label": "Normal",
+	},
+	"hover": {
+		"force": false,
+		"id": "hover",
+		"label": "Hover",
+	}
+}
