@@ -45,9 +45,9 @@ const withEditorProps = createHigherOrderComponent((BlockListBlock) => {
 		 * Some controls must use the parent blocks like for
 		 * galleries but others will use children like buttonControls
 		 */
-		// const parentBlock = select(blockEditorStore).getBlock(
-		// 	props.rootClientId || props.clientId
-		// );
+		const parentBlock = select(blockEditorStore).getBlock(
+			props.rootClientId || props.clientId
+		);
 		// const parentBlockName = select(blockEditorStore).getBlockName(
 		// 	props.rootClientId || props.clientId
 		// );
