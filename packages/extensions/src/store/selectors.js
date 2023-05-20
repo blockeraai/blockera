@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import { get } from 'lodash';
 import createSelector from 'rememo';
 
 /**
@@ -15,15 +16,15 @@ import createSelector from 'rememo';
  * import { useSelect } from '@wordpress/data';
  *
  * const ExampleComponent = () => {
- *     const paragraphBlockExtension = useSelect( ( select ) =>
- *         ( select ) => select( blockExtensionsStore ).getBlockExtension( 'core/paragraph' ),
+ *     const buttonBlockExtension = useSelect( ( select ) =>
+ *         ( select ) => select( blockExtensionsStore ).getBlockExtension( 'core/button' ),
  *         []
  *     );
  *
  *     return (
  *         <ul>
- *             { paragraphBlock &&
- *                 Object.entries( paragraphBlock.supports ).map(
+ *             { buttonBlock &&
+ *                 Object.entries( buttonBlock.publisherSupports ).map(
  *                     ( blockSupportsEntry ) => {
  *                         const [ propertyName, value ] = blockSupportsEntry;
  *                         return (
@@ -89,15 +90,15 @@ export const getBlockExtensions = createSelector(
  * import { useSelect } from '@wordpress/data';
  *
  * const ExampleComponent = () => {
- *     const paragraphBlockSupports = useSelect( ( select ) =>
- *         ( select ) => select( blockExtensionsStore ).getBlockExtensionSupports( 'core/paragraph' ),
+ *     const buttonBlockSupports = useSelect( ( select ) =>
+ *         ( select ) => select( blockExtensionsStore ).getBlockExtensionSupports( 'core/button' ),
  *         []
  *     );
  *
  *     return (
  *         <ul>
- *             { paragraphBlockSupports &&
- *                 Object.entries( paragraphBlockSupports ).map(
+ *             { buttonBlockSupports &&
+ *                 Object.entries( buttonBlockSupports ).map(
  *                     ( blockSupportsEntry ) => {
  *                         const [ propertyName, value ] = blockSupportsEntry;
  *                         return (
@@ -115,5 +116,115 @@ export const getBlockExtensions = createSelector(
  * @return {Object?} Block Extension.
  */
 export function getBlockExtensionSupports(state, name) {
-	return state.blockExtensions[name]?.supports;
+	return state.blockExtensions[name]?.publisherSupports;
+}
+
+/**
+ * Returns the block extension support value for a feature, if defined.
+ *
+ * @param {Object}          state           Data state.
+ * @param {(string|Object)} nameOrExtension Block extension name or extension object
+ * @param {Array|string}    feature         Feature to retrieve
+ * @param {*}               defaultSupports Default value to return if not
+ *                                          explicitly defined
+ *
+ * @example
+ * ```js
+ * import { __, sprintf } from '@wordpress/i18n';
+ * import { store as extensionsStore } from '@publisher/extensions';
+ * import { useSelect } from '@wordpress/data';
+ *
+ * const ExampleComponent = () => {
+ *     const buttonBlockExtensionSupportValue = useSelect( ( select ) =>
+ *         select( extensionsStore ).getBlockExtensionSupport( 'core/button', 'publisher-core/box-shadow' ),
+ *         []
+ *     );
+ *
+ *     return (
+ *         <p>
+ *             { sprintf(
+ *                 __( 'core/button extension supports['publisher-core/box-shadow'] value: %s' ),
+ *                 buttonBlockExtensionSupportValue
+ *             ) }
+ *         </p>
+ *     );
+ * };
+ * ```
+ *
+ * @return {?*} Block support value
+ */
+export const getBlockExtensionSupport = (
+	state,
+	nameOrExtension,
+	feature,
+	defaultSupports
+) => {
+	const blockExtension = getNormalizedBlockExtension(state, nameOrExtension);
+	if (!blockExtension?.publisherSupports) {
+		return defaultSupports;
+	}
+
+	return get(blockExtension.publisherSupports, feature, defaultSupports);
+};
+
+/**
+ * Given a block extension name or block extension object, returns the corresponding
+ * normalized block extension object.
+ *
+ * @param {Object}          state      Block extensions state.
+ * @param {(string|Object)} nameOrExtension Block extension name or extension object
+ *
+ * @return {Object} Block extension object.
+ */
+const getNormalizedBlockExtension = (state, nameOrExtension) =>
+	'string' === typeof nameOrExtension
+		? getBlockExtension(state, nameOrExtension)
+		: nameOrExtension;
+
+/**
+ * Returns true if the block extension defines support for a feature, or false otherwise.
+ *
+ * @param {Object}          state           Data state.
+ * @param {(string|Object)} nameOrExtension      Block extension name or extension object.
+ * @param {string}          feature         Feature to test.
+ * @param {boolean}         defaultSupports Whether feature is supported by
+ *                                          default if not explicitly defined.
+ *
+ * @example
+ * ```js
+ * import { __, sprintf } from '@wordpress/i18n';
+ * import { store as extensionsStore } from '@publisher/extensions';
+ * import { useSelect } from '@wordpress/data';
+ *
+ * const ExampleComponent = () => {
+ *     const buttonBlockExtensionSupportBoxShadow = useSelect( ( select ) =>
+ *         select( extensionsStore ).hasBlockExtensionSupport( 'core/button', 'publisher-core/box-shadow' ),
+ *         []
+ *     );
+ *
+ *     return (
+ *         <p>
+ *             { sprintf(
+ *                 __( 'core/button extension supports box-shadow?: %s' ),
+ *                 buttonBlockExtensionSupportBoxShadow
+ *             ) }
+ *         /p>
+ *     );
+ * };
+ * ```
+ *
+ * @return {boolean} Whether block supports feature.
+ */
+export function hasBlockExtensionSupport(
+	state,
+	nameOrExtension,
+	feature,
+	defaultSupports
+) {
+	return !!getBlockExtensionSupport(
+		state,
+		nameOrExtension,
+		feature,
+		defaultSupports
+	);
 }
