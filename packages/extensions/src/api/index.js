@@ -1,4 +1,11 @@
-export { omit, hasAllProperties } from './utils';
+/**
+ * Internal dependencies
+ */
+import { InitControls } from '../controls';
+
+InitControls();
+
+export { omit } from './utils';
 export {
 	registerBlockExtension,
 	unregisterBlockExtension,

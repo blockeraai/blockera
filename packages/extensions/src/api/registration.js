@@ -15,13 +15,12 @@ import { store as extensionStore } from '../store';
  *
  * @property {string}             name          Block extension type's namespaced name.
  * @property {Object}             [attributes]  Block extension attributes.
- * @property {WPComponent}        [save]        Optional component describing
+ * @property {WPComponent}        [Save]        Optional component describing
  *                                              serialized markup structure of a
- *                                              block type.
- * @property {WPComponent}        edit          Component rendering an element to
+ *                                              block extension type.
+ * @property {WPComponent}        Edit          Component rendering an element to
  *                                              manipulate the attributes of a block
  *                                              in the context of an editor.
- * @property {WPBlockVariation[]} [variations]  The list of block variations.
  * @property {Object}             [example]     Example provides structured data for
  *                                              the block preview. When not defined
  *                                              then no preview is shown.
@@ -47,14 +46,14 @@ import { store as extensionStore } from '../store';
  * } );
  * ```
  *
- * @returns {publisherBlockExtensionType|undefined} The block extension, if it has been successfully registered;
+ * @return {publisherBlockExtensionType|undefined} The block extension, if it has been successfully registered;
  *                    otherwise `undefined`.
  */
 
 export function registerBlockExtension(
 	name: string,
 	settings: Object
-): publisherBlockExtensionType | undefined {
+): Object | undefined {
 	if (typeof name !== 'string') {
 		console.error('Block extension names must be strings.');
 		return;
@@ -73,11 +72,10 @@ export function registerBlockExtension(
 
 	const blockExtension = {
 		name,
+		publisherProps: {},
 		publisherSupports: {},
-		publisherAttributes: {},
+		publisherSaveProps: {},
 		publisherEditorProps: {},
-		publisherCursorStatus: [],
-		publisherDeviceStatus: [],
 		publisherCssGenerators: [],
 		...settings,
 	};
