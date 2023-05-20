@@ -9,6 +9,8 @@ import { select } from '@wordpress/data';
 import { STORE_NAME } from '../store/constants';
 
 const withCustomizeSaveElement = (element, blockType, attributes) => {
+	const { getBlockExtensions, getBlockExtension, hasBlockExtensionSupport } =
+		select(STORE_NAME);
 	const currentExtension = getBlockExtension(blockType?.name);
 
 	if (!currentExtension) {
@@ -17,8 +19,6 @@ const withCustomizeSaveElement = (element, blockType, attributes) => {
 
 	let SaveElement = {};
 	const { Save } = currentExtension;
-	const { getBlockExtensions, getBlockExtension, hasBlockExtensionSupport } =
-		select(STORE_NAME);
 	const extensions = getBlockExtensions();
 
 	if ('function' === typeof Save) {

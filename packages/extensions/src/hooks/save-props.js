@@ -19,6 +19,8 @@ import { STORE_NAME } from '../store/constants';
  * @return {Object} Filtered props applied to save element.
  */
 function withSaveProps(extraProps, blockType, attributes) {
+	const { getBlockExtensions, getBlockExtension, hasBlockExtensionSupport } =
+		select(STORE_NAME);
 	const currentExtension = getBlockExtension(blockType?.name);
 
 	if (!currentExtension) {
@@ -26,8 +28,6 @@ function withSaveProps(extraProps, blockType, attributes) {
 	}
 
 	const { publisherSaveProps } = currentExtension;
-	const { getBlockExtensions, getBlockExtension, hasBlockExtensionSupport } =
-		select(STORE_NAME);
 	const extensions = getBlockExtensions();
 
 	if (publisherSaveProps) {
