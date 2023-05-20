@@ -1,9 +1,3 @@
-import withSaveProps from './save-props';
-import withEditorProps from './editor-props';
-import withBlockControls from './block-controls';
-import withBlockSettings from './block-settings';
-import withCustomizeSaveElement from './save-element';
-
 /**
  * WordPress dependencies
  */
@@ -12,6 +6,11 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Internal dependencies
  */
+import withSaveProps from './save-props';
+import withEditorProps from './editor-props';
+import withBlockControls from './block-controls';
+import withBlockSettings from './block-settings';
+import withCustomizeSaveElement from './save-element';
 
 export default function applyHooks() {
 	addFilter(

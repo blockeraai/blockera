@@ -6,9 +6,8 @@ import { select } from '@wordpress/data';
 /**
  * Internal dependencies
  */
-import controlsExtensions from './controls';
+import { default as blockSettings } from '../api/settings';
 import { STORE_NAME } from '../store/constants';
-import { blockSettings, hasAllProperties } from '../api';
 
 /**
  * Publisher default CssGenerators object.
@@ -28,71 +27,51 @@ export default function withBlockSettings(
 	settings: Object,
 	name: Object
 ): Object {
-	settings = {
-		...settings,
-		attributes: {
-			...settings.attributes,
-			publisherAttributes: {
-				type: 'object',
-				default: {},
-				items: {
-					type: 'object',
-					properties: {},
+	const { addSupports } = blockSettings;
+	const { getBlockExtensions, getBlockExtension, hasBlockExtensionSupport } =
+		select(STORE_NAME);
+	const extensions = getBlockExtensions();
+	const currentExtension = getBlockExtension(name);
+
+	extensions.forEach(
+		({
+			name: extensionName,
+			Edit = () => {},
+			Save = () => {},
+			publisherProps = {},
+			publisherSupports = {},
+			publisherCssGenerators = {},
+			...extension
+		}) => {
+			if (
+				!hasBlockExtensionSupport(currentExtension?.name, extensionName)
+			) {
+				return;
+			}
+
+			settings = {
+				...settings,
+				publisherEdit: Edit,
+				publisherSave: Save,
+				/**
+				 * TODO: Please implements publisherProps data structure in future!
+				 *
+				 * @see {@link libs/publisher-core/README.md} references of final structure for publisherProps property!
+				 */
+				attributes: {
+					...publisherProps,
+					...settings.attributes,
 				},
-			},
-		},
-		supports: {
-			...settings.supports,
-			__experimentalPublisherDefaultControls: {},
-		},
-	};
-
-	const registeredBlockExtension = select(STORE_NAME).getBlockExtension(name);
-
-	if (
-		!registeredBlockExtension ||
-		!hasAllProperties(registeredBlockExtension, [
-			'publisherAttributes',
-			'publisherSupports',
-		])
-	) {
-		return settings;
-	}
-
-	const { publisherAttributes, publisherSupports, publisherCssGenerators } =
-		registeredBlockExtension;
-	const { merge } = blockSettings;
-
-	if ('function' !== typeof merge) {
-		return settings;
-	}
-
-	//Register controls attributes and supports into WordPress Block Type!
-	Object.keys(controlsExtensions).forEach((support) => {
-		if (publisherSupports[support]) {
-			const {
-				publisherAttributes: attributes,
-				publisherSupports: supports,
-				publisherCssGenerators: cssGenerators,
-			} = controlsExtensions[support];
-
-			settings = merge(settings, {
-				supports,
-				attributes,
+				supports: addSupports(settings.supports, publisherSupports),
 				publisherCssGenerators: {
 					...defaultCssGenerators,
-					...(cssGenerators ? cssGenerators : {}),
+					...publisherCssGenerators,
+					...(settings?.publisherCssGenerators || {}),
 				},
-			});
+				...extension,
+			};
 		}
-	});
+	);
 
-	return merge(settings, {
-		supports: publisherSupports,
-		attributes: publisherAttributes,
-		publisherCssGenerators: {
-			...defaultCssGenerators,
-			...(publisherCssGenerators ? publisherCssGenerators : {}),
-		},
-	});
+	return settings;
 }

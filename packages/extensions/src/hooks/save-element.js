@@ -6,30 +6,31 @@ import { select } from '@wordpress/data';
 /**
  * Internal dependencies
  */
-import controlsExtensions from './controls';
 import { STORE_NAME } from '../store/constants';
 
 const withCustomizeSaveElement = (element, blockType, attributes) => {
-	const registeredBlockExtension = select(STORE_NAME).getBlockExtension(
-		blockType?.name
-	);
+	const currentExtension = getBlockExtension(blockType?.name);
 
-	if (!registeredBlockExtension) {
+	if (!currentExtension) {
 		return element;
 	}
 
 	let SaveElement = {};
-	const { Save, publisherSupports } = registeredBlockExtension;
+	const { Save } = currentExtension;
+	const { getBlockExtensions, getBlockExtension, hasBlockExtensionSupport } =
+		select(STORE_NAME);
+	const extensions = getBlockExtensions();
 
 	if ('function' === typeof Save) {
 		SaveElement = {
+			...SaveElement,
 			...Save(element, blockType, attributes),
 		};
 	}
 
-	Object.keys(controlsExtensions).forEach((support) => {
-		if (publisherSupports[support]) {
-			const { Save: controlSave } = controlsExtensions[support];
+	extensions.forEach((extension) => {
+		if (hasBlockExtensionSupport(currentExtension, extension.name)) {
+			const { Save: controlSave } = extension;
 
 			if ('function' !== typeof controlSave) {
 				return;

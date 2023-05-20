@@ -1,14 +1,16 @@
 /**
- * External dependencies
+ * WordPress dependencies
  */
-import { isObject } from 'lodash';
+import { useSelect } from '@wordpress/data';
+import { useBlockEditContext } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
  */
-import { getClassNames } from '@publisher/classnames';
+import classnames from 'classnames';
+import { STORE_NAME } from '../store/constants';
 
-export function useExtendedProps(
+export function getExtendedProps(
 	defaultProps: Object,
 	extensionProps: Object
 ): Object {
@@ -22,10 +24,7 @@ export function useExtendedProps(
 		if ('className' === key) {
 			defaultProps = {
 				...defaultProps,
-				className: getClassNames(
-					defaultProps?.className || '',
-					newProp
-				),
+				className: classnames(defaultProps?.className || '', newProp),
 			};
 
 			continue;
@@ -47,4 +46,47 @@ export function useExtendedProps(
 	}
 
 	return defaultProps;
+}
+
+export function useDisplayBlockControls() {
+	const { isSelected, clientId, name } = useBlockEditContext();
+	return useSelect(
+		(select) => {
+			if (isSelected) {
+				return true;
+			}
+
+			const {
+				getBlockName,
+				isFirstMultiSelectedBlock,
+				getMultiSelectedBlockClientIds,
+			} = select('core/block-editor');
+
+			if (isFirstMultiSelectedBlock(clientId)) {
+				return getMultiSelectedBlockClientIds().every(
+					(id) => getBlockName(id) === name
+				);
+			}
+
+			return false;
+		},
+		[clientId, isSelected, name]
+	);
+}
+
+export function useBlockExtensions(blockName: string): Object {
+	return useSelect((select) => {
+		const {
+			getBlockExtension,
+			getBlockExtensions,
+			hasBlockExtensionSupport,
+		} = select(STORE_NAME);
+
+		return {
+			extensions: getBlockExtensions(),
+			hasExtensionSupport: hasBlockExtensionSupport,
+			currentExtension: getBlockExtension(blockName),
+			blockType: select('core/blocks').getBlockType(blockName),
+		};
+	});
 }

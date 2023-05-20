@@ -6,9 +6,8 @@ import { select } from '@wordpress/data';
 /**
  * Internal dependencies
  */
-import controlsExtensions from './controls';
+import { getExtendedProps } from './hooks';
 import { STORE_NAME } from '../store/constants';
-import { useExtendedProps } from './hooks';
 
 /**
  * Override props assigned to save component to inject attributes
@@ -20,34 +19,36 @@ import { useExtendedProps } from './hooks';
  * @return {Object} Filtered props applied to save element.
  */
 function withSaveProps(extraProps, blockType, attributes) {
-	const registeredBlockExtension = select(STORE_NAME).getBlockExtension(
-		blockType?.name
-	);
+	const currentExtension = getBlockExtension(blockType?.name);
 
-	if (!registeredBlockExtension) {
+	if (!currentExtension) {
 		return extraProps;
 	}
 
-	const { publisherSaveProps, publisherSupports } = registeredBlockExtension;
+	const { publisherSaveProps } = currentExtension;
+	const { getBlockExtensions, getBlockExtension, hasBlockExtensionSupport } =
+		select(STORE_NAME);
+	const extensions = getBlockExtensions();
 
 	if (publisherSaveProps) {
-		extraProps = useExtendedProps(extraProps, publisherSaveProps);
+		extraProps = getExtendedProps(extraProps, publisherSaveProps);
 	}
 
 	//Register controls attributes and supports into WordPress Block Type!
-	Object.keys(controlsExtensions).forEach((support) => {
-		if (publisherSupports[support]) {
-			const { publisherSaveProps: saveProps } =
-				controlsExtensions[support];
-
-			extraProps = useExtendedProps(extraProps, saveProps);
+	extensions.forEach((extension) => {
+		if (!hasBlockExtensionSupport(currentExtension, extension.name)) {
+			return;
 		}
+
+		const { publisherSaveProps: saveProps } = extension;
+
+		extraProps = getExtendedProps(extraProps, saveProps);
 	});
 
-	if (attributes?.publisherAttributes?.id) {
-		extraProps = useExtendedProps(extraProps, {
-			className: `publisher-attrs-id-${attributes.publisherAttributes.id}`,
-		});
+	if (attributes?.publisherPropsId) {
+		// extraProps = useExtendedProps(extraProps, {
+		// 	className: `publisher-attrs-id-${attributes?.publisherPropsId}`,
+		// });
 	}
 
 	return extraProps;

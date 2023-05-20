@@ -1,49 +1,36 @@
 /**
  * WordPress dependencies
  */
-import { getBlockSupport } from '@wordpress/blocks';
-import { select } from '@wordpress/data';
+import { BlockControls } from '@wordpress/block-editor';
 import { useEffect, useRef, useMemo } from '@wordpress/element';
 import { createHigherOrderComponent } from '@wordpress/compose';
 
 /**
  * Internal dependencies
  */
-import controlsExtensions from './controls';
-import { STORE_NAME } from '../store/constants';
+import { computedCssRules } from '@publisher/style-engine';
 import { extensionClassNames } from '@publisher/classnames';
-import { CssGenerators } from '../api/css-generator';
+import { useBlockExtensions, useDisplayBlockControls } from './hooks';
 
 /**
- * Add custom Publisher Extensions attributes to selected blocks
+ * Add custom Publisher props identifier to selected blocks
  *
  * @param {Object} props Block props
- * @return {{}|Object} Block props extended with Publisher Extensions attributes.
+ * @return {{}|Object} Block props extended with Publisher Extensions.
  */
 const useAttributes = (props: Object): Object => {
 	const extendedProps = { ...props };
 
-	extendedProps.attributes.publisherAttributes =
-		extendedProps.attributes.publisherAttributes || {};
-
-	if (
-		typeof extendedProps.attributes.publisherAttributes.id === 'undefined'
-	) {
+	if (typeof extendedProps.attributes.publisherPropsId === 'undefined') {
 		const d = new Date();
-		extendedProps.attributes.publisherAttributes = Object.assign(
-			{},
-			extendedProps.attributes.publisherAttributes,
-			{
-				id:
-					'' +
-					d.getMonth() +
-					d.getDate() +
-					d.getHours() +
-					d.getMinutes() +
-					d.getSeconds() +
-					d.getMilliseconds(),
-			}
-		);
+		extendedProps.attributes.publisherPropsId =
+			'' +
+			d.getMonth() +
+			d.getDate() +
+			d.getHours() +
+			d.getMinutes() +
+			d.getSeconds() +
+			d.getMilliseconds();
 	}
 
 	return extendedProps;
@@ -51,60 +38,27 @@ const useAttributes = (props: Object): Object => {
 
 const MappedControlsExtensions = (props: Object): Array<Object> => {
 	const mappedItems = [];
-
-	const blockSupport = getBlockSupport(
-		props.name,
-		'__experimentalPublisherDefaultControls'
-	);
+	const { extensions, currentExtension, hasExtensionSupport } =
+		useBlockExtensions(props?.name);
 
 	//Mapped controls `Edit` component to rendering in WordPress current Block Type!
-	Object.keys(controlsExtensions).forEach((support, index) => {
-		if (blockSupport[support]) {
-			const { Edit } = controlsExtensions[support];
+	extensions.forEach((_extension, index) => {
+		const { name } = _extension;
 
-			if ('function' !== typeof Edit) {
-				return;
-			}
-
-			mappedItems.push(<Edit key={`${support}-${index}`} {...props} />);
+		if (!hasExtensionSupport(currentExtension, name)) {
+			return;
 		}
+
+		const { Edit } = _extension;
+
+		if ('function' !== typeof Edit) {
+			return;
+		}
+
+		mappedItems.push(<Edit key={`${name}-${index}`} {...props} />);
 	});
 
 	return mappedItems;
-};
-
-/**
- * Retrieve css
- *
- * @param {Object} blockType The current block type
- * @param {*} blockProps The current block properties
- * @returns {string} The current block css output of css generators!
- */
-export const getCss = (blockType: Object, blockProps: Object): string => {
-	let css = '';
-	const { publisherCssGenerators } = blockType;
-
-	for (const controlId in publisherCssGenerators) {
-		if (!Object.hasOwnProperty.call(publisherCssGenerators, controlId)) {
-			continue;
-		}
-
-		const generator = publisherCssGenerators[controlId];
-
-		if (!generator?.type) {
-			continue;
-		}
-
-		const cssGenerator = new CssGenerators(
-			controlId,
-			generator,
-			blockProps
-		);
-
-		css += cssGenerator.rules() + '\n';
-	}
-
-	return css;
 };
 
 /**
@@ -116,23 +70,27 @@ export const getCss = (blockType: Object, blockProps: Object): string => {
 const withBlockControls = createHigherOrderComponent((BlockEdit) => {
 	return (blockProps) => {
 		const { name } = blockProps;
-		const registeredBlockExtension =
-			select(STORE_NAME).getBlockExtension(name);
+		const { blockType, currentExtension } = useBlockExtensions(name);
 
-		if (!registeredBlockExtension) {
+		if (!currentExtension) {
 			return <BlockEdit {...blockProps} />;
 		}
 
-		const blockType = select('core/blocks').getBlockType(name);
-
+		//Extended Block Properties with publisherPropsId when changes blockProps!
 		const props = useMemo(() => {
 			return {
 				...useAttributes(blockProps),
 			};
 		}, [blockProps]);
 
+		const classnames = extensionClassNames({
+			[props.className]: true,
+			[`publisher-client-id-${props.clientId}`]: true,
+		});
+
 		const blockEditRef = useRef();
-		const { Edit, sideEffect } = registeredBlockExtension;
+		const { Edit, sideEffect } = currentExtension;
+		const __cssRules = computedCssRules(blockType, props);
 
 		useEffect(() => {
 			if ('function' !== typeof sideEffect) {
@@ -142,28 +100,27 @@ const withBlockControls = createHigherOrderComponent((BlockEdit) => {
 			sideEffect(blockEditRef, props);
 		}, [blockEditRef, props, sideEffect]);
 
-		const __css = getCss(blockType, props);
-
 		return (
-			<>
-				<BlockEdit
-					{...props}
-					className={extensionClassNames(
-						'publisher-extension-ref',
-						`client-id-${props.clientId}`,
-						props.className
+			<div ref={blockEditRef}>
+				<BlockControls group="block" __experimentalShareWithChildBlocks>
+					{useDisplayBlockControls() && (
+						<>
+							<MappedControlsExtensions {...props} />
+							{'function' === typeof Edit && (
+								<Edit {...{ ...props, name }} />
+							)}
+						</>
 					)}
-				/>
-				<MappedControlsExtensions {...{ ...props, name }} />
-				{'function' === typeof Edit && <Edit {...{ ...props, name }} />}
-				{__css && (
+				</BlockControls>
+				<BlockEdit {...props} className={classnames} />
+				{0 !== __cssRules?.length && (
 					<style
 						dangerouslySetInnerHTML={{
-							__html: __css,
+							__html: __cssRules,
 						}}
 					/>
 				)}
-			</>
+			</div>
 		);
 	};
 }, 'withAllNeedsControls');

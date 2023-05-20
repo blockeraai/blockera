@@ -12,10 +12,8 @@ import classnames from 'classnames';
  * Internal dependencies
  */
 import { enhance } from './utils';
-import { useExtendedProps } from './hooks';
-import controlsExtensions from './controls';
+import { useBlockExtensions, getExtendedProps } from './hooks';
 import deprecateAllFeatures from './deprecated';
-import { STORE_NAME } from '../store/constants';
 
 /**
  * React hook function to override the default block element to add wrapper props.
@@ -26,15 +24,14 @@ import { STORE_NAME } from '../store/constants';
  */
 const withEditorProps = createHigherOrderComponent((BlockListBlock) => {
 	return enhance(({ select, ...props }) => {
-		const registeredBlockExtension = select(STORE_NAME).getBlockExtension(
-			props?.name
-		);
+		const { currentExtension, hasExtensionSupport, extensions } =
+			useBlockExtensions(props?.name);
 
-		if (!registeredBlockExtension) {
+		if (!currentExtension) {
 			return <BlockListBlock {...props} />;
 		}
 
-		const blockEditorStore = 'core/block-editor';
+		// const blockEditorStore = 'core/block-editor';
 
 		/**
 		 * Block deprecation logic belongs here.
@@ -48,12 +45,12 @@ const withEditorProps = createHigherOrderComponent((BlockListBlock) => {
 		 * Some controls must use the parent blocks like for
 		 * galleries but others will use children like buttonControls
 		 */
-		const parentBlock = select(blockEditorStore).getBlock(
-			props.rootClientId || props.clientId
-		);
-		const parentBlockName = select(blockEditorStore).getBlockName(
-			props.rootClientId || props.clientId
-		);
+		// const parentBlock = select(blockEditorStore).getBlock(
+		// 	props.rootClientId || props.clientId
+		// );
+		// const parentBlockName = select(blockEditorStore).getBlockName(
+		// 	props.rootClientId || props.clientId
+		// );
 		// const childBlock = select(blockEditorStore).getBlock(props.clientId);
 		// const childBlockName = select(blockEditorStore).getBlockName(
 		// 	props.clientId
@@ -64,24 +61,24 @@ const withEditorProps = createHigherOrderComponent((BlockListBlock) => {
 		 * allow a source of truth for all applied extensions.
 		 */
 		const everyExtension = [];
-		const { publisherEditorProps, publisherSupports } =
-			registeredBlockExtension;
+		const { publisherEditorProps } = currentExtension;
 
 		if (publisherEditorProps) {
 			everyExtension.push(
-				useExtendedProps(props.wrapperProps, publisherEditorProps)
+				getExtendedProps(props.wrapperProps, publisherEditorProps)
 			);
 		}
 
-		Object.keys(controlsExtensions).forEach((support) => {
-			if (publisherSupports[support]) {
-				const { publisherEditorProps: editorProps } =
-					controlsExtensions[support];
-
-				everyExtension.push(
-					useExtendedProps(props.wrapperProps, editorProps)
-				);
+		extensions.forEach((extension) => {
+			if (!hasExtensionSupport(currentExtension, extension.name)) {
+				return;
 			}
+
+			const { publisherEditorProps: editorProps } = extension;
+
+			everyExtension.push(
+				getExtendedProps(props.wrapperProps, editorProps)
+			);
 		});
 
 		if (!everyExtension?.length) {
