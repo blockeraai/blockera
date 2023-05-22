@@ -1,0 +1,14 @@
+{
+	"type": "field",
+	"name": "Transition",
+	"props": {
+		"publisherTransition": {
+			"type": "array",
+			"default": []
+		}
+	},
+	"cssGenerators": {},
+	"editorProps": {
+		"className": "publisher-transition"
+	}
+}

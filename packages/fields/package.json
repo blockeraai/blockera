@@ -1,0 +1,27 @@
+{
+	"name": "@publisher/fields",
+	"version": "1.0.0",
+	"description": "Publisher Fields package to wrap publisher components and controls.",
+	"author": "The Publisher Contributors",
+	"license": "ISC",
+	"keywords": [
+		"publisher",
+		"wordpress",
+		"gutenberg",
+		"fields"
+	],
+	"homepage": "https://gitlab.com/better-projects/publisher-fse/publisher-core/packages/fields/-/blob/main/README.md",
+	"repository": {
+		"type": "git",
+		"url": "git+https://gitlab.com/better-projects/publisher-fse/publisher-core.git",
+		"directory": "packages/fields"
+	},
+	"sideEffects": false,
+	"bugs": {
+		"url": "https://gitlab.com/better-projects/publisher-fse/publisher-core/-/issues"
+	},
+	"engines": {
+		"node": ">=12"
+	},
+	"main": "src/index.js"
+}

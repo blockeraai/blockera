@@ -1,0 +1,14 @@
+{
+	"type": "field",
+	"name": "Opacity",
+	"props": {
+		"publisherOpacity": {
+			"type": "integer",
+			"default": 1
+		}
+	},
+	"cssGenerators": {},
+	"editorProps": {
+		"className": "publisher-opacity"
+	}
+}

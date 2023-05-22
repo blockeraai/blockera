@@ -1,0 +1,26 @@
+{
+	"type": "field",
+	"name": "BoxShadow",
+	"props": {
+		"publisherBoxShadowItems": {
+			"type": "array",
+			"default": []
+		}
+	},
+	"fields": {},
+	"cssGenerators": {
+		"publisherBoxShadowItems": [
+			{
+				"type": "function",
+				"function": "getCssRules",
+				"selector": " .wp-element-button"
+			}
+		]
+	},
+	"editorProps": {
+		"className": "publisher-box-shadow-wrapper"
+	},
+	"saveProps": {
+		"className": ""
+	}
+}
