@@ -1,0 +1,22 @@
+{
+	"type": "extension",
+	"isOpen": true,
+	"label": "Effects",
+	"name": "publisherEffects",
+	"props": {
+		"publisherEffects": {
+			"type": "object",
+			"default": {}
+		}
+	},
+	"fields": {
+		"Opacity": {
+			"publisherCssGenerators": {}
+		},
+		"Transition": true
+	},
+	"cssGenerators": {},
+	"editorProps": {
+		"className": "publisher-effects-wrapper"
+	}
+}

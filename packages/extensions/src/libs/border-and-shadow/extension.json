@@ -1,0 +1,17 @@
+{
+	"type": "extension",
+	"isOpen": true,
+	"label": "Border and Shadow",
+	"name": "publisherBorderAndShadow",
+	"fields": {
+		"BoxShadow": {
+			"supports": {
+				"shadow": false
+			}
+		}
+	},
+	"cssGenerators": {},
+	"editorProps": {
+		"className": "publisher-border-shadow-wrapper"
+	}
+}
