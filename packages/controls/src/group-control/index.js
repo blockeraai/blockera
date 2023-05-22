@@ -68,7 +68,7 @@ export default function GroupControl({
 			</div>
 			{isPopover
 				? isOpen && (
-						<Popover>
+						<Popover offset={20} placement="left-start">
 							<div className="content">{children}</div>
 						</Popover>
 				  )

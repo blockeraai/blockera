@@ -50,6 +50,7 @@ const RepeaterItem = ({ item, itemId }) => {
 				}
 				children={<InnerComponents {...{ item, itemId }} />}
 				isOpen={isOpen}
+				isPopover={true}
 			/>
 		</div>
 	);
