@@ -23,7 +23,7 @@ export function getExtendedProps(
 
 		if ('className' === key) {
 			defaultProps = {
-				...defaultProps,
+				...(defaultProps || {}),
 				className: classnames(defaultProps?.className || '', newProp),
 			};
 
@@ -37,9 +37,9 @@ export function getExtendedProps(
 		}
 
 		defaultProps = {
-			...defaultProps,
+			...(defaultProps || {}),
 			[key]: {
-				...defaultProps[key],
+				...(defaultProps[key] ?? {}),
 				...newProp,
 			},
 		};
@@ -74,19 +74,24 @@ export function useDisplayBlockControls() {
 	);
 }
 
-export function useBlockExtensions(blockName: string): Object {
+export function useBlockExtensions(extensionName: string): Object {
 	return useSelect((select) => {
 		const {
-			getBlockExtension,
 			getBlockExtensions,
-			hasBlockExtensionSupport,
+			getBlockExtensionBy,
+			hasBlockExtensionField,
 		} = select(STORE_NAME);
 
 		return {
-			extensions: getBlockExtensions(),
-			hasExtensionSupport: hasBlockExtensionSupport,
-			currentExtension: getBlockExtension(blockName),
-			blockType: select('core/blocks').getBlockType(blockName),
+			extensions: getBlockExtensions().filter(
+				({ type, name }) =>
+					name !== extensionName &&
+					'extension' === type &&
+					hasBlockExtensionField(extensionName, name)
+			),
+			hasExtensionSupport: hasBlockExtensionField,
+			currentExtension: getBlockExtensionBy('targetBlock', extensionName),
+			blockType: select('core/blocks').getBlockType(extensionName),
 		};
 	});
 }

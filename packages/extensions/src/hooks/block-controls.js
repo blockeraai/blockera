@@ -4,6 +4,7 @@
 import { BlockControls } from '@wordpress/block-editor';
 import { useEffect, useRef, useMemo } from '@wordpress/element';
 import { createHigherOrderComponent } from '@wordpress/compose';
+import { select } from '@wordpress/data';
 
 /**
  * Internal dependencies
@@ -11,6 +12,7 @@ import { createHigherOrderComponent } from '@wordpress/compose';
 import { computedCssRules } from '@publisher/style-engine';
 import { extensionClassNames } from '@publisher/classnames';
 import { useBlockExtensions, useDisplayBlockControls } from './hooks';
+import { InspectElement } from '@publisher/components';
 
 /**
  * Add custom Publisher props identifier to selected blocks
@@ -36,29 +38,49 @@ const useAttributes = (props: Object): Object => {
 	return extendedProps;
 };
 
-const MappedControlsExtensions = (props: Object): Array<Object> => {
-	const mappedItems = [];
-	const { extensions, currentExtension, hasExtensionSupport } =
-		useBlockExtensions(props?.name);
+const MappedControlsExtensions = (props) => {
+	const { publisherEdit } = select('core/blocks').getBlockType(props?.name);
 
 	//Mapped controls `Edit` component to rendering in WordPress current Block Type!
-	extensions.forEach((_extension, index) => {
-		const { name } = _extension;
+	const {
+		BlockUI: { Edit: BlockEditComponent },
+		ExtensionUI,
+		FieldUI,
+	} = publisherEdit;
 
-		if (!hasExtensionSupport(currentExtension, name)) {
-			return;
-		}
+	return (
+		<BlockEditComponent {...props}>
+			{ExtensionUI.map(
+				(
+					{ name, label, isOpen, Edit: ExtensionEditComponent },
+					index
+				) => (
+					<InspectElement
+						title={label}
+						initialOpen={isOpen}
+						key={`${name}-${index}`}
+					>
+						<ExtensionEditComponent {...props}>
+							{FieldUI.map((field, fieldId) => {
+								if (!field[name]) {
+									return null;
+								}
 
-		const { Edit } = _extension;
+								const FieldEditComponent = field[name];
 
-		if ('function' !== typeof Edit) {
-			return;
-		}
-
-		mappedItems.push(<Edit key={`${name}-${index}`} {...props} />);
-	});
-
-	return mappedItems;
+								return (
+									<FieldEditComponent
+										key={`${name}-${index}-${fieldId}`}
+										{...props}
+									/>
+								);
+							})}
+						</ExtensionEditComponent>
+					</InspectElement>
+				)
+			)}
+		</BlockEditComponent>
+	);
 };
 
 /**
@@ -101,7 +123,7 @@ const withBlockControls = createHigherOrderComponent((BlockEdit) => {
 		}, [blockEditRef, props, sideEffect]);
 
 		return (
-			<div ref={blockEditRef}>
+			<>
 				<BlockControls group="block" __experimentalShareWithChildBlocks>
 					{useDisplayBlockControls() && (
 						<>
@@ -120,7 +142,7 @@ const withBlockControls = createHigherOrderComponent((BlockEdit) => {
 						}}
 					/>
 				)}
-			</div>
+			</>
 		);
 	};
 }, 'withAllNeedsControls');

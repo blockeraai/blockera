@@ -5,7 +5,7 @@ import { get } from 'lodash';
 import createSelector from 'rememo';
 
 /**
- * Returns a block type by name.
+ * Returns a block extension by name.
  *
  * @param {Object} state Data state.
  * @param {string} name  Block type name.
@@ -17,14 +17,14 @@ import createSelector from 'rememo';
  *
  * const ExampleComponent = () => {
  *     const buttonBlockExtension = useSelect( ( select ) =>
- *         ( select ) => select( blockExtensionsStore ).getBlockExtension( 'core/button' ),
+ *         ( select ) => select( blockExtensionsStore ).getBlockExtension( 'publisherButton' ),
  *         []
  *     );
  *
  *     return (
  *         <ul>
  *             { buttonBlock &&
- *                 Object.entries( buttonBlock.publisherSupports ).map(
+ *                 Object.entries( buttonBlock.supports ).map(
  *                     ( blockSupportsEntry ) => {
  *                         const [ propertyName, value ] = blockSupportsEntry;
  *                         return (
@@ -43,6 +43,50 @@ import createSelector from 'rememo';
  */
 export function getBlockExtension(state, name) {
 	return state.blockExtensions[name];
+}
+
+/**
+ * Returns a block extension by targetName.
+ *
+ * @param {Object} state Data state.
+ * @param {string} field The block field name.
+ * @param {string} name  Block extension targetName.
+ *
+ * @example
+ * ```js
+ * import { store as blockExtensionsStore } from '@publisher/extensions';
+ * import { useSelect } from '@wordpress/data';
+ *
+ * const ExampleComponent = () => {
+ *     const buttonBlockExtension = useSelect( ( select ) =>
+ *         ( select ) => select( blockExtensionsStore ).getBlockExtensionBy( 'targetName', 'core/button' ),
+ *         []
+ *     );
+ *
+ *     return (
+ *         <ul>
+ *             { buttonBlock &&
+ *                 Object.entries( buttonBlock.supports ).map(
+ *                     ( blockSupportsEntry ) => {
+ *                         const [ propertyName, value ] = blockSupportsEntry;
+ *                         return (
+ *                             <li
+ *                                 key={ propertyName }
+ *                             >{ `${ propertyName } : ${ value }` }</li>
+ *                         );
+ *                     }
+ *                 ) }
+ *         </ul>
+ *     );
+ * };
+ * ```
+ *
+ * @return {Object?} Block Extension.
+ */
+export function getBlockExtensionBy(state, field, name) {
+	return Object.entries(state.blockExtensions)
+		.map((item) => (item[1][field] === name ? item[1] : null))
+		.filter((item) => null !== item)[0];
 }
 
 /**
@@ -79,7 +123,7 @@ export const getBlockExtensions = createSelector(
 );
 
 /**
- * Returns a block extension supports by name.
+ * Returns a block extension fields by name.
  *
  * @param {Object} state Data state.
  * @param {string} name  Block extension name.
@@ -90,17 +134,17 @@ export const getBlockExtensions = createSelector(
  * import { useSelect } from '@wordpress/data';
  *
  * const ExampleComponent = () => {
- *     const buttonBlockSupports = useSelect( ( select ) =>
- *         ( select ) => select( blockExtensionsStore ).getBlockExtensionSupports( 'core/button' ),
+ *     const buttonBlockFields = useSelect( ( select ) =>
+ *         ( select ) => select( blockExtensionsStore ).getBlockExtensionFields( 'core/button' ),
  *         []
  *     );
  *
  *     return (
  *         <ul>
- *             { buttonBlockSupports &&
- *                 Object.entries( buttonBlockSupports ).map(
- *                     ( blockSupportsEntry ) => {
- *                         const [ propertyName, value ] = blockSupportsEntry;
+ *             { buttonBlockFields &&
+ *                 Object.entries( buttonBlockFields ).map(
+ *                     ( blockFieldsEntry ) => {
+ *                         const [ propertyName, value ] = blockFieldsEntry;
  *                         return (
  *                             <li
  *                                 key={ propertyName }
@@ -113,10 +157,10 @@ export const getBlockExtensions = createSelector(
  * };
  * ```
  *
- * @return {Object?} Block Extension.
+ * @return {Object?} Block extension fields.
  */
-export function getBlockExtensionSupports(state, name) {
-	return state.blockExtensions[name]?.publisherSupports;
+export function getBlockExtensionFields(state, name) {
+	return state.blockExtensions[name]?.fields;
 }
 
 /**
@@ -125,7 +169,7 @@ export function getBlockExtensionSupports(state, name) {
  * @param {Object}          state           Data state.
  * @param {(string|Object)} nameOrExtension Block extension name or extension object
  * @param {Array|string}    feature         Feature to retrieve
- * @param {*}               defaultSupports Default value to return if not
+ * @param {*}               defaultFields Default value to return if not
  *                                          explicitly defined
  *
  * @example
@@ -135,36 +179,36 @@ export function getBlockExtensionSupports(state, name) {
  * import { useSelect } from '@wordpress/data';
  *
  * const ExampleComponent = () => {
- *     const buttonBlockExtensionSupportValue = useSelect( ( select ) =>
- *         select( extensionsStore ).getBlockExtensionSupport( 'core/button', 'publisher-core/box-shadow' ),
+ *     const buttonBlockExtensionFieldValue = useSelect( ( select ) =>
+ *         select( extensionsStore ).getBlockExtensionField( 'core/button', 'BoxShadow' ),
  *         []
  *     );
  *
  *     return (
  *         <p>
  *             { sprintf(
- *                 __( 'core/button extension supports['publisher-core/box-shadow'] value: %s' ),
- *                 buttonBlockExtensionSupportValue
+ *                 __( 'core/button extension field ['BoxShadow'] value: %s' ),
+ *                 buttonBlockExtensionFieldValue
  *             ) }
  *         </p>
  *     );
  * };
  * ```
  *
- * @return {?*} Block support value
+ * @return {?*} Block field value
  */
-export const getBlockExtensionSupport = (
+export const getBlockExtensionField = (
 	state,
 	nameOrExtension,
 	feature,
-	defaultSupports
+	defaultFields
 ) => {
 	const blockExtension = getNormalizedBlockExtension(state, nameOrExtension);
-	if (!blockExtension?.publisherSupports) {
-		return defaultSupports;
+	if (!blockExtension?.fields) {
+		return defaultFields;
 	}
 
-	return get(blockExtension.publisherSupports, feature, defaultSupports);
+	return get(blockExtension.fields, feature, defaultFields);
 };
 
 /**
@@ -182,12 +226,12 @@ const getNormalizedBlockExtension = (state, nameOrExtension) =>
 		: nameOrExtension;
 
 /**
- * Returns true if the block extension defines support for a feature, or false otherwise.
+ * Returns true if the block extension defines field support for a feature, or false otherwise.
  *
  * @param {Object}          state           Data state.
  * @param {(string|Object)} nameOrExtension      Block extension name or extension object.
  * @param {string}          feature         Feature to test.
- * @param {boolean}         defaultSupports Whether feature is supported by
+ * @param {boolean}         defaultFields Whether field is supported by
  *                                          default if not explicitly defined.
  *
  * @example
@@ -197,34 +241,34 @@ const getNormalizedBlockExtension = (state, nameOrExtension) =>
  * import { useSelect } from '@wordpress/data';
  *
  * const ExampleComponent = () => {
- *     const buttonBlockExtensionSupportBoxShadow = useSelect( ( select ) =>
- *         select( extensionsStore ).hasBlockExtensionSupport( 'core/button', 'publisher-core/box-shadow' ),
+ *     const buttonBlockExtensionFieldBoxShadow = useSelect( ( select ) =>
+ *         select( extensionsStore ).hasBlockExtensionField( 'core/button', 'BoxShadow' ),
  *         []
  *     );
  *
  *     return (
  *         <p>
  *             { sprintf(
- *                 __( 'core/button extension supports box-shadow?: %s' ),
- *                 buttonBlockExtensionSupportBoxShadow
+ *                 __( 'core/button extension support box-shadow filed?: %s' ),
+ *                 buttonBlockExtensionFieldBoxShadow
  *             ) }
  *         /p>
  *     );
  * };
  * ```
  *
- * @return {boolean} Whether block supports feature.
+ * @return {boolean} Whether block Fields feature.
  */
-export function hasBlockExtensionSupport(
+export function hasBlockExtensionField(
 	state,
 	nameOrExtension,
 	feature,
-	defaultSupports
+	defaultFields
 ) {
-	return !!getBlockExtensionSupport(
+	return !!getBlockExtensionField(
 		state,
 		nameOrExtension,
 		feature,
-		defaultSupports
+		defaultFields
 	);
 }

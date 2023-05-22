@@ -8,7 +8,7 @@ import { withSelect } from '@wordpress/data';
  * Upper Case first character of word
  *
  * @param {string} word word string
- * @returns {string} word with upper case first char!
+ * @return {string} word with upper case first char!
  */
 export function ucFirstWord(word: string): string {
 	return word.charAt(0).toUpperCase() + word.slice(1);
@@ -38,3 +38,6 @@ export const enhance = compose(
 		};
 	})
 );
+
+export const isValidArrayItem = (item) =>
+	null !== item && item && (item?.length || Object.values(item)?.length);

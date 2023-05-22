@@ -6,44 +6,63 @@ import { select } from '@wordpress/data';
 /**
  * Internal dependencies
  */
+import { isValidArrayItem } from './utils';
 import { STORE_NAME } from '../store/constants';
 
 const withCustomizeSaveElement = (element, blockType, attributes) => {
-	const { getBlockExtensions, getBlockExtension, hasBlockExtensionSupport } =
-		select(STORE_NAME);
-	const currentExtension = getBlockExtension(blockType?.name);
+	const { getBlockExtensionBy } = select(STORE_NAME);
+	const currentExtension = getBlockExtensionBy(
+		'targetBlock',
+		blockType?.name
+	);
 
 	if (!currentExtension) {
 		return element;
 	}
 
-	let SaveElement = {};
-	const { Save } = currentExtension;
-	const extensions = getBlockExtensions();
+	const { publisherSave } = select('core/blocks').getBlockType(
+		blockType?.name
+	);
+	const {
+		BlockUI: { Save: BlockSaveComponent },
+		ExtensionUI,
+		FieldUI,
+	} = publisherSave;
 
-	if ('function' === typeof Save) {
-		SaveElement = {
-			...SaveElement,
-			...Save(element, blockType, attributes),
-		};
-	}
+	//Mapped controls `Save` component to rendering in WordPress current Block Type!
+	const additionalSaveElements = BlockSaveComponent({
+		element: ExtensionUI.map(
+			({ name, Save: ExtensionSaveComponent }, index) => (
+				<ExtensionSaveComponent
+					element={FieldUI.map((field, _index) => {
+						if (!field[name]) {
+							return null;
+						}
 
-	extensions.forEach((extension) => {
-		if (hasBlockExtensionSupport(currentExtension, extension.name)) {
-			const { Save: controlSave } = extension;
+						const FieldSaveComponent = field[name];
 
-			if ('function' !== typeof controlSave) {
-				return;
-			}
+						return (
+							<FieldSaveComponent
+								blockType={blockType}
+								attributes={attributes}
+								key={`${name}-${index}-${_index}`}
+							/>
+						);
+					})}
+					key={`${name}-${index}`}
+				/>
+			)
+		),
+	})
+		.flat()
+		.filter(isValidArrayItem);
 
-			SaveElement = {
-				...SaveElement,
-				...controlSave(element, blockType, attributes),
-			};
-		}
-	});
-
-	return SaveElement;
+	return (
+		<>
+			{element}
+			{additionalSaveElements}
+		</>
+	);
 };
 
 export default withCustomizeSaveElement;

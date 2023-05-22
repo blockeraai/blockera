@@ -19,31 +19,19 @@ import { STORE_NAME } from '../store/constants';
  * @return {Object} Filtered props applied to save element.
  */
 function withSaveProps(extraProps, blockType, attributes) {
-	const { getBlockExtensions, getBlockExtension, hasBlockExtensionSupport } =
-		select(STORE_NAME);
-	const currentExtension = getBlockExtension(blockType?.name);
+	const { getBlockExtensionBy } = select(STORE_NAME);
+	const currentExtension = getBlockExtensionBy(
+		'targetBlock',
+		blockType?.name
+	);
 
 	if (!currentExtension) {
 		return extraProps;
 	}
 
-	const { publisherSaveProps } = currentExtension;
-	const extensions = getBlockExtensions();
-
-	if (publisherSaveProps) {
-		extraProps = getExtendedProps(extraProps, publisherSaveProps);
-	}
-
-	//Register controls attributes and supports into WordPress Block Type!
-	extensions.forEach((extension) => {
-		if (!hasBlockExtensionSupport(currentExtension, extension.name)) {
-			return;
-		}
-
-		const { publisherSaveProps: saveProps } = extension;
-
-		extraProps = getExtendedProps(extraProps, saveProps);
-	});
+	const { publisherSaveProps } = select('core/blocks').getBlockType(
+		blockType?.name
+	);
 
 	if (attributes?.publisherPropsId) {
 		// extraProps = useExtendedProps(extraProps, {
@@ -51,7 +39,7 @@ function withSaveProps(extraProps, blockType, attributes) {
 		// });
 	}
 
-	return extraProps;
+	return getExtendedProps(extraProps, publisherSaveProps);
 }
 
 export default withSaveProps;

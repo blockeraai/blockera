@@ -12,8 +12,9 @@ import classnames from 'classnames';
  * Internal dependencies
  */
 import { enhance } from './utils';
-import { useBlockExtensions, getExtendedProps } from './hooks';
+import { useBlockExtensions } from './hooks';
 import deprecateAllFeatures from './deprecated';
+import { isArray, isObject } from 'lodash';
 
 /**
  * React hook function to override the default block element to add wrapper props.
@@ -24,14 +25,11 @@ import deprecateAllFeatures from './deprecated';
  */
 const withEditorProps = createHigherOrderComponent((BlockListBlock) => {
 	return enhance(({ select, ...props }) => {
-		const { currentExtension, hasExtensionSupport, extensions } =
-			useBlockExtensions(props?.name);
+		const { currentExtension } = useBlockExtensions(props?.name);
 
 		if (!currentExtension) {
 			return <BlockListBlock {...props} />;
 		}
-
-		// const blockEditorStore = 'core/block-editor';
 
 		/**
 		 * Block deprecation logic belongs here.
@@ -42,46 +40,14 @@ const withEditorProps = createHigherOrderComponent((BlockListBlock) => {
 		useEffect(() => deprecateAllFeatures(props), [props]);
 
 		/**
-		 * Some controls must use the parent blocks like for
-		 * galleries but others will use children like buttonControls
-		 */
-		// const parentBlock = select(blockEditorStore).getBlock(
-		// 	props.rootClientId || props.clientId
-		// );
-		// const parentBlockName = select(blockEditorStore).getBlockName(
-		// 	props.rootClientId || props.clientId
-		// );
-		// const childBlock = select(blockEditorStore).getBlock(props.clientId);
-		// const childBlockName = select(blockEditorStore).getBlockName(
-		// 	props.clientId
-		// );
-
-		/**
 		 * Group extensions in an array to minimize code duplication and
 		 * allow a source of truth for all applied extensions.
 		 */
-		const everyExtension = [];
-		const { publisherEditorProps } = currentExtension;
+		const { publisherEditorProps } = select('core/blocks').getBlockType(
+			props?.name
+		);
 
-		if (publisherEditorProps) {
-			everyExtension.push(
-				getExtendedProps(props.wrapperProps, publisherEditorProps)
-			);
-		}
-
-		extensions.forEach((extension) => {
-			if (!hasExtensionSupport(currentExtension, extension.name)) {
-				return;
-			}
-
-			const { publisherEditorProps: editorProps } = extension;
-
-			everyExtension.push(
-				getExtendedProps(props.wrapperProps, editorProps)
-			);
-		});
-
-		if (!everyExtension?.length) {
+		if (!publisherEditorProps) {
 			return <BlockListBlock {...props} />;
 		}
 
@@ -89,7 +55,13 @@ const withEditorProps = createHigherOrderComponent((BlockListBlock) => {
 		 * Merge classes from all extensions.
 		 */
 		const mergeClasses = classnames(
-			...everyExtension.map((extendedProps) => extendedProps?.className)
+			Object.fromEntries(
+				Object.entries(publisherEditorProps)
+					.map((extendedProps) =>
+						'className' !== extendedProps[0] ? null : extendedProps
+					)
+					.filter((item) => null !== item)
+			)?.className
 		);
 
 		/**
@@ -103,11 +75,29 @@ const withEditorProps = createHigherOrderComponent((BlockListBlock) => {
 			 * Be aware of overriding existing props with matching properties names when adding new extensions.
 			 * Classes are a known collision point and must be merged separately.
 			 */
-			everyExtension.forEach((extendedProps) => {
-				mergedProps = {
-					...mergedProps,
-					...extendedProps,
-				};
+			Object.entries(publisherEditorProps).forEach((extendedProps) => {
+				if (isObject(extendedProps[1])) {
+					mergedProps = {
+						...mergedProps,
+						[extendedProps[0]]: {
+							...(mergedProps[extendedProps[0]] ?? {}),
+							...extendedProps[1],
+						},
+					};
+				} else if (isArray(extendedProps[1])) {
+					mergedProps = {
+						...mergedProps,
+						[extendedProps[0]]: [
+							...(mergedProps[extendedProps[0]] ?? []),
+							...extendedProps[1],
+						],
+					};
+				} else {
+					mergedProps = {
+						...mergedProps,
+						[extendedProps[0]]: extendedProps[1],
+					};
+				}
 			});
 
 			// Classnames collide due to matching property names. We delete them here and merge them separately.
