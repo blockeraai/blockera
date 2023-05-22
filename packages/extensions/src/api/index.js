@@ -1,10 +1,6 @@
 /**
  * Internal dependencies
  */
-import { InitControls } from '../controls';
-
-InitControls();
-
 export { omit } from './utils';
 export {
 	registerBlockExtension,

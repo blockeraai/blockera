@@ -52,16 +52,16 @@ import { store as extensionStore } from '../store';
 
 export function registerBlockExtension(
 	name: string,
-	settings: Object
+	{ type = 'block', ...settings }: Object
 ): Object | undefined {
 	if (typeof name !== 'string') {
 		console.error('Block extension names must be strings.');
 		return;
 	}
 
-	if (!/^[a-z][a-z0-9-]*\/[a-z][a-z0-9-]*$/.test(name)) {
+	if (!/^(publisher|[A-Z][a-z0-9-]).*(?:[A-Z][a-z0-9-])*$/.test(name)) {
 		console.error(
-			'Block extension names must contain a namespace prefix, include only lowercase alphanumeric characters or dashes, and start with a letter. Example: my-plugin/my-custom-block-extension'
+			'Block extension names must contain a namespace prefix, include only lowercase alphanumeric characters or dashes, and start with a letter. Example: "publisherMyCustomBlockExtension" or "MyCustomBlockExtension"'
 		);
 		return;
 	}
@@ -70,13 +70,26 @@ export function registerBlockExtension(
 		return;
 	}
 
+	if (!['block', 'extension', 'field'].includes(type)) {
+		console.error(
+			`Block Extension type must be equals with "extension", "block" or "field" this type is ${type}, Block Extension type validation error!`
+		);
+		return;
+	}
+
 	const blockExtension = {
 		name,
-		publisherProps: {},
-		publisherSupports: {},
-		publisherSaveProps: {},
-		publisherEditorProps: {},
-		publisherCssGenerators: [],
+		type,
+		label: '',
+		props: {},
+		icon: null,
+		fields: {},
+		isOpen: false,
+		saveProps: {},
+		description: '',
+		editorProps: {},
+		targetBlock: null,
+		cssGenerators: [],
 		...settings,
 	};
 
