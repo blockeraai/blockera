@@ -3,6 +3,7 @@
  */
 import { get } from 'lodash';
 import createSelector from 'rememo';
+import { isValidArrayItem } from '../hooks/utils';
 
 /**
  * Returns a block extension by name.
@@ -208,7 +209,65 @@ export const getBlockExtensionField = (
 		return defaultFields;
 	}
 
-	return get(blockExtension.fields, feature, defaultFields);
+	const fields = blockExtension.fields
+		.map((field) => {
+			if (feature === field.field) {
+				return field;
+			}
+
+			return null;
+		})
+		.filter(isValidArrayItem);
+
+	return fields[0] || defaultFields;
+};
+
+/**
+ * Returns the block extension support value, if defined.
+ *
+ * @param {Object}          state           Data state.
+ * @param {(string|Object)} nameOrExtension Block extension name or extension object
+ * @param {Array|string}    feature         Feature to retrieve
+ * @param {*}               defaultExtensions Default value to return if not
+ *                                          explicitly defined
+ *
+ * @example
+ * ```js
+ * import { __, sprintf } from '@wordpress/i18n';
+ * import { store as extensionsStore } from '@publisher/extensions';
+ * import { useSelect } from '@wordpress/data';
+ *
+ * const ExampleComponent = () => {
+ *     const buttonBlockExtensionValue = useSelect( ( select ) =>
+ *         select( extensionsStore ).buttonBlockExtensionValue( 'core/button', 'BorderAndShadow' ),
+ *         []
+ *     );
+ *
+ *     return (
+ *         <p>
+ *             { sprintf(
+ *                 __( 'core/button extension field ['BorderAndShadow'] value: %s' ),
+ *                 buttonBlockExtensionValue
+ *             ) }
+ *         </p>
+ *     );
+ * };
+ * ```
+ *
+ * @return {?*} Block Extension value
+ */
+export const getBlockExtensionSupport = (
+	state,
+	nameOrExtension,
+	feature,
+	defaultExtensions
+) => {
+	const blockExtension = getNormalizedBlockExtension(state, nameOrExtension);
+	if (!blockExtension?.extensions) {
+		return defaultExtensions;
+	}
+
+	return get(blockExtension.extensions, feature, defaultExtensions);
 };
 
 /**
@@ -270,5 +329,53 @@ export function hasBlockExtensionField(
 		nameOrExtension,
 		feature,
 		defaultFields
+	);
+}
+
+/**
+ * Returns true if the block extension defines support for a feature, or false otherwise.
+ *
+ * @param {Object}          state           Data state.
+ * @param {(string|Object)} nameOrExtension      Block extension name or extension object.
+ * @param {string}          feature         Feature to test.
+ * @param {boolean}         defaultExtensions Whether extension is supported by
+ *                                          default if not explicitly defined.
+ *
+ * @example
+ * ```js
+ * import { __, sprintf } from '@wordpress/i18n';
+ * import { store as extensionsStore } from '@publisher/extensions';
+ * import { useSelect } from '@wordpress/data';
+ *
+ * const ExampleComponent = () => {
+ *     const buttonBlockExtension = useSelect( ( select ) =>
+ *         select( extensionsStore ).buttonBlockExtension( 'core/button', 'BorderAndShadow' ),
+ *         []
+ *     );
+ *
+ *     return (
+ *         <p>
+ *             { sprintf(
+ *                 __( 'core/button extension support border-and-shadow extension?: %s' ),
+ *                 buttonBlockExtension
+ *             ) }
+ *         /p>
+ *     );
+ * };
+ * ```
+ *
+ * @return {boolean} Whether block Extensions feature.
+ */
+export function hasBlockExtensionSupport(
+	state,
+	nameOrExtension,
+	feature,
+	defaultExtensions
+) {
+	return !!getBlockExtensionSupport(
+		state,
+		nameOrExtension,
+		feature,
+		defaultExtensions
 	);
 }
