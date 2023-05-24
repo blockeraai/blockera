@@ -2,8 +2,8 @@
  * Internal dependencies
  */
 import helpers from './helpers';
-import extension from './extension.json';
-import { OpacityControl } from '@publisher/controls';
+import extension from './field.json';
+import { RangeControl } from '@publisher/controls';
 import {
 	injectHelpersToCssGenerators,
 	computedCssRules,
@@ -18,7 +18,7 @@ export default {
 	Edit: ({ name, ...props }) => {
 		return (
 			<>
-				<OpacityControl {...props} blockName={name} />
+				<RangeControl {...props} blockName={name} />
 			</>
 		);
 	},

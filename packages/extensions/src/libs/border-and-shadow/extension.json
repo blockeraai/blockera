@@ -3,13 +3,15 @@
 	"isOpen": true,
 	"label": "Border and Shadow",
 	"name": "publisherBorderAndShadow",
-	"fields": {
-		"BoxShadow": {
+	"fields": [
+		{
+			"type": "field",
+			"field": "BoxShadow",
 			"supports": {
 				"shadow": false
 			}
 		}
-	},
+	],
 	"cssGenerators": {},
 	"editorProps": {
 		"className": "publisher-border-shadow-wrapper"

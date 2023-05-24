@@ -9,12 +9,20 @@
 			"default": {}
 		}
 	},
-	"fields": {
-		"Opacity": {
-			"publisherCssGenerators": {}
+	"fields": [
+		{
+			"type": "field",
+			"field": "Input",
+			"settings": {
+				"type": "range"
+			},
+			"cssGenerators": {}
 		},
-		"Transition": true
-	},
+		{
+			"type": "field",
+			"field": "Transition"
+		}
+	],
 	"cssGenerators": {},
 	"editorProps": {
 		"className": "publisher-effects-wrapper"

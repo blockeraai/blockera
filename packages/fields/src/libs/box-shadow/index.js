@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import helpers from './helpers';
-import extension from './extension.json';
+import extension from './field.json';
 import { BoxShadowControl } from '@publisher/controls';
 import {
 	injectHelpersToCssGenerators,
