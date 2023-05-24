@@ -27,7 +27,7 @@ import { store as extensionStore } from '../store';
  */
 
 /**
- * Registers a new block extension provided a unique name and an object defining its
+ * Registers a new block extension in three types (field, extension, and block) provided a unique name and an object defining its
  * behavior. Once registered, the block extension is made available as an option to any
  * editor interface where block extensions are implemented.
  *
@@ -86,6 +86,7 @@ export function registerBlockExtension(
 		fields: {},
 		isOpen: false,
 		saveProps: {},
+		extensions: {},
 		description: '',
 		editorProps: {},
 		targetBlock: null,
