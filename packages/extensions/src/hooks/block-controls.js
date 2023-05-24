@@ -12,7 +12,7 @@ import { select } from '@wordpress/data';
 import { computedCssRules } from '@publisher/style-engine';
 import { extensionClassNames } from '@publisher/classnames';
 import { useBlockExtensions, useDisplayBlockControls } from './hooks';
-import { InspectElement } from '@publisher/components';
+import { Divider, InspectElement } from '@publisher/components';
 
 /**
  * Add custom Publisher props identifier to selected blocks
@@ -69,10 +69,13 @@ const MappedControlsExtensions = (props) => {
 								const FieldEditComponent = field[name];
 
 								return (
-									<FieldEditComponent
-										key={`${name}-${index}-${fieldId}`}
-										{...props}
-									/>
+									<>
+										<FieldEditComponent
+											key={`${name}-${index}-${fieldId}`}
+											{...props}
+										/>
+										<Divider />
+									</>
 								);
 							})}
 						</ExtensionEditComponent>
