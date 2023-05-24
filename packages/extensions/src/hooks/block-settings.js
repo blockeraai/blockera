@@ -15,6 +15,80 @@ import { isValidArrayItem } from './utils';
 import { STORE_NAME } from '../store/constants';
 import { isBlockExtension, isExtension, isFieldExtension } from '../api/utils';
 
+const {
+	getBlockExtension,
+	getBlockExtensionBy,
+	hasBlockExtensionSupport,
+	hasBlockExtensionField,
+} = select(STORE_NAME);
+
+const prepareExtension = (data) => {
+	if (!isObject(data[1]) && !isArray(data[1]) && !data[1]) {
+		return null;
+	}
+
+	return getBlockExtension(data[0]);
+};
+
+function getBlockExtensions(block: Object): Array<Object> {
+	return Object.entries(block.extensions)
+		.map(prepareExtension)
+		.filter(isValidArrayItem)
+		.filter(
+			({ name: extensionName, ...extension }) =>
+				isExtension(extension) &&
+				hasBlockExtensionSupport(block?.name, extensionName)
+		);
+}
+
+function getBlockFields(block: Object): Array<Object> {
+	return Object.values(block.extensions)
+		.map(({ fields }) => fields.map((field) => field.field || field))
+		.flat()
+		.map((field) => getBlockExtension(field))
+		.filter(isValidArrayItem)
+		.flat();
+}
+
+function isParentExtension(fieldName: string, { name }: Object): boolean {
+	return hasBlockExtensionField(name, fieldName);
+}
+
+function mergeBlockFieldSettings(
+	field: Object,
+	extensions: Object,
+	blockExtensions: Object,
+	defaultBlockSettings: Object
+): Object {
+	const parentExtension = extensions.filter((extension) =>
+		isParentExtension(field.name, extension.name)
+	)[0];
+
+	if (
+		parentExtension?.fields &&
+		parentExtension?.fields[field.name] &&
+		!isBoolean(parentExtension?.fields[field.name])
+	) {
+		field = {
+			...field,
+			...parentExtension.fields[field.name],
+		};
+	}
+
+	if (
+		blockExtensions[parentExtension?.name] &&
+		blockExtensions[parentExtension?.name][field.name] &&
+		!isBoolean(blockExtensions[parentExtension?.name][field.name])
+	) {
+		field = {
+			...field,
+			...blockExtensions[parentExtension.name][field.name],
+		};
+	}
+
+	return mergeSettings(defaultBlockSettings, field);
+}
+
 /**
  * Filters registered block settings, extending block settings with settings and block name.
  *
@@ -26,71 +100,24 @@ export default function withBlockSettings(
 	settings: Object,
 	name: Object
 ): Object {
-	const { getBlockExtension, getBlockExtensionBy, hasBlockExtensionField } =
-		select(STORE_NAME);
 	const currentExtension = getBlockExtensionBy('targetBlock', name);
 
 	if (!currentExtension || !isBlockExtension(currentExtension)) {
 		return settings;
 	}
 
-	const prepareExtension = (data) => {
-		if (!isObject(data[1]) && !isArray(data[1]) && !data[1]) {
-			return null;
-		}
+	const fields = getBlockFields(currentExtension);
+	const extensions = getBlockExtensions(currentExtension);
 
-		return getBlockExtension(data[0]);
-	};
-
-	const extensions = Object.entries(currentExtension.fields)
-		.map(prepareExtension)
-		.filter(isValidArrayItem)
-		.filter(
-			({ name: extensionName, ...extension }) =>
-				isExtension(extension) &&
-				hasBlockExtensionField(currentExtension?.name, extensionName)
-		);
-
-	const fields = Object.keys(currentExtension.fields)
-		.map((extensionName) => {
-			return Object.entries(currentExtension.fields[extensionName])
-				.map(prepareExtension)
-				.filter(isValidArrayItem);
-		})
-		.filter(isValidArrayItem)
-		.flat();
-
-	fields.forEach((field) => {
-		const parentExtension = extensions.filter(
-			(extension) => extension.fields[field.name]
-		)[0];
-
-		if (
-			parentExtension?.fields &&
-			parentExtension?.fields[field.name] &&
-			!isBoolean(parentExtension?.fields[field.name])
-		) {
-			field = {
-				...field,
-				...parentExtension.fields[field.name],
-			};
-		}
-
-		if (
-			currentExtension.fields[parentExtension?.name] &&
-			currentExtension.fields[parentExtension?.name][field.name] &&
-			!isBoolean(
-				currentExtension.fields[parentExtension?.name][field.name]
-			)
-		) {
-			field = {
-				...field,
-				...currentExtension.fields[parentExtension.name][field.name],
-			};
-		}
-
-		settings = mergeSettings(settings, field);
-	});
+	fields.forEach(
+		(field) =>
+			(settings = mergeBlockFieldSettings(
+				field,
+				extensions,
+				currentExtension.extensions,
+				settings
+			))
+	);
 	extensions.forEach(
 		(extension) => (settings = mergeSettings(settings, extension))
 	);
@@ -126,16 +153,14 @@ function mergeSettings(
 		? getObjectColumn(additional, 'supports')
 		: {};
 	const supportFields = isExtension(additional)
-		? getObjectColumn(additional, 'fields')
+		? Object.values(getObjectColumn(additional, 'fields')).map((item) => {
+				return { ...{ [item.field]: true } };
+		  })
 		: {};
 	const getFieldUI = (field, UIName) => {
-		const parentExtension = extensions.filter(
-			(extension) => extension.fields[field.name]
+		const parentExtension = extensions.filter((extension) =>
+			isParentExtension(field.name, extension)
 		)[0];
-
-		if (!parentExtension?.fields || !parentExtension?.fields[field.name]) {
-			return [];
-		}
 
 		if (!field[UIName]) {
 			console.error(`Extension UI for: "${UIName}" was not exists!`);
