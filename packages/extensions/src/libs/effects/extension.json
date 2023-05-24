@@ -21,6 +21,10 @@
 		{
 			"type": "field",
 			"field": "Transition"
+		},
+		{
+			"type": "field",
+			"field": "AnglePicker"
 		}
 	],
 	"cssGenerators": {},
