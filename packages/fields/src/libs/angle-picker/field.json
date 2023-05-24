@@ -1,0 +1,14 @@
+{
+	"type": "field",
+	"name": "AnglePicker",
+	"props": {
+		"publisherAnglePicker": {
+			"type": "integer",
+			"default": 0
+		}
+	},
+	"cssGenerators": {},
+	"editorProps": {
+		"className": "publisher-angle-value"
+	}
+}
