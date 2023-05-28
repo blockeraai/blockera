@@ -9,34 +9,11 @@ import { select } from '@wordpress/data';
 /**
  * Internal dependencies
  */
+import { useAttributes } from './utils';
 import { computedCssRules } from '@publisher/style-engine';
 import { extensionClassNames } from '@publisher/classnames';
-import { useBlockExtensions, useDisplayBlockControls } from './hooks';
 import { Divider, InspectElement } from '@publisher/components';
-
-/**
- * Add custom Publisher props identifier to selected blocks
- *
- * @param {Object} props Block props
- * @return {{}|Object} Block props extended with Publisher Extensions.
- */
-const useAttributes = (props: Object): Object => {
-	const extendedProps = { ...props };
-
-	if (typeof extendedProps.attributes.publisherPropsId === 'undefined') {
-		const d = new Date();
-		extendedProps.attributes.publisherPropsId =
-			'' +
-			d.getMonth() +
-			d.getDate() +
-			d.getHours() +
-			d.getMinutes() +
-			d.getSeconds() +
-			d.getMilliseconds();
-	}
-
-	return extendedProps;
-};
+import { useBlockExtensions, useDisplayBlockControls } from './hooks';
 
 const MappedControlsExtensions = (props) => {
 	const { publisherEdit } = select('core/blocks').getBlockType(props?.name);

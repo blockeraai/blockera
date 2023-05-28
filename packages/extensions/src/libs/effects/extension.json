@@ -3,7 +3,7 @@
 	"isOpen": true,
 	"label": "Effects",
 	"name": "publisherEffects",
-	"props": {
+	"attributes": {
 		"publisherEffects": {
 			"type": "object",
 			"default": {}
@@ -16,7 +16,13 @@
 			"settings": {
 				"type": "range"
 			},
-			"cssGenerators": {}
+			"cssGenerators": {},
+			"attributes": {
+				"opacity": {
+					"type": "integer",
+					"default": 0
+				}
+			}
 		},
 		{
 			"type": "field",

@@ -7,13 +7,14 @@
 		{
 			"type": "field",
 			"field": "BoxShadow",
-			"supports": {
-				"shadow": false
-			}
+			"label": "Box Shadow"
 		}
 	],
 	"cssGenerators": {},
 	"editorProps": {
 		"className": "publisher-border-shadow-wrapper"
+	},
+	"saveProps": {
+		"className": "publisher-core extension"
 	}
 }

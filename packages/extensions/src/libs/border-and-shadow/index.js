@@ -1,14 +1,13 @@
 /**
  * Internal dependencies
  */
+import migrate from './migrate';
 import extension from './extension.json';
 
 export default {
+	migrate,
 	...extension,
-	Edit: ({ children }) => {
+	edit: ({ children }) => {
 		return <div>{children}</div>;
-	},
-	Save: ({ element }) => {
-		return element;
 	},
 };

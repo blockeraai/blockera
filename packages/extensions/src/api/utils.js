@@ -18,7 +18,7 @@ export function omit(object, keys) {
  * @param {string} type the block extension string must be equal with "block"
  * @return {boolean} true on success, false when otherwise!
  */
-export const isBlockExtension = ({ type }) => 'block' === type;
+export const isBlockTypeExtension = ({ type }) => 'block' === type;
 
 /**
  * is field extension?
@@ -26,7 +26,7 @@ export const isBlockExtension = ({ type }) => 'block' === type;
  * @param {string} type the field extension string must be equal with "field"
  * @return {boolean} true on success, false when otherwise!
  */
-export const isFieldExtension = ({ type }) => 'field' === type;
+export const isFieldTypeExtension = ({ type }) => 'field' === type;
 
 /**
  * is extension?
@@ -34,4 +34,12 @@ export const isFieldExtension = ({ type }) => 'field' === type;
  * @param {string} type the field extension string must be equal with "extension"
  * @return {boolean} true on success, false when otherwise!
  */
-export const isExtension = ({ type }) => 'extension' === type;
+export const isExtensionType = ({ type }) => 'extension' === type;
+
+/**
+ * is enable extension?
+ *
+ * @param {Object} extension the target extension
+ * @return {boolean} true on success, false on otherwise
+ */
+export const isEnableExtension = (extension) => true === extension?.status;

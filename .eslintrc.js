@@ -19,6 +19,9 @@ module.exports = {
 				message: 'Unexpected property on console object was called',
 			},
 		],
+		'react-hooks/rules-of-hooks': 'off',
+		'react-hooks/exhaustive-deps': 'off',
+		'react/no-unknown-property': 'off',
 	},
 	env: {
 		jest: true,

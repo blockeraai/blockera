@@ -41,3 +41,27 @@ export const enhance = compose(
 
 export const isValidArrayItem = (item) =>
 	null !== item && item && (item?.length || Object.values(item)?.length);
+
+/**
+ * Add custom Publisher props identifier to selected blocks
+ *
+ * @param {Object} props Block props
+ * @return {{}|Object} Block props extended with Publisher Extensions.
+ */
+export const useAttributes = (props: Object): Object => {
+	const extendedProps = { ...props };
+
+	if (typeof extendedProps.attributes.publisherPropsId === 'undefined') {
+		const d = new Date();
+		extendedProps.attributes.publisherPropsId =
+			'' +
+			d.getMonth() +
+			d.getDate() +
+			d.getHours() +
+			d.getMinutes() +
+			d.getSeconds() +
+			d.getMilliseconds();
+	}
+
+	return extendedProps;
+};

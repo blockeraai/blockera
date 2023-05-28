@@ -7,7 +7,6 @@ import { useBlockEditContext } from '@wordpress/block-editor';
 /**
  * Internal dependencies
  */
-import classnames from 'classnames';
 import { STORE_NAME } from '../store/constants';
 
 export function getExtendedProps(
@@ -22,9 +21,20 @@ export function getExtendedProps(
 		const newProp = extensionProps[key];
 
 		if ('className' === key) {
+			const addClassName = (className) => {
+				if (!className) {
+					return newProp;
+				}
+				if (-1 === className?.indexOf(newProp)) {
+					return `${className} ${newProp}`;
+				}
+
+				return className;
+			};
+
 			defaultProps = {
 				...(defaultProps || {}),
-				className: classnames(defaultProps?.className || '', newProp),
+				className: addClassName(defaultProps?.className),
 			};
 
 			continue;

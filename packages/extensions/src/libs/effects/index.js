@@ -17,10 +17,7 @@ export default {
 	// 		extension.publisherCssGenerators
 	// 	),
 	// },
-	Edit: ({ children }) => {
+	edit: ({ children }) => {
 		return <div>{children}</div>;
-	},
-	Save: ({ element }) => {
-		return element;
 	},
 };
