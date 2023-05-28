@@ -1,4 +1,3 @@
 {
-	"publisher-core": true,
-	"extension": true
+	"publisher-extension": true
 }

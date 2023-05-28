@@ -8,137 +8,121 @@ import {
 describe('Classnames testing ...', () => {
 	describe('Extensions classnames api testing ...', () => {
 		test('testing when passed names as String!', () => {
-			const generatedClassnames = extensionClassNames(
-				'publisher-core extension extension-id'
-			);
+			const generatedClassnames = extensionClassNames('id');
 
 			expect(generatedClassnames).toBe(
-				'publisher-core extension extension-id'
+				'publisher-extension publisher-extension-id'
+			);
+		});
+
+		test('testing when passed names as multiple String!', () => {
+			const generatedClassnames = extensionClassNames('id another-id');
+
+			expect(generatedClassnames).toBe(
+				'publisher-extension publisher-extension-id publisher-extension-another-id'
 			);
 		});
 
 		test('testing when passed names as Object!', () => {
 			const generatedClassnames = extensionClassNames({
-				extension: true,
-				'publisher-core': true,
-				'extension-id': true,
+				id: true,
 			});
 
 			expect(generatedClassnames).toBe(
-				'publisher-core extension extension-id'
+				'publisher-extension publisher-extension-id'
 			);
 		});
 
 		test('testing when passed names as Array!', () => {
-			const generatedClassnames = extensionClassNames([
-				'publisher-core',
-				'extension',
-				'extension-id',
-			]);
+			const generatedClassnames = extensionClassNames(['id', 'test']);
 
 			expect(generatedClassnames).toBe(
-				'publisher-core extension extension-id'
+				'publisher-extension publisher-extension-id publisher-extension-test'
 			);
 		});
 	});
 
 	describe('Controls classnames api testing ...', () => {
 		test('testing when passed names as String!', () => {
-			const generatedClassnames = controlClassNames(
-				'publisher-core control control-id'
-			);
+			const generatedClassnames = controlClassNames('id');
 
 			expect(generatedClassnames).toBe(
-				'publisher-core control control-id'
+				'publisher-control publisher-control-id'
 			);
 		});
 
 		test('testing when passed names as Object!', () => {
 			const generatedClassnames = controlClassNames({
-				control: true,
-				'publisher-core': true,
-				'control-id': true,
+				id: true,
 			});
 
 			expect(generatedClassnames).toBe(
-				'publisher-core control control-id'
+				'publisher-control publisher-control-id'
 			);
 		});
 
 		test('testing when passed names as Array!', () => {
-			const generatedClassnames = controlClassNames([
-				'publisher-core',
-				'control',
-				'control-id',
-			]);
+			const generatedClassnames = controlClassNames(['id']);
 
 			expect(generatedClassnames).toBe(
-				'publisher-core control control-id'
+				'publisher-control publisher-control-id'
 			);
 		});
 	});
 
 	describe('Components classnames api testing ...', () => {
 		test('testing when passed names as String!', () => {
-			const generatedClassnames = componentClassNames(
-				'publisher-core component component-id'
-			);
+			const generatedClassnames = componentClassNames('id');
 
 			expect(generatedClassnames).toBe(
-				'publisher-core component component-id'
+				'publisher-component publisher-component-id'
 			);
 		});
 
 		test('testing when passed names as Object!', () => {
 			const generatedClassnames = componentClassNames({
-				component: true,
-				'publisher-core': true,
-				'component-id': true,
+				id: true,
 			});
 
 			expect(generatedClassnames).toBe(
-				'publisher-core component component-id'
+				'publisher-component publisher-component-id'
 			);
 		});
 
 		test('testing when passed names as Array!', () => {
-			const generatedClassnames = componentClassNames([
-				'publisher-core',
-				'component',
-				'component-id',
-			]);
+			const generatedClassnames = componentClassNames(['id']);
 
 			expect(generatedClassnames).toBe(
-				'publisher-core component component-id'
+				'publisher-component publisher-component-id'
 			);
 		});
 	});
 
 	describe('Root classnames api testing ...', () => {
 		test('testing when passed names as String!', () => {
-			const generatedClassnames = getClassNames(
-				'publisher-core className'
-			);
+			const generatedClassnames = getClassNames('className');
 
-			expect(generatedClassnames).toBe('publisher-core className');
+			expect(generatedClassnames).toBe(
+				'publisher-core publisher-core-className'
+			);
 		});
 
 		test('testing when passed names as Object!', () => {
 			const generatedClassnames = getClassNames({
 				className: true,
-				'publisher-core': true,
 			});
 
-			expect(generatedClassnames).toBe('publisher-core className');
+			expect(generatedClassnames).toBe(
+				'publisher-core publisher-core-className'
+			);
 		});
 
 		test('testing when passed names as Array!', () => {
-			const generatedClassnames = getClassNames([
-				'publisher-core',
-				'className',
-			]);
+			const generatedClassnames = getClassNames(['className']);
 
-			expect(generatedClassnames).toBe('publisher-core className');
+			expect(generatedClassnames).toBe(
+				'publisher-core publisher-core-className'
+			);
 		});
 	});
 });

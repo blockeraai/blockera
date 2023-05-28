@@ -1,4 +1,3 @@
 {
-	"publisher-core": true,
-	"component": true
+	"publisher-component": true
 }
