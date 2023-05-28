@@ -22,18 +22,13 @@ export default {
 			})
 			?.filter((item) => null !== item);
 
-		return `${createCssRule({
-			selector: `.publisher-core.extension.publisher-extension-ref.client-id-${props.clientId}`,
-			properties: {
-				'box-shadow': value?.join(','),
-			},
-		})}\n${createCssRule({
-			selector: `.publisher-box-shadow-wrapper${
-				cssGenerator.selector ?? ''
+		return createCssRule({
+			selector: `#block-${props.clientId}${
+				cssGenerator.selector ? ' ' + cssGenerator.selector : ''
 			}`,
 			properties: {
 				'box-shadow': value?.join(','),
 			},
-		})}`;
+		});
 	},
 };

@@ -1,7 +1,7 @@
 {
 	"type": "field",
 	"name": "Input",
-	"props": {
+	"attributes": {
 		"publisherInput": {
 			"type": "integer",
 			"default": 1

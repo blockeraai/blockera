@@ -1,7 +1,7 @@
 {
 	"type": "field",
 	"name": "AnglePicker",
-	"props": {
+	"attributes": {
 		"publisherAnglePicker": {
 			"type": "integer",
 			"default": 0

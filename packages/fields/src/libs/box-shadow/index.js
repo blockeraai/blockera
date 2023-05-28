@@ -3,11 +3,8 @@
  */
 import helpers from './helpers';
 import extension from './field.json';
-import { BoxShadowControl } from '@publisher/controls';
-import {
-	injectHelpersToCssGenerators,
-	computedCssRules,
-} from '@publisher/style-engine';
+import { BoxShadowControl, LabelControl } from '@publisher/controls';
+import { injectHelpersToCssGenerators } from '@publisher/style-engine';
 
 export default {
 	...extension,
@@ -15,30 +12,12 @@ export default {
 		...extension.publisherCssGenerators,
 		...injectHelpersToCssGenerators(helpers, extension.cssGenerators),
 	},
-	Edit: ({ name, ...props }) => {
-		//label
-		//merge component && controls
-		return <BoxShadowControl {...props} blockName={name} />;
-	},
-	Save: ({ blockType, attributes }) => {
-		const { publisherBoxShadowItems } = attributes;
-
-		if (!publisherBoxShadowItems) {
-			return null;
-		}
-
-		const __css = computedCssRules(blockType, {
-			attributes,
-		});
-
+	edit: ({ name: blockName, label, ...props }) => {
 		return (
-			0 !== __css?.trim()?.length && (
-				<style
-					dangerouslySetInnerHTML={{
-						__html: __css,
-					}}
-				/>
-			)
+			<>
+				<LabelControl label={label} />
+				<BoxShadowControl {...props} blockName={blockName} />
+			</>
 		);
 	},
 };
