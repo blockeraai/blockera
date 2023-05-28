@@ -33,7 +33,7 @@ function prepareClassName(section, items) {
 	return items;
 }
 
-function _classnames(section = rootDefault, names) {
+function _classnames(addSectionClass = true, section = rootDefault, names) {
 	// find the section prefix from it's default
 	if (typeof section !== 'string') {
 		section = Object.keys(section)[0];
@@ -42,25 +42,49 @@ function _classnames(section = rootDefault, names) {
 	// prepend section prefix to all classes
 	names = prepareClassName(section, names);
 
-	return classnames(section, names);
+	if (addSectionClass) {
+		return classnames(section, names);
+	}
+
+	return classnames(names);
 }
 
 export function getClassNames(...names) {
-	return _classnames(rootDefault, names);
+	return _classnames(true, rootDefault, names);
+}
+
+export function getInnerClassNames(...names) {
+	return _classnames(false, rootDefault, names);
 }
 
 export function controlClassNames(...names) {
-	return _classnames(controlsDefault, names);
+	return _classnames(true, controlsDefault, names);
+}
+
+export function controlInnerClassNames(...names) {
+	return _classnames(false, controlsDefault, names);
 }
 
 export function fieldsClassNames(...names) {
-	return _classnames(fieldsDefault, names);
+	return _classnames(true, fieldsDefault, names);
+}
+
+export function fieldsInnerClassNames(...names) {
+	return _classnames(false, fieldsDefault, names);
 }
 
 export function componentClassNames(...names) {
-	return _classnames(componentsDefault, names);
+	return _classnames(true, componentsDefault, names);
+}
+
+export function componentInnerClassNames(...names) {
+	return _classnames(false, componentsDefault, names);
 }
 
 export function extensionClassNames(...names) {
-	return _classnames(extensionsDefault, names);
+	return _classnames(true, extensionsDefault, names);
+}
+
+export function extensionInnerClassNames(...names) {
+	return _classnames(false, extensionsDefault, names);
 }

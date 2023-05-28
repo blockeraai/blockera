@@ -1,8 +1,12 @@
 import {
 	componentClassNames,
+	componentInnerClassNames,
 	controlClassNames,
+	controlInnerClassNames,
 	extensionClassNames,
+	extensionInnerClassNames,
 	getClassNames,
+	getInnerClassNames,
 } from '..';
 
 describe('Classnames testing ...', () => {
@@ -40,6 +44,12 @@ describe('Classnames testing ...', () => {
 				'publisher-extension publisher-extension-id publisher-extension-test'
 			);
 		});
+
+		test('testing inner items', () => {
+			const generatedClassnames = extensionInnerClassNames('id');
+
+			expect(generatedClassnames).toBe('publisher-extension-id');
+		});
 	});
 
 	describe('Controls classnames api testing ...', () => {
@@ -67,6 +77,12 @@ describe('Classnames testing ...', () => {
 			expect(generatedClassnames).toBe(
 				'publisher-control publisher-control-id'
 			);
+		});
+
+		test('testing Inner classes', () => {
+			const generatedClassnames = controlInnerClassNames('id');
+
+			expect(generatedClassnames).toBe('publisher-control-id');
 		});
 	});
 
@@ -96,6 +112,12 @@ describe('Classnames testing ...', () => {
 				'publisher-component publisher-component-id'
 			);
 		});
+
+		test('testing Inner class', () => {
+			const generatedClassnames = componentInnerClassNames('id');
+
+			expect(generatedClassnames).toBe('publisher-component-id');
+		});
 	});
 
 	describe('Root classnames api testing ...', () => {
@@ -123,6 +145,12 @@ describe('Classnames testing ...', () => {
 			expect(generatedClassnames).toBe(
 				'publisher-core publisher-core-className'
 			);
+		});
+
+		test('testing Inner class', () => {
+			const generatedClassnames = getInnerClassNames('className');
+
+			expect(generatedClassnames).toBe('publisher-core-className');
 		});
 	});
 });
