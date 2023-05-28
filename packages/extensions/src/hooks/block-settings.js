@@ -175,6 +175,10 @@ function mergeFieldType(
 	}
 
 	parentExtension.fields.forEach((_field, index) => {
+		if (field.name !== _field.field) {
+			return;
+		}
+
 		field = {
 			...field,
 			...merge(
@@ -208,12 +212,7 @@ function mergeFieldType(
 				...(blockExtension.UI || {}),
 				fields: {
 					...(blockExtension?.UI?.fields || {}),
-					[parentExtension.name]: fieldUI.filter(
-						(obj, _index) =>
-							fieldUI.findIndex(
-								(item) => item.name === obj.name
-							) === _index
-					),
+					[parentExtension.name]: fieldUI,
 				},
 			},
 		};
@@ -359,12 +358,10 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 					additional.editorProps.className
 				);
 
-				const { onRemove, onReplace, ..._props } = props;
-
 				return (
 					<>
 						{useDisplayBlockControls() && (
-							<BlockEditComponent {..._props}>
+							<BlockEditComponent {...props}>
 								{additional.UI.extensions?.map(
 									(
 										{
@@ -382,8 +379,9 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 											key={`${name}-${index}`}
 										>
 											<ExtensionEditComponent
+												{...props}
 												key={`extension-${index}`}
-												{...{ ..._props, ...extension }}
+												extension={extension}
 											>
 												{additional.UI.fields[
 													name
@@ -395,11 +393,9 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 
 													return (
 														<FieldEditComponent
+															{...props}
+															field={_field}
 															key={`field-${index}-${_index}`}
-															{...{
-																..._props,
-																..._field,
-															}}
 														/>
 													);
 												})}
