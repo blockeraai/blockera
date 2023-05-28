@@ -18,13 +18,13 @@ import './style.scss';
 
 export default function ColorControl({
 	color,
-	className = 'color-control',
+	className,
 	...props
 }) {
 	const [isOpen, setOpen] = useState(false);
 
 	return (
-		<div className={controlClassNames(className)}>
+		<div className={controlClassNames('color', className)}>
 			<div className="color-indicator-with-label">
 				<ColorIndicator
 					colorValue={color}

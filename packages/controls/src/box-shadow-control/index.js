@@ -23,12 +23,7 @@ const initialState = {
 	color: 'transparent',
 };
 
-function BoxShadowControl({
-	attributes,
-	setAttributes,
-	className = 'box-shadow',
-	...props
-}) {
+function BoxShadowControl({ attributes, setAttributes, className, ...props }) {
 	const { publisherBoxShadowItems } = attributes;
 	const updateBlockAttributes = useCallback(
 		(newBoxShadowItems) => {
@@ -41,7 +36,7 @@ function BoxShadowControl({
 	);
 
 	return (
-		<div className={controlClassNames('control', className)}>
+		<div className={controlClassNames('box-shadow', className)}>
 			<RepeaterControl
 				label={__('Add Box Shadow', 'publisher')}
 				{...{

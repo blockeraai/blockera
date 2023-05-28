@@ -20,12 +20,7 @@ const initialState = {
 	color: 'transparent',
 };
 
-function TransitionControl({
-	attributes,
-	setAttributes,
-	className = 'transition',
-	...props
-}) {
+function TransitionControl({ attributes, setAttributes, className, ...props }) {
 	const { Transition } = attributes;
 	const updateBlockAttributes = useCallback(
 		(newTransition) => {
@@ -40,7 +35,7 @@ function TransitionControl({
 	const InnerComponents = () => <>Hello Transition</>;
 
 	return (
-		<div className={controlClassNames('control', className)}>
+		<div className={controlClassNames('transition', className)}>
 			<RepeaterControl
 				{...{
 					...props,

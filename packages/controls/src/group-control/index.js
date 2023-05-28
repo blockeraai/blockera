@@ -19,7 +19,7 @@ export default function GroupControl({
 	isPopover = false,
 	isDraggable = false,
 	dropCallback = null,
-	className = 'group',
+	className,
 }) {
 	const styleRef = useRef(null);
 	const [draggingIndex, setDraggingIndex] = useState(null);
@@ -59,7 +59,7 @@ export default function GroupControl({
 			draggable
 			onDragOver={handleDragOver}
 			onDrop={(e) => handleDrop(e, groupId)}
-			className={controlClassNames(className)}
+			className={controlClassNames('group', className)}
 			onDragStart={(e) => handleDragStart(e, groupId)}
 			style={styleRef.current}
 		>

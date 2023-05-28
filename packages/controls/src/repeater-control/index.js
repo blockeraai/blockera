@@ -29,7 +29,7 @@ const RepeaterControl = ({
 	clientId,
 	InnerComponents,
 	initialState = {},
-	className = 'repeater',
+	className,
 	updateBlockAttributes = () => {},
 }) => {
 	const [repeaterItems, dispatch] = useImmerReducer(
@@ -59,7 +59,7 @@ const RepeaterControl = ({
 
 	return (
 		<RepeaterContextProvider {...defaultRepeaterState}>
-			<div className={controlClassNames('control', className)}>
+			<div className={controlClassNames('repeater', className)}>
 				<MappedItems />
 				<Button
 					className="add-new-item"

@@ -10,12 +10,12 @@ import { controlClassNames } from '@publisher/classnames';
 
 
 export default function ToggleControl({
-	className = 'toggle-control',
+	className,
 	...props
 }) {
 	return (
 		<WordPressToggleControl
-			className={controlClassNames(className)}
+			className={controlClassNames('toggle-control', className)}
 			{...props}
 		/>
 	);

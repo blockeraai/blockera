@@ -3,8 +3,9 @@
  */
 import helpers from './helpers';
 import extension from './field.json';
-import { LabelControl, TransitionControl } from '@publisher/controls';
+import { TransitionControl, LabelControl } from '@publisher/controls';
 import { injectHelpersToCssGenerators } from '@publisher/style-engine';
+import { fieldsClassNames } from '@publisher/classnames';
 
 export default {
 	...extension,
@@ -14,10 +15,13 @@ export default {
 	},
 	edit: ({ name, field: { label }, ...props }) => {
 		return (
-			<>
+			<div className={fieldsClassNames('transition', '2-column')}>
 				<LabelControl label={label} />
-				<TransitionControl {...props} blockName={name} />
-			</>
+
+				<div className={fieldsClassNames('controls')}>
+					<TransitionControl {...props} blockName={name} />
+				</div>
+			</div>
 		);
 	},
 };

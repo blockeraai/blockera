@@ -9,6 +9,7 @@ import { SelectControl as WordPressSelectControl } from '@wordpress/components';
  * External dependencies
  */
 import { isObject } from 'lodash';
+import { controlClassNames } from '@publisher/classnames';
 
 const SelectControl = (
 	options,
@@ -16,6 +17,7 @@ const SelectControl = (
 	initValue = '',
 	isGrouped = false,
 	disabledItemLabel = __('--- Select an item ---', 'publisher-core'),
+	className,
 	...props
 ) => {
 	const [value, setValue] = useState(initValue);
@@ -27,6 +29,7 @@ const SelectControl = (
 			onChange={(selection) => {
 				setValue(selection);
 			}}
+			className={controlClassNames('select', className)}
 			__nextHasNoMarginBottom
 		>
 			{children}

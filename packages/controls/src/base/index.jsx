@@ -9,12 +9,12 @@ import { BaseControl as WordPressBaseControl } from '@wordpress/components';
 import { controlClassNames } from '@publisher/classnames';
 
 export default function BaseControl({
-	className = 'base',
+	className,
 	...props
 }) {
 	return (
 		<WordPressBaseControl
-			className={controlClassNames(className)}
+			className={controlClassNames('base', className)}
 			{...props}
 		/>
 	);

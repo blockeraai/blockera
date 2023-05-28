@@ -3,13 +3,9 @@
  */
 import { controlClassNames } from '@publisher/classnames';
 
-export default function LabelControl({
-	label,
-	className = controlClassNames('label-control'),
-	...props
-}) {
+export default function LabelControl({ label, className, ...props }) {
 	return (
-		<span {...props} className={className}>
+		<span {...props} className={controlClassNames('label', className)}>
 			{label}
 		</span>
 	);

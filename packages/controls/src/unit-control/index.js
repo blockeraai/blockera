@@ -8,10 +8,10 @@ import { __experimentalUnitControl as WordPressUnitControl } from '@wordpress/bl
  */
 import { controlClassNames } from '@publisher/classnames';
 
-export default function UnitControl({ className = 'unit-control', ...props }) {
+export default function UnitControl({ className, ...props }) {
 	return (
 		<WordPressUnitControl
-			className={controlClassNames(className)}
+			className={controlClassNames('unit', className)}
 			{...props}
 		/>
 	);
