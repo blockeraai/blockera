@@ -2,28 +2,46 @@
  * Internal dependencies
  */
 import helpers from './helpers';
-import extension from './field.json';
+import field from './field.json';
 import { InputControl, LabelControl, RangeControl } from '@publisher/controls';
 import { injectHelpersToCssGenerators } from '@publisher/style-engine';
-import { fieldsClassNames } from '@publisher/classnames';
+import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
 
 export default {
-	...extension,
+	...field,
 	publisherCssGenerators: {
-		...extension.publisherCssGenerators,
-		...injectHelpersToCssGenerators(helpers, extension.cssGenerators),
+		...field.publisherCssGenerators,
+		...injectHelpersToCssGenerators(helpers, field.cssGenerators),
 	},
-	edit: ({ name, field: { label, settings }, ...props }) => {
+	edit: ({ name, field: { label, settings }, className, ...props }) => {
 		return (
-			<div className={fieldsClassNames('input', '2-column')}>
-				<LabelControl label={label} />
+			<div
+				className={fieldsClassNames(
+					'input',
+					label !== '' ? '2-column' : '1-column'
+				)}
+			>
+				{label && (
+					<div className={fieldsInnerClassNames('label')}>
+						<LabelControl label={label} />
+					</div>
+				)}
 
-				<div className={fieldsClassNames('controls')}>
+				<div className={fieldsInnerClassNames('control')}>
 					{'range' === settings?.type && (
-						<RangeControl {...props} blockName={name} />
+						<RangeControl
+							{...props}
+							{...settings}
+							blockName={name}
+							withInputField={true}
+						/>
 					)}
 					{'text' === settings?.type && (
-						<InputControl {...props} blockName={name} />
+						<InputControl
+							{...props}
+							{...settings}
+							blockName={name}
+						/>
 					)}
 				</div>
 			</div>

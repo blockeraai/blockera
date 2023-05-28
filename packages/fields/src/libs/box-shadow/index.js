@@ -2,23 +2,21 @@
  * Internal dependencies
  */
 import helpers from './helpers';
-import extension from './field.json';
-import { BoxShadowControl, LabelControl } from '@publisher/controls';
+import field from './field.json';
+import { BoxShadowControl } from '@publisher/controls';
 import { injectHelpersToCssGenerators } from '@publisher/style-engine';
-import { fieldsClassNames } from '@publisher/classnames';
+import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
 
 export default {
-	...extension,
+	...field,
 	publisherCssGenerators: {
-		...extension.publisherCssGenerators,
-		...injectHelpersToCssGenerators(helpers, extension.cssGenerators),
+		...field.publisherCssGenerators,
+		...injectHelpersToCssGenerators(helpers, field.cssGenerators),
 	},
-	edit: ({ name: blockName, field: { label }, ...props }) => {
+	edit: ({ name: blockName, ...props }) => {
 		return (
-			<div className={fieldsClassNames('angle-picker', '2-column')}>
-				<LabelControl label={label} />
-
-				<div className={fieldsClassNames('controls')}>
+			<div className={fieldsClassNames('box-shadow', '1-column')}>
+				<div className={fieldsInnerClassNames('control')}>
 					<BoxShadowControl {...props} blockName={blockName} />
 				</div>
 			</div>

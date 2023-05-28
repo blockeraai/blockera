@@ -13,8 +13,12 @@
 		{
 			"type": "field",
 			"field": "Input",
+			"label": "Opacity",
 			"settings": {
-				"type": "range"
+				"type": "range",
+				"min": 0,
+				"max": 100,
+				"initialPosition": 0
 			},
 			"cssGenerators": {}
 		},
@@ -24,7 +28,8 @@
 		},
 		{
 			"type": "field",
-			"field": "AnglePicker"
+			"field": "AnglePicker",
+			"label": "Angel"
 		}
 	],
 	"cssGenerators": {},

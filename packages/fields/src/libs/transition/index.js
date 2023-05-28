@@ -2,23 +2,28 @@
  * Internal dependencies
  */
 import helpers from './helpers';
-import extension from './field.json';
+import field from './field.json';
 import { TransitionControl, LabelControl } from '@publisher/controls';
 import { injectHelpersToCssGenerators } from '@publisher/style-engine';
 import { fieldsClassNames } from '@publisher/classnames';
 
 export default {
-	...extension,
+	...field,
 	publisherCssGenerators: {
-		...extension.publisherCssGenerators,
-		...injectHelpersToCssGenerators(helpers, extension.cssGenerators),
+		...field.publisherCssGenerators,
+		...injectHelpersToCssGenerators(helpers, field.cssGenerators),
 	},
 	edit: ({ name, field: { label }, ...props }) => {
 		return (
-			<div className={fieldsClassNames('transition', '2-column')}>
+			<div
+				className={fieldsClassNames(
+					'transition',
+					label !== '' ? '2-column' : '1-column'
+				)}
+			>
 				<LabelControl label={label} />
 
-				<div className={fieldsClassNames('controls')}>
+				<div className={fieldsClassNames('control')}>
 					<TransitionControl {...props} blockName={name} />
 				</div>
 			</div>
