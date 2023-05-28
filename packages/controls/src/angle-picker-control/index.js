@@ -8,6 +8,7 @@ import { controlClassNames } from '@publisher/classnames';
 export default function AnglePickerControl({
 	initValue = 0,
 	className,
+	label = '',
 	...props
 }) {
 	const [angle, setAngle] = useState(initValue);
@@ -17,6 +18,7 @@ export default function AnglePickerControl({
 			{...props}
 			value={angle}
 			onChange={setAngle}
+			label={label}
 			__nextHasNoMarginBottom
 			className={controlClassNames('angle', className)}
 		/>
