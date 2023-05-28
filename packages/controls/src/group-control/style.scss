@@ -1,4 +1,4 @@
-.publisher-core.control.group {
+.publisher-control-group {
 	z-index: 999999;
 	border: 1px solid #d5dadf;
 
@@ -56,12 +56,14 @@
 			margin: 12px 0;
 		}
 	}
-}
 
-.publisher-core.control.group.activate {
-	opacity: 1;
-}
+	&.active {
+		opacity: 1;
+	}
 
-.publisher-core.control.group.deactivate {
-	opacity: 0.5;
+	&.deactivate {
+		opacity: 0.5;
+		user-select: none;
+		pointer-events: none;
+	}
 }

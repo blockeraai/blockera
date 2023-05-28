@@ -1,17 +1,13 @@
-.publisher-core.control.color-control {
+.publisher-control-color {
 	//
+
+	.color-indicator {
+		margin-right: 5px;
+	}
 
 	.color-indicator-with-label {
 		border: solid 1px #e5e5e5;
 		padding: 5px 10px;
 		display: flex;
-	}
-}
-
-.publisher-core.control {
-	//
-
-	.color-indicator {
-		margin-right: 5px;
 	}
 }
