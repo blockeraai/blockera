@@ -3,7 +3,7 @@
  */
 import helpers from './helpers';
 import extension from './field.json';
-import { AnglePickerControl } from '@publisher/controls';
+import { AnglePickerControl, LabelControl } from '@publisher/controls';
 import { injectHelpersToCssGenerators } from '@publisher/style-engine';
 
 export default {
@@ -12,9 +12,10 @@ export default {
 		...extension.publisherCssGenerators,
 		...injectHelpersToCssGenerators(helpers, extension.cssGenerators),
 	},
-	edit: ({ name, ...props }) => {
+	edit: ({ name, field: { label }, ...props }) => {
 		return (
 			<>
+				<LabelControl label={label} />
 				<AnglePickerControl {...props} blockName={name} />
 			</>
 		);

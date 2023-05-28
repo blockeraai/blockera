@@ -12,7 +12,7 @@ export default {
 		...extension.publisherCssGenerators,
 		...injectHelpersToCssGenerators(helpers, extension.cssGenerators),
 	},
-	edit: ({ name: blockName, label, ...props }) => {
+	edit: ({ name: blockName, field: { label }, ...props }) => {
 		return (
 			<>
 				<LabelControl label={label} />

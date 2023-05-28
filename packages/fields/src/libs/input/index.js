@@ -3,7 +3,7 @@
  */
 import helpers from './helpers';
 import extension from './field.json';
-import { RangeControl } from '@publisher/controls';
+import { InputControl, LabelControl, RangeControl } from '@publisher/controls';
 import { injectHelpersToCssGenerators } from '@publisher/style-engine';
 
 export default {
@@ -12,10 +12,16 @@ export default {
 		...extension.publisherCssGenerators,
 		...injectHelpersToCssGenerators(helpers, extension.cssGenerators),
 	},
-	edit: ({ name, ...props }) => {
+	edit: ({ name, field: { label, settings }, ...props }) => {
 		return (
 			<>
-				<RangeControl {...props} blockName={name} />
+				<LabelControl label={label} />
+				{'range' === settings?.type && (
+					<RangeControl {...props} blockName={name} />
+				)}
+				{'text' === settings?.type && (
+					<InputControl {...props} blockName={name} />
+				)}
 			</>
 		);
 	},

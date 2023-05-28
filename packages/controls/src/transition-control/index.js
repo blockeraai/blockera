@@ -1,7 +1,6 @@
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
 import { useCallback } from '@wordpress/element';
 
 /**
@@ -43,7 +42,6 @@ function TransitionControl({
 	return (
 		<div className={controlClassNames('control', className)}>
 			<RepeaterControl
-				label={__('Add Transition', 'publisher')}
 				{...{
 					...props,
 					initialState,

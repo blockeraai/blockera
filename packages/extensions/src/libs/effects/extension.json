@@ -16,13 +16,7 @@
 			"settings": {
 				"type": "range"
 			},
-			"cssGenerators": {},
-			"attributes": {
-				"opacity": {
-					"type": "integer",
-					"default": 0
-				}
-			}
+			"cssGenerators": {}
 		},
 		{
 			"type": "field",
