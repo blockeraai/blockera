@@ -47,11 +47,27 @@ export default class CssGenerators {
 		return this[addRule]();
 	}
 
+	convertToCssSelector(cssClasses: string): string {
+		if (!cssClasses) {
+			return '';
+		}
+
+		return `.${cssClasses.replace(/\s+/g, '.')}`;
+	}
+
 	setUniqueClassName() {
-		this.selector = this.selector.replace(
-			/\.{{BLOCK_ID}}/g,
-			`.publisher-core.extension.publisher-extension-ref.client-id-${this.blockProps?.clientId}`
-		);
+		if (!this.selector) {
+			return;
+		}
+
+		this.selector = this.selector
+			.replace(/\.{{BLOCK_ID}}/g, `#block-${this.blockProps?.clientId}`)
+			.replace(
+				/\.{{className}}/g,
+				`.${this.convertToCssSelector(
+					this.blockProps.attributes.className
+				)}`
+			);
 	}
 
 	addStaticRule() {
@@ -64,6 +80,8 @@ export default class CssGenerators {
 		if (!this.getPropValue(this.name)) {
 			return '';
 		}
+
+		this.setUniqueClassName();
 
 		return this.function(this.name, this.blockProps, this);
 	}

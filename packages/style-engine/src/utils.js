@@ -59,14 +59,14 @@ export const computedCssRules = (
 	blockProps: Object
 ): string => {
 	let css = '';
-	const { publisherCssGenerators = [] } = blockType;
+	const { cssGenerators = [] } = blockType;
 
-	for (const controlId in publisherCssGenerators) {
-		if (!Object.hasOwnProperty.call(publisherCssGenerators, controlId)) {
+	for (const controlId in cssGenerators) {
+		if (!Object.hasOwnProperty.call(cssGenerators, controlId)) {
 			continue;
 		}
 
-		const generator = publisherCssGenerators[controlId];
+		const generator = cssGenerators[controlId];
 
 		if (!generator?.type) {
 			continue;
@@ -93,7 +93,7 @@ export const computedCssRules = (
 export const createCssRule = (style: Object): string => {
 	if (!hasAllProperties(style, ['selector', 'properties'])) {
 		console.warn(
-			`Style rule: %o ${JSON.stringify(style)} avoid css rule validation!`
+			`Style rule: ${JSON.stringify(style)} avoid css rule validation!`
 		);
 		return '';
 	}
