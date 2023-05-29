@@ -2,9 +2,8 @@
  * External dependencies
  */
 const { join } = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-// const { isArray, merge, mergeWith } = require('lodash');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 /**
  * WordPress dependencies
@@ -49,7 +48,7 @@ module.exports = (env, argv) => {
 		name: 'packages',
 		entry: {
 			...publisherEntries,
-			// ...styleDependencies.entry
+			...styleDependencies.entry,
 		},
 		output: {
 			devtoolNamespace: 'publisher',
