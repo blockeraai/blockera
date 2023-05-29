@@ -9,12 +9,10 @@ import { Button as WPButton } from '@wordpress/components';
 import { componentClassNames } from '@publisher/classnames';
 
 
-export default function Button({ children, className = 'button-component', ...props }) {
+export default function Button({ children, className, ...props }) {
 	return (
 		<WPButton
-			className={componentClassNames(
-				className
-			)}
+			className={componentClassNames('button', className)}
 			{...props}
 		>
 			{children}

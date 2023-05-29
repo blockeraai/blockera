@@ -9,11 +9,11 @@ import { __experimentalVStack as WordPressVStack } from '@wordpress/components';
 import { componentClassNames } from '@publisher/classnames';
 
 
-export default function VStack({ children, className = 'vertical-stack-component', ...props }) {
+export default function VStack({ children, className, ...props }) {
 	return (
 		<WordPressVStack
 			{...props}
-			className={componentClassNames(className)}
+			className={componentClassNames('vertical-stack', className)}
 		>
 			{children}
 		</WordPressVStack>

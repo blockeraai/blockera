@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies
  */
+import { controlClassNames } from '@publisher/classnames';
 import { RangeControl as WordPressRangeControl } from '@wordpress/components';
 
 /**
@@ -10,13 +11,7 @@ import { RangeControl as WordPressRangeControl } from '@wordpress/components';
  * @return {Object} The JSX object
  */
 const RangeControl = (props) => {
-	const {
-		className = 'range-control',
-		value,
-		onChange = () => {},
-		min = 12,
-		max = 30,
-	} = props;
+	const { className, value, onChange = () => {}, min = 12, max = 30 } = props;
 
 	return (
 		<>
@@ -27,7 +22,7 @@ const RangeControl = (props) => {
 					value,
 					...props,
 					onChange,
-					className,
+					className: controlClassNames('range', className),
 				}}
 			/>
 		</>

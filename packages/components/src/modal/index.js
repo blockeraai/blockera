@@ -3,17 +3,18 @@
  */
 import { __ } from '@wordpress/i18n';
 import { Modal as WPModal } from '@wordpress/components';
+import { componentClassNames } from '@publisher/classnames';
 
-/**
- * Render ModalIcon Component
- *
- * @param {object} children
- * @returns {React.ReactElement}
- */
-export default function Modal({ children, headerIcon, headerTitle, ...props }) {
+export default function Modal({
+	children,
+	headerIcon,
+	headerTitle,
+	className,
+	...props
+}) {
 	return (
 		<WPModal
-			className="publisher-modal-component"
+			className={componentClassNames('modal', className)}
 			title={
 				<>
 					{headerIcon && headerIcon}

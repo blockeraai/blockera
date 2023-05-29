@@ -10,6 +10,7 @@ import { memo, useContext, useState } from '@wordpress/element';
 import ActionsUI from './actions-ui';
 import { RepeaterContext } from '../context';
 import GroupControl from '../../group-control';
+import { controlInnerClassNames } from '@publisher/classnames';
 
 const RepeaterItem = ({ item, itemId }) => {
 	const [isOpen, setOpen] = useState(false);
@@ -29,7 +30,7 @@ const RepeaterItem = ({ item, itemId }) => {
 	};
 
 	return (
-		<div className="repeater-item">
+		<div className={controlInnerClassNames('repeater-item')}>
 			<GroupControl
 				isDraggable
 				groupId={itemId}
