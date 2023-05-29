@@ -11,10 +11,23 @@ class AssetsProvider {
 	 */
 	protected static $assets = [
 		'icons',
+		'fields',
 		'controls',
 		'components',
 		'classnames',
 		'extensions',
+	];
+
+	/**
+	 * Holds packages dependencies array.
+	 *
+	 * @var string[]
+	 */
+	protected static $packages_deps = [
+		'extensions' => [
+			'@publisher/fields',
+			'@publisher/controls',
+		]
 	];
 
 	public function __construct() {
@@ -42,9 +55,14 @@ class AssetsProvider {
 				wp_register_style(
 					'@publisher/' . $asset,
 					str_replace( '\\', '/', $assetInfo['style'] ),
-					[],
+					self::$packages_deps[ $asset ] ?? [],
 					$assetInfo['version']
 				);
+			}
+
+			if ( ! $assetInfo['script'] ) {
+
+				continue;
 			}
 
 			wp_register_script(
@@ -83,15 +101,29 @@ class AssetsProvider {
 
 		$deps    = $assetInfo['dependencies'] ?? [];
 		$version = $assetInfo['version'] ?? filemtime( $assetInfoFile );
-		$script  = sprintf(
+
+		$js_file = sprintf(
 			'%s%s/index%s.js',
-			pb_core_config( 'app.dist_url' ),
+			pb_core_config( 'app.dist_path' ),
 			$name,
 			$isDevelopment ? '' : '.min'
 		);
 
+		if ( file_exists( $js_file ) ) {
+
+			$script = sprintf(
+				'%s%s/index%s.js',
+				pb_core_config( 'app.dist_url' ),
+				$name,
+				$isDevelopment ? '' : '.min'
+			);
+		} else {
+
+			$script = '';
+		}
+
 		$css_file = sprintf(
-			'%s%s/style%s.css',
+			'%s%s-styles/style%s.css',
 			pb_core_config( 'app.dist_path' ),
 			$name,
 			$isDevelopment ? '' : '.min'
@@ -100,7 +132,7 @@ class AssetsProvider {
 		if ( file_exists( $css_file ) ) {
 
 			$style = sprintf(
-				'%s%s/style%s.css',
+				'%s%s-styles/style%s.css',
 				pb_core_config( 'app.dist_url' ),
 				$name,
 				$isDevelopment ? '' : '.min'
