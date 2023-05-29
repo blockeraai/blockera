@@ -5,6 +5,8 @@ import { useState } from '@wordpress/element';
 import { AnglePickerControl as WordPressAnglePickerControl } from '@wordpress/components';
 import { controlClassNames } from '@publisher/classnames';
 
+import './style.scss';
+
 export default function AnglePickerControl({
 	initValue = 0,
 	className,
