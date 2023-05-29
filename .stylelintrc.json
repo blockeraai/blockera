@@ -9,7 +9,7 @@
 		"selector-class-pattern": null,
 		"indentation": null,
 		"color-hex-length": "long",
-		"rule-empty-line-before": "never",
+		"rule-empty-line-before": "always",
 		"comment-empty-line-before": "never"
 	}
 }
