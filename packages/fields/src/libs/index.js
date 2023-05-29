@@ -10,6 +10,7 @@ import Input from './input';
 import BoxShadow from './box-shadow';
 import Transition from './transition';
 import AnglePicker from './angle-picker';
+import Select from './select';
 
 export function getFields() {
 	return applyFilters('publisher.core.fields.libs', [
@@ -17,5 +18,6 @@ export function getFields() {
 		BoxShadow,
 		Transition,
 		AnglePicker,
+		Select,
 	]);
 }

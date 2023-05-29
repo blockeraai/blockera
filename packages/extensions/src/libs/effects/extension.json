@@ -28,6 +28,18 @@
 		},
 		{
 			"type": "field",
+			"field": "SelectC",
+			"label": "Cursor",
+			"settings": {
+				"Options": {
+					"test": "Test",
+					"test1": "Test1",
+					"test2": "Test2"
+				}
+			}
+		},
+		{
+			"type": "field",
 			"field": "AnglePicker",
 			"label": "Angel"
 		}

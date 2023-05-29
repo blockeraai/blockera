@@ -1,0 +1,14 @@
+{
+	"type": "field",
+	"name": "Select",
+	"attributes": {
+		"publisherSelect": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"cssGenerators": {},
+	"editorProps": {
+		"className": "publisher-select"
+	}
+}
