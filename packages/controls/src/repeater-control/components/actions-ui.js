@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { reset } from '@wordpress/icons';
+import { close } from '@wordpress/icons';
 import { useContext } from '@wordpress/element';
 
 /**
@@ -27,29 +27,30 @@ export default function ActionsUI({
 
 	return (
 		<>
-			<VisibleElement {...{ setVisibility, isVisible }} />
+			{!isPopover && (
+				<Button
+					className={controlInnerClassNames('btn-toggle')}
+					icon={isOpen ? 'arrow-up-alt2' : 'arrow-down-alt2'}
+					label={
+						isOpen
+							? __('Close Settings', 'publisher')
+							: __('Open Settings', 'publisher')
+					}
+					showTooltip={true}
+					onClick={() => setOpen(!isOpen)}
+				/>
+			)}
 
-			<Button
-				className={controlInnerClassNames('btn-delete')}
-				icon={reset}
-				showTooltip={true}
-				onClick={() => removeItem(itemId)}
-				label={__('Delete', 'publisher')}
-			/>
-
-			{/* {!isPopover && ( */}
-			<Button
-				className={controlInnerClassNames('btn-toggle')}
-				icon={isOpen ? 'arrow-up-alt2' : 'arrow-down-alt2'}
-				label={
-					isOpen
-						? __('Close Settings', 'publisher')
-						: __('Open Settings', 'publisher')
-				}
-				showTooltip={true}
-				onClick={() => setOpen(!isOpen)}
-			/>
-			{/* )} */}
+			<div className={controlInnerClassNames('action-btns')}>
+				<VisibleElement {...{ setVisibility, isVisible }} />
+				<Button
+					className={controlInnerClassNames('btn-delete')}
+					icon={close}
+					showTooltip={true}
+					onClick={() => removeItem(itemId)}
+					label={__('Delete', 'publisher')}
+				/>
+			</div>
 		</>
 	);
 }

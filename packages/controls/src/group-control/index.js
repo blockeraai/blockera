@@ -7,16 +7,24 @@ import { Popover } from '@wordpress/components';
 /**
  * Internal dependencies
  */
+import {
+	controlClassNames,
+	controlInnerClassNames,
+} from '@publisher/classnames';
+
+/**
+ * Styles
+ */
 import './style.scss';
-import { controlClassNames } from '@publisher/classnames';
 
 export default function GroupControl({
 	design = 'minimal',
-	isOpen,
 	header,
 	children,
 	groupId = null,
 	dropArgs = null,
+	isOpen = false,
+	isVisible = true,
 	isPopover = false,
 	isDraggable = false,
 	dropCallback = null,
@@ -63,17 +71,29 @@ export default function GroupControl({
 			className={controlClassNames(
 				'group',
 				'design-' + design,
+				isVisible ? ' is-active' : ' is-inactive',
+				isOpen ? 'is-open' : 'is-close',
 				className
 			)}
 			onDragStart={(e) => handleDragStart(e, groupId)}
 			style={styleRef.current}
 		>
-			<div className={`header${isDraggable ? ' draggable' : ''}`}>
-				<div className="header-label">{header}</div>
+			<div
+				className={controlInnerClassNames(
+					'group-header',
+					isDraggable ? ' draggable' : ''
+				)}
+			>
+				{header}
 			</div>
+
 			{isPopover
 				? isOpen && (
-						<Popover offset={35} placement="left-start">
+						<Popover
+							offset={35}
+							placement="left-start"
+							className={controlInnerClassNames('group-popover')}
+						>
 							<div className="content">{children}</div>
 						</Popover>
 				  )

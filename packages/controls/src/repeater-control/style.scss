@@ -3,14 +3,45 @@
 	row-gap: 10px;
 	flex-direction: column;
 
-	.status {
-		margin-left: 8px;
-		margin-right: 16px;
-	}
-
-	.publisher-control-header {
+	& > .publisher-control-header {
 		display: flex;
 		align-items: center;
+	}
+
+	.publisher-control-repeater-group-header {
+		display: flex;
+		align-items: center;
+		flex-wrap: nowrap;
+		padding: 2px 4px;
+		height: 30px;
+		width: 100%;
+		position: relative;
+
+		.publisher-control-action-btns {
+			position: absolute;
+			top: 0;
+			right: 0px;
+			opacity: 0;
+			visibility: hidden;
+			display: flex;
+			align-items: center;
+
+			.status {
+				width: 30px;
+				height: 30px;
+				line-height: 30px;
+				text-align: center;
+			}
+		}
+
+		.publisher-control-btn-toggle + .publisher-control-action-btns {
+			right: 30px;
+		}
+
+		&:hover .publisher-control-action-btns {
+			opacity: 1;
+			visibility: visible;
+		}
 	}
 
 	.publisher-control-btn-add {

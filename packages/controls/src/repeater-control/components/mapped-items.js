@@ -10,13 +10,13 @@ import RepeaterItem from './repeater-item';
 import { RepeaterContext } from '../context';
 
 const MappedItems = () => {
-	const { repeaterItems: items, isPopover } = useContext(RepeaterContext);
+	const { repeaterItems: items } = useContext(RepeaterContext);
 
 	const cachedValue = useMemo(
 		() =>
 			items.map((item, itemId) => (
 				<RepeaterItem
-					{...{ item, itemId, isPopover }}
+					{...{ item, itemId }}
 					key={`repeater-item-${itemId}`}
 				/>
 			)),

@@ -1,11 +1,14 @@
 /**
  * WordPress dependencies
  */
+import { controlInnerClassNames } from '@publisher/classnames';
 import { ColorIndicator } from '@wordpress/components';
 import { memo } from '@wordpress/element';
 
 const Header = ({
 	item: { x, y, blur, spread, unit = 'px', color = '#fff' },
+	isOpen,
+	setOpen,
 	children,
 }) => {
 	const heading = () => {
@@ -29,7 +32,10 @@ const Header = ({
 	};
 
 	return (
-		<div className="header-label">
+		<div
+			className={controlInnerClassNames('repeater-group-header')}
+			onClick={() => setOpen(!isOpen)}
+		>
 			<ColorIndicator colorValue={color} className="color-indicator" />
 			<span className="publisher-core-box-shadow-values">
 				{heading()}
