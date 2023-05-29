@@ -18,7 +18,7 @@ export default {
 			<div
 				className={fieldsClassNames(
 					'transition',
-					label !== '' ? '2-column' : '1-column'
+					label !== '' ? 'columns-2' : 'columns-1'
 				)}
 			>
 				<LabelControl label={label} />

@@ -15,7 +15,7 @@ export default {
 	},
 	edit: ({ name: blockName, ...props }) => {
 		return (
-			<div className={fieldsClassNames('box-shadow', '1-column')}>
+			<div className={fieldsClassNames('box-shadow', 'columns-1')}>
 				<div className={fieldsInnerClassNames('control')}>
 					<BoxShadowControl {...props} blockName={blockName} />
 				</div>
