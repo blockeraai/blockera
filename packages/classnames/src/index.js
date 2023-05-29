@@ -19,16 +19,27 @@ function prepareClassName(section, items) {
 		(typeof items === 'string' || items instanceof String) &&
 		items !== ''
 	) {
-		items = (section + '-' + items).replaceAll(' ', ' ' + section + '-');
+		items = section + '-' + items;
 	} else if (Array.isArray(items)) {
-		for (let i = 0; i < items.length; i++) {
-			items[i] = prepareClassName(section, items[i]);
-		}
+		// prepend section to first item
+		items[0] = prepareClassName(section, items[0]);
 	} else if (typeof items === 'object') {
+		let first = true;
+		const newItems = [];
+
 		Object.keys(items).forEach((key) => {
-			items[section + '-' + key] = prepareClassName(section, items[key]);
-			delete items[key];
+			if (items[key] === true) {
+				if (first === true) {
+					newItems.push(prepareClassName(section, key));
+
+					first = false;
+				} else {
+					newItems.push(key);
+				}
+			}
 		});
+
+		items = newItems;
 	}
 	return items;
 }
