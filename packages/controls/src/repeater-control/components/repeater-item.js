@@ -12,10 +12,11 @@ import { RepeaterContext } from '../context';
 import GroupControl from '../../group-control';
 import { controlInnerClassNames } from '@publisher/classnames';
 
-const RepeaterItem = ({ item, itemId }) => {
+const RepeaterItem = ({ item, itemId, isPopover = true }) => {
 	const [isOpen, setOpen] = useState(false);
 	const [isVisible, setVisibility] = useState(true);
 	const {
+		design,
 		InnerComponents,
 		Header,
 		sortItems,
@@ -33,6 +34,7 @@ const RepeaterItem = ({ item, itemId }) => {
 		<div className={controlInnerClassNames('repeater-item')}>
 			<GroupControl
 				isDraggable
+				design={design}
 				groupId={itemId}
 				dropArgs={items}
 				dropCallback={sortItems}
@@ -51,7 +53,7 @@ const RepeaterItem = ({ item, itemId }) => {
 				}
 				children={<InnerComponents {...{ item, itemId }} />}
 				isOpen={isOpen}
-				isPopover={true}
+				isPopover={isPopover}
 			/>
 		</div>
 	);

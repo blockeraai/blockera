@@ -4,6 +4,7 @@
 import { createContext } from '@wordpress/element';
 
 const RepeaterContext = createContext({
+	design: 'minimal',
 	Header: null,
 	clientId: null,
 	attributes: {},
@@ -13,6 +14,7 @@ const RepeaterContext = createContext({
 	removeItem: () => {},
 	changeItem: () => {},
 	InnerComponents: null,
+	isPopover: true,
 });
 
 const RepeaterContextProvider = ({ children, ...props }) => {

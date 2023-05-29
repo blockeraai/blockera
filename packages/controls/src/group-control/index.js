@@ -11,6 +11,7 @@ import './style.scss';
 import { controlClassNames } from '@publisher/classnames';
 
 export default function GroupControl({
+	design = 'minimal',
 	isOpen,
 	header,
 	children,
@@ -56,10 +57,14 @@ export default function GroupControl({
 
 	return (
 		<div
-			draggable
+			draggable={isDraggable}
 			onDragOver={handleDragOver}
 			onDrop={(e) => handleDrop(e, groupId)}
-			className={controlClassNames('group', className)}
+			className={controlClassNames(
+				'group',
+				'design-' + design,
+				className
+			)}
 			onDragStart={(e) => handleDragStart(e, groupId)}
 			style={styleRef.current}
 		>
@@ -68,7 +73,7 @@ export default function GroupControl({
 			</div>
 			{isPopover
 				? isOpen && (
-						<Popover offset={20} placement="left-start">
+						<Popover offset={35} placement="left-start">
 							<div className="content">{children}</div>
 						</Popover>
 				  )

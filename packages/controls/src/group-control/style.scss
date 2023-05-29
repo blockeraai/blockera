@@ -1,11 +1,10 @@
 .publisher-control-group {
 	z-index: 999999;
-	border: 1px solid #d5dadf;
+	border: 1px solid #cccccc;
+	border-radius: 2px;
 
 	.header {
 		display: flex;
-		background: #ffffff;
-		border-bottom: none;
 
 		.header-label {
 			display: flex;
@@ -43,10 +42,15 @@
 			content: "";
 			height: 13px;
 			display: block;
+			opacity: 0;
 			margin-right: 3px;
 			position: relative;
 			background-repeat: no-repeat;
 			background-image: url("data:image/svg+xml,%3Csvg width=%273%27 height=%2713%27 viewBox=%270 0 3 13%27 fill=%27none%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Crect width=%273%27 height=%273%27 rx=%271.5%27 fill=%27%23A8A8A8%27/%3E%3Crect y=%275%27 width=%273%27 height=%273%27 rx=%271.5%27 fill=%27%23A8A8A8%27/%3E%3Crect y=%2710%27 width=%273%27 height=%273%27 rx=%271.5%27 fill=%27%23A8A8A8%27/%3E%3C/svg%3E");
+		}
+
+		&:hover::before {
+			opacity: 1;
 		}
 	}
 
@@ -64,8 +68,7 @@
 	}
 
 	&.deactivate {
-		opacity: 0.5;
+		opacity: 0.5 !important;
 		user-select: none;
-		pointer-events: none;
 	}
 }

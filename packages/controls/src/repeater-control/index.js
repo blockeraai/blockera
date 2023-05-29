@@ -12,7 +12,10 @@ import { useImmerReducer } from 'use-immer';
 /**
  * Internal dependencies.
  */
-import { controlClassNames } from '@publisher/classnames';
+import {
+	controlClassNames,
+	controlInnerClassNames,
+} from '@publisher/classnames';
 import repeaterItemsReducer from './store/reducer';
 import { RepeaterContextProvider } from './context';
 import { Button, Icon } from '@publisher/components';
@@ -21,8 +24,10 @@ import { addItem, removeItem, changeItem, sortItems } from './store/actions';
 
 //CSS dependencies
 import './style.scss';
+import LabelControl from '../label-control';
 
 const RepeaterControl = ({
+	design = 'minimal',
 	label,
 	value,
 	Header,
@@ -30,11 +35,12 @@ const RepeaterControl = ({
 	InnerComponents,
 	initialState = {},
 	className,
+	isPopover = true,
 	updateBlockAttributes = () => {},
 }) => {
 	const [repeaterItems, dispatch] = useImmerReducer(
 		repeaterItemsReducer,
-		value?.length ? value : [initialState]
+		value?.length ? value : []
 	);
 
 	useEffect(() => {
@@ -44,6 +50,7 @@ const RepeaterControl = ({
 	}, [repeaterItems, value, updateBlockAttributes]);
 
 	const defaultRepeaterState = {
+		design,
 		Header,
 		clientId,
 		dispatch,
@@ -55,19 +62,29 @@ const RepeaterControl = ({
 		changeItem: (itemId, newValue) =>
 			dispatch(changeItem(itemId, newValue)),
 		sortItems: (newValue) => dispatch(sortItems(newValue)),
+		isPopover,
 	};
 
 	return (
 		<RepeaterContextProvider {...defaultRepeaterState}>
-			<div className={controlClassNames('repeater', className)}>
+			<div
+				className={controlClassNames(
+					'repeater',
+					'design-' + design,
+					className
+				)}
+			>
+				<div className={controlInnerClassNames('header')}>
+					<LabelControl label={label} />
+
+					<Button
+						className={controlInnerClassNames('btn-add')}
+						onClick={defaultRepeaterState.addNewItem}
+					>
+						<Icon type="wp" icon={plus} size={17} />
+					</Button>
+				</div>
 				<MappedItems />
-				<Button
-					className="add-new-item"
-					onClick={defaultRepeaterState.addNewItem}
-				>
-					<Icon type="wp" icon={plus} size={17} />
-					{label}
-				</Button>
 			</div>
 		</RepeaterContextProvider>
 	);

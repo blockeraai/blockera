@@ -1,12 +1,42 @@
 .publisher-control-repeater {
-	//
-
-	.add-new-item {
-		border: solid 1px #eeeeee;
-	}
+	display: flex;
+	row-gap: 10px;
+	flex-direction: column;
 
 	.status {
 		margin-left: 8px;
 		margin-right: 16px;
+	}
+
+	.publisher-control-header {
+		display: flex;
+		align-items: center;
+	}
+
+	.publisher-control-btn-add {
+		font-size: 13px;
+		font-weight: 400;
+		height: 22px;
+		line-height: 22px;
+		width: 22px;
+		margin: 0;
+		padding: 0 0;
+		border: 1px solid #cccccc;
+		margin-left: auto;
+
+		&:focus:not(:disabled) {
+			//
+
+			border-color: var(
+				--wp-components-color-accent,
+				var(--wp-admin-theme-color, #007cba)
+			);
+			box-shadow: 0 0 0 var(--wp-admin-border-width-focus)
+				var(
+					--wp-components-color-accent,
+					var(--wp-admin-theme-color, #007cba)
+				);
+			outline: 3px solid transparent;
+		}
 	}
 }

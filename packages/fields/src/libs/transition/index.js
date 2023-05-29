@@ -3,9 +3,9 @@
  */
 import helpers from './helpers';
 import field from './field.json';
-import { TransitionControl, LabelControl } from '@publisher/controls';
+import { TransitionControl } from '@publisher/controls';
 import { injectHelpersToCssGenerators } from '@publisher/style-engine';
-import { fieldsClassNames } from '@publisher/classnames';
+import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
 
 export default {
 	...field,
@@ -21,10 +21,12 @@ export default {
 					label !== '' ? 'columns-2' : 'columns-1'
 				)}
 			>
-				<LabelControl label={label} />
-
-				<div className={fieldsClassNames('control')}>
-					<TransitionControl {...props} blockName={name} />
+				<div className={fieldsInnerClassNames('control')}>
+					<TransitionControl
+						{...props}
+						isPopover={false}
+						blockName={name}
+					/>
 				</div>
 			</div>
 		);

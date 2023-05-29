@@ -13,14 +13,14 @@ import { controlClassNames } from '@publisher/classnames';
 import BoxShadowFields from './components/box-shadow-fields';
 
 const initialState = {
-	x: 0,
+	x: 10,
 	y: 0,
 	blur: 0,
 	spread: 0,
 	unit: 'px',
 	inset: false,
 	isVisible: true,
-	color: 'transparent',
+	color: '',
 };
 
 function BoxShadowControl({ attributes, setAttributes, className, ...props }) {
@@ -38,7 +38,7 @@ function BoxShadowControl({ attributes, setAttributes, className, ...props }) {
 	return (
 		<div className={controlClassNames('box-shadow', className)}>
 			<RepeaterControl
-				label={__('Add Box Shadow', 'publisher')}
+				label={__('Box Shadows', 'publisher')}
 				{...{
 					...props,
 					Header,

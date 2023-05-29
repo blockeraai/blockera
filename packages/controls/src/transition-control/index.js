@@ -2,6 +2,7 @@
  * WordPress dependencies
  */
 import { useCallback } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -37,6 +38,7 @@ function TransitionControl({ attributes, setAttributes, className, ...props }) {
 	return (
 		<div className={controlClassNames('transition', className)}>
 			<RepeaterControl
+				label={__('Transitions', 'publisher')}
 				{...{
 					...props,
 					initialState,
