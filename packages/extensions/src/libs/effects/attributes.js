@@ -11,8 +11,4 @@ export const attributes = {
 		type: 'string',
 		default: 'default',
 	},
-	publisherAnglePicker: {
-		type: 'integer',
-		default: 0,
-	},
 };

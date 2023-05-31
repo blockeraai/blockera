@@ -17,7 +17,6 @@ export function EffectsStyles({
 		publisherCursor,
 		publisherOpacity,
 		// publisherTransition,
-		// publisherAnglePicker,
 	},
 }) {
 	const { attributes: _attributes, ...blockProps } =

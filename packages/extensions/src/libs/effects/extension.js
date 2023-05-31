@@ -6,12 +6,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import {
-	InputField,
-	SelectField,
-	TransitionField,
-	AnglePickerField,
-} from '@publisher/fields';
+import { InputField, SelectField, TransitionField } from '@publisher/fields';
 import { isActiveField } from '../../api/utils';
 import { cursorFieldOptions } from './utils';
 
@@ -21,7 +16,6 @@ export function EffectsExtension({ children, config, ...props }) {
 			publisherCursor,
 			publisherOpacity,
 			publisherTransition,
-			publisherAnglePicker,
 		},
 	} = config;
 
@@ -61,16 +55,6 @@ export function EffectsExtension({ children, config, ...props }) {
 						label: __('Cursor', 'publisher-core'),
 						options: cursorFieldOptions(),
 						initValue: 'default',
-					}}
-				/>
-			)}
-
-			{isActiveField(publisherAnglePicker) && (
-				<AnglePickerField
-					{...{
-						...props,
-						attribute: 'publisherAnglePicker',
-						label: __('Angle', 'publisher-core'),
 					}}
 				/>
 			)}
