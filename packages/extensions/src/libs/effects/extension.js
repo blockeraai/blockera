@@ -13,6 +13,7 @@ import {
 	AnglePickerField,
 } from '@publisher/fields';
 import { isActiveField } from '../../api/utils';
+import { cursorFieldOptions } from './utils';
 
 export function EffectsExtension({ children, config, ...props }) {
 	const {
@@ -41,6 +42,7 @@ export function EffectsExtension({ children, config, ...props }) {
 					}}
 				/>
 			)}
+
 			{isActiveField(publisherTransition) && (
 				<TransitionField
 					{...{
@@ -50,20 +52,19 @@ export function EffectsExtension({ children, config, ...props }) {
 					}}
 				/>
 			)}
+
 			{isActiveField(publisherCursor) && (
 				<SelectField
 					{...{
 						...props,
 						attribute: 'publisherCursor',
 						label: __('Cursor', 'publisher-core'),
-						options: [
-							{ label: 'Copy', value: 'copy' },
-							{ label: 'Move', value: 'move' },
-							{ label: 'Auto', value: 'auto' },
-						],
+						options: cursorFieldOptions(),
+						initValue: 'default',
 					}}
 				/>
 			)}
+
 			{isActiveField(publisherAnglePicker) && (
 				<AnglePickerField
 					{...{

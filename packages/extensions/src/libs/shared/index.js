@@ -36,7 +36,7 @@ export function SharedBlockExtension({ children, ...props }) {
 			/>
 			<BaseExtension
 				{...props}
-				initialOpen={false}
+				initialOpen={true}
 				extensionId={'Effects'}
 				title={__('Effects', 'publisher-core')}
 			/>

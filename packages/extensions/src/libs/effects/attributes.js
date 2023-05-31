@@ -9,7 +9,7 @@ export const attributes = {
 	},
 	publisherCursor: {
 		type: 'string',
-		default: '',
+		default: 'default',
 	},
 	publisherAnglePicker: {
 		type: 'integer',
