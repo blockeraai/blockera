@@ -1,7 +1,7 @@
 // general style for fields
 import './style.scss';
 
-// export { IconField } from './libs/icon';
+export { IconField } from './libs/icon';
 export { InputField } from './libs/input';
 export { SelectField } from './libs/select';
 export { TransitionField } from './libs/transition';

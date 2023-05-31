@@ -1,2 +1,2 @@
-// export { BoxShadowField } from './field';
-// export { BoxShadowFieldStyle } from './styles';
+export { BoxShadowField } from './field';
+export { BoxShadowFieldStyle } from './styles';
