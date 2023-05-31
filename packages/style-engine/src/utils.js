@@ -66,23 +66,39 @@ export const computedCssRules = (
 			continue;
 		}
 
-		const generator = cssGenerators[controlId];
+		const generatorDetails = cssGenerators[controlId];
 
-		if (!generator?.type) {
-			continue;
-		}
+		generatorDetails.forEach((generator) => {
+			if (!isValidGenerator(generator)) {
+				console.warn(
+					`${JSON.stringify(
+						generator
+					)} was not a valid css generator!`
+				);
+				return;
+			}
 
-		const cssGenerator = new CssGenerators(
-			controlId,
-			generator,
-			blockProps
-		);
+			const cssGenerator = new CssGenerators(
+				controlId,
+				generator,
+				blockProps
+			);
 
-		css += cssGenerator.rules() + '\n';
+			css += cssGenerator.rules() + '\n';
+		});
 	}
 
 	return css;
 };
+
+/**
+ * Check is valid css generator?
+ *
+ * @param {Object} generator the css generator
+ * @return {boolean} true on success, false when otherwise!
+ */
+export const isValidGenerator = (generator: Object): boolean =>
+	['function', 'static'].includes(generator?.type);
 
 /**
  * Creating CSS Rule!
