@@ -1,19 +1,19 @@
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
-import { useCallback } from '@wordpress/element';
+import { useCallback, useContext } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
 import Header from './components/header';
 import RepeaterControl from '../repeater-control';
+import { BlockEditContext } from '@publisher/extensions';
 import { controlClassNames } from '@publisher/classnames';
 import BoxShadowFields from './components/box-shadow-fields';
 
 const initialState = {
-	x: 10,
+	x: 0,
 	y: 0,
 	blur: 0,
 	spread: 0,
@@ -23,13 +23,14 @@ const initialState = {
 	color: '',
 };
 
-function BoxShadowControl({ attributes, setAttributes, className, ...props }) {
+function BoxShadowControl({ attribute, className, ...props }) {
+	const { attributes, setAttributes } = useContext(BlockEditContext);
 	const { publisherBoxShadowItems } = attributes;
 	const updateBlockAttributes = useCallback(
 		(newBoxShadowItems) => {
 			setAttributes({
 				...attributes,
-				publisherBoxShadowItems: newBoxShadowItems,
+				[attribute]: newBoxShadowItems,
 			});
 		},
 		[attributes, setAttributes]
@@ -38,7 +39,6 @@ function BoxShadowControl({ attributes, setAttributes, className, ...props }) {
 	return (
 		<div className={controlClassNames('box-shadow', className)}>
 			<RepeaterControl
-				label={__('Box Shadows', 'publisher')}
 				{...{
 					...props,
 					Header,

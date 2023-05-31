@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
+import { useContext } from '@wordpress/element';
 import { SelectControl as WordPressSelectControl } from '@wordpress/components';
 
 /**
@@ -10,24 +10,29 @@ import { SelectControl as WordPressSelectControl } from '@wordpress/components';
  */
 import { isObject } from 'lodash';
 import { controlClassNames } from '@publisher/classnames';
+import { BlockEditContext } from '@publisher/extensions';
 
-const SelectControl = (
+const SelectControl = ({
 	options,
 	children,
+	attribute,
 	initValue = '',
 	isGrouped = false,
 	disabledItemLabel = __('--- Select an item ---', 'publisher-core'),
 	className,
 	...props
-) => {
-	const [value, setValue] = useState(initValue);
+}) => {
+	const { attributes, setAttributes } = useContext(BlockEditContext);
 
 	const GroupSelect = () => (
 		<WordPressSelectControl
 			{...props}
-			value={value}
+			value={attributes[attribute] || initValue}
 			onChange={(selection) => {
-				setValue(selection);
+				setAttributes({
+					...attributes,
+					[attribute]: selection,
+				});
 			}}
 			className={controlClassNames('select', className)}
 			__nextHasNoMarginBottom
@@ -42,16 +47,21 @@ const SelectControl = (
 			{!isGrouped && isObject(options) && (
 				<WordPressSelectControl
 					{...props}
-					value={value}
-					options={{
-						...{
+					value={attributes[attribute] || initValue}
+					options={[
+						{
 							value: '',
 							label: disabledItemLabel,
 							disable: true,
 						},
 						...options,
-					}}
-					onChange={(selection) => setValue(selection)}
+					]}
+					onChange={(selection) =>
+						setAttributes({
+							...attributes,
+							[attribute]: selection,
+						})
+					}
 					__nextHasNoMarginBottom
 				/>
 			)}

@@ -1,17 +1,23 @@
 /**
  * WordPress dependencies
  */
+import { useContext } from '@wordpress/element';
 import { controlClassNames } from '@publisher/classnames';
 import { RangeControl as WordPressRangeControl } from '@wordpress/components';
 
 /**
- * Render Range Control
- *
- * @param {Object} props The component properties
- * @return {Object} The JSX object
+ * Internal dependencies
  */
-const RangeControl = (props) => {
-	const { className, value, onChange = () => {}, min = 12, max = 30 } = props;
+import { BlockEditContext } from '@publisher/extensions';
+
+const RangeControl = ({
+	min = 12,
+	max = 30,
+	className,
+	attribute,
+	initialPosition,
+}) => {
+	const { attributes, setAttributes } = useContext(BlockEditContext);
 
 	return (
 		<>
@@ -19,9 +25,12 @@ const RangeControl = (props) => {
 				{...{
 					min,
 					max,
-					value,
-					...props,
-					onChange,
+					value: attributes[attribute] || initialPosition,
+					onChange: (newValue) =>
+						setAttributes({
+							...attributes,
+							[attribute]: newValue,
+						}),
 					className: controlClassNames('range', className),
 				}}
 			/>

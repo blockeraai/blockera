@@ -1,13 +1,13 @@
 /**
  * WordPress dependencies
  */
-import { useCallback } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { useCallback, useContext } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
 import RepeaterControl from '../repeater-control';
+import { BlockEditContext } from '@publisher/extensions';
 import { controlClassNames } from '@publisher/classnames';
 
 const initialState = {
@@ -21,7 +21,8 @@ const initialState = {
 	color: 'transparent',
 };
 
-function TransitionControl({ attributes, setAttributes, className, ...props }) {
+function TransitionControl({ attribute, className, ...props }) {
+	const { attributes, setAttributes } = useContext(BlockEditContext);
 	const { Transition } = attributes;
 	const updateBlockAttributes = useCallback(
 		(newTransition) => {
@@ -38,7 +39,6 @@ function TransitionControl({ attributes, setAttributes, className, ...props }) {
 	return (
 		<div className={controlClassNames('transition', className)}>
 			<RepeaterControl
-				label={__('Transitions', 'publisher')}
 				{...{
 					...props,
 					initialState,
