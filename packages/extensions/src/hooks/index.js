@@ -12,6 +12,8 @@ import withBlockSettings from './block-settings';
 // import withBlockControls from './block-controls';
 // import withCustomizeSaveElement from './save-element';
 
+export { BlockEditContext, BlockEditContextProvider } from './context';
+
 export default function applyHooks() {
 	addFilter(
 		'blocks.registerBlockType',

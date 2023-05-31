@@ -1,3 +1,5 @@
+import { isObject, isArray } from 'lodash';
+
 /**
  * Return a new object with the specified keys omitted.
  *
@@ -21,20 +23,13 @@ export function omit(object, keys) {
 export const isBlockTypeExtension = ({ type }) => 'block' === type;
 
 /**
- * is field extension?
+ * is active extension?
  *
- * @param {string} type the field extension string must be equal with "field"
+ * @param {string} fieldConfig the field config
  * @return {boolean} true on success, false when otherwise!
  */
-export const isFieldTypeExtension = ({ type }) => 'field' === type;
-
-/**
- * is extension?
- *
- * @param {string} type the field extension string must be equal with "extension"
- * @return {boolean} true on success, false when otherwise!
- */
-export const isExtensionType = ({ type }) => 'extension' === type;
+export const isActiveField = (fieldConfig) =>
+	isObject(fieldConfig) ? fieldConfig?.status : true === fieldConfig;
 
 /**
  * is enable extension?
@@ -43,3 +38,52 @@ export const isExtensionType = ({ type }) => 'extension' === type;
  * @return {boolean} true on success, false on otherwise
  */
 export const isEnableExtension = (extension) => true === extension?.status;
+
+/**
+ * Merging objects
+ *
+ * @param {Object} a the object first
+ * @param {Object} b the object second
+ * @return {Object} merged second object into first
+ */
+export const merge = (a: Object, b: Object): Object => {
+	for (const key in b) {
+		if (!Object.hasOwnProperty.call(b, key)) {
+			continue;
+		}
+
+		const element = b[key];
+
+		if (!element) {
+			continue;
+		}
+
+		if (isObject(element)) {
+			a = {
+				...a,
+				key: {
+					...(a[key] || {}),
+					...element,
+				},
+			};
+
+			continue;
+		}
+
+		if (isArray(element)) {
+			a = {
+				...a,
+				key: [...(a[key] || []), ...element],
+			};
+
+			continue;
+		}
+
+		a = {
+			...a,
+			[!a[key] ? key : a[key]]: b[key],
+		};
+	}
+
+	return a;
+};

@@ -1,13 +1,4 @@
-/**
- * Internal dependencies
- */
-import migrate from './migrate';
-import extension from './extension.json';
-
-export default {
-	migrate,
-	...extension,
-	edit: ({ children }) => {
-		return <div>{children}</div>;
-	},
-};
+export { supports } from './supports';
+export { attributes } from './attributes';
+export { BorderAndShadowStyles } from './styles';
+export { BorderAndShadowExtension } from './extension';

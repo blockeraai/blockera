@@ -1,17 +1,27 @@
-/**
- * WordPress dependencies
- */
-import { applyFilters } from '@wordpress/hooks';
-
-/**
- * Internal dependencies
- */
-import Effects from './effects';
-import BorderAndShadow from './border-and-shadow';
-
-export function getExtensions() {
-	return applyFilters('publisher.core.extensions.extensions.list', [
-		Effects,
-		BorderAndShadow,
-	]);
-}
+export {
+	BorderAndShadowStyles,
+	BorderAndShadowExtension,
+	attributes as borderAndShadowExtensionAttributes,
+	supports as borderAndShadowExtensionSupports,
+} from './border-and-shadow';
+export {
+	EffectsStyles,
+	EffectsExtension,
+	attributes as effectsExtensionAttributes,
+	supports as effectsExtensionSupports,
+} from './effects';
+export {
+	IconExtension,
+	attributes as IconExtensionAttributes,
+	supports as IconExtensionSupports,
+} from './icon';
+export {
+	SharedBlockExtension,
+	attributes as sharedBlockExtensionAttributes,
+	supports as sharedBlockExtensionSupports,
+} from './shared';
+export { BaseExtension } from './base';
+export {
+	BaseExtensionContext,
+	BaseExtensionContextProvider,
+} from './base/context';
