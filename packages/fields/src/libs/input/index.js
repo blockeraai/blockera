@@ -1,50 +1,52 @@
 /**
+ * WordPress dependencies
+ */
+import { useContext } from '@wordpress/element';
+
+/**
  * Internal dependencies
  */
-import helpers from './helpers';
-import field from './field.json';
+import { BlockEditContext } from '@publisher/extensions';
 import { InputControl, LabelControl, RangeControl } from '@publisher/controls';
-import { injectHelpersToCssGenerators } from '@publisher/style-engine';
 import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
 
-export default {
-	...field,
-	publisherCssGenerators: {
-		...field.publisherCssGenerators,
-		...injectHelpersToCssGenerators(helpers, field.cssGenerators),
-	},
-	edit: ({ name, field: { label, settings }, className, ...props }) => {
-		return (
-			<div
-				className={fieldsClassNames(
-					'input',
-					label !== '' ? 'columns-2' : 'columns-1'
-				)}
-			>
-				{label && (
-					<div className={fieldsInnerClassNames('label')}>
-						<LabelControl label={label} />
-					</div>
-				)}
+export function InputField({ name, label, attribute, settings, ...props }) {
+	const { name: blockName, ...blockProps } = useContext(BlockEditContext);
 
-				<div className={fieldsInnerClassNames('control')}>
-					{'range' === settings?.type && (
-						<RangeControl
-							{...props}
-							{...settings}
-							blockName={name}
-							withInputField={true}
-						/>
-					)}
-					{'text' === settings?.type && (
-						<InputControl
-							{...props}
-							{...settings}
-							blockName={name}
-						/>
-					)}
+	return (
+		<div
+			className={fieldsClassNames(
+				'input',
+				label !== '' ? 'columns-2' : 'columns-1'
+			)}
+		>
+			{label && (
+				<div className={fieldsInnerClassNames('label')}>
+					<LabelControl label={label} />
 				</div>
+			)}
+
+			<div className={fieldsInnerClassNames('control')}>
+				{'range' === settings?.type && (
+					<RangeControl
+						{...props}
+						{...settings}
+						{...blockProps}
+						blockName={name}
+						withInputField={true}
+						attribute={attribute}
+					/>
+				)}
+				{'text' === settings?.type && (
+					<InputControl
+						{...props}
+						{...settings}
+						{...blockProps}
+						blockName={name}
+						attribute={attribute}
+					/>
+				)}
 			</div>
-		);
-	},
-};
+		</div>
+	);
+}
