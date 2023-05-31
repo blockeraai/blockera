@@ -16,7 +16,7 @@ export function EffectsStyles({
 		cssGenerators,
 		publisherCursor,
 		publisherOpacity,
-		// publisherTransition,
+		publisherBlendMode,
 	},
 }) {
 	const { attributes: _attributes, ...blockProps } =
@@ -62,6 +62,30 @@ export function EffectsStyles({
 								selector: '.{{BLOCK_ID}}',
 								properties: {
 									cursor: '{{publisherCursor}}',
+								},
+							},
+						],
+					},
+				},
+				{ attributes: _attributes, ...blockProps }
+			)
+		);
+	}
+
+	if (
+		isActiveField(publisherBlendMode) &&
+		_attributes.publisherBlendMode !== attributes.publisherBlendMode.default
+	) {
+		generators.push(
+			computedCssRules(
+				{
+					cssGenerators: {
+						publisherBlendMode: [
+							{
+								type: 'static',
+								selector: '.{{BLOCK_ID}}',
+								properties: {
+									'mix-blend-mode': '{{publisherBlendMode}}',
 								},
 							},
 						],

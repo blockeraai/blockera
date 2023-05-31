@@ -4,6 +4,76 @@
 import { __ } from '@wordpress/i18n';
 
 // list of all cursor options for select field
+export const blendModeFieldOptions = function () {
+	return [
+		{
+			label: __('Normal', 'publisher-core'),
+			value: 'normal',
+		},
+		{
+			label: __('Darken', 'publisher-core'),
+			value: 'darken',
+		},
+		{
+			label: __('Lighten', 'publisher-core'),
+			value: 'lighten',
+		},
+		{
+			label: __('Multiply', 'publisher-core'),
+			value: 'multiply',
+		},
+		{
+			label: __('Screen', 'publisher-core'),
+			value: 'screen',
+		},
+		{
+			label: __('Overlay', 'publisher-core'),
+			value: 'overlay',
+		},
+		{
+			label: __('Color Dodge', 'publisher-core'),
+			value: 'color-dodge',
+		},
+		{
+			label: __('Color Burn', 'publisher-core'),
+			value: 'color-burn',
+		},
+		{
+			label: __('Hard Light', 'publisher-core'),
+			value: 'hard-light',
+		},
+		{
+			label: __('Soft Light', 'publisher-core'),
+			value: 'soft-light',
+		},
+		{
+			label: __('Difference', 'publisher-core'),
+			value: 'difference',
+		},
+		{
+			label: __('Exclusion', 'publisher-core'),
+			value: 'exclusion',
+		},
+		{
+			label: __('Hue', 'publisher-core'),
+			value: 'hue',
+		},
+		{
+			label: __('Saturation', 'publisher-core'),
+			value: 'saturation',
+		},
+		{
+			label: __('Color', 'publisher-core'),
+			value: 'color',
+		},
+		{
+			label: __('Luminosity', 'publisher-core'),
+			value: 'luminosity',
+		},
+	];
+};
+
+// list of all cursor options for select field
 export const cursorFieldOptions = function () {
 	return [
 		{

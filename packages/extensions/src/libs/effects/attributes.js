@@ -11,4 +11,8 @@ export const attributes = {
 		type: 'string',
 		default: 'default',
 	},
+	publisherBlendMode: {
+		type: 'string',
+		default: 'normal',
+	},
 };

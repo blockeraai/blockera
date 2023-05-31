@@ -8,14 +8,15 @@ import { __ } from '@wordpress/i18n';
  */
 import { InputField, SelectField, TransitionField } from '@publisher/fields';
 import { isActiveField } from '../../api/utils';
-import { cursorFieldOptions } from './utils';
+import { cursorFieldOptions, blendModeFieldOptions } from './utils';
 
 export function EffectsExtension({ children, config, ...props }) {
 	const {
 		effectsConfig: {
-			publisherCursor,
 			publisherOpacity,
 			publisherTransition,
+			publisherCursor,
+			publisherBlendMode,
 		},
 	} = config;
 
@@ -55,6 +56,18 @@ export function EffectsExtension({ children, config, ...props }) {
 						label: __('Cursor', 'publisher-core'),
 						options: cursorFieldOptions(),
 						initValue: 'default',
+					}}
+				/>
+			)}
+
+			{isActiveField(publisherBlendMode) && (
+				<SelectField
+					{...{
+						...props,
+						attribute: 'publisherBlendMode',
+						label: __('Blending', 'publisher-core'),
+						options: blendModeFieldOptions(),
+						initValue: 'normal',
 					}}
 				/>
 			)}
