@@ -43,7 +43,7 @@ export function EffectsExtension({ children, config, ...props }) {
 					{...{
 						...props,
 						attribute: 'publisherTransition',
-						label: __('Transition', 'publisher-core'),
+						label: __('Transitions', 'publisher-core'),
 					}}
 				/>
 			)}
