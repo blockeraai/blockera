@@ -7,7 +7,12 @@ import { useContext } from '@wordpress/element';
  * Internal dependencies
  */
 import { BlockEditContext } from '@publisher/extensions';
-import { InputControl, LabelControl, RangeControl } from '@publisher/controls';
+import {
+	InputControl,
+	CssInputControl,
+	LabelControl,
+	RangeControl,
+} from '@publisher/controls';
 import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
 
 export function InputField({ name, label, attribute, settings, ...props }) {
@@ -37,10 +42,21 @@ export function InputField({ name, label, attribute, settings, ...props }) {
 						attribute={attribute}
 					/>
 				)}
+
 				{'text' === settings?.type && (
 					<InputControl
 						{...props}
 						{...settings}
+						{...blockProps}
+						blockName={name}
+						attribute={attribute}
+					/>
+				)}
+
+				{'css' === settings?.type && (
+					<CssInputControl
+						{...props}
+						{...{ ...settings, type: 'css' }}
 						{...blockProps}
 						blockName={name}
 						attribute={attribute}
