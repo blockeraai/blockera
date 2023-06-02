@@ -12,7 +12,7 @@ import { BlockEditContext } from '@publisher/extensions';
 export function CssInputControl({ attribute, className, unitType, ...props }) {
 	const { attributes } = useContext(BlockEditContext);
 	const specialClassName = ' publisher-control-unit-special';
-	let baseClassName = className;
+	const baseClassName = className;
 
 	// Base list of CSS units
 	const cssUnits = [
@@ -45,6 +45,10 @@ export function CssInputControl({ attribute, className, unitType, ...props }) {
 			);
 			break;
 
+		case 'essential':
+			// no new units
+			break;
+
 		default:
 			cssUnits.push(...initialCssUnits);
 			break;
@@ -65,7 +69,7 @@ export function CssInputControl({ attribute, className, unitType, ...props }) {
 				'fit-content',
 				'max-content',
 				'min-content',
-			].some((item) => unit.endsWith(item))
+			].some((item) => unit?.endsWith(item))
 		)
 			return true;
 		return false;
@@ -77,18 +81,14 @@ export function CssInputControl({ attribute, className, unitType, ...props }) {
 				...props,
 				type: 'number',
 				units: cssUnits,
-				attribute: attribute,
+				attribute,
 			}}
 			className={classNames}
 			onUnitChange={(nextUnitValue) => {
 				if (isSpecialUnit(nextUnitValue)) {
 					setClassNames(baseClassName + specialClassName);
-				} else {
-					if (classNames.includes(specialClassName))
-						setClassNames(
-							baseClassName.replace(specialClassName, '')
-						);
-				}
+				} else if (classNames.includes(specialClassName))
+					setClassNames(baseClassName.replace(specialClassName, ''));
 			}}
 		/>
 	);
