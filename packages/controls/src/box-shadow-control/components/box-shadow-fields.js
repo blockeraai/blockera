@@ -9,20 +9,13 @@ import { memo, useContext } from '@wordpress/element';
  * Internal dependencies
  */
 import BaseControl from '../../base';
-import UnitControl from '../../unit-control';
-import ColorControl from '../../color-control';
-import ToggleControl from '../../toggle-control';
-import { VStack, HStack } from '@publisher/components';
+import { InputField, SelectField, ColorField } from '@publisher/fields';
 import { RepeaterContext } from '../../repeater-control/context';
 
 const BoxShadowFields = ({ item, itemId }) => {
-	const { changeItem } = useContext(RepeaterContext);
+	const { changeItem, blockName } = useContext(RepeaterContext);
 
-	const { x, y, blur, spread, inset, color, unit } = item;
 	const sharedProps = {
-		unit,
-		max: 32,
-		min: -32,
 		units: useCustomUnits({
 			availableUnits: ['px', '%', 'em'],
 			defaultValues: { px: 0 },
@@ -33,78 +26,109 @@ const BoxShadowFields = ({ item, itemId }) => {
 
 	return (
 		<BaseControl id={`repeater-item-${itemId}`}>
-			<VStack>
-				<HStack justify="space-between">
-					<UnitControl
-						value={x}
-						{...sharedProps}
-						onChange={(xInput) =>
-							changeItem(itemId, {
-								...item,
-								x: xInput,
-							})
-						}
-						label={__('X', 'publisher')}
-					/>
-					<UnitControl
-						value={y}
-						{...sharedProps}
-						onChange={(yInput) =>
-							changeItem(itemId, {
-								...item,
-								y: yInput,
-							})
-						}
-						label={__('Y', 'publisher')}
-					/>
-				</HStack>
-				<HStack justify="space-between">
-					<UnitControl
-						value={blur}
-						{...sharedProps}
-						onChange={(blurInput) =>
-							changeItem(itemId, {
-								...item,
-								blur: blurInput,
-							})
-						}
-						label={__('BLUR', 'publisher')}
-					/>
-					<UnitControl
-						value={spread}
-						{...sharedProps}
-						onChange={(spreadInput) =>
-							changeItem(itemId, {
-								...item,
-								spread: spreadInput,
-							})
-						}
-						label={__('SPREAD', 'publisher')}
-					/>
-				</HStack>
-				<HStack justify="space-between">
-					<ColorControl
-						color={color}
-						onChange={(colorInput) =>
-							changeItem(itemId, {
-								...item,
-								color: colorInput,
-							})
-						}
-					/>
-					<ToggleControl
-						label={__('Inset', 'publisher')}
-						help=""
-						checked={inset}
-						onChange={() =>
-							changeItem(itemId, {
-								...item,
-								inset: !inset,
-							})
-						}
-					/>
-				</HStack>
-			</VStack>
+			<SelectField
+				attribute="type"
+				label={__('Position', 'publisher-core')}
+				options={[
+					{
+						label: __('Inner', 'publisher-core'),
+						value: 'inner',
+					},
+					{
+						label: __('Outer', 'publisher-core'),
+						value: 'outer',
+					},
+				]}
+				onChange={(input) =>
+					changeItem(itemId, {
+						...item,
+						type: input,
+					})
+				}
+				initValue="inside"
+				{...sharedProps}
+			/>
+
+			<InputField
+				attribute="x"
+				label={__('X', 'publisher-core')}
+				name={blockName}
+				settings={{
+					type: 'css',
+					unitType: 'essential',
+				}}
+				onChange={(input) =>
+					changeItem(itemId, {
+						...item,
+						x: input,
+					})
+				}
+				{...sharedProps}
+			/>
+
+			<InputField
+				attribute="y"
+				label={__('Y', 'publisher-core')}
+				name={blockName}
+				settings={{
+					type: 'css',
+					unitType: 'essential',
+				}}
+				onChange={(input) =>
+					changeItem(itemId, {
+						...item,
+						y: input,
+					})
+				}
+				{...sharedProps}
+			/>
+
+			<InputField
+				attribute="blur"
+				label={__('Blur', 'publisher-core')}
+				name={blockName}
+				settings={{
+					type: 'css',
+					unitType: 'essential',
+				}}
+				onChange={(input) =>
+					changeItem(itemId, {
+						...item,
+						blur: input,
+					})
+				}
+				{...sharedProps}
+			/>
+
+			<InputField
+				attribute="spread"
+				label={__('Spread', 'publisher-core')}
+				name={blockName}
+				settings={{
+					type: 'css',
+					unitType: 'essential',
+				}}
+				onChange={(input) =>
+					changeItem(itemId, {
+						...item,
+						spread: input,
+					})
+				}
+				{...sharedProps}
+			/>
+
+			<ColorField
+				attribute="color"
+				label={__('Color', 'publisher-core')}
+				name={blockName}
+				onChange={(input) =>
+					changeItem(itemId, {
+						...item,
+						color: input,
+					})
+				}
+				{...sharedProps}
+			/>
 		</BaseControl>
 	);
 };

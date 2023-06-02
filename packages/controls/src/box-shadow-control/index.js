@@ -13,6 +13,8 @@ import { controlClassNames } from '@publisher/classnames';
 import BoxShadowFields from './components/box-shadow-fields';
 
 const initialState = {
+	type: 'outside',
+	angle: 0,
 	x: 0,
 	y: 0,
 	blur: 0,
