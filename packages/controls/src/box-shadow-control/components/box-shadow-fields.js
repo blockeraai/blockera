@@ -2,7 +2,6 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { __experimentalUseCustomUnits as useCustomUnits } from '@wordpress/components';
 import { memo, useContext } from '@wordpress/element';
 
 /**
@@ -14,15 +13,6 @@ import { RepeaterContext } from '../../repeater-control/context';
 
 const BoxShadowFields = ({ item, itemId }) => {
 	const { changeItem, blockName } = useContext(RepeaterContext);
-
-	const sharedProps = {
-		units: useCustomUnits({
-			availableUnits: ['px', '%', 'em'],
-			defaultValues: { px: 0 },
-		}),
-		onUnitChange: (unitValue) =>
-			changeItem(itemId, { ...item, unit: unitValue }),
-	};
 
 	return (
 		<BaseControl id={`repeater-item-${itemId}`}>
@@ -46,7 +36,6 @@ const BoxShadowFields = ({ item, itemId }) => {
 					})
 				}
 				initValue="inside"
-				{...sharedProps}
 			/>
 
 			<InputField
@@ -56,6 +45,7 @@ const BoxShadowFields = ({ item, itemId }) => {
 				settings={{
 					type: 'css',
 					unitType: 'essential',
+					range: true,
 				}}
 				onChange={(input) =>
 					changeItem(itemId, {
@@ -63,7 +53,6 @@ const BoxShadowFields = ({ item, itemId }) => {
 						x: input,
 					})
 				}
-				{...sharedProps}
 			/>
 
 			<InputField
@@ -73,6 +62,7 @@ const BoxShadowFields = ({ item, itemId }) => {
 				settings={{
 					type: 'css',
 					unitType: 'essential',
+					range: true,
 				}}
 				onChange={(input) =>
 					changeItem(itemId, {
@@ -80,7 +70,6 @@ const BoxShadowFields = ({ item, itemId }) => {
 						y: input,
 					})
 				}
-				{...sharedProps}
 			/>
 
 			<InputField
@@ -90,6 +79,7 @@ const BoxShadowFields = ({ item, itemId }) => {
 				settings={{
 					type: 'css',
 					unitType: 'essential',
+					range: true,
 				}}
 				onChange={(input) =>
 					changeItem(itemId, {
@@ -97,7 +87,6 @@ const BoxShadowFields = ({ item, itemId }) => {
 						blur: input,
 					})
 				}
-				{...sharedProps}
 			/>
 
 			<InputField
@@ -107,6 +96,7 @@ const BoxShadowFields = ({ item, itemId }) => {
 				settings={{
 					type: 'css',
 					unitType: 'essential',
+					range: true,
 				}}
 				onChange={(input) =>
 					changeItem(itemId, {
@@ -114,7 +104,6 @@ const BoxShadowFields = ({ item, itemId }) => {
 						spread: input,
 					})
 				}
-				{...sharedProps}
 			/>
 
 			<ColorField
@@ -127,7 +116,6 @@ const BoxShadowFields = ({ item, itemId }) => {
 						color: input,
 					})
 				}
-				{...sharedProps}
 			/>
 		</BaseControl>
 	);
