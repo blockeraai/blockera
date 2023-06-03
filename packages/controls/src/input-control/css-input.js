@@ -7,6 +7,7 @@ import { useState, useContext } from '@wordpress/element';
  * Internal dependencies
  */
 import { InputControl } from './input';
+import { isSpecialUnit } from './utils';
 import { BlockEditContext } from '@publisher/extensions';
 
 export function CssInputControl({
@@ -80,21 +81,6 @@ export function CssInputControl({
 			? baseClassName + specialClassName
 			: baseClassName
 	);
-
-	function isSpecialUnit(unit) {
-		if (
-			[
-				'auto',
-				'initial',
-				'inherit',
-				'fit-content',
-				'max-content',
-				'min-content',
-			].some((item) => unit?.endsWith(item))
-		)
-			return true;
-		return false;
-	}
 
 	return (
 		<InputControl
