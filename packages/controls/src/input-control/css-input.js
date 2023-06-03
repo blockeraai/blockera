@@ -9,49 +9,70 @@ import { useState, useContext } from '@wordpress/element';
 import { InputControl } from './input';
 import { BlockEditContext } from '@publisher/extensions';
 
-export function CssInputControl({ attribute, className, unitType, ...props }) {
+export function CssInputControl({
+	attribute,
+	className,
+	unitType = 'general',
+	units = false,
+	...props
+}) {
 	const { attributes } = useContext(BlockEditContext);
 	const specialClassName = ' publisher-control-unit-special';
 	const baseClassName = className;
+	let cssUnits = units ? units : [];
 
-	// Base list of CSS units
-	const cssUnits = [
-		{ value: 'px', label: 'PX', default: 0 },
-		{ value: '%', label: '%', default: 0 },
-		{ value: 'em', label: 'EM', default: 0 },
-		{ value: 'rem', label: 'REM', default: 0 },
-		{ value: 'ch', label: 'CH', default: 0 },
-		{ value: 'vw', label: 'VW', default: 0 },
-		{ value: 'vh', label: 'VH', default: 0 },
-		{ value: 'dvw', label: 'DVW', default: 0 },
-		{ value: 'dvh', label: 'DVH', default: 0 },
-	];
+	if (!units) {
+		// Base list of CSS units
+		cssUnits = [
+			{ value: '%', label: '%', default: 0 },
+			{ value: 'px', label: 'PX', default: 0 },
+			{ value: 'em', label: 'EM', default: 0 },
+			{ value: 'rem', label: 'REM', default: 0 },
+			{ value: 'ch', label: 'CH', default: 0 },
+			{ value: 'vw', label: 'VW', default: 0 },
+			{ value: 'vh', label: 'VH', default: 0 },
+			{ value: 'dvw', label: 'DVW', default: 0 },
+			{ value: 'dvh', label: 'DVH', default: 0 },
+		];
 
-	const initialCssUnits = [
-		{ value: 'auto', label: 'Auto', default: 0 },
-		{ value: 'inherit', label: 'Inherit', default: 0 },
-		{ value: 'initial', label: 'Initial', default: 0 },
-	];
+		const initialCssUnits = [
+			{ value: 'auto', label: 'Auto', default: 0 },
+			{ value: 'inherit', label: 'Inherit', default: 0 },
+			{ value: 'initial', label: 'Initial', default: 0 },
+		];
 
-	switch (unitType) {
-		case 'width':
-			cssUnits.push(
-				...initialCssUnits,
-				...[
-					{ value: 'fit-content', label: 'Fit Content', default: 0 },
-					{ value: 'max-content', label: 'Max Content', default: 0 },
-					{ value: 'min-content', label: 'Min Content', default: 0 },
-				]
-			);
-			break;
+		switch (unitType) {
+			case 'width':
+				cssUnits.push(
+					...initialCssUnits,
+					...[
+						{
+							value: 'fit-content',
+							label: 'Fit Content',
+							default: 0,
+						},
+						{
+							value: 'max-content',
+							label: 'Max Content',
+							default: 0,
+						},
+						{
+							value: 'min-content',
+							label: 'Min Content',
+							default: 0,
+						},
+					]
+				);
+				break;
 
-		case 'essential':
-			// no new units
-			break;
+			case 'essential':
+				// no new units
+				break;
 
-		default:
-			cssUnits.push(...initialCssUnits);
-			break;
+			case 'general':
+				cssUnits.push(...initialCssUnits);
+				break;
+		}
 	}
 
 	const [classNames, setClassNames] = useState(
