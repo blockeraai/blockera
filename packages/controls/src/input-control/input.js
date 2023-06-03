@@ -12,6 +12,7 @@ import {
  */
 import { controlClassNames } from '@publisher/classnames';
 import { BlockEditContext } from '@publisher/extensions';
+import { RangeControl } from './../index';
 
 /**
  * Styles
@@ -23,12 +24,28 @@ export function InputControl({
 	attribute,
 	className,
 	units,
+	suffix = '', // todo implement
+	range = false,
 	...props
 }) {
 	const { attributes, setAttributes } = useContext(BlockEditContext);
 
 	return (
-		<>
+		<div
+			className={controlClassNames(
+				'input',
+				range ? 'input-range' : '',
+				className
+			)}
+		>
+			{range && (
+				<RangeControl
+					attribute={attribute}
+					withInputField={false}
+					{...props}
+				/>
+			)}
+
 			{units && (
 				<UnitControl
 					{...props}
@@ -61,6 +78,6 @@ export function InputControl({
 					className={controlClassNames('text', className)}
 				/>
 			)}
-		</>
+		</div>
 	);
 }

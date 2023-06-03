@@ -25,8 +25,8 @@ export function CssInputControl({
 	if (!units) {
 		// Base list of CSS units
 		cssUnits = [
-			{ value: '%', label: '%', default: 0 },
 			{ value: 'px', label: 'PX', default: 0 },
+			{ value: '%', label: '%', default: 0 },
 			{ value: 'em', label: 'EM', default: 0 },
 			{ value: 'rem', label: 'REM', default: 0 },
 			{ value: 'ch', label: 'CH', default: 0 },

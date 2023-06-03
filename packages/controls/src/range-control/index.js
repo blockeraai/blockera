@@ -16,6 +16,8 @@ const RangeControl = ({
 	className,
 	attribute,
 	initialPosition,
+	withInputField = true,
+	onChange = () => {},
 }) => {
 	const { attributes, setAttributes } = useContext(BlockEditContext);
 
@@ -26,13 +28,17 @@ const RangeControl = ({
 					min,
 					max,
 					value: attributes[attribute] || initialPosition,
-					onChange: (newValue) =>
+					onChange: (newValue) => {
+						onChange(newValue);
 						setAttributes({
 							...attributes,
 							[attribute]: newValue,
-						}),
+						});
+					},
 					className: controlClassNames('range', className),
 				}}
+				withInputField={withInputField}
+				__nextHasNoMarginBottom={false}
 			/>
 		</>
 	);
