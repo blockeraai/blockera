@@ -37,3 +37,7 @@ node_modules/
 
 # .env file
 .env
+
+# lib directory
+@build
+.DS_Store
