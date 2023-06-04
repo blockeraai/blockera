@@ -20,6 +20,13 @@
 		letter-spacing: -0.2px;
 		font-size: 12px;
 
+		.publisher-control-header-icon {
+			display: flex;
+			min-width: 24px;
+			justify-content: center;
+			align-content: center;
+		}
+
 		.publisher-control-header-values {
 			margin-left: auto;
 		}

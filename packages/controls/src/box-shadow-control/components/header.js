@@ -25,10 +25,12 @@ const Header = ({
 			className={controlInnerClassNames('repeater-group-header')}
 			onClick={() => setOpen(!isOpen)}
 		>
-			<ColorIndicator
-				colorValue={color}
-				className={controlInnerClassNames('color-indicator')}
-			/>
+			<span className={controlInnerClassNames('header-icon')}>
+				<ColorIndicator
+					colorValue={color}
+					className={controlInnerClassNames('color-indicator')}
+				/>
+			</span>
 
 			<span className={controlInnerClassNames('header-label')}>
 				{type === 'inner'
