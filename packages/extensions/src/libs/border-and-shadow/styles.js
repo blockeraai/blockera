@@ -25,8 +25,8 @@ export function BorderAndShadowStyles({
 	if (
 		isActiveField(boxShadow) &&
 		!arrayEquals(
-			attributes.publisherBoxShadowItems.default,
-			_attributes.publisherBoxShadowItems
+			attributes.publisherBoxShadow.default,
+			_attributes.publisherBoxShadow
 		)
 	) {
 		generators.push(BoxShadowFieldStyle(boxShadow));

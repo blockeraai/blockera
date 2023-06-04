@@ -20,7 +20,7 @@ export function BoxShadowFieldStyle(boxShadow) {
 	return computedCssRules(
 		{
 			cssGenerators: {
-				publisherBoxShadowItems: [
+				publisherBoxShadow: [
 					{
 						type: 'function',
 						function: cssGenerator,

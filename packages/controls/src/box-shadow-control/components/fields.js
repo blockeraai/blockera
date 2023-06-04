@@ -14,7 +14,7 @@ import { InputField, SelectField, ColorField } from '@publisher/fields';
  */
 import BaseControl from '../../base';
 
-const BoxShadowFields = ({ item, itemId }) => {
+const Fields = ({ item, itemId }) => {
 	return (
 		<BaseControl id={`repeater-item-${itemId}`}>
 			<SelectField
@@ -33,7 +33,7 @@ const BoxShadowFields = ({ item, itemId }) => {
 				initValue="inside"
 				attribute="type"
 				repeaterAttributeIndex={itemId}
-				repeaterAttribute="publisherBoxShadowItems"
+				repeaterAttribute="publisherBoxShadow"
 			/>
 
 			<InputField
@@ -48,7 +48,7 @@ const BoxShadowFields = ({ item, itemId }) => {
 				//
 				attribute="x"
 				repeaterAttributeIndex={itemId}
-				repeaterAttribute="publisherBoxShadowItems"
+				repeaterAttribute="publisherBoxShadow"
 			/>
 
 			<InputField
@@ -63,7 +63,7 @@ const BoxShadowFields = ({ item, itemId }) => {
 				//
 				attribute="y"
 				repeaterAttributeIndex={itemId}
-				repeaterAttribute="publisherBoxShadowItems"
+				repeaterAttribute="publisherBoxShadow"
 			/>
 
 			<InputField
@@ -78,7 +78,7 @@ const BoxShadowFields = ({ item, itemId }) => {
 				//
 				attribute="blur"
 				repeaterAttributeIndex={itemId}
-				repeaterAttribute="publisherBoxShadowItems"
+				repeaterAttribute="publisherBoxShadow"
 			/>
 
 			<InputField
@@ -93,7 +93,7 @@ const BoxShadowFields = ({ item, itemId }) => {
 				//
 				attribute="spread"
 				repeaterAttributeIndex={itemId}
-				repeaterAttribute="publisherBoxShadowItems"
+				repeaterAttribute="publisherBoxShadow"
 			/>
 
 			<ColorField
@@ -101,10 +101,10 @@ const BoxShadowFields = ({ item, itemId }) => {
 				//
 				attribute="color"
 				repeaterAttributeIndex={itemId}
-				repeaterAttribute="publisherBoxShadowItems"
+				repeaterAttribute="publisherBoxShadow"
 			/>
 		</BaseControl>
 	);
 };
 
-export default memo(BoxShadowFields);
+export default memo(Fields);

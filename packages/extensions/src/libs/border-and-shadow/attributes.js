@@ -1,5 +1,5 @@
 export const attributes = {
-	publisherBoxShadowItems: {
+	publisherBoxShadow: {
 		type: 'array',
 		default: [],
 	},

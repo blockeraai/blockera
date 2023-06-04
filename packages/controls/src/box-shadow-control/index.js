@@ -14,7 +14,7 @@ import { controlClassNames } from '@publisher/classnames';
  */
 import Header from './components/header';
 import RepeaterControl from '../repeater-control';
-import BoxShadowFields from './components/box-shadow-fields';
+import Fields from './components/fields';
 import { getControlValue, updateControlValue } from './../utils';
 
 const initialState = {
@@ -65,7 +65,7 @@ function BoxShadowControl({
 						);
 					},
 					value: controlValue,
-					InnerComponents: BoxShadowFields,
+					InnerComponents: Fields,
 				}}
 			/>
 		</div>

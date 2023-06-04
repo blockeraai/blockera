@@ -25,7 +25,7 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 					{...{
 						...props,
 						config: boxShadow,
-						attribute: 'publisherBoxShadowItems',
+						attribute: 'publisherBoxShadow',
 						label: __('Box Shadow', 'publisher-core'),
 					}}
 				/>

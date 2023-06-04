@@ -6,11 +6,11 @@ import { createCssRule } from '@publisher/style-engine';
 export function cssGenerator(id, props, styleEngine) {
 	const { attributes } = props;
 
-	if (!attributes?.publisherBoxShadowItems?.length) {
+	if (!attributes?.publisherBoxShadow?.length) {
 		return '';
 	}
 
-	const value = attributes?.publisherBoxShadowItems
+	const value = attributes?.publisherBoxShadow
 		?.map((item) => {
 			if (!item.isVisible) {
 				return null;
