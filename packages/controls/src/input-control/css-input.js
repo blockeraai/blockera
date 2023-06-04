@@ -77,6 +77,14 @@ export function CssInputControl({
 
 				break;
 
+			case 'duration':
+				cssUnits = [
+					{ value: 'ms', label: 'MS', default: 0 },
+					{ value: 's', label: 'S', default: 1 },
+				];
+
+				break;
+
 			case 'width':
 				cssUnits.push(
 					...initialCssUnits,
