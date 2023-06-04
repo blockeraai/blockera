@@ -25,6 +25,10 @@
 			min-width: 24px;
 			justify-content: center;
 			align-content: center;
+
+			svg {
+				fill: currentColor;
+			}
 		}
 
 		.publisher-control-header-values {

@@ -6,24 +6,23 @@ import { useContext } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
 import { BlockEditContext } from '@publisher/extensions';
+import { controlClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
+import Header from './components/header';
 import RepeaterControl from '../repeater-control';
+import Fields from './components/fields';
 import { getControlValue, updateControlValue } from './../utils';
 
 const initialState = {
-	x: 0,
-	y: 0,
-	blur: 0,
-	spread: 0,
-	unit: 'px',
-	inset: false,
+	type: 'all',
+	duration: '500ms',
+	timing: 'ease',
+	delay: '0ms',
 	isVisible: true,
-	color: 'transparent',
 };
 
 function TransitionControl({
@@ -46,13 +45,12 @@ function TransitionControl({
 		attributes
 	);
 
-	const InnerComponents = () => <>Hello Transition</>;
-
 	return (
 		<div className={controlClassNames('transition', className)}>
 			<RepeaterControl
 				{...{
 					...props,
+					Header,
 					initialState,
 					updateBlockAttributes: (newValue) => {
 						updateControlValue(
@@ -65,7 +63,7 @@ function TransitionControl({
 						);
 					},
 					value: controlValue,
-					InnerComponents,
+					InnerComponents: Fields,
 				}}
 			/>
 		</div>

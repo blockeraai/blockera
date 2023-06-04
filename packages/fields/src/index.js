@@ -7,4 +7,4 @@ export { ColorField } from './libs/color';
 export { IconField } from './libs/icon';
 export { InputField } from './libs/input';
 export { SelectField } from './libs/select';
-export { TransitionField } from './libs/transition';
+export { TransitionField, TransitionFieldStyle } from './libs/transition';

@@ -4,12 +4,16 @@
 import { TransitionControl } from '@publisher/controls';
 import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
 
-export function TransitionField({ attribute, label, ...props }) {
+export function TransitionField({ config, attribute, label, ...props }) {
 	return (
 		<div className={fieldsClassNames('transition', 'columns-1')}>
 			<div className={fieldsInnerClassNames('control')}>
 				<TransitionControl
-					{...{ ...props, attribute }}
+					{...{
+						config,
+						...props,
+						attribute,
+					}}
 					isPopover={true}
 					label={label}
 				/>

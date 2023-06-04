@@ -7,10 +7,12 @@ import { useContext } from '@wordpress/element';
  * Publisher dependencies
  */
 import { computedCssRules } from '@publisher/style-engine';
+import { TransitionFieldStyle } from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
+import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
 import { BlockEditContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
@@ -21,6 +23,7 @@ export function EffectsStyles({
 		publisherCursor,
 		publisherOpacity,
 		publisherBlendMode,
+		publisherTransition,
 	},
 }) {
 	const { attributes: _attributes, ...blockProps } =
@@ -98,6 +101,16 @@ export function EffectsStyles({
 				{ attributes: _attributes, ...blockProps }
 			)
 		);
+	}
+
+	if (
+		isActiveField(publisherTransition) &&
+		!arrayEquals(
+			attributes.publisherTransition.default,
+			_attributes.publisherTransition
+		)
+	) {
+		generators.push(TransitionFieldStyle(publisherTransition));
 	}
 
 	generators.push(
