@@ -1,10 +1,10 @@
 /**
- * Internal dependencies
+ * Publisher dependencies
  */
 import { AnglePickerControl, LabelControl } from '@publisher/controls';
 import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
 
-export function AnglePickerField({ label, attribute, ...props }) {
+export function AnglePickerField({ label, ...props }) {
 	return (
 		<div
 			className={fieldsClassNames(
@@ -22,7 +22,6 @@ export function AnglePickerField({ label, attribute, ...props }) {
 				<AnglePickerControl
 					{...{
 						...props,
-						attribute,
 					}}
 				/>
 			</div>

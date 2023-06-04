@@ -6,15 +6,16 @@ import { close } from '@wordpress/icons';
 import { useContext } from '@wordpress/element';
 
 /**
+ * Publisher dependencies
+ */
+import { Button } from '@publisher/components';
+import { controlInnerClassNames } from '@publisher/classnames';
+
+/**
  * Internal dependencies
  */
 import { RepeaterContext } from '../context';
 import VisibleElement from './visible-element';
-import { Button } from '@publisher/components';
-import {
-	controlClassNames,
-	controlInnerClassNames,
-} from '@publisher/classnames';
 
 export default function ActionsUI({
 	itemId,

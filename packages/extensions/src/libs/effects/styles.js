@@ -4,12 +4,16 @@
 import { useContext } from '@wordpress/element';
 
 /**
+ * Publisher dependencies
+ */
+import { computedCssRules } from '@publisher/style-engine';
+
+/**
  * Internal dependencies
  */
 import { attributes } from './attributes';
 import { BlockEditContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
-import { computedCssRules } from '@publisher/style-engine';
 
 export function EffectsStyles({
 	effectsConfig: {
@@ -37,7 +41,7 @@ export function EffectsStyles({
 								type: 'static',
 								selector: '.{{BLOCK_ID}}',
 								properties: {
-									opacity: '{{publisherOpacity}}%',
+									opacity: '{{publisherOpacity}}',
 								},
 							},
 						],

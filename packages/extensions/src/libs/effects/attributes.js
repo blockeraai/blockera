@@ -1,7 +1,7 @@
 export const attributes = {
 	publisherOpacity: {
-		type: 'integer',
-		default: 100,
+		type: 'string',
+		default: '100%',
 	},
 	publisherTransition: {
 		type: 'array',

@@ -4,7 +4,7 @@
 import { useContext } from '@wordpress/element';
 
 /**
- * Internal dependencies
+ * Publisher dependencies
  */
 import { BlockEditContext } from '@publisher/extensions';
 import {
@@ -15,7 +15,7 @@ import {
 } from '@publisher/controls';
 import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
 
-export function InputField({ name, label, attribute, settings, ...props }) {
+export function InputField({ name, label, settings, ...props }) {
 	const { name: blockName, ...blockProps } = useContext(BlockEditContext);
 
 	return (
@@ -39,7 +39,6 @@ export function InputField({ name, label, attribute, settings, ...props }) {
 						{...blockProps}
 						blockName={name}
 						withInputField={true}
-						attribute={attribute}
 					/>
 				)}
 
@@ -49,7 +48,6 @@ export function InputField({ name, label, attribute, settings, ...props }) {
 						{...settings}
 						{...blockProps}
 						blockName={name}
-						attribute={attribute}
 					/>
 				)}
 
@@ -59,7 +57,6 @@ export function InputField({ name, label, attribute, settings, ...props }) {
 						{...{ ...settings, type: 'css' }}
 						{...blockProps}
 						blockName={name}
-						attribute={attribute}
 					/>
 				)}
 			</div>

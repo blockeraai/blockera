@@ -4,9 +4,13 @@
 import { __ } from '@wordpress/i18n';
 
 /**
- * Internal dependencies
+ * Publisher dependencies
  */
 import { InputField, SelectField, TransitionField } from '@publisher/fields';
+
+/**
+ * Internal dependencies
+ */
 import { isActiveField } from '../../api/utils';
 import { cursorFieldOptions, blendModeFieldOptions } from './utils';
 
@@ -28,11 +32,14 @@ export function EffectsExtension({ children, config, ...props }) {
 						...props,
 						label: __('Opacity', 'publisher-core'),
 						settings: {
-							type: 'range',
+							type: 'css',
+							range: true,
 							min: 0,
 							max: 100,
 							initialPosition: 100,
+							units: [{ value: '%', label: '%', default: 0 }],
 						},
+						//
 						attribute: 'publisherOpacity',
 					}}
 				/>
@@ -52,10 +59,11 @@ export function EffectsExtension({ children, config, ...props }) {
 				<SelectField
 					{...{
 						...props,
-						attribute: 'publisherCursor',
 						label: __('Cursor', 'publisher-core'),
 						options: cursorFieldOptions(),
+						//
 						initValue: 'default',
+						attribute: 'publisherCursor',
 					}}
 				/>
 			)}
@@ -64,10 +72,11 @@ export function EffectsExtension({ children, config, ...props }) {
 				<SelectField
 					{...{
 						...props,
-						attribute: 'publisherBlendMode',
 						label: __('Blending', 'publisher-core'),
 						options: blendModeFieldOptions(),
+						//
 						initValue: 'normal',
+						attribute: 'publisherBlendMode',
 					}}
 				/>
 			)}

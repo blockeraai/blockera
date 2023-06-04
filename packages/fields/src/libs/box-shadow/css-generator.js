@@ -1,5 +1,5 @@
 /**
- * Internal dependencies
+ * Publisher dependencies
  */
 import { createCssRule } from '@publisher/style-engine';
 
@@ -15,9 +15,10 @@ export function cssGenerator(id, props, styleEngine) {
 			if (!item.isVisible) {
 				return null;
 			}
-			return `${item.x} ${item.y} ${item.blur} ${item.spread} ${
-				item.color
-			} ${item.inset ? 'inset' : ''}`;
+
+			return `${item.type === 'inner' ? 'inset' : ''} ${item.x} ${
+				item.y
+			} ${item.blur} ${item.spread} ${item.color}`;
 		})
 		?.filter((item) => null !== item);
 

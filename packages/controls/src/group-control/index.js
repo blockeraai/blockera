@@ -5,7 +5,7 @@ import { useRef, useState, useEffect } from '@wordpress/element';
 import { Popover } from '@wordpress/components';
 
 /**
- * Internal dependencies
+ * Publisher dependencies
  */
 import {
 	controlClassNames,

@@ -4,13 +4,17 @@
 import { useContext } from '@wordpress/element';
 
 /**
+ * Publisher dependencies
+ */
+import { BoxShadowFieldStyle } from '@publisher/fields';
+
+/**
  * Internal dependencies
  */
 import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
 import { isActiveField } from '../../api/utils';
 import { BlockEditContext } from '../../hooks/context';
-import { BoxShadowFieldStyle } from '@publisher/fields';
 
 export function BorderAndShadowStyles({
 	borderAndShadowConfig: { boxShadow },

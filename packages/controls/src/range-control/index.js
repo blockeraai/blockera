@@ -2,38 +2,63 @@
  * WordPress dependencies
  */
 import { useContext } from '@wordpress/element';
-import { controlClassNames } from '@publisher/classnames';
 import { RangeControl as WordPressRangeControl } from '@wordpress/components';
+
+/**
+ * Publisher dependencies
+ */
+import { controlClassNames } from '@publisher/classnames';
+import { BlockEditContext } from '@publisher/extensions';
 
 /**
  * Internal dependencies
  */
-import { BlockEditContext } from '@publisher/extensions';
+import { getControlValue, updateControlValue } from './../utils';
 
 const RangeControl = ({
-	min = 12,
-	max = 30,
-	className,
-	attribute,
+	min,
+	max,
 	initialPosition,
 	withInputField = true,
+	//
+	value,
+	attribute,
+	repeaterAttributeIndex = null,
+	repeaterAttribute = null,
+	//
+	className,
 	onChange = () => {},
 }) => {
 	const { attributes, setAttributes } = useContext(BlockEditContext);
+
+	let controlValue = getControlValue(
+		value,
+		attribute,
+		repeaterAttribute,
+		repeaterAttributeIndex,
+		'',
+		attributes
+	);
 
 	return (
 		<>
 			<WordPressRangeControl
 				{...{
+					initialPosition,
 					min,
 					max,
-					value: attributes[attribute] || initialPosition,
+					value: controlValue,
 					onChange: (newValue) => {
+						updateControlValue(
+							newValue,
+							attribute,
+							repeaterAttribute,
+							repeaterAttributeIndex,
+							attributes,
+							setAttributes
+						);
+
 						onChange(newValue);
-						setAttributes({
-							...attributes,
-							[attribute]: newValue,
-						});
 					},
 					className: controlClassNames('range', className),
 				}}

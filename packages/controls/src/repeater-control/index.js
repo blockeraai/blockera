@@ -10,15 +10,19 @@ import { useEffect } from '@wordpress/element';
 import { useImmerReducer } from 'use-immer';
 
 /**
- * Internal dependencies.
+ * Publisher dependencies
  */
+import { Button, Icon } from '@publisher/components';
 import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
+
+/**
+ * Internal dependencies.
+ */
 import repeaterItemsReducer from './store/reducer';
 import { RepeaterContextProvider } from './context';
-import { Button, Icon } from '@publisher/components';
 import MappedItems from './components/mapped-items';
 import { addItem, removeItem, changeItem, sortItems } from './store/actions';
 

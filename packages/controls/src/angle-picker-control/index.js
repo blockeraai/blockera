@@ -6,31 +6,56 @@ import { AnglePickerControl as WordPressAnglePickerControl } from '@wordpress/co
 import { controlClassNames } from '@publisher/classnames';
 
 /**
+ * Publisher dependencies
+ */
+import { BlockEditContext } from '@publisher/extensions';
+
+/**
  * Internal dependencies
  */
 import './style.scss';
-import { BlockEditContext } from '@publisher/extensions';
+import { getControlValue, updateControlValue } from './../utils';
 
 export default function AnglePickerControl({
 	initValue = 0,
-	className,
+	//
+	value,
 	attribute,
-	label = '',
+	repeaterAttributeIndex = null,
+	repeaterAttribute = null,
+	//
+	className,
+	onChange = () => {},
 	...props
 }) {
 	const { attributes, setAttributes } = useContext(BlockEditContext);
 
+	let controlValue = getControlValue(
+		value,
+		attribute,
+		repeaterAttribute,
+		repeaterAttributeIndex,
+		initValue,
+		attributes
+	);
+
 	return (
 		<WordPressAnglePickerControl
 			{...props}
-			value={attributes[attribute] || initValue}
-			onChange={(angle) =>
-				setAttributes({
-					...attributes,
-					[attribute]: angle,
-				})
-			}
-			label={label}
+			value={controlValue}
+			onChange={(newValue) => {
+				updateControlValue(
+					newValue,
+					attribute,
+					repeaterAttribute,
+					repeaterAttributeIndex,
+					attributes,
+					setAttributes
+				);
+
+				onChange(newValue);
+			}}
+			label=""
 			__nextHasNoMarginBottom
 			className={controlClassNames('angle', className)}
 		/>

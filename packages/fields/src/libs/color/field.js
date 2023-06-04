@@ -4,13 +4,13 @@
 import { useContext } from '@wordpress/element';
 
 /**
- * Internal dependencies
+ * Publisher dependencies
  */
 import { BlockEditContext } from '@publisher/extensions';
 import { LabelControl, ColorControl } from '@publisher/controls';
 import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
 
-export function ColorField({ name, label, attribute, settings, ...props }) {
+export function ColorField({ name, label, settings, ...props }) {
 	const { name: blockName, ...blockProps } = useContext(BlockEditContext);
 
 	return (
@@ -28,12 +28,10 @@ export function ColorField({ name, label, attribute, settings, ...props }) {
 
 			<div className={fieldsInnerClassNames('control')}>
 				<ColorControl
-					// color={color}
 					{...props}
 					{...settings}
 					{...blockProps}
 					blockName={name}
-					attribute={attribute}
 				/>
 			</div>
 		</div>

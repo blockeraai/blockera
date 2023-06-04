@@ -10,17 +10,29 @@
 
 	.publisher-control-repeater-group-header {
 		display: flex;
+		gap: 7px;
 		align-items: center;
 		flex-wrap: nowrap;
-		padding: 2px 4px;
+		padding: 2px 0;
 		height: 30px;
 		width: 100%;
 		position: relative;
+		letter-spacing: -0.2px;
+		font-size: 12px;
+
+		.publisher-control-header-values {
+			margin-left: auto;
+		}
+
+		.publisher-control-color-indicator {
+			width: 16px;
+			height: 16px;
+		}
 
 		.publisher-control-action-btns {
 			position: absolute;
 			top: 0;
-			right: 0px;
+			right: -12px;
 			opacity: 0;
 			visibility: hidden;
 			display: flex;
@@ -41,6 +53,11 @@
 		&:hover .publisher-control-action-btns {
 			opacity: 1;
 			visibility: visible;
+		}
+
+		&:hover .publisher-control-header-values {
+			opacity: 0;
+			visibility: hidden;
 		}
 	}
 

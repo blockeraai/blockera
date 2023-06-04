@@ -1,5 +1,5 @@
 /**
- * Internal dependencies
+ * Publisher dependencies
  */
 import { BoxShadowControl } from '@publisher/controls';
 import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';

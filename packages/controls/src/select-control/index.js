@@ -5,7 +5,7 @@ import { useContext } from '@wordpress/element';
 import { SelectControl as WPSelectControl } from '@wordpress/components';
 
 /**
- * External dependencies
+ * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
 import { BlockEditContext } from '@publisher/extensions';
@@ -14,15 +14,31 @@ import { BlockEditContext } from '@publisher/extensions';
  * Internal dependencies
  */
 import { renderSelectNativeOption } from './utils';
+import { getControlValue, updateControlValue } from './../utils';
 
 const SelectControl = ({
+	initValue = '',
 	options,
 	children,
+	//
+	value,
 	attribute,
-	initValue = '',
+	repeaterAttributeIndex = null,
+	repeaterAttribute = null,
+	//
 	className,
+	onChange = () => {},
 }) => {
 	const { attributes, setAttributes } = useContext(BlockEditContext);
+
+	let controlValue = getControlValue(
+		value,
+		attribute,
+		repeaterAttribute,
+		repeaterAttributeIndex,
+		initValue,
+		attributes
+	);
 
 	return (
 		<>
@@ -32,16 +48,22 @@ const SelectControl = ({
 					'native-select',
 					className
 				)}
-				value={attributes[attribute] || initValue}
-				onChange={(selection) => {
-					setAttributes({
-						...attributes,
-						[attribute]: selection,
-					});
+				value={controlValue}
+				onChange={(newValue) => {
+					updateControlValue(
+						newValue,
+						attribute,
+						repeaterAttribute,
+						repeaterAttributeIndex,
+						attributes,
+						setAttributes
+					);
+
+					onChange(newValue);
 				}}
 				__nextHasNoMarginBottom
 			>
-				{options.map(renderSelectNativeOption)}
+				{options?.map(renderSelectNativeOption)}
 				{children}
 			</WPSelectControl>
 		</>

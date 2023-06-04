@@ -1,5 +1,5 @@
 /**
- * Internal dependencies
+ * Publisher dependencies
  */
 import { Icon } from '@publisher/components';
 

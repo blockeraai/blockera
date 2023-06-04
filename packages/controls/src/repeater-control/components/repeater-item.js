@@ -5,12 +5,16 @@ import { __ } from '@wordpress/i18n';
 import { memo, useContext, useState } from '@wordpress/element';
 
 /**
+ * Publisher dependencies
+ */
+import { controlInnerClassNames } from '@publisher/classnames';
+
+/**
  * Internal dependencies
  */
 import ActionsUI from './actions-ui';
 import { RepeaterContext } from '../context';
 import GroupControl from '../../group-control';
-import { controlInnerClassNames } from '@publisher/classnames';
 
 const RepeaterItem = ({ item, itemId }) => {
 	const [isOpen, setOpen] = useState(false);

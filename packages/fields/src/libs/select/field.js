@@ -1,10 +1,10 @@
 /**
- * Internal dependencies
+ * Publisher dependencies
  */
 import { SelectControl, LabelControl } from '@publisher/controls';
 import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
 
-export function SelectField({ name, attribute, label, options, ...props }) {
+export function SelectField({ name, label, options, ...props }) {
 	return (
 		<div
 			className={fieldsClassNames(
@@ -23,7 +23,6 @@ export function SelectField({ name, attribute, label, options, ...props }) {
 					{...{
 						...props,
 						options,
-						attribute,
 					}}
 				/>
 			</div>

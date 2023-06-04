@@ -2,120 +2,106 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo, useContext } from '@wordpress/element';
+import { memo } from '@wordpress/element';
+
+/**
+ * Publisher dependencies
+ */
+import { InputField, SelectField, ColorField } from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
 import BaseControl from '../../base';
-import { InputField, SelectField, ColorField } from '@publisher/fields';
-import { RepeaterContext } from '../../repeater-control/context';
 
 const BoxShadowFields = ({ item, itemId }) => {
-	const { changeItem, blockName } = useContext(RepeaterContext);
-
 	return (
 		<BaseControl id={`repeater-item-${itemId}`}>
 			<SelectField
-				attribute="type"
 				label={__('Position', 'publisher-core')}
 				options={[
-					{
-						label: __('Inner', 'publisher-core'),
-						value: 'inner',
-					},
 					{
 						label: __('Outer', 'publisher-core'),
 						value: 'outer',
 					},
+					{
+						label: __('Inner', 'publisher-core'),
+						value: 'inner',
+					},
 				]}
-				onChange={(input) =>
-					changeItem(itemId, {
-						...item,
-						type: input,
-					})
-				}
+				//
 				initValue="inside"
+				attribute="type"
+				repeaterAttributeIndex={itemId}
+				repeaterAttribute="publisherBoxShadowItems"
 			/>
 
 			<InputField
-				attribute="x"
 				label={__('X', 'publisher-core')}
-				name={blockName}
 				settings={{
 					type: 'css',
-					unitType: 'essential',
+					unitType: 'box-shadow',
 					range: true,
+					min: -100,
+					max: 100,
 				}}
-				onChange={(input) =>
-					changeItem(itemId, {
-						...item,
-						x: input,
-					})
-				}
+				//
+				attribute="x"
+				repeaterAttributeIndex={itemId}
+				repeaterAttribute="publisherBoxShadowItems"
 			/>
 
 			<InputField
-				attribute="y"
 				label={__('Y', 'publisher-core')}
-				name={blockName}
 				settings={{
 					type: 'css',
-					unitType: 'essential',
+					unitType: 'box-shadow',
 					range: true,
+					min: -100,
+					max: 100,
 				}}
-				onChange={(input) =>
-					changeItem(itemId, {
-						...item,
-						y: input,
-					})
-				}
+				//
+				attribute="y"
+				repeaterAttributeIndex={itemId}
+				repeaterAttribute="publisherBoxShadowItems"
 			/>
 
 			<InputField
-				attribute="blur"
 				label={__('Blur', 'publisher-core')}
-				name={blockName}
 				settings={{
 					type: 'css',
-					unitType: 'essential',
+					unitType: 'box-shadow',
 					range: true,
+					min: 0,
+					max: 100,
 				}}
-				onChange={(input) =>
-					changeItem(itemId, {
-						...item,
-						blur: input,
-					})
-				}
+				//
+				attribute="blur"
+				repeaterAttributeIndex={itemId}
+				repeaterAttribute="publisherBoxShadowItems"
 			/>
 
 			<InputField
-				attribute="spread"
 				label={__('Spread', 'publisher-core')}
-				name={blockName}
 				settings={{
 					type: 'css',
-					unitType: 'essential',
+					unitType: 'box-shadow',
 					range: true,
+					min: -100,
+					max: 100,
 				}}
-				onChange={(input) =>
-					changeItem(itemId, {
-						...item,
-						spread: input,
-					})
-				}
+				//
+				attribute="spread"
+				repeaterAttributeIndex={itemId}
+				repeaterAttribute="publisherBoxShadowItems"
 			/>
 
 			<ColorField
-				attribute="color"
 				label={__('Color', 'publisher-core')}
-				name={blockName}
-				onChange={(input) =>
-					changeItem(itemId, {
-						...item,
-						color: input,
-					})
-				}
+				//
+				attribute="color"
+				repeaterAttributeIndex={itemId}
+				repeaterAttribute="publisherBoxShadowItems"
 			/>
 		</BaseControl>
 	);

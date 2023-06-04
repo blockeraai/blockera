@@ -4,7 +4,7 @@
 import { BaseControl as WordPressBaseControl } from '@wordpress/components';
 
 /**
- * External dependencies
+ * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
 

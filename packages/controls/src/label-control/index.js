@@ -1,5 +1,5 @@
 /**
- * Internal dependencies
+ * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
 

@@ -1,34 +1,23 @@
 /**
  * WordPress dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
 import { ColorIndicator } from '@wordpress/components';
 import { memo } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
+
+/**
+ * Publisher dependencies
+ */
+import { controlInnerClassNames } from '@publisher/classnames';
 
 const Header = ({
-	item: { x, y, blur, spread, unit = 'px', color = '#fff' },
+	item: { type, x, y, blur, spread, color = '#fff' },
 	isOpen,
 	setOpen,
 	children,
 }) => {
 	const heading = () => {
-		const getNormalizedValue = (value) => {
-			if ('string' === typeof value) {
-				value = value.replace(/[px,%,em]/g, '');
-			}
-			if (!value?.length) {
-				return `0${unit}`;
-			}
-			if (!value?.includes(unit)) {
-				return `${value}${unit}`;
-			}
-
-			return value;
-		};
-
-		return `${getNormalizedValue(x)} ${getNormalizedValue(
-			y
-		)} ${getNormalizedValue(blur)} ${getNormalizedValue(spread)}`;
+		return `${x} ${y} ${blur} ${spread}`;
 	};
 
 	return (
@@ -36,8 +25,18 @@ const Header = ({
 			className={controlInnerClassNames('repeater-group-header')}
 			onClick={() => setOpen(!isOpen)}
 		>
-			<ColorIndicator colorValue={color} className="color-indicator" />
-			<span className="publisher-core-box-shadow-values">
+			<ColorIndicator
+				colorValue={color}
+				className={controlInnerClassNames('color-indicator')}
+			/>
+
+			<span className={controlInnerClassNames('header-label')}>
+				{type === 'inner'
+					? __('Inner', 'publisher-core')
+					: __('Outer', 'publisher-core')}
+			</span>
+
+			<span className={controlInnerClassNames('header-values')}>
 				{heading()}
 			</span>
 

@@ -1,18 +1,62 @@
 /**
  * WordPress dependencies
  */
-import { __experimentalUnitControl as WordPressUnitControl } from '@wordpress/block-editor';
+import { __experimentalUnitControl as WPUnitControl } from '@wordpress/block-editor';
+import { useContext } from '@wordpress/element';
+
+/**
+ * Publisher dependencies
+ */
+import { controlClassNames } from '@publisher/classnames';
+import { BlockEditContext } from '@publisher/extensions';
 
 /**
  * Internal dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import { getControlValue, updateControlValue } from './../utils';
 
-export default function UnitControl({ className, ...props }) {
+export default function UnitControl({
+	units,
+	//
+	value,
+	attribute,
+	repeaterAttributeIndex = null,
+	repeaterAttribute = null,
+	//
+	className,
+	onChange = () => {},
+	...props
+}) {
+	const { attributes, setAttributes } = useContext(BlockEditContext);
+
+	let controlValue = getControlValue(
+		value,
+		attribute,
+		repeaterAttribute,
+		repeaterAttributeIndex,
+		null,
+		attributes
+	);
+
 	return (
-		<WordPressUnitControl
-			className={controlClassNames('unit', className)}
+		<WPUnitControl
 			{...props}
+			units={units}
+			value={controlValue}
+			className={controlClassNames('unit', className)}
+			onChange={(newValue) => {
+				updateControlValue(
+					newValue,
+					attribute,
+					repeaterAttribute,
+					repeaterAttributeIndex,
+					attributes,
+					setAttributes
+				);
+
+				onChange(newValue);
+			}}
+			isUnitSelectTabbable={false}
 		/>
 	);
 }
