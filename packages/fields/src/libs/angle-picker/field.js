@@ -1,30 +1,34 @@
 /**
  * Publisher dependencies
  */
-import { AnglePickerControl, LabelControl } from '@publisher/controls';
-import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
+import { AnglePickerControl } from '@publisher/controls';
 
-export function AnglePickerField({ label, ...props }) {
+/**
+ * Internal dependencies
+ */
+import { Field } from '../field';
+
+export function AnglePickerField({
+	label,
+	columns,
+	className,
+	children,
+	...props
+}) {
 	return (
-		<div
-			className={fieldsClassNames(
-				'angle-picker',
-				label !== '' ? 'columns-2' : 'columns-1'
-			)}
+		<Field
+			label={label}
+			field="angle-picker"
+			columns={columns}
+			className={className}
 		>
-			{label && (
-				<div className={fieldsInnerClassNames('label')}>
-					<LabelControl label={label} />
-				</div>
-			)}
+			<AnglePickerControl
+				{...{
+					...props,
+				}}
+			/>
 
-			<div className={fieldsClassNames('control')}>
-				<AnglePickerControl
-					{...{
-						...props,
-					}}
-				/>
-			</div>
-		</div>
+			{children}
+		</Field>
 	);
 }

@@ -1,6 +1,4 @@
-// general style for fields
-import './style.scss';
-
+export { Field } from './libs/field';
 export { AnglePickerField } from './libs/angle-picker';
 export { BoxShadowField, BoxShadowFieldStyle } from './libs/box-shadow';
 export { ColorField } from './libs/color';

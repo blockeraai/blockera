@@ -1,31 +1,37 @@
 /**
  * Publisher dependencies
  */
-import { SelectControl, LabelControl } from '@publisher/controls';
-import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
+import { SelectControl } from '@publisher/controls';
 
-export function SelectField({ name, label, options, ...props }) {
+/**
+ * Internal dependencies
+ */
+import { Field } from '../field';
+
+export function SelectField({
+	name,
+	label,
+	columns,
+	className,
+	options,
+	children,
+	...props
+}) {
 	return (
-		<div
-			className={fieldsClassNames(
-				'select',
-				label !== '' ? 'columns-2' : 'columns-1'
-			)}
+		<Field
+			label={label}
+			field="select"
+			columns={columns}
+			className={className}
 		>
-			{label && (
-				<div className={fieldsInnerClassNames('label')}>
-					<LabelControl label={label} />
-				</div>
-			)}
+			<SelectControl
+				{...{
+					...props,
+					options,
+				}}
+			/>
 
-			<div className={fieldsInnerClassNames('control')}>
-				<SelectControl
-					{...{
-						...props,
-						options,
-					}}
-				/>
-			</div>
-		</div>
+			{children}
+		</Field>
 	);
 }

@@ -1,26 +1,29 @@
 /**
  * Internal dependencies
  */
-import { IconControl, LabelControl } from '@publisher/controls';
-import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
+import { IconControl } from '@publisher/controls';
 
-export function IconField({ attribute, label, ...props }) {
+/**
+ * Internal dependencies
+ */
+import { Field } from '../field';
+
+export function IconField({ attribute, label, className, children, ...props }) {
 	return (
-		<div className={fieldsClassNames('icon', 'columns-1')}>
-			{label && (
-				<div className={fieldsInnerClassNames('label')}>
-					<LabelControl label={label} />
-				</div>
-			)}
+		<Field
+			label={label}
+			field="icon"
+			columns="columns-1"
+			className={className}
+		>
+			<IconControl
+				{...{
+					...props,
+					attribute,
+				}}
+			/>
 
-			<div className={fieldsInnerClassNames('control')}>
-				<IconControl
-					{...{
-						...props,
-						attribute,
-					}}
-				/>
-			</div>
-		</div>
+			{children}
+		</Field>
 	);
 }

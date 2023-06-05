@@ -2,21 +2,32 @@
  * Publisher dependencies
  */
 import { BoxShadowControl } from '@publisher/controls';
-import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
 
-export function BoxShadowField({ config, label, attribute, ...props }) {
+/**
+ * Internal dependencies
+ */
+import { Field } from '../field';
+
+export function BoxShadowField({
+	config,
+	label,
+	attribute,
+	className,
+	children,
+	...props
+}) {
 	return (
-		<div className={fieldsClassNames('box-shadow', 'columns-1')}>
-			<div className={fieldsInnerClassNames('control')}>
-				<BoxShadowControl
-					{...{
-						config,
-						...props,
-						attribute,
-					}}
-					label={label}
-				/>
-			</div>
-		</div>
+		<Field field="box-shadow" columns="columns-1" className={className}>
+			<BoxShadowControl
+				{...{
+					config,
+					...props,
+					attribute,
+				}}
+				label={label}
+			/>
+
+			{children}
+		</Field>
 	);
 }

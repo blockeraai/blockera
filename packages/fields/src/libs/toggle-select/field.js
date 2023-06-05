@@ -1,31 +1,37 @@
 /**
  * Publisher dependencies
  */
-import { ToggleSelectControl, LabelControl } from '@publisher/controls';
-import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
+import { ToggleSelectControl } from '@publisher/controls';
 
-export function ToggleSelectField({ name, label, options, ...props }) {
+/**
+ * Internal dependencies
+ */
+import { Field } from '../field';
+
+export function ToggleSelectField({
+	name,
+	label,
+	options,
+	columns,
+	children,
+	className,
+	...props
+}) {
 	return (
-		<div
-			className={fieldsClassNames(
-				'toggle-select',
-				label !== '' ? 'columns-2' : 'columns-1'
-			)}
+		<Field
+			label={label}
+			field="toggle-select"
+			columns={columns}
+			className={className}
 		>
-			{label && (
-				<div className={fieldsInnerClassNames('label')}>
-					<LabelControl label={label} />
-				</div>
-			)}
+			<ToggleSelectControl
+				{...{
+					...props,
+					options,
+				}}
+			/>
 
-			<div className={fieldsInnerClassNames('control')}>
-				<ToggleSelectControl
-					{...{
-						...props,
-						options,
-					}}
-				/>
-			</div>
-		</div>
+			{children}
+		</Field>
 	);
 }

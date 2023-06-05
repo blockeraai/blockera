@@ -2,22 +2,34 @@
  * Publisher dependencies
  */
 import { FilterControl } from '@publisher/controls';
-import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
 
-export function FilterField({ config, attribute, label, ...props }) {
+/**
+ * Internal dependencies
+ */
+import { Field } from '../field';
+
+export function FilterField({
+	config,
+	attribute,
+	label,
+	columns,
+	className,
+	children,
+	...props
+}) {
 	return (
-		<div className={fieldsClassNames('filter', 'columns-1')}>
-			<div className={fieldsInnerClassNames('control')}>
-				<FilterControl
-					{...{
-						config,
-						...props,
-						attribute,
-					}}
-					isPopover={true}
-					label={label}
-				/>
-			</div>
-		</div>
+		<Field field="filter" columns="columns-1" className={className}>
+			<FilterControl
+				{...{
+					config,
+					...props,
+					attribute,
+				}}
+				isPopover={true}
+				label={label}
+			/>
+
+			{children}
+		</Field>
 	);
 }

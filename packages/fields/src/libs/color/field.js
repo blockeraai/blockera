@@ -7,33 +7,39 @@ import { useContext } from '@wordpress/element';
  * Publisher dependencies
  */
 import { BlockEditContext } from '@publisher/extensions';
-import { LabelControl, ColorControl } from '@publisher/controls';
-import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
+import { ColorControl } from '@publisher/controls';
 
-export function ColorField({ name, label, settings, ...props }) {
+/**
+ * Internal dependencies
+ */
+import { Field } from '../field';
+
+export function ColorField({
+	name,
+	label,
+	settings,
+	columns,
+	className,
+	children,
+	...props
+}) {
 	const { name: blockName, ...blockProps } = useContext(BlockEditContext);
 
 	return (
-		<div
-			className={fieldsClassNames(
-				'color',
-				label !== '' ? 'columns-2' : 'columns-1'
-			)}
+		<Field
+			label={label}
+			field="color"
+			columns={columns}
+			className={className}
 		>
-			{label && (
-				<div className={fieldsInnerClassNames('label')}>
-					<LabelControl label={label} />
-				</div>
-			)}
+			<ColorControl
+				{...props}
+				{...settings}
+				{...blockProps}
+				blockName={name}
+			/>
 
-			<div className={fieldsInnerClassNames('control')}>
-				<ColorControl
-					{...props}
-					{...settings}
-					{...blockProps}
-					blockName={name}
-				/>
-			</div>
-		</div>
+			{children}
+		</Field>
 	);
 }
