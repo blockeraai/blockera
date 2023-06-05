@@ -14,9 +14,14 @@ import { computedCssRules } from '@publisher/style-engine';
 import { attributes } from './attributes';
 import { BlockEditContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
+import { backgroundClipCSSGenerator } from './css-generator';
 
 export function BackgroundStyles({
-	backgroundConfig: { cssGenerators, publisherBackgroundColor },
+	backgroundConfig: {
+		cssGenerators,
+		publisherBackgroundColor,
+		publisherBackgroundClip,
+	},
 }) {
 	const { attributes: _attributes, ...blockProps } =
 		useContext(BlockEditContext);
@@ -42,6 +47,29 @@ export function BackgroundStyles({
 								},
 							},
 						],
+					},
+				},
+				{ attributes: _attributes, ...blockProps }
+			)
+		);
+	}
+
+	if (
+		isActiveField(publisherBackgroundClip) &&
+		_attributes.publisherBackgroundClip !==
+			attributes.publisherBackgroundClip.default
+	) {
+		generators.push(
+			computedCssRules(
+				{
+					cssGenerators: {
+						publisherBackgroundClip: [
+							{
+								type: 'function',
+								function: backgroundClipCSSGenerator,
+							},
+						],
+						...(publisherBackgroundClip?.cssGenerators || {}),
 					},
 				},
 				{ attributes: _attributes, ...blockProps }

@@ -3,4 +3,8 @@ export const attributes = {
 		type: 'string',
 		default: '',
 	},
+	publisherBackgroundClip: {
+		type: 'string',
+		default: 'none',
+	},
 };
