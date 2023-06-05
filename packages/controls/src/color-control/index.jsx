@@ -9,7 +9,7 @@ import { useState, useContext } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import { controlClassNames, controlInnerClassNames } from '@publisher/classnames';
 import { BlockEditContext } from '@publisher/extensions';
 
 
@@ -44,15 +44,14 @@ export default function ColorControl({
 	);
 
 	return (
-		<div className={controlClassNames('color', className)}>
+		<div className={controlClassNames('color', isOpen ? 'color-picker-open' : '', className)}>
 
-			<div className="color-indicator-with-label">
+			<div className={controlInnerClassNames('color-indicator')} onClick={() => setOpen(!isOpen)}>
 				<ColorIndicator
 					colorValue={controlValue}
 					className="color-indicator"
-					onClick={() => setOpen(true)}
 				/>
-				{controlValue}
+				{controlValue || __("None", 'publisher-core')}
 			</div>
 
 			<ColorPickerPopover
