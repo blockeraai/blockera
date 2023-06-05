@@ -33,11 +33,11 @@ export function EffectsExtension({ children, config, ...props }) {
 						label: __('Opacity', 'publisher-core'),
 						settings: {
 							type: 'css',
+							unitType: 'percent',
 							range: true,
 							min: 0,
 							max: 100,
 							initialPosition: 100,
-							units: [{ value: '%', label: '%', default: 0 }],
 						},
 						//
 						attribute: 'publisherOpacity',

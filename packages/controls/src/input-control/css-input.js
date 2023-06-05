@@ -82,7 +82,11 @@ export function CssInputControl({
 					{ value: 'ms', label: 'MS', default: 0 },
 					{ value: 's', label: 'S', default: 1 },
 				];
+				break;
 
+
+			case 'percent':
+				cssUnits = [{ value: '%', label: '%', default: 0 }];
 				break;
 
 			case 'width':
