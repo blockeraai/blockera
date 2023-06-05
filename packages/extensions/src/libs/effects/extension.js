@@ -27,6 +27,7 @@ export function EffectsExtension({ children, config, ...props }) {
 			publisherFilter,
 			publisherCursor,
 			publisherBlendMode,
+			publisherBackdropFilter,
 		},
 	} = config;
 
@@ -67,6 +68,16 @@ export function EffectsExtension({ children, config, ...props }) {
 						...props,
 						attribute: 'publisherFilter',
 						label: __('Filters', 'publisher-core'),
+					}}
+				/>
+			)}
+
+			{isActiveField(publisherBackdropFilter) && (
+				<FilterField
+					{...{
+						...props,
+						attribute: 'publisherBackdropFilter',
+						label: __('Backdrop Filters', 'publisher-core'),
 					}}
 				/>
 			)}

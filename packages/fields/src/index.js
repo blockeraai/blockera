@@ -8,4 +8,8 @@ export { IconField } from './libs/icon';
 export { InputField } from './libs/input';
 export { SelectField } from './libs/select';
 export { TransitionField, TransitionFieldStyle } from './libs/transition';
-export { FilterField, FilterFieldStyle } from './libs/filter';
+export {
+	FilterField,
+	FilterFieldStyle,
+	BackdropFilterFieldStyle,
+} from './libs/filter';

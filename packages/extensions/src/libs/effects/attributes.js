@@ -11,6 +11,10 @@ export const attributes = {
 		type: 'array',
 		default: [],
 	},
+	publisherBackdropFilter: {
+		type: 'array',
+		default: [],
+	},
 	publisherCursor: {
 		type: 'string',
 		default: 'default',

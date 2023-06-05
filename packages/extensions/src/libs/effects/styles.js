@@ -7,7 +7,11 @@ import { useContext } from '@wordpress/element';
  * Publisher dependencies
  */
 import { computedCssRules } from '@publisher/style-engine';
-import { TransitionFieldStyle, FilterFieldStyle } from '@publisher/fields';
+import {
+	TransitionFieldStyle,
+	FilterFieldStyle,
+	BackdropFilterFieldStyle,
+} from '@publisher/fields';
 
 /**
  * Internal dependencies
@@ -23,6 +27,7 @@ export function EffectsStyles({
 		publisherOpacity,
 		publisherTransition,
 		publisherFilter,
+		publisherBackdropFilter,
 		publisherCursor,
 		publisherBlendMode,
 	},
@@ -74,6 +79,16 @@ export function EffectsStyles({
 		)
 	) {
 		generators.push(FilterFieldStyle(publisherFilter));
+	}
+
+	if (
+		isActiveField(publisherBackdropFilter) &&
+		!arrayEquals(
+			attributes.publisherBackdropFilter.default,
+			_attributes.publisherBackdropFilter
+		)
+	) {
+		generators.push(BackdropFilterFieldStyle(publisherBackdropFilter));
 	}
 
 	if (

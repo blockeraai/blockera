@@ -12,7 +12,10 @@ import { BlockEditContext } from '@publisher/extensions';
 /**
  * Internal dependencies
  */
-import { cssGenerator } from './css-generator';
+import {
+	filterFieldCSSGenerator,
+	backdropFilterFieldCSSGenerator,
+} from './css-generator';
 
 export function FilterFieldStyle(Filter) {
 	const blockProps = useContext(BlockEditContext);
@@ -23,7 +26,26 @@ export function FilterFieldStyle(Filter) {
 				publisherFilter: [
 					{
 						type: 'function',
-						function: cssGenerator,
+						function: filterFieldCSSGenerator,
+					},
+				],
+				...(Filter?.cssGenerators || {}),
+			},
+		},
+		blockProps
+	);
+}
+
+export function BackdropFilterFieldStyle(Filter) {
+	const blockProps = useContext(BlockEditContext);
+
+	return computedCssRules(
+		{
+			cssGenerators: {
+				publisherBackdropFilter: [
+					{
+						type: 'function',
+						function: backdropFilterFieldCSSGenerator,
 					},
 				],
 				...(Filter?.cssGenerators || {}),
