@@ -6,7 +6,12 @@ import { __ } from '@wordpress/i18n';
 /**
  * Publisher dependencies
  */
-import { InputField, SelectField, TransitionField } from '@publisher/fields';
+import {
+	InputField,
+	SelectField,
+	TransitionField,
+	FilterField,
+} from '@publisher/fields';
 
 /**
  * Internal dependencies
@@ -19,6 +24,7 @@ export function EffectsExtension({ children, config, ...props }) {
 		effectsConfig: {
 			publisherOpacity,
 			publisherTransition,
+			publisherFilter,
 			publisherCursor,
 			publisherBlendMode,
 		},
@@ -51,6 +57,16 @@ export function EffectsExtension({ children, config, ...props }) {
 						...props,
 						attribute: 'publisherTransition',
 						label: __('Transitions', 'publisher-core'),
+					}}
+				/>
+			)}
+
+			{isActiveField(publisherFilter) && (
+				<FilterField
+					{...{
+						...props,
+						attribute: 'publisherFilter',
+						label: __('Filters', 'publisher-core'),
 					}}
 				/>
 			)}

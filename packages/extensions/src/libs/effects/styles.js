@@ -7,7 +7,7 @@ import { useContext } from '@wordpress/element';
  * Publisher dependencies
  */
 import { computedCssRules } from '@publisher/style-engine';
-import { TransitionFieldStyle } from '@publisher/fields';
+import { TransitionFieldStyle, FilterFieldStyle } from '@publisher/fields';
 
 /**
  * Internal dependencies
@@ -20,10 +20,11 @@ import { isActiveField } from '../../api/utils';
 export function EffectsStyles({
 	effectsConfig: {
 		cssGenerators,
-		publisherCursor,
 		publisherOpacity,
-		publisherBlendMode,
 		publisherTransition,
+		publisherFilter,
+		publisherCursor,
+		publisherBlendMode,
 	},
 }) {
 	const { attributes: _attributes, ...blockProps } =
@@ -53,6 +54,26 @@ export function EffectsStyles({
 				{ attributes: _attributes, ...blockProps }
 			)
 		);
+	}
+
+	if (
+		isActiveField(publisherTransition) &&
+		!arrayEquals(
+			attributes.publisherTransition.default,
+			_attributes.publisherTransition
+		)
+	) {
+		generators.push(TransitionFieldStyle(publisherTransition));
+	}
+
+	if (
+		isActiveField(publisherFilter) &&
+		!arrayEquals(
+			attributes.publisherFilter.default,
+			_attributes.publisherFilter
+		)
+	) {
+		generators.push(FilterFieldStyle(publisherFilter));
 	}
 
 	if (
@@ -101,16 +122,6 @@ export function EffectsStyles({
 				{ attributes: _attributes, ...blockProps }
 			)
 		);
-	}
-
-	if (
-		isActiveField(publisherTransition) &&
-		!arrayEquals(
-			attributes.publisherTransition.default,
-			_attributes.publisherTransition
-		)
-	) {
-		generators.push(TransitionFieldStyle(publisherTransition));
 	}
 
 	generators.push(

@@ -14,4 +14,5 @@ export { default as SelectControl } from './select-control';
 export { default as RepeaterControl } from './repeater-control';
 export { default as BoxShadowControl } from './box-shadow-control';
 export { default as TransitionControl } from './transition-control';
+export { default as FilterControl } from './filter-control';
 export { default as AnglePickerControl } from './angle-picker-control';

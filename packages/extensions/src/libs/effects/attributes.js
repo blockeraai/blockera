@@ -7,6 +7,10 @@ export const attributes = {
 		type: 'array',
 		default: [],
 	},
+	publisherFilter: {
+		type: 'array',
+		default: [],
+	},
 	publisherCursor: {
 		type: 'string',
 		default: 'default',

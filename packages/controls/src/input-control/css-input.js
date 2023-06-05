@@ -74,7 +74,6 @@ export function CssInputControl({
 					{ value: 'dvw', label: 'DVW', default: 0 },
 					{ value: 'dvh', label: 'DVH', default: 0 },
 				];
-
 				break;
 
 			case 'duration':
@@ -84,6 +83,13 @@ export function CssInputControl({
 				];
 				break;
 
+			case 'angle':
+				cssUnits = [
+					{ value: 'deg', label: 'DEG', default: 0 },
+					{ value: 'rad', label: 'RAD', default: 0 },
+					{ value: 'grad', label: 'GRAD', default: 0 },
+				];
+				break;
 
 			case 'percent':
 				cssUnits = [{ value: '%', label: '%', default: 0 }];
