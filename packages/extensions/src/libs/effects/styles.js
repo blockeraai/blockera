@@ -150,7 +150,5 @@ export function EffectsStyles({
 		)
 	);
 
-	//TODO: Please, implements publisherTransition and publisherAnglePicker css generators!
-
 	return generators.length > 1 ? generators.join('\n') : generators.join('');
 }
