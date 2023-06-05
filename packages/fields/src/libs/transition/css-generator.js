@@ -32,7 +32,7 @@ export function cssGenerator(id, props, styleEngine) {
 			styleEngine.selector ? ' ' + styleEngine.selector : ''
 		}`,
 		properties: {
-			transition: value?.join(','),
+			transition: value?.join(', '),
 		},
 	});
 }

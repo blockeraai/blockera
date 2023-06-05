@@ -27,7 +27,7 @@ export function cssGenerator(id, props, styleEngine) {
 			styleEngine.selector ? ' ' + styleEngine.selector : ''
 		}`,
 		properties: {
-			'box-shadow': value?.join(','),
+			'box-shadow': value?.join(', '),
 		},
 	});
 }
