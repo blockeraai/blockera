@@ -4,38 +4,33 @@ export default function DropShadowIcon({}) {
 			width="18"
 			height="18"
 			viewBox="0 0 18 18"
-			fill="currentColor"
+			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>
-			<g clip-path="url(#clip0_1241_8154)">
-				<g opacity="0.4">
-					<path
-						d="M8.32575 9.5625C9.36129 9.5625 10.2008 8.72303 10.2008 7.6875C10.2008 6.65197 9.36129 5.8125 8.32575 5.8125C7.29022 5.8125 6.45075 6.65197 6.45075 7.6875C6.45075 8.72303 7.29022 9.5625 8.32575 9.5625Z"
-						fill="currentColor"
-					/>
-					<path
-						fill-rule="evenodd"
-						clip-rule="evenodd"
-						d="M3 15.9263V4C3 3.44772 3.44772 3 4 3H17C17.5523 3 18 3.44772 18 4V17C18 17.5523 17.5523 18 17 18H4C3.44772 18 3 17.5523 3 17V17V16.5V15.9263ZM3.9375 3.9375H17.0625V12.6742L13.9508 9.5625L9.61481 13.8984L8.32575 12.375L3.9375 16.2757V3.9375Z"
-						fill="currentColor"
-					/>
-				</g>
-				<path
-					d="M5.32575 6.5625C6.36129 6.5625 7.20075 5.72303 7.20075 4.6875C7.20075 3.65197 6.36129 2.8125 5.32575 2.8125C4.29022 2.8125 3.45075 3.65197 3.45075 4.6875C3.45075 5.72303 4.29022 6.5625 5.32575 6.5625Z"
-					fill="currentColor"
-				/>
+			<g opacity="0.4">
 				<path
 					fill-rule="evenodd"
 					clip-rule="evenodd"
-					d="M0 13V1C0 0.447715 0.447715 0 1 0H14C14.5523 0 15 0.447715 15 1V14C15 14.5523 14.5523 15 14 15H1C0.447715 15 0 14.5523 0 14V13.5V13ZM0.9375 0.9375H14.0625V9.67425L10.9508 6.5625L6.61481 10.8984L5.32575 9.375L0.9375 13.2757V0.9375Z"
+					d="M5 3C4.44772 3 4 3.44772 4 4V16C4 16.5523 4.44772 17 5 17H17C17.5523 17 18 16.5523 18 16V4C18 3.44772 17.5523 3 17 3H5ZM17 4H5V16H17V4Z"
 					fill="currentColor"
 				/>
+				<path
+					d="M13.7917 10L17 14.2857V16H6L13.7917 10Z"
+					fill="currentColor"
+				/>
+				<circle cx="8.5" cy="7.5" r="1.5" fill="currentColor" />
 			</g>
-			<defs>
-				<clipPath id="clip0_1241_8154">
-					<rect width="18" height="18" />
-				</clipPath>
-			</defs>
+			<path
+				fill-rule="evenodd"
+				clip-rule="evenodd"
+				d="M2 1C1.44772 1 1 1.44772 1 2V14C1 14.5523 1.44772 15 2 15H14C14.5523 15 15 14.5523 15 14V2C15 1.44772 14.5523 1 14 1H2ZM14 2H2V14H14V2Z"
+				fill="currentColor"
+			/>
+			<path
+				d="M10.7917 8L14 12.2857V14H3L10.7917 8Z"
+				fill="currentColor"
+			/>
+			<circle cx="5.5" cy="5.5" r="1.5" fill="currentColor" />
 		</svg>
 	);
 }
