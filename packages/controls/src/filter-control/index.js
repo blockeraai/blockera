@@ -19,7 +19,7 @@ import { getControlValue, updateControlValue } from './../utils';
 
 const initialState = {
 	type: 'blur',
-	blur: '10px',
+	blur: '3px',
 	brightness: '200%',
 	contrast: '200%',
 	'hue-rotate': '45deg',
