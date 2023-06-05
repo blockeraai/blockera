@@ -64,6 +64,7 @@ function TransitionControl({
 					},
 					value: controlValue,
 					InnerComponents: Fields,
+					attribute,
 				}}
 			/>
 		</div>

@@ -66,6 +66,7 @@ function BoxShadowControl({
 					},
 					value: controlValue,
 					InnerComponents: Fields,
+					attribute,
 				}}
 			/>
 		</div>

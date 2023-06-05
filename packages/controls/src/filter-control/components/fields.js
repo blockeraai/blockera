@@ -15,7 +15,7 @@ import { BlockEditContext } from '@publisher/extensions';
 import BaseControl from '../../base';
 import { getTypeOptions } from './../utils';
 
-const Fields = ({ itemId }) => {
+const Fields = ({ itemId, repeaterAttribute }) => {
 	const { attributes } = useContext(BlockEditContext);
 
 	return (
@@ -27,10 +27,10 @@ const Fields = ({ itemId }) => {
 				initValue="blur"
 				attribute="type"
 				repeaterAttributeIndex={itemId}
-				repeaterAttribute="publisherFilter"
+				repeaterAttribute={repeaterAttribute}
 			/>
 
-			{attributes.publisherFilter[itemId].type === 'blur' && (
+			{attributes[repeaterAttribute][itemId].type === 'blur' && (
 				<InputField
 					label={__('Blur', 'publisher-core')}
 					settings={{
@@ -43,11 +43,11 @@ const Fields = ({ itemId }) => {
 					//
 					attribute="blur"
 					repeaterAttributeIndex={itemId}
-					repeaterAttribute="publisherFilter"
+					repeaterAttribute={repeaterAttribute}
 				/>
 			)}
 
-			{attributes.publisherFilter[itemId].type === 'drop-shadow' && (
+			{attributes[repeaterAttribute][itemId].type === 'drop-shadow' && (
 				<>
 					<InputField
 						label={__('X', 'publisher-core')}
@@ -61,7 +61,7 @@ const Fields = ({ itemId }) => {
 						//
 						attribute="drop-shadow-x"
 						repeaterAttributeIndex={itemId}
-						repeaterAttribute="publisherFilter"
+						repeaterAttribute={repeaterAttribute}
 					/>
 
 					<InputField
@@ -76,7 +76,7 @@ const Fields = ({ itemId }) => {
 						//
 						attribute="drop-shadow-y"
 						repeaterAttributeIndex={itemId}
-						repeaterAttribute="publisherFilter"
+						repeaterAttribute={repeaterAttribute}
 					/>
 
 					<InputField
@@ -91,7 +91,7 @@ const Fields = ({ itemId }) => {
 						//
 						attribute="drop-shadow-blur"
 						repeaterAttributeIndex={itemId}
-						repeaterAttribute="publisherFilter"
+						repeaterAttribute={repeaterAttribute}
 					/>
 
 					<ColorField
@@ -99,12 +99,12 @@ const Fields = ({ itemId }) => {
 						//
 						attribute="drop-shadow-color"
 						repeaterAttributeIndex={itemId}
-						repeaterAttribute="publisherFilter"
+						repeaterAttribute={repeaterAttribute}
 					/>
 				</>
 			)}
 
-			{attributes.publisherFilter[itemId].type === 'brightness' && (
+			{attributes[repeaterAttribute][itemId].type === 'brightness' && (
 				<InputField
 					label={__('Brightness', 'publisher-core')}
 					settings={{
@@ -117,11 +117,11 @@ const Fields = ({ itemId }) => {
 					//
 					attribute="brightness"
 					repeaterAttributeIndex={itemId}
-					repeaterAttribute="publisherFilter"
+					repeaterAttribute={repeaterAttribute}
 				/>
 			)}
 
-			{attributes.publisherFilter[itemId].type === 'contrast' && (
+			{attributes[repeaterAttribute][itemId].type === 'contrast' && (
 				<InputField
 					label={__('Contrast', 'publisher-core')}
 					settings={{
@@ -134,11 +134,11 @@ const Fields = ({ itemId }) => {
 					//
 					attribute="contrast"
 					repeaterAttributeIndex={itemId}
-					repeaterAttribute="publisherFilter"
+					repeaterAttribute={repeaterAttribute}
 				/>
 			)}
 
-			{attributes.publisherFilter[itemId].type === 'hue-rotate' && (
+			{attributes[repeaterAttribute][itemId].type === 'hue-rotate' && (
 				<InputField
 					label={__('Hue Rotate', 'publisher-core')}
 					settings={{
@@ -151,11 +151,11 @@ const Fields = ({ itemId }) => {
 					//
 					attribute="hue-rotate"
 					repeaterAttributeIndex={itemId}
-					repeaterAttribute="publisherFilter"
+					repeaterAttribute={repeaterAttribute}
 				/>
 			)}
 
-			{attributes.publisherFilter[itemId].type === 'saturate' && (
+			{attributes[repeaterAttribute][itemId].type === 'saturate' && (
 				<InputField
 					label={__('Saturation', 'publisher-core')}
 					settings={{
@@ -168,11 +168,11 @@ const Fields = ({ itemId }) => {
 					//
 					attribute="saturate"
 					repeaterAttributeIndex={itemId}
-					repeaterAttribute="publisherFilter"
+					repeaterAttribute={repeaterAttribute}
 				/>
 			)}
 
-			{attributes.publisherFilter[itemId].type === 'grayscale' && (
+			{attributes[repeaterAttribute][itemId].type === 'grayscale' && (
 				<InputField
 					label={__('Grayscale', 'publisher-core')}
 					settings={{
@@ -185,11 +185,11 @@ const Fields = ({ itemId }) => {
 					//
 					attribute="grayscale"
 					repeaterAttributeIndex={itemId}
-					repeaterAttribute="publisherFilter"
+					repeaterAttribute={repeaterAttribute}
 				/>
 			)}
 
-			{attributes.publisherFilter[itemId].type === 'invert' && (
+			{attributes[repeaterAttribute][itemId].type === 'invert' && (
 				<InputField
 					label={__('Invert', 'publisher-core')}
 					settings={{
@@ -202,11 +202,11 @@ const Fields = ({ itemId }) => {
 					//
 					attribute="invert"
 					repeaterAttributeIndex={itemId}
-					repeaterAttribute="publisherFilter"
+					repeaterAttribute={repeaterAttribute}
 				/>
 			)}
 
-			{attributes.publisherFilter[itemId].type === 'sepia' && (
+			{attributes[repeaterAttribute][itemId].type === 'sepia' && (
 				<InputField
 					label={__('Sepia', 'publisher-core')}
 					settings={{
@@ -219,7 +219,7 @@ const Fields = ({ itemId }) => {
 					//
 					attribute="sepia"
 					repeaterAttributeIndex={itemId}
-					repeaterAttribute="publisherFilter"
+					repeaterAttribute={repeaterAttribute}
 				/>
 			)}
 		</BaseControl>

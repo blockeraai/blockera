@@ -14,7 +14,7 @@ import { InputField, SelectField, ColorField } from '@publisher/fields';
  */
 import BaseControl from '../../base';
 
-const Fields = ({ item, itemId }) => {
+const Fields = ({ itemId, repeaterAttribute }) => {
 	return (
 		<BaseControl id={`repeater-item-${itemId}`}>
 			<SelectField
@@ -33,7 +33,7 @@ const Fields = ({ item, itemId }) => {
 				initValue="inside"
 				attribute="type"
 				repeaterAttributeIndex={itemId}
-				repeaterAttribute="publisherBoxShadow"
+				repeaterAttribute={repeaterAttribute}
 			/>
 
 			<InputField
@@ -48,7 +48,7 @@ const Fields = ({ item, itemId }) => {
 				//
 				attribute="x"
 				repeaterAttributeIndex={itemId}
-				repeaterAttribute="publisherBoxShadow"
+				repeaterAttribute={repeaterAttribute}
 			/>
 
 			<InputField
@@ -63,7 +63,7 @@ const Fields = ({ item, itemId }) => {
 				//
 				attribute="y"
 				repeaterAttributeIndex={itemId}
-				repeaterAttribute="publisherBoxShadow"
+				repeaterAttribute={repeaterAttribute}
 			/>
 
 			<InputField
@@ -78,7 +78,7 @@ const Fields = ({ item, itemId }) => {
 				//
 				attribute="blur"
 				repeaterAttributeIndex={itemId}
-				repeaterAttribute="publisherBoxShadow"
+				repeaterAttribute={repeaterAttribute}
 			/>
 
 			<InputField
@@ -93,7 +93,7 @@ const Fields = ({ item, itemId }) => {
 				//
 				attribute="spread"
 				repeaterAttributeIndex={itemId}
-				repeaterAttribute="publisherBoxShadow"
+				repeaterAttribute={repeaterAttribute}
 			/>
 
 			<ColorField
@@ -101,7 +101,7 @@ const Fields = ({ item, itemId }) => {
 				//
 				attribute="color"
 				repeaterAttributeIndex={itemId}
-				repeaterAttribute="publisherBoxShadow"
+				repeaterAttribute={repeaterAttribute}
 			/>
 		</BaseControl>
 	);

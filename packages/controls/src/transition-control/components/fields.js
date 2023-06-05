@@ -7,7 +7,7 @@ import { memo } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { InputField, SelectField, ColorField } from '@publisher/fields';
+import { InputField, SelectField } from '@publisher/fields';
 
 /**
  * Internal dependencies
@@ -15,7 +15,7 @@ import { InputField, SelectField, ColorField } from '@publisher/fields';
 import BaseControl from '../../base';
 import { getTypeOptions, getTimingOptions } from './../utils';
 
-const Fields = ({ item, itemId }) => {
+const Fields = ({ itemId, repeaterAttribute }) => {
 	return (
 		<BaseControl id={`repeater-item-${itemId}`}>
 			<SelectField
@@ -25,7 +25,7 @@ const Fields = ({ item, itemId }) => {
 				initValue="all"
 				attribute="type"
 				repeaterAttributeIndex={itemId}
-				repeaterAttribute="publisherTransition"
+				repeaterAttribute={repeaterAttribute}
 			/>
 
 			<InputField
@@ -40,7 +40,7 @@ const Fields = ({ item, itemId }) => {
 				//
 				attribute="duration"
 				repeaterAttributeIndex={itemId}
-				repeaterAttribute="publisherTransition"
+				repeaterAttribute={repeaterAttribute}
 			/>
 
 			<SelectField
@@ -50,7 +50,7 @@ const Fields = ({ item, itemId }) => {
 				initValue="all"
 				attribute="timing"
 				repeaterAttributeIndex={itemId}
-				repeaterAttribute="publisherTransition"
+				repeaterAttribute={repeaterAttribute}
 			/>
 
 			<InputField
@@ -66,7 +66,7 @@ const Fields = ({ item, itemId }) => {
 				//
 				attribute="delay"
 				repeaterAttributeIndex={itemId}
-				repeaterAttribute="publisherTransition"
+				repeaterAttribute={repeaterAttribute}
 			/>
 		</BaseControl>
 	);

@@ -16,7 +16,7 @@ import ActionsUI from './actions-ui';
 import { RepeaterContext } from '../context';
 import GroupControl from '../../group-control';
 
-const RepeaterItem = ({ item, itemId }) => {
+const RepeaterItem = ({ item, itemId, repeaterAttribute }) => {
 	const [isOpen, setOpen] = useState(false);
 	const [isVisible, setVisibility] = useState(true);
 	const {
@@ -61,7 +61,9 @@ const RepeaterItem = ({ item, itemId }) => {
 						</CustomHeader>
 					)
 				}
-				children={<InnerComponents {...{ item, itemId }} />}
+				children={
+					<InnerComponents {...{ item, itemId, repeaterAttribute }} />
+				}
 				isOpen={isOpen}
 				isVisible={isVisible}
 				isPopover={isPopover}

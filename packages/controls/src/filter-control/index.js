@@ -73,6 +73,7 @@ function FilterControl({
 					},
 					value: controlValue,
 					InnerComponents: Fields,
+					attribute,
 				}}
 			/>
 		</div>

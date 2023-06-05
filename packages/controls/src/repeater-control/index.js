@@ -31,6 +31,7 @@ import './style.scss';
 import LabelControl from '../label-control';
 
 const RepeaterControl = ({
+	attribute,
 	design = 'minimal',
 	label,
 	value,
@@ -54,6 +55,7 @@ const RepeaterControl = ({
 	}, [repeaterItems, value, updateBlockAttributes]);
 
 	const defaultRepeaterState = {
+		repeaterAttribute: attribute,
 		design,
 		Header,
 		clientId,
