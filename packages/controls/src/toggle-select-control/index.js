@@ -32,6 +32,7 @@ const ToggleSelectControl = ({
 	//
 	className,
 	onChange = () => {},
+	...props
 }) => {
 	const { attributes, setAttributes } = useContext(BlockEditContext);
 
@@ -64,6 +65,7 @@ const ToggleSelectControl = ({
 				label=""
 				hideLabelFromVision={true}
 				isBlock={true}
+				{...props}
 			>
 				{options?.map((item) => {
 					if (typeof item.icon !== 'undefined') {
