@@ -1,0 +1,23 @@
+.publisher-control-toggle-select {
+	border-color: #949494 !important;
+	width: 100%;
+	min-height: 32px !important;
+
+	&:focus-within {
+		border-color: var(
+			--wp-components-color-accent,
+			var(--wp-admin-theme-color, #007cba)
+		) !important;
+	}
+
+	.components-toggle-group-control-option-base {
+		width: 100% !important;
+	}
+
+	div[role="presentation"] {
+		background: var(
+			--wp-components-color-accent,
+			var(--wp-admin-theme-color, #007cba)
+		);
+	}
+}

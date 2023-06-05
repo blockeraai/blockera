@@ -7,7 +7,7 @@ import { memo } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { InputField, SelectField, ColorField } from '@publisher/fields';
+import { InputField, ToggleSelectField, ColorField } from '@publisher/fields';
 
 /**
  * Internal dependencies
@@ -17,7 +17,7 @@ import BaseControl from '../../base';
 const Fields = ({ itemId, repeaterAttribute }) => {
 	return (
 		<BaseControl id={`repeater-item-${itemId}`}>
-			<SelectField
+			<ToggleSelectField
 				label={__('Position', 'publisher-core')}
 				options={[
 					{

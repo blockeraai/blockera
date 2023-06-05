@@ -11,6 +11,7 @@ export { InputControl, CssInputControl } from './input-control';
 export { default as LabelControl } from './label-control';
 export { default as ToggleControl } from './toggle-control';
 export { default as SelectControl } from './select-control';
+export { default as ToggleSelectControl } from './toggle-select-control';
 export { default as RepeaterControl } from './repeater-control';
 export { default as BoxShadowControl } from './box-shadow-control';
 export { default as TransitionControl } from './transition-control';
