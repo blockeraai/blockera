@@ -8,6 +8,10 @@ import { __ } from '@wordpress/i18n';
  */
 import { BaseExtension } from '../base';
 import {
+	attributes as backgroundAttributes,
+	supports as backgroundSupports,
+} from '../background';
+import {
 	attributes as borderAndShadowAttributes,
 	supports as borderAndShadowSupports,
 } from '../border-and-shadow';
@@ -17,12 +21,14 @@ import {
 } from '../effects';
 
 export const attributes = {
-	...effectsAttributes,
+	...backgroundAttributes,
 	...borderAndShadowAttributes,
+	...effectsAttributes,
 };
 export const supports = {
-	...effectsSupports,
+	...backgroundSupports,
 	...borderAndShadowSupports,
+	...effectsSupports,
 };
 
 export function SharedBlockExtension({ children, ...props }) {
@@ -31,9 +37,17 @@ export function SharedBlockExtension({ children, ...props }) {
 			<BaseExtension
 				{...props}
 				initialOpen={true}
+				extensionId={'Background'}
+				title={__('Background', 'publisher-core')}
+			/>
+
+			<BaseExtension
+				{...props}
+				initialOpen={true}
 				extensionId={'BorderAndShadow'}
 				title={__('Border And Shadow', 'publisher-core')}
 			/>
+
 			<BaseExtension
 				{...props}
 				initialOpen={true}

@@ -1,4 +1,10 @@
 export {
+	BackgroundStyles,
+	BackgroundExtension,
+	attributes as backgroundAttributes,
+	supports as backgroundSupports,
+} from './background';
+export {
 	BorderAndShadowStyles,
 	BorderAndShadowExtension,
 	attributes as borderAndShadowExtensionAttributes,
