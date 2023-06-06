@@ -41,32 +41,26 @@ const SelectControl = ({
 	);
 
 	return (
-		<>
-			<WPSelectControl
-				className={controlClassNames(
-					'select',
-					'native-select',
-					className
-				)}
-				value={controlValue}
-				onChange={(newValue) => {
-					updateControlValue(
-						newValue,
-						attribute,
-						repeaterAttribute,
-						repeaterAttributeIndex,
-						attributes,
-						setAttributes
-					);
+		<WPSelectControl
+			className={controlClassNames('select', 'native-select', className)}
+			value={controlValue}
+			onChange={(newValue) => {
+				updateControlValue(
+					newValue,
+					attribute,
+					repeaterAttribute,
+					repeaterAttributeIndex,
+					attributes,
+					setAttributes
+				);
 
-					onChange(newValue);
-				}}
-				__nextHasNoMarginBottom
-			>
-				{options?.map(renderSelectNativeOption)}
-				{children}
-			</WPSelectControl>
-		</>
+				onChange(newValue);
+			}}
+			__nextHasNoMarginBottom
+		>
+			{options?.map(renderSelectNativeOption)}
+			{children}
+		</WPSelectControl>
 	);
 };
 
