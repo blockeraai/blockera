@@ -16,6 +16,7 @@ import Header from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 import { getControlValue, updateControlValue } from '../utils';
+import './style.scss';
 
 const initialState = {
 	type: 'image',
@@ -84,3 +85,5 @@ function BackgroundControl({
 }
 
 export default BackgroundControl;
+
+export { getBackgroundItemBGProperty } from './utils';

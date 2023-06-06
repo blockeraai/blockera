@@ -33,6 +33,10 @@
 
 		.publisher-control-header-values {
 			margin-left: auto;
+			display: flex;
+			min-width: 20px;
+			justify-content: flex-end;
+			align-content: center;
 		}
 
 		.publisher-control-color-indicator {

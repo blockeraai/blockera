@@ -2,6 +2,7 @@
  * Publisher dependencies
  */
 import { createCssRule } from '@publisher/style-engine';
+import { getBackgroundItemBGProperty } from '@publisher/controls';
 
 export function backgroundCSSGenerator(id, props, styleEngine) {
 	const { attributes } = props;
@@ -32,7 +33,7 @@ export function backgroundCSSGenerator(id, props, styleEngine) {
 				}
 
 				// Image
-				properties.image.push(`url(${item.image})`);
+				properties.image.push(getBackgroundItemBGProperty(item));
 
 				// Background Size
 				if (item['image-size'] === 'custom') {
@@ -61,17 +62,8 @@ export function backgroundCSSGenerator(id, props, styleEngine) {
 					return undefined;
 				}
 
-				let gradient = item['linear-gradient'];
-
-				if (item['linear-gradient-repeat'] === 'repeat') {
-					gradient = gradient.replace(
-						'linear-gradient(',
-						'repeating-linear-gradient('
-					);
-				}
-
 				// Image
-				properties.image.push(gradient);
+				properties.image.push(getBackgroundItemBGProperty(item));
 
 				// Background Size
 				properties.size.push('auto');
@@ -92,36 +84,8 @@ export function backgroundCSSGenerator(id, props, styleEngine) {
 					return undefined;
 				}
 
-				let radialGradient = item['radial-gradient'];
-
-				if (item['radial-gradient-repeat'] === 'repeat') {
-					radialGradient = radialGradient.replace(
-						'radial-gradient(',
-						'repeating-radial-gradient('
-					);
-				}
-
-				// Gradient Position
-				if (
-					item['radial-gradient-position-left'] &&
-					item['radial-gradient-position-top']
-				) {
-					radialGradient = radialGradient.replace(
-						'gradient(',
-						`gradient( circle at ${item['radial-gradient-position-left']} ${item['radial-gradient-position-top']}, `
-					);
-				}
-
-				// Gradient Size
-				if (item['radial-gradient-size']) {
-					radialGradient = radialGradient.replace(
-						'circle at ',
-						`circle ${item['radial-gradient-size']} at `
-					);
-				}
-
 				// Image
-				properties.image.push(radialGradient);
+				properties.image.push(getBackgroundItemBGProperty(item));
 
 				// Background Size
 				properties.size.push('auto');

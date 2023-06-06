@@ -15,26 +15,27 @@ import { controlInnerClassNames } from '@publisher/classnames';
 import { default as TypeImageIcon } from '../icons/type-image';
 import { default as TypeLinearGradientIcon } from '../icons/type-linear-gradient';
 import { default as TypeRadialGradientIcon } from '../icons/type-radial-gradient';
+import { default as ItemPreview } from './item-preview';
 
 const Header = ({ item, isOpen, setOpen, children }) => {
-	let label, icon, value;
+	let label, icon, preview;
 
 	switch (item.type) {
 		case 'image':
 			label = __('Image', 'publisher-core');
-			value = 'test.png';
+			preview = <ItemPreview {...item} />;
 			icon = <TypeImageIcon />;
 			break;
 
 		case 'linear-gradient':
 			label = __('Linear Gradient', 'publisher-core');
-			value = '';
+			preview = <ItemPreview {...item} />;
 			icon = <TypeLinearGradientIcon />;
 			break;
 
 		case 'radial-gradient':
 			label = __('Radial Gradient', 'publisher-core');
-			value = '';
+			preview = <ItemPreview {...item} />;
 			icon = <TypeRadialGradientIcon />;
 			break;
 	}
@@ -53,7 +54,7 @@ const Header = ({ item, isOpen, setOpen, children }) => {
 			</span>
 
 			<span className={controlInnerClassNames('header-values')}>
-				{value}
+				{preview}
 			</span>
 
 			{children}
