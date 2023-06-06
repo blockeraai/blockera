@@ -5,6 +5,7 @@ export { ColorField } from './libs/color';
 export { IconField } from './libs/icon';
 export { InputField } from './libs/input';
 export { SelectField } from './libs/select';
+export { GradientBarField } from './libs/gradient-bar';
 export { ToggleSelectField } from './libs/toggle-select';
 export { TransitionField, TransitionFieldStyle } from './libs/transition';
 export { BackgroundField, BackgroundFieldStyle } from './libs/background';
