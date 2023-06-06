@@ -56,7 +56,6 @@ export function updateControlValue(
 		setAttributes({
 			...attributes,
 			[repeaterAttribute]: [
-				...(attributes[repeaterAttribute] ?? []),
 				...attributes[repeaterAttribute]?.map((repeaterItem, index) => {
 					if (repeaterAttributeIndex !== index) {
 						return repeaterItem;
