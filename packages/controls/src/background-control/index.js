@@ -23,15 +23,15 @@ const initialState = {
 	'image-size': 'custom',
 	'image-size-width': 'auto',
 	'image-size-height': 'auto',
-	'image-position-left': '0%',
 	'image-position-top': '0%',
+	'image-position-left': '0%',
 	'image-repeat': 'repeat',
 	'image-attachment': 'scroll',
 	'linear-gradient': 'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
 	'linear-gradient-repeat': 'no-repeat',
 	'radial-gradient': 'radial-gradient(rgb(0,159,251) 0%,rgb(229,46,0) 100%)',
-	'radial-gradient-position-left': '50%',
 	'radial-gradient-position-top': '50%',
+	'radial-gradient-position-left': '50%',
 	'radial-gradient-size': 'farthest-corner',
 	'radial-gradient-repeat': 'no-repeat',
 	isVisible: true,
@@ -48,7 +48,7 @@ function BackgroundControl({
 }) {
 	const { attributes, setAttributes } = useContext(BlockEditContext);
 
-	let controlValue = getControlValue(
+	const controlValue = getControlValue(
 		value,
 		attribute,
 		repeaterAttribute,

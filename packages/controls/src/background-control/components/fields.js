@@ -8,13 +8,13 @@ import { memo, useContext } from '@wordpress/element';
  * Publisher dependencies
  */
 import {
-	Field,
 	ToggleSelectField,
 	InputField,
 	GradientBarField,
 	AnglePickerField,
+	PositionField,
 } from '@publisher/fields';
-import { HStack, VStack } from '@publisher/components';
+import { HStack } from '@publisher/components';
 import { updateControlValue } from '@publisher/controls';
 import { BlockEditContext } from '@publisher/extensions';
 /**
@@ -145,41 +145,12 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						)}
 					</ToggleSelectField>
 
-					<Field label={__('Position', 'publisher-core')}>
-						<HStack spacing="2" justify="space-around">
-							<span>Position Picker</span>
-
-							<VStack spacing="2" justify="space-around">
-								<InputField
-									label={__('Left', 'publisher-core')}
-									settings={{
-										type: 'css',
-										unitType: 'background-position',
-									}}
-									className="no-gap"
-									//
-									initValue="0%"
-									attribute="image-position-left"
-									repeaterAttributeIndex={itemId}
-									repeaterAttribute={repeaterAttribute}
-								/>
-
-								<InputField
-									label={__('Top', 'publisher-core')}
-									settings={{
-										type: 'css',
-										unitType: 'background-position',
-									}}
-									className="no-gap"
-									//
-									initValue="0%"
-									attribute="image-position-top"
-									repeaterAttributeIndex={itemId}
-									repeaterAttribute={repeaterAttribute}
-								/>
-							</VStack>
-						</HStack>
-					</Field>
+					<PositionField
+						attributeTopField="image-position-top"
+						attributeLeftField="image-position-left"
+						repeaterAttributeIndex={itemId}
+						repeaterAttribute={repeaterAttribute}
+					/>
 
 					<ToggleSelectField
 						label={__('Repeat', 'publisher-core')}
@@ -302,41 +273,12 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						repeaterAttribute={repeaterAttribute}
 					/>
 
-					<Field label={__('Position', 'publisher-core')}>
-						<HStack spacing="2" justify="space-around">
-							<span>Position Picker</span>
-
-							<VStack spacing="2" justify="space-around">
-								<InputField
-									label={__('Left', 'publisher-core')}
-									settings={{
-										type: 'css',
-										unitType: 'background-position',
-									}}
-									className="no-gap"
-									//
-									initValue="50%"
-									attribute="radial-gradient-position-left"
-									repeaterAttributeIndex={itemId}
-									repeaterAttribute={repeaterAttribute}
-								/>
-
-								<InputField
-									label={__('Top', 'publisher-core')}
-									settings={{
-										type: 'css',
-										unitType: 'background-position',
-									}}
-									className="no-gap"
-									//
-									initValue="50%"
-									attribute="radial-gradient-position-top"
-									repeaterAttributeIndex={itemId}
-									repeaterAttribute={repeaterAttribute}
-								/>
-							</VStack>
-						</HStack>
-					</Field>
+					<PositionField
+						attributeTopField="radial-gradient-position-top"
+						attributeLeftField="radial-gradient-position-left"
+						repeaterAttributeIndex={itemId}
+						repeaterAttribute={repeaterAttribute}
+					/>
 
 					<ToggleSelectField
 						label={__('Size', 'publisher-core')}
