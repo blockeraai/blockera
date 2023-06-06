@@ -1,4 +1,11 @@
 export default function LinearGradientRepeatIcon({}) {
+	const gradient0ID = 'gr-' + Math.floor(Math.random() * 10000);
+	const gradient1ID = 'gr-' + Math.floor(Math.random() * 10000);
+	const gradient2ID = 'gr-' + Math.floor(Math.random() * 10000);
+	const gradient3ID = 'gr-' + Math.floor(Math.random() * 10000);
+	const gradient4ID = 'gr-' + Math.floor(Math.random() * 10000);
+	const gradient5ID = 'gr-' + Math.floor(Math.random() * 10000);
+
 	return (
 		<svg
 			width="18"
@@ -7,23 +14,139 @@ export default function LinearGradientRepeatIcon({}) {
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			<path
-				opacity="0.3"
 				fill-rule="evenodd"
 				clip-rule="evenodd"
-				d="M14 9C14 11.7614 11.7614 14 9 14C6.23858 14 4 11.7614 4 9C4 6.23858 6.23858 4 9 4C11.7614 4 14 6.23858 14 9ZM12 9C12 10.6569 10.6569 12 9 12C7.34315 12 6 10.6569 6 9C6 7.34315 7.34315 6 9 6C10.6569 6 12 7.34315 12 9Z"
-				fill="currentColor"
-			/>
+				d="M7.55636 3L3 7.55636V4C3 3.44771 3.44772 3 4 3H7.55636Z"
+				fill={'url(#' + gradient0ID + ')'}
+			></path>
 			<path
-				opacity="0.3"
 				fill-rule="evenodd"
 				clip-rule="evenodd"
-				d="M17 9C17 13.4183 13.4183 17 9 17C4.58172 17 1 13.4183 1 9C1 4.58172 4.58172 1 9 1C13.4183 1 17 4.58172 17 9ZM15 9C15 12.3137 12.3137 15 9 15C5.68629 15 3 12.3137 3 9C3 5.68629 5.68629 3 9 3C12.3137 3 15 5.68629 15 9Z"
-				fill="currentColor"
-			/>
+				d="M11.799 3L3 11.799V7.55637L7.55637 3H11.799Z"
+				fill={'url(#' + gradient1ID + ')'}
+			></path>
 			<path
-				d="M9 11C10.1046 11 11 10.1046 11 9C11 7.89543 10.1046 7 9 7C7.89543 7 7 7.89543 7 9C7 10.1046 7.89543 11 9 11Z"
+				fill-rule="evenodd"
+				clip-rule="evenodd"
+				d="M15 4.04165L4.04165 15H4C3.44772 15 3 14.5523 3 14V11.799L11.799 3H14C14.5523 3 15 3.44772 15 4V4.04165Z"
+				fill={'url(#' + gradient2ID + ')'}
+			></path>
+			<path
+				fill-rule="evenodd"
+				clip-rule="evenodd"
+				d="M15 8.2843L8.28427 15H4.04163L15 4.04166V8.2843Z"
+				fill={'url(#' + gradient3ID + ')'}
+			></path>
+			<path
+				fill-rule="evenodd"
+				clip-rule="evenodd"
+				d="M12.5564 15H8.31372L15 8.31372V12.5564L12.5564 15Z"
+				fill={'url(#' + gradient4ID + ')'}
+			></path>
+			<path
+				fill-rule="evenodd"
+				clip-rule="evenodd"
+				d="M15 12.3137V14C15 14.5523 14.5523 15 14 15H12.3137L15 12.3137Z"
+				fill={'url(#' + gradient5ID + ')'}
+			></path>
+			<path
+				fill-rule="evenodd"
+				clip-rule="evenodd"
+				d="M3 1C1.89543 1 1 1.89543 1 3V15C1 16.1046 1.89543 17 3 17H15C16.1046 17 17 16.1046 17 15V3C17 1.89543 16.1046 1 15 1H3ZM3 2C2.44772 2 2 2.44772 2 3V15C2 15.5523 2.44772 16 3 16H15C15.5523 16 16 15.5523 16 15V3C16 2.44772 15.5523 2 15 2H3Z"
 				fill="currentColor"
-			/>
+			></path>
+			<defs>
+				<linearGradient
+					id={gradient0ID}
+					x1="2.65685"
+					y1="3.65687"
+					x2="4.77817"
+					y2="5.77819"
+					gradientUnits="userSpaceOnUse"
+				>
+					<stop stop-color="currentColor"></stop>
+					<stop
+						offset="1"
+						stop-opacity="0"
+						stop-color="currentColor"
+					></stop>
+				</linearGradient>
+				<linearGradient
+					id={gradient1ID}
+					x1="4.77819"
+					y1="5.77817"
+					x2="6.89951"
+					y2="7.89949"
+					gradientUnits="userSpaceOnUse"
+				>
+					<stop stop-color="currentColor"></stop>
+					<stop
+						offset="1"
+						stop-opacity="0"
+						stop-color="currentColor"
+					></stop>
+				</linearGradient>
+				<linearGradient
+					id={gradient2ID}
+					x1="7.32108"
+					y1="7.47794"
+					x2="9.4424"
+					y2="9.59926"
+					gradientUnits="userSpaceOnUse"
+				>
+					<stop stop-color="currentColor"></stop>
+					<stop
+						offset="1"
+						stop-opacity="0"
+						stop-color="currentColor"
+					></stop>
+				</linearGradient>
+				<linearGradient
+					id={gradient3ID}
+					x1="9.92492"
+					y1="9.11674"
+					x2="12.0462"
+					y2="11.2381"
+					gradientUnits="userSpaceOnUse"
+				>
+					<stop stop-color="currentColor"></stop>
+					<stop
+						offset="1"
+						stop-opacity="0"
+						stop-color="currentColor"
+					></stop>
+				</linearGradient>
+				<linearGradient
+					id={gradient4ID}
+					x1="11.6569"
+					y1="11.6569"
+					x2="13.7782"
+					y2="13.7782"
+					gradientUnits="userSpaceOnUse"
+				>
+					<stop stop-color="currentColor"></stop>
+					<stop
+						offset="1"
+						stop-opacity="0"
+						stop-color="currentColor"
+					></stop>
+				</linearGradient>
+				<linearGradient
+					id={gradient5ID}
+					x1="13.6569"
+					y1="13.6569"
+					x2="15.7782"
+					y2="15.7782"
+					gradientUnits="userSpaceOnUse"
+				>
+					<stop stop-color="currentColor"></stop>
+					<stop
+						offset="1"
+						stop-opacity="0"
+						stop-color="currentColor"
+					></stop>
+				</linearGradient>
+			</defs>
 		</svg>
 	);
 }

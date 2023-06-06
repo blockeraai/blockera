@@ -1,4 +1,6 @@
 export default function TypeRadialGradientIcon({}) {
+	const gradientID = 'gr-' + Math.floor(Math.random() * 10000);
+
 	return (
 		<svg
 			width="18"
@@ -18,19 +20,23 @@ export default function TypeRadialGradientIcon({}) {
 				y="3"
 				width="12"
 				height="12"
-				fill="url(#paint0_radial_878_10544)"
+				fill={'url(#' + gradientID + ')'}
 			/>
 			<defs>
 				<radialGradient
-					id="paint0_radial_878_10544"
+					id={gradientID}
 					cx="0"
 					cy="0"
 					r="1"
 					gradientUnits="userSpaceOnUse"
 					gradientTransform="translate(9 9) rotate(90) scale(6)"
 				>
-					<stop offset="0.25" />
-					<stop offset="1" stop-opacity="0" />
+					<stop stop-color="currentColor"></stop>
+					<stop
+						offset="1"
+						stop-opacity="0"
+						stop-color="currentColor"
+					></stop>
 				</radialGradient>
 			</defs>
 		</svg>

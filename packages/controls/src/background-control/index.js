@@ -30,6 +30,10 @@ const initialState = {
 	'linear-gradient': 'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
 	'linear-gradient-repeat': 'no-repeat',
 	'radial-gradient': 'radial-gradient(rgb(0,159,251) 0%,rgb(229,46,0) 100%)',
+	'radial-gradient-position-left': '50%',
+	'radial-gradient-position-top': '50%',
+	'radial-gradient-size': 'farthest-corner',
+	'radial-gradient-repeat': 'no-repeat',
 	isVisible: true,
 };
 

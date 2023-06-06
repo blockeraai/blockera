@@ -1,14 +1,20 @@
 export default function RepeatYIcon({}) {
 	return (
 		<svg
-			width="5"
+			width="18"
 			height="18"
-			viewBox="0 0 5 18"
+			viewBox="0 0 18 18"
 			xmlns="http://www.w3.org/2000/svg"
 		>
-			<path d="M4.5 14H0.5V18H4.5V14Z" fill="currentColor" />
-			<path d="M4.5 7H0.5V11H4.5V7Z" fill="currentColor" />
-			<path d="M4.5 0H0.5V4H4.5V0Z" fill="currentColor" />
+			<path
+				fill-rule="evenodd"
+				clip-rule="evenodd"
+				d="M3 1C1.89543 1 1 1.89543 1 3V15C1 16.1046 1.89543 17 3 17H15C16.1046 17 17 16.1046 17 15V3C17 1.89543 16.1046 1 15 1H3ZM3 2C2.44772 2 2 2.44772 2 3V15C2 15.5523 2.44772 16 3 16H15C15.5523 16 16 15.5523 16 15V3C16 2.44772 15.5523 2 15 2H3Z"
+				fill="currentColor"
+			/>
+			<rect x="8" y="4" width="2" height="2" fill="currentColor" />
+			<rect x="8" y="8" width="2" height="2" fill="currentColor" />
+			<rect x="8" y="12" width="2" height="2" fill="currentColor" />
 		</svg>
 	);
 }

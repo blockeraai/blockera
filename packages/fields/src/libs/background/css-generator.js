@@ -77,7 +77,57 @@ export function backgroundCSSGenerator(id, props, styleEngine) {
 				properties.size.push('auto');
 
 				// Background Position
-				properties.position.push('0px 0px');
+				properties.position.push('0 0');
+
+				// Background Repeat
+				properties.repeat.push('repeat');
+
+				// Background Attachment
+				properties.attachment.push('scroll');
+
+				break;
+
+			case 'radial-gradient':
+				if (!item['radial-gradient']) {
+					return undefined;
+				}
+
+				let radialGradient = item['radial-gradient'];
+
+				if (item['radial-gradient-repeat'] === 'repeat') {
+					radialGradient = radialGradient.replace(
+						'radial-gradient(',
+						'repeating-radial-gradient('
+					);
+				}
+
+				// Gradient Position
+				if (
+					item['radial-gradient-position-left'] &&
+					item['radial-gradient-position-top']
+				) {
+					radialGradient = radialGradient.replace(
+						'gradient(',
+						`gradient( circle at ${item['radial-gradient-position-left']} ${item['radial-gradient-position-top']}, `
+					);
+				}
+
+				// Gradient Size
+				if (item['radial-gradient-size']) {
+					radialGradient = radialGradient.replace(
+						'circle at ',
+						`circle ${item['radial-gradient-size']} at `
+					);
+				}
+
+				// Image
+				properties.image.push(radialGradient);
+
+				// Background Size
+				properties.size.push('auto');
+
+				// Background Position
+				properties.position.push('0 0');
 
 				// Background Repeat
 				properties.repeat.push('repeat');

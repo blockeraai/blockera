@@ -30,6 +30,12 @@ import { default as RepeatYIcon } from '../icons/repeat-y';
 import { default as RepeatNoIcon } from '../icons/repeat-no';
 import { default as LinearGradientRepeatIcon } from '../icons/linear-gradient-repeat';
 import { default as LinearGradientNoRepeatIcon } from '../icons/linear-gradient-no-repeat';
+import { default as RadialGradientFarthestCornerIcon } from '../icons/radial-gradient-farthest-corner';
+import { default as RadialGradientFarthestSideIcon } from '../icons/radial-gradient-farthest-side';
+import { default as RadialGradientClosestCornerIcon } from '../icons/radial-gradient-closest-corner';
+import { default as RadialGradientClosestSideIcon } from '../icons/radial-gradient-closest-side';
+import { default as RadialGradientRepeatIcon } from '../icons/radial-gradient-repeat';
+import { default as RadialGradientNoRepeatIcon } from '../icons/radial-gradient-no-repeat';
 
 const Fields = ({ itemId, repeaterAttribute }) => {
 	const { attributes, setAttributes } = useContext(BlockEditContext);
@@ -37,7 +43,9 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 	const value =
 		attributes[repeaterAttribute] && attributes[repeaterAttribute][itemId];
 
-	const linearGradientValue = /\((\d.*)deg,/im?.exec(value);
+	const linearGradientValue = /\((\d.*)deg,/im?.exec(
+		value['linear-gradient']
+	);
 
 	return (
 		<BaseControl id={`repeater-item-${itemId}`}>
@@ -245,7 +253,7 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						onChange={(newValue) => {
 							// update linear gradient value
 							updateControlValue(
-								value.replace(
+								value['linear-gradient'].replace(
 									/\(\d.*deg,/gim,
 									`(${newValue}deg,`
 								),
@@ -289,7 +297,107 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 					<GradientBarField
 						//
 						initValue="radial-gradient(rgb(0,159,251) 0%,rgb(229,46,0) 100%)"
-						attribute="background-radial-gradient"
+						attribute="radial-gradient"
+						repeaterAttributeIndex={itemId}
+						repeaterAttribute={repeaterAttribute}
+					/>
+
+					<Field label={__('Position', 'publisher-core')}>
+						<HStack spacing="2" justify="space-around">
+							<span>Position Picker</span>
+
+							<VStack spacing="2" justify="space-around">
+								<InputField
+									label={__('Left', 'publisher-core')}
+									settings={{
+										type: 'css',
+										unitType: 'background-position',
+									}}
+									className="no-gap"
+									//
+									initValue="50%"
+									attribute="radial-gradient-position-left"
+									repeaterAttributeIndex={itemId}
+									repeaterAttribute={repeaterAttribute}
+								/>
+
+								<InputField
+									label={__('Top', 'publisher-core')}
+									settings={{
+										type: 'css',
+										unitType: 'background-position',
+									}}
+									className="no-gap"
+									//
+									initValue="50%"
+									attribute="radial-gradient-position-top"
+									repeaterAttributeIndex={itemId}
+									repeaterAttribute={repeaterAttribute}
+								/>
+							</VStack>
+						</HStack>
+					</Field>
+
+					<ToggleSelectField
+						label={__('Size', 'publisher-core')}
+						options={[
+							{
+								label: __(
+									'Farthest corner of the box from its center',
+									'publisher-core'
+								),
+								value: 'farthest-corner',
+								icon: <RadialGradientFarthestCornerIcon />,
+							},
+							{
+								label: __(
+									'Similar to closest-side, except the ending shape is sized to meet the side of the box farthest from its center',
+									'publisher-core'
+								),
+								value: 'farthest-side',
+								icon: <RadialGradientFarthestSideIcon />,
+							},
+							{
+								label: __(
+									"The gradient's ending shape is sized so that it exactly meets the closest corner of the box from its center",
+									'publisher-core'
+								),
+								value: 'closest-corner',
+								icon: <RadialGradientClosestCornerIcon />,
+							},
+							{
+								label: __(
+									"The gradient's ending shape meets the side of the box closest to its center",
+									'publisher-core'
+								),
+								value: 'closest-side',
+								icon: <RadialGradientClosestSideIcon />,
+							},
+						]}
+						//
+						initValue="farthest-corner"
+						attribute="radial-gradient-size"
+						repeaterAttributeIndex={itemId}
+						repeaterAttribute={repeaterAttribute}
+					/>
+
+					<ToggleSelectField
+						label={__('Repeat', 'publisher-core')}
+						options={[
+							{
+								label: __("Don't Repeat", 'publisher-core'),
+								value: 'no-repeat',
+								icon: <RadialGradientNoRepeatIcon />,
+							},
+							{
+								label: __('Repeat', 'publisher-core'),
+								value: 'repeat',
+								icon: <RadialGradientRepeatIcon />,
+							},
+						]}
+						//
+						initValue="no-repeat"
+						attribute="radial-gradient-repeat"
 						repeaterAttributeIndex={itemId}
 						repeaterAttribute={repeaterAttribute}
 					/>
