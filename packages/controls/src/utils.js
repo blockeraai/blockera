@@ -31,7 +31,7 @@ export function getControlValue(
 		] !== 'undefined'
 	) {
 		return attributes[repeaterAttribute][repeaterAttributeIndex][attribute];
-	} else if (typeof attributes[attribute] != 'undefined') {
+	} else if (typeof attributes[attribute] !== 'undefined') {
 		return attributes[attribute];
 	}
 
@@ -53,10 +53,22 @@ export function updateControlValue(
 	}
 
 	if (repeaterAttribute !== null) {
-		setAttributes(
-			(attributes[repeaterAttribute][repeaterAttributeIndex][attribute] =
-				value)
-		);
+		setAttributes({
+			...attributes,
+			[repeaterAttribute]: [
+				...(attributes[repeaterAttribute] ?? []),
+				...attributes[repeaterAttribute]?.map((repeaterItem, index) => {
+					if (repeaterAttributeIndex !== index) {
+						return repeaterItem;
+					}
+
+					return {
+						...repeaterItem,
+						[attribute]: value,
+					};
+				}),
+			],
+		});
 	} else {
 		setAttributes({
 			...attributes,
