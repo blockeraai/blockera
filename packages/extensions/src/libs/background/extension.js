@@ -6,7 +6,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Publisher dependencies
  */
-import { ColorField, SelectField } from '@publisher/fields';
+import { ColorField, SelectField, BackgroundField } from '@publisher/fields';
 
 /**
  * Internal dependencies
@@ -15,11 +15,25 @@ import { isActiveField } from '../../api/utils';
 
 export function BackgroundExtension({ children, config, ...props }) {
 	const {
-		backgroundConfig: { publisherBackgroundColor, publisherBackgroundClip },
+		backgroundConfig: {
+			publisherBackground,
+			publisherBackgroundColor,
+			publisherBackgroundClip,
+		},
 	} = config;
 
 	return (
 		<>
+			{isActiveField(publisherBackground) && (
+				<BackgroundField
+					{...{
+						...props,
+						attribute: 'publisherBackground',
+						label: __('Image & Gradient', 'publisher-core'),
+					}}
+				/>
+			)}
+
 			{isActiveField(publisherBackgroundColor) && (
 				<ColorField
 					{...{

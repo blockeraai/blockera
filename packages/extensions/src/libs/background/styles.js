@@ -7,10 +7,12 @@ import { useContext } from '@wordpress/element';
  * Publisher dependencies
  */
 import { computedCssRules } from '@publisher/style-engine';
+import { BackgroundFieldStyle } from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
+import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
 import { BlockEditContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
@@ -19,6 +21,7 @@ import { backgroundClipCSSGenerator } from './css-generator';
 export function BackgroundStyles({
 	backgroundConfig: {
 		cssGenerators,
+		publisherBackground,
 		publisherBackgroundColor,
 		publisherBackgroundClip,
 	},
@@ -27,6 +30,16 @@ export function BackgroundStyles({
 		useContext(BlockEditContext);
 
 	const generators = [];
+
+	if (
+		isActiveField(publisherBackground) &&
+		!arrayEquals(
+			attributes.publisherBackground.default,
+			_attributes.publisherBackground
+		)
+	) {
+		generators.push(BackgroundFieldStyle(publisherBackground));
+	}
 
 	if (
 		isActiveField(publisherBackgroundColor) &&
