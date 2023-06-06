@@ -14,6 +14,6 @@
 [options]
 
 react.runtime=automatic
-module.name_mapper='^Root' ->'<PROJECT_ROOT>/src'
+module.name_mapper='^Root' ->'<PROJECT_ROOT>/packages'
 
 [strict]

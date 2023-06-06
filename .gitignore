@@ -37,3 +37,12 @@ node_modules/
 
 # .env file
 .env
+
+# lib directory
+@build
+
+# OS files
+.DS_Store
+
+#Examples stories
+/stories
