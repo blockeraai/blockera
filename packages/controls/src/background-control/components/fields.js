@@ -34,6 +34,11 @@ import { default as LinearGradientNoRepeatIcon } from '../icons/linear-gradient-
 const Fields = ({ itemId, repeaterAttribute }) => {
 	const { attributes, setAttributes } = useContext(BlockEditContext);
 
+	const value =
+		attributes[repeaterAttribute] && attributes[repeaterAttribute][itemId];
+
+	const linearGradientValue = /\((\d.*)deg,/im?.exec(value);
+
 	return (
 		<BaseControl id={`repeater-item-${itemId}`}>
 			<ToggleSelectField
@@ -62,7 +67,7 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 				repeaterAttribute={repeaterAttribute}
 			/>
 
-			{attributes[repeaterAttribute][itemId].type === 'image' && (
+			{value.type === 'image' && (
 				<>
 					<InputField
 						label={__('Image', 'publisher-core')}
@@ -97,8 +102,7 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						repeaterAttributeIndex={itemId}
 						repeaterAttribute={repeaterAttribute}
 					>
-						{attributes[repeaterAttribute][itemId]['image-size'] ===
-							'custom' && (
+						{value['image-size'] === 'custom' && (
 							<HStack spacing="2" justify="space-around">
 								<InputField
 									label={__('Width', 'publisher-core')}
@@ -227,8 +231,7 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 				</>
 			)}
 
-			{attributes[repeaterAttribute][itemId].type ===
-				'linear-gradient' && (
+			{value.type === 'linear-gradient' && (
 				<>
 					<GradientBarField
 						initValue="linear-gradient(90deg,#009efa 10%,#e52e00 90%)"
@@ -242,9 +245,10 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						onChange={(newValue) => {
 							// update linear gradient value
 							updateControlValue(
-								attributes[repeaterAttribute][itemId][
-									'linear-gradient'
-								].replace(/\(\d.*deg\,/gim, `(${newValue}deg,`),
+								value.replace(
+									/\(\d.*deg,/gim,
+									`(${newValue}deg,`
+								),
 								'linear-gradient',
 								repeaterAttribute,
 								itemId,
@@ -253,11 +257,7 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 							);
 						}}
 						value={
-							/\((\d.*)deg\,/im.exec(
-								attributes[repeaterAttribute][itemId][
-									'linear-gradient'
-								]
-							)[1]
+							linearGradientValue ? linearGradientValue[1] : ''
 						}
 					/>
 
@@ -284,8 +284,7 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 				</>
 			)}
 
-			{attributes[repeaterAttribute][itemId].type ===
-				'radial-gradient' && (
+			{value.type === 'radial-gradient' && (
 				<>
 					<GradientBarField
 						//
