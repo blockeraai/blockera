@@ -4,8 +4,6 @@ const path = require('path');
 /** @type { import('@storybook/react-webpack5').StorybookConfig } */
 const config = {
 	stories: [
-		'../stories/**/*.mdx',
-		'../stories/**/*.stories.@(js|jsx|ts|tsx)',
 		'../packages/controls/src/**/stories/*.@(js|jsx|ts|tsx)',
 		// '../packages/fields/stories/**/*.stories.@(js|jsx|ts|tsx)',
 		// '../packages/extensions/stories/**/*.stories.@(js|jsx|ts|tsx)',
@@ -14,6 +12,7 @@ const config = {
 		'@storybook/addon-links',
 		'@storybook/addon-essentials',
 		'@storybook/addon-interactions',
+		'@storybook/addon-a11y',
 	],
 	framework: {
 		name: '@storybook/react-webpack5',
