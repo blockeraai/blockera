@@ -2,6 +2,10 @@
 import './style.scss';
 
 export { default as BaseControl } from './base';
+export {
+	default as AlignmentMatrixControl,
+	convertAlignmentMatrixCoordinates,
+} from './alignment-matrix-control';
 export { default as IconControl } from './icon-control';
 export { default as UnitControl } from './unit-control';
 export { default as ColorControl } from './color-control';

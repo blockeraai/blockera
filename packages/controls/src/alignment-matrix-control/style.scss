@@ -1,0 +1,14 @@
+.publisher-control-alignment-matrix {
+	border-color: rgb(148, 148, 148) !important;
+	border-radius: 2px !important;
+	margin: 0 !important;
+
+	span {
+		border-radius: 50%;
+	}
+
+	span[tabindex="0"] span {
+		box-shadow: var(--wp-admin-theme-color, #007cba) 0px 0px 0px 2px;
+		color: var(--wp-admin-theme-color, #007cba);
+	}
+}
