@@ -48,6 +48,10 @@ export function updateControlValue(
 ) {
 	// const { setAttributes } = useContext(BlockEditContext);
 
+	if (!attribute) {
+		return;
+	}
+
 	if (repeaterAttribute !== null) {
 		setAttributes(
 			(attributes[repeaterAttribute][repeaterAttributeIndex][attribute] =
