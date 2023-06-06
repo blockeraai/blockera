@@ -25,33 +25,67 @@ export function backgroundCSSGenerator(id, props, styleEngine) {
 		}
 
 		// Image Background
-		if (item.type === 'image') {
-			if (!item.image) {
-				return undefined;
-			}
+		switch (item.type) {
+			case 'image':
+				if (!item.image) {
+					return undefined;
+				}
 
-			// Image
-			properties.image.push(`url(${item.image})`);
+				// Image
+				properties.image.push(`url(${item.image})`);
 
-			// Background Size
-			if (item['background-image-size'] === 'custom') {
-				properties.size.push(
-					`${item['background-image-size-width']} ${item['background-image-size-height']}`
+				// Background Size
+				if (item['image-size'] === 'custom') {
+					properties.size.push(
+						`${item['image-size-width']} ${item['image-size-height']}`
+					);
+				} else {
+					properties.size.push(item['image-size']);
+				}
+
+				// Background Position
+				properties.position.push(
+					`${item['image-position-left']} ${item['image-position-top']}`
 				);
-			} else {
-				properties.size.push(item['background-image-size']);
-			}
 
-			// Background Position
-			properties.position.push(
-				`${item['background-image-position-left']} ${item['background-image-position-top']}`
-			);
+				// Background Repeat
+				properties.repeat.push(item['image-repeat']);
 
-			// Background Repeat
-			properties.repeat.push(item['background-image-repeat']);
+				// Background Attachment
+				properties.attachment.push(item['image-attachment']);
 
-			// Background Attachment
-			properties.attachment.push(item['background-image-attachment']);
+				break;
+
+			case 'linear-gradient':
+				if (!item['linear-gradient']) {
+					return undefined;
+				}
+
+				let gradient = item['linear-gradient'];
+
+				if (item['linear-gradient-repeat'] === 'repeat') {
+					gradient = gradient.replace(
+						'linear-gradient(',
+						'repeating-linear-gradient('
+					);
+				}
+
+				// Image
+				properties.image.push(gradient);
+
+				// Background Size
+				properties.size.push('auto');
+
+				// Background Position
+				properties.position.push('0px 0px');
+
+				// Background Repeat
+				properties.repeat.push('repeat');
+
+				// Background Attachment
+				properties.attachment.push('scroll');
+
+				break;
 		}
 
 		return undefined;

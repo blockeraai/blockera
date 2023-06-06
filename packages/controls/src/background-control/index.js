@@ -20,13 +20,16 @@ import { getControlValue, updateControlValue } from '../utils';
 const initialState = {
 	type: 'image',
 	image: '',
-	'background-image-size': 'custom',
-	'background-image-size-width': 'auto',
-	'background-image-size-height': 'auto',
-	'background-image-position-left': '0%',
-	'background-image-position-top': '0%',
-	'background-image-repeat': 'repeat',
-	'background-image-attachment': 'scroll',
+	'image-size': 'custom',
+	'image-size-width': 'auto',
+	'image-size-height': 'auto',
+	'image-position-left': '0%',
+	'image-position-top': '0%',
+	'image-repeat': 'repeat',
+	'image-attachment': 'scroll',
+	'linear-gradient': 'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
+	'linear-gradient-repeat': 'no-repeat',
+	'radial-gradient': 'radial-gradient(rgb(0,159,251) 0%,rgb(229,46,0) 100%)',
 	isVisible: true,
 };
 

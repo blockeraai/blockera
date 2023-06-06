@@ -7,8 +7,15 @@ import { memo, useContext } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { Field, ToggleSelectField, InputField } from '@publisher/fields';
+import {
+	Field,
+	ToggleSelectField,
+	InputField,
+	GradientBarField,
+	AnglePickerField,
+} from '@publisher/fields';
 import { HStack, VStack } from '@publisher/components';
+import { updateControlValue } from '@publisher/controls';
 import { BlockEditContext } from '@publisher/extensions';
 /**
  * Internal dependencies
@@ -21,9 +28,11 @@ import { default as RepeatIcon } from '../icons/repeat';
 import { default as RepeatXIcon } from '../icons/repeat-x';
 import { default as RepeatYIcon } from '../icons/repeat-y';
 import { default as RepeatNoIcon } from '../icons/repeat-no';
+import { default as LinearGradientRepeatIcon } from '../icons/linear-gradient-repeat';
+import { default as LinearGradientNoRepeatIcon } from '../icons/linear-gradient-no-repeat';
 
 const Fields = ({ itemId, repeaterAttribute }) => {
-	const { attributes } = useContext(BlockEditContext);
+	const { attributes, setAttributes } = useContext(BlockEditContext);
 
 	return (
 		<BaseControl id={`repeater-item-${itemId}`}>
@@ -84,13 +93,12 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						]}
 						//
 						initValue="custom"
-						attribute="background-image-size"
+						attribute="image-size"
 						repeaterAttributeIndex={itemId}
 						repeaterAttribute={repeaterAttribute}
 					>
-						{attributes[repeaterAttribute][itemId][
-							'background-image-size'
-						] === 'custom' && (
+						{attributes[repeaterAttribute][itemId]['image-size'] ===
+							'custom' && (
 							<HStack spacing="2" justify="space-around">
 								<InputField
 									label={__('Width', 'publisher-core')}
@@ -102,7 +110,7 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 									}}
 									//
 									initValue="1auto"
-									attribute="background-image-size-width"
+									attribute="image-size-width"
 									repeaterAttributeIndex={itemId}
 									repeaterAttribute={repeaterAttribute}
 								/>
@@ -117,7 +125,7 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 									}}
 									//
 									initValue="1auto"
-									attribute="background-image-size-height"
+									attribute="image-size-height"
 									repeaterAttributeIndex={itemId}
 									repeaterAttribute={repeaterAttribute}
 								/>
@@ -139,7 +147,7 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 									className="no-gap"
 									//
 									initValue="0%"
-									attribute="background-image-position-left"
+									attribute="image-position-left"
 									repeaterAttributeIndex={itemId}
 									repeaterAttribute={repeaterAttribute}
 								/>
@@ -153,7 +161,7 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 									className="no-gap"
 									//
 									initValue="0%"
-									attribute="background-image-position-top"
+									attribute="image-position-top"
 									repeaterAttributeIndex={itemId}
 									repeaterAttribute={repeaterAttribute}
 								/>
@@ -193,7 +201,7 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						]}
 						//
 						initValue="repeat"
-						attribute="background-image-repeat"
+						attribute="image-repeat"
 						repeaterAttributeIndex={itemId}
 						repeaterAttribute={repeaterAttribute}
 					/>
@@ -212,7 +220,77 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						]}
 						//
 						initValue="scroll"
-						attribute="background-image-attachment"
+						attribute="image-attachment"
+						repeaterAttributeIndex={itemId}
+						repeaterAttribute={repeaterAttribute}
+					/>
+				</>
+			)}
+
+			{attributes[repeaterAttribute][itemId].type ===
+				'linear-gradient' && (
+				<>
+					<GradientBarField
+						initValue="linear-gradient(90deg,#009efa 10%,#e52e00 90%)"
+						attribute="linear-gradient"
+						repeaterAttributeIndex={itemId}
+						repeaterAttribute={repeaterAttribute}
+					/>
+
+					<AnglePickerField
+						label={__('Angel', 'publisher-core')}
+						onChange={(newValue) => {
+							// update linear gradient value
+							updateControlValue(
+								attributes[repeaterAttribute][itemId][
+									'linear-gradient'
+								].replace(/\(\d.*deg\,/gim, `(${newValue}deg,`),
+								'linear-gradient',
+								repeaterAttribute,
+								itemId,
+								attributes,
+								setAttributes
+							);
+						}}
+						value={
+							/\((\d.*)deg\,/im.exec(
+								attributes[repeaterAttribute][itemId][
+									'linear-gradient'
+								]
+							)[1]
+						}
+					/>
+
+					<ToggleSelectField
+						label={__('Repeat', 'publisher-core')}
+						options={[
+							{
+								label: __("Don't Repeat", 'publisher-core'),
+								value: 'no-repeat',
+								icon: <LinearGradientNoRepeatIcon />,
+							},
+							{
+								label: __('Repeat', 'publisher-core'),
+								value: 'repeat',
+								icon: <LinearGradientRepeatIcon />,
+							},
+						]}
+						//
+						initValue="no-repeat"
+						attribute="linear-gradient-repeat"
+						repeaterAttributeIndex={itemId}
+						repeaterAttribute={repeaterAttribute}
+					/>
+				</>
+			)}
+
+			{attributes[repeaterAttribute][itemId].type ===
+				'radial-gradient' && (
+				<>
+					<GradientBarField
+						//
+						initValue="radial-gradient(rgb(0,159,251) 0%,rgb(229,46,0) 100%)"
+						attribute="background-radial-gradient"
 						repeaterAttributeIndex={itemId}
 						repeaterAttribute={repeaterAttribute}
 					/>
