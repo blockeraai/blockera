@@ -7,6 +7,7 @@ export { InputField } from './libs/input';
 export { SelectField } from './libs/select';
 export { GradientBarField } from './libs/gradient-bar';
 export { ToggleSelectField } from './libs/toggle-select';
+export { PositionField } from './libs/position';
 export { TransitionField, TransitionFieldStyle } from './libs/transition';
 export { BackgroundField, BackgroundFieldStyle } from './libs/background';
 export {
