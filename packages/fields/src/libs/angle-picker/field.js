@@ -22,11 +22,7 @@ export function AnglePickerField({
 			columns={columns}
 			className={className}
 		>
-			<AnglePickerControl
-				{...{
-					...props,
-				}}
-			/>
+			<AnglePickerControl {...props} />
 
 			{children}
 		</Field>
