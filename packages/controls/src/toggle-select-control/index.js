@@ -36,7 +36,7 @@ const ToggleSelectControl = ({
 }) => {
 	const { attributes, setAttributes } = useContext(BlockEditContext);
 
-	let controlValue = getControlValue(
+	const controlValue = getControlValue(
 		value,
 		attribute,
 		repeaterAttribute,
