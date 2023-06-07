@@ -14,16 +14,8 @@ import { ColorControl } from '@publisher/controls';
  */
 import { Field } from '../field';
 
-export function ColorField({
-	name,
-	label,
-	settings,
-	columns,
-	className,
-	children,
-	...props
-}) {
-	const { name: blockName, ...blockProps } = useContext(BlockEditContext);
+export function ColorField({ label, attribute, columns, className, children }) {
+	const { name, attributes, setAttributes } = useContext(BlockEditContext);
 
 	return (
 		<Field
@@ -33,9 +25,12 @@ export function ColorField({
 			className={className}
 		>
 			<ColorControl
-				{...props}
-				{...settings}
-				{...blockProps}
+				value={attributes[attribute]}
+				onValueChange={(newValue) => {
+					attributes[attribute] = newValue;
+
+					setAttributes(attributes);
+				}}
 				blockName={name}
 			/>
 

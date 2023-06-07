@@ -2,19 +2,16 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useContext } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
  */
 import {
-	updateControlValue,
-	getControlValue,
 	AlignmentMatrixControl,
 	convertAlignmentMatrixCoordinates,
 } from '@publisher/controls';
 import { HStack, VStack } from '@publisher/components';
-import { BlockEditContext } from '@publisher/extensions';
 
 /**
  * Internal dependencies
@@ -29,116 +26,84 @@ export function PositionField({
 	className,
 	options,
 	//
+	top,
+	left,
 	attributeTopField,
 	attributeLeftField,
-	repeaterAttribute,
-	repeaterAttributeIndex,
+	onValueChange = () => {},
+	onChangeAlignment = () => {},
 	children,
 
 	...props
 }) {
-	const { attributes, setAttributes } = useContext(BlockEditContext);
-
-	let attributeTopFieldValue = getControlValue(
-		undefined,
-		attributeTopField,
-		repeaterAttribute,
-		repeaterAttributeIndex,
-		'50%',
-		attributes
-	);
-
-	let attributeLeftFieldValue = getControlValue(
-		undefined,
-		attributeTopField,
-		repeaterAttribute,
-		repeaterAttributeIndex,
-		'50%',
-		attributes
-	);
+	const [coordinates, setCoordinates] = useState({
+		top,
+		left,
+	});
 
 	return (
 		<>
-			{attributeTopField && attributeLeftField && (
-				<Field label={label} field="position" className={className}>
-					<HStack spacing="2" justify="space-around">
-						<div style={{ width: '75%' }}>
-							<AlignmentMatrixControl
-								value={
-									convertAlignmentMatrixCoordinates({
-										top: attributeTopFieldValue,
-										left: attributeLeftFieldValue,
-									})?.compact
-								}
-								onChange={(newValue) => {
-									let coordinates =
-										convertAlignmentMatrixCoordinates(
-											newValue
-										);
+			<Field label={label} field="position" className={className}>
+				<HStack spacing="2" justify="space-around">
+					<div style={{ width: '75%' }}>
+						<AlignmentMatrixControl
+							value={
+								convertAlignmentMatrixCoordinates(coordinates)
+									?.compact
+							}
+							onChange={(newValue) => {
+								const _coordinates =
+									convertAlignmentMatrixCoordinates(newValue);
 
-									updateControlValue(
-										coordinates.top.number,
-										attributeTopField,
-										repeaterAttribute,
-										repeaterAttributeIndex,
-										attributes,
-										setAttributes
-									);
+								setCoordinates(_coordinates);
 
-									updateControlValue(
-										coordinates.left.number,
-										attributeLeftField,
-										repeaterAttribute,
-										repeaterAttributeIndex,
-										attributes,
-										setAttributes
-									);
+								onChangeAlignment({
+									[attributeTopField]:
+										_coordinates.top.number,
+									[attributeLeftField]:
+										_coordinates.left.number,
+								});
+							}}
+						/>
+					</div>
+
+					<div style={{ width: '100%' }}>
+						<VStack spacing="2" justify="space-around">
+							<InputField
+								label={__('Top', 'publisher-core')}
+								settings={{
+									type: 'css',
+									unitType: 'background-position',
+								}}
+								//
+								initValue={coordinates.top}
+								//
+								{...props}
+								onValueChange={(value) => {
+									onValueChange(value, attributeTopField);
 								}}
 							/>
-						</div>
 
-						<div style={{ width: '100%' }}>
-							<VStack spacing="2" justify="space-around">
-								<InputField
-									label={__('Top', 'publisher-core')}
-									settings={{
-										type: 'css',
-										unitType: 'background-position',
-									}}
-									//
-									initValue="0%"
-									attribute={attributeTopField}
-									repeaterAttributeIndex={
-										repeaterAttributeIndex
-									}
-									repeaterAttribute={repeaterAttribute}
-									//
-									{...props}
-								/>
+							<InputField
+								label={__('Left', 'publisher-core')}
+								settings={{
+									type: 'css',
+									unitType: 'background-position',
+								}}
+								//
+								initValue={coordinates.left}
+								//
+								{...props}
+								onValueChange={(value) => {
+									onValueChange(value, attributeLeftField);
+								}}
+							/>
+						</VStack>
+					</div>
+				</HStack>
 
-								<InputField
-									label={__('Left', 'publisher-core')}
-									settings={{
-										type: 'css',
-										unitType: 'background-position',
-									}}
-									//
-									initValue="0%"
-									attribute={attributeLeftField}
-									repeaterAttributeIndex={
-										repeaterAttributeIndex
-									}
-									repeaterAttribute={repeaterAttribute}
-									//
-									{...props}
-								/>
-							</VStack>
-						</div>
-					</HStack>
-
-					{children}
-				</Field>
-			)}
+				{children}
+			</Field>
 		</>
 	);
 }

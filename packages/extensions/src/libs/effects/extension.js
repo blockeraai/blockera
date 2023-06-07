@@ -2,6 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useContext } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -16,6 +17,7 @@ import {
 /**
  * Internal dependencies
  */
+import { BlockEditContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
 import { cursorFieldOptions, blendModeFieldOptions } from './utils';
 
@@ -30,6 +32,8 @@ export function EffectsExtension({ children, config, ...props }) {
 			publisherBackdropFilter,
 		},
 	} = config;
+
+	const { attributes, setAttributes } = useContext(BlockEditContext);
 
 	return (
 		<>
@@ -48,6 +52,11 @@ export function EffectsExtension({ children, config, ...props }) {
 						},
 						//
 						attribute: 'publisherOpacity',
+						onValueChange: (newValue) => {
+							attributes.publisherOpacity = newValue;
+
+							setAttributes(attributes);
+						},
 					}}
 				/>
 			)}

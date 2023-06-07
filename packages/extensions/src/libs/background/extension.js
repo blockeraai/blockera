@@ -68,7 +68,7 @@ export function BackgroundExtension({ children, config, ...props }) {
 							},
 						],
 						//
-						initValue: 'default',
+						initValue: 'none',
 						attribute: 'publisherBackgroundClip',
 					}}
 				/>
