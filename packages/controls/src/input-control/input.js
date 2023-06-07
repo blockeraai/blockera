@@ -16,19 +16,25 @@ import { controlClassNames } from '@publisher/classnames';
  */
 import './style.scss';
 import { RangeControl } from './../index';
+import { useState } from '@wordpress/element';
 
 export function InputControl({
-	initValue,
 	units,
-	// suffix = '',  //todo implement
 	range = false,
+	// suffix = '',  //todo implement
 	//
 	value,
+	initValue,
 	//
 	className,
+	onChange = (newValue) => {
+		return newValue;
+	},
 	onValueChange = () => {},
 	...props
 }) {
+	const [controlValue, setValue] = useState(value || initValue);
+
 	return (
 		<div
 			className={controlClassNames(
@@ -40,12 +46,16 @@ export function InputControl({
 			{range && (
 				<RangeControl
 					withInputField={false}
-					value={value}
+					value={controlValue}
 					onChange={(newValue) => {
 						// extract unit from old value and assign it to newValue
-						newValue = newValue + value.replace(/[0-9|-]/gi, '');
+						newValue =
+							newValue + controlValue.replace(/[0-9|-]/gi, '');
 
+						newValue = onChange(newValue);
+						setValue(newValue);
 						onValueChange(newValue);
+						return newValue;
 					}}
 					//
 					{...props}
@@ -58,12 +68,18 @@ export function InputControl({
 					{...props}
 					units={units}
 					value={value}
-					onChange={onValueChange}
+					onChange={(newValue) => {
+						newValue = onChange(newValue);
+						setValue(newValue);
+						onValueChange(newValue);
+						return newValue;
+					}}
 					className={controlClassNames(
 						'text',
 						'publisher-control-unit',
 						className
 					)}
+					isUnitSelectTabbable={false}
 				/>
 			)}
 
@@ -71,7 +87,12 @@ export function InputControl({
 				<WPTextControl
 					{...props}
 					value={value}
-					onChange={onValueChange}
+					onChange={(newValue) => {
+						newValue = onChange(newValue);
+						setValue(newValue);
+						onValueChange(newValue);
+						return newValue;
+					}}
 					className={controlClassNames('text', className)}
 				/>
 			)}

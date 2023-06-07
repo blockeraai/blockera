@@ -13,7 +13,6 @@ import { InputField, SelectField } from '@publisher/fields';
  * Internal dependencies
  */
 import BaseControl from '../../base';
-import { getRepeaterItemTypeProps } from '../../utils';
 import { getTypeOptions, getTimingOptions } from '../utils';
 import { RepeaterContext } from '../../repeater-control/context';
 
@@ -27,7 +26,8 @@ const Fields = ({ itemId, item }) => {
 				options={getTypeOptions()}
 				//
 				initValue="all"
-				{...getRepeaterItemTypeProps({ itemId, item, changeItem })}
+				value={item.type}
+				onValueChange={(type) => changeItem(itemId, { ...item, type })}
 			/>
 
 			<InputField
@@ -38,8 +38,10 @@ const Fields = ({ itemId, item }) => {
 					range: true,
 					min: 0,
 					max: 5000,
+					value: item.duration,
 				}}
 				//
+				initValue="500ms"
 				value={item.duration}
 				onValueChange={(duration) =>
 					changeItem(itemId, { ...item, duration })

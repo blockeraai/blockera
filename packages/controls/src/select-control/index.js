@@ -22,7 +22,12 @@ const SelectControl = ({
 	value: _value,
 	//
 	className,
-	onValueChange = () => {},
+	onChange = (newValue) => {
+		return newValue;
+	},
+	onValueChange = (newValue) => {
+		return newValue;
+	},
 }) => {
 	const [value, setValue] = useState(_value || initValue);
 
@@ -31,8 +36,8 @@ const SelectControl = ({
 			className={controlClassNames('select', 'native-select', className)}
 			value={value}
 			onChange={(newValue) => {
+				newValue = onChange(newValue);
 				setValue(newValue);
-
 				onValueChange(newValue);
 			}}
 			__nextHasNoMarginBottom

@@ -6,15 +6,14 @@ import { useContext } from '@wordpress/element';
 
 /**
  * Publisher dependencies
-*/
+ */
 import { controlClassNames } from '@publisher/classnames';
 import { BlockEditContext } from '@publisher/extensions';
 
 /**
  * Internal dependencies
-*/
+ */
 import { getControlValue, updateControlValue } from './../utils';
-
 
 export default function ToggleControl({
 	value,
@@ -23,13 +22,16 @@ export default function ToggleControl({
 	repeaterAttribute = null,
 	//
 	className,
-	onChange = () => { },
+	onChange = (newValue) => {
+		return newValue;
+	},
+	onValueChange = () => {},
+
 	...props
 }) {
-
 	const { attributes, setAttributes } = useContext(BlockEditContext);
 
-	let controlValue = getControlValue(
+	const controlValue = getControlValue(
 		value,
 		attribute,
 		repeaterAttribute,
@@ -42,16 +44,8 @@ export default function ToggleControl({
 		<WPToggleControl
 			value={controlValue}
 			onChange={(newValue) => {
-				updateControlValue(
-					newValue,
-					attribute,
-					repeaterAttribute,
-					repeaterAttributeIndex,
-					attributes,
-					setAttributes
-				);
-
-				onChange(newValue);
+				newValue = onChange(newValue);
+				onValueChange(newValue);
 			}}
 			className={controlClassNames('toggle-control', className)}
 			{...props}

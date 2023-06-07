@@ -11,7 +11,6 @@ import { Field } from '../field';
 export function ToggleSelectField({
 	name,
 	label,
-	options,
 	columns,
 	children,
 	className,
@@ -24,12 +23,7 @@ export function ToggleSelectField({
 			columns={columns}
 			className={className}
 		>
-			<ToggleSelectControl
-				{...{
-					...props,
-					options,
-				}}
-			/>
+			<ToggleSelectControl {...props} />
 
 			{children}
 		</Field>

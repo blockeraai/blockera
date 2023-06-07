@@ -2,6 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useContext } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -12,6 +13,7 @@ import { ColorField, SelectField, BackgroundField } from '@publisher/fields';
  * Internal dependencies
  */
 import { isActiveField } from '../../api/utils';
+import { BlockEditContext } from '../../hooks';
 
 export function BackgroundExtension({ children, config, ...props }) {
 	const {
@@ -21,6 +23,8 @@ export function BackgroundExtension({ children, config, ...props }) {
 			publisherBackgroundClip,
 		},
 	} = config;
+
+	const { attributes, setAttributes } = useContext(BlockEditContext);
 
 	return (
 		<>
@@ -40,6 +44,14 @@ export function BackgroundExtension({ children, config, ...props }) {
 						...props,
 						label: __('Color', 'publisher-core'),
 						attribute: 'publisherBackgroundColor',
+						//
+						initValue: '',
+						value: attributes.publisherBackgroundColor,
+						onValueChange: (newValue) =>
+							setAttributes({
+								...attributes,
+								publisherBackgroundColor: newValue,
+							}),
 					}}
 				/>
 			)}
@@ -69,7 +81,12 @@ export function BackgroundExtension({ children, config, ...props }) {
 						],
 						//
 						initValue: 'none',
-						attribute: 'publisherBackgroundClip',
+						value: attributes.publisherBackgroundClip,
+						onValueChange: (newValue) =>
+							setAttributes({
+								...attributes,
+								publisherBackgroundClip: newValue,
+							}),
 					}}
 				/>
 			)}

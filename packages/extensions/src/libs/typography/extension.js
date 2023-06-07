@@ -12,11 +12,15 @@ import { ColorField, TextShadowField } from '@publisher/fields';
  * Internal dependencies
  */
 import { isActiveField } from '../../api/utils';
+import { useContext } from '@wordpress/element';
+import { BlockEditContext } from '../../hooks';
 
 export function TypographyExtension({ children, config, ...props }) {
 	const {
 		typographyConfig: { publisherFontColor, publisherTextShadow },
 	} = config;
+
+	const { attributes, setAttributes } = useContext(BlockEditContext);
 
 	return (
 		<>
@@ -25,7 +29,14 @@ export function TypographyExtension({ children, config, ...props }) {
 					{...{
 						...props,
 						label: __('Color', 'publisher-core'),
-						attribute: 'publisherFontColor',
+						//
+						initValue: '',
+						value: attributes.publisherFontColor,
+						onValueChange: (newValue) =>
+							setAttributes({
+								...attributes,
+								publisherFontColor: newValue,
+							}),
 					}}
 				/>
 			)}

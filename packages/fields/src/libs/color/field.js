@@ -1,12 +1,6 @@
 /**
- * WordPress dependencies
- */
-import { useContext } from '@wordpress/element';
-
-/**
  * Publisher dependencies
  */
-import { BlockEditContext } from '@publisher/extensions';
 import { ColorControl } from '@publisher/controls';
 
 /**
@@ -14,9 +8,14 @@ import { ColorControl } from '@publisher/controls';
  */
 import { Field } from '../field';
 
-export function ColorField({ label, attribute, columns, className, children }) {
-	const { name, attributes, setAttributes } = useContext(BlockEditContext);
-
+export function ColorField({
+	label,
+	attribute,
+	columns,
+	className,
+	children,
+	...props
+}) {
 	return (
 		<Field
 			label={label}
@@ -24,16 +23,7 @@ export function ColorField({ label, attribute, columns, className, children }) {
 			columns={columns}
 			className={className}
 		>
-			<ColorControl
-				value={attributes[attribute]}
-				onValueChange={(newValue) =>
-					setAttributes({
-						...attributes,
-						[attribute]: newValue,
-					})
-				}
-				blockName={name}
-			/>
+			<ColorControl {...props} />
 
 			{children}
 		</Field>

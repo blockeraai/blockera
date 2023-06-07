@@ -27,7 +27,9 @@ const AlignmentMatrixControl = ({
 	//
 	className,
 	onChange = () => {},
-	onValueChange = () => {},
+	onValueChange = (newValue) => {
+		return newValue;
+	},
 }) => {
 	const { attributes } = useContext(BlockEditContext);
 
@@ -48,6 +50,7 @@ const AlignmentMatrixControl = ({
 			onChange={(newValue) => {
 				onChange(newValue);
 				onValueChange(newValue);
+				return newValue;
 			}}
 		/>
 	);

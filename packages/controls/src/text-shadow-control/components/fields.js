@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo } from '@wordpress/element';
+import { memo, useContext } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -13,8 +13,11 @@ import { InputField, ColorField } from '@publisher/fields';
  * Internal dependencies
  */
 import BaseControl from '../../base';
+import { RepeaterContext } from '../../repeater-control/context';
 
-const Fields = ({ itemId, repeaterAttribute }) => {
+const Fields = ({ itemId, item, repeaterAttribute }) => {
+	const { changeItem } = useContext(RepeaterContext);
+
 	return (
 		<BaseControl id={`repeater-item-${itemId}`}>
 			<InputField
@@ -27,9 +30,9 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 					max: 100,
 				}}
 				//
-				attribute="x"
-				repeaterAttributeIndex={itemId}
-				repeaterAttribute={repeaterAttribute}
+				initValue="1px"
+				value={item.x}
+				onValueChange={(x) => changeItem(itemId, { ...item, x })}
 			/>
 
 			<InputField
@@ -45,6 +48,10 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 				attribute="y"
 				repeaterAttributeIndex={itemId}
 				repeaterAttribute={repeaterAttribute}
+				//
+				initValue="1px"
+				value={item.y}
+				onValueChange={(y) => changeItem(itemId, { ...item, y })}
 			/>
 
 			<InputField
@@ -57,17 +64,19 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 					max: 100,
 				}}
 				//
-				attribute="blur"
-				repeaterAttributeIndex={itemId}
-				repeaterAttribute={repeaterAttribute}
+				initValue="1px"
+				value={item.blur}
+				onValueChange={(blur) => changeItem(itemId, { ...item, blur })}
 			/>
 
 			<ColorField
 				label={__('Color', 'publisher-core')}
 				//
-				attribute="color"
-				repeaterAttributeIndex={itemId}
-				repeaterAttribute={repeaterAttribute}
+				initValue=""
+				value={item.color}
+				onValueChange={(color) =>
+					changeItem(itemId, { ...item, color })
+				}
 			/>
 		</BaseControl>
 	);

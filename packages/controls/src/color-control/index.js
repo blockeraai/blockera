@@ -22,7 +22,9 @@ import { ColorPickerPopover } from './popover';
 export default function ColorControl({
 	value,
 	//
-	onValueChange = () => {},
+	onValueChange = (newValue) => {
+		return newValue;
+	},
 	className,
 	...props
 }) {
@@ -56,10 +58,12 @@ export default function ColorControl({
 					element: { color: color || 'transparent' },
 				}}
 				value={color}
-				onChange={(color) => {
-					setColor(color);
+				onChange={(newValue) => {
+					setColor(newValue);
 
-					onValueChange(color);
+					onValueChange(newValue);
+
+					return newValue;
 				}}
 			/>
 		</div>

@@ -75,10 +75,3 @@ export function updateControlValue(
 		});
 	}
 }
-
-export function getRepeaterItemTypeProps({ itemId, item, changeItem }) {
-	return {
-		value: item.type,
-		onValueChange: (type) => changeItem(itemId, { ...item, type }),
-	};
-}

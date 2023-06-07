@@ -26,6 +26,9 @@ const ToggleSelectControl = ({
 	attribute,
 	//
 	className,
+	onChange = (newValue) => {
+		return newValue;
+	},
 	onValueChange = () => {},
 	...props
 }) => {
@@ -34,7 +37,11 @@ const ToggleSelectControl = ({
 			<WPToggleGroupControl
 				className={controlClassNames('toggle-select', className)}
 				value={value || initValue}
-				onChange={onValueChange}
+				onChange={(newValue) => {
+					newValue = onChange(newValue);
+					onValueChange(newValue);
+					return newValue;
+				}}
 				label=""
 				hideLabelFromVision={true}
 				isBlock={true}

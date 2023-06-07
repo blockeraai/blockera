@@ -13,6 +13,7 @@ export function CssInputControl({
 	unitType = 'general',
 	units = false,
 	//
+	initValue,
 	value,
 	attribute,
 	//
@@ -20,7 +21,8 @@ export function CssInputControl({
 	...props
 }) {
 	const specialClassName = ' publisher-control-unit-special';
-	const baseClassName = className;
+	const baseClassName = className || '';
+
 	let cssUnits = units ? units : [];
 
 	if (!cssUnits.length) {
@@ -136,13 +138,19 @@ export function CssInputControl({
 		}
 	}
 
+	const [controlValue] = useState('');
+
 	const [classNames, setClassNames] = useState(
-		isSpecialUnit(value) ? baseClassName + specialClassName : baseClassName
+		isSpecialUnit(controlValue)
+			? baseClassName + specialClassName
+			: baseClassName
 	);
 
 	return (
 		<InputControl
 			{...props}
+			value={value}
+			initValue={initValue}
 			units={cssUnits}
 			//
 			className={classNames}

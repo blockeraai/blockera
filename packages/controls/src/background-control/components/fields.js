@@ -15,7 +15,7 @@ import {
 	PositionField,
 } from '@publisher/fields';
 import { HStack } from '@publisher/components';
-import { BlockEditContext } from '@publisher/extensions';
+
 /**
  * Internal dependencies
  */
@@ -25,7 +25,6 @@ import RepeatXIcon from '../icons/repeat-x';
 import RepeatYIcon from '../icons/repeat-y';
 import RepeatNoIcon from '../icons/repeat-no';
 import TypeImageIcon from '../icons/type-image';
-import { getRepeaterItemTypeProps } from '../../utils';
 import { RepeaterContext } from '../../repeater-control/context';
 import TypeLinearGradientIcon from '../icons/type-linear-gradient';
 import TypeRadialGradientIcon from '../icons/type-radial-gradient';
@@ -38,16 +37,10 @@ import RadialGradientFarthestSideIcon from '../icons/radial-gradient-farthest-si
 import RadialGradientClosestCornerIcon from '../icons/radial-gradient-closest-corner';
 import RadialGradientFarthestCornerIcon from '../icons/radial-gradient-farthest-corner';
 
-const Fields = ({ itemId, item, repeaterAttribute }) => {
-	const { attributes } = useContext(BlockEditContext);
+const Fields = ({ itemId, item }) => {
 	const { changeItem } = useContext(RepeaterContext);
 
-	const value =
-		attributes[repeaterAttribute] && attributes[repeaterAttribute][itemId];
-
-	const linearGradientValue = /\((\d.*)deg,/im?.exec(
-		value['linear-gradient']
-	);
+	const linearGradientValue = /\((\d.*)deg,/im?.exec(item['linear-gradient']);
 
 	const onChangePositionAlignment = (newValue) =>
 		changeItem(itemId, {
@@ -83,10 +76,11 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 				]}
 				//
 				initValue="image"
-				{...getRepeaterItemTypeProps({ itemId, item, changeItem })}
+				value={item.type}
+				onValueChange={(type) => changeItem(itemId, { ...item, type })}
 			/>
 
-			{value.type === 'image' && (
+			{item.type === 'image' && (
 				<>
 					<InputField
 						label={__('Image', 'publisher-core')}
@@ -95,9 +89,9 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 						}}
 						//
 						value={item.image}
-						onValueChange={(image) =>
-							changeItem(itemId, { ...item, image })
-						}
+						onValueChange={(image) => {
+							changeItem(itemId, { ...item, image });
+						}}
 					/>
 
 					<ToggleSelectField
@@ -123,7 +117,7 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 							changeItem(itemId, { ...item, 'image-size': size })
 						}
 					>
-						{value['image-size'] === 'custom' && (
+						{item['image-size'] === 'custom' && (
 							<HStack spacing="2" justify="space-around">
 								<InputField
 									label={__('Width', 'publisher-core')}
@@ -134,7 +128,7 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 										unitType: 'background-size',
 									}}
 									//
-									initValue="1auto"
+									initValue="auto"
 									value={item['image-size-width']}
 									onValueChange={(width) =>
 										changeItem(itemId, {
@@ -153,7 +147,7 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 										unitType: 'background-size',
 									}}
 									//
-									initValue="1auto"
+									initValue="auto"
 									value={item['image-size-height']}
 									onValueChange={(height) =>
 										changeItem(itemId, {
@@ -167,12 +161,20 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 					</ToggleSelectField>
 
 					<PositionField
-						top={item['image-position-top']}
-						left={item['image-position-left']}
-						attributeTopField="image-position-top"
-						attributeLeftField="image-position-left"
-						onChangeAlignment={onChangePositionAlignment}
-						onValueChange={onChangePositionField}
+						topValue={item['image-position-top']}
+						leftValue={item['image-position-left']}
+						onTopValueChange={(newValue) => {
+							changeItem(itemId, {
+								...item,
+								'image-position-top': newValue,
+							});
+						}}
+						onLeftValueChange={(newValue) =>
+							changeItem(itemId, {
+								...item,
+								'image-position-left': newValue,
+							})
+						}
 					/>
 
 					<ToggleSelectField
@@ -241,7 +243,7 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 				</>
 			)}
 
-			{value.type === 'linear-gradient' && (
+			{item.type === 'linear-gradient' && (
 				<>
 					<GradientBarField
 						initValue="linear-gradient(90deg,#009efa 10%,#e52e00 90%)"
@@ -260,7 +262,7 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 							// update linear gradient value
 							changeItem(itemId, {
 								...item,
-								'linear-gradient': value[
+								'linear-gradient': item[
 									'linear-gradient'
 								].replace(/\(\d.*deg,/gim, `(${newValue}deg,`),
 							});
@@ -297,7 +299,7 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 				</>
 			)}
 
-			{value.type === 'radial-gradient' && (
+			{item.type === 'radial-gradient' && (
 				<>
 					<GradientBarField
 						//

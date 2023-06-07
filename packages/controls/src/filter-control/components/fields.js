@@ -8,17 +8,15 @@ import { memo, useContext } from '@wordpress/element';
  * Publisher dependencies
  */
 import { InputField, SelectField, ColorField } from '@publisher/fields';
-import { BlockEditContext } from '@publisher/extensions';
+
 /**
  * Internal dependencies
  */
 import BaseControl from '../../base';
 import { getTypeOptions } from '../utils';
-import { getRepeaterItemTypeProps } from '../../utils';
 import { RepeaterContext } from '../../repeater-control/context';
 
-const Fields = ({ itemId, item, repeaterAttribute }) => {
-	const { attributes } = useContext(BlockEditContext);
+const Fields = ({ itemId, item }) => {
 	const { changeItem } = useContext(RepeaterContext);
 
 	return (
@@ -28,10 +26,11 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 				options={getTypeOptions()}
 				//
 				initValue="blur"
-				{...getRepeaterItemTypeProps({ itemId, item, changeItem })}
+				value={item.type}
+				onValueChange={(type) => changeItem(itemId, { ...item, type })}
 			/>
 
-			{attributes[repeaterAttribute][itemId].type === 'blur' && (
+			{item.type === 'blur' && (
 				<InputField
 					label={__('Blur', 'publisher-core')}
 					settings={{
@@ -49,7 +48,7 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 				/>
 			)}
 
-			{attributes[repeaterAttribute][itemId].type === 'drop-shadow' && (
+			{item.type === 'drop-shadow' && (
 				<>
 					<InputField
 						label={__('X', 'publisher-core')}
@@ -122,7 +121,7 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 				</>
 			)}
 
-			{attributes[repeaterAttribute][itemId].type === 'brightness' && (
+			{item.type === 'brightness' && (
 				<InputField
 					label={__('Brightness', 'publisher-core')}
 					settings={{
@@ -143,7 +142,7 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 				/>
 			)}
 
-			{attributes[repeaterAttribute][itemId].type === 'contrast' && (
+			{item.type === 'contrast' && (
 				<InputField
 					label={__('Contrast', 'publisher-core')}
 					settings={{
@@ -164,7 +163,7 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 				/>
 			)}
 
-			{attributes[repeaterAttribute][itemId].type === 'hue-rotate' && (
+			{item.type === 'hue-rotate' && (
 				<InputField
 					label={__('Hue Rotate', 'publisher-core')}
 					settings={{
@@ -185,7 +184,7 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 				/>
 			)}
 
-			{attributes[repeaterAttribute][itemId].type === 'saturate' && (
+			{item.type === 'saturate' && (
 				<InputField
 					label={__('Saturation', 'publisher-core')}
 					settings={{
@@ -206,7 +205,7 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 				/>
 			)}
 
-			{attributes[repeaterAttribute][itemId].type === 'grayscale' && (
+			{item.type === 'grayscale' && (
 				<InputField
 					label={__('Grayscale', 'publisher-core')}
 					settings={{
@@ -227,7 +226,7 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 				/>
 			)}
 
-			{attributes[repeaterAttribute][itemId].type === 'invert' && (
+			{item.type === 'invert' && (
 				<InputField
 					label={__('Invert', 'publisher-core')}
 					settings={{
@@ -248,7 +247,7 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 				/>
 			)}
 
-			{attributes[repeaterAttribute][itemId].type === 'sepia' && (
+			{item.type === 'sepia' && (
 				<InputField
 					label={__('Sepia', 'publisher-core')}
 					settings={{

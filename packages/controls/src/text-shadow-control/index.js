@@ -18,9 +18,9 @@ import Fields from './components/fields';
 import { getControlValue, updateControlValue } from './../utils';
 
 const initialState = {
-	x: '0px',
-	y: '0px',
-	blur: '0px',
+	x: '1px',
+	y: '1px',
+	blur: '1px',
 	color: '',
 	isVisible: true,
 };

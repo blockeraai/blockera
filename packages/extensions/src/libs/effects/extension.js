@@ -49,6 +49,7 @@ export function EffectsExtension({ children, config, ...props }) {
 							min: 0,
 							max: 100,
 							initialPosition: 100,
+							initValue: '100%',
 						},
 						//
 						value: attributes.publisherOpacity,
@@ -99,7 +100,12 @@ export function EffectsExtension({ children, config, ...props }) {
 						options: cursorFieldOptions(),
 						//
 						initValue: 'default',
-						attribute: 'publisherCursor',
+						value: attributes.publisherCursor,
+						onValueChange: (newValue) =>
+							setAttributes({
+								...attributes,
+								publisherCursor: newValue,
+							}),
 					}}
 				/>
 			)}
@@ -112,7 +118,12 @@ export function EffectsExtension({ children, config, ...props }) {
 						options: blendModeFieldOptions(),
 						//
 						initValue: 'normal',
-						attribute: 'publisherBlendMode',
+						value: attributes.publisherBlendMode,
+						onValueChange: (newValue) =>
+							setAttributes({
+								...attributes,
+								publisherBlendMode: newValue,
+							}),
 					}}
 				/>
 			)}

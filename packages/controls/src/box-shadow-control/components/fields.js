@@ -13,7 +13,6 @@ import { InputField, ToggleSelectField, ColorField } from '@publisher/fields';
  * Internal dependencies
  */
 import BaseControl from '../../base';
-import { getRepeaterItemTypeProps } from '../../utils';
 import { RepeaterContext } from '../../repeater-control/context';
 
 const Fields = ({ itemId, item }) => {
@@ -34,7 +33,9 @@ const Fields = ({ itemId, item }) => {
 					},
 				]}
 				//
-				{...getRepeaterItemTypeProps({ itemId, item, changeItem })}
+				initValue="outer"
+				value={item.type}
+				onValueChange={(type) => changeItem(itemId, { ...item, type })}
 			/>
 
 			<InputField

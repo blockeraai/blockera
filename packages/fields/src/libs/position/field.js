@@ -20,25 +20,19 @@ import { Field, InputField } from '../../index';
 import './style.scss';
 
 export function PositionField({
-	name,
 	label = __('Position', 'publisher-core'),
-	columns,
 	className,
-	options,
 	//
-	top,
-	left,
-	attributeTopField,
-	attributeLeftField,
-	onValueChange = () => {},
-	onChangeAlignment = () => {},
+	topValue,
+	leftValue,
 	children,
-
-	...props
+	//
+	onTopValueChange = () => {},
+	onLeftValueChange = () => {},
 }) {
 	const [coordinates, setCoordinates] = useState({
-		top,
-		left,
+		top: topValue,
+		left: leftValue,
 	});
 
 	return (
@@ -55,14 +49,13 @@ export function PositionField({
 								const _coordinates =
 									convertAlignmentMatrixCoordinates(newValue);
 
-								setCoordinates(_coordinates);
-
-								onChangeAlignment({
-									[attributeTopField]:
-										_coordinates.top.number,
-									[attributeLeftField]:
-										_coordinates.left.number,
+								setCoordinates({
+									top: _coordinates.top.number,
+									left: _coordinates.left.number,
 								});
+
+								onTopValueChange(_coordinates.top.number);
+								onLeftValueChange(_coordinates.left.number);
 							}}
 						/>
 					</div>
@@ -76,11 +69,15 @@ export function PositionField({
 									unitType: 'background-position',
 								}}
 								//
+								value={coordinates.top}
 								initValue={coordinates.top}
-								//
-								{...props}
 								onValueChange={(value) => {
-									onValueChange(value, attributeTopField);
+									setCoordinates({
+										...coordinates,
+										top: value,
+									});
+
+									onTopValueChange(value);
 								}}
 							/>
 
@@ -91,11 +88,15 @@ export function PositionField({
 									unitType: 'background-position',
 								}}
 								//
+								value={coordinates.left}
 								initValue={coordinates.left}
-								//
-								{...props}
 								onValueChange={(value) => {
-									onValueChange(value, attributeLeftField);
+									setCoordinates({
+										...coordinates,
+										left: value,
+									});
+
+									onLeftValueChange(value);
 								}}
 							/>
 						</VStack>

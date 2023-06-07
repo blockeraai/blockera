@@ -26,10 +26,12 @@ export default function AnglePickerControl({
 	value,
 	//
 	className,
-	onValueChange = () => {},
+	onValueChange = (newValue) => {
+		return newValue;
+	},
 	...props
 }) {
-	const [angel, setAngel] = useState(value || initValue);
+	const [controlValue, setControlValue] = useState(value || initValue);
 
 	function addAngle(angle, value) {
 		// Add the value to the angle
@@ -63,36 +65,39 @@ export default function AnglePickerControl({
 		<HStack className={controlClassNames('angle', className)}>
 			<WordPressAnglePickerControl
 				{...props}
-				value={angel}
-				onChange={(_angle) => {
-					setAngel(_angle);
-					onValueChange(_angle);
+				value={controlValue}
+				onChange={(newValue) => {
+					setControlValue(newValue);
+					onValueChange(newValue);
+					return newValue;
 				}}
 				label=""
 				__nextHasNoMarginBottom
 			/>
+
 			<Button
 				className={controlInnerClassNames('btn-rotate-left')}
 				showTooltip={true}
 				label={__('Rotate Left', 'publisher')}
 				icon={rotateLeft}
 				onClick={() => {
-					const _angel = subtractAngle(angel, 45);
+					const newValue = subtractAngle(controlValue, 45);
 
-					setAngel(_angel);
-					onValueChange(_angel);
+					setControlValue(newValue);
+					onValueChange(newValue);
 				}}
 			/>
+
 			<Button
 				className={controlInnerClassNames('btn-rotate-right')}
 				showTooltip={true}
 				label={__('Rotate Right', 'publisher')}
 				icon={rotateRight}
 				onClick={() => {
-					const _angel = addAngle(angel, 45);
+					const newValue = addAngle(controlValue, 45);
 
-					setAngel(_angel);
-					onValueChange(_angel);
+					setControlValue(newValue);
+					onValueChange(newValue);
 				}}
 			/>
 		</HStack>

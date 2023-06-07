@@ -1,12 +1,6 @@
 /**
- * WordPress dependencies
- */
-import { useContext } from '@wordpress/element';
-
-/**
  * Publisher dependencies
  */
-import { BlockEditContext } from '@publisher/extensions';
 import {
 	InputControl,
 	CssInputControl,
@@ -27,8 +21,6 @@ export function InputField({
 	settings,
 	...props
 }) {
-	const { name: blockName, ...blockProps } = useContext(BlockEditContext);
-
 	return (
 		<Field
 			label={label}
@@ -40,26 +32,20 @@ export function InputField({
 				<RangeControl
 					{...props}
 					{...settings}
-					{...blockProps}
 					blockName={name}
 					withInputField={true}
 				/>
 			)}
 
 			{'text' === settings?.type && (
-				<InputControl
-					{...props}
-					{...settings}
-					{...blockProps}
-					blockName={name}
-				/>
+				<InputControl {...props} {...settings} blockName={name} />
 			)}
 
 			{'css' === settings?.type && (
 				<CssInputControl
 					{...props}
-					{...{ ...settings, type: 'css' }}
-					{...blockProps}
+					{...settings}
+					type="css"
 					blockName={name}
 				/>
 			)}

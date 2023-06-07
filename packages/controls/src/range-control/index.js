@@ -17,6 +17,9 @@ const RangeControl = ({
 	//
 	value,
 	className,
+	onChange = (newValue) => {
+		return newValue;
+	},
 	onValueChange = () => {},
 }) => {
 	return (
@@ -27,7 +30,11 @@ const RangeControl = ({
 					min,
 					max,
 					value,
-					onChange: onValueChange,
+					onChange: (newValue) => {
+						newValue = onChange(newValue);
+						onValueChange(newValue);
+						return newValue;
+					},
 					className: controlClassNames('range', className),
 				}}
 				withInputField={withInputField}

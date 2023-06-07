@@ -19,6 +19,9 @@ const GradientBarControl = ({
 	value,
 	//
 	className,
+	onChange = (newValue) => {
+		return newValue;
+	},
 	onValueChange = () => {},
 }) => {
 	return (
@@ -27,7 +30,11 @@ const GradientBarControl = ({
 			value={value || initValue}
 			gradients={[]}
 			clearable={false}
-			onChange={onValueChange}
+			onChange={(newValue) => {
+				newValue = onChange(newValue);
+				onValueChange(newValue);
+				return newValue;
+			}}
 		/>
 	);
 };
