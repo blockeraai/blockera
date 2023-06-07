@@ -1,0 +1,69 @@
+.publisher-component-buttons {
+	display: flex;
+	gap: 10px;
+}
+
+.publisher-component-button {
+	border: 1px solid #959595;
+	font-size: 13px;
+	font-weight: 400;
+	display: flex;
+	gap: 8px;
+
+	&.size-input,
+	&.size-small {
+		height: 30px;
+		padding: 2px 10px;
+		line-height: 30px;
+		font-size: 12.4px;
+	}
+
+	&.size-extra-small {
+		font-size: 12.4px;
+		height: 22px;
+		padding: 0 5px;
+		line-height: 22px;
+	}
+
+	&.align-center {
+		justify-content: center;
+	}
+
+	&.align-left {
+		justify-content: flex-start;
+	}
+
+	&.align-right {
+		justify-content: flex-end;
+	}
+
+	&:hover {
+		border-color: var(
+						--wp-components-color-accent,
+						var(--wp-admin-theme-color, #007cba)
+		);
+		color: var(--wp-components-color-foreground, #1e1e1e);
+	}
+
+	&.toggle-focus.is-focus:not(:disabled),
+	&.toggle-focus.is-focus:focus:not(:disabled),
+	&:focus:not(:disabled):not(.toggle-focus) {
+
+		border-color: var(
+						--wp-components-color-accent,
+						var(--wp-admin-theme-color, #007cba)
+		);
+		box-shadow: 0 0 0 1px var(
+						--wp-components-color-accent,
+						var(--wp-admin-theme-color, #007cba)
+		);
+		outline: 2px solid transparent;
+	}
+
+	&.toggle-focus:focus:not(:disabled) {
+
+		border-color: #959595;
+		box-shadow: none;
+		outline: none;
+	}
+}
