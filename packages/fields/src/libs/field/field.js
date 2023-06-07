@@ -12,14 +12,24 @@ import './style.scss';
 export function Field({
 	label,
 	children,
-	columns,
+	columns = '',
 	className,
 	field = 'general',
 }) {
-	columns = columns ? columns : label !== '' ? 'columns-2' : 'columns-1';
+	columns = columns || (label !== '' ? 'columns-2' : 'columns-1');
+
+	let cssColumns = '';
+
+	if (columns !== 'columns-1' && columns !== 'columns-2') {
+		cssColumns = columns;
+		columns = 'columns-custom';
+	}
 
 	return (
-		<div className={fieldsClassNames(field, columns, className)}>
+		<div
+			className={fieldsClassNames(field, columns, className)}
+			style={{ 'grid-template-columns': cssColumns || '' }}
+		>
 			{label && (
 				<div className={fieldsInnerClassNames('label')}>
 					<LabelControl label={label} />

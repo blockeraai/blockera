@@ -46,12 +46,19 @@
 		.components-base-control:last-child .components-base-control__field {
 			margin-bottom: 0;
 		}
+
+		// this is the extra tag that popover adds!
+		> span:empty {
+			display: none;
+		}
 	}
 
 	&.control-first .publisher-field-control {
 		order: 1;
 	}
 
+
+	&.columns-custom,
 	&.columns-1 {
 		display: grid;
 		grid-template-columns: 1fr;
