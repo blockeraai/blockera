@@ -8,16 +8,14 @@ import { useState } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import {
-	controlClassNames,
-	controlInnerClassNames,
-} from '@publisher/classnames';
+import { controlClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
 import './style.scss';
 import { ColorPickerPopover } from './popover';
+import { Button } from '@publisher/components';
 
 export default function ColorControl({
 	value,
@@ -32,15 +30,16 @@ export default function ColorControl({
 	const [color, setColor] = useState(value);
 
 	return (
-		<div
-			className={controlClassNames(
-				'color',
-				isOpen ? 'color-picker-open' : '',
-				className
-			)}
-		>
-			<div
-				className={controlInnerClassNames('color-indicator')}
+		<>
+			<Button
+				size="input"
+				style="primary"
+				className={
+					isOpen
+						? 'is-focus toggle-focus ' +
+						  controlClassNames('color-indicator')
+						: 'toggle-focus ' + controlClassNames('color-indicator')
+				}
 				onClick={() => setOpen(!isOpen)}
 			>
 				<ColorIndicator
@@ -48,7 +47,7 @@ export default function ColorControl({
 					className="color-indicator"
 				/>
 				{color || __('None', 'publisher-core')}
-			</div>
+			</Button>
 
 			<ColorPickerPopover
 				onClose={() => setOpen(false)}
@@ -66,6 +65,6 @@ export default function ColorControl({
 					return newValue;
 				}}
 			/>
-		</div>
+		</>
 	);
 }
