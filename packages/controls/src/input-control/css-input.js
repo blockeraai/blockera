@@ -1,19 +1,13 @@
 /**
  * WordPress dependencies
  */
-import { useState, useContext } from '@wordpress/element';
-
-/**
- * Publisher dependencies
- */
-import { BlockEditContext } from '@publisher/extensions';
+import { useState } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
 import { InputControl } from './input';
 import { isSpecialUnit } from './utils';
-import { getControlValue } from '../utils';
 
 export function CssInputControl({
 	unitType = 'general',
@@ -21,23 +15,10 @@ export function CssInputControl({
 	//
 	value,
 	attribute,
-	repeaterAttributeIndex = null,
-	repeaterAttribute = null,
 	//
 	className,
 	...props
 }) {
-	const { attributes } = useContext(BlockEditContext);
-
-	const controlValue = getControlValue(
-		value,
-		attribute,
-		repeaterAttribute,
-		repeaterAttributeIndex,
-		'',
-		attributes
-	);
-
 	const specialClassName = ' publisher-control-unit-special';
 	const baseClassName = className;
 	let cssUnits = units ? units : [];
@@ -156,9 +137,7 @@ export function CssInputControl({
 	}
 
 	const [classNames, setClassNames] = useState(
-		isSpecialUnit(controlValue)
-			? baseClassName + specialClassName
-			: baseClassName
+		isSpecialUnit(value) ? baseClassName + specialClassName : baseClassName
 	);
 
 	return (
@@ -173,11 +152,6 @@ export function CssInputControl({
 				} else if (classNames.includes(specialClassName))
 					setClassNames(baseClassName.replace(specialClassName, ''));
 			}}
-			//
-			value={controlValue}
-			attribute={attribute}
-			repeaterAttribute={repeaterAttribute}
-			repeaterAttributeIndex={repeaterAttributeIndex}
 		/>
 	);
 }

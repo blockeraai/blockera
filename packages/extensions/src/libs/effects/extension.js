@@ -51,12 +51,12 @@ export function EffectsExtension({ children, config, ...props }) {
 							initialPosition: 100,
 						},
 						//
-						attribute: 'publisherOpacity',
-						onValueChange: (newValue) => {
-							attributes.publisherOpacity = newValue;
-
-							setAttributes(attributes);
-						},
+						value: attributes.publisherOpacity,
+						onValueChange: (newValue) =>
+							setAttributes({
+								...attributes,
+								publisherOpacity: newValue,
+							}),
 					}}
 				/>
 			)}

@@ -40,11 +40,11 @@ function TransitionControl({
 					...props,
 					Header,
 					initialState,
-					updateBlockAttributes: (newTransitionItems) => {
-						attributes[attribute] = newTransitionItems;
-
-						setAttributes(attributes);
-					},
+					updateBlockAttributes: (newTransitionItems) =>
+						setAttributes({
+							...attributes,
+							[attribute]: newTransitionItems,
+						}),
 					value: transitionItems,
 					InnerComponents: Fields,
 					attribute,

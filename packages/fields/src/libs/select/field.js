@@ -36,11 +36,11 @@ export function SelectField({
 					options,
 					initValue,
 					value: attributes[attribute],
-					onValueChange: (newValue) => {
-						attributes[attribute] = newValue;
-
-						setAttributes(attributes);
-					},
+					onValueChange: (newValue) =>
+						setAttributes({
+							...attributes,
+							[attribute]: newValue,
+						}),
 				}}
 			/>
 

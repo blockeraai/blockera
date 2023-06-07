@@ -53,11 +53,11 @@ function BackgroundControl({
 					...props,
 					Header,
 					initialState,
-					updateBlockAttributes: (newBackgroundItems) => {
-						attributes[attribute] = newBackgroundItems;
-
-						setAttributes(attributes);
-					},
+					updateBlockAttributes: (newBackgroundItems) =>
+						setAttributes({
+							...attributes,
+							[attribute]: newBackgroundItems,
+						}),
 					value: backgroundItems,
 					InnerComponents: Fields,
 					attribute,

@@ -45,11 +45,11 @@ function BoxShadowControl({
 					initialState,
 					value: boxShadowItems,
 					InnerComponents: Fields,
-					updateBlockAttributes: (newBoxShadowItems) => {
-						attributes[attribute] = newBoxShadowItems;
-
-						setAttributes(attributes);
-					},
+					updateBlockAttributes: (newBoxShadowItems) =>
+						setAttributes({
+							...attributes,
+							[attribute]: newBoxShadowItems,
+						}),
 				}}
 			/>
 		</div>

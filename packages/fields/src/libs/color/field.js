@@ -26,11 +26,12 @@ export function ColorField({ label, attribute, columns, className, children }) {
 		>
 			<ColorControl
 				value={attributes[attribute]}
-				onValueChange={(newValue) => {
-					attributes[attribute] = newValue;
-
-					setAttributes(attributes);
-				}}
+				onValueChange={(newValue) =>
+					setAttributes({
+						...attributes,
+						[attribute]: newValue,
+					})
+				}
 				blockName={name}
 			/>
 

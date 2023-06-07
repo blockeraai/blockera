@@ -49,11 +49,11 @@ function FilterControl({
 					...props,
 					Header,
 					initialState,
-					updateBlockAttributes: (newFilterItems) => {
-						attributes[attribute] = newFilterItems;
-
-						setAttributes(attributes);
-					},
+					updateBlockAttributes: (newFilterItems) =>
+						setAttributes({
+							...attributes,
+							[attribute]: newFilterItems,
+						}),
 					value: filterItems,
 					InnerComponents: Fields,
 					attribute,
