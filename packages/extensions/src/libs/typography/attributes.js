@@ -3,6 +3,14 @@ export const attributes = {
 		type: 'string',
 		default: '',
 	},
+	publisherFontSize: {
+		type: 'string',
+		default: '',
+	},
+	publisherLineHeight: {
+		type: 'string',
+		default: '',
+	},
 	publisherTextShadow: {
 		type: 'array',
 		default: [],

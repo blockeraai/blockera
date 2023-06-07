@@ -20,6 +20,8 @@ import { TextShadowFieldStyle } from '@publisher/fields';
 export function TypographyStyles({
 	typographyConfig: {
 		cssGenerators,
+		publisherFontSize,
+		publisherLineHeight,
 		publisherFontColor,
 		publisherTextShadow,
 	},
@@ -27,23 +29,41 @@ export function TypographyStyles({
 	const { attributes: _attributes, ...blockProps } =
 		useContext(BlockEditContext);
 
+	const properties = {};
 	const generators = [];
 
 	if (
 		isActiveField(publisherFontColor) &&
 		_attributes.publisherFontColor !== attributes.publisherFontColor.default
 	) {
+		properties.color = '{{publisherFontColor}}';
+	}
+
+	if (
+		isActiveField(publisherFontSize) &&
+		_attributes.publisherFontSize !== attributes.publisherFontSize.default
+	) {
+		properties['font-size'] = '{{publisherFontSize}}';
+	}
+
+	if (
+		isActiveField(publisherLineHeight) &&
+		_attributes.publisherLineHeight !==
+			attributes.publisherLineHeight.default
+	) {
+		properties['line-height'] = '{{publisherLineHeight}}';
+	}
+
+	if (properties) {
 		generators.push(
 			computedCssRules(
 				{
 					cssGenerators: {
-						publisherFontColor: [
+						publisherTypography: [
 							{
 								type: 'static',
 								selector: '.{{BLOCK_ID}}',
-								properties: {
-									color: '{{publisherFontColor}}',
-								},
+								properties: { ...properties },
 							},
 						],
 					},
