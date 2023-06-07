@@ -2,7 +2,6 @@
  * WordPress dependencies
  */
 import { useRef, useState, useEffect } from '@wordpress/element';
-import { Popover } from '@wordpress/components';
 
 /**
  * Publisher dependencies
@@ -11,6 +10,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
+import { Popover } from '@publisher/components';
 
 /**
  * Styles
