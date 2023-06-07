@@ -29,7 +29,7 @@ export function CssInputControl({
 }) {
 	const { attributes } = useContext(BlockEditContext);
 
-	let controlValue = getControlValue(
+	const controlValue = getControlValue(
 		value,
 		attribute,
 		repeaterAttribute,
@@ -63,6 +63,7 @@ export function CssInputControl({
 		];
 
 		switch (unitType) {
+			case 'text-shadow':
 			case 'box-shadow':
 				cssUnits = [
 					{ value: 'px', label: 'PX', default: 0 },

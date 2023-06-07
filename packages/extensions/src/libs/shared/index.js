@@ -19,13 +19,19 @@ import {
 	attributes as effectsAttributes,
 	supports as effectsSupports,
 } from '../effects';
+import {
+	attributes as typographyAttributes,
+	supports as typographySupports,
+} from '../typography';
 
 export const attributes = {
+	...typographyAttributes,
 	...backgroundAttributes,
 	...borderAndShadowAttributes,
 	...effectsAttributes,
 };
 export const supports = {
+	...typographySupports,
 	...backgroundSupports,
 	...borderAndShadowSupports,
 	...effectsSupports,
@@ -34,6 +40,13 @@ export const supports = {
 export function SharedBlockExtension({ children, ...props }) {
 	return (
 		<>
+			<BaseExtension
+				{...props}
+				initialOpen={true}
+				extensionId={'Typography'}
+				title={__('Typography', 'publisher-core')}
+			/>
+
 			<BaseExtension
 				{...props}
 				initialOpen={true}

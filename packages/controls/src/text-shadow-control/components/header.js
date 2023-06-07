@@ -1,0 +1,44 @@
+/**
+ * WordPress dependencies
+ */
+import { ColorIndicator } from '@wordpress/components';
+import { memo } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
+
+/**
+ * Publisher dependencies
+ */
+import { controlInnerClassNames } from '@publisher/classnames';
+
+const Header = ({
+	item: { x, y, blur, color = '#fff' },
+	isOpen,
+	setOpen,
+	children,
+}) => {
+	return (
+		<div
+			className={controlInnerClassNames('repeater-group-header')}
+			onClick={() => setOpen(!isOpen)}
+		>
+			<span className={controlInnerClassNames('header-icon')}>
+				<ColorIndicator
+					colorValue={color}
+					className={controlInnerClassNames('color-indicator')}
+				/>
+			</span>
+
+			<span className={controlInnerClassNames('header-label')}>
+				{__('Text Shadow', 'publisher-core')}
+			</span>
+
+			<span className={controlInnerClassNames('header-values')}>
+				{`${x} ${y} ${blur}`}
+			</span>
+
+			{children}
+		</div>
+	);
+};
+
+export default memo(Header);

@@ -1,6 +1,7 @@
 export { Field } from './libs/field';
 export { AnglePickerField } from './libs/angle-picker';
 export { BoxShadowField, BoxShadowFieldStyle } from './libs/box-shadow';
+export { TextShadowField, TextShadowFieldStyle } from './libs/text-shadow';
 export { ColorField } from './libs/color';
 export { IconField } from './libs/icon';
 export { InputField } from './libs/input';

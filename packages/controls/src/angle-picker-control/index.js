@@ -36,7 +36,7 @@ export default function AnglePickerControl({
 }) {
 	const { attributes, setAttributes } = useContext(BlockEditContext);
 
-	let controlValue = getControlValue(
+	const controlValue = getControlValue(
 		value,
 		attribute,
 		repeaterAttribute,
@@ -104,7 +104,7 @@ export default function AnglePickerControl({
 				onClick={() => {
 					setAngel(subtractAngle(angel, 45));
 				}}
-			></Button>
+			/>
 			<Button
 				className={controlInnerClassNames('btn-rotate-right')}
 				showTooltip={true}
@@ -113,7 +113,7 @@ export default function AnglePickerControl({
 				onClick={() => {
 					setAngel(addAngle(angel, 45));
 				}}
-			></Button>
+			/>
 		</HStack>
 	);
 }

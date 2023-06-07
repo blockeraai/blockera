@@ -17,6 +17,12 @@ export {
 	supports as effectsExtensionSupports,
 } from './effects';
 export {
+	TypographyStyles,
+	TypographyExtension,
+	attributes as typographyExtensionAttributes,
+	supports as typographyExtensionSupports,
+} from './typography';
+export {
 	IconExtension,
 	attributes as IconExtensionAttributes,
 	supports as IconExtensionSupports,
