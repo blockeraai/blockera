@@ -15,7 +15,6 @@ import { controlClassNames } from '@publisher/classnames';
 import Header from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
-import { getControlValue, updateControlValue } from './../utils';
 
 const initialState = {
 	type: 'all',
@@ -26,24 +25,13 @@ const initialState = {
 };
 
 function TransitionControl({
-	value,
 	attribute,
-	repeaterAttributeIndex = null,
-	repeaterAttribute = null,
 	//
 	className,
 	...props
 }) {
 	const { attributes, setAttributes } = useContext(BlockEditContext);
-
-	let controlValue = getControlValue(
-		value,
-		attribute,
-		repeaterAttribute,
-		repeaterAttributeIndex,
-		'',
-		attributes
-	);
+	const { [attribute]: transitionItems } = attributes;
 
 	return (
 		<div className={controlClassNames('transition', className)}>
@@ -52,17 +40,12 @@ function TransitionControl({
 					...props,
 					Header,
 					initialState,
-					updateBlockAttributes: (newValue) => {
-						updateControlValue(
-							newValue,
-							attribute,
-							repeaterAttribute,
-							repeaterAttributeIndex,
-							attributes,
-							setAttributes
-						);
+					updateBlockAttributes: (newTransitionItems) => {
+						attributes[attribute] = newTransitionItems;
+
+						setAttributes(attributes);
 					},
-					value: controlValue,
+					value: transitionItems,
 					InnerComponents: Fields,
 					attribute,
 				}}

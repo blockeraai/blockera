@@ -13,10 +13,13 @@ import { BlockEditContext } from '@publisher/extensions';
  * Internal dependencies
  */
 import BaseControl from '../../base';
-import { getTypeOptions } from './../utils';
+import { getTypeOptions } from '../utils';
+import { getRepeaterItemTypeProps } from '../../utils';
+import { RepeaterContext } from '../../repeater-control/context';
 
-const Fields = ({ itemId, repeaterAttribute }) => {
+const Fields = ({ itemId, item, repeaterAttribute }) => {
 	const { attributes } = useContext(BlockEditContext);
+	const { changeItem } = useContext(RepeaterContext);
 
 	return (
 		<BaseControl id={`repeater-item-${itemId}`}>
@@ -25,9 +28,7 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 				options={getTypeOptions()}
 				//
 				initValue="blur"
-				attribute="type"
-				repeaterAttributeIndex={itemId}
-				repeaterAttribute={repeaterAttribute}
+				{...getRepeaterItemTypeProps({ itemId, item, changeItem })}
 			/>
 
 			{attributes[repeaterAttribute][itemId].type === 'blur' && (
@@ -41,9 +42,10 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						max: 50,
 					}}
 					//
-					attribute="blur"
-					repeaterAttributeIndex={itemId}
-					repeaterAttribute={repeaterAttribute}
+					value={item.blur}
+					onValueChange={(blur) =>
+						changeItem(itemId, { ...item, blur })
+					}
 				/>
 			)}
 
@@ -59,9 +61,13 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 							max: 100,
 						}}
 						//
-						attribute="drop-shadow-x"
-						repeaterAttributeIndex={itemId}
-						repeaterAttribute={repeaterAttribute}
+						value={item['drop-shadow-x']}
+						onValueChange={(newValue) =>
+							changeItem(itemId, {
+								...item,
+								'drop-shadow-x': newValue,
+							})
+						}
 					/>
 
 					<InputField
@@ -74,9 +80,13 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 							max: 100,
 						}}
 						//
-						attribute="drop-shadow-y"
-						repeaterAttributeIndex={itemId}
-						repeaterAttribute={repeaterAttribute}
+						value={item['drop-shadow-y']}
+						onValueChange={(newValue) =>
+							changeItem(itemId, {
+								...item,
+								'drop-shadow-y': newValue,
+							})
+						}
 					/>
 
 					<InputField
@@ -89,17 +99,25 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 							max: 100,
 						}}
 						//
-						attribute="drop-shadow-blur"
-						repeaterAttributeIndex={itemId}
-						repeaterAttribute={repeaterAttribute}
+						value={item['drop-shadow-blur']}
+						onValueChange={(newValue) =>
+							changeItem(itemId, {
+								...item,
+								'drop-shadow-blur': newValue,
+							})
+						}
 					/>
 
 					<ColorField
 						label={__('Color', 'publisher-core')}
 						//
-						attribute="drop-shadow-color"
-						repeaterAttributeIndex={itemId}
-						repeaterAttribute={repeaterAttribute}
+						value={item['drop-shadow-color']}
+						onValueChange={(newValue) =>
+							changeItem(itemId, {
+								...item,
+								'drop-shadow-color': newValue,
+							})
+						}
 					/>
 				</>
 			)}
@@ -115,9 +133,13 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						max: 200,
 					}}
 					//
-					attribute="brightness"
-					repeaterAttributeIndex={itemId}
-					repeaterAttribute={repeaterAttribute}
+					value={item.brightness}
+					onValueChange={(brightness) =>
+						changeItem(itemId, {
+							...item,
+							brightness,
+						})
+					}
 				/>
 			)}
 
@@ -132,9 +154,13 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						max: 200,
 					}}
 					//
-					attribute="contrast"
-					repeaterAttributeIndex={itemId}
-					repeaterAttribute={repeaterAttribute}
+					value={item.contrast}
+					onValueChange={(contrast) =>
+						changeItem(itemId, {
+							...item,
+							contrast,
+						})
+					}
 				/>
 			)}
 
@@ -149,9 +175,13 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						max: 365,
 					}}
 					//
-					attribute="hue-rotate"
-					repeaterAttributeIndex={itemId}
-					repeaterAttribute={repeaterAttribute}
+					value={item['hue-rotate']}
+					onValueChange={(newValue) =>
+						changeItem(itemId, {
+							...item,
+							'hue-rotate': newValue,
+						})
+					}
 				/>
 			)}
 
@@ -166,9 +196,13 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						max: 200,
 					}}
 					//
-					attribute="saturate"
-					repeaterAttributeIndex={itemId}
-					repeaterAttribute={repeaterAttribute}
+					value={item.saturate}
+					onValueChange={(saturate) =>
+						changeItem(itemId, {
+							...item,
+							saturate,
+						})
+					}
 				/>
 			)}
 
@@ -183,9 +217,13 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						max: 100,
 					}}
 					//
-					attribute="grayscale"
-					repeaterAttributeIndex={itemId}
-					repeaterAttribute={repeaterAttribute}
+					value={item.grayscale}
+					onValueChange={(grayscale) =>
+						changeItem(itemId, {
+							...item,
+							grayscale,
+						})
+					}
 				/>
 			)}
 
@@ -200,9 +238,13 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						max: 100,
 					}}
 					//
-					attribute="invert"
-					repeaterAttributeIndex={itemId}
-					repeaterAttribute={repeaterAttribute}
+					value={item.invert}
+					onValueChange={(invert) =>
+						changeItem(itemId, {
+							...item,
+							invert,
+						})
+					}
 				/>
 			)}
 
@@ -217,9 +259,13 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						max: 100,
 					}}
 					//
-					attribute="sepia"
-					repeaterAttributeIndex={itemId}
-					repeaterAttribute={repeaterAttribute}
+					value={item.sepia}
+					onValueChange={(sepia) =>
+						changeItem(itemId, {
+							...item,
+							sepia,
+						})
+					}
 				/>
 			)}
 		</BaseControl>

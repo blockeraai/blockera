@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo } from '@wordpress/element';
+import { memo, useContext } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -13,8 +13,12 @@ import { InputField, ToggleSelectField, ColorField } from '@publisher/fields';
  * Internal dependencies
  */
 import BaseControl from '../../base';
+import { getRepeaterItemTypeProps } from '../../utils';
+import { RepeaterContext } from '../../repeater-control/context';
 
-const Fields = ({ itemId, repeaterAttribute }) => {
+const Fields = ({ itemId, item }) => {
+	const { changeItem } = useContext(RepeaterContext);
+
 	return (
 		<BaseControl id={`repeater-item-${itemId}`}>
 			<ToggleSelectField
@@ -30,10 +34,7 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 					},
 				]}
 				//
-				initValue="inside"
-				attribute="type"
-				repeaterAttributeIndex={itemId}
-				repeaterAttribute={repeaterAttribute}
+				{...getRepeaterItemTypeProps({ itemId, item, changeItem })}
 			/>
 
 			<InputField
@@ -46,9 +47,8 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 					max: 100,
 				}}
 				//
-				attribute="x"
-				repeaterAttributeIndex={itemId}
-				repeaterAttribute={repeaterAttribute}
+				value={item.x}
+				onValueChange={(x) => changeItem(itemId, { ...item, x })}
 			/>
 
 			<InputField
@@ -61,9 +61,8 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 					max: 100,
 				}}
 				//
-				attribute="y"
-				repeaterAttributeIndex={itemId}
-				repeaterAttribute={repeaterAttribute}
+				value={item.y}
+				onValueChange={(y) => changeItem(itemId, { ...item, y })}
 			/>
 
 			<InputField
@@ -76,9 +75,8 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 					max: 100,
 				}}
 				//
-				attribute="blur"
-				repeaterAttributeIndex={itemId}
-				repeaterAttribute={repeaterAttribute}
+				value={item.blur}
+				onValueChange={(blur) => changeItem(itemId, { ...item, blur })}
 			/>
 
 			<InputField
@@ -91,17 +89,19 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 					max: 100,
 				}}
 				//
-				attribute="spread"
-				repeaterAttributeIndex={itemId}
-				repeaterAttribute={repeaterAttribute}
+				value={item.spread}
+				onValueChange={(spread) =>
+					changeItem(itemId, { ...item, spread })
+				}
 			/>
 
 			<ColorField
 				label={__('Color', 'publisher-core')}
 				//
-				attribute="color"
-				repeaterAttributeIndex={itemId}
-				repeaterAttribute={repeaterAttribute}
+				value={item.color}
+				onValueChange={(color) =>
+					changeItem(itemId, { ...item, color })
+				}
 			/>
 		</BaseControl>
 	);

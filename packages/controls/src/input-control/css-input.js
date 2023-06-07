@@ -13,7 +13,7 @@ import { BlockEditContext } from '@publisher/extensions';
  */
 import { InputControl } from './input';
 import { isSpecialUnit } from './utils';
-import { getControlValue } from './../utils';
+import { getControlValue } from '../utils';
 
 export function CssInputControl({
 	unitType = 'general',

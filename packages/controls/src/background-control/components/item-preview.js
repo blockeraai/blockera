@@ -22,7 +22,7 @@ export default function ItemPreview(item) {
 					style={{
 						'background-image': cssProperty,
 					}}
-				></span>
+				/>
 			)}
 		</>
 	);

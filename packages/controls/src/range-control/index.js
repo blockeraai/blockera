@@ -1,19 +1,12 @@
 /**
  * WordPress dependencies
  */
-import { useContext } from '@wordpress/element';
 import { RangeControl as WordPressRangeControl } from '@wordpress/components';
 
 /**
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { BlockEditContext } from '@publisher/extensions';
-
-/**
- * Internal dependencies
- */
-import { getControlValue, updateControlValue } from './../utils';
 
 const RangeControl = ({
 	min,
@@ -21,25 +14,11 @@ const RangeControl = ({
 	initialPosition,
 	withInputField = true,
 	//
-	value,
-	attribute,
-	repeaterAttributeIndex = null,
-	repeaterAttribute = null,
 	//
+	value,
 	className,
-	onChange = () => {},
+	onValueChange = () => {},
 }) => {
-	const { attributes, setAttributes } = useContext(BlockEditContext);
-
-	let controlValue = getControlValue(
-		value,
-		attribute,
-		repeaterAttribute,
-		repeaterAttributeIndex,
-		'',
-		attributes
-	);
-
 	return (
 		<>
 			<WordPressRangeControl
@@ -47,19 +26,8 @@ const RangeControl = ({
 					initialPosition,
 					min,
 					max,
-					value: controlValue,
-					onChange: (newValue) => {
-						updateControlValue(
-							newValue,
-							attribute,
-							repeaterAttribute,
-							repeaterAttributeIndex,
-							attributes,
-							setAttributes
-						);
-
-						onChange(newValue);
-					},
+					value,
+					onChange: onValueChange,
 					className: controlClassNames('range', className),
 				}}
 				withInputField={withInputField}

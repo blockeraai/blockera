@@ -13,7 +13,7 @@ import { BlockEditContext } from '@publisher/extensions';
 /**
  * Internal dependencies
  */
-import { getControlValue, updateControlValue } from './../utils';
+import { getControlValue } from '../utils';
 import './style.scss';
 
 const AlignmentMatrixControl = ({
@@ -27,10 +27,11 @@ const AlignmentMatrixControl = ({
 	//
 	className,
 	onChange = () => {},
+	onValueChange = () => {},
 }) => {
-	const { attributes, setAttributes } = useContext(BlockEditContext);
+	const { attributes } = useContext(BlockEditContext);
 
-	let controlValue = getControlValue(
+	const controlValue = getControlValue(
 		value,
 		attribute,
 		repeaterAttribute,
@@ -45,16 +46,8 @@ const AlignmentMatrixControl = ({
 			value={controlValue}
 			width={width}
 			onChange={(newValue) => {
-				updateControlValue(
-					newValue,
-					attribute,
-					repeaterAttribute,
-					repeaterAttributeIndex,
-					attributes,
-					setAttributes
-				);
-
 				onChange(newValue);
+				onValueChange(newValue);
 			}}
 		/>
 	);

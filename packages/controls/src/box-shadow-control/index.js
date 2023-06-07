@@ -13,9 +13,8 @@ import { controlClassNames } from '@publisher/classnames';
  * Internal dependencies
  */
 import Header from './components/header';
-import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
-import { getControlValue, updateControlValue } from './../utils';
+import RepeaterControl from '../repeater-control';
 
 const initialState = {
 	type: 'outer',
@@ -28,45 +27,29 @@ const initialState = {
 };
 
 function BoxShadowControl({
-	value,
 	attribute,
-	repeaterAttributeIndex = null,
-	repeaterAttribute = null,
 	//
 	className,
 	...props
 }) {
 	const { attributes, setAttributes } = useContext(BlockEditContext);
-
-	let controlValue = getControlValue(
-		value,
-		attribute,
-		repeaterAttribute,
-		repeaterAttributeIndex,
-		'',
-		attributes
-	);
+	const { [attribute]: boxShadowItems } = attributes;
 
 	return (
 		<div className={controlClassNames('box-shadow', className)}>
 			<RepeaterControl
 				{...{
-					...props,
 					Header,
-					initialState,
-					updateBlockAttributes: (newValue) => {
-						updateControlValue(
-							newValue,
-							attribute,
-							repeaterAttribute,
-							repeaterAttributeIndex,
-							attributes,
-							setAttributes
-						);
-					},
-					value: controlValue,
-					InnerComponents: Fields,
+					...props,
 					attribute,
+					initialState,
+					value: boxShadowItems,
+					InnerComponents: Fields,
+					updateBlockAttributes: (newBoxShadowItems) => {
+						attributes[attribute] = newBoxShadowItems;
+
+						setAttributes(attributes);
+					},
 				}}
 			/>
 		</div>

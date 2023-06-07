@@ -15,7 +15,6 @@ import { controlClassNames } from '@publisher/classnames';
 import Header from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
-import { getControlValue, updateControlValue } from '../utils';
 import './style.scss';
 
 const initialState = {
@@ -39,24 +38,13 @@ const initialState = {
 };
 
 function BackgroundControl({
-	value,
 	attribute,
-	repeaterAttributeIndex = null,
-	repeaterAttribute = null,
 	//
 	className,
 	...props
 }) {
 	const { attributes, setAttributes } = useContext(BlockEditContext);
-
-	const controlValue = getControlValue(
-		value,
-		attribute,
-		repeaterAttribute,
-		repeaterAttributeIndex,
-		'',
-		attributes
-	);
+	const { [attribute]: backgroundItems } = attributes;
 
 	return (
 		<div className={controlClassNames('background', className)}>
@@ -65,17 +53,12 @@ function BackgroundControl({
 					...props,
 					Header,
 					initialState,
-					updateBlockAttributes: (newValue) => {
-						updateControlValue(
-							newValue,
-							attribute,
-							repeaterAttribute,
-							repeaterAttributeIndex,
-							attributes,
-							setAttributes
-						);
+					updateBlockAttributes: (newBackgroundItems) => {
+						attributes[attribute] = newBackgroundItems;
+
+						setAttributes(attributes);
 					},
-					value: controlValue,
+					value: backgroundItems,
 					InnerComponents: Fields,
 					attribute,
 				}}

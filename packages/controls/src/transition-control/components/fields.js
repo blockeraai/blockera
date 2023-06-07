@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo } from '@wordpress/element';
+import { memo, useContext } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -13,9 +13,13 @@ import { InputField, SelectField } from '@publisher/fields';
  * Internal dependencies
  */
 import BaseControl from '../../base';
-import { getTypeOptions, getTimingOptions } from './../utils';
+import { getRepeaterItemTypeProps } from '../../utils';
+import { getTypeOptions, getTimingOptions } from '../utils';
+import { RepeaterContext } from '../../repeater-control/context';
 
-const Fields = ({ itemId, repeaterAttribute }) => {
+const Fields = ({ itemId, item }) => {
+	const { changeItem } = useContext(RepeaterContext);
+
 	return (
 		<BaseControl id={`repeater-item-${itemId}`}>
 			<SelectField
@@ -23,9 +27,7 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 				options={getTypeOptions()}
 				//
 				initValue="all"
-				attribute="type"
-				repeaterAttributeIndex={itemId}
-				repeaterAttribute={repeaterAttribute}
+				{...getRepeaterItemTypeProps({ itemId, item, changeItem })}
 			/>
 
 			<InputField
@@ -38,9 +40,10 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 					max: 5000,
 				}}
 				//
-				attribute="duration"
-				repeaterAttributeIndex={itemId}
-				repeaterAttribute={repeaterAttribute}
+				value={item.duration}
+				onValueChange={(duration) =>
+					changeItem(itemId, { ...item, duration })
+				}
 			/>
 
 			<SelectField
@@ -48,9 +51,10 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 				options={getTimingOptions()}
 				//
 				initValue="all"
-				attribute="timing"
-				repeaterAttributeIndex={itemId}
-				repeaterAttribute={repeaterAttribute}
+				value={item.timing}
+				onValueChange={(timing) =>
+					changeItem(itemId, { ...item, timing })
+				}
 			/>
 
 			<InputField
@@ -64,9 +68,10 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 					initialPosition: 0,
 				}}
 				//
-				attribute="delay"
-				repeaterAttributeIndex={itemId}
-				repeaterAttribute={repeaterAttribute}
+				value={item.delay}
+				onValueChange={(delay) =>
+					changeItem(itemId, { ...item, delay })
+				}
 			/>
 		</BaseControl>
 	);

@@ -15,7 +15,6 @@ import { controlClassNames } from '@publisher/classnames';
 import Header from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
-import { getControlValue, updateControlValue } from './../utils';
 
 const initialState = {
 	type: 'blur',
@@ -35,24 +34,13 @@ const initialState = {
 };
 
 function FilterControl({
-	value,
 	attribute,
-	repeaterAttributeIndex = null,
-	repeaterAttribute = null,
 	//
 	className,
 	...props
 }) {
 	const { attributes, setAttributes } = useContext(BlockEditContext);
-
-	let controlValue = getControlValue(
-		value,
-		attribute,
-		repeaterAttribute,
-		repeaterAttributeIndex,
-		'',
-		attributes
-	);
+	const { [attribute]: filterItems } = attributes;
 
 	return (
 		<div className={controlClassNames('filter', className)}>
@@ -61,17 +49,12 @@ function FilterControl({
 					...props,
 					Header,
 					initialState,
-					updateBlockAttributes: (newValue) => {
-						updateControlValue(
-							newValue,
-							attribute,
-							repeaterAttribute,
-							repeaterAttributeIndex,
-							attributes,
-							setAttributes
-						);
+					updateBlockAttributes: (newFilterItems) => {
+						attributes[attribute] = newFilterItems;
+
+						setAttributes(attributes);
 					},
-					value: controlValue,
+					value: filterItems,
 					InnerComponents: Fields,
 					attribute,
 				}}

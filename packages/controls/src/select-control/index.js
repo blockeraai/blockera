@@ -1,60 +1,39 @@
 /**
  * WordPress dependencies
  */
-import { useContext } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import { SelectControl as WPSelectControl } from '@wordpress/components';
 
 /**
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { BlockEditContext } from '@publisher/extensions';
 
 /**
  * Internal dependencies
  */
 import { renderSelectNativeOption } from './utils';
-import { getControlValue, updateControlValue } from './../utils';
 
 const SelectControl = ({
 	initValue = '',
 	options,
 	children,
 	//
-	value,
-	attribute,
-	repeaterAttributeIndex = null,
-	repeaterAttribute = null,
+	value: _value,
 	//
 	className,
-	onChange = () => {},
+	onValueChange = () => {},
 }) => {
-	const { attributes, setAttributes } = useContext(BlockEditContext);
-
-	let controlValue = getControlValue(
-		value,
-		attribute,
-		repeaterAttribute,
-		repeaterAttributeIndex,
-		initValue,
-		attributes
-	);
+	const [value, setValue] = useState(_value || initValue);
 
 	return (
 		<WPSelectControl
 			className={controlClassNames('select', 'native-select', className)}
-			value={controlValue}
+			value={value}
 			onChange={(newValue) => {
-				updateControlValue(
-					newValue,
-					attribute,
-					repeaterAttribute,
-					repeaterAttributeIndex,
-					attributes,
-					setAttributes
-				);
+				setValue(newValue);
 
-				onChange(newValue);
+				onValueChange(newValue);
 			}}
 			__nextHasNoMarginBottom
 		>

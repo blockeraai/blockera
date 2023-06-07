@@ -15,30 +15,32 @@ import {
 	PositionField,
 } from '@publisher/fields';
 import { HStack } from '@publisher/components';
-import { updateControlValue } from '@publisher/controls';
 import { BlockEditContext } from '@publisher/extensions';
 /**
  * Internal dependencies
  */
 import BaseControl from '../../base';
-import { default as TypeImageIcon } from '../icons/type-image';
-import { default as TypeLinearGradientIcon } from '../icons/type-linear-gradient';
-import { default as TypeRadialGradientIcon } from '../icons/type-radial-gradient';
-import { default as RepeatIcon } from '../icons/repeat';
-import { default as RepeatXIcon } from '../icons/repeat-x';
-import { default as RepeatYIcon } from '../icons/repeat-y';
-import { default as RepeatNoIcon } from '../icons/repeat-no';
-import { default as LinearGradientRepeatIcon } from '../icons/linear-gradient-repeat';
-import { default as LinearGradientNoRepeatIcon } from '../icons/linear-gradient-no-repeat';
-import { default as RadialGradientFarthestCornerIcon } from '../icons/radial-gradient-farthest-corner';
-import { default as RadialGradientFarthestSideIcon } from '../icons/radial-gradient-farthest-side';
-import { default as RadialGradientClosestCornerIcon } from '../icons/radial-gradient-closest-corner';
-import { default as RadialGradientClosestSideIcon } from '../icons/radial-gradient-closest-side';
-import { default as RadialGradientRepeatIcon } from '../icons/radial-gradient-repeat';
-import { default as RadialGradientNoRepeatIcon } from '../icons/radial-gradient-no-repeat';
+import RepeatIcon from '../icons/repeat';
+import RepeatXIcon from '../icons/repeat-x';
+import RepeatYIcon from '../icons/repeat-y';
+import RepeatNoIcon from '../icons/repeat-no';
+import TypeImageIcon from '../icons/type-image';
+import { getRepeaterItemTypeProps } from '../../utils';
+import { RepeaterContext } from '../../repeater-control/context';
+import TypeLinearGradientIcon from '../icons/type-linear-gradient';
+import TypeRadialGradientIcon from '../icons/type-radial-gradient';
+import LinearGradientRepeatIcon from '../icons/linear-gradient-repeat';
+import RadialGradientRepeatIcon from '../icons/radial-gradient-repeat';
+import LinearGradientNoRepeatIcon from '../icons/linear-gradient-no-repeat';
+import RadialGradientNoRepeatIcon from '../icons/radial-gradient-no-repeat';
+import RadialGradientClosestSideIcon from '../icons/radial-gradient-closest-side';
+import RadialGradientFarthestSideIcon from '../icons/radial-gradient-farthest-side';
+import RadialGradientClosestCornerIcon from '../icons/radial-gradient-closest-corner';
+import RadialGradientFarthestCornerIcon from '../icons/radial-gradient-farthest-corner';
 
-const Fields = ({ itemId, repeaterAttribute }) => {
-	const { attributes, setAttributes } = useContext(BlockEditContext);
+const Fields = ({ itemId, item, repeaterAttribute }) => {
+	const { attributes } = useContext(BlockEditContext);
+	const { changeItem } = useContext(RepeaterContext);
 
 	const value =
 		attributes[repeaterAttribute] && attributes[repeaterAttribute][itemId];
@@ -46,6 +48,17 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 	const linearGradientValue = /\((\d.*)deg,/im?.exec(
 		value['linear-gradient']
 	);
+
+	const onChangePositionAlignment = (newValue) =>
+		changeItem(itemId, {
+			...item,
+			...newValue,
+		});
+	const onChangePositionField = (newValue, attributeId) =>
+		changeItem(itemId, {
+			...item,
+			[attributeId]: newValue,
+		});
 
 	return (
 		<BaseControl id={`repeater-item-${itemId}`}>
@@ -70,9 +83,7 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 				]}
 				//
 				initValue="image"
-				attribute="type"
-				repeaterAttributeIndex={itemId}
-				repeaterAttribute={repeaterAttribute}
+				{...getRepeaterItemTypeProps({ itemId, item, changeItem })}
 			/>
 
 			{value.type === 'image' && (
@@ -83,9 +94,10 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 							type: 'text',
 						}}
 						//
-						attribute="image"
-						repeaterAttributeIndex={itemId}
-						repeaterAttribute={repeaterAttribute}
+						value={item.image}
+						onValueChange={(image) =>
+							changeItem(itemId, { ...item, image })
+						}
 					/>
 
 					<ToggleSelectField
@@ -106,9 +118,10 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						]}
 						//
 						initValue="custom"
-						attribute="image-size"
-						repeaterAttributeIndex={itemId}
-						repeaterAttribute={repeaterAttribute}
+						value={item['image-size']}
+						onValueChange={(size) =>
+							changeItem(itemId, { ...item, 'image-size': size })
+						}
 					>
 						{value['image-size'] === 'custom' && (
 							<HStack spacing="2" justify="space-around">
@@ -122,9 +135,13 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 									}}
 									//
 									initValue="1auto"
-									attribute="image-size-width"
-									repeaterAttributeIndex={itemId}
-									repeaterAttribute={repeaterAttribute}
+									value={item['image-size-width']}
+									onValueChange={(width) =>
+										changeItem(itemId, {
+											...item,
+											'image-size-width': width,
+										})
+									}
 								/>
 
 								<InputField
@@ -137,19 +154,25 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 									}}
 									//
 									initValue="1auto"
-									attribute="image-size-height"
-									repeaterAttributeIndex={itemId}
-									repeaterAttribute={repeaterAttribute}
+									value={item['image-size-height']}
+									onValueChange={(height) =>
+										changeItem(itemId, {
+											...item,
+											'image-size-height': height,
+										})
+									}
 								/>
 							</HStack>
 						)}
 					</ToggleSelectField>
 
 					<PositionField
+						top={item['image-position-top']}
+						left={item['image-position-left']}
 						attributeTopField="image-position-top"
 						attributeLeftField="image-position-left"
-						repeaterAttributeIndex={itemId}
-						repeaterAttribute={repeaterAttribute}
+						onChangeAlignment={onChangePositionAlignment}
+						onValueChange={onChangePositionField}
 					/>
 
 					<ToggleSelectField
@@ -184,9 +207,13 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						]}
 						//
 						initValue="repeat"
-						attribute="image-repeat"
-						repeaterAttributeIndex={itemId}
-						repeaterAttribute={repeaterAttribute}
+						value={item['image-repeat']}
+						onValueChange={(newValue) =>
+							changeItem(itemId, {
+								...item,
+								'image-repeat': newValue,
+							})
+						}
 					/>
 
 					<ToggleSelectField
@@ -203,9 +230,13 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						]}
 						//
 						initValue="scroll"
-						attribute="image-attachment"
-						repeaterAttributeIndex={itemId}
-						repeaterAttribute={repeaterAttribute}
+						value={item['image-attachment']}
+						onValueChange={(newValue) =>
+							changeItem(itemId, {
+								...item,
+								'image-attachment': newValue,
+							})
+						}
 					/>
 				</>
 			)}
@@ -214,26 +245,25 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 				<>
 					<GradientBarField
 						initValue="linear-gradient(90deg,#009efa 10%,#e52e00 90%)"
-						attribute="linear-gradient"
-						repeaterAttributeIndex={itemId}
-						repeaterAttribute={repeaterAttribute}
+						value={item['linear-gradient']}
+						onValueChange={(newValue) =>
+							changeItem(itemId, {
+								...item,
+								'linear-gradient': newValue,
+							})
+						}
 					/>
 
 					<AnglePickerField
 						label={__('Angel', 'publisher-core')}
-						onChange={(newValue) => {
+						onValueChange={(newValue) => {
 							// update linear gradient value
-							updateControlValue(
-								value['linear-gradient'].replace(
-									/\(\d.*deg,/gim,
-									`(${newValue}deg,`
-								),
-								'linear-gradient',
-								repeaterAttribute,
-								itemId,
-								attributes,
-								setAttributes
-							);
+							changeItem(itemId, {
+								...item,
+								'linear-gradient': value[
+									'linear-gradient'
+								].replace(/\(\d.*deg,/gim, `(${newValue}deg,`),
+							});
 						}}
 						value={
 							linearGradientValue ? linearGradientValue[1] : ''
@@ -256,9 +286,13 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						]}
 						//
 						initValue="no-repeat"
-						attribute="linear-gradient-repeat"
-						repeaterAttributeIndex={itemId}
-						repeaterAttribute={repeaterAttribute}
+						value={item['linear-gradient-repeat']}
+						onValueChange={(newValue) =>
+							changeItem(itemId, {
+								...item,
+								'linear-gradient-repeat': newValue,
+							})
+						}
 					/>
 				</>
 			)}
@@ -268,16 +302,22 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 					<GradientBarField
 						//
 						initValue="radial-gradient(rgb(0,159,251) 0%,rgb(229,46,0) 100%)"
-						attribute="radial-gradient"
-						repeaterAttributeIndex={itemId}
-						repeaterAttribute={repeaterAttribute}
+						value={item['radial-gradient']}
+						onValueChange={(newValue) =>
+							changeItem(itemId, {
+								...item,
+								'radial-gradient': newValue,
+							})
+						}
 					/>
 
 					<PositionField
+						top={item['radial-gradient-position-top']}
+						left={item['radial-gradient-position-left']}
 						attributeTopField="radial-gradient-position-top"
 						attributeLeftField="radial-gradient-position-left"
-						repeaterAttributeIndex={itemId}
-						repeaterAttribute={repeaterAttribute}
+						onChangeAlignment={onChangePositionAlignment}
+						onValueChange={onChangePositionField}
 					/>
 
 					<ToggleSelectField
@@ -318,9 +358,13 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						]}
 						//
 						initValue="farthest-corner"
-						attribute="radial-gradient-size"
-						repeaterAttributeIndex={itemId}
-						repeaterAttribute={repeaterAttribute}
+						value={item['radial-gradient-size']}
+						onValueChange={(newValue) =>
+							changeItem(itemId, {
+								...item,
+								'radial-gradient-size': newValue,
+							})
+						}
 					/>
 
 					<ToggleSelectField
@@ -339,9 +383,13 @@ const Fields = ({ itemId, repeaterAttribute }) => {
 						]}
 						//
 						initValue="no-repeat"
-						attribute="radial-gradient-repeat"
-						repeaterAttributeIndex={itemId}
-						repeaterAttribute={repeaterAttribute}
+						value={item['radial-gradient-repeat']}
+						onValueChange={(newValue) =>
+							changeItem(itemId, {
+								...item,
+								'radial-gradient-repeat': newValue,
+							})
+						}
 					/>
 				</>
 			)}

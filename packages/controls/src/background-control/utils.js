@@ -7,7 +7,6 @@ export function getBackgroundItemBGProperty(item) {
 
 			// Image
 			return `url(${item.image})`;
-			break;
 
 		case 'linear-gradient':
 			if (!item['linear-gradient']) {
@@ -24,7 +23,6 @@ export function getBackgroundItemBGProperty(item) {
 			}
 
 			return gradient;
-			break;
 
 		case 'radial-gradient':
 			if (!item['radial-gradient']) {
@@ -60,7 +58,6 @@ export function getBackgroundItemBGProperty(item) {
 			}
 
 			return radialGradient;
-			break;
 	}
 
 	return undefined;

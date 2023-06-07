@@ -19,42 +19,36 @@ export function convertAlignmentMatrixCoordinates(value) {
 					number: '50%',
 					text: 'center',
 				};
-				break;
 
 			case 'top':
 				return {
 					number: '0%',
 					text: 'top',
 				};
-				break;
 
 			case 'bottom':
 				return {
 					number: '100%',
 					text: 'bottom',
 				};
-				break;
 
 			case 'left':
 				return {
 					number: '0%',
 					text: 'left',
 				};
-				break;
 
 			case 'right':
 				return {
 					number: '100%',
 					text: 'right',
 				};
-				break;
 
 			default:
 				return {
 					number: '50%',
 					text: 'center',
 				};
-				break;
 		}
 	}
 
@@ -82,7 +76,7 @@ export function convertAlignmentMatrixCoordinates(value) {
 				break;
 		}
 
-		let splitted = value.split(' ');
+		const splitted = value.split(' ');
 
 		if (splitted.length !== 2) {
 			return coordinates;

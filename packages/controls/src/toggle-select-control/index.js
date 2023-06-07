@@ -1,7 +1,6 @@
 /**
  * WordPress dependencies
  */
-import { useContext } from '@wordpress/element';
 import {
 	__experimentalToggleGroupControl as WPToggleGroupControl,
 	__experimentalToggleGroupControlOption as WPToggleGroupControlOption,
@@ -12,12 +11,10 @@ import {
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { BlockEditContext } from '@publisher/extensions';
 
 /**
  * Internal dependencies
  */
-import { getControlValue, updateControlValue } from './../utils';
 import './style.scss';
 
 const ToggleSelectControl = ({
@@ -27,41 +24,17 @@ const ToggleSelectControl = ({
 	//
 	value,
 	attribute,
-	repeaterAttributeIndex = null,
-	repeaterAttribute = null,
 	//
 	className,
-	onChange = () => {},
+	onValueChange = () => {},
 	...props
 }) => {
-	const { attributes, setAttributes } = useContext(BlockEditContext);
-
-	const controlValue = getControlValue(
-		value,
-		attribute,
-		repeaterAttribute,
-		repeaterAttributeIndex,
-		initValue,
-		attributes
-	);
-
 	return (
 		<>
 			<WPToggleGroupControl
 				className={controlClassNames('toggle-select', className)}
-				value={controlValue}
-				onChange={(newValue) => {
-					updateControlValue(
-						newValue,
-						attribute,
-						repeaterAttribute,
-						repeaterAttributeIndex,
-						attributes,
-						setAttributes
-					);
-
-					onChange(newValue);
-				}}
+				value={value || initValue}
+				onChange={onValueChange}
 				label=""
 				hideLabelFromVision={true}
 				isBlock={true}

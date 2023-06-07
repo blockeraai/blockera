@@ -13,7 +13,7 @@ const MappedItems = () => {
 	const { repeaterItems: items, repeaterAttribute } =
 		useContext(RepeaterContext);
 
-	const cachedValue = useMemo(
+	return useMemo(
 		() =>
 			items.map((item, itemId) => (
 				<RepeaterItem
@@ -21,10 +21,8 @@ const MappedItems = () => {
 					key={`repeater-item-${itemId}`}
 				/>
 			)),
-		[items]
+		[items, repeaterAttribute]
 	);
-
-	return cachedValue;
 };
 
 export default MappedItems;

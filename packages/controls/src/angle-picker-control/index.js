@@ -2,14 +2,13 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useContext, useState } from '@wordpress/element';
-import { AnglePickerControl as WordPressAnglePickerControl } from '@wordpress/components';
+import { useState } from '@wordpress/element';
 import { rotateLeft, rotateRight } from '@wordpress/icons';
+import { AnglePickerControl as WordPressAnglePickerControl } from '@wordpress/components';
 
 /**
  * Publisher dependencies
  */
-import { BlockEditContext } from '@publisher/extensions';
 import {
 	controlClassNames,
 	controlInnerClassNames,
@@ -20,32 +19,17 @@ import { Button, HStack } from '@publisher/components';
  * Internal dependencies
  */
 import './style.scss';
-import { getControlValue, updateControlValue } from './../utils';
 
 export default function AnglePickerControl({
 	initValue = 0,
 	//
 	value,
-	attribute,
-	repeaterAttributeIndex = null,
-	repeaterAttribute = null,
 	//
 	className,
-	onChange = () => {},
+	onValueChange = () => {},
 	...props
 }) {
-	const { attributes, setAttributes } = useContext(BlockEditContext);
-
-	const controlValue = getControlValue(
-		value,
-		attribute,
-		repeaterAttribute,
-		repeaterAttributeIndex,
-		initValue,
-		attributes
-	);
-
-	const [angel, setAngel] = useState(controlValue);
+	const [angel, setAngel] = useState(value || initValue);
 
 	function addAngle(angle, value) {
 		// Add the value to the angle
@@ -80,18 +64,9 @@ export default function AnglePickerControl({
 			<WordPressAnglePickerControl
 				{...props}
 				value={angel}
-				onChange={(newValue) => {
-					updateControlValue(
-						newValue,
-						attribute,
-						repeaterAttribute,
-						repeaterAttributeIndex,
-						attributes,
-						setAttributes
-					);
-					setAngel(newValue);
-
-					onChange(newValue);
+				onChange={(_angle) => {
+					setAngel(_angle);
+					onValueChange(_angle);
 				}}
 				label=""
 				__nextHasNoMarginBottom
@@ -102,7 +77,10 @@ export default function AnglePickerControl({
 				label={__('Rotate Left', 'publisher')}
 				icon={rotateLeft}
 				onClick={() => {
-					setAngel(subtractAngle(angel, 45));
+					const _angel = subtractAngle(angel, 45);
+
+					setAngel(_angel);
+					onValueChange(_angel);
 				}}
 			/>
 			<Button
@@ -111,7 +89,10 @@ export default function AnglePickerControl({
 				label={__('Rotate Right', 'publisher')}
 				icon={rotateRight}
 				onClick={() => {
-					setAngel(addAngle(angel, 45));
+					const _angel = addAngle(angel, 45);
+
+					setAngel(_angel);
+					onValueChange(_angel);
 				}}
 			/>
 		</HStack>

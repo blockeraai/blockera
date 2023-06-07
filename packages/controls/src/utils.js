@@ -55,8 +55,8 @@ export function updateControlValue(
 	if (repeaterAttribute !== null) {
 		setAttributes({
 			...attributes,
-			[repeaterAttribute]: [
-				...attributes[repeaterAttribute]?.map((repeaterItem, index) => {
+			[repeaterAttribute]: attributes[repeaterAttribute]?.map(
+				(repeaterItem, index) => {
 					if (repeaterAttributeIndex !== index) {
 						return repeaterItem;
 					}
@@ -65,8 +65,8 @@ export function updateControlValue(
 						...repeaterItem,
 						[attribute]: value,
 					};
-				}),
-			],
+				}
+			),
 		});
 	} else {
 		setAttributes({
@@ -74,4 +74,11 @@ export function updateControlValue(
 			[attribute]: value,
 		});
 	}
+}
+
+export function getRepeaterItemTypeProps({ itemId, item, changeItem }) {
+	return {
+		value: item.type,
+		onValueChange: (type) => changeItem(itemId, { ...item, type }),
+	};
 }
