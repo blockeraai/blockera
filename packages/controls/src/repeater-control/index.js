@@ -12,7 +12,7 @@ import { useImmerReducer } from 'use-immer';
 /**
  * Publisher dependencies
  */
-import { Button, Icon } from '@publisher/components';
+import { Button } from '@publisher/components';
 import {
 	controlClassNames,
 	controlInnerClassNames,
@@ -25,10 +25,11 @@ import repeaterItemsReducer from './store/reducer';
 import { RepeaterContextProvider } from './context';
 import MappedItems from './components/mapped-items';
 import { addItem, removeItem, changeItem, sortItems } from './store/actions';
+import LabelControl from '../label-control';
+import PlusIcon from './icons/plus';
 
 //CSS dependencies
 import './style.scss';
-import LabelControl from '../label-control';
 
 const RepeaterControl = ({
 	attribute,
@@ -84,10 +85,11 @@ const RepeaterControl = ({
 					<LabelControl label={label} />
 
 					<Button
+						size="extra-small"
 						className={controlInnerClassNames('btn-add')}
 						onClick={defaultRepeaterState.addNewItem}
 					>
-						<Icon type="wp" icon={plus} size={17} />
+						<PlusIcon />
 					</Button>
 				</div>
 				<MappedItems />

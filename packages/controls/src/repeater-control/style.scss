@@ -77,29 +77,8 @@
 	}
 
 	.publisher-control-btn-add {
-		font-size: 13px;
-		font-weight: 400;
-		height: 22px;
-		line-height: 22px;
+		padding: 0 !important;
 		width: 22px;
-		margin: 0;
-		padding: 0 0;
-		border: 1px solid #959595;
 		margin-left: auto;
-
-		&:focus:not(:disabled) {
-			//
-
-			border-color: var(
-				--wp-components-color-accent,
-				var(--wp-admin-theme-color, #007cba)
-			);
-			box-shadow: 0 0 0 var(--wp-admin-border-width-focus)
-				var(
-					--wp-components-color-accent,
-					var(--wp-admin-theme-color, #007cba)
-				);
-			outline: 3px solid transparent;
-		}
 	}
 }
