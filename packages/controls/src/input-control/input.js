@@ -67,7 +67,7 @@ export function InputControl({
 				<WPUnitControl
 					{...props}
 					units={units}
-					value={value}
+					value={controlValue}
 					onChange={(newValue) => {
 						newValue = onChange(newValue);
 						setValue(newValue);
@@ -86,7 +86,7 @@ export function InputControl({
 			{!units && (
 				<WPTextControl
 					{...props}
-					value={value}
+					value={controlValue}
 					onChange={(newValue) => {
 						newValue = onChange(newValue);
 						setValue(newValue);
