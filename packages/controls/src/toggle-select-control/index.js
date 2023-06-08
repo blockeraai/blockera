@@ -21,6 +21,7 @@ const ToggleSelectControl = ({
 	initValue = '',
 	options,
 	children,
+	isDeselectable = false,
 	//
 	value,
 	attribute,
@@ -45,6 +46,8 @@ const ToggleSelectControl = ({
 				label=""
 				hideLabelFromVision={true}
 				isBlock={true}
+				isDeselectable={isDeselectable}
+				__nextHasNoMarginBottom={false}
 				{...props}
 			>
 				{options?.map((item) => {
