@@ -27,6 +27,7 @@ class AssetsProvider {
 		'extensions' => [
 			'@publisher/fields',
 			'@publisher/controls',
+			'@publisher/components'
 		]
 	];
 
