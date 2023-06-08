@@ -4,11 +4,15 @@
 }
 
 .publisher-component-button {
-	border: 1px solid #959595;
+
 	font-size: 13px;
 	font-weight: 400;
 	display: flex;
 	gap: 8px;
+
+	&:not(.no-border){
+		border: 1px solid #959595;
+	}
 
 	&.size-input,
 	&.size-small {
@@ -37,7 +41,7 @@
 		justify-content: flex-end;
 	}
 
-	&:hover {
+	&:hover:not(.no-border) {
 		border-color: var(
 						--wp-components-color-accent,
 						var(--wp-admin-theme-color, #007cba)
@@ -45,9 +49,9 @@
 		color: var(--wp-components-color-foreground, #1e1e1e);
 	}
 
-	&.toggle-focus.is-focus:not(:disabled),
-	&.toggle-focus.is-focus:focus:not(:disabled),
-	&:focus:not(:disabled):not(.toggle-focus) {
+	&.toggle-focus.is-focus:not(:disabled):not(.no-border),
+	&.toggle-focus.is-focus:focus:not(:disabled):not(.no-border),
+	&:focus:not(:disabled):not(.toggle-focus):not(.no-border) {
 
 		border-color: var(
 						--wp-components-color-accent,
@@ -60,9 +64,15 @@
 		outline: 2px solid transparent;
 	}
 
-	&.toggle-focus:focus:not(:disabled) {
+	&.toggle-focus:focus:not(:disabled):not(.no-border) {
 
 		border-color: #959595;
+		box-shadow: none;
+		outline: none;
+	}
+
+	&.components-button.no-border:focus:not(:disabled){
+		border: none;
 		box-shadow: none;
 		outline: none;
 	}

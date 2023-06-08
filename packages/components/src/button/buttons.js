@@ -6,16 +6,9 @@ import { componentClassNames } from '@publisher/classnames';
 /**
  * Internal dependencies
  */
-import './style.scss';
 import { HStack } from '../index';
+import './style.scss';
 
-/**
- *
- * classes:
- * text-center = center align content
- *
- * size-small
- */
 export default function Buttons({
 	className,
 	children,

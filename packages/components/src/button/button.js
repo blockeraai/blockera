@@ -13,13 +13,6 @@ import { componentClassNames } from '@publisher/classnames';
  */
 import './style.scss';
 
-/**
- *
- * classes:
- * text-center = center align content
- *
- * size-small
- */
 export default function Button({
 	size = 'normal',
 	style = 'primary',
