@@ -827,7 +827,7 @@ export function TypographyExtension({ children, config, ...props }) {
 										publisherWordBreak: newValue,
 									})
 								}
-							></SelectField>
+							/>
 						)}
 					</Popover>
 				)}
