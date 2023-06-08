@@ -10,6 +10,7 @@ import * as extensions from '../';
 import * as config from './config';
 import { InspectElement } from '@publisher/components';
 import { BaseExtensionContextProvider, BaseExtensionContext } from './context';
+import { useDisplayBlockControls } from '../../hooks/hooks';
 
 export function BaseExtension({
 	title,
@@ -30,11 +31,13 @@ export function BaseExtension({
 
 	return (
 		<BaseExtensionContextProvider {...contextValue}>
-			<InspectElement title={title} initialOpen={initialOpen}>
-				{'function' === typeof ExtensionTypeUI && (
-					<ExtensionTypeUI {...{ ...props, config }} />
-				)}
-			</InspectElement>
+			{useDisplayBlockControls() && (
+				<InspectElement title={title} initialOpen={initialOpen}>
+					{'function' === typeof ExtensionTypeUI && (
+						<ExtensionTypeUI {...{ ...props, config }} />
+					)}
+				</InspectElement>
+			)}
 			{children}
 			{'function' === typeof ExtensionTypeCssRules && (
 				<style
