@@ -88,6 +88,7 @@ export function EffectsExtension({ children, config, ...props }) {
 						...props,
 						attribute: 'publisherBackdropFilter',
 						label: __('Backdrop Filters', 'publisher-core'),
+						popoverLabel: __('Backdrop Filter', 'publisher-core'),
 					}}
 				/>
 			)}

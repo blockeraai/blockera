@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies
  */
+import { __ } from '@wordpress/i18n';
 import { useContext } from '@wordpress/element';
 
 /**
@@ -35,6 +36,7 @@ const initialState = {
 
 function FilterControl({
 	attribute,
+	popoverLabel = __('Filter Effect', 'publisher-core'),
 	//
 	className,
 	...props
@@ -47,6 +49,7 @@ function FilterControl({
 			<RepeaterControl
 				{...{
 					...props,
+					popoverLabel,
 					Header,
 					initialState,
 					updateBlockAttributes: (newFilterItems) =>

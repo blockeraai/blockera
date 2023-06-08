@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies
  */
+import { __ } from '@wordpress/i18n';
 import { useContext } from '@wordpress/element';
 
 /**
@@ -50,6 +51,7 @@ function TextShadowControl({
 			<RepeaterControl
 				{...{
 					...props,
+					popoverLabel: __('Text Shadow', 'publisher-core'),
 					Header,
 					initialState,
 					updateBlockAttributes: (newValue) => {

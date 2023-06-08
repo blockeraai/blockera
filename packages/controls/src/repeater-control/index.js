@@ -1,7 +1,6 @@
 /**
  * WordPress dependencies.
  */
-import { plus } from '@wordpress/icons';
 import { useEffect } from '@wordpress/element';
 
 /**
@@ -34,6 +33,7 @@ import './style.scss';
 const RepeaterControl = ({
 	attribute,
 	design = 'minimal',
+	popoverLabel,
 	label,
 	value,
 	Header,
@@ -70,6 +70,7 @@ const RepeaterControl = ({
 			dispatch(changeItem(itemId, newValue)),
 		sortItems: (newValue) => dispatch(sortItems(newValue)),
 		isPopover,
+		popoverLabel,
 	};
 
 	return (

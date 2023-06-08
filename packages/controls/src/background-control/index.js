@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies
  */
+import { __ } from '@wordpress/i18n';
 import { useContext } from '@wordpress/element';
 
 /**
@@ -51,6 +52,7 @@ function BackgroundControl({
 			<RepeaterControl
 				{...{
 					...props,
+					popoverLabel: __('Background', 'publisher-core'),
 					Header,
 					initialState,
 					updateBlockAttributes: (newBackgroundItems) =>

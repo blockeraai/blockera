@@ -26,6 +26,7 @@ const RepeaterItem = ({ item, itemId, repeaterAttribute }) => {
 		sortItems,
 		repeaterItems: items,
 		isPopover,
+		popoverLabel,
 	} = useContext(RepeaterContext);
 	const actionsProps = {
 		itemId,
@@ -67,6 +68,10 @@ const RepeaterItem = ({ item, itemId, repeaterAttribute }) => {
 				isOpen={isOpen}
 				isVisible={isVisible}
 				isPopover={isPopover}
+				popoverLabel={popoverLabel}
+				onClose={() => {
+					setOpen(false);
+				}}
 			/>
 		</div>
 	);

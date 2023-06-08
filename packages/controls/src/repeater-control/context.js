@@ -5,6 +5,7 @@ import { createContext } from '@wordpress/element';
 
 const RepeaterContext = createContext({
 	design: 'minimal',
+	popoverLabel: '',
 	Header: null,
 	clientId: null,
 	attributes: {},

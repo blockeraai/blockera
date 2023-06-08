@@ -15,6 +15,7 @@ export function FilterField({
 	columns,
 	className,
 	children,
+	popoverLabel,
 	...props
 }) {
 	return (
@@ -24,6 +25,7 @@ export function FilterField({
 					config,
 					...props,
 					attribute,
+					popoverLabel,
 				}}
 				isPopover={true}
 				label={label}

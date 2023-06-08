@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies
  */
+import { __ } from '@wordpress/i18n';
 import { useContext } from '@wordpress/element';
 
 /**
@@ -38,6 +39,7 @@ function TransitionControl({
 			<RepeaterControl
 				{...{
 					...props,
+					popoverLabel: __('Transition', 'publisher-core'),
 					Header,
 					initialState,
 					updateBlockAttributes: (newTransitionItems) =>

@@ -29,6 +29,8 @@ export default function GroupControl({
 	isDraggable = false,
 	dropCallback = null,
 	className,
+	popoverLabel,
+	onClose,
 }) {
 	const styleRef = useRef(null);
 	const [draggingIndex, setDraggingIndex] = useState(null);
@@ -93,6 +95,8 @@ export default function GroupControl({
 							offset={35}
 							placement="left-start"
 							className={controlInnerClassNames('group-popover')}
+							label={popoverLabel}
+							onClose={onClose}
 						>
 							<div className="content">{children}</div>
 						</Popover>
