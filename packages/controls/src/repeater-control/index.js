@@ -1,9 +1,4 @@
 /**
- * WordPress dependencies.
- */
-import { useEffect } from '@wordpress/element';
-
-/**
  * External dependencies
  */
 import { useImmerReducer } from 'use-immer';
@@ -49,12 +44,6 @@ const RepeaterControl = ({
 		value?.length ? value : []
 	);
 
-	useEffect(() => {
-		if (value !== repeaterItems) {
-			updateBlockAttributes(repeaterItems);
-		}
-	}, [repeaterItems, value, updateBlockAttributes]);
-
 	const defaultRepeaterState = {
 		repeaterAttribute: attribute,
 		design,
@@ -66,8 +55,11 @@ const RepeaterControl = ({
 		InnerComponents,
 		addNewItem: () => dispatch(addItem(initialState)),
 		removeItem: (itemId) => dispatch(removeItem(itemId)),
-		changeItem: (itemId, newValue) =>
-			dispatch(changeItem(itemId, newValue)),
+		changeItem: (itemId, newValue) => {
+			dispatch(changeItem(itemId, newValue));
+
+			updateBlockAttributes(repeaterItems);
+		},
 		sortItems: (newValue) => dispatch(sortItems(newValue)),
 		isPopover,
 		popoverLabel,
