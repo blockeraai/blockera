@@ -27,8 +27,7 @@ export function PositionField({
 	leftValue,
 	children,
 	//
-	onTopValueChange = () => {},
-	onLeftValueChange = () => {},
+	onValueChange = () => {},
 }) {
 	const [coordinates, setCoordinates] = useState({
 		top: topValue,
@@ -45,7 +44,7 @@ export function PositionField({
 								convertAlignmentMatrixCoordinates(coordinates)
 									?.compact
 							}
-							onChange={(newValue) => {
+							onValueChange={(newValue) => {
 								const _coordinates =
 									convertAlignmentMatrixCoordinates(newValue);
 
@@ -54,8 +53,10 @@ export function PositionField({
 									left: _coordinates.left.number,
 								});
 
-								onTopValueChange(_coordinates.top.number);
-								onLeftValueChange(_coordinates.left.number);
+								onValueChange({
+									top: _coordinates.top.number,
+									left: _coordinates.left.number,
+								});
 							}}
 						/>
 					</div>
@@ -77,7 +78,9 @@ export function PositionField({
 										top: value,
 									});
 
-									onTopValueChange(value);
+									onValueChange({
+										top: value,
+									});
 								}}
 							/>
 
@@ -96,7 +99,9 @@ export function PositionField({
 										left: value,
 									});
 
-									onLeftValueChange(value);
+									onValueChange({
+										left: value,
+									});
 								}}
 							/>
 						</VStack>

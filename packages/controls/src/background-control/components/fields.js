@@ -42,17 +42,6 @@ const Fields = ({ itemId, item }) => {
 
 	const linearGradientValue = /\((\d.*)deg,/im?.exec(item['linear-gradient']);
 
-	const onChangePositionAlignment = (newValue) =>
-		changeItem(itemId, {
-			...item,
-			...newValue,
-		});
-	const onChangePositionField = (newValue, attributeId) =>
-		changeItem(itemId, {
-			...item,
-			[attributeId]: newValue,
-		});
-
 	return (
 		<BaseControl id={`repeater-item-${itemId}`}>
 			<ToggleSelectField
@@ -163,18 +152,13 @@ const Fields = ({ itemId, item }) => {
 					<PositionField
 						topValue={item['image-position-top']}
 						leftValue={item['image-position-left']}
-						onTopValueChange={(newValue) => {
+						onValueChange={({ top, left }) => {
 							changeItem(itemId, {
 								...item,
-								'image-position-top': newValue,
+								'image-position-top': top || item.top,
+								'image-position-left': left || item.left,
 							});
 						}}
-						onLeftValueChange={(newValue) =>
-							changeItem(itemId, {
-								...item,
-								'image-position-left': newValue,
-							})
-						}
 					/>
 
 					<ToggleSelectField
@@ -314,12 +298,16 @@ const Fields = ({ itemId, item }) => {
 					/>
 
 					<PositionField
-						top={item['radial-gradient-position-top']}
-						left={item['radial-gradient-position-left']}
-						attributeTopField="radial-gradient-position-top"
-						attributeLeftField="radial-gradient-position-left"
-						onChangeAlignment={onChangePositionAlignment}
-						onValueChange={onChangePositionField}
+						topValue={item['radial-gradient-position-top']}
+						leftValue={item['radial-gradient-position-left']}
+						onValueChange={({ top, left }) => {
+							changeItem(itemId, {
+								...item,
+								'radial-gradient-position-top': top || item.top,
+								'radial-gradient-position-left':
+									left || item.left,
+							});
+						}}
 					/>
 
 					<ToggleSelectField
