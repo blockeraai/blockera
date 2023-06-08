@@ -1,9 +1,4 @@
 /**
- * External dependencies
- */
-import { useImmerReducer } from 'use-immer';
-
-/**
  * Publisher dependencies
  */
 import { Button } from '@publisher/components';
@@ -15,15 +10,14 @@ import {
 /**
  * Internal dependencies.
  */
-import repeaterItemsReducer from './store/reducer';
 import { RepeaterContextProvider } from './context';
 import MappedItems from './components/mapped-items';
-import { addItem, removeItem, changeItem, sortItems } from './store/actions';
 import LabelControl from '../label-control';
 import PlusIcon from './icons/plus';
 
 //CSS dependencies
 import './style.scss';
+import { useState } from '@wordpress/element';
 
 const RepeaterControl = ({
 	attribute,
@@ -39,8 +33,7 @@ const RepeaterControl = ({
 	isPopover = true,
 	updateBlockAttributes = () => {},
 }) => {
-	const [repeaterItems, dispatch] = useImmerReducer(
-		repeaterItemsReducer,
+	const [repeaterItems, setRepeaterItems] = useState(
 		value?.length ? value : []
 	);
 
@@ -49,18 +42,46 @@ const RepeaterControl = ({
 		design,
 		Header,
 		clientId,
-		dispatch,
 		initialState,
 		repeaterItems,
 		InnerComponents,
-		addNewItem: () => dispatch(addItem(initialState)),
-		removeItem: (itemId) => dispatch(removeItem(itemId)),
-		changeItem: (itemId, newValue) => {
-			dispatch(changeItem(itemId, newValue));
+		addNewItem: () => {
+			setRepeaterItems([...repeaterItems, ...[initialState]]);
 
 			updateBlockAttributes(repeaterItems);
 		},
-		sortItems: (newValue) => dispatch(sortItems(newValue)),
+		removeItem: (itemId) => {
+			setRepeaterItems(
+				repeaterItems.filter((i, index) => index !== itemId)
+			);
+			updateBlockAttributes(repeaterItems);
+		},
+		changeItem: (itemId, newValue) => {
+			const _repeaterItems = repeaterItems.map((i, id) => {
+				if (id === itemId) {
+					return newValue;
+				}
+
+				return i;
+			});
+
+			setRepeaterItems(_repeaterItems);
+			updateBlockAttributes(_repeaterItems);
+		},
+		sortItems: (newValue) => {
+			const arrayMove = ({ args, toIndex, fromIndex }) => {
+				const newArr = [...args];
+				const [removed] = newArr.splice(fromIndex, 1);
+				newArr.splice(toIndex, 0, removed);
+
+				return newArr;
+			};
+
+			const _repeaterItems = arrayMove(newValue);
+
+			setRepeaterItems(_repeaterItems);
+			updateBlockAttributes(_repeaterItems);
+		},
 		isPopover,
 		popoverLabel,
 	};
