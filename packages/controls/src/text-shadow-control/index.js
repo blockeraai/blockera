@@ -16,7 +16,6 @@ import { controlClassNames } from '@publisher/classnames';
 import Header from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
-import { getControlValue, updateControlValue } from './../utils';
 
 const initialState = {
 	x: '1px',
@@ -27,46 +26,31 @@ const initialState = {
 };
 
 function TextShadowControl({
-	value,
 	attribute,
-	repeaterAttributeIndex = null,
-	repeaterAttribute = null,
 	//
 	className,
 	...props
 }) {
 	const { attributes, setAttributes } = useContext(BlockEditContext);
-
-	const controlValue = getControlValue(
-		value,
-		attribute,
-		repeaterAttribute,
-		repeaterAttributeIndex,
-		'',
-		attributes
-	);
+	const { [attribute]: textShadowItems } = attributes;
 
 	return (
 		<div className={controlClassNames('text-shadow', className)}>
 			<RepeaterControl
 				{...{
 					...props,
-					popoverLabel: __('Text Shadow', 'publisher-core'),
 					Header,
-					initialState,
-					updateBlockAttributes: (newValue) => {
-						updateControlValue(
-							newValue,
-							attribute,
-							repeaterAttribute,
-							repeaterAttributeIndex,
-							attributes,
-							setAttributes
-						);
-					},
-					value: controlValue,
-					InnerComponents: Fields,
 					attribute,
+					initialState,
+					updateBlockAttributes: (textShadowItems) => {
+						setAttributes({
+							...attributes,
+							[attribute]: textShadowItems,
+						});
+					},
+					value: textShadowItems,
+					InnerComponents: Fields,
+					popoverLabel: __('Text Shadow', 'publisher-core'),
 				}}
 			/>
 		</div>
