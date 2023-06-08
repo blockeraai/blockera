@@ -8,18 +8,22 @@ import { __ } from '@wordpress/i18n';
  */
 import { BaseExtension } from '../base';
 import {
+	BackgroundExtensionIcon,
 	attributes as backgroundAttributes,
 	supports as backgroundSupports,
 } from '../background';
 import {
+	BorderAndShadowExtensionIcon,
 	attributes as borderAndShadowAttributes,
 	supports as borderAndShadowSupports,
 } from '../border-and-shadow';
 import {
+	EffectsExtensionIcon,
 	attributes as effectsAttributes,
 	supports as effectsSupports,
 } from '../effects';
 import {
+	TypographyExtensionIcon,
 	attributes as typographyAttributes,
 	supports as typographySupports,
 } from '../typography';
@@ -45,6 +49,7 @@ export function SharedBlockExtension({ children, ...props }) {
 				initialOpen={true}
 				extensionId={'Typography'}
 				title={__('Typography', 'publisher-core')}
+				icon=<TypographyExtensionIcon />
 			/>
 
 			<BaseExtension
@@ -52,6 +57,7 @@ export function SharedBlockExtension({ children, ...props }) {
 				initialOpen={true}
 				extensionId={'Background'}
 				title={__('Background', 'publisher-core')}
+				icon=<BackgroundExtensionIcon />
 			/>
 
 			<BaseExtension
@@ -59,6 +65,7 @@ export function SharedBlockExtension({ children, ...props }) {
 				initialOpen={true}
 				extensionId={'BorderAndShadow'}
 				title={__('Border And Shadow', 'publisher-core')}
+				icon=<BorderAndShadowExtensionIcon />
 			/>
 
 			<BaseExtension
@@ -66,6 +73,7 @@ export function SharedBlockExtension({ children, ...props }) {
 				initialOpen={true}
 				extensionId={'Effects'}
 				title={__('Effects', 'publisher-core')}
+				icon=<EffectsExtensionIcon />
 			/>
 			{children}
 		</>

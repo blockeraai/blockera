@@ -4,16 +4,22 @@
 import { useContext } from '@wordpress/element';
 
 /**
+ * Publisher dependencies
+ */
+import { InspectElement } from '@publisher/components';
+import { componentClassNames } from '@publisher/classnames';
+
+/**
  * Internal dependencies
  */
 import * as extensions from '../';
 import * as config from './config';
-import { InspectElement } from '@publisher/components';
 import { BaseExtensionContextProvider, BaseExtensionContext } from './context';
 import { useDisplayBlockControls } from '../../hooks/hooks';
 
 export function BaseExtension({
 	title,
+	icon,
 	children,
 	blockName,
 	extensionId,
@@ -32,7 +38,15 @@ export function BaseExtension({
 	return (
 		<BaseExtensionContextProvider {...contextValue}>
 			{useDisplayBlockControls() && (
-				<InspectElement title={title} initialOpen={initialOpen}>
+				<InspectElement
+					className={componentClassNames(
+						'extension',
+						'extension-' + extensionId
+					)}
+					title={title}
+					initialOpen={initialOpen}
+					icon={icon}
+				>
 					{'function' === typeof ExtensionTypeUI && (
 						<ExtensionTypeUI {...{ ...props, config }} />
 					)}
