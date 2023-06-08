@@ -33,22 +33,18 @@
 	}
 
 	.publisher-field-control {
-		// remove WP bottom space		.components-base-control:last-child
 		order: 3;
 		display: flex;
 		flex-direction: column;
 		gap: var(--gap);
 
-		.components-base-control:last-child {
-			margin-bottom: 0;
-		}
-
-		.components-base-control:last-child .components-base-control__field {
+		& > .components-base-control,
+		& > .components-base-control > .components-base-control__field {
 			margin-bottom: 0;
 		}
 
 		// this is the extra tag that popover adds!
-		> span:empty {
+		& > span:empty {
 			display: none;
 		}
 	}
