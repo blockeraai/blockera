@@ -21,13 +21,20 @@ export const prepareSelectCustomOptions = function (options) {
 
 	function convertOption(item, customClass = '') {
 		return {
-			name: item?.icon ? (
+			name: (
 				<>
-					<span className="item-icon">{item.icon}</span>
-					<span className="item-label">{item.label}</span>
+					{item?.icon ? (
+						<span className="item-icon">{item.icon}</span>
+					) : (
+						''
+					)}
+
+					{item?.label ? (
+						<span className="item-label">{item.label}</span>
+					) : (
+						''
+					)}
 				</>
-			) : (
-				<span className="item-label">{item.label}</span>
 			),
 			key: item.value,
 			style: item?.style,
