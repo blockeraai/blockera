@@ -14,6 +14,10 @@ import { ColorField, SelectField, BackgroundField } from '@publisher/fields';
  */
 import { isActiveField } from '../../api/utils';
 import { BlockEditContext } from '../../hooks';
+import ClipPaddingIcon from './icons/clip-padding';
+import ClipContentIcon from './icons/clip-content';
+import ClipTextIcon from './icons/clip-text';
+import ClipNoneIcon from './icons/clip-none';
 
 export function BackgroundExtension({ children, config, ...props }) {
 	const {
@@ -65,21 +69,26 @@ export function BackgroundExtension({ children, config, ...props }) {
 							{
 								label: __('None', 'publisher-core'),
 								value: 'none',
+								icon: <ClipNoneIcon />,
 							},
 							{
 								label: __('Clip to Padding', 'publisher-core'),
 								value: 'padding-box',
+								icon: <ClipPaddingIcon />,
 							},
 							{
 								label: __('Clip to Content', 'publisher-core'),
 								value: 'content-box',
+								icon: <ClipContentIcon />,
 							},
 							{
 								label: __('Clip to Text', 'publisher-core'),
 								value: 'text',
+								icon: <ClipTextIcon />,
 							},
 						],
 						//
+						type: 'custom',
 						initValue: 'none',
 						value: attributes.publisherBackgroundClip,
 						onValueChange: (newValue) =>
