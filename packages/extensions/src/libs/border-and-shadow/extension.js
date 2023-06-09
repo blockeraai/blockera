@@ -12,6 +12,7 @@ import { BoxShadowField } from '@publisher/fields';
  * Internal dependencies
  */
 import { isActiveField } from '../../api/utils';
+import { BorderField } from '@publisher/fields/src/libs/border/field';
 
 export function BorderAndShadowExtension({ children, config, ...props }) {
 	const {
@@ -30,7 +31,9 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 					}}
 				/>
 			)}
-			{/* TODO: implements BorderField in next time! */}
+
+			<BorderField label="Border" />
+
 			<div>{children}</div>
 		</>
 	);
