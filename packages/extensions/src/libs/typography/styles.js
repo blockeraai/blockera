@@ -244,7 +244,7 @@ export function TypographyStyles({
 		isActiveField(publisherWordBreak) &&
 		_attributes.publisherWordBreak !==
 			attributes.publisherWordBreak.default &&
-		_attributes.publisherWordBreak !== 'inherit'
+		_attributes.publisherWordBreak !== 'normal'
 	) {
 		properties['word-break'] = _attributes.publisherWordBreak;
 	}

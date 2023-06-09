@@ -47,6 +47,9 @@ import Columns2Icon from './icons/columns-2';
 import Columns3Icon from './icons/columns-3';
 import Columns4Icon from './icons/columns-4';
 import Columns5Icon from './icons/columns-5';
+import BreakingNormalIcon from './icons/breaking-normal';
+import BreakingBreakAllIcon from './icons/breaking-break-all';
+import BreakingInheritIcon from './icons/breaking-inherit';
 
 export function TypographyExtension({ children, config, ...props }) {
 	const {
@@ -789,8 +792,9 @@ export function TypographyExtension({ children, config, ...props }) {
 								label={__('Breaking', 'publisher-core')}
 								options={[
 									{
-										label: __('Inherit', 'publisher-core'),
-										value: 'inherit',
+										label: __('Normal', 'publisher-core'),
+										value: 'normal',
+										icon: <BreakingNormalIcon />,
 									},
 									{
 										label: __(
@@ -798,6 +802,7 @@ export function TypographyExtension({ children, config, ...props }) {
 											'publisher-core'
 										),
 										value: 'break-all',
+										icon: <BreakingBreakAllIcon />,
 									},
 									{
 										label: __(
@@ -805,6 +810,7 @@ export function TypographyExtension({ children, config, ...props }) {
 											'publisher-core'
 										),
 										value: 'keep-all',
+										icon: <BreakingNormalIcon />,
 									},
 									{
 										label: __(
@@ -812,14 +818,18 @@ export function TypographyExtension({ children, config, ...props }) {
 											'publisher-core'
 										),
 										value: 'break-word',
+										icon: <BreakingBreakAllIcon />,
 									},
 									{
-										label: __('Normal', 'publisher-core'),
-										value: 'normal',
+										label: __('Inherit', 'publisher-core'),
+										value: 'inherit',
+										icon: <BreakingInheritIcon />,
 									},
 								]}
+								type="custom"
+								customMenuPosition="top"
 								//
-								initValue="inherit"
+								initValue="normal"
 								value={attributes.publisherWordBreak}
 								onValueChange={(newValue) =>
 									setAttributes({
