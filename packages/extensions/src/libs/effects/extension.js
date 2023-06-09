@@ -99,6 +99,8 @@ export function EffectsExtension({ children, config, ...props }) {
 						...props,
 						label: __('Cursor', 'publisher-core'),
 						options: cursorFieldOptions(),
+						type: 'custom',
+						customMenuPosition: 'top',
 						//
 						initValue: 'default',
 						value: attributes.publisherCursor,
@@ -117,6 +119,8 @@ export function EffectsExtension({ children, config, ...props }) {
 						...props,
 						label: __('Blending', 'publisher-core'),
 						options: blendModeFieldOptions(),
+						type: 'custom',
+						customMenuPosition: 'top',
 						//
 						initValue: 'normal',
 						value: attributes.publisherBlendMode,
