@@ -27,5 +27,6 @@ export {
 } from './background-control';
 export { default as AnglePickerControl } from './angle-picker-control';
 export { default as GradientBarControl } from './gradient-bar-control';
+export { default as BorderControl } from './border-control';
 
 export { getControlValue, updateControlValue } from './utils';
