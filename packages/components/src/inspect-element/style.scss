@@ -6,6 +6,8 @@
 			color: var(--wp-admin-theme-color, #007cba);
 			font-weight: 600;
 			font-size: 14px;
+			padding: 0 16px;
+			height: 48px;
 
 			.extension-icon{
 				order: -1;
@@ -16,5 +18,10 @@
 
 	&.components-panel__body.is-opened {
 		padding: 16px 16px 24px;
+		margin-bottom: 10px;
+	}
+
+	&.components-panel__body.is-opened > .components-panel__body-title{
+		margin-bottom: 10px;
 	}
 }
