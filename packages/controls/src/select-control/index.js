@@ -2,7 +2,10 @@
  * WordPress dependencies
  */
 import { useState } from '@wordpress/element';
-import { SelectControl as WPSelectControl } from '@wordpress/components';
+import {
+	SelectControl as WPSelectControl,
+	CustomSelectControl as WPCustomSelectControl,
+} from '@wordpress/components';
 
 /**
  * Publisher dependencies
@@ -12,12 +15,15 @@ import { controlClassNames } from '@publisher/classnames';
 /**
  * Internal dependencies
  */
-import { renderSelectNativeOption } from './utils';
+import { renderSelectNativeOption, prepareSelectCustomOptions } from './utils';
+import './style.scss';
 
 const SelectControl = ({
 	initValue = '',
 	options,
 	children,
+	type = 'native', // custom
+	customMenuPosition = 'bottom', // top
 	//
 	value: _value,
 	//
@@ -31,20 +37,50 @@ const SelectControl = ({
 }) => {
 	const [value, setValue] = useState(_value || initValue);
 
+	if (type === 'custom') options = prepareSelectCustomOptions(options);
+
 	return (
-		<WPSelectControl
-			className={controlClassNames('select', 'native-select', className)}
-			value={value}
-			onChange={(newValue) => {
-				newValue = onChange(newValue);
-				setValue(newValue);
-				onValueChange(newValue);
-			}}
-			__nextHasNoMarginBottom
-		>
-			{options?.map(renderSelectNativeOption)}
-			{children}
-		</WPSelectControl>
+		<>
+			{type === 'native' && (
+				<WPSelectControl
+					className={controlClassNames('select', 'native', className)}
+					value={value}
+					onChange={(newValue) => {
+						newValue = onChange(newValue);
+						setValue(newValue);
+						onValueChange(newValue);
+					}}
+					__nextHasNoMarginBottom
+				>
+					{options?.map(renderSelectNativeOption)}
+					{children}
+				</WPSelectControl>
+			)}
+
+			{type === 'custom' && (
+				<WPCustomSelectControl
+					hideLabelFromVision={true}
+					className={controlClassNames(
+						'select',
+						'custom',
+						'menu-position-' + customMenuPosition,
+						className
+					)}
+					value={options.find((option) => option.key === value)}
+					onChange={({ selectedItem }) => {
+						let newValue = onChange(selectedItem.key);
+
+						if (newValue === '') {
+							newValue = initValue;
+						}
+
+						setValue(newValue);
+						onValueChange(newValue);
+					}}
+					options={options}
+				></WPCustomSelectControl>
+			)}
+		</>
 	);
 };
 
