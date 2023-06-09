@@ -46,6 +46,7 @@ export function InputControl({
 			{range && (
 				<RangeControl
 					withInputField={false}
+					className={className}
 					value={controlValue}
 					onChange={(newValue) => {
 						// extract unit from old value and assign it to newValue

@@ -1,6 +1,23 @@
-//
 
 .publisher-control-input {
+
+	.components-text-control__input{
+		border: 1px solid #949494;
+		border-radius: 2px;
+	}
+
+	&.no-border .components-text-control__input{
+		border: none;
+		border-radius: 2px;
+		box-shadow: none;
+
+		&:focus{
+			border-radius: 2px;
+			box-shadow: none;
+		}
+	}
+
+
 	.components-input-control__suffix,
 	.components-unit-control__select {
 		width: 25px !important;
