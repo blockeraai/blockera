@@ -80,6 +80,7 @@ export default function AnglePickerControl({
 				showTooltip={true}
 				label={__('Rotate Left', 'publisher')}
 				icon={rotateLeft}
+				align="center"
 				onClick={() => {
 					const newValue = subtractAngle(controlValue, 45);
 
@@ -93,6 +94,7 @@ export default function AnglePickerControl({
 				showTooltip={true}
 				label={__('Rotate Right', 'publisher')}
 				icon={rotateRight}
+				align="center"
 				onClick={() => {
 					const newValue = addAngle(controlValue, 45);
 
