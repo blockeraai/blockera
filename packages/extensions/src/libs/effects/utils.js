@@ -3,40 +3,40 @@
  */
 import { __ } from '@wordpress/i18n';
 
-import { default as CursorAutoIcon } from './icons/cursors/auto';
-import { default as CursorDefaultIcon } from './icons/cursors/default';
-import { default as CursorNoneIcon } from './icons/cursors/none';
-import { default as CursorPointerIcon } from './icons/cursors/pointer';
-import { default as CursorNotAllowedIcon } from './icons/cursors/not-allowed';
-import { default as CursorWaitIcon } from './icons/cursors/wait';
-import { default as CursorHelpIcon } from './icons/cursors/help';
-import { default as CursorContextMenuIcon } from './icons/cursors/context-menu';
-import { default as CursorCellIcon } from './icons/cursors/cell';
-import { default as CursorCrosshairIcon } from './icons/cursors/crosshair';
-import { default as CursorTextIcon } from './icons/cursors/text';
-import { default as CursorVerticalTextIcon } from './icons/cursors/vertical-text';
-import { default as CursorGrabIcon } from './icons/cursors/grab';
-import { default as CursorGrabbingIcon } from './icons/cursors/grabbing';
-import { default as CursorAliasIcon } from './icons/cursors/alias';
-import { default as CursorMoveIcon } from './icons/cursors/move';
-import { default as CursorZoomInIcon } from './icons/cursors/zoom-in';
-import { default as CursorZoomOutIcon } from './icons/cursors/zoom-out';
-import { default as CursorColResizeIcon } from './icons/cursors/col-resize';
-import { default as CursorRowResizeIcon } from './icons/cursors/row-resize';
-import { default as CursorNeswResizeIcon } from './icons/cursors/nesw-resize';
-import { default as CursorNwseResizeIcon } from './icons/cursors/nwse-resize';
-import { default as CursorEwResizeIcon } from './icons/cursors/ew-resize';
-import { default as CursorNsResizeIcon } from './icons/cursors/ns-resize';
-import { default as CursorNResizeIcon } from './icons/cursors/n-resize';
-import { default as CursorWResizeIcon } from './icons/cursors/w-resize';
-import { default as CursorSResizeIcon } from './icons/cursors/s-resize';
-import { default as CursorEResizeIcon } from './icons/cursors/e-resize';
-import { default as CursorNwResizeIcon } from './icons/cursors/nw-resize';
-import { default as CursorNeResizeIcon } from './icons/cursors/ne-resize';
-import { default as CursorSwResizeIcon } from './icons/cursors/sw-resize';
-import { default as CursorSeResizeIcon } from './icons/cursors/se-resize';
-import { default as BlendIcon } from './icons/blend/blend';
-import { default as BlendInheritIcon } from './icons/blend/blend-inherit';
+import CursorAutoIcon from './icons/cursors/auto';
+import CursorDefaultIcon from './icons/cursors/default';
+import CursorNoneIcon from './icons/cursors/none';
+import CursorPointerIcon from './icons/cursors/pointer';
+import CursorNotAllowedIcon from './icons/cursors/not-allowed';
+import CursorWaitIcon from './icons/cursors/wait';
+import CursorHelpIcon from './icons/cursors/help';
+import CursorContextMenuIcon from './icons/cursors/context-menu';
+import CursorCellIcon from './icons/cursors/cell';
+import CursorCrosshairIcon from './icons/cursors/crosshair';
+import CursorTextIcon from './icons/cursors/text';
+import CursorVerticalTextIcon from './icons/cursors/vertical-text';
+import CursorGrabIcon from './icons/cursors/grab';
+import CursorGrabbingIcon from './icons/cursors/grabbing';
+import CursorAliasIcon from './icons/cursors/alias';
+import CursorMoveIcon from './icons/cursors/move';
+import CursorZoomInIcon from './icons/cursors/zoom-in';
+import CursorZoomOutIcon from './icons/cursors/zoom-out';
+import CursorColResizeIcon from './icons/cursors/col-resize';
+import CursorRowResizeIcon from './icons/cursors/row-resize';
+import CursorNeswResizeIcon from './icons/cursors/nesw-resize';
+import CursorNwseResizeIcon from './icons/cursors/nwse-resize';
+import CursorEwResizeIcon from './icons/cursors/ew-resize';
+import CursorNsResizeIcon from './icons/cursors/ns-resize';
+import CursorNResizeIcon from './icons/cursors/n-resize';
+import CursorWResizeIcon from './icons/cursors/w-resize';
+import CursorSResizeIcon from './icons/cursors/s-resize';
+import CursorEResizeIcon from './icons/cursors/e-resize';
+import CursorNwResizeIcon from './icons/cursors/nw-resize';
+import CursorNeResizeIcon from './icons/cursors/ne-resize';
+import CursorSwResizeIcon from './icons/cursors/sw-resize';
+import CursorSeResizeIcon from './icons/cursors/se-resize';
+import BlendIcon from './icons/blend/blend';
+import InheritIcon from '../../icons/inherit';
 
 // list of all cursor options for select field
 export const blendModeFieldOptions = function () {
@@ -55,7 +55,7 @@ export const blendModeFieldOptions = function () {
 					label: __('Inherit', 'publisher-core'),
 					value: 'inherit',
 					className: 'hide-icon',
-					icon: <BlendInheritIcon />,
+					icon: <InheritIcon />,
 				},
 			],
 		},

@@ -49,7 +49,7 @@ import Columns4Icon from './icons/columns-4';
 import Columns5Icon from './icons/columns-5';
 import BreakingNormalIcon from './icons/breaking-normal';
 import BreakingBreakAllIcon from './icons/breaking-break-all';
-import BreakingInheritIcon from './icons/breaking-inherit';
+import InheritIcon from '../../icons/inherit';
 
 export function TypographyExtension({ children, config, ...props }) {
 	const {
@@ -823,7 +823,7 @@ export function TypographyExtension({ children, config, ...props }) {
 									{
 										label: __('Inherit', 'publisher-core'),
 										value: 'inherit',
-										icon: <BreakingInheritIcon />,
+										icon: <InheritIcon />,
 									},
 								]}
 								type="custom"

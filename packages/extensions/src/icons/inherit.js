@@ -1,4 +1,4 @@
-export default function BreakingInheritIcon({}) {
+export default function InheritIcon({}) {
 	return (
 		<svg
 			width="18"
