@@ -3,10 +3,8 @@
  */
 import { __ } from '@wordpress/i18n';
 
-import CursorAutoIcon from './icons/cursors/auto';
-import CursorDefaultIcon from './icons/cursors/default';
-import CursorNoneIcon from './icons/cursors/none';
 import CursorPointerIcon from './icons/cursors/pointer';
+import CursorNoneIcon from './icons/cursors/none';
 import CursorNotAllowedIcon from './icons/cursors/not-allowed';
 import CursorWaitIcon from './icons/cursors/wait';
 import CursorHelpIcon from './icons/cursors/help';
@@ -199,12 +197,12 @@ export const cursorFieldOptions = function () {
 				{
 					label: __('Auto', 'publisher-core'),
 					value: 'auto',
-					icon: <CursorAutoIcon />,
+					icon: <CursorPointerIcon />,
 				},
 				{
 					label: __('Default', 'publisher-core'),
 					value: 'default',
-					icon: <CursorDefaultIcon />,
+					icon: <CursorPointerIcon />,
 				},
 				{
 					label: __('none', 'publisher-core'),
