@@ -37,11 +37,16 @@
 			line-height: 18px;
 			display: flex;
 			min-height: 30px;
-			margin: 0;
-			padding: 0 6px;
 			gap: 10px;
 			cursor: pointer;
 			font-size: 13px;
+			margin: 0 0 5px;
+			padding: 0 5px 0 6px;
+
+			.components-custom-select-control__item-icon{
+				position: absolute;
+				right: 3px;
+			}
 
 			&.option-group{
 				pointer-events: none;
@@ -65,6 +70,10 @@
 
 			&.hide-icon .item-icon{
 				display: none;
+			}
+
+			&:last-child{
+				margin-bottom: 0;
 			}
 		}
 	}
