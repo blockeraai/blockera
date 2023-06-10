@@ -46,6 +46,7 @@ export function CssInputControl({
 		];
 
 		switch (unitType) {
+			case 'outline':
 			case 'text-shadow':
 			case 'box-shadow':
 				cssUnits = [

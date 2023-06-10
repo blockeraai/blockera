@@ -3,4 +3,8 @@ export const borderAndShadowConfig = {
 		status: true,
 		cssGenerators: {},
 	},
+	publisherOutline: {
+		status: true,
+		cssGenerators: {},
+	},
 };

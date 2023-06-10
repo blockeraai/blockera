@@ -6,7 +6,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Publisher dependencies
  */
-import { BoxShadowField } from '@publisher/fields';
+import { BoxShadowField, OutlineField } from '@publisher/fields';
 
 /**
  * Internal dependencies
@@ -16,7 +16,7 @@ import { BorderField } from '@publisher/fields/src/libs/border/field';
 
 export function BorderAndShadowExtension({ children, config, ...props }) {
 	const {
-		borderAndShadowConfig: { publisherBoxShadow },
+		borderAndShadowConfig: { publisherBoxShadow, publisherOutline },
 	} = config;
 
 	return (
@@ -29,7 +29,18 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 						...props,
 						config: publisherBoxShadow,
 						attribute: 'publisherBoxShadow',
-						label: __('Box Shadow', 'publisher-core'),
+						label: __('Box Shadows', 'publisher-core'),
+					}}
+				/>
+			)}
+
+			{isActiveField(publisherOutline) && (
+				<OutlineField
+					{...{
+						...props,
+						config: publisherOutline,
+						attribute: 'publisherOutline',
+						label: __('Outlines', 'publisher-core'),
 					}}
 				/>
 			)}

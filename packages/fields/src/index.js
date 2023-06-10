@@ -11,6 +11,7 @@ export { ToggleSelectField } from './libs/toggle-select';
 export { PositionField } from './libs/position';
 export { TransitionField, TransitionFieldStyle } from './libs/transition';
 export { BackgroundField, BackgroundFieldStyle } from './libs/background';
+export { OutlineField, OutlineFieldStyle } from './libs/outline';
 export {
 	FilterField,
 	FilterFieldStyle,

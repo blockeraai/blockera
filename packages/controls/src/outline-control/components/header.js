@@ -1,0 +1,66 @@
+/**
+ * WordPress dependencies
+ */
+import { ColorIndicator } from '@wordpress/components';
+import { memo } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
+
+/**
+ * Publisher dependencies
+ */
+import { controlInnerClassNames } from '@publisher/classnames';
+
+import CloneIcon from './../icons/outline';
+import BorderStyleHSolidIcon from '../../border-control/icons/style-h-solid';
+import BorderStyleHDashedIcon from '../../border-control/icons/style-h-dashed';
+import BorderStyleHDottedIcon from '../../border-control/icons/style-h-dotted';
+import BorderStyleHDoubleIcon from '../../border-control/icons/style-h-double';
+
+const Header = ({
+	item: { style, width, color = '#fff' },
+	isOpen,
+	setOpen,
+	children,
+}) => {
+	function getStyleIcon() {
+		if (style === 'solid') {
+			return <BorderStyleHSolidIcon />;
+		} else if (style === 'dashed') {
+			return <BorderStyleHDashedIcon />;
+		} else if (style === 'dotted') {
+			return <BorderStyleHDottedIcon />;
+		} else if (style === 'double') {
+			return <BorderStyleHDoubleIcon />;
+		}
+	}
+
+	return (
+		<div
+			className={controlInnerClassNames('repeater-group-header')}
+			onClick={() => setOpen(!isOpen)}
+		>
+			<span className={controlInnerClassNames('header-icon')}>
+				<CloneIcon />
+			</span>
+
+			<span className={controlInnerClassNames('header-label')}>
+				{__('Outline', 'publisher-core')}
+			</span>
+
+			<span className={controlInnerClassNames('header-values')}>
+				<span>{width}px</span>
+
+				{getStyleIcon()}
+
+				<ColorIndicator
+					colorValue={color}
+					className={controlInnerClassNames('color-indicator')}
+				/>
+			</span>
+
+			{children}
+		</div>
+	);
+};
+
+export default memo(Header);
