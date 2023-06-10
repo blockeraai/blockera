@@ -26,7 +26,7 @@ export default function ActionsUI({
 	isVisible,
 	setVisibility,
 }) {
-	const { removeItem, isPopover } = useContext(RepeaterContext);
+	const { removeItem, cloneItem, isPopover } = useContext(RepeaterContext);
 
 	return (
 		<>
@@ -68,6 +68,7 @@ export default function ActionsUI({
 					icon={CloneIcon}
 					showTooltip={true}
 					label={__('Clone', 'publisher')}
+					onClick={() => cloneItem(itemId)}
 				/>
 
 				<Button

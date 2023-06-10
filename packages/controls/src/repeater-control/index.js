@@ -45,6 +45,11 @@ const RepeaterControl = ({
 		initialState,
 		repeaterItems,
 		InnerComponents,
+		cloneItem: () => {
+			setRepeaterItems([...repeaterItems, ...repeaterItems.slice(-1)]);
+
+			updateBlockAttributes(repeaterItems);
+		},
 		addNewItem: () => {
 			setRepeaterItems([...repeaterItems, ...[initialState]]);
 
