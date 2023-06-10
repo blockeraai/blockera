@@ -8,6 +8,7 @@
 		min-width: 290px;
 		min-height: 260px;
 		border-radius: 3px;
+		position: relative;
 	}
 
 	&.with-header{
@@ -21,9 +22,9 @@
 		padding: 0 15px;
 		box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1882352941);
 		position: absolute;
-		top: 2px;
-		left: 2px;
-		right: 2px;
+		top: 0;
+		left: 0;
+		right: 0;
 		background: #fff;
 		margin: 0;
 		height: 42px;
