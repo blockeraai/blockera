@@ -565,7 +565,7 @@ export function TypographyExtension({ children, config, ...props }) {
 
 						{isActiveField(publisherTextColumns) && (
 							<ToggleSelectField
-								label={__('Text Columns', 'publisher-core')}
+								label={__('Columns', 'publisher-core')}
 								options={[
 									{
 										label: __(
@@ -654,6 +654,8 @@ export function TypographyExtension({ children, config, ...props }) {
 													'Divider',
 													'publisher-core'
 												)}
+												columns="columns-1"
+												className="control-first label-center small-gap"
 											>
 												<BorderControl
 													lines="vertical"
