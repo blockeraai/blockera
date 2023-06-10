@@ -75,7 +75,7 @@ export function backgroundCSSGenerator(id, props, styleEngine) {
 				properties.repeat.push('repeat');
 
 				// Background Attachment
-				properties.attachment.push('scroll');
+				properties.attachment.push(item['linear-gradient-attachment']);
 
 				break;
 
@@ -97,7 +97,7 @@ export function backgroundCSSGenerator(id, props, styleEngine) {
 				properties.repeat.push('repeat');
 
 				// Background Attachment
-				properties.attachment.push('scroll');
+				properties.attachment.push(item['radial-gradient-attachment']);
 
 				break;
 		}

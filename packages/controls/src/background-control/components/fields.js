@@ -280,6 +280,29 @@ const Fields = ({ itemId, item }) => {
 							})
 						}
 					/>
+
+					<ToggleSelectField
+						label={__('Attachment', 'publisher-core')}
+						options={[
+							{
+								label: __('Scroll', 'publisher-core'),
+								value: 'scroll',
+							},
+							{
+								label: __('Fixed', 'publisher-core'),
+								value: 'fixed',
+							},
+						]}
+						//
+						initValue="scroll"
+						value={item['linear-gradient-attachment']}
+						onValueChange={(newValue) =>
+							changeItem(itemId, {
+								...item,
+								'linear-gradient-attachment': newValue,
+							})
+						}
+					/>
 				</>
 			)}
 
@@ -378,6 +401,29 @@ const Fields = ({ itemId, item }) => {
 							changeItem(itemId, {
 								...item,
 								'radial-gradient-repeat': newValue,
+							})
+						}
+					/>
+
+					<ToggleSelectField
+						label={__('Attachment', 'publisher-core')}
+						options={[
+							{
+								label: __('Scroll', 'publisher-core'),
+								value: 'scroll',
+							},
+							{
+								label: __('Fixed', 'publisher-core'),
+								value: 'fixed',
+							},
+						]}
+						//
+						initValue="scroll"
+						value={item['radial-gradient-attachment']}
+						onValueChange={(newValue) =>
+							changeItem(itemId, {
+								...item,
+								'radial-gradient-attachment': newValue,
 							})
 						}
 					/>
