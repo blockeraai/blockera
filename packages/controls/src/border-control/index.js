@@ -48,8 +48,10 @@ const BorderControl = ({
 				className={controlClassNames('input', 'no-border')}
 				value={controlValue.width}
 				onValueChange={(newValue) => {
-					setControlValue({ ...controlValue, width: newValue });
-					onValueChange(controlValue);
+					const value = { ...controlValue, width: newValue };
+
+					setControlValue(value);
+					onValueChange(value);
 				}}
 			/>
 
@@ -59,8 +61,10 @@ const BorderControl = ({
 				className="no-border"
 				value={controlValue.color}
 				onValueChange={(newValue) => {
-					setControlValue({ ...controlValue, color: newValue });
-					onValueChange(controlValue);
+					const value = { ...controlValue, color: newValue };
+
+					setControlValue(value);
+					onValueChange(value);
 				}}
 			/>
 
@@ -116,8 +120,10 @@ const BorderControl = ({
 					},
 				]}
 				onValueChange={(newValue) => {
-					setControlValue({ ...controlValue, style: newValue });
-					onValueChange(controlValue);
+					const value = { ...controlValue, style: newValue };
+
+					setControlValue(value);
+					onValueChange(value);
 				}}
 			/>
 		</div>
