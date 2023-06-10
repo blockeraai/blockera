@@ -2,7 +2,6 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { close } from '@wordpress/icons';
 import { useContext } from '@wordpress/element';
 
 /**
@@ -15,7 +14,10 @@ import { controlInnerClassNames } from '@publisher/classnames';
  * Internal dependencies
  */
 import { RepeaterContext } from '../context';
-import VisibleElement from './visible-element';
+import DeleteIcon from './../icons/delete';
+import EnableIcon from './../icons/enable';
+import DisableIcon from './../icons/disable';
+import CloneIcon from './../icons/clone';
 
 export default function ActionsUI({
 	itemId,
@@ -43,10 +45,37 @@ export default function ActionsUI({
 			)}
 
 			<div className={controlInnerClassNames('action-btns')}>
-				<VisibleElement {...{ setVisibility, isVisible }} />
 				<Button
-					className={controlInnerClassNames('btn-delete')}
-					icon={close}
+					className={controlInnerClassNames(
+						'btn-visibility',
+						'no-border'
+					)}
+					icon={isVisible ? EnableIcon : DisableIcon}
+					showTooltip={true}
+					onClick={(e) => {
+						setVisibility(!isVisible);
+						e.preventDefault();
+					}}
+					label={
+						isVisible
+							? __('Disable', 'publisher')
+							: __('Enable', 'publisher')
+					}
+				/>
+
+				<Button
+					className={controlInnerClassNames('btn-clone', 'no-border')}
+					icon={CloneIcon}
+					showTooltip={true}
+					label={__('Clone', 'publisher')}
+				/>
+
+				<Button
+					className={controlInnerClassNames(
+						'btn-delete',
+						'no-border'
+					)}
+					icon={DeleteIcon}
 					showTooltip={true}
 					onClick={() => removeItem(itemId)}
 					label={__('Delete', 'publisher')}
