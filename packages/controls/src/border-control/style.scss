@@ -1,34 +1,43 @@
 .publisher-control-border {
 	display: grid;
-	grid-template-columns: 35px 30px 35px;
+	grid-template-columns: repeat(3, 1fr);
 	align-items: center;
-	width: 110px;
+	min-width: 110px;
 	box-shadow: inset 0 0 0 1px #949494;
 	border-radius: 2px;
-	padding: 1px;
 	gap: 2px;
+	width: 100%;
+
+	&:first-child:last-child {
+		margin-left: auto;
+	}
 
 	> span:empty {
 		display: none;
 	}
 
-	.publisher-control-input .components-text-control__input {
-		border-radius: 2px 0 0 2px !important;
-		margin: 0;
-		z-index: 1;
-		padding: 6px 3px;
-		text-align: center;
-		-moz-appearance: textfield;
+	> .publisher-control-input {
+		margin-right: auto;
 
-		&::-webkit-outer-spin-button,
-		&::-webkit-inner-spin-button {
-			-webkit-appearance: none;
+		.components-text-control__input {
+			border-radius: 2px 0 0 2px !important;
 			margin: 0;
-		}
+			z-index: 1;
+			padding: 6px 3px;
+			text-align: center;
+			-moz-appearance: textfield;
 
-		&:focus {
-			z-index: 10;
-			box-shadow: 0 0 0 2px var(--wp-components-color-accent, var(--wp-admin-theme-color, #007cba)) !important;
+			&::-webkit-outer-spin-button,
+			&::-webkit-inner-spin-button {
+				-webkit-appearance: none;
+				margin: 0;
+			}
+
+			&:focus {
+				z-index: 10;
+				box-shadow: 0 0 0 1px var(--wp-components-color-accent, var(--wp-admin-theme-color, #007cba)) !important;
+				border: 1px solid var(--wp-admin-theme-color);
+			}
 		}
 	}
 
@@ -37,12 +46,15 @@
 		z-index: 1;
 
 		&.is-focus {
-			box-shadow: 0 0 0 2px var(--wp-components-color-accent, var(--wp-admin-theme-color, #007cba));
+			box-shadow: 0 0 0 1px var(--wp-components-color-accent, var(--wp-admin-theme-color, #007cba));
+			border: 1px solid var(--wp-admin-theme-color);
 		}
 	}
 
-	.publisher-control-select {
+	> .publisher-control-select {
+		margin-left: auto;
 		z-index: 1;
+		width: 100%;
 
 		.components-input-control__backdrop {
 			border-radius: 0 2px 2px 0 !important;
@@ -53,7 +65,8 @@
 		}
 
 		.components-input-control__backdrop.components-input-control__backdrop {
-			box-shadow: 0 0 0 2px var(--publisher-border-color, transparent) !important;
+			box-shadow: 0 0 0 1px var(--publisher-border-color, transparent) !important;
+			border: 1px solid var(--publisher-border-color, transparent) !important;
 		}
 
 		.components-custom-select-control__menu {

@@ -51,19 +51,22 @@
 		min-width: fit-content;
 	}
 
-	.components-custom-select-control__button{
-
-	}
-
 	.components-input-control__backdrop{
 		border-color: rgb(148, 148, 148);
 		border-style: solid;
 		border-width: 1px;
 	}
 
-	&.no-border .components-input-control__backdrop{
-		border: none;
-		box-shadow: none;
+	&.no-border {
+		.components-input-control__container{
+			background: none;
+		}
+
+		.components-input-control__backdrop {
+			border: none;
+			box-shadow: none;
+			background: none;
+		}
 	}
 
 	.components-input-control__backdrop{
@@ -118,6 +121,10 @@
 
 			&.level-2-item:not(.width-icon){
 				padding-left: 15px;
+			}
+
+			&.align-center{
+				justify-content: center;
 			}
 
 			&.hide-icon .item-icon{

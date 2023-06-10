@@ -10,6 +10,7 @@
 		border: none;
 		border-radius: 2px;
 		box-shadow: none;
+		background: none;
 
 		&:focus{
 			border-radius: 2px;
@@ -74,6 +75,7 @@
 
 	& > .components-base-control {
 		margin: 0;
+		min-width: 60px;
 	}
 
 	&.publisher-control-unit-special {

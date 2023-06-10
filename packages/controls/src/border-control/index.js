@@ -22,6 +22,7 @@ import './style.scss';
 const BorderControl = ({
 	lines = 'horizontal',
 	initValue = '',
+	customMenuPosition,
 	//
 	value: _value,
 	//
@@ -64,6 +65,7 @@ const BorderControl = ({
 			/>
 
 			<SelectControl
+				customMenuPosition={customMenuPosition}
 				type="custom"
 				className="input-hide-label input-hide-caret input-align-center no-border"
 				value={controlValue.style}
@@ -77,6 +79,7 @@ const BorderControl = ({
 								<BorderStyleVSolidIcon />
 							),
 						value: 'solid',
+						className: 'align-center',
 					},
 					{
 						label: '',
@@ -87,6 +90,7 @@ const BorderControl = ({
 								<BorderStyleVDashedIcon />
 							),
 						value: 'dashed',
+						className: 'align-center',
 					},
 					{
 						label: '',
@@ -97,6 +101,7 @@ const BorderControl = ({
 								<BorderStyleVDottedIcon />
 							),
 						value: 'dotted',
+						className: 'align-center',
 					},
 					{
 						label: '',
@@ -107,6 +112,7 @@ const BorderControl = ({
 								<BorderStyleVDoubleIcon />
 							),
 						value: 'double',
+						className: 'align-center',
 					},
 				]}
 				onValueChange={(newValue) => {
