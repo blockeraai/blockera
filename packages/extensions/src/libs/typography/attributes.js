@@ -81,6 +81,6 @@ export const attributes = {
 	},
 	publisherWordBreak: {
 		type: 'string',
-		default: 'inherit',
+		default: 'normal',
 	},
 };
