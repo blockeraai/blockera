@@ -355,22 +355,22 @@ export function TypographyExtension({ children, config, ...props }) {
 												},
 												{
 													label: __(
-														'Uppercase',
-														'publisher-core'
-													),
-													value: 'uppercase',
-													icon: (
-														<TextTransformUppercaseIcon />
-													),
-												},
-												{
-													label: __(
 														'Lowercase',
 														'publisher-core'
 													),
 													value: 'overline',
 													icon: (
 														<TextTransformLowercaseIcon />
+													),
+												},
+												{
+													label: __(
+														'Uppercase',
+														'publisher-core'
+													),
+													value: 'uppercase',
+													icon: (
+														<TextTransformUppercaseIcon />
 													),
 												},
 												{
