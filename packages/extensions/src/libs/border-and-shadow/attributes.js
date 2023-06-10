@@ -3,5 +3,4 @@ export const attributes = {
 		type: 'array',
 		default: [],
 	},
-	//TODO: add "publisherBorder" attribute!
 };

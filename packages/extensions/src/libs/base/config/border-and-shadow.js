@@ -1,7 +1,6 @@
 export const borderAndShadowConfig = {
-	boxShadow: {
+	publisherBoxShadow: {
 		status: true,
 		cssGenerators: {},
 	},
-	border: false,
 };

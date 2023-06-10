@@ -17,22 +17,20 @@ import { isActiveField } from '../../api/utils';
 import { BlockEditContext } from '../../hooks/context';
 
 export function BorderAndShadowStyles({
-	borderAndShadowConfig: { boxShadow },
+	borderAndShadowConfig: { publisherBoxShadow },
 }) {
 	const { attributes: _attributes } = useContext(BlockEditContext);
 	const generators = [];
 
 	if (
-		isActiveField(boxShadow) &&
+		isActiveField(publisherBoxShadow) &&
 		!arrayEquals(
 			attributes.publisherBoxShadow.default,
 			_attributes.publisherBoxShadow
 		)
 	) {
-		generators.push(BoxShadowFieldStyle(boxShadow));
+		generators.push(BoxShadowFieldStyle(publisherBoxShadow));
 	}
-
-	//TODO: Please, implements publisherTransition and publisherBorder css generators!
 
 	return generators.length > 1 ? generators.join('\n') : generators.join('');
 }

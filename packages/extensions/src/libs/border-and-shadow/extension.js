@@ -16,23 +16,23 @@ import { BorderField } from '@publisher/fields/src/libs/border/field';
 
 export function BorderAndShadowExtension({ children, config, ...props }) {
 	const {
-		borderAndShadowConfig: { boxShadow },
+		borderAndShadowConfig: { publisherBoxShadow },
 	} = config;
 
 	return (
 		<>
-			{isActiveField(boxShadow) && (
+			<BorderField label="Border" />
+
+			{isActiveField(publisherBoxShadow) && (
 				<BoxShadowField
 					{...{
 						...props,
-						config: boxShadow,
+						config: publisherBoxShadow,
 						attribute: 'publisherBoxShadow',
 						label: __('Box Shadow', 'publisher-core'),
 					}}
 				/>
 			)}
-
-			<BorderField label="Border" />
 
 			<div>{children}</div>
 		</>
