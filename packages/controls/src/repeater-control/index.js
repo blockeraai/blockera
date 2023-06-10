@@ -46,20 +46,27 @@ const RepeaterControl = ({
 		repeaterItems,
 		InnerComponents,
 		cloneItem: () => {
-			setRepeaterItems([...repeaterItems, ...repeaterItems.slice(-1)]);
+			const _repeaterItems = [
+				...repeaterItems,
+				...repeaterItems.slice(-1),
+			];
 
-			updateBlockAttributes(repeaterItems);
+			setRepeaterItems(_repeaterItems);
+			updateBlockAttributes(_repeaterItems);
 		},
 		addNewItem: () => {
-			setRepeaterItems([...repeaterItems, ...[initialState]]);
+			const _repeaterItems = [...repeaterItems, ...[initialState]];
 
-			updateBlockAttributes(repeaterItems);
+			setRepeaterItems(_repeaterItems);
+			updateBlockAttributes(_repeaterItems);
 		},
 		removeItem: (itemId) => {
-			setRepeaterItems(
-				repeaterItems.filter((i, index) => index !== itemId)
+			const _repeaterItems = repeaterItems.filter(
+				(i, index) => index !== itemId
 			);
-			updateBlockAttributes(repeaterItems);
+
+			setRepeaterItems(_repeaterItems);
+			updateBlockAttributes(_repeaterItems);
 		},
 		changeItem: (itemId, newValue) => {
 			const _repeaterItems = repeaterItems.map((i, id) => {
