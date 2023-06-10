@@ -205,7 +205,7 @@ export function TypographyStyles({
 					_attributes.publisherTextColumnsDividerColor !==
 					attributes.publisherTextColumnsDividerColor.default
 				) {
-					properties['column-rule'] =
+					properties['column-rule-color'] =
 						_attributes.publisherTextColumnsDividerColor;
 				}
 
@@ -222,7 +222,7 @@ export function TypographyStyles({
 					attributes.publisherTextColumnsDividerWidth.default
 				) {
 					properties['column-rule-width'] =
-						_attributes.publisherTextColumnsDividerWidth;
+						_attributes.publisherTextColumnsDividerWidth + 'px';
 				}
 
 				break;

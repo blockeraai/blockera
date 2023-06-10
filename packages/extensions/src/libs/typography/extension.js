@@ -15,6 +15,7 @@ import {
 	TextShadowField,
 	ToggleSelectField,
 } from '@publisher/fields';
+import { BorderControl } from '@publisher/controls';
 import { Popover, Button, HStack } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
 
@@ -23,6 +24,7 @@ import { controlInnerClassNames } from '@publisher/classnames';
  */
 import { BlockEditContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
+// icons
 import NoneIcon from './icons/none';
 import TypographyButtonIcon from './icons/typography-button';
 import TextAlignLeftIcon from './icons/text-align-left';
@@ -625,7 +627,6 @@ export function TypographyExtension({ children, config, ...props }) {
 													'Gap',
 													'publisher-core'
 												)}
-												columns="2fr 8fr"
 												settings={{
 													type: 'css',
 													unitType: 'essential',
@@ -648,101 +649,35 @@ export function TypographyExtension({ children, config, ...props }) {
 												}
 											/>
 
-											<InputField
+											<Field
 												label={__(
-													'Divider Width',
+													'Divider',
 													'publisher-core'
 												)}
-												columns="2fr 8fr"
-												settings={{
-													type: 'css',
-													unitType: 'essential',
-													range: true,
-													min: 0,
-													max: 10,
-													initValue: '0px',
-												}}
-												//
-												initValue=""
-												value={
-													attributes.publisherTextColumnsDividerWidth
-												}
-												onValueChange={(newValue) =>
-													setAttributes({
-														...attributes,
-														publisherTextColumnsDividerWidth:
-															newValue,
-													})
-												}
-											/>
-
-											<ColorField
-												label={__(
-													'Divider Color',
-													'publisher-core'
-												)}
-												//
-												initValue=""
-												value={
-													attributes.publisherTextColumnsDividerColor
-												}
-												onValueChange={(newValue) =>
-													setAttributes({
-														...attributes,
-														publisherTextColumnsDividerColor:
-															newValue,
-													})
-												}
-											/>
-
-											<SelectField
-												label={__(
-													'Divider Color',
-													'publisher-core'
-												)}
-												options={[
-													{
-														label: __(
-															'None',
-															'publisher-core'
-														),
-														value: 'none',
-													},
-													{
-														label: __(
-															'Solid',
-															'publisher-core'
-														),
-														value: 'solid',
-													},
-													{
-														label: __(
-															'Dashed',
-															'publisher-core'
-														),
-														value: 'dashed',
-													},
-													{
-														label: __(
-															'Dotted',
-															'publisher-core'
-														),
-														value: 'dotted',
-													},
-												]}
-												//
-												initValue="none"
-												value={
-													attributes.publisherTextColumnsDividerStyle
-												}
-												onValueChange={(newValue) =>
-													setAttributes({
-														...attributes,
-														publisherTextColumnsDividerStyle:
-															newValue,
-													})
-												}
-											/>
+											>
+												<BorderControl
+													lines="vertical"
+													customMenuPosition="top"
+													value={{
+														width: attributes.publisherTextColumnsDividerWidth,
+														style: attributes.publisherTextColumnsDividerStyle,
+														color: attributes.publisherTextColumnsDividerColor,
+													}}
+													onValueChange={(
+														newValue
+													) => {
+														setAttributes({
+															...attributes,
+															publisherTextColumnsDividerWidth:
+																newValue.width,
+															publisherTextColumnsDividerStyle:
+																newValue.style,
+															publisherTextColumnsDividerColor:
+																newValue.color,
+														});
+													}}
+												/>
+											</Field>
 										</>
 									)}
 							</ToggleSelectField>
