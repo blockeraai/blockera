@@ -1,24 +1,38 @@
 
 .publisher-control-input {
-
-	.components-text-control__input{
+	
+	.components-text-control__input {
 		border: 1px solid #949494;
 		border-radius: 2px;
 	}
-
-	&.no-border .components-text-control__input{
-		border: none;
-		border-radius: 2px;
-		box-shadow: none;
-		background: none;
-
-		&:focus{
+	
+	.components-input-control__input[type=css],
+	.components-input-control__input[type=number] {
+		cursor: ns-resize;
+	}
+	
+	&.no-border {
+		.components-input-control__backdrop {
+			border: none !important;
+			border-radius: 2px !important;
+			box-shadow: none !important;
+			background: none !important;
+		}
+		
+		.components-text-control__input {
+			border: none;
 			border-radius: 2px;
 			box-shadow: none;
+			background: none;
+			
+			&:focus {
+				border-radius: 2px;
+				box-shadow: none;
+			}
 		}
 	}
-
-
+	
+	
 	.components-input-control__suffix,
 	.components-unit-control__select {
 		width: 25px !important;
@@ -31,7 +45,7 @@
 		height: 30px !important;
 		line-height: 28px !important;
 	}
-
+	
 	.components-unit-control__unit-label {
 		font-size: 11px !important;
 		color: #aeaeae !important;
@@ -46,9 +60,11 @@
 	.components-input-control__input {
 		display: none !important;
 	}
+	
 	.components-input-control__suffix {
 		width: 100% !important;
 		height: 30px !important;
+		
 		.components-unit-control__select {
 			width: 100% !important;
 			border-radius: 2px !important;
@@ -59,9 +75,7 @@
 			text-align: left !important;
 			text-align-last: left !important;
 			padding: 0px 26px 0px 8px !important;
-			background: #fff
-				url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%231E1E1E%22%2F%3E%3C%2Fsvg%3E)
-				no-repeat right 5px top 55%;
+			background: #ffffff url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%231E1E1E%22%2F%3E%3C%2Fsvg%3E) no-repeat right 5px top 55%;
 			background-size: 13px 11px !important;
 			letter-spacing: 0;
 		}
@@ -72,14 +86,15 @@
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	column-gap: 15px;
-
+	
 	& > .components-base-control {
 		margin: 0;
 		min-width: 60px;
 	}
-
+	
 	&.publisher-control-unit-special {
 		grid-template-columns: 1fr;
+		
 		.publisher-control-range {
 			display: none;
 		}
