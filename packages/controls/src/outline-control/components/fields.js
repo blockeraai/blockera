@@ -25,7 +25,7 @@ const Fields = ({ itemId, item }) => {
 				<BorderControl
 					lines="horizontal"
 					initValue={{
-						width: '2',
+						width: '2px',
 						style: 'solid',
 						color: '#B6B6B6',
 					}}

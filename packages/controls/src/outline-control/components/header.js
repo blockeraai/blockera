@@ -49,7 +49,7 @@ const Header = ({
 			</span>
 
 			<span className={controlInnerClassNames('header-values')}>
-				<span>{width}px</span>
+				<span>{width}</span>
 
 				{getStyleIcon()}
 

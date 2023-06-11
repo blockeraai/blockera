@@ -18,7 +18,7 @@ import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
 const initialState = {
-	width: '2',
+	width: '2px',
 	style: 'solid',
 	color: '#B6B6B6',
 	offset: '2px',
