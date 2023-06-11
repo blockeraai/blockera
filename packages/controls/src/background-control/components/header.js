@@ -17,7 +17,7 @@ import { default as TypeLinearGradientIcon } from '../icons/type-linear-gradient
 import { default as TypeRadialGradientIcon } from '../icons/type-radial-gradient';
 import { default as ItemPreview } from './item-preview';
 
-const Header = ({ item, isOpen, setOpen, children }) => {
+const Header = ({ item, isOpen, setOpen, children, isOpenPopoverEvent }) => {
 	let label, icon, preview;
 
 	switch (item.type) {
@@ -43,7 +43,7 @@ const Header = ({ item, isOpen, setOpen, children }) => {
 	return (
 		<div
 			className={controlInnerClassNames('repeater-group-header')}
-			onClick={() => setOpen(!isOpen)}
+			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
 		>
 			<span className={controlInnerClassNames('header-icon')}>
 				{icon}

@@ -14,6 +14,7 @@ import { controlInnerClassNames } from '@publisher/classnames';
  */
 import ActionsUI from './actions-ui';
 import { RepeaterContext } from '../context';
+import { isOpenPopoverEvent } from '../utils';
 import GroupControl from '../../group-control';
 
 const RepeaterItem = ({ item, itemId, repeaterAttribute }) => {
@@ -29,11 +30,13 @@ const RepeaterItem = ({ item, itemId, repeaterAttribute }) => {
 		popoverLabel,
 	} = useContext(RepeaterContext);
 	const actionsProps = {
+		item,
 		itemId,
 		isOpen,
 		setOpen,
 		isVisible,
 		setVisibility,
+		isOpenPopoverEvent,
 	};
 
 	return (
@@ -51,14 +54,16 @@ const RepeaterItem = ({ item, itemId, repeaterAttribute }) => {
 							className={controlInnerClassNames(
 								'repeater-group-header'
 							)}
-							onClick={() => setOpen(!isOpen)}
+							onClick={(event) =>
+								isOpenPopoverEvent(event) && setOpen(!isOpen)
+							}
 						>
 							{__('Item ', 'publisher') + itemId}
-							<ActionsUI {...{ ...actionsProps }} />
+							<ActionsUI {...actionsProps} />
 						</div>
 					) : (
-						<CustomHeader {...{ item, itemId, isOpen, setOpen }}>
-							<ActionsUI {...{ ...actionsProps }} />
+						<CustomHeader {...actionsProps}>
+							<ActionsUI {...actionsProps} />
 						</CustomHeader>
 					)
 				}
