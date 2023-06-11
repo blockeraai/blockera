@@ -1,0 +1,203 @@
+/**
+ * WordPress dependencies
+ */
+import { useState } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
+
+/**
+ * Publisher dependencies
+ */
+import {
+	controlClassNames,
+	controlInnerClassNames,
+} from '@publisher/classnames';
+
+/**
+ * Internal dependencies
+ */
+import { CssInputControl, LabelControl, ToggleSelectControl } from '../index';
+import { default as CompactIcon } from './icons/compact';
+import { default as CustomIcon } from './icons/custom';
+import './style.scss';
+
+const BorderRadiusControl = ({
+	label = '',
+	initValue = {
+		type: 'all',
+		all: '0px',
+		topLeft: '0px',
+		topRight: '0px',
+		bottomLeft: '0px',
+		bottomRight: '0px',
+	},
+	//
+	value,
+	//
+	className,
+	onValueChange = (newValue) => {
+		return newValue;
+	},
+}) => {
+	const [controlValue, setControlValue] = useState({
+		...initValue,
+		...value,
+	});
+
+	return (
+		<div className={controlClassNames('border-radius', className)}>
+			<div className={controlInnerClassNames('border-header')}>
+				{label && (
+					<div className={controlInnerClassNames('label')}>
+						<LabelControl label={label} />
+					</div>
+				)}
+
+				{controlValue.type === 'all' && (
+					<CssInputControl
+						min="0"
+						type="css"
+						unitType="essential"
+						value={controlValue.all}
+						onValueChange={(newValue) => {
+							const value = { ...controlValue, all: newValue };
+							setControlValue(value);
+							onValueChange(value);
+						}}
+						style={{
+							'--pb-all': controlValue.all,
+						}}
+					/>
+				)}
+
+				<ToggleSelectControl
+					initValue="compact"
+					value={controlValue.type}
+					options={[
+						{
+							label: __('Compact', 'publisher-core'),
+							value: 'all',
+							icon: <CompactIcon />,
+						},
+						{
+							label: __('Custom', 'publisher-core'),
+							value: 'custom',
+							icon: <CustomIcon />,
+						},
+					]}
+					onValueChange={(newValue) => {
+						if (newValue === 'custom') {
+							const value = {
+								...controlValue,
+								type: newValue,
+								topLeft: controlValue.all,
+								topRight: controlValue.all,
+								bottomLeft: controlValue.all,
+								bottomRight: controlValue.all,
+							};
+							setControlValue(value);
+							onValueChange(value);
+						} else {
+							const value = {
+								...controlValue,
+								type: newValue,
+							};
+							setControlValue(value);
+							onValueChange(value);
+						}
+					}}
+				/>
+			</div>
+
+			{controlValue.type === 'custom' && (
+				<div className={controlInnerClassNames('border-corners')}>
+					<div
+						className={controlInnerClassNames(
+							'border-corners-preview'
+						)}
+						style={{
+							'--pb-top-left': controlValue.topLeft,
+							'--pb-top-right': controlValue.topRight,
+							'--pb-bottom-left': controlValue.bottomLeft,
+							'--pb-bottom-right': controlValue.bottomRight,
+						}}
+					>
+						<CssInputControl
+							min="0"
+							type="css"
+							unitType="essential"
+							className={controlInnerClassNames(
+								'border-corner-top-left',
+								'no-border'
+							)}
+							value={controlValue.topLeft}
+							onValueChange={(newValue) => {
+								const value = {
+									...controlValue,
+									topLeft: newValue,
+								};
+								setControlValue(value);
+								onValueChange(value);
+							}}
+						/>
+						<CssInputControl
+							min="0"
+							type="css"
+							unitType="essential"
+							className={controlInnerClassNames(
+								'border-corner-top-right',
+								'no-border'
+							)}
+							value={controlValue.topRight}
+							onValueChange={(newValue) => {
+								const value = {
+									...controlValue,
+									topRight: newValue,
+								};
+								setControlValue(value);
+								onValueChange(value);
+							}}
+						/>
+						<CssInputControl
+							min="0"
+							type="css"
+							unitType="essential"
+							className={controlInnerClassNames(
+								'border-corner-bottom-left',
+								'no-border'
+							)}
+							value={controlValue.bottomLeft}
+							onValueChange={(newValue) => {
+								const value = {
+									...controlValue,
+									bottomLeft: newValue,
+								};
+								setControlValue(value);
+								onValueChange(value);
+							}}
+						/>
+						<CssInputControl
+							min="0"
+							type="css"
+							unitType="essential"
+							className={controlInnerClassNames(
+								'border-corner-bottom-right',
+								'no-border'
+							)}
+							value={controlValue.bottomRight}
+							onValueChange={(newValue) => {
+								const value = {
+									...controlValue,
+									bottomRight: newValue,
+								};
+								setControlValue(value);
+								onValueChange(value);
+							}}
+						/>
+					</div>
+				</div>
+			)}
+		</div>
+	);
+};
+
+export default BorderRadiusControl;
