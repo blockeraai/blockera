@@ -15,6 +15,7 @@ const Header = ({
 	isOpen,
 	setOpen,
 	children,
+	isOpenPopoverEvent,
 }) => {
 	const heading = () => {
 		return `${x} ${y} ${blur} ${spread}`;
@@ -23,7 +24,7 @@ const Header = ({
 	return (
 		<div
 			className={controlInnerClassNames('repeater-group-header')}
-			onClick={() => setOpen(!isOpen)}
+			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
 		>
 			<span className={controlInnerClassNames('header-icon')}>
 				<ColorIndicator

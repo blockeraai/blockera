@@ -14,11 +14,17 @@ import { controlInnerClassNames } from '@publisher/classnames';
 import { getTypeLabel } from '../utils';
 import { default as TransitionIcon } from '../icons/transition';
 
-const Header = ({ item: { type, duration }, isOpen, setOpen, children }) => {
+const Header = ({
+	item: { type, duration },
+	isOpen,
+	setOpen,
+	children,
+	isOpenPopoverEvent,
+}) => {
 	return (
 		<div
 			className={controlInnerClassNames('repeater-group-header')}
-			onClick={() => setOpen(!isOpen)}
+			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
 		>
 			<span className={controlInnerClassNames('header-icon')}>
 				<TransitionIcon />

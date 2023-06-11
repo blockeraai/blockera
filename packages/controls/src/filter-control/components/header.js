@@ -23,7 +23,7 @@ import { default as InvertIcon } from '../icons/invert';
 import { default as SaturationIcon } from '../icons/saturate';
 import { default as SepiaIcon } from '../icons/sepia';
 
-const Header = ({ item, isOpen, setOpen, children }) => {
+const Header = ({ item, isOpen, setOpen, children, isOpenPopoverEvent }) => {
 	let label, icon, value;
 
 	switch (item.type) {
@@ -85,7 +85,7 @@ const Header = ({ item, isOpen, setOpen, children }) => {
 	return (
 		<div
 			className={controlInnerClassNames('repeater-group-header')}
-			onClick={() => setOpen(!isOpen)}
+			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
 		>
 			<span className={controlInnerClassNames('header-icon')}>
 				{icon}
