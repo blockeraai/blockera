@@ -2,26 +2,50 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useContext } from '@wordpress/element';
 
 /**
  * Publisher dependencies
  */
-import { BoxShadowField, OutlineField } from '@publisher/fields';
+import {
+	BoxBorderField,
+	BoxShadowField,
+	OutlineField,
+} from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
 import { isActiveField } from '../../api/utils';
-import { BorderField } from '@publisher/fields/src/libs/border/field';
+import { BlockEditContext } from '../../hooks';
 
 export function BorderAndShadowExtension({ children, config, ...props }) {
 	const {
-		borderAndShadowConfig: { publisherBoxShadow, publisherOutline },
+		borderAndShadowConfig: {
+			publisherBoxShadow,
+			publisherOutline,
+			publisherBorder,
+		},
 	} = config;
 
+	const { attributes, setAttributes } = useContext(BlockEditContext);
+
+	console.log('attributes.publisherBorder', attributes.publisherBorder);
 	return (
 		<>
-			<BorderField label="Border" />
+			{isActiveField(publisherBorder) && (
+				<BoxBorderField
+					label={__('Border Line', 'publisher-core')}
+					value={attributes.publisherBorder}
+					onValueChange={(newValue) => {
+						console.log(newValue);
+						setAttributes({
+							...attributes,
+							publisherBorder: newValue,
+						});
+					}}
+				/>
+			)}
 
 			{isActiveField(publisherBoxShadow) && (
 				<BoxShadowField

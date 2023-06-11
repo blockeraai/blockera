@@ -7,4 +7,8 @@ export const borderAndShadowConfig = {
 		status: true,
 		cssGenerators: {},
 	},
+	publisherBorder: {
+		status: true,
+		cssGenerators: {},
+	},
 };

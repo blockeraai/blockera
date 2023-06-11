@@ -6,7 +6,11 @@ import { useContext } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { BoxShadowFieldStyle, OutlineFieldStyle } from '@publisher/fields';
+import {
+	BoxShadowFieldStyle,
+	OutlineFieldStyle,
+	BoxBorderFieldStyle,
+} from '@publisher/fields';
 
 /**
  * Internal dependencies
@@ -17,7 +21,11 @@ import { isActiveField } from '../../api/utils';
 import { BlockEditContext } from '../../hooks/context';
 
 export function BorderAndShadowStyles({
-	borderAndShadowConfig: { publisherBoxShadow, publisherOutline },
+	borderAndShadowConfig: {
+		publisherBoxShadow,
+		publisherOutline,
+		publisherBorder,
+	},
 }) {
 	const { attributes: _attributes } = useContext(BlockEditContext);
 	const generators = [];
@@ -40,6 +48,17 @@ export function BorderAndShadowStyles({
 		)
 	) {
 		generators.push(OutlineFieldStyle(publisherOutline));
+	}
+
+	if (
+		isActiveField(publisherBorder) &&
+		!arrayEquals(
+			attributes.publisherBorder.default,
+			_attributes.publisherBorder
+		)
+	) {
+		console.log(BoxBorderFieldStyle(publisherBorder));
+		generators.push(BoxBorderFieldStyle(publisherBorder));
 	}
 
 	return generators.length > 1 ? generators.join('\n') : generators.join('');

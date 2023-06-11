@@ -7,4 +7,8 @@ export const attributes = {
 		type: 'array',
 		default: [],
 	},
+	publisherBorder: {
+		type: 'object',
+		default: [],
+	},
 };
