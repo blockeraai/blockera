@@ -23,7 +23,7 @@ export function InputControl({
 	range = false,
 	// suffix = '',  //todo implement
 	//
-	value,
+	value = null,
 	initValue,
 	//
 	className,
@@ -33,7 +33,9 @@ export function InputControl({
 	onValueChange = () => {},
 	...props
 }) {
-	const [controlValue, setValue] = useState(value || initValue);
+	const [controlValue, setValue] = useState(
+		value !== null ? value : initValue
+	);
 
 	return (
 		<div
