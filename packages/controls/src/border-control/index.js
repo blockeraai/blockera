@@ -7,7 +7,12 @@ import { useState } from '@wordpress/element';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { InputControl, SelectControl, ColorControl } from '../index';
+import {
+	CssInputControl,
+	InputControl,
+	SelectControl,
+	ColorControl,
+} from '../index';
 import BorderStyleHSolidIcon from './icons/style-h-solid';
 import BorderStyleHDashedIcon from './icons/style-h-dashed';
 import BorderStyleHDottedIcon from './icons/style-h-dotted';
@@ -22,7 +27,7 @@ import './style.scss';
 const BorderControl = ({
 	lines = 'horizontal',
 	initValue = {
-		width: 0,
+		width: '0px',
 		style: 'solid',
 		color: '',
 	},
@@ -42,8 +47,11 @@ const BorderControl = ({
 
 	return (
 		<div className={controlClassNames('border', className)}>
-			<InputControl
-				type="number"
+			<CssInputControl
+				min="0"
+				unitType="custom"
+				units={[{ value: 'px', label: 'PX', default: 0 }]}
+				// type="number"
 				className={controlClassNames('input', 'no-border')}
 				value={controlValue.width}
 				onValueChange={(newValue) => {

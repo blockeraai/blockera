@@ -25,27 +25,27 @@ const BoxBorderControl = ({
 	initValue = {
 		type: 'all',
 		all: {
-			width: '0',
+			width: '0px',
 			style: 'solid',
 			color: '',
 		},
 		left: {
-			width: '0',
+			width: '0px',
 			style: 'solid',
 			color: '',
 		},
 		right: {
-			width: '0',
+			width: '0px',
 			style: 'solid',
 			color: '',
 		},
 		top: {
-			width: '0',
+			width: '0px',
 			style: 'solid',
 			color: '',
 		},
 		bottom: {
-			width: '0',
+			width: '0px',
 			style: 'solid',
 			color: '',
 		},
@@ -129,17 +129,16 @@ const BoxBorderControl = ({
 							'border-corners-preview'
 						)}
 						style={{
-							'--pb-top-width': controlValue.top.width + 'px',
+							'--pb-top-width': controlValue.top.width,
 							'--pb-top-style': controlValue.top.style,
 							'--pb-top-color': controlValue.top.color,
-							'--pb-right-width': controlValue.right.width + 'px',
+							'--pb-right-width': controlValue.right.width,
 							'--pb-right-style': controlValue.right.style,
 							'--pb-right-color': controlValue.right.color,
-							'--pb-bottom-width':
-								controlValue.bottom.width + 'px',
+							'--pb-bottom-width': controlValue.bottom.width,
 							'--pb-bottom-style': controlValue.bottom.style,
 							'--pb-bottom-color': controlValue.bottom.color,
-							'--pb-left-width': controlValue.left.width + 'px',
+							'--pb-left-width': controlValue.left.width,
 							'--pb-left-style': controlValue.left.style,
 							'--pb-left-color': controlValue.left.color,
 						}}
