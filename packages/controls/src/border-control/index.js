@@ -21,25 +21,24 @@ import './style.scss';
 
 const BorderControl = ({
 	lines = 'horizontal',
-	initValue = '',
+	initValue = {
+		width: 0,
+		style: 'solid',
+		color: '',
+	},
 	customMenuPosition,
 	//
-	value: _value,
+	value,
 	//
 	className,
 	onValueChange = (newValue) => {
 		return newValue;
 	},
 }) => {
-	const initial = _value || initValue;
-
-	const border = {
-		width: initial?.width ? initial.width : '0',
-		color: initial?.color ? initial.color : '',
-		style: initial?.style ? initial.style : 'solid',
-	};
-
-	const [controlValue, setControlValue] = useState(border);
+	const [controlValue, setControlValue] = useState({
+		...initValue,
+		...value,
+	});
 
 	return (
 		<div className={controlClassNames('border', className)}>

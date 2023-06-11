@@ -2,7 +2,7 @@
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	align-items: center;
-	min-width: 110px;
+	min-width: 100px;
 	box-shadow: inset 0 0 0 1px #949494;
 	border-radius: 2px;
 	gap: 2px;
@@ -14,6 +14,11 @@
 
 	> span:empty {
 		display: none;
+	}
+
+	.publisher-control-select.custom .components-custom-select-control__button {
+		padding-left: 5px !important;
+		padding-right: 5px !important;
 	}
 
 	> .publisher-control-input {
