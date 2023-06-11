@@ -8,6 +8,7 @@ import { useState, useContext } from '@wordpress/element';
  * Publisher dependencies
  */
 import {
+	BorderField,
 	ColorField,
 	Field,
 	InputField,
@@ -15,7 +16,6 @@ import {
 	TextShadowField,
 	ToggleSelectField,
 } from '@publisher/fields';
-import { BorderControl } from '@publisher/controls';
 import { Popover, Button, HStack } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
 
@@ -649,37 +649,32 @@ export function TypographyExtension({ children, config, ...props }) {
 												}
 											/>
 
-											<Field
+											<BorderField
 												label={__(
 													'Divider',
 													'publisher-core'
 												)}
 												columns="columns-1"
 												className="control-first label-center small-gap"
-											>
-												<BorderControl
-													lines="vertical"
-													customMenuPosition="top"
-													value={{
-														width: attributes.publisherTextColumnsDividerWidth,
-														style: attributes.publisherTextColumnsDividerStyle,
-														color: attributes.publisherTextColumnsDividerColor,
-													}}
-													onValueChange={(
-														newValue
-													) => {
-														setAttributes({
-															...attributes,
-															publisherTextColumnsDividerWidth:
-																newValue.width,
-															publisherTextColumnsDividerStyle:
-																newValue.style,
-															publisherTextColumnsDividerColor:
-																newValue.color,
-														});
-													}}
-												/>
-											</Field>
+												lines="vertical"
+												customMenuPosition="top"
+												value={{
+													width: attributes.publisherTextColumnsDividerWidth,
+													style: attributes.publisherTextColumnsDividerStyle,
+													color: attributes.publisherTextColumnsDividerColor,
+												}}
+												onValueChange={(newValue) => {
+													setAttributes({
+														...attributes,
+														publisherTextColumnsDividerWidth:
+															newValue.width,
+														publisherTextColumnsDividerStyle:
+															newValue.style,
+														publisherTextColumnsDividerColor:
+															newValue.color,
+													});
+												}}
+											/>
 										</>
 									)}
 							</ToggleSelectField>

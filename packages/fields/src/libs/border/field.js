@@ -25,10 +25,7 @@ export function BorderField({
 			columns={columns}
 			className={className}
 		>
-			<BorderControl
-				{...props}
-				value={{ width: '1', color: '#eeeeee', style: 'solid' }}
-			/>
+			<BorderControl {...props} />
 
 			{children}
 		</Field>

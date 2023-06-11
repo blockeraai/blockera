@@ -222,7 +222,7 @@ export function TypographyStyles({
 					attributes.publisherTextColumnsDividerWidth.default
 				) {
 					properties['column-rule-width'] =
-						_attributes.publisherTextColumnsDividerWidth + 'px';
+						_attributes.publisherTextColumnsDividerWidth;
 				}
 
 				break;
