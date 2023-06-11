@@ -33,7 +33,9 @@ export function backgroundCSSGenerator(id, props, styleEngine) {
 				}
 
 				// Image
-				properties.image.push(getBackgroundItemBGProperty(item));
+				properties.image.push(
+					`url(${getBackgroundItemBGProperty(item)})`
+				);
 
 				// Background Size
 				if (item['image-size'] === 'custom') {

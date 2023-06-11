@@ -1,7 +1,6 @@
 /**
  * WordPress dependencies
  */
-import { ColorIndicator } from '@wordpress/components';
 import { memo } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
@@ -9,6 +8,7 @@ import { __ } from '@wordpress/i18n';
  * Publisher dependencies
  */
 import { controlInnerClassNames } from '@publisher/classnames';
+import { ColorIndicator } from '@publisher/components';
 
 const Header = ({
 	item: { type, x, y, blur, spread, color = '#fff' },
@@ -27,10 +27,7 @@ const Header = ({
 			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
 		>
 			<span className={controlInnerClassNames('header-icon')}>
-				<ColorIndicator
-					colorValue={color}
-					className={controlInnerClassNames('color-indicator')}
-				/>
+				<ColorIndicator value={color} />
 			</span>
 
 			<span className={controlInnerClassNames('header-label')}>

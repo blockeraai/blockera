@@ -2,13 +2,13 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { ColorIndicator } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
+import { ColorIndicator } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -42,7 +42,7 @@ export default function ColorControl({
 				size="input"
 				style="primary"
 				className={controlClassNames(
-					'color-indicator',
+					'color',
 					'color-type-' + type,
 					'toggle-focus',
 					isOpen ? 'is-focus' : '',
@@ -51,10 +51,7 @@ export default function ColorControl({
 				onClick={() => setOpen(!isOpen)}
 				{...props}
 			>
-				<ColorIndicator
-					colorValue={color}
-					className="color-indicator"
-				/>
+				<ColorIndicator value={color} />
 
 				{label}
 			</Button>

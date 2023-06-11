@@ -1,13 +1,13 @@
 /**
  * WordPress dependencies
  */
-import { ColorIndicator } from '@wordpress/components';
 import { memo } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
 /**
  * Publisher dependencies
  */
+import { ColorIndicator } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
 
 import CloneIcon from './../icons/outline';
@@ -53,10 +53,7 @@ const Header = ({
 
 				{getStyleIcon()}
 
-				<ColorIndicator
-					colorValue={color}
-					className={controlInnerClassNames('color-indicator')}
-				/>
+				<ColorIndicator value={color} />
 			</span>
 
 			{children}

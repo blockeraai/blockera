@@ -2,15 +2,15 @@ export function getBackgroundItemBGProperty(item) {
 	switch (item.type) {
 		case 'image':
 			if (!item.image) {
-				return undefined;
+				return '';
 			}
 
 			// Image
-			return `url(${item.image})`;
+			return item.image;
 
 		case 'linear-gradient':
 			if (!item['linear-gradient']) {
-				return undefined;
+				return '';
 			}
 
 			let gradient = item['linear-gradient'];
@@ -26,7 +26,7 @@ export function getBackgroundItemBGProperty(item) {
 
 		case 'radial-gradient':
 			if (!item['radial-gradient']) {
-				return undefined;
+				return '';
 			}
 
 			let radialGradient = item['radial-gradient'];
@@ -60,5 +60,5 @@ export function getBackgroundItemBGProperty(item) {
 			return radialGradient;
 	}
 
-	return undefined;
+	return '';
 }
