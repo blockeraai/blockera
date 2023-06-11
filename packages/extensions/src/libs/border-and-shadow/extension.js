@@ -8,6 +8,7 @@ import { useContext } from '@wordpress/element';
  * Publisher dependencies
  */
 import {
+	BorderRadiusField,
 	BoxBorderField,
 	BoxShadowField,
 	OutlineField,
@@ -25,6 +26,7 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 			publisherBoxShadow,
 			publisherOutline,
 			publisherBorder,
+			publisherBorderRadius,
 		},
 	} = config;
 
@@ -40,6 +42,19 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 						setAttributes({
 							...attributes,
 							publisherBorder: newValue,
+						});
+					}}
+				/>
+			)}
+
+			{isActiveField(publisherBorderRadius) && (
+				<BorderRadiusField
+					label={__('Radius', 'publisher-core')}
+					value={attributes.publisherBorderRadius}
+					onValueChange={(newValue) => {
+						setAttributes({
+							...attributes,
+							publisherBorderRadius: newValue,
 						});
 					}}
 				/>

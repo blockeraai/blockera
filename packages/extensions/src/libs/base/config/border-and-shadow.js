@@ -11,4 +11,8 @@ export const borderAndShadowConfig = {
 		status: true,
 		cssGenerators: {},
 	},
+	publisherBorderRadius: {
+		status: true,
+		cssGenerators: {},
+	},
 };

@@ -11,4 +11,8 @@ export const attributes = {
 		type: 'object',
 		default: [],
 	},
+	publisherBorderRadius: {
+		type: 'object',
+		default: [],
+	},
 };

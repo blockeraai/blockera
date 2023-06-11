@@ -10,6 +10,7 @@ import {
 	BoxShadowFieldStyle,
 	OutlineFieldStyle,
 	BoxBorderFieldStyle,
+	BorderRadiusFieldStyle,
 } from '@publisher/fields';
 
 /**
@@ -25,6 +26,7 @@ export function BorderAndShadowStyles({
 		publisherBoxShadow,
 		publisherOutline,
 		publisherBorder,
+		publisherBorderRadius,
 	},
 }) {
 	const { attributes: _attributes } = useContext(BlockEditContext);
@@ -57,8 +59,17 @@ export function BorderAndShadowStyles({
 			_attributes.publisherBorder
 		)
 	) {
-		console.log(BoxBorderFieldStyle(publisherBorder));
 		generators.push(BoxBorderFieldStyle(publisherBorder));
+	}
+
+	if (
+		isActiveField(publisherBorderRadius) &&
+		!arrayEquals(
+			attributes.publisherBorderRadius.default,
+			_attributes.publisherBorderRadius
+		)
+	) {
+		generators.push(BorderRadiusFieldStyle(publisherBorderRadius));
 	}
 
 	return generators.length > 1 ? generators.join('\n') : generators.join('');
