@@ -29,5 +29,6 @@ export {
 export { default as AnglePickerControl } from './angle-picker-control';
 export { default as GradientBarControl } from './gradient-bar-control';
 export { default as BorderControl } from './border-control';
+export { default as BoxBorderControl } from './box-border-control';
 
 export { getControlValue, updateControlValue } from './utils';
