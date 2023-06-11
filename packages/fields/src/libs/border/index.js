@@ -1,1 +1,1 @@
-export { SelectField } from './field';
+export { BorderField } from './field';
