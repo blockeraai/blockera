@@ -1,18 +1,15 @@
 export default function CustomIcon({}) {
 	return (
 		<svg
-			width="16"
-			height="16"
-			viewBox="0 0 16 16"
+			width="14"
+			height="14"
+			viewBox="0 0 14 14"
 			xmlns="http://www.w3.org/2000/svg"
 		>
-			<path
-				d="M4.37114e-07 13L0 3H2L2 13H4.37114e-07Z"
-				fill="currentColor"
-			/>
-			<path d="M13 14H3V16H13V14Z" fill="currentColor" />
-			<path d="M14 3L14 13H16L16 3L14 3Z" fill="currentColor" />
-			<path d="M13 0L3 4.37115e-07L3 2L13 2V0Z" fill="currentColor" />
+			<path d="M11 0H3V2L11 2V0Z" fill="currentColor" />
+			<path d="M0 11V3H2L2 11H0Z" fill="currentColor" />
+			<path d="M12 3L12 11H14V3H12Z" fill="currentColor" />
+			<path d="M11 12H3V14L11 14V12Z" fill="currentColor" />
 		</svg>
 	);
 }

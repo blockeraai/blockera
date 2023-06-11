@@ -1,13 +1,13 @@
 export default function CompactIcon({}) {
 	return (
 		<svg
-			width="16"
-			height="16"
-			viewBox="0 0 16 16"
+			width="14"
+			height="14"
+			viewBox="0 0 14 14"
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			<path
-				d="M14 14H2V6.11959e-07L0 6.99383e-07L6.99383e-07 16H16L16 0L2 6.11959e-07L2 2L14 2L14 14Z"
+				d="M0 14V0H2L2 12H12V2L2 2L2 0H14V14L0 14Z"
 				fill="currentColor"
 			/>
 		</svg>

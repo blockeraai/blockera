@@ -24,12 +24,7 @@ export function BoxBorderField({
 			columns="columns-1"
 			className={className}
 		>
-			<BoxBorderControl
-				{...props}
-				label={label}
-				// value={{ width: '1', color: '#eeeeee', style: 'solid' }}
-				//onValueChange={(newValue) => console.log(newValue)}
-			/>
+			<BoxBorderControl {...props} label={label} />
 
 			{children}
 		</Field>

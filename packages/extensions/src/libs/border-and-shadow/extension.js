@@ -30,7 +30,6 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 
 	const { attributes, setAttributes } = useContext(BlockEditContext);
 
-	console.log('attributes.publisherBorder', attributes.publisherBorder);
 	return (
 		<>
 			{isActiveField(publisherBorder) && (
@@ -38,7 +37,6 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 					label={__('Border Line', 'publisher-core')}
 					value={attributes.publisherBorder}
 					onValueChange={(newValue) => {
-						console.log(newValue);
 						setAttributes({
 							...attributes,
 							publisherBorder: newValue,
