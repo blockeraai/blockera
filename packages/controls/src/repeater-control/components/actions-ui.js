@@ -18,15 +18,18 @@ import DeleteIcon from './../icons/delete';
 import EnableIcon from './../icons/enable';
 import DisableIcon from './../icons/disable';
 import CloneIcon from './../icons/clone';
+import { isOpenPopoverEvent } from '../utils';
 
 export default function ActionsUI({
+	item,
 	itemId,
 	isOpen,
 	setOpen,
 	isVisible,
 	setVisibility,
 }) {
-	const { removeItem, cloneItem, isPopover } = useContext(RepeaterContext);
+	const { removeItem, changeItem, cloneItem, isPopover } =
+		useContext(RepeaterContext);
 
 	return (
 		<>
@@ -40,7 +43,9 @@ export default function ActionsUI({
 							: __('Open Settings', 'publisher')
 					}
 					showTooltip={true}
-					onClick={() => setOpen(!isOpen)}
+					onClick={(event) =>
+						!isOpenPopoverEvent(event) && setOpen(!isOpen)
+					}
 				/>
 			)}
 
@@ -52,9 +57,16 @@ export default function ActionsUI({
 					)}
 					icon={isVisible ? EnableIcon : DisableIcon}
 					showTooltip={true}
-					onClick={(e) => {
+					onClick={(event) => {
+						if (isOpenPopoverEvent(event)) {
+							return;
+						}
+
 						setVisibility(!isVisible);
-						e.preventDefault();
+						changeItem(itemId, {
+							...item,
+							isVisible: !isVisible,
+						});
 					}}
 					label={
 						isVisible
@@ -68,7 +80,9 @@ export default function ActionsUI({
 					icon={CloneIcon}
 					showTooltip={true}
 					label={__('Clone', 'publisher')}
-					onClick={() => cloneItem(itemId)}
+					onClick={(event) =>
+						!isOpenPopoverEvent(event) && cloneItem(itemId)
+					}
 				/>
 
 				<Button
@@ -78,7 +92,9 @@ export default function ActionsUI({
 					)}
 					icon={DeleteIcon}
 					showTooltip={true}
-					onClick={() => removeItem(itemId)}
+					onClick={(event) =>
+						!isOpenPopoverEvent(event) && removeItem(itemId)
+					}
 					label={__('Delete', 'publisher')}
 				/>
 			</div>
