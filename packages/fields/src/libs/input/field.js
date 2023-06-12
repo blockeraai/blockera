@@ -41,6 +41,15 @@ export function InputField({
 				<InputControl {...props} {...settings} blockName={name} />
 			)}
 
+			{'number' === settings?.type && (
+				<InputControl
+					{...props}
+					{...settings}
+					type="number"
+					blockName={name}
+				/>
+			)}
+
 			{'css' === settings?.type && (
 				<CssInputControl
 					{...props}
