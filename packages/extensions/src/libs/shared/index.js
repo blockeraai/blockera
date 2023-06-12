@@ -37,6 +37,11 @@ import {
 	attributes as positionAttributes,
 	supports as positionSupports,
 } from '../position';
+import {
+	SizeExtensionIcon,
+	attributes as sizeAttributes,
+	supports as sizeSupports,
+} from '../size';
 
 export const attributes = {
 	...typographyAttributes,
@@ -45,6 +50,7 @@ export const attributes = {
 	...effectsAttributes,
 	...spacingAttributes,
 	...positionAttributes,
+	...sizeAttributes,
 };
 export const supports = {
 	...typographySupports,
@@ -53,6 +59,7 @@ export const supports = {
 	...effectsSupports,
 	...spacingSupports,
 	...positionSupports,
+	...sizeSupports,
 };
 
 export function SharedBlockExtension({ children, ...props }) {
@@ -72,6 +79,14 @@ export function SharedBlockExtension({ children, ...props }) {
 				extensionId={'Position'}
 				title={__('Position', 'publisher-core')}
 				icon=<PositionExtensionIcon />
+			/>
+
+			<BaseExtension
+				{...props}
+				initialOpen={true}
+				extensionId={'Size'}
+				title={__('Size', 'publisher-core')}
+				icon=<SizeExtensionIcon />
 			/>
 
 			<BaseExtension

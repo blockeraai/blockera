@@ -1,4 +1,11 @@
 export {
+	SizeExtensionIcon,
+	SizeStyles,
+	SizeExtension,
+	attributes as sizeAttributes,
+	supports as sizeSupports,
+} from './size';
+export {
 	PositionExtensionIcon,
 	PositionStyles,
 	PositionExtension,

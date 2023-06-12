@@ -4,3 +4,4 @@ export { borderAndShadowConfig } from './border-and-shadow';
 export { effectsConfig } from './effects';
 export { spacingConfig } from './spacing';
 export { positionConfig } from './position';
+export { sizeConfig } from './size';
