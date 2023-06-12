@@ -13,6 +13,7 @@ import {
 	GradientBarField,
 	AnglePickerField,
 	PositionField,
+	MediaImageField,
 } from '@publisher/fields';
 import { HStack } from '@publisher/components';
 
@@ -71,8 +72,9 @@ const Fields = ({ itemId, item }) => {
 
 			{item.type === 'image' && (
 				<>
-					<InputField
-						label={__('Image', 'publisher-core')}
+					<MediaImageField
+						label=""
+						columns="columns-1"
 						settings={{
 							type: 'text',
 						}}
