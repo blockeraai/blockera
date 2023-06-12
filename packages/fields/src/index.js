@@ -15,6 +15,7 @@ export { OutlineField, OutlineFieldStyle } from './libs/outline';
 export { BorderField } from './libs/border';
 export { BoxBorderField, BoxBorderFieldStyle } from './libs/box-border';
 export { MediaImageField } from './libs/media-image';
+export { BoxSpacingField } from './libs/box-spacing';
 export {
 	BorderRadiusField,
 	BorderRadiusFieldStyle,
