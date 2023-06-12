@@ -205,14 +205,14 @@ const Fields = ({ itemId, item }) => {
 					/>
 
 					<ToggleSelectField
-						label={__('Attachment', 'publisher-core')}
+						label={__('Effect', 'publisher-core')}
 						options={[
 							{
-								label: __('Scroll', 'publisher-core'),
+								label: __('Fix', 'publisher-core'),
 								value: 'scroll',
 							},
 							{
-								label: __('Fixed', 'publisher-core'),
+								label: __('Parallax', 'publisher-core'),
 								value: 'fixed',
 							},
 						]}
@@ -284,14 +284,14 @@ const Fields = ({ itemId, item }) => {
 					/>
 
 					<ToggleSelectField
-						label={__('Attachment', 'publisher-core')}
+						label={__('Effect', 'publisher-core')}
 						options={[
 							{
-								label: __('Scroll', 'publisher-core'),
+								label: __('Fix', 'publisher-core'),
 								value: 'scroll',
 							},
 							{
-								label: __('Fixed', 'publisher-core'),
+								label: __('Parallax', 'publisher-core'),
 								value: 'fixed',
 							},
 						]}
@@ -408,14 +408,14 @@ const Fields = ({ itemId, item }) => {
 					/>
 
 					<ToggleSelectField
-						label={__('Attachment', 'publisher-core')}
+						label={__('Effect', 'publisher-core')}
 						options={[
 							{
-								label: __('Scroll', 'publisher-core'),
+								label: __('Fix', 'publisher-core'),
 								value: 'scroll',
 							},
 							{
-								label: __('Fixed', 'publisher-core'),
+								label: __('Parallax', 'publisher-core'),
 								value: 'fixed',
 							},
 						]}
