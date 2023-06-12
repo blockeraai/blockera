@@ -32,6 +32,11 @@ import {
 	attributes as spacingAttributes,
 	supports as spacingSupports,
 } from '../spacing';
+import {
+	PositionExtensionIcon,
+	attributes as positionAttributes,
+	supports as positionSupports,
+} from '../position';
 
 export const attributes = {
 	...typographyAttributes,
@@ -39,6 +44,7 @@ export const attributes = {
 	...borderAndShadowAttributes,
 	...effectsAttributes,
 	...spacingAttributes,
+	...positionAttributes,
 };
 export const supports = {
 	...typographySupports,
@@ -46,6 +52,7 @@ export const supports = {
 	...borderAndShadowSupports,
 	...effectsSupports,
 	...spacingSupports,
+	...positionSupports,
 };
 
 export function SharedBlockExtension({ children, ...props }) {
@@ -57,6 +64,14 @@ export function SharedBlockExtension({ children, ...props }) {
 				extensionId={'Spacing'}
 				title={__('Spacing', 'publisher-core')}
 				icon=<SpacingExtensionIcon />
+			/>
+
+			<BaseExtension
+				{...props}
+				initialOpen={true}
+				extensionId={'Position'}
+				title={__('Position', 'publisher-core')}
+				icon=<PositionExtensionIcon />
 			/>
 
 			<BaseExtension

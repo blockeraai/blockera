@@ -1,4 +1,11 @@
 export {
+	PositionExtensionIcon,
+	PositionStyles,
+	PositionExtension,
+	attributes as positionAttributes,
+	supports as positionSupports,
+} from './position';
+export {
 	SpacingExtensionIcon,
 	SpacingStyles,
 	SpacingExtension,
