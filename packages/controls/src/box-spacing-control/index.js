@@ -32,16 +32,16 @@ import { default as PaddingLeftIcon } from './icons/padding-left';
 const BoxSpacingControl = ({
 	initValue = {
 		margin: {
-			top: '0px',
-			right: '0px',
-			bottom: '0px',
-			left: '0px',
+			top: '',
+			right: '',
+			bottom: '',
+			left: '',
 		},
 		padding: {
-			top: '0px',
-			right: '0px',
-			bottom: '0px',
-			left: '0px',
+			top: '',
+			right: '',
+			bottom: '',
+			left: '',
 		},
 	},
 	value,
@@ -61,6 +61,16 @@ const BoxSpacingControl = ({
 	});
 
 	const [openPopover, setOpenPopover] = useState('');
+
+	function fixLabelText(value) {
+		if (value === '') {
+			value = '-';
+		} else {
+			value = value.replace('px', '');
+		}
+
+		return value;
+	}
 
 	return (
 		<div {...props} className={controlClassNames('box-spacing', className)}>
@@ -169,7 +179,7 @@ const BoxSpacingControl = ({
 				)}
 			>
 				<LabelControl
-					label={controlValue.margin.top.replace('px', '')}
+					label={fixLabelText(controlValue.margin.top)}
 					onClick={() => setOpenPopover('margin-top')}
 				/>
 
@@ -204,7 +214,7 @@ const BoxSpacingControl = ({
 				)}
 			>
 				<LabelControl
-					label={controlValue.margin.right.replace('px', '')}
+					label={fixLabelText(controlValue.margin.right)}
 					onClick={() => setOpenPopover('margin-right')}
 				/>
 
@@ -240,7 +250,7 @@ const BoxSpacingControl = ({
 				)}
 			>
 				<LabelControl
-					label={controlValue.margin.bottom.replace('px', '')}
+					label={fixLabelText(controlValue.margin.bottom)}
 					onClick={() => setOpenPopover('margin-bottom')}
 				/>
 
@@ -275,7 +285,7 @@ const BoxSpacingControl = ({
 				)}
 			>
 				<LabelControl
-					label={controlValue.margin.left.replace('px', '')}
+					label={fixLabelText(controlValue.margin.left)}
 					onClick={() => setOpenPopover('margin-left')}
 				/>
 
@@ -310,7 +320,7 @@ const BoxSpacingControl = ({
 				)}
 			>
 				<LabelControl
-					label={controlValue.padding.top.replace('px', '')}
+					label={fixLabelText(controlValue.padding.top)}
 					onClick={() => setOpenPopover('padding-top')}
 				/>
 
@@ -346,7 +356,7 @@ const BoxSpacingControl = ({
 				)}
 			>
 				<LabelControl
-					label={controlValue.padding.right.replace('px', '')}
+					label={fixLabelText(controlValue.padding.right)}
 					onClick={() => setOpenPopover('padding-right')}
 				/>
 
@@ -383,7 +393,7 @@ const BoxSpacingControl = ({
 				)}
 			>
 				<LabelControl
-					label={controlValue.padding.bottom.replace('px', '')}
+					label={fixLabelText(controlValue.padding.bottom)}
 					onClick={() => setOpenPopover('padding-bottom')}
 				/>
 
@@ -419,7 +429,7 @@ const BoxSpacingControl = ({
 				)}
 			>
 				<LabelControl
-					label={controlValue.padding.left.replace('px', '')}
+					label={fixLabelText(controlValue.padding.left)}
 					onClick={() => setOpenPopover('padding-left')}
 				/>
 
