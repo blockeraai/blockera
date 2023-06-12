@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies
  */
+import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 
 /**
@@ -135,7 +136,8 @@ export function SidePopover({
 					/>
 
 					<Field
-						label=""
+						label={__('Shortcuts', 'publisher-core')}
+						columns="columns-1"
 						className={controlInnerClassNames(
 							'side-popover-action-buttons'
 						)}
