@@ -31,5 +31,6 @@ export { default as GradientBarControl } from './gradient-bar-control';
 export { default as BorderControl } from './border-control';
 export { default as BoxBorderControl } from './box-border-control';
 export { default as BorderRadiusControl } from './border-radius-control';
+export { default as MediaImageControl } from './media-image-control';
 
 export { getControlValue, updateControlValue } from './utils';
