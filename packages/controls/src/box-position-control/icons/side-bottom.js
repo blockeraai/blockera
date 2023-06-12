@@ -1,0 +1,20 @@
+export default function SideBottomIcon({}) {
+	return (
+		<svg
+			width="19"
+			height="19"
+			viewBox="0 0 19 19"
+			xmlns="http://www.w3.org/2000/svg"
+		>
+			<path
+				opacity="0.3"
+				fillRule="evenodd"
+				clipRule="evenodd"
+				d="M0.5 0H19.5V19H14.5V18H18.5V1H1.5V18H5.5V19H0.5V0Z"
+			/>
+			<rect x="0.5" y="8" width="19" height="5" />
+			<rect x="9.5" y="14" width="1" height="4" />
+			<rect x="6.5" y="18" width="7" height="1" />
+		</svg>
+	);
+}

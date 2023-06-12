@@ -16,6 +16,7 @@ export { BorderField } from './libs/border';
 export { BoxBorderField, BoxBorderFieldStyle } from './libs/box-border';
 export { MediaImageField } from './libs/media-image';
 export { BoxSpacingField } from './libs/box-spacing';
+export { BoxPositionField } from './libs/box-position';
 export {
 	BorderRadiusField,
 	BorderRadiusFieldStyle,

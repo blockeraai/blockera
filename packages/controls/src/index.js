@@ -33,5 +33,6 @@ export { default as BoxBorderControl } from './box-border-control';
 export { default as BorderRadiusControl } from './border-radius-control';
 export { default as MediaImageControl } from './media-image-control';
 export { default as BoxSpacingControl } from './box-spacing-control';
+export { default as BoxPositionControl } from './box-position-control';
 
 export { getControlValue, updateControlValue } from './utils';
