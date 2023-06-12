@@ -7,3 +7,4 @@ export { default as HStack } from './h-stack';
 export { default as Divider } from './divider';
 export { default as InspectElement } from './inspect-element';
 export { default as ColorIndicator } from './color-indicator';
+export { default as MediaUploader } from './media-uploader';
