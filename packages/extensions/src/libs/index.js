@@ -1,4 +1,11 @@
 export {
+	SpacingExtensionIcon,
+	SpacingStyles,
+	SpacingExtension,
+	attributes as spacingAttributes,
+	supports as spacingSupports,
+} from './spacing';
+export {
 	BackgroundExtensionIcon,
 	BackgroundStyles,
 	BackgroundExtension,

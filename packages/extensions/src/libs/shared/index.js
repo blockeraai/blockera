@@ -27,23 +27,38 @@ import {
 	attributes as typographyAttributes,
 	supports as typographySupports,
 } from '../typography';
+import {
+	SpacingExtensionIcon,
+	attributes as spacingAttributes,
+	supports as spacingSupports,
+} from '../spacing';
 
 export const attributes = {
 	...typographyAttributes,
 	...backgroundAttributes,
 	...borderAndShadowAttributes,
 	...effectsAttributes,
+	...spacingAttributes,
 };
 export const supports = {
 	...typographySupports,
 	...backgroundSupports,
 	...borderAndShadowSupports,
 	...effectsSupports,
+	...spacingSupports,
 };
 
 export function SharedBlockExtension({ children, ...props }) {
 	return (
 		<>
+			<BaseExtension
+				{...props}
+				initialOpen={true}
+				extensionId={'Spacing'}
+				title={__('Spacing', 'publisher-core')}
+				icon=<SpacingExtensionIcon />
+			/>
+
 			<BaseExtension
 				{...props}
 				initialOpen={true}
