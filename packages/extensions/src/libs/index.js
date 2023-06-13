@@ -1,4 +1,11 @@
 export {
+	LayoutExtensionIcon,
+	LayoutStyles,
+	LayoutExtension,
+	attributes as layoutAttributes,
+	supports as layoutSupports,
+} from './layout';
+export {
 	SizeExtensionIcon,
 	SizeStyles,
 	SizeExtension,
