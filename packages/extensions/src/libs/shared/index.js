@@ -13,6 +13,11 @@ import {
 	supports as backgroundSupports,
 } from '../background';
 import {
+	IconExtensionIcon,
+	attributes as iconAttributes,
+	supports as iconSupports,
+} from '../icon';
+import {
 	BorderAndShadowExtensionIcon,
 	attributes as borderAndShadowAttributes,
 	supports as borderAndShadowSupports,
@@ -57,6 +62,7 @@ export const attributes = {
 	...positionAttributes,
 	...sizeAttributes,
 	...layoutAttributes,
+	...iconAttributes,
 };
 export const supports = {
 	...typographySupports,
@@ -67,6 +73,7 @@ export const supports = {
 	...positionSupports,
 	...sizeSupports,
 	...layoutSupports,
+	...iconSupports,
 };
 
 export function SharedBlockExtension({ children, ...props }) {
@@ -135,6 +142,15 @@ export function SharedBlockExtension({ children, ...props }) {
 				title={__('Effects', 'publisher-core')}
 				icon=<EffectsExtensionIcon />
 			/>
+
+			<BaseExtension
+				{...props}
+				initialOpen={true}
+				extensionId={'Icon'}
+				title={__('Icon', 'publisher-core')}
+				icon=<IconExtensionIcon />
+			/>
+
 			{children}
 		</>
 	);
