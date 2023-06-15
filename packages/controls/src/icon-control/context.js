@@ -4,15 +4,18 @@
 import { createContext } from '@wordpress/element';
 
 const IconContext = createContext({
-	iconInfo: {
-		name: null,
-		size: null,
-		type: null,
+	currentIcon: {
+		icon: null,
+		library: null,
 		uploadSVG: null,
 	},
 	dispatch: () => {},
 	recommendationList: [],
 	handleOnIconClick: () => {},
+	suggestionsQuery: '',
+	isCurrentIcon: () => {
+		return false;
+	},
 });
 
 const IconContextProvider = ({ children, ...props }) => {

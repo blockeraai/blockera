@@ -1,0 +1,12 @@
+[
+	{
+		"iconName": "faMobileButton",
+		"library": "fas",
+		"tags": ["mobile button"]
+	},
+	{
+		"iconName": "faMobileScreenButton",
+		"library": "fas",
+		"tags": ["mobile screen button"]
+	}
+]

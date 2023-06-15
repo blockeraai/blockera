@@ -1,0 +1,37 @@
+[
+	{
+		"iconName": "button",
+		"library": "wp",
+		"tags": ["button"]
+	},
+	{
+		"iconName": "buttons",
+		"library": "wp",
+		"tags": ["buttons"]
+	},
+	{
+		"iconName": "calendar",
+		"library": "wp",
+		"tags": ["calendar buttons"]
+	},
+	{
+		"iconName": "comment",
+		"library": "wp",
+		"tags": ["calendar button"]
+	},
+	{
+		"iconName": "cover",
+		"library": "wp",
+		"tags": ["cover button"]
+	},
+	{
+		"iconName": "drawerRight",
+		"library": "wp",
+		"tags": ["drawer button"]
+	},
+	{
+		"iconName": "heading",
+		"library": "wp",
+		"tags": ["heading", "bookmark"]
+	}
+]

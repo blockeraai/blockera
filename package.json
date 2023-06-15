@@ -32,7 +32,6 @@
 		"@publisher/data-extractor": "file:packages/data-extractor",
 		"@publisher/extensions": "file:packages/extensions",
 		"@publisher/fields": "file:packages/fields",
-		"@publisher/icons": "file:packages/icons",
 		"@publisher/style-engine": "file:packages/style-engine"
 	},
 	"devDependencies": {

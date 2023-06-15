@@ -1,135 +1,218 @@
-:root {
-	--publisher-editor-border-line-color: #cccccc;
-	--publisher-editor-border-radius: 2px;
-}
-
-:root {
-	--publisher-core-icon-control-border-color: #cccccc;
-	--publisher-core-icon-control-sidebar-bg-color: #f6f6f6;
-}
-
-.publisher-icon-transparent-bg {
-	height: 100px;
-	cursor: pointer;
-	border: 1px solid var(--publisher-editor-border-line-color);
-	border-radius: var(--publisher-editor-border-radius)
-		var(--publisher-editor-border-radius) 0 0;
-	background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width=%278%27 height=%278%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cg fill=%27%23E3E5ED%27 fill-rule=%27evenodd%27%3E%3Cpath d=%27M0 0h4v4H0zM4 4h4v4H4z%27/%3E%3C/g%3E%3C/svg%3E");
-}
-
-.publisher-icon-transparent-bg:last-child {
-	border-radius: var(--publisher-editor-border-radius);
-}
-
-.publisher-icon-transparent-bg img {
-	display: block;
-	width: auto;
-	height: 100%;
-	margin: 0 auto;
-}
-
-.publisher-icon-recommended .publisher-core-current-icon {
-	display: block;
-	width: 30px;
-	height: 30px;
-	margin: 30px auto 0 auto;
-}
-
-.publisher-icon-recommended {
-	margin-top: -8px;
-	padding: 0 40px;
-	border: 1px solid var(--publisher-editor-border-line-color);
-	border-top: none;
-	border-radius: 0 0 var(--publisher-editor-border-radius)
-		var(--publisher-editor-border-radius);
-}
-
-.publisher-modal-component h1 {
-	font-size: 14px !important;
-}
-
-.publisher-modal-component .components-modal__content {
-	margin-top: 50px;
-	padding: 0;
-}
-
-.publisher-modal-component .components-modal__header {
-	height: 50px;
-	border-bottom: solid 1px var(--publisher-core-icon-control-border-color);
-}
-
-.publisher-core-tab-panel {
-	display: flex;
-	width: 870px;
-	height: 593px;
-	padding: 0;
-}
-
-.publisher-core-tab-panel .components-tab-panel__tabs {
-	flex-direction: column;
-	width: 220px;
-	border-right: solid 1px var(--publisher-core-icon-control-border-color);
-	background-color: var(--publisher-core-icon-control-sidebar-bg-color);
-}
-
-.publisher-core-tab-panel .publisher-core-tab-content {
-	width: 650px;
-	height: 100%;
-}
-
-.publisher-core-tab-content {
-	padding: 20px 40px;
-}
-
-.publisher-core-m-header-icon {
+.publisher-control-icon {
+	background: repeating-conic-gradient(#eaeaea 0%, #eaeaea 25%, transparent 0%, transparent 50%) 50% center/10px 10px;
+	border-color: #cccccc;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 2px;
 	position: relative;
-	top: 5px;
-	margin-right: 10px;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	
+	.publisher-control-icon-preview {
+		height: 140px;
+		display: flex;
+		justify-content: center;
+		cursor: pointer;
+		position: relative;
+		width: 100%;
+		align-items: center;
+		order: -1;
+		
+		img,
+		svg {
+			width: auto;
+			height: auto;
+			max-width: 80px;
+			max-height: 100%;
+		}
+		
+		img {
+			min-width: 50px;
+			max-width: 100%;
+			max-height: 100px;
+		}
+		
+		.publisher-control-action-btns {
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			opacity: 0;
+			border-top: 1px solid #cccccc;
+			grid-template-columns: 1fr 1fr;
+			background: #ffffff;
+			transition: all 0.15s ease;
+			visibility: hidden;
+			display: grid;
+			
+			.publisher-component-button {
+				height: 32px;
+				border-radius: 0;
+				
+				&.btn-icon-library {
+					border-right: 1px solid #cccccc;
+				}
+			}
+		}
+		
+		&:hover {
+			.publisher-control-action-btns {
+				opacity: 1;
+				visibility: visible;
+			}
+		}
+		
+		.publisher-component-button.btn-delete {
+			position: absolute;
+			right: 0;
+			top: 0;
+			width: 24px;
+			padding: 0;
+			min-width: 24px;
+			height: 24px;
+			border-left: 1px solid #cccccc;
+			border-bottom: 1px solid #cccccc;
+			background: #ffffff;
+			border-radius: 0 0 0 2px;
+			visibility: hidden;
+			opacity: 0;
+			transition: all 0.15s ease;
+		}
+		
+		&:hover {
+			.publisher-component-button.btn-delete {
+				visibility: visible;
+				opacity: 1;
+			}
+		}
+	}
+	
+	&.icon-custom {
+		.publisher-control-icon-preview {
+			
+			&:before {
+				content: "";
+				display: block;
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				top: 0;
+				background: #000000;
+				opacity: 0;
+				visibility: hidden;
+				z-index: 0;
+				transition: all 0.3s ease;
+			}
+			
+			&:hover {
+				&:before {
+					opacity: 0.15;
+					visibility: visible;
+				}
+			}
+		}
+	}
+	
+	&:hover {
+		border-color: var(--wp-admin-theme-color, #007cba);
+	}
+	
+	&.is-open-icon-picker {
+		box-shadow: 0 0 0 1px var(--wp-admin-theme-color, #007cba);
+		border-color: var(--wp-admin-theme-color, #007cba);
+	}
+	
+	.publisher-control-icon-suggestions + .publisher-control-icon-preview {
+		height: 120px;
+	}
+	
+	.publisher-component-button.btn-choose-icon {
+		background: #ffffff;
+		box-shadow: 0 4px 7px #cccccc;
+		border-radius: 3px;
+		font-size: 12px;
+		padding: 4px 10px;
+		height: 30px;
+	}
+	
+	
+	&.icon-none {
+		
+		&.is-open-icon-picker .publisher-component-button.btn-choose-icon {
+			box-shadow: 0 0 0 1px var(--wp-admin-theme-color, #007cba);
+			border-color: var(--wp-admin-theme-color, #007cba);
+		}
+	}
+	
+	
+	.publisher-control-icon-suggestions {
+		display: flex;
+		flex-direction: row;
+		gap: 6px;
+		right: 0;
+		height: 36px;
+		align-content: center;
+		justify-content: center;
+		background: #ffffff;
+		border-top: 1px solid #cccccc;
+		flex-wrap: wrap;
+		width: 100%;
+		align-items: center;
+		border-radius: 0 0 2px 2px;
+		
+		.publisher-core-current-icon {
+			display: block;
+			width: 30px;
+			height: 30px;
+			margin: 30px auto 0 auto;
+		}
+	}
 }
 
-.publisher-core-overflow-scroll {
-	overflow-y: scroll;
-	height: 80%;
-}
-
-.publisher-icon-item {
-	box-sizing: border-box !important;
-	padding: 6px;
+.publisher-control-icon-control-icon {
+	--icon-size: 24px;
+	width: var(--icon-size);
+	height: var(--icon-size);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #1e1e1e;
 	cursor: pointer;
-	transition: all 0.1s;
-	border: solid 1px transparent;
-	border-radius: var(--publisher-editor-border-radius);
-}
-
-.publisher-icon-item:hover {
-	border: solid 1px #0047eb;
-}
-
-.publisher-core-tab.active-tab {
-	background-color: #ffffff;
-}
-
-.publisher-core-size-control {
-	position: absolute;
-	bottom: 20px;
-	left: 4%;
-	width: 150px;
-}
-
-.publisher-core-size-control
-	.components-range-control__root
-	.components-base-control {
-	display: none !important;
-}
-
-.publisher-core-icon-control__delete {
-	position: absolute;
-	right: 16px;
-	border: solid 1px var(--publisher-core-icon-control-border-color);
-	background: #ffffff;
-}
-
-.publisher-core-is-pro-icon {
-	opacity: 0.3;
-	cursor: not-allowed;
+	transition: all 0.2s ease;
+	
+	&:hover {
+		color: var(--wp-admin-theme-color, #007cba);
+		
+		svg {
+			transform: scale(1.4);
+		}
+	}
+	
+	svg {
+		transition: all 0.2s ease;
+		width: var(--icon-size, 24px);
+		height: var(--icon-size, 24px);
+		fill: currentColor;
+		margin: 0 auto;
+		display: block;
+		padding: 4px;
+		box-sizing: content-box;
+	}
+	
+	&.library-wp {
+		--icon-size: 30px;
+	}
+	
+	&.library-publisher {
+		--icon-size: 26px;
+	}
+	
+	&.library-fas,
+	&.library-far {
+		--icon-size: 18px;
+	}
 }

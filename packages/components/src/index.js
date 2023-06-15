@@ -1,4 +1,4 @@
-export { default as Icon } from './icon';
+export * from './icons';
 export { default as Popover } from './popover';
 export { default as Modal } from './modal';
 export { Button, Buttons } from './button';
