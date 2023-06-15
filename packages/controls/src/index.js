@@ -35,5 +35,3 @@ export { default as MediaImageControl } from './media-image-control';
 export { default as BoxSpacingControl } from './box-spacing-control';
 export { default as BoxPositionControl } from './box-position-control';
 export { default as SearchControl } from './search-control';
-
-export { getControlValue, updateControlValue } from './utils';
