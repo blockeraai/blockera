@@ -8,7 +8,7 @@ import { IconControl } from '@publisher/controls';
  */
 import { Field } from '../field';
 
-export function IconField({ attribute, label, className, children, ...props }) {
+export function IconField({ label, className, children, ...props }) {
 	return (
 		<Field
 			label={label}
@@ -16,12 +16,7 @@ export function IconField({ attribute, label, className, children, ...props }) {
 			columns="columns-1"
 			className={className}
 		>
-			<IconControl
-				{...{
-					...props,
-					attribute,
-				}}
-			/>
+			<IconControl {...props} />
 
 			{children}
 		</Field>
