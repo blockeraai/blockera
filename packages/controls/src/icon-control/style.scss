@@ -150,9 +150,9 @@
 	
 	
 	.publisher-control-icon-suggestions {
-		display: flex;
-		flex-direction: row;
-		gap: 6px;
+		display: grid;
+		grid-template-columns: repeat(6, 30px);
+		gap: 2px;
 		right: 0;
 		height: 36px;
 		align-content: center;
@@ -163,26 +163,22 @@
 		width: 100%;
 		align-items: center;
 		border-radius: 0 0 2px 2px;
-		
-		.publisher-core-current-icon {
-			display: block;
-			width: 30px;
-			height: 30px;
-			margin: 30px auto 0 auto;
-		}
+		justify-items: center;
 	}
 }
 
 .publisher-control-icon-control-icon {
 	--icon-size: 24px;
-	width: var(--icon-size);
-	height: var(--icon-size);
+	width: 30px;
+	height: 30px;
+	line-height: calc(var(--icon-size, 24px) + 8px);
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	color: #1e1e1e;
 	cursor: pointer;
 	transition: all 0.2s ease;
+	text-align: center;
 	
 	&:hover {
 		color: var(--wp-admin-theme-color, #007cba);
@@ -197,18 +193,15 @@
 		width: var(--icon-size, 24px);
 		height: var(--icon-size, 24px);
 		fill: currentColor;
-		margin: 0 auto;
-		display: block;
-		padding: 4px;
-		box-sizing: content-box;
+		display: inline-block;
 	}
 	
 	&.library-wp {
-		--icon-size: 30px;
+		--icon-size: 24px;
 	}
 	
 	&.library-publisher {
-		--icon-size: 26px;
+		--icon-size: 24px;
 	}
 	
 	&.library-fas,
