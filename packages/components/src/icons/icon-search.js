@@ -9,6 +9,7 @@ import Fuse from 'fuse.js';
 import {
 	getIconLibraryIcons,
 	getIconLibrarySearchData,
+	getIconLibrariesSearchIndex,
 	isValidIconLibrary,
 } from './icon-library';
 import { isValidIcon } from './icon';
@@ -18,23 +19,27 @@ export function iconSearch({ query, library = 'all', limit }) {
 		return {};
 	}
 
-	const fuse = new Fuse(getIconLibrarySearchData(library), {
-		shouldSort: true,
-		includeScore: false,
-		keys: [
-			{
-				name: 'title',
-				weight: 0.2,
-			},
-			{
-				name: 'tags',
-				weight: 0.5,
-			},
-		],
-		minMatchCharLength: 3,
-		useExtendedSearch: false,
-		threshold: 0.15,
-	});
+	const fuse = new Fuse(
+		getIconLibrarySearchData(library),
+		{
+			shouldSort: true,
+			includeScore: false,
+			keys: [
+				{
+					name: 'title',
+					weight: 0.2,
+				},
+				{
+					name: 'tags',
+					weight: 0.5,
+				},
+			],
+			minMatchCharLength: 3,
+			useExtendedSearch: false,
+			threshold: 0.15,
+		},
+		getIconLibrariesSearchIndex()
+	);
 
 	let result = fuse.search(query);
 

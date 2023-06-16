@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import Fuse from 'fuse.js';
+
+/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
@@ -15,6 +20,7 @@ import WPIconsSearchData from './library-wp/search-data.json';
 import FarIconsSearchData from './library-far/search-data.json';
 import FasIconsSearchData from './library-fas/search-data.json';
 import PublisherIconsSearchData from './library-publisher/search-data.json';
+import searchIndex from './search-index.json';
 
 import { default as WPLibraryIcon } from './library-wp/library-icon';
 import { default as PublisherLibraryIcon } from './library-publisher/library-icon';
@@ -124,4 +130,8 @@ export function getIconLibrarySearchData(library: string): Array {
 		}
 
 	return searchData;
+}
+
+export function getIconLibrariesSearchIndex(): Array {
+	return Fuse.parseIndex(searchIndex);
 }
