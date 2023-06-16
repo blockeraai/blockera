@@ -7,3 +7,4 @@ export { positionConfig } from './position';
 export { sizeConfig } from './size';
 export { layoutConfig } from './layout';
 export { iconConfig } from './icon';
+export { advancedConfig } from './advanced';

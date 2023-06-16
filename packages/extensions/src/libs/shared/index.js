@@ -52,6 +52,11 @@ import {
 	attributes as layoutAttributes,
 	supports as layoutSupports,
 } from '../layout';
+import {
+	AdvancedExtensionIcon,
+	attributes as advancedAttributes,
+	supports as advancedSupports,
+} from '../advanced';
 
 export const attributes = {
 	...typographyAttributes,
@@ -63,6 +68,7 @@ export const attributes = {
 	...sizeAttributes,
 	...layoutAttributes,
 	...iconAttributes,
+	...advancedAttributes,
 };
 export const supports = {
 	...typographySupports,
@@ -74,6 +80,7 @@ export const supports = {
 	...sizeSupports,
 	...layoutSupports,
 	...iconSupports,
+	...advancedSupports,
 };
 
 export function SharedBlockExtension({ children, ...props }) {
@@ -149,6 +156,14 @@ export function SharedBlockExtension({ children, ...props }) {
 				extensionId={'Effects'}
 				title={__('Effects', 'publisher-core')}
 				icon=<EffectsExtensionIcon />
+			/>
+
+			<BaseExtension
+				{...props}
+				initialOpen={true}
+				extensionId={'Advanced'}
+				title={__('Advanced', 'publisher-core')}
+				icon=<AdvancedExtensionIcon />
 			/>
 
 			{children}

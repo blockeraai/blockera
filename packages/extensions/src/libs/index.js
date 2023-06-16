@@ -60,6 +60,11 @@ export {
 	supports as IconExtensionSupports,
 } from './icon';
 export {
+	AdvancedExtension,
+	attributes as AdvancedExtensionAttributes,
+	supports as AdvancedExtensionSupports,
+} from './advanced';
+export {
 	SharedBlockExtension,
 	attributes as sharedBlockExtensionAttributes,
 	supports as sharedBlockExtensionSupports,
