@@ -1,7 +1,14 @@
 [
 	{
 		"iconName": "publisher",
+		"title": "publisher",
 		"library": "publisher",
-		"tags": ["publisher button"]
+		"tags": []
+	},
+	{
+		"iconName": "publisherCircle",
+		"title": "Publisher Circle",
+		"library": "publisher",
+		"tags": []
 	}
 ]

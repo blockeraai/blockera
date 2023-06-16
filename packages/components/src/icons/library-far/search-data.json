@@ -1,7 +1,980 @@
 [
 	{
-		"iconName": "faAddressBook",
+		"iconName": "faAddressCard",
+		"title": "Address Card",
 		"library": "far",
-		"tags": ["address", "address book", "postal code"]
+		"tags": ["Vcard", "card", "contact", "information"]
+	},
+	{
+		"iconName": "faBarChart",
+		"title": "Bar Chart",
+		"library": "far",
+		"tags": ["chart", "graph", "statistics"]
+	},
+	{
+		"iconName": "faBell",
+		"title": "Bell",
+		"library": "far",
+		"tags": ["alarm", "notification", "alert"]
+	},
+	{
+		"iconName": "faBellSlash",
+		"title": "Bell Slash",
+		"library": "far",
+		"tags": ["mute", "silence", "turn off"]
+	},
+	{
+		"iconName": "faBookmark",
+		"title": "Bookmark",
+		"library": "far",
+		"tags": ["favorite", "save", "mark"]
+	},
+	{
+		"iconName": "faBuilding",
+		"title": "Building",
+		"library": "far",
+		"tags": ["construction", "edifice", "structure"]
+	},
+	{
+		"iconName": "faCalendar",
+		"title": "Calendar",
+		"library": "far",
+		"tags": ["date", "schedule", "time"]
+	},
+	{
+		"iconName": "faCalendarCheck",
+		"title": "Calendar Check",
+		"library": "far",
+		"tags": ["date", "event", "reminder"]
+	},
+	{
+		"iconName": "faCalendarDays",
+		"title": "Calendar Days",
+		"library": "far",
+		"tags": ["date", "month", "year"]
+	},
+	{
+		"iconName": "faCalendarMinus",
+		"title": "Calendar Minus",
+		"library": "far",
+		"tags": ["schedule", "date", "appointment"]
+	},
+	{
+		"iconName": "faCalendarPlus",
+		"title": "Calendar Plus",
+		"library": "far",
+		"tags": ["schedule", "date", "appointment"]
+	},
+	{
+		"iconName": "faCalendarXmark",
+		"title": "Calendar Xmark",
+		"library": "far",
+		"tags": ["Calendar", "schedule", "date", "appointment"]
+	},
+	{
+		"iconName": "faCaretSquareDown",
+		"title": "Caret Square Down",
+		"library": "far",
+		"tags": ["dropdown", "select", "arrow"]
+	},
+	{
+		"iconName": "faCaretSquareRight",
+		"title": "Caret Square Right",
+		"library": "far",
+		"tags": ["next", "arrow", "forward"]
+	},
+	{
+		"iconName": "faCaretSquareUp",
+		"title": "Caret Square Up",
+		"library": "far",
+		"tags": ["previous", "arrow", "backward"]
+	},
+	{
+		"iconName": "faChessBishop",
+		"title": "Chess Bishop",
+		"library": "far",
+		"tags": ["game", "strategy", "chess piece"]
+	},
+	{
+		"iconName": "faChessKing",
+		"title": "Chess King",
+		"library": "far",
+		"tags": ["game", "strategy", "chess piece"]
+	},
+	{
+		"iconName": "faChessKnight",
+		"title": "Chess Knight",
+		"library": "far",
+		"tags": ["game", "strategy", "chess piece"]
+	},
+	{
+		"iconName": "faChessPawn",
+		"title": "Chess Pawn",
+		"library": "far",
+		"tags": ["Chess piece", "Game piece", "Pawn chess"]
+	},
+	{
+		"iconName": "faChessQueen",
+		"title": "Chess Queen",
+		"library": "far",
+		"tags": ["Chess piece", "Game piece", "Queen chess"]
+	},
+	{
+		"iconName": "faChessRook",
+		"title": "Chess Rook",
+		"library": "far",
+		"tags": ["Chess piece", "Game piece", "Rook chess"]
+	},
+	{
+		"iconName": "faCircle",
+		"title": "Circle",
+		"library": "far",
+		"tags": ["Round shape", "Circular", "Sphere"]
+	},
+	{
+		"iconName": "faCircleCheck",
+		"title": "Circle Check",
+		"library": "far",
+		"tags": ["Checkmark", "Check symbol", "Verification"]
+	},
+	{
+		"iconName": "faCircleDot",
+		"title": "Circle Dot",
+		"library": "far",
+		"tags": ["Spot", "Point", "Mark"]
+	},
+	{
+		"iconName": "faCircleDown",
+		"title": "Circle Down",
+		"library": "far",
+		"tags": ["Arrow down", "Downward", "Pointing down"]
+	},
+	{
+		"iconName": "faCircleLeft",
+		"title": "Circle Left",
+		"library": "far",
+		"tags": ["Arrow left", "Leftward", "Pointing left"]
+	},
+	{
+		"iconName": "faCirclePause",
+		"title": "Circle Pause",
+		"library": "far",
+		"tags": ["Pause button", "Stop", "Hold"]
+	},
+	{
+		"iconName": "faCircleRight",
+		"title": "Circle Right",
+		"library": "far",
+		"tags": ["right arrow", "navigation", "next"]
+	},
+	{
+		"iconName": "faCircleStop",
+		"title": "Circle Stop",
+		"library": "far",
+		"tags": ["stop sign", "forbidden", "halt"]
+	},
+	{
+		"iconName": "faCircleUp",
+		"title": "Circle Up",
+		"library": "far",
+		"tags": ["up arrow", "scroll", "top"]
+	},
+	{
+		"iconName": "faCircleUser",
+		"title": "Circle User",
+		"library": "far",
+		"tags": ["person icon", "avatar", "human"]
+	},
+	{
+		"iconName": "faCircleXmark",
+		"title": "Circle Xmark",
+		"library": "far",
+		"tags": ["cancel", "delete", "remove"]
+	},
+	{
+		"iconName": "faClipboard",
+		"title": "Clipboard",
+		"library": "far",
+		"tags": ["document", "notes", "paperwork"]
+	},
+	{
+		"iconName": "faClockFour",
+		"title": "Clock Four",
+		"library": "far",
+		"tags": ["time", "hour", "schedule"]
+	},
+	{
+		"iconName": "faClone",
+		"title": "Clone",
+		"library": "far",
+		"tags": ["duplicate", "repeat", "copy"]
+	},
+	{
+		"iconName": "faClosedCaptioning",
+		"title": "Closed Captioning",
+		"library": "far",
+		"tags": ["subtitles", "caption", "transcript"]
+	},
+	{
+		"iconName": "faComment",
+		"title": "Comment",
+		"library": "far",
+		"tags": ["discussion", "feedback", "opinion"]
+	},
+	{
+		"iconName": "faCommenting",
+		"title": "Commenting",
+		"library": "far",
+		"tags": ["conversation", "remarks", "response"]
+	},
+	{
+		"iconName": "faComments",
+		"title": "Comments",
+		"library": "far",
+		"tags": ["feedback", "opinions", "responses"]
+	},
+	{
+		"iconName": "faCompass",
+		"title": "Compass",
+		"library": "far",
+		"tags": ["direction", "navigation", "orientation"]
+	},
+	{
+		"iconName": "faContactBook",
+		"title": "Contact Book",
+		"library": "far",
+		"tags": ["address book", "contacts", "phone book"]
+	},
+	{
+		"iconName": "faCopy",
+		"title": "Copy",
+		"library": "far",
+		"tags": ["clone", "duplicate", "reproduce"]
+	},
+	{
+		"iconName": "faCopyright",
+		"title": "Copyright",
+		"library": "far",
+		"tags": ["intellectual property", "license", "ownership"]
+	},
+	{
+		"iconName": "faCreditCard",
+		"title": "Credit Card",
+		"library": "far",
+		"tags": ["debit card", "payment method", "plastic money"]
+	},
+	{
+		"iconName": "faEdit",
+		"title": "Edit",
+		"library": "far",
+		"tags": ["modify", "revise", "update"]
+	},
+	{
+		"iconName": "faEnvelope",
+		"title": "Envelope",
+		"library": "far",
+		"tags": ["mail", "letter", "correspondence"]
+	},
+	{
+		"iconName": "faEnvelopeOpen",
+		"title": "Envelope Open",
+		"library": "far",
+		"tags": ["read", "message", "inbox"]
+	},
+	{
+		"iconName": "faEye",
+		"title": "Eye",
+		"library": "far",
+		"tags": ["sight", "vision", "gaze"]
+	},
+	{
+		"iconName": "faEyeSlash",
+		"title": "Eye Slash",
+		"library": "far",
+		"tags": ["hide", "conceal", "obscure"]
+	},
+	{
+		"iconName": "faFaceAngry",
+		"title": "Face Angry",
+		"library": "far",
+		"tags": ["mad", "upset", "outraged"]
+	},
+	{
+		"iconName": "faFaceDizzy",
+		"title": "Face Dizzy",
+		"library": "far",
+		"tags": ["vertigo", "unsteady", "lightheaded"]
+	},
+	{
+		"iconName": "faFaceFlushed",
+		"title": "Face Flushed",
+		"library": "far",
+		"tags": ["embarrassed", "ashamed", "blushing"]
+	},
+	{
+		"iconName": "faFaceFrown",
+		"title": "Face Frown",
+		"library": "far",
+		"tags": ["sad", "disappointed", "unhappy"]
+	},
+	{
+		"iconName": "faFaceFrownOpen",
+		"title": "Face Frown Open",
+		"library": "far",
+		"tags": ["concerned", "worried", "troubled"]
+	},
+	{
+		"iconName": "faFaceGrimace",
+		"title": "Face Grimace",
+		"library": "far",
+		"tags": ["pain", "discomfort", "wince"]
+	},
+	{
+		"iconName": "faFaceGrin",
+		"title": "Face Grin",
+		"library": "far",
+		"tags": ["smile", "happy", "positive"]
+	},
+	{
+		"iconName": "faFaceGrinBeam",
+		"title": "Face Grin Beam",
+		"library": "far",
+		"tags": ["laugh", "joyful", "gleeful"]
+	},
+	{
+		"iconName": "faFaceGrinBeamSweat",
+		"title": "Face Grin Beam Sweat",
+		"library": "far",
+		"tags": ["nervous", "anxious", "perspiring"]
+	},
+	{
+		"iconName": "faFaceGrinHearts",
+		"title": "Face Grin Hearts",
+		"library": "far",
+		"tags": ["love", "adoration", "romantic"]
+	},
+	{
+		"iconName": "faFaceGrinSquint",
+		"title": "Face Grin Squint",
+		"library": "far",
+		"tags": ["funny", "humorous", "comical"]
+	},
+	{
+		"iconName": "faFaceGrinSquintTears",
+		"title": "Face Grin Squint Tears",
+		"library": "far",
+		"tags": ["hilarious", "amusing", "uproarious"]
+	},
+	{
+		"iconName": "faFaceGrinStars",
+		"title": "Face Grin Stars",
+		"library": "far",
+		"tags": ["celebrity", "famous", "renowned"]
+	},
+	{
+		"iconName": "faFaceGrinTears",
+		"title": "Face Grin Tears",
+		"library": "far",
+		"tags": ["emotional", "crying", "tearful"]
+	},
+	{
+		"iconName": "faFaceGrinTongue",
+		"title": "Face Grin Tongue",
+		"library": "far",
+		"tags": ["silly", "goofy", "playful"]
+	},
+	{
+		"iconName": "faFaceGrinTongueSquint",
+		"title": "Face Grin Tongue Squint",
+		"library": "far",
+		"tags": ["ridiculous", "absurd", "preposterous"]
+	},
+	{
+		"iconName": "faFaceGrinTongueWink",
+		"title": "Face Grin Tongue Wink",
+		"library": "far",
+		"tags": ["smile", "tongue", "wink"]
+	},
+	{
+		"iconName": "faFaceGrinWide",
+		"title": "Face Grin Wide",
+		"library": "far",
+		"tags": ["smile", "grin", "wide"]
+	},
+	{
+		"iconName": "faFaceGrinWink",
+		"title": "Face Grin Wink",
+		"library": "far",
+		"tags": ["smile", "grin", "wink"]
+	},
+	{
+		"iconName": "faFaceKiss",
+		"title": "Face Kiss",
+		"library": "far",
+		"tags": ["kiss", "affection", "love"]
+	},
+	{
+		"iconName": "faFaceKissBeam",
+		"title": "Face Kiss Beam",
+		"library": "far",
+		"tags": ["kiss", "affection", "beam"]
+	},
+	{
+		"iconName": "faFaceKissWinkHeart",
+		"title": "Face Kiss Wink Heart",
+		"library": "far",
+		"tags": ["kiss", "affection", "wink"]
+	},
+	{
+		"iconName": "faFaceLaugh",
+		"title": "Face Laugh",
+		"library": "far",
+		"tags": ["laugh", "smile", "happy"]
+	},
+	{
+		"iconName": "faFaceLaughBeam",
+		"title": "Face Laugh Beam",
+		"library": "far",
+		"tags": ["laugh", "smile", "beam"]
+	},
+	{
+		"iconName": "faFaceLaughSquint",
+		"title": "Face Laugh Squint",
+		"library": "far",
+		"tags": ["laugh", "smile", "squint"]
+	},
+	{
+		"iconName": "faFaceLaughWink",
+		"title": "Face Laugh Wink",
+		"library": "far",
+		"tags": ["laugh", "smile", "wink"]
+	},
+	{
+		"iconName": "faFaceMeh",
+		"title": "Face Meh",
+		"library": "far",
+		"tags": ["neutral", "unimpressed", "indifferent"]
+	},
+	{
+		"iconName": "faFaceMehBlank",
+		"title": "Face Meh Blank",
+		"library": "far",
+		"tags": ["neutral", "blank expression", "expressionless"]
+	},
+	{
+		"iconName": "faFaceRollingEyes",
+		"title": "Face Rolling Eyes",
+		"library": "far",
+		"tags": ["meh", "sarcastic", "annoyed", "dismissive"]
+	},
+	{
+		"iconName": "faFaceSadCry",
+		"title": "Face Sad Cry",
+		"library": "far",
+		"tags": ["upset", "tears", "crying"]
+	},
+	{
+		"iconName": "faFaceSadTear",
+		"title": "Face Sad Tear",
+		"library": "far",
+		"tags": ["upset", "tears", "crying"]
+	},
+	{
+		"iconName": "faFaceSmile",
+		"title": "Face Smile",
+		"library": "far",
+		"tags": ["happy", "pleased", "content"]
+	},
+	{
+		"iconName": "faFaceSmileBeam",
+		"title": "Face Smile Beam",
+		"library": "far",
+		"tags": ["happy", "pleased", "beaming"]
+	},
+	{
+		"iconName": "faFaceSmileWink",
+		"title": "Face Smile Wink",
+		"library": "far",
+		"tags": ["playful", "flirtatious", "winking"]
+	},
+	{
+		"iconName": "faFaceSurprise",
+		"title": "Face Surprise",
+		"library": "far",
+		"tags": ["shocked", "amazed", "surprised"]
+	},
+	{
+		"iconName": "faFaceTired",
+		"title": "Face Tired",
+		"library": "far",
+		"tags": ["exhausted", "sleepy", "fatigued"]
+	},
+	{
+		"iconName": "faFile",
+		"title": "File",
+		"library": "far",
+		"tags": ["document", "paper", "record"]
+	},
+	{
+		"iconName": "faFileArchive",
+		"title": "File Archive",
+		"library": "far",
+		"tags": ["compressed", "zip", "folder"]
+	},
+	{
+		"iconName": "faFileAudio",
+		"title": "File Audio",
+		"library": "far",
+		"tags": ["music", "sound", "mp3"]
+	},
+	{
+		"iconName": "faFileCode",
+		"title": "File Code",
+		"library": "far",
+		"tags": ["programming", "html", "css"]
+	},
+	{
+		"iconName": "faFileExcel",
+		"title": "File Excel",
+		"library": "far",
+		"tags": ["spreadsheet", "data", "table"]
+	},
+	{
+		"iconName": "faFileImage",
+		"title": "File Image",
+		"library": "far",
+		"tags": ["picture", "photo", "graphic"]
+	},
+	{
+		"iconName": "faFilePdf",
+		"title": "File Pdf",
+		"library": "far",
+		"tags": ["document", "acrobat", "form"]
+	},
+	{
+		"iconName": "faFilePowerpoint",
+		"title": "File Powerpoint",
+		"library": "far",
+		"tags": ["presentation", "slideshow", "lecture"]
+	},
+	{
+		"iconName": "faFileText",
+		"title": "File Text",
+		"library": "far",
+		"tags": ["File", "File Lines", "document", "note", "write"]
+	},
+	{
+		"iconName": "faFileVideo",
+		"title": "File Video",
+		"library": "far",
+		"tags": ["movie", "film", "clip"]
+	},
+	{
+		"iconName": "faFileWord",
+		"title": "File Word",
+		"library": "far",
+		"tags": ["document", "text", "write"]
+	},
+	{
+		"iconName": "faFlag",
+		"title": "Flag",
+		"library": "far",
+		"tags": ["country", "banner", "national"]
+	},
+	{
+		"iconName": "faFolderBlank",
+		"title": "Folder Blank",
+		"library": "far",
+		"tags": ["directory", "file", "document"]
+	},
+	{
+		"iconName": "faFolderClosed",
+		"title": "Folder Closed",
+		"library": "far",
+		"tags": ["directory", "file", "document"]
+	},
+	{
+		"iconName": "faFolderOpen",
+		"title": "Folder Open",
+		"library": "far",
+		"tags": ["directory", "file", "document"]
+	},
+	{
+		"iconName": "faFontAwesomeLogoFull",
+		"title": "Font Awesome Logo Full",
+		"library": "far",
+		"tags": ["brand", "icon"]
+	},
+	{
+		"iconName": "faFutbolBall",
+		"title": "Futbol Ball",
+		"library": "far",
+		"tags": ["soccer", "football", "sport"]
+	},
+	{
+		"iconName": "faGem",
+		"title": "Gem",
+		"library": "far",
+		"tags": ["jewelry", "diamond", "precious"]
+	},
+	{
+		"iconName": "faHand",
+		"title": "Hand",
+		"library": "far",
+		"tags": ["gesture", "palm", "finger"]
+	},
+	{
+		"iconName": "faHandLizard",
+		"title": "Hand Lizard",
+		"library": "far",
+		"tags": ["gesture", "reptile", "palm"]
+	},
+	{
+		"iconName": "faHandPeace",
+		"title": "Hand Peace",
+		"library": "far",
+		"tags": ["gesture", "palm", "finger"]
+	},
+	{
+		"iconName": "faHandPointDown",
+		"title": "Hand Point Down",
+		"library": "far",
+		"tags": ["finger", "gesture", "direction"]
+	},
+	{
+		"iconName": "faHandPointLeft",
+		"title": "Hand Point Left",
+		"library": "far",
+		"tags": ["finger", "gesture", "direction"]
+	},
+	{
+		"iconName": "faHandPointRight",
+		"title": "Hand Point Right",
+		"library": "far",
+		"tags": ["finger", "gesture", "direction"]
+	},
+	{
+		"iconName": "faHandPointUp",
+		"title": "Hand Point Up",
+		"library": "far",
+		"tags": ["finger", "gesture", "direction"]
+	},
+	{
+		"iconName": "faHandPointer",
+		"title": "Hand Pointer",
+		"library": "far",
+		"tags": ["finger", "gesture", "direction"]
+	},
+	{
+		"iconName": "faHandRock",
+		"title": "Hand Rock",
+		"library": "far",
+		"tags": ["Fist", "Hand Back", "hand", "gesture", "rock-paper-scissors"]
+	},
+	{
+		"iconName": "faHandScissors",
+		"title": "Hand Scissors",
+		"library": "far",
+		"tags": ["hand", "gesture", "rock-paper-scissors"]
+	},
+	{
+		"iconName": "faHandSpock",
+		"title": "Hand Spock",
+		"library": "far",
+		"tags": ["hand", "gesture"]
+	},
+	{
+		"iconName": "faHandshake",
+		"title": "Handshake",
+		"library": "far",
+		"tags": ["greeting", "agreement"]
+	},
+	{
+		"iconName": "faHardDrive",
+		"title": "Hard Drive",
+		"library": "far",
+		"tags": ["hdd", "computer", "hardware", "storage"]
+	},
+	{
+		"iconName": "faHeart",
+		"title": "Heart",
+		"library": "far",
+		"tags": ["love", "passion", "affection"]
+	},
+	{
+		"iconName": "faHospital",
+		"title": "Hospital",
+		"library": "far",
+		"tags": ["healthcare", "medical", "clinic"]
+	},
+	{
+		"iconName": "faHourglassEmpty",
+		"title": "Hourglass Empty",
+		"library": "far",
+		"tags": ["time", "waiting", "countdown"]
+	},
+	{
+		"iconName": "faHourglassHalf",
+		"title": "Hourglass Half",
+		"library": "far",
+		"tags": ["time", "waiting", "countdown"]
+	},
+	{
+		"iconName": "faIdBadge",
+		"title": "Id Badge",
+		"library": "far",
+		"tags": ["identification", "access", "security"]
+	},
+	{
+		"iconName": "faIdCard",
+		"title": "Id Card",
+		"library": "far",
+		"tags": ["Driver License", "identification", "access", "security"]
+	},
+	{
+		"iconName": "faImage",
+		"title": "Image",
+		"library": "far",
+		"tags": ["picture", "photo", "graphic"]
+	},
+	{
+		"iconName": "faImages",
+		"title": "Images",
+		"library": "far",
+		"tags": ["picture", "photo", "graphic"]
+	},
+	{
+		"iconName": "faKeyboard",
+		"title": "Keyboard",
+		"library": "far",
+		"tags": ["typing", "input", "computer"]
+	},
+	{
+		"iconName": "faLemon",
+		"title": "Lemon",
+		"library": "far",
+		"tags": ["fruit", "citrus", "sour"]
+	},
+	{
+		"iconName": "faLifeRing",
+		"title": "Life Ring",
+		"library": "far",
+		"tags": ["safety", "rescue", "emergency"]
+	},
+	{
+		"iconName": "faLightbulb",
+		"title": "Lightbulb",
+		"library": "far",
+		"tags": ["lamp", "light", "electricity"]
+	},
+	{
+		"iconName": "faMap",
+		"title": "Map",
+		"library": "far",
+		"tags": ["directions", "wayfinding", "location"]
+	},
+	{
+		"iconName": "faMessage",
+		"title": "Message",
+		"library": "far",
+		"tags": ["chat", "conversation", "messaging"]
+	},
+	{
+		"iconName": "faMinusSquare",
+		"title": "Minus Square",
+		"library": "far",
+		"tags": ["subtract", "remove", "delete"]
+	},
+	{
+		"iconName": "faMoneyBill1",
+		"title": "Money Bill1",
+		"library": "far",
+		"tags": ["cash", "currency", "dollar"]
+	},
+	{
+		"iconName": "faMoon",
+		"title": "Moon",
+		"library": "far",
+		"tags": ["night", "lunar", "sky"]
+	},
+	{
+		"iconName": "faNewspaper",
+		"title": "Newspaper",
+		"library": "far",
+		"tags": ["press", "journalism", "media"]
+	},
+	{
+		"iconName": "faObjectGroup",
+		"title": "Object Group",
+		"library": "far",
+		"tags": ["arrange", "combine", "group"]
+	},
+	{
+		"iconName": "faObjectUngroup",
+		"title": "Object Ungroup",
+		"library": "far",
+		"tags": ["separate", "disperse", "break apart"]
+	},
+	{
+		"iconName": "faPaperPlane",
+		"title": "Paper Plane",
+		"library": "far",
+		"tags": ["send", "message", "mail"]
+	},
+	{
+		"iconName": "faPaste",
+		"title": "Paste",
+		"library": "far",
+		"tags": ["Clipboard", "copy", "insert", "duplicate"]
+	},
+	{
+		"iconName": "faPlayCircle",
+		"title": "Play Circle",
+		"library": "far",
+		"tags": ["video", "music", "player"]
+	},
+	{
+		"iconName": "faPlusSquare",
+		"title": "Plus Square",
+		"library": "far",
+		"tags": ["add", "include", "append"]
+	},
+	{
+		"iconName": "faQuestionCircle",
+		"title": "Question Circle",
+		"library": "far",
+		"tags": ["help", "information", "unknown"]
+	},
+	{
+		"iconName": "faRectangleList",
+		"title": "Rectangle List",
+		"library": "far",
+		"tags": ["menu", "options", "dropdown"]
+	},
+	{
+		"iconName": "faRectangleXmark",
+		"title": "Rectangle Xmark",
+		"library": "far",
+		"tags": ["Window Close", "remove", "close", "cancel"]
+	},
+	{
+		"iconName": "faRegistered",
+		"title": "Registered",
+		"library": "far",
+		"tags": ["brand", "trademark", "logo"]
+	},
+	{
+		"iconName": "faSave",
+		"title": "Save",
+		"library": "far",
+		"tags": ["Floppy Disk", "download", "backup", "store"]
+	},
+	{
+		"iconName": "faShareFromSquare",
+		"title": "Share From Square",
+		"library": "far",
+		"tags": ["send", "forward", "pass"]
+	},
+	{
+		"iconName": "faSnowflake",
+		"title": "Snowflake",
+		"library": "far",
+		"tags": ["cold", "winter", "weather"]
+	},
+	{
+		"iconName": "faSquare",
+		"title": "Square",
+		"library": "far",
+		"tags": ["shape", "geometry", "figure"]
+	},
+	{
+		"iconName": "faSquareCaretLeft",
+		"title": "Square Caret Left",
+		"library": "far",
+		"tags": ["arrow", "direction", "move"]
+	},
+	{
+		"iconName": "faSquareCheck",
+		"title": "Square Check",
+		"library": "far",
+		"tags": ["box", "tick", "mark"]
+	},
+	{
+		"iconName": "faSquareFull",
+		"title": "Square Full",
+		"library": "far",
+		"tags": ["block", "shape", "square"]
+	},
+	{
+		"iconName": "faStar",
+		"title": "Star",
+		"library": "far",
+		"tags": ["shape", "rating", "favorite"]
+	},
+	{
+		"iconName": "faStarHalf",
+		"title": "Star Half",
+		"library": "far",
+		"tags": ["shape", "rating", "favorite"]
+	},
+	{
+		"iconName": "faStarHalfStroke",
+		"title": "Star Half Stroke",
+		"library": "far",
+		"tags": ["shape", "rating", "favorite"]
+	},
+	{
+		"iconName": "faStickyNote",
+		"title": "Sticky Note",
+		"library": "far",
+		"tags": ["memo", "remind", "note"]
+	},
+	{
+		"iconName": "faSun",
+		"title": "Sun",
+		"library": "far",
+		"tags": ["daytime", "light", "weather"]
+	},
+	{
+		"iconName": "faThumbsDown",
+		"title": "Thumbs Down",
+		"library": "far",
+		"tags": ["dislike", "no", "reject"]
+	},
+	{
+		"iconName": "faThumbsUp",
+		"title": "Thumbs Up",
+		"library": "far",
+		"tags": ["like", "yes", "approve"]
+	},
+	{
+		"iconName": "faTrashCan",
+		"title": "Trash Can",
+		"library": "far",
+		"tags": ["garbage", "bin", "delete"]
+	},
+	{
+		"iconName": "faUser",
+		"title": "User",
+		"library": "far",
+		"tags": ["person", "profile", "avatar"]
+	},
+	{
+		"iconName": "faWindowMaximize",
+		"title": "Window Maximize",
+		"library": "far",
+		"tags": ["expand", "fullscreen", "enlarge"]
+	},
+	{
+		"iconName": "faWindowMinimize",
+		"title": "Window Minimize",
+		"library": "far",
+		"tags": ["hide", "collapse", "shrink"]
+	},
+	{
+		"iconName": "faWindowRestore",
+		"title": "Window Restore",
+		"library": "far",
+		"tags": ["resize", "return", "bring back"]
 	}
 ]
