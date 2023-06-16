@@ -39,6 +39,7 @@ export default function Search({}) {
 							library: 'search',
 							query: value,
 							onClick: handleIconSelect,
+							limit: 49,
 						})
 					);
 				}}
