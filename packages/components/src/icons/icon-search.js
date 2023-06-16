@@ -67,12 +67,12 @@ export function createIconsBaseSearchData({ library }) {
 	}
 
 	const libraryIcons = getIconLibraryIcons(library);
-	let _charsToRemoveFromTagBegginig = 0;
+	let _charsToRemoveFromTagBeginning = 0;
 
 	if (library === 'far' || library === 'fas') {
-		_charsToRemoveFromTagBegginig = 3;
+		_charsToRemoveFromTagBeginning = 3;
 	} else if (library === 'publisher') {
-		_charsToRemoveFromTagBegginig = 9;
+		_charsToRemoveFromTagBeginning = 9;
 	}
 
 	const searchData = [];
@@ -84,7 +84,7 @@ export function createIconsBaseSearchData({ library }) {
 
 		const title = icon
 			.replace(/([A-Z])/g, ' $1')
-			.slice(_charsToRemoveFromTagBegginig)
+			.slice(_charsToRemoveFromTagBeginning)
 			.replace(/( Alt)(?!.*\1)/, '')
 			.trim();
 
