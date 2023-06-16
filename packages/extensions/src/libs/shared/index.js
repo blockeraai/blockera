@@ -82,6 +82,14 @@ export function SharedBlockExtension({ children, ...props }) {
 			<BaseExtension
 				{...props}
 				initialOpen={true}
+				extensionId={'Icon'}
+				title={__('Icon', 'publisher-core')}
+				icon=<IconExtensionIcon />
+			/>
+
+			<BaseExtension
+				{...props}
+				initialOpen={true}
 				extensionId={'Spacing'}
 				title={__('Spacing', 'publisher-core')}
 				icon=<SpacingExtensionIcon />
@@ -141,14 +149,6 @@ export function SharedBlockExtension({ children, ...props }) {
 				extensionId={'Effects'}
 				title={__('Effects', 'publisher-core')}
 				icon=<EffectsExtensionIcon />
-			/>
-
-			<BaseExtension
-				{...props}
-				initialOpen={true}
-				extensionId={'Icon'}
-				title={__('Icon', 'publisher-core')}
-				icon=<IconExtensionIcon />
 			/>
 
 			{children}
