@@ -150,9 +150,8 @@
 	
 	
 	.publisher-control-icon-suggestions {
-		display: grid;
-		grid-template-columns: repeat(6, 30px);
-		gap: 2px;
+		display: flex;
+		gap: 4px;
 		right: 0;
 		height: 36px;
 		align-content: center;
