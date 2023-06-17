@@ -33,11 +33,17 @@
 		}
 	}
 	
+	svg {
+		overflow: visible;
+	}
+	
 	.publisher-control-shape-side {
 		transition: all .2s ease;
 		fill: #f6f6f6;
 		stroke: #cccccc;
 		user-select: none;
+		stroke-linejoin: round;
+		
 		
 		&.selected-side,
 		&:hover {
