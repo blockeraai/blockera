@@ -94,6 +94,7 @@ export function IconExtension({ children, config, ...props }) {
 								type: 'css',
 								unitType: 'essential',
 								initValue: '',
+								min: 8,
 							}}
 							//
 							initValue=""
@@ -115,6 +116,7 @@ export function IconExtension({ children, config, ...props }) {
 								type: 'css',
 								unitType: 'essential',
 								initValue: '',
+								min: 8,
 							}}
 							//
 							initValue=""
