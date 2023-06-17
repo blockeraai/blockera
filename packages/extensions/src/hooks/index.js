@@ -41,3 +41,4 @@ export default function applyHooks() {
 	// 	withCustomizeSaveElement
 	// );
 }
+export { default as withBlockSettings } from './block-settings';

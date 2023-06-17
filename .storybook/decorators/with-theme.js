@@ -1,26 +1,26 @@
 /**
  * External dependencies
  */
-import styled from "@emotion/styled";
-import { css } from "@emotion/react";
+import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 
 /**
  * Internal dependencies
  */
-import Theme from "@wordpress/components/build-module/theme";
+import Theme from '@wordpress/components/build-module/theme';
 
 const themes = {
 	default: {},
 	darkBg: {
-		accent: "#f7c849",
-		background: "#1e1e1e",
+		accent: '#f7c849',
+		background: '#1e1e1e',
 	},
 	lightGrayBg: {
-		accent: "#3858e9",
-		background: "#f0f0f0",
+		accent: '#3858e9',
+		background: '#f0f0f0',
 	},
 	classic: {
-		accent: "#007cba",
+		accent: '#007cba',
 	},
 };
 
@@ -64,12 +64,15 @@ export const WithTheme = (Story, context) => {
 	const selectedTheme = themes[context.globals.componentsTheme];
 	const selectedBackground = selectedTheme.background;
 
-	if (context.componentId === "components-experimental-theme") {
+	if (context.componentId === 'components-experimental-theme') {
 		return (
 			<>
 				<Story />
-				{context.globals.componentsTheme !== "default" && (
-					<Notice>The Theme toolbar addon is disabled for this story. Use Controls to change the values.</Notice>
+				{context.globals.componentsTheme !== 'default' && (
+					<Notice>
+						The Theme toolbar addon is disabled for this story. Use
+						Controls to change the values.
+					</Notice>
 				)}
 			</>
 		);
@@ -79,7 +82,11 @@ export const WithTheme = (Story, context) => {
 		<BackgroundColorWrapper background={selectedBackground}>
 			<Theme {...themes[context.globals.componentsTheme]}>
 				<Story {...context} />
-				{selectedBackground && <BackgroundIndicator>Themed background {selectedBackground}</BackgroundIndicator>}
+				{selectedBackground && (
+					<BackgroundIndicator>
+						Themed background {selectedBackground}
+					</BackgroundIndicator>
+				)}
 			</Theme>
 		</BackgroundColorWrapper>
 	);

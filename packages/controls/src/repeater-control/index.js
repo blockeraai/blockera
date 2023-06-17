@@ -1,6 +1,7 @@
 /**
  * Publisher dependencies
  */
+import { useState } from '@wordpress/element';
 import { Button } from '@publisher/components';
 import {
 	controlClassNames,
@@ -14,10 +15,6 @@ import { RepeaterContextProvider } from './context';
 import MappedItems from './components/mapped-items';
 import LabelControl from '../label-control';
 import PlusIcon from './icons/plus';
-
-//CSS dependencies
-import './style.scss';
-import { useState } from '@wordpress/element';
 
 const RepeaterControl = ({
 	attribute,
@@ -38,6 +35,7 @@ const RepeaterControl = ({
 	const [repeaterItems, setRepeaterItems] = useState(
 		value?.length ? value : []
 	);
+
 	const defaultRepeaterState = {
 		repeaterAttribute: attribute,
 		design,

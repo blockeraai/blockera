@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
 /**
  * A Storybook decorator to wrap a story in a div applying a max width and
@@ -27,7 +27,7 @@ const Indicator = styled.div`
 `;
 
 export const WithMaxWidthWrapper = (Story, context) => {
-	if (context.globals.maxWidthWrapper === "none") {
+	if (context.globals.maxWidthWrapper === 'none') {
 		return <Story {...context} />;
 	}
 

@@ -12,11 +12,6 @@ import {
  */
 import { controlClassNames } from '@publisher/classnames';
 
-/**
- * Internal dependencies
- */
-import './style.scss';
-
 const ToggleSelectControl = ({
 	initValue = '',
 	options,

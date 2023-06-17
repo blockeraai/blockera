@@ -19,7 +19,7 @@ import {
 import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
 import { isActiveField } from '../../api/utils';
-import { BlockEditContext } from '../../hooks/context';
+import { BlockEditContext } from '../../hooks';
 
 export function BorderAndShadowStyles({
 	borderAndShadowConfig: {

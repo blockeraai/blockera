@@ -17,11 +17,10 @@ import {
  */
 import { Button } from '../button';
 import CloseIcon from './icons/close';
-import './style.scss';
 
 export default function Popover({
 	label = '',
-	onClose = () => {},
+	onClose = () => { },
 	children,
 	className,
 	...props

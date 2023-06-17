@@ -9,6 +9,7 @@ import { within, userEvent } from '@storybook/testing-library';
 import { InputControl } from '../input';
 import { BlockEditContext } from '@publisher/extensions';
 import { useState } from '@wordpress/element';
+import { decorators } from '../../../../../.storybook/preview';
 
 let _value = {
 	publisherInput: '20',
@@ -54,7 +55,10 @@ export const Default = {
 		className: 'publisher-input',
 		value: _value.publisherInput,
 	},
-	decorators: [WithMockBlockEditContext],
+	decorators: [WithMockBlockEditContext, ...decorators],
+	parameters: {
+		jest: ['input.spec.js'],
+	},
 };
 
 export const InputWithUnit = {
@@ -66,7 +70,7 @@ export const InputWithUnit = {
 		className: 'publisher-input',
 		value: _value.publisherInput,
 	},
-	decorators: [WithMockBlockEditContext],
+	decorators: [WithMockBlockEditContext, ...decorators],
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 
@@ -84,7 +88,7 @@ export const InputWithSlider = {
 		className: 'publisher-input',
 		value: _value.publisherInput,
 	},
-	decorators: [WithMockBlockEditContext],
+	decorators: [WithMockBlockEditContext, ...decorators],
 };
 
 export const InputWithUnitAndSlider = {
@@ -96,5 +100,5 @@ export const InputWithUnitAndSlider = {
 		className: 'publisher-input',
 		value: _value.publisherInput,
 	},
-	decorators: [WithMockBlockEditContext],
+	decorators: [WithMockBlockEditContext, ...decorators],
 };

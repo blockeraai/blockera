@@ -7,12 +7,7 @@ import { useState } from '@wordpress/element';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import {
-	CssInputControl,
-	InputControl,
-	SelectControl,
-	ColorControl,
-} from '../index';
+import { CssInputControl, SelectControl, ColorControl } from '../index';
 import BorderStyleHSolidIcon from './icons/style-h-solid';
 import BorderStyleHDashedIcon from './icons/style-h-dashed';
 import BorderStyleHDottedIcon from './icons/style-h-dotted';
@@ -21,8 +16,6 @@ import BorderStyleVSolidIcon from './icons/style-v-solid';
 import BorderStyleVDashedIcon from './icons/style-v-dashed';
 import BorderStyleVDottedIcon from './icons/style-v-dotted';
 import BorderStyleVDoubleIcon from './icons/style-v-double';
-
-import './style.scss';
 
 const BorderControl = ({
 	lines = 'horizontal',

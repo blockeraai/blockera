@@ -1,13 +1,18 @@
 /**
  * WordPress dependencies
  */
-import { addFilter, removeFilter } from "@wordpress/hooks";
-import { useEffect, useLayoutEffect, useRef, useState } from "@wordpress/element";
+import { addFilter, removeFilter } from '@wordpress/hooks';
+import {
+	useEffect,
+	useLayoutEffect,
+	useRef,
+	useState,
+} from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
-import CONFIG from "../package-styles/config";
+import CONFIG from '../package-styles/config';
 
 export const WithRTL = (Story, context) => {
 	const [rerenderKey, setRerenderKey] = useState(0);
@@ -15,18 +20,25 @@ export const WithRTL = (Story, context) => {
 
 	useEffect(() => {
 		// Override the return value of i18n.isRTL()
-		addFilter("i18n.gettext_with_context", "storybook", (translation, text, _context) => {
-			if (text === "ltr" && _context === "text direction") {
-				return context.globals.direction;
+		addFilter(
+			'i18n.gettext_with_context',
+			'storybook',
+			(translation, text, _context) => {
+				if (text === 'ltr' && _context === 'text direction') {
+					return context.globals.direction;
+				}
+				return translation;
 			}
-			return translation;
-		});
+		);
 
-		ref.current.ownerDocument.documentElement.setAttribute("dir", context.globals.direction);
+		ref.current.ownerDocument.documentElement.setAttribute(
+			'dir',
+			context.globals.direction
+		);
 
 		setRerenderKey((prevValue) => prevValue + 1);
 
-		return () => removeFilter("i18n.gettext_with_context", "storybook");
+		return () => removeFilter('i18n.gettext_with_context', 'storybook');
 	}, [context.globals.direction]);
 
 	useLayoutEffect(() => {

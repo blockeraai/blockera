@@ -3,11 +3,6 @@
  */
 import { componentClassNames } from '@publisher/classnames';
 
-/**
- * Internal dependencies
- */
-import './style.scss';
-
 export default function ColorIndicator({
 	className,
 	value = '',

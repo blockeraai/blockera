@@ -15,11 +15,6 @@ import {
 } from '@publisher/classnames';
 import { Button, HStack } from '@publisher/components';
 
-/**
- * Internal dependencies
- */
-import './style.scss';
-
 export default function AnglePickerControl({
 	initValue = 0,
 	//

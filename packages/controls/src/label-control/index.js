@@ -3,8 +3,6 @@
  */
 import { controlClassNames } from '@publisher/classnames';
 
-import './style.scss';
-
 export default function LabelControl({ label, className, ...props }) {
 	return (
 		<>

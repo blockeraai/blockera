@@ -8,11 +8,6 @@ import { RangeControl as WordPressRangeControl } from '@wordpress/components';
  */
 import { controlClassNames } from '@publisher/classnames';
 
-/**
- * Inner dependencies
- */
-import './style.scss';
-
 const RangeControl = ({
 	min,
 	max,

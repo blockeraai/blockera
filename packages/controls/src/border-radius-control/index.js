@@ -18,7 +18,6 @@ import {
 import { CssInputControl, LabelControl, ToggleSelectControl } from '../index';
 import { default as CompactIcon } from './icons/compact';
 import { default as CustomIcon } from './icons/custom';
-import './style.scss';
 
 const BorderRadiusControl = ({
 	label = '',

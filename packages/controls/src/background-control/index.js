@@ -16,7 +16,6 @@ import { controlClassNames } from '@publisher/classnames';
 import Header from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
-import './style.scss';
 
 const initialState = {
 	type: 'image',

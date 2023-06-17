@@ -8,14 +8,12 @@ import { useState } from '@wordpress/element';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { ColorIndicator } from '@publisher/components';
+import { ColorIndicator, Button } from '@publisher/components';
 
 /**
  * Internal dependencies
  */
-import './style.scss';
 import { ColorPickerPopover } from './popover';
-import { Button } from '@publisher/components';
 
 export default function ColorControl({
 	value,

@@ -1,15 +1,13 @@
-
-
-.publisher-component-extension{
-	.components-panel__body-title{
-		.components-panel__body-toggle{
+.publisher-component-extension {
+	.components-panel__body-title {
+		.components-panel__body-toggle {
 			color: var(--wp-admin-theme-color, #007cba);
 			font-weight: 600;
 			font-size: 13px;
 			padding: 0 16px;
 			height: 48px;
 
-			.extension-icon{
+			.extension-icon {
 				order: -1;
 				margin-right: 5px;
 			}
@@ -21,7 +19,7 @@
 		margin-bottom: 10px;
 	}
 
-	&.components-panel__body.is-opened > .components-panel__body-title{
+	&.components-panel__body.is-opened > .components-panel__body-title {
 		margin-bottom: 10px;
 	}
 }

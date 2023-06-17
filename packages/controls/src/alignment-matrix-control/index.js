@@ -8,11 +8,6 @@ import { __experimentalAlignmentMatrixControl as WPAlignmentMatrixControl } from
  */
 import { controlClassNames } from '@publisher/classnames';
 
-/**
- * Internal dependencies
- */
-import './style.scss';
-
 const AlignmentMatrixControl = ({
 	initValue = '',
 	width = 68,

@@ -1,6 +1,3 @@
-// general styles for controls
-import './style.scss';
-
 export { default as BaseControl } from './base';
 export {
 	default as AlignmentMatrixControl,
@@ -20,7 +17,6 @@ export { default as RepeaterControl } from './repeater-control';
 export { default as BoxShadowControl } from './box-shadow-control';
 export { default as TextShadowControl } from './text-shadow-control';
 export { default as TransitionControl } from './transition-control';
-export { default as AttributesControl } from './attributes-control';
 export { default as FilterControl } from './filter-control';
 export { default as OutlineControl } from './outline-control';
 export {
@@ -35,4 +31,6 @@ export { default as BorderRadiusControl } from './border-radius-control';
 export { default as MediaImageControl } from './media-image-control';
 export { default as BoxSpacingControl } from './box-spacing-control';
 export { default as BoxPositionControl } from './box-position-control';
-export { default as SearchControl } from './search-control';
+
+export { getControlValue, updateControlValue } from './utils';
+

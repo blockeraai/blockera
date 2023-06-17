@@ -16,7 +16,6 @@ import {
  * Internal dependencies
  */
 import { default as DeleteIcon } from './icons/delete';
-import './style.scss';
 
 const MediaImageControl = ({
 	initValue = '',
@@ -53,7 +52,7 @@ const MediaImageControl = ({
 						const newValue = onChange('');
 						onValueChange(newValue);
 					}}
-				></Button>
+				/>
 			)}
 
 			{value && (

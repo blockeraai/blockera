@@ -8,11 +8,6 @@ import { Button as WPButton } from '@wordpress/components';
  */
 import { componentClassNames } from '@publisher/classnames';
 
-/**
- * Internal dependencies
- */
-import './style.scss';
-
 export default function Button({
 	size = 'normal',
 	style = 'primary',

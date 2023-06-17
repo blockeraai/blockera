@@ -1,13 +1,14 @@
 /**
  * External dependencies
  */
-const { join } = require('path');
+const { join, resolve } = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 /**
  * WordPress dependencies
  */
+const postcssPlugins = require('@wordpress/postcss-plugins-preset');
 const {
 	camelCaseDash,
 } = require('@wordpress/dependency-extraction-webpack-plugin/lib/util');
@@ -39,6 +40,24 @@ const publisherEntries = publisherPackages.reduce((memo, packageName) => {
 		},
 	};
 }, {});
+
+const scssLoaders = ({ isLazy }) => [
+	{
+		loader: 'style-loader',
+		options: { injectType: isLazy ? 'lazyStyleTag' : 'styleTag' },
+	},
+	'css-loader',
+	{
+		loader: 'postcss-loader',
+		options: {
+			postcssOptions: {
+				ident: 'postcss',
+				plugins: postcssPlugins,
+			},
+		},
+	},
+	'sass-loader',
+];
 
 module.exports = (env, argv) => {
 	const isProduction = argv.mode === 'production';
@@ -74,12 +93,15 @@ module.exports = (env, argv) => {
 					exclude: /node_modules/,
 					use: [
 						// Creates `style` nodes from JS strings
-						'style-loader',
-						// Translates CSS into CommonJS
-						'css-loader',
-						// Compiles Sass to CSS
+						'style-loader', // Translates CSS into CommonJS
+						'css-loader', //  Compiles Sass to CSS
 						'sass-loader',
 					],
+				},
+				{
+					test: /\.lazy\.scss$/,
+					use: scssLoaders({ isLazy: true }),
+					include: resolve(__dirname),
 				},
 				{
 					test: /\.scss$/,

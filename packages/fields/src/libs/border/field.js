@@ -7,7 +7,6 @@ import { BorderControl } from '@publisher/controls';
  * Internal dependencies
  */
 import { Field } from '../field';
-import './style.scss';
 
 export function BorderField({
 	name,

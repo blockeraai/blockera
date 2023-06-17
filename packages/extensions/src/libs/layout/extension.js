@@ -43,9 +43,8 @@ import { default as AlignContentFlexEndIcon } from './icons/align-content-flex-e
 import { default as AlignContentSpaceAroundIcon } from './icons/align-content-space-around';
 import { default as AlignContentSpaceBetweenIcon } from './icons/align-content-space-between';
 import { default as AlignContentStretchIcon } from './icons/align-content-stretch';
-import './style.scss';
 
-export function LayoutExtension({ children, config, ...props }) {
+export function LayoutExtension({ config }) {
 	const {
 		layoutConfig: {
 			publisherDisplay,

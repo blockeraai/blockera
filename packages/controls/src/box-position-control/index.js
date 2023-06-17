@@ -16,7 +16,6 @@ import { Button } from '@publisher/components';
 /**
  * Internal dependencies
  */
-import './style.scss';
 import { LabelControl, SelectControl } from '../index';
 import { SidePopover } from './components/side-popover';
 

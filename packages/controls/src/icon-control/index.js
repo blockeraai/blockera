@@ -22,7 +22,6 @@ import { useLateEffect } from './utils';
 import { default as Suggestions } from './components/suggestions';
 import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
 import { default as DeleteIcon } from './icons/delete';
-import './style.scss';
 
 export default function IconControl({
 	suggestionsQuery = '',

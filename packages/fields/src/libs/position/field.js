@@ -17,7 +17,6 @@ import { HStack, VStack } from '@publisher/components';
  * Internal dependencies
  */
 import { Field, InputField } from '../../index';
-import './style.scss';
 
 export function PositionField({
 	label = __('Position', 'publisher-core'),

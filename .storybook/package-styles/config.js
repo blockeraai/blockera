@@ -1,16 +1,16 @@
 /**
  * Internal dependencies
  */
-import blockEditorLtr from "./block-editor-ltr.lazy.scss";
-import blockEditorRtl from "./block-editor-rtl.lazy.scss";
-import blockLibraryLtr from "./block-library-ltr.lazy.scss";
-import blockLibraryRtl from "./block-library-rtl.lazy.scss";
-import componentsLtr from "./components-ltr.lazy.scss";
-import componentsRtl from "./components-rtl.lazy.scss";
-import formatLibraryLtr from "./format-library-ltr.lazy.scss";
-import formatLibraryRtl from "./format-library-rtl.lazy.scss";
-import editSiteLtr from "./edit-site-ltr.lazy.scss";
-import editSiteRtl from "./edit-site-rtl.lazy.scss";
+import blockEditorLtr from './block-editor-ltr.lazy.scss';
+import blockEditorRtl from './block-editor-rtl.lazy.scss';
+import blockLibraryLtr from './block-library-ltr.lazy.scss';
+import blockLibraryRtl from './block-library-rtl.lazy.scss';
+import componentsLtr from './components-ltr.lazy.scss';
+import componentsRtl from './components-rtl.lazy.scss';
+import formatLibraryLtr from './format-library-ltr.lazy.scss';
+import formatLibraryRtl from './format-library-rtl.lazy.scss';
+import editSiteLtr from './edit-site-ltr.lazy.scss';
+import editSiteRtl from './edit-site-rtl.lazy.scss';
 
 /**
  * Stylesheets to lazy load when the story's context.componentId matches the

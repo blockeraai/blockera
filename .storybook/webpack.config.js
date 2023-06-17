@@ -1,29 +1,29 @@
 /**
  * External dependencies
  */
-const path = require("path");
+const path = require('path');
 
 /**
  * WordPress dependencies
  */
-const postcssPlugins = require("@wordpress/postcss-plugins-preset");
+const postcssPlugins = require('@wordpress/postcss-plugins-preset');
 
 const scssLoaders = ({ isLazy }) => [
 	{
-		loader: "style-loader",
-		options: { injectType: isLazy ? "lazyStyleTag" : "styleTag" },
+		loader: 'style-loader',
+		options: { injectType: isLazy ? 'lazyStyleTag' : 'styleTag' },
 	},
-	"css-loader",
+	'css-loader',
 	{
-		loader: "postcss-loader",
+		loader: 'postcss-loader',
 		options: {
 			postcssOptions: {
-				ident: "postcss",
+				ident: 'postcss',
 				plugins: postcssPlugins,
 			},
 		},
 	},
-	"sass-loader",
+	'sass-loader',
 ];
 
 module.exports = ({ config }) => {
@@ -32,14 +32,14 @@ module.exports = ({ config }) => {
 			// Currently does not work with our tsx stories
 			// See https://github.com/storybookjs/storybook/issues/17275
 			test: /\/stories\/.+\.(j|t)sx?$/,
-			loader: require.resolve("@storybook/source-loader"),
-			enforce: "pre",
+			loader: require.resolve('@storybook/source-loader'),
+			enforce: 'pre',
 		},
 		{
 			// Allows a story description to be written as a doc comment above the exported story
 			test: /\/stories\/.+\.(j|t)sx?$/,
-			loader: path.resolve(__dirname, "./webpack/description-loader.js"),
-			enforce: "post",
+			loader: path.resolve(__dirname, './webpack/description-loader.js'),
+			enforce: 'post',
 		},
 		{
 			test: /\.scss$/,
@@ -56,10 +56,10 @@ module.exports = ({ config }) => {
 			test: /\.(js|jsx)$/,
 			exclude: /node_modules/,
 			resolve: {
-				extensions: [".js", ".jsx"],
+				extensions: ['.js', '.jsx'],
 			},
 			use: {
-				loader: "babel-loader",
+				loader: 'babel-loader',
 			},
 		}
 	);

@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-const babel = require("@babel/core");
+const babel = require('@babel/core');
 
 /**
  * Allows a story description to be written as a doc comment above the exported story.
@@ -23,20 +23,20 @@ function annotateDescriptionPlugin() {
 				}
 
 				const commentValues = path.node.leadingComments.map((node) => {
-					if (node.type === "CommentLine") {
+					if (node.type === 'CommentLine') {
 						return node.value.trimLeft();
 					}
 					// else, node.type === 'CommentBlock'
 					return node.value
-						.split("\n")
+						.split('\n')
 						.map((line) => {
 							// stripping out the whitespace and * from comment blocks
-							return line.replace(/^(\s+)?(\*+)?(\s+)?/, "");
+							return line.replace(/^(\s+)?(\*+)?(\s+)?/, '');
 						})
-						.join("\n")
+						.join('\n')
 						.trim();
 				});
-				const description = commentValues.join("\n");
+				const description = commentValues.join('\n');
 				const storyId = path.node.declaration.declarations[0].id.name;
 
 				path.container.push(
@@ -56,7 +56,7 @@ module.exports = function (source) {
 	const output = babel.transform(source, {
 		plugins: [annotateDescriptionPlugin],
 		filename: __filename,
-		sourceType: "module",
+		sourceType: 'module',
 	});
 	return output.code;
 };

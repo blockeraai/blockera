@@ -26,11 +26,11 @@ const initialState = {
 };
 
 function OutlineControl({
-	attribute,
-	//
-	className,
-	...props
-}) {
+							attribute,
+							//
+							className,
+							...props
+						}) {
 	const { attributes, setAttributes } = useContext(BlockEditContext);
 	const { [attribute]: textShadowItems } = attributes;
 

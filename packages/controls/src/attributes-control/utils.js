@@ -110,9 +110,9 @@ export function getAttributeFieldKeyOptions({ element = '' }) {
 }
 
 export function getAttributeFieldValueOptions({
-	element = '',
-	attribute = '',
-}) {
+												  element = '',
+												  attribute = '',
+											  }) {
 	switch (element) {
 		case 'a':
 			switch (attribute) {
@@ -340,43 +340,43 @@ export function getAttributeItemIcon({ element, attribute }) {
 		case 'a':
 			switch (attribute) {
 				case 'rel':
-					return <ARelIcon />;
+					return <ARelIcon/>;
 
 				case 'target':
-					return <ATargetIcon />;
+					return <ATargetIcon/>;
 
 				case 'hreflang':
-					return <AHreflangIcon />;
+					return <AHreflangIcon/>;
 
 				case 'referrerpolicy':
-					return <AReferrerpolicyIcon />;
+					return <AReferrerpolicyIcon/>;
 			}
 			break;
 
 		case 'button':
 			switch (attribute) {
 				case 'type':
-					return <ButtonTypeIcon />;
+					return <ButtonTypeIcon/>;
 			}
 			break;
 
 		case 'ol':
 			switch (attribute) {
 				case 'type':
-					return <OlTypeIcon />;
+					return <OlTypeIcon/>;
 
 				case 'reversed':
-					return <OlReversedIcon />;
+					return <OlReversedIcon/>;
 
 				case 'start':
-					return <OlStartIcon />;
+					return <OlStartIcon/>;
 			}
 			break;
 	}
 
 	if (attribute.startsWith('data-')) {
-		return <AttributeDataIcon />;
+		return <AttributeDataIcon/>;
 	}
 
-	return <AttributeIcon />;
+	return <AttributeIcon/>;
 }

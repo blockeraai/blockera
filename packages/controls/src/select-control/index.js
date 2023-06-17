@@ -16,7 +16,6 @@ import { controlClassNames } from '@publisher/classnames';
  * Internal dependencies
  */
 import { renderSelectNativeOption, prepareSelectCustomOptions } from './utils';
-import './style.scss';
 
 const SelectControl = ({
 	initValue = '',
@@ -78,7 +77,7 @@ const SelectControl = ({
 						onValueChange(newValue);
 					}}
 					options={options}
-				></WPCustomSelectControl>
+				/>
 			)}
 		</>
 	);

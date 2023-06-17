@@ -7,7 +7,6 @@ import { componentClassNames } from '@publisher/classnames';
  * Internal dependencies
  */
 import { HStack } from '../index';
-import './style.scss';
 
 export default function Buttons({
 	className,

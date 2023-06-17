@@ -8,11 +8,6 @@ import { SearchControl as WPSearchControl } from '@wordpress/components';
  */
 import { controlClassNames } from '@publisher/classnames';
 
-/**
- * Inner dependencies
- */
-import './style.scss';
-
 const SearchControl = ({ ...props }) => {
 	return (
 		<WPSearchControl className={controlClassNames('search')} {...props} />

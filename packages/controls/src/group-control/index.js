@@ -12,11 +12,6 @@ import {
 } from '@publisher/classnames';
 import { Popover } from '@publisher/components';
 
-/**
- * Styles
- */
-import './style.scss';
-
 export default function GroupControl({
 	design = 'minimal',
 	header,

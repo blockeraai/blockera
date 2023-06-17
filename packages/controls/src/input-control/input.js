@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies
  */
+import { useState } from '@wordpress/element';
 import {
 	TextControl as WPTextControl,
 	__experimentalUnitControl as WPUnitControl,
@@ -10,13 +11,7 @@ import {
  * Internal dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-
-/**
- * Styles
- */
-import './style.scss';
 import { RangeControl } from './../index';
-import { useState } from '@wordpress/element';
 
 export function InputControl({
 	units,

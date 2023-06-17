@@ -15,7 +15,6 @@ import {
 /**
  * Internal dependencies
  */
-import './style.scss';
 import { LabelControl } from '../index';
 import { SidePopover } from './components/side-popover';
 

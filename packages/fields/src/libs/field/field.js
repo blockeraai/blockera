@@ -4,11 +4,6 @@
 import { LabelControl } from '@publisher/controls';
 import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
 
-/**
- * Internal dependencies
- */
-import './style.scss';
-
 export function Field({
 	label,
 	children,

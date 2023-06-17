@@ -1,15 +1,15 @@
 /**
  * Internal dependencies
  */
-import { Playground } from "@publisher/core-storybook";
+import { Playground } from '@publisher/core-storybook';
 
 /**
  * Plugin dependencies
  */
-import { sharedDefault } from "../../../../../src/blocks";
+import { sharedDefault } from '../../../../../src/blocks';
 
 export default {
-	title: "Playground/Block Editor",
+	title: 'Playground/Block Editor',
 	component: Playground,
 };
 
