@@ -26,6 +26,7 @@ export function AttributesField({
 				}}
 				isPopover={true}
 				label={label}
+				attributeElement="a"
 			/>
 
 			{children}

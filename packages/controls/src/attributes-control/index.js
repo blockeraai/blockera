@@ -27,6 +27,7 @@ function AttributesControl({
 	attribute,
 	//
 	className,
+	attributeElement = 'general',
 	...props
 }) {
 	const { attributes, setAttributes } = useContext(BlockEditContext);
@@ -37,7 +38,7 @@ function AttributesControl({
 			<RepeaterControl
 				{...{
 					...props,
-					popoverLabel: __('Attributes', 'publisher-core'),
+					popoverLabel: __('HTML Attribute', 'publisher-core'),
 					Header,
 					initialState,
 					updateBlockAttributes: (newItems) =>
@@ -48,6 +49,7 @@ function AttributesControl({
 					value: attributesItems,
 					InnerComponents: Fields,
 					attribute,
+					attributeElement,
 				}}
 			/>
 		</div>

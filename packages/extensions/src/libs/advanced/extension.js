@@ -25,7 +25,7 @@ export function AdvancedExtension({ children, config, ...props }) {
 					{...{
 						...props,
 						attribute: 'publisherAttributes',
-						label: __('Attributes', 'publisher-core'),
+						label: __('HTML Attributes', 'publisher-core'),
 					}}
 				/>
 			)}
