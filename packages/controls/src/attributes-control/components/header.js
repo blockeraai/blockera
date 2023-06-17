@@ -1,0 +1,58 @@
+/**
+ * WordPress dependencies
+ */
+import { __ } from '@wordpress/i18n';
+import { memo, useContext } from '@wordpress/element';
+
+/**
+ * Publisher dependencies
+ */
+import { controlInnerClassNames } from '@publisher/classnames';
+
+/**
+ * Internal dependencies
+ */
+import { RepeaterContext } from '../../repeater-control/context';
+import { getAttributeItemIcon } from '../utils';
+
+const Header = ({
+	item: { key, value },
+	isOpen,
+	setOpen,
+	children,
+	isOpenPopoverEvent,
+}) => {
+	const { customProps } = useContext(RepeaterContext);
+
+	return (
+		<div
+			className={controlInnerClassNames('repeater-group-header')}
+			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
+		>
+			<span className={controlInnerClassNames('header-icon')}>
+				{getAttributeItemIcon({
+					element: customProps.attributeElement,
+					attribute: key,
+				})}
+			</span>
+
+			<span
+				className={controlInnerClassNames('header-label')}
+				style={{ textTransform: key ? 'initial' : '' }}
+			>
+				{key ? key.replace(/^data-/, '') : __('None', 'publisher-core')}
+			</span>
+
+			<span
+				className={controlInnerClassNames('header-values')}
+				style={{ textTransform: 'initial' }}
+			>
+				{value}
+			</span>
+
+			{children}
+		</div>
+	);
+};
+
+export default memo(Header);

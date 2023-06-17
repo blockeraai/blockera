@@ -13,6 +13,11 @@ import {
 	supports as backgroundSupports,
 } from '../background';
 import {
+	IconExtensionIcon,
+	attributes as iconAttributes,
+	supports as iconSupports,
+} from '../icon';
+import {
 	BorderAndShadowExtensionIcon,
 	attributes as borderAndShadowAttributes,
 	supports as borderAndShadowSupports,
@@ -47,6 +52,11 @@ import {
 	attributes as layoutAttributes,
 	supports as layoutSupports,
 } from '../layout';
+import {
+	AdvancedExtensionIcon,
+	attributes as advancedAttributes,
+	supports as advancedSupports,
+} from '../advanced';
 
 export const attributes = {
 	...typographyAttributes,
@@ -57,6 +67,8 @@ export const attributes = {
 	...positionAttributes,
 	...sizeAttributes,
 	...layoutAttributes,
+	...iconAttributes,
+	...advancedAttributes,
 };
 export const supports = {
 	...typographySupports,
@@ -67,11 +79,21 @@ export const supports = {
 	...positionSupports,
 	...sizeSupports,
 	...layoutSupports,
+	...iconSupports,
+	...advancedSupports,
 };
 
 export function SharedBlockExtension({ children, ...props }) {
 	return (
 		<>
+			<BaseExtension
+				{...props}
+				initialOpen={true}
+				extensionId={'Icon'}
+				title={__('Icon', 'publisher-core')}
+				icon=<IconExtensionIcon />
+			/>
+
 			<BaseExtension
 				{...props}
 				initialOpen={true}
@@ -135,6 +157,15 @@ export function SharedBlockExtension({ children, ...props }) {
 				title={__('Effects', 'publisher-core')}
 				icon=<EffectsExtensionIcon />
 			/>
+
+			<BaseExtension
+				{...props}
+				initialOpen={true}
+				extensionId={'Advanced'}
+				title={__('Advanced', 'publisher-core')}
+				icon=<AdvancedExtensionIcon />
+			/>
+
 			{children}
 		</>
 	);

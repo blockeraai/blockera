@@ -15,7 +15,7 @@ export default function MediaUploader({
 	className,
 	allowedTypes,
 	children,
-	multiple,
+	multiple = false,
 	mode,
 	...props
 }) {
@@ -23,9 +23,9 @@ export default function MediaUploader({
 		<WPMediaUploadCheck>
 			<WPMediaUpload
 				className={componentClassNames('media-upload', className)}
-				allowedTypes
-				multiple
-				mode
+				allowedTypes={allowedTypes}
+				multiple={multiple}
+				mode={mode}
 				{...props}
 			/>
 		</WPMediaUploadCheck>

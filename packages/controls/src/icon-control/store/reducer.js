@@ -1,36 +1,36 @@
-export function iconReducer(iconInfo, action) {
+export function iconReducer(iconData, action) {
 	switch (action.type) {
 		case 'UPDATE_ICON':
 			return {
-				...iconInfo,
+				...iconData,
+				icon: action.icon,
+				library: action.library,
 				uploadSVG: '',
-				name: action.name,
-				type: action.iconType,
 			};
 
 		case 'UPDATE_SVG':
 			return {
-				...iconInfo,
-				name: null,
-				type: null,
+				...iconData,
+				icon: null,
+				library: null,
 				uploadSVG: action.uploadSVG,
 			};
 
 		case 'UPDATE_SIZE':
 			return {
-				...iconInfo,
+				...iconData,
 				size: action.size,
 			};
 
 		case 'DELETE_ICON':
 			return {
+				icon: null,
+				library: null,
 				size: null,
-				name: null,
-				type: null,
 				uploadSVG: '',
 			};
 
 		default:
-			return iconInfo;
+			return iconData;
 	}
 }

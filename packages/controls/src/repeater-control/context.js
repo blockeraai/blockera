@@ -11,12 +11,14 @@ const RepeaterContext = createContext({
 	attributes: {},
 	initialState: {},
 	repeaterItems: {},
+	repeaterItemsPopoverClassName: '',
 	cloneItem: () => {},
 	addNewItem: () => {},
 	removeItem: () => {},
 	changeItem: () => {},
 	InnerComponents: null,
 	isPopover: true,
+	customProps: {},
 });
 
 const RepeaterContextProvider = ({ children, ...props }) => {

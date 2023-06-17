@@ -41,12 +41,16 @@ export default function Popover({
 					{...props}
 				>
 					{label && (
-						<div className={componentInnerClassNames('header')}>
+						<div
+							className={componentInnerClassNames(
+								'popover-header'
+							)}
+						>
 							{label}
 
 							<Button
 								className={componentInnerClassNames(
-									'header-close',
+									'popover-close',
 									'no-border'
 								)}
 								size="extra-small"
@@ -61,7 +65,10 @@ export default function Popover({
 							</Button>
 						</div>
 					)}
-					{children}
+
+					<div className={componentInnerClassNames('popover-body')}>
+						{children}
+					</div>
 				</WPPopover>
 			)}
 		</>

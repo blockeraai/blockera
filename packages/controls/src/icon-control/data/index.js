@@ -119,7 +119,7 @@ export function getRecommendation({
 	fixedSizing = false,
 }) {
 	let foundItems = [];
-	const query = search();
+	const query = typeof search === 'function' ? search() : search;
 
 	if (Array.isArray(query)) {
 		foundItems = query;

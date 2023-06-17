@@ -1,48 +1,101 @@
 /**
  * WordPress dependencies
  */
-import {
-	__experimentalHStack as HStack,
-	__experimentalVStack as VStack,
-	Button,
-	FlexItem,
-	__experimentalGrid as Grid,
-} from '@wordpress/components';
-import { MediaUpload } from '@wordpress/block-editor';
-import { useState, useReducer } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { close } from '@wordpress/icons';
+import { useState, useReducer } from '@wordpress/element';
 
 /**
- * External dependencies
+ * Publisher dependencies
  */
-import classnames from 'classnames';
-
-/**
- * Style dependencies
- */
-import './style.scss';
+import {
+	controlClassNames,
+	controlInnerClassNames,
+} from '@publisher/classnames';
+import { Button, Icon, MediaUploader } from '@publisher/components';
 
 /**
  * Internal dependencies
  */
-import { Modal, InspectElement, Icon } from '@publisher/components';
-import { getIcon, publisherBlue } from '@publisher/icons';
-import { getRecommendation } from './data';
 import { IconContextProvider } from './context';
-import IconTabPanel from './components/icon-tab-panel';
 import { iconReducer } from './store/reducer';
+import { useLateEffect } from './utils';
+import { default as Suggestions } from './components/suggestions';
+import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
+import { default as DeleteIcon } from './icons/delete';
+import './style.scss';
 
 export default function IconControl({
+	suggestionsQuery = '',
+	//
+	labelChoose = __('Choose Icon…', 'publisher-blocks'),
+	labelIconLibrary = __('Icon Library', 'publisher-blocks'),
+	labelUploadSvg = __('Upload SVG', 'publisher-blocks'),
+	//
 	value,
-	title,
-	isOpen,
-	attributes,
-	setAttributes,
-	label = 'icon',
-	advancedSearch = '',
+	initValue = {
+		icon: '',
+		library: '',
+		uploadSVG: '',
+	},
+	//
+	className,
+	onValueChange = (newValue) => {
+		return newValue;
+	},
 }) {
-	function handleOnIconClick(event, action) {
+	const [currentIcon, currentIconDispatch] = useReducer(iconReducer, {
+		...initValue,
+		...value,
+	});
+
+	useLateEffect(() => {
+		onValueChange(currentIcon);
+	}, [currentIcon]);
+
+	const [isOpenModal, setOpenModal] = useState(false);
+
+	const openModal = (event) => {
+		const target = event.target;
+		if (
+			'svg' === target.nodeName &&
+			'delete' === target.getAttribute('datatype')
+		) {
+			return;
+		}
+
+		setOpenModal(true);
+	};
+
+	const defaultIconState = {
+		suggestionsQuery,
+		currentIcon,
+		dispatch: currentIconDispatch,
+		handleIconSelect,
+	};
+
+	function dispatchActions(action) {
+		currentIconDispatch(action);
+		setOpenModal(false);
+	}
+
+	function hasIcon() {
+		if (!currentIcon) {
+			return false;
+		}
+
+		if (currentIcon.uploadSVG !== '') {
+			return true;
+		}
+
+		if (currentIcon.icon === null) {
+			return false;
+		}
+
+		return currentIcon.icon !== '';
+	}
+
+	function handleIconSelect(event, action) {
+		event.stopPropagation();
 		let target = event.target;
 
 		if ('SVG' !== target.nodeName) {
@@ -56,174 +109,106 @@ export default function IconControl({
 		dispatchActions(action);
 	}
 
-	const recommendationList = getRecommendation({
-		limit: 6,
-		handleOnIconClick,
-		fixedSizing: true,
-		size: attributes.size,
-		search: advancedSearch,
-	});
-	const [iconInfo, dispatch] = useReducer(iconReducer, {
-		name: recommendationList[0]
-			? recommendationList[0].props.iconname.name ?? value
-			: value,
-		size: attributes.size,
-		type: recommendationList[0]
-			? recommendationList[0].props.icon.iconType ?? 'wp'
-			: 'wp',
-		uploadSVG: attributes.uploadSVG,
-	});
-
-	const [isOpenModal, setOpenModal] = useState(false);
-	const openModal = (event) => {
-		const target = event.target;
-		if (
-			'svg' === target.nodeName &&
-			'delete' === target.getAttribute('datatype')
-		) {
-			return;
-		}
-
-		setOpenModal(true);
-	};
-	const closeModal = () => setOpenModal(false);
-	const defaultIconState = {
-		iconInfo,
-		dispatch,
-		recommendationList: getRecommendation({
-			size: iconInfo.size,
-			handleOnIconClick,
-			search: advancedSearch,
-		}),
-		handleOnIconClick,
-	};
-
-	function dispatchActions(action) {
-		dispatch(action);
-		setAttributes({
-			...attributes,
-			icon: iconInfo.name,
-			size: iconInfo.size,
-			iconType: iconInfo.type,
-		});
-		closeModal();
-	}
-
 	return (
 		<IconContextProvider {...defaultIconState}>
-			<InspectElement title={title} initialOpen={isOpen}>
-				<VStack>
-					<VStack>
-						<FlexItem>{label.toUpperCase()}</FlexItem>
-						<FlexItem
-							onClick={openModal}
-							className={`publisher-icon-transparent-bg`}
-						>
-							<Icon
-								type="wp"
-								className="publisher-core-icon-control__delete"
-								icon={close}
-								size={24}
-								datatype="delete"
-								onClick={() =>
-									dispatch({ type: 'DELETE_ICON' })
-								}
-							/>
-							<Icon
-								size={22}
-								type={iconInfo.type}
-								icon={getIcon(iconInfo.name, iconInfo.type)}
-								uploadedSVG={iconInfo.uploadSVG}
-								className={classnames(
-									'publisher-core-current-icon'
-								)}
-							/>
-						</FlexItem>
+			<div
+				className={controlClassNames(
+					'icon',
+					hasIcon() ? 'icon-custom' : 'icon-none',
+					isOpenModal ? 'is-open-icon-picker' : '',
+					className
+				)}
+			>
+				<Suggestions />
 
-						<Grid
-							className="publisher-icon-recommended"
-							columns={
-								recommendationList.length > 6
-									? 6
-									: recommendationList.length
-							}
-							gap={0}
-						>
-							{recommendationList}
-						</Grid>
-					</VStack>
-
-					<HStack
-						justify="space-between"
-						className="publisher-icon-actions"
+				{hasIcon() ? (
+					<div
+						className={controlInnerClassNames(
+							'icon-preview',
+							'icon-preview-empty'
+						)}
+						onClick={openModal}
 					>
 						<Button
-							label={__('Icon Library', 'publisher-blocks')}
-							variant="secondary"
-							onClick={openModal}
-						>
-							{__('Icon Library', 'publisher-blocks')}
-						</Button>
-
-						<MediaUpload
-							onSelect={(media) => {
-								dispatch({
-									type: 'UPDATE_SVG',
-									uploadSVG: {
-										title: media.title,
-										filename: media.filename,
-										url: media.url,
-										updated: '',
-									},
-								});
-								setAttributes({
-									...attributes,
-									uploadSVG: {
-										title: media.title,
-										filename: media.filename,
-										url: media.url,
-										updated: '',
-									},
-									icon: '',
+							className="btn-delete no-border"
+							icon={<DeleteIcon />}
+							align="center"
+							onClick={(e) => {
+								e.stopPropagation();
+								currentIconDispatch({
+									type: 'DELETE_ICON',
 								});
 							}}
-							multiple={false}
-							render={({ open }) => (
-								<>
+						></Button>
+
+						{currentIcon.uploadSVG ? (
+							<img
+								src={currentIcon.uploadSVG.url}
+								alt={currentIcon.uploadSVG.title}
+							/>
+						) : (
+							<Icon {...currentIcon} size={50} />
+						)}
+
+						<div className={controlInnerClassNames('action-btns')}>
+							<Button
+								label={__('Icon Library', 'publisher-blocks')}
+								onClick={openModal}
+								className="btn-icon-library no-border"
+								align="center"
+							>
+								{labelIconLibrary}
+							</Button>
+
+							<MediaUploader
+								onSelect={(media) => {
+									currentIconDispatch({
+										type: 'UPDATE_SVG',
+										uploadSVG: {
+											title: media.title,
+											filename: media.filename,
+											url: media.url,
+											updated: '',
+										},
+									});
+								}}
+								mode="upload"
+								render={({ open }) => (
 									<Button
-										label={__(
-											'Upload SVG',
-											'publisher-blocks'
-										)}
-										variant="secondary"
-										onClick={open}
+										className="btn-upload no-border"
+										align="center"
+										onClick={(event) => {
+											event.stopPropagation();
+											open();
+										}}
 									>
-										{__('Upload SVG', 'publisher-blocks')}
+										{labelUploadSvg}
 									</Button>
-								</>
-							)}
-						/>
-					</HStack>
-				</VStack>
-			</InspectElement>
+								)}
+							/>
+						</div>
+					</div>
+				) : (
+					<div className={controlInnerClassNames('icon-preview')}>
+						<Button
+							label={labelChoose}
+							onClick={openModal}
+							className="btn-choose-icon"
+							align="center"
+						>
+							{labelChoose}
+						</Button>
+					</div>
+				)}
+			</div>
 
 			{isOpenModal && (
-				<Modal
-					headerTitle={__('ICON LIBRARY', 'publisher-blocks')}
-					onRequestClose={closeModal}
-					headerIcon={
-						<Icon
-							type="publisher"
-							size={22}
-							icon={publisherBlue}
-							className="publisher-core-m-header-icon"
-						/>
-					}
-				>
-					<HStack justify="space-between">
-						<IconTabPanel />
-					</HStack>
-				</Modal>
+				<IconPickerPopover
+					isOpen={isOpenModal}
+					onClose={() => {
+						setOpenModal(false);
+					}}
+				/>
 			)}
 		</IconContextProvider>
 	);

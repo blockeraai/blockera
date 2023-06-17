@@ -24,6 +24,7 @@ import { controlInnerClassNames } from '@publisher/classnames';
  */
 import { BlockEditContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
+import './style.scss';
 // icons
 import NoneIcon from './icons/none';
 import TypographyButtonIcon from './icons/typography-button';
@@ -108,10 +109,7 @@ export function TypographyExtension({ children, config, ...props }) {
 						label={__('Typography', 'publisher-core')}
 						offset={125}
 						placement="left-start"
-						className={controlInnerClassNames(
-							'group-popover',
-							'typography-popover'
-						)}
+						className={controlInnerClassNames('typography-popover')}
 						onClose={() => {
 							setIsVisible(false);
 						}}
