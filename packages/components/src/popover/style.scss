@@ -1,9 +1,11 @@
 .publisher-component-popover {
 	position: relative;
-	--popover-min-height: 260px;
+	--popover-min-height: auto;
 	--popover-height: auto;
 	--popover-width: 290px;
 	--popover-header-height: 42px;
+	--popover-overflow: visible;
+	overflow: var(--popover-overflow) !important;
 	
 	.components-popover__content {
 		padding: 0;
@@ -15,6 +17,7 @@
 		position: relative;
 		min-height: auto;
 		height: auto;
+		overflow: var(--popover-overflow) !important;
 	}
 	
 	&.with-header {
@@ -54,6 +57,6 @@
 		padding: 18px 18px 18px;
 		min-height: calc( var(--popover-min-height) - var(--popover-header-height) );
 		max-height: calc( var(--popover-height) - var(--popover-header-height) );
-		overflow: auto;
+		overflow: var(--popover-overflow) !important;
 	}
 }
