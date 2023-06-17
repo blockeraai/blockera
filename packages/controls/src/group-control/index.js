@@ -26,6 +26,7 @@ export default function GroupControl({
 	isOpen = false,
 	isVisible = true,
 	isPopover = false,
+	popoverClassName,
 	isDraggable = false,
 	dropCallback = null,
 	className,
@@ -94,7 +95,10 @@ export default function GroupControl({
 						<Popover
 							offset={35}
 							placement="left-start"
-							className={controlInnerClassNames('group-popover')}
+							className={controlInnerClassNames(
+								'group-popover',
+								popoverClassName
+							)}
 							label={popoverLabel}
 							onClose={onClose}
 						>

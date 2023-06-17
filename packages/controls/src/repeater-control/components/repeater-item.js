@@ -28,6 +28,7 @@ const RepeaterItem = ({ item, itemId, repeaterAttribute }) => {
 		repeaterItems: items,
 		isPopover,
 		popoverLabel,
+		repeaterItemsPopoverClassName,
 	} = useContext(RepeaterContext);
 	const actionsProps = {
 		item,
@@ -47,6 +48,7 @@ const RepeaterItem = ({ item, itemId, repeaterAttribute }) => {
 				groupId={itemId}
 				dropArgs={items}
 				dropCallback={sortItems}
+				popoverClassName={repeaterItemsPopoverClassName}
 				className={controlInnerClassNames('repeater-item-group')}
 				header={
 					!CustomHeader ? (
