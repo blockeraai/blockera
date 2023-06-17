@@ -32,6 +32,7 @@ const RepeaterControl = ({
 	className,
 	isPopover = true,
 	updateBlockAttributes = () => {},
+	...props
 }) => {
 	const [repeaterItems, setRepeaterItems] = useState(
 		value?.length ? value : []
@@ -96,6 +97,7 @@ const RepeaterControl = ({
 		},
 		isPopover,
 		popoverLabel,
+		customProps: { ...props },
 	};
 
 	return (

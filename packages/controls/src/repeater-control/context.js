@@ -17,6 +17,7 @@ const RepeaterContext = createContext({
 	changeItem: () => {},
 	InnerComponents: null,
 	isPopover: true,
+	customProps: {},
 });
 
 const RepeaterContextProvider = ({ children, ...props }) => {
