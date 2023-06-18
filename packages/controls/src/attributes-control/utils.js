@@ -7,6 +7,7 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import { default as AttributeIcon } from './icons/attribute';
+import { default as AttributeAriaIcon } from './icons/attribute-aria';
 import { default as ARelIcon } from './icons/a-rel';
 import { default as ATargetIcon } from './icons/a-target';
 import { default as AHreflangIcon } from './icons/a-hreflang';
@@ -16,6 +17,7 @@ import { default as OlTypeIcon } from './icons/ol-type';
 import { default as OlReversedIcon } from './icons/ol-reversed';
 import { default as OlStartIcon } from './icons/ol-start';
 import { default as AttributeDataIcon } from './icons/attribute-data';
+import { default as AttributeRequiredIcon } from './icons/attribute-required';
 
 export function getAttributeFieldKeyOptions({ element = '' }) {
 	switch (element) {
@@ -110,9 +112,9 @@ export function getAttributeFieldKeyOptions({ element = '' }) {
 }
 
 export function getAttributeFieldValueOptions({
-												  element = '',
-												  attribute = '',
-											  }) {
+	element = '',
+	attribute = '',
+}) {
 	switch (element) {
 		case 'a':
 			switch (attribute) {
@@ -340,43 +342,55 @@ export function getAttributeItemIcon({ element, attribute }) {
 		case 'a':
 			switch (attribute) {
 				case 'rel':
-					return <ARelIcon/>;
+					return <ARelIcon />;
 
 				case 'target':
-					return <ATargetIcon/>;
+					return <ATargetIcon />;
 
 				case 'hreflang':
-					return <AHreflangIcon/>;
+					return <AHreflangIcon />;
 
 				case 'referrerpolicy':
-					return <AReferrerpolicyIcon/>;
+					return <AReferrerpolicyIcon />;
 			}
 			break;
 
 		case 'button':
 			switch (attribute) {
 				case 'type':
-					return <ButtonTypeIcon/>;
+					return <ButtonTypeIcon />;
 			}
 			break;
 
 		case 'ol':
 			switch (attribute) {
 				case 'type':
-					return <OlTypeIcon/>;
+					return <OlTypeIcon />;
 
 				case 'reversed':
-					return <OlReversedIcon/>;
+					return <OlReversedIcon />;
 
 				case 'start':
-					return <OlStartIcon/>;
+					return <OlStartIcon />;
 			}
 			break;
 	}
 
-	if (attribute.startsWith('data-')) {
-		return <AttributeDataIcon/>;
+	if (attribute === 'lang') {
+		return <AHreflangIcon />;
 	}
 
-	return <AttributeIcon/>;
+	if (attribute === 'required') {
+		return <AttributeRequiredIcon />;
+	}
+
+	if (attribute.startsWith('aria-')) {
+		return <AttributeAriaIcon />;
+	}
+
+	if (attribute.startsWith('data-')) {
+		return <AttributeDataIcon />;
+	}
+
+	return <AttributeIcon />;
 }

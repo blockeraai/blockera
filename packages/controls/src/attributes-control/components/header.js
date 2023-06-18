@@ -40,7 +40,9 @@ const Header = ({
 				className={controlInnerClassNames('header-label')}
 				style={{ textTransform: key ? 'initial' : '' }}
 			>
-				{key ? key.replace(/^data-/, '') : __('None', 'publisher-core')}
+				{key
+					? key.replace(/^data-/, '').replace(/^aria-/, '')
+					: __('None', 'publisher-core')}
 			</span>
 
 			<span
