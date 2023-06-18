@@ -6,6 +6,13 @@ export {
 	supports as layoutSupports,
 } from './layout';
 export {
+	FlexChildExtensionIcon,
+	FlexChildStyles,
+	FlexChildExtension,
+	attributes as flexChildAttributes,
+	supports as flexChildSupports,
+} from './flex-child';
+export {
 	SizeExtensionIcon,
 	SizeStyles,
 	SizeExtension,
