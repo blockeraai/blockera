@@ -13,6 +13,7 @@ import {
 	IconField,
 	InputField,
 	ToggleSelectField,
+	LinkField,
 } from '@publisher/fields';
 
 /**
@@ -32,6 +33,7 @@ export function IconExtension({ children, config, ...props }) {
 			publisherIconGap,
 			publisherIconSize,
 			publisherIconColor,
+			publisherIconLink,
 		},
 	} = config;
 
@@ -57,95 +59,116 @@ export function IconExtension({ children, config, ...props }) {
 			)}
 
 			{isActiveField(publisherIconOptions) && (
-				<Field label={__('Style', 'publisher-core')} columns="1fr 3fr">
-					{isActiveField(publisherIconPosition) && (
-						<ToggleSelectField
-							label={__('Position', 'publisher-core')}
-							options={[
-								{
-									label: __('Left', 'publisher-core'),
-									value: 'left',
-									icon: <PositionLeftIcon />,
-								},
-								{
-									label: __('Right', 'publisher-core'),
-									value: 'right',
-									icon: <PositionRightIcon />,
-								},
-							]}
-							isDeselectable={true}
+				<>
+					<Field
+						label={__('Style', 'publisher-core')}
+						columns="1fr 3fr"
+					>
+						{isActiveField(publisherIconPosition) && (
+							<ToggleSelectField
+								label={__('Position', 'publisher-core')}
+								options={[
+									{
+										label: __('Left', 'publisher-core'),
+										value: 'left',
+										icon: <PositionLeftIcon />,
+									},
+									{
+										label: __('Right', 'publisher-core'),
+										value: 'right',
+										icon: <PositionRightIcon />,
+									},
+								]}
+								isDeselectable={true}
+								//
+								initValue=""
+								value={attributes.publisherIconPosition}
+								onValueChange={(newValue) =>
+									setAttributes({
+										...attributes,
+										publisherIconPosition: newValue,
+									})
+								}
+							/>
+						)}
+
+						{isActiveField(publisherIconGap) && (
+							<InputField
+								{...props}
+								label={__('Gap', 'publisher-core')}
+								settings={{
+									type: 'css',
+									unitType: 'essential',
+									initValue: '',
+									min: 8,
+								}}
+								//
+								initValue=""
+								value={attributes.publisherIconGap}
+								onValueChange={(newValue) =>
+									setAttributes({
+										...attributes,
+										publisherIconGap: newValue,
+									})
+								}
+							/>
+						)}
+
+						{isActiveField(publisherIconSize) && (
+							<InputField
+								{...props}
+								label={__('Size', 'publisher-core')}
+								settings={{
+									type: 'css',
+									unitType: 'essential',
+									initValue: '',
+									min: 8,
+								}}
+								//
+								initValue=""
+								value={attributes.publisherIconSize}
+								onValueChange={(newValue) =>
+									setAttributes({
+										...attributes,
+										publisherIconSize: newValue,
+									})
+								}
+							/>
+						)}
+
+						{isActiveField(publisherIconColor) && (
+							<ColorField
+								{...props}
+								label={__('Color', 'publisher-core')}
+								//
+								initValue=""
+								value={attributes.publisherIconColor}
+								onValueChange={(newValue) =>
+									setAttributes({
+										...attributes,
+										publisherIconColor: newValue,
+									})
+								}
+							/>
+						)}
+					</Field>
+
+					{isActiveField(publisherIconLink) && (
+						<LinkField
+							{...props}
+							label={__('Link', 'publisher-core')}
+							columns="1fr 3fr"
 							//
-							initValue=""
-							value={attributes.publisherIconPosition}
-							onValueChange={(newValue) =>
+							value={attributes.publisherIconLink}
+							onValueChange={(newValue) => {
 								setAttributes({
 									...attributes,
-									publisherIconPosition: newValue,
-								})
-							}
-						/>
-					)}
-
-					{isActiveField(publisherIconGap) && (
-						<InputField
-							{...props}
-							label={__('Gap', 'publisher-core')}
-							settings={{
-								type: 'css',
-								unitType: 'essential',
-								initValue: '',
-								min: 8,
+									publisherIconLink: newValue,
+								});
 							}}
-							//
-							initValue=""
-							value={attributes.publisherIconGap}
-							onValueChange={(newValue) =>
-								setAttributes({
-									...attributes,
-									publisherIconGap: newValue,
-								})
-							}
 						/>
 					)}
-
-					{isActiveField(publisherIconSize) && (
-						<InputField
-							{...props}
-							label={__('Size', 'publisher-core')}
-							settings={{
-								type: 'css',
-								unitType: 'essential',
-								initValue: '',
-								min: 8,
-							}}
-							//
-							initValue=""
-							value={attributes.publisherIconSize}
-							onValueChange={(newValue) =>
-								setAttributes({
-									...attributes,
-									publisherIconSize: newValue,
-								})
-							}
-						/>
-					)}
-
-					{isActiveField(publisherIconColor) && (
-						<ColorField
-							{...props}
-							label={__('Color', 'publisher-core')}
-							//
-							initValue=""
-							value={attributes.publisherIconColor}
-							onValueChange={(newValue) =>
-								setAttributes({
-									...attributes,
-									publisherIconColor: newValue,
-								})
-							}
-						/>
-					)}
-				</Field>
+				</>
 			)}
 		</>
 	);

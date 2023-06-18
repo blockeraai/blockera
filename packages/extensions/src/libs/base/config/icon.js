@@ -5,4 +5,5 @@ export const iconConfig = {
 	publisherIconGap: true,
 	publisherIconSize: true,
 	publisherIconColor: true,
+	publisherIconLink: true,
 };

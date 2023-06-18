@@ -19,4 +19,8 @@ export const attributes = {
 		type: 'string',
 		default: '',
 	},
+	publisherIconLink: {
+		type: 'object',
+		default: {},
+	},
 };
