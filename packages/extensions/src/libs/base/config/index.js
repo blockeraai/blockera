@@ -8,3 +8,4 @@ export { sizeConfig } from './size';
 export { layoutConfig } from './layout';
 export { iconConfig } from './icon';
 export { advancedConfig } from './advanced';
+export { flexChildConfig } from './flex-child';

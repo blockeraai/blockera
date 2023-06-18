@@ -53,6 +53,11 @@ import {
 	supports as layoutSupports,
 } from '../layout';
 import {
+	FlexChildExtensionIcon,
+	attributes as flexChildAttributes,
+	supports as flexChildSupports,
+} from '../flex-child';
+import {
 	AdvancedExtensionIcon,
 	attributes as advancedAttributes,
 	supports as advancedSupports,
@@ -67,6 +72,7 @@ export const attributes = {
 	...positionAttributes,
 	...sizeAttributes,
 	...layoutAttributes,
+	...flexChildAttributes,
 	...iconAttributes,
 	...advancedAttributes,
 };
@@ -79,6 +85,7 @@ export const supports = {
 	...positionSupports,
 	...sizeSupports,
 	...layoutSupports,
+	...flexChildSupports,
 	...iconSupports,
 	...advancedSupports,
 };
@@ -116,6 +123,14 @@ export function SharedBlockExtension({ children, ...props }) {
 				extensionId={'Size'}
 				title={__('Size', 'publisher-core')}
 				icon=<SizeExtensionIcon />
+			/>
+
+			<BaseExtension
+				{...props}
+				initialOpen={true}
+				extensionId={'FlexChild'}
+				title={__('Flex Child', 'publisher-core')}
+				icon=<FlexChildExtensionIcon />
 			/>
 
 			<BaseExtension
