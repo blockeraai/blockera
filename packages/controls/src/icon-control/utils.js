@@ -1,9 +1,4 @@
 /**
- * WordPress dependencies
- */
-import { useEffect, useRef, useState } from '@wordpress/element';
-
-/**
  * Publisher dependencies
  */
 import {
@@ -14,32 +9,6 @@ import {
 	isValidIcon,
 } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
-
-export function useLateEffect(func, deps) {
-	const didMount = useRef(false);
-
-	useEffect(() => {
-		if (didMount.current) func();
-		else didMount.current = true;
-	}, deps);
-}
-
-export function useIsVisible(ref) {
-	const [isIntersecting, setIntersecting] = useState(false);
-
-	useEffect(() => {
-		const observer = new IntersectionObserver(([entry]) =>
-			setIntersecting(entry.isIntersecting)
-		);
-
-		observer.observe(ref.current);
-		return () => {
-			observer.disconnect();
-		};
-	}, [ref]);
-
-	return isIntersecting;
-}
 
 export function getLibraryIcons({
 	library,

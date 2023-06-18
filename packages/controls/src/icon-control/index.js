@@ -12,13 +12,13 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { Button, Icon, MediaUploader } from '@publisher/components';
+import { useLateEffect } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
 import { IconContextProvider } from './context';
 import { iconReducer } from './store/reducer';
-import { useLateEffect } from './utils';
 import { default as Suggestions } from './components/suggestions';
 import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
 import { default as DeleteIcon } from './icons/delete';

@@ -13,12 +13,13 @@ import {
  * Publisher dependencies
  */
 import { controlInnerClassNames } from '@publisher/classnames';
+import { useIsVisible } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
 import { IconContext } from '../../context';
-import { getLibraryIcons, useIsVisible } from '../../utils';
+import { getLibraryIcons } from '../../utils';
 import { default as IconLibraryLoading } from './icon-library-loading';
 
 const IconLibrary = ({

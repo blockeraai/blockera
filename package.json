@@ -33,7 +33,8 @@
 		"@publisher/data-extractor": "file:packages/data-extractor",
 		"@publisher/extensions": "file:packages/extensions",
 		"@publisher/fields": "file:packages/fields",
-		"@publisher/style-engine": "file:packages/style-engine"
+		"@publisher/style-engine": "file:packages/style-engine",
+		"@publisher/utils": "file:packages/utils"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.21.0",
