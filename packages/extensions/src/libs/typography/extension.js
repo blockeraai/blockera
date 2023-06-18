@@ -24,7 +24,6 @@ import { controlInnerClassNames } from '@publisher/classnames';
  */
 import { BlockEditContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
-import './style.scss';
 // icons
 import NoneIcon from './icons/none';
 import TypographyButtonIcon from './icons/typography-button';
