@@ -14,7 +14,6 @@ import { controlInnerClassNames } from '@publisher/classnames';
  */
 import { default as Search } from './search';
 import { default as IconLibraries } from './icon-libraries';
-import './style.scss';
 
 export default function IconPickerPopover({
 	libraries,
