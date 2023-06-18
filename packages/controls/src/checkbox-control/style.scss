@@ -1,0 +1,16 @@
+.publisher-control.publisher-control-checkbox {
+	margin: 0 !important;
+	font-size: 12px;
+	
+	.components-checkbox-control__input-container {
+		margin-right: 10px;
+	}
+	
+	.components-checkbox-control__input[type=checkbox] {
+		border-color: #949494;
+		
+		&:checked {
+			border-color: var(--wp-admin-theme-color);
+		}
+	}
+}
