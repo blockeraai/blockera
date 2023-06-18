@@ -28,8 +28,14 @@ export default function ActionsUI({
 	isVisible,
 	setVisibility,
 }) {
-	const { removeItem, changeItem, cloneItem, isPopover } =
-		useContext(RepeaterContext);
+	const {
+		removeItem,
+		changeItem,
+		cloneItem,
+		isPopover,
+		maxItems,
+		repeaterItems,
+	} = useContext(RepeaterContext);
 
 	return (
 		<>
@@ -75,15 +81,20 @@ export default function ActionsUI({
 					}
 				/>
 
-				<Button
-					className={controlInnerClassNames('btn-clone', 'no-border')}
-					icon={CloneIcon}
-					showTooltip={true}
-					label={__('Clone', 'publisher')}
-					onClick={(event) =>
-						!isOpenPopoverEvent(event) && cloneItem(itemId)
-					}
-				/>
+				{(maxItems === -1 || repeaterItems?.length < maxItems) && (
+					<Button
+						className={controlInnerClassNames(
+							'btn-clone',
+							'no-border'
+						)}
+						icon={CloneIcon}
+						showTooltip={true}
+						label={__('Clone', 'publisher')}
+						onClick={(event) =>
+							!isOpenPopoverEvent(event) && cloneItem(itemId)
+						}
+					/>
+				)}
 
 				<Button
 					className={controlInnerClassNames(

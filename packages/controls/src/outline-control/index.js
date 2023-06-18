@@ -34,6 +34,7 @@ export default function OutlineControl({
 			Header={Header}
 			InnerComponents={Fields}
 			initValue={initValue}
+			maxItems={1}
 			{...props}
 		/>
 	);

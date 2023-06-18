@@ -30,6 +30,7 @@ const RepeaterControl = ({
 	clientId,
 	InnerComponents,
 	initValue = {},
+	maxItems = -1,
 	className,
 	isPopover = true,
 	onValueChange = (newValue) => {
@@ -52,8 +53,13 @@ const RepeaterControl = ({
 		clientId,
 		initValue,
 		repeaterItems,
+		maxItems,
 		InnerComponents,
 		cloneItem: () => {
+			if (maxItems !== -1 && repeaterItems?.length >= maxItems) {
+				return;
+			}
+
 			const _repeaterItems = [
 				...repeaterItems,
 				...repeaterItems.slice(-1),
@@ -62,6 +68,10 @@ const RepeaterControl = ({
 			setRepeaterItems(_repeaterItems);
 		},
 		addNewItem: () => {
+			if (maxItems !== -1 && repeaterItems?.length >= maxItems) {
+				return;
+			}
+
 			const _repeaterItems = [...repeaterItems, ...[initValue]];
 
 			setRepeaterItems(_repeaterItems);
@@ -118,7 +128,17 @@ const RepeaterControl = ({
 					<Button
 						size="extra-small"
 						className={controlInnerClassNames('btn-add')}
-						onClick={defaultRepeaterState.addNewItem}
+						{...(maxItems !== -1 &&
+						repeaterItems?.length >= maxItems
+							? { disabled: true }
+							: {})}
+						onClick={() => {
+							if (
+								maxItems === -1 ||
+								repeaterItems?.length < maxItems
+							)
+								defaultRepeaterState.addNewItem();
+						}}
 					>
 						<PlusIcon />
 					</Button>
