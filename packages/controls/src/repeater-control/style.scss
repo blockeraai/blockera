@@ -2,35 +2,41 @@
 	display: flex;
 	row-gap: 10px;
 	flex-direction: column;
-
+	
 	& > .publisher-control-header {
 		display: flex;
 		align-items: center;
 	}
-
+	
+	.publisher-control-repeater-item {
+		.publisher-control-group-header {
+			padding: 0;
+		}
+	}
+	
 	.publisher-control-repeater-group-header {
 		display: flex;
 		gap: 7px;
 		align-items: center;
 		flex-wrap: nowrap;
-		padding: 2px 0;
+		padding: 2px 12px;
 		height: 30px;
 		width: 100%;
 		position: relative;
 		letter-spacing: -0.2px;
 		font-size: 12px;
-
+		
 		.publisher-control-header-icon {
 			display: flex;
 			min-width: 20px;
 			justify-content: center;
 			align-content: center;
-
+			
 			svg {
 				fill: currentColor;
 			}
 		}
-
+		
 		.publisher-control-header-values {
 			margin-left: auto;
 			display: flex;
@@ -40,16 +46,23 @@
 			gap: 8px;
 			text-transform: capitalize;
 		}
-
+		
 		.publisher-control-action-btns {
 			position: absolute;
 			top: 0;
-			right: -12px;
+			right: 5px;
 			opacity: 0;
 			visibility: hidden;
 			display: flex;
 			align-items: center;
-
+			background: #fff;
+			gap: -1px;
+			padding-left: 3px;
+			
+			.components-button{
+				margin-right: -5px;
+			}
+			
 			.status {
 				width: 30px;
 				height: 30px;
@@ -57,22 +70,22 @@
 				text-align: center;
 			}
 		}
-
+		
 		.publisher-control-btn-toggle + .publisher-control-action-btns {
 			right: 30px;
 		}
-
+		
 		&:hover .publisher-control-action-btns {
 			opacity: 1;
 			visibility: visible;
 		}
-
+		
 		&:hover .publisher-control-header-values {
 			opacity: 0;
 			visibility: hidden;
 		}
 	}
-
+	
 	.publisher-control-btn-add {
 		padding: 0 !important;
 		width: 22px;
