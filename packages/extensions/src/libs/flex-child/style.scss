@@ -1,4 +1,5 @@
 .publisher-field-toggle-select {
+	&.items-flex-direction-column-reverse,
 	&.items-flex-direction-column {
 		svg {
 			transform: rotate(-90deg);
