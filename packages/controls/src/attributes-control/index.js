@@ -2,12 +2,10 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useContext } from '@wordpress/element';
 
 /**
  * Publisher dependencies
  */
-import { BlockEditContext } from '@publisher/extensions';
 import { controlClassNames } from '@publisher/classnames';
 
 /**
@@ -24,15 +22,17 @@ const initialState = {
 };
 
 function AttributesControl({
+	initValue = { ...initialState },
+	value,
 	attribute,
 	//
 	className,
 	attributeElement = 'general',
+	onValueChange = (newValue) => {
+		return newValue;
+	},
 	...props
 }) {
-	const { attributes, setAttributes } = useContext(BlockEditContext);
-	const { [attribute]: attributesItems } = attributes;
-
 	return (
 		<div className={controlClassNames('attributes', className)}>
 			<RepeaterControl
@@ -40,13 +40,10 @@ function AttributesControl({
 					...props,
 					popoverLabel: __('HTML Attribute', 'publisher-core'),
 					Header,
-					initialState,
+					initialState: initValue,
 					updateBlockAttributes: (newItems) =>
-						setAttributes({
-							...attributes,
-							[attribute]: newItems,
-						}),
-					value: attributesItems,
+						onValueChange(newItems),
+					value,
 					InnerComponents: Fields,
 					attribute,
 					attributeElement,
