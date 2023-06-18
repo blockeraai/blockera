@@ -62,23 +62,29 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 
 			{isActiveField(publisherBoxShadow) && (
 				<BoxShadowField
-					{...{
-						...props,
-						config: publisherBoxShadow,
-						attribute: 'publisherBoxShadow',
-						label: __('Box Shadows', 'publisher-core'),
+					label={__('Box Shadows', 'publisher-core')}
+					value={attributes.publisherBoxShadow}
+					onValueChange={(newValue) => {
+						setAttributes({
+							...attributes,
+							publisherBoxShadow: newValue,
+						});
 					}}
+					{...props}
 				/>
 			)}
 
 			{isActiveField(publisherOutline) && (
 				<OutlineField
-					{...{
-						...props,
-						config: publisherOutline,
-						attribute: 'publisherOutline',
-						label: __('Outlines', 'publisher-core'),
+					label={__('Outline', 'publisher-core')}
+					value={attributes.publisherOutline}
+					onValueChange={(newValue) => {
+						setAttributes({
+							...attributes,
+							publisherOutline: newValue,
+						});
 					}}
+					{...props}
 				/>
 			)}
 

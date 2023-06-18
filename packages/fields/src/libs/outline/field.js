@@ -8,24 +8,10 @@ import { OutlineControl } from '@publisher/controls';
  */
 import { Field } from '../field';
 
-export function OutlineField({
-	config,
-	label,
-	attribute,
-	className,
-	children,
-	...props
-}) {
+export function OutlineField({ className, children, ...props }) {
 	return (
 		<Field field="outline" columns="columns-1" className={className}>
-			<OutlineControl
-				{...{
-					config,
-					...props,
-					attribute,
-				}}
-				label={label}
-			/>
+			<OutlineControl {...props} />
 
 			{children}
 		</Field>

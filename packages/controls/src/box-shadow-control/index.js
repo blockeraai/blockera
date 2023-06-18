@@ -2,12 +2,10 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useContext } from '@wordpress/element';
 
 /**
  * Publisher dependencies
  */
-import { BlockEditContext } from '@publisher/extensions';
 import { controlClassNames } from '@publisher/classnames';
 
 /**
@@ -17,45 +15,28 @@ import Header from './components/header';
 import Fields from './components/fields';
 import RepeaterControl from '../repeater-control';
 
-const initialState = {
-	type: 'outer',
-	x: '0px',
-	y: '0px',
-	blur: '0px',
-	spread: '0px',
-	isVisible: true,
-	color: '',
-};
-
-function BoxShadowControl({
-	attribute,
-	//
+export default function BoxShadowControl({
+	initValue = {
+		type: 'outer',
+		x: '0px',
+		y: '0px',
+		blur: '0px',
+		spread: '0px',
+		isVisible: true,
+		color: '',
+	},
+	popoverLabel = __('Box Shadow', 'publisher-core'),
 	className,
 	...props
 }) {
-	const { attributes, setAttributes } = useContext(BlockEditContext);
-	const { [attribute]: boxShadowItems } = attributes;
-
 	return (
-		<div className={controlClassNames('box-shadow', className)}>
-			<RepeaterControl
-				{...{
-					popoverLabel: __('Box Shadow', 'publisher-core'),
-					Header,
-					...props,
-					attribute,
-					initialState,
-					value: boxShadowItems,
-					InnerComponents: Fields,
-					updateBlockAttributes: (newBoxShadowItems) =>
-						setAttributes({
-							...attributes,
-							[attribute]: newBoxShadowItems,
-						}),
-				}}
-			/>
-		</div>
+		<RepeaterControl
+			className={controlClassNames('box-shadow', className)}
+			popoverLabel={popoverLabel}
+			Header={Header}
+			InnerComponents={Fields}
+			initValue={initValue}
+			{...props}
+		/>
 	);
 }
-
-export default BoxShadowControl;

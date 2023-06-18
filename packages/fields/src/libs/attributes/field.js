@@ -9,24 +9,17 @@ import { AttributesControl } from '@publisher/controls';
 import { Field } from '../field';
 
 export function AttributesField({
-	config,
-	attribute,
-	label,
 	className,
 	children,
+	attributeElement = 'a',
 	...props
 }) {
 	return (
 		<Field field="attributes" columns="columns-1" className={className}>
 			<AttributesControl
-				{...{
-					config,
-					...props,
-					attribute,
-				}}
+				{...props}
 				isPopover={true}
-				label={label}
-				attributeElement="a"
+				attributeElement={attributeElement}
 			/>
 
 			{children}

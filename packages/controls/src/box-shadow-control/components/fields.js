@@ -33,7 +33,6 @@ const Fields = ({ itemId, item }) => {
 					},
 				]}
 				//
-				initValue="outer"
 				value={item.type}
 				onValueChange={(type) => changeItem(itemId, { ...item, type })}
 			/>

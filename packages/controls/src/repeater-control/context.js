@@ -9,7 +9,7 @@ const RepeaterContext = createContext({
 	Header: null,
 	clientId: null,
 	attributes: {},
-	initialState: {},
+	initValue: {},
 	repeaterItems: {},
 	repeaterItemsPopoverClassName: '',
 	cloneItem: () => {},

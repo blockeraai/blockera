@@ -64,32 +64,44 @@ export function EffectsExtension({ children, config, ...props }) {
 
 			{isActiveField(publisherTransition) && (
 				<TransitionField
-					{...{
-						...props,
-						attribute: 'publisherTransition',
-						label: __('Transitions', 'publisher-core'),
-					}}
+					label={__('Transitions', 'publisher-core')}
+					value={attributes.publisherTransition}
+					onValueChange={(newValue) =>
+						setAttributes({
+							...attributes,
+							publisherTransition: newValue,
+						})
+					}
+					{...props}
 				/>
 			)}
 
 			{isActiveField(publisherFilter) && (
 				<FilterField
-					{...{
-						...props,
-						attribute: 'publisherFilter',
-						label: __('Filters', 'publisher-core'),
-					}}
+					label={__('Filters', 'publisher-core')}
+					value={attributes.publisherFilter}
+					onValueChange={(newValue) =>
+						setAttributes({
+							...attributes,
+							publisherFilter: newValue,
+						})
+					}
+					{...props}
 				/>
 			)}
 
 			{isActiveField(publisherBackdropFilter) && (
 				<FilterField
-					{...{
-						...props,
-						attribute: 'publisherBackdropFilter',
-						label: __('Backdrop Filters', 'publisher-core'),
-						popoverLabel: __('Backdrop Filter', 'publisher-core'),
-					}}
+					label={__('Backdrop Filters', 'publisher-core')}
+					popoverLabel={__('Backdrop Filter', 'publisher-core')}
+					value={attributes.publisherBackdropFilter}
+					onValueChange={(newValue) =>
+						setAttributes({
+							...attributes,
+							publisherBackdropFilter: newValue,
+						})
+					}
+					{...props}
 				/>
 			)}
 

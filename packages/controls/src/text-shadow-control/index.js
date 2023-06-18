@@ -2,12 +2,10 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useContext } from '@wordpress/element';
 
 /**
  * Publisher dependencies
  */
-import { BlockEditContext } from '@publisher/extensions';
 import { controlClassNames } from '@publisher/classnames';
 
 /**
@@ -17,44 +15,29 @@ import Header from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
-const initialState = {
-	x: '1px',
-	y: '1px',
-	blur: '1px',
-	color: '',
-	isVisible: true,
-};
-
-function TextShadowControl({
-	attribute,
+export default function TextShadowControl({
+	initValue = {
+		x: '1px',
+		y: '1px',
+		blur: '1px',
+		color: '',
+		isVisible: true,
+	},
+	popoverLabel = __('Text Shadow', 'publisher-core'),
 	//
 	className,
 	...props
 }) {
-	const { attributes, setAttributes } = useContext(BlockEditContext);
-	const { [attribute]: textShadowItems } = attributes;
-
 	return (
 		<div className={controlClassNames('text-shadow', className)}>
 			<RepeaterControl
-				{...{
-					...props,
-					Header,
-					attribute,
-					initialState,
-					updateBlockAttributes: (textShadowItems) => {
-						setAttributes({
-							...attributes,
-							[attribute]: textShadowItems,
-						});
-					},
-					value: textShadowItems,
-					InnerComponents: Fields,
-					popoverLabel: __('Text Shadow', 'publisher-core'),
-				}}
+				className={controlClassNames('text-shadow', className)}
+				popoverLabel={popoverLabel}
+				Header={Header}
+				InnerComponents={Fields}
+				initValue={initValue}
+				{...props}
 			/>
 		</div>
 	);
 }
-
-export default TextShadowControl;

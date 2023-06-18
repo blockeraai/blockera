@@ -15,7 +15,7 @@ import { InputField, ColorField } from '@publisher/fields';
 import BaseControl from '../../base';
 import { RepeaterContext } from '../../repeater-control/context';
 
-const Fields = ({ itemId, item, repeaterAttribute }) => {
+const Fields = ({ itemId, item }) => {
 	const { changeItem } = useContext(RepeaterContext);
 
 	return (
@@ -30,7 +30,6 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 					max: 100,
 				}}
 				//
-				initValue="1px"
 				value={item.x}
 				onValueChange={(x) => changeItem(itemId, { ...item, x })}
 			/>
@@ -45,11 +44,6 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 					max: 100,
 				}}
 				//
-				attribute="y"
-				repeaterAttributeIndex={itemId}
-				repeaterAttribute={repeaterAttribute}
-				//
-				initValue="1px"
 				value={item.y}
 				onValueChange={(y) => changeItem(itemId, { ...item, y })}
 			/>
@@ -64,7 +58,6 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 					max: 100,
 				}}
 				//
-				initValue="1px"
 				value={item.blur}
 				onValueChange={(blur) => changeItem(itemId, { ...item, blur })}
 			/>
@@ -72,7 +65,6 @@ const Fields = ({ itemId, item, repeaterAttribute }) => {
 			<ColorField
 				label={__('Color', 'publisher-core')}
 				//
-				initValue=""
 				value={item.color}
 				onValueChange={(color) =>
 					changeItem(itemId, { ...item, color })

@@ -26,17 +26,15 @@ export function AdvancedExtension({ children, config, ...props }) {
 		<>
 			{isActiveField(publisherAttributes) && (
 				<AttributesField
-					{...{
-						...props,
-						label: __('HTML Attributes', 'publisher-core'),
-						value: attributes.publisherAttributes,
-						onValueChange: (newValue) => {
-							setAttributes({
-								...attributes,
-								attributes: newValue,
-							});
-						},
+					label={__('HTML Attributes', 'publisher-core')}
+					value={attributes.publisherAttributes}
+					onValueChange={(newValue) => {
+						setAttributes({
+							...attributes,
+							attributes: newValue,
+						});
 					}}
+					{...props}
 				/>
 			)}
 		</>

@@ -25,7 +25,6 @@ const Fields = ({ itemId, item }) => {
 				label={__('Type', 'publisher-core')}
 				options={getTypeOptions()}
 				//
-				initValue="blur"
 				value={item.type}
 				onValueChange={(type) => changeItem(itemId, { ...item, type })}
 			/>

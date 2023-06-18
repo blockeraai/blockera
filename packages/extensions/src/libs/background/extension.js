@@ -35,11 +35,15 @@ export function BackgroundExtension({ children, config, ...props }) {
 		<>
 			{isActiveField(publisherBackground) && (
 				<BackgroundField
-					{...{
-						...props,
-						attribute: 'publisherBackground',
-						label: __('Image & Gradient', 'publisher-core'),
-					}}
+					label={__('Image & Gradient', 'publisher-core')}
+					value={attributes.publisherBackground}
+					onValueChange={(newValue) =>
+						setAttributes({
+							...attributes,
+							publisherBackground: newValue,
+						})
+					}
+					{...props}
 				/>
 			)}
 

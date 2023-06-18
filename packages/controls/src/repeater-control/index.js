@@ -1,12 +1,17 @@
 /**
- * Publisher dependencies
+ * WordPress dependencies
  */
 import { useState } from '@wordpress/element';
+
+/**
+ * Publisher dependencies
+ */
 import { Button } from '@publisher/components';
 import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
+import { useLateEffect } from '@publisher/utils';
 
 /**
  * Internal dependencies.
@@ -17,7 +22,6 @@ import LabelControl from '../label-control';
 import PlusIcon from './icons/plus';
 
 const RepeaterControl = ({
-	attribute,
 	design = 'minimal',
 	popoverLabel,
 	label,
@@ -25,10 +29,12 @@ const RepeaterControl = ({
 	Header,
 	clientId,
 	InnerComponents,
-	initialState = {},
+	initValue = {},
 	className,
 	isPopover = true,
-	updateBlockAttributes = () => {},
+	onValueChange = (newValue) => {
+		return newValue;
+	},
 	repeaterItemsPopoverClassName = '',
 	...props
 }) => {
@@ -36,12 +42,15 @@ const RepeaterControl = ({
 		value?.length ? value : []
 	);
 
+	useLateEffect(() => {
+		onValueChange(repeaterItems);
+	}, [repeaterItems]);
+
 	const defaultRepeaterState = {
-		repeaterAttribute: attribute,
 		design,
 		Header,
 		clientId,
-		initialState,
+		initValue,
 		repeaterItems,
 		InnerComponents,
 		cloneItem: () => {
@@ -51,13 +60,11 @@ const RepeaterControl = ({
 			];
 
 			setRepeaterItems(_repeaterItems);
-			updateBlockAttributes(_repeaterItems);
 		},
 		addNewItem: () => {
-			const _repeaterItems = [...repeaterItems, ...[initialState]];
+			const _repeaterItems = [...repeaterItems, ...[initValue]];
 
 			setRepeaterItems(_repeaterItems);
-			updateBlockAttributes(_repeaterItems);
 		},
 		removeItem: (itemId) => {
 			const _repeaterItems = repeaterItems.filter(
@@ -65,7 +72,6 @@ const RepeaterControl = ({
 			);
 
 			setRepeaterItems(_repeaterItems);
-			updateBlockAttributes(_repeaterItems);
 		},
 		changeItem: (itemId, newValue) => {
 			const _repeaterItems = repeaterItems.map((i, id) => {
@@ -77,7 +83,6 @@ const RepeaterControl = ({
 			});
 
 			setRepeaterItems(_repeaterItems);
-			updateBlockAttributes(_repeaterItems);
 		},
 		sortItems: (newValue) => {
 			const arrayMove = ({ args, toIndex, fromIndex }) => {
@@ -91,7 +96,6 @@ const RepeaterControl = ({
 			const _repeaterItems = arrayMove(newValue);
 
 			setRepeaterItems(_repeaterItems);
-			updateBlockAttributes(_repeaterItems);
 		},
 		isPopover,
 		popoverLabel,

@@ -8,24 +8,10 @@ import { TextShadowControl } from '@publisher/controls';
  */
 import { Field } from '../field';
 
-export function TextShadowField({
-	config,
-	label,
-	attribute,
-	className,
-	children,
-	...props
-}) {
+export function TextShadowField({ className, children, ...props }) {
 	return (
 		<Field field="text-shadow" columns="columns-1" className={className}>
-			<TextShadowControl
-				{...{
-					config,
-					...props,
-					attribute,
-				}}
-				label={label}
-			/>
+			<TextShadowControl {...props} />
 
 			{children}
 		</Field>

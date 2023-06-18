@@ -17,7 +17,7 @@ import { RepeaterContext } from '../context';
 import { isOpenPopoverEvent } from '../utils';
 import GroupControl from '../../group-control';
 
-const RepeaterItem = ({ item, itemId, repeaterAttribute }) => {
+const RepeaterItem = ({ item, itemId }) => {
 	const [isOpen, setOpen] = useState(false);
 	const [isVisible, setVisibility] = useState(true);
 	const {
@@ -69,9 +69,7 @@ const RepeaterItem = ({ item, itemId, repeaterAttribute }) => {
 						</CustomHeader>
 					)
 				}
-				children={
-					<InnerComponents {...{ item, itemId, repeaterAttribute }} />
-				}
+				children={<InnerComponents {...{ item, itemId }} />}
 				isOpen={isOpen}
 				isVisible={isVisible}
 				isPopover={isPopover}

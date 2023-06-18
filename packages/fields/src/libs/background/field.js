@@ -8,25 +8,10 @@ import { BackgroundControl } from '@publisher/controls';
  */
 import { Field } from '../field';
 
-export function BackgroundField({
-	config,
-	attribute,
-	label,
-	className,
-	children,
-	...props
-}) {
+export function BackgroundField({ className, children, ...props }) {
 	return (
 		<Field field="background" columns="columns-1" className={className}>
-			<BackgroundControl
-				{...{
-					config,
-					...props,
-					attribute,
-				}}
-				isPopover={true}
-				label={label}
-			/>
+			<BackgroundControl {...props} isPopover={true} />
 
 			{children}
 		</Field>

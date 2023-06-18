@@ -8,28 +8,10 @@ import { FilterControl } from '@publisher/controls';
  */
 import { Field } from '../field';
 
-export function FilterField({
-	config,
-	attribute,
-	label,
-	columns,
-	className,
-	children,
-	popoverLabel,
-	...props
-}) {
+export function FilterField({ columns, className, children, ...props }) {
 	return (
 		<Field field="filter" columns="columns-1" className={className}>
-			<FilterControl
-				{...{
-					config,
-					...props,
-					attribute,
-					popoverLabel,
-				}}
-				isPopover={true}
-				label={label}
-			/>
+			<FilterControl {...props} isPopover={true} />
 
 			{children}
 		</Field>

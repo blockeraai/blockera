@@ -65,7 +65,6 @@ const Fields = ({ itemId, item }) => {
 					},
 				]}
 				//
-				initValue="image"
 				value={item.type}
 				onValueChange={(type) => changeItem(itemId, { ...item, type })}
 			/>
@@ -102,7 +101,6 @@ const Fields = ({ itemId, item }) => {
 							},
 						]}
 						//
-						initValue="custom"
 						value={item['image-size']}
 						onValueChange={(size) =>
 							changeItem(itemId, { ...item, 'image-size': size })
@@ -119,7 +117,6 @@ const Fields = ({ itemId, item }) => {
 										unitType: 'background-size',
 									}}
 									//
-									initValue="auto"
 									value={item['image-size-width']}
 									onValueChange={(width) =>
 										changeItem(itemId, {
@@ -138,7 +135,6 @@ const Fields = ({ itemId, item }) => {
 										unitType: 'background-size',
 									}}
 									//
-									initValue="auto"
 									value={item['image-size-height']}
 									onValueChange={(height) =>
 										changeItem(itemId, {
@@ -194,7 +190,6 @@ const Fields = ({ itemId, item }) => {
 							},
 						]}
 						//
-						initValue="repeat"
 						value={item['image-repeat']}
 						onValueChange={(newValue) =>
 							changeItem(itemId, {
@@ -217,7 +212,6 @@ const Fields = ({ itemId, item }) => {
 							},
 						]}
 						//
-						initValue="scroll"
 						value={item['image-attachment']}
 						onValueChange={(newValue) =>
 							changeItem(itemId, {
@@ -232,7 +226,6 @@ const Fields = ({ itemId, item }) => {
 			{item.type === 'linear-gradient' && (
 				<>
 					<GradientBarField
-						initValue="linear-gradient(90deg,#009efa 10%,#e52e00 90%)"
 						value={item['linear-gradient']}
 						onValueChange={(newValue) =>
 							changeItem(itemId, {
@@ -273,7 +266,6 @@ const Fields = ({ itemId, item }) => {
 							},
 						]}
 						//
-						initValue="no-repeat"
 						value={item['linear-gradient-repeat']}
 						onValueChange={(newValue) =>
 							changeItem(itemId, {
@@ -296,7 +288,6 @@ const Fields = ({ itemId, item }) => {
 							},
 						]}
 						//
-						initValue="scroll"
 						value={item['linear-gradient-attachment']}
 						onValueChange={(newValue) =>
 							changeItem(itemId, {
@@ -312,7 +303,6 @@ const Fields = ({ itemId, item }) => {
 				<>
 					<GradientBarField
 						//
-						initValue="radial-gradient(rgb(0,159,251) 0%,rgb(229,46,0) 100%)"
 						value={item['radial-gradient']}
 						onValueChange={(newValue) =>
 							changeItem(itemId, {
@@ -372,7 +362,6 @@ const Fields = ({ itemId, item }) => {
 							},
 						]}
 						//
-						initValue="farthest-corner"
 						value={item['radial-gradient-size']}
 						onValueChange={(newValue) =>
 							changeItem(itemId, {
@@ -397,7 +386,6 @@ const Fields = ({ itemId, item }) => {
 							},
 						]}
 						//
-						initValue="no-repeat"
 						value={item['radial-gradient-repeat']}
 						onValueChange={(newValue) =>
 							changeItem(itemId, {
@@ -420,7 +408,6 @@ const Fields = ({ itemId, item }) => {
 							},
 						]}
 						//
-						initValue="scroll"
 						value={item['radial-gradient-attachment']}
 						onValueChange={(newValue) =>
 							changeItem(itemId, {

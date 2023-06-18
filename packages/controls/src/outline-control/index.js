@@ -2,12 +2,10 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useContext } from '@wordpress/element';
 
 /**
  * Publisher dependencies
  */
-import { BlockEditContext } from '@publisher/extensions';
 import { controlClassNames } from '@publisher/classnames';
 
 /**
@@ -17,44 +15,26 @@ import Header from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
-const initialState = {
-	width: '2px',
-	style: 'solid',
-	color: '#B6B6B6',
-	offset: '2px',
-	isVisible: true,
-};
-
-function OutlineControl({
-							attribute,
-							//
-							className,
-							...props
-						}) {
-	const { attributes, setAttributes } = useContext(BlockEditContext);
-	const { [attribute]: textShadowItems } = attributes;
-
+export default function OutlineControl({
+	initValue = {
+		width: '2px',
+		style: 'solid',
+		color: '#b6b6b6',
+		offset: '2px',
+		isVisible: true,
+	},
+	popoverLabel = __('Outline', 'publisher-core'),
+	className,
+	...props
+}) {
 	return (
-		<div className={controlClassNames('outline', className)}>
-			<RepeaterControl
-				{...{
-					...props,
-					Header,
-					attribute,
-					initialState,
-					updateBlockAttributes: (textShadowItems) => {
-						setAttributes({
-							...attributes,
-							[attribute]: textShadowItems,
-						});
-					},
-					value: textShadowItems,
-					InnerComponents: Fields,
-					popoverLabel: __('Outline', 'publisher-core'),
-				}}
-			/>
-		</div>
+		<RepeaterControl
+			className={controlClassNames('outline', className)}
+			popoverLabel={popoverLabel}
+			Header={Header}
+			InnerComponents={Fields}
+			initValue={initValue}
+			{...props}
+		/>
 	);
 }
-
-export default OutlineControl;

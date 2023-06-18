@@ -24,11 +24,6 @@ const Fields = ({ itemId, item }) => {
 			<Field label={__('Outline', 'publisher-core')}>
 				<BorderControl
 					lines="horizontal"
-					initValue={{
-						width: '2px',
-						style: 'solid',
-						color: '#B6B6B6',
-					}}
 					value={{
 						width: item.width,
 						style: item.style,
@@ -55,7 +50,6 @@ const Fields = ({ itemId, item }) => {
 					max: 40,
 				}}
 				//
-				initValue="2px"
 				value={item.offset}
 				onValueChange={(offset) =>
 					changeItem(itemId, { ...item, offset })

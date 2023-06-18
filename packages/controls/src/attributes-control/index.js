@@ -15,42 +15,28 @@ import Header from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
-const initialState = {
-	key: '',
-	value: '',
-	isVisible: true,
-};
-
-function AttributesControl({
-	initValue = { ...initialState },
-	value,
-	attribute,
+export default function AttributesControl({
+	initValue = {
+		key: '',
+		value: '',
+		isVisible: true,
+	},
+	popoverLabel = __('HTML Attribute', 'publisher-core'),
+	attributeElement = 'general',
 	//
 	className,
-	attributeElement = 'general',
-	onValueChange = (newValue) => {
-		return newValue;
-	},
 	...props
 }) {
 	return (
 		<div className={controlClassNames('attributes', className)}>
 			<RepeaterControl
-				{...{
-					...props,
-					popoverLabel: __('HTML Attribute', 'publisher-core'),
-					Header,
-					initialState: initValue,
-					updateBlockAttributes: (newItems) =>
-						onValueChange(newItems),
-					value,
-					InnerComponents: Fields,
-					attribute,
-					attributeElement,
-				}}
+				popoverLabel={popoverLabel}
+				Header={Header}
+				InnerComponents={Fields}
+				initValue={initValue}
+				attributeElement={attributeElement}
+				{...props}
 			/>
 		</div>
 	);
 }
-
-export default AttributesControl;

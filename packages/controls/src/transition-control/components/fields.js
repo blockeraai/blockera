@@ -25,7 +25,6 @@ const Fields = ({ itemId, item }) => {
 				label={__('Type', 'publisher-core')}
 				options={getTypeOptions()}
 				//
-				initValue="all"
 				value={item.type}
 				onValueChange={(type) => changeItem(itemId, { ...item, type })}
 			/>
@@ -41,7 +40,6 @@ const Fields = ({ itemId, item }) => {
 					value: item.duration,
 				}}
 				//
-				initValue="500ms"
 				value={item.duration}
 				onValueChange={(duration) =>
 					changeItem(itemId, { ...item, duration })
@@ -52,7 +50,6 @@ const Fields = ({ itemId, item }) => {
 				label={__('Timing', 'publisher-core')}
 				options={getTimingOptions()}
 				//
-				initValue="all"
 				value={item.timing}
 				onValueChange={(timing) =>
 					changeItem(itemId, { ...item, timing })

@@ -791,12 +791,15 @@ export function TypographyExtension({ children, config, ...props }) {
 
 			{isActiveField(publisherTextShadow) && (
 				<TextShadowField
-					{...{
-						...props,
-						config: publisherTextShadow,
-						attribute: 'publisherTextShadow',
-						label: __('Text Shadow', 'publisher-core'),
-					}}
+					label={__('Text Shadows', 'publisher-core')}
+					value={attributes.publisherTextShadow}
+					onValueChange={(newValue) =>
+						setAttributes({
+							...attributes,
+							publisherTextShadow: newValue,
+						})
+					}
+					{...props}
 				/>
 			)}
 		</>

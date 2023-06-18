@@ -10,18 +10,17 @@ import RepeaterItem from './repeater-item';
 import { RepeaterContext } from '../context';
 
 const MappedItems = () => {
-	const { repeaterItems: items, repeaterAttribute } =
-		useContext(RepeaterContext);
+	const { repeaterItems: items } = useContext(RepeaterContext);
 
 	return useMemo(
 		() =>
 			items.map((item, itemId) => (
 				<RepeaterItem
-					{...{ item, itemId, repeaterAttribute }}
+					{...{ item, itemId }}
 					key={`repeater-item-${itemId}`}
 				/>
 			)),
-		[items, repeaterAttribute]
+		[items]
 	);
 };
 

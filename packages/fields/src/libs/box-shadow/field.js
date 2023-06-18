@@ -8,24 +8,10 @@ import { BoxShadowControl } from '@publisher/controls';
  */
 import { Field } from '../field';
 
-export function BoxShadowField({
-	config,
-	label,
-	attribute,
-	className,
-	children,
-	...props
-}) {
+export function BoxShadowField({ className, children, ...props }) {
 	return (
 		<Field field="box-shadow" columns="columns-1" className={className}>
-			<BoxShadowControl
-				{...{
-					config,
-					...props,
-					attribute,
-				}}
-				label={label}
-			/>
+			<BoxShadowControl {...props} />
 
 			{children}
 		</Field>
