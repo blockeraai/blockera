@@ -30,9 +30,5 @@ export function createBlockEditorContent(
 		block = createBlock(blockName, attributes);
 	}
 
-	const wrapperBlock = createBlock(wrapperBlockName);
-
-	wrapperBlock.innerBlocks.push(block);
-
-	return wrapperBlock;
+	return createBlock(wrapperBlockName, {}, [block]);
 }
