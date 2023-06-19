@@ -28,4 +28,4 @@ export {
 	BackdropFilterFieldStyle,
 } from './libs/filter';
 export { LinkField } from './libs/link';
-export { TransformField, TransformFieldStyle } from './libs/transform';
+export { TransformField } from './libs/transform';

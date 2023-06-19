@@ -11,7 +11,6 @@ import {
 	TransitionFieldStyle,
 	FilterFieldStyle,
 	BackdropFilterFieldStyle,
-	TransformFieldStyle,
 } from '@publisher/fields';
 
 /**
@@ -70,7 +69,93 @@ export function EffectsStyles({
 			_attributes.publisherTransform
 		)
 	) {
-		generators.push(TransformFieldStyle(publisherTransform));
+		const transformProperties = {};
+
+		let transformProperty = _attributes.publisherTransform
+			?.map((item) => {
+				if (!item.isVisible) {
+					return null;
+				}
+
+				switch (item.type) {
+					case 'move':
+						return `translate3d(${item['move-x']}, ${item['move-y']}, ${item['move-z']})`;
+
+					case 'scale':
+						return `scale3d(${item.scale}, ${item.scale}, 50%)`;
+
+					case 'rotate':
+						return `rotateX(${item['rotate-x']}) rotateY(${item['rotate-y']}) rotateZ(${item['rotate-z']})`;
+
+					case 'skew':
+						return `skew(${item['skew-x']}, ${item['skew-y']})`;
+				}
+
+				return null;
+			})
+			?.filter((item) => null !== item)
+			.join(' ');
+
+		if (_attributes.publisherTransformSelfPerspective) {
+			transformProperty = `perspective(${_attributes.publisherTransformSelfPerspective}) ${transformProperty}`;
+		}
+
+		if (transformProperty) {
+			transformProperties.transform = transformProperty;
+		}
+
+		if (
+			!arrayEquals(
+				attributes.publisherTransformSelfOrigin.default,
+				_attributes.publisherTransformSelfOrigin
+			)
+		) {
+			transformProperties[
+				'transform-origin'
+			] = `${_attributes.publisherTransformSelfOrigin?.top} ${_attributes.publisherTransformSelfOrigin?.left}`;
+		}
+
+		if (_attributes.publisherBackfaceVisibility) {
+			transformProperties['backface-visibility'] =
+				_attributes.publisherBackfaceVisibility;
+		}
+
+		if (_attributes.publisherTransformChildPerspective) {
+			transformProperties.perspective =
+				_attributes.publisherTransformChildPerspective !== '0px'
+					? _attributes.publisherTransformChildPerspective
+					: 'none';
+		}
+
+		if (
+			!arrayEquals(
+				attributes.publisherTransformChildOrigin.default,
+				_attributes.publisherTransformChildOrigin
+			)
+		) {
+			transformProperties[
+				'perspective-origin'
+			] = `${_attributes.publisherTransformChildOrigin?.top} ${_attributes.publisherTransformChildOrigin?.left}`;
+		}
+
+		if (transformProperties) {
+			generators.push(
+				computedCssRules(
+					{
+						cssGenerators: {
+							publisherTransform: [
+								{
+									type: 'static',
+									selector: '.{{BLOCK_ID}}',
+									properties: { ...transformProperties },
+								},
+							],
+						},
+					},
+					{ attributes: _attributes, ...blockProps }
+				)
+			);
+		}
 	}
 
 	if (

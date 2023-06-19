@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useContext } from '@wordpress/element';
+import { useContext, useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -13,7 +13,11 @@ import {
 	TransitionField,
 	FilterField,
 	TransformField,
+	PositionField,
+	ToggleSelectField,
 } from '@publisher/fields';
+import { Button, Popover } from '@publisher/components';
+import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -21,6 +25,7 @@ import {
 import { BlockEditContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
 import { cursorFieldOptions, blendModeFieldOptions } from './utils';
+import { default as GearIcon } from './icons/gear';
 
 export function EffectsExtension({ children, config, ...props }) {
 	const {
@@ -37,45 +42,219 @@ export function EffectsExtension({ children, config, ...props }) {
 
 	const { attributes, setAttributes } = useContext(BlockEditContext);
 
+	const [isTransformSettingsVisible, setIsTransformSettingsVisible] =
+		useState(false);
+
 	return (
 		<>
 			{isActiveField(publisherOpacity) && (
 				<InputField
-					{...{
-						...props,
-						label: __('Opacity', 'publisher-core'),
-						settings: {
-							type: 'css',
-							unitType: 'percent',
-							range: true,
-							min: 0,
-							max: 100,
-							initialPosition: 100,
-							initValue: '100%',
-						},
-						//
-						value: attributes.publisherOpacity,
-						onValueChange: (newValue) =>
-							setAttributes({
-								...attributes,
-								publisherOpacity: newValue,
-							}),
+					label={__('Opacity', 'publisher-core')}
+					settings={{
+						type: 'css',
+						unitType: 'percent',
+						range: true,
+						min: 0,
+						max: 100,
+						initialPosition: 100,
+						initValue: '100%',
 					}}
-				/>
-			)}
-
-			{isActiveField(publisherTransform) && (
-				<TransformField
-					label={__('2D & 3D Transforms', 'publisher-core')}
-					value={attributes.publisherTransform}
+					value={attributes.publisherOpacity}
 					onValueChange={(newValue) =>
 						setAttributes({
 							...attributes,
-							publisherTransform: newValue,
+							publisherOpacity: newValue,
 						})
 					}
 					{...props}
 				/>
+			)}
+
+			{isActiveField(publisherTransform) && (
+				<>
+					<TransformField
+						label={__('2D & 3D Transforms', 'publisher-core')}
+						value={attributes.publisherTransform}
+						onValueChange={(newValue) =>
+							setAttributes({
+								...attributes,
+								publisherTransform: newValue,
+							})
+						}
+						headerButtonsStart={
+							<>
+								<Button
+									size="extra-small"
+									className={controlInnerClassNames(
+										'btn-add',
+										isTransformSettingsVisible
+											? 'is-focus toggle-focus'
+											: 'toggle-focus'
+									)}
+									onClick={() =>
+										setIsTransformSettingsVisible(
+											!isTransformSettingsVisible
+										)
+									}
+								>
+									<GearIcon />
+								</Button>
+							</>
+						}
+						{...props}
+					>
+						{isTransformSettingsVisible && (
+							<Popover
+								label={__(
+									'Transform Settings',
+									'publisher-core'
+								)}
+								offset={35}
+								placement="left-start"
+								className={controlInnerClassNames(
+									'transform-settings-popover'
+								)}
+								onClose={() => {
+									setIsTransformSettingsVisible(false);
+								}}
+							>
+								<InputField
+									label={__(
+										'Self Perspective',
+										'publisher-core'
+									)}
+									settings={{
+										type: 'css',
+										unitType: 'essential',
+										range: true,
+										min: 0,
+										max: 2000,
+									}}
+									initValue="0px"
+									value={
+										attributes.publisherTransformSelfPerspective
+									}
+									onValueChange={(newValue) => {
+										console.log(newValue);
+										setAttributes({
+											...attributes,
+											publisherTransformSelfPerspective:
+												newValue,
+										});
+									}}
+									{...props}
+								/>
+
+								<PositionField
+									label={__('Self Origin', 'publisher-core')}
+									topValue={
+										attributes.publisherTransformSelfOrigin
+											?.top
+									}
+									leftValue={
+										attributes.publisherTransformSelfOrigin
+											?.left
+									}
+									onValueChange={({ top, left }) => {
+										setAttributes({
+											...attributes,
+											publisherTransformSelfOrigin: {
+												...attributes.publisherTransformSelfOrigin,
+												top,
+												left,
+											},
+										});
+									}}
+								/>
+
+								<ToggleSelectField
+									label={__(
+										'Backface Visibility',
+										'publisher-core'
+									)}
+									options={[
+										{
+											label: __(
+												'Visible',
+												'publisher-core'
+											),
+											value: 'visible',
+										},
+										{
+											label: __(
+												'Hidden',
+												'publisher-core'
+											),
+											value: 'hidden',
+										},
+									]}
+									initValue="visible"
+									value={
+										attributes.publisherBackfaceVisibility
+									}
+									onValueChange={(newValue) =>
+										setAttributes({
+											...attributes,
+											publisherBackfaceVisibility:
+												newValue,
+										})
+									}
+								/>
+
+								<InputField
+									label={__(
+										'Child Perspective',
+										'publisher-core'
+									)}
+									settings={{
+										type: 'css',
+										unitType: 'essential',
+										range: true,
+										min: 0,
+										max: 2000,
+										initValue: '0px',
+									}}
+									initValue="0px"
+									value={
+										attributes.publisherTransformChildPerspective
+											? attributes.publisherTransformChildPerspective
+											: '0px'
+									}
+									onValueChange={(newValue) =>
+										setAttributes({
+											...attributes,
+											publisherTransformChildPerspective:
+												newValue,
+										})
+									}
+									{...props}
+								/>
+
+								<PositionField
+									label={__('Child Origin', 'publisher-core')}
+									topValue={
+										attributes.publisherTransformChildOrigin
+											?.top
+									}
+									leftValue={
+										attributes.publisherTransformChildOrigin
+											?.left
+									}
+									onValueChange={({ top, left }) => {
+										setAttributes({
+											...attributes,
+											publisherTransformChildOrigin: {
+												...attributes.publisherTransformChildOrigin,
+												top,
+												left,
+											},
+										});
+									}}
+								/>
+							</Popover>
+						)}
+					</TransformField>
+				</>
 			)}
 
 			{isActiveField(publisherTransition) && (
