@@ -15,7 +15,6 @@ export function CssInputControl({
 	//
 	initValue,
 	value,
-	attribute,
 	//
 	className,
 	...props
@@ -170,7 +169,7 @@ export function CssInputControl({
 		}
 	}
 
-	const [controlValue] = useState('');
+	const [controlValue] = useState(value || initValue);
 
 	const [classNames, setClassNames] = useState(
 		isSpecialUnit(controlValue)

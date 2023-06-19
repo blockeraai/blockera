@@ -28,9 +28,7 @@ export function InputControl({
 	onValueChange = () => {},
 	...props
 }) {
-	const [controlValue, setValue] = useState(
-		value !== null ? value : initValue
-	);
+	const [controlValue, setValue] = useState(value || initValue);
 
 	return (
 		<div
