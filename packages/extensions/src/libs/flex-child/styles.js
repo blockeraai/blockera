@@ -81,7 +81,6 @@ export function FlexChildStyles({
 		_attributes.publisherFlexChildOrder !==
 			attributes.publisherFlexChildOrder.default
 	) {
-		console.log(_attributes.publisherFlexChildOrder);
 		switch (_attributes.publisherFlexChildOrder) {
 			case 'first':
 				properties.order = '-1';
