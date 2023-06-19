@@ -12,6 +12,7 @@ import {
 	SelectField,
 	TransitionField,
 	FilterField,
+	TransformField,
 } from '@publisher/fields';
 
 /**
@@ -25,6 +26,7 @@ export function EffectsExtension({ children, config, ...props }) {
 	const {
 		effectsConfig: {
 			publisherOpacity,
+			publisherTransform,
 			publisherTransition,
 			publisherFilter,
 			publisherCursor,
@@ -59,6 +61,20 @@ export function EffectsExtension({ children, config, ...props }) {
 								publisherOpacity: newValue,
 							}),
 					}}
+				/>
+			)}
+
+			{isActiveField(publisherTransform) && (
+				<TransformField
+					label={__('2D & 3D Transforms', 'publisher-core')}
+					value={attributes.publisherTransform}
+					onValueChange={(newValue) =>
+						setAttributes({
+							...attributes,
+							publisherTransform: newValue,
+						})
+					}
+					{...props}
 				/>
 			)}
 

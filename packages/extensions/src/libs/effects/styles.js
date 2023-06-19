@@ -11,6 +11,7 @@ import {
 	TransitionFieldStyle,
 	FilterFieldStyle,
 	BackdropFilterFieldStyle,
+	TransformFieldStyle,
 } from '@publisher/fields';
 
 /**
@@ -25,6 +26,7 @@ export function EffectsStyles({
 	effectsConfig: {
 		cssGenerators,
 		publisherOpacity,
+		publisherTransform,
 		publisherTransition,
 		publisherFilter,
 		publisherBackdropFilter,
@@ -59,6 +61,16 @@ export function EffectsStyles({
 				{ attributes: _attributes, ...blockProps }
 			)
 		);
+	}
+
+	if (
+		isActiveField(publisherTransform) &&
+		!arrayEquals(
+			attributes.publisherTransform.default,
+			_attributes.publisherTransform
+		)
+	) {
+		generators.push(TransformFieldStyle(publisherTransform));
 	}
 
 	if (

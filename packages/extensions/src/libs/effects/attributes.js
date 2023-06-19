@@ -3,6 +3,10 @@ export const attributes = {
 		type: 'string',
 		default: '100%',
 	},
+	publisherTransform: {
+		type: 'array',
+		default: [],
+	},
 	publisherTransition: {
 		type: 'array',
 		default: [],
