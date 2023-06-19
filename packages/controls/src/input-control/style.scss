@@ -1,9 +1,16 @@
-
 .publisher-control-input {
 	
 	.components-text-control__input {
-		border: 1px solid #949494;
+		border: 1px solid var(--publisher-controls-border-color);
 		border-radius: 2px;
+		
+		&:hover {
+			border-color: var(--publisher-controls-border-color-hover);
+		}
+		
+		&:focus {
+			border-color: var(--publisher-controls-border-color-focus);
+		}
 	}
 	
 	.components-input-control__input[type=css],
@@ -32,7 +39,6 @@
 		}
 	}
 	
-	
 	.components-input-control__suffix,
 	.components-unit-control__select {
 		width: 25px !important;
@@ -44,6 +50,10 @@
 		text-align-last: center !important;
 		height: 30px !important;
 		line-height: 28px !important;
+		
+		&:focus {
+			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
+		}
 	}
 	
 	.components-unit-control__unit-label {
@@ -53,6 +63,29 @@
 		padding: 0 !important;
 		letter-spacing: 0 !important;
 		width: auto !important;
+	}
+	
+	.components-input-control__backdrop.components-input-control__backdrop.components-input-control__backdrop {
+		border-color: var(--publisher-controls-border-color)
+	}
+	
+	// border color for focus
+	.components-base-control__field {
+		.components-flex {
+			.components-input-control__input:focus + .components-input-control__suffix + .components-input-control__backdrop {
+				border-color: var(--publisher-controls-border-color-focus) !important;
+				box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
+			}
+		}
+	}
+	
+	// border color for hover
+	.components-base-control__field:hover {
+		.components-flex {
+			.components-input-control__backdrop.components-input-control__backdrop.components-input-control__backdrop {
+				border-color: var(--publisher-controls-border-color-hover);
+			}
+		}
 	}
 }
 
@@ -74,7 +107,7 @@
 			color: rgb(30, 30, 30) !important;
 			text-align: left !important;
 			text-align-last: left !important;
-			padding: 0px 26px 0px 8px !important;
+			padding: 0 26px 0 8px !important;
 			background: #ffffff url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%231E1E1E%22%2F%3E%3C%2Fsvg%3E) no-repeat right 5px top 55%;
 			background-size: 13px 11px !important;
 			letter-spacing: 0;

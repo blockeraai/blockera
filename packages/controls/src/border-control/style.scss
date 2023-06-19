@@ -3,10 +3,14 @@
 	grid-template-columns: repeat(3, 1fr);
 	align-items: center;
 	min-width: 100px;
-	box-shadow: inset 0 0 0 1px #949494;
+	box-shadow: inset 0 0 0 1px var(--publisher-controls-border-color);
 	border-radius: 2px;
 	gap: 2px;
 	width: 100%;
+	
+	&:hover {
+		box-shadow: inset 0 0 0 1px var(--publisher-controls-border-color-hover);
+	}
 	
 	&:first-child:last-child {
 		margin-left: auto;
@@ -34,13 +38,14 @@
 			.components-input-control__input {
 				border-radius: 2px 0 0 2px !important;
 				z-index: 1;
-				padding: 6px 3px;
+				padding: 6px 0 !important;
 				text-align: center;
+				font-size: 12px !important;
 				
 				&:focus {
 					z-index: 10;
-					box-shadow: 0 0 0 1px var(--wp-components-color-accent, var(--wp-admin-theme-color, #007cba)) !important;
-					border: 1px solid var(--wp-admin-theme-color);
+					box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
+					border: 1px solid var(--publisher-controls-border-color-focus);
 				}
 			}
 		}
@@ -51,8 +56,8 @@
 		z-index: 1;
 		
 		&.is-focus {
-			box-shadow: 0 0 0 1px var(--wp-components-color-accent, var(--wp-admin-theme-color, #007cba));
-			border: 1px solid var(--wp-admin-theme-color);
+			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+			border: 1px solid var(--publisher-controls-border-color-focus);
 		}
 	}
 	

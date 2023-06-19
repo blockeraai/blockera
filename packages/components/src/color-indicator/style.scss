@@ -13,14 +13,14 @@
 		&:after {
 			content: "";
 			display: inline-block;
-			background: #db0000;
+			background: var(--publisher-controls-border-color);
 			width: 100%;
-			height: 2px;
+			height: 1px;
 			position: absolute;
 			top: 50%;
 			left: 0;
 			transform: rotate(310deg);
-			margin-top: -1px;
+			margin-top: -0.5px;
 		}
 	}
 }

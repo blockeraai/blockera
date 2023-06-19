@@ -7,10 +7,22 @@
 	}
 	
 	.components-checkbox-control__input[type=checkbox] {
-		border-color: #949494;
+		border-color: var(--publisher-controls-border-color);
 		
 		&:checked {
-			border-color: var(--wp-admin-theme-color);
+			border-color: var(--publisher-controls-border-color-focus) !important;
+			background-color: var(--publisher-controls-border-color-focus) !important;
+		}
+		
+		&:focus{
+			box-shadow: 0 0 0 2px #fff,0 0 0 4px var(--publisher-controls-border-color-focus);
+			outline: 2px solid transparent;
+		}
+	}
+	
+	&:hover{
+		.components-checkbox-control__input[type=checkbox] {
+			border-color: var(--publisher-controls-border-color-hover);
 		}
 	}
 }

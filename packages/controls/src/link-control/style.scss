@@ -11,6 +11,7 @@
 		.publisher-control-text {
 			position: relative;
 			
+			&:hover,
 			&:focus-within {
 				z-index: 1;
 			}
@@ -26,7 +27,7 @@
 			height: 30px;
 			position: relative;
 			
-			
+			&:hover,
 			&:focus {
 				z-index: 1;
 			}

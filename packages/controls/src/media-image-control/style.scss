@@ -1,7 +1,7 @@
 .publisher-control-media-image {
 	height: 140px;
 	background: repeating-conic-gradient(#eaeaea 0%, #eaeaea 25%, transparent 0%, transparent 50%) 50% center/10px 10px;
-	border-color: rgb(148, 148, 148);
+	border-color: var(--publisher-controls-border-color);
 	border-style: solid;
 	border-width: 1px;
 	border-radius: 2px;
@@ -31,7 +31,8 @@
 	
 	.publisher-component-button.btn-choose-image {
 		background: #ffffff;
-		box-shadow: 0 4px 7px rgba(0, 0, 0, 0.2);
+		border-color: var(--publisher-controls-border-color-hover);
+		box-shadow: 0 4px 7px var(--publisher-controls-border-color-hover);
 		border-radius: 3px;
 		font-size: 12px;
 		padding: 4px 10px;
@@ -46,14 +47,16 @@
 		padding: 0;
 		min-width: 24px;
 		height: 24px;
-		border-left: 1px solid rgb(148, 148, 148);
-		border-bottom: 1px solid rgb(148, 148, 148);
+		border-left: 1px solid var(--publisher-controls-border-color-hover);
+		border-bottom: 1px solid var(--publisher-controls-border-color-hover);
 		background: #ffffff;
 		border-radius: 0 0 0 2px;
 		display: none;
 	}
 	
 	&:hover {
+		border-color: var(--publisher-controls-border-color-hover);
+		
 		.publisher-component-button.btn-delete {
 			display: block;
 		}
@@ -71,7 +74,7 @@
 		bottom: 0;
 		left: 0;
 		right: 0;
-		border-top: 1px solid rgb(148, 148, 148);
+		border-top: 1px solid var(--publisher-controls-border-color);
 		grid-template-columns: 1fr 1fr;
 		background: #ffffff;
 		display: none;

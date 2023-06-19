@@ -41,7 +41,7 @@
 			right: 0;
 			bottom: 0;
 			opacity: 0;
-			border-top: 1px solid #cccccc;
+			border-top: 1px solid var(--publisher-controls-border-color);
 			grid-template-columns: 1fr 1fr;
 			background: #ffffff;
 			transition: all 0.15s ease;
@@ -53,7 +53,7 @@
 				border-radius: 0;
 				
 				&.btn-icon-library {
-					border-right: 1px solid #cccccc;
+					border-right: 1px solid var(--publisher-controls-border-color);
 				}
 			}
 		}
@@ -73,8 +73,8 @@
 			padding: 0;
 			min-width: 24px;
 			height: 24px;
-			border-left: 1px solid #cccccc;
-			border-bottom: 1px solid #cccccc;
+			border-left: 1px solid var(--publisher-controls-border-color);
+			border-bottom: 1px solid var(--publisher-controls-border-color);
 			background: #ffffff;
 			border-radius: 0 0 0 2px;
 			visibility: hidden;
@@ -118,12 +118,12 @@
 	}
 	
 	&:hover {
-		border-color: var(--wp-admin-theme-color, #007cba);
+		border-color: var(--publisher-controls-border-color-hover);
 	}
 	
 	&.is-open-icon-picker {
-		box-shadow: 0 0 0 1px var(--wp-admin-theme-color, #007cba);
-		border-color: var(--wp-admin-theme-color, #007cba);
+		box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+		border-color: var(--publisher-controls-border-color-focus);
 	}
 	
 	.publisher-control-icon-suggestions + .publisher-control-icon-preview {
@@ -132,7 +132,8 @@
 	
 	.publisher-component-button.btn-choose-icon {
 		background: #ffffff;
-		box-shadow: 0 4px 7px #cccccc;
+		border-color: var(--publisher-controls-border-color-hover);
+		box-shadow: 0 4px 7px var(--publisher-controls-border-color-hover);
 		border-radius: 3px;
 		font-size: 12px;
 		padding: 4px 10px;
@@ -143,11 +144,10 @@
 	&.icon-none {
 		
 		&.is-open-icon-picker .publisher-component-button.btn-choose-icon {
-			box-shadow: 0 0 0 1px var(--wp-admin-theme-color, #007cba);
-			border-color: var(--wp-admin-theme-color, #007cba);
+			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+			border-color: var(--publisher-controls-border-color-focus);
 		}
 	}
-	
 	
 	.publisher-control-icon-suggestions {
 		display: flex;
@@ -157,7 +157,7 @@
 		align-content: center;
 		justify-content: center;
 		background: #ffffff;
-		border-top: 1px solid #cccccc;
+		border-top: 1px solid var(--publisher-controls-border-color);
 		flex-wrap: wrap;
 		width: 100%;
 		align-items: center;
@@ -180,7 +180,7 @@
 	text-align: center;
 	
 	&:hover {
-		color: var(--wp-admin-theme-color, #007cba);
+		color: var(--publisher-controls-border-color-focus);
 		
 		svg {
 			transform: scale(1.4);

@@ -10,15 +10,15 @@
 	
 	.publisher-control-shape-side {
 		transition: all .2s ease;
-		fill: #f6f6f6;
-		stroke: #cccccc;
+		fill: var(--publisher-controls-fill-color);
+		stroke: var(--publisher-controls-border-color);
 		user-select: none;
 		stroke-linejoin: round;
 		
 		&.selected-side,
 		&:hover {
 			fill: #ffffff;
-			stroke: var(--wp-components-color-accent, var(--wp-admin-theme-color, #007cba));
+			stroke: var(--publisher-controls-border-color-focus);
 			stroke-width: 2px;
 		}
 		
