@@ -55,11 +55,11 @@
 			visibility: hidden;
 			display: flex;
 			align-items: center;
-			background: #fff;
+			background: #ffffff;
 			gap: -1px;
 			padding-left: 3px;
 			
-			.components-button{
+			.components-button {
 				margin-right: -5px;
 			}
 			
@@ -86,9 +86,15 @@
 		}
 	}
 	
-	.publisher-control-btn-add {
-		padding: 0 !important;
-		width: 22px;
+	.publisher-control-repeater-header-action-btns {
 		margin-left: auto;
+		display: flex;
+		flex-direction: row;
+		gap: 10px;
+		
+		.publisher-control-btn-add {
+			padding: 0 !important;
+			width: 22px;
+		}
 	}
 }

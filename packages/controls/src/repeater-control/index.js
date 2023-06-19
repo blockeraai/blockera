@@ -37,6 +37,8 @@ const RepeaterControl = ({
 		return newValue;
 	},
 	repeaterItemsPopoverClassName = '',
+	headerButtonsStart = '',
+	headerButtonsEnd = '',
 	...props
 }) => {
 	const [repeaterItems, setRepeaterItems] = useState(
@@ -125,23 +127,31 @@ const RepeaterControl = ({
 				<div className={controlInnerClassNames('header')}>
 					<LabelControl label={label} />
 
-					<Button
-						size="extra-small"
-						className={controlInnerClassNames('btn-add')}
-						{...(maxItems !== -1 &&
-						repeaterItems?.length >= maxItems
-							? { disabled: true }
-							: {})}
-						onClick={() => {
-							if (
-								maxItems === -1 ||
-								repeaterItems?.length < maxItems
-							)
-								defaultRepeaterState.addNewItem();
-						}}
+					<div
+						className={controlInnerClassNames(
+							'repeater-header-action-btns'
+						)}
 					>
-						<PlusIcon />
-					</Button>
+						{headerButtonsStart}
+						<Button
+							size="extra-small"
+							className={controlInnerClassNames('btn-add')}
+							{...(maxItems !== -1 &&
+							repeaterItems?.length >= maxItems
+								? { disabled: true }
+								: {})}
+							onClick={() => {
+								if (
+									maxItems === -1 ||
+									repeaterItems?.length < maxItems
+								)
+									defaultRepeaterState.addNewItem();
+							}}
+						>
+							<PlusIcon />
+						</Button>
+						{headerButtonsEnd}
+					</div>
 				</div>
 				<MappedItems />
 			</div>
