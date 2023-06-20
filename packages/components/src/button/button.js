@@ -1,4 +1,9 @@
 /**
+ *External dependencies
+ */
+import PropTypes from 'prop-types';
+
+/**
  * WordPress dependencies
  */
 import { Button as WPButton } from '@wordpress/components';
@@ -32,3 +37,12 @@ export default function Button({
 		</WPButton>
 	);
 }
+
+Button.propTypes = {
+	size: PropTypes.string,
+	style: PropTypes.string,
+	align: PropTypes.string,
+	props: PropTypes.object,
+	className: PropTypes.string,
+	children: PropTypes.element,
+};
