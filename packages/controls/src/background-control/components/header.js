@@ -8,7 +8,7 @@ import { __ } from '@wordpress/i18n';
  * Publisher dependencies
  */
 import { controlInnerClassNames } from '@publisher/classnames';
-import { ColorIndicator } from '@publisher/components';
+import { ColorIndicator, ColorIndicatorStack } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -16,6 +16,7 @@ import { ColorIndicator } from '@publisher/components';
 import { default as TypeImageIcon } from '../icons/type-image';
 import { default as TypeLinearGradientIcon } from '../icons/type-linear-gradient';
 import { default as TypeRadialGradientIcon } from '../icons/type-radial-gradient';
+import { default as TypeMeshGradientIcon } from '../icons/type-mesh-gradient';
 import { getBackgroundItemBGProperty } from '../utils';
 
 const Header = ({ item, isOpen, setOpen, children, isOpenPopoverEvent }) => {
@@ -44,6 +45,18 @@ const Header = ({ item, isOpen, setOpen, children, isOpenPopoverEvent }) => {
 				<ColorIndicator type="radial-gradient" value={itemBGProperty} />
 			);
 			icon = <TypeRadialGradientIcon />;
+			break;
+
+		case 'mesh-gradient':
+			label = __('Mesh Gradient', 'publisher-core');
+			preview = (
+				<ColorIndicatorStack
+					value={item['mesh-gradient-colors'].map((value) => {
+						return { value: value.color };
+					})}
+				/>
+			);
+			icon = <TypeMeshGradientIcon />;
 			break;
 	}
 

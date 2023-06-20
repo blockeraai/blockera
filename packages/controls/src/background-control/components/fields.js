@@ -14,13 +14,20 @@ import {
 	AnglePickerField,
 	PositionField,
 	MediaImageField,
+	Field,
 } from '@publisher/fields';
 import { HStack } from '@publisher/components';
+import {
+	controlClassNames,
+	controlInnerClassNames,
+} from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
 import BaseControl from '../../base';
+import RepeaterControl from '../../repeater-control';
+// Icons
 import RepeatIcon from '../icons/repeat';
 import RepeatXIcon from '../icons/repeat-x';
 import RepeatYIcon from '../icons/repeat-y';
@@ -29,6 +36,7 @@ import TypeImageIcon from '../icons/type-image';
 import { RepeaterContext } from '../../repeater-control/context';
 import TypeLinearGradientIcon from '../icons/type-linear-gradient';
 import TypeRadialGradientIcon from '../icons/type-radial-gradient';
+import { default as TypeMeshGradientIcon } from '../icons/type-mesh-gradient';
 import LinearGradientRepeatIcon from '../icons/linear-gradient-repeat';
 import RadialGradientRepeatIcon from '../icons/radial-gradient-repeat';
 import LinearGradientNoRepeatIcon from '../icons/linear-gradient-no-repeat';
@@ -37,11 +45,38 @@ import RadialGradientClosestSideIcon from '../icons/radial-gradient-closest-side
 import RadialGradientFarthestSideIcon from '../icons/radial-gradient-farthest-side';
 import RadialGradientClosestCornerIcon from '../icons/radial-gradient-closest-corner';
 import RadialGradientFarthestCornerIcon from '../icons/radial-gradient-farthest-corner';
+import { default as MeshGradientHeader } from './mesh-gradient/header';
+import { default as MeshGradientFields } from './mesh-gradient/fields';
+import { default as generateMeshGradient } from './mesh-gradient/mesh-generator';
+import { default as RegenerateIcon } from './../icons/regenerate';
 
 const Fields = ({ itemId, item }) => {
 	const { changeItem } = useContext(RepeaterContext);
 
 	const linearGradientValue = /\((\d.*)deg,/im?.exec(item['linear-gradient']);
+
+	function regenerateMeshGradient() {
+		const meshGradient = generateMeshGradient(
+			item['mesh-gradient-colors']?.length
+				? item['mesh-gradient-colors'].length
+				: 4
+		);
+
+		const newItem = {
+			...item,
+			'mesh-gradient': meshGradient.gradient,
+			'mesh-gradient-colors': meshGradient.colors.map((value) => {
+				return { color: value };
+			}),
+		};
+
+		changeItem(itemId, newItem);
+	}
+
+	// fill new random mesh gradient if it's empty
+	if (!item['mesh-gradient']) {
+		regenerateMeshGradient();
+	}
 
 	return (
 		<BaseControl id={`repeater-item-${itemId}`}>
@@ -62,6 +97,11 @@ const Fields = ({ itemId, item }) => {
 						label: __('Radial Gradient', 'publisher-core'),
 						value: 'radial-gradient',
 						icon: <TypeRadialGradientIcon />,
+					},
+					{
+						label: __('Mesh Gradient', 'publisher-core'),
+						value: 'mesh-gradient',
+						icon: <TypeMeshGradientIcon />,
 					},
 				]}
 				//
@@ -413,6 +453,140 @@ const Fields = ({ itemId, item }) => {
 							changeItem(itemId, {
 								...item,
 								'radial-gradient-attachment': newValue,
+							})
+						}
+					/>
+				</>
+			)}
+
+			{item.type === 'mesh-gradient' && (
+				<>
+					<Field label="" columns="columns-1">
+						<div
+							className={controlInnerClassNames(
+								'mesh-generator-preview'
+							)}
+							style={{
+								backgroundColor:
+									item['mesh-gradient-colors'][0].color,
+								backgroundImage: item['mesh-gradient'],
+								...Object.assign(
+									...item['mesh-gradient-colors'].map(
+										(value, index) => {
+											const newVar = '--c' + index;
+											const obj = {};
+											obj[newVar] = value.color;
+											return obj;
+										}
+									)
+								),
+							}}
+							onClick={() => {
+								regenerateMeshGradient();
+							}}
+						>
+							<span
+								className={controlInnerClassNames(
+									'mesh-generator-preview-regenerate'
+								)}
+							>
+								<RegenerateIcon /> {__('Regenerate')}
+							</span>
+						</div>
+					</Field>
+
+					<Field label="" columns="columns-1">
+						<RepeaterControl
+							label={__('Colors', 'publisher-core')}
+							className={controlClassNames(
+								'mesh-gradient-background'
+							)}
+							popoverLabel={__(
+								'Mesh Gradient Color',
+								'publisher-color'
+							)}
+							Header={MeshGradientHeader}
+							InnerComponents={MeshGradientFields}
+							value={item['mesh-gradient-colors']}
+							minItems={3}
+							visibilityControl={false}
+							initValue={{
+								color: '',
+							}}
+							onValueChange={(newValue) => {
+								// regenerate gradient if new item added or removed
+								if (
+									newValue.length !==
+									item['mesh-gradient-colors'].length
+								) {
+									const meshGradient = generateMeshGradient(
+										newValue.length
+									);
+
+									const newItem = {
+										...item,
+										'mesh-gradient': meshGradient.gradient,
+									};
+
+									newValue.map((item, index) => {
+										if (
+											newItem['mesh-gradient-colors']
+												.length < newValue.length
+										) {
+											if (
+												typeof newItem[
+													'mesh-gradient-colors'
+												][index] === 'undefined'
+											) {
+												newItem['mesh-gradient-colors'][
+													index
+												] = {
+													color: meshGradient.colors[
+														index
+													],
+												};
+											}
+										} else if (
+											newItem['mesh-gradient-colors']
+												.length > newValue.length
+										) {
+											newItem['mesh-gradient-colors'] =
+												newItem[
+													'mesh-gradient-colors'
+												].slice(0, newValue.length);
+										}
+										return null;
+									});
+
+									changeItem(itemId, newItem);
+								} else {
+									changeItem(itemId, {
+										...item,
+										'mesh-gradient-colors': newValue,
+									});
+								}
+							}}
+						/>
+					</Field>
+
+					<ToggleSelectField
+						label={__('Effect', 'publisher-core')}
+						options={[
+							{
+								label: __('Fix', 'publisher-core'),
+								value: 'scroll',
+							},
+							{
+								label: __('Parallax', 'publisher-core'),
+								value: 'fixed',
+							},
+						]}
+						//
+						value={item['mesh-gradient-attachment']}
+						onValueChange={(newValue) =>
+							changeItem(itemId, {
+								...item,
+								'mesh-gradient-attachment': newValue,
 							})
 						}
 					/>
