@@ -15,7 +15,12 @@ import {
 import { ShortcutProvider } from '@wordpress/keyboard-shortcuts';
 import { Popover, SlotFillProvider } from '@wordpress/components';
 
-export default function Playground({ blocks: _blocks, styles }) {
+/**
+ * Internal dependencies
+ */
+import styles from '../../../../../.storybook/playground-styles/style.lazy.scss';
+
+export default function Playground({ blocks: _blocks }) {
 	// const { blocks: _blocks, styles } = useContext(PlaygroundContext);
 	const [blocks, updateBlocks] = useState(_blocks);
 

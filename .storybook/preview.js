@@ -13,6 +13,7 @@ import { WithGlobalCSS } from './decorators/with-global-css';
 import { WithMarginChecker } from './decorators/with-margin-checker';
 import { WithMaxWidthWrapper } from './decorators/with-max-width-wrapper';
 import { WithInspectorStyles } from './decorators/with-inspector-styles';
+import WithBlockEditContext from './decorators/with-block-edit-context';
 
 export const globalTypes = {
 	direction: {
@@ -97,6 +98,7 @@ export const decorators = [
 	WithRTL,
 	WithMaxWidthWrapper,
 	WithTheme,
+	WithBlockEditContext,
 ];
 
 export const inspectDecorator = WithInspectorStyles;

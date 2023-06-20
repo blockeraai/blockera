@@ -7,8 +7,6 @@ import { within, userEvent } from '@storybook/testing-library';
  * Internal dependencies
  */
 import { InputControl } from '../input';
-import { BlockEditContext } from '@publisher/extensions';
-import { useState } from '@wordpress/element';
 import {
 	decorators,
 	inspectDecorator,
@@ -33,23 +31,6 @@ const onValueChange = (newValue) => {
 	_value = newValue;
 };
 
-const WithMockBlockEditContext = (story) => {
-	const [value, setValue] = useState(_value);
-
-	return (
-		<BlockEditContext.Provider
-			value={{
-				attributes: {
-					publisherInput: value,
-				},
-				setAttributes: setValue,
-			}}
-		>
-			{story()}
-		</BlockEditContext.Provider>
-	);
-};
-
 export const Default = {
 	args: {
 		range: false,
@@ -58,7 +39,7 @@ export const Default = {
 		className: 'publisher-input',
 		value: _value.publisherInput,
 	},
-	decorators: [inspectDecorator, WithMockBlockEditContext, ...decorators],
+	decorators: [inspectDecorator, ...decorators],
 	parameters: {
 		jest: ['input.spec.js'],
 	},
@@ -73,7 +54,7 @@ export const InputWithUnit = {
 		className: 'publisher-input',
 		value: _value.publisherInput,
 	},
-	decorators: [inspectDecorator, WithMockBlockEditContext, ...decorators],
+	decorators: [inspectDecorator, ...decorators],
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 
@@ -91,7 +72,7 @@ export const InputWithSlider = {
 		className: 'publisher-input',
 		value: _value.publisherInput,
 	},
-	decorators: [inspectDecorator, WithMockBlockEditContext, ...decorators],
+	decorators: [inspectDecorator, ...decorators],
 };
 
 export const InputWithUnitAndSlider = {
@@ -103,5 +84,5 @@ export const InputWithUnitAndSlider = {
 		className: 'publisher-input',
 		value: _value.publisherInput,
 	},
-	decorators: [inspectDecorator, WithMockBlockEditContext, ...decorators],
+	decorators: [inspectDecorator, ...decorators],
 };

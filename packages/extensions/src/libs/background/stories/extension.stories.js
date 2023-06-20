@@ -6,10 +6,8 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { BaseExtension, BlockEditContext } from '@publisher/extensions';
-import { useState } from '@wordpress/element';
+import { BaseExtension } from '@publisher/extensions';
 import { decorators } from '../../../../../../.storybook/preview';
-import styles from '../../../../../../.storybook/playground-styles/style.lazy.scss';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
@@ -18,12 +16,6 @@ import {
 import { attributes } from '../attributes';
 import { supports } from '../supports';
 import BackgroundExtensionIcon from '../icons/extension-icon';
-
-const _value = {
-	publisherBackground: [],
-	publisherBackgroundColor: '',
-	publisherBackgroundClip: '',
-};
 
 blocksInitializer({
 	name: 'publisherBackgroundExtension',
@@ -60,25 +52,14 @@ export default {
 	tags: ['autodocs'],
 };
 
-const WithMockBlockEditContext = (story) => {
-	const [value, setValue] = useState(_value);
-
-	return (
-		<BlockEditContext.Provider
-			value={{
-				attributes: value,
-				setAttributes: setValue,
-			}}
-		>
-			{story()}
-		</BlockEditContext.Provider>
-	);
-};
-
 export const Default = {
 	args: {
 		blocks: [wrapperBlock],
-		styles,
+		blocContextValue: {
+			publisherBackground: [],
+			publisherBackgroundColor: '',
+			publisherBackgroundClip: '',
+		},
 	},
-	decorators: [WithMockBlockEditContext, ...decorators],
+	decorators: [...decorators],
 };
