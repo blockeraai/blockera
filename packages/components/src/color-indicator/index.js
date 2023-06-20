@@ -62,3 +62,46 @@ export default function ColorIndicator({
 		></span>
 	);
 }
+
+export function ColorIndicatorStack({
+	className,
+	value = [],
+	size = 18,
+	...props
+}) {
+	if (!value?.length) {
+		return <></>;
+	}
+
+	const colorsStack = [];
+
+	value.slice(0, 8).map((value) => {
+		colorsStack.push(
+			<ColorIndicator
+				value={value?.value ? value?.value : value}
+				type={value?.type ? value.type : 'color'}
+				size={size}
+				{...props}
+			></ColorIndicator>
+		);
+		return null;
+	});
+
+	let space: string;
+	if (colorsStack?.length < 4) {
+		space = '-5px';
+	} else {
+		space = colorsStack?.length < 6 ? '-7px' : '-9px';
+	}
+
+	return (
+		<div
+			className={componentClassNames('color-indicator-stack', className)}
+			style={{
+				'--stack-space': space,
+			}}
+		>
+			{colorsStack}
+		</div>
+	);
+}
