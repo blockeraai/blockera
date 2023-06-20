@@ -75,17 +75,20 @@ export function ColorIndicatorStack({
 
 	const colorsStack = [];
 
-	value.slice(0, 8).map((value) => {
-		colorsStack.push(
-			<ColorIndicator
-				value={value?.value ? value?.value : value}
-				type={value?.type ? value.type : 'color'}
-				size={size}
-				{...props}
-			></ColorIndicator>
-		);
-		return null;
-	});
+	value
+		.slice(0, 8)
+		.reverse()
+		.map((value) => {
+			colorsStack.push(
+				<ColorIndicator
+					value={value?.value ? value?.value : value}
+					type={value?.type ? value.type : 'color'}
+					size={size}
+					{...props}
+				></ColorIndicator>
+			);
+			return null;
+		});
 
 	let space: string;
 	if (colorsStack?.length < 4) {
