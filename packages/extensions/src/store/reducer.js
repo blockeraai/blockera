@@ -6,13 +6,13 @@ import { combineReducers } from '@wordpress/data';
 /**
  * Internal dependencies
  */
-import { omit } from '../api/utils';
+import { omit } from '../api';
 
 /**
  * Key block types by their name.
  *
  * @param {*} types
- * @returns
+ * @return {Object} extensions
  */
 function keyBlockExtensionsByName(types) {
 	return types.reduce(
