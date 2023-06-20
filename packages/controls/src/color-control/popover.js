@@ -2,18 +2,23 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { ColorPicker } from '@wordpress/components';
 
 /**
  * Publisher dependencies
  */
 import { Popover, Button } from '@publisher/components';
 
-export function ColorPickerPopover({
+/**
+ * Internal dependencies
+ */
+import { default as ColorPicker } from './color-picker';
+
+export default function ColorPickerPopover({
 	isOpen,
 	element,
 	onClose = () => {},
 	onChange = () => {},
+	...props
 }) {
 	return (
 		<>
@@ -27,8 +32,11 @@ export function ColorPickerPopover({
 				>
 					<ColorPicker
 						enableAlpha={false}
-						color={element.color}
-						onChangeComplete={(color) => onChange(color.hex)}
+						value={element.color}
+						onValueChange={(color) => {
+							onChange(color);
+						}}
+						{...props}
 					/>
 
 					<Button onClick={() => onChange('')}>Clear</Button>
