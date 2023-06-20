@@ -3,31 +3,19 @@
  */
 import { BackgroundField } from '../field';
 import { BlockEditContext, extensionConfig } from '@publisher/extensions';
-import { useState, useEffect } from '@wordpress/element';
-import { decorators } from '../../../../../../.storybook/preview';
-import styles from '../../../../../../.storybook/playground-styles/style.lazy.scss';
+import { useState } from '@wordpress/element';
+import {
+	decorators,
+	inspectDecorator,
+} from '../../../../../../.storybook/preview';
 
 const _value = {
 	publisherBackground: [],
-	publisherBackgroundColor: '',
-	publisherBackgroundClip: '',
-};
-
-const WithBackgroundFieldStyles = (props) => {
-	// Ensures that the CSS intended for the playground (especially the style resets)
-	// are only loaded for the playground and don't leak into other stories.
-	useEffect(() => {
-		styles.use();
-
-		return styles.unuse;
-	});
-
-	return BackgroundField(props);
 };
 
 export default {
 	title: 'Fields/Background',
-	component: WithBackgroundFieldStyles,
+	component: BackgroundField,
 	tags: ['autodocs'],
 };
 
@@ -53,5 +41,5 @@ export const Default = {
 		label: 'Background Field',
 		className: 'publisher-background-field',
 	},
-	decorators: [WithMockBlockEditContext, ...decorators],
+	decorators: [WithMockBlockEditContext, inspectDecorator, ...decorators],
 };

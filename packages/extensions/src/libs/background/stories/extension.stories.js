@@ -1,12 +1,23 @@
 /**
+ * WordPress dependencies
+ */
+import { __ } from '@wordpress/i18n';
+
+/**
  * Internal dependencies
  */
-import { BackgroundExtension } from '../extension';
-import { BlockEditContext } from '@publisher/extensions';
-import { useState, useEffect } from '@wordpress/element';
+import { BaseExtension, BlockEditContext } from '@publisher/extensions';
+import { useState } from '@wordpress/element';
 import { decorators } from '../../../../../../.storybook/preview';
-import * as config from '../../base/config';
 import styles from '../../../../../../.storybook/playground-styles/style.lazy.scss';
+import {
+	blocksInitializer,
+	createBlockEditorContent,
+	Playground,
+} from '@publisher/core-storybook';
+import { attributes } from '../attributes';
+import { supports } from '../supports';
+import BackgroundExtensionIcon from '../icons/extension-icon';
 
 const _value = {
 	publisherBackground: [],
@@ -14,21 +25,38 @@ const _value = {
 	publisherBackgroundClip: '',
 };
 
-const WithBackgroundExtensionStyles = (props) => {
-	// Ensures that the CSS intended for the playground (especially the style resets)
-	// are only loaded for the playground and don't leak into other stories.
-	useEffect(() => {
-		styles.use();
+blocksInitializer({
+	name: 'publisherBackgroundExtension',
+	targetBlock: 'core/button',
+	attributes,
+	supports,
+	edit(props) {
+		return (
+			<>
+				<BaseExtension
+					{...props}
+					initialOpen={true}
+					extensionId={'Background'}
+					title={__('Background', 'publisher-core')}
+					icon=<BackgroundExtensionIcon />
+				/>
+			</>
+		);
+	},
+});
 
-		return styles.unuse;
-	});
-
-	return BackgroundExtension(props);
-};
+const wrapperBlock = createBlockEditorContent('core/buttons', 'core/button', {
+	text: 'Get In Touch',
+	style: {
+		border: {
+			radius: '50px',
+		},
+	},
+});
 
 export default {
 	title: 'Extensions/Background',
-	component: WithBackgroundExtensionStyles,
+	component: Playground,
 	tags: ['autodocs'],
 };
 
@@ -49,8 +77,8 @@ const WithMockBlockEditContext = (story) => {
 
 export const Default = {
 	args: {
-		config,
-		className: 'publisher-background-extension',
+		blocks: [wrapperBlock],
+		styles,
 	},
 	decorators: [WithMockBlockEditContext, ...decorators],
 };
