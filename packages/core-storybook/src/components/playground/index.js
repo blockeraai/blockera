@@ -2,8 +2,7 @@
  * WordPress dependencies
  */
 import '@wordpress/format-library';
-import { useMergeRefs } from '@wordpress/compose';
-import { useEffect, useRef, useState } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import {
 	BlockList,
 	BlockTools,
@@ -12,15 +11,12 @@ import {
 	BlockInspector,
 	BlockEditorProvider,
 	BlockEditorKeyboardShortcuts,
-	__unstableUseTypewriter as useTypewriter,
-	__unstableUseTypingObserver as useTypingObserver,
-	__unstableUseClipboardHandler as useClipboardHandler,
-	__unstableUseBlockSelectionClearer as useBlockSelectionClearer,
 } from '@wordpress/block-editor';
 import { ShortcutProvider } from '@wordpress/keyboard-shortcuts';
 import { Popover, SlotFillProvider } from '@wordpress/components';
 
 export default function Playground({ blocks: _blocks, styles }) {
+	// const { blocks: _blocks, styles } = useContext(PlaygroundContext);
 	const [blocks, updateBlocks] = useState(_blocks);
 
 	// Ensures that the CSS intended for the playground (especially the style resets)
@@ -30,15 +26,6 @@ export default function Playground({ blocks: _blocks, styles }) {
 
 		return styles.unuse;
 	});
-
-	const ref = useRef();
-	const contentRef = useMergeRefs([
-		ref,
-		useClipboardHandler(),
-		useTypewriter(),
-		useTypingObserver(),
-		useBlockSelectionClearer(),
-	]);
 
 	return (
 		<div className="playground" data-testid="publisher-playground">
@@ -53,11 +40,10 @@ export default function Playground({ blocks: _blocks, styles }) {
 							<BlockInspector />
 						</div>
 						<div className="playground__content">
-							<BlockTools __unstableContentRef={ref}>
+							<BlockTools>
 								<div className="editor-styles-wrapper">
 									<BlockEditorKeyboardShortcuts.Register />
 									<WritingFlow
-										ref={contentRef}
 										className="editor-styles-wrapper"
 										style={{
 											flex: '1',
