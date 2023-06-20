@@ -1,27 +1,5 @@
-:root {
-	--base-color: #FF0000;
-	--color-analogous-1: hsl(var(--hue1), 100%, 74%);
-	--color-analogous-2: hsl(var(--hue2), 100%, 74%);
-	--color-analogous-3: hsl(var(--hue3), 100%, 74%);
-	--color-analogous-4: hsl(var(--hue4), 100%, 74%);
-	--color-complementary-1: hsl(var(--compHue1), 100%, 74%);
-	--color-complementary-2: hsl(var(--compHue2), 100%, 74%);
-	--color-complementary-3: hsl(var(--compHue3), 100%, 74%);
-	--color-complementary-4: hsl(var(--compHue4), 100%, 74%);
-}
 
-.gradient-item {
-	width: 200px;
-	height: 50px;
-	margin-bottom: 10px;
-}
-
-.mesh-gradient-css {
-	background-color: var(--base-color);
-	background-image: var(--bgImage);
-}
-
-.mesh-gradient-jsx {
-	background-color: var(--base-color);
-	background-image: var(--bgImage);
+.publisher-control-select .components-custom-select-control__button .publisher-bg-clipping-none {
+	color: var(--publisher-controls-border-color);
+	fill: currentColor;
 }
