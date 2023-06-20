@@ -12,6 +12,8 @@ const RepeaterContext = createContext({
 	initValue: {},
 	repeaterItems: {},
 	maxItems: -1,
+	minItems: -1,
+	visibilityControl: true,
 	repeaterItemsPopoverClassName: '',
 	cloneItem: () => {},
 	addNewItem: () => {},

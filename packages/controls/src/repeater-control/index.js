@@ -31,6 +31,8 @@ const RepeaterControl = ({
 	InnerComponents,
 	initValue = {},
 	maxItems = -1,
+	minItems = -1,
+	visibilityControl = true,
 	className,
 	isPopover = true,
 	onValueChange = (newValue) => {
@@ -56,6 +58,8 @@ const RepeaterControl = ({
 		initValue,
 		repeaterItems,
 		maxItems,
+		minItems,
+		visibilityControl,
 		InnerComponents,
 		cloneItem: () => {
 			if (maxItems !== -1 && repeaterItems?.length >= maxItems) {
