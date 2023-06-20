@@ -33,11 +33,11 @@ export default function withBlockSettings(
 		return mergeBlockSettings(settings, {
 			...blockExtension,
 			attributes: {
-				...sharedExtension.attributes,
+				...(sharedExtension?.attributes ?? {}),
 				...blockExtension.attributes,
 			},
 			supports: {
-				...sharedExtension.supports,
+				...(sharedExtension?.supports ?? {}),
 				...blockExtension.supports,
 			},
 		});
