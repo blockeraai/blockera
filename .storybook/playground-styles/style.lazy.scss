@@ -66,6 +66,12 @@
 	}
 }
 
+.playground__sidebar-standalone{
+	border-right: 1px solid #ddd;
+	left: 50%;
+	transform: translate(-50%, 0);
+}
+
 /**
  * Animations
  */
