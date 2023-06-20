@@ -12,6 +12,7 @@ import { WithTheme } from './decorators/with-theme';
 import { WithGlobalCSS } from './decorators/with-global-css';
 import { WithMarginChecker } from './decorators/with-margin-checker';
 import { WithMaxWidthWrapper } from './decorators/with-max-width-wrapper';
+import { WithInspectorStyles } from './decorators/with-inspector-styles';
 
 export const globalTypes = {
 	direction: {
@@ -97,6 +98,8 @@ export const decorators = [
 	WithMaxWidthWrapper,
 	WithTheme,
 ];
+
+export const inspectDecorator = WithInspectorStyles;
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type { import('@storybook/react').Preview } */
