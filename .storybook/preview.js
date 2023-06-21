@@ -115,12 +115,18 @@ export const inspectDecorator = WithInspectorStyles;
 /** @type { import('@storybook/react').Preview } */
 const preview = {
 	parameters: {
+		options: {
+			storySort: {
+				order: ['Components', 'Controls', 'Extensions', '*'],
+			},
+		},
 		actions: { argTypesRegex: '^on[A-Z].*' },
 		controls: {
 			matchers: {
 				color: /(background|color)$/i,
 				date: /Date$/,
 			},
+			expanded: true,
 		},
 		docs: {
 			page: () => (
@@ -136,6 +142,13 @@ const preview = {
 		},
 		sourceLinkPrefix:
 			'https://gitlab.com/better-projects/publisher-fse/publisher-core',
+	},
+	argTypes: {
+		children: {
+			table: {
+				disable: true,
+			},
+		},
 	},
 };
 
