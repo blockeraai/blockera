@@ -14,8 +14,8 @@ import { Button as WPButton } from '@wordpress/components';
 import { componentClassNames } from '@publisher/classnames';
 
 export default function Button({
-	size = 'normal',
 	style = 'primary',
+	size = 'normal',
 	align = 'left',
 	noBorder = false,
 	//
@@ -41,9 +41,11 @@ export default function Button({
 }
 
 Button.propTypes = {
-	size: PropTypes.string,
-	style: PropTypes.string,
-	align: PropTypes.string,
+	style: PropTypes.oneOf(['primary', 'secondary']),
+	size: PropTypes.oneOf(['normal', 'small', 'extra-small']),
+	align: PropTypes.oneOf(['left', 'center', 'right']),
+	noBorder: PropTypes.bool,
+	icon: PropTypes.element,
 	props: PropTypes.object,
 	className: PropTypes.string,
 	children: PropTypes.element,
