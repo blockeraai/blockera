@@ -49,12 +49,10 @@
 }
 
 .playground__sidebar {
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	width: $sidebar-width;
-	border-left: $border-width solid $gray-300;
+	position: relative;
+	width: 280px;
+	min-height: 500px;
+	border-left: 1px solid #ddd;
 	height: auto;
 	overflow: auto;
 	-webkit-overflow-scrolling: touch;
