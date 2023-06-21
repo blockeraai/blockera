@@ -18,6 +18,7 @@ import { default as ColorPickerPopover } from './popover';
 export default function ColorControl({
 	value,
 	type = 'normal',
+	noBorder = false,
 	//
 	onValueChange = (newValue) => {
 		return newValue;
@@ -43,7 +44,8 @@ export default function ColorControl({
 					'color',
 					'color-type-' + type,
 					'toggle-focus',
-					isOpen ? 'is-focus' : '',
+					isOpen && 'is-focus',
+					noBorder && 'no-border',
 					className
 				)}
 				onClick={() => setOpen(!isOpen)}

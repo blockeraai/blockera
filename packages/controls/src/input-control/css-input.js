@@ -12,6 +12,7 @@ import { isSpecialUnit } from './utils';
 export function CssInputControl({
 	unitType = 'general',
 	units = false,
+	noBorder = false,
 	//
 	initValue,
 	value,
@@ -183,6 +184,7 @@ export function CssInputControl({
 			value={value}
 			initValue={initValue}
 			units={cssUnits}
+			noBorder={noBorder}
 			//
 			className={classNames}
 			onUnitChange={(nextUnitValue) => {

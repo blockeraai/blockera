@@ -44,7 +44,8 @@ const MediaImageControl = ({
 		>
 			{value && (
 				<Button
-					className="btn-delete no-border"
+					className="btn-delete"
+					noBorder={true}
 					icon={<DeleteIcon />}
 					align="center"
 					onClick={() => {
@@ -97,7 +98,8 @@ const MediaImageControl = ({
 						mode="browse"
 						render={({ open }) => (
 							<Button
-								className="btn-media-library no-border"
+								className="btn-media-library"
+								noBorder={true}
 								align="center"
 								onClick={open}
 							>
@@ -116,9 +118,10 @@ const MediaImageControl = ({
 						mode="upload"
 						render={({ open }) => (
 							<Button
-								className="btn-upload no-border"
+								className="btn-upload"
 								align="center"
 								onClick={open}
+								noBorder={true}
 							>
 								{labelUploadImage}
 							</Button>

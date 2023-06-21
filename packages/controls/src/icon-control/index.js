@@ -129,7 +129,8 @@ export default function IconControl({
 						onClick={openModal}
 					>
 						<Button
-							className="btn-delete no-border"
+							className="btn-delete"
+							noBorder={true}
 							icon={<DeleteIcon />}
 							align="center"
 							onClick={(e) => {
@@ -153,7 +154,8 @@ export default function IconControl({
 							<Button
 								label={__('Icon Library', 'publisher-blocks')}
 								onClick={openModal}
-								className="btn-icon-library no-border"
+								className="btn-icon-library"
+								noBorder={true}
 								align="center"
 							>
 								{labelIconLibrary}
@@ -174,7 +176,8 @@ export default function IconControl({
 								mode="upload"
 								render={({ open }) => (
 									<Button
-										className="btn-upload no-border"
+										className="btn-upload"
+										noBorder={true}
 										align="center"
 										onClick={(event) => {
 											event.stopPropagation();

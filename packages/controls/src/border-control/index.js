@@ -45,7 +45,8 @@ const BorderControl = ({
 				unitType="custom"
 				units={[{ value: 'px', label: 'PX', default: 0 }]}
 				// type="number"
-				className={controlClassNames('input', 'no-border')}
+				className={controlClassNames('input')}
+				noBorder={true}
 				value={controlValue.width}
 				onValueChange={(newValue) => {
 					const value = { ...controlValue, width: newValue };
@@ -58,7 +59,7 @@ const BorderControl = ({
 			<ColorControl
 				type="minimal"
 				align="center"
-				className="no-border"
+				noBorder={true}
 				value={controlValue.color}
 				onValueChange={(newValue) => {
 					const value = { ...controlValue, color: newValue };
@@ -71,7 +72,8 @@ const BorderControl = ({
 			<SelectControl
 				customMenuPosition={customMenuPosition}
 				type="custom"
-				className="input-hide-label input-hide-caret input-align-center no-border"
+				className="input-hide-label input-hide-caret input-align-center"
+				noBorder={true}
 				value={controlValue.style}
 				options={[
 					{

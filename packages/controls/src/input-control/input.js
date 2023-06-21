@@ -16,6 +16,7 @@ import { RangeControl } from './../index';
 export function InputControl({
 	units,
 	range = false,
+	noBorder = false,
 	// suffix = '',  //todo implement
 	//
 	value = null,
@@ -73,6 +74,7 @@ export function InputControl({
 					className={controlClassNames(
 						'text',
 						'publisher-control-unit',
+						noBorder && 'no-border',
 						className
 					)}
 					isUnitSelectTabbable={false}
@@ -89,7 +91,11 @@ export function InputControl({
 						onValueChange(newValue);
 						return newValue;
 					}}
-					className={controlClassNames('text', className)}
+					className={controlClassNames(
+						'text',
+						noBorder && 'no-border',
+						className
+					)}
 				/>
 			)}
 		</div>

@@ -125,9 +125,9 @@ const BorderRadiusControl = ({
 							type="css"
 							unitType="essential"
 							className={controlInnerClassNames(
-								'border-corner-top-left',
-								'no-border'
+								'border-corner-top-left'
 							)}
+							noBorder={true}
 							value={controlValue.topLeft}
 							onValueChange={(newValue) => {
 								const value = {
@@ -143,9 +143,9 @@ const BorderRadiusControl = ({
 							type="css"
 							unitType="essential"
 							className={controlInnerClassNames(
-								'border-corner-top-right',
-								'no-border'
+								'border-corner-top-right'
 							)}
+							noBorder={true}
 							value={controlValue.topRight}
 							onValueChange={(newValue) => {
 								const value = {
@@ -161,9 +161,9 @@ const BorderRadiusControl = ({
 							type="css"
 							unitType="essential"
 							className={controlInnerClassNames(
-								'border-corner-bottom-left',
-								'no-border'
+								'border-corner-bottom-left'
 							)}
+							noBorder={true}
 							value={controlValue.bottomLeft}
 							onValueChange={(newValue) => {
 								const value = {
@@ -179,9 +179,9 @@ const BorderRadiusControl = ({
 							type="css"
 							unitType="essential"
 							className={controlInnerClassNames(
-								'border-corner-bottom-right',
-								'no-border'
+								'border-corner-bottom-right'
 							)}
+							noBorder={true}
 							value={controlValue.bottomRight}
 							onValueChange={(newValue) => {
 								const value = {

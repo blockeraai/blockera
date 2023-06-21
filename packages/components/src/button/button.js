@@ -17,6 +17,7 @@ export default function Button({
 	size = 'normal',
 	style = 'primary',
 	align = 'left',
+	noBorder = false,
 	//
 	className,
 	children,
@@ -29,6 +30,7 @@ export default function Button({
 				'size-' + size,
 				'style-' + style,
 				'align-' + align,
+				noBorder && 'no-border',
 				className
 			)}
 			{...props}

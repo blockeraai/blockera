@@ -20,7 +20,7 @@ import CloseIcon from './icons/close';
 
 export default function Popover({
 	label = '',
-	onClose = () => { },
+	onClose = () => {},
 	children,
 	className,
 	...props
@@ -49,9 +49,9 @@ export default function Popover({
 
 							<Button
 								className={componentInnerClassNames(
-									'popover-close',
-									'no-border'
+									'popover-close'
 								)}
+								noBorder={true}
 								size="extra-small"
 								align="center"
 								onClick={() => {

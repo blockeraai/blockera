@@ -23,6 +23,7 @@ const SelectControl = ({
 	children,
 	type = 'native', // custom
 	customMenuPosition = 'bottom', // top
+	noBorder = false,
 	//
 	value: _value,
 	//
@@ -42,7 +43,12 @@ const SelectControl = ({
 		<>
 			{type === 'native' && (
 				<WPSelectControl
-					className={controlClassNames('select', 'native', className)}
+					className={controlClassNames(
+						'select',
+						'native',
+						noBorder && 'no-border',
+						className
+					)}
 					value={value}
 					onChange={(newValue) => {
 						newValue = onChange(newValue);
@@ -63,6 +69,7 @@ const SelectControl = ({
 						'select',
 						'custom',
 						'menu-position-' + customMenuPosition,
+						noBorder && 'no-border',
 						className
 					)}
 					value={options.find((option) => option.key === value)}

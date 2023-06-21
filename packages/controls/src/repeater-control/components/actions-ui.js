@@ -60,10 +60,8 @@ export default function ActionsUI({
 			<div className={controlInnerClassNames('action-btns')}>
 				{visibilityControl && (
 					<Button
-						className={controlInnerClassNames(
-							'btn-visibility',
-							'no-border'
-						)}
+						className={controlInnerClassNames('btn-visibility')}
+						noBorder={true}
 						icon={isVisible ? EnableIcon : DisableIcon}
 						showTooltip={true}
 						onClick={(event) => {
@@ -87,10 +85,8 @@ export default function ActionsUI({
 
 				{(maxItems === -1 || repeaterItems?.length < maxItems) && (
 					<Button
-						className={controlInnerClassNames(
-							'btn-clone',
-							'no-border'
-						)}
+						className={controlInnerClassNames('btn-clone')}
+						noBorder={true}
 						icon={CloneIcon}
 						showTooltip={true}
 						label={__('Clone', 'publisher')}
@@ -102,10 +98,8 @@ export default function ActionsUI({
 
 				{(minItems === -1 || repeaterItems?.length > minItems) && (
 					<Button
-						className={controlInnerClassNames(
-							'btn-delete',
-							'no-border'
-						)}
+						className={controlInnerClassNames('btn-delete')}
+						noBorder={true}
 						icon={DeleteIcon}
 						showTooltip={true}
 						onClick={(event) =>
