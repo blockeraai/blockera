@@ -36,6 +36,9 @@ export default function BackgroundControl({
 		'radial-gradient-size': 'farthest-corner',
 		'radial-gradient-repeat': 'no-repeat',
 		'radial-gradient-attachment': 'scroll',
+		'mesh-gradient': '',
+		'mesh-gradient-colors': [],
+		'mesh-gradient-attachment': 'scroll',
 		isVisible: true,
 	},
 	popoverLabel = __('Background', 'publisher-core'),
@@ -50,6 +53,9 @@ export default function BackgroundControl({
 			Header={Header}
 			InnerComponents={Fields}
 			initValue={initValue}
+			repeaterItemsPopoverClassName={controlClassNames(
+				'background-popover'
+			)}
 			{...props}
 		/>
 	);

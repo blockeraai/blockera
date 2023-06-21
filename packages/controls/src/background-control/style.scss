@@ -10,3 +10,57 @@
 		box-shadow: inset 0 0 0 1px #00000033;
 	}
 }
+
+.publisher-control-background-popover {
+	.publisher-field-gradient-bar .components-custom-gradient-picker .components-custom-gradient-picker__gradient-bar {
+		border-radius: 2px;
+		height: 100px;
+		box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+	}
+	
+	.publisher-field-gradient-bar .components-custom-gradient-picker .components-custom-gradient-picker__gradient-bar .components-custom-gradient-picker__control-point-dropdown {
+		top: 41px;
+	}
+}
+
+.publisher-control-mesh-generator-preview {
+	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+	border-radius: 2px;
+	height: 100px;
+	cursor: pointer;
+	position: relative;
+	user-select: none;
+	
+	.publisher-control-mesh-generator-preview-regenerate {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		padding: 5px;
+		height: 28px;
+		font-size: 11px;
+		gap: 4px;
+		visibility: hidden;
+		border-radius: 2px 0 0 0;
+		display: flex;
+		align-items: center;
+		color: #000;
+		font-weight: 500;
+		text-transform: uppercase;
+		mix-blend-mode: color-burn;
+		
+		svg {
+			width: 18px;
+			fill: currentColor;
+		}
+		
+		&:hover {
+			opacity: 1;
+		}
+	}
+	
+	&:hover {
+		.publisher-control-mesh-generator-preview-regenerate {
+			visibility: visible;
+		}
+	}
+}

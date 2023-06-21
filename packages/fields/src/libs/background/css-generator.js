@@ -17,6 +17,7 @@ export function backgroundCSSGenerator(id, props, styleEngine) {
 		position: [],
 		repeat: [],
 		attachment: [],
+		backgroundColor: '',
 	};
 
 	// Collect all properties
@@ -102,6 +103,42 @@ export function backgroundCSSGenerator(id, props, styleEngine) {
 				properties.attachment.push(item['radial-gradient-attachment']);
 
 				break;
+
+			case 'mesh-gradient':
+				if (!item['mesh-gradient']) {
+					return undefined;
+				}
+
+				let gradient = item['mesh-gradient'];
+
+				item['mesh-gradient-colors'].map((value, index) => {
+					gradient = gradient.replace(
+						`var(--c${index})`,
+						item['mesh-gradient-colors'][index].color
+					);
+					return null;
+				});
+
+				// override bg color
+				properties['background-color'] =
+					item['mesh-gradient-colors'][0].color;
+
+				// Image
+				properties.image.push(gradient);
+
+				// Background Size
+				properties.size.push('auto');
+
+				// Background Position
+				properties.position.push('0 0');
+
+				// Background Repeat
+				properties.repeat.push('repeat');
+
+				// Background Attachment
+				properties.attachment.push(item['mesh-gradient-attachment']);
+
+				break;
 		}
 
 		return undefined;
@@ -112,6 +149,9 @@ export function backgroundCSSGenerator(id, props, styleEngine) {
 			styleEngine.selector ? ' ' + styleEngine.selector : ''
 		}`,
 		properties: {
+			'background-color': properties['background-color']
+				? properties['background-color'] + ' !important'
+				: '',
 			'background-image': properties.image.join(', '),
 			'background-size': properties.size.join(', '),
 			'background-position': properties.position.join(', '),

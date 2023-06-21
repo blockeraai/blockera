@@ -34,9 +34,16 @@ export default function ActionsUI({
 		cloneItem,
 		isPopover,
 		maxItems,
+		minItems,
+		visibilityControl,
 		repeaterItems,
 	} = useContext(RepeaterContext);
 
+	console.log(
+		minItems,
+		repeaterItems?.length,
+		repeaterItems?.length > minItems
+	);
 	return (
 		<>
 			{!isPopover && (
@@ -56,30 +63,32 @@ export default function ActionsUI({
 			)}
 
 			<div className={controlInnerClassNames('action-btns')}>
-				<Button
-					className={controlInnerClassNames(
-						'btn-visibility',
-						'no-border'
-					)}
-					icon={isVisible ? EnableIcon : DisableIcon}
-					showTooltip={true}
-					onClick={(event) => {
-						if (isOpenPopoverEvent(event)) {
-							return;
-						}
+				{visibilityControl && (
+					<Button
+						className={controlInnerClassNames(
+							'btn-visibility',
+							'no-border'
+						)}
+						icon={isVisible ? EnableIcon : DisableIcon}
+						showTooltip={true}
+						onClick={(event) => {
+							if (isOpenPopoverEvent(event)) {
+								return;
+							}
 
-						setVisibility(!isVisible);
-						changeItem(itemId, {
-							...item,
-							isVisible: !isVisible,
-						});
-					}}
-					label={
-						isVisible
-							? __('Disable', 'publisher')
-							: __('Enable', 'publisher')
-					}
-				/>
+							setVisibility(!isVisible);
+							changeItem(itemId, {
+								...item,
+								isVisible: !isVisible,
+							});
+						}}
+						label={
+							isVisible
+								? __('Disable', 'publisher')
+								: __('Enable', 'publisher')
+						}
+					/>
+				)}
 
 				{(maxItems === -1 || repeaterItems?.length < maxItems) && (
 					<Button
@@ -96,18 +105,20 @@ export default function ActionsUI({
 					/>
 				)}
 
-				<Button
-					className={controlInnerClassNames(
-						'btn-delete',
-						'no-border'
-					)}
-					icon={DeleteIcon}
-					showTooltip={true}
-					onClick={(event) =>
-						!isOpenPopoverEvent(event) && removeItem(itemId)
-					}
-					label={__('Delete', 'publisher')}
-				/>
+				{(minItems === -1 || repeaterItems?.length > minItems) && (
+					<Button
+						className={controlInnerClassNames(
+							'btn-delete',
+							'no-border'
+						)}
+						icon={DeleteIcon}
+						showTooltip={true}
+						onClick={(event) =>
+							!isOpenPopoverEvent(event) && removeItem(itemId)
+						}
+						label={__('Delete', 'publisher')}
+					/>
+				)}
 			</div>
 		</>
 	);
