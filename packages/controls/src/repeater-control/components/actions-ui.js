@@ -39,11 +39,6 @@ export default function ActionsUI({
 		repeaterItems,
 	} = useContext(RepeaterContext);
 
-	console.log(
-		minItems,
-		repeaterItems?.length,
-		repeaterItems?.length > minItems
-	);
 	return (
 		<>
 			{!isPopover && (
