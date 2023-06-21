@@ -2,6 +2,14 @@
  * Storybook dependencies
  */
 import { withTests } from '@storybook/addon-jest';
+import {
+	Title,
+	Subtitle,
+	Description,
+	Primary,
+	Controls,
+	Stories,
+} from '@storybook/blocks';
 
 /**
  * Internal dependencies
@@ -113,7 +121,18 @@ const preview = {
 				color: /(background|color)$/i,
 				date: /Date$/,
 			},
-			sort: 'requiredFirst',
+		},
+		docs: {
+			page: () => (
+				<>
+					<Title />
+					<Subtitle />
+					<Description />
+					<Primary />
+					<Controls />
+					<Stories />
+				</>
+			),
 		},
 		sourceLinkPrefix:
 			'https://gitlab.com/better-projects/publisher-fse/publisher-core',
