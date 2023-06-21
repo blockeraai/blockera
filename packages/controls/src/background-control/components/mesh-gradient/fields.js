@@ -27,7 +27,7 @@ const Fields = ({ itemId, item }) => {
 						color: newValue,
 					})
 				}
-			></ColorPicker>
+			/>
 		</BaseControl>
 	);
 };
