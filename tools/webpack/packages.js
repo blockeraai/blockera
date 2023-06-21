@@ -103,14 +103,6 @@ module.exports = (env, argv) => {
 					use: scssLoaders({ isLazy: true }),
 					include: resolve(__dirname),
 				},
-				{
-					test: /\.scss$/,
-					use: [
-						MiniCssExtractPlugin.loader,
-						'css-loader',
-						'sass-loader',
-					],
-				},
 			],
 		},
 		plugins: [
