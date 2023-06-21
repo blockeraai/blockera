@@ -39,15 +39,14 @@ export default function ColorControl({
 		<>
 			<Button
 				size="input"
-				style="primary"
 				className={controlClassNames(
 					'color',
 					'color-type-' + type,
-					'toggle-focus',
-					isOpen && 'is-focus',
-					noBorder && 'no-border',
 					className
 				)}
+				noBorder={noBorder}
+				isFocus={isOpen}
+				contentAlign="left"
 				onClick={() => setOpen(!isOpen)}
 				{...props}
 			>

@@ -91,10 +91,8 @@ export function TypographyExtension({ children, config, ...props }) {
 			>
 				<Button
 					size="input"
-					style="primary"
-					className={
-						isVisible ? 'is-focus toggle-focus' : 'toggle-focus'
-					}
+					isFocus={isVisible}
+					contentAlign="left"
 					onClick={() => {
 						toggleVisible();
 					}}

@@ -3,15 +3,12 @@
 	gap: 10px;
 }
 
-.publisher-component-button {
+.components-button.publisher-component-button {
 	font-size: 13px;
 	font-weight: 400;
 	display: flex;
+	justify-content: center !important;
 	gap: 8px;
-	
-	&:not(.no-border) {
-		border: 1px solid var(--publisher-controls-border-color);
-	}
 	
 	&.size-input,
 	&.size-small {
@@ -28,40 +25,77 @@
 		line-height: 22px;
 	}
 	
-	&.align-center {
-		justify-content: center;
+	&.content-align-left {
+		justify-content: flex-start !important;
 	}
 	
-	&.align-left {
-		justify-content: flex-start;
+	&.content-align-right {
+		justify-content: flex-end !important;
 	}
 	
-	&.align-right {
-		justify-content: flex-end;
+	&.components-button.no-border {
+		&:focus:not(:disabled),
+		&:hover,
+		& {
+			border: none;
+			box-shadow: none;
+			outline: none;
+		}
 	}
 	
-	&:hover:not(.no-border) {
-		border-color: var(--publisher-controls-border-color-hover);
-		color: var(--wp-components-color-foreground, #1e1e1e);
+	&.is-primary {
+		
+		&.is-focus:not(:disabled),
+		&:focus:not(:disabled, .no-border) {
+			box-shadow: inset 0 0 0 1px var(--publisher-controls-border-color-focus, #ffffff), 0 0 0 1px var(--publisher-controls-background-color), 0 0 0 2.5px var(--publisher-controls-border-color-focus) !important;
+		}
 	}
 	
-	&.toggle-focus.is-focus:not(:disabled):not(.no-border),
-	&.toggle-focus.is-focus:focus:not(:disabled):not(.no-border),
-	&:focus:not(:disabled):not(.toggle-focus):not(.no-border) {
-		border-color: var(--publisher-controls-border-color-focus);
-		box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
-		outline: 2px solid transparent;
+	&.is-secondary {
+		outline: 3px solid transparent;
+		
+		&:hover:not(:disabled, .no-border) {
+			box-shadow: inset 0 0 0 1px var(--publisher-controls-border-color-focus, #ffffff);
+		}
+		
+		&.is-focus:not(:disabled),
+		&:focus:not(:disabled, .no-border) {
+			box-shadow: inset 0 0 0 1px var(--publisher-controls-border-color-focus, #ffffff), 0 0 0 1px var(--publisher-controls-background-color), 0 0 0 2.5px var(--publisher-controls-border-color-focus) !important;
+		}
 	}
 	
-	&.toggle-focus:focus:not(:disabled):not(.no-border) {
-		border-color: var(--publisher-controls-border-color);
-		box-shadow: none;
-		outline: none;
-	}
-	
-	&.components-button.no-border:focus:not(:disabled) {
-		border: none;
-		box-shadow: none;
-		outline: none;
+	&.is-tertiary {
+		color: var(--publisher-controls-color);
+		--wp-components-color-accent: var(--publisher-controls-border-color);
+		background: transparent;
+		
+		
+		&:not(.no-border) {
+			box-shadow: inset 0 0 0 1px var(--publisher-controls-border-color);
+			outline: 1px solid transparent;
+		}
+		
+		&.no-border:hover {
+			background: transparent;
+		}
+		
+		&:hover:not(:disabled, [aria-disabled=true], .no-border) {
+			background: var(--publisher-controls-background-color);
+			color: var(--publisher-controls-color);
+		}
+		
+		&:hover:not(:disabled, [aria-disabled=true], .no-border) {
+			--publisher-controls-border-color: var(--publisher-controls-border-color-hover);
+		}
+		
+		&.is-focus:not(.no-border) {
+			background: var(--publisher-controls-background-color);
+		}
+		
+		&.is-focus:not(:disabled),
+		&:focus:not(:disabled, .no-border, .toggle-focus) {
+			box-shadow: inset 0 0 0 1px var(--publisher-controls-border-color-focus), 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
+			outline: 2px solid transparent !important;
+		}
 	}
 }

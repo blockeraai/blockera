@@ -131,22 +131,12 @@
 	}
 	
 	.publisher-component-button.btn-choose-icon {
-		background: #ffffff;
-		border-color: var(--publisher-controls-border-color-hover);
-		box-shadow: 0 4px 7px var(--publisher-controls-border-color-hover);
+		background: #ffffff !important;
+		box-shadow: inset 0 0 0 1px var(--publisher-controls-border-color), 0 4px 7px var(--publisher-controls-border-color-hover);
 		border-radius: 3px;
 		font-size: 12px;
 		padding: 4px 10px;
 		height: 30px;
-	}
-	
-	
-	&.icon-none {
-		
-		&.is-open-icon-picker .publisher-component-button.btn-choose-icon {
-			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
-			border-color: var(--publisher-controls-border-color-focus);
-		}
 	}
 	
 	.publisher-control-icon-suggestions {

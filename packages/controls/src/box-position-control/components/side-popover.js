@@ -68,7 +68,6 @@ export function SidePopover({
 							<HStack>
 								<Button
 									size="small"
-									align="center"
 									onClick={() => {
 										setControlValue('0px');
 									}}
@@ -78,7 +77,6 @@ export function SidePopover({
 
 								<Button
 									size="small"
-									align="center"
 									onClick={() => setControlValue('10px')}
 								>
 									10
@@ -86,7 +84,6 @@ export function SidePopover({
 
 								<Button
 									size="small"
-									align="center"
 									onClick={() => setControlValue('20px')}
 								>
 									20
@@ -94,7 +91,6 @@ export function SidePopover({
 
 								<Button
 									size="small"
-									align="center"
 									onClick={() => setControlValue('30px')}
 								>
 									30
@@ -103,7 +99,6 @@ export function SidePopover({
 							<HStack>
 								<Button
 									size="small"
-									align="center"
 									onClick={() => {
 										setControlValue('60px');
 									}}
@@ -113,7 +108,6 @@ export function SidePopover({
 
 								<Button
 									size="small"
-									align="center"
 									onClick={() => setControlValue('80px')}
 								>
 									80
@@ -121,7 +115,6 @@ export function SidePopover({
 
 								<Button
 									size="small"
-									align="center"
 									onClick={() => setControlValue('100px')}
 								>
 									100
@@ -129,7 +122,6 @@ export function SidePopover({
 
 								<Button
 									size="small"
-									align="center"
 									onClick={() => setControlValue('120px')}
 								>
 									120

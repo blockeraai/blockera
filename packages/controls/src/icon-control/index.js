@@ -131,8 +131,8 @@ export default function IconControl({
 						<Button
 							className="btn-delete"
 							noBorder={true}
+							isFocus={isOpenModal}
 							icon={<DeleteIcon />}
-							align="center"
 							onClick={(e) => {
 								e.stopPropagation();
 								currentIconDispatch({
@@ -156,7 +156,6 @@ export default function IconControl({
 								onClick={openModal}
 								className="btn-icon-library"
 								noBorder={true}
-								align="center"
 							>
 								{labelIconLibrary}
 							</Button>
@@ -178,7 +177,6 @@ export default function IconControl({
 									<Button
 										className="btn-upload"
 										noBorder={true}
-										align="center"
 										onClick={(event) => {
 											event.stopPropagation();
 											open();
@@ -196,7 +194,6 @@ export default function IconControl({
 							label={labelChoose}
 							onClick={openModal}
 							className="btn-choose-icon"
-							align="center"
 						>
 							{labelChoose}
 						</Button>

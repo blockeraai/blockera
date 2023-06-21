@@ -86,11 +86,9 @@ export function EffectsExtension({ children, config, ...props }) {
 								<Button
 									size="extra-small"
 									className={controlInnerClassNames(
-										'btn-add',
-										isTransformSettingsVisible
-											? 'is-focus toggle-focus'
-											: 'toggle-focus'
+										'btn-add'
 									)}
+									isFocus={isTransformSettingsVisible}
 									onClick={() =>
 										setIsTransformSettingsVisible(
 											!isTransformSettingsVisible

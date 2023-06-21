@@ -47,7 +47,6 @@ const MediaImageControl = ({
 					className="btn-delete"
 					noBorder={true}
 					icon={<DeleteIcon />}
-					align="center"
 					onClick={() => {
 						setValue('');
 						const newValue = onChange('');
@@ -75,11 +74,7 @@ const MediaImageControl = ({
 					allowedTypes={['image']}
 					mode="browse"
 					render={({ open }) => (
-						<Button
-							className="btn-choose-image"
-							align="center"
-							onClick={open}
-						>
+						<Button className="btn-choose-image" onClick={open}>
 							{labelChoose}
 						</Button>
 					)}
@@ -100,7 +95,6 @@ const MediaImageControl = ({
 							<Button
 								className="btn-media-library"
 								noBorder={true}
-								align="center"
 								onClick={open}
 							>
 								{labelMediaLibrary}
@@ -119,7 +113,6 @@ const MediaImageControl = ({
 						render={({ open }) => (
 							<Button
 								className="btn-upload"
-								align="center"
 								onClick={open}
 								noBorder={true}
 							>

@@ -22,10 +22,10 @@
 			}
 		}
 		
-		.publisher-component-button {
+		.components-button.publisher-component-button {
 			border-radius: 0 2px 2px 0;
-			height: 30px;
 			position: relative;
+			padding: 2px 8px;
 			
 			&:hover,
 			&:focus {

@@ -75,8 +75,7 @@ const LinkControl = ({
 				/>
 				<Button
 					onClick={() => setIsAdvancedMode(!isAdvancedMode)}
-					size="extra-small"
-					align="center"
+					size="small"
 					className={controlInnerClassNames(
 						'link-advanced-options-btn',
 						isAdvancedMode ? 'is-active' : ''

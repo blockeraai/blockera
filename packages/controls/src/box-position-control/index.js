@@ -410,7 +410,6 @@ const BoxPositionControl = ({
 										<Button
 											className="position-quick-btn"
 											size="small"
-											align="center"
 											onClick={() => {
 												const value = {
 													...controlValue,
@@ -433,7 +432,6 @@ const BoxPositionControl = ({
 										<Button
 											className="position-quick-btn"
 											size="small"
-											align="center"
 											onClick={() => {
 												const value = {
 													...controlValue,
@@ -465,7 +463,6 @@ const BoxPositionControl = ({
 										<Button
 											className="position-quick-btn"
 											size="small"
-											align="center"
 											onClick={() => {
 												const value = {
 													...controlValue,
@@ -489,7 +486,6 @@ const BoxPositionControl = ({
 										<Button
 											className="position-quick-btn"
 											size="small"
-											align="center"
 											onClick={() => {
 												const value = {
 													...controlValue,
@@ -530,7 +526,6 @@ const BoxPositionControl = ({
 										<Button
 											className="position-quick-btn"
 											size="small"
-											align="center"
 											onClick={() => {
 												const value = {
 													...controlValue,
@@ -553,7 +548,6 @@ const BoxPositionControl = ({
 										<Button
 											className="position-quick-btn"
 											size="small"
-											align="center"
 											onClick={() => {
 												const value = {
 													...controlValue,
@@ -585,7 +579,6 @@ const BoxPositionControl = ({
 										<Button
 											className="position-quick-btn"
 											size="small"
-											align="center"
 											onClick={() => {
 												const value = {
 													...controlValue,
@@ -608,7 +601,6 @@ const BoxPositionControl = ({
 										<Button
 											className="position-quick-btn"
 											size="small"
-											align="center"
 											onClick={() => {
 												const value = {
 													...controlValue,
@@ -641,7 +633,6 @@ const BoxPositionControl = ({
 									<Button
 										className="position-quick-btn"
 										size="small"
-										align="center"
 										onClick={() => {
 											const value = {
 												...controlValue,
@@ -664,7 +655,6 @@ const BoxPositionControl = ({
 									<Button
 										className="position-quick-btn"
 										size="small"
-										align="center"
 										onClick={() => {
 											const value = {
 												...controlValue,
