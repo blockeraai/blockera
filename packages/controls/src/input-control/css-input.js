@@ -4,6 +4,11 @@
 import { useState } from '@wordpress/element';
 
 /**
+ * External dependencies
+ */
+import PropTypes from 'prop-types';
+
+/**
  * Internal dependencies
  */
 import { InputControl } from './input';
@@ -196,3 +201,29 @@ export function CssInputControl({
 		/>
 	);
 }
+
+CssInputControl.propTypes = {
+	range: PropTypes.bool,
+	units: PropTypes.array,
+	value: PropTypes.string,
+	noBorder: PropTypes.bool,
+	onChange: PropTypes.func,
+	initValue: PropTypes.string,
+	className: PropTypes.string,
+	onValueChange: PropTypes.func,
+	unitType: PropTypes.oneOf([
+		'outline',
+		'text-shadow',
+		'box-shadow',
+		'background-size',
+		'background-position',
+		'text-indent',
+		'letter-spacing',
+		'essential',
+		'general',
+		'width',
+		'percent',
+		'angle',
+		'duration',
+	]),
+};

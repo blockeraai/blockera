@@ -14,10 +14,10 @@ import { Button as WPButton } from '@wordpress/components';
 import { componentClassNames } from '@publisher/classnames';
 
 export default function Button({
-	style = 'primary',
-	size = 'normal',
-	align = 'left',
-	noBorder = false,
+	style,
+	size,
+	align,
+	noBorder,
 	//
 	className,
 	children,
@@ -48,5 +48,14 @@ Button.propTypes = {
 	icon: PropTypes.element,
 	props: PropTypes.object,
 	className: PropTypes.string,
-	children: PropTypes.element,
+	children: PropTypes.node,
+};
+
+Button.defaultProps = {
+	style: 'primary',
+	size: 'normal',
+	align: 'left',
+	noBorder: false,
+	className: '',
+	children: () => [],
 };

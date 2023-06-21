@@ -8,6 +8,11 @@ import {
 } from '@wordpress/components';
 
 /**
+ * External dependencies
+ */
+import PropTypes from 'prop-types';
+
+/**
  * Internal dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
@@ -101,3 +106,14 @@ export function InputControl({
 		</div>
 	);
 }
+
+InputControl.propTypes = {
+	range: PropTypes.bool,
+	units: PropTypes.array,
+	value: PropTypes.string,
+	noBorder: PropTypes.bool,
+	onChange: PropTypes.func,
+	initValue: PropTypes.string,
+	className: PropTypes.string,
+	onValueChange: PropTypes.func,
+};
