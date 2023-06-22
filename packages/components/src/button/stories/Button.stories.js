@@ -63,13 +63,14 @@ export const Sizes = {
 export const Screenshot = {
 	render: (args) => (
 		<>
+			<h2 className="story-heading">Primary Button</h2>
+
 			<Buttons
 				gap="20px"
 				direction="column"
 				alignItems="flex-start"
 				style={{ margin: '0 0 50px' }}
 			>
-				<h2 style={{ margin: '0 0 10px' }}>Primary Button</h2>
 				<Button variant="primary" size="normal" {...args}>
 					Normal Button
 				</Button>
@@ -121,13 +122,13 @@ export const Screenshot = {
 				</Button>
 			</Buttons>
 
+			<h2 className="story-heading">Secondary Button</h2>
 			<Buttons
 				gap="20px"
 				direction="column"
 				alignItems="flex-start"
 				style={{ margin: '0 0 50px' }}
 			>
-				<h2 style={{ margin: '0 0 10px' }}>Secondary Button</h2>
 				<Button variant="secondary" size="normal" {...args}>
 					Normal Button
 				</Button>
@@ -179,8 +180,8 @@ export const Screenshot = {
 				</Button>
 			</Buttons>
 
+			<h2 className="story-heading">Tertiary Button</h2>
 			<Buttons gap="20px" direction="column" alignItems="flex-start">
-				<h2 style={{ margin: '0 0 10px' }}>Tertiary Button</h2>
 				<Button variant="tertiary" size="normal" {...args}>
 					Normal Button
 				</Button>

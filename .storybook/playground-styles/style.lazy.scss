@@ -85,3 +85,16 @@
 		opacity: 1;
 	}
 }
+
+/**
+ * Our Custom Styles for stories
+ */
+.story-heading{
+	margin: 30px 0 15px !important;
+	font-size: 15px !important;
+	font-weight: 600;
+	
+	&:first-child{
+		margin-top: 0 !important;
+	}
+}
