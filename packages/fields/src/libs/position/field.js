@@ -11,7 +11,7 @@ import {
 	AlignmentMatrixControl,
 	convertAlignmentMatrixCoordinates,
 } from '@publisher/controls';
-import { HStack, VStack } from '@publisher/components';
+import { Flex } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -36,7 +36,7 @@ export function PositionField({
 	return (
 		<>
 			<Field label={label} field="position" className={className}>
-				<HStack spacing="2" justify="space-around">
+				<Flex gap="8px" direction="row" justify="space-around">
 					<div style={{ width: '75%' }}>
 						<AlignmentMatrixControl
 							value={
@@ -61,7 +61,11 @@ export function PositionField({
 					</div>
 
 					<div style={{ width: '100%' }}>
-						<VStack spacing="2" justify="space-around">
+						<Flex
+							direction="column"
+							gap="8px"
+							justify="space-around"
+						>
 							<InputField
 								label={__('Top', 'publisher-core')}
 								settings={{
@@ -103,9 +107,9 @@ export function PositionField({
 									});
 								}}
 							/>
-						</VStack>
+						</Flex>
 					</div>
-				</HStack>
+				</Flex>
 
 				{children}
 			</Field>

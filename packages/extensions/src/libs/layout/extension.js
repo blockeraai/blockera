@@ -8,7 +8,7 @@ import { useContext } from '@wordpress/element';
  * Publisher dependencies
  */
 import { Field, InputField, ToggleSelectField } from '@publisher/fields';
-import { HStack } from '@publisher/components';
+import { Flex } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -263,7 +263,7 @@ export function LayoutExtension({ config }) {
 							label={__('Gap', 'publisher-core')}
 							columns="1fr 2.65fr"
 						>
-							<HStack>
+							<Flex direction="row" gap="10px">
 								{isActiveField(publisherGapRows) && (
 									<InputField
 										columns="columns-1"
@@ -311,7 +311,7 @@ export function LayoutExtension({ config }) {
 										}
 									/>
 								)}
-							</HStack>
+							</Flex>
 						</Field>
 					)}
 

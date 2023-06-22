@@ -7,7 +7,7 @@ import { useState } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { Button, HStack, Popover, VStack } from '@publisher/components';
+import { Button, Grid, Popover } from '@publisher/components';
 import { Field, InputField } from '@publisher/fields';
 import { controlInnerClassNames } from '@publisher/classnames';
 
@@ -64,70 +64,67 @@ export function SidePopover({
 							'side-popover-action-buttons'
 						)}
 					>
-						<VStack>
-							<HStack>
-								<Button
-									size="small"
-									onClick={() => {
-										setControlValue('0px');
-									}}
-								>
-									0
-								</Button>
+						<Grid gap="10px" gridTemplateColumns="repeat(4, 1fr)">
+							<Button
+								size="small"
+								onClick={() => {
+									setControlValue('0px');
+								}}
+							>
+								0
+							</Button>
 
-								<Button
-									size="small"
-									onClick={() => setControlValue('10px')}
-								>
-									10
-								</Button>
+							<Button
+								size="small"
+								onClick={() => setControlValue('10px')}
+							>
+								10
+							</Button>
 
-								<Button
-									size="small"
-									onClick={() => setControlValue('20px')}
-								>
-									20
-								</Button>
+							<Button
+								size="small"
+								onClick={() => setControlValue('20px')}
+							>
+								20
+							</Button>
 
-								<Button
-									size="small"
-									onClick={() => setControlValue('30px')}
-								>
-									30
-								</Button>
-							</HStack>
-							<HStack>
-								<Button
-									size="small"
-									onClick={() => {
-										setControlValue('60px');
-									}}
-								>
-									60
-								</Button>
+							<Button
+								size="small"
+								onClick={() => setControlValue('30px')}
+							>
+								30
+							</Button>
 
-								<Button
-									size="small"
-									onClick={() => setControlValue('80px')}
-								>
-									80
-								</Button>
+							<Button
+								size="small"
+								onClick={() => {
+									setControlValue('60px');
+								}}
+							>
+								60
+							</Button>
 
-								<Button
-									size="small"
-									onClick={() => setControlValue('100px')}
-								>
-									100
-								</Button>
+							<Button
+								size="small"
+								onClick={() => setControlValue('80px')}
+							>
+								80
+							</Button>
 
-								<Button
-									size="small"
-									onClick={() => setControlValue('120px')}
-								>
-									120
-								</Button>
-							</HStack>
-						</VStack>
+							<Button
+								size="small"
+								onClick={() => setControlValue('100px')}
+							>
+								100
+							</Button>
+
+							<Button
+								size="small"
+								onClick={() => setControlValue('120px')}
+							>
+								120
+							</Button>
+						</Grid>
 					</Field>
 				</Popover>
 			)}

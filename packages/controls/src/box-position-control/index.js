@@ -11,7 +11,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
-import { Button } from '@publisher/components';
+import { Button, Flex, Grid } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -381,255 +381,205 @@ const BoxPositionControl = ({
 						</div>
 
 						{controlValue.type === 'absolute' && (
-							<div
+							<Flex
+								direction="row"
+								justifyContent="center"
+								alignItems="flex-start"
+								gap="20px"
 								style={{
-									display: 'flex',
-									flexDirection: 'row',
-									justifyContent: 'center',
-									alignItems: 'flex-start',
-									gap: '50px',
 									marginTop: '10px',
 								}}
 							>
-								<div
-									style={{
-										display: 'flex',
-										flexDirection: 'column',
-										justifyContent: 'flex-end',
-										gap: '10px',
-									}}
+								<Grid
+									gridTemplateColumns="repeat(2, 1fr)"
+									gap="10px"
 								>
-									<div
-										style={{
-											display: 'flex',
-											flexDirection: 'row',
-											justifyContent: 'flex-end',
-											gap: '10px',
+									<Button
+										className="position-quick-btn"
+										size="small"
+										onClick={() => {
+											const value = {
+												...controlValue,
+												position: {
+													...controlValue.position,
+													top: '0px',
+													right: '',
+													bottom: '',
+													left: '0px',
+												},
+											};
+
+											setControlValue(value);
+
+											onValueChange(value);
 										}}
 									>
-										<Button
-											className="position-quick-btn"
-											size="small"
-											onClick={() => {
-												const value = {
-													...controlValue,
-													position: {
-														...controlValue.position,
-														top: '0px',
-														right: '',
-														bottom: '',
-														left: '0px',
-													},
-												};
+										<AbsoluteTopLeftIcon />
+									</Button>
+									<Button
+										className="position-quick-btn"
+										size="small"
+										onClick={() => {
+											const value = {
+												...controlValue,
+												position: {
+													...controlValue.position,
+													top: '0px',
+													right: '0px',
+													bottom: '',
+													left: '',
+												},
+											};
 
-												setControlValue(value);
+											setControlValue(value);
 
-												onValueChange(value);
-											}}
-										>
-											<AbsoluteTopLeftIcon />
-										</Button>
-										<Button
-											className="position-quick-btn"
-											size="small"
-											onClick={() => {
-												const value = {
-													...controlValue,
-													position: {
-														...controlValue.position,
-														top: '0px',
-														right: '0px',
-														bottom: '',
-														left: '',
-													},
-												};
-
-												setControlValue(value);
-
-												onValueChange(value);
-											}}
-										>
-											<AbsoluteTopRightIcon />
-										</Button>
-									</div>
-									<div
-										style={{
-											display: 'flex',
-											flexDirection: 'row',
-											justifyContent: 'flex-end',
-											gap: '10px',
+											onValueChange(value);
 										}}
 									>
-										<Button
-											className="position-quick-btn"
-											size="small"
-											onClick={() => {
-												const value = {
-													...controlValue,
-													position: {
-														...controlValue.position,
-														top: '',
-														right: '',
-														bottom: '0px',
-														left: '0px',
-													},
-												};
+										<AbsoluteTopRightIcon />
+									</Button>
+									<Button
+										className="position-quick-btn"
+										size="small"
+										onClick={() => {
+											const value = {
+												...controlValue,
+												position: {
+													...controlValue.position,
+													top: '',
+													right: '',
+													bottom: '0px',
+													left: '0px',
+												},
+											};
 
-												setControlValue(value);
+											setControlValue(value);
 
-												onValueChange(value);
-											}}
-										>
-											<AbsoluteBottomLeftIcon />
-										</Button>
+											onValueChange(value);
+										}}
+									>
+										<AbsoluteBottomLeftIcon />
+									</Button>
 
-										<Button
-											className="position-quick-btn"
-											size="small"
-											onClick={() => {
-												const value = {
-													...controlValue,
-													position: {
-														...controlValue.position,
-														top: '',
-														right: '0px',
-														bottom: '0px',
-														left: '',
-													},
-												};
+									<Button
+										className="position-quick-btn"
+										size="small"
+										onClick={() => {
+											const value = {
+												...controlValue,
+												position: {
+													...controlValue.position,
+													top: '',
+													right: '0px',
+													bottom: '0px',
+													left: '',
+												},
+											};
 
-												setControlValue(value);
+											setControlValue(value);
 
-												onValueChange(value);
-											}}
-										>
-											<AbsoluteBottomRightIcon />
-										</Button>
-									</div>
-								</div>
-								<div
-									style={{
-										display: 'flex',
-										flexDirection: 'column',
-										justifyContent: 'flex-end',
-										gap: '10px',
-									}}
+											onValueChange(value);
+										}}
+									>
+										<AbsoluteBottomRightIcon />
+									</Button>
+								</Grid>
+
+								<Grid
+									gridTemplateColumns="repeat(2, 1fr)"
+									gap="10px"
 								>
-									<div
-										style={{
-											display: 'flex',
-											flexDirection: 'row',
-											justifyContent: 'flex-end',
-											gap: '10px',
+									<Button
+										className="position-quick-btn"
+										size="small"
+										onClick={() => {
+											const value = {
+												...controlValue,
+												position: {
+													...controlValue.position,
+													top: '0px',
+													right: '0px',
+													bottom: '',
+													left: '0px',
+												},
+											};
+
+											setControlValue(value);
+
+											onValueChange(value);
 										}}
 									>
-										<Button
-											className="position-quick-btn"
-											size="small"
-											onClick={() => {
-												const value = {
-													...controlValue,
-													position: {
-														...controlValue.position,
-														top: '0px',
-														right: '0px',
-														bottom: '',
-														left: '0px',
-													},
-												};
+										<AbsoluteTopIcon />
+									</Button>
+									<Button
+										className="position-quick-btn"
+										size="small"
+										onClick={() => {
+											const value = {
+												...controlValue,
+												position: {
+													...controlValue.position,
+													top: '0px',
+													right: '0px',
+													bottom: '0px',
+													left: '',
+												},
+											};
 
-												setControlValue(value);
+											setControlValue(value);
 
-												onValueChange(value);
-											}}
-										>
-											<AbsoluteTopIcon />
-										</Button>
-										<Button
-											className="position-quick-btn"
-											size="small"
-											onClick={() => {
-												const value = {
-													...controlValue,
-													position: {
-														...controlValue.position,
-														top: '0px',
-														right: '0px',
-														bottom: '0px',
-														left: '',
-													},
-												};
-
-												setControlValue(value);
-
-												onValueChange(value);
-											}}
-										>
-											<AbsoluteRightIcon />
-										</Button>
-									</div>
-									<div
-										style={{
-											display: 'flex',
-											flexDirection: 'row',
-											justifyContent: 'flex-end',
-											gap: '10px',
+											onValueChange(value);
 										}}
 									>
-										<Button
-											className="position-quick-btn"
-											size="small"
-											onClick={() => {
-												const value = {
-													...controlValue,
-													position: {
-														...controlValue.position,
-														top: '',
-														right: '0px',
-														bottom: '0px',
-														left: '0px',
-													},
-												};
+										<AbsoluteRightIcon />
+									</Button>
+									<Button
+										className="position-quick-btn"
+										size="small"
+										onClick={() => {
+											const value = {
+												...controlValue,
+												position: {
+													...controlValue.position,
+													top: '',
+													right: '0px',
+													bottom: '0px',
+													left: '0px',
+												},
+											};
 
-												setControlValue(value);
+											setControlValue(value);
 
-												onValueChange(value);
-											}}
-										>
-											<AbsoluteBottomIcon />
-										</Button>
-										<Button
-											className="position-quick-btn"
-											size="small"
-											onClick={() => {
-												const value = {
-													...controlValue,
-													position: {
-														...controlValue.position,
-														top: '0px',
-														right: '',
-														bottom: '0px',
-														left: '0px',
-													},
-												};
+											onValueChange(value);
+										}}
+									>
+										<AbsoluteBottomIcon />
+									</Button>
+									<Button
+										className="position-quick-btn"
+										size="small"
+										onClick={() => {
+											const value = {
+												...controlValue,
+												position: {
+													...controlValue.position,
+													top: '0px',
+													right: '',
+													bottom: '0px',
+													left: '0px',
+												},
+											};
 
-												setControlValue(value);
+											setControlValue(value);
 
-												onValueChange(value);
-											}}
-										>
-											<AbsoluteLeftIcon />
-										</Button>
-									</div>
-								</div>
-								<div
-									style={{
-										display: 'flex',
-										flexDirection: 'column',
-										justifyContent: 'flex-end',
-										gap: '10px',
-									}}
-								>
+											onValueChange(value);
+										}}
+									>
+										<AbsoluteLeftIcon />
+									</Button>
+								</Grid>
+
+								<Grid gridTemplateColumns="1fr" gap="10px">
 									<Button
 										className="position-quick-btn"
 										size="small"
@@ -674,8 +624,8 @@ const BoxPositionControl = ({
 									>
 										<AbsoluteCenterIcon />
 									</Button>
-								</div>
-							</div>
+								</Grid>
+							</Flex>
 						)}
 					</div>
 				)}

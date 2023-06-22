@@ -7,7 +7,7 @@ import { useState } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { Button, HStack, Popover, VStack } from '@publisher/components';
+import { Button, Flex, Grid, Popover } from '@publisher/components';
 import { Field, InputField } from '@publisher/fields';
 import { controlInnerClassNames } from '@publisher/classnames';
 
@@ -27,70 +27,95 @@ export function SidePopover({
 
 	function getAllActionButtons() {
 		return (
-			<VStack>
-				<HStack>
-					<Button
-						size="small"
-						onClick={() => {
-							setControlValue('0px');
-						}}
-					>
-						0
-					</Button>
+			<Grid
+				gridTemplateColumns="repeat(4, 1fr)"
+				gap="8px"
+				style={{ width: '100%' }}
+			>
+				<Button
+					size="small"
+					onClick={() => {
+						setControlValue('0px');
+					}}
+					style={{
+						padding: '2px 0',
+					}}
+				>
+					0
+				</Button>
 
-					<Button
-						size="small"
-						onClick={() => setControlValue('10px')}
-					>
-						10
-					</Button>
+				<Button
+					size="small"
+					onClick={() => setControlValue('10px')}
+					style={{
+						padding: '2px 0',
+					}}
+				>
+					10
+				</Button>
 
-					<Button
-						size="small"
-						onClick={() => setControlValue('20px')}
-					>
-						20
-					</Button>
+				<Button
+					size="small"
+					onClick={() => setControlValue('20px')}
+					style={{
+						padding: '2px 0',
+					}}
+				>
+					20
+				</Button>
 
-					<Button
-						size="small"
-						onClick={() => setControlValue('30px')}
-					>
-						30
-					</Button>
-				</HStack>
-				<HStack>
-					<Button
-						size="small"
-						onClick={() => {
-							setControlValue('60px');
-						}}
-					>
-						60
-					</Button>
+				<Button
+					size="small"
+					onClick={() => setControlValue('30px')}
+					style={{
+						padding: '2px 0',
+					}}
+				>
+					30
+				</Button>
 
-					<Button
-						size="small"
-						onClick={() => setControlValue('80px')}
-					>
-						80
-					</Button>
+				<Button
+					size="small"
+					onClick={() => {
+						setControlValue('60px');
+					}}
+					style={{
+						padding: '2px 0',
+					}}
+				>
+					60
+				</Button>
 
-					<Button
-						size="small"
-						onClick={() => setControlValue('100px')}
-					>
-						100
-					</Button>
+				<Button
+					size="small"
+					onClick={() => setControlValue('80px')}
+					style={{
+						padding: '2px 0',
+					}}
+				>
+					80
+				</Button>
 
-					<Button
-						size="small"
-						onClick={() => setControlValue('120px')}
-					>
-						120
-					</Button>
-				</HStack>
-			</VStack>
+				<Button
+					size="small"
+					onClick={() => setControlValue('100px')}
+					style={{
+						padding: '2px 0',
+					}}
+				>
+					100
+				</Button>
+
+				<Button
+					size="small"
+					onClick={() => setControlValue('120px')}
+					style={{
+						padding: '2px 0',
+					}}
+				>
+					120
+				</Button>
+			</Grid>
 		);
 	}
 
@@ -136,8 +161,11 @@ export function SidePopover({
 					>
 						<>
 							{type === 'margin' && (
-								<HStack>
-									<HStack style={{ width: '68px' }}>
+								<Flex direction="row">
+									<Flex
+										direction="column"
+										style={{ width: '40%' }}
+									>
 										<Button
 											size="small"
 											className="auto-btn"
@@ -145,11 +173,11 @@ export function SidePopover({
 												setControlValue('0Auto');
 											}}
 										>
-											Auto
+											{__('Auto', 'publisher-core')}
 										</Button>
-									</HStack>
+									</Flex>
 									{getAllActionButtons()}
-								</HStack>
+								</Flex>
 							)}
 
 							{type === 'padding' && <>{getAllActionButtons()}</>}

@@ -16,7 +16,7 @@ import {
 	MediaImageField,
 	Field,
 } from '@publisher/fields';
-import { HStack } from '@publisher/components';
+import { Flex } from '@publisher/components';
 import {
 	controlClassNames,
 	controlInnerClassNames,
@@ -147,7 +147,11 @@ const Fields = ({ itemId, item }) => {
 						}
 					>
 						{item['image-size'] === 'custom' && (
-							<HStack spacing="2" justify="space-around">
+							<Flex
+								direction="row"
+								gap="8px"
+								justifyContent="space-around"
+							>
 								<InputField
 									label={__('Width', 'publisher-core')}
 									columns="columns-1"
@@ -183,7 +187,7 @@ const Fields = ({ itemId, item }) => {
 										})
 									}
 								/>
-							</HStack>
+							</Flex>
 						)}
 					</ToggleSelectField>
 

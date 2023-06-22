@@ -16,7 +16,7 @@ import {
 	TextShadowField,
 	ToggleSelectField,
 } from '@publisher/fields';
-import { Popover, Button, HStack } from '@publisher/components';
+import { Popover, Button, Flex } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
@@ -212,7 +212,7 @@ export function TypographyExtension({ children, config, ...props }) {
 								/>
 							)}
 
-							<HStack>
+							<Flex direction="row" gap="10px">
 								<div style={{ width: '70%' }}>
 									{isActiveField(publisherTextDecoration) && (
 										<ToggleSelectField
@@ -325,9 +325,9 @@ export function TypographyExtension({ children, config, ...props }) {
 										/>
 									)}
 								</div>
-							</HStack>
+							</Flex>
 
-							<HStack>
+							<Flex direction="row" gap="10px">
 								<div style={{ width: '70%' }}>
 									{isActiveField(publisherTextTransform) && (
 										<ToggleSelectField
@@ -436,7 +436,7 @@ export function TypographyExtension({ children, config, ...props }) {
 										/>
 									)}
 								</div>
-							</HStack>
+							</Flex>
 						</Field>
 
 						<Field

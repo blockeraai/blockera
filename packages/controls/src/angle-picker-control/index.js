@@ -13,7 +13,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
-import { Button, HStack } from '@publisher/components';
+import { Button, Flex } from '@publisher/components';
 
 export default function AnglePickerControl({
 	initValue = 0,
@@ -57,7 +57,7 @@ export default function AnglePickerControl({
 	}
 
 	return (
-		<HStack className={controlClassNames('angle', className)}>
+		<Flex direction="row" className={controlClassNames('angle', className)}>
 			<WordPressAnglePickerControl
 				{...props}
 				value={controlValue}
@@ -95,6 +95,6 @@ export default function AnglePickerControl({
 					onValueChange(newValue);
 				}}
 			/>
-		</HStack>
+		</Flex>
 	);
 }
