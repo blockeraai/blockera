@@ -14,7 +14,7 @@ import { Button as WPButton } from '@wordpress/components';
 import { componentClassNames } from '@publisher/classnames';
 
 export default function Button({
-	style,
+	variant,
 	size,
 	contentAlign,
 	noBorder,
@@ -24,13 +24,12 @@ export default function Button({
 	//
 	...props
 }) {
-	console.log(props);
 	return (
 		<WPButton
 			className={componentClassNames(
 				'button',
 				'size-' + size,
-				'style-' + style,
+				'variant-' + variant,
 				contentAlign && 'content-align-' + contentAlign,
 				noBorder && 'no-border',
 				// eslint-disable-next-line no-nested-ternary
@@ -41,7 +40,7 @@ export default function Button({
 					: '',
 				className
 			)}
-			variant={style}
+			variant={variant}
 			{...props}
 		>
 			{children}
@@ -53,7 +52,7 @@ Button.propTypes = {
 	/**
 	 * Sets the style of button, `primary` is the style with background and `secondary` is outlined button style.
 	 */
-	style: PropTypes.oneOf(['primary', 'secondary', 'tertiary', 'link']),
+	variant: PropTypes.oneOf(['primary', 'secondary', 'tertiary', 'link']),
 	/**
 	 * Sets the size of button.
 	 */
@@ -71,51 +70,43 @@ Button.propTypes = {
 	 */
 	isFocus: PropTypes.bool,
 	/**
-	 * Custom CSS classes.
-	 */
-	className: PropTypes.string,
-	/**
-	 * Inner button content.
-	 */
-	children: PropTypes.node,
-	/**
 	 * WP Button Props 👇
 	 */
 	/**
-	 * 👋 WP Button → If provided, renders an Icon component inside the button.
+	 * 🔗 WP Button → If provided, renders an Icon component inside the button.
 	 */
 	icon: PropTypes.element,
 	/**
-	 * 👋 WP Button → If provided with `icon`, sets the position of icon relative to the `text`.
+	 * 🔗 WP Button → If provided with `icon`, sets the position of icon relative to the `text`.
 	 *
 	 * @default 'left'
 	 */
 	iconPosition: PropTypes.oneOf(['left', 'right']),
 	/**
-	 * 👋 WP Button → If provided with `icon`, sets the icon size.
+	 * 🔗 WP Button → If provided with `icon`, sets the icon size.
 	 * Please refer to the Icon component for more details regarding
 	 * the default value of its `size` prop.
 	 */
 	iconSize: PropTypes.number,
 	/**
-	 * 👋 WP Button → Indicates activity while a action is being performed.
+	 * 🔗 WP Button → Indicates activity while a action is being performed.
 	 */
 	isBusy: PropTypes.bool,
 	/**
-	 * 👋 WP Button → Renders a red text-based button style to indicate destructive behavior.
+	 * 🔗 WP Button → Renders a red text-based button style to indicate destructive behavior.
 	 */
 	isDestructive: PropTypes.bool,
 	/**
-	 * 👋 WP Button → Renders a pressed button style.
+	 * 🔗 WP Button → Renders a pressed button style.
 	 */
 	isPressed: PropTypes.bool,
 	/**
-	 * 👋 WP Button → Sets the `aria-label` of the component, if none is provided.
+	 * 🔗 WP Button → Sets the `aria-label` of the component, if none is provided.
 	 * Sets the Tooltip content if `showTooltip` is provided.
 	 */
 	label: PropTypes.bool,
 	/**
-	 * 👋 WP Button → If provided with `showTooltip`, appends the Shortcut label to the tooltip content.
+	 * 🔗 WP Button → If provided with `showTooltip`, appends the Shortcut label to the tooltip content.
 	 * If an object is provided, it should contain `display` and `ariaLabel` keys.
 	 */
 	shortcut: PropTypes.oneOfType([
@@ -126,20 +117,19 @@ Button.propTypes = {
 		}),
 	]),
 	/**
-	 * 👋 WP Button → If provided, renders a Tooltip component for the button.
+	 * 🔗 WP Button → If provided, renders a Tooltip component for the button.
 	 */
 	showTooltip: PropTypes.string,
 	/**
-	 * 👋 WP Button → If provided, displays the given text inside the button. If the button contains children elements, the text is displayed before them.
+	 * 🔗 WP Button → If provided, displays the given text inside the button. If the button contains children elements, the text is displayed before them.
 	 */
 	text: PropTypes.string,
 };
 
 Button.defaultProps = {
-	style: 'tertiary',
+	variant: 'tertiary',
 	size: 'normal',
 	contentAlign: 'center',
 	noBorder: false,
 	isFocus: null,
-	className: '',
 };

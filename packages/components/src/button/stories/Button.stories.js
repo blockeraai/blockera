@@ -2,6 +2,7 @@
  * Internal dependencies
  */
 import Button from '../button';
+import Buttons from '../buttons';
 import {
 	decorators,
 	inspectDecorator,
@@ -16,7 +17,7 @@ export default {
 
 export const Default = {
 	args: {
-		style: 'tertiary',
+		variant: 'tertiary',
 		children: 'Call to Action',
 	},
 	decorators: [inspectDecorator, ...decorators],
@@ -24,41 +25,27 @@ export const Default = {
 
 export const Styles = {
 	render: (args) => (
-		<div
-			style={{
-				display: 'flex',
-				flexDirection: 'column',
-				gap: '20px',
-				alignItems: 'flex-start',
-			}}
-		>
-			<Button style="primary" {...args}>
+		<Buttons direction="column" alignItems="flex-start" gap="20px">
+			<Button variant="primary" {...args}>
 				Primary Button
 			</Button>
-			<Button style="secondary" {...args}>
+			<Button variant="secondary" {...args}>
 				Secondary Button
 			</Button>
-			<Button style="tertiary" {...args}>
+			<Button variant="tertiary" {...args}>
 				Tertiary Button
 			</Button>
-			<Button style="link" {...args}>
+			<Button variant="link" {...args}>
 				Link Button
 			</Button>
-		</div>
+		</Buttons>
 	),
 	decorators: [inspectDecorator, ...decorators],
 };
 
 export const Sizes = {
 	render: (args) => (
-		<div
-			style={{
-				display: 'flex',
-				flexDirection: 'column',
-				gap: '20px',
-				alignItems: 'flex-start',
-			}}
-		>
+		<Buttons direction="column" alignItems="flex-start" gap="20px">
 			<Button size="normal" {...args}>
 				Normal Button
 			</Button>
@@ -68,169 +55,183 @@ export const Sizes = {
 			<Button size="extra-small" {...args}>
 				Extra Small
 			</Button>
-		</div>
+		</Buttons>
 	),
 	decorators: [inspectDecorator, ...decorators],
 };
 
 export const Screenshot = {
 	render: (args) => (
-		<div
-			style={{
-				display: 'flex',
-				flexDirection: 'column',
-				gap: '20px',
-				alignItems: 'flex-start',
-			}}
-		>
-			<h3 style={{ margin: '0 0 10px' }}>Primary Button</h3>
-			<Button style="primary" size="normal" {...args}>
-				Normal Button
-			</Button>
-			<Button style="primary" size="small" {...args}>
-				Small Button
-			</Button>
-			<Button
-				style="primary"
-				size="small"
-				icon={<Icon />}
-				text="Small Button + Text + Icon"
-				{...args}
-			/>
-			<Button
-				style="primary"
-				size="small"
-				iconPosition="right"
-				icon={<Icon />}
-				text="Small Button + Text + Right Icon"
-				{...args}
-			/>
-			<Button style="primary" size="extra-small" {...args}>
-				Extra Small
-			</Button>
-			<Button style="primary" size="extra-small" isFocus={true} {...args}>
-				Extra Small + Focused
-			</Button>
-			<Button
-				style="primary"
-				size="extra-small"
-				noBorder={true}
-				{...args}
+		<>
+			<Buttons
+				gap="20px"
+				direction="column"
+				alignItems="flex-start"
+				style={{ margin: '0 0 50px' }}
 			>
-				Extra Small + No Border
-			</Button>
-			<Button
-				style="primary"
-				size="extra-small"
-				isFocus={true}
-				noBorder={true}
-				{...args}
-			>
-				Extra Small + No Border + Focused
-			</Button>
+				<h2 style={{ margin: '0 0 10px' }}>Primary Button</h2>
+				<Button variant="primary" size="normal" {...args}>
+					Normal Button
+				</Button>
+				<Button variant="primary" size="small" {...args}>
+					Small Button
+				</Button>
+				<Button
+					variant="primary"
+					size="small"
+					icon={<Icon />}
+					text="Small Button + Text + Icon"
+					{...args}
+				/>
+				<Button
+					variant="primary"
+					size="small"
+					iconPosition="right"
+					icon={<Icon />}
+					text="Small Button + Text + Right Icon"
+					{...args}
+				/>
+				<Button variant="primary" size="extra-small" {...args}>
+					Extra Small
+				</Button>
+				<Button
+					variant="primary"
+					size="extra-small"
+					isFocus={true}
+					{...args}
+				>
+					Extra Small + Focused
+				</Button>
+				<Button
+					variant="primary"
+					size="extra-small"
+					noBorder={true}
+					{...args}
+				>
+					Extra Small + No Border
+				</Button>
+				<Button
+					variant="primary"
+					size="extra-small"
+					isFocus={true}
+					noBorder={true}
+					{...args}
+				>
+					Extra Small + No Border + Focused
+				</Button>
+			</Buttons>
 
-			<h3 style={{ margin: '30px 0 10px' }}>Secondary Button</h3>
-			<Button style="secondary" size="normal" {...args}>
-				Normal Button
-			</Button>
-			<Button style="secondary" size="small" {...args}>
-				Small Button
-			</Button>
-			<Button
-				style="secondary"
-				size="small"
-				icon={<Icon />}
-				text="Normal Button + Text + Icon"
-				{...args}
-			/>
-			<Button
-				style="secondary"
-				size="small"
-				iconPosition="right"
-				icon={<Icon />}
-				text="Normal Button + Text + Right Icon"
-				{...args}
-			/>
-			<Button style="secondary" size="extra-small" {...args}>
-				Extra Small
-			</Button>
-			<Button
-				style="secondary"
-				size="extra-small"
-				isFocus={true}
-				{...args}
+			<Buttons
+				gap="20px"
+				direction="column"
+				alignItems="flex-start"
+				style={{ margin: '0 0 50px' }}
 			>
-				Extra Small & Focused
-			</Button>
-			<Button
-				style="secondary"
-				size="extra-small"
-				noBorder={true}
-				{...args}
-			>
-				Extra Small & No Border
-			</Button>
-			<Button
-				style="secondary"
-				size="extra-small"
-				isFocus={true}
-				noBorder={true}
-				{...args}
-			>
-				Extra Small & No Border & Focused
-			</Button>
+				<h2 style={{ margin: '0 0 10px' }}>Secondary Button</h2>
+				<Button variant="secondary" size="normal" {...args}>
+					Normal Button
+				</Button>
+				<Button variant="secondary" size="small" {...args}>
+					Small Button
+				</Button>
+				<Button
+					variant="secondary"
+					size="small"
+					icon={<Icon />}
+					text="Normal Button + Text + Icon"
+					{...args}
+				/>
+				<Button
+					variant="secondary"
+					size="small"
+					iconPosition="right"
+					icon={<Icon />}
+					text="Normal Button + Text + Right Icon"
+					{...args}
+				/>
+				<Button variant="secondary" size="extra-small" {...args}>
+					Extra Small
+				</Button>
+				<Button
+					variant="secondary"
+					size="extra-small"
+					isFocus={true}
+					{...args}
+				>
+					Extra Small & Focused
+				</Button>
+				<Button
+					variant="secondary"
+					size="extra-small"
+					noBorder={true}
+					{...args}
+				>
+					Extra Small & No Border
+				</Button>
+				<Button
+					variant="secondary"
+					size="extra-small"
+					isFocus={true}
+					noBorder={true}
+					{...args}
+				>
+					Extra Small & No Border & Focused
+				</Button>
+			</Buttons>
 
-			<h3 style={{ margin: '30px 0 10px' }}>Tertiary Button</h3>
-			<Button style="tertiary" size="normal" {...args}>
-				Normal Button
-			</Button>
-			<Button style="tertiary" size="small" {...args}>
-				Small Button
-			</Button>
-			<Button
-				style="tertiary"
-				size="small"
-				icon={<Icon />}
-				text="Normal Button + Text + Icon"
-				{...args}
-			/>
-			<Button
-				style="tertiary"
-				size="small"
-				iconPosition="right"
-				icon={<Icon />}
-				text="Normal Button + Text + Right Icon"
-				{...args}
-			/>
-			<Button style="tertiary" size="extra-small" {...args}>
-				Extra Small
-			</Button>
-			<Button
-				style="tertiary"
-				size="extra-small"
-				isFocus={true}
-				{...args}
-			>
-				Extra Small & Focused
-			</Button>
-			<Button
-				style="tertiary"
-				size="extra-small"
-				noBorder={true}
-				{...args}
-			>
-				Extra Small & No Border
-			</Button>
-			<Button
-				style="tertiary"
-				size="extra-small"
-				isFocus={true}
-				noBorder={true}
-				{...args}
-			>
-				Extra Small & No Border & Focused
-			</Button>
-		</div>
+			<Buttons gap="20px" direction="column" alignItems="flex-start">
+				<h2 style={{ margin: '0 0 10px' }}>Tertiary Button</h2>
+				<Button variant="tertiary" size="normal" {...args}>
+					Normal Button
+				</Button>
+				<Button variant="tertiary" size="small" {...args}>
+					Small Button
+				</Button>
+				<Button
+					variant="tertiary"
+					size="small"
+					icon={<Icon />}
+					text="Normal Button + Text + Icon"
+					{...args}
+				/>
+				<Button
+					variant="tertiary"
+					size="small"
+					iconPosition="right"
+					icon={<Icon />}
+					text="Normal Button + Text + Right Icon"
+					{...args}
+				/>
+				<Button variant="tertiary" size="extra-small" {...args}>
+					Extra Small
+				</Button>
+				<Button
+					variant="tertiary"
+					size="extra-small"
+					isFocus={true}
+					{...args}
+				>
+					Extra Small & Focused
+				</Button>
+				<Button
+					variant="tertiary"
+					size="extra-small"
+					noBorder={true}
+					{...args}
+				>
+					Extra Small & No Border
+				</Button>
+				<Button
+					variant="tertiary"
+					size="extra-small"
+					isFocus={true}
+					noBorder={true}
+					{...args}
+				>
+					Extra Small & No Border & Focused
+				</Button>
+			</Buttons>
+		</>
 	),
 	decorators: [inspectDecorator, ...decorators],
 };
