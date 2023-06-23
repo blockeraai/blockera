@@ -49,6 +49,14 @@
 		&:focus:not(:disabled, .no-border) {
 			box-shadow: inset 0 0 0 1px var(--publisher-controls-border-color-focus, #ffffff), 0 0 0 1px var(--publisher-controls-background-color), 0 0 0 2.5px var(--publisher-controls-border-color-focus) !important;
 		}
+		
+		&:disabled,
+		&[aria-disabled=true],
+		&[aria-disabled=true]:hover{
+			opacity: 0.5;
+			outline: none;
+			transform: none;
+		}
 	}
 	
 	&.is-secondary {
@@ -61,6 +69,16 @@
 		&.is-focus:not(:disabled),
 		&:focus:not(:disabled, .no-border) {
 			box-shadow: inset 0 0 0 1px var(--publisher-controls-border-color-focus, #ffffff), 0 0 0 1px var(--publisher-controls-background-color), 0 0 0 2.5px var(--publisher-controls-border-color-focus) !important;
+		}
+		
+		&:disabled,
+		&[aria-disabled=true],
+		&[aria-disabled=true]:hover{
+			opacity: 0.5;
+			outline: none;
+			transform: none;
+			box-shadow: inset 0 0 0 1px var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+			color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
 		}
 	}
 	
@@ -96,6 +114,14 @@
 		&:focus:not(:disabled, .no-border, .toggle-focus) {
 			box-shadow: inset 0 0 0 1px var(--publisher-controls-border-color-focus), 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
 			outline: 2px solid transparent !important;
+		}
+		
+		&:disabled,
+		&[aria-disabled=true],
+		&[aria-disabled=true]:hover {
+			opacity: 0.5;
+			outline: none;
+			transform: none;
 		}
 	}
 }

@@ -74,6 +74,14 @@ export const Screenshot = {
 				<Button variant="primary" size="normal" {...args}>
 					Normal Button
 				</Button>
+				<Button
+					variant="primary"
+					size="normal"
+					disabled={true}
+					{...args}
+				>
+					Normal Disabled Button
+				</Button>
 				<Button variant="primary" size="small" {...args}>
 					Small Button
 				</Button>
@@ -132,6 +140,14 @@ export const Screenshot = {
 				<Button variant="secondary" size="normal" {...args}>
 					Normal Button
 				</Button>
+				<Button
+					variant="secondary"
+					size="normal"
+					disabled={true}
+					{...args}
+				>
+					Normal Disabled Button
+				</Button>
 				<Button variant="secondary" size="small" {...args}>
 					Small Button
 				</Button>
@@ -184,6 +200,14 @@ export const Screenshot = {
 			<Buttons gap="20px" direction="column" alignItems="flex-start">
 				<Button variant="tertiary" size="normal" {...args}>
 					Normal Button
+				</Button>
+				<Button
+					variant="tertiary"
+					size="normal"
+					disabled={true}
+					{...args}
+				>
+					Normal Disabled Button
 				</Button>
 				<Button variant="tertiary" size="small" {...args}>
 					Small Button
