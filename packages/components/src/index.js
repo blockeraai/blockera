@@ -6,8 +6,5 @@ export { default as Flex } from './flex';
 export { default as Grid } from './grid';
 export { default as Divider } from './divider';
 export { default as InspectElement } from './inspect-element';
-export {
-	default as ColorIndicator,
-	ColorIndicatorStack,
-} from './color-indicator';
+export * from './color-indicator';
 export { default as MediaUploader } from './media-uploader';

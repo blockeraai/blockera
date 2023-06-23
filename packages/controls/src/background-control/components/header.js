@@ -33,17 +33,13 @@ const Header = ({ item, isOpen, setOpen, children, isOpenPopoverEvent }) => {
 
 		case 'linear-gradient':
 			label = __('Linear Gradient', 'publisher-core');
-			preview = (
-				<ColorIndicator type="linear-gradient" value={itemBGProperty} />
-			);
+			preview = <ColorIndicator type="gradient" value={itemBGProperty} />;
 			icon = <TypeLinearGradientIcon />;
 			break;
 
 		case 'radial-gradient':
 			label = __('Radial Gradient', 'publisher-core');
-			preview = (
-				<ColorIndicator type="radial-gradient" value={itemBGProperty} />
-			);
+			preview = <ColorIndicator type="gradient" value={itemBGProperty} />;
 			icon = <TypeRadialGradientIcon />;
 			break;
 
