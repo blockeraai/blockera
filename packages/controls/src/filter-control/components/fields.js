@@ -26,7 +26,7 @@ const Fields = ({ itemId, item }) => {
 				options={getTypeOptions()}
 				//
 				value={item.type}
-				onValueChange={(type) => changeItem(itemId, { ...item, type })}
+				onChange={(type) => changeItem(itemId, { ...item, type })}
 			/>
 
 			{item.type === 'blur' && (

@@ -120,7 +120,7 @@ const BorderControl = ({
 						className: 'align-center',
 					},
 				]}
-				onValueChange={(newValue) => {
+				onChange={(newValue) => {
 					const value = { ...controlValue, style: newValue };
 
 					setControlValue(value);

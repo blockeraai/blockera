@@ -101,7 +101,7 @@ export function BackgroundExtension({ children, config, ...props }) {
 						type: 'custom',
 						defaultValue: 'none',
 						value: attributes.publisherBackgroundClip,
-						onValueChange: (newValue) =>
+						onChange: (newValue) =>
 							setAttributes({
 								...attributes,
 								publisherBackgroundClip: newValue,

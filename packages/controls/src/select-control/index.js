@@ -1,16 +1,17 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
-import { useState } from '@wordpress/element';
 import {
 	SelectControl as WPSelectControl,
 	CustomSelectControl as WPCustomSelectControl,
 } from '@wordpress/components';
+import PropTypes from 'prop-types';
 
 /**
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
+import { useValue } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -18,24 +19,23 @@ import { controlClassNames } from '@publisher/classnames';
 import { renderSelectNativeOption, prepareSelectCustomOptions } from './utils';
 
 const SelectControl = ({
-	defaultValue = '',
+	type,
 	options,
-	children,
-	type = 'native', // custom
-	customMenuPosition = 'bottom', // top
-	noBorder = false,
+	customMenuPosition,
+	noBorder,
+	multiple,
 	//
-	value: _value,
+	defaultValue,
+	value: initialValue,
+	onChange,
 	//
 	className,
-	onChange = (newValue) => {
-		return newValue;
-	},
-	onValueChange = (newValue) => {
-		return newValue;
-	},
 }) => {
-	const [value, setValue] = useState(_value || defaultValue);
+	const { value, setValue } = useValue({
+		initialValue,
+		defaultValue,
+		onChange,
+	});
 
 	if (type === 'custom') options = prepareSelectCustomOptions(options);
 
@@ -50,15 +50,11 @@ const SelectControl = ({
 						className
 					)}
 					value={value}
-					onChange={(newValue) => {
-						newValue = onChange(newValue);
-						setValue(newValue);
-						onValueChange(newValue);
-					}}
+					onChange={setValue}
+					multiple={multiple}
 					__nextHasNoMarginBottom
 				>
 					{options?.map(renderSelectNativeOption)}
-					{children}
 				</WPSelectControl>
 			)}
 
@@ -74,14 +70,7 @@ const SelectControl = ({
 					)}
 					value={options.find((option) => option.key === value)}
 					onChange={({ selectedItem }) => {
-						let newValue = onChange(selectedItem.key);
-
-						if (newValue === '') {
-							newValue = defaultValue;
-						}
-
-						setValue(newValue);
-						onValueChange(newValue);
+						setValue(selectedItem.key);
 					}}
 					options={options}
 				/>
@@ -91,3 +80,55 @@ const SelectControl = ({
 };
 
 export default SelectControl;
+
+SelectControl.propTypes = {
+	/**
+	 * It sets the control default value if the value not provided. By using it the control will not fire onValueChange event for this default value on control first render,
+	 */
+	defaultValue: PropTypes.string,
+	/**
+	 * The current value.
+	 */
+	value: PropTypes.string,
+	/**
+	 * Function that will be fired while the control value state changes.
+	 */
+	onChange: PropTypes.func,
+	/**
+	 * Type of select. `native` is the browser native select control and the `custom` is custom developed select that is more advanced and it's options support icon.
+	 */
+	type: PropTypes.oneOf(['native', 'custom']),
+	/**
+	 * Select control options array.
+	 */
+	options: PropTypes.array,
+	/**
+	 * Select dropdown menu position for `custom` select control.
+	 */
+	customMenuPosition: PropTypes.oneOf(['bottom', 'top']),
+	/**
+	 * By using this you can prevent the control to show the border and outline shape.
+	 */
+	noBorder: PropTypes.bool,
+	/**
+	 * WP Button Props 👇
+	 */
+	/**
+	 * 🔗 WP SelectControl → If this property is added, multiple values can be selected. The `value` passed should be an array.
+	 *
+	 * It only works in `native` type.
+	 *
+	 * In most cases, it is preferable to use the `FormTokenField` or `CheckboxControl` components instead.
+	 *
+	 * @default false
+	 */
+	multiple: PropTypes.bool,
+};
+
+SelectControl.defaultProps = {
+	defaultValue: '',
+	type: 'native',
+	customMenuPosition: 'bottom',
+	noBorder: false,
+	multiple: false,
+};

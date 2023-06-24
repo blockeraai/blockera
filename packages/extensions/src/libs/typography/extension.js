@@ -760,7 +760,7 @@ export function TypographyExtension({ children, config, ...props }) {
 								//
 								defaultValue="normal"
 								value={attributes.publisherWordBreak}
-								onValueChange={(newValue) =>
+								onChange={(newValue) =>
 									setAttributes({
 										...attributes,
 										publisherWordBreak: newValue,

@@ -26,7 +26,7 @@ const Fields = ({ itemId, item }) => {
 				options={getTypeOptions()}
 				//
 				value={item.type}
-				onValueChange={(type) => changeItem(itemId, { ...item, type })}
+				onChange={(type) => changeItem(itemId, { ...item, type })}
 			/>
 
 			<InputField
@@ -51,9 +51,7 @@ const Fields = ({ itemId, item }) => {
 				options={getTimingOptions()}
 				//
 				value={item.timing}
-				onValueChange={(timing) =>
-					changeItem(itemId, { ...item, timing })
-				}
+				onChange={(timing) => changeItem(itemId, { ...item, timing })}
 			/>
 
 			<InputField

@@ -123,7 +123,7 @@ const BoxPositionControl = ({
 					//
 					defaultValue="static"
 					value={controlValue.type}
-					onValueChange={(newValue) => {
+					onChange={(newValue) => {
 						const value = {
 							...controlValue,
 							type: newValue,

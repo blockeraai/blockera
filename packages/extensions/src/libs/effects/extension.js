@@ -309,7 +309,7 @@ export function EffectsExtension({ children, config, ...props }) {
 						//
 						defaultValue: 'default',
 						value: attributes.publisherCursor,
-						onValueChange: (newValue) =>
+						onChange: (newValue) =>
 							setAttributes({
 								...attributes,
 								publisherCursor: newValue,
@@ -329,7 +329,7 @@ export function EffectsExtension({ children, config, ...props }) {
 						//
 						defaultValue: 'normal',
 						value: attributes.publisherBlendMode,
-						onValueChange: (newValue) =>
+						onChange: (newValue) =>
 							setAttributes({
 								...attributes,
 								publisherBlendMode: newValue,

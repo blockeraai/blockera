@@ -75,7 +75,7 @@ const Fields = ({ itemId, item }) => {
 						// type="customProps"
 						value={customMode ? 'customKey' : currentKey}
 						initValue=""
-						onValueChange={(newValue) => {
+						onChange={(newValue) => {
 							// update key
 							if (newValue !== '' && newValue !== 'customKey') {
 								changeItem(itemId, {
@@ -129,7 +129,7 @@ const Fields = ({ itemId, item }) => {
 									// type="customProps"
 									value={currentValue}
 									initValue=""
-									onValueChange={(newValue) => {
+									onChange={(newValue) => {
 										setCurrentValue(newValue);
 										changeItem(itemId, {
 											...item,
