@@ -11,7 +11,22 @@ const StoryDataDecorator = (story, context) => {
 		>
 			{story()}
 
-			<p style={{ marginTop: '20px' }}>value is {value}</p>
+			<p style={{ marginTop: '20px' }}>
+				Default Value:
+				<pre
+					data-testid="default-value"
+					style={{ backgroundColor: '#eee', padding: '8px 10px' }}
+				>
+					{context.allArgs.value}
+				</pre>
+				Current Value:
+				<pre
+					data-testid="current-value"
+					style={{ backgroundColor: '#eee', padding: '8px 10px' }}
+				>
+					{value}
+				</pre>
+			</p>
 		</StoryDataContext.Provider>
 	);
 };
