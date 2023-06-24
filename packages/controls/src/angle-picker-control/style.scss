@@ -6,6 +6,7 @@
 	.components-angle-picker-control__angle-circle {
 		height: 30px;
 		width: 30px;
+		border: 1px solid var(--publisher-controls-border-color);
 	}
 	
 	.components-angle-picker-control {
@@ -18,6 +19,26 @@
 		.components-flex-item:nth-child(1) {
 			order: 2;
 		}
+		
+		.components-input-control__backdrop {
+			border: 1px solid var(--publisher-controls-border-color);
+			border-radius: 2px;
+		}
+		
+		.components-input-control__input:focus + .components-input-control__suffix + .components-input-control__backdrop {
+			border-color: var(--publisher-controls-border-color-focus) !important;
+			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
+		}
+		
+		.components-input-control__suffix {
+			span {
+				margin-right: 7px;
+			}
+		}
+		
+		& > * {
+			margin: 0;
+		}
 	}
 	
 	.publisher-component-button {
@@ -28,14 +49,7 @@
 		width: 30px;
 		margin: 0;
 		padding: 0 0;
-		border: 1px solid #959595;
 		margin-left: auto;
 		min-width: 30px;
-		
-		&:focus:not(:disabled) {
-			border-color: var(--publisher-controls-border-color-focus);
-			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
-			outline: 3px solid transparent;
-		}
 	}
 }

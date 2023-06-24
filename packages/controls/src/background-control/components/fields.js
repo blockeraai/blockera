@@ -281,7 +281,7 @@ const Fields = ({ itemId, item }) => {
 
 					<AnglePickerField
 						label={__('Angel', 'publisher-core')}
-						onValueChange={(newValue) => {
+						onChange={(newValue) => {
 							// update linear gradient value
 							changeItem(itemId, {
 								...item,
