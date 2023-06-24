@@ -14,7 +14,7 @@ import classnames from 'classnames';
 import { enhance } from './utils';
 import { useBlockExtensions } from './hooks';
 import deprecateAllFeatures from './deprecated';
-import { isArray, isObject } from 'lodash';
+import { isArray, isObject } from '@publisher/utils';
 
 /**
  * React hook function to override the default block element to add wrapper props.

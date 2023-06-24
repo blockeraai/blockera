@@ -1,4 +1,4 @@
-import { isObject, isArray } from 'lodash';
+import { isObject, isArray } from '@publisher/utils';
 
 /**
  * Return a new object with the specified keys omitted.
