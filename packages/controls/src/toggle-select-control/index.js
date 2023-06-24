@@ -13,7 +13,7 @@ import {
 import { controlClassNames } from '@publisher/classnames';
 
 const ToggleSelectControl = ({
-	initValue = '',
+	defaultValue = '',
 	options,
 	children,
 	isDeselectable = false,
@@ -32,7 +32,7 @@ const ToggleSelectControl = ({
 		<>
 			<WPToggleGroupControl
 				className={controlClassNames('toggle-select', className)}
-				value={value || initValue}
+				value={value || defaultValue}
 				onChange={(newValue) => {
 					newValue = onChange(newValue);
 					onValueChange(newValue);

@@ -16,7 +16,7 @@ import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
 export default function TransitionControl({
-	initValue = {
+	defaultValue = {
 		type: 'all',
 		duration: '500ms',
 		timing: 'ease',
@@ -34,7 +34,7 @@ export default function TransitionControl({
 			popoverLabel={popoverLabel}
 			Header={Header}
 			InnerComponents={Fields}
-			initValue={initValue}
+			defaultValue={defaultValue}
 			{...props}
 		/>
 	);

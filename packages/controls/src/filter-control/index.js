@@ -16,7 +16,7 @@ import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
 export default function FilterControl({
-	initValue = {
+	defaultValue = {
 		type: 'blur',
 		blur: '3px',
 		brightness: '200%',
@@ -43,7 +43,7 @@ export default function FilterControl({
 			popoverLabel={popoverLabel}
 			Header={Header}
 			InnerComponents={Fields}
-			initValue={initValue}
+			defaultValue={defaultValue}
 			{...props}
 		/>
 	);

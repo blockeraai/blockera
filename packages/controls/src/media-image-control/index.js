@@ -18,7 +18,7 @@ import {
 import { default as DeleteIcon } from './icons/delete';
 
 const MediaImageControl = ({
-	initValue = '',
+	defaultValue = '',
 	value: _value,
 	labelChoose = __('Choose Image…', 'publisher-core'),
 	labelMediaLibrary = __('Media Library', 'publisher-core'),
@@ -32,7 +32,7 @@ const MediaImageControl = ({
 		return newValue;
 	},
 }) => {
-	const [value, setValue] = useState(_value || initValue);
+	const [value, setValue] = useState(_value || defaultValue);
 
 	return (
 		<div

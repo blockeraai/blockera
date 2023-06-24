@@ -16,7 +16,7 @@ import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
 export default function BackgroundControl({
-	initValue = {
+	defaultValue = {
 		type: 'image',
 		image: '',
 		'image-size': 'custom',
@@ -52,7 +52,7 @@ export default function BackgroundControl({
 			popoverLabel={popoverLabel}
 			Header={Header}
 			InnerComponents={Fields}
-			initValue={initValue}
+			defaultValue={defaultValue}
 			repeaterItemsPopoverClassName={controlClassNames(
 				'background-popover'
 			)}

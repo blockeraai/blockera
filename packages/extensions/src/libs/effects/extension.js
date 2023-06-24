@@ -57,7 +57,7 @@ export function EffectsExtension({ children, config, ...props }) {
 						min: 0,
 						max: 100,
 						initialPosition: 100,
-						initValue: '100%',
+						defaultValue: '100%',
 					}}
 					value={attributes.publisherOpacity}
 					onValueChange={(newValue) =>
@@ -128,7 +128,7 @@ export function EffectsExtension({ children, config, ...props }) {
 										min: 0,
 										max: 2000,
 									}}
-									initValue="0px"
+									defaultValue="0px"
 									value={
 										attributes.publisherTransformSelfPerspective
 									}
@@ -186,7 +186,7 @@ export function EffectsExtension({ children, config, ...props }) {
 											value: 'hidden',
 										},
 									]}
-									initValue="visible"
+									defaultValue="visible"
 									value={
 										attributes.publisherBackfaceVisibility
 									}
@@ -210,9 +210,9 @@ export function EffectsExtension({ children, config, ...props }) {
 										range: true,
 										min: 0,
 										max: 2000,
-										initValue: '0px',
+										defaultValue: '0px',
 									}}
-									initValue="0px"
+									defaultValue="0px"
 									value={
 										attributes.publisherTransformChildPerspective
 											? attributes.publisherTransformChildPerspective
@@ -307,7 +307,7 @@ export function EffectsExtension({ children, config, ...props }) {
 						type: 'custom',
 						customMenuPosition: 'top',
 						//
-						initValue: 'default',
+						defaultValue: 'default',
 						value: attributes.publisherCursor,
 						onValueChange: (newValue) =>
 							setAttributes({
@@ -327,7 +327,7 @@ export function EffectsExtension({ children, config, ...props }) {
 						type: 'custom',
 						customMenuPosition: 'top',
 						//
-						initValue: 'normal',
+						defaultValue: 'normal',
 						value: attributes.publisherBlendMode,
 						onValueChange: (newValue) =>
 							setAttributes({

@@ -16,7 +16,7 @@ import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
 export default function OutlineControl({
-	initValue = {
+	defaultValue = {
 		width: '2px',
 		style: 'solid',
 		color: '#b6b6b6',
@@ -33,7 +33,7 @@ export default function OutlineControl({
 			popoverLabel={popoverLabel}
 			Header={Header}
 			InnerComponents={Fields}
-			initValue={initValue}
+			defaultValue={defaultValue}
 			maxItems={1}
 			{...props}
 		/>

@@ -42,7 +42,7 @@ import { default as AbsoluteCenterIcon } from './icons/absolute-center';
 
 const BoxPositionControl = ({
 	label = __('Position', 'publisher-core'),
-	initValue = {
+	defaultValue = {
 		type: 'static',
 		position: {
 			top: '',
@@ -63,7 +63,7 @@ const BoxPositionControl = ({
 	...props
 }) => {
 	const [controlValue, setControlValue] = useState({
-		...initValue,
+		...defaultValue,
 		...value,
 	});
 
@@ -121,7 +121,7 @@ const BoxPositionControl = ({
 					]}
 					type="custom"
 					//
-					initValue="static"
+					defaultValue="static"
 					value={controlValue.type}
 					onValueChange={(newValue) => {
 						const value = {

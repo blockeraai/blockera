@@ -19,7 +19,7 @@ import BorderStyleVDoubleIcon from './icons/style-v-double';
 
 const BorderControl = ({
 	lines = 'horizontal',
-	initValue = {
+	defaultValue = {
 		width: '0px',
 		style: 'solid',
 		color: '',
@@ -34,7 +34,7 @@ const BorderControl = ({
 	},
 }) => {
 	const [controlValue, setControlValue] = useState({
-		...initValue,
+		...defaultValue,
 		...value,
 	});
 

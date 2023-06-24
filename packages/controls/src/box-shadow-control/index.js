@@ -16,7 +16,7 @@ import Fields from './components/fields';
 import RepeaterControl from '../repeater-control';
 
 export default function BoxShadowControl({
-	initValue = {
+	defaultValue = {
 		type: 'outer',
 		x: '0px',
 		y: '0px',
@@ -35,7 +35,7 @@ export default function BoxShadowControl({
 			popoverLabel={popoverLabel}
 			Header={Header}
 			InnerComponents={Fields}
-			initValue={initValue}
+			defaultValue={defaultValue}
 			{...props}
 		/>
 	);

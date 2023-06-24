@@ -9,7 +9,7 @@ const RepeaterContext = createContext({
 	Header: null,
 	clientId: null,
 	attributes: {},
-	initValue: {},
+	defaultValue: {},
 	repeaterItems: {},
 	maxItems: -1,
 	minItems: -1,

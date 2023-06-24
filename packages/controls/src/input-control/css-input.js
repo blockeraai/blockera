@@ -19,7 +19,7 @@ export function CssInputControl({
 	units = false,
 	noBorder = false,
 	//
-	initValue,
+	defaultValue,
 	value,
 	//
 	className,
@@ -175,7 +175,7 @@ export function CssInputControl({
 		}
 	}
 
-	const [controlValue] = useState(value || initValue);
+	const [controlValue] = useState(value || defaultValue);
 
 	const [classNames, setClassNames] = useState(
 		isSpecialUnit(controlValue)
@@ -187,7 +187,7 @@ export function CssInputControl({
 		<InputControl
 			{...props}
 			value={value}
-			initValue={initValue}
+			defaultValue={defaultValue}
 			units={cssUnits}
 			noBorder={noBorder}
 			//
@@ -208,7 +208,7 @@ CssInputControl.propTypes = {
 	value: PropTypes.string,
 	noBorder: PropTypes.bool,
 	onChange: PropTypes.func,
-	initValue: PropTypes.string,
+	defaultValue: PropTypes.string,
 	className: PropTypes.string,
 	onValueChange: PropTypes.func,
 	unitType: PropTypes.oneOf([

@@ -74,7 +74,7 @@ export function PositionField({
 								}}
 								//
 								value={coordinates.top}
-								initValue={coordinates.top}
+								defaultValue={coordinates.top}
 								onValueChange={(value) => {
 									setCoordinates({
 										...coordinates,
@@ -95,7 +95,7 @@ export function PositionField({
 								}}
 								//
 								value={coordinates.left}
-								initValue={coordinates.left}
+								defaultValue={coordinates.left}
 								onValueChange={(value) => {
 									setCoordinates({
 										...coordinates,

@@ -29,7 +29,7 @@ import { default as PaddingBottomIcon } from './icons/padding-bottom';
 import { default as PaddingLeftIcon } from './icons/padding-left';
 
 const BoxSpacingControl = ({
-	initValue = {
+	defaultValue = {
 		margin: {
 			top: '',
 			right: '',
@@ -55,7 +55,7 @@ const BoxSpacingControl = ({
 	...props
 }) => {
 	const [controlValue, setControlValue] = useState({
-		...initValue,
+		...defaultValue,
 		...value,
 	});
 

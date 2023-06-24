@@ -54,7 +54,7 @@ export function BackgroundExtension({ children, config, ...props }) {
 						label: __('Color', 'publisher-core'),
 						attribute: 'publisherBackgroundColor',
 						//
-						initValue: '',
+						defaultValue: '',
 						value: attributes.publisherBackgroundColor,
 						onValueChange: (newValue) =>
 							setAttributes({
@@ -99,7 +99,7 @@ export function BackgroundExtension({ children, config, ...props }) {
 						],
 						//
 						type: 'custom',
-						initValue: 'none',
+						defaultValue: 'none',
 						value: attributes.publisherBackgroundClip,
 						onValueChange: (newValue) =>
 							setAttributes({

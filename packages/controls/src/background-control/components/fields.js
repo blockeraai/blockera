@@ -514,7 +514,7 @@ const Fields = ({ itemId, item }) => {
 							value={item['mesh-gradient-colors']}
 							minItems={3}
 							visibilityControl={false}
-							initValue={{
+							defaultValue={{
 								color: '',
 							}}
 							onValueChange={(newValue) => {

@@ -16,7 +16,7 @@ import {
 import { Button, Flex } from '@publisher/components';
 
 export default function AnglePickerControl({
-	initValue = 0,
+	defaultValue = 0,
 	//
 	value,
 	//
@@ -26,7 +26,7 @@ export default function AnglePickerControl({
 	},
 	...props
 }) {
-	const [controlValue, setControlValue] = useState(value || initValue);
+	const [controlValue, setControlValue] = useState(value || defaultValue);
 
 	function addAngle(angle, value) {
 		// Add the value to the angle

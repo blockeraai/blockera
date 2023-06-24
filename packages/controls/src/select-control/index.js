@@ -18,7 +18,7 @@ import { controlClassNames } from '@publisher/classnames';
 import { renderSelectNativeOption, prepareSelectCustomOptions } from './utils';
 
 const SelectControl = ({
-	initValue = '',
+	defaultValue = '',
 	options,
 	children,
 	type = 'native', // custom
@@ -35,7 +35,7 @@ const SelectControl = ({
 		return newValue;
 	},
 }) => {
-	const [value, setValue] = useState(_value || initValue);
+	const [value, setValue] = useState(_value || defaultValue);
 
 	if (type === 'custom') options = prepareSelectCustomOptions(options);
 
@@ -77,7 +77,7 @@ const SelectControl = ({
 						let newValue = onChange(selectedItem.key);
 
 						if (newValue === '') {
-							newValue = initValue;
+							newValue = defaultValue;
 						}
 
 						setValue(newValue);

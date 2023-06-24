@@ -21,7 +21,7 @@ import { default as CustomIcon } from './icons/custom';
 
 const BorderRadiusControl = ({
 	label = '',
-	initValue = {
+	defaultValue = {
 		type: 'all',
 		all: '0px',
 		topLeft: '0px',
@@ -38,7 +38,7 @@ const BorderRadiusControl = ({
 	},
 }) => {
 	const [controlValue, setControlValue] = useState({
-		...initValue,
+		...defaultValue,
 		...value,
 	});
 
@@ -69,7 +69,7 @@ const BorderRadiusControl = ({
 				)}
 
 				<ToggleSelectControl
-					initValue="compact"
+					defaultValue="compact"
 					value={controlValue.type}
 					options={[
 						{

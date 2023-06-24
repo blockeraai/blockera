@@ -31,7 +31,7 @@ export default function IconControl({
 	labelUploadSvg = __('Upload SVG', 'publisher-blocks'),
 	//
 	value,
-	initValue = {
+	defaultValue = {
 		icon: '',
 		library: '',
 		uploadSVG: '',
@@ -43,7 +43,7 @@ export default function IconControl({
 	},
 }) {
 	const [currentIcon, currentIconDispatch] = useReducer(iconReducer, {
-		...initValue,
+		...defaultValue,
 		...value,
 	});
 

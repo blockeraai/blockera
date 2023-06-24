@@ -120,10 +120,10 @@ export function TypographyExtension({ children, config, ...props }) {
 									range: true,
 									min: 0,
 									max: 200,
-									initValue: '14px',
+									defaultValue: '14px',
 								}}
 								//
-								initValue=""
+								defaultValue=""
 								value={attributes.publisherFontSize}
 								onValueChange={(newValue) =>
 									setAttributes({
@@ -143,10 +143,10 @@ export function TypographyExtension({ children, config, ...props }) {
 									range: true,
 									min: 0,
 									max: 100,
-									initValue: '14px',
+									defaultValue: '14px',
 								}}
 								//
-								initValue=""
+								defaultValue=""
 								value={attributes.publisherLineHeight}
 								onValueChange={(newValue) =>
 									setAttributes({
@@ -201,7 +201,7 @@ export function TypographyExtension({ children, config, ...props }) {
 									]}
 									isDeselectable={true}
 									//
-									initValue=""
+									defaultValue=""
 									value={attributes.publisherTextAlign}
 									onValueChange={(newValue) =>
 										setAttributes({
@@ -264,7 +264,7 @@ export function TypographyExtension({ children, config, ...props }) {
 											]}
 											isDeselectable={true}
 											//
-											initValue=""
+											defaultValue=""
 											value={
 												attributes.publisherTextDecoration
 											}
@@ -311,7 +311,7 @@ export function TypographyExtension({ children, config, ...props }) {
 											]}
 											isDeselectable={true}
 											//
-											initValue=""
+											defaultValue=""
 											value={
 												attributes.publisherFontStyle
 											}
@@ -379,7 +379,7 @@ export function TypographyExtension({ children, config, ...props }) {
 											]}
 											isDeselectable={true}
 											//
-											initValue=""
+											defaultValue=""
 											value={
 												attributes.publisherTextTransform
 											}
@@ -422,7 +422,7 @@ export function TypographyExtension({ children, config, ...props }) {
 											]}
 											isDeselectable={true}
 											//
-											initValue=""
+											defaultValue=""
 											value={
 												attributes.publisherDirection
 											}
@@ -456,7 +456,7 @@ export function TypographyExtension({ children, config, ...props }) {
 									}}
 									columns="2fr 2.4fr"
 									//
-									initValue=""
+									defaultValue=""
 									value={attributes.publisherLetterSpacing}
 									onValueChange={(newValue) =>
 										setAttributes({
@@ -477,7 +477,7 @@ export function TypographyExtension({ children, config, ...props }) {
 									}}
 									columns="2fr 2.4fr"
 									//
-									initValue=""
+									defaultValue=""
 									value={attributes.publisherWordSpacing}
 									onValueChange={(newValue) =>
 										setAttributes({
@@ -497,7 +497,7 @@ export function TypographyExtension({ children, config, ...props }) {
 									}}
 									columns="2fr 2.4fr"
 									//
-									initValue=""
+									defaultValue=""
 									value={attributes.publisherTextIndent}
 									onValueChange={(newValue) =>
 										setAttributes({
@@ -547,7 +547,7 @@ export function TypographyExtension({ children, config, ...props }) {
 								]}
 								isDeselectable={true}
 								//
-								initValue=""
+								defaultValue=""
 								value={attributes.publisherTextOrientation}
 								onValueChange={(newValue) =>
 									setAttributes({
@@ -602,7 +602,7 @@ export function TypographyExtension({ children, config, ...props }) {
 								]}
 								isDeselectable={true}
 								//
-								initValue=""
+								defaultValue=""
 								value={attributes.publisherTextColumns}
 								onValueChange={(newValue) =>
 									setAttributes({
@@ -628,10 +628,10 @@ export function TypographyExtension({ children, config, ...props }) {
 													range: true,
 													min: 0,
 													max: 200,
-													initValue: '20px',
+													defaultValue: '20px',
 												}}
 												//
-												initValue=""
+												defaultValue=""
 												value={
 													attributes.publisherTextColumnsGap
 												}
@@ -680,7 +680,7 @@ export function TypographyExtension({ children, config, ...props }) {
 								<ColorField
 									label={__('Color', 'publisher-core')}
 									//
-									initValue=""
+									defaultValue=""
 									value={attributes.publisherTextStrokeColor}
 									onValueChange={(newValue) =>
 										setAttributes({
@@ -698,7 +698,7 @@ export function TypographyExtension({ children, config, ...props }) {
 											unitType: 'essential',
 										}}
 										//
-										initValue=""
+										defaultValue=""
 										value={
 											attributes.publisherTextStrokeWidth
 										}
@@ -756,7 +756,7 @@ export function TypographyExtension({ children, config, ...props }) {
 								type="custom"
 								customMenuPosition="top"
 								//
-								initValue="normal"
+								defaultValue="normal"
 								value={attributes.publisherWordBreak}
 								onValueChange={(newValue) =>
 									setAttributes({
@@ -776,7 +776,7 @@ export function TypographyExtension({ children, config, ...props }) {
 						...props,
 						label: __('Color', 'publisher-core'),
 						//
-						initValue: '',
+						defaultValue: '',
 						value: attributes.publisherFontColor,
 						onValueChange: (newValue) =>
 							setAttributes({

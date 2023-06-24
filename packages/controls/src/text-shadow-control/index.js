@@ -16,7 +16,7 @@ import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
 export default function TextShadowControl({
-	initValue = {
+	defaultValue = {
 		x: '1px',
 		y: '1px',
 		blur: '1px',
@@ -35,7 +35,7 @@ export default function TextShadowControl({
 				popoverLabel={popoverLabel}
 				Header={Header}
 				InnerComponents={Fields}
-				initValue={initValue}
+				defaultValue={defaultValue}
 				{...props}
 			/>
 		</div>

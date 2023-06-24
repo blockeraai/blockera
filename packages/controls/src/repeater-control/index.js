@@ -29,7 +29,7 @@ const RepeaterControl = ({
 	Header,
 	clientId,
 	InnerComponents,
-	initValue = {},
+	defaultValue = {},
 	maxItems = -1,
 	minItems = -1,
 	visibilityControl = true,
@@ -55,7 +55,7 @@ const RepeaterControl = ({
 		design,
 		Header,
 		clientId,
-		initValue,
+		defaultValue,
 		repeaterItems,
 		maxItems,
 		minItems,
@@ -78,7 +78,7 @@ const RepeaterControl = ({
 				return;
 			}
 
-			const _repeaterItems = [...repeaterItems, ...[initValue]];
+			const _repeaterItems = [...repeaterItems, ...[defaultValue]];
 
 			setRepeaterItems(_repeaterItems);
 		},

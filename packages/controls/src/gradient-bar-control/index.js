@@ -9,7 +9,7 @@ import { GradientPicker as WPGradientPicker } from '@wordpress/components';
 import { controlClassNames } from '@publisher/classnames';
 
 const GradientBarControl = ({
-	initValue = null,
+	defaultValue = null,
 	//
 	value,
 	//
@@ -22,7 +22,7 @@ const GradientBarControl = ({
 	return (
 		<WPGradientPicker
 			className={controlClassNames('select', 'native-select', className)}
-			value={value || initValue}
+			value={value || defaultValue}
 			gradients={[]}
 			clearable={false}
 			onChange={(newValue) => {

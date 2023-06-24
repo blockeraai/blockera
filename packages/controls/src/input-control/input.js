@@ -25,7 +25,7 @@ export function InputControl({
 	// suffix = '',  //todo implement
 	//
 	value = null,
-	initValue,
+	defaultValue,
 	//
 	className,
 	onChange = (newValue) => {
@@ -34,7 +34,7 @@ export function InputControl({
 	onValueChange = () => {},
 	...props
 }) {
-	const [controlValue, setValue] = useState(value || initValue);
+	const [controlValue, setValue] = useState(value || defaultValue);
 
 	return (
 		<div
@@ -113,7 +113,7 @@ InputControl.propTypes = {
 	value: PropTypes.string,
 	noBorder: PropTypes.bool,
 	onChange: PropTypes.func,
-	initValue: PropTypes.string,
+	defaultValue: PropTypes.string,
 	className: PropTypes.string,
 	onValueChange: PropTypes.func,
 };

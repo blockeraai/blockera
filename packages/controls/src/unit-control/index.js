@@ -12,7 +12,7 @@ import { controlClassNames } from '@publisher/classnames';
 export default function UnitControl({
 	units,
 	//
-	initValue,
+	defaultValue,
 	value,
 	//
 	className,
@@ -22,7 +22,7 @@ export default function UnitControl({
 	onValueChange = () => {},
 	...props
 }) {
-	const [controlValue, setControlValue] = useState(value || initValue);
+	const [controlValue, setControlValue] = useState(value || defaultValue);
 
 	return (
 		<WPUnitControl

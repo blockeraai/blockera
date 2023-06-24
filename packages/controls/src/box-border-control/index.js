@@ -21,7 +21,7 @@ import { default as CustomIcon } from './icons/custom';
 
 const BoxBorderControl = ({
 	label = '',
-	initValue = {
+	defaultValue = {
 		type: 'all',
 		all: {
 			width: '0px',
@@ -58,7 +58,7 @@ const BoxBorderControl = ({
 	},
 }) => {
 	const [controlValue, setControlValue] = useState({
-		...initValue,
+		...defaultValue,
 		...value,
 	});
 
@@ -83,7 +83,7 @@ const BoxBorderControl = ({
 				)}
 
 				<ToggleSelectControl
-					initValue="compact"
+					defaultValue="compact"
 					value={controlValue.type}
 					options={[
 						{
