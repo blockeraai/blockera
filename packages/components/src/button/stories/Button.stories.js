@@ -60,7 +60,7 @@ export const Sizes = {
 	decorators: [inspectDecorator, ...decorators],
 };
 
-export const Screenshot = {
+export const PrimaryButton = {
 	render: (args) => (
 		<>
 			<h2 className="story-heading">Primary Button</h2>
@@ -103,33 +103,35 @@ export const Screenshot = {
 				<Button variant="primary" size="extra-small" {...args}>
 					Extra Small
 				</Button>
-				<Button
-					variant="primary"
-					size="extra-small"
-					isFocus={true}
-					{...args}
-				>
-					Extra Small + Focused
+				<Button variant="primary" size="small" isFocus={true} {...args}>
+					Small + Focused
 				</Button>
 				<Button
 					variant="primary"
-					size="extra-small"
+					size="small"
 					noBorder={true}
 					{...args}
 				>
-					Extra Small + No Border
+					Small + No Border
 				</Button>
 				<Button
 					variant="primary"
-					size="extra-small"
+					size="small"
 					isFocus={true}
 					noBorder={true}
 					{...args}
 				>
-					Extra Small + No Border + Focused
+					Small + No Border + Focused
 				</Button>
 			</Buttons>
+		</>
+	),
+	decorators: [inspectDecorator, ...decorators],
+};
 
+export const SecondaryButton = {
+	render: (args) => (
+		<>
 			<h2 className="story-heading">Secondary Button</h2>
 			<Buttons
 				gap="20px"
@@ -171,31 +173,38 @@ export const Screenshot = {
 				</Button>
 				<Button
 					variant="secondary"
-					size="extra-small"
+					size="small"
 					isFocus={true}
 					{...args}
 				>
-					Extra Small & Focused
+					Small & Focused
 				</Button>
 				<Button
 					variant="secondary"
-					size="extra-small"
+					size="small"
 					noBorder={true}
 					{...args}
 				>
-					Extra Small & No Border
+					Small & No Border
 				</Button>
 				<Button
 					variant="secondary"
-					size="extra-small"
+					size="small"
 					isFocus={true}
 					noBorder={true}
 					{...args}
 				>
-					Extra Small & No Border & Focused
+					Small & No Border & Focused
 				</Button>
 			</Buttons>
+		</>
+	),
+	decorators: [inspectDecorator, ...decorators],
+};
 
+export const TertiaryButton = {
+	render: (args) => (
+		<>
 			<h2 className="story-heading">Tertiary Button</h2>
 			<Buttons gap="20px" direction="column" alignItems="flex-start">
 				<Button variant="tertiary" size="normal" {...args}>
@@ -232,30 +241,43 @@ export const Screenshot = {
 				</Button>
 				<Button
 					variant="tertiary"
-					size="extra-small"
+					size="small"
 					isFocus={true}
 					{...args}
 				>
-					Extra Small & Focused
+					Small & Focused
 				</Button>
 				<Button
 					variant="tertiary"
-					size="extra-small"
+					size="small"
 					noBorder={true}
 					{...args}
 				>
-					Extra Small & No Border
+					Small & No Border
 				</Button>
 				<Button
 					variant="tertiary"
-					size="extra-small"
+					size="small"
 					isFocus={true}
 					noBorder={true}
 					{...args}
 				>
-					Extra Small & No Border & Focused
+					Small & No Border & Focused
 				</Button>
 			</Buttons>
+		</>
+	),
+	decorators: [inspectDecorator, ...decorators],
+};
+
+export const Screenshot = {
+	render: (args) => (
+		<>
+			<PrimaryButton.render {...args} />
+
+			<SecondaryButton.render {...args} />
+
+			<TertiaryButton.render {...args} />
 		</>
 	),
 	decorators: [inspectDecorator, ...decorators],
