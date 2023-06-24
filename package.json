@@ -175,6 +175,9 @@
 		],
 		"*.{js,ts,tsx}": [
 			"wp-scripts lint-js"
+		],
+		"*.scss": [
+			"wp-scripts lint-style"
 		]
 	}
 }
