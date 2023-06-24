@@ -31,7 +31,7 @@ export const ChangeSize = {
 	decorators: [inspectDecorator, ...decorators],
 };
 
-const AlignmentMatrixControlWithHooks = () => {
+const AlignmentMatrixControlWithHooks = (args) => {
 	const { storyValue, setStoryValue } = useContext(StoryDataContext);
 	const [value, setValue] = useState(storyValue);
 
@@ -40,7 +40,13 @@ const AlignmentMatrixControlWithHooks = () => {
 		setValue(newValue);
 	};
 
-	return <AlignmentMatrixControl onChange={handleOnChange} value={value} />;
+	return (
+		<AlignmentMatrixControl
+			{...args}
+			onChange={handleOnChange}
+			value={value}
+		/>
+	);
 };
 
 export const Playground = {
@@ -48,5 +54,5 @@ export const Playground = {
 		value: 'center center',
 	},
 	decorators: [StoryDataDecorator, inspectDecorator, ...decorators],
-	render: () => <AlignmentMatrixControlWithHooks />,
+	render: (args) => <AlignmentMatrixControlWithHooks {...args} />,
 };
