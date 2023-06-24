@@ -10,9 +10,23 @@ import {
 import { default as AlignmentMatrixControl } from '../index';
 import { useContext } from '@wordpress/element';
 
+const Component = (args) => {
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	const { storyValue, setStoryValue } = useContext(StoryDataContext);
+
+	return (
+		<AlignmentMatrixControl
+			onValueChange={(newValue) => {
+				setStoryValue(newValue);
+			}}
+			{...{ ...args, value: storyValue }}
+		/>
+	);
+};
+
 export default {
 	title: 'Controls/Alignment Matrix',
-	component: AlignmentMatrixControl,
+	component: Component,
 	tags: ['autodocs'],
 };
 
@@ -36,28 +50,4 @@ export const Playground = {
 		value: 'center center',
 	},
 	decorators: [StoryDataDecorator, inspectDecorator, ...decorators],
-	render: (args) => {
-		// eslint-disable-next-line react-hooks/rules-of-hooks
-		const { setStoryValue } = useContext(StoryDataContext);
-
-		return (
-			<>
-				<AlignmentMatrixControl
-					onValueChange={(newValue) => {
-						setStoryValue(newValue);
-					}}
-					{...args}
-				/>
-
-				<button
-					onClick={() => {
-						console.log('test');
-						setStoryValue('test');
-					}}
-				>
-					set test
-				</button>
-			</>
-		);
-	},
 };
