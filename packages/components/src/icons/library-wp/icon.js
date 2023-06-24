@@ -1,18 +1,28 @@
-// Load WP icons
+/**
+ * External dependencies
+ */
 import { Icon as WordPressIconComponent } from '@wordpress/components';
 
+/**
+ * Publisher dependencies
+ */
+import { isString, isUndefined } from '@publisher/utils';
+
+/**
+ * Internal dependencies
+ */
 import { getIcon } from '../index';
 
 export function WPIcon({ fixedSizing = false, size, icon, ...props }) {
-	if (typeof icon === 'string') {
+	if (isString(icon)) {
 		icon = getIcon(icon, 'wp');
 	}
 
-	if (typeof icon?.icon === 'string') {
+	if (isString(icon?.icon)) {
 		icon = getIcon(icon?.icon ? icon?.icon : icon?.iconName, 'wp');
 	}
 
-	if (typeof icon.icon === 'undefined') {
+	if (isUndefined(icon.icon)) {
 		return <></>;
 	}
 

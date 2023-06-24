@@ -2,11 +2,12 @@
  * External dependencies
  */
 import Fuse from 'fuse.js';
+import { __ } from '@wordpress/i18n';
 
 /**
- * WordPress dependencies
+ * Publisher dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { isUndefined } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -55,7 +56,7 @@ const IconLibraries = {
 };
 
 export function isValidIconLibrary(library) {
-	return typeof IconLibraries[library] !== 'undefined';
+	return !isUndefined(IconLibraries[library]);
 }
 
 export function getIconLibrary(library: string): Array {

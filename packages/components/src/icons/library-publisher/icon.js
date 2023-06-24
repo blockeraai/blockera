@@ -1,12 +1,24 @@
-import { getIcon } from '../index';
+/**
+ * External Dependencies
+ */
 import { Icon as WordPressIconComponent } from '@wordpress/components';
 
+/**
+ * Publisher dependencies
+ */
+import { isString, isUndefined } from '@publisher/utils';
+
+/**
+ * Internal dependencies
+ */
+import { getIcon } from '../index';
+
 export function PublisherIcon({ fixedSizing = false, size, icon, ...props }) {
-	if (typeof icon === 'string') {
+	if (isString(icon)) {
 		icon = getIcon(icon, 'publisher');
 	}
 
-	if (typeof icon.icon === 'undefined') {
+	if (isUndefined(icon.icon)) {
 		return <></>;
 	}
 

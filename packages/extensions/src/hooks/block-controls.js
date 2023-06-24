@@ -1,5 +1,5 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { BlockControls } from '@wordpress/block-editor';
 import { useEffect, useRef, useMemo } from '@wordpress/element';
@@ -7,12 +7,17 @@ import { createHigherOrderComponent } from '@wordpress/compose';
 import { select } from '@wordpress/data';
 
 /**
- * Internal dependencies
+ * Publisher dependencies
  */
-import { useAttributes } from './utils';
+import { isFunction } from '@publisher/utils';
 import { computedCssRules } from '@publisher/style-engine';
 import { extensionClassNames } from '@publisher/classnames';
 import { Divider, InspectElement } from '@publisher/components';
+
+/**
+ * Internal dependencies
+ */
+import { useAttributes } from './utils';
 import { useBlockExtensions, useDisplayBlockControls } from './hooks';
 
 const MappedControlsExtensions = (props) => {
@@ -95,7 +100,7 @@ const withBlockControls = createHigherOrderComponent((BlockEdit) => {
 		const __cssRules = computedCssRules(blockType, props);
 
 		useEffect(() => {
-			if ('function' !== typeof sideEffect) {
+			if (!isFunction(sideEffect)) {
 				return;
 			}
 
@@ -108,7 +113,8 @@ const withBlockControls = createHigherOrderComponent((BlockEdit) => {
 					{useDisplayBlockControls() && (
 						<>
 							<MappedControlsExtensions {...props} />
-							{'function' === typeof Edit && (
+
+							{isFunction(Edit) && (
 								<Edit {...{ ...props, name }} />
 							)}
 						</>

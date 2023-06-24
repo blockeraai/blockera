@@ -1,7 +1,9 @@
+import { isString } from '@publisher/utils';
+
 // Validates the value is with a special CSS units or not
 export function isSpecialUnit(value) {
-	if (
-		typeof value === 'string' &&
+	return (
+		isString(value) &&
 		[
 			'auto',
 			'initial',
@@ -10,7 +12,5 @@ export function isSpecialUnit(value) {
 			'max-content',
 			'min-content',
 		].some((item) => value?.endsWith(item))
-	)
-		return true;
-	return false;
+	);
 }

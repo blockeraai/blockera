@@ -1,5 +1,5 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { useContext } from '@wordpress/element';
 
@@ -8,6 +8,7 @@ import { useContext } from '@wordpress/element';
  */
 import { InspectElement } from '@publisher/components';
 import { componentClassNames } from '@publisher/classnames';
+import { isFunction } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -47,14 +48,15 @@ export function BaseExtension({
 					initialOpen={initialOpen}
 					icon={icon}
 				>
-					{'function' === typeof ExtensionTypeUI && (
+					{isFunction(ExtensionTypeUI) && (
 						<ExtensionTypeUI {...{ ...props, config }} />
 					)}
 				</InspectElement>
 			)}
 			{children}
-			{'function' === typeof ExtensionTypeCssRules && (
+			{isFunction(ExtensionTypeCssRules) && (
 				<style
+					/* eslint-disable-next-line react/no-unknown-property */
 					datablocktype={blockName}
 					dangerouslySetInnerHTML={{
 						__html: ExtensionTypeCssRules(config),

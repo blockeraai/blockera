@@ -1,16 +1,21 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { select } from '@wordpress/data';
 import { useMemo, useEffect } from '@wordpress/element';
+
+/**
+ * Publisher dependencies
+ */
+import { isArray, isFunction } from '@publisher/utils';
+import { extensionClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
 import { STORE_NAME } from '../store/constants';
 import { BlockEditContextProvider } from './context';
-import { isValidArrayItem, useAttributes } from './utils';
-import { extensionClassNames } from '@publisher/classnames';
+import { useAttributes } from './utils';
 import { isBlockTypeExtension, isEnableExtension } from '../api/utils';
 
 const { getBlockExtension, getBlockExtensionBy } = select(STORE_NAME);
@@ -69,12 +74,15 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 			...additional.supports,
 		},
 		edit(blockProps) {
-			if ('function' === typeof additional?.sideEffect) {
+			if (isFunction(additional?.sideEffect)) {
+				// eslint-disable-next-line react-hooks/rules-of-hooks
 				useEffect(() => additional.sideEffect(blockProps), []);
 			}
-			if ('function' === typeof additional?.edit) {
+
+			if (isFunction(additional?.edit)) {
 				const { edit: BlockEditComponent } = additional;
 
+				// eslint-disable-next-line react-hooks/rules-of-hooks
 				const props = useMemo(() => {
 					return {
 						...useAttributes(blockProps),
@@ -115,7 +123,7 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 				},
 			},
 			...(settings?.deprecated || []),
-		].filter(isValidArrayItem),
+		].filter(isArray),
 		publisherEditorProps: {
 			...(settings.publisherEditorProps || {}),
 			...additional.editorProps,

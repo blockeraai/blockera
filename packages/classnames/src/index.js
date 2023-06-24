@@ -2,6 +2,7 @@
  * External dependencies
  */
 import classnames from 'classnames';
+import { isArray, isEmpty, isObject, isString } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -15,15 +16,12 @@ import extensionsDefault from './defaults/extensions.json';
 // recursive
 // items supported types: String, Object, Array
 function prepareClassName(section, items) {
-	if (
-		(typeof items === 'string' || items instanceof String) &&
-		items !== ''
-	) {
+	if (isString(items) && !isEmpty(items)) {
 		items = section + '-' + items;
-	} else if (Array.isArray(items)) {
+	} else if (isArray(items)) {
 		// prepend section to first item
 		items[0] = prepareClassName(section, items[0]);
-	} else if (typeof items === 'object') {
+	} else if (isObject(items)) {
 		let first = true;
 		const newItems = [];
 
@@ -46,7 +44,7 @@ function prepareClassName(section, items) {
 
 function _classnames(addSectionClass = true, section = rootDefault, names) {
 	// find the section prefix from it's default
-	if (typeof section !== 'string') {
+	if (!isString(section)) {
 		section = Object.keys(section)[0];
 	}
 

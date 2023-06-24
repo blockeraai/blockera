@@ -1,12 +1,16 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { select } from '@wordpress/data';
 
 /**
+ * Publisher dependencies
+ */
+import { isArray } from '@publisher/utils';
+
+/**
  * Internal dependencies
  */
-import { isValidArrayItem } from './utils';
 import { STORE_NAME } from '../store/constants';
 
 const withCustomizeSaveElement = (element, blockType, attributes) => {
@@ -55,7 +59,7 @@ const withCustomizeSaveElement = (element, blockType, attributes) => {
 		),
 	})
 		.flat()
-		.filter(isValidArrayItem);
+		.filter(isArray);
 
 	return (
 		<>

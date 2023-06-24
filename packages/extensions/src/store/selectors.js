@@ -3,7 +3,11 @@
  */
 import { get } from 'lodash';
 import createSelector from 'rememo';
-import { isValidArrayItem } from '../hooks/utils';
+
+/**
+ * Publisher dependencies
+ */
+import { isArray, isString } from '@publisher/utils';
 
 /**
  * Returns a block extension by name.
@@ -217,7 +221,7 @@ export const getBlockExtensionField = (
 
 			return null;
 		})
-		.filter(isValidArrayItem);
+		.filter(isArray);
 
 	return fields[0] || defaultFields;
 };
@@ -280,7 +284,7 @@ export const getBlockExtensionSupport = (
  * @return {Object} Block extension object.
  */
 const getNormalizedBlockExtension = (state, nameOrExtension) =>
-	'string' === typeof nameOrExtension
+	isString(nameOrExtension)
 		? getBlockExtension(state, nameOrExtension)
 		: nameOrExtension;
 

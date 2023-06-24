@@ -1,8 +1,13 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { compose } from '@wordpress/compose';
 import { withSelect } from '@wordpress/data';
+
+/**
+ * Publisher dependencies
+ */
+import { isUndefined } from '@publisher/utils';
 
 /**
  * Upper Case first character of word
@@ -39,9 +44,6 @@ export const enhance = compose(
 	})
 );
 
-export const isValidArrayItem = (item) =>
-	null !== item && item && (item?.length || Object.values(item)?.length);
-
 /**
  * Add custom Publisher props identifier to selected blocks
  *
@@ -51,7 +53,7 @@ export const isValidArrayItem = (item) =>
 export const useAttributes = (props: Object): Object => {
 	const extendedProps = { ...props };
 
-	if (typeof extendedProps.attributes.publisherPropsId === 'undefined') {
+	if (isUndefined(extendedProps.attributes.publisherPropsId)) {
 		const d = new Date();
 		extendedProps.attributes.publisherPropsId =
 			'' +

@@ -1,7 +1,12 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { select, dispatch } from '@wordpress/data';
+
+/**
+ * Publisher dependencies
+ */
+import { isString } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -54,7 +59,7 @@ export function registerBlockExtension(
 	name: string,
 	{ type = 'block', ...settings }: Object
 ): Object | undefined {
-	if (typeof name !== 'string') {
+	if (!isString(name)) {
 		console.error('Block extension names must be strings.');
 		return;
 	}

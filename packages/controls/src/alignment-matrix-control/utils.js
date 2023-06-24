@@ -1,3 +1,8 @@
+/**
+ * Publisher dependencies
+ */
+import { isString } from '@publisher/utils';
+
 export function convertAlignmentMatrixCoordinates(value) {
 	const coordinates = {
 		calculated: false,
@@ -52,7 +57,7 @@ export function convertAlignmentMatrixCoordinates(value) {
 		}
 	}
 
-	if (typeof value === 'string') {
+	if (isString(value)) {
 		// support for shorthand
 		switch (value) {
 			case 'center':

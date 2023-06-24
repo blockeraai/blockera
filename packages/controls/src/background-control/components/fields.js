@@ -21,6 +21,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
+import { isUndefined } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -538,9 +539,11 @@ const Fields = ({ itemId, item }) => {
 												.length < newValue.length
 										) {
 											if (
-												typeof newItem[
-													'mesh-gradient-colors'
-												][index] === 'undefined'
+												isUndefined(
+													newItem[
+														'mesh-gradient-colors'
+													][index]
+												)
 											) {
 												newItem['mesh-gradient-colors'][
 													index

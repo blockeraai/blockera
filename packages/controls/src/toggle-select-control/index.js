@@ -11,6 +11,7 @@ import {
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
+import { isUndefined } from '@publisher/utils';
 
 const ToggleSelectControl = ({
 	defaultValue = '',
@@ -46,7 +47,7 @@ const ToggleSelectControl = ({
 				{...props}
 			>
 				{options?.map((item) => {
-					if (typeof item.icon !== 'undefined') {
+					if (!isUndefined(item.icon)) {
 						return (
 							<WPToggleGroupControlOptionIcon
 								{...item}

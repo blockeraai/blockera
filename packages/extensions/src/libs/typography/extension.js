@@ -1,5 +1,5 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { useState, useContext } from '@wordpress/element';
@@ -18,6 +18,7 @@ import {
 } from '@publisher/fields';
 import { Popover, Button, Flex } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
+import { isEmpty, isUndefined } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -611,11 +612,12 @@ export function TypographyExtension({ children, config, ...props }) {
 									})
 								}
 							>
-								{attributes.publisherTextColumns !== '' &&
+								{!isEmpty(attributes.publisherTextColumns) &&
 									attributes.publisherTextColumns !==
 										'none' &&
-									typeof attributes.publisherTextColumns !==
-										'undefined' && (
+									!isUndefined(
+										attributes.publisherTextColumns
+									) && (
 										<>
 											<InputField
 												label={__(

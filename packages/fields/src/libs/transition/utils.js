@@ -1,3 +1,8 @@
+/**
+ * Publisher dependencies
+ */
+import { isUndefined } from '@publisher/utils';
+
 export const getTimingCSS = function (timing) {
 	const allTimings = {
 		linear: 'linear',
@@ -8,7 +13,7 @@ export const getTimingCSS = function (timing) {
 		//
 		'ease-in-quad': 'cubic-bezier(0.55, 0.085, 0.68, 0.53)',
 		'ease-in-cubic': 'cubic-bezier(0.550, 0.055, 0.675, 0.190)',
-		'ease-in-cubic': 'cubic-bezier(0.895, 0.030, 0.685, 0.220)',
+		'ease-in-quart': 'cubic-bezier(0.895, 0.030, 0.685, 0.220)',
 		'ease-in-quint': 'cubic-bezier(0.755, 0.050, 0.855, 0.060)',
 		'ease-in-sine': 'cubic-bezier(0.470, 0.000, 0.745, 0.715)',
 		'ease-in-expo': 'cubic-bezier(0.950, 0.050, 0.795, 0.035)',
@@ -34,7 +39,5 @@ export const getTimingCSS = function (timing) {
 		'ease-in-out-back': 'cubic-bezier(0.680, -0.550, 0.265, 1.550)',
 	};
 
-	return typeof allTimings[timing] !== 'undefined'
-		? allTimings[timing]
-		: 'ease';
+	return !isUndefined(allTimings[timing]) ? allTimings[timing] : 'ease';
 };

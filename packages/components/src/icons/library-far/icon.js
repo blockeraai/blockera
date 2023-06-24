@@ -1,6 +1,16 @@
-// Load FA icons and register to library
+/**
+ * External Dependencies
+ */
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+/**
+ * Publisher Dependencies
+ */
+import { isString, isUndefined } from '@publisher/utils';
+
+/**
+ * Internal Dependencies
+ */
 import { getIcon } from '../index';
 
 export function FontAwesomeIconFar({
@@ -10,11 +20,11 @@ export function FontAwesomeIconFar({
 	fixedSizing = false,
 	...props
 }) {
-	if (typeof icon === 'string') {
+	if (isString(icon)) {
 		icon = getIcon(icon, 'far');
 	}
 
-	if (typeof icon.icon === 'undefined') {
+	if (isUndefined(icon.icon)) {
 		return <></>;
 	}
 

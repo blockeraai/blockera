@@ -1,4 +1,9 @@
 /**
+ * Publisher dependencies
+ */
+import { isFunction, isUndefined } from '@publisher/utils';
+
+/**
  * Internal dependencies
  */
 import { WPIcon } from './library-wp/index';
@@ -42,7 +47,7 @@ export function getIcon(
 
 	const lib = getIconLibraryIcons(libraryName);
 
-	if (typeof lib[iconName] !== 'undefined') {
+	if (!isUndefined(lib[iconName])) {
 		if (standardize) {
 			return createStandardIconObject(
 				iconName,
@@ -68,7 +73,7 @@ export function isValidIcon(icon, key) {
 		return false;
 	}
 
-	return 'function' !== typeof icon;
+	return !isFunction(icon);
 }
 
 export function createStandardIconObject(iconName, library, icon) {
@@ -117,7 +122,7 @@ export function createStandardIconObject(iconName, library, icon) {
 	}
 
 	if (library === 'publisher') {
-		if (typeof icon === 'function') {
+		if (isFunction(icon)) {
 			return {
 				icon,
 				iconName,
