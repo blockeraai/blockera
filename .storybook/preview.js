@@ -98,15 +98,15 @@ export const globalTypes = {
 };
 
 export const decorators = [
+	WithRTL,
+	WithTheme,
+	WithGlobalCSS,
+	WithMarginChecker,
+	WithMaxWidthWrapper,
+	WithBlockEditContext,
 	withTests({
 		results,
 	}),
-	WithGlobalCSS,
-	WithMarginChecker,
-	WithRTL,
-	WithMaxWidthWrapper,
-	WithTheme,
-	WithBlockEditContext,
 ];
 
 export { StoryDataContext } from './decorators/with-story-data/context';
