@@ -109,6 +109,9 @@ export const decorators = [
 	WithBlockEditContext,
 ];
 
+export { StoryDataContext } from './decorators/with-story-data/context';
+export { default as StoryDataDecorator } from './decorators/with-story-data/with-story-data-decorator';
+
 export const inspectDecorator = WithInspectorStyles;
 
 // eslint-disable-next-line jsdoc/valid-types
