@@ -1,6 +1,6 @@
 import { useState, useEffect } from '@wordpress/element';
 
-export function useValue({ initialValue, defaultValue, onValueChange = null }) {
+export function useValue({ initialValue, defaultValue, onChange = null }) {
 	const [value, setValue] = useState(
 		typeof initialValue === 'undefined' || initialValue === null
 			? defaultValue
@@ -8,7 +8,7 @@ export function useValue({ initialValue, defaultValue, onValueChange = null }) {
 	);
 
 	useEffect(() => {
-		if (typeof onValueChange === 'function') onValueChange(value);
+		if (typeof onChange === 'function') onChange(value);
 	}, [value]);
 
 	// can be used to toggle value if it was boolean

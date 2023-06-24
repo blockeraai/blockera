@@ -20,14 +20,11 @@ export default function AlignmentMatrixControl({
 	onChange = (newValue) => {
 		return newValue;
 	},
-	onValueChange = (newValue) => {
-		return newValue;
-	},
 }) {
 	const { value, setValue } = useValue({
 		initialValue,
 		defaultValue,
-		onValueChange,
+		onChange,
 	});
 
 	return (
@@ -37,9 +34,7 @@ export default function AlignmentMatrixControl({
 				value={value}
 				width={size}
 				onChange={(newValue) => {
-					newValue = onChange(newValue);
 					setValue(newValue);
-					return newValue;
 				}}
 			/>
 		</>
@@ -61,6 +56,10 @@ AlignmentMatrixControl.propTypes = {
 	 * @default 68
 	 */
 	size: PropTypes.number,
+	/**
+	 * Function that will be fired while the control value state changes.
+	 */
+	onChange: PropTypes.func,
 };
 
 AlignmentMatrixControl.defaultProps = {

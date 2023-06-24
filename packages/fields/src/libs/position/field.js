@@ -43,7 +43,7 @@ export function PositionField({
 								convertAlignmentMatrixCoordinates(coordinates)
 									?.compact
 							}
-							onValueChange={(newValue) => {
+							onChange={(newValue) => {
 								const _coordinates =
 									convertAlignmentMatrixCoordinates(newValue);
 
