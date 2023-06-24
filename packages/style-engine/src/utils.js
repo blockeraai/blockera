@@ -3,7 +3,7 @@
  */
 import CssGenerators from '@publisher/style-engine';
 import { prepare } from '@publisher/data-extractor';
-import { isString } from 'lodash';
+import { isString } from '@publisher/utils';
 
 /**
  * Has object all passed properties?

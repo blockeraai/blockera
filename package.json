@@ -110,7 +110,6 @@
 		"jest-snapshot": "^27.4.5",
 		"jsdom": "^16.7.0",
 		"lint-staged": "^12.1.1",
-		"lodash": "^4.17.21",
 		"matchdep": "^2.0.0",
 		"memize": "^1.0.5",
 		"pa11y": "^6.2.3",
@@ -175,6 +174,9 @@
 		],
 		"*.{js,ts,tsx}": [
 			"wp-scripts lint-js"
+		],
+		"*.scss": [
+			"wp-scripts lint-style"
 		]
 	}
 }

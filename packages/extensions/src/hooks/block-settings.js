@@ -7,7 +7,7 @@ import { useMemo, useEffect } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { isArray, isFunction } from '@publisher/utils';
+import { isObject, isFunction } from '@publisher/utils';
 import { extensionClassNames } from '@publisher/classnames';
 
 /**
@@ -123,7 +123,7 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 				},
 			},
 			...(settings?.deprecated || []),
-		].filter(isArray),
+		].filter(isObject),
 		publisherEditorProps: {
 			...(settings.publisherEditorProps || {}),
 			...additional.editorProps,

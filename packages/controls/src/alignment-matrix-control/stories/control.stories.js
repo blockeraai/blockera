@@ -8,7 +8,7 @@ import {
 	StoryDataDecorator,
 } from '../../../../../.storybook/preview';
 import { default as AlignmentMatrixControl } from '../index';
-import { useContext } from '@wordpress/element';
+import { useContext, useState } from '@wordpress/element';
 
 export default {
 	title: 'Controls/Alignment Matrix',
@@ -31,33 +31,28 @@ export const ChangeSize = {
 	decorators: [inspectDecorator, ...decorators],
 };
 
+const AlignmentMatrixControlWithHooks = (args) => {
+	const { storyValue, setStoryValue } = useContext(StoryDataContext);
+	const [value, setValue] = useState(storyValue);
+
+	const handleOnChange = (newValue) => {
+		setStoryValue(newValue);
+		setValue(newValue);
+	};
+
+	return (
+		<AlignmentMatrixControl
+			{...args}
+			onChange={handleOnChange}
+			value={value}
+		/>
+	);
+};
+
 export const Playground = {
 	args: {
 		value: 'center center',
 	},
 	decorators: [StoryDataDecorator, inspectDecorator, ...decorators],
-	render: (args) => {
-		// eslint-disable-next-line react-hooks/rules-of-hooks
-		const { setStoryValue } = useContext(StoryDataContext);
-
-		return (
-			<>
-				<AlignmentMatrixControl
-					onValueChange={(newValue) => {
-						setStoryValue(newValue);
-					}}
-					{...args}
-				/>
-
-				<button
-					onClick={() => {
-						console.log('test');
-						setStoryValue('test');
-					}}
-				>
-					set test
-				</button>
-			</>
-		);
-	},
+	render: (args) => <AlignmentMatrixControlWithHooks {...args} />,
 };
