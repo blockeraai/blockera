@@ -160,6 +160,7 @@
 		"test:js:coverage": "yarn test:js --coverage",
 		"test:js:update": "yarn test:js -u",
 		"test:generate-output": "jest --json --outputFile=.jest-test-results.json",
+		"test:generate-output:dev": "jest --json --outputFile=.jest-test-results.json -- --watch",
 		"version": "grunt version && grunt update-pot",
 		"storybook:init": "npx storybook@latest init --type react",
 		"storybook:start": "storybook dev -p 6006",
