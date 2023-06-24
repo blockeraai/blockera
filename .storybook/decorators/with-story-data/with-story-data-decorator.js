@@ -3,7 +3,7 @@ import { useState } from '@wordpress/element';
 import { StoryDataContext } from './context';
 
 const StoryDataDecorator = (story, context) => {
-	const [value, setValue] = useState(context.value);
+	const [value, setValue] = useState(context.allArgs.value);
 
 	return (
 		<StoryDataContext.Provider
