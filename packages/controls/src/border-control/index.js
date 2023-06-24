@@ -71,7 +71,9 @@ const BorderControl = ({
 			<SelectControl
 				customMenuPosition={customMenuPosition}
 				type="custom"
-				className="input-hide-label input-hide-caret input-align-center"
+				customInputCenterContent={true}
+				customHideInputCaret={true}
+				customHideInputLabel={true}
 				noBorder={true}
 				value={controlValue.style}
 				options={[

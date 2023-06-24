@@ -22,6 +22,10 @@ const SelectControl = ({
 	type,
 	options,
 	customMenuPosition,
+	customHideInputIcon,
+	customHideInputLabel,
+	customHideInputCaret,
+	customInputCenterContent,
 	noBorder,
 	multiple,
 	//
@@ -66,6 +70,10 @@ const SelectControl = ({
 						'custom',
 						'menu-position-' + customMenuPosition,
 						noBorder && 'no-border',
+						customHideInputIcon && 'input-hide-icon',
+						customHideInputLabel && 'input-hide-label',
+						customHideInputCaret && 'input-hide-caret',
+						customInputCenterContent && 'input-align-center',
 						className
 					)}
 					value={options.find((option) => option.key === value)}
@@ -107,6 +115,22 @@ SelectControl.propTypes = {
 	 */
 	customMenuPosition: PropTypes.oneOf(['bottom', 'top']),
 	/**
+	 * Hides icon for current select item but icons of dropdown items will be shown
+	 */
+	customHideInputIcon: PropTypes.bool,
+	/**
+	 * Hides label for current select item but label's of dropdown items will be shown
+	 */
+	customHideInputLabel: PropTypes.bool,
+	/**
+	 * Hides input caret icon
+	 */
+	customHideInputCaret: PropTypes.bool,
+	/**
+	 * Sets the content of input content to center align but does not affect drop-down menu items
+	 */
+	customInputCenterContent: PropTypes.bool,
+	/**
 	 * By using this you can prevent the control to show the border and outline shape.
 	 */
 	noBorder: PropTypes.bool,
@@ -129,6 +153,10 @@ SelectControl.defaultProps = {
 	defaultValue: '',
 	type: 'native',
 	customMenuPosition: 'bottom',
+	customHideInputIcon: false,
+	customHideInputLabel: false,
+	customHideInputCaret: false,
+	customInputCenterContent: false,
 	noBorder: false,
 	multiple: false,
 };
