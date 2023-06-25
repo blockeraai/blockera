@@ -10,6 +10,20 @@
 		
 		&:focus {
 			border-color: var(--publisher-controls-border-color-focus);
+			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+		}
+	}
+	
+	&.is-hovered:not(:hover, :focus, .is-focused) {
+		.components-text-control__input {
+			border-color: var(--publisher-controls-border-color-hover);
+		}
+	}
+	
+	&.is-focused {
+		.components-text-control__input {
+			border-color: var(--publisher-controls-border-color-focus);
+			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
 		}
 	}
 	
@@ -27,14 +41,22 @@
 		}
 		
 		.components-text-control__input {
-			border: none;
+			border: 1px solid transparent;
 			border-radius: 2px;
 			box-shadow: none;
 			background: none;
 			
 			&:focus {
 				border-radius: 2px;
-				box-shadow: none;
+				border: 1px solid var(--publisher-controls-border-color-focus);
+				box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+			}
+		}
+		
+		&.is-focused {
+			.components-text-control__input {
+				border: 1px solid var(--publisher-controls-border-color-focus);
+				box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
 			}
 		}
 	}
@@ -69,17 +91,26 @@
 		border-color: var(--publisher-controls-border-color)
 	}
 	
-	// border color for focus
 	.components-base-control__field {
 		.components-flex {
 			.components-input-control__input:focus + .components-input-control__suffix + .components-input-control__backdrop {
-				border-color: var(--publisher-controls-border-color-focus) !important;
+				border: 1px solid var(--publisher-controls-border-color-focus) !important;
+				box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
+			}
+		}
+	}
+	
+	&.is-focused .components-base-control__field {
+		.components-flex {
+			.components-input-control__backdrop {
+				border: 1px solid var(--publisher-controls-border-color-focus) !important;
 				box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
 			}
 		}
 	}
 	
 	// border color for hover
+	&.is-hovered .components-base-control__field,
 	.components-base-control__field:hover {
 		.components-flex {
 			.components-input-control__backdrop.components-input-control__backdrop.components-input-control__backdrop {
@@ -111,6 +142,10 @@
 			background: #ffffff url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%231E1E1E%22%2F%3E%3C%2Fsvg%3E) no-repeat right 5px top 55%;
 			background-size: 13px 11px !important;
 			letter-spacing: 0;
+			
+			&:not(:disabled):hover {
+				background-color: var(--publisher-controls-background-color);
+			}
 		}
 	}
 }

@@ -141,12 +141,12 @@ export function SidePopover({
 							range: true,
 							min: type === 'margin' ? -100 : 0,
 							max: 100,
-							initValue: '0px',
+							defaultValue: '0px',
 						}}
 						//
-						initValue="0px"
+						defaultValue="0px"
 						value={controlValue !== '' ? controlValue : '0px'}
-						onValueChange={(newValue) => {
+						onChange={(newValue) => {
 							setControlValue(value);
 							onValueChange(newValue);
 						}}

@@ -48,7 +48,7 @@ const BorderControl = ({
 				className={controlClassNames('input')}
 				noBorder={true}
 				value={controlValue.width}
-				onValueChange={(newValue) => {
+				onChange={(newValue) => {
 					const value = { ...controlValue, width: newValue };
 
 					setControlValue(value);

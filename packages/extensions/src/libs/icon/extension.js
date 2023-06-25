@@ -99,13 +99,13 @@ export function IconExtension({ children, config, ...props }) {
 								settings={{
 									type: 'css',
 									unitType: 'essential',
-									initValue: '',
+									defaultValue: '',
 									min: 8,
 								}}
 								//
-								initValue=""
+								defaultValue=""
 								value={attributes.publisherIconGap}
-								onValueChange={(newValue) =>
+								onChange={(newValue) =>
 									setAttributes({
 										...attributes,
 										publisherIconGap: newValue,
@@ -121,13 +121,13 @@ export function IconExtension({ children, config, ...props }) {
 								settings={{
 									type: 'css',
 									unitType: 'essential',
-									initValue: '',
+									defaultValue: '',
 									min: 8,
 								}}
 								//
-								initValue=""
+								defaultValue=""
 								value={attributes.publisherIconSize}
-								onValueChange={(newValue) =>
+								onChange={(newValue) =>
 									setAttributes({
 										...attributes,
 										publisherIconSize: newValue,

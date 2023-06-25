@@ -163,7 +163,7 @@ const Fields = ({ itemId, item }) => {
 									}}
 									//
 									value={item['image-size-width']}
-									onValueChange={(width) =>
+									onChange={(width) =>
 										changeItem(itemId, {
 											...item,
 											'image-size-width': width,
@@ -181,7 +181,7 @@ const Fields = ({ itemId, item }) => {
 									}}
 									//
 									value={item['image-size-height']}
-									onValueChange={(height) =>
+									onChange={(height) =>
 										changeItem(itemId, {
 											...item,
 											'image-size-height': height,

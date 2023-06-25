@@ -60,7 +60,7 @@ export function EffectsExtension({ children, config, ...props }) {
 						defaultValue: '100%',
 					}}
 					value={attributes.publisherOpacity}
-					onValueChange={(newValue) =>
+					onChange={(newValue) =>
 						setAttributes({
 							...attributes,
 							publisherOpacity: newValue,
@@ -132,8 +132,7 @@ export function EffectsExtension({ children, config, ...props }) {
 									value={
 										attributes.publisherTransformSelfPerspective
 									}
-									onValueChange={(newValue) => {
-										console.log(newValue);
+									onChange={(newValue) => {
 										setAttributes({
 											...attributes,
 											publisherTransformSelfPerspective:
@@ -218,7 +217,7 @@ export function EffectsExtension({ children, config, ...props }) {
 											? attributes.publisherTransformChildPerspective
 											: '0px'
 									}
-									onValueChange={(newValue) =>
+									onChange={(newValue) =>
 										setAttributes({
 											...attributes,
 											publisherTransformChildPerspective:

@@ -272,14 +272,14 @@ export function LayoutExtension({ config }) {
 											unitType: 'essential',
 											min: 0,
 											max: 200,
-											initValue: '',
+											defaultValue: '',
 										}}
 										label={__('Rows', 'publisher-core')}
 										className="control-first label-center small-gap"
 										//
-										initValue=""
+										defaultValue=""
 										value={attributes.publisherGapRows}
-										onValueChange={(newValue) =>
+										onChange={(newValue) =>
 											setAttributes({
 												...attributes,
 												publisherGapRows: newValue,
@@ -296,14 +296,14 @@ export function LayoutExtension({ config }) {
 											unitType: 'essential',
 											min: 0,
 											max: 200,
-											initValue: '',
+											defaultValue: '',
 										}}
 										label={__('Columns', 'publisher-core')}
 										className="control-first label-center small-gap"
 										//
-										initValue=""
+										defaultValue=""
 										value={attributes.publisherGapColumns}
-										onValueChange={(newValue) =>
+										onChange={(newValue) =>
 											setAttributes({
 												...attributes,
 												publisherGapColumns: newValue,

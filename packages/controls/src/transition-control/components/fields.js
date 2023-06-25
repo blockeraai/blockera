@@ -41,7 +41,7 @@ const Fields = ({ itemId, item }) => {
 				}}
 				//
 				value={item.duration}
-				onValueChange={(duration) =>
+				onChange={(duration) =>
 					changeItem(itemId, { ...item, duration })
 				}
 			/>
@@ -66,9 +66,7 @@ const Fields = ({ itemId, item }) => {
 				}}
 				//
 				value={item.delay}
-				onValueChange={(delay) =>
-					changeItem(itemId, { ...item, delay })
-				}
+				onChange={(delay) => changeItem(itemId, { ...item, delay })}
 			/>
 		</BaseControl>
 	);

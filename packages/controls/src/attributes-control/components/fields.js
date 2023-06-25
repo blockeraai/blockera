@@ -150,9 +150,9 @@ const Fields = ({ itemId, item }) => {
 												type: 'text',
 											}}
 											//
-											initValue=""
+											defaultValue=""
 											value={currentValue}
-											onValueChange={(newValue) => {
+											onChange={(newValue) => {
 												setCurrentValue(newValue);
 												changeItem(itemId, {
 													...item,
@@ -177,9 +177,9 @@ const Fields = ({ itemId, item }) => {
 							type: 'text',
 						}}
 						//
-						initValue=""
+						defaultValue=""
 						value={currentKey}
-						onValueChange={(newValue) => {
+						onChange={(newValue) => {
 							setCurrentKey(newValue);
 							changeItem(itemId, {
 								...item,
@@ -195,9 +195,9 @@ const Fields = ({ itemId, item }) => {
 							type: 'text',
 						}}
 						//
-						initValue=""
+						defaultValue=""
 						value={currentValue}
-						onValueChange={(newValue) => {
+						onChange={(newValue) => {
 							setCurrentValue(newValue);
 							changeItem(itemId, {
 								...item,

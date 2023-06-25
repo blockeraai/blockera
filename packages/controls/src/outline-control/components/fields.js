@@ -51,9 +51,7 @@ const Fields = ({ itemId, item }) => {
 				}}
 				//
 				value={item.offset}
-				onValueChange={(offset) =>
-					changeItem(itemId, { ...item, offset })
-				}
+				onChange={(offset) => changeItem(itemId, { ...item, offset })}
 			/>
 		</BaseControl>
 	);

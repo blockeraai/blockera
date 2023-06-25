@@ -1,20 +1,17 @@
 /**
- * Storybook dependencies
+ * External dependencies
  */
 import { within, userEvent } from '@storybook/testing-library';
 
 /**
  * Internal dependencies
  */
-import { InputControl } from '../input';
+import { InputControl } from '../../index';
 import {
 	decorators,
 	inspectDecorator,
 } from '../../../../../.storybook/preview';
-
-let _value = {
-	publisherInput: '20',
-};
+import { Flex } from '@publisher/components';
 
 const units = [
 	{ value: 'px', label: 'px', default: 0 },
@@ -28,17 +25,11 @@ export default {
 	tags: ['autodocs'],
 };
 
-const onValueChange = (newValue) => {
-	_value = newValue;
-};
-
 export const Default = {
 	args: {
-		range: false,
-		onValueChange,
-		defaultValue: '10px',
+		defaultValue: '10',
 		className: 'publisher-input',
-		value: _value.publisherInput,
+		value: '20',
 	},
 	decorators: [inspectDecorator, ...decorators],
 	parameters: {
@@ -49,11 +40,9 @@ export const Default = {
 export const InputWithUnit = {
 	args: {
 		units,
-		range: false,
-		onValueChange,
 		defaultValue: '10px',
 		className: 'publisher-input',
-		value: _value.publisherInput,
+		value: '20px',
 	},
 	decorators: [inspectDecorator, ...decorators],
 	play: async ({ canvasElement, step }) => {
@@ -68,10 +57,9 @@ export const InputWithUnit = {
 export const InputWithSlider = {
 	args: {
 		range: true,
-		onValueChange,
 		defaultValue: '10px',
 		className: 'publisher-input',
-		value: _value.publisherInput,
+		value: '20px',
 	},
 	decorators: [inspectDecorator, ...decorators],
 };
@@ -80,10 +68,167 @@ export const InputWithUnitAndSlider = {
 	args: {
 		units,
 		range: true,
-		onValueChange,
 		defaultValue: '10px',
 		className: 'publisher-input',
-		value: _value.publisherInput,
+		value: '20px',
 	},
 	decorators: [inspectDecorator, ...decorators],
+};
+
+export const Screenshot = {
+	args: {
+		defaultValue: '10px',
+		value: '20px',
+	},
+	decorators: [inspectDecorator, ...decorators],
+	render: (args) => (
+		<>
+			<h2 className="story-heading">Text Input</h2>
+			<Flex direction="column" gap="20px">
+				<InputControl type="text" {...args} />
+				<InputControl type="text" className="is-hovered" {...args} />
+				<InputControl type="text" className="is-focused" {...args} />
+				<InputControl type="text" noBorder={true} {...args} />
+				<InputControl
+					type="text"
+					className="is-focused"
+					noBorder={true}
+					{...args}
+				/>
+			</Flex>
+
+			<h2 className="story-heading">Number Input</h2>
+			<Flex direction="column" gap="20px">
+				<InputControl {...args} type="number" value="20" />
+				<InputControl
+					{...args}
+					type="number"
+					value="20"
+					className="is-hovered"
+				/>
+				<InputControl
+					{...args}
+					type="number"
+					value="20"
+					className="is-focused"
+				/>
+				<InputControl
+					{...args}
+					type="number"
+					value="20"
+					noBorder={true}
+				/>
+				<InputControl
+					{...args}
+					type="number"
+					className="is-focused"
+					value="20"
+					noBorder={true}
+				/>
+			</Flex>
+
+			<h2 className="story-heading">Range Number Input</h2>
+			<Flex direction="column" gap="20px">
+				<InputControl {...args} range={true} type="number" value="20" />
+				<InputControl
+					{...args}
+					range={true}
+					type="number"
+					value="20"
+					className="is-hovered"
+				/>
+				<InputControl
+					{...args}
+					range={true}
+					type="number"
+					value="20"
+					className="is-focused"
+				/>
+				<InputControl
+					{...args}
+					range={true}
+					type="number"
+					value="20"
+					noBorder={true}
+				/>
+				<InputControl
+					{...args}
+					range={true}
+					type="number"
+					className="is-focused"
+					value="20"
+					noBorder={true}
+				/>
+			</Flex>
+
+			<h2 className="story-heading">Units Input</h2>
+			<Flex direction="column" gap="20px">
+				<InputControl {...args} units={units} type="number" />
+				<InputControl
+					{...args}
+					units={units}
+					type="number"
+					className="is-hovered"
+				/>
+				<InputControl
+					{...args}
+					units={units}
+					type="number"
+					className="is-focused"
+				/>
+				<InputControl
+					{...args}
+					units={units}
+					type="number"
+					noBorder={true}
+				/>
+				<InputControl
+					{...args}
+					units={units}
+					type="number"
+					className="is-focused"
+					noBorder={true}
+				/>
+			</Flex>
+
+			<h2 className="story-heading">Range Units Input</h2>
+			<Flex direction="column" gap="20px">
+				<InputControl
+					{...args}
+					range={true}
+					units={units}
+					type="number"
+				/>
+				<InputControl
+					{...args}
+					range={true}
+					units={units}
+					type="number"
+					className="is-hovered"
+				/>
+				<InputControl
+					{...args}
+					range={true}
+					units={units}
+					type="number"
+					className="is-focused"
+				/>
+				<InputControl
+					{...args}
+					range={true}
+					units={units}
+					type="number"
+					noBorder={true}
+				/>
+				<InputControl
+					{...args}
+					range={true}
+					units={units}
+					type="number"
+					className="is-focused"
+					noBorder={true}
+				/>
+			</Flex>
+		</>
+	),
 };

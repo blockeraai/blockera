@@ -57,7 +57,7 @@ const BorderRadiusControl = ({
 						type="css"
 						unitType="essential"
 						value={controlValue.all}
-						onValueChange={(newValue) => {
+						onChange={(newValue) => {
 							const value = { ...controlValue, all: newValue };
 							setControlValue(value);
 							onValueChange(value);
@@ -129,7 +129,7 @@ const BorderRadiusControl = ({
 							)}
 							noBorder={true}
 							value={controlValue.topLeft}
-							onValueChange={(newValue) => {
+							onChange={(newValue) => {
 								const value = {
 									...controlValue,
 									topLeft: newValue,
@@ -147,7 +147,7 @@ const BorderRadiusControl = ({
 							)}
 							noBorder={true}
 							value={controlValue.topRight}
-							onValueChange={(newValue) => {
+							onChange={(newValue) => {
 								const value = {
 									...controlValue,
 									topRight: newValue,
@@ -165,7 +165,7 @@ const BorderRadiusControl = ({
 							)}
 							noBorder={true}
 							value={controlValue.bottomLeft}
-							onValueChange={(newValue) => {
+							onChange={(newValue) => {
 								const value = {
 									...controlValue,
 									bottomLeft: newValue,
@@ -183,7 +183,7 @@ const BorderRadiusControl = ({
 							)}
 							noBorder={true}
 							value={controlValue.bottomRight}
-							onValueChange={(newValue) => {
+							onChange={(newValue) => {
 								const value = {
 									...controlValue,
 									bottomRight: newValue,

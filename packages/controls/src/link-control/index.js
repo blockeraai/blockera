@@ -69,7 +69,7 @@ const LinkControl = ({
 				<InputControl
 					value={controlValue.link}
 					placeholder={placeholder}
-					onValueChange={(newValue) => {
+					onChange={(newValue) => {
 						setControlValue({ ...controlValue, link: newValue });
 					}}
 				/>
@@ -114,9 +114,9 @@ const LinkControl = ({
 						settings={{
 							type: 'text',
 						}}
-						value={controlValue.label}
 						label={__('Label', 'publisher-core')}
-						onValueChange={(newValue) => {
+						value={controlValue.label}
+						onChange={(newValue) => {
 							setControlValue({
 								...controlValue,
 								label: newValue,

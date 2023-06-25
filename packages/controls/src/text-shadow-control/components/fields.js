@@ -31,7 +31,7 @@ const Fields = ({ itemId, item }) => {
 				}}
 				//
 				value={item.x}
-				onValueChange={(x) => changeItem(itemId, { ...item, x })}
+				onChange={(x) => changeItem(itemId, { ...item, x })}
 			/>
 
 			<InputField
@@ -45,7 +45,7 @@ const Fields = ({ itemId, item }) => {
 				}}
 				//
 				value={item.y}
-				onValueChange={(y) => changeItem(itemId, { ...item, y })}
+				onChange={(y) => changeItem(itemId, { ...item, y })}
 			/>
 
 			<InputField
@@ -59,7 +59,7 @@ const Fields = ({ itemId, item }) => {
 				}}
 				//
 				value={item.blur}
-				onValueChange={(blur) => changeItem(itemId, { ...item, blur })}
+				onChange={(blur) => changeItem(itemId, { ...item, blur })}
 			/>
 
 			<ColorField

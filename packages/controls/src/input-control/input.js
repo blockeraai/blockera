@@ -1,15 +1,10 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
-import { useState } from '@wordpress/element';
 import {
 	TextControl as WPTextControl,
 	__experimentalUnitControl as WPUnitControl,
 } from '@wordpress/components';
-
-/**
- * External dependencies
- */
 import PropTypes from 'prop-types';
 
 /**
@@ -17,30 +12,32 @@ import PropTypes from 'prop-types';
  */
 import { controlClassNames } from '@publisher/classnames';
 import { RangeControl } from './../index';
+import { useValue } from '@publisher/utils';
 
 export function InputControl({
 	units,
-	range = false,
-	noBorder = false,
-	// suffix = '',  //todo implement
+	range,
+	noBorder,
 	//
-	value = null,
+	value: initialValue,
 	defaultValue,
+	onChange,
 	//
 	className,
-	onChange = (newValue) => {
-		return newValue;
-	},
-	onValueChange = () => {},
 	...props
 }) {
-	const [controlValue, setValue] = useState(value || defaultValue);
+	const { value, setValue } = useValue({
+		initialValue,
+		defaultValue,
+		onChange,
+	});
 
 	return (
 		<div
 			className={controlClassNames(
 				'input',
 				range ? 'input-range' : '',
+				noBorder && 'no-border',
 				className
 			)}
 		>
@@ -48,15 +45,11 @@ export function InputControl({
 				<RangeControl
 					withInputField={false}
 					className={className}
-					value={controlValue}
+					value={value}
 					onChange={(newValue) => {
 						// extract unit from old value and assign it to newValue
-						newValue =
-							newValue + controlValue.replace(/[0-9|-]/gi, '');
-
-						newValue = onChange(newValue);
+						newValue = newValue + value.replace(/[0-9|-]/gi, '');
 						setValue(newValue);
-						onValueChange(newValue);
 						return newValue;
 					}}
 					//
@@ -69,17 +62,11 @@ export function InputControl({
 				<WPUnitControl
 					{...props}
 					units={units}
-					value={controlValue}
-					onChange={(newValue) => {
-						newValue = onChange(newValue);
-						setValue(newValue);
-						onValueChange(newValue);
-						return newValue;
-					}}
+					value={value}
+					onChange={setValue}
 					className={controlClassNames(
 						'text',
 						'publisher-control-unit',
-						noBorder && 'no-border',
 						className
 					)}
 					isUnitSelectTabbable={false}
@@ -89,18 +76,9 @@ export function InputControl({
 			{!units && (
 				<WPTextControl
 					{...props}
-					value={controlValue}
-					onChange={(newValue) => {
-						newValue = onChange(newValue);
-						setValue(newValue);
-						onValueChange(newValue);
-						return newValue;
-					}}
-					className={controlClassNames(
-						'text',
-						noBorder && 'no-border',
-						className
-					)}
+					value={value}
+					onChange={setValue}
+					className={controlClassNames('text', className)}
 				/>
 			)}
 		</div>
@@ -108,12 +86,51 @@ export function InputControl({
 }
 
 InputControl.propTypes = {
-	range: PropTypes.bool,
-	units: PropTypes.array,
-	value: PropTypes.string,
-	noBorder: PropTypes.bool,
-	onChange: PropTypes.func,
+	/**
+	 * It sets the control default value if the value not provided. By using it the control will not fire onValueChange event for this default value on control first render,
+	 */
 	defaultValue: PropTypes.string,
-	className: PropTypes.string,
-	onValueChange: PropTypes.func,
+	/**
+	 * The current value.
+	 */
+	value: PropTypes.string,
+	/**
+	 * Function that will be fired while the control value state changes.
+	 */
+	onChange: PropTypes.func,
+	/**
+	 * Sets to show range control for input or not
+	 */
+	range: PropTypes.bool,
+	/**
+	 * Indicates units for showing unit for value.
+	 */
+	units: PropTypes.arrayOf(
+		PropTypes.shape({
+			value: PropTypes.string,
+			label: PropTypes.string,
+			default: PropTypes.string,
+		})
+	),
+	/**
+	 * By using this you can prevent the control to show the border and outline shape.
+	 */
+	noBorder: PropTypes.bool,
+	/**
+	 * The minimum `value` allowed.
+	 */
+	min: PropTypes.number,
+	/**
+	 * The maximum `value` allowed.
+	 */
+	max: PropTypes.number,
+	/**
+	 * Disables the `input`, preventing new values from being applied.
+	 */
+	disabled: PropTypes.bool,
+};
+
+InputControl.defaultProps = {
+	range: false,
+	noBorder: false,
 };

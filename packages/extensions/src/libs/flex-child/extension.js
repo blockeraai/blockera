@@ -83,7 +83,7 @@ export function FlexChildExtension({ config }) {
 								label={__('Grow', 'publisher-core')}
 								settings={{ type: 'number', min: 0 }}
 								value={attributes.publisherFlexChildGrow}
-								onValueChange={(newValue) =>
+								onChange={(newValue) =>
 									setAttributes({
 										...attributes,
 										publisherFlexChildGrow: newValue,
@@ -94,7 +94,7 @@ export function FlexChildExtension({ config }) {
 								label={__('Shrink', 'publisher-core')}
 								settings={{ type: 'number', min: 0 }}
 								value={attributes.publisherFlexChildShrink}
-								onValueChange={(newValue) =>
+								onChange={(newValue) =>
 									setAttributes({
 										...attributes,
 										publisherFlexChildShrink: newValue,
@@ -108,9 +108,9 @@ export function FlexChildExtension({ config }) {
 									unitType: 'essential',
 									min: 0,
 								}}
-								initValue="auto"
+								defaultValue="auto"
 								value={attributes.publisherFlexChildBasis}
-								onValueChange={(newValue) =>
+								onChange={(newValue) =>
 									setAttributes({
 										...attributes,
 										publisherFlexChildBasis: newValue,
@@ -156,7 +156,7 @@ export function FlexChildExtension({ config }) {
 					columns="1fr 2.65fr"
 					className={'items-flex-direction-' + flexDirection}
 					//
-					initValue=""
+					defaultValue=""
 					value={attributes.publisherFlexChildAlign}
 					onValueChange={(newValue) =>
 						setAttributes({
@@ -188,7 +188,7 @@ export function FlexChildExtension({ config }) {
 					isDeselectable={true}
 					columns="1fr 2.65fr"
 					//
-					initValue=""
+					defaultValue=""
 					value={attributes.publisherFlexChildOrder}
 					onValueChange={(newValue) =>
 						setAttributes({
@@ -205,9 +205,9 @@ export function FlexChildExtension({ config }) {
 									type: 'number',
 									min: -1,
 								}}
-								initValue={1}
+								defaultValue={1}
 								value={attributes.publisherFlexChildOrderCustom}
-								onValueChange={(newValue) =>
+								onChange={(newValue) =>
 									setAttributes({
 										...attributes,
 										publisherFlexChildOrderCustom: newValue,

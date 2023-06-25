@@ -51,7 +51,7 @@ export function SidePopover({
 						//
 						defaultValue="0px"
 						value={controlValue !== '' ? controlValue : '0px'}
-						onValueChange={(newValue) => {
+						onChange={(newValue) => {
 							setControlValue(value);
 							onValueChange(newValue);
 						}}

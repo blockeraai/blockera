@@ -1,12 +1,12 @@
 /**
- * WordPress dependencies
- */
-import { useState } from '@wordpress/element';
-
-/**
  * External dependencies
  */
 import PropTypes from 'prop-types';
+
+/**
+ * Publisher dependencies
+ */
+import { useValue } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -15,12 +15,13 @@ import { InputControl } from './input';
 import { isSpecialUnit } from './utils';
 
 export function CssInputControl({
-	unitType = 'general',
-	units = false,
-	noBorder = false,
+	unitType,
+	units,
+	noBorder,
 	//
 	defaultValue,
-	value,
+	value: initialValue,
+	onChange,
 	//
 	className,
 	...props
@@ -175,13 +176,11 @@ export function CssInputControl({
 		}
 	}
 
-	const [controlValue] = useState(value || defaultValue);
-
-	const [classNames, setClassNames] = useState(
-		isSpecialUnit(controlValue)
-			? baseClassName + specialClassName
-			: baseClassName
-	);
+	const { value, setValue } = useValue({
+		initialValue,
+		defaultValue,
+		onChange,
+	});
 
 	return (
 		<InputControl
@@ -190,40 +189,81 @@ export function CssInputControl({
 			defaultValue={defaultValue}
 			units={cssUnits}
 			noBorder={noBorder}
-			//
-			className={classNames}
-			onUnitChange={(nextUnitValue) => {
-				if (isSpecialUnit(nextUnitValue)) {
-					setClassNames(baseClassName + specialClassName);
-				} else if (classNames.includes(specialClassName))
-					setClassNames(baseClassName.replace(specialClassName, ''));
-			}}
+			className={
+				isSpecialUnit(value)
+					? baseClassName + specialClassName
+					: baseClassName
+			}
+			onChange={setValue}
 		/>
 	);
 }
 
 CssInputControl.propTypes = {
-	range: PropTypes.bool,
-	units: PropTypes.array,
-	value: PropTypes.string,
-	noBorder: PropTypes.bool,
-	onChange: PropTypes.func,
-	defaultValue: PropTypes.string,
-	className: PropTypes.string,
-	onValueChange: PropTypes.func,
+	/**
+	 * Type of CSS units from presets
+	 */
 	unitType: PropTypes.oneOf([
 		'outline',
 		'text-shadow',
 		'box-shadow',
 		'background-size',
-		'background-position',
-		'text-indent',
 		'letter-spacing',
+		'text-indent',
+		'background-position',
+		'duration',
+		'angle',
+		'percent',
+		'width',
 		'essential',
 		'general',
-		'width',
-		'percent',
-		'angle',
-		'duration',
 	]),
+	/**
+	 * It sets the control default value if the value not provided. By using it the control will not fire onValueChange event for this default value on control first render,
+	 */
+	defaultValue: PropTypes.string,
+	/**
+	 * The current value.
+	 */
+	value: PropTypes.string,
+	/**
+	 * Function that will be fired while the control value state changes.
+	 */
+	onChange: PropTypes.func,
+	/**
+	 * Sets to show range control for input or not
+	 */
+	range: PropTypes.bool,
+	/**
+	 * Indicates units for showing unit for value.
+	 */
+	units: PropTypes.arrayOf(
+		PropTypes.shape({
+			value: PropTypes.string,
+			label: PropTypes.string,
+			default: PropTypes.string,
+		})
+	),
+	/**
+	 * By using this you can prevent the control to show the border and outline shape.
+	 */
+	noBorder: PropTypes.bool,
+	/**
+	 * The minimum `value` allowed.
+	 */
+	min: PropTypes.number,
+	/**
+	 * The maximum `value` allowed.
+	 */
+	max: PropTypes.number,
+	/**
+	 * Disables the `input`, preventing new values from being applied.
+	 */
+	disabled: PropTypes.bool,
+};
+
+CssInputControl.defaultProps = {
+	unitType: 'general',
+	range: false,
+	noBorder: false,
 };
