@@ -1,15 +1,64 @@
 import {
+	getClassnames,
 	componentClassNames,
 	componentInnerClassNames,
 	controlClassNames,
 	controlInnerClassNames,
 	extensionClassNames,
 	extensionInnerClassNames,
+	fieldsClassNames,
+	fieldsInnerClassNames,
 	getClassNames,
 	getInnerClassNames,
 } from '..';
 
 describe('Classnames testing ...', () => {
+	describe('getClassnames testing ...', () => {
+		test('test custom string section!', () => {
+			const generatedClassnames = getClassnames(true, 'section', 'value');
+
+			expect(generatedClassnames).toBe('section section-value');
+		});
+
+		test('test custom string section but not append section', () => {
+			const generatedClassnames = getClassnames(
+				false,
+				'section',
+				'value'
+			);
+
+			expect(generatedClassnames).toBe('section-value');
+		});
+
+		test('section as object', () => {
+			const generatedClassnames = getClassnames(
+				false,
+				{ section: true },
+				'value'
+			);
+
+			expect(generatedClassnames).toBe('section-value');
+		});
+
+		test('section as invalid (not string or valid object)', () => {
+			const generatedClassnames = getClassnames(false, false, 'value');
+
+			expect(generatedClassnames).toBe('publisher-value');
+		});
+
+		test('not passing names', () => {
+			const generatedClassnames = getClassnames(false, 'section');
+
+			expect(generatedClassnames).toBe('section');
+		});
+
+		test('not passing names', () => {
+			const generatedClassnames = getClassnames(true, 'section');
+
+			expect(generatedClassnames).toBe('section');
+		});
+	});
+
 	describe('Extensions classnames api testing ...', () => {
 		test('testing when passed names as String!', () => {
 			const generatedClassnames = extensionClassNames('class');
@@ -148,6 +197,42 @@ describe('Classnames testing ...', () => {
 			const generatedClassnames = componentInnerClassNames('class');
 
 			expect(generatedClassnames).toBe('publisher-component-class');
+		});
+	});
+
+	describe('fields classnames api testing ...', () => {
+		test('testing when passed names as String!', () => {
+			const generatedClassnames = fieldsClassNames('class');
+
+			expect(generatedClassnames).toBe(
+				'publisher-field publisher-field-class'
+			);
+		});
+
+		test('testing when passed names as Object!', () => {
+			const generatedClassnames = fieldsClassNames({
+				class: true,
+				'another-class': true,
+				'disabled-class': false,
+			});
+
+			expect(generatedClassnames).toBe(
+				'publisher-field publisher-field-class another-class'
+			);
+		});
+
+		test('testing when passed names as Array!', () => {
+			const generatedClassnames = fieldsClassNames(['class']);
+
+			expect(generatedClassnames).toBe(
+				'publisher-field publisher-field-class'
+			);
+		});
+
+		test('testing Inner class', () => {
+			const generatedClassnames = fieldsInnerClassNames('class');
+
+			expect(generatedClassnames).toBe('publisher-field-class');
 		});
 	});
 

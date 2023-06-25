@@ -2,7 +2,13 @@
  * External dependencies
  */
 import classnames from 'classnames';
-import { isArray, isEmpty, isObject, isString } from '@publisher/utils';
+import {
+	isArray,
+	isEmpty,
+	isObject,
+	isString,
+	isUndefined,
+} from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -42,10 +48,23 @@ function prepareClassName(section, items) {
 	return items;
 }
 
-function _classnames(addSectionClass = true, section = rootDefault, names) {
-	// find the section prefix from it's default
-	if (!isString(section)) {
+export function getClassnames(
+	addSectionClass = true,
+	section = rootDefault,
+	names
+) {
+	// find the section prefix from its default
+	if (isObject(section)) {
 		section = Object.keys(section)[0];
+	}
+
+	if (!isString(section)) {
+		section = 'publisher';
+	}
+
+	// return only section
+	if (isUndefined(names) || isEmpty(names)) {
+		return classnames(section);
 	}
 
 	// prepend section prefix to all classes
@@ -59,41 +78,41 @@ function _classnames(addSectionClass = true, section = rootDefault, names) {
 }
 
 export function getClassNames(...names) {
-	return _classnames(true, rootDefault, names);
+	return getClassnames(true, rootDefault, names);
 }
 
 export function getInnerClassNames(...names) {
-	return _classnames(false, rootDefault, names);
+	return getClassnames(false, rootDefault, names);
 }
 
 export function controlClassNames(...names) {
-	return _classnames(true, controlsDefault, names);
+	return getClassnames(true, controlsDefault, names);
 }
 
 export function controlInnerClassNames(...names) {
-	return _classnames(false, controlsDefault, names);
+	return getClassnames(false, controlsDefault, names);
 }
 
 export function fieldsClassNames(...names) {
-	return _classnames(true, fieldsDefault, names);
+	return getClassnames(true, fieldsDefault, names);
 }
 
 export function fieldsInnerClassNames(...names) {
-	return _classnames(false, fieldsDefault, names);
+	return getClassnames(false, fieldsDefault, names);
 }
 
 export function componentClassNames(...names) {
-	return _classnames(true, componentsDefault, names);
+	return getClassnames(true, componentsDefault, names);
 }
 
 export function componentInnerClassNames(...names) {
-	return _classnames(false, componentsDefault, names);
+	return getClassnames(false, componentsDefault, names);
 }
 
 export function extensionClassNames(...names) {
-	return _classnames(true, extensionsDefault, names);
+	return getClassnames(true, extensionsDefault, names);
 }
 
 export function extensionInnerClassNames(...names) {
-	return _classnames(false, extensionsDefault, names);
+	return getClassnames(false, extensionsDefault, names);
 }
