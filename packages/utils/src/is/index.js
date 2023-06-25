@@ -9,21 +9,18 @@ export function isUndefined(value) {
 }
 
 /**
- * is a given value String?
+ * is a given value empty?
  *
  * @param {*} [value]
  * @return {boolean} boolean
  */
 export function isEmpty(value) {
-	if (isObject(value)) {
-		const length = Object.getOwnPropertyNames(value).length;
-
-		return (
-			length === 0 ||
-			(length === 1 && isArray(value)) ||
-			(length === 2 && isArguments(value))
-		);
+	if (isArray(value)) {
+		return value.length === 0;
+	} else if (isObject(value)) {
+		return Object.keys(value).length === 0;
 	}
+
 	return value === '';
 }
 
@@ -35,16 +32,6 @@ export function isEmpty(value) {
  */
 export function isNull(value) {
 	return value === null;
-}
-
-/**
- * is a given value NaN?
- *
- * @param {*} [value]
- * @return {boolean} boolean
- */
-export function isNaN(value) {
-	return Number.isNaN(value);
 }
 
 /**
@@ -114,7 +101,11 @@ export function isJSON(value) {
  * @return {boolean} boolean
  */
 export function isObject(value) {
-	return Object(value) === value;
+	return (
+		Object(value) === value &&
+		Object.prototype.toString.call(value) !== '[object Array]' &&
+		Object.prototype.toString.call(value) !== '[object Function]'
+	);
 }
 
 /**
@@ -125,29 +116,6 @@ export function isObject(value) {
  */
 export function isString(value) {
 	return Object.prototype.toString.call(value) === '[object String]';
-}
-
-/**
- * is a given value RegExp?
- *
- * @param {*} [value]
- * @return {boolean} boolean
- */
-export function isRegex(value) {
-	return Object.prototype.toString.call(value) === '[object RegExp]';
-}
-
-/**
- * is a given value String?
- *
- * @param {*} [value]
- * @return {boolean} boolean
- */
-export function isArguments(value) {
-	return (
-		Object.prototype.toString.call(value) === '[object Arguments]' ||
-		(value !== null && typeof value === 'object' && 'callee' in value)
-	);
 }
 
 /**
