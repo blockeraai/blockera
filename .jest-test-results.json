@@ -2,13 +2,13 @@
 	"numFailedTestSuites": 1,
 	"numFailedTests": 0,
 	"numPassedTestSuites": 3,
-	"numPassedTests": 25,
+	"numPassedTests": 30,
 	"numPendingTestSuites": 0,
 	"numPendingTests": 0,
 	"numRuntimeErrorTestSuites": 1,
 	"numTodoTests": 0,
 	"numTotalTestSuites": 4,
-	"numTotalTests": 25,
+	"numTotalTests": 30,
 	"openHandles": [],
 	"snapshot": {
 		"added": 0,
@@ -26,7 +26,7 @@
 		"unmatched": 0,
 		"updated": 0
 	},
-	"startTime": 1686488337962,
+	"startTime": 1687673117738,
 	"success": false,
 	"testResults": [
 		{
@@ -35,7 +35,7 @@
 					"ancestorTitles": [
 						"API Preparing data property value testing..."
 					],
-					"duration": 3,
+					"duration": 2,
 					"failureDetails": [],
 					"failureMessages": [],
 					"fullName": "API Preparing data property value testing... Access to \"x.y[2]\" from data with string query testing...",
@@ -50,7 +50,7 @@
 					"ancestorTitles": [
 						"API Preparing data property value testing..."
 					],
-					"duration": 2,
+					"duration": 1,
 					"failureDetails": [],
 					"failureMessages": [],
 					"fullName": "API Preparing data property value testing... Access to \"x\" from data with string query testing...",
@@ -92,11 +92,21 @@
 					"title": "Access to \"boxShadowItems[0].y\" from data with string query testing..."
 				}
 			],
-			"endTime": 1686488340832,
+			"endTime": 1687673120154,
 			"message": "",
-			"name": "/Users/reza/Desktop/workflow/publisher/wp-content/plugins/publisher-blocks/libs/publisher-core/packages/data-extractor/src/test/prepare.spec.js",
-			"startTime": 1686488338501,
+			"name": "/Users/aliaghdam/Sites/site-publisher-platform/wp-content/plugins/publisher-blocks/libs/publisher-core/packages/data-extractor/src/test/prepare.spec.js",
+			"startTime": 1687673118764,
 			"status": "passed",
+			"summary": ""
+		},
+		{
+			"assertionResults": [],
+			"coverage": {},
+			"endTime": 1687673120573,
+			"message": "  \u001b[1m● \u001b[22mTest suite failed to run\n\n    Cannot find module '@publisher/extensions/src/controls/box-shadow/helpers' from 'packages/style-engine/src/test/css-generator.spec.js'\n\n    \u001b[0m \u001b[90m 3 |\u001b[39m \u001b[90m */\u001b[39m\u001b[0m\n    \u001b[0m \u001b[90m 4 |\u001b[39m \u001b[36mimport\u001b[39m \u001b[33mCssGenerators\u001b[39m \u001b[36mfrom\u001b[39m \u001b[32m'@publisher/style-engine'\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n    \u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 |\u001b[39m \u001b[36mimport\u001b[39m helpers \u001b[36mfrom\u001b[39m \u001b[32m'@publisher/extensions/src/controls/box-shadow/helpers'\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n    \u001b[0m \u001b[90m   |\u001b[39m \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n    \u001b[0m \u001b[90m 6 |\u001b[39m\u001b[0m\n    \u001b[0m \u001b[90m 7 |\u001b[39m \u001b[36mconst\u001b[39m blockProps \u001b[33m=\u001b[39m {\u001b[0m\n    \u001b[0m \u001b[90m 8 |\u001b[39m \tclientId\u001b[33m:\u001b[39m \u001b[35m12354645546\u001b[39m\u001b[33m,\u001b[39m\u001b[0m\n\n      \u001b[2mat Resolver._throwModNotFoundError (\u001b[22mnode_modules/jest-cli/node_modules/jest-resolve/build/resolver.js\u001b[2m:427:11)\u001b[22m\n      \u001b[2mat Object.require (\u001b[22m\u001b[0m\u001b[36mpackages/style-engine/src/test/css-generator.spec.js\u001b[39m\u001b[0m\u001b[2m:5:1)\u001b[22m\n",
+			"name": "/Users/aliaghdam/Sites/site-publisher-platform/wp-content/plugins/publisher-blocks/libs/publisher-core/packages/style-engine/src/test/css-generator.spec.js",
+			"startTime": 1687673120573,
+			"status": "failed",
 			"summary": ""
 		},
 		{
@@ -106,7 +116,7 @@
 						"Classnames testing ...",
 						"Extensions classnames api testing ..."
 					],
-					"duration": 5,
+					"duration": 3,
 					"failureDetails": [],
 					"failureMessages": [],
 					"fullName": "Classnames testing ... Extensions classnames api testing ... testing when passed names as String!",
@@ -122,7 +132,7 @@
 						"Classnames testing ...",
 						"Extensions classnames api testing ..."
 					],
-					"duration": 2,
+					"duration": 0,
 					"failureDetails": [],
 					"failureMessages": [],
 					"fullName": "Classnames testing ... Extensions classnames api testing ... testing when passed names as multiple String!",
@@ -138,7 +148,7 @@
 						"Classnames testing ...",
 						"Extensions classnames api testing ..."
 					],
-					"duration": 1,
+					"duration": 0,
 					"failureDetails": [],
 					"failureMessages": [],
 					"fullName": "Classnames testing ... Extensions classnames api testing ... testing when passed names as Object!",
@@ -154,7 +164,7 @@
 						"Classnames testing ...",
 						"Extensions classnames api testing ..."
 					],
-					"duration": 0,
+					"duration": 3,
 					"failureDetails": [],
 					"failureMessages": [],
 					"fullName": "Classnames testing ... Extensions classnames api testing ... testing when passed names as Array!",
@@ -250,7 +260,7 @@
 						"Classnames testing ...",
 						"Controls classnames api testing ..."
 					],
-					"duration": 0,
+					"duration": 1,
 					"failureDetails": [],
 					"failureMessages": [],
 					"fullName": "Classnames testing ... Controls classnames api testing ... testing Inner classes",
@@ -282,7 +292,7 @@
 						"Classnames testing ...",
 						"Components classnames api testing ..."
 					],
-					"duration": 0,
+					"duration": 1,
 					"failureDetails": [],
 					"failureMessages": [],
 					"fullName": "Classnames testing ... Components classnames api testing ... testing when passed names as String!",
@@ -298,7 +308,7 @@
 						"Classnames testing ...",
 						"Components classnames api testing ..."
 					],
-					"duration": 1,
+					"duration": 0,
 					"failureDetails": [],
 					"failureMessages": [],
 					"fullName": "Classnames testing ... Components classnames api testing ... testing when passed names as Object!",
@@ -314,7 +324,7 @@
 						"Classnames testing ...",
 						"Components classnames api testing ..."
 					],
-					"duration": 1,
+					"duration": 0,
 					"failureDetails": [],
 					"failureMessages": [],
 					"fullName": "Classnames testing ... Components classnames api testing ... testing when passed names as Array!",
@@ -330,7 +340,7 @@
 						"Classnames testing ...",
 						"Components classnames api testing ..."
 					],
-					"duration": 0,
+					"duration": 1,
 					"failureDetails": [],
 					"failureMessages": [],
 					"fullName": "Classnames testing ... Components classnames api testing ... testing Inner class",
@@ -346,7 +356,7 @@
 						"Classnames testing ...",
 						"Root classnames api testing ..."
 					],
-					"duration": 4,
+					"duration": 0,
 					"failureDetails": [],
 					"failureMessages": [],
 					"fullName": "Classnames testing ... Root classnames api testing ... testing when passed names as String!",
@@ -362,7 +372,7 @@
 						"Classnames testing ...",
 						"Root classnames api testing ..."
 					],
-					"duration": 1,
+					"duration": 0,
 					"failureDetails": [],
 					"failureMessages": [],
 					"fullName": "Classnames testing ... Root classnames api testing ... testing when passed names as Object!",
@@ -378,7 +388,7 @@
 						"Classnames testing ...",
 						"Root classnames api testing ..."
 					],
-					"duration": 0,
+					"duration": 1,
 					"failureDetails": [],
 					"failureMessages": [],
 					"fullName": "Classnames testing ... Root classnames api testing ... testing when passed names as Array!",
@@ -422,43 +432,116 @@
 					"title": "testing Inner class -> multiple"
 				}
 			],
-			"endTime": 1686488340886,
+			"endTime": 1687673120484,
 			"message": "",
-			"name": "/Users/reza/Desktop/workflow/publisher/wp-content/plugins/publisher-blocks/libs/publisher-core/packages/classnames/src/test/index.spec.js",
-			"startTime": 1686488338518,
+			"name": "/Users/aliaghdam/Sites/site-publisher-platform/wp-content/plugins/publisher-blocks/libs/publisher-core/packages/classnames/src/test/index.spec.js",
+			"startTime": 1687673118764,
 			"status": "passed",
-			"summary": ""
-		},
-		{
-			"assertionResults": [],
-			"coverage": {},
-			"endTime": 1686488341988,
-			"message": "  \u001b[1m● \u001b[22mTest suite failed to run\n\n    Cannot find module '@publisher/extensions/src/controls/box-shadow/helpers' from 'packages/style-engine/src/test/css-generator.spec.js'\n\n    \u001b[0m \u001b[90m 3 |\u001b[39m \u001b[90m */\u001b[39m\u001b[0m\n    \u001b[0m \u001b[90m 4 |\u001b[39m \u001b[36mimport\u001b[39m \u001b[33mCssGenerators\u001b[39m \u001b[36mfrom\u001b[39m \u001b[32m'@publisher/style-engine'\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n    \u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 |\u001b[39m \u001b[36mimport\u001b[39m helpers \u001b[36mfrom\u001b[39m \u001b[32m'@publisher/extensions/src/controls/box-shadow/helpers'\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n    \u001b[0m \u001b[90m   |\u001b[39m \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n    \u001b[0m \u001b[90m 6 |\u001b[39m\u001b[0m\n    \u001b[0m \u001b[90m 7 |\u001b[39m \u001b[36mconst\u001b[39m blockProps \u001b[33m=\u001b[39m {\u001b[0m\n    \u001b[0m \u001b[90m 8 |\u001b[39m \tclientId\u001b[33m:\u001b[39m \u001b[35m12354645546\u001b[39m\u001b[33m,\u001b[39m\u001b[0m\n\n      \u001b[2mat Resolver._throwModNotFoundError (\u001b[22mnode_modules/jest-cli/node_modules/jest-resolve/build/resolver.js\u001b[2m:427:11)\u001b[22m\n      \u001b[2mat Object.require (\u001b[22m\u001b[0m\u001b[36mpackages/style-engine/src/test/css-generator.spec.js\u001b[39m\u001b[0m\u001b[2m:5:1)\u001b[22m\n",
-			"name": "/Users/reza/Desktop/workflow/publisher/wp-content/plugins/publisher-blocks/libs/publisher-core/packages/style-engine/src/test/css-generator.spec.js",
-			"startTime": 1686488341988,
-			"status": "failed",
 			"summary": ""
 		},
 		{
 			"assertionResults": [
 				{
-					"ancestorTitles": ["testing input control"],
+					"ancestorTitles": [
+						"Testing util functions",
+						"addAngle testing"
+					],
 					"duration": 2,
 					"failureDetails": [],
 					"failureMessages": [],
-					"fullName": "testing input control InputControl render correctly",
+					"fullName": "Testing util functions addAngle testing testing when passed values as String!",
 					"invocations": 1,
 					"location": null,
 					"numPassingAsserts": 1,
 					"retryReasons": [],
 					"status": "passed",
-					"title": "InputControl render correctly"
+					"title": "testing when passed values as String!"
+				},
+				{
+					"ancestorTitles": [
+						"Testing util functions",
+						"addAngle testing"
+					],
+					"duration": 1,
+					"failureDetails": [],
+					"failureMessages": [],
+					"fullName": "Testing util functions addAngle testing testing when passed as number!",
+					"invocations": 1,
+					"location": null,
+					"numPassingAsserts": 1,
+					"retryReasons": [],
+					"status": "passed",
+					"title": "testing when passed as number!"
+				},
+				{
+					"ancestorTitles": [
+						"Testing util functions",
+						"addAngle testing"
+					],
+					"duration": 0,
+					"failureDetails": [],
+					"failureMessages": [],
+					"fullName": "Testing util functions addAngle testing testing when passed as negative number!",
+					"invocations": 1,
+					"location": null,
+					"numPassingAsserts": 1,
+					"retryReasons": [],
+					"status": "passed",
+					"title": "testing when passed as negative number!"
+				},
+				{
+					"ancestorTitles": [
+						"Testing util functions",
+						"subtractAngle testing"
+					],
+					"duration": 0,
+					"failureDetails": [],
+					"failureMessages": [],
+					"fullName": "Testing util functions subtractAngle testing testing when passed values as String!",
+					"invocations": 1,
+					"location": null,
+					"numPassingAsserts": 1,
+					"retryReasons": [],
+					"status": "passed",
+					"title": "testing when passed values as String!"
+				},
+				{
+					"ancestorTitles": [
+						"Testing util functions",
+						"subtractAngle testing"
+					],
+					"duration": 1,
+					"failureDetails": [],
+					"failureMessages": [],
+					"fullName": "Testing util functions subtractAngle testing testing when passed as number!",
+					"invocations": 1,
+					"location": null,
+					"numPassingAsserts": 1,
+					"retryReasons": [],
+					"status": "passed",
+					"title": "testing when passed as number!"
+				},
+				{
+					"ancestorTitles": [
+						"Testing util functions",
+						"subtractAngle testing"
+					],
+					"duration": 0,
+					"failureDetails": [],
+					"failureMessages": [],
+					"fullName": "Testing util functions subtractAngle testing testing when passed as negative number!",
+					"invocations": 1,
+					"location": null,
+					"numPassingAsserts": 1,
+					"retryReasons": [],
+					"status": "passed",
+					"title": "testing when passed as negative number!"
 				}
 			],
-			"endTime": 1686488341921,
+			"endTime": 1687673120536,
 			"message": "",
-			"name": "/Users/reza/Desktop/workflow/publisher/wp-content/plugins/publisher-blocks/libs/publisher-core/packages/controls/src/input-control/test/input.spec.js",
-			"startTime": 1686488338502,
+			"name": "/Users/aliaghdam/Sites/site-publisher-platform/wp-content/plugins/publisher-blocks/libs/publisher-core/packages/controls/src/angle-picker-control/test/utils.spec.js",
+			"startTime": 1687673120160,
 			"status": "passed",
 			"summary": ""
 		}
