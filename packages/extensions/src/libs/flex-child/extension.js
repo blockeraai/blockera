@@ -68,7 +68,7 @@ export function FlexChildExtension({ config }) {
 					columns="1fr 2.65fr"
 					className={'items-flex-direction-' + flexDirection}
 					//
-					initValue=""
+					defaultValue=""
 					value={attributes.publisherFlexChildSizing}
 					onValueChange={(newValue) =>
 						setAttributes({

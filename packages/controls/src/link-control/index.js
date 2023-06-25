@@ -24,7 +24,7 @@ import { InputField } from '@publisher/fields';
 const LinkControl = ({
 	advancedOpen = 'auto',
 	//
-	initValue = {
+	defaultValue = {
 		link: '',
 		target: false,
 		nofollow: false,
@@ -43,7 +43,7 @@ const LinkControl = ({
 	},
 }) => {
 	const [controlValue, setControlValue] = useState({
-		...initValue,
+		...defaultValue,
 		...value,
 	});
 

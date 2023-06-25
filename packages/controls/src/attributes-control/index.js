@@ -16,7 +16,7 @@ import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
 export default function AttributesControl({
-	initValue = {
+	defaultValue = {
 		key: '',
 		value: '',
 		isVisible: true,
@@ -33,7 +33,7 @@ export default function AttributesControl({
 				popoverLabel={popoverLabel}
 				Header={Header}
 				InnerComponents={Fields}
-				initValue={initValue}
+				defaultValue={defaultValue}
 				attributeElement={attributeElement}
 				{...props}
 			/>

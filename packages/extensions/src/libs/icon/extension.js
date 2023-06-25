@@ -81,7 +81,7 @@ export function IconExtension({ children, config, ...props }) {
 								]}
 								isDeselectable={true}
 								//
-								initValue=""
+								defaultValue=""
 								value={attributes.publisherIconPosition}
 								onValueChange={(newValue) =>
 									setAttributes({
@@ -141,7 +141,7 @@ export function IconExtension({ children, config, ...props }) {
 								{...props}
 								label={__('Color', 'publisher-core')}
 								//
-								initValue=""
+								defaultValue=""
 								value={attributes.publisherIconColor}
 								onValueChange={(newValue) =>
 									setAttributes({
