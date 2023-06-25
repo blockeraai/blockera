@@ -19,6 +19,12 @@ describe('Testing util functions', () => {
 
 			expect(value).toBe(315);
 		});
+
+		test('result angle should be more than 360', () => {
+			const value = addAngle(350, 20);
+
+			expect(value).toBe(10);
+		});
 	});
 
 	describe('subtractAngle testing', () => {
@@ -38,6 +44,18 @@ describe('Testing util functions', () => {
 			const value = subtractAngle(45, -90);
 
 			expect(value).toBe(135);
+		});
+
+		test('subtracted angle is less than 0', () => {
+			const value = subtractAngle(45, 90);
+
+			expect(value).toBe(315);
+		});
+
+		test('subtracted ange is mre than 360', () => {
+			const value = subtractAngle(20, -370);
+
+			expect(value).toBe(30);
 		});
 	});
 });
