@@ -2,7 +2,7 @@
 module.exports = {
 	rootDir: '../../../',
 	preset: '@wordpress/jest-preset-default',
-	collectCoverageFrom: ['<rootDir>/src/**/*.js'],
+	collectCoverageFrom: ['<rootDir>/packages/**/*.js'],
 	setupFilesAfterEnv: [
 		require.resolve(
 			'@wordpress/jest-preset-default/scripts/setup-globals.js'
