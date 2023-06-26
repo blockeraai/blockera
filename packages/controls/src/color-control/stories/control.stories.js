@@ -4,13 +4,19 @@
 import { Flex } from '@publisher/components';
 
 /**
+ * Publisher Storybook dependencies
+ */
+import { default as Decorators } from '@publisher/storybook/decorators';
+
+/**
  * Internal dependencies
  */
 import { ColorControl } from '../../index';
-import {
-	decorators,
-	inspectDecorator,
-} from '../../../../../.storybook/preview';
+import { WithPlaygroundStyles } from '../../../../../.storybook/preview';
+
+const { WithInspectorStyles, SharedDecorators } = Decorators;
+
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Controls/ColorControl',
@@ -23,7 +29,7 @@ export const Default = {
 		defaultValue: '',
 		value: '',
 	},
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const _ColorControl = {
@@ -31,7 +37,7 @@ export const _ColorControl = {
 		defaultValue: '',
 		value: '',
 	},
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
 		<>
 			<h2 className="story-heading">Normal Color Control</h2>
