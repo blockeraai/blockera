@@ -1,10 +1,13 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useContext } from '@wordpress/element';
+import { expect } from '@storybook/jest';
+import { fireEvent, userEvent, within } from '@storybook/testing-library';
 
 /**
- * Publisher Storybook dependencies
+ * Publisher dependencies
  */
 import { default as Decorators } from '@publisher/storybook/decorators';
 import { Flex } from '@publisher/components';
@@ -16,7 +19,12 @@ import { default as SelectControl } from '../index';
 import { default as InheritIcon } from './icons/inherit';
 import { WithPlaygroundStyles } from '../../../../../.storybook/preview';
 
-const { WithInspectorStyles, SharedDecorators } = Decorators;
+const {
+	WithInspectorStyles,
+	StoryDataContext,
+	WithStoryContextProvider,
+	SharedDecorators,
+} = Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
 
@@ -185,6 +193,94 @@ export const CustomSelect = {
 				</Flex>
 			</Flex>
 		);
+	},
+};
+
+const NativeControlWithHooks = (args) => {
+	const { storyValue, setStoryValue } = useContext(StoryDataContext);
+
+	return (
+		<SelectControl {...args} onChange={setStoryValue} value={storyValue} />
+	);
+};
+
+export const PlayNative = {
+	args: {
+		type: 'native',
+		options: selectOptions,
+		value: 'all',
+	},
+	decorators: [
+		WithStoryContextProvider,
+		WithInspectorStyles,
+		...SharedDecorators,
+	],
+	parameters: {
+		// jest: ['utils.spec.js'],
+	},
+	render: (args) => <NativeControlWithHooks {...args} />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const selectControl = canvas.getByRole('combobox');
+		const currentValue = canvas.getByTestId('current-value');
+
+		await expect(currentValue).toBeInTheDocument();
+		await expect(selectControl).toBeInTheDocument();
+
+		await expect(currentValue).toHaveTextContent('all');
+		await expect(selectControl).toHaveValue('all');
+
+		await fireEvent.change(selectControl, {
+			target: { value: 'opacity' },
+		});
+
+		await expect(selectControl).toHaveValue('opacity');
+		//await expect(currentValue).toHaveTextContent('opacity');
+	},
+};
+
+const CustomControlWithHooks = (args) => {
+	const { storyValue, setStoryValue } = useContext(StoryDataContext);
+
+	return (
+		<SelectControl {...args} onChange={setStoryValue} value={storyValue} />
+	);
+};
+
+export const PlayCustom = {
+	args: {
+		type: 'custom',
+		options: selectOptions,
+		value: 'all',
+	},
+	decorators: [
+		WithStoryContextProvider,
+		WithInspectorStyles,
+		...SharedDecorators,
+	],
+	parameters: {
+		// jest: ['utils.spec.js'],
+	},
+	render: (args) => <CustomControlWithHooks {...args} />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const selectControl = canvas.getByRole('button');
+		const currentValue = canvas.getByTestId('current-value');
+
+		await expect(currentValue).toBeInTheDocument();
+		await expect(selectControl).toBeInTheDocument();
+
+		await expect(currentValue).toHaveTextContent('all');
+
+		// change item
+		await userEvent.click(selectControl);
+		await userEvent.click(canvas.getAllByRole('option')[3]);
+		//await expect(currentValue).toHaveTextContent('margin');
+
+		// open and use esc to close
+		await userEvent.click(selectControl);
+		await userEvent.type(selectControl, '{esc}');
+		//await expect(currentValue).toHaveTextContent('margin');
 	},
 };
 
