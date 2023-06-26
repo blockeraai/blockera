@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
  * Publisher dependencies
  */
 import { componentClassNames } from '@publisher/classnames';
-import { isNumber } from '@publisher/utils';
 
 export default function ColorIndicator({
 	className,
@@ -20,9 +19,9 @@ export default function ColorIndicator({
 	const customStyle = {};
 	let styleClassName = '';
 
-	if (size !== 18 && isNumber(size)) {
-		customStyle.width = size + 'px';
-		customStyle.height = size + 'px';
+	if (size !== 18) {
+		customStyle.width = Number(size) + 'px';
+		customStyle.height = Number(size) + 'px';
 	}
 
 	switch (type) {
