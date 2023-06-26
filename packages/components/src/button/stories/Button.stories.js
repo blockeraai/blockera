@@ -10,6 +10,7 @@ import Button from '../button';
 import Buttons from '../buttons';
 import { default as Icon } from './icons/icon';
 import { WithPlaygroundStyles } from '../../../../../.storybook/decorators/with-playground-styles';
+import Flex from '../../flex';
 
 const { WithInspectorStyles, SharedDecorators } = Decorators;
 
@@ -68,15 +69,10 @@ export const Sizes = {
 
 export const PrimaryButton = {
 	render: (args) => (
-		<>
+		<Flex direction="column" gap="15px">
 			<h2 className="story-heading">Primary Button</h2>
 
-			<Buttons
-				gap="20px"
-				direction="column"
-				alignItems="flex-start"
-				style={{ margin: '0 0 50px' }}
-			>
+			<Buttons gap="20px" direction="column" alignItems="flex-start">
 				<Button variant="primary" size="normal" {...args}>
 					Normal Button
 				</Button>
@@ -130,21 +126,16 @@ export const PrimaryButton = {
 					Small + No Border + Focused
 				</Button>
 			</Buttons>
-		</>
+		</Flex>
 	),
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const SecondaryButton = {
 	render: (args) => (
-		<>
+		<Flex direction="column" gap="15px">
 			<h2 className="story-heading">Secondary Button</h2>
-			<Buttons
-				gap="20px"
-				direction="column"
-				alignItems="flex-start"
-				style={{ margin: '0 0 50px' }}
-			>
+			<Buttons gap="20px" direction="column" alignItems="flex-start">
 				<Button variant="secondary" size="normal" {...args}>
 					Normal Button
 				</Button>
@@ -203,15 +194,16 @@ export const SecondaryButton = {
 					Small & No Border & Focused
 				</Button>
 			</Buttons>
-		</>
+		</Flex>
 	),
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const TertiaryButton = {
 	render: (args) => (
-		<>
+		<Flex direction="column" gap="15px">
 			<h2 className="story-heading">Tertiary Button</h2>
+
 			<Buttons gap="20px" direction="column" alignItems="flex-start">
 				<Button variant="tertiary" size="normal" {...args}>
 					Normal Button
@@ -271,20 +263,20 @@ export const TertiaryButton = {
 					Small & No Border & Focused
 				</Button>
 			</Buttons>
-		</>
+		</Flex>
 	),
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const Screenshot = {
 	render: (args) => (
-		<>
+		<Flex direction="column" gap="50px">
 			<PrimaryButton.render {...args} />
 
 			<SecondaryButton.render {...args} />
 
 			<TertiaryButton.render {...args} />
-		</>
+		</Flex>
 	),
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
