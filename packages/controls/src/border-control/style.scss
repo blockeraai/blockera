@@ -1,6 +1,6 @@
 .publisher-control-border {
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: 1fr 30px 1fr;
 	align-items: center;
 	min-width: 100px;
 	box-shadow: inset 0 0 0 1px var(--publisher-controls-border-color);

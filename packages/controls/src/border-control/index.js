@@ -58,10 +58,9 @@ const BorderControl = ({
 
 			<ColorControl
 				type="minimal"
-				contentAlign="center"
 				noBorder={true}
 				value={controlValue.color}
-				onValueChange={(newValue) => {
+				onChange={(newValue) => {
 					const value = { ...controlValue, color: newValue };
 					setControlValue(value);
 					onValueChange(value);
