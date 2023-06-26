@@ -1,7 +1,7 @@
 /**
  * Publisher dependencies
  */
-import { isObject, isUndefined } from '@publisher/utils';
+import { isArray, isUndefined } from '@publisher/utils';
 
 // renders a option of select (single or grouped) for native HTML select
 // recursive
@@ -59,7 +59,7 @@ export const prepareSelectCustomOptions = function (options) {
 	}
 
 	options?.map((item) => {
-		if (!isUndefined(item.options) && isObject(item.options)) {
+		if (!isUndefined(item.options) && isArray(item.options)) {
 			selectOptions.push(
 				convertOptionGroup({
 					label: item.label,
