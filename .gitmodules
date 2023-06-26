@@ -1,0 +1,3 @@
+[submodule "libs/storybook"]
+	path = libs/storybook
+	url = git@gitlab.com:publisherwp/libraries/storybook.git
