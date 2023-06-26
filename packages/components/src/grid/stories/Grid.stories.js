@@ -8,6 +8,7 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  */
 import Grid from '../index';
 import { WithPlaygroundStyles } from '../../../../../.storybook/decorators/with-playground-styles';
+import Flex from '../../flex';
 
 const { WithInspectorStyles, SharedDecorators } = Decorators;
 
@@ -19,254 +20,68 @@ export default {
 	tags: ['autodocs'],
 };
 
+const GridChildren = ({ count = 3 }) => {
+	const stack = [];
+
+	for (let i = 1; i <= count; i++) {
+		stack.push(
+			<div
+				style={{
+					backgroundColor: '#0047eb',
+					color: '#fff',
+					width: '60px',
+				}}
+			>
+				Item {i}
+			</div>
+		);
+	}
+
+	return <>{stack}</>;
+};
+
 export const Default = {
 	args: {
-		children: (
-			<>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-						width: '60px',
-					}}
-				>
-					Item 1
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-						width: '90px',
-					}}
-				>
-					Item 2
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-						width: '110px',
-					}}
-				>
-					Item 3
-				</div>
-			</>
-		),
+		children: <GridChildren count={3} />,
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const Screenshot = {
 	render: (args) => (
-		<>
-			<h2 className="story-heading">Default Grid</h2>
-			<Grid direction="row" {...args}>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 1
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 2
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 3
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 4
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 5
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 6
-				</div>
-			</Grid>
+		<Flex direction="column" gap="30px">
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">Default Grid</h2>
+				<Grid direction="row" gap="30px" {...args}>
+					<GridChildren count={3} />
+				</Grid>
+			</Flex>
 
-			<h2 className="story-heading">30px Gap Grid</h2>
-			<Grid gap="30px" {...args}>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 1
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 2
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 3
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 4
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 5
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 6
-				</div>
-			</Grid>
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">30px Gap Grid</h2>
+				<Grid gap="30px" {...args}>
+					<GridChildren count={3} />
+				</Grid>
+			</Flex>
 
-			<h2 className="story-heading">3 Columns Grid</h2>
-			<Grid gridTemplateColumns="repeat(3, 1fr)" {...args}>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 1
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 2
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 3
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 4
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 5
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 6
-				</div>
-			</Grid>
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">3 Columns Grid</h2>
+				<Grid gridTemplateColumns="repeat(3, 1fr)" gap="30px" {...args}>
+					<GridChildren count={6} />
+				</Grid>
+			</Flex>
 
-			<h2 className="story-heading">3 Columns Grid (50px)</h2>
-			<Grid gridTemplateColumns="repeat(3, 50px)" {...args}>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">3 Columns Grid (50px)</h2>
+				<Grid
+					gridTemplateColumns="repeat(3, 50px)"
+					gap="30px"
+					{...args}
 				>
-					Item 1
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 2
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 3
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 4
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 5
-				</div>
-				<div
-					style={{
-						backgroundColor: '#0047eb',
-						color: '#fff',
-					}}
-				>
-					Item 6
-				</div>
-			</Grid>
-		</>
+					<GridChildren count={6} />
+				</Grid>
+			</Flex>
+		</Flex>
 	),
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
