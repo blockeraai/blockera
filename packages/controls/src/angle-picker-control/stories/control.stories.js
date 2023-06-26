@@ -2,7 +2,12 @@
  * External dependencies
  */
 import { useContext } from '@wordpress/element';
-import { fireEvent, userEvent, within } from '@storybook/testing-library';
+import {
+	fireEvent,
+	userEvent,
+	waitFor,
+	within,
+} from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
 
 /**
@@ -96,23 +101,38 @@ export const Play = {
 
 			await userEvent.type(numberInput, '1{enter}');
 			await expect(numberInput).toHaveValue(201);
-			//await expect(numberInput).toHaveTextContent('201');
+			await waitFor(
+				async () => await expect(currentValue).toHaveTextContent('201'),
+				{ timeout: 1000 }
+			);
 
 			await userEvent.type(numberInput, '{arrowdown}{enter}');
 			await expect(numberInput).toHaveValue(200);
-			//await expect(numberInput).toHaveTextContent('200');
+			await waitFor(
+				async () => await expect(currentValue).toHaveTextContent('200'),
+				{ timeout: 1000 }
+			);
 
 			await userEvent.type(numberInput, '{arrowup}{enter}');
 			await expect(numberInput).toHaveValue(201);
-			//await expect(numberInput).toHaveTextContent('201');
+			await waitFor(
+				async () => await expect(currentValue).toHaveTextContent('201'),
+				{ timeout: 1000 }
+			);
 
 			await userEvent.type(numberInput, '{backspace}');
 			await expect(numberInput).toHaveValue(20);
-			//await expect(numberInput).toHaveTextContent('20');
+			await waitFor(
+				async () => await expect(currentValue).toHaveTextContent('20'),
+				{ timeout: 1000 }
+			);
 
 			await userEvent.type(numberInput, '10{enter}');
 			await expect(numberInput).toHaveValue(360);
-			//await expect(numberInput).toHaveTextContent('36');
+			await waitFor(
+				async () => await expect(currentValue).toHaveTextContent('36'),
+				{ timeout: 1000 }
+			);
 		});
 
 		await step('Rotate Buttons', async () => {
@@ -126,13 +146,19 @@ export const Play = {
 			await fireEvent.click(leftButton);
 			await fireEvent.focus(leftButton);
 			await expect(numberInput).toHaveValue(315);
-			//await expect(numberInput).toHaveTextContent('315');
+			await waitFor(
+				async () => await expect(currentValue).toHaveTextContent('315'),
+				{ timeout: 1000 }
+			);
 
 			await fireEvent.change(numberInput, { target: { value: 0 } });
 			await fireEvent.click(rightButton);
 			await fireEvent.focus(rightButton);
 			await expect(numberInput).toHaveValue(45);
-			//await expect(numberInput).toHaveTextContent('45');
+			await waitFor(
+				async () => await expect(currentValue).toHaveTextContent('45'),
+				{ timeout: 1000 }
+			);
 		});
 	},
 };
