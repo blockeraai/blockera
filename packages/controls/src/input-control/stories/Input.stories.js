@@ -4,13 +4,19 @@
 import { Flex } from '@publisher/components';
 
 /**
+ * Publisher Storybook dependencies
+ */
+import { default as Decorators } from '@publisher/storybook/decorators';
+
+/**
  * Internal dependencies
  */
 import { InputControl } from '../../index';
-import {
-	decorators,
-	inspectDecorator,
-} from '../../../../../.storybook/preview';
+import { WithPlaygroundStyles } from '../../../../../.storybook/decorators/with-playground-styles';
+
+const { WithInspectorStyles, SharedDecorators } = Decorators;
+
+SharedDecorators.push(WithPlaygroundStyles);
 
 const units = [
 	{ value: 'px', label: 'px', default: 0 },
@@ -29,7 +35,7 @@ export const Default = {
 		defaultValue: '10',
 		value: '20',
 	},
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 	parameters: {
 		jest: ['input.spec.js'],
 	},
@@ -40,7 +46,7 @@ export const TextInput = {
 		defaultValue: '10px',
 		value: '20px',
 	},
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
 		<>
 			<h2 className="story-heading">Text Input</h2>
@@ -65,7 +71,7 @@ export const NumberInput = {
 		defaultValue: '10px',
 		value: '20px',
 	},
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
 		<>
 			<h2 className="story-heading">Number Input</h2>
@@ -140,7 +146,7 @@ export const UnitsInput = {
 		defaultValue: '10px',
 		value: '20px',
 	},
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
 		<>
 			<h2 className="story-heading">Units Input</h2>
@@ -222,7 +228,7 @@ export const CssInput = {
 		className: 'publisher-input',
 		value: '20px',
 	},
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
 		<>
 			<h2 className="story-heading">CSS Input</h2>
@@ -246,7 +252,7 @@ export const Screenshot = {
 		defaultValue: '10px',
 		value: '20px',
 	},
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
 		<>
 			<TextInput.render {...args} />

@@ -1,12 +1,18 @@
 /**
+ * Publisher Storybook dependencies
+ */
+import { default as Decorators } from '@publisher/storybook/decorators';
+
+/**
  * Internal dependencies
  */
 import { BackgroundField } from '../field';
 import { extensionConfig } from '@publisher/extensions';
-import {
-	decorators,
-	inspectDecorator,
-} from '../../../../../../.storybook/preview';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
+
+const { WithInspectorStyles, SharedDecorators } = Decorators;
+
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Fields/Background',
@@ -24,5 +30,5 @@ export const Default = {
 			publisherBackground: [],
 		},
 	},
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };

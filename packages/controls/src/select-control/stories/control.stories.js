@@ -1,14 +1,23 @@
 /**
- * Internal dependencies
+ * WordPress dependencies
  */
-import {
-	decorators,
-	inspectDecorator,
-} from '../../../../../.storybook/preview';
-import { default as SelectControl } from '../index';
 import { __ } from '@wordpress/i18n';
 
+/**
+ * Publisher Storybook dependencies
+ */
+import { default as Decorators } from '@publisher/storybook/decorators';
+
+/**
+ * Internal dependencies
+ */
+import { default as SelectControl } from '../index';
 import { default as InheritIcon } from './icons/inherit';
+import { WithPlaygroundStyles } from '../../../../../.storybook/preview';
+
+const { WithInspectorStyles, SharedDecorators } = Decorators;
+
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Controls/Select',
@@ -77,7 +86,7 @@ export const NativeSelect = {
 		options: selectOptions,
 		value: 'all',
 	},
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => {
 		return (
 			<>
@@ -100,7 +109,7 @@ export const CustomSelect = {
 		options: selectOptions,
 		value: 'all',
 	},
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => {
 		return (
 			<>

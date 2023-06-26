@@ -1,11 +1,17 @@
 /**
+ * Publisher Storybook dependencies
+ */
+import { default as Decorators } from '@publisher/storybook/decorators';
+
+/**
  * Internal dependencies
  */
 import Grid from '../index';
-import {
-	decorators,
-	inspectDecorator,
-} from '../../../../../.storybook/preview';
+import { WithPlaygroundStyles } from '../../../../../.storybook/decorators/with-playground-styles';
+
+const { WithInspectorStyles, SharedDecorators } = Decorators;
+
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Components/Grid Component',
@@ -47,7 +53,7 @@ export const Default = {
 			</>
 		),
 	},
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const Screenshot = {
@@ -262,5 +268,5 @@ export const Screenshot = {
 			</Grid>
 		</>
 	),
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };

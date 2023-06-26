@@ -4,18 +4,27 @@
 import { __ } from '@wordpress/i18n';
 
 /**
+ * Publisher Storybook dependencies
+ */
+import { default as Decorators } from '@publisher/storybook/decorators';
+
+/**
  * Internal dependencies
  */
 import { BaseExtension } from '@publisher/extensions';
-import { decorators } from '../../../../../../.storybook/preview';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
-	Playground,
-} from '@publisher/core-storybook';
-import { attributes } from '../attributes';
+} from '@publisher/storybook/block-api';
+import { Playground } from '@publisher/storybook/components';
 import { supports } from '../supports';
+import { attributes } from '../attributes';
 import BackgroundExtensionIcon from '../icons/extension-icon';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/decorators/with-playground-styles';
+
+const { SharedDecorators } = Decorators;
+
+SharedDecorators.push(WithPlaygroundStyles);
 
 blocksInitializer({
 	name: 'publisherBackgroundExtension',
@@ -61,5 +70,5 @@ export const Default = {
 			publisherBackgroundClip: '',
 		},
 	},
-	decorators: [...decorators],
+	decorators: [...SharedDecorators],
 };

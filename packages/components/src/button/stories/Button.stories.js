@@ -1,13 +1,19 @@
 /**
+ * Publisher Storybook dependencies
+ */
+import { default as Decorators } from '@publisher/storybook/decorators';
+
+/**
  * Internal dependencies
  */
 import Button from '../button';
 import Buttons from '../buttons';
-import {
-	decorators,
-	inspectDecorator,
-} from '../../../../../.storybook/preview';
 import { default as Icon } from './icons/icon';
+import { WithPlaygroundStyles } from '../../../../../.storybook/decorators/with-playground-styles';
+
+const { WithInspectorStyles, SharedDecorators } = Decorators;
+
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Components/Button Component',
@@ -20,7 +26,7 @@ export const Default = {
 		variant: 'tertiary',
 		children: 'Call to Action',
 	},
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const Styles = {
@@ -40,7 +46,7 @@ export const Styles = {
 			</Button>
 		</Buttons>
 	),
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const Sizes = {
@@ -57,7 +63,7 @@ export const Sizes = {
 			</Button>
 		</Buttons>
 	),
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const PrimaryButton = {
@@ -126,7 +132,7 @@ export const PrimaryButton = {
 			</Buttons>
 		</>
 	),
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const SecondaryButton = {
@@ -199,7 +205,7 @@ export const SecondaryButton = {
 			</Buttons>
 		</>
 	),
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const TertiaryButton = {
@@ -267,7 +273,7 @@ export const TertiaryButton = {
 			</Buttons>
 		</>
 	),
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const Screenshot = {
@@ -280,5 +286,5 @@ export const Screenshot = {
 			<TertiaryButton.render {...args} />
 		</>
 	),
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };

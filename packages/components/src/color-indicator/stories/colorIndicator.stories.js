@@ -1,13 +1,19 @@
 /**
+ * Publisher Storybook dependencies
+ */
+import { default as Decorators } from '@publisher/storybook/decorators';
+
+/**
  * Internal dependencies
  */
+import { Flex } from '../../index';
 import { default as ColorIndicator } from '../color-indicator';
 import { default as ColorIndicatorStack } from '../color-indicator-stack';
-import {
-	decorators,
-	inspectDecorator,
-} from '../../../../../.storybook/preview';
-import { Flex } from '../../index';
+import { WithPlaygroundStyles } from '../../../../../.storybook/decorators/with-playground-styles';
+
+const { WithInspectorStyles, SharedDecorators } = Decorators;
+
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Components/Color Indicator',
@@ -29,7 +35,7 @@ export const Default = {
 			control: 'range',
 		},
 	},
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const Color = {
@@ -53,7 +59,7 @@ export const Color = {
 			</Flex>
 		</>
 	),
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const Image = {
@@ -85,7 +91,7 @@ export const Image = {
 			</Flex>
 		</>
 	),
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const Gradient = {
@@ -118,7 +124,7 @@ export const Gradient = {
 			</Flex>
 		</div>
 	),
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const Stack = {
@@ -244,5 +250,5 @@ export const Stack = {
 			/>
 		</div>
 	),
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };

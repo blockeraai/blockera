@@ -1,11 +1,17 @@
 /**
+ * Publisher Storybook dependencies
+ */
+import { default as Decorators } from '@publisher/storybook/decorators';
+
+/**
  * Internal dependencies
  */
 import Flex from '../index';
-import {
-	decorators,
-	inspectDecorator,
-} from '../../../../../.storybook/preview';
+import { WithPlaygroundStyles } from '../../../../../.storybook/decorators/with-playground-styles';
+
+const { WithInspectorStyles, SharedDecorators } = Decorators;
+
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Components/Flex Component',
@@ -50,7 +56,7 @@ export const Default = {
 			</>
 		),
 	},
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const Screenshot = {
@@ -261,5 +267,5 @@ export const Screenshot = {
 			</Flex>
 		</>
 	),
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
