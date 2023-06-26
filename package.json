@@ -32,13 +32,13 @@
 		"@publisher/data-extractor": "file:packages/data-extractor",
 		"@publisher/extensions": "file:packages/extensions",
 		"@publisher/fields": "file:packages/fields",
-		"@publisher/storybook": "file:libs/storybook",
 		"@publisher/style-engine": "file:packages/style-engine",
 		"@publisher/utils": "file:packages/utils"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.21.0",
 		"@babel/core": "^7.21.4",
+		"@publisher/storybook": "file:libs/storybook",
 		"@babel/plugin-proposal-export-default-from": "^7.18.10",
 		"@babel/preset-flow": "^7.21.4",
 		"@babel/preset-react": "^7.22.5",
