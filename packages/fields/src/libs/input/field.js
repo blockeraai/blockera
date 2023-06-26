@@ -37,24 +37,11 @@ export function InputField({
 				/>
 			)}
 
-			{'text' === settings?.type && (
-				<InputControl {...props} {...settings} blockName={name} />
-			)}
-
-			{'number' === settings?.type && (
+			{'range' !== settings?.type && (
 				<InputControl
 					{...props}
 					{...settings}
-					type="number"
-					blockName={name}
-				/>
-			)}
-
-			{'css' === settings?.type && (
-				<CssInputControl
-					{...props}
-					{...settings}
-					type="css"
+					type={settings.type}
 					blockName={name}
 				/>
 			)}

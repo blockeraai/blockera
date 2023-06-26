@@ -15,7 +15,7 @@ import {
 /**
  * Internal dependencies
  */
-import { CssInputControl, LabelControl, ToggleSelectControl } from '../index';
+import { InputControl, LabelControl, ToggleSelectControl } from '../index';
 import { default as CompactIcon } from './icons/compact';
 import { default as CustomIcon } from './icons/custom';
 
@@ -52,7 +52,7 @@ const BorderRadiusControl = ({
 				)}
 
 				{controlValue.type === 'all' && (
-					<CssInputControl
+					<InputControl
 						min="0"
 						type="css"
 						unitType="essential"
@@ -120,7 +120,7 @@ const BorderRadiusControl = ({
 							'--pb-bottom-right': controlValue.bottomRight,
 						}}
 					>
-						<CssInputControl
+						<InputControl
 							min="0"
 							type="css"
 							unitType="essential"
@@ -138,7 +138,7 @@ const BorderRadiusControl = ({
 								onValueChange(value);
 							}}
 						/>
-						<CssInputControl
+						<InputControl
 							min="0"
 							type="css"
 							unitType="essential"
@@ -156,7 +156,7 @@ const BorderRadiusControl = ({
 								onValueChange(value);
 							}}
 						/>
-						<CssInputControl
+						<InputControl
 							min="0"
 							type="css"
 							unitType="essential"
@@ -174,7 +174,7 @@ const BorderRadiusControl = ({
 								onValueChange(value);
 							}}
 						/>
-						<CssInputControl
+						<InputControl
 							min="0"
 							type="css"
 							unitType="essential"

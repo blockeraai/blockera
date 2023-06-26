@@ -118,33 +118,35 @@
 			}
 		}
 	}
-}
-
-.publisher-control-unit.publisher-control-unit-special {
-	.components-input-control__input {
-		display: none !important;
-	}
 	
-	.components-input-control__suffix {
-		width: 100% !important;
-		height: 30px !important;
-		
-		.components-unit-control__select {
-			width: 100% !important;
-			border-radius: 2px !important;
-			text-transform: capitalize !important;
-			font-size: 13px !important;
-			font-weight: 400 !important;
-			color: rgb(30, 30, 30) !important;
-			text-align: left !important;
-			text-align-last: left !important;
-			padding: 0 26px 0 8px !important;
-			background: #ffffff url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%231E1E1E%22%2F%3E%3C%2Fsvg%3E) no-repeat right 5px top 55%;
-			background-size: 13px 11px !important;
-			letter-spacing: 0;
+	&.publisher-control-unit-special{
+		.publisher-control-unit{
+			.components-input-control__input {
+				display: none !important;
+			}
 			
-			&:not(:disabled):hover {
-				background-color: var(--publisher-controls-background-color);
+			.components-input-control__suffix {
+				width: 100% !important;
+				height: 30px !important;
+				
+				.components-unit-control__select {
+					width: 100% !important;
+					border-radius: 2px !important;
+					text-transform: capitalize !important;
+					font-size: 13px !important;
+					font-weight: 400 !important;
+					color: rgb(30, 30, 30) !important;
+					text-align: left !important;
+					text-align-last: left !important;
+					padding: 0 26px 0 8px !important;
+					background: #ffffff url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%231E1E1E%22%2F%3E%3C%2Fsvg%3E) no-repeat right 5px top 55%;
+					background-size: 13px 11px !important;
+					letter-spacing: 0;
+					
+					&:not(:disabled):hover {
+						background-color: var(--publisher-controls-background-color);
+					}
+				}
 			}
 		}
 	}

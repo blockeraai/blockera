@@ -8,13 +8,19 @@ import {
 import PropTypes from 'prop-types';
 
 /**
- * Internal dependencies
+ * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
+import { isEmpty, isUndefined, useValue } from '@publisher/utils';
+
+/**
+ * Internal dependencies
+ */
 import { RangeControl } from './../index';
-import { useValue } from '@publisher/utils';
+import { getCSSUnits, isSpecialUnit } from './utils';
 
 export function InputControl({
+	unitType,
 	units,
 	range,
 	noBorder,
@@ -32,12 +38,17 @@ export function InputControl({
 		onChange,
 	});
 
+	if ((isUndefined(units) || isEmpty(units)) && unitType !== '') {
+		units = getCSSUnits(unitType);
+	}
+
 	return (
 		<div
 			className={controlClassNames(
 				'input',
-				range ? 'input-range' : '',
+				range && 'input-range',
 				noBorder && 'no-border',
+				isSpecialUnit(value) && 'publisher-control-unit-special',
 				className
 			)}
 		>
@@ -103,6 +114,24 @@ InputControl.propTypes = {
 	 */
 	range: PropTypes.bool,
 	/**
+	 * Type of CSS units from presets
+	 */
+	unitType: PropTypes.oneOf([
+		'outline',
+		'text-shadow',
+		'box-shadow',
+		'background-size',
+		'letter-spacing',
+		'text-indent',
+		'background-position',
+		'duration',
+		'angle',
+		'percent',
+		'width',
+		'essential',
+		'general',
+	]),
+	/**
 	 * Indicates units for showing unit for value.
 	 */
 	units: PropTypes.arrayOf(
@@ -131,6 +160,7 @@ InputControl.propTypes = {
 };
 
 InputControl.defaultProps = {
+	unitType: '',
 	range: false,
 	noBorder: false,
 };

@@ -1,7 +1,7 @@
 /**
- * External dependencies
+ * Publisher dependencies
  */
-import { within, userEvent } from '@storybook/testing-library';
+import { Flex } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -11,7 +11,6 @@ import {
 	decorators,
 	inspectDecorator,
 } from '../../../../../.storybook/preview';
-import { Flex } from '@publisher/components';
 
 const units = [
 	{ value: 'px', label: 'px', default: 0 },
@@ -28,7 +27,6 @@ export default {
 export const Default = {
 	args: {
 		defaultValue: '10',
-		className: 'publisher-input',
 		value: '20',
 	},
 	decorators: [inspectDecorator, ...decorators],
@@ -37,45 +35,7 @@ export const Default = {
 	},
 };
 
-export const InputWithUnit = {
-	args: {
-		units,
-		defaultValue: '10px',
-		className: 'publisher-input',
-		value: '20px',
-	},
-	decorators: [inspectDecorator, ...decorators],
-	play: async ({ canvasElement, step }) => {
-		const canvas = within(canvasElement);
-
-		await step('Enter input value', async () => {
-			await userEvent.type(canvas.getByDisplayValue('20'), '60');
-		});
-	},
-};
-
-export const InputWithSlider = {
-	args: {
-		range: true,
-		defaultValue: '10px',
-		className: 'publisher-input',
-		value: '20px',
-	},
-	decorators: [inspectDecorator, ...decorators],
-};
-
-export const InputWithUnitAndSlider = {
-	args: {
-		units,
-		range: true,
-		defaultValue: '10px',
-		className: 'publisher-input',
-		value: '20px',
-	},
-	decorators: [inspectDecorator, ...decorators],
-};
-
-export const Screenshot = {
+export const TextInput = {
 	args: {
 		defaultValue: '10px',
 		value: '20px',
@@ -96,7 +56,18 @@ export const Screenshot = {
 					{...args}
 				/>
 			</Flex>
+		</>
+	),
+};
 
+export const NumberInput = {
+	args: {
+		defaultValue: '10px',
+		value: '20px',
+	},
+	decorators: [inspectDecorator, ...decorators],
+	render: (args) => (
+		<>
 			<h2 className="story-heading">Number Input</h2>
 			<Flex direction="column" gap="20px">
 				<InputControl {...args} type="number" value="20" />
@@ -160,7 +131,18 @@ export const Screenshot = {
 					noBorder={true}
 				/>
 			</Flex>
+		</>
+	),
+};
 
+export const UnitsInput = {
+	args: {
+		defaultValue: '10px',
+		value: '20px',
+	},
+	decorators: [inspectDecorator, ...decorators],
+	render: (args) => (
+		<>
 			<h2 className="story-heading">Units Input</h2>
 			<Flex direction="column" gap="20px">
 				<InputControl {...args} units={units} type="number" />
@@ -229,6 +211,51 @@ export const Screenshot = {
 					noBorder={true}
 				/>
 			</Flex>
+		</>
+	),
+};
+
+export const CssInput = {
+	args: {
+		unitType: 'general',
+		defaultValue: '10px',
+		className: 'publisher-input',
+		value: '20px',
+	},
+	decorators: [inspectDecorator, ...decorators],
+	render: (args) => (
+		<>
+			<h2 className="story-heading">CSS Input</h2>
+			<Flex direction="column" gap="20px">
+				<InputControl {...args} unitType="general" />
+				<InputControl {...args} unitType="general" value="1auto" />
+				<InputControl {...args} range={true} unitType="general" />
+				<InputControl
+					{...args}
+					range={true}
+					unitType="general"
+					value="1auto"
+				/>
+			</Flex>
+		</>
+	),
+};
+
+export const Screenshot = {
+	args: {
+		defaultValue: '10px',
+		value: '20px',
+	},
+	decorators: [inspectDecorator, ...decorators],
+	render: (args) => (
+		<>
+			<TextInput.render {...args} />
+
+			<NumberInput.render {...args} />
+
+			<UnitsInput.render {...args} />
+
+			<CssInput.render {...args} />
 		</>
 	),
 };

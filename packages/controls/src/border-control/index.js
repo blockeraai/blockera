@@ -7,7 +7,7 @@ import { useState } from '@wordpress/element';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { CssInputControl, SelectControl, ColorControl } from '../index';
+import { InputControl, SelectControl, ColorControl } from '../index';
 import BorderStyleHSolidIcon from './icons/style-h-solid';
 import BorderStyleHDashedIcon from './icons/style-h-dashed';
 import BorderStyleHDottedIcon from './icons/style-h-dotted';
@@ -40,7 +40,7 @@ const BorderControl = ({
 
 	return (
 		<div className={controlClassNames('border', className)}>
-			<CssInputControl
+			<InputControl
 				min="0"
 				unitType="custom"
 				units={[{ value: 'px', label: 'PX', default: 0 }]}
