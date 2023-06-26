@@ -29,7 +29,6 @@
 		"@publisher/classnames": "file:packages/classnames",
 		"@publisher/components": "file:packages/components",
 		"@publisher/controls": "file:packages/controls",
-		"@publisher/core-storybook": "file:packages/core-storybook",
 		"@publisher/data-extractor": "file:packages/data-extractor",
 		"@publisher/extensions": "file:packages/extensions",
 		"@publisher/fields": "file:packages/fields",
