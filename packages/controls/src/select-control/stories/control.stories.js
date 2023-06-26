@@ -7,6 +7,7 @@ import { __ } from '@wordpress/i18n';
  * Publisher Storybook dependencies
  */
 import { default as Decorators } from '@publisher/storybook/decorators';
+import { Flex } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -89,16 +90,22 @@ export const NativeSelect = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => {
 		return (
-			<>
-				<h2 className="story-heading">Native → Normal</h2>
-				<SelectControl {...args} />
+			<Flex direction="column" gap="30px">
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">Native → Normal</h2>
+					<SelectControl {...args} />
+				</Flex>
 
-				<h2 className="story-heading">Native → Hover</h2>
-				<SelectControl {...args} className="is-hovered" />
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">Native → Hover</h2>
+					<SelectControl {...args} className="is-hovered" />
+				</Flex>
 
-				<h2 className="story-heading">Native → Focus</h2>
-				<SelectControl {...args} className="is-focused" />
-			</>
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">Native → Focus</h2>
+					<SelectControl {...args} className="is-focused" />
+				</Flex>
+			</Flex>
 		);
 	},
 };
@@ -112,43 +119,85 @@ export const CustomSelect = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => {
 		return (
-			<>
-				<h2 className="story-heading">Custom → Normal</h2>
-				<SelectControl {...args} />
+			<Flex direction="column" gap="30px">
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">Custom → Normal</h2>
+					<SelectControl {...args} />
+				</Flex>
 
-				<h2 className="story-heading">Custom → Hover</h2>
-				<SelectControl {...args} className="is-hovered" />
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">Custom → Hover</h2>
+					<SelectControl {...args} className="is-hovered" />
+				</Flex>
 
-				<h2 className="story-heading">Custom → Focus</h2>
-				<SelectControl {...args} className="is-focused" />
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">Custom → Focus</h2>
+					<SelectControl {...args} className="is-focused" />
+				</Flex>
 
-				<h2 className="story-heading">Custom → noBorder</h2>
-				<SelectControl {...args} noBorder={true} />
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">Custom → noBorder</h2>
+					<SelectControl {...args} noBorder={true} />
+				</Flex>
 
-				<h2 className="story-heading">Custom → noBorder → Focus</h2>
-				<SelectControl
-					{...args}
-					noBorder={true}
-					className="is-focused"
-				/>
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">Custom → noBorder → Focus</h2>
+					<SelectControl
+						{...args}
+						noBorder={true}
+						className="is-focused"
+					/>
+				</Flex>
 
-				<h2 className="story-heading">Custom → Menu Position Top</h2>
-				<SelectControl {...args} customMenuPosition="top" />
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">
+						Custom → Menu Position Top
+					</h2>
+					<SelectControl {...args} customMenuPosition="top" />
+				</Flex>
 
-				<h2 className="story-heading">Custom → customHideInputIcon</h2>
-				<SelectControl {...args} customHideInputIcon={true} />
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">
+						Custom → customHideInputIcon
+					</h2>
+					<SelectControl {...args} customHideInputIcon={true} />
+				</Flex>
 
-				<h2 className="story-heading">Custom → customHideInputLabel</h2>
-				<SelectControl {...args} customHideInputLabel={true} />
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">
+						Custom → customHideInputLabel
+					</h2>
+					<SelectControl {...args} customHideInputLabel={true} />
+				</Flex>
 
-				<h2 className="story-heading">Custom → customHideInputCaret</h2>
-				<SelectControl {...args} customHideInputCaret={true} />
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">
+						Custom → customHideInputCaret
+					</h2>
+					<SelectControl {...args} customHideInputCaret={true} />
+				</Flex>
 
-				<h2 className="story-heading">
-					Custom → customInputCenterContent
-				</h2>
-				<SelectControl {...args} customInputCenterContent={true} />
-			</>
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">
+						Custom → customInputCenterContent
+					</h2>
+					<SelectControl {...args} customInputCenterContent={true} />
+				</Flex>
+			</Flex>
+		);
+	},
+};
+
+export const Screenshot = {
+	args: {},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: () => {
+		return (
+			<Flex direction="column" gap="50px">
+				<NativeSelect.render {...NativeSelect.args} />
+
+				<CustomSelect.render {...CustomSelect.args} />
+			</Flex>
 		);
 	},
 };
