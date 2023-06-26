@@ -74,7 +74,7 @@ const BoxBorderControl = ({
 				{controlValue.type === 'all' && (
 					<BorderControl
 						value={controlValue.all}
-						onValueChange={(newValue) => {
+						onChange={(newValue) => {
 							const value = { ...controlValue, all: newValue };
 							setControlValue(value);
 							onValueChange(value);
@@ -147,7 +147,7 @@ const BoxBorderControl = ({
 								'border-corner-top'
 							)}
 							value={controlValue.top}
-							onValueChange={(newValue) => {
+							onChange={(newValue) => {
 								const value = {
 									...controlValue,
 									top: newValue,
@@ -157,12 +157,12 @@ const BoxBorderControl = ({
 							}}
 						/>
 						<BorderControl
-							lines="vertical"
+							linesDirection="vertical"
 							className={controlInnerClassNames(
 								'border-corner-right'
 							)}
 							value={controlValue.right}
-							onValueChange={(newValue) => {
+							onChange={(newValue) => {
 								const value = {
 									...controlValue,
 									right: newValue,
@@ -176,7 +176,7 @@ const BoxBorderControl = ({
 								'border-corner-bottom'
 							)}
 							value={controlValue.bottom}
-							onValueChange={(newValue) => {
+							onChange={(newValue) => {
 								const value = {
 									...controlValue,
 									bottom: newValue,
@@ -191,7 +191,7 @@ const BoxBorderControl = ({
 								'border-corner-left'
 							)}
 							value={controlValue.left}
-							onValueChange={(newValue) => {
+							onChange={(newValue) => {
 								const value = {
 									...controlValue,
 									left: newValue,
