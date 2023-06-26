@@ -38,7 +38,7 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 				<BoxBorderField
 					label={__('Border Line', 'publisher-core')}
 					value={attributes.publisherBorder}
-					onValueChange={(newValue) => {
+					onChange={(newValue) => {
 						setAttributes({
 							...attributes,
 							publisherBorder: newValue,

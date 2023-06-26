@@ -72,7 +72,7 @@ const Fields = ({ itemId, item }) => {
 						}}
 						//
 						value={item['move-x']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, { ...item, 'move-x': newValue })
 						}
 					/>
@@ -87,7 +87,7 @@ const Fields = ({ itemId, item }) => {
 						}}
 						//
 						value={item['move-y']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, { ...item, 'move-y': newValue })
 						}
 					/>
@@ -102,7 +102,7 @@ const Fields = ({ itemId, item }) => {
 						}}
 						//
 						value={item['move-z']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, { ...item, 'move-z': newValue })
 						}
 					/>
@@ -122,7 +122,7 @@ const Fields = ({ itemId, item }) => {
 						}}
 						//
 						value={item.scale}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, { ...item, scale: newValue })
 						}
 					/>
@@ -142,7 +142,7 @@ const Fields = ({ itemId, item }) => {
 						}}
 						//
 						value={item['rotate-x']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, {
 								...item,
 								'rotate-x': newValue,
@@ -160,7 +160,7 @@ const Fields = ({ itemId, item }) => {
 						}}
 						//
 						value={item['rotate-y']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, {
 								...item,
 								'rotate-y': newValue,
@@ -178,7 +178,7 @@ const Fields = ({ itemId, item }) => {
 						}}
 						//
 						value={item['rotate-z']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, {
 								...item,
 								'rotate-z': newValue,
@@ -201,7 +201,7 @@ const Fields = ({ itemId, item }) => {
 						}}
 						//
 						value={item['skew-x']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, {
 								...item,
 								'skew-x': newValue,
@@ -219,7 +219,7 @@ const Fields = ({ itemId, item }) => {
 						}}
 						//
 						value={item['skew-y']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, {
 								...item,
 								'skew-y': newValue,

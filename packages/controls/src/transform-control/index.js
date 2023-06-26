@@ -16,7 +16,7 @@ import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
 export default function TransformControl({
-	initValue = {
+	defaultValue = {
 		type: 'move',
 		'move-x': '0px',
 		'move-y': '0px',
@@ -40,7 +40,7 @@ export default function TransformControl({
 			popoverLabel={popoverLabel}
 			Header={Header}
 			InnerComponents={Fields}
-			initValue={initValue}
+			defaultValue={defaultValue}
 			{...props}
 		/>
 	);

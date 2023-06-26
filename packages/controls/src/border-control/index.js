@@ -1,13 +1,18 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
-import { useState } from '@wordpress/element';
+import PropTypes from 'prop-types';
 
 /**
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { CssInputControl, SelectControl, ColorControl } from '../index';
+import { useValue } from '@publisher/utils';
+
+/**
+ * Publisher dependencies
+ */
+import { InputControl, SelectControl, ColorControl } from '../index';
 import BorderStyleHSolidIcon from './icons/style-h-solid';
 import BorderStyleHDashedIcon from './icons/style-h-dashed';
 import BorderStyleHDottedIcon from './icons/style-h-dotted';
@@ -17,70 +22,72 @@ import BorderStyleVDashedIcon from './icons/style-v-dashed';
 import BorderStyleVDottedIcon from './icons/style-v-dotted';
 import BorderStyleVDoubleIcon from './icons/style-v-double';
 
-const BorderControl = ({
-	lines = 'horizontal',
-	defaultValue = {
-		width: '0px',
-		style: 'solid',
-		color: '',
-	},
+export default function BorderControl({
+	linesDirection,
 	customMenuPosition,
 	//
-	value,
-	//
-	className,
-	onValueChange = (newValue) => {
+	defaultValue,
+	value: initialValue,
+	onChange = (newValue) => {
 		return newValue;
 	},
-}) => {
-	const [controlValue, setControlValue] = useState({
-		...defaultValue,
-		...value,
+	style,
+	//
+	className,
+	// internal usage for stories
+	__isWidthFocused,
+	__isColorFocused,
+	__isStyleFocused,
+}) {
+	const { value, setValue } = useValue({
+		initialValue,
+		defaultValue,
+		onChange,
+		mergeInitialAndDefault: true,
 	});
 
 	return (
-		<div className={controlClassNames('border', className)}>
-			<CssInputControl
+		<div className={controlClassNames('border', className)} style={style}>
+			<InputControl
 				min="0"
 				unitType="custom"
 				units={[{ value: 'px', label: 'PX', default: 0 }]}
 				// type="number"
-				className={controlClassNames('input')}
+				className={controlClassNames(
+					'input',
+					__isWidthFocused && 'is-focused'
+				)}
 				noBorder={true}
-				value={controlValue.width}
-				onValueChange={(newValue) => {
-					const value = { ...controlValue, width: newValue };
-
-					setControlValue(value);
-					onValueChange(value);
+				value={value.width}
+				onChange={(newValue) => {
+					setValue({ ...value, width: newValue });
 				}}
 			/>
 
 			<ColorControl
 				type="minimal"
-				contentAlign="center"
 				noBorder={true}
-				value={controlValue.color}
-				onValueChange={(newValue) => {
-					const value = { ...controlValue, color: newValue };
-					setControlValue(value);
-					onValueChange(value);
+				value={value.color}
+				onChange={(newValue) => {
+					setValue({ ...value, color: newValue });
 				}}
+				className={__isColorFocused && 'is-focus'}
 			/>
 
 			<SelectControl
+				className={__isStyleFocused && 'is-focused'}
 				customMenuPosition={customMenuPosition}
 				type="custom"
 				customInputCenterContent={true}
 				customHideInputCaret={true}
 				customHideInputLabel={true}
 				noBorder={true}
-				value={controlValue.style}
+				value={value.style}
 				options={[
 					{
 						label: '',
 						icon:
-							lines === 'horizontal' ? (
+							linesDirection === 'horizontal' ? (
 								<BorderStyleHSolidIcon />
 							) : (
 								<BorderStyleVSolidIcon />
@@ -91,7 +98,7 @@ const BorderControl = ({
 					{
 						label: '',
 						icon:
-							lines === 'horizontal' ? (
+							linesDirection === 'horizontal' ? (
 								<BorderStyleHDashedIcon />
 							) : (
 								<BorderStyleVDashedIcon />
@@ -102,7 +109,7 @@ const BorderControl = ({
 					{
 						label: '',
 						icon:
-							lines === 'horizontal' ? (
+							linesDirection === 'horizontal' ? (
 								<BorderStyleHDottedIcon />
 							) : (
 								<BorderStyleVDottedIcon />
@@ -113,7 +120,7 @@ const BorderControl = ({
 					{
 						label: '',
 						icon:
-							lines === 'horizontal' ? (
+							linesDirection === 'horizontal' ? (
 								<BorderStyleHDoubleIcon />
 							) : (
 								<BorderStyleVDoubleIcon />
@@ -123,14 +130,41 @@ const BorderControl = ({
 					},
 				]}
 				onChange={(newValue) => {
-					const value = { ...controlValue, style: newValue };
-
-					setControlValue(value);
-					onValueChange(value);
+					setValue({ ...value, style: newValue });
 				}}
 			/>
 		</div>
 	);
+}
+
+BorderControl.propTypes = {
+	/**
+	 * It sets the control default value if the value not provided. By using it the control will not fire onValueChange event for this default value on control first render,
+	 */
+	defaultValue: PropTypes.shape({
+		width: PropTypes.string,
+		style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
+		color: PropTypes.string,
+	}),
+	/**
+	 * The current value.
+	 */
+	value: PropTypes.string,
+	/**
+	 * Function that will be fired while the control value state changes.
+	 */
+	onChange: PropTypes.func,
+	/**
+	 * Indicates border-line icons direction
+	 */
+	linesDirection: PropTypes.oneOf(['horizontal', 'vertical']),
 };
 
-export default BorderControl;
+BorderControl.defaultProps = {
+	linesDirection: 'horizontal',
+	defaultValue: {
+		width: '0px',
+		style: 'solid',
+		color: '',
+	},
+};

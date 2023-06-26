@@ -4,11 +4,10 @@ export {
 	convertAlignmentMatrixCoordinates,
 } from './alignment-matrix-control';
 export { default as IconControl } from './icon-control';
-export { default as UnitControl } from './unit-control';
 export * from './color-control';
 export { default as GroupControl } from './group-control';
 export { default as RangeControl } from './range-control';
-export { InputControl, CssInputControl } from './input-control';
+export { InputControl } from './input-control';
 export { default as LabelControl } from './label-control';
 export { default as ToggleControl } from './toggle-control';
 export { default as SelectControl } from './select-control';

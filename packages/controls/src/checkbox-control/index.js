@@ -13,7 +13,7 @@ import { controlClassNames } from '@publisher/classnames';
  */
 
 const CheckboxControl = ({
-	initValue = false,
+	defaultValue = false,
 	//
 	value,
 	//
@@ -29,7 +29,7 @@ const CheckboxControl = ({
 	return (
 		<WPCheckboxControl
 			className={controlClassNames('checkbox', className)}
-			checked={value || initValue}
+			checked={value || defaultValue}
 			onChange={(newValue) => {
 				newValue = onChange(newValue);
 				// setIsChecked(newValue);

@@ -36,11 +36,11 @@ export function SizeExtension({ children, config, ...props }) {
 							type: 'css',
 							unitType: 'essential',
 							min: 0,
-							initValue: '',
+							defaultValue: '',
 						},
 						//
 						value: attributes.publisherWidth,
-						onValueChange: (newValue) =>
+						onChange: (newValue) =>
 							setAttributes({
 								...attributes,
 								publisherWidth: newValue,
@@ -58,11 +58,11 @@ export function SizeExtension({ children, config, ...props }) {
 							type: 'css',
 							unitType: 'essential',
 							min: 0,
-							initValue: '',
+							defaultValue: '',
 						},
 						//
 						value: attributes.publisherHeight,
-						onValueChange: (newValue) =>
+						onChange: (newValue) =>
 							setAttributes({
 								...attributes,
 								publisherHeight: newValue,
@@ -92,7 +92,7 @@ export function SizeExtension({ children, config, ...props }) {
 						},
 					]}
 					//
-					initValue="visible"
+					defaultValue="visible"
 					value={attributes.publisherOverflow}
 					onValueChange={(newValue) =>
 						setAttributes({

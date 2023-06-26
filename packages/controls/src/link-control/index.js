@@ -24,7 +24,7 @@ import { InputField } from '@publisher/fields';
 const LinkControl = ({
 	advancedOpen = 'auto',
 	//
-	initValue = {
+	defaultValue = {
 		link: '',
 		target: false,
 		nofollow: false,
@@ -43,7 +43,7 @@ const LinkControl = ({
 	},
 }) => {
 	const [controlValue, setControlValue] = useState({
-		...initValue,
+		...defaultValue,
 		...value,
 	});
 
@@ -69,7 +69,7 @@ const LinkControl = ({
 				<InputControl
 					value={controlValue.link}
 					placeholder={placeholder}
-					onValueChange={(newValue) => {
+					onChange={(newValue) => {
 						setControlValue({ ...controlValue, link: newValue });
 					}}
 				/>
@@ -114,9 +114,9 @@ const LinkControl = ({
 						settings={{
 							type: 'text',
 						}}
-						value={controlValue.label}
 						label={__('Label', 'publisher-core')}
-						onValueChange={(newValue) => {
+						value={controlValue.label}
+						onChange={(newValue) => {
 							setControlValue({
 								...controlValue,
 								label: newValue,

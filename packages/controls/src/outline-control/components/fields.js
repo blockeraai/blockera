@@ -23,13 +23,13 @@ const Fields = ({ itemId, item }) => {
 		<BaseControl id={`repeater-item-${itemId}`}>
 			<Field label={__('Outline', 'publisher-core')}>
 				<BorderControl
-					lines="horizontal"
+					linesDirection="horizontal"
 					value={{
 						width: item.width,
 						style: item.style,
 						color: item.color,
 					}}
-					onValueChange={(newValue) =>
+					onChange={(newValue) =>
 						changeItem(itemId, {
 							...item,
 							width: newValue.width,
@@ -51,9 +51,7 @@ const Fields = ({ itemId, item }) => {
 				}}
 				//
 				value={item.offset}
-				onValueChange={(offset) =>
-					changeItem(itemId, { ...item, offset })
-				}
+				onChange={(offset) => changeItem(itemId, { ...item, offset })}
 			/>
 		</BaseControl>
 	);

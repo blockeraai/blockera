@@ -96,7 +96,7 @@ export function LayoutExtension({ config }) {
 					isDeselectable={true}
 					columns="1fr 2.65fr"
 					//
-					initValue=""
+					defaultValue=""
 					value={attributes.publisherDisplay}
 					onValueChange={(newValue) =>
 						setAttributes({
@@ -141,7 +141,7 @@ export function LayoutExtension({ config }) {
 							]}
 							columns="1fr 2.65fr"
 							//
-							initValue="row"
+							defaultValue="row"
 							value={attributes.publisherFlexDirection}
 							onValueChange={(newValue) =>
 								setAttributes({
@@ -190,7 +190,7 @@ export function LayoutExtension({ config }) {
 								' publisher-flex-align-items'
 							}
 							//
-							initValue=""
+							defaultValue=""
 							value={attributes.publisherAlignItems}
 							onValueChange={(newValue) =>
 								setAttributes({
@@ -247,7 +247,7 @@ export function LayoutExtension({ config }) {
 								' publisher-flex-justify-content'
 							}
 							//
-							initValue=""
+							defaultValue=""
 							value={attributes.publisherJustifyContent}
 							onValueChange={(newValue) =>
 								setAttributes({
@@ -272,14 +272,14 @@ export function LayoutExtension({ config }) {
 											unitType: 'essential',
 											min: 0,
 											max: 200,
-											initValue: '',
+											defaultValue: '',
 										}}
 										label={__('Rows', 'publisher-core')}
 										className="control-first label-center small-gap"
 										//
-										initValue=""
+										defaultValue=""
 										value={attributes.publisherGapRows}
-										onValueChange={(newValue) =>
+										onChange={(newValue) =>
 											setAttributes({
 												...attributes,
 												publisherGapRows: newValue,
@@ -296,14 +296,14 @@ export function LayoutExtension({ config }) {
 											unitType: 'essential',
 											min: 0,
 											max: 200,
-											initValue: '',
+											defaultValue: '',
 										}}
 										label={__('Columns', 'publisher-core')}
 										className="control-first label-center small-gap"
 										//
-										initValue=""
+										defaultValue=""
 										value={attributes.publisherGapColumns}
-										onValueChange={(newValue) =>
+										onChange={(newValue) =>
 											setAttributes({
 												...attributes,
 												publisherGapColumns: newValue,
@@ -338,7 +338,7 @@ export function LayoutExtension({ config }) {
 									' publisher-flex-wrap'
 								}
 								//
-								initValue="nowrap"
+								defaultValue="nowrap"
 								value={attributes.publisherFlexWrap}
 								onValueChange={(newValue) =>
 									setAttributes({
@@ -425,7 +425,7 @@ export function LayoutExtension({ config }) {
 											' publisher-flex-align-content'
 										}
 										//
-										initValue=""
+										defaultValue=""
 										value={attributes.publisherAlignContent}
 										onValueChange={(newValue) =>
 											setAttributes({

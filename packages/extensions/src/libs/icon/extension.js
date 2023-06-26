@@ -81,7 +81,7 @@ export function IconExtension({ children, config, ...props }) {
 								]}
 								isDeselectable={true}
 								//
-								initValue=""
+								defaultValue=""
 								value={attributes.publisherIconPosition}
 								onValueChange={(newValue) =>
 									setAttributes({
@@ -99,13 +99,13 @@ export function IconExtension({ children, config, ...props }) {
 								settings={{
 									type: 'css',
 									unitType: 'essential',
-									initValue: '',
+									defaultValue: '',
 									min: 8,
 								}}
 								//
-								initValue=""
+								defaultValue=""
 								value={attributes.publisherIconGap}
-								onValueChange={(newValue) =>
+								onChange={(newValue) =>
 									setAttributes({
 										...attributes,
 										publisherIconGap: newValue,
@@ -121,13 +121,13 @@ export function IconExtension({ children, config, ...props }) {
 								settings={{
 									type: 'css',
 									unitType: 'essential',
-									initValue: '',
+									defaultValue: '',
 									min: 8,
 								}}
 								//
-								initValue=""
+								defaultValue=""
 								value={attributes.publisherIconSize}
-								onValueChange={(newValue) =>
+								onChange={(newValue) =>
 									setAttributes({
 										...attributes,
 										publisherIconSize: newValue,
@@ -141,7 +141,7 @@ export function IconExtension({ children, config, ...props }) {
 								{...props}
 								label={__('Color', 'publisher-core')}
 								//
-								initValue=""
+								defaultValue=""
 								value={attributes.publisherIconColor}
 								onValueChange={(newValue) =>
 									setAttributes({

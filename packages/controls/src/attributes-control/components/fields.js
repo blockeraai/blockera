@@ -74,7 +74,7 @@ const Fields = ({ itemId, item }) => {
 						options={keyFieldOptions}
 						// type="customProps"
 						value={customMode ? 'customKey' : currentKey}
-						initValue=""
+						defaultValue=""
 						onChange={(newValue) => {
 							// update key
 							if (newValue !== '' && newValue !== 'customKey') {
@@ -128,7 +128,7 @@ const Fields = ({ itemId, item }) => {
 									options={valueFieldOptions}
 									// type="customProps"
 									value={currentValue}
-									initValue=""
+									defaultValue=""
 									onChange={(newValue) => {
 										setCurrentValue(newValue);
 										changeItem(itemId, {
@@ -150,9 +150,9 @@ const Fields = ({ itemId, item }) => {
 												type: 'text',
 											}}
 											//
-											initValue=""
+											defaultValue=""
 											value={currentValue}
-											onValueChange={(newValue) => {
+											onChange={(newValue) => {
 												setCurrentValue(newValue);
 												changeItem(itemId, {
 													...item,
@@ -177,9 +177,9 @@ const Fields = ({ itemId, item }) => {
 							type: 'text',
 						}}
 						//
-						initValue=""
+						defaultValue=""
 						value={currentKey}
-						onValueChange={(newValue) => {
+						onChange={(newValue) => {
 							setCurrentKey(newValue);
 							changeItem(itemId, {
 								...item,
@@ -195,9 +195,9 @@ const Fields = ({ itemId, item }) => {
 							type: 'text',
 						}}
 						//
-						initValue=""
+						defaultValue=""
 						value={currentValue}
-						onValueChange={(newValue) => {
+						onChange={(newValue) => {
 							setCurrentValue(newValue);
 							changeItem(itemId, {
 								...item,

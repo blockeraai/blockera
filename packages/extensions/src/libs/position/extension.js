@@ -49,9 +49,9 @@ export function PositionExtension({ children, config, ...props }) {
 							type: 'number',
 						}}
 						//
-						initValue=""
+						defaultValue=""
 						value={attributes.publisherZIndex}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							setAttributes({
 								...attributes,
 								publisherZIndex: newValue,

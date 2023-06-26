@@ -41,9 +41,7 @@ const Fields = ({ itemId, item }) => {
 					}}
 					//
 					value={item.blur}
-					onValueChange={(blur) =>
-						changeItem(itemId, { ...item, blur })
-					}
+					onChange={(blur) => changeItem(itemId, { ...item, blur })}
 				/>
 			)}
 
@@ -60,7 +58,7 @@ const Fields = ({ itemId, item }) => {
 						}}
 						//
 						value={item['drop-shadow-x']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, {
 								...item,
 								'drop-shadow-x': newValue,
@@ -79,7 +77,7 @@ const Fields = ({ itemId, item }) => {
 						}}
 						//
 						value={item['drop-shadow-y']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, {
 								...item,
 								'drop-shadow-y': newValue,
@@ -98,7 +96,7 @@ const Fields = ({ itemId, item }) => {
 						}}
 						//
 						value={item['drop-shadow-blur']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, {
 								...item,
 								'drop-shadow-blur': newValue,
@@ -132,7 +130,7 @@ const Fields = ({ itemId, item }) => {
 					}}
 					//
 					value={item.brightness}
-					onValueChange={(brightness) =>
+					onChange={(brightness) =>
 						changeItem(itemId, {
 							...item,
 							brightness,
@@ -153,7 +151,7 @@ const Fields = ({ itemId, item }) => {
 					}}
 					//
 					value={item.contrast}
-					onValueChange={(contrast) =>
+					onChange={(contrast) =>
 						changeItem(itemId, {
 							...item,
 							contrast,
@@ -174,7 +172,7 @@ const Fields = ({ itemId, item }) => {
 					}}
 					//
 					value={item['hue-rotate']}
-					onValueChange={(newValue) =>
+					onChange={(newValue) =>
 						changeItem(itemId, {
 							...item,
 							'hue-rotate': newValue,
@@ -195,7 +193,7 @@ const Fields = ({ itemId, item }) => {
 					}}
 					//
 					value={item.saturate}
-					onValueChange={(saturate) =>
+					onChange={(saturate) =>
 						changeItem(itemId, {
 							...item,
 							saturate,
@@ -216,7 +214,7 @@ const Fields = ({ itemId, item }) => {
 					}}
 					//
 					value={item.grayscale}
-					onValueChange={(grayscale) =>
+					onChange={(grayscale) =>
 						changeItem(itemId, {
 							...item,
 							grayscale,
@@ -237,7 +235,7 @@ const Fields = ({ itemId, item }) => {
 					}}
 					//
 					value={item.invert}
-					onValueChange={(invert) =>
+					onChange={(invert) =>
 						changeItem(itemId, {
 							...item,
 							invert,
@@ -258,7 +256,7 @@ const Fields = ({ itemId, item }) => {
 					}}
 					//
 					value={item.sepia}
-					onValueChange={(sepia) =>
+					onChange={(sepia) =>
 						changeItem(itemId, {
 							...item,
 							sepia,

@@ -15,7 +15,7 @@ import {
 /**
  * Internal dependencies
  */
-import { CssInputControl, LabelControl, ToggleSelectControl } from '../index';
+import { InputControl, LabelControl, ToggleSelectControl } from '../index';
 import { default as CompactIcon } from './icons/compact';
 import { default as CustomIcon } from './icons/custom';
 
@@ -52,12 +52,12 @@ const BorderRadiusControl = ({
 				)}
 
 				{controlValue.type === 'all' && (
-					<CssInputControl
+					<InputControl
 						min="0"
 						type="css"
 						unitType="essential"
 						value={controlValue.all}
-						onValueChange={(newValue) => {
+						onChange={(newValue) => {
 							const value = { ...controlValue, all: newValue };
 							setControlValue(value);
 							onValueChange(value);
@@ -120,7 +120,7 @@ const BorderRadiusControl = ({
 							'--pb-bottom-right': controlValue.bottomRight,
 						}}
 					>
-						<CssInputControl
+						<InputControl
 							min="0"
 							type="css"
 							unitType="essential"
@@ -129,7 +129,7 @@ const BorderRadiusControl = ({
 							)}
 							noBorder={true}
 							value={controlValue.topLeft}
-							onValueChange={(newValue) => {
+							onChange={(newValue) => {
 								const value = {
 									...controlValue,
 									topLeft: newValue,
@@ -138,7 +138,7 @@ const BorderRadiusControl = ({
 								onValueChange(value);
 							}}
 						/>
-						<CssInputControl
+						<InputControl
 							min="0"
 							type="css"
 							unitType="essential"
@@ -147,7 +147,7 @@ const BorderRadiusControl = ({
 							)}
 							noBorder={true}
 							value={controlValue.topRight}
-							onValueChange={(newValue) => {
+							onChange={(newValue) => {
 								const value = {
 									...controlValue,
 									topRight: newValue,
@@ -156,7 +156,7 @@ const BorderRadiusControl = ({
 								onValueChange(value);
 							}}
 						/>
-						<CssInputControl
+						<InputControl
 							min="0"
 							type="css"
 							unitType="essential"
@@ -165,7 +165,7 @@ const BorderRadiusControl = ({
 							)}
 							noBorder={true}
 							value={controlValue.bottomLeft}
-							onValueChange={(newValue) => {
+							onChange={(newValue) => {
 								const value = {
 									...controlValue,
 									bottomLeft: newValue,
@@ -174,7 +174,7 @@ const BorderRadiusControl = ({
 								onValueChange(value);
 							}}
 						/>
-						<CssInputControl
+						<InputControl
 							min="0"
 							type="css"
 							unitType="essential"
@@ -183,7 +183,7 @@ const BorderRadiusControl = ({
 							)}
 							noBorder={true}
 							value={controlValue.bottomRight}
-							onValueChange={(newValue) => {
+							onChange={(newValue) => {
 								const value = {
 									...controlValue,
 									bottomRight: newValue,

@@ -126,7 +126,7 @@ export function TypographyExtension({ children, config, ...props }) {
 								//
 								defaultValue=""
 								value={attributes.publisherFontSize}
-								onValueChange={(newValue) =>
+								onChange={(newValue) =>
 									setAttributes({
 										...attributes,
 										publisherFontSize: newValue,
@@ -149,7 +149,7 @@ export function TypographyExtension({ children, config, ...props }) {
 								//
 								defaultValue=""
 								value={attributes.publisherLineHeight}
-								onValueChange={(newValue) =>
+								onChange={(newValue) =>
 									setAttributes({
 										...attributes,
 										publisherLineHeight: newValue,
@@ -451,7 +451,6 @@ export function TypographyExtension({ children, config, ...props }) {
 										type: 'css',
 										unitType: 'letter-spacing',
 										onValidate: (newValue) => {
-											console.log(newValue);
 											return newValue;
 										},
 									}}
@@ -459,7 +458,7 @@ export function TypographyExtension({ children, config, ...props }) {
 									//
 									defaultValue=""
 									value={attributes.publisherLetterSpacing}
-									onValueChange={(newValue) =>
+									onChange={(newValue) =>
 										setAttributes({
 											...attributes,
 											publisherLetterSpacing: newValue,
@@ -480,7 +479,7 @@ export function TypographyExtension({ children, config, ...props }) {
 									//
 									defaultValue=""
 									value={attributes.publisherWordSpacing}
-									onValueChange={(newValue) =>
+									onChange={(newValue) =>
 										setAttributes({
 											...attributes,
 											publisherWordSpacing: newValue,
@@ -500,7 +499,7 @@ export function TypographyExtension({ children, config, ...props }) {
 									//
 									defaultValue=""
 									value={attributes.publisherTextIndent}
-									onValueChange={(newValue) =>
+									onChange={(newValue) =>
 										setAttributes({
 											...attributes,
 											publisherTextIndent: newValue,
@@ -637,7 +636,7 @@ export function TypographyExtension({ children, config, ...props }) {
 												value={
 													attributes.publisherTextColumnsGap
 												}
-												onValueChange={(newValue) =>
+												onChange={(newValue) =>
 													setAttributes({
 														...attributes,
 														publisherTextColumnsGap:
@@ -704,7 +703,7 @@ export function TypographyExtension({ children, config, ...props }) {
 										value={
 											attributes.publisherTextStrokeWidth
 										}
-										onValueChange={(newValue) =>
+										onChange={(newValue) =>
 											setAttributes({
 												...attributes,
 												publisherTextStrokeWidth:

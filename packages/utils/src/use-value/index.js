@@ -6,14 +6,25 @@ import { useState, useEffect } from '@wordpress/element';
 /**
  * Internal Dependencies
  */
-import { isBoolean, isFunction, isNull, isUndefined } from '../is';
+import { isBoolean, isFunction, isNull, isObject, isUndefined } from '../is';
 
-export function useValue({ initialValue, defaultValue, onChange = null }) {
-	const [value, setValue] = useState(
+export function useValue({
+	initialValue,
+	defaultValue,
+	onChange,
+	mergeInitialAndDefault,
+}) {
+	const calculatedInitValue =
+		// eslint-disable-next-line no-nested-ternary
 		isUndefined(initialValue) || isNull(initialValue)
 			? defaultValue
-			: initialValue
-	);
+			: mergeInitialAndDefault &&
+			  isObject(initialValue) &&
+			  isObject(defaultValue)
+			? { ...defaultValue, ...initialValue }
+			: initialValue;
+
+	const [value, setValue] = useState(calculatedInitValue);
 
 	useEffect(() => {
 		if (isFunction(onChange)) onChange(value);
@@ -31,9 +42,15 @@ export function useValue({ initialValue, defaultValue, onChange = null }) {
 	}
 
 	// resets current value to defaultValue
-	function resetValue() {
+	function resetToDefault() {
 		setValue(defaultValue);
 	}
 
-	return { value, setValue, toggleValue, resetValue };
+	// resets current value to defaultValue
+	function resetToInitial() {
+		// initialValue actually should be calculated value to prevent issue while if the initialValue was merged with defaultValue
+		setValue(calculatedInitValue);
+	}
+
+	return { value, setValue, toggleValue, resetToDefault, resetToInitial };
 }
