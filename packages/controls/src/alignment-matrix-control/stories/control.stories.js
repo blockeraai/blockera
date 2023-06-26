@@ -1,18 +1,14 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { useContext } from '@wordpress/element';
-
-/**
- * Storybook dependencies
- */
 import { expect } from '@storybook/jest';
 import { waitFor, userEvent, within } from '@storybook/testing-library';
 
 /**
- * Publisher Storybook dependencies
+ * Publisher dependencies
  */
-
+import { Flex } from '@publisher/components';
 import { default as Decorators } from '@publisher/storybook/decorators';
 
 /**
@@ -63,7 +59,7 @@ const ControlWithHooks = (args) => {
 	);
 };
 
-export const ChangeCell = {
+export const Play = {
 	args: {
 		value: 'center center',
 	},
@@ -72,6 +68,9 @@ export const ChangeCell = {
 		WithInspectorStyles,
 		...SharedDecorators,
 	],
+	parameters: {
+		jest: ['utils.spec.js'],
+	},
 	render: (args) => (
 		<div data-testid="change-cell-test-id">
 			<ControlWithHooks {...args} />
@@ -100,4 +99,68 @@ export const ChangeCell = {
 			);
 		}
 	},
+};
+
+export const Screenshot = {
+	args: {
+		value: 'center center',
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => (
+		<Flex direction="column" gap="30px">
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">Custom Size</h2>
+				<AlignmentMatrixControl
+					{...args}
+					size="50"
+					value="center center"
+				/>
+			</Flex>
+
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">Top Left</h2>
+				<AlignmentMatrixControl {...args} value="top left" />
+			</Flex>
+
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">Top Center</h2>
+				<AlignmentMatrixControl {...args} value="top center" />
+			</Flex>
+
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">Top Right</h2>
+				<AlignmentMatrixControl {...args} value="top right" />
+			</Flex>
+
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">Center Left</h2>
+				<AlignmentMatrixControl {...args} value="center left" />
+			</Flex>
+
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">Center Center</h2>
+				<AlignmentMatrixControl {...args} value="center center" />
+			</Flex>
+
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">Center Right</h2>
+				<AlignmentMatrixControl {...args} value="center right" />
+			</Flex>
+
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">Bottom Left</h2>
+				<AlignmentMatrixControl {...args} value="bottom left" />
+			</Flex>
+
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">Bottom Center</h2>
+				<AlignmentMatrixControl {...args} value="bottom center" />
+			</Flex>
+
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">Bottom Right</h2>
+				<AlignmentMatrixControl {...args} value="bottom right" />
+			</Flex>
+		</Flex>
+	),
 };
