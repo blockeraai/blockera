@@ -4,7 +4,12 @@
 import { __ } from '@wordpress/i18n';
 import { useContext } from '@wordpress/element';
 import { expect } from '@storybook/jest';
-import { fireEvent, userEvent, within } from '@storybook/testing-library';
+import {
+	within,
+	waitFor,
+	fireEvent,
+	userEvent,
+} from '@storybook/testing-library';
 
 /**
  * Publisher dependencies
@@ -27,6 +32,8 @@ const {
 } = Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
+
+const timeout = 1000;
 
 export default {
 	title: 'Controls/SelectControl',
@@ -230,12 +237,15 @@ export const PlayNative = {
 		await expect(currentValue).toHaveTextContent('all');
 		await expect(selectControl).toHaveValue('all');
 
-		await fireEvent.change(selectControl, {
+		fireEvent.change(selectControl, {
 			target: { value: 'opacity' },
 		});
 
 		await expect(selectControl).toHaveValue('opacity');
-		//await expect(currentValue).toHaveTextContent('opacity');
+		await waitFor(
+			async () => await expect(currentValue).toHaveTextContent('opacity'),
+			{ timeout }
+		);
 	},
 };
 
@@ -275,12 +285,19 @@ export const PlayCustom = {
 		// change item
 		await userEvent.click(selectControl);
 		await userEvent.click(canvas.getAllByRole('option')[3]);
-		//await expect(currentValue).toHaveTextContent('margin');
+		await waitFor(
+			async () => await expect(currentValue).toHaveTextContent('margin'),
+			{ timeout }
+		);
 
 		// open and use esc to close
 		await userEvent.click(selectControl);
 		await userEvent.type(selectControl, '{esc}');
-		//await expect(currentValue).toHaveTextContent('margin');
+
+		await waitFor(
+			async () => await expect(currentValue).toHaveTextContent('margin'),
+			{ timeout }
+		);
 	},
 };
 
