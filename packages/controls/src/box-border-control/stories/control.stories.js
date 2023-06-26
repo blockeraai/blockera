@@ -4,13 +4,19 @@
 import { Flex } from '@publisher/components';
 
 /**
+ * Publisher Storybook dependencies
+ */
+import { default as Decorators } from '@publisher/storybook/decorators';
+
+/**
  * Internal dependencies
  */
 import { BoxBorderControl } from '../../index';
-import {
-	decorators,
-	inspectDecorator,
-} from '../../../../../.storybook/preview';
+import { WithPlaygroundStyles } from '../../../../../.storybook/decorators/with-playground-styles';
+
+const { WithInspectorStyles, SharedDecorators } = Decorators;
+
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Controls/BoxBorderControl',
@@ -30,7 +36,7 @@ export const Default = {
 			},
 		},
 	},
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const AllBorders = {
@@ -45,7 +51,7 @@ export const AllBorders = {
 			},
 		},
 	},
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
 		<>
 			<h2 className="story-heading">All Borders</h2>
@@ -69,7 +75,7 @@ export const CustomBorders = {
 			},
 		},
 	},
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
 		<>
 			<h2 className="story-heading">Custom Borders</h2>
@@ -144,7 +150,7 @@ export const CustomBorders = {
 };
 
 export const Screenshot = {
-	decorators: [inspectDecorator, ...decorators],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: () => (
 		<>
 			<AllBorders.render {...AllBorders.args} />
