@@ -31,7 +31,7 @@ const {
 SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
-	title: 'Controls/Alignment Matrix',
+	title: 'Controls/AlignmentMatrixControl',
 	component: AlignmentMatrixControl,
 	tags: ['autodocs'],
 };

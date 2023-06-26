@@ -20,7 +20,7 @@ const { WithInspectorStyles, SharedDecorators } = Decorators;
 SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
-	title: 'Controls/Select',
+	title: 'Controls/SelectControl',
 	component: SelectControl,
 	tags: ['autodocs'],
 };

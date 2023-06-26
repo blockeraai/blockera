@@ -14,7 +14,7 @@ const { WithInspectorStyles, SharedDecorators } = Decorators;
 SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
-	title: 'Controls/Angle Picker',
+	title: 'Controls/AnglePickerControl',
 	component: AnglePickerControl,
 	tags: ['autodocs'],
 };
