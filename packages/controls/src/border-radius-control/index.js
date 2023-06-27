@@ -1,8 +1,8 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
-import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import PropTypes from 'prop-types';
 
 /**
  * Publisher dependencies
@@ -11,6 +11,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
+import { useValue } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -19,28 +20,33 @@ import { InputControl, LabelControl, ToggleSelectControl } from '../index';
 import { default as CompactIcon } from './icons/compact';
 import { default as CustomIcon } from './icons/custom';
 
-const BorderRadiusControl = ({
-	label = '',
-	defaultValue = {
-		type: 'all',
-		all: '0px',
-		topLeft: '0px',
-		topRight: '0px',
-		bottomLeft: '0px',
-		bottomRight: '0px',
-	},
-	//
-	value,
+export default function BorderRadiusControl({
+	label,
+	defaultValue,
+	value: initialValue,
 	//
 	className,
-	onValueChange = (newValue) => {
-		return newValue;
-	},
-}) => {
-	const [controlValue, setControlValue] = useState({
-		...defaultValue,
-		...value,
+	onChange,
+}) {
+	const { value, setValue } = useValue({
+		initialValue,
+		defaultValue,
+		onChange,
+		mergeInitialAndDefault: true,
+		valueCleanup,
 	});
+
+	// value clean up for removing extra values to prevent saving extra data!
+	function valueCleanup(value) {
+		if (value.type === 'all') {
+			delete value?.topLeft;
+			delete value?.topRight;
+			delete value?.bottomLeft;
+			delete value?.bottomRight;
+		}
+
+		return value;
+	}
 
 	return (
 		<div className={controlClassNames('border-radius', className)}>
@@ -51,26 +57,24 @@ const BorderRadiusControl = ({
 					</div>
 				)}
 
-				{controlValue.type === 'all' && (
+				{value.type === 'all' && (
 					<InputControl
 						min="0"
 						type="css"
 						unitType="essential"
-						value={controlValue.all}
+						value={value.all}
 						onChange={(newValue) => {
-							const value = { ...controlValue, all: newValue };
-							setControlValue(value);
-							onValueChange(value);
+							setValue({ ...value, all: newValue });
 						}}
 						style={{
-							'--pb-all': controlValue.all,
+							'--pb-all': value.all,
 						}}
 					/>
 				)}
 
 				<ToggleSelectControl
 					defaultValue="compact"
-					value={controlValue.type}
+					value={value.type}
 					options={[
 						{
 							label: __('Compact', 'publisher-core'),
@@ -85,39 +89,35 @@ const BorderRadiusControl = ({
 					]}
 					onChange={(newValue) => {
 						if (newValue === 'custom') {
-							const value = {
-								...controlValue,
+							setValue({
+								...value,
 								type: newValue,
-								topLeft: controlValue.all,
-								topRight: controlValue.all,
-								bottomLeft: controlValue.all,
-								bottomRight: controlValue.all,
-							};
-							setControlValue(value);
-							onValueChange(value);
+								topLeft: value.all,
+								topRight: value.all,
+								bottomLeft: value.all,
+								bottomRight: value.all,
+							});
 						} else {
-							const value = {
-								...controlValue,
+							setValue({
+								...value,
 								type: newValue,
-							};
-							setControlValue(value);
-							onValueChange(value);
+							});
 						}
 					}}
 				/>
 			</div>
 
-			{controlValue.type === 'custom' && (
+			{value.type === 'custom' && (
 				<div className={controlInnerClassNames('border-corners')}>
 					<div
 						className={controlInnerClassNames(
 							'border-corners-preview'
 						)}
 						style={{
-							'--pb-top-left': controlValue.topLeft,
-							'--pb-top-right': controlValue.topRight,
-							'--pb-bottom-left': controlValue.bottomLeft,
-							'--pb-bottom-right': controlValue.bottomRight,
+							'--pb-top-left': value.topLeft,
+							'--pb-top-right': value.topRight,
+							'--pb-bottom-left': value.bottomLeft,
+							'--pb-bottom-right': value.bottomRight,
 						}}
 					>
 						<InputControl
@@ -128,14 +128,12 @@ const BorderRadiusControl = ({
 								'border-corner-top-left'
 							)}
 							noBorder={true}
-							value={controlValue.topLeft}
+							value={value.topLeft}
 							onChange={(newValue) => {
-								const value = {
-									...controlValue,
+								setValue({
+									...value,
 									topLeft: newValue,
-								};
-								setControlValue(value);
-								onValueChange(value);
+								});
 							}}
 						/>
 						<InputControl
@@ -146,14 +144,12 @@ const BorderRadiusControl = ({
 								'border-corner-top-right'
 							)}
 							noBorder={true}
-							value={controlValue.topRight}
+							value={value.topRight}
 							onChange={(newValue) => {
-								const value = {
-									...controlValue,
+								setValue({
+									...value,
 									topRight: newValue,
-								};
-								setControlValue(value);
-								onValueChange(value);
+								});
 							}}
 						/>
 						<InputControl
@@ -164,14 +160,12 @@ const BorderRadiusControl = ({
 								'border-corner-bottom-left'
 							)}
 							noBorder={true}
-							value={controlValue.bottomLeft}
+							value={value.bottomLeft}
 							onChange={(newValue) => {
-								const value = {
-									...controlValue,
+								setValue({
+									...value,
 									bottomLeft: newValue,
-								};
-								setControlValue(value);
-								onValueChange(value);
+								});
 							}}
 						/>
 						<InputControl
@@ -182,14 +176,12 @@ const BorderRadiusControl = ({
 								'border-corner-bottom-right'
 							)}
 							noBorder={true}
-							value={controlValue.bottomRight}
+							value={value.bottomRight}
 							onChange={(newValue) => {
-								const value = {
-									...controlValue,
+								setValue({
+									...value,
 									bottomRight: newValue,
-								};
-								setControlValue(value);
-								onValueChange(value);
+								});
 							}}
 						/>
 					</div>
@@ -197,6 +189,55 @@ const BorderRadiusControl = ({
 			)}
 		</div>
 	);
+}
+
+BorderRadiusControl.propTypes = {
+	/**
+	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
+	 */
+	defaultValue: PropTypes.shape({
+		type: PropTypes.oneOf(['all', 'custom']),
+		all: PropTypes.string,
+		topLeft: PropTypes.string,
+		topRight: PropTypes.string,
+		bottomLeft: PropTypes.string,
+		bottomRight: PropTypes.string,
+	}),
+	/**
+	 * The current value.
+	 */
+	value: PropTypes.oneOfType([
+		PropTypes.shape({
+			type: PropTypes.oneOf(['all']),
+			all: PropTypes.string,
+		}),
+		PropTypes.shape({
+			type: PropTypes.oneOf(['custom']),
+			all: PropTypes.string,
+			topLeft: PropTypes.string,
+			topRight: PropTypes.string,
+			bottomLeft: PropTypes.string,
+			bottomRight: PropTypes.string,
+		}),
+	]),
+	/**
+	 * Function that will be fired while the control value state changes.
+	 */
+	onChange: PropTypes.func,
+	/**
+	 * Label of control
+	 */
+	label: PropTypes.string,
 };
 
-export default BorderRadiusControl;
+BorderRadiusControl.defaultProps = {
+	label: '',
+	defaultValue: {
+		type: 'all',
+		all: '0px',
+		topLeft: '0px',
+		topRight: '0px',
+		bottomLeft: '0px',
+		bottomRight: '0px',
+	},
+};

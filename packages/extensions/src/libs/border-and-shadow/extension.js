@@ -51,7 +51,7 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 				<BorderRadiusField
 					label={__('Radius', 'publisher-core')}
 					value={attributes.publisherBorderRadius}
-					onValueChange={(newValue) => {
+					onChange={(newValue) => {
 						setAttributes({
 							...attributes,
 							publisherBorderRadius: newValue,
