@@ -48,21 +48,19 @@ export const TextInput = {
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
-		<>
+		<Flex direction="column" gap="15px">
 			<h2 className="story-heading">Text Input</h2>
-			<Flex direction="column" gap="20px">
-				<InputControl type="text" {...args} />
-				<InputControl type="text" className="is-hovered" {...args} />
-				<InputControl type="text" className="is-focused" {...args} />
-				<InputControl type="text" noBorder={true} {...args} />
-				<InputControl
-					type="text"
-					className="is-focused"
-					noBorder={true}
-					{...args}
-				/>
-			</Flex>
-		</>
+			<InputControl type="text" {...args} />
+			<InputControl type="text" className="is-hovered" {...args} />
+			<InputControl type="text" className="is-focused" {...args} />
+			<InputControl type="text" noBorder={true} {...args} />
+			<InputControl
+				type="text"
+				className="is-focused"
+				noBorder={true}
+				{...args}
+			/>
+		</Flex>
 	),
 };
 
@@ -73,9 +71,9 @@ export const NumberInput = {
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
-		<>
-			<h2 className="story-heading">Number Input</h2>
-			<Flex direction="column" gap="20px">
+		<Flex direction="column" gap="30px">
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">Number Input</h2>
 				<InputControl {...args} type="number" value="20" />
 				<InputControl
 					{...args}
@@ -104,8 +102,8 @@ export const NumberInput = {
 				/>
 			</Flex>
 
-			<h2 className="story-heading">Range Number Input</h2>
-			<Flex direction="column" gap="20px">
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">Range Number Input</h2>
 				<InputControl {...args} range={true} type="number" value="20" />
 				<InputControl
 					{...args}
@@ -137,7 +135,7 @@ export const NumberInput = {
 					noBorder={true}
 				/>
 			</Flex>
-		</>
+		</Flex>
 	),
 };
 
@@ -148,9 +146,9 @@ export const UnitsInput = {
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
-		<>
-			<h2 className="story-heading">Units Input</h2>
-			<Flex direction="column" gap="20px">
+		<Flex direction="column" gap="30px">
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">Units Input</h2>
 				<InputControl {...args} units={units} type="number" />
 				<InputControl
 					{...args}
@@ -179,8 +177,8 @@ export const UnitsInput = {
 				/>
 			</Flex>
 
-			<h2 className="story-heading">Range Units Input</h2>
-			<Flex direction="column" gap="20px">
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">Range Units Input</h2>
 				<InputControl
 					{...args}
 					range={true}
@@ -217,7 +215,7 @@ export const UnitsInput = {
 					noBorder={true}
 				/>
 			</Flex>
-		</>
+		</Flex>
 	),
 };
 
@@ -230,20 +228,18 @@ export const CssInput = {
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
-		<>
+		<Flex direction="column" gap="15px">
 			<h2 className="story-heading">CSS Input</h2>
-			<Flex direction="column" gap="20px">
-				<InputControl {...args} unitType="general" />
-				<InputControl {...args} unitType="general" value="1auto" />
-				<InputControl {...args} range={true} unitType="general" />
-				<InputControl
-					{...args}
-					range={true}
-					unitType="general"
-					value="1auto"
-				/>
-			</Flex>
-		</>
+			<InputControl {...args} unitType="general" />
+			<InputControl {...args} unitType="general" value="1auto" />
+			<InputControl {...args} range={true} unitType="general" />
+			<InputControl
+				{...args}
+				range={true}
+				unitType="general"
+				value="1auto"
+			/>
+		</Flex>
 	),
 };
 
@@ -254,7 +250,7 @@ export const Screenshot = {
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
-		<>
+		<Flex direction="column" gap="50px">
 			<TextInput.render {...args} />
 
 			<NumberInput.render {...args} />
@@ -262,6 +258,6 @@ export const Screenshot = {
 			<UnitsInput.render {...args} />
 
 			<CssInput.render {...args} />
-		</>
+		</Flex>
 	),
 };
