@@ -19,15 +19,15 @@ export function varExport(value, indent = '') {
 		return indent + 'null';
 	} else if (isArray(value)) {
 		const elements = value
-			.map((el) => varExport(el, indent + '  '))
+			.map((el) => varExport(el, indent + '    '))
 			.join(',\n');
 		return indent + '[\n' + elements + '\n' + indent + ']';
 	} else if (isObject(value)) {
 		const keys = Object.keys(value);
 		const properties = keys
 			.map((key) => {
-				const propertyValue = varExport(value[key], indent + '  ');
-				return indent + '  ' + key + ': ' + propertyValue;
+				const propertyValue = varExport(value[key], indent + '\t');
+				return indent + '    ' + key + ': ' + propertyValue;
 			})
 			.join(',\n');
 		return '{\n' + properties + '\n' + indent + '}';

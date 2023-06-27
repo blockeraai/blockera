@@ -30,13 +30,13 @@ describe('varExport testing', () => {
 
 	test('array', () => {
 		expect(varExport(['hello', 'akbar'])).toBe(
-			'[\n' + "  'hello',\n" + "  'akbar'\n" + ']'
+			"[\n    'hello',\n    'akbar'\n]"
 		);
 	});
 
 	test('object', () => {
 		expect(varExport({ name: 'akbar', family: 'akbari' })).toBe(
-			"{\n  name:   'akbar',\n  family:   'akbari'\n}"
+			"{\n    name: \t'akbar',\n    family: \t'akbari'\n}"
 		);
 	});
 
@@ -50,12 +50,12 @@ describe('varExport testing', () => {
 				interest: ['Publisher', 'WordPress'],
 			})
 		).toBe(
-			'{\n  ' +
-				"name:   'akbar',\n" +
-				"  family:   'akbari',\n" +
-				'  age:   30,\n' +
-				'  isMarried:   false,\n' +
-				"  interest:   [\n    'Publisher',\n    'WordPress'\n  ]\n" +
+			'{\n' +
+				"    name: \t'akbar',\n" +
+				"    family: \t'akbari',\n" +
+				'    age: \t30,\n' +
+				'    isMarried: \tfalse,\n' +
+				"    interest: \t[\n\t    'Publisher',\n\t    'WordPress'\n\t]\n" +
 				'}'
 		);
 	});
