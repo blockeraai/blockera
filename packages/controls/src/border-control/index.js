@@ -149,7 +149,11 @@ BorderControl.propTypes = {
 	/**
 	 * The current value.
 	 */
-	value: PropTypes.string,
+	value: PropTypes.shape({
+		width: PropTypes.string,
+		style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
+		color: PropTypes.string,
+	}),
 	/**
 	 * Function that will be fired while the control value state changes.
 	 */
