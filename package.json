@@ -38,12 +38,12 @@
 	"devDependencies": {
 		"@babel/cli": "^7.21.0",
 		"@babel/core": "^7.21.4",
-		"@publisher/storybook": "file:libs/storybook",
 		"@babel/plugin-proposal-export-default-from": "^7.18.10",
 		"@babel/preset-flow": "^7.21.4",
 		"@babel/preset-react": "^7.22.5",
 		"@emotion/styled": "^11.11.0",
 		"@jest/core": "^27.4.5",
+		"@publisher/storybook": "file:libs/storybook",
 		"@storybook/addon-a11y": "^7.0.18",
 		"@storybook/addon-actions": "^7.0.20",
 		"@storybook/addon-controls": "^7.0.20",
@@ -99,6 +99,7 @@
 		"esm": "^3.2.25",
 		"expect-puppeteer": "^6.0.2",
 		"flow-bin": "^0.203.1",
+		"framer-motion": "^10.12.15",
 		"fs": "^0.0.1-security",
 		"grunt": "^1.5.2",
 		"grunt-contrib-clean": "^2.0.0",
@@ -173,7 +174,6 @@
 		"storybook:start": "storybook dev -p 6008",
 		"storybook:test": "test-storybook",
 		"storybook:test:start": "test-storybook --watch",
-		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build"
 	},
 	"lint-staged": {
