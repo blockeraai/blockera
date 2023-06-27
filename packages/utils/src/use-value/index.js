@@ -1,12 +1,13 @@
 /**
  * External Dependencies
  */
-import { useState, useEffect } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 
 /**
  * Internal Dependencies
  */
 import { isBoolean, isFunction, isNull, isObject, isUndefined } from '../is';
+import { useLateEffect } from '../use-late-effect';
 
 export function useValue({
 	initialValue,
@@ -26,7 +27,8 @@ export function useValue({
 
 	const [value, setValue] = useState(calculatedInitValue);
 
-	useEffect(() => {
+	// don't fire change for value at first time!
+	useLateEffect(() => {
 		if (isFunction(onChange)) onChange(value);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [value]);

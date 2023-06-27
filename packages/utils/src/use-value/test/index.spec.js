@@ -32,11 +32,7 @@ describe('useValue testing', () => {
 
 		// initial value passed and it should be 1
 		expect(result.current.value).toBe(1);
-
-		// on change should not be fired for initial value
-		// it's a bug in jest that fires onChange first time, but it should not!
-		// so in reality the value should be ``
-		expect(upperComponentValue).toBe(1);
+		expect(upperComponentValue).toBe('');
 
 		act(() => {
 			result.current.setValue('Akbar');
