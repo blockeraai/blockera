@@ -161,7 +161,6 @@ InputControl.propTypes = {
 };
 
 InputControl.defaultProps = {
-	unitType: '',
 	range: false,
 	noBorder: false,
 };
