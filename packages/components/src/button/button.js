@@ -56,7 +56,7 @@ Button.propTypes = {
 	/**
 	 * Sets the size of button.
 	 */
-	size: PropTypes.oneOf(['normal', 'small', 'extra-small']),
+	size: PropTypes.oneOf(['normal', 'small', 'extra-small', 'input']),
 	/**
 	 * It is useful for buttons with specified width and allows you to align the content to `left` or `right`. By default, it's `center` and handled by flex justify-content property.
 	 */
