@@ -183,7 +183,7 @@ BoxBorderControl.propTypes = {
 	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onValueChange event for this default value on control first render,
 	 */
-	defaultValue: PropTypes.oneOf([
+	defaultValue: PropTypes.oneOfType([
 		PropTypes.shape({
 			type: 'all',
 			all: PropTypes.shape({
@@ -193,7 +193,7 @@ BoxBorderControl.propTypes = {
 			}),
 		}),
 		PropTypes.shape({
-			type: 'custom',
+			type: PropTypes.oneOf(['all', 'custom']),
 			all: PropTypes.shape({
 				width: PropTypes.string,
 				style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
@@ -206,7 +206,7 @@ BoxBorderControl.propTypes = {
 			}),
 			right: PropTypes.shape({
 				width: PropTypes.string,
-				style: PropTypes.string,
+				style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
 				color: PropTypes.string,
 			}),
 			bottom: PropTypes.shape({
@@ -234,7 +234,7 @@ BoxBorderControl.propTypes = {
 			}),
 		}),
 		PropTypes.shape({
-			type: 'custom',
+			type: PropTypes.oneOf(['all', 'custom']),
 			all: PropTypes.shape({
 				width: PropTypes.string,
 				style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
