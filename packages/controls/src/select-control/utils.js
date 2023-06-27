@@ -23,6 +23,7 @@ export const renderSelectNativeOption = function (item) {
 
 export const prepareSelectCustomOptions = function (options) {
 	const selectOptions = [];
+	let groupCounter = 0; // we save it to make tests will pass!
 
 	function convertOption(item, customClass = '') {
 		return {
@@ -51,9 +52,11 @@ export const prepareSelectCustomOptions = function (options) {
 	}
 
 	function convertOptionGroup(item) {
+		groupCounter++;
+
 		return {
 			name: <span className="item-label">{item.label}</span>,
-			key: '',
+			key: 'group-' + groupCounter,
 			className: ' option-group',
 		};
 	}
