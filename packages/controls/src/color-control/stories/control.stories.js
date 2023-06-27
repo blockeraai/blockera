@@ -39,9 +39,9 @@ export const _ColorControl = {
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
-		<>
-			<h2 className="story-heading">Normal Color Control</h2>
-			<Flex direction="column" gap="20px">
+		<Flex direction="column" gap="30px">
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">Normal Color Control</h2>
 				<ColorControl {...args} value="" />
 				<ColorControl {...args} value="#eeeeee" />
 				<ColorControl {...args} value="#0947eb" />
@@ -53,12 +53,12 @@ export const _ColorControl = {
 				<ColorControl {...args} value="#0947eb" contentAlign="center" />
 			</Flex>
 
-			<h2 className="story-heading">Minimal Color Control</h2>
 			<Flex direction="column" gap="20px">
+				<h2 className="story-heading">Minimal Color Control</h2>
 				<ColorControl {...args} value="" type="minimal" />
 				<ColorControl {...args} value="#eeeeee" type="minimal" />
 				<ColorControl {...args} value="#0947eb" type="minimal" />
 			</Flex>
-		</>
+		</Flex>
 	),
 };
