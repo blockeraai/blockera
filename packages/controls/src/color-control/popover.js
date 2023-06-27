@@ -18,6 +18,7 @@ export default function ColorPickerPopover({
 	element,
 	onClose = () => {},
 	onChange = () => {},
+	placement = 'left-start',
 	...props
 }) {
 	return (
@@ -26,7 +27,7 @@ export default function ColorPickerPopover({
 				<Popover
 					label={__('Color Picker', 'publisher-core')}
 					offset={20}
-					placement="left-start"
+					placement={placement}
 					className="components-palette-edit-popover"
 					onClose={onClose}
 				>
