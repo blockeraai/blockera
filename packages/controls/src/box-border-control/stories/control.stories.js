@@ -205,7 +205,7 @@ export const PlayAll = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						"{ type: 'all', all: { width: '2px', style: 'solid', color: '#0947eb' } }"
+						'{ "type": "all", "all": { "width": "2px", "style": "solid", "color": "#0947eb" } }'
 					),
 				{ timeout: 1000 }
 			);
@@ -215,7 +215,7 @@ export const PlayAll = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						"{ type: 'all', all: { width: '20px', style: 'solid', color: '#0947eb' } }"
+						'{ "type": "all", "all": { "width": "20px", "style": "solid", "color": "#0947eb" } }'
 					),
 				{ timeout: 1000 }
 			);
@@ -230,7 +230,7 @@ export const PlayAll = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						"{ type: 'all', all: { width: '20px', style: 'dashed', color: '#0947eb' } }"
+						'{ "type": "all", "all": { "width": "20px", "style": "dashed", "color": "#0947eb" } }'
 					),
 				{ timeout: 1000 }
 			);
@@ -296,7 +296,7 @@ export const PlayCorner = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						"{ type: 'custom', all: { width: '2px', style: 'solid', color: '#0947eb' }, top: { width: '2px', style: 'solid', color: '#0947eb' }, right: { width: '2px', style: 'solid', color: '#0947eb' }, bottom: { width: '2px', style: 'solid', color: '#0947eb' }, left: { width: '2px', style: 'solid', color: '#0947eb' } }"
+						'{ "type": "custom", "all": { "width": "2px", "style": "solid", "color": "#0947eb" }, "top": { "width": "2px", "style": "solid", "color": "#0947eb" }, "right": { "width": "2px", "style": "solid", "color": "#0947eb" }, "bottom": { "width": "2px", "style": "solid", "color": "#0947eb" }, "left": { "width": "2px", "style": "solid", "color": "#0947eb" } }'
 					),
 				{ timeout: 1000 }
 			);
@@ -306,7 +306,7 @@ export const PlayCorner = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						"{ type: 'custom', all: { width: '2px', style: 'solid', color: '#0947eb' }, left: { width: '2px', style: 'solid', color: '#0947eb' }, right: { width: '20px', style: 'solid', color: '#0947eb' }, top: { width: '2px', style: 'solid', color: '#0947eb' }, bottom: { width: '2px', style: 'solid', color: '#0947eb' } }"
+						'{ "type": "custom", "all": { "width": "2px", "style": "solid", "color": "#0947eb" }, "left": { "width": "2px", "style": "solid", "color": "#0947eb" }, "right": { "width": "20px", "style": "solid", "color": "#0947eb" }, "top": { "width": "2px", "style": "solid", "color": "#0947eb" }, "bottom": { "width": "2px", "style": "solid", "color": "#0947eb" } }'
 					),
 				{ timeout: 1000 }
 			);

@@ -189,7 +189,7 @@ export const Play = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						"width: '20px'"
+						'"width": "20px"'
 					),
 				{ timeout: 1000 }
 			);
@@ -209,7 +209,7 @@ export const Play = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						"style: 'dashed'"
+						'"style": "dashed"'
 					),
 				{ timeout: 1000 }
 			);

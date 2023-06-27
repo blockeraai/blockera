@@ -81,20 +81,20 @@ export const Play = {
 
 		await step('Story Data', async () => {
 			await expect(currentValue).toBeInTheDocument();
-			await expect(currentValue).toHaveTextContent("''");
+			await expect(currentValue).toHaveTextContent('""');
 		});
 
 		await step('Search for term', async () => {
 			fireEvent.change(input, { target: { value: 'term' } });
 			await waitFor(
 				async () =>
-					await expect(currentValue).toHaveTextContent("'term'"),
+					await expect(currentValue).toHaveTextContent('"term"'),
 				{ timeout: 1000 }
 			);
 
 			fireEvent.change(input, { target: { value: '' } });
 			await waitFor(
-				async () => await expect(currentValue).toHaveTextContent("''"),
+				async () => await expect(currentValue).toHaveTextContent('""'),
 				{ timeout: 1000 }
 			);
 		});
@@ -103,7 +103,7 @@ export const Play = {
 			fireEvent.change(input, { target: { value: 'term' } });
 			await waitFor(
 				async () =>
-					await expect(currentValue).toHaveTextContent("'term'"),
+					await expect(currentValue).toHaveTextContent('"term"'),
 				{ timeout: 1000 }
 			);
 
@@ -115,7 +115,7 @@ export const Play = {
 
 			// value should be reset to empty
 			await waitFor(
-				async () => await expect(currentValue).toHaveTextContent("''"),
+				async () => await expect(currentValue).toHaveTextContent('""'),
 				{ timeout: 1000 }
 			);
 		});

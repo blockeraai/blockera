@@ -158,7 +158,7 @@ export const Play = {
 
 		await step('Story Data', async () => {
 			await expect(currentValue).toBeInTheDocument();
-			await expect(currentValue).toHaveTextContent("''");
+			await expect(currentValue).toHaveTextContent('""');
 		});
 
 		await step('Change Test', async () => {
@@ -180,7 +180,7 @@ export const Play = {
 		await step('Deselect', async () => {
 			await userEvent.click(buttons[1]);
 			await waitFor(
-				async () => await expect(currentValue).toHaveTextContent("''"),
+				async () => await expect(currentValue).toHaveTextContent('""'),
 				{ timeout: 1000 }
 			);
 		});

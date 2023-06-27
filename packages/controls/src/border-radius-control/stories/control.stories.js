@@ -149,7 +149,7 @@ export const PlayAll = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						"{ type: 'all', all: '10px' }"
+						'{ "type": "all", "all": "10px" }'
 					),
 				{ timeout: 1000 }
 			);
@@ -159,7 +159,7 @@ export const PlayAll = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						"{ type: 'all', all: '20px' }"
+						'{ "type": "all", "all": "20px" }'
 					),
 				{ timeout: 1000 }
 			);
@@ -172,7 +172,7 @@ export const PlayAll = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						"{ type: 'custom', all: '20px', topLeft: '20px', topRight: '20px', bottomLeft: '20px', bottomRight: '20px' }"
+						'{ "type": "custom", "all": "20px", "topLeft": "20px", "topRight": "20px", "bottomLeft": "20px", "bottomRight": "20px" }'
 					),
 				{ timeout: 1000 }
 			);
@@ -182,7 +182,7 @@ export const PlayAll = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						"{ type: 'all', all: '20px' }"
+						'{ "type": "all", "all": "20px" }'
 					),
 				{ timeout: 1000 }
 			);
@@ -229,7 +229,7 @@ export const PlayCorner = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						"{ type: 'custom', all: '10px', topLeft: '10px', topRight: '10px', bottomRight: '10px', bottomLeft: '10px' }"
+						'{ "type": "custom", "all": "10px", "topLeft": "10px", "topRight": "10px", "bottomRight": "10px", "bottomLeft": "10px" }'
 					),
 				{ timeout: 1000 }
 			);
@@ -239,7 +239,7 @@ export const PlayCorner = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						"{ type: 'custom', all: '10px', topLeft: '10px', topRight: '20px', bottomLeft: '10px', bottomRight: '10px' }"
+						'{ "type": "custom", "all": "10px", "topLeft": "10px", "topRight": "20px", "bottomLeft": "10px", "bottomRight": "10px" }'
 					),
 				{ timeout: 1000 }
 			);
@@ -252,7 +252,7 @@ export const PlayCorner = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						"{ type: 'custom', all: '10px', topLeft: '10px', topRight: '20px', bottomLeft: '50%', bottomRight: '10px' }"
+						'{ "type": "custom", "all": "10px", "topLeft": "10px", "topRight": "20px", "bottomLeft": "50%", "bottomRight": "10px" }'
 					),
 				{ timeout: 1000 }
 			);
@@ -264,7 +264,7 @@ export const PlayCorner = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						"{ type: 'all', all: '10px' }"
+						'{ "type": "all", "all": "10px" }'
 					),
 				{ timeout: 1000 }
 			);
@@ -276,7 +276,7 @@ export const PlayCorner = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						"{ type: 'custom', all: '10px', topLeft: '10px', topRight: '10px', bottomLeft: '10px', bottomRight: '10px' }"
+						'{ "type": "custom", "all": "10px", "topLeft": "10px", "topRight": "10px", "bottomLeft": "10px", "bottomRight": "10px" }'
 					),
 				{ timeout: 1000 }
 			);
