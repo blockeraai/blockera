@@ -83,7 +83,7 @@ const BorderRadiusControl = ({
 							icon: <CustomIcon />,
 						},
 					]}
-					onValueChange={(newValue) => {
+					onChange={(newValue) => {
 						if (newValue === 'custom') {
 							const value = {
 								...controlValue,

@@ -3,10 +3,12 @@
 	width: 100%;
 	min-height: 30px !important;
 	
+	&.is-hovered,
 	&:hover {
 		border-color: var(--publisher-controls-border-color-hover) !important;
 	}
 	
+	&.is-focused,
 	&:focus-within {
 		border-color: var(--publisher-controls-border-color-focus) !important;
 		box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
@@ -22,6 +24,13 @@
 			box-shadow: none !important;
 			outline: none !important;
 		}
+	}
+	
+	// remove inner item style for focus
+	&.is-focused .components-toggle-group-control-option-base {
+		border: none !important;
+		box-shadow: none !important;
+		outline: none !important;
 	}
 	
 	div[role="presentation"] {

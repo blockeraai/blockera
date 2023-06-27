@@ -11,34 +11,39 @@ import {
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { isUndefined } from '@publisher/utils';
+import { isUndefined, useValue } from '@publisher/utils';
+import PropTypes from 'prop-types';
 
-const ToggleSelectControl = ({
-	defaultValue = '',
-	options,
-	children,
+export default function ToggleSelectControl({
 	isDeselectable = false,
+	options,
 	//
-	value,
-	attribute,
+	defaultValue = '',
+	value: initialValue,
+	onChange,
 	//
 	className,
-	onChange = (newValue) => {
-		return newValue;
-	},
-	onValueChange = () => {},
+	children,
 	...props
-}) => {
+}) {
+	const { value, setValue } = useValue({
+		initialValue,
+		defaultValue,
+		onChange,
+		valueCleanup,
+	});
+
+	function valueCleanup(value) {
+		// WPToggleGroupControl returns undefined while deselecting
+		return isUndefined(value) ? '' : value;
+	}
+
 	return (
 		<>
 			<WPToggleGroupControl
 				className={controlClassNames('toggle-select', className)}
-				value={value || defaultValue}
-				onChange={(newValue) => {
-					newValue = onChange(newValue);
-					onValueChange(newValue);
-					return newValue;
-				}}
+				value={value}
+				onChange={setValue}
 				label=""
 				hideLabelFromVision={true}
 				isBlock={true}
@@ -67,6 +72,44 @@ const ToggleSelectControl = ({
 			</WPToggleGroupControl>
 		</>
 	);
+}
+
+ToggleSelectControl.propTypes = {
+	/**
+	 * It sets the control default value if the value not provided. By using it the control will not fire onValueChange event for this default value on control first render,
+	 */
+	defaultValue: PropTypes.string,
+	/**
+	 * The current value.
+	 */
+	value: PropTypes.string,
+	/**
+	 * Function that will be fired while the control value state changes.
+	 */
+	onChange: PropTypes.func,
+	/**
+	 * list of toggle select options
+	 */
+	options: PropTypes.arrayOf(
+		PropTypes.oneOfType([
+			PropTypes.shape({
+				label: PropTypes.string,
+				value: PropTypes.string,
+				icon: PropTypes.element,
+			}),
+			PropTypes.shape({
+				label: PropTypes.string,
+				value: PropTypes.string,
+			}),
+		])
+	),
+	/**
+	 * Specifies than user can deselect active item in select or not
+	 */
+	isDeselectable: PropTypes.bool,
 };
 
-export default ToggleSelectControl;
+ToggleSelectControl.defaultProps = {
+	value: '',
+	isDeselectable: false,
+};

@@ -81,7 +81,7 @@ export default function BoxBorderControl({
 							icon: <CustomIcon />,
 						},
 					]}
-					onValueChange={(newValue) => {
+					onChange={(newValue) => {
 						if (newValue === 'custom') {
 							setValue({
 								...value,
