@@ -13,6 +13,7 @@ export function useValue({
 	initialValue,
 	defaultValue,
 	onChange,
+	valueCleanup,
 	mergeInitialAndDefault,
 }) {
 	const calculatedInitValue =
@@ -32,6 +33,13 @@ export function useValue({
 		if (isFunction(onChange)) onChange(value);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [value]);
+
+	//clean up data at first then fire state change
+	function updateValue(newValue) {
+		if (isFunction(valueCleanup)) newValue = valueCleanup(newValue);
+
+		setValue(newValue);
+	}
 
 	// can be used to toggle value if it was boolean
 	function toggleValue() {
@@ -54,5 +62,11 @@ export function useValue({
 		setValue(calculatedInitValue);
 	}
 
-	return { value, setValue, toggleValue, resetToDefault, resetToInitial };
+	return {
+		value,
+		setValue: updateValue,
+		toggleValue,
+		resetToDefault,
+		resetToInitial,
+	};
 }

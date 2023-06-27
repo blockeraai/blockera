@@ -132,4 +132,45 @@ describe('useValue testing', () => {
 
 		expect(result.current.value).toBe('Hello');
 	});
+
+	test('Clean up value', () => {
+		function valueCleanup(value) {
+			if (value.type === 'all') {
+				delete value?.custom;
+			}
+
+			return value;
+		}
+
+		const { result } = renderHook(() =>
+			useValue({
+				initialValue: {
+					type: 'custom',
+					all: 'new all value',
+					custom: 'new custom value',
+				},
+				defaultValue: {
+					type: 'all',
+					all: 'default all value',
+					custom: 'default custom value',
+				},
+				valueCleanup,
+			})
+		);
+
+		expect(result.current.value).toStrictEqual({
+			type: 'custom',
+			all: 'new all value',
+			custom: 'new custom value',
+		});
+
+		act(() => {
+			result.current.setValue({ ...result.current.value, type: 'all' });
+		});
+
+		expect(result.current.value).toStrictEqual({
+			type: 'all',
+			all: 'new all value',
+		});
+	});
 });
