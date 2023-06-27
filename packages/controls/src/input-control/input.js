@@ -68,8 +68,7 @@ export function InputControl({
 				/>
 			)}
 
-			{units && (
-				//todo replace this with our UnitControl (there is strange bug about half units list!)
+			{!isEmpty(units) ? (
 				<WPUnitControl
 					{...props}
 					units={units}
@@ -82,9 +81,7 @@ export function InputControl({
 					)}
 					isUnitSelectTabbable={false}
 				/>
-			)}
-
-			{!units && (
+			) : (
 				<WPTextControl
 					{...props}
 					value={value}
