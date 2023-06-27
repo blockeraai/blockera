@@ -1,8 +1,8 @@
 /**
  * WordPress dependencies
  */
+import { useContext, useState } from '@wordpress/element';
 import { Popover as WPPopover } from '@wordpress/components';
-import { useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -17,15 +17,21 @@ import {
  */
 import { Button } from '../button';
 import CloseIcon from './icons/close';
+import { isFunction } from '@publisher/utils';
+//Tips of this import: 👇
+//Relative path is used to avoid dependency on the storybook library in the production environment!
+import { PopoverContextData } from '../../../../libs/storybook/decorators/with-popover-data/context';
 
 export default function Popover({
 	label = '',
 	onClose = () => {},
 	children,
 	className,
+	placement = 'bottom-start',
 	...props
 }) {
 	const [isVisible, setIsVisible] = useState(true);
+	const { onFocusOutside } = useContext(PopoverContextData);
 
 	return (
 		<>
@@ -37,6 +43,10 @@ export default function Popover({
 						className
 					)}
 					onClose={onClose}
+					onFocusOutside={
+						isFunction(onFocusOutside) ? onFocusOutside : onClose
+					}
+					placement={placement}
 					{...props}
 				>
 					{label && (
