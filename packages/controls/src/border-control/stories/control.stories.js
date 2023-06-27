@@ -174,7 +174,7 @@ export const Play = {
 		});
 		const buttons = canvas.getAllByRole('button'); // colorpicker +  custom select
 
-		await step('Story data is avaliable', async () => {
+		await step('Story data is available', async () => {
 			await expect(currentValue).toBeInTheDocument();
 		});
 
