@@ -5,7 +5,7 @@
 	
 	.components-search-control__icon {
 		button {
-			margin-right: -8px;
+			margin-right: -6px;
 		}
 	}
 	
@@ -19,5 +19,14 @@
 		&:focus {
 			box-shadow: 0 0 0 2px var(--publisher-controls-border-color-focus);
 		}
+	}
+	
+	&.is-hovered input[type=search].components-search-control__input,
+	&:hover input[type=search].components-search-control__input {
+		box-shadow: 0 0 0 1px var(--publisher-controls-border-color-hover);
+	}
+	
+	&.is-focused input[type=search].components-search-control__input {
+		box-shadow: 0 0 0 2px var(--publisher-controls-border-color-focus);
 	}
 }
