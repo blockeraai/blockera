@@ -91,7 +91,7 @@ const LinkControl = ({
 					<CheckboxControl
 						value={controlValue.target}
 						label={__('Open in New Window', 'publisher-core')}
-						onValueChange={(newValue) => {
+						onChange={(newValue) => {
 							setControlValue({
 								...controlValue,
 								target: newValue,
@@ -102,7 +102,7 @@ const LinkControl = ({
 					<CheckboxControl
 						value={controlValue.nofollow}
 						label={__('Add Nofollow', 'publisher-core')}
-						onValueChange={(newValue) => {
+						onChange={(newValue) => {
 							setControlValue({
 								...controlValue,
 								nofollow: newValue,
