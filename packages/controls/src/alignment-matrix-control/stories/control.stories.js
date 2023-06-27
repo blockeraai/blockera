@@ -88,8 +88,8 @@ export const Play = {
 			await waitFor(
 				async () => {
 					await expect(
-						canvas.getByTestId('current-value').innerText.trim()
-					).toBe(
+						canvas.getByTestId('current-value')
+					).toHaveTextContent(
 						node
 							.querySelector('.components-visually-hidden')
 							.innerText.trim()
