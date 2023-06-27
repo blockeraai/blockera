@@ -33,7 +33,20 @@ export default function BoxBorderControl({
 		defaultValue,
 		mergeInitialAndDefault: true,
 		onChange,
+		valueCleanup,
 	});
+
+	// value clean up for removing extra values to prevent saving extra data!
+	function valueCleanup(value) {
+		if (value.type === 'all') {
+			delete value?.top;
+			delete value?.right;
+			delete value?.bottom;
+			delete value?.left;
+		}
+
+		return value;
+	}
 
 	return (
 		<div className={controlClassNames('box-border', className)}>
