@@ -78,14 +78,9 @@ Flex.propTypes = {
 	 */
 	flexWrap: PropTypes.oneOf(['nowrap', 'wrap']),
 	className: PropTypes.string,
-	children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
 };
 
 Flex.defaultProps = {
 	direction: 'row',
-	gap: '',
-	justifyContent: '',
-	alignItems: '',
-	flexWrap: '',
 	className: '',
 };

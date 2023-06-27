@@ -130,6 +130,7 @@ InputControl.propTypes = {
 		'width',
 		'essential',
 		'general',
+		'custom',
 	]),
 	/**
 	 * Indicates units for showing unit for value.
@@ -138,7 +139,7 @@ InputControl.propTypes = {
 		PropTypes.shape({
 			value: PropTypes.string,
 			label: PropTypes.string,
-			default: PropTypes.string,
+			default: PropTypes.number,
 		})
 	),
 	/**
@@ -148,11 +149,11 @@ InputControl.propTypes = {
 	/**
 	 * The minimum `value` allowed.
 	 */
-	min: PropTypes.number,
+	min: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	/**
 	 * The maximum `value` allowed.
 	 */
-	max: PropTypes.number,
+	max: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	/**
 	 * Disables the `input`, preventing new values from being applied.
 	 */

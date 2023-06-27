@@ -98,5 +98,4 @@ ColorIndicator.defaultProps = {
 	type: '',
 	value: '',
 	size: 18,
-	maxItems: 8,
 };
