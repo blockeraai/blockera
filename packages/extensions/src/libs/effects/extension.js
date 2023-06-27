@@ -189,7 +189,7 @@ export function EffectsExtension({ children, config, ...props }) {
 									value={
 										attributes.publisherBackfaceVisibility
 									}
-									onValueChange={(newValue) =>
+									onChange={(newValue) =>
 										setAttributes({
 											...attributes,
 											publisherBackfaceVisibility:

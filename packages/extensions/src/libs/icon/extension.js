@@ -83,7 +83,7 @@ export function IconExtension({ children, config, ...props }) {
 								//
 								defaultValue=""
 								value={attributes.publisherIconPosition}
-								onValueChange={(newValue) =>
+								onChange={(newValue) =>
 									setAttributes({
 										...attributes,
 										publisherIconPosition: newValue,

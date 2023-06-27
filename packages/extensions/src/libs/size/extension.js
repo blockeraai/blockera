@@ -94,7 +94,7 @@ export function SizeExtension({ children, config, ...props }) {
 					//
 					defaultValue="visible"
 					value={attributes.publisherOverflow}
-					onValueChange={(newValue) =>
+					onChange={(newValue) =>
 						setAttributes({
 							...attributes,
 							publisherOverflow: newValue,

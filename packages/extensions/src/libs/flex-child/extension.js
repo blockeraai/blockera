@@ -70,7 +70,7 @@ export function FlexChildExtension({ config }) {
 					//
 					defaultValue=""
 					value={attributes.publisherFlexChildSizing}
-					onValueChange={(newValue) =>
+					onChange={(newValue) =>
 						setAttributes({
 							...attributes,
 							publisherFlexChildSizing: newValue,
@@ -158,7 +158,7 @@ export function FlexChildExtension({ config }) {
 					//
 					defaultValue=""
 					value={attributes.publisherFlexChildAlign}
-					onValueChange={(newValue) =>
+					onChange={(newValue) =>
 						setAttributes({
 							...attributes,
 							publisherFlexChildAlign: newValue,
@@ -190,7 +190,7 @@ export function FlexChildExtension({ config }) {
 					//
 					defaultValue=""
 					value={attributes.publisherFlexChildOrder}
-					onValueChange={(newValue) =>
+					onChange={(newValue) =>
 						setAttributes({
 							...attributes,
 							publisherFlexChildOrder: newValue,

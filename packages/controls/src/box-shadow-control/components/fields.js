@@ -34,7 +34,7 @@ const Fields = ({ itemId, item }) => {
 				]}
 				//
 				value={item.type}
-				onValueChange={(type) => changeItem(itemId, { ...item, type })}
+				onChange={(type) => changeItem(itemId, { ...item, type })}
 			/>
 
 			<InputField

@@ -204,7 +204,7 @@ export function TypographyExtension({ children, config, ...props }) {
 									//
 									defaultValue=""
 									value={attributes.publisherTextAlign}
-									onValueChange={(newValue) =>
+									onChange={(newValue) =>
 										setAttributes({
 											...attributes,
 											publisherTextAlign: newValue,
@@ -269,7 +269,7 @@ export function TypographyExtension({ children, config, ...props }) {
 											value={
 												attributes.publisherTextDecoration
 											}
-											onValueChange={(newValue) =>
+											onChange={(newValue) =>
 												setAttributes({
 													...attributes,
 													publisherTextDecoration:
@@ -316,7 +316,7 @@ export function TypographyExtension({ children, config, ...props }) {
 											value={
 												attributes.publisherFontStyle
 											}
-											onValueChange={(newValue) =>
+											onChange={(newValue) =>
 												setAttributes({
 													...attributes,
 													publisherFontStyle:
@@ -384,7 +384,7 @@ export function TypographyExtension({ children, config, ...props }) {
 											value={
 												attributes.publisherTextTransform
 											}
-											onValueChange={(newValue) =>
+											onChange={(newValue) =>
 												setAttributes({
 													...attributes,
 													publisherTextTransform:
@@ -427,7 +427,7 @@ export function TypographyExtension({ children, config, ...props }) {
 											value={
 												attributes.publisherDirection
 											}
-											onValueChange={(newValue) =>
+											onChange={(newValue) =>
 												setAttributes({
 													...attributes,
 													publisherDirection:
@@ -549,7 +549,7 @@ export function TypographyExtension({ children, config, ...props }) {
 								//
 								defaultValue=""
 								value={attributes.publisherTextOrientation}
-								onValueChange={(newValue) =>
+								onChange={(newValue) =>
 									setAttributes({
 										...attributes,
 										publisherTextOrientation: newValue,
@@ -604,7 +604,7 @@ export function TypographyExtension({ children, config, ...props }) {
 								//
 								defaultValue=""
 								value={attributes.publisherTextColumns}
-								onValueChange={(newValue) =>
+								onChange={(newValue) =>
 									setAttributes({
 										...attributes,
 										publisherTextColumns: newValue,

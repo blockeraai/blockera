@@ -98,7 +98,7 @@ export function LayoutExtension({ config }) {
 					//
 					defaultValue=""
 					value={attributes.publisherDisplay}
-					onValueChange={(newValue) =>
+					onChange={(newValue) =>
 						setAttributes({
 							...attributes,
 							publisherDisplay: newValue,
@@ -143,7 +143,7 @@ export function LayoutExtension({ config }) {
 							//
 							defaultValue="row"
 							value={attributes.publisherFlexDirection}
-							onValueChange={(newValue) =>
+							onChange={(newValue) =>
 								setAttributes({
 									...attributes,
 									publisherFlexDirection: newValue,
@@ -192,7 +192,7 @@ export function LayoutExtension({ config }) {
 							//
 							defaultValue=""
 							value={attributes.publisherAlignItems}
-							onValueChange={(newValue) =>
+							onChange={(newValue) =>
 								setAttributes({
 									...attributes,
 									publisherAlignItems: newValue,
@@ -249,7 +249,7 @@ export function LayoutExtension({ config }) {
 							//
 							defaultValue=""
 							value={attributes.publisherJustifyContent}
-							onValueChange={(newValue) =>
+							onChange={(newValue) =>
 								setAttributes({
 									...attributes,
 									publisherJustifyContent: newValue,
@@ -340,7 +340,7 @@ export function LayoutExtension({ config }) {
 								//
 								defaultValue="nowrap"
 								value={attributes.publisherFlexWrap}
-								onValueChange={(newValue) =>
+								onChange={(newValue) =>
 									setAttributes({
 										...attributes,
 										publisherFlexWrap: newValue,
@@ -427,7 +427,7 @@ export function LayoutExtension({ config }) {
 										//
 										defaultValue=""
 										value={attributes.publisherAlignContent}
-										onValueChange={(newValue) =>
+										onChange={(newValue) =>
 											setAttributes({
 												...attributes,
 												publisherAlignContent: newValue,

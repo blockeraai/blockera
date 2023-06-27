@@ -107,7 +107,7 @@ const Fields = ({ itemId, item }) => {
 				]}
 				//
 				value={item.type}
-				onValueChange={(type) => changeItem(itemId, { ...item, type })}
+				onChange={(type) => changeItem(itemId, { ...item, type })}
 			/>
 
 			{item.type === 'image' && (
@@ -143,7 +143,7 @@ const Fields = ({ itemId, item }) => {
 						]}
 						//
 						value={item['image-size']}
-						onValueChange={(size) =>
+						onChange={(size) =>
 							changeItem(itemId, { ...item, 'image-size': size })
 						}
 					>
@@ -236,7 +236,7 @@ const Fields = ({ itemId, item }) => {
 						]}
 						//
 						value={item['image-repeat']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, {
 								...item,
 								'image-repeat': newValue,
@@ -258,7 +258,7 @@ const Fields = ({ itemId, item }) => {
 						]}
 						//
 						value={item['image-attachment']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, {
 								...item,
 								'image-attachment': newValue,
@@ -312,7 +312,7 @@ const Fields = ({ itemId, item }) => {
 						]}
 						//
 						value={item['linear-gradient-repeat']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, {
 								...item,
 								'linear-gradient-repeat': newValue,
@@ -334,7 +334,7 @@ const Fields = ({ itemId, item }) => {
 						]}
 						//
 						value={item['linear-gradient-attachment']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, {
 								...item,
 								'linear-gradient-attachment': newValue,
@@ -408,7 +408,7 @@ const Fields = ({ itemId, item }) => {
 						]}
 						//
 						value={item['radial-gradient-size']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, {
 								...item,
 								'radial-gradient-size': newValue,
@@ -432,7 +432,7 @@ const Fields = ({ itemId, item }) => {
 						]}
 						//
 						value={item['radial-gradient-repeat']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, {
 								...item,
 								'radial-gradient-repeat': newValue,
@@ -454,7 +454,7 @@ const Fields = ({ itemId, item }) => {
 						]}
 						//
 						value={item['radial-gradient-attachment']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, {
 								...item,
 								'radial-gradient-attachment': newValue,
@@ -590,7 +590,7 @@ const Fields = ({ itemId, item }) => {
 						]}
 						//
 						value={item['mesh-gradient-attachment']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, {
 								...item,
 								'mesh-gradient-attachment': newValue,
