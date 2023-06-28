@@ -58,7 +58,7 @@ export default function RepeaterControl({
 	const defaultRepeaterState = {
 		design,
 		isPopover,
-		popoverLabel,
+		popoverLabel: popoverLabel || label,
 		popoverClassName,
 		maxItems,
 		minItems,
