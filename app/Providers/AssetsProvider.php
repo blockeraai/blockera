@@ -11,11 +11,14 @@ class AssetsProvider {
 	 */
 	protected static $assets = [
 		'icons',
+		'utils',
 		'fields',
 		'controls',
 		'components',
 		'classnames',
 		'extensions',
+		'style-engine',
+		'data-extractor',
 	];
 
 	/**
