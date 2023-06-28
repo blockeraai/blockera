@@ -1,7 +1,7 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
-import { memo } from '@wordpress/element';
+import { memo, useContext } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
@@ -9,12 +9,14 @@ import { __, sprintf } from '@wordpress/i18n';
  */
 import { controlInnerClassNames } from '@publisher/classnames';
 import { getIconLibrary } from '@publisher/components';
+import { isEmpty, isUndefined } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
 import { default as IconLibrary } from './icon-library';
 import { default as SuggestionsIcon } from '../../icons/suggestions';
+import { IconContext } from '../../context';
 
 const IconLibraries = ({
 	libraries = {
@@ -35,6 +37,13 @@ const IconLibraries = ({
 		},
 	},
 }) => {
+	const { suggestionsQuery } = useContext(IconContext);
+
+	// skip suggestions if not required
+	if (isUndefined(suggestionsQuery) || isEmpty(suggestionsQuery)) {
+		delete libraries?.suggestions;
+	}
+
 	const stack = [];
 
 	for (const library in libraries) {
