@@ -683,7 +683,7 @@ export function TypographyExtension({ children, config, ...props }) {
 									//
 									defaultValue=""
 									value={attributes.publisherTextStrokeColor}
-									onValueChange={(newValue) =>
+									onChange={(newValue) =>
 										setAttributes({
 											...attributes,
 											publisherTextStrokeColor: newValue,
@@ -779,7 +779,7 @@ export function TypographyExtension({ children, config, ...props }) {
 						//
 						defaultValue: '',
 						value: attributes.publisherFontColor,
-						onValueChange: (newValue) =>
+						onChange: (newValue) =>
 							setAttributes({
 								...attributes,
 								publisherFontColor: newValue,

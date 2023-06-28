@@ -66,9 +66,7 @@ const Fields = ({ itemId, item }) => {
 				label={__('Color', 'publisher-core')}
 				//
 				value={item.color}
-				onValueChange={(color) =>
-					changeItem(itemId, { ...item, color })
-				}
+				onChange={(color) => changeItem(itemId, { ...item, color })}
 			/>
 		</BaseControl>
 	);

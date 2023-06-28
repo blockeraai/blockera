@@ -56,7 +56,7 @@ export function BackgroundExtension({ children, config, ...props }) {
 						//
 						defaultValue: '',
 						value: attributes.publisherBackgroundColor,
-						onValueChange: (newValue) =>
+						onChange: (newValue) =>
 							setAttributes({
 								...attributes,
 								publisherBackgroundColor: newValue,

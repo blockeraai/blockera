@@ -143,7 +143,7 @@ export function IconExtension({ children, config, ...props }) {
 								//
 								defaultValue=""
 								value={attributes.publisherIconColor}
-								onValueChange={(newValue) =>
+								onChange={(newValue) =>
 									setAttributes({
 										...attributes,
 										publisherIconColor: newValue,

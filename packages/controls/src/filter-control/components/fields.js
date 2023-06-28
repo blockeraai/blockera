@@ -108,7 +108,7 @@ const Fields = ({ itemId, item }) => {
 						label={__('Color', 'publisher-core')}
 						//
 						value={item['drop-shadow-color']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, {
 								...item,
 								'drop-shadow-color': newValue,
