@@ -14,7 +14,7 @@ import { controlInnerClassNames } from '@publisher/classnames';
 import { getTypeLabel } from '../utils';
 import { default as TransitionIcon } from '../icons/transition';
 
-const Header = ({
+const RepeaterItemHeader = ({
 	item: { type, duration },
 	isOpen,
 	setOpen,
@@ -43,4 +43,4 @@ const Header = ({
 	);
 };
 
-export default memo(Header);
+export default memo(RepeaterItemHeader);

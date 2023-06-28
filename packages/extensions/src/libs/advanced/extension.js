@@ -28,7 +28,7 @@ export function AdvancedExtension({ children, config, ...props }) {
 				<AttributesField
 					label={__('HTML Attributes', 'publisher-core')}
 					value={attributes.publisherAttributes}
-					onValueChange={(newValue) => {
+					onChange={(newValue) => {
 						setAttributes({
 							...attributes,
 							attributes: newValue,

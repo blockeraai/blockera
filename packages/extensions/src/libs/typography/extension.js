@@ -792,7 +792,7 @@ export function TypographyExtension({ children, config, ...props }) {
 				<TextShadowField
 					label={__('Text Shadows', 'publisher-core')}
 					value={attributes.publisherTextShadow}
-					onValueChange={(newValue) =>
+					onChange={(newValue) =>
 						setAttributes({
 							...attributes,
 							publisherTextShadow: newValue,

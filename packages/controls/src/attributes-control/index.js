@@ -11,12 +11,12 @@ import { controlClassNames } from '@publisher/classnames';
 /**
  * Internal dependencies
  */
-import Header from './components/header';
+import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
 export default function AttributesControl({
-	defaultValue = {
+	defaultRepeaterItemValue = {
 		key: '',
 		value: '',
 		isVisible: true,
@@ -31,9 +31,10 @@ export default function AttributesControl({
 		<div className={controlClassNames('attributes', className)}>
 			<RepeaterControl
 				popoverLabel={popoverLabel}
-				Header={Header}
-				InnerComponents={Fields}
-				defaultValue={defaultValue}
+				repeaterItemHeader={RepeaterItemHeader}
+				repeaterItemChildren={Fields}
+				defaultRepeaterItemValue={defaultRepeaterItemValue}
+				// custom prop for this control
 				attributeElement={attributeElement}
 				{...props}
 			/>

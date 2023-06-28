@@ -1,5 +1,5 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { memo, useContext, useState } from '@wordpress/element';
@@ -12,25 +12,27 @@ import { controlInnerClassNames } from '@publisher/classnames';
 /**
  * Internal dependencies
  */
-import ActionsUI from './actions-ui';
+import RepeaterItemActions from './actions';
 import { RepeaterContext } from '../context';
 import { isOpenPopoverEvent } from '../utils';
 import GroupControl from '../../group-control';
 
 const RepeaterItem = ({ item, itemId }) => {
 	const [isOpen, setOpen] = useState(false);
-	const [isVisible, setVisibility] = useState(true);
+	const [isVisible, setVisibility] = useState(item?.isVisible);
+
 	const {
 		design,
-		InnerComponents,
-		Header: CustomHeader,
+		repeaterItemChildren: RepeaterItemChildren,
+		repeaterItemHeader: RepeaterItemHeader,
 		sortItems,
 		repeaterItems: items,
 		isPopover,
 		popoverLabel,
-		repeaterItemsPopoverClassName,
+		popoverClassName,
 	} = useContext(RepeaterContext);
-	const actionsProps = {
+
+	const repeaterItemActionsProps = {
 		item,
 		itemId,
 		isOpen,
@@ -48,28 +50,38 @@ const RepeaterItem = ({ item, itemId }) => {
 				groupId={itemId}
 				dropArgs={items}
 				dropCallback={sortItems}
-				popoverClassName={repeaterItemsPopoverClassName}
+				popoverClassName={popoverClassName}
 				className={controlInnerClassNames('repeater-item-group')}
 				header={
-					!CustomHeader ? (
-						<div
-							className={controlInnerClassNames(
-								'repeater-group-header'
-							)}
-							onClick={(event) =>
-								isOpenPopoverEvent(event) && setOpen(!isOpen)
-							}
-						>
-							{__('Item ', 'publisher') + itemId}
-							<ActionsUI {...actionsProps} />
-						</div>
+					!RepeaterItemHeader ? (
+						<>
+							<div
+								className={controlInnerClassNames(
+									'repeater-group-header'
+								)}
+								onClick={(event) =>
+									isOpenPopoverEvent(event) &&
+									setOpen(!isOpen)
+								}
+							>
+								{__('Item ', 'publisher') + itemId}
+							</div>
+							<RepeaterItemActions
+								{...repeaterItemActionsProps}
+							/>
+						</>
 					) : (
-						<CustomHeader {...actionsProps}>
-							<ActionsUI {...actionsProps} />
-						</CustomHeader>
+						<>
+							<RepeaterItemHeader
+								{...repeaterItemActionsProps}
+							></RepeaterItemHeader>
+							<RepeaterItemActions
+								{...repeaterItemActionsProps}
+							/>
+						</>
 					)
 				}
-				children={<InnerComponents {...{ item, itemId }} />}
+				children={<RepeaterItemChildren {...{ item, itemId }} />}
 				isOpen={isOpen}
 				isVisible={isVisible}
 				isPopover={isPopover}

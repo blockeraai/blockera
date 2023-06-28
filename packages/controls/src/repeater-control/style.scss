@@ -14,40 +14,43 @@
 		}
 	}
 	
-	.publisher-control-repeater-group-header {
-		display: flex;
-		gap: 7px;
-		align-items: center;
-		flex-wrap: nowrap;
-		padding: 2px 12px;
-		height: 30px;
-		width: 100%;
-		position: relative;
-		letter-spacing: -0.2px;
-		font-size: 12px;
+	.publisher-control-group-header {
 		
-		.publisher-control-header-icon {
+		.publisher-control-repeater-group-header {
 			display: flex;
-			min-width: 20px;
-			justify-content: center;
-			align-content: center;
+			gap: 7px;
+			align-items: center;
+			flex-wrap: nowrap;
+			padding: 2px 12px;
+			height: 30px;
+			width: 100%;
+			position: relative;
+			letter-spacing: -0.2px;
+			font-size: 12px;
 			
-			svg {
-				fill: currentColor;
+			.publisher-control-header-icon {
+				display: flex;
+				min-width: 20px;
+				justify-content: center;
+				align-content: center;
+				
+				svg {
+					fill: currentColor;
+				}
+			}
+			
+			.publisher-control-header-values {
+				margin-left: auto;
+				display: flex;
+				min-width: 20px;
+				justify-content: flex-end;
+				align-content: center;
+				gap: 8px;
+				text-transform: capitalize;
 			}
 		}
 		
-		.publisher-control-header-values {
-			margin-left: auto;
-			display: flex;
-			min-width: 20px;
-			justify-content: flex-end;
-			align-content: center;
-			gap: 8px;
-			text-transform: capitalize;
-		}
-		
-		.publisher-control-action-btns {
+		.publisher-control-action-buttons {
 			position: absolute;
 			top: 0;
 			right: 5px;
@@ -71,11 +74,11 @@
 			}
 		}
 		
-		.publisher-control-btn-toggle + .publisher-control-action-btns {
+		.publisher-control-btn-toggle + .publisher-control-action-buttons {
 			right: 30px;
 		}
 		
-		&:hover .publisher-control-action-btns {
+		&:hover .publisher-control-action-buttons {
 			opacity: 1;
 			visibility: visible;
 		}
@@ -86,7 +89,7 @@
 		}
 	}
 	
-	.publisher-control-repeater-header-action-btns {
+	.publisher-control-repeater-header-action-buttons {
 		margin-left: auto;
 		display: flex;
 		flex-direction: row;

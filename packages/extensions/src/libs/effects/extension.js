@@ -75,13 +75,13 @@ export function EffectsExtension({ children, config, ...props }) {
 					<TransformField
 						label={__('2D & 3D Transforms', 'publisher-core')}
 						value={attributes.publisherTransform}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							setAttributes({
 								...attributes,
 								publisherTransform: newValue,
 							})
 						}
-						headerButtonsStart={
+						injectHeaderButtonsStart={
 							<>
 								<Button
 									size="extra-small"
@@ -258,7 +258,7 @@ export function EffectsExtension({ children, config, ...props }) {
 				<TransitionField
 					label={__('Transitions', 'publisher-core')}
 					value={attributes.publisherTransition}
-					onValueChange={(newValue) =>
+					onChange={(newValue) =>
 						setAttributes({
 							...attributes,
 							publisherTransition: newValue,
@@ -272,7 +272,7 @@ export function EffectsExtension({ children, config, ...props }) {
 				<FilterField
 					label={__('Filters', 'publisher-core')}
 					value={attributes.publisherFilter}
-					onValueChange={(newValue) =>
+					onChange={(newValue) =>
 						setAttributes({
 							...attributes,
 							publisherFilter: newValue,
@@ -287,7 +287,7 @@ export function EffectsExtension({ children, config, ...props }) {
 					label={__('Backdrop Filters', 'publisher-core')}
 					popoverLabel={__('Backdrop Filter', 'publisher-core')}
 					value={attributes.publisherBackdropFilter}
-					onValueChange={(newValue) =>
+					onChange={(newValue) =>
 						setAttributes({
 							...attributes,
 							publisherBackdropFilter: newValue,

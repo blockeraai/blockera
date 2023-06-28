@@ -126,7 +126,7 @@ const LinkControl = ({
 
 					<AttributesControl
 						value={controlValue.attributes}
-						onValueChange={(newValue) => {
+						onChange={(newValue) => {
 							setControlValue({
 								...controlValue,
 								attributes: newValue,

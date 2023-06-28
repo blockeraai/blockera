@@ -16,11 +16,7 @@ export function AttributesField({
 }) {
 	return (
 		<Field field="attributes" columns="columns-1" className={className}>
-			<AttributesControl
-				{...props}
-				isPopover={true}
-				attributeElement={attributeElement}
-			/>
+			<AttributesControl {...props} attributeElement={attributeElement} />
 
 			{children}
 		</Field>

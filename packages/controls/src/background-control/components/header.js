@@ -19,7 +19,13 @@ import { default as TypeRadialGradientIcon } from '../icons/type-radial-gradient
 import { default as TypeMeshGradientIcon } from '../icons/type-mesh-gradient';
 import { getBackgroundItemBGProperty } from '../utils';
 
-const Header = ({ item, isOpen, setOpen, children, isOpenPopoverEvent }) => {
+const RepeaterItemHeader = ({
+	item,
+	isOpen,
+	setOpen,
+	children,
+	isOpenPopoverEvent,
+}) => {
 	let label, icon, preview;
 
 	const itemBGProperty = getBackgroundItemBGProperty(item);
@@ -78,4 +84,4 @@ const Header = ({ item, isOpen, setOpen, children, isOpenPopoverEvent }) => {
 	);
 };
 
-export default memo(Header);
+export default memo(RepeaterItemHeader);

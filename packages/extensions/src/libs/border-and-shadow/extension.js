@@ -64,7 +64,7 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 				<BoxShadowField
 					label={__('Box Shadows', 'publisher-core')}
 					value={attributes.publisherBoxShadow}
-					onValueChange={(newValue) => {
+					onChange={(newValue) => {
 						setAttributes({
 							...attributes,
 							publisherBoxShadow: newValue,
@@ -78,7 +78,7 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 				<OutlineField
 					label={__('Outline', 'publisher-core')}
 					value={attributes.publisherOutline}
-					onValueChange={(newValue) => {
+					onChange={(newValue) => {
 						setAttributes({
 							...attributes,
 							publisherOutline: newValue,

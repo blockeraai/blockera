@@ -11,12 +11,12 @@ import { controlClassNames } from '@publisher/classnames';
 /**
  * Internal dependencies
  */
-import Header from './components/header';
+import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
 export default function BackgroundControl({
-	defaultValue = {
+	defaultRepeaterItemValue = {
 		type: 'image',
 		image: '',
 		'image-size': 'custom',
@@ -50,12 +50,10 @@ export default function BackgroundControl({
 		<RepeaterControl
 			className={controlClassNames('background', className)}
 			popoverLabel={popoverLabel}
-			Header={Header}
-			InnerComponents={Fields}
-			defaultValue={defaultValue}
-			repeaterItemsPopoverClassName={controlClassNames(
-				'background-popover'
-			)}
+			repeaterItemHeader={RepeaterItemHeader}
+			repeaterItemChildren={Fields}
+			defaultRepeaterItemValue={defaultRepeaterItemValue}
+			popoverClassName={controlClassNames('background-popover')}
 			{...props}
 		/>
 	);

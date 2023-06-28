@@ -11,12 +11,12 @@ import { controlClassNames } from '@publisher/classnames';
 /**
  * Internal dependencies
  */
-import Header from './components/header';
+import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
 export default function TextShadowControl({
-	defaultValue = {
+	defaultRepeaterItemValue = {
 		x: '1px',
 		y: '1px',
 		blur: '1px',
@@ -33,9 +33,9 @@ export default function TextShadowControl({
 			<RepeaterControl
 				className={controlClassNames('text-shadow', className)}
 				popoverLabel={popoverLabel}
-				Header={Header}
-				InnerComponents={Fields}
-				defaultValue={defaultValue}
+				repeaterItemHeader={RepeaterItemHeader}
+				repeaterItemChildren={Fields}
+				defaultRepeaterItemValue={defaultRepeaterItemValue}
 				{...props}
 			/>
 		</div>

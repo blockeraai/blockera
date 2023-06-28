@@ -37,7 +37,7 @@ export function BackgroundExtension({ children, config, ...props }) {
 				<BackgroundField
 					label={__('Image & Gradient', 'publisher-core')}
 					value={attributes.publisherBackground}
-					onValueChange={(newValue) =>
+					onChange={(newValue) =>
 						setAttributes({
 							...attributes,
 							publisherBackground: newValue,

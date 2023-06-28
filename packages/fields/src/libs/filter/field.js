@@ -11,7 +11,7 @@ import { Field } from '../field';
 export function FilterField({ columns, className, children, ...props }) {
 	return (
 		<Field field="filter" columns="columns-1" className={className}>
-			<FilterControl {...props} isPopover={true} />
+			<FilterControl {...props} />
 
 			{children}
 		</Field>

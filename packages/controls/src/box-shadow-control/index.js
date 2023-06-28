@@ -11,19 +11,19 @@ import { controlClassNames } from '@publisher/classnames';
 /**
  * Internal dependencies
  */
-import Header from './components/header';
+import RepeaterItemHeader from './components/header';
 import Fields from './components/fields';
 import RepeaterControl from '../repeater-control';
 
 export default function BoxShadowControl({
-	defaultValue = {
+	defaultRepeaterItemValue = {
 		type: 'outer',
 		x: '0px',
 		y: '0px',
 		blur: '0px',
 		spread: '0px',
-		isVisible: true,
 		color: '',
+		isVisible: true,
 	},
 	popoverLabel = __('Box Shadow', 'publisher-core'),
 	className,
@@ -33,9 +33,9 @@ export default function BoxShadowControl({
 		<RepeaterControl
 			className={controlClassNames('box-shadow', className)}
 			popoverLabel={popoverLabel}
-			Header={Header}
-			InnerComponents={Fields}
-			defaultValue={defaultValue}
+			repeaterItemHeader={RepeaterItemHeader}
+			repeaterItemChildren={Fields}
+			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			{...props}
 		/>
 	);

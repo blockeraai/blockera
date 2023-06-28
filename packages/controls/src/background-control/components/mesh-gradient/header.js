@@ -14,7 +14,7 @@ import { ColorIndicator } from '@publisher/components';
  * Internal dependencies
  */
 
-const Header = ({
+const RepeaterItemHeader = ({
 	itemId,
 	item,
 	isOpen,
@@ -44,4 +44,4 @@ const Header = ({
 	);
 };
 
-export default memo(Header);
+export default memo(RepeaterItemHeader);

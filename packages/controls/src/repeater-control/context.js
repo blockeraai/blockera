@@ -5,23 +5,31 @@ import { createContext } from '@wordpress/element';
 
 const RepeaterContext = createContext({
 	design: 'minimal',
+	isPopover: true,
 	popoverLabel: '',
-	Header: null,
-	clientId: null,
+	popoverClassName: '',
+	maxItems: -1,
+	minItems: 0,
+	actionButtonAdd: true,
+	actionButtonVisibility: true,
+	actionButtonDelete: true,
+	actionButtonClone: true,
+	injectHeaderButtonsStart: '',
+	injectHeaderButtonsEnd: '',
+	//
+	repeaterItemHeader: null,
+	repeaterItemChildren: null,
+	//
 	attributes: {},
 	defaultValue: {},
-	repeaterItems: {},
-	maxItems: -1,
-	minItems: -1,
-	visibilityControl: true,
-	repeaterItemsPopoverClassName: '',
+	repeaterItems: {}, // value
+	//
+	customProps: {}, // we use this for passing props from out of RepeaterControl to RepeaterItemHeader and RepeaterItemChildren
+	//
 	cloneItem: () => {},
 	addNewItem: () => {},
 	removeItem: () => {},
 	changeItem: () => {},
-	InnerComponents: null,
-	isPopover: true,
-	customProps: {},
 });
 
 const RepeaterContextProvider = ({ children, ...props }) => {

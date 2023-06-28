@@ -11,12 +11,12 @@ import { controlClassNames } from '@publisher/classnames';
 /**
  * Internal dependencies
  */
-import Header from './components/header';
+import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
 export default function OutlineControl({
-	defaultValue = {
+	defaultRepeaterItemValue = {
 		width: '2px',
 		style: 'solid',
 		color: '#b6b6b6',
@@ -31,9 +31,9 @@ export default function OutlineControl({
 		<RepeaterControl
 			className={controlClassNames('outline', className)}
 			popoverLabel={popoverLabel}
-			Header={Header}
-			InnerComponents={Fields}
-			defaultValue={defaultValue}
+			repeaterItemHeader={RepeaterItemHeader}
+			repeaterItemChildren={Fields}
+			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			maxItems={1}
 			{...props}
 		/>

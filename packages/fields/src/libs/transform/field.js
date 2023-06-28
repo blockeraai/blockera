@@ -11,7 +11,7 @@ import { Field } from '../field';
 export function TransformField({ columns, className, children, ...props }) {
 	return (
 		<Field field="transform" columns="columns-1" className={className}>
-			<TransformControl {...props} isPopover={true} />
+			<TransformControl {...props} />
 
 			{children}
 		</Field>

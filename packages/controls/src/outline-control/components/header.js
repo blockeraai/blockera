@@ -16,7 +16,7 @@ import BorderStyleHDashedIcon from '../../border-control/icons/style-h-dashed';
 import BorderStyleHDottedIcon from '../../border-control/icons/style-h-dotted';
 import BorderStyleHDoubleIcon from '../../border-control/icons/style-h-double';
 
-const Header = ({
+const RepeaterItemHeader = ({
 	item: { style, width, color = '#fff' },
 	isOpen,
 	setOpen,
@@ -61,4 +61,4 @@ const Header = ({
 	);
 };
 
-export default memo(Header);
+export default memo(RepeaterItemHeader);

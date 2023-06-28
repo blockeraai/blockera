@@ -15,7 +15,7 @@ import { controlInnerClassNames } from '@publisher/classnames';
 import { RepeaterContext } from '../../repeater-control/context';
 import { getAttributeItemIcon } from '../utils';
 
-const Header = ({
+const RepeaterItemHeader = ({
 	item: { key, value },
 	isOpen,
 	setOpen,
@@ -57,4 +57,4 @@ const Header = ({
 	);
 };
 
-export default memo(Header);
+export default memo(RepeaterItemHeader);

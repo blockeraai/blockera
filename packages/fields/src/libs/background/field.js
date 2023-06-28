@@ -11,7 +11,7 @@ import { Field } from '../field';
 export function BackgroundField({ className, children, ...props }) {
 	return (
 		<Field field="background" columns="columns-1" className={className}>
-			<BackgroundControl {...props} isPopover={true} />
+			<BackgroundControl {...props} />
 
 			{children}
 		</Field>

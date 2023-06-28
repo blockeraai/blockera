@@ -11,12 +11,12 @@ import { controlClassNames } from '@publisher/classnames';
 /**
  * Internal dependencies
  */
-import Header from './components/header';
+import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
 export default function FilterControl({
-	defaultValue = {
+	defaultRepeaterItemValue = {
 		type: 'blur',
 		blur: '3px',
 		brightness: '200%',
@@ -41,9 +41,9 @@ export default function FilterControl({
 		<RepeaterControl
 			className={controlClassNames('filter', className)}
 			popoverLabel={popoverLabel}
-			Header={Header}
-			InnerComponents={Fields}
-			defaultValue={defaultValue}
+			repeaterItemHeader={RepeaterItemHeader}
+			repeaterItemChildren={Fields}
+			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			{...props}
 		/>
 	);

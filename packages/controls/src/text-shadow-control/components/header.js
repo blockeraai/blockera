@@ -10,7 +10,7 @@ import { __ } from '@wordpress/i18n';
 import { controlInnerClassNames } from '@publisher/classnames';
 import { ColorIndicator } from '@publisher/components';
 
-const Header = ({
+const RepeaterItemHeader = ({
 	item: { x, y, blur, color = '#fff' },
 	isOpen,
 	setOpen,
@@ -39,4 +39,4 @@ const Header = ({
 	);
 };
 
-export default memo(Header);
+export default memo(RepeaterItemHeader);

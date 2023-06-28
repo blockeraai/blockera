@@ -11,12 +11,12 @@ import { controlClassNames } from '@publisher/classnames';
 /**
  * Internal dependencies
  */
-import Header from './components/header';
+import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
 export default function TransformControl({
-	defaultValue = {
+	defaultRepeaterItemValue = {
 		type: 'move',
 		'move-x': '0px',
 		'move-y': '0px',
@@ -38,9 +38,9 @@ export default function TransformControl({
 		<RepeaterControl
 			className={controlClassNames('transform', className)}
 			popoverLabel={popoverLabel}
-			Header={Header}
-			InnerComponents={Fields}
-			defaultValue={defaultValue}
+			repeaterItemHeader={RepeaterItemHeader}
+			repeaterItemChildren={Fields}
+			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			{...props}
 		/>
 	);

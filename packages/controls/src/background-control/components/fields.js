@@ -510,11 +510,11 @@ const Fields = ({ itemId, item }) => {
 								'Mesh Gradient Color',
 								'publisher-color'
 							)}
-							Header={MeshGradientHeader}
-							InnerComponents={MeshGradientFields}
+							repeaterItemHeader={MeshGradientHeader}
+							repeaterItemChildren={MeshGradientFields}
 							value={item['mesh-gradient-colors']}
 							minItems={3}
-							visibilityControl={false}
+							actionButtonVisibility={false}
 							defaultValue={{
 								color: '',
 							}}

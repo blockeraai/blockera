@@ -18,7 +18,13 @@ import { default as RotateIcon } from '../icons/rotate';
 import { default as ScaleIcon } from '../icons/scale';
 import { default as SkewIcon } from '../icons/skew';
 
-const Header = ({ item, isOpen, setOpen, children, isOpenPopoverEvent }) => {
+const RepeaterItemHeader = ({
+	item,
+	isOpen,
+	setOpen,
+	children,
+	isOpenPopoverEvent,
+}) => {
 	let label, icon, value;
 
 	switch (item.type) {
@@ -69,4 +75,4 @@ const Header = ({ item, isOpen, setOpen, children, isOpenPopoverEvent }) => {
 	);
 };
 
-export default memo(Header);
+export default memo(RepeaterItemHeader);

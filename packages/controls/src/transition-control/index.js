@@ -11,12 +11,12 @@ import { controlClassNames } from '@publisher/classnames';
 /**
  * Internal dependencies
  */
-import Header from './components/header';
+import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
 export default function TransitionControl({
-	defaultValue = {
+	defaultRepeaterItemValue = {
 		type: 'all',
 		duration: '500ms',
 		timing: 'ease',
@@ -32,9 +32,9 @@ export default function TransitionControl({
 		<RepeaterControl
 			className={controlClassNames('transition', className)}
 			popoverLabel={popoverLabel}
-			Header={Header}
-			InnerComponents={Fields}
-			defaultValue={defaultValue}
+			repeaterItemHeader={RepeaterItemHeader}
+			repeaterItemChildren={Fields}
+			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			{...props}
 		/>
 	);
