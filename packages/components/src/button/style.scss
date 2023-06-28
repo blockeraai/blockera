@@ -94,7 +94,7 @@
 		}
 		
 		&.no-border:hover {
-			background: transparent;
+			background: var(--publisher-controls-background-color);
 		}
 		
 		&:hover:not(:disabled, [aria-disabled=true], .no-border) {
