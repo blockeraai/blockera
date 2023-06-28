@@ -129,6 +129,7 @@ export default function IconControl({
 						onClick={openModal}
 					>
 						<Button
+							aria-label={__('Remove Icon', 'publisher-core')}
 							className="btn-delete"
 							noBorder={true}
 							isFocus={isOpenModal}

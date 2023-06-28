@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import { sprintf, __ } from '@wordpress/i18n';
+
+/**
  * Publisher dependencies
  */
 import {
@@ -65,6 +70,11 @@ export function getLibraryIcons({
 						isCurrentIcon(icon.iconName, icon.library)
 							? 'icon-current'
 							: ''
+					)}
+					aria-label={sprintf(
+						// translators: %s is icon ID in icon libraries for example arrow-left
+						__('%s Icon', 'publisher-core'),
+						icon.iconName
 					)}
 					onClick={(event) =>
 						onClick(event, {
