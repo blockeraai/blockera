@@ -51,7 +51,10 @@ const RepeaterItem = ({ item, itemId }) => {
 				dropArgs={items}
 				dropCallback={sortItems}
 				popoverClassName={popoverClassName}
-				className={controlInnerClassNames('repeater-item-group')}
+				className={controlInnerClassNames(
+					'repeater-item-group',
+					item?.__className
+				)}
 				header={
 					!RepeaterItemHeader ? (
 						<>
