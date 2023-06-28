@@ -13,8 +13,10 @@
 	}
 	
 	&.is-inactive {
-		opacity: 0.5 !important;
-		user-select: none;
+		.publisher-control-group-header > *:not(.publisher-control-action-buttons){
+			opacity: 0.5 !important;
+			user-select: none;
+		}
 	}
 	
 	.publisher-control-group-header {
