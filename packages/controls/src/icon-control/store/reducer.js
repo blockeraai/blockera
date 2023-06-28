@@ -16,17 +16,10 @@ export function iconReducer(iconData, action) {
 				uploadSVG: action.uploadSVG,
 			};
 
-		case 'UPDATE_SIZE':
-			return {
-				...iconData,
-				size: action.size,
-			};
-
 		case 'DELETE_ICON':
 			return {
-				icon: null,
-				library: null,
-				size: null,
+				icon: '',
+				library: '',
 				uploadSVG: '',
 			};
 

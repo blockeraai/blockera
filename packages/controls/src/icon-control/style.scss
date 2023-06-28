@@ -41,7 +41,7 @@
 			right: 0;
 			bottom: 0;
 			opacity: 0;
-			border-top: 1px solid var(--publisher-controls-border-color);
+			border-top: 1px solid var(--publisher-controls-border-color) !important;
 			grid-template-columns: 1fr 1fr;
 			background: #ffffff;
 			transition: all 0.15s ease;
@@ -53,7 +53,7 @@
 				border-radius: 0;
 				
 				&.btn-icon-library {
-					border-right: 1px solid var(--publisher-controls-border-color);
+					border-right: 1px solid var(--publisher-controls-border-color) !important;
 				}
 			}
 		}
@@ -73,8 +73,8 @@
 			padding: 0;
 			min-width: 24px;
 			height: 24px;
-			border-left: 1px solid var(--publisher-controls-border-color);
-			border-bottom: 1px solid var(--publisher-controls-border-color);
+			border-left: 1px solid var(--publisher-controls-border-color) !important;
+			border-bottom: 1px solid var(--publisher-controls-border-color) !important;
 			background: #ffffff;
 			border-radius: 0 0 0 2px;
 			visibility: hidden;
@@ -86,6 +86,7 @@
 			.publisher-component-button.btn-delete {
 				visibility: visible;
 				opacity: 1;
+				background: #ffffff;
 			}
 		}
 	}

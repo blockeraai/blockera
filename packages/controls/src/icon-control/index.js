@@ -1,8 +1,9 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { useState, useReducer } from '@wordpress/element';
+import PropTypes from 'prop-types';
 
 /**
  * Publisher dependencies
@@ -12,7 +13,7 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { Button, Icon, MediaUploader } from '@publisher/components';
-import { useLateEffect } from '@publisher/utils';
+import { isEmpty, isFunction, useLateEffect } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -24,23 +25,17 @@ import { default as IconPickerPopover } from './components/icon-picker/icon-pick
 import { default as DeleteIcon } from './icons/delete';
 
 export default function IconControl({
-	suggestionsQuery = '',
+	suggestionsQuery,
 	//
-	labelChoose = __('Choose Icon…', 'publisher-blocks'),
-	labelIconLibrary = __('Icon Library', 'publisher-blocks'),
-	labelUploadSvg = __('Upload SVG', 'publisher-blocks'),
+	labelChoose,
+	labelIconLibrary,
+	labelUploadSvg,
 	//
 	value,
-	defaultValue = {
-		icon: '',
-		library: '',
-		uploadSVG: '',
-	},
+	defaultValue,
+	onChange,
 	//
 	className,
-	onValueChange = (newValue) => {
-		return newValue;
-	},
 }) {
 	const [currentIcon, currentIconDispatch] = useReducer(iconReducer, {
 		...defaultValue,
@@ -48,7 +43,7 @@ export default function IconControl({
 	});
 
 	useLateEffect(() => {
-		onValueChange(currentIcon);
+		if (isFunction(onChange)) onChange(currentIcon);
 	}, [currentIcon]);
 
 	const [isOpenModal, setOpenModal] = useState(false);
@@ -78,7 +73,7 @@ export default function IconControl({
 	}
 
 	function hasIcon() {
-		if (!currentIcon) {
+		if (isEmpty(currentIcon)) {
 			return false;
 		}
 
@@ -213,3 +208,59 @@ export default function IconControl({
 		</IconContextProvider>
 	);
 }
+
+IconControl.propTypes = {
+	/**
+	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
+	 */
+	defaultValue: PropTypes.shape({
+		icon: PropTypes.string,
+		library: PropTypes.string,
+		uploadSVG: PropTypes.oneOf([
+			PropTypes.string,
+			PropTypes.object,
+			PropTypes.element,
+		]),
+	}),
+	/**
+	 * The current icon.
+	 */
+	value: PropTypes.oneOfType([
+		PropTypes.string,
+		PropTypes.shape({
+			icon: PropTypes.string,
+			library: PropTypes.string,
+			uploadSVG: PropTypes.oneOf([
+				PropTypes.string,
+				PropTypes.object,
+				PropTypes.element,
+			]),
+		}),
+	]),
+	/**
+	 * Function that will be fired while the control value state changes.
+	 */
+	onChange: PropTypes.func,
+	/**
+	 * A term a function that returns a term for preparing suggestions
+	 */
+	suggestionsQuery: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+	/**
+	 * Choose label
+	 */
+	labelChoose: PropTypes.string,
+	/**
+	 * Open icon library label
+	 */
+	labelIconLibrary: PropTypes.string,
+	/**
+	 * upload svg label
+	 */
+	labelUploadSvg: PropTypes.string,
+};
+
+IconControl.defaultProps = {
+	labelChoose: __('Choose Icon…', 'publisher-blocks'),
+	labelIconLibrary: __('Icon Library', 'publisher-blocks'),
+	labelUploadSvg: __('Upload SVG', 'publisher-blocks'),
+};

@@ -49,7 +49,7 @@ export function IconExtension({ children, config, ...props }) {
 					suggestionsQuery={() => {
 						return 'button';
 					}}
-					onValueChange={(newValue) => {
+					onChange={(newValue) => {
 						setAttributes({
 							...attributes,
 							publisherIcon: newValue,
