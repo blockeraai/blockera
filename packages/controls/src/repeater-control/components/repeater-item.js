@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { memo, useContext, useState } from '@wordpress/element';
 
 /**
@@ -66,8 +66,17 @@ const RepeaterItem = ({ item, itemId }) => {
 									isOpenPopoverEvent(event) &&
 									setOpen(!isOpen)
 								}
+								aria-label={sprintf(
+									// translators: %d is the repeater item id. It's the aria label for repeater item
+									__('Item %d', 'publisher-core'),
+									itemId + 1
+								)}
 							>
-								{__('Item ', 'publisher') + itemId}
+								{sprintf(
+									// translators: %d is the repeater item id. It's the repeater item name
+									__('Item %d', 'publisher-core'),
+									itemId + 1
+								)}
 							</div>
 							<RepeaterItemActions
 								{...repeaterItemActionsProps}

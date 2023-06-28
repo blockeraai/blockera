@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { useContext } from '@wordpress/element';
 
 /**
@@ -82,6 +82,19 @@ export default function RepeaterItemActions({
 								? __('Disable', 'publisher')
 								: __('Enable', 'publisher')
 						}
+						aria-label={
+							isVisible
+								? sprintf(
+										// translators: %d is the repeater item id. It's aria label for disabling repeater item
+										__('Disable %d', 'publisher'),
+										itemId + 1
+								  )
+								: sprintf(
+										// translators: %d is the repeater item id. It's aria label for enabling repeater item
+										__('Enable %d', 'publisher'),
+										itemId + 1
+								  )
+						}
 					/>
 				)}
 
@@ -96,6 +109,11 @@ export default function RepeaterItemActions({
 							onClick={(event) =>
 								!isOpenPopoverEvent(event) && cloneItem(itemId)
 							}
+							aria-label={sprintf(
+								// translators: %d is the repeater item id. It's aria label for cloning repeater item
+								__('Clone %d', 'publisher'),
+								itemId + 1
+							)}
 						/>
 					)}
 
@@ -110,6 +128,11 @@ export default function RepeaterItemActions({
 								!isOpenPopoverEvent(event) && removeItem(itemId)
 							}
 							label={__('Delete', 'publisher')}
+							aria-label={sprintf(
+								// translators: %d is the repeater item id. It's aria label for deleting repeater item
+								__('Delete %d', 'publisher'),
+								itemId + 1
+							)}
 						/>
 					)}
 			</div>

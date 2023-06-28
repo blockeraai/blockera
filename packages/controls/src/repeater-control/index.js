@@ -2,6 +2,7 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Publisher dependencies
@@ -159,6 +160,7 @@ export default function RepeaterControl({
 								repeaterItems?.length >= maxItems
 									? { disabled: true }
 									: {})}
+								aria-label={__('Add New', 'publisher-core')}
 								onClick={() => {
 									if (
 										maxItems === -1 ||
