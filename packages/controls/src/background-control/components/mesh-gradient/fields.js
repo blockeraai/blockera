@@ -21,7 +21,7 @@ const Fields = ({ itemId, item }) => {
 		<BaseControl id={`repeater-item-${itemId}`}>
 			<ColorPicker
 				value={item.color}
-				onValueChange={(newValue) =>
+				onChange={(newValue) =>
 					changeItem(itemId, {
 						...item,
 						color: newValue,

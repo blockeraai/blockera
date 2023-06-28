@@ -34,9 +34,7 @@ export default function ColorPickerPopover({
 					<ColorPicker
 						enableAlpha={false}
 						value={element.color}
-						onValueChange={(color) => {
-							onChange(color);
-						}}
+						onChange={onChange}
 						{...props}
 					/>
 
