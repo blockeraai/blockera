@@ -180,7 +180,7 @@ const ControlWithHooks = (args) => {
 	);
 };
 
-export const PlayUnits = {
+export const Play = {
 	args: {
 		...CustomHeader.args,
 		value: [
