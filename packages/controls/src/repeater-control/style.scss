@@ -14,6 +14,7 @@
 		}
 	}
 	
+	
 	.publisher-control-group-header {
 		
 		.publisher-control-repeater-group-header {
@@ -77,18 +78,20 @@
 		.publisher-control-btn-toggle + .publisher-control-action-buttons {
 			right: 30px;
 		}
-		
-		&:hover .publisher-control-action-buttons {
-			opacity: 1;
-			visibility: visible;
-		}
-		
-		&:hover .publisher-control-header-values {
-			opacity: 0;
-			visibility: hidden;
-		}
 	}
 	
+	.publisher-control-group.is-hovered .publisher-control-action-buttons,
+	.publisher-control-group-header:hover .publisher-control-action-buttons {
+		opacity: 1;
+		visibility: visible;
+	}
+
+	.publisher-control-group.is-hovered .publisher-control-header-values,
+	.publisher-control-group-header:hover .publisher-control-header-values {
+		opacity: 0;
+		visibility: hidden;
+	}
+
 	.publisher-control-repeater-header-action-buttons {
 		margin-left: auto;
 		display: flex;

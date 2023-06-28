@@ -3,6 +3,7 @@
 	border: 1px solid var(--publisher-controls-border-color);
 	border-radius: 2px;
 	
+	&.is-hovered,
 	&:hover {
 		border-color: var(--publisher-controls-border-color-hover);
 	}
@@ -57,11 +58,16 @@
 			top: 50%;
 			transform: translate(-50%, -50%);
 			left: 7px;
+			transition: 0.1s all ease;
 		}
 		
 		&:hover::before {
 			opacity: 1;
 		}
+	}
+	
+	&.is-hovered .publisher-control-group-header.draggable:before{
+		opacity: 1;
 	}
 	
 	.content {
