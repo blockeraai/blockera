@@ -26,6 +26,7 @@ export default function ColorControl({
 	contentAlign,
 	//
 	className,
+	style,
 	...props
 }) {
 	const { value, setValue } = useValue({
@@ -60,6 +61,10 @@ export default function ColorControl({
 				isFocus={isOpen}
 				contentAlign={type === 'minimal' ? 'center' : contentAlign}
 				onClick={() => setOpen(!isOpen)}
+				style={{
+					...style,
+					'--publisher-controls-border-color-focus': value,
+				}}
 				{...props}
 			>
 				<ColorIndicator type="color" value={value} />
