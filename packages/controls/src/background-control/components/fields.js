@@ -518,7 +518,7 @@ const Fields = ({ itemId, item }) => {
 							defaultValue={{
 								color: '',
 							}}
-							onValueChange={(newValue) => {
+							onChange={(newValue) => {
 								// regenerate gradient if new item added or removed
 								if (
 									newValue.length !==
