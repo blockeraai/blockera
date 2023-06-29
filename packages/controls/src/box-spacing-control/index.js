@@ -185,7 +185,7 @@ const BoxSpacingControl = ({
 				<SidePopover
 					icon={<MarginTopIcon />}
 					onClose={() => setOpenPopover('')}
-					label={__('Margin Top', 'publisher-core')}
+					title={__('Margin Top', 'publisher-core')}
 					value={controlValue.margin.top}
 					isOpen={openPopover === 'margin-top'}
 					onValueChange={(newValue) => {
@@ -221,7 +221,7 @@ const BoxSpacingControl = ({
 					offset={255}
 					icon={<MarginRightIcon />}
 					onClose={() => setOpenPopover('')}
-					label={__('Margin Right', 'publisher-core')}
+					title={__('Margin Right', 'publisher-core')}
 					value={controlValue.margin.right}
 					isOpen={openPopover === 'margin-right'}
 					onValueChange={(newValue) => {
@@ -256,7 +256,7 @@ const BoxSpacingControl = ({
 				<SidePopover
 					icon={<MarginBottomIcon />}
 					onClose={() => setOpenPopover('')}
-					label={__('Margin Bottom', 'publisher-core')}
+					title={__('Margin Bottom', 'publisher-core')}
 					value={controlValue.margin.bottom}
 					isOpen={openPopover === 'margin-bottom'}
 					onValueChange={(newValue) => {
@@ -291,7 +291,7 @@ const BoxSpacingControl = ({
 				<SidePopover
 					icon={<MarginLeftIcon />}
 					onClose={() => setOpenPopover('')}
-					label={__('Margin Left', 'publisher-core')}
+					title={__('Margin Left', 'publisher-core')}
 					value={controlValue.margin.left}
 					isOpen={openPopover === 'margin-left'}
 					onValueChange={(newValue) => {
@@ -327,7 +327,7 @@ const BoxSpacingControl = ({
 					type="padding"
 					icon={<PaddingTopIcon />}
 					onClose={() => setOpenPopover('')}
-					label={__('Padding Top', 'publisher-core')}
+					title={__('Padding Top', 'publisher-core')}
 					value={controlValue.padding.top}
 					isOpen={openPopover === 'padding-top'}
 					onValueChange={(newValue) => {
@@ -364,7 +364,7 @@ const BoxSpacingControl = ({
 					type="padding"
 					icon={<PaddingRightIcon />}
 					onClose={() => setOpenPopover('')}
-					label={__('Padding Right', 'publisher-core')}
+					title={__('Padding Right', 'publisher-core')}
 					value={controlValue.padding.right}
 					isOpen={openPopover === 'padding-right'}
 					onValueChange={(newValue) => {
@@ -400,7 +400,7 @@ const BoxSpacingControl = ({
 					type="padding"
 					icon={<PaddingBottomIcon />}
 					onClose={() => setOpenPopover('')}
-					label={__('Padding Bottom', 'publisher-core')}
+					title={__('Padding Bottom', 'publisher-core')}
 					value={controlValue.padding.bottom}
 					isOpen={openPopover === 'padding-bottom'}
 					onValueChange={(newValue) => {
@@ -437,7 +437,7 @@ const BoxSpacingControl = ({
 					type="padding"
 					icon={<PaddingLeftIcon />}
 					onClose={() => setOpenPopover('')}
-					label={__('Padding Left', 'publisher-core')}
+					title={__('Padding Left', 'publisher-core')}
 					value={controlValue.padding.left}
 					isOpen={openPopover === 'padding-left'}
 					onValueChange={(newValue) => {

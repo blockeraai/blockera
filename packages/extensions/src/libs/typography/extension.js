@@ -104,7 +104,7 @@ export function TypographyExtension({ children, config, ...props }) {
 
 				{isVisible && (
 					<Popover
-						label={__('Typography', 'publisher-core')}
+						title={__('Typography', 'publisher-core')}
 						offset={125}
 						placement="left-start"
 						className={controlInnerClassNames('typography-popover')}

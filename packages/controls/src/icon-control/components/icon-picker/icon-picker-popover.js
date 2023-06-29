@@ -25,7 +25,7 @@ export default function IconPickerPopover({
 		<>
 			{isOpen && (
 				<Popover
-					label={__('Icon Picker', 'publisher-core')}
+					title={__('Icon Picker', 'publisher-core')}
 					offset={35}
 					placement="left-start"
 					className={controlInnerClassNames('icon-popover')}

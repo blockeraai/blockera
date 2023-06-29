@@ -25,7 +25,7 @@ export default function ColorPickerPopover({
 		<>
 			{isOpen && (
 				<Popover
-					label={__('Color Picker', 'publisher-core')}
+					title={__('Color Picker', 'publisher-core')}
 					offset={20}
 					placement={placement}
 					className="components-palette-edit-popover"

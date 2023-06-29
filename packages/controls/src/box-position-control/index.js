@@ -249,7 +249,7 @@ const BoxPositionControl = ({
 							<SidePopover
 								icon={<SideTopIcon />}
 								onClose={() => setOpenPopover('')}
-								label={__('Top Position', 'publisher-core')}
+								title={__('Top Position', 'publisher-core')}
 								value={controlValue.position.top}
 								isOpen={openPopover === 'top'}
 								onValueChange={(newValue) => {
@@ -287,7 +287,7 @@ const BoxPositionControl = ({
 								offset={255}
 								icon={<SideRightIcon />}
 								onClose={() => setOpenPopover('')}
-								label={__('Right Position', 'publisher-core')}
+								title={__('Right Position', 'publisher-core')}
 								value={controlValue.position.right}
 								isOpen={openPopover === 'right'}
 								onValueChange={(newValue) => {
@@ -324,7 +324,7 @@ const BoxPositionControl = ({
 							<SidePopover
 								icon={<SideBottomIcon />}
 								onClose={() => setOpenPopover('')}
-								label={__('Bottom Position', 'publisher-core')}
+								title={__('Bottom Position', 'publisher-core')}
 								value={controlValue.position.bottom}
 								isOpen={openPopover === 'bottom'}
 								onValueChange={(newValue) => {
@@ -359,7 +359,7 @@ const BoxPositionControl = ({
 							<SidePopover
 								icon={<SideLeftIcon />}
 								onClose={() => setOpenPopover('')}
-								label={__('Left Position', 'publisher-core')}
+								title={__('Left Position', 'publisher-core')}
 								value={controlValue.position.left}
 								isOpen={openPopover === 'left'}
 								onValueChange={(newValue) => {

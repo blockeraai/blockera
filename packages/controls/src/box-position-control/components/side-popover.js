@@ -12,7 +12,7 @@ import { Field, InputField } from '@publisher/fields';
 import { controlInnerClassNames } from '@publisher/classnames';
 
 export function SidePopover({
-	label = '',
+	title = '',
 	icon = '',
 	isOpen,
 	value,
@@ -28,9 +28,9 @@ export function SidePopover({
 		<>
 			{isOpen && (
 				<Popover
-					label={
+					title={
 						<>
-							{icon} <span>{label}</span>
+							{icon} <span>{title}</span>
 						</>
 					}
 					offset={offset}

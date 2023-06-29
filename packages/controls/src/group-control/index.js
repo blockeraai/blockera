@@ -149,7 +149,7 @@ export default function GroupControl({
 						'group-popover',
 						popoverClassName
 					)}
-					label={popoverLabel || header}
+					title={popoverLabel || header}
 					onClose={onClose}
 				>
 					{children}

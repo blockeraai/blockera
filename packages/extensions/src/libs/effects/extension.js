@@ -103,7 +103,7 @@ export function EffectsExtension({ children, config, ...props }) {
 					>
 						{isTransformSettingsVisible && (
 							<Popover
-								label={__(
+								title={__(
 									'Transform Settings',
 									'publisher-core'
 								)}

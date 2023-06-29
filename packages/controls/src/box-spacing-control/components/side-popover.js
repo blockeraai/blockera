@@ -123,7 +123,7 @@ export function SidePopover({
 		<>
 			{isOpen && (
 				<Popover
-					label={
+					title={
 						<>
 							{icon} <span>{label}</span>
 						</>

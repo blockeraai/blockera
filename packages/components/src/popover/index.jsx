@@ -23,7 +23,7 @@ import { isFunction } from '@publisher/utils';
 import { PopoverContextData } from '../../../../libs/storybook/decorators/with-popover-data/context';
 
 export default function Popover({
-	label = '',
+	title = '',
 	onClose = () => {},
 	children,
 	className,
@@ -39,7 +39,7 @@ export default function Popover({
 				<WPPopover
 					className={componentClassNames(
 						'popover',
-						label && 'with-header',
+						title && 'with-header',
 						className
 					)}
 					onClose={onClose}
@@ -49,13 +49,13 @@ export default function Popover({
 					placement={placement}
 					{...props}
 				>
-					{label && (
+					{title && (
 						<div
 							className={componentInnerClassNames(
 								'popover-header'
 							)}
 						>
-							{label}
+							{title}
 
 							<Button
 								className={componentInnerClassNames(
