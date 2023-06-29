@@ -1,11 +1,7 @@
 /**
  * Publisher dependencies
  */
-import {
-	InputControl,
-	CssInputControl,
-	RangeControl,
-} from '@publisher/controls';
+import { InputControl, RangeControl } from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -29,21 +25,11 @@ export function InputField({
 			className={className}
 		>
 			{'range' === settings?.type && (
-				<RangeControl
-					{...props}
-					{...settings}
-					blockName={name}
-					withInputField={true}
-				/>
+				<RangeControl {...props} {...settings} withInputField={true} />
 			)}
 
 			{'range' !== settings?.type && (
-				<InputControl
-					{...props}
-					{...settings}
-					type={settings.type}
-					blockName={name}
-				/>
+				<InputControl {...props} {...settings} type={settings.type} />
 			)}
 
 			{children}
