@@ -1,7 +1,8 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import PropTypes from 'prop-types';
 
 /**
  * Publisher dependencies
@@ -16,14 +17,8 @@ import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
 export default function OutlineControl({
-	defaultRepeaterItemValue = {
-		width: '2px',
-		style: 'solid',
-		color: '#b6b6b6',
-		offset: '2px',
-		isVisible: true,
-	},
-	popoverLabel = __('Outline', 'publisher-core'),
+	defaultRepeaterItemValue,
+	popoverLabel,
 	className,
 	...props
 }) {
@@ -39,3 +34,31 @@ export default function OutlineControl({
 		/>
 	);
 }
+
+OutlineControl.propTypes = {
+	/**
+	 * Default value of each repeater item
+	 */
+	defaultRepeaterItemValue: PropTypes.shape({
+		width: PropTypes.string,
+		style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
+		color: PropTypes.string,
+		offset: PropTypes.string,
+		isVisible: PropTypes.bool,
+	}),
+	/**
+	 * Label for popover
+	 */
+	popoverLabel: PropTypes.string,
+};
+
+OutlineControl.defaultProps = {
+	defaultRepeaterItemValue: {
+		width: '2px',
+		style: 'solid',
+		color: '#b6b6b6',
+		offset: '2px',
+		isVisible: true,
+	},
+	popoverLabel: __('Outline', 'publisher-core'),
+};
