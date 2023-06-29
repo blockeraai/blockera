@@ -44,11 +44,11 @@ RangeControl.propTypes = {
 	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
-	defaultValue: PropTypes.number,
+	defaultValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	/**
 	 * The current value.
 	 */
-	value: PropTypes.number,
+	value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	/**
 	 * Function that will be fired while the control value state changes.
 	 */
