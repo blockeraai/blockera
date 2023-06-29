@@ -95,7 +95,7 @@ ColorIndicator.propTypes = {
 };
 
 ColorIndicator.defaultProps = {
-	type: '',
+	type: 'color',
 	value: '',
 	size: 18,
 };
