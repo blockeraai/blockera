@@ -68,7 +68,7 @@ export default function Popover({
 									setIsVisible(false);
 									onClose();
 								}}
-								tabindex="-1"
+								tabIndex="-1"
 							>
 								<CloseIcon />
 							</Button>
