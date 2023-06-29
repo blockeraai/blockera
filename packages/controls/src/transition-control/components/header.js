@@ -1,7 +1,8 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { memo } from '@wordpress/element';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Publisher dependencies
@@ -16,6 +17,7 @@ import { default as TransitionIcon } from '../icons/transition';
 
 const RepeaterItemHeader = ({
 	item: { type, duration },
+	itemId,
 	isOpen,
 	setOpen,
 	children,
@@ -25,6 +27,11 @@ const RepeaterItemHeader = ({
 		<div
 			className={controlInnerClassNames('repeater-group-header')}
 			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
+			aria-label={sprintf(
+				// translators: it's the aria label for repeater item
+				__('Item %d', 'publisher-core'),
+				itemId + 1
+			)}
 		>
 			<span className={controlInnerClassNames('header-icon')}>
 				<TransitionIcon />
