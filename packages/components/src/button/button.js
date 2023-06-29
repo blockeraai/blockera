@@ -75,7 +75,7 @@ Button.propTypes = {
 	/**
 	 * 🔗 WP Button → If provided, renders an Icon component inside the button.
 	 */
-	icon: PropTypes.element,
+	icon: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
 	/**
 	 * 🔗 WP Button → If provided with `icon`, sets the position of icon relative to the `text`.
 	 *
@@ -104,7 +104,7 @@ Button.propTypes = {
 	 * 🔗 WP Button → Sets the `aria-label` of the component, if none is provided.
 	 * Sets the Tooltip content if `showTooltip` is provided.
 	 */
-	label: PropTypes.bool,
+	label: PropTypes.string,
 	/**
 	 * 🔗 WP Button → If provided with `showTooltip`, appends the Shortcut label to the tooltip content.
 	 * If an object is provided, it should contain `display` and `ariaLabel` keys.
@@ -119,7 +119,7 @@ Button.propTypes = {
 	/**
 	 * 🔗 WP Button → If provided, renders a Tooltip component for the button.
 	 */
-	showTooltip: PropTypes.string,
+	showTooltip: PropTypes.bool,
 	/**
 	 * 🔗 WP Button → If provided, displays the given text inside the button. If the button contains children elements, the text is displayed before them.
 	 */

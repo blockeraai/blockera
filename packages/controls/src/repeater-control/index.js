@@ -190,7 +190,7 @@ RepeaterControl.propTypes = {
 	/**
 	 * The current value of control
 	 */
-	value: PropTypes.string,
+	value: PropTypes.array,
 	/**
 	 * Function that will be fired while the control value state changes.
 	 */
@@ -279,6 +279,8 @@ RepeaterControl.propTypes = {
 	repeaterItemHeader: PropTypes.oneOfType([
 		PropTypes.string,
 		PropTypes.element,
+		PropTypes.func,
+		PropTypes.object,
 	]),
 	/**
 	 * Children components for each repeater item
@@ -286,6 +288,8 @@ RepeaterControl.propTypes = {
 	repeaterItemChildren: PropTypes.oneOfType([
 		PropTypes.string,
 		PropTypes.element,
+		PropTypes.func,
+		PropTypes.object,
 	]),
 };
 
