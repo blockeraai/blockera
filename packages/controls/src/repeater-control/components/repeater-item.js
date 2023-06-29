@@ -2,7 +2,13 @@
  * External dependencies
  */
 import { __, sprintf } from '@wordpress/i18n';
-import { memo, useContext, useState } from '@wordpress/element';
+import {
+	memo,
+	useContext,
+	useEffect,
+	useRef,
+	useState,
+} from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -27,7 +33,7 @@ const RepeaterItem = ({ item, itemId }) => {
 		repeaterItemHeader: RepeaterItemHeader,
 		sortItems,
 		repeaterItems: items,
-		isPopover,
+		mode,
 		popoverLabel,
 		popoverClassName,
 	} = useContext(RepeaterContext);
@@ -42,14 +48,67 @@ const RepeaterItem = ({ item, itemId }) => {
 		isOpenPopoverEvent,
 	};
 
+	const styleRef = useRef(null);
+	const [draggingIndex, setDraggingIndex] = useState(null);
+
+	useEffect(() => {
+		styleRef.current = {
+			opacity: draggingIndex && draggingIndex !== itemId ? 0.5 : 1,
+		};
+	}, [draggingIndex, itemId]);
+
+	const handleDragStart = (e, index) => {
+		e.dataTransfer.setData('text/plain', index);
+		setDraggingIndex(index);
+	};
+
+	const handleDragOver = (e) => {
+		e.preventDefault();
+	};
+
+	const handleDragLeave = (e) => {
+		e.preventDefault();
+	};
+
+	const handleDragEnter = (e) => {
+		e.preventDefault();
+	};
+
+	const handleDrop = (e, index) => {
+		e.preventDefault();
+
+		setDraggingIndex(index);
+
+		if (!sortItems) {
+			return;
+		}
+
+		const toIndex = index;
+		const fromIndex = parseInt(e.dataTransfer.getData('text/plain'), 10);
+
+		sortItems({ args: items, fromIndex, toIndex });
+	};
+
 	return (
-		<div className={controlInnerClassNames('repeater-item')}>
+		<div
+			className={controlInnerClassNames(
+				'repeater-item',
+				'draggable',
+				isVisible ? ' is-active' : ' is-inactive'
+			)}
+			draggable={true}
+			onDragOver={handleDragOver}
+			onDragEnter={handleDragEnter}
+			onDragLeave={handleDragLeave}
+			onDrop={(e) => handleDrop(e, itemId)}
+			onDragStart={(e) => handleDragStart(e, itemId)}
+			style={styleRef.current}
+		>
 			<GroupControl
-				isDraggable={true}
+				mode={mode}
+				toggleOpenBorder={true}
 				design={design}
-				groupId={itemId}
-				dropArgs={items}
-				dropCallback={sortItems}
+				popoverLabel={popoverLabel}
 				popoverClassName={popoverClassName}
 				className={controlInnerClassNames(
 					'repeater-item-group',
@@ -57,47 +116,37 @@ const RepeaterItem = ({ item, itemId }) => {
 				)}
 				header={
 					!RepeaterItemHeader ? (
-						<>
-							<div
-								className={controlInnerClassNames(
-									'repeater-group-header'
-								)}
-								onClick={(event) =>
-									isOpenPopoverEvent(event) &&
-									setOpen(!isOpen)
-								}
-								aria-label={sprintf(
-									// translators: %d is the repeater item id. It's the aria label for repeater item
-									__('Item %d', 'publisher-core'),
-									itemId + 1
-								)}
-							>
-								{sprintf(
-									// translators: %d is the repeater item id. It's the repeater item name
-									__('Item %d', 'publisher-core'),
-									itemId + 1
-								)}
-							</div>
-							<RepeaterItemActions
-								{...repeaterItemActionsProps}
-							/>
-						</>
+						<div
+							className={controlInnerClassNames(
+								'repeater-group-header'
+							)}
+							onClick={(event) =>
+								isOpenPopoverEvent(event) && setOpen(!isOpen)
+							}
+							aria-label={sprintf(
+								// translators: %d is the repeater item id. It's the aria label for repeater item
+								__('Item %d', 'publisher-core'),
+								itemId + 1
+							)}
+						>
+							{sprintf(
+								// translators: %d is the repeater item id. It's the repeater item name
+								__('Item %d', 'publisher-core'),
+								itemId + 1
+							)}
+						</div>
 					) : (
-						<>
-							<RepeaterItemHeader
-								{...repeaterItemActionsProps}
-							></RepeaterItemHeader>
-							<RepeaterItemActions
-								{...repeaterItemActionsProps}
-							/>
-						</>
+						<RepeaterItemHeader
+							{...repeaterItemActionsProps}
+						></RepeaterItemHeader>
 					)
+				}
+				headerOpenButton={false}
+				injectHeaderButtonsStart={
+					<RepeaterItemActions {...repeaterItemActionsProps} />
 				}
 				children={<RepeaterItemChildren {...{ item, itemId }} />}
 				isOpen={isOpen}
-				isVisible={isVisible}
-				isPopover={isPopover}
-				popoverLabel={popoverLabel}
 				onClose={() => {
 					setOpen(false);
 				}}

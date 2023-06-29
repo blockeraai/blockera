@@ -40,9 +40,9 @@ export default {
 	tags: ['autodocs'],
 };
 
-export const EmptyRepeater = {
+export const EmptyPopover = {
 	args: {
-		label: 'Repeater',
+		label: 'Items',
 		repeaterItemChildren: () => <p>hi</p>,
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
@@ -100,9 +100,9 @@ function CustomRepeaterItemHeader({
 	);
 }
 
-export const Custom = {
+export const FilledPopover = {
 	args: {
-		label: 'Repeater',
+		label: 'Items',
 		defaultRepeaterItemValue: {
 			name: '',
 			isVisible: true,
@@ -136,9 +136,9 @@ export const Custom = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
-export const CustomHeader = {
+export const CustomHeaderPopover = {
 	args: {
-		...Custom.args,
+		...FilledPopover.args,
 		...{
 			repeaterItemHeader: CustomRepeaterItemHeader,
 		},
@@ -148,7 +148,7 @@ export const CustomHeader = {
 
 export const MaxItems = {
 	args: {
-		...Custom.args,
+		...FilledPopover.args,
 		...{
 			repeaterItemHeader: CustomRepeaterItemHeader,
 			maxItems: 5,
@@ -159,7 +159,7 @@ export const MaxItems = {
 
 export const MinItems = {
 	args: {
-		...Custom.args,
+		...FilledPopover.args,
 		...{
 			repeaterItemHeader: CustomRepeaterItemHeader,
 			minItems: 5,
@@ -180,9 +180,20 @@ const ControlWithHooks = (args) => {
 	);
 };
 
+export const FilledAccordion = {
+	args: {
+		...FilledPopover.args,
+		...{
+			repeaterItemHeader: CustomRepeaterItemHeader,
+			mode: 'accordion',
+		},
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+};
+
 export const Play = {
 	args: {
-		...CustomHeader.args,
+		...CustomHeaderPopover.args,
 		value: [
 			{
 				name: 'Akbar',
@@ -286,28 +297,45 @@ export const Screenshot = {
 	render: () => (
 		<Flex direction="column" gap="50px">
 			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">Empty Repeater</h2>
-				<RepeaterControl {...EmptyRepeater.args} />
+				<h2 className="story-heading">
+					Popover Repeater<span>Empty</span>
+				</h2>
+				<RepeaterControl {...EmptyPopover.args} />
 			</Flex>
 
 			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">Custom Repeater</h2>
-				<RepeaterControl {...Custom.args} />
+				<h2 className="story-heading">
+					Popover Repeater<span>Filled</span>
+				</h2>
+				<RepeaterControl {...FilledPopover.args} />
 			</Flex>
 
 			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">Customized Header Repeater</h2>
-				<RepeaterControl {...CustomHeader.args} />
+				<h2 className="story-heading">
+					Popover Repeater<span>Custom Header</span>
+				</h2>
+				<RepeaterControl {...CustomHeaderPopover.args} />
 			</Flex>
 
 			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">Max Items → 5</h2>
+				<h2 className="story-heading">
+					Popover Repeater<span>Max 5 Items</span>
+				</h2>
 				<RepeaterControl {...MaxItems.args} />
 			</Flex>
 
 			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">Min Items → 5</h2>
+				<h2 className="story-heading">
+					Popover Repeater<span>Min 5 Items</span>
+				</h2>
 				<RepeaterControl {...MinItems.args} />
+			</Flex>
+
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">
+					Accordion Repeater<span>Filled</span>
+				</h2>
+				<RepeaterControl {...FilledAccordion.args} />
 			</Flex>
 		</Flex>
 	),

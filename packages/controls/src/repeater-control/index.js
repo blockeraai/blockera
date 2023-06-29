@@ -24,7 +24,7 @@ import PlusIcon from './icons/plus';
 
 export default function RepeaterControl({
 	design,
-	isPopover,
+	mode,
 	popoverLabel,
 	popoverClassName,
 	maxItems,
@@ -58,7 +58,7 @@ export default function RepeaterControl({
 
 	const defaultRepeaterState = {
 		design,
-		isPopover,
+		mode,
 		popoverLabel: popoverLabel || label,
 		popoverClassName,
 		maxItems,
@@ -212,9 +212,9 @@ RepeaterControl.propTypes = {
 	 *
 	 * @default true
 	 */
-	isPopover: PropTypes.bool,
+	mode: PropTypes.oneOf(['popover', 'accordion']),
 	/**
-	 * Specifies the popover title if `isPopover` was true. by default the repeater label will be shown as popover title.
+	 * Specifies the popover title if `mode` was `popover`. by default the repeater label will be shown as popover title.
 	 */
 	popoverLabel: PropTypes.string,
 	/**
@@ -293,7 +293,7 @@ RepeaterControl.defaultProps = {
 	defaultValue: [],
 	defaultRepeaterItemValue: { isVisible: true },
 	design: 'minimal',
-	isPopover: true,
+	mode: 'popover',
 	maxItems: -1,
 	minItems: 0,
 	actionButtonAdd: true,
