@@ -270,6 +270,7 @@ export const Play = {
 			await expect(
 				canvas.getByRole('textbox', { type: 'text' })
 			).toHaveValue('New Akbar');
+
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
@@ -281,12 +282,96 @@ export const Play = {
 
 		await step('Delete New Item', async () => {
 			await expect(canvas.getByLabelText('Delete 6')).toBeInTheDocument();
-			fireEvent.mouseOver(
-				canvas
-					.getByLabelText('Item 6')
-					.closest('.publisher-control-group-header')
-			);
+
 			await userEvent.click(canvas.getByLabelText('Delete 6'));
+
+			await waitFor(
+				async () =>
+					await expect(currentValue).toHaveTextContent(
+						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbat", "isVisible": true } ]'
+					),
+				{ timeout: 1000 }
+			);
+		});
+
+		await step('Disable Last Item', async () => {
+			await expect(
+				canvas.getByLabelText('Disable 5')
+			).toBeInTheDocument();
+
+			await userEvent.click(canvas.getByLabelText('Disable 5'));
+
+			await waitFor(
+				async () =>
+					await expect(currentValue).toHaveTextContent(
+						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbat", "isVisible": false } ]'
+					),
+				{ timeout: 1000 }
+			);
+
+			await userEvent.click(canvas.getByLabelText('Enable 5'));
+
+			await waitFor(
+				async () =>
+					await expect(currentValue).toHaveTextContent(
+						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbat", "isVisible": true } ]'
+					),
+				{ timeout: 1000 }
+			);
+		});
+
+		await step('Clone Last Item', async () => {
+			await expect(canvas.getByLabelText('Clone 5')).toBeInTheDocument();
+
+			await userEvent.click(canvas.getByLabelText('Clone 5'));
+
+			await waitFor(
+				async () =>
+					await expect(currentValue).toHaveTextContent(
+						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbat", "isVisible": true }, { "name": "Doste Akbat", "isVisible": true } ]'
+					),
+				{ timeout: 1000 }
+			);
+		});
+
+		await step(
+			'Try to add new item but max items count is exceeded',
+			async () => {
+				// add new item
+				await userEvent.click(button);
+				await waitFor(
+					async () =>
+						await expect(currentValue).toHaveTextContent(
+							'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbat", "isVisible": true }, { "name": "Doste Akbat", "isVisible": true } ]'
+						),
+					{ timeout: 1000 }
+				);
+			}
+		);
+
+		await step('Remove 3 Items', async () => {
+			await expect(canvas.getByLabelText('Delete 6')).toBeInTheDocument();
+			await userEvent.click(canvas.getByLabelText('Delete 6'));
+
+			await expect(canvas.getByLabelText('Delete 5')).toBeInTheDocument();
+			await userEvent.click(canvas.getByLabelText('Delete 5'));
+
+			await expect(canvas.getByLabelText('Delete 4')).toBeInTheDocument();
+			await userEvent.click(canvas.getByLabelText('Delete 4'));
+
+			await waitFor(
+				async () =>
+					await expect(currentValue).toHaveTextContent(
+						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true } ]'
+					),
+				{ timeout: 1000 }
+			);
+		});
+
+		await step('Try delete 1 more item', async () => {
+			await expect(
+				canvas.queryByLabelText('Delete 3')
+			).not.toBeInTheDocument();
 		});
 	},
 };
