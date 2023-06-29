@@ -62,6 +62,7 @@
 	.publisher-control-color {
 		border-radius: 0 !important;
 		z-index: 1;
+		background: none !important;
 		
 		&.is-focus {
 			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
