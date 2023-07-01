@@ -59,7 +59,7 @@ const Fields = ({ itemId, item }) => {
 					}
 				}
 		} else {
-			return false;
+			return true;
 		}
 
 		return true;
@@ -67,7 +67,7 @@ const Fields = ({ itemId, item }) => {
 
 	return (
 		<BaseControl id={`repeater-item-${itemId}`}>
-			{keyFieldOptions.length && (
+			{keyFieldOptions.length > 0 && (
 				<>
 					<SelectField
 						label={__('Attribute', 'publisher-core')}
@@ -119,7 +119,6 @@ const Fields = ({ itemId, item }) => {
 							}
 						}}
 					/>
-
 					{!customMode && (
 						<>
 							{valueFieldOptions.length ? (
@@ -188,7 +187,6 @@ const Fields = ({ itemId, item }) => {
 							});
 						}}
 					/>
-
 					<InputField
 						label={__('Value', 'publisher-core')}
 						settings={{
