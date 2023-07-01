@@ -305,7 +305,7 @@ export function getAttributeFieldValueOptions({
 			}
 			break;
 
-		case 'ol' && attribute === 'type':
+		case 'ol':
 			switch (attribute) {
 				case 'type':
 					return [
