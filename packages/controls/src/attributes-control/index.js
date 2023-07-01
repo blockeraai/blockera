@@ -1,7 +1,8 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import PropTypes from 'prop-types';
 
 /**
  * Publisher dependencies
@@ -16,28 +17,66 @@ import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
 export default function AttributesControl({
-	defaultRepeaterItemValue = {
-		key: '',
-		value: '',
-		isVisible: true,
-	},
-	popoverLabel = __('HTML Attribute', 'publisher-core'),
-	attributeElement = 'general',
+	defaultRepeaterItemValue,
+	popoverLabel,
+	attributeElement,
 	//
 	className,
 	...props
 }) {
 	return (
-		<div className={controlClassNames('attributes', className)}>
-			<RepeaterControl
-				popoverLabel={popoverLabel}
-				repeaterItemHeader={RepeaterItemHeader}
-				repeaterItemChildren={Fields}
-				defaultRepeaterItemValue={defaultRepeaterItemValue}
-				// custom prop for this control
-				attributeElement={attributeElement}
-				{...props}
-			/>
-		</div>
+		<RepeaterControl
+			popoverLabel={popoverLabel}
+			repeaterItemHeader={RepeaterItemHeader}
+			repeaterItemChildren={Fields}
+			defaultRepeaterItemValue={defaultRepeaterItemValue}
+			// custom prop for this control
+			attributeElement={attributeElement}
+			className={controlClassNames('attributes', className)}
+			{...props}
+		/>
 	);
 }
+
+AttributesControl.propTypes = {
+	/**
+	 * Specifies the attributes for a specific tag. It adds better UX for field.
+	 */
+	attributeElement: PropTypes.oneOf(['a', 'button', 'ol', 'general'])
+		.isRequired,
+	/**
+	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
+	 */
+	defaultValue: PropTypes.array,
+	/**
+	 * The current value.
+	 */
+	value: PropTypes.array,
+	/**
+	 * Function that will be fired while the control value state changes.
+	 */
+	onChange: PropTypes.func,
+	/**
+	 * Default value of each repeater item
+	 */
+	defaultRepeaterItemValue: PropTypes.shape({
+		key: PropTypes.string,
+		value: PropTypes.string,
+		isVisible: PropTypes.bool,
+	}),
+	/**
+	 * Label for popover
+	 */
+	popoverLabel: PropTypes.string,
+};
+
+AttributesControl.defaultProps = {
+	attributeElement: 'general',
+	value: [],
+	defaultRepeaterItemValue: {
+		key: '',
+		value: '',
+		isVisible: true,
+	},
+	popoverLabel: __('HTML Attribute', 'publisher-core'),
+};
