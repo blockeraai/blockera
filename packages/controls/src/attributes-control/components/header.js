@@ -1,7 +1,7 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { memo, useContext } from '@wordpress/element';
 
 /**
@@ -17,6 +17,7 @@ import { getAttributeItemIcon } from '../utils';
 
 const RepeaterItemHeader = ({
 	item: { key, value },
+	itemId,
 	isOpen,
 	setOpen,
 	children,
@@ -28,6 +29,11 @@ const RepeaterItemHeader = ({
 		<div
 			className={controlInnerClassNames('repeater-group-header')}
 			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
+			aria-label={sprintf(
+				// translators: it's the aria label for repeater item
+				__('Item %d', 'publisher-core'),
+				itemId + 1
+			)}
 		>
 			<span className={controlInnerClassNames('header-icon')}>
 				{getAttributeItemIcon({
