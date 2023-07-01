@@ -320,15 +320,15 @@ export const Play = {
 			);
 		});
 
-		await step('Clone Last Item', async () => {
-			await expect(canvas.getByLabelText('Clone 5')).toBeInTheDocument();
+		await step('Clone Item', async () => {
+			await expect(canvas.getByLabelText('Clone 4')).toBeInTheDocument();
 
-			await userEvent.click(canvas.getByLabelText('Clone 5'));
+			await userEvent.click(canvas.getByLabelText('Clone 4'));
 
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbat", "isVisible": true }, { "name": "Doste Akbat", "isVisible": true } ]'
+						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbat", "isVisible": true } ]'
 					),
 				{ timeout: 1000 }
 			);
@@ -342,7 +342,7 @@ export const Play = {
 				await waitFor(
 					async () =>
 						await expect(currentValue).toHaveTextContent(
-							'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbat", "isVisible": true }, { "name": "Doste Akbat", "isVisible": true } ]'
+							'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbat", "isVisible": true } ]'
 						),
 					{ timeout: 1000 }
 				);

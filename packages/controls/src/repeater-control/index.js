@@ -76,17 +76,20 @@ export default function RepeaterControl({
 		//
 		customProps: { ...props },
 		//
-		cloneItem: () => {
+		cloneItem: (itemId) => {
 			if (maxItems !== -1 && repeaterItems?.length >= maxItems) {
 				return;
 			}
 
-			const _repeaterItems = [
-				...repeaterItems,
-				...repeaterItems.slice(-1),
-			];
+			if (itemId >= repeaterItems.length) {
+				return;
+			}
 
-			setRepeaterItems(_repeaterItems);
+			setRepeaterItems([
+				...repeaterItems.slice(0, itemId + 1),
+				repeaterItems[itemId],
+				...repeaterItems.slice(itemId + 1),
+			]);
 		},
 		addNewItem: () => {
 			if (maxItems !== -1 && repeaterItems?.length >= maxItems) {
