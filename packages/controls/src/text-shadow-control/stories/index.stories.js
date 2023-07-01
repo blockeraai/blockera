@@ -43,23 +43,55 @@ export const Fill = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => {
 		return (
-			<Flex direction="column" gap="50px">
-				<Flex direction="column" gap="15px">
-					<h2 className="story-heading">Filled</h2>
-					<TextShadowControl
-						{...args}
-						label="Text Shadows"
-						value={[
-							{
-								x: '2px',
-								y: '2px',
-								blur: '2px',
-								color: '#0947eb',
-								isVisible: true,
-							},
-						]}
-					/>
-				</Flex>
+			<Flex direction="column" gap="30px">
+				<h2 className="story-heading">Filled</h2>
+				<TextShadowControl
+					{...args}
+					label="Text Shadows"
+					value={[
+						{
+							x: '2px',
+							y: '2px',
+							blur: '2px',
+							color: '#0947eb',
+							isVisible: true,
+						},
+					]}
+				/>
+			</Flex>
+		);
+	},
+};
+
+export const Open = {
+	args: {
+		label: 'Text Shadows',
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<Flex
+				direction="column"
+				gap="30px"
+				style={{ marginBottom: '300px' }}
+			>
+				<h2 className="story-heading">
+					Filled<span>Open Item</span>
+				</h2>
+				<TextShadowControl
+					{...args}
+					label="Text Shadows"
+					value={[
+						{
+							x: '2px',
+							y: '2px',
+							blur: '2px',
+							color: '#0947eb',
+							isVisible: true,
+							isOpen: true,
+						},
+					]}
+				/>
 			</Flex>
 		);
 	},
@@ -142,6 +174,8 @@ export const Screenshot = {
 			</Flex>
 
 			<Fill.render />
+
+			<Open.render />
 		</Flex>
 	),
 };

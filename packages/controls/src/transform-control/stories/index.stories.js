@@ -82,6 +82,106 @@ export const Fill = {
 	},
 };
 
+export const Open = {
+	args: {
+		label: 'Transforms',
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<Flex direction="column" gap="50px">
+				<Flex
+					direction="column"
+					gap="15px"
+					style={{ marginBottom: '250px' }}
+				>
+					<h2 className="story-heading">
+						Open<span>Move</span>
+					</h2>
+					<TransformControl
+						{...args}
+						value={[
+							{
+								type: 'move',
+								'move-x': '10px',
+								'move-y': '10px',
+								'move-z': '10px',
+								isVisible: true,
+								isOpen: true,
+							},
+						]}
+					/>
+				</Flex>
+
+				<Flex
+					direction="column"
+					gap="15px"
+					style={{ marginBottom: '150px' }}
+				>
+					<h2 className="story-heading">
+						Open<span>Scale</span>
+					</h2>
+					<TransformControl
+						{...args}
+						value={[
+							{
+								type: 'scale',
+								scale: '20%',
+								isVisible: true,
+								isOpen: true,
+							},
+						]}
+					/>
+				</Flex>
+
+				<Flex
+					direction="column"
+					gap="15px"
+					style={{ marginBottom: '150px' }}
+				>
+					<h2 className="story-heading">
+						Open<span>Rotate</span>
+					</h2>
+					<TransformControl
+						{...args}
+						value={[
+							{
+								type: 'rotate',
+								'rotate-x': '30deg',
+								'rotate-y': '30deg',
+								'rotate-z': '30deg',
+								isOpen: true,
+							},
+						]}
+					/>
+				</Flex>
+
+				<Flex
+					direction="column"
+					gap="15px"
+					style={{ marginBottom: '250px' }}
+				>
+					<h2 className="story-heading">
+						Open<span>Skew</span>
+					</h2>
+					<TransformControl
+						{...args}
+						value={[
+							{
+								type: 'skew',
+								'skew-x': '40deg',
+								'skew-y': '40deg',
+								isVisible: true,
+								isOpen: true,
+							},
+						]}
+					/>
+				</Flex>
+			</Flex>
+		);
+	},
+};
+
 const ControlWithHooks = (args) => {
 	const { storyValue, setStoryValue } = useContext(StoryDataContext);
 
@@ -159,6 +259,8 @@ export const Screenshot = {
 			</Flex>
 
 			<Fill.render />
+
+			<Open.render />
 		</Flex>
 	),
 };

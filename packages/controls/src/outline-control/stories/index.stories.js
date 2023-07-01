@@ -120,6 +120,27 @@ export const Fill = {
 						]}
 					/>
 				</Flex>
+
+				<Flex
+					direction="column"
+					gap="15px"
+					style={{ marginTop: '50px', marginBottom: '200px' }}
+				>
+					<h2 className="story-heading">Open</h2>
+					<OutlineControl
+						{...args}
+						value={[
+							{
+								width: '4px',
+								style: 'double',
+								color: '#ab3a00',
+								offset: '4px',
+								isVisible: true,
+								isOpen: true,
+							},
+						]}
+					/>
+				</Flex>
 			</Flex>
 		);
 	},

@@ -100,8 +100,221 @@ export const Fill = {
 							},
 							{
 								type: 'sepia',
-								sepia: '100%',
+								sepia: '90%',
 								isVisible: true,
+							},
+						]}
+					/>
+				</Flex>
+			</Flex>
+		);
+	},
+};
+
+export const Open = {
+	args: {
+		label: 'Filters',
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<Flex direction="column" gap="50px">
+				<Flex
+					direction="column"
+					gap="15px"
+					style={{ marginBottom: '180px' }}
+				>
+					<h2 className="story-heading">
+						Open<span>Blur</span>
+					</h2>
+					<FilterControl
+						{...args}
+						label="Filters"
+						value={[
+							{
+								type: 'blur',
+								blur: '10px',
+								isVisible: true,
+								isOpen: true,
+							},
+						]}
+					/>
+				</Flex>
+
+				<Flex
+					direction="column"
+					gap="15px"
+					style={{ marginBottom: '300px' }}
+				>
+					<h2 className="story-heading">
+						Open<span>Drop Shadow</span>
+					</h2>
+					<FilterControl
+						{...args}
+						label="Filters"
+						value={[
+							{
+								type: 'drop-shadow',
+								'drop-shadow-x': '20px',
+								'drop-shadow-y': '20px',
+								'drop-shadow-blur': '20px',
+								'drop-shadow-color': '#0947eb',
+								isVisible: true,
+								isOpen: true,
+							},
+						]}
+					/>
+				</Flex>
+
+				<Flex
+					direction="column"
+					gap="15px"
+					style={{ marginBottom: '180px' }}
+				>
+					<h2 className="story-heading">
+						Open<span>Brightness</span>
+					</h2>
+					<FilterControl
+						{...args}
+						label="Filters"
+						value={[
+							{
+								type: 'brightness',
+								brightness: '30%',
+								isVisible: true,
+								isOpen: true,
+							},
+						]}
+					/>
+				</Flex>
+
+				<Flex
+					direction="column"
+					gap="15px"
+					style={{ marginBottom: '180px' }}
+				>
+					<h2 className="story-heading">
+						Open<span>Contrast</span>
+					</h2>
+					<FilterControl
+						{...args}
+						label="Filters"
+						value={[
+							{
+								type: 'contrast',
+								contrast: '40%',
+								isVisible: true,
+								isOpen: true,
+							},
+						]}
+					/>
+				</Flex>
+
+				<Flex
+					direction="column"
+					gap="15px"
+					style={{ marginBottom: '180px' }}
+				>
+					<h2 className="story-heading">
+						Open<span>Hue Rotate</span>
+					</h2>
+					<FilterControl
+						{...args}
+						label="Filters"
+						value={[
+							{
+								type: 'hue-rotate',
+								'hue-rotate': '50deg',
+								isVisible: true,
+								isOpen: true,
+							},
+						]}
+					/>
+				</Flex>
+
+				<Flex
+					direction="column"
+					gap="15px"
+					style={{ marginBottom: '180px' }}
+				>
+					<h2 className="story-heading">
+						Open<span>Saturate</span>
+					</h2>
+					<FilterControl
+						{...args}
+						label="Filters"
+						value={[
+							{
+								type: 'saturate',
+								saturate: '60%',
+								isVisible: true,
+								isOpen: true,
+							},
+						]}
+					/>
+				</Flex>
+
+				<Flex
+					direction="column"
+					gap="15px"
+					style={{ marginBottom: '180px' }}
+				>
+					<h2 className="story-heading">
+						Open<span>Grayscale</span>
+					</h2>
+					<FilterControl
+						{...args}
+						label="Filters"
+						value={[
+							{
+								type: 'grayscale',
+								grayscale: '70%',
+								isVisible: true,
+								isOpen: true,
+							},
+						]}
+					/>
+				</Flex>
+
+				<Flex
+					direction="column"
+					gap="15px"
+					style={{ marginBottom: '180px' }}
+				>
+					<h2 className="story-heading">
+						Open<span>Invert</span>
+					</h2>
+					<FilterControl
+						{...args}
+						label="Filters"
+						value={[
+							{
+								type: 'invert',
+								invert: '80%',
+								isVisible: true,
+								isOpen: true,
+							},
+						]}
+					/>
+				</Flex>
+
+				<Flex
+					direction="column"
+					gap="15px"
+					style={{ marginBottom: '180px' }}
+				>
+					<h2 className="story-heading">
+						Open<span>Sepia</span>
+					</h2>
+					<FilterControl
+						{...args}
+						label="Filters"
+						value={[
+							{
+								type: 'sepia',
+								sepia: '90%',
+								isVisible: true,
+								isOpen: true,
 							},
 						]}
 					/>
@@ -204,6 +417,8 @@ export const Screenshot = {
 			</Flex>
 
 			<Fill.render />
+
+			<Open.render />
 		</Flex>
 	),
 };

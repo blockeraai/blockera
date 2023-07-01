@@ -126,6 +126,41 @@ export const Fill = {
 	},
 };
 
+export const Open = {
+	args: {
+		label: 'Box Shadows',
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<Flex
+				direction="column"
+				gap="15px"
+				style={{ marginBottom: '400px' }}
+			>
+				<h2 className="story-heading">
+					Filled<span>Open Item</span>
+				</h2>
+				<BoxShadowControl
+					{...args}
+					value={[
+						{
+							type: 'outer',
+							x: '2px',
+							y: '2px',
+							blur: '2px',
+							spread: '2px',
+							color: '#0947eb',
+							isVisible: true,
+							isOpen: true,
+						},
+					]}
+				/>
+			</Flex>
+		);
+	},
+};
+
 const ControlWithHooks = (args) => {
 	const { storyValue, setStoryValue } = useContext(StoryDataContext);
 
@@ -203,6 +238,8 @@ export const Screenshot = {
 			</Flex>
 
 			<Fill.render />
+
+			<Open.render />
 		</Flex>
 	),
 };

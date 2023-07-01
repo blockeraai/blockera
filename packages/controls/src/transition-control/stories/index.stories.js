@@ -48,30 +48,67 @@ export const Fill = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => {
 		return (
-			<Flex direction="column" gap="50px">
-				<Flex direction="column" gap="15px">
-					<h2 className="story-heading">Filled</h2>
-					<TransitionControl
-						{...args}
-						label="Transitions"
-						value={[
-							{
-								type: 'all',
-								duration: '250ms',
-								timing: 'ease',
-								delay: '10ms',
-								isVisible: true,
-							},
-							{
-								type: 'opacity',
-								duration: '600ms',
-								timing: 'ease',
-								delay: '0ms',
-								isVisible: true,
-							},
-						]}
-					/>
-				</Flex>
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">Filled</h2>
+				<TransitionControl
+					{...args}
+					label="Transitions"
+					value={[
+						{
+							type: 'all',
+							duration: '250ms',
+							timing: 'ease',
+							delay: '10ms',
+							isVisible: true,
+						},
+						{
+							type: 'opacity',
+							duration: '600ms',
+							timing: 'ease',
+							delay: '0ms',
+							isVisible: true,
+						},
+					]}
+				/>
+			</Flex>
+		);
+	},
+};
+
+export const Open = {
+	args: {
+		label: 'Transitions',
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<Flex
+				direction="column"
+				gap="15px"
+				style={{ marginBottom: '250px' }}
+			>
+				<h2 className="story-heading">Filled</h2>
+				<TransitionControl
+					{...args}
+					label="Transitions"
+					value={[
+						{
+							type: 'all',
+							duration: '250ms',
+							timing: 'ease',
+							delay: '10ms',
+							isVisible: true,
+							isOpen: true,
+						},
+						{
+							type: 'opacity',
+							duration: '600ms',
+							timing: 'ease',
+							delay: '0ms',
+							isVisible: true,
+						},
+					]}
+				/>
 			</Flex>
 		);
 	},
@@ -173,6 +210,8 @@ export const Screenshot = {
 			</Flex>
 
 			<Fill.render />
+
+			<Open.render />
 		</Flex>
 	),
 };

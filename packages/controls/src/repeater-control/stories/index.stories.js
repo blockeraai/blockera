@@ -170,6 +170,31 @@ export const MinItems = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
+export const OpenItemPopover = {
+	args: {
+		...FilledPopover.args,
+		...{
+			value: [
+				{
+					name: 'Akbar',
+					isVisible: true,
+				},
+				{
+					name: 'Akbar Ali',
+					isVisible: true,
+				},
+				{
+					name: 'Akbar Shah',
+					isVisible: true,
+					isOpen: true,
+				},
+			],
+			minItems: 5,
+		},
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+};
+
 const ControlWithHooks = (args) => {
 	const { storyValue, setStoryValue } = useContext(StoryDataContext);
 
@@ -187,6 +212,31 @@ export const FilledAccordion = {
 		...FilledPopover.args,
 		...{
 			repeaterItemHeader: CustomRepeaterItemHeader,
+			mode: 'accordion',
+		},
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+};
+
+export const OpenItemAccordion = {
+	args: {
+		...FilledPopover.args,
+		...{
+			value: [
+				{
+					name: 'Akbar',
+					isVisible: true,
+				},
+				{
+					name: 'Akbar Ali',
+					isVisible: true,
+				},
+				{
+					name: 'Akbar Shah',
+					isVisible: true,
+					isOpen: true,
+				},
+			],
 			mode: 'accordion',
 		},
 	},
@@ -418,11 +468,33 @@ export const Screenshot = {
 				<RepeaterControl {...MinItems.args} />
 			</Flex>
 
+			<Flex
+				direction="column"
+				gap="15px"
+				style={{ marginBottom: '100px' }}
+			>
+				<h2 className="story-heading">
+					Popover Repeater<span>Open Item</span>
+				</h2>
+				<RepeaterControl {...OpenItemPopover.args} />
+			</Flex>
+
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">
 					Accordion Repeater<span>Filled</span>
 				</h2>
 				<RepeaterControl {...FilledAccordion.args} />
+			</Flex>
+
+			<Flex
+				direction="column"
+				gap="15px"
+				style={{ marginBottom: '150px' }}
+			>
+				<h2 className="story-heading">
+					Accordion Repeater<span>Open Item</span>
+				</h2>
+				<RepeaterControl {...OpenItemAccordion.args} />
 			</Flex>
 		</Flex>
 	),
