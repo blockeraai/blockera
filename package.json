@@ -129,6 +129,7 @@
 		"puppeteer": "^20.1.1",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
+		"react-redux": "^8.1.1",
 		"react-router-dom": "^6.14.0",
 		"rtlcss-webpack-plugin": "^4.0.6",
 		"sass": "^1.63.3",
@@ -174,7 +175,8 @@
 		"storybook:start": "storybook dev -p 6008",
 		"storybook:test": "test-storybook",
 		"storybook:test:start": "test-storybook --watch",
-		"build-storybook": "storybook build"
+		"build-storybook": "storybook build",
+		"icons:indexing": "node packages/components/bin/icons/index.js search.json"
 	},
 	"lint-staged": {
 		"*.{js,json,ts,tsx,yml,yaml}": [
