@@ -22,10 +22,13 @@ import RepeaterItemActions from './actions';
 import { RepeaterContext } from '../context';
 import { isOpenPopoverEvent } from '../utils';
 import GroupControl from '../../group-control';
+import { isBoolean } from '@publisher/utils';
 
 const RepeaterItem = ({ item, itemId }) => {
 	const [isOpen, setOpen] = useState(false);
-	const [isVisible, setVisibility] = useState(item?.isVisible);
+	const [isVisible, setVisibility] = useState(
+		isBoolean(item?.isVisible) ? item.isVisible : true
+	);
 
 	const {
 		design,
