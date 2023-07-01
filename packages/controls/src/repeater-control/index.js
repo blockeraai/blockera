@@ -52,8 +52,10 @@ export default function RepeaterControl({
 	const { value: repeaterItems, setValue: setRepeaterItems } = useValue({
 		initialValue,
 		defaultValue,
+		innerDefaultValue: defaultRepeaterItemValue,
 		onChange,
 		valueCleanup,
+		mergeInitialAndDefault: true,
 	});
 
 	const defaultRepeaterState = {

@@ -6,26 +6,25 @@ import { useState } from '@wordpress/element';
 /**
  * Internal Dependencies
  */
-import { isBoolean, isFunction, isNull, isObject, isUndefined } from '../is';
+import {
+	isArray,
+	isBoolean,
+	isFunction,
+	isNull,
+	isObject,
+	isUndefined,
+} from '../is';
 import { useLateEffect } from '../use-late-effect';
 
 export function useValue({
 	initialValue,
 	defaultValue,
+	innerDefaultValue,
 	onChange,
 	valueCleanup,
 	mergeInitialAndDefault,
 }) {
-	const calculatedInitValue =
-		// eslint-disable-next-line no-nested-ternary
-		isUndefined(initialValue) || isNull(initialValue)
-			? defaultValue
-			: mergeInitialAndDefault &&
-			  isObject(initialValue) &&
-			  isObject(defaultValue)
-			? { ...defaultValue, ...initialValue }
-			: initialValue;
-
+	const calculatedInitValue = getCalculatedInitValue();
 	const [value, setValue] = useState(calculatedInitValue);
 
 	// don't fire change for value at first time!
@@ -60,6 +59,33 @@ export function useValue({
 	function resetToInitial() {
 		// initialValue actually should be calculated value to prevent issue while if the initialValue was merged with defaultValue
 		setValue(calculatedInitValue);
+	}
+
+	function getCalculatedInitValue() {
+		if (isUndefined(initialValue) || isNull(initialValue)) {
+			return defaultValue;
+		}
+		if (mergeInitialAndDefault) {
+			if (isObject(initialValue) && isObject(defaultValue))
+				return { ...defaultValue, ...initialValue };
+
+			// merge default value to object elements inside initialValue
+			// used for repeaters
+			if (isArray(initialValue) && isObject(innerDefaultValue)) {
+				initialValue.map((item, itemId) => {
+					if (isObject(item)) {
+						initialValue[itemId] = {
+							...innerDefaultValue,
+							...item,
+						};
+					}
+
+					return null;
+				});
+			}
+		}
+
+		return initialValue;
 	}
 
 	return {

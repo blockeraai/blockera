@@ -92,11 +92,34 @@ describe('useValue testing', () => {
 			})
 		);
 
-		// initial value passed and it should be 1
 		expect(result.current.value).toStrictEqual({
 			name: 'Akbar',
 			family: 'Akbari',
 		});
+	});
+
+	test('merge initialValue (array with child objects) and defaultValue', () => {
+		const { result } = renderHook(() =>
+			useValue({
+				initialValue: [
+					{
+						name: 'Akbar',
+					},
+				],
+				innerDefaultValue: {
+					name: 'Hello',
+					family: 'Akbari',
+				},
+				mergeInitialAndDefault: true,
+			})
+		);
+
+		expect(result.current.value).toStrictEqual([
+			{
+				name: 'Akbar',
+				family: 'Akbari',
+			},
+		]);
 	});
 
 	test('toggle boolean value', () => {
