@@ -127,7 +127,7 @@ export const FilledPopover = {
 				isVisible: false,
 			},
 			{
-				name: 'Doste Akbat',
+				name: 'Doste Akbar',
 				isVisible: false,
 				__className: 'is-hovered is-open',
 			},
@@ -212,7 +212,7 @@ export const Play = {
 				isVisible: true,
 			},
 			{
-				name: 'Doste Akbat',
+				name: 'Doste Akbar',
 				isVisible: true,
 			},
 		],
@@ -236,7 +236,7 @@ export const Play = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbat", "isVisible": true } ]'
+						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbar", "isVisible": true } ]'
 					),
 				{ timeout: 1000 }
 			);
@@ -248,7 +248,7 @@ export const Play = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbat", "isVisible": true }, { "name": "", "isVisible": true } ]'
+						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbar", "isVisible": true }, { "name": "", "isVisible": true } ]'
 					),
 				{ timeout: 1000 }
 			);
@@ -274,7 +274,7 @@ export const Play = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbat", "isVisible": true }, { "name": "New Akbar", "isVisible": true } ]'
+						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbar", "isVisible": true }, { "name": "New Akbar", "isVisible": true } ]'
 					),
 				{ timeout: 1000 }
 			);
@@ -288,7 +288,7 @@ export const Play = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbat", "isVisible": true } ]'
+						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbar", "isVisible": true } ]'
 					),
 				{ timeout: 1000 }
 			);
@@ -304,7 +304,7 @@ export const Play = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbat", "isVisible": false } ]'
+						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbar", "isVisible": false } ]'
 					),
 				{ timeout: 1000 }
 			);
@@ -314,7 +314,7 @@ export const Play = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbat", "isVisible": true } ]'
+						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbar", "isVisible": true } ]'
 					),
 				{ timeout: 1000 }
 			);
@@ -328,7 +328,7 @@ export const Play = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbat", "isVisible": true } ]'
+						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbar", "isVisible": true } ]'
 					),
 				{ timeout: 1000 }
 			);
@@ -342,7 +342,7 @@ export const Play = {
 				await waitFor(
 					async () =>
 						await expect(currentValue).toHaveTextContent(
-							'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbat", "isVisible": true } ]'
+							'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbar", "isVisible": true } ]'
 						),
 					{ timeout: 1000 }
 				);
