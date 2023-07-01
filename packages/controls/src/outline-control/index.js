@@ -37,6 +37,18 @@ export default function OutlineControl({
 
 OutlineControl.propTypes = {
 	/**
+	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
+	 */
+	defaultValue: PropTypes.array,
+	/**
+	 * The current value.
+	 */
+	value: PropTypes.array,
+	/**
+	 * Function that will be fired while the control value state changes.
+	 */
+	onChange: PropTypes.func,
+	/**
 	 * Default value of each repeater item
 	 */
 	defaultRepeaterItemValue: PropTypes.shape({
@@ -53,6 +65,7 @@ OutlineControl.propTypes = {
 };
 
 OutlineControl.defaultProps = {
+	value: [],
 	defaultRepeaterItemValue: {
 		width: '2px',
 		style: 'solid',
