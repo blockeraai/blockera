@@ -141,6 +141,8 @@ export const CustomHeaderPopover = {
 		...FilledPopover.args,
 		...{
 			repeaterItemHeader: CustomRepeaterItemHeader,
+			injectHeaderButtonsStart: '👉',
+			injectHeaderButtonsEnd: '👈',
 		},
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
