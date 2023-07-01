@@ -1,7 +1,8 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import PropTypes from 'prop-types';
 
 /**
  * Publisher dependencies
@@ -16,28 +17,60 @@ import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
 export default function TextShadowControl({
-	defaultRepeaterItemValue = {
+	defaultRepeaterItemValue,
+	popoverLabel,
+	className,
+	...props
+}) {
+	return (
+		<RepeaterControl
+			className={controlClassNames('text-shadow', className)}
+			popoverLabel={popoverLabel}
+			repeaterItemHeader={RepeaterItemHeader}
+			repeaterItemChildren={Fields}
+			defaultRepeaterItemValue={defaultRepeaterItemValue}
+			{...props}
+		/>
+	);
+}
+
+TextShadowControl.propTypes = {
+	/**
+	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
+	 */
+	defaultValue: PropTypes.array,
+	/**
+	 * The current value.
+	 */
+	value: PropTypes.array,
+	/**
+	 * Function that will be fired while the control value state changes.
+	 */
+	onChange: PropTypes.func,
+	/**
+	 * Default value of each repeater item
+	 */
+	defaultRepeaterItemValue: PropTypes.shape({
+		x: PropTypes.string,
+		y: PropTypes.string,
+		blur: PropTypes.string,
+		color: PropTypes.string,
+		isVisible: PropTypes.bool,
+	}),
+	/**
+	 * Label for popover
+	 */
+	popoverLabel: PropTypes.string,
+};
+
+TextShadowControl.defaultProps = {
+	value: [],
+	defaultRepeaterItemValue: {
 		x: '1px',
 		y: '1px',
 		blur: '1px',
 		color: '',
 		isVisible: true,
 	},
-	popoverLabel = __('Text Shadow', 'publisher-core'),
-	//
-	className,
-	...props
-}) {
-	return (
-		<div className={controlClassNames('text-shadow', className)}>
-			<RepeaterControl
-				className={controlClassNames('text-shadow', className)}
-				popoverLabel={popoverLabel}
-				repeaterItemHeader={RepeaterItemHeader}
-				repeaterItemChildren={Fields}
-				defaultRepeaterItemValue={defaultRepeaterItemValue}
-				{...props}
-			/>
-		</div>
-	);
-}
+	popoverLabel: __('Text Shadow', 'publisher-core'),
+};
