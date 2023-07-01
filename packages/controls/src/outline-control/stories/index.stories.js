@@ -151,7 +151,7 @@ export const Play = {
 		//
 		await step('Story Data', async () => {
 			await expect(currentValue).toBeInTheDocument();
-			await expect(currentValue).toBeEmpty();
+			await expect(currentValue).toBeEmptyDOMElement();
 		});
 
 		await step('Click Add Button', async () => {
