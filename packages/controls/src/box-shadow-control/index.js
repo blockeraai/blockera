@@ -1,7 +1,8 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import PropTypes from 'prop-types';
 
 /**
  * Publisher dependencies
@@ -16,16 +17,8 @@ import Fields from './components/fields';
 import RepeaterControl from '../repeater-control';
 
 export default function BoxShadowControl({
-	defaultRepeaterItemValue = {
-		type: 'outer',
-		x: '0px',
-		y: '0px',
-		blur: '0px',
-		spread: '0px',
-		color: '',
-		isVisible: true,
-	},
-	popoverLabel = __('Box Shadow', 'publisher-core'),
+	defaultRepeaterItemValue,
+	popoverLabel,
 	className,
 	...props
 }) {
@@ -40,3 +33,48 @@ export default function BoxShadowControl({
 		/>
 	);
 }
+
+BoxShadowControl.propTypes = {
+	/**
+	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
+	 */
+	defaultValue: PropTypes.array,
+	/**
+	 * The current value.
+	 */
+	value: PropTypes.array,
+	/**
+	 * Function that will be fired while the control value state changes.
+	 */
+	onChange: PropTypes.func,
+	/**
+	 * Default value of each repeater item
+	 */
+	defaultRepeaterItemValue: PropTypes.shape({
+		type: PropTypes.oneOf(['outer', 'inner']),
+		x: PropTypes.string,
+		y: PropTypes.string,
+		blur: PropTypes.string,
+		spread: PropTypes.string,
+		color: PropTypes.string,
+		isVisible: PropTypes.bool,
+	}),
+	/**
+	 * Label for popover
+	 */
+	popoverLabel: PropTypes.string,
+};
+
+BoxShadowControl.defaultProps = {
+	value: [],
+	defaultRepeaterItemValue: {
+		type: 'outer',
+		x: '0px',
+		y: '0px',
+		blur: '0px',
+		spread: '0px',
+		color: '',
+		isVisible: true,
+	},
+	popoverLabel: __('Box Shadow', 'publisher-core'),
+};
