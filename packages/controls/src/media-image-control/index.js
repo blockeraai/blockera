@@ -1,8 +1,9 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
+import PropTypes from 'prop-types';
+
 /**
  * Publisher dependencies
  */
@@ -11,28 +12,27 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
+import { useValue } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
 import { default as DeleteIcon } from './icons/delete';
 
-const MediaImageControl = ({
-	defaultValue = '',
-	value: _value,
-	labelChoose = __('Choose Image…', 'publisher-core'),
-	labelMediaLibrary = __('Media Library', 'publisher-core'),
-	labelUploadImage = __('Upload Image', 'publisher-core'),
-	//
+export default function MediaImageControl({
+	defaultValue,
+	value: initialValue,
+	labelChoose,
+	labelMediaLibrary,
+	labelUploadImage,
 	className,
-	onChange = (newValue) => {
-		return newValue;
-	},
-	onValueChange = (newValue) => {
-		return newValue;
-	},
-}) => {
-	const [value, setValue] = useState(_value || defaultValue);
+	onChange,
+}) {
+	const { value, setValue } = useValue({
+		defaultValue,
+		initialValue,
+		onChange,
+	});
 
 	return (
 		<div
@@ -49,8 +49,6 @@ const MediaImageControl = ({
 					icon={<DeleteIcon />}
 					onClick={() => {
 						setValue('');
-						const newValue = onChange('');
-						onValueChange(newValue);
 					}}
 				/>
 			)}
@@ -67,9 +65,7 @@ const MediaImageControl = ({
 			{!value && (
 				<MediaUploader
 					onSelect={(image) => {
-						const newValue = onChange(image.url);
-						setValue(newValue);
-						onValueChange(newValue);
+						setValue(image.url);
 					}}
 					allowedTypes={['image']}
 					mode="browse"
@@ -85,9 +81,7 @@ const MediaImageControl = ({
 				<div className={controlInnerClassNames('action-btns')}>
 					<MediaUploader
 						onSelect={(image) => {
-							const newValue = onChange(image.url);
-							setValue(newValue);
-							onValueChange(newValue);
+							setValue(image?.url);
 						}}
 						allowedTypes={['image']}
 						mode="browse"
@@ -104,9 +98,7 @@ const MediaImageControl = ({
 
 					<MediaUploader
 						onSelect={(image) => {
-							const newValue = onChange(image.url);
-							setValue(newValue);
-							onValueChange(newValue);
+							setValue(image?.url);
 						}}
 						allowedTypes={['image']}
 						mode="upload"
@@ -124,6 +116,38 @@ const MediaImageControl = ({
 			)}
 		</div>
 	);
+}
+
+MediaImageControl.propTypes = {
+	/**
+	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
+	 */
+	defaultValue: PropTypes.string,
+	/**
+	 * The current value.
+	 */
+	value: PropTypes.string,
+	/**
+	 * Function that will be fired while the control value state changes.
+	 */
+	onChange: PropTypes.func,
+	/**
+	 * Label for choose button while the image control is empty
+	 */
+	labelChoose: PropTypes.string,
+	/**
+	 * The `Media Library` button label.
+	 */
+	labelMediaLibrary: PropTypes.string,
+	/**
+	 * The `Upload Image` button label.
+	 */
+	labelUploadImage: PropTypes.string,
 };
 
-export default MediaImageControl;
+MediaImageControl.defaultProps = {
+	defaultValue: '',
+	labelChoose: __('Choose Image…', 'publisher-core'),
+	labelMediaLibrary: __('Media Library', 'publisher-core'),
+	labelUploadImage: __('Upload Image', 'publisher-core'),
+};

@@ -47,9 +47,9 @@
 		padding: 0;
 		min-width: 24px;
 		height: 24px;
-		border-left: 1px solid var(--publisher-controls-border-color-hover);
-		border-bottom: 1px solid var(--publisher-controls-border-color-hover);
-		background: #ffffff;
+		border-left: 1px solid var(--publisher-controls-border-color-hover) !important;
+		border-bottom: 1px solid var(--publisher-controls-border-color-hover) !important;
+		background: #ffffff !important;
 		border-radius: 0 0 0 2px;
 		display: none;
 	}

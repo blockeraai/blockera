@@ -120,7 +120,7 @@ const Fields = ({ itemId, item }) => {
 						}}
 						//
 						value={item.image}
-						onValueChange={(image) => {
+						onChange={(image) => {
 							changeItem(itemId, { ...item, image });
 						}}
 					/>
