@@ -157,6 +157,8 @@ describe('useValue testing', () => {
 	});
 
 	test('Clean up value', () => {
+		let outerValue = {};
+
 		function valueCleanup(value) {
 			if (value.type === 'all') {
 				delete value?.custom;
@@ -178,6 +180,9 @@ describe('useValue testing', () => {
 					custom: 'default custom value',
 				},
 				valueCleanup,
+				onChange: (newValue) => {
+					outerValue = newValue;
+				},
 			})
 		);
 
@@ -191,7 +196,7 @@ describe('useValue testing', () => {
 			result.current.setValue({ ...result.current.value, type: 'all' });
 		});
 
-		expect(result.current.value).toStrictEqual({
+		expect(outerValue).toStrictEqual({
 			type: 'all',
 			all: 'new all value',
 		});

@@ -29,14 +29,16 @@ export function useValue({
 
 	// don't fire change for value at first time!
 	useLateEffect(() => {
-		if (isFunction(onChange)) onChange(value);
+		if (isFunction(onChange)) {
+			if (isFunction(valueCleanup)) onChange(valueCleanup(value));
+			else onChange(value);
+		}
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [value]);
 
 	//clean up data at first then fire state change
 	function updateValue(newValue) {
-		if (isFunction(valueCleanup)) newValue = valueCleanup(newValue);
-
 		setValue(newValue);
 	}
 
