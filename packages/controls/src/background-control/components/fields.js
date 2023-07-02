@@ -272,7 +272,7 @@ const Fields = ({ itemId, item }) => {
 				<>
 					<GradientBarField
 						value={item['linear-gradient']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, {
 								...item,
 								'linear-gradient': newValue,
@@ -349,7 +349,7 @@ const Fields = ({ itemId, item }) => {
 					<GradientBarField
 						//
 						value={item['radial-gradient']}
-						onValueChange={(newValue) =>
+						onChange={(newValue) =>
 							changeItem(itemId, {
 								...item,
 								'radial-gradient': newValue,

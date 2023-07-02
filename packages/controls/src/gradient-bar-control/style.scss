@@ -1,5 +1,5 @@
-.publisher-field-gradient-bar {
-	> .publisher-field-control > :first-child {
+.publisher-control-gradient-bar {
+	& > *:first-child {
 		margin-top: 0 !important;
 		margin-bottom: 0 !important;
 	}
@@ -9,6 +9,7 @@
 			border-radius: 52px;
 			height: 40px;
 			width: 100%;
+			overflow: hidden;
 
 			.components-custom-gradient-picker__control-point-dropdown {
 				height: 18px;
