@@ -160,7 +160,7 @@ export function IconExtension({ children, config, ...props }) {
 							columns="1fr 3fr"
 							//
 							value={attributes.publisherIconLink}
-							onValueChange={(newValue) => {
+							onChange={(newValue) => {
 								setAttributes({
 									...attributes,
 									publisherIconLink: newValue,

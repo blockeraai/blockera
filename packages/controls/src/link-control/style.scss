@@ -7,35 +7,30 @@
 		display: flex;
 		flex-direction: row;
 		gap: 0;
+		position: relative;
 		
-		.publisher-control-text {
-			position: relative;
+		.publisher-control-input {
+			width: 100%;
 			
-			&:hover,
-			&:focus-within {
-				z-index: 1;
-			}
-			
-			.components-text-control__input {
-				border-radius: 2px 0 0 2px;
-				font-size: 12px;
+			.publisher-control-text {
+				.components-text-control__input {
+					font-size: 12px;
+				}
 			}
 		}
 		
 		.components-button.publisher-component-button {
 			border-radius: 0 2px 2px 0;
-			position: relative;
+			position: absolute;
 			padding: 2px 8px;
+			right: -1px;
+			top: 0;
+			background: transparent !important;
 			
 			&:hover,
-			&:focus {
-				z-index: 1;
-			}
-			
 			&.is-active {
 				color: var(--wp-admin-theme-color);
 			}
-			
 		}
 	}
 	
