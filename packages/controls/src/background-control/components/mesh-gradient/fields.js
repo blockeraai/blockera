@@ -12,14 +12,15 @@ import { memo, useContext } from '@wordpress/element';
  */
 import BaseControl from '../../../base';
 import { RepeaterContext } from '../../../repeater-control/context';
-import { ColorPicker } from '../../../index';
+import { ColorPickerControl } from '../../../index';
 
 const Fields = ({ itemId, item }) => {
 	const { changeItem } = useContext(RepeaterContext);
 
 	return (
 		<BaseControl id={`repeater-item-${itemId}`}>
-			<ColorPicker
+			<ColorPickerControl
+				isPopover={false}
 				value={item.color}
 				onChange={(newValue) =>
 					changeItem(itemId, {

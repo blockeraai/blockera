@@ -5,6 +5,7 @@ export {
 } from './alignment-matrix-control';
 export { default as IconControl } from './icon-control';
 export * from './color-control';
+export * from './color-picker-control';
 export { default as GroupControl } from './group-control';
 export { default as RangeControl } from './range-control';
 export { InputControl } from './input-control';

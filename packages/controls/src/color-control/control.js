@@ -13,7 +13,7 @@ import { ColorIndicator, Button } from '@publisher/components';
 /**
  * Internal dependencies
  */
-import { default as ColorPickerPopover } from './popover';
+import { ColorPickerControl } from '../index';
 import PropTypes from 'prop-types';
 import { useValue } from '@publisher/utils';
 
@@ -73,15 +73,13 @@ export default function ColorControl({
 			</Button>
 
 			{isOpen && (
-				<ColorPickerPopover
+				<ColorPickerControl
+					isPopover={true}
+					isOpen={isOpen}
 					onClose={() => setOpen(false)}
-					{...{
-						...props,
-						isOpen,
-						element: { color: value || 'transparent' },
-					}}
-					value={value}
 					onChange={setValue}
+					value={value}
+					{...props}
 				/>
 			)}
 		</>
