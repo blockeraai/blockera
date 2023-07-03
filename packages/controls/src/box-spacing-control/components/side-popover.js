@@ -1,8 +1,7 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -10,20 +9,25 @@ import { useState } from '@wordpress/element';
 import { Button, Flex, Grid, Popover } from '@publisher/components';
 import { Field, InputField } from '@publisher/fields';
 import { controlInnerClassNames } from '@publisher/classnames';
+import { useValue } from '@publisher/utils';
 
 export function SidePopover({
-	label = '',
+	title = '',
 	icon = '',
 	isOpen,
 	type = 'margin',
-	value,
+	value: initialValue,
 	offset = 35,
 	onClose = () => {},
-	onValueChange = (newValue) => {
+	onChange = (newValue) => {
 		return newValue;
 	},
 }) {
-	const [controlValue, setControlValue] = useState(value);
+	const { value, setValue } = useValue({
+		initialValue,
+		defaultValue: '0px',
+		onChange,
+	});
 
 	function getAllActionButtons() {
 		return (
@@ -34,8 +38,9 @@ export function SidePopover({
 			>
 				<Button
 					size="small"
+					aria-label="Set 0px"
 					onClick={() => {
-						setControlValue('0px');
+						setValue('0px');
 					}}
 					style={{
 						padding: '2px 0',
@@ -46,7 +51,8 @@ export function SidePopover({
 
 				<Button
 					size="small"
-					onClick={() => setControlValue('10px')}
+					aria-label="Set 10px"
+					onClick={() => setValue('10px')}
 					style={{
 						padding: '2px 0',
 					}}
@@ -56,7 +62,8 @@ export function SidePopover({
 
 				<Button
 					size="small"
-					onClick={() => setControlValue('20px')}
+					aria-label="Set 20px"
+					onClick={() => setValue('20px')}
 					style={{
 						padding: '2px 0',
 					}}
@@ -66,7 +73,8 @@ export function SidePopover({
 
 				<Button
 					size="small"
-					onClick={() => setControlValue('30px')}
+					aria-label="Set 30px"
+					onClick={() => setValue('30px')}
 					style={{
 						padding: '2px 0',
 					}}
@@ -76,8 +84,9 @@ export function SidePopover({
 
 				<Button
 					size="small"
+					aria-label="Set 60px"
 					onClick={() => {
-						setControlValue('60px');
+						setValue('60px');
 					}}
 					style={{
 						padding: '2px 0',
@@ -88,7 +97,8 @@ export function SidePopover({
 
 				<Button
 					size="small"
-					onClick={() => setControlValue('80px')}
+					aria-label="Set 80px"
+					onClick={() => setValue('80px')}
 					style={{
 						padding: '2px 0',
 					}}
@@ -98,7 +108,8 @@ export function SidePopover({
 
 				<Button
 					size="small"
-					onClick={() => setControlValue('100px')}
+					aria-label="Set 100px"
+					onClick={() => setValue('100px')}
 					style={{
 						padding: '2px 0',
 					}}
@@ -108,7 +119,8 @@ export function SidePopover({
 
 				<Button
 					size="small"
-					onClick={() => setControlValue('120px')}
+					aria-label="Set 120px"
+					onClick={() => setValue('120px')}
 					style={{
 						padding: '2px 0',
 					}}
@@ -125,7 +137,7 @@ export function SidePopover({
 				<Popover
 					title={
 						<>
-							{icon} <span>{label}</span>
+							{icon} <span>{title}</span>
 						</>
 					}
 					offset={offset}
@@ -137,7 +149,7 @@ export function SidePopover({
 						label=""
 						settings={{
 							type: 'css',
-							unitType: 'essential',
+							unitType: type,
 							range: true,
 							min: type === 'margin' ? -100 : 0,
 							max: 100,
@@ -145,11 +157,8 @@ export function SidePopover({
 						}}
 						//
 						defaultValue="0px"
-						value={controlValue !== '' ? controlValue : '0px'}
-						onChange={(newValue) => {
-							setControlValue(value);
-							onValueChange(newValue);
-						}}
+						value={value}
+						onChange={setValue}
 					/>
 
 					<Field
@@ -168,9 +177,10 @@ export function SidePopover({
 									>
 										<Button
 											size="small"
+											aria-label="Set Auto"
 											className="auto-btn"
 											onClick={() => {
-												setControlValue('0Auto');
+												setValue('0auto');
 											}}
 										>
 											{__('Auto', 'publisher-core')}

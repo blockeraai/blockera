@@ -48,6 +48,31 @@
 			pointer-events: all;
 			cursor: pointer;
 			font-size: 10px;
+			
+			i {
+				font-size: 8px;
+				color: #b9b9b9;
+				position: absolute;
+				transform: translate(3px, -5px);
+			}
+		}
+		
+		&.side-vertical i {
+			transform: translate(-4px, -11px);
+			right: 0;
+		}
+		
+		&.side-vertical.side-padding-left i {
+			transform: translate(0, -11px);
+			left: 7px;
+			text-align: left;
+		}
+		
+		&.side-vertical.side-padding-right i {
+			transform: translate(0, -11px);
+			left: 0;
+			right: 7px;
+			text-align: right;
 		}
 		
 		&.side-margin-top {

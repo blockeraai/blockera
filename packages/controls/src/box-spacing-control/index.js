@@ -1,8 +1,9 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
+import PropTypes from 'prop-types';
 
 /**
  * Publisher dependencies
@@ -11,6 +12,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
+import { useValue } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -28,46 +30,46 @@ import { default as PaddingRightIcon } from './icons/padding-right';
 import { default as PaddingBottomIcon } from './icons/padding-bottom';
 import { default as PaddingLeftIcon } from './icons/padding-left';
 
-const BoxSpacingControl = ({
-	defaultValue = {
-		margin: {
-			top: '',
-			right: '',
-			bottom: '',
-			left: '',
-		},
-		padding: {
-			top: '',
-			right: '',
-			bottom: '',
-			left: '',
-		},
-	},
-	value,
-	//
+export default function BoxSpacingControl({
+	defaultValue,
+	value: initialValue,
 	className,
-	onChange = (newValue) => {
-		return newValue;
-	},
-	onValueChange = (newValue) => {
-		return newValue;
-	},
+	onChange,
+	openSide,
 	...props
-}) => {
-	const [controlValue, setControlValue] = useState({
-		...defaultValue,
-		...value,
+}) {
+	const { value, setValue } = useValue({
+		initialValue,
+		defaultValue,
+		onChange,
+		mergeInitialAndDefault: true,
 	});
 
-	const [openPopover, setOpenPopover] = useState('');
+	const [openPopover, setOpenPopover] = useState(openSide);
 
 	function fixLabelText(value) {
 		if (value === '') {
 			value = '-';
 		} else {
-			value = value.replace('px', '');
-		}
+			// remove px
+			value = value.replace('px', '', value);
 
+			const match = /(\d+)(auto|px|%|em|rem|ch|vw|vh|dvw|dvh)/gi.exec(
+				value
+			);
+			if (match) {
+				if (match[2] === 'auto') {
+					value = <>Auto</>;
+				} else {
+					value = (
+						<>
+							{match[1]}
+							<i>{match[2]}</i>
+						</>
+					);
+				}
+			}
+		}
 		return value;
 	}
 
@@ -83,6 +85,7 @@ const BoxSpacingControl = ({
 				<path
 					className={controlInnerClassNames(
 						'shape-side',
+						'side-horizontal',
 						'side-margin-top',
 						openPopover === 'margin-top' ? 'selected-side' : ''
 					)}
@@ -92,6 +95,7 @@ const BoxSpacingControl = ({
 				<path
 					className={controlInnerClassNames(
 						'shape-side',
+						'side-vertical',
 						'side-margin-right',
 						openPopover === 'margin-right' ? 'selected-side' : ''
 					)}
@@ -101,6 +105,7 @@ const BoxSpacingControl = ({
 				<path
 					className={controlInnerClassNames(
 						'shape-side',
+						'side-horizontal',
 						'side-margin-bottom',
 						openPopover === 'margin-bottom' ? 'selected-side' : ''
 					)}
@@ -110,6 +115,7 @@ const BoxSpacingControl = ({
 				<path
 					className={controlInnerClassNames(
 						'shape-side',
+						'side-vertical',
 						'side-margin-left',
 						openPopover === 'margin-left' ? 'selected-side' : ''
 					)}
@@ -119,6 +125,7 @@ const BoxSpacingControl = ({
 				<path
 					className={controlInnerClassNames(
 						'shape-side',
+						'side-horizontal',
 						'side-padding-top',
 						openPopover === 'padding-top' ? 'selected-side' : ''
 					)}
@@ -128,6 +135,7 @@ const BoxSpacingControl = ({
 				<path
 					className={controlInnerClassNames(
 						'shape-side',
+						'side-vertical',
 						'side-padding-right',
 						openPopover === 'padding-right' ? 'selected-side' : ''
 					)}
@@ -137,6 +145,7 @@ const BoxSpacingControl = ({
 				<path
 					className={controlInnerClassNames(
 						'shape-side',
+						'side-horizontal',
 						'side-padding-bottom',
 						openPopover === 'padding-bottom' ? 'selected-side' : ''
 					)}
@@ -146,6 +155,7 @@ const BoxSpacingControl = ({
 				<path
 					className={controlInnerClassNames(
 						'shape-side',
+						'side-vertical',
 						'side-padding-left',
 						openPopover === 'padding-left' ? 'selected-side' : ''
 					)}
@@ -174,34 +184,30 @@ const BoxSpacingControl = ({
 			<div
 				className={controlInnerClassNames(
 					'label-side',
+					'side-horizontal',
 					'side-margin-top'
 				)}
 			>
 				<LabelControl
-					label={fixLabelText(controlValue.margin.top)}
+					ariaLabel={__('Top Margin', 'publisher-core')}
+					label={fixLabelText(value.margin.top)}
 					onClick={() => setOpenPopover('margin-top')}
 				/>
 
 				<SidePopover
 					icon={<MarginTopIcon />}
 					onClose={() => setOpenPopover('')}
-					title={__('Margin Top', 'publisher-core')}
-					value={controlValue.margin.top}
+					title={__('Top Margin', 'publisher-core')}
+					value={value.margin.top}
 					isOpen={openPopover === 'margin-top'}
-					onValueChange={(newValue) => {
-						const value = onChange({
-							...controlValue,
+					onChange={(newValue) => {
+						setValue({
+							...value,
 							margin: {
-								...controlValue.margin,
+								...value.margin,
 								top: newValue,
 							},
 						});
-
-						setControlValue(value);
-
-						onValueChange(value);
-
-						return value;
 					}}
 				/>
 			</div>
@@ -209,11 +215,13 @@ const BoxSpacingControl = ({
 			<div
 				className={controlInnerClassNames(
 					'label-side',
+					'side-vertical',
 					'side-margin-right'
 				)}
 			>
 				<LabelControl
-					label={fixLabelText(controlValue.margin.right)}
+					ariaLabel={__('Right Margin', 'publisher-core')}
+					label={fixLabelText(value.margin.right)}
 					onClick={() => setOpenPopover('margin-right')}
 				/>
 
@@ -221,23 +229,17 @@ const BoxSpacingControl = ({
 					offset={255}
 					icon={<MarginRightIcon />}
 					onClose={() => setOpenPopover('')}
-					title={__('Margin Right', 'publisher-core')}
-					value={controlValue.margin.right}
+					title={__('Right Margin', 'publisher-core')}
+					value={value.margin.right}
 					isOpen={openPopover === 'margin-right'}
-					onValueChange={(newValue) => {
-						const value = onChange({
-							...controlValue,
+					onChange={(newValue) => {
+						setValue({
+							...value,
 							margin: {
-								...controlValue.margin,
+								...value.margin,
 								right: newValue,
 							},
 						});
-
-						setControlValue(value);
-
-						onValueChange(value);
-
-						return value;
 					}}
 				/>
 			</div>
@@ -245,34 +247,30 @@ const BoxSpacingControl = ({
 			<div
 				className={controlInnerClassNames(
 					'label-side',
+					'side-horizontal',
 					'side-margin-bottom'
 				)}
 			>
 				<LabelControl
-					label={fixLabelText(controlValue.margin.bottom)}
+					ariaLabel={__('Bottom Margin', 'publisher-core')}
+					label={fixLabelText(value.margin.bottom)}
 					onClick={() => setOpenPopover('margin-bottom')}
 				/>
 
 				<SidePopover
 					icon={<MarginBottomIcon />}
 					onClose={() => setOpenPopover('')}
-					title={__('Margin Bottom', 'publisher-core')}
-					value={controlValue.margin.bottom}
+					title={__('Bottom Margin', 'publisher-core')}
+					value={value.margin.bottom}
 					isOpen={openPopover === 'margin-bottom'}
-					onValueChange={(newValue) => {
-						const value = onChange({
-							...controlValue,
+					onChange={(newValue) => {
+						setValue({
+							...value,
 							margin: {
-								...controlValue.margin,
+								...value.margin,
 								bottom: newValue,
 							},
 						});
-
-						setControlValue(value);
-
-						onValueChange(value);
-
-						return value;
 					}}
 				/>
 			</div>
@@ -280,34 +278,30 @@ const BoxSpacingControl = ({
 			<div
 				className={controlInnerClassNames(
 					'label-side',
+					'side-vertical',
 					'side-margin-left'
 				)}
 			>
 				<LabelControl
-					label={fixLabelText(controlValue.margin.left)}
+					ariaLabel={__('Left Margin', 'publisher-core')}
+					label={fixLabelText(value.margin.left)}
 					onClick={() => setOpenPopover('margin-left')}
 				/>
 
 				<SidePopover
 					icon={<MarginLeftIcon />}
 					onClose={() => setOpenPopover('')}
-					title={__('Margin Left', 'publisher-core')}
-					value={controlValue.margin.left}
+					title={__('Left Margin', 'publisher-core')}
+					value={value.margin.left}
 					isOpen={openPopover === 'margin-left'}
-					onValueChange={(newValue) => {
-						const value = onChange({
-							...controlValue,
+					onChange={(newValue) => {
+						setValue({
+							...value,
 							margin: {
-								...controlValue.margin,
+								...value.margin,
 								left: newValue,
 							},
 						});
-
-						setControlValue(value);
-
-						onValueChange(value);
-
-						return value;
 					}}
 				/>
 			</div>
@@ -315,11 +309,13 @@ const BoxSpacingControl = ({
 			<div
 				className={controlInnerClassNames(
 					'label-side',
+					'side-horizontal',
 					'side-padding-top'
 				)}
 			>
 				<LabelControl
-					label={fixLabelText(controlValue.padding.top)}
+					ariaLabel={__('Top Padding', 'publisher-core')}
+					label={fixLabelText(value.padding.top)}
 					onClick={() => setOpenPopover('padding-top')}
 				/>
 
@@ -327,23 +323,17 @@ const BoxSpacingControl = ({
 					type="padding"
 					icon={<PaddingTopIcon />}
 					onClose={() => setOpenPopover('')}
-					title={__('Padding Top', 'publisher-core')}
-					value={controlValue.padding.top}
+					title={__('Top Padding', 'publisher-core')}
+					value={value.padding.top}
 					isOpen={openPopover === 'padding-top'}
-					onValueChange={(newValue) => {
-						const value = onChange({
-							...controlValue,
+					onChange={(newValue) => {
+						setValue({
+							...value,
 							padding: {
-								...controlValue.padding,
+								...value.padding,
 								top: newValue,
 							},
 						});
-
-						setControlValue(value);
-
-						onValueChange(value);
-
-						return value;
 					}}
 				/>
 			</div>
@@ -351,11 +341,13 @@ const BoxSpacingControl = ({
 			<div
 				className={controlInnerClassNames(
 					'label-side',
+					'side-vertical',
 					'side-padding-right'
 				)}
 			>
 				<LabelControl
-					label={fixLabelText(controlValue.padding.right)}
+					ariaLabel={__('Right Padding', 'publisher-core')}
+					label={fixLabelText(value.padding.right)}
 					onClick={() => setOpenPopover('padding-right')}
 				/>
 
@@ -364,23 +356,17 @@ const BoxSpacingControl = ({
 					type="padding"
 					icon={<PaddingRightIcon />}
 					onClose={() => setOpenPopover('')}
-					title={__('Padding Right', 'publisher-core')}
-					value={controlValue.padding.right}
+					title={__('Right Padding', 'publisher-core')}
+					value={value.padding.right}
 					isOpen={openPopover === 'padding-right'}
-					onValueChange={(newValue) => {
-						const value = onChange({
-							...controlValue,
+					onChange={(newValue) => {
+						setValue({
+							...value,
 							padding: {
-								...controlValue.padding,
+								...value.padding,
 								right: newValue,
 							},
 						});
-
-						setControlValue(value);
-
-						onValueChange(value);
-
-						return value;
 					}}
 				/>
 			</div>
@@ -388,11 +374,13 @@ const BoxSpacingControl = ({
 			<div
 				className={controlInnerClassNames(
 					'label-side',
+					'side-horizontal',
 					'side-padding-bottom'
 				)}
 			>
 				<LabelControl
-					label={fixLabelText(controlValue.padding.bottom)}
+					ariaLabel={__('Bottom Padding', 'publisher-core')}
+					label={fixLabelText(value.padding.bottom)}
 					onClick={() => setOpenPopover('padding-bottom')}
 				/>
 
@@ -400,23 +388,17 @@ const BoxSpacingControl = ({
 					type="padding"
 					icon={<PaddingBottomIcon />}
 					onClose={() => setOpenPopover('')}
-					title={__('Padding Bottom', 'publisher-core')}
-					value={controlValue.padding.bottom}
+					title={__('Bottom Padding', 'publisher-core')}
+					value={value.padding.bottom}
 					isOpen={openPopover === 'padding-bottom'}
-					onValueChange={(newValue) => {
-						const value = onChange({
-							...controlValue,
+					onChange={(newValue) => {
+						setValue({
+							...value,
 							padding: {
-								...controlValue.padding,
+								...value.padding,
 								bottom: newValue,
 							},
 						});
-
-						setControlValue(value);
-
-						onValueChange(value);
-
-						return value;
 					}}
 				/>
 			</div>
@@ -424,11 +406,13 @@ const BoxSpacingControl = ({
 			<div
 				className={controlInnerClassNames(
 					'label-side',
+					'side-vertical',
 					'side-padding-left'
 				)}
 			>
 				<LabelControl
-					label={fixLabelText(controlValue.padding.left)}
+					ariaLabel={__('Left Padding', 'publisher-core')}
+					label={fixLabelText(value.padding.left)}
 					onClick={() => setOpenPopover('padding-left')}
 				/>
 
@@ -437,28 +421,85 @@ const BoxSpacingControl = ({
 					type="padding"
 					icon={<PaddingLeftIcon />}
 					onClose={() => setOpenPopover('')}
-					title={__('Padding Left', 'publisher-core')}
-					value={controlValue.padding.left}
+					title={__('Left Padding', 'publisher-core')}
+					value={value.padding.left}
 					isOpen={openPopover === 'padding-left'}
-					onValueChange={(newValue) => {
-						const value = onChange({
-							...controlValue,
+					onChange={(newValue) => {
+						setValue({
+							...value,
 							padding: {
-								...controlValue.padding,
+								...value.padding,
 								left: newValue,
 							},
 						});
-
-						setControlValue(value);
-
-						onValueChange(value);
-
-						return value;
 					}}
 				/>
 			</div>
 		</div>
 	);
+}
+
+BoxSpacingControl.propTypes = {
+	/**
+	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
+	 */
+	defaultValue: PropTypes.shape({
+		margin: PropTypes.shape({
+			top: PropTypes.string,
+			right: PropTypes.string,
+			bottom: PropTypes.string,
+			lefty: PropTypes.string,
+		}),
+		padding: PropTypes.shape({
+			top: PropTypes.string,
+			right: PropTypes.string,
+			bottom: PropTypes.string,
+			lefty: PropTypes.string,
+		}),
+	}),
+	/**
+	 * The current value.
+	 */
+	value: PropTypes.shape({
+		margin: PropTypes.shape({
+			top: PropTypes.string,
+			right: PropTypes.string,
+			bottom: PropTypes.string,
+			lefty: PropTypes.string,
+		}),
+		padding: PropTypes.shape({
+			top: PropTypes.string,
+			right: PropTypes.string,
+			bottom: PropTypes.string,
+			lefty: PropTypes.string,
+		}),
+	}),
+	/**
+	 * Function that will be fired while the control value state changes.
+	 */
+	onChange: PropTypes.func,
+	/**
+	 * Specifies which side is open by default.
+	 *
+	 * @default ``
+	 */
+	openSide: PropTypes.string,
 };
 
-export default BoxSpacingControl;
+BoxSpacingControl.defaultProps = {
+	defaultValue: {
+		margin: {
+			top: '',
+			right: '',
+			bottom: '',
+			left: '',
+		},
+		padding: {
+			top: '',
+			right: '',
+			bottom: '',
+			left: '',
+		},
+	},
+	openSide: '',
+};

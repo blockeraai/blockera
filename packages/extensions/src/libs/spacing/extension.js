@@ -30,7 +30,7 @@ export function SpacingExtension({ children, config, ...props }) {
 						label: '',
 						//
 						value: attributes.publisherSpacing,
-						onValueChange: (newValue) =>
+						onChange: (newValue) =>
 							setAttributes({
 								...attributes,
 								publisherSpacing: newValue,
