@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import PropTypes from 'prop-types';
+
+/**
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
@@ -23,3 +28,23 @@ export default function LabelControl({
 		</>
 	);
 }
+
+LabelControl.propTypes = {
+	/**
+	 * Label text
+	 */
+	label: PropTypes.string,
+	/**
+	 * Custom css classes
+	 */
+	className: PropTypes.string,
+	/**
+	 * Custom aria label for adding to label tag
+	 */
+	ariaLabel: PropTypes.string,
+};
+
+LabelControl.defaultProps = {
+	label: '',
+	ariaLabel: '',
+};
