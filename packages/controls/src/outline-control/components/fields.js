@@ -12,7 +12,6 @@ import { InputField, Field } from '@publisher/fields';
 /**
  * Internal dependencies
  */
-import BaseControl from '../../base';
 import { RepeaterContext } from '../../repeater-control/context';
 import { BorderControl } from '../../index';
 
@@ -20,7 +19,7 @@ const Fields = ({ itemId, item }) => {
 	const { changeItem } = useContext(RepeaterContext);
 
 	return (
-		<BaseControl id={`repeater-item-${itemId}`}>
+		<div id={`repeater-item-${itemId}`}>
 			<Field label={__('Outline', 'publisher-core')}>
 				<BorderControl
 					linesDirection="horizontal"
@@ -53,7 +52,7 @@ const Fields = ({ itemId, item }) => {
 				value={item.offset}
 				onChange={(offset) => changeItem(itemId, { ...item, offset })}
 			/>
-		</BaseControl>
+		</div>
 	);
 };
 

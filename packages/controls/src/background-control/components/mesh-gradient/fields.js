@@ -10,7 +10,6 @@ import { memo, useContext } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import BaseControl from '../../../base';
 import { RepeaterContext } from '../../../repeater-control/context';
 import { ColorPickerControl } from '../../../index';
 
@@ -18,7 +17,7 @@ const Fields = ({ itemId, item }) => {
 	const { changeItem } = useContext(RepeaterContext);
 
 	return (
-		<BaseControl id={`repeater-item-${itemId}`}>
+		<div id={`repeater-item-${itemId}`}>
 			<ColorPickerControl
 				isPopover={false}
 				value={item.color}
@@ -29,7 +28,7 @@ const Fields = ({ itemId, item }) => {
 					})
 				}
 			/>
-		</BaseControl>
+		</div>
 	);
 };
 

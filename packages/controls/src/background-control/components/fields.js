@@ -26,7 +26,6 @@ import { isUndefined } from '@publisher/utils';
 /**
  * Internal dependencies
  */
-import BaseControl from '../../base';
 import RepeaterControl from '../../repeater-control';
 // Icons
 import RepeatIcon from '../icons/repeat';
@@ -80,7 +79,7 @@ const Fields = ({ itemId, item }) => {
 	}
 
 	return (
-		<BaseControl id={`repeater-item-${itemId}`}>
+		<div id={`repeater-item-${itemId}`}>
 			<ToggleSelectField
 				label={__('Type', 'publisher-core')}
 				options={[
@@ -599,7 +598,7 @@ const Fields = ({ itemId, item }) => {
 					/>
 				</>
 			)}
-		</BaseControl>
+		</div>
 	);
 };
 

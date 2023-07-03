@@ -12,7 +12,6 @@ import { InputField, SelectField } from '@publisher/fields';
 /**
  * Internal dependencies
  */
-import BaseControl from '../../base';
 import { RepeaterContext } from '../../repeater-control/context';
 import {
 	getAttributeFieldValueOptions,
@@ -66,7 +65,7 @@ const Fields = ({ itemId, item }) => {
 	}
 
 	return (
-		<BaseControl id={`repeater-item-${itemId}`}>
+		<div id={`repeater-item-${itemId}`}>
 			{keyFieldOptions.length > 0 && (
 				<>
 					<SelectField
@@ -206,7 +205,7 @@ const Fields = ({ itemId, item }) => {
 					/>
 				</>
 			)}
-		</BaseControl>
+		</div>
 	);
 };
 

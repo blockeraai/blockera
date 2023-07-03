@@ -1,4 +1,3 @@
-export { default as BaseControl } from './base';
 export {
 	default as AlignmentMatrixControl,
 	convertAlignmentMatrixCoordinates,

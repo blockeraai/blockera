@@ -23,7 +23,6 @@ import { RepeaterControl } from '../../index';
 import { RepeaterContext } from '../context';
 import { InputField } from '@publisher/fields';
 import { __, sprintf } from '@wordpress/i18n';
-import BaseControl from '../../base';
 import { controlInnerClassNames } from '@publisher/classnames';
 import { default as InheritIcon } from './icons/inherit';
 
@@ -52,7 +51,7 @@ function CustomRepeaterItemChildren({ itemId, item }) {
 	const { changeItem } = useContext(RepeaterContext);
 
 	return (
-		<BaseControl id={`repeater-item-${itemId}`}>
+		<div id={`repeater-item-${itemId}`}>
 			<InputField
 				label={__('Name', 'publisher-core')}
 				settings={{
@@ -63,7 +62,7 @@ function CustomRepeaterItemChildren({ itemId, item }) {
 					changeItem(itemId, { ...item, name: value })
 				}
 			/>
-		</BaseControl>
+		</div>
 	);
 }
 

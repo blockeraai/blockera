@@ -12,7 +12,6 @@ import { InputField, ToggleSelectField } from '@publisher/fields';
 /**
  * Internal dependencies
  */
-import BaseControl from '../../base';
 import { RepeaterContext } from '../../repeater-control/context';
 import { default as MoveIcon } from '../icons/move';
 import { default as RotateIcon } from '../icons/rotate';
@@ -29,7 +28,7 @@ const Fields = ({ itemId, item }) => {
 	const { changeItem } = useContext(RepeaterContext);
 
 	return (
-		<BaseControl id={`repeater-item-${itemId}`}>
+		<div id={`repeater-item-${itemId}`}>
 			<ToggleSelectField
 				label={__('Type', 'publisher-core')}
 				options={[
@@ -228,7 +227,7 @@ const Fields = ({ itemId, item }) => {
 					/>
 				</>
 			)}
-		</BaseControl>
+		</div>
 	);
 };
 

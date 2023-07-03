@@ -12,7 +12,6 @@ import { InputField, SelectField } from '@publisher/fields';
 /**
  * Internal dependencies
  */
-import BaseControl from '../../base';
 import { getTypeOptions, getTimingOptions } from '../utils';
 import { RepeaterContext } from '../../repeater-control/context';
 
@@ -20,7 +19,7 @@ const Fields = ({ itemId, item }) => {
 	const { changeItem } = useContext(RepeaterContext);
 
 	return (
-		<BaseControl id={`repeater-item-${itemId}`}>
+		<div id={`repeater-item-${itemId}`}>
 			<SelectField
 				label={__('Type', 'publisher-core')}
 				options={getTypeOptions()}
@@ -68,7 +67,7 @@ const Fields = ({ itemId, item }) => {
 				value={item.delay}
 				onChange={(delay) => changeItem(itemId, { ...item, delay })}
 			/>
-		</BaseControl>
+		</div>
 	);
 };
 

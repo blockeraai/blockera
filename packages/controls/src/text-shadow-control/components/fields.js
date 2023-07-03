@@ -12,14 +12,13 @@ import { InputField, ColorField } from '@publisher/fields';
 /**
  * Internal dependencies
  */
-import BaseControl from '../../base';
 import { RepeaterContext } from '../../repeater-control/context';
 
 const Fields = ({ itemId, item }) => {
 	const { changeItem } = useContext(RepeaterContext);
 
 	return (
-		<BaseControl id={`repeater-item-${itemId}`}>
+		<div id={`repeater-item-${itemId}`}>
 			<InputField
 				label={__('X', 'publisher-core')}
 				settings={{
@@ -68,7 +67,7 @@ const Fields = ({ itemId, item }) => {
 				value={item.color}
 				onChange={(color) => changeItem(itemId, { ...item, color })}
 			/>
-		</BaseControl>
+		</div>
 	);
 };
 
