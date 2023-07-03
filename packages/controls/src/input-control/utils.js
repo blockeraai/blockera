@@ -144,6 +144,7 @@ export function getCSSUnits(unitType = '') {
 			];
 			break;
 
+		case 'padding':
 		case 'essential':
 			cssUnits = [
 				{ value: 'px', label: 'PX', default: 0 },
@@ -173,6 +174,22 @@ export function getCSSUnits(unitType = '') {
 				{ value: 'auto', label: 'Auto', default: 0 },
 				{ value: 'inherit', label: 'Inherit', default: 0 },
 				{ value: 'initial', label: 'Initial', default: 0 },
+			];
+			break;
+
+		case 'margin':
+			cssUnits = [
+				{ value: 'px', label: 'PX', default: 0 },
+				{ value: '%', label: '%', default: 0 },
+				{ value: 'em', label: 'EM', default: 0 },
+				{ value: 'rem', label: 'REM', default: 0 },
+				{ value: 'ch', label: 'CH', default: 0 },
+				{ value: 'vw', label: 'VW', default: 0 },
+				{ value: 'vh', label: 'VH', default: 0 },
+				{ value: 'dvw', label: 'DVW', default: 0 },
+				{ value: 'dvh', label: 'DVH', default: 0 },
+				//
+				{ value: 'auto', label: 'Auto', default: 0 },
 			];
 			break;
 	}

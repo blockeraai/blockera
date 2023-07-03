@@ -86,6 +86,35 @@ describe('Util functions', () => {
 			]);
 		});
 
+		test('margin', () => {
+			expect(getCSSUnits('margin')).toStrictEqual([
+				{ value: 'px', label: 'PX', default: 0 },
+				{ value: '%', label: '%', default: 0 },
+				{ value: 'em', label: 'EM', default: 0 },
+				{ value: 'rem', label: 'REM', default: 0 },
+				{ value: 'ch', label: 'CH', default: 0 },
+				{ value: 'vw', label: 'VW', default: 0 },
+				{ value: 'vh', label: 'VH', default: 0 },
+				{ value: 'dvw', label: 'DVW', default: 0 },
+				{ value: 'dvh', label: 'DVH', default: 0 },
+				{ value: 'auto', label: 'Auto', default: 0 },
+			]);
+		});
+
+		test('padding', () => {
+			expect(getCSSUnits('padding')).toStrictEqual([
+				{ value: 'px', label: 'PX', default: 0 },
+				{ value: '%', label: '%', default: 0 },
+				{ value: 'em', label: 'EM', default: 0 },
+				{ value: 'rem', label: 'REM', default: 0 },
+				{ value: 'ch', label: 'CH', default: 0 },
+				{ value: 'vw', label: 'VW', default: 0 },
+				{ value: 'vh', label: 'VH', default: 0 },
+				{ value: 'dvw', label: 'DVW', default: 0 },
+				{ value: 'dvh', label: 'DVH', default: 0 },
+			]);
+		});
+
 		test('width', () => {
 			expect(getCSSUnits('width')).toStrictEqual([
 				{ value: 'px', label: 'PX', default: 0 },
