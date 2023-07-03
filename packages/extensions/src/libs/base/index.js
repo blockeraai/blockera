@@ -2,13 +2,14 @@
  * External dependencies
  */
 import { useContext } from '@wordpress/element';
+import { InspectorControls } from '@wordpress/block-editor';
 
 /**
  * Publisher dependencies
  */
-import { InspectElement } from '@publisher/components';
 import { componentClassNames } from '@publisher/classnames';
 import { isFunction } from '@publisher/utils';
+import { PanelBodyControl } from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -39,19 +40,21 @@ export function BaseExtension({
 	return (
 		<BaseExtensionContextProvider {...contextValue}>
 			{useDisplayBlockControls() && (
-				<InspectElement
-					className={componentClassNames(
-						'extension',
-						'extension-' + extensionId
-					)}
-					title={title}
-					initialOpen={initialOpen}
-					icon={icon}
-				>
-					{isFunction(ExtensionTypeUI) && (
-						<ExtensionTypeUI {...{ ...props, config }} />
-					)}
-				</InspectElement>
+				<InspectorControls>
+					<PanelBodyControl
+						title={title}
+						initialOpen={initialOpen}
+						icon={icon}
+						className={componentClassNames(
+							'extension',
+							'extension-' + extensionId
+						)}
+					>
+						{isFunction(ExtensionTypeUI) && (
+							<ExtensionTypeUI {...{ ...props, config }} />
+						)}
+					</PanelBodyControl>
+				</InspectorControls>
 			)}
 			{children}
 			{isFunction(ExtensionTypeCssRules) && (

@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { BlockControls } from '@wordpress/block-editor';
+import { BlockControls, InspectorControls } from '@wordpress/block-editor';
 import { useEffect, useRef, useMemo } from '@wordpress/element';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { select } from '@wordpress/data';
@@ -12,13 +12,14 @@ import { select } from '@wordpress/data';
 import { isFunction } from '@publisher/utils';
 import { computedCssRules } from '@publisher/style-engine';
 import { extensionClassNames } from '@publisher/classnames';
-import { Divider, InspectElement } from '@publisher/components';
+import { Divider } from '@publisher/components';
 
 /**
  * Internal dependencies
  */
 import { useAttributes } from './utils';
 import { useBlockExtensions, useDisplayBlockControls } from './hooks';
+import { PanelBodyControl } from '@publisher/controls';
 
 const MappedControlsExtensions = (props) => {
 	const { publisherEdit } = select('core/blocks').getBlockType(props?.name);
@@ -37,31 +38,29 @@ const MappedControlsExtensions = (props) => {
 					{ name, label, isOpen, Edit: ExtensionEditComponent },
 					index
 				) => (
-					<InspectElement
-						title={label}
-						initialOpen={isOpen}
-						key={`${name}-${index}`}
-					>
-						<ExtensionEditComponent {...props}>
-							{FieldUI.map((field, fieldId) => {
-								if (!field[name]) {
-									return null;
-								}
+					<InspectorControls key={`${name}-${index}`}>
+						<PanelBodyControl title={label} initialOpen={isOpen}>
+							<ExtensionEditComponent {...props}>
+								{FieldUI.map((field, fieldId) => {
+									if (!field[name]) {
+										return null;
+									}
 
-								const FieldEditComponent = field[name];
+									const FieldEditComponent = field[name];
 
-								return (
-									<>
-										<FieldEditComponent
-											key={`${name}-${index}-${fieldId}`}
-											{...props}
-										/>
-										<Divider />
-									</>
-								);
-							})}
-						</ExtensionEditComponent>
-					</InspectElement>
+									return (
+										<>
+											<FieldEditComponent
+												key={`${name}-${index}-${fieldId}`}
+												{...props}
+											/>
+											<Divider />
+										</>
+									);
+								})}
+							</ExtensionEditComponent>
+						</PanelBodyControl>
+					</InspectorControls>
 				)
 			)}
 		</BlockEditComponent>

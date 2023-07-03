@@ -35,3 +35,4 @@ export { default as SearchControl } from './search-control';
 export { default as LinkControl } from './link-control';
 export { default as CheckboxControl } from './checkbox-control';
 export { default as TransformControl } from './transform-control';
+export { default as PanelBodyControl } from './panel-body-control';
