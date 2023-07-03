@@ -21,7 +21,6 @@
 	}
 	
 	&.with-header {
-		
 		.components-popover__content {
 			padding-top: 42px;
 		}
@@ -53,10 +52,10 @@
 		}
 	}
 	
-	.publisher-component-popover-body{
+	.publisher-component-popover-body {
 		padding: 18px 18px 18px;
-		min-height: calc( var(--popover-min-height) - var(--popover-header-height) );
-		max-height: calc( var(--popover-height) - var(--popover-header-height) );
+		min-height: calc(var(--popover-min-height) - var(--popover-header-height));
+		max-height: calc(var(--popover-height) - var(--popover-header-height));
 		overflow: var(--popover-overflow) !important;
 	}
 }
