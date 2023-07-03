@@ -1,8 +1,7 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -10,19 +9,24 @@ import { useState } from '@wordpress/element';
 import { Button, Grid, Popover } from '@publisher/components';
 import { Field, InputField } from '@publisher/fields';
 import { controlInnerClassNames } from '@publisher/classnames';
+import { useValue } from '@publisher/utils';
 
 export function SidePopover({
 	title = '',
 	icon = '',
 	isOpen,
-	value,
+	value: initialValue,
 	offset = 35,
 	onClose = () => {},
-	onValueChange = (newValue) => {
+	onChange = (newValue) => {
 		return newValue;
 	},
 }) {
-	const [controlValue, setControlValue] = useState(value);
+	const { value, setValue } = useValue({
+		initialValue,
+		defaultValue: '0px',
+		onChange,
+	});
 
 	return (
 		<>
@@ -50,11 +54,8 @@ export function SidePopover({
 						}}
 						//
 						defaultValue="0px"
-						value={controlValue !== '' ? controlValue : '0px'}
-						onChange={(newValue) => {
-							setControlValue(value);
-							onValueChange(newValue);
-						}}
+						value={value}
+						onChange={setValue}
 					/>
 
 					<Field
@@ -66,61 +67,69 @@ export function SidePopover({
 					>
 						<Grid gap="10px" gridTemplateColumns="repeat(4, 1fr)">
 							<Button
+								aria-label={__('Set 0px', 'publisher-core')}
 								size="small"
 								onClick={() => {
-									setControlValue('0px');
+									setValue('0px');
 								}}
 							>
 								0
 							</Button>
 
 							<Button
+								aria-label={__('Set 10px', 'publisher-core')}
 								size="small"
-								onClick={() => setControlValue('10px')}
+								onClick={() => setValue('10px')}
 							>
 								10
 							</Button>
 
 							<Button
+								aria-label={__('Set 20px', 'publisher-core')}
 								size="small"
-								onClick={() => setControlValue('20px')}
+								onClick={() => setValue('20px')}
 							>
 								20
 							</Button>
 
 							<Button
+								aria-label={__('Set 30px', 'publisher-core')}
 								size="small"
-								onClick={() => setControlValue('30px')}
+								onClick={() => setValue('30px')}
 							>
 								30
 							</Button>
 
 							<Button
+								aria-label={__('Set 60px', 'publisher-core')}
 								size="small"
 								onClick={() => {
-									setControlValue('60px');
+									setValue('60px');
 								}}
 							>
 								60
 							</Button>
 
 							<Button
+								aria-label={__('Set 80px', 'publisher-core')}
 								size="small"
-								onClick={() => setControlValue('80px')}
+								onClick={() => setValue('80px')}
 							>
 								80
 							</Button>
 
 							<Button
+								aria-label={__('Set 100px', 'publisher-core')}
 								size="small"
-								onClick={() => setControlValue('100px')}
+								onClick={() => setValue('100px')}
 							>
 								100
 							</Button>
 
 							<Button
+								aria-label={__('Set 120px', 'publisher-core')}
 								size="small"
-								onClick={() => setControlValue('120px')}
+								onClick={() => setValue('120px')}
 							>
 								120
 							</Button>

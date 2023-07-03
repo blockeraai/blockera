@@ -31,7 +31,7 @@ export function PositionExtension({ children, config, ...props }) {
 						label: '',
 						//
 						value: attributes.publisherPosition,
-						onValueChange: (newValue) =>
+						onChange: (newValue) =>
 							setAttributes({
 								...attributes,
 								publisherPosition: newValue,
