@@ -51,7 +51,9 @@ export function BaseExtension({
 						)}
 					>
 						{isFunction(ExtensionTypeUI) && (
-							<ExtensionTypeUI {...{ ...props, config }} />
+							<ExtensionTypeUI
+								{...{ ...props, blockName, config }}
+							/>
 						)}
 					</PanelBodyControl>
 				</InspectorControls>
