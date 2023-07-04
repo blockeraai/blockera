@@ -119,6 +119,16 @@ export function isString(value) {
 }
 
 /**
+ * is a given value Integer?
+ *
+ * @param {*} [value]
+ * @return {boolean} boolean
+ */
+export function isInteger(value) {
+	return Number.isInteger(value);
+}
+
+/**
  * is string end with a given target parameter?
  *
  * @param {string} [string]

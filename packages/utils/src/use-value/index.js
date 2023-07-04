@@ -74,15 +74,13 @@ export function useValue({
 			// merge default value to object elements inside initialValue
 			// used for repeaters
 			if (isArray(initialValue) && isObject(innerDefaultValue)) {
-				initialValue.map((item, itemId) => {
+				initialValue.forEach((item, itemId) => {
 					if (isObject(item)) {
 						initialValue[itemId] = {
 							...innerDefaultValue,
 							...item,
 						};
 					}
-
-					return null;
 				});
 			}
 		}
