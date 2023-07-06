@@ -29,14 +29,15 @@ export default function ColorIndicatorStack({
 	value
 		.slice(0, maxItems)
 		.reverse()
-		.map((value) => {
+		.map((value, index) => {
 			colorsStack.push(
 				<ColorIndicator
+					key={index}
 					value={value?.value ? value?.value : value}
 					type={value?.type ? value.type : 'color'}
 					size={size}
 					{...props}
-				></ColorIndicator>
+				/>
 			);
 			return null;
 		});
@@ -88,7 +89,7 @@ ColorIndicatorStack.propTypes = {
 	/**
 	 * Specifies the max count of value items to be shown
 	 */
-	maxItems: PropTypes.string,
+	maxItems: PropTypes.number,
 };
 
 ColorIndicatorStack.defaultProps = {
