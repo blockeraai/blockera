@@ -23,7 +23,7 @@ export function Field({
 	return (
 		<div
 			className={fieldsClassNames(field, columns, className)}
-			style={{ 'grid-template-columns': cssColumns || '' }}
+			style={{ gridTemplateColumns: cssColumns || '' }}
 		>
 			{label && (
 				<div className={fieldsInnerClassNames('label')}>
