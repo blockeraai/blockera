@@ -16,8 +16,8 @@ export default function RadialGradientClosestCornerIcon({}) {
 				fill="currentColor"
 			/>
 			<path
-				fill-rule="evenodd"
-				clip-rule="evenodd"
+				fillRule="evenodd"
+				clipRule="evenodd"
 				d="M2.001 1.001H1.001V4.415H2.001V2.708L4.44087 5.147C4.63595 5.34201 4.95213 5.34209 5.14731 5.14719C5.34264 4.95214 5.34284 4.63567 5.14775 4.44037L2.711 2.001H4.501V1.001H2.001Z"
 				fill="currentColor"
 			/>

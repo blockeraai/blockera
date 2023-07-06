@@ -10,15 +10,15 @@ export default function TransitionIcon({}) {
 		>
 			<path
 				opacity="0.4"
-				fill-rule="evenodd"
-				clip-rule="evenodd"
+				fillRule="evenodd"
+				clipRule="evenodd"
 				d="M8 2H1V9H5V8C5 6.34315 6.34315 5 8 5V2Z"
 				fill="currentColor"
 			/>
 			<path
 				opacity="0.7"
-				fill-rule="evenodd"
-				clip-rule="evenodd"
+				fillRule="evenodd"
+				clipRule="evenodd"
 				d="M8 6C6.89543 6 6 6.89543 6 8V11C6 12.1046 6.89543 13 8 13H9.02746C9.25804 10.9142 10.9142 9.25804 13 9.02746V8C13 6.89543 12.1046 6 11 6H8Z"
 				fill="currentColor"
 			/>

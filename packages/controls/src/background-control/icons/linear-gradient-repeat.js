@@ -14,44 +14,44 @@ export default function LinearGradientRepeatIcon({}) {
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			<path
-				fill-rule="evenodd"
-				clip-rule="evenodd"
+				fillRule="evenodd"
+				clipRule="evenodd"
 				d="M7.55636 3L3 7.55636V4C3 3.44771 3.44772 3 4 3H7.55636Z"
 				fill={'url(#' + gradient0ID + ')'}
 			></path>
 			<path
-				fill-rule="evenodd"
-				clip-rule="evenodd"
+				fillRule="evenodd"
+				clipRule="evenodd"
 				d="M11.799 3L3 11.799V7.55637L7.55637 3H11.799Z"
 				fill={'url(#' + gradient1ID + ')'}
 			></path>
 			<path
-				fill-rule="evenodd"
-				clip-rule="evenodd"
+				fillRule="evenodd"
+				clipRule="evenodd"
 				d="M15 4.04165L4.04165 15H4C3.44772 15 3 14.5523 3 14V11.799L11.799 3H14C14.5523 3 15 3.44772 15 4V4.04165Z"
 				fill={'url(#' + gradient2ID + ')'}
 			></path>
 			<path
-				fill-rule="evenodd"
-				clip-rule="evenodd"
+				fillRule="evenodd"
+				clipRule="evenodd"
 				d="M15 8.2843L8.28427 15H4.04163L15 4.04166V8.2843Z"
 				fill={'url(#' + gradient3ID + ')'}
 			></path>
 			<path
-				fill-rule="evenodd"
-				clip-rule="evenodd"
+				fillRule="evenodd"
+				clipRule="evenodd"
 				d="M12.5564 15H8.31372L15 8.31372V12.5564L12.5564 15Z"
 				fill={'url(#' + gradient4ID + ')'}
 			></path>
 			<path
-				fill-rule="evenodd"
-				clip-rule="evenodd"
+				fillRule="evenodd"
+				clipRule="evenodd"
 				d="M15 12.3137V14C15 14.5523 14.5523 15 14 15H12.3137L15 12.3137Z"
 				fill={'url(#' + gradient5ID + ')'}
 			></path>
 			<path
-				fill-rule="evenodd"
-				clip-rule="evenodd"
+				fillRule="evenodd"
+				clipRule="evenodd"
 				d="M3 1C1.89543 1 1 1.89543 1 3V15C1 16.1046 1.89543 17 3 17H15C16.1046 17 17 16.1046 17 15V3C17 1.89543 16.1046 1 15 1H3ZM3 2C2.44772 2 2 2.44772 2 3V15C2 15.5523 2.44772 16 3 16H15C15.5523 16 16 15.5523 16 15V3C16 2.44772 15.5523 2 15 2H3Z"
 				fill="currentColor"
 			></path>
@@ -64,11 +64,11 @@ export default function LinearGradientRepeatIcon({}) {
 					y2="5.77819"
 					gradientUnits="userSpaceOnUse"
 				>
-					<stop stop-color="currentColor"></stop>
+					<stop stopColor="currentColor"></stop>
 					<stop
 						offset="1"
-						stop-opacity="0"
-						stop-color="currentColor"
+						stopOpacity="0"
+						stopColor="currentColor"
 					></stop>
 				</linearGradient>
 				<linearGradient
@@ -79,11 +79,11 @@ export default function LinearGradientRepeatIcon({}) {
 					y2="7.89949"
 					gradientUnits="userSpaceOnUse"
 				>
-					<stop stop-color="currentColor"></stop>
+					<stop stopColor="currentColor"></stop>
 					<stop
 						offset="1"
-						stop-opacity="0"
-						stop-color="currentColor"
+						stopOpacity="0"
+						stopColor="currentColor"
 					></stop>
 				</linearGradient>
 				<linearGradient
@@ -94,11 +94,11 @@ export default function LinearGradientRepeatIcon({}) {
 					y2="9.59926"
 					gradientUnits="userSpaceOnUse"
 				>
-					<stop stop-color="currentColor"></stop>
+					<stop stopColor="currentColor"></stop>
 					<stop
 						offset="1"
-						stop-opacity="0"
-						stop-color="currentColor"
+						stopOpacity="0"
+						stopColor="currentColor"
 					></stop>
 				</linearGradient>
 				<linearGradient
@@ -109,11 +109,11 @@ export default function LinearGradientRepeatIcon({}) {
 					y2="11.2381"
 					gradientUnits="userSpaceOnUse"
 				>
-					<stop stop-color="currentColor"></stop>
+					<stop stopColor="currentColor"></stop>
 					<stop
 						offset="1"
-						stop-opacity="0"
-						stop-color="currentColor"
+						stopOpacity="0"
+						stopColor="currentColor"
 					></stop>
 				</linearGradient>
 				<linearGradient
@@ -124,11 +124,11 @@ export default function LinearGradientRepeatIcon({}) {
 					y2="13.7782"
 					gradientUnits="userSpaceOnUse"
 				>
-					<stop stop-color="currentColor"></stop>
+					<stop stopColor="currentColor"></stop>
 					<stop
 						offset="1"
-						stop-opacity="0"
-						stop-color="currentColor"
+						stopOpacity="0"
+						stopColor="currentColor"
 					></stop>
 				</linearGradient>
 				<linearGradient
@@ -139,11 +139,11 @@ export default function LinearGradientRepeatIcon({}) {
 					y2="15.7782"
 					gradientUnits="userSpaceOnUse"
 				>
-					<stop stop-color="currentColor"></stop>
+					<stop stopColor="currentColor"></stop>
 					<stop
 						offset="1"
-						stop-opacity="0"
-						stop-color="currentColor"
+						stopOpacity="0"
+						stopColor="currentColor"
 					></stop>
 				</linearGradient>
 			</defs>
