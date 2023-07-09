@@ -154,10 +154,12 @@ export const createCssRule = (style: Object): string => {
 			return;
 		}
 
-		styleBody = styleBody.replace(query, replacement).replace(/\{|\}/g, '');
+		styleBody = styleBody.replace(query, replacement).replace(/[{}]/g, '');
 	});
 
-	return `${selector}{${styleBody}}`;
+	return `${selector}{
+${styleBody.trim()}
+}`;
 };
 
 /**
