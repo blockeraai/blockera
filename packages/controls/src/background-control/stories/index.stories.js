@@ -1,8 +1,9 @@
 /**
  * External dependencies
  */
-import { useContext } from '@wordpress/element';
+import { nanoid } from 'nanoid';
 import { expect } from '@storybook/jest';
+import { useContext } from '@wordpress/element';
 import { userEvent, waitFor, within } from '@storybook/testing-library';
 
 /**
@@ -16,6 +17,7 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  */
 import { BackgroundControl } from '../../index';
 import { WithPlaygroundStyles } from '../../../../../.storybook/preview';
+import { WithControlDataProvider } from '../../../../../.storybook/decorators/with-control-data-provider';
 
 const {
 	WithInspectorStyles,
@@ -26,6 +28,7 @@ const {
 } = Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
+SharedDecorators.push(WithControlDataProvider);
 
 export default {
 	title: 'Controls/BackgroundControl',
@@ -36,6 +39,10 @@ export default {
 export const Empty = {
 	args: {
 		label: 'Background',
+		controlInfo: {
+			name: nanoid(),
+			value: [],
+		},
 	},
 	decorators: [
 		WithInspectorStyles,
@@ -47,6 +54,117 @@ export const Empty = {
 export const Filled = {
 	args: {
 		label: 'Background',
+		controlInfo: {
+			name: nanoid(),
+			value: {
+				backgroundImage: [
+					{
+						type: 'image',
+						image: 'https://betterstudio.com/wp-content/uploads/2022/09/publisher-theme.svg',
+						isVisible: true,
+					},
+					{
+						type: 'image',
+						isVisible: true,
+					},
+					{
+						type: 'image',
+						image: 'https://betterstudio.com/wp-content/uploads/2022/09/publisher-theme.svg',
+						isVisible: true,
+						isOpen: true,
+					},
+				],
+				backgroundLinearGradient: [
+					{
+						type: 'linear-gradient',
+						'linear-gradient':
+							'linear-gradient(90deg,rgb(25,0,255) 10%,rgb(230,134,0) 90%)',
+						isVisible: true,
+					},
+					{
+						type: 'linear-gradient',
+						'linear-gradient':
+							'linear-gradient(90deg,rgb(30,183,0) 7%,rgb(0,205,205) 90%)',
+						isVisible: true,
+						isOpen: true,
+					},
+				],
+				backgroundRadialGradient: [
+					{
+						type: 'radial-gradient',
+						'radial-gradient':
+							'radial-gradient(rgb(250,0,247) 0%,rgb(255,213,0) 64%)',
+						isVisible: true,
+					},
+					{
+						type: 'radial-gradient',
+						'radial-gradient':
+							'radial-gradient(rgb(74,0,250) 0%,rgb(145,0,230) 100%)',
+						isVisible: true,
+						isOpen: true,
+					},
+				],
+				backgroundMeshGradient: [
+					{
+						type: 'mesh-gradient',
+						'mesh-gradient':
+							'radial-gradient(at 0% 0%, var(--c0) 0px, transparent 47%),radial-gradient(at 85% 28%, var(--c1) 0px, transparent 45%),radial-gradient(at 95% 37%, var(--c2) 0px, transparent 66%),radial-gradient(at 97% 79%, var(--c3) 0px, transparent 59%)',
+						'mesh-gradient-colors': [
+							{
+								isVisible: true,
+								color: '#af4dff',
+							},
+							{
+								isVisible: true,
+								color: '#ff51f6',
+							},
+							{
+								isVisible: true,
+								color: '#3590ff',
+							},
+							{
+								isVisible: true,
+								color: '#f7ff65',
+							},
+						],
+						isVisible: true,
+					},
+					{
+						type: 'mesh-gradient',
+						'mesh-gradient':
+							'radial-gradient(at 0% 0%, var(--c0) 0px, transparent 63%),radial-gradient(at 53% 44%, var(--c1) 0px, transparent 58%),radial-gradient(at 14% 76%, var(--c2) 0px, transparent 66%),radial-gradient(at 90% 51%, var(--c3) 0px, transparent 68%),radial-gradient(at 44% 62%, var(--c4) 0px, transparent 49%),radial-gradient(at 3% 4%, var(--c5) 0px, transparent 53%)',
+						'mesh-gradient-colors': [
+							{
+								isVisible: true,
+								color: '#4d61ff',
+							},
+							{
+								isVisible: true,
+								color: '#9451ff',
+							},
+							{
+								isVisible: true,
+								color: '#35ffe7',
+							},
+							{
+								isVisible: true,
+								color: '#ffa065',
+							},
+							{
+								isVisible: true,
+								color: '#6c37ff',
+							},
+							{
+								isVisible: true,
+								color: '#73b9ff',
+							},
+						],
+						isVisible: true,
+						isOpen: true,
+					},
+				],
+			},
+		},
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => {
@@ -63,23 +181,7 @@ export const Filled = {
 					<BackgroundControl
 						{...args}
 						label="Background"
-						value={[
-							{
-								type: 'image',
-								image: 'https://betterstudio.com/wp-content/uploads/2022/09/publisher-theme.svg',
-								isVisible: true,
-							},
-							{
-								type: 'image',
-								isVisible: true,
-							},
-							{
-								type: 'image',
-								image: 'https://betterstudio.com/wp-content/uploads/2022/09/publisher-theme.svg',
-								isVisible: true,
-								isOpen: true,
-							},
-						]}
+						repeaterId={'backgroundImage'}
 					/>
 				</Flex>
 
@@ -94,21 +196,7 @@ export const Filled = {
 					<BackgroundControl
 						{...args}
 						label="Background"
-						value={[
-							{
-								type: 'linear-gradient',
-								'linear-gradient':
-									'linear-gradient(90deg,rgb(25,0,255) 10%,rgb(230,134,0) 90%)',
-								isVisible: true,
-							},
-							{
-								type: 'linear-gradient',
-								'linear-gradient':
-									'linear-gradient(90deg,rgb(30,183,0) 7%,rgb(0,205,205) 90%)',
-								isVisible: true,
-								isOpen: true,
-							},
-						]}
+						repeaterId={'backgroundLinearGradient'}
 					/>
 				</Flex>
 
@@ -123,21 +211,7 @@ export const Filled = {
 					<BackgroundControl
 						{...args}
 						label="Background"
-						value={[
-							{
-								type: 'radial-gradient',
-								'radial-gradient':
-									'radial-gradient(rgb(250,0,247) 0%,rgb(255,213,0) 64%)',
-								isVisible: true,
-							},
-							{
-								type: 'radial-gradient',
-								'radial-gradient':
-									'radial-gradient(rgb(74,0,250) 0%,rgb(145,0,230) 100%)',
-								isVisible: true,
-								isOpen: true,
-							},
-						]}
+						repeaterId={'backgroundRadialGradient'}
 					/>
 				</Flex>
 
@@ -152,65 +226,7 @@ export const Filled = {
 					<BackgroundControl
 						{...args}
 						label="Background"
-						value={[
-							{
-								type: 'mesh-gradient',
-								'mesh-gradient':
-									'radial-gradient(at 0% 0%, var(--c0) 0px, transparent 47%),radial-gradient(at 85% 28%, var(--c1) 0px, transparent 45%),radial-gradient(at 95% 37%, var(--c2) 0px, transparent 66%),radial-gradient(at 97% 79%, var(--c3) 0px, transparent 59%)',
-								'mesh-gradient-colors': [
-									{
-										isVisible: true,
-										color: '#af4dff',
-									},
-									{
-										isVisible: true,
-										color: '#ff51f6',
-									},
-									{
-										isVisible: true,
-										color: '#3590ff',
-									},
-									{
-										isVisible: true,
-										color: '#f7ff65',
-									},
-								],
-								isVisible: true,
-							},
-							{
-								type: 'mesh-gradient',
-								'mesh-gradient':
-									'radial-gradient(at 0% 0%, var(--c0) 0px, transparent 63%),radial-gradient(at 53% 44%, var(--c1) 0px, transparent 58%),radial-gradient(at 14% 76%, var(--c2) 0px, transparent 66%),radial-gradient(at 90% 51%, var(--c3) 0px, transparent 68%),radial-gradient(at 44% 62%, var(--c4) 0px, transparent 49%),radial-gradient(at 3% 4%, var(--c5) 0px, transparent 53%)',
-								'mesh-gradient-colors': [
-									{
-										isVisible: true,
-										color: '#4d61ff',
-									},
-									{
-										isVisible: true,
-										color: '#9451ff',
-									},
-									{
-										isVisible: true,
-										color: '#35ffe7',
-									},
-									{
-										isVisible: true,
-										color: '#ffa065',
-									},
-									{
-										isVisible: true,
-										color: '#6c37ff',
-									},
-									{
-										isVisible: true,
-										color: '#73b9ff',
-									},
-								],
-								isVisible: true,
-								isOpen: true,
-							},
-						]}
+						repeaterId={'backgroundMeshGradient'}
 					/>
 				</Flex>
 			</Flex>
