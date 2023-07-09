@@ -1,14 +1,15 @@
 /**
  * External dependencies
  */
-import { createContext } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
+import { createContext, useEffect } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
 import { registerControl } from '../api';
 import { STORE_NAME } from '../store/constants';
+import { isFunction } from '@publisher/utils';
 
 export const ControlContext = createContext({
 	controlInfo: {
@@ -22,7 +23,7 @@ export const ControlContext = createContext({
 
 export const ControlContextProvider = ({ value: controlInfo, children }) => {
 	//Prepare control status and value!
-	const { status, value } = useSelect(
+	const { status, value, onChange, valueCleanUp } = useSelect(
 		(select) => {
 			registerControl(controlInfo);
 
@@ -34,6 +35,13 @@ export const ControlContextProvider = ({ value: controlInfo, children }) => {
 	);
 	//control dispatch for available actions
 	const dispatch = useDispatch(STORE_NAME);
+
+	useEffect(() => {
+		return isFunction(onChange) && isFunction(valueCleanUp)
+			? onChange(valueCleanUp(value))
+			: onChange(value);
+		// eslint-disable-next-line
+	}, [value]);
 
 	//You can to enable||disable current control with status column!
 	if (!status) {
