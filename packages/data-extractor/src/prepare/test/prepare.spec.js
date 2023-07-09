@@ -1,4 +1,4 @@
-import { prepare } from '..';
+import { prepare } from '../../index';
 
 describe('API Preparing data property value testing...', () => {
 	it('Access to "x.y[2]" from data with string query testing...', () => {
@@ -62,5 +62,23 @@ describe('API Preparing data property value testing...', () => {
 		const query = 'attributes.boxShadowItems[0].y';
 
 		expect(prepare(query, data)).toBe('10px');
+	});
+
+	it(`Access to "[0][x-prop]" from data with string query testing...`, () => {
+		const query = `[0][x-prop]`;
+		const data = [
+			{
+				'x-prop': [],
+				'x-prop-1': 25,
+			},
+			{
+				'x-prop': [],
+				'x-prop-1': 10,
+			},
+		];
+
+		expect(prepare(query, data)).toEqual([]);
+		expect(prepare('[0][x-prop-1]', data)).toEqual(25);
+		expect(prepare('[1][x-prop-1]', data)).toEqual(10);
 	});
 });
