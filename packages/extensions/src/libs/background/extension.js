@@ -7,6 +7,7 @@ import { useContext } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
+import { ControlContextProvider } from '@publisher/controls';
 import { ColorField, SelectField, BackgroundField } from '@publisher/fields';
 
 /**
@@ -34,18 +35,23 @@ export function BackgroundExtension({ children, config, ...props }) {
 	return (
 		<>
 			{isActiveField(publisherBackground) && (
-				<BackgroundField
-					label={__('Image & Gradient', 'publisher-core')}
-					value={attributes.publisherBackground}
-					attribute={'publisherBackground'}
-					onChange={(newValue) =>
-						setAttributes({
-							...attributes,
-							publisherBackground: newValue,
-						})
-					}
-					{...props}
-				/>
+				<ControlContextProvider
+					value={{
+						name: `${props.blockName}/BackgroundControl`,
+						//
+						value: attributes.publisherBackground,
+						onChange: (newValue) =>
+							setAttributes({
+								...attributes,
+								publisherBackground: newValue,
+							}),
+					}}
+				>
+					<BackgroundField
+						label={__('Image & Gradient', 'publisher-core')}
+						{...props}
+					/>
+				</ControlContextProvider>
 			)}
 
 			{isActiveField(publisherBackgroundColor) && (
