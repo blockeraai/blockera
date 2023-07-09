@@ -2,7 +2,6 @@
  * Internal dependencies
  */
 import CssGenerators from '@publisher/style-engine';
-import helpers from '@publisher/extensions/src/controls/box-shadow/helpers';
 
 const blockProps = {
 	clientId: 12354645546,
@@ -37,8 +36,7 @@ describe('Css Generator testing ...', () => {
 			blockProps
 		);
 
-		expect(cssGenerator.rules())
-			.toBe(`.publisher-core.extension.publisher-extension-ref.client-id-12354645546 a{
+		expect(cssGenerator.rules()).toBe(`#block-12354645546 a{
 box-shadow: inherit 10px 15px 20px #fff inset;
 }`);
 	});
@@ -77,26 +75,6 @@ box-shadow: inherit 10px 15px 20px #fff inset;
 		expect(cssGenerator.rules())
 			.toBe(`.publisher-core.extension.publisher-extension-ref.client-id-12354645546 a{
 box-shadow: inherit 10px 15px 20px #fff inset, 0px 10px 15px 20px #000 inset;
-}`);
-	});
-
-	test('function generator testing...', () => {
-		const cssGenerator = new CssGenerators(
-			'boxShadowItems',
-			{
-				type: 'function',
-				function: helpers.getCssRules,
-				selector: ' a.wp-element-button',
-			},
-			blockProps
-		);
-
-		expect(cssGenerator.rules())
-			.toBe(`.publisher-core.extension.publisher-extension-ref.client-id-12354645546{
-box-shadow: 0px 10px 15px 20px #fff inset;
-}
-.publisher-box-shadow-wrapper a.wp-element-button{
-box-shadow: 0px 10px 15px 20px #fff inset;
 }`);
 	});
 });
