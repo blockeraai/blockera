@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 /**
  * Publisher dependencies
  */
+import { isArray } from '@publisher/utils';
 import { controlClassNames } from '@publisher/classnames';
 
 /**
@@ -15,8 +16,6 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
-import { useEffect } from '@wordpress/element';
-import { useControlContext } from '../context';
 
 export default function BackgroundControl({
 	defaultRepeaterItemValue,
@@ -26,6 +25,10 @@ export default function BackgroundControl({
 }) {
 	// it's commented because we wait for field context provider to use it.
 	function valueCleanup(value) {
+		if (!isArray(value)) {
+			return value;
+		}
+
 		return value.map((item) => {
 			if (item?.type !== 'image') {
 				delete item.image;
@@ -40,7 +43,8 @@ export default function BackgroundControl({
 
 			if (item?.type !== 'mesh-gradient') {
 				delete item['mesh-gradient'];
-				delete item['mesh-gradient-colors'];
+				//TODO: fix this
+				// delete item['mesh-gradient-colors'];
 				delete item['mesh-gradient-attachment'];
 			}
 
@@ -62,16 +66,6 @@ export default function BackgroundControl({
 			return item;
 		});
 	}
-
-	const {
-		controlInfo: { name: controlId },
-		dispatch: { modifyControlInfo },
-	} = useControlContext();
-
-	useEffect(() => {
-		modifyControlInfo({ controlId, info: { valueCleanup } });
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
 
 	return (
 		<RepeaterControl
