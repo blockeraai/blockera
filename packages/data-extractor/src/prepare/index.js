@@ -49,16 +49,7 @@ export function prepare(query: string, dataset: Object): Array<string> {
  * @return {*} return any value
  */
 export function accumulator(a, x) {
-	const regexp = /\[.*]/gi;
-	let tempValue = a[x];
-
-	regexMatch(regexp, x, (match) => {
-		match[0] = match[0].replace(/[\[\]]/g, '');
-
-		tempValue = tempValue[match[0]];
-	});
-
-	return tempValue;
+	return a[x];
 }
 
 /**

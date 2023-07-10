@@ -24,39 +24,13 @@ export function update(
 ): null {
 	const keys = [];
 	let currentObj = object;
-	const regexp = /\[.*]/gi;
 
 	regexMatch(/[\w-]+/g, query, (match) => keys.push(match));
 
 	const lastKey = keys.pop();
 
 	for (const key of keys) {
-		if (regexp.test(key)) {
-			currentObj = currentObj[key.replace(regexp, '')];
-
-			regexMatch(regexp, key, (match) => {
-				currentObj = currentObj[match.replace(/[\[\]]/g, '')];
-			});
-
-			continue;
-		}
-
 		currentObj = currentObj[key];
-	}
-
-	if (regexp.test(lastKey)) {
-		currentObj = currentObj[lastKey.replace(regexp, '')];
-
-		regexMatch(regexp, lastKey, (match) => {
-			//running this condition when prepare lastKey
-			if (!value) {
-				return;
-			}
-
-			currentObj[match.replace(/[\[\]]/g, '')] = value;
-		});
-
-		return object;
 	}
 
 	if ('replace' === type) {
