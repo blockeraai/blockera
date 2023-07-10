@@ -37,11 +37,13 @@ export const ControlContextProvider = ({ value: controlInfo, children }) => {
 	const dispatch = useDispatch(STORE_NAME);
 
 	useEffect(() => {
-		return isFunction(onChange) && isFunction(valueCleanUp)
-			? onChange(valueCleanUp(value))
-			: onChange(value);
+		if (isFunction(onChange))
+			// eslint-disable-next-line no-unused-expressions
+			isFunction(valueCleanUp)
+				? onChange(valueCleanUp(value))
+				: onChange(value);
 		// eslint-disable-next-line
-	}, [value]);
+	}, [value, valueCleanUp, onChange]);
 
 	//You can to enable||disable current control with status column!
 	if (!status) {

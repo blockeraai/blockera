@@ -9,6 +9,7 @@ import { useContext } from '@wordpress/element';
 import {
 	isArray,
 	isBoolean,
+	isFunction,
 	isNull,
 	isObject,
 	isUndefined,
@@ -44,6 +45,7 @@ export const useControlContext = (args) => {
 
 	const {
 		id,
+		onChange,
 		repeater: { itemId, repeaterId, defaultRepeaterItemValue } = {
 			itemId: null,
 			repeaterId: null,
@@ -67,6 +69,30 @@ export const useControlContext = (args) => {
 	 */
 	function isRepeaterControl() {
 		return isArray(savedValue) && isObject(defaultRepeaterItemValue);
+	}
+
+	/**
+	 * Merged control info with customize settings
+	 *
+	 * @param {Object} controlInfo the current control context information
+	 * @return {{}} the merged info of control context
+	 */
+	function mergedControlInfo(controlInfo) {
+		return {
+			...controlInfo,
+			onChange: isFunction(onChange)
+				? {
+						...controlInfo,
+						onChange,
+				  }
+				: controlInfo.onChange,
+			valueCleanup: isFunction(valueCleanup)
+				? {
+						...controlInfo,
+						valueCleanup,
+				  }
+				: controlInfo.valueCleanup,
+		};
 	}
 
 	/**
@@ -107,7 +133,7 @@ export const useControlContext = (args) => {
 
 	return {
 		dispatch,
-		controlInfo,
+		controlInfo: mergedControlInfo(controlInfo),
 		value: calculatedInitValue,
 		/**
 		 * Reset control value to default value.
