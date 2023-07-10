@@ -15,15 +15,16 @@ export const ControlContext = createContext({
 	controlInfo: {
 		name: null,
 		value: null,
-		onChange: () => null,
+		onChange: null,
 	},
 	value: null,
-	dispatch: () => null,
+	dispatch: null,
+	valueCleanup: null,
 });
 
 export const ControlContextProvider = ({ value: controlInfo, children }) => {
 	//Prepare control status and value!
-	const { status, value, onChange, valueCleanUp } = useSelect(
+	const { status, value, onChange, valueCleanup } = useSelect(
 		(select) => {
 			registerControl(controlInfo);
 
@@ -39,11 +40,11 @@ export const ControlContextProvider = ({ value: controlInfo, children }) => {
 	useEffect(() => {
 		if (isFunction(onChange))
 			// eslint-disable-next-line no-unused-expressions
-			isFunction(valueCleanUp)
-				? onChange(valueCleanUp(value))
+			isFunction(valueCleanup)
+				? onChange(valueCleanup(value))
 				: onChange(value);
 		// eslint-disable-next-line
-	}, [value, valueCleanUp, onChange]);
+	}, [value, valueCleanup, onChange]);
 
 	//You can to enable||disable current control with status column!
 	if (!status) {
