@@ -305,7 +305,15 @@ export const PlayImage = {
 PlayImage.storyName = 'Play → Image';
 
 export const Screenshot = {
-	args: {},
+	args: {
+		controlInfo: {
+			...Filled.args.controlInfo,
+			value: {
+				...Filled.args.controlInfo.value,
+				emptyBackground: [],
+			},
+		},
+	},
 	decorators: [
 		WithInspectorStyles,
 		WithPopoverDataProvider,
@@ -315,10 +323,13 @@ export const Screenshot = {
 		<Flex direction="column" gap="50px">
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Empty</h2>
-				<BackgroundControl {...Empty.args} />
+				<BackgroundControl
+					{...Empty.args}
+					repeaterId={'emptyBackground'}
+				/>
 			</Flex>
 
-			<Filled.render />
+			<Filled.render {...Filled.args} />
 		</Flex>
 	),
 };
