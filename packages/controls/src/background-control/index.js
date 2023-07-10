@@ -15,6 +15,8 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
+import { useEffect } from '@wordpress/element';
+import { useControlContext } from '../context';
 
 export default function BackgroundControl({
 	defaultRepeaterItemValue,
@@ -23,43 +25,53 @@ export default function BackgroundControl({
 	...props
 }) {
 	// it's commented because we wait for field context provider to use it.
-	// function valueCleanup(value) {
-	// 	return value.map((item) => {
-	// 		if (item?.type !== 'image') {
-	// 			delete item.image;
-	// 			delete item['image-size'];
-	// 			delete item['image-size-width'];
-	// 			delete item['image-size-height'];
-	// 			delete item['image-position-top'];
-	// 			delete item['image-position-left'];
-	// 			delete item['image-repeat'];
-	// 			delete item['image-attachment'];
-	// 		}
-	//
-	// 		if (item?.type !== 'mesh-gradient') {
-	// 			delete item['mesh-gradient'];
-	// 			delete item['mesh-gradient-colors'];
-	// 			delete item['mesh-gradient-attachment'];
-	// 		}
-	//
-	// 		if (item?.type !== 'linear-gradient') {
-	// 			delete item['linear-gradient'];
-	// 			delete item['linear-gradient-repeat'];
-	// 			delete item['linear-gradient-attachment'];
-	// 		}
-	//
-	// 		if (item?.type !== 'radial-gradient') {
-	// 			delete item['radial-gradient'];
-	// 			delete item['radial-gradient-position-top'];
-	// 			delete item['radial-gradient-position-left'];
-	// 			delete item['radial-gradient-size'];
-	// 			delete item['radial-gradient-repeat'];
-	// 			delete item['radial-gradient-attachment'];
-	// 		}
-	//
-	// 		return item;
-	// 	});
-	// }
+	function valueCleanup(value) {
+		return value.map((item) => {
+			if (item?.type !== 'image') {
+				delete item.image;
+				delete item['image-size'];
+				delete item['image-size-width'];
+				delete item['image-size-height'];
+				delete item['image-position-top'];
+				delete item['image-position-left'];
+				delete item['image-repeat'];
+				delete item['image-attachment'];
+			}
+
+			if (item?.type !== 'mesh-gradient') {
+				delete item['mesh-gradient'];
+				delete item['mesh-gradient-colors'];
+				delete item['mesh-gradient-attachment'];
+			}
+
+			if (item?.type !== 'linear-gradient') {
+				delete item['linear-gradient'];
+				delete item['linear-gradient-repeat'];
+				delete item['linear-gradient-attachment'];
+			}
+
+			if (item?.type !== 'radial-gradient') {
+				delete item['radial-gradient'];
+				delete item['radial-gradient-position-top'];
+				delete item['radial-gradient-position-left'];
+				delete item['radial-gradient-size'];
+				delete item['radial-gradient-repeat'];
+				delete item['radial-gradient-attachment'];
+			}
+
+			return item;
+		});
+	}
+
+	const {
+		controlInfo: { name: controlId },
+		dispatch: { modifyControlInfo },
+	} = useControlContext();
+
+	useEffect(() => {
+		modifyControlInfo({ controlId, info: { valueCleanup } });
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<RepeaterControl
@@ -70,6 +82,7 @@ export default function BackgroundControl({
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			popoverClassName={controlClassNames('background-popover')}
 			{...props}
+			valueCleanup={valueCleanup}
 		/>
 	);
 }
