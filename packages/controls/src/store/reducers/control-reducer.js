@@ -56,6 +56,19 @@ export function controlReducer(state = {}, action) {
 				},
 			};
 
+		case 'MODIFY_CONTROL_INFO':
+			if (action.info.name || !action.controlId) {
+				return state;
+			}
+
+			return {
+				...state,
+				[action.controlId]: {
+					...state[action.controlId],
+					...action.info,
+				},
+			};
+
 		default:
 			//when action type is exists in available repeater control actions!
 			if (

@@ -1,7 +1,12 @@
 /**
  * Internal dependencies
  */
-import { addControl, removeControl, modifyControlValue } from '../../actions';
+import {
+	addControl,
+	removeControl,
+	modifyControlValue,
+	modifyControlInfo,
+} from '../../actions';
 import { controlReducer } from '../control-reducer';
 import { repeaterReducer } from '../repeater-reducer';
 
@@ -109,6 +114,38 @@ describe('Control reducer', function () {
 				value: {
 					x: 20,
 				},
+			},
+		});
+	});
+
+	it('should modified control info', function () {
+		state = controlReducer(
+			state,
+			addControl({
+				value: {
+					x: 10,
+				},
+				name: 'TestControl',
+			})
+		);
+
+		const nextState = controlReducer(
+			state,
+			modifyControlInfo({
+				info: {
+					testProp: 'testValue',
+				},
+				controlId: 'TestControl',
+			})
+		);
+
+		expect(nextState).toEqual({
+			TestControl: {
+				value: {
+					x: 10,
+				},
+				name: 'TestControl',
+				testProp: 'testValue',
 			},
 		});
 	});

@@ -23,6 +23,14 @@ export function modifyControlValue({
 	};
 }
 
+export function modifyControlInfo({ info, controlId }) {
+	return {
+		info,
+		controlId,
+		type: 'MODIFY_CONTROL_INFO',
+	};
+}
+
 export function addRepeaterItem({
 	value,
 	controlId,
