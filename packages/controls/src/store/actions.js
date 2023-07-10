@@ -28,14 +28,12 @@ export function addRepeaterItem({
 	controlId,
 	maxItems = -1,
 	repeaterId = null,
-	repeaterParentItemId = null,
 }) {
 	return {
 		value,
 		maxItems,
 		controlId,
 		repeaterId,
-		repeaterParentItemId,
 		type: 'ADD_REPEATER_ITEM',
 	};
 }
@@ -48,7 +46,6 @@ export function changeRepeaterItem({
 	maxItems = -1,
 	repeaterId = null,
 	valueCleanup = null,
-	repeaterParentItemId = null,
 }) {
 	return {
 		value,
@@ -57,23 +54,16 @@ export function changeRepeaterItem({
 		maxItems,
 		repeaterId,
 		valueCleanup,
-		repeaterParentItemId,
 		type: 'CHANGE_REPEATER_ITEM',
 		defaultItemValue: defaultItemValue ?? {},
 	};
 }
 
-export function removeRepeaterItem({
-	controlId,
-	itemId,
-	repeaterId = null,
-	repeaterParentItemId = null,
-}) {
+export function removeRepeaterItem({ controlId, itemId, repeaterId = null }) {
 	return {
 		itemId,
 		controlId,
 		repeaterId,
-		repeaterParentItemId,
 		type: 'REMOVE_REPEATER_ITEM',
 	};
 }
@@ -84,7 +74,6 @@ export function sortRepeaterItem({
 	controlId,
 	fromIndex,
 	repeaterId = null,
-	repeaterParentItemId = null,
 }) {
 	return {
 		items,
@@ -92,7 +81,6 @@ export function sortRepeaterItem({
 		fromIndex,
 		controlId,
 		repeaterId,
-		repeaterParentItemId,
 		type: 'SORT_REPEATER_ITEM',
 	};
 }
@@ -102,14 +90,12 @@ export function cloneRepeaterItem({
 	controlId,
 	maxItems = -1,
 	repeaterId = null,
-	repeaterParentItemId = null,
 }) {
 	return {
 		itemId,
 		controlId,
 		maxItems,
 		repeaterId,
-		repeaterParentItemId,
 		type: 'CLONE_REPEATER_ITEM',
 	};
 }

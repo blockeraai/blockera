@@ -399,4 +399,37 @@ describe('Add Repeater Item', function () {
 			},
 		});
 	});
+
+	it('should add item with simple repeaterId with limitation', function () {
+		let state = {};
+
+		state = controlReducer(
+			state,
+			addControl({
+				value: {
+					repeater: [{ x: 10 }],
+				},
+				name: 'TestRepeaterControl',
+			})
+		);
+
+		state = controlReducer(
+			state,
+			addRepeaterItem({
+				maxItems: 1,
+				value: { x: 10 },
+				repeaterId: 'repeater',
+				controlId: 'TestRepeaterControl',
+			})
+		);
+
+		expect(state).toEqual({
+			TestRepeaterControl: {
+				name: 'TestRepeaterControl',
+				value: {
+					repeater: [{ x: 10 }],
+				},
+			},
+		});
+	});
 });

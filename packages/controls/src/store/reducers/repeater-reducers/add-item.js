@@ -25,7 +25,7 @@ function handleActionIncludeRepeaterId(controlValue, action) {
 	//To limit the number of control items, it is enough to set the maxItems number and this value is less than the current number of state items.
 	if (
 		hasLimitation(action) &&
-		controlValue[action.repeaterId]?.length >= action.maxItems
+		prepare(action.repeaterId, controlValue)?.length >= action.maxItems
 	) {
 		return controlValue;
 	}

@@ -5,18 +5,6 @@ import { isArray, isInteger, isString } from '@publisher/utils';
 import { prepare } from '@publisher/data-extractor';
 
 /**
- * Is called dispatcher action from child?
- *
- * @param  {Object} action the action details of dispatcher
- * @return {boolean} true on success, false when otherwise!
- */
-export function isActionFromChildRepeater(action) {
-	return (
-		isInteger(action.repeaterParentItemId) && isString(action.repeaterId)
-	);
-}
-
-/**
  * has limitation in action?
  *
  * @param {Object} action the action of dispatcher

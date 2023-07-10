@@ -15,11 +15,20 @@ function getNewValue({ valueCleanup, value }) {
 }
 
 function handleActionIncludeRepeaterId(controlValue, action) {
-	if (!isQuery(action)) {
-		return controlValue;
+	if (isQuery(action)) {
+		return update(controlValue, action.repeaterId, getNewValue(action));
 	}
 
-	return update(controlValue, action.repeaterId, getNewValue(action));
+	return {
+		...controlValue,
+		[action.repeaterId]: controlValue[action.repeaterId].map((item, id) => {
+			if (id === action.itemId) {
+				return getNewValue(action);
+			}
+
+			return item;
+		}),
+	};
 }
 
 export function changeItem(state = {}, action) {

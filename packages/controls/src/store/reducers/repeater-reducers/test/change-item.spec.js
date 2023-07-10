@@ -3,6 +3,7 @@
  */
 import { controlReducer } from '../../control-reducer';
 import { addControl, changeRepeaterItem } from '../../../actions';
+import { repeaterReducer } from '../../repeater-reducer';
 
 describe('Change Repeater Item', function () {
 	it('should changed repeater control item', function () {
@@ -155,5 +156,81 @@ describe('Change Repeater Item', function () {
 				},
 			},
 		});
+	});
+
+	it('should testing valueCleanUp()', function () {
+		let state = {};
+
+		state = controlReducer(
+			state,
+			addControl({
+				value: {
+					x: [{ x: 10 }, { x: 12 }],
+				},
+				name: 'TestRepeaterControl',
+			})
+		);
+
+		expect(
+			controlReducer(
+				state,
+				changeRepeaterItem({
+					value: { x: 20 },
+					repeaterId: 'x[1]',
+					controlId: 'TestRepeaterControl',
+					valueCleanup: (value) => value,
+				})
+			)
+		).toEqual({
+			TestRepeaterControl: {
+				name: 'TestRepeaterControl',
+				value: {
+					x: [{ x: 10 }, { x: 20 }],
+				},
+			},
+		});
+	});
+
+	it('should testing change item of repeater with simple repeaterId', function () {
+		let state = {};
+
+		state = controlReducer(
+			state,
+			addControl({
+				value: {
+					x: [{ x: 10 }, { x: 12 }],
+				},
+				name: 'TestRepeaterControl',
+			})
+		);
+
+		expect(
+			controlReducer(
+				state,
+				changeRepeaterItem({
+					value: { x: 20 },
+					itemId: 1,
+					repeaterId: 'x',
+					controlId: 'TestRepeaterControl',
+					valueCleanup: (value) => value,
+				})
+			)
+		).toEqual({
+			TestRepeaterControl: {
+				name: 'TestRepeaterControl',
+				value: {
+					x: [{ x: 10 }, { x: 20 }],
+				},
+			},
+		});
+	});
+
+	it('should not change item of invalid state structure', function () {
+		const initialState = {};
+		expect(
+			repeaterReducer(initialState, {
+				type: 'CHANGE_REPEATER_ITEM',
+			})
+		).toEqual(initialState);
 	});
 });

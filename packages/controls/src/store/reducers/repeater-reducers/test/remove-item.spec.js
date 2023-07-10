@@ -3,6 +3,7 @@
  */
 import { controlReducer } from '../../control-reducer';
 import { addControl, removeRepeaterItem } from '../../../actions';
+import { repeaterReducer } from '../../repeater-reducer';
 
 describe('Remove Repeater Item', function () {
 	it('should modified control state with remove repeater item', function () {
@@ -143,5 +144,14 @@ describe('Remove Repeater Item', function () {
 				},
 			},
 		});
+	});
+
+	it('should not remove item of invalid state structure', function () {
+		const initialState = {};
+		expect(
+			repeaterReducer(initialState, {
+				type: 'REMOVE_REPEATER_ITEM',
+			})
+		).toEqual(initialState);
 	});
 });
