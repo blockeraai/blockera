@@ -29,6 +29,7 @@ const {
 
 SharedDecorators.push(WithPlaygroundStyles);
 SharedDecorators.push(WithControlDataProvider);
+SharedDecorators.push(WithPopoverDataProvider);
 
 export default {
 	title: 'Controls/BackgroundControl',
@@ -44,11 +45,7 @@ export const Empty = {
 			value: [],
 		},
 	},
-	decorators: [
-		WithInspectorStyles,
-		WithPopoverDataProvider,
-		...SharedDecorators,
-	],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const Filled = {
@@ -252,7 +249,6 @@ export const PlayImage = {
 	},
 	decorators: [
 		WithStoryContextProvider,
-		WithPopoverDataProvider,
 		WithInspectorStyles,
 		...SharedDecorators,
 	],
@@ -314,11 +310,7 @@ export const Screenshot = {
 			},
 		},
 	},
-	decorators: [
-		WithInspectorStyles,
-		WithPopoverDataProvider,
-		...SharedDecorators,
-	],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: () => (
 		<Flex direction="column" gap="50px">
 			<Flex direction="column" gap="15px">
