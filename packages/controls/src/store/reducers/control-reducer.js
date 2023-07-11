@@ -4,11 +4,6 @@
 import { isFunction, isUndefined, omit } from '@publisher/utils';
 
 /**
- * Internal dependencies
- */
-import { repeaterReducer } from './repeater-reducer';
-
-/**
  * The global state management control context provider!
  *
  * @param {Object} state the state of control
@@ -70,20 +65,6 @@ export function controlReducer(state = {}, action) {
 			};
 
 		default:
-			//when action type is exists in available repeater control actions!
-			if (
-				[
-					'ADD_REPEATER_ITEM',
-					'SORT_REPEATER_ITEM',
-					'CLONE_REPEATER_ITEM',
-					'RESET_REPEATER_ITEM',
-					'CHANGE_REPEATER_ITEM',
-					'REMOVE_REPEATER_ITEM',
-				].includes(action.type)
-			) {
-				return repeaterReducer(state, action);
-			}
-
 			return state;
 	}
 }

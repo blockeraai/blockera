@@ -1,15 +1,15 @@
 /**
  * Internal dependencies
  */
-import { controlReducer } from '../../control-reducer';
-import { addControl, changeRepeaterItem } from '../../../actions';
-import { repeaterReducer } from '../../repeater-reducer';
+import { repeaterReducer } from '../';
+import { changeRepeaterItem } from '../../actions';
+import { addControl } from '../../../../store/actions';
 
 describe('Change Repeater Item', function () {
 	it('should changed repeater control item', function () {
 		let state = {};
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: [{ x: 10 }, { x: 12 }],
@@ -18,7 +18,7 @@ describe('Change Repeater Item', function () {
 		);
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				changeRepeaterItem({
 					value: { x: 20 },
@@ -36,7 +36,7 @@ describe('Change Repeater Item', function () {
 	it('should changed repeater control item with repeaterId as `query`', function () {
 		let state = {};
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: {
@@ -51,7 +51,7 @@ describe('Change Repeater Item', function () {
 		);
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				changeRepeaterItem({
 					value: { x: 20 },
@@ -72,7 +72,7 @@ describe('Change Repeater Item', function () {
 			},
 		});
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: {
@@ -91,7 +91,7 @@ describe('Change Repeater Item', function () {
 		);
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				changeRepeaterItem({
 					value: { value: 20 },
@@ -129,7 +129,7 @@ describe('Change Repeater Item', function () {
 	it('should changed repeater control item in first level of state structure', function () {
 		let state = {};
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: {
@@ -140,7 +140,7 @@ describe('Change Repeater Item', function () {
 		);
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				changeRepeaterItem({
 					value: { x: 20 },
@@ -161,7 +161,7 @@ describe('Change Repeater Item', function () {
 	it('should testing valueCleanUp()', function () {
 		let state = {};
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: {
@@ -172,7 +172,7 @@ describe('Change Repeater Item', function () {
 		);
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				changeRepeaterItem({
 					value: { x: 20 },
@@ -194,7 +194,7 @@ describe('Change Repeater Item', function () {
 	it('should testing change item of repeater with simple repeaterId', function () {
 		let state = {};
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: {
@@ -205,7 +205,7 @@ describe('Change Repeater Item', function () {
 		);
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				changeRepeaterItem({
 					value: { x: 20 },

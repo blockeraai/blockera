@@ -1,19 +1,15 @@
 /**
  * Internal dependencies
  */
-import { controlReducer } from '../../control-reducer';
-import {
-	addControl,
-	addRepeaterItem,
-	sortRepeaterItem,
-} from '../../../actions';
-import { repeaterReducer } from '../../repeater-reducer';
+import { repeaterReducer } from '../';
+import { addControl } from '../../../../store/actions';
+import { addRepeaterItem, sortRepeaterItem } from '../../actions';
 
 describe('Sort Repeater Item', function () {
 	it('should modified control state with sort repeater items', function () {
 		let state = {};
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: [{ x: 10 }, { x: 12 }],
@@ -22,7 +18,7 @@ describe('Sort Repeater Item', function () {
 		);
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				sortRepeaterItem({
 					items: [{ x: 10 }, { x: 12 }],
@@ -38,7 +34,7 @@ describe('Sort Repeater Item', function () {
 			},
 		});
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addRepeaterItem({
 				value: { x: 15 },
@@ -47,7 +43,7 @@ describe('Sort Repeater Item', function () {
 		);
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				sortRepeaterItem({
 					items: [{ x: 10 }, { x: 12 }, { x: 15 }],
@@ -63,7 +59,7 @@ describe('Sort Repeater Item', function () {
 			},
 		});
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: {
@@ -78,7 +74,7 @@ describe('Sort Repeater Item', function () {
 		);
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				sortRepeaterItem({
 					items: [{ x: 10 }, { x: 12 }, { x: 15 }],
@@ -105,7 +101,7 @@ describe('Sort Repeater Item', function () {
 			},
 		});
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: {
@@ -116,7 +112,7 @@ describe('Sort Repeater Item', function () {
 		);
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				sortRepeaterItem({
 					items: [

@@ -1,15 +1,15 @@
 /**
  * Internal dependencies
  */
-import { controlReducer } from '../../control-reducer';
-import { addControl, cloneRepeaterItem } from '../../../actions';
-import { repeaterReducer } from '../../repeater-reducer';
+import { repeaterReducer } from '../';
+import { cloneRepeaterItem } from '../../actions';
+import { addControl } from '../../../../store/actions';
 
 describe('Clone Repeater Item', function () {
 	it('should modified control state with clone repeater item', function () {
 		let state = {};
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: [{ x: 10 }, { x: 12 }],
@@ -18,7 +18,7 @@ describe('Clone Repeater Item', function () {
 		);
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				cloneRepeaterItem({
 					itemId: 1,
@@ -35,7 +35,7 @@ describe('Clone Repeater Item', function () {
 	it('should modified control state with clone repeater item by repeaterId as `query`', function () {
 		let state = {};
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: {
@@ -45,7 +45,7 @@ describe('Clone Repeater Item', function () {
 			})
 		);
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			cloneRepeaterItem({
 				itemId: 1,
@@ -63,7 +63,7 @@ describe('Clone Repeater Item', function () {
 			},
 		});
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: {
@@ -81,7 +81,7 @@ describe('Clone Repeater Item', function () {
 			})
 		);
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			cloneRepeaterItem({
 				itemId: 1,
@@ -105,7 +105,7 @@ describe('Clone Repeater Item', function () {
 			},
 		});
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: {
@@ -123,7 +123,7 @@ describe('Clone Repeater Item', function () {
 			})
 		);
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			cloneRepeaterItem({
 				itemId: 1,
@@ -148,7 +148,7 @@ describe('Clone Repeater Item', function () {
 			},
 		});
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: {
@@ -158,7 +158,7 @@ describe('Clone Repeater Item', function () {
 			})
 		);
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			cloneRepeaterItem({
 				itemId: 1,
@@ -175,7 +175,7 @@ describe('Clone Repeater Item', function () {
 			},
 		});
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: [{ x: 10 }, { x: 12 }],
@@ -183,7 +183,7 @@ describe('Clone Repeater Item', function () {
 			})
 		);
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			cloneRepeaterItem({
 				itemId: 1,
@@ -198,7 +198,7 @@ describe('Clone Repeater Item', function () {
 			value: [{ x: 10 }, { x: 12 }],
 		});
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: [{ x: 10 }, { x: 12 }],
@@ -206,7 +206,7 @@ describe('Clone Repeater Item', function () {
 			})
 		);
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			cloneRepeaterItem({
 				itemId: 2,

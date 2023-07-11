@@ -1,15 +1,15 @@
 /**
  * Internal dependencies
  */
-import { controlReducer } from '../../control-reducer';
-import { addControl, removeRepeaterItem } from '../../../actions';
-import { repeaterReducer } from '../../repeater-reducer';
+import { repeaterReducer } from '../';
+import { removeRepeaterItem } from '../../actions';
+import { addControl } from '../../../../store/actions';
 
 describe('Remove Repeater Item', function () {
 	it('should modified control state with remove repeater item', function () {
 		let state = {};
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: [{ x: 0 }],
@@ -18,7 +18,7 @@ describe('Remove Repeater Item', function () {
 		);
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				removeRepeaterItem({
 					itemId: 0,
@@ -35,7 +35,7 @@ describe('Remove Repeater Item', function () {
 	it('remove item with simple repeaterId', function () {
 		let state = {};
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: {
@@ -46,7 +46,7 @@ describe('Remove Repeater Item', function () {
 		);
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				removeRepeaterItem({
 					itemId: 0,
@@ -66,7 +66,7 @@ describe('Remove Repeater Item', function () {
 	it('remove item with query of state in repeaterId', function () {
 		let state = {};
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: {
@@ -83,7 +83,7 @@ describe('Remove Repeater Item', function () {
 		);
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				removeRepeaterItem({
 					itemId: 1,
@@ -109,7 +109,7 @@ describe('Remove Repeater Item', function () {
 	it('remove item of repeater inside other repeater control', function () {
 		let state = {};
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: {
@@ -124,7 +124,7 @@ describe('Remove Repeater Item', function () {
 		);
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				removeRepeaterItem({
 					itemId: 0,

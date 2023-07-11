@@ -1,13 +1,17 @@
 /**
+ * External dependencies
+ */
+import { combineReducers } from '@wordpress/data';
+
+/**
  * Internal dependencies
  */
-import {
-	addItem,
-	sortItem,
-	cloneItem,
-	changeItem,
-	removeItem,
-} from './repeater-reducers';
+import { addItem } from './add-item';
+import { sortItem } from './sort-item';
+import { cloneItem } from './clone-item';
+import { removeItem } from './remove-item';
+import { changeItem } from './change-item';
+import { controlReducer } from '../../../store/reducers/control-reducer';
 
 // eslint-disable-next-line jsdoc/require-returns-check
 /**
@@ -19,6 +23,12 @@ import {
  */
 export function repeaterReducer(state = {}, action): Object {
 	switch (action.type) {
+		case 'ADD_UNPROCESSED_CONTROL':
+		case 'REMOVE_CONTROL':
+		case 'MODIFY_CONTROL_VALUE':
+		case 'MODIFY_CONTROL_INFO':
+			return controlReducer(state, action);
+
 		case 'ADD_REPEATER_ITEM':
 			return addItem(state, action);
 
@@ -38,3 +48,7 @@ export function repeaterReducer(state = {}, action): Object {
 			return state;
 	}
 }
+
+export default combineReducers({
+	repeaterReducer,
+});

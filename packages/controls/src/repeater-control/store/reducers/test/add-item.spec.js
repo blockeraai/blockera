@@ -1,14 +1,15 @@
 /**
  * Internal dependencies
  */
-import { controlReducer } from '../../control-reducer';
-import { addControl, addRepeaterItem } from '../../../actions';
+import { repeaterReducer } from '../';
+import { addRepeaterItem } from '../../actions';
+import { addControl } from '../../../../store/actions';
 
 describe('Add Repeater Item', function () {
 	it('should add item in high level of state', function () {
 		let state = {};
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: [],
@@ -17,7 +18,7 @@ describe('Add Repeater Item', function () {
 		);
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				addRepeaterItem({
 					value: { x: 10 },
@@ -39,7 +40,7 @@ describe('Add Repeater Item', function () {
 	it('should not add item in incorrect repeaterId', function () {
 		let state = {};
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: {
@@ -50,7 +51,7 @@ describe('Add Repeater Item', function () {
 		);
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				addRepeaterItem({
 					maxItems: 2,
@@ -72,7 +73,7 @@ describe('Add Repeater Item', function () {
 	it('should add item in secondary level of state', function () {
 		let state = {};
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: {
@@ -82,7 +83,7 @@ describe('Add Repeater Item', function () {
 			})
 		);
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addRepeaterItem({
 				value: { x: 10 },
@@ -108,7 +109,7 @@ describe('Add Repeater Item', function () {
 	it('should add item order by limited with maxItems value', function () {
 		let state = {};
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: [{ x: 10 }, { x: 10 }],
@@ -116,7 +117,7 @@ describe('Add Repeater Item', function () {
 			})
 		);
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addRepeaterItem({
 				maxItems: 3,
@@ -125,7 +126,7 @@ describe('Add Repeater Item', function () {
 			})
 		);
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addRepeaterItem({
 				maxItems: 3,
@@ -145,7 +146,7 @@ describe('Add Repeater Item', function () {
 	it('should add item with repeaterId as query`', function () {
 		let state = {};
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: {
@@ -160,7 +161,7 @@ describe('Add Repeater Item', function () {
 		);
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				addRepeaterItem({
 					value: { x: 10 },
@@ -189,7 +190,7 @@ describe('Add Repeater Item', function () {
 	it('should add item into repeater where exists inside other repeater with repeaterId as `query`', function () {
 		let state = {};
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: {
@@ -208,7 +209,7 @@ describe('Add Repeater Item', function () {
 		);
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				addRepeaterItem({
 					value: { x: 10 },
@@ -238,7 +239,7 @@ describe('Add Repeater Item', function () {
 		});
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				addRepeaterItem({
 					maxItems: 1,
@@ -268,7 +269,7 @@ describe('Add Repeater Item', function () {
 			},
 		});
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: {
@@ -291,7 +292,7 @@ describe('Add Repeater Item', function () {
 		);
 
 		expect(
-			controlReducer(
+			repeaterReducer(
 				state,
 				addRepeaterItem({
 					value: { x: 10 },
@@ -347,7 +348,7 @@ describe('Add Repeater Item', function () {
 	it('access to repeater inside other repeater like [0][repeater-secondary]', function () {
 		let state = {};
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: [
@@ -359,7 +360,7 @@ describe('Add Repeater Item', function () {
 			})
 		);
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addRepeaterItem({
 				value: { x: 10 },
@@ -379,7 +380,7 @@ describe('Add Repeater Item', function () {
 			},
 		});
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addRepeaterItem({
 				value: { x: 10 },
@@ -403,7 +404,7 @@ describe('Add Repeater Item', function () {
 	it('should add item with simple repeaterId with limitation', function () {
 		let state = {};
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addControl({
 				value: {
@@ -413,7 +414,7 @@ describe('Add Repeater Item', function () {
 			})
 		);
 
-		state = controlReducer(
+		state = repeaterReducer(
 			state,
 			addRepeaterItem({
 				maxItems: 1,
