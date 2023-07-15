@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo, useContext, useEffect } from '@wordpress/element';
+import { memo, useContext } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -51,6 +51,28 @@ import { default as generateMeshGradient } from './mesh-gradient/mesh-generator'
 import { default as RegenerateIcon } from '../icons/regenerate';
 import { RepeaterContext } from '../../repeater-control/context';
 
+/**
+ * Providing mesh gradient colors details.
+ *
+ * @param {Object} object the data holder
+ * @return {{}} retrieved object includes mesh gradient details
+ */
+function meshGradientProvider(object) {
+	const meshGradient = generateMeshGradient(
+		object['mesh-gradient-colors']?.length
+			? object['mesh-gradient-colors'].length
+			: 4
+	);
+
+	return {
+		...object,
+		'mesh-gradient': meshGradient.gradient,
+		'mesh-gradient-colors': meshGradient.colors.map((value) => {
+			return { color: value };
+		}),
+	};
+}
+
 const Fields = ({ itemId, item }) => {
 	const {
 		controlInfo: { name: controlId },
@@ -59,29 +81,6 @@ const Fields = ({ itemId, item }) => {
 	const { repeaterId } = useContext(RepeaterContext);
 
 	const linearGradientValue = /\((\d.*)deg,/im?.exec(item['linear-gradient']);
-
-	function regenerateMeshGradient() {
-		const meshGradient = generateMeshGradient(
-			item['mesh-gradient-colors']?.length
-				? item['mesh-gradient-colors'].length
-				: 4
-		);
-
-		const newItem = {
-			...item,
-			'mesh-gradient': meshGradient.gradient,
-			'mesh-gradient-colors': meshGradient.colors.map((value) => {
-				return { color: value };
-			}),
-		};
-
-		changeRepeaterItem({
-			itemId,
-			controlId,
-			repeaterId,
-			value: newItem,
-		});
-	}
 
 	function getControlId(id) {
 		if (!/\[.*]/g.test(id)) {
@@ -93,13 +92,10 @@ const Fields = ({ itemId, item }) => {
 			: `${repeaterId}[${itemId}]${id}`;
 	}
 
-	useEffect(() => {
-		// fill new random mesh gradient if it's empty
-		if (!item['mesh-gradient']) {
-			regenerateMeshGradient();
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [item]);
+	// fill new random mesh gradient with provider if it's empty
+	if (!item['mesh-gradient']) {
+		item = { ...item, ...meshGradientProvider(item) };
+	}
 
 	return (
 		<div id={`repeater-item-${itemId}`}>
@@ -183,7 +179,7 @@ const Fields = ({ itemId, item }) => {
 							},
 						]}
 						//
-						id={getControlId('size')}
+						id={getControlId('image-size')}
 						value={item['image-size']}
 						onChange={(size) =>
 							changeRepeaterItem({
@@ -618,7 +614,12 @@ const Fields = ({ itemId, item }) => {
 								),
 							}}
 							onClick={() => {
-								regenerateMeshGradient();
+								changeRepeaterItem({
+									controlId,
+									repeaterId,
+									itemId,
+									value: meshGradientProvider(item),
+								});
 							}}
 						>
 							<span

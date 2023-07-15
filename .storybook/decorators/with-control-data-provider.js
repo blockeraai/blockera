@@ -16,7 +16,10 @@ export const WithControlDataProvider = (Story, context) => {
 	};
 
 	return (
-		<ControlContextProvider value={controlInfo}>
+		<ControlContextProvider
+			storeName={context?.allArgs?.storeName ?? 'publisher-core/controls'}
+			value={controlInfo}
+		>
 			<Story />
 		</ControlContextProvider>
 	);

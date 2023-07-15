@@ -17,6 +17,8 @@ const RepeaterContext = createContext({
 	injectHeaderButtonsStart: '',
 	injectHeaderButtonsEnd: '',
 	//
+	controlId: null,
+	repeaterId: null,
 	repeaterItemHeader: null,
 	repeaterItemChildren: null,
 	//
@@ -25,11 +27,6 @@ const RepeaterContext = createContext({
 	repeaterItems: {}, // value
 	//
 	customProps: {}, // we use this for passing props from out of RepeaterControl to RepeaterItemHeader and RepeaterItemChildren
-	//
-	cloneItem: () => {},
-	addNewItem: () => {},
-	removeItem: () => {},
-	changeItem: () => {},
 });
 
 const RepeaterContextProvider = ({ children, ...props }) => {

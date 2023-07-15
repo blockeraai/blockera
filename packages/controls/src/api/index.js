@@ -11,16 +11,27 @@ import { isString } from '@publisher/utils';
 /**
  * Internal dependencies
  */
-import { store } from '../store';
+import { store as controlStore } from '../store';
+import {
+	store as repeaterStore,
+	STORE_NAME as repeaterControlStoreName,
+} from '../repeater-control/store';
 
 //Register control into store to use in control context provider
-export function registerControl({ name, ...control }): Object | undefined {
+export function registerControl({
+	name,
+	type: STORE_NAME,
+	...control
+}): Object | undefined {
 	if (!isString(name)) {
 		return;
 	}
 
 	//get `publisher-core/controls` store or details of that
-	const { getControl } = select(store);
+	const { getControl } =
+		repeaterControlStoreName === STORE_NAME
+			? select(repeaterStore)
+			: select(controlStore);
 
 	//Check is registered control or not!
 	if (getControl(name)) {
@@ -36,8 +47,11 @@ export function registerControl({ name, ...control }): Object | undefined {
 		...control,
 	};
 
-	//get `addControl` of `publisher-core/controls` store dispatchers
-	const { addControl } = dispatch(store);
+	//get `addControl` of `publisher-core/controls` || `publisher-core/controls/repeater` store dispatchers
+	const { addControl } =
+		repeaterControlStoreName === STORE_NAME
+			? dispatch(repeaterStore)
+			: dispatch(controlStore);
 
 	//fire add control action
 	addControl({ name, ..._control });

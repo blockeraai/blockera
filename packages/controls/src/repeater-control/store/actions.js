@@ -74,3 +74,5 @@ export function cloneRepeaterItem({
 		type: 'CLONE_REPEATER_ITEM',
 	};
 }
+
+export * from '../../store/actions';

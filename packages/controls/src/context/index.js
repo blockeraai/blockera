@@ -1,15 +1,14 @@
 /**
  * External dependencies
  */
+import { createContext } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
-import { createContext, useEffect } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
+import { STORE_NAME } from '../store';
 import { registerControl } from '../api';
-import { STORE_NAME } from '../store/constants';
-import { isFunction } from '@publisher/utils';
 
 export const ControlContext = createContext({
 	controlInfo: {
@@ -19,32 +18,29 @@ export const ControlContext = createContext({
 	},
 	value: null,
 	dispatch: null,
-	valueCleanup: null,
 });
 
-export const ControlContextProvider = ({ value: controlInfo, children }) => {
+export const ControlContextProvider = ({
+	value: controlInfo,
+	children,
+	storeName = STORE_NAME,
+}) => {
 	//Prepare control status and value!
-	const { status, value, onChange, valueCleanup } = useSelect(
+	const { status, value, onChange } = useSelect(
 		(select) => {
-			registerControl(controlInfo);
+			registerControl({
+				...controlInfo,
+				type: storeName,
+			});
 
-			const { getControl } = select(STORE_NAME);
+			const { getControl } = select(storeName);
 
 			return getControl(controlInfo.name);
 		},
 		[controlInfo]
 	);
 	//control dispatch for available actions
-	const dispatch = useDispatch(STORE_NAME);
-
-	useEffect(() => {
-		if (isFunction(onChange))
-			// eslint-disable-next-line no-unused-expressions
-			isFunction(valueCleanup)
-				? onChange(valueCleanup(value))
-				: onChange(value);
-		// eslint-disable-next-line
-	}, [value, valueCleanup, onChange]);
+	const dispatch = useDispatch(storeName);
 
 	//You can to enable||disable current control with status column!
 	if (!status) {
@@ -52,7 +48,9 @@ export const ControlContextProvider = ({ value: controlInfo, children }) => {
 	}
 
 	return (
-		<ControlContext.Provider value={{ controlInfo, value, dispatch }}>
+		<ControlContext.Provider
+			value={{ controlInfo, value, onChange, dispatch }}
+		>
 			{children}
 		</ControlContext.Provider>
 	);

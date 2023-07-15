@@ -26,4 +26,4 @@ export const store = createReduxStore(STORE_NAME, {
 
 register(store);
 
-export { reducer, selectors, actions };
+export { reducer, selectors, actions, STORE_NAME };

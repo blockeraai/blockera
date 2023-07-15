@@ -7,20 +7,23 @@ import { __ } from '@wordpress/i18n';
 /**
  * Publisher dependencies
  */
-import { Button } from '@publisher/components';
 import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
-import { useValue } from '@publisher/utils';
+import { Button } from '@publisher/components';
+import { isUndefined } from '@publisher/utils';
+import { prepare } from '@publisher/data-extractor';
 
 /**
  * Internal dependencies.
  */
+import PlusIcon from './icons/plus';
+import LabelControl from '../label-control';
+import { useControlContext } from '../context';
 import { RepeaterContextProvider } from './context';
 import MappedItems from './components/mapped-items';
-import LabelControl from '../label-control';
-import PlusIcon from './icons/plus';
+import useControlEffect from '../context/hooks/use-control-effect';
 
 export default function RepeaterControl({
 	design,
@@ -37,10 +40,10 @@ export default function RepeaterControl({
 	injectHeaderButtonsEnd,
 	//
 	label,
+	repeaterId,
 	repeaterItemHeader,
 	repeaterItemChildren,
 	//
-	value: initialValue,
 	defaultValue,
 	defaultRepeaterItemValue,
 	onChange,
@@ -49,13 +52,30 @@ export default function RepeaterControl({
 	className,
 	...props
 }) {
-	const { value: repeaterItems, setValue: setRepeaterItems } = useValue({
-		initialValue,
+	const {
+		value,
+		dispatch: { addRepeaterItem },
+		controlInfo: { name: controlId },
+	} = useControlContext({
 		defaultValue,
-		innerDefaultValue: defaultRepeaterItemValue,
-		onChange,
+		repeater: {
+			repeaterId,
+			defaultRepeaterItemValue,
+		},
 		valueCleanup,
 		mergeInitialAndDefault: true,
+	});
+
+	const repeaterItems = isUndefined(repeaterId)
+		? value
+		: prepare(repeaterId, value);
+
+	//Call onChange function if is set valueCleanup as function to clean value else set all value details into parent state!
+	useControlEffect({
+		onChange,
+		valueCleanup,
+		value: repeaterItems,
+		dependencies: [repeaterItems],
 	});
 
 	const defaultRepeaterState = {
@@ -70,6 +90,8 @@ export default function RepeaterControl({
 		actionButtonDelete,
 		actionButtonClone,
 		//
+		controlId,
+		repeaterId,
 		repeaterItemHeader,
 		repeaterItemChildren,
 		//
@@ -77,65 +99,6 @@ export default function RepeaterControl({
 		repeaterItems, // value
 		//
 		customProps: { ...props },
-		//
-		cloneItem: (itemId) => {
-			if (maxItems !== -1 && repeaterItems?.length >= maxItems) {
-				return;
-			}
-
-			if (itemId >= repeaterItems.length) {
-				return;
-			}
-
-			setRepeaterItems([
-				...repeaterItems.slice(0, itemId + 1),
-				repeaterItems[itemId],
-				...repeaterItems.slice(itemId + 1),
-			]);
-		},
-		addNewItem: () => {
-			if (maxItems !== -1 && repeaterItems?.length >= maxItems) {
-				return;
-			}
-
-			const _repeaterItems = [
-				...repeaterItems,
-				...[defaultRepeaterItemValue],
-			];
-
-			setRepeaterItems(_repeaterItems);
-		},
-		removeItem: (itemId) => {
-			const _repeaterItems = repeaterItems.filter(
-				(i, index) => index !== itemId
-			);
-
-			setRepeaterItems(_repeaterItems);
-		},
-		changeItem: (itemId, newValue) => {
-			const _repeaterItems = repeaterItems.map((i, id) => {
-				if (id === itemId) {
-					return newValue;
-				}
-
-				return i;
-			});
-
-			setRepeaterItems(_repeaterItems);
-		},
-		sortItems: (newValue) => {
-			const arrayMove = ({ args, toIndex, fromIndex }) => {
-				const newArr = [...args];
-				const [removed] = newArr.splice(fromIndex, 1);
-				newArr.splice(toIndex, 0, removed);
-
-				return newArr;
-			};
-
-			const _repeaterItems = arrayMove(newValue);
-
-			setRepeaterItems(_repeaterItems);
-		},
 	};
 
 	return (
@@ -170,8 +133,13 @@ export default function RepeaterControl({
 									if (
 										maxItems === -1 ||
 										repeaterItems?.length < maxItems
-									)
-										defaultRepeaterState.addNewItem();
+									) {
+										addRepeaterItem({
+											controlId,
+											repeaterId,
+											value: defaultRepeaterItemValue,
+										});
+									}
 								}}
 							>
 								<PlusIcon />
@@ -192,14 +160,10 @@ RepeaterControl.propTypes = {
 	 * It sets the default value of repeater. Please note for defining the value of repeater items you have to use `defaultRepeaterItemValue`
 	 */
 	defaultValue: PropTypes.array,
-	/**
-	 * The current value of control
-	 */
-	value: PropTypes.array,
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
+	// /**
+	//  * Function that will be fired while the control value state changes.
+	//  */
+	// onChange: PropTypes.func,
 	/**
 	 * Function that runs before firing onChange. You can use it cleanup values
 	 */

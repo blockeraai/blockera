@@ -14,11 +14,11 @@ import { controlInnerClassNames } from '@publisher/classnames';
  * Internal dependencies
  */
 import { RepeaterContext } from '../context';
-import DeleteIcon from './../icons/delete';
-import EnableIcon from './../icons/enable';
-import DisableIcon from './../icons/disable';
-import CloneIcon from './../icons/clone';
-import { isOpenPopoverEvent } from '../utils';
+import DeleteIcon from '../icons/delete';
+import EnableIcon from '../icons/enable';
+import DisableIcon from '../icons/disable';
+import CloneIcon from '../icons/clone';
+import { useControlContext } from '../../context';
 
 export default function RepeaterItemActions({
 	item,
@@ -27,16 +27,18 @@ export default function RepeaterItemActions({
 	setVisibility,
 }) {
 	const {
-		removeItem,
-		changeItem,
-		cloneItem,
+		controlId,
 		maxItems,
 		minItems,
+		repeaterId,
 		actionButtonVisibility,
 		actionButtonDelete,
 		actionButtonClone,
 		repeaterItems,
 	} = useContext(RepeaterContext);
+	const {
+		dispatch: { changeRepeaterItem, cloneRepeaterItem, removeRepeaterItem },
+	} = useControlContext();
 
 	return (
 		<>
@@ -49,9 +51,14 @@ export default function RepeaterItemActions({
 					onClick={(event) => {
 						event.stopPropagation();
 						setVisibility(!isVisible);
-						changeItem(itemId, {
-							...item,
-							isVisible: !isVisible,
+						changeRepeaterItem({
+							controlId,
+							itemId,
+							value: {
+								...item,
+								isVisible: !isVisible,
+							},
+							repeaterId,
 						});
 					}}
 					label={
@@ -85,7 +92,11 @@ export default function RepeaterItemActions({
 						label={__('Clone', 'publisher')}
 						onClick={(event) => {
 							event.stopPropagation();
-							cloneItem(itemId);
+							cloneRepeaterItem({
+								itemId,
+								controlId,
+								repeaterId,
+							});
 						}}
 						aria-label={sprintf(
 							// translators: %d is the repeater item id. It's aria label for cloning repeater item
@@ -104,7 +115,11 @@ export default function RepeaterItemActions({
 						showTooltip={true}
 						onClick={(event) => {
 							event.stopPropagation();
-							removeItem(itemId);
+							removeRepeaterItem({
+								itemId,
+								controlId,
+								repeaterId,
+							});
 						}}
 						label={__('Delete', 'publisher')}
 						aria-label={sprintf(

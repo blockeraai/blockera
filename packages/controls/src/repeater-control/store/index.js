@@ -8,8 +8,8 @@ import { createReduxStore, register } from '@wordpress/data';
  */
 import reducer from './reducers';
 import * as actions from './actions';
-// import * as selectors from './selectors';
 import { STORE_NAME } from './constants';
+import * as selectors from './selectors';
 
 /**
  * Store definition for the repeater control namespace.
@@ -20,10 +20,10 @@ import { STORE_NAME } from './constants';
  */
 export const store = createReduxStore(STORE_NAME, {
 	reducer,
-	// selectors,
+	selectors,
 	actions,
 });
 
 register(store);
 
-export { reducer, actions };
+export { reducer, selectors, actions, STORE_NAME };

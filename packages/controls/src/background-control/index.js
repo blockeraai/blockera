@@ -43,8 +43,7 @@ export default function BackgroundControl({
 
 			if (item?.type !== 'mesh-gradient') {
 				delete item['mesh-gradient'];
-				//TODO: fix this
-				// delete item['mesh-gradient-colors'];
+				delete item['mesh-gradient-colors'];
 				delete item['mesh-gradient-attachment'];
 			}
 

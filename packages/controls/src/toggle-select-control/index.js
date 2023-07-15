@@ -1,6 +1,7 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
+import PropTypes from 'prop-types';
 import {
 	__experimentalToggleGroupControl as WPToggleGroupControl,
 	__experimentalToggleGroupControlOption as WPToggleGroupControlOption,
@@ -10,14 +11,24 @@ import {
 /**
  * Publisher dependencies
  */
+import { isUndefined } from '@publisher/utils';
 import { controlClassNames } from '@publisher/classnames';
-import { isUndefined, useValue } from '@publisher/utils';
-import PropTypes from 'prop-types';
+
+/**
+ * Internal dependencies
+ */
+import { useControlContext } from '../context';
+
+function valueCleanup(value) {
+	// WPToggleGroupControl returns undefined while deselecting
+	return isUndefined(value) ? '' : value;
+}
 
 export default function ToggleSelectControl({
 	isDeselectable = false,
 	options,
 	//
+	id,
 	defaultValue = '',
 	value: initialValue,
 	onChange,
@@ -26,24 +37,17 @@ export default function ToggleSelectControl({
 	children,
 	...props
 }) {
-	const { value, setValue } = useValue({
-		initialValue,
+	const { value } = useControlContext({
+		id,
 		defaultValue,
-		onChange,
-		valueCleanup,
 	});
-
-	function valueCleanup(value) {
-		// WPToggleGroupControl returns undefined while deselecting
-		return isUndefined(value) ? '' : value;
-	}
 
 	return (
 		<>
 			<WPToggleGroupControl
 				className={controlClassNames('toggle-select', className)}
 				value={value}
-				onChange={setValue}
+				onChange={(newValue) => onChange(valueCleanup(newValue))}
 				label=""
 				hideLabelFromVision={true}
 				isBlock={true}

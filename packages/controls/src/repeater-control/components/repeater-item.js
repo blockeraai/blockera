@@ -13,6 +13,7 @@ import {
 /**
  * Publisher dependencies
  */
+import { isBoolean } from '@publisher/utils';
 import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
@@ -22,7 +23,7 @@ import RepeaterItemActions from './actions';
 import { RepeaterContext } from '../context';
 import { isOpenPopoverEvent } from '../utils';
 import GroupControl from '../../group-control';
-import { isBoolean } from '@publisher/utils';
+import { useControlContext } from '../../context';
 
 const RepeaterItem = ({ item, itemId }) => {
 	const [isOpen, setOpen] = useState(
@@ -33,14 +34,19 @@ const RepeaterItem = ({ item, itemId }) => {
 	);
 
 	const {
-		design,
-		repeaterItemChildren: RepeaterItemChildren,
-		repeaterItemHeader: RepeaterItemHeader,
-		sortItems,
-		repeaterItems: items,
+		controlInfo: { name: controlId },
+		dispatch,
+	} = useControlContext();
+
+	const {
 		mode,
+		design,
+		repeaterId,
 		popoverLabel,
 		popoverClassName,
+		repeaterItems: items,
+		repeaterItemHeader: RepeaterItemHeader,
+		repeaterItemChildren: RepeaterItemChildren,
 	} = useContext(RepeaterContext);
 
 	const repeaterItemActionsProps = {
@@ -84,14 +90,17 @@ const RepeaterItem = ({ item, itemId }) => {
 
 		setDraggingIndex(index);
 
-		if (!sortItems) {
-			return;
-		}
-
 		const toIndex = index;
+		const { sortRepeaterItem } = dispatch;
 		const fromIndex = parseInt(e.dataTransfer.getData('text/plain'), 10);
 
-		sortItems({ args: items, fromIndex, toIndex });
+		sortRepeaterItem({
+			controlId,
+			items,
+			fromIndex,
+			toIndex,
+			repeaterId,
+		});
 	};
 
 	return (
@@ -141,9 +150,7 @@ const RepeaterItem = ({ item, itemId }) => {
 							)}
 						</div>
 					) : (
-						<RepeaterItemHeader
-							{...repeaterItemActionsProps}
-						></RepeaterItemHeader>
+						<RepeaterItemHeader {...repeaterItemActionsProps} />
 					)
 				}
 				headerOpenButton={false}
