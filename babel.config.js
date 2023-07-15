@@ -4,9 +4,10 @@ module.exports = function (api) {
 
 	return {
 		presets: [
-			'@wordpress/babel-preset-default',
 			'@babel/preset-env',
+			['@babel/preset-react', { runtime: 'automatic' }],
 			'@babel/preset-flow',
+			'@wordpress/babel-preset-default',
 		],
 		plugins: [
 			'macros',
