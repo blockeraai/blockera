@@ -23,7 +23,6 @@ import LabelControl from '../label-control';
 import { useControlContext } from '../context';
 import { RepeaterContextProvider } from './context';
 import MappedItems from './components/mapped-items';
-import useControlEffect from '../context/hooks/use-control-effect';
 
 export default function RepeaterControl({
 	design,
@@ -62,20 +61,14 @@ export default function RepeaterControl({
 			repeaterId,
 			defaultRepeaterItemValue,
 		},
+		onChange,
+		valueCleanup,
 		mergeInitialAndDefault: true,
 	});
 
 	const repeaterItems = isUndefined(repeaterId)
 		? value
 		: prepare(repeaterId, value);
-
-	//Call onChange function if is set valueCleanup as function to clean value else set all value details into parent state!
-	useControlEffect({
-		onChange,
-		valueCleanup,
-		value: repeaterItems,
-		dependencies: [repeaterItems],
-	});
 
 	const defaultRepeaterState = {
 		design,
