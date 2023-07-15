@@ -651,6 +651,14 @@ const Fields = ({ itemId, item }) => {
 								color: '',
 							}}
 							onChange={(newValue) => {
+								//Prevent to re-updating state when newValue with current value is equal!
+								if (
+									newValue[itemId]['mesh-gradient-colors'] ===
+									item['mesh-gradient-colors']
+								) {
+									return;
+								}
+
 								// regenerate gradient if new item added or removed
 								if (
 									newValue.length !==
