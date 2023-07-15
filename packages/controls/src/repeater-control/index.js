@@ -62,7 +62,6 @@ export default function RepeaterControl({
 			repeaterId,
 			defaultRepeaterItemValue,
 		},
-		valueCleanup,
 		mergeInitialAndDefault: true,
 	});
 
