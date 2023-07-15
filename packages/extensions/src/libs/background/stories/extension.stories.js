@@ -38,8 +38,9 @@ blocksInitializer({
 					{...props}
 					initialOpen={true}
 					extensionId={'Background'}
-					title={__('Background', 'publisher-core')}
 					icon=<BackgroundExtensionIcon />
+					storeName={'publisher-core/controls/repeater'}
+					title={__('Background', 'publisher-core')}
 				/>
 			</>
 		);
@@ -68,6 +69,10 @@ export const Default = {
 			publisherBackground: [],
 			publisherBackgroundColor: '',
 			publisherBackgroundClip: '',
+		},
+		controlInfo: {
+			name: 'core/button/BackgroundControl',
+			value: [],
 		},
 	},
 	decorators: [...SharedDecorators],

@@ -9,7 +9,7 @@ import { InspectorControls } from '@wordpress/block-editor';
  */
 import { componentClassNames } from '@publisher/classnames';
 import { isFunction } from '@publisher/utils';
-import { PanelBodyControl } from '@publisher/controls';
+import { PanelBodyControl, STORE_NAME } from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -26,6 +26,7 @@ export function BaseExtension({
 	blockName,
 	extensionId,
 	initialOpen,
+	storeName = STORE_NAME,
 	...props
 }) {
 	const context = useContext(BaseExtensionContext);
@@ -52,7 +53,7 @@ export function BaseExtension({
 					>
 						{isFunction(ExtensionTypeUI) && (
 							<ExtensionTypeUI
-								{...{ ...props, blockName, config }}
+								{...{ ...props, storeName, blockName, config }}
 							/>
 						)}
 					</PanelBodyControl>

@@ -40,15 +40,17 @@ export function BackgroundExtension({ children, config, ...props }) {
 						name: `${props.blockName}/BackgroundControl`,
 						//
 						value: attributes.publisherBackground,
-						onChange: (newValue) =>
-							setAttributes({
-								...attributes,
-								publisherBackground: newValue,
-							}),
 					}}
+					storeName={props.storeName}
 				>
 					<BackgroundField
 						label={__('Image & Gradient', 'publisher-core')}
+						onChange={(newValue) =>
+							setAttributes({
+								...attributes,
+								publisherBackground: newValue,
+							})
+						}
 						{...props}
 					/>
 				</ControlContextProvider>
