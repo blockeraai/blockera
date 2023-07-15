@@ -14,7 +14,6 @@ export const ControlContext = createContext({
 	controlInfo: {
 		name: null,
 		value: null,
-		onChange: null,
 	},
 	value: null,
 	dispatch: null,
@@ -24,9 +23,10 @@ export const ControlContextProvider = ({
 	value: controlInfo,
 	children,
 	storeName = STORE_NAME,
+	...props
 }) => {
 	//Prepare control status and value!
-	const { status, value, onChange } = useSelect(
+	const { status, value } = useSelect(
 		(select) => {
 			registerControl({
 				...controlInfo,
@@ -49,7 +49,8 @@ export const ControlContextProvider = ({
 
 	return (
 		<ControlContext.Provider
-			value={{ controlInfo, value, onChange, dispatch }}
+			{...props}
+			value={{ controlInfo, value, dispatch }}
 		>
 			{children}
 		</ControlContext.Provider>
