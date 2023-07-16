@@ -8,7 +8,13 @@ import { useContext } from '@wordpress/element';
  * Publisher dependencies
  */
 import { prepare } from '@publisher/data-extractor';
-import { isNull, isObject, isBoolean, isUndefined } from '@publisher/utils';
+import {
+	isNull,
+	isObject,
+	isBoolean,
+	isUndefined,
+	isArray,
+} from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -103,6 +109,11 @@ export const useControlContext = (args) => {
 			// merge default value to object elements inside initialValue
 			// used for repeaters
 			if (isRepeaterControl()) {
+				// not array value is not valid!
+				if (!isArray(savedValue)) {
+					return defaultValue;
+				}
+
 				savedValue.forEach((item, itemId) => {
 					if (isObject(item)) {
 						savedValue[itemId] = {
