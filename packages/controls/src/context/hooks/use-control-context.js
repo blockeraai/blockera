@@ -16,6 +16,7 @@ import { isNull, isObject, isBoolean, isUndefined } from '@publisher/utils';
 import { ControlContext } from '../index';
 import { STORE_NAME as CONTROL_STORE_NAME } from '../../store';
 import { STORE_NAME as REPEATER_STORE_NAME } from '../../repeater-control/store/constants';
+import useControlEffect from './use-control-effect';
 
 //eslint-disable-next-line
 /**
@@ -50,9 +51,22 @@ export const useControlContext = (args) => {
 			repeaterId: null,
 			defaultRepeaterItemValue: null,
 		},
+		onChange,
+		valueCleanup,
 		defaultValue,
 		mergeInitialAndDefault,
 	} = args;
+
+	const calculatedValue = getCalculatedInitValue();
+
+	//Call onChange function if is set valueCleanup as function to clean value else set all value details into parent state!
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	useControlEffect({
+		onChange,
+		valueCleanup,
+		value: calculatedValue,
+		dependencies: [calculatedValue],
+	});
 
 	/**
 	 * @see ../../store/actions.js file to check available actions of dispatcher!
@@ -103,11 +117,9 @@ export const useControlContext = (args) => {
 		return isUndefined(id) ? savedValue : prepare(id, savedValue);
 	}
 
-	const control = getControl(controlInfo.name);
-
 	return {
 		dispatch,
-		value: getCalculatedInitValue(args),
+		value: calculatedValue,
 		controlInfo: getControl(controlInfo.name),
 		/**
 		 * Reset control value to default value.
@@ -122,20 +134,21 @@ export const useControlContext = (args) => {
 					value: defaultRepeaterItemValue,
 				});
 
-				return;
+				return defaultValue;
 			}
 
 			modifyControlValue({
+				valueCleanup,
 				value: defaultValue,
 				controlId: controlInfo.name,
-				valueCleanup: control.valueCleanup,
 			});
+
+			return defaultValue;
 		},
 		/**
 		 * Reset control value to saved value on database.
 		 */
 		resetToSavedValue: (value) => {
-			//TODO: implements reset repeater all items to specific value
 			if (isRepeaterControl()) {
 				changeRepeaterItem({
 					value,
@@ -144,14 +157,16 @@ export const useControlContext = (args) => {
 					controlId: controlInfo.name,
 				});
 
-				return;
+				return value;
 			}
 
 			modifyControlValue({
 				value,
+				valueCleanup,
 				controlId: controlInfo.name,
-				valueCleanup: control.valueCleanup,
 			});
+
+			return value;
 		},
 		// eslint-disable-next-line
 		/**
@@ -160,14 +175,16 @@ export const useControlContext = (args) => {
 		 * @return {boolean} toggled control value!
 		 */
 		toggleValue: () => {
-			if (!isBoolean(savedValue)) {
+			if (!isBoolean(calculatedValue)) {
 				return false;
 			}
 
 			modifyControlValue({
-				value: !savedValue,
+				value: !calculatedValue,
 				controlId: controlInfo.name,
 			});
+
+			return !calculatedValue;
 		},
 	};
 };
