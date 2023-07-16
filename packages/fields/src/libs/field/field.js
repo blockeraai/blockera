@@ -5,7 +5,7 @@ import { LabelControl } from '@publisher/controls';
 import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
 
 export function Field({
-	label,
+	label = '',
 	children,
 	columns = '',
 	className,
@@ -20,16 +20,31 @@ export function Field({
 		columns = 'columns-custom';
 	}
 
+	if (label === '') {
+		if (field === 'empty') {
+			return (
+				<div
+					className={fieldsClassNames(field, columns, className)}
+					style={{ gridTemplateColumns: cssColumns || '' }}
+				>
+					<div className={fieldsInnerClassNames('control')}>
+						{children}
+					</div>
+				</div>
+			);
+		}
+
+		return <>{children}</>;
+	}
+
 	return (
 		<div
 			className={fieldsClassNames(field, columns, className)}
 			style={{ gridTemplateColumns: cssColumns || '' }}
 		>
-			{label && (
-				<div className={fieldsInnerClassNames('label')}>
-					<LabelControl label={label} />
-				</div>
-			)}
+			<div className={fieldsInnerClassNames('label')}>
+				<LabelControl label={label} />
+			</div>
 
 			<div className={fieldsInnerClassNames('control')}>{children}</div>
 		</div>
