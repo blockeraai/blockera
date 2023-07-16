@@ -15,7 +15,7 @@ import { store as controlStore } from '../store';
 import {
 	store as repeaterStore,
 	STORE_NAME as repeaterControlStoreName,
-} from '../repeater-control/store';
+} from '../libs/repeater-control/store';
 
 //Register control into store to use in control context provider
 export function registerControl({

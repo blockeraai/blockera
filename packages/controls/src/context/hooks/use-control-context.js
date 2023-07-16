@@ -21,7 +21,7 @@ import {
  */
 import { ControlContext } from '../index';
 import { STORE_NAME as CONTROL_STORE_NAME } from '../../store';
-import { STORE_NAME as REPEATER_STORE_NAME } from '../../repeater-control/store/constants';
+import { STORE_NAME as REPEATER_STORE_NAME } from '../../libs/repeater-control/store/constants';
 import useControlEffect from './use-control-effect';
 
 //eslint-disable-next-line
