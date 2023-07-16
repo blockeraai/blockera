@@ -149,7 +149,7 @@ const Fields = ({ itemId, item }) => {
 						}}
 						//
 						value={item.image}
-						onValueChange={(image) => {
+						onChange={(image) => {
 							changeRepeaterItem({
 								controlId,
 								repeaterId,
