@@ -208,6 +208,30 @@ export const DeselectableToggle = {
 	},
 };
 
+export const Field = {
+	args: {
+		label: 'Field',
+		value: 'center',
+		options: optionsWithIcon,
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">With Field</h2>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: args.value,
+					}}
+				>
+					<ToggleSelectControl {...args} />
+				</ControlContextProvider>
+			</Flex>
+		);
+	},
+};
+
 const ControlWithHooks = (args) => {
 	const { storyValue, setStoryValue } = useContext(StoryDataContext);
 
@@ -278,6 +302,7 @@ export const Screenshot = {
 			<TextToggle.render {...TextToggle.args} />
 			<IconToggle.render {...IconToggle.args} />
 			<DeselectableToggle.render {...DeselectableToggle.args} />
+			<Field.render {...Field.args} />
 		</Flex>
 	),
 };

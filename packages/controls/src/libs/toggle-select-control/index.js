@@ -11,8 +11,9 @@ import {
 /**
  * Publisher dependencies
  */
-import { isUndefined } from '@publisher/utils';
+import { isEmpty, isUndefined } from '@publisher/utils';
 import { controlClassNames } from '@publisher/classnames';
+import { Field } from '@publisher/fields';
 
 /**
  * Internal dependencies
@@ -20,12 +21,13 @@ import { controlClassNames } from '@publisher/classnames';
 import { useControlContext } from '../../context';
 
 export default function ToggleSelectControl({
-	isDeselectable = false,
+	isDeselectable,
 	options,
 	//
 	id,
-	defaultValue = '',
-	value: initialValue,
+	label,
+	columns,
+	defaultValue,
 	onChange,
 	//
 	className,
@@ -44,8 +46,8 @@ export default function ToggleSelectControl({
 		return isUndefined(value) ? '' : value;
 	}
 
-	return (
-		<>
+	function Control() {
+		return (
 			<WPToggleGroupControl
 				className={controlClassNames('toggle-select', className)}
 				value={value}
@@ -74,13 +76,45 @@ export default function ToggleSelectControl({
 						/>
 					);
 				})}
-				{children}
 			</WPToggleGroupControl>
-		</>
+		);
+	}
+
+	if (isEmpty(label)) {
+		return (
+			<>
+				<Control />
+				{children}
+			</>
+		);
+	}
+
+	return (
+		<Field
+			label={label}
+			field="toggle-select"
+			columns={columns}
+			className={className}
+		>
+			<Control />
+			{children}
+		</Field>
 	);
 }
 
 ToggleSelectControl.propTypes = {
+	/**
+	 * Label for field. If you pass empty value the field will not be added and simple control will be rendered
+	 *
+	 * @default ""
+	 */
+	label: PropTypes.string,
+	/**
+	 * Columns setting for Field grid.
+	 *
+	 * @default "columns-2"
+	 */
+	columns: PropTypes.string,
 	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
@@ -116,6 +150,7 @@ ToggleSelectControl.propTypes = {
 };
 
 ToggleSelectControl.defaultProps = {
-	value: '',
+	label: '',
+	defaultValue: '',
 	isDeselectable: false,
 };
