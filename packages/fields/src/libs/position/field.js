@@ -82,6 +82,7 @@ export function PositionField({
 									});
 
 									onValueChange({
+										...coordinates,
 										top: value,
 									});
 								}}
@@ -103,6 +104,7 @@ export function PositionField({
 									});
 
 									onValueChange({
+										...coordinates,
 										left: value,
 									});
 								}}
