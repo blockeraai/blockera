@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import { nanoid } from 'nanoid';
 import { __ } from '@wordpress/i18n';
 import { useContext } from '@wordpress/element';
 import { userEvent, waitFor, within } from '@storybook/testing-library';
@@ -15,8 +16,9 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 /**
  * Internal dependencies
  */
-import { ToggleSelectControl } from '../../index';
+import { ControlContextProvider, ToggleSelectControl } from '../../index';
 import { default as InheritIcon } from './icons/inherit';
+import { WithControlDataProvider } from '../../../../../.storybook/decorators/with-control-data-provider';
 
 const {
 	WithInspectorStyles,
@@ -24,6 +26,8 @@ const {
 	WithStoryContextProvider,
 	SharedDecorators,
 } = Decorators;
+
+SharedDecorators.push(WithControlDataProvider);
 
 const options = [
 	{
@@ -82,9 +86,30 @@ export const TextToggle = {
 		return (
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Text Toggles</h2>
-				<ToggleSelectControl {...args} />
-				<ToggleSelectControl {...args} className="is-hovered" />
-				<ToggleSelectControl {...args} className="is-focused" />
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 'left',
+					}}
+				>
+					<ToggleSelectControl {...args} />
+				</ControlContextProvider>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 'left',
+					}}
+				>
+					<ToggleSelectControl {...args} className="is-hovered" />
+				</ControlContextProvider>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 'left',
+					}}
+				>
+					<ToggleSelectControl {...args} className="is-focused" />
+				</ControlContextProvider>
 			</Flex>
 		);
 	},
@@ -100,9 +125,30 @@ export const IconToggle = {
 		return (
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Icon Toggles</h2>
-				<ToggleSelectControl {...args} />
-				<ToggleSelectControl {...args} className="is-hovered" />
-				<ToggleSelectControl {...args} className="is-focused" />
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 'center',
+					}}
+				>
+					<ToggleSelectControl {...args} />
+				</ControlContextProvider>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 'center',
+					}}
+				>
+					<ToggleSelectControl {...args} className="is-hovered" />
+				</ControlContextProvider>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 'center',
+					}}
+				>
+					<ToggleSelectControl {...args} className="is-focused" />
+				</ControlContextProvider>
 			</Flex>
 		);
 	},
@@ -119,9 +165,30 @@ export const DeselectableToggle = {
 		return (
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Deselectable Toggles</h2>
-				<ToggleSelectControl {...args} />
-				<ToggleSelectControl {...args} className="is-hovered" />
-				<ToggleSelectControl {...args} className="is-focused" />
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: '',
+					}}
+				>
+					<ToggleSelectControl {...args} />
+				</ControlContextProvider>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: '',
+					}}
+				>
+					<ToggleSelectControl {...args} className="is-hovered" />
+				</ControlContextProvider>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: '',
+					}}
+				>
+					<ToggleSelectControl {...args} className="is-focused" />
+				</ControlContextProvider>
 			</Flex>
 		);
 	},
@@ -144,6 +211,10 @@ export const Play = {
 		value: '',
 		options,
 		isDeselectable: true,
+		controlInfo: {
+			name: nanoid(),
+			value: '',
+		},
 	},
 	decorators: [
 		WithStoryContextProvider,
