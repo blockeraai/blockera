@@ -16,8 +16,9 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 /**
  * Internal dependencies
  */
-import { ControlContextProvider, ToggleSelectControl } from '../../index';
 import { default as InheritIcon } from './icons/inherit';
+import { WithPlaygroundStyles } from '../../../../../.storybook/preview';
+import { ControlContextProvider, ToggleSelectControl } from '../../index';
 import { WithControlDataProvider } from '../../../../../.storybook/decorators/with-control-data-provider';
 
 const {
@@ -27,6 +28,7 @@ const {
 	SharedDecorators,
 } = Decorators;
 
+SharedDecorators.push(WithPlaygroundStyles);
 SharedDecorators.push(WithControlDataProvider);
 
 const options = [
