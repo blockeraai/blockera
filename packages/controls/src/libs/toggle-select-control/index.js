@@ -11,7 +11,7 @@ import {
 /**
  * Publisher dependencies
  */
-import { isEmpty, isUndefined } from '@publisher/utils';
+import { isUndefined } from '@publisher/utils';
 import { controlClassNames } from '@publisher/classnames';
 import { Field } from '@publisher/fields';
 
@@ -29,6 +29,7 @@ export default function ToggleSelectControl({
 	columns,
 	defaultValue,
 	onChange,
+	field,
 	//
 	className,
 	children,
@@ -46,57 +47,47 @@ export default function ToggleSelectControl({
 		return isUndefined(value) ? '' : value;
 	}
 
-	function Control() {
-		return (
-			<WPToggleGroupControl
-				className={controlClassNames('toggle-select', className)}
-				value={value}
-				onChange={onChange}
-				label=""
-				hideLabelFromVision={true}
-				isBlock={true}
-				isDeselectable={isDeselectable}
-				__nextHasNoMarginBottom={false}
-				{...props}
-			>
-				{options?.map((item) => {
-					if (!isUndefined(item.icon)) {
+	return (
+		<Field
+			label={label}
+			field={field}
+			columns={columns}
+			className={className}
+		>
+			<div className={controlClassNames('toggle-select', className)}>
+				<WPToggleGroupControl
+					className={controlClassNames(
+						'toggle-select-inner',
+						className
+					)}
+					value={value}
+					onChange={onChange}
+					label={undefined}
+					hideLabelFromVision={true}
+					isBlock={true}
+					isDeselectable={isDeselectable}
+					__nextHasNoMarginBottom={false}
+					{...props}
+				>
+					{options?.map((item) => {
+						if (!isUndefined(item.icon)) {
+							return (
+								<WPToggleGroupControlOptionIcon
+									{...item}
+									key={item.value}
+								/>
+							);
+						}
+
 						return (
-							<WPToggleGroupControlOptionIcon
+							<WPToggleGroupControlOption
 								{...item}
 								key={item.value}
 							/>
 						);
-					}
-
-					return (
-						<WPToggleGroupControlOption
-							{...item}
-							key={item.value}
-						/>
-					);
-				})}
-			</WPToggleGroupControl>
-		);
-	}
-
-	if (isEmpty(label)) {
-		return (
-			<>
-				<Control />
-				{children}
-			</>
-		);
-	}
-
-	return (
-		<Field
-			label={label}
-			field="toggle-select"
-			columns={columns}
-			className={className}
-		>
-			<Control />
+					})}
+				</WPToggleGroupControl>
+			</div>
 			{children}
 		</Field>
 	);
@@ -109,6 +100,12 @@ ToggleSelectControl.propTypes = {
 	 * @default ""
 	 */
 	label: PropTypes.string,
+	/**
+	 * Field id for passing into child Field component
+	 *
+	 * @default "toggle-select"
+	 */
+	field: PropTypes.string,
 	/**
 	 * Columns setting for Field grid.
 	 *
@@ -153,4 +150,5 @@ ToggleSelectControl.defaultProps = {
 	label: '',
 	defaultValue: '',
 	isDeselectable: false,
+	field: 'toggle-select',
 };

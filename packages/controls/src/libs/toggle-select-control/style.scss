@@ -1,39 +1,41 @@
 .publisher-control-toggle-select {
-	border-color: var(--publisher-controls-border-color) !important;
-	width: 100%;
-	min-height: 30px !important;
-	
-	&.is-hovered,
-	&:hover {
-		border-color: var(--publisher-controls-border-color-hover) !important;
-	}
-	
-	&.is-focused,
-	&:focus-within {
-		border-color: var(--publisher-controls-border-color-focus) !important;
-		box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
-	}
-	
-	.components-toggle-group-control-option-base {
-		width: 100% !important;
-		padding: 0 5px !important;
+	.publisher-control-toggle-select-inner {
+		border-color: var(--publisher-controls-border-color) !important;
+		width: 100%;
+		min-height: 30px !important;
+		
+		&.is-hovered,
+		&:hover {
+			border-color: var(--publisher-controls-border-color-hover) !important;
+		}
+		
+		&.is-focused,
+		&:focus-within {
+			border-color: var(--publisher-controls-border-color-focus) !important;
+			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+		}
+		
+		.components-toggle-group-control-option-base {
+			width: 100% !important;
+			padding: 0 5px !important;
+			
+			// remove inner item style for focus
+			&:focus {
+				border: none !important;
+				box-shadow: none !important;
+				outline: none !important;
+			}
+		}
 		
 		// remove inner item style for focus
-		&:focus {
+		&.is-focused .components-toggle-group-control-option-base {
 			border: none !important;
 			box-shadow: none !important;
 			outline: none !important;
 		}
-	}
-	
-	// remove inner item style for focus
-	&.is-focused .components-toggle-group-control-option-base {
-		border: none !important;
-		box-shadow: none !important;
-		outline: none !important;
-	}
-	
-	div[role="presentation"] {
-		background: var(--publisher-controls-border-color-focus);
+		
+		div[role="presentation"] {
+			background: var(--publisher-controls-border-color-focus);
+		}
 	}
 }

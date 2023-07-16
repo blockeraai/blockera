@@ -41,7 +41,7 @@ const options = [
 		value: 'center',
 	},
 	{
-		label: __('right', 'publisher-core'),
+		label: __('Right', 'publisher-core'),
 		value: 'right',
 	},
 ];
@@ -89,7 +89,7 @@ export const TextToggle = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => {
 		return (
-			<Flex direction="column" gap="15px">
+			<Flex direction="column" gap="20px">
 				<h2 className="story-heading">Text Toggles</h2>
 				<ControlContextProvider
 					value={{
@@ -130,7 +130,7 @@ export const IconToggle = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => {
 		return (
-			<Flex direction="column" gap="15px">
+			<Flex direction="column" gap="20px">
 				<h2 className="story-heading">Icon Toggles</h2>
 				<ControlContextProvider
 					value={{
@@ -175,7 +175,7 @@ export const DeselectableToggle = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => {
 		return (
-			<Flex direction="column" gap="15px">
+			<Flex direction="column" gap="20px">
 				<h2 className="story-heading">Deselectable Toggles</h2>
 				<ControlContextProvider
 					value={{
@@ -217,7 +217,7 @@ export const Field = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => {
 		return (
-			<Flex direction="column" gap="15px">
+			<Flex direction="column" gap="20px">
 				<h2 className="story-heading">With Field</h2>
 				<ControlContextProvider
 					value={{
