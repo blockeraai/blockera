@@ -275,7 +275,7 @@ export const PlayImage = {
 		//
 		await step('Story Data', async () => {
 			await expect(currentValue).toBeInTheDocument();
-			await expect(currentValue).toBeEmptyDOMElement();
+			await expect(currentValue).toHaveTextContent('[]');
 		});
 
 		await step('Click Add Button', async () => {
@@ -285,7 +285,7 @@ export const PlayImage = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "type": "image", "image": "", "image-size": "custom", "image-size-width": "auto", "image-size-height": "auto", "image-position-top": "50%", "image-position-left": "50%", "image-repeat": "repeat", "image-attachment": "scroll", "linear-gradient": "linear-gradient(90deg,#009efa 10%,#e52e00 90%)", "linear-gradient-repeat": "no-repeat", "linear-gradient-attachment": "scroll", "radial-gradient": "radial-gradient(rgb(0,159,251) 0%,rgb(229,46,0) 100%)", "radial-gradient-position-top": "50%", "radial-gradient-position-left": "50%", "radial-gradient-size": "farthest-corner", "radial-gradient-repeat": "no-repeat", "radial-gradient-attachment": "scroll", "mesh-gradient": "", "mesh-gradient-colors": [], "mesh-gradient-attachment": "scroll", "isVisible": true } ]'
+						'[ { "type": "image", "image": "", "image-size": "custom", "image-size-width": "1auto", "image-size-height": "1auto", "image-position-top": "50%", "image-position-left": "50%", "image-repeat": "repeat", "image-attachment": "scroll", "isVisible": true } ]'
 					),
 				{ timeout: 1000 }
 			);
@@ -305,7 +305,51 @@ export const PlayImage = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "type": "image", "image": "", "image-size": "custom", "image-size-width": "auto", "image-size-height": "auto", "image-position-top": "60%", "image-repeat": "repeat", "image-attachment": "scroll", "isVisible": true } ]'
+						'[ { "type": "image", "image": "", "image-size": "custom", "image-size-width": "1auto", "image-size-height": "1auto", "image-position-top": "60%", "image-position-left": "50%", "image-repeat": "repeat", "image-attachment": "scroll", "isVisible": true } ]'
+					),
+				{ timeout: 2000 }
+			);
+		});
+
+		await step('Change to Linear Gradient', async () => {
+			await expect(
+				canvas.getByLabelText('Linear Gradient')
+			).toBeInTheDocument();
+
+			await userEvent.click(canvas.getByLabelText('Linear Gradient'));
+			await waitFor(
+				async () =>
+					await expect(currentValue).toHaveTextContent(
+						'[ { "type": "linear-gradient", "linear-gradient": "linear-gradient(90deg,#009efa 10%,#e52e00 90%)", "linear-gradient-repeat": "no-repeat", "linear-gradient-attachment": "scroll", "isVisible": true } ]'
+					),
+				{ timeout: 2000 }
+			);
+		});
+
+		await step('Change to Radial Gradient', async () => {
+			await expect(
+				canvas.getByLabelText('Radial Gradient')
+			).toBeInTheDocument();
+
+			await userEvent.click(canvas.getByLabelText('Radial Gradient'));
+			await waitFor(
+				async () =>
+					await expect(currentValue).toHaveTextContent(
+						'[ { "type": "radial-gradient", "radial-gradient": "radial-gradient(rgb(0,159,251) 0%,rgb(229,46,0) 100%)", "radial-gradient-position-top": "50%", "radial-gradient-position-left": "50%", "radial-gradient-size": "farthest-corner", "radial-gradient-repeat": "no-repeat", "radial-gradient-attachment": "scroll", "isVisible": true } ]'
+					),
+				{ timeout: 2000 }
+			);
+		});
+		await step('Change to Mesh Gradient', async () => {
+			await expect(
+				canvas.getByLabelText('Mesh Gradient')
+			).toBeInTheDocument();
+
+			await userEvent.click(canvas.getByLabelText('Mesh Gradient'));
+			await waitFor(
+				async () =>
+					await expect(currentValue).toHaveTextContent(
+						'"type": "mesh-gradient"'
 					),
 				{ timeout: 2000 }
 			);
