@@ -1,14 +1,30 @@
 .publisher-control-alignment-matrix {
-	border-color: var(--publisher-controls-border-color) !important;
-	border-radius: 2px !important;
-	margin: 0 !important;
-
-	span {
-		border-radius: 50%;
+	.publisher-control-alignment-matrix-box {
+		border-color: var(--publisher-controls-border-color) !important;
+		border-radius: 2px !important;
+		margin: 0 !important;
+		
+		span {
+			border-radius: 50%;
+		}
+		
+		span[tabindex="0"] span {
+			box-shadow: var(--publisher-controls-border-color-focus) 0 0 0 2px;
+			color: var(--publisher-controls-border-color-focus);
+		}
 	}
-
-	span[tabindex="0"] span {
-		box-shadow: var(--publisher-controls-border-color-focus) 0 0 0 2px;
-		color: var(--publisher-controls-border-color-focus);
+	
+	.publisher-field.publisher-field-input {
+		& + & {
+			border-top: none;
+			padding-top: 0;
+			margin-top: 0;
+		}
+		
+		input {
+			font-size: 12px;
+			padding-right: 0;
+			padding-inline-end: 0;
+		}
 	}
 }

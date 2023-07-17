@@ -16,6 +16,9 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  */
 import { default as AlignmentMatrixControl } from '../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
+import { nanoid } from 'nanoid';
+import { ControlContextProvider } from '../../../context';
 
 const {
 	WithInspectorStyles,
@@ -25,6 +28,7 @@ const {
 } = Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
+SharedDecorators.push(WithControlDataProvider);
 
 export default {
 	title: 'Controls/AlignmentMatrixControl',
@@ -34,14 +38,27 @@ export default {
 
 export const Default = {
 	args: {
-		value: 'center center',
+		inputFields: false,
+		controlInfo: {
+			name: nanoid(),
+			value: {
+				top: '50%',
+				left: '50%',
+			},
+		},
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const CustomSize = {
 	args: {
-		value: 'center center',
+		controlInfo: {
+			name: nanoid(),
+			value: {
+				top: '50%',
+				left: '50%',
+			},
+		},
 		size: 100,
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
@@ -61,7 +78,14 @@ const ControlWithHooks = (args) => {
 
 export const Play = {
 	args: {
-		value: 'center center',
+		inputFields: true,
+		controlInfo: {
+			name: nanoid(),
+			value: {
+				top: '50%',
+				left: '50%',
+			},
+		},
 	},
 	decorators: [
 		WithStoryContextProvider,
@@ -76,28 +100,161 @@ export const Play = {
 			<ControlWithHooks {...args} />
 		</div>
 	),
-	play: async ({ canvasElement }) => {
+	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 
-		const test = canvas.getByTestId('change-cell-test-id');
+		const cells = canvas.getByTestId('change-cell-test-id');
 
-		// file all `gridcell`. There is no any custom id or value for selecting specific cell.
-		for (const node of test.querySelectorAll('span[role="gridcell"]')) {
-			await userEvent.click(node);
-
+		await step('change grid cells', async () => {
+			// Top Left
+			await userEvent.click(
+				cells.querySelectorAll('span[role="gridcell"]')[0]
+			);
 			await waitFor(
 				async () => {
 					await expect(
 						canvas.getByTestId('current-value')
-					).toHaveTextContent(
-						node
-							.querySelector('.components-visually-hidden')
-							.innerText.trim()
-					);
+					).toHaveTextContent('{ "top": "0%", "left": "0%" }');
 				},
 				{ timeout: 1000 }
 			);
-		}
+
+			// Top Center
+			await userEvent.click(
+				cells.querySelectorAll('span[role="gridcell"]')[1]
+			);
+			await waitFor(
+				async () => {
+					await expect(
+						canvas.getByTestId('current-value')
+					).toHaveTextContent('{ "top": "0%", "left": "50%" }');
+				},
+				{ timeout: 1000 }
+			);
+
+			// Top Right
+			await userEvent.click(
+				cells.querySelectorAll('span[role="gridcell"]')[2]
+			);
+			await waitFor(
+				async () => {
+					await expect(
+						canvas.getByTestId('current-value')
+					).toHaveTextContent('{ "top": "0%", "left": "100%" }');
+				},
+				{ timeout: 1000 }
+			);
+
+			// Center Left
+			await userEvent.click(
+				cells.querySelectorAll('span[role="gridcell"]')[3]
+			);
+			await waitFor(
+				async () => {
+					await expect(
+						canvas.getByTestId('current-value')
+					).toHaveTextContent('{ "top": "50%", "left": "0%" }');
+				},
+				{ timeout: 1000 }
+			);
+
+			// Center, Center
+			await userEvent.click(
+				cells.querySelectorAll('span[role="gridcell"]')[4]
+			);
+			await waitFor(
+				async () => {
+					await expect(
+						canvas.getByTestId('current-value')
+					).toHaveTextContent('{ "top": "50%", "left": "50%" }');
+				},
+				{ timeout: 1000 }
+			);
+
+			// Center, Right
+			await userEvent.click(
+				cells.querySelectorAll('span[role="gridcell"]')[5]
+			);
+			await waitFor(
+				async () => {
+					await expect(
+						canvas.getByTestId('current-value')
+					).toHaveTextContent('{ "top": "50%", "left": "100%" }');
+				},
+				{ timeout: 1000 }
+			);
+
+			// Bottom Left
+			await userEvent.click(
+				cells.querySelectorAll('span[role="gridcell"]')[6]
+			);
+			await waitFor(
+				async () => {
+					await expect(
+						canvas.getByTestId('current-value')
+					).toHaveTextContent('{ "top": "100%", "left": "0%" }');
+				},
+				{ timeout: 1000 }
+			);
+
+			// Bottom Center
+			await userEvent.click(
+				cells.querySelectorAll('span[role="gridcell"]')[7]
+			);
+			await waitFor(
+				async () => {
+					await expect(
+						canvas.getByTestId('current-value')
+					).toHaveTextContent('{ "top": "100%", "left": "50%" }');
+				},
+				{ timeout: 1000 }
+			);
+
+			// Bottom Right
+			await userEvent.click(
+				cells.querySelectorAll('span[role="gridcell"]')[8]
+			);
+			await waitFor(
+				async () => {
+					await expect(
+						canvas.getByTestId('current-value')
+					).toHaveTextContent('{ "top": "100%", "left": "100%" }');
+				},
+				{ timeout: 1000 }
+			);
+		});
+
+		await step('Change Top Input', async () => {
+			// Top Left
+			await userEvent.type(
+				canvas.getAllByRole('textbox')[0],
+				'{backspace}5'
+			);
+			await waitFor(
+				async () => {
+					await expect(
+						canvas.getByTestId('current-value')
+					).toHaveTextContent('{ "top": "55%", "left": "50%" }');
+				},
+				{ timeout: 1000 }
+			);
+		});
+
+		await step('Change Left Input', async () => {
+			// Top Left
+			await userEvent.type(
+				canvas.getAllByRole('textbox')[1],
+				'{backspace}5'
+			);
+			await waitFor(
+				async () => {
+					await expect(
+						canvas.getByTestId('current-value')
+					).toHaveTextContent('{ "top": "55%", "left": "55%" }');
+				},
+				{ timeout: 1000 }
+			);
+		});
 	},
 };
 
@@ -109,57 +266,151 @@ export const Screenshot = {
 	render: (args) => (
 		<Flex direction="column" gap="30px">
 			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">With Input</h2>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: { top: '50%', left: '50%' },
+					}}
+				>
+					<AlignmentMatrixControl {...args} inputFields={true} />
+				</ControlContextProvider>
+			</Flex>
+
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">With Field</h2>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: { top: '50%', left: '50%' },
+					}}
+				>
+					<AlignmentMatrixControl
+						{...args}
+						inputFields={true}
+						label="Position"
+					/>
+				</ControlContextProvider>
+			</Flex>
+
+			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Custom Size</h2>
-				<AlignmentMatrixControl
-					{...args}
-					size="50"
-					value="center center"
-				/>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: { top: '50%', left: '50%' },
+					}}
+				>
+					<AlignmentMatrixControl {...args} size="50" />
+				</ControlContextProvider>
 			</Flex>
 
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Top Left</h2>
-				<AlignmentMatrixControl {...args} value="top left" />
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: { top: '0%', left: '0%' },
+					}}
+				>
+					<AlignmentMatrixControl {...args} />
+				</ControlContextProvider>
 			</Flex>
 
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Top Center</h2>
-				<AlignmentMatrixControl {...args} value="top center" />
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: { top: '0%', left: '50%' },
+					}}
+				>
+					<AlignmentMatrixControl {...args} value="top center" />
+				</ControlContextProvider>
 			</Flex>
 
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Top Right</h2>
-				<AlignmentMatrixControl {...args} value="top right" />
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: { top: '0%', left: '100%' },
+					}}
+				>
+					<AlignmentMatrixControl {...args} value="top right" />
+				</ControlContextProvider>
 			</Flex>
 
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Center Left</h2>
-				<AlignmentMatrixControl {...args} value="center left" />
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: { top: '50%', left: '0%' },
+					}}
+				>
+					<AlignmentMatrixControl {...args} value="center left" />
+				</ControlContextProvider>
 			</Flex>
 
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Center Center</h2>
-				<AlignmentMatrixControl {...args} value="center center" />
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: { top: '50%', left: '50%' },
+					}}
+				>
+					<AlignmentMatrixControl {...args} value="center center" />
+				</ControlContextProvider>
 			</Flex>
 
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Center Right</h2>
-				<AlignmentMatrixControl {...args} value="center right" />
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: { top: '50%', left: '100%' },
+					}}
+				>
+					<AlignmentMatrixControl {...args} value="center right" />
+				</ControlContextProvider>
 			</Flex>
 
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Bottom Left</h2>
-				<AlignmentMatrixControl {...args} value="bottom left" />
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: { top: '100%', left: '0%' },
+					}}
+				>
+					<AlignmentMatrixControl {...args} value="bottom left" />
+				</ControlContextProvider>
 			</Flex>
 
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Bottom Center</h2>
-				<AlignmentMatrixControl {...args} value="bottom center" />
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: { top: '100%', left: '50%' },
+					}}
+				>
+					<AlignmentMatrixControl {...args} value="bottom center" />
+				</ControlContextProvider>
 			</Flex>
 
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Bottom Right</h2>
-				<AlignmentMatrixControl {...args} value="bottom right" />
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: { top: '100%', left: '100%' },
+					}}
+				>
+					<AlignmentMatrixControl {...args} value="bottom right" />
+				</ControlContextProvider>
 			</Flex>
 		</Flex>
 	),
