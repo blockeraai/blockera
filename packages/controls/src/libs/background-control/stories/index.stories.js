@@ -4,7 +4,12 @@
 import { nanoid } from 'nanoid';
 import { expect } from '@storybook/jest';
 import { useContext } from '@wordpress/element';
-import { userEvent, waitFor, within } from '@storybook/testing-library';
+import {
+	fireEvent,
+	userEvent,
+	waitFor,
+	within,
+} from '@storybook/testing-library';
 
 /**
  * Publisher dependencies
@@ -285,7 +290,7 @@ export const PlayImage = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "type": "image", "image": "", "image-size": "custom", "image-size-width": "1auto", "image-size-height": "1auto", "image-position-top": "50%", "image-position-left": "50%", "image-repeat": "repeat", "image-attachment": "scroll", "isVisible": true } ]'
+						'[ { "type": "image", "image": "", "image-size": "custom", "image-size-width": "1auto", "image-size-height": "1auto", "image-position": { "top": "50%", "left": "50%" }, "image-repeat": "repeat", "image-attachment": "scroll", "isVisible": true } ]'
 					),
 				{ timeout: 1000 }
 			);
@@ -295,17 +300,15 @@ export const PlayImage = {
 			await userEvent.click(canvas.getByLabelText('Item 1'));
 		});
 
-		await step('Change Input', async () => {
-			await expect(canvas.getAllByRole('textbox')[0]).toBeInTheDocument();
+		await step('Change item', async () => {
+			await expect(canvas.getByLabelText('Cover')).toBeInTheDocument();
 
-			await userEvent.type(
-				canvas.getAllByRole('textbox')[0],
-				'{backspace}{backspace}60{enter}'
-			);
+			await userEvent.click(canvas.getByLabelText('Cover'));
+
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "type": "image", "image": "", "image-size": "custom", "image-size-width": "1auto", "image-size-height": "1auto", "image-position-top": "60%", "image-position-left": "50%", "image-repeat": "repeat", "image-attachment": "scroll", "isVisible": true } ]'
+						'[ { "type": "image", "image": "", "image-size": "cover", "image-size-width": "1auto", "image-size-height": "1auto", "image-position": { "top": "50%", "left": "50%" }, "image-repeat": "repeat", "image-attachment": "scroll", "isVisible": true } ]'
 					),
 				{ timeout: 2000 }
 			);
@@ -317,6 +320,7 @@ export const PlayImage = {
 			).toBeInTheDocument();
 
 			await userEvent.click(canvas.getByLabelText('Linear Gradient'));
+
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(

@@ -15,12 +15,13 @@ export function GradientBarField({
 	className,
 	options,
 	children,
+	field = 'gradient-bar',
 	...props
 }) {
 	return (
 		<Field
 			label={label}
-			field="gradient-bar"
+			field={field}
 			columns="columns-1"
 			className={className}
 		>

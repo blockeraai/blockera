@@ -9,6 +9,7 @@ import {
 	waitFor,
 	within,
 } from '@storybook/testing-library';
+import { nanoid } from 'nanoid';
 
 /**
  * Publisher dependencies
@@ -19,7 +20,9 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 /**
  * Internal dependencies
  */
-import { InputControl } from '../../index';
+import { ControlContextProvider, InputControl } from '../../../index';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 
 const {
 	WithInspectorStyles,
@@ -27,6 +30,9 @@ const {
 	WithStoryContextProvider,
 	SharedDecorators,
 } = Decorators;
+
+SharedDecorators.push(WithPlaygroundStyles);
+SharedDecorators.push(WithControlDataProvider);
 
 const units = [
 	{ value: 'px', label: 'px', default: 0 },
@@ -60,16 +66,56 @@ export const TextInput = {
 	render: (args) => (
 		<Flex direction="column" gap="15px">
 			<h2 className="story-heading">Text Input</h2>
-			<InputControl type="text" {...args} />
-			<InputControl type="text" className="is-hovered" {...args} />
-			<InputControl type="text" className="is-focused" {...args} />
-			<InputControl type="text" noBorder={true} {...args} />
-			<InputControl
-				type="text"
-				className="is-focused"
-				noBorder={true}
-				{...args}
-			/>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<InputControl type="text" {...args} />
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<InputControl type="text" className="is-hovered" {...args} />
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<InputControl type="text" className="is-focused" {...args} />
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<InputControl type="text" noBorder={true} {...args} />
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<InputControl
+					type="text"
+					className="is-focused"
+					noBorder={true}
+					{...args}
+				/>
+			</ControlContextProvider>
 		</Flex>
 	),
 };
@@ -77,74 +123,142 @@ export const TextInput = {
 export const NumberInput = {
 	args: {
 		defaultValue: '10px',
-		value: '20px',
+		value: '20',
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
 		<Flex direction="column" gap="30px">
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Number Input</h2>
-				<InputControl {...args} type="number" value="20" />
-				<InputControl
-					{...args}
-					type="number"
-					value="20"
-					className="is-hovered"
-				/>
-				<InputControl
-					{...args}
-					type="number"
-					value="20"
-					className="is-focused"
-				/>
-				<InputControl
-					{...args}
-					type="number"
-					value="20"
-					noBorder={true}
-				/>
-				<InputControl
-					{...args}
-					type="number"
-					className="is-focused"
-					value="20"
-					noBorder={true}
-				/>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 0,
+					}}
+				>
+					<InputControl {...args} type="number" />
+				</ControlContextProvider>
+
+				{/*<ControlContextProvider*/}
+				{/*	value={{*/}
+				{/*		name: nanoid(),*/}
+				{/*		value: 10,*/}
+				{/*	}}*/}
+				{/*>*/}
+				{/*	<InputControl*/}
+				{/*		{...args}*/}
+				{/*		type="number"*/}
+				{/*		className="is-hovered"*/}
+				{/*	/>*/}
+				{/*</ControlContextProvider>*/}
+
+				{/*<ControlContextProvider*/}
+				{/*	value={{*/}
+				{/*		name: nanoid(),*/}
+				{/*		value: 20,*/}
+				{/*	}}*/}
+				{/*>*/}
+				{/*	<InputControl*/}
+				{/*		{...args}*/}
+				{/*		type="number"*/}
+				{/*		className="is-focused"*/}
+				{/*	/>*/}
+				{/*</ControlContextProvider>*/}
+
+				{/*<ControlContextProvider*/}
+				{/*	value={{*/}
+				{/*		name: nanoid(),*/}
+				{/*		value: 30,*/}
+				{/*	}}*/}
+				{/*>*/}
+				{/*	<InputControl {...args} type="number" noBorder={true} />*/}
+				{/*</ControlContextProvider>*/}
+
+				{/*<ControlContextProvider*/}
+				{/*	value={{*/}
+				{/*		name: nanoid(),*/}
+				{/*		value: 40,*/}
+				{/*	}}*/}
+				{/*>*/}
+				{/*	<InputControl*/}
+				{/*		{...args}*/}
+				{/*		type="number"*/}
+				{/*		className="is-focused"*/}
+				{/*		noBorder={true}*/}
+				{/*	/>*/}
+				{/*</ControlContextProvider>*/}
 			</Flex>
 
-			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">Range Number Input</h2>
-				<InputControl {...args} range={true} type="number" value="20" />
-				<InputControl
-					{...args}
-					range={true}
-					type="number"
-					value="20"
-					className="is-hovered"
-				/>
-				<InputControl
-					{...args}
-					range={true}
-					type="number"
-					value="20"
-					className="is-focused"
-				/>
-				<InputControl
-					{...args}
-					range={true}
-					type="number"
-					value="20"
-					noBorder={true}
-				/>
-				<InputControl
-					{...args}
-					range={true}
-					type="number"
-					className="is-focused"
-					value="20"
-					noBorder={true}
-				/>
-			</Flex>
+			{/*<Flex direction="column" gap="15px">*/}
+			{/*	<h2 className="story-heading">Range Number Input</h2>*/}
+
+			{/*	<ControlContextProvider*/}
+			{/*		value={{*/}
+			{/*			name: nanoid(),*/}
+			{/*			value: 50,*/}
+			{/*		}}*/}
+			{/*	>*/}
+			{/*		<InputControl {...args} range={true} type="number" />*/}
+			{/*	</ControlContextProvider>*/}
+
+			{/*	<ControlContextProvider*/}
+			{/*		value={{*/}
+			{/*			name: nanoid(),*/}
+			{/*			value: 60,*/}
+			{/*		}}*/}
+			{/*	>*/}
+			{/*		<InputControl*/}
+			{/*			{...args}*/}
+			{/*			range={true}*/}
+			{/*			type="number"*/}
+			{/*			className="is-hovered"*/}
+			{/*		/>*/}
+			{/*	</ControlContextProvider>*/}
+
+			{/*	<ControlContextProvider*/}
+			{/*		value={{*/}
+			{/*			name: nanoid(),*/}
+			{/*			value: 70,*/}
+			{/*		}}*/}
+			{/*	>*/}
+			{/*		<InputControl*/}
+			{/*			{...args}*/}
+			{/*			range={true}*/}
+			{/*			type="number"*/}
+			{/*			className="is-focused"*/}
+			{/*		/>*/}
+			{/*	</ControlContextProvider>*/}
+
+			{/*	<ControlContextProvider*/}
+			{/*		value={{*/}
+			{/*			name: nanoid(),*/}
+			{/*			value: 80,*/}
+			{/*		}}*/}
+			{/*	>*/}
+			{/*		<InputControl*/}
+			{/*			{...args}*/}
+			{/*			range={true}*/}
+			{/*			type="number"*/}
+			{/*			noBorder={true}*/}
+			{/*		/>*/}
+			{/*	</ControlContextProvider>*/}
+
+			{/*	<ControlContextProvider*/}
+			{/*		value={{*/}
+			{/*			name: nanoid(),*/}
+			{/*			value: 90,*/}
+			{/*		}}*/}
+			{/*	>*/}
+			{/*		<InputControl*/}
+			{/*			{...args}*/}
+			{/*			range={true}*/}
+			{/*			type="number"*/}
+			{/*			className="is-focused"*/}
+			{/*			noBorder={true}*/}
+			{/*		/>*/}
+			{/*	</ControlContextProvider>*/}
+			{/*</Flex>*/}
 		</Flex>
 	),
 };

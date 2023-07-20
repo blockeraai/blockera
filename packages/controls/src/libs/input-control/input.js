@@ -11,13 +11,15 @@ import PropTypes from 'prop-types';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { isEmpty, isUndefined, useValue } from '@publisher/utils';
+import { isEmpty, isString, isUndefined } from '@publisher/utils';
+import { Field } from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
 import { RangeControl } from './../index';
 import { getCSSUnits, isSpecialUnit } from './utils';
+import { useControlContext } from '../../context';
 
 export function InputControl({
 	unitType,
@@ -25,71 +27,82 @@ export function InputControl({
 	range,
 	noBorder,
 	//
-	value: initialValue,
+	id,
+	label,
+	columns,
 	defaultValue,
 	onChange,
+	field,
 	//
 	className,
 	...props
 }) {
-	const { value, setValue } = useValue({
-		initialValue,
+	const { value } = useControlContext({
+		id,
 		defaultValue,
 		onChange,
 	});
 
-	if ((isUndefined(units) || isEmpty(units)) && unitType !== '') {
+	// add css units
+	if (unitType !== '' && (isUndefined(units) || isEmpty(units))) {
 		units = getCSSUnits(unitType);
 	}
 
 	return (
-		<div
-			className={controlClassNames(
-				'input',
-				range && 'input-range',
-				noBorder && 'no-border',
-				isSpecialUnit(value) && 'publisher-control-unit-special',
-				className
-			)}
+		<Field
+			label={label}
+			field={field}
+			columns={columns}
+			className={className}
 		>
-			{range && (
-				<RangeControl
-					withInputField={false}
-					className={className}
-					value={value}
-					onChange={(newValue) => {
-						// extract unit from old value and assign it to newValue
-						newValue = newValue + value.replace(/[0-9|-]/gi, '');
-						setValue(newValue);
-						return newValue;
-					}}
-					//
-					{...props}
-				/>
-			)}
+			<div
+				className={controlClassNames(
+					'input',
+					range && 'input-range',
+					noBorder && 'no-border',
+					isSpecialUnit(value) && 'publisher-control-unit-special',
+					className
+				)}
+			>
+				{range && (
+					<RangeControl
+						withInputField={false}
+						className={className}
+						value={value}
+						onChange={(newValue) => {
+							// extract unit from old value and assign it to newValue
+							if (isString(value))
+								newValue =
+									newValue + value.replace(/[0-9|-]/gi, '');
+							onChange(newValue);
+						}}
+						{...props}
+					/>
+				)}
 
-			{!isEmpty(units) ? (
-				<WPUnitControl
-					{...props}
-					units={units}
-					value={value}
-					onChange={setValue}
-					className={controlClassNames(
-						'text',
-						'publisher-control-unit',
-						className
-					)}
-					isUnitSelectTabbable={false}
-				/>
-			) : (
-				<WPTextControl
-					{...props}
-					value={value}
-					onChange={setValue}
-					className={controlClassNames('text', className)}
-				/>
-			)}
-		</div>
+				{!isEmpty(units) ? (
+					<WPUnitControl
+						{...props}
+						units={units}
+						value={value}
+						onChange={onChange}
+						className={controlClassNames(
+							'text',
+							'publisher-control-unit',
+							className
+						)}
+						isUnitSelectTabbable={false}
+					/>
+				) : (
+					<WPTextControl
+						{...props}
+						value={value}
+						onChange={onChange}
+						className={controlClassNames('text', className)}
+					/>
+				)}
+			</div>
+		</Field>
 	);
 }
 
@@ -160,4 +173,5 @@ InputControl.propTypes = {
 InputControl.defaultProps = {
 	range: false,
 	noBorder: false,
+	field: 'input',
 };

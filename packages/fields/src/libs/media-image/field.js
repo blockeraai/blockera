@@ -15,12 +15,13 @@ export function MediaImageField({
 	className,
 	attribute,
 	children,
+	field = 'media-image',
 	...props
 }) {
 	return (
 		<Field
 			label={label}
-			field="media-image"
+			field={field}
 			columns={columns}
 			className={className}
 		>

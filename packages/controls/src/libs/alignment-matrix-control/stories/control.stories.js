@@ -4,6 +4,7 @@
 import { useContext } from '@wordpress/element';
 import { expect } from '@storybook/jest';
 import { waitFor, userEvent, within } from '@storybook/testing-library';
+import { nanoid } from 'nanoid';
 
 /**
  * Publisher dependencies
@@ -17,7 +18,6 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 import { default as AlignmentMatrixControl } from '../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
-import { nanoid } from 'nanoid';
 import { ControlContextProvider } from '../../../context';
 
 const {

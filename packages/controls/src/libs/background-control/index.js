@@ -35,8 +35,7 @@ export default function BackgroundControl({
 				delete item['image-size'];
 				delete item['image-size-width'];
 				delete item['image-size-height'];
-				delete item['image-position-top'];
-				delete item['image-position-left'];
+				delete item['image-position'];
 				delete item['image-repeat'];
 				delete item['image-attachment'];
 			}
@@ -55,12 +54,14 @@ export default function BackgroundControl({
 
 			if (item?.type !== 'radial-gradient') {
 				delete item['radial-gradient'];
-				delete item['radial-gradient-position-top'];
-				delete item['radial-gradient-position-left'];
+				delete item['radial-gradient-position'];
 				delete item['radial-gradient-size'];
 				delete item['radial-gradient-repeat'];
 				delete item['radial-gradient-attachment'];
 			}
+
+			// internal usage
+			delete item.isOpen;
 
 			return item;
 		});
@@ -105,16 +106,20 @@ BackgroundControl.propTypes = {
 		'image-size': PropTypes.string,
 		'image-size-width': PropTypes.string,
 		'image-size-height': PropTypes.string,
-		'image-position-top': PropTypes.string,
-		'image-position-left': PropTypes.string,
+		'image-position': PropTypes.shape({
+			top: PropTypes.string,
+			left: PropTypes.string,
+		}),
 		'image-repeat': PropTypes.string,
 		'image-attachment': PropTypes.string,
 		'linear-gradient': PropTypes.string,
 		'linear-gradient-repeat': PropTypes.string,
 		'linear-gradient-attachment': PropTypes.string,
 		'radial-gradient': PropTypes.string,
-		'radial-gradient-position-top': PropTypes.string,
-		'radial-gradient-position-left': PropTypes.string,
+		'radial-gradient-position': PropTypes.shape({
+			top: PropTypes.string,
+			left: PropTypes.string,
+		}),
 		'radial-gradient-size': PropTypes.string,
 		'radial-gradient-repeat': PropTypes.string,
 		'radial-gradient-attachment': PropTypes.string,
@@ -137,8 +142,10 @@ BackgroundControl.defaultProps = {
 		'image-size': 'custom',
 		'image-size-width': '1auto',
 		'image-size-height': '1auto',
-		'image-position-top': '50%',
-		'image-position-left': '50%',
+		'image-position': {
+			top: '50%',
+			left: '50%',
+		},
 		'image-repeat': 'repeat',
 		'image-attachment': 'scroll',
 		'linear-gradient': 'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
@@ -146,8 +153,10 @@ BackgroundControl.defaultProps = {
 		'linear-gradient-attachment': 'scroll',
 		'radial-gradient':
 			'radial-gradient(rgb(0,159,251) 0%,rgb(229,46,0) 100%)',
-		'radial-gradient-position-top': '50%',
-		'radial-gradient-position-left': '50%',
+		'radial-gradient-position': {
+			top: '50%',
+			left: '50%',
+		},
 		'radial-gradient-size': 'farthest-corner',
 		'radial-gradient-repeat': 'no-repeat',
 		'radial-gradient-attachment': 'scroll',

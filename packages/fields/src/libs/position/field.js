@@ -18,6 +18,7 @@ import { Flex } from '@publisher/components';
  */
 import { Field, InputField } from '../../index';
 
+// todo remove this filed, it's replaced by AlignmentMatrixControl
 export function PositionField({
 	label = __('Position', 'publisher-core'),
 	className,

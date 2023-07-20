@@ -8,11 +8,8 @@ import { memo, useContext } from '@wordpress/element';
  * Publisher dependencies
  */
 import {
-	ToggleSelectField,
-	InputField,
 	GradientBarField,
 	AnglePickerField,
-	PositionField,
 	MediaImageField,
 	Field,
 } from '@publisher/fields';
@@ -26,6 +23,11 @@ import { isUndefined } from '@publisher/utils';
 /**
  * Internal dependencies
  */
+import {
+	AlignmentMatrixControl,
+	InputControl,
+	ToggleSelectControl,
+} from '../../index';
 import RepeaterControl from '../../repeater-control';
 import { useControlContext } from '../../../context';
 // Icons
@@ -99,7 +101,7 @@ const Fields = ({ itemId, item }) => {
 
 	return (
 		<div id={`repeater-item-${itemId}`}>
-			<ToggleSelectField
+			<ToggleSelectControl
 				label={__('Type', 'publisher-core')}
 				options={[
 					{
@@ -123,9 +125,7 @@ const Fields = ({ itemId, item }) => {
 						icon: <TypeMeshGradientIcon />,
 					},
 				]}
-				//
 				id={getControlId('type')}
-				value={item.type}
 				onChange={(type) =>
 					changeRepeaterItem({
 						controlId,
@@ -143,6 +143,7 @@ const Fields = ({ itemId, item }) => {
 				<>
 					<MediaImageField
 						label=""
+						field="empty"
 						columns="columns-1"
 						settings={{
 							type: 'text',
@@ -162,7 +163,7 @@ const Fields = ({ itemId, item }) => {
 						}}
 					/>
 
-					<ToggleSelectField
+					<ToggleSelectControl
 						label={__('Size', 'publisher-core')}
 						options={[
 							{
@@ -178,9 +179,7 @@ const Fields = ({ itemId, item }) => {
 								value: 'contain',
 							},
 						]}
-						//
 						id={getControlId('image-size')}
-						value={item['image-size']}
 						onChange={(size) =>
 							changeRepeaterItem({
 								controlId,
@@ -199,16 +198,13 @@ const Fields = ({ itemId, item }) => {
 								gap="8px"
 								justifyContent="space-around"
 							>
-								<InputField
+								<InputControl
 									label={__('Width', 'publisher-core')}
 									columns="columns-1"
 									className="control-first label-center small-gap"
-									settings={{
-										type: 'css',
-										unitType: 'background-size',
-									}}
-									//
-									value={item['image-size-width']}
+									type="css"
+									unitType="background-size"
+									id={getControlId('image-size-width')}
 									onChange={(width) =>
 										changeRepeaterItem({
 											controlId,
@@ -222,16 +218,13 @@ const Fields = ({ itemId, item }) => {
 									}
 								/>
 
-								<InputField
+								<InputControl
 									label={__('Height', 'publisher-core')}
 									columns="columns-1"
 									className="control-first label-center small-gap"
-									settings={{
-										type: 'css',
-										unitType: 'background-size',
-									}}
-									//
-									value={item['image-size-height']}
+									type="css"
+									unitType="background-size"
+									id={getControlId('image-size-height')}
 									onChange={(height) =>
 										changeRepeaterItem({
 											controlId,
@@ -246,26 +239,26 @@ const Fields = ({ itemId, item }) => {
 								/>
 							</Flex>
 						)}
-					</ToggleSelectField>
+					</ToggleSelectControl>
 
-					<PositionField
-						topValue={item['image-position-top']}
-						leftValue={item['image-position-left']}
-						onValueChange={({ top, left }) => {
+					<AlignmentMatrixControl
+						inputFields={true}
+						label={__('Position', 'publisher-core')}
+						id={getControlId('[image-position]')}
+						onChange={({ newValue }) => {
 							changeRepeaterItem({
 								controlId,
 								repeaterId,
 								itemId,
 								value: {
 									...item,
-									'image-position-top': top || item.top,
-									'image-position-left': left || item.left,
+									'image-position': newValue,
 								},
 							});
 						}}
 					/>
 
-					<ToggleSelectField
+					<ToggleSelectControl
 						label={__('Repeat', 'publisher-core')}
 						options={[
 							{
@@ -297,7 +290,6 @@ const Fields = ({ itemId, item }) => {
 						]}
 						//
 						id={getControlId('[image-repeat]')}
-						value={item['image-repeat']}
 						onChange={(newValue) =>
 							changeRepeaterItem({
 								controlId,
@@ -311,7 +303,7 @@ const Fields = ({ itemId, item }) => {
 						}
 					/>
 
-					<ToggleSelectField
+					<ToggleSelectControl
 						label={__('Effect', 'publisher-core')}
 						options={[
 							{
@@ -323,9 +315,7 @@ const Fields = ({ itemId, item }) => {
 								value: 'fixed',
 							},
 						]}
-						//
 						id={getControlId('[image-attachment]')}
-						value={item['image-attachment']}
 						onChange={(newValue) =>
 							changeRepeaterItem({
 								controlId,
@@ -344,6 +334,7 @@ const Fields = ({ itemId, item }) => {
 			{item.type === 'linear-gradient' && (
 				<>
 					<GradientBarField
+						field="empty"
 						value={item['linear-gradient']}
 						onValueChange={(newValue) =>
 							changeRepeaterItem({
@@ -382,7 +373,7 @@ const Fields = ({ itemId, item }) => {
 						}
 					/>
 
-					<ToggleSelectField
+					<ToggleSelectControl
 						label={__('Repeat', 'publisher-core')}
 						options={[
 							{
@@ -398,7 +389,6 @@ const Fields = ({ itemId, item }) => {
 						]}
 						//
 						id={getControlId('[linear-gradient-repeat]')}
-						value={item['linear-gradient-repeat']}
 						onChange={(newValue) =>
 							changeRepeaterItem({
 								controlId,
@@ -412,7 +402,7 @@ const Fields = ({ itemId, item }) => {
 						}
 					/>
 
-					<ToggleSelectField
+					<ToggleSelectControl
 						label={__('Effect', 'publisher-core')}
 						options={[
 							{
@@ -424,9 +414,7 @@ const Fields = ({ itemId, item }) => {
 								value: 'fixed',
 							},
 						]}
-						//
 						id={getControlId('[linear-gradient-attachment]')}
-						value={item['linear-gradient-attachment']}
 						onChange={(newValue) =>
 							changeRepeaterItem({
 								controlId,
@@ -445,7 +433,7 @@ const Fields = ({ itemId, item }) => {
 			{item.type === 'radial-gradient' && (
 				<>
 					<GradientBarField
-						//
+						field="empty"
 						value={item['radial-gradient']}
 						onValueChange={(newValue) =>
 							changeRepeaterItem({
@@ -460,26 +448,24 @@ const Fields = ({ itemId, item }) => {
 						}
 					/>
 
-					<PositionField
-						topValue={item['radial-gradient-position-top']}
-						leftValue={item['radial-gradient-position-left']}
-						onValueChange={({ top, left }) => {
+					<AlignmentMatrixControl
+						inputFields={true}
+						label={__('Position', 'publisher-core')}
+						id={getControlId('[radial-gradient-position]')}
+						onChange={({ newValue }) => {
 							changeRepeaterItem({
 								controlId,
 								repeaterId,
 								itemId,
 								value: {
 									...item,
-									'radial-gradient-position-top':
-										top || item.top,
-									'radial-gradient-position-left':
-										left || item.left,
+									'radial-gradient-position': newValue,
 								},
 							});
 						}}
 					/>
 
-					<ToggleSelectField
+					<ToggleSelectControl
 						label={__('Size', 'publisher-core')}
 						options={[
 							{
@@ -515,9 +501,7 @@ const Fields = ({ itemId, item }) => {
 								icon: <RadialGradientClosestSideIcon />,
 							},
 						]}
-						//
 						id={getControlId('[radial-gradient-size]')}
-						value={item['radial-gradient-size']}
 						onChange={(newValue) =>
 							changeRepeaterItem({
 								controlId,
@@ -531,7 +515,7 @@ const Fields = ({ itemId, item }) => {
 						}
 					/>
 
-					<ToggleSelectField
+					<ToggleSelectControl
 						label={__('Repeat', 'publisher-core')}
 						options={[
 							{
@@ -545,9 +529,7 @@ const Fields = ({ itemId, item }) => {
 								icon: <RadialGradientRepeatIcon />,
 							},
 						]}
-						//
 						id={getControlId('[radial-gradient-repeat]')}
-						value={item['radial-gradient-repeat']}
 						onChange={(newValue) =>
 							changeRepeaterItem({
 								controlId,
@@ -561,7 +543,7 @@ const Fields = ({ itemId, item }) => {
 						}
 					/>
 
-					<ToggleSelectField
+					<ToggleSelectControl
 						label={__('Effect', 'publisher-core')}
 						options={[
 							{
@@ -573,9 +555,7 @@ const Fields = ({ itemId, item }) => {
 								value: 'fixed',
 							},
 						]}
-						//
 						id={getControlId('[radial-gradient-attachment]')}
-						value={item['radial-gradient-attachment']}
 						onChange={(newValue) =>
 							changeRepeaterItem({
 								controlId,
@@ -593,7 +573,7 @@ const Fields = ({ itemId, item }) => {
 
 			{item.type === 'mesh-gradient' && (
 				<>
-					<Field label="" columns="columns-1">
+					<Field label="" columns="columns-1" field="empty">
 						<div
 							className={controlInnerClassNames(
 								'mesh-generator-preview'
@@ -632,7 +612,7 @@ const Fields = ({ itemId, item }) => {
 						</div>
 					</Field>
 
-					<Field label="" columns="columns-1">
+					<Field label="" columns="columns-1" field="empty">
 						<RepeaterControl
 							repeaterId={getControlId('[mesh-gradient-colors]')}
 							label={__('Colors', 'publisher-core')}
@@ -726,7 +706,7 @@ const Fields = ({ itemId, item }) => {
 						/>
 					</Field>
 
-					<ToggleSelectField
+					<ToggleSelectControl
 						label={__('Effect', 'publisher-core')}
 						options={[
 							{
@@ -738,9 +718,7 @@ const Fields = ({ itemId, item }) => {
 								value: 'fixed',
 							},
 						]}
-						//
 						id={getControlId('[mesh-gradient-attachment]')}
-						value={item['mesh-gradient-attachment']}
 						onChange={(newValue) =>
 							changeRepeaterItem({
 								controlId,
