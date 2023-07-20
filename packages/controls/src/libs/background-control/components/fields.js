@@ -245,7 +245,7 @@ const Fields = ({ itemId, item }) => {
 						inputFields={true}
 						label={__('Position', 'publisher-core')}
 						id={getControlId('[image-position]')}
-						onChange={({ newValue }) => {
+						onChange={(newValue) => {
 							changeRepeaterItem({
 								controlId,
 								repeaterId,
@@ -452,7 +452,7 @@ const Fields = ({ itemId, item }) => {
 						inputFields={true}
 						label={__('Position', 'publisher-core')}
 						id={getControlId('[radial-gradient-position]')}
-						onChange={({ newValue }) => {
+						onChange={(newValue) => {
 							changeRepeaterItem({
 								controlId,
 								repeaterId,

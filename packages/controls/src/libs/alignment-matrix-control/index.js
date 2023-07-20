@@ -18,6 +18,7 @@ import { Flex } from '@publisher/components';
 import { useControlContext } from '../../context';
 import { convertAlignmentMatrixCoordinates } from './utils';
 import { InputControl } from '../input-control';
+import { isUndefined } from '@publisher/utils';
 
 export default function AlignmentMatrixControl({
 	inputFields,
@@ -35,7 +36,6 @@ export default function AlignmentMatrixControl({
 	const { value } = useControlContext({
 		id,
 		defaultValue,
-		onChange,
 	});
 
 	if (!inputFields) {
@@ -103,7 +103,7 @@ export default function AlignmentMatrixControl({
 				<div style={{ width: '100%' }}>
 					<Flex direction="column" gap="8px" justify="space-around">
 						<InputControl
-							id={'top'}
+							id={isUndefined(id) ? 'top' : `${id}.top`}
 							label={__('Top', 'publisher-core')}
 							type="css"
 							unitType="background-position"
@@ -117,7 +117,7 @@ export default function AlignmentMatrixControl({
 						/>
 
 						<InputControl
-							id={'left'}
+							id={isUndefined(id) ? 'left' : `${id}.left`}
 							label={__('Left', 'publisher-core')}
 							type="css"
 							unitType="background-position"

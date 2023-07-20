@@ -18,7 +18,7 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 import { default as AlignmentMatrixControl } from '../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
-import { ControlContextProvider } from '../../../context';
+import { ControlContextProvider, useControlContext } from '../../../context';
 
 const {
 	WithInspectorStyles,
@@ -66,11 +66,21 @@ export const CustomSize = {
 
 const ControlWithHooks = (args) => {
 	const { storyValue, setStoryValue } = useContext(StoryDataContext);
+	const {
+		controlInfo: { name: controlId },
+		dispatch: { modifyControlValue },
+	} = useControlContext(args);
 
 	return (
 		<AlignmentMatrixControl
 			{...args}
-			onChange={setStoryValue}
+			onChange={(newValue) => {
+				setStoryValue(newValue);
+				modifyControlValue({
+					controlId,
+					value: newValue,
+				});
+			}}
 			value={storyValue}
 		/>
 	);
@@ -228,13 +238,13 @@ export const Play = {
 			// Top Left
 			await userEvent.type(
 				canvas.getAllByRole('textbox')[0],
-				'{backspace}5'
+				'{backspace}{backspace}{backspace}55'
 			);
 			await waitFor(
 				async () => {
 					await expect(
 						canvas.getByTestId('current-value')
-					).toHaveTextContent('{ "top": "55%", "left": "50%" }');
+					).toHaveTextContent('{ "top": "55%", "left": "100%" }');
 				},
 				{ timeout: 1000 }
 			);
@@ -244,7 +254,7 @@ export const Play = {
 			// Top Left
 			await userEvent.type(
 				canvas.getAllByRole('textbox')[1],
-				'{backspace}5'
+				'{backspace}{backspace}{backspace}55'
 			);
 			await waitFor(
 				async () => {
