@@ -40,7 +40,6 @@ export function InputControl({
 	const { value } = useControlContext({
 		id,
 		defaultValue,
-		onChange,
 	});
 
 	// add css units
@@ -68,7 +67,6 @@ export function InputControl({
 					<RangeControl
 						withInputField={false}
 						className={className}
-						value={value}
 						onChange={(newValue) => {
 							// extract unit from old value and assign it to newValue
 							if (isString(value))

@@ -15,6 +15,10 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  * Internal dependencies
  */
 import { RangeControl } from '../../index';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
+import { ControlContextProvider, useControlContext } from '../../../context';
+import { nanoid } from 'nanoid';
 
 const {
 	WithInspectorStyles,
@@ -22,6 +26,8 @@ const {
 	WithStoryContextProvider,
 	SharedDecorators,
 } = Decorators;
+
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Controls/RangeControl',
@@ -45,10 +51,38 @@ export const States = {
 		return (
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Range Control</h2>
-				<RangeControl {...args} value={10} />
-				<RangeControl {...args} value={30} withInputField={false} />
-				<RangeControl {...args} min={0} max={100} value={20} />
-				<RangeControl {...args} />
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 10,
+					}}
+				>
+					<ControlWithHooks {...args} />
+				</ControlContextProvider>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 30,
+					}}
+				>
+					<ControlWithHooks {...args} withInputField={false} />
+				</ControlContextProvider>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 20,
+					}}
+				>
+					<ControlWithHooks {...args} min={0} max={100} />
+				</ControlContextProvider>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: args.value,
+					}}
+				>
+					<ControlWithHooks {...args} />
+				</ControlContextProvider>
 			</Flex>
 		);
 	},
@@ -56,12 +90,22 @@ export const States = {
 
 const ControlWithHooks = (args) => {
 	const { storyValue, setStoryValue } = useContext(StoryDataContext);
+	const {
+		controlInfo: { name: controlId },
+		dispatch: { modifyControlValue },
+	} = useControlContext();
 
 	return (
 		<div data-testid="container">
 			<RangeControl
 				{...args}
-				onChange={setStoryValue}
+				onChange={(newValue) => {
+					setStoryValue(newValue);
+					modifyControlValue({
+						controlId,
+						value: newValue,
+					});
+				}}
 				value={storyValue}
 			/>
 		</div>
@@ -75,6 +119,7 @@ export const Play = {
 	decorators: [
 		WithStoryContextProvider,
 		WithInspectorStyles,
+		WithControlDataProvider,
 		...SharedDecorators,
 	],
 	render: (args) => <ControlWithHooks {...args} />,

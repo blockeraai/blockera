@@ -1,29 +1,32 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
+import PropTypes from 'prop-types';
 import { RangeControl as WordPressRangeControl } from '@wordpress/components';
 
 /**
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import PropTypes from 'prop-types';
-import { useValue } from '@publisher/utils';
+
+/**
+ * Internal dependencies
+ */
+import { useControlContext } from '../../context';
 
 export default function RangeControl({
 	min,
 	max,
 	initialPosition,
 	withInputField,
-	value: initialValue,
+	id,
 	defaultValue,
 	onChange,
 	className,
 }) {
-	const { value, setValue } = useValue({
-		initialValue,
+	const { value } = useControlContext({
+		id,
 		defaultValue,
-		onChange,
 	});
 
 	return (
@@ -32,7 +35,7 @@ export default function RangeControl({
 			max={max}
 			initialPosition={initialPosition}
 			value={value}
-			onChange={setValue}
+			onChange={onChange}
 			className={controlClassNames('range', className)}
 			withInputField={withInputField}
 			__nextHasNoMarginBottom={false}
@@ -45,10 +48,6 @@ RangeControl.propTypes = {
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
 	defaultValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-	/**
-	 * The current value.
-	 */
-	value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	/**
 	 * Function that will be fired while the control value state changes.
 	 */
