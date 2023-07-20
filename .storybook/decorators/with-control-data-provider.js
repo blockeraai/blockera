@@ -12,7 +12,6 @@ export const WithControlDataProvider = (Story, context) => {
 	const controlInfo = context.allArgs.controlInfo ?? {
 		name: nanoid(),
 		value: undefined,
-		onChange: () => null,
 	};
 
 	return (
