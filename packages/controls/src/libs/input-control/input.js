@@ -37,9 +37,10 @@ export function InputControl({
 	className,
 	...props
 }) {
-	const { value } = useControlContext({
+	const { value, setValue } = useControlContext({
 		id,
 		defaultValue,
+		onChange,
 	});
 
 	// add css units
@@ -72,7 +73,7 @@ export function InputControl({
 							if (isString(value))
 								newValue =
 									newValue + value.replace(/[0-9|-]/gi, '');
-							onChange(newValue);
+							setValue(newValue);
 						}}
 						{...props}
 					/>
@@ -83,7 +84,7 @@ export function InputControl({
 						{...props}
 						units={units}
 						value={value}
-						onChange={onChange}
+						onChange={setValue}
 						className={controlClassNames(
 							'text',
 							'publisher-control-unit',
@@ -95,7 +96,7 @@ export function InputControl({
 					<WPTextControl
 						{...props}
 						value={value}
-						onChange={onChange}
+						onChange={setValue}
 						className={controlClassNames('text', className)}
 					/>
 				)}

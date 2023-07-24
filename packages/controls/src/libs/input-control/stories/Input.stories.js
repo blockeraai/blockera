@@ -36,6 +36,7 @@ const {
 } = Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
+SharedDecorators.push(WithControlDataProvider);
 
 const units = [
 	{ value: 'px', label: 'px', default: 0 },
@@ -51,8 +52,11 @@ export default {
 
 export const Default = {
 	args: {
+		controlInfo: {
+			name: nanoid(),
+			value: '20',
+		},
 		defaultValue: '10',
-		value: '20',
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	parameters: {
