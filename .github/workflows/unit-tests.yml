@@ -20,8 +20,20 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
+    submodule-update:
+        name: Git Submodule Update
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - name: Initialize Submodules
+              run: git submodule init
+
+            - name: Update Submodules
+              run: git submodule
+
     unit-js:
         name: JavaScript
+        needs: [submodule-update]
         runs-on: ubuntu-latest
         if: ${{ github.repository == 'publisherwp/publisher-core' || github.event_name == 'pull_request' }}
 
@@ -37,7 +49,7 @@ jobs:
               uses: ./.github/setup-node
               with:
                   node-version: ${{ matrix.node }}
-
+  
             - name: Npm build
               run: npx run build
 
