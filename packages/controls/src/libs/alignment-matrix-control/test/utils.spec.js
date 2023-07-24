@@ -394,10 +394,10 @@ describe('Util functions', () => {
 					left: 'akbar',
 				})
 			).toMatchObject({
-				calculated: true,
-				compact: 'center center',
-				top: { number: '50%', text: 'center' },
-				left: { number: '50%', text: 'center' },
+				calculated: false,
+				compact: '',
+				top: { number: '', text: '' },
+				left: { number: '', text: '' },
 			});
 		});
 
@@ -408,10 +408,52 @@ describe('Util functions', () => {
 					left: '0%',
 				})
 			).toMatchObject({
-				calculated: true,
-				compact: 'center left',
-				top: { number: '50%', text: 'center' },
-				left: { number: '0%', text: 'left' },
+				calculated: false,
+				compact: '',
+				top: { number: '', text: '' },
+				left: { number: '', text: '' },
+			});
+		});
+
+		test('top customized value', () => {
+			expect(
+				convertAlignmentMatrixCoordinates({
+					top: '59%',
+					left: '50%',
+				})
+			).toMatchObject({
+				calculated: false,
+				compact: '',
+				top: { number: '', text: '' },
+				left: { number: '', text: '' },
+			});
+		});
+
+		test('left customized value', () => {
+			expect(
+				convertAlignmentMatrixCoordinates({
+					top: '50%',
+					left: '59%',
+				})
+			).toMatchObject({
+				calculated: false,
+				compact: '',
+				top: { number: '', text: '' },
+				left: { number: '', text: '' },
+			});
+		});
+
+		test('both customized value', () => {
+			expect(
+				convertAlignmentMatrixCoordinates({
+					top: '59%',
+					left: '59%',
+				})
+			).toMatchObject({
+				calculated: false,
+				compact: '',
+				top: { number: '', text: '' },
+				left: { number: '', text: '' },
 			});
 		});
 	});
