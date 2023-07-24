@@ -150,7 +150,7 @@
 		"webpack": "^5.78.0"
 	},
 	"scripts": {
-		"build": "wp-scripts build --mode production",
+		"build": "wp-scripts build --progress --mode production",
 		"format": "wp-scripts format",
 		"lint:js": "wp-scripts lint-js",
 		"lint:css": "wp-scripts lint-style",
