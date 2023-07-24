@@ -32,53 +32,53 @@ const IconLibraries = {
 	wp: {
 		id: 'wp',
 		// translators: Icon library name
-		name: __('WordPress', 'publisher-core'),
+		name: __( 'WordPress', 'publisher-core' ),
 		icon: <WPLibraryIcon />,
 	},
 	publisher: {
 		id: 'publisher',
 		// translators: Icon library name
-		name: __('Publisher', 'publisher-core'),
+		name: __( 'Publisher', 'publisher-core' ),
 		icon: <PublisherLibraryIcon />,
 	},
 	far: {
 		id: 'far',
 		// translators: Icon library name
-		name: __('FontAwesome Regular', 'publisher-core'),
+		name: __( 'FontAwesome Regular', 'publisher-core' ),
 		icon: <FarLibraryIcon />,
 	},
 	fas: {
 		id: 'fas',
 		// translators: WordPress icon library name
-		name: __('FontAwesome Solid', 'publisher-core'),
+		name: __( 'FontAwesome Solid', 'publisher-core' ),
 		icon: <FasLibraryIcon />,
 	},
 };
 
-export function isValidIconLibrary(library) {
-	return !isUndefined(IconLibraries[library]);
+export function isValidIconLibrary( library ) {
+	return ! isUndefined( IconLibraries[ library ] );
 }
 
-export function getIconLibrary(library: string): Array {
+export function getIconLibrary( library: string ): Array {
 	const libs = {};
 
-	if (library === 'all') {
-		for (const key in IconLibraries) {
-			libs[key] = IconLibraries[key];
+	if ( library === 'all' ) {
+		for ( const key in IconLibraries ) {
+			libs[ key ] = IconLibraries[ key ];
 		}
-	} else if (isValidIconLibrary(library)) {
-		libs[library] = IconLibraries[library];
+	} else if ( isValidIconLibrary( library ) ) {
+		libs[ library ] = IconLibraries[ library ];
 	}
 
 	return libs;
 }
 
-export function getIconLibraryIcons(iconLibrary: String): Array {
-	if (!isValidIconLibrary(iconLibrary)) {
+export function getIconLibraryIcons( iconLibrary: String ): Array {
+	if ( ! isValidIconLibrary( iconLibrary ) ) {
 		return {};
 	}
 
-	switch (iconLibrary) {
+	switch ( iconLibrary ) {
 		case 'publisher':
 			return PublisherIcons;
 
@@ -95,23 +95,23 @@ export function getIconLibraryIcons(iconLibrary: String): Array {
 	return {};
 }
 
-export function getIconLibrarySearchData(library: string): Array {
+export function getIconLibrarySearchData( library: string ): Array {
 	const searchData = [];
 
-	if (library === 'all' || isValidIconLibrary(library))
-		switch (library) {
+	if ( library === 'all' || isValidIconLibrary( library ) )
+		switch ( library ) {
 			case 'all':
-				Array.prototype.push.apply(searchData, WPIconsSearchData);
+				Array.prototype.push.apply( searchData, WPIconsSearchData );
 				Array.prototype.push.apply(
 					searchData,
 					PublisherIconsSearchData
 				);
-				Array.prototype.push.apply(searchData, FarIconsSearchData);
-				Array.prototype.push.apply(searchData, FasIconsSearchData);
+				Array.prototype.push.apply( searchData, FarIconsSearchData );
+				Array.prototype.push.apply( searchData, FasIconsSearchData );
 				break;
 
 			case 'wp':
-				Array.prototype.push.apply(searchData, WPIconsSearchData);
+				Array.prototype.push.apply( searchData, WPIconsSearchData );
 				break;
 
 			case 'publisher':
@@ -122,11 +122,11 @@ export function getIconLibrarySearchData(library: string): Array {
 				break;
 
 			case 'far':
-				Array.prototype.push.apply(searchData, FasIconsSearchData);
+				Array.prototype.push.apply( searchData, FasIconsSearchData );
 				break;
 
 			case 'fas':
-				Array.prototype.push.apply(searchData, FasIconsSearchData);
+				Array.prototype.push.apply( searchData, FasIconsSearchData );
 				break;
 		}
 
@@ -134,5 +134,5 @@ export function getIconLibrarySearchData(library: string): Array {
 }
 
 export function getIconLibrariesSearchIndex(): Array {
-	return Fuse.parseIndex(searchIndex);
+	return Fuse.parseIndex( searchIndex );
 }
