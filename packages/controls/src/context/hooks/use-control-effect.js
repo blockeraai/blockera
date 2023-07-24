@@ -9,13 +9,13 @@ import { useEffect } from '@wordpress/element';
 import { isFunction } from '@publisher/utils';
 
 export default function useControlEffect({
-	value,
+	value: controlValue,
 	onChange,
 	sideEffect,
 	valueCleanup,
 	dependencies = [],
 }) {
-	const setValue = () => {
+	const setValue = (value) => {
 		if (isFunction(onChange)) {
 			// eslint-disable-next-line no-unused-expressions
 			isFunction(valueCleanup)
@@ -30,7 +30,7 @@ export default function useControlEffect({
 	}
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
-	useEffect(setValue, [...dependencies]);
+	useEffect(() => setValue(controlValue), [...dependencies]);
 
 	return setValue;
 }
