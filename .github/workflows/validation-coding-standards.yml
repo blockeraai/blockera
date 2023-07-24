@@ -1,4 +1,4 @@
-name: 'Validation / Coding Standards'
+name: 'Validation / Coding Standards (lint)'
 
 on:
     pull_request:
