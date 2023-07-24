@@ -4,7 +4,6 @@ inputs:
     node-version:
         description: 'Optional. The Node.js version to use. When not specified, the version specified in .nvmrc will be used.'
         required: false
-        type: string
 
 runs:
     using: 'composite'
@@ -22,14 +21,14 @@ runs:
               echo "NODE_VERSION=$(node -v)" >> $GITHUB_OUTPUT
           shell: bash
 
-        #        - name: Cache node_modules
-        #          id: cache-node_modules
-        #          uses: actions/cache@v3
-        #          with:
-        #              path: '**/node_modules'
-        #              key: node_modules-${{ runner.os }}-${{ steps.node-version.outputs.NODE_VERSION }}-${{ hashFiles('package-lock.json') }}
+        - name: Cache node_modules
+          id: cache-node_modules
+          uses: actions/cache@v3
+          with:
+              path: '**/node_modules'
+              key: node_modules-${{ runner.os }}-${{ steps.node-version.outputs.NODE_VERSION }}-${{ hashFiles('package-lock.json') }}
 
         - name: Install npm dependencies
           if: ${{ steps.cache-node_modules.outputs.cache-hit != 'true' }}
-          run: npm ci
+          run: npm ci --force
           shell: bash
