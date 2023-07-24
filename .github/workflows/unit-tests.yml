@@ -21,30 +21,30 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    #    submodule-update:
-    #        name: Git Submodule Update
-    #        runs-on: ubuntu-latest
-    #        steps:
-    #
+    submodule-update:
+        name: Git Submodule Update
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - name: Initialize Submodules
+              run: git submodule init
+
+            - name: Update Submodules
+              run: git submodule
 
     unit-js:
         name: JavaScript
+        needs: [submodule-update]
         runs-on: ubuntu-latest
         if: ${{ github.repository == 'publisherwp/publisher-core' || github.event_name == 'pull_request' }}
 
         strategy:
             fail-fast: false
             matrix:
-                node: ['14']
+                node: ['18.13.0']
 
         steps:
             - uses: actions/checkout@v3
-
-            - uses: actions/checkout@v3
-            - name: Initialize Submodules
-              run: git submodule init
-            - name: Update Submodules
-              run: git submodule
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
@@ -52,7 +52,7 @@ jobs:
                   node-version: ${{ matrix.node }}
 
             - name: Npm build
-              run: npx run build
+              run: npm run build
 
             - name: Running the tests
               run: npm run test:js
