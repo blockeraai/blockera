@@ -11,6 +11,7 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 import { ControlContextProvider, GradientBarControl } from '../../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
+import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
 
 const { WithInspectorStyles, SharedDecorators } = Decorators;
 
@@ -49,7 +50,10 @@ export const Filled = {
 							value: 'linear-gradient(90deg,rgb(25,0,255) 10%,rgb(230,134,0) 90%)',
 						}}
 					>
-						<GradientBarControl {...args} />
+						<ControlWithHooks
+							Control={GradientBarControl}
+							{...args}
+						/>
 					</ControlContextProvider>
 				</Flex>
 
