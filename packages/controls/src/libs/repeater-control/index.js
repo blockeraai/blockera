@@ -57,6 +57,7 @@ export default function RepeaterControl({
 		controlInfo: { name: controlId },
 	} = useControlContext({
 		defaultValue,
+		sideEffect: true,
 		repeater: {
 			repeaterId,
 			defaultRepeaterItemValue,
