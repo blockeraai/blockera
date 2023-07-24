@@ -36,7 +36,6 @@ const {
 } = Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
-// SharedDecorators.push(WithControlDataProvider);
 
 const units = [
 	{ value: 'px', label: 'px', default: 0 },
