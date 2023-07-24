@@ -11,20 +11,19 @@ jobs:
         if: ${{ github.repository == 'publisherwp/publisher-core' }}
 
         steps:
-            - name: Checkout
-              uses: actions/checkout@v2
-              with:
-                  ref: main
+            #            - name: Checkout
+            #              uses: actions/checkout@v2
+            #              with:
+            #                  ref: main
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
 
             - name: Build Storybook
               run: npm run storybook:build
-
-            - name: Deploy
-              uses: peaceiris/actions-gh-pages@v3
-              with:
-                  github_token: ${{ secrets.GITHUB_TOKEN }}
-                  publish_dir: ./storybook/build
-                  force_orphan: true
+#            - name: Deploy
+#              uses: peaceiris/actions-gh-pages@v3
+#              with:
+#                  github_token: ${{ secrets.GITHUB_TOKEN }}
+#                  publish_dir: ./storybook/build
+#                  force_orphan: true
