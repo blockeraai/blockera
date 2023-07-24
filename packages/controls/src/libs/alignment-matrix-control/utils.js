@@ -142,15 +142,23 @@ export function convertAlignmentMatrixCoordinates(value) {
 			return coordinates;
 		}
 
-		if (coordinates.left.text === '' && coordinates.top.text !== '') {
-			coordinates.left.text = 'center';
-			coordinates.left.number = '50%';
-		} else if (
-			coordinates.left.text !== '' &&
-			coordinates.top.text === ''
+		// only 1 side detected (other changed)
+		if (
+			(coordinates.left.text === '' && coordinates.top.text !== '') ||
+			(coordinates.left.text !== '' && coordinates.top.text === '')
 		) {
-			coordinates.top.text = 'center';
-			coordinates.top.number = '50%';
+			return {
+				calculated: false,
+				compact: '',
+				top: {
+					number: '',
+					text: '',
+				},
+				left: {
+					number: '',
+					text: '',
+				},
+			};
 		}
 
 		coordinates.compact = `${coordinates.top.text} ${coordinates.left.text}`;
