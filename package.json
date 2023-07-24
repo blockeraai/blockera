@@ -164,6 +164,7 @@
 		"husky:init": "npx husky-init && chmod ug+x .husky/*",
 		"flow": "flow ./src",
 		"setup": "yarn install && yarn run build",
+		"test:unit:php": "composer run-script test",
 		"test:e2e": "cypress run --config video=false --browser chrome",
 		"test:e2e:debug": "npx cypress open",
 		"test:e2e:headed": "yarn test:e2e --headed",
