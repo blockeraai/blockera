@@ -36,7 +36,7 @@ const {
 } = Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
-SharedDecorators.push(WithControlDataProvider);
+// SharedDecorators.push(WithControlDataProvider);
 
 const units = [
 	{ value: 'px', label: 'px', default: 0 },
@@ -70,7 +70,7 @@ const ControlWithHooks = (args) => {
 
 export default {
 	title: 'Controls/InputControl',
-	component: ControlWithHooks,
+	component: InputControl,
 	tags: ['autodocs'],
 };
 
@@ -82,7 +82,12 @@ export const Default = {
 		},
 		defaultValue: '10',
 	},
-	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => <ControlWithHooks {...args} />,
+	decorators: [
+		WithInspectorStyles,
+		WithControlDataProvider,
+		...SharedDecorators,
+	],
 	parameters: {
 		jest: ['input.spec.js'],
 	},
