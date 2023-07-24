@@ -44,9 +44,33 @@ const units = [
 	{ value: 'em', label: 'em', default: 0 },
 ];
 
+const ControlWithHooks = (args) => {
+	const { storyValue, setStoryValue } = useContext(StoryDataContext);
+	const {
+		value,
+		controlInfo: { name: controlId },
+		dispatch: { modifyControlValue },
+		// eslint-disable-next-line
+	} = useControlContext();
+
+	return (
+		<InputControl
+			{...args}
+			value={storyValue ? storyValue : value}
+			onChange={(newValue) => {
+				setStoryValue(newValue);
+				modifyControlValue({
+					controlId,
+					value: newValue,
+				});
+			}}
+		/>
+	);
+};
+
 export default {
 	title: 'Controls/InputControl',
-	component: InputControl,
+	component: ControlWithHooks,
 	tags: ['autodocs'],
 };
 
@@ -473,30 +497,6 @@ export const CssInput = {
 			</ControlContextProvider>
 		</Flex>
 	),
-};
-
-const ControlWithHooks = (args) => {
-	const { storyValue, setStoryValue } = useContext(StoryDataContext);
-	const {
-		value,
-		controlInfo: { name: controlId },
-		dispatch: { modifyControlValue },
-		// eslint-disable-next-line
-	} = useControlContext();
-
-	return (
-		<InputControl
-			{...args}
-			value={storyValue ? storyValue : value}
-			onChange={(newValue) => {
-				setStoryValue(newValue);
-				modifyControlValue({
-					controlId,
-					value: newValue,
-				});
-			}}
-		/>
-	);
 };
 
 export const PlayText = {
