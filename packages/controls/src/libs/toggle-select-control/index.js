@@ -35,10 +35,10 @@ export default function ToggleSelectControl({
 	children,
 	...props
 }) {
-	const { value } = useControlContext({
+	const { value, setValue } = useControlContext({
 		id,
-		defaultValue,
 		onChange,
+		defaultValue,
 		valueCleanup,
 	});
 
@@ -61,7 +61,7 @@ export default function ToggleSelectControl({
 						className
 					)}
 					value={value}
-					onChange={onChange}
+					onChange={setValue}
 					label={undefined}
 					hideLabelFromVision={true}
 					isBlock={true}
