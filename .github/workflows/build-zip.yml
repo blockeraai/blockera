@@ -9,9 +9,9 @@ jobs:
         steps:
             - uses: actions/checkout@v3
             - run: composer install --ansi --no-progress --no-interaction --prefer-dist
-            - uses: montudor/action-zip@v1
-              with:
-                  args: zip -qq -r vendor.zip vendor
+            #             - uses: montudor/action-zip@v1
+            #               with:
+            #                   args: zip -qq -r vendor.zip vendor
             - uses: actions/upload-artifact@v2
               with:
                   name: vendor.zip
@@ -19,23 +19,23 @@ jobs:
         needs: composer-install
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v3
             - uses: actions/download-artifact@v2
               with:
                   name: vendor.zip
-            - uses: montudor/action-zip@v1
-              with:
-                  args: unzip -qq vendor.zip -d vendor
+            #             - uses: montudor/action-zip@v1
+            #               with:
+            #                   args: unzip -qq vendor.zip -d vendor
             - run: ./vendor/bin/phpunit
     mutation:
         needs: composer-install
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v3
             - uses: actions/download-artifact@v2
               with:
                   name: vendor.zip
-            - uses: montudor/action-zip@v1
-              with:
-                  args: unzip -qq vendor.zip -d vendor
+            #             - uses: montudor/action-zip@v1
+            #               with:
+            #                   args: unzip -qq vendor.zip -d vendor
             - run: ./vendor/bin/infection
