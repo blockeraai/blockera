@@ -1,19 +1,21 @@
 /**
  * Publisher dependencies
  */
+import { nanoid } from 'nanoid';
 import { Flex } from '@publisher/components';
 import { default as Decorators } from '@publisher/storybook/decorators';
 
 /**
  * Internal dependencies
  */
+import { ControlContextProvider, GradientBarControl } from '../../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
-import GradientBarControl from '../index';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 
-const { WithInspectorStyles, SharedDecorators, WithPopoverDataProvider } =
-	Decorators;
+const { WithInspectorStyles, SharedDecorators } = Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
+SharedDecorators.push(WithControlDataProvider);
 
 export default {
 	title: 'Controls/GradientBarControl',
@@ -22,12 +24,13 @@ export default {
 };
 
 export const Empty = {
-	args: {},
-	decorators: [
-		WithInspectorStyles,
-		WithPopoverDataProvider,
-		...SharedDecorators,
-	],
+	args: {
+		controlInfo: {
+			name: nanoid(),
+			value: 'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
+		},
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const Filled = {
@@ -40,20 +43,28 @@ export const Filled = {
 					<h2 className="story-heading">
 						Gradient<span>Linear Gradient</span>
 					</h2>
-					<GradientBarControl
-						{...args}
-						value="linear-gradient(90deg,rgb(25,0,255) 10%,rgb(230,134,0) 90%)"
-					/>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: 'linear-gradient(90deg,rgb(25,0,255) 10%,rgb(230,134,0) 90%)',
+						}}
+					>
+						<GradientBarControl {...args} />
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex direction="column" gap="15px">
 					<h2 className="story-heading">
 						Gradient<span>Radial Gradient</span>
 					</h2>
-					<GradientBarControl
-						{...args}
-						value="radial-gradient(rgb(250,0,247) 0%,rgb(255,213,0) 64%)"
-					/>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: 'radial-gradient(rgb(250,0,247) 0%,rgb(255,213,0) 64%)',
+						}}
+					>
+						<GradientBarControl {...args} />
+					</ControlContextProvider>
 				</Flex>
 			</Flex>
 		);
@@ -62,16 +73,19 @@ export const Filled = {
 
 export const Screenshot = {
 	args: {},
-	decorators: [
-		WithInspectorStyles,
-		WithPopoverDataProvider,
-		...SharedDecorators,
-	],
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: () => (
 		<Flex direction="column" gap="50px">
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Empty</h2>
-				<GradientBarControl {...Empty.args} />
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
+					}}
+				>
+					<GradientBarControl {...Empty.args} />
+				</ControlContextProvider>
 			</Flex>
 
 			<Filled.render />
