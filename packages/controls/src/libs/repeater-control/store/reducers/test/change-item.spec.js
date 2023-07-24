@@ -2,8 +2,7 @@
  * Internal dependencies
  */
 import { repeaterReducer } from '../';
-import { changeRepeaterItem } from '../../actions';
-import { addControl } from '../../../../store/actions';
+import { addControl, changeRepeaterItem } from '../../actions';
 
 describe('Change Repeater Item', function () {
 	it('should changed repeater control item', function () {

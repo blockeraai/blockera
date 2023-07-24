@@ -2,8 +2,7 @@
  * Internal dependencies
  */
 import { repeaterReducer } from '../';
-import { removeRepeaterItem } from '../../actions';
-import { addControl } from '../../../../store/actions';
+import { addControl, removeRepeaterItem } from '../../actions';
 
 describe('Remove Repeater Item', function () {
 	it('should modified control state with remove repeater item', function () {

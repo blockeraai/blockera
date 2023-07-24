@@ -2,8 +2,7 @@
  * Internal dependencies
  */
 import { repeaterReducer } from '../';
-import { addControl } from '../../../../store/actions';
-import { addRepeaterItem, sortRepeaterItem } from '../../actions';
+import { addControl, addRepeaterItem, sortRepeaterItem } from '../../actions';
 
 describe('Sort Repeater Item', function () {
 	it('should modified control state with sort repeater items', function () {
