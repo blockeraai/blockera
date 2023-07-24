@@ -15,7 +15,7 @@ if ( ! class_exists( 'PublisherLibraryLoader' ) ) {
 		 * @var self[]
 		 * @since 1.0.0
 		 */
-		protected static $instances = [];
+		protected static array $instances = [];
 
 		/**
 		 * Store the library multiple version information.
@@ -23,7 +23,7 @@ if ( ! class_exists( 'PublisherLibraryLoader' ) ) {
 		 * @var array
 		 * @since 1.0.0
 		 */
-		protected $registered = [];
+		protected array $registered = [];
 
 		/**
 		 * Library unique identifier.
@@ -31,7 +31,7 @@ if ( ! class_exists( 'PublisherLibraryLoader' ) ) {
 		 * @var string
 		 * @since 1.0.0
 		 */
-		protected $id;
+		protected string $id;
 
 		protected function __construct( string $unique_id, $options = [] ) {
 
@@ -74,6 +74,7 @@ if ( ! class_exists( 'PublisherLibraryLoader' ) ) {
 		 * Get the singleton instance.
 		 *
 		 * @param string $unique_id
+		 * @param array  $options
 		 *
 		 * @since 1.0.0
 		 * @return static

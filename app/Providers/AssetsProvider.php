@@ -9,7 +9,7 @@ class AssetsProvider {
 	 *
 	 * @var array
 	 */
-	protected static $assets = [
+	protected static array $assets = [
 		'icons',
 		'utils',
 		'fields',
@@ -26,7 +26,7 @@ class AssetsProvider {
 	 *
 	 * @var string[]
 	 */
-	protected static $packages_deps = [
+	protected static array $packages_deps = [
 		'extensions' => [
 			'@publisher/fields',
 			'@publisher/controls',

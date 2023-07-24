@@ -13,22 +13,22 @@ if ( ! class_exists( 'PublisherComposerLoader' ) ) {
 		/**
 		 * @var self|null
 		 */
-		protected static $instance = null;
+		protected static ?PublisherComposerLoader $instance = null;
 
 		/**
 		 * @var ClassLoader|null
 		 */
-		protected $loader = null;
+		protected ?ClassLoader $loader = null;
 
 		/**
 		 * @var array
 		 */
-		protected $autoload_files = [];
+		protected array $autoload_files = [];
 
 		/**
 		 * @var string[]
 		 */
-		protected $vendor_dirs = [];
+		protected array $vendor_dirs = [];
 
 		private function __construct( $vendor_dir ) {
 

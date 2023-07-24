@@ -11,7 +11,7 @@ class Env {
 	 *
 	 * @return mixed
 	 */
-	public static function get( string $key, $default ) {
+	public static function get( string $key, mixed $default ): mixed {
 
 		if ( ! isset( $_ENV[ $key ] ) ) {
 
