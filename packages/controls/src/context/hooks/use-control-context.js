@@ -60,6 +60,7 @@ export const useControlContext = (args) => {
 		onChange,
 		valueCleanup,
 		defaultValue,
+		sideEffect = false,
 		mergeInitialAndDefault,
 	} = args;
 
@@ -67,8 +68,9 @@ export const useControlContext = (args) => {
 
 	//Call onChange function if is set valueCleanup as function to clean value else set all value details into parent state!
 	// eslint-disable-next-line react-hooks/rules-of-hooks
-	useControlEffect({
+	const setValue = useControlEffect({
 		onChange,
+		sideEffect,
 		valueCleanup,
 		value: calculatedValue,
 		dependencies: [calculatedValue],
@@ -130,6 +132,7 @@ export const useControlContext = (args) => {
 
 	return {
 		dispatch,
+		setValue,
 		value: calculatedValue,
 		controlInfo: getControl(controlInfo.name),
 		/**

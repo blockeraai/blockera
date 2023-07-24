@@ -11,10 +11,11 @@ import { isFunction } from '@publisher/utils';
 export default function useControlEffect({
 	value,
 	onChange,
+	sideEffect,
 	valueCleanup,
 	dependencies = [],
 }) {
-	useEffect(() => {
+	const setValue = () => {
 		if (isFunction(onChange)) {
 			// eslint-disable-next-line no-unused-expressions
 			isFunction(valueCleanup)
@@ -22,5 +23,14 @@ export default function useControlEffect({
 				: onChange(value);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [...dependencies]);
+	};
+
+	if (!sideEffect) {
+		return setValue;
+	}
+
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	useEffect(setValue, [...dependencies]);
+
+	return setValue;
 }
