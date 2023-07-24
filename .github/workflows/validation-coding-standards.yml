@@ -10,8 +10,8 @@ jobs:
         runs-on: ubuntu-latest
         name: PHP
         steps:
-            #            - name: Checkout
-            #              uses: actions/checkout@v2
+            - name: Checkout
+              uses: actions/checkout@v3
 
             - name: Composer Install
               run: composer install --prefer-dist --optimize-autoloader

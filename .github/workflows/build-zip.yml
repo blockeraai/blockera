@@ -6,9 +6,10 @@ jobs:
     composer-install:
         runs-on: ubuntu-latest
         steps:
-            #            - uses: actions/checkout@v1
-            - run: composer install --ansi --no-progress --no-interaction --prefer-dist
-              #            - uses: montudor/action-zip@v1
+            - uses: actions/checkout@v3
+            - run:
+                  composer install --ansi --no-progress --no-interaction --prefer-dist
+                  #            - uses: montudor/action-zip@v1
 #               with:
 #                   args: zip -qq -r vendor.zip vendor
 #            - uses: actions/upload-artifact@v2
