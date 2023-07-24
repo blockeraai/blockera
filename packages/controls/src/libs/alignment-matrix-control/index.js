@@ -106,6 +106,8 @@ export default function AlignmentMatrixControl({
 							id={isUndefined(id) ? 'top' : `${id}.top`}
 							label={__('Top', 'publisher-core')}
 							type="css"
+							min={0}
+							max={100}
 							unitType="background-position"
 							defaultValue={value.top}
 							onChange={(newValue) => {
@@ -120,6 +122,8 @@ export default function AlignmentMatrixControl({
 							id={isUndefined(id) ? 'left' : `${id}.left`}
 							label={__('Left', 'publisher-core')}
 							type="css"
+							min={0}
+							max={100}
 							unitType="background-position"
 							defaultValue={value.left}
 							onChange={(newValue) => {
