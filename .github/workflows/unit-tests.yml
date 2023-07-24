@@ -29,7 +29,6 @@ jobs:
 
     unit-js:
         name: JavaScript
-        needs: [submodule-update]
         runs-on: ubuntu-latest
         if: ${{ github.repository == 'publisherwp/publisher-core' || github.event_name == 'pull_request' }}
 
