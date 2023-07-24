@@ -1,4 +1,5 @@
 name: Unit Tests
+run-name: ${{ github.actor }} Run Unit Tests Jobs ✅
 
 # Since Unit Tests are required to pass for each PR,
 # we cannot disable them for documentation-only changes.
@@ -20,16 +21,11 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    submodule-update:
-        name: Git Submodule Update
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-            - name: Initialize Submodules
-              run: git submodule init
-
-            - name: Update Submodules
-              run: git submodule
+    #    submodule-update:
+    #        name: Git Submodule Update
+    #        runs-on: ubuntu-latest
+    #        steps:
+    #
 
     unit-js:
         name: JavaScript
@@ -45,11 +41,17 @@ jobs:
         steps:
             - uses: actions/checkout@v3
 
+            - uses: actions/checkout@v3
+            - name: Initialize Submodules
+              run: git submodule init
+            - name: Update Submodules
+              run: git submodule
+
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
               with:
                   node-version: ${{ matrix.node }}
-  
+
             - name: Npm build
               run: npx run build
 
