@@ -176,9 +176,9 @@
 		"version": "grunt version && grunt update-pot",
 		"storybook:init": "npx storybook@latest init --type react",
 		"storybook:start": "storybook dev -p 6008",
+		"storybook:build": "storybook build",
 		"storybook:test": "test-storybook",
 		"storybook:test:start": "test-storybook --watch",
-		"build-storybook": "storybook build",
 		"icons:indexing": "node packages/components/bin/icons/index.js search.json"
 	},
 	"lint-staged": {
