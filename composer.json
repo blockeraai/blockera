@@ -24,7 +24,7 @@
 	"minimum-stability": "dev",
 	"require": {
 		"php": ">=7.4",
-		"vlucas/phpdotenv": "5.5.x-dev"
+		"vlucas/phpdotenv": "^5.5@dev"
 	},
 	"require-dev": {
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.7",

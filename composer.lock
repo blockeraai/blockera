@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bf05ec81f031d4a272c6add71ca170fe",
+    "content-hash": "a9da357c95b40edd06ef493e655158fc",
     "packages": [
         {
             "name": "graham-campbell/result-type",
@@ -6939,9 +6939,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "vlucas/phpdotenv": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
