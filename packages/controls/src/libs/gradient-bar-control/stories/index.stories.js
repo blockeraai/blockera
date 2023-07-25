@@ -16,7 +16,6 @@ import ControlWithHooks from '../../../../../../.storybook/components/control-wi
 const { WithInspectorStyles, SharedDecorators } = Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
-SharedDecorators.push(WithControlDataProvider);
 
 export default {
 	title: 'Controls/GradientBarControl',
@@ -31,7 +30,14 @@ export const Empty = {
 			value: 'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
 		},
 	},
-	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => (
+		<ControlWithHooks Control={GradientBarControl} {...args} />
+	),
+	decorators: [
+		WithInspectorStyles,
+		WithControlDataProvider,
+		...SharedDecorators,
+	],
 };
 
 export const Filled = {
@@ -67,9 +73,34 @@ export const Filled = {
 							value: 'radial-gradient(rgb(250,0,247) 0%,rgb(255,213,0) 64%)',
 						}}
 					>
-						<GradientBarControl {...args} />
+						<ControlWithHooks
+							Control={GradientBarControl}
+							{...args}
+						/>
 					</ControlContextProvider>
 				</Flex>
+			</Flex>
+		);
+	},
+};
+
+export const Field = {
+	args: {
+		label: 'Field',
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<Flex direction="column" gap="20px">
+				<h2 className="story-heading">With Field</h2>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 'linear-gradient(90deg,rgb(25,0,255) 10%,rgb(230,134,0) 90%)',
+					}}
+				>
+					<ControlWithHooks Control={GradientBarControl} {...args} />
+				</ControlContextProvider>
 			</Flex>
 		);
 	},
@@ -88,11 +119,16 @@ export const Screenshot = {
 						value: 'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
 					}}
 				>
-					<GradientBarControl {...Empty.args} />
+					<ControlWithHooks
+						Control={GradientBarControl}
+						{...Empty.args}
+					/>
 				</ControlContextProvider>
 			</Flex>
 
-			<Filled.render />
+			<Filled.render {...Filled.args} />
+
+			<Field.render {...Field.args} />
 		</Flex>
 	),
 };
