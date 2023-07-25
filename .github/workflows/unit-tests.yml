@@ -29,8 +29,6 @@ jobs:
 
             - name: Initialize Submodule
               run: git submodule init
-            - name: Update Submodule
-              run: git submodule update
 
     unit-js:
         name: JavaScript
