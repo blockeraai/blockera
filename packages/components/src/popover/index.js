@@ -13,16 +13,13 @@ import {
 	componentInnerClassNames,
 } from '@publisher/classnames';
 import { isFunction, isUndefined } from '@publisher/utils';
+import { PopoverContextData } from '@publisher/storybook/decorators/with-popover-data/context';
 
 /**
  * Internal dependencies
  */
 import { Button } from '../button';
 import CloseIcon from './icons/close';
-
-// 🚨 Important Note 👇
-//Relative path is used to avoid dependency on the storybook library in the production environment!
-import { PopoverContextData } from '../../../../libs/storybook/decorators/with-popover-data/context';
 
 export default function Popover({
 	title,
