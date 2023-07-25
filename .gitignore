@@ -48,3 +48,4 @@ node_modules/
 /stories
 dist
 dist
+.phpunit.result.cache

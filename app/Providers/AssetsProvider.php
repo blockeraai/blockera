@@ -112,12 +112,12 @@ class AssetsProvider {
 	 *
 	 * @return array
 	 */
-	protected function assetInfo( string $name ): array {
+	public function assetInfo( string $name ): array {
 
 		$isDevelopment = pb_core_config( 'app.debug' );
 
 		$assetInfoFile = sprintf(
-			'%s/%s/index%s.asset.php',
+			'%s%s/index%s.asset.php',
 			pb_core_config( 'app.dist_path' ),
 			$name,
 			$isDevelopment ? '' : '.min'

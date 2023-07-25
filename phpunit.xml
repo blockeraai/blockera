@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--@see: https://github.com/wp-phpunit/docs to configuration project for wp phpunit testing-->
+<phpunit
+        bootstrap="./tests/php/unit/bootstrap.php"
+        backupGlobals="false"
+        colors="true"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        verbose="true"
+>
+    <testsuites>
+        <testsuite name="Test Suite">
+            <directory suffix=".php">./tests/php/unit/</directory>
+            <exclude>./tests/php/unit/Fixtures/</exclude>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./publisher-core</directory>
+        </whitelist>
+    </filter>
+
+    <php>
+        <env name="WP_PHPUNIT__TESTS_CONFIG" value="tests/php/unit/wp-config.php" />
+    </php>
+
+</phpunit>
+

@@ -11,6 +11,11 @@
 			"app/functions.php"
 		]
 	},
+	"autoload-dev": {
+		"psr-4": {
+			"Publisher\\Core\\Tests\\": "tests/php/unit"
+		}
+	},
 	"authors": [
 		{
 			"name": "The Publisher Contributors"
@@ -28,7 +33,9 @@
 		"squizlabs/php_codesniffer": "^3.5",
 		"wp-cli/wp-cli-bundle": "^2.4",
 		"wp-coding-standards/wpcs": "^2.1",
-		"wp-phpunit/wp-phpunit": "^6.0.1"
+		"wp-phpunit/wp-phpunit": "^6.0.1",
+		"filp/whoops": "^2.15",
+		"yoast/phpunit-polyfills": "^1.0"
 	},
 	"config": {
 		"platform": {
