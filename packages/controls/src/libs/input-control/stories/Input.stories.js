@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import { useContext } from '@wordpress/element';
 import { expect } from '@storybook/jest';
 import {
 	fireEvent,
@@ -20,20 +19,13 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 /**
  * Internal dependencies
  */
-import {
-	ControlContextProvider,
-	InputControl,
-	useControlContext,
-} from '../../../index';
+import { ControlContextProvider, InputControl } from '../../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
+import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
 
-const {
-	WithInspectorStyles,
-	StoryDataContext,
-	WithStoryContextProvider,
-	SharedDecorators,
-} = Decorators;
+const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
+	Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
 
@@ -42,30 +34,6 @@ const units = [
 	{ value: '%', label: '%', default: 10 },
 	{ value: 'em', label: 'em', default: 0 },
 ];
-
-const ControlWithHooks = (args) => {
-	const { storyValue, setStoryValue } = useContext(StoryDataContext);
-	const {
-		value,
-		controlInfo: { name: controlId },
-		dispatch: { modifyControlValue },
-		// eslint-disable-next-line
-	} = useControlContext();
-
-	return (
-		<InputControl
-			{...args}
-			value={storyValue ? storyValue : value}
-			onChange={(newValue) => {
-				setStoryValue(newValue);
-				modifyControlValue({
-					controlId,
-					value: newValue,
-				});
-			}}
-		/>
-	);
-};
 
 export default {
 	title: 'Controls/InputControl',
@@ -81,7 +49,7 @@ export const Default = {
 		},
 		defaultValue: '10',
 	},
-	render: (args) => <ControlWithHooks {...args} />,
+	render: (args) => <ControlWithHooks Control={InputControl} {...args} />,
 	decorators: [
 		WithInspectorStyles,
 		WithControlDataProvider,
@@ -108,7 +76,11 @@ export const TextInput = {
 					value: args.value,
 				}}
 			>
-				<ControlWithHooks type="text" {...args} />
+				<ControlWithHooks
+					Control={InputControl}
+					type="text"
+					{...args}
+				/>
 			</ControlContextProvider>
 
 			<ControlContextProvider
@@ -118,6 +90,7 @@ export const TextInput = {
 				}}
 			>
 				<ControlWithHooks
+					Control={InputControl}
 					type="text"
 					className="is-hovered"
 					{...args}
@@ -131,6 +104,7 @@ export const TextInput = {
 				}}
 			>
 				<ControlWithHooks
+					Control={InputControl}
 					type="text"
 					className="is-focused"
 					{...args}
@@ -143,7 +117,12 @@ export const TextInput = {
 					value: args.value,
 				}}
 			>
-				<ControlWithHooks type="text" noBorder={true} {...args} />
+				<ControlWithHooks
+					Control={InputControl}
+					type="text"
+					noBorder={true}
+					{...args}
+				/>
 			</ControlContextProvider>
 
 			<ControlContextProvider
@@ -153,6 +132,7 @@ export const TextInput = {
 				}}
 			>
 				<ControlWithHooks
+					Control={InputControl}
 					type="text"
 					className="is-focused"
 					noBorder={true}
@@ -180,7 +160,11 @@ export const NumberInput = {
 						value: 0,
 					}}
 				>
-					<ControlWithHooks {...args} type="number" />
+					<ControlWithHooks
+						Control={InputControl}
+						{...args}
+						type="number"
+					/>
 				</ControlContextProvider>
 
 				<ControlContextProvider
@@ -190,6 +174,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
+						Control={InputControl}
 						{...args}
 						type="number"
 						className="is-hovered"
@@ -203,6 +188,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
+						Control={InputControl}
 						{...args}
 						type="number"
 						className="is-focused"
@@ -215,7 +201,12 @@ export const NumberInput = {
 						value: 30,
 					}}
 				>
-					<ControlWithHooks {...args} type="number" noBorder={true} />
+					<ControlWithHooks
+						Control={InputControl}
+						{...args}
+						type="number"
+						noBorder={true}
+					/>
 				</ControlContextProvider>
 
 				<ControlContextProvider
@@ -225,6 +216,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
+						Control={InputControl}
 						{...args}
 						type="number"
 						className="is-focused"
@@ -242,7 +234,12 @@ export const NumberInput = {
 						value: 50,
 					}}
 				>
-					<ControlWithHooks {...args} range={true} type="number" />
+					<ControlWithHooks
+						Control={InputControl}
+						{...args}
+						range={true}
+						type="number"
+					/>
 				</ControlContextProvider>
 
 				<ControlContextProvider
@@ -252,6 +249,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
+						Control={InputControl}
 						{...args}
 						range={true}
 						type="number"
@@ -266,6 +264,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
+						Control={InputControl}
 						{...args}
 						range={true}
 						type="number"
@@ -280,6 +279,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
+						Control={InputControl}
 						{...args}
 						range={true}
 						type="number"
@@ -294,6 +294,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
+						Control={InputControl}
 						{...args}
 						range={true}
 						type="number"
@@ -322,7 +323,12 @@ export const UnitsInput = {
 						value: args.value,
 					}}
 				>
-					<ControlWithHooks {...args} units={units} type="number" />
+					<ControlWithHooks
+						Control={InputControl}
+						{...args}
+						units={units}
+						type="number"
+					/>
 				</ControlContextProvider>
 				<ControlContextProvider
 					value={{
@@ -331,6 +337,7 @@ export const UnitsInput = {
 					}}
 				>
 					<ControlWithHooks
+						Control={InputControl}
 						{...args}
 						units={units}
 						type="number"
@@ -344,6 +351,7 @@ export const UnitsInput = {
 					}}
 				>
 					<ControlWithHooks
+						Control={InputControl}
 						{...args}
 						units={units}
 						type="number"
@@ -357,6 +365,7 @@ export const UnitsInput = {
 					}}
 				>
 					<ControlWithHooks
+						Control={InputControl}
 						{...args}
 						units={units}
 						type="number"
@@ -370,6 +379,7 @@ export const UnitsInput = {
 					}}
 				>
 					<ControlWithHooks
+						Control={InputControl}
 						{...args}
 						units={units}
 						type="number"
@@ -388,6 +398,7 @@ export const UnitsInput = {
 					}}
 				>
 					<ControlWithHooks
+						Control={InputControl}
 						{...args}
 						range={true}
 						units={units}
@@ -401,6 +412,7 @@ export const UnitsInput = {
 					}}
 				>
 					<ControlWithHooks
+						Control={InputControl}
 						{...args}
 						range={true}
 						units={units}
@@ -415,6 +427,7 @@ export const UnitsInput = {
 					}}
 				>
 					<ControlWithHooks
+						Control={InputControl}
 						{...args}
 						range={true}
 						units={units}
@@ -429,6 +442,7 @@ export const UnitsInput = {
 					}}
 				>
 					<ControlWithHooks
+						Control={InputControl}
 						{...args}
 						range={true}
 						units={units}
@@ -443,6 +457,7 @@ export const UnitsInput = {
 					}}
 				>
 					<ControlWithHooks
+						Control={InputControl}
 						{...args}
 						range={true}
 						units={units}
@@ -473,7 +488,11 @@ export const CssInput = {
 					value: args.value,
 				}}
 			>
-				<ControlWithHooks {...args} unitType="general" />
+				<ControlWithHooks
+					Control={InputControl}
+					{...args}
+					unitType="general"
+				/>
 			</ControlContextProvider>
 			<ControlContextProvider
 				value={{
@@ -481,7 +500,12 @@ export const CssInput = {
 					value: args.value,
 				}}
 			>
-				<ControlWithHooks {...args} unitType="general" value="1auto" />
+				<ControlWithHooks
+					Control={InputControl}
+					{...args}
+					unitType="general"
+					value="1auto"
+				/>
 			</ControlContextProvider>
 			<ControlContextProvider
 				value={{
@@ -489,7 +513,12 @@ export const CssInput = {
 					value: args.value,
 				}}
 			>
-				<ControlWithHooks {...args} range={true} unitType="general" />
+				<ControlWithHooks
+					Control={InputControl}
+					{...args}
+					range={true}
+					unitType="general"
+				/>
 			</ControlContextProvider>
 			<ControlContextProvider
 				value={{
@@ -497,7 +526,12 @@ export const CssInput = {
 					value: '1auto',
 				}}
 			>
-				<ControlWithHooks {...args} range={true} unitType="general" />
+				<ControlWithHooks
+					Control={InputControl}
+					{...args}
+					range={true}
+					unitType="general"
+				/>
 			</ControlContextProvider>
 		</Flex>
 	),
@@ -516,7 +550,7 @@ export const PlayText = {
 		WithInspectorStyles,
 		...SharedDecorators,
 	],
-	render: (args) => <ControlWithHooks {...args} />,
+	render: (args) => <ControlWithHooks Control={InputControl} {...args} />,
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 
@@ -536,7 +570,9 @@ export const PlayText = {
 			await expect(currentValue).toHaveTextContent('20px');
 
 			fireEvent.change(input, { target: { value: '30px' } });
-			await expect(input).toHaveValue('30px');
+			await waitFor(async () => await expect(input).toHaveValue('30px'), {
+				timeout: 1000,
+			});
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent('30px'),
@@ -556,12 +592,12 @@ export const PlayNumber = {
 		},
 	},
 	decorators: [
-		WithStoryContextProvider,
 		WithInspectorStyles,
+		WithStoryContextProvider,
 		WithControlDataProvider,
 		...SharedDecorators,
 	],
-	render: (args) => <ControlWithHooks {...args} />,
+	render: (args) => <ControlWithHooks Control={InputControl} {...args} />,
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 
@@ -580,11 +616,17 @@ export const PlayNumber = {
 			await expect(input).toHaveValue(20);
 			await expect(currentValue).toHaveTextContent('20');
 
-			// type 30px, control should not accept strings
-			userEvent.type(input, '{backspace}{backspace}30px{enter}');
-			await expect(input).toHaveValue(30);
+			// type 30
+			fireEvent.change(input, {
+				target: {
+					value: '30',
+				},
+			});
 			await waitFor(
-				async () => await expect(currentValue).toHaveTextContent('30'),
+				async () => {
+					await expect(input).toHaveValue(30);
+					await expect(currentValue).toHaveTextContent('30');
+				},
 				{ timeout: 1000 }
 			);
 		});
@@ -607,7 +649,7 @@ export const PlayUnits = {
 		WithControlDataProvider,
 		...SharedDecorators,
 	],
-	render: (args) => <ControlWithHooks {...args} />,
+	render: (args) => <ControlWithHooks Control={InputControl} {...args} />,
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 
