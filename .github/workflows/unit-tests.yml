@@ -21,19 +21,9 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    submodule-update:
-        name: Git Submodule Update
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-
-            - name: Initialize Submodule
-              run: git submodule init
-
     unit-js:
         name: JavaScript
         runs-on: ubuntu-latest
-        needs: [submodule-update]
         if: ${{ github.repository == 'publisherwp/publisher-core' || github.event_name == 'pull_request' }}
 
         strategy:
@@ -42,33 +32,15 @@ jobs:
                 node: ['14']
 
         steps:
-            - name: Use desired version of Node.js
-              uses: actions/setup-node@v3
+            - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
+
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
               with:
-                  node-version-file: '.nvmrc'
-                  node-version: ${{ inputs.node-version }}
-                  cache: npm
-
-            - name: Get Node.js and npm version
-              id: node-version
-              run: |
-                  echo "NODE_VERSION=$(node -v)" >> $GITHUB_OUTPUT
-              shell: bash
-
-            - name: Cache node_modules
-              id: cache-node_modules
-              uses: actions/cache@v3
-              with:
-                  path: '**/node_modules'
-                  key: node_modules-${{ runner.os }}-${{ steps.node-version.outputs.NODE_VERSION }}-${{ hashFiles('package-lock.json') }}
-
-            - name: Install npm dependencies
-              if: ${{ steps.cache-node_modules.outputs.cache-hit != 'true' }}
-              run: npm ci --force
-              shell: bash
+                  node-version: ${{ matrix.node }}
 
             - name: Npm build
-              run: npx run build
+              run: npx lerna run build
 
             - name: Running the tests
-              run: npm run test:js
+              run: npm run test:unit -- --ci --maxWorkers=2 --cacheDirectory="$HOME/.jest-cache"
