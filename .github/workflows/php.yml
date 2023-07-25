@@ -1,0 +1,46 @@
+name: PHP Composer
+
+on:
+    push:
+        branches: ['main']
+    pull_request:
+        branches: ['main']
+
+permissions:
+    contents: read
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Validate composer.json and composer.lock
+              run: composer validate --strict
+
+            - name: Cache Composer packages
+              id: composer-cache
+              uses: actions/cache@v3
+              with:
+                  path: vendor
+                  key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-php-
+
+            - name: Install dependencies
+              run: composer install --prefer-dist --no-progress
+
+            - name: Setup database
+              run: |
+                  mysql -u root
+                  create database wp_tests;
+
+            - name: Run test suite
+              #        env:
+              #          APP_MODE = production
+              #          WP_PHPUNIT__TESTS_CONFIG = tests/php/unit/wp-config.php
+              #          WP_TESTS_DIR = ./
+              #          DB = wp_tests
+              #          PB_CORE_VERSION = 1.0-alpha
+              run: composer run-script test
