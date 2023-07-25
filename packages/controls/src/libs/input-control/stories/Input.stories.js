@@ -537,6 +537,28 @@ export const CssInput = {
 	),
 };
 
+export const Field = {
+	args: {
+		label: 'Field',
+		type: 'number',
+		value: '20',
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => (
+		<Flex direction="column" gap="20px">
+			<h2 className="story-heading">With Field</h2>
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks Control={InputControl} {...args} />
+			</ControlContextProvider>
+		</Flex>
+	),
+};
+
 export const PlayText = {
 	args: {
 		controlInfo: {
@@ -733,15 +755,17 @@ export const Screenshot = {
 		value: '20px',
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
-	render: (args) => (
+	render: () => (
 		<Flex direction="column" gap="50px">
-			<TextInput.render {...args} />
+			<TextInput.render {...TextInput.args} />
 
-			<NumberInput.render {...args} />
+			<NumberInput.render {...NumberInput.args} />
 
-			<UnitsInput.render {...args} />
+			<UnitsInput.render {...UnitsInput.args} />
 
-			<CssInput.render {...args} />
+			<CssInput.render {...CssInput.args} />
+
+			<Field.render {...Field.args} />
 		</Flex>
 	),
 };
