@@ -69,13 +69,40 @@ class AssetsProvider {
 				continue;
 			}
 
+			$deps = $this->exclude_dependencies( $assetInfo['deps'] );
+
 			wp_register_script(
 				'@publisher/' . $asset,
 				str_replace( '\\', '/', $assetInfo['script'] ),
-				$assetInfo['deps'],
+				$deps,
 				$assetInfo['version']
 			);
 		}
+	}
+
+	/**
+	 * Exclude deps before register script!
+	 *
+	 * @param array $dependencies
+	 *
+	 * @since 1.0.0
+	 * @return array
+	 */
+	private function exclude_dependencies( array $dependencies ): array {
+
+		$excludes = ['@publisher/storybook'];
+
+		foreach ($excludes as $item){
+
+			if ( ! in_array( $item, $dependencies, true ) ) {
+
+				continue;
+			}
+
+			unset( $dependencies[ array_search( $item, $dependencies, true ) ] );
+		}
+
+		return $dependencies;
 	}
 
 	/**
