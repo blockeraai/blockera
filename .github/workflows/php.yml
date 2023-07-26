@@ -55,6 +55,7 @@ jobs:
                   rm latest.tar.gz
             - name: Move WordPress Files
               run: |
+                  mkdir wp
                   mv wordpress/* wp
                   rm -r wordpress
 
