@@ -52,7 +52,7 @@ describe('Testing util functions', () => {
 			expect(value).toBe(315);
 		});
 
-		test('subtracted ange is mre than 360', () => {
+		test('result angle should be more than 360', () => {
 			const value = subtractAngle(20, -370);
 
 			expect(value).toBe(30);

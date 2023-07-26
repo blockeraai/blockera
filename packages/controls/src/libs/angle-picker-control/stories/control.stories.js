@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import { useContext } from '@wordpress/element';
 import {
 	fireEvent,
 	userEvent,
@@ -19,15 +18,15 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 /**
  * Internal dependencies
  */
-import { default as AnglePickerControl } from '../index';
+import { AnglePickerControl } from '../../index';
+import { ControlContextProvider } from '../../../context';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
+import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
+import { nanoid } from 'nanoid';
 
-const {
-	WithInspectorStyles,
-	StoryDataContext,
-	WithStoryContextProvider,
-	SharedDecorators,
-} = Decorators;
+const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
+	Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
 
@@ -40,7 +39,21 @@ export default {
 export const Default = {
 	args: {
 		value: 25,
+		rotateButtons: false,
 	},
+	render: (args) => (
+		<Flex direction="column" gap="15px">
+			<h2 className="story-heading">With Rotate Button</h2>
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks Control={AnglePickerControl} {...args} />
+			</ControlContextProvider>
+		</Flex>
+	),
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
@@ -49,28 +62,57 @@ export const NoButtons = {
 		value: 25,
 		rotateButtons: false,
 	},
+	render: (args) => (
+		<Flex direction="column" gap="15px">
+			<h2 className="story-heading">Without Rotate Button</h2>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks Control={AnglePickerControl} {...args} />
+			</ControlContextProvider>
+		</Flex>
+	),
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
-const ControlWithHooks = (args) => {
-	const { storyValue, setStoryValue } = useContext(StoryDataContext);
+export const Field = {
+	args: {
+		label: 'Angle Picker',
+		value: 45,
+		rotateButtons: true,
+	},
+	render: (args) => (
+		<Flex direction="column" gap="15px">
+			<h2 className="story-heading">With Field</h2>
 
-	return (
-		<AnglePickerControl
-			{...args}
-			onChange={setStoryValue}
-			value={storyValue}
-		/>
-	);
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks Control={AnglePickerControl} {...args} />
+			</ControlContextProvider>
+		</Flex>
+	),
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
 export const Play = {
 	args: {
-		value: '20',
+		controlInfo: {
+			name: nanoid(),
+			value: '20',
+		},
 	},
 	decorators: [
 		WithStoryContextProvider,
 		WithInspectorStyles,
+		WithControlDataProvider,
 		...SharedDecorators,
 	],
 	parameters: {
@@ -78,7 +120,7 @@ export const Play = {
 	},
 	render: (args) => (
 		<div data-testid="change-cell-test-id">
-			<ControlWithHooks {...args} />
+			<ControlWithHooks Control={AnglePickerControl} {...args} />
 		</div>
 	),
 	play: async ({ canvasElement, step }) => {
@@ -142,18 +184,20 @@ export const Play = {
 			const rightButton = canvas.getByLabelText('Rotate Right');
 			await expect(rightButton).toBeInTheDocument();
 
+			// noinspection ES6RedundantAwait
 			await fireEvent.change(numberInput, { target: { value: 0 } });
-			await fireEvent.click(leftButton);
-			await fireEvent.focus(leftButton);
+			await userEvent.click(leftButton);
+			fireEvent.focus(leftButton);
 			await expect(numberInput).toHaveValue(315);
 			await waitFor(
 				async () => await expect(currentValue).toHaveTextContent('315'),
 				{ timeout: 1000 }
 			);
 
+			// noinspection ES6RedundantAwait
 			await fireEvent.change(numberInput, { target: { value: 0 } });
-			await fireEvent.click(rightButton);
-			await fireEvent.focus(rightButton);
+			await userEvent.click(rightButton);
+			fireEvent.focus(rightButton);
 			await expect(numberInput).toHaveValue(45);
 			await waitFor(
 				async () => await expect(currentValue).toHaveTextContent('45'),
@@ -163,24 +207,16 @@ export const Play = {
 	},
 };
 
-export const Screenshot = {
+export const All = {
 	args: {},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
-	render: (args) => (
-		<Flex direction="column" gap="30px">
-			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">With Rotate Buttons</h2>
-				<AnglePickerControl {...args} value="20" rotateButtons={true} />
-			</Flex>
+	render: () => (
+		<Flex direction="column" gap="50px">
+			<Default.render {...Default.args} />
 
-			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">Without Rotate Button</h2>
-				<AnglePickerControl
-					{...args}
-					value="45"
-					rotateButtons={false}
-				/>
-			</Flex>
+			<NoButtons.render {...NoButtons.args} />
+
+			<Field.render {...Field.args} />
 		</Flex>
 	),
 };

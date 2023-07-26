@@ -27,6 +27,7 @@ import {
 	AlignmentMatrixControl,
 	InputControl,
 	ToggleSelectControl,
+	AnglePickerControl,
 } from '../../index';
 import RepeaterControl from '../../repeater-control';
 import { useControlContext } from '../../../context';
@@ -81,8 +82,6 @@ const Fields = ({ itemId, item }) => {
 		dispatch: { changeRepeaterItem },
 	} = useControlContext();
 	const { repeaterId } = useContext(RepeaterContext);
-
-	const linearGradientValue = /\((\d.*)deg,/im?.exec(item['linear-gradient']);
 
 	function getControlId(id) {
 		if (!/\[.*]/g.test(id)) {
@@ -349,8 +348,9 @@ const Fields = ({ itemId, item }) => {
 						}
 					/>
 
-					<AnglePickerField
+					<AnglePickerControl
 						label={__('Angel', 'publisher-core')}
+						id={getControlId('[linear-gradient-angel]')}
 						onChange={(newValue) => {
 							// update linear gradient value
 							changeRepeaterItem({
@@ -359,18 +359,10 @@ const Fields = ({ itemId, item }) => {
 								itemId,
 								value: {
 									...item,
-									'linear-gradient': item[
-										'linear-gradient'
-									].replace(
-										/\(\d.*deg,/gim,
-										`(${newValue}deg,`
-									),
+									'linear-gradient-angel': newValue,
 								},
 							});
 						}}
-						value={
-							linearGradientValue ? linearGradientValue[1] : ''
-						}
 					/>
 
 					<ToggleSelectControl
