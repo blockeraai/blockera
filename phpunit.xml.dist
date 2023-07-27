@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--@see: https://github.com/wp-phpunit/docs to configuration project for wp phpunit testing-->
 <phpunit
-        bootstrap="./tests/php/unit/bootstrap.php"
+        bootstrap="./.dev/tests/phpunit/bootstrap.php"
         backupGlobals="false"
         colors="true"
         convertErrorsToExceptions="true"
@@ -9,10 +8,18 @@
         convertWarningsToExceptions="true"
         verbose="true"
 >
+    <coverage>
+        <report>
+            <html outputDirectory="php-coverage" />
+        </report>
+    </coverage>
+
     <testsuites>
         <testsuite name="Test Suite">
-            <directory suffix=".php">./tests/php/unit/</directory>
-            <exclude>./tests/php/unit/Fixtures/</exclude>
+            <directory suffix=".php">./.dev/tests/phpunit/</directory>
+            <exclude>./.dev/tests/phpunit/Fixtures/</exclude>
+            <exclude>./node_modules/</exclude>
+            <exclude>./dist/</exclude>
         </testsuite>
     </testsuites>
 
@@ -23,11 +30,8 @@
     </filter>
 
     <php>
-        <env name="APP_MODE" value="development"/>
-        <env name="DB" value="wp_tests"/>
-        <env name="PB_CORE_VERSION" value="1.0-alpha" />
-        <env name="WP_TESTS_DIR" value="/wp/"/>
-        <env name="WP_PHPUNIT__TESTS_CONFIG" value="tests/php/unit/wp-config.php" />
+        <const name="PHPUNIT_PLUGIN_TEST" value="true"/>
+        <env name="WP_PHPUNIT__TESTS_CONFIG" value="./.dev/tests/phpunit/config.php" />
     </php>
 
 </phpunit>
