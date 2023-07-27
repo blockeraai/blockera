@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import { useContext } from '@wordpress/element';
 import { expect } from '@storybook/jest';
 import { waitFor, userEvent, within } from '@storybook/testing-library';
 import { nanoid } from 'nanoid';
@@ -18,14 +17,11 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 import { default as AlignmentMatrixControl } from '../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
-import { ControlContextProvider, useControlContext } from '../../../context';
+import { ControlContextProvider } from '../../../context';
+import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
 
-const {
-	WithInspectorStyles,
-	StoryDataContext,
-	WithStoryContextProvider,
-	SharedDecorators,
-} = Decorators;
+const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
+	Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
 SharedDecorators.push(WithControlDataProvider);
@@ -64,28 +60,6 @@ export const CustomSize = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
-const ControlWithHooks = (args) => {
-	const { storyValue, setStoryValue } = useContext(StoryDataContext);
-	const {
-		controlInfo: { name: controlId },
-		dispatch: { modifyControlValue },
-	} = useControlContext(args);
-
-	return (
-		<AlignmentMatrixControl
-			{...args}
-			onChange={(newValue) => {
-				setStoryValue(newValue);
-				modifyControlValue({
-					controlId,
-					value: newValue,
-				});
-			}}
-			value={storyValue}
-		/>
-	);
-};
-
 export const Play = {
 	args: {
 		inputFields: true,
@@ -107,7 +81,7 @@ export const Play = {
 	},
 	render: (args) => (
 		<div data-testid="change-cell-test-id">
-			<ControlWithHooks {...args} />
+			<ControlWithHooks Control={AlignmentMatrixControl} {...args} />
 		</div>
 	),
 	play: async ({ canvasElement, step }) => {
@@ -268,7 +242,7 @@ export const Play = {
 	},
 };
 
-export const Screenshot = {
+export const All = {
 	args: {
 		value: 'center center',
 	},
@@ -283,7 +257,11 @@ export const Screenshot = {
 						value: { top: '50%', left: '50%' },
 					}}
 				>
-					<AlignmentMatrixControl {...args} inputFields={true} />
+					<ControlWithHooks
+						Control={AlignmentMatrixControl}
+						{...args}
+						inputFields={true}
+					/>
 				</ControlContextProvider>
 			</Flex>
 
@@ -295,7 +273,8 @@ export const Screenshot = {
 						value: { top: '50%', left: '50%' },
 					}}
 				>
-					<AlignmentMatrixControl
+					<ControlWithHooks
+						Control={AlignmentMatrixControl}
 						{...args}
 						inputFields={true}
 						label="Position"
@@ -311,7 +290,11 @@ export const Screenshot = {
 						value: { top: '50%', left: '50%' },
 					}}
 				>
-					<AlignmentMatrixControl {...args} size="50" />
+					<ControlWithHooks
+						Control={AlignmentMatrixControl}
+						{...args}
+						size="50"
+					/>
 				</ControlContextProvider>
 			</Flex>
 
@@ -323,7 +306,10 @@ export const Screenshot = {
 						value: { top: '0%', left: '0%' },
 					}}
 				>
-					<AlignmentMatrixControl {...args} />
+					<ControlWithHooks
+						Control={AlignmentMatrixControl}
+						{...args}
+					/>
 				</ControlContextProvider>
 			</Flex>
 
@@ -335,7 +321,11 @@ export const Screenshot = {
 						value: { top: '0%', left: '50%' },
 					}}
 				>
-					<AlignmentMatrixControl {...args} value="top center" />
+					<ControlWithHooks
+						Control={AlignmentMatrixControl}
+						{...args}
+						value="top center"
+					/>
 				</ControlContextProvider>
 			</Flex>
 
@@ -347,7 +337,11 @@ export const Screenshot = {
 						value: { top: '0%', left: '100%' },
 					}}
 				>
-					<AlignmentMatrixControl {...args} value="top right" />
+					<ControlWithHooks
+						Control={AlignmentMatrixControl}
+						{...args}
+						value="top right"
+					/>
 				</ControlContextProvider>
 			</Flex>
 
@@ -359,7 +353,11 @@ export const Screenshot = {
 						value: { top: '50%', left: '0%' },
 					}}
 				>
-					<AlignmentMatrixControl {...args} value="center left" />
+					<ControlWithHooks
+						Control={AlignmentMatrixControl}
+						{...args}
+						value="center left"
+					/>
 				</ControlContextProvider>
 			</Flex>
 
@@ -371,7 +369,11 @@ export const Screenshot = {
 						value: { top: '50%', left: '50%' },
 					}}
 				>
-					<AlignmentMatrixControl {...args} value="center center" />
+					<ControlWithHooks
+						Control={AlignmentMatrixControl}
+						{...args}
+						value="center center"
+					/>
 				</ControlContextProvider>
 			</Flex>
 
@@ -383,7 +385,11 @@ export const Screenshot = {
 						value: { top: '50%', left: '100%' },
 					}}
 				>
-					<AlignmentMatrixControl {...args} value="center right" />
+					<ControlWithHooks
+						Control={AlignmentMatrixControl}
+						{...args}
+						value="center right"
+					/>
 				</ControlContextProvider>
 			</Flex>
 
@@ -395,7 +401,11 @@ export const Screenshot = {
 						value: { top: '100%', left: '0%' },
 					}}
 				>
-					<AlignmentMatrixControl {...args} value="bottom left" />
+					<ControlWithHooks
+						Control={AlignmentMatrixControl}
+						{...args}
+						value="bottom left"
+					/>
 				</ControlContextProvider>
 			</Flex>
 
@@ -407,7 +417,11 @@ export const Screenshot = {
 						value: { top: '100%', left: '50%' },
 					}}
 				>
-					<AlignmentMatrixControl {...args} value="bottom center" />
+					<ControlWithHooks
+						Control={AlignmentMatrixControl}
+						{...args}
+						value="bottom center"
+					/>
 				</ControlContextProvider>
 			</Flex>
 
@@ -419,7 +433,11 @@ export const Screenshot = {
 						value: { top: '100%', left: '100%' },
 					}}
 				>
-					<AlignmentMatrixControl {...args} value="bottom right" />
+					<ControlWithHooks
+						Control={AlignmentMatrixControl}
+						{...args}
+						value="bottom right"
+					/>
 				</ControlContextProvider>
 			</Flex>
 		</Flex>
