@@ -13,7 +13,7 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Publisher\\Core\\Tests\\": "tests/php/unit"
+			"Publisher\\Core\\Tests\\": ".dev/tests/phpunit"
 		}
 	},
 	"authors": [
@@ -39,7 +39,7 @@
 	},
 	"config": {
 		"platform": {
-			"php": "8.1"
+			"php": "7.4"
 		},
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true,
@@ -49,6 +49,7 @@
 	"scripts": {
 		"lint": "@php ./vendor/bin/phpcs --runtime-set ignore_warnings_on_exit 1",
 		"lint:fix": "@php ./vendor/bin/phpcbf",
-		"test": "@php ./vendor/bin/phpunit"
+		"test": "@php ./vendor/bin/phpunit",
+		"test:coverage": "@php ./vendor/bin/phpunit --coverage-html php-coverage"
 	}
 }
