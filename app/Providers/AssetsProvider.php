@@ -10,7 +10,6 @@ class AssetsProvider {
 	 * @var array
 	 */
 	protected static array $assets = [
-		'icons',
 		'utils',
 		'fields',
 		'controls',
@@ -41,41 +40,60 @@ class AssetsProvider {
 	}
 
 	/**
+	 * Preparing current assets with info!
+	 *
+	 * @return array
+	 */
+	protected function prepare_assets(): array {
+
+		$provider = $this;
+
+		return array_filter(
+			array_map( static function ( string $asset ) use ( $provider ) {
+
+				if ( ! $assetInfo = $provider->assetInfo( $asset ) ) {
+
+					return null;
+				}
+
+				return $assetInfo;
+
+			}, self::$assets )
+		);
+	}
+
+	/**
 	 * Register all assets in WordPress.
 	 *
 	 * @return void
 	 */
 	public function register_assets(): void {
 
-		foreach ( self::$assets as $asset ) {
+		//Registering assets ...
+		foreach ( $this->prepare_assets() as $asset ) {
 
-			if ( ! $assetInfo = $this->assetInfo( $asset ) ) {
-
-				continue;
-			}
-
-			if ( $assetInfo['style'] ) {
+			if ( $asset['style'] ) {
 
 				wp_register_style(
-					'@publisher/' . $asset,
-					str_replace( '\\', '/', $assetInfo['style'] ),
-					self::$packages_deps[ $asset ] ?? [],
-					$assetInfo['version']
+					'@publisher/' . $asset['name'],
+					str_replace( '\\', '/', $asset['style'] ),
+					self::$packages_deps[ $asset['name'] ] ?? [],
+					$asset['version']
 				);
 			}
 
-			if ( ! $assetInfo['script'] ) {
+			if ( ! $asset['script'] ) {
 
 				continue;
 			}
 
-			$deps = $this->exclude_dependencies( $assetInfo['deps'] );
+			$deps = $this->exclude_dependencies( $asset['deps'] );
 
 			wp_register_script(
-				'@publisher/' . $asset,
-				str_replace( '\\', '/', $assetInfo['script'] ),
+				'@publisher/' . $asset['name'],
+				str_replace( '\\', '/', $asset['script'] ),
 				$deps,
-				$assetInfo['version']
+				$asset['version']
 			);
 		}
 	}
@@ -90,9 +108,9 @@ class AssetsProvider {
 	 */
 	private function exclude_dependencies( array $dependencies ): array {
 
-		$excludes = ['@publisher/storybook'];
+		$excludes = [ '@publisher/storybook' ];
 
-		foreach ($excludes as $item){
+		foreach ( $excludes as $item ) {
 
 			if ( ! in_array( $item, $dependencies, true ) ) {
 
@@ -173,7 +191,7 @@ class AssetsProvider {
 			$style = '';
 		}
 
-		return compact( 'deps', 'script', 'style', 'version' );
+		return compact( 'name', 'deps', 'script', 'style', 'version' );
 	}
 
 }
