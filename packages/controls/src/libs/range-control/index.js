@@ -24,9 +24,10 @@ export default function RangeControl({
 	onChange,
 	className,
 }) {
-	const { value } = useControlContext({
+	const { value, setValue } = useControlContext({
 		id,
 		defaultValue,
+		onChange,
 	});
 
 	return (
@@ -35,7 +36,7 @@ export default function RangeControl({
 			max={max}
 			initialPosition={initialPosition}
 			value={value}
-			onChange={onChange}
+			onChange={setValue}
 			className={controlClassNames('range', className)}
 			withInputField={withInputField}
 			__nextHasNoMarginBottom={false}
