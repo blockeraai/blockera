@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import { useContext } from '@wordpress/element';
 import { fireEvent, waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
 
@@ -16,12 +15,13 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  */
 import { ColorPickerControl } from '../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
+import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 
 const {
 	WithInspectorStyles,
 	WithPopoverDataProvider,
 	SharedDecorators,
-	StoryDataContext,
 	WithStoryContextProvider,
 } = Decorators;
 
@@ -38,22 +38,34 @@ export const PopoverPicker = {
 		defaultValue: '',
 		value: '',
 		isOpen: true,
+		isPopover: true,
 	},
 	decorators: [
 		WithInspectorStyles,
 		WithPopoverDataProvider,
+		WithControlDataProvider,
 		...SharedDecorators,
 	],
+	render: (args) => (
+		<Flex direction="column" gap="15px">
+			<h2 className="story-heading">
+				ColorPicker<span>Popover</span>
+			</h2>
+			<ControlWithHooks Control={ColorPickerControl} {...args} />
+		</Flex>
+	),
 };
 
 export const WithoutPopover = {
 	args: {
 		defaultValue: '',
 		value: '#0947eb',
+		isPopover: false,
 	},
 	decorators: [
 		WithInspectorStyles,
 		WithPopoverDataProvider,
+		WithControlDataProvider,
 		...SharedDecorators,
 	],
 	render: (args) => (
@@ -61,21 +73,31 @@ export const WithoutPopover = {
 			<h2 className="story-heading">
 				ColorPicker<span>Without Popover</span>
 			</h2>
-			<ColorPickerControl {...args} isPopover={false} />
+			<ControlWithHooks Control={ColorPickerControl} {...args} />
 		</Flex>
 	),
 };
 
-const ControlWithHooks = (args) => {
-	const { storyValue, setStoryValue } = useContext(StoryDataContext);
-
-	return (
-		<ColorPickerControl
-			{...args}
-			onChange={setStoryValue}
-			value={storyValue}
-		/>
-	);
+export const Field = {
+	args: {
+		label: 'ColorPicker',
+		defaultValue: '',
+		value: '#0947eb',
+		isPopover: false,
+		columns: 'columns-1',
+	},
+	decorators: [
+		WithInspectorStyles,
+		WithPopoverDataProvider,
+		WithControlDataProvider,
+		...SharedDecorators,
+	],
+	render: (args) => (
+		<Flex direction="column" gap="15px">
+			<h2 className="story-heading">With Field</h2>
+			<ControlWithHooks Control={ColorPickerControl} {...args} />
+		</Flex>
+	),
 };
 
 export const Play = {
@@ -86,9 +108,12 @@ export const Play = {
 	decorators: [
 		WithStoryContextProvider,
 		WithInspectorStyles,
+		WithPopoverDataProvider,
 		...SharedDecorators,
 	],
-	render: (args) => <ControlWithHooks {...args} />,
+	render: (args) => (
+		<ControlWithHooks Control={ColorPickerControl} {...args} />
+	),
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 
@@ -112,25 +137,27 @@ export const Play = {
 	},
 };
 
-export const Screenshot = {
+export const All = {
 	args: {},
 	decorators: [
 		WithInspectorStyles,
 		WithPopoverDataProvider,
+		WithControlDataProvider,
 		...SharedDecorators,
 	],
 	render: () => (
 		<Flex direction="column" gap="50px">
 			<Flex
 				direction="column"
-				gap="15px"
+				gap="50px"
 				style={{ marginBottom: '500px' }}
 			>
-				<h2 className="story-heading">Popover Color Picker</h2>
-				<ColorPickerControl {...PopoverPicker.args} />
+				<PopoverPicker.render {...PopoverPicker.args} />
 			</Flex>
 
-			<WithoutPopover.render />
+			<WithoutPopover.render {...WithoutPopover.args} />
+
+			<Field.render {...Field.args} />
 		</Flex>
 	),
 };
