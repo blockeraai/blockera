@@ -111,10 +111,6 @@ InputControl.propTypes = {
 	 */
 	defaultValue: PropTypes.string,
 	/**
-	 * The current value.
-	 */
-	value: PropTypes.string,
-	/**
 	 * Function that will be fired while the control value state changes.
 	 */
 	onChange: PropTypes.func,
