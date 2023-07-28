@@ -11,12 +11,13 @@ import PropTypes from 'prop-types';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { useValue } from '@publisher/utils';
+import { Field } from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
 import { renderSelectNativeOption, prepareSelectCustomOptions } from './utils';
+import { useControlContext } from '../../context';
 
 const SelectControl = ({
 	type,
@@ -29,22 +30,30 @@ const SelectControl = ({
 	noBorder,
 	multiple,
 	//
+	id,
+	label,
+	columns,
 	defaultValue,
-	value: initialValue,
 	onChange,
+	field,
 	//
 	className,
 }) => {
-	const { value, setValue } = useValue({
-		initialValue,
-		defaultValue,
+	const { value, setValue } = useControlContext({
+		id,
 		onChange,
+		defaultValue,
 	});
 
 	if (type === 'custom') options = prepareSelectCustomOptions(options);
 
 	return (
-		<>
+		<Field
+			label={label}
+			field={field}
+			columns={columns}
+			className={className}
+		>
 			{type === 'native' && (
 				<WPSelectControl
 					className={controlClassNames(
@@ -83,7 +92,7 @@ const SelectControl = ({
 					options={options}
 				/>
 			)}
-		</>
+		</Field>
 	);
 };
 
@@ -91,13 +100,27 @@ export default SelectControl;
 
 SelectControl.propTypes = {
 	/**
+	 * Label for field. If you pass empty value the field will not be added and simple control will be rendered
+	 *
+	 * @default ""
+	 */
+	label: PropTypes.string,
+	/**
+	 * Field id for passing into child Field component
+	 *
+	 * @default "toggle-select"
+	 */
+	field: PropTypes.string,
+	/**
+	 * Columns setting for Field grid.
+	 *
+	 * @default "columns-2"
+	 */
+	columns: PropTypes.string,
+	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
 	defaultValue: PropTypes.string,
-	/**
-	 * The current value.
-	 */
-	value: PropTypes.string,
 	/**
 	 * Function that will be fired while the control value state changes.
 	 */
@@ -150,7 +173,6 @@ SelectControl.propTypes = {
 };
 
 SelectControl.defaultProps = {
-	defaultValue: '',
 	type: 'native',
 	customMenuPosition: 'bottom',
 	customHideInputIcon: false,
@@ -159,4 +181,7 @@ SelectControl.defaultProps = {
 	customInputCenterContent: false,
 	noBorder: false,
 	multiple: false,
+	label: '',
+	defaultValue: '',
+	field: 'select',
 };
