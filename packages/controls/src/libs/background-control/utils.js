@@ -22,6 +22,11 @@ export function getBackgroundItemBGProperty(item) {
 				);
 			}
 
+			gradient = gradient.replace(
+				/\((\d.*)deg,/im,
+				item['linear-gradient-angel']
+			);
+
 			return gradient;
 
 		case 'radial-gradient':
