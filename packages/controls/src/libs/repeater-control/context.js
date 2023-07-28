@@ -2,6 +2,7 @@
  * WordPress dependencies
  */
 import { createContext } from '@wordpress/element';
+import { isFunction, isUndefined } from '@publisher/utils';
 
 const RepeaterContext = createContext({
 	design: 'minimal',
@@ -22,6 +23,8 @@ const RepeaterContext = createContext({
 	repeaterItemHeader: null,
 	repeaterItemChildren: null,
 	//
+	getControlId: null,
+	//
 	attributes: {},
 	defaultValue: {},
 	repeaterItems: {}, // value
@@ -30,6 +33,17 @@ const RepeaterContext = createContext({
 });
 
 const RepeaterContextProvider = ({ children, ...props }) => {
+	if (!isFunction(props.getControlId))
+		props.getControlId = (itemId, id) => {
+			if (!/\[.*]/g.test(id)) {
+				id = `.${id}`;
+			}
+
+			return isUndefined(props.repeaterId)
+				? `[${itemId}]${id}`
+				: `${props.repeaterId}[${itemId}]${id}`;
+		};
+
 	return (
 		<RepeaterContext.Provider value={props}>
 			{children}
