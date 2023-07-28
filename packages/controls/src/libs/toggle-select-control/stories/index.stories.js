@@ -3,7 +3,6 @@
  */
 import { nanoid } from 'nanoid';
 import { __ } from '@wordpress/i18n';
-import { useContext } from '@wordpress/element';
 import { userEvent, waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
 
@@ -20,13 +19,10 @@ import { default as InheritIcon } from './icons/inherit';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import { ControlContextProvider, ToggleSelectControl } from '../../../index';
 import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
+import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
 
-const {
-	WithInspectorStyles,
-	StoryDataContext,
-	WithStoryContextProvider,
-	SharedDecorators,
-} = Decorators;
+const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
+	Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
 SharedDecorators.push(WithControlDataProvider);
@@ -232,18 +228,6 @@ export const Field = {
 	},
 };
 
-const ControlWithHooks = (args) => {
-	const { storyValue, setStoryValue } = useContext(StoryDataContext);
-
-	return (
-		<ToggleSelectControl
-			{...args}
-			onChange={setStoryValue}
-			value={storyValue}
-		/>
-	);
-};
-
 export const Play = {
 	args: {
 		options,
@@ -258,7 +242,9 @@ export const Play = {
 		WithInspectorStyles,
 		...SharedDecorators,
 	],
-	render: (args) => <ControlWithHooks {...args} />,
+	render: (args) => (
+		<ControlWithHooks Control={ToggleSelectControl} {...args} />
+	),
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 		const currentValue = canvas.getByTestId('current-value');
@@ -295,13 +281,16 @@ export const Play = {
 	},
 };
 
-export const Screenshot = {
+export const All = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: () => (
 		<Flex direction="column" gap="50px">
 			<TextToggle.render {...TextToggle.args} />
+
 			<IconToggle.render {...IconToggle.args} />
+
 			<DeselectableToggle.render {...DeselectableToggle.args} />
+
 			<Field.render {...Field.args} />
 		</Flex>
 	),
