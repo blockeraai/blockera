@@ -357,7 +357,7 @@ export const PlayImage = {
 };
 PlayImage.storyName = 'Play → Image';
 
-export const Screenshot = {
+export const All = {
 	args: {},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: () => (
