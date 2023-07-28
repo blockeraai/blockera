@@ -7,7 +7,7 @@ import { memo, useContext } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { GradientBarField, MediaImageField, Field } from '@publisher/fields';
+import { Field } from '@publisher/fields';
 import { Flex } from '@publisher/components';
 import {
 	controlClassNames,
@@ -22,10 +22,14 @@ import {
 	AlignmentMatrixControl,
 	InputControl,
 	ToggleSelectControl,
+	GradientBarControl,
 	AnglePickerControl,
+	MediaImageControl,
 } from '../../index';
 import RepeaterControl from '../../repeater-control';
 import { useControlContext } from '../../../context';
+import { RepeaterContext } from '../../repeater-control/context';
+
 // Icons
 import RepeatIcon from '../icons/repeat';
 import RepeatXIcon from '../icons/repeat-x';
@@ -47,7 +51,6 @@ import { default as MeshGradientHeader } from './mesh-gradient/header';
 import { default as MeshGradientFields } from './mesh-gradient/fields';
 import { default as generateMeshGradient } from './mesh-gradient/mesh-generator';
 import { default as RegenerateIcon } from '../icons/regenerate';
-import { RepeaterContext } from '../../repeater-control/context';
 
 /**
  * Providing mesh gradient colors details.
@@ -76,17 +79,8 @@ const Fields = ({ itemId, item }) => {
 		controlInfo: { name: controlId },
 		dispatch: { changeRepeaterItem },
 	} = useControlContext();
-	const { repeaterId } = useContext(RepeaterContext);
 
-	function getControlId(id) {
-		if (!/\[.*]/g.test(id)) {
-			id = `.${id}`;
-		}
-
-		return isUndefined(repeaterId)
-			? `[${itemId}]${id}`
-			: `${repeaterId}[${itemId}]${id}`;
-	}
+	const { repeaterId, getControlId } = useContext(RepeaterContext);
 
 	// fill new random mesh gradient with provider if it's empty
 	if (!item['mesh-gradient']) {
@@ -119,7 +113,7 @@ const Fields = ({ itemId, item }) => {
 						icon: <TypeMeshGradientIcon />,
 					},
 				]}
-				id={getControlId('type')}
+				id={getControlId(itemId, 'type')}
 				onChange={(type) =>
 					changeRepeaterItem({
 						controlId,
@@ -135,15 +129,11 @@ const Fields = ({ itemId, item }) => {
 
 			{item.type === 'image' && (
 				<>
-					<MediaImageField
+					<MediaImageControl
 						label=""
 						field="empty"
 						columns="columns-1"
-						settings={{
-							type: 'text',
-						}}
-						//
-						value={item.image}
+						id={getControlId(itemId, 'image')}
 						onChange={(image) => {
 							changeRepeaterItem({
 								controlId,
@@ -173,7 +163,7 @@ const Fields = ({ itemId, item }) => {
 								value: 'contain',
 							},
 						]}
-						id={getControlId('image-size')}
+						id={getControlId(itemId, 'image-size')}
 						onChange={(size) =>
 							changeRepeaterItem({
 								controlId,
@@ -198,7 +188,10 @@ const Fields = ({ itemId, item }) => {
 									className="control-first label-center small-gap"
 									type="css"
 									unitType="background-size"
-									id={getControlId('image-size-width')}
+									id={getControlId(
+										itemId,
+										'image-size-width'
+									)}
 									onChange={(width) =>
 										changeRepeaterItem({
 											controlId,
@@ -218,7 +211,10 @@ const Fields = ({ itemId, item }) => {
 									className="control-first label-center small-gap"
 									type="css"
 									unitType="background-size"
-									id={getControlId('image-size-height')}
+									id={getControlId(
+										itemId,
+										'image-size-height'
+									)}
 									onChange={(height) =>
 										changeRepeaterItem({
 											controlId,
@@ -238,7 +234,7 @@ const Fields = ({ itemId, item }) => {
 					<AlignmentMatrixControl
 						inputFields={true}
 						label={__('Position', 'publisher-core')}
-						id={getControlId('[image-position]')}
+						id={getControlId(itemId, '[image-position]')}
 						onChange={(newValue) => {
 							changeRepeaterItem({
 								controlId,
@@ -283,7 +279,7 @@ const Fields = ({ itemId, item }) => {
 							},
 						]}
 						//
-						id={getControlId('[image-repeat]')}
+						id={getControlId(itemId, '[image-repeat]')}
 						onChange={(newValue) =>
 							changeRepeaterItem({
 								controlId,
@@ -309,7 +305,7 @@ const Fields = ({ itemId, item }) => {
 								value: 'fixed',
 							},
 						]}
-						id={getControlId('[image-attachment]')}
+						id={getControlId(itemId, '[image-attachment]')}
 						onChange={(newValue) =>
 							changeRepeaterItem({
 								controlId,
@@ -327,10 +323,11 @@ const Fields = ({ itemId, item }) => {
 
 			{item.type === 'linear-gradient' && (
 				<>
-					<GradientBarField
+					<GradientBarControl
+						label=""
 						field="empty"
-						value={item['linear-gradient']}
-						onValueChange={(newValue) =>
+						id={getControlId(itemId, '[linear-gradient]')}
+						onChange={(newValue) => {
 							changeRepeaterItem({
 								controlId,
 								repeaterId,
@@ -339,13 +336,13 @@ const Fields = ({ itemId, item }) => {
 									...item,
 									'linear-gradient': newValue,
 								},
-							})
-						}
+							});
+						}}
 					/>
 
 					<AnglePickerControl
 						label={__('Angel', 'publisher-core')}
-						id={getControlId('[linear-gradient-angel]')}
+						id={getControlId(itemId, '[linear-gradient-angel]')}
 						onChange={(newValue) => {
 							// update linear gradient value
 							changeRepeaterItem({
@@ -375,7 +372,7 @@ const Fields = ({ itemId, item }) => {
 							},
 						]}
 						//
-						id={getControlId('[linear-gradient-repeat]')}
+						id={getControlId(itemId, '[linear-gradient-repeat]')}
 						onChange={(newValue) =>
 							changeRepeaterItem({
 								controlId,
@@ -401,7 +398,10 @@ const Fields = ({ itemId, item }) => {
 								value: 'fixed',
 							},
 						]}
-						id={getControlId('[linear-gradient-attachment]')}
+						id={getControlId(
+							itemId,
+							'[linear-gradient-attachment]'
+						)}
 						onChange={(newValue) =>
 							changeRepeaterItem({
 								controlId,
@@ -419,10 +419,11 @@ const Fields = ({ itemId, item }) => {
 
 			{item.type === 'radial-gradient' && (
 				<>
-					<GradientBarField
+					<GradientBarControl
+						label=""
 						field="empty"
-						value={item['radial-gradient']}
-						onValueChange={(newValue) =>
+						id={getControlId(itemId, '[radial-gradient]')}
+						onChange={(newValue) =>
 							changeRepeaterItem({
 								controlId,
 								repeaterId,
@@ -438,7 +439,7 @@ const Fields = ({ itemId, item }) => {
 					<AlignmentMatrixControl
 						inputFields={true}
 						label={__('Position', 'publisher-core')}
-						id={getControlId('[radial-gradient-position]')}
+						id={getControlId(itemId, '[radial-gradient-position]')}
 						onChange={(newValue) => {
 							changeRepeaterItem({
 								controlId,
@@ -488,7 +489,7 @@ const Fields = ({ itemId, item }) => {
 								icon: <RadialGradientClosestSideIcon />,
 							},
 						]}
-						id={getControlId('[radial-gradient-size]')}
+						id={getControlId(itemId, '[radial-gradient-size]')}
 						onChange={(newValue) =>
 							changeRepeaterItem({
 								controlId,
@@ -516,7 +517,7 @@ const Fields = ({ itemId, item }) => {
 								icon: <RadialGradientRepeatIcon />,
 							},
 						]}
-						id={getControlId('[radial-gradient-repeat]')}
+						id={getControlId(itemId, '[radial-gradient-repeat]')}
 						onChange={(newValue) =>
 							changeRepeaterItem({
 								controlId,
@@ -542,7 +543,10 @@ const Fields = ({ itemId, item }) => {
 								value: 'fixed',
 							},
 						]}
-						id={getControlId('[radial-gradient-attachment]')}
+						id={getControlId(
+							itemId,
+							'[radial-gradient-attachment]'
+						)}
 						onChange={(newValue) =>
 							changeRepeaterItem({
 								controlId,
@@ -601,7 +605,10 @@ const Fields = ({ itemId, item }) => {
 
 					<Field label="" columns="columns-1" field="empty">
 						<RepeaterControl
-							repeaterId={getControlId('[mesh-gradient-colors]')}
+							repeaterId={getControlId(
+								itemId,
+								'[mesh-gradient-colors]'
+							)}
 							label={__('Colors', 'publisher-core')}
 							className={controlClassNames(
 								'mesh-gradient-background'
@@ -705,7 +712,7 @@ const Fields = ({ itemId, item }) => {
 								value: 'fixed',
 							},
 						]}
-						id={getControlId('[mesh-gradient-attachment]')}
+						id={getControlId(itemId, '[mesh-gradient-attachment]')}
 						onChange={(newValue) =>
 							changeRepeaterItem({
 								controlId,
