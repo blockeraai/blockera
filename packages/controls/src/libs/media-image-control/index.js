@@ -12,125 +12,126 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
-import { useValue } from '@publisher/utils';
+import { Field } from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
 import { default as DeleteIcon } from './icons/delete';
+import { useControlContext } from '../../context';
 
 export default function MediaImageControl({
-	defaultValue,
-	value: initialValue,
 	labelChoose,
 	labelMediaLibrary,
 	labelUploadImage,
-	className,
+	//
+	id,
+	label,
+	columns,
+	defaultValue,
 	onChange,
+	field,
+	//
+	className,
 }) {
-	const { value, setValue } = useValue({
-		defaultValue,
-		initialValue,
+	const { value, setValue } = useControlContext({
+		id,
 		onChange,
+		defaultValue,
 	});
 
 	return (
-		<div
-			className={controlClassNames(
-				'media-image',
-				value ? 'image-custom' : 'image-none',
-				className
-			)}
+		<Field
+			label={label}
+			field={field}
+			columns={columns}
+			className={className}
 		>
-			{value && (
-				<Button
-					className="btn-delete"
-					noBorder={true}
-					icon={<DeleteIcon />}
-					onClick={() => {
-						setValue('');
-					}}
-				/>
-			)}
+			<div
+				className={controlClassNames(
+					'media-image',
+					value ? 'image-custom' : 'image-none',
+					className
+				)}
+			>
+				{value && (
+					<Button
+						className="btn-delete"
+						noBorder={true}
+						icon={<DeleteIcon />}
+						onClick={() => {
+							setValue('');
+						}}
+					/>
+				)}
 
-			{value && (
-				<img
-					alt={value}
-					src={value}
-					align="center"
-					className={controlInnerClassNames('image-preview')}
-				/>
-			)}
+				{value && (
+					<img
+						alt={value}
+						src={value}
+						align="center"
+						className={controlInnerClassNames('image-preview')}
+					/>
+				)}
 
-			{!value && (
-				<MediaUploader
-					onSelect={(image) => {
-						setValue(image.url);
-					}}
-					allowedTypes={['image']}
-					mode="browse"
-					render={({ open }) => (
-						<Button className="btn-choose-image" onClick={open}>
-							{labelChoose}
-						</Button>
-					)}
-				/>
-			)}
-
-			{value && (
-				<div className={controlInnerClassNames('action-btns')}>
+				{!value && (
 					<MediaUploader
 						onSelect={(image) => {
-							setValue(image?.url);
+							setValue(image.url);
 						}}
 						allowedTypes={['image']}
 						mode="browse"
 						render={({ open }) => (
-							<Button
-								className="btn-media-library"
-								noBorder={true}
-								onClick={open}
-							>
-								{labelMediaLibrary}
+							<Button className="btn-choose-image" onClick={open}>
+								{labelChoose}
 							</Button>
 						)}
 					/>
+				)}
 
-					<MediaUploader
-						onSelect={(image) => {
-							setValue(image?.url);
-						}}
-						allowedTypes={['image']}
-						mode="upload"
-						render={({ open }) => (
-							<Button
-								className="btn-upload"
-								onClick={open}
-								noBorder={true}
-							>
-								{labelUploadImage}
-							</Button>
-						)}
-					/>
-				</div>
-			)}
-		</div>
+				{value && (
+					<div className={controlInnerClassNames('action-btns')}>
+						<MediaUploader
+							onSelect={(image) => {
+								setValue(image?.url);
+							}}
+							allowedTypes={['image']}
+							mode="browse"
+							render={({ open }) => (
+								<Button
+									className="btn-media-library"
+									noBorder={true}
+									onClick={open}
+								>
+									{labelMediaLibrary}
+								</Button>
+							)}
+						/>
+
+						<MediaUploader
+							onSelect={(image) => {
+								setValue(image?.url);
+							}}
+							allowedTypes={['image']}
+							mode="upload"
+							render={({ open }) => (
+								<Button
+									className="btn-upload"
+									onClick={open}
+									noBorder={true}
+								>
+									{labelUploadImage}
+								</Button>
+							)}
+						/>
+					</div>
+				)}
+			</div>
+		</Field>
 	);
 }
 
 MediaImageControl.propTypes = {
-	/**
-	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
-	 */
-	defaultValue: PropTypes.string,
-	/**
-	 * The current value.
-	 */
-	value: PropTypes.string,
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
 	/**
 	 * Label for choose button while the image control is empty
 	 */
@@ -143,9 +144,37 @@ MediaImageControl.propTypes = {
 	 * The `Upload Image` button label.
 	 */
 	labelUploadImage: PropTypes.string,
+	/**
+	 * Label for field. If you pass empty value the field will not be added and simple control will be rendered
+	 *
+	 * @default ""
+	 */
+	label: PropTypes.string,
+	/**
+	 * Field id for passing into child Field component
+	 *
+	 * @default "toggle-select"
+	 */
+	field: PropTypes.string,
+	/**
+	 * Columns setting for Field grid.
+	 *
+	 * @default "columns-2"
+	 */
+	columns: PropTypes.string,
+	/**
+	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
+	 */
+	defaultValue: PropTypes.string,
+	/**
+	 * Function that will be fired while the control value state changes.
+	 */
+	onChange: PropTypes.func,
 };
 
 MediaImageControl.defaultProps = {
+	label: '',
+	field: 'media-image',
 	defaultValue: '',
 	labelChoose: __('Choose Image…', 'publisher-core'),
 	labelMediaLibrary: __('Media Library', 'publisher-core'),
