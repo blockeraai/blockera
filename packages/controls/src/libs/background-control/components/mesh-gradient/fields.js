@@ -4,10 +4,6 @@
 import { memo, useContext } from '@wordpress/element';
 
 /**
- * Publisher dependencies
- */
-
-/**
  * Internal dependencies
  */
 import { RepeaterContext } from '../../../repeater-control/context';
@@ -19,13 +15,16 @@ const Fields = ({ itemId, item }) => {
 		controlInfo: { name: controlId },
 		dispatch: { changeRepeaterItem },
 	} = useControlContext();
-	const { repeaterId } = useContext(RepeaterContext);
+
+	const { repeaterId, getControlId } = useContext(RepeaterContext);
 
 	return (
 		<div id={`repeater-item-${itemId}`}>
 			<ColorPickerControl
+				label=""
+				field="empty"
 				isPopover={false}
-				value={item.color}
+				id={getControlId(itemId, 'color')}
 				onChange={(newValue) => {
 					changeRepeaterItem({
 						controlId,

@@ -48,6 +48,7 @@ export default function BackgroundControl({
 
 			if (item?.type !== 'linear-gradient') {
 				delete item['linear-gradient'];
+				delete item['linear-gradient-angel'];
 				delete item['linear-gradient-repeat'];
 				delete item['linear-gradient-attachment'];
 			}
@@ -113,6 +114,7 @@ BackgroundControl.propTypes = {
 		'image-repeat': PropTypes.string,
 		'image-attachment': PropTypes.string,
 		'linear-gradient': PropTypes.string,
+		'linear-gradient-angel': PropTypes.string,
 		'linear-gradient-repeat': PropTypes.string,
 		'linear-gradient-attachment': PropTypes.string,
 		'radial-gradient': PropTypes.string,
@@ -149,6 +151,7 @@ BackgroundControl.defaultProps = {
 		'image-repeat': 'repeat',
 		'image-attachment': 'scroll',
 		'linear-gradient': 'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
+		'linear-gradient-angel': '90',
 		'linear-gradient-repeat': 'no-repeat',
 		'linear-gradient-attachment': 'scroll',
 		'radial-gradient':
