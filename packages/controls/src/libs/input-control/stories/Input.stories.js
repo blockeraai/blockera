@@ -749,7 +749,7 @@ export const PlayUnits = {
 };
 PlayUnits.storyName = 'Play → Units';
 
-export const Screenshot = {
+export const All = {
 	args: {
 		defaultValue: '10px',
 		value: '20px',
