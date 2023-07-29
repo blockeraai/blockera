@@ -1,9 +1,9 @@
 /**
  * External dependencies
  */
-import { useContext } from '@wordpress/element';
 import { userEvent, waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
+import { nanoid } from 'nanoid';
 
 /**
  * Publisher dependencies
@@ -15,13 +15,12 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  * Internal dependencies
  */
 import { CheckboxControl } from '../../index';
+import { ControlContextProvider } from '../../../context';
+import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 
-const {
-	WithInspectorStyles,
-	StoryDataContext,
-	WithStoryContextProvider,
-	SharedDecorators,
-} = Decorators;
+const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
+	Decorators;
 
 export default {
 	title: 'Controls/CheckboxControl',
@@ -35,48 +34,100 @@ export const Default = {
 		label: 'Checkbox',
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
-};
-
-export const States = {
-	args: {
-		label: 'test',
-		value: false,
-	},
-	decorators: [WithInspectorStyles, ...SharedDecorators],
-	render: () => {
+	render: (args) => {
 		return (
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Checkbox</h2>
-				<CheckboxControl label="Not Checked" value={false} />
-				<CheckboxControl label="Checked" value={true} />
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: args.value,
+					}}
+				>
+					<ControlWithHooks
+						Control={CheckboxControl}
+						checkboxLabel="Not Checked"
+					/>
+				</ControlContextProvider>
 			</Flex>
 		);
 	},
 };
 
-const ControlWithHooks = (args) => {
-	const { storyValue, setStoryValue } = useContext(StoryDataContext);
+export const States = {
+	args: {},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: () => {
+		return (
+			<Flex direction="column" gap="20px">
+				<h2 className="story-heading">Checkbox</h2>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: false,
+					}}
+				>
+					<ControlWithHooks
+						Control={CheckboxControl}
+						checkboxLabel="Not Checked"
+					/>
+				</ControlContextProvider>
 
-	return (
-		<CheckboxControl
-			{...args}
-			onChange={setStoryValue}
-			value={storyValue}
-		/>
-	);
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: true,
+					}}
+				>
+					<ControlWithHooks
+						Control={CheckboxControl}
+						checkboxLabel="Checked"
+					/>
+				</ControlContextProvider>
+			</Flex>
+		);
+	},
+};
+
+export const Field = {
+	args: {
+		value: true,
+		label: 'Enable',
+		checkboxLabel: 'Feature Name',
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">With Field</h2>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: args.value,
+					}}
+				>
+					<ControlWithHooks Control={CheckboxControl} {...args} />
+				</ControlContextProvider>
+			</Flex>
+		);
+	},
 };
 
 export const Play = {
 	args: {
-		label: '',
-		value: false,
+		checkboxLabel: 'Checkbox',
+		controlInfo: {
+			name: nanoid(),
+			value: false,
+		},
 	},
 	decorators: [
 		WithStoryContextProvider,
 		WithInspectorStyles,
+		WithControlDataProvider,
 		...SharedDecorators,
 	],
-	render: (args) => <ControlWithHooks {...args} />,
+	render: (args) => <ControlWithHooks Control={CheckboxControl} {...args} />,
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 		const currentValue = canvas.getByTestId('current-value');
@@ -105,11 +156,15 @@ export const Play = {
 	},
 };
 
-export const Screenshot = {
+export const All = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: () => (
 		<Flex direction="column" gap="50px">
+			<Default.render {...Default.args} />
+
 			<States.render {...States.args} />
+
+			<Field.render {...Field.args} />
 		</Flex>
 	),
 };
