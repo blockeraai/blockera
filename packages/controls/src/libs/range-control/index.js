@@ -8,6 +8,7 @@ import { RangeControl as WordPressRangeControl } from '@wordpress/components';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
+import { Field } from '@publisher/fields';
 
 /**
  * Internal dependencies
@@ -19,10 +20,15 @@ export default function RangeControl({
 	max,
 	initialPosition,
 	withInputField,
+	className,
+	//
 	id,
+	label,
+	columns,
 	defaultValue,
 	onChange,
-	className,
+	field,
+	//
 }) {
 	const { value, setValue } = useControlContext({
 		id,
@@ -31,20 +37,45 @@ export default function RangeControl({
 	});
 
 	return (
-		<WordPressRangeControl
-			min={min}
-			max={max}
-			initialPosition={initialPosition}
-			value={value}
-			onChange={setValue}
-			className={controlClassNames('range', className)}
-			withInputField={withInputField}
-			__nextHasNoMarginBottom={false}
-		/>
+		<Field
+			label={label}
+			field={field}
+			columns={columns}
+			className={className}
+		>
+			<WordPressRangeControl
+				min={min}
+				max={max}
+				initialPosition={initialPosition}
+				value={value}
+				onChange={setValue}
+				className={controlClassNames('range', className)}
+				withInputField={withInputField}
+				__nextHasNoMarginBottom={false}
+			/>
+		</Field>
 	);
 }
 
 RangeControl.propTypes = {
+	/**
+	 * Label for field. If you pass empty value the field will not be added and simple control will be rendered
+	 *
+	 * @default ""
+	 */
+	label: PropTypes.string,
+	/**
+	 * Field id for passing into child Field component
+	 *
+	 * @default "toggle-select"
+	 */
+	field: PropTypes.string,
+	/**
+	 * Columns setting for Field grid.
+	 *
+	 * @default "columns-2"
+	 */
+	columns: PropTypes.string,
 	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
@@ -77,4 +108,5 @@ RangeControl.propTypes = {
 
 RangeControl.defaultProps = {
 	withInputField: true,
+	field: 'range',
 };
