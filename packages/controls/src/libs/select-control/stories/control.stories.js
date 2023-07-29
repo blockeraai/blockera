@@ -2,7 +2,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useContext } from '@wordpress/element';
 import { expect } from '@storybook/jest';
 import {
 	within,
@@ -10,6 +9,7 @@ import {
 	fireEvent,
 	userEvent,
 } from '@storybook/testing-library';
+import { nanoid } from 'nanoid';
 
 /**
  * Publisher dependencies
@@ -20,16 +20,14 @@ import { Flex } from '@publisher/components';
 /**
  * Internal dependencies
  */
-import { default as SelectControl } from '../index';
 import { default as InheritIcon } from './icons/inherit';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
+import { ControlContextProvider, SelectControl } from '../../../index';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
+import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
 
-const {
-	WithInspectorStyles,
-	StoryDataContext,
-	WithStoryContextProvider,
-	SharedDecorators,
-} = Decorators;
+const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
+	Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
 
@@ -102,23 +100,80 @@ export const NativeSelect = {
 		options: selectOptions,
 		value: 'all',
 	},
-	decorators: [WithInspectorStyles, ...SharedDecorators],
+	decorators: [
+		WithInspectorStyles,
+		WithControlDataProvider,
+		...SharedDecorators,
+	],
 	render: (args) => {
 		return (
 			<Flex direction="column" gap="30px">
 				<Flex direction="column" gap="15px">
-					<h2 className="story-heading">Native → Normal</h2>
-					<SelectControl {...args} />
+					<h2 className="story-heading">
+						Native<span>Normal</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: args.value,
+						}}
+					>
+						<ControlWithHooks Control={SelectControl} {...args} />
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex direction="column" gap="15px">
-					<h2 className="story-heading">Native → Hover</h2>
-					<SelectControl {...args} className="is-hovered" />
+					<h2 className="story-heading">
+						Native<span>Hover</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: args.value,
+						}}
+					>
+						<ControlWithHooks
+							Control={SelectControl}
+							{...args}
+							className="is-hovered"
+						/>
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex direction="column" gap="15px">
-					<h2 className="story-heading">Native → Focus</h2>
-					<SelectControl {...args} className="is-focused" />
+					<h2 className="story-heading">
+						Native<span>Focus</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: args.value,
+						}}
+					>
+						<ControlWithHooks
+							Control={SelectControl}
+							{...args}
+							className="is-focused"
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">
+						Native<span>With Field</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: args.value,
+						}}
+					>
+						<ControlWithHooks
+							Control={SelectControl}
+							{...args}
+							label="Field"
+						/>
+					</ControlContextProvider>
 				</Flex>
 			</Flex>
 		);
@@ -131,84 +186,211 @@ export const CustomSelect = {
 		options: selectOptions,
 		value: 'all',
 	},
-	decorators: [WithInspectorStyles, ...SharedDecorators],
+	decorators: [
+		WithInspectorStyles,
+		WithControlDataProvider,
+		...SharedDecorators,
+	],
 	render: (args) => {
 		return (
-			<Flex direction="column" gap="30px">
-				<Flex direction="column" gap="15px">
-					<h2 className="story-heading">Custom → Normal</h2>
-					<SelectControl {...args} />
-				</Flex>
-
-				<Flex direction="column" gap="15px">
-					<h2 className="story-heading">Custom → Hover</h2>
-					<SelectControl {...args} className="is-hovered" />
-				</Flex>
-
-				<Flex direction="column" gap="15px">
-					<h2 className="story-heading">Custom → Focus</h2>
-					<SelectControl {...args} className="is-focused" />
-				</Flex>
-
-				<Flex direction="column" gap="15px">
-					<h2 className="story-heading">Custom → noBorder</h2>
-					<SelectControl {...args} noBorder={true} />
-				</Flex>
-
-				<Flex direction="column" gap="15px">
-					<h2 className="story-heading">Custom → noBorder → Focus</h2>
-					<SelectControl
-						{...args}
-						noBorder={true}
-						className="is-focused"
-					/>
-				</Flex>
-
-				<Flex direction="column" gap="15px">
+			<Flex direction="column" gap="50px">
+				<Flex direction="column" gap="20px">
 					<h2 className="story-heading">
-						Custom → Menu Position Top
+						Custom<span>Normal</span>
 					</h2>
-					<SelectControl {...args} customMenuPosition="top" />
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: args.value,
+						}}
+					>
+						<ControlWithHooks Control={SelectControl} {...args} />
+					</ControlContextProvider>
 				</Flex>
 
-				<Flex direction="column" gap="15px">
+				<Flex direction="column" gap="20px">
 					<h2 className="story-heading">
-						Custom → customHideInputIcon
+						Custom<span>Hover</span>
 					</h2>
-					<SelectControl {...args} customHideInputIcon={true} />
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: args.value,
+						}}
+					>
+						<ControlWithHooks
+							Control={SelectControl}
+							{...args}
+							className="is-hovered"
+						/>
+					</ControlContextProvider>
 				</Flex>
 
-				<Flex direction="column" gap="15px">
+				<Flex direction="column" gap="20px">
 					<h2 className="story-heading">
-						Custom → customHideInputLabel
+						Custom<span>Focus</span>
 					</h2>
-					<SelectControl {...args} customHideInputLabel={true} />
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: args.value,
+						}}
+					>
+						<ControlWithHooks
+							Control={SelectControl}
+							{...args}
+							className="is-focused"
+						/>
+					</ControlContextProvider>
 				</Flex>
 
-				<Flex direction="column" gap="15px">
+				<Flex direction="column" gap="20px">
 					<h2 className="story-heading">
-						Custom → customHideInputCaret
+						Custom<span>noBorder</span>
 					</h2>
-					<SelectControl {...args} customHideInputCaret={true} />
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: args.value,
+						}}
+					>
+						<ControlWithHooks
+							Control={SelectControl}
+							{...args}
+							noBorder={true}
+						/>
+					</ControlContextProvider>
 				</Flex>
 
-				<Flex direction="column" gap="15px">
+				<Flex direction="column" gap="20px">
 					<h2 className="story-heading">
-						Custom → customInputCenterContent
+						Custom<span>noBorder → Focus</span>
 					</h2>
-					<SelectControl {...args} customInputCenterContent={true} />
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: args.value,
+						}}
+					>
+						<ControlWithHooks
+							Control={SelectControl}
+							{...args}
+							noBorder={true}
+							className="is-focused"
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Custom<span>Menu Position Top</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: args.value,
+						}}
+					>
+						<ControlWithHooks
+							Control={SelectControl}
+							{...args}
+							customMenuPosition="top"
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Custom<span>customHideInputIcon</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: args.value,
+						}}
+					>
+						<ControlWithHooks
+							Control={SelectControl}
+							{...args}
+							customHideInputIcon={true}
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Custom<span>customHideInputLabel</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: args.value,
+						}}
+					>
+						<ControlWithHooks
+							Control={SelectControl}
+							{...args}
+							customHideInputLabel={true}
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Custom<span>customHideInputCaret</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: args.value,
+						}}
+					>
+						<ControlWithHooks
+							Control={SelectControl}
+							{...args}
+							customHideInputCaret={true}
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Custom<span>customInputCenterContent</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: args.value,
+						}}
+					>
+						<ControlWithHooks
+							Control={SelectControl}
+							{...args}
+							customInputCenterContent={true}
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Custom<span>With Field</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: args.value,
+						}}
+					>
+						<ControlWithHooks
+							Control={SelectControl}
+							{...args}
+							label="Field"
+						/>
+					</ControlContextProvider>
 				</Flex>
 			</Flex>
 		);
 	},
-};
-
-const NativeControlWithHooks = (args) => {
-	const { storyValue, setStoryValue } = useContext(StoryDataContext);
-
-	return (
-		<SelectControl {...args} onChange={setStoryValue} value={storyValue} />
-	);
 };
 
 export const PlayNative = {
@@ -220,12 +402,10 @@ export const PlayNative = {
 	decorators: [
 		WithStoryContextProvider,
 		WithInspectorStyles,
+		WithControlDataProvider,
 		...SharedDecorators,
 	],
-	parameters: {
-		// jest: ['utils.spec.js'],
-	},
-	render: (args) => <NativeControlWithHooks {...args} />,
+	render: (args) => <ControlWithHooks Control={SelectControl} {...args} />,
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
 		const selectControl = canvas.getByRole('combobox');
@@ -234,28 +414,30 @@ export const PlayNative = {
 		await expect(currentValue).toBeInTheDocument();
 		await expect(selectControl).toBeInTheDocument();
 
-		await expect(currentValue).toHaveTextContent('all');
-		await expect(selectControl).toHaveValue('all');
+		await waitFor(
+			async () => await expect(currentValue).toHaveTextContent('all'),
+			{ timeout }
+		);
+		await waitFor(
+			async () => await expect(selectControl).toHaveValue('all'),
+			{ timeout }
+		);
 
 		fireEvent.change(selectControl, {
 			target: { value: 'opacity' },
 		});
 
-		await expect(selectControl).toHaveValue('opacity');
+		await waitFor(
+			async () => await expect(selectControl).toHaveValue('opacity'),
+			{ timeout }
+		);
 		await waitFor(
 			async () => await expect(currentValue).toHaveTextContent('opacity'),
 			{ timeout }
 		);
 	},
 };
-
-const CustomControlWithHooks = (args) => {
-	const { storyValue, setStoryValue } = useContext(StoryDataContext);
-
-	return (
-		<SelectControl {...args} onChange={setStoryValue} value={storyValue} />
-	);
-};
+PlayNative.storyName = 'Play → Native';
 
 export const PlayCustom = {
 	args: {
@@ -266,12 +448,10 @@ export const PlayCustom = {
 	decorators: [
 		WithStoryContextProvider,
 		WithInspectorStyles,
+		WithControlDataProvider,
 		...SharedDecorators,
 	],
-	parameters: {
-		// jest: ['utils.spec.js'],
-	},
-	render: (args) => <CustomControlWithHooks {...args} />,
+	render: (args) => <ControlWithHooks Control={SelectControl} {...args} />,
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
 		const selectControl = canvas.getByRole('button');
@@ -300,8 +480,9 @@ export const PlayCustom = {
 		);
 	},
 };
+PlayCustom.storyName = 'Play → Custom';
 
-export const Screenshot = {
+export const All = {
 	args: {},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: () => {
