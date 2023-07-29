@@ -11,7 +11,7 @@ import { controlClassNames } from '@publisher/classnames';
 export default function LabelControl({
 	label,
 	className,
-	ariaLabel = '',
+	ariaLabel,
 	...props
 }) {
 	return (
