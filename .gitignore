@@ -49,3 +49,4 @@ node_modules/
 dist
 dist
 .phpunit.result.cache
+.wp-env.json
