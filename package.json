@@ -185,7 +185,12 @@
 		"storybook:build": "storybook build",
 		"storybook:test": "test-storybook",
 		"storybook:test:start": "test-storybook --watch",
-		"icons:indexing": "node packages/components/bin/icons/index.js search.json"
+		"icons:indexing": "node packages/components/bin/icons/index.js search.json",
+		"env": "wp-env",
+		"env:stop": "npm run env stop",
+		"env:start": "npm run env start --xdebug",
+		"env:reset": "npm run env:start --update --xdebug",
+		"env:tests-cli:bash": "npm run env run tests-cli bash"
 	},
 	"lint-staged": {
 		"*.{js,json,ts,tsx,yml,yaml}": [
