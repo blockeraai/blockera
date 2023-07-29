@@ -11,7 +11,8 @@ import { GroupControl } from '../../index';
 import { default as AccordionCustomOpenIcon } from './icons/accordion-custom-open-icon';
 import { default as AccordionCustomCloseIcon } from './icons/accordion-custom-close-icon';
 
-const { WithInspectorStyles, SharedDecorators } = Decorators;
+const { WithInspectorStyles, SharedDecorators, WithPopoverDataProvider } =
+	Decorators;
 
 export default {
 	title: 'Controls/GroupControl',
@@ -104,7 +105,11 @@ export const Popover = {
 		...Default.args,
 		mode: 'popover',
 	},
-	decorators: [WithInspectorStyles, ...SharedDecorators],
+	decorators: [
+		WithInspectorStyles,
+		WithPopoverDataProvider,
+		...SharedDecorators,
+	],
 	render: (args) => {
 		return (
 			<Flex direction="column" gap="100px">
@@ -171,7 +176,11 @@ export const Popover = {
 };
 
 export const Screenshot = {
-	decorators: [WithInspectorStyles, ...SharedDecorators],
+	decorators: [
+		WithInspectorStyles,
+		WithPopoverDataProvider,
+		...SharedDecorators,
+	],
 	render: () => (
 		<Flex direction="column" gap="150px">
 			<Accordion.render {...Accordion.args} />
