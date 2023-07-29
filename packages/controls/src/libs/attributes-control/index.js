@@ -49,10 +49,6 @@ AttributesControl.propTypes = {
 	 */
 	defaultValue: PropTypes.array,
 	/**
-	 * The current value.
-	 */
-	value: PropTypes.array,
-	/**
 	 * Function that will be fired while the control value state changes.
 	 */
 	onChange: PropTypes.func,
@@ -61,6 +57,7 @@ AttributesControl.propTypes = {
 	 */
 	defaultRepeaterItemValue: PropTypes.shape({
 		key: PropTypes.string,
+		__key: PropTypes.string,
 		value: PropTypes.string,
 		isVisible: PropTypes.bool,
 	}),
@@ -72,9 +69,10 @@ AttributesControl.propTypes = {
 
 AttributesControl.defaultProps = {
 	attributeElement: 'general',
-	value: [],
+	defaultValue: [],
 	defaultRepeaterItemValue: {
 		key: '',
+		__key: '',
 		value: '',
 		isVisible: true,
 	},
