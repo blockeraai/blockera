@@ -29,7 +29,7 @@ export function getAttributeFieldKeyOptions({ element = '' }) {
 				},
 				{
 					label: __('Custom Attribute', 'publisher-core'),
-					value: 'customKey',
+					value: 'custom',
 				},
 				{
 					type: 'optgroup',
@@ -63,7 +63,7 @@ export function getAttributeFieldKeyOptions({ element = '' }) {
 				},
 				{
 					label: __('Custom Attribute', 'publisher-core'),
-					value: 'customKey',
+					value: 'custom',
 				},
 				{
 					type: 'optgroup',
@@ -85,7 +85,7 @@ export function getAttributeFieldKeyOptions({ element = '' }) {
 				},
 				{
 					label: __('Custom Attribute', 'publisher-core'),
-					value: 'customKey',
+					value: 'custom',
 				},
 				{
 					type: 'optgroup',

@@ -5,11 +5,6 @@ import { __ } from '@wordpress/i18n';
 import { memo, useContext, useState } from '@wordpress/element';
 
 /**
- * Publisher dependencies
- */
-import { InputField, SelectField } from '@publisher/fields';
-
-/**
  * Internal dependencies
  */
 import { RepeaterContext } from '../../repeater-control/context';
@@ -17,17 +12,22 @@ import {
 	getAttributeFieldValueOptions,
 	getAttributeFieldKeyOptions,
 } from '../utils';
+import { useControlContext } from '../../../context';
+import { InputControl, SelectControl } from '../../index';
 
 const Fields = ({ itemId, item }) => {
-	const { changeItem, customProps } = useContext(RepeaterContext);
+	const {
+		controlInfo: { name: controlId },
+		dispatch: { changeRepeaterItem },
+	} = useControlContext();
 
-	const [currentKey, setCurrentKey] = useState(item.key);
-	const [currentValue, setCurrentValue] = useState(item.value);
+	const { repeaterId, getControlId, customProps } =
+		useContext(RepeaterContext);
 
 	const [valueFieldOptions, setValueFieldOptions] = useState(
 		getAttributeFieldValueOptions({
 			element: customProps.attributeElement,
-			attribute: currentKey,
+			attribute: item.key,
 		})
 	);
 
@@ -41,24 +41,22 @@ const Fields = ({ itemId, item }) => {
 
 	// disable customProps mode if current key is inside key select field options
 	function checkInitCustomMode() {
-		if (currentKey !== '') {
+		if (item.key !== '') {
 			if (keyFieldOptions.length)
 				for (const option in keyFieldOptions) {
 					if (keyFieldOptions[option]?.options) {
 						for (const _option in keyFieldOptions[option].options) {
 							if (
 								keyFieldOptions[option].options[_option]
-									.value === currentKey
+									.value === item.key
 							) {
 								return false;
 							}
 						}
-					} else if (keyFieldOptions[option]?.value === currentKey) {
+					} else if (keyFieldOptions[option]?.value === item.key) {
 						return false;
 					}
 				}
-		} else {
-			return true;
 		}
 
 		return true;
@@ -68,23 +66,26 @@ const Fields = ({ itemId, item }) => {
 		<div id={`repeater-item-${itemId}`}>
 			{keyFieldOptions.length > 0 && (
 				<>
-					<SelectField
+					<SelectControl
 						label={__('Attribute', 'publisher-core')}
 						options={keyFieldOptions}
-						// type="customProps"
-						value={customMode ? 'customKey' : currentKey}
+						id={getControlId(itemId, '__key')}
 						defaultValue=""
 						onChange={(newValue) => {
 							// update key
-							if (newValue !== '' && newValue !== 'customKey') {
-								changeItem(itemId, {
-									...item,
-									key: newValue,
-									value: '',
+							if (newValue !== '' && newValue !== 'custom') {
+								changeRepeaterItem({
+									controlId,
+									repeaterId,
+									itemId,
+									value: {
+										...item,
+										__key: newValue,
+										key: newValue,
+										value: '', // clear value to prevent issue
+									},
 								});
 
-								setCurrentKey(newValue);
-								setCurrentValue('');
 								setCustomMode(false);
 
 								setValueFieldOptions(
@@ -97,65 +98,80 @@ const Fields = ({ itemId, item }) => {
 
 							if (newValue === '') {
 								setValueFieldOptions([]);
-								setCurrentKey('');
+
 								setCustomMode(false);
-								setCurrentValue('');
-								changeItem(itemId, {
-									...item,
-									key: newValue,
-									value: newValue,
+
+								changeRepeaterItem({
+									controlId,
+									repeaterId,
+									itemId,
+									value: {
+										...item,
+										__key: '',
+										key: '',
+										value: '',
+									},
 								});
-							} else if (newValue === 'customKey') {
+							} else if (newValue === 'custom') {
 								setValueFieldOptions([]);
+
 								setCustomMode(true);
-								setCurrentKey('');
-								setCurrentValue('');
-								changeItem(itemId, {
-									...item,
-									key: '',
-									value: '',
+
+								changeRepeaterItem({
+									controlId,
+									repeaterId,
+									itemId,
+									value: {
+										...item,
+										__key: newValue,
+										key: '',
+										value: '',
+									},
 								});
 							}
 						}}
 					/>
+
 					{!customMode && (
 						<>
-							{valueFieldOptions.length ? (
-								<SelectField
+							{item.key !== '' && valueFieldOptions.length ? (
+								<SelectControl
 									label={__('Value', 'publisher-core')}
 									options={valueFieldOptions}
-									// type="customProps"
-									value={currentValue}
+									id={getControlId(itemId, 'value')}
 									defaultValue=""
 									onChange={(newValue) => {
-										setCurrentValue(newValue);
-										changeItem(itemId, {
-											...item,
-											key: currentKey,
-											value: newValue,
+										changeRepeaterItem({
+											controlId,
+											repeaterId,
+											itemId,
+											value: {
+												...item,
+												value: newValue,
+											},
 										});
 									}}
 								/>
 							) : (
 								<>
-									{currentKey !== '' && (
-										<InputField
+									{item.key !== '' && (
+										<InputControl
 											label={__(
 												'Value',
 												'publisher-core'
 											)}
-											settings={{
-												type: 'text',
-											}}
-											//
+											type="text"
+											id={getControlId(itemId, 'value')}
 											defaultValue=""
-											value={currentValue}
 											onChange={(newValue) => {
-												setCurrentValue(newValue);
-												changeItem(itemId, {
-													...item,
-													key: currentKey,
-													value: newValue,
+												changeRepeaterItem({
+													controlId,
+													repeaterId,
+													itemId,
+													value: {
+														...item,
+														value: newValue,
+													},
 												});
 											}}
 										/>
@@ -169,37 +185,38 @@ const Fields = ({ itemId, item }) => {
 
 			{customMode && (
 				<>
-					<InputField
+					<InputControl
 						label={__('Key', 'publisher-core')}
-						settings={{
-							type: 'text',
-						}}
-						//
+						type="text"
+						id={getControlId(itemId, 'key')}
 						defaultValue=""
-						value={currentKey}
 						onChange={(newValue) => {
-							setCurrentKey(newValue);
-							changeItem(itemId, {
-								...item,
-								key: newValue,
-								value: currentValue,
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: {
+									...item,
+									key: newValue,
+								},
 							});
 						}}
 					/>
-					<InputField
+					<InputControl
 						label={__('Value', 'publisher-core')}
-						settings={{
-							type: 'text',
-						}}
-						//
+						id={getControlId(itemId, 'value')}
+						type="text"
 						defaultValue=""
-						value={currentValue}
 						onChange={(newValue) => {
-							setCurrentValue(newValue);
-							changeItem(itemId, {
-								...item,
-								key: currentKey,
-								value: newValue,
+							// setCurrentValue(newValue);
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: {
+									...item,
+									value: newValue,
+								},
 							});
 						}}
 					/>
