@@ -1,9 +1,9 @@
 /**
  * External dependencies
  */
-import { useContext } from '@wordpress/element';
 import { fireEvent, waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
+import { nanoid } from 'nanoid';
 
 /**
  * Publisher dependencies
@@ -17,15 +17,11 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 import { RangeControl } from '../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
-import { ControlContextProvider, useControlContext } from '../../../context';
-import { nanoid } from 'nanoid';
+import { ControlContextProvider } from '../../../context';
+import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
 
-const {
-	WithInspectorStyles,
-	StoryDataContext,
-	WithStoryContextProvider,
-	SharedDecorators,
-} = Decorators;
+const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
+	Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
 
@@ -40,6 +36,22 @@ export const Default = {
 		value: 0,
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<Flex direction="column" gap="20px">
+				<h2 className="story-heading">Range</h2>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: args.value,
+					}}
+				>
+					<ControlWithHooks Control={RangeControl} />
+				</ControlContextProvider>
+			</Flex>
+		);
+	},
 };
 
 export const States = {
@@ -57,7 +69,7 @@ export const States = {
 						value: 10,
 					}}
 				>
-					<ControlWithHooks {...args} />
+					<ControlWithHooks Control={RangeControl} {...args} />
 				</ControlContextProvider>
 				<ControlContextProvider
 					value={{
@@ -65,7 +77,11 @@ export const States = {
 						value: 30,
 					}}
 				>
-					<ControlWithHooks {...args} withInputField={false} />
+					<ControlWithHooks
+						Control={RangeControl}
+						{...args}
+						withInputField={false}
+					/>
 				</ControlContextProvider>
 				<ControlContextProvider
 					value={{
@@ -73,7 +89,12 @@ export const States = {
 						value: 20,
 					}}
 				>
-					<ControlWithHooks {...args} min={0} max={100} />
+					<ControlWithHooks
+						Control={RangeControl}
+						{...args}
+						min={0}
+						max={100}
+					/>
 				</ControlContextProvider>
 				<ControlContextProvider
 					value={{
@@ -81,35 +102,35 @@ export const States = {
 						value: args.value,
 					}}
 				>
-					<ControlWithHooks {...args} />
+					<ControlWithHooks Control={RangeControl} {...args} />
 				</ControlContextProvider>
 			</Flex>
 		);
 	},
 };
 
-const ControlWithHooks = (args) => {
-	const { storyValue, setStoryValue } = useContext(StoryDataContext);
-	const {
-		controlInfo: { name: controlId },
-		dispatch: { modifyControlValue },
-	} = useControlContext();
+export const Field = {
+	args: {
+		label: 'Time',
+		value: 30,
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<Flex direction="column" gap="20px">
+				<h2 className="story-heading">With Field</h2>
 
-	return (
-		<div data-testid="container">
-			<RangeControl
-				{...args}
-				onChange={(newValue) => {
-					setStoryValue(newValue);
-					modifyControlValue({
-						controlId,
-						value: newValue,
-					});
-				}}
-				value={storyValue}
-			/>
-		</div>
-	);
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: args.value,
+					}}
+				>
+					<ControlWithHooks Control={RangeControl} {...args} />
+				</ControlContextProvider>
+			</Flex>
+		);
+	},
 };
 
 export const Play = {
@@ -122,7 +143,7 @@ export const Play = {
 		WithControlDataProvider,
 		...SharedDecorators,
 	],
-	render: (args) => <ControlWithHooks {...args} />,
+	render: (args) => <ControlWithHooks Control={RangeControl} {...args} />,
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 		const currentValue = canvas.getByTestId('current-value');
@@ -145,11 +166,13 @@ export const Play = {
 	},
 };
 
-export const Screenshot = {
+export const All = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: () => (
 		<Flex direction="column" gap="50px">
 			<States.render {...States.args} />
+
+			<Field.render {...Field.args} />
 		</Flex>
 	),
 };
