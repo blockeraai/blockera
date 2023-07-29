@@ -130,7 +130,7 @@ export const Multiple = {
 	},
 };
 
-export const Screenshot = {
+export const All = {
 	args: {},
 	decorators: [WithPopoverDataProvider, ...SharedDecorators],
 	render: () => (
