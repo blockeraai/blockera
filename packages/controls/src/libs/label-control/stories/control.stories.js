@@ -34,7 +34,7 @@ export const Simple = {
 	],
 };
 
-export const Screenshot = {
+export const All = {
 	args: {},
 	decorators: [
 		WithInspectorStyles,
