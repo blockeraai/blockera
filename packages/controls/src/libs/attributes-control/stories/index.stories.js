@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import { useContext } from '@wordpress/element';
 import { expect } from '@storybook/jest';
 import {
 	fireEvent,
@@ -9,6 +8,7 @@ import {
 	waitFor,
 	within,
 } from '@storybook/testing-library';
+import { nanoid } from 'nanoid';
 
 /**
  * Publisher dependencies
@@ -20,13 +20,16 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  * Internal dependencies
  */
 import { AttributesControl } from '../../index';
+import { STORE_NAME } from '../../repeater-control/store';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/decorators/with-playground-styles';
+import { ControlContextProvider } from '../../../context';
+import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
 
-const {
-	WithInspectorStyles,
-	StoryDataContext,
-	WithStoryContextProvider,
-	SharedDecorators,
-} = Decorators;
+const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
+	Decorators;
+SharedDecorators.push(WithPlaygroundStyles);
+SharedDecorators.push(WithControlDataProvider);
 
 export default {
 	title: 'Controls/AttributesControl',
@@ -37,6 +40,11 @@ export default {
 export const Empty = {
 	args: {
 		label: 'Attributes',
+		controlInfo: {
+			name: nanoid(),
+			value: [],
+		},
+		storeName: STORE_NAME,
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
@@ -49,200 +57,206 @@ export const Filled = {
 	render: (args) => {
 		return (
 			<Flex direction="column" gap="50px">
-				<Flex direction="column" gap="15px">
+				<Flex
+					direction="column"
+					gap="15px"
+					style={{ marginBottom: '150px' }}
+				>
 					<h2 className="story-heading">
 						Attributes<span>General</span>
 					</h2>
-					<AttributesControl
-						{...args}
-						label="Attributes"
-						value={[
-							{
-								key: 'data-test',
-								value: '#test',
-								isVisible: true,
-							},
-							{
-								key: 'aria-label',
-								value: '#label',
-								isVisible: true,
-							},
-							{
-								key: 'lang',
-								value: '#lang',
-								isVisible: true,
-							},
-							{
-								key: 'required',
-								value: '#required',
-								isVisible: true,
-							},
-							{
-								key: 'custom',
-								value: '#custom',
-								isVisible: true,
-							},
-						]}
-					/>
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									key: 'data-test',
+									__key: 'data-test',
+									value: '#test',
+									isVisible: true,
+									isOpen: true,
+								},
+								{
+									key: 'aria-label',
+									__key: 'aria-label',
+									value: '#label',
+									isVisible: true,
+								},
+								{
+									key: 'lang',
+									__key: 'lang',
+									value: '#lang',
+									isVisible: true,
+								},
+								{
+									key: 'required',
+									__key: 'required',
+									value: '#required',
+									isVisible: true,
+								},
+								{
+									key: 'custom',
+									__key: 'custom',
+									value: '#custom',
+									isVisible: true,
+									isOpen: true,
+								},
+							],
+						}}
+					>
+						<AttributesControl {...args} label="Attributes" />
+					</ControlContextProvider>
 				</Flex>
 
-				<Flex direction="column" gap="15px">
+				<Flex
+					direction="column"
+					gap="15px"
+					style={{ marginBottom: '150px' }}
+				>
 					<h2 className="story-heading">
 						Attributes<span>A Tag</span>
 					</h2>
-					<AttributesControl
-						{...args}
-						label="Attributes"
-						attributeElement="a"
-						value={[
-							{ key: 'rel', value: 'nofollow', isVisible: true },
-							{
-								key: 'target',
-								value: '_blank',
-								isVisible: true,
-							},
-							{
-								key: 'hreflang',
-								value: '#hreflang',
-								isVisible: true,
-							},
-							{
-								key: 'referrerpolicy',
-								value: 'no-referrer',
-								isVisible: true,
-							},
-						]}
-					/>
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									key: 'rel',
+									__key: 'rel',
+									value: 'nofollow',
+									isVisible: true,
+									isOpen: true,
+								},
+								{
+									key: 'target',
+									__key: 'target',
+									value: '_blank',
+									isVisible: true,
+								},
+								{
+									key: 'hreflang',
+									__key: 'hreflang',
+									value: '#hreflang',
+									isVisible: true,
+								},
+								{
+									key: 'referrerpolicy',
+									__key: 'referrerpolicy',
+									value: 'no-referrer',
+									isVisible: true,
+								},
+								{
+									key: 'test',
+									__key: 'custom',
+									value: 'test-value',
+									isVisible: true,
+									isOpen: true,
+								},
+							],
+						}}
+					>
+						<AttributesControl
+							{...args}
+							label="Attributes"
+							attributeElement="a"
+						/>
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex direction="column" gap="15px">
 					<h2 className="story-heading">
 						Attributes<span>Button Tag</span>
 					</h2>
-					<AttributesControl
-						{...args}
-						label="Attributes"
-						attributeElement="button"
-						value={[
-							{
-								key: 'type',
-								value: '#type',
-								isVisible: true,
-							},
-						]}
-					/>
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									key: 'type',
+									__key: 'type',
+									value: 'button',
+									isVisible: true,
+								},
+								{
+									key: 'test',
+									__key: 'custom',
+									value: '#value',
+									isVisible: true,
+								},
+							],
+						}}
+					>
+						<AttributesControl
+							{...args}
+							label="Attributes"
+							attributeElement="button"
+						/>
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex direction="column" gap="15px">
 					<h2 className="story-heading">
 						Attributes<span>Ol Tag</span>
 					</h2>
-					<AttributesControl
-						{...args}
-						label="Attributes"
-						attributeElement="ol"
-						value={[
-							{
-								key: 'reversed',
-								value: '#reversed',
-								isVisible: true,
-							},
-							{
-								key: 'start',
-								value: '#start',
-								isVisible: true,
-							},
-							{
-								key: 'type',
-								value: '#type',
-								isVisible: true,
-							},
-						]}
-					/>
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									key: 'reversed',
+									__key: 'reversed',
+									value: '#reversed',
+									isVisible: true,
+								},
+								{
+									key: 'start',
+									__key: 'start',
+									value: '#start',
+									isVisible: true,
+								},
+								{
+									key: 'type',
+									__key: 'type',
+									value: '#type',
+									isVisible: true,
+								},
+							],
+						}}
+					>
+						<AttributesControl
+							{...args}
+							label="Attributes"
+							attributeElement="ol"
+						/>
+					</ControlContextProvider>
 				</Flex>
 			</Flex>
 		);
 	},
-};
-
-export const Open = {
-	args: {
-		label: 'Attributes',
-	},
-	decorators: [WithInspectorStyles, ...SharedDecorators],
-	render: (args) => {
-		return (
-			<Flex direction="column" gap="50px">
-				<Flex
-					direction="column"
-					gap="15px"
-					style={{ marginBottom: '150px' }}
-				>
-					<h2 className="story-heading">
-						Open<span>Custom</span>
-					</h2>
-					<AttributesControl
-						{...args}
-						value={[
-							{
-								key: 'custom',
-								value: '#custom',
-								isVisible: true,
-								isOpen: true,
-							},
-						]}
-					/>
-				</Flex>
-
-				<Flex
-					direction="column"
-					gap="15px"
-					style={{ marginBottom: '150px' }}
-				>
-					<h2 className="story-heading">
-						Open<span>A Tag</span>
-					</h2>
-					<AttributesControl
-						{...args}
-						attributeElement="a"
-						value={[
-							{
-								key: 'rel',
-								value: 'nofollow',
-								isVisible: true,
-								isOpen: true,
-							},
-						]}
-					/>
-				</Flex>
-			</Flex>
-		);
-	},
-};
-
-const ControlWithHooks = (args) => {
-	const { storyValue, setStoryValue } = useContext(StoryDataContext);
-
-	return (
-		<AttributesControl
-			{...args}
-			onChange={setStoryValue}
-			value={storyValue}
-		/>
-	);
 };
 
 export const PlayGeneral = {
 	args: {
 		label: 'Attributes',
 		attributeElement: 'general',
+		controlInfo: {
+			name: nanoid(),
+			value: [],
+		},
+		storeName: STORE_NAME,
 	},
 	decorators: [
 		WithStoryContextProvider,
 		WithInspectorStyles,
 		...SharedDecorators,
 	],
-	render: (args) => <ControlWithHooks {...args} />,
+	render: (args) => (
+		<ControlWithHooks Control={AttributesControl} {...args} />
+	),
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 
@@ -251,7 +265,7 @@ export const PlayGeneral = {
 		//
 		await step('Story Data', async () => {
 			await expect(currentValue).toBeInTheDocument();
-			await expect(currentValue).toBeEmptyDOMElement();
+			await expect(currentValue).toHaveTextContent('[]');
 		});
 
 		await step('Click Add Button', async () => {
@@ -261,9 +275,9 @@ export const PlayGeneral = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "key": "", "value": "", "isVisible": true } ]'
+						'[ { "key": "", "__key": "", "value": "", "isVisible": true } ]'
 					),
-				{ timeout: 1000 }
+				{ timeout: 2000 }
 			);
 		});
 
@@ -278,7 +292,7 @@ export const PlayGeneral = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "key": "custom attr", "value": "", "isVisible": true } ]'
+						'[ { "key": "custom attr", "__key": "custom", "value": "", "isVisible": true } ]'
 					),
 				{ timeout: 2000 }
 			);
@@ -287,7 +301,7 @@ export const PlayGeneral = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "key": "custom attr", "value": "attr value", "isVisible": true } ]'
+						'[ { "key": "custom attr", "__key": "custom", "value": "attr value", "isVisible": true } ]'
 					),
 				{ timeout: 2000 }
 			);
@@ -300,13 +314,20 @@ export const PlaySpecial = {
 	args: {
 		label: 'Attributes',
 		attributeElement: 'a',
+		controlInfo: {
+			name: nanoid(),
+			value: [],
+		},
+		storeName: STORE_NAME,
 	},
 	decorators: [
 		WithStoryContextProvider,
 		WithInspectorStyles,
 		...SharedDecorators,
 	],
-	render: (args) => <ControlWithHooks {...args} />,
+	render: (args) => (
+		<ControlWithHooks Control={AttributesControl} {...args} />
+	),
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 
@@ -315,7 +336,7 @@ export const PlaySpecial = {
 		//
 		await step('Story Data', async () => {
 			await expect(currentValue).toBeInTheDocument();
-			await expect(currentValue).toBeEmptyDOMElement();
+			await expect(currentValue).toHaveTextContent('[]');
 		});
 
 		await step('Click Add Button', async () => {
@@ -325,7 +346,7 @@ export const PlaySpecial = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "key": "", "value": "", "isVisible": true } ]'
+						'[ { "key": "",  "__key": "", "value": "", "isVisible": true } ]'
 					),
 				{ timeout: 1000 }
 			);
@@ -345,7 +366,7 @@ export const PlaySpecial = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "key": "rel", "value": "", "isVisible": true } ]'
+						'[ { "key": "rel", "__key": "rel", "value": "", "isVisible": true } ]'
 					),
 				{ timeout: 2000 }
 			);
@@ -361,7 +382,7 @@ export const PlaySpecial = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "key": "rel", "value": "next", "isVisible": true } ]'
+						'[ { "key": "rel", "__key": "rel", "value": "next", "isVisible": true } ]'
 					),
 				{ timeout: 2000 }
 			);
@@ -370,7 +391,7 @@ export const PlaySpecial = {
 };
 PlaySpecial.storyName = 'Play → Special';
 
-export const Screenshot = {
+export const All = {
 	args: {},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: () => (
@@ -381,8 +402,6 @@ export const Screenshot = {
 			</Flex>
 
 			<Filled.render />
-
-			<Open.render />
 		</Flex>
 	),
 };
