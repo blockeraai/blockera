@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import { __ } from '@wordpress/i18n';
 import { useContext, useState } from '@wordpress/element';
 import { Popover as WPPopover } from '@wordpress/components';
 import PropTypes from 'prop-types';
@@ -76,6 +77,7 @@ export default function Popover({
 									onClose();
 								}}
 								tabIndex="-1"
+								aria-label={__('Close Modal', 'publisher-core')}
 							>
 								<CloseIcon />
 							</Button>
