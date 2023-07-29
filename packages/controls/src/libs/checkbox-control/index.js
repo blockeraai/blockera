@@ -8,54 +8,86 @@ import PropTypes from 'prop-types';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { useValue } from '@publisher/utils';
+import { Field } from '@publisher/fields';
+
+/**
+ * Internal dependencies
+ */
+import { useControlContext } from '../../context';
 
 export default function CheckboxControl({
-	defaultValue,
-	value: initialValue,
-	onChange,
-	className,
+	checkboxLabel,
+	//
+	id,
 	label,
+	columns,
+	defaultValue,
+	onChange,
+	field,
+	//
+	className,
 	...props
 }) {
-	const { value, setValue } = useValue({
-		initialValue,
-		defaultValue,
+	const { value, setValue } = useControlContext({
+		id,
 		onChange,
+		defaultValue,
 	});
 
 	return (
-		<WPCheckboxControl
-			className={controlClassNames('checkbox', className)}
-			checked={value}
-			onChange={setValue}
+		<Field
 			label={label}
-			{...props}
-		/>
+			field={field}
+			columns={columns}
+			className={className}
+		>
+			<WPCheckboxControl
+				className={controlClassNames('checkbox', className)}
+				checked={value}
+				onChange={setValue}
+				label={checkboxLabel}
+				{...props}
+			/>
+		</Field>
 	);
 }
 
 CheckboxControl.propTypes = {
 	/**
+	 * Label for checkbox.
+	 *
+	 * @default ""
+	 */
+	checkboxLabel: PropTypes.string,
+	/**
+	 * Label for field. If you pass empty value the field will not be added and simple control will be rendered
+	 *
+	 * @default ""
+	 */
+	label: PropTypes.string,
+	/**
+	 * Field id for passing into child Field component
+	 *
+	 * @default "toggle-select"
+	 */
+	field: PropTypes.string,
+	/**
+	 * Columns setting for Field grid.
+	 *
+	 * @default "columns-2"
+	 */
+	columns: PropTypes.string,
+	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
-	defaultValue: PropTypes.bool,
-	/**
-	 * The current value.
-	 */
-	value: PropTypes.bool,
+	defaultValue: PropTypes.string,
 	/**
 	 * Function that will be fired while the control value state changes.
 	 */
 	onChange: PropTypes.func,
-	/**
-	 * A label for the input field, that appears at the side of the checkbox.
-	 * The prop will be rendered as content a label element. If no prop is
-	 * passed an empty label is rendered.
-	 */
-	label: PropTypes.string,
 };
 
 CheckboxControl.defaultProps = {
 	defaultValue: false,
+	field: 'checkbox',
 };
