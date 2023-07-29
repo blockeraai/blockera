@@ -175,7 +175,7 @@ export const Popover = {
 	},
 };
 
-export const Screenshot = {
+export const All = {
 	decorators: [
 		WithInspectorStyles,
 		WithPopoverDataProvider,
