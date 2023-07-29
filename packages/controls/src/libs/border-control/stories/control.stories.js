@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import { useContext } from '@wordpress/element';
 import {
 	fireEvent,
 	userEvent,
@@ -9,6 +8,7 @@ import {
 	within,
 } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
+import { nanoid } from 'nanoid';
 
 /**
  * Publisher dependencies
@@ -20,13 +20,14 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  * Internal dependencies
  */
 import { BorderControl } from '../../index';
+import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/decorators/with-playground-styles';
+import { ControlContextProvider } from '../../../context';
 
-const {
-	WithInspectorStyles,
-	StoryDataContext,
-	WithStoryContextProvider,
-	SharedDecorators,
-} = Decorators;
+const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
+	Decorators;
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Controls/BorderControl',
@@ -43,6 +44,21 @@ export const Default = {
 		},
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => (
+		<Flex direction="column" gap="30px">
+			<h2 className="story-heading">
+				Border<span>Default</span>
+			</h2>
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks Control={BorderControl} {...args} />
+			</ControlContextProvider>
+		</Flex>
+	),
 };
 
 export const HorizontalBorder = {
@@ -58,21 +74,64 @@ export const HorizontalBorder = {
 	render: (args) => (
 		<Flex direction="column" gap="30px">
 			<h2 className="story-heading">Horizontal Border Control</h2>
-			<BorderControl {...args} />
-			<BorderControl {...args} value={{}} />
-			<BorderControl
-				{...args}
-				value={{ ...args.value, style: 'dashed' }}
-			/>
-			<BorderControl
-				{...args}
-				value={{ ...args.value, style: 'dotted' }}
-			/>
-			<BorderControl
-				{...args}
-				value={{ ...args.value, style: 'double' }}
-			/>
-			<BorderControl {...args} style={{ width: '91px' }} />
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks Control={BorderControl} {...args} />
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: {},
+				}}
+			>
+				<ControlWithHooks Control={BorderControl} {...args} />
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: { ...args.value, style: 'dashed' },
+				}}
+			>
+				<ControlWithHooks Control={BorderControl} {...args} />
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: { ...args.value, style: 'dotted' },
+				}}
+			>
+				<ControlWithHooks Control={BorderControl} {...args} />
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: { ...args.value, style: 'double' },
+				}}
+			>
+				<ControlWithHooks Control={BorderControl} {...args} />
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks
+					Control={BorderControl}
+					{...args}
+					style={{ width: '91px' }}
+				/>
+			</ControlContextProvider>
 		</Flex>
 	),
 };
@@ -90,21 +149,63 @@ export const VerticalBorder = {
 	render: (args) => (
 		<Flex direction="column" gap="30px">
 			<h2 className="story-heading">Vertical Border Control</h2>
-			<BorderControl {...args} />
-			<BorderControl {...args} value={{}} />
-			<BorderControl
-				{...args}
-				value={{ ...args.value, style: 'dashed' }}
-			/>
-			<BorderControl
-				{...args}
-				value={{ ...args.value, style: 'dotted' }}
-			/>
-			<BorderControl
-				{...args}
-				value={{ ...args.value, style: 'double' }}
-			/>
-			<BorderControl {...args} style={{ width: '91px' }} />
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks Control={BorderControl} {...args} />
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: {},
+				}}
+			>
+				<ControlWithHooks Control={BorderControl} {...args} />
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: { ...args.value, style: 'dashed' },
+				}}
+			>
+				<ControlWithHooks Control={BorderControl} {...args} />
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: { ...args.value, style: 'dotted' },
+				}}
+			>
+				<ControlWithHooks Control={BorderControl} {...args} />
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: { ...args.value, style: 'double' },
+				}}
+			>
+				<ControlWithHooks Control={BorderControl} {...args} />
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks
+					Control={BorderControl}
+					{...args}
+					style={{ width: '91px' }}
+				/>
+			</ControlContextProvider>
 		</Flex>
 	),
 };
@@ -121,37 +222,91 @@ export const FocusAndWidthChange = {
 	render: (args) => (
 		<Flex direction="column" gap="30px">
 			<h2 className="story-heading">Focus And Width Change</h2>
-			<BorderControl {...args} __isWidthFocused={true} />
-			<BorderControl
-				{...args}
-				__isWidthFocused={true}
-				style={{ width: '91px' }}
-			/>
-			<BorderControl {...args} __isColorFocused={true} />
-			<BorderControl
-				{...args}
-				__isColorFocused={true}
-				style={{ width: '91px' }}
-			/>
-			<BorderControl {...args} __isStyleFocused={true} />
-			<BorderControl
-				{...args}
-				__isStyleFocused={true}
-				style={{ width: '91px' }}
-			/>
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks
+					Control={BorderControl}
+					{...args}
+					__isWidthFocused={true}
+				/>
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks
+					Control={BorderControl}
+					{...args}
+					__isWidthFocused={true}
+					style={{ width: '91px' }}
+				/>
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks
+					Control={BorderControl}
+					{...args}
+					__isColorFocused={true}
+				/>
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks
+					Control={BorderControl}
+					{...args}
+					__isColorFocused={true}
+					style={{ width: '91px' }}
+				/>
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks
+					Control={BorderControl}
+					{...args}
+					__isStyleFocused={true}
+				/>
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks
+					Control={BorderControl}
+					{...args}
+					__isStyleFocused={true}
+					style={{ width: '91px' }}
+				/>
+			</ControlContextProvider>
 		</Flex>
 	),
 };
 
-const ControlWithHooks = (args) => {
-	const { storyValue, setStoryValue } = useContext(StoryDataContext);
-
-	return (
-		<BorderControl {...args} onChange={setStoryValue} value={storyValue} />
-	);
-};
-
-export const Play = {
+export const Field = {
 	args: {
 		value: {
 			width: '10px',
@@ -159,12 +314,40 @@ export const Play = {
 			color: '#0947eb',
 		},
 	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => (
+		<Flex direction="column" gap="30px">
+			<h2 className="story-heading">With Field</h2>
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks Control={BorderControl} {...args} />
+			</ControlContextProvider>
+		</Flex>
+	),
+};
+
+export const Play = {
+	args: {
+		controlInfo: {
+			name: nanoid(),
+			value: {
+				width: '10px',
+				style: 'solid',
+				color: '#0947eb',
+			},
+		},
+	},
 	decorators: [
 		WithStoryContextProvider,
+		WithControlDataProvider,
 		WithInspectorStyles,
 		...SharedDecorators,
 	],
-	render: (args) => <ControlWithHooks {...args} />,
+	render: (args) => <ControlWithHooks Control={BorderControl} {...args} />,
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 
@@ -180,12 +363,14 @@ export const Play = {
 
 		await step('Input control test', async () => {
 			await expect(numberInput).toBeInTheDocument();
-
 			await expect(numberInput).toHaveValue(10);
 			await expect(currentValue).toHaveTextContent(10);
 
 			fireEvent.change(numberInput, { target: { value: 20 } });
-			await expect(numberInput).toHaveValue(20);
+			await waitFor(
+				async () => await expect(numberInput).toHaveValue(20),
+				{ timeout: 1000 }
+			);
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
@@ -197,33 +382,48 @@ export const Play = {
 
 		await step('Test Color Picker', async () => {
 			await expect(buttons[0]).toBeInTheDocument(); // color
-			// Todo: write color picker tests after fixing the popover bug in Storybook
-		});
 
-		await step('Input control test', async () => {
-			await expect(buttons[1]).toBeInTheDocument(); // custom select
+			await userEvent.click(buttons[0]);
 
-			// change item to dashed
-			await userEvent.click(buttons[1]);
-			await userEvent.click(canvas.getAllByRole('option')[1]);
+			const input = canvas.getAllByRole('textbox')[0];
+
+			// element shown inside popover
+			await expect(input).toBeInTheDocument();
+
+			fireEvent.change(input, { target: { value: '00B703' } });
 			await waitFor(
 				async () =>
-					await expect(currentValue).toHaveTextContent(
-						'"style": "dashed"'
-					),
+					await expect(currentValue).toHaveTextContent('"#00b703"'),
 				{ timeout: 1000 }
 			);
+
+			/// Close Modal
+			await expect(
+				canvas.getByLabelText('Close Modal')
+			).toBeInTheDocument();
+			fireEvent.click(canvas.getByLabelText('Close Modal'));
+			await expect(
+				canvas.getByLabelText('Close Modal')
+			).not.toBeVisible();
 		});
+
+		// todo add style control test in cypress implementation
 	},
 };
 
-export const Screenshot = {
+export const All = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: () => (
 		<Flex direction="column" gap="50px">
+			<Default.render {...Default.args} />
+
 			<HorizontalBorder.render {...HorizontalBorder.args} />
+
 			<VerticalBorder.render {...VerticalBorder.args} />
+
 			<FocusAndWidthChange.render {...FocusAndWidthChange.args} />
+
+			<Field.render {...Field.args} />
 		</Flex>
 	),
 };
