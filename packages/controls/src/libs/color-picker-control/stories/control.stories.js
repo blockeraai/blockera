@@ -3,6 +3,7 @@
  */
 import { fireEvent, waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
+import { nanoid } from 'nanoid';
 
 /**
  * Publisher dependencies
@@ -102,13 +103,17 @@ export const Field = {
 
 export const Play = {
 	args: {
-		value: '',
 		isOpen: true,
+		controlInfo: {
+			name: nanoid(),
+			value: '',
+		},
 	},
 	decorators: [
 		WithStoryContextProvider,
 		WithInspectorStyles,
 		WithPopoverDataProvider,
+		WithControlDataProvider,
 		...SharedDecorators,
 	],
 	render: (args) => (
