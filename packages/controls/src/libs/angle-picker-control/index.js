@@ -24,7 +24,6 @@ import { default as RotateLeftIcon } from './icons/rotate-left';
 import { default as RotateRightIcon } from './icons/rotate-right';
 
 export default function AnglePickerControl({
-	value: initialValue,
 	rotateButtons,
 	//
 	id,
@@ -97,6 +96,10 @@ export default function AnglePickerControl({
 }
 
 AnglePickerControl.propTypes = {
+	/**
+	 * ID for retrieving value from control context
+	 */
+	id: PropTypes.string.isRequired,
 	/**
 	 * Label for field. If you pass empty value the field will not be added and simple control will be rendered
 	 *
