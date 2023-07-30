@@ -11,7 +11,6 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
-import { useValue } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -19,21 +18,22 @@ import { useValue } from '@publisher/utils';
 import { InputControl, LabelControl, ToggleSelectControl } from '../index';
 import { default as CompactIcon } from './icons/compact';
 import { default as CustomIcon } from './icons/custom';
+import { useControlContext } from '../../context';
 
 export default function BorderRadiusControl({
+	id,
 	label,
 	defaultValue,
-	value: initialValue,
+	onChange,
 	//
 	className,
-	onChange,
 }) {
-	const { value, setValue } = useValue({
-		initialValue,
-		defaultValue,
+	const { value, setValue } = useControlContext({
+		id,
 		onChange,
-		mergeInitialAndDefault: true,
+		defaultValue,
 		valueCleanup,
+		mergeInitialAndDefault: true,
 	});
 
 	// value clean up for removing extra values to prevent saving extra data!
@@ -59,10 +59,10 @@ export default function BorderRadiusControl({
 
 				{value.type === 'all' && (
 					<InputControl
+						id="all"
 						min="0"
 						type="css"
 						unitType="essential"
-						value={value.all}
 						onChange={(newValue) => {
 							setValue({ ...value, all: newValue });
 						}}
@@ -73,6 +73,7 @@ export default function BorderRadiusControl({
 				)}
 
 				<ToggleSelectControl
+					id="type"
 					defaultValue="compact"
 					value={value.type}
 					options={[
@@ -121,6 +122,7 @@ export default function BorderRadiusControl({
 						}}
 					>
 						<InputControl
+							id="topLeft"
 							min="0"
 							type="css"
 							unitType="essential"
@@ -137,6 +139,7 @@ export default function BorderRadiusControl({
 							}}
 						/>
 						<InputControl
+							id="topRight"
 							min="0"
 							type="css"
 							unitType="essential"
@@ -153,6 +156,7 @@ export default function BorderRadiusControl({
 							}}
 						/>
 						<InputControl
+							id="bottomLeft"
 							min="0"
 							type="css"
 							unitType="essential"
@@ -169,6 +173,7 @@ export default function BorderRadiusControl({
 							}}
 						/>
 						<InputControl
+							id="bottomRight"
 							min="0"
 							type="css"
 							unitType="essential"
@@ -204,26 +209,13 @@ BorderRadiusControl.propTypes = {
 		bottomRight: PropTypes.string,
 	}),
 	/**
-	 * The current value.
-	 */
-	value: PropTypes.oneOfType([
-		PropTypes.shape({
-			type: PropTypes.oneOf(['all']),
-			all: PropTypes.string,
-		}),
-		PropTypes.shape({
-			type: PropTypes.oneOf(['custom']),
-			all: PropTypes.string,
-			topLeft: PropTypes.string,
-			topRight: PropTypes.string,
-			bottomLeft: PropTypes.string,
-			bottomRight: PropTypes.string,
-		}),
-	]),
-	/**
 	 * Function that will be fired while the control value state changes.
 	 */
 	onChange: PropTypes.func,
+	/**
+	 * ID for retrieving value from control context
+	 */
+	id: PropTypes.string,
 	/**
 	 * Label of control
 	 */
