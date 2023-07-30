@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import PropTypes from 'prop-types';
 
 /**
  * Publisher dependencies
@@ -15,25 +16,24 @@ import {
  * Internal dependencies
  */
 import { BorderControl, LabelControl, ToggleSelectControl } from '../index';
+import { useControlContext } from '../../context';
 import { default as CompactIcon } from './icons/compact';
 import { default as CustomIcon } from './icons/custom';
-import { useValue } from '@publisher/utils';
-import PropTypes from 'prop-types';
 
 export default function BoxBorderControl({
-	label = '',
+	id,
+	label,
 	defaultValue,
-	value: initialValue,
 	onChange,
 	//
 	className,
 }) {
-	const { value, setValue } = useValue({
-		initialValue,
-		defaultValue,
-		mergeInitialAndDefault: true,
+	const { value, setValue } = useControlContext({
+		id,
 		onChange,
+		defaultValue,
 		valueCleanup,
+		mergeInitialAndDefault: true,
 	});
 
 	// value clean up for removing extra values to prevent saving extra data!
@@ -59,7 +59,7 @@ export default function BoxBorderControl({
 
 				{value.type === 'all' && (
 					<BorderControl
-						value={value.all}
+						id="all"
 						onChange={(newValue) => {
 							setValue({ ...value, all: newValue });
 						}}
@@ -67,8 +67,8 @@ export default function BoxBorderControl({
 				)}
 
 				<ToggleSelectControl
+					id="type"
 					defaultValue="compact"
-					value={value.type}
 					options={[
 						{
 							label: __('Compact', 'publisher-core'),
@@ -123,10 +123,10 @@ export default function BoxBorderControl({
 						}}
 					>
 						<BorderControl
+							id="top"
 							className={controlInnerClassNames(
 								'border-corner-top'
 							)}
-							value={value.top}
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -135,11 +135,11 @@ export default function BoxBorderControl({
 							}}
 						/>
 						<BorderControl
+							id="right"
 							linesDirection="vertical"
 							className={controlInnerClassNames(
 								'border-corner-right'
 							)}
-							value={value.right}
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -148,10 +148,10 @@ export default function BoxBorderControl({
 							}}
 						/>
 						<BorderControl
+							id="bottom"
 							className={controlInnerClassNames(
 								'border-corner-bottom'
 							)}
-							value={value.bottom}
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -160,11 +160,11 @@ export default function BoxBorderControl({
 							}}
 						/>
 						<BorderControl
+							id="left"
 							linesDirection="vertical"
 							className={controlInnerClassNames(
 								'border-corner-left'
 							)}
-							value={value.left}
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -181,50 +181,13 @@ export default function BoxBorderControl({
 
 BoxBorderControl.propTypes = {
 	/**
+	 * ID for retrieving value from control context
+	 */
+	id: PropTypes.string.isRequired,
+	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
 	defaultValue: PropTypes.oneOfType([
-		PropTypes.shape({
-			type: 'all',
-			all: PropTypes.shape({
-				width: PropTypes.string,
-				style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
-				color: PropTypes.string,
-			}),
-		}),
-		PropTypes.shape({
-			type: PropTypes.oneOf(['all', 'custom']),
-			all: PropTypes.shape({
-				width: PropTypes.string,
-				style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
-				color: PropTypes.string,
-			}),
-			top: PropTypes.shape({
-				width: PropTypes.string,
-				style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
-				color: PropTypes.string,
-			}),
-			right: PropTypes.shape({
-				width: PropTypes.string,
-				style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
-				color: PropTypes.string,
-			}),
-			bottom: PropTypes.shape({
-				width: PropTypes.string,
-				style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
-				color: PropTypes.string,
-			}),
-			left: PropTypes.shape({
-				width: PropTypes.string,
-				style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
-				color: PropTypes.string,
-			}),
-		}),
-	]),
-	/**
-	 * The current value.
-	 */
-	value: PropTypes.oneOfType([
 		PropTypes.shape({
 			type: 'all',
 			all: PropTypes.shape({
@@ -269,6 +232,7 @@ BoxBorderControl.propTypes = {
 };
 
 BoxBorderControl.defaultProps = {
+	label: '',
 	defaultValue: {
 		type: 'all',
 		all: {
