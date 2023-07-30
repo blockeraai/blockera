@@ -41,7 +41,7 @@ export default function BorderControl({
 	__isColorFocused,
 	__isStyleFocused,
 }) {
-	const { value, setValue } = useControlContext({
+	const { value, setValue, getId } = useControlContext({
 		id,
 		onChange,
 		defaultValue,
@@ -60,6 +60,7 @@ export default function BorderControl({
 				style={style}
 			>
 				<InputControl
+					id={getId(id, 'width')}
 					min="0"
 					unitType="custom"
 					units={[{ value: 'px', label: 'PX', default: 0 }]}
@@ -67,7 +68,6 @@ export default function BorderControl({
 						'input',
 						__isWidthFocused && 'is-focused'
 					)}
-					id="width"
 					noBorder={true}
 					onChange={(newValue) => {
 						setValue({ ...value, width: newValue });
@@ -75,9 +75,9 @@ export default function BorderControl({
 				/>
 
 				<ColorControl
+					id={getId(id, 'color')}
 					type="minimal"
 					noBorder={true}
-					id="color"
 					onChange={(newValue) => {
 						setValue({ ...value, color: newValue });
 					}}
@@ -85,7 +85,7 @@ export default function BorderControl({
 				/>
 
 				<SelectControl
-					id="style"
+					id={getId(id, 'style')}
 					className={__isStyleFocused && 'is-focused'}
 					customMenuPosition={customMenuPosition}
 					type="custom"
