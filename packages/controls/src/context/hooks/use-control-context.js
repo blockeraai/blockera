@@ -205,5 +205,17 @@ export const useControlContext = (args) => {
 
 			return !calculatedValue;
 		},
+		/**
+		 * Return
+		 *
+		 * @return {boolean} toggled control value!
+		 */
+		getId: (id, childId) => {
+			if (!isUndefined(id)) {
+				return `${id}.${childId}`;
+			}
+
+			return childId;
+		},
 	};
 };
