@@ -112,6 +112,10 @@ ColorControl.propTypes = {
 	 */
 	contentAlign: PropTypes.oneOf(['left', 'center', 'right']),
 	/**
+	 * ID for retrieving value from control context
+	 */
+	id: PropTypes.string.isRequired,
+	/**
 	 * Label for field. If you pass empty value the field will not be added and simple control will be rendered
 	 *
 	 * @default ""
