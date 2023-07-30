@@ -13,7 +13,6 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { Button, Flex, Grid } from '@publisher/components';
-import { useValue } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -41,20 +40,23 @@ import { default as AbsoluteBottomIcon } from './icons/absolute-bottom';
 import { default as AbsoluteLeftIcon } from './icons/absolute-left';
 import { default as AbsoluteFullIcon } from './icons/absolute-full';
 import { default as AbsoluteCenterIcon } from './icons/absolute-center';
+import { useControlContext } from '../../context';
 
 export default function BoxPositionControl({
+	openSide,
+	//
+	id,
 	label,
 	defaultValue,
-	value: initialValue,
-	openSide,
-	className,
 	onChange,
+	//
+	className,
 	...props
 }) {
-	const { value, setValue } = useValue({
-		initialValue,
-		defaultValue,
+	const { value, setValue, getId } = useControlContext({
+		id,
 		onChange,
+		defaultValue,
 		mergeInitialAndDefault: true,
 	});
 
@@ -99,6 +101,7 @@ export default function BoxPositionControl({
 				)}
 
 				<SelectControl
+					id={getId(id, 'type')}
 					options={[
 						{
 							label: __('Default', 'publisher-core'),
@@ -130,7 +133,6 @@ export default function BoxPositionControl({
 					aria-label={__('Choose Position', 'publisher-core')}
 					//
 					defaultValue="static"
-					value={value.type}
 					onChange={(newValue) => {
 						setValue({
 							...value,
@@ -229,10 +231,10 @@ export default function BoxPositionControl({
 						/>
 
 						<SidePopover
+							id={getId(id, 'position.top')}
 							icon={<SideTopIcon />}
 							onClose={() => setOpenPopover('')}
 							title={__('Top Position', 'publisher-core')}
-							value={value.position.top}
 							isOpen={openPopover === 'top'}
 							onChange={(newValue) => {
 								setValue({
@@ -260,11 +262,11 @@ export default function BoxPositionControl({
 						/>
 
 						<SidePopover
+							id={getId(id, 'position.right')}
 							offset={255}
 							icon={<SideRightIcon />}
 							onClose={() => setOpenPopover('')}
 							title={__('Right Position', 'publisher-core')}
-							value={value.position.right}
 							isOpen={openPopover === 'right'}
 							onChange={(newValue) => {
 								setValue({
@@ -292,10 +294,10 @@ export default function BoxPositionControl({
 						/>
 
 						<SidePopover
+							id={getId(id, 'position.bottom')}
 							icon={<SideBottomIcon />}
 							onClose={() => setOpenPopover('')}
 							title={__('Bottom Position', 'publisher-core')}
-							value={value.position.bottom}
 							isOpen={openPopover === 'bottom'}
 							onChange={(newValue) => {
 								setValue({
@@ -323,10 +325,10 @@ export default function BoxPositionControl({
 						/>
 
 						<SidePopover
+							id={getId(id, 'position.left')}
 							icon={<SideLeftIcon />}
 							onClose={() => setOpenPopover('')}
 							title={__('Left Position', 'publisher-core')}
-							value={value.position.left}
 							isOpen={openPopover === 'left'}
 							onChange={(newValue) => {
 								setValue({
@@ -577,27 +579,19 @@ export default function BoxPositionControl({
 
 BoxPositionControl.propTypes = {
 	/**
+	 * ID for retrieving value from control context
+	 */
+	id: PropTypes.string.isRequired,
+	/**
+	 * Control Label
+	 *
+	 * @default `Position`
+	 */
+	label: PropTypes.string,
+	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
 	defaultValue: PropTypes.shape({
-		type: PropTypes.oneOf([
-			'static',
-			'relative',
-			'absolute',
-			'sticky',
-			'fixed',
-		]),
-		position: {
-			top: PropTypes.string,
-			right: PropTypes.string,
-			bottom: PropTypes.string,
-			left: PropTypes.string,
-		},
-	}),
-	/**
-	 * The current value.
-	 */
-	value: PropTypes.shape({
 		type: PropTypes.oneOf([
 			'static',
 			'relative',
@@ -617,17 +611,29 @@ BoxPositionControl.propTypes = {
 	 */
 	onChange: PropTypes.func,
 	/**
+	 * The current value.
+	 */
+	value: PropTypes.shape({
+		type: PropTypes.oneOf([
+			'static',
+			'relative',
+			'absolute',
+			'sticky',
+			'fixed',
+		]),
+		position: {
+			top: PropTypes.string,
+			right: PropTypes.string,
+			bottom: PropTypes.string,
+			left: PropTypes.string,
+		},
+	}),
+	/**
 	 * Specifies which side is open by default.
 	 *
 	 * @default ``
 	 */
 	openSide: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
-	/**
-	 * Control Label
-	 *
-	 * @default `Position`
-	 */
-	label: PropTypes.string,
 };
 
 BoxPositionControl.defaultProps = {

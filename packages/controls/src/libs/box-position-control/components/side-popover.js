@@ -7,25 +7,30 @@ import { __ } from '@wordpress/i18n';
  * Publisher dependencies
  */
 import { Button, Grid, Popover } from '@publisher/components';
-import { Field, InputField } from '@publisher/fields';
+import { Field } from '@publisher/fields';
 import { controlInnerClassNames } from '@publisher/classnames';
-import { useValue } from '@publisher/utils';
+
+/**
+ * Internal dependencies
+ */
+import { useControlContext } from '../../../context';
+import { InputControl } from '../../input-control';
 
 export function SidePopover({
+	id,
 	title = '',
 	icon = '',
 	isOpen,
-	value: initialValue,
 	offset = 35,
 	onClose = () => {},
 	onChange = (newValue) => {
 		return newValue;
 	},
 }) {
-	const { value, setValue } = useValue({
-		initialValue,
-		defaultValue: '0px',
+	const { setValue } = useControlContext({
+		id,
 		onChange,
+		defaultValue: '0px',
 	});
 
 	return (
@@ -42,19 +47,15 @@ export function SidePopover({
 					className="spacing-edit-popover"
 					onClose={onClose}
 				>
-					<InputField
+					<InputControl
+						id={id}
 						label=""
-						settings={{
-							type: 'css',
-							unitType: 'essential',
-							range: true,
-							min: -250,
-							max: 250,
-							defaultValue: '0px',
-						}}
-						//
+						type="css"
+						unitType="essential"
+						range={true}
+						min={-250}
+						max={250}
 						defaultValue="0px"
-						value={value}
 						onChange={setValue}
 					/>
 
