@@ -8,7 +8,7 @@ import {
 	within,
 } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
-import { useContext } from '@wordpress/element';
+import { nanoid } from 'nanoid';
 
 /**
  * Publisher dependencies
@@ -20,13 +20,14 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  * Internal dependencies
  */
 import { BorderRadiusControl } from '../../index';
+import { ControlContextProvider } from '../../../context';
+import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 
-const {
-	WithInspectorStyles,
-	StoryDataContext,
-	WithStoryContextProvider,
-	SharedDecorators,
-} = Decorators;
+const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
+	Decorators;
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Controls/BorderRadiusControl',
@@ -43,6 +44,22 @@ export const Default = {
 		},
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => (
+		<Flex direction="column" gap="20px">
+			<h2 className="story-heading">
+				Color<span>Empty</span>
+			</h2>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks Control={BorderRadiusControl} {...args} />
+			</ControlContextProvider>
+		</Flex>
+	),
 };
 
 export const AllCorners = {
@@ -55,80 +72,106 @@ export const AllCorners = {
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
-		<Flex direction="column" gap="15px">
+		<Flex direction="column" gap="20px">
 			<h2 className="story-heading">All Borders</h2>
-			<BorderRadiusControl {...args} label="All" />
-			<BorderRadiusControl {...args} value={{}} label="Empty" />
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks
+					Control={BorderRadiusControl}
+					{...args}
+					label="All"
+				/>
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: {},
+				}}
+			>
+				<ControlWithHooks
+					Control={BorderRadiusControl}
+					{...args}
+					label="Empty"
+				/>
+			</ControlContextProvider>
 		</Flex>
 	),
 };
 
 export const CustomCorners = {
-	args: {
-		label: 'Border Radius',
-		value: {
-			type: 'all',
-			all: '7px',
-		},
-	},
+	args: {},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
 		<Flex direction="column" gap="15px">
 			<h2 className="story-heading">Custom Corners</h2>
-			<BorderRadiusControl
-				{...args}
-				label="All Same"
+			<ControlContextProvider
 				value={{
-					type: 'custom',
-					all: '10px',
-					topLeft: '10px',
-					topRight: '10px',
-					bottomRight: '10px',
-					bottomLeft: '10px',
+					name: nanoid(),
+					value: {
+						type: 'custom',
+						all: '10px',
+						topLeft: '10px',
+						topRight: '10px',
+						bottomRight: '10px',
+						bottomLeft: '10px',
+					},
 				}}
-			/>
-			<BorderRadiusControl
-				{...args}
-				label="Customized"
+			>
+				<ControlWithHooks
+					Control={BorderRadiusControl}
+					{...args}
+					label="All Same"
+				/>
+			</ControlContextProvider>
+
+			<ControlContextProvider
 				value={{
-					type: 'custom',
-					all: '10%',
-					topLeft: '10%',
-					topRight: '50%',
-					bottomRight: '10%',
-					bottomLeft: '50%',
+					name: nanoid(),
+					value: {
+						type: 'custom',
+						all: '10%',
+						topLeft: '10%',
+						topRight: '50%',
+						bottomRight: '10%',
+						bottomLeft: '50%',
+					},
 				}}
-			/>
+			>
+				<ControlWithHooks
+					Control={BorderRadiusControl}
+					{...args}
+					label="Customized"
+				/>
+			</ControlContextProvider>
 		</Flex>
 	),
-};
-
-const ControlWithHooks = (args) => {
-	const { storyValue, setStoryValue } = useContext(StoryDataContext);
-
-	return (
-		<BorderRadiusControl
-			{...args}
-			onChange={setStoryValue}
-			value={storyValue}
-		/>
-	);
 };
 
 export const PlayAll = {
 	args: {
 		label: 'Border Radius',
-		value: {
-			type: 'all',
-			all: '10px',
+		controlInfo: {
+			name: nanoid(),
+			value: {
+				type: 'all',
+				all: '10px',
+			},
 		},
 	},
 	decorators: [
 		WithStoryContextProvider,
 		WithInspectorStyles,
+		WithControlDataProvider,
 		...SharedDecorators,
 	],
-	render: (args) => <ControlWithHooks {...args} />,
+	render: (args) => (
+		<ControlWithHooks Control={BorderRadiusControl} {...args} />
+	),
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 
@@ -194,21 +237,27 @@ PlayAll.storyName = 'Play → All Corners';
 export const PlayCorner = {
 	args: {
 		label: 'Border Line',
-		value: {
-			type: 'custom',
-			all: '10px',
-			topLeft: '10px',
-			topRight: '10px',
-			bottomRight: '10px',
-			bottomLeft: '10px',
+		controlInfo: {
+			name: nanoid(),
+			value: {
+				type: 'custom',
+				all: '10px',
+				topLeft: '10px',
+				topRight: '10px',
+				bottomRight: '10px',
+				bottomLeft: '10px',
+			},
 		},
 	},
 	decorators: [
 		WithStoryContextProvider,
 		WithInspectorStyles,
+		WithControlDataProvider,
 		...SharedDecorators,
 	],
-	render: (args) => <ControlWithHooks {...args} />,
+	render: (args) => (
+		<ControlWithHooks Control={BorderRadiusControl} {...args} />
+	),
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 
@@ -285,7 +334,7 @@ export const PlayCorner = {
 };
 PlayCorner.storyName = 'Play → Custom Corners';
 
-export const Screenshot = {
+export const All = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: () => (
 		<Flex direction="column" gap="50px">
