@@ -47,7 +47,7 @@ export const Default = {
 	render: (args) => (
 		<Flex direction="column" gap="20px">
 			<h2 className="story-heading">
-				Border Radius<span>Empty</span>
+				Color<span>Empty</span>
 			</h2>
 
 			<ControlContextProvider
