@@ -105,8 +105,13 @@ export const useControlContext = (args) => {
 		}
 
 		if (mergeInitialAndDefault) {
-			if (isObject(savedValue) && isObject(defaultValue))
+			if (isObject(savedValue) && isObject(defaultValue)) {
+				if (!isUndefined(id)) {
+					return { ...defaultValue, ...prepare(id, savedValue) };
+				}
+
 				return { ...defaultValue, ...savedValue };
+			}
 
 			// merge default value to object elements inside initialValue
 			// used for repeaters
