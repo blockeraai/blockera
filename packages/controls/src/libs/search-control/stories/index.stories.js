@@ -1,9 +1,9 @@
 /**
  * External dependencies
  */
-import { useContext } from '@wordpress/element';
 import { fireEvent, waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
+import { nanoid } from 'nanoid';
 
 /**
  * Publisher dependencies
@@ -15,13 +15,15 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  * Internal dependencies
  */
 import { SearchControl } from '../../index';
+import { ControlContextProvider } from '../../../context';
+import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 
-const {
-	WithInspectorStyles,
-	StoryDataContext,
-	WithStoryContextProvider,
-	SharedDecorators,
-} = Decorators;
+const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
+	Decorators;
+
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Controls/SearchControl',
@@ -35,45 +37,98 @@ export const Default = {
 		value: '',
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => (
+		<Flex direction="column" gap="20px">
+			<h2 className="story-heading">
+				Search<span>Empty</span>
+			</h2>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: '',
+				}}
+			>
+				<ControlWithHooks Control={SearchControl} {...args} />
+			</ControlContextProvider>
+		</Flex>
+	),
 };
 
 export const States = {
 	args: {
 		placeholder: 'Enter to search...',
-		value: '',
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => {
 		return (
-			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">Search</h2>
-				<SearchControl {...args} />
-				<SearchControl {...args} className="is-hovered" />
-				<SearchControl {...args} className="is-focused" />
-				<SearchControl {...args} value="term" />
+			<Flex direction="column" gap="20px">
+				<h2 className="story-heading">
+					Search<span>States</span>
+				</h2>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: '',
+					}}
+				>
+					<ControlWithHooks Control={SearchControl} {...args} />
+				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: '',
+					}}
+				>
+					<ControlWithHooks
+						Control={SearchControl}
+						{...args}
+						className="is-hovered"
+					/>
+				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: '',
+					}}
+				>
+					<ControlWithHooks
+						Control={SearchControl}
+						{...args}
+						className="is-focused"
+					/>
+				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 'publisher',
+					}}
+				>
+					<ControlWithHooks Control={SearchControl} {...args} />
+				</ControlContextProvider>
 			</Flex>
 		);
 	},
 };
 
-const ControlWithHooks = (args) => {
-	const { storyValue, setStoryValue } = useContext(StoryDataContext);
-
-	return (
-		<SearchControl {...args} onChange={setStoryValue} value={storyValue} />
-	);
-};
-
 export const Play = {
 	args: {
-		value: '',
+		controlInfo: {
+			name: nanoid(),
+			value: '',
+		},
 	},
 	decorators: [
 		WithStoryContextProvider,
 		WithInspectorStyles,
+		WithControlDataProvider,
 		...SharedDecorators,
 	],
-	render: (args) => <ControlWithHooks {...args} />,
+	render: (args) => <ControlWithHooks Control={SearchControl} {...args} />,
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 		const currentValue = canvas.getByTestId('current-value');
@@ -85,10 +140,10 @@ export const Play = {
 		});
 
 		await step('Search for term', async () => {
-			fireEvent.change(input, { target: { value: 'term' } });
+			fireEvent.change(input, { target: { value: 'publisher' } });
 			await waitFor(
 				async () =>
-					await expect(currentValue).toHaveTextContent('"term"'),
+					await expect(currentValue).toHaveTextContent('"publisher"'),
 				{ timeout: 1000 }
 			);
 
@@ -122,10 +177,12 @@ export const Play = {
 	},
 };
 
-export const Screenshot = {
+export const All = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: () => (
 		<Flex direction="column" gap="50px">
+			<Default.render {...Default.args} />
+
 			<States.render {...States.args} />
 		</Flex>
 	),
