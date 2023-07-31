@@ -23,17 +23,31 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v3
+
             - name: Setup PHP version
               uses: ./.github/setup-php
+
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Setup Node
+              uses: ./.github/setup-node
+
+            - name: Running Build Script
+              run: npm run build
+
             - name: Checkout source code
               uses: actions/checkout@v3
+
             - name: Install WordPress Test Suite
               run: |
                   bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+
             - name: Get Composer Cache Directory
               id: composer-cache
               run: |
                   echo "::set-output name=dir::$(composer config cache-files-dir)"
+
             - name: Setup Composer cache
               uses: actions/cache@v1
               with:
@@ -41,11 +55,14 @@ jobs:
                   key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
                   restore-keys: |
                       ${{ runner.os }}-composer-
+
             - name: Install composer
               run: composer install --prefer-dist --no-progress --no-suggest
+
             - name: Change directory
               run: |
-                cd ..
-                cd publisher-core
+                  cd ..
+                  cd publisher-core
+
             - name: Running PHPUnit Tests
               run: composer run-script test
