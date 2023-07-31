@@ -17,6 +17,7 @@ import Fields from './components/fields';
 import RepeaterControl from '../repeater-control';
 
 export default function BoxShadowControl({
+	id,
 	defaultRepeaterItemValue,
 	popoverLabel,
 	className,
@@ -24,6 +25,7 @@ export default function BoxShadowControl({
 }) {
 	return (
 		<RepeaterControl
+			id={id}
 			className={controlClassNames('box-shadow', className)}
 			popoverLabel={popoverLabel}
 			repeaterItemHeader={RepeaterItemHeader}
@@ -39,10 +41,6 @@ BoxShadowControl.propTypes = {
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
 	defaultValue: PropTypes.array,
-	/**
-	 * The current value.
-	 */
-	value: PropTypes.array,
 	/**
 	 * Function that will be fired while the control value state changes.
 	 */
@@ -66,7 +64,7 @@ BoxShadowControl.propTypes = {
 };
 
 BoxShadowControl.defaultProps = {
-	value: [],
+	defaultValue: [],
 	defaultRepeaterItemValue: {
 		type: 'outer',
 		x: '0px',
