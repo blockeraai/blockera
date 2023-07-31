@@ -5,21 +5,24 @@ import { __ } from '@wordpress/i18n';
 import { memo, useContext } from '@wordpress/element';
 
 /**
- * Publisher dependencies
- */
-import { InputField, ToggleSelectField, ColorField } from '@publisher/fields';
-
-/**
  * Internal dependencies
  */
 import { RepeaterContext } from '../../repeater-control/context';
+import { ColorControl, InputControl, ToggleSelectControl } from '../../index';
+import { useControlContext } from '../../../context';
 
 const Fields = ({ itemId, item }) => {
-	const { changeItem } = useContext(RepeaterContext);
+	const {
+		controlInfo: { name: controlId },
+		dispatch: { changeRepeaterItem },
+	} = useControlContext();
+
+	const { repeaterId, getControlId } = useContext(RepeaterContext);
 
 	return (
 		<div id={`repeater-item-${itemId}`}>
-			<ToggleSelectField
+			<ToggleSelectControl
+				id={getControlId(itemId, 'type')}
 				label={__('Position', 'publisher-core')}
 				options={[
 					{
@@ -31,72 +34,99 @@ const Fields = ({ itemId, item }) => {
 						value: 'inner',
 					},
 				]}
-				//
-				value={item.type}
-				onChange={(type) => changeItem(itemId, { ...item, type })}
+				onChange={(type) =>
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, type },
+					})
+				}
 			/>
 
-			<InputField
+			<InputControl
+				id={getControlId(itemId, 'x')}
 				label={__('X', 'publisher-core')}
-				settings={{
-					type: 'css',
-					unitType: 'box-shadow',
-					range: true,
-					min: -100,
-					max: 100,
-				}}
-				//
-				value={item.x}
-				onChange={(x) => changeItem(itemId, { ...item, x })}
+				type="css"
+				unitType="box-shadow"
+				range={true}
+				min={-100}
+				max={100}
+				onChange={(x) =>
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, x },
+					})
+				}
 			/>
 
-			<InputField
+			<InputControl
+				id={getControlId(itemId, 'y')}
 				label={__('Y', 'publisher-core')}
-				settings={{
-					type: 'css',
-					unitType: 'box-shadow',
-					range: true,
-					min: -100,
-					max: 100,
-				}}
-				//
-				value={item.y}
-				onChange={(y) => changeItem(itemId, { ...item, y })}
+				type="css"
+				unitType="box-shadow"
+				range={true}
+				min={-100}
+				max={100}
+				onChange={(y) =>
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, y },
+					})
+				}
 			/>
 
-			<InputField
+			<InputControl
+				id={getControlId(itemId, 'blur')}
 				label={__('Blur', 'publisher-core')}
-				settings={{
-					type: 'css',
-					unitType: 'box-shadow',
-					range: true,
-					min: 0,
-					max: 100,
-				}}
-				//
-				value={item.blur}
-				onChange={(blur) => changeItem(itemId, { ...item, blur })}
+				type="css"
+				unitType="box-shadow"
+				range={true}
+				min={0}
+				max={100}
+				onChange={(blur) =>
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, blur },
+					})
+				}
 			/>
 
-			<InputField
+			<InputControl
+				id={getControlId(itemId, 'spread')}
 				label={__('Spread', 'publisher-core')}
-				settings={{
-					type: 'css',
-					unitType: 'box-shadow',
-					range: true,
-					min: -100,
-					max: 100,
-				}}
-				//
-				value={item.spread}
-				onChange={(spread) => changeItem(itemId, { ...item, spread })}
+				type="css"
+				unitType="box-shadow"
+				range={true}
+				min={-100}
+				max={100}
+				onChange={(spread) =>
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, spread },
+					})
+				}
 			/>
 
-			<ColorField
+			<ColorControl
+				id={getControlId(itemId, 'color')}
 				label={__('Color', 'publisher-core')}
-				//
-				value={item.color}
-				onChange={(color) => changeItem(itemId, { ...item, color })}
+				onChange={(color) =>
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, color },
+					})
+				}
 			/>
 		</div>
 	);
