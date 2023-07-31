@@ -33,10 +33,20 @@ jobs:
             - name: Setup Node
               uses: ./.github/setup-node
 
-            - name: Git Submodule Update
+            # Set up the SSH key
+            - name: Set up SSH key
               run: |
-                  git submodule init
-                  git submodule update
+                  mkdir -p ~/.ssh
+                  echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+                  chmod 600 ~/.ssh/id_rsa
+                  ssh-add ~/.ssh/id_rsa
+
+            # Install Git and update submodules
+            - name: Install Git and update submodules
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install git
+                  git submodule update --init --recursive
 
             - name: Running Build Script
               run: npm run build
