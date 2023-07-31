@@ -14,6 +14,7 @@ import {
 	isBoolean,
 	isUndefined,
 	isArray,
+	isEmpty,
 } from '@publisher/utils';
 
 /**
@@ -31,14 +32,14 @@ import useControlEffect from './use-control-effect';
  * @param {Object} args the control arguments
  * @return {Object} retrieved object of helpers to work with control!
  */
-export const useControlContext = (args) => {
+export const useControlContext = ( args ) => {
 	const {
 		controlInfo,
 		value: savedValue,
 		dispatch,
-	} = useContext(ControlContext);
+	} = useContext( ControlContext );
 
-	if (isUndefined(args)) {
+	if ( isUndefined( args ) ) {
 		return {
 			value: savedValue,
 			dispatch,
@@ -47,8 +48,8 @@ export const useControlContext = (args) => {
 	}
 
 	const { getControl } = isRepeaterControl()
-		? select(REPEATER_STORE_NAME)
-		: select(CONTROL_STORE_NAME);
+		? select( REPEATER_STORE_NAME )
+		: select( CONTROL_STORE_NAME );
 
 	const {
 		id,
@@ -68,13 +69,13 @@ export const useControlContext = (args) => {
 
 	//Call onChange function if is set valueCleanup as function to clean value else set all value details into parent state!
 	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const setValue = useControlEffect({
+	const setValue = useControlEffect( {
 		onChange,
 		sideEffect,
 		valueCleanup,
 		value: calculatedValue,
-		dependencies: [calculatedValue],
-	});
+		dependencies: [ calculatedValue ],
+	} );
 
 	/**
 	 * @see ../../store/actions.js file to check available actions of dispatcher!
@@ -88,8 +89,8 @@ export const useControlContext = (args) => {
 	 */
 	function isRepeaterControl() {
 		return (
-			!isUndefined(args.repeater) &&
-			isObject(args.repeater.defaultRepeaterItemValue)
+			! isUndefined( args.repeater ) &&
+			isObject( args.repeater.defaultRepeaterItemValue )
 		);
 	}
 
@@ -100,14 +101,14 @@ export const useControlContext = (args) => {
 	 * @return {null|*} retrieved standard calculated value for current control!
 	 */
 	function getCalculatedInitValue() {
-		if (isUndefined(savedValue) || isNull(savedValue)) {
+		if ( isUndefined( savedValue ) || isNull( savedValue ) ) {
 			return defaultValue;
 		}
 
-		if (mergeInitialAndDefault) {
-			if (isObject(savedValue) && isObject(defaultValue)) {
-				if (!isUndefined(id)) {
-					return { ...defaultValue, ...prepare(id, savedValue) };
+		if ( mergeInitialAndDefault ) {
+			if ( isObject( savedValue ) && isObject( defaultValue ) ) {
+				if ( ! isUndefined( id ) ) {
+					return { ...defaultValue, ...prepare( id, savedValue ) };
 				}
 
 				return { ...defaultValue, ...savedValue };
@@ -115,75 +116,80 @@ export const useControlContext = (args) => {
 
 			// merge default value to object elements inside initialValue
 			// used for repeaters
-			if (isRepeaterControl()) {
+			if ( isRepeaterControl() ) {
 				// not array value is not valid!
-				if (!isArray(savedValue)) {
+				if ( ! isArray( savedValue ) ) {
 					return defaultValue;
 				}
 
-				savedValue.forEach((item, itemId) => {
-					if (isObject(item)) {
-						savedValue[itemId] = {
+				savedValue.forEach( ( item, itemId ) => {
+					if ( isObject( item ) ) {
+						savedValue[ itemId ] = {
 							...defaultRepeaterItemValue,
 							...item,
 						};
 					}
-				});
+				} );
 			}
 		}
 
-		return isUndefined(id) ? savedValue : prepare(id, savedValue);
+		// eslint-disable-next-line no-nested-ternary
+		return isUndefined( id )
+			? savedValue
+			: isEmpty( savedValue )
+			? defaultValue
+			: prepare( id, savedValue );
 	}
 
 	return {
 		dispatch,
 		setValue,
 		value: calculatedValue,
-		controlInfo: getControl(controlInfo.name),
+		controlInfo: getControl( controlInfo.name ),
 		/**
 		 * Reset control value to default value.
 		 */
 		resetToDefault: () => {
 			//TODO: implements reset repeater all items to specific value
-			if (isRepeaterControl()) {
-				changeRepeaterItem({
+			if ( isRepeaterControl() ) {
+				changeRepeaterItem( {
 					itemId,
 					repeaterId,
 					controlId: controlInfo.name,
 					value: defaultRepeaterItemValue,
-				});
+				} );
 
 				return defaultValue;
 			}
 
-			modifyControlValue({
+			modifyControlValue( {
 				valueCleanup,
 				value: defaultValue,
 				controlId: controlInfo.name,
-			});
+			} );
 
 			return defaultValue;
 		},
 		/**
 		 * Reset control value to saved value on database.
 		 */
-		resetToSavedValue: (value) => {
-			if (isRepeaterControl()) {
-				changeRepeaterItem({
+		resetToSavedValue: ( value ) => {
+			if ( isRepeaterControl() ) {
+				changeRepeaterItem( {
 					value,
 					itemId,
 					repeaterId,
 					controlId: controlInfo.name,
-				});
+				} );
 
 				return value;
 			}
 
-			modifyControlValue({
+			modifyControlValue( {
 				value,
 				valueCleanup,
 				controlId: controlInfo.name,
-			});
+			} );
 
 			return value;
 		},
@@ -194,25 +200,25 @@ export const useControlContext = (args) => {
 		 * @return {boolean} toggled control value!
 		 */
 		toggleValue: () => {
-			if (!isBoolean(calculatedValue)) {
+			if ( ! isBoolean( calculatedValue ) ) {
 				return false;
 			}
 
-			modifyControlValue({
-				value: !calculatedValue,
+			modifyControlValue( {
+				value: ! calculatedValue,
 				controlId: controlInfo.name,
-			});
+			} );
 
-			return !calculatedValue;
+			return ! calculatedValue;
 		},
 		/**
 		 * Return
 		 *
 		 * @return {boolean} toggled control value!
 		 */
-		getId: (id, childId) => {
-			if (!isUndefined(id)) {
-				return `${id}.${childId}`;
+		getId: ( id, childId ) => {
+			if ( ! isUndefined( id ) ) {
+				return `${ id }.${ childId }`;
 			}
 
 			return childId;
