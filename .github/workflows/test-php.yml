@@ -33,6 +33,11 @@ jobs:
             - name: Setup Node
               uses: ./.github/setup-node
 
+            - name: Git Submodule Update
+              run: |
+                  git submodule init
+                  git submodule update
+
             - name: Running Build Script
               run: npm run build
 
