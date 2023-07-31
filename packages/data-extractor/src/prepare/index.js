@@ -15,30 +15,30 @@ import { regexMatch } from '../utils';
  * @param {Object} dataset the origin object
  * @return {*} value of dataset queried props
  */
-export function prepare(query: string, dataset: Object): Array<string> {
-	const parsedQuery = query.split('.');
-	const itemValue = (...values) => values.reduce(accumulator, dataset);
+export function prepare( query: string, dataset: Object ): Array< string > {
+	const parsedQuery = query.split( '.' );
+	const itemValue = ( ...values ) => values.reduce( accumulator, dataset );
 
 	let props = [];
 
-	parsedQuery.forEach((item, index) => {
+	parsedQuery.forEach( ( item, index ) => {
 		//TODO: refactor this block!
-		if (0 === item.indexOf('[')) {
-			regexMatch(/\[(.*?)]/g, item, (match, groupIndex) => {
-				if (0 === groupIndex) {
+		if ( 0 === item.indexOf( '[' ) ) {
+			regexMatch( /\[(.*?)]/g, item, ( match, groupIndex ) => {
+				if ( 0 === groupIndex ) {
 					return;
 				}
 
-				props.push(match);
-			});
+				props.push( match );
+			} );
 
 			return;
 		}
 
-		props = toArray(item, props, index);
-	});
+		props = toArray( item, props, index );
+	} );
 
-	return itemValue(...props);
+	return itemValue( ...props );
 }
 
 /**
@@ -48,8 +48,8 @@ export function prepare(query: string, dataset: Object): Array<string> {
  * @param {string} x the item of reducer
  * @return {*} return any value
  */
-export function accumulator(a, x) {
-	return a[x];
+export function accumulator( a, x ) {
+	return a[ x ];
 }
 
 /**
@@ -59,23 +59,23 @@ export function accumulator(a, x) {
  * @param {Array<any>} arr the array target
  * @return {Array<*>} return array
  */
-export function toArray(item: string, arr: Array<any>): Array<any> {
+export function toArray( item: string, arr: Array< any > ): Array< any > {
 	const search = /[\[\]]/g;
 
-	if (-1 !== item.indexOf('[')) {
-		const details = item.split('[');
+	if ( -1 !== item.indexOf( '[' ) ) {
+		const details = item.split( '[' );
 
-		details.forEach((_item) => {
-			arr.push(_item.replace(search, ''));
-		});
+		details.forEach( ( _item ) => {
+			arr.push( _item.replace( search, '' ) );
+		} );
 
 		return arr;
 	}
 
-	const newItem = item.replace(search, '');
+	const newItem = item.replace( search, '' );
 
-	if (!isEmpty(newItem)) {
-		arr.push(newItem);
+	if ( ! isEmpty( newItem ) ) {
+		arr.push( newItem );
 	}
 
 	return arr;
