@@ -605,10 +605,7 @@ const Fields = ({ itemId, item }) => {
 
 					<Field label="" columns="columns-1" field="empty">
 						<RepeaterControl
-							repeaterId={getControlId(
-								itemId,
-								'[mesh-gradient-colors]'
-							)}
+							id={getControlId(itemId, '[mesh-gradient-colors]')}
 							label={__('Colors', 'publisher-core')}
 							className={controlClassNames(
 								'mesh-gradient-background'

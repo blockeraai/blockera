@@ -39,7 +39,7 @@ export default function RepeaterControl({
 	injectHeaderButtonsEnd,
 	//
 	label,
-	repeaterId,
+	id: repeaterId,
 	repeaterItemHeader,
 	repeaterItemChildren,
 	//
