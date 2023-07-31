@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import { useContext } from '@wordpress/element';
 import { expect } from '@storybook/jest';
 import {
 	fireEvent,
@@ -9,6 +8,7 @@ import {
 	waitFor,
 	within,
 } from '@storybook/testing-library';
+import { nanoid } from 'nanoid';
 
 /**
  * Publisher dependencies
@@ -19,17 +19,20 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 /**
  * Internal dependencies
  */
-import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import BoxSpacingControl from '../index';
+import { ControlContextProvider } from '../../../context';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
+import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 
 const {
 	WithInspectorStyles,
-	StoryDataContext,
 	WithStoryContextProvider,
 	SharedDecorators,
 	WithPopoverDataProvider,
 } = Decorators;
 
+SharedDecorators.push(WithPopoverDataProvider);
 SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
@@ -39,14 +42,42 @@ export default {
 };
 
 export const Empty = {
-	args: {
-		label: 'Spacing',
-	},
+	args: {},
 	decorators: [
 		WithInspectorStyles,
 		WithPopoverDataProvider,
 		...SharedDecorators,
 	],
+	render: (args) => (
+		<Flex direction="column" gap="20px">
+			<h2 className="story-heading">
+				Box Spacing<span>Empty</span>
+			</h2>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					// value: {},
+					value: {
+						margin: {
+							top: '',
+							right: '',
+							bottom: '',
+							left: '',
+						},
+						padding: {
+							top: '',
+							right: '',
+							bottom: '',
+							left: '',
+						},
+					},
+				}}
+			>
+				<ControlWithHooks Control={BoxSpacingControl} {...args} />
+			</ControlContextProvider>
+		</Flex>
+	),
 };
 
 export const Filled = {
@@ -59,92 +90,123 @@ export const Filled = {
 					<h2 className="story-heading">
 						Fill<span>Margin</span>
 					</h2>
-					<BoxSpacingControl
-						{...args}
+
+					<ControlContextProvider
 						value={{
-							margin: {
-								top: '10px',
-								right: '20%',
-								bottom: '30vh',
-								left: '40dvh',
-							},
-							padding: {
-								top: '',
-								right: '',
-								bottom: '',
-								left: '',
+							name: nanoid(),
+							value: {
+								margin: {
+									top: '10px',
+									right: '20%',
+									bottom: '30vh',
+									left: '40dvh',
+								},
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
 							},
 						}}
-					/>
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+						/>
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex direction="column" gap="15px">
 					<h2 className="story-heading">
 						Fill<span>Margin Only PX</span>
 					</h2>
-					<BoxSpacingControl
-						{...args}
+
+					<ControlContextProvider
 						value={{
-							margin: {
-								top: '10px',
-								right: '20px',
-								bottom: '30px',
-								left: '40px',
-							},
-							padding: {
-								top: '',
-								right: '',
-								bottom: '',
-								left: '',
+							name: nanoid(),
+							value: {
+								margin: {
+									top: '10px',
+									right: '20px',
+									bottom: '30px',
+									left: '40px',
+								},
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
 							},
 						}}
-					/>
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+						/>
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex direction="column" gap="15px">
 					<h2 className="story-heading">
 						Fill<span>Padding</span>
 					</h2>
-					<BoxSpacingControl
-						{...args}
+					<ControlContextProvider
 						value={{
-							margin: {
-								top: '',
-								right: '',
-								bottom: '',
-								left: '',
-							},
-							padding: {
-								top: '10px',
-								right: '20%',
-								bottom: '30vh',
-								left: '40dvh',
+							name: nanoid(),
+							value: {
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								padding: {
+									top: '10px',
+									right: '20%',
+									bottom: '30vh',
+									left: '40dvh',
+								},
 							},
 						}}
-					/>
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+						/>
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex direction="column" gap="15px">
 					<h2 className="story-heading">
 						Fill<span>All</span>
 					</h2>
-					<BoxSpacingControl
-						{...args}
+
+					<ControlContextProvider
 						value={{
-							margin: {
-								top: '10px',
-								right: '20%',
-								bottom: '30vh',
-								left: '40dvh',
-							},
-							padding: {
-								top: '50px',
-								right: '60%',
-								bottom: '70vh',
-								left: '80dvh',
+							name: nanoid(),
+							value: {
+								margin: {
+									top: '10px',
+									right: '20%',
+									bottom: '30vh',
+									left: '40dvh',
+								},
+								padding: {
+									top: '50px',
+									right: '60%',
+									bottom: '70vh',
+									left: '80dvh',
+								},
 							},
 						}}
-					/>
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+						/>
+					</ControlContextProvider>
 				</Flex>
 			</Flex>
 		);
@@ -165,24 +227,32 @@ export const Open = {
 					<h2 className="story-heading">
 						Open<span>Top Margin</span>
 					</h2>
-					<BoxSpacingControl
-						{...args}
-						openSide="margin-top"
+
+					<ControlContextProvider
 						value={{
-							margin: {
-								top: '10px',
-								right: '',
-								bottom: '',
-								left: '',
-							},
-							padding: {
-								top: '',
-								right: '',
-								bottom: '',
-								left: '',
+							name: nanoid(),
+							value: {
+								margin: {
+									top: '10px',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
 							},
 						}}
-					/>
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+							openSide="margin-top"
+						/>
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex
@@ -193,24 +263,32 @@ export const Open = {
 					<h2 className="story-heading">
 						Open<span>Right Margin</span>
 					</h2>
-					<BoxSpacingControl
-						{...args}
-						openSide="margin-right"
+
+					<ControlContextProvider
 						value={{
-							margin: {
-								top: '',
-								right: '20%',
-								bottom: '',
-								left: '',
-							},
-							padding: {
-								top: '',
-								right: '',
-								bottom: '',
-								left: '',
+							name: nanoid(),
+							value: {
+								margin: {
+									top: '',
+									right: '20%',
+									bottom: '',
+									left: '',
+								},
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
 							},
 						}}
-					/>
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+							openSide="margin-right"
+						/>
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex
@@ -221,24 +299,32 @@ export const Open = {
 					<h2 className="story-heading">
 						Open<span>Bottom Margin</span>
 					</h2>
-					<BoxSpacingControl
-						{...args}
-						openSide="margin-bottom"
+
+					<ControlContextProvider
 						value={{
-							margin: {
-								top: '',
-								right: '',
-								bottom: '30vh',
-								left: '',
-							},
-							padding: {
-								top: '',
-								right: '',
-								bottom: '',
-								left: '',
+							name: nanoid(),
+							value: {
+								margin: {
+									top: '',
+									right: '',
+									bottom: '30vh',
+									left: '',
+								},
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
 							},
 						}}
-					/>
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+							openSide="margin-bottom"
+						/>
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex
@@ -249,24 +335,32 @@ export const Open = {
 					<h2 className="story-heading">
 						Open<span>Left Margin</span>
 					</h2>
-					<BoxSpacingControl
-						{...args}
-						openSide="margin-left"
+
+					<ControlContextProvider
 						value={{
-							margin: {
-								top: '',
-								right: '',
-								bottom: '',
-								left: '40dvh',
-							},
-							padding: {
-								top: '',
-								right: '',
-								bottom: '',
-								left: '',
+							name: nanoid(),
+							value: {
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '40dvh',
+								},
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
 							},
 						}}
-					/>
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+							openSide="margin-left"
+						/>
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex
@@ -277,24 +371,32 @@ export const Open = {
 					<h2 className="story-heading">
 						Open<span>Top Padding</span>
 					</h2>
-					<BoxSpacingControl
-						{...args}
-						openSide="padding-top"
+
+					<ControlContextProvider
 						value={{
-							margin: {
-								top: '',
-								right: '',
-								bottom: '',
-								left: '',
-							},
-							padding: {
-								top: '10px',
-								right: '',
-								bottom: '',
-								left: '',
+							name: nanoid(),
+							value: {
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								padding: {
+									top: '10px',
+									right: '',
+									bottom: '',
+									left: '',
+								},
 							},
 						}}
-					/>
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+							openSide="padding-top"
+						/>
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex
@@ -305,24 +407,32 @@ export const Open = {
 					<h2 className="story-heading">
 						Open<span>Right Padding</span>
 					</h2>
-					<BoxSpacingControl
-						{...args}
-						openSide="padding-right"
+
+					<ControlContextProvider
 						value={{
-							margin: {
-								top: '',
-								right: '',
-								bottom: '',
-								left: '',
-							},
-							padding: {
-								top: '',
-								right: '20%',
-								bottom: '',
-								left: '',
+							name: nanoid(),
+							value: {
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								padding: {
+									top: '',
+									right: '20%',
+									bottom: '',
+									left: '',
+								},
 							},
 						}}
-					/>
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+							openSide="padding-right"
+						/>
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex
@@ -333,24 +443,32 @@ export const Open = {
 					<h2 className="story-heading">
 						Open<span>Bottom Padding</span>
 					</h2>
-					<BoxSpacingControl
-						{...args}
-						openSide="padding-bottom"
+
+					<ControlContextProvider
 						value={{
-							margin: {
-								top: '',
-								right: '',
-								bottom: '',
-								left: '',
-							},
-							padding: {
-								top: '',
-								right: '',
-								bottom: '30vh',
-								left: '',
+							name: nanoid(),
+							value: {
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								padding: {
+									top: '',
+									right: '',
+									bottom: '30vh',
+									left: '',
+								},
 							},
 						}}
-					/>
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+							openSide="padding-bottom"
+						/>
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex
@@ -361,51 +479,105 @@ export const Open = {
 					<h2 className="story-heading">
 						Open<span>Left Padding</span>
 					</h2>
-					<BoxSpacingControl
-						{...args}
-						openSide="padding-left"
+					<ControlContextProvider
 						value={{
-							margin: {
-								top: '',
-								right: '',
-								bottom: '',
-								left: '',
-							},
-							padding: {
-								top: '',
-								right: '',
-								bottom: '',
-								left: '40dvh',
+							name: nanoid(),
+							value: {
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '40dvh',
+								},
 							},
 						}}
-					/>
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+							openSide="padding-left"
+						/>
+					</ControlContextProvider>
 				</Flex>
 			</Flex>
 		);
 	},
 };
 
-const ControlWithHooks = (args) => {
-	const { storyValue, setStoryValue } = useContext(StoryDataContext);
+export const Field = {
+	args: {
+		label: 'Box Spacing',
+	},
+	decorators: [
+		WithInspectorStyles,
+		WithPopoverDataProvider,
+		...SharedDecorators,
+	],
+	render: (args) => (
+		<Flex direction="column" gap="20px">
+			<h2 className="story-heading">With Field</h2>
 
-	return (
-		<BoxSpacingControl
-			{...args}
-			onChange={setStoryValue}
-			value={storyValue}
-		/>
-	);
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: {
+						margin: {
+							top: '',
+							right: '',
+							bottom: '',
+							left: '',
+						},
+						padding: {
+							top: '',
+							right: '',
+							bottom: '',
+							left: '',
+						},
+					},
+				}}
+			>
+				<ControlWithHooks Control={BoxSpacingControl} {...args} />
+			</ControlContextProvider>
+		</Flex>
+	),
 };
 
 export const Play = {
-	args: {},
+	args: {
+		controlInfo: {
+			name: nanoid(),
+			value: {
+				margin: {
+					top: '',
+					right: '',
+					bottom: '',
+					left: '',
+				},
+				padding: {
+					top: '',
+					right: '',
+					bottom: '',
+					left: '',
+				},
+			},
+		},
+	},
 	decorators: [
 		WithStoryContextProvider,
 		WithPopoverDataProvider,
+		WithControlDataProvider,
 		WithInspectorStyles,
 		...SharedDecorators,
 	],
-	render: (args) => <ControlWithHooks {...args} />,
+	render: (args) => (
+		<ControlWithHooks Control={BoxSpacingControl} {...args} />
+	),
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 
@@ -413,7 +585,9 @@ export const Play = {
 
 		await step('Story Data', async () => {
 			await expect(currentValue).toBeInTheDocument();
-			await expect(currentValue).toBeEmptyDOMElement();
+			await expect(currentValue).toHaveTextContent(
+				'{ "margin": { "top": "", "right": "", "bottom": "", "left": "" }, "padding": { "top": "", "right": "", "bottom": "", "left": "" } }'
+			);
 		});
 
 		await step('Top Margin', async () => {
@@ -702,7 +876,7 @@ export const Play = {
 	},
 };
 
-export const Screenshot = {
+export const All = {
 	args: {},
 	decorators: [
 		WithInspectorStyles,
@@ -711,14 +885,13 @@ export const Screenshot = {
 	],
 	render: () => (
 		<Flex direction="column" gap="50px">
-			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">Empty</h2>
-				<BoxSpacingControl {...Empty.args} />
-			</Flex>
+			<Empty.render {...Empty.args} />
 
-			<Filled.render />
+			<Filled.render {...Filled.args} />
 
-			<Open.render />
+			<Open.render {...Open.args} />
+
+			<Field.render {...Field.args} />
 		</Flex>
 	),
 };
