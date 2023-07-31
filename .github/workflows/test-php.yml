@@ -43,5 +43,7 @@ jobs:
                       ${{ runner.os }}-composer-
             - name: Install composer
               run: composer install --prefer-dist --no-progress --no-suggest
-            - name: Run phpunit
-              run: phpunit
+            - name: Change directory
+              run: cd publisher-core
+            - name: Running PHPUnit Tests
+              run: composer run-script test
