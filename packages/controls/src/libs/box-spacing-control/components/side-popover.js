@@ -9,24 +9,28 @@ import { __ } from '@wordpress/i18n';
 import { Button, Flex, Grid, Popover } from '@publisher/components';
 import { Field, InputField } from '@publisher/fields';
 import { controlInnerClassNames } from '@publisher/classnames';
-import { useValue } from '@publisher/utils';
+
+/**
+ * Internal dependencies
+ */
+import { useControlContext } from '../../../context';
 
 export function SidePopover({
+	id,
 	title = '',
 	icon = '',
 	isOpen,
 	type = 'margin',
-	value: initialValue,
 	offset = 35,
 	onClose = () => {},
 	onChange = (newValue) => {
 		return newValue;
 	},
 }) {
-	const { value, setValue } = useValue({
-		initialValue,
-		defaultValue: '0px',
+	const { setValue } = useControlContext({
+		id,
 		onChange,
+		defaultValue: '0px',
 	});
 
 	function getAllActionButtons() {
@@ -146,6 +150,7 @@ export function SidePopover({
 					onClose={onClose}
 				>
 					<InputField
+						id={id}
 						label=""
 						settings={{
 							type: 'css',
@@ -157,7 +162,6 @@ export function SidePopover({
 						}}
 						//
 						defaultValue="0px"
-						value={value}
 						onChange={setValue}
 					/>
 
