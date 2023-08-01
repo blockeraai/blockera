@@ -29,6 +29,7 @@ const {
 } = Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
+SharedDecorators.push(WithPopoverDataProvider);
 
 export default {
 	title: 'Controls/BoxShadowControl',
