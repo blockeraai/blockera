@@ -46,13 +46,14 @@ jobs:
               run: |
                   sudo apt-get update
                   sudo apt-get install git
-                  git submodule update --init --recursive
+                  cd ..
+                  cd publisher-core/libs/storybook
+                  git clone git@github.com:publisherwp/storybook.git
+                  cd ..
+                  cd ..
 
             - name: Running Build Script
               run: npm run build
-
-            - name: Checkout source code
-              uses: actions/checkout@v3
 
             - name: Install WordPress Test Suite
               run: |
@@ -73,11 +74,6 @@ jobs:
 
             - name: Install composer
               run: composer install --prefer-dist --no-progress --no-suggest
-
-            - name: Change directory
-              run: |
-                  cd ..
-                  cd publisher-core
 
             - name: Running PHPUnit Tests
               run: composer run-script test
