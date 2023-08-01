@@ -360,7 +360,7 @@ export const Play = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "type": "blur", "blur": "3px", "brightness": "200%", "contrast": "200%", "hue-rotate": "45deg", "saturate": "200%", "grayscale": "100%", "invert": "100%", "sepia": "100%", "drop-shadow-x": "10px", "drop-shadow-y": "10px", "drop-shadow-blur": "10px", "drop-shadow-color": "", "isVisible": true } ]'
+						'[ { "type": "blur", "blur": "3px", "isVisible": true } ]'
 					),
 				{ timeout: 1000 }
 			);
@@ -382,7 +382,7 @@ export const Play = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "type": "blur", "blur": "10px", "brightness": "200%", "contrast": "200%", "hue-rotate": "45deg", "saturate": "200%", "grayscale": "100%", "invert": "100%", "sepia": "100%", "drop-shadow-x": "10px", "drop-shadow-y": "10px", "drop-shadow-blur": "10px", "drop-shadow-color": "", "isVisible": true } ]'
+						'[ { "type": "blur", "blur": "10px", "isVisible": true } ]'
 					),
 				{ timeout: 1000 }
 			);
@@ -398,7 +398,7 @@ export const Play = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "type": "brightness", "blur": "10px", "brightness": "200%", "contrast": "200%", "hue-rotate": "45deg", "saturate": "200%", "grayscale": "100%", "invert": "100%", "sepia": "100%", "drop-shadow-x": "10px", "drop-shadow-y": "10px", "drop-shadow-blur": "10px", "drop-shadow-color": "", "isVisible": true } ]'
+						'[ { "type": "brightness", "brightness": "200%", "isVisible": true } ]'
 					),
 				{ timeout: 1000 }
 			);
