@@ -43,6 +43,8 @@ jobs:
 
             # Install Git and update submodules
             - name: Install Git and update submodules
+              env:
+                  GH_TOKEN: ${{ github.token }}
               run: |
                   sudo apt-get update
                   sudo apt-get install git
