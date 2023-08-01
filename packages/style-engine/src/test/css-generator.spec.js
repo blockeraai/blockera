@@ -72,8 +72,7 @@ box-shadow: inherit 10px 15px 20px #fff inset;
 			}
 		);
 
-		expect(cssGenerator.rules())
-			.toBe(`.publisher-core.extension.publisher-extension-ref.client-id-12354645546 a{
+		expect(cssGenerator.rules()).toBe(`#block-12354645546 a{
 box-shadow: inherit 10px 15px 20px #fff inset, 0px 10px 15px 20px #000 inset;
 }`);
 	});
