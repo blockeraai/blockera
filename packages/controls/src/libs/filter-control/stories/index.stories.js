@@ -9,6 +9,7 @@ import {
 	waitFor,
 	within,
 } from '@storybook/testing-library';
+import { nanoid } from 'nanoid';
 
 /**
  * Publisher dependencies
@@ -20,13 +21,21 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  * Internal dependencies
  */
 import FilterControl from '../index';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
+import { ControlContextProvider } from '../../../context';
+import { STORE_NAME } from '../../repeater-control/store';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 
 const {
 	WithInspectorStyles,
 	StoryDataContext,
 	WithStoryContextProvider,
 	SharedDecorators,
+	WithPopoverDataProvider,
 } = Decorators;
+
+SharedDecorators.push(WithPlaygroundStyles);
+SharedDecorators.push(WithPopoverDataProvider);
 
 export default {
 	title: 'Controls/FilterControl',
@@ -39,6 +48,23 @@ export const Empty = {
 		label: 'Filters',
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => (
+		<Flex direction="column" gap="20px">
+			<h2 className="story-heading">
+				Box Shadow<span>Empty</span>
+			</h2>
+
+			<ControlContextProvider
+				storeName={STORE_NAME}
+				value={{
+					name: nanoid(),
+					value: [],
+				}}
+			>
+				<ControlWithHooks Control={FilterControl} {...args} />
+			</ControlContextProvider>
+		</Flex>
+	),
 };
 
 export const Fill = {
@@ -51,60 +77,65 @@ export const Fill = {
 			<Flex direction="column" gap="50px">
 				<Flex direction="column" gap="15px">
 					<h2 className="story-heading">Filled</h2>
-					<FilterControl
-						{...args}
-						label="Filters"
-						value={[
-							{
-								type: 'blur',
-								blur: '10px',
-								isVisible: true,
-							},
-							{
-								type: 'drop-shadow',
-								'drop-shadow-x': '20px',
-								'drop-shadow-y': '20px',
-								'drop-shadow-blur': '20px',
-								'drop-shadow-color': '#0947eb',
-								isVisible: true,
-							},
-							{
-								type: 'brightness',
-								brightness: '30%',
-								isVisible: true,
-							},
-							{
-								type: 'contrast',
-								contrast: '40%',
-								isVisible: true,
-							},
-							{
-								type: 'hue-rotate',
-								'hue-rotate': '50deg',
-								isVisible: true,
-							},
-							{
-								type: 'saturate',
-								saturate: '60%',
-								isVisible: true,
-							},
-							{
-								type: 'grayscale',
-								grayscale: '70%',
-								isVisible: true,
-							},
-							{
-								type: 'invert',
-								invert: '80%',
-								isVisible: true,
-							},
-							{
-								type: 'sepia',
-								sepia: '90%',
-								isVisible: true,
-							},
-						]}
-					/>
+
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									type: 'blur',
+									blur: '10px',
+									isVisible: true,
+								},
+								{
+									type: 'drop-shadow',
+									'drop-shadow-x': '20px',
+									'drop-shadow-y': '20px',
+									'drop-shadow-blur': '20px',
+									'drop-shadow-color': '#0947eb',
+									isVisible: true,
+								},
+								{
+									type: 'brightness',
+									brightness: '30%',
+									isVisible: true,
+								},
+								{
+									type: 'contrast',
+									contrast: '40%',
+									isVisible: true,
+								},
+								{
+									type: 'hue-rotate',
+									'hue-rotate': '50deg',
+									isVisible: true,
+								},
+								{
+									type: 'saturate',
+									saturate: '60%',
+									isVisible: true,
+								},
+								{
+									type: 'grayscale',
+									grayscale: '70%',
+									isVisible: true,
+								},
+								{
+									type: 'invert',
+									invert: '80%',
+									isVisible: true,
+								},
+								{
+									type: 'sepia',
+									sepia: '90%',
+									isVisible: true,
+								},
+							],
+						}}
+					>
+						<ControlWithHooks Control={FilterControl} {...args} />
+					</ControlContextProvider>
 				</Flex>
 			</Flex>
 		);
@@ -127,18 +158,23 @@ export const Open = {
 					<h2 className="story-heading">
 						Open<span>Blur</span>
 					</h2>
-					<FilterControl
-						{...args}
-						label="Filters"
-						value={[
-							{
-								type: 'blur',
-								blur: '10px',
-								isVisible: true,
-								isOpen: true,
-							},
-						]}
-					/>
+
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									type: 'blur',
+									blur: '10px',
+									isVisible: true,
+									isOpen: true,
+								},
+							],
+						}}
+					>
+						<ControlWithHooks Control={FilterControl} {...args} />
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex
@@ -149,21 +185,26 @@ export const Open = {
 					<h2 className="story-heading">
 						Open<span>Drop Shadow</span>
 					</h2>
-					<FilterControl
-						{...args}
-						label="Filters"
-						value={[
-							{
-								type: 'drop-shadow',
-								'drop-shadow-x': '20px',
-								'drop-shadow-y': '20px',
-								'drop-shadow-blur': '20px',
-								'drop-shadow-color': '#0947eb',
-								isVisible: true,
-								isOpen: true,
-							},
-						]}
-					/>
+
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									type: 'drop-shadow',
+									'drop-shadow-x': '20px',
+									'drop-shadow-y': '20px',
+									'drop-shadow-blur': '20px',
+									'drop-shadow-color': '#0947eb',
+									isVisible: true,
+									isOpen: true,
+								},
+							],
+						}}
+					>
+						<ControlWithHooks Control={FilterControl} {...args} />
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex
@@ -174,18 +215,23 @@ export const Open = {
 					<h2 className="story-heading">
 						Open<span>Brightness</span>
 					</h2>
-					<FilterControl
-						{...args}
-						label="Filters"
-						value={[
-							{
-								type: 'brightness',
-								brightness: '30%',
-								isVisible: true,
-								isOpen: true,
-							},
-						]}
-					/>
+
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									type: 'brightness',
+									brightness: '30%',
+									isVisible: true,
+									isOpen: true,
+								},
+							],
+						}}
+					>
+						<ControlWithHooks Control={FilterControl} {...args} />
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex
@@ -196,18 +242,23 @@ export const Open = {
 					<h2 className="story-heading">
 						Open<span>Contrast</span>
 					</h2>
-					<FilterControl
-						{...args}
-						label="Filters"
-						value={[
-							{
-								type: 'contrast',
-								contrast: '40%',
-								isVisible: true,
-								isOpen: true,
-							},
-						]}
-					/>
+
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									type: 'contrast',
+									contrast: '40%',
+									isVisible: true,
+									isOpen: true,
+								},
+							],
+						}}
+					>
+						<ControlWithHooks Control={FilterControl} {...args} />
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex
@@ -218,18 +269,23 @@ export const Open = {
 					<h2 className="story-heading">
 						Open<span>Hue Rotate</span>
 					</h2>
-					<FilterControl
-						{...args}
-						label="Filters"
-						value={[
-							{
-								type: 'hue-rotate',
-								'hue-rotate': '50deg',
-								isVisible: true,
-								isOpen: true,
-							},
-						]}
-					/>
+
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									type: 'hue-rotate',
+									'hue-rotate': '50deg',
+									isVisible: true,
+									isOpen: true,
+								},
+							],
+						}}
+					>
+						<ControlWithHooks Control={FilterControl} {...args} />
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex
@@ -240,18 +296,23 @@ export const Open = {
 					<h2 className="story-heading">
 						Open<span>Saturate</span>
 					</h2>
-					<FilterControl
-						{...args}
-						label="Filters"
-						value={[
-							{
-								type: 'saturate',
-								saturate: '60%',
-								isVisible: true,
-								isOpen: true,
-							},
-						]}
-					/>
+
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									type: 'saturate',
+									saturate: '60%',
+									isVisible: true,
+									isOpen: true,
+								},
+							],
+						}}
+					>
+						<ControlWithHooks Control={FilterControl} {...args} />
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex
@@ -262,18 +323,23 @@ export const Open = {
 					<h2 className="story-heading">
 						Open<span>Grayscale</span>
 					</h2>
-					<FilterControl
-						{...args}
-						label="Filters"
-						value={[
-							{
-								type: 'grayscale',
-								grayscale: '70%',
-								isVisible: true,
-								isOpen: true,
-							},
-						]}
-					/>
+
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									type: 'grayscale',
+									grayscale: '70%',
+									isVisible: true,
+									isOpen: true,
+								},
+							],
+						}}
+					>
+						<ControlWithHooks Control={FilterControl} {...args} />
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex
@@ -284,18 +350,23 @@ export const Open = {
 					<h2 className="story-heading">
 						Open<span>Invert</span>
 					</h2>
-					<FilterControl
-						{...args}
-						label="Filters"
-						value={[
-							{
-								type: 'invert',
-								invert: '80%',
-								isVisible: true,
-								isOpen: true,
-							},
-						]}
-					/>
+
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									type: 'invert',
+									invert: '80%',
+									isVisible: true,
+									isOpen: true,
+								},
+							],
+						}}
+					>
+						<ControlWithHooks Control={FilterControl} {...args} />
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex
@@ -306,18 +377,23 @@ export const Open = {
 					<h2 className="story-heading">
 						Open<span>Sepia</span>
 					</h2>
-					<FilterControl
-						{...args}
-						label="Filters"
-						value={[
-							{
-								type: 'sepia',
-								sepia: '90%',
-								isVisible: true,
-								isOpen: true,
-							},
-						]}
-					/>
+
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									type: 'sepia',
+									sepia: '90%',
+									isVisible: true,
+									isOpen: true,
+								},
+							],
+						}}
+					>
+						<ControlWithHooks Control={FilterControl} {...args} />
+					</ControlContextProvider>
 				</Flex>
 			</Flex>
 		);
@@ -335,13 +411,19 @@ const ControlWithHooks = (args) => {
 export const Play = {
 	args: {
 		label: 'Filters',
+		controlInfo: {
+			name: nanoid(),
+			value: [],
+		},
+		storeName: STORE_NAME,
 	},
 	decorators: [
 		WithStoryContextProvider,
 		WithInspectorStyles,
+		WithControlDataProvider,
 		...SharedDecorators,
 	],
-	render: (args) => <ControlWithHooks {...args} />,
+	render: (args) => <ControlWithHooks Control={FilterControl} {...args} />,
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 
@@ -350,7 +432,7 @@ export const Play = {
 		//
 		await step('Story Data', async () => {
 			await expect(currentValue).toBeInTheDocument();
-			await expect(currentValue).toBeEmptyDOMElement();
+			await expect(currentValue).toHaveTextContent('[]');
 		});
 
 		await step('Click Add Button', async () => {
@@ -406,19 +488,16 @@ export const Play = {
 	},
 };
 
-export const Screenshot = {
+export const All = {
 	args: {},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: () => (
 		<Flex direction="column" gap="50px">
-			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">Empty</h2>
-				<FilterControl {...Empty.args} />
-			</Flex>
+			<Empty.render {...Empty.args} />
 
-			<Fill.render />
+			<Fill.render {...Fill.args} />
 
-			<Open.render />
+			<Open.render {...Open.args} />
 		</Flex>
 	),
 };
