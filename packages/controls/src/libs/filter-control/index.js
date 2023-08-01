@@ -15,6 +15,7 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
+import { isArray } from '@publisher/utils';
 
 export default function FilterControl({
 	defaultRepeaterItemValue,
@@ -22,7 +23,57 @@ export default function FilterControl({
 	className,
 	...props
 }) {
-	// todo value cleanup
+	function valueCleanup(value) {
+		if (!isArray(value)) {
+			return value;
+		}
+
+		return value.map((item) => {
+			if (item?.type !== 'blur') {
+				delete item.blur;
+			}
+
+			if (item?.type !== 'brightness') {
+				delete item.brightness;
+			}
+
+			if (item?.type !== 'contrast') {
+				delete item.contrast;
+			}
+
+			if (item?.type !== 'hue-rotate') {
+				delete item['hue-rotate'];
+			}
+
+			if (item?.type !== 'saturate') {
+				delete item.saturate;
+			}
+
+			if (item?.type !== 'grayscale') {
+				delete item.grayscale;
+			}
+
+			if (item?.type !== 'invert') {
+				delete item.invert;
+			}
+
+			if (item?.type !== 'sepia') {
+				delete item.sepia;
+			}
+
+			if (item?.type !== 'drop-shadow') {
+				delete item['drop-shadow-x'];
+				delete item['drop-shadow-y'];
+				delete item['drop-shadow-blur'];
+				delete item['drop-shadow-color'];
+			}
+
+			// internal usage
+			delete item.isOpen;
+
+			return item;
+		});
+	}
 
 	return (
 		<RepeaterControl
@@ -32,6 +83,7 @@ export default function FilterControl({
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			{...props}
+			valueCleanup={valueCleanup}
 		/>
 	);
 }
