@@ -33,27 +33,6 @@ jobs:
             - name: Setup Node
               uses: ./.github/setup-node
 
-            # Set up the SSH key
-            #            - name: Set up SSH key
-            #              run: |
-            #                  mkdir -p ~/.ssh
-            #                  echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-            #                  chmod 600 ~/.ssh/id_rsa
-            #                  ssh-add ~/.ssh/id_rsa
-
-            # Install Git and update submodules
-            - name: Install Git and update submodules
-              env:
-                  GH_TOKEN: ${{ github.token }}
-              run: |
-                  sudo apt-get update
-                  sudo apt-get install git
-                  cd ..
-                  cd publisher-core/libs/storybook
-                  gh repo clone publisherwp/storybook
-                  cd ..
-                  cd ..
-
             - name: Running Build Script
               run: npm run build
 
@@ -76,6 +55,11 @@ jobs:
 
             - name: Install composer
               run: composer install --prefer-dist --no-progress --no-suggest
+
+            - name: Change directory
+              run: |
+                  cd ..
+                  cd publisher-core
 
             - name: Running PHPUnit Tests
               run: composer run-script test

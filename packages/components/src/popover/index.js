@@ -13,7 +13,7 @@ import {
 	componentInnerClassNames,
 } from '@publisher/classnames';
 import { isFunction, isUndefined } from '@publisher/utils';
-import { PopoverContextData } from '@publisher/storybook/decorators/with-popover-data/context';
+// import { PopoverContextData } from '@publisher/storybook/decorators/with-popover-data/context';
 
 /**
  * Internal dependencies
@@ -21,7 +21,7 @@ import { PopoverContextData } from '@publisher/storybook/decorators/with-popover
 import { Button } from '../button';
 import CloseIcon from './icons/close';
 
-export default function Popover({
+export default function Popover( {
 	title,
 	onClose,
 	children,
@@ -31,62 +31,66 @@ export default function Popover({
 	shift: _shift,
 	flip: _flip,
 	...props
-}) {
-	const [isVisible, setIsVisible] = useState(true);
+} ) {
+	const [ isVisible, setIsVisible ] = useState( true );
+
+	const PopoverContextData = '';
 
 	const { onFocusOutside, shift, resize, flip } =
-		useContext(PopoverContextData);
+		useContext( PopoverContextData );
 
 	return (
 		<>
-			{isVisible && (
+			{ isVisible && (
 				<WPPopover
-					className={componentClassNames(
+					className={ componentClassNames(
 						'popover',
 						title && 'with-header',
 						className
-					)}
-					onClose={onClose}
+					) }
+					onClose={ onClose }
 					onFocusOutside={
-						isFunction(onFocusOutside) ? onFocusOutside : onClose
+						isFunction( onFocusOutside ) ? onFocusOutside : onClose
 					}
-					shift={!isUndefined(shift) ? shift : _shift}
-					resize={!isUndefined(resize) ? resize : _resize}
-					flip={!isUndefined(flip) ? flip : _flip}
-					placement={placement}
-					{...props}
+					shift={ ! isUndefined( shift ) ? shift : _shift }
+					resize={ ! isUndefined( resize ) ? resize : _resize }
+					flip={ ! isUndefined( flip ) ? flip : _flip }
+					placement={ placement }
+					{ ...props }
 				>
-					{title && (
+					{ title && (
 						<div
-							className={componentInnerClassNames(
+							className={ componentInnerClassNames(
 								'popover-header'
-							)}
+							) }
 						>
-							{title}
+							{ title }
 
 							<Button
-								className={componentInnerClassNames(
+								className={ componentInnerClassNames(
 									'popover-close'
-								)}
-								noBorder={true}
+								) }
+								noBorder={ true }
 								size="extra-small"
 								align="center"
-								onClick={() => {
-									setIsVisible(false);
+								onClick={ () => {
+									setIsVisible( false );
 									onClose();
-								}}
+								} }
 								tabIndex="-1"
 							>
 								<CloseIcon />
 							</Button>
 						</div>
-					)}
+					) }
 
-					<div className={componentInnerClassNames('popover-body')}>
-						{children}
+					<div
+						className={ componentInnerClassNames( 'popover-body' ) }
+					>
+						{ children }
 					</div>
 				</WPPopover>
-			)}
+			) }
 		</>
 	);
 }
@@ -106,7 +110,7 @@ Popover.propTypes = {
 	 *
 	 * @default 'bottom-start'
 	 */
-	placement: PropTypes.oneOf([
+	placement: PropTypes.oneOf( [
 		'top-start',
 		'top',
 		'top-end',
@@ -119,7 +123,7 @@ Popover.propTypes = {
 		'left-start',
 		'left',
 		'left-end',
-	]),
+	] ),
 	/**
 	 * Adjusts the size of the popover to prevent its contents from going out of
 	 * view when meeting the viewport edges.
