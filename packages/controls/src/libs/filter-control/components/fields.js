@@ -5,112 +5,128 @@ import { __ } from '@wordpress/i18n';
 import { memo, useContext } from '@wordpress/element';
 
 /**
- * Publisher dependencies
- */
-import { InputField, SelectField, ColorField } from '@publisher/fields';
-
-/**
  * Internal dependencies
  */
 import { getTypeOptions } from '../utils';
 import { RepeaterContext } from '../../repeater-control/context';
+import { useControlContext } from '../../../context';
+import { ColorControl, InputControl, SelectControl } from '../../index';
 
 const Fields = ({ itemId, item }) => {
-	const { changeItem } = useContext(RepeaterContext);
+	const {
+		controlInfo: { name: controlId },
+		dispatch: { changeRepeaterItem },
+	} = useControlContext();
+
+	const { repeaterId, getControlId } = useContext(RepeaterContext);
 
 	return (
 		<div id={`repeater-item-${itemId}`}>
-			<SelectField
+			<SelectControl
+				id={getControlId(itemId, 'type')}
 				label={__('Type', 'publisher-core')}
 				options={getTypeOptions()}
-				//
-				value={item.type}
-				onChange={(type) => changeItem(itemId, { ...item, type })}
+				onChange={(type) =>
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, type },
+					})
+				}
 			/>
 
 			{item.type === 'blur' && (
-				<InputField
+				<InputControl
+					id={getControlId(itemId, 'blur')}
 					label={__('Blur', 'publisher-core')}
-					settings={{
-						type: 'css',
-						unitType: 'essential',
-						range: true,
-						min: 0,
-						max: 50,
-					}}
-					//
-					value={item.blur}
-					onChange={(blur) => changeItem(itemId, { ...item, blur })}
+					type="css"
+					unitType="essential"
+					range={true}
+					min={0}
+					max={50}
+					onChange={(blur) =>
+						changeRepeaterItem({
+							controlId,
+							repeaterId,
+							itemId,
+							value: { ...item, blur },
+						})
+					}
 				/>
 			)}
 
 			{item.type === 'drop-shadow' && (
 				<>
-					<InputField
+					<InputControl
+						id={getControlId(itemId, 'drop-shadow-x')}
 						label={__('X', 'publisher-core')}
-						settings={{
-							type: 'css',
-							unitType: 'essential',
-							range: true,
-							min: -100,
-							max: 100,
-						}}
-						//
-						value={item['drop-shadow-x']}
+						type="css"
+						unitType="essential"
+						range={true}
+						min={-100}
+						max={100}
 						onChange={(newValue) =>
-							changeItem(itemId, {
-								...item,
-								'drop-shadow-x': newValue,
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: { ...item, 'drop-shadow-x': newValue },
 							})
 						}
 					/>
 
-					<InputField
+					<InputControl
+						id={getControlId(itemId, 'drop-shadow-y')}
 						label={__('Y', 'publisher-core')}
-						settings={{
-							type: 'css',
-							unitType: 'essential',
-							range: true,
-							min: -100,
-							max: 100,
-						}}
-						//
-						value={item['drop-shadow-y']}
+						type="css"
+						unitType="essential"
+						range={true}
+						min={-100}
+						max={100}
 						onChange={(newValue) =>
-							changeItem(itemId, {
-								...item,
-								'drop-shadow-y': newValue,
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: { ...item, 'drop-shadow-y': newValue },
 							})
 						}
 					/>
 
-					<InputField
+					<InputControl
+						id={getControlId(itemId, 'drop-shadow-blur')}
 						label={__('Blur', 'publisher-core')}
-						settings={{
-							type: 'css',
-							unitType: 'essential',
-							range: true,
-							min: 0,
-							max: 100,
-						}}
-						//
-						value={item['drop-shadow-blur']}
+						type="css"
+						unitType="essential"
+						range={true}
+						min={0}
+						max={100}
 						onChange={(newValue) =>
-							changeItem(itemId, {
-								...item,
-								'drop-shadow-blur': newValue,
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: {
+									...item,
+									'drop-shadow-blur': newValue,
+								},
 							})
 						}
 					/>
 
-					<ColorField
+					<ColorControl
+						id={getControlId(itemId, 'drop-shadow-color')}
 						label={__('Color', 'publisher-core')}
-						//
-						value={item['drop-shadow-color']}
 						onChange={(newValue) =>
-							changeItem(itemId, {
-								...item,
-								'drop-shadow-color': newValue,
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: {
+									...item,
+									'drop-shadow-color': newValue,
+								},
 							})
 						}
 					/>
@@ -118,147 +134,161 @@ const Fields = ({ itemId, item }) => {
 			)}
 
 			{item.type === 'brightness' && (
-				<InputField
+				<InputControl
+					id={getControlId(itemId, 'brightness')}
 					label={__('Brightness', 'publisher-core')}
-					settings={{
-						type: 'css',
-						unitType: 'percent',
-						range: true,
-						min: 0,
-						max: 200,
-					}}
-					//
-					value={item.brightness}
+					type="css"
+					unitType="percent"
+					range={true}
+					min={0}
+					max={200}
 					onChange={(brightness) =>
-						changeItem(itemId, {
-							...item,
-							brightness,
+						changeRepeaterItem({
+							controlId,
+							repeaterId,
+							itemId,
+							value: {
+								...item,
+								brightness,
+							},
 						})
 					}
 				/>
 			)}
 
 			{item.type === 'contrast' && (
-				<InputField
+				<InputControl
+					id={getControlId(itemId, 'contrast')}
 					label={__('Contrast', 'publisher-core')}
-					settings={{
-						type: 'css',
-						unitType: 'percent',
-						range: true,
-						min: 0,
-						max: 200,
-					}}
-					//
-					value={item.contrast}
+					type="css"
+					unitType="percent"
+					range={true}
+					min={0}
+					max={200}
 					onChange={(contrast) =>
-						changeItem(itemId, {
-							...item,
-							contrast,
+						changeRepeaterItem({
+							controlId,
+							repeaterId,
+							itemId,
+							value: {
+								...item,
+								contrast,
+							},
 						})
 					}
 				/>
 			)}
 
 			{item.type === 'hue-rotate' && (
-				<InputField
+				<InputControl
+					id={getControlId(itemId, 'hue-rotate')}
 					label={__('Hue Rotate', 'publisher-core')}
-					settings={{
-						type: 'css',
-						unitType: 'angle',
-						range: true,
-						min: -365,
-						max: 365,
-					}}
-					//
-					value={item['hue-rotate']}
+					type="css"
+					unitType="angle"
+					range={true}
+					min={-365}
+					max={365}
 					onChange={(newValue) =>
-						changeItem(itemId, {
-							...item,
-							'hue-rotate': newValue,
+						changeRepeaterItem({
+							controlId,
+							repeaterId,
+							itemId,
+							value: {
+								...item,
+								'hue-rotate': newValue,
+							},
 						})
 					}
 				/>
 			)}
 
 			{item.type === 'saturate' && (
-				<InputField
+				<InputControl
+					id={getControlId(itemId, 'saturate')}
 					label={__('Saturation', 'publisher-core')}
-					settings={{
-						type: 'css',
-						unitType: 'percent',
-						range: true,
-						min: 0,
-						max: 200,
-					}}
-					//
-					value={item.saturate}
+					type="css"
+					unitType="percent"
+					range={true}
+					min={0}
+					max={200}
 					onChange={(saturate) =>
-						changeItem(itemId, {
-							...item,
-							saturate,
+						changeRepeaterItem({
+							controlId,
+							repeaterId,
+							itemId,
+							value: {
+								...item,
+								saturate,
+							},
 						})
 					}
 				/>
 			)}
 
 			{item.type === 'grayscale' && (
-				<InputField
+				<InputControl
+					id={getControlId(itemId, 'grayscale')}
 					label={__('Grayscale', 'publisher-core')}
-					settings={{
-						type: 'css',
-						unitType: 'percent',
-						range: true,
-						min: 0,
-						max: 100,
-					}}
-					//
-					value={item.grayscale}
+					type="css"
+					unitType="percent"
+					range={true}
+					min={0}
+					max={100}
 					onChange={(grayscale) =>
-						changeItem(itemId, {
-							...item,
-							grayscale,
+						changeRepeaterItem({
+							controlId,
+							repeaterId,
+							itemId,
+							value: {
+								...item,
+								grayscale,
+							},
 						})
 					}
 				/>
 			)}
 
 			{item.type === 'invert' && (
-				<InputField
+				<InputControl
+					id={getControlId(itemId, 'invert')}
 					label={__('Invert', 'publisher-core')}
-					settings={{
-						type: 'css',
-						unitType: 'percent',
-						range: true,
-						min: 0,
-						max: 100,
-					}}
-					//
-					value={item.invert}
+					type="css"
+					unitType="percent"
+					range={true}
+					min={0}
+					max={100}
 					onChange={(invert) =>
-						changeItem(itemId, {
-							...item,
-							invert,
+						changeRepeaterItem({
+							controlId,
+							repeaterId,
+							itemId,
+							value: {
+								...item,
+								invert,
+							},
 						})
 					}
 				/>
 			)}
 
 			{item.type === 'sepia' && (
-				<InputField
+				<InputControl
+					id={getControlId(itemId, 'sepia')}
 					label={__('Sepia', 'publisher-core')}
-					settings={{
-						type: 'css',
-						unitType: 'percent',
-						range: true,
-						min: 0,
-						max: 100,
-					}}
-					//
-					value={item.sepia}
+					type="css"
+					unitType="percent"
+					range={true}
+					min={0}
+					max={100}
 					onChange={(sepia) =>
-						changeItem(itemId, {
-							...item,
-							sepia,
+						changeRepeaterItem({
+							controlId,
+							repeaterId,
+							itemId,
+							value: {
+								...item,
+								sepia,
+							},
 						})
 					}
 				/>
