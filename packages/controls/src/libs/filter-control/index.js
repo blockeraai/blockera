@@ -18,6 +18,7 @@ import Fields from './components/fields';
 import { isArray } from '@publisher/utils';
 
 export default function FilterControl({
+	id,
 	defaultRepeaterItemValue,
 	popoverLabel,
 	className,
@@ -77,6 +78,7 @@ export default function FilterControl({
 
 	return (
 		<RepeaterControl
+			id={id}
 			className={controlClassNames('filter', className)}
 			popoverLabel={popoverLabel}
 			repeaterItemHeader={RepeaterItemHeader}
@@ -93,10 +95,6 @@ FilterControl.propTypes = {
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
 	defaultValue: PropTypes.array,
-	/**
-	 * The current value.
-	 */
-	value: PropTypes.array,
 	/**
 	 * Function that will be fired while the control value state changes.
 	 */
@@ -137,7 +135,7 @@ FilterControl.propTypes = {
 };
 
 FilterControl.defaultProps = {
-	value: [],
+	defaultValue: [],
 	defaultRepeaterItemValue: {
 		type: 'blur',
 		blur: '3px',
