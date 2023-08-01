@@ -9,29 +9,37 @@ import {
 	waitFor,
 	within,
 } from '@storybook/testing-library';
+import { __, sprintf } from '@wordpress/i18n';
+import { nanoid } from 'nanoid';
 
 /**
  * Publisher dependencies
  */
 import { Flex } from '@publisher/components';
 import { default as Decorators } from '@publisher/storybook/decorators';
+import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
-import { RepeaterControl } from '../../index';
+import { InputControl, RepeaterControl } from '../../index';
+import { STORE_NAME } from '../store';
 import { RepeaterContext } from '../context';
-import { InputField } from '@publisher/fields';
-import { __, sprintf } from '@wordpress/i18n';
-import { controlInnerClassNames } from '@publisher/classnames';
+import { ControlContextProvider, useControlContext } from '../../../context';
 import { default as InheritIcon } from './icons/inherit';
+import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 
 const {
 	WithInspectorStyles,
-	StoryDataContext,
 	WithStoryContextProvider,
+	WithPopoverDataProvider,
 	SharedDecorators,
 } = Decorators;
+
+SharedDecorators.push(WithPopoverDataProvider);
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Controls/RepeaterControl',
@@ -39,27 +47,63 @@ export default {
 	tags: ['autodocs'],
 };
 
-export const EmptyPopover = {
+export const PopoverEmpty = {
 	args: {
 		label: 'Items',
 		repeaterItemChildren: () => <p>hi</p>,
+		storeName: STORE_NAME,
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<Flex
+				direction="column"
+				gap="20px"
+				style={{ marginBottom: '100px' }}
+			>
+				<h2 className="story-heading">
+					Repeater<span>Popover → Empty</span>
+				</h2>
+				<ControlContextProvider
+					storeName={STORE_NAME}
+					value={{
+						name: nanoid(),
+						value: [],
+					}}
+				>
+					<ControlWithHooks
+						Control={RepeaterControl}
+						{...args}
+						label="Repeater"
+					/>
+				</ControlContextProvider>
+			</Flex>
+		);
+	},
 };
+PopoverEmpty.storyName = 'Popover → Empty';
 
 function CustomRepeaterItemChildren({ itemId, item }) {
-	const { changeItem } = useContext(RepeaterContext);
+	const {
+		controlInfo: { name: controlId },
+		dispatch: { changeRepeaterItem },
+	} = useControlContext();
+
+	const { repeaterId, getControlId } = useContext(RepeaterContext);
 
 	return (
 		<div id={`repeater-item-${itemId}`}>
-			<InputField
+			<InputControl
+				id={getControlId(itemId, 'name')}
+				type="text"
 				label={__('Name', 'publisher-core')}
-				settings={{
-					type: 'text',
-				}}
-				value={item.name}
 				onChange={(value) =>
-					changeItem(itemId, { ...item, name: value })
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, name: value },
+					})
 				}
 			/>
 		</div>
@@ -99,7 +143,7 @@ function CustomRepeaterItemHeader({
 	);
 }
 
-export const FilledPopover = {
+export const PopoverFilled = {
 	args: {
 		label: 'Items',
 		defaultRepeaterItemValue: {
@@ -107,37 +151,64 @@ export const FilledPopover = {
 			isVisible: true,
 		},
 		repeaterItemChildren: CustomRepeaterItemChildren,
-		value: [
-			{
-				name: 'Akbar',
-				isVisible: true,
-			},
-			{
-				name: 'Akbar Ali',
-				isVisible: true,
-			},
-			{
-				name: 'Akbar Shah',
-				isVisible: true,
-				__className: 'is-hovered',
-			},
-			{
-				name: 'Akbarollah',
-				isVisible: false,
-			},
-			{
-				name: 'Doste Akbar',
-				isVisible: false,
-				__className: 'is-hovered is-open',
-			},
-		],
+		storeName: STORE_NAME,
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<Flex
+				direction="column"
+				gap="20px"
+				style={{ marginBottom: '100px' }}
+			>
+				<h2 className="story-heading">
+					Repeater<span>Popover → Filled</span>
+				</h2>
+				<ControlContextProvider
+					storeName={STORE_NAME}
+					value={{
+						name: nanoid(),
+						value: [
+							{
+								name: 'Akbar',
+								isVisible: true,
+							},
+							{
+								name: 'Akbar Ali',
+								isVisible: true,
+							},
+							{
+								name: 'Akbar Shah',
+								isVisible: true,
+								__className: 'is-hovered',
+							},
+							{
+								name: 'Akbarollah',
+								isVisible: false,
+							},
+							{
+								name: 'Doste Akbar',
+								isVisible: false,
+								__className: 'is-hovered is-open',
+							},
+						],
+					}}
+				>
+					<ControlWithHooks
+						Control={RepeaterControl}
+						{...args}
+						label="Repeater"
+					/>
+				</ControlContextProvider>
+			</Flex>
+		);
+	},
 };
+PopoverFilled.storyName = 'Popover → Filled';
 
-export const CustomHeaderPopover = {
+export const PopoverCustomHeader = {
 	args: {
-		...FilledPopover.args,
+		...PopoverFilled.args,
 		...{
 			repeaterItemHeader: CustomRepeaterItemHeader,
 			injectHeaderButtonsStart: '👉',
@@ -145,137 +216,378 @@ export const CustomHeaderPopover = {
 		},
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<Flex
+				direction="column"
+				gap="20px"
+				style={{ marginBottom: '100px' }}
+			>
+				<h2 className="story-heading">
+					Repeater<span>Popover → Custom Header</span>
+				</h2>
+				<ControlContextProvider
+					storeName={STORE_NAME}
+					value={{
+						name: nanoid(),
+						value: [
+							{
+								name: 'Akbar',
+								isVisible: true,
+							},
+							{
+								name: 'Akbar Ali',
+								isVisible: true,
+							},
+							{
+								name: 'Akbar Shah',
+								isVisible: true,
+								__className: 'is-hovered',
+							},
+							{
+								name: 'Akbarollah',
+								isVisible: false,
+							},
+							{
+								name: 'Doste Akbar',
+								isVisible: false,
+								__className: 'is-hovered is-open',
+							},
+						],
+					}}
+				>
+					<ControlWithHooks
+						Control={RepeaterControl}
+						{...args}
+						label="Repeater"
+					/>
+				</ControlContextProvider>
+			</Flex>
+		);
+	},
 };
+PopoverCustomHeader.storyName = 'Popover → Custom Header';
 
-export const MaxItems = {
+export const PopoverMaxItems = {
 	args: {
-		...FilledPopover.args,
+		...PopoverFilled.args,
 		...{
 			repeaterItemHeader: CustomRepeaterItemHeader,
 			maxItems: 5,
 		},
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<Flex
+				direction="column"
+				gap="20px"
+				style={{ marginBottom: '100px' }}
+			>
+				<h2 className="story-heading">
+					Repeater<span>Popover → Max Items</span>
+				</h2>
+				<ControlContextProvider
+					storeName={STORE_NAME}
+					value={{
+						name: nanoid(),
+						value: [
+							{
+								name: 'Akbar',
+								isVisible: true,
+							},
+							{
+								name: 'Akbar Ali',
+								isVisible: true,
+							},
+							{
+								name: 'Akbar Shah',
+								isVisible: true,
+								__className: 'is-hovered',
+							},
+							{
+								name: 'Akbarollah',
+								isVisible: false,
+							},
+							{
+								name: 'Doste Akbar',
+								isVisible: false,
+								__className: 'is-hovered is-open',
+							},
+						],
+					}}
+				>
+					<ControlWithHooks
+						Control={RepeaterControl}
+						{...args}
+						label="Repeater"
+					/>
+				</ControlContextProvider>
+			</Flex>
+		);
+	},
 };
+PopoverMaxItems.storyName = 'Popover → Max Items';
 
-export const MinItems = {
+export const PopoverMinItems = {
 	args: {
-		...FilledPopover.args,
+		...PopoverFilled.args,
 		...{
 			repeaterItemHeader: CustomRepeaterItemHeader,
 			minItems: 5,
 		},
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<Flex
+				direction="column"
+				gap="20px"
+				style={{ marginBottom: '100px' }}
+			>
+				<h2 className="story-heading">
+					Repeater<span>Popover → Min Items</span>
+				</h2>
+				<ControlContextProvider
+					storeName={STORE_NAME}
+					value={{
+						name: nanoid(),
+						value: [
+							{
+								name: 'Akbar',
+								isVisible: true,
+							},
+							{
+								name: 'Akbar Ali',
+								isVisible: true,
+							},
+							{
+								name: 'Akbar Shah',
+								isVisible: true,
+								__className: 'is-hovered',
+							},
+							{
+								name: 'Akbarollah',
+								isVisible: false,
+							},
+							{
+								name: 'Doste Akbar',
+								isVisible: false,
+								__className: 'is-hovered is-open',
+							},
+						],
+					}}
+				>
+					<ControlWithHooks
+						Control={RepeaterControl}
+						{...args}
+						label="Repeater"
+					/>
+				</ControlContextProvider>
+			</Flex>
+		);
+	},
 };
+PopoverMinItems.storyName = 'Popover → Min Items';
 
-export const OpenItemPopover = {
+export const PopoverOpenItem = {
 	args: {
-		...FilledPopover.args,
-		...{
-			value: [
-				{
-					name: 'Akbar',
-					isVisible: true,
-				},
-				{
-					name: 'Akbar Ali',
-					isVisible: true,
-				},
-				{
-					name: 'Akbar Shah',
-					isVisible: true,
-					isOpen: true,
-				},
-			],
-			minItems: 5,
-		},
+		...PopoverFilled.args,
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<Flex
+				direction="column"
+				gap="20px"
+				style={{ marginBottom: '100px' }}
+			>
+				<h2 className="story-heading">
+					Repeater<span>Popover → Open Item</span>
+				</h2>
+				<ControlContextProvider
+					storeName={STORE_NAME}
+					value={{
+						name: nanoid(),
+						value: [
+							{
+								name: 'Akbar',
+								isVisible: true,
+							},
+							{
+								name: 'Akbar Ali',
+								isVisible: true,
+							},
+							{
+								name: 'Akbar Shah',
+								isVisible: true,
+								isOpen: true,
+							},
+						],
+					}}
+				>
+					<ControlWithHooks
+						Control={RepeaterControl}
+						{...args}
+						label="Repeater"
+					/>
+				</ControlContextProvider>
+			</Flex>
+		);
+	},
 };
+PopoverOpenItem.storyName = 'Popover → Open Item';
 
-const ControlWithHooks = (args) => {
-	const { storyValue, setStoryValue } = useContext(StoryDataContext);
-
-	return (
-		<RepeaterControl
-			{...args}
-			onChange={setStoryValue}
-			value={storyValue}
-		/>
-	);
-};
-
-export const FilledAccordion = {
+export const AccordionFilled = {
 	args: {
-		...FilledPopover.args,
+		...PopoverFilled.args,
 		...{
 			repeaterItemHeader: CustomRepeaterItemHeader,
 			mode: 'accordion',
 		},
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<Flex
+				direction="column"
+				gap="20px"
+				style={{ marginBottom: '100px' }}
+			>
+				<h2 className="story-heading">
+					Repeater<span>Accordion → Filled</span>
+				</h2>
+				<ControlContextProvider
+					storeName={STORE_NAME}
+					value={{
+						name: nanoid(),
+						value: [
+							{
+								name: 'Akbar',
+								isVisible: true,
+							},
+							{
+								name: 'Akbar Ali',
+								isVisible: true,
+							},
+							{
+								name: 'Akbar Shah',
+								isVisible: true,
+								__className: 'is-hovered',
+							},
+							{
+								name: 'Akbarollah',
+								isVisible: false,
+							},
+							{
+								name: 'Doste Akbar',
+								isVisible: false,
+								__className: 'is-hovered is-open',
+							},
+						],
+					}}
+				>
+					<ControlWithHooks
+						Control={RepeaterControl}
+						{...args}
+						label="Repeater"
+					/>
+				</ControlContextProvider>
+			</Flex>
+		);
+	},
 };
+AccordionFilled.storyName = 'Accordion → Filled';
 
-export const OpenItemAccordion = {
+export const AccordionOpenItem = {
 	args: {
-		...FilledPopover.args,
+		...PopoverFilled.args,
 		...{
-			value: [
-				{
-					name: 'Akbar',
-					isVisible: true,
-				},
-				{
-					name: 'Akbar Ali',
-					isVisible: true,
-				},
-				{
-					name: 'Akbar Shah',
-					isVisible: true,
-					isOpen: true,
-				},
-			],
 			mode: 'accordion',
 		},
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<Flex
+				direction="column"
+				gap="20px"
+				style={{ marginBottom: '100px' }}
+			>
+				<h2 className="story-heading">
+					Repeater<span>Accordion → Custom Header</span>
+				</h2>
+				<ControlContextProvider
+					storeName={STORE_NAME}
+					value={{
+						name: nanoid(),
+						value: [
+							{
+								name: 'Akbar',
+								isVisible: true,
+							},
+							{
+								name: 'Akbar Ali',
+								isVisible: true,
+							},
+							{
+								name: 'Akbar Shah',
+								isVisible: true,
+								isOpen: true,
+							},
+						],
+					}}
+				>
+					<ControlWithHooks
+						Control={RepeaterControl}
+						{...args}
+						label="Repeater"
+					/>
+				</ControlContextProvider>
+			</Flex>
+		);
+	},
 };
+AccordionOpenItem.storyName = 'Accordion → Custom Header';
 
 export const Play = {
 	args: {
-		...CustomHeaderPopover.args,
-		value: [
-			{
-				name: 'Akbar',
-				isVisible: true,
-			},
-			{
-				name: 'Akbar Ali',
-				isVisible: true,
-			},
-			{
-				name: 'Akbar Shah',
-				isVisible: true,
-			},
-			{
-				name: 'Akbarollah',
-				isVisible: true,
-			},
-			{
-				name: 'Doste Akbar',
-				isVisible: true,
-			},
-		],
+		...PopoverCustomHeader.args,
+		controlInfo: {
+			name: nanoid(),
+			value: [
+				{
+					name: 'Akbar',
+					isVisible: true,
+				},
+				{
+					name: 'Akbar Ali',
+					isVisible: true,
+				},
+				{
+					name: 'Akbar Shah',
+					isVisible: true,
+				},
+				{
+					name: 'Akbarollah',
+					isVisible: true,
+				},
+				{
+					name: 'Doste Akbar',
+					isVisible: true,
+				},
+			],
+		},
 		minItems: 3,
 		maxItems: 6,
 	},
 	decorators: [
 		WithStoryContextProvider,
 		WithInspectorStyles,
+		WithControlDataProvider,
 		...SharedDecorators,
 	],
-	render: (args) => <ControlWithHooks {...args} />,
+	render: (args) => <ControlWithHooks Control={RepeaterControl} {...args} />,
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 
@@ -427,74 +739,26 @@ export const Play = {
 	},
 };
 
-export const Screenshot = {
+export const All = {
 	args: {},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: () => (
 		<Flex direction="column" gap="50px">
-			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">
-					Popover Repeater<span>Empty</span>
-				</h2>
-				<RepeaterControl {...EmptyPopover.args} />
-			</Flex>
+			<PopoverEmpty.render {...PopoverEmpty.args} />
 
-			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">
-					Popover Repeater<span>Filled</span>
-				</h2>
-				<RepeaterControl {...FilledPopover.args} />
-			</Flex>
+			<PopoverFilled.render {...PopoverFilled.args} />
 
-			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">
-					Popover Repeater<span>Custom Header</span>
-				</h2>
-				<RepeaterControl {...CustomHeaderPopover.args} />
-			</Flex>
+			<PopoverCustomHeader.render {...PopoverCustomHeader.args} />
 
-			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">
-					Popover Repeater<span>Max 5 Items</span>
-				</h2>
-				<RepeaterControl {...MaxItems.args} />
-			</Flex>
+			<PopoverMaxItems.render {...PopoverMaxItems.args} />
 
-			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">
-					Popover Repeater<span>Min 5 Items</span>
-				</h2>
-				<RepeaterControl {...MinItems.args} />
-			</Flex>
+			<PopoverMinItems.render {...PopoverMinItems.args} />
 
-			<Flex
-				direction="column"
-				gap="15px"
-				style={{ marginBottom: '100px' }}
-			>
-				<h2 className="story-heading">
-					Popover Repeater<span>Open Item</span>
-				</h2>
-				<RepeaterControl {...OpenItemPopover.args} />
-			</Flex>
+			<PopoverOpenItem.render {...PopoverOpenItem.args} />
 
-			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">
-					Accordion Repeater<span>Filled</span>
-				</h2>
-				<RepeaterControl {...FilledAccordion.args} />
-			</Flex>
+			<AccordionFilled.render {...AccordionFilled.args} />
 
-			<Flex
-				direction="column"
-				gap="15px"
-				style={{ marginBottom: '150px' }}
-			>
-				<h2 className="story-heading">
-					Accordion Repeater<span>Open Item</span>
-				</h2>
-				<RepeaterControl {...OpenItemAccordion.args} />
-			</Flex>
+			<AccordionOpenItem.render {...AccordionOpenItem.args} />
 		</Flex>
 	),
 };
