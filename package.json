@@ -126,6 +126,7 @@
 		"memize": "^1.0.5",
 		"mini-css-extract-plugin": "^2.7.6",
 		"nanoid": "^4.0.2",
+		"npm-run-all": "^4.1.5",
 		"pa11y": "^6.2.3",
 		"path": "^0.12.7",
 		"po2json": "^1.0.0-alpha",
@@ -164,12 +165,12 @@
 		"start": "wp-scripts start --progress --mode development",
 		"start:debug": "DEBUG_MODE=on wp-scripts start --progress",
 		"packages-update": "wp-scripts packages-update",
+		"postinstall": "patch-package && node ./patches/patch-xcode.js",
 		"clean": "rm -rf build dist/* node_modules vendor wordpress",
 		"prepare": "husky install",
 		"husky:init": "npx husky-init && chmod ug+x .husky/*",
 		"flow": "flow ./src",
 		"setup": "yarn install && yarn run build",
-		"test:unit:php": "composer run-script test",
 		"test:e2e": "cypress run --config video=false --browser chrome",
 		"test:e2e:debug": "npx cypress open",
 		"test:e2e:headed": "yarn test:e2e --headed",
@@ -179,6 +180,11 @@
 		"test:js:update": "yarn test:js -u",
 		"test:generate-output": "jest --json --outputFile=.jest-test-results.json",
 		"test:generate-output:dev": "jest --json --outputFile=.jest-test-results.json -- --watch",
+		"test:unit:php:setup": "npm run env:start",
+		"test:unit:php:base": "npm run env run --env-cwd='wp-content/plugins/publisher-core' tests-wordpress vendor/bin/phpunit -c phpunit.xml.dist --verbose",
+		"test:unit:php": "npm-run-all test:unit:php:setup test:unit:php:base",
+		"test:unit:php:multisite:base": "npm run env run --env-cwd='wp-content/plugins/publisher-core' tests-wordpress vendor/bin/phpunit -c phpunit/multisite.xml --verbose",
+		"test:unit:php:multisite": "npm-run-all test:unit:php:setup test:unit:php:multisite:base",
 		"version": "grunt version && grunt update-pot",
 		"storybook:init": "npx storybook@latest init --type react",
 		"storybook:start": "storybook dev -p 6008",
@@ -202,5 +208,10 @@
 		"*.scss": [
 			"wp-scripts lint-style"
 		]
+	},
+	"wp-env": {
+		"plugin-dir": "publisher-core",
+		"plugin-name": "Publisher Core",
+		"welcome-build-command": "npm run dev"
 	}
 }
