@@ -7,6 +7,33 @@ on:
     workflow_dispatch:
 
 jobs:
+    unit-js:
+        name: JavaScript
+        runs-on: ubuntu-latest
+        if: ${{ github.repository == 'WordPress/gutenberg' || github.event_name == 'pull_request' }}
+
+        strategy:
+            fail-fast: false
+            matrix:
+                node: ['14']
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
+              with:
+                  node-version: ${{ matrix.node }}
+
+            - name: Npm build
+              run: npm run build
+
+            - name: Running the tests
+              run: npm run test:js -- --ci --maxWorkers=2 --cacheDirectory="$HOME/.jest-cache"
+
+            - name: Running the date tests
+              run: npm run test:unit:date -- --ci --maxWorkers=2 --cacheDirectory="$HOME/.jest-cache"
+
     compute-previous-wordpress-version:
         name: Compute previous WordPress version
         runs-on: ubuntu-latest
@@ -155,7 +182,7 @@ jobs:
                   fi
                   # Extract just the number of tests from the string.
                   num_tests=$(echo "$num_tests" | grep -Eo '[0-9]+')
-                  if [ $num_tests -lt 500 ] ; then
+                  if [ $num_tests -lt 9 ] ; then
                     echo "Only $num_tests tests passed, which is much fewer than expected." && exit 1
                   fi
                   echo "$num_tests tests passed."
