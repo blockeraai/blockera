@@ -15,15 +15,15 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                node: ['14']
+                node: ['18.3.0']
 
         steps:
             - uses: actions/checkout@v3
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
-              with:
-                  node-version: ${{ matrix.node }}
+            #              with:
+            #                  node-version: ${{ matrix.node }}
 
             - name: Npm build
               run: npm run build
@@ -69,10 +69,6 @@ jobs:
             fail-fast: true
             matrix:
                 php:
-                    - '7.0'
-                    - '7.1'
-                    - '7.2'
-                    - '7.3'
                     - '7.4'
                     - '8.0'
                     - '8.1'
@@ -81,8 +77,6 @@ jobs:
                 wordpress: [''] # Latest WordPress version.
                 include:
                     # Test with the previous WP version.
-                    - php: '7.0'
-                      wordpress: ${{ needs.compute-previous-wordpress-version.outputs.previous-wordpress-version }}
                     - php: '7.4'
                       wordpress: ${{ needs.compute-previous-wordpress-version.outputs.previous-wordpress-version }}
                     - php: '8.2'
