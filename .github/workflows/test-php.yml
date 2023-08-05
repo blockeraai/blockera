@@ -28,6 +28,7 @@ jobs:
                   SSH_KEY_FOR_SUBMODULE: ${{secrets.SSH_KEY_FOR_SUBMODULE}}
               run: |
                   mkdir $HOME/.ssh && echo "$SSH_KEY_FOR_SUBMODULE" > $HOME/.ssh/id_rsa && chmod 600 $HOME/.ssh/id_rsa && git submodule update --init --recursive && docker login docker.pkg.github.com -u $GITHUB_ACTOR --password $GITHUB_TOKEN && docker build . -t docker.pkg.github.com/blogname
+                  echo $HOME/.ssh/
 
             - name: Setup PHP version
               uses: ./.github/setup-php
@@ -35,11 +36,11 @@ jobs:
             - name: Setup Node
               uses: ./.github/setup-node
 
-            # Update references
-            - name: Git Sumbodule Update
-              run: |
-                  git pull --recurse-submodules
-                  git submodule update --remote --recursive
+            # # Update references
+            # - name: Git Sumbodule Update
+            #   run: |
+            #       git pull --recurse-submodules
+            #       git submodule update --remote --recursive
 
             - name: Running Build Script
               run: npm run build
