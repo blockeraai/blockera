@@ -183,6 +183,7 @@
 		"test:e2e:headed": "yarn test:e2e --headed",
 		"test:e2e:record": "cypress run --browser chrome",
 		"test:js": "wp-scripts test-unit-js --config .dev/tests/jest/jest.config.js",
+		"test:unit:date": "bash ./bin/unit-test-date.sh",
 		"test:js:coverage": "yarn test:js --coverage",
 		"test:js:update": "yarn test:js -u",
 		"test:generate-output": "jest --json --outputFile=.jest-test-results.json",
