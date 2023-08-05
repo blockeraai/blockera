@@ -21,15 +21,16 @@ jobs:
                     - 3306/tcp
                 options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
         steps:
+            # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+            - uses: actions/checkout@v3
             - name: Checkout
-              uses: actions/checkout@v3
+              env:
+                  SSH_KEY_FOR_SUBMODULE: ${{secrets.SSH_KEY_FOR_SUBMODULE}}
+              run: |
+                  mkdir $HOME/.ssh && echo "$SSH_KEY_FOR_SUBMODULE" > $HOME/.ssh/id_rsa && chmod 600 $HOME/.ssh/id_rsa && git submodule update --init --recursive && docker login docker.pkg.github.com -u $GITHUB_ACTOR --password $GITHUB_TOKEN && docker build . -t docker.pkg.github.com/blogname
 
             - name: Setup PHP version
               uses: ./.github/setup-php
-
-            # Checkout with ssh-key
-            - name: Checkout
-              uses: actions/checkout@v3
 
             - name: Setup Node
               uses: ./.github/setup-node
