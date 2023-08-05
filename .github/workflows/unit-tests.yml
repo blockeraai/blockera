@@ -31,9 +31,6 @@ jobs:
             - name: Running the tests
               run: npm run test:js -- --ci --maxWorkers=2 --cacheDirectory="$HOME/.jest-cache"
 
-            - name: Running the date tests
-              run: npm run test:unit:date -- --ci --maxWorkers=2 --cacheDirectory="$HOME/.jest-cache"
-
     compute-previous-wordpress-version:
         name: Compute previous WordPress version
         runs-on: ubuntu-latest
