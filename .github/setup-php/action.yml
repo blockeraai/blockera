@@ -1,0 +1,12 @@
+name: 'Setup PHP & PHPUnit'
+description: ''
+
+runs:
+    using: 'composite'
+    steps:
+        - name: Setup PHP version
+          uses: shivammathur/setup-php@v2
+          with:
+              php-version: '7.4'
+              extensions: simplexml, mysql
+              tools: phpunit:7.5.15

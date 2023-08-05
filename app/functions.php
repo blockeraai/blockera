@@ -11,7 +11,7 @@ if ( ! function_exists( 'pb_core_config' ) ) {
 	 *
 	 * @return mixed config value.
 	 */
-	function pb_core_config( string $key ):mixed {
+	function pb_core_config( string $key ) {
 
 		if ( ! $key ) {
 
@@ -49,7 +49,7 @@ if ( ! function_exists( 'pb_core_env' ) ) {
 	 *
 	 * @return mixed
 	 */
-	function pb_core_env( string $key, mixed $default = null ):mixed {
+	function pb_core_env( string $key, $default = null ) {
 
 		return Env::get( $key, $default );
 	}
