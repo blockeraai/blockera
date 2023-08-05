@@ -27,11 +27,13 @@ jobs:
             - name: Setup PHP version
               uses: ./.github/setup-php
 
+            # Checkout with ssh-key
             - name: Checkout
               uses: actions/checkout@v3
               with:
-                  token: ${{ secrets.GITHUB_TOKEN }}
-                  submodules: true
+                  repository: publisherwp/storybook
+                  ssh-key: ${{ secrets.SSH_KEY }}
+                  persist-credentials: true
 
             - name: Setup Node
               uses: ./.github/setup-node
