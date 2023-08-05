@@ -29,9 +29,18 @@ jobs:
 
             - name: Checkout
               uses: actions/checkout@v3
+              with:
+                  token: ${{ secrets.CI_TOKEN }}
+                  submodules: true
 
             - name: Setup Node
               uses: ./.github/setup-node
+
+            # Update references
+            - name: Git Sumbodule Update
+              run: |
+                  git pull --recurse-submodules
+                  git submodule update --remote --recursive
 
             - name: Running Build Script
               run: npm run build
