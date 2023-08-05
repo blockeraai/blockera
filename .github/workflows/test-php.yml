@@ -30,17 +30,17 @@ jobs:
             # Checkout with ssh-key
             - name: Checkout
               uses: actions/checkout@v3
-              with:
-                  repository: publisherwp/storybook
-                  ssh-key: ${{ secrets.SSH_KEY }}
-                  persist-credentials: true
-                  path: master
 
             - name: Setup Node
               uses: ./.github/setup-node
 
             # Update references
             - name: Git Sumbodule Update
+              with:
+                  repository: publisherwp/storybook
+                  ssh-key: ${{ secrets.SSH_KEY }}
+                  persist-credentials: true
+                  path: master
               run: |
                   git pull --recurse-submodules
                   git submodule update --remote --recursive
