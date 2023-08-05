@@ -65,10 +65,10 @@ jobs:
             - name: Install composer
               run: composer install --prefer-dist --no-progress --no-suggest
 
-            - name: Change directory
-              run: |
-                  cd ..
-                  cd publisher-core
+            # - name: Change directory
+            #   run: |
+            #       cd ..
+            #       cd publisher-core
 
             - name: Running PHPUnit Tests
               run: composer run-script test
