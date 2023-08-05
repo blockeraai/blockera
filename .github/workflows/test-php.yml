@@ -34,6 +34,7 @@ jobs:
                   repository: publisherwp/storybook
                   ssh-key: ${{ secrets.SSH_KEY }}
                   persist-credentials: true
+                  path: master
 
             - name: Setup Node
               uses: ./.github/setup-node
