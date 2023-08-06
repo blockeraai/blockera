@@ -108,6 +108,28 @@
         <exclude-pattern>/.dev/tests/phpunit/*</exclude-pattern>
     </rule>
 
+    <rule ref="PHPCompatibility.FunctionDeclarations.NewReturnTypeDeclarations.voidFound">
+        <exclude-pattern>/.dev/tests/phpunit/*</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.Commenting.FunctionComment.MissingParamComment">
+        <exclude-pattern>/.dev/tests/phpunit/*</exclude-pattern>
+    </rule>
+    <rule ref="PHPCompatibility.FunctionDeclarations.NewReturnTypeDeclarations.voidFound">
+        <exclude-pattern>/.dev/tests/phpunit/*</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.Security.EscapeOutput.DeprecatedWhitelistCommentFound">
+        <exclude-pattern>/.dev/tests/phpunit/*</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.PHP.CommentedOutCode.Found">
+        <exclude-pattern>/.dev/tests/phpunit/*</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.Commenting.InlineComment.InvalidEndChar">
+        <exclude-pattern>/.dev/tests/phpunit/*</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.PHP.CommentedOutCode.Found">
+        <exclude-pattern>/.dev/tests/phpunit/*</exclude-pattern>
+    </rule>
+
     <!-- Exclude PHPUnit tests from file and class name sniffs (for Core parity). -->
     <rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
         <exclude-pattern>/.dev/tests/phpunit/*</exclude-pattern>
