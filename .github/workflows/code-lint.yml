@@ -50,6 +50,7 @@ jobs:
               id: phpcs-publisher-core
               run: |
                   pwd
+                  mkdir .cache
                   phpcs --report-full --report-checkstyle=./.cache/phpcs-report.xml --standard=phpcs.xml
 
             - name: Show PHPCS results in PR
