@@ -30,7 +30,11 @@ export default function useControlEffect({
 	}
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
-	useEffect(() => setValue(controlValue), [...dependencies]);
+	useEffect(
+		() => setValue(controlValue),
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[...dependencies]
+	);
 
 	return setValue;
 }

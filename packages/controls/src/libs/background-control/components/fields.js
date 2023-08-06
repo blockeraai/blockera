@@ -7,12 +7,7 @@ import { memo, useContext } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import {
-	GradientBarField,
-	AnglePickerField,
-	MediaImageField,
-	Field,
-} from '@publisher/fields';
+import { GradientBarField, MediaImageField, Field } from '@publisher/fields';
 import { Flex } from '@publisher/components';
 import {
 	controlClassNames,
