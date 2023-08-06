@@ -55,3 +55,5 @@ dist
 
 # php code sniffer report
 .cache/phpcs-report.xml
+
+.cache/phpcs.json
