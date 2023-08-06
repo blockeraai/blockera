@@ -21,7 +21,7 @@ jobs:
               uses: ./.github/setup-node
 
             - name: Running the lint:js
-              run: npm run lint:js -- --ci --maxWorkers=2 --cacheDirectory="$HOME/.jest-cache"
+              run: npm run lint:js"
 
     phpcs:
         name: PHP coding standards
