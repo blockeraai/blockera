@@ -18,7 +18,9 @@ jobs:
               uses: actions/checkout@v3
               with:
                   submodules: recursive
-                  token: ${{ secrets.SSH_KEY_FOR_SUBMODULE }}
+                  ssh-key: ${{ secrets.SSH_KEY_FOR_SUBMODULE }}
+                  persist-credentials: false
+                  path: ./libs/storybook
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
