@@ -21,7 +21,7 @@ jobs:
               uses: ./.github/setup-node
 
             - name: Running the lint:js
-              run: npm run lint:js"
+              run: npm run lint:js
 
     phpcs:
         name: PHP coding standards
