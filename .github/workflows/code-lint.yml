@@ -48,7 +48,7 @@ jobs:
 
             - name: Run PHPCS on all Publisher Core files
               id: phpcs-publisher-core
-              run: phpcbf --report-full --report-checkstyle=./.cache/phpcs-report.xml --standard=phpcs.xml
+              run: phpcs --report-full --report-checkstyle=./.cache/phpcs-report.xml --standard=phpcs.xml
 
             - name: Show PHPCS results in PR
               if: ${{ always() && steps.phpcs-publisher-core.outcome == 'failure' }}
