@@ -7,6 +7,22 @@ on:
     workflow_dispatch:
 
 jobs:
+    jslint:
+        name: JavaScript WordPress Lint
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        if: ${{ github.repository == 'publisherwp/publisher-core' || github.event_name == 'pull_request' }}
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
+
+            - name: Running the lint:js
+              run: npm run test:js -- --ci --maxWorkers=2 --cacheDirectory="$HOME/.jest-cache"
+
     phpcs:
         name: PHP coding standards
         runs-on: ubuntu-latest
