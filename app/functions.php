@@ -7,7 +7,7 @@ if ( ! function_exists( 'pb_core_config' ) ) {
 	/**
 	 * Retrieve the config with key param or return all config as array
 	 *
-	 * @param string $key
+	 * @param string $key the key of config.
 	 *
 	 * @return mixed config value.
 	 */
@@ -19,9 +19,9 @@ if ( ! function_exists( 'pb_core_config' ) ) {
 		}
 
 		$key_parts       = explode( '.', $key );
-		$config_includes = [
+		$config_includes = array(
 			'app' => PB_CORE_PATH . '/config/app.php',
-		];
+		);
 
 		if ( ! $config_includes[ $key_parts[0] ] ) {
 
@@ -44,8 +44,8 @@ if ( ! function_exists( 'pb_core_env' ) ) {
 	/**
 	 * Gets the value of an environment variable.
 	 *
-	 * @param string $key
-	 * @param mixed  $default
+	 * @param string $key the key of config.
+	 * @param mixed  $default the default value.
 	 *
 	 * @return mixed
 	 */
