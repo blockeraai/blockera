@@ -1,0 +1,31 @@
+name: Storybook Tests
+
+on:
+    pull_request:
+        types: [opened, synchronize, ready_for_review]
+
+    workflow_dispatch:
+
+jobs:
+    test:
+        timeout-minutes: 60
+        runs-on: ubuntu-latest
+        if: ${{ github.repository == 'publisherwp/publisher-core' || github.event_name == 'pull_request' }}
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Setup Node
+              uses: actions/setup-node@v3
+
+            - name: Install Playwright
+              run: npx playwright install --with-deps
+
+            - name: Build Storybook
+              run: yarn build-storybook --quiet
+            - name: Serve Storybook and run tests
+              run: |
+                  npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
+                  "npx http-server storybook-static --port 6006 --silent" \
+                  "npx wait-on tcp:6006 && yarn test-storybook"
