@@ -9,12 +9,12 @@
 	position: relative;
 	background-position: 50% 50%;
 	background-size: contain;
-	
+
 	&.image-none,
 	&.gradient-none,
 	&.color-none {
-		&:after {
-			background-color: #ffffff;
+
+		&::after {
 			content: "";
 			display: inline-block;
 			background: rgba(0, 0, 0, 0.25);
@@ -27,36 +27,36 @@
 			margin-top: -0.5px;
 		}
 	}
-	
-	&.image-none:after {
+
+	&.image-none::after {
 		background-color: #ff3e3e;
 		height: 2px;
 		margin-top: -1px;
 	}
-	
-	&:before {
-		content: '';
+
+	&::before {
+		content: "";
 		background: #ffffff;
 		display: block;
 		position: absolute;
 		left: 0;
 		right: 0;
 		top: 0;
-		bottom: 0px;
+		bottom: 0;
 		z-index: -1;
 		border-radius: 50%;
 	}
-	
+
 }
 
 .publisher-component-color-indicator-stack {
 	display: flex;
 	--stack-space: -5px;
-	
+
 	.publisher-component-color-indicator:not(:first-child) {
 		margin-left: var(--stack-space);
 	}
-	
+
 	.publisher-component-color-indicator {
 		box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25), 0 0 0 2px #ffffff;
 	}

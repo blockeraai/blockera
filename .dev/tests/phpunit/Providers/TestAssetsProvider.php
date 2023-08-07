@@ -41,13 +41,16 @@ class TestAssetsProvider extends AppTestCase {
 			unset( $actual['version'] );
 		}
 
-		$this->assertEquals( array_merge(
-			$asset,
-			[
-				'style'  => ! empty( $asset['style'] ) ? $asset['style'] . ( self::$is_dev_mode ? '' : '.min' ) . '.css' : '',
-				'script' => ! empty( $asset['script'] ) ? $asset['script'] . ( self::$is_dev_mode ? '' : '.min' ) . '.js' : '',
-			]
-		), $actual );
+		$this->assertEquals(
+			array_merge(
+				$asset,
+				[
+					'style'  => ! empty( $asset['style'] ) ? $asset['style'] . ( self::$is_dev_mode ? '' : '.min' ) . '.css' : '',
+					'script' => ! empty( $asset['script'] ) ? $asset['script'] . ( self::$is_dev_mode ? '' : '.min' ) . '.js' : '',
+				]
+			),
+			$actual
+		);
 	}
 
 	public function testShouldRegisteredAssetsAfterCreateNewInstanceOfAssetsProviderClass(): void {
@@ -80,11 +83,11 @@ class TestAssetsProvider extends AppTestCase {
 						'wp-element',
 						'wp-i18n',
 						'wp-polyfill',
-						'wp-primitives'
+						'wp-primitives',
 					],
 					'style'  => '/dist/controls-styles/style',
 					'script' => '/dist/controls/index',
-				]
+				],
 			],
 			[
 				[
@@ -100,7 +103,7 @@ class TestAssetsProvider extends AppTestCase {
 					],
 					'style'  => '/dist/components-styles/style',
 					'script' => '/dist/components/index',
-				]
+				],
 			],
 			[
 				[
@@ -119,7 +122,7 @@ class TestAssetsProvider extends AppTestCase {
 					],
 					'style'  => '/dist/extensions-styles/style',
 					'script' => '/dist/extensions/index',
-				]
+				],
 			],
 			[
 				[
@@ -130,7 +133,7 @@ class TestAssetsProvider extends AppTestCase {
 					],
 					'style'  => '',
 					'script' => '/dist/classnames/index',
-				]
+				],
 			],
 			[
 				[
@@ -141,18 +144,18 @@ class TestAssetsProvider extends AppTestCase {
 					],
 					'style'  => '',
 					'script' => '/dist/data-extractor/index',
-				]
+				],
 			],
 			[
 				[
 					'name'   => 'style-engine',
 					'deps'   => [
 						'wp-element',
-						'wp-polyfill'
+						'wp-polyfill',
 					],
 					'style'  => '',
 					'script' => '/dist/style-engine/index',
-				]
+				],
 			],
 			[
 				[
@@ -169,7 +172,7 @@ class TestAssetsProvider extends AppTestCase {
 					],
 					'style'  => '/dist/fields-styles/style',
 					'script' => '/dist/fields/index',
-				]
+				],
 			],
 			[
 				[
@@ -180,7 +183,7 @@ class TestAssetsProvider extends AppTestCase {
 					],
 					'style'  => '',
 					'script' => '/dist/utils/index',
-				]
+				],
 			],
 		];
 	}

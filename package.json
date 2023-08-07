@@ -102,6 +102,7 @@
 		"css-minimizer-webpack-plugin": "^5.0.0",
 		"cypress": "^12.11.0",
 		"cypress-log-to-output": "^1.1.2",
+		"eslint-plugin-cypress": "^2.13.3",
 		"eslint-plugin-storybook": "^0.6.12",
 		"esm": "^3.2.25",
 		"expect-puppeteer": "^6.0.2",

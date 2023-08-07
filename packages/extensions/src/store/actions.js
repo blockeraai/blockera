@@ -1,3 +1,4 @@
+// eslint-disable-next-line jsdoc/valid-types
 /** @typedef {import('../api/registration').publisherBlockExtensionType} publisherBlockExtensionType */
 
 /**
@@ -27,7 +28,7 @@ export function addBlockExtensions(blockExtension) {
  */
 export const __experimentalRegisterBlockExtension =
 	(blockExtension) =>
-	({ dispatch, select }) => {
+	({ dispatch }) => {
 		dispatch({
 			type: 'ADD_UNPROCESSED_BLOCK_EXTENSION',
 			blockExtension,

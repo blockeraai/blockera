@@ -2,6 +2,11 @@
 
 namespace Publisher\Core\Providers;
 
+/**
+ * AssetsProvider is registering all assets of publisher-core into WordPress
+ *
+ * @since 1.0.0
+ */
 class AssetsProvider {
 
 	/**
@@ -29,14 +34,21 @@ class AssetsProvider {
 		'extensions' => [
 			'@publisher/fields',
 			'@publisher/controls',
-			'@publisher/components'
-		]
+			'@publisher/components',
+		],
 	];
 
+	/**
+	 * AssetsProvider constructor method,
+	 * when create new instance of current class,
+	 * fire `wp_enqueue_scripts` and `enqueue_block_editor_assets`
+	 *
+	 * @since 1.0.0
+	 */
 	public function __construct() {
 
-		add_action( 'wp_enqueue_scripts', [ $this, 'register_assets' ], 10 );
-		add_action( 'enqueue_block_editor_assets', [ $this, 'register_assets' ], 10 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ), 10 );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'register_assets' ), 10 );
 	}
 
 	/**
@@ -49,16 +61,21 @@ class AssetsProvider {
 		$provider = $this;
 
 		return array_filter(
-			array_map( static function ( string $asset ) use ( $provider ) {
+			array_map(
+				static function ( string $asset ) use ( $provider ) {
 
-				if ( ! $assetInfo = $provider->assetInfo( $asset ) ) {
+					$assetInfo = $provider->assetInfo( $asset );
 
-					return null;
-				}
+					if ( ! $assetInfo ) {
 
-				return $assetInfo;
+						return null;
+					}
 
-			}, self::$assets )
+					return $assetInfo;
+
+				},
+				self::$assets
+			)
 		);
 	}
 
@@ -67,9 +84,9 @@ class AssetsProvider {
 	 *
 	 * @return void
 	 */
-	public function register_assets(): void {
+	public function register_assets() {
 
-		//Registering assets ...
+		// Registering assets ...
 		foreach ( $this->prepare_assets() as $asset ) {
 
 			if ( $asset['style'] ) {
@@ -93,7 +110,8 @@ class AssetsProvider {
 				'@publisher/' . $asset['name'],
 				str_replace( '\\', '/', $asset['script'] ),
 				$deps,
-				$asset['version']
+				$asset['version'],
+				true
 			);
 		}
 	}
@@ -101,14 +119,14 @@ class AssetsProvider {
 	/**
 	 * Exclude deps before register script!
 	 *
-	 * @param array $dependencies
+	 * @param array $dependencies the dependencies of current asset.
 	 *
 	 * @since 1.0.0
-	 * @return array
+	 * @return array the list of filtered dependencies
 	 */
 	private function exclude_dependencies( array $dependencies ): array {
 
-		$excludes = [ '@publisher/storybook' ];
+		$excludes = array( '@publisher/storybook' );
 
 		foreach ( $excludes as $item ) {
 
@@ -126,9 +144,9 @@ class AssetsProvider {
 	/**
 	 * Retrieve assets information.
 	 *
-	 * @param string $name
+	 * @param string $name the name of current asset.
 	 *
-	 * @return array
+	 * @return array the asset data
 	 */
 	public function assetInfo( string $name ): array {
 

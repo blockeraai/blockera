@@ -46,6 +46,14 @@ node_modules/
 
 #Examples stories
 /stories
+
+#Dist Directory
 dist
-dist
+
+# phpunit cache
 .phpunit.result.cache
+
+# php code sniffer report
+.cache/phpcs-report.xml
+
+.cache/phpcs.json

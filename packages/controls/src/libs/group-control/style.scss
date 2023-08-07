@@ -4,12 +4,12 @@
 	border-radius: 2px;
 	transition: box-shadow 0.1s linear;
 	background: var(--publisher-controls-background-color);
-	
+
 	&.is-hovered,
 	&:hover {
 		border-color: var(--publisher-controls-border-color-hover);
 	}
-	
+
 	.publisher-control-group-header {
 		display: flex;
 		align-items: center;
@@ -21,14 +21,14 @@
 		gap: 8px;
 		position: relative;
 		font-size: 12px;
-		
+
 		.publisher-control-action-buttons {
 			display: flex;
 			align-items: center;
 			background: #ffffff;
 			gap: -1px;
 			padding-left: 3px;
-			
+
 			.publisher-component-button {
 				height: 30px;
 				width: 30px;
@@ -36,26 +36,26 @@
 				justify-content: center;
 				margin-left: auto;
 				padding: 0;
-				
+
 				&:hover {
 					color: var(--publisher-controls-border-color-focus);
 				}
 			}
 		}
 	}
-	
+
 	.publisher-control-group-content {
 		font-size: 12px;
 	}
 }
 
 .publisher-control-group.mode-accordion {
-	
+
 	&.is-open.toggle-open-border {
 		border-color: var(--publisher-controls-border-color-focus);
 		box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
 	}
-	
+
 	.publisher-control-group-content {
 		border-top: 1px solid var(--publisher-controls-sep-color);
 		padding: 12px 0;
@@ -64,7 +64,7 @@
 }
 
 .publisher-control-group.mode-popover {
-	
+
 	&.is-open {
 		border-color: var(--publisher-controls-border-color-focus);
 		box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);

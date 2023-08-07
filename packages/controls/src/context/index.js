@@ -37,6 +37,7 @@ export const ControlContextProvider = ({
 
 			return getControl(controlInfo.name);
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[controlInfo]
 	);
 	//control dispatch for available actions

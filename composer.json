@@ -47,9 +47,9 @@
 		}
 	},
 	"scripts": {
-		"lint": "@php ./vendor/bin/phpcs --runtime-set ignore_warnings_on_exit 1",
-		"lint:fix": "@php ./vendor/bin/phpcbf",
 		"test": "@php ./vendor/bin/phpunit",
+		"lint": "phpcs --standard=phpcs.xml",
+		"format": "phpcbf --standard=phpcs.xml --report-summary --report-source",
 		"test:coverage": "@php ./vendor/bin/phpunit --coverage-html php-coverage"
 	}
 }

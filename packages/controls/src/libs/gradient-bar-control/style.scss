@@ -1,10 +1,12 @@
 .publisher-control-gradient-bar {
+
 	& > *:first-child {
 		margin-top: 0 !important;
 		margin-bottom: 0 !important;
 	}
 
 	.components-custom-gradient-picker {
+
 		.components-custom-gradient-picker__gradient-bar {
 			border-radius: 52px;
 			height: 40px;
@@ -19,7 +21,7 @@
 			}
 
 			.components-custom-gradient-picker__control-point-button {
-				border: 1px solid #fff;
+				border: 1px solid #ffffff;
 			}
 		}
 

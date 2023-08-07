@@ -2,12 +2,13 @@
  * Login to our test WordPress site
  */
 export function loginToSite() {
-	return goTo("/wp-login.php", true).then(() => {
+	return goTo('/wp-login.php', true).then(() => {
+		// eslint-disable-next-line cypress/no-unnecessary-waiting
 		cy.wait(250);
 
-		cy.get("#user_login").type(Cypress.env("wpUsername"));
-		cy.get("#user_pass").type(Cypress.env("wpPassword"));
-		cy.get("#wp-submit").click();
+		cy.get('#user_login').type(Cypress.env('wpUsername'));
+		cy.get('#user_pass').type(Cypress.env('wpPassword'));
+		cy.get('#wp-submit').click();
 	});
 }
 
@@ -17,8 +18,8 @@ export function loginToSite() {
  * @param {string}  path  The URI path to go to.
  * @param {boolean} login If this is a login page.
  */
-export function goTo(path = "/wp-admin", login = false) {
-	return cy.visit(Cypress.env("testURL") + path).then(() => {
+export function goTo(path = '/wp-admin', login = false) {
+	return cy.visit(Cypress.env('testURL') + path).then(() => {
 		return login
 			? cy.window().then((win) => {
 					return win;
@@ -34,7 +35,7 @@ export function goTo(path = "/wp-admin", login = false) {
 export function getWPDataObject() {
 	return cy
 		.window()
-		.its("wp.data")
+		.its('wp.data')
 		.then((data) => {
 			return data;
 		});
@@ -46,15 +47,15 @@ export function getWPDataObject() {
 export function disableGutenbergFeatures() {
 	return getWPDataObject().then((data) => {
 		// Enable "Top Toolbar"
-		if (!data.select("core/edit-post").isFeatureActive("fixedToolbar")) {
-			data.dispatch("core/edit-post").toggleFeature("fixedToolbar");
+		if (!data.select('core/edit-post').isFeatureActive('fixedToolbar')) {
+			data.dispatch('core/edit-post').toggleFeature('fixedToolbar');
 		}
 
-		if (data.select("core/edit-post").isFeatureActive("welcomeGuide")) {
-			data.dispatch("core/edit-post").toggleFeature("welcomeGuide");
+		if (data.select('core/edit-post').isFeatureActive('welcomeGuide')) {
+			data.dispatch('core/edit-post').toggleFeature('welcomeGuide');
 		}
 
-		data.dispatch("core/editor").disablePublishSidebar();
+		data.dispatch('core/editor').disablePublishSidebar();
 	});
 }
 
@@ -65,8 +66,8 @@ export function disableGutenbergFeatures() {
  * @param {boolean} clearEditor Should clear editor of all blocks
  */
 export function addBlockToPost(blockName, clearEditor = false) {
-	const blockCategory = blockName.split("/")[0] || false;
-	const blockID = blockName.split("/")[1] || false;
+	const blockCategory = blockName.split('/')[0] || false;
+	const blockID = blockName.split('/')[1] || false;
 
 	if (!blockCategory || !blockID) {
 		return;
@@ -79,21 +80,22 @@ export function addBlockToPost(blockName, clearEditor = false) {
 	cy.get(
 		'.edit-post-header [aria-label="Add block"], .edit-site-header [aria-label="Add block"], .edit-post-header-toolbar__inserter-toggle'
 	).click();
+	// eslint-disable-next-line cypress/unsafe-to-chain-command
 	cy.get(
-		".block-editor-inserter__search-input,input.block-editor-inserter__search, .components-search-control__input"
+		'.block-editor-inserter__search-input,input.block-editor-inserter__search, .components-search-control__input'
 	)
 		.click()
 		.type(blockName);
 
 	const targetClassName =
-		(blockCategory === "core" ? "" : `-${blockCategory}`) + `-${blockID}`;
-	cy.get(".editor-block-list-item" + targetClassName)
+		(blockCategory === 'core' ? '' : `-${blockCategory}`) + `-${blockID}`;
+	cy.get('.editor-block-list-item' + targetClassName)
 		.first()
 		.click();
 
 	// Make sure the block was added to our page
 	cy.get(`[class*="-visual-editor"] [data-type="${blockName}"]`)
-		.should("exist")
+		.should('exist')
 		.then(() => {
 			// Then close the block inserter if still open.
 			const inserterButton = Cypress.$(
@@ -111,18 +113,19 @@ export function addNewGroupToPost() {
 	cy.get(
 		'.edit-post-header [aria-label="Add block"], .edit-site-header [aria-label="Add block"], .edit-post-header-toolbar__inserter-toggle'
 	).click();
+	// eslint-disable-next-line cypress/unsafe-to-chain-command
 	cy.get(
-		".block-editor-inserter__search-input,input.block-editor-inserter__search, .components-search-control__input"
+		'.block-editor-inserter__search-input,input.block-editor-inserter__search, .components-search-control__input'
 	)
 		.click()
-		.type("group");
+		.type('group');
 
 	// The different structure of classes is here
-	cy.get(".block-editor-block-types-list__item").first().click();
+	cy.get('.block-editor-block-types-list__item').first().click();
 
 	// Make sure the block was added to our page
 	cy.get(`[class*="-visual-editor"] [data-type='core/group']`)
-		.should("exist")
+		.should('exist')
 		.then(() => {
 			// Then close the block inserter if still open.
 			const inserterButton = Cypress.$(
@@ -138,10 +141,10 @@ export function addNewGroupToPost() {
  * From inside the WordPress editor open the PublisherBlocks Gutenberg editor panel
  */
 export function savePage() {
-	cy.get(".edit-post-header__settings button.is-primary").click();
+	cy.get('.edit-post-header__settings button.is-primary').click();
 
-	cy.get(".components-editor-notices__snackbar", { timeout: 120000 }).should(
-		"not.be.empty"
+	cy.get('.components-editor-notices__snackbar', { timeout: 120000 }).should(
+		'not.be.empty'
 	);
 
 	// Reload the page to ensure that we're not hitting any block errors
@@ -157,11 +160,11 @@ export function savePage() {
 export function checkForBlockErrors(blockName) {
 	disableGutenbergFeatures();
 
-	cy.get(".block-editor-warning").should("not.exist");
+	cy.get('.block-editor-warning').should('not.exist');
 
-	cy.get("body.php-error").should("not.exist");
+	cy.get('body.php-error').should('not.exist');
 
-	cy.get(`[data-type="${blockName}"]`).should("exist");
+	cy.get(`[data-type="${blockName}"]`).should('exist');
 }
 
 /**
@@ -170,8 +173,8 @@ export function checkForBlockErrors(blockName) {
 export function viewPage() {
 	cy.get('button[aria-label="Settings"]').then((settingsButton) => {
 		if (
-			!Cypress.$(settingsButton).hasClass("is-pressed") &&
-			!Cypress.$(settingsButton).hasClass("is-toggled")
+			!Cypress.$(settingsButton).hasClass('is-pressed') &&
+			!Cypress.$(settingsButton).hasClass('is-toggled')
 		) {
 			cy.get(settingsButton).click();
 		}
@@ -181,18 +184,18 @@ export function viewPage() {
 
 	// WP 6.1
 	if (isWP61AtLeast()) {
-		cy.get(".edit-post-post-url__dropdown button").click();
+		cy.get('.edit-post-post-url__dropdown button').click();
 
-		cy.get(".editor-post-url__link").then((pageLink) => {
-			const linkAddress = Cypress.$(pageLink).attr("href");
+		cy.get('.editor-post-url__link').then((pageLink) => {
+			const linkAddress = Cypress.$(pageLink).attr('href');
 			cy.visit(linkAddress);
 		});
 	} else {
 		// <= WP 6.0
 		openSettingsPanel(/permalink/i);
 
-		cy.get(".edit-post-post-link__link").then((pageLink) => {
-			const linkAddress = Cypress.$(pageLink).attr("href");
+		cy.get('.edit-post-post-link__link').then((pageLink) => {
+			const linkAddress = Cypress.$(pageLink).attr('href');
 			cy.visit(linkAddress);
 		});
 	}
@@ -202,7 +205,7 @@ export function viewPage() {
  * Edit the currently viewed page
  */
 export function editPage() {
-	cy.get("#wp-admin-bar-edit").click();
+	cy.get('#wp-admin-bar-edit').click();
 }
 
 /**
@@ -210,9 +213,9 @@ export function editPage() {
  */
 export function clearBlocks() {
 	getWPDataObject().then((data) => {
-		data.dispatch("core/block-editor").removeBlocks(
+		data.dispatch('core/block-editor').removeBlocks(
 			data
-				.select("core/block-editor")
+				.select('core/block-editor')
 				.getBlocks()
 				.map((block) => block.clientId)
 		);
@@ -226,16 +229,16 @@ export function clearBlocks() {
 export function getBlockSlug() {
 	const specFile = Cypress.spec.name;
 
-	return specFile.split("/").pop().replace(".cypress.js", "");
+	return specFile.split('/').pop().replace('.cypress.js', '');
 }
 
 /**
  * Open the block navigator.
  */
 export function openBlockNavigator() {
-	cy.get(".edit-post-header__toolbar")
+	cy.get('.edit-post-header__toolbar')
 		.find(
-			".block-editor-block-navigation,.edit-post-header-toolbar__list-view-toggle,.edit-post-header-toolbar__document-overview-toggle"
+			'.block-editor-block-navigation,.edit-post-header-toolbar__list-view-toggle,.edit-post-header-toolbar__document-overview-toggle'
 		)
 		.click();
 }
@@ -246,10 +249,10 @@ export function openBlockNavigator() {
  * @param {string} style Name of the style to apply
  */
 export function setBlockStyle(style) {
-	openSettingsPanel(RegExp("styles", "i"));
+	openSettingsPanel(RegExp('styles', 'i'));
 
 	cy.get('.edit-post-sidebar [class*="editor-block-styles"]')
-		.contains(RegExp(style, "i"))
+		.contains(RegExp(style, 'i'))
 		.click();
 }
 
@@ -262,32 +265,34 @@ export function setBlockStyle(style) {
  * @param {boolean} isChildBlock Optional selector for children blocks. Default will be top level blocks.
  */
 export function selectBlock(name, isChildBlock = false) {
-	cy.get(".edit-post-header__toolbar")
+	cy.get('.edit-post-header__toolbar')
 		.find(
-			".block-editor-block-navigation,.edit-post-header-toolbar__list-view-toggle"
+			'.block-editor-block-navigation,.edit-post-header-toolbar__list-view-toggle'
 		)
 		.click();
 
 	if (isChildBlock) {
-		cy.get(".block-editor-list-view__expander svg").first().click();
+		cy.get('.block-editor-list-view__expander svg').first().click();
 	}
 
 	// A small wait seems needed to make sure that the list of blocks on the left is complete
+	// eslint-disable-next-line
 	cy.wait(250);
 
 	// Returning the cy.get function allows to chain off of selectBlock
+	// eslint-disable-next-line
 	return cy
-		.get(".block-editor-block-navigation-leaf,.block-editor-list-view-leaf")
-		.contains(isChildBlock ? RegExp(`${name}$`, "i") : RegExp(name, "i"))
+		.get('.block-editor-block-navigation-leaf,.block-editor-list-view-leaf')
+		.contains(isChildBlock ? RegExp(`${name}$`, 'i') : RegExp(name, 'i'))
 		.click()
 		.then(() => {
 			// Then close the block navigator if still open.
 			const inserterButton = Cypress.$(
-				".edit-post-header__toolbar button.edit-post-header-toolbar__list-view-toggle.is-pressed"
+				'.edit-post-header__toolbar button.edit-post-header-toolbar__list-view-toggle.is-pressed'
 			);
 			if (!!inserterButton.length) {
 				cy.get(
-					".edit-post-header__toolbar button.edit-post-header-toolbar__list-view-toggle.is-pressed"
+					'.edit-post-header__toolbar button.edit-post-header-toolbar__list-view-toggle.is-pressed'
 				).click();
 			}
 		});
@@ -307,12 +312,13 @@ export function setInputValue(
 	value,
 	ignoreCase = true
 ) {
-	openSettingsPanel(ignoreCase ? RegExp(panelName, "i") : panelName);
+	openSettingsPanel(ignoreCase ? RegExp(panelName, 'i') : panelName);
 
-	cy.get(".edit-post-sidebar")
-		.contains(ignoreCase ? RegExp(settingName, "i") : settingName)
-		.not(".block-editor-block-card__description")
+	cy.get('.edit-post-sidebar')
+		.contains(ignoreCase ? RegExp(settingName, 'i') : settingName)
+		.not('.block-editor-block-card__description')
 		.then(($settingSection) => {
+			// eslint-disable-next-line
 			cy.get(Cypress.$($settingSection).parent())
 				.find('input[type="number"]')
 				.focus()
@@ -332,49 +338,50 @@ export function setColorSettingsFoldableSetting(settingName, hexColor) {
 		openSettingsPanel(/color settings|color/i);
 	}
 
-	const formattedHex = hexColor.split("#")[1];
+	const formattedHex = hexColor.split('#')[1];
 
-	cy.get(".block-editor-panel-color-gradient-settings__dropdown")
+	cy.get('.block-editor-panel-color-gradient-settings__dropdown')
 		.contains(settingName, { matchCase: false })
 		.click();
-	cy.get(".components-color-palette__custom-color").click();
+	cy.get('.components-color-palette__custom-color').click();
 
 	// Not needed in WP 6.1 anymore
 	if (!isWP61AtLeast()) {
 		cy.get('[aria-label="Show detailed inputs"]').click();
 	}
-
-	cy.get(".components-color-picker")
-		.find(".components-input-control__input")
+	// eslint-disable-next-line
+	cy.get('.components-color-picker')
+		.find('.components-input-control__input')
 		.click()
 		.clear()
 		.type(formattedHex);
 
-	cy.get(".block-editor-panel-color-gradient-settings__dropdown")
+	cy.get('.block-editor-panel-color-gradient-settings__dropdown')
 		.contains(settingName, { matchCase: false })
 		.click({ force: true });
 }
 
 export function setColorPanelSetting(settingName, hexColor) {
-	const formattedHex = hexColor.split("#")[1];
+	const formattedHex = hexColor.split('#')[1];
 
-	cy.get(".block-editor-panel-color-gradient-settings__dropdown")
+	cy.get('.block-editor-panel-color-gradient-settings__dropdown')
 		.contains(settingName, { matchCase: false })
 		.click();
-	cy.get(".components-color-palette__custom-color").click();
+	cy.get('.components-color-palette__custom-color').click();
 
 	// Not needed in WP 6.1 anymore
 	if (!isWP61AtLeast()) {
 		cy.get('[aria-label="Show detailed inputs"]').click();
 	}
 
-	cy.get(".components-color-picker")
-		.find(".components-input-control__input")
+	// eslint-disable-next-line
+	cy.get('.components-color-picker')
+		.find('.components-input-control__input')
 		.click()
 		.clear()
 		.type(formattedHex);
 
-	cy.get(".block-editor-panel-color-gradient-settings__dropdown")
+	cy.get('.block-editor-panel-color-gradient-settings__dropdown')
 		.contains(settingName, { matchCase: false })
 		.click();
 }
@@ -385,14 +392,14 @@ export function setColorPanelSetting(settingName, hexColor) {
  * @param {RegExp} panelText The panel label text to open. eg: Color Settings
  */
 export function openSettingsPanel(panelText) {
-	cy.get(".components-panel__body")
+	cy.get('.components-panel__body')
 		.contains(panelText)
 		.then(($panelTop) => {
 			const $parentPanel = Cypress.$($panelTop).closest(
-				"div.components-panel__body"
+				'div.components-panel__body'
 			);
-			if (!$parentPanel.hasClass("is-opened")) {
-				$panelTop.trigger("click");
+			if (!$parentPanel.hasClass('is-opened')) {
+				$panelTop.trigger('click');
 			}
 		});
 }
@@ -404,13 +411,14 @@ export function openSettingsPanel(panelText) {
  */
 export function openHeadingToolbarAndSelect(headingLevel) {
 	cy.get(
-		".block-editor-block-toolbar .block-editor-block-toolbar__slot button"
+		'.block-editor-block-toolbar .block-editor-block-toolbar__slot button'
 	).each((button, index) => {
 		if (index === 1) {
 			// represents the second position in the toolbar
 			cy.get(button).click({ force: true });
 		}
 	});
+	// eslint-disable-next-line
 	cy.get('.components-popover__content div[role="menu"] button')
 		.contains(headingLevel)
 		.focus()
@@ -423,10 +431,10 @@ export function openHeadingToolbarAndSelect(headingLevel) {
  * @param {string} checkboxLabelText The checkbox label text. eg: Drop Cap
  */
 export function toggleSettingCheckbox(checkboxLabelText) {
-	cy.get(".components-toggle-control__label")
+	cy.get('.components-toggle-control__label')
 		.contains(checkboxLabelText)
-		.closest(".components-base-control__field")
-		.find(".components-form-toggle__input")
+		.closest('.components-base-control__field')
+		.find('.components-form-toggle__input')
 		.click();
 }
 
@@ -443,21 +451,21 @@ export function hexToRGB(hex) {
 
 	// 3 digits
 	if (hex.length === 4) {
-		r = "0x" + hex[1] + hex[1];
-		g = "0x" + hex[2] + hex[2];
-		b = "0x" + hex[3] + hex[3];
+		r = '0x' + hex[1] + hex[1];
+		g = '0x' + hex[2] + hex[2];
+		b = '0x' + hex[3] + hex[3];
 		// 6 digits
 	} else if (hex.length === 7) {
-		r = "0x" + hex[1] + hex[2];
-		g = "0x" + hex[3] + hex[4];
-		b = "0x" + hex[5] + hex[6];
+		r = '0x' + hex[1] + hex[2];
+		g = '0x' + hex[3] + hex[4];
+		b = '0x' + hex[5] + hex[6];
 	}
 
-	return "rgb(" + +r + ", " + +g + ", " + +b + ")";
+	return 'rgb(' + +r + ', ' + +g + ', ' + +b + ')';
 }
 
 export function isNotWPLocalEnv() {
-	return Cypress.env("testURL") !== "http://localhost:8889";
+	return Cypress.env('testURL') !== 'http://localhost:8889';
 }
 
 // A condition to determine if we are testing on WordPress 6.1+
@@ -470,16 +478,16 @@ export function isWP61AtLeast() {
 
 function getIframeDocument(containerClass) {
 	return cy
-		.get(containerClass + " iframe")
-		.its("0.contentDocument")
-		.should("exist");
+		.get(containerClass + ' iframe')
+		.its('0.contentDocument')
+		.should('exist');
 }
 
 export function getIframeBody(containerClass) {
 	return (
 		getIframeDocument(containerClass)
-			.its("body")
-			.should("not.be.undefined")
+			.its('body')
+			.should('not.be.undefined')
 			// wraps "body" DOM element to allow
 			// chaining more Cypress commands, like ".find(...)"
 			.then(cy.wrap)

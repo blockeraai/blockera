@@ -10,6 +10,12 @@
 		"indentation": null,
 		"color-hex-length": "long",
 		"rule-empty-line-before": "always",
-		"comment-empty-line-before": "never"
-	}
+		"comment-empty-line-before": "never",
+		"value-keyword-case": null
+	},
+	"ignoreFiles": [
+		"coverage/**/*.css",
+		"libs/storybook/**/*.css",
+		"libs/storybook/**/*.scss"
+	]
 }

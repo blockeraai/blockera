@@ -13,7 +13,7 @@ import { computedCssRules } from '@publisher/style-engine';
  */
 import { BlockEditContext } from '../../hooks';
 
-export function IconStyles({ iconConfig: { cssGenerators, publisherIcon } }) {
+export function IconStyles({ iconConfig: { cssGenerators } }) {
 	const { attributes: _attributes, ...blockProps } =
 		useContext(BlockEditContext);
 

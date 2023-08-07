@@ -1,32 +1,32 @@
 .publisher-control.publisher-control-panel-body {
-	
+
 	.components-panel__body-title {
-		
+
 		.components-panel__body-toggle {
 			color: var(--publisher-controls-border-color-focus);
 			font-weight: 600;
 			font-size: 13px;
 			padding: 0 16px;
 			height: 48px;
-			
+
 			.components-panel__icon {
 				order: -1;
 				margin: 0 5px 0 0;
 				display: inline-flex;
-				
-				svg{
-					color:var(--publisher-controls-border-color-focus) ;
-					fill: currentColor;
+
+				svg {
+					color: var(--publisher-controls-border-color-focus);
+					fill: currentcolor;
 				}
 			}
 		}
 	}
-	
+
 	&.is-opened {
 		padding: 16px 16px 16px;
 		margin-bottom: 10px;
 	}
-	
+
 	&.is-opened > .components-panel__body-title {
 		margin-bottom: 10px;
 	}

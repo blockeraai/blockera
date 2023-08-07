@@ -7,187 +7,141 @@ export const getTypeLabel = function (type) {
 	switch (type) {
 		case 'all':
 			return __('All', 'publisher-core');
-			break;
 
 		case 'opacity':
 			return __('Opacity', 'publisher-core');
-			break;
 
 		case 'margin':
 			return __('Margin', 'publisher-core');
-			break;
 
 		case 'padding':
 			return __('Padding', 'publisher-core');
-			break;
 
 		case 'border':
 			return __('Border', 'publisher-core');
-			break;
 
 		case 'transform':
 			return __('Transform', 'publisher-core');
-			break;
 
 		case 'filter':
 			return __('Filter', 'publisher-core');
-			break;
 
 		case 'flex':
 			return __('Flex', 'publisher-core');
-			break;
 
 		case 'background-color':
 			return __('Background Color', 'publisher-core');
-			break;
 
 		case 'background-position':
 			return __('Background Position', 'publisher-core');
-			break;
 
 		case 'text-shadow':
 			return __('Text Shadow', 'publisher-core');
-			break;
 
 		case 'box-shadow':
 			return __('Box Shadow', 'publisher-core');
-			break;
 
 		case 'width':
 			return __('Width', 'publisher-core');
-			break;
 
 		case 'height':
 			return __('Height', 'publisher-core');
-			break;
 
 		case 'max-height':
 			return __('Max Height', 'publisher-core');
-			break;
 
 		case 'max-width':
 			return __('Max Width', 'publisher-core');
-			break;
 
 		case 'min-height':
 			return __('Min Height', 'publisher-core');
-			break;
 
 		case 'min-width':
 			return __('Min Width', 'publisher-core');
-			break;
 
 		case 'border-radius':
 			return __('Border Radius', 'publisher-core');
-			break;
 
 		case 'border-color':
 			return __('Border Color', 'publisher-core');
-			break;
 
 		case 'border-width':
 			return __('Border Width', 'publisher-core');
-			break;
 
 		case 'color':
 			return __('Font Color', 'publisher-core');
-			break;
 
 		case 'font-size':
 			return __('Font Size', 'publisher-core');
-			break;
 
 		case 'line-height':
 			return __('Line Height', 'publisher-core');
-			break;
 
 		case 'letter-spacing':
 			return __('Letter Spacing', 'publisher-core');
-			break;
 
 		case 'text-indent':
 			return __('Text Indent', 'publisher-core');
-			break;
 
 		case 'word-spacing':
 			return __('Word Spacing', 'publisher-core');
-			break;
 
 		case 'font-variation-settings':
 			return __('Font Variation', 'publisher-core');
-			break;
 
 		case '-webkit-text-stroke-color':
 			return __('Text Stroke Color', 'publisher-core');
-			break;
 
 		case 'top':
 			return __('Top', 'publisher-core');
-			break;
 
 		case 'right':
 			return __('Right', 'publisher-core');
-			break;
 
 		case 'bottom':
 			return __('Bottom', 'publisher-core');
-			break;
 
 		case 'left':
 			return __('Left', 'publisher-core');
-			break;
 
 		case 'z-index':
 			return __('Z-Index', 'publisher-core');
-			break;
 
 		case 'margin-top':
 			return __('Margin Top', 'publisher-core');
-			break;
 
 		case 'margin-right':
 			return __('Margin Right', 'publisher-core');
-			break;
 
 		case 'margin-bottom':
 			return __('Margin Bottom', 'publisher-core');
-			break;
 
 		case 'margin-left':
 			return __('Margin Left', 'publisher-core');
-			break;
 
 		case 'padding-top':
 			return __('Padding Top', 'publisher-core');
-			break;
 
 		case 'padding-right':
 			return __('Padding Right', 'publisher-core');
-			break;
 
 		case 'padding-bottom':
 			return __('Padding Bottom', 'publisher-core');
-			break;
 
 		case 'padding-left':
 			return __('Padding Left', 'publisher-core');
-			break;
 
 		case 'flex-grow':
 			return __('Flex Grow', 'publisher-core');
-			break;
 
 		case 'flex-shrink':
 			return __('Flex Shrink', 'publisher-core');
-			break;
 
 		case 'flex-basis':
 			return __('Flex Basis', 'publisher-core');
-			break;
 
 		default:
 			return type;
-			break;
 	}
 };
 

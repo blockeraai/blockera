@@ -1,2 +1,6 @@
 <?php
-//Let's show them we are better 😉
+/**
+ * Let's show them we are better 😉.
+ *
+ * @package Application
+ */

@@ -4,12 +4,7 @@
 import { nanoid } from 'nanoid';
 import { expect } from '@storybook/jest';
 import { useContext } from '@wordpress/element';
-import {
-	fireEvent,
-	userEvent,
-	waitFor,
-	within,
-} from '@storybook/testing-library';
+import { userEvent, waitFor, within } from '@storybook/testing-library';
 
 /**
  * Publisher dependencies

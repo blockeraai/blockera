@@ -1,8 +1,12 @@
-import { disableGutenbergFeatures, goTo, loginToSite } from "../helpers";
+/**
+ * Internal dependencies
+ */
+import { disableGutenbergFeatures, goTo, loginToSite } from '../helpers';
 
 before(function () {
 	loginToSite().then(() => {
-		goTo("/wp-admin/post-new.php?post_type=post").then(() => {
+		goTo('/wp-admin/post-new.php?post_type=post').then(() => {
+			// eslint-disable-next-line
 			cy.wait(2000);
 			disableGutenbergFeatures();
 		});
@@ -15,9 +19,9 @@ Cypress.Cookies.defaults({
 });
 
 // Custom uploadFile command
-Cypress.Commands.add("uploadFile", (fileName, fileType, selector) => {
+Cypress.Commands.add('uploadFile', (fileName, fileType, selector) => {
 	cy.get(selector).then((subject) => {
-		cy.fixture(fileName, "hex").then((fileHex) => {
+		cy.fixture(fileName, 'hex').then((fileHex) => {
 			const fileBytes = hexStringToByte(fileHex);
 			const testFile = new File([fileBytes], fileName, {
 				type: fileType,
@@ -50,7 +54,7 @@ function hexStringToByte(str) {
  * Sometimes unhandled exceptions occur in Core that do not effect the UX created by PublisherBlocks.
  * We discard unhandled exceptions and pass the test as long as assertions continue expectedly.
  */
-Cypress.on("uncaught:exception", () => {
+Cypress.on('uncaught:exception', () => {
 	// returning false here prevents Cypress from failing the test.
 	return false;
 });
