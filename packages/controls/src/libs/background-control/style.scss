@@ -1,4 +1,5 @@
 .publisher-control-background {
+
 	.publisher-control-item-preview {
 		width: 18px;
 		height: 18px;
@@ -12,12 +13,13 @@
 }
 
 .publisher-control-background-popover {
+
 	.publisher-control-gradient-bar .components-custom-gradient-picker .components-custom-gradient-picker__gradient-bar {
 		border-radius: 2px;
 		height: 100px;
 		box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
 	}
-	
+
 	.publisher-control-gradient-bar .components-custom-gradient-picker .components-custom-gradient-picker__gradient-bar .components-custom-gradient-picker__control-point-dropdown {
 		top: 41px;
 	}
@@ -30,7 +32,7 @@
 	cursor: pointer;
 	position: relative;
 	user-select: none;
-	
+
 	.publisher-control-mesh-generator-preview-regenerate {
 		position: absolute;
 		left: 0;
@@ -43,22 +45,23 @@
 		border-radius: 2px 0 0 0;
 		display: flex;
 		align-items: center;
-		color: #000;
+		color: #000000;
 		font-weight: 500;
 		text-transform: uppercase;
 		mix-blend-mode: color-burn;
-		
+
 		svg {
 			width: 18px;
-			fill: currentColor;
+			fill: currentcolor;
 		}
-		
+
 		&:hover {
 			opacity: 1;
 		}
 	}
-	
+
 	&:hover {
+
 		.publisher-control-mesh-generator-preview-regenerate {
 			visibility: visible;
 		}

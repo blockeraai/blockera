@@ -1,46 +1,48 @@
 .publisher-control-angle {
+
 	.components-flex-item {
 		margin: 0 !important;
 	}
-	
+
 	.components-angle-picker-control__angle-circle {
 		height: 30px;
 		width: 30px;
 		border: 1px solid var(--publisher-controls-border-color);
 	}
-	
+
 	.components-angle-picker-control {
 		gap: 10px;
-		
+
 		.components-flex-item:nth-child(2) {
 			order: 1;
 		}
-		
+
 		.components-flex-item:nth-child(1) {
 			order: 2;
 		}
-		
+
 		.components-input-control__backdrop {
 			border: 1px solid var(--publisher-controls-border-color);
 			border-radius: 2px;
 		}
-		
+
 		.components-input-control__input:focus + .components-input-control__suffix + .components-input-control__backdrop {
 			border-color: var(--publisher-controls-border-color-focus) !important;
 			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
 		}
-		
+
 		.components-input-control__suffix {
+
 			span {
 				margin-right: 7px;
 			}
 		}
-		
+
 		& > * {
 			margin: 0;
 		}
 	}
-	
+
 	.publisher-component-button {
 		font-size: 13px;
 		font-weight: 400;

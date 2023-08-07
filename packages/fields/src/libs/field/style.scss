@@ -1,88 +1,90 @@
 .publisher-field {
 	--gap: 10px;
 	width: 100%;
-	
+
 	&.small-gap {
 		--gap: 5px;
 	}
-	
+
 	&.no-gap {
 		--gap: 0;
 	}
-	
+
 	.publisher-field-label {
 		order: 2;
 		display: flex;
 		align-items: flex-start;
-		
+
 		.publisher-control-label {
 			display: flex;
 			align-items: center;
 			min-height: 30px;
 		}
 	}
-	
+
 	&.small-gap .publisher-field-label .publisher-control-label {
 		min-height: initial;
 	}
-	
+
 	&.label-center .publisher-field-label {
 		margin-left: auto;
 		margin-right: auto;
 	}
-	
+
 	.publisher-field-control {
 		order: 3;
 		display: flex;
 		flex-direction: column;
 		gap: var(--gap);
-		
+
 		& > .components-base-control,
 		& > .components-base-control > .components-base-control__field {
 			margin-bottom: 0;
 		}
-		
+
 		// this is the extra tag that popover adds!
+
 		& > span:empty {
 			display: none;
 		}
 	}
-	
+
 	&.control-first .publisher-field-control {
 		order: 1;
 	}
-	
-	
+
+
 	&.columns-custom,
 	&.columns-1 {
 		display: grid;
 		grid-template-columns: 1fr;
 		gap: var(--gap);
 	}
-	
+
 	&.columns-2 {
 		display: grid;
 		grid-template-columns: 1fr 2fr;
 		gap: var(--gap);
 	}
-	
+
 	.publisher-control-group-popover &.columns-2 {
 		grid-template-columns: 2fr 5fr;
 	}
-	
+
 	& + & {
 		border-top: 1px solid var(--publisher-controls-sep-color);
 		padding-top: 10px;
 		margin-top: 10px;
 	}
-	
+
 	// remove for stacked
+
 	& & + & {
 		border-top: none;
 		padding-top: 0;
 		margin-top: 0;
 	}
-	
+
 	&.publisher-field-general {
 		align-items: start;
 	}

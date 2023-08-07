@@ -2,36 +2,38 @@
 	display: flex;
 	row-gap: 10px;
 	flex-direction: column;
-	
+
 	& > .publisher-control-header {
 		display: flex;
 		align-items: center;
 	}
-	
+
 	.publisher-control-repeater-item {
 		border-radius: 2px;
 		transition: transform 0.2s linear;
-		
+
 		.publisher-control-group-header {
 			padding: 0 12px;
 		}
-		
+
 		&.is-inactive {
+
 			.publisher-control-group-header > *:not(.publisher-control-action-buttons) {
 				opacity: 0.5 !important;
 				user-select: none;
 			}
-			
+
 			.publisher-control-action-buttons {
+
 				.publisher-control-btn-visibility {
 					color: #c70000 !important;
 				}
 			}
 		}
 	}
-	
+
 	.publisher-control-group-header {
-		
+
 		.publisher-control-repeater-group-header {
 			display: flex;
 			gap: 7px;
@@ -43,18 +45,18 @@
 			position: relative;
 			letter-spacing: -0.2px;
 			font-size: 12px;
-			
+
 			.publisher-control-header-icon {
 				display: flex;
 				min-width: 20px;
 				justify-content: center;
 				align-content: center;
-				
+
 				svg {
-					fill: currentColor;
+					fill: currentcolor;
 				}
 			}
-			
+
 			.publisher-control-header-values {
 				margin-left: auto;
 				display: flex;
@@ -64,9 +66,9 @@
 				gap: 8px;
 				text-transform: capitalize;
 			}
-			
+
 		}
-		
+
 		.publisher-control-action-buttons {
 			position: absolute;
 			top: 0;
@@ -78,11 +80,12 @@
 			background: #ffffff;
 			gap: -1px;
 			padding-left: 3px;
-			
+
 			.publisher-component-button {
 				margin-right: -3px;
-				
+
 				&.publisher-control-btn-visibility {
+
 					&:hover {
 						color: #c70000;
 					}
@@ -90,25 +93,25 @@
 			}
 		}
 	}
-	
+
 	.publisher-control-group.is-hovered .publisher-control-action-buttons,
 	.publisher-control-group-header:hover .publisher-control-action-buttons {
 		opacity: 1;
 		visibility: visible;
 	}
-	
+
 	.publisher-control-group.is-hovered .publisher-control-header-values,
 	.publisher-control-group-header:hover .publisher-control-header-values {
 		opacity: 0;
 		visibility: hidden;
 	}
-	
+
 	.publisher-control-repeater-header-action-buttons {
 		margin-left: auto;
 		display: flex;
 		flex-direction: row;
 		gap: 10px;
-		
+
 		.publisher-control-btn-add {
 			padding: 0 !important;
 			width: 22px;
