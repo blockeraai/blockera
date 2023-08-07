@@ -34,7 +34,7 @@ jobs:
                   git clone git@github.com:publisherwp/storybook.git
 
             - name: Build Storybook
-              run: yarn storybook:build --quiet
+              run: npm run storybook:build --quiet
             - name: Serve Storybook and run tests
               run: |
                   npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
