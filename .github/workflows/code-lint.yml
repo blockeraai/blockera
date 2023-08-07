@@ -14,10 +14,13 @@ jobs:
         if: ${{ github.repository == 'publisherwp/publisher-core' || github.event_name == 'pull_request' }}
 
         steps:
+            - name: Checkout Parent
+              uses: actions/checkout@v3
+
             - name: Checkout repository
               uses: actions/checkout@v3
               with:
-                  submodules: recursive
+                  repository: publisherwp/storybook
                   ssh-key: ${{ secrets.SSH_KEY_FOR_SUBMODULE }}
                   persist-credentials: false
                   path: ./libs/storybook
