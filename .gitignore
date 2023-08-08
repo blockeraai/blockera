@@ -57,3 +57,6 @@ dist
 .cache/phpcs-report.xml
 
 .cache/phpcs.json
+
+# Storybook Build directory
+storybook-static
