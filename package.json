@@ -33,7 +33,8 @@
 		"@publisher/extensions": "file:packages/extensions",
 		"@publisher/fields": "file:packages/fields",
 		"@publisher/style-engine": "file:packages/style-engine",
-		"@publisher/utils": "file:packages/utils"
+		"@publisher/utils": "file:packages/utils",
+		"git-conventional-commits": "^2.6.5"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.22.9",
