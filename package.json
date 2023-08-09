@@ -33,8 +33,7 @@
 		"@publisher/extensions": "file:packages/extensions",
 		"@publisher/fields": "file:packages/fields",
 		"@publisher/style-engine": "file:packages/style-engine",
-		"@publisher/utils": "file:packages/utils",
-		"git-conventional-commits": "^2.6.5"
+		"@publisher/utils": "file:packages/utils"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.22.9",
@@ -111,6 +110,7 @@
 		"framer-motion": "^10.12.15",
 		"fs": "^0.0.1-security",
 		"fuse.js": "^6.6.2",
+		"git-conventional-commits": "^2.6.5",
 		"grunt": "^1.5.2",
 		"grunt-contrib-clean": "^2.0.0",
 		"grunt-contrib-compress": "^2.0.0",
