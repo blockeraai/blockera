@@ -25,4 +25,4 @@ export default {
 };
 
 export const WithJestTests = withTests({ results });
-export { WithPlaygroundStyles } from './decorators/with-playground-styles';
+export * from './decorators/with-playground-styles';
