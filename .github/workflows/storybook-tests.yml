@@ -22,9 +22,6 @@ jobs:
             - name: Install Playwright
               run: npx playwright install --with-deps
 
-            - name: Install Storybook
-              run: npx storybook@latest init
-
             - name: Setup SSH
               uses: MrSquaare/ssh-setup-action@v1
               with:
