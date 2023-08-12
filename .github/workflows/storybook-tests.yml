@@ -23,7 +23,7 @@ jobs:
               run: npx playwright install --with-deps
 
             - name: Install Storybook
-              run: npx storybook@latest init
+              run: npx storybook@latest
 
             - name: Setup SSH
               uses: MrSquaare/ssh-setup-action@v1
@@ -37,7 +37,7 @@ jobs:
                   git clone git@github.com:publisherwp/storybook.git
 
             - name: Build Storybook
-              run: npm run storybook:build --quiet
+              run: npm run storybook:build --quiet --debug-webpack
             - name: Serve Storybook and run tests
               run: |
                   npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
