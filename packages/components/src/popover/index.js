@@ -13,7 +13,7 @@ import {
 	componentInnerClassNames,
 } from '@publisher/classnames';
 import { isFunction, isUndefined } from '@publisher/utils';
-// import { PopoverContextData } from '@publisher/storybook/decorators/with-popover-data/context';
+import { PopoverContextData } from '@publisher/storybook/decorators/with-popover-data/context';
 
 /**
  * Internal dependencies
@@ -33,8 +33,6 @@ export default function Popover({
 	...props
 }) {
 	const [isVisible, setIsVisible] = useState(true);
-
-	const PopoverContextData = '';
 
 	const { onFocusOutside, shift, resize, flip } =
 		useContext(PopoverContextData);

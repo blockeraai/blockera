@@ -1,0 +1,32 @@
+# TODO: Documentation
+
+# Tooling
+/bin                                            @rezaelahidev
+/tools											@rezaelahidev
+/.storybook                                     @rezaelahidev
+/libs/storybook 								@rezaelahidev @aliaghdam
+
+# Project Management
+/.github
+/.husky											@rezaelahidev
+
+# Development ENV
+/.dev		                                    @rezaelahidev
+
+# PHP
+/app
+/config
+/init.php
+/bootstrap
+/publisher-core.php								@rezaelahidev
+
+# Packages
+/packages/controls								@aliaghdam @rezaelahidev
+/packages/classnames							@aliaghdam @rezaelahidev
+/packages/components							@aliaghdam @rezaelahidev
+/packages/data-extractor						@rezaelahidev
+/packages/extensions							@rezaelahidev @aliaghdam
+/packages/utils									@aliaghdam
+/packages/fields								@aliaghdam
+/packages/style-engine							@rezaelahidev
+/packages/components/bin/icons/index.js			@rezaelahidev
