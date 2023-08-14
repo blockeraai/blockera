@@ -13,7 +13,7 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { Button, Icon, MediaUploader } from '@publisher/components';
-import { isEmpty, isFunction, useLateEffect } from '@publisher/utils';
+import { isEmpty, useLateEffect } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -23,6 +23,7 @@ import { iconReducer } from './store/reducer';
 import { default as Suggestions } from './components/suggestions';
 import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
 import { default as DeleteIcon } from './icons/delete';
+import { useControlContext } from '../../context';
 
 export default function IconControl({
 	suggestionsQuery,
@@ -31,19 +32,20 @@ export default function IconControl({
 	labelIconLibrary,
 	labelUploadSvg,
 	//
-	value,
 	defaultValue,
 	onChange,
 	//
 	className,
 }) {
-	const [currentIcon, currentIconDispatch] = useReducer(iconReducer, {
-		...defaultValue,
-		...value,
+	const { value, setValue } = useControlContext({
+		defaultValue,
+		onChange,
 	});
 
+	const [currentIcon, currentIconDispatch] = useReducer(iconReducer, value);
+
 	useLateEffect(() => {
-		if (isFunction(onChange)) onChange(currentIcon);
+		setValue(currentIcon);
 	}, [currentIcon]);
 
 	const [isOpenModal, setOpenModal] = useState(false);
@@ -90,6 +92,7 @@ export default function IconControl({
 
 	function handleIconSelect(event, action) {
 		event.stopPropagation();
+
 		let target = event.target;
 
 		if ('SVG' !== target.nodeName) {

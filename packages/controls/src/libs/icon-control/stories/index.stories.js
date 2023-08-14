@@ -1,14 +1,14 @@
 /**
  * External dependencies
  */
-import { useContext } from '@wordpress/element';
-import { expect } from '@storybook/jest';
+import { nanoid } from 'nanoid';
 import {
 	fireEvent,
 	userEvent,
 	waitFor,
 	within,
 } from '@storybook/testing-library';
+import { expect } from '@storybook/jest';
 
 /**
  * Publisher dependencies
@@ -20,13 +20,15 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  * Internal dependencies
  */
 import { IconControl } from '../../index';
+import { ControlContextProvider } from '../../../context';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
+import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 
-const {
-	WithInspectorStyles,
-	StoryDataContext,
-	WithStoryContextProvider,
-	SharedDecorators,
-} = Decorators;
+const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
+	Decorators;
+
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Controls/IconControl',
@@ -37,64 +39,98 @@ export default {
 export const Default = {
 	args: {
 		defaultValue: '',
-		value: '',
+		controlInfo: {
+			name: nanoid(),
+			value: '',
+		},
 	},
-	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => <ControlWithHooks Control={IconControl} {...args} />,
+	decorators: [
+		WithInspectorStyles,
+		WithControlDataProvider,
+		...SharedDecorators,
+	],
 };
 
 export const WithIcon = {
 	args: {
-		value: {
-			icon: 'home',
-			library: 'wp',
-			uploadSVG: '',
+		controlInfo: {
+			name: nanoid(),
+			value: {
+				icon: 'home',
+				library: 'wp',
+				uploadSVG: '',
+			},
 		},
 	},
-	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => <ControlWithHooks Control={IconControl} {...args} />,
+	decorators: [
+		WithInspectorStyles,
+		WithControlDataProvider,
+		...SharedDecorators,
+	],
 };
 
 export const CustomURLIcon = {
 	args: {
-		value: {
-			icon: 'home',
-			library: 'custom',
-			uploadSVG: {
-				url: 'https://betterstudio.com/wp-content/uploads/2022/09/publisher-theme.svg',
-				title: 'Publisher logo',
+		controlInfo: {
+			name: nanoid(),
+			value: {
+				icon: 'home',
+				library: 'custom',
+				uploadSVG: {
+					url: 'https://betterstudio.com/wp-content/uploads/2022/09/publisher-theme.svg',
+					title: 'Publisher logo',
+				},
 			},
 		},
 	},
-	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => <ControlWithHooks Control={IconControl} {...args} />,
+	decorators: [
+		WithInspectorStyles,
+		WithControlDataProvider,
+		...SharedDecorators,
+	],
 };
 
 export const WithSuggestions = {
 	args: {
-		value: {
-			icon: 'pullLeft',
-			library: 'wp',
-			uploadSVG: '',
+		controlInfo: {
+			name: nanoid(),
+			value: {
+				icon: 'pullLeft',
+				library: 'wp',
+				uploadSVG: '',
+			},
 		},
 		suggestionsQuery: 'left',
 	},
-	decorators: [WithInspectorStyles, ...SharedDecorators],
-};
-
-const ControlWithHooks = (args) => {
-	const { storyValue, setStoryValue } = useContext(StoryDataContext);
-
-	return (
-		<IconControl {...args} onChange={setStoryValue} value={storyValue} />
-	);
+	render: (args) => <ControlWithHooks Control={IconControl} {...args} />,
+	decorators: [
+		WithInspectorStyles,
+		WithControlDataProvider,
+		...SharedDecorators,
+	],
 };
 
 export const Play = {
-	args: {},
+	args: {
+		controlInfo: {
+			name: nanoid(),
+			value: {
+				icon: '',
+				library: '',
+				uploadSVG: '',
+			},
+		},
+	},
 	decorators: [
 		WithStoryContextProvider,
 		WithInspectorStyles,
+		WithControlDataProvider,
 		...SharedDecorators,
 	],
-	render: (args) => <ControlWithHooks {...args} />,
+	render: (args) => <ControlWithHooks Control={IconControl} {...args} />,
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 
@@ -150,27 +186,41 @@ export const Play = {
 };
 
 export const Screenshot = {
-	decorators: [WithInspectorStyles, ...SharedDecorators],
+	decorators: [
+		WithInspectorStyles,
+		WithControlDataProvider,
+		...SharedDecorators,
+	],
 	render: () => (
 		<Flex direction="column" gap="50px">
 			<Flex direction="column" gap="30px">
 				<h2 className="story-heading">Empty</h2>
-				<IconControl {...Default.args} />
+				<ControlContextProvider value={Default.args.controlInfo}>
+					<Default.render {...Default.args} />
+				</ControlContextProvider>
 			</Flex>
 
 			<Flex direction="column" gap="30px">
 				<h2 className="story-heading">Selected Icon</h2>
-				<IconControl {...WithIcon.args} />
+				<ControlContextProvider value={WithIcon.args.controlInfo}>
+					<WithIcon.render {...WithIcon.args} />
+				</ControlContextProvider>
 			</Flex>
 
 			<Flex direction="column" gap="30px">
 				<h2 className="story-heading">Custom Uploaded Icon</h2>
-				<IconControl {...CustomURLIcon.args} />
+				<ControlContextProvider value={CustomURLIcon.args.controlInfo}>
+					<CustomURLIcon.render {...CustomURLIcon.args} />
+				</ControlContextProvider>
 			</Flex>
 
 			<Flex direction="column" gap="30px">
 				<h2 className="story-heading">With Suggestion Icons</h2>
-				<IconControl {...WithSuggestions.args} />
+				<ControlContextProvider
+					value={WithSuggestions.args.controlInfo}
+				>
+					<WithSuggestions.render {...WithSuggestions.args} />
+				</ControlContextProvider>
 			</Flex>
 		</Flex>
 	),
