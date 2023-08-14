@@ -135,7 +135,7 @@ export default function IconControl({
 									type: 'DELETE_ICON',
 								});
 							}}
-						></Button>
+						/>
 
 						{currentIcon.uploadSVG ? (
 							<img
