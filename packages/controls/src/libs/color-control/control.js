@@ -147,4 +147,5 @@ ColorControl.defaultProps = {
 	type: 'normal',
 	contentAlign: 'left',
 	field: 'color',
+	defaultValue: '',
 };
