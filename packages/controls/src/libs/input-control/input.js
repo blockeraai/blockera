@@ -21,7 +21,7 @@ import { RangeControl } from './../index';
 import { getCSSUnits, isSpecialUnit } from './utils';
 import { useControlContext } from '../../context';
 
-export function InputControl( {
+export function InputControl({
 	unitType,
 	units,
 	range,
@@ -34,70 +34,70 @@ export function InputControl( {
 	field, //
 	className,
 	...props
-} ) {
-	const { value, setValue } = useControlContext( {
+}) {
+	const { value, setValue } = useControlContext({
 		id,
 		defaultValue,
 		onChange,
-	} );
+	});
 
 	// add css units
-	if ( unitType !== '' && ( isUndefined( units ) || isEmpty( units ) ) ) {
-		units = getCSSUnits( unitType );
+	if (unitType !== '' && (isUndefined(units) || isEmpty(units))) {
+		units = getCSSUnits(unitType);
 	}
 
 	return (
 		<Field
-			label={ label }
-			field={ field }
-			columns={ columns }
-			className={ className }
+			label={label}
+			field={field}
+			columns={columns}
+			className={className}
 		>
 			<div
-				className={ controlClassNames(
+				className={controlClassNames(
 					'input',
 					range && 'input-range',
 					noBorder && 'no-border',
-					isSpecialUnit( value ) && 'publisher-control-unit-special',
+					isSpecialUnit(value) && 'publisher-control-unit-special',
 					className
-				) }
+				)}
 			>
-				{ range && (
+				{range && (
 					<RangeControl
-						withInputField={ false }
-						className={ className }
-						onChange={ ( newValue ) => {
+						withInputField={false}
+						className={className}
+						onChange={(newValue) => {
 							// extract unit from old value and assign it to newValue
-							if ( isString( value ) )
+							if (isString(value))
 								newValue =
-									newValue + value.replace( /[0-9|-]/gi, '' );
-							setValue( newValue );
-						} }
-						{ ...props }
+									newValue + value.replace(/[0-9|-]/gi, '');
+							setValue(newValue);
+						}}
+						{...props}
 					/>
-				) }
+				)}
 
-				{ ! isEmpty( units ) ? (
+				{!isEmpty(units) ? (
 					<WPUnitControl
-						{ ...props }
-						units={ units }
-						value={ value }
-						onChange={ setValue }
-						className={ controlClassNames(
+						{...props}
+						units={units}
+						value={value}
+						onChange={setValue}
+						className={controlClassNames(
 							'text',
 							'publisher-control-unit',
 							className
-						) }
-						isUnitSelectTabbable={ false }
+						)}
+						isUnitSelectTabbable={false}
 					/>
 				) : (
 					<WPTextControl
-						{ ...props }
-						value={ value }
-						onChange={ setValue }
-						className={ controlClassNames( 'text', className ) }
+						{...props}
+						value={value}
+						onChange={setValue}
+						className={controlClassNames('text', className)}
 					/>
-				) }
+				)}
 			</div>
 		</Field>
 	);
@@ -123,7 +123,7 @@ InputControl.propTypes = {
 	/**
 	 * Type of CSS units from presets
 	 */
-	unitType: PropTypes.oneOf( [
+	unitType: PropTypes.oneOf([
 		'outline',
 		'text-shadow',
 		'box-shadow',
@@ -138,16 +138,16 @@ InputControl.propTypes = {
 		'essential',
 		'general',
 		'custom',
-	] ),
+	]),
 	/**
 	 * Indicates units for showing unit for value.
 	 */
 	units: PropTypes.arrayOf(
-		PropTypes.shape( {
+		PropTypes.shape({
 			value: PropTypes.string,
 			label: PropTypes.string,
 			default: PropTypes.number,
-		} )
+		})
 	),
 	/**
 	 * By using this you can prevent the control to show the border and outline shape.
@@ -156,11 +156,11 @@ InputControl.propTypes = {
 	/**
 	 * The minimum `value` allowed.
 	 */
-	min: PropTypes.oneOfType( [ PropTypes.number, PropTypes.string ] ),
+	min: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	/**
 	 * The maximum `value` allowed.
 	 */
-	max: PropTypes.oneOfType( [ PropTypes.number, PropTypes.string ] ),
+	max: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	/**
 	 * Disables the `input`, preventing new values from being applied.
 	 */

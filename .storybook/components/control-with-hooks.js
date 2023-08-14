@@ -3,7 +3,7 @@
  */
 import { useControlContext } from '@publisher/controls';
 
-const ControlWithHooks = ( { Control, ...args } ) => {
+const ControlWithHooks = ({ Control, ...args }) => {
 	const {
 		controlInfo: { name: controlId },
 		dispatch: { modifyControlValue }, // eslint-disable-next-line
@@ -11,12 +11,12 @@ const ControlWithHooks = ( { Control, ...args } ) => {
 
 	return (
 		<Control
-			{ ...args }
-			onChange={ ( newValue ) =>
-				modifyControlValue( {
+			{...args}
+			onChange={(newValue) =>
+				modifyControlValue({
 					controlId,
 					value: newValue,
-				} )
+				})
 			}
 		/>
 	);
