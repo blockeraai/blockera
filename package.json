@@ -177,7 +177,6 @@
 		"start:debug": "DEBUG_MODE=on wp-scripts start --progress",
 		"clean": "rm -rf build dist/* node_modules vendor wordpress",
 		"prepare": "husky install",
-		"husky:init": "npx husky-init && chmod ug+x .husky/*",
 		"flow": "flow ./src",
 		"setup": "yarn install && yarn run build",
 		"test:e2e": "cypress run --config video=false --browser chrome",
