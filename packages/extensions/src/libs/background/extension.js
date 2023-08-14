@@ -57,66 +57,82 @@ export function BackgroundExtension({ children, config, ...props }) {
 			)}
 
 			{isActiveField(publisherBackgroundColor) && (
-				<ColorField
-					{...{
-						...props,
-						label: __('Color', 'publisher-core'),
-						attribute: 'publisherBackgroundColor',
-						//
-						defaultValue: '',
+				<ControlContextProvider
+					value={{
+						name: `${props.blockName}/BackgroundColor`,
 						value: attributes.publisherBackgroundColor,
-						onChange: (newValue) =>
-							setAttributes({
-								...attributes,
-								publisherBackgroundColor: newValue,
-							}),
 					}}
-				/>
+				>
+					<ColorField
+						{...{
+							...props,
+							label: __('Color', 'publisher-core'),
+							//
+							onChange: (newValue) =>
+								setAttributes({
+									...attributes,
+									publisherBackgroundColor: newValue,
+								}),
+						}}
+					/>
+				</ControlContextProvider>
 			)}
 
 			{isActiveField(publisherBackgroundClip) && (
-				<SelectField
-					{...{
-						...props,
-						label: __('Clipping', 'publisher-core'),
-						options: [
-							{
-								label: __('None', 'publisher-core'),
-								value: 'none',
-								icon: <ClipNoneIcon />,
-							},
-							{
-								label: __('Clip to Padding', 'publisher-core'),
-								value: 'padding-box',
-								icon: <ClipPaddingIcon />,
-							},
-							{
-								label: __('Clip to Content', 'publisher-core'),
-								value: 'content-box',
-								icon: <ClipContentIcon />,
-							},
-							{
-								label: __('Clip to Text', 'publisher-core'),
-								value: 'text',
-								icon: <ClipTextIcon />,
-							},
-							{
-								label: __('Inherit', 'publisher-core'),
-								value: 'inherit',
-								icon: <InheritIcon />,
-							},
-						],
-						//
-						type: 'custom',
-						defaultValue: 'none',
+				<ControlContextProvider
+					value={{
+						name: `${props.blockName}/BackgroundClip`,
 						value: attributes.publisherBackgroundClip,
-						onChange: (newValue) =>
-							setAttributes({
-								...attributes,
-								publisherBackgroundClip: newValue,
-							}),
 					}}
-				/>
+				>
+					<SelectField
+						{...{
+							...props,
+							label: __('Clipping', 'publisher-core'),
+							options: [
+								{
+									label: __('None', 'publisher-core'),
+									value: 'none',
+									icon: <ClipNoneIcon />,
+								},
+								{
+									label: __(
+										'Clip to Padding',
+										'publisher-core'
+									),
+									value: 'padding-box',
+									icon: <ClipPaddingIcon />,
+								},
+								{
+									label: __(
+										'Clip to Content',
+										'publisher-core'
+									),
+									value: 'content-box',
+									icon: <ClipContentIcon />,
+								},
+								{
+									label: __('Clip to Text', 'publisher-core'),
+									value: 'text',
+									icon: <ClipTextIcon />,
+								},
+								{
+									label: __('Inherit', 'publisher-core'),
+									value: 'inherit',
+									icon: <InheritIcon />,
+								},
+							],
+							//
+							type: 'custom',
+							defaultValue: 'none',
+							onChange: (newValue) =>
+								setAttributes({
+									...attributes,
+									publisherBackgroundClip: newValue,
+								}),
+						}}
+					/>
+				</ControlContextProvider>
 			)}
 		</>
 	);
