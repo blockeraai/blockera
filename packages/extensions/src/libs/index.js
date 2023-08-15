@@ -1,3 +1,4 @@
+export * from './utils';
 export {
 	LayoutExtensionIcon,
 	LayoutStyles,
