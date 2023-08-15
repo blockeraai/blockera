@@ -1,5 +1,5 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { useContext } from '@wordpress/element';
 
@@ -7,10 +7,12 @@ import { useContext } from '@wordpress/element';
  * Publisher dependencies
  */
 import { BoxSpacingField } from '@publisher/fields';
+import { ControlContextProvider } from '@publisher/controls';
 
 /**
  * Internal dependencies
  */
+import { generateExtensionId } from '../utils';
 import { BlockEditContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
 
@@ -24,19 +26,26 @@ export function SpacingExtension({ children, config, ...props }) {
 	return (
 		<>
 			{isActiveField(publisherSpacing) && (
-				<BoxSpacingField
-					{...{
-						...props,
-						label: '',
-						//
+				<ControlContextProvider
+					value={{
+						name: generateExtensionId(props.blockName, 'spacing'),
 						value: attributes.publisherSpacing,
-						onChange: (newValue) =>
-							setAttributes({
-								...attributes,
-								publisherSpacing: newValue,
-							}),
 					}}
-				/>
+				>
+					<BoxSpacingField
+						{...{
+							...props,
+							label: '',
+							//
+							value: attributes.publisherSpacing,
+							onChange: (newValue) =>
+								setAttributes({
+									...attributes,
+									publisherSpacing: newValue,
+								}),
+						}}
+					/>
+				</ControlContextProvider>
 			)}
 		</>
 	);
