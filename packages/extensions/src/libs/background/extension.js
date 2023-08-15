@@ -13,13 +13,14 @@ import { ColorField, SelectField, BackgroundField } from '@publisher/fields';
 /**
  * Internal dependencies
  */
-import { isActiveField } from '../../api/utils';
-import { BlockEditContext } from '../../hooks';
-import ClipPaddingIcon from './icons/clip-padding';
-import ClipContentIcon from './icons/clip-content';
 import ClipTextIcon from './icons/clip-text';
 import ClipNoneIcon from './icons/clip-none';
 import InheritIcon from '../../icons/inherit';
+import { BlockEditContext } from '../../hooks';
+import { generateExtensionId } from '../utils';
+import { isActiveField } from '../../api/utils';
+import ClipPaddingIcon from './icons/clip-padding';
+import ClipContentIcon from './icons/clip-content';
 
 export function BackgroundExtension({ children, config, ...props }) {
 	const {
@@ -37,11 +38,14 @@ export function BackgroundExtension({ children, config, ...props }) {
 			{isActiveField(publisherBackground) && (
 				<ControlContextProvider
 					value={{
-						name: `${props.blockName}/BackgroundControl`,
+						name: generateExtensionId(
+							props.blockName,
+							'background'
+						),
 						//
 						value: attributes.publisherBackground,
 					}}
-					storeName={props.storeName}
+					storeName={'publisher-core/controls/repeater'}
 				>
 					<BackgroundField
 						label={__('Image & Gradient', 'publisher-core')}
@@ -59,7 +63,10 @@ export function BackgroundExtension({ children, config, ...props }) {
 			{isActiveField(publisherBackgroundColor) && (
 				<ControlContextProvider
 					value={{
-						name: `${props.blockName}/BackgroundColor`,
+						name: generateExtensionId(
+							props.blockName,
+							'background-color'
+						),
 						value: attributes.publisherBackgroundColor,
 					}}
 				>
@@ -81,7 +88,10 @@ export function BackgroundExtension({ children, config, ...props }) {
 			{isActiveField(publisherBackgroundClip) && (
 				<ControlContextProvider
 					value={{
-						name: `${props.blockName}/BackgroundClip`,
+						name: generateExtensionId(
+							props.blockName,
+							'background-clip'
+						),
 						value: attributes.publisherBackgroundClip,
 					}}
 				>

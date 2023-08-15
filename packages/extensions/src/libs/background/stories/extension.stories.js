@@ -70,10 +70,6 @@ export const Default = {
 			publisherBackgroundColor: '',
 			publisherBackgroundClip: '',
 		},
-		controlInfo: {
-			name: 'core/button/BackgroundControl',
-			value: [],
-		},
 	},
 	decorators: [...SharedDecorators],
 };
