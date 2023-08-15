@@ -12,28 +12,29 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
-import { useValue } from '@publisher/utils';
 import { Button } from '@publisher/components';
 import { InputField } from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
-import { InputControl, CheckboxControl, AttributesControl } from '../index';
+import { STORE_NAME } from '../repeater-control/store';
 import { default as AdvancedIcon } from './icons/advanced';
+import { generateExtensionId } from '@publisher/extensions';
+import { InputControl, CheckboxControl, AttributesControl } from '../index';
+import { ControlContextProvider, useControlContext } from '../../context';
 
 export default function LinkControl({
-	advancedOpen,
-	defaultValue,
-	placeholder,
-	value: initialValue,
-	className,
 	onChange,
+	className,
+	placeholder,
+	attributesId,
+	defaultValue,
+	advancedOpen,
 }) {
-	const { value, setValue } = useValue({
-		initialValue,
-		defaultValue,
+	const { value, setValue } = useControlContext({
 		onChange,
+		defaultValue,
 	});
 
 	const [isAdvancedMode, setIsAdvancedMode] = useState(
@@ -51,7 +52,7 @@ export default function LinkControl({
 		<div className={controlClassNames('link', className)}>
 			<div className={controlInnerClassNames('link-row-link')}>
 				<InputControl
-					value={value.link}
+					id={'link'}
 					placeholder={placeholder}
 					onChange={(newValue) => {
 						setValue({ ...value, link: newValue });
@@ -75,7 +76,7 @@ export default function LinkControl({
 					className={controlInnerClassNames('link-advanced-settings')}
 				>
 					<CheckboxControl
-						value={value.target}
+						id={'target'}
 						label={__('Open in New Window', 'publisher-core')}
 						onChange={(newValue) => {
 							setValue({
@@ -86,7 +87,7 @@ export default function LinkControl({
 					/>
 
 					<CheckboxControl
-						value={value.nofollow}
+						id={'nofollow'}
 						label={__('Add Nofollow', 'publisher-core')}
 						onChange={(newValue) => {
 							setValue({
@@ -101,7 +102,7 @@ export default function LinkControl({
 							type: 'text',
 						}}
 						label={__('Label', 'publisher-core')}
-						value={value.label}
+						id={'label'}
 						onChange={(newValue) => {
 							setValue({
 								...value,
@@ -110,18 +111,28 @@ export default function LinkControl({
 						}}
 					/>
 
-					<AttributesControl
-						value={value.attributes}
-						onChange={(newValue) => {
-							setValue({
-								...value,
-								attributes: newValue,
-							});
+					<ControlContextProvider
+						value={{
+							name: generateExtensionId(
+								attributesId,
+								'attributes'
+							),
+							value: value.attributes,
 						}}
-						attributeElement="a"
-						isPopover={true}
-						label={__('Attributes', 'publisher-core')}
-					/>
+						storeName={STORE_NAME}
+					>
+						<AttributesControl
+							onChange={(newValue) => {
+								setValue({
+									...value,
+									attributes: newValue,
+								});
+							}}
+							attributeElement="a"
+							isPopover={true}
+							label={__('Attributes', 'publisher-core')}
+						/>
+					</ControlContextProvider>
 				</div>
 			)}
 		</div>
@@ -130,25 +141,13 @@ export default function LinkControl({
 
 LinkControl.propTypes = {
 	/**
+	 * The control attributes identifier is required property!
+	 */
+	attributesId: PropTypes.string.isRequired,
+	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
 	defaultValue: PropTypes.shape({
-		link: PropTypes.string,
-		target: PropTypes.bool,
-		nofollow: PropTypes.bool,
-		label: PropTypes.string,
-		attributes: PropTypes.arrayOf(
-			PropTypes.shape({
-				key: PropTypes.string,
-				value: PropTypes.string,
-				isVisible: PropTypes.bool,
-			})
-		),
-	}),
-	/**
-	 * The current value.
-	 */
-	value: PropTypes.shape({
 		link: PropTypes.string,
 		target: PropTypes.bool,
 		nofollow: PropTypes.bool,
@@ -181,6 +180,7 @@ LinkControl.propTypes = {
 };
 
 LinkControl.defaultProps = {
+	attributesId: 'link-control-attributes',
 	placeholder: 'https://your-link.com',
 	advancedOpen: 'auto',
 	defaultValue: {
