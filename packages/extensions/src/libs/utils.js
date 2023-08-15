@@ -5,7 +5,7 @@
  * @param {Array<any>} b second array
  * @return {boolean} true on success, false when otherwise!
  */
-import { nanoid } from 'nanoid';
+import { nanoid } from 'nanoid/non-secure';
 
 export function arrayEquals(a: Array, b: Array): boolean {
 	return JSON.stringify(a) === JSON.stringify(b);
@@ -19,5 +19,5 @@ export function arrayEquals(a: Array, b: Array): boolean {
  * @return {string} retrieved extension standard identifier.
  */
 export function generateExtensionId(blockName, id) {
-	return `${blockName}/${id}-${nanoid()}`;
+	return `${blockName}/${id}/${nanoid('small')}`;
 }
