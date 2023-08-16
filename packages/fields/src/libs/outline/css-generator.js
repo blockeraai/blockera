@@ -20,7 +20,9 @@ export function cssGenerator(id, props, styleEngine) {
 			return null;
 		}
 
-		properties.outlines.push(`${item.width} ${item.style} ${item.color}`);
+		properties.outlines.push(
+			`${item.border.width} ${item.border.style} ${item.border.color}`
+		);
 		properties.offset.push(item.offset);
 
 		return undefined;
