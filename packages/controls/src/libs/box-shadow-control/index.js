@@ -38,6 +38,10 @@ export default function BoxShadowControl({
 
 BoxShadowControl.propTypes = {
 	/**
+	 * The control identifier
+	 */
+	id: PropTypes.string,
+	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
 	defaultValue: PropTypes.array,
