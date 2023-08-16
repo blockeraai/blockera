@@ -28,7 +28,12 @@ export default function BorderRadiusControl({
 	//
 	className,
 }) {
-	const { value, setValue } = useControlContext({
+	const {
+		value,
+		setValue,
+		controlInfo: { name: controlId },
+		dispatch: { modifyControlValue },
+	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
@@ -65,6 +70,13 @@ export default function BorderRadiusControl({
 						unitType="essential"
 						onChange={(newValue) => {
 							setValue({ ...value, all: newValue });
+							modifyControlValue({
+								controlId,
+								value: {
+									...value,
+									all: newValue,
+								},
+							});
 						}}
 						style={{
 							'--pb-all': value.all,
@@ -98,10 +110,28 @@ export default function BorderRadiusControl({
 								bottomLeft: value.all,
 								bottomRight: value.all,
 							});
+							modifyControlValue({
+								controlId,
+								value: {
+									...value,
+									type: newValue,
+									topLeft: value.all,
+									topRight: value.all,
+									bottomLeft: value.all,
+									bottomRight: value.all,
+								},
+							});
 						} else {
 							setValue({
 								...value,
 								type: newValue,
+							});
+							modifyControlValue({
+								controlId,
+								value: {
+									...value,
+									type: newValue,
+								},
 							});
 						}
 					}}
@@ -136,6 +166,13 @@ export default function BorderRadiusControl({
 									...value,
 									topLeft: newValue,
 								});
+								modifyControlValue({
+									controlId,
+									value: {
+										...value,
+										topLeft: newValue,
+									},
+								});
 							}}
 						/>
 						<InputControl
@@ -152,6 +189,13 @@ export default function BorderRadiusControl({
 								setValue({
 									...value,
 									topRight: newValue,
+								});
+								modifyControlValue({
+									controlId,
+									value: {
+										...value,
+										topRight: newValue,
+									},
 								});
 							}}
 						/>
@@ -170,6 +214,13 @@ export default function BorderRadiusControl({
 									...value,
 									bottomLeft: newValue,
 								});
+								modifyControlValue({
+									controlId,
+									value: {
+										...value,
+										bottomLeft: newValue,
+									},
+								});
 							}}
 						/>
 						<InputControl
@@ -186,6 +237,13 @@ export default function BorderRadiusControl({
 								setValue({
 									...value,
 									bottomRight: newValue,
+								});
+								modifyControlValue({
+									controlId,
+									value: {
+										...value,
+										bottomRight: newValue,
+									},
 								});
 							}}
 						/>
