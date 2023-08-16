@@ -7,21 +7,29 @@ import { memo, useContext } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
+import { isInteger } from '@publisher/utils';
 import { InputField, Field } from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
-import { RepeaterContext } from '../../repeater-control/context';
 import { BorderControl } from '../../index';
+import { useControlContext } from '../../../context';
+import { RepeaterContext } from '../../repeater-control/context';
 
 const Fields = ({ itemId, item }) => {
-	const { changeItem } = useContext(RepeaterContext);
+	const {
+		controlInfo: { name: controlId },
+		dispatch: { changeRepeaterItem },
+	} = useControlContext();
+
+	const { repeaterId, getControlId } = useContext(RepeaterContext);
 
 	return (
 		<div id={`repeater-item-${itemId}`}>
 			<Field label={__('Outline', 'publisher-core')}>
 				<BorderControl
+					id={getControlId(itemId, 'border')}
 					linesDirection="horizontal"
 					value={{
 						width: item.width,
@@ -29,11 +37,18 @@ const Fields = ({ itemId, item }) => {
 						color: item.color,
 					}}
 					onChange={(newValue) =>
-						changeItem(itemId, {
-							...item,
-							width: newValue.width,
-							color: newValue.color,
-							style: newValue.style,
+						changeRepeaterItem({
+							controlId,
+							repeaterId,
+							itemId,
+							value: {
+								...item,
+								border: {
+									width: newValue.width,
+									color: newValue.color,
+									style: newValue.style,
+								},
+							},
 						})
 					}
 				/>
@@ -50,7 +65,17 @@ const Fields = ({ itemId, item }) => {
 				}}
 				//
 				value={item.offset}
-				onChange={(offset) => changeItem(itemId, { ...item, offset })}
+				onChange={(offset) =>
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: {
+							...item,
+							offset: !isInteger(offset) ? offset : `${offset}px`,
+						},
+					})
+				}
 			/>
 		</div>
 	);

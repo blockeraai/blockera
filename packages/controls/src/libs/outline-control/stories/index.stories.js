@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { useContext } from '@wordpress/element';
+import { nanoid } from 'nanoid';
 import { expect } from '@storybook/jest';
 import {
 	fireEvent,
@@ -20,13 +20,15 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  * Internal dependencies
  */
 import { OutlineControl } from '../../index';
+import { ControlContextProvider } from '../../../context';
+import { STORE_NAME } from '../../repeater-control/store';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
+import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
 
-const {
-	WithInspectorStyles,
-	StoryDataContext,
-	WithStoryContextProvider,
-	SharedDecorators,
-} = Decorators;
+const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
+	Decorators;
+
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Controls/OutlineControl',
@@ -39,6 +41,23 @@ export const Empty = {
 		label: 'Outline',
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => (
+		<Flex direction="column" gap="20px">
+			<h2 className="story-heading">
+				Outline<span>Empty</span>
+			</h2>
+
+			<ControlContextProvider
+				storeName={STORE_NAME}
+				value={{
+					name: nanoid(),
+					value: [],
+				}}
+			>
+				<OutlineControl {...args} />
+			</ControlContextProvider>
+		</Flex>
+	),
 };
 
 export const Fill = {
@@ -53,72 +72,92 @@ export const Fill = {
 					<h2 className="story-heading">
 						Filled<span>Solid</span>
 					</h2>
-					<OutlineControl
-						{...args}
-						value={[
-							{
-								width: '1px',
-								style: 'solid',
-								color: '#0947eb',
-								offset: '1px',
-								isVisible: true,
-							},
-						]}
-					/>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									width: '1px',
+									style: 'solid',
+									color: '#0947eb',
+									offset: '1px',
+									isVisible: true,
+								},
+							],
+						}}
+						storeName={STORE_NAME}
+					>
+						<OutlineControl {...args} />
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex direction="column" gap="15px">
 					<h2 className="story-heading">
 						Filled<span>Dashed</span>
 					</h2>
-					<OutlineControl
-						{...args}
-						value={[
-							{
-								width: '2px',
-								style: 'dashed',
-								color: '#008461',
-								offset: '2px',
-								isVisible: true,
-							},
-						]}
-					/>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									width: '2px',
+									style: 'dashed',
+									color: '#008461',
+									offset: '2px',
+									isVisible: true,
+								},
+							],
+						}}
+						storeName={STORE_NAME}
+					>
+						<OutlineControl {...args} />
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex direction="column" gap="15px">
 					<h2 className="story-heading">
 						Filled<span>Dotted</span>
 					</h2>
-					<OutlineControl
-						{...args}
-						value={[
-							{
-								width: '3px',
-								style: 'dotted',
-								color: '#2b00ae',
-								offset: '3px',
-								isVisible: true,
-							},
-						]}
-					/>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									width: '3px',
+									style: 'dotted',
+									color: '#2b00ae',
+									offset: '3px',
+									isVisible: true,
+								},
+							],
+						}}
+						storeName={STORE_NAME}
+					>
+						<OutlineControl {...args} />
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex direction="column" gap="15px">
 					<h2 className="story-heading">
 						Filled<span>Double</span>
 					</h2>
-					<OutlineControl
-						{...args}
-						value={[
-							{
-								width: '4px',
-								style: 'double',
-								color: '#ab3a00',
-								offset: '4px',
-								isVisible: true,
-							},
-						]}
-					/>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									width: '4px',
+									style: 'double',
+									color: '#ab3a00',
+									offset: '4px',
+									isVisible: true,
+								},
+							],
+						}}
+						storeName={STORE_NAME}
+					>
+						<OutlineControl {...args} storeName={STORE_NAME} />
+					</ControlContextProvider>
 				</Flex>
 
 				<Flex
@@ -127,43 +166,45 @@ export const Fill = {
 					style={{ marginTop: '50px', marginBottom: '200px' }}
 				>
 					<h2 className="story-heading">Open</h2>
-					<OutlineControl
-						{...args}
-						value={[
-							{
-								width: '4px',
-								style: 'double',
-								color: '#ab3a00',
-								offset: '4px',
-								isVisible: true,
-								isOpen: true,
-							},
-						]}
-					/>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									width: '4px',
+									style: 'double',
+									color: '#ab3a00',
+									offset: '4px',
+									isVisible: true,
+									isOpen: true,
+								},
+							],
+						}}
+						storeName={STORE_NAME}
+					>
+						<OutlineControl {...args} />
+					</ControlContextProvider>
 				</Flex>
 			</Flex>
 		);
 	},
 };
 
-const ControlWithHooks = (args) => {
-	const { storyValue, setStoryValue } = useContext(StoryDataContext);
-
-	return (
-		<OutlineControl {...args} onChange={setStoryValue} value={storyValue} />
-	);
-};
-
 export const Play = {
 	args: {
 		label: 'Outline',
+		controlInfo: {
+			name: nanoid(),
+			value: [],
+		},
+		storeName: STORE_NAME,
 	},
 	decorators: [
 		WithStoryContextProvider,
 		WithInspectorStyles,
 		...SharedDecorators,
 	],
-	render: (args) => <ControlWithHooks {...args} />,
+	render: (args) => <ControlWithHooks Control={OutlineControl} {...args} />,
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 
@@ -231,9 +272,9 @@ export const Screenshot = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: () => (
 		<Flex direction="column" gap="50px">
-			<OutlineControl {...Empty.args} />
+			<Empty.render {...Empty.args} />
 
-			<Fill.render />
+			<Fill.render {...Fill.args} />
 		</Flex>
 	),
 };

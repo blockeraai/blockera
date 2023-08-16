@@ -17,13 +17,15 @@ import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
 export default function OutlineControl({
-	defaultRepeaterItemValue,
-	popoverLabel,
+	id,
 	className,
+	popoverLabel,
+	defaultRepeaterItemValue,
 	...props
 }) {
 	return (
 		<RepeaterControl
+			id={id}
 			className={controlClassNames('outline', className)}
 			popoverLabel={popoverLabel}
 			repeaterItemHeader={RepeaterItemHeader}
@@ -36,6 +38,10 @@ export default function OutlineControl({
 }
 
 OutlineControl.propTypes = {
+	/**
+	 * The control identifier
+	 */
+	id: PropTypes.string,
 	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
@@ -52,9 +58,11 @@ OutlineControl.propTypes = {
 	 * Default value of each repeater item
 	 */
 	defaultRepeaterItemValue: PropTypes.shape({
-		width: PropTypes.string,
-		style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
-		color: PropTypes.string,
+		border: PropTypes.shape({
+			width: PropTypes.string,
+			style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
+			color: PropTypes.string,
+		}),
 		offset: PropTypes.string,
 		isVisible: PropTypes.bool,
 	}),
@@ -67,9 +75,11 @@ OutlineControl.propTypes = {
 OutlineControl.defaultProps = {
 	value: [],
 	defaultRepeaterItemValue: {
-		width: '2px',
-		style: 'solid',
-		color: '#b6b6b6',
+		border: {
+			width: '2px',
+			style: 'solid',
+			color: '#b6b6b6',
+		},
 		offset: '2px',
 		isVisible: true,
 	},
