@@ -23,7 +23,7 @@ import BorderStyleVDashedIcon from './icons/style-v-dashed';
 import BorderStyleVDottedIcon from './icons/style-v-dotted';
 import BorderStyleVDoubleIcon from './icons/style-v-double';
 
-export default function BorderControl( {
+export default function BorderControl({
 	linesDirection,
 	customMenuPosition,
 	style, //
@@ -37,61 +37,61 @@ export default function BorderControl( {
 	__isWidthFocused,
 	__isColorFocused,
 	__isStyleFocused,
-} ) {
-	const { value, setValue, getId } = useControlContext( {
+}) {
+	const { value, setValue, getId } = useControlContext({
 		id,
 		onChange,
 		defaultValue,
 		mergeInitialAndDefault: true,
-	} );
+	});
 
 	return (
 		<Field
-			label={ label }
-			field={ field }
-			columns={ columns }
-			className={ className }
+			label={label}
+			field={field}
+			columns={columns}
+			className={className}
 		>
 			<div
-				className={ controlClassNames( 'border', className ) }
-				style={ style }
+				className={controlClassNames('border', className)}
+				style={style}
 			>
 				<InputControl
-					id={ getId( id, 'width' ) }
+					id={getId(id, 'width')}
 					min="0"
 					unitType="custom"
-					defaultValue={ '0' }
-					units={ [ { value: 'px', label: 'PX', default: 0 } ] }
-					className={ controlClassNames(
+					defaultValue={'0'}
+					units={[{ value: 'px', label: 'PX', default: 0 }]}
+					className={controlClassNames(
 						'input',
 						__isWidthFocused && 'is-focused'
-					) }
-					noBorder={ true }
-					onChange={ ( newValue ) => {
-						setValue( { ...value, width: newValue } );
-					} }
+					)}
+					noBorder={true}
+					onChange={(newValue) => {
+						setValue({ ...value, width: newValue });
+					}}
 				/>
 
 				<ColorControl
-					id={ getId( id, 'color' ) }
+					id={getId(id, 'color')}
 					type="minimal"
-					noBorder={ true }
-					onChange={ ( newValue ) => {
-						setValue( { ...value, color: newValue } );
-					} }
-					className={ __isColorFocused && 'is-focus' }
+					noBorder={true}
+					onChange={(newValue) => {
+						setValue({ ...value, color: newValue });
+					}}
+					className={__isColorFocused && 'is-focus'}
 				/>
 
 				<SelectControl
-					id={ getId( id, 'style' ) }
-					className={ __isStyleFocused && 'is-focused' }
-					customMenuPosition={ customMenuPosition }
+					id={getId(id, 'style')}
+					className={__isStyleFocused && 'is-focused'}
+					customMenuPosition={customMenuPosition}
 					type="custom"
-					customInputCenterContent={ true }
-					customHideInputCaret={ true }
-					customHideInputLabel={ true }
-					noBorder={ true }
-					options={ [
+					customInputCenterContent={true}
+					customHideInputCaret={true}
+					customHideInputLabel={true}
+					noBorder={true}
+					options={[
 						{
 							label: '',
 							icon:
@@ -136,10 +136,10 @@ export default function BorderControl( {
 							value: 'double',
 							className: 'align-center',
 						},
-					] }
-					onChange={ ( newValue ) => {
-						setValue( { ...value, style: newValue } );
-					} }
+					]}
+					onChange={(newValue) => {
+						setValue({ ...value, style: newValue });
+					}}
 				/>
 			</div>
 		</Field>
@@ -150,7 +150,7 @@ BorderControl.propTypes = {
 	/**
 	 * Indicates border-line icons direction
 	 */
-	linesDirection: PropTypes.oneOf( [ 'horizontal', 'vertical' ] ),
+	linesDirection: PropTypes.oneOf(['horizontal', 'vertical']),
 	/**
 	 * ID for retrieving value from control context
 	 */
@@ -176,11 +176,11 @@ BorderControl.propTypes = {
 	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
-	defaultValue: PropTypes.shape( {
+	defaultValue: PropTypes.shape({
 		width: PropTypes.string,
-		style: PropTypes.oneOf( [ 'solid', 'dashed', 'dotted', 'double' ] ),
+		style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
 		color: PropTypes.string,
-	} ),
+	}),
 	/**
 	 * Function that will be fired while the control value state changes.
 	 */
