@@ -9,10 +9,10 @@ export const attributes = {
 	},
 	publisherBorder: {
 		type: 'object',
-		default: [],
+		default: {},
 	},
 	publisherBorderRadius: {
 		type: 'object',
-		default: [],
+		default: {},
 	},
 };

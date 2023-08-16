@@ -13,12 +13,14 @@ import {
 	BoxShadowField,
 	OutlineField,
 } from '@publisher/fields';
+import { ControlContextProvider } from '@publisher/controls';
 
 /**
  * Internal dependencies
  */
-import { isActiveField } from '../../api/utils';
+import { generateExtensionId } from '../utils';
 import { BlockEditContext } from '../../hooks';
+import { isActiveField } from '../../api/utils';
 
 export function BorderAndShadowExtension({ children, config, ...props }) {
 	const {
@@ -35,57 +37,89 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 	return (
 		<>
 			{isActiveField(publisherBorder) && (
-				<BoxBorderField
-					label={__('Border Line', 'publisher-core')}
-					value={attributes.publisherBorder}
-					onChange={(newValue) => {
-						setAttributes({
-							...attributes,
-							publisherBorder: newValue,
-						});
+				<ControlContextProvider
+					value={{
+						name: generateExtensionId(props.blockName, 'border'),
+						value: attributes.publisherBorder,
 					}}
-				/>
+				>
+					<BoxBorderField
+						label={__('Border Line', 'publisher-core')}
+						onChange={(newValue) =>
+							setAttributes({
+								...attributes,
+								publisherBorder: newValue,
+							})
+						}
+					/>
+				</ControlContextProvider>
 			)}
 
 			{isActiveField(publisherBorderRadius) && (
-				<BorderRadiusField
-					label={__('Radius', 'publisher-core')}
-					value={attributes.publisherBorderRadius}
-					onChange={(newValue) => {
-						setAttributes({
-							...attributes,
-							publisherBorderRadius: newValue,
-						});
+				<ControlContextProvider
+					value={{
+						name: generateExtensionId(
+							props.blockName,
+							'border-radius'
+						),
+						value: attributes.publisherBorderRadius,
 					}}
-				/>
+				>
+					<BorderRadiusField
+						label={__('Radius', 'publisher-core')}
+						onChange={(newValue) => {
+							setAttributes({
+								...attributes,
+								publisherBorderRadius: newValue,
+							});
+						}}
+					/>
+				</ControlContextProvider>
 			)}
 
 			{isActiveField(publisherBoxShadow) && (
-				<BoxShadowField
-					label={__('Box Shadows', 'publisher-core')}
-					value={attributes.publisherBoxShadow}
-					onChange={(newValue) => {
-						setAttributes({
-							...attributes,
-							publisherBoxShadow: newValue,
-						});
+				<ControlContextProvider
+					value={{
+						name: generateExtensionId(
+							props.blockName,
+							'box-shadow'
+						),
+						value: attributes.publisherBoxShadow,
 					}}
-					{...props}
-				/>
+					storeName={'publisher-core/controls/repeater'}
+				>
+					<BoxShadowField
+						label={__('Box Shadows', 'publisher-core')}
+						onChange={(newValue) => {
+							setAttributes({
+								...attributes,
+								publisherBoxShadow: newValue,
+							});
+						}}
+						{...props}
+					/>
+				</ControlContextProvider>
 			)}
 
 			{isActiveField(publisherOutline) && (
-				<OutlineField
-					label={__('Outline', 'publisher-core')}
-					value={attributes.publisherOutline}
-					onChange={(newValue) => {
-						setAttributes({
-							...attributes,
-							publisherOutline: newValue,
-						});
+				<ControlContextProvider
+					value={{
+						name: generateExtensionId(props.blockName, 'outline'),
+						value: attributes.publisherOutline,
 					}}
-					{...props}
-				/>
+					storeName={'publisher-core/controls/repeater'}
+				>
+					<OutlineField
+						label={__('Outline', 'publisher-core')}
+						onChange={(newValue) => {
+							setAttributes({
+								...attributes,
+								publisherOutline: newValue,
+							});
+						}}
+						{...props}
+					/>
+				</ControlContextProvider>
 			)}
 
 			<div>{children}</div>
