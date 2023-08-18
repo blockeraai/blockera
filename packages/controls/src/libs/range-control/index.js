@@ -7,13 +7,22 @@ import { RangeControl as WordPressRangeControl } from '@wordpress/components';
 /**
  * Publisher dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
 import { Field } from '@publisher/fields';
+import { isString } from '@publisher/utils';
+import { controlClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
 import { useControlContext } from '../../context';
+
+function valueCleanup(value) {
+	if (isString(value)) {
+		return Number(value.replace(/%|px|em/, ''));
+	}
+
+	return value;
+}
 
 export default function RangeControl({
 	min,
@@ -30,11 +39,16 @@ export default function RangeControl({
 	field,
 	//
 }) {
-	const { value, setValue } = useControlContext({
+	let { value, setValue } = useControlContext({
 		id,
-		defaultValue,
 		onChange,
+		defaultValue,
+		valueCleanup,
 	});
+
+	if (isString(value)) {
+		value = valueCleanup(value);
+	}
 
 	return (
 		<Field
