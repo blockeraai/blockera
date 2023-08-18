@@ -143,7 +143,17 @@ export const useControlContext = (args) => {
 
 	return {
 		dispatch,
-		setValue,
+		setValue: (value) => {
+			setValue(value);
+
+			// extends setValue default operation to modify flatten control value!
+			if (isUndefined(id)) {
+				modifyControlValue({
+					value,
+					controlId: controlInfo.name,
+				});
+			}
+		},
 		value: calculatedValue,
 		controlInfo: getControl(controlInfo.name),
 		/**
