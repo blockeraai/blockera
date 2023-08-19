@@ -4,6 +4,11 @@
 import { combineReducers } from '@wordpress/data';
 
 /**
+ * Publisher dependencies
+ */
+import { isArray, isObject, isUndefined } from '@publisher/utils';
+
+/**
  * Internal dependencies
  */
 import { addItem } from './add-item';
@@ -27,6 +32,14 @@ export function repeaterReducer(state = {}, action): Object {
 		case 'REMOVE_CONTROL':
 		case 'MODIFY_CONTROL_VALUE':
 		case 'MODIFY_CONTROL_INFO':
+			if (
+				!isUndefined(action.value) &&
+				!isArray(action.value) &&
+				!isObject(action.value)
+			) {
+				return state;
+			}
+
 			return controlReducer(state, action);
 
 		case 'ADD_REPEATER_ITEM':
