@@ -12,23 +12,36 @@ import { InputField, SelectField } from '@publisher/fields';
 /**
  * Internal dependencies
  */
+import { useControlContext } from '../../../context';
 import { getTypeOptions, getTimingOptions } from '../utils';
 import { RepeaterContext } from '../../repeater-control/context';
 
 const Fields = ({ itemId, item }) => {
-	const { changeItem } = useContext(RepeaterContext);
+	const {
+		controlInfo: { name: controlId },
+		dispatch: { changeRepeaterItem },
+	} = useControlContext();
+
+	const { repeaterId, getControlId } = useContext(RepeaterContext);
 
 	return (
 		<div id={`repeater-item-${itemId}`}>
 			<SelectField
+				id={getControlId(itemId, 'type')}
 				label={__('Type', 'publisher-core')}
 				options={getTypeOptions()}
-				//
-				value={item.type}
-				onChange={(type) => changeItem(itemId, { ...item, type })}
+				onChange={(type) =>
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, type },
+					})
+				}
 			/>
 
 			<InputField
+				id={getControlId(itemId, 'duration')}
 				label={__('Duration', 'publisher-core')}
 				settings={{
 					type: 'css',
@@ -38,22 +51,32 @@ const Fields = ({ itemId, item }) => {
 					max: 5000,
 					value: item.duration,
 				}}
-				//
-				value={item.duration}
 				onChange={(duration) =>
-					changeItem(itemId, { ...item, duration })
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, duration },
+					})
 				}
 			/>
 
 			<SelectField
+				id={getControlId(itemId, 'timing')}
 				label={__('Timing', 'publisher-core')}
 				options={getTimingOptions()}
-				//
-				value={item.timing}
-				onChange={(timing) => changeItem(itemId, { ...item, timing })}
+				onChange={(timing) =>
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, timing },
+					})
+				}
 			/>
 
 			<InputField
+				id={getControlId(itemId, 'delay')}
 				label={__('Delay', 'publisher-core')}
 				settings={{
 					type: 'css',
@@ -63,9 +86,14 @@ const Fields = ({ itemId, item }) => {
 					max: 5000,
 					initialPosition: 0,
 				}}
-				//
-				value={item.delay}
-				onChange={(delay) => changeItem(itemId, { ...item, delay })}
+				onChange={(delay) =>
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, delay },
+					})
+				}
 			/>
 		</div>
 	);
