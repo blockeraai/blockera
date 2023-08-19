@@ -17,6 +17,7 @@ import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 
 export default function AttributesControl({
+	id,
 	defaultRepeaterItemValue,
 	popoverLabel,
 	attributeElement,
@@ -26,6 +27,7 @@ export default function AttributesControl({
 }) {
 	return (
 		<RepeaterControl
+			id={id}
 			popoverLabel={popoverLabel}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
@@ -39,6 +41,10 @@ export default function AttributesControl({
 }
 
 AttributesControl.propTypes = {
+	/**
+	 * The control identifier
+	 */
+	id: PropTypes.string,
 	/**
 	 * Specifies the attributes for a specific tag. It adds better UX for field.
 	 */
