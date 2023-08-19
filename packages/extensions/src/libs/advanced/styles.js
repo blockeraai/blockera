@@ -13,7 +13,7 @@ import { computedCssRules } from '@publisher/style-engine';
  */
 import { BlockEditContext } from '../../hooks';
 
-export function AdvancedStyles({ advanceConfig: { cssGenerators } }) {
+export function AdvancedStyles({ advancedConfig: { cssGenerators } }) {
 	const { attributes: _attributes, ...blockProps } =
 		useContext(BlockEditContext);
 

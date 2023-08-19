@@ -1,5 +1,5 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { useContext } from '@wordpress/element';
@@ -8,12 +8,14 @@ import { useContext } from '@wordpress/element';
  * Publisher dependencies
  */
 import { AttributesField } from '@publisher/fields';
+import { ControlContextProvider } from '@publisher/controls';
 
 /**
  * Internal dependencies
  */
-import { isActiveField } from '../../api/utils';
 import { BlockEditContext } from '../../hooks';
+import { generateExtensionId } from '../utils';
+import { isActiveField } from '../../api/utils';
 
 export function AdvancedExtension({ children, config, ...props }) {
 	const {
@@ -25,17 +27,27 @@ export function AdvancedExtension({ children, config, ...props }) {
 	return (
 		<>
 			{isActiveField(publisherAttributes) && (
-				<AttributesField
-					label={__('HTML Attributes', 'publisher-core')}
-					value={attributes.publisherAttributes}
-					onChange={(newValue) => {
-						setAttributes({
-							...attributes,
-							attributes: newValue,
-						});
+				<ControlContextProvider
+					value={{
+						name: generateExtensionId(
+							props.blockName,
+							'attributes'
+						),
+						value: attributes.publisherAttributes,
 					}}
-					{...props}
-				/>
+					storeName={'publisher-core/controls/repeater'}
+				>
+					<AttributesField
+						label={__('HTML Attributes', 'publisher-core')}
+						onChange={(newValue) => {
+							setAttributes({
+								...attributes,
+								attributes: newValue,
+							});
+						}}
+						{...props}
+					/>
+				</ControlContextProvider>
 			)}
 		</>
 	);

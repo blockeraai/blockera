@@ -56,6 +56,13 @@ export {
 	supports as effectsExtensionSupports,
 } from './effects';
 export {
+	AdvancedExtensionIcon,
+	AdvancedStyles,
+	AdvancedExtension,
+	attributes as advancedExtensionAttributes,
+	supports as advancedExtensionSupports,
+} from './advanced';
+export {
 	TypographyExtensionIcon,
 	TypographyStyles,
 	TypographyExtension,
