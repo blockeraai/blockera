@@ -26,6 +26,8 @@ function valueCleanup(value) {
 			'ch',
 			'vw',
 			'vh',
+			'ms',
+			's',
 			'dvw',
 			'dvh',
 			'deg',
