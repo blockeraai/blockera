@@ -118,7 +118,7 @@ export function TypographyExtension({ children, config, ...props }) {
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(
-										props.blockName,
+										props,
 										'font-size'
 									),
 									value: attributes.publisherFontSize,
@@ -150,7 +150,7 @@ export function TypographyExtension({ children, config, ...props }) {
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(
-										props.blockName,
+										props,
 										'line-height'
 									),
 									value: attributes.publisherLineHeight,
@@ -183,7 +183,7 @@ export function TypographyExtension({ children, config, ...props }) {
 								<ControlContextProvider
 									value={{
 										name: generateExtensionId(
-											props.blockName,
+											props,
 											'text-align'
 										),
 										value: attributes.publisherTextAlign,
@@ -255,7 +255,7 @@ export function TypographyExtension({ children, config, ...props }) {
 										<ControlContextProvider
 											value={{
 												name: generateExtensionId(
-													props.blockName,
+													props,
 													'text-decoration'
 												),
 												value: attributes.publisherTextDecoration,
@@ -327,7 +327,7 @@ export function TypographyExtension({ children, config, ...props }) {
 										<ControlContextProvider
 											value={{
 												name: generateExtensionId(
-													props.blockName,
+													props,
 													'font-style'
 												),
 												value: attributes.publisherFontStyle,
@@ -384,7 +384,7 @@ export function TypographyExtension({ children, config, ...props }) {
 										<ControlContextProvider
 											value={{
 												name: generateExtensionId(
-													props.blockName,
+													props,
 													'text-transform'
 												),
 												value: attributes.publisherTextTransform,
@@ -456,7 +456,7 @@ export function TypographyExtension({ children, config, ...props }) {
 										<ControlContextProvider
 											value={{
 												name: generateExtensionId(
-													props.blockName,
+													props,
 													'direction'
 												),
 												value: attributes.publisherDirection,
@@ -516,7 +516,7 @@ export function TypographyExtension({ children, config, ...props }) {
 								<ControlContextProvider
 									value={{
 										name: generateExtensionId(
-											props.blockName,
+											props,
 											'letter-spacing'
 										),
 										value: attributes.publisherLetterSpacing,
@@ -549,7 +549,7 @@ export function TypographyExtension({ children, config, ...props }) {
 								<ControlContextProvider
 									value={{
 										name: generateExtensionId(
-											props.blockName,
+											props,
 											'word-spacing'
 										),
 										value: attributes.publisherWordSpacing,
@@ -579,7 +579,7 @@ export function TypographyExtension({ children, config, ...props }) {
 								<ControlContextProvider
 									value={{
 										name: generateExtensionId(
-											props.blockName,
+											props,
 											'text-indent'
 										),
 										value: attributes.publisherTextIndent,
@@ -612,7 +612,7 @@ export function TypographyExtension({ children, config, ...props }) {
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(
-										props.blockName,
+										props,
 										'text-orientation'
 									),
 									value: attributes.publisherTextOrientation,
@@ -676,7 +676,7 @@ export function TypographyExtension({ children, config, ...props }) {
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(
-										props.blockName,
+										props,
 										'text-columns'
 									),
 									value: attributes.publisherTextColumns,
@@ -745,7 +745,7 @@ export function TypographyExtension({ children, config, ...props }) {
 												<ControlContextProvider
 													value={{
 														name: generateExtensionId(
-															props.blockName,
+															props,
 															'text-columns-gap'
 														),
 														value: attributes.publisherTextColumnsGap,
@@ -781,7 +781,7 @@ export function TypographyExtension({ children, config, ...props }) {
 												<ControlContextProvider
 													value={{
 														name: generateExtensionId(
-															props.blockName,
+															props,
 															'divider'
 														),
 														value: {
@@ -826,7 +826,7 @@ export function TypographyExtension({ children, config, ...props }) {
 								<ControlContextProvider
 									value={{
 										name: generateExtensionId(
-											props.blockName,
+											props,
 											'text-stroke-color'
 										),
 										value: attributes.publisherTextStrokeColor,
@@ -850,7 +850,7 @@ export function TypographyExtension({ children, config, ...props }) {
 									<ControlContextProvider
 										value={{
 											name: generateExtensionId(
-												props.blockName,
+												props,
 												'text-stroke-width'
 											),
 											value: attributes.publisherTextStrokeWidth,
@@ -884,7 +884,7 @@ export function TypographyExtension({ children, config, ...props }) {
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(
-										props.blockName,
+										props,
 										'word-break'
 									),
 									value: attributes.publisherWordBreak,
@@ -954,10 +954,7 @@ export function TypographyExtension({ children, config, ...props }) {
 			{isActiveField(publisherFontColor) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(
-							props.blockName,
-							'font-color'
-						),
+						name: generateExtensionId(props, 'font-color'),
 						value: attributes.publisherFontColor,
 					}}
 				>
@@ -980,10 +977,7 @@ export function TypographyExtension({ children, config, ...props }) {
 			{isActiveField(publisherTextShadow) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(
-							props.blockName,
-							'text-shadow'
-						),
+						name: generateExtensionId(props, 'text-shadow'),
 						value: attributes.publisherTextShadow,
 					}}
 					storeName={'publisher-core/controls/repeater'}

@@ -38,10 +38,7 @@ export function BackgroundExtension({ children, config, ...props }) {
 			{isActiveField(publisherBackground) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(
-							props.blockName,
-							'background'
-						),
+						name: generateExtensionId(props, 'background'),
 						//
 						value: attributes.publisherBackground,
 					}}
@@ -63,10 +60,7 @@ export function BackgroundExtension({ children, config, ...props }) {
 			{isActiveField(publisherBackgroundColor) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(
-							props.blockName,
-							'background-color'
-						),
+						name: generateExtensionId(props, 'background-color'),
 						value: attributes.publisherBackgroundColor,
 					}}
 				>
@@ -88,10 +82,7 @@ export function BackgroundExtension({ children, config, ...props }) {
 			{isActiveField(publisherBackgroundClip) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(
-							props.blockName,
-							'background-clip'
-						),
+						name: generateExtensionId(props, 'background-clip'),
 						value: attributes.publisherBackgroundClip,
 					}}
 				>

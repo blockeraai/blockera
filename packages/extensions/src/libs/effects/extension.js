@@ -56,7 +56,7 @@ export function EffectsExtension({ children, config, ...props }) {
 			{isActiveField(publisherOpacity) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props.blockName, 'opacity'),
+						name: generateExtensionId(props, 'opacity'),
 						value: attributes.publisherOpacity,
 					}}
 				>
@@ -88,10 +88,7 @@ export function EffectsExtension({ children, config, ...props }) {
 				<>
 					<ControlContextProvider
 						value={{
-							name: generateExtensionId(
-								props.blockName,
-								'transform-2d-3d'
-							),
+							name: generateExtensionId(props, 'transform-2d-3d'),
 							value: attributes.publisherTransform,
 						}}
 						storeName={'publisher-core/controls/repeater'}
@@ -143,7 +140,7 @@ export function EffectsExtension({ children, config, ...props }) {
 									<ControlContextProvider
 										value={{
 											name: generateExtensionId(
-												props.blockName,
+												props,
 												'self-perspective'
 											),
 											value: attributes.publisherTransformSelfPerspective,
@@ -176,7 +173,7 @@ export function EffectsExtension({ children, config, ...props }) {
 									<ControlContextProvider
 										value={{
 											name: generateExtensionId(
-												props.blockName,
+												props,
 												'self-origin'
 											),
 											value: {
@@ -225,7 +222,7 @@ export function EffectsExtension({ children, config, ...props }) {
 									<ControlContextProvider
 										value={{
 											name: generateExtensionId(
-												props.blockName,
+												props,
 												'backface-visibility'
 											),
 											value: attributes.publisherBackfaceVisibility,
@@ -266,7 +263,7 @@ export function EffectsExtension({ children, config, ...props }) {
 									<ControlContextProvider
 										value={{
 											name: generateExtensionId(
-												props.blockName,
+												props,
 												'child-perspective'
 											),
 											value: attributes.publisherTransformChildPerspective
@@ -302,7 +299,7 @@ export function EffectsExtension({ children, config, ...props }) {
 									<ControlContextProvider
 										value={{
 											name: generateExtensionId(
-												props.blockName,
+												props,
 												'child-origin'
 											),
 											value: {
@@ -357,10 +354,7 @@ export function EffectsExtension({ children, config, ...props }) {
 			{isActiveField(publisherTransition) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(
-							props.blockName,
-							'transition'
-						),
+						name: generateExtensionId(props, 'transition'),
 						value: attributes.publisherTransition,
 					}}
 					storeName={'publisher-core/controls/repeater'}
@@ -381,7 +375,7 @@ export function EffectsExtension({ children, config, ...props }) {
 			{isActiveField(publisherFilter) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props.blockName, 'filters'),
+						name: generateExtensionId(props, 'filters'),
 						value: attributes.publisherFilter,
 					}}
 					storeName={'publisher-core/controls/repeater'}
@@ -402,10 +396,7 @@ export function EffectsExtension({ children, config, ...props }) {
 			{isActiveField(publisherBackdropFilter) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(
-							props.blockName,
-							'backdrop-filters'
-						),
+						name: generateExtensionId(props, 'backdrop-filters'),
 						value: attributes.publisherBackdropFilter,
 					}}
 					storeName={'publisher-core/controls/repeater'}
@@ -427,7 +418,7 @@ export function EffectsExtension({ children, config, ...props }) {
 			{isActiveField(publisherCursor) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props.blockName, 'cursor'),
+						name: generateExtensionId(props, 'cursor'),
 						value: attributes.publisherCursor,
 					}}
 				>
@@ -453,10 +444,7 @@ export function EffectsExtension({ children, config, ...props }) {
 			{isActiveField(publisherBlendMode) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(
-							props.blockName,
-							'blend-mode'
-						),
+						name: generateExtensionId(props, 'blend-mode'),
 						value: attributes.publisherBlendMode,
 					}}
 				>

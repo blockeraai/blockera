@@ -29,7 +29,7 @@ export function PositionExtension({ children, config, ...props }) {
 			{isActiveField(publisherPosition) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props.blockName, 'position'),
+						name: generateExtensionId(props, 'position'),
 						value: attributes.publisherPosition,
 					}}
 				>
@@ -53,10 +53,7 @@ export function PositionExtension({ children, config, ...props }) {
 				attributes?.publisherPosition?.type !== 'static' && (
 					<ControlContextProvider
 						value={{
-							name: generateExtensionId(
-								props.blockName,
-								'z-index'
-							),
+							name: generateExtensionId(props, 'z-index'),
 							value: attributes.publisherZIndex,
 						}}
 					>

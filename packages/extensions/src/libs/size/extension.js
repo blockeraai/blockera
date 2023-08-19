@@ -32,7 +32,7 @@ export function SizeExtension({ children, config, ...props }) {
 			{isActiveField(publisherWidth) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props.blockName, 'width'),
+						name: generateExtensionId(props, 'width'),
 						value: attributes.publisherWidth,
 					}}
 				>
@@ -60,7 +60,7 @@ export function SizeExtension({ children, config, ...props }) {
 			{isActiveField(publisherHeight) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props.blockName, 'height'),
+						name: generateExtensionId(props, 'height'),
 						value: attributes.publisherHeight,
 					}}
 				>
@@ -88,7 +88,7 @@ export function SizeExtension({ children, config, ...props }) {
 			{isActiveField(publisherOverflow) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props.blockName, 'overflow'),
+						name: generateExtensionId(props, 'overflow'),
 						value: attributes.publisherOverflow,
 					}}
 				>

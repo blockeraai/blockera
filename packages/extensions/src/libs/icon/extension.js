@@ -46,7 +46,7 @@ export function IconExtension({ children, config, ...props }) {
 			{isActiveField(publisherIcon) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props.blockName, 'icon'),
+						name: generateExtensionId(props, 'icon'),
 						value: attributes.publisherIcon,
 					}}
 				>
@@ -76,7 +76,7 @@ export function IconExtension({ children, config, ...props }) {
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(
-										props.blockName,
+										props,
 										'icon-position'
 									),
 									value: attributes.publisherIconPosition,
@@ -116,7 +116,7 @@ export function IconExtension({ children, config, ...props }) {
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(
-										props.blockName,
+										props,
 										'icon-gap'
 									),
 									value: attributes.publisherIconGap,
@@ -147,7 +147,7 @@ export function IconExtension({ children, config, ...props }) {
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(
-										props.blockName,
+										props,
 										'icon-size'
 									),
 									value: attributes.publisherIconSize,
@@ -178,7 +178,7 @@ export function IconExtension({ children, config, ...props }) {
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(
-										props.blockName,
+										props,
 										'icon-color'
 									),
 									value: attributes.publisherIconColor,
@@ -203,10 +203,7 @@ export function IconExtension({ children, config, ...props }) {
 					{isActiveField(publisherIconLink) && (
 						<ControlContextProvider
 							value={{
-								name: generateExtensionId(
-									props.blockName,
-									'icon-link'
-								),
+								name: generateExtensionId(props, 'icon-link'),
 								value: attributes.publisherIconLink,
 							}}
 						>
@@ -214,10 +211,7 @@ export function IconExtension({ children, config, ...props }) {
 								{...props}
 								label={__('Link', 'publisher-core')}
 								columns="1fr 3fr"
-								id={generateExtensionId(
-									props.blockName,
-									'icon-link'
-								)}
+								id={generateExtensionId(props, 'icon-link')}
 								//
 								onChange={(newValue) => {
 									setAttributes({

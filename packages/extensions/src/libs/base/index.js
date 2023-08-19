@@ -24,6 +24,7 @@ export function BaseExtension({
 	icon,
 	children,
 	blockName,
+	clientId,
 	extensionId,
 	initialOpen,
 	storeName = STORE_NAME,
@@ -53,7 +54,13 @@ export function BaseExtension({
 					>
 						{isFunction(ExtensionTypeUI) && (
 							<ExtensionTypeUI
-								{...{ ...props, storeName, blockName, config }}
+								{...{
+									...props,
+									clientId,
+									storeName,
+									blockName,
+									config,
+								}}
 							/>
 						)}
 					</PanelBodyControl>
@@ -64,6 +71,8 @@ export function BaseExtension({
 				<style
 					/* eslint-disable-next-line react/no-unknown-property */
 					datablocktype={blockName}
+					/* eslint-disable-next-line react/no-unknown-property */
+					datablockclientid={clientId}
 					dangerouslySetInnerHTML={{
 						__html: ExtensionTypeCssRules(config),
 					}}

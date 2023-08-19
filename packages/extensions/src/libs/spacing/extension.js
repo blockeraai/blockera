@@ -28,7 +28,7 @@ export function SpacingExtension({ children, config, ...props }) {
 			{isActiveField(publisherSpacing) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props.blockName, 'spacing'),
+						name: generateExtensionId(props, 'spacing'),
 						value: attributes.publisherSpacing,
 					}}
 				>

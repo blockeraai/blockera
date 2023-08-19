@@ -44,7 +44,7 @@ export function FlexChildExtension({ config, ...props }) {
 			{isActiveField(publisherFlexChildSizing) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props.blockName, 'sizing'),
+						name: generateExtensionId(props, 'sizing'),
 						value: attributes.publisherFlexChildSizing,
 					}}
 				>
@@ -92,7 +92,7 @@ export function FlexChildExtension({ config, ...props }) {
 								<ControlContextProvider
 									value={{
 										name: generateExtensionId(
-											props.blockName,
+											props,
 											'grow'
 										),
 										value: attributes.publisherFlexChildGrow,
@@ -113,7 +113,7 @@ export function FlexChildExtension({ config, ...props }) {
 								<ControlContextProvider
 									value={{
 										name: generateExtensionId(
-											props.blockName,
+											props,
 											'shrink'
 										),
 										value: attributes.publisherFlexChildShrink,
@@ -134,7 +134,7 @@ export function FlexChildExtension({ config, ...props }) {
 								<ControlContextProvider
 									value={{
 										name: generateExtensionId(
-											props.blockName,
+											props,
 											'basis'
 										),
 										value: attributes.publisherFlexChildBasis,
@@ -169,7 +169,7 @@ export function FlexChildExtension({ config, ...props }) {
 			{isActiveField(publisherFlexChildAlign) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props.blockName, 'align'),
+						name: generateExtensionId(props, 'align'),
 						value: attributes.publisherFlexChildAlign,
 					}}
 				>
@@ -220,7 +220,7 @@ export function FlexChildExtension({ config, ...props }) {
 			{isActiveField(publisherFlexChildOrder) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props.blockName, 'order'),
+						name: generateExtensionId(props, 'order'),
 						value: attributes.publisherFlexChildOrder,
 					}}
 				>
@@ -258,7 +258,7 @@ export function FlexChildExtension({ config, ...props }) {
 								<ControlContextProvider
 									value={{
 										name: generateExtensionId(
-											props.blockName,
+											props,
 											'order-custom'
 										),
 										value: attributes.publisherFlexChildOrderCustom,

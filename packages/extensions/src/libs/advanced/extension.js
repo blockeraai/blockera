@@ -29,10 +29,7 @@ export function AdvancedExtension({ children, config, ...props }) {
 			{isActiveField(publisherAttributes) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(
-							props.blockName,
-							'attributes'
-						),
+						name: generateExtensionId(props, 'attributes'),
 						value: attributes.publisherAttributes,
 					}}
 					storeName={'publisher-core/controls/repeater'}

@@ -39,7 +39,7 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 			{isActiveField(publisherBorder) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props.blockName, 'border'),
+						name: generateExtensionId(props, 'border'),
 						value: attributes.publisherBorder,
 					}}
 				>
@@ -58,10 +58,7 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 			{isActiveField(publisherBorderRadius) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(
-							props.blockName,
-							'border-radius'
-						),
+						name: generateExtensionId(props, 'border-radius'),
 						value: attributes.publisherBorderRadius,
 					}}
 				>
@@ -80,10 +77,7 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 			{isActiveField(publisherBoxShadow) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(
-							props.blockName,
-							'box-shadow'
-						),
+						name: generateExtensionId(props, 'box-shadow'),
 						value: attributes.publisherBoxShadow,
 					}}
 					storeName={'publisher-core/controls/repeater'}
@@ -104,7 +98,7 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 			{isActiveField(publisherOutline) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props.blockName, 'outline'),
+						name: generateExtensionId(props, 'outline'),
 						value: attributes.publisherOutline,
 					}}
 					storeName={'publisher-core/controls/repeater'}

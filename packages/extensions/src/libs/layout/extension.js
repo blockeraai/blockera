@@ -68,7 +68,7 @@ export function LayoutExtension({ config, ...props }) {
 			{isActiveField(publisherDisplay) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props.blockName, 'display'),
+						name: generateExtensionId(props, 'display'),
 						value: attributes.publisherDisplay,
 					}}
 				>
@@ -120,10 +120,7 @@ export function LayoutExtension({ config, ...props }) {
 					{isActiveField(publisherFlexDirection) && (
 						<ControlContextProvider
 							value={{
-								name: generateExtensionId(
-									props.blockName,
-									'direction'
-								),
+								name: generateExtensionId(props, 'direction'),
 								value: attributes.publisherFlexDirection,
 							}}
 						>
@@ -177,10 +174,7 @@ export function LayoutExtension({ config, ...props }) {
 					{isActiveField(publisherAlignItems) && (
 						<ControlContextProvider
 							value={{
-								name: generateExtensionId(
-									props.blockName,
-									'align-items'
-								),
+								name: generateExtensionId(props, 'align-items'),
 								value: attributes.publisherAlignItems,
 							}}
 						>
@@ -239,7 +233,7 @@ export function LayoutExtension({ config, ...props }) {
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(
-									props.blockName,
+									props,
 									'justify-content'
 								),
 								value: attributes.publisherJustifyContent,
@@ -320,7 +314,7 @@ export function LayoutExtension({ config, ...props }) {
 									<ControlContextProvider
 										value={{
 											name: generateExtensionId(
-												props.blockName,
+												props,
 												'gap-rows'
 											),
 											value: attributes.publisherGapRows,
@@ -353,7 +347,7 @@ export function LayoutExtension({ config, ...props }) {
 									<ControlContextProvider
 										value={{
 											name: generateExtensionId(
-												props.blockName,
+												props,
 												'gap-columns'
 											),
 											value: attributes.publisherGapColumns,
@@ -394,7 +388,7 @@ export function LayoutExtension({ config, ...props }) {
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(
-										props.blockName,
+										props,
 										'flex-wrap'
 									),
 									value: attributes.publisherFlexWrap,
@@ -439,7 +433,7 @@ export function LayoutExtension({ config, ...props }) {
 									<ControlContextProvider
 										value={{
 											name: generateExtensionId(
-												props.blockName,
+												props,
 												'align-content'
 											),
 											value: attributes.publisherAlignContent,
