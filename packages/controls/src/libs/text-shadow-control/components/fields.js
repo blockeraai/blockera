@@ -13,13 +13,20 @@ import { InputField, ColorField } from '@publisher/fields';
  * Internal dependencies
  */
 import { RepeaterContext } from '../../repeater-control/context';
+import { useControlContext } from '../../../context';
 
 const Fields = ({ itemId, item }) => {
-	const { changeItem } = useContext(RepeaterContext);
+	const {
+		controlInfo: { name: controlId },
+		dispatch: { changeRepeaterItem },
+	} = useControlContext();
+
+	const { repeaterId, getControlId } = useContext(RepeaterContext);
 
 	return (
 		<div id={`repeater-item-${itemId}`}>
 			<InputField
+				id={getControlId(itemId, 'x')}
 				label={__('X', 'publisher-core')}
 				settings={{
 					type: 'css',
@@ -28,12 +35,18 @@ const Fields = ({ itemId, item }) => {
 					min: -100,
 					max: 100,
 				}}
-				//
-				value={item.x}
-				onChange={(x) => changeItem(itemId, { ...item, x })}
+				onChange={(x) =>
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, x },
+					})
+				}
 			/>
 
 			<InputField
+				id={getControlId(itemId, 'y')}
 				label={__('Y', 'publisher-core')}
 				settings={{
 					type: 'css',
@@ -42,12 +55,18 @@ const Fields = ({ itemId, item }) => {
 					min: -100,
 					max: 100,
 				}}
-				//
-				value={item.y}
-				onChange={(y) => changeItem(itemId, { ...item, y })}
+				onChange={(y) =>
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, y },
+					})
+				}
 			/>
 
 			<InputField
+				id={getControlId(itemId, 'blur')}
 				label={__('Blur', 'publisher-core')}
 				settings={{
 					type: 'css',
@@ -56,16 +75,27 @@ const Fields = ({ itemId, item }) => {
 					min: 0,
 					max: 100,
 				}}
-				//
-				value={item.blur}
-				onChange={(blur) => changeItem(itemId, { ...item, blur })}
+				onChange={(blur) =>
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, blur },
+					})
+				}
 			/>
 
 			<ColorField
+				id={getControlId(itemId, 'color')}
 				label={__('Color', 'publisher-core')}
-				//
-				value={item.color}
-				onChange={(color) => changeItem(itemId, { ...item, color })}
+				onChange={(color) =>
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, color },
+					})
+				}
 			/>
 		</div>
 	);
