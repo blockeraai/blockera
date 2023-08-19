@@ -18,7 +18,23 @@ import { useControlContext } from '../../context';
 
 function valueCleanup(value) {
 	if (isString(value)) {
-		return Number(value.replace(/%|px|em/, ''));
+		const units = [
+			'px',
+			'%',
+			'em',
+			'rem',
+			'ch',
+			'vw',
+			'vh',
+			'dvw',
+			'dvh',
+			'deg',
+			'rad',
+			'grad',
+		];
+		const regexp = new RegExp(units.join('|'), 'gi');
+
+		return Number(value.replace(regexp, ''));
 	}
 
 	return value;
