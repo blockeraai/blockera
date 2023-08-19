@@ -4,7 +4,7 @@
 import { createContext, useMemo } from '@wordpress/element';
 
 const BlockEditContext = createContext({
-	handleUpdateCssRules: () => {},
+	blockProps: {},
 });
 
 const BlockEditContextProvider = ({ children, ...props }) => {

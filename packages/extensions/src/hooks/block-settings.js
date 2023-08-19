@@ -106,7 +106,10 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 				return (
 					<>
 						<BlockEditContextProvider {...props}>
-							<BlockEditComponent blockName={blockProps.name} />
+							<BlockEditComponent
+								blockName={blockProps.name}
+								clientId={blockProps.clientId}
+							/>
 						</BlockEditContextProvider>
 						{settings.edit(props)}
 					</>
