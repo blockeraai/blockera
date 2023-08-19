@@ -64,6 +64,7 @@ export function InputControl({
 			>
 				{range && (
 					<RangeControl
+						id={id}
 						withInputField={false}
 						className={className}
 						onChange={(newValue) => {
