@@ -12,11 +12,12 @@ import { InputField, ToggleSelectField } from '@publisher/fields';
 /**
  * Internal dependencies
  */
-import { RepeaterContext } from '../../repeater-control/context';
 import { default as MoveIcon } from '../icons/move';
-import { default as RotateIcon } from '../icons/rotate';
-import { default as ScaleIcon } from '../icons/scale';
 import { default as SkewIcon } from '../icons/skew';
+import { useControlContext } from '../../../context';
+import { default as ScaleIcon } from '../icons/scale';
+import { default as RotateIcon } from '../icons/rotate';
+import { RepeaterContext } from '../../repeater-control/context';
 import { default as XCoordinateIcon } from '../icons/coordinate-x';
 import { default as YCoordinateIcon } from '../icons/coordinate-y';
 import { default as ZCoordinateIcon } from '../icons/coordinate-z';
@@ -25,11 +26,17 @@ import { default as RotateYCoordinateIcon } from '../icons/coordinate-rotate-y';
 import { default as RotateZCoordinateIcon } from '../icons/coordinate-rotate-z';
 
 const Fields = ({ itemId, item }) => {
-	const { changeItem } = useContext(RepeaterContext);
+	const {
+		controlInfo: { name: controlId },
+		dispatch: { changeRepeaterItem },
+	} = useControlContext();
+
+	const { repeaterId, getControlId } = useContext(RepeaterContext);
 
 	return (
 		<div id={`repeater-item-${itemId}`}>
 			<ToggleSelectField
+				id={getControlId(itemId, 'type')}
 				label={__('Type', 'publisher-core')}
 				options={[
 					{
@@ -53,14 +60,20 @@ const Fields = ({ itemId, item }) => {
 						icon: <SkewIcon />,
 					},
 				]}
-				//
-				value={item.type}
-				onChange={(type) => changeItem(itemId, { ...item, type })}
+				onChange={(type) =>
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, type },
+					})
+				}
 			/>
 
 			{item.type === 'move' && (
 				<>
 					<InputField
+						id={getControlId(itemId, 'move-x')}
 						label={<XCoordinateIcon />}
 						settings={{
 							type: 'css',
@@ -69,13 +82,17 @@ const Fields = ({ itemId, item }) => {
 							min: -300,
 							max: 300,
 						}}
-						//
-						value={item['move-x']}
 						onChange={(newValue) =>
-							changeItem(itemId, { ...item, 'move-x': newValue })
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: { ...item, 'move-x': newValue },
+							})
 						}
 					/>
 					<InputField
+						id={getControlId(itemId, 'move-y')}
 						label={<YCoordinateIcon />}
 						settings={{
 							type: 'css',
@@ -84,13 +101,17 @@ const Fields = ({ itemId, item }) => {
 							min: -300,
 							max: 300,
 						}}
-						//
-						value={item['move-y']}
 						onChange={(newValue) =>
-							changeItem(itemId, { ...item, 'move-y': newValue })
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: { ...item, 'move-y': newValue },
+							})
 						}
 					/>
 					<InputField
+						id={getControlId(itemId, 'move-z')}
 						label={<ZCoordinateIcon />}
 						settings={{
 							type: 'css',
@@ -99,10 +120,13 @@ const Fields = ({ itemId, item }) => {
 							min: -300,
 							max: 300,
 						}}
-						//
-						value={item['move-z']}
 						onChange={(newValue) =>
-							changeItem(itemId, { ...item, 'move-z': newValue })
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: { ...item, 'move-z': newValue },
+							})
 						}
 					/>
 				</>
@@ -111,6 +135,7 @@ const Fields = ({ itemId, item }) => {
 			{item.type === 'scale' && (
 				<>
 					<InputField
+						id={getControlId(itemId, 'scale')}
 						label={__('Scale', 'publisher-core')}
 						settings={{
 							type: 'css',
@@ -119,10 +144,13 @@ const Fields = ({ itemId, item }) => {
 							min: 0,
 							max: 200,
 						}}
-						//
-						value={item.scale}
 						onChange={(newValue) =>
-							changeItem(itemId, { ...item, scale: newValue })
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: { ...item, scale: newValue },
+							})
 						}
 					/>
 				</>
@@ -131,6 +159,7 @@ const Fields = ({ itemId, item }) => {
 			{item.type === 'rotate' && (
 				<>
 					<InputField
+						id={getControlId(itemId, 'rotate-x')}
 						label={<RotateXCoordinateIcon />}
 						settings={{
 							type: 'css',
@@ -139,16 +168,17 @@ const Fields = ({ itemId, item }) => {
 							min: -180,
 							max: 180,
 						}}
-						//
-						value={item['rotate-x']}
 						onChange={(newValue) =>
-							changeItem(itemId, {
-								...item,
-								'rotate-x': newValue,
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: { ...item, 'rotate-x': newValue },
 							})
 						}
 					/>
 					<InputField
+						id={getControlId(itemId, 'rotate-y')}
 						label={<RotateYCoordinateIcon />}
 						settings={{
 							type: 'css',
@@ -157,16 +187,17 @@ const Fields = ({ itemId, item }) => {
 							min: -180,
 							max: 180,
 						}}
-						//
-						value={item['rotate-y']}
 						onChange={(newValue) =>
-							changeItem(itemId, {
-								...item,
-								'rotate-y': newValue,
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: { ...item, 'rotate-y': newValue },
 							})
 						}
 					/>
 					<InputField
+						id={getControlId(itemId, 'rotate-z')}
 						label={<RotateZCoordinateIcon />}
 						settings={{
 							type: 'css',
@@ -175,12 +206,12 @@ const Fields = ({ itemId, item }) => {
 							min: -180,
 							max: 180,
 						}}
-						//
-						value={item['rotate-z']}
 						onChange={(newValue) =>
-							changeItem(itemId, {
-								...item,
-								'rotate-z': newValue,
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: { ...item, 'rotate-z': newValue },
 							})
 						}
 					/>
@@ -190,6 +221,7 @@ const Fields = ({ itemId, item }) => {
 			{item.type === 'skew' && (
 				<>
 					<InputField
+						id={getControlId(itemId, 'skew-x')}
 						label={<XCoordinateIcon />}
 						settings={{
 							type: 'css',
@@ -198,16 +230,17 @@ const Fields = ({ itemId, item }) => {
 							min: -60,
 							max: 60,
 						}}
-						//
-						value={item['skew-x']}
 						onChange={(newValue) =>
-							changeItem(itemId, {
-								...item,
-								'skew-x': newValue,
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: { ...item, 'skew-x': newValue },
 							})
 						}
 					/>
 					<InputField
+						id={getControlId(itemId, 'skew-y')}
 						label={<YCoordinateIcon />}
 						settings={{
 							type: 'css',
@@ -216,12 +249,12 @@ const Fields = ({ itemId, item }) => {
 							min: -60,
 							max: 60,
 						}}
-						//
-						value={item['skew-y']}
 						onChange={(newValue) =>
-							changeItem(itemId, {
-								...item,
-								'skew-y': newValue,
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: { ...item, 'skew-y': newValue },
 							})
 						}
 					/>
