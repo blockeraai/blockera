@@ -2,7 +2,6 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -10,6 +9,7 @@ import { useState } from '@wordpress/element';
 import {
 	AlignmentMatrixControl,
 	convertAlignmentMatrixCoordinates,
+	useControlContext,
 } from '@publisher/controls';
 import { Flex } from '@publisher/components';
 
@@ -27,95 +27,88 @@ export function PositionField({
 	leftValue,
 	children,
 	//
-	onValueChange = () => {},
+	onChange = () => {},
 }) {
-	const [coordinates, setCoordinates] = useState({
-		top: topValue,
-		left: leftValue,
+	const { value: coordinates, setValue: setCoordinates } = useControlContext({
+		defaultValue: {
+			top: topValue,
+			left: leftValue,
+		},
 	});
 
 	return (
-		<>
-			<Field label={label} field="position" className={className}>
-				<Flex gap="8px" direction="row" justify="space-around">
-					<div style={{ width: '75%' }}>
-						<AlignmentMatrixControl
-							value={
-								convertAlignmentMatrixCoordinates(coordinates)
-									?.compact
-							}
-							onChange={(newValue) => {
-								const _coordinates =
-									convertAlignmentMatrixCoordinates(newValue);
+		<Field label={label} field="position" className={className}>
+			<Flex gap="8px" direction="row" justify="space-around">
+				<div style={{ width: '75%' }}>
+					<AlignmentMatrixControl
+						id={'coordinates'}
+						onChange={(newValue) => {
+							const _coordinates =
+								convertAlignmentMatrixCoordinates(newValue);
 
+							setCoordinates({
+								coordinates: _coordinates,
+								top: _coordinates.top.number,
+								left: _coordinates.left.number,
+							});
+
+							onChange({
+								top: _coordinates.top.number,
+								left: _coordinates.left.number,
+							});
+						}}
+					/>
+				</div>
+
+				<div style={{ width: '100%' }}>
+					<Flex direction="column" gap="8px" justify="space-around">
+						<InputField
+							label={__('Top', 'publisher-core')}
+							id={'top'}
+							settings={{
+								type: 'css',
+								unitType: 'background-position',
+							}}
+							defaultValue={coordinates.top}
+							onChange={(value) => {
 								setCoordinates({
-									top: _coordinates.top.number,
-									left: _coordinates.left.number,
+									...coordinates,
+									top: value,
 								});
 
-								onValueChange({
-									top: _coordinates.top.number,
-									left: _coordinates.left.number,
+								onChange({
+									...coordinates,
+									top: value,
 								});
 							}}
 						/>
-					</div>
 
-					<div style={{ width: '100%' }}>
-						<Flex
-							direction="column"
-							gap="8px"
-							justify="space-around"
-						>
-							<InputField
-								label={__('Top', 'publisher-core')}
-								settings={{
-									type: 'css',
-									unitType: 'background-position',
-								}}
-								//
-								value={coordinates.top}
-								defaultValue={coordinates.top}
-								onChange={(value) => {
-									setCoordinates({
-										...coordinates,
-										top: value,
-									});
+						<InputField
+							label={__('Left', 'publisher-core')}
+							id={'left'}
+							settings={{
+								type: 'css',
+								unitType: 'background-position',
+							}}
+							//
+							defaultValue={coordinates.left}
+							onChange={(value) => {
+								setCoordinates({
+									...coordinates,
+									left: value,
+								});
 
-									onValueChange({
-										...coordinates,
-										top: value,
-									});
-								}}
-							/>
+								onChange({
+									...coordinates,
+									left: value,
+								});
+							}}
+						/>
+					</Flex>
+				</div>
+			</Flex>
 
-							<InputField
-								label={__('Left', 'publisher-core')}
-								settings={{
-									type: 'css',
-									unitType: 'background-position',
-								}}
-								//
-								value={coordinates.left}
-								defaultValue={coordinates.left}
-								onChange={(value) => {
-									setCoordinates({
-										...coordinates,
-										left: value,
-									});
-
-									onValueChange({
-										...coordinates,
-										left: value,
-									});
-								}}
-							/>
-						</Flex>
-					</div>
-				</Flex>
-
-				{children}
-			</Field>
-		</>
+			{children}
+		</Field>
 	);
 }
