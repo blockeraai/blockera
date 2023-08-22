@@ -16,7 +16,6 @@ class AssetsProvider {
 	 */
 	protected static array $assets = [
 		'utils',
-		'fields',
 		'controls',
 		'components',
 		'classnames',
@@ -32,7 +31,6 @@ class AssetsProvider {
 	 */
 	protected static array $packages_deps = [
 		'extensions' => [
-			'@publisher/fields',
 			'@publisher/controls',
 			'@publisher/components',
 		],
