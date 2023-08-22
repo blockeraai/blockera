@@ -1,1 +1,0 @@
-export { IconField } from './field';

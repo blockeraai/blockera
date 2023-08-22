@@ -1,1 +1,0 @@
-export { MediaImageField } from './field';
