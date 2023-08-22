@@ -12,6 +12,7 @@ module.exports = {
 		],
 		'import/no-extraneous-dependencies': 'off',
 		'@wordpress/no-unsafe-wp-apis': 'off',
+		'@wordpress/no-base-control-with-label-without-id': 'off',
 		'jsdoc/check-line-alignment': 'off',
 		'jsdoc/require-param': 'off',
 		'jsdoc/check-param-names': 'off',
