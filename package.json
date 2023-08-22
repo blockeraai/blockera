@@ -12,10 +12,10 @@
 		"WordPress",
 		"editor"
 	],
-	"homepage": "https://gitlab.com/better-projects/publisher-fse/publisher-core",
-	"repository": "git+https://gitlab.com/better-projects/publisher-fse/publisher-core.git",
+	"homepage": "https://github.com/publisherwp/publisher-core.git",
+	"repository": "https://github.com/publisherwp/publisher-core.git",
 	"bugs": {
-		"url": "https://gitlab.com/better-projects/publisher-fse/publisher-core/-/issues"
+		"url": "https://github.com/publisherwp/publisher-core/issues"
 	},
 	"engines": {
 		"node": ">=14.0.0",
@@ -31,7 +31,6 @@
 		"@publisher/controls": "file:packages/controls",
 		"@publisher/data-extractor": "file:packages/data-extractor",
 		"@publisher/extensions": "file:packages/extensions",
-		"@publisher/fields": "file:packages/fields",
 		"@publisher/style-engine": "file:packages/style-engine",
 		"@publisher/utils": "file:packages/utils"
 	},
