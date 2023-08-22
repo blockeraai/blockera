@@ -7,17 +7,17 @@ import { useState, useContext } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import {
-	BorderField,
-	ColorField,
-	Field,
-	InputField,
-	SelectField,
-	TextShadowField,
-	ToggleSelectField,
-} from '@publisher/fields';
 import { isEmpty, isUndefined } from '@publisher/utils';
-import { ControlContextProvider } from '@publisher/controls';
+import {
+	BaseControl,
+	BorderControl,
+	ColorControl,
+	ControlContextProvider,
+	InputControl,
+	SelectControl,
+	TextShadowControl,
+	ToggleSelectControl,
+} from '@publisher/controls';
 import { Popover, Button, Flex } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
 
@@ -88,8 +88,8 @@ export function TypographyExtension({ children, config, ...props }) {
 
 	return (
 		<>
-			<Field
-				field="typography"
+			<BaseControl
+				controlName="typography"
 				label={__('Typography', 'publisher-core')}
 			>
 				<Button
@@ -124,25 +124,26 @@ export function TypographyExtension({ children, config, ...props }) {
 									value: attributes.publisherFontSize,
 								}}
 							>
-								<InputField
+								<BaseControl
+									controlName="input"
 									label={__('Font Size', 'publisher-core')}
-									settings={{
-										type: 'css',
-										unitType: 'essential',
-										range: true,
-										min: 0,
-										max: 200,
-										defaultValue: '14px',
-									}}
-									//
-									defaultValue=""
-									onChange={(newValue) =>
-										setAttributes({
-											...attributes,
-											publisherFontSize: newValue,
-										})
-									}
-								/>
+								>
+									<InputControl
+										{...{
+											...props,
+											unitType: 'essential',
+											range: true,
+											min: 0,
+											max: 200,
+											defaultValue: '14px',
+											onChange: (newValue) =>
+												setAttributes({
+													...attributes,
+													publisherFontSize: newValue,
+												}),
+										}}
+									/>
+								</BaseControl>
 							</ControlContextProvider>
 						)}
 
@@ -156,29 +157,31 @@ export function TypographyExtension({ children, config, ...props }) {
 									value: attributes.publisherLineHeight,
 								}}
 							>
-								<InputField
+								<BaseControl
+									controlName="input"
 									label={__('Line Height', 'publisher-core')}
-									settings={{
-										type: 'css',
-										unitType: 'essential',
-										range: true,
-										min: 0,
-										max: 100,
-										defaultValue: '14px',
-									}}
-									//
-									defaultValue=""
-									onChange={(newValue) =>
-										setAttributes({
-											...attributes,
-											publisherLineHeight: newValue,
-										})
-									}
-								/>
+								>
+									<InputControl
+										{...{
+											...props,
+											unitType: 'essential',
+											range: true,
+											min: 0,
+											max: 100,
+											defaultValue: '14px',
+											onChange: (newValue) =>
+												setAttributes({
+													...attributes,
+													publisherLineHeight:
+														newValue,
+												}),
+										}}
+									/>
+								</BaseControl>
 							</ControlContextProvider>
 						)}
 
-						<Field field="style" label="" columns="columns-1">
+						<BaseControl controlName="style" columns="columns-1">
 							{isActiveField(publisherTextAlign) && (
 								<ControlContextProvider
 									value={{
@@ -189,63 +192,76 @@ export function TypographyExtension({ children, config, ...props }) {
 										value: attributes.publisherTextAlign,
 									}}
 								>
-									<ToggleSelectField
-										label={__('Align', 'publisher-core')}
+									<BaseControl
 										columns="columns-1"
+										controlName="toggle-select"
 										className="control-first label-center small-gap"
-										options={[
-											{
-												label: __(
-													'Left',
-													'publisher-core'
-												),
-												value: 'left',
-												icon: <TextAlignLeftIcon />,
-											},
-											{
-												label: __(
-													'Center',
-													'publisher-core'
-												),
-												value: 'center',
-												icon: <TextAlignCenterIcon />,
-											},
-											{
-												label: __(
-													'Right',
-													'publisher-core'
-												),
-												value: 'right',
-												icon: <TextAlignRightIcon />,
-											},
-											{
-												label: __(
-													'Justify',
-													'publisher-core'
-												),
-												value: 'justify',
-												icon: <TextAlignJustifyIcon />,
-											},
-											{
-												label: __(
-													'None',
-													'publisher-core'
-												),
-												value: 'initial',
-												icon: <NoneIcon />,
-											},
-										]}
-										isDeselectable={true}
-										//
-										defaultValue=""
-										value={attributes.publisherTextAlign}
-										onChange={(newValue) =>
-											setAttributes({
-												...attributes,
-												publisherTextAlign: newValue,
-											})
-										}
-									/>
+										label={__('Align', 'publisher-core')}
+									>
+										<ToggleSelectControl
+											options={[
+												{
+													label: __(
+														'Left',
+														'publisher-core'
+													),
+													value: 'left',
+													icon: <TextAlignLeftIcon />,
+												},
+												{
+													label: __(
+														'Center',
+														'publisher-core'
+													),
+													value: 'center',
+													icon: (
+														<TextAlignCenterIcon />
+													),
+												},
+												{
+													label: __(
+														'Right',
+														'publisher-core'
+													),
+													value: 'right',
+													icon: (
+														<TextAlignRightIcon />
+													),
+												},
+												{
+													label: __(
+														'Justify',
+														'publisher-core'
+													),
+													value: 'justify',
+													icon: (
+														<TextAlignJustifyIcon />
+													),
+												},
+												{
+													label: __(
+														'None',
+														'publisher-core'
+													),
+													value: 'initial',
+													icon: <NoneIcon />,
+												},
+											]}
+											isDeselectable={true}
+											//
+											defaultValue=""
+											value={
+												attributes.publisherTextAlign
+											}
+											onChange={(newValue) =>
+												setAttributes({
+													...attributes,
+													publisherTextAlign:
+														newValue,
+												})
+											}
+										/>
+									</BaseControl>
 								</ControlContextProvider>
 							)}
 
@@ -261,64 +277,67 @@ export function TypographyExtension({ children, config, ...props }) {
 												value: attributes.publisherTextDecoration,
 											}}
 										>
-											<ToggleSelectField
+											<BaseControl
 												label={__(
 													'Decoration',
 													'publisher-core'
 												)}
 												columns="columns-1"
 												className="control-first label-center small-gap"
-												options={[
-													{
-														label: __(
-															'Underline',
-															'publisher-core'
-														),
-														value: 'underline',
-														icon: (
-															<TextDecorationUnderlineIcon />
-														),
-													},
-													{
-														label: __(
-															'Line Through',
-															'publisher-core'
-														),
-														value: 'line-through',
-														icon: (
-															<TextDecorationLineThroughIcon />
-														),
-													},
-													{
-														label: __(
-															'Overline',
-															'publisher-core'
-														),
-														value: 'overline',
-														icon: (
-															<TextDecorationOverlineIcon />
-														),
-													},
-													{
-														label: __(
-															'None',
-															'publisher-core'
-														),
-														value: 'initial',
-														icon: <NoneIcon />,
-													},
-												]}
-												isDeselectable={true}
-												//
-												defaultValue=""
-												onChange={(newValue) =>
-													setAttributes({
-														...attributes,
-														publisherTextDecoration:
-															newValue,
-													})
-												}
-											/>
+											>
+												<ToggleSelectControl
+													options={[
+														{
+															label: __(
+																'Underline',
+																'publisher-core'
+															),
+															value: 'underline',
+															icon: (
+																<TextDecorationUnderlineIcon />
+															),
+														},
+														{
+															label: __(
+																'Line Through',
+																'publisher-core'
+															),
+															value: 'line-through',
+															icon: (
+																<TextDecorationLineThroughIcon />
+															),
+														},
+														{
+															label: __(
+																'Overline',
+																'publisher-core'
+															),
+															value: 'overline',
+															icon: (
+																<TextDecorationOverlineIcon />
+															),
+														},
+														{
+															label: __(
+																'None',
+																'publisher-core'
+															),
+															value: 'initial',
+															icon: <NoneIcon />,
+														},
+													]}
+													isDeselectable={true}
+													//
+													defaultValue=""
+													onChange={(newValue) =>
+														setAttributes({
+															...attributes,
+															publisherTextDecoration:
+																newValue,
+														})
+													}
+												/>
+											</BaseControl>
 										</ControlContextProvider>
 									)}
 								</div>
@@ -333,46 +352,49 @@ export function TypographyExtension({ children, config, ...props }) {
 												value: attributes.publisherFontStyle,
 											}}
 										>
-											<ToggleSelectField
+											<BaseControl
 												label={__(
 													'Italicize',
 													'publisher-core'
 												)}
 												columns="columns-1"
 												className="control-first label-center small-gap"
-												options={[
-													{
-														label: __(
-															'Normal',
-															'publisher-core'
-														),
-														value: 'normal',
-														icon: (
-															<FontStyleNormalIcon />
-														),
-													},
-													{
-														label: __(
-															'Line Through',
-															'publisher-core'
-														),
-														value: 'italic',
-														icon: (
-															<FontStyleItalicIcon />
-														),
-													},
-												]}
-												isDeselectable={true}
-												//
-												defaultValue=""
-												onChange={(newValue) =>
-													setAttributes({
-														...attributes,
-														publisherFontStyle:
-															newValue,
-													})
-												}
-											/>
+											>
+												<ToggleSelectControl
+													options={[
+														{
+															label: __(
+																'Normal',
+																'publisher-core'
+															),
+															value: 'normal',
+															icon: (
+																<FontStyleNormalIcon />
+															),
+														},
+														{
+															label: __(
+																'Line Through',
+																'publisher-core'
+															),
+															value: 'italic',
+															icon: (
+																<FontStyleItalicIcon />
+															),
+														},
+													]}
+													isDeselectable={true}
+													//
+													defaultValue=""
+													onChange={(newValue) =>
+														setAttributes({
+															...attributes,
+															publisherFontStyle:
+																newValue,
+														})
+													}
+												/>
+											</BaseControl>
 										</ControlContextProvider>
 									)}
 								</div>
@@ -390,64 +412,67 @@ export function TypographyExtension({ children, config, ...props }) {
 												value: attributes.publisherTextTransform,
 											}}
 										>
-											<ToggleSelectField
+											<BaseControl
 												label={__(
 													'Capitalize',
 													'publisher-core'
 												)}
 												columns="columns-1"
 												className="control-first label-center small-gap"
-												options={[
-													{
-														label: __(
-															'Capitalize',
-															'publisher-core'
-														),
-														value: 'capitalize',
-														icon: (
-															<TextTransformCapitalizeIcon />
-														),
-													},
-													{
-														label: __(
-															'Lowercase',
-															'publisher-core'
-														),
-														value: 'overline',
-														icon: (
-															<TextTransformLowercaseIcon />
-														),
-													},
-													{
-														label: __(
-															'Uppercase',
-															'publisher-core'
-														),
-														value: 'uppercase',
-														icon: (
-															<TextTransformUppercaseIcon />
-														),
-													},
-													{
-														label: __(
-															'None',
-															'publisher-core'
-														),
-														value: 'initial',
-														icon: <NoneIcon />,
-													},
-												]}
-												isDeselectable={true}
-												//
-												defaultValue=""
-												onChange={(newValue) =>
-													setAttributes({
-														...attributes,
-														publisherTextTransform:
-															newValue,
-													})
-												}
-											/>
+											>
+												<ToggleSelectControl
+													options={[
+														{
+															label: __(
+																'Capitalize',
+																'publisher-core'
+															),
+															value: 'capitalize',
+															icon: (
+																<TextTransformCapitalizeIcon />
+															),
+														},
+														{
+															label: __(
+																'Lowercase',
+																'publisher-core'
+															),
+															value: 'overline',
+															icon: (
+																<TextTransformLowercaseIcon />
+															),
+														},
+														{
+															label: __(
+																'Uppercase',
+																'publisher-core'
+															),
+															value: 'uppercase',
+															icon: (
+																<TextTransformUppercaseIcon />
+															),
+														},
+														{
+															label: __(
+																'None',
+																'publisher-core'
+															),
+															value: 'initial',
+															icon: <NoneIcon />,
+														},
+													]}
+													isDeselectable={true}
+													//
+													defaultValue=""
+													onChange={(newValue) =>
+														setAttributes({
+															...attributes,
+															publisherTextTransform:
+																newValue,
+														})
+													}
+												/>
+											</BaseControl>
 										</ControlContextProvider>
 									)}
 								</div>
@@ -462,54 +487,57 @@ export function TypographyExtension({ children, config, ...props }) {
 												value: attributes.publisherDirection,
 											}}
 										>
-											<ToggleSelectField
+											<BaseControl
 												label={__(
 													'Direction',
 													'publisher-core'
 												)}
 												columns="columns-1"
 												className="control-first label-center small-gap"
-												options={[
-													{
-														label: __(
-															'Left to Right',
-															'publisher-core'
-														),
-														value: 'ltr',
-														icon: (
-															<DirectionLtrIcon />
-														),
-													},
-													{
-														label: __(
-															'Right to Left',
-															'publisher-core'
-														),
-														value: 'rtl',
-														icon: (
-															<DirectionRtlIcon />
-														),
-													},
-												]}
-												isDeselectable={true}
-												//
-												defaultValue=""
-												onChange={(newValue) =>
-													setAttributes({
-														...attributes,
-														publisherDirection:
-															newValue,
-													})
-												}
-											/>
+											>
+												<ToggleSelectControl
+													options={[
+														{
+															label: __(
+																'Left to Right',
+																'publisher-core'
+															),
+															value: 'ltr',
+															icon: (
+																<DirectionLtrIcon />
+															),
+														},
+														{
+															label: __(
+																'Right to Left',
+																'publisher-core'
+															),
+															value: 'rtl',
+															icon: (
+																<DirectionRtlIcon />
+															),
+														},
+													]}
+													isDeselectable={true}
+													//
+													defaultValue=""
+													onChange={(newValue) =>
+														setAttributes({
+															...attributes,
+															publisherDirection:
+																newValue,
+														})
+													}
+												/>
+											</BaseControl>
 										</ControlContextProvider>
 									)}
 								</div>
 							</Flex>
-						</Field>
+						</BaseControl>
 
-						<Field
-							field="spacing"
+						<BaseControl
+							controlName="spacing"
 							label={__('Spacing', 'publisher-core')}
 						>
 							{isActiveField(publisherLetterSpacing) && (
@@ -522,26 +550,28 @@ export function TypographyExtension({ children, config, ...props }) {
 										value: attributes.publisherLetterSpacing,
 									}}
 								>
-									<InputField
-										label={__('Letters', 'publisher-core')}
-										settings={{
-											type: 'css',
-											unitType: 'letter-spacing',
-											onValidate: (newValue) => {
-												return newValue;
-											},
-										}}
+									<BaseControl
+										controlName="input"
 										columns="2fr 2.4fr"
-										//
-										defaultValue=""
-										onChange={(newValue) =>
-											setAttributes({
-												...attributes,
-												publisherLetterSpacing:
-													newValue,
-											})
-										}
-									/>
+										label={__('Letters', 'publisher-core')}
+									>
+										<InputControl
+											{...{
+												...props,
+												unitType: 'letter-spacing',
+												defaultValue: '',
+												onValidate: (newValue) => {
+													return newValue;
+												},
+												onChange: (newValue) =>
+													setAttributes({
+														...attributes,
+														publisherLetterSpacing:
+															newValue,
+													}),
+											}}
+										/>
+									</BaseControl>
 								</ControlContextProvider>
 							)}
 
@@ -555,23 +585,26 @@ export function TypographyExtension({ children, config, ...props }) {
 										value: attributes.publisherWordSpacing,
 									}}
 								>
-									<InputField
-										label={__('Words', 'publisher-core')}
-										settings={{
-											type: 'css',
-											unitType: 'letter-spacing',
-											step: 'any',
-										}}
+									<BaseControl
+										controlName="input"
 										columns="2fr 2.4fr"
-										//
-										defaultValue=""
-										onChange={(newValue) =>
-											setAttributes({
-												...attributes,
-												publisherWordSpacing: newValue,
-											})
-										}
-									/>
+										label={__('Words', 'publisher-core')}
+									>
+										<InputControl
+											{...{
+												...props,
+												unitType: 'letter-spacing',
+												step: 'any',
+												defaultValue: '',
+												onChange: (newValue) =>
+													setAttributes({
+														...attributes,
+														publisherWordSpacing:
+															newValue,
+													}),
+											}}
+										/>
+									</BaseControl>
 								</ControlContextProvider>
 							)}
 
@@ -585,28 +618,31 @@ export function TypographyExtension({ children, config, ...props }) {
 										value: attributes.publisherTextIndent,
 									}}
 								>
-									<InputField
+									<BaseControl
+										controlName="input"
+										columns="2fr 2.4fr"
 										label={__(
 											'Text Indent',
 											'publisher-core'
 										)}
-										settings={{
-											type: 'css',
-											unitType: 'text-indent',
-										}}
-										columns="2fr 2.4fr"
-										//
-										defaultValue=""
-										onChange={(newValue) =>
-											setAttributes({
-												...attributes,
-												publisherTextIndent: newValue,
-											})
-										}
-									/>
+									>
+										<InputControl
+											{...{
+												...props,
+												unitType: 'text-indent',
+												defaultValue: '',
+												onChange: (newValue) =>
+													setAttributes({
+														...attributes,
+														publisherTextIndent:
+															newValue,
+													}),
+											}}
+										/>
+									</BaseControl>
 								</ControlContextProvider>
 							)}
-						</Field>
+						</BaseControl>
 
 						{isActiveField(publisherTextOrientation) && (
 							<ControlContextProvider
@@ -618,57 +654,73 @@ export function TypographyExtension({ children, config, ...props }) {
 									value: attributes.publisherTextOrientation,
 								}}
 							>
-								<ToggleSelectField
+								<BaseControl
+									controlName="toggle-select"
 									label={__('Orientation', 'publisher-core')}
-									options={[
-										{
-											label: __(
-												'vertically from top to bottom, and the next vertical line is positioned to the right of the previous line',
-												'publisher-core'
-											),
-											value: 'style-1',
-											icon: <TextOrientationStyle1Icon />,
-										},
-										{
-											label: __(
-												'vertically from top to bottom, and the next vertical line is positioned to the left of the previous line',
-												'publisher-core'
-											),
-											value: 'style-2',
-											icon: <TextOrientationStyle2Icon />,
-										},
-										{
-											label: __(
-												'Right',
-												'publisher-core'
-											),
-											value: 'style-3',
-											icon: <TextOrientationStyle3Icon />,
-										},
-										{
-											label: __(
-												'Right',
-												'publisher-core'
-											),
-											value: 'style-4',
-											icon: <TextOrientationStyle4Icon />,
-										},
-										{
-											label: __('None', 'publisher-core'),
-											value: 'initial',
-											icon: <NoneIcon />,
-										},
-									]}
-									isDeselectable={true}
-									//
-									defaultValue=""
-									onChange={(newValue) =>
-										setAttributes({
-											...attributes,
-											publisherTextOrientation: newValue,
-										})
-									}
-								/>
+								>
+									<ToggleSelectControl
+										options={[
+											{
+												label: __(
+													'vertically from top to bottom, and the next vertical line is positioned to the right of the previous line',
+													'publisher-core'
+												),
+												value: 'style-1',
+												icon: (
+													<TextOrientationStyle1Icon />
+												),
+											},
+											{
+												label: __(
+													'vertically from top to bottom, and the next vertical line is positioned to the left of the previous line',
+													'publisher-core'
+												),
+												value: 'style-2',
+												icon: (
+													<TextOrientationStyle2Icon />
+												),
+											},
+											{
+												label: __(
+													'Right',
+													'publisher-core'
+												),
+												value: 'style-3',
+												icon: (
+													<TextOrientationStyle3Icon />
+												),
+											},
+											{
+												label: __(
+													'Right',
+													'publisher-core'
+												),
+												value: 'style-4',
+												icon: (
+													<TextOrientationStyle4Icon />
+												),
+											},
+											{
+												label: __(
+													'None',
+													'publisher-core'
+												),
+												value: 'initial',
+												icon: <NoneIcon />,
+											},
+										]}
+										isDeselectable={true}
+										//
+										defaultValue=""
+										onChange={(newValue) =>
+											setAttributes({
+												...attributes,
+												publisherTextOrientation:
+													newValue,
+											})
+										}
+									/>
+								</BaseControl>
 							</ControlContextProvider>
 						)}
 
@@ -682,57 +734,63 @@ export function TypographyExtension({ children, config, ...props }) {
 									value: attributes.publisherTextColumns,
 								}}
 							>
-								<ToggleSelectField
+								<BaseControl
+									controlName="toggle-select"
 									label={__('Columns', 'publisher-core')}
-									options={[
-										{
-											label: __(
-												'2 Columns Text',
-												'publisher-core'
-											),
-											value: '2-columns',
-											icon: <Columns2Icon />,
-										},
-										{
-											label: __(
-												'3 Columns Text',
-												'publisher-core'
-											),
-											value: '3-columns',
-											icon: <Columns3Icon />,
-										},
-										{
-											label: __(
-												'4 Columns Text',
-												'publisher-core'
-											),
-											value: '4-columns',
-											icon: <Columns4Icon />,
-										},
-										{
-											label: __(
-												'5 Columns Text',
-												'publisher-core'
-											),
-											value: '5-columns',
-											icon: <Columns5Icon />,
-										},
-										{
-											label: __('None', 'publisher-core'),
-											value: 'none',
-											icon: <NoneIcon />,
-										},
-									]}
-									isDeselectable={true}
-									//
-									defaultValue=""
-									onChange={(newValue) =>
-										setAttributes({
-											...attributes,
-											publisherTextColumns: newValue,
-										})
-									}
 								>
+									<ToggleSelectControl
+										options={[
+											{
+												label: __(
+													'2 Columns Text',
+													'publisher-core'
+												),
+												value: '2-columns',
+												icon: <Columns2Icon />,
+											},
+											{
+												label: __(
+													'3 Columns Text',
+													'publisher-core'
+												),
+												value: '3-columns',
+												icon: <Columns3Icon />,
+											},
+											{
+												label: __(
+													'4 Columns Text',
+													'publisher-core'
+												),
+												value: '4-columns',
+												icon: <Columns4Icon />,
+											},
+											{
+												label: __(
+													'5 Columns Text',
+													'publisher-core'
+												),
+												value: '5-columns',
+												icon: <Columns5Icon />,
+											},
+											{
+												label: __(
+													'None',
+													'publisher-core'
+												),
+												value: 'none',
+												icon: <NoneIcon />,
+											},
+										]}
+										isDeselectable={true}
+										//
+										defaultValue=""
+										onChange={(newValue) =>
+											setAttributes({
+												...attributes,
+												publisherTextColumns: newValue,
+											})
+										}
+									/>
 									{!isEmpty(
 										attributes.publisherTextColumns
 									) &&
@@ -751,31 +809,36 @@ export function TypographyExtension({ children, config, ...props }) {
 														value: attributes.publisherTextColumnsGap,
 													}}
 												>
-													<InputField
+													<BaseControl
+														controlName="input"
 														label={__(
 															'Gap',
 															'publisher-core'
 														)}
-														settings={{
-															type: 'css',
-															unitType:
-																'essential',
-															range: true,
-															min: 0,
-															max: 200,
-															defaultValue:
-																'20px',
-														}}
-														//
-														defaultValue=""
-														onChange={(newValue) =>
-															setAttributes({
-																...attributes,
-																publisherTextColumnsGap:
-																	newValue,
-															})
-														}
-													/>
+													>
+														<InputControl
+															{...{
+																...props,
+																unitType:
+																	'essential',
+																range: true,
+																min: 0,
+																max: 200,
+																defaultValue:
+																	'20px',
+																onChange: (
+																	newValue
+																) =>
+																	setAttributes(
+																		{
+																			...attributes,
+																			publisherTextColumnsGap:
+																				newValue,
+																		}
+																	),
+															}}
+														/>
+													</BaseControl>
 												</ControlContextProvider>
 
 												<ControlContextProvider
@@ -791,38 +854,42 @@ export function TypographyExtension({ children, config, ...props }) {
 														},
 													}}
 												>
-													<BorderField
+													<BaseControl
+														controlName="border"
 														label={__(
 															'Divider',
 															'publisher-core'
 														)}
 														columns="columns-1"
 														className="control-first label-center small-gap"
-														lines="vertical"
-														customMenuPosition="top"
-														onValueChange={(
-															newValue
-														) => {
-															setAttributes({
-																...attributes,
-																publisherTextColumnsDividerWidth:
-																	newValue.width,
-																publisherTextColumnsDividerStyle:
-																	newValue.style,
-																publisherTextColumnsDividerColor:
-																	newValue.color,
-															});
-														}}
-													/>
+													>
+														<BorderControl
+															lines="vertical"
+															customMenuPosition="top"
+															onValueChange={(
+																newValue
+															) => {
+																setAttributes({
+																	...attributes,
+																	publisherTextColumnsDividerWidth:
+																		newValue.width,
+																	publisherTextColumnsDividerStyle:
+																		newValue.style,
+																	publisherTextColumnsDividerColor:
+																		newValue.color,
+																});
+															}}
+														/>
+													</BaseControl>
 												</ControlContextProvider>
 											</>
 										)}
-								</ToggleSelectField>
+								</BaseControl>
 							</ControlContextProvider>
 						)}
 
 						{isActiveField(publisherTextStrokeColor) && (
-							<Field label={__('Stroke', 'publisher-core')}>
+							<BaseControl label={__('Stroke', 'publisher-core')}>
 								<ControlContextProvider
 									value={{
 										name: generateExtensionId(
@@ -832,18 +899,21 @@ export function TypographyExtension({ children, config, ...props }) {
 										value: attributes.publisherTextStrokeColor,
 									}}
 								>
-									<ColorField
+									<BaseControl
+										controlName="color"
 										label={__('Color', 'publisher-core')}
-										//
-										defaultValue=""
-										onChange={(newValue) =>
-											setAttributes({
-												...attributes,
-												publisherTextStrokeColor:
-													newValue,
-											})
-										}
-									/>
+									>
+										<ColorControl
+											defaultValue=""
+											onChange={(newValue) =>
+												setAttributes({
+													...attributes,
+													publisherTextStrokeColor:
+														newValue,
+												})
+											}
+										/>
+									</BaseControl>
 								</ControlContextProvider>
 
 								{attributes.publisherTextStrokeColor && (
@@ -856,28 +926,30 @@ export function TypographyExtension({ children, config, ...props }) {
 											value: attributes.publisherTextStrokeWidth,
 										}}
 									>
-										<InputField
+										<BaseControl
+											controlName="input"
 											label={__(
 												'Width',
 												'publisher-core'
 											)}
-											settings={{
-												type: 'css',
-												unitType: 'essential',
-											}}
-											//
-											defaultValue=""
-											onChange={(newValue) =>
-												setAttributes({
-													...attributes,
-													publisherTextStrokeWidth:
-														newValue,
-												})
-											}
-										/>
+										>
+											<InputControl
+												{...{
+													...props,
+													unitType: 'essential',
+													defaultValue: '',
+													onChange: (newValue) =>
+														setAttributes({
+															...attributes,
+															publisherTextStrokeWidth:
+																newValue,
+														}),
+												}}
+											/>
+										</BaseControl>
 									</ControlContextProvider>
 								)}
-							</Field>
+							</BaseControl>
 						)}
 
 						{isActiveField(publisherWordBreak) && (
@@ -890,66 +962,70 @@ export function TypographyExtension({ children, config, ...props }) {
 									value: attributes.publisherWordBreak,
 								}}
 							>
-								<SelectField
+								<BaseControl
+									controlName="select"
 									label={__('Breaking', 'publisher-core')}
-									options={[
-										{
-											label: __(
-												'Normal',
-												'publisher-core'
-											),
-											value: 'normal',
-											icon: <BreakingNormalIcon />,
-										},
-										{
-											label: __(
-												'Break All Words',
-												'publisher-core'
-											),
-											value: 'break-all',
-											icon: <BreakingBreakAllIcon />,
-										},
-										{
-											label: __(
-												'Keep All Words',
-												'publisher-core'
-											),
-											value: 'keep-all',
-											icon: <BreakingNormalIcon />,
-										},
-										{
-											label: __(
-												'Break Word',
-												'publisher-core'
-											),
-											value: 'break-word',
-											icon: <BreakingBreakAllIcon />,
-										},
-										{
-											label: __(
-												'Inherit',
-												'publisher-core'
-											),
-											value: 'inherit',
-											icon: <InheritIcon />,
-										},
-									]}
-									type="custom"
-									customMenuPosition="top"
-									//
-									defaultValue="normal"
-									onChange={(newValue) =>
-										setAttributes({
-											...attributes,
-											publisherWordBreak: newValue,
-										})
-									}
-								/>
+								>
+									<SelectControl
+										options={[
+											{
+												label: __(
+													'Normal',
+													'publisher-core'
+												),
+												value: 'normal',
+												icon: <BreakingNormalIcon />,
+											},
+											{
+												label: __(
+													'Break All Words',
+													'publisher-core'
+												),
+												value: 'break-all',
+												icon: <BreakingBreakAllIcon />,
+											},
+											{
+												label: __(
+													'Keep All Words',
+													'publisher-core'
+												),
+												value: 'keep-all',
+												icon: <BreakingNormalIcon />,
+											},
+											{
+												label: __(
+													'Break Word',
+													'publisher-core'
+												),
+												value: 'break-word',
+												icon: <BreakingBreakAllIcon />,
+											},
+											{
+												label: __(
+													'Inherit',
+													'publisher-core'
+												),
+												value: 'inherit',
+												icon: <InheritIcon />,
+											},
+										]}
+										type="custom"
+										customMenuPosition="top"
+										//
+										defaultValue="normal"
+										onChange={(newValue) =>
+											setAttributes({
+												...attributes,
+												publisherWordBreak: newValue,
+											})
+										}
+									/>
+								</BaseControl>
 							</ControlContextProvider>
 						)}
 					</Popover>
 				)}
-			</Field>
+			</BaseControl>
 
 			{isActiveField(publisherFontColor) && (
 				<ControlContextProvider
@@ -958,19 +1034,23 @@ export function TypographyExtension({ children, config, ...props }) {
 						value: attributes.publisherFontColor,
 					}}
 				>
-					<ColorField
-						{...{
-							...props,
-							label: __('Color', 'publisher-core'),
-							//
-							defaultValue: '',
-							onChange: (newValue) =>
-								setAttributes({
-									...attributes,
-									publisherFontColor: newValue,
-								}),
-						}}
-					/>
+					<BaseControl
+						controlName="color"
+						label={__('Color', 'publisher-core')}
+					>
+						<ColorControl
+							{...{
+								...props,
+								//
+								defaultValue: '',
+								onChange: (newValue) =>
+									setAttributes({
+										...attributes,
+										publisherFontColor: newValue,
+									}),
+							}}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 
@@ -982,16 +1062,18 @@ export function TypographyExtension({ children, config, ...props }) {
 					}}
 					storeName={'publisher-core/controls/repeater'}
 				>
-					<TextShadowField
-						label={__('Text Shadows', 'publisher-core')}
-						onChange={(newValue) =>
-							setAttributes({
-								...attributes,
-								publisherTextShadow: newValue,
-							})
-						}
-						{...props}
-					/>
+					<BaseControl controlName="text-shadow" columns="columns-1">
+						<TextShadowControl
+							label={__('Text Shadows', 'publisher-core')}
+							onChange={(newValue) =>
+								setAttributes({
+									...attributes,
+									publisherTextShadow: newValue,
+								})
+							}
+							{...props}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 		</>

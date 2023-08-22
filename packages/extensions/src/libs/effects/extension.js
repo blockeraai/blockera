@@ -8,15 +8,14 @@ import { useContext, useState } from '@wordpress/element';
  * Publisher dependencies
  */
 import {
-	InputField,
-	SelectField,
-	TransitionField,
-	FilterField,
-	TransformField,
-	PositionField,
-	ToggleSelectField,
-} from '@publisher/fields';
-import {
+	BaseControl,
+	InputControl,
+	SelectControl,
+	FilterControl,
+	PositionControl,
+	TransformControl,
+	TransitionControl,
+	ToggleSelectControl,
 	ControlContextProvider,
 	convertAlignmentMatrixCoordinates,
 } from '@publisher/controls';
@@ -60,27 +59,29 @@ export function EffectsExtension({ children, config, ...props }) {
 						value: attributes.publisherOpacity,
 					}}
 				>
-					<InputField
+					<BaseControl
+						controlName="input"
 						label={__('Opacity', 'publisher-core')}
-						settings={{
-							type: 'css',
-							unitType: 'percent',
-							range: true,
-							min: 0,
-							max: 100,
-							initialPosition: 100,
-							defaultValue: '100%',
-						}}
-						onChange={(newValue) =>
-							setAttributes({
-								...attributes,
-								publisherOpacity: isInteger(newValue)
-									? `${newValue}%`
-									: newValue,
-							})
-						}
-						{...props}
-					/>
+					>
+						<InputControl
+							{...{
+								...props,
+								unitType: 'percent',
+								range: true,
+								min: 0,
+								max: 100,
+								initialPosition: 100,
+								defaultValue: '100%',
+								onChange: (newValue) =>
+									setAttributes({
+										...attributes,
+										publisherOpacity: isInteger(newValue)
+											? `${newValue}%`
+											: newValue,
+									}),
+							}}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 
@@ -93,35 +94,43 @@ export function EffectsExtension({ children, config, ...props }) {
 						}}
 						storeName={'publisher-core/controls/repeater'}
 					>
-						<TransformField
-							label={__('2D & 3D Transforms', 'publisher-core')}
-							value={attributes.publisherTransform}
-							onChange={(newValue) =>
-								setAttributes({
-									...attributes,
-									publisherTransform: newValue,
-								})
-							}
-							injectHeaderButtonsStart={
-								<>
-									<Button
-										size="extra-small"
-										className={controlInnerClassNames(
-											'btn-add'
-										)}
-										isFocus={isTransformSettingsVisible}
-										onClick={() =>
-											setIsTransformSettingsVisible(
-												!isTransformSettingsVisible
-											)
-										}
-									>
-										<GearIcon />
-									</Button>
-								</>
-							}
-							{...props}
+						<BaseControl
+							columns="columns-1"
+							controlName="transform"
 						>
+							<TransformControl
+								label={__(
+									'2D & 3D Transforms',
+									'publisher-core'
+								)}
+								value={attributes.publisherTransform}
+								onChange={(newValue) =>
+									setAttributes({
+										...attributes,
+										publisherTransform: newValue,
+									})
+								}
+								injectHeaderButtonsStart={
+									<>
+										<Button
+											size="extra-small"
+											className={controlInnerClassNames(
+												'btn-add'
+											)}
+											isFocus={isTransformSettingsVisible}
+											onClick={() =>
+												setIsTransformSettingsVisible(
+													!isTransformSettingsVisible
+												)
+											}
+										>
+											<GearIcon />
+										</Button>
+									</>
+								}
+								{...props}
+							/>
+
 							{isTransformSettingsVisible && (
 								<Popover
 									title={__(
@@ -146,28 +155,31 @@ export function EffectsExtension({ children, config, ...props }) {
 											value: attributes.publisherTransformSelfPerspective,
 										}}
 									>
-										<InputField
+										<BaseControl
+											controlName="input"
 											label={__(
 												'Self Perspective',
 												'publisher-core'
 											)}
-											settings={{
-												type: 'css',
-												unitType: 'essential',
-												range: true,
-												min: 0,
-												max: 2000,
-											}}
-											defaultValue="0px"
-											onChange={(newValue) => {
-												setAttributes({
-													...attributes,
-													publisherTransformSelfPerspective:
-														newValue,
-												});
-											}}
-											{...props}
-										/>
+										>
+											<InputControl
+												{...{
+													...props,
+													unitType: 'essential',
+													range: true,
+													min: 0,
+													max: 2000,
+													initialPosition: 100,
+													defaultValue: '0px',
+													onChange: (newValue) =>
+														setAttributes({
+															...attributes,
+															publisherTransformSelfPerspective:
+																newValue,
+														}),
+												}}
+											/>
+										</BaseControl>
 									</ControlContextProvider>
 
 									<ControlContextProvider
@@ -190,7 +202,7 @@ export function EffectsExtension({ children, config, ...props }) {
 											},
 										}}
 									>
-										<PositionField
+										<PositionControl
 											label={__(
 												'Self Origin',
 												'publisher-core'
@@ -228,36 +240,40 @@ export function EffectsExtension({ children, config, ...props }) {
 											value: attributes.publisherBackfaceVisibility,
 										}}
 									>
-										<ToggleSelectField
+										<BaseControl
+											controlName="toggle-select"
 											label={__(
 												'Backface Visibility',
 												'publisher-core'
 											)}
-											options={[
-												{
-													label: __(
-														'Visible',
-														'publisher-core'
-													),
-													value: 'visible',
-												},
-												{
-													label: __(
-														'Hidden',
-														'publisher-core'
-													),
-													value: 'hidden',
-												},
-											]}
-											defaultValue="visible"
-											onChange={(newValue) =>
-												setAttributes({
-													...attributes,
-													publisherBackfaceVisibility:
-														newValue,
-												})
-											}
-										/>
+										>
+											<ToggleSelectControl
+												options={[
+													{
+														label: __(
+															'Visible',
+															'publisher-core'
+														),
+														value: 'visible',
+													},
+													{
+														label: __(
+															'Hidden',
+															'publisher-core'
+														),
+														value: 'hidden',
+													},
+												]}
+												defaultValue="visible"
+												onChange={(newValue) =>
+													setAttributes({
+														...attributes,
+														publisherBackfaceVisibility:
+															newValue,
+													})
+												}
+											/>
+										</BaseControl>
 									</ControlContextProvider>
 
 									<ControlContextProvider
@@ -271,29 +287,30 @@ export function EffectsExtension({ children, config, ...props }) {
 												: '0px',
 										}}
 									>
-										<InputField
+										<BaseControl
+											controlName="input"
 											label={__(
 												'Child Perspective',
 												'publisher-core'
 											)}
-											settings={{
-												type: 'css',
-												unitType: 'essential',
-												range: true,
-												min: 0,
-												max: 2000,
-												defaultValue: '0px',
-											}}
-											defaultValue="0px"
-											onChange={(newValue) =>
-												setAttributes({
-													...attributes,
-													publisherTransformChildPerspective:
-														newValue,
-												})
-											}
-											{...props}
-										/>
+										>
+											<InputControl
+												{...{
+													...props,
+													unitType: 'essential',
+													range: true,
+													min: 0,
+													max: 2000,
+													defaultValue: '0px',
+													onChange: (newValue) =>
+														setAttributes({
+															...attributes,
+															publisherTransformChildPerspective:
+																newValue,
+														}),
+												}}
+											/>
+										</BaseControl>
 									</ControlContextProvider>
 
 									<ControlContextProvider
@@ -316,7 +333,7 @@ export function EffectsExtension({ children, config, ...props }) {
 											},
 										}}
 									>
-										<PositionField
+										<PositionControl
 											label={__(
 												'Child Origin',
 												'publisher-core'
@@ -346,7 +363,7 @@ export function EffectsExtension({ children, config, ...props }) {
 									</ControlContextProvider>
 								</Popover>
 							)}
-						</TransformField>
+						</BaseControl>
 					</ControlContextProvider>
 				</>
 			)}
@@ -359,16 +376,18 @@ export function EffectsExtension({ children, config, ...props }) {
 					}}
 					storeName={'publisher-core/controls/repeater'}
 				>
-					<TransitionField
-						label={__('Transitions', 'publisher-core')}
-						onChange={(newValue) =>
-							setAttributes({
-								...attributes,
-								publisherTransition: newValue,
-							})
-						}
-						{...props}
-					/>
+					<BaseControl controlName="transition" columns="columns-1">
+						<TransitionControl
+							label={__('Transitions', 'publisher-core')}
+							onChange={(newValue) =>
+								setAttributes({
+									...attributes,
+									publisherTransition: newValue,
+								})
+							}
+							{...props}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 
@@ -380,16 +399,18 @@ export function EffectsExtension({ children, config, ...props }) {
 					}}
 					storeName={'publisher-core/controls/repeater'}
 				>
-					<FilterField
-						label={__('Filters', 'publisher-core')}
-						onChange={(newValue) =>
-							setAttributes({
-								...attributes,
-								publisherFilter: newValue,
-							})
-						}
-						{...props}
-					/>
+					<BaseControl controlName="filter" columns="columns-1">
+						<FilterControl
+							label={__('Filters', 'publisher-core')}
+							onChange={(newValue) =>
+								setAttributes({
+									...attributes,
+									publisherFilter: newValue,
+								})
+							}
+							{...props}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 
@@ -401,17 +422,22 @@ export function EffectsExtension({ children, config, ...props }) {
 					}}
 					storeName={'publisher-core/controls/repeater'}
 				>
-					<FilterField
-						label={__('Backdrop Filters', 'publisher-core')}
-						popoverLabel={__('Backdrop Filter', 'publisher-core')}
-						onChange={(newValue) =>
-							setAttributes({
-								...attributes,
-								publisherBackdropFilter: newValue,
-							})
-						}
-						{...props}
-					/>
+					<BaseControl columns="columns-1" controlName="filter">
+						<FilterControl
+							label={__('Backdrop Filters', 'publisher-core')}
+							popoverLabel={__(
+								'Backdrop Filter',
+								'publisher-core'
+							)}
+							onChange={(newValue) =>
+								setAttributes({
+									...attributes,
+									publisherBackdropFilter: newValue,
+								})
+							}
+							{...props}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 
@@ -422,22 +448,26 @@ export function EffectsExtension({ children, config, ...props }) {
 						value: attributes.publisherCursor,
 					}}
 				>
-					<SelectField
-						{...{
-							...props,
-							label: __('Cursor', 'publisher-core'),
-							options: cursorFieldOptions(),
-							type: 'custom',
-							customMenuPosition: 'top',
-							//
-							defaultValue: 'default',
-							onChange: (newValue) =>
-								setAttributes({
-									...attributes,
-									publisherCursor: newValue,
-								}),
-						}}
-					/>
+					<BaseControl
+						controlName="select"
+						label={__('Cursor', 'publisher-core')}
+					>
+						<SelectControl
+							{...{
+								...props,
+								options: cursorFieldOptions(),
+								type: 'custom',
+								customMenuPosition: 'top',
+								//
+								defaultValue: 'default',
+								onChange: (newValue) =>
+									setAttributes({
+										...attributes,
+										publisherCursor: newValue,
+									}),
+							}}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 
@@ -448,23 +478,27 @@ export function EffectsExtension({ children, config, ...props }) {
 						value: attributes.publisherBlendMode,
 					}}
 				>
-					<SelectField
-						{...{
-							...props,
-							label: __('Blending', 'publisher-core'),
-							options: blendModeFieldOptions(),
-							type: 'custom',
-							customMenuPosition: 'top',
-							//
-							defaultValue: 'normal',
-							value: attributes.publisherBlendMode,
-							onChange: (newValue) =>
-								setAttributes({
-									...attributes,
-									publisherBlendMode: newValue,
-								}),
-						}}
-					/>
+					<BaseControl
+						controlName="select"
+						label={__('Blending', 'publisher-core')}
+					>
+						<SelectControl
+							{...{
+								...props,
+								options: blendModeFieldOptions(),
+								type: 'custom',
+								customMenuPosition: 'top',
+								//
+								defaultValue: 'normal',
+								value: attributes.publisherBlendMode,
+								onChange: (newValue) =>
+									setAttributes({
+										...attributes,
+										publisherBlendMode: newValue,
+									}),
+							}}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 		</>

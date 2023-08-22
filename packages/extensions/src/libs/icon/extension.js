@@ -8,14 +8,14 @@ import { useContext } from '@wordpress/element';
  * Publisher dependencies
  */
 import {
-	ColorField,
-	Field,
-	IconField,
-	InputField,
-	ToggleSelectField,
-	LinkField,
-} from '@publisher/fields';
-import { ControlContextProvider } from '@publisher/controls';
+	BaseControl,
+	LinkControl,
+	ColorControl,
+	InputControl,
+	ToggleSelectControl,
+	ControlContextProvider,
+	IconControl,
+} from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -50,25 +50,26 @@ export function IconExtension({ children, config, ...props }) {
 						value: attributes.publisherIcon,
 					}}
 				>
-					<IconField
-						{...props}
-						label=""
-						suggestionsQuery={() => {
-							return 'button';
-						}}
-						onChange={(newValue) => {
-							setAttributes({
-								...attributes,
-								publisherIcon: newValue,
-							});
-						}}
-					/>
+					<BaseControl controlName="icon" columns="columns-1">
+						<IconControl
+							{...props}
+							suggestionsQuery={() => {
+								return 'button';
+							}}
+							onChange={(newValue) => {
+								setAttributes({
+									...attributes,
+									publisherIcon: newValue,
+								});
+							}}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 
 			{isActiveField(publisherIconOptions) && (
 				<>
-					<Field
+					<BaseControl
 						label={__('Style', 'publisher-core')}
 						columns="1fr 3fr"
 					>
@@ -82,33 +83,40 @@ export function IconExtension({ children, config, ...props }) {
 									value: attributes.publisherIconPosition,
 								}}
 							>
-								<ToggleSelectField
+								<BaseControl
+									controlName="toggle-select"
 									label={__('Position', 'publisher-core')}
-									options={[
-										{
-											label: __('Left', 'publisher-core'),
-											value: 'left',
-											icon: <PositionLeftIcon />,
-										},
-										{
-											label: __(
-												'Right',
-												'publisher-core'
-											),
-											value: 'right',
-											icon: <PositionRightIcon />,
-										},
-									]}
-									isDeselectable={true}
-									//
-									defaultValue=""
-									onChange={(newValue) =>
-										setAttributes({
-											...attributes,
-											publisherIconPosition: newValue,
-										})
-									}
-								/>
+								>
+									<ToggleSelectControl
+										options={[
+											{
+												label: __(
+													'Left',
+													'publisher-core'
+												),
+												value: 'left',
+												icon: <PositionLeftIcon />,
+											},
+											{
+												label: __(
+													'Right',
+													'publisher-core'
+												),
+												value: 'right',
+												icon: <PositionRightIcon />,
+											},
+										]}
+										isDeselectable={true}
+										//
+										defaultValue=""
+										onChange={(newValue) =>
+											setAttributes({
+												...attributes,
+												publisherIconPosition: newValue,
+											})
+										}
+									/>
+								</BaseControl>
 							</ControlContextProvider>
 						)}
 
@@ -122,24 +130,24 @@ export function IconExtension({ children, config, ...props }) {
 									value: attributes.publisherIconGap,
 								}}
 							>
-								<InputField
-									{...props}
+								<BaseControl
+									controlName="input"
 									label={__('Gap', 'publisher-core')}
-									settings={{
-										type: 'css',
-										unitType: 'essential',
-										defaultValue: '',
-										min: 8,
-									}}
-									//
-									defaultValue=""
-									onChange={(newValue) =>
-										setAttributes({
-											...attributes,
-											publisherIconGap: newValue,
-										})
-									}
-								/>
+								>
+									<InputControl
+										{...{
+											...props,
+											unitType: 'essential',
+											defaultValue: '',
+											min: 8,
+											onChange: (newValue) =>
+												setAttributes({
+													...attributes,
+													publisherIconGap: newValue,
+												}),
+										}}
+									/>
+								</BaseControl>
 							</ControlContextProvider>
 						)}
 
@@ -153,24 +161,24 @@ export function IconExtension({ children, config, ...props }) {
 									value: attributes.publisherIconSize,
 								}}
 							>
-								<InputField
-									{...props}
+								<BaseControl
+									controlName="input"
 									label={__('Size', 'publisher-core')}
-									settings={{
-										type: 'css',
-										unitType: 'essential',
-										defaultValue: '',
-										min: 8,
-									}}
-									//
-									defaultValue=""
-									onChange={(newValue) =>
-										setAttributes({
-											...attributes,
-											publisherIconSize: newValue,
-										})
-									}
-								/>
+								>
+									<InputControl
+										{...{
+											...props,
+											unitType: 'essential',
+											defaultValue: '',
+											min: 8,
+											onChange: (newValue) =>
+												setAttributes({
+													...attributes,
+													publisherIconSize: newValue,
+												}),
+										}}
+									/>
+								</BaseControl>
 							</ControlContextProvider>
 						)}
 
@@ -184,21 +192,25 @@ export function IconExtension({ children, config, ...props }) {
 									value: attributes.publisherIconColor,
 								}}
 							>
-								<ColorField
-									{...props}
+								<BaseControl
+									controlName="color"
 									label={__('Color', 'publisher-core')}
-									//
-									defaultValue=""
-									onChange={(newValue) =>
-										setAttributes({
-											...attributes,
-											publisherIconColor: newValue,
-										})
-									}
-								/>
+								>
+									<ColorControl
+										{...props}
+										//
+										defaultValue=""
+										onChange={(newValue) =>
+											setAttributes({
+												...attributes,
+												publisherIconColor: newValue,
+											})
+										}
+									/>
+								</BaseControl>
 							</ControlContextProvider>
 						)}
-					</Field>
+					</BaseControl>
 
 					{isActiveField(publisherIconLink) && (
 						<ControlContextProvider
@@ -207,19 +219,23 @@ export function IconExtension({ children, config, ...props }) {
 								value: attributes.publisherIconLink,
 							}}
 						>
-							<LinkField
-								{...props}
-								label={__('Link', 'publisher-core')}
+							<BaseControl
+								controlName="link"
 								columns="1fr 3fr"
-								id={generateExtensionId(props, 'icon-link')}
-								//
-								onChange={(newValue) => {
-									setAttributes({
-										...attributes,
-										publisherIconLink: newValue,
-									});
-								}}
-							/>
+								label={__('Link', 'publisher-core')}
+							>
+								<LinkControl
+									{...props}
+									id={generateExtensionId(props, 'icon-link')}
+									//
+									onChange={(newValue) => {
+										setAttributes({
+											...attributes,
+											publisherIconLink: newValue,
+										});
+									}}
+								/>
+							</BaseControl>
 						</ControlContextProvider>
 					)}
 				</>

@@ -7,8 +7,12 @@ import { useContext } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { ControlContextProvider } from '@publisher/controls';
-import { InputField, ToggleSelectField } from '@publisher/fields';
+import {
+	BaseControl,
+	ControlContextProvider,
+	InputControl,
+	ToggleSelectControl,
+} from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -48,45 +52,48 @@ export function FlexChildExtension({ config, ...props }) {
 						value: attributes.publisherFlexChildSizing,
 					}}
 				>
-					<ToggleSelectField
-						label={__('Sizing', 'publisher-core')}
-						options={[
-							{
-								label: __('Shrink', 'publisher-core'),
-								value: 'shrink',
-								icon: <SizingShrinkIcon />,
-							},
-							{
-								label: __('Grow', 'publisher-core'),
-								value: 'grow',
-								icon: <SizingGrowIcon />,
-							},
-							{
-								label: __(
-									'No Grow or Shrink',
-									'publisher-core'
-								),
-								value: 'no',
-								icon: <SizingNotIcon />,
-							},
-							{
-								label: __('Custom', 'publisher-core'),
-								value: 'custom',
-								icon: <GearIcon />,
-							},
-						]}
-						isDeselectable={true}
+					<BaseControl
 						columns="1fr 2.65fr"
+						controlName="toggle-select"
+						label={__('Sizing', 'publisher-core')}
 						className={'items-flex-direction-' + flexDirection}
-						//
-						defaultValue=""
-						onChange={(newValue) =>
-							setAttributes({
-								...attributes,
-								publisherFlexChildSizing: newValue,
-							})
-						}
 					>
+						<ToggleSelectControl
+							options={[
+								{
+									label: __('Shrink', 'publisher-core'),
+									value: 'shrink',
+									icon: <SizingShrinkIcon />,
+								},
+								{
+									label: __('Grow', 'publisher-core'),
+									value: 'grow',
+									icon: <SizingGrowIcon />,
+								},
+								{
+									label: __(
+										'No Grow or Shrink',
+										'publisher-core'
+									),
+									value: 'no',
+									icon: <SizingNotIcon />,
+								},
+								{
+									label: __('Custom', 'publisher-core'),
+									value: 'custom',
+									icon: <GearIcon />,
+								},
+							]}
+							isDeselectable={true}
+							//
+							defaultValue=""
+							onChange={(newValue) =>
+								setAttributes({
+									...attributes,
+									publisherFlexChildSizing: newValue,
+								})
+							}
+						/>
 						{attributes.publisherFlexChildSizing === 'custom' && (
 							<>
 								<ControlContextProvider
@@ -98,17 +105,23 @@ export function FlexChildExtension({ config, ...props }) {
 										value: attributes.publisherFlexChildGrow,
 									}}
 								>
-									<InputField
+									<BaseControl
+										controlName="input"
 										label={__('Grow', 'publisher-core')}
-										settings={{ type: 'number', min: 0 }}
-										onChange={(newValue) =>
-											setAttributes({
-												...attributes,
-												publisherFlexChildGrow:
-													newValue,
-											})
-										}
-									/>
+									>
+										<InputControl
+											{...{
+												...props,
+												min: 0,
+												onChange: (newValue) =>
+													setAttributes({
+														...attributes,
+														publisherFlexChildGrow:
+															newValue,
+													}),
+											}}
+										/>
+									</BaseControl>
 								</ControlContextProvider>
 								<ControlContextProvider
 									value={{
@@ -119,17 +132,23 @@ export function FlexChildExtension({ config, ...props }) {
 										value: attributes.publisherFlexChildShrink,
 									}}
 								>
-									<InputField
+									<BaseControl
+										controlName="input"
 										label={__('Shrink', 'publisher-core')}
-										settings={{ type: 'number', min: 0 }}
-										onChange={(newValue) =>
-											setAttributes({
-												...attributes,
-												publisherFlexChildShrink:
-													newValue,
-											})
-										}
-									/>
+									>
+										<InputControl
+											{...{
+												...props,
+												min: 0,
+												onChange: (newValue) =>
+													setAttributes({
+														...attributes,
+														publisherFlexChildShrink:
+															newValue,
+													}),
+											}}
+										/>
+									</BaseControl>
 								</ControlContextProvider>
 								<ControlContextProvider
 									value={{
@@ -140,29 +159,29 @@ export function FlexChildExtension({ config, ...props }) {
 										value: attributes.publisherFlexChildBasis,
 									}}
 								>
-									<InputField
+									<BaseControl
+										controlName="input"
 										label={__('Basis', 'publisher-core')}
-										settings={{
-											type: 'css',
-											unitType: 'essential',
-											min: 0,
-										}}
-										defaultValue="auto"
-										value={
-											attributes.publisherFlexChildBasis
-										}
-										onChange={(newValue) =>
-											setAttributes({
-												...attributes,
-												publisherFlexChildBasis:
-													newValue,
-											})
-										}
-									/>
+									>
+										<InputControl
+											{...{
+												...props,
+												unitType: 'essential',
+												min: 0,
+												defaultValue: 'auto',
+												onChange: (newValue) =>
+													setAttributes({
+														...attributes,
+														publisherFlexChildBasis:
+															newValue,
+													}),
+											}}
+										/>
+									</BaseControl>
 								</ControlContextProvider>
 							</>
 						)}
-					</ToggleSelectField>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 
@@ -173,47 +192,51 @@ export function FlexChildExtension({ config, ...props }) {
 						value: attributes.publisherFlexChildAlign,
 					}}
 				>
-					<ToggleSelectField
-						label={__('Align', 'publisher-core')}
-						options={[
-							{
-								label: __('Flex Start', 'publisher-core'),
-								value: 'flex-start',
-								icon: <AlignFlexStartIcon />,
-							},
-							{
-								label: __('Center', 'publisher-core'),
-								value: 'center',
-								icon: <AlignFlexCenterIcon />,
-							},
-							{
-								label: __('Flex End', 'publisher-core'),
-								value: 'flex-end',
-								icon: <AlignFlexEndIcon />,
-							},
-							{
-								label: __('Stretch', 'publisher-core'),
-								value: 'stretch',
-								icon: <AlignStretchIcon />,
-							},
-							{
-								label: __('Baseline', 'publisher-core'),
-								value: 'baseline',
-								icon: <AlignBaselineIcon />,
-							},
-						]}
-						isDeselectable={true}
+					<BaseControl
 						columns="1fr 2.65fr"
+						controlName="toggle-select"
+						label={__('Align', 'publisher-core')}
 						className={'items-flex-direction-' + flexDirection}
-						//
-						defaultValue=""
-						onChange={(newValue) =>
-							setAttributes({
-								...attributes,
-								publisherFlexChildAlign: newValue,
-							})
-						}
-					/>
+					>
+						<ToggleSelectControl
+							options={[
+								{
+									label: __('Flex Start', 'publisher-core'),
+									value: 'flex-start',
+									icon: <AlignFlexStartIcon />,
+								},
+								{
+									label: __('Center', 'publisher-core'),
+									value: 'center',
+									icon: <AlignFlexCenterIcon />,
+								},
+								{
+									label: __('Flex End', 'publisher-core'),
+									value: 'flex-end',
+									icon: <AlignFlexEndIcon />,
+								},
+								{
+									label: __('Stretch', 'publisher-core'),
+									value: 'stretch',
+									icon: <AlignStretchIcon />,
+								},
+								{
+									label: __('Baseline', 'publisher-core'),
+									value: 'baseline',
+									icon: <AlignBaselineIcon />,
+								},
+							]}
+							isDeselectable={true}
+							//
+							defaultValue=""
+							onChange={(newValue) =>
+								setAttributes({
+									...attributes,
+									publisherFlexChildAlign: newValue,
+								})
+							}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 
@@ -224,34 +247,37 @@ export function FlexChildExtension({ config, ...props }) {
 						value: attributes.publisherFlexChildOrder,
 					}}
 				>
-					<ToggleSelectField
-						label={__('Order', 'publisher-core')}
-						options={[
-							{
-								label: __('First', 'publisher-core'),
-								value: 'first',
-							},
-							{
-								label: __('Last', 'publisher-core'),
-								value: 'last',
-							},
-							{
-								label: __('Custom Order', 'publisher-core'),
-								value: 'custom',
-								icon: <GearIcon />,
-							},
-						]}
-						isDeselectable={true}
+					<BaseControl
 						columns="1fr 2.65fr"
-						//
-						defaultValue=""
-						onChange={(newValue) =>
-							setAttributes({
-								...attributes,
-								publisherFlexChildOrder: newValue,
-							})
-						}
+						controlName="toggle-select"
+						label={__('Order', 'publisher-core')}
 					>
+						<ToggleSelectControl
+							options={[
+								{
+									label: __('First', 'publisher-core'),
+									value: 'first',
+								},
+								{
+									label: __('Last', 'publisher-core'),
+									value: 'last',
+								},
+								{
+									label: __('Custom Order', 'publisher-core'),
+									value: 'custom',
+									icon: <GearIcon />,
+								},
+							]}
+							isDeselectable={true}
+							//
+							defaultValue=""
+							onChange={(newValue) =>
+								setAttributes({
+									...attributes,
+									publisherFlexChildOrder: newValue,
+								})
+							}
+						/>
 						<>
 							{attributes.publisherFlexChildOrder ===
 								'custom' && (
@@ -264,25 +290,27 @@ export function FlexChildExtension({ config, ...props }) {
 										value: attributes.publisherFlexChildOrderCustom,
 									}}
 								>
-									<InputField
+									<BaseControl
+										controlName="input"
 										label={__('Order', 'publisher-core')}
-										settings={{
-											type: 'number',
-											min: -1,
-										}}
-										defaultValue={1}
-										onChange={(newValue) =>
-											setAttributes({
-												...attributes,
-												publisherFlexChildOrderCustom:
-													newValue,
-											})
-										}
-									/>
+									>
+										<InputControl
+											{...{
+												...props,
+												min: -1,
+												onChange: (newValue) =>
+													setAttributes({
+														...attributes,
+														publisherFlexChildOrderCustom:
+															newValue,
+													}),
+											}}
+										/>
+									</BaseControl>
 								</ControlContextProvider>
 							)}
 						</>
-					</ToggleSelectField>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 		</>

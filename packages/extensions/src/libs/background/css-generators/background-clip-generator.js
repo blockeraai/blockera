@@ -3,7 +3,7 @@
  */
 import { createCssRule } from '@publisher/style-engine';
 
-export function backgroundClipCSSGenerator(id, props, styleEngine) {
+export function backgroundClipGenerator(id, props, styleEngine) {
 	const { attributes } = props;
 
 	if (attributes?.publisherBackgroundClip === 'none') {

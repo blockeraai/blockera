@@ -7,8 +7,12 @@ import { useContext } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { ControlContextProvider } from '@publisher/controls';
-import { InputField, ToggleSelectField } from '@publisher/fields';
+import {
+	BaseControl,
+	ControlContextProvider,
+	InputControl,
+	ToggleSelectControl,
+} from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -36,24 +40,24 @@ export function SizeExtension({ children, config, ...props }) {
 						value: attributes.publisherWidth,
 					}}
 				>
-					<InputField
-						{...{
-							...props,
-							label: __('Width', 'publisher-core'),
-							settings: {
-								type: 'css',
+					<BaseControl
+						controlName="input"
+						label={__('Width', 'publisher-core')}
+					>
+						<InputControl
+							{...{
+								...props,
 								unitType: 'essential',
 								min: 0,
 								defaultValue: '',
-							},
-							//
-							onChange: (newValue) =>
-								setAttributes({
-									...attributes,
-									publisherWidth: newValue,
-								}),
-						}}
-					/>
+								onChange: (newValue) =>
+									setAttributes({
+										...attributes,
+										publisherWidth: newValue,
+									}),
+							}}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 
@@ -64,24 +68,24 @@ export function SizeExtension({ children, config, ...props }) {
 						value: attributes.publisherHeight,
 					}}
 				>
-					<InputField
-						{...{
-							...props,
-							label: __('Height', 'publisher-core'),
-							settings: {
-								type: 'css',
+					<BaseControl
+						controlName="input"
+						label={__('Height', 'publisher-core')}
+					>
+						<InputControl
+							{...{
+								...props,
 								unitType: 'essential',
 								min: 0,
 								defaultValue: '',
-							},
-							//
-							onChange: (newValue) =>
-								setAttributes({
-									...attributes,
-									publisherHeight: newValue,
-								}),
-						}}
-					/>
+								onChange: (newValue) =>
+									setAttributes({
+										...attributes,
+										publisherHeight: newValue,
+									}),
+							}}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 
@@ -92,34 +96,38 @@ export function SizeExtension({ children, config, ...props }) {
 						value: attributes.publisherOverflow,
 					}}
 				>
-					<ToggleSelectField
+					<BaseControl
+						controlName="toggle-select"
 						label={__('Overflow', 'publisher-core')}
-						options={[
-							{
-								label: __('Visible', 'publisher-core'),
-								value: 'visible',
-								icon: <OverflowVisibleIcon />,
-							},
-							{
-								label: __('Hidden', 'publisher-core'),
-								value: 'hidden',
-								icon: <OverflowHiddenIcon />,
-							},
-							{
-								label: __('Scroll', 'publisher-core'),
-								value: 'scroll',
-								icon: <OverflowScrollIcon />,
-							},
-						]}
-						//
-						defaultValue="visible"
-						onChange={(newValue) =>
-							setAttributes({
-								...attributes,
-								publisherOverflow: newValue,
-							})
-						}
-					/>
+					>
+						<ToggleSelectControl
+							options={[
+								{
+									label: __('Visible', 'publisher-core'),
+									value: 'visible',
+									icon: <OverflowVisibleIcon />,
+								},
+								{
+									label: __('Hidden', 'publisher-core'),
+									value: 'hidden',
+									icon: <OverflowHiddenIcon />,
+								},
+								{
+									label: __('Scroll', 'publisher-core'),
+									value: 'scroll',
+									icon: <OverflowScrollIcon />,
+								},
+							]}
+							//
+							defaultValue="visible"
+							onChange={(newValue) =>
+								setAttributes({
+									...attributes,
+									publisherOverflow: newValue,
+								})
+							}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 		</>

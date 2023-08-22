@@ -7,9 +7,13 @@ import { useContext } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
+import {
+	BaseControl,
+	ControlContextProvider,
+	InputControl,
+	ToggleSelectControl,
+} from '@publisher/controls';
 import { Flex } from '@publisher/components';
-import { ControlContextProvider } from '@publisher/controls';
-import { Field, InputField, ToggleSelectField } from '@publisher/fields';
 
 /**
  * Internal dependencies
@@ -72,46 +76,50 @@ export function LayoutExtension({ config, ...props }) {
 						value: attributes.publisherDisplay,
 					}}
 				>
-					<ToggleSelectField
-						label={__('Display', 'publisher-core')}
-						options={[
-							{
-								label: __('Block', 'publisher-core'),
-								value: 'block',
-								icon: <DisplayBlockIcon />,
-							},
-							{
-								label: __('Flex', 'publisher-core'),
-								value: 'flex',
-								icon: <DisplayFlexIcon />,
-							},
-							{
-								label: __('Inline Block', 'publisher-core'),
-								value: 'inline-block',
-								icon: <DisplayInlineBlockIcon />,
-							},
-							{
-								label: __('Inline', 'publisher-core'),
-								value: 'inline',
-								icon: <DisplayInlineIcon />,
-							},
-							{
-								label: __('None', 'publisher-core'),
-								value: 'none',
-								icon: <DisplayNoneIcon />,
-							},
-						]}
-						isDeselectable={true}
+					<BaseControl
 						columns="1fr 2.65fr"
-						//
-						defaultValue=""
-						onChange={(newValue) =>
-							setAttributes({
-								...attributes,
-								publisherDisplay: newValue,
-							})
-						}
-					/>
+						controlName="toggle-select"
+					>
+						<ToggleSelectControl
+							label={__('Display', 'publisher-core')}
+							options={[
+								{
+									label: __('Block', 'publisher-core'),
+									value: 'block',
+									icon: <DisplayBlockIcon />,
+								},
+								{
+									label: __('Flex', 'publisher-core'),
+									value: 'flex',
+									icon: <DisplayFlexIcon />,
+								},
+								{
+									label: __('Inline Block', 'publisher-core'),
+									value: 'inline-block',
+									icon: <DisplayInlineBlockIcon />,
+								},
+								{
+									label: __('Inline', 'publisher-core'),
+									value: 'inline',
+									icon: <DisplayInlineIcon />,
+								},
+								{
+									label: __('None', 'publisher-core'),
+									value: 'none',
+									icon: <DisplayNoneIcon />,
+								},
+							]}
+							isDeselectable={true}
+							//
+							defaultValue=""
+							onChange={(newValue) =>
+								setAttributes({
+									...attributes,
+									publisherDisplay: newValue,
+								})
+							}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 
@@ -124,50 +132,59 @@ export function LayoutExtension({ config, ...props }) {
 								value: attributes.publisherFlexDirection,
 							}}
 						>
-							<ToggleSelectField
-								label={__('Direction', 'publisher-core')}
-								options={[
-									{
-										label: __('Row', 'publisher-core'),
-										value: 'row',
-										icon: <FlexDirectionRowBlockIcon />,
-									},
-									{
-										label: __('column', 'publisher-core'),
-										value: 'column',
-										icon: <FlexDirectionColumnBlockIcon />,
-									},
-									{
-										label: __(
-											'Row Reverse',
-											'publisher-core'
-										),
-										value: 'row-reverse',
-										icon: (
-											<FlexDirectionRowReverseBlockIcon />
-										),
-									},
-									{
-										label: __(
-											'Column Reverse',
-											'publisher-core'
-										),
-										value: 'column-reverse',
-										icon: (
-											<FlexDirectionColumnReverseBlockIcon />
-										),
-									},
-								]}
+							<BaseControl
 								columns="1fr 2.65fr"
-								//
-								defaultValue="row"
-								onChange={(newValue) =>
-									setAttributes({
-										...attributes,
-										publisherFlexDirection: newValue,
-									})
-								}
-							/>
+								controlName="toggle-select"
+							>
+								<ToggleSelectControl
+									label={__('Direction', 'publisher-core')}
+									options={[
+										{
+											label: __('Row', 'publisher-core'),
+											value: 'row',
+											icon: <FlexDirectionRowBlockIcon />,
+										},
+										{
+											label: __(
+												'column',
+												'publisher-core'
+											),
+											value: 'column',
+											icon: (
+												<FlexDirectionColumnBlockIcon />
+											),
+										},
+										{
+											label: __(
+												'Row Reverse',
+												'publisher-core'
+											),
+											value: 'row-reverse',
+											icon: (
+												<FlexDirectionRowReverseBlockIcon />
+											),
+										},
+										{
+											label: __(
+												'Column Reverse',
+												'publisher-core'
+											),
+											value: 'column-reverse',
+											icon: (
+												<FlexDirectionColumnReverseBlockIcon />
+											),
+										},
+									]}
+									//
+									defaultValue="row"
+									onChange={(newValue) =>
+										setAttributes({
+											...attributes,
+											publisherFlexDirection: newValue,
+										})
+									}
+								/>
+							</BaseControl>
 						</ControlContextProvider>
 					)}
 
@@ -178,54 +195,78 @@ export function LayoutExtension({ config, ...props }) {
 								value: attributes.publisherAlignItems,
 							}}
 						>
-							<ToggleSelectField
-								label={__('Align Items', 'publisher-core')}
-								options={[
-									{
-										label: __('Center', 'publisher-core'),
-										value: 'center',
-										icon: <AlignItemsCenterBlockIcon />,
-									},
-									{
-										label: __(
-											'Flex Start',
-											'publisher-core'
-										),
-										value: 'flex-start',
-										icon: <AlignItemsFlexStartBlockIcon />,
-									},
-									{
-										label: __('Flex End', 'publisher-core'),
-										value: 'flex-end',
-										icon: <AlignItemsFlexEndBlockIcon />,
-									},
-									{
-										label: __('Stretch', 'publisher-core'),
-										value: 'stretch',
-										icon: <AlignItemsStretchBlockIcon />,
-									},
-									{
-										label: __('Baseline', 'publisher-core'),
-										value: 'baseline',
-										icon: <AlignItemsBaselineBlockIcon />,
-									},
-								]}
+							<BaseControl
 								columns="1fr 2.65fr"
-								isDeselectable={true}
+								controlName="toggle-select"
 								className={
 									'publisher-direction-' +
 									attributes.publisherFlexDirection +
 									' publisher-flex-align-items'
 								}
-								//
-								defaultValue=""
-								onChange={(newValue) =>
-									setAttributes({
-										...attributes,
-										publisherAlignItems: newValue,
-									})
-								}
-							/>
+								label={__('Align Items', 'publisher-core')}
+							>
+								<ToggleSelectControl
+									options={[
+										{
+											label: __(
+												'Center',
+												'publisher-core'
+											),
+											value: 'center',
+											icon: <AlignItemsCenterBlockIcon />,
+										},
+										{
+											label: __(
+												'Flex Start',
+												'publisher-core'
+											),
+											value: 'flex-start',
+											icon: (
+												<AlignItemsFlexStartBlockIcon />
+											),
+										},
+										{
+											label: __(
+												'Flex End',
+												'publisher-core'
+											),
+											value: 'flex-end',
+											icon: (
+												<AlignItemsFlexEndBlockIcon />
+											),
+										},
+										{
+											label: __(
+												'Stretch',
+												'publisher-core'
+											),
+											value: 'stretch',
+											icon: (
+												<AlignItemsStretchBlockIcon />
+											),
+										},
+										{
+											label: __(
+												'Baseline',
+												'publisher-core'
+											),
+											value: 'baseline',
+											icon: (
+												<AlignItemsBaselineBlockIcon />
+											),
+										},
+									]}
+									isDeselectable={true}
+									//
+									defaultValue=""
+									onChange={(newValue) =>
+										setAttributes({
+											...attributes,
+											publisherAlignItems: newValue,
+										})
+									}
+								/>
+							</BaseControl>
 						</ControlContextProvider>
 					)}
 
@@ -239,73 +280,83 @@ export function LayoutExtension({ config, ...props }) {
 								value: attributes.publisherJustifyContent,
 							}}
 						>
-							<ToggleSelectField
-								label={__('Justify', 'publisher-core')}
-								options={[
-									{
-										label: __('Center', 'publisher-core'),
-										value: 'center',
-										icon: <JustifyCenterIcon />,
-									},
-									{
-										label: __(
-											'Flex Start',
-											'publisher-core'
-										),
-										value: 'flex-start',
-										icon: <JustifyFlexStartIcon />,
-									},
-									{
-										label: __('Flex End', 'publisher-core'),
-										value: 'flex-end',
-										icon: <JustifyFlexEndIcon />,
-									},
-									{
-										label: __(
-											'Space Between',
-											'publisher-core'
-										),
-										value: 'space-between',
-										icon: <JustifySpaceBetweenIcon />,
-									},
-									{
-										label: __(
-											'Space Around',
-											'publisher-core'
-										),
-										value: 'space-around',
-										icon: <JustifySpaceAroundIcon />,
-									},
-									{
-										label: __(
-											'Space Evenly',
-											'publisher-core'
-										),
-										value: 'space-evenly',
-										icon: <JustifySpaceEvenlyIcon />,
-									},
-								]}
+							<BaseControl
 								columns="1fr 2.65fr"
-								isDeselectable={true}
 								className={
 									'publisher-direction-' +
 									attributes.publisherFlexDirection +
 									' publisher-flex-justify-content'
 								}
-								//
-								defaultValue=""
-								onChange={(newValue) =>
-									setAttributes({
-										...attributes,
-										publisherJustifyContent: newValue,
-									})
-								}
-							/>
+								controlName="toggle-select"
+								label={__('Justify', 'publisher-core')}
+							>
+								<ToggleSelectControl
+									options={[
+										{
+											label: __(
+												'Center',
+												'publisher-core'
+											),
+											value: 'center',
+											icon: <JustifyCenterIcon />,
+										},
+										{
+											label: __(
+												'Flex Start',
+												'publisher-core'
+											),
+											value: 'flex-start',
+											icon: <JustifyFlexStartIcon />,
+										},
+										{
+											label: __(
+												'Flex End',
+												'publisher-core'
+											),
+											value: 'flex-end',
+											icon: <JustifyFlexEndIcon />,
+										},
+										{
+											label: __(
+												'Space Between',
+												'publisher-core'
+											),
+											value: 'space-between',
+											icon: <JustifySpaceBetweenIcon />,
+										},
+										{
+											label: __(
+												'Space Around',
+												'publisher-core'
+											),
+											value: 'space-around',
+											icon: <JustifySpaceAroundIcon />,
+										},
+										{
+											label: __(
+												'Space Evenly',
+												'publisher-core'
+											),
+											value: 'space-evenly',
+											icon: <JustifySpaceEvenlyIcon />,
+										},
+									]}
+									isDeselectable={true}
+									//
+									defaultValue=""
+									onChange={(newValue) =>
+										setAttributes({
+											...attributes,
+											publisherJustifyContent: newValue,
+										})
+									}
+								/>
+							</BaseControl>
 						</ControlContextProvider>
 					)}
 
 					{isActiveField(publisherGap) && (
-						<Field
+						<BaseControl
 							label={__('Gap', 'publisher-core')}
 							columns="1fr 2.65fr"
 						>
@@ -320,26 +371,28 @@ export function LayoutExtension({ config, ...props }) {
 											value: attributes.publisherGapRows,
 										}}
 									>
-										<InputField
+										<BaseControl
+											controlName="input"
 											columns="columns-1"
-											settings={{
-												type: 'css',
-												unitType: 'essential',
-												min: 0,
-												max: 200,
-												defaultValue: '',
-											}}
-											label={__('Rows', 'publisher-core')}
 											className="control-first label-center small-gap"
-											//
-											defaultValue=""
-											onChange={(newValue) =>
-												setAttributes({
-													...attributes,
-													publisherGapRows: newValue,
-												})
-											}
-										/>
+											label={__('Rows', 'publisher-core')}
+										>
+											<InputControl
+												{...{
+													...props,
+													unitType: 'essential',
+													min: 0,
+													max: 200,
+													defaultValue: '',
+													onChange: (newValue) =>
+														setAttributes({
+															...attributes,
+															publisherGapRows:
+																newValue,
+														}),
+												}}
+											/>
+										</BaseControl>
 									</ControlContextProvider>
 								)}
 
@@ -353,34 +406,35 @@ export function LayoutExtension({ config, ...props }) {
 											value: attributes.publisherGapColumns,
 										}}
 									>
-										<InputField
+										<BaseControl
+											controlName="input"
 											columns="columns-1"
-											settings={{
-												type: 'css',
-												unitType: 'essential',
-												min: 0,
-												max: 200,
-												defaultValue: '',
-											}}
+											className="control-first label-center small-gap"
 											label={__(
 												'Columns',
 												'publisher-core'
 											)}
-											className="control-first label-center small-gap"
-											//
-											defaultValue=""
-											onChange={(newValue) =>
-												setAttributes({
-													...attributes,
-													publisherGapColumns:
-														newValue,
-												})
-											}
-										/>
+										>
+											<InputControl
+												{...{
+													...props,
+													unitType: 'essential',
+													min: 0,
+													max: 200,
+													defaultValue: '',
+													onChange: (newValue) =>
+														setAttributes({
+															...attributes,
+															publisherGapColumns:
+																newValue,
+														}),
+												}}
+											/>
+										</BaseControl>
 									</ControlContextProvider>
 								)}
 							</Flex>
-						</Field>
+						</BaseControl>
 					)}
 
 					{isActiveField(publisherFlexWrap) && (
@@ -394,38 +448,45 @@ export function LayoutExtension({ config, ...props }) {
 									value: attributes.publisherFlexWrap,
 								}}
 							>
-								<ToggleSelectField
-									label={__('Children', 'publisher-core')}
-									options={[
-										{
-											label: __(
-												'No Wrap',
-												'publisher-core'
-											),
-											value: 'nowrap',
-											icon: <WrapNoWrapIcon />,
-										},
-										{
-											label: __('Wrap', 'publisher-core'),
-											value: 'wrap',
-											icon: <WrapWrapIcon />,
-										},
-									]}
+								<BaseControl
 									columns="1fr 2.65fr"
 									className={
 										'publisher-direction-' +
 										attributes.publisherFlexDirection +
 										' publisher-flex-wrap'
 									}
-									//
-									defaultValue="nowrap"
-									onChange={(newValue) =>
-										setAttributes({
-											...attributes,
-											publisherFlexWrap: newValue,
-										})
-									}
-								/>
+									controlName="toggle-select"
+									label={__('Children', 'publisher-core')}
+								>
+									<ToggleSelectControl
+										options={[
+											{
+												label: __(
+													'No Wrap',
+													'publisher-core'
+												),
+												value: 'nowrap',
+												icon: <WrapNoWrapIcon />,
+											},
+											{
+												label: __(
+													'Wrap',
+													'publisher-core'
+												),
+												value: 'wrap',
+												icon: <WrapWrapIcon />,
+											},
+										]}
+										//
+										defaultValue="nowrap"
+										onChange={(newValue) =>
+											setAttributes({
+												...attributes,
+												publisherFlexWrap: newValue,
+											})
+										}
+									/>
+								</BaseControl>
 							</ControlContextProvider>
 
 							{isActiveField(publisherAlignContent) &&
@@ -439,90 +500,94 @@ export function LayoutExtension({ config, ...props }) {
 											value: attributes.publisherAlignContent,
 										}}
 									>
-										<ToggleSelectField
+										<BaseControl
+											controlName="toggle-select"
 											label={__(
 												'Align Content',
 												'publisher-core'
 											)}
-											options={[
-												{
-													label: __(
-														'center',
-														'publisher-core'
-													),
-													value: 'center',
-													icon: (
-														<AlignContentCenterIcon />
-													),
-												},
-												{
-													label: __(
-														'Flex Start',
-														'publisher-core'
-													),
-													value: 'flex-start',
-													icon: (
-														<AlignContentFlexStartIcon />
-													),
-												},
-												{
-													label: __(
-														'Flex End',
-														'publisher-core'
-													),
-													value: 'flex-end',
-													icon: (
-														<AlignContentFlexEndIcon />
-													),
-												},
-												{
-													label: __(
-														'Space Around',
-														'publisher-core'
-													),
-													value: 'space-around',
-													icon: (
-														<AlignContentSpaceAroundIcon />
-													),
-												},
-												{
-													label: __(
-														'Space Between',
-														'publisher-core'
-													),
-													value: 'space-between',
-													icon: (
-														<AlignContentSpaceBetweenIcon />
-													),
-												},
-												{
-													label: __(
-														'Stretch',
-														'publisher-core'
-													),
-													value: 'stretch',
-													icon: (
-														<AlignContentStretchIcon />
-													),
-												},
-											]}
 											columns="1fr 2.65fr"
-											isDeselectable={true}
 											className={
 												'publisher-direction-' +
 												attributes.publisherFlexDirection +
 												' publisher-flex-align-content'
 											}
-											//
-											defaultValue=""
-											onChange={(newValue) =>
-												setAttributes({
-													...attributes,
-													publisherAlignContent:
-														newValue,
-												})
-											}
-										/>
+										>
+											<ToggleSelectControl
+												options={[
+													{
+														label: __(
+															'center',
+															'publisher-core'
+														),
+														value: 'center',
+														icon: (
+															<AlignContentCenterIcon />
+														),
+													},
+													{
+														label: __(
+															'Flex Start',
+															'publisher-core'
+														),
+														value: 'flex-start',
+														icon: (
+															<AlignContentFlexStartIcon />
+														),
+													},
+													{
+														label: __(
+															'Flex End',
+															'publisher-core'
+														),
+														value: 'flex-end',
+														icon: (
+															<AlignContentFlexEndIcon />
+														),
+													},
+													{
+														label: __(
+															'Space Around',
+															'publisher-core'
+														),
+														value: 'space-around',
+														icon: (
+															<AlignContentSpaceAroundIcon />
+														),
+													},
+													{
+														label: __(
+															'Space Between',
+															'publisher-core'
+														),
+														value: 'space-between',
+														icon: (
+															<AlignContentSpaceBetweenIcon />
+														),
+													},
+													{
+														label: __(
+															'Stretch',
+															'publisher-core'
+														),
+														value: 'stretch',
+														icon: (
+															<AlignContentStretchIcon />
+														),
+													},
+												]}
+												isDeselectable={true}
+												//
+												defaultValue=""
+												onChange={(newValue) =>
+													setAttributes({
+														...attributes,
+														publisherAlignContent:
+															newValue,
+													})
+												}
+											/>
+										</BaseControl>
 									</ControlContextProvider>
 								)}
 						</>

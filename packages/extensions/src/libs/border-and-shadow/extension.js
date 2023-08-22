@@ -8,12 +8,13 @@ import { useContext } from '@wordpress/element';
  * Publisher dependencies
  */
 import {
-	BorderRadiusField,
-	BoxBorderField,
-	BoxShadowField,
-	OutlineField,
-} from '@publisher/fields';
-import { ControlContextProvider } from '@publisher/controls';
+	BaseControl,
+	BorderRadiusControl,
+	BoxBorderControl,
+	BoxShadowControl,
+	ControlContextProvider,
+	OutlineControl,
+} from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -43,15 +44,17 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 						value: attributes.publisherBorder,
 					}}
 				>
-					<BoxBorderField
-						label={__('Border Line', 'publisher-core')}
-						onChange={(newValue) =>
-							setAttributes({
-								...attributes,
-								publisherBorder: newValue,
-							})
-						}
-					/>
+					<BaseControl controlName="border" columns="columns-1">
+						<BoxBorderControl
+							label={__('Border Line', 'publisher-core')}
+							onChange={(newValue) =>
+								setAttributes({
+									...attributes,
+									publisherBorder: newValue,
+								})
+							}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 
@@ -62,15 +65,20 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 						value: attributes.publisherBorderRadius,
 					}}
 				>
-					<BorderRadiusField
-						label={__('Radius', 'publisher-core')}
-						onChange={(newValue) => {
-							setAttributes({
-								...attributes,
-								publisherBorderRadius: newValue,
-							});
-						}}
-					/>
+					<BaseControl
+						columns="columns-1"
+						controlName="border-radius"
+					>
+						<BorderRadiusControl
+							label={__('Radius', 'publisher-core')}
+							onChange={(newValue) => {
+								setAttributes({
+									...attributes,
+									publisherBorderRadius: newValue,
+								});
+							}}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 
@@ -82,16 +90,18 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 					}}
 					storeName={'publisher-core/controls/repeater'}
 				>
-					<BoxShadowField
-						label={__('Box Shadows', 'publisher-core')}
-						onChange={(newValue) => {
-							setAttributes({
-								...attributes,
-								publisherBoxShadow: newValue,
-							});
-						}}
-						{...props}
-					/>
+					<BaseControl controlName="box-shadow" columns="columns-1">
+						<BoxShadowControl
+							label={__('Box Shadows', 'publisher-core')}
+							onChange={(newValue) => {
+								setAttributes({
+									...attributes,
+									publisherBoxShadow: newValue,
+								});
+							}}
+							{...props}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 
@@ -103,16 +113,18 @@ export function BorderAndShadowExtension({ children, config, ...props }) {
 					}}
 					storeName={'publisher-core/controls/repeater'}
 				>
-					<OutlineField
-						label={__('Outline', 'publisher-core')}
-						onChange={(newValue) => {
-							setAttributes({
-								...attributes,
-								publisherOutline: newValue,
-							});
-						}}
-						{...props}
-					/>
+					<BaseControl controlName="outline" columns="columns-1">
+						<OutlineControl
+							label={__('Outline', 'publisher-core')}
+							onChange={(newValue) => {
+								setAttributes({
+									...attributes,
+									publisherOutline: newValue,
+								});
+							}}
+							{...props}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 

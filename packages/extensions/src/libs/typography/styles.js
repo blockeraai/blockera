@@ -11,11 +11,11 @@ import { computedCssRules } from '@publisher/style-engine';
 /**
  * Internal dependencies
  */
+import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
 import { BlockEditContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
-import { arrayEquals } from '../utils';
-import { TextShadowFieldStyle } from '@publisher/fields';
+import { TextShadowGenerator } from './css-generators';
 
 export function TypographyStyles({
 	typographyConfig: {
@@ -276,7 +276,22 @@ export function TypographyStyles({
 			_attributes.publisherTextShadow
 		)
 	) {
-		generators.push(TextShadowFieldStyle(publisherTextShadow));
+		generators.push(
+			computedCssRules(
+				{
+					cssGenerators: {
+						publisherTextShadow: [
+							{
+								type: 'function',
+								function: TextShadowGenerator,
+							},
+						],
+						...(publisherTextShadow?.cssGenerators || {}),
+					},
+				},
+				{ attributes: _attributes, ...blockProps }
+			)
+		);
 	}
 
 	generators.push(

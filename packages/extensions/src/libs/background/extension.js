@@ -7,8 +7,13 @@ import { useContext } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { ControlContextProvider } from '@publisher/controls';
-import { ColorField, SelectField, BackgroundField } from '@publisher/fields';
+import {
+	BaseControl,
+	ColorControl,
+	SelectControl,
+	BackgroundControl,
+	ControlContextProvider,
+} from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -44,16 +49,18 @@ export function BackgroundExtension({ children, config, ...props }) {
 					}}
 					storeName={'publisher-core/controls/repeater'}
 				>
-					<BackgroundField
-						label={__('Image & Gradient', 'publisher-core')}
-						onChange={(newValue) =>
-							setAttributes({
-								...attributes,
-								publisherBackground: newValue,
-							})
-						}
-						{...props}
-					/>
+					<BaseControl controlName="background" columns="columns-1">
+						<BackgroundControl
+							label={__('Image & Gradient', 'publisher-core')}
+							onChange={(newValue) =>
+								setAttributes({
+									...attributes,
+									publisherBackground: newValue,
+								})
+							}
+							{...props}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 
@@ -64,18 +71,22 @@ export function BackgroundExtension({ children, config, ...props }) {
 						value: attributes.publisherBackgroundColor,
 					}}
 				>
-					<ColorField
-						{...{
-							...props,
-							label: __('Color', 'publisher-core'),
-							//
-							onChange: (newValue) =>
-								setAttributes({
-									...attributes,
-									publisherBackgroundColor: newValue,
-								}),
-						}}
-					/>
+					<BaseControl
+						controlName="color"
+						label={__('Color', 'publisher-core')}
+					>
+						<ColorControl
+							{...{
+								...props,
+								//
+								onChange: (newValue) =>
+									setAttributes({
+										...attributes,
+										publisherBackgroundColor: newValue,
+									}),
+							}}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 
@@ -86,53 +97,60 @@ export function BackgroundExtension({ children, config, ...props }) {
 						value: attributes.publisherBackgroundClip,
 					}}
 				>
-					<SelectField
-						{...{
-							...props,
-							label: __('Clipping', 'publisher-core'),
-							options: [
-								{
-									label: __('None', 'publisher-core'),
-									value: 'none',
-									icon: <ClipNoneIcon />,
-								},
-								{
-									label: __(
-										'Clip to Padding',
-										'publisher-core'
-									),
-									value: 'padding-box',
-									icon: <ClipPaddingIcon />,
-								},
-								{
-									label: __(
-										'Clip to Content',
-										'publisher-core'
-									),
-									value: 'content-box',
-									icon: <ClipContentIcon />,
-								},
-								{
-									label: __('Clip to Text', 'publisher-core'),
-									value: 'text',
-									icon: <ClipTextIcon />,
-								},
-								{
-									label: __('Inherit', 'publisher-core'),
-									value: 'inherit',
-									icon: <InheritIcon />,
-								},
-							],
-							//
-							type: 'custom',
-							defaultValue: 'none',
-							onChange: (newValue) =>
-								setAttributes({
-									...attributes,
-									publisherBackgroundClip: newValue,
-								}),
-						}}
-					/>
+					<BaseControl
+						controlName="select"
+						label={__('Clipping', 'publisher-core')}
+					>
+						<SelectControl
+							{...{
+								...props,
+								options: [
+									{
+										label: __('None', 'publisher-core'),
+										value: 'none',
+										icon: <ClipNoneIcon />,
+									},
+									{
+										label: __(
+											'Clip to Padding',
+											'publisher-core'
+										),
+										value: 'padding-box',
+										icon: <ClipPaddingIcon />,
+									},
+									{
+										label: __(
+											'Clip to Content',
+											'publisher-core'
+										),
+										value: 'content-box',
+										icon: <ClipContentIcon />,
+									},
+									{
+										label: __(
+											'Clip to Text',
+											'publisher-core'
+										),
+										value: 'text',
+										icon: <ClipTextIcon />,
+									},
+									{
+										label: __('Inherit', 'publisher-core'),
+										value: 'inherit',
+										icon: <InheritIcon />,
+									},
+								],
+								//
+								type: 'custom',
+								defaultValue: 'none',
+								onChange: (newValue) =>
+									setAttributes({
+										...attributes,
+										publisherBackgroundClip: newValue,
+									}),
+							}}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 		</>

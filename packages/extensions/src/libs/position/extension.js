@@ -7,8 +7,12 @@ import { useContext } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { ControlContextProvider } from '@publisher/controls';
-import { BoxPositionField, InputField } from '@publisher/fields';
+import {
+	BaseControl,
+	BoxPositionControl,
+	ControlContextProvider,
+	InputControl,
+} from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -33,18 +37,19 @@ export function PositionExtension({ children, config, ...props }) {
 						value: attributes.publisherPosition,
 					}}
 				>
-					<BoxPositionField
-						{...{
-							...props,
-							label: '',
-							//
-							onChange: (newValue) =>
-								setAttributes({
-									...attributes,
-									publisherPosition: newValue,
-								}),
-						}}
-					/>
+					<BaseControl controlName="box-position">
+						<BoxPositionControl
+							{...{
+								...props,
+								//
+								onChange: (newValue) =>
+									setAttributes({
+										...attributes,
+										publisherPosition: newValue,
+									}),
+							}}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 
@@ -57,20 +62,22 @@ export function PositionExtension({ children, config, ...props }) {
 							value: attributes.publisherZIndex,
 						}}
 					>
-						<InputField
+						<BaseControl
+							controlName="input"
 							label={__('z-index', 'publisher-core')}
-							settings={{
-								type: 'number',
-							}}
-							//
-							defaultValue=""
-							onChange={(newValue) =>
-								setAttributes({
-									...attributes,
-									publisherZIndex: newValue,
-								})
-							}
-						/>
+						>
+							<InputControl
+								{...{
+									...props,
+									defaultValue: '',
+									onChange: (newValue) =>
+										setAttributes({
+											...attributes,
+											publisherZIndex: newValue,
+										}),
+								}}
+							/>
+						</BaseControl>
 					</ControlContextProvider>
 				)}
 		</>

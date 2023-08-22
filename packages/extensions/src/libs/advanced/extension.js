@@ -7,8 +7,11 @@ import { useContext } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { AttributesField } from '@publisher/fields';
-import { ControlContextProvider } from '@publisher/controls';
+import {
+	AttributesControl,
+	BaseControl,
+	ControlContextProvider,
+} from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -34,16 +37,19 @@ export function AdvancedExtension({ children, config, ...props }) {
 					}}
 					storeName={'publisher-core/controls/repeater'}
 				>
-					<AttributesField
-						label={__('HTML Attributes', 'publisher-core')}
-						onChange={(newValue) => {
-							setAttributes({
-								...attributes,
-								attributes: newValue,
-							});
-						}}
-						{...props}
-					/>
+					<BaseControl controlName="attributes" columns="columns-1">
+						<AttributesControl
+							label={__('HTML Attributes', 'publisher-core')}
+							onChange={(newValue) => {
+								setAttributes({
+									...attributes,
+									attributes: newValue,
+								});
+							}}
+							{...props}
+							attributeElement={'a'}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 		</>

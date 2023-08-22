@@ -7,15 +7,11 @@ import { useContext } from '@wordpress/element';
  * Publisher dependencies
  */
 import { computedCssRules } from '@publisher/style-engine';
-import {
-	TransitionFieldStyle,
-	FilterFieldStyle,
-	BackdropFilterFieldStyle,
-} from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
+import { FilterGenerator, TransitionGenerator } from './css-generators';
 import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
 import { BlockEditContext } from '../../hooks';
@@ -33,14 +29,14 @@ export function EffectsStyles({
 		publisherBlendMode,
 	},
 }) {
-	const { attributes: _attributes, ...blockProps } =
-		useContext(BlockEditContext);
+	const blockProps = useContext(BlockEditContext);
 
 	const generators = [];
 
 	if (
 		isActiveField(publisherOpacity) &&
-		_attributes.publisherOpacity !== attributes.publisherOpacity.default
+		blockProps.attributes.publisherOpacity !==
+			attributes.publisherOpacity.default
 	) {
 		generators.push(
 			computedCssRules(
@@ -57,7 +53,7 @@ export function EffectsStyles({
 						],
 					},
 				},
-				{ attributes: _attributes, ...blockProps }
+				{ attributes: blockProps.attributes, ...blockProps }
 			)
 		);
 	}
@@ -66,12 +62,12 @@ export function EffectsStyles({
 		isActiveField(publisherTransform) &&
 		!arrayEquals(
 			attributes.publisherTransform.default,
-			_attributes.publisherTransform
+			blockProps.attributes.publisherTransform
 		)
 	) {
 		const transformProperties = {};
 
-		let transformProperty = _attributes.publisherTransform
+		let transformProperty = blockProps.attributes.publisherTransform
 			?.map((item) => {
 				if (!item.isVisible) {
 					return null;
@@ -96,8 +92,8 @@ export function EffectsStyles({
 			?.filter((item) => null !== item)
 			.join(' ');
 
-		if (_attributes.publisherTransformSelfPerspective) {
-			transformProperty = `perspective(${_attributes.publisherTransformSelfPerspective}) ${transformProperty}`;
+		if (blockProps.attributes.publisherTransformSelfPerspective) {
+			transformProperty = `perspective(${blockProps.attributes.publisherTransformSelfPerspective}) ${transformProperty}`;
 		}
 
 		if (transformProperty) {
@@ -107,35 +103,36 @@ export function EffectsStyles({
 		if (
 			!arrayEquals(
 				attributes.publisherTransformSelfOrigin.default,
-				_attributes.publisherTransformSelfOrigin
+				blockProps.attributes.publisherTransformSelfOrigin
 			)
 		) {
 			transformProperties[
 				'transform-origin'
-			] = `${_attributes.publisherTransformSelfOrigin?.top} ${_attributes.publisherTransformSelfOrigin?.left}`;
+			] = `${blockProps.attributes.publisherTransformSelfOrigin?.top} ${blockProps.attributes.publisherTransformSelfOrigin?.left}`;
 		}
 
-		if (_attributes.publisherBackfaceVisibility) {
+		if (blockProps.attributes.publisherBackfaceVisibility) {
 			transformProperties['backface-visibility'] =
-				_attributes.publisherBackfaceVisibility;
+				blockProps.attributes.publisherBackfaceVisibility;
 		}
 
-		if (_attributes.publisherTransformChildPerspective) {
+		if (blockProps.attributes.publisherTransformChildPerspective) {
 			transformProperties.perspective =
-				_attributes.publisherTransformChildPerspective !== '0px'
-					? _attributes.publisherTransformChildPerspective
+				blockProps.attributes.publisherTransformChildPerspective !==
+				'0px'
+					? blockProps.attributes.publisherTransformChildPerspective
 					: 'none';
 		}
 
 		if (
 			!arrayEquals(
 				attributes.publisherTransformChildOrigin.default,
-				_attributes.publisherTransformChildOrigin
+				blockProps.attributes.publisherTransformChildOrigin
 			)
 		) {
 			transformProperties[
 				'perspective-origin'
-			] = `${_attributes.publisherTransformChildOrigin?.top} ${_attributes.publisherTransformChildOrigin?.left}`;
+			] = `${blockProps.attributes.publisherTransformChildOrigin?.top} ${blockProps.attributes.publisherTransformChildOrigin?.left}`;
 		}
 
 		if (transformProperties) {
@@ -152,7 +149,7 @@ export function EffectsStyles({
 							],
 						},
 					},
-					{ attributes: _attributes, ...blockProps }
+					{ attributes: blockProps.attributes, ...blockProps }
 				)
 			);
 		}
@@ -162,35 +159,93 @@ export function EffectsStyles({
 		isActiveField(publisherTransition) &&
 		!arrayEquals(
 			attributes.publisherTransition.default,
-			_attributes.publisherTransition
+			blockProps.attributes.publisherTransition
 		)
 	) {
-		generators.push(TransitionFieldStyle(publisherTransition));
+		generators.push(
+			computedCssRules(
+				{
+					cssGenerators: {
+						publisherTransition: [
+							{
+								type: 'function',
+								function: TransitionGenerator,
+							},
+						],
+						...(publisherTransition?.cssGenerators || {}),
+					},
+				},
+				blockProps
+			)
+		);
 	}
 
 	if (
 		isActiveField(publisherFilter) &&
 		!arrayEquals(
 			attributes.publisherFilter.default,
-			_attributes.publisherFilter
+			blockProps.attributes.publisherFilter
 		)
 	) {
-		generators.push(FilterFieldStyle(publisherFilter));
+		generators.push(
+			computedCssRules(
+				{
+					cssGenerators: {
+						publisherFilter: [
+							{
+								type: 'function',
+								function: FilterGenerator,
+							},
+						],
+						...(publisherFilter?.cssGenerators || {}),
+					},
+				},
+				{
+					...blockProps,
+					cssGeneratorEntity: {
+						property: 'filter',
+						id: 'publisherFilter',
+					},
+				}
+			)
+		);
 	}
 
 	if (
 		isActiveField(publisherBackdropFilter) &&
 		!arrayEquals(
 			attributes.publisherBackdropFilter.default,
-			_attributes.publisherBackdropFilter
+			blockProps.attributes.publisherBackdropFilter
 		)
 	) {
-		generators.push(BackdropFilterFieldStyle(publisherBackdropFilter));
+		generators.push(
+			computedCssRules(
+				{
+					cssGenerators: {
+						publisherBackdropFilter: [
+							{
+								type: 'function',
+								function: FilterGenerator,
+							},
+						],
+						...(publisherBackdropFilter?.cssGenerators || {}),
+					},
+				},
+				{
+					...blockProps,
+					cssGeneratorEntity: {
+						property: 'backdrop-filter',
+						id: 'publisherBackdropFilter',
+					},
+				}
+			)
+		);
 	}
 
 	if (
 		isActiveField(publisherCursor) &&
-		_attributes.publisherCursor !== attributes.publisherCursor.default
+		blockProps.attributes.publisherCursor !==
+			attributes.publisherCursor.default
 	) {
 		generators.push(
 			computedCssRules(
@@ -207,14 +262,15 @@ export function EffectsStyles({
 						],
 					},
 				},
-				{ attributes: _attributes, ...blockProps }
+				{ attributes: blockProps.attributes, ...blockProps }
 			)
 		);
 	}
 
 	if (
 		isActiveField(publisherBlendMode) &&
-		_attributes.publisherBlendMode !== attributes.publisherBlendMode.default
+		blockProps.attributes.publisherBlendMode !==
+			attributes.publisherBlendMode.default
 	) {
 		generators.push(
 			computedCssRules(
@@ -231,7 +287,7 @@ export function EffectsStyles({
 						],
 					},
 				},
-				{ attributes: _attributes, ...blockProps }
+				{ attributes: blockProps.attributes, ...blockProps }
 			)
 		);
 	}
@@ -243,7 +299,7 @@ export function EffectsStyles({
 					...(cssGenerators || {}),
 				},
 			},
-			{ attributes: _attributes, ...blockProps }
+			{ attributes: blockProps.attributes, ...blockProps }
 		)
 	);
 

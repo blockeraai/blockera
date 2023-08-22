@@ -7,7 +7,6 @@ import { useContext } from '@wordpress/element';
  * Publisher dependencies
  */
 import { computedCssRules } from '@publisher/style-engine';
-import { BackgroundFieldStyle } from '@publisher/fields';
 
 /**
  * Internal dependencies
@@ -16,7 +15,7 @@ import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
 import { BlockEditContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
-import { backgroundClipCSSGenerator } from './css-generator';
+import { backgroundGenerator, backgroundClipGenerator } from './css-generators';
 
 export function BackgroundStyles({
 	backgroundConfig: {
@@ -26,8 +25,7 @@ export function BackgroundStyles({
 		publisherBackgroundClip,
 	},
 }) {
-	const { attributes: _attributes, ...blockProps } =
-		useContext(BlockEditContext);
+	const blockProps = useContext(BlockEditContext);
 
 	const generators = [];
 
@@ -35,15 +33,30 @@ export function BackgroundStyles({
 		isActiveField(publisherBackground) &&
 		!arrayEquals(
 			attributes.publisherBackground.default,
-			_attributes.publisherBackground
+			blockProps.attributes.publisherBackground
 		)
 	) {
-		generators.push(BackgroundFieldStyle(publisherBackground));
+		generators.push(
+			computedCssRules(
+				{
+					cssGenerators: {
+						publisherBackground: [
+							{
+								type: 'function',
+								function: backgroundGenerator,
+							},
+						],
+						...(publisherBackground?.cssGenerators || {}),
+					},
+				},
+				blockProps
+			)
+		);
 	}
 
 	if (
 		isActiveField(publisherBackgroundColor) &&
-		_attributes.publisherBackgroundColor !==
+		blockProps.attributes.publisherBackgroundColor !==
 			attributes.publisherBackgroundColor.default
 	) {
 		generators.push(
@@ -62,14 +75,14 @@ export function BackgroundStyles({
 						],
 					},
 				},
-				{ attributes: _attributes, ...blockProps }
+				blockProps
 			)
 		);
 	}
 
 	if (
 		isActiveField(publisherBackgroundClip) &&
-		_attributes.publisherBackgroundClip !==
+		blockProps.attributes.publisherBackgroundClip !==
 			attributes.publisherBackgroundClip.default
 	) {
 		generators.push(
@@ -79,13 +92,13 @@ export function BackgroundStyles({
 						publisherBackgroundClip: [
 							{
 								type: 'function',
-								function: backgroundClipCSSGenerator,
+								function: backgroundClipGenerator,
 							},
 						],
 						...(publisherBackgroundClip?.cssGenerators || {}),
 					},
 				},
-				{ attributes: _attributes, ...blockProps }
+				blockProps
 			)
 		);
 	}
@@ -97,7 +110,7 @@ export function BackgroundStyles({
 					...(cssGenerators || {}),
 				},
 			},
-			{ attributes: _attributes, ...blockProps }
+			blockProps
 		)
 	);
 

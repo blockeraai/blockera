@@ -6,8 +6,11 @@ import { useContext } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { BoxSpacingField } from '@publisher/fields';
-import { ControlContextProvider } from '@publisher/controls';
+import {
+	BaseControl,
+	BoxSpacingControl,
+	ControlContextProvider,
+} from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -32,19 +35,19 @@ export function SpacingExtension({ children, config, ...props }) {
 						value: attributes.publisherSpacing,
 					}}
 				>
-					<BoxSpacingField
-						{...{
-							...props,
-							label: '',
-							//
-							value: attributes.publisherSpacing,
-							onChange: (newValue) =>
-								setAttributes({
-									...attributes,
-									publisherSpacing: newValue,
-								}),
-						}}
-					/>
+					<BaseControl controlName="box-spacing">
+						<BoxSpacingControl
+							{...{
+								...props,
+								//
+								onChange: (newValue) =>
+									setAttributes({
+										...attributes,
+										publisherSpacing: newValue,
+									}),
+							}}
+						/>
+					</BaseControl>
 				</ControlContextProvider>
 			)}
 		</>
