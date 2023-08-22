@@ -7,13 +7,13 @@ import { RangeControl as WordPressRangeControl } from '@wordpress/components';
 /**
  * Publisher dependencies
  */
-import { Field } from '@publisher/fields';
 import { isString } from '@publisher/utils';
 import { controlClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
+import BaseControl from '../base-control';
 import { useControlContext } from '../../context';
 
 function valueCleanup(value) {
@@ -69,10 +69,10 @@ export default function RangeControl({
 	}
 
 	return (
-		<Field
+		<BaseControl
 			label={label}
-			field={field}
 			columns={columns}
+			controlName={field}
 			className={className}
 		>
 			<WordPressRangeControl
@@ -85,7 +85,7 @@ export default function RangeControl({
 				withInputField={withInputField}
 				__nextHasNoMarginBottom={false}
 			/>
-		</Field>
+		</BaseControl>
 	);
 }
 

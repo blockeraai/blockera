@@ -9,11 +9,11 @@ import { __ } from '@wordpress/i18n';
  * Publisher dependencies
  */
 import { Button, Popover } from '@publisher/components';
-import { Field } from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
+import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
 
 export default function ColorPickerControl({
@@ -51,10 +51,10 @@ export default function ColorPickerControl({
 
 	if (isPopover) {
 		return (
-			<Field
+			<BaseControl
 				label={label}
-				field={field}
 				columns={columns}
+				controlName={field}
 				className={className}
 			>
 				{isOpen && (
@@ -77,15 +77,15 @@ export default function ColorPickerControl({
 						</Button>
 					</Popover>
 				)}
-			</Field>
+			</BaseControl>
 		);
 	}
 
 	return (
-		<Field
+		<BaseControl
 			label={label}
-			field={field}
 			columns={columns}
+			controlName={field}
 			className={className}
 		>
 			<WPColorPicker
@@ -94,7 +94,7 @@ export default function ColorPickerControl({
 				onChangeComplete={(color) => setValue(color.hex)}
 				{...props}
 			/>
-		</Field>
+		</BaseControl>
 	);
 }
 

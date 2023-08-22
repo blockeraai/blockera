@@ -7,21 +7,21 @@ import PropTypes from 'prop-types';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { Field } from '@publisher/fields';
 
 /**
  * Publisher dependencies
  */
+import BaseControl from '../base-control';
 import { useControlContext } from '../../context';
-import { InputControl, SelectControl, ColorControl } from '../index';
 import BorderStyleHSolidIcon from './icons/style-h-solid';
+import BorderStyleVSolidIcon from './icons/style-v-solid';
 import BorderStyleHDashedIcon from './icons/style-h-dashed';
 import BorderStyleHDottedIcon from './icons/style-h-dotted';
 import BorderStyleHDoubleIcon from './icons/style-h-double';
-import BorderStyleVSolidIcon from './icons/style-v-solid';
 import BorderStyleVDashedIcon from './icons/style-v-dashed';
 import BorderStyleVDottedIcon from './icons/style-v-dotted';
 import BorderStyleVDoubleIcon from './icons/style-v-double';
+import { InputControl, SelectControl, ColorControl } from '../index';
 
 export default function BorderControl({
 	linesDirection,
@@ -46,10 +46,10 @@ export default function BorderControl({
 	});
 
 	return (
-		<Field
+		<BaseControl
 			label={label}
-			field={field}
 			columns={columns}
+			controlName={field}
 			className={className}
 		>
 			<div
@@ -142,7 +142,7 @@ export default function BorderControl({
 					}}
 				/>
 			</div>
-		</Field>
+		</BaseControl>
 	);
 }
 
@@ -154,7 +154,7 @@ BorderControl.propTypes = {
 	/**
 	 * ID for retrieving value from control context
 	 */
-	id: PropTypes.string.isRequired,
+	id: PropTypes.string,
 	/**
 	 * Label for field. If you pass empty value the field will not be added and simple control will be rendered
 	 *

@@ -11,13 +11,13 @@ import PropTypes from 'prop-types';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { Field } from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
-import { renderSelectNativeOption, prepareSelectCustomOptions } from './utils';
+import BaseControl from '../base-control';
 import { useControlContext } from '../../context';
+import { renderSelectNativeOption, prepareSelectCustomOptions } from './utils';
 
 const SelectControl = ({
 	type,
@@ -48,10 +48,10 @@ const SelectControl = ({
 	if (type === 'custom') options = prepareSelectCustomOptions(options);
 
 	return (
-		<Field
+		<BaseControl
 			label={label}
-			field={field}
 			columns={columns}
+			controlName={field}
 			className={className}
 		>
 			{type === 'native' && (
@@ -92,7 +92,7 @@ const SelectControl = ({
 					options={options}
 				/>
 			)}
-		</Field>
+		</BaseControl>
 	);
 };
 
@@ -102,7 +102,7 @@ SelectControl.propTypes = {
 	/**
 	 * ID for retrieving value from control context
 	 */
-	id: PropTypes.string.isRequired,
+	id: PropTypes.string,
 	/**
 	 * Label for field. If you pass empty value the field will not be added and simple control will be rendered
 	 *

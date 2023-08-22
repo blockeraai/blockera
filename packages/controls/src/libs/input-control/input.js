@@ -12,12 +12,11 @@ import PropTypes from 'prop-types';
  */
 import { controlClassNames } from '@publisher/classnames';
 import { isEmpty, isString, isUndefined } from '@publisher/utils';
-import { Field } from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
-import { RangeControl } from './../index';
+import { RangeControl, BaseControl } from './../index';
 import { getCSSUnits, isSpecialUnit } from './utils';
 import { useControlContext } from '../../context';
 
@@ -47,10 +46,10 @@ export function InputControl({
 	}
 
 	return (
-		<Field
+		<BaseControl
 			label={label}
-			field={field}
 			columns={columns}
+			controlName={field}
 			className={className}
 		>
 			<div
@@ -100,7 +99,7 @@ export function InputControl({
 					/>
 				)}
 			</div>
-		</Field>
+		</BaseControl>
 	);
 }
 

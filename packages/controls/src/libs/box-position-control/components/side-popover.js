@@ -7,14 +7,13 @@ import { __ } from '@wordpress/i18n';
  * Publisher dependencies
  */
 import { Button, Grid, Popover } from '@publisher/components';
-import { Field } from '@publisher/fields';
 import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
+import { BaseControl, InputControl } from '../../index';
 import { useControlContext } from '../../../context';
-import { InputControl } from '../../input-control';
 
 export function SidePopover({
 	id,
@@ -59,7 +58,7 @@ export function SidePopover({
 						onChange={setValue}
 					/>
 
-					<Field
+					<BaseControl
 						label={__('Shortcuts', 'publisher-core')}
 						columns="columns-1"
 						className={controlInnerClassNames(
@@ -135,7 +134,7 @@ export function SidePopover({
 								120
 							</Button>
 						</Grid>
-					</Field>
+					</BaseControl>
 				</Popover>
 			)}
 		</>

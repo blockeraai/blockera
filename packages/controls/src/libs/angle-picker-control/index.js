@@ -13,11 +13,11 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { Button, Flex } from '@publisher/components';
-import { Field } from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
+import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
 import { addAngle, subtractAngle } from './utils';
 import { default as RotateLeftIcon } from './icons/rotate-left';
@@ -43,10 +43,10 @@ export default function AnglePickerControl({
 	});
 
 	return (
-		<Field
+		<BaseControl
 			label={label}
-			field={field}
 			columns={columns}
+			controlName={field}
 			className={className}
 		>
 			<Flex
@@ -91,7 +91,7 @@ export default function AnglePickerControl({
 					</>
 				)}
 			</Flex>
-		</Field>
+		</BaseControl>
 	);
 }
 

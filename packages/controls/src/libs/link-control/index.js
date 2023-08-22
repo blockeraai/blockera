@@ -13,7 +13,6 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { Button } from '@publisher/components';
-import { InputField } from '@publisher/fields';
 
 /**
  * Internal dependencies
@@ -21,7 +20,12 @@ import { InputField } from '@publisher/fields';
 import { STORE_NAME } from '../repeater-control/store';
 import { default as AdvancedIcon } from './icons/advanced';
 import { generateExtensionId } from '@publisher/extensions';
-import { InputControl, CheckboxControl, AttributesControl } from '../index';
+import {
+	BaseControl,
+	InputControl,
+	CheckboxControl,
+	AttributesControl,
+} from '../index';
 import { ControlContextProvider, useControlContext } from '../../context';
 
 export default function LinkControl({
@@ -97,19 +101,20 @@ export default function LinkControl({
 						}}
 					/>
 
-					<InputField
-						settings={{
-							type: 'text',
-						}}
+					<BaseControl
+						controlName="input"
 						label={__('Label', 'publisher-core')}
-						id={'label'}
-						onChange={(newValue) => {
-							setValue({
-								...value,
-								label: newValue,
-							});
-						}}
-					/>
+					>
+						<InputControl
+							id={'label'}
+							onChange={(newValue) => {
+								setValue({
+									...value,
+									label: newValue,
+								});
+							}}
+						/>
+					</BaseControl>
 
 					<ControlContextProvider
 						value={{

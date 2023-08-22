@@ -5,16 +5,12 @@ import { __ } from '@wordpress/i18n';
 import { memo, useContext } from '@wordpress/element';
 
 /**
- * Publisher dependencies
- */
-import { InputField, SelectField } from '@publisher/fields';
-
-/**
  * Internal dependencies
  */
 import { useControlContext } from '../../../context';
 import { getTypeOptions, getTimingOptions } from '../utils';
 import { RepeaterContext } from '../../repeater-control/context';
+import { BaseControl, InputControl, SelectControl } from '../../index';
 
 const Fields = ({ itemId, item }) => {
 	const {
@@ -26,75 +22,84 @@ const Fields = ({ itemId, item }) => {
 
 	return (
 		<div id={`repeater-item-${itemId}`}>
-			<SelectField
-				id={getControlId(itemId, 'type')}
+			<BaseControl
+				controlName="select"
 				label={__('Type', 'publisher-core')}
-				options={getTypeOptions()}
-				onChange={(type) =>
-					changeRepeaterItem({
-						controlId,
-						repeaterId,
-						itemId,
-						value: { ...item, type },
-					})
-				}
-			/>
+			>
+				<SelectControl
+					id={getControlId(itemId, 'type')}
+					options={getTypeOptions()}
+					onChange={(type) =>
+						changeRepeaterItem({
+							controlId,
+							repeaterId,
+							itemId,
+							value: { ...item, type },
+						})
+					}
+				/>
+			</BaseControl>
 
-			<InputField
-				id={getControlId(itemId, 'duration')}
+			<BaseControl
+				controlName="input"
 				label={__('Duration', 'publisher-core')}
-				settings={{
-					type: 'css',
-					unitType: 'duration',
-					range: true,
-					min: 0,
-					max: 5000,
-					value: item.duration,
-				}}
-				onChange={(duration) =>
-					changeRepeaterItem({
-						controlId,
-						repeaterId,
-						itemId,
-						value: { ...item, duration },
-					})
-				}
-			/>
+			>
+				<InputControl
+					unitType="duration"
+					range={true}
+					min={0}
+					max={5000}
+					id={getControlId(itemId, 'duration')}
+					onChange={(duration) =>
+						changeRepeaterItem({
+							controlId,
+							repeaterId,
+							itemId,
+							value: { ...item, duration },
+						})
+					}
+				/>
+			</BaseControl>
 
-			<SelectField
-				id={getControlId(itemId, 'timing')}
+			<BaseControl
+				controlName="select"
 				label={__('Timing', 'publisher-core')}
-				options={getTimingOptions()}
-				onChange={(timing) =>
-					changeRepeaterItem({
-						controlId,
-						repeaterId,
-						itemId,
-						value: { ...item, timing },
-					})
-				}
-			/>
+			>
+				<SelectControl
+					id={getControlId(itemId, 'timing')}
+					options={getTimingOptions()}
+					onChange={(timing) =>
+						changeRepeaterItem({
+							controlId,
+							repeaterId,
+							itemId,
+							value: { ...item, timing },
+						})
+					}
+				/>
+			</BaseControl>
 
-			<InputField
-				id={getControlId(itemId, 'delay')}
+			<BaseControl
+				controlName="input"
 				label={__('Delay', 'publisher-core')}
-				settings={{
-					type: 'css',
-					unitType: 'duration',
-					range: true,
-					min: 0,
-					max: 5000,
-					initialPosition: 0,
-				}}
-				onChange={(delay) =>
-					changeRepeaterItem({
-						controlId,
-						repeaterId,
-						itemId,
-						value: { ...item, delay },
-					})
-				}
-			/>
+			>
+				<InputControl
+					unitType="duration"
+					range={true}
+					min={0}
+					max={5000}
+					id={getControlId(itemId, 'delay')}
+					onChange={(delay) =>
+						changeRepeaterItem({
+							controlId,
+							repeaterId,
+							itemId,
+							value: { ...item, delay },
+						})
+					}
+					initialPosition={0}
+				/>
+			</BaseControl>
 		</div>
 	);
 };

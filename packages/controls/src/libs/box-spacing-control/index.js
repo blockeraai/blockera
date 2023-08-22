@@ -12,12 +12,11 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
-import { Field } from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
-import { LabelControl } from '../index';
+import { LabelControl, BaseControl } from '../index';
 import { SidePopover } from './components/side-popover';
 import { useControlContext } from '../../context';
 
@@ -80,10 +79,10 @@ export default function BoxSpacingControl({
 	}
 
 	return (
-		<Field
+		<BaseControl
 			label={label}
-			field={field}
 			columns={columns}
+			controlName={field}
 			className={className}
 		>
 			<div
@@ -462,7 +461,7 @@ export default function BoxSpacingControl({
 					/>
 				</div>
 			</div>
-		</Field>
+		</BaseControl>
 	);
 }
 

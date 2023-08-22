@@ -13,11 +13,11 @@ import {
  */
 import { isUndefined } from '@publisher/utils';
 import { controlClassNames } from '@publisher/classnames';
-import { Field } from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
+import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
 
 export default function ToggleSelectControl({
@@ -48,10 +48,10 @@ export default function ToggleSelectControl({
 	}
 
 	return (
-		<Field
+		<BaseControl
 			label={label}
-			field={field}
 			columns={columns}
+			controlName={field}
 			className={className}
 		>
 			<div className={controlClassNames('toggle-select', className)}>
@@ -89,7 +89,7 @@ export default function ToggleSelectControl({
 				</WPToggleGroupControl>
 			</div>
 			{children}
-		</Field>
+		</BaseControl>
 	);
 }
 
@@ -97,7 +97,7 @@ ToggleSelectControl.propTypes = {
 	/**
 	 * ID for retrieving value from control context
 	 */
-	id: PropTypes.string.isRequired,
+	id: PropTypes.string,
 	/**
 	 * Label for field. If you pass empty value the field will not be added and simple control will be rendered
 	 *

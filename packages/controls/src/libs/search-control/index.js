@@ -9,11 +9,11 @@ import PropTypes from 'prop-types';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { Field } from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
+import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
 
 export default function SearchControl({
@@ -34,10 +34,10 @@ export default function SearchControl({
 	});
 
 	return (
-		<Field
+		<BaseControl
 			label={label}
-			field={field}
 			columns={columns}
+			controlName={field}
 			className={className}
 		>
 			<WPSearchControl
@@ -46,7 +46,7 @@ export default function SearchControl({
 				className={controlClassNames('search', className)}
 				{...props}
 			/>
-		</Field>
+		</BaseControl>
 	);
 }
 

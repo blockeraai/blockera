@@ -9,12 +9,11 @@ import { useState } from '@wordpress/element';
  */
 import { controlClassNames } from '@publisher/classnames';
 import { ColorIndicator, Button } from '@publisher/components';
-import { Field } from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
-import { ColorPickerControl } from '../index';
+import { BaseControl, ColorPickerControl } from '../index';
 import PropTypes from 'prop-types';
 import { useControlContext } from '../../context';
 
@@ -54,10 +53,10 @@ export default function ColorControl({
 	}
 
 	return (
-		<Field
+		<BaseControl
 			label={label}
-			field={field}
 			columns={columns}
+			controlName={field}
 			className={className}
 		>
 			<Button
@@ -94,7 +93,7 @@ export default function ColorControl({
 					{...props}
 				/>
 			)}
-		</Field>
+		</BaseControl>
 	);
 }
 
@@ -114,7 +113,7 @@ ColorControl.propTypes = {
 	/**
 	 * ID for retrieving value from control context
 	 */
-	id: PropTypes.string.isRequired,
+	id: PropTypes.string,
 	/**
 	 * Label for field. If you pass empty value the field will not be added and simple control will be rendered
 	 *

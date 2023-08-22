@@ -7,7 +7,6 @@ import { memo, useContext } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { Field } from '@publisher/fields';
 import { Flex } from '@publisher/components';
 import {
 	controlClassNames,
@@ -19,12 +18,13 @@ import { isUndefined } from '@publisher/utils';
  * Internal dependencies
  */
 import {
-	AlignmentMatrixControl,
+	BaseControl,
 	InputControl,
-	ToggleSelectControl,
+	MediaImageControl,
 	GradientBarControl,
 	AnglePickerControl,
-	MediaImageControl,
+	ToggleSelectControl,
+	AlignmentMatrixControl,
 } from '../../index';
 import RepeaterControl from '../../repeater-control';
 import { useControlContext } from '../../../context';
@@ -564,7 +564,11 @@ const Fields = ({ itemId, item }) => {
 
 			{item.type === 'mesh-gradient' && (
 				<>
-					<Field label="" columns="columns-1" field="empty">
+					<BaseControl
+						label=""
+						columns="columns-1"
+						controlName="empty"
+					>
 						<div
 							className={controlInnerClassNames(
 								'mesh-generator-preview'
@@ -601,9 +605,13 @@ const Fields = ({ itemId, item }) => {
 								<RegenerateIcon /> {__('Regenerate')}
 							</span>
 						</div>
-					</Field>
+					</BaseControl>
 
-					<Field label="" columns="columns-1" field="empty">
+					<BaseControl
+						label=""
+						columns="columns-1"
+						controlName="empty"
+					>
 						<RepeaterControl
 							id={getControlId(itemId, '[mesh-gradient-colors]')}
 							label={__('Colors', 'publisher-core')}
@@ -695,7 +703,7 @@ const Fields = ({ itemId, item }) => {
 								}
 							}}
 						/>
-					</Field>
+					</BaseControl>
 
 					<ToggleSelectControl
 						label={__('Effect', 'publisher-core')}

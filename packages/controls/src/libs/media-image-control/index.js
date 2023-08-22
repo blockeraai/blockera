@@ -12,13 +12,13 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
-import { Field } from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
-import { default as DeleteIcon } from './icons/delete';
+import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
+import { default as DeleteIcon } from './icons/delete';
 
 export default function MediaImageControl({
 	labelChoose,
@@ -41,10 +41,10 @@ export default function MediaImageControl({
 	});
 
 	return (
-		<Field
+		<BaseControl
 			label={label}
-			field={field}
 			columns={columns}
+			controlName={field}
 			className={className}
 		>
 			<div
@@ -127,7 +127,7 @@ export default function MediaImageControl({
 					</div>
 				)}
 			</div>
-		</Field>
+		</BaseControl>
 	);
 }
 

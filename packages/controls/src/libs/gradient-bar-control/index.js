@@ -8,11 +8,11 @@ import PropTypes from 'prop-types';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { Field } from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
+import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
 
 export default function GradientBarControl({
@@ -32,10 +32,10 @@ export default function GradientBarControl({
 	});
 
 	return (
-		<Field
+		<BaseControl
 			label={label}
-			field={field}
 			columns={columns}
+			controlName={field}
 			className={className}
 		>
 			<div className={controlClassNames('gradient-bar', className)}>
@@ -46,7 +46,7 @@ export default function GradientBarControl({
 					onChange={setValue}
 				/>
 			</div>
-		</Field>
+		</BaseControl>
 	);
 }
 

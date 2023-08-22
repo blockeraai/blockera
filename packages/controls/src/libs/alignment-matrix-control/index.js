@@ -9,16 +9,16 @@ import { __ } from '@wordpress/i18n';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { Field } from '@publisher/fields';
 import { Flex } from '@publisher/components';
 
 /**
  * Internal dependencies
  */
+import BaseControl from '../base-control';
+import { isUndefined } from '@publisher/utils';
+import { InputControl } from '../input-control';
 import { useControlContext } from '../../context';
 import { convertAlignmentMatrixCoordinates } from './utils';
-import { InputControl } from '../input-control';
-import { isUndefined } from '@publisher/utils';
 
 export default function AlignmentMatrixControl({
 	inputFields,
@@ -40,10 +40,10 @@ export default function AlignmentMatrixControl({
 
 	if (!inputFields) {
 		return (
-			<Field
+			<BaseControl
 				label={label}
-				field={field}
 				columns={columns}
+				controlName={field}
 				className={className}
 			>
 				<div className={controlClassNames('alignment-matrix')}>
@@ -64,15 +64,15 @@ export default function AlignmentMatrixControl({
 						}}
 					/>
 				</div>
-			</Field>
+			</BaseControl>
 		);
 	}
 
 	return (
-		<Field
+		<BaseControl
 			label={label}
-			field={field}
 			columns={columns}
+			controlName={field}
 			className={className}
 		>
 			<Flex
@@ -136,7 +136,7 @@ export default function AlignmentMatrixControl({
 					</Flex>
 				</div>
 			</Flex>
-		</Field>
+		</BaseControl>
 	);
 }
 

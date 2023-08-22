@@ -6,14 +6,14 @@ import { __ } from '@wordpress/i18n';
 /**
  * Publisher dependencies
  */
-import { Button, Flex, Grid, Popover } from '@publisher/components';
-import { Field, InputField } from '@publisher/fields';
 import { controlInnerClassNames } from '@publisher/classnames';
+import { Button, Flex, Grid, Popover } from '@publisher/components';
 
 /**
  * Internal dependencies
  */
 import { useControlContext } from '../../../context';
+import { BaseControl, InputControl } from '../../index';
 
 export function SidePopover({
 	id,
@@ -149,23 +149,20 @@ export function SidePopover({
 					className="spacing-edit-popover"
 					onClose={onClose}
 				>
-					<InputField
-						id={id}
-						label=""
-						settings={{
-							type: 'css',
-							unitType: type,
-							range: true,
-							min: type === 'margin' ? -100 : 0,
-							max: 100,
-							defaultValue: '0px',
-						}}
-						//
-						defaultValue="0px"
-						onChange={setValue}
-					/>
+					<BaseControl controlName="input">
+						<InputControl
+							id={id}
+							unitType={type}
+							range={true}
+							min={type === 'margin' ? -100 : 0}
+							max={100}
+							//
+							defaultValue="0px"
+							onChange={setValue}
+						/>
+					</BaseControl>
 
-					<Field
+					<BaseControl
 						label={__('Shortcuts', 'publisher-core')}
 						columns="columns-1"
 						className={controlInnerClassNames(
@@ -196,7 +193,7 @@ export function SidePopover({
 
 							{type === 'padding' && <>{getAllActionButtons()}</>}
 						</>
-					</Field>
+					</BaseControl>
 				</Popover>
 			)}
 		</>

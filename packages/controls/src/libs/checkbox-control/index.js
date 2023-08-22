@@ -8,11 +8,11 @@ import PropTypes from 'prop-types';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { Field } from '@publisher/fields';
 
 /**
  * Internal dependencies
  */
+import BaseControl from '../base-control';
 import { useControlContext } from '../../context';
 
 export default function CheckboxControl({
@@ -35,10 +35,10 @@ export default function CheckboxControl({
 	});
 
 	return (
-		<Field
+		<BaseControl
 			label={label}
-			field={field}
 			columns={columns}
+			controlName={field}
 			className={className}
 		>
 			<WPCheckboxControl
@@ -48,7 +48,7 @@ export default function CheckboxControl({
 				label={checkboxLabel}
 				{...props}
 			/>
-		</Field>
+		</BaseControl>
 	);
 }
 

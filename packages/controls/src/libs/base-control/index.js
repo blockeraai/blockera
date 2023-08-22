@@ -1,0 +1,90 @@
+/**
+ * External dependencies
+ */
+import PropTypes from 'prop-types';
+
+/**
+ * Publisher dependencies
+ */
+import { LabelControl } from '@publisher/controls';
+import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
+
+export default function BaseControl({
+	label,
+	children,
+	columns,
+	className,
+	controlName,
+}) {
+	columns = columns || (label !== '' ? 'columns-2' : 'columns-1');
+
+	let cssColumns = '';
+
+	if (columns !== 'columns-1' && columns !== 'columns-2') {
+		cssColumns = columns;
+		columns = 'columns-custom';
+	}
+
+	if (label === '') {
+		if (controlName === 'empty') {
+			return (
+				<div
+					className={fieldsClassNames(
+						controlName,
+						columns,
+						className
+					)}
+					style={{ gridTemplateColumns: cssColumns || '' }}
+				>
+					<div className={fieldsInnerClassNames('control')}>
+						{children}
+					</div>
+				</div>
+			);
+		}
+
+		return <>{children}</>;
+	}
+
+	return (
+		<div
+			className={fieldsClassNames(controlName, columns, className)}
+			style={{ gridTemplateColumns: cssColumns || '' }}
+		>
+			<div className={fieldsClassNames('label')}>
+				<LabelControl label={label} />
+			</div>
+
+			<div className={fieldsClassNames('control')}>{children}</div>
+		</div>
+	);
+}
+
+BaseControl.propTypes = {
+	/**
+	 * The label for child control.
+	 */
+	label: PropTypes.string,
+	/**
+	 * The child control.
+	 */
+	children: PropTypes.element,
+	/**
+	 * The classname for number of columns in wrapper(BaseControl).
+	 */
+	columns: PropTypes.string,
+	/**
+	 * The custom classname.
+	 */
+	className: PropTypes.string,
+	/**
+	 * The name of control to choose render with label or not!
+	 */
+	controlName: PropTypes.oneOfType(['empty', 'general']),
+};
+
+BaseControl.defaultProps = {
+	label: '',
+	columns: '',
+	controlName: 'general',
+};
