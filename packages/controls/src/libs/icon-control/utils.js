@@ -63,6 +63,7 @@ export function getLibraryIcons({
 		if (isValidIcon(icon, iconKey))
 			iconsStack.push(
 				<span
+					key={iconKey}
 					className={controlInnerClassNames(
 						'icon-control-icon',
 						'library-' + icon.library,

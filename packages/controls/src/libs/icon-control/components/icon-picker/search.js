@@ -31,7 +31,7 @@ export default function Search({}) {
 			)}
 		>
 			<SearchControl
-				value={searchInput}
+				defaultValue={searchInput}
 				onChange={(value) => {
 					setSearchInput(value);
 					setSearchData(
