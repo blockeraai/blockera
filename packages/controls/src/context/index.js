@@ -2,7 +2,7 @@
  * External dependencies
  */
 import { createContext, useContext } from '@wordpress/element';
-import { useDispatch, useSelect } from '@wordpress/data';
+import { useDispatch, select } from '@wordpress/data';
 
 /**
  * Publisher dependencies
@@ -30,21 +30,16 @@ export const ControlContextProvider = ({
 	storeName = STORE_NAME,
 	...props
 }) => {
+	registerControl({
+		...controlInfo,
+		type: storeName,
+	});
+
+	const { getControl } = select(storeName);
+
 	//Prepare control status and value!
-	const { status, value } = useSelect(
-		(select) => {
-			registerControl({
-				...controlInfo,
-				type: storeName,
-			});
+	const { status, value } = getControl(controlInfo.name);
 
-			const { getControl } = select(storeName);
-
-			return getControl(controlInfo.name);
-		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[controlInfo]
-	);
 	//control dispatch for available actions
 	const dispatch = useDispatch(storeName);
 	// get block clientId
