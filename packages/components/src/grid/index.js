@@ -76,37 +76,40 @@ Grid.propTypes = {
 	 * Sets the distribution of space between and around content items along a grid's block axis.
 	 */
 	alignContent: PropTypes.oneOf([
+		'',
 		'center',
-		'space-between',
-		'space-around',
-		'space-evenly',
 		'stretch',
+		'space-evenly',
+		'space-around',
+		'space-between',
 	]),
 	/**
 	 * Defines how the browser distributes space between and around content items along the inline axis of a grid container.
 	 */
 	justifyContent: PropTypes.oneOf([
+		'',
+		'end',
 		'start',
 		'center',
-		'end',
-		'space-between',
 		'space-around',
 		'space-evenly',
+		'space-between',
 	]),
 	/**
 	 * Sets the align-self value on all direct children as a group. In Grid Layout, it controls the alignment of items on the Block Axis within their grid area.
 	 */
 	alignItems: PropTypes.oneOf([
+		'',
+		'end',
 		'start',
 		'center',
-		'end',
 		'stretch',
 		'baseline',
 	]),
 	/**
 	 * Defines the default justify-self for all items of the box, giving them all a default way of justifying each box along the appropriate axis..
 	 */
-	justifyItems: PropTypes.oneOf(['start', 'center', 'end', 'stretch']),
+	justifyItems: PropTypes.oneOf(['', 'start', 'center', 'end', 'stretch']),
 };
 
 Grid.defaultProps = {

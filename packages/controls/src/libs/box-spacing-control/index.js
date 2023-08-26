@@ -469,7 +469,7 @@ BoxSpacingControl.propTypes = {
 	/**
 	 * ID for retrieving value from control context
 	 */
-	id: PropTypes.string.isRequired,
+	id: PropTypes.string,
 	/**
 	 * Control Label
 	 *

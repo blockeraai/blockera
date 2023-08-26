@@ -581,7 +581,7 @@ BoxPositionControl.propTypes = {
 	/**
 	 * ID for retrieving value from control context
 	 */
-	id: PropTypes.string.isRequired,
+	id: PropTypes.string,
 	/**
 	 * Control Label
 	 *
@@ -599,12 +599,12 @@ BoxPositionControl.propTypes = {
 			'sticky',
 			'fixed',
 		]),
-		position: {
+		position: PropTypes.shape({
 			top: PropTypes.string,
 			right: PropTypes.string,
 			bottom: PropTypes.string,
 			left: PropTypes.string,
-		},
+		}),
 	}),
 	/**
 	 * Function that will be fired while the control value state changes.
@@ -633,7 +633,7 @@ BoxPositionControl.propTypes = {
 	 *
 	 * @default ``
 	 */
-	openSide: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
+	openSide: PropTypes.oneOf(['top', 'right', 'bottom', 'left', '']),
 };
 
 BoxPositionControl.defaultProps = {

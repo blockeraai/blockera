@@ -226,21 +226,6 @@ IconControl.propTypes = {
 		]),
 	}),
 	/**
-	 * The current icon.
-	 */
-	value: PropTypes.oneOfType([
-		PropTypes.string,
-		PropTypes.shape({
-			icon: PropTypes.string,
-			library: PropTypes.string,
-			uploadSVG: PropTypes.oneOf([
-				PropTypes.string,
-				PropTypes.object,
-				PropTypes.element,
-			]),
-		}),
-	]),
-	/**
 	 * Function that will be fired while the control value state changes.
 	 */
 	onChange: PropTypes.func,

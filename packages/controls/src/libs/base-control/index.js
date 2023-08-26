@@ -68,7 +68,7 @@ BaseControl.propTypes = {
 	/**
 	 * The child control.
 	 */
-	children: PropTypes.element,
+	children: PropTypes.node,
 	/**
 	 * The classname for number of columns in wrapper(BaseControl).
 	 */
