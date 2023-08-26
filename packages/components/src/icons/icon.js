@@ -12,9 +12,9 @@ import { FontAwesomeIconFar } from './library-far/index';
 import { PublisherIcon } from './library-publisher/index';
 import { isValidIconLibrary, getIconLibraryIcons } from './icon-library';
 
-export function Icon({ library, uploadedSVG, ...props }) {
-	if (uploadedSVG) {
-		return <img alt={uploadedSVG.title} src={uploadedSVG.url} />;
+export function Icon({ library, uploadSVG, ...props }) {
+	if (uploadSVG) {
+		return <img alt={uploadSVG.title} src={uploadSVG.url} />;
 	}
 
 	if (!props.icon || !library) {
