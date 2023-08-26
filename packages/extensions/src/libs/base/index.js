@@ -54,13 +54,13 @@ export function BaseExtension({
 					>
 						{isFunction(ExtensionTypeUI) && (
 							<ExtensionTypeUI
-								{...{
-									...props,
+								{...props}
+								block={{
 									clientId,
 									storeName,
 									blockName,
-									config,
 								}}
+								config={config}
 							/>
 						)}
 					</PanelBodyControl>

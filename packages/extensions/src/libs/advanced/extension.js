@@ -20,7 +20,7 @@ import { BlockEditContext } from '../../hooks';
 import { generateExtensionId } from '../utils';
 import { isActiveField } from '../../api/utils';
 
-export function AdvancedExtension({ children, config, ...props }) {
+export function AdvancedExtension({ children, block, config, ...props }) {
 	const {
 		advancedConfig: { publisherAttributes },
 	} = config;
@@ -32,7 +32,7 @@ export function AdvancedExtension({ children, config, ...props }) {
 			{isActiveField(publisherAttributes) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props, 'attributes'),
+						name: generateExtensionId(block, 'attributes'),
 						value: attributes.publisherAttributes,
 					}}
 					storeName={'publisher-core/controls/repeater'}

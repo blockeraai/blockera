@@ -50,7 +50,7 @@ import { default as AlignContentSpaceAroundIcon } from './icons/align-content-sp
 import { default as AlignContentSpaceBetweenIcon } from './icons/align-content-space-between';
 import { default as AlignContentStretchIcon } from './icons/align-content-stretch';
 
-export function LayoutExtension({ config, ...props }) {
+export function LayoutExtension({ block, config, ...props }) {
 	const {
 		layoutConfig: {
 			publisherDisplay,
@@ -72,7 +72,7 @@ export function LayoutExtension({ config, ...props }) {
 			{isActiveField(publisherDisplay) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props, 'display'),
+						name: generateExtensionId(block, 'display'),
 						value: attributes.publisherDisplay,
 					}}
 				>
@@ -128,7 +128,7 @@ export function LayoutExtension({ config, ...props }) {
 					{isActiveField(publisherFlexDirection) && (
 						<ControlContextProvider
 							value={{
-								name: generateExtensionId(props, 'direction'),
+								name: generateExtensionId(block, 'direction'),
 								value: attributes.publisherFlexDirection,
 							}}
 						>
@@ -191,7 +191,7 @@ export function LayoutExtension({ config, ...props }) {
 					{isActiveField(publisherAlignItems) && (
 						<ControlContextProvider
 							value={{
-								name: generateExtensionId(props, 'align-items'),
+								name: generateExtensionId(block, 'align-items'),
 								value: attributes.publisherAlignItems,
 							}}
 						>

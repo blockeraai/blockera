@@ -30,7 +30,7 @@ import { default as AlignFlexEndIcon } from './icons/align-flex-end';
 import { default as AlignStretchIcon } from './icons/align-stretch';
 import { default as AlignBaselineIcon } from './icons/align-baseline';
 
-export function FlexChildExtension({ config, ...props }) {
+export function FlexChildExtension({ block, config, ...props }) {
 	const {
 		flexChildConfig: {
 			publisherFlexChildSizing,
@@ -48,7 +48,7 @@ export function FlexChildExtension({ config, ...props }) {
 			{isActiveField(publisherFlexChildSizing) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props, 'sizing'),
+						name: generateExtensionId(block, 'sizing'),
 						value: attributes.publisherFlexChildSizing,
 					}}
 				>
@@ -99,7 +99,7 @@ export function FlexChildExtension({ config, ...props }) {
 								<ControlContextProvider
 									value={{
 										name: generateExtensionId(
-											props,
+											block,
 											'grow'
 										),
 										value: attributes.publisherFlexChildGrow,
@@ -126,7 +126,7 @@ export function FlexChildExtension({ config, ...props }) {
 								<ControlContextProvider
 									value={{
 										name: generateExtensionId(
-											props,
+											block,
 											'shrink'
 										),
 										value: attributes.publisherFlexChildShrink,
@@ -153,7 +153,7 @@ export function FlexChildExtension({ config, ...props }) {
 								<ControlContextProvider
 									value={{
 										name: generateExtensionId(
-											props,
+											block,
 											'basis'
 										),
 										value: attributes.publisherFlexChildBasis,
@@ -188,7 +188,7 @@ export function FlexChildExtension({ config, ...props }) {
 			{isActiveField(publisherFlexChildAlign) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props, 'align'),
+						name: generateExtensionId(block, 'align'),
 						value: attributes.publisherFlexChildAlign,
 					}}
 				>
@@ -243,7 +243,7 @@ export function FlexChildExtension({ config, ...props }) {
 			{isActiveField(publisherFlexChildOrder) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props, 'order'),
+						name: generateExtensionId(block, 'order'),
 						value: attributes.publisherFlexChildOrder,
 					}}
 				>
@@ -284,7 +284,7 @@ export function FlexChildExtension({ config, ...props }) {
 								<ControlContextProvider
 									value={{
 										name: generateExtensionId(
-											props,
+											block,
 											'order-custom'
 										),
 										value: attributes.publisherFlexChildOrderCustom,

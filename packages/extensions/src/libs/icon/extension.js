@@ -26,7 +26,7 @@ import { isActiveField } from '../../api/utils';
 import { default as PositionLeftIcon } from './icons/position-left';
 import { default as PositionRightIcon } from './icons/position-right';
 
-export function IconExtension({ children, config, ...props }) {
+export function IconExtension({ block, children, config, ...props }) {
 	const {
 		iconConfig: {
 			publisherIcon,
@@ -46,7 +46,7 @@ export function IconExtension({ children, config, ...props }) {
 			{isActiveField(publisherIcon) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props, 'icon'),
+						name: generateExtensionId(block, 'icon'),
 						value: attributes.publisherIcon,
 					}}
 				>
@@ -77,7 +77,7 @@ export function IconExtension({ children, config, ...props }) {
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(
-										props,
+										block,
 										'icon-position'
 									),
 									value: attributes.publisherIconPosition,
@@ -124,7 +124,7 @@ export function IconExtension({ children, config, ...props }) {
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(
-										props,
+										block,
 										'icon-gap'
 									),
 									value: attributes.publisherIconGap,
@@ -155,7 +155,7 @@ export function IconExtension({ children, config, ...props }) {
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(
-										props,
+										block,
 										'icon-size'
 									),
 									value: attributes.publisherIconSize,
@@ -186,7 +186,7 @@ export function IconExtension({ children, config, ...props }) {
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(
-										props,
+										block,
 										'icon-color'
 									),
 									value: attributes.publisherIconColor,
@@ -215,7 +215,7 @@ export function IconExtension({ children, config, ...props }) {
 					{isActiveField(publisherIconLink) && (
 						<ControlContextProvider
 							value={{
-								name: generateExtensionId(props, 'icon-link'),
+								name: generateExtensionId(block, 'icon-link'),
 								value: attributes.publisherIconLink,
 							}}
 						>
@@ -226,7 +226,7 @@ export function IconExtension({ children, config, ...props }) {
 							>
 								<LinkControl
 									{...props}
-									id={generateExtensionId(props, 'icon-link')}
+									id={generateExtensionId(block, 'icon-link')}
 									//
 									onChange={(newValue) => {
 										setAttributes({

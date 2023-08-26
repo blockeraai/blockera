@@ -27,7 +27,7 @@ import { isActiveField } from '../../api/utils';
 import ClipPaddingIcon from './icons/clip-padding';
 import ClipContentIcon from './icons/clip-content';
 
-export function BackgroundExtension({ children, config, ...props }) {
+export function BackgroundExtension({ children, block, config, ...props }) {
 	const {
 		backgroundConfig: {
 			publisherBackground,
@@ -43,7 +43,7 @@ export function BackgroundExtension({ children, config, ...props }) {
 			{isActiveField(publisherBackground) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props, 'background'),
+						name: generateExtensionId(block, 'background'),
 						//
 						value: attributes.publisherBackground,
 					}}
@@ -67,7 +67,7 @@ export function BackgroundExtension({ children, config, ...props }) {
 			{isActiveField(publisherBackgroundColor) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props, 'background-color'),
+						name: generateExtensionId(block, 'background-color'),
 						value: attributes.publisherBackgroundColor,
 					}}
 				>
@@ -93,7 +93,7 @@ export function BackgroundExtension({ children, config, ...props }) {
 			{isActiveField(publisherBackgroundClip) && (
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(props, 'background-clip'),
+						name: generateExtensionId(block, 'background-clip'),
 						value: attributes.publisherBackgroundClip,
 					}}
 				>
