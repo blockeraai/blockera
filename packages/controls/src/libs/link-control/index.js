@@ -19,7 +19,6 @@ import { Button } from '@publisher/components';
  */
 import { STORE_NAME } from '../repeater-control/store';
 import { default as AdvancedIcon } from './icons/advanced';
-import { generateExtensionId } from '@publisher/extensions';
 import {
 	BaseControl,
 	InputControl,
@@ -36,9 +35,14 @@ export default function LinkControl({
 	defaultValue,
 	advancedOpen,
 }) {
-	const { value, setValue } = useControlContext({
+	const {
+		controlInfo: { name: controlId },
+		value,
+		setValue,
+	} = useControlContext({
 		onChange,
 		defaultValue,
+		mergeInitialAndDefault: true,
 	});
 
 	const [isAdvancedMode, setIsAdvancedMode] = useState(
@@ -118,10 +122,7 @@ export default function LinkControl({
 
 					<ControlContextProvider
 						value={{
-							name: generateExtensionId(
-								attributesId,
-								'attributes'
-							),
+							name: `${controlId}/${attributesId}`,
 							value: value.attributes,
 						}}
 						storeName={STORE_NAME}
