@@ -1,9 +1,9 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
-import { useState, useReducer } from '@wordpress/element';
 import PropTypes from 'prop-types';
+import { __ } from '@wordpress/i18n';
+import { memo, useState, useReducer } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -13,19 +13,20 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { Button, Icon, MediaUploader } from '@publisher/components';
-import { isEmpty, useLateEffect } from '@publisher/utils';
+import { isEmpty, isUndefined, useLateEffect } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
-import { IconContextProvider } from './context';
 import { iconReducer } from './store/reducer';
+import { IconContextProvider } from './context';
+import { useControlContext } from '../../context';
+import { hasSameProps } from '@publisher/extensions';
+import { default as DeleteIcon } from './icons/delete';
 import { default as Suggestions } from './components/suggestions';
 import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
-import { default as DeleteIcon } from './icons/delete';
-import { useControlContext } from '../../context';
 
-export default function IconControl({
+function IconControl({
 	suggestionsQuery,
 	//
 	labelChoose,
@@ -75,7 +76,7 @@ export default function IconControl({
 	}
 
 	function hasIcon() {
-		if (isEmpty(currentIcon)) {
+		if (isUndefined(currentIcon) || isEmpty(currentIcon)) {
 			return false;
 		}
 
@@ -252,3 +253,5 @@ IconControl.defaultProps = {
 	labelIconLibrary: __('Icon Library', 'publisher-blocks'),
 	labelUploadSvg: __('Upload SVG', 'publisher-blocks'),
 };
+
+export default memo(IconControl, hasSameProps);

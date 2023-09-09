@@ -2,7 +2,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
+import { useState, memo } from '@wordpress/element';
 import PropTypes from 'prop-types';
 
 /**
@@ -41,8 +41,9 @@ import { default as AbsoluteLeftIcon } from './icons/absolute-left';
 import { default as AbsoluteFullIcon } from './icons/absolute-full';
 import { default as AbsoluteCenterIcon } from './icons/absolute-center';
 import { useControlContext } from '../../context';
+import { hasSameProps } from '@publisher/extensions';
 
-export default function BoxPositionControl({
+function BoxPositionControl({
 	openSide,
 	//
 	id,
@@ -649,3 +650,5 @@ BoxPositionControl.defaultProps = {
 	openSide: '',
 	label: __('Position', 'publisher-core'),
 };
+
+export default memo(BoxPositionControl, hasSameProps);
