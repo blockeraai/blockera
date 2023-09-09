@@ -2,7 +2,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useContext } from '@wordpress/element';
+import { memo } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -17,69 +17,77 @@ import {
 /**
  * Internal dependencies
  */
-import { generateExtensionId } from '../utils';
-import { BlockEditContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
+import { generateExtensionId, hasSameProps } from '../utils';
 
-export function PositionExtension({ children, config, ...props }) {
-	const {
-		positionConfig: { publisherPosition, publisherZIndex },
-	} = config;
+export const PositionExtension = memo(
+	({
+		block,
+		config,
+		children,
+		zIndexValue,
+		positionValue,
+		handleOnChangeAttributes,
+		...props
+	}) => {
+		const {
+			positionConfig: { publisherPosition, publisherZIndex },
+		} = config;
 
-	const { attributes, setAttributes } = useContext(BlockEditContext);
-
-	return (
-		<>
-			{isActiveField(publisherPosition) && (
-				<ControlContextProvider
-					value={{
-						name: generateExtensionId(props, 'position'),
-						value: attributes.publisherPosition,
-					}}
-				>
-					<BaseControl controlName="box-position">
-						<BoxPositionControl
-							{...{
-								...props,
-								//
-								onChange: (newValue) =>
-									setAttributes({
-										...attributes,
-										publisherPosition: newValue,
-									}),
-							}}
-						/>
-					</BaseControl>
-				</ControlContextProvider>
-			)}
-
-			{isActiveField(publisherZIndex) &&
-				attributes?.publisherPosition?.type !== undefined &&
-				attributes?.publisherPosition?.type !== 'static' && (
+		return (
+			<>
+				{isActiveField(publisherPosition) && (
 					<ControlContextProvider
 						value={{
-							name: generateExtensionId(props, 'z-index'),
-							value: attributes.publisherZIndex,
+							name: generateExtensionId(block, 'position'),
+							value: positionValue,
 						}}
 					>
-						<BaseControl
-							controlName="input"
-							label={__('z-index', 'publisher-core')}
-						>
-							<InputControl
+						<BaseControl controlName="box-position">
+							<BoxPositionControl
 								{...{
 									...props,
-									defaultValue: '',
+									//
 									onChange: (newValue) =>
-										setAttributes({
-											...attributes,
-											publisherZIndex: newValue,
-										}),
+										handleOnChangeAttributes(
+											'publisherPosition',
+											newValue
+										),
 								}}
 							/>
 						</BaseControl>
 					</ControlContextProvider>
 				)}
-		</>
-	);
-}
+
+				{isActiveField(publisherZIndex) &&
+					positionValue?.type !== undefined &&
+					positionValue?.type !== 'static' && (
+						<ControlContextProvider
+							value={{
+								name: generateExtensionId(block, 'z-index'),
+								value: zIndexValue,
+							}}
+						>
+							<BaseControl
+								controlName="input"
+								label={__('z-index', 'publisher-core')}
+							>
+								<InputControl
+									{...{
+										...props,
+										defaultValue: '',
+										onChange: (newValue) =>
+											handleOnChangeAttributes(
+												'publisherZIndex',
+												newValue
+											),
+									}}
+								/>
+							</BaseControl>
+						</ControlContextProvider>
+					)}
+			</>
+		);
+	},
+	hasSameProps
+);

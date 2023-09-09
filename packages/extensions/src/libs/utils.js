@@ -20,3 +20,14 @@ export function arrayEquals(a: Array, b: Array): boolean {
 export function generateExtensionId({ blockName, clientId }, id) {
 	return `${blockName}/${id}/${clientId}`;
 }
+
+/**
+ * Retrieve result of equal props in any component with object structure!
+ *
+ * @param {Object} prevProps the older component props
+ * @param {Object} nextProps the newest component props
+ * @return {boolean} true on success, false on otherwise!
+ */
+export function hasSameProps(prevProps, nextProps) {
+	return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+}

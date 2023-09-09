@@ -2,7 +2,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useContext } from '@wordpress/element';
+import { memo } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -16,42 +16,54 @@ import {
 /**
  * Internal dependencies
  */
-import { BlockEditContext } from '../../hooks';
-import { generateExtensionId } from '../utils';
 import { isActiveField } from '../../api/utils';
+import { hasSameProps, generateExtensionId } from '../utils';
 
-export function AdvancedExtension({ children, block, config, ...props }) {
-	const {
-		advancedConfig: { publisherAttributes },
-	} = config;
+export const AdvancedExtension = memo(
+	({
+		block,
+		config,
+		children,
+		attributes,
+		handleOnChangeAttributes,
+		...props
+	}) => {
+		const {
+			advancedConfig: { publisherAttributes: publisherAttributesConfig },
+		} = config;
 
-	const { attributes, setAttributes } = useContext(BlockEditContext);
+		return (
+			<>
+				{isActiveField(publisherAttributesConfig) && (
+					<ControlContextProvider
+						value={{
+							name: generateExtensionId(block, 'attributes'),
+							value: attributes,
+						}}
+						storeName={'publisher-core/controls/repeater'}
+					>
+						<BaseControl
+							controlName="attributes"
+							columns="columns-1"
+						>
+							<AttributesControl
+								label={__('HTML Attributes', 'publisher-core')}
+								onChange={(newValue) =>
+									handleOnChangeAttributes(
+										'publisherAttributes',
+										newValue
+									)
+								}
+								{...props}
+								attributeElement={'a'}
+							/>
+						</BaseControl>
+					</ControlContextProvider>
+				)}
 
-	return (
-		<>
-			{isActiveField(publisherAttributes) && (
-				<ControlContextProvider
-					value={{
-						name: generateExtensionId(block, 'attributes'),
-						value: attributes.publisherAttributes,
-					}}
-					storeName={'publisher-core/controls/repeater'}
-				>
-					<BaseControl controlName="attributes" columns="columns-1">
-						<AttributesControl
-							label={__('HTML Attributes', 'publisher-core')}
-							onChange={(newValue) => {
-								setAttributes({
-									...attributes,
-									attributes: newValue,
-								});
-							}}
-							{...props}
-							attributeElement={'a'}
-						/>
-					</BaseControl>
-				</ControlContextProvider>
-			)}
-		</>
-	);
-}
+				{children}
+			</>
+		);
+	},
+	hasSameProps
+);
