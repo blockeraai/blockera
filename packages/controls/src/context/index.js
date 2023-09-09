@@ -1,13 +1,8 @@
 /**
  * External dependencies
  */
-import { createContext, useContext } from '@wordpress/element';
+import { createContext } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
-
-/**
- * Publisher dependencies
- */
-import { BlockEditContext } from '@publisher/extensions';
 
 /**
  * Internal dependencies
@@ -47,8 +42,6 @@ export const ControlContextProvider = ({
 	);
 	//control dispatch for available actions
 	const dispatch = useDispatch(storeName);
-	// get block clientId
-	const { clientId } = useContext(BlockEditContext);
 
 	//You can to enable||disable current control with status column!
 	if (!status) {
@@ -58,7 +51,7 @@ export const ControlContextProvider = ({
 	return (
 		<ControlContext.Provider
 			{...props}
-			value={{ controlInfo, value, dispatch, key: clientId }}
+			value={{ controlInfo, value, dispatch }}
 		>
 			{children}
 		</ControlContext.Provider>
