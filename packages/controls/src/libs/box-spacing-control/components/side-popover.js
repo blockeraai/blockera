@@ -26,11 +26,12 @@ export function SidePopover({
 	onChange = (newValue) => {
 		return newValue;
 	},
+	defaultValue = '0px',
 }) {
 	const { setValue } = useControlContext({
 		id,
 		onChange,
-		defaultValue: '0px',
+		defaultValue,
 	});
 
 	function getAllActionButtons() {
@@ -157,7 +158,7 @@ export function SidePopover({
 							min={type === 'margin' ? -100 : 0}
 							max={100}
 							//
-							defaultValue="0px"
+							defaultValue={defaultValue}
 							onChange={setValue}
 						/>
 					</BaseControl>

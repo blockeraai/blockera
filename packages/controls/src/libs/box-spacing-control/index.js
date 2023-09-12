@@ -219,6 +219,7 @@ export default function BoxSpacingControl({
 					/>
 
 					<SidePopover
+						defaultValue={value.margin.top}
 						id={getId(id, 'margin.top')}
 						icon={<MarginTopIcon />}
 						onClose={() => setOpenPopover('')}
@@ -250,6 +251,7 @@ export default function BoxSpacingControl({
 					/>
 
 					<SidePopover
+						defaultValue={value.margin.right}
 						id={getId(id, 'margin.right')}
 						offset={255}
 						icon={<MarginRightIcon />}
@@ -282,6 +284,7 @@ export default function BoxSpacingControl({
 					/>
 
 					<SidePopover
+						defaultValue={value.margin.bottom}
 						id={getId(id, 'margin.bottom')}
 						icon={<MarginBottomIcon />}
 						onClose={() => setOpenPopover('')}
@@ -313,6 +316,7 @@ export default function BoxSpacingControl({
 					/>
 
 					<SidePopover
+						defaultValue={value.margin.left}
 						id={getId(id, 'margin.left')}
 						icon={<MarginLeftIcon />}
 						onClose={() => setOpenPopover('')}
@@ -344,6 +348,7 @@ export default function BoxSpacingControl({
 					/>
 
 					<SidePopover
+						defaultValue={value.padding.top}
 						id={getId(id, 'padding.top')}
 						type="padding"
 						icon={<PaddingTopIcon />}
@@ -376,6 +381,7 @@ export default function BoxSpacingControl({
 					/>
 
 					<SidePopover
+						defaultValue={value.padding.right}
 						id={getId(id, 'padding.right')}
 						offset={215}
 						type="padding"
@@ -410,6 +416,7 @@ export default function BoxSpacingControl({
 					/>
 
 					<SidePopover
+						defaultValue={value.padding.bottom}
 						id={getId(id, 'padding.bottom')}
 						type="padding"
 						icon={<PaddingBottomIcon />}
@@ -442,6 +449,7 @@ export default function BoxSpacingControl({
 					/>
 
 					<SidePopover
+						defaultValue={value.padding.left}
 						id={getId(id, 'padding.left')}
 						offset={78}
 						type="padding"
@@ -484,13 +492,13 @@ BoxSpacingControl.propTypes = {
 			top: PropTypes.string,
 			right: PropTypes.string,
 			bottom: PropTypes.string,
-			lefty: PropTypes.string,
+			left: PropTypes.string,
 		}),
 		padding: PropTypes.shape({
 			top: PropTypes.string,
 			right: PropTypes.string,
 			bottom: PropTypes.string,
-			lefty: PropTypes.string,
+			left: PropTypes.string,
 		}),
 	}),
 	/**
