@@ -1,9 +1,9 @@
 /**
  * Internal dependencies
  */
-import CssGenerators from '@publisher/style-engine';
-import { prepare } from '@publisher/data-extractor';
+import CssGenerators from './css-generator';
 import { isString } from '@publisher/utils';
+import { prepare } from '@publisher/data-extractor';
 
 /**
  * Has object all passed properties?
@@ -114,34 +114,12 @@ export const createCssRule = (style: Object): string => {
 		return '';
 	}
 
-	const { properties = [], selector = '', blockProps = {} } = style;
+	const { properties, options, selector = '', blockProps = {} } = style;
 
-	let styleBody = [];
-	const keys = Object.keys(properties);
-	const lastKeyIndex = keys.length - 1;
-
-	for (const property in properties) {
-		if (!Object.hasOwnProperty.call(properties, property)) {
-			continue;
-		}
-
-		const value = properties[property];
-
-		if (!isString(value)) {
-			console.warn(
-				`CSS property value must be string given ${typeof value}, please double check properties.`
-			);
-			continue;
-		}
-
-		styleBody.push(
-			`${property}: ${value}${-1 === value.indexOf(';') ? ';\n' : '\n'}${
-				lastKeyIndex === keys.indexOf(property) ? '\n' : ''
-			}`
-		);
-	}
-
-	styleBody = styleBody.join('\n');
+	let styleBody = getProperties({
+		options,
+		properties,
+	}).join('\n');
 
 	if (!blockProps?.attributes) {
 		return `${selector}{${styleBody}}`;
@@ -160,6 +138,51 @@ export const createCssRule = (style: Object): string => {
 	return `${selector}{
 ${styleBody.trim()}
 }`;
+};
+
+/**
+ * Retrieve properties as array with all active options.
+ *
+ * @param {Object} properties css properties with value
+ * @param {Object} options css generator options
+ * @return {string[]} the array of strings include css props
+ */
+export const getProperties = ({ properties, options }) => {
+	const _properties = {};
+	const keys = Object.keys(properties);
+	const lastKeyIndex = keys.length - 1;
+
+	for (const property in properties) {
+		if (!Object.hasOwnProperty.call(properties, property)) {
+			continue;
+		}
+
+		const value = properties[property];
+
+		if (!isString(value)) {
+			console.warn(
+				`CSS property value must be string given ${typeof value}, please double check properties.`
+			);
+			continue;
+		}
+
+		let tempValue = '';
+
+		if (-1 === value.indexOf(';')) {
+			tempValue = `${property}: ${value}${
+				options.important ? ' !important' : ''
+			};\n`;
+		} else if (options.important) {
+			tempValue = value.replace(';', ' !important;\n');
+		} else {
+			tempValue = `${property}: ${value}`;
+		}
+
+		tempValue += lastKeyIndex === keys.indexOf(property) ? '\n' : '';
+		_properties[property] = tempValue;
+	}
+
+	return Object.values(_properties);
 };
 
 /**
