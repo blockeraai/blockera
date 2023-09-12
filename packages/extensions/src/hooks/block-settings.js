@@ -73,6 +73,10 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 			...settings.supports,
 			...additional.supports,
 		},
+		selectors: {
+			...(settings.selectors || {}),
+			...(additional.selectors || {}),
+		},
 		edit(blockProps) {
 			if (isFunction(additional?.sideEffect)) {
 				// eslint-disable-next-line react-hooks/rules-of-hooks
