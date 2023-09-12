@@ -67,6 +67,7 @@ import {
 	attributes as advancedAttributes,
 	supports as advancedSupports,
 } from '../advanced';
+import { update } from '@publisher/data-extractor';
 
 export const attributes = {
 	...typographyAttributes,
@@ -101,7 +102,17 @@ export function SharedBlockExtension({
 	setAttributes,
 	...props
 }) {
-	const handleOnChangeAttributes = (attributeId, attributeValue) => {
+	const handleOnChangeAttributes = (attributeId, attributeValue, query) => {
+		if (query) {
+			setAttributes({
+				...attributes,
+				...update(attributes, query, attributeValue),
+				[attributeId]: attributeValue,
+			});
+
+			return;
+		}
+
 		setAttributes({
 			...attributes,
 			[attributeId]: attributeValue,
@@ -131,7 +142,8 @@ export function SharedBlockExtension({
 				{...props}
 				initialOpen={true}
 				extensionId={'Spacing'}
-				spacingValue={attributes.spacing}
+				editorStyle={attributes.style}
+				spacingValue={attributes.publisherSpacing}
 				title={__('Spacing', 'publisher-core')}
 				handleOnChangeAttributes={handleOnChangeAttributes}
 				icon=<SpacingExtensionIcon />
@@ -149,7 +161,14 @@ export function SharedBlockExtension({
 			/>
 
 			<BaseExtension
-				{...props}
+				{...{
+					...props,
+					...include(attributes, [
+						'publisherWidth',
+						'publisherHeight',
+						'publisherOverflow',
+					]),
+				}}
 				initialOpen={true}
 				extensionId={'Size'}
 				title={__('Size', 'publisher-core')}
