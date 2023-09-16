@@ -1,0 +1,79 @@
+{
+	"icon": [
+		"publisherIcon",
+		"publisherIconGap",
+		"publisherIconSize",
+		"publisherIconLink",
+		"publisherIconColor",
+		"publisherIconPosition"
+	],
+	"size": ["publisherWidth", "publisherHeight", "publisherOverflow"],
+	"flexChild": [
+		"publisherFlexChildGrow",
+		"publisherFlexDirection",
+		"publisherFlexChildAlign",
+		"publisherFlexChildBasis",
+		"publisherFlexChildOrder",
+		"publisherFlexChildSizing",
+		"publisherFlexChildShrink",
+		"publisherFlexChildOrderCustom"
+	],
+	"layout": [
+		"publisherGapRows",
+		"publisherDisplay",
+		"publisherFlexWrap",
+		"publisherGapColumns",
+		"publisherAlignItems",
+		"publisherAlignContent",
+		"publisherFlexDirection",
+		"publisherJustifyContent"
+	],
+	"typography": [
+		"publisherFontSize",
+		"publisherFontStyle",
+		"publisherDirection",
+		"publisherFontColor",
+		"publisherWordBreak",
+		"publisherTextIndent",
+		"publisherTextIndent",
+		"publisherTextShadow",
+		"publisherLineHeight",
+		"publisherWordSpacing",
+		"publisherTextColumns",
+		"publisherTextTransform",
+		"publisherLetterSpacing",
+		"publisherTextColumnsGap",
+		"publisherTextDecoration",
+		"publisherTextOrientation",
+		"publisherTextStrokeWidth",
+		"publisherTextStrokeColor",
+		"publisherTextColumnsDividerWidth",
+		"publisherTextColumnsDividerStyle",
+		"publisherTextColumnsDividerColor"
+	],
+	"background": [
+		"publisherBackground",
+		"publisherBackgroundColor",
+		"publisherBackgroundClip"
+	],
+	"borderAndShadow": [
+		"publisherBorder",
+		"publisherOutline",
+		"publisherBoxShadow",
+		"publisherBorderRadius"
+	],
+	"effects": [
+		"publisherFilter",
+		"publisherCursor",
+		"publisherOpacity",
+		"publisherTransform",
+		"publisherBlendMode",
+		"publisherTransition",
+		"publisherBackdropFilter",
+		"publisherBackfaceVisibility",
+		"publisherTransformSelfOrigin",
+		"publisherTransformChildOrigin",
+		"publisherTransformSelfPerspective",
+		"publisherTransformChildPerspective"
+	]
+}

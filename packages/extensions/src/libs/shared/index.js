@@ -1,7 +1,9 @@
+// @flow
 /**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
+import type { Node, MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -67,7 +69,8 @@ import {
 	attributes as advancedAttributes,
 	supports as advancedSupports,
 } from '../advanced';
-import { update } from '@publisher/data-extractor';
+import extensions from './extensions.json';
+import { useAttributes } from './use-attributes';
 
 export const attributes = {
 	...typographyAttributes,
@@ -96,215 +99,164 @@ export const supports = {
 	...advancedSupports,
 };
 
+type Props = {
+	children?: Node,
+	attributes: Object,
+	setAttributes: (attributes: Object) => void,
+};
+
 export function SharedBlockExtension({
 	children,
 	attributes,
 	setAttributes,
 	...props
-}) {
-	const handleOnChangeAttributes = (attributeId, attributeValue, query) => {
-		if (query) {
-			setAttributes({
-				...attributes,
-				...update(attributes, query, attributeValue),
-				[attributeId]: attributeValue,
-			});
+}: Props): MixedElement {
+	const { handleOnChangeAttributes } = useAttributes(
+		attributes,
+		setAttributes
+	);
+	const {
+		icon,
+		size,
+		layout,
+		effects,
+		flexChild,
+		typography,
+		background,
+		borderAndShadow,
+	} = extensions;
 
-			return;
-		}
-
-		setAttributes({
-			...attributes,
-			[attributeId]: attributeValue,
-		});
-	};
+	props = { ...props, attributes };
 
 	return (
 		<>
 			<BaseExtension
 				{...props}
-				values={include(attributes, [
-					'publisherIcon',
-					'publisherIconGap',
-					'publisherIconSize',
-					'publisherIconLink',
-					'publisherIconColor',
-					'publisherIconPosition',
-				])}
-				initialOpen={true}
+				values={include(attributes, icon, 'publisher')}
+				initialOpen={false}
 				extensionId={'Icon'}
 				title={__('Icon', 'publisher-core')}
 				handleOnChangeAttributes={handleOnChangeAttributes}
-				icon=<IconExtensionIcon />
+				icon={<IconExtensionIcon />}
 			/>
 
 			<BaseExtension
 				{...props}
-				initialOpen={true}
+				initialOpen={false}
 				extensionId={'Spacing'}
-				editorStyle={attributes.style}
+				defaultValue={attributes.style?.spacing || {}}
 				spacingValue={attributes.publisherSpacing}
 				title={__('Spacing', 'publisher-core')}
 				handleOnChangeAttributes={handleOnChangeAttributes}
-				icon=<SpacingExtensionIcon />
+				icon={<SpacingExtensionIcon />}
 			/>
 
 			<BaseExtension
 				{...props}
-				initialOpen={true}
+				initialOpen={false}
 				extensionId={'Position'}
 				zIndexValue={attributes.publisherZIndex}
 				positionValue={attributes.publisherPosition}
 				title={__('Position', 'publisher-core')}
 				handleOnChangeAttributes={handleOnChangeAttributes}
-				icon=<PositionExtensionIcon />
+				icon={<PositionExtensionIcon />}
 			/>
 
 			<BaseExtension
 				{...{
 					...props,
-					...include(attributes, [
-						'publisherWidth',
-						'publisherHeight',
-						'publisherOverflow',
-					]),
+					...include(attributes, size, 'publisher'),
 				}}
-				initialOpen={true}
+				defaultValue={{
+					width: attributes.width || attributes.publisherWidth,
+					height: attributes.height || attributes.publisherHeight,
+					overflow: attributes.publisherOverflow,
+				}}
+				initialOpen={false}
 				extensionId={'Size'}
 				title={__('Size', 'publisher-core')}
 				handleOnChangeAttributes={handleOnChangeAttributes}
-				icon=<SizeExtensionIcon />
+				icon={<SizeExtensionIcon />}
 			/>
 
 			<BaseExtension
 				{...props}
-				initialOpen={true}
+				initialOpen={false}
 				extensionId={'FlexChild'}
 				title={__('Flex Child', 'publisher-core')}
-				values={include(attributes, [
-					'publisherFlexChildGrow',
-					'publisherFlexDirection',
-					'publisherFlexChildAlign',
-					'publisherFlexChildBasis',
-					'publisherFlexChildOrder',
-					'publisherFlexChildSizing',
-					'publisherFlexChildShrink',
-					'publisherFlexChildOrderCustom',
-				])}
+				values={include(attributes, flexChild, 'publisher')}
 				handleOnChangeAttributes={handleOnChangeAttributes}
-				icon=<FlexChildExtensionIcon />
+				icon={<FlexChildExtensionIcon />}
 			/>
 
 			<BaseExtension
 				{...props}
-				initialOpen={true}
+				initialOpen={false}
 				extensionId={'Layout'}
 				title={__('Layout', 'publisher-core')}
-				values={include(attributes, [
-					'publisherGapRows',
-					'publisherDisplay',
-					'publisherFlexWrap',
-					'publisherGapColumns',
-					'publisherAlignItems',
-					'publisherAlignContent',
-					'publisherFlexDirection',
-					'publisherJustifyContent',
-				])}
+				values={include(attributes, layout, 'publisher')}
+				defaultValue={attributes.layout || {}}
 				handleOnChangeAttributes={handleOnChangeAttributes}
-				icon=<LayoutExtensionIcon />
+				icon={<LayoutExtensionIcon />}
 			/>
 
 			<BaseExtension
 				{...props}
-				initialOpen={true}
+				initialOpen={false}
 				extensionId={'Typography'}
 				title={__('Typography', 'publisher-core')}
-				values={include(attributes, [
-					'publisherFontSize',
-					'publisherFontStyle',
-					'publisherDirection',
-					'publisherFontColor',
-					'publisherWordBreak',
-					'publisherTextIndent',
-					'publisherTextIndent',
-					'publisherTextShadow',
-					'publisherLineHeight',
-					'publisherWordSpacing',
-					'publisherTextColumns',
-					'publisherTextTransform',
-					'publisherLetterSpacing',
-					'publisherTextColumnsGap',
-					'publisherTextDecoration',
-					'publisherTextOrientation',
-					'publisherTextStrokeWidth',
-					'publisherTextStrokeColor',
-					'publisherTextColumnsDividerWidth',
-					'publisherTextColumnsDividerStyle',
-					'publisherTextColumnsDividerColor',
-				])}
+				values={include(attributes, typography)}
+				defaultValue={{
+					fontSize:
+						attributes.fontSize || attributes.publisherFontSize,
+					typography: attributes.style?.typography || {},
+				}}
 				handleOnChangeAttributes={handleOnChangeAttributes}
-				icon=<TypographyExtensionIcon />
+				icon={<TypographyExtensionIcon />}
 			/>
 
 			<BaseExtension
 				{...props}
-				initialOpen={true}
+				initialOpen={false}
 				extensionId={'Background'}
-				values={include(attributes, [
-					'publisherBackground',
-					'publisherBackgroundColor',
-					'publisherBackgroundClip',
-				])}
+				values={include(attributes, background)}
+				defaultValue={attributes.style?.background || {}}
 				handleOnChangeAttributes={handleOnChangeAttributes}
 				title={__('Background', 'publisher-core')}
-				icon=<BackgroundExtensionIcon />
+				icon={<BackgroundExtensionIcon />}
 			/>
 
 			<BaseExtension
 				{...props}
-				initialOpen={true}
+				initialOpen={false}
 				extensionId={'BorderAndShadow'}
-				values={include(attributes, [
-					'publisherBorder',
-					'publisherOutline',
-					'publisherBoxShadow',
-					'publisherBorderRadius',
-				])}
+				values={include(attributes, borderAndShadow, 'publisher')}
 				handleOnChangeAttributes={handleOnChangeAttributes}
+				defaultValue={{
+					borderColor: attributes?.borderColor || '',
+					border: attributes.style?.border || {},
+				}}
 				title={__('Border And Shadow', 'publisher-core')}
-				icon=<BorderAndShadowExtensionIcon />
+				icon={<BorderAndShadowExtensionIcon />}
 			/>
 
 			<BaseExtension
 				{...props}
-				initialOpen={true}
+				initialOpen={false}
 				extensionId={'Effects'}
-				values={include(attributes, [
-					'publisherFilter',
-					'publisherCursor',
-					'publisherOpacity',
-					'publisherTransform',
-					'publisherBlendMode',
-					'publisherTransition',
-					'publisherBackdropFilter',
-					'publisherBackfaceVisibility',
-					'publisherTransformSelfOrigin',
-					'publisherTransformChildOrigin',
-					'publisherTransformSelfPerspective',
-					'publisherTransformChildPerspective',
-				])}
+				values={include(attributes, effects)}
 				handleOnChangeAttributes={handleOnChangeAttributes}
 				title={__('Effects', 'publisher-core')}
-				icon=<EffectsExtensionIcon />
+				icon={<EffectsExtensionIcon />}
 			/>
 
 			<BaseExtension
-				initialOpen={true}
+				initialOpen={false}
 				extensionId={'Advanced'}
 				attributes={attributes.publisherAttributes}
 				handleOnChangeAttributes={handleOnChangeAttributes}
 				title={__('Advanced', 'publisher-core')}
-				icon=<AdvancedExtensionIcon />
+				icon={<AdvancedExtensionIcon />}
 			/>
 
 			{children}
