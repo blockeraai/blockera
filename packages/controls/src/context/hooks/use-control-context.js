@@ -101,7 +101,11 @@ export const useControlContext = (args) => {
 	 * @return {null|*} retrieved standard calculated value for current control!
 	 */
 	function getCalculatedInitValue() {
-		if (isUndefined(savedValue) || isNull(savedValue)) {
+		if (
+			isUndefined(savedValue) ||
+			isNull(savedValue) ||
+			isEmpty(savedValue)
+		) {
 			return defaultValue;
 		}
 
