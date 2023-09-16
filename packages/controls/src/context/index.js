@@ -25,14 +25,14 @@ export const ControlContextProvider = ({
 	storeName = STORE_NAME,
 	...props
 }) => {
+	registerControl({
+		...controlInfo,
+		type: storeName,
+	});
+
 	//Prepare control status and value!
 	const { status, value } = useSelect(
 		(select) => {
-			registerControl({
-				...controlInfo,
-				type: storeName,
-			});
-
 			const { getControl } = select(storeName);
 
 			return getControl(controlInfo.name);
