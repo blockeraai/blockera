@@ -114,7 +114,12 @@ export const createCssRule = (style: Object): string => {
 		return '';
 	}
 
-	const { properties, options, selector = '', blockProps = {} } = style;
+	const {
+		properties,
+		options = { important: false },
+		selector = '',
+		blockProps = {},
+	} = style;
 
 	let styleBody = getProperties({
 		options,
