@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { select } from '@wordpress/data';
+import { select, useSelect } from '@wordpress/data';
 import { useMemo, useEffect } from '@wordpress/element';
 
 /**
@@ -78,6 +78,12 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 			...(additional.selectors || {}),
 		},
 		edit(blockProps) {
+			// eslint-disable-next-line react-hooks/rules-of-hooks
+			const { supports } = useSelect((select) => {
+				const { getBlockType } = select('core/blocks');
+
+				return getBlockType(blockProps.name);
+			});
 			if (isFunction(additional?.sideEffect)) {
 				// eslint-disable-next-line react-hooks/rules-of-hooks
 				useEffect(
@@ -111,6 +117,7 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 					<>
 						<BlockEditContextProvider {...props}>
 							<BlockEditComponent
+								supports={supports}
 								blockName={blockProps.name}
 								attributes={props.attributes}
 								clientId={blockProps.clientId}
@@ -131,8 +138,11 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 				migrate(attributes) {
 					return additional.migrate(attributes);
 				},
-				save(props) {
-					return settings.save(props);
+				edit(blockProps) {
+					return settings.edit(blockProps);
+				},
+				save(blockProps) {
+					return settings.save(blockProps);
 				},
 			},
 			...(settings?.deprecated || []),
