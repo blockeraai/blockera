@@ -1,3 +1,9 @@
+// @flow
+/**
+ * Internal dependencies
+ */
+import type { BlockProps } from './types';
+
 /**
  * Retrieve reply to question "is array equals?".
  *
@@ -5,8 +11,8 @@
  * @param {Array<any>} b second array
  * @return {boolean} true on success, false when otherwise!
  */
-export function arrayEquals(a: Array, b: Array): boolean {
-	return JSON.stringify(a) === JSON.stringify(b);
+export function arrayEquals(a: Array<any>, b: Array<any>): boolean {
+	return hasSameProps(a, b);
 }
 
 /**
@@ -17,7 +23,10 @@ export function arrayEquals(a: Array, b: Array): boolean {
  * @param {string} id
  * @return {string} retrieved extension standard identifier.
  */
-export function generateExtensionId({ blockName, clientId }, id) {
+export function generateExtensionId(
+	{ blockName, clientId }: BlockProps,
+	id: string
+): string {
 	return `${blockName}/${id}/${clientId}`;
 }
 
@@ -28,6 +37,11 @@ export function generateExtensionId({ blockName, clientId }, id) {
  * @param {Object} nextProps the newest component props
  * @return {boolean} true on success, false on otherwise!
  */
-export function hasSameProps(prevProps, nextProps) {
+export function hasSameProps(
+	// eslint-disable-next-line no-undef
+	prevProps: $ReadOnly<Object> | Array<any>,
+	// eslint-disable-next-line no-undef
+	nextProps: $ReadOnly<Object> | Array<any>
+): boolean {
 	return JSON.stringify(prevProps) === JSON.stringify(nextProps);
 }
