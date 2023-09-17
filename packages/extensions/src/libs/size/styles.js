@@ -1,19 +1,28 @@
-/**
- * WordPress dependencies
- */
-import { useContext } from '@wordpress/element';
-
+// @flow
 /**
  * Publisher dependencies
  */
+import { isUndefined } from '@publisher/utils';
 import { computedCssRules } from '@publisher/style-engine';
 
 /**
  * Internal dependencies
  */
 import { attributes } from './attributes';
-import { BlockEditContext } from '../../hooks';
+import type { TBlockProps } from '../types';
+import { useCssSelector } from '../../hooks';
 import { isActiveField } from '../../api/utils';
+import type { TSizeCssProps } from './types/size-props';
+
+interface IConfigs {
+	sizeConfig: {
+		cssGenerators: Object,
+		publisherWidth: string,
+		publisherHeight: string,
+		publisherOverflow: string,
+	};
+	blockProps: TBlockProps;
+}
 
 export function SizeStyles({
 	sizeConfig: {
@@ -22,19 +31,26 @@ export function SizeStyles({
 		publisherHeight,
 		publisherOverflow,
 	},
-}) {
-	const { attributes: _attributes, ...blockProps } =
-		useContext(BlockEditContext);
-
+	blockProps,
+}: IConfigs): string {
+	const { attributes: _attributes, blockName } = blockProps;
+	const selector = useCssSelector({
+		blockName,
+		supportId: 'publisherSize',
+	});
 	const generators = [];
-
-	const properties = {};
+	const properties: TSizeCssProps = {};
 
 	if (
 		isActiveField(publisherWidth) &&
 		_attributes.publisherWidth !== attributes.publisherWidth.default
 	) {
 		properties.width = _attributes.publisherWidth;
+	} else if (
+		isUndefined(properties.width) &&
+		!isUndefined(_attributes.width)
+	) {
+		properties.width = _attributes.width;
 	}
 
 	if (
@@ -42,6 +58,11 @@ export function SizeStyles({
 		_attributes.publisherHeight !== attributes.publisherHeight.default
 	) {
 		properties.height = _attributes.publisherHeight;
+	} else if (
+		isUndefined(properties.height) &&
+		!isUndefined(_attributes.height)
+	) {
+		properties.height = _attributes.height;
 	}
 
 	if (
@@ -59,13 +80,16 @@ export function SizeStyles({
 						publisherWidth: [
 							{
 								type: 'static',
-								selector: '.{{BLOCK_ID}}',
+								selector,
 								properties,
+								options: {
+									important: true,
+								},
 							},
 						],
 					},
 				},
-				{ attributes: _attributes, ...blockProps }
+				blockProps
 			)
 		);
 	}
@@ -77,7 +101,7 @@ export function SizeStyles({
 					...(cssGenerators || {}),
 				},
 			},
-			{ attributes: _attributes, ...blockProps }
+			blockProps
 		)
 	);
 

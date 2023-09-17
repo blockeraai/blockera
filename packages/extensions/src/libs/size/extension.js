@@ -1,8 +1,10 @@
+// @flow
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -19,11 +21,12 @@ import {
  */
 import { isActiveField } from '../../api/utils';
 import { generateExtensionId, hasSameProps } from '../utils';
-import { default as OverflowVisibleIcon } from './icons/overflow-visible';
+import type { TSizeProps } from './types/size-props';
 import { default as OverflowHiddenIcon } from './icons/overflow-hidden';
 import { default as OverflowScrollIcon } from './icons/overflow-scroll';
+import { default as OverflowVisibleIcon } from './icons/overflow-visible';
 
-export const SizeExtension = memo(
+export const SizeExtension: MixedElement = memo<TSizeProps>(
 	({
 		block,
 		width,
@@ -31,9 +34,10 @@ export const SizeExtension = memo(
 		config,
 		overflow,
 		children,
+		defaultValue: { width: _width, height: _height, overflow: _overflow },
 		handleOnChangeAttributes,
 		...props
-	}) => {
+	}: TSizeProps): MixedElement => {
 		const {
 			sizeConfig: { publisherWidth, publisherHeight, publisherOverflow },
 		} = config;
@@ -56,11 +60,12 @@ export const SizeExtension = memo(
 									...props,
 									unitType: 'essential',
 									min: 0,
-									defaultValue: '',
+									defaultValue: _width,
 									onChange: (newValue) =>
 										handleOnChangeAttributes(
 											'publisherWidth',
-											newValue
+											newValue,
+											'width'
 										),
 								}}
 							/>
@@ -84,11 +89,12 @@ export const SizeExtension = memo(
 									...props,
 									unitType: 'essential',
 									min: 0,
-									defaultValue: '',
+									defaultValue: _height,
 									onChange: (newValue) =>
 										handleOnChangeAttributes(
 											'publisherHeight',
-											newValue
+											newValue,
+											'height'
 										),
 								}}
 							/>
@@ -126,7 +132,7 @@ export const SizeExtension = memo(
 									},
 								]}
 								//
-								defaultValue="visible"
+								defaultValue={_overflow || 'visible'}
 								onChange={(newValue) =>
 									handleOnChangeAttributes(
 										'publisherOverflow',
