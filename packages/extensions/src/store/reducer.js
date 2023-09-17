@@ -4,9 +4,9 @@
 import { combineReducers } from '@wordpress/data';
 
 /**
- * Internal dependencies
+ * Publisher dependencies
  */
-import { omit } from '../api';
+import { omit } from '@publisher/utils';
 
 /**
  * Key block types by their name.
