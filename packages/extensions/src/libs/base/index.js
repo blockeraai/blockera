@@ -25,8 +25,10 @@ export const BaseExtension = memo(
 		title,
 		icon,
 		children,
-		blockName,
 		clientId,
+		supports,
+		blockName,
+		attributes,
 		extensionId,
 		initialOpen,
 		storeName = STORE_NAME,
@@ -62,6 +64,7 @@ export const BaseExtension = memo(
 										clientId,
 										storeName,
 										blockName,
+										attributes,
 									}}
 									config={config}
 								/>
@@ -77,7 +80,15 @@ export const BaseExtension = memo(
 						/* eslint-disable-next-line react/no-unknown-property */
 						datablockclientid={clientId}
 						dangerouslySetInnerHTML={{
-							__html: getExtensionCssRules(config),
+							__html: getExtensionCssRules({
+								...config,
+								blockProps: {
+									supports,
+									clientId,
+									blockName,
+									attributes,
+								},
+							}),
 						}}
 					/>
 				)}
