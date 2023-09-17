@@ -1,8 +1,4 @@
-/**
- * WordPress dependencies
- */
-import { useContext } from '@wordpress/element';
-
+// @flow
 /**
  * Publisher dependencies
  */
@@ -12,62 +8,82 @@ import { computedCssRules } from '@publisher/style-engine';
  * Internal dependencies
  */
 import { attributes } from './attributes';
-import { BlockEditContext } from '../../hooks';
+import type { TBlockProps } from '../types';
+import { useBlocksStore, useCssSelector } from '../../hooks';
+import { isUndefined } from '@publisher/utils';
 import { isActiveField } from '../../api/utils';
+import type { TSpacingDefaultProps, TCssProps } from './types/spacing-props';
+
+interface IConfigs {
+	spacingConfig: {
+		cssGenerators: Object,
+		publisherSpacing: TSpacingDefaultProps,
+	};
+	blockProps: TBlockProps;
+}
+
+function updateCssProps(spacingProps: TSpacingDefaultProps): TCssProps {
+	const properties: TCssProps = {};
+
+	if (!isUndefined(spacingProps.margin)) {
+		if (spacingProps.margin.top !== '') {
+			properties['margin-top'] = spacingProps.margin.top;
+		}
+
+		if (spacingProps.margin.right !== '') {
+			properties['margin-right'] = spacingProps.margin.right;
+		}
+
+		if (spacingProps.margin.bottom !== '') {
+			properties['margin-bottom'] = spacingProps.margin.bottom;
+		}
+
+		if (spacingProps.margin.left !== '') {
+			properties['margin-left'] = spacingProps.margin.left;
+		}
+	}
+
+	if (!isUndefined(spacingProps.padding)) {
+		if (spacingProps.padding.top !== '') {
+			properties['padding-top'] = spacingProps.padding.top;
+		}
+
+		if (spacingProps.padding.right !== '') {
+			properties['padding-right'] = spacingProps.padding.right;
+		}
+
+		if (spacingProps.padding.bottom !== '') {
+			properties['padding-bottom'] = spacingProps.padding.bottom;
+		}
+
+		if (spacingProps.padding.left !== '') {
+			properties['padding-left'] = spacingProps.padding.left;
+		}
+	}
+
+	return properties;
+}
 
 export function SpacingStyles({
 	spacingConfig: { cssGenerators, publisherSpacing },
-}) {
-	const { attributes: _attributes, ...blockProps } =
-		useContext(BlockEditContext);
-
+	blockProps,
+}: IConfigs): string {
+	const { attributes: _attributes, blockName } = blockProps;
+	const selector = useCssSelector({
+		blockName,
+		supportId: 'publisherSpacing',
+		fallbackSupportId: 'spacing',
+	});
+	const { hasBlockSupport } = useBlocksStore();
 	const generators = [];
-
-	const properties = {};
-
-	if (
+	const fallbackProps = !hasBlockSupport(blockName, 'spacing')
+		? {}
+		: updateCssProps(_attributes?.style?.spacing);
+	const properties: TCssProps =
 		isActiveField(publisherSpacing) &&
 		_attributes.publisherSpacing !== attributes.publisherSpacing.default
-	) {
-		if (_attributes.publisherSpacing.margin.top !== '') {
-			properties['margin-top'] = _attributes.publisherSpacing.margin.top;
-		}
-
-		if (_attributes.publisherSpacing.margin.right !== '') {
-			properties['margin-right'] =
-				_attributes.publisherSpacing.margin.right;
-		}
-
-		if (_attributes.publisherSpacing.margin.bottom !== '') {
-			properties['margin-bottom'] =
-				_attributes.publisherSpacing.margin.bottom;
-		}
-
-		if (_attributes.publisherSpacing.margin.left !== '') {
-			properties['margin-left'] =
-				_attributes.publisherSpacing.margin.left;
-		}
-
-		if (_attributes.publisherSpacing.padding.top !== '') {
-			properties['padding-top'] =
-				_attributes.publisherSpacing.padding.top;
-		}
-
-		if (_attributes.publisherSpacing.padding.right !== '') {
-			properties['padding-right'] =
-				_attributes.publisherSpacing.padding.right;
-		}
-
-		if (_attributes.publisherSpacing.padding.bottom !== '') {
-			properties['padding-bottom'] =
-				_attributes.publisherSpacing.padding.bottom;
-		}
-
-		if (_attributes.publisherSpacing.padding.left !== '') {
-			properties['padding-left'] =
-				_attributes.publisherSpacing.padding.left;
-		}
-	}
+			? updateCssProps(_attributes.publisherSpacing)
+			: fallbackProps;
 
 	if (Object.keys(properties).length > 0) {
 		generators.push(
@@ -77,13 +93,16 @@ export function SpacingStyles({
 						publisherSpacing: [
 							{
 								type: 'static',
-								selector: '.{{BLOCK_ID}}',
+								selector,
 								properties,
+								options: {
+									important: true,
+								},
 							},
 						],
 					},
 				},
-				{ attributes: _attributes, ...blockProps }
+				blockProps
 			)
 		);
 	}
@@ -95,7 +114,7 @@ export function SpacingStyles({
 					...(cssGenerators || {}),
 				},
 			},
-			{ attributes: _attributes, ...blockProps }
+			blockProps
 		)
 	);
 
