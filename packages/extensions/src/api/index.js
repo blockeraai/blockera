@@ -1,7 +1,6 @@
 /**
  * Internal dependencies
  */
-export { omit } from './utils';
 export {
 	registerBlockExtension,
 	unregisterBlockExtension,

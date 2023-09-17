@@ -7,3 +7,11 @@ export function getPascalCase(str) {
 		return first.toUpperCase() + rest.toLowerCase();
 	});
 }
+
+export function getCamelCase(str, removePart) {
+	if (removePart) {
+		str = str.replace(removePart, '');
+	}
+
+	return str.substring(0, 1).toLowerCase() + str.substring(1, str.length);
+}
