@@ -2,7 +2,7 @@
  * External dependencies
  */
 import { select, useSelect } from '@wordpress/data';
-import { useMemo, useEffect } from '@wordpress/element';
+import { useMemo, useEffect, useRef } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -17,6 +17,7 @@ import { STORE_NAME } from '../store/constants';
 import { BlockEditContextProvider } from './context';
 import { useAttributes } from './utils';
 import { isBlockTypeExtension, isEnableExtension } from '../api/utils';
+import { useIconEffect } from './use-icon-effect';
 
 const { getBlockExtension, getBlockExtensionBy } = select(STORE_NAME);
 
@@ -68,6 +69,9 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 		attributes: {
 			...settings.attributes,
 			...additional.attributes,
+			publisherPropsId: {
+				type: 'string',
+			},
 		},
 		supports: {
 			...settings.supports,
@@ -84,14 +88,30 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 
 				return getBlockType(blockProps.name);
 			});
-			if (isFunction(additional?.sideEffect)) {
-				// eslint-disable-next-line react-hooks/rules-of-hooks
-				useEffect(
-					() => additional.sideEffect(blockProps),
-					// eslint-disable-next-line react-hooks/exhaustive-deps
-					[]
-				);
-			}
+			// eslint-disable-next-line react-hooks/rules-of-hooks
+			const blockEditRef = useRef(null);
+
+			// eslint-disable-next-line react-hooks/rules-of-hooks
+			useEffect(
+				() => {
+					useIconEffect({
+						name: blockProps.name,
+						clientId: blockProps.clientId,
+						publisherIcon: blockProps?.attributes?.publisherIcon,
+						publisherIconGap:
+							blockProps?.attributes?.publisherIconGap,
+						publisherIconSize:
+							blockProps?.attributes?.publisherIconSize,
+						publisherIconColor:
+							blockProps?.attributes?.publisherIconColor,
+						publisherIconPosition:
+							blockProps?.attributes?.publisherIconPosition,
+						blockRefId: blockEditRef,
+					});
+				},
+				// eslint-disable-next-line react-hooks/exhaustive-deps
+				[blockProps.attributes]
+			);
 
 			if (isFunction(additional?.edit)) {
 				const { edit: BlockEditComponent } = additional;
@@ -115,6 +135,7 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 
 				return (
 					<>
+						<div ref={blockEditRef} />
 						<BlockEditContextProvider {...props}>
 							<BlockEditComponent
 								supports={supports}

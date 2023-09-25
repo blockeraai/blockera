@@ -6,10 +6,10 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Internal dependencies
  */
-import withEditorProps from './editor-props';
+// import withEditorProps from './editor-props';
 import withBlockSettings from './block-settings';
 // import withSaveProps from './save-props';
-// import withBlockControls from './block-controls';
+import withBlockControls from './block-controls';
 // import withCustomizeSaveElement from './save-element';
 
 export { BlockEditContext, BlockEditContextProvider } from './context';
@@ -20,16 +20,16 @@ export default function applyHooks() {
 		'publisher/core/extensions/withAdvancedControlsAttributes',
 		withBlockSettings
 	);
-	// addFilter(
-	// 	'editor.BlockEdit',
-	// 	'publisher/core/extensions/withAdvancedBlockEditControls',
-	// 	withBlockControls
-	// );
 	addFilter(
-		'editor.BlockListBlock',
-		'publisher/core/extensions/withAppliedEditorProps',
-		withEditorProps
+		'editor.BlockEdit',
+		'publisher/core/extensions/withAdvancedBlockEditControls',
+		withBlockControls
 	);
+	// addFilter(
+	// 	'editor.BlockListBlock',
+	// 	'publisher/core/extensions/withAppliedEditorProps',
+	// 	withEditorProps
+	// );
 	// addFilter(
 	// 	'blocks.getSaveContent.extraProps',
 	// 	'publisher/core/extensions/withAppliedExtraSaveProps',
@@ -43,5 +43,6 @@ export default function applyHooks() {
 }
 export { default as withBlockSettings } from './block-settings';
 
+export { useIconEffect } from './use-icon-effect';
 export { useBlocksStore } from './use-blocks-store';
 export { useCssSelector } from './use-css-selector';
