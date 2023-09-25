@@ -1,8 +1,10 @@
+// @flow
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -19,6 +21,7 @@ import { Flex } from '@publisher/components';
  * Internal dependencies
  */
 import { isActiveField } from '../../api/utils';
+import type { TLayoutProps } from './types/layout-props';
 import { default as WrapWrapIcon } from './icons/wrap-wrap';
 import { generateExtensionId, hasSameProps } from '../utils';
 import { default as WrapNoWrapIcon } from './icons/wrap-nowrap';
@@ -49,7 +52,7 @@ import { default as AlignContentSpaceBetweenIcon } from './icons/align-content-s
 import { default as FlexDirectionRowReverseBlockIcon } from './icons/flex-direction-row-reverse';
 import { default as FlexDirectionColumnReverseBlockIcon } from './icons/flex-direction-column-reverse';
 
-export const LayoutExtension = memo(
+export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 	({
 		block,
 		values: {
@@ -62,10 +65,16 @@ export const LayoutExtension = memo(
 			flexDirection,
 			justifyContent,
 		},
+		// defaultValue: {
+		// 	type,
+		// 	wideSize,
+		// 	contentSize,
+		// 	justifyContent: defaultJustifyContent,
+		// },
 		handleOnChangeAttributes,
 		config,
 		...props
-	}) => {
+	}: TLayoutProps): MixedElement => {
 		const {
 			layoutConfig: {
 				publisherDisplay,

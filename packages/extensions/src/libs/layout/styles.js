@@ -1,8 +1,4 @@
-/**
- * WordPress dependencies
- */
-import { useContext } from '@wordpress/element';
-
+// @flow
 /**
  * Publisher dependencies
  */
@@ -12,8 +8,24 @@ import { computedCssRules } from '@publisher/style-engine';
  * Internal dependencies
  */
 import { attributes } from './attributes';
-import { BlockEditContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
+import type { TBlockProps } from '../types';
+import type { TCssProps } from './types/layout-props';
+
+interface IConfigs {
+	layoutConfig: {
+		cssGenerators: Object,
+		publisherDisplay: string,
+		publisherFlexDirection: string,
+		publisherAlignItems: string,
+		publisherJustifyContent: string,
+		publisherGapRows: string,
+		publisherGapColumns: string,
+		publisherFlexWrap: string,
+		publisherAlignContent: string,
+	};
+	blockProps: TBlockProps;
+}
 
 export function LayoutStyles({
 	layoutConfig: {
@@ -27,13 +39,13 @@ export function LayoutStyles({
 		publisherFlexWrap,
 		publisherAlignContent,
 	},
-}) {
-	const { attributes: _attributes, ...blockProps } =
-		useContext(BlockEditContext);
+	blockProps,
+}: IConfigs): string {
+	const { attributes: _attributes } = blockProps;
 
 	const generators = [];
 
-	const properties = {};
+	const properties: TCssProps = {};
 
 	if (
 		isActiveField(publisherDisplay) &&
