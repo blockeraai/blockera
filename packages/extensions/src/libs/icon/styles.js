@@ -1,8 +1,4 @@
-/**
- * WordPress dependencies
- */
-import { useContext } from '@wordpress/element';
-
+// @flow
 /**
  * Publisher dependencies
  */
@@ -11,12 +7,19 @@ import { computedCssRules } from '@publisher/style-engine';
 /**
  * Internal dependencies
  */
-import { BlockEditContext } from '../../hooks';
+import type { TBlockProps } from '../types';
 
-export function IconStyles({ iconConfig: { cssGenerators } }) {
-	const { attributes: _attributes, ...blockProps } =
-		useContext(BlockEditContext);
+interface IConfigs {
+	iconConfig: {
+		cssGenerators: Object,
+	};
+	blockProps: TBlockProps;
+}
 
+export function IconStyles({
+	iconConfig: { cssGenerators },
+	blockProps,
+}: IConfigs): string {
 	const generators = [];
 
 	generators.push(
@@ -26,7 +29,7 @@ export function IconStyles({ iconConfig: { cssGenerators } }) {
 					...(cssGenerators || {}),
 				},
 			},
-			{ attributes: _attributes, ...blockProps }
+			blockProps
 		)
 	);
 

@@ -1,8 +1,10 @@
+// @flow
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -24,8 +26,9 @@ import { isActiveField } from '../../api/utils';
 import { default as PositionLeftIcon } from './icons/position-left';
 import { generateExtensionId, hasSameProps } from '../utils';
 import { default as PositionRightIcon } from './icons/position-right';
+import type { TIconProps } from './types/icon-extension-props';
 
-export const IconExtension = memo(
+export const IconExtension: MixedElement = memo<TIconProps>(
 	({
 		block,
 		config,
@@ -33,7 +36,7 @@ export const IconExtension = memo(
 		values: { icon, iconGap, iconSize, iconLink, iconColor, iconPosition },
 		handleOnChangeAttributes,
 		...props
-	}) => {
+	}: TIconProps): MixedElement => {
 		const {
 			iconConfig: {
 				publisherIcon,
