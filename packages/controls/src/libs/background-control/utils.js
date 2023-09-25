@@ -23,8 +23,8 @@ export function getBackgroundItemBGProperty(item) {
 			}
 
 			gradient = gradient.replace(
-				/\((\d.*)deg,/im,
-				item['linear-gradient-angel']
+				/(\d.*)deg,/im,
+				item['linear-gradient-angel'] + 'deg,'
 			);
 
 			return gradient;
