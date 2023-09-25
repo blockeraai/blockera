@@ -5,15 +5,17 @@
 	"license": "ISC",
 	"autoload": {
 		"psr-4": {
-			"Publisher\\Core\\": "app/"
+			"Publisher\\Framework\\": "app/"
 		},
 		"files": [
-			"app/functions.php"
+			"app/functions.php",
+			"app/Illuminate/Support/helpers.php",
+			"app/Illuminate/StyleEngine/helpers.php"
 		]
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Publisher\\Core\\Tests\\": ".dev/tests/phpunit"
+			"Publisher\\Framework\\Tests\\": ".dev/tests/phpunit"
 		}
 	},
 	"authors": [
@@ -24,7 +26,11 @@
 	"minimum-stability": "dev",
 	"require": {
 		"php": ">=7.4",
-		"vlucas/phpdotenv": "^5.5@dev"
+		"vlucas/phpdotenv": "^5.5@dev",
+		"symfony/dom-crawler": "5.4.x-dev",
+		"symfony/css-selector": "5.4.x-dev",
+		"voku/simple_html_dom": "dev-master",
+		"illuminate/container": "8.x-dev"
 	},
 	"require-dev": {
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.7",
@@ -35,7 +41,8 @@
 		"wp-coding-standards/wpcs": "^2.1",
 		"wp-phpunit/wp-phpunit": "^6.0.1",
 		"filp/whoops": "^2.15",
-		"yoast/phpunit-polyfills": "^1.0"
+		"yoast/phpunit-polyfills": "^1.0",
+		"symfony/var-dumper": "5.4.x-dev"
 	},
 	"config": {
 		"platform": {
