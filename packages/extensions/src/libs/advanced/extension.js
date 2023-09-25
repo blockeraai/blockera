@@ -1,8 +1,10 @@
+// @flow
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -18,8 +20,9 @@ import {
  */
 import { isActiveField } from '../../api/utils';
 import { hasSameProps, generateExtensionId } from '../utils';
+import type { TAdvancedProps } from './types/advanced-props';
 
-export const AdvancedExtension = memo(
+export const AdvancedExtension: TAdvancedProps = memo<TAdvancedProps>(
 	({
 		block,
 		config,
@@ -27,7 +30,7 @@ export const AdvancedExtension = memo(
 		attributes,
 		handleOnChangeAttributes,
 		...props
-	}) => {
+	}: TAdvancedProps): MixedElement => {
 		const {
 			advancedConfig: { publisherAttributes: publisherAttributesConfig },
 		} = config;
