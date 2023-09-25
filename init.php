@@ -1,6 +1,6 @@
 <?php
 
-use Publisher\Core\Providers\Assets\AssetsProvider;
+use Publisher\Framework\Providers\Assets\AssetsProvider;
 
 $version = '1.0.0';
 
