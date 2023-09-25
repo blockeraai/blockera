@@ -1,8 +1,10 @@
+// @flow
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { memo, useState } from '@wordpress/element';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -26,12 +28,13 @@ import { controlInnerClassNames } from '@publisher/classnames';
 /**
  * Internal dependencies
  */
-import { generateExtensionId, hasSameProps } from '../utils';
 import { isActiveField } from '../../api/utils';
 import { default as GearIcon } from './icons/gear';
+import type { TEffectsProps } from './types/effects-props';
+import { generateExtensionId, hasSameProps } from '../utils';
 import { cursorFieldOptions, blendModeFieldOptions } from './utils';
 
-export const EffectsExtension = memo(
+export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 	({
 		children,
 		values: {
@@ -52,7 +55,7 @@ export const EffectsExtension = memo(
 		config,
 		handleOnChangeAttributes,
 		...props
-	}) => {
+	}: TEffectsProps): MixedElement => {
 		const {
 			effectsConfig: {
 				publisherOpacity,

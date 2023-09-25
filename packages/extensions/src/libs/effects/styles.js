@@ -1,8 +1,4 @@
-/**
- * WordPress dependencies
- */
-import { useContext } from '@wordpress/element';
-
+// @flow
 /**
  * Publisher dependencies
  */
@@ -14,23 +10,37 @@ import { computedCssRules } from '@publisher/style-engine';
 import { FilterGenerator, TransitionGenerator } from './css-generators';
 import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
-import { BlockEditContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
+import type { TBlockProps } from '../types';
+import type { TTransformCssProps } from './types/effects-props';
+
+interface IConfigs {
+	effectsConfig: {
+		cssGenerators: Object,
+		publisherCursor?: string,
+		publisherOpacity?: string,
+		publisherBlendMode?: string,
+		publisherFilter?: Array<Object>,
+		publisherTransform?: Array<Object>,
+		publisherTransition?: Array<Object>,
+		publisherBackdropFilter?: Array<Object>,
+	};
+	blockProps: TBlockProps;
+}
 
 export function EffectsStyles({
 	effectsConfig: {
 		cssGenerators,
+		publisherFilter,
+		publisherCursor,
 		publisherOpacity,
 		publisherTransform,
-		publisherTransition,
-		publisherFilter,
-		publisherBackdropFilter,
-		publisherCursor,
 		publisherBlendMode,
+		publisherTransition,
+		publisherBackdropFilter,
 	},
-}) {
-	const blockProps = useContext(BlockEditContext);
-
+	blockProps,
+}: IConfigs): string {
 	const generators = [];
 
 	if (
@@ -65,7 +75,7 @@ export function EffectsStyles({
 			blockProps.attributes.publisherTransform
 		)
 	) {
-		const transformProperties = {};
+		const transformProperties: TTransformCssProps = {};
 
 		let transformProperty = blockProps.attributes.publisherTransform
 			?.map((item) => {
@@ -172,7 +182,6 @@ export function EffectsStyles({
 								function: TransitionGenerator,
 							},
 						],
-						...(publisherTransition?.cssGenerators || {}),
 					},
 				},
 				blockProps
@@ -197,7 +206,6 @@ export function EffectsStyles({
 								function: FilterGenerator,
 							},
 						],
-						...(publisherFilter?.cssGenerators || {}),
 					},
 				},
 				{
@@ -228,7 +236,6 @@ export function EffectsStyles({
 								function: FilterGenerator,
 							},
 						],
-						...(publisherBackdropFilter?.cssGenerators || {}),
 					},
 				},
 				{
