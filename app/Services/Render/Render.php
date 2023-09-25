@@ -104,10 +104,6 @@ class Render {
 		 */
 		$parser = $this->app->make( Parser::class );
 
-		if ( 'core/button' === $block['blockName'] && false !== strpos( $_SERVER['REQUEST_URI'], '?dd=true' ) ) {
-			dd( $block );
-		}
-
 		//apply css styles
 		$parser->getCss( compact( 'block', 'uniqueClassname' ) );
 
