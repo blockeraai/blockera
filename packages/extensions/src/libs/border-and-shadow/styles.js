@@ -1,9 +1,4 @@
 /**
- * WordPress dependencies
- */
-import { useContext } from '@wordpress/element';
-
-/**
  * Publisher dependencies
  */
 import { computedCssRules } from '@publisher/style-engine';
@@ -13,7 +8,6 @@ import { computedCssRules } from '@publisher/style-engine';
  */
 import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
-import { BlockEditContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
 import {
 	OutlineGenerator,
@@ -21,17 +15,31 @@ import {
 	BoxBorderGenerator,
 	BorderRadiusGenerator,
 } from './css-generators';
+import type { TBlockProps } from '../types';
+import { isSupportBorder } from '../../wordpress';
+
+interface IConfigs {
+	borderAndShadowConfig: {
+		cssGenerators: Object,
+		publisherBorder?: Object,
+		publisherOutline?: Object,
+		publisherBoxShadow?: Object,
+		publisherBorderRadius?: Object,
+	};
+	blockProps: TBlockProps;
+}
 
 export function BorderAndShadowStyles({
 	borderAndShadowConfig: {
-		publisherBoxShadow,
-		publisherOutline,
 		publisherBorder,
+		publisherOutline,
+		publisherBoxShadow,
 		publisherBorderRadius,
 	},
-}) {
-	const blockProps = useContext(BlockEditContext);
+	blockProps,
+}: IConfigs) {
 	const generators = [];
+	const { blockName } = blockProps;
 
 	if (
 		isActiveField(publisherBoxShadow) &&
@@ -88,7 +96,8 @@ export function BorderAndShadowStyles({
 		!arrayEquals(
 			attributes.publisherBorder.default,
 			blockProps.attributes.publisherBorder
-		)
+		) &&
+		!isSupportBorder(blockName)
 	) {
 		generators.push(
 			computedCssRules(
@@ -113,7 +122,8 @@ export function BorderAndShadowStyles({
 		!arrayEquals(
 			attributes.publisherBorderRadius.default,
 			blockProps.attributes.publisherBorderRadius
-		)
+		) &&
+		!isSupportBorder(blockName, true)
 	) {
 		generators.push(
 			computedCssRules(
