@@ -1,8 +1,10 @@
+// @flow
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { useState, memo } from '@wordpress/element';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -10,13 +12,13 @@ import { useState, memo } from '@wordpress/element';
 import { isEmpty, isUndefined } from '@publisher/utils';
 import {
 	BaseControl,
-	BorderControl,
 	ColorControl,
-	ControlContextProvider,
 	InputControl,
 	SelectControl,
+	BorderControl,
 	TextShadowControl,
 	ToggleSelectControl,
+	ControlContextProvider,
 } from '@publisher/controls';
 import { Popover, Button, Flex } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
@@ -24,38 +26,55 @@ import { controlInnerClassNames } from '@publisher/classnames';
 /**
  * Internal dependencies
  */
-import { generateExtensionId, hasSameProps } from '../utils';
 import { isActiveField } from '../../api/utils';
+import { generateExtensionId, hasSameProps } from '../utils';
+import type { TTypographyProps } from './type/typography-props';
+import {
+	FontSize,
+	FontStyle,
+	LineHeight,
+	TextTransform,
+	TextDecoration,
+	LetterSpacing,
+} from './components';
 // icons
 import NoneIcon from './icons/none';
-import TypographyButtonIcon from './icons/typography-button';
-import TextAlignLeftIcon from './icons/text-align-left';
-import TextAlignCenterIcon from './icons/text-align-center';
-import TextAlignRightIcon from './icons/text-align-right';
-import TextAlignJustifyIcon from './icons/text-align-justify';
-import TextDecorationLineThroughIcon from './icons/text-dectoration-line-through';
-import TextDecorationOverlineIcon from './icons/text-decoration-overline';
-import TextDecorationUnderlineIcon from './icons/text-decoration-underline';
-import FontStyleNormalIcon from './icons/font-style-normal';
-import FontStyleItalicIcon from './icons/font-style-italic';
-import TextTransformCapitalizeIcon from './icons/text-transform-capitalize';
-import TextTransformUppercaseIcon from './icons/text-transform-uppercase';
-import TextTransformLowercaseIcon from './icons/text-transform-lowercase';
-import DirectionRtlIcon from './icons/direction-rtl';
-import DirectionLtrIcon from './icons/direction-ltr';
-import TextOrientationStyle1Icon from './icons/text-orientation-style-1';
-import TextOrientationStyle2Icon from './icons/text-orientation-style-2';
-import TextOrientationStyle3Icon from './icons/text-orientation-style-3';
-import TextOrientationStyle4Icon from './icons/text-orientation-style-4';
 import Columns2Icon from './icons/columns-2';
 import Columns3Icon from './icons/columns-3';
 import Columns4Icon from './icons/columns-4';
 import Columns5Icon from './icons/columns-5';
-import BreakingNormalIcon from './icons/breaking-normal';
-import BreakingBreakAllIcon from './icons/breaking-break-all';
 import InheritIcon from '../../icons/inherit';
+import DirectionRtlIcon from './icons/direction-rtl';
+import DirectionLtrIcon from './icons/direction-ltr';
+import TextAlignLeftIcon from './icons/text-align-left';
+import BreakingNormalIcon from './icons/breaking-normal';
+import TextAlignRightIcon from './icons/text-align-right';
+import TextAlignCenterIcon from './icons/text-align-center';
+import TypographyButtonIcon from './icons/typography-button';
+import BreakingBreakAllIcon from './icons/breaking-break-all';
+import TextAlignJustifyIcon from './icons/text-align-justify';
+import TextOrientationStyle1Icon from './icons/text-orientation-style-1';
+import TextOrientationStyle2Icon from './icons/text-orientation-style-2';
+import TextOrientationStyle3Icon from './icons/text-orientation-style-3';
+import TextOrientationStyle4Icon from './icons/text-orientation-style-4';
 
-export const TypographyExtension = memo(
+function getFontSizeAccurate(value: string) {
+	const sizes = {
+		small: '1rem',
+		medium: '1.125rem',
+		large: '1.75rem',
+		'x-large': '2.25rem',
+		'xx-large': '10rem',
+	};
+
+	if (isUndefined(sizes[value])) {
+		return value;
+	}
+
+	return sizes[value];
+}
+
+export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 	({
 		block,
 		config,
@@ -83,9 +102,22 @@ export const TypographyExtension = memo(
 			textColumnsDividerStyle,
 			textColumnsDividerColor,
 		},
+		defaultValue: {
+			fontSize: defaultFontSize,
+			typography: {
+				fontSize: _fontSize,
+				fontStyle: _fontStyle,
+				//FIXME: Add fontWeight option into extension!
+				// fontWeight: _fontWeight,
+				textTransform: _textTransform,
+				lineHeight: _lineHeight,
+				letterSpacing: _letterSpacing,
+				textDecoration: _textDecoration,
+			},
+		},
 		handleOnChangeAttributes,
 		...props
-	}) => {
+	}: TTypographyProps): MixedElement => {
 		const {
 			typographyConfig: {
 				publisherFontColor,
@@ -112,6 +144,10 @@ export const TypographyExtension = memo(
 		const toggleVisible = () => {
 			setIsVisible((state) => !state);
 		};
+
+		const fontSizeCalculated = defaultFontSize
+			? getFontSizeAccurate(defaultFontSize)
+			: _fontSize;
 
 		return (
 			<>
@@ -144,75 +180,23 @@ export const TypographyExtension = memo(
 							}}
 						>
 							{isActiveField(publisherFontSize) && (
-								<ControlContextProvider
-									value={{
-										name: generateExtensionId(
-											block,
-											'font-size'
-										),
-										value: fontSize,
-									}}
-								>
-									<BaseControl
-										controlName="input"
-										label={__(
-											'Font Size',
-											'publisher-core'
-										)}
-									>
-										<InputControl
-											{...{
-												...props,
-												unitType: 'essential',
-												range: true,
-												min: 0,
-												max: 200,
-												defaultValue: '14px',
-												onChange: (newValue) =>
-													handleOnChangeAttributes(
-														'publisherFontSize',
-														newValue
-													),
-											}}
-										/>
-									</BaseControl>
-								</ControlContextProvider>
+								<FontSize
+									block={block}
+									parentProps={props}
+									onChange={handleOnChangeAttributes}
+									value={fontSize || fontSizeCalculated}
+									defaultValue={fontSizeCalculated || '14px'}
+								/>
 							)}
 
 							{isActiveField(publisherLineHeight) && (
-								<ControlContextProvider
-									value={{
-										name: generateExtensionId(
-											block,
-											'line-height'
-										),
-										value: lineHeight,
-									}}
-								>
-									<BaseControl
-										controlName="input"
-										label={__(
-											'Line Height',
-											'publisher-core'
-										)}
-									>
-										<InputControl
-											{...{
-												...props,
-												unitType: 'essential',
-												range: true,
-												min: 0,
-												max: 100,
-												defaultValue: '14px',
-												onChange: (newValue) =>
-													handleOnChangeAttributes(
-														'publisherLineHeight',
-														newValue
-													),
-											}}
-										/>
-									</BaseControl>
-								</ControlContextProvider>
+								<LineHeight
+									block={block}
+									parentProps={props}
+									value={lineHeight || _lineHeight}
+									onChange={handleOnChangeAttributes}
+									defaultValue={_lineHeight || '14px'}
+								/>
 							)}
 
 							<BaseControl
@@ -309,134 +293,28 @@ export const TypographyExtension = memo(
 										{isActiveField(
 											publisherTextDecoration
 										) && (
-											<ControlContextProvider
-												value={{
-													name: generateExtensionId(
-														block,
-														'text-decoration'
-													),
-													value: textDecoration,
-												}}
-											>
-												<BaseControl
-													label={__(
-														'Decoration',
-														'publisher-core'
-													)}
-													columns="columns-1"
-													className="control-first label-center small-gap"
-												>
-													<ToggleSelectControl
-														options={[
-															{
-																label: __(
-																	'Underline',
-																	'publisher-core'
-																),
-																value: 'underline',
-																icon: (
-																	<TextDecorationUnderlineIcon />
-																),
-															},
-															{
-																label: __(
-																	'Line Through',
-																	'publisher-core'
-																),
-																value: 'line-through',
-																icon: (
-																	<TextDecorationLineThroughIcon />
-																),
-															},
-															{
-																label: __(
-																	'Overline',
-																	'publisher-core'
-																),
-																value: 'overline',
-																icon: (
-																	<TextDecorationOverlineIcon />
-																),
-															},
-															{
-																label: __(
-																	'None',
-																	'publisher-core'
-																),
-																value: 'initial',
-																icon: (
-																	<NoneIcon />
-																),
-															},
-														]}
-														isDeselectable={true}
-														//
-														defaultValue=""
-														onChange={(newValue) =>
-															handleOnChangeAttributes(
-																'publisherTextDecoration',
-																newValue
-															)
-														}
-													/>
-												</BaseControl>
-											</ControlContextProvider>
+											<TextDecoration
+												block={block}
+												value={
+													_textDecoration ||
+													textDecoration
+												}
+												onChange={
+													handleOnChangeAttributes
+												}
+											/>
 										)}
 									</div>
 									<div style={{ width: '40%' }}>
 										{isActiveField(publisherFontStyle) && (
-											<ControlContextProvider
-												value={{
-													name: generateExtensionId(
-														block,
-														'font-style'
-													),
-													value: fontStyle,
-												}}
-											>
-												<BaseControl
-													label={__(
-														'Italicize',
-														'publisher-core'
-													)}
-													columns="columns-1"
-													className="control-first label-center small-gap"
-												>
-													<ToggleSelectControl
-														options={[
-															{
-																label: __(
-																	'Normal',
-																	'publisher-core'
-																),
-																value: 'normal',
-																icon: (
-																	<FontStyleNormalIcon />
-																),
-															},
-															{
-																label: __(
-																	'Line Through',
-																	'publisher-core'
-																),
-																value: 'italic',
-																icon: (
-																	<FontStyleItalicIcon />
-																),
-															},
-														]}
-														isDeselectable={true}
-														//
-														defaultValue=""
-														onChange={(newValue) =>
-															handleOnChangeAttributes(
-																'publisherFontStyle',
-																newValue
-															)
-														}
-													/>
-												</BaseControl>
-											</ControlContextProvider>
+											<FontStyle
+												block={block}
+												value={fontStyle || _fontStyle}
+												onChange={
+													handleOnChangeAttributes
+												}
+												defaultValue={_fontStyle}
+											/>
 										)}
 									</div>
 								</Flex>
@@ -446,78 +324,16 @@ export const TypographyExtension = memo(
 										{isActiveField(
 											publisherTextTransform
 										) && (
-											<ControlContextProvider
-												value={{
-													name: generateExtensionId(
-														block,
-														'text-transform'
-													),
-													value: textTransform,
-												}}
-											>
-												<BaseControl
-													label={__(
-														'Capitalize',
-														'publisher-core'
-													)}
-													columns="columns-1"
-													className="control-first label-center small-gap"
-												>
-													<ToggleSelectControl
-														options={[
-															{
-																label: __(
-																	'Capitalize',
-																	'publisher-core'
-																),
-																value: 'capitalize',
-																icon: (
-																	<TextTransformCapitalizeIcon />
-																),
-															},
-															{
-																label: __(
-																	'Lowercase',
-																	'publisher-core'
-																),
-																value: 'overline',
-																icon: (
-																	<TextTransformLowercaseIcon />
-																),
-															},
-															{
-																label: __(
-																	'Uppercase',
-																	'publisher-core'
-																),
-																value: 'uppercase',
-																icon: (
-																	<TextTransformUppercaseIcon />
-																),
-															},
-															{
-																label: __(
-																	'None',
-																	'publisher-core'
-																),
-																value: 'initial',
-																icon: (
-																	<NoneIcon />
-																),
-															},
-														]}
-														isDeselectable={true}
-														//
-														defaultValue=""
-														onChange={(newValue) =>
-															handleOnChangeAttributes(
-																'publisherTextTransform',
-																newValue
-															)
-														}
-													/>
-												</BaseControl>
-											</ControlContextProvider>
+											<TextTransform
+												block={block}
+												value={
+													textTransform ||
+													_textTransform
+												}
+												onChange={
+													handleOnChangeAttributes
+												}
+											/>
 										)}
 									</div>
 									<div style={{ width: '40%' }}>
@@ -584,40 +400,12 @@ export const TypographyExtension = memo(
 								label={__('Spacing', 'publisher-core')}
 							>
 								{isActiveField(publisherLetterSpacing) && (
-									<ControlContextProvider
-										value={{
-											name: generateExtensionId(
-												block,
-												'letter-spacing'
-											),
-											value: letterSpacing,
-										}}
-									>
-										<BaseControl
-											controlName="input"
-											columns="2fr 2.4fr"
-											label={__(
-												'Letters',
-												'publisher-core'
-											)}
-										>
-											<InputControl
-												{...{
-													...props,
-													unitType: 'letter-spacing',
-													defaultValue: '',
-													onValidate: (newValue) => {
-														return newValue;
-													},
-													onChange: (newValue) =>
-														handleOnChangeAttributes(
-															'publisherLetterSpacing',
-															newValue
-														),
-												}}
-											/>
-										</BaseControl>
-									</ControlContextProvider>
+									<LetterSpacing
+										block={block}
+										parentProps={props}
+										value={letterSpacing || _letterSpacing}
+										onChange={handleOnChangeAttributes}
+									/>
 								)}
 
 								{isActiveField(publisherWordSpacing) && (
@@ -1094,8 +882,7 @@ export const TypographyExtension = memo(
 						>
 							<ColorControl
 								{...{
-									...props,
-									//
+									...props, //
 									defaultValue: '',
 									onChange: (newValue) =>
 										handleOnChangeAttributes(
