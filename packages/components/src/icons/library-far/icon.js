@@ -17,6 +17,7 @@ export function FontAwesomeIconFar({
 	icon,
 	size,
 	uploadedSVG,
+	style = {},
 	fixedSizing = false,
 	...props
 }) {
@@ -35,10 +36,11 @@ export function FontAwesomeIconFar({
 			style={
 				!fixedSizing
 					? {
+							...style,
 							width: `${size}px`,
 							height: `${size}px`,
 					  }
-					: ''
+					: style
 			}
 		/>
 	);

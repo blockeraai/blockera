@@ -13,7 +13,13 @@ import { isString, isUndefined } from '@publisher/utils';
  */
 import { getIcon } from '../index';
 
-export function PublisherIcon({ fixedSizing = false, size, icon, ...props }) {
+export function PublisherIcon({
+	fixedSizing = false,
+	style = {},
+	size,
+	icon,
+	...props
+}) {
 	if (isString(icon)) {
 		icon = getIcon(icon, 'publisher');
 	}
@@ -24,6 +30,7 @@ export function PublisherIcon({ fixedSizing = false, size, icon, ...props }) {
 
 	return (
 		<WordPressIconComponent
+			style={style}
 			icon={icon.icon}
 			size={!fixedSizing ? size : 22}
 			{...props}
