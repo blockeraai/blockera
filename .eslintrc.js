@@ -10,7 +10,6 @@ module.exports = {
 				endOfLine: 'auto',
 			},
 		],
-		'no-unused-expressions': 'off',
 		'import/no-extraneous-dependencies': 'off',
 		'@wordpress/no-unsafe-wp-apis': 'off',
 		'@wordpress/no-base-control-with-label-without-id': 'off',
