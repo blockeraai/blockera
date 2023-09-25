@@ -25,6 +25,7 @@ import type { TSizeProps } from './types/size-props';
 import { default as OverflowHiddenIcon } from './icons/overflow-hidden';
 import { default as OverflowScrollIcon } from './icons/overflow-scroll';
 import { default as OverflowVisibleIcon } from './icons/overflow-visible';
+import { convertToPercent } from './utils';
 
 export const SizeExtension: MixedElement = memo<TSizeProps>(
 	({
@@ -65,7 +66,19 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										handleOnChangeAttributes(
 											'publisherWidth',
 											newValue,
-											'width'
+											'',
+											(
+												attributes: Object,
+												setAttributes: (
+													attributes: Object
+												) => void
+											): void =>
+												setAttributes({
+													...attributes,
+													width: convertToPercent(
+														newValue
+													),
+												})
 										),
 								}}
 							/>
@@ -94,7 +107,19 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										handleOnChangeAttributes(
 											'publisherHeight',
 											newValue,
-											'height'
+											'',
+											(
+												attributes: Object,
+												setAttributes: (
+													attributes: Object
+												) => void
+											): void =>
+												setAttributes({
+													...attributes,
+													height: convertToPercent(
+														newValue
+													),
+												})
 										),
 								}}
 							/>
