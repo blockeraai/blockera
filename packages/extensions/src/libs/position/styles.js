@@ -1,8 +1,4 @@
-/**
- * WordPress dependencies
- */
-import { useContext } from '@wordpress/element';
-
+// @flow
 /**
  * Publisher dependencies
  */
@@ -12,18 +8,36 @@ import { computedCssRules } from '@publisher/style-engine';
  * Internal dependencies
  */
 import { attributes } from './attributes';
-import { BlockEditContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
+import type { TBlockProps } from '../types';
+
+type cssProps = {
+	position?: string,
+	top?: string,
+	right?: string,
+	bottom?: string,
+	left?: string,
+	'z-index'?: string,
+};
+
+interface IConfigs {
+	positionConfig: {
+		cssGenerators: Object,
+		publisherPosition: cssProps,
+		publisherZIndex: string,
+	};
+	blockProps: TBlockProps;
+}
 
 export function PositionStyles({
 	positionConfig: { cssGenerators, publisherPosition, publisherZIndex },
-}) {
-	const { attributes: _attributes, ...blockProps } =
-		useContext(BlockEditContext);
+	blockProps,
+}: IConfigs): string {
+	const { attributes: _attributes } = blockProps;
 
 	const generators = [];
 
-	const properties = {};
+	const properties: cssProps = {};
 
 	if (
 		isActiveField(publisherPosition) &&
@@ -71,7 +85,7 @@ export function PositionStyles({
 						],
 					},
 				},
-				{ attributes: _attributes, ...blockProps }
+				blockProps
 			)
 		);
 	}
@@ -83,7 +97,7 @@ export function PositionStyles({
 					...(cssGenerators || {}),
 				},
 			},
-			{ attributes: _attributes, ...blockProps }
+			blockProps
 		)
 	);
 

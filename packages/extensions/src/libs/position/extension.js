@@ -1,8 +1,10 @@
+// @flow
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -19,8 +21,9 @@ import {
  */
 import { isActiveField } from '../../api/utils';
 import { generateExtensionId, hasSameProps } from '../utils';
+import type { TPositionExtensionProps } from './types/position-extension-props';
 
-export const PositionExtension = memo(
+export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 	({
 		block,
 		config,
@@ -29,7 +32,7 @@ export const PositionExtension = memo(
 		positionValue,
 		handleOnChangeAttributes,
 		...props
-	}) => {
+	}: TPositionExtensionProps): MixedElement => {
 		const {
 			positionConfig: { publisherPosition, publisherZIndex },
 		} = config;
