@@ -1,8 +1,4 @@
-/**
- * WordPress dependencies
- */
-import { useContext } from '@wordpress/element';
-
+// @flow
 /**
  * Publisher dependencies
  */
@@ -12,8 +8,19 @@ import { computedCssRules } from '@publisher/style-engine';
  * Internal dependencies
  */
 import { attributes } from './attributes';
-import { BlockEditContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
+import type { TBlockProps } from '../types';
+import type { TCssProps } from './types/flex-child-props';
+
+interface IConfigs {
+	flexChildConfig: {
+		cssGenerators: Object,
+		publisherFlexChildSizing?: string,
+		publisherFlexChildAlign?: string,
+		publisherFlexChildOrder?: string,
+	};
+	blockProps: TBlockProps;
+}
 
 export function FlexChildStyles({
 	flexChildConfig: {
@@ -22,13 +29,13 @@ export function FlexChildStyles({
 		publisherFlexChildAlign,
 		publisherFlexChildOrder,
 	},
-}) {
-	const { attributes: _attributes, ...blockProps } =
-		useContext(BlockEditContext);
+	blockProps,
+}: IConfigs): string {
+	const { attributes: _attributes } = blockProps;
 
 	const generators = [];
 
-	const properties = {};
+	const properties: TCssProps = {};
 
 	if (
 		isActiveField(publisherFlexChildSizing) &&

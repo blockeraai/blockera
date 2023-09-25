@@ -1,7 +1,9 @@
+// @flow
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import type { MixedElement } from 'react';
 import { memo } from '@wordpress/element';
 
 /**
@@ -28,8 +30,9 @@ import { default as AlignFlexEndIcon } from './icons/align-flex-end';
 import { default as AlignBaselineIcon } from './icons/align-baseline';
 import { default as AlignFlexStartIcon } from './icons/align-flex-start';
 import { default as AlignFlexCenterIcon } from './icons/align-flex-center';
+import type { TFlexChildProps } from './types/flex-child-props';
 
-export const FlexChildExtension = memo(
+export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 	({
 		block,
 		config,
@@ -45,7 +48,7 @@ export const FlexChildExtension = memo(
 		},
 		handleOnChangeAttributes,
 		...props
-	}) => {
+	}: TFlexChildProps): MixedElement => {
 		const {
 			flexChildConfig: {
 				publisherFlexChildSizing,
