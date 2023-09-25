@@ -1,8 +1,4 @@
-/**
- * WordPress dependencies
- */
-import { useContext } from '@wordpress/element';
-
+// @flow
 /**
  * Publisher dependencies
  */
@@ -13,9 +9,20 @@ import { computedCssRules } from '@publisher/style-engine';
  */
 import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
-import { BlockEditContext } from '../../hooks';
+import type { TBlockProps } from '../types';
 import { isActiveField } from '../../api/utils';
 import { backgroundGenerator, backgroundClipGenerator } from './css-generators';
+import { useCssSelector } from '../../hooks';
+
+interface IConfigs {
+	backgroundConfig: {
+		cssGenerators: Object,
+		publisherBackground?: Object,
+		publisherBackgroundColor?: Object,
+		publisherBackgroundClip?: Object,
+	};
+	blockProps: TBlockProps;
+}
 
 export function BackgroundStyles({
 	backgroundConfig: {
@@ -24,10 +31,14 @@ export function BackgroundStyles({
 		publisherBackgroundColor,
 		publisherBackgroundClip,
 	},
-}) {
-	const blockProps = useContext(BlockEditContext);
-
+	blockProps,
+}: IConfigs): string {
 	const generators = [];
+	const selector = useCssSelector({
+		blockName: blockProps.name,
+		supportId: 'publisherBackground',
+		// fallbackSupportId: 'background'
+	});
 
 	if (
 		isActiveField(publisherBackground) &&
@@ -42,6 +53,7 @@ export function BackgroundStyles({
 					cssGenerators: {
 						publisherBackground: [
 							{
+								selector: `${selector}, ${selector} .publisher-icon-element div[contentEditable="true"], .publisher-icon-element div`,
 								type: 'function',
 								function: backgroundGenerator,
 							},
@@ -95,7 +107,6 @@ export function BackgroundStyles({
 								function: backgroundClipGenerator,
 							},
 						],
-						...(publisherBackgroundClip?.cssGenerators || {}),
 					},
 				},
 				blockProps

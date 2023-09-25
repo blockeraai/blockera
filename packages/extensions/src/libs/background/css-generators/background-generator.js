@@ -49,7 +49,7 @@ export function backgroundGenerator(id, props, styleEngine) {
 
 				// Background Position
 				properties.position.push(
-					`${item['image-position-left']} ${item['image-position-top']}`
+					`${item['image-position'].left} ${item['image-position'].top}`
 				);
 
 				// Background Repeat
@@ -97,7 +97,9 @@ export function backgroundGenerator(id, props, styleEngine) {
 				properties.position.push('0 0');
 
 				// Background Repeat
-				properties.repeat.push('repeat');
+				properties.repeat.push(
+					item['radial-gradient-repeat'] ?? 'repeat'
+				);
 
 				// Background Attachment
 				properties.attachment.push(item['radial-gradient-attachment']);

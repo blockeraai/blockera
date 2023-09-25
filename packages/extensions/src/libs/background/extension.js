@@ -1,8 +1,10 @@
+// @flow
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -14,6 +16,7 @@ import {
 	BackgroundControl,
 	ControlContextProvider,
 } from '@publisher/controls';
+import { isArray, isEmpty } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -25,18 +28,20 @@ import { isActiveField } from '../../api/utils';
 import ClipPaddingIcon from './icons/clip-padding';
 import ClipContentIcon from './icons/clip-content';
 import { generateExtensionId, hasSameProps } from '../utils';
+import type { TBackgroundProps } from './types/background-props';
 
-export const BackgroundExtension = memo(
+export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 	({
 		block,
 		config,
 		children,
 		background,
+		defaultValue,
 		backgroundClip,
 		backgroundColor,
 		handleOnChangeAttributes,
 		...props
-	}) => {
+	}: TBackgroundProps): MixedElement => {
 		const {
 			backgroundConfig: {
 				publisherBackground,
@@ -50,9 +55,23 @@ export const BackgroundExtension = memo(
 				{isActiveField(publisherBackground) && (
 					<ControlContextProvider
 						value={{
-							name: generateExtensionId(block, 'background'),
-							//
-							value: background,
+							name: generateExtensionId(block, 'background'), //
+							value: background || [
+								{
+									type: 'image',
+									image: defaultValue.backgroundImage || '',
+									'image-size': 'custom',
+									'image-size-width': '1auto',
+									'image-size-height': '1auto',
+									'image-position': {
+										top: '50%',
+										left: '50%',
+									},
+									'image-repeat': 'repeat',
+									'image-attachment': 'scroll',
+									isVisible: true,
+								},
+							],
 						}}
 						storeName={'publisher-core/controls/repeater'}
 					>
@@ -65,7 +84,35 @@ export const BackgroundExtension = memo(
 								onChange={(newValue) =>
 									handleOnChangeAttributes(
 										'publisherBackground',
-										newValue
+										newValue,
+										'',
+										(
+											attributes: Object,
+											setAttributes: (
+												attributes: Object
+											) => void
+										): void => {
+											if (
+												!isArray(newValue) ||
+												isEmpty(newValue)
+											) {
+												return;
+											}
+
+											setAttributes({
+												...attributes,
+												style: {
+													...(attributes?.style ??
+														{}),
+													background: {
+														...(attributes?.style
+															?.background ?? {}),
+														backgroundImage:
+															newValue[0].image,
+													},
+												},
+											});
+										}
 									)
 								}
 								{...props}
@@ -90,8 +137,7 @@ export const BackgroundExtension = memo(
 						>
 							<ColorControl
 								{...{
-									...props,
-									//
+									...props, //
 									onChange: (newValue) =>
 										handleOnChangeAttributes(
 											'publisherBackgroundColor',
@@ -155,8 +201,7 @@ export const BackgroundExtension = memo(
 											value: 'inherit',
 											icon: <InheritIcon />,
 										},
-									],
-									//
+									], //
 									type: 'custom',
 									defaultValue: 'none',
 									onChange: (newValue) =>
