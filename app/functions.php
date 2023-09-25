@@ -1,6 +1,6 @@
 <?php
 
-use Publisher\Core\Support\Env;
+use Publisher\Framework\Illuminate\Support\Env;
 
 if ( ! function_exists( 'pb_core_config' ) ) {
 
