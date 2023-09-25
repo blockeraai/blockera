@@ -25,6 +25,10 @@ interface IConfigs {
 function updateCssProps(spacingProps: TSpacingDefaultProps): TCssProps {
 	const properties: TCssProps = {};
 
+	if (isUndefined(spacingProps)) {
+		return properties;
+	}
+
 	if (!isUndefined(spacingProps.margin)) {
 		if (spacingProps.margin.top !== '') {
 			properties['margin-top'] = spacingProps.margin.top;

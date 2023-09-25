@@ -79,10 +79,29 @@ export const SpacingExtension: TSpacingProps = memo<TSpacingProps>(
 										handleOnChangeAttributes(
 											'publisherSpacing',
 											newValue,
-											defaultValue.padding ||
-												defaultValue.margin
-												? 'style.spacing'
-												: ''
+											'',
+											(
+												attributes: Object,
+												setAttributes: (
+													attributes: Object
+												) => void
+											): void => {
+												if (
+													!defaultValue.padding &&
+													!defaultValue.margin
+												) {
+													return;
+												}
+
+												setAttributes({
+													...attributes,
+													style: {
+														...(attributes?.style ??
+															{}),
+														spacing: newValue,
+													},
+												});
+											}
 										),
 								}}
 							/>
