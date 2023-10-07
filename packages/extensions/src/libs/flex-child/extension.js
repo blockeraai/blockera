@@ -119,22 +119,20 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 											value: flexChildGrow,
 										}}
 									>
-										<BaseControl
+										<InputControl
 											controlName="input"
 											label={__('Grow', 'publisher-core')}
-										>
-											<InputControl
-												{...{
-													...props,
-													min: 0,
-													onChange: (newValue) =>
-														handleOnChangeAttributes(
-															'publisherFlexChildGrow',
-															newValue
-														),
-												}}
-											/>
-										</BaseControl>
+											columns="columns-2"
+											{...{
+												...props,
+												min: 0,
+												onChange: (newValue) =>
+													handleOnChangeAttributes(
+														'publisherFlexChildGrow',
+														newValue
+													),
+											}}
+										/>
 									</ControlContextProvider>
 									<ControlContextProvider
 										value={{
@@ -145,25 +143,23 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 											value: flexChildShrink,
 										}}
 									>
-										<BaseControl
+										<InputControl
 											controlName="input"
 											label={__(
 												'Shrink',
 												'publisher-core'
 											)}
-										>
-											<InputControl
-												{...{
-													...props,
-													min: 0,
-													onChange: (newValue) =>
-														handleOnChangeAttributes(
-															'publisherFlexChildShrink',
-															newValue
-														),
-												}}
-											/>
-										</BaseControl>
+											columns="columns-2"
+											{...{
+												...props,
+												min: 0,
+												onChange: (newValue) =>
+													handleOnChangeAttributes(
+														'publisherFlexChildShrink',
+														newValue
+													),
+											}}
+										/>
 									</ControlContextProvider>
 									<ControlContextProvider
 										value={{
@@ -174,27 +170,25 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 											value: flexChildBasis,
 										}}
 									>
-										<BaseControl
+										<InputControl
 											controlName="input"
 											label={__(
 												'Basis',
 												'publisher-core'
 											)}
-										>
-											<InputControl
-												{...{
-													...props,
-													unitType: 'essential',
-													min: 0,
-													defaultValue: 'auto',
-													onChange: (newValue) =>
-														handleOnChangeAttributes(
-															'publisherFlexChildBasis',
-															newValue
-														),
-												}}
-											/>
-										</BaseControl>
+											columns="columns-2"
+											{...{
+												...props,
+												unitType: 'essential',
+												min: 0,
+												defaultValue: 'auto',
+												onChange: (newValue) =>
+													handleOnChangeAttributes(
+														'publisherFlexChildBasis',
+														newValue
+													),
+											}}
+										/>
 									</ControlContextProvider>
 								</>
 							)}
@@ -312,25 +306,23 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 											value: flexChildOrderCustom,
 										}}
 									>
-										<BaseControl
+										<InputControl
 											controlName="input"
 											label={__(
 												'Order',
 												'publisher-core'
 											)}
-										>
-											<InputControl
-												{...{
-													...props,
-													min: -1,
-													onChange: (newValue) =>
-														handleOnChangeAttributes(
-															'publisherFlexChildOrderCustom',
-															newValue
-														),
-												}}
-											/>
-										</BaseControl>
+											columns="columns-2"
+											{...{
+												...props,
+												min: -1,
+												onChange: (newValue) =>
+													handleOnChangeAttributes(
+														'publisherFlexChildOrderCustom',
+														newValue
+													),
+											}}
+										/>
 									</ControlContextProvider>
 								)}
 							</>

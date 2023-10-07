@@ -103,6 +103,7 @@ export default function AlignmentMatrixControl({
 				<div style={{ width: '100%' }}>
 					<Flex direction="column" gap="8px" justify="space-around">
 						<InputControl
+							columns="columns-2"
 							id={isUndefined(id) ? 'top' : `${id}.top`}
 							label={__('Top', 'publisher-core')}
 							type="css"
@@ -119,6 +120,7 @@ export default function AlignmentMatrixControl({
 						/>
 
 						<InputControl
+							columns="columns-2"
 							id={isUndefined(id) ? 'left' : `${id}.left`}
 							label={__('Left', 'publisher-core')}
 							type="css"

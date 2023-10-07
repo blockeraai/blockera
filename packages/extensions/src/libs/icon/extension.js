@@ -58,20 +58,19 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 							value: icon,
 						}}
 					>
-						<BaseControl controlName="icon" columns="columns-1">
-							<IconControl
-								{...props}
-								suggestionsQuery={() => {
-									return 'button';
-								}}
-								onChange={(newValue) =>
-									handleOnChangeAttributes(
-										'publisherIcon',
-										newValue
-									)
-								}
-							/>
-						</BaseControl>
+						<IconControl
+							{...props}
+							columns="columns-1"
+							suggestionsQuery={() => {
+								return 'button';
+							}}
+							onChange={(newValue) =>
+								handleOnChangeAttributes(
+									'publisherIcon',
+									newValue
+								)
+							}
+						/>
 					</ControlContextProvider>
 				)}
 
@@ -91,40 +90,38 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 										value: iconPosition,
 									}}
 								>
-									<BaseControl
+									<ToggleSelectControl
 										controlName="toggle-select"
 										label={__('Position', 'publisher-core')}
-									>
-										<ToggleSelectControl
-											options={[
-												{
-													label: __(
-														'Left',
-														'publisher-core'
-													),
-													value: 'left',
-													icon: <PositionLeftIcon />,
-												},
-												{
-													label: __(
-														'Right',
-														'publisher-core'
-													),
-													value: 'right',
-													icon: <PositionRightIcon />,
-												},
-											]}
-											isDeselectable={true}
-											//
-											defaultValue=""
-											onChange={(newValue) =>
-												handleOnChangeAttributes(
-													'publisherIconPosition',
-													newValue
-												)
-											}
-										/>
-									</BaseControl>
+										columns="columns-2"
+										options={[
+											{
+												label: __(
+													'Left',
+													'publisher-core'
+												),
+												value: 'left',
+												icon: <PositionLeftIcon />,
+											},
+											{
+												label: __(
+													'Right',
+													'publisher-core'
+												),
+												value: 'right',
+												icon: <PositionRightIcon />,
+											},
+										]}
+										isDeselectable={true}
+										//
+										defaultValue=""
+										onChange={(newValue) =>
+											handleOnChangeAttributes(
+												'publisherIconPosition',
+												newValue
+											)
+										}
+									/>
 								</ControlContextProvider>
 							)}
 
@@ -138,24 +135,22 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 										value: iconGap,
 									}}
 								>
-									<BaseControl
+									<InputControl
 										controlName="input"
 										label={__('Gap', 'publisher-core')}
-									>
-										<InputControl
-											{...{
-												...props,
-												unitType: 'essential',
-												defaultValue: '',
-												min: 8,
-												onChange: (newValue) =>
-													handleOnChangeAttributes(
-														'publisherIconGap',
-														newValue
-													),
-											}}
-										/>
-									</BaseControl>
+										columns="columns-2"
+										{...{
+											...props,
+											unitType: 'essential',
+											defaultValue: '',
+											min: 8,
+											onChange: (newValue) =>
+												handleOnChangeAttributes(
+													'publisherIconGap',
+													newValue
+												),
+										}}
+									/>
 								</ControlContextProvider>
 							)}
 
@@ -169,24 +164,22 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 										value: iconSize,
 									}}
 								>
-									<BaseControl
+									<InputControl
 										controlName="input"
 										label={__('Size', 'publisher-core')}
-									>
-										<InputControl
-											{...{
-												...props,
-												unitType: 'essential',
-												defaultValue: '',
-												min: 8,
-												onChange: (newValue) =>
-													handleOnChangeAttributes(
-														'publisherIconSize',
-														newValue
-													),
-											}}
-										/>
-									</BaseControl>
+										columns="columns-2"
+										{...{
+											...props,
+											unitType: 'essential',
+											defaultValue: '',
+											min: 8,
+											onChange: (newValue) =>
+												handleOnChangeAttributes(
+													'publisherIconSize',
+													newValue
+												),
+										}}
+									/>
 								</ControlContextProvider>
 							)}
 
@@ -200,22 +193,20 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 										value: iconColor,
 									}}
 								>
-									<BaseControl
+									<ColorControl
 										controlName="color"
 										label={__('Color', 'publisher-core')}
-									>
-										<ColorControl
-											{...props}
-											//
-											defaultValue=""
-											onChange={(newValue) =>
-												handleOnChangeAttributes(
-													'publisherIconColor',
-													newValue
-												)
-											}
-										/>
-									</BaseControl>
+										columns="columns-2"
+										{...props}
+										//
+										defaultValue=""
+										onChange={(newValue) =>
+											handleOnChangeAttributes(
+												'publisherIconColor',
+												newValue
+											)
+										}
+									/>
 								</ControlContextProvider>
 							)}
 						</BaseControl>
@@ -230,26 +221,20 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 									value: iconLink,
 								}}
 							>
-								<BaseControl
+								<LinkControl
 									controlName="link"
 									columns="1fr 3fr"
 									label={__('Link', 'publisher-core')}
-								>
-									<LinkControl
-										{...props}
-										id={generateExtensionId(
-											block,
-											'icon-link'
-										)}
-										//
-										onChange={(newValue) =>
-											handleOnChangeAttributes(
-												'publisherIconLink',
-												newValue
-											)
-										}
-									/>
-								</BaseControl>
+									{...props}
+									id={generateExtensionId(block, 'icon-link')}
+									//
+									onChange={(newValue) =>
+										handleOnChangeAttributes(
+											'publisherIconLink',
+											newValue
+										)
+									}
+								/>
 							</ControlContextProvider>
 						)}
 					</>

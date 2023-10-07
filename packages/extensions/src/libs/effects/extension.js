@@ -80,29 +80,27 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 							value: opacity,
 						}}
 					>
-						<BaseControl
+						<InputControl
 							controlName="input"
 							label={__('Opacity', 'publisher-core')}
-						>
-							<InputControl
-								{...{
-									...props,
-									unitType: 'percent',
-									range: true,
-									min: 0,
-									max: 100,
-									initialPosition: 100,
-									defaultValue: '100%',
-									onChange: (newValue) =>
-										handleOnChangeAttributes(
-											'publisherOpacity',
-											isInteger(newValue)
-												? `${newValue}%`
-												: newValue
-										),
-								}}
-							/>
-						</BaseControl>
+							columns="columns-2"
+							{...{
+								...props,
+								unitType: 'percent',
+								range: true,
+								min: 0,
+								max: 100,
+								initialPosition: 100,
+								defaultValue: '100%',
+								onChange: (newValue) =>
+									handleOnChangeAttributes(
+										'publisherOpacity',
+										isInteger(newValue)
+											? `${newValue}%`
+											: newValue
+									),
+							}}
+						/>
 					</ControlContextProvider>
 				)}
 
@@ -185,30 +183,28 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 												value: transformSelfPerspective,
 											}}
 										>
-											<BaseControl
+											<InputControl
 												controlName="input"
 												label={__(
 													'Self Perspective',
 													'publisher-core'
 												)}
-											>
-												<InputControl
-													{...{
-														...props,
-														unitType: 'essential',
-														range: true,
-														min: 0,
-														max: 2000,
-														initialPosition: 100,
-														defaultValue: '0px',
-														onChange: (newValue) =>
-															handleOnChangeAttributes(
-																'publisherTransformSelfPerspective',
-																newValue
-															),
-													}}
-												/>
-											</BaseControl>
+												columns="columns-2"
+												{...{
+													...props,
+													unitType: 'essential',
+													range: true,
+													min: 0,
+													max: 2000,
+													initialPosition: 100,
+													defaultValue: '0px',
+													onChange: (newValue) =>
+														handleOnChangeAttributes(
+															'publisherTransformSelfPerspective',
+															newValue
+														),
+												}}
+											/>
 										</ControlContextProvider>
 
 										<ControlContextProvider
@@ -232,6 +228,7 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 													'Self Origin',
 													'publisher-core'
 												)}
+												columns="columns-2"
 												topValue={
 													transformSelfOrigin?.top
 												}
@@ -260,39 +257,37 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 												value: backfaceVisibility,
 											}}
 										>
-											<BaseControl
+											<ToggleSelectControl
 												controlName="toggle-select"
 												label={__(
 													'Backface Visibility',
 													'publisher-core'
 												)}
-											>
-												<ToggleSelectControl
-													options={[
-														{
-															label: __(
-																'Visible',
-																'publisher-core'
-															),
-															value: 'visible',
-														},
-														{
-															label: __(
-																'Hidden',
-																'publisher-core'
-															),
-															value: 'hidden',
-														},
-													]}
-													defaultValue="visible"
-													onChange={(newValue) =>
-														handleOnChangeAttributes(
-															'publisherBackfaceVisibility',
-															newValue
-														)
-													}
-												/>
-											</BaseControl>
+												columns="columns-2"
+												options={[
+													{
+														label: __(
+															'Visible',
+															'publisher-core'
+														),
+														value: 'visible',
+													},
+													{
+														label: __(
+															'Hidden',
+															'publisher-core'
+														),
+														value: 'hidden',
+													},
+												]}
+												defaultValue="visible"
+												onChange={(newValue) =>
+													handleOnChangeAttributes(
+														'publisherBackfaceVisibility',
+														newValue
+													)
+												}
+											/>
 										</ControlContextProvider>
 
 										<ControlContextProvider
@@ -306,29 +301,27 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 													: '0px',
 											}}
 										>
-											<BaseControl
+											<InputControl
 												controlName="input"
 												label={__(
 													'Child Perspective',
 													'publisher-core'
 												)}
-											>
-												<InputControl
-													{...{
-														...props,
-														unitType: 'essential',
-														range: true,
-														min: 0,
-														max: 2000,
-														defaultValue: '0px',
-														onChange: (newValue) =>
-															handleOnChangeAttributes(
-																'publisherTransformChildPerspective',
-																newValue
-															),
-													}}
-												/>
-											</BaseControl>
+												columns="columns-2"
+												{...{
+													...props,
+													unitType: 'essential',
+													range: true,
+													min: 0,
+													max: 2000,
+													defaultValue: '0px',
+													onChange: (newValue) =>
+														handleOnChangeAttributes(
+															'publisherTransformChildPerspective',
+															newValue
+														),
+												}}
+											/>
 										</ControlContextProvider>
 
 										<ControlContextProvider
@@ -352,6 +345,7 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 													'Child Origin',
 													'publisher-core'
 												)}
+												columns="columns-2"
 												topValue={
 													transformChildOrigin?.top
 												}
@@ -466,26 +460,24 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 							value: cursor,
 						}}
 					>
-						<BaseControl
+						<SelectControl
 							controlName="select"
 							label={__('Cursor', 'publisher-core')}
-						>
-							<SelectControl
-								{...{
-									...props,
-									options: cursorFieldOptions(),
-									type: 'custom',
-									customMenuPosition: 'top',
-									//
-									defaultValue: 'default',
-									onChange: (newValue) =>
-										handleOnChangeAttributes(
-											'publisherCursor',
-											newValue
-										),
-								}}
-							/>
-						</BaseControl>
+							columns="columns-2"
+							{...{
+								...props,
+								options: cursorFieldOptions(),
+								type: 'custom',
+								customMenuPosition: 'top',
+								//
+								defaultValue: 'default',
+								onChange: (newValue) =>
+									handleOnChangeAttributes(
+										'publisherCursor',
+										newValue
+									),
+							}}
+						/>
 					</ControlContextProvider>
 				)}
 
@@ -496,27 +488,25 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 							value: blendMode,
 						}}
 					>
-						<BaseControl
+						<SelectControl
 							controlName="select"
 							label={__('Blending', 'publisher-core')}
-						>
-							<SelectControl
-								{...{
-									...props,
-									options: blendModeFieldOptions(),
-									type: 'custom',
-									customMenuPosition: 'top',
-									//
-									defaultValue: 'normal',
-									value: blendMode,
-									onChange: (newValue) =>
-										handleOnChangeAttributes(
-											'publisherBlendMode',
-											newValue
-										),
-								}}
-							/>
-						</BaseControl>
+							columns="columns-2"
+							{...{
+								...props,
+								options: blendModeFieldOptions(),
+								type: 'custom',
+								customMenuPosition: 'top',
+								//
+								defaultValue: 'normal',
+								value: blendMode,
+								onChange: (newValue) =>
+									handleOnChangeAttributes(
+										'publisherBlendMode',
+										newValue
+									),
+							}}
+						/>
 					</ControlContextProvider>
 				)}
 			</>

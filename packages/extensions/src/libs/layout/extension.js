@@ -98,53 +98,46 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 							value: display,
 						}}
 					>
-						<BaseControl
+						<ToggleSelectControl
+							label={__('Display', 'publisher-core')}
 							columns="1fr 2.65fr"
-							controlName="toggle-select"
-						>
-							<ToggleSelectControl
-								label={__('Display', 'publisher-core')}
-								options={[
-									{
-										label: __('Block', 'publisher-core'),
-										value: 'block',
-										icon: <DisplayBlockIcon />,
-									},
-									{
-										label: __('Flex', 'publisher-core'),
-										value: 'flex',
-										icon: <DisplayFlexIcon />,
-									},
-									{
-										label: __(
-											'Inline Block',
-											'publisher-core'
-										),
-										value: 'inline-block',
-										icon: <DisplayInlineBlockIcon />,
-									},
-									{
-										label: __('Inline', 'publisher-core'),
-										value: 'inline',
-										icon: <DisplayInlineIcon />,
-									},
-									{
-										label: __('None', 'publisher-core'),
-										value: 'none',
-										icon: <DisplayNoneIcon />,
-									},
-								]}
-								isDeselectable={true}
-								//
-								defaultValue=""
-								onChange={(newValue) =>
-									handleOnChangeAttributes(
-										'publisherDisplay',
-										newValue
-									)
-								}
-							/>
-						</BaseControl>
+							options={[
+								{
+									label: __('Block', 'publisher-core'),
+									value: 'block',
+									icon: <DisplayBlockIcon />,
+								},
+								{
+									label: __('Flex', 'publisher-core'),
+									value: 'flex',
+									icon: <DisplayFlexIcon />,
+								},
+								{
+									label: __('Inline Block', 'publisher-core'),
+									value: 'inline-block',
+									icon: <DisplayInlineBlockIcon />,
+								},
+								{
+									label: __('Inline', 'publisher-core'),
+									value: 'inline',
+									icon: <DisplayInlineIcon />,
+								},
+								{
+									label: __('None', 'publisher-core'),
+									value: 'none',
+									icon: <DisplayNoneIcon />,
+								},
+							]}
+							isDeselectable={true}
+							//
+							defaultValue=""
+							onChange={(newValue) =>
+								handleOnChangeAttributes(
+									'publisherDisplay',
+									newValue
+								)
+							}
+						/>
 					</ControlContextProvider>
 				)}
 
@@ -160,67 +153,55 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									value: flexDirection,
 								}}
 							>
-								<BaseControl
+								<ToggleSelectControl
+									label={__('Direction', 'publisher-core')}
 									columns="1fr 2.65fr"
-									controlName="toggle-select"
-								>
-									<ToggleSelectControl
-										label={__(
-											'Direction',
-											'publisher-core'
-										)}
-										options={[
-											{
-												label: __(
-													'Row',
-													'publisher-core'
-												),
-												value: 'row',
-												icon: (
-													<FlexDirectionRowBlockIcon />
-												),
-											},
-											{
-												label: __(
-													'column',
-													'publisher-core'
-												),
-												value: 'column',
-												icon: (
-													<FlexDirectionColumnBlockIcon />
-												),
-											},
-											{
-												label: __(
-													'Row Reverse',
-													'publisher-core'
-												),
-												value: 'row-reverse',
-												icon: (
-													<FlexDirectionRowReverseBlockIcon />
-												),
-											},
-											{
-												label: __(
-													'Column Reverse',
-													'publisher-core'
-												),
-												value: 'column-reverse',
-												icon: (
-													<FlexDirectionColumnReverseBlockIcon />
-												),
-											},
-										]}
-										//
-										defaultValue="row"
-										onChange={(newValue) =>
-											handleOnChangeAttributes(
-												'publisherFlexDirection',
-												newValue
-											)
-										}
-									/>
-								</BaseControl>
+									options={[
+										{
+											label: __('Row', 'publisher-core'),
+											value: 'row',
+											icon: <FlexDirectionRowBlockIcon />,
+										},
+										{
+											label: __(
+												'column',
+												'publisher-core'
+											),
+											value: 'column',
+											icon: (
+												<FlexDirectionColumnBlockIcon />
+											),
+										},
+										{
+											label: __(
+												'Row Reverse',
+												'publisher-core'
+											),
+											value: 'row-reverse',
+											icon: (
+												<FlexDirectionRowReverseBlockIcon />
+											),
+										},
+										{
+											label: __(
+												'Column Reverse',
+												'publisher-core'
+											),
+											value: 'column-reverse',
+											icon: (
+												<FlexDirectionColumnReverseBlockIcon />
+											),
+										},
+									]}
+									//
+									defaultValue="row"
+									onChange={(newValue) =>
+										handleOnChangeAttributes(
+											'publisherFlexDirection',
+											newValue
+										)
+									}
+								/>
 							</ControlContextProvider>
 						)}
 

@@ -9,7 +9,7 @@ import { memo, useContext } from '@wordpress/element';
  */
 import { useControlContext } from '../../../context';
 import { RepeaterContext } from '../../repeater-control/context';
-import { BaseControl, ColorControl, InputControl } from '../../index';
+import { ColorControl, InputControl } from '../../index';
 
 const Fields = ({ itemId, item }) => {
 	const {
@@ -21,79 +21,77 @@ const Fields = ({ itemId, item }) => {
 
 	return (
 		<div id={`repeater-item-${itemId}`}>
-			<BaseControl controlName="input" label={__('X', 'publisher-core')}>
-				<InputControl
-					id={getControlId(itemId, 'x')}
-					unitType="text-shadow"
-					range={true}
-					min={-100}
-					max={100}
-					onChange={(x) =>
-						changeRepeaterItem({
-							controlId,
-							repeaterId,
-							itemId,
-							value: { ...item, x },
-						})
-					}
-				/>
-			</BaseControl>
+			<InputControl
+				controlName="input"
+				label={__('X', 'publisher-core')}
+				columns="columns-2"
+				id={getControlId(itemId, 'x')}
+				unitType="text-shadow"
+				range={true}
+				min={-100}
+				max={100}
+				onChange={(x) =>
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, x },
+					})
+				}
+			/>
 
-			<BaseControl controlName="input" label={__('Y', 'publisher-core')}>
-				<InputControl
-					id={getControlId(itemId, 'y')}
-					unitType="text-shadow"
-					range={true}
-					min={-100}
-					max={100}
-					onChange={(y) =>
-						changeRepeaterItem({
-							controlId,
-							repeaterId,
-							itemId,
-							value: { ...item, y },
-						})
-					}
-				/>
-			</BaseControl>
+			<InputControl
+				controlName="input"
+				label={__('Y', 'publisher-core')}
+				columns="columns-2"
+				id={getControlId(itemId, 'y')}
+				unitType="text-shadow"
+				range={true}
+				min={-100}
+				max={100}
+				onChange={(y) =>
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, y },
+					})
+				}
+			/>
 
-			<BaseControl
+			<InputControl
 				controlName="input"
 				label={__('Blur', 'publisher-core')}
-			>
-				<InputControl
-					id={getControlId(itemId, 'blur')}
-					unitType="text-shadow"
-					range={true}
-					min={0}
-					max={100}
-					onChange={(blur) =>
-						changeRepeaterItem({
-							controlId,
-							repeaterId,
-							itemId,
-							value: { ...item, blur },
-						})
-					}
-				/>
-			</BaseControl>
+				columns="columns-2"
+				id={getControlId(itemId, 'blur')}
+				unitType="text-shadow"
+				range={true}
+				min={0}
+				max={100}
+				onChange={(blur) =>
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, blur },
+					})
+				}
+			/>
 
-			<BaseControl
+			<ColorControl
 				controlName="color"
 				label={__('Color', 'publisher-core')}
-			>
-				<ColorControl
-					id={getControlId(itemId, 'color')}
-					onChange={(color) =>
-						changeRepeaterItem({
-							controlId,
-							repeaterId,
-							itemId,
-							value: { ...item, color },
-						})
-					}
-				/>
-			</BaseControl>
+				columns="columns-2"
+				id={getControlId(itemId, 'color')}
+				onChange={(color) =>
+					changeRepeaterItem({
+						controlId,
+						repeaterId,
+						itemId,
+						value: { ...item, color },
+					})
+				}
+			/>
 		</div>
 	);
 };

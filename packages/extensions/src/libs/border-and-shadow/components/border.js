@@ -8,11 +8,7 @@ import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
-import {
-	BaseControl,
-	BoxBorderControl,
-	ControlContextProvider,
-} from '@publisher/controls';
+import { BoxBorderControl, ControlContextProvider } from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -202,23 +198,21 @@ export const Border = ({
 						: getNormalDefaultValue(),
 			}}
 		>
-			<BaseControl controlName="border" columns="columns-1">
-				<BoxBorderControl
-					label={__('Border Line', 'publisher-core')}
-					onChange={(newValue) => {
-						onChange(
-							'publisherBorder',
-							newValue,
-							'',
-							(
-								attributes: Object,
-								setAttributes: (attributes: Object) => void
-							): void =>
-								callback(newValue, attributes, setAttributes)
-						);
-					}}
-				/>
-			</BaseControl>
+			<BoxBorderControl
+				columns="columns-1"
+				label={__('Border Line', 'publisher-core')}
+				onChange={(newValue) => {
+					onChange(
+						'publisherBorder',
+						newValue,
+						'',
+						(
+							attributes: Object,
+							setAttributes: (attributes: Object) => void
+						): void => callback(newValue, attributes, setAttributes)
+					);
+				}}
+			/>
 		</ControlContextProvider>
 	);
 };

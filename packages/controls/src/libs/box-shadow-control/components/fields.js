@@ -24,6 +24,7 @@ const Fields = ({ itemId, item }) => {
 			<ToggleSelectControl
 				id={getControlId(itemId, 'type')}
 				label={__('Position', 'publisher-core')}
+				columns="columns-2"
 				options={[
 					{
 						label: __('Outer', 'publisher-core'),
@@ -47,6 +48,7 @@ const Fields = ({ itemId, item }) => {
 			<InputControl
 				id={getControlId(itemId, 'x')}
 				label={__('X', 'publisher-core')}
+				columns="columns-2"
 				type="css"
 				unitType="box-shadow"
 				range={true}
@@ -65,6 +67,7 @@ const Fields = ({ itemId, item }) => {
 			<InputControl
 				id={getControlId(itemId, 'y')}
 				label={__('Y', 'publisher-core')}
+				columns="columns-2"
 				type="css"
 				unitType="box-shadow"
 				range={true}
@@ -83,6 +86,7 @@ const Fields = ({ itemId, item }) => {
 			<InputControl
 				id={getControlId(itemId, 'blur')}
 				label={__('Blur', 'publisher-core')}
+				columns="columns-2"
 				type="css"
 				unitType="box-shadow"
 				range={true}
@@ -101,6 +105,7 @@ const Fields = ({ itemId, item }) => {
 			<InputControl
 				id={getControlId(itemId, 'spread')}
 				label={__('Spread', 'publisher-core')}
+				columns="columns-2"
 				type="css"
 				unitType="box-shadow"
 				range={true}
@@ -119,6 +124,7 @@ const Fields = ({ itemId, item }) => {
 			<ColorControl
 				id={getControlId(itemId, 'color')}
 				label={__('Color', 'publisher-core')}
+				columns="columns-2"
 				onChange={(color) =>
 					changeRepeaterItem({
 						controlId,

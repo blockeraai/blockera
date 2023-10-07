@@ -131,21 +131,19 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 							value: backgroundColor,
 						}}
 					>
-						<BaseControl
+						<ColorControl
 							controlName="color"
 							label={__('Color', 'publisher-core')}
-						>
-							<ColorControl
-								{...{
-									...props, //
-									onChange: (newValue) =>
-										handleOnChangeAttributes(
-											'publisherBackgroundColor',
-											newValue
-										),
-								}}
-							/>
-						</BaseControl>
+							columns="columns-2"
+							{...{
+								...props, //
+								onChange: (newValue) =>
+									handleOnChangeAttributes(
+										'publisherBackgroundColor',
+										newValue
+									),
+							}}
+						/>
 					</ControlContextProvider>
 				)}
 
@@ -156,62 +154,57 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 							value: backgroundClip,
 						}}
 					>
-						<BaseControl
+						<SelectControl
 							controlName="select"
 							label={__('Clipping', 'publisher-core')}
-						>
-							<SelectControl
-								{...{
-									...props,
-									options: [
-										{
-											label: __('None', 'publisher-core'),
-											value: 'none',
-											icon: <ClipNoneIcon />,
-										},
-										{
-											label: __(
-												'Clip to Padding',
-												'publisher-core'
-											),
-											value: 'padding-box',
-											icon: <ClipPaddingIcon />,
-										},
-										{
-											label: __(
-												'Clip to Content',
-												'publisher-core'
-											),
-											value: 'content-box',
-											icon: <ClipContentIcon />,
-										},
-										{
-											label: __(
-												'Clip to Text',
-												'publisher-core'
-											),
-											value: 'text',
-											icon: <ClipTextIcon />,
-										},
-										{
-											label: __(
-												'Inherit',
-												'publisher-core'
-											),
-											value: 'inherit',
-											icon: <InheritIcon />,
-										},
-									], //
-									type: 'custom',
-									defaultValue: 'none',
-									onChange: (newValue) =>
-										handleOnChangeAttributes(
-											'publisherBackgroundClip',
-											newValue
+							columns="columns-2"
+							{...{
+								...props,
+								options: [
+									{
+										label: __('None', 'publisher-core'),
+										value: 'none',
+										icon: <ClipNoneIcon />,
+									},
+									{
+										label: __(
+											'Clip to Padding',
+											'publisher-core'
 										),
-								}}
-							/>
-						</BaseControl>
+										value: 'padding-box',
+										icon: <ClipPaddingIcon />,
+									},
+									{
+										label: __(
+											'Clip to Content',
+											'publisher-core'
+										),
+										value: 'content-box',
+										icon: <ClipContentIcon />,
+									},
+									{
+										label: __(
+											'Clip to Text',
+											'publisher-core'
+										),
+										value: 'text',
+										icon: <ClipTextIcon />,
+									},
+									{
+										label: __('Inherit', 'publisher-core'),
+										value: 'inherit',
+										icon: <InheritIcon />,
+									},
+								], //
+								type: 'custom',
+								defaultValue: 'none',
+								onChange: (newValue) =>
+									handleOnChangeAttributes(
+										'publisherBackgroundClip',
+										newValue
+									),
+							}}
+						/>
 					</ControlContextProvider>
 				)}
 			</>

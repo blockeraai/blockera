@@ -91,6 +91,7 @@ const Fields = ({ itemId, item }) => {
 		<div id={`repeater-item-${itemId}`}>
 			<ToggleSelectControl
 				label={__('Type', 'publisher-core')}
+				columns="columns-2"
 				options={[
 					{
 						label: __('Image', 'publisher-core'),
@@ -149,6 +150,7 @@ const Fields = ({ itemId, item }) => {
 
 					<ToggleSelectControl
 						label={__('Size', 'publisher-core')}
+						columns="columns-2"
 						options={[
 							{
 								label: __('Custom', 'publisher-core'),
@@ -234,6 +236,7 @@ const Fields = ({ itemId, item }) => {
 					<AlignmentMatrixControl
 						inputFields={true}
 						label={__('Position', 'publisher-core')}
+						columns="columns-2"
 						id={getControlId(itemId, '[image-position]')}
 						onChange={(newValue) => {
 							changeRepeaterItem({
@@ -250,6 +253,7 @@ const Fields = ({ itemId, item }) => {
 
 					<ToggleSelectControl
 						label={__('Repeat', 'publisher-core')}
+						columns="columns-2"
 						options={[
 							{
 								label: __(
@@ -295,6 +299,7 @@ const Fields = ({ itemId, item }) => {
 
 					<ToggleSelectControl
 						label={__('Effect', 'publisher-core')}
+						columns="columns-2"
 						options={[
 							{
 								label: __('Fix', 'publisher-core'),
@@ -342,6 +347,7 @@ const Fields = ({ itemId, item }) => {
 
 					<AnglePickerControl
 						label={__('Angel', 'publisher-core')}
+						columns="columns-2"
 						id={getControlId(itemId, '[linear-gradient-angel]')}
 						onChange={(newValue) => {
 							// update linear gradient value
@@ -359,6 +365,7 @@ const Fields = ({ itemId, item }) => {
 
 					<ToggleSelectControl
 						label={__('Repeat', 'publisher-core')}
+						columns="columns-2"
 						options={[
 							{
 								label: __("Don't Repeat", 'publisher-core'),
@@ -388,6 +395,7 @@ const Fields = ({ itemId, item }) => {
 
 					<ToggleSelectControl
 						label={__('Effect', 'publisher-core')}
+						columns="columns-2"
 						options={[
 							{
 								label: __('Fix', 'publisher-core'),
@@ -439,6 +447,7 @@ const Fields = ({ itemId, item }) => {
 					<AlignmentMatrixControl
 						inputFields={true}
 						label={__('Position', 'publisher-core')}
+						columns="columns-2"
 						id={getControlId(itemId, '[radial-gradient-position]')}
 						onChange={(newValue) => {
 							changeRepeaterItem({
@@ -455,6 +464,7 @@ const Fields = ({ itemId, item }) => {
 
 					<ToggleSelectControl
 						label={__('Size', 'publisher-core')}
+						columns="columns-2"
 						options={[
 							{
 								label: __(
@@ -505,6 +515,7 @@ const Fields = ({ itemId, item }) => {
 
 					<ToggleSelectControl
 						label={__('Repeat', 'publisher-core')}
+						columns="columns-2"
 						options={[
 							{
 								label: __("Don't Repeat", 'publisher-core'),
@@ -533,6 +544,7 @@ const Fields = ({ itemId, item }) => {
 
 					<ToggleSelectControl
 						label={__('Effect', 'publisher-core')}
+						columns="columns-2"
 						options={[
 							{
 								label: __('Fix', 'publisher-core'),
@@ -707,6 +719,7 @@ const Fields = ({ itemId, item }) => {
 
 					<ToggleSelectControl
 						label={__('Effect', 'publisher-core')}
+						columns="columns-2"
 						options={[
 							{
 								label: __('Fix', 'publisher-core'),

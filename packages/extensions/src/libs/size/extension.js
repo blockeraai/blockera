@@ -10,7 +10,6 @@ import type { MixedElement } from 'react';
  * Publisher dependencies
  */
 import {
-	BaseControl,
 	ControlContextProvider,
 	InputControl,
 	ToggleSelectControl,
@@ -52,37 +51,35 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 							value: width,
 						}}
 					>
-						<BaseControl
+						<InputControl
 							controlName="input"
 							label={__('Width', 'publisher-core')}
-						>
-							<InputControl
-								{...{
-									...props,
-									unitType: 'essential',
-									min: 0,
-									defaultValue: _width,
-									onChange: (newValue) =>
-										handleOnChangeAttributes(
-											'publisherWidth',
-											newValue,
-											'',
-											(
-												attributes: Object,
-												setAttributes: (
-													attributes: Object
-												) => void
-											): void =>
-												setAttributes({
-													...attributes,
-													width: convertToPercent(
-														newValue
-													),
-												})
-										),
-								}}
-							/>
-						</BaseControl>
+							columns="columns-2"
+							{...{
+								...props,
+								unitType: 'essential',
+								min: 0,
+								defaultValue: _width,
+								onChange: (newValue) =>
+									handleOnChangeAttributes(
+										'publisherWidth',
+										newValue,
+										'',
+										(
+											attributes: Object,
+											setAttributes: (
+												attributes: Object
+											) => void
+										): void =>
+											setAttributes({
+												...attributes,
+												width: convertToPercent(
+													newValue
+												),
+											})
+									),
+							}}
+						/>
 					</ControlContextProvider>
 				)}
 
@@ -93,37 +90,35 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 							value: height,
 						}}
 					>
-						<BaseControl
+						<InputControl
 							controlName="input"
 							label={__('Height', 'publisher-core')}
-						>
-							<InputControl
-								{...{
-									...props,
-									unitType: 'essential',
-									min: 0,
-									defaultValue: _height,
-									onChange: (newValue) =>
-										handleOnChangeAttributes(
-											'publisherHeight',
-											newValue,
-											'',
-											(
-												attributes: Object,
-												setAttributes: (
-													attributes: Object
-												) => void
-											): void =>
-												setAttributes({
-													...attributes,
-													height: convertToPercent(
-														newValue
-													),
-												})
-										),
-								}}
-							/>
-						</BaseControl>
+							columns="columns-2"
+							{...{
+								...props,
+								unitType: 'essential',
+								min: 0,
+								defaultValue: _height,
+								onChange: (newValue) =>
+									handleOnChangeAttributes(
+										'publisherHeight',
+										newValue,
+										'',
+										(
+											attributes: Object,
+											setAttributes: (
+												attributes: Object
+											) => void
+										): void =>
+											setAttributes({
+												...attributes,
+												height: convertToPercent(
+													newValue
+												),
+											})
+									),
+							}}
+						/>
 					</ControlContextProvider>
 				)}
 
@@ -134,38 +129,36 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 							value: overflow,
 						}}
 					>
-						<BaseControl
+						<ToggleSelectControl
 							controlName="toggle-select"
 							label={__('Overflow', 'publisher-core')}
-						>
-							<ToggleSelectControl
-								options={[
-									{
-										label: __('Visible', 'publisher-core'),
-										value: 'visible',
-										icon: <OverflowVisibleIcon />,
-									},
-									{
-										label: __('Hidden', 'publisher-core'),
-										value: 'hidden',
-										icon: <OverflowHiddenIcon />,
-									},
-									{
-										label: __('Scroll', 'publisher-core'),
-										value: 'scroll',
-										icon: <OverflowScrollIcon />,
-									},
-								]}
-								//
-								defaultValue={_overflow || 'visible'}
-								onChange={(newValue) =>
-									handleOnChangeAttributes(
-										'publisherOverflow',
-										newValue
-									)
-								}
-							/>
-						</BaseControl>
+							columns="columns-2"
+							options={[
+								{
+									label: __('Visible', 'publisher-core'),
+									value: 'visible',
+									icon: <OverflowVisibleIcon />,
+								},
+								{
+									label: __('Hidden', 'publisher-core'),
+									value: 'hidden',
+									icon: <OverflowHiddenIcon />,
+								},
+								{
+									label: __('Scroll', 'publisher-core'),
+									value: 'scroll',
+									icon: <OverflowScrollIcon />,
+								},
+							]}
+							//
+							defaultValue={_overflow || 'visible'}
+							onChange={(newValue) =>
+								handleOnChangeAttributes(
+									'publisherOverflow',
+									newValue
+								)
+							}
+						/>
 					</ControlContextProvider>
 				)}
 			</>

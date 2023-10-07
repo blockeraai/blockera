@@ -25,6 +25,7 @@ const Fields = ({ itemId, item }) => {
 			<SelectControl
 				id={getControlId(itemId, 'type')}
 				label={__('Type', 'publisher-core')}
+				columns="columns-2"
 				options={getTypeOptions()}
 				onChange={(type) =>
 					changeRepeaterItem({
@@ -40,6 +41,7 @@ const Fields = ({ itemId, item }) => {
 				<InputControl
 					id={getControlId(itemId, 'blur')}
 					label={__('Blur', 'publisher-core')}
+					columns="columns-2"
 					type="css"
 					unitType="essential"
 					range={true}
@@ -61,6 +63,7 @@ const Fields = ({ itemId, item }) => {
 					<InputControl
 						id={getControlId(itemId, 'drop-shadow-x')}
 						label={__('X', 'publisher-core')}
+						columns="columns-2"
 						type="css"
 						unitType="essential"
 						range={true}
@@ -79,6 +82,7 @@ const Fields = ({ itemId, item }) => {
 					<InputControl
 						id={getControlId(itemId, 'drop-shadow-y')}
 						label={__('Y', 'publisher-core')}
+						columns="columns-2"
 						type="css"
 						unitType="essential"
 						range={true}
@@ -97,6 +101,7 @@ const Fields = ({ itemId, item }) => {
 					<InputControl
 						id={getControlId(itemId, 'drop-shadow-blur')}
 						label={__('Blur', 'publisher-core')}
+						columns="columns-2"
 						type="css"
 						unitType="essential"
 						range={true}
@@ -118,6 +123,7 @@ const Fields = ({ itemId, item }) => {
 					<ColorControl
 						id={getControlId(itemId, 'drop-shadow-color')}
 						label={__('Color', 'publisher-core')}
+						columns="columns-2"
 						onChange={(newValue) =>
 							changeRepeaterItem({
 								controlId,
@@ -137,6 +143,7 @@ const Fields = ({ itemId, item }) => {
 				<InputControl
 					id={getControlId(itemId, 'brightness')}
 					label={__('Brightness', 'publisher-core')}
+					columns="columns-2"
 					type="css"
 					unitType="percent"
 					range={true}
@@ -160,6 +167,7 @@ const Fields = ({ itemId, item }) => {
 				<InputControl
 					id={getControlId(itemId, 'contrast')}
 					label={__('Contrast', 'publisher-core')}
+					columns="columns-2"
 					type="css"
 					unitType="percent"
 					range={true}
@@ -183,6 +191,7 @@ const Fields = ({ itemId, item }) => {
 				<InputControl
 					id={getControlId(itemId, 'hue-rotate')}
 					label={__('Hue Rotate', 'publisher-core')}
+					columns="columns-2"
 					type="css"
 					unitType="angle"
 					range={true}
@@ -206,6 +215,7 @@ const Fields = ({ itemId, item }) => {
 				<InputControl
 					id={getControlId(itemId, 'saturate')}
 					label={__('Saturation', 'publisher-core')}
+					columns="columns-2"
 					type="css"
 					unitType="percent"
 					range={true}
@@ -229,6 +239,7 @@ const Fields = ({ itemId, item }) => {
 				<InputControl
 					id={getControlId(itemId, 'grayscale')}
 					label={__('Grayscale', 'publisher-core')}
+					columns="columns-2"
 					type="css"
 					unitType="percent"
 					range={true}
@@ -252,6 +263,7 @@ const Fields = ({ itemId, item }) => {
 				<InputControl
 					id={getControlId(itemId, 'invert')}
 					label={__('Invert', 'publisher-core')}
+					columns="columns-2"
 					type="css"
 					unitType="percent"
 					range={true}
@@ -275,6 +287,7 @@ const Fields = ({ itemId, item }) => {
 				<InputControl
 					id={getControlId(itemId, 'sepia')}
 					label={__('Sepia', 'publisher-core')}
+					columns="columns-2"
 					type="css"
 					unitType="percent"
 					range={true}

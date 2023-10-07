@@ -20,6 +20,7 @@ import { Flex } from '@publisher/components';
 export default function PositionControl({
 	label,
 	className,
+	columns,
 	//
 	topValue,
 	leftValue,
@@ -35,7 +36,12 @@ export default function PositionControl({
 	});
 
 	return (
-		<BaseControl label={label} controlName="position" className={className}>
+		<BaseControl
+			label={label}
+			controlName="position"
+			className={className}
+			columns={columns}
+		>
 			<Flex gap="8px" direction="row" justify="space-around">
 				<div style={{ width: '75%' }}>
 					<AlignmentMatrixControl

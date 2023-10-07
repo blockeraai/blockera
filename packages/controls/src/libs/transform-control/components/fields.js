@@ -72,201 +72,188 @@ const Fields = ({ itemId, item }) => {
 
 			{item.type === 'move' && (
 				<>
-					<BaseControl
+					<InputControl
 						controlName="input"
 						label={<XCoordinateIcon />}
-					>
-						<InputControl
-							id={getControlId(itemId, 'move-x')}
-							unitType="essential"
-							range={true}
-							min={-300}
-							max={300}
-							onChange={(newValue) =>
-								changeRepeaterItem({
-									controlId,
-									repeaterId,
-									itemId,
-									value: { ...item, 'move-x': newValue },
-								})
-							}
-						/>
-					</BaseControl>
-					<BaseControl
+						columns="columns-2"
+						id={getControlId(itemId, 'move-x')}
+						unitType="essential"
+						range={true}
+						min={-300}
+						max={300}
+						onChange={(newValue) =>
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: { ...item, 'move-x': newValue },
+							})
+						}
+					/>
+
+					<InputControl
 						controlName="input"
 						label={<YCoordinateIcon />}
-					>
-						<InputControl
-							id={getControlId(itemId, 'move-y')}
-							unitType="essential"
-							range={true}
-							min={-300}
-							max={300}
-							onChange={(newValue) =>
-								changeRepeaterItem({
-									controlId,
-									repeaterId,
-									itemId,
-									value: { ...item, 'move-y': newValue },
-								})
-							}
-						/>
-					</BaseControl>
-					<BaseControl
+						columns="columns-2"
+						id={getControlId(itemId, 'move-y')}
+						unitType="essential"
+						range={true}
+						min={-300}
+						max={300}
+						onChange={(newValue) =>
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: { ...item, 'move-y': newValue },
+							})
+						}
+					/>
+
+					<InputControl
 						controlName="input"
 						label={<ZCoordinateIcon />}
-					>
-						<InputControl
-							id={getControlId(itemId, 'move-z')}
-							unitType="essential"
-							range={true}
-							min={-300}
-							max={300}
-							onChange={(newValue) =>
-								changeRepeaterItem({
-									controlId,
-									repeaterId,
-									itemId,
-									value: { ...item, 'move-z': newValue },
-								})
-							}
-						/>
-					</BaseControl>
+						columns="columns-2"
+						id={getControlId(itemId, 'move-z')}
+						unitType="essential"
+						range={true}
+						min={-300}
+						max={300}
+						onChange={(newValue) =>
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: { ...item, 'move-z': newValue },
+							})
+						}
+					/>
 				</>
 			)}
 
 			{item.type === 'scale' && (
 				<>
-					<BaseControl
+					<InputControl
 						controlName="input"
 						label={__('Scale', 'publisher-core')}
-					>
-						<InputControl
-							id={getControlId(itemId, 'scale')}
-							unitType="percent"
-							range={true}
-							min={0}
-							max={200}
-							onChange={(newValue) =>
-								changeRepeaterItem({
-									controlId,
-									repeaterId,
-									itemId,
-									value: { ...item, scale: newValue },
-								})
-							}
-						/>
-					</BaseControl>
+						columns="columns-2"
+						id={getControlId(itemId, 'scale')}
+						unitType="percent"
+						range={true}
+						min={0}
+						max={200}
+						onChange={(newValue) =>
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: { ...item, scale: newValue },
+							})
+						}
+					/>
 				</>
 			)}
 
 			{item.type === 'rotate' && (
 				<>
-					<BaseControl
+					<InputControl
 						controlName="input"
 						label={<RotateXCoordinateIcon />}
-					>
-						<InputControl
-							id={getControlId(itemId, 'rotate-x')}
-							unitType="angle"
-							range={true}
-							min={-180}
-							max={180}
-							onChange={(newValue) =>
-								changeRepeaterItem({
-									controlId,
-									repeaterId,
-									itemId,
-									value: { ...item, 'rotate-x': newValue },
-								})
-							}
-						/>
-					</BaseControl>
-					<BaseControl
+						columns="columns-2"
+						id={getControlId(itemId, 'rotate-x')}
+						unitType="angle"
+						range={true}
+						min={-180}
+						max={180}
+						onChange={(newValue) =>
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: { ...item, 'rotate-x': newValue },
+							})
+						}
+					/>
+
+					<InputControl
 						controlName="input"
 						label={<RotateYCoordinateIcon />}
-					>
-						<InputControl
-							id={getControlId(itemId, 'rotate-y')}
-							unitType="angle"
-							range={true}
-							min={-180}
-							max={180}
-							onChange={(newValue) =>
-								changeRepeaterItem({
-									controlId,
-									repeaterId,
-									itemId,
-									value: { ...item, 'rotate-y': newValue },
-								})
-							}
-						/>
-					</BaseControl>
-					<BaseControl
+						columns="columns-2"
+						id={getControlId(itemId, 'rotate-y')}
+						unitType="angle"
+						range={true}
+						min={-180}
+						max={180}
+						onChange={(newValue) =>
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: { ...item, 'rotate-y': newValue },
+							})
+						}
+					/>
+
+					<InputControl
 						controlName="input"
 						label={<RotateZCoordinateIcon />}
-					>
-						<InputControl
-							id={getControlId(itemId, 'rotate-z')}
-							unitType="angle"
-							range={true}
-							min={-180}
-							max={180}
-							onChange={(newValue) =>
-								changeRepeaterItem({
-									controlId,
-									repeaterId,
-									itemId,
-									value: { ...item, 'rotate-z': newValue },
-								})
-							}
-						/>
-					</BaseControl>
+						columns="columns-2"
+						id={getControlId(itemId, 'rotate-z')}
+						unitType="angle"
+						range={true}
+						min={-180}
+						max={180}
+						onChange={(newValue) =>
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: { ...item, 'rotate-z': newValue },
+							})
+						}
+					/>
 				</>
 			)}
 
 			{item.type === 'skew' && (
 				<>
-					<BaseControl
+					<InputControl
+						id={getControlId(itemId, 'skew-x')}
 						controlName="input"
 						label={<XCoordinateIcon />}
-					>
-						<InputControl
-							id={getControlId(itemId, 'skew-x')}
-							unitType="angle"
-							range={true}
-							min={-60}
-							max={60}
-							onChange={(newValue) =>
-								changeRepeaterItem({
-									controlId,
-									repeaterId,
-									itemId,
-									value: { ...item, 'skew-x': newValue },
-								})
-							}
-						/>
-					</BaseControl>
-					<BaseControl
+						columns="columns-2"
+						unitType="angle"
+						range={true}
+						min={-60}
+						max={60}
+						onChange={(newValue) =>
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: { ...item, 'skew-x': newValue },
+							})
+						}
+					/>
+
+					<InputControl
 						controlName="input"
 						label={<YCoordinateIcon />}
-					>
-						<InputControl
-							id={getControlId(itemId, 'skew-y')}
-							unitType="angle"
-							range={true}
-							min={-60}
-							max={60}
-							onChange={(newValue) =>
-								changeRepeaterItem({
-									controlId,
-									repeaterId,
-									itemId,
-									value: { ...item, 'skew-y': newValue },
-								})
-							}
-						/>
-					</BaseControl>
+						columns="columns-2"
+						id={getControlId(itemId, 'skew-y')}
+						unitType="angle"
+						range={true}
+						min={-60}
+						max={60}
+						onChange={(newValue) =>
+							changeRepeaterItem({
+								controlId,
+								repeaterId,
+								itemId,
+								value: { ...item, 'skew-y': newValue },
+							})
+						}
+					/>
 				</>
 			)}
 		</div>

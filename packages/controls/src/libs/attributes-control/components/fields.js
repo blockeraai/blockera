@@ -68,6 +68,7 @@ const Fields = ({ itemId, item }) => {
 				<>
 					<SelectControl
 						label={__('Attribute', 'publisher-core')}
+						columns="columns-2"
 						options={keyFieldOptions}
 						id={getControlId(itemId, '__key')}
 						defaultValue=""
@@ -137,6 +138,7 @@ const Fields = ({ itemId, item }) => {
 							{item.key !== '' && valueFieldOptions.length ? (
 								<SelectControl
 									label={__('Value', 'publisher-core')}
+									columns="columns-2"
 									options={valueFieldOptions}
 									id={getControlId(itemId, 'value')}
 									defaultValue=""
@@ -160,6 +162,7 @@ const Fields = ({ itemId, item }) => {
 												'Value',
 												'publisher-core'
 											)}
+											columns="columns-2"
 											type="text"
 											id={getControlId(itemId, 'value')}
 											defaultValue=""
@@ -187,6 +190,7 @@ const Fields = ({ itemId, item }) => {
 				<>
 					<InputControl
 						label={__('Key', 'publisher-core')}
+						columns="columns-2"
 						type="text"
 						id={getControlId(itemId, 'key')}
 						defaultValue=""
@@ -204,6 +208,7 @@ const Fields = ({ itemId, item }) => {
 					/>
 					<InputControl
 						label={__('Value', 'publisher-core')}
+						columns="columns-2"
 						id={getControlId(itemId, 'value')}
 						type="text"
 						defaultValue=""

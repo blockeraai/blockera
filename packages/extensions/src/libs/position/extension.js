@@ -46,7 +46,11 @@ export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 							value: positionValue,
 						}}
 					>
-						<BaseControl controlName="box-position">
+						<BaseControl
+							controlName="box-position"
+							columns="columns-1"
+							label=""
+						>
 							<BoxPositionControl
 								{...{
 									...props,
@@ -71,22 +75,20 @@ export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 								value: zIndexValue,
 							}}
 						>
-							<BaseControl
+							<InputControl
 								controlName="input"
+								columns="columns-2"
 								label={__('z-index', 'publisher-core')}
-							>
-								<InputControl
-									{...{
-										...props,
-										defaultValue: '',
-										onChange: (newValue) =>
-											handleOnChangeAttributes(
-												'publisherZIndex',
-												newValue
-											),
-									}}
-								/>
-							</BaseControl>
+								{...{
+									...props,
+									defaultValue: '',
+									onChange: (newValue) =>
+										handleOnChangeAttributes(
+											'publisherZIndex',
+											newValue
+										),
+								}}
+							/>
 						</ControlContextProvider>
 					)}
 			</>

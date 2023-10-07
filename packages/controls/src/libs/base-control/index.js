@@ -16,16 +16,14 @@ export default function BaseControl({
 	className,
 	controlName,
 }) {
-	columns = columns || (label !== '' ? 'columns-2' : 'columns-1');
-
 	let cssColumns = '';
 
-	if (columns !== 'columns-1' && columns !== 'columns-2') {
+	if (columns !== '' && columns !== 'columns-1' && columns !== 'columns-2') {
 		cssColumns = columns;
 		columns = 'columns-custom';
 	}
 
-	if (label === '') {
+	if (label === '' && columns === '') {
 		if (controlName === 'empty') {
 			return (
 				<div

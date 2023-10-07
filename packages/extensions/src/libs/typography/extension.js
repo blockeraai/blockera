@@ -154,6 +154,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 				<BaseControl
 					controlName="typography"
 					label={__('Typography', 'publisher-core')}
+					columns="columns-2"
 				>
 					<Button
 						size="input"
@@ -876,22 +877,20 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 							value: fontColor,
 						}}
 					>
-						<BaseControl
+						<ColorControl
 							controlName="color"
 							label={__('Color', 'publisher-core')}
-						>
-							<ColorControl
-								{...{
-									...props, //
-									defaultValue: '',
-									onChange: (newValue) =>
-										handleOnChangeAttributes(
-											'publisherFontColor',
-											newValue
-										),
-								}}
-							/>
-						</BaseControl>
+							columns="columns-2"
+							{...{
+								...props, //
+								defaultValue: '',
+								onChange: (newValue) =>
+									handleOnChangeAttributes(
+										'publisherFontColor',
+										newValue
+									),
+							}}
+						/>
 					</ControlContextProvider>
 				)}
 

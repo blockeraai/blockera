@@ -28,6 +28,9 @@ import {
 import { ControlContextProvider, useControlContext } from '../../context';
 
 export default function LinkControl({
+	label,
+	columns,
+	field,
 	onChange,
 	className,
 	placeholder,
@@ -57,59 +60,76 @@ export default function LinkControl({
 	);
 
 	return (
-		<div className={controlClassNames('link', className)}>
-			<div className={controlInnerClassNames('link-row-link')}>
-				<InputControl
-					id={'link'}
-					placeholder={placeholder}
-					onChange={(newValue) => {
-						setValue({ ...value, link: newValue });
-					}}
-				/>
-				<Button
-					onClick={() => setIsAdvancedMode(!isAdvancedMode)}
-					size="small"
-					className={controlInnerClassNames(
-						'link-advanced-options-btn',
-						isAdvancedMode ? 'is-active' : ''
-					)}
-					noBorder={true}
-					aria-label={__('Open Advanced Settings', 'publisher-core')}
-				>
-					<AdvancedIcon />
-				</Button>
-			</div>
-			{isAdvancedMode && (
-				<div
-					className={controlInnerClassNames('link-advanced-settings')}
-				>
-					<CheckboxControl
-						id={'target'}
-						label={__('Open in New Window', 'publisher-core')}
+		<BaseControl
+			label={label}
+			columns={columns}
+			controlName={field}
+			className={className}
+		>
+			<div className={controlClassNames('link', className)}>
+				<div className={controlInnerClassNames('link-row-link')}>
+					<InputControl
+						id={'link'}
+						placeholder={placeholder}
 						onChange={(newValue) => {
-							setValue({
-								...value,
-								target: newValue,
-							});
+							setValue({ ...value, link: newValue });
 						}}
 					/>
-
-					<CheckboxControl
-						id={'nofollow'}
-						label={__('Add Nofollow', 'publisher-core')}
-						onChange={(newValue) => {
-							setValue({
-								...value,
-								nofollow: newValue,
-							});
-						}}
-					/>
-
-					<BaseControl
-						controlName="input"
-						label={__('Label', 'publisher-core')}
+					<Button
+						onClick={() => setIsAdvancedMode(!isAdvancedMode)}
+						size="small"
+						className={controlInnerClassNames(
+							'link-advanced-options-btn',
+							isAdvancedMode ? 'is-active' : ''
+						)}
+						noBorder={true}
+						aria-label={__(
+							'Open Advanced Settings',
+							'publisher-core'
+						)}
 					>
+						<AdvancedIcon />
+					</Button>
+				</div>
+				{isAdvancedMode && (
+					<div
+						className={controlInnerClassNames(
+							'link-advanced-settings'
+						)}
+					>
+						<CheckboxControl
+							id={'target'}
+							checkboxLabel={__(
+								'Open in New Window',
+								'publisher-core'
+							)}
+							label=""
+							columns=""
+							onChange={(newValue) => {
+								setValue({
+									...value,
+									target: newValue,
+								});
+							}}
+						/>
+
+						<CheckboxControl
+							id={'nofollow'}
+							label=""
+							columns=""
+							checkboxLabel={__('Add Nofollow', 'publisher-core')}
+							onChange={(newValue) => {
+								setValue({
+									...value,
+									nofollow: newValue,
+								});
+							}}
+						/>
+
 						<InputControl
+							controlName="input"
+							label={__('Label', 'publisher-core')}
+							columns="columns-2"
 							id={'label'}
 							onChange={(newValue) => {
 								setValue({
@@ -118,30 +138,30 @@ export default function LinkControl({
 								});
 							}}
 						/>
-					</BaseControl>
 
-					<ControlContextProvider
-						value={{
-							name: `${controlId}/${attributesId}`,
-							value: value.attributes,
-						}}
-						storeName={STORE_NAME}
-					>
-						<AttributesControl
-							onChange={(newValue) => {
-								setValue({
-									...value,
-									attributes: newValue,
-								});
+						<ControlContextProvider
+							value={{
+								name: `${controlId}/${attributesId}`,
+								value: value.attributes,
 							}}
-							attributeElement="a"
-							isPopover={true}
-							label={__('Attributes', 'publisher-core')}
-						/>
-					</ControlContextProvider>
-				</div>
-			)}
-		</div>
+							storeName={STORE_NAME}
+						>
+							<AttributesControl
+								onChange={(newValue) => {
+									setValue({
+										...value,
+										attributes: newValue,
+									});
+								}}
+								attributeElement="a"
+								isPopover={true}
+								label={__('Attributes', 'publisher-core')}
+							/>
+						</ControlContextProvider>
+					</div>
+				)}
+			</div>
+		</BaseControl>
 	);
 }
 
@@ -196,4 +216,5 @@ LinkControl.defaultProps = {
 		label: '',
 		attributes: [],
 	},
+	field: 'link',
 };
