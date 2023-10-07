@@ -268,7 +268,7 @@ export const TertiaryButton = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
-export const Screenshot = {
+export const All = {
 	render: (args) => (
 		<Flex direction="column" gap="50px">
 			<PrimaryButton.render {...args} />

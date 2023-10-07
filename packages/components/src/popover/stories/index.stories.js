@@ -328,7 +328,7 @@ export const Placements = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
-export const Screenshot = {
+export const All = {
 	render: () => (
 		<Flex direction="column" gap="50px">
 			<Default.render {...Default.args} />

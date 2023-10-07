@@ -302,7 +302,7 @@ export const Stack = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
-export const Screenshot = {
+export const All = {
 	render: () => (
 		<Flex direction="column" gap="30px">
 			<Color.render {...Color.args} />
