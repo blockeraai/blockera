@@ -49,6 +49,55 @@ class PublisherAssets {
 		add_action( 'enqueue_block_editor_assets', array( $this, 'register_assets' ), 10 );
 	}
 
+	public function enqueue() {
+
+		add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_editor_assets' ], 9e2 );
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_editor_assets' ], 9e2 );
+	}
+
+	/**
+	 * Enqueueing block editor or site editor assets.
+	 *
+	 * @hook `enqueue_block_editor_assets`
+	 *
+	 * @return void
+	 */
+	public function enqueue_editor_assets(): void {
+		
+		if ( ! is_admin() ) {
+
+			return;
+		}
+
+		foreach ( $this->prepare_assets() as $asset ) {
+
+			if ( $asset['style'] ) {
+
+				wp_enqueue_style(
+					'@publisher/' . $asset['name'],
+					str_replace( '\\', '/', $asset['style'] ),
+					self::$packages_deps[ $asset['name'] ] ?? [],
+					$asset['version']
+				);
+			}
+
+			if ( ! $asset['script'] ) {
+
+				continue;
+			}
+
+			$deps = $this->exclude_dependencies( $asset['deps'] );
+
+			wp_enqueue_script(
+				'@publisher/' . $asset['name'],
+				str_replace( '\\', '/', $asset['script'] ),
+				$deps,
+				$asset['version'],
+				true
+			);
+		}
+	}
+
 	/**
 	 * Preparing current assets with info!
 	 *

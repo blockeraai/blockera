@@ -20,6 +20,42 @@ require __DIR__ . '/vendor/autoload.php';
 define( 'PB_CORE_URI', plugin_dir_url( __FILE__ ) );
 define( 'PB_CORE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'PB_CORE_VERSION', '1.0.0' );
+define( 'PB_ENV', 'wp-env' );
+
 
 # loading front controller
 require __DIR__ . '/bootstrap/app.php';
+
+
+add_action( 'enqueue_block_editor_assets', 'enqueue_editor_assets', 9e2 );
+add_action( 'wp_enqueue_scripts', 'enqueue_editor_assets', 9e2 );
+
+
+function enqueue_editor_assets(): void {
+
+	$handle = 'publisher-core';
+
+	$asset_file_info = PB_CORE_PATH . 'tools/wp-env-app/dist/publisher-core-app.asset.php';
+
+	if ( ! file_exists( $asset_file_info ) ) {
+
+		return;
+	}
+
+	$info = include $asset_file_info;
+
+	if ( empty( $info['version'] ) || ! is_admin() ) {
+
+		return;
+	}
+
+	/**
+	 * JavaScripts
+	 */
+	wp_enqueue_script(
+		$handle,
+		PB_CORE_URI . 'tools/wp-env-app/dist/publisher-core-app.js',
+		$info['dependencies'],
+		$info['version']
+	);
+}

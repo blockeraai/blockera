@@ -53,7 +53,13 @@ class AssetsProvider extends ServiceProvider {
 	 */
 	public function boot(): void {
 
-		$this->app->make( PublisherAssets::class );
+		$assets = $this->app->make( PublisherAssets::class );
+
+		//handle loading assets in wp-env to use in CI
+		if ( defined( 'PB_ENV' ) && 'wp-env' === PB_ENV ) {
+
+			$assets->enqueue();
+		}
 	}
 
 }
