@@ -122,7 +122,7 @@ describe('testing control context provider and related hooks', () => {
 		]);
 	});
 
-	it('arguments includes repeater details when repeater is empty', () => {
+	it('arguments includes repeater details when repeater is empty and defaultValue is empty array', () => {
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
@@ -137,6 +137,7 @@ describe('testing control context provider and related hooks', () => {
 			() =>
 				useControlContext({
 					repeater: {},
+					defaultValue: [],
 				}),
 			{
 				wrapper,
