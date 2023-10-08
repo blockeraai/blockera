@@ -39,8 +39,7 @@ jobs:
             - name: Start WordPress Environment
               run: |
                   npm run env:start
-                  wp-env run tests-cli bash
-                  wp plugin activate publisher-core
+                  npm run plugin:activate
 
             - name: Wait for WordPress to Start
               run: sleep 40
