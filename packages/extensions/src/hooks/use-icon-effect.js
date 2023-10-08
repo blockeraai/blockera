@@ -44,6 +44,7 @@ const IconComponent = ({ el, iconNode, position }) => {
 				}
 			};
 
+			/* eslint-disable no-unused-expressions */
 			iconElement &&
 				iconElement.addEventListener('keydown', handleKeyDownEvent);
 
