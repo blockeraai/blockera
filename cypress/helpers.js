@@ -3,7 +3,7 @@
  */
 export function loginToSite() {
 	return goTo('/wp-login.php', true).then(() => {
-		// eslint-disable-next-line cypress/no-unnecessary-waiting
+		// eslint-disable-next-line
 		cy.wait(250);
 
 		cy.get('#user_login').type(Cypress.env('wpUsername'));
@@ -60,9 +60,10 @@ export function disableGutenbergFeatures() {
 }
 
 /**
- * From inside the WordPress editor open the PublisherBlocks Gutenberg editor panel
+ * From inside the WordPress editor open the publisher-core Gutenberg editor panel
  *
  * @param {string}  blockName   The name to find in the block inserter
+ *                              e.g 'core/image'.
  * @param {boolean} clearEditor Should clear editor of all blocks
  */
 export function addBlockToPost(blockName, clearEditor = false) {
@@ -77,24 +78,38 @@ export function addBlockToPost(blockName, clearEditor = false) {
 		clearBlocks();
 	}
 
-	cy.get(
-		'.edit-post-header [aria-label="Add block"], .edit-site-header [aria-label="Add block"], .edit-post-header-toolbar__inserter-toggle'
-	).click();
-	// eslint-disable-next-line cypress/unsafe-to-chain-command
+	if (
+		Cypress.$(
+			'.edit-post-header-toolbar__inserter-toggle[aria-pressed="false"]'
+		)
+	) {
+		cy.get(
+			'.edit-post-header [aria-label="Add block"], .edit-site-header [aria-label="Add block"], .edit-post-header-toolbar__inserter-toggle[aria-pressed="false"]'
+		).click();
+	}
+
+	// eslint-disable-next-line
 	cy.get(
 		'.block-editor-inserter__search-input,input.block-editor-inserter__search, .components-search-control__input'
 	)
 		.click()
 		.type(blockName);
 
+	/**
+	 * The network request to block-directory may be cached and is not consistently fired with each test.
+	 * Instead of intercepting we can await known dom elements that appear only when search results are present.
+	 * This should correct a race condition in CI.
+	 */
+	cy.get('div.block-editor-inserter__main-area:not(.show-as-tabs)');
+
 	const targetClassName =
 		(blockCategory === 'core' ? '' : `-${blockCategory}`) + `-${blockID}`;
 	cy.get('.editor-block-list-item' + targetClassName)
 		.first()
-		.click();
+		.click({ force: true });
 
 	// Make sure the block was added to our page
-	cy.get(`[class*="-visual-editor"] [data-type="${blockName}"]`)
+	cy.get(`[class*="-visual-editor"]`)
 		.should('exist')
 		.then(() => {
 			// Then close the block inserter if still open.
@@ -109,19 +124,27 @@ export function addBlockToPost(blockName, clearEditor = false) {
 
 export function addNewGroupToPost() {
 	clearBlocks();
-
+	// eslint-disable-next-line
 	cy.get(
 		'.edit-post-header [aria-label="Add block"], .edit-site-header [aria-label="Add block"], .edit-post-header-toolbar__inserter-toggle'
 	).click();
-	// eslint-disable-next-line cypress/unsafe-to-chain-command
+	// eslint-disable-next-line
 	cy.get(
 		'.block-editor-inserter__search-input,input.block-editor-inserter__search, .components-search-control__input'
 	)
 		.click()
 		.type('group');
+	// eslint-disable-next-line
+	if (isWP62AtLeast()) {
+		// eslint-disable-next-line
+		cy.wait(1000);
 
-	// The different structure of classes is here
-	cy.get('.block-editor-block-types-list__item').first().click();
+		cy.get('.block-editor-block-types-list__list-item')
+			.contains('Group')
+			.click();
+	} else {
+		cy.get('.block-editor-block-types-list__item').first().click();
+	}
 
 	// Make sure the block was added to our page
 	cy.get(`[class*="-visual-editor"] [data-type='core/group']`)
@@ -138,7 +161,7 @@ export function addNewGroupToPost() {
 }
 
 /**
- * From inside the WordPress editor open the PublisherBlocks Gutenberg editor panel
+ * From inside the WordPress editor open the publisher-core Gutenberg editor panel
  */
 export function savePage() {
 	cy.get('.edit-post-header__settings button.is-primary').click();
@@ -155,6 +178,7 @@ export function savePage() {
  * Check the page for block errors
  *
  * @param {string} blockName blockName the block to check for
+ *                           e.g 'core/image'.
  */
 
 export function checkForBlockErrors(blockName) {
@@ -182,23 +206,12 @@ export function viewPage() {
 
 	cy.get('button[data-label="Post"]');
 
-	// WP 6.1
-	if (isWP61AtLeast()) {
-		cy.get('.edit-post-post-url__dropdown button').click();
+	cy.get('.edit-post-post-url__dropdown button').click();
 
-		cy.get('.editor-post-url__link').then((pageLink) => {
-			const linkAddress = Cypress.$(pageLink).attr('href');
-			cy.visit(linkAddress);
-		});
-	} else {
-		// <= WP 6.0
-		openSettingsPanel(/permalink/i);
-
-		cy.get('.edit-post-post-link__link').then((pageLink) => {
-			const linkAddress = Cypress.$(pageLink).attr('href');
-			cy.visit(linkAddress);
-		});
-	}
+	cy.get('.editor-post-url__link').then((pageLink) => {
+		const linkAddress = Cypress.$(pageLink).attr('href');
+		cy.visit(linkAddress);
+	});
 }
 
 /**
@@ -236,11 +249,27 @@ export function getBlockSlug() {
  * Open the block navigator.
  */
 export function openBlockNavigator() {
-	cy.get('.edit-post-header__toolbar')
-		.find(
-			'.block-editor-block-navigation,.edit-post-header-toolbar__list-view-toggle,.edit-post-header-toolbar__document-overview-toggle'
-		)
-		.click();
+	cy.get(
+		'.block-editor-block-navigation,.edit-post-header-toolbar__list-view-toggle,.edit-post-header-toolbar__document-overview-toggle'
+	).then((element) => {
+		if (!element.hasClass('is-pressed')) {
+			element.click();
+		}
+	});
+}
+
+/**
+ * Close the block navigator.
+ */
+export function closeBlockNavigator() {
+	const inserterButton = Cypress.$(
+		'.edit-post-header__toolbar button.edit-post-header-toolbar__list-view-toggle.is-pressed'
+	);
+	if (inserterButton.length > 0) {
+		cy.get(
+			'.edit-post-header__toolbar button.edit-post-header-toolbar__list-view-toggle.is-pressed'
+		).click();
+	}
 }
 
 /**
@@ -265,11 +294,7 @@ export function setBlockStyle(style) {
  * @param {boolean} isChildBlock Optional selector for children blocks. Default will be top level blocks.
  */
 export function selectBlock(name, isChildBlock = false) {
-	cy.get('.edit-post-header__toolbar')
-		.find(
-			'.block-editor-block-navigation,.edit-post-header-toolbar__list-view-toggle'
-		)
-		.click();
+	openBlockNavigator();
 
 	if (isChildBlock) {
 		cy.get('.block-editor-list-view__expander svg').first().click();
@@ -287,14 +312,7 @@ export function selectBlock(name, isChildBlock = false) {
 		.click()
 		.then(() => {
 			// Then close the block navigator if still open.
-			const inserterButton = Cypress.$(
-				'.edit-post-header__toolbar button.edit-post-header-toolbar__list-view-toggle.is-pressed'
-			);
-			if (!!inserterButton.length) {
-				cy.get(
-					'.edit-post-header__toolbar button.edit-post-header-toolbar__list-view-toggle.is-pressed'
-				).click();
-			}
+			closeBlockNavigator();
 		});
 }
 
@@ -313,7 +331,7 @@ export function setInputValue(
 	ignoreCase = true
 ) {
 	openSettingsPanel(ignoreCase ? RegExp(panelName, 'i') : panelName);
-
+	// eslint-disable-next-line
 	cy.get('.edit-post-sidebar')
 		.contains(ignoreCase ? RegExp(settingName, 'i') : settingName)
 		.not('.block-editor-block-card__description')
@@ -333,22 +351,12 @@ export function setInputValue(
  * @param {string} hexColor
  */
 export function setColorSettingsFoldableSetting(settingName, hexColor) {
-	// Not needed in WP 6.1 anymore
-	if (!isWP61AtLeast()) {
-		openSettingsPanel(/color settings|color/i);
-	}
-
 	const formattedHex = hexColor.split('#')[1];
 
 	cy.get('.block-editor-panel-color-gradient-settings__dropdown')
 		.contains(settingName, { matchCase: false })
 		.click();
 	cy.get('.components-color-palette__custom-color').click();
-
-	// Not needed in WP 6.1 anymore
-	if (!isWP61AtLeast()) {
-		cy.get('[aria-label="Show detailed inputs"]').click();
-	}
 	// eslint-disable-next-line
 	cy.get('.components-color-picker')
 		.find('.components-input-control__input')
@@ -368,12 +376,6 @@ export function setColorPanelSetting(settingName, hexColor) {
 		.contains(settingName, { matchCase: false })
 		.click();
 	cy.get('.components-color-palette__custom-color').click();
-
-	// Not needed in WP 6.1 anymore
-	if (!isWP61AtLeast()) {
-		cy.get('[aria-label="Show detailed inputs"]').click();
-	}
-
 	// eslint-disable-next-line
 	cy.get('.components-color-picker')
 		.find('.components-input-control__input')
@@ -468,12 +470,13 @@ export function isNotWPLocalEnv() {
 	return Cypress.env('testURL') !== 'http://localhost:8889';
 }
 
-// A condition to determine if we are testing on WordPress 6.1+
-export function isWP61AtLeast() {
-	// WP 6.0 uses the branch-6 class, and version 6.1+ uses branch-6-x (ex : branch-6-1 for WP 6.1)
-	// So we are looking for a class that starts with branch-6-
-
-	return Cypress.$("[class*='branch-6-']").length > 0;
+// A condition to determine if we are testing on WordPress 6.2+
+// This function should be removed in the process of the work for WP 6.3 compatibility
+export function isWP62AtLeast() {
+	return (
+		Cypress.$("[class*='branch-6-2']").length > 0 ||
+		Cypress.$("[class*='branch-6-3']").length > 0
+	);
 }
 
 function getIframeDocument(containerClass) {
@@ -492,4 +495,17 @@ export function getIframeBody(containerClass) {
 			// chaining more Cypress commands, like ".find(...)"
 			.then(cy.wrap)
 	);
+}
+
+export function hexStringToByte(str) {
+	if (!str) {
+		return new Uint8Array();
+	}
+
+	const a = [];
+	for (let i = 0, len = str.length; i < len; i += 2) {
+		a.push(parseInt(str.substr(i, 2), 16));
+	}
+
+	return new Uint8Array(a);
 }

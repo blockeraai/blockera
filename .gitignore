@@ -60,3 +60,6 @@ dist
 
 # Storybook Build directory
 storybook-static
+
+# nyc plugin of cypress
+.nyc_output

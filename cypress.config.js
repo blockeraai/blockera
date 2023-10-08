@@ -5,25 +5,43 @@ module.exports = defineConfig({
 	defaultCommandTimeout: 20000,
 	e2e: {
 		setupNodeEvents(on, config) {
-			return require('./.dev/tests/cypress/plugins/index.js')(on, config);
+			require('./cypress/plugins/index.js')(on, config);
+			require('@cypress/code-coverage/task')(on, config);
+
+			return config;
 		},
-		specPattern: './/**/*.cypress.js',
-		supportFile: '.dev/tests/cypress/support/commands.js',
+		specPattern: 'packages/**/*.cypress.js',
+		supportFile: 'cypress/support/e2e.js',
 	},
 	env: {
 		wpUsername: 'admin',
 		wpPassword: 'password',
 		testURL: 'http://localhost:8889',
 	},
-	fixturesFolder: 'languages',
+	fixturesFolder: 'cypress/fixtures',
 	pageLoadTimeout: 120000,
-	projectId: 'sovnn2',
+	projectId: 'publisher-core',
 	retries: {
 		openMode: 0,
 		runMode: 0,
 	},
-	screenshotsFolder: '.dev/tests/cypress/screenshots',
-	videosFolder: '.dev/tests/cypress/videos',
+	coverage: true,
+	screenshotsFolder: 'cypress/screenshots',
+	videosFolder: 'cypress/videos',
 	viewportHeight: 1440,
 	viewportWidth: 2560,
+	component: {
+		setupNodeEvents(on, config) {
+			require('./cypress/plugins/index.js')(on, config);
+			require('@cypress/code-coverage/task')(on, config);
+
+			return config;
+		},
+		devServer: {
+			framework: 'react',
+			bundler: 'webpack',
+		},
+		specPattern: 'packages/**/*.cy.js',
+		supportFile: 'cypress/support/component.js',
+	},
 });
