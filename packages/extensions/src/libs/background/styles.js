@@ -35,7 +35,7 @@ export function BackgroundStyles({
 }: IConfigs): string {
 	const generators = [];
 	const selector = useCssSelector({
-		blockName: blockProps.name,
+		blockName: blockProps.blockName,
 		supportId: 'publisherBackground',
 		// fallbackSupportId: 'background'
 	});
@@ -53,7 +53,7 @@ export function BackgroundStyles({
 					cssGenerators: {
 						publisherBackground: [
 							{
-								selector: `${selector}, ${selector} .publisher-icon-element div[contentEditable="true"], .publisher-icon-element div`,
+								selector: `${selector} .publisher-extension-ref, ${selector} .publisher-icon-element div[contentEditable="true"], .publisher-icon-element div`,
 								type: 'function',
 								function: backgroundGenerator,
 							},

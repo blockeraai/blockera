@@ -147,8 +147,10 @@ export function backgroundGenerator(id, props, styleEngine) {
 	});
 
 	return createCssRule({
-		selector: `#block-${props.clientId}${
-			styleEngine.selector ? ' ' + styleEngine.selector : ''
+		selector: `${
+			styleEngine.selector
+				? `#block-${props.clientId}` + styleEngine.selector
+				: ''
 		}`,
 		properties: {
 			'background-color': properties['background-color']
