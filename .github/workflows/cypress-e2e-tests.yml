@@ -30,6 +30,9 @@ jobs:
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
 
+            - name: Install Composer Packages
+              run: composer install
+
             - name: Build wp-env app
               run: npm run build:wp-env-app
 
