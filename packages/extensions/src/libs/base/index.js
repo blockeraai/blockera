@@ -75,10 +75,8 @@ export const BaseExtension = memo(
 				{children}
 				{isFunction(getExtensionCssRules) && (
 					<style
-						/* eslint-disable-next-line react/no-unknown-property */
-						datablocktype={blockName}
-						/* eslint-disable-next-line react/no-unknown-property */
-						datablockclientid={clientId}
+						data-block-type={blockName}
+						data-extension-id={extensionId}
 						dangerouslySetInnerHTML={{
 							__html: getExtensionCssRules({
 								...config,
