@@ -225,6 +225,9 @@
 		],
 		"*.scss": [
 			"wp-scripts lint-style"
+		],
+		"*.php": [
+			"./vendor/bin/phpcs --report-full --report-checkstyle=./.cache/phpcs-report.xml --standard=phpcs.xml"
 		]
 	},
 	"wp-env": {

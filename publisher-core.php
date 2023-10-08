@@ -30,8 +30,12 @@ require __DIR__ . '/bootstrap/app.php';
 add_action( 'enqueue_block_editor_assets', 'enqueue_editor_assets', 9e2 );
 add_action( 'wp_enqueue_scripts', 'enqueue_editor_assets', 9e2 );
 
-
-function enqueue_editor_assets(): void {
+/**
+ * Enqueue gutenberg editor assets to load.
+ *
+ * @return void
+ */
+function enqueue_editor_assets() {
 
 	$handle = 'publisher-core';
 
@@ -56,6 +60,7 @@ function enqueue_editor_assets(): void {
 		$handle,
 		PB_CORE_URI . 'tools/wp-env-app/dist/publisher-core-app.js',
 		$info['dependencies'],
-		$info['version']
+		$info['version'],
+		true
 	);
 }
