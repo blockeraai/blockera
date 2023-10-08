@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Core\Tests;
+namespace Publisher\Framework\Tests;
 
 abstract class AppTestCase extends \WP_UnitTestCase {
 

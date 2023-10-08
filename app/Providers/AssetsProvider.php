@@ -25,41 +25,53 @@ use Publisher\Framework\Illuminate\Support\ServiceProvider;
 class AssetsProvider extends ServiceProvider {
 
 	/**
+	 * Hold instance of PublisherAssets object
+	 *
+	 * @var null|PublisherAssets
+	 */
+	protected $handler = null;
+
+	/**
 	 * Register any application services.
 	 *
-	 * @throws BaseException
 	 * @return void
 	 */
 	public function register(): void {
 
-		try {
-
-			$this->app->singleton( PublisherAssets::class, function ( Application $app ) {
+		$this->app->singleton(
+			PublisherAssets::class,
+			function ( Application $app ) {
 
 				return new PublisherAssets( $app );
-			} );
-
-		} catch ( BaseException $handler ) {
-
-			throw new BaseException( 'Binding ' . PublisherAssets::class . " Failure!\n" . $handler->getMessage() );
-		}
+			}
+		);
 	}
 
 	/**
 	 * Bootstrap any application services.
 	 *
-	 * @throws BindingResolutionException
+	 * @throws BindingResolutionException Binding resolution exception error handle.
 	 * @return void
 	 */
 	public function boot(): void {
 
-		$assets = $this->app->make( PublisherAssets::class );
+		$this->handler = $this->app->make( PublisherAssets::class );
 
-		//handle loading assets in wp-env to use in CI
+		// Handle loading assets in wp-env to use in CI.
 		if ( defined( 'PB_ENV' ) && 'wp-env' === PB_ENV ) {
 
-			$assets->enqueue();
+			$this->handler->enqueue();
 		}
+	}
+
+	/**
+	 * Retrieve handler object.
+	 *
+	 * @return PublisherAssets|null
+	 */
+	public function getHandler(): ?PublisherAssets {
+
+		return $this->handler;
 	}
 
 }

@@ -3,7 +3,7 @@
     <description>Sniffs for WordPress plugins, with minor modifications for PublisherCore</description>
 
     <!-- Check for cross-version support for PHP 7.0 and higher. -->
-    <config name="testVersion" value="7.0-"/>
+    <config name="testVersion" value="7.4-"/>
     <rule ref="PHPCompatibilityWP">
         <include-pattern>*\.php$</include-pattern>
     </rule>

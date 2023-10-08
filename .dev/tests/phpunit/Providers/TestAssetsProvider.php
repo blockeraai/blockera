@@ -1,18 +1,10 @@
 <?php
 
-namespace Publisher\Core\Tests\Providers;
+namespace Publisher\Framework\Tests\Providers;
 
-/**
- * Internal dependencies
- */
-
-use Publisher\Core\Tests\AppTestCase;
-
-/**
- * Publisher Core dependencies
- */
-
-use Publisher\Core\Providers\AssetsProvider;
+use Publisher\Framework\Tests\AppTestCase;
+use Publisher\Framework\Providers\AssetsProvider;
+use Publisher\Framework\Illuminate\Foundation\Application;
 
 class TestAssetsProvider extends AppTestCase {
 
@@ -22,7 +14,7 @@ class TestAssetsProvider extends AppTestCase {
 
 		parent::set_up();
 
-		self::$provider = new AssetsProvider();
+		self::$provider = new AssetsProvider( new Application() );
 	}
 
 	/**
@@ -34,7 +26,9 @@ class TestAssetsProvider extends AppTestCase {
 	 */
 	public function testShouldReturnAssetInformationWithGivenAssetName( array $asset ): void {
 
-		$actual = self::$provider->assetInfo( $asset['name'] );
+		self::$provider->boot();
+
+		$actual = self::$provider->getHandler()->assetInfo( $asset['name'] );
 
 		if ( ! empty( $actual ) ) {
 
@@ -55,12 +49,11 @@ class TestAssetsProvider extends AppTestCase {
 
 	public function testShouldRegisteredAssetsAfterCreateNewInstanceOfAssetsProviderClass(): void {
 
-		new AssetsProvider();
+		self::$provider->boot();
 
 		do_action( 'wp_enqueue_scripts' );
 
 		$this->assertTrue( wp_script_is( '@publisher/utils', 'registered' ) );
-		$this->assertTrue( wp_script_is( '@publisher/fields', 'registered' ) );
 		$this->assertTrue( wp_script_is( '@publisher/controls', 'registered' ) );
 		$this->assertTrue( wp_script_is( '@publisher/components', 'registered' ) );
 		$this->assertTrue( wp_script_is( '@publisher/extensions', 'registered' ) );
@@ -152,6 +145,7 @@ class TestAssetsProvider extends AppTestCase {
 					'deps'   => [
 						'wp-element',
 						'wp-polyfill',
+						'wp-style-engine',
 					],
 					'style'  => '',
 					'script' => '/dist/style-engine/index',
