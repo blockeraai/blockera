@@ -26,7 +26,7 @@ export const isSupportBorder = (
 		return hasBlockSupport(blockName, '__experimentalBorder');
 	}
 
-	const { radius } = getBlockSupport(blockName, '__experimentalBorder');
+	const support = getBlockSupport(blockName, '__experimentalBorder');
 
-	return radius;
+	return support?.radius || false;
 };
