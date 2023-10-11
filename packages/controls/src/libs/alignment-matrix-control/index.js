@@ -33,8 +33,9 @@ export default function AlignmentMatrixControl({
 	//
 	className,
 }) {
-	const { value } = useControlContext({
+	const { value, setValue } = useControlContext({
 		id,
+		onChange,
 		defaultValue,
 	});
 
@@ -57,7 +58,7 @@ export default function AlignmentMatrixControl({
 							newValue =
 								convertAlignmentMatrixCoordinates(newValue);
 
-							onChange({
+							setValue({
 								top: newValue.top.number,
 								left: newValue.left.number,
 							});
@@ -92,7 +93,7 @@ export default function AlignmentMatrixControl({
 							newValue =
 								convertAlignmentMatrixCoordinates(newValue);
 
-							onChange({
+							setValue({
 								top: newValue.top.number,
 								left: newValue.left.number,
 							});
@@ -112,7 +113,7 @@ export default function AlignmentMatrixControl({
 							unitType="background-position"
 							defaultValue={value.top}
 							onChange={(newValue) => {
-								onChange({
+								setValue({
 									...value,
 									top: newValue,
 								});
@@ -129,7 +130,7 @@ export default function AlignmentMatrixControl({
 							unitType="background-position"
 							defaultValue={value.left}
 							onChange={(newValue) => {
-								onChange({
+								setValue({
 									...value,
 									left: newValue,
 								});
@@ -146,7 +147,7 @@ AlignmentMatrixControl.propTypes = {
 	/**
 	 * ID for retrieving value from control context
 	 */
-	id: PropTypes.string.isRequired,
+	id: PropTypes.string,
 	/**
 	 * Label for field. If you pass empty value the field will not be added and simple control will be rendered
 	 *
