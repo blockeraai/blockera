@@ -2,7 +2,7 @@
 /**
  * Internal dependencies
  */
-import type { BlockProps } from './types';
+import type { TBlockProps } from './types';
 
 /**
  * Retrieve reply to question "is array equals?".
@@ -24,7 +24,7 @@ export function arrayEquals(a: Array<any>, b: Array<any>): boolean {
  * @return {string} retrieved extension standard identifier.
  */
 export function generateExtensionId(
-	{ blockName, clientId }: BlockProps,
+	{ blockName, clientId }: TBlockProps,
 	id: string
 ): string {
 	return `${blockName}/${id}/${clientId}`;
