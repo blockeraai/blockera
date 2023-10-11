@@ -205,7 +205,7 @@ export function SharedBlockExtension({
 				initialOpen={false}
 				extensionId={'Typography'}
 				title={__('Typography', 'publisher-core')}
-				values={include(attributes, typography)}
+				values={include(attributes, typography, 'publisher')}
 				defaultValue={{
 					fontSize:
 						attributes.fontSize || attributes.publisherFontSize,
@@ -219,7 +219,7 @@ export function SharedBlockExtension({
 				{...props}
 				initialOpen={false}
 				extensionId={'Background'}
-				values={include(attributes, background)}
+				values={include(attributes, background, 'publisher')}
 				defaultValue={attributes.style?.background || {}}
 				handleOnChangeAttributes={handleOnChangeAttributes}
 				title={__('Background', 'publisher-core')}
@@ -244,7 +244,7 @@ export function SharedBlockExtension({
 				{...props}
 				initialOpen={false}
 				extensionId={'Effects'}
-				values={include(attributes, effects)}
+				values={include(attributes, effects, 'publisher')}
 				handleOnChangeAttributes={handleOnChangeAttributes}
 				title={__('Effects', 'publisher-core')}
 				icon={<EffectsExtensionIcon />}
