@@ -14,12 +14,12 @@ import {
 	InputControl,
 	SelectControl,
 	FilterControl,
-	PositionControl,
 	TransformControl,
 	TransitionControl,
 	ToggleSelectControl,
 	ControlContextProvider,
 	convertAlignmentMatrixCoordinates,
+	AlignmentMatrixControl,
 } from '@publisher/controls';
 import { isInteger } from '@publisher/utils';
 import { Button, Popover } from '@publisher/components';
@@ -214,8 +214,7 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 													'self-origin'
 												),
 												value: {
-													top: transformSelfOrigin?.top,
-													left: transformSelfOrigin?.left,
+													...transformSelfOrigin,
 													coordinates:
 														convertAlignmentMatrixCoordinates(
 															transformSelfOrigin
@@ -223,19 +222,14 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 												},
 											}}
 										>
-											<PositionControl
+											<AlignmentMatrixControl
 												label={__(
 													'Self Origin',
 													'publisher-core'
 												)}
 												columns="columns-2"
-												topValue={
-													transformSelfOrigin?.top
-												}
-												leftValue={
-													transformSelfOrigin?.left
-												}
-												onChange={({ top, left }) => {
+												inputFields={true}
+												onChange={({ top, left }) =>
 													handleOnChangeAttributes(
 														'publisherTransformSelfOrigin',
 														{
@@ -243,8 +237,8 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 															top,
 															left,
 														}
-													);
-												}}
+													)
+												}
 											/>
 										</ControlContextProvider>
 
@@ -340,22 +334,14 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 												},
 											}}
 										>
-											<PositionControl
+											<AlignmentMatrixControl
 												label={__(
 													'Child Origin',
 													'publisher-core'
 												)}
 												columns="columns-2"
-												topValue={
-													transformChildOrigin?.top
-												}
-												leftValue={
-													transformChildOrigin?.left
-												}
-												onValueChange={({
-													top,
-													left,
-												}) => {
+												inputFields={true}
+												onChange={({ top, left }) =>
 													handleOnChangeAttributes(
 														'publisherTransformChildOrigin',
 														{
@@ -363,8 +349,8 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 															top,
 															left,
 														}
-													);
-												}}
+													)
+												}
 											/>
 										</ControlContextProvider>
 									</Popover>
