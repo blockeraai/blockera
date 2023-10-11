@@ -35,10 +35,8 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 		block,
 		config,
 		children,
-		background,
+		values: { background, backgroundClip, backgroundColor },
 		defaultValue,
-		backgroundClip,
-		backgroundColor,
 		handleOnChangeAttributes,
 		...props
 	}: TBackgroundProps): MixedElement => {

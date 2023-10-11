@@ -13,9 +13,11 @@ export type TBackgroundProps = {
 	block: TBlockProps,
 	config: Object,
 	children?: MixedElement,
-	background: Object,
-	backgroundClip: string,
-	backgroundColor: string,
+	values: {
+		background: Object,
+		backgroundClip: string,
+		backgroundColor: string,
+	},
 	defaultValue: {
 		backgroundSize?: string,
 		backgroundImage?: string,
