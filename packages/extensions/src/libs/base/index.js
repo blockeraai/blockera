@@ -2,7 +2,6 @@
  * External dependencies
  */
 import { useContext, memo } from '@wordpress/element';
-import { InspectorControls } from '@wordpress/block-editor';
 
 /**
  * Publisher dependencies
@@ -45,32 +44,30 @@ export const BaseExtension = memo(
 
 		return (
 			<BaseExtensionContextProvider {...contextValue}>
+				<SideEffect />
 				{useDisplayBlockControls() && (
-					<InspectorControls>
-						<PanelBodyControl
-							title={title}
-							initialOpen={initialOpen}
-							icon={icon}
-							className={componentClassNames(
-								'extension',
-								'extension-' + extensionId
-							)}
-						>
-							<SideEffect />
-							{isObject(ExtensionElement) && (
-								<ExtensionElement
-									{...props}
-									block={{
-										clientId,
-										storeName,
-										blockName,
-										attributes,
-									}}
-									config={config}
-								/>
-							)}
-						</PanelBodyControl>
-					</InspectorControls>
+					<PanelBodyControl
+						title={title}
+						initialOpen={initialOpen}
+						icon={icon}
+						className={componentClassNames(
+							'extension',
+							'extension-' + extensionId
+						)}
+					>
+						{isObject(ExtensionElement) && (
+							<ExtensionElement
+								{...props}
+								block={{
+									clientId,
+									storeName,
+									blockName,
+									attributes,
+								}}
+								config={config}
+							/>
+						)}
+					</PanelBodyControl>
 				)}
 				{children}
 				{isFunction(getExtensionCssRules) && (

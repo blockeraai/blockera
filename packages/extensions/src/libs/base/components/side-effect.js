@@ -10,7 +10,7 @@ export function SideEffect() {
 		);
 
 		if (tabs) {
-			// tabs.style.display = 'none';
+			tabs.style.display = 'none';
 		}
 	}, []);
 
