@@ -47,7 +47,7 @@ export const Default = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
 
-export const Screenshot = {
+export const All = {
 	render: (args) => (
 		<Flex direction="column" gap="30px">
 			<Flex direction="column" gap="15px">
