@@ -1,0 +1,38 @@
+:root {
+	--publisher-tab-panel-active-color: #147eb8;
+	--publisher-tab-panel-context-color: #e0e0e0;
+}
+
+.publisher-tab-panel .components-tab-panel__tabs {
+	background-color: #f8f9fc;
+	justify-content: space-between;
+}
+
+.publisher-tab-panel .components-tab-panel__tabs-item {
+	background-color: #f6f6f6;
+	border-right: solid 1px var(--publisher-tab-panel-context-color);
+	flex: 1;
+
+	:last-child {
+		border-right: none;
+	}
+}
+
+.publisher-tab-panel .components-tab-panel__tabs-item.active-tab {
+	background-color: #ffffff;
+	border-top: solid 3px var(--publisher-tab-panel-active-color);
+	color: var(--publisher-tab-panel-active-color);
+	border-bottom: none;
+}
+
+.publisher-tab-panel .publisher-tab-button span {
+	display: block !important;
+	margin: 0 auto 6px auto !important;
+}
+
+.publisher-tab-button {
+	display: block !important;
+	width: 95px;
+	height: 68px;
+	border-bottom: solid 1px var(--publisher-tab-panel-context-color);
+}
