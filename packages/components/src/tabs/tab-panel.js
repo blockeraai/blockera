@@ -43,7 +43,7 @@ export default function TabPanel({
 			);
 		}
 	}, [initialTabName, selected, tabs]);
-	console.log(tabs);
+
 	const Menu = () => (
 		<NavigableMenu
 			role="tablist"
@@ -65,7 +65,6 @@ export default function TabPanel({
 					selected={tab.name === selected}
 					key={tab.name}
 					onClick={partial(handleClick, tab.name)}
-					// icon={tab.icon}
 				>
 					<Flex direction={'column'} alignItems={'center'}>
 						{tab.icon}
