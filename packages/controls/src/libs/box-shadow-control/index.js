@@ -75,7 +75,7 @@ BoxShadowControl.defaultProps = {
 		y: '0px',
 		blur: '0px',
 		spread: '0px',
-		color: '',
+		color: '#000000ab',
 		isVisible: true,
 	},
 	popoverLabel: __('Box Shadow', 'publisher-core'),
