@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import domReady from '@wordpress/dom-ready';
+// import domReady from '@wordpress/dom-ready';
 
 /**
  * Internal dependencies
@@ -60,10 +60,8 @@ class Setup {
 	}
 }
 
-domReady(() => {
-	const setupInstance = new Setup();
+const setupInstance = new Setup();
 
-	setupInstance.addExtensions().addBlocks();
+setupInstance.addExtensions().addBlocks();
 
-	applyHooks();
-});
+applyHooks();
