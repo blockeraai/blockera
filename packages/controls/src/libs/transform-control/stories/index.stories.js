@@ -11,6 +11,7 @@ import { userEvent, waitFor, within } from '@storybook/testing-library';
  */
 import { Flex } from '@publisher/components';
 import { default as Decorators } from '@publisher/storybook/decorators';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 
 /**
  * Internal dependencies
@@ -25,6 +26,8 @@ const {
 	WithStoryContextProvider,
 	SharedDecorators,
 } = Decorators;
+
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Controls/TransformControl',
