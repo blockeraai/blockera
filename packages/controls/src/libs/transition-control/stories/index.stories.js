@@ -222,7 +222,7 @@ export const Play = {
 	},
 };
 
-export const Screenshot = {
+export const All = {
 	args: {},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: () => (
