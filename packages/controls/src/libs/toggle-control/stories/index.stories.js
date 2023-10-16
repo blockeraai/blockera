@@ -100,7 +100,7 @@ export const Play = {
 	},
 };
 
-export const Screenshot = {
+export const All = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: () => (
 		<Flex direction="column" gap="50px">
