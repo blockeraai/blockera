@@ -1,8 +1,9 @@
 /**
  * External dependencies
  */
-import { useContext } from '@wordpress/element';
+import { nanoid } from 'nanoid';
 import { expect } from '@storybook/jest';
+import { useContext } from '@wordpress/element';
 import { userEvent, waitFor, within } from '@storybook/testing-library';
 
 /**
@@ -15,6 +16,7 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  * Internal dependencies
  */
 import { TransformControl } from '../../index';
+import { STORE_NAME } from '../../repeater-control/store';
 
 const {
 	WithInspectorStyles,
@@ -32,6 +34,11 @@ export default {
 export const Empty = {
 	args: {
 		label: 'Transforms',
+		controlInfo: {
+			name: nanoid(),
+			value: [],
+		},
+		storeName: STORE_NAME,
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 };

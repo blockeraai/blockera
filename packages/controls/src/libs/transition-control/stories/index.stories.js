@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import { nanoid } from 'nanoid';
 import { useContext } from '@wordpress/element';
 import { expect } from '@storybook/jest';
 import {
@@ -20,6 +21,7 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  * Internal dependencies
  */
 import TransitionControl from '../index';
+import { STORE_NAME } from '../../repeater-control/store';
 
 const {
 	WithInspectorStyles,
@@ -37,6 +39,11 @@ export default {
 export const Empty = {
 	args: {
 		label: 'Transitions',
+		controlInfo: {
+			name: nanoid(),
+			value: [],
+		},
+		storeName: STORE_NAME,
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
