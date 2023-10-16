@@ -309,10 +309,11 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 										<InputControl
 											controlName="input"
 											label={__(
-												'Order',
+												'Custom',
 												'publisher-core'
 											)}
-											columns="columns-2"
+											columns="2fr 3fr"
+											unitType="order"
 											{...{
 												...props,
 												min: -1,
