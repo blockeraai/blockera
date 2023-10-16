@@ -22,6 +22,7 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  */
 import TransitionControl from '../index';
 import { STORE_NAME } from '../../repeater-control/store';
+import { ControlContextProvider } from '../../../context';
 
 const {
 	WithInspectorStyles,
@@ -57,26 +58,31 @@ export const Fill = {
 		return (
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Filled</h2>
-				<TransitionControl
-					{...args}
-					label="Transitions"
-					value={[
-						{
-							type: 'all',
-							duration: '250ms',
-							timing: 'ease',
-							delay: '10ms',
-							isVisible: true,
-						},
-						{
-							type: 'opacity',
-							duration: '600ms',
-							timing: 'ease',
-							delay: '0ms',
-							isVisible: true,
-						},
-					]}
-				/>
+
+				<ControlContextProvider
+					storeName={STORE_NAME}
+					value={{
+						name: nanoid(),
+						value: [
+							{
+								type: 'all',
+								duration: '250ms',
+								timing: 'ease',
+								delay: '10ms',
+								isVisible: true,
+							},
+							{
+								type: 'opacity',
+								duration: '600ms',
+								timing: 'ease',
+								delay: '0ms',
+								isVisible: true,
+							},
+						],
+					}}
+				>
+					<TransitionControl {...args} label="Transitions" />
+				</ControlContextProvider>
 			</Flex>
 		);
 	},
@@ -95,27 +101,32 @@ export const Open = {
 				style={{ marginBottom: '250px' }}
 			>
 				<h2 className="story-heading">Filled</h2>
-				<TransitionControl
-					{...args}
-					label="Transitions"
-					value={[
-						{
-							type: 'all',
-							duration: '250ms',
-							timing: 'ease',
-							delay: '10ms',
-							isVisible: true,
-							isOpen: true,
-						},
-						{
-							type: 'opacity',
-							duration: '600ms',
-							timing: 'ease',
-							delay: '0ms',
-							isVisible: true,
-						},
-					]}
-				/>
+
+				<ControlContextProvider
+					storeName={STORE_NAME}
+					value={{
+						name: nanoid(),
+						value: [
+							{
+								type: 'all',
+								duration: '250ms',
+								timing: 'ease',
+								delay: '10ms',
+								isVisible: true,
+								isOpen: true,
+							},
+							{
+								type: 'opacity',
+								duration: '600ms',
+								timing: 'ease',
+								delay: '0ms',
+								isVisible: true,
+							},
+						],
+					}}
+				>
+					<TransitionControl {...args} label="Transitions" />
+				</ControlContextProvider>
 			</Flex>
 		);
 	},
@@ -136,6 +147,11 @@ const ControlWithHooks = (args) => {
 export const Play = {
 	args: {
 		label: 'Transitions',
+		controlInfo: {
+			name: nanoid(),
+			value: [],
+		},
+		storeName: STORE_NAME,
 	},
 	decorators: [
 		WithStoryContextProvider,
@@ -213,7 +229,15 @@ export const Screenshot = {
 		<Flex direction="column" gap="50px">
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Empty</h2>
-				<TransitionControl {...Empty.args} />
+				<ControlContextProvider
+					storeName={STORE_NAME}
+					value={{
+						name: nanoid(),
+						value: [],
+					}}
+				>
+					<TransitionControl {...Empty.args} />
+				</ControlContextProvider>
 			</Flex>
 
 			<Fill.render />

@@ -17,6 +17,7 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  */
 import { TextShadowControl } from '../../index';
 import { STORE_NAME } from '../../repeater-control/store';
+import { ControlContextProvider } from '../../../context';
 
 const {
 	WithInspectorStyles,
@@ -52,19 +53,24 @@ export const Fill = {
 		return (
 			<Flex direction="column" gap="30px">
 				<h2 className="story-heading">Filled</h2>
-				<TextShadowControl
-					{...args}
-					label="Text Shadows"
-					value={[
-						{
-							x: '2px',
-							y: '2px',
-							blur: '2px',
-							color: '#0947eb',
-							isVisible: true,
-						},
-					]}
-				/>
+
+				<ControlContextProvider
+					storeName={STORE_NAME}
+					value={{
+						name: nanoid(),
+						value: [
+							{
+								x: '2px',
+								y: '3px',
+								blur: '4px',
+								color: '#0947eb',
+								isVisible: true,
+							},
+						],
+					}}
+				>
+					<TextShadowControl {...args} label="Text Shadows" />
+				</ControlContextProvider>
 			</Flex>
 		);
 	},
@@ -73,6 +79,11 @@ export const Fill = {
 export const Open = {
 	args: {
 		label: 'Text Shadows',
+		controlInfo: {
+			name: nanoid(),
+			value: [],
+		},
+		storeName: STORE_NAME,
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => {
@@ -85,20 +96,25 @@ export const Open = {
 				<h2 className="story-heading">
 					Filled<span>Open Item</span>
 				</h2>
-				<TextShadowControl
-					{...args}
-					label="Text Shadows"
-					value={[
-						{
-							x: '2px',
-							y: '2px',
-							blur: '2px',
-							color: '#0947eb',
-							isVisible: true,
-							isOpen: true,
-						},
-					]}
-				/>
+
+				<ControlContextProvider
+					storeName={STORE_NAME}
+					value={{
+						name: nanoid(),
+						value: [
+							{
+								x: '2px',
+								y: '3px',
+								blur: '4px',
+								color: '#0947eb',
+								isVisible: true,
+								isOpen: true,
+							},
+						],
+					}}
+				>
+					<TextShadowControl {...args} label="Text Shadows" />
+				</ControlContextProvider>
 			</Flex>
 		);
 	},
@@ -119,6 +135,11 @@ const ControlWithHooks = (args) => {
 export const Play = {
 	args: {
 		label: 'Text Shadows',
+		controlInfo: {
+			name: nanoid(),
+			value: [],
+		},
+		storeName: STORE_NAME,
 	},
 	decorators: [
 		WithStoryContextProvider,
@@ -177,7 +198,15 @@ export const Screenshot = {
 		<Flex direction="column" gap="50px">
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Empty</h2>
-				<TextShadowControl {...Empty.args} />
+				<ControlContextProvider
+					storeName={STORE_NAME}
+					value={{
+						name: nanoid(),
+						value: [],
+					}}
+				>
+					<TextShadowControl {...Empty.args} />
+				</ControlContextProvider>
 			</Flex>
 
 			<Fill.render />
