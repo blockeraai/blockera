@@ -15,6 +15,7 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  * Internal dependencies
  */
 import { ToggleControl } from '../../index';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 
 const {
 	WithInspectorStyles,
@@ -22,6 +23,8 @@ const {
 	WithStoryContextProvider,
 	SharedDecorators,
 } = Decorators;
+
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Controls/ToggleControl',
