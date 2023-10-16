@@ -23,13 +23,18 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 import TransitionControl from '../index';
 import { STORE_NAME } from '../../repeater-control/store';
 import { ControlContextProvider } from '../../../context';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 
 const {
 	WithInspectorStyles,
 	StoryDataContext,
 	WithStoryContextProvider,
+	WithPopoverDataProvider,
 	SharedDecorators,
 } = Decorators;
+
+SharedDecorators.push(WithPopoverDataProvider);
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Controls/TransitionControl',
