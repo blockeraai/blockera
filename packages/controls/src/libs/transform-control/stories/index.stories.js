@@ -25,8 +25,10 @@ const {
 	StoryDataContext,
 	WithStoryContextProvider,
 	SharedDecorators,
+	WithPopoverDataProvider,
 } = Decorators;
 
+SharedDecorators.push(WithPopoverDataProvider);
 SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
