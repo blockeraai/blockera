@@ -30,6 +30,9 @@ jobs:
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
 
+            - name: install deps
+              run: npm i
+
             - name: Install Composer Packages
               run: composer install
 
