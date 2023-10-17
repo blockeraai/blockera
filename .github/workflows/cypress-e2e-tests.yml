@@ -45,7 +45,9 @@ jobs:
               run: sleep 40
 
             - name: Installing Cypress
-              run: cypress install
+              run: |
+                  npm install cypress --save-dev
+                  cypress install
 
             - name: Run Cypress E2E Tests
               run: npm run test:e2e
