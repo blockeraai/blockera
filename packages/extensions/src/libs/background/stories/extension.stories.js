@@ -21,6 +21,8 @@ import { supports } from '../supports';
 import { attributes } from '../attributes';
 import BackgroundExtensionIcon from '../icons/extension-icon';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/decorators/with-playground-styles';
+import { useAttributes } from '../../shared/use-attributes';
+import { InspectorControls } from '@wordpress/block-editor';
 
 const { SharedDecorators } = Decorators;
 
@@ -31,17 +33,31 @@ blocksInitializer({
 	targetBlock: 'core/button',
 	attributes,
 	supports,
-	edit(props) {
+	edit({ attributes, setAttributes, ...props }) {
+		// eslint-disable-next-line
+		const { handleOnChangeAttributes } = useAttributes(
+			attributes,
+			setAttributes
+		);
+
 		return (
 			<>
-				<BaseExtension
-					{...props}
-					initialOpen={true}
-					extensionId={'Background'}
-					icon=<BackgroundExtensionIcon />
-					storeName={'publisher-core/controls/repeater'}
-					title={__('Background', 'publisher-core')}
-				/>
+				<InspectorControls>
+					<BaseExtension
+						{...{ ...props, attributes, setAttributes }}
+						initialOpen={true}
+						values={{
+							background: undefined,
+							backgroundColor: '',
+							backgroundClip: 'none',
+						}}
+						extensionId={'Background'}
+						icon={<BackgroundExtensionIcon />}
+						storeName={'publisher-core/controls/repeater'}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+						title={__('Background', 'publisher-core')}
+					/>
+				</InspectorControls>
 			</>
 		);
 	},

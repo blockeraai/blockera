@@ -19,6 +19,7 @@ import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import { TransformControl } from '../../index';
 import { STORE_NAME } from '../../repeater-control/store';
 import { ControlContextProvider } from '../../../context';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 
 const {
 	WithInspectorStyles,
@@ -29,6 +30,7 @@ const {
 } = Decorators;
 
 SharedDecorators.push(WithPopoverDataProvider);
+SharedDecorators.push(WithControlDataProvider);
 SharedDecorators.push(WithPlaygroundStyles);
 
 export default {

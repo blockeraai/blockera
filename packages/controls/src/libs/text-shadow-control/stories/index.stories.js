@@ -18,13 +18,20 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 import { TextShadowControl } from '../../index';
 import { STORE_NAME } from '../../repeater-control/store';
 import { ControlContextProvider } from '../../../context';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/decorators/with-playground-styles';
 
 const {
 	WithInspectorStyles,
 	StoryDataContext,
 	WithStoryContextProvider,
 	SharedDecorators,
+	WithPopoverDataProvider,
 } = Decorators;
+
+SharedDecorators.push(WithPopoverDataProvider);
+SharedDecorators.push(WithControlDataProvider);
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Controls/TextShadowControl',

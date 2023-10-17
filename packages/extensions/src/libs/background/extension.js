@@ -57,7 +57,7 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 							value: background || [
 								{
 									type: 'image',
-									image: defaultValue.backgroundImage || '',
+									image: defaultValue?.backgroundImage || '',
 									'image-size': 'custom',
 									'image-size-width': '1auto',
 									'image-size-height': '1auto',
