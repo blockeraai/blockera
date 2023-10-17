@@ -12,6 +12,11 @@
 		.publisher-control-label {
 			margin-right: auto;
 		}
+		
+		// change only first input width
+		.publisher-control-input {
+			width: 90px;
+		}
 	}
 	
 	.publisher-control-input {
