@@ -39,36 +39,34 @@ export const FontSize = ({
 				value,
 			}}
 		>
-			<BaseControl
+			<InputControl
 				controlName="input"
 				label={__('Font Size', 'publisher-core')}
-			>
-				<InputControl
-					{...{
-						...parentProps,
-						unitType: 'essential',
-						range: true,
-						min: 0,
-						max: 200,
-						defaultValue,
-						onChange: (newValue) =>
-							onChange(
-								'publisherFontSize',
-								String(newValue),
-								'',
-								(
-									attributes: Object,
-									setAttributes: (attributes: Object) => void
-								) => {
-									setAttributes({
-										...attributes,
-										fontSize: undefined,
-									});
-								}
-							),
-					}}
-				/>
-			</BaseControl>
+				columns="columns-2"
+				{...{
+					...parentProps,
+					unitType: 'essential',
+					range: true,
+					min: 0,
+					max: 200,
+					defaultValue,
+					onChange: (newValue) =>
+						onChange(
+							'publisherFontSize',
+							String(newValue),
+							'',
+							(
+								attributes: Object,
+								setAttributes: (attributes: Object) => void
+							) => {
+								setAttributes({
+									...attributes,
+									fontSize: undefined,
+								});
+							}
+						),
+				}}
+			/>
 		</ControlContextProvider>
 	);
 };

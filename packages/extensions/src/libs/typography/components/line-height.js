@@ -41,52 +41,50 @@ export const LineHeight = ({
 				value,
 			}}
 		>
-			<BaseControl
+			<InputControl
 				controlName="input"
 				label={__('Line Height', 'publisher-core')}
-			>
-				<InputControl
-					{...{
-						...parentProps,
-						unitType: 'essential',
-						range: true,
-						min: 0,
-						max: 100,
-						defaultValue: defaultValue || '14px',
-						onChange: (newValue) => {
-							onChange(
-								'publisherLineHeight',
-								newValue,
-								'',
-								(
-									attributes: Object,
-									setAttributes: (attributes: Object) => void
-								): void =>
-									setAttributes({
-										...attributes,
-										style: {
-											...(attributes?.style ?? {}),
-											typography: {
-												...(attributes?.style
-													?.typography ?? {}),
-												lineHeight: !isNumber(newValue)
-													? Number(
-															newValue
-																.replace(
-																	/[a-zA-Z]+$/g,
-																	''
-																)
-																.trim()
-													  )
-													: newValue,
-											},
+				columns="columns-2"
+				{...{
+					...parentProps,
+					unitType: 'essential',
+					range: true,
+					min: 0,
+					max: 100,
+					defaultValue: defaultValue || '14px',
+					onChange: (newValue) => {
+						onChange(
+							'publisherLineHeight',
+							newValue,
+							'',
+							(
+								attributes: Object,
+								setAttributes: (attributes: Object) => void
+							): void =>
+								setAttributes({
+									...attributes,
+									style: {
+										...(attributes?.style ?? {}),
+										typography: {
+											...(attributes?.style?.typography ??
+												{}),
+											lineHeight: !isNumber(newValue)
+												? Number(
+														newValue
+															.replace(
+																/[a-zA-Z]+$/g,
+																''
+															)
+															.trim()
+												  )
+												: newValue,
 										},
-									})
-							);
-						},
-					}}
-				/>
-			</BaseControl>
+									},
+								})
+						);
+					},
+				}}
+			/>
 		</ControlContextProvider>
 	);
 };

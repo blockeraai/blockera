@@ -40,47 +40,44 @@ export const FontStyle = ({
 				value,
 			}}
 		>
-			<BaseControl
+			<ToggleSelectControl
 				label={__('Italicize', 'publisher-core')}
 				columns="columns-1"
 				className="control-first label-center small-gap"
-			>
-				<ToggleSelectControl
-					options={[
-						{
-							label: __('Normal', 'publisher-core'),
-							value: 'normal',
-							icon: <FontStyleNormalIcon />,
-						},
-						{
-							label: __('Line Through', 'publisher-core'),
-							value: 'italic',
-							icon: <FontStyleItalicIcon />,
-						},
-					]}
-					isDeselectable={true}
-					//
-					defaultValue={defaultValue || 'normal'}
-					onChange={(newValue) =>
-						onChange(
-							'publisherFontStyle',
-							newValue,
-							'',
-							(
-								attributes: Object,
-								setAttributes: (attributes: Object) => void
-							): void =>
-								setAttributes({
-									...attributes,
-									style: {
-										...(attributes?.style ?? {}),
-										fontStyle: newValue,
-									},
-								})
-						)
-					}
-				/>
-			</BaseControl>
+				options={[
+					{
+						label: __('Normal', 'publisher-core'),
+						value: 'normal',
+						icon: <FontStyleNormalIcon />,
+					},
+					{
+						label: __('Line Through', 'publisher-core'),
+						value: 'italic',
+						icon: <FontStyleItalicIcon />,
+					},
+				]}
+				isDeselectable={true}
+				//
+				defaultValue={defaultValue || 'normal'}
+				onChange={(newValue) =>
+					onChange(
+						'publisherFontStyle',
+						newValue,
+						'',
+						(
+							attributes: Object,
+							setAttributes: (attributes: Object) => void
+						): void =>
+							setAttributes({
+								...attributes,
+								style: {
+									...(attributes?.style ?? {}),
+									fontStyle: newValue,
+								},
+							})
+					)
+				}
+			/>
 		</ControlContextProvider>
 	);
 };
