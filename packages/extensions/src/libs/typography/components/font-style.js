@@ -9,7 +9,6 @@ import type { MixedElement } from 'react';
  * Publisher dependencies
  */
 import {
-	BaseControl,
 	ToggleSelectControl,
 	ControlContextProvider,
 } from '@publisher/controls';
