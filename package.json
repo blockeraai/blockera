@@ -187,7 +187,7 @@
 		"prepare": "husky install",
 		"flow": "flow ./packages",
 		"setup": "npm install && npm run build",
-		"test:e2e": "npx cypress run --config video=false --browser chrome",
+		"test:e2e": "./node_modules/.bin/cypress run --config video=false --browser chrome",
 		"test:ct": "npx cypress run-ct",
 		"test:ct:debug": "npx cypress open-ct",
 		"test:e2e:debug": "npx cypress open --e2e",
