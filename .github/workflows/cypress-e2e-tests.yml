@@ -44,11 +44,6 @@ jobs:
             - name: Wait for WordPress to Start
               run: sleep 40
 
-            - name: Installing Cypress
-              run: |
-                  npm install cypress --save-dev
-                  cypress install
-
             - name: Run Cypress E2E Tests
               run: npm run test:e2e
 
