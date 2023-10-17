@@ -45,7 +45,7 @@ jobs:
               run: sleep 40
 
             - name: Run Cypress E2E Tests
-              run: npm run test:e2e
+              run: npx cypress run --config video=false --browser chrome
 
             - name: Stop WordPress Environment
               run: npm run env:stop
