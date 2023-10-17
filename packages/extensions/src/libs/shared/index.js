@@ -73,6 +73,7 @@ import {
 } from '../advanced';
 import extensions from './extensions.json';
 import { useAttributes } from './use-attributes';
+import { ExtensionStyle } from '../base/style';
 
 export const attributes = {
 	...typographyAttributes,
@@ -322,6 +323,23 @@ export function SharedBlockExtension({
 				<Tabs tabs={tabs} getPanel={MappedExtensions} />
 				{children}
 			</InspectorControls>
+
+			<ExtensionStyle
+				{...props}
+				extensions={[
+					'Icon',
+					'Size',
+					'Layout',
+					'Spacing',
+					'Effects',
+					'Position',
+					'Advanced',
+					'FlexChild',
+					'Typography',
+					'Background',
+					'BorderAndShadow',
+				]}
+			/>
 		</>
 	);
 }
