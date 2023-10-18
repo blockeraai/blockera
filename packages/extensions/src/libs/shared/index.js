@@ -73,6 +73,7 @@ import {
 } from '../advanced';
 import extensions from './extensions.json';
 import { useAttributes } from './use-attributes';
+import { ExtensionStyle } from '../base/style';
 
 export const attributes = {
 	...typographyAttributes,
@@ -118,7 +119,6 @@ export function SharedBlockExtension({
 		setAttributes
 	);
 	const {
-		icon,
 		size,
 		layout,
 		effects,
@@ -126,6 +126,7 @@ export function SharedBlockExtension({
 		typography,
 		background,
 		borderAndShadow,
+		icon,
 	} = extensions;
 
 	props = { ...props, attributes };
@@ -142,20 +143,11 @@ export function SharedBlockExtension({
 						<BaseExtension
 							{...props}
 							values={include(attributes, icon, 'publisher')}
-							initialOpen={false}
+							initialOpen={true}
 							extensionId={'Icon'}
 							title={__('Icon', 'publisher-core')}
 							handleOnChangeAttributes={handleOnChangeAttributes}
 							icon={<IconExtensionIcon />}
-						/>
-
-						<BaseExtension
-							initialOpen={false}
-							extensionId={'Advanced'}
-							attributes={attributes.publisherAttributes}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-							title={__('Advanced', 'publisher-core')}
-							icon={<AdvancedExtensionIcon />}
 						/>
 					</>
 				);
@@ -164,7 +156,7 @@ export function SharedBlockExtension({
 					<>
 						<BaseExtension
 							{...props}
-							initialOpen={false}
+							initialOpen={true}
 							extensionId={'Spacing'}
 							defaultValue={attributes.style?.spacing || {}}
 							spacingValue={attributes.publisherSpacing}
@@ -175,7 +167,7 @@ export function SharedBlockExtension({
 
 						<BaseExtension
 							{...props}
-							initialOpen={false}
+							initialOpen={true}
 							extensionId={'Position'}
 							zIndexValue={attributes.publisherZIndex}
 							positionValue={attributes.publisherPosition}
@@ -198,7 +190,7 @@ export function SharedBlockExtension({
 									attributes.publisherHeight,
 								overflow: attributes.publisherOverflow,
 							}}
-							initialOpen={false}
+							initialOpen={true}
 							extensionId={'Size'}
 							title={__('Size', 'publisher-core')}
 							handleOnChangeAttributes={handleOnChangeAttributes}
@@ -207,7 +199,7 @@ export function SharedBlockExtension({
 
 						<BaseExtension
 							{...props}
-							initialOpen={false}
+							initialOpen={true}
 							extensionId={'FlexChild'}
 							title={__('Flex Child', 'publisher-core')}
 							values={include(attributes, flexChild, 'publisher')}
@@ -217,7 +209,7 @@ export function SharedBlockExtension({
 
 						<BaseExtension
 							{...props}
-							initialOpen={false}
+							initialOpen={true}
 							extensionId={'Layout'}
 							title={__('Layout', 'publisher-core')}
 							values={include(attributes, layout, 'publisher')}
@@ -228,7 +220,7 @@ export function SharedBlockExtension({
 
 						<BaseExtension
 							{...props}
-							initialOpen={false}
+							initialOpen={true}
 							extensionId={'Typography'}
 							title={__('Typography', 'publisher-core')}
 							values={include(
@@ -248,7 +240,7 @@ export function SharedBlockExtension({
 
 						<BaseExtension
 							{...props}
-							initialOpen={false}
+							initialOpen={true}
 							extensionId={'Background'}
 							values={include(
 								attributes,
@@ -263,7 +255,7 @@ export function SharedBlockExtension({
 
 						<BaseExtension
 							{...props}
-							initialOpen={false}
+							initialOpen={true}
 							extensionId={'BorderAndShadow'}
 							values={include(
 								attributes,
@@ -278,19 +270,24 @@ export function SharedBlockExtension({
 							title={__('Border And Shadow', 'publisher-core')}
 							icon={<BorderAndShadowExtensionIcon />}
 						/>
-					</>
-				);
-			case 'interaction':
-				return (
-					<>
+
 						<BaseExtension
 							{...props}
-							initialOpen={false}
+							initialOpen={true}
 							extensionId={'Effects'}
 							values={include(attributes, effects, 'publisher')}
 							handleOnChangeAttributes={handleOnChangeAttributes}
 							title={__('Effects', 'publisher-core')}
 							icon={<EffectsExtensionIcon />}
+						/>
+
+						<BaseExtension
+							initialOpen={true}
+							extensionId={'Advanced'}
+							attributes={attributes.publisherAttributes}
+							handleOnChangeAttributes={handleOnChangeAttributes}
+							title={__('Advanced', 'publisher-core')}
+							icon={<AdvancedExtensionIcon />}
 						/>
 					</>
 				);
@@ -318,15 +315,6 @@ export function SharedBlockExtension({
 				name: 'styles',
 			},
 		},
-		{
-			name: 'interaction',
-			title: __('Interaction', 'publisher-core'),
-			className: 'interaction-tab',
-			icon: {
-				library: 'publisher',
-				name: 'publisherInteraction',
-			},
-		},
 	];
 
 	return (
@@ -335,6 +323,23 @@ export function SharedBlockExtension({
 				<Tabs tabs={tabs} getPanel={MappedExtensions} />
 				{children}
 			</InspectorControls>
+
+			<ExtensionStyle
+				{...props}
+				extensions={[
+					'Icon',
+					'Size',
+					'Layout',
+					'Spacing',
+					'Effects',
+					'Position',
+					'Advanced',
+					'FlexChild',
+					'Typography',
+					'Background',
+					'BorderAndShadow',
+				]}
+			/>
 		</>
 	);
 }

@@ -50,7 +50,10 @@ export const AdvancedExtension: TAdvancedProps = memo<TAdvancedProps>(
 							columns="columns-1"
 						>
 							<AttributesControl
-								label={__('HTML Attributes', 'publisher-core')}
+								label={__(
+									'Custom HTML Attributes',
+									'publisher-core'
+								)}
 								onChange={(newValue) =>
 									handleOnChangeAttributes(
 										'publisherAttributes',

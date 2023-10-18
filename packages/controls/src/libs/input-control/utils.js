@@ -11,6 +11,9 @@ export function isSpecialUnit(value) {
 			'fit-content',
 			'max-content',
 			'min-content',
+			'unset',
+			'revert-layer',
+			'revert',
 		].some((item) => value?.endsWith(item))
 	);
 }
@@ -190,6 +193,18 @@ export function getCSSUnits(unitType = '') {
 				{ value: 'dvh', label: 'DVH', default: 0 },
 				//
 				{ value: 'auto', label: 'Auto', default: 0 },
+			];
+			break;
+
+		case 'order':
+			cssUnits = [
+				{ value: '-', label: '-', default: 0 },
+				//
+				{ value: 'revert', label: 'Revert', default: 0 },
+				{ value: 'revert-layer', label: 'Revert Layer', default: 0 },
+				{ value: 'inherit', label: 'Inherit', default: 0 },
+				{ value: 'initial', label: 'Initial', default: 0 },
+				{ value: 'unset', label: 'Unset', default: 0 },
 			];
 			break;
 	}

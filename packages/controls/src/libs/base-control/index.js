@@ -49,9 +49,11 @@ export default function BaseControl({
 			className={fieldsClassNames(controlName, columns, className)}
 			style={{ gridTemplateColumns: cssColumns || '' }}
 		>
-			<div className={fieldsClassNames('label')}>
-				<LabelControl label={label} />
-			</div>
+			{label !== '' && (
+				<div className={fieldsClassNames('label')}>
+					<LabelControl label={label} />
+				</div>
+			)}
 
 			<div className={fieldsClassNames('control')}>{children}</div>
 		</div>
