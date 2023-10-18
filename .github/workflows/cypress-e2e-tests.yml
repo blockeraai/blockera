@@ -33,16 +33,14 @@ jobs:
             - name: Install Composer Packages
               run: composer install
 
+            - name: Start WordPress Environment
+              run: npm run env:start
+
             - name: Build wp-env app
               run: npm run build:wp-env-app
 
-            - name: Start WordPress Environment
-              run: |
-                  npm run env:start
-                  npm run plugin:activate
-
-            - name: Wait for WordPress to Start
-              run: sleep 40
+            - name: Activate publisher-core plugin
+              run: npm run plugin:activate
 
             - name: Run Cypress E2E Tests
               run: npm run test:e2e
