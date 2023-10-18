@@ -31,6 +31,7 @@ export default function Popover({
 	resize: _resize,
 	shift: _shift,
 	flip: _flip,
+
 	...props
 }) {
 	const [isVisible, setIsVisible] = useState(true);
@@ -62,6 +63,7 @@ export default function Popover({
 							className={componentInnerClassNames(
 								'popover-header'
 							)}
+							data-test="popover-header"
 						>
 							{title}
 

@@ -28,8 +28,10 @@ module.exports = defineConfig({
 	coverage: true,
 	screenshotsFolder: 'cypress/screenshots',
 	videosFolder: 'cypress/videos',
-	viewportHeight: 1440,
-	viewportWidth: 2560,
+	// viewportHeight: 1440,
+	// viewportWidth: 2560,
+	viewportHeight: 500,
+	viewportWidth: 500,
 	component: {
 		setupNodeEvents(on, config) {
 			require('./cypress/plugins/index.js')(on, config);
