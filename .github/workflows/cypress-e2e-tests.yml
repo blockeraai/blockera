@@ -27,6 +27,9 @@ jobs:
                   cd libs
                   git clone git@github.com:publisherwp/storybook.git
 
+            - name: Start WordPress Environment
+              run: npm run env:start
+
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
 
@@ -36,13 +39,8 @@ jobs:
             - name: Build wp-env app
               run: npm run build:wp-env-app
 
-            - name: Start WordPress Environment
-              run: |
-                  npm run env:start
-                  npm run plugin:activate
-
-            - name: Wait for WordPress to Start
-              run: sleep 40
+            - name: Activate Publisher Core Plugin
+              run: npm run plugin:activate
 
             - name: Run Cypress E2E Tests
               run: npm run test:e2e
