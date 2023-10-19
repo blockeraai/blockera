@@ -47,9 +47,12 @@ blocksInitializer({
 						{...{ ...props, attributes, setAttributes }}
 						initialOpen={true}
 						values={{
-							background: undefined,
-							backgroundColor: '',
-							backgroundClip: 'none',
+							background:
+								attributes?.publisherBackground || undefined,
+							backgroundColor:
+								attributes?.publisherBackgroundColor || '',
+							backgroundClip:
+								attributes?.publisherBackgroundClip || 'none',
 						}}
 						extensionId={'Background'}
 						icon={<BackgroundExtensionIcon />}
