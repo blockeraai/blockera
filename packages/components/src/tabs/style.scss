@@ -18,8 +18,8 @@
 	&:last-child {
 		border-right: none;
 	}
-	
-	&:before {
+
+	&::before {
 		display: none;
 		position: absolute;
 		top: -1px;
@@ -34,8 +34,8 @@
 	background-color: #ffffff;
 	color: var(--publisher-tab-panel-active-color);
 	border-bottom-color: transparent;
-	
-	&:before {
+
+	&::before {
 		display: block;
 	}
 }
