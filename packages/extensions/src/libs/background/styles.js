@@ -53,7 +53,7 @@ export function BackgroundStyles({
 					cssGenerators: {
 						publisherBackground: [
 							{
-								selector: `${selector} .publisher-extension-ref, ${selector} .publisher-icon-element div[contentEditable="true"], .publisher-icon-element div`,
+								selector: `${selector}, ${selector} .publisher-extension-ref, ${selector} .publisher-icon-element div[contentEditable="true"], .publisher-icon-element div`,
 								type: 'function',
 								function: backgroundGenerator,
 							},

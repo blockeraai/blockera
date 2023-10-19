@@ -11,7 +11,7 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 /**
  * Internal dependencies
  */
-import { BaseExtension } from '@publisher/extensions';
+import { BaseExtension, ExtensionStyle } from '@publisher/extensions';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
@@ -30,7 +30,7 @@ SharedDecorators.push(WithPlaygroundStyles);
 
 blocksInitializer({
 	name: 'publisherBackgroundExtension',
-	targetBlock: 'core/button',
+	targetBlock: 'core/paragraph',
 	attributes,
 	supports,
 	edit({ attributes, setAttributes, ...props }) {
@@ -58,17 +58,24 @@ blocksInitializer({
 						title={__('Background', 'publisher-core')}
 					/>
 				</InspectorControls>
+
+				<ExtensionStyle
+					extensions={['Background']}
+					{...{
+						...props,
+						attributes,
+						setAttributes,
+					}}
+				/>
 			</>
 		);
 	},
 });
 
-const wrapperBlock = createBlockEditorContent('core/buttons', 'core/button', {
-	text: 'Get In Touch',
-	style: {
-		border: {
-			radius: '50px',
-		},
+const wrapperBlock = createBlockEditorContent({
+	blockName: 'core/paragraph',
+	attributes: {
+		content: 'This is test text.',
 	},
 });
 
@@ -80,12 +87,17 @@ export default {
 
 export const Default = {
 	args: {
-		blocks: [wrapperBlock],
-		blocContextValue: {
-			publisherBackground: [],
-			publisherBackgroundColor: '',
-			publisherBackgroundClip: '',
-		},
+		blocks: [
+			{
+				...wrapperBlock,
+				attributes: {
+					...(wrapperBlock?.attributes || {}),
+					publisherBackground: [],
+					publisherBackgroundColor: '',
+					publisherBackgroundClip: '',
+				},
+			},
+		],
 	},
 	decorators: [...SharedDecorators],
 };
