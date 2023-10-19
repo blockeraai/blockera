@@ -399,6 +399,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 							<BaseControl
 								controlName="spacing"
 								label={__('Spacing', 'publisher-core')}
+								columns="columns-2"
 							>
 								{isActiveField(publisherLetterSpacing) && (
 									<LetterSpacing
@@ -489,75 +490,73 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 										value: textOrientation,
 									}}
 								>
-									<BaseControl
+									<ToggleSelectControl
 										controlName="toggle-select"
 										label={__(
 											'Orientation',
 											'publisher-core'
 										)}
-									>
-										<ToggleSelectControl
-											options={[
-												{
-													label: __(
-														'vertically from top to bottom, and the next vertical line is positioned to the right of the previous line',
-														'publisher-core'
-													),
-													value: 'style-1',
-													icon: (
-														<TextOrientationStyle1Icon />
-													),
-												},
-												{
-													label: __(
-														'vertically from top to bottom, and the next vertical line is positioned to the left of the previous line',
-														'publisher-core'
-													),
-													value: 'style-2',
-													icon: (
-														<TextOrientationStyle2Icon />
-													),
-												},
-												{
-													label: __(
-														'Right',
-														'publisher-core'
-													),
-													value: 'style-3',
-													icon: (
-														<TextOrientationStyle3Icon />
-													),
-												},
-												{
-													label: __(
-														'Right',
-														'publisher-core'
-													),
-													value: 'style-4',
-													icon: (
-														<TextOrientationStyle4Icon />
-													),
-												},
-												{
-													label: __(
-														'None',
-														'publisher-core'
-													),
-													value: 'initial',
-													icon: <NoneIcon />,
-												},
-											]}
-											isDeselectable={true}
-											//
-											defaultValue=""
-											onChange={(newValue) =>
-												handleOnChangeAttributes(
-													'publisherTextOrientation',
-													newValue
-												)
-											}
-										/>
-									</BaseControl>
+										columns="columns-2"
+										options={[
+											{
+												label: __(
+													'vertically from top to bottom, and the next vertical line is positioned to the right of the previous line',
+													'publisher-core'
+												),
+												value: 'style-1',
+												icon: (
+													<TextOrientationStyle1Icon />
+												),
+											},
+											{
+												label: __(
+													'vertically from top to bottom, and the next vertical line is positioned to the left of the previous line',
+													'publisher-core'
+												),
+												value: 'style-2',
+												icon: (
+													<TextOrientationStyle2Icon />
+												),
+											},
+											{
+												label: __(
+													'Right',
+													'publisher-core'
+												),
+												value: 'style-3',
+												icon: (
+													<TextOrientationStyle3Icon />
+												),
+											},
+											{
+												label: __(
+													'Right',
+													'publisher-core'
+												),
+												value: 'style-4',
+												icon: (
+													<TextOrientationStyle4Icon />
+												),
+											},
+											{
+												label: __(
+													'None',
+													'publisher-core'
+												),
+												value: 'initial',
+												icon: <NoneIcon />,
+											},
+										]}
+										isDeselectable={true}
+										//
+										defaultValue=""
+										onChange={(newValue) =>
+											handleOnChangeAttributes(
+												'publisherTextOrientation',
+												newValue
+											)
+										}
+									/>
 								</ControlContextProvider>
 							)}
 
@@ -574,6 +573,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 									<BaseControl
 										controlName="toggle-select"
 										label={__('Columns', 'publisher-core')}
+										columns="columns-2"
 									>
 										<ToggleSelectControl
 											options={[
@@ -641,33 +641,31 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 															value: textColumnsGap,
 														}}
 													>
-														<BaseControl
+														<InputControl
 															controlName="input"
 															label={__(
 																'Gap',
 																'publisher-core'
 															)}
-														>
-															<InputControl
-																{...{
-																	...props,
-																	unitType:
-																		'essential',
-																	range: true,
-																	min: 0,
-																	max: 200,
-																	defaultValue:
-																		'20px',
-																	onChange: (
+															columns="columns-2"
+															{...{
+																...props,
+																unitType:
+																	'essential',
+																range: true,
+																min: 0,
+																max: 200,
+																defaultValue:
+																	'20px',
+																onChange: (
+																	newValue
+																) =>
+																	handleOnChangeAttributes(
+																		'publisherTextColumnsGap',
 																		newValue
-																	) =>
-																		handleOnChangeAttributes(
-																			'publisherTextColumnsGap',
-																			newValue
-																		),
-																}}
-															/>
-														</BaseControl>
+																	),
+															}}
+														/>
 													</ControlContextProvider>
 
 													<ControlContextProvider
@@ -683,7 +681,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 															},
 														}}
 													>
-														<BaseControl
+														<BorderControl
 															controlName="border"
 															label={__(
 																'Divider',
@@ -691,28 +689,25 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 															)}
 															columns="columns-1"
 															className="control-first label-center small-gap"
-														>
-															<BorderControl
-																lines="vertical"
-																customMenuPosition="top"
-																onValueChange={(
+															lines="vertical"
+															customMenuPosition="top"
+															onValueChange={(
+																newValue
+															) => {
+																handleOnChangeAttributes(
+																	'publisherTextColumnsDividerWidth',
 																	newValue
-																) => {
-																	handleOnChangeAttributes(
-																		'publisherTextColumnsDividerWidth',
-																		newValue
-																	);
-																	handleOnChangeAttributes(
-																		'publisherTextColumnsDividerStyle',
-																		newValue
-																	);
-																	handleOnChangeAttributes(
-																		'publisherTextColumnsDividerColor',
-																		newValue
-																	);
-																}}
-															/>
-														</BaseControl>
+																);
+																handleOnChangeAttributes(
+																	'publisherTextColumnsDividerStyle',
+																	newValue
+																);
+																handleOnChangeAttributes(
+																	'publisherTextColumnsDividerColor',
+																	newValue
+																);
+															}}
+														/>
 													</ControlContextProvider>
 												</>
 											)}
@@ -723,6 +718,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 							{isActiveField(publisherTextStrokeColor) && (
 								<BaseControl
 									label={__('Stroke', 'publisher-core')}
+									columns="columns-2"
 								>
 									<ControlContextProvider
 										value={{
@@ -733,23 +729,21 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											value: textStrokeColor,
 										}}
 									>
-										<BaseControl
+										<ColorControl
 											controlName="color"
 											label={__(
 												'Color',
 												'publisher-core'
 											)}
-										>
-											<ColorControl
-												defaultValue=""
-												onChange={(newValue) =>
-													handleOnChangeAttributes(
-														'publisherTextStrokeColor',
-														newValue
-													)
-												}
-											/>
-										</BaseControl>
+											columns="columns-2"
+											defaultValue=""
+											onChange={(newValue) =>
+												handleOnChangeAttributes(
+													'publisherTextStrokeColor',
+													newValue
+												)
+											}
+										/>
 									</ControlContextProvider>
 
 									{textStrokeColor && (
@@ -762,26 +756,24 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 												value: textStrokeWidth,
 											}}
 										>
-											<BaseControl
+											<InputControl
 												controlName="input"
 												label={__(
 													'Width',
 													'publisher-core'
 												)}
-											>
-												<InputControl
-													{...{
-														...props,
-														unitType: 'essential',
-														defaultValue: '',
-														onChange: (newValue) =>
-															handleOnChangeAttributes(
-																'publisherTextStrokeWidth',
-																newValue
-															),
-													}}
-												/>
-											</BaseControl>
+												columns="columns-2"
+												{...{
+													...props,
+													unitType: 'essential',
+													defaultValue: '',
+													onChange: (newValue) =>
+														handleOnChangeAttributes(
+															'publisherTextStrokeWidth',
+															newValue
+														),
+												}}
+											/>
 										</ControlContextProvider>
 									)}
 								</BaseControl>
@@ -797,73 +789,63 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 										value: wordBreak,
 									}}
 								>
-									<BaseControl
+									<SelectControl
 										controlName="select"
 										label={__('Breaking', 'publisher-core')}
-									>
-										<SelectControl
-											options={[
-												{
-													label: __(
-														'Normal',
-														'publisher-core'
-													),
-													value: 'normal',
-													icon: (
-														<BreakingNormalIcon />
-													),
-												},
-												{
-													label: __(
-														'Break All Words',
-														'publisher-core'
-													),
-													value: 'break-all',
-													icon: (
-														<BreakingBreakAllIcon />
-													),
-												},
-												{
-													label: __(
-														'Keep All Words',
-														'publisher-core'
-													),
-													value: 'keep-all',
-													icon: (
-														<BreakingNormalIcon />
-													),
-												},
-												{
-													label: __(
-														'Break Word',
-														'publisher-core'
-													),
-													value: 'break-word',
-													icon: (
-														<BreakingBreakAllIcon />
-													),
-												},
-												{
-													label: __(
-														'Inherit',
-														'publisher-core'
-													),
-													value: 'inherit',
-													icon: <InheritIcon />,
-												},
-											]}
-											type="custom"
-											customMenuPosition="top"
-											//
-											defaultValue="normal"
-											onChange={(newValue) =>
-												handleOnChangeAttributes(
-													'publisherWordBreak',
-													newValue
-												)
-											}
-										/>
-									</BaseControl>
+										columns="columns-2"
+										options={[
+											{
+												label: __(
+													'Normal',
+													'publisher-core'
+												),
+												value: 'normal',
+												icon: <BreakingNormalIcon />,
+											},
+											{
+												label: __(
+													'Break All Words',
+													'publisher-core'
+												),
+												value: 'break-all',
+												icon: <BreakingBreakAllIcon />,
+											},
+											{
+												label: __(
+													'Keep All Words',
+													'publisher-core'
+												),
+												value: 'keep-all',
+												icon: <BreakingNormalIcon />,
+											},
+											{
+												label: __(
+													'Break Word',
+													'publisher-core'
+												),
+												value: 'break-word',
+												icon: <BreakingBreakAllIcon />,
+											},
+											{
+												label: __(
+													'Inherit',
+													'publisher-core'
+												),
+												value: 'inherit',
+												icon: <InheritIcon />,
+											},
+										]}
+										type="custom"
+										customMenuPosition="top"
+										//
+										defaultValue="normal"
+										onChange={(newValue) =>
+											handleOnChangeAttributes(
+												'publisherWordBreak',
+												newValue
+											)
+										}
+									/>
 								</ControlContextProvider>
 							)}
 						</Popover>

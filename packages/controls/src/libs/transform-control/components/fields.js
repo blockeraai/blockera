@@ -34,6 +34,7 @@ const Fields = ({ itemId, item }) => {
 			<BaseControl
 				controlName="toggle-select"
 				label={__('Type', 'publisher-core')}
+				columns="columns-2"
 			>
 				<ToggleSelectControl
 					id={getControlId(itemId, 'type')}

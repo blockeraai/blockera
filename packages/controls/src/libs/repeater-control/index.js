@@ -121,7 +121,10 @@ export default function RepeaterControl({
 								repeaterItems?.length >= maxItems
 									? { disabled: true }
 									: {})}
-								aria-label={__('Add New', 'publisher-core')}
+								aria-label={
+									__('Add New', 'publisher-core') +
+									` ${defaultRepeaterState.popoverLabel}`
+								}
 								onClick={() => {
 									if (
 										maxItems === -1 ||

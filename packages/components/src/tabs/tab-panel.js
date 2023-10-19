@@ -66,7 +66,11 @@ export default function TabPanel({
 					key={tab.name}
 					onClick={partial(handleClick, tab.name)}
 				>
-					<Flex direction={'column'} alignItems={'center'}>
+					<Flex
+						direction={'column'}
+						alignItems={'center'}
+						gap={'5px'}
+					>
 						{tab.icon}
 						{tab.title}
 					</Flex>

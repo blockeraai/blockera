@@ -15,6 +15,7 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  * Internal dependencies
  */
 import { ToggleControl } from '../../index';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 
 const {
 	WithInspectorStyles,
@@ -22,6 +23,8 @@ const {
 	WithStoryContextProvider,
 	SharedDecorators,
 } = Decorators;
+
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Controls/ToggleControl',
@@ -100,7 +103,7 @@ export const Play = {
 	},
 };
 
-export const Screenshot = {
+export const All = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: () => (
 		<Flex direction="column" gap="50px">
