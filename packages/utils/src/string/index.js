@@ -15,3 +15,12 @@ export function getCamelCase(str, removePart) {
 
 	return str.substring(0, 1).toLowerCase() + str.substring(1, str.length);
 }
+
+export function getCapitalCase(str) {
+	const capitalCasedText = str
+		.toLowerCase()
+		.split(' ')
+		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+		.join(' ');
+	return capitalCasedText;
+}
