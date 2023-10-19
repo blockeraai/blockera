@@ -1,8 +1,5 @@
 module.exports = {
-	extends: [
-		'plugin:@wordpress/eslint-plugin/recommended',
-		'plugin:cypress/recommended',
-	],
+	extends: ['plugin:cypress/recommended'],
 	rules: {
 		'prettier/prettier': [
 			'error',
