@@ -1,0 +1,314 @@
+/// <reference types="Cypress" />
+
+import GroupControl from '..';
+import { default as AccordionCustomOpenIcon } from './icons/accordion-custom-open-icon';
+import { default as AccordionCustomCloseIcon } from './icons/accordion-custom-close-icon';
+
+describe('group control component testing', () => {
+	beforeEach(() => {
+		// run these tests as if in a desktop
+		// browser with a 720p monitor
+		cy.viewport(1280, 720);
+	});
+
+	describe('default', () => {
+		it('should render header title', () => {
+			cy.withInspector({
+				component: (
+					<GroupControl
+						mode="accordion"
+						header="Header Text"
+						children="Body Text"
+					/>
+				),
+			});
+			cy.get('.publisher-control-group-header').should(
+				'contain',
+				'Header Text'
+			);
+			cy.get('[aria-label="Open Settings"]').should('be.visible');
+		});
+		it('should render initial isOpen ', () => {
+			cy.withInspector({
+				component: (
+					<GroupControl
+						mode="accordion"
+						header="Header Text"
+						children="Body Text"
+						isOpen
+					/>
+				),
+			});
+			cy.get('.publisher-control-group-content').should('be.visible');
+		});
+		it('should close body section in default mode', () => {
+			cy.withInspector({
+				component: (
+					<GroupControl
+						mode="accordion"
+						header="Header Text"
+						children="Body Text"
+					/>
+				),
+			});
+			cy.get('.publisher-control-group').should('have.class', 'is-close');
+		});
+		it('should open body section after click on header', () => {
+			cy.withInspector({
+				component: (
+					<GroupControl
+						mode="accordion"
+						header="Header Text"
+						children="Body Text"
+					/>
+				),
+			});
+			cy.get('.publisher-control-group')
+				.click()
+				.should('have.class', 'is-open');
+			cy.get('[aria-label="Close Settings"]').should('be.visible');
+			cy.get('.publisher-control-group-content').should('be.visible');
+			cy.get('.publisher-control-group-content').should(
+				'contain',
+				'Body Text'
+			);
+		});
+	});
+	describe('accordion', () => {
+		it('should not displaying the border in the initial state', () => {
+			cy.withInspector({
+				component: (
+					<GroupControl
+						mode="accordion"
+						header="Header Text"
+						children="Body Text"
+					/>
+				),
+			});
+			cy.get('.publisher-control-group-header').click();
+			cy.get('.publisher-control-group').should(
+				'not.have.class',
+				'toggle-open-border'
+			);
+		});
+		it('should display border after open accordion', () => {
+			cy.withInspector({
+				component: (
+					<GroupControl
+						mode="accordion"
+						header="Header Text"
+						children="Body Text"
+						toggleOpenBorder
+					/>
+				),
+			});
+			cy.get('.publisher-control-group-header').click();
+			cy.get('.publisher-control-group').should(
+				'have.class',
+				'toggle-open-border'
+			);
+		});
+		it('should display custom icon', () => {
+			cy.withInspector({
+				component: (
+					<GroupControl
+						mode="accordion"
+						header="Header Text"
+						children="Body Text"
+						headerOpenIcon={<AccordionCustomOpenIcon />}
+						headerCloseIcon={<AccordionCustomCloseIcon />}
+					/>
+				),
+			});
+			cy.get('[data-cy="plus-svg"]').should('be.visible');
+			cy.get('[aria-label="Open Settings"]').click();
+			cy.get('[data-cy="minus-svg"]').should('be.visible');
+		});
+		it('should display extra Item Around Icon', () => {
+			cy.withInspector({
+				component: (
+					<GroupControl
+						mode="accordion"
+						header="Header Text"
+						children="Body Text"
+						injectHeaderButtonsStart={<AccordionCustomOpenIcon />}
+						injectHeaderButtonsEnd={<AccordionCustomCloseIcon />}
+					/>
+				),
+			});
+			cy.get('[data-cy="plus-svg"]').should('be.visible');
+			cy.get('[data-cy="minus-svg"]').should('be.visible');
+		});
+		it('should display extra Item Around Icon', () => {
+			cy.withInspector({
+				component: (
+					<GroupControl
+						mode="accordion"
+						header="Header Text"
+						children="Body Text"
+						injectHeaderButtonsStart={<AccordionCustomOpenIcon />}
+						injectHeaderButtonsEnd={<AccordionCustomCloseIcon />}
+					/>
+				),
+			});
+			cy.get('[data-cy="plus-svg"]').should('be.visible');
+			cy.get('[data-cy="minus-svg"]').should('be.visible');
+		});
+	});
+	describe('popover', () => {
+		it('should display popover modal', () => {
+			cy.withInspector({
+				component: (
+					<GroupControl
+						mode="popover"
+						header="Header Text"
+						children="Body Text"
+						toggleOpenBorder
+					/>
+				),
+			});
+			cy.get('.publisher-control-group').and('have.class', 'is-close');
+			cy.get('.publisher-control-group-header').click();
+			cy.get('.publisher-control-group')
+				.should('have.class', 'toggle-open-border')
+				.and('have.class', 'is-open');
+		});
+		it('should display popover default state is open', () => {
+			cy.withInspector({
+				component: (
+					<GroupControl
+						mode="popover"
+						popoverLabel="Label Text"
+						header="Header Text"
+						children="Body Text"
+						toggleOpenBorder
+						isOpen
+					/>
+				),
+			});
+
+			cy.get('.publisher-control-group').and('have.class', 'is-open');
+			cy.get('.publisher-control-group').should('contain', 'Header Text');
+			cy.get('.publisher-control-group-popover')
+				.should('contain', 'Label Text')
+				.should('contain', 'Body Text');
+		});
+		it('should display popover with custom icons', () => {
+			cy.withInspector({
+				component: (
+					<GroupControl
+						mode="popover"
+						popoverLabel="Label Text"
+						header="Header Text"
+						children="Body Text"
+						toggleOpenBorder
+						headerOpenIcon={<AccordionCustomOpenIcon />}
+						headerCloseIcon={<AccordionCustomCloseIcon />}
+					/>
+				),
+			});
+			cy.get('.publisher-control-group').should(
+				'have.class',
+				'toggle-open-border'
+			);
+			cy.get('[data-cy="plus-svg"]').should('be.visible');
+			cy.get('[aria-label="Open Settings"]').click();
+			cy.get('[data-cy="minus-svg"]').should('be.visible');
+		});
+		it('should display inject header buttons start and end', () => {
+			cy.withInspector({
+				component: (
+					<GroupControl
+						mode="popover"
+						popoverLabel="Label Text"
+						header="Header Text"
+						children="Body Text"
+						toggleOpenBorder
+						injectHeaderButtonsStart={<AccordionCustomOpenIcon />}
+						injectHeaderButtonsEnd={<AccordionCustomCloseIcon />}
+					/>
+				),
+			});
+			cy.get('.publisher-control-group').should(
+				'have.class',
+				'toggle-open-border'
+			);
+			cy.get('[data-cy="plus-svg"]').should('be.visible');
+			cy.get('[data-cy="minus-svg"]').should('be.visible');
+		});
+		it('should render popover custom className', () => {
+			cy.withInspector({
+				component: (
+					<GroupControl
+						mode="popover"
+						popoverLabel="Label Text"
+						header="Header Text"
+						children="Body Text"
+						toggleOpenBorder
+						injectHeaderButtonsStart={<AccordionCustomOpenIcon />}
+						injectHeaderButtonsEnd={<AccordionCustomCloseIcon />}
+						className="custom-classname"
+					/>
+				),
+			});
+			cy.get('.publisher-control-group')
+				.should('have.class', 'toggle-open-border')
+				.and('have.class', 'custom-classname');
+			cy.get('[data-cy="plus-svg"]').should('be.visible');
+			cy.get('[data-cy="minus-svg"]').should('be.visible');
+		});
+		it('should render close popover', () => {
+			cy.withInspector({
+				component: (
+					<GroupControl
+						mode="popover"
+						popoverLabel="Label Text"
+						header="Header Text"
+						children="Body Text"
+						toggleOpenBorder
+						injectHeaderButtonsStart={<AccordionCustomOpenIcon />}
+						injectHeaderButtonsEnd={<AccordionCustomCloseIcon />}
+						className="custom-classname"
+					/>
+				),
+			});
+			cy.get('.publisher-control-group')
+				.should('have.class', 'toggle-open-border')
+				.and('have.class', 'custom-classname')
+				.and('have.class', 'is-close');
+			cy.get('[data-cy="plus-svg"]').should('be.visible');
+			cy.get('[data-cy="minus-svg"]').should('be.visible');
+			cy.get('[aria-label="Open Settings"]').click();
+			cy.get('[aria-label="Close Modal"]').should('be.visible');
+			cy.get('[aria-label="Close Modal"]').click();
+			cy.get('.publisher-control-group').and('have.class', 'is-open');
+		});
+		it('should render custom popover label', () => {
+			cy.withInspector({
+				component: (
+					<GroupControl
+						mode="popover"
+						header="Header Text"
+						children="Body Text"
+						toggleOpenBorder
+						injectHeaderButtonsStart={<AccordionCustomOpenIcon />}
+						injectHeaderButtonsEnd={<AccordionCustomCloseIcon />}
+						popoverLabel="👋 Popover Title"
+						className="custom-classname"
+						isOpen
+					/>
+				),
+			});
+			cy.get('.publisher-control-group')
+				.should('have.class', 'toggle-open-border')
+				.and('have.class', 'custom-classname');
+			cy.get('[data-cy="plus-svg"]').should('be.visible');
+			cy.get('[data-cy="minus-svg"]').should('be.visible');
+			cy.get('[aria-label="Close Modal"]').should('be.visible');
+			cy.get('.publisher-component-popover-header').should(
+				'contain',
+				'👋 Popover Title'
+			);
+		});
+	});
+});
