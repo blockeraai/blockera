@@ -1,4 +1,4 @@
-export default function TypeImageIcon({}) {
+export default function TypeImageIcon() {
 	return (
 		<svg
 			width="18"

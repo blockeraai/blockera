@@ -1,8 +1,8 @@
+/**
+ * Internal dependencies
+ */
 import BackgroundControl from '../index';
-import { ControlContextProvider } from '../../../context';
-import { nanoid } from 'nanoid';
 import { STORE_NAME } from '../../repeater-control/store';
-import { PanelBody, Popover, SlotFillProvider } from '@wordpress/components';
 
 describe('background control component testing', () => {
 	it('should close modal of third item!', () => {

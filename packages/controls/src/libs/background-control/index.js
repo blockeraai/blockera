@@ -1,6 +1,8 @@
+// @flow
 /**
  * External dependencies
  */
+import type { MixedElement } from 'react';
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
 
@@ -16,15 +18,17 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
+import type { TBackgroundControlProps } from './types';
 
 export default function BackgroundControl({
+	defaultValue,
 	defaultRepeaterItemValue,
 	popoverLabel,
 	className,
 	...props
-}) {
+}: TBackgroundControlProps): MixedElement {
 	// it's commented because we wait for field context provider to use it.
-	function valueCleanup(value) {
+	function valueCleanup(value: any | Array<Object>) {
 		if (!isArray(value)) {
 			return value;
 		}
@@ -94,8 +98,13 @@ BackgroundControl.propTypes = {
 	 */
 	onChange: PropTypes.func,
 	/**
+	 * className that will be use in repeater control wrapper and popover class name.
+	 */
+	className: PropTypes.string,
+	/**
 	 * Default value of each repeater item
 	 */
+	//$FlowFixMe
 	defaultRepeaterItemValue: PropTypes.shape({
 		type: PropTypes.oneOf([
 			'image',
@@ -137,6 +146,8 @@ BackgroundControl.propTypes = {
 };
 
 BackgroundControl.defaultProps = {
+	className: '',
+	// $FlowFixMe
 	defaultValue: [],
 	defaultRepeaterItemValue: {
 		type: 'image',
@@ -164,9 +175,11 @@ BackgroundControl.defaultProps = {
 		'radial-gradient-repeat': 'no-repeat',
 		'radial-gradient-attachment': 'scroll',
 		'mesh-gradient': '',
+		// $FlowFixMe
 		'mesh-gradient-colors': [],
 		'mesh-gradient-attachment': 'scroll',
 		isVisible: true,
 	},
+	// $FlowFixMe
 	popoverLabel: __('Background', 'publisher-core'),
 };
