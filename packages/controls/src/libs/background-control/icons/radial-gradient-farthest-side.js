@@ -1,4 +1,4 @@
-export default function RadialGradientFarthestSideIcon({}) {
+export default function RadialGradientFarthestSideIcon() {
 	return (
 		<svg
 			width="18"

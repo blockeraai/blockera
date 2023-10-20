@@ -1,4 +1,4 @@
-export default function RadialGradientRepeatIcon({}) {
+export default function RadialGradientRepeatIcon() {
 	const gradient0ID = 'gr-' + Math.floor(Math.random() * 10000);
 	const gradient1ID = 'gr-' + Math.floor(Math.random() * 10000);
 
@@ -42,12 +42,12 @@ export default function RadialGradientRepeatIcon({}) {
 					gradientUnits="userSpaceOnUse"
 					gradientTransform="translate(9 9) rotate(90) scale(8)"
 				>
-					<stop offset="0.421579" stopColor="currentColor"></stop>
+					<stop offset="0.421579" stopColor="currentColor" />
 					<stop
 						offset="0.626871"
 						stopOpacity="0.3"
 						stopColor="currentColor"
-					></stop>
+					/>
 				</radialGradient>
 				<radialGradient
 					id={gradient1ID}
@@ -57,12 +57,12 @@ export default function RadialGradientRepeatIcon({}) {
 					gradientUnits="userSpaceOnUse"
 					gradientTransform="translate(9 9) rotate(90) scale(8)"
 				>
-					<stop offset="0.793429" stopColor="currentColor"></stop>
+					<stop offset="0.793429" stopColor="currentColor" />
 					<stop
 						offset="1"
 						stopOpacity="0.3"
 						stopColor="currentColor"
-					></stop>
+					/>
 				</radialGradient>
 			</defs>
 		</svg>

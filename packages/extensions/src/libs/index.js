@@ -80,6 +80,7 @@ export {
 	supports as sharedBlockExtensionSupports,
 } from './shared';
 export { BaseExtension } from './base';
+export { ExtensionStyle } from './base/style';
 export {
 	BaseExtensionContext,
 	BaseExtensionContextProvider,

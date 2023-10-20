@@ -1,16 +1,17 @@
-const generateColor = () => {
+// @flow
+const generateColor = (): number => {
 	return Math.round(Math.random() * 360);
 };
 
-const getPercent = (value) => {
+const getPercent = (value: number): number => {
 	return Math.round((Math.random() * (value * 100)) % 100);
 };
 
-const getRandomNumber = (min, max) => {
+const getRandomNumber = (min: number, max: number): number => {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const hslToHex = (h, s, l) => {
+const hslToHex = (h: number, s: number, l: number): string => {
 	h /= 360;
 	s /= 100;
 	l /= 100;
@@ -19,7 +20,7 @@ const hslToHex = (h, s, l) => {
 	if (s === 0) {
 		r = g = b = l;
 	} else {
-		const hue2rgb = (p, q, t) => {
+		const hue2rgb = (p: number, q: number, t: number): number => {
 			if (t < 0) t += 1;
 			if (t > 1) t -= 1;
 			if (t < 1 / 6) return p + (q - p) * 6 * t;
@@ -35,7 +36,7 @@ const hslToHex = (h, s, l) => {
 		b = hue2rgb(p, q, h - 1 / 3);
 	}
 
-	const toHex = (c) => {
+	const toHex = (c: number): number | string => {
 		const hex = Math.round(c * 255).toString(16);
 		return hex.length === 1 ? '0' + hex : hex;
 	};
@@ -43,8 +44,8 @@ const hslToHex = (h, s, l) => {
 	return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 };
 
-const generateColors = (length, baseColor) => {
-	return Array.from({ length }, (_, i) => {
+const generateColors = (length: number, baseColor: number): Object => {
+	return Array.from({ length }, (_: void, i: number): string => {
 		if (i === 0) {
 			return hslToHex(baseColor, 100, 65);
 		}
@@ -65,15 +66,15 @@ const generateColors = (length, baseColor) => {
 	});
 };
 
-const generateGradient = (length) => {
-	return Array.from({ length }, (_, i) => {
+const generateGradient = (length: number): Object => {
+	return Array.from({ length }, (_: void, i: number): string => {
 		return `radial-gradient(at ${getPercent(i)}% ${getPercent(
 			i * 10
 		)}%, var(--c${i}) 0px, transparent ${getRandomNumber(40, 70)}%)`;
 	});
 };
 
-export default function generateMeshGradient(length) {
+export default function generateMeshGradient(length: number): Object {
 	const colors = generateColors(length, generateColor());
 
 	const proprieties = generateGradient(length);

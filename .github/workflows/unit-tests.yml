@@ -157,20 +157,8 @@ jobs:
                   svn --version
                   locale -a
 
-            - name: Start Docker environment
+            - name: Start WordPress Environment
               run: npm run env:start
-
-            - name: Log running Docker containers
-              run: docker ps -a
-
-            - name: Docker container debug information
-              run: |
-                  npm run env run tests-mysql mysql -- --version
-                  npm run env run tests-wordpress php -- --version
-                  npm run env run tests-wordpress php -m
-                  npm run env run tests-wordpress php -i
-                  npm run env run tests-wordpress /var/www/html/wp-content/plugins/publisher-core/vendor/bin/phpunit -- --version
-                  npm run env run tests-wordpress locale -a
 
             - name: Running single site unit tests
               if: ${{ ! matrix.multisite }}

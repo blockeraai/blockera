@@ -8,11 +8,7 @@ import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
-import {
-	BaseControl,
-	ControlContextProvider,
-	InputControl,
-} from '@publisher/controls';
+import { ControlContextProvider, InputControl } from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -40,43 +36,40 @@ export const LetterSpacing = ({
 				value,
 			}}
 		>
-			<BaseControl
+			<InputControl
 				controlName="input"
 				columns="2fr 2.4fr"
 				label={__('Letters', 'publisher-core')}
-			>
-				<InputControl
-					{...{
-						...parentProps,
-						defaultValue,
-						unitType: 'letter-spacing',
-						onValidate: (newValue) => {
-							return newValue;
-						},
-						onChange: (newValue) =>
-							onChange(
-								'publisherLetterSpacing',
-								newValue,
-								'',
-								(
-									attributes: Object,
-									setAttributes: (attributes: Object) => void
-								): void =>
-									setAttributes({
-										...attributes,
-										style: {
-											...(attributes?.style ?? {}),
-											typography: {
-												...(attributes?.style
-													?.typography ?? {}),
-												letterSpacing: newValue,
-											},
+				{...{
+					...parentProps,
+					defaultValue,
+					unitType: 'letter-spacing',
+					onValidate: (newValue) => {
+						return newValue;
+					},
+					onChange: (newValue) =>
+						onChange(
+							'publisherLetterSpacing',
+							newValue,
+							'',
+							(
+								attributes: Object,
+								setAttributes: (attributes: Object) => void
+							): void =>
+								setAttributes({
+									...attributes,
+									style: {
+										...(attributes?.style ?? {}),
+										typography: {
+											...(attributes?.style?.typography ??
+												{}),
+											letterSpacing: newValue,
 										},
-									})
-							),
-					}}
-				/>
-			</BaseControl>
+									},
+								})
+						),
+				}}
+			/>
 		</ControlContextProvider>
 	);
 };

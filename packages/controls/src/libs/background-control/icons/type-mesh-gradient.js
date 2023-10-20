@@ -1,4 +1,4 @@
-export default function TypeMeshGradientIcon({}) {
+export default function TypeMeshGradientIcon() {
 	const maskID = 'mask-' + Math.floor(Math.random() * 10000);
 	const gr0ID = 'gr-' + Math.floor(Math.random() * 10000);
 	const gr1ID = 'gr-' + Math.floor(Math.random() * 10000);
@@ -59,12 +59,8 @@ export default function TypeMeshGradientIcon({}) {
 					gradientUnits="userSpaceOnUse"
 					gradientTransform="translate(13 13) rotate(90) scale(5)"
 				>
-					<stop offset="0.25" stopColor="currentColor"></stop>
-					<stop
-						offset="1"
-						stopOpacity="0"
-						stopColor="currentColor"
-					></stop>
+					<stop offset="0.25" stopColor="currentColor" />
+					<stop offset="1" stopOpacity="0" stopColor="currentColor" />
 				</radialGradient>
 				<radialGradient
 					id={gr1ID}
@@ -74,12 +70,8 @@ export default function TypeMeshGradientIcon({}) {
 					gradientUnits="userSpaceOnUse"
 					gradientTransform="translate(12 4) rotate(90) scale(6)"
 				>
-					<stop offset="0.25" stopColor="currentColor"></stop>
-					<stop
-						offset="1"
-						stopOpacity="0"
-						stopColor="currentColor"
-					></stop>
+					<stop offset="0.25" stopColor="currentColor" />
+					<stop offset="1" stopOpacity="0" stopColor="currentColor" />
 				</radialGradient>
 				<radialGradient
 					id={gr2ID}
@@ -89,12 +81,12 @@ export default function TypeMeshGradientIcon({}) {
 					gradientUnits="userSpaceOnUse"
 					gradientTransform="translate(5 14) rotate(90) scale(8)"
 				>
-					<stop offset="0.161458" stopColor="currentColor"></stop>
+					<stop offset="0.161458" stopColor="currentColor" />
 					<stop
 						offset="0.776042"
 						stopOpacity="0"
 						stopColor="currentColor"
-					></stop>
+					/>
 				</radialGradient>
 			</defs>
 		</svg>

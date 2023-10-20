@@ -1,4 +1,4 @@
-export default function TypeRadialGradientIcon({}) {
+export default function TypeRadialGradientIcon() {
 	const gradientID = 'gr-' + Math.floor(Math.random() * 10000);
 
 	return (
@@ -31,12 +31,8 @@ export default function TypeRadialGradientIcon({}) {
 					gradientUnits="userSpaceOnUse"
 					gradientTransform="translate(9 9) rotate(90) scale(6)"
 				>
-					<stop stopColor="currentColor"></stop>
-					<stop
-						offset="1"
-						stopOpacity="0"
-						stopColor="currentColor"
-					></stop>
+					<stop stopColor="currentColor" />
+					<stop offset="1" stopOpacity="0" stopColor="currentColor" />
 				</radialGradient>
 			</defs>
 		</svg>

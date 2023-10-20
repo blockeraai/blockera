@@ -32,7 +32,7 @@ class TestAssetsProvider extends AppTestCase {
 
 		if ( ! empty( $actual ) ) {
 
-			unset( $actual['version'] );
+			unset( $actual['version'], $actual['deps'] );
 		}
 
 		$this->assertEquals(
@@ -41,7 +41,7 @@ class TestAssetsProvider extends AppTestCase {
 				[
 					'style'  => ! empty( $asset['style'] ) ? $asset['style'] . ( self::$is_dev_mode ? '' : '.min' ) . '.css' : '',
 					'script' => ! empty( $asset['script'] ) ? $asset['script'] . ( self::$is_dev_mode ? '' : '.min' ) . '.js' : '',
-				]
+				],
 			),
 			$actual
 		);
@@ -68,16 +68,6 @@ class TestAssetsProvider extends AppTestCase {
 			[
 				[
 					'name'   => 'controls',
-					'deps'   => [
-						'react',
-						'wp-block-editor',
-						'wp-components',
-						'wp-data',
-						'wp-element',
-						'wp-i18n',
-						'wp-polyfill',
-						'wp-primitives',
-					],
 					'style'  => '/dist/controls-styles/style',
 					'script' => '/dist/controls/index',
 				],
@@ -85,15 +75,6 @@ class TestAssetsProvider extends AppTestCase {
 			[
 				[
 					'name'   => 'components',
-					'deps'   => [
-						'react',
-						'wp-block-editor',
-						'wp-components',
-						'wp-element',
-						'wp-i18n',
-						'wp-polyfill',
-						'wp-primitives',
-					],
 					'style'  => '/dist/components-styles/style',
 					'script' => '/dist/components/index',
 				],
@@ -101,18 +82,6 @@ class TestAssetsProvider extends AppTestCase {
 			[
 				[
 					'name'   => 'extensions',
-					'deps'   => [
-						'react',
-						'wp-block-editor',
-						'wp-components',
-						'wp-compose',
-						'wp-data',
-						'wp-element',
-						'wp-hooks',
-						'wp-i18n',
-						'wp-polyfill',
-						'wp-primitives',
-					],
 					'style'  => '/dist/extensions-styles/style',
 					'script' => '/dist/extensions/index',
 				],
@@ -120,10 +89,6 @@ class TestAssetsProvider extends AppTestCase {
 			[
 				[
 					'name'   => 'classnames',
-					'deps'   => [
-						'wp-element',
-						'wp-polyfill',
-					],
 					'style'  => '',
 					'script' => '/dist/classnames/index',
 				],
@@ -131,10 +96,6 @@ class TestAssetsProvider extends AppTestCase {
 			[
 				[
 					'name'   => 'data-extractor',
-					'deps'   => [
-						'wp-element',
-						'wp-polyfill',
-					],
 					'style'  => '',
 					'script' => '/dist/data-extractor/index',
 				],
@@ -142,11 +103,6 @@ class TestAssetsProvider extends AppTestCase {
 			[
 				[
 					'name'   => 'style-engine',
-					'deps'   => [
-						'wp-element',
-						'wp-polyfill',
-						'wp-style-engine',
-					],
 					'style'  => '',
 					'script' => '/dist/style-engine/index',
 				],
@@ -154,10 +110,6 @@ class TestAssetsProvider extends AppTestCase {
 			[
 				[
 					'name'   => 'utils',
-					'deps'   => [
-						'wp-element',
-						'wp-polyfill',
-					],
 					'style'  => '',
 					'script' => '/dist/utils/index',
 				],

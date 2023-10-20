@@ -11,7 +11,7 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 /**
  * Internal dependencies
  */
-import { BaseExtension } from '@publisher/extensions';
+import { BaseExtension, ExtensionStyle } from '@publisher/extensions';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
@@ -21,6 +21,8 @@ import { supports } from '../supports';
 import { attributes } from '../attributes';
 import BackgroundExtensionIcon from '../icons/extension-icon';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/decorators/with-playground-styles';
+import { useAttributes } from '../../shared/use-attributes';
+import { InspectorControls } from '@wordpress/block-editor';
 
 const { SharedDecorators } = Decorators;
 
@@ -28,31 +30,55 @@ SharedDecorators.push(WithPlaygroundStyles);
 
 blocksInitializer({
 	name: 'publisherBackgroundExtension',
-	targetBlock: 'core/button',
+	targetBlock: 'core/paragraph',
 	attributes,
 	supports,
-	edit(props) {
+	edit({ attributes, setAttributes, ...props }) {
+		// eslint-disable-next-line
+		const { handleOnChangeAttributes } = useAttributes(
+			attributes,
+			setAttributes
+		);
+
 		return (
 			<>
-				<BaseExtension
-					{...props}
-					initialOpen={true}
-					extensionId={'Background'}
-					icon=<BackgroundExtensionIcon />
-					storeName={'publisher-core/controls/repeater'}
-					title={__('Background', 'publisher-core')}
+				<InspectorControls>
+					<BaseExtension
+						{...{ ...props, attributes, setAttributes }}
+						initialOpen={true}
+						values={{
+							background:
+								attributes?.publisherBackground || undefined,
+							backgroundColor:
+								attributes?.publisherBackgroundColor || '',
+							backgroundClip:
+								attributes?.publisherBackgroundClip || 'none',
+						}}
+						extensionId={'Background'}
+						icon={<BackgroundExtensionIcon />}
+						storeName={'publisher-core/controls/repeater'}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+						title={__('Background', 'publisher-core')}
+					/>
+				</InspectorControls>
+
+				<ExtensionStyle
+					extensions={['Background']}
+					{...{
+						...props,
+						attributes,
+						setAttributes,
+					}}
 				/>
 			</>
 		);
 	},
 });
 
-const wrapperBlock = createBlockEditorContent('core/buttons', 'core/button', {
-	text: 'Get In Touch',
-	style: {
-		border: {
-			radius: '50px',
-		},
+const wrapperBlock = createBlockEditorContent({
+	blockName: 'core/paragraph',
+	attributes: {
+		content: 'This is test text.',
 	},
 });
 
@@ -64,12 +90,17 @@ export default {
 
 export const Default = {
 	args: {
-		blocks: [wrapperBlock],
-		blocContextValue: {
-			publisherBackground: [],
-			publisherBackgroundColor: '',
-			publisherBackgroundClip: '',
-		},
+		blocks: [
+			{
+				...wrapperBlock,
+				attributes: {
+					...(wrapperBlock?.attributes || {}),
+					publisherBackground: [],
+					publisherBackgroundColor: '',
+					publisherBackgroundClip: '',
+				},
+			},
+		],
 	},
 	decorators: [...SharedDecorators],
 };

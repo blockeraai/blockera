@@ -6,7 +6,7 @@ import { useContext, memo } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { isFunction, isObject } from '@publisher/utils';
+import { isObject } from '@publisher/utils';
 import { componentClassNames } from '@publisher/classnames';
 import { PanelBodyControl, STORE_NAME } from '@publisher/controls';
 
@@ -35,7 +35,6 @@ export const BaseExtension = memo(
 	}) => {
 		const context = useContext(BaseExtensionContext);
 		const ExtensionElement = extensions[`${extensionId}Extension`];
-		const getExtensionCssRules = extensions[`${extensionId}Styles`];
 
 		const contextValue = {
 			...props,
@@ -70,23 +69,6 @@ export const BaseExtension = memo(
 					</PanelBodyControl>
 				)}
 				{children}
-				{isFunction(getExtensionCssRules) && (
-					<style
-						data-block-type={blockName}
-						data-extension-id={extensionId}
-						dangerouslySetInnerHTML={{
-							__html: getExtensionCssRules({
-								...config,
-								blockProps: {
-									supports,
-									clientId,
-									blockName,
-									attributes,
-								},
-							}),
-						}}
-					/>
-				)}
 			</BaseExtensionContextProvider>
 		);
 	}

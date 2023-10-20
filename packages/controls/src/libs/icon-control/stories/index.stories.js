@@ -185,7 +185,7 @@ export const Play = {
 	},
 };
 
-export const Screenshot = {
+export const All = {
 	decorators: [
 		WithInspectorStyles,
 		WithControlDataProvider,

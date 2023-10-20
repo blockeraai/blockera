@@ -1,4 +1,4 @@
-export default function LinearGradientNoRepeatIcon({}) {
+export default function LinearGradientNoRepeatIcon() {
 	const gradientID = 'gr-' + Math.floor(Math.random() * 10000);
 
 	return (
@@ -30,12 +30,8 @@ export default function LinearGradientNoRepeatIcon({}) {
 					y2="15"
 					gradientUnits="userSpaceOnUse"
 				>
-					<stop stopColor="currentColor"></stop>
-					<stop
-						offset="1"
-						stopOpacity="0"
-						stopColor="currentColor"
-					></stop>
+					<stop stopColor="currentColor" />
+					<stop offset="1" stopOpacity="0" stopColor="currentColor" />
 				</linearGradient>
 			</defs>
 		</svg>

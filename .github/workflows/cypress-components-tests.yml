@@ -1,4 +1,4 @@
-name: Cypress E2E Tests
+name: Cypress Components Tests
 
 on:
     pull_request:
@@ -7,8 +7,8 @@ on:
     workflow_dispatch:
 
 jobs:
-    cypress_e2e_tests:
-        name: Cypress End 2 End Tests
+    cypress_components_tests:
+        name: Cypress Components Tests
         runs-on: ubuntu-latest
         if: ${{ github.repository == 'publisherwp/publisher-core' || github.event_name == 'pull_request' }}
 
@@ -30,19 +30,5 @@ jobs:
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
 
-            - name: Install Composer Packages
-              run: composer install
-
-            - name: Start WordPress Environment
-              run: npm run env:start
-
-            - name: Build wp-env app
-              run: |
-                  npm run build
-                  npm run build:wp-env-app
-
-            - name: Run Cypress E2E Tests
-              run: npm run test:e2e
-
-            - name: Stop WordPress Environment
-              run: npm run env:stop
+            - name: Run Cypress Tests
+              run: npm run test:ct
