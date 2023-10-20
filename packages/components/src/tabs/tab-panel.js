@@ -1,35 +1,39 @@
+// @flow
 /**
  * External dependencies
  */
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import type { Element } from 'react';
 import { partial, find } from 'lodash';
 import { useInstanceId } from '@wordpress/compose';
-import { NavigableMenu, Button } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
+import { NavigableMenu, Button } from '@wordpress/components';
 
 /**
  * Internal dependencies
  */
 import Flex from '../flex';
+import type { TTabPanelProps } from './types';
 
 const noop = () => {};
 
 export default function TabPanel({
 	tabs,
 	children,
+	onSelect,
 	className,
+	orientation,
+	activeClass,
 	initialTabName,
-	onSelect = noop,
-	orientation = 'horizontal',
-	activeClass = 'is-active',
-}) {
+}: TTabPanelProps): Element<any> {
 	const instanceId = useInstanceId(TabPanel, 'tab-panel');
 	const [selected, setSelected] = useState(null);
-	const handleClick = (tabKey) => {
+	const handleClick = (tabKey: string): void => {
 		setSelected(tabKey);
 		onSelect(tabKey);
 	};
-	const onNavigate = (childIndex, child) => {
+	const onNavigate = (childIndex: number, child: Object): void => {
 		child.click();
 	};
 	const selectedTab = find(tabs, { name: selected });
@@ -65,13 +69,14 @@ export default function TabPanel({
 					selected={tab.name === selected}
 					key={tab.name}
 					onClick={partial(handleClick, tab.name)}
+					data-test={`${tab.name}-tab`}
 				>
 					<Flex
 						direction={'column'}
 						alignItems={'center'}
 						gap={'5px'}
 					>
-						{tab.icon}
+						<div data-test={'publisher-tab-icon'}>{tab.icon}</div>
 						{tab.title}
 					</Flex>
 				</Button>
@@ -96,3 +101,28 @@ export default function TabPanel({
 		</div>
 	);
 }
+
+TabPanel.propTypes = {
+	// $FlowFixMe
+	tabs: PropTypes.arrayOf(
+		PropTypes.shape({
+			name: PropTypes.string,
+			title: PropTypes.string,
+			className: PropTypes.string,
+			icon: PropTypes.element,
+		})
+	),
+	children: PropTypes.element,
+	onSelect: PropTypes.func,
+	className: PropTypes.string,
+	orientation: PropTypes.string,
+	activeClass: PropTypes.string,
+	initialTabName: PropTypes.string,
+};
+
+TabPanel.defaultProps = {
+	onSelect: noop,
+	activeClass: 'is-active',
+	orientation: 'horizontal',
+	initialTabName: undefined,
+};

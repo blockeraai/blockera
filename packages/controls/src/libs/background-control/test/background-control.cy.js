@@ -6,7 +6,7 @@ import { STORE_NAME } from '../../repeater-control/store';
 
 describe('background control component testing', () => {
 	it('should close modal of third item!', () => {
-		cy.withInspector({
+		cy.withDataProvider({
 			component: <BackgroundControl label={'Background'} />,
 			value: [
 				{
