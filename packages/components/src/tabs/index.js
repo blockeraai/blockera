@@ -2,15 +2,21 @@
 /**
  * External dependencies
  */
-import type { MixedElement } from 'react';
-import { forwardRef, useRef } from '@wordpress/element';
+import PropTypes from 'prop-types';
+import type { Element } from 'react';
+import { useRef } from '@wordpress/element';
+
+/**
+ * Publisher dependencies
+ */
+import classnames from 'classnames';
 
 /**
  * Internal dependencies
  */
 import { Icon } from '../icons';
 import TabPanel from './tab-panel';
-import classnames from 'classnames';
+import type { TTabsProps, TTabProps } from './types';
 
 /**
  * Handle on select event!
@@ -23,29 +29,17 @@ const onSelect = (tabName: string): void => {
 	tab && tab.classList.add('is-active');
 };
 
-type TTabProps = {
-	name: string,
-	title: string,
-	icon: {
-		name: string,
-		library: string,
-	},
-};
-
-type TTabsProps = {
-	tabs: Array<TTabProps>,
-	getPanel: (tab: string) => Object,
-	isCustomized: boolean,
-};
-
-export function Tabs(
-	{ tabs, getPanel, isCustomized }: TTabsProps,
-	ref: Object
-): MixedElement {
-	const tabsRef = useRef(
-		tabs.map((tab, index) => {
+export function Tabs(props: TTabsProps): Element<any> {
+	const { tabs, getPanel } = props;
+	const tabsRef: {
+		current: Array<{
+			...TTabProps,
+			icon: Element<any>,
+		}>,
+	} = useRef(
+		tabs.map((tab: TTabProps, index: number): Object => {
 			if (!tab.icon) {
-				return false;
+				return tab;
 			}
 
 			return {
@@ -60,10 +54,8 @@ export function Tabs(
 			};
 		})
 	);
-
-	const classes = classnames('publisher-tab-panel', {
-		'publisher-sidebar-customized': isCustomized,
-	});
+	const ref = useRef();
+	const classes = classnames('publisher-tab-panel');
 
 	return (
 		<div ref={ref}>
@@ -79,6 +71,22 @@ export function Tabs(
 	);
 }
 
-const ForwardedComponent: TTabsProps = forwardRef(Tabs);
+Tabs.propTypes = {
+	// $FlowFixMe
+	props: PropTypes.shape({
+		tabs: PropTypes.arrayOf(
+			PropTypes.shape({
+				name: PropTypes.string,
+				title: PropTypes.string,
+				icon: {
+					name: PropTypes.string,
+					library: PropTypes.string,
+				},
+			})
+		).isRequired,
+		getPanel: PropTypes.func,
+	}),
+	ref: PropTypes.object,
+};
 
-export default ForwardedComponent;
+export default Tabs;
