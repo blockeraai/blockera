@@ -78,6 +78,8 @@ export default function GroupControl({
 		if (isFunction(fnOnClose)) {
 			fnOnClose();
 		}
+
+		setOpen(false);
 	}
 
 	return (
