@@ -38,6 +38,11 @@ export default function Popover({
 	const { onFocusOutside, shift, resize, flip } =
 		useContext(PopoverContextData);
 
+	const handleOnClose = () => {
+		onClose();
+		setIsVisible(false);
+	};
+
 	return (
 		<>
 			{isVisible && (
@@ -47,9 +52,11 @@ export default function Popover({
 						title && 'with-header',
 						className
 					)}
-					onClose={onClose}
+					onClose={handleOnClose}
 					onFocusOutside={
-						isFunction(onFocusOutside) ? onFocusOutside : onClose
+						isFunction(onFocusOutside)
+							? onFocusOutside
+							: handleOnClose
 					}
 					shift={!isUndefined(shift) ? shift : _shift}
 					resize={!isUndefined(resize) ? resize : _resize}
