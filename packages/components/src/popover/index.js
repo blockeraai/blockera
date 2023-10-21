@@ -35,6 +35,10 @@ export default function Popover({
 }) {
 	const [isVisible, setIsVisible] = useState(true);
 
+	/**
+	 * You can use popover context provider to wrap this component and prevent closing popover with
+	 * provided onFocusOutside fn for implement other functionality.
+	 */
 	const { onFocusOutside, shift, resize, flip } =
 		useContext(PopoverContextData);
 
@@ -107,7 +111,6 @@ Popover.propTypes = {
 	title: PropTypes.string,
 	/**
 	 * Event that would be called while closing popover.
-	 * You can return false to prevent closing popover.
 	 */
 	onClose: PropTypes.func,
 	/**
