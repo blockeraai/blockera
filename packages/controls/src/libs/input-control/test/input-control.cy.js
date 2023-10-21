@@ -10,19 +10,19 @@ describe('input control component testing', () => {
 	});
 	describe('default', () => {
 		it('should display default value', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: <InputControl defaultValue={20} />,
 			});
 			cy.get('input').should('have.value', 20);
 		});
 		it('should display onchanged value - number', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: <InputControl />,
 			});
 			cy.get('input').type(100).should('have.value', 100);
 		});
 		it('should display onchanged value - string', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: <InputControl />,
 			});
 			cy.get('input')
@@ -30,7 +30,7 @@ describe('input control component testing', () => {
 				.should('have.value', 'this is a test value');
 		});
 		it('should render clear input', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: <InputControl />,
 			});
 			cy.get('input')
@@ -42,7 +42,7 @@ describe('input control component testing', () => {
 
 	describe('text input', () => {
 		it('should display onchanged string value', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: <InputControl />,
 			});
 			cy.get('input')
@@ -53,13 +53,13 @@ describe('input control component testing', () => {
 
 	describe('number input', () => {
 		it('should display onchanged number value', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: <InputControl type="number" />,
 			});
 			cy.get('input').type(100).should('have.value', 100);
 		});
 		it('should render incrementing-and-decrementing by arrows', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: <InputControl type="number" />,
 			});
 			cy.get('input[type="number"]').type(100).trigger('change');
@@ -69,7 +69,7 @@ describe('input control component testing', () => {
 			cy.get('input[type="number"]').should('have.value', -100);
 		});
 		it('should skip string value', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: <InputControl type="number" />,
 			});
 			cy.get('input')
@@ -86,7 +86,7 @@ describe('input control component testing', () => {
 				{ value: 'em', label: 'em', default: 0 },
 			];
 
-			cy.withInspector({
+			cy.withDataProvider({
 				component: <InputControl units={units} />,
 			});
 			cy.get('[aria-label="Select unit"]')
@@ -100,7 +100,7 @@ describe('input control component testing', () => {
 				.should('have.value', 'em');
 		});
 		it('should change and handle units dropdown with unit type', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: <InputControl unitType="background-position" />,
 			});
 			cy.get('[aria-label="Select unit"]')
@@ -126,7 +126,7 @@ describe('input control component testing', () => {
 
 	describe('range unit', () => {
 		it('should change value by range control ', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: <InputControl range />,
 			});
 			cy.get('input[type=range]').invoke('val', '70').trigger('change');
@@ -138,7 +138,7 @@ describe('input control component testing', () => {
 				{ value: '%', label: '%', default: 10 },
 				{ value: 'em', label: 'em', default: 0 },
 			];
-			cy.withInspector({
+			cy.withDataProvider({
 				component: <InputControl range units={units} />,
 			});
 			cy.get('input[type=range]').invoke('val', '70').trigger('change');
@@ -157,7 +157,7 @@ describe('input control component testing', () => {
 
 	describe('css unit', () => {
 		it('should render css units', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: <InputControl range unitType="general" />,
 			});
 			cy.get('[aria-label="Select unit"]')
