@@ -133,6 +133,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 							controlName="toggle-select"
 							label={__('Overflow', 'publisher-core')}
 							columns="columns-2"
+							isDeselectable={true}
 							options={[
 								{
 									label: __('Visible', 'publisher-core'),
@@ -147,11 +148,10 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 								{
 									label: __('Scroll', 'publisher-core'),
 									value: 'scroll',
-									icon: <OverflowScrollIcon />,
 								},
 							]}
 							//
-							defaultValue={_overflow || 'visible'}
+							defaultValue={_overflow || ''}
 							onChange={(newValue) =>
 								handleOnChangeAttributes(
 									'publisherOverflow',
