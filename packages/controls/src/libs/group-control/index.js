@@ -1,9 +1,9 @@
 /**
  * External dependencies
  */
-import { useState } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
+import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -13,14 +13,14 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { Button, Popover } from '@publisher/components';
+import { useOutsideClick, isFunction } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
+import { default as PopoverOpenIcon } from './icons/popover-open';
 import { default as AccordionOpenIcon } from './icons/accordion-open';
 import { default as AccordionCloseIcon } from './icons/accordion-close';
-import { default as PopoverOpenIcon } from './icons/popover-open';
-import { isFunction } from '@publisher/utils';
 
 export default function GroupControl({
 	design,
@@ -45,6 +45,9 @@ export default function GroupControl({
 	onOpen: fnOnOpen,
 }) {
 	const [isOpen, setOpen] = useState(_isOpen);
+	const { ref } = useOutsideClick({
+		onOutsideClick: () => setOpen(false),
+	});
 
 	function getHeaderOpenIcon() {
 		if (headerOpenIcon) {
@@ -78,8 +81,6 @@ export default function GroupControl({
 		if (isFunction(fnOnClose)) {
 			fnOnClose();
 		}
-
-		setOpen(false);
 	}
 
 	return (
@@ -95,6 +96,7 @@ export default function GroupControl({
 			)}
 		>
 			<div
+				ref={ref}
 				className={controlInnerClassNames('group-header')}
 				onClick={() => {
 					if (!isOpen) {
