@@ -1,4 +1,4 @@
-export default function RepeatXIcon({}) {
+export default function RepeatXIcon() {
 	return (
 		<svg
 			width="18"

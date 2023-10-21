@@ -1,4 +1,12 @@
-export function getBackgroundItemBGProperty(item) {
+// @flow
+/**
+ * Internal dependencies
+ */
+import type { TDefaultRepeaterItemValue } from './types';
+
+export function getBackgroundItemBGProperty(
+	item: TDefaultRepeaterItemValue
+): string {
 	switch (item.type) {
 		case 'image':
 			if (!item.image) {
@@ -45,12 +53,12 @@ export function getBackgroundItemBGProperty(item) {
 
 			// Gradient Position
 			if (
-				item['radial-gradient-position-left'] &&
-				item['radial-gradient-position-top']
+				item['radial-gradient-position']?.left &&
+				item['radial-gradient-position']?.top
 			) {
 				radialGradient = radialGradient.replace(
 					'gradient(',
-					`gradient( circle at ${item['radial-gradient-position-left']} ${item['radial-gradient-position-top']}, `
+					`gradient( circle at ${item['radial-gradient-position'].left} ${item['radial-gradient-position'].top}, `
 				);
 			}
 

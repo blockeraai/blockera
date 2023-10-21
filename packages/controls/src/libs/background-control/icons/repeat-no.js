@@ -1,4 +1,4 @@
-export default function RepeatNoIcon({}) {
+export default function RepeatNoIcon() {
 	return (
 		<svg
 			width="21"

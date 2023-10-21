@@ -1,4 +1,4 @@
-export default function RepeatYIcon({}) {
+export default function RepeatYIcon() {
 	return (
 		<svg
 			width="18"

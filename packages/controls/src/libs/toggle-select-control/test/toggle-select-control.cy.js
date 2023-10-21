@@ -1,7 +1,6 @@
 import ToggleSelectControl from '../index';
 import { __ } from '@wordpress/i18n';
 import { default as InheritIcon } from '../stories/icons/inherit';
-import { getCapitalCase } from '@publisher/utils';
 
 describe('toggle-select-control', () => {
 	context('Text Toggle', () => {
@@ -21,7 +20,7 @@ describe('toggle-select-control', () => {
 		];
 
 		it('renders options with correct text', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: <ToggleSelectControl options={options} />,
 				value: 'left',
 			});
@@ -31,14 +30,14 @@ describe('toggle-select-control', () => {
 				.each(($btn, idx) => {
 					cy.wrap($btn).should(
 						'have.text',
-						getCapitalCase(options[idx].value)
+						Cypress._.upperFirst(options[idx].value)
 					);
 				});
 		});
 
 		it('renders with correct default selected text', () => {
 			options.forEach((option, _, options) => {
-				cy.withInspector({
+				cy.withDataProvider({
 					component: <ToggleSelectControl options={options} />,
 					value: option.value,
 				});
@@ -46,7 +45,7 @@ describe('toggle-select-control', () => {
 				cy.get('[aria-checked="true"]').should('have.length', 1);
 				cy.get('[aria-checked="true"]').should(
 					'have.text',
-					getCapitalCase(option.value)
+					Cypress._.upperFirst(option.value)
 				);
 			});
 		});
@@ -72,7 +71,7 @@ describe('toggle-select-control', () => {
 		];
 
 		it('renders options with correct Icon', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: <ToggleSelectControl options={optionsWithIcon} />,
 				value: 'left',
 			});
@@ -85,7 +84,7 @@ describe('toggle-select-control', () => {
 
 		it('has correct default selected option', () => {
 			optionsWithIcon.forEach((optionWithIcon, _, optionsWithIcon) => {
-				cy.withInspector({
+				cy.withDataProvider({
 					component: (
 						<ToggleSelectControl options={optionsWithIcon} />
 					),
@@ -119,7 +118,7 @@ describe('toggle-select-control', () => {
 		];
 
 		it('selects each item correctly', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: <ToggleSelectControl options={options} />,
 				value: 'left',
 			});
@@ -131,7 +130,7 @@ describe('toggle-select-control', () => {
 		});
 
 		it('only one option can be selected at particular time', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: <ToggleSelectControl options={options} />,
 				value: 'left',
 			});
@@ -144,7 +143,7 @@ describe('toggle-select-control', () => {
 
 		context('isDeselectable=True', () => {
 			it('all options should be unselected on default state', () => {
-				cy.withInspector({
+				cy.withDataProvider({
 					component: (
 						<ToggleSelectControl
 							options={options}
@@ -158,7 +157,7 @@ describe('toggle-select-control', () => {
 			});
 
 			it('options are de-selectable', () => {
-				cy.withInspector({
+				cy.withDataProvider({
 					component: (
 						<ToggleSelectControl
 							options={options}

@@ -25,7 +25,7 @@ import '../../packages/components/src/style.scss';
 
 Cypress.Commands.add('mount', mount);
 
-Cypress.Commands.add('withInspector', ({ component, store, value }) => {
+Cypress.Commands.add('withInspector', (component) => {
 	mount(
 		<SlotFillProvider>
 			<div className="playground__sidebar playground__sidebar-standalone">
@@ -37,22 +37,26 @@ Cypress.Commands.add('withInspector', ({ component, store, value }) => {
 							id="tab-panel-0-settings-view"
 							className="components-tab-panel__tab-content"
 						>
-							<PanelBody>
-								<ControlContextProvider
-									storeName={store}
-									value={{
-										name: nanoid(),
-										value,
-									}}
-								>
-									{component}
-								</ControlContextProvider>
-							</PanelBody>
+							<PanelBody>{component}</PanelBody>
 						</div>
 					</div>
 				</div>
 			</div>
 			<Popover.Slot />
 		</SlotFillProvider>
+	);
+});
+
+Cypress.Commands.add('withDataProvider', ({ component, store, value }) => {
+	cy.withInspector(
+		<ControlContextProvider
+			storeName={store}
+			value={{
+				name: nanoid(),
+				value,
+			}}
+		>
+			{component}
+		</ControlContextProvider>
 	);
 });

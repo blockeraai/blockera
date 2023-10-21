@@ -178,7 +178,7 @@
 		"build": "wp-scripts build --progress --mode production",
 		"format": "wp-scripts format",
 		"lint:js": "wp-scripts lint-js",
-		"lint:css": "wp-scripts lint-style",
+		"lint:css": "wp-scripts lint-style packages/**/*.scss",
 		"lint:php": "composer run lint",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"start": "wp-scripts start --progress --mode development",
@@ -223,10 +223,10 @@
 			"wp-scripts format"
 		],
 		"*.{js,ts,tsx}": [
-			"wp-scripts lint-js"
+			"npm run lint:js"
 		],
 		"*.scss": [
-			"wp-scripts lint-style"
+			"npm run lint:css"
 		],
 		"*.php": [
 			"./vendor/bin/phpcs --report-full --report-checkstyle=./.cache/phpcs-report.xml --standard=phpcs.xml"
