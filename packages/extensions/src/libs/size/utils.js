@@ -1,6 +1,6 @@
 // @flow
 
-export function convertToPercent(value: string) {
+export function convertToPercent(value: string): number | string {
 	const match = value.match(/^(\d+(?:\.\d+)?)(\w+)$/);
 
 	if (!match) {
