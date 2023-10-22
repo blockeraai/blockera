@@ -45,6 +45,7 @@ export default function GroupControl({
 	onOpen: fnOnOpen,
 }) {
 	const [isOpen, setOpen] = useState(_isOpen);
+	const [isActivePopover, setActivePopover] = useState(_isOpen);
 	const { ref } = useOutsideClick({
 		onOutsideClick: () => setOpen(false),
 	});
@@ -90,7 +91,7 @@ export default function GroupControl({
 				'design-' + design,
 				'mode-' + mode,
 
-				isOpen ? 'is-open' : 'is-close',
+				isOpen || (isActivePopover && !isOpen) ? 'is-open' : 'is-close',
 				toggleOpenBorder ? 'toggle-open-border' : '',
 				className
 			)}
@@ -106,6 +107,7 @@ export default function GroupControl({
 					}
 
 					setOpen(!isOpen);
+					setActivePopover(!isActivePopover);
 				}}
 			>
 				{header}
@@ -145,7 +147,7 @@ export default function GroupControl({
 				</div>
 			</div>
 
-			{mode === 'popover' && isOpen && (
+			{mode === 'popover' && isActivePopover && (
 				<Popover
 					offset={35}
 					placement="left-start"
@@ -154,7 +156,11 @@ export default function GroupControl({
 						popoverClassName
 					)}
 					title={popoverLabel || header}
-					onClose={onClose}
+					onClose={() => {
+						onClose();
+
+						setActivePopover(false);
+					}}
 				>
 					{children}
 				</Popover>
