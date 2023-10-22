@@ -1,9 +1,9 @@
 /**
  * External dependencies
  */
-import { useState } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
+import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -13,14 +13,14 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { Button, Popover } from '@publisher/components';
+import { useOutsideClick, isFunction } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
+import { default as PopoverOpenIcon } from './icons/popover-open';
 import { default as AccordionOpenIcon } from './icons/accordion-open';
 import { default as AccordionCloseIcon } from './icons/accordion-close';
-import { default as PopoverOpenIcon } from './icons/popover-open';
-import { isFunction } from '@publisher/utils';
 
 export default function GroupControl({
 	design,
@@ -45,6 +45,10 @@ export default function GroupControl({
 	onOpen: fnOnOpen,
 }) {
 	const [isOpen, setOpen] = useState(_isOpen);
+	const [isActivePopover, setActivePopover] = useState(_isOpen);
+	const { ref } = useOutsideClick({
+		onOutsideClick: () => setOpen(false),
+	});
 
 	function getHeaderOpenIcon() {
 		if (headerOpenIcon) {
@@ -87,12 +91,13 @@ export default function GroupControl({
 				'design-' + design,
 				'mode-' + mode,
 
-				isOpen ? 'is-open' : 'is-close',
+				isOpen || (isActivePopover && !isOpen) ? 'is-open' : 'is-close',
 				toggleOpenBorder ? 'toggle-open-border' : '',
 				className
 			)}
 		>
 			<div
+				ref={ref}
 				className={controlInnerClassNames('group-header')}
 				onClick={() => {
 					if (!isOpen) {
@@ -102,6 +107,7 @@ export default function GroupControl({
 					}
 
 					setOpen(!isOpen);
+					setActivePopover(!isActivePopover);
 				}}
 			>
 				{header}
@@ -141,7 +147,7 @@ export default function GroupControl({
 				</div>
 			</div>
 
-			{mode === 'popover' && isOpen && (
+			{mode === 'popover' && isActivePopover && (
 				<Popover
 					offset={35}
 					placement="left-start"
@@ -150,7 +156,11 @@ export default function GroupControl({
 						popoverClassName
 					)}
 					title={popoverLabel || header}
-					onClose={onClose}
+					onClose={() => {
+						onClose();
+
+						setActivePopover(false);
+					}}
 				>
 					{children}
 				</Popover>

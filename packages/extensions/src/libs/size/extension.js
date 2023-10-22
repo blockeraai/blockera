@@ -22,7 +22,6 @@ import { isActiveField } from '../../api/utils';
 import { generateExtensionId, hasSameProps } from '../utils';
 import type { TSizeProps } from './types/size-props';
 import { default as OverflowHiddenIcon } from './icons/overflow-hidden';
-import { default as OverflowScrollIcon } from './icons/overflow-scroll';
 import { default as OverflowVisibleIcon } from './icons/overflow-visible';
 import { convertToPercent } from './utils';
 
@@ -133,6 +132,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 							controlName="toggle-select"
 							label={__('Overflow', 'publisher-core')}
 							columns="columns-2"
+							isDeselectable={true}
 							options={[
 								{
 									label: __('Visible', 'publisher-core'),
@@ -147,11 +147,10 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 								{
 									label: __('Scroll', 'publisher-core'),
 									value: 'scroll',
-									icon: <OverflowScrollIcon />,
 								},
 							]}
 							//
-							defaultValue={_overflow || 'visible'}
+							defaultValue={_overflow || ''}
 							onChange={(newValue) =>
 								handleOnChangeAttributes(
 									'publisherOverflow',

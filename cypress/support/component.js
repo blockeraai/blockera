@@ -22,6 +22,7 @@ import './commands';
 import '../../packages/controls/src/style.scss';
 import '../../.storybook/styles/style.lazy.scss';
 import '../../packages/components/src/style.scss';
+import { WithControlDataProvider } from './components/providers/control-provider/with-control-data-provider';
 
 Cypress.Commands.add('mount', mount);
 
@@ -56,7 +57,10 @@ Cypress.Commands.add('withDataProvider', ({ component, store, value }) => {
 				value,
 			}}
 		>
-			{component}
+			<WithControlDataProvider
+				contextValue={value}
+				children={component}
+			/>
 		</ControlContextProvider>
 	);
 });

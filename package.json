@@ -145,7 +145,7 @@
 		"postcss-scss": "^4.0.6",
 		"prettier": "^2.5.1",
 		"prop-types": "^15.8.1",
-		"puppeteer": "^21.3.8",
+		"puppeteer": "^20.1.1",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-redux": "^8.1.1",
@@ -178,24 +178,24 @@
 		"build": "wp-scripts build --progress --mode production",
 		"format": "wp-scripts format",
 		"lint:js": "wp-scripts lint-js",
-		"lint:css": "wp-scripts lint-style",
+		"lint:css": "wp-scripts lint-style packages/**/*.scss",
 		"lint:php": "composer run lint",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"start": "wp-scripts start --progress --mode development",
 		"start:debug": "DEBUG_MODE=on wp-scripts start --progress",
 		"clean": "rm -rf build dist/* node_modules vendor wordpress",
 		"prepare": "husky install",
-		"flow": "flow ./packages",
-		"setup": "yarn install && yarn run build",
-		"test:e2e": "cypress run --config video=false --browser chrome",
+		"flow": "./node_modules/.bin/flow ./packages",
+		"setup": "npm install && npm run build",
+		"test:e2e": "./node_modules/.bin/cypress run --config video=false --browser chrome",
 		"test:ct": "npx cypress run-ct",
 		"test:ct:debug": "npx cypress open-ct",
 		"test:e2e:debug": "npx cypress open --e2e",
-		"test:e2e:headed": "yarn test:e2e --headed",
-		"test:e2e:record": "cypress run --browser chrome",
+		"test:e2e:headed": "npm run test:e2e --headed",
+		"test:e2e:record": "npx cypress run --browser chrome",
 		"test:js": "wp-scripts test-unit-js --config .dev/tests/jest/jest.config.js",
-		"test:js:coverage": "yarn test:js --coverage",
-		"test:js:update": "yarn test:js -u",
+		"test:js:coverage": "npm run test:js --coverage",
+		"test:js:update": "npm run test:js -u",
 		"test:generate-output": "jest --json --outputFile=.jest-test-results.json",
 		"test:generate-output:dev": "jest --json --outputFile=.jest-test-results.json -- --watch",
 		"test:unit:php:setup": "npm run env:start",
@@ -215,17 +215,18 @@
 		"env:reset": "npm run env:start --update --xdebug",
 		"env:tests-cli:bash": "npm run env run tests-cli bash",
 		"packages:update": "wp-scripts packages-update",
-		"plugin:activate": "wp-env run tests-cli wp plugin activate publisher-core"
+		"plugin:activate": "wp-env run tests-cli wp plugin activate publisher-core",
+		"plugin:deactivate": "wp-env run tests-cli wp plugin deactivate publisher-core"
 	},
 	"lint-staged": {
 		"*.{js,json,ts,tsx,yml,yaml}": [
 			"wp-scripts format"
 		],
 		"*.{js,ts,tsx}": [
-			"wp-scripts lint-js"
+			"npm run lint:js"
 		],
 		"*.scss": [
-			"wp-scripts lint-style"
+			"npm run lint:css"
 		],
 		"*.php": [
 			"./vendor/bin/phpcs --report-full --report-checkstyle=./.cache/phpcs-report.xml --standard=phpcs.xml"
