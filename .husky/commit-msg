@@ -4,4 +4,4 @@ commit_message="$1"
 # exit with a non zero exit code incase of an invalid commit message
 
 # use git-conventional-commits, see https://github.com/qoomon/git-conventional-commits
-git-conventional-commits commit-msg-hook "$commit_message"
+node_modules/git-conventional-commits/cli.js commit-msg-hook "$commit_message"
