@@ -22,7 +22,6 @@ import { isActiveField } from '../../api/utils';
 import { generateExtensionId, hasSameProps } from '../utils';
 import type { TSizeProps } from './types/size-props';
 import { default as OverflowHiddenIcon } from './icons/overflow-hidden';
-import { default as OverflowScrollIcon } from './icons/overflow-scroll';
 import { default as OverflowVisibleIcon } from './icons/overflow-visible';
 import { convertToPercent } from './utils';
 
