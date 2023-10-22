@@ -185,7 +185,7 @@
 		"start:debug": "DEBUG_MODE=on wp-scripts start --progress",
 		"clean": "rm -rf build dist/* node_modules vendor wordpress",
 		"prepare": "husky install",
-		"flow": "flow ./packages",
+		"flow": "./node_modules/.bin/flow ./packages",
 		"setup": "npm install && npm run build",
 		"test:e2e": "./node_modules/.bin/cypress run --config video=false --browser chrome",
 		"test:ct": "npx cypress run-ct",
