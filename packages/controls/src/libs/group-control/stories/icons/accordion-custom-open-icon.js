@@ -5,6 +5,7 @@ export default function AccordionCustomOpenIcon({}) {
 			viewBox="0 0 24 24"
 			width="24"
 			height="24"
+			data-cy="minus-svg"
 		>
 			<path d="M7 11.5h10V13H7z"></path>
 		</svg>

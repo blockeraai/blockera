@@ -1,8 +1,8 @@
 /// <reference types="Cypress" />
 
 import GroupControl from '..';
-import { default as AccordionCustomOpenIcon } from './icons/accordion-custom-open-icon';
-import { default as AccordionCustomCloseIcon } from './icons/accordion-custom-close-icon';
+import { default as AccordionCustomOpenIcon } from '../stories/icons/accordion-custom-open-icon';
+import { default as AccordionCustomCloseIcon } from '../stories/icons/accordion-custom-close-icon';
 
 describe('group control component testing', () => {
 	beforeEach(() => {
@@ -22,7 +22,7 @@ describe('group control component testing', () => {
 					/>
 				),
 			});
-			cy.get('.publisher-control-group-header').should(
+			cy.getByDataCy('group-control-header').should(
 				'contain',
 				'Header Text'
 			);
@@ -39,7 +39,7 @@ describe('group control component testing', () => {
 					/>
 				),
 			});
-			cy.get('.publisher-control-group-content').should('be.visible');
+			cy.getByDataCy('group-control-content').should('be.visible');
 		});
 		it('should close body section in default mode', () => {
 			cy.withDataProvider({
@@ -51,7 +51,7 @@ describe('group control component testing', () => {
 					/>
 				),
 			});
-			cy.get('.publisher-control-group').should('have.class', 'is-close');
+			cy.getByDataCy('control-group').should('have.class', 'is-close');
 		});
 		it('should open body section after click on header', () => {
 			cy.withDataProvider({
@@ -63,12 +63,12 @@ describe('group control component testing', () => {
 					/>
 				),
 			});
-			cy.get('.publisher-control-group')
+			cy.getByDataCy('control-group')
 				.click()
 				.should('have.class', 'is-open');
 			cy.get('[aria-label="Close Settings"]').should('be.visible');
-			cy.get('.publisher-control-group-content').should('be.visible');
-			cy.get('.publisher-control-group-content').should(
+			cy.getByDataCy('group-control-content').should('be.visible');
+			cy.getByDataCy('group-control-content').should(
 				'contain',
 				'Body Text'
 			);
@@ -85,8 +85,8 @@ describe('group control component testing', () => {
 					/>
 				),
 			});
-			cy.get('.publisher-control-group-header').click();
-			cy.get('.publisher-control-group').should(
+			cy.getByDataCy('group-control-header').click();
+			cy.getByDataCy('control-group').should(
 				'not.have.class',
 				'toggle-open-border'
 			);
@@ -102,8 +102,8 @@ describe('group control component testing', () => {
 					/>
 				),
 			});
-			cy.get('.publisher-control-group-header').click();
-			cy.get('.publisher-control-group').should(
+			cy.getByDataCy('group-control-header').click();
+			cy.getByDataCy('control-group').should(
 				'have.class',
 				'toggle-open-border'
 			);
@@ -167,9 +167,9 @@ describe('group control component testing', () => {
 					/>
 				),
 			});
-			cy.get('.publisher-control-group').and('have.class', 'is-close');
-			cy.get('.publisher-control-group-header').click();
-			cy.get('.publisher-control-group')
+			cy.getByDataCy('control-group').and('have.class', 'is-close');
+			cy.getByDataCy('group-control-header').click();
+			cy.getByDataCy('control-group')
 				.should('have.class', 'toggle-open-border')
 				.and('have.class', 'is-open');
 		});
@@ -187,8 +187,8 @@ describe('group control component testing', () => {
 				),
 			});
 
-			cy.get('.publisher-control-group').and('have.class', 'is-open');
-			cy.get('.publisher-control-group').should('contain', 'Header Text');
+			cy.getByDataCy('control-group').and('have.class', 'is-open');
+			cy.getByDataCy('control-group').should('contain', 'Header Text');
 			cy.get('.publisher-control-group-popover')
 				.should('contain', 'Label Text')
 				.should('contain', 'Body Text');
@@ -207,7 +207,7 @@ describe('group control component testing', () => {
 					/>
 				),
 			});
-			cy.get('.publisher-control-group').should(
+			cy.getByDataCy('control-group').should(
 				'have.class',
 				'toggle-open-border'
 			);
@@ -229,7 +229,7 @@ describe('group control component testing', () => {
 					/>
 				),
 			});
-			cy.get('.publisher-control-group').should(
+			cy.getByDataCy('control-group').should(
 				'have.class',
 				'toggle-open-border'
 			);
@@ -251,7 +251,7 @@ describe('group control component testing', () => {
 					/>
 				),
 			});
-			cy.get('.publisher-control-group')
+			cy.getByDataCy('control-group')
 				.should('have.class', 'toggle-open-border')
 				.and('have.class', 'custom-classname');
 			cy.get('[data-cy="plus-svg"]').should('be.visible');
@@ -272,7 +272,7 @@ describe('group control component testing', () => {
 					/>
 				),
 			});
-			cy.get('.publisher-control-group')
+			cy.getByDataCy('control-group')
 				.should('have.class', 'toggle-open-border')
 				.and('have.class', 'custom-classname')
 				.and('have.class', 'is-close');
@@ -298,7 +298,7 @@ describe('group control component testing', () => {
 					/>
 				),
 			});
-			cy.get('.publisher-control-group')
+			cy.getByDataCy('control-group')
 				.should('have.class', 'toggle-open-border')
 				.and('have.class', 'custom-classname');
 			cy.get('[data-cy="plus-svg"]').should('be.visible');
