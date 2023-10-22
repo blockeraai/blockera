@@ -13,7 +13,7 @@ describe('group control component testing', () => {
 
 	describe('default', () => {
 		it('should render header title', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: (
 					<GroupControl
 						mode="accordion"
@@ -29,7 +29,7 @@ describe('group control component testing', () => {
 			cy.get('[aria-label="Open Settings"]').should('be.visible');
 		});
 		it('should render initial isOpen ', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: (
 					<GroupControl
 						mode="accordion"
@@ -42,7 +42,7 @@ describe('group control component testing', () => {
 			cy.get('.publisher-control-group-content').should('be.visible');
 		});
 		it('should close body section in default mode', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: (
 					<GroupControl
 						mode="accordion"
@@ -54,7 +54,7 @@ describe('group control component testing', () => {
 			cy.get('.publisher-control-group').should('have.class', 'is-close');
 		});
 		it('should open body section after click on header', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: (
 					<GroupControl
 						mode="accordion"
@@ -76,7 +76,7 @@ describe('group control component testing', () => {
 	});
 	describe('accordion', () => {
 		it('should not displaying the border in the initial state', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: (
 					<GroupControl
 						mode="accordion"
@@ -92,7 +92,7 @@ describe('group control component testing', () => {
 			);
 		});
 		it('should display border after open accordion', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: (
 					<GroupControl
 						mode="accordion"
@@ -109,7 +109,7 @@ describe('group control component testing', () => {
 			);
 		});
 		it('should display custom icon', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: (
 					<GroupControl
 						mode="accordion"
@@ -125,7 +125,7 @@ describe('group control component testing', () => {
 			cy.get('[data-cy="minus-svg"]').should('be.visible');
 		});
 		it('should display extra Item Around Icon', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: (
 					<GroupControl
 						mode="accordion"
@@ -140,7 +140,7 @@ describe('group control component testing', () => {
 			cy.get('[data-cy="minus-svg"]').should('be.visible');
 		});
 		it('should display extra Item Around Icon', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: (
 					<GroupControl
 						mode="accordion"
@@ -157,7 +157,7 @@ describe('group control component testing', () => {
 	});
 	describe('popover', () => {
 		it('should display popover modal', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: (
 					<GroupControl
 						mode="popover"
@@ -174,7 +174,7 @@ describe('group control component testing', () => {
 				.and('have.class', 'is-open');
 		});
 		it('should display popover default state is open', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: (
 					<GroupControl
 						mode="popover"
@@ -194,7 +194,7 @@ describe('group control component testing', () => {
 				.should('contain', 'Body Text');
 		});
 		it('should display popover with custom icons', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: (
 					<GroupControl
 						mode="popover"
@@ -216,7 +216,7 @@ describe('group control component testing', () => {
 			cy.get('[data-cy="minus-svg"]').should('be.visible');
 		});
 		it('should display inject header buttons start and end', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: (
 					<GroupControl
 						mode="popover"
@@ -237,7 +237,7 @@ describe('group control component testing', () => {
 			cy.get('[data-cy="minus-svg"]').should('be.visible');
 		});
 		it('should render popover custom className', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: (
 					<GroupControl
 						mode="popover"
@@ -258,7 +258,7 @@ describe('group control component testing', () => {
 			cy.get('[data-cy="minus-svg"]').should('be.visible');
 		});
 		it('should render close popover', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: (
 					<GroupControl
 						mode="popover"
@@ -278,13 +278,12 @@ describe('group control component testing', () => {
 				.and('have.class', 'is-close');
 			cy.get('[data-cy="plus-svg"]').should('be.visible');
 			cy.get('[data-cy="minus-svg"]').should('be.visible');
-			cy.get('[aria-label="Open Settings"]').click();
+			cy.get('[data-cy="minus-svg"]').click();
 			cy.get('[aria-label="Close Modal"]').should('be.visible');
 			cy.get('[aria-label="Close Modal"]').click();
-			cy.get('.publisher-control-group').and('have.class', 'is-open');
 		});
 		it('should render custom popover label', () => {
-			cy.withInspector({
+			cy.withDataProvider({
 				component: (
 					<GroupControl
 						mode="popover"

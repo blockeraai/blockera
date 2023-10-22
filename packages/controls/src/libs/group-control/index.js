@@ -100,7 +100,7 @@ export default function GroupControl({
 				ref={ref}
 				className={controlInnerClassNames('group-header')}
 				onClick={() => {
-					if (!isOpen) {
+					if (isOpen) {
 						onClose();
 					} else {
 						onOpen();
@@ -130,14 +130,14 @@ export default function GroupControl({
 							}
 							onClick={(event) => {
 								event.stopPropagation();
-
-								if (!isOpen) {
+								if (isOpen) {
 									onClose();
 								} else {
 									onOpen();
 								}
 
 								setOpen(!isOpen);
+								setActivePopover(!isActivePopover);
 							}}
 							noBorder={true}
 						/>
