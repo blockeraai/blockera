@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -23,7 +24,6 @@ import LabelControl from '../label-control';
 import { useControlContext } from '../../context';
 import { RepeaterContextProvider } from './context';
 import MappedItems from './components/mapped-items';
-
 export default function RepeaterControl({
 	design,
 	mode,
@@ -102,6 +102,7 @@ export default function RepeaterControl({
 					'design-' + design,
 					className
 				)}
+				data-cy="publisher-repeater-control"
 			>
 				<div className={controlInnerClassNames('header')}>
 					<LabelControl label={label} />
