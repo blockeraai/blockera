@@ -38,21 +38,20 @@ function RepeaterFilledItemChildren({ itemId, item }) {
 }
 
 const RepeaterItemChildren = () => <h3>this is body section</h3>;
-//Delete 2 Clone 2 Disable 2
+
 describe('repeater control component testing', () => {
 	beforeEach(() => {
 		// run these tests as if in a desktop
 		// browser with a 720p monitor
 		cy.viewport(1280, 720);
 	});
-	describe('popover -> empty', () => {
+	describe('popover', () => {
 		it('should add new item', () => {
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
 						label="Items"
 						repeaterItemChildren={() => <RepeaterItemChildren />}
-						storeName={STORE_NAME}
 					/>
 				),
 				value: [],
@@ -70,7 +69,6 @@ describe('repeater control component testing', () => {
 					<RepeaterControl
 						label="Items"
 						repeaterItemChildren={() => <RepeaterItemChildren />}
-						storeName={STORE_NAME}
 					/>
 				),
 				value: [],
@@ -88,7 +86,6 @@ describe('repeater control component testing', () => {
 					<RepeaterControl
 						label="Items"
 						repeaterItemChildren={() => <RepeaterItemChildren />}
-						storeName={STORE_NAME}
 					/>
 				),
 				value: [],
@@ -109,7 +106,6 @@ describe('repeater control component testing', () => {
 					<RepeaterControl
 						label="Items"
 						repeaterItemChildren={() => <RepeaterItemChildren />}
-						storeName={STORE_NAME}
 					/>
 				),
 				value: [],
@@ -125,15 +121,12 @@ describe('repeater control component testing', () => {
 				.first()
 				.should('have.class', 'is-inactive');
 		});
-	});
-	describe('popover -> filled', () => {
 		it('should display field in body section', () => {
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
 						label="Items"
 						repeaterItemChildren={RepeaterFilledItemChildren}
-						storeName={STORE_NAME}
 					/>
 				),
 				value: [
@@ -147,8 +140,6 @@ describe('repeater control component testing', () => {
 			cy.getByDataCy('repeater-item').click();
 			cy.get('input[type="text"]').should('have.value', 'john doe');
 		});
-	});
-	describe('popover -> custom header', () => {
 		it('should display custom header icons', () => {
 			cy.withDataProvider({
 				component: (
@@ -157,7 +148,6 @@ describe('repeater control component testing', () => {
 						repeaterItemChildren={RepeaterItemChildren}
 						injectHeaderButtonsStart={<AccordionCustomOpenIcon />}
 						injectHeaderButtonsEnd={<AccordionCustomCloseIcon />}
-						storeName={STORE_NAME}
 					/>
 				),
 				value: [{}],
@@ -165,6 +155,89 @@ describe('repeater control component testing', () => {
 			});
 			cy.getByDataCy('plus-svg').should('be.visible');
 			cy.getByDataCy('minus-svg').should('be.visible');
+		});
+		it('should render max items', () => {
+			cy.withDataProvider({
+				component: (
+					<RepeaterControl
+						label="Items"
+						repeaterItemChildren={RepeaterItemChildren}
+						maxItems={4}
+					/>
+				),
+				value: [],
+				store: STORE_NAME,
+			});
+			cy.multiClick(`[aria-label="Add New Items"]`, 4);
+			cy.getByDataCy('publisher-repeater-control')
+				.find('[data-cy="repeater-item"]')
+				.should('have.length', 4);
+			cy.get(`[aria-label="Add New Items"]`).should('be.disabled');
+		});
+		it('should render min items', () => {
+			cy.withDataProvider({
+				component: (
+					<RepeaterControl
+						label="Items"
+						repeaterItemChildren={RepeaterItemChildren}
+						minItems={3}
+					/>
+				),
+				value: [],
+				store: STORE_NAME,
+			});
+			cy.multiClick('[aria-label="Add New Items"]', 4);
+
+			cy.getByDataCy('publisher-repeater-control')
+				.find('[data-cy="repeater-item"]')
+				.should('have.length', 4);
+			cy.getByDataCy('repeater-item').first().realHover('mouse');
+			cy.get('[aria-label="Delete 1"]').click();
+			cy.getByDataCy('repeater-item').first().realHover('mouse');
+			cy.get('[aria-label="Delete 1"]').should('not.exist');
+		});
+		it('should render item is open', () => {
+			cy.withDataProvider({
+				component: (
+					<RepeaterControl
+						label="Items"
+						repeaterItemChildren={RepeaterItemChildren}
+					/>
+				),
+				value: [
+					{
+						isVisible: true,
+						isOpen: true,
+					},
+					{
+						isVisible: true,
+					},
+				],
+				store: STORE_NAME,
+			});
+			cy.get('.publisher-control-group-popover').should('exist');
+		});
+	});
+	describe('accordion', () => {
+		it('should display field in body section', () => {
+			cy.withDataProvider({
+				component: (
+					<RepeaterControl
+						label="Items"
+						mode="accordion"
+						repeaterItemChildren={RepeaterFilledItemChildren}
+					/>
+				),
+				value: [
+					{
+						name: 'john doe',
+						isVisible: true,
+					},
+				],
+				store: STORE_NAME,
+			});
+			cy.getByDataCy('repeater-item').click();
+			cy.get('input[type="text"]').should('have.value', 'john doe');
 		});
 	});
 });
