@@ -497,7 +497,7 @@ export const AccordionFilled = {
 		);
 	},
 };
-AccordionFilled.storyName = 'Accordion → Filled';
+AccordionFilled.storyName = 'Accordion → Custom Header';
 
 export const AccordionOpenItem = {
 	args: {
@@ -548,7 +548,7 @@ export const AccordionOpenItem = {
 		);
 	},
 };
-AccordionOpenItem.storyName = 'Accordion → Custom Header';
+AccordionOpenItem.storyName = 'Accordion → Filled';
 
 export const Play = {
 	args: {
