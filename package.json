@@ -32,7 +32,8 @@
 		"@publisher/data-extractor": "file:packages/data-extractor",
 		"@publisher/extensions": "file:packages/extensions",
 		"@publisher/style-engine": "file:packages/style-engine",
-		"@publisher/utils": "file:packages/utils"
+		"@publisher/utils": "file:packages/utils",
+		"cypress-real-events": "^1.10.3"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.22.9",
@@ -151,7 +152,6 @@
 		"react-redux": "^8.1.1",
 		"react-router-dom": "^6.14.0",
 		"react-test-renderer": "^18.2.0",
-		"rememo": "^4.0.2",
 		"rtlcss-webpack-plugin": "^4.0.6",
 		"sass": "^1.63.3",
 		"sass-loader": "^13.2.2",
@@ -186,9 +186,9 @@
 		"start:debug": "DEBUG_MODE=on wp-scripts start --progress",
 		"clean": "rm -rf build dist/* node_modules vendor wordpress",
 		"prepare": "husky install",
-		"flow": "npx flow status",
+		"flow": "flow ./packages",
 		"setup": "npm install && npm run build",
-		"test:e2e": "npx cypress run --config video=false --browser chrome",
+		"test:e2e": "./node_modules/.bin/cypress run --config video=false --browser chrome",
 		"test:ct": "npx cypress run-ct",
 		"test:ct:debug": "npx cypress open-ct",
 		"test:e2e:debug": "npx cypress open --e2e",
