@@ -1,28 +1,39 @@
+//@flow
 /**
  * External dependencies
  */
 import { PanelBody as WPPanelBody } from '@wordpress/components';
-import PropTypes from 'prop-types';
-
+import type { MixedElement, Node } from 'react';
 /**
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
+import { PropTypes } from 'prop-types';
 
+type Props = {
+	title: string,
+	initialOpen?: boolean,
+	className?: string,
+	icon?: Node,
+	onToggle?: () => void,
+	children: Node,
+};
 export default function PanelBodyControl({
 	title,
-	initialOpen,
+	initialOpen = true,
 	className,
 	icon,
 	children,
+	onToggle,
 	...props
-}) {
+}: Props): MixedElement {
 	return (
 		<WPPanelBody
 			title={title}
 			initialOpen={initialOpen}
 			className={controlClassNames('panel-body', className)}
 			icon={icon ? <span>{icon}</span> : ''} // by wrapping icon inside a tag the WPPanelBody wraps it inside a tag with components-panel__icon class
+			onToggle={onToggle}
 			{...props}
 		>
 			{children}
@@ -48,7 +59,6 @@ PanelBodyControl.propTypes = {
 	 */
 	onToggle: PropTypes.element,
 };
-
 PanelBodyControl.defaultProps = {
 	initialOpen: true,
 };
