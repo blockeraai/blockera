@@ -38,6 +38,42 @@ describe('input control component testing', () => {
 				.clear()
 				.should('have.value', '');
 		});
+		it('should control data value must be equal with expected data value passed in data provider access with control identifier', () => {
+			cy.withDataProvider({
+				component: (
+					<InputControl defaultValue={'10px'} id={'inputControl'} />
+				),
+				value: {
+					inputControl: '300px',
+				},
+			});
+			cy.get('input').should('have.value', '300px');
+		});
+		it('should control data value must be equal with expected data value passed in data provider access with control identifier', () => {
+			cy.withDataProvider({
+				component: (
+					<InputControl
+						defaultValue={'10px'}
+						id={'inputControl.value'}
+					/>
+				),
+				value: {
+					inputControl: {
+						value: '300px',
+					},
+				},
+			});
+			cy.get('input').should('have.value', '300px');
+		});
+		it('should render label prop value', () => {
+			cy.withDataProvider({
+				component: <InputControl label="Example Label" />,
+			});
+			cy.get('[aria-label="Example Label"]').should(
+				'contain',
+				'Example Label'
+			);
+		});
 	});
 
 	describe('text input', () => {
