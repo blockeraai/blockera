@@ -13,6 +13,7 @@ import {
  */
 import { isUndefined } from '@publisher/utils';
 import { controlClassNames } from '@publisher/classnames';
+import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
@@ -20,21 +21,49 @@ import { controlClassNames } from '@publisher/classnames';
 import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
 
+type IconOption = {
+	label: string,
+	value: string,
+	icon: MixedElement,
+};
+
+type TextOption = {
+	label: string,
+	value: string,
+};
+
+type Option = IconOption | TextOption;
+
+type Props = {
+	isDeselectable?: boolean,
+	options: Option[],
+	//
+	id?: string,
+	label?: string,
+	columns?: string,
+	defaultValue?: string,
+	onChange?: string,
+	field?: string,
+	//
+	className?: string,
+	children?: string,
+};
+
 export default function ToggleSelectControl({
-	isDeselectable,
+	isDeselectable = false,
 	options,
 	//
 	id,
-	label,
+	label = '',
 	columns,
-	defaultValue,
+	defaultValue = '',
 	onChange,
-	field,
+	field = 'toggle-select',
 	//
 	className,
 	children,
 	...props
-}) {
+}: Props): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
 		onChange,
