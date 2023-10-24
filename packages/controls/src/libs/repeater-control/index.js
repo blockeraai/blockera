@@ -13,8 +13,8 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { Button } from '@publisher/components';
-import { isUndefined } from '@publisher/utils';
-import { prepare } from '@publisher/data-extractor';
+// import { isUndefined } from '@publisher/utils';
+// import { prepare } from '@publisher/data-extractor';
 
 /**
  * Internal dependencies.
@@ -67,9 +67,11 @@ export default function RepeaterControl({
 		mergeInitialAndDefault: true,
 	});
 
-	const repeaterItems = isUndefined(repeaterId)
-		? value
-		: prepare(repeaterId, value);
+	// const repeaterItems = isUndefined(repeaterId)
+	// 	? value
+	// 	: prepare(repeaterId, value);
+
+	const repeaterItems = value;
 
 	const defaultRepeaterState = {
 		design,

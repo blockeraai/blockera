@@ -217,6 +217,30 @@ describe('repeater control component testing', () => {
 			});
 			cy.get('.publisher-control-group-popover').should('exist');
 		});
+		it('should display popover custom className', () => {
+			cy.withDataProvider({
+				component: (
+					<RepeaterControl
+						label="Items"
+						mode="popover"
+						repeaterItemChildren={RepeaterFilledItemChildren}
+						popoverClassName="custom-class"
+					/>
+				),
+				value: [
+					{
+						name: 'john doe',
+						isVisible: true,
+					},
+				],
+				store: STORE_NAME,
+			});
+			cy.getByDataCy('repeater-item').first().click();
+			cy.get('.publisher-control-group-popover').should(
+				'have.class',
+				'custom-class'
+			);
+		});
 	});
 	describe('accordion', () => {
 		it('should display field in body section', () => {
@@ -238,6 +262,117 @@ describe('repeater control component testing', () => {
 			});
 			cy.getByDataCy('repeater-item').click();
 			cy.get('input[type="text"]').should('have.value', 'john doe');
+		});
+		it('should display more className', () => {
+			cy.withDataProvider({
+				component: (
+					<RepeaterControl
+						label="Items"
+						mode="accordion"
+						repeaterItemChildren={RepeaterFilledItemChildren}
+						className="custom-class"
+					/>
+				),
+				value: [
+					{
+						name: 'john doe',
+						isVisible: true,
+					},
+				],
+				store: STORE_NAME,
+			});
+			cy.getByDataCy('publisher-repeater-control').should(
+				'have.class',
+				'custom-class'
+			);
+		});
+		it('should disable all action buttons', () => {
+			cy.withDataProvider({
+				component: (
+					<RepeaterControl
+						label="Items"
+						mode="accordion"
+						repeaterItemChildren={RepeaterFilledItemChildren}
+						actionButtonAdd={false}
+						actionButtonAdd={false}
+						actionButtonVisibility={false}
+						actionButtonDelete={false}
+						actionButtonClone={false}
+					/>
+				),
+				value: [
+					{
+						isVisible: true,
+					},
+				],
+				store: STORE_NAME,
+			});
+			cy.get(`[aria-label="Add New Items"]`).should('not.be.exist');
+			cy.get(`[aria-label="Delete 1"]`).should('not.be.exist');
+			cy.get(`[aria-label="Clone 1"]`).should('not.be.exist');
+			cy.get(`[aria-label="Disable 1"]`).should('not.be.exist');
+		});
+		it('should display label', () => {
+			cy.withDataProvider({
+				component: (
+					<RepeaterControl
+						label="My Label"
+						mode="accordion"
+						repeaterItemChildren={RepeaterFilledItemChildren}
+						actionButtonAdd={false}
+						actionButtonAdd={false}
+						actionButtonVisibility={false}
+						actionButtonDelete={false}
+						actionButtonClone={false}
+					/>
+				),
+				value: [
+					{
+						isVisible: true,
+					},
+				],
+				store: STORE_NAME,
+			});
+			cy.getByDataCy(`label-control`).should('contain', 'My Label');
+		});
+		it('should display default values', () => {
+			cy.withDataProvider({
+				component: (
+					<RepeaterControl
+						label="My Label"
+						mode="accordion"
+						repeaterItemChildren={RepeaterFilledItemChildren}
+						defaultValue={[
+							{ isVisible: true },
+							{ isVisible: true },
+						]}
+					/>
+				),
+				value: [],
+				store: STORE_NAME,
+			});
+			cy.getByDataCy('publisher-repeater-control')
+				.find('[data-cy="repeater-item"]')
+				.should('have.length', 2);
+		});
+		it('should display data with data id', () => {
+			cy.withDataProvider({
+				component: (
+					<RepeaterControl
+						label="My Label"
+						mode="accordion"
+						repeaterItemChildren={RepeaterFilledItemChildren}
+						defaultRepeaterItemValue={{ isVisible: true }}
+						id="data.myData"
+					/>
+				),
+				value: {
+					data: {
+						myData: [{}, {}],
+					},
+				},
+				store: STORE_NAME,
+			});
 		});
 	});
 });
