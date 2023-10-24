@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -14,6 +15,18 @@ import { controlClassNames } from '@publisher/classnames';
  */
 import BaseControl from '../base-control';
 import { useControlContext } from '../../context';
+import type { MixedElement } from 'react';
+
+type Props = {
+	checkboxLabel: string,
+	id?: string,
+	label?: string,
+	columns?: string,
+	defaultValue?: boolean,
+	onChange?: () => void,
+	field?: string,
+	className?: string,
+};
 
 export default function CheckboxControl({
 	checkboxLabel,
@@ -21,13 +34,13 @@ export default function CheckboxControl({
 	id,
 	label,
 	columns,
-	defaultValue,
+	defaultValue = false,
 	onChange,
-	field,
+	field = 'checkbox',
 	//
 	className,
 	...props
-}) {
+}: Props): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
 		onChange,
