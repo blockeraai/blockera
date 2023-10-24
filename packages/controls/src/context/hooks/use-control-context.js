@@ -121,18 +121,43 @@ export const useControlContext = (args) => {
 			// merge default value to object elements inside initialValue
 			// used for repeaters
 			if (isRepeaterControl()) {
-				// not array value is not valid!
-				if (!isArray(savedValue)) {
-					return defaultValue;
-				}
-
-				savedValue.forEach((item, itemId) => {
+				let repeaterValue = [];
+				const mappedRepeaterValue = ({ item, itemId, items }) => {
 					if (isObject(item)) {
-						savedValue[itemId] = {
+						items[itemId] = {
 							...defaultRepeaterItemValue,
 							...item,
 						};
 					}
+
+					return item;
+				};
+
+				// not array value is not valid!
+				if (!isArray(savedValue) && isUndefined(repeaterId)) {
+					return defaultValue || [];
+				}
+
+				if (isArray(savedValue)) {
+					return isObject(defaultRepeaterItemValue)
+						? savedValue?.map((item, itemId) => {
+								return mappedRepeaterValue({
+									item,
+									itemId,
+									items: savedValue,
+								});
+						  })
+						: savedValue;
+				}
+
+				repeaterValue = prepare(repeaterId, savedValue);
+
+				return repeaterValue?.map((item, itemId) => {
+					return mappedRepeaterValue({
+						item,
+						itemId,
+						items: repeaterValue,
+					});
 				});
 			}
 		}

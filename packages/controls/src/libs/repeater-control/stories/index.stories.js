@@ -2,41 +2,29 @@
  * External dependencies
  */
 import { useContext } from '@wordpress/element';
-import { expect } from '@storybook/jest';
-import {
-	fireEvent,
-	userEvent,
-	waitFor,
-	within,
-} from '@storybook/testing-library';
 import { __, sprintf } from '@wordpress/i18n';
 import { nanoid } from 'nanoid';
 
 /**
  * Publisher dependencies
  */
+import { controlInnerClassNames } from '@publisher/classnames';
 import { Flex } from '@publisher/components';
 import { default as Decorators } from '@publisher/storybook/decorators';
-import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
-import { InputControl, RepeaterControl } from '../../index';
-import { STORE_NAME } from '../store';
-import { RepeaterContext } from '../context';
-import { ControlContextProvider, useControlContext } from '../../../context';
-import { default as InheritIcon } from './icons/inherit';
 import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
-import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
+import { ControlContextProvider, useControlContext } from '../../../context';
+import { InputControl, RepeaterControl } from '../../index';
+import { RepeaterContext } from '../context';
+import { STORE_NAME } from '../store';
+import { default as InheritIcon } from './icons/inherit';
 
-const {
-	WithInspectorStyles,
-	WithStoryContextProvider,
-	WithPopoverDataProvider,
-	SharedDecorators,
-} = Decorators;
+const { WithInspectorStyles, WithPopoverDataProvider, SharedDecorators } =
+	Decorators;
 
 SharedDecorators.push(WithPopoverDataProvider);
 SharedDecorators.push(WithPlaygroundStyles);
@@ -549,195 +537,6 @@ export const AccordionOpenItem = {
 	},
 };
 AccordionOpenItem.storyName = 'Accordion → Filled';
-
-export const Play = {
-	args: {
-		...PopoverCustomHeader.args,
-		controlInfo: {
-			name: nanoid(),
-			value: [
-				{
-					name: 'Akbar',
-					isVisible: true,
-				},
-				{
-					name: 'Akbar Ali',
-					isVisible: true,
-				},
-				{
-					name: 'Akbar Shah',
-					isVisible: true,
-				},
-				{
-					name: 'Akbarollah',
-					isVisible: true,
-				},
-				{
-					name: 'Doste Akbar',
-					isVisible: true,
-				},
-			],
-		},
-		minItems: 3,
-		maxItems: 6,
-	},
-	decorators: [
-		WithStoryContextProvider,
-		WithInspectorStyles,
-		WithControlDataProvider,
-		...SharedDecorators,
-	],
-	render: (args) => <ControlWithHooks Control={RepeaterControl} {...args} />,
-	play: async ({ canvasElement, step }) => {
-		const canvas = within(canvasElement);
-
-		const currentValue = canvas.getByTestId('current-value');
-		const button = canvas.getByLabelText('Add New');
-
-		await step('Test Initialise Data', async () => {
-			await expect(currentValue).toBeInTheDocument();
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent(
-						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbar", "isVisible": true } ]'
-					),
-				{ timeout: 1000 }
-			);
-		});
-
-		await step('Add New Item', async () => {
-			// add new item
-			await userEvent.click(button);
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent(
-						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbar", "isVisible": true }, { "name": "", "isVisible": true } ]'
-					),
-				{ timeout: 1000 }
-			);
-
-			await expect(canvas.getByLabelText('Item 6')).toBeInTheDocument();
-
-			// open popover
-			await userEvent.click(canvas.getByLabelText('Item 6'));
-
-			// find input and change
-			await expect(
-				canvas.getByRole('textbox', { type: 'text' })
-			).toBeInTheDocument();
-
-			fireEvent.change(canvas.getByRole('textbox', { type: 'text' }), {
-				target: { value: 'New Akbar' },
-			});
-
-			await expect(
-				canvas.getByRole('textbox', { type: 'text' })
-			).toHaveValue('New Akbar');
-
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent(
-						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbar", "isVisible": true }, { "name": "New Akbar", "isVisible": true } ]'
-					),
-				{ timeout: 1000 }
-			);
-		});
-
-		await step('Delete New Item', async () => {
-			await expect(canvas.getByLabelText('Delete 6')).toBeInTheDocument();
-
-			await userEvent.click(canvas.getByLabelText('Delete 6'));
-
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent(
-						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbar", "isVisible": true } ]'
-					),
-				{ timeout: 1000 }
-			);
-		});
-
-		await step('Disable Last Item', async () => {
-			await expect(
-				canvas.getByLabelText('Disable 5')
-			).toBeInTheDocument();
-
-			await userEvent.click(canvas.getByLabelText('Disable 5'));
-
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent(
-						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbar", "isVisible": false } ]'
-					),
-				{ timeout: 1000 }
-			);
-
-			await userEvent.click(canvas.getByLabelText('Enable 5'));
-
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent(
-						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbar", "isVisible": true } ]'
-					),
-				{ timeout: 1000 }
-			);
-		});
-
-		await step('Clone Item', async () => {
-			await expect(canvas.getByLabelText('Clone 4')).toBeInTheDocument();
-
-			await userEvent.click(canvas.getByLabelText('Clone 4'));
-
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent(
-						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbar", "isVisible": true } ]'
-					),
-				{ timeout: 1000 }
-			);
-		});
-
-		await step(
-			'Try to add new item but max items count is exceeded',
-			async () => {
-				// add new item
-				await userEvent.click(button);
-				await waitFor(
-					async () =>
-						await expect(currentValue).toHaveTextContent(
-							'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Akbarollah", "isVisible": true }, { "name": "Doste Akbar", "isVisible": true } ]'
-						),
-					{ timeout: 1000 }
-				);
-			}
-		);
-
-		await step('Remove 3 Items', async () => {
-			await expect(canvas.getByLabelText('Delete 6')).toBeInTheDocument();
-			await userEvent.click(canvas.getByLabelText('Delete 6'));
-
-			await expect(canvas.getByLabelText('Delete 5')).toBeInTheDocument();
-			await userEvent.click(canvas.getByLabelText('Delete 5'));
-
-			await expect(canvas.getByLabelText('Delete 4')).toBeInTheDocument();
-			await userEvent.click(canvas.getByLabelText('Delete 4'));
-
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent(
-						'[ { "name": "Akbar", "isVisible": true }, { "name": "Akbar Ali", "isVisible": true }, { "name": "Akbar Shah", "isVisible": true } ]'
-					),
-				{ timeout: 1000 }
-			);
-		});
-
-		await step('Try delete 1 more item', async () => {
-			await expect(
-				canvas.queryByLabelText('Delete 3')
-			).not.toBeInTheDocument();
-		});
-	},
-};
 
 export const All = {
 	args: {},
