@@ -10,11 +10,12 @@ import { useContext } from '@wordpress/element';
 import { prepare } from '@publisher/data-extractor';
 import {
 	isNull,
+	isArray,
+	isEmpty,
+	isString,
 	isObject,
 	isBoolean,
 	isUndefined,
-	isArray,
-	isEmpty,
 } from '@publisher/utils';
 
 /**
@@ -118,6 +119,10 @@ export const useControlContext = (args) => {
 				return { ...defaultValue, ...savedValue };
 			}
 
+			if (isUndefined(id) && !isString(savedValue)) {
+				return defaultValue || '';
+			}
+
 			// merge default value to object elements inside initialValue
 			// used for repeaters
 			if (isRepeaterControl()) {
@@ -142,7 +147,7 @@ export const useControlContext = (args) => {
 			? savedValue
 			: isEmpty(savedValue)
 			? defaultValue
-			: prepare(id, savedValue);
+			: prepare(id, savedValue) || defaultValue;
 	}
 
 	return {
