@@ -45,7 +45,7 @@ PanelBodyControl.propTypes = {
 	/**
 	 * Title of Inspect Element
 	 */
-	title: PropTypes.string,
+	title: PropTypes.string.isRequired,
 	/**
 	 * Default open or close status for panel body
 	 */
