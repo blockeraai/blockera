@@ -1,3 +1,4 @@
+// @flow
 /**
  * WordPress dependencies
  */
@@ -16,24 +17,41 @@ import { ColorIndicator, Button } from '@publisher/components';
 import { BaseControl, ColorPickerControl } from '../index';
 import PropTypes from 'prop-types';
 import { useControlContext } from '../../context';
+import type { MixedElement } from 'react';
 
+type Props = {
+	type?: 'normal' | 'minimal',
+	noBorder?: boolean,
+	contentAlign?: 'left' | 'center' | 'right',
+	//
+	id?: string,
+	label?: string,
+	columns?: string,
+	defaultValue?: string,
+	onChange?: () => void,
+	field?: string,
+	//
+	//
+	className?: string,
+	style?: Object,
+};
 export default function ColorControl({
-	type,
+	type = 'normal',
 	noBorder,
-	contentAlign,
+	contentAlign = 'left',
 	//
 	id,
 	label,
 	columns,
 	defaultValue,
 	onChange,
-	field,
+	field = 'color',
 	//
 	//
 	className,
 	style,
 	...props
-}) {
+}: Props): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
 		onChange,
@@ -42,7 +60,7 @@ export default function ColorControl({
 
 	const [isOpen, setOpen] = useState(false);
 
-	let buttonLabel = '';
+	let buttonLabel: MixedElement;
 
 	if (type === 'normal') {
 		buttonLabel = value ? (
@@ -105,11 +123,11 @@ ColorControl.propTypes = {
 	/**
 	 * Type of CSS units from presets
 	 */
-	type: PropTypes.oneOf(['normal', 'minimal']),
+	type: (PropTypes.oneOf(['normal', 'minimal']): any),
 	/**
 	 * It is useful for buttons with specified width and allows you to align the content to `left` or `right`. By default, it's `center` and handled by flex justify-content property.
 	 */
-	contentAlign: PropTypes.oneOf(['left', 'center', 'right']),
+	contentAlign: (PropTypes.oneOf(['left', 'center', 'right']): any),
 	/**
 	 * ID for retrieving value from control context
 	 */
