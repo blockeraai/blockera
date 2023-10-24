@@ -49,7 +49,7 @@ describe('input control component testing', () => {
 			});
 			cy.get('input').should('have.value', '300px');
 		});
-		it('should control data value must be equal with expected data value passed in data provider access with control identifier', () => {
+		it('should control data value equal with expected defaultValue when id of context value was not defined', () => {
 			cy.withDataProvider({
 				component: (
 					<InputControl
@@ -59,11 +59,22 @@ describe('input control component testing', () => {
 				),
 				value: {
 					inputControl: {
+						value: undefined,
+					},
+				},
+			});
+			cy.get('input').should('have.value', '10px');
+		});
+		it('should control data value equal with expected defaultValue when id was not provided for InputControl', () => {
+			cy.withDataProvider({
+				component: <InputControl defaultValue={'10px'} />,
+				value: {
+					inputControl: {
 						value: '300px',
 					},
 				},
 			});
-			cy.get('input').should('have.value', '300px');
+			cy.get('input').should('have.value', '10px');
 		});
 		it('should render label prop value', () => {
 			cy.withDataProvider({

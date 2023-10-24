@@ -38,6 +38,7 @@ export function InputControl({
 		id,
 		defaultValue,
 		onChange,
+		mergeInitialAndDefault: true,
 	});
 
 	// add css units
