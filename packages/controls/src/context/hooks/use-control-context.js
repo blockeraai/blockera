@@ -119,8 +119,12 @@ export const useControlContext = (args) => {
 				return { ...defaultValue, ...savedValue };
 			}
 
-			if (isUndefined(id) && !isString(savedValue)) {
-				return defaultValue || '';
+			if (
+				isUndefined(id) &&
+				!isString(savedValue) &&
+				isString(defaultValue)
+			) {
+				return defaultValue;
 			}
 
 			// merge default value to object elements inside initialValue
