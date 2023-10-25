@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * Publisher dependencies
  */
@@ -47,6 +49,7 @@ export const prepareSelectCustomOptions = function (options) {
 			className:
 				(item?.className ? item.className : '') +
 				(item?.icon ? ' width-icon' : '') +
+				(item?.disabled ? ' disabled' : '') +
 				` ${customClass}`,
 		};
 	}
