@@ -1,6 +1,10 @@
 import ToggleSelectControl from '../index';
 import { __ } from '@wordpress/i18n';
 import { default as InheritIcon } from '../stories/icons/inherit';
+import { select, dispatch } from '@wordpress/data';
+import { addControl, modifyControlValue } from '../../../store/actions';
+import { controlReducer } from '../../../store/reducers/control-reducer';
+import { getControlValue } from '../../../store/selectors';
 
 describe('toggle-select-control', () => {
 	beforeEach(() => {
@@ -237,6 +241,45 @@ describe('toggle-select-control', () => {
 			cy.get('[aria-checked="true"]')
 				.should('have.length', '1')
 				.contains('Right');
+		});
+
+		it.only('should when toggle-select control value is changed, then context data provider value to changed!', () => {
+			const name = 'toggle-select-control';
+
+			cy.withDataProvider({
+				component: (
+					<ToggleSelectControl
+						options={options}
+						onChange={(value) => {
+							controlReducer(
+								select('publisher-core/controls').getControl(
+									name
+								),
+								modifyControlValue({
+									value,
+									controlId: name,
+								})
+							);
+						}}
+					/>
+				),
+				value: 'left',
+				name,
+			});
+
+			cy.get('button').contains('Right').click();
+
+			// Current component
+			cy.get('[aria-checked="true"]').should(
+				'have.attr',
+				'data-value',
+				'right'
+			);
+
+			// Check data provider value!
+			cy.wait(100).then(() => {
+				expect('right').to.be.equal(getControlValue(name));
+			});
 		});
 	});
 });
