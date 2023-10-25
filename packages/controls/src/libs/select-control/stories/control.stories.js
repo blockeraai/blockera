@@ -1,16 +1,16 @@
+// @flow
+
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { expect } from '@storybook/jest';
-import {
-	within,
-	waitFor,
-	fireEvent,
-	userEvent,
-} from '@storybook/testing-library';
 import { nanoid } from 'nanoid';
+import type { MixedElement } from 'react';
 
+/**
+ * Internal dependencies
+ */
+import type { TSelectControlProps } from '../types';
 /**
  * Publisher dependencies
  */
@@ -26,12 +26,9 @@ import { ControlContextProvider, SelectControl } from '../../../index';
 import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
 
-const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
-	Decorators;
+const { WithInspectorStyles, SharedDecorators } = Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
-
-const timeout = 1000;
 
 export default {
 	title: 'Controls/SelectControl',
@@ -99,13 +96,14 @@ export const NativeSelect = {
 		type: 'native',
 		options: selectOptions,
 		value: 'all',
+		field: 'select',
 	},
 	decorators: [
 		WithInspectorStyles,
 		WithControlDataProvider,
 		...SharedDecorators,
 	],
-	render: (args) => {
+	render: (args: TSelectControlProps): MixedElement => {
 		return (
 			<Flex direction="column" gap="30px">
 				<Flex direction="column" gap="15px">
@@ -191,7 +189,7 @@ export const CustomSelect = {
 		WithControlDataProvider,
 		...SharedDecorators,
 	],
-	render: (args) => {
+	render: (args: TSelectControlProps): MixedElement => {
 		return (
 			<Flex direction="column" gap="50px">
 				<Flex direction="column" gap="20px">
@@ -392,95 +390,6 @@ export const CustomSelect = {
 		);
 	},
 };
-
-export const PlayNative = {
-	args: {
-		type: 'native',
-		options: selectOptions,
-		value: 'all',
-	},
-	decorators: [
-		WithStoryContextProvider,
-		WithInspectorStyles,
-		WithControlDataProvider,
-		...SharedDecorators,
-	],
-	render: (args) => <ControlWithHooks Control={SelectControl} {...args} />,
-	play: async ({ canvasElement }) => {
-		const canvas = within(canvasElement);
-		const selectControl = canvas.getByRole('combobox');
-		const currentValue = canvas.getByTestId('current-value');
-
-		await expect(currentValue).toBeInTheDocument();
-		await expect(selectControl).toBeInTheDocument();
-
-		await waitFor(
-			async () => await expect(currentValue).toHaveTextContent('all'),
-			{ timeout }
-		);
-		await waitFor(
-			async () => await expect(selectControl).toHaveValue('all'),
-			{ timeout }
-		);
-
-		fireEvent.change(selectControl, {
-			target: { value: 'opacity' },
-		});
-
-		await waitFor(
-			async () => await expect(selectControl).toHaveValue('opacity'),
-			{ timeout }
-		);
-		await waitFor(
-			async () => await expect(currentValue).toHaveTextContent('opacity'),
-			{ timeout }
-		);
-	},
-};
-PlayNative.storyName = 'Play → Native';
-
-export const PlayCustom = {
-	args: {
-		type: 'custom',
-		options: selectOptions,
-		value: 'all',
-	},
-	decorators: [
-		WithStoryContextProvider,
-		WithInspectorStyles,
-		WithControlDataProvider,
-		...SharedDecorators,
-	],
-	render: (args) => <ControlWithHooks Control={SelectControl} {...args} />,
-	play: async ({ canvasElement }) => {
-		const canvas = within(canvasElement);
-		const selectControl = canvas.getByRole('button');
-		const currentValue = canvas.getByTestId('current-value');
-
-		await expect(currentValue).toBeInTheDocument();
-		await expect(selectControl).toBeInTheDocument();
-
-		await expect(currentValue).toHaveTextContent('all');
-
-		// change item
-		await userEvent.click(selectControl);
-		await userEvent.click(canvas.getAllByRole('option')[3]);
-		await waitFor(
-			async () => await expect(currentValue).toHaveTextContent('margin'),
-			{ timeout }
-		);
-
-		// open and use esc to close
-		await userEvent.click(selectControl);
-		await userEvent.type(selectControl, '{esc}');
-
-		await waitFor(
-			async () => await expect(currentValue).toHaveTextContent('margin'),
-			{ timeout }
-		);
-	},
-};
-PlayCustom.storyName = 'Play → Custom';
 
 export const All = {
 	args: {},

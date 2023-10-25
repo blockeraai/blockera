@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * External dependencies
  */
@@ -6,11 +8,13 @@ import {
 	CustomSelectControl as WPCustomSelectControl,
 } from '@wordpress/components';
 import PropTypes from 'prop-types';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
+import type { TSelectControlProps } from './types';
 
 /**
  * Internal dependencies
@@ -38,7 +42,7 @@ const SelectControl = ({
 	field,
 	//
 	className,
-}) => {
+}: TSelectControlProps): MixedElement => {
 	const { value, setValue } = useControlContext({
 		id,
 		onChange,
