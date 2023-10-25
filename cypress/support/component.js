@@ -4,6 +4,7 @@
 import { nanoid } from 'nanoid';
 import { mount } from 'cypress/react';
 import '@cypress/code-coverage/support';
+import 'cypress-real-events/support';
 import { PanelBody, Popover, SlotFillProvider } from '@wordpress/components';
 
 /**

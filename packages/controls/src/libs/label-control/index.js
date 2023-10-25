@@ -21,6 +21,7 @@ export default function LabelControl({
 					{...props}
 					className={controlClassNames('label', className)}
 					aria-label={ariaLabel || label}
+					data-cy="label-control"
 				>
 					{label}
 				</span>

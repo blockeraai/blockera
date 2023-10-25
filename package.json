@@ -32,7 +32,8 @@
 		"@publisher/data-extractor": "file:packages/data-extractor",
 		"@publisher/extensions": "file:packages/extensions",
 		"@publisher/style-engine": "file:packages/style-engine",
-		"@publisher/utils": "file:packages/utils"
+		"@publisher/utils": "file:packages/utils",
+		"cypress-real-events": "^1.10.3"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.22.9",
