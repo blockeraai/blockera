@@ -48,19 +48,22 @@ Cypress.Commands.add('withInspector', (component) => {
 	);
 });
 
-Cypress.Commands.add('withDataProvider', ({ component, store, value }) => {
-	cy.withInspector(
-		<ControlContextProvider
-			storeName={store}
-			value={{
-				name: nanoid(),
-				value,
-			}}
-		>
-			<WithControlDataProvider
-				contextValue={value}
-				children={component}
-			/>
-		</ControlContextProvider>
-	);
-});
+Cypress.Commands.add(
+	'withDataProvider',
+	({ component, store, value, name = nanoid() }) => {
+		cy.withInspector(
+			<ControlContextProvider
+				storeName={store}
+				value={{
+					name,
+					value,
+				}}
+			>
+				<WithControlDataProvider
+					contextValue={value}
+					children={component}
+				/>
+			</ControlContextProvider>
+		);
+	}
+);
