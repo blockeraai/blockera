@@ -17,7 +17,7 @@ export default function ToggleControl({
 	onChange,
 	className,
 	...props
-}) {
+}: TToggleControlProps) {
 	const { value, setValue } = useValue({
 		initialValue,
 		defaultValue,
@@ -39,22 +39,27 @@ ToggleControl.propTypes = {
 	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
+	// $FlowFixMe
 	defaultValue: PropTypes.bool,
 	/**
 	 * The current value.
 	 */
+	// $FlowFixMe
 	value: PropTypes.bool,
 	/**
 	 * Function that will be fired while the control value state changes.
 	 */
+	// $FlowFixMe
 	onChange: PropTypes.func,
 	/**
 	 * Label after toggle
 	 */
+	// $FlowFixMe
 	label: PropTypes.string,
 };
-
+// $FlowFixMe
 ToggleControl.defaultProps = {
+	// $FlowFixMe
 	value: false,
 	label: '',
 };
