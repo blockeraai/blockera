@@ -31,6 +31,8 @@ export default function GradientBarControl({
 		onChange,
 	});
 
+	console.log('value:', value);
+
 	return (
 		<BaseControl
 			label={label}
@@ -38,7 +40,10 @@ export default function GradientBarControl({
 			controlName={field}
 			className={className}
 		>
-			<div className={controlClassNames('gradient-bar', className)}>
+			<div
+				data-cy="gradient-bar-control"
+				className={controlClassNames('gradient-bar', className)}
+			>
 				<WPGradientPicker
 					value={value}
 					gradients={[]}
