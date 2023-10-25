@@ -15,7 +15,6 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 /**
  * Internal dependencies
  */
-import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import { ControlContextProvider, useControlContext } from '../../../context';
 import { InputControl, RepeaterControl } from '../../index';
@@ -59,11 +58,7 @@ export const PopoverEmpty = {
 						value: [],
 					}}
 				>
-					<ControlWithHooks
-						Control={RepeaterControl}
-						{...args}
-						label="Repeater"
-					/>
+					<RepeaterControl {...args} label="Repeater" />
 				</ControlContextProvider>
 			</Flex>
 		);
@@ -182,11 +177,7 @@ export const PopoverFilled = {
 						],
 					}}
 				>
-					<ControlWithHooks
-						Control={RepeaterControl}
-						{...args}
-						label="Repeater"
-					/>
+					<RepeaterControl {...args} label="Repeater" />
 				</ControlContextProvider>
 			</Flex>
 		);
@@ -244,11 +235,7 @@ export const PopoverCustomHeader = {
 						],
 					}}
 				>
-					<ControlWithHooks
-						Control={RepeaterControl}
-						{...args}
-						label="Repeater"
-					/>
+					<RepeaterControl {...args} label="Repeater" />
 				</ControlContextProvider>
 			</Flex>
 		);
@@ -305,11 +292,7 @@ export const PopoverMaxItems = {
 						],
 					}}
 				>
-					<ControlWithHooks
-						Control={RepeaterControl}
-						{...args}
-						label="Repeater"
-					/>
+					<RepeaterControl {...args} label="Repeater" />
 				</ControlContextProvider>
 			</Flex>
 		);
@@ -366,11 +349,7 @@ export const PopoverMinItems = {
 						],
 					}}
 				>
-					<ControlWithHooks
-						Control={RepeaterControl}
-						{...args}
-						label="Repeater"
-					/>
+					<RepeaterControl {...args} label="Repeater" />
 				</ControlContextProvider>
 			</Flex>
 		);
@@ -414,11 +393,7 @@ export const PopoverOpenItem = {
 						],
 					}}
 				>
-					<ControlWithHooks
-						Control={RepeaterControl}
-						{...args}
-						label="Repeater"
-					/>
+					<RepeaterControl {...args} label="Repeater" />
 				</ControlContextProvider>
 			</Flex>
 		);
@@ -475,11 +450,7 @@ export const AccordionFilled = {
 						],
 					}}
 				>
-					<ControlWithHooks
-						Control={RepeaterControl}
-						{...args}
-						label="Repeater"
-					/>
+					<RepeaterControl {...args} label="Repeater" />
 				</ControlContextProvider>
 			</Flex>
 		);
@@ -526,11 +497,7 @@ export const AccordionOpenItem = {
 						],
 					}}
 				>
-					<ControlWithHooks
-						Control={RepeaterControl}
-						{...args}
-						label="Repeater"
-					/>
+					<RepeaterControl {...args} label="Repeater" />
 				</ControlContextProvider>
 			</Flex>
 		);
