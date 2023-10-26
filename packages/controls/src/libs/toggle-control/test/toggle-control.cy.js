@@ -51,4 +51,16 @@ describe('toggle control component testing', () => {
 		});
 		cy.get('.components-form-toggle').should('have.class', 'is-checked');
 	});
+	it('should call onChange handler', () => {
+		const onChangeMock = cy.stub().as('onChangeMock');
+		cy.withDataProvider({
+			component: (
+				<ToggleControl label="my toggle" onChange={onChangeMock} />
+			),
+		});
+		cy.get('.components-form-toggle').each(($btn) => {
+			cy.wrap($btn).click();
+			cy.get('@onChangeMock').should('have.been.called');
+		});
+	});
 });
