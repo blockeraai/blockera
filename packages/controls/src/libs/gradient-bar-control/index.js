@@ -31,8 +31,6 @@ export default function GradientBarControl({
 		onChange,
 	});
 
-	console.log('value:', value);
-
 	return (
 		<BaseControl
 			label={label}
