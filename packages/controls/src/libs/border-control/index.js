@@ -1,7 +1,10 @@
+// @flow
+
 /**
  * External dependencies
  */
 import PropTypes from 'prop-types';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -22,6 +25,7 @@ import BorderStyleVDashedIcon from './icons/style-v-dashed';
 import BorderStyleVDottedIcon from './icons/style-v-dotted';
 import BorderStyleVDoubleIcon from './icons/style-v-double';
 import { InputControl, SelectControl, ColorControl } from '../index';
+import type { TBorderControlProps } from './types';
 
 export default function BorderControl({
 	linesDirection,
@@ -37,7 +41,7 @@ export default function BorderControl({
 	__isWidthFocused,
 	__isColorFocused,
 	__isStyleFocused,
-}) {
+}: TBorderControlProps): MixedElement {
 	const { value, setValue, getId } = useControlContext({
 		id,
 		onChange,
@@ -55,6 +59,7 @@ export default function BorderControl({
 			<div
 				className={controlClassNames('border', className)}
 				style={style}
+				data-test="border-control-component"
 			>
 				<InputControl
 					id={getId(id, 'width')}
@@ -70,6 +75,7 @@ export default function BorderControl({
 					onChange={(newValue) => {
 						setValue({ ...value, width: newValue });
 					}}
+					data-test="border-control-width"
 				/>
 
 				<ColorControl
@@ -79,7 +85,8 @@ export default function BorderControl({
 					onChange={(newValue) => {
 						setValue({ ...value, color: newValue });
 					}}
-					className={__isColorFocused && 'is-focus'}
+					className={__isColorFocused && 'is-focused'}
+					data-test="border-control-color"
 				/>
 
 				<SelectControl
