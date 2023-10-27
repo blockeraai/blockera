@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -14,6 +15,11 @@ import { controlClassNames } from '@publisher/classnames';
  */
 import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
+/**
+ * Types
+ */
+import type { TGradientBarControlProps } from './types/gradient-bar-control-props';
+import type { MixedElement } from 'react';
 
 export default function GradientBarControl({
 	id,
@@ -24,7 +30,7 @@ export default function GradientBarControl({
 	field,
 	//
 	className,
-}) {
+}: TGradientBarControlProps): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
 		defaultValue,
