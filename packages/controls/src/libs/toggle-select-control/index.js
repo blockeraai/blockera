@@ -169,7 +169,7 @@ ToggleSelectControl.propTypes = {
 				value: PropTypes.string,
 			}),
 		])
-	): any),
+	).isRequired: any),
 	/**
 	 * Specifies than user can deselect active item in select or not
 	 */
