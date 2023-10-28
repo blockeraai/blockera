@@ -49,7 +49,7 @@ describe('API Preparing data property value testing...', () => {
 						x: '0px',
 						y: '10px',
 						blur: '15px',
-						color: '#fff',
+						color: '#ffffff',
 						spread: '20px',
 						inset: 'inset',
 						isVisible: true,
@@ -80,5 +80,34 @@ describe('API Preparing data property value testing...', () => {
 		expect(prepare(query, data)).toEqual([]);
 		expect(prepare('[0][x-prop-1]', data)).toEqual(25);
 		expect(prepare('[1][x-prop-1]', data)).toEqual(10);
+	});
+
+	it(`Retrieved undefined when query is invalid`, () => {
+		const query = `[0].x`;
+		const data = [
+			{
+				'x-prop': [],
+				'x-prop-1': 25,
+			},
+			{
+				'x-prop': [],
+				'x-prop-1': 10,
+			},
+		];
+
+		expect(prepare(query, data)).toEqual(undefined);
+	});
+
+	it(`Retrieved undefined when query is valid but value is undefined`, () => {
+		const query = `x[0].y`;
+		const data = {
+			x: [
+				{
+					y: undefined,
+				},
+			],
+		};
+
+		expect(prepare(query, data)).toEqual(undefined);
 	});
 });
