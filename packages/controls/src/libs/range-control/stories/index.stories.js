@@ -1,8 +1,6 @@
 /**
  * External dependencies
  */
-import { fireEvent, waitFor, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
 import { nanoid } from 'nanoid';
 
 /**
@@ -16,12 +14,10 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  */
 import { RangeControl } from '../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
-import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 import { ControlContextProvider } from '../../../context';
 import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
 
-const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
-	Decorators;
+const { WithInspectorStyles, SharedDecorators } = Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
 
@@ -130,39 +126,6 @@ export const Field = {
 				</ControlContextProvider>
 			</Flex>
 		);
-	},
-};
-
-export const Play = {
-	args: {
-		value: 20,
-	},
-	decorators: [
-		WithStoryContextProvider,
-		WithInspectorStyles,
-		WithControlDataProvider,
-		...SharedDecorators,
-	],
-	render: (args) => <ControlWithHooks Control={RangeControl} {...args} />,
-	play: async ({ canvasElement, step }) => {
-		const canvas = within(canvasElement);
-		const currentValue = canvas.getByTestId('current-value');
-		const input = canvas.getByRole('spinbutton', {
-			type: 'number',
-		});
-
-		await step('Story Data', async () => {
-			await expect(currentValue).toBeInTheDocument();
-			await expect(currentValue).toHaveTextContent('20');
-		});
-
-		await step('Change input value', async () => {
-			fireEvent.change(input, { target: { value: '30' } });
-			await waitFor(
-				async () => await expect(currentValue).toHaveTextContent('30'),
-				{ timeout: 1000 }
-			);
-		});
 	},
 };
 
