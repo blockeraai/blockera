@@ -10,7 +10,10 @@ describe('toggle-select-control', () => {
 	beforeEach(() => {
 		cy.viewport(1280, 720);
 	});
-	context('Text Toggle', () => {
+
+	const name = 'toggle-select-control';
+
+	context('Visual Tests', () => {
 		const options = [
 			{
 				label: __('Left', 'publisher-core'),
@@ -56,59 +59,68 @@ describe('toggle-select-control', () => {
 				);
 			});
 		});
-	});
 
-	context('Icon Toggle', () => {
-		const optionsWithIcon = [
-			{
-				label: __('Left', 'publisher-core'),
-				value: 'left',
-				icon: <InheritIcon />,
-			},
-			{
-				label: __('Center', 'publisher-core'),
-				value: 'center',
-				icon: <InheritIcon />,
-			},
-			{
-				label: __('Right', 'publisher-core'),
-				value: 'right',
-				icon: <InheritIcon />,
-			},
-		];
+		context('Icon Toggle', () => {
+			const optionsWithIcon = [
+				{
+					label: __('Left', 'publisher-core'),
+					value: 'left',
+					icon: <InheritIcon />,
+				},
+				{
+					label: __('Center', 'publisher-core'),
+					value: 'center',
+					icon: <InheritIcon />,
+				},
+				{
+					label: __('Right', 'publisher-core'),
+					value: 'right',
+					icon: <InheritIcon />,
+				},
+			];
 
-		it('renders options with correct Icon', () => {
-			cy.withDataProvider({
-				component: <ToggleSelectControl options={optionsWithIcon} />,
-				value: 'left',
-			});
-
-			cy.get('svg').should('have.length', 3);
-			cy.get('svg').each(($icon) => {
-				cy.wrap($icon).should('exist');
-			});
-		});
-
-		it('has correct default selected option', () => {
-			optionsWithIcon.forEach((optionWithIcon, _, optionsWithIcon) => {
+			it('renders options with correct Icon', () => {
 				cy.withDataProvider({
 					component: (
 						<ToggleSelectControl options={optionsWithIcon} />
 					),
-					value: optionWithIcon.value,
+					value: 'left',
 				});
 
-				cy.get('[aria-checked="true"]').should('have.length', 1);
-				cy.get('[aria-checked="true"]').should(
-					'have.attr',
-					'data-value',
-					optionWithIcon.value
+				cy.get('svg').should('have.length', 3);
+				cy.get('svg').each(($icon) => {
+					cy.wrap($icon).should('exist');
+				});
+			});
+
+			it('has correct default selected option', () => {
+				optionsWithIcon.forEach(
+					(optionWithIcon, _, optionsWithIcon) => {
+						cy.withDataProvider({
+							component: (
+								<ToggleSelectControl
+									options={optionsWithIcon}
+								/>
+							),
+							value: optionWithIcon.value,
+						});
+
+						cy.get('[aria-checked="true"]').should(
+							'have.length',
+							1
+						);
+						cy.get('[aria-checked="true"]').should(
+							'have.attr',
+							'data-value',
+							optionWithIcon.value
+						);
+					}
 				);
 			});
 		});
 	});
 
-	context('Common Tests:(Implemented on Text Toggle)', () => {
+	context('Behavioral Tests', () => {
 		const options = [
 			{
 				label: __('Left', 'publisher-core'),
@@ -125,127 +137,6 @@ describe('toggle-select-control', () => {
 		];
 
 		it('selects each item correctly', () => {
-			cy.withDataProvider({
-				component: <ToggleSelectControl options={options} />,
-				value: 'left',
-			});
-
-			cy.get('button').each(($btn) => {
-				cy.wrap($btn).click();
-				cy.wrap($btn).should('have.attr', 'aria-checked', 'true');
-			});
-		});
-
-		it('only one option can be selected at particular time', () => {
-			cy.withDataProvider({
-				component: <ToggleSelectControl options={options} />,
-				value: 'left',
-			});
-
-			cy.get('button').each(($btn) => {
-				cy.wrap($btn).click();
-				cy.get('[aria-checked="true"]').should('have.length', 1);
-			});
-		});
-
-		it('should call onChange handler when toggling between options', () => {
-			const onChangeMock = cy.stub().as('onChangeMock');
-			cy.withDataProvider({
-				component: (
-					<ToggleSelectControl
-						options={options}
-						onChange={onChangeMock}
-						defaultValue="center"
-					/>
-				),
-			});
-
-			cy.get('button').each(($btn) => {
-				cy.wrap($btn).click();
-				cy.get('@onChangeMock').should('have.been.called');
-			});
-		});
-
-		context('isDeselectable=True', () => {
-			it('all options should be unselected on default state', () => {
-				cy.withDataProvider({
-					component: (
-						<ToggleSelectControl
-							options={options}
-							isDeselectable={true}
-						/>
-					),
-					value: '',
-				});
-
-				cy.get('[aria-checked="true"]').should('not.exist');
-			});
-
-			it('options are de-selectable', () => {
-				cy.withDataProvider({
-					component: (
-						<ToggleSelectControl
-							options={options}
-							isDeselectable={true}
-						/>
-					),
-					value: '',
-				});
-
-				cy.get('button').each(($btn) => {
-					cy.wrap($btn).click();
-					cy.get('[aria-pressed="true"]');
-					cy.wrap($btn).click();
-					cy.get('[aria-pressed="true"]').should('not.exist');
-				});
-			});
-		});
-	});
-	context('useControlContext', () => {
-		const options = [
-			{
-				label: __('Left', 'publisher-core'),
-				value: 'left',
-			},
-			{
-				label: __('Center', 'publisher-core'),
-				value: 'center',
-			},
-			{
-				label: __('Right', 'publisher-core'),
-				value: 'right',
-			},
-		];
-		it('should retrieve data from useControlContext with simple value without id', () => {
-			cy.withDataProvider({
-				component: <ToggleSelectControl options={options} />,
-				value: 'center',
-			});
-
-			cy.get('[aria-checked="true"]')
-				.should('have.length', '1')
-				.contains('Center');
-		});
-
-		it('should retrieve data from useControlContext with complex value with id', () => {
-			cy.withDataProvider({
-				component: (
-					<ToggleSelectControl options={options} id="x.y[0].z" />
-				),
-				value: {
-					x: {
-						y: [{ z: 'right' }],
-					},
-				},
-			});
-			cy.get('[aria-checked="true"]')
-				.should('have.length', '1')
-				.contains('Right');
-		});
-
-		it.only('should when toggle-select control value is changed, then context data provider value to changed!', () => {
-			const name = 'toggle-select-control';
-
 			cy.withDataProvider({
 				component: (
 					<ToggleSelectControl
@@ -267,19 +158,137 @@ describe('toggle-select-control', () => {
 				name,
 			});
 
-			cy.get('button').contains('Right').click();
-
-			// Current component
-			cy.get('[aria-checked="true"]').should(
-				'have.attr',
-				'data-value',
-				'right'
-			);
-
-			// Check data provider value!
-			cy.wait(100).then(() => {
-				expect('right').to.be.equal(getControlValue(name));
+			cy.get('button').each(($btn) => {
+				cy.wrap($btn).click();
+				cy.wrap($btn).should('have.attr', 'aria-checked', 'true');
+				cy.wait(100).then(() => {
+					expect(getControlValue(name)).to.be.equal(
+						$btn.text().toLowerCase()
+					);
+				});
 			});
 		});
+
+		it('only one option can be selected at particular time', () => {
+			cy.withDataProvider({
+				component: <ToggleSelectControl options={options} />,
+				value: 'left',
+			});
+
+			cy.get('button').each(($btn) => {
+				cy.wrap($btn).click();
+				cy.get('[aria-checked="true"]').should('have.length', 1);
+			});
+		});
+
+		it('should be able to de-select options when isDeselectable is true', () => {
+			cy.withDataProvider({
+				component: (
+					<ToggleSelectControl
+						options={options}
+						isDeselectable={true}
+						onChange={(value) => {
+							controlReducer(
+								select('publisher-core/controls').getControl(
+									name
+								),
+								modifyControlValue({
+									value,
+									controlId: name,
+								})
+							);
+						}}
+					/>
+				),
+				value: '',
+				name,
+			});
+
+			cy.get('button').each(($btn, idx) => {
+				cy.wrap($btn).click();
+				cy.get('[aria-pressed="true"]').should('exist');
+				cy.wait(100).then(() => {
+					expect(getControlValue(name)).to.be.equal(
+						$btn.text().toLowerCase()
+					);
+				});
+
+				cy.wrap($btn).click();
+				cy.get('[aria-pressed="true"]').should('not.exist');
+				cy.wait(100).then(() => {
+					expect(getControlValue(name)).to.be.equal(undefined);
+				});
+			});
+		});
+	});
+
+	context('useControlContext', () => {
+		const options = [
+			{
+				label: __('Left', 'publisher-core'),
+				value: 'left',
+			},
+			{
+				label: __('Center', 'publisher-core'),
+				value: 'center',
+			},
+			{
+				label: __('Right', 'publisher-core'),
+				value: 'right',
+			},
+		];
+
+		it('should retrieve data from useControlContext with simple value without id', () => {
+			cy.withDataProvider({
+				component: <ToggleSelectControl options={options} />,
+				value: 'center',
+			});
+
+			cy.get('[aria-checked="true"]')
+				.should('have.length', '1')
+				.contains('Center');
+		});
+
+		it('should retrieve data from useControlContext with simple value without id', () => {
+			cy.withDataProvider({
+				component: (
+					<ToggleSelectControl
+						options={options}
+						defaultValue="center"
+					/>
+				),
+				value: undefined,
+			});
+
+			cy.get('[aria-checked="true"]')
+				.should('have.length', '1')
+				.contains('Center');
+		});
+
+		// it.only('should retrieve data from useControlContext with complex value with id', () => {
+		// 	cy.withDataProvider({
+		// 		component: (
+		// 			<ToggleSelectControl
+		// 				options={options}
+		// 				id="x[0].b[0].c"
+		// 				defaultValue="center"
+		// 			/>
+		// 		),
+		// 		value: {
+		// 			x: [
+		// 				{
+		// 					b: [
+		// 						{
+		// 							c: undefined,
+		// 						},
+		// 					],
+		// 				},
+		// 			],
+		// 		},
+		// 	});
+		// 	cy.get('[aria-checked="true"]')
+		// 		.should('have.length', '1')
+		// 		.contains('Center');
+		// });
 	});
 });

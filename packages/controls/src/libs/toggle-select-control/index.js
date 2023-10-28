@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -69,9 +70,10 @@ export default function ToggleSelectControl({
 		onChange,
 		defaultValue,
 		valueCleanup,
+		mergeInitialDefaultValue: true,
 	});
 
-	function valueCleanup(value) {
+	function valueCleanup(value: any) {
 		// WPToggleGroupControl returns undefined while deselecting
 		return isUndefined(value) ? '' : value;
 	}
@@ -156,7 +158,7 @@ ToggleSelectControl.propTypes = {
 	/**
 	 * list of toggle select options
 	 */
-	options: PropTypes.arrayOf(
+	options: (PropTypes.arrayOf(
 		PropTypes.oneOfType([
 			PropTypes.shape({
 				label: PropTypes.string,
@@ -168,7 +170,7 @@ ToggleSelectControl.propTypes = {
 				value: PropTypes.string,
 			}),
 		])
-	).isRequired,
+	).isRequired: any),
 	/**
 	 * Specifies than user can deselect active item in select or not
 	 */
