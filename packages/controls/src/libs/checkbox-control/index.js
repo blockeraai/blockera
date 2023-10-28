@@ -60,6 +60,7 @@ export default function CheckboxControl({
 				onChange={setValue}
 				label={checkboxLabel}
 				{...props}
+				aria-checked={value}
 			/>
 		</BaseControl>
 	);
