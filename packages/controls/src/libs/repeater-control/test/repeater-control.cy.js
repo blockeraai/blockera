@@ -10,9 +10,6 @@ import { __ } from '@wordpress/i18n';
 import AccordionCustomOpenIcon from './icons/accordion-custom-open-icon';
 import AccordionCustomCloseIcon from './icons/accordion-custom-close-icon';
 import { getControlValue } from '../../../store/selectors';
-import { controlReducer } from '../../../store/reducers/control-reducer';
-import { select } from '@wordpress/data';
-import { modifyControlValue } from '../store/actions';
 import { nanoid } from 'nanoid';
 
 function RepeaterFilledItemChildren({ itemId, item }) {
@@ -72,7 +69,7 @@ describe('repeater control component testing', () => {
 				.should('have.length', 7);
 
 			// Check data provider value!
-			cy.wait(100).then(() => {
+			cy.then(() => {
 				expect(getControlValue(name, STORE_NAME)).to.have.length(7);
 			});
 		});
@@ -100,7 +97,7 @@ describe('repeater control component testing', () => {
 				.should('have.length', 1);
 
 			// Check data provider value!
-			cy.wait(100).then(() => {
+			cy.then(() => {
 				expect(getControlValue(name, STORE_NAME)).to.have.length(1);
 			});
 		});
@@ -128,7 +125,7 @@ describe('repeater control component testing', () => {
 				.should('have.length', 5);
 
 			// Check data provider value!
-			cy.wait(100).then(() => {
+			cy.then(() => {
 				expect(getControlValue(name, STORE_NAME)).to.have.length(5);
 			});
 		});
@@ -157,9 +154,9 @@ describe('repeater control component testing', () => {
 				.should('have.class', 'is-inactive');
 
 			// Check data provider value!
-			cy.wait(100).then(() => {
-				expect(getControlValue(name, STORE_NAME)[0].isVisible).to.have
-					.false;
+			cy.then(() => {
+				return expect(getControlValue(name, STORE_NAME)[0].isVisible).to
+					.have.false;
 			});
 		});
 		it('should display field in body section', () => {
@@ -261,9 +258,9 @@ describe('repeater control component testing', () => {
 			cy.get('.publisher-control-group-popover').should('exist');
 
 			// Check data provider value!
-			cy.wait(100).then(() => {
-				expect(getControlValue(name, STORE_NAME)[0].isOpen).to.have
-					.true;
+			cy.then(() => {
+				return expect(getControlValue(name, STORE_NAME)[0].isOpen).to
+					.have.true;
 			});
 		});
 		it('should display popover custom className', () => {
@@ -343,7 +340,6 @@ describe('repeater control component testing', () => {
 						mode="accordion"
 						repeaterItemChildren={RepeaterFilledItemChildren}
 						actionButtonAdd={false}
-						actionButtonAdd={false}
 						actionButtonVisibility={false}
 						actionButtonDelete={false}
 						actionButtonClone={false}
@@ -368,7 +364,6 @@ describe('repeater control component testing', () => {
 						label="My Label"
 						mode="accordion"
 						repeaterItemChildren={RepeaterFilledItemChildren}
-						actionButtonAdd={false}
 						actionButtonAdd={false}
 						actionButtonVisibility={false}
 						actionButtonDelete={false}
@@ -407,7 +402,7 @@ describe('repeater control component testing', () => {
 				.should('have.length', 2);
 
 			// Check data provider value!
-			cy.wait(100).then(() => {
+			cy.then(() => {
 				expect(getControlValue(name, STORE_NAME)).to.have.length(2);
 			});
 		});
@@ -433,9 +428,9 @@ describe('repeater control component testing', () => {
 			});
 
 			// Check data provider value!
-			cy.wait(100).then(() => {
+			cy.then(() => {
 				expect(
-					getControlValue(name, STORE_NAME)['data']['myData']
+					getControlValue(name, STORE_NAME).data.myData
 				).to.have.length(2);
 			});
 		});
@@ -478,7 +473,7 @@ describe('repeater control component testing', () => {
 			cy.multiClick(`[aria-label="Add New My Label"]`, 2);
 
 			// Check data provider value!
-			cy.wait(100).then(() => {
+			cy.then(() => {
 				const value = [{ isVisible: true }, { isVisible: true }];
 				expect(value).to.deep.eq(getControlValue(name, STORE_NAME));
 			});
