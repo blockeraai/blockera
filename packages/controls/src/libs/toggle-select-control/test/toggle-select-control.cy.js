@@ -240,8 +240,8 @@ describe('toggle-select-control', () => {
 				.contains('Center');
 		});
 
-		// 2. test is correct but fails. need to refactor useControlContext | cannot read property of undefined -- x is undefine
-		it('retrieved data must be value, when defaultValue(ok) && id(!ok) && value(ok)', () => {
+		// 2.
+		it('retrieved data must be defaultValue, when defaultValue(ok) && id(!ok) && value(ok)', () => {
 			cy.withDataProvider({
 				component: (
 					<ToggleSelectControl
@@ -259,8 +259,7 @@ describe('toggle-select-control', () => {
 				.contains('Center');
 		});
 
-		// 3. test is correct but fails. need to refactor useControlContext | defaultValue is not applied
-		// Hint: I think the root of problem is in retrieving savedValue from context and not args!
+		// 3.
 		it('retrieved data must be defaultValue, when defaultValue(ok) && id(ok) && value(undefined)', () => {
 			cy.withDataProvider({
 				component: (
