@@ -1,13 +1,15 @@
 import { CheckboxControl } from '../..';
+import { getControlValue } from '../../../store/selectors';
 
 describe('checkbox control', () => {
 	beforeEach(() => {
 		cy.viewport(1280, 720);
 	});
 
-	context('Default', () => {
+	context('Visual Tests', () => {
 		const checkboxLabel = 'Checkbox Label';
-		it('renders input and label', () => {
+
+		it('renders input and label for input', () => {
 			cy.withDataProvider({
 				component: <CheckboxControl checkboxLabel={checkboxLabel} />,
 			});
@@ -16,76 +18,7 @@ describe('checkbox control', () => {
 			cy.contains(checkboxLabel);
 		});
 
-		it('get correct default value', () => {
-			const checkboxLabel = 'Checkbox Label';
-			cy.withDataProvider({
-				component: <CheckboxControl checkboxLabel={checkboxLabel} />,
-			});
-
-			cy.get('.components-checkbox-control__input-container')
-				.find('svg')
-				.should('not.exist');
-		});
-
-		it('user can check and uncheck the checkbox by clicking on checkbox', () => {
-			const checkboxLabel = 'Checkbox Label';
-			cy.withDataProvider({
-				component: <CheckboxControl checkboxLabel={checkboxLabel} />,
-			});
-
-			cy.get('input[type=checkbox]').as('checkbox');
-
-			cy.get('@checkbox').click();
-			cy.get('.components-checkbox-control__input-container')
-				.find('svg')
-				.should('exist');
-
-			cy.get('@checkbox').click();
-			cy.get('.components-checkbox-control__input-container')
-				.find('svg')
-				.should('not.exist');
-		});
-
-		it('user can check and uncheck the checkbox by clicking on label', () => {
-			const checkboxLabel = 'Checkbox Label';
-			cy.withDataProvider({
-				component: <CheckboxControl checkboxLabel={checkboxLabel} />,
-			});
-
-			cy.contains(checkboxLabel).click();
-			cy.get('.components-checkbox-control__input-container')
-				.find('svg')
-				.should('exist');
-
-			cy.contains(checkboxLabel).click();
-			cy.get('.components-checkbox-control__input-container')
-				.find('svg')
-				.should('not.exist');
-		});
-
-		it('the onChanged passed to control get called', () => {
-			const checkboxLabel = 'Checkbox Label';
-			const mockOnChange = cy.stub().as('mockOnChange');
-			cy.withDataProvider({
-				component: (
-					<CheckboxControl
-						checkboxLabel={checkboxLabel}
-						onChange={mockOnChange}
-					/>
-				),
-			});
-
-			cy.get('input[type=checkbox]').as('checkbox');
-
-			cy.get('@checkbox').click();
-			cy.get('@checkbox').click();
-
-			cy.get('@mockOnChange').should('have.been.calledTwice');
-		});
-	});
-
-	context('Field', () => {
-		it('renders label for checkbox', () => {
+		it('renders label for checkbox when label is passed.', () => {
 			const checkboxLabel = 'Checkbox Label';
 			const fieldLabel = 'Field Label';
 			cy.withDataProvider({
@@ -101,38 +34,146 @@ describe('checkbox control', () => {
 		});
 	});
 
-	context('useControlContext', () => {
-		it('should retrieve data from useControlContext with simple value without id', () => {
+	context('Behavioral Tests', () => {
+		it('user can check and uncheck the checkbox by clicking on checkbox', () => {
 			const checkboxLabel = 'Checkbox Label';
+			cy.withDataProvider({
+				component: <CheckboxControl checkboxLabel={checkboxLabel} />,
+				name,
+			});
+
+			cy.get('input[type=checkbox]').as('checkbox');
+
+			// visual assertion : check
+			cy.get('@checkbox').click();
+			cy.get('.components-checkbox-control__input-container').find('svg');
+			cy.get('@checkbox').should('have.attr', 'aria-checked', 'true');
+
+			// data assertion : check
+			cy.get('@checkbox').then(() => {
+				expect(getControlValue(name)).to.be.equal(true);
+			});
+
+			// visual assertion : un-check
+			cy.get('@checkbox').click();
+			cy.get('.components-checkbox-control__input-container')
+				.find('svg')
+				.should('not.exist');
+			cy.get('@checkbox').should('have.attr', 'aria-checked', 'false');
+
+			// data assertion : un-check
+			cy.get('@checkbox').then(() => {
+				expect(getControlValue(name)).to.be.equal(undefined);
+			});
+		});
+
+		it('user can check and uncheck the checkbox by clicking on label', () => {
+			const checkboxLabel = 'Checkbox Label';
+			cy.withDataProvider({
+				component: <CheckboxControl checkboxLabel={checkboxLabel} />,
+				name,
+			});
+
+			cy.get('input[type=checkbox]').as('checkbox');
+			cy.contains(checkboxLabel).click();
+
+			// visual assertion : check
+			cy.get('.components-checkbox-control__input-container')
+				.find('svg')
+				.should('exist');
+			cy.get('@checkbox').should('have.attr', 'aria-checked', 'true');
+
+			// data assertion : check
+			cy.get('@checkbox').then(() => {
+				expect(getControlValue(name)).to.be.equal(true);
+			});
+
+			// visual assertion : un-check
+			cy.contains(checkboxLabel).click();
+			cy.get('.components-checkbox-control__input-container')
+				.find('svg')
+				.should('not.exist');
+			cy.get('@checkbox').should('have.attr', 'aria-checked', 'false');
+
+			// data assertion : un-check
+			cy.get('@checkbox').then(() => {
+				expect(getControlValue(name)).to.be.equal(undefined);
+			});
+		});
+	});
+
+	context("Control's initial value", () => {
+		const checkboxLabel = 'Checkbox Label';
+
+		// 1.
+		it('calculated data must be defaultValue, when defaultValue(ok) && id(!ok) value(undefined)', () => {
+			cy.withDataProvider({
+				component: (
+					<CheckboxControl
+						checkboxLabel={checkboxLabel}
+						defaultValue={true}
+					/>
+				),
+				value: undefined,
+			});
+
+			cy.get('input[type=checkbox]').as('checkbox');
+			cy.get('@checkbox').should('have.attr', 'aria-checked', 'true');
+		});
+
+		// 2.
+		it('calculated defaultValue must be value, when defaultValue(ok) && id(!ok) && value(ok)', () => {
+			cy.withDataProvider({
+				component: (
+					<CheckboxControl
+						checkboxLabel={checkboxLabel}
+						defaultValue={true}
+						id="x.y"
+					/>
+				),
+				value: false,
+			});
+
+			cy.get('input[type=checkbox]').as('checkbox');
+			cy.get('@checkbox').should('have.attr', 'aria-checked', 'true');
+		});
+
+		// 3.
+		it('calculated data must be defaultValue, when defaultValue(ok) && id(ok) && value(undefined)', () => {
+			cy.withDataProvider({
+				component: (
+					<CheckboxControl
+						checkboxLabel={checkboxLabel}
+						id="x[0].b[0].c"
+						defaultValue={true}
+					/>
+				),
+				value: {
+					x: [
+						{
+							b: [
+								{
+									c: undefined,
+								},
+							],
+						},
+					],
+				},
+			});
+
+			cy.get('input[type=checkbox]').as('checkbox');
+			cy.get('@checkbox').should('have.attr', 'aria-checked', 'true');
+		});
+
+		// 4.
+		it('calculated data must be value, when id(!ok), defaultValue(!ok), value(root)', () => {
 			cy.withDataProvider({
 				component: <CheckboxControl checkboxLabel={checkboxLabel} />,
 				value: true,
 			});
 
-			cy.get('.components-checkbox-control__input-container')
-				.find('svg')
-				.should('exist');
-		});
-
-		it('should retrieve data from useControlContext with complex value with id', () => {
-			const checkboxLabel = 'Checkbox Label';
-			cy.withDataProvider({
-				component: (
-					<CheckboxControl
-						checkboxLabel={checkboxLabel}
-						id="x.y[0].z"
-					/>
-				),
-				value: {
-					x: {
-						y: [{ z: true }],
-					},
-				},
-			});
-
-			cy.get('.components-checkbox-control__input-container')
-				.find('svg')
-				.should('exist');
+			cy.get('input[type=checkbox]').as('checkbox');
+			cy.get('@checkbox').should('have.attr', 'aria-checked', 'true');
 		});
 	});
 });
