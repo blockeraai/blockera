@@ -70,7 +70,6 @@ export default function ToggleSelectControl({
 		onChange,
 		defaultValue,
 		valueCleanup,
-		mergeInitialDefaultValue: true,
 	});
 
 	function valueCleanup(value: any) {

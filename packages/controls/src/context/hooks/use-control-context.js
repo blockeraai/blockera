@@ -142,7 +142,7 @@ export const useControlContext = (args) => {
 			? savedValue
 			: isEmpty(savedValue)
 			? defaultValue
-			: prepare(id, savedValue);
+			: prepare(id, savedValue) || defaultValue;
 	}
 
 	return {

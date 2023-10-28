@@ -11,7 +11,7 @@ import { useControlContext } from '../hooks';
 import { ControlContextProvider } from '../index';
 
 describe('testing control context provider and related hooks', () => {
-	it('arguments not passed', () => {
+	it('should value is null when not wrapped with context and other args not passing', () => {
 		const { result } = renderHook(() => useControlContext());
 
 		expect(result.current.value).toBe(null);
@@ -37,7 +37,107 @@ describe('testing control context provider and related hooks', () => {
 		expect(result.current.value).toBe(20);
 	});
 
-	it('arguments just includes defaultValue', () => {
+	it('should retrieve undefined value when id is invalid and defaultValue is not defined', () => {
+		const wrapper = ({ children }) => (
+			<ControlContextProvider
+				value={{
+					name: '20',
+					value: {
+						x: [{ y: 20 }],
+					},
+				}}
+			>
+				{children}
+			</ControlContextProvider>
+		);
+		const { result } = renderHook(
+			() => useControlContext({ id: 'x[1].y' }),
+			{
+				wrapper,
+			}
+		);
+
+		expect(result.current.value).toBe(undefined);
+	});
+
+	it('should retrieve defaultValue when id is invalid and defaultValue is defined', () => {
+		const wrapper = ({ children }) => (
+			<ControlContextProvider
+				value={{
+					name: '30',
+					value: {
+						x: 20,
+					},
+				}}
+			>
+				{children}
+			</ControlContextProvider>
+		);
+		const { result } = renderHook(
+			() => useControlContext({ id: 'y', defaultValue: 10 }),
+			{
+				wrapper,
+			}
+		);
+
+		expect(result.current.value).toBe(10);
+	});
+
+	it('should retrieve defaultValue when id is valid, value is undefined, and defaultValue is defined', () => {
+		const wrapper = ({ children }) => (
+			<ControlContextProvider
+				value={{
+					name: '50',
+					value: {
+						x: [
+							{
+								y: undefined,
+							},
+						],
+					},
+				}}
+			>
+				{children}
+			</ControlContextProvider>
+		);
+		const { result } = renderHook(
+			() => useControlContext({ id: 'x[0].y', defaultValue: 10 }),
+			{
+				wrapper,
+			}
+		);
+
+		expect(result.current.value).toBe(10);
+	});
+
+	it('should retrieve defaultValue when id is invalid, value is undefined, and defaultValue is defined', () => {
+		const wrapper = ({ children }) => (
+			<ControlContextProvider
+				value={{
+					name: '55',
+					value: {
+						x: [
+							{
+								y: undefined,
+							},
+						],
+					},
+				}}
+			>
+				{children}
+			</ControlContextProvider>
+		);
+		const { result } = renderHook(
+			() => useControlContext({ id: 'x[0].z.y', defaultValue: 10 }),
+			{
+				wrapper,
+			}
+		);
+
+		expect(result.current.value).toBe(10);
+	});
+
+	it('should return defaultValue when arguments just includes defaultValue', () => {
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
@@ -56,7 +156,7 @@ describe('testing control context provider and related hooks', () => {
 		expect(result.current.value).toBe(56);
 	});
 
-	it('arguments includes mergeInitialAndDefault', () => {
+	it('should merged defaultValue and context value when mergeInitialAndDefault flag is true', () => {
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
@@ -86,7 +186,7 @@ describe('testing control context provider and related hooks', () => {
 		});
 	});
 
-	it('arguments includes mergeInitialAndDefault when repeater details is exists', () => {
+	it('should return repeater merged value when mergeInitialAndDefault flag is true and use in repeater', () => {
 		const defaultRepeaterItemValue = {
 			y: 30,
 		};
@@ -122,7 +222,7 @@ describe('testing control context provider and related hooks', () => {
 		]);
 	});
 
-	it('arguments includes repeater details when repeater is empty and defaultValue is empty array', () => {
+	it('should return defaultValue when repeater details is empty object', () => {
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{

@@ -1,9 +1,6 @@
 import ToggleSelectControl from '../index';
 import { __ } from '@wordpress/i18n';
 import { default as InheritIcon } from '../stories/icons/inherit';
-import { select, dispatch } from '@wordpress/data';
-import { addControl, modifyControlValue } from '../../../store/actions';
-import { controlReducer } from '../../../store/reducers/control-reducer';
 import { getControlValue } from '../../../store/selectors';
 
 describe('toggle-select-control', () => {
@@ -138,34 +135,21 @@ describe('toggle-select-control', () => {
 
 		it('selects each item correctly', () => {
 			cy.withDataProvider({
-				component: (
-					<ToggleSelectControl
-						options={options}
-						onChange={(value) => {
-							controlReducer(
-								select('publisher-core/controls').getControl(
-									name
-								),
-								modifyControlValue({
-									value,
-									controlId: name,
-								})
-							);
-						}}
-					/>
-				),
+				component: <ToggleSelectControl options={options} />,
 				value: 'left',
 				name,
 			});
 
 			cy.get('button').each(($btn) => {
 				cy.wrap($btn).click();
-				cy.wrap($btn).should('have.attr', 'aria-checked', 'true');
-				cy.wait(100).then(() => {
-					expect(getControlValue(name)).to.be.equal(
-						$btn.text().toLowerCase()
-					);
-				});
+				// visual and data assertion
+				cy.wrap($btn)
+					.should('have.attr', 'aria-checked', 'true')
+					.then(() => {
+						expect(getControlValue(name)).to.be.equal(
+							$btn.text().toLowerCase()
+						);
+					});
 			});
 		});
 
@@ -173,11 +157,19 @@ describe('toggle-select-control', () => {
 			cy.withDataProvider({
 				component: <ToggleSelectControl options={options} />,
 				value: 'left',
+				name,
 			});
 
 			cy.get('button').each(($btn) => {
 				cy.wrap($btn).click();
-				cy.get('[aria-checked="true"]').should('have.length', 1);
+				// visual and data assertion
+				cy.get('[aria-checked="true"]')
+					.should('have.length', 1)
+					.then(() => {
+						expect(getControlValue(name)).to.be.equal(
+							$btn.text().toLowerCase()
+						);
+					});
 			});
 		});
 
@@ -187,42 +179,33 @@ describe('toggle-select-control', () => {
 					<ToggleSelectControl
 						options={options}
 						isDeselectable={true}
-						onChange={(value) => {
-							controlReducer(
-								select('publisher-core/controls').getControl(
-									name
-								),
-								modifyControlValue({
-									value,
-									controlId: name,
-								})
-							);
-						}}
 					/>
 				),
 				value: '',
 				name,
 			});
 
-			cy.get('button').each(($btn, idx) => {
+			cy.get('button').each(($btn) => {
 				cy.wrap($btn).click();
-				cy.get('[aria-pressed="true"]').should('exist');
-				cy.wait(100).then(() => {
+				// visual and data assertion : select
+				cy.get('[aria-pressed="true"]').then(() => {
 					expect(getControlValue(name)).to.be.equal(
 						$btn.text().toLowerCase()
 					);
 				});
 
 				cy.wrap($btn).click();
-				cy.get('[aria-pressed="true"]').should('not.exist');
-				cy.wait(100).then(() => {
-					expect(getControlValue(name)).to.be.equal(undefined);
-				});
+				// visual and data assertion : de-select
+				cy.get('[aria-pressed="true"]')
+					.should('not.exist')
+					.then(() => {
+						expect(getControlValue(name)).to.be.equal(undefined);
+					});
 			});
 		});
 	});
 
-	context('useControlContext', () => {
+	context("Control's initial value", () => {
 		const options = [
 			{
 				label: __('Left', 'publisher-core'),
@@ -238,26 +221,18 @@ describe('toggle-select-control', () => {
 			},
 		];
 
-		it('should retrieve data from useControlContext with simple value without id', () => {
-			cy.withDataProvider({
-				component: <ToggleSelectControl options={options} />,
-				value: 'center',
-			});
-
-			cy.get('[aria-checked="true"]')
-				.should('have.length', '1')
-				.contains('Center');
-		});
-
-		it('should retrieve data from useControlContext with simple value without id', () => {
+		// 1.
+		it('retrieved data must be defaultValue, when defaultValue(ok) && id(!ok) value(undefined)', () => {
 			cy.withDataProvider({
 				component: (
 					<ToggleSelectControl
 						options={options}
 						defaultValue="center"
+						id="y.x"
 					/>
 				),
 				value: undefined,
+				name,
 			});
 
 			cy.get('[aria-checked="true"]')
@@ -265,30 +240,64 @@ describe('toggle-select-control', () => {
 				.contains('Center');
 		});
 
-		// it.only('should retrieve data from useControlContext with complex value with id', () => {
-		// 	cy.withDataProvider({
-		// 		component: (
-		// 			<ToggleSelectControl
-		// 				options={options}
-		// 				id="x[0].b[0].c"
-		// 				defaultValue="center"
-		// 			/>
-		// 		),
-		// 		value: {
-		// 			x: [
-		// 				{
-		// 					b: [
-		// 						{
-		// 							c: undefined,
-		// 						},
-		// 					],
-		// 				},
-		// 			],
-		// 		},
-		// 	});
-		// 	cy.get('[aria-checked="true"]')
-		// 		.should('have.length', '1')
-		// 		.contains('Center');
-		// });
+		// 2. test is correct but fails. need to refactor useControlContext | cannot read property of undefined -- x is undefine
+		it('retrieved data must be value, when defaultValue(ok) && id(!ok) && value(ok)', () => {
+			cy.withDataProvider({
+				component: (
+					<ToggleSelectControl
+						options={options}
+						defaultValue="center"
+						id="x.y"
+					/>
+				),
+				value: 'left',
+				name,
+			});
+
+			cy.get('[aria-checked="true"]')
+				.should('have.length', '1')
+				.contains('Center');
+		});
+
+		// 3. test is correct but fails. need to refactor useControlContext | defaultValue is not applied
+		// Hint: I think the root of problem is in retrieving savedValue from context and not args!
+		it('retrieved data must be defaultValue, when defaultValue(ok) && id(ok) && value(undefined)', () => {
+			cy.withDataProvider({
+				component: (
+					<ToggleSelectControl
+						options={options}
+						id="x[0].b[0].c"
+						defaultValue="center"
+					/>
+				),
+				value: {
+					x: [
+						{
+							b: [
+								{
+									c: undefined,
+								},
+							],
+						},
+					],
+				},
+			});
+
+			cy.get('[aria-checked="true"]')
+				.should('have.length', '1')
+				.contains('Center');
+		});
+
+		// 4.
+		it('retrieved data must be value, when id(!ok), defaultValue(!ok), value(root)', () => {
+			cy.withDataProvider({
+				component: <ToggleSelectControl options={options} />,
+				value: 'right',
+			});
+
+			cy.get('[aria-checked="true"]')
+				.should('have.length', '1')
+				.contains('Right');
+		});
 	});
 });
