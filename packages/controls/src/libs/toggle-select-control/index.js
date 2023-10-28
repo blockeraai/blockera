@@ -51,15 +51,15 @@ type Props = {
 };
 
 export default function ToggleSelectControl({
-	isDeselectable = false,
+	isDeselectable,
 	options,
 	//
 	id,
-	label = '',
+	label,
 	columns,
-	defaultValue = '',
+	defaultValue,
 	onChange,
-	field = 'toggle-select',
+	field,
 	//
 	className,
 	children,
