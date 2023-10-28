@@ -1,6 +1,8 @@
 /// <reference types="Cypress" />
 
+import { nanoid } from 'nanoid';
 import GradientBarControl from '../';
+import { getControlValue } from '../../../store/selectors';
 
 const hexToRgb = (hex) => {
 	let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -35,6 +37,40 @@ describe('gradient bar control component testing', () => {
 			.find('button')
 			.should('have.length', 2);
 	});
+	it('should render default value', () => {
+		const name = nanoid();
+		cy.withDataProvider({
+			component: <GradientBarControl label="My Label" />,
+			value: 'linear-gradient(135deg,rgb(6,147,227) 0%,rgb(128,64,64) 50%,rgb(155,81,224) 100%)',
+			name,
+		});
+
+		// Check data provider value!
+		cy.then(() => {
+			return expect(getControlValue(name)).to.eq(
+				'linear-gradient(135deg,rgb(6,147,227) 0%,rgb(128,64,64) 50%,rgb(155,81,224) 100%)'
+			);
+		});
+	});
+	it('should render default value with id', () => {
+		const name = nanoid();
+		cy.withDataProvider({
+			component: <GradientBarControl label="My Label" id="a.b" />,
+			value: {
+				a: {
+					b: 'linear-gradient(135deg,rgb(6,147,227) 0%,rgb(128,64,64) 50%,rgb(155,81,224) 100%)',
+				},
+			},
+			name,
+		});
+
+		// Check data provider value!
+		cy.then(() => {
+			return expect(getControlValue(name).a.b).to.eq(
+				'linear-gradient(135deg,rgb(6,147,227) 0%,rgb(128,64,64) 50%,rgb(155,81,224) 100%)'
+			);
+		});
+	});
 	it('should add new gradient', () => {
 		cy.withDataProvider({
 			component: <GradientBarControl label="My Label" />,
@@ -59,9 +95,30 @@ describe('gradient bar control component testing', () => {
 		cy.get('.components-popover').clickOutside();
 		cy.get('@onChangeMock').should('have.been.called');
 	});
-	it('should render remove color pointer', () => {
+	it('should change provider after change component state', () => {
+		const name = nanoid();
 		cy.withDataProvider({
 			component: <GradientBarControl label="my toggle" />,
+			name,
+			value: '',
+		});
+
+		cy.getByDataCy('gradient-bar-control').click();
+		cy.get('[aria-label="Color"]').click();
+		cy.get('.components-popover').clickOutside();
+
+		// Check data provider value!
+		cy.then(() => {
+			return expect(getControlValue(name)).to.eq(
+				'linear-gradient(135deg,rgb(6,147,227) 0%,rgb(128,64,64) 50%,rgb(155,81,224) 100%)'
+			);
+		});
+	});
+	it('should render remove color pointer', () => {
+		const name = nanoid();
+		cy.withDataProvider({
+			component: <GradientBarControl label="my toggle" />,
+			name,
 		});
 		cy.getByDataCy('gradient-bar-control')
 			.find('button')
@@ -81,10 +138,19 @@ describe('gradient bar control component testing', () => {
 		cy.getByDataCy('gradient-bar-control')
 			.find('button')
 			.should('have.length', 2);
+
+		// Check data provider value!
+		cy.then(() => {
+			return expect(getControlValue(name)).to.eq(
+				'linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%)'
+			);
+		});
 	});
 	it('should display correct pointer color', () => {
+		const name = nanoid();
 		cy.withDataProvider({
 			component: <GradientBarControl label="My Label" />,
+			name,
 		});
 		cy.get('button').first().click();
 		cy.get('input[maxlength="9"]').then(($input) => {
