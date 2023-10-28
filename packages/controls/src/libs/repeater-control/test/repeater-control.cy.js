@@ -52,6 +52,8 @@ describe('repeater control component testing', () => {
 	});
 	describe('popover', () => {
 		it('should add new item', () => {
+			const name = nanoid();
+
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
@@ -61,14 +63,21 @@ describe('repeater control component testing', () => {
 				),
 				value: [],
 				store: STORE_NAME,
+				name,
 			});
 			cy.multiClick(`[aria-label="Add New Items"]`, 7);
-			// cy.getByDataCy('repeater-item');
+
 			cy.getByDataCy('publisher-repeater-control')
 				.find('[data-cy="repeater-item"]')
 				.should('have.length', 7);
+
+			// Check data provider value!
+			cy.wait(100).then(() => {
+				expect(getControlValue(name, STORE_NAME)).to.have.length(7);
+			});
 		});
 		it('should render delete item', () => {
+			const name = nanoid();
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
@@ -78,14 +87,25 @@ describe('repeater control component testing', () => {
 				),
 				value: [],
 				store: STORE_NAME,
+				name,
 			});
 			cy.multiClick('[aria-label="Add New Items"]', 3);
 			cy.getByDataCy('repeater-item').first().realHover('mouse');
 			cy.getByDataCy('repeater-item').first().realHover('mouse');
 			cy.getByDataCy('repeater-item').first().realHover('mouse');
-			cy.multiClick('[aria-label="Delete 1"]', 3);
+			cy.multiClick('[aria-label="Delete 1"]', 2);
+
+			cy.getByDataCy('publisher-repeater-control')
+				.find('[data-cy="repeater-item"]')
+				.should('have.length', 1);
+
+			// Check data provider value!
+			cy.wait(100).then(() => {
+				expect(getControlValue(name, STORE_NAME)).to.have.length(1);
+			});
 		});
 		it('should render copy item', () => {
+			const name = nanoid();
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
@@ -95,17 +115,25 @@ describe('repeater control component testing', () => {
 				),
 				value: [],
 				store: STORE_NAME,
+				name,
 			});
 			cy.multiClick('[aria-label="Add New Items"]', 2);
 			cy.getByDataCy('repeater-item').first().realHover('mouse');
 			cy.getByDataCy('repeater-item').first().realHover('mouse');
 			cy.getByDataCy('repeater-item').first().realHover('mouse');
 			cy.multiClick('[aria-label="Clone 1"]', 3);
+
 			cy.getByDataCy('publisher-repeater-control')
 				.find('[data-cy="repeater-item"]')
 				.should('have.length', 5);
+
+			// Check data provider value!
+			cy.wait(100).then(() => {
+				expect(getControlValue(name, STORE_NAME)).to.have.length(5);
+			});
 		});
 		it('should render disable item', () => {
+			const name = nanoid();
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
@@ -115,6 +143,7 @@ describe('repeater control component testing', () => {
 				),
 				value: [],
 				store: STORE_NAME,
+				name,
 			});
 			cy.multiClick('[aria-label="Add New Items"]', 3);
 			cy.getByDataCy('repeater-item')
@@ -122,9 +151,16 @@ describe('repeater control component testing', () => {
 				.should('have.class', 'is-active');
 			cy.getByDataCy('repeater-item').first().realHover('mouse');
 			cy.get('[aria-label="Disable 1"]').click();
+
 			cy.getByDataCy('repeater-item')
 				.first()
 				.should('have.class', 'is-inactive');
+
+			// Check data provider value!
+			cy.wait(100).then(() => {
+				expect(getControlValue(name, STORE_NAME)[0].isVisible).to.have
+					.false;
+			});
 		});
 		it('should display field in body section', () => {
 			cy.withDataProvider({
@@ -202,6 +238,7 @@ describe('repeater control component testing', () => {
 			cy.get('[aria-label="Delete 1"]').should('not.exist');
 		});
 		it('should render item is open', () => {
+			const name = nanoid();
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
@@ -219,8 +256,15 @@ describe('repeater control component testing', () => {
 					},
 				],
 				store: STORE_NAME,
+				name,
 			});
 			cy.get('.publisher-control-group-popover').should('exist');
+
+			// Check data provider value!
+			cy.wait(100).then(() => {
+				expect(getControlValue(name, STORE_NAME)[0].isOpen).to.have
+					.true;
+			});
 		});
 		it('should display popover custom className', () => {
 			cy.withDataProvider({
@@ -341,6 +385,7 @@ describe('repeater control component testing', () => {
 			cy.getByDataCy(`label-control`).should('contain', 'My Label');
 		});
 		it('should display default values', () => {
+			const name = nanoid();
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
@@ -353,14 +398,21 @@ describe('repeater control component testing', () => {
 						]}
 					/>
 				),
-				value: [],
+				value: [{ isVisible: true }, { isVisible: true }],
 				store: STORE_NAME,
+				name,
 			});
 			cy.getByDataCy('publisher-repeater-control')
 				.find('[data-cy="repeater-item"]')
 				.should('have.length', 2);
+
+			// Check data provider value!
+			cy.wait(100).then(() => {
+				expect(getControlValue(name, STORE_NAME)).to.have.length(2);
+			});
 		});
 		it('should display data with data id', () => {
+			const name = nanoid();
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
@@ -377,6 +429,14 @@ describe('repeater control component testing', () => {
 					},
 				},
 				store: STORE_NAME,
+				name,
+			});
+
+			// Check data provider value!
+			cy.wait(100).then(() => {
+				expect(
+					getControlValue(name, STORE_NAME)['data']['myData']
+				).to.have.length(2);
 			});
 		});
 		it('should when repeater control value is changed, then context data provider value to changed!', () => {
