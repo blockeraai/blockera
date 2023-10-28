@@ -65,7 +65,7 @@ export default function BorderControl({
 					id={getId(id, 'width')}
 					min="0"
 					unitType="custom"
-					defaultValue={'0'}
+					defaultValue={defaultValue ? defaultValue.width : '0'}
 					units={[{ value: 'px', label: 'PX', default: 0 }]}
 					className={controlClassNames(
 						'input',
@@ -87,6 +87,7 @@ export default function BorderControl({
 					}}
 					className={__isColorFocused && 'is-focused'}
 					data-test="border-control-color"
+					defaultValue={defaultValue && defaultValue.color}
 				/>
 
 				<SelectControl
@@ -147,6 +148,7 @@ export default function BorderControl({
 					onChange={(newValue) => {
 						setValue({ ...value, style: newValue });
 					}}
+					defaultValue={defaultValue && defaultValue.style}
 				/>
 			</div>
 		</BaseControl>
@@ -157,6 +159,7 @@ BorderControl.propTypes = {
 	/**
 	 * Indicates border-line icons direction
 	 */
+	// $FlowFixMe
 	linesDirection: PropTypes.oneOf(['horizontal', 'vertical']),
 	/**
 	 * ID for retrieving value from control context
@@ -183,6 +186,7 @@ BorderControl.propTypes = {
 	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
+	// $FlowFixMe
 	defaultValue: PropTypes.shape({
 		width: PropTypes.string,
 		style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
