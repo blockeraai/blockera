@@ -63,6 +63,7 @@ describe('group control component testing', () => {
 					/>
 				),
 			});
+			/* eslint-disable cypress/unsafe-to-chain-command */
 			cy.getByDataCy('control-group')
 				.click()
 				.should('have.class', 'is-open');
