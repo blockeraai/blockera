@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { nanoid } from 'nanoid';
+import { select } from '@wordpress/data';
 import { mount } from 'cypress/react';
 import '@cypress/code-coverage/support';
 import 'cypress-real-events/support';
@@ -10,7 +11,7 @@ import { PanelBody, Popover, SlotFillProvider } from '@wordpress/components';
 /**
  * Publisher dependencies
  */
-import { ControlContextProvider } from '@publisher/controls';
+import { ControlContextProvider, STORE_NAME } from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -24,6 +25,8 @@ import '../../packages/controls/src/style.scss';
 import '../../.storybook/styles/style.lazy.scss';
 import '../../packages/components/src/style.scss';
 import { WithControlDataProvider } from './components/providers/control-provider/with-control-data-provider';
+import { controlReducer } from '@publisher/controls/src/store/reducers/control-reducer';
+import { modifyControlValue } from '@publisher/controls/src/store/actions';
 
 Cypress.Commands.add('mount', mount);
 
@@ -49,9 +52,25 @@ Cypress.Commands.add('withInspector', (component) => {
 	);
 });
 
+const handleOnChange = ({ value, store, name }) => {
+	controlReducer(
+		select(store).getControl(name),
+		modifyControlValue({
+			value,
+			controlId: name,
+		})
+	);
+};
+
 Cypress.Commands.add(
 	'withDataProvider',
-	({ component, store, value, name = nanoid() }) => {
+	({
+		component,
+		store = STORE_NAME,
+		value,
+		name = nanoid(),
+		onChange = handleOnChange,
+	}) => {
 		cy.withInspector(
 			<ControlContextProvider
 				storeName={store}
@@ -63,6 +82,13 @@ Cypress.Commands.add(
 				<WithControlDataProvider
 					contextValue={value}
 					children={component}
+					onChange={(_value) => {
+						onChange({
+							store,
+							name,
+							value: _value,
+						});
+					}}
 				/>
 			</ControlContextProvider>
 		);

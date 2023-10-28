@@ -9,10 +9,11 @@ import { useContext } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import AccordionCustomOpenIcon from './icons/accordion-custom-open-icon';
 import AccordionCustomCloseIcon from './icons/accordion-custom-close-icon';
-import { controlReducer } from '../../../store/reducers/control-reducer';
-import { modifyControlValue } from '../store/actions';
-import { select } from '@wordpress/data';
 import { getControlValue } from '../../../store/selectors';
+import { controlReducer } from '../../../store/reducers/control-reducer';
+import { select } from '@wordpress/data';
+import { modifyControlValue } from '../store/actions';
+import { nanoid } from 'nanoid';
 
 function RepeaterFilledItemChildren({ itemId, item }) {
 	const {
@@ -378,8 +379,9 @@ describe('repeater control component testing', () => {
 				store: STORE_NAME,
 			});
 		});
-		it('should call onChange handler when repeater changing', () => {
+		it('should when repeater control value is changed, then context data provider value to changed!', () => {
 			const onChangeMock = cy.stub().as('onChangeMock');
+
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
@@ -389,12 +391,36 @@ describe('repeater control component testing', () => {
 						onChange={onChangeMock}
 					/>
 				),
-				value: [],
 				store: STORE_NAME,
+				value: [],
+				name,
 			});
-			cy.get('[aria-label="Add New My Label"]').each(($btn) => {
-				cy.wrap($btn).click();
-				cy.get('@onChangeMock').should('have.been.called');
+
+			cy.multiClick(`[aria-label="Add New My Label"]`, 2);
+			cy.get('@onChangeMock').should('have.been.called');
+		});
+		it('should when repeater control value is changed, then context data provider value to changed!', () => {
+			const name = nanoid();
+
+			cy.withDataProvider({
+				component: (
+					<RepeaterControl
+						label="My Label"
+						mode="accordion"
+						repeaterItemChildren={RepeaterFilledItemChildren}
+					/>
+				),
+				store: STORE_NAME,
+				value: [],
+				name,
+			});
+
+			cy.multiClick(`[aria-label="Add New My Label"]`, 2);
+
+			// Check data provider value!
+			cy.wait(100).then(() => {
+				const value = [{ isVisible: true }, { isVisible: true }];
+				expect(value).to.deep.eq(getControlValue(name, STORE_NAME));
 			});
 		});
 	});
