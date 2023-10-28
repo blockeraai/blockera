@@ -34,9 +34,9 @@ export default function CheckboxControl({
 	id,
 	label,
 	columns,
-	defaultValue = false,
+	defaultValue,
 	onChange,
-	field = 'checkbox',
+	field,
 	//
 	className,
 	...props
