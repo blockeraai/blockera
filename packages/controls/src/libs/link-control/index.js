@@ -96,6 +96,7 @@ export default function LinkControl({
 						className={controlInnerClassNames(
 							'link-advanced-settings'
 						)}
+						data-cy="link-advance-setting"
 					>
 						<CheckboxControl
 							id={'target'}

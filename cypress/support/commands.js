@@ -39,3 +39,6 @@ Cypress.Commands.add('getByDataCy', (selector, ...args) => {
 Cypress.Commands.add('getByDataTest', (selector, ...args) => {
 	return cy.get(`[data-test=${selector}]`, ...args);
 });
+Cypress.Commands.add('clickOutside', () => {
+	return cy.get('body').click(0, 0);
+});
