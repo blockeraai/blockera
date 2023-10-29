@@ -318,7 +318,7 @@ describe('border-control component testing', () => {
 	});
 
 	describe('test useControlContext', () => {
-		it('have default value, no value, no id', () => {
+		it('should render default value when:defaultValue OK && id !OK && value is undefined', () => {
 			cy.withDataProvider({
 				component: (
 					<BorderControl
@@ -338,7 +338,7 @@ describe('border-control component testing', () => {
 			cy.getByDataTest('border-control-width').should('have.value', '10');
 		});
 
-		it('have default value, valid id, have value', () => {
+		it('should render value when: defaultValue OK && id OK && value is OK', () => {
 			cy.withDataProvider({
 				component: (
 					<BorderControl
@@ -365,7 +365,7 @@ describe('border-control component testing', () => {
 			cy.getByDataTest('border-control-width').should('have.value', '10');
 		});
 
-		it('have default value, have invalid id,have value', () => {
+		it('should render default value when:defaultValue OK && id is invalid, value ok', () => {
 			cy.withDataProvider({
 				component: (
 					<BorderControl
@@ -392,7 +392,30 @@ describe('border-control component testing', () => {
 			cy.getByDataTest('border-control-width').should('have.value', '20');
 		});
 
-		it('no default value, no id, have value', () => {
+		it('should render default value when:defaultValue OK && id is valid, value is invalid', () => {
+			cy.withDataProvider({
+				component: (
+					<BorderControl
+						{...defaultProps}
+						defaultValue={{
+							width: '20px',
+							style: 'solid',
+							color: '',
+						}}
+						id={'[0].data'}
+					/>
+				),
+				value: [
+					{
+						data: undefined,
+					},
+				],
+			});
+
+			cy.getByDataTest('border-control-width').should('have.value', '20');
+		});
+
+		it('should render value when:defaultValue !OK && id !OK && value exists on root', () => {
 			cy.withDataProvider({
 				component: <BorderControl {...defaultProps} />,
 				value: {
