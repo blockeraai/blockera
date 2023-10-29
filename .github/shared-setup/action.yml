@@ -10,9 +10,6 @@ runs:
     steps:
         - name: Setup SSH
           uses: MrSquaare/ssh-setup-action@v1
-          with:
-              host: github.com
-              private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
         - name: Clone Submodule
           shell: bash
