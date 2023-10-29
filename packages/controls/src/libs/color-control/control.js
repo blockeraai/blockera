@@ -38,14 +38,14 @@ type Props = {
 export default function ColorControl({
 	type = 'normal',
 	noBorder,
-	contentAlign = 'left',
+	contentAlign,
 	//
 	id,
 	label,
 	columns,
 	defaultValue,
 	onChange,
-	field = 'color',
+	field,
 	//
 	//
 	className,
