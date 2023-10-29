@@ -16,10 +16,16 @@ jobs:
             - name: Checkout Repository
               uses: actions/checkout@v3
 
-            - name: Shared Setup Action
-              uses: ./.github/shared-setup
+            - name: Setup SSH
+              uses: MrSquaare/ssh-setup-action@v1
               with:
+                  host: github.com
                   private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+            - name: Clone Submodule
+              run: |
+                  cd libs
+                  git clone git@github.com:publisherwp/storybook.git
 
             - name: Install Composer Packages
               run: composer install
@@ -32,8 +38,10 @@ jobs:
                   npm run build
                   npm run build:wp-env-app
 
-            - name: Run Cypress E2E Tests
-              run: npm run test:e2e
+              # Install npm dependencies, cache them correctly
+              # and run all Cypress tests
+            - name: Cypress run
+              uses: cypress-io/github-action@v6
 
             - name: Stop WordPress Environment
               run: npm run env:stop
