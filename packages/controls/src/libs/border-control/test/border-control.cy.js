@@ -173,7 +173,7 @@ describe('border-control component testing', () => {
 		});
 	});
 
-	describe('visual test', () => {
+	describe('rendering test', () => {
 		it('with field', () => {
 			cy.withDataProvider({
 				component: (
@@ -338,9 +338,7 @@ describe('border-control component testing', () => {
 			cy.getByDataTest('border-control-width').should('have.value', '10');
 		});
 
-		it('have default value, have id, invalid value', () => {
-			const value = [{ id: undefined }];
-
+		it('have default value, valid id, have value', () => {
 			cy.withDataProvider({
 				component: (
 					<BorderControl
@@ -350,15 +348,24 @@ describe('border-control component testing', () => {
 							style: 'solid',
 							color: '',
 						}}
-						id={value[0].id}
+						id={'[0].data'}
 					/>
 				),
+				value: [
+					{
+						data: {
+							width: '10px',
+							style: 'solid',
+							color: '',
+						},
+					},
+				],
 			});
 
-			cy.getByDataTest('border-control-width').should('have.value', '0');
+			cy.getByDataTest('border-control-width').should('have.value', '10');
 		});
 
-		it('have default value, have invalid id,no value', () => {
+		it('have default value, have invalid id,have value', () => {
 			cy.withDataProvider({
 				component: (
 					<BorderControl
@@ -368,9 +375,18 @@ describe('border-control component testing', () => {
 							style: 'solid',
 							color: '',
 						}}
-						id="invalid"
+						id={'[0].x'}
 					/>
 				),
+				value: [
+					{
+						data: {
+							width: '10px',
+							style: 'solid',
+							color: '',
+						},
+					},
+				],
 			});
 
 			cy.getByDataTest('border-control-width').should('have.value', '20');
