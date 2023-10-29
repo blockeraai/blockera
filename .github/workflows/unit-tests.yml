@@ -20,19 +20,8 @@ jobs:
         steps:
             - uses: actions/checkout@v3
 
-            - name: Setup SSH
-              uses: MrSquaare/ssh-setup-action@v1
-              with:
-                  host: github.com
-                  private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-            - name: Clone Submodule
-              run: |
-                  cd libs
-                  git clone git@github.com:publisherwp/storybook.git
-
-            - name: Setup Node.js and install dependencies
-              uses: ./.github/setup-node
+            - name: Shared Setup Action
+              uses: ./.github/shared-setup
 
             - name: Npm build
               run: npm run build
@@ -95,19 +84,8 @@ jobs:
         steps:
             - uses: actions/checkout@v3
 
-            - name: Setup SSH
-              uses: MrSquaare/ssh-setup-action@v1
-              with:
-                  host: github.com
-                  private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-            - name: Clone Submodule
-              run: |
-                  cd libs
-                  git clone git@github.com:publisherwp/storybook.git
-
-            - name: Setup Node.js and install dependencies
-              uses: ./.github/setup-node
+            - name: Shared Setup Action
+              uses: ./.github/shared-setup
 
             ##
             # This allows Composer dependencies to be installed using a single step.
