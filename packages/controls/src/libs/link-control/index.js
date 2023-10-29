@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -26,6 +27,11 @@ import {
 	AttributesControl,
 } from '../index';
 import { ControlContextProvider, useControlContext } from '../../context';
+/**
+ * types
+ */
+import type { MixedElement } from 'react';
+import type { TLinkControlProps } from './types/link-control-props';
 
 export default function LinkControl({
 	label,
@@ -37,7 +43,7 @@ export default function LinkControl({
 	attributesId,
 	defaultValue,
 	advancedOpen,
-}) {
+}: TLinkControlProps): MixedElement {
 	const {
 		controlInfo: { name: controlId },
 		value,
@@ -196,6 +202,7 @@ LinkControl.propTypes = {
 	 *
 	 * @default `auto`
 	 */
+	// $FlowFixMe
 	advancedOpen: PropTypes.oneOfType([
 		PropTypes.oneOf(['auto']),
 		PropTypes.bool,
@@ -205,7 +212,7 @@ LinkControl.propTypes = {
 	 */
 	placeholder: PropTypes.string,
 };
-
+// $FlowFixMe
 LinkControl.defaultProps = {
 	attributesId: 'link-control-attributes',
 	placeholder: 'https://your-link.com',
