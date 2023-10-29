@@ -48,7 +48,7 @@ const SelectControl = ({
 		onChange,
 		defaultValue,
 	});
-	console.log(options);
+
 	if (type === 'custom') options = prepareSelectCustomOptions(options);
 
 	return (
