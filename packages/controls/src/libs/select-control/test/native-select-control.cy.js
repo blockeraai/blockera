@@ -261,30 +261,31 @@ describe('native select control component testing', () => {
 			cy.get('select').should('have.value', 'all');
 		});
 
-		it('have default value, have id, invalid value', () => {
-			const value = [{ id: undefined }];
+		it('have default value, have id, valid value', () => {
 			cy.withDataProvider({
 				component: (
 					<SelectControl
 						{...defaultProps}
 						defaultValue={'all'}
-						id={value[0].id}
+						id={'[0]'}
 					/>
 				),
+				value: ['border'],
 			});
 
-			cy.get('select').should('have.value', 'all');
+			cy.get('select').should('have.value', 'border');
 		});
 
-		it('have default value, have invalid id,no value', () => {
+		it('have default value, have invalid id,have value', () => {
 			cy.withDataProvider({
 				component: (
 					<SelectControl
 						{...defaultProps}
 						defaultValue={'all'}
-						id="invalid"
+						id={'[1]'}
 					/>
 				),
+				value: ['border'],
 			});
 
 			cy.get('select').should('have.value', 'all');

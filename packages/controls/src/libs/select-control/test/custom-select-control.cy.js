@@ -117,7 +117,7 @@ describe('custom select control component testing', () => {
 		});
 	});
 
-	describe('visual test:', () => {
+	describe('rendering test:', () => {
 		it('With Field', () => {
 			cy.withDataProvider({
 				component: <SelectControl {...defaultProps} label="Field" />,
@@ -404,19 +404,19 @@ describe('custom select control component testing', () => {
 			getSelectButton().contains('All Properties');
 		});
 
-		it('have default value, have id, invalid value', () => {
-			const value = [{ id: undefined }];
+		it('have default value, have id, have value', () => {
 			cy.withDataProvider({
 				component: (
 					<SelectControl
 						{...defaultProps}
 						defaultValue={'all'}
-						id={value[0].id}
+						id={'[0]'}
 					/>
 				),
+				value: ['border'],
 			});
 
-			getSelectButton().contains('All Properties');
+			getSelectButton().contains('Border');
 		});
 
 		it('have default value, have invalid id,no value', () => {
@@ -425,9 +425,10 @@ describe('custom select control component testing', () => {
 					<SelectControl
 						{...defaultProps}
 						defaultValue={'all'}
-						id="invalid"
+						id={'[1]'}
 					/>
 				),
+				value: ['border'],
 			});
 			getSelectButton().contains('All Properties');
 		});
