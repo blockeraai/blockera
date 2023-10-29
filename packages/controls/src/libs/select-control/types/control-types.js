@@ -1,34 +1,33 @@
 // @flow
+import type { Element } from 'React';
 
-export type TSelectOption = {
+export type TNativeOption = {
 	label: string,
 	value: string,
-	icon?: Element,
+	icon?: Element<any>,
 	type?: string,
 	disabled?: boolean,
-	options?: Array<TSelectOption>,
-};
-
-export type TCustomSelectOption = {
-	name?: string,
-	key: string,
-	style?: Element,
 	className?: string,
+	style?: Object,
+	options?: Array<Object>,
+	key?: string,
 };
+export type TSelectOptions = TNativeOption[];
 
 export type TSelectControlProps = {
-	id: string,
+	id?: string,
 	label?: string,
 	field?: string,
 	columns?: string,
 	defaultValue?: string,
-	onChange: () => {},
+	onChange?: () => {},
 	type: 'native' | 'custom',
-	options: Array<TSelectOption>,
-	customMenuPosition?: 'bottom' | 'top',
+	options: TSelectOptions,
+	customMenuPosition: 'bottom' | 'top',
 	customHideInputIcon?: boolean,
 	customHideInputLabel?: boolean,
 	customInputCenterContent?: boolean,
+	customHideInputCaret?: boolean,
 	noBorder?: boolean,
 	multiple?: boolean,
 	className?: string,

@@ -48,7 +48,7 @@ const SelectControl = ({
 		onChange,
 		defaultValue,
 	});
-
+	console.log(options);
 	if (type === 'custom') options = prepareSelectCustomOptions(options);
 
 	return (
@@ -81,7 +81,7 @@ const SelectControl = ({
 					className={controlClassNames(
 						'select',
 						'custom',
-						'menu-position-' + customMenuPosition,
+						'menu-position-' + (customMenuPosition || null),
 						noBorder && 'no-border',
 						customHideInputIcon && 'input-hide-icon',
 						customHideInputLabel && 'input-hide-label',
@@ -136,6 +136,7 @@ SelectControl.propTypes = {
 	/**
 	 * Type of select. `native` is the browser native select control and the `custom` is custom developed select that is more advanced and it's options support icon.
 	 */
+	// $FlowFixMe
 	type: PropTypes.oneOf(['native', 'custom']),
 	/**
 	 * Select control options array.
@@ -144,6 +145,7 @@ SelectControl.propTypes = {
 	/**
 	 * Select dropdown menu position for `custom` select control.
 	 */
+	// $FlowFixMe
 	customMenuPosition: PropTypes.oneOf(['bottom', 'top']),
 	/**
 	 * Hides icon for current select item but icons of dropdown items will be shown

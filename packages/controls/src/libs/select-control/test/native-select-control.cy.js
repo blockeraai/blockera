@@ -1,7 +1,7 @@
 import { SelectControl } from '../..';
 import InheritIcon from '../stories/icons/inherit';
-import { select, dispatch } from '@wordpress/data';
-import { addControl, modifyControlValue } from '../../../store/actions';
+import { select } from '@wordpress/data';
+import { modifyControlValue } from '../../../store/actions';
 import { controlReducer } from '../../../store/reducers/control-reducer';
 import { getControlValue } from '../../../store/selectors';
 import { nanoid } from 'nanoid';
@@ -65,7 +65,6 @@ describe('native select control component testing', () => {
 	const defaultProps = {
 		type: 'native',
 		options: selectOptions,
-		value: 'all',
 	};
 
 	describe('Normal', () => {
@@ -83,35 +82,17 @@ describe('native select control component testing', () => {
 		it('select opacity option', () => {
 			const name = nanoid();
 			cy.withDataProvider({
-				component: (
-					<SelectControl
-						{...defaultProps}
-						onChange={(value) => {
-							controlReducer(
-								select('publisher-core/controls').getControl(
-									name
-								),
-								modifyControlValue({
-									value,
-									controlId: name,
-								})
-							);
-						}}
-					/>
-				),
+				component: <SelectControl {...defaultProps} />,
 				value: 'all',
 				name,
 			});
+			cy.get('select').select('opacity');
 
-			cy.get('#inspector-select-control-1').select('opacity');
-			cy.get('#inspector-select-control-1').should(
-				'have.value',
-				'opacity'
-			);
-			cy.get('#inspector-select-control-1').blur();
+			cy.get('select').should('have.value', 'opacity');
+			cy.get('select').blur();
 
 			//Check data provider value
-			cy.wait(100).then(() => {
+			cy.get('select').then(() => {
 				expect('opacity').to.be.equal(getControlValue(name));
 			});
 		});
@@ -119,36 +100,17 @@ describe('native select control component testing', () => {
 		it('not able to select disabled option', () => {
 			const name = nanoid();
 			cy.withDataProvider({
-				component: (
-					<SelectControl
-						{...defaultProps}
-						onChange={(value) => {
-							controlReducer(
-								select('publisher-core/controls').getControl(
-									name
-								),
-								modifyControlValue({
-									value,
-									controlId: name,
-								})
-							);
-						}}
-					/>
-				),
+				component: <SelectControl {...defaultProps} />,
 				value: 'all',
 				name,
 			});
 
-			cy.get('#inspector-select-control-2')
-				.get('[value="filter"]')
-				.should('be.disabled');
-			cy.get('#inspector-select-control-2')
-				.get('[value="filter"]')
-				.click({ force: true });
-			cy.get('#inspector-select-control-2').should('have.value', 'all');
+			cy.get('select').get('[value="filter"]').should('be.disabled');
+			cy.get('select').get('[value="filter"]').click({ force: true });
+			cy.get('select').should('have.value', 'all');
 
 			//Check data provider value
-			cy.wait(100).then(() => {
+			cy.get('select').then(() => {
 				expect('all').to.be.equal(getControlValue(name));
 			});
 		});
@@ -166,13 +128,14 @@ describe('native select control component testing', () => {
 				),
 				value: 'all',
 			});
-			cy.get('#inspector-select-control-3')
-				.trigger('mouseover')
+			cy.get('select').trigger('mouseover');
+			cy.get('select')
 				.parent()
 				.parent()
 				.should('have.class', 'is-hovered');
 		});
 	});
+
 	describe('Focus', () => {
 		it('test border on focus', () => {
 			cy.withDataProvider({
@@ -185,13 +148,14 @@ describe('native select control component testing', () => {
 				),
 				value: 'all',
 			});
-			cy.get('#inspector-select-control-4')
-				.trigger('focus')
+			cy.get('select').trigger('focus');
+			cy.get('select')
 				.parent()
 				.parent()
 				.should('have.class', 'is-focused');
 		});
 	});
+
 	describe('With Field', () => {
 		it('pass label', () => {
 			cy.withDataProvider({
@@ -201,77 +165,62 @@ describe('native select control component testing', () => {
 			cy.contains('Field');
 		});
 	});
+
 	describe('test noBorder :', () => {
 		it('passing false ', () => {
 			cy.withDataProvider({
 				component: <SelectControl {...defaultProps} noBorder={false} />,
 				value: 'all',
 			});
-			cy.get('#inspector-select-control-6')
+			cy.get('select')
 				.parent()
 				.parent()
 				.should('not.have.class', 'no-border');
 		});
+
 		it('passing true ', () => {
 			cy.withDataProvider({
 				component: <SelectControl {...defaultProps} noBorder={true} />,
 				value: 'all',
 			});
-			cy.get('#inspector-select-control-7')
+			cy.get('select')
 				.parent()
 				.parent()
 				.should('have.class', 'no-border');
 		});
 	});
+
 	describe('test multiple :', () => {
 		it('passing false ', () => {
 			cy.withDataProvider({
 				component: <SelectControl {...defaultProps} multiple={false} />,
 				value: 'all',
 			});
-			cy.get('#inspector-select-control-8').should(
-				'not.have.attr',
-				'multiple'
-			);
+			cy.get('select').should('not.have.attr', 'multiple');
 		});
 
 		it('passing true ', () => {
 			const name = nanoid();
 			cy.withDataProvider({
-				component: (
-					<SelectControl
-						{...defaultProps}
-						multiple={true}
-						onChange={(value) => {
-							controlReducer(
-								select('publisher-core/controls').getControl(
-									name
-								),
-								modifyControlValue({
-									value,
-									controlId: name,
-								})
-							);
-						}}
-					/>
-				),
+				component: <SelectControl {...defaultProps} multiple={true} />,
 				value: 'all',
 				name,
 			});
 
-			cy.get('#inspector-select-control-9')
-				.select(['opacity', 'margin', 'padding'])
+			cy.get('select').select(['opacity', 'margin', 'padding']);
+			cy.get('select')
 				.invoke('val')
 				.should('deep.equal', ['opacity', 'margin', 'padding']);
 
 			//Check data provider value
-			cy.wait(100).then(() => {
+			cy.get('select').then(() => {
 				expect(['opacity', 'margin', 'padding']).to.be.deep.equal(
 					getControlValue(name)
 				);
 			});
 		});
 	});
+
 	describe('test onChange', () => {
 		it('does onChange fire', () => {
 			const name = nanoid();
@@ -295,9 +244,59 @@ describe('native select control component testing', () => {
 				name,
 			});
 
-			cy.get('#inspector-select-control-10').select('border');
+			cy.get('select').select('border');
 
 			cy.get('@onChange').should('have.been.called');
+		});
+	});
+
+	describe('test useControlContext', () => {
+		it('have default value, no value, no id', () => {
+			cy.withDataProvider({
+				component: (
+					<SelectControl {...defaultProps} defaultValue={'all'} />
+				),
+			});
+
+			cy.get('select').should('have.value', 'all');
+		});
+
+		it('have default value, have id, invalid value', () => {
+			const value = [{ id: undefined }];
+			cy.withDataProvider({
+				component: (
+					<SelectControl
+						{...defaultProps}
+						defaultValue={'all'}
+						id={value[0].id}
+					/>
+				),
+			});
+
+			cy.get('select').should('have.value', 'all');
+		});
+
+		it('have default value, have invalid id,no value', () => {
+			cy.withDataProvider({
+				component: (
+					<SelectControl
+						{...defaultProps}
+						defaultValue={'all'}
+						id="invalid"
+					/>
+				),
+			});
+
+			cy.get('select').should('have.value', 'all');
+		});
+
+		it('no default value, no id, have value', () => {
+			cy.withDataProvider({
+				component: <SelectControl {...defaultProps} />,
+				value: 'all',
+			});
+
+			cy.get('select').should('have.value', 'all');
 		});
 	});
 });
