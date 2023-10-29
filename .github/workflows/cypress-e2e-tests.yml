@@ -30,18 +30,16 @@ jobs:
             - name: Install Composer Packages
               run: composer install
 
-            - name: Start WordPress Environment
-              run: npm run env:start
-
-            - name: Build wp-env app
-              run: |
-                  npm run build
-                  npm run build:wp-env-app
-
               # Install npm dependencies, cache them correctly
               # and run all Cypress tests
             - name: Cypress run
               uses: cypress-io/github-action@v6
+              with:
+                  build: |
+                      npm run env:start
+                      npm run build
+                      npm run build:wp-env-app
+                  browser: chrome
 
             - name: Stop WordPress Environment
               run: npm run env:stop
