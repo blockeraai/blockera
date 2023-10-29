@@ -11,7 +11,6 @@ jobs:
         name: JavaScript coding standards
         runs-on: ubuntu-latest
         timeout-minutes: 20
-        needs: shared_setup
         if: ${{ github.repository == 'publisherwp/publisher-core' || github.event_name == 'pull_request' }}
 
         strategy:
@@ -25,6 +24,9 @@ jobs:
 
             - name: Shared Setup Action
               uses: ./.github/shared-setup
+              with:
+                  host: github.com
+                  private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
             - name: Running the lint:js
               run: npm run lint:js
@@ -33,7 +35,6 @@ jobs:
         name: CSS coding standards
         runs-on: ubuntu-latest
         timeout-minutes: 20
-        needs: shared_setup
         if: ${{ github.repository == 'publisherwp/publisher-core' || github.event_name == 'pull_request' }}
 
         steps:
@@ -42,6 +43,9 @@ jobs:
 
             - name: Shared Setup Action
               uses: ./.github/shared-setup
+              with:
+                  host: github.com
+                  private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
             - name: Running the lint:css
               run: npm run lint:css
