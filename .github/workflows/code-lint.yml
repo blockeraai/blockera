@@ -7,8 +7,8 @@ on:
     workflow_dispatch:
 
 jobs:
-    jslint:
-        name: JavaScript coding standards
+    lint:
+        name: JavaScript and Css coding standards
         runs-on: ubuntu-latest
         timeout-minutes: 20
         if: ${{ github.repository == 'publisherwp/publisher-core' || github.event_name == 'pull_request' }}
@@ -29,21 +29,6 @@ jobs:
 
             - name: Running the lint:js
               run: npm run lint:js
-
-    stylelint:
-        name: CSS coding standards
-        runs-on: ubuntu-latest
-        timeout-minutes: 20
-        if: ${{ github.repository == 'publisherwp/publisher-core' || github.event_name == 'pull_request' }}
-
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v3
-
-            - name: Shared Setup Action
-              uses: ./.github/shared-setup
-              with:
-                  private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
             - name: Running the lint:css
               run: npm run lint:css
