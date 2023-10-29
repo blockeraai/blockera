@@ -1,9 +1,12 @@
 name: 'Shared setup action'
 description: 'shared configuration for workflow will be done.'
 inputs:
-    node-version:
-        description: 'Optional. The Node.js version to use. When not specified, the version specified in .nvmrc will be used.'
+    host:
+        description: 'submodule host address'
         required: false
+    private-key:
+        description: 'access to submodule with private key'
+        required: true
 
 runs:
     using: 'composite'
@@ -16,6 +19,9 @@ runs:
           run: |
               cd libs
               git clone git@github.com:publisherwp/storybook.git
+          with:
+              host: github.com
+              private-key: ${{ inputs.private-key }}
 
         - name: Setup Node.js and install dependencies
           uses: ./.github/setup-node

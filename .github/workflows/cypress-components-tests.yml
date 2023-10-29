@@ -19,7 +19,6 @@ jobs:
             - name: Shared Setup Action
               uses: ./.github/shared-setup
               with:
-                  host: github.com
                   private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
             - name: Run Cypress Tests
