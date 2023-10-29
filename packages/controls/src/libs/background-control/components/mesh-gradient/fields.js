@@ -33,6 +33,7 @@ const Fields: TFieldsProps = memo<TFieldsProps>(
 					label=""
 					field="empty"
 					isPopover={false}
+					hasClearBtn={false}
 					id={getControlId(itemId, 'color')}
 					onChange={(newValue) => {
 						changeRepeaterItem({

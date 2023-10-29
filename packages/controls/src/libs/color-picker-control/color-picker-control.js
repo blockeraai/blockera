@@ -1,27 +1,63 @@
+// @flow
 /**
  * External dependencies
  */
 import { ColorPicker as WPColorPicker } from '@wordpress/components';
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
+import ResetColorIcon from './ResetColorIcon';
 
 /**
  * Publisher dependencies
  */
-import { Button, Popover } from '@publisher/components';
+import { Button, Flex, Popover } from '@publisher/components';
 
 /**
  * Internal dependencies
  */
 import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
+import type { MixedElement } from 'react';
+
+type Placement =
+	| 'top-start'
+	| 'top'
+	| 'top-end'
+	| 'right-start'
+	| 'right'
+	| 'right-end'
+	| 'bottom-start'
+	| 'bottom'
+	| 'bottom-end'
+	| 'left-start'
+	| 'left'
+	| 'left-end';
+
+type Props = {
+	popoverTitle: string,
+	isOpen: boolean,
+	onClose: () => void,
+	placement: Placement,
+	isPopover: boolean,
+	hasClearBtn: boolean,
+	//
+	id: string,
+	label: string,
+	columns: string,
+	defaultValue: string,
+	onChange: () => void,
+	field: string,
+	//
+	className: string,
+};
 
 export default function ColorPickerControl({
-	popoverTitle,
+	popoverTitle = (__('Color Picker', 'publisher-core'): any),
 	isOpen,
 	onClose,
 	placement,
-	isPopover = true,
+	isPopover,
+	hasClearBtn = true,
 	//
 	id,
 	label,
@@ -32,7 +68,7 @@ export default function ColorPickerControl({
 	//
 	className,
 	...props
-}) {
+}: Props): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
 		onChange,
@@ -41,7 +77,7 @@ export default function ColorPickerControl({
 	});
 
 	// make sure always we treat colors as lower case
-	function valueCleanup(value) {
+	function valueCleanup(value: string) {
 		if (value !== '') {
 			value = value.toLowerCase();
 		}
@@ -57,26 +93,44 @@ export default function ColorPickerControl({
 				controlName={field}
 				className={className}
 			>
-				{isOpen && (
-					<Popover
-						title={popoverTitle}
-						offset={20}
-						placement={placement}
-						className="components-palette-edit-popover"
-						onClose={onClose}
-					>
-						<WPColorPicker
-							enableAlpha={false}
-							color={value}
-							onChangeComplete={(color) => setValue(color.hex)}
-							{...props}
-						/>
-
-						<Button onClick={() => onChange('')}>
-							{__('Clear', 'publisher-core')}
-						</Button>
-					</Popover>
-				)}
+				<>
+					{isOpen && (
+						<Popover
+							title={
+								<Flex
+									justifyContent={'space-between'}
+									alignItems={'center'}
+									style={{ width: '100%' }}
+								>
+									<p>{popoverTitle}</p>
+									{hasClearBtn && (
+										<Button
+											size={'extra-small'}
+											onClick={() => setValue('')}
+											style={{ padding: '5px' }}
+											aria-label="reset-color"
+										>
+											<ResetColorIcon />
+										</Button>
+									)}
+								</Flex>
+							}
+							offset={20}
+							placement={placement}
+							className="components-palette-edit-popover"
+							onClose={onClose}
+						>
+							<WPColorPicker
+								enableAlpha={false}
+								color={value}
+								onChangeComplete={(color) =>
+									setValue(color.hex)
+								}
+								{...props}
+							/>
+						</Popover>
+					)}
+				</>
 			</BaseControl>
 		);
 	}
@@ -94,6 +148,11 @@ export default function ColorPickerControl({
 				onChangeComplete={(color) => setValue(color.hex)}
 				{...props}
 			/>
+			{hasClearBtn && (
+				<Button onClick={() => setValue('')} aria-label="reset-color">
+					{__('Clear', 'publisher-core')}
+				</Button>
+			)}
 		</BaseControl>
 	);
 }
@@ -150,7 +209,7 @@ ColorPickerControl.propTypes = {
 ColorPickerControl.defaultProps = {
 	label: '',
 	field: 'color-picker',
-	popoverTitle: __('Color Picker', 'publisher-core'),
+	popoverTitle: (__('Color Picker', 'publisher-core'): any),
 	isPopover: true,
 	defaultValue: '',
 	isOpen: false,

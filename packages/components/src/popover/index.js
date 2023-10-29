@@ -80,7 +80,7 @@ export default function Popover({
 								className={componentInnerClassNames(
 									'popover-close'
 								)}
-								noBorder={true}
+								noBorder={false}
 								size="extra-small"
 								align="center"
 								onClick={() => {
