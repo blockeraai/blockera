@@ -11,25 +11,20 @@ jobs:
         name: JavaScript coding standards
         runs-on: ubuntu-latest
         timeout-minutes: 20
+        needs: shared_setup
         if: ${{ github.repository == 'publisherwp/publisher-core' || github.event_name == 'pull_request' }}
+
+        strategy:
+            fail-fast: false
+            matrix:
+                node: ['18.3.0']
 
         steps:
             - name: Checkout repository
               uses: actions/checkout@v3
 
-            - name: Setup SSH
-              uses: MrSquaare/ssh-setup-action@v1
-              with:
-                  host: github.com
-                  private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-            - name: Clone Submodule
-              run: |
-                  cd libs
-                  git clone git@github.com:publisherwp/storybook.git
-
-            - name: Setup Node.js and install dependencies
-              uses: ./.github/setup-node
+            - name: Shared Setup Action
+              uses: ./.github/shared-setup
 
             - name: Running the lint:js
               run: npm run lint:js
@@ -38,14 +33,15 @@ jobs:
         name: CSS coding standards
         runs-on: ubuntu-latest
         timeout-minutes: 20
+        needs: shared_setup
         if: ${{ github.repository == 'publisherwp/publisher-core' || github.event_name == 'pull_request' }}
 
         steps:
             - name: Checkout repository
               uses: actions/checkout@v3
 
-            - name: Setup Node.js and install dependencies
-              uses: ./.github/setup-node
+            - name: Shared Setup Action
+              uses: ./.github/shared-setup
 
             - name: Running the lint:css
               run: npm run lint:css

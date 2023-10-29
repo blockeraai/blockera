@@ -1,0 +1,24 @@
+name: 'Shared setup action'
+description: 'shared configuration for workflow will be done.'
+inputs:
+    node-version:
+        description: 'Optional. The Node.js version to use. When not specified, the version specified in .nvmrc will be used.'
+        required: false
+
+runs:
+    using: 'composite'
+    steps:
+        - name: Setup SSH
+          uses: MrSquaare/ssh-setup-action@v1
+          with:
+              host: github.com
+              private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+        - name: Clone Submodule
+          shell: bash
+          run: |
+              cd libs
+              git clone git@github.com:publisherwp/storybook.git
+
+        - name: Setup Node.js and install dependencies
+          uses: ./.github/setup-node
