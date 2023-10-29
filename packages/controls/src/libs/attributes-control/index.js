@@ -1,8 +1,11 @@
+// @flow
+
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -15,6 +18,7 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
+import type { TAttributeControlProps } from './types';
 
 export default function AttributesControl({
 	id,
@@ -24,7 +28,7 @@ export default function AttributesControl({
 	//
 	className,
 	...props
-}) {
+}: TAttributeControlProps): MixedElement {
 	return (
 		<RepeaterControl
 			id={id}
@@ -48,6 +52,7 @@ AttributesControl.propTypes = {
 	/**
 	 * Specifies the attributes for a specific tag. It adds better UX for field.
 	 */
+	// $FlowFixMe
 	attributeElement: PropTypes.oneOf(['a', 'button', 'ol', 'general'])
 		.isRequired,
 	/**
@@ -61,6 +66,7 @@ AttributesControl.propTypes = {
 	/**
 	 * Default value of each repeater item
 	 */
+	// $FlowFixMe
 	defaultRepeaterItemValue: PropTypes.shape({
 		key: PropTypes.string,
 		__key: PropTypes.string,
@@ -75,6 +81,7 @@ AttributesControl.propTypes = {
 
 AttributesControl.defaultProps = {
 	attributeElement: 'general',
+	// $FlowFixMe
 	defaultValue: [],
 	defaultRepeaterItemValue: {
 		key: '',
@@ -82,5 +89,6 @@ AttributesControl.defaultProps = {
 		value: '',
 		isVisible: true,
 	},
+	// $FlowFixMe
 	popoverLabel: __('HTML Attribute', 'publisher-core'),
 };

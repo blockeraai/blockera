@@ -1,3 +1,5 @@
+//@flow
+
 /**
  * External dependencies
  */
@@ -8,12 +10,14 @@ import { memo, useContext } from '@wordpress/element';
  * Publisher dependencies
  */
 import { controlInnerClassNames } from '@publisher/classnames';
+import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
  */
 import { RepeaterContext } from '../../repeater-control/context';
 import { getAttributeItemIcon } from '../utils';
+import type { THeaderProps } from '../types';
 
 const RepeaterItemHeader = ({
 	item: { key, value },
@@ -22,7 +26,7 @@ const RepeaterItemHeader = ({
 	setOpen,
 	children,
 	isOpenPopoverEvent,
-}) => {
+}: THeaderProps): MixedElement => {
 	const { customProps } = useContext(RepeaterContext);
 
 	return (
@@ -62,5 +66,5 @@ const RepeaterItemHeader = ({
 		</div>
 	);
 };
-
+// $FlowFixMe
 export default memo(RepeaterItemHeader);

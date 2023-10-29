@@ -1,9 +1,11 @@
+// @flow
+
 /**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { memo, useContext, useState } from '@wordpress/element';
-
+import type { MixedElement, useEffect } from 'react';
 /**
  * Internal dependencies
  */
@@ -14,8 +16,9 @@ import {
 } from '../utils';
 import { useControlContext } from '../../../context';
 import { InputControl, SelectControl } from '../../index';
+import type { TFieldsProps } from '../types';
 
-const Fields = ({ itemId, item }) => {
+const Fields = ({ itemId, item }: TFieldsProps): MixedElement => {
 	const {
 		controlInfo: { name: controlId },
 		dispatch: { changeRepeaterItem },
@@ -62,6 +65,72 @@ const Fields = ({ itemId, item }) => {
 		return true;
 	}
 
+	function handleOnChange(newValue: string) {
+		// update key
+		if (newValue !== '' && newValue !== 'custom') {
+			changeRepeaterItem({
+				controlId,
+				repeaterId,
+				itemId,
+				value: {
+					...item,
+					__key: newValue,
+					key: newValue,
+					value: '', // clear value to prevent issue
+				},
+			});
+
+			setCustomMode(false);
+
+			setValueFieldOptions(
+				getAttributeFieldValueOptions({
+					element: customProps.attributeElement,
+					attribute: newValue,
+				})
+			);
+		}
+
+		if (newValue === '') {
+			setValueFieldOptions([]);
+
+			setCustomMode(false);
+
+			changeRepeaterItem({
+				controlId,
+				repeaterId,
+				itemId,
+				value: {
+					...item,
+					__key: '',
+					key: '',
+					value: '',
+				},
+			});
+		} else if (newValue === 'custom') {
+			setValueFieldOptions([]);
+
+			setCustomMode(true);
+
+			changeRepeaterItem({
+				controlId,
+				repeaterId,
+				itemId,
+				value: {
+					...item,
+					__key: newValue,
+					key: '',
+					value: '',
+				},
+			});
+		}
+	}
+
+	useEffect(() => {
+		if (customProps.attributeElement !== 'general') {
+			handleOnChange('');
+		}
+	}, []);
+
 	return (
 		<div id={`repeater-item-${itemId}`}>
 			{keyFieldOptions.length > 0 && (
@@ -72,65 +141,7 @@ const Fields = ({ itemId, item }) => {
 						options={keyFieldOptions}
 						id={getControlId(itemId, '__key')}
 						defaultValue=""
-						onChange={(newValue) => {
-							// update key
-							if (newValue !== '' && newValue !== 'custom') {
-								changeRepeaterItem({
-									controlId,
-									repeaterId,
-									itemId,
-									value: {
-										...item,
-										__key: newValue,
-										key: newValue,
-										value: '', // clear value to prevent issue
-									},
-								});
-
-								setCustomMode(false);
-
-								setValueFieldOptions(
-									getAttributeFieldValueOptions({
-										element: customProps.attributeElement,
-										attribute: newValue,
-									})
-								);
-							}
-
-							if (newValue === '') {
-								setValueFieldOptions([]);
-
-								setCustomMode(false);
-
-								changeRepeaterItem({
-									controlId,
-									repeaterId,
-									itemId,
-									value: {
-										...item,
-										__key: '',
-										key: '',
-										value: '',
-									},
-								});
-							} else if (newValue === 'custom') {
-								setValueFieldOptions([]);
-
-								setCustomMode(true);
-
-								changeRepeaterItem({
-									controlId,
-									repeaterId,
-									itemId,
-									value: {
-										...item,
-										__key: newValue,
-										key: '',
-										value: '',
-									},
-								});
-							}
-						}}
+						onChange={(newValue) => handleOnChange(newValue)}
 					/>
 
 					{!customMode && (
@@ -230,5 +241,5 @@ const Fields = ({ itemId, item }) => {
 		</div>
 	);
 };
-
+// $FlowFixMe
 export default memo(Fields);
