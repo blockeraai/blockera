@@ -1,6 +1,6 @@
 import { BorderControl } from '../../..';
-import { select, dispatch } from '@wordpress/data';
-import { addControl, modifyControlValue } from '../../../store/actions';
+import { select } from '@wordpress/data';
+import { modifyControlValue } from '../../../store/actions';
 import { controlReducer } from '../../../store/reducers/control-reducer';
 import { getControlValue } from '../../../store/selectors';
 
@@ -8,25 +8,10 @@ describe('border-control component testing', () => {
 	const name = 'border-control';
 	const defaultProps = {
 		field: 'border',
-		defaultValue: {
-			width: '0px',
-			style: 'solid',
-			color: '',
-		},
-		onChange: (value) => {
-			controlReducer(
-				select('publisher-core/controls').getControl(name),
-				modifyControlValue({
-					value,
-					controlId: name,
-				})
-			);
-		},
 	};
 
-	describe('test interaction : ', () => {
+	describe('interaction test: ', () => {
 		it('render correctly', () => {
-			cy.viewport(1000, 1000);
 			cy.withDataProvider({
 				component: <BorderControl {...defaultProps} />,
 				value: {
@@ -36,11 +21,11 @@ describe('border-control component testing', () => {
 				},
 				name,
 			});
+
 			cy.getByDataTest('border-control-component').should('exist');
 		});
 
 		it('change width', () => {
-			cy.viewport(1000, 1000);
 			cy.withDataProvider({
 				component: <BorderControl {...defaultProps} />,
 				value: {
@@ -51,18 +36,31 @@ describe('border-control component testing', () => {
 				name,
 			});
 
-			cy.getByDataTest('border-control-width').clear().type(5);
+			cy.getByDataTest('border-control-width').clear();
+			cy.getByDataTest('border-control-width').type(5);
 			cy.getByDataTest('border-control-width').should('have.value', '5');
 
 			// Check data provider value!
-			cy.wait(100).then(() => {
+			cy.getByDataTest('border-control-width').then(() => {
 				expect('5px').to.be.equal(getControlValue(name).width);
 			});
 		});
 
 		it('dose onChange fire ?', () => {
+			const defaultProps = {
+				field: 'border',
+				onChange: (value) => {
+					controlReducer(
+						select('publisher-core/controls').getControl(name),
+						modifyControlValue({
+							value,
+							controlId: name,
+						})
+					);
+				},
+			};
 			cy.stub(defaultProps, 'onChange').as('onChange');
-			cy.viewport(1000, 1000);
+
 			cy.withDataProvider({
 				component: <BorderControl {...defaultProps} />,
 				value: {
@@ -73,12 +71,12 @@ describe('border-control component testing', () => {
 				name,
 			});
 
-			cy.getByDataTest('border-control-width').clear().type(10);
+			cy.getByDataTest('border-control-width').clear();
+			cy.getByDataTest('border-control-width').type(10);
 			cy.get('@onChange').should('have.been.called');
 		});
 
 		it('change style', () => {
-			cy.viewport(1000, 1000);
 			cy.withDataProvider({
 				component: <BorderControl {...defaultProps} />,
 				value: {
@@ -89,32 +87,26 @@ describe('border-control component testing', () => {
 				name,
 			});
 
-			// customSelectControl is not a real selectControl, and doesn't let us use normal select approaches
+			cy.getByDataTest('border-control-color').next().click();
+			cy.get('ul').children('li').last().click();
 
-			cy.getByDataTest('border-control-color')
-				.next()
-				.click()
-				.children('ul')
-				.get('#downshift-8-item-2')
-				.click();
-			cy.wait(1000);
-			cy.getByDataTest('border-control-color')
-				.next()
-				.click()
-				.children('ul')
-				.get('#downshift-8-item-2')
+			cy.getByDataTest('border-control-color').next().click();
+			cy.get('ul')
+				.children('li')
+				.last()
 				.should('have.attr', 'aria-selected')
 				.should('include', 'true');
 
 			// Check data provider value!
-			cy.wait(100).then(() => {
-				expect('dotted').to.be.equal(getControlValue(name).style);
-			});
+			cy.getByDataTest('border-control-color')
+				.next()
+				.then(() => {
+					expect('double').to.be.equal(getControlValue(name).style);
+				});
 		});
 
 		describe('color picker :', () => {
 			it('change color', () => {
-				cy.viewport(1000, 1000);
 				cy.withDataProvider({
 					component: <BorderControl {...defaultProps} />,
 					value: {
@@ -126,19 +118,26 @@ describe('border-control component testing', () => {
 				});
 
 				cy.getByDataTest('border-control-color').click();
-				cy.get('#inspector-input-control-5').clear().type('ccc').blur();
+				cy.contains('Color Picker')
+					.parent()
+					.get('input[maxlength="9"]')
+					.clear();
+				cy.contains('Color Picker')
+					.parent()
+					.get('input[maxlength="9"]')
+					.type('cccccc');
+
 				cy.getByDataTest('border-control-color')
 					.should('have.attr', 'style')
-					.should('include', 'ccc');
+					.should('include', 'cccccc');
 
 				// Check data provider value!
-				cy.wait(100).then(() => {
+				cy.getByDataTest('border-control-color').then(() => {
 					expect('#cccccc').to.be.equal(getControlValue(name).color);
 				});
 			});
 
 			it('clear color', () => {
-				cy.viewport(1000, 1000);
 				cy.withDataProvider({
 					component: <BorderControl {...defaultProps} />,
 					value: {
@@ -155,7 +154,7 @@ describe('border-control component testing', () => {
 					.should('include', 'ccc');
 
 				//Check data provider value!
-				cy.wait(100).then(() => {
+				cy.getByDataTest('border-control-color').then(() => {
 					expect('#cccccc').to.be.equal(getControlValue(name).color);
 				});
 
@@ -167,58 +166,15 @@ describe('border-control component testing', () => {
 					.should('be.empty');
 
 				// Check data provider value!
-				cy.wait(100).then(() => {
+				cy.getByDataTest('border-control-color').then(() => {
 					expect('').to.be.equal(getControlValue(name).color);
 				});
 			});
 		});
 	});
 
-	describe('test different styles', () => {
-		it('render horizontal (default)', () => {
-			cy.viewport(1000, 1000);
-			cy.withDataProvider({
-				component: (
-					<BorderControl
-						{...defaultProps}
-						linesDirection="horizontal"
-					/>
-				),
-				value: { width: '0px', style: 'solid', color: '' },
-				name,
-			});
-
-			cy.get(<BorderControl />).as('component');
-			cy.get('@component').then((data) => {
-				expect(data.selector.props.linesDirection).to.be.equal(
-					'horizontal'
-				);
-			});
-		});
-
-		it('render vertical', () => {
-			cy.viewport(1000, 1000);
-			cy.withDataProvider({
-				component: (
-					<BorderControl
-						{...defaultProps}
-						linesDirection="vertical"
-					/>
-				),
-				value: { width: '0px', style: 'solid', color: '' },
-				name,
-			});
-
-			cy.get(<BorderControl linesDirection="vertical" />).as('component');
-			cy.get('@component').then((data) => {
-				expect(data.selector.props.linesDirection).to.be.equal(
-					'vertical'
-				);
-			});
-		});
-
+	describe('rendering test', () => {
 		it('with field', () => {
-			cy.viewport(1000, 1000);
 			cy.withDataProvider({
 				component: (
 					<BorderControl {...defaultProps} label="Border Control" />
@@ -226,13 +182,13 @@ describe('border-control component testing', () => {
 				value: { width: '0px', style: 'solid', color: '' },
 				name,
 			});
+
 			cy.contains('Border Control');
 		});
 
 		describe('Focus', () => {
 			describe('width', () => {
 				it('default width style', () => {
-					cy.viewport(1000, 1000);
 					cy.withDataProvider({
 						component: (
 							<BorderControl
@@ -251,7 +207,6 @@ describe('border-control component testing', () => {
 				});
 
 				it('passing width style', () => {
-					cy.viewport(1000, 1000);
 					cy.withDataProvider({
 						component: (
 							<BorderControl
@@ -274,9 +229,9 @@ describe('border-control component testing', () => {
 						.should('include', 'width: 100px');
 				});
 			});
+
 			describe('color', () => {
 				it('default width style', () => {
-					cy.viewport(1000, 1000);
 					cy.withDataProvider({
 						component: (
 							<BorderControl
@@ -295,7 +250,6 @@ describe('border-control component testing', () => {
 				});
 
 				it('passing width style', () => {
-					cy.viewport(1000, 1000);
 					cy.withDataProvider({
 						component: (
 							<BorderControl
@@ -320,7 +274,6 @@ describe('border-control component testing', () => {
 			});
 			describe('style', () => {
 				it('default width style', () => {
-					cy.viewport(1000, 1000);
 					cy.withDataProvider({
 						component: (
 							<BorderControl
@@ -339,7 +292,6 @@ describe('border-control component testing', () => {
 				});
 
 				it('passing width style', () => {
-					cy.viewport(1000, 1000);
 					cy.withDataProvider({
 						component: (
 							<BorderControl
@@ -362,6 +314,118 @@ describe('border-control component testing', () => {
 						.should('include', 'width: 100px');
 				});
 			});
+		});
+	});
+
+	describe('test useControlContext', () => {
+		it('should render default value when:defaultValue OK && id !OK && value is undefined', () => {
+			cy.withDataProvider({
+				component: (
+					<BorderControl
+						{...defaultProps}
+						defaultValue={{
+							width: '10px',
+							style: 'solid',
+							color: 'ffffff',
+						}}
+					/>
+				),
+			});
+
+			cy.getByDataTest('border-control-color')
+				.should('have.attr', 'style')
+				.should('include', 'ffffff');
+			cy.getByDataTest('border-control-width').should('have.value', '10');
+		});
+
+		it('should render value when: defaultValue OK && id OK && value is OK', () => {
+			cy.withDataProvider({
+				component: (
+					<BorderControl
+						{...defaultProps}
+						defaultValue={{
+							width: '0px',
+							style: 'solid',
+							color: '',
+						}}
+						id={'[0].data'}
+					/>
+				),
+				value: [
+					{
+						data: {
+							width: '10px',
+							style: 'solid',
+							color: '',
+						},
+					},
+				],
+			});
+
+			cy.getByDataTest('border-control-width').should('have.value', '10');
+		});
+
+		it('should render default value when:defaultValue OK && id is invalid, value ok', () => {
+			cy.withDataProvider({
+				component: (
+					<BorderControl
+						{...defaultProps}
+						defaultValue={{
+							width: '20px',
+							style: 'solid',
+							color: '',
+						}}
+						id={'[0].x'}
+					/>
+				),
+				value: [
+					{
+						data: {
+							width: '10px',
+							style: 'solid',
+							color: '',
+						},
+					},
+				],
+			});
+
+			cy.getByDataTest('border-control-width').should('have.value', '20');
+		});
+
+		it('should render default value when:defaultValue OK && id is valid, value is invalid', () => {
+			cy.withDataProvider({
+				component: (
+					<BorderControl
+						{...defaultProps}
+						defaultValue={{
+							width: '20px',
+							style: 'solid',
+							color: '',
+						}}
+						id={'[0].data'}
+					/>
+				),
+				value: [
+					{
+						data: undefined,
+					},
+				],
+			});
+
+			cy.getByDataTest('border-control-width').should('have.value', '20');
+		});
+
+		it('should render value when:defaultValue !OK && id !OK && value exists on root', () => {
+			cy.withDataProvider({
+				component: <BorderControl {...defaultProps} />,
+				value: {
+					width: '30px',
+					style: 'solid',
+					color: '',
+				},
+			});
+
+			cy.getByDataTest('border-control-width').should('have.value', '30');
 		});
 	});
 });
