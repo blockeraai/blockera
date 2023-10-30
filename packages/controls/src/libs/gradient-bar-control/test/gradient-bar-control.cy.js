@@ -5,7 +5,7 @@ import GradientBarControl from '../';
 import { getControlValue } from '../../../store/selectors';
 
 const hexToRgb = (hex) => {
-	let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 	return result
 		? {
 				r: parseInt(result[1], 16),
@@ -163,10 +163,10 @@ describe('gradient bar control component testing', () => {
 				.then((classList) => {
 					// WP render colors to aria label
 					// pick color from aria label
-					let buttonAriaLabel = classList.split(' ')[9];
+					const buttonAriaLabel = classList.split(' ')[9];
 
 					// convert input hex color to rgb
-					let inputRgb = hexToRgb(`#${val}`);
+					const inputRgb = hexToRgb(`#${val}`);
 
 					expect(buttonAriaLabel).to.equal(
 						`rgba(${inputRgb.r},${inputRgb.g},${inputRgb.b},1).`
