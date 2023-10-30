@@ -17,8 +17,8 @@ export const getControl = (state, fieldName) => {
 	return state.controlReducer[fieldName];
 };
 
-export const getControlValue = (controlName) => {
-	const { getControl } = select(STORE_NAME);
+export const getControlValue = (controlName, store = STORE_NAME) => {
+	const { getControl } = select(store);
 
 	return getControl(controlName)?.value || undefined;
 };
