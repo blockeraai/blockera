@@ -39,6 +39,10 @@ Cypress.Commands.add('getByDataCy', (selector, ...args) => {
 Cypress.Commands.add('getByDataTest', (selector, ...args) => {
 	return cy.get(`[data-test=${selector}]`, ...args);
 });
+// for testing
+Cypress.Commands.add('test gite', (selector, ...args) => {
+	return cy.get(`[data-test=${selector}]`, ...args);
+});
 Cypress.Commands.add('multiClick', (selector, count, ...args) => {
 	let counter = 0;
 	while (counter !== count) {
