@@ -3,6 +3,12 @@
  */
 import createSelector from 'rememo';
 import { select } from '@wordpress/data';
+
+/**
+ * Publisher dependencies
+ */
+import { isEmpty, isUndefined } from '@publisher/utils';
+
 /**
  * Internal dependencies
  */
@@ -14,11 +20,20 @@ export const getControls = createSelector(
 );
 
 export const getControl = (state, fieldName) => {
-	return state.controlReducer[fieldName];
+	return state.controlReducer[fieldName] || undefined;
 };
 
 export const getControlValue = (controlName, store = STORE_NAME) => {
 	const { getControl } = select(store);
+	const control = getControl(controlName);
 
-	return getControl(controlName)?.value || undefined;
+	if (isUndefined(control)) {
+		return control;
+	}
+
+	if (isUndefined(control?.value) || !isEmpty(control?.value)) {
+		return control?.value || undefined;
+	}
+
+	return control.value;
 };
