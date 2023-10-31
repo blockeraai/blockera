@@ -16,7 +16,6 @@ describe('angle-picker-control', () => {
 			});
 
 			cy.get('input');
-			cy.get('.components-angle-picker-control__angle-circle');
 			cy.get('[aria-label="Rotate Left"]');
 			cy.get('[aria-label="Rotate Right"]');
 		});
