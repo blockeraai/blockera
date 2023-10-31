@@ -10,6 +10,10 @@ import PropTypes from 'prop-types';
 import { controlClassNames } from '@publisher/classnames';
 import { useValue } from '@publisher/utils';
 
+/**
+ * Publisher dependencies
+ */
+import type { TToggleControlProps } from './types/toggle-control-props';
 export default function ToggleControl({
 	label,
 	defaultValue,
