@@ -13,4 +13,6 @@ at the root of `publisher-core` please run:
 
 >composer install
 
+> npm run build 
+
 

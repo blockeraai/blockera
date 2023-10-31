@@ -23,6 +23,7 @@ import { generateExtensionId, hasSameProps } from '../utils';
 import type { TSizeProps } from './types/size-props';
 import { default as OverflowHiddenIcon } from './icons/overflow-hidden';
 import { default as OverflowVisibleIcon } from './icons/overflow-visible';
+import { default as OverflowScrollIcon } from './icons/overflow-scroll';
 import { convertToPercent } from './utils';
 
 export const SizeExtension: MixedElement = memo<TSizeProps>(
@@ -135,18 +136,28 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 							isDeselectable={true}
 							options={[
 								{
-									label: __('Visible', 'publisher-core'),
+									label: __(
+										'Visible Overflow',
+										'publisher-core'
+									),
 									value: 'visible',
 									icon: <OverflowVisibleIcon />,
 								},
 								{
-									label: __('Hidden', 'publisher-core'),
+									label: __(
+										'Hidden Overflow',
+										'publisher-core'
+									),
 									value: 'hidden',
 									icon: <OverflowHiddenIcon />,
 								},
 								{
-									label: __('Scroll', 'publisher-core'),
+									label: __(
+										'Scroll Overflow',
+										'publisher-core'
+									),
 									value: 'scroll',
+									icon: <OverflowScrollIcon />,
 								},
 							]}
 							//

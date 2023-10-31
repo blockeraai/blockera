@@ -34,9 +34,9 @@ export default function CheckboxControl({
 	id,
 	label,
 	columns,
-	defaultValue = false,
+	defaultValue,
 	onChange,
-	field = 'checkbox',
+	field,
 	//
 	className,
 	...props
@@ -60,6 +60,7 @@ export default function CheckboxControl({
 				onChange={setValue}
 				label={checkboxLabel}
 				{...props}
+				aria-checked={value}
 			/>
 		</BaseControl>
 	);
