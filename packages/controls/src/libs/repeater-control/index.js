@@ -77,12 +77,8 @@ export default function RepeaterControl({
 		mergeInitialAndDefault: true,
 	});
 
-	// const repeaterItems = isUndefined(repeaterId)
-	// 	? value
-	// 	: prepare(repeaterId, value);
-
 	const repeaterItems = value;
-
+	console.log(repeaterItems);
 	const defaultRepeaterState: TRepeaterDefaultStateProps = {
 		design,
 		mode,
@@ -292,4 +288,3 @@ RepeaterControl.defaultProps = {
 	injectHeaderButtonsStart: '',
 	injectHeaderButtonsEnd: '',
 };
-// sadegh akbari

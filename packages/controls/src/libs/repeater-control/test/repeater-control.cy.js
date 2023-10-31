@@ -480,4 +480,3 @@ describe('repeater control component testing', () => {
 		});
 	});
 });
-// test
