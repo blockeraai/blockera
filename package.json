@@ -32,8 +32,7 @@
 		"@publisher/data-extractor": "file:packages/data-extractor",
 		"@publisher/extensions": "file:packages/extensions",
 		"@publisher/style-engine": "file:packages/style-engine",
-		"@publisher/utils": "file:packages/utils",
-		"cypress-real-events": "^1.10.3"
+		"@publisher/utils": "file:packages/utils"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.22.9",
@@ -142,6 +141,7 @@
 		"pa11y": "^6.2.3",
 		"path": "^0.12.7",
 		"po2json": "^1.0.0-alpha",
+		"postcss-lit": "^1.1.0",
 		"postcss-loader": "^7.3.3",
 		"postcss-scss": "^4.0.6",
 		"prettier": "^2.5.1",
@@ -161,6 +161,7 @@
 		"storybook": "^7.4.6",
 		"storybook-source-link": "^2.0.9",
 		"style-loader": "^3.3.2",
+		"stylelint": "^14.16.1",
 		"terser-webpack-plugin": "^5.3.7",
 		"tiny-swiper": "^2.2.0",
 		"ts-jest": "^29.1.0",
@@ -172,7 +173,8 @@
 		"@babel/core": "^7.0 || ^7.21.4 || ^7.22.9",
 		"@storybook/addons": "^6.4.0 || 7.0.18",
 		"react": "^16.8.0 || ^17.0.0 || ^18.2.0",
-		"react-dom": "^0.14.0 || ^15.0.0 || ^16.0.0 || ^16.8.0 || ^17.0.0 || ^18.2.0"
+		"react-dom": "^0.14.0 || ^15.0.0 || ^16.0.0 || ^16.8.0 || ^17.0.0 || ^18.2.0",
+		"stylelint": "^14.2"
 	},
 	"scripts": {
 		"build:wp-env-app": "wp-scripts build --progress --mode none",
