@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * External dependencies
  */
@@ -22,6 +24,18 @@ import { useControlContext } from '../../context';
 import { addAngle, subtractAngle } from './utils';
 import { default as RotateLeftIcon } from './icons/rotate-left';
 import { default as RotateRightIcon } from './icons/rotate-right';
+import type { MixedElement } from 'react';
+
+type Props = {
+	rotateButtons?: Boolean,
+	id?: string,
+	label?: string,
+	columns?: string,
+	defaultValue?: string,
+	onChange?: () => void,
+	field?: string,
+	className?: string,
+};
 
 export default function AnglePickerControl({
 	rotateButtons,
@@ -35,7 +49,7 @@ export default function AnglePickerControl({
 	//
 	className,
 	...props
-}) {
+}: Props): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
 		onChange,
