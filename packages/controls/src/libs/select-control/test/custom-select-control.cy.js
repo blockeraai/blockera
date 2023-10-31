@@ -69,6 +69,10 @@ const defaultProps = {
 const getSelectButton = () => cy.get('[aria-haspopup="listbox"]');
 
 describe('custom select control component testing', () => {
+	beforeEach(() => {
+		cy.viewport(1280, 720);
+	});
+
 	describe('interaction test :(on normal version)', () => {
 		it('render correctly', () => {
 			cy.withDataProvider({
