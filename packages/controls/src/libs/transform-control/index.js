@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -15,13 +16,37 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
+import type { MixedElement } from 'react';
+
+type RepeaterItem = {
+	type: 'move' | 'scale' | 'rotate' | 'skew',
+	'move-x': string,
+	'move-y': string,
+	'move-z': string,
+	scale: string,
+	'rotate-x': string,
+	'rotate-y': string,
+	'rotate-z': string,
+	'skew-x': string,
+	'skew-y': string,
+	isVisible: boolean,
+};
+
+type Props = {
+	popoverLabel?: string,
+	className?: string,
+	defaultValue?: RepeaterItem[],
+	value?: RepeaterItem[],
+	onChange?: () => void,
+	defaultRepeaterItemValue?: RepeaterItem,
+};
 
 export default function TransformControl({
 	defaultRepeaterItemValue,
 	popoverLabel,
 	className,
 	...props
-}) {
+}: Props): MixedElement {
 	return (
 		<RepeaterControl
 			className={controlClassNames('transform', className)}
@@ -50,7 +75,7 @@ TransformControl.propTypes = {
 	/**
 	 * Default value of each repeater item
 	 */
-	defaultRepeaterItemValue: PropTypes.shape({
+	defaultRepeaterItemValue: (PropTypes.shape({
 		type: PropTypes.oneOf(['move', 'scale', 'rotate', 'skew']),
 		'move-x': PropTypes.string,
 		'move-y': PropTypes.string,
@@ -62,7 +87,7 @@ TransformControl.propTypes = {
 		'skew-x': PropTypes.string,
 		'skew-y': PropTypes.string,
 		isVisible: PropTypes.bool,
-	}),
+	}): any),
 	/**
 	 * Label for popover
 	 */
@@ -70,7 +95,7 @@ TransformControl.propTypes = {
 };
 
 TransformControl.defaultProps = {
-	value: [],
+	value: ([]: Array<empty>),
 	defaultRepeaterItemValue: {
 		type: 'move',
 		'move-x': '0px',
@@ -84,5 +109,5 @@ TransformControl.defaultProps = {
 		'skew-y': '0deg',
 		isVisible: true,
 	},
-	popoverLabel: __('Transform', 'publisher-core'),
+	popoverLabel: (__('Transform', 'publisher-core'): any),
 };
