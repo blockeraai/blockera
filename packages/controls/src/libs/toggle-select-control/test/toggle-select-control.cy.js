@@ -10,7 +10,7 @@ describe('toggle-select-control', () => {
 
 	const name = 'toggle-select-control';
 
-	context('Visual Tests', () => {
+	context('Functionality test → Initialise', () => {
 		const options = [
 			{
 				label: __('Left', 'publisher-core'),
@@ -117,7 +117,7 @@ describe('toggle-select-control', () => {
 		});
 	});
 
-	context('Behavioral Tests', () => {
+	context('Functionality Tests', () => {
 		const options = [
 			{
 				label: __('Left', 'publisher-core'),
