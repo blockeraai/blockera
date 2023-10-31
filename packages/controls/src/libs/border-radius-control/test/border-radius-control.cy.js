@@ -6,6 +6,10 @@ import { modifyControlValue } from '../../../store/actions';
 import { select } from '@wordpress/data';
 
 describe('border-radius-control component testing', () => {
+	beforeEach(() => {
+		cy.viewport(1280, 720);
+	});
+
 	it('render correctly', () => {
 		cy.withDataProvider({
 			component: <BorderRadiusControl />,
