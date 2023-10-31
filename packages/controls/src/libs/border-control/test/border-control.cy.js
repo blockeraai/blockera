@@ -5,6 +5,10 @@ import { controlReducer } from '../../../store/reducers/control-reducer';
 import { getControlValue } from '../../../store/selectors';
 
 describe('border-control component testing', () => {
+	beforeEach(() => {
+		cy.viewport(1280, 720);
+	});
+
 	const name = 'border-control';
 	const defaultProps = {
 		field: 'border',
