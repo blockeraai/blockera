@@ -1,7 +1,7 @@
 // @flow
 type ID = string;
 export type TGradientBarControlProps = {
-	id: ID,
+	id?: ID,
 	label?: string,
 	columns?: string,
 	defaultValue?: string,
