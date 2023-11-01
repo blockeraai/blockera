@@ -7,32 +7,38 @@ describe('Color Control', () => {
 		cy.viewport(1280, 720);
 	});
 
-	context('Visual Tests', () => {
+	context('Rendering Tests', () => {
 		it('renders a button with icon and label inside it', () => {
-			cy.withDataProvider({ component: <ColorControl /> });
-			cy.get('.components-button').as('btn');
-			cy.get('@btn').find('.color-label');
-			cy.get('@btn').find('.color-none');
+			cy.withDataProvider({
+				component: <ColorControl />,
+			});
+			cy.getByDataCy('color-btn');
+			cy.getByDataCy('color-label');
+			cy.getByDataCy('color-indicator');
 		});
 
 		it('renders minimal type, correctly', () => {
 			cy.withDataProvider({
 				component: <ColorControl type="minimal" />,
 			});
-			cy.get('.color-none');
-			cy.get('.color-label').should('not.exist');
+			cy.getByDataCy('color-indicator');
+			cy.getByDataCy('color-label').should('not.exist');
 		});
 	});
 
-	context('Behavioral Tests', () => {
+	context('Functional Tests', () => {
 		it('should open and close color picker by clicking on color control', () => {
-			cy.withDataProvider({ component: <ColorControl />, value: '' });
-			cy.get('.components-button').as('btn');
+			cy.withDataProvider({
+				component: <ColorControl popoverTitle="custom popover title" />,
+				value: '',
+			});
+			cy.getByDataCy('color-btn').as('btn');
 
 			cy.get('@btn').click();
-			cy.get('.publisher-component-popover-header');
-			cy.get('@btn').eq(0).click();
-			cy.get('.publisher-component-popover-header').should('not.exist');
+			cy.contains('custom popover title');
+
+			cy.get('@btn').click();
+			cy.contains('custom popover title').should('not.exist');
 		});
 
 		it('changing color in color picker, changes it in color control as expected', () => {
@@ -41,22 +47,22 @@ describe('Color Control', () => {
 				value: '',
 				name,
 			});
-			cy.get('.components-button').as('btn');
+			cy.getByDataCy('color-btn').as('btn');
 
 			cy.get('@btn').click();
 			cy.get('input').clear();
 			cy.get('input').type('ddd');
 
 			// visual assertion
-			cy.get('.color-label').contains('#ddd');
-			cy.get('.color-custom').should(
+			cy.getByDataCy('color-label').contains('#ddd');
+			cy.getByDataCy('color-indicator').should(
 				'have.css',
 				'backgroundColor',
 				'rgb(221, 221, 221)'
 			);
 
 			// data assertion
-			cy.get('.color-label')
+			cy.getByDataCy('color-label')
 				.contains('#ddd')
 				.then(() => {
 					expect(getControlValue(name)).to.be.equal('#dddddd');
@@ -72,7 +78,7 @@ describe('Color Control', () => {
 				value: undefined,
 			});
 
-			cy.get('.color-label').contains('#1b44b5');
+			cy.getByDataCy('color-label').contains('#1b44b5');
 		});
 
 		// 2.
@@ -82,7 +88,7 @@ describe('Color Control', () => {
 				value: '#eee',
 			});
 
-			cy.get('.color-label').contains('#1b44b5');
+			cy.getByDataCy('color-label').contains('#1b44b5');
 		});
 
 		// 3.
@@ -104,7 +110,7 @@ describe('Color Control', () => {
 				},
 			});
 
-			cy.get('.color-label').contains('#1b44b5');
+			cy.getByDataCy('color-label').contains('#1b44b5');
 		});
 
 		// 4.
@@ -114,7 +120,7 @@ describe('Color Control', () => {
 				value: '#1b44b5',
 			});
 
-			cy.get('.color-label').contains('#1b44b5');
+			cy.getByDataCy('color-label').contains('#1b44b5');
 		});
 	});
 });
