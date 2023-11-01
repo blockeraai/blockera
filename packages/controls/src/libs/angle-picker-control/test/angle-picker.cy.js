@@ -6,7 +6,7 @@ describe('angle-picker-control', () => {
 		cy.viewport(1280, 720);
 	});
 
-	context('Visual Tests', () => {
+	context('Functional Test → Rendering', () => {
 		it('renders angle picker and input and left/right buttons as default state', () => {
 			const name = 'angle-picker-1';
 			cy.withDataProvider({
