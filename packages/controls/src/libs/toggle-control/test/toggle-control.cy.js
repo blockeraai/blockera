@@ -33,6 +33,14 @@ describe('toggle control component testing', () => {
 		cy.get('.components-form-toggle').should('have.class', 'is-checked');
 		cy.get('input[type="checkbox"]').should('exist');
 	});
+	it('should must change value with click on label', () => {
+		cy.withDataProvider({
+			component: <ToggleControl label="my toggle" />,
+		});
+		cy.get('label').contains('my toggle').click();
+		cy.get('.components-form-toggle').should('have.class', 'is-checked');
+		cy.get('input[type="checkbox"]').should('exist');
+	});
 	it('should render custom classname', () => {
 		cy.withDataProvider({
 			component: (
