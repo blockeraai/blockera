@@ -1,9 +1,16 @@
+// @flow
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
 
-export const getTypeLabel = function (type) {
+import { __ } from '@wordpress/i18n';
+/**
+ * Internal dependencies
+ */
+
+import type { TgetTypeLabelProps } from './types';
+// $FlowFixMe
+export const getTypeLabel = function (type: TgetTypeLabelProps) {
 	switch (type) {
 		case 'all':
 			return __('All', 'publisher-core');
@@ -144,7 +151,7 @@ export const getTypeLabel = function (type) {
 			return type;
 	}
 };
-
+// $FlowFixMe
 export const getTypeOptions = function () {
 	return [
 		{
@@ -383,7 +390,7 @@ export const getTypeOptions = function () {
 		},
 	];
 };
-
+// $FlowFixMe
 export const getTimingOptions = function () {
 	return [
 		{

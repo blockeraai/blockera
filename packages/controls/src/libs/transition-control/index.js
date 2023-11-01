@@ -1,9 +1,10 @@
+// @flow
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
-
+import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
@@ -15,13 +16,14 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
+import type { TTransitionControlProps } from './types';
 
 export default function TransitionControl({
 	defaultRepeaterItemValue,
 	popoverLabel,
 	className,
 	...props
-}) {
+}: TTransitionControlProps): MixedElement {
 	return (
 		<RepeaterControl
 			className={controlClassNames('transition', className)}
@@ -50,6 +52,7 @@ TransitionControl.propTypes = {
 	/**
 	 * Default value of each repeater item
 	 */
+	// $FlowFixMe
 	defaultRepeaterItemValue: PropTypes.shape({
 		type: PropTypes.string,
 		duration: PropTypes.string,
@@ -64,6 +67,7 @@ TransitionControl.propTypes = {
 };
 
 TransitionControl.defaultProps = {
+	// $FlowFixMe
 	value: [],
 	defaultRepeaterItemValue: {
 		type: 'all',
@@ -72,5 +76,6 @@ TransitionControl.defaultProps = {
 		delay: '0ms',
 		isVisible: true,
 	},
+	// $FlowFixMe
 	popoverLabel: __('Transition', 'publisher-core'),
 };
