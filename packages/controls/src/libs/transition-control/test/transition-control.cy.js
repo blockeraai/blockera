@@ -287,7 +287,7 @@ describe('transition control component testing', () => {
 				.should('have.value', '3');
 
 			//Check data provider value
-			cy.get('[aria-label="Item 1"]').then(() => {
+			cy.get('@popover').then(() => {
 				expect([
 					{
 						type: 'opacity',
