@@ -1,8 +1,10 @@
+// @flow
 /**
  * External dependencies
  */
-import { ToggleControl as WPToggleControl } from '@wordpress/components';
 import PropTypes from 'prop-types';
+import type { MixedElement } from 'react';
+import { ToggleControl as WPToggleControl } from '@wordpress/components';
 
 /**
  * Publisher dependencies
@@ -14,6 +16,7 @@ import { useValue } from '@publisher/utils';
  * Publisher dependencies
  */
 import type { TToggleControlProps } from './types/toggle-control-props';
+
 export default function ToggleControl({
 	label,
 	defaultValue,
@@ -21,7 +24,7 @@ export default function ToggleControl({
 	onChange,
 	className,
 	...props
-}: TToggleControlProps) {
+}: TToggleControlProps): MixedElement {
 	const { value, setValue } = useValue({
 		initialValue,
 		defaultValue,
@@ -43,27 +46,22 @@ ToggleControl.propTypes = {
 	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
-	// $FlowFixMe
 	defaultValue: PropTypes.bool,
 	/**
 	 * The current value.
 	 */
-	// $FlowFixMe
 	value: PropTypes.bool,
 	/**
 	 * Function that will be fired while the control value state changes.
 	 */
-	// $FlowFixMe
 	onChange: PropTypes.func,
 	/**
 	 * Label after toggle
 	 */
-	// $FlowFixMe
 	label: PropTypes.string,
 };
 // $FlowFixMe
 ToggleControl.defaultProps = {
-	// $FlowFixMe
 	value: false,
 	label: '',
 };
