@@ -1,9 +1,10 @@
+// @flow
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
-
+import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
@@ -19,7 +20,7 @@ import { InputControl, LabelControl, ToggleSelectControl } from '../index';
 import { default as CompactIcon } from './icons/compact';
 import { default as CustomIcon } from './icons/custom';
 import { useControlContext } from '../../context';
-
+import type { TBorderRadiusControlProps, TValue } from './types/control-type';
 export default function BorderRadiusControl({
 	id,
 	label,
@@ -27,7 +28,7 @@ export default function BorderRadiusControl({
 	onChange,
 	//
 	className,
-}) {
+}: TBorderRadiusControlProps): MixedElement {
 	const {
 		value,
 		setValue,
@@ -42,7 +43,7 @@ export default function BorderRadiusControl({
 	});
 
 	// value clean up for removing extra values to prevent saving extra data!
-	function valueCleanup(value) {
+	function valueCleanup(value: TValue) {
 		if (value.type === 'all') {
 			delete value?.topLeft;
 			delete value?.topRight;
@@ -81,12 +82,13 @@ export default function BorderRadiusControl({
 						style={{
 							'--pb-all': value.all,
 						}}
+						defaultValue={value.all}
 					/>
 				)}
 
 				<ToggleSelectControl
 					id="type"
-					defaultValue="compact"
+					defaultValue={defaultValue ? defaultValue.type : 'compact'}
 					value={value.type}
 					options={[
 						{
@@ -161,6 +163,7 @@ export default function BorderRadiusControl({
 							)}
 							noBorder={true}
 							value={value.topLeft}
+							defaultValue={value.topLeft || '0'}
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -185,6 +188,7 @@ export default function BorderRadiusControl({
 							)}
 							noBorder={true}
 							value={value.topRight}
+							defaultValue={value.topRight || '0'}
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -209,6 +213,7 @@ export default function BorderRadiusControl({
 							)}
 							noBorder={true}
 							value={value.bottomLeft}
+							defaultValue={value.bottomLeft || '0'}
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -233,6 +238,7 @@ export default function BorderRadiusControl({
 							)}
 							noBorder={true}
 							value={value.bottomRight}
+							defaultValue={value.bottomRight || '0'}
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -258,6 +264,7 @@ BorderRadiusControl.propTypes = {
 	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
+	// $FlowFixMe
 	defaultValue: PropTypes.shape({
 		type: PropTypes.oneOf(['all', 'custom']),
 		all: PropTypes.string,

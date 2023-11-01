@@ -104,10 +104,10 @@ describe('link control component testing', () => {
 			cy.get('[aria-label="Add New HTML Attribute"]').click();
 			cy.get('[aria-label="Add New HTML Attribute"]').click();
 
-			cy.get('.publisher-control-repeater-item').first().click();
+			cy.get('[data-cy="repeater-item"]').first().click();
 			cy.get('.components-select-control__input').select('target');
 
-			cy.get('.publisher-control-repeater').clickOutside();
+			cy.getByDataCy('publisher-repeater-control').clickOutside();
 
 			// Check data provider value!
 			cy.then(() => {
@@ -149,7 +149,7 @@ describe('link control component testing', () => {
 			cy.get('@onChangeMock').should('have.been.called');
 		});
 
-		it.only('should display new classname', () => {
+		it('should display new classname', () => {
 			cy.withDataProvider({
 				component: (
 					<LinkControl label="My Label" className="custom-class" />

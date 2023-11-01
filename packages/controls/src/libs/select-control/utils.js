@@ -1,11 +1,26 @@
+// @flow
+
 /**
  * Publisher dependencies
  */
 import { isArray, isUndefined } from '@publisher/utils';
 
+/**
+ * External Internal dependencies
+ */
+import type { MixedElement } from 'react';
+
+/**
+ * Internal dependencies
+ */
+import type { TSelectOptions, TNativeOption } from './types';
 // renders a option of select (single or grouped) for native HTML select
 // recursive
-export const renderSelectNativeOption = function (item) {
+
+// $FlowFixMe
+export const renderSelectNativeOption = function (
+	item: TNativeOption
+): MixedElement {
 	if (
 		item?.type &&
 		(item.type === 'group' || item.type === 'optgroup') &&
@@ -21,11 +36,12 @@ export const renderSelectNativeOption = function (item) {
 	return <option {...item}>{item.label}</option>;
 };
 
-export const prepareSelectCustomOptions = function (options) {
+// $FlowFixMe
+export const prepareSelectCustomOptions = function (options: TSelectOptions) {
 	const selectOptions = [];
 	let groupCounter = 0; // we save it to make tests will pass!
 
-	function convertOption(item, customClass = '') {
+	function convertOption(item: TNativeOption, customClass?: string = '') {
 		return {
 			name: (
 				<>
@@ -47,11 +63,12 @@ export const prepareSelectCustomOptions = function (options) {
 			className:
 				(item?.className ? item.className : '') +
 				(item?.icon ? ' width-icon' : '') +
+				(item?.disabled ? ' disabled' : '') +
 				` ${customClass}`,
 		};
 	}
 
-	function convertOptionGroup(item) {
+	function convertOptionGroup(item: { label: string }) {
 		groupCounter++;
 
 		return {
