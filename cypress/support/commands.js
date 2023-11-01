@@ -50,3 +50,6 @@ Cypress.Commands.add('multiClick', (selector, count, ...args) => {
 		counter += 1;
 	}
 });
+Cypress.Commands.add('clickOutside', () => {
+	return cy.get('body').click(0, 0);
+});
