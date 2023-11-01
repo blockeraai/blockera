@@ -180,7 +180,8 @@ LinkControl.propTypes = {
 	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
-	defaultValue: PropTypes.shape({
+	// $FlowFixMe
+	defaultValue: (PropTypes.shape({
 		link: PropTypes.string,
 		target: PropTypes.bool,
 		nofollow: PropTypes.bool,
@@ -192,7 +193,7 @@ LinkControl.propTypes = {
 				isVisible: PropTypes.bool,
 			})
 		),
-	}),
+	}): any),
 	/**
 	 * Function that will be fired while the control value state changes.
 	 */

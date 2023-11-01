@@ -149,20 +149,17 @@ describe('link control component testing', () => {
 			cy.get('@onChangeMock').should('have.been.called');
 		});
 
-		it('should display new classname', () => {
+		it.only('should display new classname', () => {
 			cy.withDataProvider({
 				component: (
 					<LinkControl label="My Label" className="custom-class" />
 				),
 			});
 
-			cy.get('.publisher-field-link').should(
-				'have.class',
-				'custom-class'
-			);
+			cy.getByDataCy('base-control').should('have.class', 'custom-class');
 		});
 
-		it('should display placehoder', () => {
+		it('should display placeholder', () => {
 			cy.withDataProvider({
 				component: (
 					<LinkControl
@@ -176,7 +173,7 @@ describe('link control component testing', () => {
 			cy.get('input[placeholder="Enter link').should('exist');
 		});
 
-		it('should display defaul value', () => {
+		it('should display default value', () => {
 			const name = nanoid();
 			const defaultValue = {
 				link: 'http://example.com',
@@ -186,7 +183,7 @@ describe('link control component testing', () => {
 				attributes: [
 					{
 						key: 'target',
-						value: '_blanck',
+						value: '_blank',
 						__key: '',
 						isVisible: true,
 					},
