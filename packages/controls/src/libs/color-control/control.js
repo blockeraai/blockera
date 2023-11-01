@@ -64,9 +64,13 @@ export default function ColorControl({
 
 	if (type === 'normal') {
 		buttonLabel = value ? (
-			<span className="color-label">{value}</span>
+			<span className="color-label" data-cy="color-label">
+				{value}
+			</span>
 		) : (
-			<span className="color-label">{__('None', 'publisher-core')}</span>
+			<span className="color-label" data-cy="color-label">
+				{__('None', 'publisher-core')}
+			</span>
 		);
 	}
 
@@ -93,9 +97,14 @@ export default function ColorControl({
 					...style,
 					'--publisher-controls-border-color-focus': value,
 				}}
+				data-cy="color-btn"
 				{...props}
 			>
-				<ColorIndicator type="color" value={value} />
+				<ColorIndicator
+					type="color"
+					value={value}
+					data-cy="color-indicator"
+				/>
 
 				{buttonLabel}
 			</Button>
