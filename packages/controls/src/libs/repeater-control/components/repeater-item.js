@@ -116,6 +116,7 @@ const RepeaterItem = ({ item, itemId }) => {
 			onDragLeave={handleDragLeave}
 			onDrop={(e) => handleDrop(e, itemId)}
 			onDragStart={(e) => handleDragStart(e, itemId)}
+			data-cy="repeater-item"
 			style={styleRef.current}
 		>
 			<GroupControl

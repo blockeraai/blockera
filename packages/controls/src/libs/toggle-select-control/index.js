@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -13,12 +14,41 @@ import {
  */
 import { isUndefined } from '@publisher/utils';
 import { controlClassNames } from '@publisher/classnames';
+import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
  */
 import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
+
+type IconOption = {
+	label: string,
+	value: string,
+	icon: MixedElement,
+};
+
+type TextOption = {
+	label: string,
+	value: string,
+};
+
+type Option = IconOption | TextOption;
+
+type Props = {
+	isDeselectable?: boolean,
+	options: Option[],
+	//
+	id?: string,
+	label?: string,
+	columns?: string,
+	defaultValue?: string,
+	onChange?: string,
+	field?: string,
+	//
+	className?: string,
+	children?: string,
+};
 
 export default function ToggleSelectControl({
 	isDeselectable,
@@ -34,7 +64,7 @@ export default function ToggleSelectControl({
 	className,
 	children,
 	...props
-}) {
+}: Props): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
 		onChange,
@@ -42,7 +72,7 @@ export default function ToggleSelectControl({
 		valueCleanup,
 	});
 
-	function valueCleanup(value) {
+	function valueCleanup(value: any) {
 		// WPToggleGroupControl returns undefined while deselecting
 		return isUndefined(value) ? '' : value;
 	}
@@ -127,7 +157,7 @@ ToggleSelectControl.propTypes = {
 	/**
 	 * list of toggle select options
 	 */
-	options: PropTypes.arrayOf(
+	options: (PropTypes.arrayOf(
 		PropTypes.oneOfType([
 			PropTypes.shape({
 				label: PropTypes.string,
@@ -139,7 +169,7 @@ ToggleSelectControl.propTypes = {
 				value: PropTypes.string,
 			}),
 		])
-	),
+	).isRequired: any),
 	/**
 	 * Specifies than user can deselect active item in select or not
 	 */
