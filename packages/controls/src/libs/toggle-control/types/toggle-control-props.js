@@ -2,7 +2,7 @@
 
 export type TToggleControlProps = {
 	label?: string,
-	defaultValue?: mixed,
+	defaultValue?: Boolean,
 	value?: Boolean,
 	onChange?: (x: Boolean) => any,
 	className?: string,
