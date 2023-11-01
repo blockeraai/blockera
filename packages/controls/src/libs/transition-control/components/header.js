@@ -32,6 +32,7 @@ const RepeaterItemHeader = ({
 				__('Item %d', 'publisher-core'),
 				itemId + 1
 			)}
+			data-test="transition-repeater-item"
 		>
 			<span className={controlInnerClassNames('header-icon')}>
 				<TransitionIcon />

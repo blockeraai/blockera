@@ -17,11 +17,14 @@ const Fields = ({ itemId, item }) => {
 		controlInfo: { name: controlId },
 		dispatch: { changeRepeaterItem },
 	} = useControlContext();
-
+	// console.log(item, itemId);
 	const { repeaterId, getControlId } = useContext(RepeaterContext);
 
 	return (
-		<div id={`repeater-item-${itemId}`}>
+		<div
+			id={`repeater-item-${itemId}`}
+			data-test="transition-control-popover"
+		>
 			<SelectControl
 				controlName="select"
 				label={__('Type', 'publisher-core')}
@@ -36,6 +39,7 @@ const Fields = ({ itemId, item }) => {
 						value: { ...item, type },
 					})
 				}
+				defaultValue={item.type}
 			/>
 
 			<InputControl
@@ -55,6 +59,8 @@ const Fields = ({ itemId, item }) => {
 						value: { ...item, duration },
 					})
 				}
+				data-test="transition-input-duration"
+				defaultValue={item.duration}
 			/>
 
 			<SelectControl
@@ -71,6 +77,7 @@ const Fields = ({ itemId, item }) => {
 						value: { ...item, timing },
 					})
 				}
+				defaultValue={item.timing}
 			/>
 
 			<InputControl
@@ -91,6 +98,8 @@ const Fields = ({ itemId, item }) => {
 					})
 				}
 				initialPosition={0}
+				data-test="transition-input-delay"
+				defaultValue={item.delay}
 			/>
 		</div>
 	);
