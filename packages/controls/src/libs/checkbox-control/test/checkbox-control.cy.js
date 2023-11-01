@@ -6,10 +6,10 @@ describe('checkbox control', () => {
 		cy.viewport(1280, 720);
 	});
 
-	context('Visual Tests', () => {
+	context('Rendering Tests', () => {
 		const checkboxLabel = 'Checkbox Label';
 
-		it('renders input and label for input', () => {
+		it('should renders input with type checkbox and label for checkbox control', () => {
 			cy.withDataProvider({
 				component: <CheckboxControl checkboxLabel={checkboxLabel} />,
 			});
@@ -18,7 +18,7 @@ describe('checkbox control', () => {
 			cy.contains(checkboxLabel);
 		});
 
-		it('renders label for checkbox when label is passed.', () => {
+		it('should render label for checkbox when label is passed.', () => {
 			const checkboxLabel = 'Checkbox Label';
 			const fieldLabel = 'Field Label';
 			cy.withDataProvider({
@@ -30,11 +30,11 @@ describe('checkbox control', () => {
 				),
 			});
 
-			cy.get('.publisher-field-label').contains(fieldLabel);
+			cy.getByDataCy('label-control').contains(fieldLabel);
 		});
 	});
 
-	context('Behavioral Tests', () => {
+	context('Functional Tests', () => {
 		it('user can check and uncheck the checkbox by clicking on checkbox', () => {
 			const checkboxLabel = 'Checkbox Label';
 			cy.withDataProvider({
@@ -102,7 +102,7 @@ describe('checkbox control', () => {
 		});
 	});
 
-	context("Control's initial value", () => {
+	context('Initial value', () => {
 		const checkboxLabel = 'Checkbox Label';
 
 		// 1.
