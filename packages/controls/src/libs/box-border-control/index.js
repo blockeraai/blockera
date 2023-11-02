@@ -1,9 +1,10 @@
+// @flow
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
-
+import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
@@ -24,6 +25,7 @@ import {
 	LabelControl,
 	ToggleSelectControl,
 } from '../index';
+import type { TBoxBorderControl, TValueTypes } from './types/control-types';
 
 export default function BoxBorderControl({
 	id,
@@ -36,7 +38,7 @@ export default function BoxBorderControl({
 	//
 	//
 	className,
-}) {
+}: TBoxBorderControl): MixedElement {
 	const {
 		value,
 		setValue,
@@ -51,7 +53,7 @@ export default function BoxBorderControl({
 	});
 
 	// value clean up for removing extra values to prevent saving extra data!
-	function valueCleanup(value) {
+	function valueCleanup(value: TValueTypes) {
 		if (value.type === 'all') {
 			delete value?.top;
 			delete value?.right;
@@ -272,6 +274,7 @@ BoxBorderControl.propTypes = {
 	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
+	// $FlowFixMe
 	defaultValue: PropTypes.oneOfType([
 		PropTypes.shape({
 			type: 'all',
