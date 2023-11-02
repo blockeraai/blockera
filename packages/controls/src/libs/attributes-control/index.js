@@ -3,6 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -15,6 +16,7 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
+import type { TAttributesControlProps } from './index';
 
 export default function AttributesControl({
 	id,
@@ -24,7 +26,7 @@ export default function AttributesControl({
 	//
 	className,
 	...props
-}) {
+}: TAttributesControlProps): MixedElement {
 	return (
 		<RepeaterControl
 			id={id}
