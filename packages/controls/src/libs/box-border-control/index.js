@@ -87,12 +87,13 @@ export default function BoxBorderControl({
 									value: { ...value, all: newValue },
 								});
 							}}
+							defaultValue={value.all}
 						/>
 					)}
 
 					<ToggleSelectControl
 						id="type"
-						defaultValue="compact"
+						defaultValue={value ? value : ''}
 						options={[
 							{
 								label: __('Compact', 'publisher-core'),
@@ -185,6 +186,7 @@ export default function BoxBorderControl({
 										},
 									});
 								}}
+								defaultValue={value.top}
 							/>
 							<BorderControl
 								label=""
@@ -207,6 +209,7 @@ export default function BoxBorderControl({
 										},
 									});
 								}}
+								defaultValue={value.right}
 							/>
 							<BorderControl
 								label=""
@@ -228,6 +231,7 @@ export default function BoxBorderControl({
 										},
 									});
 								}}
+								defaultValue={value.bottom}
 							/>
 							<BorderControl
 								label=""
@@ -250,6 +254,7 @@ export default function BoxBorderControl({
 										},
 									});
 								}}
+								defaultValue={value.left}
 							/>
 						</div>
 					</div>
