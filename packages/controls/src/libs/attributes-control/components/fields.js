@@ -3,7 +3,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo, useContext, useState } from '@wordpress/element';
+import { memo, useContext, useState, useEffect } from '@wordpress/element';
 
 /**
  * External dependencies
@@ -73,6 +73,72 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			return true;
 		}
 
+		function handleOnChange(newValue: string) {
+			// update key
+			if (newValue !== '' && newValue !== 'custom') {
+				changeRepeaterItem({
+					controlId,
+					repeaterId,
+					itemId,
+					value: {
+						...item,
+						__key: newValue,
+						key: newValue,
+						value: '', // clear value to prevent issue
+					},
+				});
+
+				setCustomMode(false);
+
+				setValueFieldOptions(
+					getAttributeFieldValueOptions({
+						element: customProps.attributeElement,
+						attribute: newValue,
+					})
+				);
+			}
+
+			if (newValue === '') {
+				setValueFieldOptions([]);
+
+				setCustomMode(false);
+
+				changeRepeaterItem({
+					controlId,
+					repeaterId,
+					itemId,
+					value: {
+						...item,
+						__key: '',
+						key: '',
+						value: '',
+					},
+				});
+			} else if (newValue === 'custom') {
+				setValueFieldOptions([]);
+
+				setCustomMode(true);
+
+				changeRepeaterItem({
+					controlId,
+					repeaterId,
+					itemId,
+					value: {
+						...item,
+						__key: newValue,
+						key: '',
+						value: '',
+					},
+				});
+			}
+		}
+
+		useEffect(() => {
+			if (customProps.attributeElement !== 'general') {
+				handleOnChange('');
+			}
+		}, []);
+
 		return (
 			<div id={`repeater-item-${itemId}`}>
 				{keyFieldOptions.length > 0 && (
@@ -84,64 +150,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							id={getControlId(itemId, '__key')}
 							defaultValue=""
 							onChange={(newValue) => {
-								// update key
-								if (newValue !== '' && newValue !== 'custom') {
-									changeRepeaterItem({
-										controlId,
-										repeaterId,
-										itemId,
-										value: {
-											...item,
-											__key: newValue,
-											key: newValue,
-											value: '', // clear value to prevent issue
-										},
-									});
-
-									setCustomMode(false);
-
-									setValueFieldOptions(
-										getAttributeFieldValueOptions({
-											element:
-												customProps.attributeElement,
-											attribute: newValue,
-										})
-									);
-								}
-
-								if (newValue === '') {
-									setValueFieldOptions([]);
-
-									setCustomMode(false);
-
-									changeRepeaterItem({
-										controlId,
-										repeaterId,
-										itemId,
-										value: {
-											...item,
-											__key: '',
-											key: '',
-											value: '',
-										},
-									});
-								} else if (newValue === 'custom') {
-									setValueFieldOptions([]);
-
-									setCustomMode(true);
-
-									changeRepeaterItem({
-										controlId,
-										repeaterId,
-										itemId,
-										value: {
-											...item,
-											__key: newValue,
-											key: '',
-											value: '',
-										},
-									});
-								}
+								handleOnChange(newValue);
 							}}
 						/>
 
