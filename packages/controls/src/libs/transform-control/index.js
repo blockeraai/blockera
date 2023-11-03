@@ -17,7 +17,7 @@ import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 import type { MixedElement } from 'react';
-import type { Props } from './types';
+import type { Props, RepeaterItem } from './types';
 
 export default function TransformControl({
 	defaultRepeaterItemValue,
@@ -65,7 +65,7 @@ TransformControl.propTypes = {
 		'skew-x': PropTypes.string,
 		'skew-y': PropTypes.string,
 		isVisible: PropTypes.bool,
-	}): any),
+	}): RepeaterItem),
 	/**
 	 * Label for popover
 	 */
@@ -87,5 +87,5 @@ TransformControl.defaultProps = {
 		'skew-y': '0deg',
 		isVisible: true,
 	},
-	popoverLabel: (__('Transform', 'publisher-core'): any),
+	popoverLabel: (__('Transform', 'publisher-core'): string),
 };
