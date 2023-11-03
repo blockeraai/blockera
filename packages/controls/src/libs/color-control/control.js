@@ -18,23 +18,8 @@ import { BaseControl, ColorPickerControl } from '../index';
 import PropTypes from 'prop-types';
 import { useControlContext } from '../../context';
 import type { MixedElement } from 'react';
+import type { Props } from './types';
 
-type Props = {
-	type?: 'normal' | 'minimal',
-	noBorder?: boolean,
-	contentAlign?: 'left' | 'center' | 'right',
-	//
-	id?: string,
-	label?: string,
-	columns?: string,
-	defaultValue?: string,
-	onChange?: () => void,
-	field?: string,
-	//
-	//
-	className?: string,
-	style?: Object,
-};
 export default function ColorControl({
 	type = 'normal',
 	noBorder,
