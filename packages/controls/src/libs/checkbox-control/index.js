@@ -16,17 +16,7 @@ import { controlClassNames } from '@publisher/classnames';
 import BaseControl from '../base-control';
 import { useControlContext } from '../../context';
 import type { MixedElement } from 'react';
-
-type Props = {
-	checkboxLabel: string,
-	id?: string,
-	label?: string,
-	columns?: string,
-	defaultValue?: boolean,
-	onChange?: () => void,
-	field?: string,
-	className?: string,
-};
+import type { Props } from './types';
 
 export default function CheckboxControl({
 	checkboxLabel,
