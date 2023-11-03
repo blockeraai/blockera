@@ -1,6 +1,6 @@
 import { TransformControl } from '../../..';
 import { getControlValue } from '../../../store/selectors';
-import { STORE_NAME } from '../../repeater-control/store/constants';
+import { STORE_NAME } from '../../repeater-control/store';
 
 describe('Transform Control', () => {
 	const contextDefaultValue = {
@@ -25,16 +25,18 @@ describe('Transform Control', () => {
 		it('click on transform item must open and close the setting popover.', () => {
 			const name = 'transform-control-f1';
 			cy.withDataProvider({
-				component: <TransformControl />,
+				component: (
+					<TransformControl popoverLabel="test popover title" />
+				),
 				value: [contextDefaultValue],
 				store: STORE_NAME,
 				name,
 			});
 
 			cy.get('[aria-label="Item 1"]').click();
-			cy.get('.components-popover__content').should('exist');
+			cy.contains('test popover title');
 			cy.get('[aria-label="Item 1"]').click();
-			cy.get('.components-popover__content').should('not.exist');
+			cy.contains('test popover title').should('not.exist');
 		});
 
 		context('Move', () => {
@@ -52,10 +54,10 @@ describe('Transform Control', () => {
 
 				cy.get('input[type="number"]').each(($input, idx) => {
 					cy.wrap($input).type('20');
-					cy.get('.publisher-control-header-values').then(($el) => {
+					cy.getByDataCy('repeater-item').then(($el) => {
 						// visual assertion
 						const textArr = $el.text().split(' ');
-						expect(textArr[idx]).to.be.equal('20px');
+						expect(...textArr[idx].match(/\d+/)).to.be.equal('20');
 
 						// data assertion
 						const items = ['move-x', 'move-y', 'move-z'];
@@ -80,11 +82,11 @@ describe('Transform Control', () => {
 				cy.get('input[type="range"]').each(($range, idx) => {
 					cy.wrap($range).invoke('val', '2001').trigger('change');
 
-					cy.get('.publisher-control-header-values').then(($el) => {
+					cy.getByDataCy('repeater-item').then(($el) => {
 						const textArr = $el.text().split(' ');
 
 						// visual assertion
-						expect(textArr[idx]).to.be.equal('300px');
+						expect(...textArr[idx].match(/\d+/)).to.be.equal('300');
 
 						// data assertion
 						const items = ['move-x', 'move-y', 'move-z'];
@@ -114,7 +116,7 @@ describe('Transform Control', () => {
 				cy.get('input[type="number"]').type('150');
 
 				// visual assertion
-				cy.get('.publisher-control-header-values')
+				cy.getByDataCy('repeater-item')
 					.contains('150')
 					.then(() => {
 						// data assertion
@@ -141,7 +143,7 @@ describe('Transform Control', () => {
 					.trigger('change');
 
 				// visual assertion
-				cy.get('.publisher-control-header-values')
+				cy.getByDataCy('repeater-item')
 					.contains('200')
 					.then(() => {
 						// data assertion
@@ -166,10 +168,10 @@ describe('Transform Control', () => {
 
 				cy.get('input[type="number"]').each(($input, idx) => {
 					cy.wrap($input).type('20');
-					cy.get('.publisher-control-header-values').then(($el) => {
+					cy.getByDataCy('repeater-item').then(($el) => {
 						// visual assertion
 						const textArr = $el.text().split(' ');
-						expect(textArr[idx]).to.be.equal('20deg');
+						expect(...textArr[idx].match(/\d+/)).to.be.equal('20');
 
 						// data assertion
 						const items = ['rotate-x', 'rotate-y', 'rotate-z'];
@@ -195,11 +197,11 @@ describe('Transform Control', () => {
 				cy.get('input[type="range"]').each(($range, idx) => {
 					cy.wrap($range).invoke('val', '2001').trigger('change');
 
-					cy.get('.publisher-control-header-values').then(($el) => {
+					cy.getByDataCy('repeater-item').then(($el) => {
 						const textArr = $el.text().split(' ');
 
 						// visual assertion
-						expect(textArr[idx]).to.be.equal('180deg');
+						expect(...textArr[idx].match(/\d+/)).to.be.equal('180');
 
 						// data assertion
 						const items = ['rotate-x', 'rotate-y', 'rotate-z'];
@@ -226,10 +228,10 @@ describe('Transform Control', () => {
 				cy.get('input[type="number"]').each(($input, idx) => {
 					cy.wrap($input).clear();
 					cy.wrap($input).type('20');
-					cy.get('.publisher-control-header-values').then(($el) => {
+					cy.getByDataCy('repeater-item').then(($el) => {
 						// visual assertion
 						const textArr = $el.text().split(' ');
-						expect(textArr[idx]).to.be.equal('20deg');
+						expect(...textArr[idx].match(/\d+/)).to.be.equal('20');
 
 						// data assertion
 						const items = ['skew-x', 'skew-y', 'skew-z'];
@@ -255,11 +257,11 @@ describe('Transform Control', () => {
 				cy.get('input[type="range"]').each(($range, idx) => {
 					cy.wrap($range).invoke('val', '2001').trigger('change');
 
-					cy.get('.publisher-control-header-values').then(($el) => {
+					cy.getByDataCy('repeater-item').then(($el) => {
 						const textArr = $el.text().split(' ');
 
 						// visual assertion
-						expect(textArr[idx]).to.be.equal('60deg');
+						expect(...textArr[idx].match(/\d+/)).to.be.equal('60');
 
 						// data assertion
 						const items = ['skew-x', 'skew-y'];
@@ -299,10 +301,10 @@ describe('Transform Control', () => {
 				name,
 			});
 
-			cy.get('.publisher-control-header-values').then(($el) => {
+			cy.getByDataCy('repeater-item').then(($el) => {
 				const textArr = $el.text().split(' ');
 				textArr.forEach((text) => {
-					expect(text).to.be.equal('50px');
+					expect(...text.match(/\d+/)).to.be.equal('50');
 				});
 			});
 		});
@@ -322,10 +324,10 @@ describe('Transform Control', () => {
 				name,
 			});
 
-			cy.get('.publisher-control-header-values').then(($el) => {
+			cy.getByDataCy('repeater-item').then(($el) => {
 				const textArr = $el.text().split(' ');
 				textArr.forEach((text) => {
-					expect(text).to.be.equal('0px');
+					expect(...text.match(/\d+/)).to.be.equal('0');
 				});
 			});
 		});
@@ -355,10 +357,10 @@ describe('Transform Control', () => {
 				name,
 			});
 
-			cy.get('.publisher-control-header-values').then(($el) => {
+			cy.getByDataCy('repeater-item').then(($el) => {
 				const textArr = $el.text().split(' ');
 				textArr.forEach((text) => {
-					expect(text).to.be.equal('50px');
+					expect(...text.match(/\d+/)).to.be.equal('50');
 				});
 			});
 		});
@@ -373,10 +375,10 @@ describe('Transform Control', () => {
 				name,
 			});
 
-			cy.get('.publisher-control-header-values').then(($el) => {
+			cy.getByDataCy('repeater-item').then(($el) => {
 				const textArr = $el.text().split(' ');
 				textArr.forEach((text) => {
-					expect(text).to.be.equal('0px');
+					expect(...text.match(/\d+/)).to.be.equal('0');
 				});
 			});
 		});
