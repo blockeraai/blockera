@@ -17,29 +17,7 @@ import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 import type { MixedElement } from 'react';
-
-type RepeaterItem = {
-	type: 'move' | 'scale' | 'rotate' | 'skew',
-	'move-x': string,
-	'move-y': string,
-	'move-z': string,
-	scale: string,
-	'rotate-x': string,
-	'rotate-y': string,
-	'rotate-z': string,
-	'skew-x': string,
-	'skew-y': string,
-	isVisible: boolean,
-};
-
-type Props = {
-	popoverLabel?: string,
-	className?: string,
-	defaultValue?: RepeaterItem[],
-	value?: RepeaterItem[],
-	onChange?: () => void,
-	defaultRepeaterItemValue?: RepeaterItem,
-};
+import type { Props } from './types';
 
 export default function TransformControl({
 	defaultRepeaterItemValue,
