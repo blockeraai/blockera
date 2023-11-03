@@ -14,7 +14,7 @@ import { controlClassNames } from '@publisher/classnames';
 /**
  * Internal dependencies
  */
-import type { TSearchControlProps } from './types/control-types';
+import type { TSearchControlProps } from './types';
 import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
 
