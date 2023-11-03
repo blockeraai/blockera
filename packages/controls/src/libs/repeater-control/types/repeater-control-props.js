@@ -17,13 +17,13 @@ export type TRepeaterControlProps = {
 	actionButtonVisibility?: Boolean | true,
 	actionButtonDelete?: Boolean | true,
 	actionButtonClone?: Boolean | true,
-	injectHeaderButtonsStart?: MixedElement,
-	injectHeaderButtonsEnd?: MixedElement,
+	injectHeaderButtonsStart?: MixedElement | null | string,
+	injectHeaderButtonsEnd?: MixedElement | null | string,
 	//
 	label?: string,
 	id?: ID,
-	repeaterItemHeader?: MixedElement,
-	repeaterItemChildren?: MixedElement,
+	repeaterItemHeader?: MixedElement | any,
+	repeaterItemChildren?: MixedElement | any,
 	//
 	defaultValue?: Array<Object> | [],
 	defaultRepeaterItemValue?: Object,
