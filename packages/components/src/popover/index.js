@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -5,7 +6,7 @@ import { __ } from '@wordpress/i18n';
 import { useContext, useState } from '@wordpress/element';
 import { Popover as WPPopover } from '@wordpress/components';
 import PropTypes from 'prop-types';
-
+import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
@@ -21,6 +22,7 @@ import { PopoverContextData } from '@publisher/storybook/decorators/with-popover
  */
 import { Button } from '../button';
 import CloseIcon from './icons/close';
+import type { TPopoverProps } from './types';
 
 export default function Popover({
 	title,
@@ -32,7 +34,7 @@ export default function Popover({
 	shift: _shift,
 	flip: _flip,
 	...props
-}) {
+}: TPopoverProps): MixedElement {
 	const [isVisible, setIsVisible] = useState(true);
 
 	/**
@@ -118,6 +120,7 @@ Popover.propTypes = {
 	 *
 	 * @default 'bottom-start'
 	 */
+	// $FlowFixMe
 	placement: PropTypes.oneOf([
 		'top-start',
 		'top',
