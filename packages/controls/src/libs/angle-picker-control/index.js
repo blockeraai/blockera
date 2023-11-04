@@ -1,8 +1,11 @@
+// @flow
+
 /**
  * External dependencies
  */
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
+import type { MixedElement } from 'react';
 import { AnglePickerControl as WordPressAnglePickerControl } from '@wordpress/components';
 
 /**
@@ -23,6 +26,17 @@ import { addAngle, subtractAngle } from './utils';
 import { default as RotateLeftIcon } from './icons/rotate-left';
 import { default as RotateRightIcon } from './icons/rotate-right';
 
+type Props = {
+	rotateButtons?: Boolean,
+	id?: string,
+	label?: string,
+	columns?: string,
+	defaultValue?: string,
+	onChange?: () => void,
+	field?: string,
+	className?: string,
+};
+
 export default function AnglePickerControl({
 	rotateButtons,
 	//
@@ -35,7 +49,7 @@ export default function AnglePickerControl({
 	//
 	className,
 	...props
-}) {
+}: Props): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
 		onChange,

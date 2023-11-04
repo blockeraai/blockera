@@ -1,7 +1,7 @@
 /**
  * Publisher dependencies
  */
-import { isEmpty } from '@publisher/utils';
+import { isEmpty, isUndefined } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -16,6 +16,10 @@ import { regexMatch } from '../utils';
  * @return {*} value of dataset queried props
  */
 export function prepare(query: string, dataset: Object): Array<string> {
+	if (isUndefined(query) || isEmpty(query)) {
+		return undefined;
+	}
+
 	const parsedQuery = query.split('.');
 	const itemValue = (...values) => values.reduce(accumulator, dataset);
 
@@ -49,6 +53,13 @@ export function prepare(query: string, dataset: Object): Array<string> {
  * @return {*} return any value
  */
 export function accumulator(a, x) {
+	const aIsInValid = isUndefined(a) || isEmpty(a);
+	const xIsInValid = isUndefined(x) || isEmpty(x);
+
+	if (aIsInValid || xIsInValid) {
+		return undefined;
+	}
+
 	return a[x];
 }
 

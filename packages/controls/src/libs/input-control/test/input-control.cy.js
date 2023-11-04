@@ -69,7 +69,7 @@ describe('input control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				return expect(getControlValue(name)).to.undefined;
+				return expect(getControlValue(name)).to.eq('');
 			});
 		});
 		it('should control data value must be equal with expected data value passed in data provider access with control identifier', () => {
