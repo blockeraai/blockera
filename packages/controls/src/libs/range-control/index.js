@@ -1,8 +1,11 @@
+// @flow
+
 /**
  * External dependencies
  */
 import PropTypes from 'prop-types';
 import { RangeControl as WordPressRangeControl } from '@wordpress/components';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -15,6 +18,7 @@ import { controlClassNames } from '@publisher/classnames';
  */
 import BaseControl from '../base-control';
 import { useControlContext } from '../../context';
+import type { TRangeControlProps } from './types/control-types';
 
 function valueCleanup(value) {
 	if (isString(value)) {
@@ -55,8 +59,7 @@ export default function RangeControl({
 	defaultValue,
 	onChange,
 	field,
-	//
-}) {
+}: TRangeControlProps): MixedElement {
 	let { value, setValue } = useControlContext({
 		id,
 		onChange,
@@ -115,6 +118,7 @@ RangeControl.propTypes = {
 	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
+	// $FlowFixMe
 	defaultValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	/**
 	 * Function that will be fired while the control value state changes.
