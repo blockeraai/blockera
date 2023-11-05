@@ -13,7 +13,7 @@ type DefaultValueProps = {
 	target?: Boolean,
 	nofollow?: Boolean,
 	label?: string,
-	attributes?: Array<Attribute>,
+	attributes?: Array<Attribute | null>,
 };
 
 export type TLinkControlProps = {

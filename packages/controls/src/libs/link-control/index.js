@@ -40,7 +40,7 @@ export default function LinkControl({
 	onChange,
 	className,
 	placeholder,
-	attributesId,
+	attributesId = 'link-control-attributes',
 	defaultValue,
 	advancedOpen,
 }: TLinkControlProps): MixedElement {
@@ -223,6 +223,7 @@ LinkControl.defaultProps = {
 		target: false,
 		nofollow: false,
 		label: '',
+		// $FlowFixMe
 		attributes: [],
 	},
 	field: 'link',
