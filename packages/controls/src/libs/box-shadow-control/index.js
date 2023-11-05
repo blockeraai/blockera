@@ -1,9 +1,10 @@
+// @flow
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
-
+import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
@@ -15,14 +16,14 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import Fields from './components/fields';
 import RepeaterControl from '../repeater-control';
-
+import type { TBoxShadowControlProps } from './types';
 export default function BoxShadowControl({
 	id,
 	defaultRepeaterItemValue,
 	popoverLabel,
 	className,
 	...props
-}) {
+}: TBoxShadowControlProps): MixedElement {
 	return (
 		<RepeaterControl
 			id={id}
@@ -52,6 +53,7 @@ BoxShadowControl.propTypes = {
 	/**
 	 * Default value of each repeater item
 	 */
+	// $FlowFixMe
 	defaultRepeaterItemValue: PropTypes.shape({
 		type: PropTypes.oneOf(['outer', 'inner']),
 		x: PropTypes.string,
@@ -68,6 +70,7 @@ BoxShadowControl.propTypes = {
 };
 
 BoxShadowControl.defaultProps = {
+	// $FlowFixMe
 	defaultValue: [],
 	defaultRepeaterItemValue: {
 		type: 'outer',
@@ -78,5 +81,6 @@ BoxShadowControl.defaultProps = {
 		color: '#000000ab',
 		isVisible: true,
 	},
+	// $FlowFixMe
 	popoverLabel: __('Box Shadow', 'publisher-core'),
 };
