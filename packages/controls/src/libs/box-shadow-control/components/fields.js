@@ -51,6 +51,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							value: { ...item, type },
 						})
 					}
+					data-test="box-shadow-type-select"
+					defaultValue={item.type}
 				/>
 
 				<InputControl
@@ -70,6 +72,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							value: { ...item, x },
 						})
 					}
+					data-test="box-shadow-x-input"
+					defaultValue={item.x}
 				/>
 
 				<InputControl
@@ -89,6 +93,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							value: { ...item, y },
 						})
 					}
+					data-test="box-shadow-y-input"
+					defaultValue={item.y}
 				/>
 
 				<InputControl
@@ -108,6 +114,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							value: { ...item, blur },
 						})
 					}
+					data-test="box-shadow-blur-input"
+					defaultValue={item.blur}
 				/>
 
 				<InputControl
@@ -127,6 +135,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							value: { ...item, spread },
 						})
 					}
+					data-test="box-shadow-spread-input"
+					defaultValue={item.spread}
 				/>
 
 				<ColorControl
@@ -141,6 +151,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							value: { ...item, color },
 						})
 					}
+					data-test="box-shadow-color-control"
+					defaultValue={item.color}
 				/>
 			</div>
 		);
