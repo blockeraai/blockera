@@ -87,6 +87,7 @@ export default function RangeControl({
 				className={controlClassNames('range', className)}
 				withInputField={withInputField}
 				__nextHasNoMarginBottom={false}
+				data-test="range-control"
 			/>
 		</BaseControl>
 	);
