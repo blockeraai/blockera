@@ -43,6 +43,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							value: { ...item, type },
 						})
 					}
+					defaultValue={item.type}
 				/>
 
 				{item.type === 'blur' && (
@@ -63,6 +64,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								value: { ...item, blur },
 							})
 						}
+						defaultValue={item.blur}
+						data-test="filter-blur-input"
 					/>
 				)}
 
@@ -88,6 +91,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 									},
 								})
 							}
+							defaultValue={item['drop-shadow-x']}
+							data-test="filter-drop-shadow-x-input"
 						/>
 
 						<InputControl
@@ -110,6 +115,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 									},
 								})
 							}
+							defaultValue={item['drop-shadow-y']}
+							data-test="filter-drop-shadow-y-input"
 						/>
 
 						<InputControl
@@ -132,6 +139,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 									},
 								})
 							}
+							defaultValue={item['drop-shadow-blur']}
+							data-test="filter-drop-shadow-blur-input"
 						/>
 
 						<ColorControl
@@ -149,6 +158,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 									},
 								})
 							}
+							defaultValue={item['drop-shadow-color']}
+							data-test="filter-drop-shadow-color"
 						/>
 					</>
 				)}
@@ -174,6 +185,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								},
 							})
 						}
+						defaultValue={item.brightness}
+						data-test="filter-brightness-input"
 					/>
 				)}
 
@@ -198,6 +211,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								},
 							})
 						}
+						defaultValue={item.contrast}
+						data-test="filter-contrast-input"
 					/>
 				)}
 
@@ -222,6 +237,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								},
 							})
 						}
+						defaultValue={item['hue-rotate']}
+						data-test="filter-hue-rotate-input"
 					/>
 				)}
 
@@ -246,6 +263,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								},
 							})
 						}
+						defaultValue={item.saturate}
+						data-test="filter-saturate-input"
 					/>
 				)}
 
@@ -270,6 +289,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								},
 							})
 						}
+						defaultValue={item.grayscale}
+						data-test="filter-grayscale-input"
 					/>
 				)}
 
@@ -294,6 +315,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								},
 							})
 						}
+						defaultValue={item.invert}
+						data-test="filter-invert-input"
 					/>
 				)}
 
@@ -318,6 +341,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								},
 							})
 						}
+						defaultValue={item.sepia}
+						data-test="filter-sepia-input"
 					/>
 				)}
 			</div>
