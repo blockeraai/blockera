@@ -3,7 +3,7 @@
  */
 import { Flex } from '@publisher/components';
 import { default as Decorators } from '@publisher/storybook/decorators';
-
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 /**
  * Internal dependencies
  */
@@ -13,6 +13,7 @@ import { default as AccordionCustomCloseIcon } from './icons/accordion-custom-cl
 
 const { WithInspectorStyles, SharedDecorators, WithPopoverDataProvider } =
 	Decorators;
+SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
 	title: 'Controls/GroupControl',
