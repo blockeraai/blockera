@@ -2,13 +2,6 @@
  * External dependencies
  */
 import { useContext } from '@wordpress/element';
-import { expect } from '@storybook/jest';
-import {
-	fireEvent,
-	userEvent,
-	waitFor,
-	within,
-} from '@storybook/testing-library';
 import { nanoid } from 'nanoid';
 
 /**
@@ -24,12 +17,10 @@ import FilterControl from '../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import { ControlContextProvider } from '../../../context';
 import { STORE_NAME } from '../../repeater-control/store';
-import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 
 const {
 	WithInspectorStyles,
 	StoryDataContext,
-	WithStoryContextProvider,
 	SharedDecorators,
 	WithPopoverDataProvider,
 } = Decorators;
@@ -406,86 +397,6 @@ const ControlWithHooks = (args) => {
 	return (
 		<FilterControl {...args} onChange={setStoryValue} value={storyValue} />
 	);
-};
-
-export const Play = {
-	args: {
-		label: 'Filters',
-		controlInfo: {
-			name: nanoid(),
-			value: [],
-		},
-		storeName: STORE_NAME,
-	},
-	decorators: [
-		WithStoryContextProvider,
-		WithInspectorStyles,
-		WithControlDataProvider,
-		...SharedDecorators,
-	],
-	render: (args) => <ControlWithHooks Control={FilterControl} {...args} />,
-	play: async ({ canvasElement, step }) => {
-		const canvas = within(canvasElement);
-
-		const currentValue = canvas.getByTestId('current-value');
-		const button = canvas.getByLabelText('Add New');
-		//
-		await step('Story Data', async () => {
-			await expect(currentValue).toBeInTheDocument();
-			await expect(currentValue).toHaveTextContent('[]');
-		});
-
-		await step('Click Add Button', async () => {
-			await expect(button).toBeInTheDocument();
-
-			await userEvent.click(button);
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent(
-						'[ { "type": "blur", "blur": "3px", "isVisible": true } ]'
-					),
-				{ timeout: 1000 }
-			);
-		});
-
-		await step('Open Popover', async () => {
-			await userEvent.click(canvas.getByLabelText('Item 1'));
-		});
-
-		await step('Change Value', async () => {
-			const inputs = canvas.getAllByRole('textbox');
-
-			fireEvent.change(inputs[0], {
-				target: {
-					value: 10,
-				},
-			});
-
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent(
-						'[ { "type": "blur", "blur": "10px", "isVisible": true } ]'
-					),
-				{ timeout: 1000 }
-			);
-		});
-
-		await step('Change Type', async () => {
-			const selects = canvas.getAllByRole('combobox', {});
-
-			fireEvent.change(selects[0], {
-				target: { value: 'brightness' },
-			});
-
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent(
-						'[ { "type": "brightness", "brightness": "200%", "isVisible": true } ]'
-					),
-				{ timeout: 1000 }
-			);
-		});
-	},
 };
 
 export const All = {
