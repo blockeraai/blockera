@@ -1,3 +1,3 @@
 // @flow
 
-export type TgetTypeLabelProps = string;
+export type TGetTypeLabelProps = string;

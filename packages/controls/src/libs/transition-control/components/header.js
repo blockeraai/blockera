@@ -4,6 +4,7 @@
  */
 import { memo } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
+import type { Element } from 'react';
 
 /**
  * Publisher dependencies
@@ -25,7 +26,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 		setOpen,
 		children,
 		isOpenPopoverEvent,
-	}: THeaderItem) => {
+	}: THeaderItem): Element<any> => {
 		return (
 			<div
 				className={controlInnerClassNames('repeater-group-header')}

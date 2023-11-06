@@ -52,14 +52,13 @@ TransitionControl.propTypes = {
 	/**
 	 * Default value of each repeater item
 	 */
-	// $FlowFixMe
-	defaultRepeaterItemValue: PropTypes.shape({
+	defaultRepeaterItemValue: (PropTypes.shape({
 		type: PropTypes.string,
 		duration: PropTypes.string,
 		timing: PropTypes.string,
 		delay: PropTypes.string,
 		isVisible: PropTypes.bool,
-	}),
+	}): any),
 	/**
 	 * Label for popover
 	 */
@@ -67,8 +66,7 @@ TransitionControl.propTypes = {
 };
 
 TransitionControl.defaultProps = {
-	// $FlowFixMe
-	value: [],
+	value: ([]: any),
 	defaultRepeaterItemValue: {
 		type: 'all',
 		duration: '500ms',
@@ -76,6 +74,5 @@ TransitionControl.defaultProps = {
 		delay: '0ms',
 		isVisible: true,
 	},
-	// $FlowFixMe
-	popoverLabel: __('Transition', 'publisher-core'),
+	popoverLabel: (__('Transition', 'publisher-core'): any),
 };

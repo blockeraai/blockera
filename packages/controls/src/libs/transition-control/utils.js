@@ -7,10 +7,9 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
+import type { TGetTypeLabelProps } from './types';
 
-import type { TgetTypeLabelProps } from './types';
-// $FlowFixMe
-export const getTypeLabel = function (type: TgetTypeLabelProps) {
+export const getTypeLabel = function (type: TGetTypeLabelProps): string {
 	switch (type) {
 		case 'all':
 			return __('All', 'publisher-core');
@@ -151,8 +150,8 @@ export const getTypeLabel = function (type: TgetTypeLabelProps) {
 			return type;
 	}
 };
-// $FlowFixMe
-export const getTypeOptions = function () {
+
+export const getTypeOptions = function (): Array<Object> {
 	return [
 		{
 			type: 'optgroup',
@@ -390,8 +389,8 @@ export const getTypeOptions = function () {
 		},
 	];
 };
-// $FlowFixMe
-export const getTimingOptions = function () {
+
+export const getTimingOptions = function (): Array<Object> {
 	return [
 		{
 			type: 'optgroup',

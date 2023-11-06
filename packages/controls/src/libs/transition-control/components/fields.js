@@ -6,6 +6,11 @@ import { __ } from '@wordpress/i18n';
 import { memo, useContext } from '@wordpress/element';
 
 /**
+ * External dependencies
+ */
+import type { Element } from 'react';
+
+/**
  * Internal dependencies
  */
 import { useControlContext } from '../../../context';
@@ -15,7 +20,7 @@ import { InputControl, SelectControl } from '../../index';
 import type { TFieldItem } from '../types';
 
 const Fields: TFieldItem = memo<TFieldItem>(
-	({ itemId, item }: TFieldItem): any => {
+	({ itemId, item }: TFieldItem): Element<any> => {
 		const {
 			controlInfo: { name: controlId },
 			dispatch: { changeRepeaterItem },
