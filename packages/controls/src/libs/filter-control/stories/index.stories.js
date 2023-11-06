@@ -42,7 +42,7 @@ export const Empty = {
 	render: (args) => (
 		<Flex direction="column" gap="20px">
 			<h2 className="story-heading">
-				Box Shadow<span>Empty</span>
+				Filter<span>Empty</span>
 			</h2>
 
 			<ControlContextProvider
