@@ -115,7 +115,7 @@ describe('input control component testing', () => {
 				);
 			});
 		});
-		it.only('should control data value equal with expected defaultValue when id was not provided for InputControl', () => {
+		it('should control data value equal with expected defaultValue when id was not provided for InputControl', () => {
 			cy.withDataProvider({
 				component: <InputControl defaultValue={'10px'} id="invalid" />,
 				value: {
