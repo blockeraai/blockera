@@ -7,7 +7,7 @@ import { controlReducer } from '../../../store/reducers/control-reducer';
 import { getControlValue } from '../../../store/selectors';
 
 describe('filter-control component testing', () => {
-	it('render correctly', () => {
+	it('should render correctly', () => {
 		cy.withDataProvider({
 			component: <FilterControl />,
 			store: STORE_NAME,
@@ -22,7 +22,7 @@ describe('filter-control component testing', () => {
 		cy.getByDataCy('group-control-header').should('exist');
 	});
 
-	it('render correctly with empty value', () => {
+	it('should render correctly with empty value', () => {
 		cy.withDataProvider({
 			component: <FilterControl />,
 			store: STORE_NAME,
@@ -32,7 +32,7 @@ describe('filter-control component testing', () => {
 		cy.getByDataCy('group-control-header').should('not.exist');
 	});
 
-	it('render correctly without passing value and defaultValue', () => {
+	it('should render correctly without passing value and defaultValue', () => {
 		cy.withDataProvider({
 			component: <FilterControl />,
 			store: STORE_NAME,
@@ -41,7 +41,7 @@ describe('filter-control component testing', () => {
 		cy.getByDataCy('group-control-header').should('not.exist');
 	});
 
-	it('render correctly with defaultValue', () => {
+	it('should render correctly with defaultValue', () => {
 		cy.withDataProvider({
 			component: (
 				<FilterControl
@@ -62,7 +62,7 @@ describe('filter-control component testing', () => {
 		cy.getByDataCy('group-control-header').contains('Drop Shadow');
 	});
 
-	it('render correctly with label', () => {
+	it('should render correctly with label', () => {
 		cy.withDataProvider({
 			component: <FilterControl label="Filter Control" />,
 			store: STORE_NAME,
@@ -71,42 +71,42 @@ describe('filter-control component testing', () => {
 		cy.contains('Filter Control');
 	});
 
-	it('does onChange fire?', () => {
-		const name = nanoid();
-		const defaultProps = {
-			onChange: (value) => {
-				controlReducer(
-					select('publisher-core/controls').getControl(name),
-					modifyControlValue({
-						value,
-						controlId: name,
-					})
-				);
-			},
-		};
-		cy.stub(defaultProps, 'onChange').as('onChange');
-
-		cy.withDataProvider({
-			component: <FilterControl {...defaultProps} />,
-			value: [
-				{
-					type: 'blur',
-					blur: '0px',
+	describe('interaction test :', () => {
+		it('should onChange be called, when interacting', () => {
+			const name = nanoid();
+			const defaultProps = {
+				onChange: (value) => {
+					controlReducer(
+						select('publisher-core/controls').getControl(name),
+						modifyControlValue({
+							value,
+							controlId: name,
+						})
+					);
 				},
-			],
-			store: STORE_NAME,
-			name,
+			};
+			cy.stub(defaultProps, 'onChange').as('onChange');
+
+			cy.withDataProvider({
+				component: <FilterControl {...defaultProps} />,
+				value: [
+					{
+						type: 'blur',
+						blur: '0px',
+					},
+				],
+				store: STORE_NAME,
+				name,
+			});
+
+			cy.getByDataCy('group-control-header').click();
+
+			cy.get('select').eq(0).select('drop-shadow');
+
+			cy.get('@onChange').should('have.been.called');
 		});
 
-		cy.getByDataCy('group-control-header').click();
-
-		cy.get('select').eq(0).select('drop-shadow');
-
-		cy.get('@onChange').should('have.been.called');
-	});
-
-	describe('interaction test ', () => {
-		it('blur', () => {
+		it('should context and local value be updated,when select blur and change value', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <FilterControl />,
@@ -160,7 +160,7 @@ describe('filter-control component testing', () => {
 			});
 		});
 
-		it('drop Shadow', () => {
+		it('should context and local value be updated,when select drop shadow and change value', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <FilterControl />,
@@ -235,7 +235,7 @@ describe('filter-control component testing', () => {
 			});
 		});
 
-		it('brightness', () => {
+		it('should context and local value be updated,when select brightness and change value', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <FilterControl />,
@@ -289,7 +289,7 @@ describe('filter-control component testing', () => {
 			});
 		});
 
-		it('contrast', () => {
+		it('should context and local value be updated,when select contrast and change value', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <FilterControl />,
@@ -343,7 +343,7 @@ describe('filter-control component testing', () => {
 			});
 		});
 
-		it('hue-rotate', () => {
+		it('should context and local value be updated,when select hue-rotate and change value', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <FilterControl />,
@@ -397,7 +397,7 @@ describe('filter-control component testing', () => {
 			});
 		});
 
-		it('saturate', () => {
+		it('should context and local value be updated,when select saturate and change value', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <FilterControl />,
@@ -451,7 +451,7 @@ describe('filter-control component testing', () => {
 			});
 		});
 
-		it('grayscale', () => {
+		it('should context and local value be updated,when select grayscale and change value', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <FilterControl />,
@@ -505,7 +505,7 @@ describe('filter-control component testing', () => {
 			});
 		});
 
-		it('invert', () => {
+		it('should context and local value be updated,when select invert and change value', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <FilterControl />,
@@ -556,7 +556,7 @@ describe('filter-control component testing', () => {
 			});
 		});
 
-		it('sepia', () => {
+		it('should context and local value be updated,when select sepia and change value', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <FilterControl />,
@@ -609,7 +609,7 @@ describe('filter-control component testing', () => {
 	});
 
 	describe('pass isOpen', () => {
-		it('passing false (default)', () => {
+		it('should popover not be open at first rendering, when passing false (default)', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <FilterControl popoverLabel="Filter Control" />,
@@ -627,7 +627,7 @@ describe('filter-control component testing', () => {
 			cy.contains('Filter Control').should('not.exist');
 		});
 
-		it('passing true', () => {
+		it('should popover be open at first rendering, when passing true', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <FilterControl popoverLabel="Filter Control" />,
@@ -647,7 +647,7 @@ describe('filter-control component testing', () => {
 	});
 
 	describe('pass isVisible', () => {
-		it('passing true (default)', () => {
+		it('should repeater item be visible, when passing true (default)', () => {
 			cy.withDataProvider({
 				component: <FilterControl />,
 				store: STORE_NAME,
@@ -666,7 +666,7 @@ describe('filter-control component testing', () => {
 				.should('have.class', 'is-active');
 		});
 
-		it('passing false', () => {
+		it('should repeater item be invisible, when passing false', () => {
 			cy.withDataProvider({
 				component: <FilterControl />,
 				store: STORE_NAME,
