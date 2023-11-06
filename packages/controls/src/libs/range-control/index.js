@@ -18,10 +18,10 @@ import { controlClassNames } from '@publisher/classnames';
  */
 import BaseControl from '../base-control';
 import { useControlContext } from '../../context';
-import type { TRangeControlProps } from './types/control-types';
+import type { TRangeControlProps, TValueCleanup } from './types';
 
-function valueCleanup(value) {
-	if (isString(value)) {
+function valueCleanup(value: TValueCleanup) {
+	if (typeof value === 'string') {
 		const units = [
 			'px',
 			'%',

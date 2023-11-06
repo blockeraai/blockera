@@ -1,5 +1,7 @@
 // @flow
 
+export type TValueCleanup = string | number;
+
 export type TRangeControlProps = {
 	id?: string,
 	label?: string,
