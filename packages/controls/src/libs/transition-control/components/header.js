@@ -38,7 +38,6 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 					__('Item %d', 'publisher-core'),
 					itemId && itemId + 1
 				)}
-				data-test="transition-repeater-item"
 			>
 				<span className={controlInnerClassNames('header-icon')}>
 					<TransitionIcon />

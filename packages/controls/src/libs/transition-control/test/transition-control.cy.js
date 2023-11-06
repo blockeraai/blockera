@@ -1,4 +1,4 @@
-import TransitionControl from '../index';
+import TransitionControl from '..';
 import { STORE_NAME } from '../../repeater-control/store';
 import { nanoid } from 'nanoid';
 import { getControlValue } from '../../../store/selectors';
@@ -7,8 +7,7 @@ import { modifyControlValue } from '../../../store/actions';
 import { select } from '@wordpress/data';
 
 describe('transition control component testing', () => {
-	it('render correctly', () => {
-		cy.viewport(1000, 1000);
+	it('should render correctly', () => {
 		cy.withDataProvider({
 			component: <TransitionControl />,
 			value: [
@@ -23,11 +22,10 @@ describe('transition control component testing', () => {
 			store: STORE_NAME,
 		});
 
-		cy.getByDataTest('transition-repeater-item').should('exist');
+		cy.getByDataCy('group-control-header').should('exist');
 	});
 
-	it('render correctly with label', () => {
-		cy.viewport(1000, 1000);
+	it('should render correctly with label', () => {
 		cy.withDataProvider({
 			component: <TransitionControl label="Transition" />,
 			value: [
@@ -45,23 +43,66 @@ describe('transition control component testing', () => {
 		cy.contains('Transition');
 	});
 
-	it('render correctly with empty value', () => {
-		cy.viewport(1000, 1000);
+	it('should render correctly with empty value', () => {
 		cy.withDataProvider({
 			component: <TransitionControl label="Transition" />,
 			value: [],
 			store: STORE_NAME,
 		});
 
-		cy.getByDataTest('transition-repeater-item').should('not.exist');
+		cy.getByDataCy('group-control-header').should('not.exist');
+	});
+
+	it('should render correctly without value and defaultValue', () => {
+		cy.withDataProvider({
+			component: <TransitionControl label="Transition" />,
+			store: STORE_NAME,
+		});
+
+		cy.getByDataCy('group-control-header').should('not.exist');
+	});
+
+	it('should render correctly with defaultValue', () => {
+		cy.withDataProvider({
+			component: (
+				<TransitionControl
+					label="Transition"
+					defaultValue={[
+						{
+							type: 'all',
+							duration: '10ms',
+							timing: 'ease',
+							delay: '10ms',
+							isVisible: true,
+						},
+					]}
+				/>
+			),
+			store: STORE_NAME,
+		});
+
+		cy.getByDataCy('group-control-header').should('exist');
 	});
 
 	describe('interaction test ', () => {
-		it('add an item', () => {
-			cy.viewport(1000, 1000);
+		it('should onChange be called, when interacting', () => {
 			const name = nanoid();
+			const defaultValue = {
+				onChange: (value) => {
+					controlReducer(
+						select('publisher-core/controls').getControl(name),
+						modifyControlValue({
+							value,
+							controlId: name,
+						})
+					);
+				},
+			};
+
+			cy.stub(defaultValue, 'onChange').as('onChange');
+
 			cy.withDataProvider({
-				component: <TransitionControl label="Transition" />,
+				component: <TransitionControl {...defaultValue} />,
 				value: [],
 				store: STORE_NAME,
 				name,
@@ -69,11 +110,10 @@ describe('transition control component testing', () => {
 
 			cy.get('button[aria-label="Add New Transition"]').click();
 
-			cy.getByDataTest('transition-repeater-item').should('exist');
+			cy.get('@onChange').should('have.been.called');
 		});
 
-		it('change type', () => {
-			cy.viewport(1000, 1000);
+		it('should context value have length of 2, when adding one more item', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <TransitionControl label="Transition" />,
@@ -90,7 +130,34 @@ describe('transition control component testing', () => {
 				name,
 			});
 
-			cy.getByDataTest('transition-repeater-item').click();
+			cy.get('button[aria-label="Add New Transition"]').click();
+
+			cy.getByDataCy('group-control-header').should('have.length', '2');
+
+			//Check data provider value
+			cy.get('body').then(() => {
+				expect(2).to.be.equal(getControlValue(name, STORE_NAME).length);
+			});
+		});
+
+		it('should context and local value be updated, when change type', () => {
+			const name = nanoid();
+			cy.withDataProvider({
+				component: <TransitionControl label="Transition" />,
+				value: [
+					{
+						type: 'all',
+						duration: '0ms',
+						timing: 'ease',
+						delay: '0ms',
+						isVisible: true,
+					},
+				],
+				store: STORE_NAME,
+				name,
+			});
+
+			cy.getByDataCy('group-control-header').click();
 
 			cy.getByDataTest('transition-control-popover').as('popover');
 			cy.get('@popover').get('select').eq(0).select('Filter');
@@ -102,14 +169,13 @@ describe('transition control component testing', () => {
 
 			// Check data provider value
 			cy.get('@popover').then(() => {
-				expect('filter').to.be.deep.equal(
+				expect('filter').to.be.equal(
 					getControlValue(name, STORE_NAME)[0].type
 				);
 			});
 		});
 
-		it('change duration', () => {
-			cy.viewport(1000, 1000);
+		it('should context and local value be updated, when change duration', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <TransitionControl label="Transition" />,
@@ -126,7 +192,7 @@ describe('transition control component testing', () => {
 				name,
 			});
 
-			cy.getByDataTest('transition-repeater-item').click();
+			cy.getByDataCy('group-control-header').click();
 
 			cy.getByDataTest('transition-control-popover').as('popover');
 			cy.get('@popover')
@@ -140,14 +206,13 @@ describe('transition control component testing', () => {
 
 			// Check data provider value
 			cy.get('@popover').then(() => {
-				expect('4000ms').to.be.deep.equal(
+				expect('4000ms').to.be.equal(
 					getControlValue(name, STORE_NAME)[0].duration
 				);
 			});
 		});
 
-		it('change timing', () => {
-			cy.viewport(1000, 1000);
+		it('should context and local value be updated, when change timing', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <TransitionControl label="Transition" />,
@@ -164,7 +229,7 @@ describe('transition control component testing', () => {
 				name,
 			});
 
-			cy.getByDataTest('transition-repeater-item').click();
+			cy.getByDataCy('group-control-header').click();
 
 			cy.getByDataTest('transition-control-popover').as('popover');
 			cy.get('@popover').get('select').eq(2).select('ease-in-out');
@@ -176,14 +241,13 @@ describe('transition control component testing', () => {
 
 			// Check data provider value
 			cy.get('@popover').then(() => {
-				expect('ease-in-out').to.be.deep.equal(
+				expect('ease-in-out').to.be.equal(
 					getControlValue(name, STORE_NAME)[0].timing
 				);
 			});
 		});
 
-		it('change delay', () => {
-			cy.viewport(1000, 1000);
+		it('should context and local value be updated, when change delay', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <TransitionControl label="Transition" />,
@@ -200,7 +264,7 @@ describe('transition control component testing', () => {
 				name,
 			});
 
-			cy.getByDataTest('transition-repeater-item').click();
+			cy.getByDataCy('group-control-header').click();
 
 			cy.getByDataTest('transition-control-popover').as('popover');
 			cy.get('@popover')
@@ -214,14 +278,13 @@ describe('transition control component testing', () => {
 
 			// Check data provider value
 			cy.get('@popover').then(() => {
-				expect('3000ms').to.be.deep.equal(
+				expect('3000ms').to.be.equal(
 					getControlValue(name, STORE_NAME)[0].delay
 				);
 			});
 		});
 
-		it('change all data', () => {
-			cy.viewport(1000, 1000);
+		it('should context and local value be updated, when change all values', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <TransitionControl label="Transition" />,
@@ -238,7 +301,7 @@ describe('transition control component testing', () => {
 				name,
 			});
 
-			cy.getByDataTest('transition-repeater-item').click();
+			cy.getByDataCy('group-control-header').click();
 			cy.getByDataTest('transition-control-popover').as('popover');
 
 			//type
@@ -286,6 +349,10 @@ describe('transition control component testing', () => {
 				.getByDataTest('transition-input-delay')
 				.should('have.value', '3');
 
+			//Check repeater item value
+			cy.getByDataCy('group-control-header').contains('Opacity');
+			cy.getByDataCy('group-control-header').contains('100');
+
 			//Check data provider value
 			cy.get('@popover').then(() => {
 				expect([
@@ -301,34 +368,93 @@ describe('transition control component testing', () => {
 		});
 	});
 
-	it('does onChange fire?', () => {
-		const name = nanoid();
-		const defaultValue = {
-			onChange: (value) => {
-				controlReducer(
-					select('publisher-core/controls').getControl(name),
-					modifyControlValue({
-						value,
-						controlId: name,
-					})
-				);
-			},
-		};
+	describe('pass isOpen', () => {
+		it('should popover not be open at first rendering, when passing false (default)', () => {
+			const name = nanoid();
+			cy.withDataProvider({
+				component: (
+					<TransitionControl popoverLabel="Transition Control" />
+				),
+				value: [
+					{
+						type: 'all',
+						duration: '0ms',
+						timing: 'ease',
+						delay: '0ms',
+						isOpen: false,
+					},
+				],
+				store: STORE_NAME,
+				name,
+			});
 
-		cy.stub(defaultValue, 'onChange').as('onChange');
-
-		cy.withDataProvider({
-			component: <TransitionControl {...defaultValue} />,
-			value: [],
-			store: STORE_NAME,
-			name,
+			cy.contains('Transition Control').should('not.exist');
 		});
 
-		cy.get('button[aria-label="Add New Transition"]').click();
+		it('should popover be open at first rendering, when passing true', () => {
+			const name = nanoid();
+			cy.withDataProvider({
+				component: (
+					<TransitionControl popoverLabel="Transition Control" />
+				),
+				value: [
+					{
+						type: 'all',
+						duration: '0ms',
+						timing: 'ease',
+						delay: '0ms',
+						isOpen: true,
+					},
+				],
+				store: STORE_NAME,
+				name,
+			});
 
-		cy.get('@onChange').should('have.been.called');
+			cy.contains('Transition Control').should('exist');
+		});
+	});
+
+	describe('pass isVisible', () => {
+		it('should repeater item be visible, when passing true (default)', () => {
+			cy.withDataProvider({
+				component: <TransitionControl />,
+				store: STORE_NAME,
+				value: [
+					{
+						type: 'all',
+						duration: '0ms',
+						timing: 'ease',
+						delay: '0ms',
+						isVisible: true,
+					},
+				],
+			});
+
+			cy.getByDataCy('group-control-header')
+				.parent()
+				.parent()
+				.should('have.class', 'is-active');
+		});
+
+		it('should repeater item be invisible, when passing false', () => {
+			cy.withDataProvider({
+				component: <TransitionControl />,
+				store: STORE_NAME,
+				value: [
+					{
+						type: 'all',
+						duration: '0ms',
+						timing: 'ease',
+						delay: '0ms',
+						isVisible: false,
+					},
+				],
+			});
+
+			cy.getByDataCy('group-control-header')
+				.parent()
+				.parent()
+				.should('have.class', 'is-inactive');
+		});
 	});
 });
-
-//	cy.getByDataTest('transition-input-duration');
-//	cy.getByDataTest('transition-repeater-item');
