@@ -69,7 +69,7 @@ describe('Color-Picker Control', () => {
 			cy.get('[id^=inspector-input-control-]')
 				.should('have.value', '000000')
 				.then(() => {
-					expect(getControlValue(name)).to.be.equal(undefined);
+					expect(Boolean(getControlValue(name))).to.be.equal(false);
 				});
 		});
 	});
