@@ -51,7 +51,7 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 					setValue(snapshot - event.clientY + startVal);
 				}
 				if (movement === 'horizontal') {
-					setValue((snapshot - event.clientX + startVal) * -1);
+					setValue(snapshot - (startVal - event.clientX));
 				}
 			}
 		};
