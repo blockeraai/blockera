@@ -1,4 +1,4 @@
-import { BoxBorderControl } from '../../..';
+import BoxBorderControl from '..';
 import { nanoid } from 'nanoid';
 import { getControlValue } from '../../../store/selectors';
 import { controlReducer } from '../../../store/reducers/control-reducer';
@@ -6,8 +6,7 @@ import { modifyControlValue } from '../../../store/actions';
 import { select } from '@wordpress/data';
 
 describe('box-border-control component testing', () => {
-	it('render correctly', () => {
-		cy.viewport(1000, 1000);
+	it('should render correctly', () => {
 		cy.withDataProvider({
 			component: <BoxBorderControl />,
 			value: {
@@ -23,8 +22,7 @@ describe('box-border-control component testing', () => {
 		cy.contains('2');
 	});
 
-	it('render correctly with label', () => {
-		cy.viewport(1000, 1000);
+	it('should render correctly with label', () => {
 		cy.withDataProvider({
 			component: <BoxBorderControl label="Box Border" />,
 			value: {
@@ -40,16 +38,15 @@ describe('box-border-control component testing', () => {
 		cy.contains('Box Border');
 	});
 
-	it('render correctly with empty value', () => {
+	it('should render correctly with empty value', () => {
 		const name = nanoid();
-		cy.viewport(1000, 1000);
 		cy.withDataProvider({
 			component: <BoxBorderControl label="empty" />,
 			value: {},
 			name,
 		});
 
-		cy.get('input').should('have.value', '0');
+		cy.get('input[type="number"]').should('have.value', '0');
 		cy.get('button[aria-label="Compact"]')
 			.should('have.attr', 'aria-checked')
 			.should('be.equal', 'false');
@@ -58,15 +55,14 @@ describe('box-border-control component testing', () => {
 			.should('be.equal', 'false');
 	});
 
-	it('render correctly with no value and default value', () => {
+	it('should render correctly with no value and default value', () => {
 		const name = nanoid();
-		cy.viewport(1000, 1000);
 		cy.withDataProvider({
 			component: <BoxBorderControl label="empty" />,
 			name,
 		});
 
-		cy.get('input').should('have.value', '0');
+		cy.get('input[type="number"]').should('have.value', '0');
 		cy.get('button[aria-label="Compact"]')
 			.should('have.attr', 'aria-checked')
 			.should('be.equal', 'false');
@@ -75,246 +71,238 @@ describe('box-border-control component testing', () => {
 			.should('be.equal', 'false');
 	});
 
-	describe('type : all', () => {
-		describe('interaction test', () => {
-			it('change width', () => {
-				const name = nanoid();
-				cy.viewport(1000, 1000);
-				cy.withDataProvider({
-					component: <BoxBorderControl />,
-					value: {
-						type: 'all',
-						all: {
-							width: '2px',
-							style: 'solid',
-							color: '#0947eb',
-						},
+	describe('interaction test (type : all)', () => {
+		it('should context and local value be updated, when change width', () => {
+			const name = nanoid();
+
+			cy.withDataProvider({
+				component: <BoxBorderControl />,
+				value: {
+					type: 'all',
+					all: {
+						width: '2px',
+						style: 'solid',
+						color: '#0947eb',
 					},
-					name,
-				});
-
-				cy.get('input').clear();
-				cy.get('input').type('10');
-
-				cy.get('input').should('have.value', '10');
-
-				//Check data provider
-				cy.get('input').then(() => {
-					expect('10px').to.be.equal(getControlValue(name).all.width);
-				});
+				},
+				name,
 			});
 
-			it('change to custom', () => {
-				const name = nanoid();
-				cy.viewport(1000, 1000);
-				cy.withDataProvider({
-					component: <BoxBorderControl />,
-					value: {
-						type: 'all',
-						all: {
-							width: '2px',
-							style: 'solid',
-							color: '#0947eb',
-						},
+			cy.get('input[type="number"]').clear();
+			cy.get('input[type="number"]').type('10');
+
+			cy.get('input[type="number"]').should('have.value', '10');
+
+			//Check data provider
+			cy.get('body').then(() => {
+				expect('10px').to.be.equal(getControlValue(name).all.width);
+			});
+		});
+
+		it('should context and local value be updated, when change to custom', () => {
+			const name = nanoid();
+
+			cy.withDataProvider({
+				component: <BoxBorderControl />,
+				value: {
+					type: 'all',
+					all: {
+						width: '2px',
+						style: 'solid',
+						color: '#0947eb',
 					},
-					name,
-				});
+				},
+				name,
+			});
 
-				cy.get('button[aria-label="Custom"]').click();
-				cy.get('button[aria-label="Custom"]')
-					.should('have.attr', 'aria-checked')
-					.should('be.equal', 'true');
+			cy.get('button[aria-label="Custom"]').click();
+			cy.get('button[aria-label="Custom"]')
+				.should('have.attr', 'aria-checked')
+				.should('be.equal', 'true');
 
-				//Check data provider
-				cy.get('input').then(() => {
-					expect('custom').to.be.equal(getControlValue(name).type);
-				});
+			//Check data provider
+			cy.get('body').then(() => {
+				expect('custom').to.be.equal(getControlValue(name).type);
 			});
 		});
 	});
 
-	describe('type : custom', () => {
-		describe('interaction test', () => {
-			const value = {
-				type: 'custom',
-				all: {
-					width: '0px',
-					style: 'solid',
-					color: '',
-				},
-				left: {
-					width: '0px',
-					style: 'solid',
-					color: '',
-				},
-				right: {
-					width: '0px',
-					style: 'solid',
-					color: '',
-				},
-				top: {
-					width: '0px',
-					style: 'solid',
-					color: '',
-				},
-				bottom: {
-					width: '0px',
-					style: 'solid',
-					color: '',
-				},
-			};
+	describe('interaction test (type : custom)', () => {
+		const value = {
+			type: 'custom',
+			all: {
+				width: '0px',
+				style: 'solid',
+				color: '',
+			},
+			left: {
+				width: '0px',
+				style: 'solid',
+				color: '',
+			},
+			right: {
+				width: '0px',
+				style: 'solid',
+				color: '',
+			},
+			top: {
+				width: '0px',
+				style: 'solid',
+				color: '',
+			},
+			bottom: {
+				width: '0px',
+				style: 'solid',
+				color: '',
+			},
+		};
 
-			it('should have same value as all when change to custom', () => {
-				const name = nanoid();
-				cy.viewport(1000, 1000);
-				cy.withDataProvider({
-					component: <BoxBorderControl />,
-					value: {
-						type: 'all',
-						all: {
-							width: '2px',
-							style: 'solid',
-							color: '#0947eb',
-						},
+		it('should each side have same value as all when change to custom', () => {
+			const name = nanoid();
+
+			cy.withDataProvider({
+				component: <BoxBorderControl />,
+				value: {
+					type: 'all',
+					all: {
+						width: '2px',
+						style: 'solid',
+						color: '#0947eb',
 					},
-					name,
-				});
-
-				cy.get('button[aria-label="Custom"]').click();
-
-				cy.get('input').should('have.value', '2');
-
-				//Check data provider
-				cy.get('input').then(() => {
-					expect({
-						width: '2px',
-						style: 'solid',
-						color: '#0947eb',
-					}).to.be.deep.equal(getControlValue(name).top);
-					expect({
-						width: '2px',
-						style: 'solid',
-						color: '#0947eb',
-					}).to.be.deep.equal(getControlValue(name).right);
-					expect({
-						width: '2px',
-						style: 'solid',
-						color: '#0947eb',
-					}).to.be.deep.equal(getControlValue(name).bottom);
-					expect({
-						width: '2px',
-						style: 'solid',
-						color: '#0947eb',
-					}).to.be.deep.equal(getControlValue(name).left);
-				});
+				},
+				name,
 			});
 
-			it('change width of top border', () => {
-				const name = nanoid();
-				cy.viewport(1000, 1000);
-				cy.withDataProvider({
-					component: <BoxBorderControl />,
-					value,
-					name,
-				});
+			cy.get('button[aria-label="Custom"]').click();
 
-				cy.get('input').eq(0).as('top-width-input');
-				cy.get('@top-width-input').clear();
-				cy.get('@top-width-input').type(5);
+			cy.get('input[type="number"]').should('have.value', '2');
 
-				cy.get('@top-width-input').should('have.value', '5');
+			//Check data provider
+			cy.get('body').then(() => {
+				expect({
+					width: '2px',
+					style: 'solid',
+					color: '#0947eb',
+				}).to.be.deep.equal(getControlValue(name).top);
+				expect({
+					width: '2px',
+					style: 'solid',
+					color: '#0947eb',
+				}).to.be.deep.equal(getControlValue(name).right);
+				expect({
+					width: '2px',
+					style: 'solid',
+					color: '#0947eb',
+				}).to.be.deep.equal(getControlValue(name).bottom);
+				expect({
+					width: '2px',
+					style: 'solid',
+					color: '#0947eb',
+				}).to.be.deep.equal(getControlValue(name).left);
+			});
+		});
 
-				//Check data provider value
-				cy.get('@top-width-input').then(() => {
-					expect('5px').to.be.equal(getControlValue(name).top.width);
-				});
+		it('should context and local value be updated, when change width of top border', () => {
+			const name = nanoid();
+
+			cy.withDataProvider({
+				component: <BoxBorderControl />,
+				value,
+				name,
 			});
 
-			it('change color of right border', () => {
-				const name = nanoid();
-				cy.viewport(1000, 1000);
-				cy.withDataProvider({
-					component: <BoxBorderControl />,
-					value,
-					name,
-				});
+			cy.get('input[type="number"]').eq(0).as('top-width-input');
+			cy.get('@top-width-input').clear();
+			cy.get('@top-width-input').type(5);
 
-				cy.get('button[type="button"]').eq(1).as('right-color-button');
-				cy.get('@right-color-button').click();
-				cy.get('input[maxlength="9"]').clear();
-				cy.get('input[maxlength="9"]').type('b0da3b');
+			cy.get('@top-width-input').should('have.value', '5');
 
-				cy.get('@right-color-button')
-					.should('have.attr', 'style')
-					.should('include', 'b0da3b');
+			//Check data provider value
+			cy.get('@top-width-input').then(() => {
+				expect('5px').to.be.equal(getControlValue(name).top.width);
+			});
+		});
 
-				//Check data provider value
-				cy.get('@right-color-button').then(() => {
-					expect('#b0da3b').to.be.equal(
-						getControlValue(name).right.color
-					);
-				});
+		it('should context and local value be updated, when change color of right border', () => {
+			const name = nanoid();
+
+			cy.withDataProvider({
+				component: <BoxBorderControl />,
+				value,
+				name,
 			});
 
-			it('change style of bottom border', () => {
-				const name = nanoid();
-				cy.viewport(1000, 1000);
-				cy.withDataProvider({
-					component: <BoxBorderControl />,
-					value,
-					name,
-				});
+			cy.get('button[type="button"]').eq(1).as('right-color-button');
+			cy.get('@right-color-button').click();
+			cy.get('input[maxlength="9"]').clear();
+			cy.get('input[maxlength="9"]').type('b0da3b');
 
-				cy.get('button[aria-haspopup="listbox"]')
-					.eq(2)
-					.as('bottom-style-button');
-				cy.get('@bottom-style-button').click();
-				cy.get('ul').get('li').eq(3).click();
+			cy.get('@right-color-button')
+				.should('have.attr', 'style')
+				.should('include', 'b0da3b');
 
-				cy.get('@bottom-style-button').click();
-				cy.get('ul')
-					.get('li')
-					.eq(3)
-					.should('have.attr', 'aria-selected')
-					.should('be.equal', 'true');
+			//Check data provider value
+			cy.get('@right-color-button').then(() => {
+				expect('#b0da3b').to.be.equal(
+					getControlValue(name).right.color
+				);
+			});
+		});
 
-				//Check data provider value
-				cy.get('@bottom-style-button').then(() => {
-					expect('double').to.be.equal(
-						getControlValue(name).bottom.style
-					);
-				});
+		it('should context and local value be updated, when change style of bottom border', () => {
+			const name = nanoid();
+
+			cy.withDataProvider({
+				component: <BoxBorderControl />,
+				value,
+				name,
 			});
 
-			it('change width of left border', () => {
-				const name = nanoid();
-				cy.viewport(1000, 1000);
-				cy.withDataProvider({
-					component: <BoxBorderControl />,
-					value,
-					name,
-				});
+			cy.get('button[aria-haspopup="listbox"]')
+				.eq(2)
+				.as('bottom-style-button');
+			cy.get('@bottom-style-button').click();
+			cy.get('ul').get('li').eq(3).click();
 
-				cy.get('input').eq(3).as('left-width-input');
-				cy.get('@left-width-input').clear();
-				cy.get('@left-width-input').type(10);
+			cy.get('@bottom-style-button').click();
+			cy.get('ul')
+				.get('li')
+				.eq(3)
+				.should('have.attr', 'aria-selected')
+				.should('be.equal', 'true');
 
-				cy.get('@left-width-input').should('have.value', '10');
+			//Check data provider value
+			cy.get('@bottom-style-button').then(() => {
+				expect('double').to.be.equal(
+					getControlValue(name).bottom.style
+				);
+			});
+		});
 
-				//Check data provider value
-				cy.get('@left-width-input').then(() => {
-					expect('10px').to.be.equal(
-						getControlValue(name).left.width
-					);
-				});
+		it('should context and local value be updated, when change width of left border', () => {
+			const name = nanoid();
+
+			cy.withDataProvider({
+				component: <BoxBorderControl />,
+				value,
+				name,
+			});
+
+			cy.get('input[type="number"]').eq(3).as('left-width-input');
+			cy.get('@left-width-input').clear();
+			cy.get('@left-width-input').type(10);
+
+			cy.get('@left-width-input').should('have.value', '10');
+
+			//Check data provider value
+			cy.get('@left-width-input').then(() => {
+				expect('10px').to.be.equal(getControlValue(name).left.width);
 			});
 		});
 	});
 
-	//will fail. after merging of border-control try again
 	describe('test useControlContext', () => {
 		it('should render default value when:defaultValue OK && id !OK && value is undefined', () => {
-			cy.viewport(1000, 1000);
 			cy.withDataProvider({
 				component: (
 					<BoxBorderControl
@@ -330,7 +318,7 @@ describe('box-border-control component testing', () => {
 				),
 			});
 
-			cy.get('input').should('have.value', '2');
+			cy.get('input[type="number"]').should('have.value', '2');
 		});
 
 		it('should render value when: defaultValue OK && id OK && value is OK', () => {
@@ -360,7 +348,7 @@ describe('box-border-control component testing', () => {
 				],
 			});
 
-			cy.get('input').should('have.value', '5');
+			cy.get('input[type="number"]').should('have.value', '5');
 		});
 
 		it('should render default value when:defaultValue OK && id is invalid, value ok', () => {
@@ -390,7 +378,7 @@ describe('box-border-control component testing', () => {
 				],
 			});
 
-			cy.get('input').should('have.value', '2');
+			cy.get('input[type="number"]').should('have.value', '2');
 		});
 
 		it('should render default value when:defaultValue OK && id is valid, value is invalid', () => {
@@ -411,7 +399,7 @@ describe('box-border-control component testing', () => {
 				value: [{ data: undefined }],
 			});
 
-			cy.get('input').should('have.value', '2');
+			cy.get('input[type="number"]').should('have.value', '2');
 		});
 
 		it('should render value when:defaultValue !OK && id !OK && value exists on root', () => {
@@ -427,11 +415,11 @@ describe('box-border-control component testing', () => {
 				},
 			});
 
-			cy.get('input').should('have.value', '5');
+			cy.get('input[type="number"]').should('have.value', '5');
 		});
 	});
 
-	it('does onChange fire ?', () => {
+	it('should onChange be called, when interacting', () => {
 		const defaultProps = {
 			onChange: (value) => {
 				controlReducer(
@@ -457,7 +445,7 @@ describe('box-border-control component testing', () => {
 			},
 		});
 
-		cy.get('input').clear();
+		cy.get('input[type="number"]').clear();
 
 		cy.get('@onChange').should('have.been.called');
 	});
