@@ -7,7 +7,7 @@ import { getControlValue } from '../../../store/selectors';
 import { nanoid } from 'nanoid';
 
 describe('box-shadow-control component testing', () => {
-	it('render correctly', () => {
+	it('should render correctly', () => {
 		cy.withDataProvider({
 			component: <BoxShadowControl />,
 			store: STORE_NAME,
@@ -27,7 +27,7 @@ describe('box-shadow-control component testing', () => {
 		cy.getByDataCy('group-control-header').should('exist');
 	});
 
-	it('render correctly with empty value', () => {
+	it('should render correctly with empty value', () => {
 		cy.withDataProvider({
 			component: <BoxShadowControl />,
 			store: STORE_NAME,
@@ -37,7 +37,7 @@ describe('box-shadow-control component testing', () => {
 		cy.getByDataCy('group-control-header').should('not.exist');
 	});
 
-	it('render correctly with no value and defaultValue', () => {
+	it('should render correctly without value and defaultValue', () => {
 		cy.withDataProvider({
 			component: <BoxShadowControl />,
 			store: STORE_NAME,
@@ -46,7 +46,7 @@ describe('box-shadow-control component testing', () => {
 		cy.getByDataCy('group-control-header').should('not.exist');
 	});
 
-	it('render correctly with defaultValue', () => {
+	it('should render correctly with defaultValue', () => {
 		cy.withDataProvider({
 			component: (
 				<BoxShadowControl
@@ -69,7 +69,7 @@ describe('box-shadow-control component testing', () => {
 		cy.getByDataCy('group-control-header').eq(0).contains('Inner');
 	});
 
-	it('render correctly with label', () => {
+	it('should render correctly with label', () => {
 		cy.withDataProvider({
 			component: <BoxShadowControl label={'Box Shadow'} />,
 			store: STORE_NAME,
@@ -89,52 +89,54 @@ describe('box-shadow-control component testing', () => {
 		cy.contains('Box Shadow');
 	});
 
-	it('does onChange fire?', () => {
-		const name = nanoid();
-		const defaultProps = {
-			onChange: (value) => {
-				controlReducer(
-					select('publisher-core/controls').getControl(name),
-					modifyControlValue({
-						value,
-						controlId: name,
-					})
-				);
-			},
-		};
-		cy.stub(defaultProps, 'onChange').as('onChange');
-
-		cy.withDataProvider({
-			component: (
-				<BoxShadowControl popoverLabel="Box Shadow" {...defaultProps} />
-			),
-			value: [
-				{
-					type: 'outer',
-					x: '0px',
-					y: '0px',
-					blur: '0px',
-					spread: '0px',
-					color: '#000000ab',
-					isVisible: true,
+	describe('interaction test: ', () => {
+		it('should onChange be called when interacting', () => {
+			const name = nanoid();
+			const defaultProps = {
+				onChange: (value) => {
+					controlReducer(
+						select('publisher-core/controls').getControl(name),
+						modifyControlValue({
+							value,
+							controlId: name,
+						})
+					);
 				},
-			],
-			store: STORE_NAME,
-			name,
+			};
+			cy.stub(defaultProps, 'onChange').as('onChange');
+
+			cy.withDataProvider({
+				component: (
+					<BoxShadowControl
+						popoverLabel="Box Shadow"
+						{...defaultProps}
+					/>
+				),
+				value: [
+					{
+						type: 'outer',
+						x: '0px',
+						y: '0px',
+						blur: '0px',
+						spread: '0px',
+						color: '#000000ab',
+						isVisible: true,
+					},
+				],
+				store: STORE_NAME,
+				name,
+			});
+
+			cy.getByDataCy('group-control-header').eq(0).click();
+			cy.contains('Box Shadow').as('popover');
+
+			cy.get('@popover').get('button[aria-label="Inner"]').click();
+
+			cy.get('@onChange').should('have.been.called');
 		});
 
-		cy.getByDataCy('group-control-header').eq(0).click();
-		cy.contains('Box Shadow').as('popover');
-
-		cy.get('@popover').get('button[aria-label="Inner"]').click();
-
-		cy.get('@onChange').should('have.been.called');
-	});
-
-	describe('interaction test: ', () => {
-		it('add one more item', () => {
+		it('should context value have length of 2, when adding one more item', () => {
 			const name = nanoid();
-			cy.viewport(1000, 1000);
 			cy.withDataProvider({
 				component: <BoxShadowControl label={'Box Shadow'} />,
 				value: [
@@ -162,9 +164,8 @@ describe('box-shadow-control component testing', () => {
 			});
 		});
 
-		it('change data (type:outer)', () => {
+		it('should context and local value be updated, when changing values (type:outer)', () => {
 			const name = nanoid();
-			cy.viewport(1000, 1000);
 			cy.withDataProvider({
 				component: <BoxShadowControl popoverLabel={'Box Shadow'} />,
 				value: [
@@ -250,9 +251,8 @@ describe('box-shadow-control component testing', () => {
 			});
 		});
 
-		it('change type and data ', () => {
+		it('should context and local value be updated, when changing values (type:inner)', () => {
 			const name = nanoid();
-			cy.viewport(1000, 1000);
 			cy.withDataProvider({
 				component: <BoxShadowControl popoverLabel={'Box Shadow'} />,
 				value: [
@@ -343,7 +343,7 @@ describe('box-shadow-control component testing', () => {
 	});
 
 	describe('pass isOpen', () => {
-		it('passing false (default)', () => {
+		it('should popover not be open at first rendering, when passing false (default)', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <BoxShadowControl popoverLabel="Box Shadow" />,
@@ -366,7 +366,7 @@ describe('box-shadow-control component testing', () => {
 			cy.contains('Box Shadow').should('not.exist');
 		});
 
-		it('passing true', () => {
+		it('should popover be open at first rendering, when passing true', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <BoxShadowControl popoverLabel="Box Shadow" />,
@@ -391,7 +391,7 @@ describe('box-shadow-control component testing', () => {
 	});
 
 	describe('pass isVisible', () => {
-		it('passing true (default)', () => {
+		it('should repeater item be visible, when passing true (default)', () => {
 			cy.withDataProvider({
 				component: <BoxShadowControl />,
 				store: STORE_NAME,
@@ -414,7 +414,7 @@ describe('box-shadow-control component testing', () => {
 				.should('have.class', 'is-active');
 		});
 
-		it('passing false', () => {
+		it('should repeater item be invisible, when passing false', () => {
 			cy.withDataProvider({
 				component: <BoxShadowControl />,
 				store: STORE_NAME,
