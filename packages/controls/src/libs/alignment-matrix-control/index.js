@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -15,11 +16,11 @@ import { Flex } from '@publisher/components';
  * Internal dependencies
  */
 import BaseControl from '../base-control';
-import { isUndefined } from '@publisher/utils';
 import { InputControl } from '../input-control';
 import { useControlContext } from '../../context';
 import { convertAlignmentMatrixCoordinates } from './utils';
-
+import type { Props } from './types';
+import type { MixedElement } from 'react';
 export default function AlignmentMatrixControl({
 	inputFields,
 	size,
@@ -32,7 +33,7 @@ export default function AlignmentMatrixControl({
 	field,
 	//
 	className,
-}) {
+}: Props): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
 		onChange,
@@ -105,7 +106,7 @@ export default function AlignmentMatrixControl({
 					<Flex direction="column" gap="8px" justify="space-around">
 						<InputControl
 							columns="columns-2"
-							id={isUndefined(id) ? 'top' : `${id}.top`}
+							id={id === undefined ? 'top' : `${id}.top`}
 							label={__('Top', 'publisher-core')}
 							type="css"
 							min={0}
@@ -122,7 +123,7 @@ export default function AlignmentMatrixControl({
 
 						<InputControl
 							columns="columns-2"
-							id={isUndefined(id) ? 'left' : `${id}.left`}
+							id={id === undefined ? 'left' : `${id}.left`}
 							label={__('Left', 'publisher-core')}
 							type="css"
 							min={0}
@@ -169,10 +170,10 @@ AlignmentMatrixControl.propTypes = {
 	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
-	defaultValue: PropTypes.shape({
+	defaultValue: (PropTypes.shape({
 		top: PropTypes.string,
 		left: PropTypes.string,
-	}),
+	}): { top: string, left: string }),
 	/**
 	 * If provided, sets the size (width and height) of the control.
 	 *
