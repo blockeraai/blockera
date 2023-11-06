@@ -103,8 +103,7 @@ FilterControl.propTypes = {
 	/**
 	 * Default value of each repeater item
 	 */
-	// $FlowFixMe
-	defaultRepeaterItemValue: PropTypes.shape({
+	defaultRepeaterItemValue: (PropTypes.shape({
 		type: PropTypes.oneOf([
 			'blur',
 			'drop-shadow',
@@ -129,7 +128,7 @@ FilterControl.propTypes = {
 		'drop-shadow-blur': PropTypes.string,
 		'drop-shadow-color': PropTypes.string,
 		isVisible: PropTypes.bool,
-	}),
+	}): any),
 	/**
 	 * Label for popover
 	 */
@@ -137,8 +136,7 @@ FilterControl.propTypes = {
 };
 
 FilterControl.defaultProps = {
-	// $FlowFixMe
-	defaultValue: [],
+	defaultValue: ([]: any),
 	defaultRepeaterItemValue: {
 		type: 'blur',
 		blur: '3px',
@@ -155,6 +153,5 @@ FilterControl.defaultProps = {
 		'drop-shadow-color': '',
 		isVisible: true,
 	},
-	// $FlowFixMe
-	popoverLabel: __('Filter Effect', 'publisher-core'),
+	popoverLabel: (__('Filter Effect', 'publisher-core'): any),
 };
