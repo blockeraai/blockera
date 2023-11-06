@@ -19,7 +19,8 @@ import { Button, Flex, Grid } from '@publisher/components';
  */
 import { LabelControl, SelectControl } from '../index';
 import { SidePopover } from './components/side-popover';
-
+import { useDragValue } from '../../hooks';
+import { useDragSetValues } from './hooks/use-drag-setValues';
 // icons
 import { default as SideTopIcon } from './icons/side-top';
 import { default as SideRightIcon } from './icons/side-right';
@@ -59,6 +60,46 @@ function BoxPositionControl({
 		onChange,
 		defaultValue,
 		mergeInitialAndDefault: true,
+	});
+	const {
+		topDragSetValue,
+		rightDragSetValue,
+		bottomDragSetValue,
+		leftDragSetValue,
+	} = useDragSetValues({ value, setValue });
+
+	const fixLabelToNumber = (labelValue) => {
+		if (labelValue) {
+			return labelValue.replace(
+				/(auto|px|%|em|rem|ch|vw|vh|dvw|dvh)$/,
+				''
+			);
+		}
+		return '';
+	};
+
+	const topDragValueHandler = useDragValue({
+		value: fixLabelToNumber(value.position.top) || 0,
+		setValue: topDragSetValue,
+		movement: 'vertical',
+	});
+
+	const leftDragValueHandler = useDragValue({
+		value: fixLabelToNumber(value.position.left) || 0,
+		setValue: leftDragSetValue,
+		movement: 'horizontal',
+	});
+
+	const rightDragValueHandler = useDragValue({
+		value: fixLabelToNumber(value.position.right) || 0,
+		setValue: rightDragSetValue,
+		movement: 'horizontal',
+	});
+
+	const bottomDragValueHandler = useDragValue({
+		value: fixLabelToNumber(value.position.bottom) || 0,
+		setValue: bottomDragSetValue,
+		movement: 'vertical',
 	});
 
 	const [openPopover, setOpenPopover] = useState(openSide);
@@ -164,6 +205,7 @@ function BoxPositionControl({
 								'side-top',
 								openPopover === 'top' ? 'selected-side' : ''
 							)}
+							onMouseDown={topDragValueHandler}
 							d="M5.242 0.5H244.757C246.094 0.5 246.763 2.11572 245.818 3.06066L220.697 28.182C219.853 29.0259 218.708 29.5 217.515 29.5H32.4846C31.2912 29.5 30.1466 29.0259 29.3027 28.182L4.18134 3.06066C3.23639 2.11571 3.90564 0.5 5.242 0.5Z"
 						/>
 
@@ -174,6 +216,7 @@ function BoxPositionControl({
 								'side-right',
 								openPopover === 'right' ? 'selected-side' : ''
 							)}
+							onMouseDown={rightDragValueHandler}
 							d="M220.5 42.4679V34.4854C220.5 33.2919 220.974 32.1473 221.818 31.3034L246.939 6.18207C247.884 5.23713 249.5 5.90638 249.5 7.24273V69.7106C249.5 71.0469 247.884 71.7162 246.939 70.7712L221.818 45.6499C220.974 44.806 220.5 43.6614 220.5 42.4679Z"
 						/>
 
@@ -184,6 +227,7 @@ function BoxPositionControl({
 								'side-bottom',
 								openPopover === 'bottom' ? 'selected-side' : ''
 							)}
+							onMouseDown={bottomDragValueHandler}
 							d="M32.4387 47.5H217.562C218.755 47.5 219.9 47.9741 220.744 48.818L245.865 73.9393C246.81 74.8843 246.141 76.5 244.804 76.5H5.19611C3.85975 76.5 3.1905 74.8843 4.13544 73.9393L29.2568 48.818C30.1007 47.9741 31.2453 47.5 32.4387 47.5Z"
 						/>
 
@@ -194,6 +238,7 @@ function BoxPositionControl({
 								'side-left',
 								openPopover === 'left' ? 'selected-side' : ''
 							)}
+							onMouseDown={leftDragValueHandler}
 							d="M0.5 69.7106V7.24322C0.5 5.90687 2.11571 5.23761 3.06066 6.18256L28.182 31.3039C29.0259 32.1478 29.5 33.2924 29.5 34.4859V42.468C29.5 43.6615 29.0259 44.8061 28.182 45.65L3.06066 70.7713C2.11571 71.7163 0.5 71.047 0.5 69.7106Z"
 						/>
 					</svg>
