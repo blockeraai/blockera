@@ -44,8 +44,8 @@ describe('ext shadow control component testing', () => {
 				name,
 			});
 
-			cy.get('.publisher-control-repeater')
-				.find('.publisher-control-repeater-item')
+			cy.getByDataCy('publisher-repeater-control')
+				.find('[data-cy="repeater-item"]')
 				.should('have.length', 2);
 
 			// Check data provider value!
@@ -103,7 +103,7 @@ describe('ext shadow control component testing', () => {
 				store: STORE_NAME,
 			});
 
-			cy.get('.publisher-control-repeater-item').click();
+			cy.getByDataCy('repeater-item').click();
 			cy.get('.publisher-component-popover-header').should(
 				'contain',
 				'My Popover Label'
@@ -147,7 +147,7 @@ describe('ext shadow control component testing', () => {
 			});
 
 			cy.get('[aria-label="Add New Text Shadow"]').click();
-			cy.get('.publisher-control-repeater-item').click();
+			cy.getByDataCy('repeater-item').click();
 
 			/* eslint-disable cypress/unsafe-to-chain-command */
 			cy.get('#inspector-input-control-3')
@@ -168,7 +168,7 @@ describe('ext shadow control component testing', () => {
 				.should('have.value', '50');
 
 			cy.get('.publisher-control-color').click();
-			cy.get('.publisher-control-repeater-item').clickOutside();
+			cy.getByDataCy('repeater-item').clickOutside();
 
 			// Check data provider value!
 			cy.then(() => {
