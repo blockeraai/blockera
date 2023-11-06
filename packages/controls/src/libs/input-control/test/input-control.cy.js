@@ -344,7 +344,11 @@ describe('input control component testing', () => {
 				.should('have.value', 'px');
 			cy.get('input[type=range]').should('exist');
 			cy.get('input[type=range]').invoke('val', '70').trigger('change');
-			cy.get('input').should('have.value', '70');
+			cy.get('input[type=range]').should('have.value', '70');
+			cy.get('input[type=number]').should('have.value', '70');
+			cy.then(() => {
+				expect(getControlValue(name)).to.eq('70px');
+			});
 
 			cy.get('[aria-label="Select unit"]')
 				.select('auto')
