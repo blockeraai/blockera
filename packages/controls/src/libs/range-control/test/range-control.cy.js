@@ -12,7 +12,7 @@ describe('range-control component testing', () => {
 		field: 'range',
 	};
 
-	it('render correctly', () => {
+	it('should render correctly', () => {
 		cy.withDataProvider({
 			component: <RangeControl {...defaultProps} />,
 			value: 0,
@@ -21,7 +21,7 @@ describe('range-control component testing', () => {
 		cy.getByDataTest('range-control').should('exist');
 	});
 
-	it('render correctly with label', () => {
+	it('should render correctly with label', () => {
 		cy.withDataProvider({
 			component: <RangeControl {...defaultProps} label="Range Control" />,
 			value: 0,
@@ -31,7 +31,7 @@ describe('range-control component testing', () => {
 		cy.contains('Range Control');
 	});
 
-	it('render correctly with input field(default)', () => {
+	it('should render correctly with input field(default)', () => {
 		cy.withDataProvider({
 			component: <RangeControl {...defaultProps} withInputField={true} />,
 			value: 0,
@@ -41,7 +41,7 @@ describe('range-control component testing', () => {
 		cy.get('input[type="number"]').should('exist');
 	});
 
-	it('render correctly without input field', () => {
+	it('should render correctly without input field', () => {
 		cy.withDataProvider({
 			component: (
 				<RangeControl {...defaultProps} withInputField={false} />
@@ -54,7 +54,7 @@ describe('range-control component testing', () => {
 	});
 
 	describe('interaction test :', () => {
-		it('change value by typing', () => {
+		it('should value be equal with context when changing by type', () => {
 			cy.withDataProvider({
 				component: <RangeControl {...defaultProps} />,
 				value: 0,
@@ -77,14 +77,14 @@ describe('range-control component testing', () => {
 		});
 
 		//TODO:
-		// it('change value by dragging', () => {
+		// it('should value be equal with context when changing by drag', () => {
 		// 	cy.withDataProvider({
 		// 		component: <RangeControl {...defaultProps} />,
 		// 		value: 0,
 		// 	});
 		// });
 
-		it('does onChange fire?', () => {
+		it('should onChange fire when interacting with component', () => {
 			const defaultProps = {
 				withInputField: true,
 				field: 'range',
