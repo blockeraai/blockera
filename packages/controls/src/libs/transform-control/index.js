@@ -43,10 +43,6 @@ TransformControl.propTypes = {
 	 */
 	defaultValue: PropTypes.array,
 	/**
-	 * The current value.
-	 */
-	value: PropTypes.array,
-	/**
 	 * Function that will be fired while the control value state changes.
 	 */
 	onChange: PropTypes.func,
@@ -73,7 +69,6 @@ TransformControl.propTypes = {
 };
 
 TransformControl.defaultProps = {
-	value: ([]: Array<empty>),
 	defaultRepeaterItemValue: {
 		type: 'move',
 		'move-x': '0px',
