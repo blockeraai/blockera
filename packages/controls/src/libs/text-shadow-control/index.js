@@ -71,6 +71,7 @@ TextShadowControl.propTypes = {
 };
 
 TextShadowControl.defaultProps = {
+	// $FlowFixMe
 	value: [],
 	defaultRepeaterItemValue: {
 		x: '1px',
@@ -79,5 +80,6 @@ TextShadowControl.defaultProps = {
 		color: '',
 		isVisible: true,
 	},
+	// $FlowFixMe
 	popoverLabel: __('Text Shadow', 'publisher-core'),
 };
