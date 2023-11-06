@@ -53,8 +53,7 @@ BoxShadowControl.propTypes = {
 	/**
 	 * Default value of each repeater item
 	 */
-	// $FlowFixMe
-	defaultRepeaterItemValue: PropTypes.shape({
+	defaultRepeaterItemValue: (PropTypes.shape({
 		type: PropTypes.oneOf(['outer', 'inner']),
 		x: PropTypes.string,
 		y: PropTypes.string,
@@ -62,7 +61,7 @@ BoxShadowControl.propTypes = {
 		spread: PropTypes.string,
 		color: PropTypes.string,
 		isVisible: PropTypes.bool,
-	}),
+	}): any),
 	/**
 	 * Label for popover
 	 */
@@ -70,8 +69,7 @@ BoxShadowControl.propTypes = {
 };
 
 BoxShadowControl.defaultProps = {
-	// $FlowFixMe
-	defaultValue: [],
+	defaultValue: ([]: any),
 	defaultRepeaterItemValue: {
 		type: 'outer',
 		x: '0px',
@@ -81,6 +79,5 @@ BoxShadowControl.defaultProps = {
 		color: '#000000ab',
 		isVisible: true,
 	},
-	// $FlowFixMe
-	popoverLabel: __('Box Shadow', 'publisher-core'),
+	popoverLabel: (__('Box Shadow', 'publisher-core'): any),
 };
