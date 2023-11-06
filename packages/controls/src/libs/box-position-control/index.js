@@ -118,16 +118,26 @@ function BoxPositionControl({
 				if (match[2] === 'auto') {
 					value = <>Auto</>;
 				} else {
+					const inputValue = match.input.replace(
+						/(auto|px|%|em|rem|ch|vw|vh|dvw|dvh)/,
+						''
+					);
 					value = (
 						<>
-							{match[1]}
+							{inputValue}
 							<i>{match[2]}</i>
 						</>
 					);
 				}
 			}
 		}
+
 		return value;
+	}
+
+	function getUnitType(value) {
+		const match = value.match(/(auto|px|%|em|rem|ch|vw|vh|dvw|dvh)/);
+		return match ? match[0] : '';
 	}
 
 	return (
@@ -282,6 +292,7 @@ function BoxPositionControl({
 							onClose={() => setOpenPopover('')}
 							title={__('Top Position', 'publisher-core')}
 							isOpen={openPopover === 'top'}
+							unit={getUnitType(value.position.top)}
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -314,6 +325,7 @@ function BoxPositionControl({
 							onClose={() => setOpenPopover('')}
 							title={__('Right Position', 'publisher-core')}
 							isOpen={openPopover === 'right'}
+							unit={getUnitType(value.position.right)}
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -345,6 +357,7 @@ function BoxPositionControl({
 							onClose={() => setOpenPopover('')}
 							title={__('Bottom Position', 'publisher-core')}
 							isOpen={openPopover === 'bottom'}
+							unit={getUnitType(value.position.bottom)}
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -376,6 +389,7 @@ function BoxPositionControl({
 							onClose={() => setOpenPopover('')}
 							title={__('Left Position', 'publisher-core')}
 							isOpen={openPopover === 'left'}
+							unit={getUnitType(value.position.left)}
 							onChange={(newValue) => {
 								setValue({
 									...value,
