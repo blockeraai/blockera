@@ -20,6 +20,23 @@ import { RangeControl, BaseControl } from './../index';
 import { getCSSUnits, isSpecialUnit } from './utils';
 import { useControlContext } from '../../context';
 
+function valueCleanup(value) {
+	let updatedValue = value;
+	const strValue = value.toString();
+	if (strValue.includes('auto')) {
+		updatedValue = 'auto';
+	}
+	if (strValue.includes('initial')) {
+		updatedValue = 'initial';
+	}
+	if (strValue.includes('inherit')) {
+		updatedValue = 'inherit';
+	}
+	console.log('updatedValue:', updatedValue);
+
+	return updatedValue;
+}
+
 export function InputControl({
 	unitType,
 	units,
@@ -38,7 +55,10 @@ export function InputControl({
 		id,
 		defaultValue,
 		onChange,
+		valueCleanup,
 	});
+
+	console.log('value:', value);
 
 	// add css units
 	if (unitType !== '' && (isUndefined(units) || isEmpty(units))) {
@@ -68,6 +88,7 @@ export function InputControl({
 						className={className}
 						onChange={(newValue) => {
 							// extract unit from old value and assign it to newValue
+							console.log('range value: ', newValue);
 							if (isString(value))
 								newValue =
 									newValue + value.replace(/[0-9|-]/gi, '');
