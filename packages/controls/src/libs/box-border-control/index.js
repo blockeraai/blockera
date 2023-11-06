@@ -25,7 +25,7 @@ import {
 	LabelControl,
 	ToggleSelectControl,
 } from '../index';
-import type { TBoxBorderControl, TValueTypes } from './types/control-types';
+import type { TBoxBorderControl, TValueTypes } from './types';
 
 export default function BoxBorderControl({
 	id,
@@ -274,8 +274,7 @@ BoxBorderControl.propTypes = {
 	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
-	// $FlowFixMe
-	defaultValue: PropTypes.oneOfType([
+	defaultValue: (PropTypes.oneOfType([
 		PropTypes.shape({
 			type: 'all',
 			all: PropTypes.shape({
@@ -312,7 +311,7 @@ BoxBorderControl.propTypes = {
 				color: PropTypes.string,
 			}),
 		}),
-	]),
+	]): any),
 	/**
 	 * Function that will be fired while the control value state changes.
 	 */
