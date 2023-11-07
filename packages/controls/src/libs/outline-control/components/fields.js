@@ -59,6 +59,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							},
 						})
 					}
+					defaultValue={item.border}
 				/>
 
 				<InputControl
@@ -83,6 +84,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							},
 						})
 					}
+					defaultValue={item.offset}
+					data-test="outline-offset-input"
 				/>
 			</div>
 		);
