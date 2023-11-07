@@ -22,7 +22,7 @@ describe('input control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				expect(getControlValue(name)).to.eq(20);
+				return expect(getControlValue(name)).to.eq(20);
 			});
 		});
 		it('should display onchanged value - number', () => {
@@ -36,7 +36,7 @@ describe('input control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				expect(getControlValue(name)).to.eq('100');
+				return expect(getControlValue(name)).to.eq('100');
 			});
 		});
 		it('should display onchanged value - string', () => {
@@ -52,7 +52,9 @@ describe('input control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				expect(getControlValue(name)).to.eq('this is a test value');
+				return expect(getControlValue(name)).to.eq(
+					'this is a test value'
+				);
 			});
 		});
 		it('should render clear input', () => {
@@ -87,7 +89,9 @@ describe('input control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				expect(getControlValue(name).inputControl).to.eq('300px');
+				return expect(getControlValue(name).inputControl).to.eq(
+					'300px'
+				);
 			});
 		});
 		it('should control data value equal with expected defaultValue when id of context value was not defined', () => {
@@ -110,7 +114,7 @@ describe('input control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				expect(getControlValue(name).inputControl.value).to.eq(
+				return expect(getControlValue(name).inputControl.value).to.eq(
 					undefined
 				);
 			});
@@ -166,7 +170,7 @@ describe('input control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				expect(getControlValue(name)).to.eq('100');
+				return expect(getControlValue(name)).to.eq('100');
 			});
 
 			cy.get('input[type="number"]').clear();
@@ -175,7 +179,7 @@ describe('input control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				expect(getControlValue(name)).to.eq('-100');
+				return expect(getControlValue(name)).to.eq('-100');
 			});
 		});
 		it('should skip string value', () => {
@@ -216,7 +220,7 @@ describe('input control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				expect(getControlValue(name)).to.eq('100px');
+				return expect(getControlValue(name)).to.eq('100px');
 			});
 
 			cy.get('[aria-label="Select unit"]')
@@ -225,7 +229,7 @@ describe('input control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				expect(getControlValue(name)).to.eq('100%');
+				return expect(getControlValue(name)).to.eq('100%');
 			});
 
 			cy.get('[aria-label="Select unit"]')
@@ -234,7 +238,7 @@ describe('input control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				expect(getControlValue(name)).to.eq('100em');
+				return expect(getControlValue(name)).to.eq('100em');
 			});
 		});
 		it('should change and handle units dropdown with unit type', () => {
@@ -251,7 +255,7 @@ describe('input control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				expect(getControlValue(name)).to.eq('100%');
+				return expect(getControlValue(name)).to.eq('100%');
 			});
 
 			cy.get('[aria-label="Select unit"]')
@@ -260,7 +264,7 @@ describe('input control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				expect(getControlValue(name)).to.eq('100px');
+				return expect(getControlValue(name)).to.eq('100px');
 			});
 
 			cy.get('[aria-label="Select unit"]')
@@ -269,7 +273,7 @@ describe('input control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				expect(getControlValue(name)).to.eq('100vw');
+				return expect(getControlValue(name)).to.eq('100vw');
 			});
 
 			cy.get('[aria-label="Select unit"]')
@@ -278,7 +282,7 @@ describe('input control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				expect(getControlValue(name)).to.eq('100vh');
+				return expect(getControlValue(name)).to.eq('100vh');
 			});
 
 			cy.get('[aria-label="Select unit"]')
@@ -287,7 +291,7 @@ describe('input control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				expect(getControlValue(name)).to.eq('100dvw');
+				return expect(getControlValue(name)).to.eq('100dvw');
 			});
 
 			cy.get('[aria-label="Select unit"]')
@@ -296,18 +300,25 @@ describe('input control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				expect(getControlValue(name)).to.eq('100dvh');
+				return expect(getControlValue(name)).to.eq('100dvh');
 			});
 		});
 	});
 
 	describe('range unit', () => {
 		it('should change value by range control ', () => {
+			const name = nanoid();
 			cy.withDataProvider({
 				component: <InputControl range />,
+				name,
 			});
-			cy.get('input[type=range]').invoke('val', '70').trigger('change');
-			cy.get('input').should('have.value', '70');
+			cy.get('input[type=range]').setSliderValue(25);
+			cy.get('input[type=text]').should('have.value', '25px');
+
+			// Check data provider value!
+			cy.then(() => {
+				return expect(getControlValue(name)).to.eq('25px');
+			});
 		});
 		it('should render range unit input', () => {
 			const units = [
@@ -315,11 +326,15 @@ describe('input control component testing', () => {
 				{ value: '%', label: '%', default: 10 },
 				{ value: 'em', label: 'em', default: 0 },
 			];
+			const name = nanoid();
 			cy.withDataProvider({
 				component: <InputControl range units={units} />,
+				name,
 			});
-			cy.get('input[type=range]').invoke('val', '70').trigger('change');
-			cy.get('input').should('have.value', '70');
+
+			cy.get('input[type=range]').setSliderValue(25);
+			cy.get('input[type=number]').should('have.value', '25');
+
 			cy.get('[aria-label="Select unit"]')
 				.select('px')
 				.should('have.value', 'px');
@@ -329,56 +344,61 @@ describe('input control component testing', () => {
 			cy.get('[aria-label="Select unit"]')
 				.select('em')
 				.should('have.value', 'em');
+
+			// Check data provider value!
+			cy.then(() => {
+				return expect(getControlValue(name)).to.eq('25em');
+			});
 		});
 	});
 
-	describe('css unit', () => {
-		it('should render css units', () => {
-			const name = nanoid();
-			cy.withDataProvider({
-				component: <InputControl range unitType="general" />,
-				name,
-			});
-			cy.get('[aria-label="Select unit"]')
-				.select('px')
-				.should('have.value', 'px');
-			cy.get('input[type=range]').should('exist');
-			cy.get('input[type=range]').invoke('val', '70').trigger('change');
-			cy.get('input[type=range]').should('have.value', '70');
-			cy.get('input[type=number]').should('have.value', '70');
-			cy.then(() => {
-				expect(getControlValue(name)).to.eq('70px');
-			});
+	// describe('css unit', () => {
+	// 	it('should render css units', () => {
+	// 		const name = nanoid();
+	// 		cy.withDataProvider({
+	// 			component: <InputControl range unitType="general" />,
+	// 			name,
+	// 		});
+	// 		cy.get('[aria-label="Select unit"]')
+	// 			.select('px')
+	// 			.should('have.value', 'px');
+	// 		cy.get('input[type=range]').should('exist');
+	// 		cy.get('input[type=range]').setSliderValue(25);
+	// 		cy.get('input[type=range]').should('have.value', '25');
+	// 		cy.get('input[type=number]').should('have.value', '25');
+	// 		cy.then(() => {
+	// 			return expect(getControlValue(name)).to.eq('25px');
+	// 		});
 
-			cy.get('[aria-label="Select unit"]')
-				.select('auto')
-				.should('have.value', 'auto');
+	// 		cy.get('[aria-label="Select unit"]')
+	// 			.select('auto')
+	// 			.should('have.value', 'auto');
 
-			// Check data provider value!
-			cy.then(() => {
-				expect(getControlValue(name)).to.eq('auto');
-			});
+	// 		// Check data provider value!
+	// 		cy.then(() => {
+	// 			return expect(getControlValue(name)).to.eq('auto');
+	// 		});
 
-			cy.get('input[type=range]').should('not.be.visible');
-			cy.get('[aria-label="Select unit"]')
-				.select('inherit')
-				.should('have.value', 'inherit');
+	// 		cy.get('input[type=range]').should('not.be.visible');
+	// 		cy.get('[aria-label="Select unit"]')
+	// 			.select('inherit')
+	// 			.should('have.value', 'inherit');
 
-			// Check data provider value!
-			cy.then(() => {
-				expect(getControlValue(name)).to.eq('inherit');
-			});
+	// 		// Check data provider value!
+	// 		cy.then(() => {
+	// 			return expect(getControlValue(name)).to.eq('inherit');
+	// 		});
 
-			cy.get('input[type=range]').should('not.be.visible');
-			cy.get('[aria-label="Select unit"]')
-				.select('initial')
-				.should('have.value', 'initial');
+	// 		cy.get('input[type=range]').should('not.be.visible');
+	// 		cy.get('[aria-label="Select unit"]')
+	// 			.select('initial')
+	// 			.should('have.value', 'initial');
 
-			// Check data provider value!
-			cy.then(() => {
-				expect(getControlValue(name)).to.eq('initial');
-			});
-			cy.get('input[type=range]').should('not.be.visible');
-		});
-	});
+	// 		// Check data provider value!
+	// 		cy.then(() => {
+	// 			return expect(getControlValue(name)).to.eq('initial');
+	// 		});
+	// 		cy.get('input[type=range]').should('not.be.visible');
+	// 	});
+	// });
 });

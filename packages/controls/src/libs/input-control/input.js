@@ -6,7 +6,7 @@ import {
 	__experimentalUnitControl as WPUnitControl,
 } from '@wordpress/components';
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
@@ -34,6 +34,7 @@ function valueCleanup(value) {
 		updatedValue = 'inherit';
 	}
 
+	console.log('value cleanup:', updatedValue);
 	return updatedValue;
 }
 
@@ -65,8 +66,10 @@ export function InputControl({
 		units = getCSSUnits(unitType);
 	}
 
+	console.log('value: ', value);
+
 	useEffect(() => {
-		if (units && !isNumber(value)) {
+		if (units && value && !isNumber(value)) {
 			for (const unit of units) {
 				if (value.toString().includes(unit.value)) {
 					setUnit(unit.value);
