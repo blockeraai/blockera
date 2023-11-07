@@ -18,7 +18,7 @@ import { useControlContext } from '../../context';
 
 function valueCleanup(value) {
 	if (isString(value)) {
-		const regexp = new RegExp('[a-zA-Z]|[^A-Za-z0-9]', 'gi');
+		const regexp = new RegExp('[a-zA-Z]|[^A-Za-z0-9-]', 'gi');
 
 		return Number(value.replace(regexp, ''));
 	}
