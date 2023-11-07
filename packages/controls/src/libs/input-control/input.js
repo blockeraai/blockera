@@ -6,12 +6,12 @@ import {
 	__experimentalUnitControl as WPUnitControl,
 } from '@wordpress/components';
 import PropTypes from 'prop-types';
-
+import { useState, useEffect } from 'react';
 /**
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { isEmpty, isString, isUndefined } from '@publisher/utils';
+import { isEmpty, isString, isUndefined, isNumber } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -23,6 +23,7 @@ import { useControlContext } from '../../context';
 function valueCleanup(value) {
 	let updatedValue = value;
 	const strValue = value.toString();
+
 	if (strValue.includes('auto')) {
 		updatedValue = 'auto';
 	}
@@ -32,7 +33,6 @@ function valueCleanup(value) {
 	if (strValue.includes('inherit')) {
 		updatedValue = 'inherit';
 	}
-	console.log('updatedValue:', updatedValue);
 
 	return updatedValue;
 }
@@ -49,6 +49,7 @@ export function InputControl({
 	onChange,
 	field, //
 	className,
+	initialUnit,
 	...props
 }) {
 	const { value, setValue } = useControlContext({
@@ -57,13 +58,22 @@ export function InputControl({
 		onChange,
 		valueCleanup,
 	});
-
-	console.log('value:', value);
+	const [unit, setUnit] = useState(initialUnit);
 
 	// add css units
 	if (unitType !== '' && (isUndefined(units) || isEmpty(units))) {
 		units = getCSSUnits(unitType);
 	}
+
+	useEffect(() => {
+		if (units && !isNumber(value)) {
+			for (const unit of units) {
+				if (value.toString().includes(unit.value)) {
+					setUnit(unit.value);
+				}
+			}
+		}
+	}, [units, value]);
 
 	return (
 		<BaseControl
@@ -84,14 +94,18 @@ export function InputControl({
 				{range && (
 					<RangeControl
 						id={id}
+						sideEffect={false}
 						withInputField={false}
 						className={className}
 						onChange={(newValue) => {
 							// extract unit from old value and assign it to newValue
-							console.log('range value: ', newValue);
-							if (isString(value))
+							if (isString(value)) {
 								newValue =
 									newValue + value.replace(/[0-9|-]/gi, '');
+							} else {
+								newValue += unit;
+							}
+
 							setValue(newValue);
 						}}
 						{...props}
@@ -186,10 +200,15 @@ InputControl.propTypes = {
 	 * Disables the `input`, preventing new values from being applied.
 	 */
 	disabled: PropTypes.bool,
+	/**
+	 * The default unit value.
+	 */
+	initialUnit: PropTypes.string,
 };
 
 InputControl.defaultProps = {
 	range: false,
 	noBorder: false,
 	field: 'input',
+	initialUnit: 'px',
 };
