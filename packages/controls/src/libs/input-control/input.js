@@ -6,12 +6,12 @@ import {
 	__experimentalUnitControl as WPUnitControl,
 } from '@wordpress/components';
 import PropTypes from 'prop-types';
-
+import { useState, useEffect } from 'react';
 /**
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { isEmpty, isString, isUndefined } from '@publisher/utils';
+import { isEmpty, isString, isUndefined, isNumber } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -58,12 +58,24 @@ export function InputControl({
 		valueCleanup,
 	});
 
+	const [valueUnitType, setValueUnitType] = useState('px');
+
 	console.log('value:', value);
 
 	// add css units
 	if (unitType !== '' && (isUndefined(units) || isEmpty(units))) {
 		units = getCSSUnits(unitType);
 	}
+
+	useEffect(() => {
+		if (units && !isNumber(value)) {
+			for (const unit of units) {
+				if (value.toString().includes(unit.value)) {
+					setValueUnitType(unit.value);
+				}
+			}
+		}
+	}, [units, value]);
 
 	return (
 		<BaseControl
@@ -88,10 +100,15 @@ export function InputControl({
 						className={className}
 						onChange={(newValue) => {
 							// extract unit from old value and assign it to newValue
-							console.log('range value: ', newValue);
-							if (isString(value))
+							console.log('range value before: ', newValue);
+							if (isString(value)) {
 								newValue =
 									newValue + value.replace(/[0-9|-]/gi, '');
+							} else {
+								newValue += valueUnitType;
+							}
+							console.log('range value after: ', newValue);
+
 							setValue(newValue);
 						}}
 						{...props}
