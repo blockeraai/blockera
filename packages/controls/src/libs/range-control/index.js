@@ -18,23 +18,7 @@ import { useControlContext } from '../../context';
 
 function valueCleanup(value) {
 	if (isString(value)) {
-		const units = [
-			'px',
-			'%',
-			'em',
-			'rem',
-			'ch',
-			'vw',
-			'vh',
-			'ms',
-			's',
-			'dvw',
-			'dvh',
-			'deg',
-			'rad',
-			'grad',
-		];
-		const regexp = new RegExp(units.join('|'), 'gi');
+		const regexp = new RegExp('[a-zA-Z]|[^A-Za-z0-9]', 'gi');
 
 		return Number(value.replace(regexp, ''));
 	}
@@ -45,16 +29,17 @@ function valueCleanup(value) {
 export default function RangeControl({
 	min,
 	max,
-	initialPosition,
-	withInputField,
 	className,
+	withInputField,
+	initialPosition,
 	//
 	id,
 	label,
-	columns,
-	defaultValue,
-	onChange,
 	field,
+	columns,
+	onChange,
+	sideEffect,
+	defaultValue,
 	//
 }) {
 	let { value, setValue } = useControlContext({
@@ -80,7 +65,15 @@ export default function RangeControl({
 				max={max}
 				initialPosition={initialPosition}
 				value={value}
-				onChange={setValue}
+				onChange={(newValue) => {
+					if (sideEffect) {
+						setValue(newValue);
+
+						return false;
+					}
+
+					onChange(newValue);
+				}}
 				className={controlClassNames('range', className)}
 				withInputField={withInputField}
 				__nextHasNoMarginBottom={false}
@@ -113,6 +106,13 @@ RangeControl.propTypes = {
 	 */
 	columns: PropTypes.string,
 	/**
+	 * if when sideEffect is true calling setValue to modify value of context provider,
+	 * else just calling onChange handler!
+	 *
+	 * @default true
+	 */
+	sideEffect: PropTypes.bool,
+	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
 	defaultValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -143,6 +143,7 @@ RangeControl.propTypes = {
 };
 
 RangeControl.defaultProps = {
-	withInputField: true,
 	field: 'range',
+	sideEffect: true,
+	withInputField: true,
 };
