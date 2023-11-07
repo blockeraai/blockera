@@ -1,8 +1,10 @@
+// @flow
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -15,6 +17,7 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
+import type { TOutlineControlProps } from './types';
 
 export default function OutlineControl({
 	id,
@@ -22,7 +25,7 @@ export default function OutlineControl({
 	popoverLabel,
 	defaultRepeaterItemValue,
 	...props
-}) {
+}: TOutlineControlProps): MixedElement {
 	return (
 		<RepeaterControl
 			id={id}
@@ -47,17 +50,13 @@ OutlineControl.propTypes = {
 	 */
 	defaultValue: PropTypes.array,
 	/**
-	 * The current value.
-	 */
-	value: PropTypes.array,
-	/**
 	 * Function that will be fired while the control value state changes.
 	 */
 	onChange: PropTypes.func,
 	/**
 	 * Default value of each repeater item
 	 */
-	defaultRepeaterItemValue: PropTypes.shape({
+	defaultRepeaterItemValue: (PropTypes.shape({
 		border: PropTypes.shape({
 			width: PropTypes.string,
 			style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
@@ -65,7 +64,7 @@ OutlineControl.propTypes = {
 		}),
 		offset: PropTypes.string,
 		isVisible: PropTypes.bool,
-	}),
+	}): any),
 	/**
 	 * Label for popover
 	 */
@@ -73,7 +72,6 @@ OutlineControl.propTypes = {
 };
 
 OutlineControl.defaultProps = {
-	value: [],
 	defaultRepeaterItemValue: {
 		border: {
 			width: '2px',
@@ -83,5 +81,5 @@ OutlineControl.defaultProps = {
 		offset: '2px',
 		isVisible: true,
 	},
-	popoverLabel: __('Outline', 'publisher-core'),
+	popoverLabel: (__('Outline', 'publisher-core'): any),
 };
