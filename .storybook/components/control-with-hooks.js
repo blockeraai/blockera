@@ -12,13 +12,12 @@ const ControlWithHooks = ({ Control, ...args }) => {
 	return (
 		<Control
 			{...args}
-			onChange={(newValue) => {
-				console.trace();
+			onChange={(newValue) =>
 				modifyControlValue({
 					controlId,
 					value: newValue,
-				});
-			}}
+				})
+			}
 		/>
 	);
 };

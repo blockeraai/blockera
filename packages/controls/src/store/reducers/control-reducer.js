@@ -24,7 +24,6 @@ export function controlReducer(state = {}, action) {
 			return omit(state, action.names);
 
 		case 'MODIFY_CONTROL_VALUE':
-			console.log('action:', action);
 			const { valueCleanup } = action;
 			const value = isFunction(valueCleanup)
 				? valueCleanup(action.value)

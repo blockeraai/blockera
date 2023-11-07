@@ -333,7 +333,7 @@ describe('input control component testing', () => {
 	});
 
 	describe('css unit', () => {
-		it.only('should render css units', () => {
+		it('should render css units', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <InputControl range unitType="general" />,
@@ -345,7 +345,7 @@ describe('input control component testing', () => {
 			cy.get('input[type=range]').should('exist');
 			cy.get('input[type=range]').invoke('val', '70').trigger('change');
 			cy.get('input[type=range]').should('have.value', '70');
-			// cy.get('input[type=number]').should('have.value', '70');
+			cy.get('input[type=number]').should('have.value', '70');
 			cy.then(() => {
 				expect(getControlValue(name)).to.eq('70px');
 			});
