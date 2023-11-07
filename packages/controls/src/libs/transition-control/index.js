@@ -42,10 +42,6 @@ TransitionControl.propTypes = {
 	 */
 	defaultValue: PropTypes.array,
 	/**
-	 * The current value.
-	 */
-	value: PropTypes.array,
-	/**
 	 * Function that will be fired while the control value state changes.
 	 */
 	onChange: PropTypes.func,
@@ -66,7 +62,6 @@ TransitionControl.propTypes = {
 };
 
 TransitionControl.defaultProps = {
-	value: ([]: any),
 	defaultRepeaterItemValue: {
 		type: 'all',
 		duration: '500ms',

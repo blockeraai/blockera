@@ -12,6 +12,5 @@ export type TTransitionControlProps = {
 	popoverLabel?: string,
 	className?: string,
 	defaultValue?: Array<Object>,
-	value?: Array<Object>,
 	onChange?: () => {},
 };
