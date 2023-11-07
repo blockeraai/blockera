@@ -21,6 +21,7 @@ export function SidePopover({
 	icon = '',
 	isOpen,
 	type = 'margin',
+	unit = 'px',
 	offset = 35,
 	onClose = () => {},
 	onChange = (newValue) => {
@@ -45,7 +46,7 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 0px"
 					onClick={() => {
-						setValue('0px');
+						setValue('0' + unit);
 					}}
 					style={{
 						padding: '2px 0',
@@ -57,7 +58,9 @@ export function SidePopover({
 				<Button
 					size="small"
 					aria-label="Set 10px"
-					onClick={() => setValue('10px')}
+					onClick={() => {
+						setValue('10' + unit);
+					}}
 					style={{
 						padding: '2px 0',
 					}}
@@ -68,7 +71,9 @@ export function SidePopover({
 				<Button
 					size="small"
 					aria-label="Set 20px"
-					onClick={() => setValue('20px')}
+					onClick={() => {
+						setValue('20' + unit);
+					}}
 					style={{
 						padding: '2px 0',
 					}}
@@ -79,7 +84,9 @@ export function SidePopover({
 				<Button
 					size="small"
 					aria-label="Set 30px"
-					onClick={() => setValue('30px')}
+					onClick={() => {
+						setValue('30' + unit);
+					}}
 					style={{
 						padding: '2px 0',
 					}}
@@ -91,7 +98,7 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 60px"
 					onClick={() => {
-						setValue('60px');
+						setValue('60' + unit);
 					}}
 					style={{
 						padding: '2px 0',
@@ -103,7 +110,9 @@ export function SidePopover({
 				<Button
 					size="small"
 					aria-label="Set 80px"
-					onClick={() => setValue('80px')}
+					onClick={() => {
+						setValue('80' + unit);
+					}}
 					style={{
 						padding: '2px 0',
 					}}
@@ -114,7 +123,9 @@ export function SidePopover({
 				<Button
 					size="small"
 					aria-label="Set 100px"
-					onClick={() => setValue('100px')}
+					onClick={() => {
+						setValue('100' + unit);
+					}}
 					style={{
 						padding: '2px 0',
 					}}
@@ -125,7 +136,9 @@ export function SidePopover({
 				<Button
 					size="small"
 					aria-label="Set 120px"
-					onClick={() => setValue('120px')}
+					onClick={() => {
+						setValue('120' + unit);
+					}}
 					style={{
 						padding: '2px 0',
 					}}

@@ -13,6 +13,14 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 	// calculate the diff in positions of the cursor.
 	const [startVal, setStartVal] = useState(0);
 
+	// add cursor to elements
+	const addCursorToElements = (cursor) => {
+		const el = document.querySelectorAll('*');
+		for (let i = 0; i < el.length; i++) {
+			el[i].style.setProperty('cursor', cursor, 'important');
+		}
+	};
+
 	// Start the drag to change operation when the mouse button is down.
 	const onStart = useCallback(
 		(event) => {
@@ -20,19 +28,13 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 				setStartVal(event.clientY);
 
 				// add cursor from all elements
-				const el = document.querySelectorAll('*');
-				for (let i = 0; i < el.length; i++) {
-					el[i].style.setProperty('cursor', 'n-resize', 'important');
-				}
+				addCursorToElements('n-resize');
 			}
 			if (movement === 'horizontal') {
 				setStartVal(event.clientX);
 
 				// add cursor from all elements
-				const el = document.querySelectorAll('*');
-				for (let i = 0; i < el.length; i++) {
-					el[i].style.setProperty('cursor', 'e-resize', 'important');
-				}
+				addCursorToElements('e-resize');
 			}
 
 			setSnapshot(value);
@@ -60,10 +62,7 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 		const onEnd = () => {
 			setStartVal(0);
 			// remove cursor from all elements
-			const el = document.querySelectorAll('*');
-			for (let i = 0; i < el.length; i++) {
-				el[i].style.setProperty('cursor', '', 'important');
-			}
+			addCursorToElements('');
 		};
 
 		document.addEventListener('mousemove', onUpdate);
