@@ -34,7 +34,6 @@ function valueCleanup(value) {
 		updatedValue = 'inherit';
 	}
 
-	console.log('value cleanup:', updatedValue);
 	return updatedValue;
 }
 
@@ -58,6 +57,7 @@ export function InputControl({
 		defaultValue,
 		onChange,
 		valueCleanup,
+		sideEffect: true,
 	});
 	const [unit, setUnit] = useState(initialUnit);
 
@@ -65,8 +65,6 @@ export function InputControl({
 	if (unitType !== '' && (isUndefined(units) || isEmpty(units))) {
 		units = getCSSUnits(unitType);
 	}
-
-	console.log('value: ', value);
 
 	useEffect(() => {
 		if (units && value && !isNumber(value)) {
