@@ -9,7 +9,6 @@ export type TItem = {
 
 export type TAttributesControlProps = {
 	id?: string,
-	attributeElement: 'a' | 'button' | 'ol' | 'general',
 	defaultValue?: [],
 	onChange?: () => {},
 	defaultRepeaterItemValue?: TItem,

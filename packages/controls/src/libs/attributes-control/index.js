@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * External dependencies
  */
@@ -16,13 +18,12 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
-import type { TAttributesControlProps } from './index';
+import type { TAttributesControlProps } from './types';
 
 export default function AttributesControl({
 	id,
 	defaultRepeaterItemValue,
 	popoverLabel,
-	attributeElement,
 	//
 	className,
 	...props
@@ -35,7 +36,6 @@ export default function AttributesControl({
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			// custom prop for this control
-			attributeElement={attributeElement}
 			className={controlClassNames('attributes', className)}
 			{...props}
 		/>
@@ -48,11 +48,6 @@ AttributesControl.propTypes = {
 	 */
 	id: PropTypes.string,
 	/**
-	 * Specifies the attributes for a specific tag. It adds better UX for field.
-	 */
-	attributeElement: PropTypes.oneOf(['a', 'button', 'ol', 'general'])
-		.isRequired,
-	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
 	defaultValue: PropTypes.array,
@@ -63,12 +58,12 @@ AttributesControl.propTypes = {
 	/**
 	 * Default value of each repeater item
 	 */
-	defaultRepeaterItemValue: PropTypes.shape({
+	defaultRepeaterItemValue: (PropTypes.shape({
 		key: PropTypes.string,
 		__key: PropTypes.string,
 		value: PropTypes.string,
 		isVisible: PropTypes.bool,
-	}),
+	}): any),
 	/**
 	 * Label for popover
 	 */
@@ -76,13 +71,12 @@ AttributesControl.propTypes = {
 };
 
 AttributesControl.defaultProps = {
-	attributeElement: 'general',
-	defaultValue: [],
+	defaultValue: ([]: any),
 	defaultRepeaterItemValue: {
 		key: '',
 		__key: '',
 		value: '',
 		isVisible: true,
 	},
-	popoverLabel: __('HTML Attribute', 'publisher-core'),
+	popoverLabel: (__('HTML Attribute', 'publisher-core'): any),
 };

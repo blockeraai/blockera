@@ -134,7 +134,11 @@ const Fields: TFieldItem = memo<TFieldItem>(
 		}
 
 		useEffect(() => {
-			if (customProps.attributeElement !== 'general') {
+			if (
+				customProps.attributeElement &&
+				item.value === '' &&
+				item.key === ''
+			) {
 				handleOnChange('');
 			}
 		}, []);
