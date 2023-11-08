@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from '@wordpress/element';
 
 export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 	// We are creating a snapshot of the values when the drag starts
