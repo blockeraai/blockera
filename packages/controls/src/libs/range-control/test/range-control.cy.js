@@ -76,13 +76,23 @@ describe('range-control component testing', () => {
 			});
 		});
 
-		//TODO:
-		// it('should value be equal with context when changing by drag', () => {
-		// 	cy.withDataProvider({
-		// 		component: <RangeControl {...defaultProps} />,
-		// 		value: 0,
-		// 	});
-		// });
+		it('should value be equal with context when changing by drag', () => {
+			const name = nanoid();
+			cy.withDataProvider({
+				component: <RangeControl {...defaultProps} />,
+				value: 0,
+				name,
+			});
+
+			cy.get('input[type=range]').setSliderValue(20);
+
+			cy.getByDataTest('range-control').should('have.value', '20');
+
+			//Check data provider value
+			cy.get('body').then(() => {
+				expect(20).to.be.equal(getControlValue(name));
+			});
+		});
 
 		it('should onChange fire when interacting with component', () => {
 			const defaultProps = {
