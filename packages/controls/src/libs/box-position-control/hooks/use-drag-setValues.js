@@ -3,13 +3,13 @@ const getValueType = (value, position) => {
 		'auto',
 		'px',
 		'%',
-		'em',
 		'rem',
+		'em',
 		'ch',
-		'vw',
-		'vh',
 		'dvw',
+		'vw',
 		'dvh',
+		'vh',
 	];
 	for (const unit of units) {
 		if (value.position[position].includes(unit)) {
