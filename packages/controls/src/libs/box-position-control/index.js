@@ -144,6 +144,7 @@ function BoxPositionControl({
 		<div
 			{...props}
 			className={controlClassNames('box-position', className)}
+			data-cy="box-position-control"
 		>
 			<div className={controlInnerClassNames('position-header')}>
 				{label && (
@@ -423,6 +424,7 @@ function BoxPositionControl({
 									)}
 									className="position-quick-btn"
 									size="small"
+									data-cy="absolute-top-left"
 									onClick={() => {
 										setValue({
 											...value,
@@ -445,6 +447,7 @@ function BoxPositionControl({
 									)}
 									className="position-quick-btn"
 									size="small"
+									data-cy="absolute-top-right"
 									onClick={() => {
 										setValue({
 											...value,
@@ -467,6 +470,7 @@ function BoxPositionControl({
 									)}
 									className="position-quick-btn"
 									size="small"
+									data-cy="absolute-bottom-left"
 									onClick={() => {
 										setValue({
 											...value,
@@ -490,6 +494,7 @@ function BoxPositionControl({
 									)}
 									className="position-quick-btn"
 									size="small"
+									data-cy="absolute-bottom-right"
 									onClick={() => {
 										setValue({
 											...value,
@@ -515,6 +520,7 @@ function BoxPositionControl({
 									aria-label={__('Top', 'publisher-core')}
 									className="position-quick-btn"
 									size="small"
+									data-cy="absolute-top"
 									onClick={() => {
 										setValue({
 											...value,
@@ -534,6 +540,7 @@ function BoxPositionControl({
 									aria-label={__('Right', 'publisher-core')}
 									className="position-quick-btn"
 									size="small"
+									data-cy="absolute-right"
 									onClick={() => {
 										setValue({
 											...value,
@@ -553,6 +560,7 @@ function BoxPositionControl({
 									aria-label={__('Bottom', 'publisher-core')}
 									className="position-quick-btn"
 									size="small"
+									data-cy="absolute-bottom"
 									onClick={() => {
 										setValue({
 											...value,
@@ -572,6 +580,7 @@ function BoxPositionControl({
 									aria-label={__('Left', 'publisher-core')}
 									className="position-quick-btn"
 									size="small"
+									data-cy="absolute-left"
 									onClick={() => {
 										setValue({
 											...value,
@@ -594,6 +603,7 @@ function BoxPositionControl({
 									aria-label={__('Full', 'publisher-core')}
 									className="position-quick-btn"
 									size="small"
+									data-cy="absolute-full"
 									onClick={() => {
 										setValue({
 											...value,
@@ -613,6 +623,7 @@ function BoxPositionControl({
 									aria-label={__('Center', 'publisher-core')}
 									className="position-quick-btn"
 									size="small"
+									data-cy="absolute-center"
 									onClick={() => {
 										setValue({
 											...value,
