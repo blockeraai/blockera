@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -13,7 +14,7 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { Button, Flex, Grid } from '@publisher/components';
-
+import { hasSameProps } from '@publisher/extensions';
 /**
  * Internal dependencies
  */
@@ -21,6 +22,12 @@ import { LabelControl, SelectControl } from '../index';
 import { SidePopover } from './components/side-popover';
 import { useDragValue } from '../../hooks';
 import { useDragSetValues } from './hooks/use-drag-setValues';
+import { useControlContext } from '../../context';
+/**
+ * Types
+ */
+import type { TBoxPositionControlProps } from './types/box-position-control-props';
+import type { MixedElement } from 'react';
 // icons
 import { default as SideTopIcon } from './icons/side-top';
 import { default as SideRightIcon } from './icons/side-right';
@@ -41,8 +48,6 @@ import { default as AbsoluteBottomIcon } from './icons/absolute-bottom';
 import { default as AbsoluteLeftIcon } from './icons/absolute-left';
 import { default as AbsoluteFullIcon } from './icons/absolute-full';
 import { default as AbsoluteCenterIcon } from './icons/absolute-center';
-import { useControlContext } from '../../context';
-import { hasSameProps } from '@publisher/extensions';
 
 function BoxPositionControl({
 	openSide,
@@ -54,7 +59,7 @@ function BoxPositionControl({
 	//
 	className,
 	...props
-}) {
+}: TBoxPositionControlProps): MixedElement {
 	const { value, setValue, getId } = useControlContext({
 		id,
 		onChange,
@@ -68,7 +73,7 @@ function BoxPositionControl({
 		leftDragSetValue,
 	} = useDragSetValues({ value, setValue });
 
-	const fixLabelToNumber = (labelValue) => {
+	const fixLabelToNumber = (labelValue: string): string => {
 		if (labelValue) {
 			return labelValue.replace(
 				/(auto|px|%|em|rem|ch|vw|vh|dvw|dvh)$/,
@@ -104,12 +109,12 @@ function BoxPositionControl({
 
 	const [openPopover, setOpenPopover] = useState(openSide);
 
-	function fixLabelText(value) {
+	function fixLabelText(value: string | MixedElement): any {
 		if (value === '') {
 			value = '-';
 		} else {
 			// remove px
-			value = value.replace('px', '', value);
+			value = (value: string).replace('px', '');
 
 			const match = /(\d+)(auto|px|%|em|rem|ch|vw|vh|dvw|dvh)/gi.exec(
 				value
@@ -662,7 +667,7 @@ BoxPositionControl.propTypes = {
 	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
-	defaultValue: PropTypes.shape({
+	defaultValue: (PropTypes.shape({
 		type: PropTypes.oneOf([
 			'static',
 			'relative',
@@ -670,13 +675,13 @@ BoxPositionControl.propTypes = {
 			'sticky',
 			'fixed',
 		]),
-		position: PropTypes.shape({
+		position: (PropTypes.shape({
 			top: PropTypes.string,
 			right: PropTypes.string,
 			bottom: PropTypes.string,
 			left: PropTypes.string,
-		}),
-	}),
+		}): any),
+	}): any),
 	/**
 	 * Function that will be fired while the control value state changes.
 	 */
@@ -684,27 +689,27 @@ BoxPositionControl.propTypes = {
 	/**
 	 * The current value.
 	 */
-	value: PropTypes.shape({
-		type: PropTypes.oneOf([
+	value: (PropTypes.shape({
+		type: (PropTypes.oneOf([
 			'static',
 			'relative',
 			'absolute',
 			'sticky',
 			'fixed',
-		]),
+		]): any),
 		position: {
 			top: PropTypes.string,
 			right: PropTypes.string,
 			bottom: PropTypes.string,
 			left: PropTypes.string,
 		},
-	}),
+	}): any),
 	/**
 	 * Specifies which side is open by default.
 	 *
 	 * @default ``
 	 */
-	openSide: PropTypes.oneOf(['top', 'right', 'bottom', 'left', '']),
+	openSide: (PropTypes.oneOf(['top', 'right', 'bottom', 'left', '']): any),
 };
 
 BoxPositionControl.defaultProps = {
