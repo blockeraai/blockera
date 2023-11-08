@@ -49,15 +49,16 @@ function valueCleanup(value: TValueCleanup) {
 export default function RangeControl({
 	min,
 	max,
-	initialPosition,
-	withInputField,
 	className,
+	withInputField,
+	initialPosition,
 	//
 	id,
 	label,
 	columns,
-	defaultValue,
 	onChange,
+	sideEffect,
+	defaultValue,
 	field,
 }: TRangeControlProps): MixedElement {
 	let { value, setValue } = useControlContext({
@@ -83,7 +84,15 @@ export default function RangeControl({
 				max={max}
 				initialPosition={initialPosition}
 				value={value}
-				onChange={setValue}
+				onChange={(newValue) => {
+					if (sideEffect) {
+						setValue(newValue);
+
+						return false;
+					}
+
+					onChange(newValue);
+				}}
 				className={controlClassNames('range', className)}
 				withInputField={withInputField}
 				__nextHasNoMarginBottom={false}
@@ -117,6 +126,13 @@ RangeControl.propTypes = {
 	 */
 	columns: PropTypes.string,
 	/**
+	 * if when sideEffect is true calling setValue to modify value of context provider,
+	 * else just calling onChange handler!
+	 *
+	 * @default true
+	 */
+	sideEffect: PropTypes.bool,
+	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
 	// $FlowFixMe
@@ -148,6 +164,7 @@ RangeControl.propTypes = {
 };
 
 RangeControl.defaultProps = {
-	withInputField: true,
 	field: 'range',
+	sideEffect: true,
+	withInputField: true,
 };
