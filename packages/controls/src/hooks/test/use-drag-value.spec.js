@@ -1,0 +1,90 @@
+/**
+ * External dependencies
+ */
+import { renderHook, render, fireEvent } from '@testing-library/react';
+import { useState } from '@wordpress/element';
+import '@testing-library/jest-dom/extend-expect';
+/**
+ * Internal dependencies
+ */
+import { useDragValue } from '../index';
+
+// Create a test component that uses the hook
+function TestComponent({ movement = 'vertical' }) {
+	const [value, setValue] = useState(0);
+	const onStart = useDragValue({ value, setValue, movement });
+
+	return (
+		<div data-testid="draggable" onMouseDown={onStart}>
+			Draggable Element
+			<div data-testid="value-display">{value}</div>
+		</div>
+	);
+}
+
+describe('testing use drag value hook', () => {
+	it('should return a function after set states', () => {
+		const myMock = jest.fn();
+		const { result } = renderHook(() =>
+			useDragValue({ value: 10, setValue: myMock, movement: 'vertical' })
+		);
+		expect(typeof result.current).toBe('function');
+	});
+
+	it('useDragValue updates value on mouse drag', () => {
+		const { getByTestId } = render(<TestComponent />);
+		const draggableElement = getByTestId('draggable');
+
+		// Simulate a mouse down event to start the drag
+		fireEvent.mouseDown(draggableElement);
+
+		// Simulate mouse move event
+		fireEvent.mouseMove(draggableElement, { clientY: 50 });
+
+		// Perform assertions on the updated value
+		expect(draggableElement).toHaveTextContent('Draggable Element'); // Just a sanity check
+
+		// Simulate a mouse up event to end the drag
+		fireEvent.mouseUp(draggableElement);
+	});
+
+	it('useDragValue updates value on vertical mouse drag', () => {
+		const { getByTestId } = render(<TestComponent />);
+		const draggableElement = getByTestId('draggable');
+		const valueDisplay = getByTestId('value-display');
+
+		// Simulate a mouse down event to start the vertical drag
+		fireEvent.mouseDown(draggableElement, { clientY: 100 });
+		fireEvent.mouseMove(draggableElement, { clientY: 50 });
+
+		// Extract the updated value from the custom attribute
+		const updatedValue = valueDisplay.textContent;
+
+		// Calculate the expected value based on the vertical drag
+		const expectedValue = '50';
+
+		expect(updatedValue).toBe(expectedValue);
+
+		fireEvent.mouseUp(draggableElement);
+	});
+
+	it('useDragValue updates value on horizontal mouse drag', () => {
+		const { getByTestId } = render(<TestComponent movement="horizontal" />);
+		const draggableElement = getByTestId('draggable');
+		const valueDisplay = getByTestId('value-display');
+
+		// Simulate a mouse down event to start the horizontal drag
+		fireEvent.mouseDown(draggableElement, { clientX: 100 });
+		fireEvent.mouseMove(draggableElement, { clientX: 50 });
+
+		// Extract the updated value from the custom attribute
+		const updatedValue = valueDisplay.textContent;
+
+		// Calculate the expected value based on the horizontal drag
+		const expectedValue = '-50';
+
+		expect(updatedValue).toBe(expectedValue);
+
+		fireEvent.mouseUp(draggableElement);
+	});
+});
