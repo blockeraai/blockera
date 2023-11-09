@@ -6,6 +6,10 @@ import { select } from '@wordpress/data';
 import { modifyControlValue } from '../../../store/actions';
 
 describe('range-control component testing', () => {
+	beforeEach(() => {
+		cy.viewport(1280, 720);
+	});
+
 	const name = 'range-control';
 	const defaultProps = {
 		withInputField: true,
