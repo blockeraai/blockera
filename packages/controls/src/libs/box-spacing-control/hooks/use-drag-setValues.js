@@ -3,13 +3,13 @@ const getValueType = (mode, value, property) => {
 		'auto',
 		'px',
 		'%',
-		'em',
 		'rem',
+		'em',
 		'ch',
-		'vw',
-		'vh',
 		'dvw',
+		'vw',
 		'dvh',
+		'vh',
 	];
 	if (value) {
 		for (const unit of units) {

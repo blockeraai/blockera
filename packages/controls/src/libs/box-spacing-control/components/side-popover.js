@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useState, useEffect } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -21,7 +22,7 @@ export function SidePopover({
 	icon = '',
 	isOpen,
 	type = 'margin',
-	unit = 'px',
+	unit,
 	offset = 35,
 	onClose = () => {},
 	onChange = (newValue) => {
@@ -35,6 +36,14 @@ export function SidePopover({
 		defaultValue,
 	});
 
+	const [unitType, setUnitType] = useState('px');
+
+	useEffect(() => {
+		if (unit) {
+			setUnitType(unit);
+		}
+	}, [unit]);
+
 	function getAllActionButtons() {
 		return (
 			<Grid
@@ -46,7 +55,7 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 0px"
 					onClick={() => {
-						setValue('0' + unit);
+						setValue('0' + unitType);
 					}}
 					style={{
 						padding: '2px 0',
@@ -59,7 +68,7 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 10px"
 					onClick={() => {
-						setValue('10' + unit);
+						setValue('10' + unitType);
 					}}
 					style={{
 						padding: '2px 0',
@@ -72,7 +81,7 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 20px"
 					onClick={() => {
-						setValue('20' + unit);
+						setValue('20' + unitType);
 					}}
 					style={{
 						padding: '2px 0',
@@ -85,7 +94,7 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 30px"
 					onClick={() => {
-						setValue('30' + unit);
+						setValue('30' + unitType);
 					}}
 					style={{
 						padding: '2px 0',
@@ -98,7 +107,7 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 60px"
 					onClick={() => {
-						setValue('60' + unit);
+						setValue('60' + unitType);
 					}}
 					style={{
 						padding: '2px 0',
@@ -111,7 +120,7 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 80px"
 					onClick={() => {
-						setValue('80' + unit);
+						setValue('80' + unitType);
 					}}
 					style={{
 						padding: '2px 0',
@@ -124,7 +133,7 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 100px"
 					onClick={() => {
-						setValue('100' + unit);
+						setValue('100' + unitType);
 					}}
 					style={{
 						padding: '2px 0',
@@ -137,7 +146,7 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 120px"
 					onClick={() => {
-						setValue('120' + unit);
+						setValue('120' + unitType);
 					}}
 					style={{
 						padding: '2px 0',
