@@ -131,7 +131,7 @@ export default function BoxSpacingControl({
 			value = '-';
 		} else {
 			// remove px
-			value = value.replace('px', '', value);
+			value = value.replace('px', '');
 
 			const match = /(\d+)(auto|px|%|em|rem|ch|vw|vh|dvw|dvh)/gi.exec(
 				value
@@ -171,6 +171,7 @@ export default function BoxSpacingControl({
 			<div
 				{...props}
 				className={controlClassNames('box-spacing', className)}
+				data-cy="box-spacing-control"
 			>
 				<svg
 					width="250"
@@ -302,6 +303,7 @@ export default function BoxSpacingControl({
 						'side-horizontal',
 						'side-margin-top'
 					)}
+					data-cy="box-spacing-margin-top"
 				>
 					<LabelControl
 						ariaLabel={__('Top Margin', 'publisher-core')}
@@ -310,7 +312,6 @@ export default function BoxSpacingControl({
 					/>
 
 					<SidePopover
-						defaultValue={value.margin.top}
 						id={getId(id, 'margin.top')}
 						icon={<MarginTopIcon />}
 						onClose={() => setOpenPopover('')}
@@ -335,6 +336,7 @@ export default function BoxSpacingControl({
 						'side-vertical',
 						'side-margin-right'
 					)}
+					data-cy="box-spacing-margin-right"
 				>
 					<LabelControl
 						ariaLabel={__('Right Margin', 'publisher-core')}
@@ -343,7 +345,6 @@ export default function BoxSpacingControl({
 					/>
 
 					<SidePopover
-						defaultValue={value.margin.right}
 						id={getId(id, 'margin.right')}
 						offset={255}
 						icon={<MarginRightIcon />}
@@ -369,6 +370,7 @@ export default function BoxSpacingControl({
 						'side-horizontal',
 						'side-margin-bottom'
 					)}
+					data-cy="box-spacing-margin-bottom"
 				>
 					<LabelControl
 						ariaLabel={__('Bottom Margin', 'publisher-core')}
@@ -377,7 +379,6 @@ export default function BoxSpacingControl({
 					/>
 
 					<SidePopover
-						defaultValue={value.margin.bottom}
 						id={getId(id, 'margin.bottom')}
 						icon={<MarginBottomIcon />}
 						onClose={() => setOpenPopover('')}
@@ -402,6 +403,7 @@ export default function BoxSpacingControl({
 						'side-vertical',
 						'side-margin-left'
 					)}
+					data-cy="box-spacing-margin-left"
 				>
 					<LabelControl
 						ariaLabel={__('Left Margin', 'publisher-core')}
@@ -410,7 +412,6 @@ export default function BoxSpacingControl({
 					/>
 
 					<SidePopover
-						defaultValue={value.margin.left}
 						id={getId(id, 'margin.left')}
 						icon={<MarginLeftIcon />}
 						onClose={() => setOpenPopover('')}
@@ -435,6 +436,7 @@ export default function BoxSpacingControl({
 						'side-horizontal',
 						'side-padding-top'
 					)}
+					data-cy="box-spacing-padding-top"
 				>
 					<LabelControl
 						ariaLabel={__('Top Padding', 'publisher-core')}
@@ -443,7 +445,6 @@ export default function BoxSpacingControl({
 					/>
 
 					<SidePopover
-						defaultValue={value.padding.top}
 						id={getId(id, 'padding.top')}
 						type="padding"
 						icon={<PaddingTopIcon />}
@@ -469,6 +470,7 @@ export default function BoxSpacingControl({
 						'side-vertical',
 						'side-padding-right'
 					)}
+					data-cy="box-spacing-padding-right"
 				>
 					<LabelControl
 						ariaLabel={__('Right Padding', 'publisher-core')}
@@ -477,7 +479,6 @@ export default function BoxSpacingControl({
 					/>
 
 					<SidePopover
-						defaultValue={value.padding.right}
 						id={getId(id, 'padding.right')}
 						offset={215}
 						type="padding"
@@ -505,6 +506,7 @@ export default function BoxSpacingControl({
 						'side-horizontal',
 						'side-padding-bottom'
 					)}
+					data-cy="box-spacing-padding-bottom"
 				>
 					<LabelControl
 						ariaLabel={__('Bottom Padding', 'publisher-core')}
@@ -513,7 +515,6 @@ export default function BoxSpacingControl({
 					/>
 
 					<SidePopover
-						defaultValue={value.padding.bottom}
 						id={getId(id, 'padding.bottom')}
 						type="padding"
 						icon={<PaddingBottomIcon />}
@@ -539,6 +540,7 @@ export default function BoxSpacingControl({
 						'side-vertical',
 						'side-padding-left'
 					)}
+					data-cy="box-spacing-padding-left"
 				>
 					<LabelControl
 						ariaLabel={__('Left Padding', 'publisher-core')}
@@ -547,7 +549,6 @@ export default function BoxSpacingControl({
 					/>
 
 					<SidePopover
-						defaultValue={value.padding.left}
 						id={getId(id, 'padding.left')}
 						offset={78}
 						type="padding"

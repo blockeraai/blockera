@@ -60,6 +60,7 @@ export function SidePopover({
 					style={{
 						padding: '2px 0',
 					}}
+					data-cy="box-spacing-set-0"
 				>
 					0
 				</Button>
@@ -73,6 +74,7 @@ export function SidePopover({
 					style={{
 						padding: '2px 0',
 					}}
+					data-cy="box-spacing-set-10"
 				>
 					10
 				</Button>
@@ -86,6 +88,7 @@ export function SidePopover({
 					style={{
 						padding: '2px 0',
 					}}
+					data-cy="box-spacing-set-20"
 				>
 					20
 				</Button>
@@ -99,6 +102,7 @@ export function SidePopover({
 					style={{
 						padding: '2px 0',
 					}}
+					data-cy="box-spacing-set-30"
 				>
 					30
 				</Button>
@@ -112,6 +116,7 @@ export function SidePopover({
 					style={{
 						padding: '2px 0',
 					}}
+					data-cy="box-spacing-set-60"
 				>
 					60
 				</Button>
@@ -125,6 +130,7 @@ export function SidePopover({
 					style={{
 						padding: '2px 0',
 					}}
+					data-cy="box-spacing-set-80"
 				>
 					80
 				</Button>
@@ -138,6 +144,7 @@ export function SidePopover({
 					style={{
 						padding: '2px 0',
 					}}
+					data-cy="box-spacing-set-100"
 				>
 					100
 				</Button>
@@ -151,6 +158,7 @@ export function SidePopover({
 					style={{
 						padding: '2px 0',
 					}}
+					data-cy="box-spacing-set-120"
 				>
 					120
 				</Button>
@@ -206,6 +214,7 @@ export function SidePopover({
 											onClick={() => {
 												setValue('0auto');
 											}}
+											data-cy="box-spacing-set-auto"
 										>
 											{__('Auto', 'publisher-core')}
 										</Button>
