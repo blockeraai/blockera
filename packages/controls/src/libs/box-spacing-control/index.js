@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -22,6 +23,12 @@ import { useControlContext } from '../../context';
 import { useDragValue } from '../../hooks';
 import { useDragSetValues } from './hooks/use-drag-setValues';
 
+/**
+ * Types
+ */
+import type { TBoxSpacingControlProps } from './types/box-position-control-props';
+import type { MixedElement } from 'react';
+
 // icons
 import { default as MarginTopIcon } from './icons/margin-top';
 import { default as MarginRightIcon } from './icons/margin-right';
@@ -44,7 +51,7 @@ export default function BoxSpacingControl({
 	field,
 	//
 	...props
-}) {
+}: TBoxSpacingControlProps): MixedElement {
 	const { value, setValue, getId } = useControlContext({
 		id,
 		onChange,
@@ -66,7 +73,7 @@ export default function BoxSpacingControl({
 		bottomPaddingDragSetValue,
 	} = useDragSetValues({ value, setValue });
 
-	const fixLabelToNumber = (labelValue) => {
+	const fixLabelToNumber = (labelValue: string): string => {
 		if (labelValue) {
 			return labelValue.replace(
 				/(auto|px|%|em|rem|ch|vw|vh|dvw|dvh)$/,
@@ -126,12 +133,12 @@ export default function BoxSpacingControl({
 
 	const [openPopover, setOpenPopover] = useState(openSide);
 
-	function fixLabelText(value) {
+	function fixLabelText(value: string | MixedElement): any {
 		if (value === '') {
 			value = '-';
 		} else {
 			// remove px
-			value = value.replace('px', '');
+			value = (value: string).replace('px', '');
 
 			const match = /(\d+)(auto|px|%|em|rem|ch|vw|vh|dvw|dvh)/gi.exec(
 				value
@@ -156,7 +163,7 @@ export default function BoxSpacingControl({
 		return value;
 	}
 
-	function getUnitType(value) {
+	function getUnitType(value: string): string {
 		const match = value.match(/(auto|px|%|em|rem|ch|vw|vh|dvw|dvh)/);
 		return match ? match[0] : '';
 	}
@@ -587,20 +594,20 @@ BoxSpacingControl.propTypes = {
 	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
-	defaultValue: PropTypes.shape({
-		margin: PropTypes.shape({
+	defaultValue: (PropTypes.shape({
+		margin: (PropTypes.shape({
 			top: PropTypes.string,
 			right: PropTypes.string,
 			bottom: PropTypes.string,
 			left: PropTypes.string,
-		}),
-		padding: PropTypes.shape({
+		}): any),
+		padding: (PropTypes.shape({
 			top: PropTypes.string,
 			right: PropTypes.string,
 			bottom: PropTypes.string,
 			left: PropTypes.string,
-		}),
-	}),
+		}): any),
+	}): any),
 	/**
 	 * Function that will be fired while the control value state changes.
 	 */
@@ -615,7 +622,7 @@ BoxSpacingControl.propTypes = {
 	 */
 	openSide: PropTypes.string,
 };
-
+// $FlowFixMe
 BoxSpacingControl.defaultProps = {
 	defaultValue: {
 		margin: {
