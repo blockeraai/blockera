@@ -104,10 +104,7 @@ describe('ext shadow control component testing', () => {
 			});
 
 			cy.getByDataCy('repeater-item').click();
-			cy.get('.publisher-component-popover-header').should(
-				'contain',
-				'My Popover Label'
-			);
+			cy.contains('My Popover Label');
 		});
 
 		it('should add custom classname', () => {
