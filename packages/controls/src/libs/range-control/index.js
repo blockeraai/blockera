@@ -1,8 +1,11 @@
+// @flow
+
 /**
  * External dependencies
  */
 import PropTypes from 'prop-types';
 import { RangeControl as WordPressRangeControl } from '@wordpress/components';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -15,10 +18,27 @@ import { controlClassNames } from '@publisher/classnames';
  */
 import BaseControl from '../base-control';
 import { useControlContext } from '../../context';
+import type { TRangeControlProps, TValueCleanup } from './types';
 
-function valueCleanup(value) {
-	if (isString(value)) {
-		const regexp = new RegExp('[a-zA-Z]|[^A-Za-z0-9-]', 'gi');
+function valueCleanup(value: TValueCleanup) {
+	if (typeof value === 'string') {
+		const units = [
+			'px',
+			'%',
+			'em',
+			'rem',
+			'ch',
+			'vw',
+			'vh',
+			'ms',
+			's',
+			'dvw',
+			'dvh',
+			'deg',
+			'rad',
+			'grad',
+		];
+		const regexp = new RegExp(units.join('|'), 'gi');
 
 		return Number(value.replace(regexp, ''));
 	}
@@ -35,13 +55,12 @@ export default function RangeControl({
 	//
 	id,
 	label,
-	field,
 	columns,
 	onChange,
 	sideEffect,
 	defaultValue,
-	//
-}) {
+	field,
+}: TRangeControlProps): MixedElement {
 	let { value, setValue } = useControlContext({
 		id,
 		onChange,
@@ -77,6 +96,7 @@ export default function RangeControl({
 				className={controlClassNames('range', className)}
 				withInputField={withInputField}
 				__nextHasNoMarginBottom={false}
+				data-test="range-control"
 			/>
 		</BaseControl>
 	);
@@ -115,6 +135,7 @@ RangeControl.propTypes = {
 	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
+	// $FlowFixMe
 	defaultValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	/**
 	 * Function that will be fired while the control value state changes.
