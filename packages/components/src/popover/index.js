@@ -3,7 +3,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useContext, useState } from '@wordpress/element';
+import { useContext, useState, useRef, useEffect } from '@wordpress/element';
 import { Popover as WPPopover } from '@wordpress/components';
 import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
@@ -49,6 +49,10 @@ export default function Popover({
 		setIsVisible(false);
 	};
 
+	const popoverRef = useRef();
+
+	useEffect(() => popoverRef.current.focus(), []);
+
 	return (
 		<>
 			{isVisible && (
@@ -69,12 +73,14 @@ export default function Popover({
 					flip={!isUndefined(flip) ? flip : _flip}
 					placement={placement}
 					{...props}
+					ref={popoverRef}
 				>
 					{title && (
 						<div
 							className={componentInnerClassNames(
 								'popover-header'
 							)}
+							data-test="popover-header"
 						>
 							{title}
 
@@ -97,7 +103,10 @@ export default function Popover({
 						</div>
 					)}
 
-					<div className={componentInnerClassNames('popover-body')}>
+					<div
+						className={componentInnerClassNames('popover-body')}
+						data-test="popover-body"
+					>
 						{children}
 					</div>
 				</WPPopover>
