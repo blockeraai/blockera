@@ -237,7 +237,15 @@ export const All = {
 		<Flex direction="column" gap="50px">
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Empty</h2>
-				<AttributesControl {...Empty.args} />
+				<ControlContextProvider
+					storeName={STORE_NAME}
+					value={{
+						name: nanoid(),
+						value: [],
+					}}
+				>
+					<AttributesControl {...Empty.args} />
+				</ControlContextProvider>
 			</Flex>
 
 			<Filled.render />
