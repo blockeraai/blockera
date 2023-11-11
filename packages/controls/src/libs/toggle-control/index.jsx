@@ -1,14 +1,21 @@
+// @flow
 /**
  * External dependencies
  */
-import { ToggleControl as WPToggleControl } from '@wordpress/components';
 import PropTypes from 'prop-types';
+import type { MixedElement } from 'react';
+import { ToggleControl as WPToggleControl } from '@wordpress/components';
 
 /**
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
 import { useValue } from '@publisher/utils';
+
+/**
+ * Publisher dependencies
+ */
+import type { TToggleControlProps } from './types/toggle-control-props';
 
 export default function ToggleControl({
 	label,
@@ -17,7 +24,7 @@ export default function ToggleControl({
 	onChange,
 	className,
 	...props
-}) {
+}: TToggleControlProps): MixedElement {
 	const { value, setValue } = useValue({
 		initialValue,
 		defaultValue,
@@ -53,7 +60,7 @@ ToggleControl.propTypes = {
 	 */
 	label: PropTypes.string,
 };
-
+// $FlowFixMe
 ToggleControl.defaultProps = {
 	value: false,
 	label: '',
