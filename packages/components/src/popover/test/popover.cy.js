@@ -535,17 +535,3 @@ describe('popover component testing', () => {
 		cy.get('@onClose').should('have.been.called');
 	});
 });
-
-// transform-origin :
-// top-start :0% 100% 0px
-// top: 50% 100% 0px
-// top-end:100% 100% 0px
-// right-start : 0% 0% px
-// right : 0% 50% 0px
-// right-end : 0% 100% 0px
-// bottom-start : 0% 0% 0px
-// bottom : 50% 0% 0px
-// bottom-end : 100% 0% 0px
-// left-start : 100% 0% 0px
-// left : 100% 50% 0px
-// left-end : 100% 100% 0
