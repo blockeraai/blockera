@@ -39,7 +39,10 @@ Cypress.Commands.add('getByDataCy', (selector, ...args) => {
 Cypress.Commands.add('getByDataTest', (selector, ...args) => {
 	return cy.get(`[data-test=${selector}]`, ...args);
 });
-
+// for testing
+Cypress.Commands.add('test gite', (selector, ...args) => {
+	return cy.get(`[data-test=${selector}]`, ...args);
+});
 Cypress.Commands.add('multiClick', (selector, count, ...args) => {
 	let counter = 0;
 	while (counter !== count) {
@@ -50,3 +53,18 @@ Cypress.Commands.add('multiClick', (selector, count, ...args) => {
 Cypress.Commands.add('clickOutside', () => {
 	return cy.get('body').click(0, 0);
 });
+Cypress.Commands.add(
+	'setSliderValue',
+	{ prevSubject: 'element' },
+	(subject, value) => {
+		const element = subject[0];
+
+		const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+			window.HTMLInputElement.prototype,
+			'value'
+		)?.set;
+
+		nativeInputValueSetter?.call(element, value);
+		element.dispatchEvent(new Event('input', { bubbles: true }));
+	}
+);
