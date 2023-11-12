@@ -15,8 +15,8 @@ module.exports = defineConfig({
 	},
 	env: {
 		wpUsername: 'admin',
-		wpPassword: 'password',
-		testURL: 'http://localhost:8889',
+		wpPassword: 'admin',
+		testURL: 'http://localhost/publisher-builder',
 	},
 	fixturesFolder: 'cypress/fixtures',
 	pageLoadTimeout: 120000,
