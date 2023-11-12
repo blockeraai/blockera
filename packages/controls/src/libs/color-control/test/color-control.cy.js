@@ -24,6 +24,14 @@ describe('Color Control', () => {
 			cy.getByDataCy('color-indicator');
 			cy.getByDataCy('color-label').should('not.exist');
 		});
+
+		it('renders None as color label when no color is selected', () => {
+			cy.withDataProvider({
+				component: <ColorControl />,
+			});
+			cy.getByDataCy('color-indicator');
+			cy.getByDataCy('color-label').should('have.text', 'None');
+		});
 	});
 
 	context('Functional Tests', () => {
@@ -66,6 +74,24 @@ describe('Color Control', () => {
 				.contains('#ddd')
 				.then(() => {
 					expect(getControlValue(name)).to.be.equal('#dddddd');
+				});
+		});
+
+		it('renders None as color label when color gets remove from color-picker', () => {
+			cy.withDataProvider({
+				component: <ColorControl />,
+				value: '#832828',
+				name,
+			});
+
+			cy.getByDataCy('color-btn').click();
+			cy.contains(/clear/i).as('clearBtn').click();
+
+			// visual and data assertion
+			cy.getByDataCy('color-label')
+				.should('have.text', 'None')
+				.then(() => {
+					expect(getControlValue(name)).to.be.equal('');
 				});
 		});
 	});
