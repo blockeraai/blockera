@@ -184,11 +184,11 @@ export function SharedBlockExtension({
 							defaultValue={{
 								width:
 									attributes.width ||
-									attributes.publisherWidth,
+									attributes.size.publisherWidth,
 								height:
 									attributes.height ||
-									attributes.publisherHeight,
-								overflow: attributes.publisherOverflow,
+									attributes.size.publisherHeight,
+								overflow: attributes.size.publisherOverflow,
 							}}
 							initialOpen={true}
 							extensionId={'Size'}
