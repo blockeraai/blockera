@@ -1,1 +1,31 @@
 @import "./libs/style.scss";
+/* right resize cursor */
+
+.cursor-r-resize {
+	cursor: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg' %3E%3Cpath d='M10 16L16 10L10 4V8H3V12H10V16Z' fill='white' /%3E%3Cpath d='M4 8.99994H11V6.41394L14.586 9.99994L11 13.5859V10.9999H4V8.99994Z' fill='black' /%3E%3C/svg%3E"), pointer !important;
+}
+/* left and right resize cursor */
+
+.cursor-lr-resize {
+	cursor: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg' %3E%3Cpath d='M2 9.999V10.004L7.997 16L7.998 12.001H9.997H12.017V16.001L17.997 10L12.017 4.001L12.018 8.02L9.997 8.022H7.997L7.998 4L2 9.999ZM3.411 10.002L6.998 6.414L6.997 9.001H10.497H13.018V6.416L16.583 10.002L13.019 13.587L13.018 11.002H10.497L6.998 11.001L6.997 13.587L3.411 10.002Z' fill='white' /%3E%3Cpath d='M10.497 11.0013H13.018V13.5873L16.583 10.0013L13.018 6.41631V9.02131H10.497H6.99701V6.41431L3.41101 10.0013L6.99701 13.5873V11.0003L10.497 11.0013Z' fill='black' /%3E%3C/svg%3E"), pointer !important;
+}
+/* left resize cursor */
+
+.cursor-l-resize {
+	cursor: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg' %3E%3Cpath d='M3 10L8.999 16.001L9 12H16V8.004L9 8.002V4L3 10Z' fill='white' /%3E%3Cpath d='M15 11H8V13.587L4.414 10L8 6.41504V9.00104L15 9.00404V11Z' fill='black' /%3E%3C/svg%3E"), pointer !important;
+}
+/* top resize cursor */
+
+.cursor-t-resize {
+	cursor: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16 10L10 4L4 10H8V17H12V10H16Z' fill='white' /%3E%3Cpath d='M9 16V9H6.414L10 5.414L13.586 9H11V16H9Z' fill='black' /%3E%3C/svg%3E"), pointer !important;
+}
+/* top and bottom resize cursor */
+
+.cursor-tb-resize {
+	cursor: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg' %3E%3Cpath d='M10 2L4 7.98H8V10V12H4L10 18L16 12H12V10V7.98H16L10 2ZM10 3.414L13.586 6.981H11V9.501V13H13.586L10 16.586L6.414 13H9V9.501V6.981H6.414L10 3.414Z' fill='white' /%3E%3Cpath d='M11 9.49994V6.97994H13.586L10 3.41394L6.414 6.97994H9V9.49994V12.9999H6.414L10 16.5859L13.586 12.9999H11V9.49994Z' fill='black' /%3E%3C/svg%3E"), pointer !important;
+}
+/* bottom resize cursor */
+
+.cursor-b-resize {
+	cursor: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg' %3E%3Cpath d='M8.001 4L8 10.999H4L9.999 17L16 10.999H12V4H8.001Z' fill='white' /%3E%3Cpath d='M11 4.99902V11.999H13.586L10 15.585L6.414 11.999H9L9.001 4.99902H11Z' fill='black' /%3E%3C/svg%3E"), pointer !important;
+}
