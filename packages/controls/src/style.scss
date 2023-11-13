@@ -17,7 +17,7 @@
 /* top resize cursor */
 
 .cursor-t-resize {
-	cursor: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg' %3E%3Cpath d='M16 10L10 4L4 10H8V17H12V10H16Z' fill='white' /%3E%3Cpath d='M9 15.9999V8.99994H6.414L10 5.41394L13.586 8.99994H11V15.9999H9Z' fill='black' /%3E%3C/svg%3E"), pointer !important;
+	cursor: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16 10L10 4L4 10H8V17H12V10H16Z' fill='white' /%3E%3Cpath d='M9 16V9H6.414L10 5.414L13.586 9H11V16H9Z' fill='black' /%3E%3C/svg%3E"), pointer !important;
 }
 /* top and bottom resize cursor */
 

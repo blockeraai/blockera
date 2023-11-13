@@ -1,13 +1,16 @@
 /**
  * External dependencies
  */
-import { useCallback, useEffect, useState } from '@wordpress/element';
+import { useCallback, useEffect, useState, useRef } from '@wordpress/element';
 
 export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 	// We are creating a snapshot of the values when the drag starts
 	// because the [value] will itself change & we need the original
 	// [value] to calculate during a drag.
 	const [snapshot, setSnapshot] = useState(value);
+
+	// create ref for created element
+	const elementRef = useRef(null);
 
 	// This captures the starting position of the drag and is used to
 	// calculate the diff in positions of the cursor.
@@ -32,6 +35,11 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 
 		// Append the new element to the body
 		document.body.appendChild(newElement);
+
+		// Assign the created element to the ref
+		if (elementRef) {
+			elementRef.current = newElement;
+		}
 	};
 
 	// Function to delete the created element by class name
@@ -72,15 +80,31 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 	useEffect(() => {
 		// Only change the value if the drag was actually started.
 		const onUpdate = (event) => {
-			if (dragStarted) {
-				if (startVal) {
-					if (movement === 'vertical') {
-						setValue(snapshot - event.clientY + startVal);
-					}
-					if (movement === 'horizontal') {
-						setValue(snapshot - (startVal - event.clientX));
-					}
+			if (dragStarted && startVal) {
+				const oldValue = value;
+				const newValue =
+					snapshot -
+					(movement === 'vertical' ? event.clientY : event.clientX) +
+					startVal;
+
+				setValue(newValue);
+
+				let directionClass = '';
+
+				if (movement === 'vertical') {
+					directionClass =
+						oldValue > newValue
+							? 'cursor-b-resize'
+							: 'cursor-t-resize';
+				} else {
+					directionClass =
+						oldValue > newValue
+							? 'cursor-r-resize'
+							: 'cursor-l-resize';
 				}
+
+				elementRef.current.className =
+					'virtual-cursor-box ' + directionClass;
 			}
 		};
 
@@ -99,7 +123,7 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 			document.removeEventListener('mousemove', onUpdate);
 			document.removeEventListener('mouseup', onEnd);
 		};
-	}, [snapshot, movement, dragStarted]); // eslint-disable-line
+	}, [snapshot, movement, dragStarted]);
 
 	return onStart;
 };
