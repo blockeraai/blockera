@@ -13,6 +13,8 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 	// calculate the diff in positions of the cursor.
 	const [startVal, setStartVal] = useState(0);
 
+	const [dragStarted, setDragStarted] = useState(false);
+
 	const createVirtualCursorBox = (cursorClass) => {
 		// Create a new div element
 		const newElement = document.createElement('div');
@@ -59,6 +61,7 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 			}
 
 			setSnapshot(value);
+			setDragStarted(true);
 		},
 		[value, movement]
 	);
@@ -69,12 +72,14 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 	useEffect(() => {
 		// Only change the value if the drag was actually started.
 		const onUpdate = (event) => {
-			if (startVal) {
-				if (movement === 'vertical') {
-					setValue(snapshot - event.clientY + startVal);
-				}
-				if (movement === 'horizontal') {
-					setValue(snapshot - (startVal - event.clientX));
+			if (dragStarted) {
+				if (startVal) {
+					if (movement === 'vertical') {
+						setValue(snapshot - event.clientY + startVal);
+					}
+					if (movement === 'horizontal') {
+						setValue(snapshot - (startVal - event.clientX));
+					}
 				}
 			}
 		};
@@ -82,6 +87,8 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 		// Stop the drag operation now.
 		const onEnd = () => {
 			setStartVal(0);
+			setDragStarted(false);
+
 			// remove cursor
 			deleteVisualDivCursor();
 		};
@@ -92,7 +99,7 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 			document.removeEventListener('mousemove', onUpdate);
 			document.removeEventListener('mouseup', onEnd);
 		};
-	}, [startVal, setValue, snapshot, movement]);
+	}, [snapshot, movement, dragStarted]); // eslint-disable-line
 
 	return onStart;
 };
