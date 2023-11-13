@@ -74,14 +74,14 @@ describe('testing use drag value hook', () => {
 		const valueDisplay = getByTestId('value-display');
 
 		// Simulate a mouse down event to start the horizontal drag
-		fireEvent.mouseDown(draggableElement, { clientX: 100 });
-		fireEvent.mouseMove(draggableElement, { clientX: 50 });
+		fireEvent.mouseDown(draggableElement, { clientX: 50 });
+		fireEvent.mouseMove(draggableElement, { clientX: 100 });
 
 		// Extract the updated value from the custom attribute
 		const updatedValue = valueDisplay.textContent;
 
 		// Calculate the expected value based on the horizontal drag
-		const expectedValue = '-50';
+		const expectedValue = '50';
 
 		expect(updatedValue).toBe(expectedValue);
 
