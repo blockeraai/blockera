@@ -123,7 +123,7 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 			document.removeEventListener('mousemove', onUpdate);
 			document.removeEventListener('mouseup', onEnd);
 		};
-	}, [snapshot, movement, dragStarted]);
+	}, [snapshot, movement, dragStarted, value, elementRef]); // eslint-disable-line
 
 	return onStart;
 };
