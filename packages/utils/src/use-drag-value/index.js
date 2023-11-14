@@ -2,6 +2,10 @@
  * External dependencies
  */
 import { useCallback, useEffect, useState, useRef } from '@wordpress/element';
+/**
+ * Internal styles
+ */
+import './style.scss';
 
 export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 	// We are creating a snapshot of the values when the drag starts
