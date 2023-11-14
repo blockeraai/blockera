@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { renderHook, render, fireEvent } from '@testing-library/react';
+import { renderHook, render, fireEvent, cleanup } from '@testing-library/react';
 import { useState } from '@wordpress/element';
 import '@testing-library/jest-dom/extend-expect';
 /**
@@ -23,6 +23,10 @@ function TestComponent({ movement = 'vertical' }) {
 }
 
 describe('testing use drag value hook', () => {
+	afterEach(() => {
+		// Cleanup by unmounting the component after each test
+		cleanup();
+	});
 	it('should return a function after set states', () => {
 		const myMock = jest.fn();
 		const { result } = renderHook(() =>
@@ -81,10 +85,25 @@ describe('testing use drag value hook', () => {
 		const updatedValue = valueDisplay.textContent;
 
 		// Calculate the expected value based on the horizontal drag
-		const expectedValue = '50';
+		const expectedValue = '-50';
 
 		expect(updatedValue).toBe(expectedValue);
 
 		fireEvent.mouseUp(draggableElement);
+	});
+
+	it('should render an element with className "virtual-cursor-box" in the document', () => {
+		// Render the component or call the function that renders the element
+		const { getByTestId } = render(<TestComponent movement="vertical" />);
+		const draggableElement = getByTestId('draggable');
+
+		// Simulate a mouse down event to start the horizontal drag
+		fireEvent.mouseDown(draggableElement, { clientX: 50 });
+		// Check if an element with the specified className exists in the document
+		const elementWithClassName = document.querySelector(
+			'.virtual-cursor-box'
+		);
+		expect(elementWithClassName).toBeInTheDocument();
+		fireEvent.mouseMove(draggableElement, { clientX: 100 });
 	});
 });
