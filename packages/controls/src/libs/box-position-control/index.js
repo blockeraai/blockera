@@ -19,7 +19,7 @@ import { Button, Flex, Grid } from '@publisher/components';
  */
 import { LabelControl, SelectControl } from '../index';
 import { SidePopover } from './components/side-popover';
-import { useDragValue } from '../../hooks';
+import { useDragValue } from '@publisher/utils';
 import { useDragSetValues } from './hooks/use-drag-setValues';
 // icons
 import { default as SideTopIcon } from './icons/side-top';
