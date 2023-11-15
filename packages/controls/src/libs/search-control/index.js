@@ -1,10 +1,11 @@
+// @flow
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { SearchControl as WPSearchControl } from '@wordpress/components';
 import PropTypes from 'prop-types';
-
+import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
@@ -13,6 +14,7 @@ import { controlClassNames } from '@publisher/classnames';
 /**
  * Internal dependencies
  */
+import type { TSearchControlProps } from './types';
 import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
 
@@ -26,7 +28,7 @@ export default function SearchControl({
 	//
 	className,
 	...props
-}) {
+}: TSearchControlProps): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
 		onChange,
@@ -54,7 +56,7 @@ SearchControl.propTypes = {
 	/**
 	 * ID for retrieving value from control context
 	 */
-	id: PropTypes.string.isRequired,
+	id: PropTypes.string,
 	/**
 	 * Label for field. If you pass empty value the field will not be added and simple control will be rendered
 	 *
@@ -88,6 +90,7 @@ SearchControl.propTypes = {
 };
 
 SearchControl.defaultProps = {
+	// $FlowFixMe
 	placeholder: __('Search…', 'publisher-core'),
 	defaultValue: '',
 	field: 'search',
