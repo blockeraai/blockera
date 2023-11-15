@@ -193,6 +193,7 @@ function IconControl({
 									mode="upload"
 									render={({ open }) => (
 										<Button
+											data-cy="upload-svg-btn"
 											className="btn-upload"
 											noBorder={true}
 											onClick={(event) => {
