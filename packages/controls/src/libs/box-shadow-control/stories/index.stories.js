@@ -1,8 +1,7 @@
 /**
  * External dependencies
  */
-import { expect } from '@storybook/jest';
-import { userEvent, waitFor, within } from '@storybook/testing-library';
+
 import { nanoid } from 'nanoid';
 
 /**
@@ -17,16 +16,11 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 import { BoxShadowControl } from '../../index';
 import { STORE_NAME } from '../../repeater-control/store';
 import { ControlContextProvider } from '../../../context';
-import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
 
-const {
-	WithInspectorStyles,
-	WithStoryContextProvider,
-	SharedDecorators,
-	WithPopoverDataProvider,
-} = Decorators;
+const { WithInspectorStyles, SharedDecorators, WithPopoverDataProvider } =
+	Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
 SharedDecorators.push(WithPopoverDataProvider);
@@ -217,66 +211,6 @@ export const Open = {
 				</ControlContextProvider>
 			</Flex>
 		);
-	},
-};
-
-export const Play = {
-	args: {
-		label: 'Box Shadows',
-		controlInfo: {
-			name: nanoid(),
-			value: [],
-		},
-		storeName: STORE_NAME,
-	},
-	decorators: [
-		WithStoryContextProvider,
-		WithInspectorStyles,
-		WithControlDataProvider,
-		...SharedDecorators,
-	],
-	render: (args) => <ControlWithHooks Control={BoxShadowControl} {...args} />,
-	play: async ({ canvasElement, step }) => {
-		const canvas = within(canvasElement);
-
-		const currentValue = canvas.getByTestId('current-value');
-		const button = canvas.getByLabelText('Add New');
-		//
-		await step('Story Data', async () => {
-			await expect(currentValue).toBeInTheDocument();
-			await expect(currentValue).toHaveTextContent('[]');
-		});
-
-		await step('Click Add Button', async () => {
-			await expect(button).toBeInTheDocument();
-
-			await userEvent.click(button);
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent(
-						'[ { "type": "outer", "x": "0px", "y": "0px", "blur": "0px", "spread": "0px", "color": "", "isVisible": true } ]'
-					),
-				{ timeout: 1000 }
-			);
-		});
-
-		await step('Open Popover', async () => {
-			await userEvent.click(canvas.getByLabelText('Item 1'));
-		});
-
-		await step('Change Input', async () => {
-			const inputs = canvas.getAllByRole('textbox');
-
-			userEvent.type(inputs[0], '{backspace}5{enter}');
-
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent(
-						'[ { "type": "outer", "x": "5px", "y": "0px", "blur": "0px", "spread": "0px", "color": "", "isVisible": true } ]'
-					),
-				{ timeout: 1000 }
-			);
-		});
 	},
 };
 

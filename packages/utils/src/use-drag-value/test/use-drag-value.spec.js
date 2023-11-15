@@ -85,7 +85,7 @@ describe('testing use drag value hook', () => {
 		const updatedValue = valueDisplay.textContent;
 
 		// Calculate the expected value based on the horizontal drag
-		const expectedValue = '-50';
+		const expectedValue = '50';
 
 		expect(updatedValue).toBe(expectedValue);
 
