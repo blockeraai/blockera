@@ -20,7 +20,7 @@ import {
 import { LabelControl, BaseControl } from '../index';
 import { SidePopover } from './components/side-popover';
 import { useControlContext } from '../../context';
-import { useDragValue } from '../../hooks';
+import { useDragValue } from '@publisher/utils';
 import { useDragSetValues } from './hooks/use-drag-setValues';
 
 /**
