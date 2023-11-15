@@ -1,11 +1,7 @@
 /**
  * External dependencies
  */
-import { useCallback, useEffect, useState, useRef } from '@wordpress/element';
-/**
- * Internal styles
- */
-import './style.scss';
+import { useCallback, useEffect, useState } from '@wordpress/element';
 
 export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 	// We are creating a snapshot of the values when the drag starts
@@ -13,19 +9,16 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 	// [value] to calculate during a drag.
 	const [snapshot, setSnapshot] = useState(value);
 
-	// create ref for created element
-	const elementRef = useRef(null);
-
 	// This captures the starting position of the drag and is used to
 	// calculate the diff in positions of the cursor.
 	const [startVal, setStartVal] = useState(0);
 
 	const [dragStarted, setDragStarted] = useState(false);
 
-	const createVirtualCursorBox = (cursorClass) => {
+	const createVirtualCursorBox = (cursor) => {
 		// Create a new div element
 		const newElement = document.createElement('div');
-		newElement.className = `virtual-cursor-box ${cursorClass}`; // Set a class name
+		newElement.className = `virtual-cursor-box`; // Set a class name
 		// Set some properties for the new element (e.g., text content and style)
 		// newElement.style.setProperty('cursor', cursor, 'important');
 
@@ -36,14 +29,9 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 		newElement.style.width = '100vw';
 		newElement.style.height = '100vh';
 		newElement.style.zIndex = '10000000';
-
+		newElement.style.setProperty('cursor', cursor, 'important');
 		// Append the new element to the body
 		document.body.appendChild(newElement);
-
-		// Assign the created element to the ref
-		if (elementRef) {
-			elementRef.current = newElement;
-		}
 	};
 
 	// Function to delete the created element by class name
@@ -63,13 +51,13 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 				setStartVal(event.clientY);
 
 				// add cursor
-				createVirtualCursorBox('cursor-tb-resize');
+				createVirtualCursorBox('ns-resize');
 			}
 			if (movement === 'horizontal') {
 				setStartVal(event.clientX);
 
 				// add cursor
-				createVirtualCursorBox('cursor-lr-resize');
+				createVirtualCursorBox('ew-resize');
 			}
 
 			setSnapshot(value);
@@ -85,30 +73,12 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 		// Only change the value if the drag was actually started.
 		const onUpdate = (event) => {
 			if (dragStarted && startVal) {
-				const oldValue = value;
-				const newValue =
-					snapshot -
-					(movement === 'vertical' ? event.clientY : event.clientX) +
-					startVal;
-
-				setValue(newValue);
-
-				let directionClass = '';
-
 				if (movement === 'vertical') {
-					directionClass =
-						oldValue > newValue
-							? 'cursor-b-resize'
-							: 'cursor-t-resize';
-				} else {
-					directionClass =
-						oldValue > newValue
-							? 'cursor-r-resize'
-							: 'cursor-l-resize';
+					setValue(snapshot - event.clientY + startVal);
 				}
-
-				elementRef.current.className =
-					'virtual-cursor-box ' + directionClass;
+				if (movement === 'horizontal') {
+					setValue(snapshot - (startVal - event.clientX));
+				}
 			}
 		};
 
@@ -127,7 +97,7 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 			document.removeEventListener('mousemove', onUpdate);
 			document.removeEventListener('mouseup', onEnd);
 		};
-	}, [snapshot, movement, dragStarted, value, elementRef]); // eslint-disable-line
+	}, [snapshot, movement, dragStarted, value]); // eslint-disable-line
 
 	return onStart;
 };
