@@ -78,7 +78,7 @@ export default function RepeaterControl({
 	});
 
 	const repeaterItems = value;
-	console.log(repeaterItems);
+
 	const defaultRepeaterState: TRepeaterDefaultStateProps = {
 		design,
 		mode,
