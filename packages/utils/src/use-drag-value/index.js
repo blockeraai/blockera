@@ -18,7 +18,7 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 	const createVirtualCursorBox = (cursor) => {
 		// Create a new div element
 		const newElement = document.createElement('div');
-		newElement.className = `virtual-cursor-box`; // Set a class name
+		newElement.className = `publisher-virtual-cursor-box`; // Set a class name
 		// Set some properties for the new element (e.g., text content and style)
 		// newElement.style.setProperty('cursor', cursor, 'important');
 
@@ -36,7 +36,9 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 
 	// Function to delete the created element by class name
 	const deleteVisualDivCursor = () => {
-		const elements = document.getElementsByClassName('virtual-cursor-box');
+		const elements = document.getElementsByClassName(
+			'publisher-virtual-cursor-box'
+		);
 		if (elements.length > 0) {
 			// Assuming there's only one element with the specified class
 			const elementToRemove = elements[0];
