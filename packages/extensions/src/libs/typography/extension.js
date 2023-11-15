@@ -861,7 +861,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 					>
 						<ColorControl
 							controlName="color"
-							label={__('Color', 'publisher-core')}
+							label={__('Text Color', 'publisher-core')}
 							columns="columns-2"
 							{...{
 								...props, //
