@@ -1,46 +1,110 @@
 /**
  * Internal dependencies
  */
-import { addBlockToPost } from '../../../../../../cypress/helpers';
+import {
+	// addBlockToPost,
+	getWPDataObject,
+	getSelectedBlock,
+	savePage,
+	redirectToFrontPage,
+	appendBlocks,
+	selectBlock,
+} from '../../../../../../cypress/helpers';
 
-describe('testing background extension with core/button block of WordPress', () => {
+describe('Background Extension', () => {
 	beforeEach(() => {
 		// run these tests as if in a desktop
 		// browser with a 720p monitor
 		cy.viewport(1280, 720);
 	});
-	it('should edit background repeater type to mesh gradient', () => {
-		addBlockToPost('core/paragraph', true);
 
-		cy.get('button').contains('Style').click();
-		cy.get('button[aria-label="Add New Background"]').click();
+	describe('Extension Initializing', () => {});
 
-		// 	cy.get('span')
-		// 		.contains('Image & Gradient')
-		// 		.parent()
-		// 		.parent()
-		// 		.get('span')
-		// 		.contains('Image')
-		// 		.click();
+	describe('Spacing', () => {
+		describe('WordPress Compatibility', () => {
+			describe('General', () => {
+				// 1- previous WordPress values
+				// 2- sync extension value with WordPress value
+			});
 
-		// 	cy.get('div[draggable="true"]').click();
+			describe('Group Block', () => {
+				// 1- previous WordPress values
+				// 2- sync extension value with WordPress value
+			});
+		});
 
-		// 	cy.get('[data-value="radial-gradient"]').click();
+		describe('Functionality', () => {
+			it('should not spacing value', () => {
+				const code = `<!-- wp:buttons -->
+					<div class="wp-block-buttons"><!-- wp:button -->
+					<div class="wp-block-button"><a class="wp-block-button__link wp-element-button">test button</a></div>
+					<!-- /wp:button --></div>
+					<!-- /wp:buttons -->`;
 
-		// 	cy.get('[aria-label="Close Modal"]').click();
+				// add block
+				appendBlocks(code);
 
-		// 	cy.getIframeBody()
-		// 		.find('.is-root-container')
-		// 		.should('contain', 'background-image: radial-gradient');
+				selectBlock('buttons');
+				cy.get('button').contains('Style').click();
 
-		// 	cy.get('button[aria-label="Add New Background"]').click();
+				// Check state
+				getWPDataObject().then((data) => {
+					expect({}).to.deep.equal(
+						getSelectedBlock(data, 'publisherSpacing')
+					);
+				});
 
-		// 	cy.get('div[draggable="true"]:last-child').click();
+				// Save to database.
+				savePage();
 
-		// 	cy.get('[data-value="mesh-gradient"]').click();
+				// Go to front page
+				redirectToFrontPage();
 
-		// 	cy.getIframeBody()
-		// 		.find('.is-root-container')
-		// 		.should('contain', 'background-image: radial-gradient');
+				// Assert css property value with expected value in front end!
+				// It should render block affected by extension to display with expected settings!
+				// cy.contains('test button')
+				// 	.then(($el) => {
+				// 		return window.getComputedStyle($el[0]);
+				// 	})
+				// 	.invoke('getPropertyValue', 'background-color')
+				// 	.should('eq', '');
+			});
+			it.only('should add spacing value', () => {
+				const code = `<!-- wp:buttons -->
+					<div class="wp-block-buttons"><!-- wp:button -->
+					<div class="wp-block-button"><a class="wp-block-button__link wp-element-button">test button</a></div>
+					<!-- /wp:button --></div>
+					<!-- /wp:buttons -->`;
+
+				// add block
+				appendBlocks(code);
+
+				selectBlock('buttons');
+				cy.get('button').contains('Style').click();
+				cy.get('span[aria-label="Top Margin"]').click();
+				cy.get('button[aria-label="Set 10px"]').click();
+				// Check state
+				// getWPDataObject().then((data) => {
+				// 	expect({}).to.deep.equal(
+				// 		getSelectedBlock(data, 'publisherSpacing')
+				// 	);
+				// });
+
+				// Save to database.
+				// savePage();
+
+				// Go to front page
+				// redirectToFrontPage();
+
+				// Assert css property value with expected value in front end!
+				// It should render block affected by extension to display with expected settings!
+				// cy.contains('test button')
+				// 	.then(($el) => {
+				// 		return window.getComputedStyle($el[0]);
+				// 	})
+				// 	.invoke('getPropertyValue', 'background-color')
+				// 	.should('eq', '');
+			});
+		});
 	});
 });
