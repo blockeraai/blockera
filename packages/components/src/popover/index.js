@@ -88,7 +88,10 @@ export default function Popover({
 									onClose();
 								}}
 								tabIndex="-1"
-								aria-label={__('Close Modal', 'publisher-core')}
+								label={__('Close', 'publisher')}
+								aria-label={__('Close', 'publisher-core')}
+								tooltipPosition="top"
+								showTooltip={true}
 							>
 								<CloseIcon />
 							</Button>
