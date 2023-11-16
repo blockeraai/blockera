@@ -60,7 +60,19 @@ export default function Popover({
 					onFocusOutside={
 						isFunction(onFocusOutside)
 							? onFocusOutside
-							: handleOnClose
+							: (e) => {
+									const excludeClasses = [
+										'btn-choose-image',
+										'btn-media-library',
+										'btn-upload',
+									];
+
+									return excludeClasses.filter((className) =>
+										e.target.classList.contains(className)
+									).length !== 0
+										? false
+										: handleOnClose();
+							  }
 					}
 					shift={!isUndefined(shift) ? shift : _shift}
 					resize={!isUndefined(resize) ? resize : _resize}
