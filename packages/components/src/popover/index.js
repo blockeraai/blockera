@@ -1,11 +1,12 @@
+// @flow
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useContext, useState } from '@wordpress/element';
+import { useContext, useState, useRef, useEffect } from '@wordpress/element';
 import { Popover as WPPopover } from '@wordpress/components';
 import PropTypes from 'prop-types';
-
+import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
@@ -21,6 +22,7 @@ import { PopoverContextData } from '@publisher/storybook/decorators/with-popover
  */
 import { Button } from '../button';
 import CloseIcon from './icons/close';
+import type { TPopoverProps } from './types';
 
 export default function Popover({
 	title,
@@ -32,7 +34,7 @@ export default function Popover({
 	shift: _shift,
 	flip: _flip,
 	...props
-}) {
+}: TPopoverProps): MixedElement {
 	const [isVisible, setIsVisible] = useState(true);
 
 	/**
@@ -46,6 +48,10 @@ export default function Popover({
 		onClose();
 		setIsVisible(false);
 	};
+
+	const popoverRef = useRef();
+
+	useEffect(() => popoverRef.current.focus(), []);
 
 	return (
 		<>
@@ -79,12 +85,14 @@ export default function Popover({
 					flip={!isUndefined(flip) ? flip : _flip}
 					placement={placement}
 					{...props}
+					ref={popoverRef}
 				>
 					{title && (
 						<div
 							className={componentInnerClassNames(
 								'popover-header'
 							)}
+							data-test="popover-header"
 						>
 							{title}
 
@@ -110,7 +118,10 @@ export default function Popover({
 						</div>
 					)}
 
-					<div className={componentInnerClassNames('popover-body')}>
+					<div
+						className={componentInnerClassNames('popover-body')}
+						data-test="popover-body"
+					>
 						{children}
 					</div>
 				</WPPopover>
@@ -133,6 +144,7 @@ Popover.propTypes = {
 	 *
 	 * @default 'bottom-start'
 	 */
+	// $FlowFixMe
 	placement: PropTypes.oneOf([
 		'top-start',
 		'top',
