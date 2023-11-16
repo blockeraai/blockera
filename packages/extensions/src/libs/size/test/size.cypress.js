@@ -7,7 +7,6 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
-	appendBlocks,
 } from '../../../../../../cypress/helpers';
 
 describe('Size Extension', () => {
@@ -15,36 +14,7 @@ describe('Size Extension', () => {
 		cy.viewport(1280, 720);
 	});
 
-	describe('Extension Initializing', () => {
-		it('should mount extension with WordPress block previous attributes', () => {
-			const code = `<!-- wp:paragraph -->
-<p>This is a test text.</p>
-<!-- /wp:paragraph -->`;
-
-			appendBlocks(code);
-
-			cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
-
-			getWPDataObject().then((data) => {
-				expect('').to.be.equal(
-					getSelectedBlock(data, 'publisherWidth')
-				);
-			});
-
-			//	savePage();
-
-			//	redirectToFrontPage();
-
-			// cy.contains('This is a test text.')
-			// 	.then(($el) => {
-			// 		console.log($el);
-			// 		console.log(window.getComputedStyle($el[0]));
-			// 		return window.getComputedStyle($el[0]);
-			// 	})
-			// 	.invoke('getPropertyValue', 'width')
-			// 	.should('eq', '');
-		});
-	});
+	//describe('Extension Initializing', () => {...});
 
 	describe('Width', () => {
 		beforeEach(() => {
@@ -73,16 +43,19 @@ describe('Size Extension', () => {
 						});
 				});
 
+				//Check block
 				cy.getIframeBody()
 					.find('[data-type="core/paragraph"]')
 					.should('have.css', 'width', '100px');
 
+				//Check store
 				getWPDataObject().then((data) => {
 					expect('100px').to.be.equal(
 						getSelectedBlock(data, 'publisherWidth')
 					);
 				});
 
+				//Check frontend
 				savePage();
 
 				redirectToFrontPage();
@@ -124,23 +97,25 @@ describe('Size Extension', () => {
 						});
 				});
 
+				//Check block
 				cy.getIframeBody()
 					.find('[data-type="core/paragraph"]')
 					.should('have.css', 'height', '80px');
 
+				//Check store
 				getWPDataObject().then((data) => {
 					expect('80px').to.be.equal(
 						getSelectedBlock(data, 'publisherHeight')
 					);
 				});
 
+				//Check frontend
 				savePage();
 
 				redirectToFrontPage();
 
 				cy.get('.publisher-paragraph')
 					.then(($el) => {
-						console.log(window.getComputedStyle($el[0]));
 						return window.getComputedStyle($el[0]);
 					})
 					.invoke('getPropertyValue', 'height')
@@ -172,20 +147,25 @@ describe('Size Extension', () => {
 						.parent()
 						.next()
 						.within(() => {
-							cy.get('button[aria-label="Visible"]').click();
+							cy.get(
+								'button[aria-label="Visible Overflow"]'
+							).click();
 						});
 				});
 
+				//Check block
 				cy.getIframeBody()
 					.find('[data-type="core/paragraph"]')
 					.should('have.css', 'overflow', 'visible');
 
+				//Check store
 				getWPDataObject().then((data) => {
 					expect('visible').to.be.equal(
 						getSelectedBlock(data, 'publisherOverflow')
 					);
 				});
 
+				//Check frontend
 				savePage();
 
 				redirectToFrontPage();
@@ -207,20 +187,24 @@ describe('Size Extension', () => {
 						.parent()
 						.next()
 						.within(() => {
-							cy.get('button[aria-label="Hidden"]').click();
+							cy.get(
+								'button[aria-label="Hidden Overflow"]'
+							).click();
 						});
 				});
-
+				//Check block
 				cy.getIframeBody()
 					.find('[data-type="core/paragraph"]')
 					.should('have.css', 'overflow', 'hidden');
 
+				//Check store
 				getWPDataObject().then((data) => {
 					expect('hidden').to.be.equal(
 						getSelectedBlock(data, 'publisherOverflow')
 					);
 				});
 
+				//Check frontend
 				savePage();
 
 				redirectToFrontPage();
@@ -242,20 +226,25 @@ describe('Size Extension', () => {
 						.parent()
 						.next()
 						.within(() => {
-							cy.get('button[aria-label="Scroll"]').click();
+							cy.get(
+								'button[aria-label="Scroll Overflow"]'
+							).click();
 						});
 				});
 
+				//Check block
 				cy.getIframeBody()
 					.find('[data-type="core/paragraph"]')
 					.should('have.css', 'overflow', 'scroll');
 
+				//Check store
 				getWPDataObject().then((data) => {
 					expect('scroll').to.be.equal(
 						getSelectedBlock(data, 'publisherOverflow')
 					);
 				});
 
+				//Check frontend
 				savePage();
 
 				redirectToFrontPage();
