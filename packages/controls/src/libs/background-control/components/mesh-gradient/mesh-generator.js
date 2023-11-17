@@ -74,6 +74,15 @@ const generateGradient = (length: number): Object => {
 	});
 };
 
+export const getRandomHexColor = (): string => {
+	const letters = '0123456789ABCDEF';
+	let color = '#';
+	for (let i = 0; i < 6; i++) {
+		color += letters[Math.floor(Math.random() * 16)];
+	}
+	return color;
+};
+
 export default function generateMeshGradient(length: number): Object {
 	const colors = generateColors(length, generateColor());
 

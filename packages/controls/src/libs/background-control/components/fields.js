@@ -49,7 +49,10 @@ import RadialGradientRepeatIcon from '../icons/radial-gradient-repeat';
 import LinearGradientNoRepeatIcon from '../icons/linear-gradient-no-repeat';
 import RadialGradientNoRepeatIcon from '../icons/radial-gradient-no-repeat';
 import { default as TypeMeshGradientIcon } from '../icons/type-mesh-gradient';
-import { default as generateMeshGradient } from './mesh-gradient/mesh-generator';
+import {
+	default as generateMeshGradient,
+	getRandomHexColor,
+} from './mesh-gradient/mesh-generator';
 import RadialGradientClosestSideIcon from '../icons/radial-gradient-closest-side';
 import RadialGradientFarthestSideIcon from '../icons/radial-gradient-farthest-side';
 import RadialGradientClosestCornerIcon from '../icons/radial-gradient-closest-corner';
@@ -661,7 +664,7 @@ const Fields: FieldItem = memo<FieldItem>(
 								minItems={3}
 								actionButtonVisibility={false}
 								defaultRepeaterItemValue={{
-									color: '',
+									color: getRandomHexColor(),
 								}}
 								onChange={(newValue) => {
 									//Prevent to re-updating state when newValue with current value is equal!
