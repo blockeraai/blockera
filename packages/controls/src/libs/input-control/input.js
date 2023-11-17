@@ -22,16 +22,19 @@ import { useControlContext } from '../../context';
 
 function valueCleanup(value) {
 	let updatedValue = value;
-	const strValue = value.toString();
 
-	if (strValue.includes('auto')) {
-		updatedValue = 'auto';
-	}
-	if (strValue.includes('initial')) {
-		updatedValue = 'initial';
-	}
-	if (strValue.includes('inherit')) {
-		updatedValue = 'inherit';
+	if (typeof value === 'string') {
+		const strValue = value.toString();
+
+		if (strValue.includes('auto')) {
+			updatedValue = 'auto';
+		}
+		if (strValue.includes('initial')) {
+			updatedValue = 'initial';
+		}
+		if (strValue.includes('inherit')) {
+			updatedValue = 'inherit';
+		}
 	}
 
 	return updatedValue;
