@@ -131,7 +131,7 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 					>
 						<ColorControl
 							controlName="color"
-							label={__('Color', 'publisher-core')}
+							label={__('BG Color', 'publisher-core')}
 							columns="columns-2"
 							{...{
 								...props, //
