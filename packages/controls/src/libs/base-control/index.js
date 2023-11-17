@@ -33,6 +33,7 @@ export default function BaseControl({
 						className
 					)}
 					style={{ gridTemplateColumns: cssColumns || '' }}
+					data-cy="base-control"
 				>
 					<div className={fieldsInnerClassNames('control')}>
 						{children}
@@ -48,6 +49,7 @@ export default function BaseControl({
 		<div
 			className={fieldsClassNames(controlName, columns, className)}
 			style={{ gridTemplateColumns: cssColumns || '' }}
+			data-cy="base-control"
 		>
 			{label !== '' && (
 				<div className={fieldsClassNames('label')}>

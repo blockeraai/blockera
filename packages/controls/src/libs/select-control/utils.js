@@ -19,7 +19,8 @@ import type { TSelectOptions, TNativeOption } from './types';
 
 // $FlowFixMe
 export const renderSelectNativeOption = function (
-	item: TNativeOption
+	item: TNativeOption,
+	index: string | number
 ): MixedElement {
 	if (
 		item?.type &&
@@ -27,13 +28,17 @@ export const renderSelectNativeOption = function (
 		item?.options
 	) {
 		return (
-			<optgroup label={item.label}>
+			<optgroup label={item.label} key={index}>
 				{item.options.map(renderSelectNativeOption)}
 			</optgroup>
 		);
 	}
 
-	return <option {...item}>{item.label}</option>;
+	return (
+		<option {...item} key={index}>
+			{item.label}
+		</option>
+	);
 };
 
 // $FlowFixMe
