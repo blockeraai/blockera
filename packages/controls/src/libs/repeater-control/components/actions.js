@@ -48,6 +48,7 @@ export default function RepeaterItemActions({
 					noBorder={true}
 					icon={isVisible ? EnableIcon : DisableIcon}
 					showTooltip={true}
+					tooltipPosition="top"
 					onClick={(event) => {
 						event.stopPropagation();
 						setVisibility(!isVisible);
@@ -89,6 +90,7 @@ export default function RepeaterItemActions({
 						noBorder={true}
 						icon={CloneIcon}
 						showTooltip={true}
+						tooltipPosition="top"
 						label={__('Clone', 'publisher')}
 						onClick={(event) => {
 							event.stopPropagation();
@@ -113,6 +115,7 @@ export default function RepeaterItemActions({
 						noBorder={true}
 						icon={DeleteIcon}
 						showTooltip={true}
+						tooltipPosition="top"
 						onClick={(event) => {
 							event.stopPropagation();
 							removeRepeaterItem({
