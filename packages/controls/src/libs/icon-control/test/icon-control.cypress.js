@@ -8,6 +8,9 @@ import {
 } from '../../../../../../cypress/helpers';
 
 describe('icon-control', () => {
+	// TODO we will add these tests when adding visual tests
+	// context('Rendering', () => {});
+
 	context('Functional', () => {
 		beforeEach(() => {
 			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
@@ -20,7 +23,7 @@ describe('icon-control', () => {
 		it('should be able to upload custom svg when there is selected icon', () => {
 			// act
 			cy.get('[aria-label="button Icon"]').click();
-			cy.getByDataCy('upload-svg-btn').click({ force: true });
+			cy.contains('button', /upload svg/i).click({ force: true });
 			cy.get('input[type="file"]').selectFile(
 				'cypress/fixtures/home.svg',
 				{
@@ -28,8 +31,6 @@ describe('icon-control', () => {
 				}
 			);
 			cy.get('.media-toolbar-primary > .button').click();
-
-			// visual assertion
 
 			// data assertion
 			getWPDataObject().then((data) => {
@@ -46,8 +47,6 @@ describe('icon-control', () => {
 			cy.get('input[type="search"]').eq(1).type('pub');
 			cy.get('span[aria-label="publisher Icon"]').click();
 
-			// visual assertion
-
 			// data assertion
 			getWPDataObject().then((data) => {
 				const selectedIconName = getSelectedBlock(
@@ -63,8 +62,6 @@ describe('icon-control', () => {
 			cy.get('[aria-label="button Icon"]').click();
 			cy.get('button[aria-label="Remove Icon"]').click({ force: true });
 
-			// visual assertion
-
 			// data assertion
 			getWPDataObject().then((data) => {
 				const selectedIconName = getSelectedBlock(
@@ -75,4 +72,17 @@ describe('icon-control', () => {
 			});
 		});
 	});
+
+	// TODO
+	// context('Initial Value', () => {
+	// 	beforeEach(() => {
+	// 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+
+	// 		cy.getIframeBody()
+	// 			.find(`[data-type="core/paragraph"]`)
+	// 			.type('this is test text.');
+	// 	});
+
+	// 	it('', () => {});
+	// });
 });
