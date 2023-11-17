@@ -21,16 +21,16 @@
 		transition: box-shadow 0.1s linear;
 
 		&:focus {
-			box-shadow: 0 0 0 2px var(--publisher-controls-border-color-focus) !important;
+			box-shadow: 0 0 0 2px var(--publisher-controls-border-color-focus);
 		}
 	}
 
-	&.is-hovered input[type="search"].components-search-control__input,
 	&:hover input[type="search"].components-search-control__input {
 		box-shadow: 0 0 0 1px var(--publisher-controls-border-color-hover);
 	}
 
+	&.is-hovered:hover input[type="search"].components-search-control__input,
 	&.is-focused input[type="search"].components-search-control__input {
-		box-shadow: 0 0 0 2px var(--publisher-controls-border-color-focus);
+		box-shadow: 0 0 0 2px var(--publisher-controls-border-color-focus) !important;
 	}
 }

@@ -78,7 +78,7 @@ export default function RepeaterControl({
 	});
 
 	const repeaterItems = value;
-	console.log(repeaterItems);
+
 	const defaultRepeaterState: TRepeaterDefaultStateProps = {
 		design,
 		mode,
@@ -130,6 +130,12 @@ export default function RepeaterControl({
 								repeaterItems?.length >= maxItems
 									? { disabled: true }
 									: {})}
+								showTooltip={true}
+								tooltipPosition="top"
+								label={
+									__('Add New', 'publisher-core') +
+									` ${defaultRepeaterState.popoverLabel}`
+								}
 								aria-label={
 									__('Add New', 'publisher-core') +
 									` ${defaultRepeaterState.popoverLabel}`
