@@ -1,3 +1,4 @@
+// @flow
 /**
  * WordPress dependencies
  */
@@ -16,55 +17,70 @@ import BorderStyleHDashedIcon from '../../border-control/icons/style-h-dashed';
 import BorderStyleHDottedIcon from '../../border-control/icons/style-h-dotted';
 import BorderStyleHDoubleIcon from '../../border-control/icons/style-h-double';
 
-const RepeaterItemHeader = ({
-	item: { style, width, color = '#fff' },
-	itemId,
-	isOpen,
-	setOpen,
-	children,
-	isOpenPopoverEvent,
-}) => {
-	function getStyleIcon() {
-		if (style === 'solid') {
-			return <BorderStyleHSolidIcon />;
-		} else if (style === 'dashed') {
-			return <BorderStyleHDashedIcon />;
-		} else if (style === 'dotted') {
-			return <BorderStyleHDottedIcon />;
-		} else if (style === 'double') {
-			return <BorderStyleHDoubleIcon />;
+/**
+ * External dependencies
+ */
+import type { Element } from 'react';
+/**
+ * Internal dependencies
+ */
+import type { THeaderItem } from '../types';
+
+const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
+	({
+		item: {
+			border: { style, width, color = '#fff' },
+		},
+		itemId,
+		isOpen,
+		setOpen,
+		children,
+		isOpenPopoverEvent,
+	}: THeaderItem): Element<any> => {
+		function getStyleIcon() {
+			if (style === 'solid') {
+				return <BorderStyleHSolidIcon />;
+			} else if (style === 'dashed') {
+				return <BorderStyleHDashedIcon />;
+			} else if (style === 'dotted') {
+				return <BorderStyleHDottedIcon />;
+			} else if (style === 'double') {
+				return <BorderStyleHDoubleIcon />;
+			}
 		}
+
+		return (
+			<div
+				className={controlInnerClassNames('repeater-group-header')}
+				onClick={(event) =>
+					isOpenPopoverEvent(event) && setOpen(!isOpen)
+				}
+				aria-label={sprintf(
+					// translators: it's the aria label for repeater item
+					__('Item %d', 'publisher-core'),
+					itemId + 1
+				)}
+			>
+				<span className={controlInnerClassNames('header-icon')}>
+					<CloneIcon />
+				</span>
+
+				<span className={controlInnerClassNames('header-label')}>
+					{__('Outline', 'publisher-core')}
+				</span>
+
+				<span className={controlInnerClassNames('header-values')}>
+					<span>{width}</span>
+
+					{getStyleIcon()}
+
+					<ColorIndicator value={color} />
+				</span>
+
+				{children}
+			</div>
+		);
 	}
+);
 
-	return (
-		<div
-			className={controlInnerClassNames('repeater-group-header')}
-			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
-			aria-label={sprintf(
-				// translators: it's the aria label for repeater item
-				__('Item %d', 'publisher-core'),
-				itemId + 1
-			)}
-		>
-			<span className={controlInnerClassNames('header-icon')}>
-				<CloneIcon />
-			</span>
-
-			<span className={controlInnerClassNames('header-label')}>
-				{__('Outline', 'publisher-core')}
-			</span>
-
-			<span className={controlInnerClassNames('header-values')}>
-				<span>{width}</span>
-
-				{getStyleIcon()}
-
-				<ColorIndicator value={color} />
-			</span>
-
-			{children}
-		</div>
-	);
-};
-
-export default memo(RepeaterItemHeader);
+export default RepeaterItemHeader;
