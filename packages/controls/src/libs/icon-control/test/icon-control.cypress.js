@@ -73,16 +73,21 @@ describe('icon-control', () => {
 		});
 	});
 
-	// TODO
-	// context('Initial Value', () => {
-	// 	beforeEach(() => {
-	// 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+	context('Initial Value', () => {
+		beforeEach(() => {
+			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
-	// 		cy.getIframeBody()
-	// 			.find(`[data-type="core/paragraph"]`)
-	// 			.type('this is test text.');
-	// 	});
+			cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
+		});
 
-	// 	it('', () => {});
-	// });
+		it('should get data from context on reload', () => {
+			// act
+			cy.get('[aria-label="button Icon"]').click();
+			cy.get('button[aria-label="Save draft"]').click();
+			cy.reload();
+
+			// TODO
+			cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
+		});
+	});
 });
