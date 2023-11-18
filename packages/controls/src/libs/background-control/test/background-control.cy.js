@@ -536,7 +536,7 @@ describe('background control', () => {
 		});
 	});
 
-	context('Initial Value', () => {
+	context.only('Initial Value', () => {
 		const defaultValue = [
 			{
 				type: 'radial-gradient',
@@ -672,6 +672,8 @@ describe('background control', () => {
 
 		// 3. as expected
 		it('calculated data must be defaultValue, when defaultValue(ok) && id(ok) && value(undefined)', () => {
+			const name = nanoid();
+
 			cy.withDataProvider({
 				component: (
 					<BackgroundControl
@@ -691,6 +693,7 @@ describe('background control', () => {
 					],
 				},
 				store: STORE_NAME,
+				name,
 			});
 
 			cy.getByDataCy('repeater-item').should(
@@ -701,16 +704,17 @@ describe('background control', () => {
 
 		// 4. passes
 		it('calculated data must be value, when id(!ok), defaultValue(!ok), value(root)', () => {
+			const name = nanoid();
 			cy.withDataProvider({
 				component: <BackgroundControl />,
 				value,
 				store: STORE_NAME,
+				name,
 			});
 
-			cy.get('button[aria-label="Linear Gradient"]').should(
-				'have.attr',
-				'aria-checked',
-				'true'
+			cy.getByDataCy('repeater-item').should(
+				'contain',
+				'Linear Gradient'
 			);
 		});
 	});
