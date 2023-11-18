@@ -16,7 +16,9 @@ class PublisherAssets {
 	 */
 	protected static array $assets = [
 		'utils',
+		'hooks',
 		'controls',
+		'core-data',
 		'components',
 		'classnames',
 		'extensions',
