@@ -32,6 +32,8 @@
 		"@publisher/data-extractor": "file:packages/data-extractor",
 		"@publisher/extensions": "file:packages/extensions",
 		"@publisher/style-engine": "file:packages/style-engine",
+		"@publisher/core-data": "file:packages/core-data",
+		"@publisher/hooks": "file:packages/hooks",
 		"@publisher/utils": "file:packages/utils"
 	},
 	"devDependencies": {
