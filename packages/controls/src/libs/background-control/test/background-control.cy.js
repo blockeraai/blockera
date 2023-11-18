@@ -635,7 +635,7 @@ describe('background control', () => {
 			},
 		];
 
-		// 1. positive false -> since there is no value, takes nothing
+		// 1. as expected
 		it('calculated data must be defaultValue, when defaultValue(ok) && id(!ok) value(undefined)', () => {
 			const name = nanoid();
 
@@ -645,28 +645,32 @@ describe('background control', () => {
 				store: STORE_NAME,
 				name,
 			});
+
+			cy.getByDataCy('repeater-item').should(
+				'contain',
+				'Radial Gradient'
+			);
 		});
 
-		// 2. positive false -> takes value!
+		//2. positive false -> calculated data is value but should be defaultValue
 		it('calculated data must be defaultValue, when defaultValue(ok) && id(!ok) && value(ok)', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: (
-					<BackgroundControl defaultValue={defaultValue} id="x.y" />
+					<BackgroundControl defaultValue={defaultValue} id="x.y.z" />
 				),
 				value,
 				store: STORE_NAME,
 				name,
 			});
 
-			cy.get('button[aria-label="Image"]').should(
-				'have.attr',
-				'aria-checked',
-				'true'
+			cy.getByDataCy('repeater-item').should(
+				'contain',
+				'Radial Gradient'
 			);
 		});
 
-		// 3. positive false -> since there is no value, takes nothing.
+		// 3. as expected
 		it('calculated data must be defaultValue, when defaultValue(ok) && id(ok) && value(undefined)', () => {
 			cy.withDataProvider({
 				component: (
@@ -689,10 +693,9 @@ describe('background control', () => {
 				store: STORE_NAME,
 			});
 
-			cy.get('button[aria-label="Image"]').should(
-				'have.attr',
-				'aria-checked',
-				'true'
+			cy.getByDataCy('repeater-item').should(
+				'contain',
+				'Radial Gradient'
 			);
 		});
 
