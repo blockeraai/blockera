@@ -2,8 +2,20 @@
 
 namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
+/**
+ * Border style definition
+ *
+ * @package Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions\Border
+ */
 class Border extends BaseStyleDefinition {
 
+	/**
+	 * Retrieve css props.
+	 *
+	 * @inheritDoc
+	 *
+	 * @return array the css properties as array
+	 */
 	public function getProperties(): array {
 
 		if ( empty( $this->settings['type'] ) ) {
@@ -71,9 +83,9 @@ class Border extends BaseStyleDefinition {
 			case 'border-radius':
 				$value = $this->settings[ $this->settings['type'] ];
 
-				if ( count( $value ) < 3 ) {
+				if ( ! empty( $value['type'] ) && 'all' === $value['type'] ) {
 
-					$props['border-radius'] = $value['all'];
+					$props['border-radius'] = $value['all'] ?? '';
 
 				} else {
 
