@@ -154,9 +154,9 @@ export const Border = ({
 		}
 	};
 	const getNormalDefaultValue = (): Object => {
-		if (!defaultValue.borderColor) {
-			const { top, right, bottom, left } = defaultValue.border;
+		const { top, right, bottom, left } = defaultValue.border;
 
+		if ((!defaultValue.borderColor && top) || right || bottom || left) {
 			return {
 				type: 'custom',
 				top: {
