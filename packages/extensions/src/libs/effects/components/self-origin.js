@@ -60,22 +60,13 @@ export const SelfOrigin = ({
 					columns="columns-2"
 					inputFields={true}
 					onChange={({ top, left }) => {
-						if (
-							top !== '50%' ||
-							left !== '50%' ||
-							transformSelfOrigin.top !== '50%' ||
-							transformSelfOrigin.left !== '50%'
-						) {
-							transformSelfOrigin.color =
-								'var(--publisher-controls-border-color-focus)';
-						}
-
 						handleOnChangeAttributes(
 							'publisherTransformSelfOrigin',
 							{
 								...transformSelfOrigin,
 								top,
 								left,
+								color: 'var(--publisher-controls-border-color-focus)',
 							}
 						);
 					}}

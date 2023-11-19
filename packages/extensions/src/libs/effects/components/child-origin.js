@@ -61,22 +61,13 @@ export const ChildOrigin = ({
 					columns="columns-2"
 					inputFields={true}
 					onChange={({ top, left }) => {
-						if (
-							top !== '50%' ||
-							left !== '50%' ||
-							transformChildOrigin.top !== '50%' ||
-							transformChildOrigin.left !== '50%'
-						) {
-							transformChildOrigin.color =
-								'var(--publisher-controls-border-color-focus)';
-						}
-
 						handleOnChangeAttributes(
 							'publisherTransformChildOrigin',
 							{
 								...transformChildOrigin,
 								top,
 								left,
+								color: 'var(--publisher-controls-border-color-focus)',
 							}
 						);
 					}}
