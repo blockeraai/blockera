@@ -16,6 +16,10 @@ import { regexMatch } from '../utils';
  * @return {*} value of dataset queried props
  */
 export function prepare(query: string, dataset: Object): Array<string> {
+	if (isUndefined(query) || isEmpty(query)) {
+		return undefined;
+	}
+
 	const parsedQuery = query.split('.');
 	const itemValue = (...values) => values.reduce(accumulator, dataset);
 

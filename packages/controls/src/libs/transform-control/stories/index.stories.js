@@ -2,9 +2,6 @@
  * External dependencies
  */
 import { nanoid } from 'nanoid';
-import { expect } from '@storybook/jest';
-import { useContext } from '@wordpress/element';
-import { userEvent, waitFor, within } from '@storybook/testing-library';
 
 /**
  * Publisher dependencies
@@ -21,13 +18,8 @@ import { STORE_NAME } from '../../repeater-control/store';
 import { ControlContextProvider } from '../../../context';
 import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 
-const {
-	WithInspectorStyles,
-	StoryDataContext,
-	WithStoryContextProvider,
-	SharedDecorators,
-	WithPopoverDataProvider,
-} = Decorators;
+const { WithInspectorStyles, SharedDecorators, WithPopoverDataProvider } =
+	Decorators;
 
 SharedDecorators.push(WithPopoverDataProvider);
 SharedDecorators.push(WithControlDataProvider);
@@ -223,77 +215,6 @@ export const Open = {
 				</Flex>
 			</Flex>
 		);
-	},
-};
-
-const ControlWithHooks = (args) => {
-	const { storyValue, setStoryValue } = useContext(StoryDataContext);
-
-	return (
-		<TransformControl
-			{...args}
-			onChange={setStoryValue}
-			value={storyValue}
-		/>
-	);
-};
-
-export const Play = {
-	args: {
-		label: 'Transforms',
-		controlInfo: {
-			name: nanoid(),
-			value: [],
-		},
-		storeName: STORE_NAME,
-	},
-	decorators: [
-		WithStoryContextProvider,
-		WithInspectorStyles,
-		...SharedDecorators,
-	],
-	render: (args) => <ControlWithHooks {...args} />,
-	play: async ({ canvasElement, step }) => {
-		const canvas = within(canvasElement);
-
-		const currentValue = canvas.getByTestId('current-value');
-		const button = canvas.getByLabelText('Add New');
-		//
-		await step('Story Data', async () => {
-			await expect(currentValue).toBeInTheDocument();
-			await expect(currentValue).toBeEmptyDOMElement();
-		});
-
-		await step('Click Add Button', async () => {
-			await expect(button).toBeInTheDocument();
-
-			await userEvent.click(button);
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent(
-						'[ { "type": "move", "move-x": "0px", "move-y": "0px", "move-z": "0px", "scale": "100%", "rotate-x": "0deg", "rotate-y": "0deg", "rotate-z": "0deg", "skew-x": "0deg", "skew-y": "0deg", "isVisible": true } ]'
-					),
-				{ timeout: 1000 }
-			);
-		});
-
-		await step('Open Popover', async () => {
-			await userEvent.click(canvas.getByLabelText('Item 1'));
-		});
-
-		await step('Change Input', async () => {
-			const inputs = canvas.getAllByRole('textbox');
-
-			userEvent.type(inputs[0], '{backspace}5{enter}');
-
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent(
-						'[ { "type": "move", "move-x": "5px", "move-y": "0px", "move-z": "0px", "scale": "100%", "rotate-x": "0deg", "rotate-y": "0deg", "rotate-z": "0deg", "skew-x": "0deg", "skew-y": "0deg", "isVisible": true } ]'
-					),
-				{ timeout: 1000 }
-			);
-		});
 	},
 };
 

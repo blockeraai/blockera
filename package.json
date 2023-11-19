@@ -73,7 +73,7 @@
 		"@storybook/testing-react": "^2.0.1",
 		"@testing-library/jest-dom": "^5.16.1",
 		"@testing-library/react": "^14.0.0",
-		"@testing-library/user-event": "^14.4.3",
+		"@testing-library/user-event": "^14.5.1",
 		"@wordpress/base-styles": "^4.26.0",
 		"@wordpress/block-editor": "^12.2.0",
 		"@wordpress/block-library": "^8.12.0",
@@ -107,6 +107,7 @@
 		"css-minimizer-webpack-plugin": "^5.0.0",
 		"cypress": "^13.3.0",
 		"cypress-log-to-output": "^1.1.2",
+		"cypress-real-events": "^1.10.3",
 		"eslint-plugin-cypress": "^2.13.3",
 		"eslint-plugin-storybook": "^0.6.12",
 		"esm": "^3.2.25",
@@ -140,6 +141,7 @@
 		"patch-package": "^8.0.0",
 		"path": "^0.12.7",
 		"po2json": "^1.0.0-alpha",
+		"postcss-lit": "^1.1.0",
 		"postcss-loader": "^7.3.3",
 		"postcss-scss": "^4.0.6",
 		"prettier": "^2.5.1",
@@ -158,6 +160,7 @@
 		"storybook": "^7.4.6",
 		"storybook-source-link": "^2.0.9",
 		"style-loader": "^3.3.2",
+		"stylelint": "^14.16.1",
 		"terser-webpack-plugin": "^5.3.7",
 		"tiny-swiper": "^2.2.0",
 		"ts-jest": "^29.1.0",
@@ -169,7 +172,8 @@
 		"@babel/core": "^7.0 || ^7.21.4 || ^7.22.9",
 		"@storybook/addons": "^6.4.0 || 7.0.18",
 		"react": "^16.8.0 || ^17.0.0 || ^18.2.0",
-		"react-dom": "^0.14.0 || ^15.0.0 || ^16.0.0 || ^16.8.0 || ^17.0.0 || ^18.2.0"
+		"react-dom": "^0.14.0 || ^15.0.0 || ^16.0.0 || ^16.8.0 || ^17.0.0 || ^18.2.0",
+		"stylelint": "^14.2"
 	},
 	"scripts": {
 		"build:wp-env-app": "wp-scripts build --progress --mode none",

@@ -10,6 +10,10 @@ import { renderHook } from '@testing-library/react';
 import { useControlContext } from '../hooks';
 import { ControlContextProvider } from '../index';
 
+function getControlId() {
+	return String(Math.random());
+}
+
 describe('testing control context provider and related hooks', () => {
 	it('should value is null when not wrapped with context and other args not passing', () => {
 		const { result } = renderHook(() => useControlContext());
@@ -21,7 +25,7 @@ describe('testing control context provider and related hooks', () => {
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
-					name: '1',
+					name: getControlId(),
 					value: {
 						x: 20,
 					},
@@ -41,7 +45,7 @@ describe('testing control context provider and related hooks', () => {
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
-					name: '20',
+					name: getControlId(),
 					value: {
 						x: [{ y: 20 }],
 					},
@@ -64,7 +68,7 @@ describe('testing control context provider and related hooks', () => {
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
-					name: '30',
+					name: getControlId(),
 					value: {
 						x: 20,
 					},
@@ -87,7 +91,7 @@ describe('testing control context provider and related hooks', () => {
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
-					name: '50',
+					name: getControlId(),
 					value: {
 						x: [
 							{
@@ -114,7 +118,7 @@ describe('testing control context provider and related hooks', () => {
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
-					name: '55',
+					name: getControlId(),
 					value: {
 						x: [
 							{
@@ -137,11 +141,95 @@ describe('testing control context provider and related hooks', () => {
 		expect(result.current.value).toBe(10);
 	});
 
+	it('should retrieve defaultValue when id is invalid, value is not Array, and defaultValue is defined', () => {
+		const wrapper = ({ children }) => (
+			<ControlContextProvider
+				value={{
+					name: getControlId(),
+					value: {
+						x: [
+							{
+								y: [{ isVisible: true }],
+							},
+						],
+					},
+				}}
+			>
+				{children}
+			</ControlContextProvider>
+		);
+		const { result } = renderHook(
+			() =>
+				useControlContext({
+					repeater: {
+						repeaterId: 'x[0].z.y',
+						defaultRepeaterItemValue: { x: 10 },
+					},
+					defaultValue: [{ isVisible: true }, { isVisible: true }],
+					mergeInitialAndDefault: true,
+				}),
+			{
+				wrapper,
+			}
+		);
+
+		expect(result.current.value).toEqual([
+			{ isVisible: true, x: 10 },
+			{ isVisible: true, x: 10 },
+		]);
+	});
+
+	it('should retrieve defaultValue when id is invalid, value is Array, and defaultValue is defined', () => {
+		const wrapper = ({ children }) => (
+			<ControlContextProvider
+				value={{
+					name: getControlId(),
+					value: [
+						{
+							y: [
+								{ isVisible: true },
+								{ isVisible: true },
+								{ isVisible: true },
+							],
+						},
+					],
+				}}
+			>
+				{children}
+			</ControlContextProvider>
+		);
+		const { result } = renderHook(
+			() =>
+				useControlContext({
+					repeater: {
+						repeaterId: '[0].z.y',
+						defaultRepeaterItemValue: { x: 10 },
+					},
+					defaultValue: [{ isVisible: true }, { isVisible: true }],
+					mergeInitialAndDefault: true,
+				}),
+			{
+				wrapper,
+			}
+		);
+
+		expect(result.current.value).toEqual([
+			{
+				y: [
+					{ isVisible: true },
+					{ isVisible: true },
+					{ isVisible: true },
+				],
+				x: 10,
+			},
+		]);
+	});
+
 	it('should return defaultValue when arguments just includes defaultValue', () => {
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
-					name: '2',
+					name: getControlId(),
 					value: null,
 				}}
 			>
@@ -160,7 +248,7 @@ describe('testing control context provider and related hooks', () => {
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
-					name: '3',
+					name: getControlId(),
 					value: {
 						x: 20,
 					},
@@ -195,7 +283,7 @@ describe('testing control context provider and related hooks', () => {
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
-					name: '4',
+					name: getControlId(),
 					value: [{ x: 20 }],
 				}}
 				storeName={storeName}
@@ -226,7 +314,7 @@ describe('testing control context provider and related hooks', () => {
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
-					name: '5',
+					name: getControlId(),
 					value: [],
 				}}
 			>
@@ -252,11 +340,11 @@ describe('testing control context provider and related hooks', () => {
 			y: 20,
 		};
 		const storeName = 'publisher-core/controls/repeater';
-
+		const name = getControlId();
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
-					name: '6',
+					name,
 					value: [],
 				}}
 				storeName={storeName}
@@ -268,7 +356,7 @@ describe('testing control context provider and related hooks', () => {
 		const { addRepeaterItem } = dispatch(storeName);
 
 		addRepeaterItem({
-			controlId: '6',
+			controlId: name,
 			value: defaultRepeaterItemValue,
 		});
 
@@ -296,11 +384,11 @@ describe('testing control context provider and related hooks', () => {
 			y: 20,
 		};
 		const storeName = 'publisher-core/controls/repeater';
-
+		const name = getControlId();
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
-					name: '7',
+					name,
 					value: [{ x: 0 }, { x: 10 }],
 				}}
 				storeName={storeName}
@@ -312,7 +400,7 @@ describe('testing control context provider and related hooks', () => {
 		const { changeRepeaterItem } = dispatch(storeName);
 
 		changeRepeaterItem({
-			controlId: '7',
+			controlId: name,
 			repeaterId: '[1]',
 			value: { x: 55 },
 		});
@@ -341,11 +429,11 @@ describe('testing control context provider and related hooks', () => {
 			y: 20,
 		};
 		const storeName = 'publisher-core/controls/repeater';
-
+		const name = getControlId();
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
-					name: '8',
+					name,
 					value: [{ x: 0 }, { x: 10 }],
 				}}
 				storeName={storeName}
@@ -357,7 +445,7 @@ describe('testing control context provider and related hooks', () => {
 		const { removeRepeaterItem } = dispatch(storeName);
 
 		removeRepeaterItem({
-			controlId: '8',
+			controlId: name,
 			repeaterId: '[1]',
 		});
 
@@ -385,11 +473,11 @@ describe('testing control context provider and related hooks', () => {
 			y: 20,
 		};
 		const storeName = 'publisher-core/controls/repeater';
-
+		const name = getControlId();
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
-					name: '9',
+					name,
 					value: [{ x: 0 }, { x: 10 }],
 				}}
 				storeName={storeName}
@@ -401,7 +489,7 @@ describe('testing control context provider and related hooks', () => {
 		const { removeRepeaterItem } = dispatch(storeName);
 
 		removeRepeaterItem({
-			controlId: '9',
+			controlId: name,
 			repeaterId: '[1]',
 			items: [{ x: 10 }, { x: 0 }],
 			toIndex: 0,
@@ -432,11 +520,11 @@ describe('testing control context provider and related hooks', () => {
 			y: 20,
 		};
 		const storeName = 'publisher-core/controls/repeater';
-
+		const name = getControlId();
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
-					name: '10',
+					name,
 					value: [{ x: 0 }, { x: 10 }],
 				}}
 				storeName={storeName}
@@ -448,7 +536,7 @@ describe('testing control context provider and related hooks', () => {
 		const { cloneRepeaterItem } = dispatch(storeName);
 
 		cloneRepeaterItem({
-			controlId: '10',
+			controlId: name,
 			repeaterId: '[1]',
 		});
 
@@ -480,11 +568,11 @@ describe('testing control context provider and related hooks', () => {
 			y: 20,
 		};
 		const storeName = 'publisher-core/controls/repeater';
-
+		const name = getControlId();
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
-					name: '11',
+					name,
 					value: [{ x: 0 }, { x: 10 }],
 				}}
 				storeName={storeName}
@@ -519,11 +607,11 @@ describe('testing control context provider and related hooks', () => {
 
 	it('should testing resetToDefault of retrieved control context api in simple control', () => {
 		const storeName = 'publisher-core/controls';
-
+		const name = getControlId();
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
-					name: 'x-test',
+					name,
 					value: {
 						x: {
 							y: {
@@ -569,11 +657,11 @@ describe('testing control context provider and related hooks', () => {
 			y: 20,
 		};
 		const storeName = 'publisher-core/controls/repeater';
-
+		const name = getControlId();
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
-					name: '12',
+					name,
 					value: [{ x: 0 }, { x: 10 }],
 				}}
 				storeName={storeName}
@@ -609,10 +697,11 @@ describe('testing control context provider and related hooks', () => {
 	});
 
 	it('should testing toggleValue of retrieved control context api', () => {
+		const name = getControlId();
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
-					name: '13',
+					name,
 					value: true,
 				}}
 			>
@@ -635,10 +724,11 @@ describe('testing control context provider and related hooks', () => {
 	});
 
 	it('should testing toggleValue of retrieved control context api when control value was not boolean type!', function () {
+		const name = getControlId();
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
-					name: '14',
+					name,
 					value: [],
 				}}
 			>

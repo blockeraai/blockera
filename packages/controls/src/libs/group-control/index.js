@@ -95,12 +95,14 @@ export default function GroupControl({
 				toggleOpenBorder ? 'toggle-open-border' : '',
 				className
 			)}
+			data-cy="control-group"
 		>
 			<div
 				ref={ref}
 				className={controlInnerClassNames('group-header')}
+				data-cy="group-control-header"
 				onClick={() => {
-					if (!isOpen) {
+					if (isOpen) {
 						onClose();
 					} else {
 						onOpen();
@@ -130,14 +132,14 @@ export default function GroupControl({
 							}
 							onClick={(event) => {
 								event.stopPropagation();
-
-								if (!isOpen) {
+								if (isOpen) {
 									onClose();
 								} else {
 									onOpen();
 								}
 
 								setOpen(!isOpen);
+								setActivePopover(!isActivePopover);
 							}}
 							noBorder={true}
 						/>
@@ -167,7 +169,10 @@ export default function GroupControl({
 			)}
 
 			{mode === 'accordion' && isOpen && (
-				<div className={controlInnerClassNames('group-content')}>
+				<div
+					data-cy="group-control-content"
+					className={controlInnerClassNames('group-content')}
+				>
 					{children}
 				</div>
 			)}

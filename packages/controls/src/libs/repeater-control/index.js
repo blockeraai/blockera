@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -12,8 +13,8 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { Button } from '@publisher/components';
-import { isUndefined } from '@publisher/utils';
-import { prepare } from '@publisher/data-extractor';
+// import { isUndefined } from '@publisher/utils';
+// import { prepare } from '@publisher/data-extractor';
 
 /**
  * Internal dependencies.
@@ -23,6 +24,15 @@ import LabelControl from '../label-control';
 import { useControlContext } from '../../context';
 import { RepeaterContextProvider } from './context';
 import MappedItems from './components/mapped-items';
+
+/**
+ * Types
+ */
+import type {
+	TRepeaterControlProps,
+	TRepeaterDefaultStateProps,
+} from './types/repeater-control-props';
+import type { MixedElement } from 'react';
 
 export default function RepeaterControl({
 	design,
@@ -50,7 +60,7 @@ export default function RepeaterControl({
 	//
 	className,
 	...props
-}) {
+}: TRepeaterControlProps): MixedElement {
 	const {
 		value,
 		dispatch: { addRepeaterItem },
@@ -67,14 +77,12 @@ export default function RepeaterControl({
 		mergeInitialAndDefault: true,
 	});
 
-	const repeaterItems = isUndefined(repeaterId)
-		? value
-		: prepare(repeaterId, value);
+	const repeaterItems = value;
 
-	const defaultRepeaterState = {
+	const defaultRepeaterState: TRepeaterDefaultStateProps = {
 		design,
 		mode,
-		popoverLabel: popoverLabel || label,
+		popoverLabel: popoverLabel || label || '',
 		popoverClassName,
 		maxItems,
 		minItems,
@@ -102,6 +110,7 @@ export default function RepeaterControl({
 					'design-' + design,
 					className
 				)}
+				data-cy="publisher-repeater-control"
 			>
 				<div className={controlInnerClassNames('header')}>
 					<LabelControl label={label} />
@@ -121,6 +130,12 @@ export default function RepeaterControl({
 								repeaterItems?.length >= maxItems
 									? { disabled: true }
 									: {})}
+								showTooltip={true}
+								tooltipPosition="top"
+								label={
+									__('Add New', 'publisher-core') +
+									` ${defaultRepeaterState.popoverLabel}`
+								}
 								aria-label={
 									__('Add New', 'publisher-core') +
 									` ${defaultRepeaterState.popoverLabel}`
@@ -171,12 +186,14 @@ RepeaterControl.propTypes = {
 	/**
 	 * It specifies the design of repeater control.
 	 */
+	// $FlowFixMe
 	design: PropTypes.oneOf(['minimal']),
 	/**
 	 * Specifies that repeater item should use popover or accordion
 	 *
 	 * @default true
 	 */
+	// $FlowFixMe
 	mode: PropTypes.oneOf(['popover', 'accordion']),
 	/**
 	 * Specifies the popover title if `mode` was `popover`. by default the repeater label will be shown as popover title.
@@ -227,6 +244,7 @@ RepeaterControl.propTypes = {
 	/**
 	 * A placeholder that you can use inject items at the beginning of header buttons.
 	 */
+	// $FlowFixMe
 	injectHeaderButtonsStart: PropTypes.oneOfType([
 		PropTypes.string,
 		PropTypes.element,
@@ -234,6 +252,7 @@ RepeaterControl.propTypes = {
 	/**
 	 * A placeholder that you can use inject items after header buttons.
 	 */
+	// $FlowFixMe
 	injectHeaderButtonsEnd: PropTypes.oneOfType([
 		PropTypes.string,
 		PropTypes.element,
@@ -241,6 +260,7 @@ RepeaterControl.propTypes = {
 	/**
 	 * Header component for each repeater item
 	 */
+	// $FlowFixMe
 	repeaterItemHeader: PropTypes.oneOfType([
 		PropTypes.string,
 		PropTypes.element,
@@ -250,6 +270,7 @@ RepeaterControl.propTypes = {
 	/**
 	 * Children components for each repeater item
 	 */
+	// $FlowFixMe
 	repeaterItemChildren: PropTypes.oneOfType([
 		PropTypes.string,
 		PropTypes.element,
@@ -257,8 +278,9 @@ RepeaterControl.propTypes = {
 		PropTypes.object,
 	]),
 };
-
+// $FlowFixMe
 RepeaterControl.defaultProps = {
+	// $FlowFixMe
 	defaultValue: [],
 	defaultRepeaterItemValue: { isVisible: true },
 	design: 'minimal',
