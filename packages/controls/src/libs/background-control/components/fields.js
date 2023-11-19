@@ -14,7 +14,6 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
-import { isUndefined, isEqualArrays } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -51,6 +50,7 @@ import RadialGradientNoRepeatIcon from '../icons/radial-gradient-no-repeat';
 import { default as TypeMeshGradientIcon } from '../icons/type-mesh-gradient';
 import {
 	default as generateMeshGradient,
+	generateGradient,
 	getRandomHexColor,
 } from './mesh-gradient/mesh-generator';
 import RadialGradientClosestSideIcon from '../icons/radial-gradient-closest-side';
@@ -667,89 +667,17 @@ const Fields: FieldItem = memo<FieldItem>(
 									color: getRandomHexColor(),
 								}}
 								onChange={(newValue) => {
-									//Prevent to re-updating state when newValue with current value is equal!
-									if (
-										isEqualArrays(
-											newValue,
-											item['mesh-gradient-colors']
-										)
-									) {
-										return;
-									}
-
-									// regenerate gradient if new item added or removed
-									if (
-										newValue.length !==
-										item['mesh-gradient-colors'].length
-									) {
-										const meshGradient =
-											generateMeshGradient(
-												newValue.length
-											);
-
-										const newItem = {
+									changeRepeaterItem({
+										controlId,
+										repeaterId,
+										itemId,
+										value: {
 											...item,
-											'mesh-gradient':
-												meshGradient.gradient,
-										};
-
-										newValue.map(
-											(
-												item: TDefaultRepeaterItemValue,
-												index: number
-											): null => {
-												if (
-													newItem[
-														'mesh-gradient-colors'
-													].length < newValue.length
-												) {
-													if (
-														isUndefined(
-															newItem[
-																'mesh-gradient-colors'
-															][index]
-														)
-													) {
-														newItem[
-															'mesh-gradient-colors'
-														][index] = {
-															color: meshGradient
-																.colors[index],
-														};
-													}
-												} else if (
-													newItem[
-														'mesh-gradient-colors'
-													].length > newValue.length
-												) {
-													newItem[
-														'mesh-gradient-colors'
-													] = newItem[
-														'mesh-gradient-colors'
-													].slice(0, newValue.length);
-												}
-												return null;
-											}
-										);
-
-										changeRepeaterItem({
-											controlId,
-											repeaterId,
-											itemId,
-											value: newItem,
-										});
-									} else {
-										changeRepeaterItem({
-											controlId,
-											repeaterId,
-											itemId,
-											value: {
-												...item,
-												'mesh-gradient-colors':
-													newValue,
-											},
-										});
-									}
+											'mesh-gradient': generateGradient(
+												newValue.length
+											),
+										},
+									});
 								}}
 							/>
 						</BaseControl>

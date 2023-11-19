@@ -66,7 +66,7 @@ const generateColors = (length: number, baseColor: number): Object => {
 	});
 };
 
-const generateGradient = (length: number): Object => {
+export const generateGradient = (length: number): Object => {
 	return Array.from({ length }, (_: void, i: number): string => {
 		return `radial-gradient(at ${getPercent(i)}% ${getPercent(
 			i * 10
