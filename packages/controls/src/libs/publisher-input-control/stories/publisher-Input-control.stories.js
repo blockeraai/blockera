@@ -40,7 +40,10 @@ export const Default = {
 			name: nanoid(),
 			value: '20',
 		},
-		defaultValue: '10',
+		label: 'My Label',
+		type: 'number',
+		min: '7',
+		// max: 20,
 	},
 	render: (args) => (
 		<ControlWithHooks Control={PublisherInputControl} {...args} />

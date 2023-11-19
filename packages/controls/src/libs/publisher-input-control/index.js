@@ -1,29 +1,24 @@
 /**
  * External dependencies
  */
-import {
-	TextControl as WPTextControl,
-	__experimentalUnitControl as WPUnitControl,
-} from '@wordpress/components';
 import PropTypes from 'prop-types';
-
+import { useMemo } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { isEmpty, isString, isUndefined } from '@publisher/utils';
+import { isEmpty, isUndefined, isNumber } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
-import { RangeControl, BaseControl } from './../index';
-import { getCSSUnits, isSpecialUnit } from './utils';
+import { BaseControl } from './../index';
+import { getCSSUnits } from './utils';
 import { useControlContext } from '../../context';
 
 export function PublisherInputControl({
 	unitType,
 	units,
-	range,
 	noBorder, //
 	id,
 	label,
@@ -32,6 +27,9 @@ export function PublisherInputControl({
 	onChange,
 	field, //
 	className,
+	type = 'text',
+	min,
+	max,
 	...props
 }) {
 	const { value, setValue } = useControlContext({
@@ -45,6 +43,20 @@ export function PublisherInputControl({
 		units = getCSSUnits(unitType);
 	}
 
+	// get the minimum value in number type
+	const getMinValue = useMemo(() => {
+		if (type === 'number' && !isUndefined(min) && isNumber(+min)) {
+			return { min };
+		}
+	}, [type, min]);
+
+	// get the maximum value in number type
+	const getMaxValue = useMemo(() => {
+		if (type === 'number' && !isUndefined(max) && isNumber(+max)) {
+			return { max };
+		}
+	}, [type, max]);
+
 	return (
 		<BaseControl
 			label={label}
@@ -52,55 +64,16 @@ export function PublisherInputControl({
 			controlName={field}
 			className={className}
 		>
-			<div
-				className={controlClassNames(
-					'input',
-					range && 'input-range',
-					noBorder && 'no-border',
-					isSpecialUnit(value) && 'publisher-control-unit-special',
-					className
-				)}
-			>
-				<input type="text" placeholder="hi there" />
-				<h1>test</h1>
-				{range && (
-					<RangeControl
-						id={id}
-						withInputField={false}
-						className={className}
-						onChange={(newValue) => {
-							// extract unit from old value and assign it to newValue
-							if (isString(value))
-								newValue =
-									newValue + value.replace(/[0-9|-]/gi, '');
-							setValue(newValue);
-						}}
-						{...props}
-					/>
-				)}
-
-				{!isEmpty(units) ? (
-					<WPUnitControl
-						{...props}
-						units={units}
-						value={value}
-						onChange={setValue}
-						className={controlClassNames(
-							'text',
-							'publisher-control-unit',
-							className
-						)}
-						isUnitSelectTabbable={false}
-					/>
-				) : (
-					<WPTextControl
-						{...props}
-						value={value}
-						onChange={setValue}
-						className={controlClassNames('text', className)}
-					/>
-				)}
-			</div>
+			<input
+				value={value}
+				onChange={(e) => setValue(e.target.value)}
+				className={controlClassNames('single-input', className)}
+				type={type}
+				placeholder="hi there"
+				{...(getMinValue && getMinValue)}
+				{...(getMaxValue && getMaxValue)}
+				{...props}
+			/>
 		</BaseControl>
 	);
 }
