@@ -22,7 +22,7 @@ import {
 	AlignmentMatrixControl,
 } from '@publisher/controls';
 import { isInteger } from '@publisher/utils';
-import { Button, Popover } from '@publisher/components';
+import { Button, Popover, Flex } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
@@ -33,6 +33,17 @@ import { default as GearIcon } from './icons/gear';
 import type { TEffectsProps } from './types/effects-props';
 import { generateExtensionId, hasSameProps } from '../utils';
 import { cursorFieldOptions, blendModeFieldOptions } from './utils';
+import OriginCustom from './icons/origin/custom';
+import OriginTopLeft from './icons/origin/top-left';
+import OriginTopCenter from './icons/origin/top-center';
+import OriginTopRight from './icons/origin/top-right';
+import OriginCenterLeft from './icons/origin/center-left';
+import OriginCenter from './icons/origin/center';
+import OriginCenterRight from './icons/origin/center-right';
+import OriginBottomLeft from './icons/origin/bottom-left';
+import OriginBottomCenter from './icons/origin/bottom-center';
+import OriginBottomRight from './icons/origin/bottom-right';
+import Back from './icons/origin/back';
 
 export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 	({
@@ -70,6 +81,12 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 
 		const [isTransformSettingsVisible, setIsTransformSettingsVisible] =
 			useState(false);
+
+		const [isSelfOriginVisible, setIsSelfOriginVisible] = useState(false);
+		const [isChildOriginVisible, setIsChildOriginVisible] = useState(false);
+
+		const [isSelfOriginEdited, setIsSelfOriginEdited] = useState(false);
+		const [isChildOriginEdited, setIsChildOriginEdited] = useState(false);
 
 		return (
 			<>
@@ -180,73 +197,165 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 											);
 										}}
 									>
-										<ControlContextProvider
-											value={{
-												name: generateExtensionId(
-													block,
-													'self-perspective'
-												),
-												value: transformSelfPerspective,
-											}}
-										>
-											<InputControl
-												controlName="input"
-												label={__(
-													'Self Perspective',
-													'publisher-core'
-												)}
-												columns="columns-2"
-												{...{
-													...props,
-													unitType: 'essential',
-													range: true,
-													min: 0,
-													max: 2000,
-													initialPosition: 100,
-													defaultValue: '0px',
-													onChange: (newValue) =>
-														handleOnChangeAttributes(
-															'publisherTransformSelfPerspective',
-															newValue
-														),
+										<BaseControl columns="columns-2">
+											<ControlContextProvider
+												value={{
+													name: generateExtensionId(
+														block,
+														'self-perspective'
+													),
+													value: transformSelfPerspective,
 												}}
-											/>
-										</ControlContextProvider>
+											>
+												<Flex
+													justifyContent="flex-start"
+													alignItems="stretch"
+													gap="10px"
+													style={{ height: '30px' }}
+												>
+													<InputControl
+														controlName="input"
+														label={__(
+															'Self Perspective',
+															'publisher-core'
+														)}
+														columns="columns-2"
+														{...{
+															...props,
+															unitType:
+																'essential',
+															range: true,
+															min: 0,
+															max: 2000,
+															initialPosition: 100,
+															defaultValue: '0px',
+															onChange: (
+																newValue
+															) =>
+																handleOnChangeAttributes(
+																	'publisherTransformSelfPerspective',
+																	newValue
+																),
+														}}
+													/>
+													<Button
+														label={__(
+															'Origin Self',
+															'publisher-core'
+														)}
+														onClick={() => {
+															setIsSelfOriginVisible(
+																!isSelfOriginVisible
+															);
+														}}
+														size="small"
+														style={{
+															padding: '6px',
+															color: isSelfOriginEdited
+																? 'var(--publisher-controls-border-color-focus)'
+																: '',
+														}}
+													>
+														{OriginIcon(
+															transformSelfOrigin?.top,
+															transformSelfOrigin?.left
+														)}
+													</Button>
+												</Flex>
+											</ControlContextProvider>
 
-										<ControlContextProvider
-											value={{
-												name: generateExtensionId(
-													block,
-													'self-origin'
-												),
-												value: {
-													...transformSelfOrigin,
-													coordinates:
-														convertAlignmentMatrixCoordinates(
-															transformSelfOrigin
-														)?.compact,
-												},
-											}}
-										>
-											<AlignmentMatrixControl
-												label={__(
-													'Self Origin',
-													'publisher-core'
-												)}
-												columns="columns-2"
-												inputFields={true}
-												onChange={({ top, left }) =>
-													handleOnChangeAttributes(
-														'publisherTransformSelfOrigin',
-														{
-															...transformSelfOrigin,
-															top,
-															left,
-														}
-													)
-												}
-											/>
-										</ControlContextProvider>
+											{isSelfOriginVisible && (
+												<Popover
+													title={
+														<>
+															<Button
+																label={__(
+																	'Back',
+																	'publisher-core'
+																)}
+																align="center"
+																style={{
+																	width: '26px',
+																	height: '26px',
+																	padding:
+																		'3px',
+																}}
+																tabIndex="-1"
+															>
+																<Back />
+															</Button>
+															{__(
+																'Perspective Position',
+																'publisher-core'
+															)}
+														</>
+													}
+													offset={40}
+													placement="left"
+													className={controlInnerClassNames(
+														'origin-self-popover'
+													)}
+													onClose={() => {
+														setIsSelfOriginVisible(
+															false
+														);
+													}}
+												>
+													<ControlContextProvider
+														value={{
+															name: generateExtensionId(
+																block,
+																'self-origin'
+															),
+															value: {
+																...transformSelfOrigin,
+																coordinates:
+																	convertAlignmentMatrixCoordinates(
+																		transformSelfOrigin
+																	)?.compact,
+															},
+														}}
+													>
+														<AlignmentMatrixControl
+															label={__(
+																'Self Origin',
+																'publisher-core'
+															)}
+															columns="columns-2"
+															inputFields={true}
+															onChange={({
+																top,
+																left,
+															}) => {
+																if (
+																	top !==
+																		'50%' ||
+																	left !==
+																		'50%' ||
+																	transformSelfOrigin.top !==
+																		'50%' ||
+																	transformSelfOrigin.left !==
+																		'50%'
+																) {
+																	setIsSelfOriginEdited(
+																		true
+																	);
+																}
+
+																handleOnChangeAttributes(
+																	'publisherTransformSelfOrigin',
+																	{
+																		...transformSelfOrigin,
+																		top,
+																		left,
+																	}
+																);
+															}}
+														/>
+													</ControlContextProvider>
+												</Popover>
+											)}
+										</BaseControl>
 
 										<ControlContextProvider
 											value={{
@@ -290,75 +399,167 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 											/>
 										</ControlContextProvider>
 
-										<ControlContextProvider
-											value={{
-												name: generateExtensionId(
-													block,
-													'child-perspective'
-												),
-												value: transformChildPerspective
-													? transformChildPerspective
-													: '0px',
-											}}
-										>
-											<InputControl
-												controlName="input"
-												label={__(
-													'Child Perspective',
-													'publisher-core'
-												)}
-												columns="columns-2"
-												{...{
-													...props,
-													unitType: 'essential',
-													range: true,
-													min: 0,
-													max: 2000,
-													defaultValue: '0px',
-													onChange: (newValue) =>
-														handleOnChangeAttributes(
-															'publisherTransformChildPerspective',
-															newValue
-														),
+										<BaseControl columns="columns-2">
+											<ControlContextProvider
+												value={{
+													name: generateExtensionId(
+														block,
+														'child-perspective'
+													),
+													value: transformChildPerspective
+														? transformChildPerspective
+														: '0px',
 												}}
-											/>
-										</ControlContextProvider>
+											>
+												<Flex
+													justifyContent="flex-start"
+													alignItems="stretch"
+													gap="10px"
+													style={{ height: '30px' }}
+												>
+													<InputControl
+														controlName="input"
+														label={__(
+															'Child Perspective',
+															'publisher-core'
+														)}
+														columns="columns-2"
+														{...{
+															...props,
+															unitType:
+																'essential',
+															range: true,
+															min: 0,
+															max: 2000,
+															defaultValue: '0px',
+															onChange: (
+																newValue
+															) =>
+																handleOnChangeAttributes(
+																	'publisherTransformChildPerspective',
+																	newValue
+																),
+														}}
+													/>
+													<Button
+														onClick={() => {
+															setIsChildOriginVisible(
+																!isChildOriginVisible
+															);
+														}}
+														label={__(
+															'Origin Child',
+															'publisher-core'
+														)}
+														size="small"
+														style={{
+															padding: '6px',
+															color: isChildOriginEdited
+																? 'var(--publisher-controls-border-color-focus)'
+																: '',
+														}}
+													>
+														{OriginIcon(
+															transformChildOrigin.top,
+															transformChildOrigin.left
+														)}
+													</Button>
+												</Flex>
+											</ControlContextProvider>
 
-										<ControlContextProvider
-											value={{
-												name: generateExtensionId(
-													block,
-													'child-origin'
-												),
-												value: {
-													top: transformChildOrigin?.top,
-													left: transformChildOrigin?.left,
-													coordinates:
-														convertAlignmentMatrixCoordinates(
-															transformChildOrigin
-														)?.compact,
-												},
-											}}
-										>
-											<AlignmentMatrixControl
-												label={__(
-													'Child Origin',
-													'publisher-core'
-												)}
-												columns="columns-2"
-												inputFields={true}
-												onChange={({ top, left }) =>
-													handleOnChangeAttributes(
-														'publisherTransformChildOrigin',
-														{
-															...transformChildOrigin,
-															top,
-															left,
-														}
-													)
-												}
-											/>
-										</ControlContextProvider>
+											{isChildOriginVisible && (
+												<Popover
+													title={
+														<>
+															<Button
+																label={__(
+																	'Back',
+																	'publisher-core'
+																)}
+																align="center"
+																style={{
+																	width: '26px',
+																	height: '26px',
+																	padding:
+																		'3px',
+																}}
+																tabIndex="-1"
+															>
+																<Back />
+															</Button>
+															{__(
+																'Perspective Position',
+																'publisher-core'
+															)}
+														</>
+													}
+													offset={40}
+													placement="left"
+													className={controlInnerClassNames(
+														'origin-child-popover'
+													)}
+													onClose={() => {
+														setIsChildOriginVisible(
+															false
+														);
+													}}
+												>
+													<ControlContextProvider
+														value={{
+															name: generateExtensionId(
+																block,
+																'child-origin'
+															),
+															value: {
+																top: transformChildOrigin?.top,
+																left: transformChildOrigin?.left,
+																coordinates:
+																	convertAlignmentMatrixCoordinates(
+																		transformChildOrigin
+																	)?.compact,
+															},
+														}}
+													>
+														<AlignmentMatrixControl
+															label={__(
+																'Child Origin',
+																'publisher-core'
+															)}
+															columns="columns-2"
+															inputFields={true}
+															onChange={({
+																top,
+																left,
+															}) => {
+																if (
+																	top !==
+																		'50%' ||
+																	left !==
+																		'50%' ||
+																	transformSelfOrigin.top !==
+																		'50%' ||
+																	transformSelfOrigin.left !==
+																		'50%'
+																) {
+																	setIsChildOriginEdited(
+																		true
+																	);
+																}
+
+																handleOnChangeAttributes(
+																	'publisherTransformChildOrigin',
+																	{
+																		...transformChildOrigin,
+																		top,
+																		left,
+																	}
+																);
+															}}
+														/>
+													</ControlContextProvider>
+												</Popover>
+											)}
+										</BaseControl>
 									</Popover>
 								)}
 							</BaseControl>
@@ -506,3 +707,16 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 	},
 	hasSameProps
 );
+
+const OriginIcon = (top: string, left: string) => {
+	if (top === '0%' && left === '0%') return <OriginTopLeft />;
+	if (top === '0%' && left === '50%') return <OriginTopCenter />;
+	if (top === '0%' && left === '100%') return <OriginTopRight />;
+	if (top === '50%' && left === '0%') return <OriginCenterLeft />;
+	if (top === '50%' && left === '50%') return <OriginCenter />;
+	if (top === '50%' && left === '100%') return <OriginCenterRight />;
+	if (top === '100%' && left === '0%') return <OriginBottomLeft />;
+	if (top === '100%' && left === '50%') return <OriginBottomCenter />;
+	if (top === '100%' && left === '100%') return <OriginBottomRight />;
+	return <OriginCustom />;
+};
