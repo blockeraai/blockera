@@ -1,4 +1,4 @@
-import { arraySortItems, toObject } from '../index';
+import { arraySortItems, isEqualArrays, toObject } from '../index';
 
 describe('Array Utils', function () {
 	it('should sort zero item to first', function () {
@@ -17,5 +17,26 @@ describe('Array Utils', function () {
 		const arr = [{ x: 1 }, { y: 2 }, { z: 3 }];
 
 		expect(toObject(arr)).toEqual({ x: 1, y: 2, z: 3 });
+	});
+
+	it('should compare two arrays and retrieve false result', function () {
+		const arr1 = [{ x: 1 }, { y: 2 }, { z: 3 }];
+		const arr2 = [{ x: 1 }, { y: 3 }, { z: 3 }];
+
+		expect(isEqualArrays(arr1, arr2)).toBeFalsy();
+	});
+
+	it('should compare two arrays with complex structure and retrieve false result', function () {
+		const arr1 = [{ x: 1 }, { y: [{ v: { b: [{ a: 1 }] } }] }, { z: 3 }];
+		const arr2 = [{ x: 1 }, { y: [{ v: { b: [{ a: 1.5 }] } }] }, { z: 3 }];
+
+		expect(isEqualArrays(arr1, arr2)).toBeFalsy();
+	});
+
+	it('should compare two arrays and retrieve true result', function () {
+		const arr1 = [{ x: 1 }, { y: 2 }, { z: 3 }];
+		const arr2 = [{ x: 1 }, { y: 2 }, { z: 3 }];
+
+		expect(isEqualArrays(arr1, arr2)).toBeTruthy();
 	});
 });

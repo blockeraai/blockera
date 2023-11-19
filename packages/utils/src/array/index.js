@@ -13,3 +13,7 @@ export const arraySortItems = ({
 export const toObject = (arr: Array): Object => {
 	return arr.reduce((acc, cur) => Object.assign(acc, cur), {});
 };
+
+export const isEqualArrays = (arr1, arr2) => {
+	return JSON.stringify(arr1) === JSON.stringify(arr2);
+};
