@@ -14,7 +14,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
-import { isUndefined } from '@publisher/utils';
+import { isUndefined, isEqualArrays } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -669,9 +669,10 @@ const Fields: FieldItem = memo<FieldItem>(
 								onChange={(newValue) => {
 									//Prevent to re-updating state when newValue with current value is equal!
 									if (
-										newValue[itemId][
-											'mesh-gradient-colors'
-										] === item['mesh-gradient-colors']
+										isEqualArrays(
+											newValue,
+											item['mesh-gradient-colors']
+										)
 									) {
 										return;
 									}
