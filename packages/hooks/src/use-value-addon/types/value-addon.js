@@ -7,10 +7,12 @@ import type { VariableTypes } from '../components/pointer/types';
 
 export type ValueAddon = {
 	id: string,
-	var?: string,
-	settings: Object,
+	settings: {
+		...Object,
+		var?: string,
+		valueType: AddonTypesItem,
+		reference?: 'preset' | 'custom',
+	},
 	type?: VariableTypes,
 	isValueAddon: boolean,
-	valueType: AddonTypesItem,
-	reference?: 'preset' | 'custom',
 };

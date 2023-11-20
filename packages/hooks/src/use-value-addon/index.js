@@ -75,6 +75,9 @@ export const useValueAddon = ({
 	const handleOnClickDynamicValue = (
 		event: SyntheticMouseEvent<EventTarget>
 	): void => {
+		/**
+		 * TODO: please complete this handler after final implements DynamicValuePicker component.
+		 */
 		console.log(event);
 	};
 
@@ -100,6 +103,9 @@ export const useValueAddon = ({
 			/>
 		),
 		handleOnClickVariable,
-		handleOnClickDynamicValue,
+		/**
+		 * TODO: please uncomment below property after final implements DynamicValuePicker component.
+		 */
+		// handleOnClickDynamicValue,
 	};
 };

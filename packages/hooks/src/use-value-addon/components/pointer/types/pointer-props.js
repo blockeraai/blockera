@@ -8,6 +8,9 @@ export type PointerProps = {
 	types: Array<'variable' | 'dynamic-value'>,
 	variableType: VariableTypes,
 	dynamicValueType: string,
+	/**
+	 * TODO: please uncomment after final implements DynamicValuePicker component.
+	 */
 	handleOnClickDynamicValue: (
 		event: SyntheticMouseEvent<EventTarget>
 	) => void,

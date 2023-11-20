@@ -9,6 +9,9 @@ import { useState } from '@wordpress/element';
  * Internal dependencies
  */
 import type { PointerProps } from './types';
+/**
+ * TODO: please remove ignore eslint comment after final implements DynamicValuePicker component.
+ */
 // eslint-disable-next-line
 import { DynamicValuePicker, VariablePicker } from '../index';
 import { Icon } from '@publisher/components';

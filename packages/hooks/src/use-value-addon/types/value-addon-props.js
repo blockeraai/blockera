@@ -33,10 +33,11 @@ export type ValueAddonProps = {
 	/**
 	 * Handle on click icon of dynamic values on control.
 	 *
+	 * TODO: please uncomment after final implements DynamicValuePicker component.
 	 * The callback function
 	 */
-	handleOnClickDynamicValue: (
-		// eslint-disable-next-line
-		event: SyntheticMouseEvent<EventTarget>
-	) => void,
+	// handleOnClickDynamicValue: (
+	// 	// eslint-disable-next-line
+	// 	event: SyntheticMouseEvent<EventTarget>
+	// ) => void,
 };

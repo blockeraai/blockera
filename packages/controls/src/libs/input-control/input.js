@@ -45,9 +45,18 @@ export function InputControl({
 	});
 
 	const { issetValueAddon, ValueAddonUI, ValueAddonPointer } = useValueAddon({
+		/**
+		 * TODO: please remove fallback values after final implements DynamicValuePicker component of useValueAddon Hook.
+		 */
 		types: controlAddonTypes || ['variable', 'dynamic-value'],
 		value,
+		/**
+		 * TODO: please remove fallback values after final implements DynamicValuePicker component of useValueAddon Hook.
+		 */
 		variableType: variableType || 'FONT_SIZE',
+		/**
+		 * TODO: please remove fallback values after final implements DynamicValuePicker component of useValueAddon Hook.
+		 */
 		dynamicValueType: dynamicValueType || '',
 		onChange: setValue,
 	});
@@ -97,6 +106,7 @@ export function InputControl({
 					className
 				)}
 			>
+				{/* TODO: Please fix ValueAddonPointer component on InputControl Body to rendering in correct location and remove this TODO item. */}
 				<ValueAddonPointer />
 				{range && (
 					<RangeControl
