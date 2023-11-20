@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
  */
 import { controlClassNames } from '@publisher/classnames';
 import { isEmpty, isString, isUndefined } from '@publisher/utils';
-import { useControlAddon } from '@publisher/hooks';
+import { useValueAddon } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -44,15 +44,15 @@ export function InputControl({
 		onChange,
 	});
 
-	const { controlAddonHasValue, ControlAddonUI, ControlAddonPointer } =
-		useControlAddon({
-			types: controlAddonTypes || ['variable', 'dynamic-value'],
-			value,
-			variableType: variableType || 'FONT_SIZE',
-			dynamicValueType: dynamicValueType || '',
-		});
+	const { issetValueAddon, ValueAddonUI, ValueAddonPointer } = useValueAddon({
+		types: controlAddonTypes || ['variable', 'dynamic-value'],
+		value,
+		variableType: variableType || 'FONT_SIZE',
+		dynamicValueType: dynamicValueType || '',
+		onChange: setValue,
+	});
 
-	if (controlAddonHasValue()) {
+	if (issetValueAddon()) {
 		return (
 			<BaseControl
 				label={label}
@@ -70,7 +70,7 @@ export function InputControl({
 						className
 					)}
 				>
-					<ControlAddonUI />
+					<ValueAddonUI />
 				</div>
 			</BaseControl>
 		);
@@ -97,7 +97,7 @@ export function InputControl({
 					className
 				)}
 			>
-				<ControlAddonPointer />
+				<ValueAddonPointer />
 				{range && (
 					<RangeControl
 						id={id}
