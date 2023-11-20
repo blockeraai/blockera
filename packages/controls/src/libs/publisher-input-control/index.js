@@ -72,7 +72,7 @@ export function PublisherInputControl({
 
 	// validator checking
 	useEffect(() => {
-		if (!validator) {
+		if (!validator || type !== 'text') {
 			// If no validator is provided, assume the value is valid
 			setIsValidValue(true);
 			return;
