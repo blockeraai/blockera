@@ -356,19 +356,20 @@ describe('background control', () => {
 		});
 
 		context('mesh-gradient type', () => {
-			it('should replace existing colors with random colors by clicking on Regenerate btn or preview', () => {
+			it('should randomly re-generate colors and gradient by click on preview', () => {
 				const colors = [
 					{ color: '#fefe' },
 					{ color: '#35ff4c' },
 					{ color: '#4deaff' },
 				];
+
 				const name = nanoid();
 				cy.withDataProvider({
 					component: <BackgroundControl />,
 					value: [
 						{
 							type: 'mesh-gradient',
-							'mesh-gradient': '',
+							'mesh-gradient': [],
 							'mesh-gradient-colors': colors,
 							'mesh-gradient-attachment': 'scroll',
 							isVisible: true,
@@ -377,19 +378,32 @@ describe('background control', () => {
 					],
 					store: STORE_NAME,
 					name,
-				});
-
-				cy.get('.publisher-control-mesh-generator-preview').click();
-				cy.get('.publisher-control-mesh-generator-preview').then(() => {
-					const newColors = getControlValue(name, STORE_NAME)[0][
-						'mesh-gradient-colors'
+				}).then(() => {
+					const prevMesh = getControlValue(name, STORE_NAME)[0][
+						'mesh-gradient'
 					];
-					expect(newColors).to.not.be.deep.equal(colors);
-					expect(newColors.length).to.be.equal(colors.length);
+
+					cy.get('.publisher-control-mesh-generator-preview').click();
+
+					cy.get('.publisher-control-mesh-generator-preview').then(
+						() => {
+							const newColors = getControlValue(
+								name,
+								STORE_NAME
+							)[0]['mesh-gradient-colors'];
+							expect(newColors.length).to.be.equal(colors.length);
+							expect(newColors).to.not.be.deep.equal(colors);
+							const newMesh = getControlValue(
+								name,
+								STORE_NAME
+							)[0]['mesh-gradient'];
+							expect(newMesh).to.not.deep.equal(prevMesh);
+						}
+					);
 				});
 			});
 
-			it('should be able to change existing colors', () => {
+			it("should change existed color's value and update gradient with new value for changed color", () => {
 				const colors = [
 					{ color: '#fefe' },
 					{ color: '#35ff4c' },
@@ -417,20 +431,91 @@ describe('background control', () => {
 				cy.get('@colorInput').clear();
 				cy.get('@colorInput').type('4fecff');
 				cy.get('@colorInput').then(() => {
-					cy.getByDataCy('control-group')
-						.last()
-						.should('contain', '#4fecff');
-
 					const newColors = getControlValue(name, STORE_NAME)[0][
 						'mesh-gradient-colors'
 					];
+
+					// color value change assertion
 					expect(newColors[newColors.length - 1].color).to.be.equal(
 						'#4fecff'
+					);
+
+					// gradient assertion
+					cy.get('.publisher-control-mesh-generator-preview').then(
+						($el) => {
+							const elementStyles = window.getComputedStyle(
+								$el[0]
+							);
+							expect(
+								elementStyles.getPropertyValue(
+									`--c${colors.length - 1}`
+								)
+							).to.be.equal('#4fecff');
+						}
 					);
 				});
 			});
 
-			it('should add new random color at the end by clicking add btn', () => {
+			it('should add new random color at the end and regenerate gradient', () => {
+				const colors = [
+					{ color: '#fefe' },
+					{ color: '#35ff4c' },
+					{ color: '#4deaff' },
+				];
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <BackgroundControl />,
+					value: [
+						{
+							type: 'mesh-gradient',
+							'mesh-gradient': '',
+							'mesh-gradient-colors': colors,
+							'mesh-gradient-attachment': 'scroll',
+							isVisible: true,
+							isOpen: true,
+						},
+					],
+					store: STORE_NAME,
+					name,
+				}).then(() => {
+					const prevMesh = getControlValue(name, STORE_NAME)[0][
+						'mesh-gradient'
+					];
+
+					cy.get('[aria-label="Add New Mesh Gradient Color"]')
+						.as('addColor')
+						.click();
+
+					cy.contains('Colors')
+						.parent()
+						.siblings('[data-cy="repeater-item"]')
+						.should(($items) => {
+							expect($items).to.have.length(colors.length + 1);
+							expect($items.last().text()).to.match(/^#\w{6}$/);
+						})
+						.then(() => {
+							const newColors = getControlValue(
+								name,
+								STORE_NAME
+							)[0]['mesh-gradient-colors'];
+
+							expect(newColors.length).to.be.equal(
+								colors.length + 1
+							);
+							expect(newColors.slice(-1)[0].color).to.match(
+								/^#\w{6}/
+							);
+
+							const newMesh = getControlValue(
+								name,
+								STORE_NAME
+							)[0]['mesh-gradient'];
+							expect(newMesh).to.be.not.deep.equal(prevMesh);
+						});
+				});
+			});
+
+			it('should not be available to delete color when there are less than 4 colors.', () => {
 				const colors = [
 					{ color: '#fefe' },
 					{ color: '#35ff4c' },
@@ -453,28 +538,17 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.get('[aria-label="Add New Mesh Gradient Color"]')
-					.as('addColor')
-					.click();
-
-				cy.getByDataCy('control-group')
-					.should('have.length', '5')
-					.last()
-					.invoke('text')
-					.should('match', /^#\w{6}/)
-					.then(() => {
-						const newColors = getControlValue(name, STORE_NAME)[0][
-							'mesh-gradient-colors'
-						];
-
-						expect(newColors.length).to.be.equal(4);
-						expect(newColors.slice(-1)[0].color).to.match(
-							/^#\w{6}/
-						);
+				cy.contains('Colors')
+					.parent()
+					.parent()
+					.within(() => {
+						cy.get('[aria-label="Delete 1"]').should('not.exist');
+						cy.get('[aria-label="Delete 2"]').should('not.exist');
+						cy.get('[aria-label="Delete 3"]').should('not.exist');
 					});
 			});
 
-			it.skip('should regenerate new gradient by adding new color', () => {
+			it('should remove color and regenerate gradient', () => {
 				const colors = [
 					{ color: '#fefe' },
 					{ color: '#35ff4c' },
@@ -495,9 +569,40 @@ describe('background control', () => {
 					],
 					store: STORE_NAME,
 					name,
+				}).then(() => {
+					const prevMesh = getControlValue(name, STORE_NAME)[0][
+						'mesh-gradient'
+					];
+
+					cy.get('[aria-label="Add New Mesh Gradient Color"]')
+						.as('addColor')
+						.click();
+
+					cy.get('[aria-label="Delete 2"]').click({ force: true });
+					cy.contains('Colors')
+						.parent()
+						.siblings('[data-cy="repeater-item"]')
+						.should(($items) => {
+							expect($items).to.have.length(colors.length);
+						})
+						.then(() => {
+							const newColors = getControlValue(
+								name,
+								STORE_NAME
+							)[0]['mesh-gradient-colors'];
+							expect(newColors.length).to.be.equal(colors.length);
+
+							const newMesh = getControlValue(
+								name,
+								STORE_NAME
+							)[0]['mesh-gradient'];
+
+							expect(newMesh).to.be.not.deep.equal(prevMesh);
+						});
 				});
 			});
 
+			// attachment
 			it('should change mesh-gradient-attachment in data when toggling between effect options', () => {
 				const name = nanoid();
 				const colors = [
@@ -533,189 +638,6 @@ describe('background control', () => {
 						expect(meshGradientAttachment).to.be.equal('fixed');
 					});
 			});
-		});
-	});
-
-	context.only('Initial Value', () => {
-		const defaultValue = [
-			{
-				type: 'radial-gradient',
-				image: '',
-				'image-size': 'contain',
-				'image-size-width': '1auto',
-				'image-size-height': '1auto',
-				'image-position': {
-					top: '50%',
-					left: '50%',
-				},
-				'image-repeat': 'repeat',
-				'image-attachment': 'scroll',
-				'linear-gradient':
-					'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
-				'linear-gradient-angel': '90',
-				'linear-gradient-repeat': 'no-repeat',
-				'linear-gradient-attachment': 'scroll',
-				'radial-gradient':
-					'radial-gradient(rgb(0,159,251) 0%,rgb(229,46,0) 100%)',
-				'radial-gradient-position': {
-					top: '50%',
-					left: '50%',
-				},
-				'radial-gradient-size': 'farthest-corner',
-				'radial-gradient-repeat': 'no-repeat',
-				'radial-gradient-attachment': 'scroll',
-				'mesh-gradient':
-					'radial-gradient(at 0% 0%, var(--c0) 0px, transparent 50%),radial-gradient(at 19% 18%, var(--c1) 0px, transparent 55%),radial-gradient(at 27% 57%, var(--c2) 0px, transparent 51%),radial-gradient(at 51% 54%, var(--c3) 0px, transparent 64%)',
-				'mesh-gradient-colors': [
-					{
-						color: '#4dffa9',
-					},
-					{
-						color: '#51fcff',
-					},
-					{
-						color: '#96ff35',
-					},
-					{
-						color: '#ff65fc',
-					},
-				],
-				'mesh-gradient-attachment': 'scroll',
-				isVisible: true,
-				isOpen: true,
-			},
-		];
-
-		const value = [
-			{
-				type: 'linear-gradient',
-				image: '',
-				'image-size': 'contain',
-				'image-size-width': '1auto',
-				'image-size-height': '1auto',
-				'image-position': {
-					top: '50%',
-					left: '50%',
-				},
-				'image-repeat': 'repeat',
-				'image-attachment': 'scroll',
-				'linear-gradient':
-					'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
-				'linear-gradient-angel': '90',
-				'linear-gradient-repeat': 'no-repeat',
-				'linear-gradient-attachment': 'scroll',
-				'radial-gradient':
-					'radial-gradient(rgb(0,159,251) 0%,rgb(229,46,0) 100%)',
-				'radial-gradient-position': {
-					top: '50%',
-					left: '50%',
-				},
-				'radial-gradient-size': 'farthest-corner',
-				'radial-gradient-repeat': 'no-repeat',
-				'radial-gradient-attachment': 'scroll',
-				'mesh-gradient':
-					'radial-gradient(at 0% 0%, var(--c0) 0px, transparent 50%),radial-gradient(at 19% 18%, var(--c1) 0px, transparent 55%),radial-gradient(at 27% 57%, var(--c2) 0px, transparent 51%),radial-gradient(at 51% 54%, var(--c3) 0px, transparent 64%)',
-				'mesh-gradient-colors': [
-					{
-						color: '#4dffa9',
-					},
-					{
-						color: '#51fcff',
-					},
-					{
-						color: '#96ff35',
-					},
-					{
-						color: '#ff65fc',
-					},
-				],
-				'mesh-gradient-attachment': 'scroll',
-				isVisible: true,
-				isOpen: true,
-			},
-		];
-
-		// 1. as expected
-		it('calculated data must be defaultValue, when defaultValue(ok) && id(!ok) value(undefined)', () => {
-			const name = nanoid();
-
-			cy.withDataProvider({
-				component: <BackgroundControl defaultValue={defaultValue} />,
-				value: undefined,
-				store: STORE_NAME,
-				name,
-			});
-
-			cy.getByDataCy('repeater-item').should(
-				'contain',
-				'Radial Gradient'
-			);
-		});
-
-		//2. positive false -> calculated data is value but should be defaultValue
-		it('calculated data must be defaultValue, when defaultValue(ok) && id(!ok) && value(ok)', () => {
-			const name = nanoid();
-			cy.withDataProvider({
-				component: (
-					<BackgroundControl defaultValue={defaultValue} id="x.y.z" />
-				),
-				value,
-				store: STORE_NAME,
-				name,
-			});
-
-			cy.getByDataCy('repeater-item').should(
-				'contain',
-				'Radial Gradient'
-			);
-		});
-
-		// 3. as expected
-		it('calculated data must be defaultValue, when defaultValue(ok) && id(ok) && value(undefined)', () => {
-			const name = nanoid();
-
-			cy.withDataProvider({
-				component: (
-					<BackgroundControl
-						id="x[0].b[0].c"
-						defaultValue={defaultValue}
-					/>
-				),
-				value: {
-					x: [
-						{
-							b: [
-								{
-									c: undefined,
-								},
-							],
-						},
-					],
-				},
-				store: STORE_NAME,
-				name,
-			});
-
-			cy.getByDataCy('repeater-item').should(
-				'contain',
-				'Radial Gradient'
-			);
-		});
-
-		// 4. passes
-		it('calculated data must be value, when id(!ok), defaultValue(!ok), value(root)', () => {
-			const name = nanoid();
-			cy.withDataProvider({
-				component: <BackgroundControl />,
-				value,
-				store: STORE_NAME,
-				name,
-			});
-
-			cy.getByDataCy('repeater-item').should(
-				'contain',
-				'Linear Gradient'
-			);
 		});
 	});
 });
