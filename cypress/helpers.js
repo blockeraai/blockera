@@ -137,20 +137,6 @@ export function addBlockToPost(blockName, clearEditor = false, className = '') {
 	// Click on added new block item.
 	cy.getIframeBody().find(`[data-type="${blockName}"]`).click();
 
-	// cy.get('button').contains('Advanced').click();
-	//
-	// cy.get('label')
-	// 	.contains('Additional CSS class(es)')
-	// 	.parent()
-	// 	.get('input[type="text"]')
-	// 	.then((el) => {
-	// 		el.forEach((_el, index) => {
-	// 			if (4 === index) {
-	// 				el.type(className);
-	// 			}
-	// 		});
-	// 	});
-
 	cy.window()
 		.its('wp.hooks')
 		.then((hooks) => {

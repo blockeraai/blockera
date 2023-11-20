@@ -79,6 +79,7 @@ export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 								controlName="input"
 								columns="columns-2"
 								label={__('z-index', 'publisher-core')}
+								type="number"
 								{...{
 									...props,
 									defaultValue: '',
