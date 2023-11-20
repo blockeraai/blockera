@@ -1,4 +1,4 @@
-import { isString } from '@publisher/utils';
+import { isString, isArray } from '@publisher/utils';
 
 // Validates the value is with a special CSS units or not
 export function isSpecialUnit(value) {
@@ -210,4 +210,51 @@ export function getCSSUnits(unitType = '') {
 	}
 
 	return cssUnits;
+}
+
+const cssFunctionsRegex = {
+	calc: /calc\(( )?([\d\.]+(%|vh|vw|vmin|vmax|em|rem|px|cm|ex|in|mm|pc|pt|ch|q|deg|rad|grad|turn|s|ms|hz|khz))( )+[+\-\*\/]( )+(\-)?([\d\.]+(%|vh|vw|vmin|vmax|em|rem|px|cm|ex|in|mm|pc|pt|ch|q|deg|rad|grad|turn|s|ms|hz|khz))( )?\)/i,
+	max: /max\(\s*((?:-?\d*\.?\d+(?:%|vh|vw|vmin|vmax|em|rem|px|cm|ex|in|mm|pc|pt|ch|q|deg|rad|grad|turn|s|ms|hz|khz)\s*,\s*)*-?\d*\.?\d+(?:%|vh|vw|vmin|vmax|em|rem|px|cm|ex|in|mm|pc|pt|ch|q|deg|rad|grad|turn|s|ms|hz|khz))\s*\)/gi,
+	min: /min\(\s*((?:-?\d*\.?\d+(?:%|vh|vw|vmin|vmax|em|rem|px|cm|ex|in|mm|pc|pt|ch|q|deg|rad|grad|turn|s|ms|hz|khz)\s*,\s*)*-?\d*\.?\d+(?:%|vh|vw|vmin|vmax|em|rem|px|cm|ex|in|mm|pc|pt|ch|q|deg|rad|grad|turn|s|ms|hz|khz))\s*\)/gi,
+	// clamp: /clamp\(\s*(-?\d*\.?\d+(?:%|vh|vw|vmin|vmax|em|rem|px|cm|ex|in|mm|pc|pt|ch|q|deg|rad|grad|turn|s|ms|hz|khz))\s*,\s*(-?\d*\.?\d+(?:%|vh|vw|vmin|vmax|em|rem|px|cm|ex|in|mm|pc|pt|ch|q|deg|rad|grad|turn|s|ms|hz|khz))\s*,\s*(-?\d*\.?\d+(?:%|vh|vw|vmin|vmax|em|rem|px|cm|ex|in|mm|pc|pt|ch|q|deg|rad|grad|turn|s|ms|hz|khz)))\s*\)/gi,
+
+	translate:
+		/translate\(\s*(-?\d*\.?\d+(?:%|vh|vw|vmin|vmax|em|rem|px|cm|ex|in|mm|pc|pt|ch|q|deg|rad|grad|turn|s|ms|hz|khz))\s*,\s*(-?\d*\.?\d+(?:%|vh|vw|vmin|vmax|em|rem|px|cm|ex|in|mm|pc|pt|ch|q|deg|rad|grad|turn|s|ms|hz|khz))\s*\)/gi,
+	scale: /scale\(\s*(-?\d*\.?\d+)\s*,\s*(-?\d*\.?\d+)\s*\)/gi,
+	rotate: /rotate\(\s*(-?\d*\.?\d+)(deg|rad|grad|turn)?\s*\)/gi,
+	rgb: /rgb\(\s*(\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3})\s*\)/gi,
+	rgba: /rgba\(\s*(\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*(?:0?\.\d|1))\s*\)/gi,
+	hsl: /hsl\(\s*(\d{1,3}\s*,\s*\d{1,3}%\s*,\s*\d{1,3}%)?\s*\)/gi,
+	hsla: /hsla\(\s*(\d{1,3}\s*,\s*\d{1,3}%\s*,\s*\d{1,3}%\s*,\s*(?:0?\.\d|1))\s*\)/gi,
+	skew: /skew\(\s*(-?\d*\.?\d+deg)\s*,\s*(-?\d*\.?\d+deg)\s*\)/gi,
+	attr: /attr\(\s*(['"])?([\w-]+)\1?\s*\)/gi,
+	var: /var\(\s*(['"])?(--[\w-]+)\1?\s*(,\s*([^)]+))?\s*\)/gi,
+	url: /url\(\s*(?:(['"])([^\n\r\f]*)\1|([^\)\s]+))\s*\)/gi,
+};
+
+/**
+ * Checks if a string contains multiple CSS function names and applies logical 'OR' between matches.
+ *
+ * @param {string} value - The input string to search for CSS functions.
+ * @param {Array<string>} cssFunctionNames - An array of CSS function names to search for.
+ * @return {Object|null} - Object with matched CSS functions or null if no matches are found.
+ */
+
+export function checkCSSFunctions(cssFunctionNames, value) {
+	if (!value || !isArray(cssFunctionNames)) {
+		return null;
+	}
+
+	const matchedFunctions = {};
+	for (const functionName of cssFunctionNames) {
+		const regex = cssFunctionsRegex[functionName];
+		if (regex) {
+			const matches = value.match(regex);
+			if (matches && matches.length > 0) {
+				matchedFunctions[functionName] = matches;
+			}
+		}
+	}
+
+	return Object.keys(matchedFunctions).length > 0 ? matchedFunctions : null;
 }

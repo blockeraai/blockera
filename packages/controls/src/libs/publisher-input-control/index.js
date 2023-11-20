@@ -2,18 +2,24 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-import { useMemo } from '@wordpress/element';
+import { useMemo, useState, useEffect } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { isEmpty, isUndefined, isNumber } from '@publisher/utils';
+import {
+	isEmpty,
+	isUndefined,
+	isNumber,
+	isFunction,
+	isArray,
+} from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
 import { BaseControl } from './../index';
-import { getCSSUnits } from './utils';
+import { getCSSUnits, checkCSSFunctions } from './utils';
 import { useControlContext } from '../../context';
 
 export function PublisherInputControl({
@@ -30,6 +36,7 @@ export function PublisherInputControl({
 	type = 'text',
 	min,
 	max,
+	validator,
 	...props
 }) {
 	const { value, setValue } = useControlContext({
@@ -37,6 +44,7 @@ export function PublisherInputControl({
 		defaultValue,
 		onChange,
 	});
+	const [isValidValue, setIsValidValue] = useState(true);
 
 	// add css units
 	if (unitType !== '' && (isUndefined(units) || isEmpty(units))) {
@@ -62,6 +70,25 @@ export function PublisherInputControl({
 		units = getCSSUnits(unitType);
 	}
 
+	// validator checking
+	useEffect(() => {
+		if (!validator) {
+			// If no validator is provided, assume the value is valid
+			setIsValidValue(true);
+			return;
+		}
+
+		let isValid = false;
+		if (isFunction(validator)) {
+			isValid = validator(value);
+		} else if (isArray(validator)) {
+			isValid = checkCSSFunctions(validator, value);
+		}
+
+		// Update validValue based on the result of validation
+		setIsValidValue(!!isValid);
+	}, [value]); // eslint-disable-line
+
 	return (
 		<BaseControl
 			label={label}
@@ -72,9 +99,13 @@ export function PublisherInputControl({
 			{isEmpty(units) ? (
 				<input
 					value={value}
-					onChange={(e) => setValue(e.target.value)}
-					className={controlClassNames('single-input', className)}
 					type={type}
+					onChange={(e) => setValue(e.target.value)}
+					className={controlClassNames(
+						'single-input',
+						!isValidValue && 'invalid',
+						className
+					)}
 					{...(getMinValue && getMinValue)}
 					{...(getMaxValue && getMaxValue)}
 					{...props}
@@ -84,7 +115,11 @@ export function PublisherInputControl({
 					<input
 						value={value}
 						onChange={(e) => setValue(e.target.value)}
-						className={controlClassNames('single-input', className)}
+						className={controlClassNames(
+							'single-input',
+							!isValidValue && 'invalid',
+							className
+						)}
 						type={type}
 						{...(getMinValue && getMinValue)}
 						{...(getMaxValue && getMaxValue)}
@@ -165,6 +200,29 @@ PublisherInputControl.propTypes = {
 	 * Disables the `input`, preventing new values from being applied.
 	 */
 	disabled: PropTypes.bool,
+	/**
+	 * check the `input`,  A function used to validate input values.
+	 */
+	validator: PropTypes.oneOfType([
+		PropTypes.func,
+		PropTypes.arrayOf(
+			PropTypes.oneOf([
+				'calc',
+				'max',
+				'min',
+				'translate',
+				'scale',
+				'rotate',
+				'rgb',
+				'rgba',
+				'hsl',
+				'hsla',
+				'skew',
+				'var',
+				'attr',
+			])
+		),
+	]),
 };
 
 PublisherInputControl.defaultProps = {
