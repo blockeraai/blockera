@@ -1,1 +1,1 @@
-export { useControlAddon } from './use-control-addon';
+export { useValueAddon } from './use-value-addon';
