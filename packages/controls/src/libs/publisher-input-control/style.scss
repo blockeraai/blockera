@@ -1,7 +1,8 @@
 .publisher-control-single-input {
 		width: 100% !important;
 		border: 1px solid var(--publisher-controls-border-color) !important;
-		border-radius: 0 !important;
+		border-radius: 2px !important;
+		transition: box-shadow 0.1s linear;
 
 		&:hover {
 			border-color: var(--publisher-controls-border-color-hover) !important;
@@ -13,14 +14,13 @@
 		}
 
 		&.invalid {
-			border: 2px solid var(--publisher-controls-invalid-input-border-color) !important;
+			border: 1px solid var(--publisher-controls-invalid-input-border-color) !important;
 		}
 
 		&.invalid:focus {
 			border: 1px solid var(--publisher-controls-invalid-input-border-color) !important;
 			box-shadow: 0 0 0 1px var(--publisher-controls-invalid-input-border-color) !important;
 		}
-
 }
 
 .publisher-control-unit-input-container {
