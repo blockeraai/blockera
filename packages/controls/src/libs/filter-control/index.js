@@ -1,9 +1,10 @@
+// @flow
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
-
+import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
@@ -16,15 +17,15 @@ import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 import { isArray } from '@publisher/utils';
-
+import type { TFilterControlProps, TValueCleanUp } from './types';
 export default function FilterControl({
 	id,
 	defaultRepeaterItemValue,
 	popoverLabel,
 	className,
 	...props
-}) {
-	function valueCleanup(value) {
+}: TFilterControlProps): MixedElement {
+	function valueCleanup(value: TValueCleanUp) {
 		if (!isArray(value)) {
 			return value;
 		}
@@ -102,7 +103,7 @@ FilterControl.propTypes = {
 	/**
 	 * Default value of each repeater item
 	 */
-	defaultRepeaterItemValue: PropTypes.shape({
+	defaultRepeaterItemValue: (PropTypes.shape({
 		type: PropTypes.oneOf([
 			'blur',
 			'drop-shadow',
@@ -127,7 +128,7 @@ FilterControl.propTypes = {
 		'drop-shadow-blur': PropTypes.string,
 		'drop-shadow-color': PropTypes.string,
 		isVisible: PropTypes.bool,
-	}),
+	}): any),
 	/**
 	 * Label for popover
 	 */
@@ -135,7 +136,7 @@ FilterControl.propTypes = {
 };
 
 FilterControl.defaultProps = {
-	defaultValue: [],
+	defaultValue: ([]: any),
 	defaultRepeaterItemValue: {
 		type: 'blur',
 		blur: '3px',
@@ -152,5 +153,5 @@ FilterControl.defaultProps = {
 		'drop-shadow-color': '',
 		isVisible: true,
 	},
-	popoverLabel: __('Filter Effect', 'publisher-core'),
+	popoverLabel: (__('Filter Effect', 'publisher-core'): any),
 };
