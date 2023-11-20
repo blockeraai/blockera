@@ -104,24 +104,28 @@ export default function BoxSpacingControl({
 		value: fixLabelToNumber(value.padding.top) || 0,
 		setValue: topPaddingDragSetValue,
 		movement: 'vertical',
+		min: 0,
 	});
 
 	const leftPaddingDragValueHandler = useDragValue({
 		value: fixLabelToNumber(value.padding.left) || 0,
 		setValue: leftPaddingDragSetValue,
 		movement: 'horizontal',
+		min: 0,
 	});
 
 	const rightPaddingDragValueHandler = useDragValue({
 		value: fixLabelToNumber(value.padding.right) || 0,
 		setValue: rightPaddingDragSetValue,
 		movement: 'horizontal',
+		min: 0,
 	});
 
 	const bottomPaddingDragValueHandler = useDragValue({
 		value: fixLabelToNumber(value.padding.bottom) || 0,
 		setValue: bottomPaddingDragSetValue,
 		movement: 'vertical',
+		min: 0,
 	});
 
 	const [openPopover, setOpenPopover] = useState(openSide);
