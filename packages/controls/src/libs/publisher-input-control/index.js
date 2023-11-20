@@ -57,6 +57,11 @@ export function PublisherInputControl({
 		}
 	}, [type, max]);
 
+	// add css units
+	if (unitType !== '' && (isUndefined(units) || isEmpty(units))) {
+		units = getCSSUnits(unitType);
+	}
+
 	return (
 		<BaseControl
 			label={label}
@@ -64,16 +69,36 @@ export function PublisherInputControl({
 			controlName={field}
 			className={className}
 		>
-			<input
-				value={value}
-				onChange={(e) => setValue(e.target.value)}
-				className={controlClassNames('single-input', className)}
-				type={type}
-				placeholder="hi there"
-				{...(getMinValue && getMinValue)}
-				{...(getMaxValue && getMaxValue)}
-				{...props}
-			/>
+			{isEmpty(units) ? (
+				<input
+					value={value}
+					onChange={(e) => setValue(e.target.value)}
+					className={controlClassNames('single-input', className)}
+					type={type}
+					{...(getMinValue && getMinValue)}
+					{...(getMaxValue && getMaxValue)}
+					{...props}
+				/>
+			) : (
+				<div className={controlClassNames('unit-input-container')}>
+					<input
+						value={value}
+						onChange={(e) => setValue(e.target.value)}
+						className={controlClassNames('single-input', className)}
+						type={type}
+						{...(getMinValue && getMinValue)}
+						{...(getMaxValue && getMaxValue)}
+						{...props}
+					/>
+					<select className={controlClassNames('unit-select')}>
+						{units.map((unit, key) => (
+							<option key={key} value={unit?.value}>
+								{unit?.label}
+							</option>
+						))}
+					</select>
+				</div>
+			)}
 		</BaseControl>
 	);
 }

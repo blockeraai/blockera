@@ -1,4 +1,5 @@
 .publisher-control-single-input {
+		width: 100% !important;
 		border: 1px solid var(--publisher-controls-border-color) !important;
 		border-radius: 0 !important;
 
@@ -11,4 +12,61 @@
 			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
 		}
 
+}
+
+.publisher-control-unit-input-container {
+	position: relative !important;
+
+	.publisher-control-unit-select {
+		appearance: none !important;
+		background: transparent !important;
+		border-radius: 2px !important;
+		border: none !important;
+		display: block !important;
+		outline: none !important;
+		margin: 0 !important;
+		min-height: auto !important;
+		position: absolute !important;
+		width: 35px !important;
+		font-size: 11px !important;
+		color: #aeaeae !important;
+		font-weight: 500 !important;
+		padding: 0 !important;
+		text-align: center !important;
+		text-align-last: center !important;
+		height: 28px !important;
+		line-height: 28px !important;
+		top: 1px !important;
+		right: 0 !important;
+		text-transform: uppercase !important;
+		transition: box-shadow 0.1s linear, border 0.1s linear !important;
+		border-top-left-radius: 0 !important;
+		border-bottom-left-radius: 0 !important;
+
+		&:focus {
+			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
+			border: 1px solid var(--publisher-controls-border-color-focus) !important;
+		}
+
+		&:not(:disabled) {
+			cursor: pointer !important;
+		}
+
+		&:not(:disabled):hover {
+			background-color: var(--publisher-controls-sep-color) !important;
+		}
+	}
+
+		.publisher-control-single-input::-webkit-outer-spin-button,
+		.publisher-control-single-input::-webkit-inner-spin-button {
+				/* display: none; <- Crashes Chrome on hover */
+					-webkit-appearance: none !important;
+					margin: 0 !important;
+					/* <-- Apparently some margin are still there even though it's hidden */
+		}
+
+		.publisher-control-single-input[type="number"] {
+			-moz-appearance: textfield !important;
+			/* Firefox */
+		}
 }
