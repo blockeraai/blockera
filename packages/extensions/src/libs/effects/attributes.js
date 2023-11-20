@@ -13,7 +13,7 @@ export const attributes = {
 	},
 	publisherTransformSelfOrigin: {
 		type: 'object',
-		default: { top: '50%', left: '50%', color: 'black' },
+		default: { top: '', left: '' },
 	},
 	publisherBackfaceVisibility: {
 		type: 'string',
@@ -25,7 +25,7 @@ export const attributes = {
 	},
 	publisherTransformChildOrigin: {
 		type: 'object',
-		default: { top: '50%', left: '50%', color: 'black' },
+		default: { top: '', left: '' },
 	},
 	publisherTransition: {
 		type: 'array',

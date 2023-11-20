@@ -67,7 +67,6 @@ export const ChildOrigin = ({
 								...transformChildOrigin,
 								top,
 								left,
-								color: 'var(--publisher-controls-border-color-focus)',
 							}
 						);
 					}}

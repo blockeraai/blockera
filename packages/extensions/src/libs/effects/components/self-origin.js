@@ -66,7 +66,6 @@ export const SelfOrigin = ({
 								...transformSelfOrigin,
 								top,
 								left,
-								color: 'var(--publisher-controls-border-color-focus)',
 							}
 						);
 					}}

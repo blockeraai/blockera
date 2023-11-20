@@ -101,7 +101,11 @@ export const TransformSettings = ({
 							size="small"
 							style={{
 								padding: '6px',
-								color: transformSelfOrigin.color,
+								color:
+									!transformSelfOrigin?.top ||
+									!transformSelfOrigin?.left
+										? 'black'
+										: 'var(--publisher-controls-border-color-focus)',
 							}}
 						>
 							{OriginIcon(
@@ -193,7 +197,11 @@ export const TransformSettings = ({
 							size="small"
 							style={{
 								padding: '6px',
-								color: transformChildOrigin.color,
+								color:
+									!transformChildOrigin.top ||
+									!transformChildOrigin.left
+										? 'black'
+										: 'var(--publisher-controls-border-color-focus)',
 							}}
 						>
 							{OriginIcon(
