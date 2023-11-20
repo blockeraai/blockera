@@ -3,7 +3,13 @@
  */
 import { useCallback, useEffect, useState } from '@wordpress/element';
 
-export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
+export const useDragValue = ({
+	value,
+	setValue,
+	movement = 'vertical',
+	min,
+	max,
+}) => {
 	// We are creating a snapshot of the values when the drag starts
 	// because the [value] will itself change & we need the original
 	// [value] to calculate during a drag.
@@ -79,12 +85,22 @@ export const useDragValue = ({ value, setValue, movement = 'vertical' }) => {
 		// Only change the value if the drag was actually started.
 		const onUpdate = (event) => {
 			if (dragStarted && startVal) {
+				let newValue;
 				if (movement === 'vertical') {
-					setValue(snapshot - event.clientY + startVal);
+					newValue = snapshot - event.clientY + startVal;
 				}
 				if (movement === 'horizontal') {
-					setValue(snapshot - (startVal - event.clientX));
+					newValue = snapshot - (startVal - event.clientX);
 				}
+
+				// Check against min and max values
+				if (typeof min === 'number' && newValue < min) {
+					newValue = min;
+				} else if (typeof max === 'number' && newValue > max) {
+					newValue = max;
+				}
+
+				setValue(newValue);
 			}
 		};
 
