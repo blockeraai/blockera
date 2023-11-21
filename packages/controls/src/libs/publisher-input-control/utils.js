@@ -18,6 +18,20 @@ export function isSpecialUnit(value) {
 	);
 }
 
+// get the number in string values
+export function extractNumber(text) {
+	if (text && isString(text)) {
+		const regex = /\d+/;
+		const match = text.match(regex);
+
+		if (match) {
+			return match[0];
+		}
+	}
+
+	return text;
+}
+
 export function getCSSUnits(unitType = '') {
 	if (unitType === '' || !isString(unitType)) {
 		return [];

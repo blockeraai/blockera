@@ -13,20 +13,27 @@ import {
 	isNumber,
 	isFunction,
 	isArray,
+	isString,
 } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
-import { BaseControl } from './../index';
-import { getCSSUnits, checkCSSFunctions } from './utils';
+import {
+	getCSSUnits,
+	checkCSSFunctions,
+	isSpecialUnit,
+	extractNumber,
+} from './utils';
 import { useControlContext } from '../../context';
+import { RangeControl, BaseControl } from './../index';
 
 export function PublisherInputControl({
 	unitType,
 	units,
 	noBorder, //
 	id,
+	range,
 	label,
 	columns,
 	defaultValue,
@@ -44,7 +51,10 @@ export function PublisherInputControl({
 		defaultValue,
 		onChange,
 	});
+
+	console.log('value:', value);
 	const [isValidValue, setIsValidValue] = useState(true);
+	const [selectedUnit, setSelectedUnit] = useState('');
 
 	// add css units
 	if (unitType !== '' && (isUndefined(units) || isEmpty(units))) {
@@ -89,6 +99,26 @@ export function PublisherInputControl({
 		setIsValidValue(!!isValid);
 	}, [value]); // eslint-disable-line
 
+	// get unit type and set it
+	useEffect(() => {
+		if (
+			!isUndefined(units) &&
+			!isEmpty(units) &&
+			isEmpty(selectedUnit) &&
+			units.length
+		) {
+			setSelectedUnit(units[0]?.value);
+		}
+	}, [units]); //eslint-disable-line
+
+	// set unit to value after unit changed
+	useEffect(() => {
+		if (type === 'number') {
+			const newValue = extractNumber(value);
+			setValue(`${newValue}${selectedUnit}`);
+		}
+	}, [selectedUnit]); //eslint-disable-line
+
 	return (
 		<BaseControl
 			label={label}
@@ -96,28 +126,38 @@ export function PublisherInputControl({
 			controlName={field}
 			className={className}
 		>
-			{isEmpty(units) ? (
-				<input
-					value={value}
-					type={type}
-					onChange={(e) => setValue(e.target.value)}
-					className={controlClassNames(
-						'single-input',
-						!isValidValue && 'invalid',
-						className
-					)}
-					{...(getMinValue && getMinValue)}
-					{...(getMaxValue && getMaxValue)}
-					{...props}
-				/>
-			) : (
-				<div className={controlClassNames('unit-input-container')}>
+			<div
+				className={controlClassNames(
+					'input-2',
+					range && 'input-range',
+					noBorder && 'no-border',
+					isSpecialUnit(value) && 'publisher-control-unit-special',
+					className
+				)}
+			>
+				{range && (
+					<RangeControl
+						id={id}
+						withInputField={false}
+						className={className}
+						onChange={(newValue) => {
+							// extract unit from old value and assign it to newValue
+							if (isString(value))
+								newValue =
+									newValue + value.replace(/[0-9|-]/gi, '');
+							setValue(newValue);
+						}}
+						{...props}
+					/>
+				)}
+				{isEmpty(units) ? (
 					<input
 						value={value}
 						onChange={(e) => setValue(e.target.value)}
 						className={controlClassNames(
 							'single-input',
 							!isValidValue && 'invalid',
+							noBorder && 'no-border',
 							className
 						)}
 						type={type}
@@ -125,15 +165,37 @@ export function PublisherInputControl({
 						{...(getMaxValue && getMaxValue)}
 						{...props}
 					/>
-					<select className={controlClassNames('unit-select')}>
-						{units.map((unit, key) => (
-							<option key={key} value={unit?.value}>
-								{unit?.label}
-							</option>
-						))}
-					</select>
-				</div>
-			)}
+				) : (
+					<div className={controlClassNames('unit-input-container')}>
+						<input
+							value={extractNumber(value)}
+							onChange={(e) =>
+								setValue(`${e.target.value}${selectedUnit}`)
+							}
+							className={controlClassNames(
+								'single-input',
+								!isValidValue && 'invalid',
+								noBorder && 'no-border',
+								className
+							)}
+							type={type}
+							{...(getMinValue && getMinValue)}
+							{...(getMaxValue && getMaxValue)}
+							{...props}
+						/>
+						<select
+							onChange={(e) => setSelectedUnit(e.target.value)}
+							className={controlClassNames('unit-select')}
+						>
+							{units.map((unit, key) => (
+								<option key={key} value={unit?.value}>
+									{unit?.label}
+								</option>
+							))}
+						</select>
+					</div>
+				)}
+			</div>
 		</BaseControl>
 	);
 }

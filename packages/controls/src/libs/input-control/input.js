@@ -40,6 +40,7 @@ export function InputControl({
 		onChange,
 	});
 
+	console.log('value:', value);
 	// add css units
 	if (unitType !== '' && (isUndefined(units) || isEmpty(units))) {
 		units = getCSSUnits(unitType);

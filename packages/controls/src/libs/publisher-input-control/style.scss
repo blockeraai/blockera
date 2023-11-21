@@ -1,78 +1,244 @@
-.publisher-control-single-input {
-		width: 100% !important;
-		border: 1px solid var(--publisher-controls-border-color) !important;
-		border-radius: 0 !important;
+.publisher-control-input-2 {
+
+	.publisher-control-single-input {
+		width: 100%;
+		border: 1px solid var(--publisher-controls-border-color);
+		border-radius: 0;
 
 		&:hover {
-			border-color: var(--publisher-controls-border-color-hover) !important;
+			border-color: var(--publisher-controls-border-color-hover);
 		}
 
 		&:focus {
-			border-color: var(--publisher-controls-border-color-focus) !important;
-			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
+			border-color: var(--publisher-controls-border-color-focus);
+			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
 		}
 
 		&.invalid {
-			border: 2px solid var(--publisher-controls-invalid-input-border-color) !important;
-		}
-
-		&.invalid:focus {
 			border: 1px solid var(--publisher-controls-invalid-input-border-color) !important;
 			box-shadow: 0 0 0 1px var(--publisher-controls-invalid-input-border-color) !important;
 		}
+	}
 
-}
+	&.is-hovered:not(:hover, :focus, .is-focused) {
 
-.publisher-control-unit-input-container {
-	position: relative !important;
+		.publisher-control-single-input {
+			border-color: var(--publisher-controls-border-color-hover);
+		}
+	}
 
-	.publisher-control-unit-select {
-		appearance: none !important;
-		background: transparent !important;
-		border-radius: 2px !important;
-		border: none !important;
-		display: block !important;
-		outline: none !important;
-		margin: 0 !important;
-		min-height: auto !important;
-		position: absolute !important;
-		width: 35px !important;
+	&.is-focused {
+
+		.publisher-control-single-input {
+			border-color: var(--publisher-controls-border-color-focus);
+			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+		}
+	}
+
+	.components-input-control__input[type="css"],
+	.components-input-control__input[type="number"] {
+		cursor: ns-resize;
+	}
+
+	&.no-border {
+
+		.components-input-control__backdrop {
+			border: none !important;
+			border-radius: 2px !important;
+			box-shadow: none !important;
+			background: none !important;
+		}
+
+		.publisher-control-single-input {
+			border: 1px solid transparent;
+			border-radius: 2px;
+			box-shadow: none;
+			background: none;
+
+			&:focus {
+				border-radius: 2px;
+				border: 1px solid var(--publisher-controls-border-color-focus);
+				box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+			}
+		}
+
+		&.is-focused {
+
+			.publisher-control-single-input {
+				border: 1px solid var(--publisher-controls-border-color-focus);
+				box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+			}
+		}
+	}
+
+	.components-input-control__suffix,
+	.components-unit-control__select {
+		width: 25px !important;
+		font-size: 11px !important;
+		color: #aeaeae !important;
+		font-weight: 500;
+		padding: 0 !important;
+		text-align: center !important;
+		text-align-last: center !important;
+		height: 30px !important;
+		line-height: 28px !important;
+
+		&:focus {
+			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
+		}
+	}
+
+	.components-unit-control__unit-label {
 		font-size: 11px !important;
 		color: #aeaeae !important;
 		font-weight: 500 !important;
 		padding: 0 !important;
-		text-align: center !important;
-		text-align-last: center !important;
-		height: 28px !important;
-		line-height: 28px !important;
-		top: 1px !important;
-		right: 0 !important;
-		text-transform: uppercase !important;
-		transition: box-shadow 0.1s linear, border 0.1s linear !important;
-		border-top-left-radius: 0 !important;
-		border-bottom-left-radius: 0 !important;
-
-		&:focus {
-			box-shadow: none !important;
-			border: none !important;
-		}
-
-		&:not(:disabled) {
-			cursor: pointer !important;
-		}
-
+		letter-spacing: 0 !important;
+		width: auto !important;
 	}
 
-		.publisher-control-single-input::-webkit-outer-spin-button,
-		.publisher-control-single-input::-webkit-inner-spin-button {
-				/* display: none; <- Crashes Chrome on hover */
-					-webkit-appearance: none !important;
-					margin: 0 !important;
-					/* <-- Apparently some margin are still there even though it's hidden */
+	.components-input-control__backdrop.components-input-control__backdrop.components-input-control__backdrop {
+		border-color: var(--publisher-controls-border-color);
+	}
+
+	.components-base-control__field {
+
+		.components-flex {
+
+			.components-input-control__input:focus + .components-input-control__suffix + .components-input-control__backdrop {
+				border: 1px solid var(--publisher-controls-border-color-focus) !important;
+				box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
+			}
+		}
+	}
+
+	&.is-focused .components-base-control__field {
+
+		.components-flex {
+
+			.components-input-control__backdrop {
+				border: 1px solid var(--publisher-controls-border-color-focus) !important;
+				box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
+			}
+		}
+	}
+
+	// border color for hover
+
+	&.is-hovered .components-base-control__field,
+	.components-base-control__field:hover {
+
+		.components-flex {
+
+			.components-input-control__backdrop.components-input-control__backdrop.components-input-control__backdrop {
+				border-color: var(--publisher-controls-border-color-hover);
+			}
+		}
+	}
+
+	&.publisher-control-unit-special {
+
+		.publisher-control-unit {
+
+			.components-input-control__input {
+				display: none !important;
+			}
+
+			.components-input-control__suffix {
+				width: 100% !important;
+				height: 30px !important;
+
+				.components-unit-control__select {
+					width: 100% !important;
+					border-radius: 2px !important;
+					text-transform: capitalize !important;
+					font-size: 13px !important;
+					font-weight: 400 !important;
+					color: rgb(30, 30, 30) !important;
+					text-align: left !important;
+					text-align-last: left !important;
+					padding: 0 26px 0 8px !important;
+					background: #ffffff url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%231E1E1E%22%2F%3E%3C%2Fsvg%3E") no-repeat right 5px top 55%;
+					background-size: 13px 11px !important;
+					letter-spacing: 0;
+
+					&:not(:disabled):hover {
+						background-color: var(--publisher-controls-background-color);
+					}
+				}
+			}
+		}
+	}
+
+		.publisher-control-unit-select {
+			appearance: none !important;
+			background: transparent !important;
+			border-radius: 2px !important;
+			border: none !important;
+			display: block !important;
+			outline: none !important;
+			margin: 0 !important;
+			min-height: auto !important;
+			position: absolute !important;
+			width: 35px !important;
+			font-size: 11px !important;
+			color: #aeaeae !important;
+			font-weight: 500 !important;
+			padding: 0 !important;
+			text-align: center !important;
+			text-align-last: center !important;
+			height: 28px !important;
+			line-height: 28px !important;
+			top: 1px !important;
+			right: 0 !important;
+			text-transform: uppercase !important;
+			transition: box-shadow 0.1s linear, border 0.1s linear !important;
+			border-top-left-radius: 0 !important;
+			border-bottom-left-radius: 0 !important;
+
+			&:focus {
+				box-shadow: none !important;
+				border: none !important;
+			}
+
+			&:not(:disabled) {
+				cursor: pointer !important;
+			}
 		}
 
-		.publisher-control-single-input[type="number"] {
-			-moz-appearance: textfield !important;
-			/* Firefox */
+		.publisher-control-unit-input-container {
+			position: relative !important;
+
+			.publisher-control-single-input::-webkit-outer-spin-button,
+			.publisher-control-single-input::-webkit-inner-spin-button {
+				/* display: none; <- Crashes Chrome on hover */
+				-webkit-appearance: none !important;
+				margin: 0 !important;
+				/* <-- Apparently some margin are still there even though it's hidden */
+			}
+
+			.publisher-control-single-input[type="number"] {
+				-moz-appearance: textfield !important;
+				/* Firefox */
+			}
 		}
+}
+
+.publisher-control-input-2.input-range {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	column-gap: 15px;
+
+	& > .components-base-control {
+		margin: 0;
+		min-width: 60px;
+	}
+
+	&.publisher-control-unit-special {
+		grid-template-columns: 1fr;
+
+		.publisher-control-range {
+			display: none;
+		}
+	}
 }
