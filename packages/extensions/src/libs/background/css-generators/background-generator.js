@@ -146,21 +146,27 @@ export function backgroundGenerator(id, props, styleEngine) {
 		return undefined;
 	});
 
+	const toReturnProperties = {
+		'background-image': properties.image.join(', '),
+		'background-size': properties.size.join(', '),
+		'background-position': properties.position.join(', '),
+		'background-repeat': properties.repeat.join(', '),
+		'background-attachment': properties.attachment.join(', '),
+	};
+
+	if (properties['background-color'])
+		toReturnProperties['background-color'] =
+			properties['background-color'] + ' !important';
+
+	if (properties.size[0] === '1auto 1auto')
+		toReturnProperties['background-size'] = 'auto auto';
+
 	return createCssRule({
 		selector: `${
 			styleEngine.selector
 				? `#block-${props.clientId}` + styleEngine.selector
 				: ''
 		}`,
-		properties: {
-			'background-color': properties['background-color']
-				? properties['background-color'] + ' !important'
-				: '',
-			'background-image': properties.image.join(', '),
-			'background-size': properties.size.join(', '),
-			'background-position': properties.position.join(', '),
-			'background-repeat': properties.repeat.join(', '),
-			'background-attachment': properties.attachment.join(', '),
-		},
+		properties: toReturnProperties,
 	});
 }
