@@ -52,9 +52,9 @@ export function PublisherInputControl({
 		onChange,
 	});
 
-	console.log('value:', value);
 	const [isValidValue, setIsValidValue] = useState(true);
 	const [selectedUnit, setSelectedUnit] = useState('');
+	const [inputType, setInputType] = useState(type || 'text');
 
 	// add css units
 	if (unitType !== '' && (isUndefined(units) || isEmpty(units))) {
@@ -63,26 +63,32 @@ export function PublisherInputControl({
 
 	// get the minimum value in number type
 	const getMinValue = useMemo(() => {
-		if (type === 'number' && !isUndefined(min) && isNumber(+min)) {
+		if (inputType === 'number' && !isUndefined(min) && isNumber(+min)) {
 			return { min };
 		}
-	}, [type, min]);
+	}, [min]); // eslint-disable-line
 
 	// get the maximum value in number type
 	const getMaxValue = useMemo(() => {
-		if (type === 'number' && !isUndefined(max) && isNumber(+max)) {
+		if (inputType === 'number' && !isUndefined(max) && isNumber(+max)) {
 			return { max };
 		}
-	}, [type, max]);
+	}, [max]); // eslint-disable-line
 
 	// add css units
 	if (unitType !== '' && (isUndefined(units) || isEmpty(units))) {
 		units = getCSSUnits(unitType);
 	}
 
+	const getUnitInputValue = useMemo(() => {
+		const numberValue = extractNumber(value);
+
+		return numberValue;
+	}, [value]);
+
 	// validator checking
 	useEffect(() => {
-		if (!validator || type !== 'text') {
+		if (!validator || inputType !== 'text') {
 			// If no validator is provided, assume the value is valid
 			setIsValidValue(true);
 			return;
@@ -108,16 +114,18 @@ export function PublisherInputControl({
 			units.length
 		) {
 			setSelectedUnit(units[0]?.value);
+			setInputType('number');
 		}
 	}, [units]); //eslint-disable-line
 
 	// set unit to value after unit changed
 	useEffect(() => {
-		if (type === 'number') {
+		if (inputType === 'number') {
 			const newValue = extractNumber(value);
+
 			setValue(`${newValue}${selectedUnit}`);
 		}
-	}, [selectedUnit]); //eslint-disable-line
+	}, [selectedUnit, inputType]); //eslint-disable-line
 
 	return (
 		<BaseControl
@@ -145,6 +153,7 @@ export function PublisherInputControl({
 							if (isString(value))
 								newValue =
 									newValue + value.replace(/[0-9|-]/gi, '');
+
 							setValue(newValue);
 						}}
 						{...props}
@@ -160,7 +169,7 @@ export function PublisherInputControl({
 							noBorder && 'no-border',
 							className
 						)}
-						type={type}
+						type={inputType}
 						{...(getMinValue && getMinValue)}
 						{...(getMaxValue && getMaxValue)}
 						{...props}
@@ -168,7 +177,7 @@ export function PublisherInputControl({
 				) : (
 					<div className={controlClassNames('unit-input-container')}>
 						<input
-							value={extractNumber(value)}
+							value={getUnitInputValue}
 							onChange={(e) =>
 								setValue(`${e.target.value}${selectedUnit}`)
 							}
@@ -178,7 +187,7 @@ export function PublisherInputControl({
 								noBorder && 'no-border',
 								className
 							)}
-							type={type}
+							type={inputType}
 							{...(getMinValue && getMinValue)}
 							{...(getMaxValue && getMaxValue)}
 							{...props}

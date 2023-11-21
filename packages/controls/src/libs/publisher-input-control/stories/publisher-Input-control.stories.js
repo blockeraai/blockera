@@ -59,11 +59,10 @@ export const TextInput = {
 	args: {
 		controlInfo: {
 			name: nanoid(),
-			value: '20',
+			value: '20px',
 		},
-		// label: 'My Label',
 		type: 'text',
-		value: '10px',
+		defaultValue: '10px',
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
@@ -482,26 +481,90 @@ export const UnitsInput = {
 	),
 };
 
-export const CssUnit = {
+export const CssInput = {
 	args: {
-		controlInfo: {
-			name: nanoid(),
-			value: '20',
-		},
-		label: 'My Label',
-		units,
+		unitType: 'general',
+		defaultValue: '10',
+		className: 'publisher-input',
+		value: '20',
 	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
-		<ControlWithHooks Control={PublisherInputControl} {...args} />
+		<Flex direction="column" gap="15px">
+			<h2 className="story-heading">CSS Input</h2>
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					{...args}
+					unitType="general"
+				/>
+			</ControlContextProvider>
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					{...args}
+					unitType="general"
+				/>
+			</ControlContextProvider>
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					{...args}
+					range={true}
+					unitType="general"
+				/>
+			</ControlContextProvider>
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					{...args}
+					range={true}
+					unitType="general"
+				/>
+			</ControlContextProvider>
+		</Flex>
 	),
-	decorators: [
-		WithInspectorStyles,
-		WithControlDataProvider,
-		...SharedDecorators,
-	],
-	parameters: {
-		jest: ['input.spec.js'],
+};
+
+export const Field = {
+	args: {
+		label: 'Field',
+		type: 'number',
+		defaultValue: '20',
 	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => (
+		<Flex direction="column" gap="20px">
+			<h2 className="story-heading">With Field</h2>
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks Control={PublisherInputControl} {...args} />
+			</ControlContextProvider>
+		</Flex>
+	),
 };
 
 export const WithCssValidator = {
@@ -528,8 +591,6 @@ export const WithCssValidator = {
 
 export const WithCustomValidator = {
 	args: {
-		label: 'My Label',
-		units,
 		validator: (value) => {
 			if (value === 'valid') {
 				return true;
@@ -549,13 +610,6 @@ export const WithCustomValidator = {
 				{...args}
 				defaultValue="valid"
 			/>
-
-			<h2 className="story-heading">Invalid Input</h2>
-			<ControlWithHooks
-				Control={PublisherInputControl}
-				{...args}
-				defaultValue="invalid"
-			/>
 		</Flex>
 	),
 	decorators: [
@@ -567,523 +621,3 @@ export const WithCustomValidator = {
 		jest: ['input.spec.js'],
 	},
 };
-
-// export const TextInput = {
-// 	args: {
-// 		defaultValue: '10px',
-// 		value: '20px',
-// 	},
-// 	decorators: [WithInspectorStyles, ...SharedDecorators],
-// 	render: (args) => (
-// 		<Flex direction="column" gap="15px">
-// 			<h2 className="story-heading">Text Input</h2>
-
-// 			<ControlContextProvider
-// 				value={{
-// 					name: nanoid(),
-// 					value: args.value,
-// 				}}
-// 			>
-// 				<ControlWithHooks
-// 					Control={PublisherInputControl}
-// 					type="text"
-// 					{...args}
-// 				/>
-// 			</ControlContextProvider>
-
-// 			<ControlContextProvider
-// 				value={{
-// 					name: nanoid(),
-// 					value: args.value,
-// 				}}
-// 			>
-// 				<ControlWithHooks
-// 					Control={PublisherInputControl}
-// 					type="text"
-// 					className="is-hovered"
-// 					{...args}
-// 				/>
-// 			</ControlContextProvider>
-
-// 			<ControlContextProvider
-// 				value={{
-// 					name: nanoid(),
-// 					value: args.value,
-// 				}}
-// 			>
-// 				<ControlWithHooks
-// 					Control={PublisherInputControl}
-// 					type="text"
-// 					className="is-focused"
-// 					{...args}
-// 				/>
-// 			</ControlContextProvider>
-
-// 			<ControlContextProvider
-// 				value={{
-// 					name: nanoid(),
-// 					value: args.value,
-// 				}}
-// 			>
-// 				<ControlWithHooks
-// 					Control={PublisherInputControl}
-// 					type="text"
-// 					noBorder={true}
-// 					{...args}
-// 				/>
-// 			</ControlContextProvider>
-
-// 			<ControlContextProvider
-// 				value={{
-// 					name: nanoid(),
-// 					value: args.value,
-// 				}}
-// 			>
-// 				<ControlWithHooks
-// 					Control={PublisherInputControl}
-// 					type="text"
-// 					className="is-focused"
-// 					noBorder={true}
-// 					{...args}
-// 				/>
-// 			</ControlContextProvider>
-// 		</Flex>
-// 	),
-// };
-
-// export const NumberInput = {
-// 	args: {
-// 		defaultValue: '10px',
-// 		value: '20',
-// 	},
-// 	decorators: [WithInspectorStyles, ...SharedDecorators],
-// 	render: (args) => (
-// 		<Flex direction="column" gap="30px">
-// 			<Flex direction="column" gap="15px">
-// 				<h2 className="story-heading">Number Input</h2>
-
-// 				<ControlContextProvider
-// 					value={{
-// 						name: nanoid(),
-// 						value: 0,
-// 					}}
-// 				>
-// 					<ControlWithHooks
-// 						Control={PublisherInputControl}
-// 						{...args}
-// 						type="number"
-// 					/>
-// 				</ControlContextProvider>
-
-// 				<ControlContextProvider
-// 					value={{
-// 						name: nanoid(),
-// 						value: 10,
-// 					}}
-// 				>
-// 					<ControlWithHooks
-// 						Control={PublisherInputControl}
-// 						{...args}
-// 						type="number"
-// 						className="is-hovered"
-// 					/>
-// 				</ControlContextProvider>
-
-// 				<ControlContextProvider
-// 					value={{
-// 						name: nanoid(),
-// 						value: 20,
-// 					}}
-// 				>
-// 					<ControlWithHooks
-// 						Control={PublisherInputControl}
-// 						{...args}
-// 						type="number"
-// 						className="is-focused"
-// 					/>
-// 				</ControlContextProvider>
-
-// 				<ControlContextProvider
-// 					value={{
-// 						name: nanoid(),
-// 						value: 30,
-// 					}}
-// 				>
-// 					<ControlWithHooks
-// 						Control={PublisherInputControl}
-// 						{...args}
-// 						type="number"
-// 						noBorder={true}
-// 					/>
-// 				</ControlContextProvider>
-
-// 				<ControlContextProvider
-// 					value={{
-// 						name: nanoid(),
-// 						value: 40,
-// 					}}
-// 				>
-// 					<ControlWithHooks
-// 						Control={PublisherInputControl}
-// 						{...args}
-// 						type="number"
-// 						className="is-focused"
-// 						noBorder={true}
-// 					/>
-// 				</ControlContextProvider>
-// 			</Flex>
-
-// 			<Flex direction="column" gap="15px">
-// 				<h2 className="story-heading">Range Number Input</h2>
-
-// 				<ControlContextProvider
-// 					value={{
-// 						name: nanoid(),
-// 						value: 50,
-// 					}}
-// 				>
-// 					<ControlWithHooks
-// 						Control={PublisherInputControl}
-// 						{...args}
-// 						range={true}
-// 						type="number"
-// 					/>
-// 				</ControlContextProvider>
-
-// 				<ControlContextProvider
-// 					value={{
-// 						name: nanoid(),
-// 						value: 60,
-// 					}}
-// 				>
-// 					<ControlWithHooks
-// 						Control={PublisherInputControl}
-// 						{...args}
-// 						range={true}
-// 						type="number"
-// 						className="is-hovered"
-// 					/>
-// 				</ControlContextProvider>
-
-// 				<ControlContextProvider
-// 					value={{
-// 						name: nanoid(),
-// 						value: 70,
-// 					}}
-// 				>
-// 					<ControlWithHooks
-// 						Control={PublisherInputControl}
-// 						{...args}
-// 						range={true}
-// 						type="number"
-// 						className="is-focused"
-// 					/>
-// 				</ControlContextProvider>
-
-// 				<ControlContextProvider
-// 					value={{
-// 						name: nanoid(),
-// 						value: 80,
-// 					}}
-// 				>
-// 					<ControlWithHooks
-// 						Control={PublisherInputControl}
-// 						{...args}
-// 						range={true}
-// 						type="number"
-// 						noBorder={true}
-// 					/>
-// 				</ControlContextProvider>
-
-// 				<ControlContextProvider
-// 					value={{
-// 						name: nanoid(),
-// 						value: 90,
-// 					}}
-// 				>
-// 					<ControlWithHooks
-// 						Control={PublisherInputControl}
-// 						{...args}
-// 						range={true}
-// 						type="number"
-// 						className="is-focused"
-// 						noBorder={true}
-// 					/>
-// 				</ControlContextProvider>
-// 			</Flex>
-// 		</Flex>
-// 	),
-// };
-
-// export const UnitsInput = {
-// 	args: {
-// 		defaultValue: '10px',
-// 		value: '20px',
-// 	},
-// 	decorators: [WithInspectorStyles, ...SharedDecorators],
-// 	render: (args) => (
-// 		<Flex direction="column" gap="30px">
-// 			<Flex direction="column" gap="15px">
-// 				<h2 className="story-heading">Units Input</h2>
-// 				<ControlContextProvider
-// 					value={{
-// 						name: nanoid(),
-// 						value: args.value,
-// 					}}
-// 				>
-// 					<ControlWithHooks
-// 						Control={PublisherInputControl}
-// 						{...args}
-// 						units={units}
-// 						type="number"
-// 					/>
-// 				</ControlContextProvider>
-// 				<ControlContextProvider
-// 					value={{
-// 						name: nanoid(),
-// 						value: args.value,
-// 					}}
-// 				>
-// 					<ControlWithHooks
-// 						Control={PublisherInputControl}
-// 						{...args}
-// 						units={units}
-// 						type="number"
-// 						className="is-hovered"
-// 					/>
-// 				</ControlContextProvider>
-// 				<ControlContextProvider
-// 					value={{
-// 						name: nanoid(),
-// 						value: args.value,
-// 					}}
-// 				>
-// 					<ControlWithHooks
-// 						Control={PublisherInputControl}
-// 						{...args}
-// 						units={units}
-// 						type="number"
-// 						className="is-focused"
-// 					/>
-// 				</ControlContextProvider>
-// 				<ControlContextProvider
-// 					value={{
-// 						name: nanoid(),
-// 						value: args.value,
-// 					}}
-// 				>
-// 					<ControlWithHooks
-// 						Control={PublisherInputControl}
-// 						{...args}
-// 						units={units}
-// 						type="number"
-// 						noBorder={true}
-// 					/>
-// 				</ControlContextProvider>
-// 				<ControlContextProvider
-// 					value={{
-// 						name: nanoid(),
-// 						value: args.value,
-// 					}}
-// 				>
-// 					<ControlWithHooks
-// 						Control={PublisherInputControl}
-// 						{...args}
-// 						units={units}
-// 						type="number"
-// 						className="is-focused"
-// 						noBorder={true}
-// 					/>
-// 				</ControlContextProvider>
-// 			</Flex>
-
-// 			<Flex direction="column" gap="15px">
-// 				<h2 className="story-heading">Range Units Input</h2>
-// 				<ControlContextProvider
-// 					value={{
-// 						name: nanoid(),
-// 						value: args.value,
-// 					}}
-// 				>
-// 					<ControlWithHooks
-// 						Control={PublisherInputControl}
-// 						{...args}
-// 						range={true}
-// 						units={units}
-// 						type="number"
-// 					/>
-// 				</ControlContextProvider>
-// 				<ControlContextProvider
-// 					value={{
-// 						name: nanoid(),
-// 						value: args.value,
-// 					}}
-// 				>
-// 					<ControlWithHooks
-// 						Control={PublisherInputControl}
-// 						{...args}
-// 						range={true}
-// 						units={units}
-// 						type="number"
-// 						className="is-hovered"
-// 					/>
-// 				</ControlContextProvider>
-// 				<ControlContextProvider
-// 					value={{
-// 						name: nanoid(),
-// 						value: args.value,
-// 					}}
-// 				>
-// 					<ControlWithHooks
-// 						Control={PublisherInputControl}
-// 						{...args}
-// 						range={true}
-// 						units={units}
-// 						type="number"
-// 						className="is-focused"
-// 					/>
-// 				</ControlContextProvider>
-// 				<ControlContextProvider
-// 					value={{
-// 						name: nanoid(),
-// 						value: args.value,
-// 					}}
-// 				>
-// 					<ControlWithHooks
-// 						Control={PublisherInputControl}
-// 						{...args}
-// 						range={true}
-// 						units={units}
-// 						type="number"
-// 						noBorder={true}
-// 					/>
-// 				</ControlContextProvider>
-// 				<ControlContextProvider
-// 					value={{
-// 						name: nanoid(),
-// 						value: args.value,
-// 					}}
-// 				>
-// 					<ControlWithHooks
-// 						Control={PublisherInputControl}
-// 						{...args}
-// 						range={true}
-// 						units={units}
-// 						type="number"
-// 						className="is-focused"
-// 						noBorder={true}
-// 					/>
-// 				</ControlContextProvider>
-// 			</Flex>
-// 		</Flex>
-// 	),
-// };
-
-// export const CssInput = {
-// 	args: {
-// 		unitType: 'general',
-// 		defaultValue: '10px',
-// 		className: 'publisher-input',
-// 		value: '20px',
-// 	},
-// 	decorators: [WithInspectorStyles, ...SharedDecorators],
-// 	render: (args) => (
-// 		<Flex direction="column" gap="15px">
-// 			<h2 className="story-heading">CSS Input</h2>
-// 			<ControlContextProvider
-// 				value={{
-// 					name: nanoid(),
-// 					value: args.value,
-// 				}}
-// 			>
-// 				<ControlWithHooks
-// 					Control={PublisherInputControl}
-// 					{...args}
-// 					unitType="general"
-// 				/>
-// 			</ControlContextProvider>
-// 			<ControlContextProvider
-// 				value={{
-// 					name: nanoid(),
-// 					value: args.value,
-// 				}}
-// 			>
-// 				<ControlWithHooks
-// 					Control={PublisherInputControl}
-// 					{...args}
-// 					unitType="general"
-// 					value="1auto"
-// 				/>
-// 			</ControlContextProvider>
-// 			<ControlContextProvider
-// 				value={{
-// 					name: nanoid(),
-// 					value: args.value,
-// 				}}
-// 			>
-// 				<ControlWithHooks
-// 					Control={PublisherInputControl}
-// 					{...args}
-// 					range={true}
-// 					unitType="general"
-// 				/>
-// 			</ControlContextProvider>
-// 			<ControlContextProvider
-// 				value={{
-// 					name: nanoid(),
-// 					value: '1auto',
-// 				}}
-// 			>
-// 				<ControlWithHooks
-// 					Control={PublisherInputControl}
-// 					{...args}
-// 					range={true}
-// 					unitType="general"
-// 				/>
-// 			</ControlContextProvider>
-// 		</Flex>
-// 	),
-// };
-
-// export const Field = {
-// 	args: {
-// 		label: 'Field',
-// 		type: 'number',
-// 		value: '20',
-// 	},
-// 	decorators: [WithInspectorStyles, ...SharedDecorators],
-// 	render: (args) => (
-// 		<Flex direction="column" gap="20px">
-// 			<h2 className="story-heading">With Field</h2>
-// 			<ControlContextProvider
-// 				value={{
-// 					name: nanoid(),
-// 					value: args.value,
-// 				}}
-// 			>
-// 				<ControlWithHooks Control={PublisherInputControl} {...args} />
-// 			</ControlContextProvider>
-// 		</Flex>
-// 	),
-// };
-
-// export const All = {
-// 	args: {
-// 		defaultValue: '10px',
-// 		value: '20px',
-// 	},
-// 	decorators: [WithInspectorStyles, ...SharedDecorators],
-// 	render: () => (
-// 		<Flex direction="column" gap="50px">
-// 			<TextInput.render {...TextInput.args} />
-
-// 			<NumberInput.render {...NumberInput.args} />
-
-// 			<UnitsInput.render {...UnitsInput.args} />
-
-// 			<CssInput.render {...CssInput.args} />
-
-// 			<Field.render {...Field.args} />
-// 		</Flex>
-// 	),
-// };

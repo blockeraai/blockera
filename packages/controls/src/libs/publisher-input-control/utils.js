@@ -23,7 +23,6 @@ export function extractNumber(text) {
 	if (text && isString(text)) {
 		const regex = /\d+/;
 		const match = text.match(regex);
-
 		if (match) {
 			return match[0];
 		}
