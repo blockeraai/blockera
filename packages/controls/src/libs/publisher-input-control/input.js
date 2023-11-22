@@ -12,12 +12,14 @@ export function Input({
 	getMinValue,
 	noBorder,
 	className,
+	disabled,
 	...props
 }) {
 	return (
 		<input
 			value={value}
 			onChange={(e) => setValue(e.target.value)}
+			disabled={disabled}
 			className={controlClassNames(
 				'single-input',
 				!isValid && 'invalid',

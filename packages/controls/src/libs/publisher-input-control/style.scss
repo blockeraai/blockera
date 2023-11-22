@@ -5,9 +5,9 @@
 		border: 1px solid var(--publisher-controls-border-color);
 		border-radius: 0;
 
-		&:hover {
-			border-color: var(--publisher-controls-border-color-hover);
-		}
+		// &:hover {
+		// 	border-color: var(--publisher-controls-border-color-hover);
+		// }
 
 		&:focus {
 			border-color: var(--publisher-controls-border-color-focus);
@@ -18,6 +18,7 @@
 			border: 1px solid var(--publisher-controls-invalid-input-border-color);
 			box-shadow: 0 0 0 1px var(--publisher-controls-invalid-input-border-color);
 		}
+
 	}
 
 	&.is-hovered:not(:hover, :focus, .is-focused) {

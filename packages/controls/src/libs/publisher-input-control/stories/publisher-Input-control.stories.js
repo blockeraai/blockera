@@ -138,6 +138,19 @@ export const TextInput = {
 					{...args}
 				/>
 			</ControlContextProvider>
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					type="number"
+					disabled
+					{...args}
+				/>
+			</ControlContextProvider>
 		</Flex>
 	),
 };

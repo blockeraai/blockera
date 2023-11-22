@@ -41,6 +41,7 @@ export function PublisherInputControl({
 	min,
 	max,
 	validator,
+	disabled = false,
 	...props
 }) {
 	const { value, setValue } = useControlContext({
@@ -134,6 +135,7 @@ export function PublisherInputControl({
 						getMinValue={getMinValue}
 						noBorder={noBorder}
 						className={className}
+						disabled={disabled}
 						{...props}
 					/>
 				) : (
@@ -149,6 +151,7 @@ export function PublisherInputControl({
 						className={className}
 						special={isSpecial}
 						setIsSpecial={setIsSpecial}
+						disabled={disabled}
 						{...props}
 					/>
 				)}
@@ -208,6 +211,10 @@ PublisherInputControl.propTypes = {
 	 */
 	noBorder: PropTypes.bool,
 	/**
+	 * By using this you can disable the control.
+	 */
+	disabled: PropTypes.bool,
+	/**
 	 * The minimum `value` allowed.
 	 */
 	min: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -215,10 +222,6 @@ PublisherInputControl.propTypes = {
 	 * The maximum `value` allowed.
 	 */
 	max: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-	/**
-	 * Disables the `input`, preventing new values from being applied.
-	 */
-	disabled: PropTypes.bool,
 	/**
 	 * check the `input`,  A function used to validate input values.
 	 */

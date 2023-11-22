@@ -23,6 +23,7 @@ export function UnitInput({
 	units = [],
 	setIsSpecial,
 	isSpecial,
+	disabled,
 	...props
 }) {
 	const [selectedUnit, setSelectedUnit] = useState('');
@@ -41,7 +42,7 @@ export function UnitInput({
 			setIsSpecial(true);
 			setSelectedUnit(unitValue);
 		}
-	}, []);
+	}, []); // eslint-disable-line
 
 	return (
 		<div className={controlClassNames('unit-input-container')}>
@@ -52,6 +53,7 @@ export function UnitInput({
 					setValue(`${e.target.value}`);
 					// setValue(`${e.target.value}${selectedUnit}`);
 				}}
+				disabled={disabled}
 				className={controlClassNames(
 					'single-input',
 					noBorder && 'no-border',
@@ -64,6 +66,7 @@ export function UnitInput({
 			/>
 			<span className={controlClassNames('input-suffix')}>
 				<select
+					disabled={disabled}
 					onChange={(e) => {
 						if (isSpecialUnit(e.target.value)) {
 							setIsSpecial(true);
