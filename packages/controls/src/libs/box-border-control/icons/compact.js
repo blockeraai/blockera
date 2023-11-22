@@ -7,8 +7,9 @@ export default function CompactIcon({}) {
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			<path
-				d="M0 14V0H2L2 12H12V2L2 2L2 0H14V14L0 14Z"
-				fill="currentColor"
+				fillRule="evenodd"
+				clipRule="evenodd"
+				d="M0 0H14V1.36842H0V0ZM12.6316 1.36842H14V14H12.6316V1.36842ZM1.36842 1.36842V13.3158V14H0V1.36842H1.36842ZM1.36842 13.3158V12.6316H12.6316V14H1.36842V13.3158Z"
 			/>
 		</svg>
 	);
