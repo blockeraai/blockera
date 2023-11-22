@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -15,13 +16,18 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
+/**
+ * Types
+ */
+import type { TTextShadowControlProps } from './types/text-shadow-control-props';
+import type { MixedElement } from 'react';
 
 export default function TextShadowControl({
 	defaultRepeaterItemValue,
 	popoverLabel,
 	className,
 	...props
-}) {
+}: TTextShadowControlProps): MixedElement {
 	return (
 		<RepeaterControl
 			className={controlClassNames('text-shadow', className)}
@@ -50,6 +56,7 @@ TextShadowControl.propTypes = {
 	/**
 	 * Default value of each repeater item
 	 */
+	// $FlowFixMe
 	defaultRepeaterItemValue: PropTypes.shape({
 		x: PropTypes.string,
 		y: PropTypes.string,
@@ -64,6 +71,7 @@ TextShadowControl.propTypes = {
 };
 
 TextShadowControl.defaultProps = {
+	// $FlowFixMe
 	value: [],
 	defaultRepeaterItemValue: {
 		x: '1px',
@@ -72,5 +80,6 @@ TextShadowControl.defaultProps = {
 		color: '',
 		isVisible: true,
 	},
+	// $FlowFixMe
 	popoverLabel: __('Text Shadow', 'publisher-core'),
 };

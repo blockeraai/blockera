@@ -1,3 +1,4 @@
+// @flow
 /**
  * WordPress dependencies
  */
@@ -16,9 +17,11 @@ import { ColorIndicator, Button } from '@publisher/components';
 import { BaseControl, ColorPickerControl } from '../index';
 import PropTypes from 'prop-types';
 import { useControlContext } from '../../context';
+import type { MixedElement } from 'react';
+import type { Props } from './types';
 
 export default function ColorControl({
-	type,
+	type = 'normal',
 	noBorder,
 	contentAlign,
 	//
@@ -33,7 +36,7 @@ export default function ColorControl({
 	className,
 	style,
 	...props
-}) {
+}: Props): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
 		onChange,
@@ -42,13 +45,17 @@ export default function ColorControl({
 
 	const [isOpen, setOpen] = useState(false);
 
-	let buttonLabel = '';
+	let buttonLabel: MixedElement;
 
 	if (type === 'normal') {
 		buttonLabel = value ? (
-			<span className="color-label">{value}</span>
+			<span className="color-label" data-cy="color-label">
+				{value}
+			</span>
 		) : (
-			<span className="color-label">{__('None', 'publisher-core')}</span>
+			<span className="color-label" data-cy="color-label">
+				{__('None', 'publisher-core')}
+			</span>
 		);
 	}
 
@@ -75,9 +82,14 @@ export default function ColorControl({
 					...style,
 					'--publisher-controls-border-color-focus': value,
 				}}
+				data-cy="color-btn"
 				{...props}
 			>
-				<ColorIndicator type="color" value={value} />
+				<ColorIndicator
+					type="color"
+					value={value}
+					data-cy="color-indicator"
+				/>
 
 				{buttonLabel}
 			</Button>
@@ -105,11 +117,11 @@ ColorControl.propTypes = {
 	/**
 	 * Type of CSS units from presets
 	 */
-	type: PropTypes.oneOf(['normal', 'minimal']),
+	type: (PropTypes.oneOf(['normal', 'minimal']): any),
 	/**
 	 * It is useful for buttons with specified width and allows you to align the content to `left` or `right`. By default, it's `center` and handled by flex justify-content property.
 	 */
-	contentAlign: PropTypes.oneOf(['left', 'center', 'right']),
+	contentAlign: (PropTypes.oneOf(['left', 'center', 'right']): any),
 	/**
 	 * ID for retrieving value from control context
 	 */

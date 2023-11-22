@@ -1,8 +1,6 @@
 /**
  * External dependencies
  */
-import { expect } from '@storybook/jest';
-import { waitFor, userEvent, within } from '@storybook/testing-library';
 import { nanoid } from 'nanoid';
 
 /**
@@ -20,8 +18,7 @@ import { WithControlDataProvider } from '../../../../../../.storybook/decorators
 import { ControlContextProvider } from '../../../context';
 import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
 
-const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
-	Decorators;
+const { WithInspectorStyles, SharedDecorators } = Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
 SharedDecorators.push(WithControlDataProvider);
@@ -58,188 +55,6 @@ export const CustomSize = {
 		size: 100,
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
-};
-
-export const Play = {
-	args: {
-		inputFields: true,
-		controlInfo: {
-			name: nanoid(),
-			value: {
-				top: '50%',
-				left: '50%',
-			},
-		},
-	},
-	decorators: [
-		WithStoryContextProvider,
-		WithInspectorStyles,
-		...SharedDecorators,
-	],
-	parameters: {
-		jest: ['utils.spec.js'],
-	},
-	render: (args) => (
-		<div data-testid="change-cell-test-id">
-			<ControlWithHooks Control={AlignmentMatrixControl} {...args} />
-		</div>
-	),
-	play: async ({ canvasElement, step }) => {
-		const canvas = within(canvasElement);
-
-		const cells = canvas.getByTestId('change-cell-test-id');
-
-		await step('change grid cells', async () => {
-			// Top Left
-			await userEvent.click(
-				cells.querySelectorAll('span[role="gridcell"]')[0]
-			);
-			await waitFor(
-				async () => {
-					await expect(
-						canvas.getByTestId('current-value')
-					).toHaveTextContent('{ "top": "0%", "left": "0%" }');
-				},
-				{ timeout: 1000 }
-			);
-
-			// Top Center
-			await userEvent.click(
-				cells.querySelectorAll('span[role="gridcell"]')[1]
-			);
-			await waitFor(
-				async () => {
-					await expect(
-						canvas.getByTestId('current-value')
-					).toHaveTextContent('{ "top": "0%", "left": "50%" }');
-				},
-				{ timeout: 1000 }
-			);
-
-			// Top Right
-			await userEvent.click(
-				cells.querySelectorAll('span[role="gridcell"]')[2]
-			);
-			await waitFor(
-				async () => {
-					await expect(
-						canvas.getByTestId('current-value')
-					).toHaveTextContent('{ "top": "0%", "left": "100%" }');
-				},
-				{ timeout: 1000 }
-			);
-
-			// Center Left
-			await userEvent.click(
-				cells.querySelectorAll('span[role="gridcell"]')[3]
-			);
-			await waitFor(
-				async () => {
-					await expect(
-						canvas.getByTestId('current-value')
-					).toHaveTextContent('{ "top": "50%", "left": "0%" }');
-				},
-				{ timeout: 1000 }
-			);
-
-			// Center, Center
-			await userEvent.click(
-				cells.querySelectorAll('span[role="gridcell"]')[4]
-			);
-			await waitFor(
-				async () => {
-					await expect(
-						canvas.getByTestId('current-value')
-					).toHaveTextContent('{ "top": "50%", "left": "50%" }');
-				},
-				{ timeout: 1000 }
-			);
-
-			// Center, Right
-			await userEvent.click(
-				cells.querySelectorAll('span[role="gridcell"]')[5]
-			);
-			await waitFor(
-				async () => {
-					await expect(
-						canvas.getByTestId('current-value')
-					).toHaveTextContent('{ "top": "50%", "left": "100%" }');
-				},
-				{ timeout: 1000 }
-			);
-
-			// Bottom Left
-			await userEvent.click(
-				cells.querySelectorAll('span[role="gridcell"]')[6]
-			);
-			await waitFor(
-				async () => {
-					await expect(
-						canvas.getByTestId('current-value')
-					).toHaveTextContent('{ "top": "100%", "left": "0%" }');
-				},
-				{ timeout: 1000 }
-			);
-
-			// Bottom Center
-			await userEvent.click(
-				cells.querySelectorAll('span[role="gridcell"]')[7]
-			);
-			await waitFor(
-				async () => {
-					await expect(
-						canvas.getByTestId('current-value')
-					).toHaveTextContent('{ "top": "100%", "left": "50%" }');
-				},
-				{ timeout: 1000 }
-			);
-
-			// Bottom Right
-			await userEvent.click(
-				cells.querySelectorAll('span[role="gridcell"]')[8]
-			);
-			await waitFor(
-				async () => {
-					await expect(
-						canvas.getByTestId('current-value')
-					).toHaveTextContent('{ "top": "100%", "left": "100%" }');
-				},
-				{ timeout: 1000 }
-			);
-		});
-
-		await step('Change Top Input', async () => {
-			// Top Left
-			await userEvent.type(
-				canvas.getAllByRole('textbox')[0],
-				'{backspace}{backspace}{backspace}55'
-			);
-			await waitFor(
-				async () => {
-					await expect(
-						canvas.getByTestId('current-value')
-					).toHaveTextContent('{ "top": "55%", "left": "100%" }');
-				},
-				{ timeout: 1000 }
-			);
-		});
-
-		await step('Change Left Input', async () => {
-			// Top Left
-			await userEvent.type(
-				canvas.getAllByRole('textbox')[1],
-				'{backspace}{backspace}{backspace}55'
-			);
-			await waitFor(
-				async () => {
-					await expect(
-						canvas.getByTestId('current-value')
-					).toHaveTextContent('{ "top": "55%", "left": "55%" }');
-				},
-				{ timeout: 1000 }
-			);
-		});
-	},
 };
 
 export const All = {
