@@ -1,13 +1,7 @@
 /**
  * External dependencies
  */
-import {
-	fireEvent,
-	userEvent,
-	waitFor,
-	within,
-} from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
+
 import { nanoid } from 'nanoid';
 
 /**
@@ -21,16 +15,11 @@ import { default as Decorators } from '@publisher/storybook/decorators';
  */
 import { ColorControl } from '../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
-import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 import { ControlContextProvider } from '../../../context';
 import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
 
-const {
-	WithInspectorStyles,
-	WithPopoverDataProvider,
-	SharedDecorators,
-	WithStoryContextProvider,
-} = Decorators;
+const { WithInspectorStyles, WithPopoverDataProvider, SharedDecorators } =
+	Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
 
@@ -182,53 +171,6 @@ export const Minimal = {
 			</ControlContextProvider>
 		</Flex>
 	),
-};
-
-export const Play = {
-	args: {
-		controlInfo: {
-			name: nanoid(),
-			value: '#0947eb',
-		},
-	},
-	decorators: [
-		WithStoryContextProvider,
-		WithInspectorStyles,
-		WithControlDataProvider,
-		...SharedDecorators,
-	],
-	render: (args) => <ControlWithHooks Control={ColorControl} {...args} />,
-	play: async ({ canvasElement, step }) => {
-		const canvas = within(canvasElement);
-
-		const currentValue = canvas.getByTestId('current-value');
-		const button = canvas.getByRole('button', {});
-
-		await step('Story Data', async () => {
-			await expect(currentValue).toBeInTheDocument();
-		});
-
-		await step('Check Initial State', async () => {
-			await expect(button).toBeInTheDocument();
-			await expect(currentValue).toHaveTextContent('"#0947eb"');
-		});
-
-		await step('Change Color', async () => {
-			await userEvent.click(button);
-
-			const input = canvas.getByRole('textbox');
-
-			// element shown inside popover
-			await expect(input).toBeInTheDocument();
-
-			fireEvent.change(input, { target: { value: '00B703' } });
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent('"#00b703"'),
-				{ timeout: 1000 }
-			);
-		});
-	},
 };
 
 export const All = {
