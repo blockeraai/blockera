@@ -7,8 +7,6 @@ import {
 } from '../../../../../../cypress/helpers';
 
 describe('Position Extension', () => {
-	beforeEach(() => cy.viewport(1280, 720));
-
 	//describe('Extension Initializing', () => {...});
 
 	describe('Position', () => {
@@ -657,7 +655,7 @@ describe('Position Extension', () => {
 							.should('eq', '0px');
 					});
 
-					it.only('should add bottom & right & left & top properties, when click on center', () => {
+					it('should add bottom & right & left & top properties, when click on center', () => {
 						cy.get('@position-extension').within(() => {
 							cy.get('[aria-label="Center"]').click();
 						});
@@ -665,11 +663,16 @@ describe('Position Extension', () => {
 						//Check block
 						cy.getIframeBody()
 							.find(`[data-type="core/paragraph"]`)
-							.should('have.css', 'position', 'absolute')
-							.and('have.css', 'top', '20%')
-							.and('have.css', 'bottom', '20%')
-							.and('have.css', 'right', '20%')
-							.and('have.css', 'left', '20%');
+							.parent()
+							.within(() => {
+								cy.get('style')
+									.invoke('text')
+									.should('include', 'position: absolute')
+									.and('include', 'top: 20%')
+									.and('include', 'bottom: 20%')
+									.and('include', 'left: 20%')
+									.and('include', 'right: 20%');
+							});
 
 						//Check store
 						getWPDataObject().then((data) => {
@@ -692,25 +695,22 @@ describe('Position Extension', () => {
 						redirectToFrontPage();
 
 						cy.get('.publisher-paragraph')
-							.then(($el) => {
-								return window.getComputedStyle($el[0]);
+							.invoke('attr', 'class')
+							.then((classes) => {
+								return classes.split(' ');
 							})
-							.as('element-style');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'position')
-							.should('eq', 'absolute');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'top')
-							.should('eq', '20%');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'right')
-							.should('eq', '20%');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'bottom')
-							.should('eq', '20%');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'left')
-							.should('eq', '20%');
+							.then((classNames) => {
+								cy.get('#core-block-supports-inline-css')
+									.invoke('text')
+									.should(
+										'include',
+										`${[classNames.length - 1]}`
+									)
+									.and('include', 'top:20%')
+									.and('include', 'bottom:20%')
+									.and('include', 'left:20%')
+									.and('include', 'right:20%');
+							});
 					});
 				});
 			});
