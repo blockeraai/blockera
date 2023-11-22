@@ -280,8 +280,8 @@ describe('group control component testing', () => {
 			cy.get('[data-cy="plus-svg"]').should('be.visible');
 			cy.get('[data-cy="minus-svg"]').should('be.visible');
 			cy.get('[data-cy="minus-svg"]').click();
-			cy.get('[aria-label="Close Modal"]').should('be.visible');
-			cy.get('[aria-label="Close Modal"]').click();
+			cy.get('[aria-label="Close"]').should('be.visible');
+			cy.get('[aria-label="Close"]').click();
 		});
 		it('should render custom popover label', () => {
 			cy.withDataProvider({
@@ -304,7 +304,7 @@ describe('group control component testing', () => {
 				.and('have.class', 'custom-classname');
 			cy.get('[data-cy="plus-svg"]').should('be.visible');
 			cy.get('[data-cy="minus-svg"]').should('be.visible');
-			cy.get('[aria-label="Close Modal"]').should('be.visible');
+			cy.get('[aria-label="Close"]').should('be.visible');
 			cy.get('.publisher-component-popover-header').should(
 				'contain',
 				'👋 Popover Title'
