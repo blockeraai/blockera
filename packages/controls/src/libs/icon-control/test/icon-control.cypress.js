@@ -84,10 +84,17 @@ describe('icon-control', () => {
 			// act
 			cy.get('[aria-label="button Icon"]').click();
 			cy.get('button[aria-label="Save draft"]').click();
-			cy.reload();
 
-			// TODO
-			cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
+			cy.visit(
+				Cypress.env('testURL') + '/wp-admin/edit.php?post_type=post'
+			).then(() => {
+				cy.get('[aria-label="“(no title)” (Edit)"]').first().click();
+
+				// wrap
+				cy.getIframeBody();
+
+				cy.getIframeBody().find('[data-type="core/paragraph"]').click();
+			});
 		});
 	});
 });
