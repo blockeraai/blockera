@@ -15,7 +15,7 @@ import {
 	ToggleSelectControl,
 	ControlContextProvider,
 } from '@publisher/controls';
-import { Button, Popover, Flex } from '@publisher/components';
+import { Button, Popover } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
@@ -61,70 +61,68 @@ export const TransformSettings = ({
 				setIsTransformSettingsVisible(false);
 			}}
 		>
-			<BaseControl columns="columns-2">
-				<ControlContextProvider
-					value={{
-						name: generateExtensionId(block, 'self-perspective'),
-						value: transformSelfPerspective,
-					}}
+			<ControlContextProvider
+				value={{
+					name: generateExtensionId(block, 'self-perspective'),
+					value: transformSelfPerspective,
+				}}
+			>
+				<BaseControl
+					label={__('Self Perspective', 'publisher-core')}
+					columns="columns-2"
+					className={'publisher-transform-self-perspective'}
 				>
-					<Flex
-						justifyContent="flex-start"
-						alignItems="stretch"
-						gap="10px"
-						style={{ height: '30px' }}
-					>
-						<InputControl
-							controlName="input"
-							label={__('Self Perspective', 'publisher-core')}
-							columns="columns-2"
-							{...{
-								...props,
-								unitType: 'essential',
-								range: true,
-								min: 0,
-								max: 2000,
-								initialPosition: 100,
-								defaultValue: '0px',
-								onChange: (newValue) =>
-									handleOnChangeAttributes(
-										'publisherTransformSelfPerspective',
-										newValue
-									),
-							}}
-						/>
-						<Button
-							label={__('Origin Self', 'publisher-core')}
-							onClick={() => {
-								setIsSelfOriginVisible(!isSelfOriginVisible);
-							}}
-							size="small"
-							style={{
-								padding: '6px',
-								color:
-									!transformSelfOrigin?.top ||
-									!transformSelfOrigin?.left
-										? 'black'
-										: 'var(--publisher-controls-border-color-focus)',
-							}}
-						>
-							{OriginIcon(
-								transformSelfOrigin?.top,
-								transformSelfOrigin?.left
-							)}
-						</Button>
-					</Flex>
-				</ControlContextProvider>
-
-				{isSelfOriginVisible && (
-					<SelfOrigin
-						transformSelfOrigin={transformSelfOrigin}
-						handleOnChangeAttributes={handleOnChangeAttributes}
-						setIsSelfOriginVisible={setIsSelfOriginVisible}
-						block={block}
+					<InputControl
+						controlName="input"
+						{...{
+							...props,
+							unitType: 'essential',
+							range: true,
+							min: 0,
+							max: 2000,
+							initialPosition: 100,
+							defaultValue: '0px',
+							onChange: (newValue) =>
+								handleOnChangeAttributes(
+									'publisherTransformSelfPerspective',
+									newValue
+								),
+						}}
 					/>
-				)}
-			</BaseControl>
+					<Button
+						label={__('Self Perspective Origin', 'publisher-core')}
+						showTooltip={true}
+						tooltipPosition="top"
+						onClick={() => {
+							setIsSelfOriginVisible(!isSelfOriginVisible);
+						}}
+						size="small"
+						style={{
+							padding: '5px',
+							width: '30px',
+							height: '30px',
+							color:
+								!transformSelfOrigin?.top ||
+								!transformSelfOrigin?.left
+									? 'var(--publisher-controls-color)'
+									: 'var(--publisher-controls-border-color-focus)',
+						}}
+					>
+						{OriginIcon(
+							transformSelfOrigin?.top,
+							transformSelfOrigin?.left
+						)}
+					</Button>
+					{isSelfOriginVisible && (
+						<SelfOrigin
+							transformSelfOrigin={transformSelfOrigin}
+							handleOnChangeAttributes={handleOnChangeAttributes}
+							setIsSelfOriginVisible={setIsSelfOriginVisible}
+							block={block}
+						/>
+					)}
+				</BaseControl>
+			</ControlContextProvider>
 
 			<ControlContextProvider
 				value={{
@@ -156,71 +154,69 @@ export const TransformSettings = ({
 				/>
 			</ControlContextProvider>
 
-			<BaseControl columns="columns-2">
-				<ControlContextProvider
-					value={{
-						name: generateExtensionId(block, 'child-perspective'),
-						value: transformChildPerspective
-							? transformChildPerspective
-							: '0px',
-					}}
+			<ControlContextProvider
+				value={{
+					name: generateExtensionId(block, 'child-perspective'),
+					value: transformChildPerspective
+						? transformChildPerspective
+						: '0px',
+				}}
+			>
+				<BaseControl
+					label={__('Child Perspective', 'publisher-core')}
+					columns="columns-2"
+					className={'publisher-transform-child-perspective'}
 				>
-					<Flex
-						justifyContent="flex-start"
-						alignItems="stretch"
-						gap="10px"
-						style={{ height: '30px' }}
-					>
-						<InputControl
-							controlName="input"
-							label={__('Child Perspective', 'publisher-core')}
-							columns="columns-2"
-							{...{
-								...props,
-								unitType: 'essential',
-								range: true,
-								min: 0,
-								max: 2000,
-								defaultValue: '0px',
-								onChange: (newValue) =>
-									handleOnChangeAttributes(
-										'publisherTransformChildPerspective',
-										newValue
-									),
-							}}
-						/>
-						<Button
-							onClick={() => {
-								setIsChildOriginVisible(!isChildOriginVisible);
-							}}
-							label={__('Origin Child', 'publisher-core')}
-							size="small"
-							style={{
-								padding: '6px',
-								color:
-									!transformChildOrigin.top ||
-									!transformChildOrigin.left
-										? 'black'
-										: 'var(--publisher-controls-border-color-focus)',
-							}}
-						>
-							{OriginIcon(
-								transformChildOrigin.top,
-								transformChildOrigin.left
-							)}
-						</Button>
-					</Flex>
-				</ControlContextProvider>
-
-				{isChildOriginVisible && (
-					<ChildOrigin
-						setIsChildOriginVisible={setIsChildOriginVisible}
-						transformChildOrigin={transformChildOrigin}
-						block={block}
-						handleOnChangeAttributes={handleOnChangeAttributes}
+					<InputControl
+						controlName="input"
+						{...{
+							...props,
+							unitType: 'essential',
+							range: true,
+							min: 0,
+							max: 2000,
+							defaultValue: '0px',
+							onChange: (newValue) =>
+								handleOnChangeAttributes(
+									'publisherTransformChildPerspective',
+									newValue
+								),
+						}}
 					/>
-				)}
-			</BaseControl>
+					<Button
+						onClick={() => {
+							setIsChildOriginVisible(!isChildOriginVisible);
+						}}
+						label={__('Child Perspective Origin', 'publisher-core')}
+						showTooltip={true}
+						tooltipPosition="top"
+						size="small"
+						style={{
+							padding: '5px',
+							width: '30px',
+							height: '30px',
+							color:
+								!transformChildOrigin.top ||
+								!transformChildOrigin.left
+									? 'var(--publisher-controls-color)'
+									: 'var(--publisher-controls-border-color-focus)',
+						}}
+					>
+						{OriginIcon(
+							transformChildOrigin.top,
+							transformChildOrigin.left
+						)}
+					</Button>
+					{isChildOriginVisible && (
+						<ChildOrigin
+							setIsChildOriginVisible={setIsChildOriginVisible}
+							transformChildOrigin={transformChildOrigin}
+							block={block}
+							handleOnChangeAttributes={handleOnChangeAttributes}
+						/>
+					)}
+				</BaseControl>
+			</ControlContextProvider>
 		</Popover>
 	);
 };
