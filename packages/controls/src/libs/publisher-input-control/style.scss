@@ -15,8 +15,8 @@
 		}
 
 		&.invalid {
-			border: 1px solid var(--publisher-controls-invalid-input-border-color) !important;
-			box-shadow: 0 0 0 1px var(--publisher-controls-invalid-input-border-color) !important;
+			border: 1px solid var(--publisher-controls-invalid-input-border-color);
+			box-shadow: 0 0 0 1px var(--publisher-controls-invalid-input-border-color);
 		}
 	}
 
@@ -43,10 +43,10 @@
 	&.no-border {
 
 		.components-input-control__backdrop {
-			border: none !important;
-			border-radius: 2px !important;
-			box-shadow: none !important;
-			background: none !important;
+			border: none;
+			border-radius: 2px;
+			box-shadow: none;
+			background: none;
 		}
 
 		.publisher-control-single-input {
@@ -85,100 +85,110 @@
 	}
 
 	.publisher-control-unit-select {
-			appearance: none !important;
-			border-radius: 2px !important;
-			// background: transparent !important;
-			border: none !important;
-			display: block !important;
-			outline: none !important;
-			margin: 0 !important;
-			min-height: auto !important;
-			position: absolute !important;
-			width: 35px !important;
-			font-size: 11px !important;
-			color: #aeaeae !important;
-			font-weight: 500 !important;
-			padding: 0 !important;
-			text-align: center !important;
-			text-align-last: center !important;
-			height: 28px !important;
-			line-height: 28px !important;
-			top: 1px !important;
-			right: 0 !important;
-			text-transform: uppercase !important;
-			border-top-left-radius: 0 !important;
-			border-bottom-left-radius: 0 !important;
-			transition: box-shadow 0.1s linear, border 0.1s linear !important;
+			appearance: none;
+			border-radius: 2px;
+			// background: transparent;
+			border: none;
+			display: block;
+			outline: none;
+			margin: 0;
+			min-height: auto;
+			position: absolute;
+			width: 35px;
+			font-size: 11px;
+			color: #aeaeae;
+			font-weight: 500;
+			padding: 0;
+			text-align: center;
+			text-align-last: center;
+			height: 28px;
+			line-height: 28px;
+			top: 1px;
+			right: 0;
+			text-transform: uppercase;
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+			transition: box-shadow 0.1s linear, border 0.1s linear;
 
 			&:not(:disabled) {
-				cursor: pointer !important;
+				cursor: pointer;
+			}
+
+			&:focus {
+				border-color: none;
+				box-shadow: none;
+				color: #aeaeae;
+			}
+
+			&:hover {
+				color: #aeaeae;
 			}
 
 			&.hide-arrow {
-				background: transparent !important;
+				background: transparent;
 			}
 	}
 
 	&.publisher-control-unit-special {
 
 			.publisher-control-single-input {
-				display: none !important;
+				display: none;
 			}
 
 			.publisher-control-input-suffix {
 				display: block;
-				width: 100% !important;
-				height: 30px !important;
+				width: 100%;
+				height: 30px;
 
 				.publisher-control-unit-select {
-					border: 1px solid var(--publisher-controls-border-color) !important;
-					border-radius: 0 !important;
-					width: 100% !important;
-					// border-radius: 2px !important;
-					text-transform: capitalize !important;
-					font-size: 13px !important;
-					font-weight: 400 !important;
-					color: rgb(30, 30, 30) !important;
-					text-align: left !important;
-					text-align-last: left !important;
-					padding: 0 26px 0 8px !important;
-					// background: #ffffff !important;
-					background-size: 13px 11px !important;
+					border: 1px solid var(--publisher-controls-border-color);
+					border-radius: 0;
+					width: 100%;
+					// border-radius: 2px;
+					text-transform: capitalize;
+					font-size: 13px;
+					font-weight: 400;
+					color: rgb(30, 30, 30);
+					text-align: left;
+					text-align-last: left;
+					padding: 0 26px 0 8px;
+					// background: #ffffff;
+					background-size: 13px 11px;
 					letter-spacing: 0;
 
 					&:hover {
-						border-color: var(--publisher-controls-border-color-hover) !important;
+						border-color: var(--publisher-controls-border-color-hover);
 					}
 
 					&:focus {
-						border-color: var(--publisher-controls-border-color-focus) !important;
-						box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
+						border-color: var(--publisher-controls-border-color-focus);
+						box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
 					}
 
 					&:not(:disabled):hover {
-						background-color: var(--publisher-controls-background-color) !important;
+						background-color: var(--publisher-controls-background-color);
 					}
 
 										&.hide-arrow {
-											background: transparent !important;
+											background: transparent;
 										}
 				}
 			}
 	}
 
 	.publisher-control-unit-input-container {
-		position: relative !important;
+		position: relative;
 
 		.publisher-control-single-input::-webkit-outer-spin-button,
 		.publisher-control-single-input::-webkit-inner-spin-button {
 			/* display: none; <- Crashes Chrome on hover */
-			-webkit-appearance: none !important;
-			margin: 0 !important;
+			-webkit-appearance: none;
+			margin: 0;
 			/* <-- Apparently some margin are still there even though it's hidden */
 		}
 
 		.publisher-control-single-input[type="number"] {
-			-moz-appearance: textfield !important;
+			-moz-appearance: textfield;
 				/* Firefox */
 		}
 	}
