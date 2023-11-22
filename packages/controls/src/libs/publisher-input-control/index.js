@@ -10,10 +10,10 @@ import { controlClassNames } from '@publisher/classnames';
 import {
 	isEmpty,
 	isUndefined,
-	isNumber,
 	isFunction,
 	isArray,
 	isString,
+	isNumber,
 } from '@publisher/utils';
 
 /**
@@ -53,6 +53,7 @@ export function PublisherInputControl({
 	});
 
 	const [isValidValue, setIsValidValue] = useState(true);
+	const [isSpecial, setIsSpecial] = useState(false);
 	const [selectedUnit, setSelectedUnit] = useState('');
 	const [inputType, setInputType] = useState(type || 'text');
 
@@ -66,6 +67,7 @@ export function PublisherInputControl({
 		if (inputType === 'number' && !isUndefined(min) && isNumber(+min)) {
 			return { min };
 		}
+		return {};
 	}, [min]); // eslint-disable-line
 
 	// get the maximum value in number type
@@ -73,12 +75,8 @@ export function PublisherInputControl({
 		if (inputType === 'number' && !isUndefined(max) && isNumber(+max)) {
 			return { max };
 		}
+		return {};
 	}, [max]); // eslint-disable-line
-
-	// add css units
-	if (unitType !== '' && (isUndefined(units) || isEmpty(units))) {
-		units = getCSSUnits(unitType);
-	}
 
 	const getUnitInputValue = useMemo(() => {
 		const numberValue = extractNumber(value);
@@ -105,7 +103,7 @@ export function PublisherInputControl({
 		setIsValidValue(!!isValid);
 	}, [value]); // eslint-disable-line
 
-	// get unit type and set it
+	// Handle unit selection and type change
 	useEffect(() => {
 		if (
 			!isUndefined(units) &&
@@ -170,8 +168,8 @@ export function PublisherInputControl({
 							className
 						)}
 						type={inputType}
-						{...(getMinValue && getMinValue)}
-						{...(getMaxValue && getMaxValue)}
+						{...getMinValue}
+						{...getMaxValue}
 						{...props}
 					/>
 				) : (
@@ -188,20 +186,33 @@ export function PublisherInputControl({
 								className
 							)}
 							type={inputType}
-							{...(getMinValue && getMinValue)}
-							{...(getMaxValue && getMaxValue)}
+							{...getMinValue}
+							{...getMaxValue}
 							{...props}
 						/>
-						<select
-							onChange={(e) => setSelectedUnit(e.target.value)}
-							className={controlClassNames('unit-select')}
-						>
-							{units.map((unit, key) => (
-								<option key={key} value={unit?.value}>
-									{unit?.label}
-								</option>
-							))}
-						</select>
+						<span className={controlClassNames('input-suffix')}>
+							<select
+								onChange={(e) => {
+									if (isSpecialUnit(e.target.value)) {
+										setValue(e.target.value);
+										setIsSpecial(true);
+									} else {
+										setIsSpecial(false);
+										setSelectedUnit(e.target.value);
+									}
+								}}
+								className={controlClassNames(
+									'unit-select',
+									!isSpecial && 'hide-arrow'
+								)}
+							>
+								{units.map((unit, key) => (
+									<option key={key} value={unit?.value}>
+										{unit?.label}
+									</option>
+								))}
+							</select>
+						</span>
 					</div>
 				)}
 			</div>

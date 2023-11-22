@@ -336,7 +336,7 @@ export const UnitsInput = {
 					<ControlWithHooks
 						Control={PublisherInputControl}
 						{...args}
-						unitType={'background-position'}
+						unitType={'letter-spacing'}
 						type="number"
 					/>
 				</ControlContextProvider>
