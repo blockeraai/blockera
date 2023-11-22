@@ -1,10 +1,13 @@
+// @flow
 /**
  * Publisher dependencies
  */
 import { isObject, isString } from '@publisher/utils';
-
-export function convertAlignmentMatrixCoordinates(value) {
-	const coordinates = {
+import type { Location, Coordinates } from './types/index';
+export function convertAlignmentMatrixCoordinates(
+	value: { top: string, left: string } | string
+): Coordinates {
+	const coordinates: Coordinates = {
 		calculated: false,
 		compact: '',
 		top: {
@@ -17,7 +20,7 @@ export function convertAlignmentMatrixCoordinates(value) {
 		},
 	};
 
-	function convertLocationToCoordinate(location) {
+	function convertLocationToCoordinate(location: Location) {
 		switch (location) {
 			case 'center':
 				return {
@@ -80,8 +83,9 @@ export function convertAlignmentMatrixCoordinates(value) {
 				value = 'center right';
 				break;
 		}
-
-		const split = value.split(' ');
+		// TODO delete comment below when adding type to utils.
+		// $FlowFixMe;
+		const split: Location[] = value.split(' ');
 
 		if (split.length !== 2) {
 			return coordinates;
