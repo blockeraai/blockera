@@ -137,6 +137,12 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 									injectHeaderButtonsStart={
 										<>
 											<Button
+												showTooltip={true}
+												tooltipPosition="top"
+												label={__(
+													'Transformation Settings',
+													'publisher-core'
+												)}
 												size="extra-small"
 												className={controlInnerClassNames(
 													'btn-add'

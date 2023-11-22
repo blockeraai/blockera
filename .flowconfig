@@ -1,5 +1,9 @@
 [ignore]
-
+<PROJECT_ROOT>/app/.*
+<PROJECT_ROOT>/node_modules/eslint-plugin-import/.*
+<PROJECT_ROOT>/node_modules/eslint-plugin-react/.*
+<PROJECT_ROOT>/node_modules/module-deps/.*
+<PROJECT_ROOT>/node_modules/resolve/.*
 [include]
 
 [libs]

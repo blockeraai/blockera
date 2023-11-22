@@ -1,9 +1,10 @@
+// @flow
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
-
+import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
@@ -15,13 +16,14 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
+import type { TTransitionControlProps } from './types';
 
 export default function TransitionControl({
 	defaultRepeaterItemValue,
 	popoverLabel,
 	className,
 	...props
-}) {
+}: TTransitionControlProps): MixedElement {
 	return (
 		<RepeaterControl
 			className={controlClassNames('transition', className)}
@@ -40,23 +42,19 @@ TransitionControl.propTypes = {
 	 */
 	defaultValue: PropTypes.array,
 	/**
-	 * The current value.
-	 */
-	value: PropTypes.array,
-	/**
 	 * Function that will be fired while the control value state changes.
 	 */
 	onChange: PropTypes.func,
 	/**
 	 * Default value of each repeater item
 	 */
-	defaultRepeaterItemValue: PropTypes.shape({
+	defaultRepeaterItemValue: (PropTypes.shape({
 		type: PropTypes.string,
 		duration: PropTypes.string,
 		timing: PropTypes.string,
 		delay: PropTypes.string,
 		isVisible: PropTypes.bool,
-	}),
+	}): any),
 	/**
 	 * Label for popover
 	 */
@@ -64,7 +62,6 @@ TransitionControl.propTypes = {
 };
 
 TransitionControl.defaultProps = {
-	value: [],
 	defaultRepeaterItemValue: {
 		type: 'all',
 		duration: '500ms',
@@ -72,5 +69,5 @@ TransitionControl.defaultProps = {
 		delay: '0ms',
 		isVisible: true,
 	},
-	popoverLabel: __('Transition', 'publisher-core'),
+	popoverLabel: (__('Transition', 'publisher-core'): any),
 };

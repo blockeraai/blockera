@@ -9,21 +9,23 @@ import { disableGutenbergFeatures, goTo, loginToSite } from '../helpers';
  */
 import '@cypress/code-coverage/support';
 
-before(function () {
-	loginToSite().then(() => {
-		// FIXME: Decide whether to activate this mod manually or not
-		// goTo('/wp-admin/plugins.php', true).then(() => {
-		// 	// eslint-disable-next-line
-		// 	cy.wait(2000);
-		//
-		// 	cy.get('#activate-publisher-core').click();
-		// });
+beforeEach(function () {
+	// run these tests as if in a desktop
+	// browser with a 720p monitor
+	cy.viewport(1280, 720);
 
-		goTo('/wp-admin/post-new.php?post_type=post').then(() => {
-			// eslint-disable-next-line
-			cy.wait(2000);
-			disableGutenbergFeatures();
-		});
+	cy.login();
+
+	goTo('/wp-admin/post-new.php?post_type=post').then(() => {
+		// eslint-disable-next-line
+		cy.wait(2000);
+		disableGutenbergFeatures();
+	});
+});
+
+Cypress.Commands.add('login', () => {
+	cy.session([Cypress.env('wpUsername'), Cypress.env('wpPassword')], () => {
+		loginToSite();
 	});
 });
 

@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -14,6 +15,8 @@ import { controlClassNames } from '@publisher/classnames';
  */
 import BaseControl from '../base-control';
 import { useControlContext } from '../../context';
+import type { MixedElement } from 'react';
+import type { Props } from './types';
 
 export default function CheckboxControl({
 	checkboxLabel,
@@ -27,7 +30,7 @@ export default function CheckboxControl({
 	//
 	className,
 	...props
-}) {
+}: Props): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
 		onChange,
@@ -47,6 +50,7 @@ export default function CheckboxControl({
 				onChange={setValue}
 				label={checkboxLabel}
 				{...props}
+				aria-checked={value}
 			/>
 		</BaseControl>
 	);
@@ -58,11 +62,11 @@ CheckboxControl.propTypes = {
 	 *
 	 * @default ""
 	 */
-	checkboxLabel: PropTypes.string,
+	checkboxLabel: PropTypes.string.isRequired,
 	/**
 	 * ID for retrieving value from control context
 	 */
-	id: PropTypes.string.isRequired,
+	id: PropTypes.string,
 	/**
 	 * Label for field. If you pass empty value the field will not be added and simple control will be rendered
 	 *

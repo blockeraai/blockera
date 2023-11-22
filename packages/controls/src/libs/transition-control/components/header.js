@@ -1,8 +1,10 @@
+// @flow
 /**
  * External dependencies
  */
 import { memo } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
+import type { Element } from 'react';
 
 /**
  * Publisher dependencies
@@ -14,40 +16,45 @@ import { controlInnerClassNames } from '@publisher/classnames';
  */
 import { getTypeLabel } from '../utils';
 import { default as TransitionIcon } from '../icons/transition';
+import type { THeaderItem } from '../types';
 
-const RepeaterItemHeader = ({
-	item: { type, duration },
-	itemId,
-	isOpen,
-	setOpen,
-	children,
-	isOpenPopoverEvent,
-}) => {
-	return (
-		<div
-			className={controlInnerClassNames('repeater-group-header')}
-			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
-			aria-label={sprintf(
-				// translators: it's the aria label for repeater item
-				__('Item %d', 'publisher-core'),
-				itemId + 1
-			)}
-		>
-			<span className={controlInnerClassNames('header-icon')}>
-				<TransitionIcon />
-			</span>
+const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
+	({
+		item: { duration, type },
+		itemId,
+		isOpen,
+		setOpen,
+		children,
+		isOpenPopoverEvent,
+	}: THeaderItem): Element<any> => {
+		return (
+			<div
+				className={controlInnerClassNames('repeater-group-header')}
+				onClick={(event) =>
+					isOpenPopoverEvent(event) && setOpen(!isOpen)
+				}
+				aria-label={sprintf(
+					// translators: it's the aria label for repeater item
+					__('Item %d', 'publisher-core'),
+					itemId && itemId + 1
+				)}
+			>
+				<span className={controlInnerClassNames('header-icon')}>
+					<TransitionIcon />
+				</span>
 
-			<span className={controlInnerClassNames('header-label')}>
-				{getTypeLabel(type)}
-			</span>
+				<span className={controlInnerClassNames('header-label')}>
+					{getTypeLabel(type)}
+				</span>
 
-			<span className={controlInnerClassNames('header-values')}>
-				{duration}
-			</span>
+				<span className={controlInnerClassNames('header-values')}>
+					{duration}
+				</span>
 
-			{children}
-		</div>
-	);
-};
+				{children}
+			</div>
+		);
+	}
+);
 
-export default memo(RepeaterItemHeader);
+export default RepeaterItemHeader;

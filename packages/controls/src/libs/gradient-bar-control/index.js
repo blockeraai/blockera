@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -14,6 +15,11 @@ import { controlClassNames } from '@publisher/classnames';
  */
 import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
+/**
+ * Types
+ */
+import type { TGradientBarControlProps } from './types/gradient-bar-control-props';
+import type { MixedElement } from 'react';
 
 export default function GradientBarControl({
 	id,
@@ -24,7 +30,7 @@ export default function GradientBarControl({
 	field,
 	//
 	className,
-}) {
+}: TGradientBarControlProps): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
 		defaultValue,
@@ -38,7 +44,10 @@ export default function GradientBarControl({
 			controlName={field}
 			className={className}
 		>
-			<div className={controlClassNames('gradient-bar', className)}>
+			<div
+				data-cy="gradient-bar-control"
+				className={controlClassNames('gradient-bar', className)}
+			>
 				<WPGradientPicker
 					value={value}
 					gradients={[]}
@@ -54,7 +63,7 @@ GradientBarControl.propTypes = {
 	/**
 	 * ID for retrieving value from control context
 	 */
-	id: PropTypes.string.isRequired,
+	id: PropTypes.string,
 	/**
 	 * Label for field. If you pass empty value the field will not be added and simple control will be rendered
 	 *

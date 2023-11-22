@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -26,6 +27,11 @@ import {
 	AttributesControl,
 } from '../index';
 import { ControlContextProvider, useControlContext } from '../../context';
+/**
+ * types
+ */
+import type { MixedElement } from 'react';
+import type { TLinkControlProps } from './types/link-control-props';
 
 export default function LinkControl({
 	label,
@@ -34,10 +40,10 @@ export default function LinkControl({
 	onChange,
 	className,
 	placeholder,
-	attributesId,
+	attributesId = 'link-control-attributes',
 	defaultValue,
 	advancedOpen,
-}) {
+}: TLinkControlProps): MixedElement {
 	const {
 		controlInfo: { name: controlId },
 		value,
@@ -96,6 +102,7 @@ export default function LinkControl({
 						className={controlInnerClassNames(
 							'link-advanced-settings'
 						)}
+						data-cy="link-advance-setting"
 					>
 						<CheckboxControl
 							id={'target'}
@@ -173,7 +180,8 @@ LinkControl.propTypes = {
 	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
-	defaultValue: PropTypes.shape({
+	// $FlowFixMe
+	defaultValue: (PropTypes.shape({
 		link: PropTypes.string,
 		target: PropTypes.bool,
 		nofollow: PropTypes.bool,
@@ -185,7 +193,7 @@ LinkControl.propTypes = {
 				isVisible: PropTypes.bool,
 			})
 		),
-	}),
+	}): any),
 	/**
 	 * Function that will be fired while the control value state changes.
 	 */
@@ -195,6 +203,7 @@ LinkControl.propTypes = {
 	 *
 	 * @default `auto`
 	 */
+	// $FlowFixMe
 	advancedOpen: PropTypes.oneOfType([
 		PropTypes.oneOf(['auto']),
 		PropTypes.bool,
@@ -204,7 +213,7 @@ LinkControl.propTypes = {
 	 */
 	placeholder: PropTypes.string,
 };
-
+// $FlowFixMe
 LinkControl.defaultProps = {
 	attributesId: 'link-control-attributes',
 	placeholder: 'https://your-link.com',
@@ -214,6 +223,7 @@ LinkControl.defaultProps = {
 		target: false,
 		nofollow: false,
 		label: '',
+		// $FlowFixMe
 		attributes: [],
 	},
 	field: 'link',

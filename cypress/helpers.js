@@ -42,6 +42,18 @@ export function getWPDataObject() {
 }
 
 /**
+ *
+ * @param {Object} data the WordPress data.
+ * @param {string} field the field of attributes of selectedBlock.
+ * @return {*} retrieved th field value of selected block attributes.
+ */
+export function getSelectedBlock(data, field) {
+	return data.select('core/block-editor').getSelectedBlock().attributes[
+		field
+	];
+}
+
+/**
  * Disable Gutenberg Tips
  */
 export function disableGutenbergFeatures() {
@@ -65,8 +77,9 @@ export function disableGutenbergFeatures() {
  * @param {string}  blockName   The name to find in the block inserter
  *                              e.g 'core/image'.
  * @param {boolean} clearEditor Should clear editor of all blocks
+ * @param {string} className The block css class name
  */
-export function addBlockToPost(blockName, clearEditor = false) {
+export function addBlockToPost(blockName, clearEditor = false, className = '') {
 	const blockCategory = blockName.split('/')[0] || false;
 	const blockID = blockName.split('/')[1] || false;
 
@@ -120,6 +133,23 @@ export function addBlockToPost(blockName, clearEditor = false) {
 				cy.get('button[class*="__inserter-toggle"].is-pressed').click();
 			}
 		});
+
+	// Click on added new block item.
+	cy.getIframeBody().find(`[data-type="${blockName}"]`).click();
+
+	cy.window()
+		.its('wp.hooks')
+		.then((hooks) => {
+			function addBlockClassName(_className) {
+				return Object.assign(_className, { class: className });
+			}
+
+			hooks.addFilter(
+				'blocks.getSaveContent.extraProps',
+				blockName,
+				addBlockClassName
+			);
+		});
 }
 
 export function addNewGroupToPost() {
@@ -171,7 +201,29 @@ export function savePage() {
 	);
 
 	// Reload the page to ensure that we're not hitting any block errors
-	cy.reload();
+	// cy.reload();
+}
+
+export function appendBlocks(blocksCode) {
+	cy.get('[aria-label="Options"]').click();
+	cy.get('span').contains('Code editor').click();
+
+	cy.get('.editor-post-text-editor').type(blocksCode, {
+		parseSpecialCharSequences: false,
+	});
+
+	cy.get('button').contains('Exit code editor').click();
+}
+
+/**
+ * Redirect to front end page from current published post.
+ */
+export function redirectToFrontPage() {
+	cy.get('[aria-label="View Post"]')
+		.invoke('attr', 'href')
+		.then((href) => {
+			cy.visit(href);
+		});
 }
 
 /**
