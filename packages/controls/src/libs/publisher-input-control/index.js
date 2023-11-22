@@ -19,14 +19,11 @@ import {
 /**
  * Internal dependencies
  */
-import {
-	getCSSUnits,
-	checkCSSFunctions,
-	isSpecialUnit,
-	extractNumber,
-} from './utils';
+import { getCSSUnits, checkCSSFunctions } from './utils';
 import { useControlContext } from '../../context';
 import { RangeControl, BaseControl } from './../index';
+import { Input } from './input';
+import { UnitInput } from './UnitInput';
 
 export function PublisherInputControl({
 	unitType,
@@ -54,8 +51,6 @@ export function PublisherInputControl({
 
 	const [isValidValue, setIsValidValue] = useState(true);
 	const [isSpecial, setIsSpecial] = useState(false);
-	const [selectedUnit, setSelectedUnit] = useState('');
-	const [inputType, setInputType] = useState(type || 'text');
 
 	// add css units
 	if (unitType !== '' && (isUndefined(units) || isEmpty(units))) {
@@ -64,7 +59,7 @@ export function PublisherInputControl({
 
 	// get the minimum value in number type
 	const getMinValue = useMemo(() => {
-		if (inputType === 'number' && !isUndefined(min) && isNumber(+min)) {
+		if (type === 'number' && !isUndefined(min) && isNumber(+min)) {
 			return { min };
 		}
 		return {};
@@ -72,21 +67,15 @@ export function PublisherInputControl({
 
 	// get the maximum value in number type
 	const getMaxValue = useMemo(() => {
-		if (inputType === 'number' && !isUndefined(max) && isNumber(+max)) {
+		if (type === 'number' && !isUndefined(max) && isNumber(+max)) {
 			return { max };
 		}
 		return {};
 	}, [max]); // eslint-disable-line
 
-	const getUnitInputValue = useMemo(() => {
-		const numberValue = extractNumber(value);
-
-		return numberValue;
-	}, [value]);
-
 	// validator checking
 	useEffect(() => {
-		if (!validator || inputType !== 'text') {
+		if (!validator || type !== 'text') {
 			// If no validator is provided, assume the value is valid
 			setIsValidValue(true);
 			return;
@@ -103,28 +92,6 @@ export function PublisherInputControl({
 		setIsValidValue(!!isValid);
 	}, [value]); // eslint-disable-line
 
-	// Handle unit selection and type change
-	useEffect(() => {
-		if (
-			!isUndefined(units) &&
-			!isEmpty(units) &&
-			isEmpty(selectedUnit) &&
-			units.length
-		) {
-			setSelectedUnit(units[0]?.value);
-			setInputType('number');
-		}
-	}, [units]); //eslint-disable-line
-
-	// set unit to value after unit changed
-	useEffect(() => {
-		if (inputType === 'number') {
-			const newValue = extractNumber(value);
-
-			setValue(`${newValue}${selectedUnit}`);
-		}
-	}, [selectedUnit, inputType]); //eslint-disable-line
-
 	return (
 		<BaseControl
 			label={label}
@@ -137,7 +104,7 @@ export function PublisherInputControl({
 					'input-2',
 					range && 'input-range',
 					noBorder && 'no-border',
-					isSpecialUnit(value) && 'publisher-control-unit-special',
+					isSpecial && 'publisher-control-unit-special',
 					className
 				)}
 			>
@@ -158,62 +125,32 @@ export function PublisherInputControl({
 					/>
 				)}
 				{isEmpty(units) ? (
-					<input
+					<Input
 						value={value}
-						onChange={(e) => setValue(e.target.value)}
-						className={controlClassNames(
-							'single-input',
-							!isValidValue && 'invalid',
-							noBorder && 'no-border',
-							className
-						)}
-						type={inputType}
-						{...getMinValue}
-						{...getMaxValue}
+						setValue={setValue}
+						isValid={isValidValue}
+						type={type}
+						getMaxValue={getMaxValue}
+						getMinValue={getMinValue}
+						noBorder={noBorder}
+						className={className}
 						{...props}
 					/>
 				) : (
-					<div className={controlClassNames('unit-input-container')}>
-						<input
-							value={getUnitInputValue}
-							onChange={(e) =>
-								setValue(`${e.target.value}${selectedUnit}`)
-							}
-							className={controlClassNames(
-								'single-input',
-								!isValidValue && 'invalid',
-								noBorder && 'no-border',
-								className
-							)}
-							type={inputType}
-							{...getMinValue}
-							{...getMaxValue}
-							{...props}
-						/>
-						<span className={controlClassNames('input-suffix')}>
-							<select
-								onChange={(e) => {
-									if (isSpecialUnit(e.target.value)) {
-										setValue(e.target.value);
-										setIsSpecial(true);
-									} else {
-										setIsSpecial(false);
-										setSelectedUnit(e.target.value);
-									}
-								}}
-								className={controlClassNames(
-									'unit-select',
-									!isSpecial && 'hide-arrow'
-								)}
-							>
-								{units.map((unit, key) => (
-									<option key={key} value={unit?.value}>
-										{unit?.label}
-									</option>
-								))}
-							</select>
-						</span>
-					</div>
+					<UnitInput
+						units={units}
+						value={value}
+						setValue={setValue}
+						isValid={isValidValue}
+						type={type}
+						getMaxValue={getMaxValue}
+						getMinValue={getMaxValue}
+						noBorder={noBorder}
+						className={className}
+						special={isSpecial}
+						setIsSpecial={setIsSpecial}
+						{...props}
+					/>
 				)}
 			</div>
 		</BaseControl>

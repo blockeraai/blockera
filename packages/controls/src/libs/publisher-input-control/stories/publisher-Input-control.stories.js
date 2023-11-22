@@ -484,9 +484,8 @@ export const UnitsInput = {
 export const CssInput = {
 	args: {
 		unitType: 'general',
-		defaultValue: '10',
+		// defaultValue: '10px',
 		className: 'publisher-input',
-		value: '20',
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
@@ -526,6 +525,7 @@ export const CssInput = {
 					Control={PublisherInputControl}
 					{...args}
 					range={true}
+					defaultValue="10"
 					unitType="general"
 				/>
 			</ControlContextProvider>
@@ -538,6 +538,7 @@ export const CssInput = {
 					Control={PublisherInputControl}
 					{...args}
 					range={true}
+					defaultValue="auto"
 					unitType="general"
 				/>
 			</ControlContextProvider>

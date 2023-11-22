@@ -114,11 +114,6 @@
 				cursor: pointer !important;
 			}
 
-						&:focus {
-							box-shadow: none !important;
-							border: none !important;
-						}
-
 			&.hide-arrow {
 				background: transparent !important;
 			}
@@ -172,21 +167,21 @@
 	}
 
 	.publisher-control-unit-input-container {
-			position: relative !important;
+		position: relative !important;
 
-			.publisher-control-single-input::-webkit-outer-spin-button,
-			.publisher-control-single-input::-webkit-inner-spin-button {
-				/* display: none; <- Crashes Chrome on hover */
-				-webkit-appearance: none !important;
-				margin: 0 !important;
-				/* <-- Apparently some margin are still there even though it's hidden */
-			}
-
-			.publisher-control-single-input[type="number"] {
-				-moz-appearance: textfield !important;
-				/* Firefox */
-			}
+		.publisher-control-single-input::-webkit-outer-spin-button,
+		.publisher-control-single-input::-webkit-inner-spin-button {
+			/* display: none; <- Crashes Chrome on hover */
+			-webkit-appearance: none !important;
+			margin: 0 !important;
+			/* <-- Apparently some margin are still there even though it's hidden */
 		}
+
+		.publisher-control-single-input[type="number"] {
+			-moz-appearance: textfield !important;
+				/* Firefox */
+		}
+	}
 }
 
 .publisher-control-input-2.input-range {

@@ -1,21 +1,29 @@
 import { isString, isArray } from '@publisher/utils';
 
+const specialUnits = [
+	'auto',
+	'initial',
+	'inherit',
+	'fit-content',
+	'max-content',
+	'min-content',
+	'unset',
+	'revert-layer',
+	'revert',
+];
+
 // Validates the value is with a special CSS units or not
 export function isSpecialUnit(value) {
 	return (
-		isString(value) &&
-		[
-			'auto',
-			'initial',
-			'inherit',
-			'fit-content',
-			'max-content',
-			'min-content',
-			'unset',
-			'revert-layer',
-			'revert',
-		].some((item) => value?.endsWith(item))
+		isString(value) && specialUnits.some((item) => value?.endsWith(item))
 	);
+}
+
+export function extractSpecialUnitType(value) {
+	if (!isString(value)) return;
+	const foundUnit = specialUnits.find((unit) => value.includes(unit));
+	console.log('unit value re', foundUnit);
+	return foundUnit;
 }
 
 // get the number in string values
