@@ -365,7 +365,7 @@ return [
 			'property_keys' => [
 				'default' => 'border-radius',
 			],
-			'path'          => [ 'publisherBorder', 'border-radius' ],
+			'path'          => [ 'publisherBorder', 'publisherBorderRadius' ],
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
@@ -453,7 +453,7 @@ return [
 		],
 	],
 	'publisherLayout'     => [
-		'display' => [
+		'display'         => [
 			'property_keys' => [
 				'default' => 'display',
 			],
@@ -461,7 +461,7 @@ return [
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
-		'row-gap' => [
+		'row-gap'         => [
 			'property_keys' => [
 				'default' => 'row-gap',
 			],
@@ -469,7 +469,7 @@ return [
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
-		'flex-wrap' => [
+		'flex-wrap'       => [
 			'property_keys' => [
 				'default' => 'flex-wrap',
 			],
@@ -477,7 +477,7 @@ return [
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
-		'column-gap' => [
+		'column-gap'      => [
 			'property_keys' => [
 				'default' => 'column-gap',
 			],
@@ -485,7 +485,7 @@ return [
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
-		'align-items' => [
+		'align-items'     => [
 			'property_keys' => [
 				'default' => 'align-items',
 			],
@@ -493,7 +493,7 @@ return [
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
-		'align-content' => [
+		'align-content'   => [
 			'property_keys' => [
 				'default' => 'align-content',
 			],
@@ -501,7 +501,7 @@ return [
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
-		'flex-direction' => [
+		'flex-direction'  => [
 			'property_keys' => [
 				'default' => 'flex-direction',
 			],
@@ -517,7 +517,7 @@ return [
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
-		'align-self' => [
+		'align-self'      => [
 			'property_keys' => [
 				'default' => 'align-self',
 			],
@@ -525,7 +525,7 @@ return [
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
-		'order' => [
+		'order'           => [
 			'property_keys' => [
 				'default' => 'order',
 			],
@@ -533,7 +533,7 @@ return [
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
-		'flex' => [
+		'flex'            => [
 			'property_keys' => [
 				'default' => 'flex',
 			],

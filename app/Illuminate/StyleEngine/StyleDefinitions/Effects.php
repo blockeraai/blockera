@@ -4,50 +4,70 @@ namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
 use Publisher\Framework\Exceptions\BaseException;
 
+/**
+ * The Effect style definition
+ *
+ * @package Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions\Effects
+ */
 class Effects extends BaseStyleDefinition {
 
 	/**
-	 * @throws BaseException
+	 * Retrieve css properties.
+	 *
 	 * @return array
 	 */
 	public function getProperties(): array {
 
-		foreach ( $this->settings as $setting ) {
+		if ( ! empty( $this->settings['type'] ) ) {
 
-			if ( ! empty( $this->settings['type'] ) ) {
-
-				switch ( $this->settings['type'] ) {
-					case 'transform':
-						array_map( [ $this, 'setTransform' ], $this->settings['transform'] );
-						break;
-					case 'transition':
-						array_map( [ $this, 'setTransition' ], $this->settings['transition'] );
-						break;
-					case 'filter':
-						array_map( [ $this, 'setFilter' ], $this->settings['filter'] );
-						break;
-					case 'backdrop-filter':
-						array_map( [ $this, 'setBackdropFilter' ], $this->settings['backdrop-filter'] );
-						break;
-
-				}
+			switch ( $this->settings['type'] ) {
+				case 'transform':
+					array_map( [ $this, 'setTransform' ], array_filter( $this->settings['transform'], [ $this, 'isVisibleSetting' ] ) );
+					break;
+				case 'transition':
+					array_map( [ $this, 'setTransition' ], array_filter( $this->settings['transition'], [ $this, 'isVisibleSetting' ] ) );
+					break;
+				case 'filter':
+					array_map( [ $this, 'setFilter' ], array_filter( $this->settings['filter'], [ $this, 'isVisibleSetting' ] ) );
+					break;
+				case 'backdropfilter':
+					array_map(
+						[ $this, 'setBackdropFilter' ],
+						array_filter(
+							$this->settings['backdropfilter'],
+							[
+								$this,
+								'isVisibleSetting',
+							]
+						)
+					);
+					break;
 			}
 
-			if ( ! isset( $setting['isVisible'] ) || ! $setting['isVisible'] ) {
-
-				continue;
-			}
-
-			$this->collectProps( $setting );
+			return $this->properties;
 		}
+
+		array_map( [ $this, 'collectProps' ], $this->settings );
 
 		return $this->properties;
 	}
 
 	/**
+	 * Check is visible setting?
+	 *
+	 * @param array $setting The setting array to check is visible.
+	 *
+	 * @return bool true on success, false when otherwise.
+	 */
+	protected function isVisibleSetting( array $setting ): bool {
+
+		return ! empty( $setting['isVisible'] );
+	}
+
+	/**
 	 * Check is valid setting for style?
 	 *
-	 * @param array $setting array of style setting
+	 * @param array $setting array of style setting.
 	 *
 	 * @return bool true on success, false on otherwise.
 	 */
@@ -57,27 +77,40 @@ class Effects extends BaseStyleDefinition {
 	}
 
 	/**
-	 * collect all css props
+	 * Collect all css props.
 	 *
-	 * @param array $setting the background settings
+	 * @param array $setting the background settings.
 	 *
-	 * @throws BaseException
 	 * @return void
 	 */
 	protected function collectProps( array $setting ): void {
 
-		// Image Background
+		// Image Background.
 		switch ( $setting['type'] ) {
-			case'cursor':
-			case 'opacity':
-			case 'mix-blend-mode':
-				$this->setProperties( [
-					$setting['type'] => $setting[ $setting['type'] ],
-				] );
+			case 'blendmode':
+				$this->setProperties(
+					[
+						'mix-blend-mode' => $setting[ $setting['type'] ],
+					]
+				);
+				break;
+			default:
+				$this->setProperties(
+					[
+						$setting['type'] => $setting[ $setting['type'] ],
+					]
+				);
 				break;
 		}
 	}
 
+	/**
+	 * Retrieve cache key.
+	 *
+	 * @param string $suffix the cache key suffix.
+	 *
+	 * @return string
+	 */
 	protected function getCacheKey( string $suffix = '' ): string {
 
 		return getClassname( __NAMESPACE__, __CLASS__ ) . parent::getCacheKey( $suffix );
@@ -86,15 +119,15 @@ class Effects extends BaseStyleDefinition {
 	/**
 	 * Setup transform style properties into stack properties.
 	 *
-	 * @param array $setting the transform setting
+	 * @param array $setting the transform setting.
 	 *
-	 * @return array retrieve transform style props as array
+	 * @return void
 	 */
-	protected function setTransform( array $setting ): array {
+	protected function setTransform( array $setting ): void {
 
 		if ( empty( $setting ) ) {
 
-			return [];
+			return;
 		}
 
 		$props     = [];
@@ -142,7 +175,7 @@ class Effects extends BaseStyleDefinition {
 
 		if ( ! empty( $this->settings['attributes']['publisherTransformChildPerspective'] ) ) {
 
-			$props['perspective'] = $this->settings['attributes']['publisherTransformChildPerspective'] !== '0px' ?
+			$props['perspective'] = '0px' !== $this->settings['attributes']['publisherTransformChildPerspective'] ?
 				$this->settings['attributes']['publisherTransformChildPerspective'] :
 				'none';
 		}
@@ -155,23 +188,32 @@ class Effects extends BaseStyleDefinition {
 			$props['perspective-origin'] = "{$top} {$left}";
 		}
 
-		$this->setProperties( $props );
+		if ( ! empty( $this->properties['transform'] ) ) {
 
-		return $props ?? [];
+			$this->setProperties(
+				empty( $props ) ?
+					[ 'transform' => sprintf( '%s %s', $this->properties['transform'], $transform ) ] :
+					[ 'transform' => sprintf( '%s %s', $this->properties['transform'], $props['transform'] ) ]
+			);
+
+			return;
+		}
+
+		$this->setProperties( empty( $props ) ? compact( 'transform' ) : $props );
 	}
 
 	/**
 	 * Setup transition style properties into stack properties.
 	 *
-	 * @param array $setting the transition setting
+	 * @param array $setting the transition setting.
 	 *
-	 * @return array retrieve transition style props as array
+	 * @return void
 	 */
-	protected function setTransition( array $setting ): array {
+	protected function setTransition( array $setting ): void {
 
 		if ( empty( $setting ) ) {
 
-			return [];
+			return;
 		}
 
 		$allTimings = [
@@ -180,7 +222,6 @@ class Effects extends BaseStyleDefinition {
 			'ease-in'           => 'ease-in',
 			'ease-out'          => 'ease-out',
 			'ease-in-out'       => 'ease-in-out',
-			//
 			'ease-in-quad'      => 'cubic-bezier(0.55, 0.085, 0.68, 0.53)',
 			'ease-in-cubic'     => 'cubic-bezier(0.550, 0.055, 0.675, 0.190)',
 			'ease-in-quart'     => 'cubic-bezier(0.895, 0.030, 0.685, 0.220)',
@@ -189,7 +230,6 @@ class Effects extends BaseStyleDefinition {
 			'ease-in-expo'      => 'cubic-bezier(0.950, 0.050, 0.795, 0.035)',
 			'ease-in-circ'      => 'cubic-bezier(0.600, 0.040, 0.980, 0.335)',
 			'ease-in-back'      => 'cubic-bezier(0.600, -0.280, 0.735, 0.045)',
-			//
 			'ease-out-quad'     => 'cubic-bezier(0.250, 0.460, 0.450, 0.940)',
 			'ease-out-cubic'    => 'cubic-bezier(0.215, 0.610, 0.355, 1.000)',
 			'ease-out-quart'    => 'cubic-bezier(0.230, 1.000, 0.320, 1.000)',
@@ -198,7 +238,6 @@ class Effects extends BaseStyleDefinition {
 			'ease-out-expo'     => 'cubic-bezier(0.190, 1.000, 0.220, 1.000)',
 			'ease-out-circ'     => 'cubic-bezier(0.075, 0.820, 0.165, 1.000)',
 			'ease-out-back'     => 'cubic-bezier(0.175, 0.885, 0.320, 1.275)',
-			//
 			'ease-in-out-quad'  => 'cubic-bezier(0.455, 0.030, 0.515, 0.955)',
 			'ease-in-out-cubic' => 'cubic-bezier(0.645, 0.045, 0.355, 1.000)',
 			'ease-in-out-quart' => 'cubic-bezier(0.770, 0.000, 0.175, 1.000)',
@@ -212,65 +251,97 @@ class Effects extends BaseStyleDefinition {
 		$timing = $allTimings[ $setting['timing'] ];
 
 		$props = [
-			//Transition
+			// Transition.
 			'transition' => "{$setting['type']} {$setting['duration']} {$timing} {$setting['delay']}",
 		];
 
-		$this->setProperties( $props );
+		if ( ! empty( $this->properties['transition'] ) ) {
 
-		return $props;
+			$this->setProperties(
+				[
+					'transition' => sprintf( '%s, %s', $this->properties['transition'], $props['transition'] ),
+				]
+			);
+
+			return;
+		}
+
+		$this->setProperties( $props );
 	}
 
 	/**
 	 * Setup filter style properties into stack properties.
 	 *
-	 * @param array $setting the filter setting
+	 * @param array $setting the filter setting.
 	 *
-	 * @return array retrieve filter style props as array
+	 * @return void
 	 */
-	protected function setFilter( array $setting ): array {
+	protected function setFilter( array $setting ): void {
 
 		if ( empty( $setting ) ) {
 
-			return [];
+			return;
 		}
 
 		$props = [
-			//Filter
-			'filter' => $setting['type'] === 'drop-shadow' ?
+			// Filter.
+			'filter' => 'drop-shadow' === $setting['type'] ?
 				"{$setting['type']}({$setting['drop-shadow-x']} {$setting['drop-shadow-y']} {$setting['drop-shadow-blur']} {$setting['drop-shadow-color']})" :
 				"{$setting['type']}({$setting[$setting['type']]})",
 		];
 
-		$this->setProperties( $props );
+		if ( ! empty( $this->properties['filter'] ) ) {
 
-		return $props;
+			$this->setProperties(
+				[
+					'filter' => sprintf( '%s %s', $this->properties['filter'], $props['filter'] ),
+				]
+			);
+
+			return;
+		}
+
+		$this->setProperties( $props );
 	}
 
 	/**
 	 * Setup backdrop-filter style properties into stack properties.
 	 *
-	 * @param array $setting the backdrop-filter setting
+	 * @param array $setting the backdrop-filter setting.
 	 *
-	 * @return array retrieve backdrop-filter style props as array
+	 * @return void
 	 */
-	protected function setBackdropFilter( array $setting ): array {
+	protected function setBackdropFilter( array $setting ): void {
 
 		if ( empty( $setting ) ) {
 
-			return [];
+			return;
 		}
 
-		$props = [
-			//BackdropFilter
-			'backdrop-filter' => $setting['type'] === 'drop-shadow' ?
-				"{$setting['type']}({$setting['drop-shadow-x']} {$setting['drop-shadow-y']} {$setting['drop-shadow-blur']} {$setting['drop-shadow-color']})" :
-				"{$setting['type']}({$setting[$setting['type']]})",
-		];
+		$currentBackdrop = 'drop-shadow' === $setting['type'] ?
+			"{$setting['type']}({$setting['drop-shadow-x']} {$setting['drop-shadow-y']} {$setting['drop-shadow-blur']} {$setting['drop-shadow-color']})" :
+			"{$setting['type']}({$setting[$setting['type']]})";
 
-		$this->setProperties( $props );
+		if ( ! empty( $this->properties['backdrop-filter'] ) ) {
 
-		return $props;
+			$this->setProperties(
+				[
+					'backdrop-filter' => sprintf(
+						'%s %s',
+						$this->properties['backdrop-filter'],
+						$currentBackdrop
+					),
+				]
+			);
+
+			return;
+		}
+
+		$this->setProperties(
+			[
+				'backdrop-filter' => $currentBackdrop,
+			]
+		);
 	}
 
 }
