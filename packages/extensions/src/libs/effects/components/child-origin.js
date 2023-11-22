@@ -36,7 +36,7 @@ export const ChildOrigin = ({
 	return (
 		<Popover
 			title={__('Perspective Position', 'publisher-core')}
-			offset={40}
+			offset={130}
 			placement="left"
 			className={controlInnerClassNames('origin-child-popover')}
 			onClose={() => {
