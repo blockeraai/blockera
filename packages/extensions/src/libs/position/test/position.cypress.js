@@ -16,8 +16,6 @@ describe('Position Extension', () => {
 			cy.getIframeBody()
 				.find(`[data-type="core/paragraph"]`)
 				.type('This is test text.');
-
-			cy.get('[aria-label="Settings"]').click({ force: true });
 		});
 
 		//describe('WordPress Compatibility', () => {...});
@@ -874,8 +872,6 @@ describe('Position Extension', () => {
 			cy.getIframeBody()
 				.find(`[data-type="core/paragraph"]`)
 				.type('This is test text.');
-
-			cy.get('[aria-label="Settings"]').click({ force: true });
 		});
 
 		//describe('WordPress Compatibility', () => {...});
