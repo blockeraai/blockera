@@ -51,119 +51,198 @@ export function getCSSUnits(unitType = '') {
 		case 'text-shadow':
 		case 'box-shadow':
 			cssUnits = [
-				{ value: 'px', label: 'PX', default: 0 },
-				{ value: 'em', label: 'EM', default: 0 },
-				{ value: 'rem', label: 'REM', default: 0 },
-				{ value: 'ch', label: 'CH', default: 0 },
-				{ value: 'vw', label: 'VW', default: 0 },
-				{ value: 'vh', label: 'VH', default: 0 },
-				{ value: 'dvw', label: 'DVW', default: 0 },
-				{ value: 'dvh', label: 'DVH', default: 0 },
+				{ value: 'px', label: 'PX', default: 0, type: 'number' },
+				{ value: 'em', label: 'EM', default: 0, type: 'number' },
+				{ value: 'rem', label: 'REM', default: 0, type: 'number' },
+				{ value: 'ch', label: 'CH', default: 0, type: 'number' },
+				{ value: 'vw', label: 'VW', default: 0, type: 'number' },
+				{ value: 'vh', label: 'VH', default: 0, type: 'number' },
+				{ value: 'dvw', label: 'DVW', default: 0, type: 'number' },
+				{ value: 'dvh', label: 'DVH', default: 0, type: 'number' },
+				{
+					value: 'func',
+					label: 'CSS FUNCTION',
+					default: '',
+					type: 'text',
+				},
 			];
 			break;
 
 		case 'background-size':
 			cssUnits = [
-				{ value: 'auto', label: 'Auto', default: 0 },
-				{ value: '%', label: '%', default: 0 },
-				{ value: 'px', label: 'PX', default: 0 },
-				{ value: 'em', label: 'EM', default: 0 },
-				{ value: 'rem', label: 'REM', default: 0 },
-				{ value: 'ch', label: 'CH', default: 0 },
-				{ value: 'vw', label: 'VW', default: 0 },
-				{ value: 'vh', label: 'VH', default: 0 },
-				{ value: 'dvw', label: 'DVW', default: 0 },
-				{ value: 'dvh', label: 'DVH', default: 0 },
+				{ value: 'auto', label: 'Auto', default: '', type: 'text' },
+				{ value: '%', label: '%', default: 0, type: 'number' },
+				{ value: 'px', label: 'PX', default: 0, type: 'number' },
+				{ value: 'em', label: 'EM', default: 0, type: 'number' },
+				{ value: 'rem', label: 'REM', default: 0, type: 'number' },
+				{ value: 'ch', label: 'CH', default: 0, type: 'number' },
+				{ value: 'vw', label: 'VW', default: 0, type: 'number' },
+				{ value: 'vh', label: 'VH', default: 0, type: 'number' },
+				{ value: 'dvw', label: 'DVW', default: 0, type: 'number' },
+				{ value: 'dvh', label: 'DVH', default: 0, type: 'number' },
+				{
+					value: 'func',
+					label: 'CSS FUNCTION',
+					default: '',
+					type: 'text',
+				},
 			];
 			break;
 
 		case 'letter-spacing':
 			cssUnits = [
-				{ value: 'px', label: 'PX', default: 0 },
-				{ value: 'em', label: 'EM', default: 0 },
-				{ value: 'rem', label: 'REM', default: 0 },
-				{ value: 'ch', label: 'CH', default: 0 },
-				{ value: 'vw', label: 'VW', default: 0 },
-				{ value: 'vh', label: 'VH', default: 0 },
-				{ value: 'dvw', label: 'DVW', default: 0 },
-				{ value: 'dvh', label: 'DVH', default: 0 },
-				{ value: 'initial', label: 'Initial', default: 0 },
-				{ value: 'inherit', label: 'Inherit', default: 0 },
+				{ value: 'px', label: 'PX', default: 0, type: 'number' },
+				{ value: 'em', label: 'EM', default: 0, type: 'number' },
+				{ value: 'rem', label: 'REM', default: 0, type: 'number' },
+				{ value: 'ch', label: 'CH', default: 0, type: 'number' },
+				{ value: 'vw', label: 'VW', default: 0, type: 'number' },
+				{ value: 'vh', label: 'VH', default: 0, type: 'number' },
+				{ value: 'dvw', label: 'DVW', default: 0, type: 'number' },
+				{ value: 'dvh', label: 'DVH', default: 0, type: 'number' },
+				{
+					value: 'initial',
+					label: 'Initial',
+					default: '',
+					type: 'text',
+				},
+				{
+					value: 'inherit',
+					label: 'Inherit',
+					default: '',
+					type: 'text',
+				},
+				{
+					value: 'func',
+					label: 'CSS FUNCTION',
+					default: '',
+					type: 'text',
+				},
 			];
 			break;
 
 		case 'text-indent':
 			cssUnits = [
-				{ value: 'px', label: 'PX', default: 0 },
-				{ value: '%', label: '%', default: 0 },
-				{ value: 'em', label: 'EM', default: 0 },
-				{ value: 'rem', label: 'REM', default: 0 },
-				{ value: 'ch', label: 'CH', default: 0 },
-				{ value: 'vw', label: 'VW', default: 0 },
-				{ value: 'vh', label: 'VH', default: 0 },
-				{ value: 'dvw', label: 'DVW', default: 0 },
-				{ value: 'dvh', label: 'DVH', default: 0 },
-				{ value: 'initial', label: 'Initial', default: 0 },
-				{ value: 'inherit', label: 'Inherit', default: 0 },
+				{ value: 'px', label: 'PX', default: 0, type: 'number' },
+				{ value: '%', label: '%', default: 0, type: 'number' },
+				{ value: 'em', label: 'EM', default: 0, type: 'number' },
+				{ value: 'rem', label: 'REM', default: 0, type: 'number' },
+				{ value: 'ch', label: 'CH', default: 0, type: 'number' },
+				{ value: 'vw', label: 'VW', default: 0, type: 'number' },
+				{ value: 'vh', label: 'VH', default: 0, type: 'number' },
+				{ value: 'dvw', label: 'DVW', default: 0, type: 'number' },
+				{ value: 'dvh', label: 'DVH', default: 0, type: 'number' },
+				{
+					value: 'initial',
+					label: 'Initial',
+					default: '',
+					type: 'text',
+				},
+				{
+					value: 'inherit',
+					label: 'Inherit',
+					default: '',
+					type: 'text',
+				},
+				{
+					value: 'func',
+					label: 'CSS FUNCTION',
+					default: '',
+					type: 'text',
+				},
 			];
 			break;
 
 		case 'background-position':
 			cssUnits = [
-				{ value: '%', label: '%', default: 0 },
-				{ value: 'px', label: 'PX', default: 0 },
-				{ value: 'vw', label: 'VW', default: 0 },
-				{ value: 'vh', label: 'VH', default: 0 },
-				{ value: 'dvw', label: 'DVW', default: 0 },
-				{ value: 'dvh', label: 'DVH', default: 0 },
+				{ value: '%', label: '%', default: 0, type: 'number' },
+				{ value: 'px', label: 'PX', default: 0, type: 'number' },
+				{ value: 'vw', label: 'VW', default: 0, type: 'number' },
+				{ value: 'vh', label: 'VH', default: 0, type: 'number' },
+				{ value: 'dvw', label: 'DVW', default: 0, type: 'number' },
+				{ value: 'dvh', label: 'DVH', default: 0, type: 'number' },
+				{
+					value: 'func',
+					label: 'CSS FUNCTION',
+					default: '',
+					type: 'text',
+				},
 			];
 			break;
 
 		case 'duration':
 			cssUnits = [
-				{ value: 'ms', label: 'MS', default: 0 },
-				{ value: 's', label: 'S', default: 1 },
+				{ value: 'ms', label: 'MS', default: 0, type: 'number' },
+				{ value: 's', label: 'S', default: 1, type: 'number' },
+				{
+					value: 'func',
+					label: 'CSS FUNCTION',
+					default: '',
+					type: 'text',
+				},
 			];
 			break;
 
 		case 'angle':
 			cssUnits = [
-				{ value: 'deg', label: 'DEG', default: 0 },
-				{ value: 'rad', label: 'RAD', default: 0 },
-				{ value: 'grad', label: 'GRAD', default: 0 },
+				{ value: 'deg', label: 'DEG', default: 0, type: 'number' },
+				{ value: 'rad', label: 'RAD', default: 0, type: 'number' },
+				{ value: 'grad', label: 'GRAD', default: 0, type: 'number' },
+				{
+					value: 'func',
+					label: 'CSS FUNCTION',
+					default: '',
+					type: 'text',
+				},
 			];
 			break;
 
 		case 'percent':
-			cssUnits = [{ value: '%', label: '%', default: 0 }];
+			cssUnits = [
+				{ value: '%', label: '%', default: 0, type: 'number' },
+				{
+					value: 'func',
+					label: 'CSS FUNCTION',
+					default: '',
+					type: 'text',
+				},
+			];
 			break;
 
 		case 'width':
 			cssUnits = [
-				{ value: 'px', label: 'PX', default: 0 },
-				{ value: '%', label: '%', default: 0 },
-				{ value: 'em', label: 'EM', default: 0 },
-				{ value: 'rem', label: 'REM', default: 0 },
-				{ value: 'ch', label: 'CH', default: 0 },
-				{ value: 'vw', label: 'VW', default: 0 },
-				{ value: 'vh', label: 'VH', default: 0 },
-				{ value: 'dvw', label: 'DVW', default: 0 },
-				{ value: 'dvh', label: 'DVH', default: 0 },
+				{ value: 'px', label: 'PX', default: 0, type: 'number' },
+				{ value: '%', label: '%', default: 0, type: 'number' },
+				{ value: 'em', label: 'EM', default: 0, type: 'number' },
+				{ value: 'rem', label: 'REM', default: 0, type: 'number' },
+				{ value: 'ch', label: 'CH', default: 0, type: 'number' },
+				{ value: 'vw', label: 'VW', default: 0, type: 'number' },
+				{ value: 'vh', label: 'VH', default: 0, type: 'number' },
+				{ value: 'dvw', label: 'DVW', default: 0, type: 'number' },
+				{ value: 'dvh', label: 'DVH', default: 0, type: 'number' },
 				//
 				{
 					value: 'fit-content',
 					label: 'Fit Content',
 					default: 0,
+					type: 'number',
 				},
 				{
 					value: 'max-content',
 					label: 'Max Content',
 					default: 0,
+					type: 'number',
 				},
 				{
 					value: 'min-content',
 					label: 'Min Content',
 					default: 0,
+					type: 'number',
+				},
+				{
+					value: 'func',
+					label: 'CSS FUNCTION',
+					default: '',
+					type: 'text',
 				},
 			];
 			break;
@@ -171,61 +250,110 @@ export function getCSSUnits(unitType = '') {
 		case 'padding':
 		case 'essential':
 			cssUnits = [
-				{ value: 'px', label: 'PX', default: 0 },
-				{ value: '%', label: '%', default: 0 },
-				{ value: 'em', label: 'EM', default: 0 },
-				{ value: 'rem', label: 'REM', default: 0 },
-				{ value: 'ch', label: 'CH', default: 0 },
-				{ value: 'vw', label: 'VW', default: 0 },
-				{ value: 'vh', label: 'VH', default: 0 },
-				{ value: 'dvw', label: 'DVW', default: 0 },
-				{ value: 'dvh', label: 'DVH', default: 0 },
+				{ value: 'px', label: 'PX', default: 0, type: 'number' },
+				{ value: '%', label: '%', default: 0, type: 'number' },
+				{ value: 'em', label: 'EM', default: 0, type: 'number' },
+				{ value: 'rem', label: 'REM', default: 0, type: 'number' },
+				{ value: 'ch', label: 'CH', default: 0, type: 'number' },
+				{ value: 'vw', label: 'VW', default: 0, type: 'number' },
+				{ value: 'vh', label: 'VH', default: 0, type: 'number' },
+				{ value: 'dvw', label: 'DVW', default: 0, type: 'number' },
+				{ value: 'dvh', label: 'DVH', default: 0, type: 'number' },
+				{
+					value: 'func',
+					label: 'CSS FUNCTION',
+					default: '',
+					type: 'text',
+				},
 			];
 			break;
 
 		case 'general':
 			cssUnits = [
-				{ value: 'px', label: 'PX', default: 0 },
-				{ value: '%', label: '%', default: 0 },
-				{ value: 'em', label: 'EM', default: 0 },
-				{ value: 'rem', label: 'REM', default: 0 },
-				{ value: 'ch', label: 'CH', default: 0 },
-				{ value: 'vw', label: 'VW', default: 0 },
-				{ value: 'vh', label: 'VH', default: 0 },
-				{ value: 'dvw', label: 'DVW', default: 0 },
-				{ value: 'dvh', label: 'DVH', default: 0 },
+				{ value: 'px', label: 'PX', default: 0, type: 'number' },
+				{ value: '%', label: '%', default: 0, type: 'number' },
+				{ value: 'em', label: 'EM', default: 0, type: 'number' },
+				{ value: 'rem', label: 'REM', default: 0, type: 'number' },
+				{ value: 'ch', label: 'CH', default: 0, type: 'number' },
+				{ value: 'vw', label: 'VW', default: 0, type: 'number' },
+				{ value: 'vh', label: 'VH', default: 0, type: 'number' },
+				{ value: 'dvw', label: 'DVW', default: 0, type: 'number' },
+				{ value: 'dvh', label: 'DVH', default: 0, type: 'number' },
 				//
-				{ value: 'auto', label: 'Auto', default: 0 },
-				{ value: 'inherit', label: 'Inherit', default: 0 },
-				{ value: 'initial', label: 'Initial', default: 0 },
+				{ value: 'auto', label: 'Auto', default: '', type: 'text' },
+				{
+					value: 'inherit',
+					label: 'Inherit',
+					default: '',
+					type: 'text',
+				},
+				{
+					value: 'initial',
+					label: 'Initial',
+					default: '',
+					type: 'text',
+				},
+				{
+					value: 'func',
+					label: 'CSS FUNCTION',
+					default: '',
+					type: 'text',
+				},
 			];
 			break;
 
 		case 'margin':
 			cssUnits = [
-				{ value: 'px', label: 'PX', default: 0 },
-				{ value: '%', label: '%', default: 0 },
-				{ value: 'em', label: 'EM', default: 0 },
-				{ value: 'rem', label: 'REM', default: 0 },
-				{ value: 'ch', label: 'CH', default: 0 },
-				{ value: 'vw', label: 'VW', default: 0 },
-				{ value: 'vh', label: 'VH', default: 0 },
-				{ value: 'dvw', label: 'DVW', default: 0 },
-				{ value: 'dvh', label: 'DVH', default: 0 },
+				{ value: 'px', label: 'PX', default: 0, type: 'number' },
+				{ value: '%', label: '%', default: 0, type: 'number' },
+				{ value: 'em', label: 'EM', default: 0, type: 'number' },
+				{ value: 'rem', label: 'REM', default: 0, type: 'number' },
+				{ value: 'ch', label: 'CH', default: 0, type: 'number' },
+				{ value: 'vw', label: 'VW', default: 0, type: 'number' },
+				{ value: 'vh', label: 'VH', default: 0, type: 'number' },
+				{ value: 'dvw', label: 'DVW', default: 0, type: 'number' },
+				{ value: 'dvh', label: 'DVH', default: 0, type: 'number' },
 				//
-				{ value: 'auto', label: 'Auto', default: 0 },
+				{ value: 'auto', label: 'Auto', default: '', type: 'text' },
+				{
+					value: 'func',
+					label: 'CSS FUNCTION',
+					default: '',
+					type: 'text',
+				},
 			];
 			break;
 
 		case 'order':
 			cssUnits = [
-				{ value: '-', label: '-', default: 0 },
+				{ value: '-', label: '-', default: '', type: 'text' },
 				//
-				{ value: 'revert', label: 'Revert', default: 0 },
-				{ value: 'revert-layer', label: 'Revert Layer', default: 0 },
-				{ value: 'inherit', label: 'Inherit', default: 0 },
-				{ value: 'initial', label: 'Initial', default: 0 },
-				{ value: 'unset', label: 'Unset', default: 0 },
+				{ value: 'revert', label: 'Revert', default: '', type: 'text' },
+				{
+					value: 'revert-layer',
+					label: 'Revert Layer',
+					default: '',
+					type: 'text',
+				},
+				{
+					value: 'inherit',
+					label: 'Inherit',
+					default: '',
+					type: 'text',
+				},
+				{
+					value: 'initial',
+					label: 'Initial',
+					default: '',
+					type: 'text',
+				},
+				{ value: 'unset', label: 'Unset', default: '', type: 'text' },
+				{
+					value: 'func',
+					label: 'CSS FUNCTION',
+					default: '',
+					type: 'text',
+				},
 			];
 			break;
 	}
