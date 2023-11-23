@@ -10,10 +10,6 @@ import {
 } from '../../../../../../cypress/helpers';
 
 describe('Size Extension', () => {
-	beforeEach(() => {
-		cy.viewport(1280, 720);
-	});
-
 	//describe('Extension Initializing', () => {...});
 
 	describe('Width', () => {
@@ -23,8 +19,6 @@ describe('Size Extension', () => {
 			cy.getIframeBody()
 				.find('[data-type="core/paragraph"]')
 				.type('This is a test text.');
-
-			cy.get('[aria-label="Settings"]').click();
 		});
 
 		// describe('Wordpress compatibility',()=>{});
@@ -77,8 +71,6 @@ describe('Size Extension', () => {
 			cy.getIframeBody()
 				.find('[data-type="core/paragraph"]')
 				.type('This is a test text.');
-
-			cy.get('[aria-label="Settings"]').click();
 		});
 
 		// describe('Wordpress compatibility',()=>{});
@@ -131,8 +123,6 @@ describe('Size Extension', () => {
 			cy.getIframeBody()
 				.find('[data-type="core/paragraph"]')
 				.type('This is a test text.');
-
-			cy.get('[aria-label="Settings"]').click();
 		});
 
 		//describe('Wordpress compatibility', () => {});
