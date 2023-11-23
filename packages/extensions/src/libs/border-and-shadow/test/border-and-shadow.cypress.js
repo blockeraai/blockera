@@ -7,10 +7,6 @@ import {
 } from '../../../../../../cypress/helpers';
 
 describe('Border and Shadow extension', () => {
-	beforeEach(() => {
-		cy.viewport(1280, 720);
-	});
-
 	//describe('Extension Initializing', () => {...});
 
 	describe('Border', () => {
@@ -20,8 +16,6 @@ describe('Border and Shadow extension', () => {
 			cy.getIframeBody()
 				.find(`[data-type="core/paragraph"]`)
 				.type('this is test text.');
-
-			cy.get('[aria-label="Settings"]').click({ force: true });
 		});
 
 		//describe('WordPress Compatibility', () => {...});
@@ -46,12 +40,10 @@ describe('Border and Shadow extension', () => {
 						cy.getByDataTest('border-control-color').click();
 					});
 
-				cy.contains('Color Picker')
-					.parent()
-					.within(() => {
-						cy.get('input[maxlength="9"]').clear();
-						cy.get('input[maxlength="9"]').type('37e6d4');
-					});
+				cy.getByDataTest('popover-body').within(() => {
+					cy.get('input[maxlength="9"]').clear();
+					cy.get('input[maxlength="9"]').type('37e6d4');
+				});
 
 				cy.get('[aria-label="Border Line"]')
 					.parents('[data-cy="base-control"]')
@@ -130,12 +122,10 @@ describe('Border and Shadow extension', () => {
 							});
 					});
 
-					cy.contains('Color Picker')
-						.parent()
-						.within(() => {
-							cy.get('input[maxlength="9"]').clear();
-							cy.get('input[maxlength="9"]').type('73ddab');
-						});
+					cy.getByDataTest('popover-body').within(() => {
+						cy.get('input[maxlength="9"]').clear();
+						cy.get('input[maxlength="9"]').type('73ddab');
+					});
 
 					//Check block
 					cy.getIframeBody()
@@ -210,12 +200,10 @@ describe('Border and Shadow extension', () => {
 							});
 					});
 
-					cy.contains('Color Picker')
-						.parent()
-						.within(() => {
-							cy.get('input[maxlength="9"]').clear();
-							cy.get('input[maxlength="9"]').type('9958e3');
-						});
+					cy.getByDataTest('popover-body').within(() => {
+						cy.get('input[maxlength="9"]').clear();
+						cy.get('input[maxlength="9"]').type('9958e3');
+					});
 					//'rgb(153, 88, 227)'
 					//Check block
 					cy.getIframeBody()
@@ -306,12 +294,10 @@ describe('Border and Shadow extension', () => {
 							});
 					});
 
-					cy.contains('Color Picker')
-						.parent()
-						.within(() => {
-							cy.get('input[maxlength="9"]').clear();
-							cy.get('input[maxlength="9"]').type('eba492');
-						});
+					cy.getByDataTest('popover-body').within(() => {
+						cy.get('input[maxlength="9"]').clear();
+						cy.get('input[maxlength="9"]').type('eba492');
+					});
 
 					//Check block
 					cy.getIframeBody()
@@ -402,12 +388,10 @@ describe('Border and Shadow extension', () => {
 							});
 					});
 
-					cy.contains('Color Picker')
-						.parent()
-						.within(() => {
-							cy.get('input[maxlength="9"]').clear();
-							cy.get('input[maxlength="9"]').type('1893da');
-						});
+					cy.getByDataTest('popover-body').within(() => {
+						cy.get('input[maxlength="9"]').clear();
+						cy.get('input[maxlength="9"]').type('1893da');
+					});
 
 					//Check block
 					cy.getIframeBody()
@@ -475,8 +459,6 @@ describe('Border and Shadow extension', () => {
 			cy.getIframeBody()
 				.find(`[data-type="core/paragraph"]`)
 				.type('this is test text.');
-
-			cy.get('[aria-label="Settings"]').click({ force: true });
 
 			//assign border to have visual of border-radius
 			cy.getByDataTest('style-tab').click();
@@ -754,11 +736,9 @@ describe('Border and Shadow extension', () => {
 			cy.getIframeBody()
 				.find(`[data-type="core/paragraph"]`)
 				.type('this is test text.');
-
-			cy.get('[aria-label="Settings"]').click({ force: true });
 		});
 
-		it('one shadow', () => {
+		it('should update correctly, when adding one shadow', () => {
 			cy.getByDataTest('style-tab').click();
 
 			cy.get('[aria-label="Box Shadows"]')
@@ -786,8 +766,8 @@ describe('Border and Shadow extension', () => {
 				cy.getByDataTest('box-shadow-color-control').click();
 			});
 
-			cy.contains('Color Picker')
-				.parent()
+			cy.getByDataTest('popover-body')
+				.last()
 				.within(() => {
 					cy.get('input[maxlength="9"]').clear();
 					cy.get('input[maxlength="9"]').type('c5eef0ab');
@@ -832,7 +812,7 @@ describe('Border and Shadow extension', () => {
 				.should('eq', 'rgba(197, 238, 240, 0.67) 10px 50px 30px 40px');
 		});
 
-		it('multiple shadow', () => {
+		it('should update correctly, when adding multiple shadow', () => {
 			cy.getByDataTest('style-tab').click();
 
 			cy.get('[aria-label="Box Shadows"]')
@@ -858,9 +838,8 @@ describe('Border and Shadow extension', () => {
 
 				cy.getByDataTest('box-shadow-color-control').click();
 			});
-
-			cy.contains('Color Picker')
-				.parent()
+			cy.getByDataTest('popover-body')
+				.last()
 				.within(() => {
 					cy.get('input[maxlength="9"]').clear();
 					cy.get('input[maxlength="9"]').type('c5eef0ab');
@@ -886,8 +865,8 @@ describe('Border and Shadow extension', () => {
 				cy.getByDataTest('box-shadow-color-control').click();
 			});
 
-			cy.contains('Color Picker')
-				.parent()
+			cy.getByDataTest('popover-body')
+				.last()
 				.within(() => {
 					cy.get('input[maxlength="9"]').clear();
 					cy.get('input[maxlength="9"]').type('6a6969e6');
@@ -952,8 +931,6 @@ describe('Border and Shadow extension', () => {
 			cy.getIframeBody()
 				.find(`[data-type="core/paragraph"]`)
 				.type('this is test text.');
-
-			cy.get('[aria-label="Settings"]').click({ force: true });
 		});
 
 		it('should update correctly, when add outline', () => {
@@ -981,8 +958,8 @@ describe('Border and Shadow extension', () => {
 				cy.getByDataTest('border-control-color').click();
 			});
 
-			cy.contains('Color Picker')
-				.parent()
+			cy.getByDataTest('popover-body')
+				.last()
 				.within(() => {
 					cy.get('input[maxlength="9"]').clear();
 					cy.get('input[maxlength="9"]').type('c5eef0ab');
