@@ -96,6 +96,9 @@
 			min-height: auto;
 			position: absolute;
 			width: 35px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
 			font-size: 11px;
 			color: #aeaeae;
 			font-weight: 500;

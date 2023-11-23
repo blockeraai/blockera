@@ -61,7 +61,7 @@ export function getCSSUnits(unitType = '') {
 				{ value: 'dvh', label: 'DVH', default: 0, type: 'number' },
 				{
 					value: 'func',
-					label: 'CSS FUNCTION',
+					label: 'CSS FUNC',
 					default: '',
 					type: 'text',
 				},
@@ -82,7 +82,7 @@ export function getCSSUnits(unitType = '') {
 				{ value: 'dvh', label: 'DVH', default: 0, type: 'number' },
 				{
 					value: 'func',
-					label: 'CSS FUNCTION',
+					label: 'CSS FUNC',
 					default: '',
 					type: 'text',
 				},
@@ -113,7 +113,7 @@ export function getCSSUnits(unitType = '') {
 				},
 				{
 					value: 'func',
-					label: 'CSS FUNCTION',
+					label: 'CSS FUNC',
 					default: '',
 					type: 'text',
 				},
@@ -145,7 +145,7 @@ export function getCSSUnits(unitType = '') {
 				},
 				{
 					value: 'func',
-					label: 'CSS FUNCTION',
+					label: 'CSS FUNC',
 					default: '',
 					type: 'text',
 				},
@@ -162,7 +162,7 @@ export function getCSSUnits(unitType = '') {
 				{ value: 'dvh', label: 'DVH', default: 0, type: 'number' },
 				{
 					value: 'func',
-					label: 'CSS FUNCTION',
+					label: 'CSS FUNC',
 					default: '',
 					type: 'text',
 				},
@@ -175,7 +175,7 @@ export function getCSSUnits(unitType = '') {
 				{ value: 's', label: 'S', default: 1, type: 'number' },
 				{
 					value: 'func',
-					label: 'CSS FUNCTION',
+					label: 'CSS FUNC',
 					default: '',
 					type: 'text',
 				},
@@ -189,7 +189,7 @@ export function getCSSUnits(unitType = '') {
 				{ value: 'grad', label: 'GRAD', default: 0, type: 'number' },
 				{
 					value: 'func',
-					label: 'CSS FUNCTION',
+					label: 'CSS FUNC',
 					default: '',
 					type: 'text',
 				},
@@ -201,7 +201,7 @@ export function getCSSUnits(unitType = '') {
 				{ value: '%', label: '%', default: 0, type: 'number' },
 				{
 					value: 'func',
-					label: 'CSS FUNCTION',
+					label: 'CSS FUNC',
 					default: '',
 					type: 'text',
 				},
@@ -240,7 +240,7 @@ export function getCSSUnits(unitType = '') {
 				},
 				{
 					value: 'func',
-					label: 'CSS FUNCTION',
+					label: 'CSS FUNC',
 					default: '',
 					type: 'text',
 				},
@@ -261,7 +261,7 @@ export function getCSSUnits(unitType = '') {
 				{ value: 'dvh', label: 'DVH', default: 0, type: 'number' },
 				{
 					value: 'func',
-					label: 'CSS FUNCTION',
+					label: 'CSS FUNC',
 					default: '',
 					type: 'text',
 				},
@@ -295,7 +295,7 @@ export function getCSSUnits(unitType = '') {
 				},
 				{
 					value: 'func',
-					label: 'CSS FUNCTION',
+					label: 'CSS FUNC',
 					default: '',
 					type: 'text',
 				},
@@ -317,7 +317,7 @@ export function getCSSUnits(unitType = '') {
 				{ value: 'auto', label: 'Auto', default: '', type: 'text' },
 				{
 					value: 'func',
-					label: 'CSS FUNCTION',
+					label: 'CSS FUNC',
 					default: '',
 					type: 'text',
 				},
@@ -350,7 +350,7 @@ export function getCSSUnits(unitType = '') {
 				{ value: 'unset', label: 'Unset', default: '', type: 'text' },
 				{
 					value: 'func',
-					label: 'CSS FUNCTION',
+					label: 'CSS FUNC',
 					default: '',
 					type: 'text',
 				},
@@ -381,11 +381,11 @@ const cssFunctionsRegex = {
 };
 
 /**
- * Checks if a string contains multiple CSS function names and applies logical 'OR' between matches.
+ * Checks if a string contains multiple CSS FUNC names and applies logical 'OR' between matches.
  *
- * @param {string} value - The input string to search for CSS functions.
- * @param {Array<string>} cssFunctionNames - An array of CSS function names to search for.
- * @return {Object|null} - Object with matched CSS functions or null if no matches are found.
+ * @param {string} value - The input string to search for CSS FUNCs.
+ * @param {Array<string>} cssFunctionNames - An array of CSS FUNC names to search for.
+ * @return {Object|null} - Object with matched CSS FUNCs or null if no matches are found.
  */
 
 export function checkCSSFunctions(cssFunctionNames, value) {
