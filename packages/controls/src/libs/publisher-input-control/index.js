@@ -149,7 +149,7 @@ export function PublisherInputControl({
 						getMinValue={getMaxValue}
 						noBorder={noBorder}
 						className={className}
-						special={isSpecial}
+						isSpecial={isSpecial}
 						setIsSpecial={setIsSpecial}
 						disabled={disabled}
 						{...props}
