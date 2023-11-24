@@ -54,7 +54,12 @@ describe('media-image', () => {
 
 			//----------------------- delete ---------------------------------
 			// act
-			cy.getByDataCy('delete-bg-img').click({ force: true });
+			cy.getByDataTest('popover-body')
+				.find('[data-cy="base-control"]')
+				.eq(1)
+				.within(() => {
+					cy.get('img').siblings('button').click({ force: true });
+				});
 
 			// data assertion
 			getWPDataObject().then((data) => {
@@ -103,20 +108,61 @@ describe('media-image', () => {
 				3
 			);
 		});
-
-		// TODO
-		// context('Initial Value', () => {
-		// 	beforeEach(() => {
-		// 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
-
-		// 		cy.getIframeBody()
-		// 			.find(`[data-type="core/paragraph"]`)
-		// 			.type('this is test text.');
-		// 	});
-		// 	it('', () => {});
-		// });
 	});
 
-	// TODO
-	// context('Initial Value', () => {});
+	context('Initial Value', () => {
+		it('should get data from context on reload', () => {
+			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.type('this is test text.');
+
+			cy.getByDataTest('style-tab').click();
+			cy.get('[aria-label="Add New Background"]').click();
+
+			cy.contains('h2', 'Background')
+				.parent()
+				.find('[data-cy="repeater-item"]')
+				.click();
+
+			cy.contains('button', /choose image/i).click();
+
+			cy.get('input[type="file"]').selectFile(
+				'cypress/fixtures/test.jpg',
+				{
+					force: true,
+				}
+			);
+			cy.get('.media-toolbar-primary > .button').click();
+
+			cy.get('button[aria-label="Save draft"]').click();
+
+			cy.visit(
+				Cypress.env('testURL') + '/wp-admin/edit.php?post_type=post'
+			).then(() => {
+				cy.get('[aria-label="“(no title)” (Edit)"]').first().click();
+
+				// wrap
+				cy.getIframeBody();
+				cy.getIframeBody()
+					.find('[data-type="core/paragraph"]')
+					.as('block');
+				cy.get('@block').click();
+				cy.getByDataTest('style-tab').click();
+
+				cy.contains('h2', 'Background')
+					.parent()
+					.find('[data-cy="repeater-item"]')
+					.click();
+
+				cy.getByDataTest('popover-body')
+					.find('[data-cy="base-control"]')
+					.eq(1)
+					.within(() => {
+						cy.get('img');
+					});
+			});
+		});
+	});
 });
