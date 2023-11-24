@@ -15,8 +15,8 @@
 		}
 
 		&.invalid {
-			border: 1px solid var(--publisher-controls-invalid-input-border-color);
-			box-shadow: 0 0 0 1px var(--publisher-controls-invalid-input-border-color);
+			border: 1px solid var(--publisher-controls-invalid-input-border-color) !important;
+			box-shadow: 0 0 0 1px var(--publisher-controls-invalid-input-border-color) !important;
 		}
 
 	}

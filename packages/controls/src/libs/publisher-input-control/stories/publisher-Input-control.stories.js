@@ -514,6 +514,7 @@ export const CssInput = {
 					Control={PublisherInputControl}
 					{...args}
 					unitType="general"
+					validator={[]}
 				/>
 			</ControlContextProvider>
 			<ControlContextProvider
@@ -588,7 +589,7 @@ export const WithCssValidator = {
 			value: 'calc(50px - 20px)',
 		},
 		label: 'My Label',
-		validator: ['calc', 'rgb'],
+		validator: [],
 	},
 	render: (args) => (
 		<ControlWithHooks Control={PublisherInputControl} {...args} />

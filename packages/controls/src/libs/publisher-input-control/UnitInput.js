@@ -2,93 +2,114 @@
  * External dependencies
  */
 import { useState, useEffect } from '@wordpress/element';
+
 /**
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-// import { isEmpty, isUndefined, isString, isNumber } from '@publisher/utils';
+import { isFunction, isArray, isUndefined } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
-import { isSpecialUnit, extractSpecialUnitType } from './utils';
+import { isSpecialUnit, checkCSSFunctions, getUnitByValue } from './utils';
 
 export function UnitInput({
 	value,
 	setValue,
-	getMaxValue,
-	getMinValue,
 	noBorder,
 	className,
 	units = [],
 	setIsSpecial,
-	isSpecial,
+	isSpecial = false,
 	disabled,
+	validator,
 	...props
 }) {
-	const [selectedUnit, setSelectedUnit] = useState('');
-	const [oldNumberValue, setOldNumberValue] = useState(null);
-	const [oldUnitValue, setOldUnitValue] = useState(null);
-	const [inputType, setInputType] = useState('number'); // eslint-disable-line
+	const [isValidValue, setIsValidValue] = useState(true);
 
-	console.log('---------');
-	console.log('selectedUnit', selectedUnit);
-	console.log('inputType', inputType);
-	console.log('oldNumberValue', oldNumberValue);
-	console.log('oldUnitValue', oldUnitValue);
-	console.log('value', value);
-
-	//  check special value
-	useEffect(() => {
-		if (isSpecialUnit(value)) {
-			const unitValue = extractSpecialUnitType(value);
-			setIsSpecial(true);
-			setSelectedUnit(unitValue);
+	const onChangeInput = (inputValue) => {
+		if (isSpecial) {
+			setValue({
+				...value,
+				oldUnit: value?.inputValue,
+				inputValue,
+			});
+		} else {
+			setValue({
+				...value,
+				oldInputValue: inputValue,
+				inputValue,
+			});
 		}
-	}, []); // eslint-disable-line
+	};
 
 	const onChangeSelect = (unit) => {
 		if (isSpecialUnit(unit)) {
-			setIsSpecial(true);
-			setInputType('text');
-			setOldNumberValue(value);
-			setOldUnitValue(unit);
-			setValue(unit);
+			setValue({
+				...value,
+				isSpecial: true,
+				unit,
+				oldUnit: value?.unit,
+				oldInputValue: isSpecialUnit(value?.inputValue)
+					? unit
+					: value?.inputValue,
+				inputValue: unit,
+				type: 'text',
+			});
 		} else {
-			if (!isSpecialUnit(oldUnitValue)) {
-				setValue(oldNumberValue);
-			}
-			setIsSpecial(false);
-			setInputType('number');
+			const type = getUnitByValue(unit)?.type || 'number';
+			setValue({
+				...value,
+				isSpecial: false,
+				inputValue: isSpecialUnit(value?.oldInputValue)
+					? 0
+					: value?.oldInputValue,
+				oldUnit: value?.unit,
+				unit,
+				type,
+			});
 		}
-		setSelectedUnit(unit);
 	};
+
+	// validator checking
+	useEffect(() => {
+		if (!validator || isUndefined(value?.inputValue)) {
+			// If no validator is provided, assume the value is valid
+			setIsValidValue(true);
+		} else {
+			let isValid = false;
+			if (isFunction(validator)) {
+				isValid = validator(value.inputValue);
+			} else if (isArray(validator)) {
+				isValid = checkCSSFunctions(validator, value.inputValue);
+			}
+
+			// Update validValue based on the result of validation
+			setIsValidValue(!!isValid);
+		}
+	}, [value]); // eslint-disable-line
 
 	return (
 		<div className={controlClassNames('unit-input-container')}>
 			<input
-				value={value}
-				onChange={(e) => {
-					console.log('e.value:', e.target.value);
-					setValue(`${e.target.value}`);
-					// setValue(`${e.target.value}${selectedUnit}`);
-				}}
+				value={value?.inputValue}
+				onChange={(e) => onChangeInput(e.target.value)}
 				disabled={disabled}
 				className={controlClassNames(
 					'single-input',
 					noBorder && 'no-border',
+					!isValidValue && 'invalid',
 					className
 				)}
-				type={inputType}
-				{...getMinValue}
-				{...getMaxValue}
+				type={value?.type || 'number'}
 				{...props}
 			/>
 			<span className={controlClassNames('input-suffix')}>
 				<select
 					disabled={disabled}
 					onChange={(e) => onChangeSelect(e.target.value)}
-					value={selectedUnit}
+					value={value?.unit || units?.[0]}
 					className={controlClassNames(
 						'unit-select',
 						!isSpecial && 'hide-arrow'

@@ -1,29 +1,23 @@
 /**
  * External dependencies
  */
+import { useMemo } from '@wordpress/element';
 import PropTypes from 'prop-types';
-import { useMemo, useState, useEffect } from '@wordpress/element';
+
 /**
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import {
-	isEmpty,
-	isUndefined,
-	isFunction,
-	isArray,
-	isString,
-	isNumber,
-} from '@publisher/utils';
+import { isEmpty, isNumber, isString, isUndefined } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
-import { getCSSUnits, checkCSSFunctions } from './utils';
 import { useControlContext } from '../../context';
-import { RangeControl, BaseControl } from './../index';
-import { Input } from './input';
+import { BaseControl, RangeControl } from './../index';
 import { UnitInput } from './UnitInput';
+import { Input } from './input';
+import { getCSSUnits } from './utils';
 
 export function PublisherInputControl({
 	unitType,
@@ -44,14 +38,22 @@ export function PublisherInputControl({
 	disabled = false,
 	...props
 }) {
+	/**
+	 * value: {
+	 * 	inputValue: string,
+	 * 	type: string | number
+	 * 	oldInputValue: string | number
+	 * 	oldUnit: string
+	 *  unit: string
+	 *  isSpecial: true | false
+	 * }
+	 *
+	 */
 	const { value, setValue } = useControlContext({
 		id,
 		defaultValue,
 		onChange,
 	});
-
-	const [isValidValue, setIsValidValue] = useState(true);
-	const [isSpecial, setIsSpecial] = useState(false);
 
 	// add css units
 	if (unitType !== '' && (isUndefined(units) || isEmpty(units))) {
@@ -74,25 +76,6 @@ export function PublisherInputControl({
 		return {};
 	}, [max]); // eslint-disable-line
 
-	// validator checking
-	useEffect(() => {
-		if (!validator || type !== 'text') {
-			// If no validator is provided, assume the value is valid
-			setIsValidValue(true);
-			return;
-		}
-
-		let isValid = false;
-		if (isFunction(validator)) {
-			isValid = validator(value);
-		} else if (isArray(validator)) {
-			isValid = checkCSSFunctions(validator, value);
-		}
-
-		// Update validValue based on the result of validation
-		setIsValidValue(!!isValid);
-	}, [value]); // eslint-disable-line
-
 	return (
 		<BaseControl
 			label={label}
@@ -105,7 +88,7 @@ export function PublisherInputControl({
 					'input-2',
 					range && 'input-range',
 					noBorder && 'no-border',
-					isSpecial && 'publisher-control-unit-special',
+					value?.isSpecial && 'publisher-control-unit-special',
 					className
 				)}
 			>
@@ -129,13 +112,13 @@ export function PublisherInputControl({
 					<Input
 						value={value}
 						setValue={setValue}
-						isValid={isValidValue}
 						type={type}
 						getMaxValue={getMaxValue}
 						getMinValue={getMinValue}
 						noBorder={noBorder}
 						className={className}
 						disabled={disabled}
+						validator={validator}
 						{...props}
 					/>
 				) : (
@@ -143,15 +126,12 @@ export function PublisherInputControl({
 						units={units}
 						value={value}
 						setValue={setValue}
-						isValid={isValidValue}
 						type={type}
-						getMaxValue={getMaxValue}
-						getMinValue={getMaxValue}
 						noBorder={noBorder}
 						className={className}
-						isSpecial={isSpecial}
-						setIsSpecial={setIsSpecial}
+						isSpecial={value?.isSpecial}
 						disabled={disabled}
+						validator={validator}
 						{...props}
 					/>
 				)}

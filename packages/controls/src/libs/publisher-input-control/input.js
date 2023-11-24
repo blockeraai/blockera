@@ -1,20 +1,52 @@
 /**
+ * External dependencies
+ */
+import { useEffect, useState } from '@wordpress/element';
+
+/**
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
+import { isArray, isFunction } from '@publisher/utils';
+
+/**
+ * Internal dependencies
+ */
+import { checkCSSFunctions } from './utils';
 
 export function Input({
 	value,
 	setValue,
-	isValid,
 	type,
 	getMaxValue,
 	getMinValue,
 	noBorder,
 	className,
 	disabled,
+	validator,
 	...props
 }) {
+	const [isValidValue, setIsValidValue] = useState(true);
+
+	// validator checking
+	useEffect(() => {
+		if (!validator || type !== 'text') {
+			// If no validator is provided, assume the value is valid
+			setIsValidValue(true);
+			return;
+		}
+
+		let isValid = false;
+		if (isFunction(validator)) {
+			isValid = validator(value);
+		} else if (isArray(validator)) {
+			isValid = checkCSSFunctions(validator, value);
+		}
+
+		// Update validValue based on the result of validation
+		setIsValidValue(!!isValid);
+	}, [value]); // eslint-disable-line
+
 	return (
 		<input
 			value={value}
@@ -22,7 +54,7 @@ export function Input({
 			disabled={disabled}
 			className={controlClassNames(
 				'single-input',
-				!isValid && 'invalid',
+				!isValidValue && 'invalid',
 				noBorder && 'no-border',
 				className
 			)}
