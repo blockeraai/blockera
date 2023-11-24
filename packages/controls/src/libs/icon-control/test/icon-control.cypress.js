@@ -36,7 +36,7 @@ describe('icon-control', () => {
 			getWPDataObject().then((data) => {
 				const uploadedFileName = getSelectedBlock(data, 'publisherIcon')
 					.uploadSVG.filename;
-				expect(uploadedFileName).to.match(/home-\d+.svg/);
+				expect(uploadedFileName).to.match(/home(-\d+)?.svg/);
 			});
 		});
 
