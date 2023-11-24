@@ -94,6 +94,9 @@ describe('icon-control', () => {
 				cy.getIframeBody();
 
 				cy.getIframeBody().find('[data-type="core/paragraph"]').click();
+
+				// assert
+				cy.get('[aria-label="Remove Icon"]').siblings('svg');
 			});
 		});
 	});
