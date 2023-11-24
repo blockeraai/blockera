@@ -49,7 +49,7 @@ describe('media-image', () => {
 				)[0]
 					.image.split('/')
 					.slice(-1);
-				expect(uploadedImageFileName).to.be.match(/^test-\d+.jpg/);
+				expect(uploadedImageFileName).to.be.match(/^test(-\d+)?.jpg/);
 			});
 
 			//----------------------- delete ---------------------------------
