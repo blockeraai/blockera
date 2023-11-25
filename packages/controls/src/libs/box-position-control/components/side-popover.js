@@ -19,7 +19,6 @@ export function SidePopover({
 	id,
 	title = '',
 	icon = '',
-	unit = 'px',
 	isOpen,
 	offset = 35,
 	onClose = () => {},
@@ -71,7 +70,7 @@ export function SidePopover({
 								aria-label={__('Set 0px', 'publisher-core')}
 								size="small"
 								onClick={() => {
-									setValue('0' + unit);
+									setValue('0px');
 								}}
 							>
 								0
@@ -80,7 +79,7 @@ export function SidePopover({
 							<Button
 								aria-label={__('Set 10px', 'publisher-core')}
 								size="small"
-								onClick={() => setValue('10' + unit)}
+								onClick={() => setValue('10px')}
 							>
 								10
 							</Button>
@@ -88,7 +87,7 @@ export function SidePopover({
 							<Button
 								aria-label={__('Set 20px', 'publisher-core')}
 								size="small"
-								onClick={() => setValue('20' + unit)}
+								onClick={() => setValue('20px')}
 							>
 								20
 							</Button>
@@ -96,7 +95,7 @@ export function SidePopover({
 							<Button
 								aria-label={__('Set 30px', 'publisher-core')}
 								size="small"
-								onClick={() => setValue('30' + unit)}
+								onClick={() => setValue('30px')}
 							>
 								30
 							</Button>
@@ -105,7 +104,7 @@ export function SidePopover({
 								aria-label={__('Set 60px', 'publisher-core')}
 								size="small"
 								onClick={() => {
-									setValue('60' + unit);
+									setValue('60px');
 								}}
 							>
 								60
@@ -114,7 +113,7 @@ export function SidePopover({
 							<Button
 								aria-label={__('Set 80px', 'publisher-core')}
 								size="small"
-								onClick={() => setValue('80' + unit)}
+								onClick={() => setValue('80px')}
 							>
 								80
 							</Button>
@@ -122,7 +121,7 @@ export function SidePopover({
 							<Button
 								aria-label={__('Set 100px', 'publisher-core')}
 								size="small"
-								onClick={() => setValue('100' + unit)}
+								onClick={() => setValue('100px')}
 							>
 								100
 							</Button>
@@ -130,7 +129,7 @@ export function SidePopover({
 							<Button
 								aria-label={__('Set 120px', 'publisher-core')}
 								size="small"
-								onClick={() => setValue('120' + unit)}
+								onClick={() => setValue('120px')}
 							>
 								120
 							</Button>
