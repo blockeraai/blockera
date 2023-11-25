@@ -49,7 +49,7 @@ import { default as AbsoluteLeftIcon } from './icons/absolute-left';
 import { default as AbsoluteFullIcon } from './icons/absolute-full';
 import { default as AbsoluteCenterIcon } from './icons/absolute-center';
 
-function BoxPositionControl({
+const Component = ({
 	openSide,
 	//
 	id,
@@ -59,7 +59,7 @@ function BoxPositionControl({
 	//
 	className,
 	...props
-}: TBoxPositionControlProps): MixedElement {
+}: TBoxPositionControlProps): MixedElement => {
 	const { value, setValue, getId } = useControlContext({
 		id,
 		onChange,
@@ -112,9 +112,9 @@ function BoxPositionControl({
 	function fixLabelText(value: string | MixedElement): any {
 		if (value === '') {
 			value = '-';
-		} else {
+		} else if ('string' === typeof value) {
 			// remove px
-			value = (value: string).replace('px', '');
+			value = value.replace('px', '');
 
 			const match = /(\d+)(auto|px|%|em|rem|ch|vw|vh|dvw|dvh)/gi.exec(
 				value
@@ -140,7 +140,7 @@ function BoxPositionControl({
 		return value;
 	}
 
-	function getUnitType(value) {
+	function getUnitType(value: string) {
 		const match = value.match(/(auto|px|%|em|rem|ch|vw|vh|dvw|dvh)/);
 		return match ? match[0] : '';
 	}
@@ -651,9 +651,9 @@ function BoxPositionControl({
 			)}
 		</div>
 	);
-}
+};
 
-BoxPositionControl.propTypes = {
+Component.propTypes = {
 	/**
 	 * ID for retrieving value from control context
 	 */
@@ -667,7 +667,7 @@ BoxPositionControl.propTypes = {
 	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
-	defaultValue: (PropTypes.shape({
+	defaultValue: PropTypes.shape({
 		type: PropTypes.oneOf([
 			'static',
 			'relative',
@@ -675,13 +675,13 @@ BoxPositionControl.propTypes = {
 			'sticky',
 			'fixed',
 		]),
-		position: (PropTypes.shape({
+		position: PropTypes.shape({
 			top: PropTypes.string,
 			right: PropTypes.string,
 			bottom: PropTypes.string,
 			left: PropTypes.string,
-		}): any),
-	}): any),
+		}),
+	}),
 	/**
 	 * Function that will be fired while the control value state changes.
 	 */
@@ -689,30 +689,30 @@ BoxPositionControl.propTypes = {
 	/**
 	 * The current value.
 	 */
-	value: (PropTypes.shape({
-		type: (PropTypes.oneOf([
+	value: PropTypes.shape({
+		type: PropTypes.oneOf([
 			'static',
 			'relative',
 			'absolute',
 			'sticky',
 			'fixed',
-		]): any),
+		]),
 		position: {
 			top: PropTypes.string,
 			right: PropTypes.string,
 			bottom: PropTypes.string,
 			left: PropTypes.string,
 		},
-	}): any),
+	}),
 	/**
 	 * Specifies which side is open by default.
 	 *
 	 * @default ``
 	 */
-	openSide: (PropTypes.oneOf(['top', 'right', 'bottom', 'left', '']): any),
+	openSide: PropTypes.oneOf(['top', 'right', 'bottom', 'left', '']),
 };
 
-BoxPositionControl.defaultProps = {
+Component.defaultProps = {
 	defaultValue: {
 		type: 'static',
 		position: {
@@ -723,7 +723,10 @@ BoxPositionControl.defaultProps = {
 		},
 	},
 	openSide: '',
-	label: __('Position', 'publisher-core'),
+	label: (__('Position', 'publisher-core'): any),
 };
 
-export default memo(BoxPositionControl, hasSameProps);
+const BoxPositionControl: TBoxPositionControlProps =
+	memo<TBoxPositionControlProps>(Component, hasSameProps);
+
+export default BoxPositionControl;
