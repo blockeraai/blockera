@@ -31,15 +31,14 @@ describe('icon-control', () => {
 
 			cy.get('.media-toolbar-primary > .button').click();
 
-			cy.getByDataCy('base-control').then(() => {
-				// data assertion
-				getWPDataObject().then((data) => {
-					const uploadedFileName = getSelectedBlock(
-						data,
-						'publisherIcon'
-					).uploadSVG.filename;
-					expect(uploadedFileName).to.match(/home(-\d+)?.svg/);
-				});
+			// data assertion
+
+			// eslint-disable-next-line cypress/no-unnecessary-waiting
+			cy.wait(100);
+			getWPDataObject().then((data) => {
+				const uploadedFileName = getSelectedBlock(data, 'publisherIcon')
+					.uploadSVG.filename;
+				expect(uploadedFileName).to.match(/home(-\d+)?.svg/);
 			});
 		});
 
