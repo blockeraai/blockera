@@ -26,7 +26,7 @@ import { useDragSetValues } from './hooks/use-drag-setValues';
 /**
  * Types
  */
-import type { TBoxSpacingControlProps } from './types/box-position-control-props';
+import type { TBoxSpacingControlProps } from './types/box-spacing-control-props';
 import type { MixedElement } from 'react';
 
 // icons
@@ -140,9 +140,9 @@ export default function BoxSpacingControl({
 	function fixLabelText(value: string | MixedElement): any {
 		if (value === '') {
 			value = '-';
-		} else {
+		} else if ('string' === typeof value) {
 			// remove px
-			value = (value: string).replace('px', '');
+			value = value.replace('px', '');
 
 			const match = /(\d+)(auto|px|%|em|rem|ch|vw|vh|dvw|dvh)/gi.exec(
 				value
