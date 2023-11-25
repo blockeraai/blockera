@@ -122,6 +122,10 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 										<InputControl
 											controlName="input"
 											label={__('Grow', 'publisher-core')}
+											aria-label={__(
+												'Custom Grow',
+												'publisher-core'
+											)}
 											columns="columns-2"
 											{...{
 												...props,
@@ -149,6 +153,10 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 												'Shrink',
 												'publisher-core'
 											)}
+											aria-label={__(
+												'Custom Shrink',
+												'publisher-core'
+											)}
 											columns="columns-2"
 											{...{
 												...props,
@@ -174,6 +182,10 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 											controlName="input"
 											label={__(
 												'Basis',
+												'publisher-core'
+											)}
+											aria-label={__(
+												'Custom Basis',
 												'publisher-core'
 											)}
 											columns="columns-2"
