@@ -15,9 +15,7 @@ describe('icon-control', () => {
 		beforeEach(() => {
 			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
-			cy.getIframeBody()
-				.find(`[data-type="core/paragraph"]`)
-				.type('this is test text.');
+			cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
 		});
 
 		it('should be able to upload custom svg when there is selected icon', () => {
@@ -30,13 +28,18 @@ describe('icon-control', () => {
 					force: true,
 				}
 			);
+
 			cy.get('.media-toolbar-primary > .button').click();
 
-			// data assertion
-			getWPDataObject().then((data) => {
-				const uploadedFileName = getSelectedBlock(data, 'publisherIcon')
-					.uploadSVG.filename;
-				expect(uploadedFileName).to.match(/home(-\d+)?.svg/);
+			cy.getByDataCy('base-control').then(() => {
+				// data assertion
+				getWPDataObject().then((data) => {
+					const uploadedFileName = getSelectedBlock(
+						data,
+						'publisherIcon'
+					).uploadSVG.filename;
+					expect(uploadedFileName).to.match(/home(-\d+)?.svg/);
+				});
 			});
 		});
 
