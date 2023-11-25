@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { useState, useEffect } from '@wordpress/element';
+import { useState, useEffect, useMemo } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -38,7 +38,9 @@ export function UnitInput({
 		} else {
 			setValue({
 				...value,
-				oldInputValue: inputValue,
+				...(value?.unit !== 'func'
+					? { oldInputValue: inputValue }
+					: {}),
 				inputValue,
 			});
 		}
@@ -51,26 +53,40 @@ export function UnitInput({
 				isSpecial: true,
 				unit,
 				oldUnit: value?.unit,
-				oldInputValue: isSpecialUnit(value?.inputValue)
-					? unit
-					: value?.inputValue,
+				// oldInputValue: value?.inputValue,
 				inputValue: unit,
 				type: 'text',
 			});
+			if (unit !== 'func') {
+				setIsValidValue(true);
+			}
 		} else {
 			const type = getUnitByValue(unit)?.type || 'number';
 			setValue({
 				...value,
 				isSpecial: false,
-				inputValue: isSpecialUnit(value?.oldInputValue)
-					? 0
-					: value?.oldInputValue,
+				inputValue: value?.oldInputValue,
 				oldUnit: value?.unit,
 				unit,
 				type,
 			});
+			if (unit !== 'func') {
+				setIsValidValue(true);
+			}
 		}
 	};
+
+	const getInputType = useMemo(() => {
+		let type = 'number';
+		if (value && value.unit) {
+			const unit = getUnitByValue(value.unit);
+			if (unit) {
+				type = unit.type;
+			}
+		}
+		console.log('type:', type);
+		return type;
+	}, [value]);
 
 	// validator checking
 	useEffect(() => {
@@ -78,6 +94,8 @@ export function UnitInput({
 			// If no validator is provided, assume the value is valid
 			setIsValidValue(true);
 		} else {
+			if (value?.unit !== 'func') return;
+
 			let isValid = false;
 			if (isFunction(validator)) {
 				isValid = validator(value.inputValue);
@@ -89,6 +107,8 @@ export function UnitInput({
 			setIsValidValue(!!isValid);
 		}
 	}, [value]); // eslint-disable-line
+
+	console.log('value:', value);
 
 	return (
 		<div className={controlClassNames('unit-input-container')}>
@@ -102,7 +122,7 @@ export function UnitInput({
 					!isValidValue && 'invalid',
 					className
 				)}
-				type={value?.type || 'number'}
+				type={getInputType}
 				{...props}
 			/>
 			<span className={controlClassNames('input-suffix')}>

@@ -589,7 +589,7 @@ export const WithCssValidator = {
 			value: 'calc(50px - 20px)',
 		},
 		label: 'My Label',
-		validator: [],
+		validator: ['rgb', 'min'],
 	},
 	render: (args) => (
 		<ControlWithHooks Control={PublisherInputControl} {...args} />

@@ -76,6 +76,8 @@ export function PublisherInputControl({
 		return {};
 	}, [max]); // eslint-disable-line
 
+	console.log('value:', value);
+
 	return (
 		<BaseControl
 			label={label}
@@ -99,11 +101,16 @@ export function PublisherInputControl({
 						className={className}
 						onChange={(newValue) => {
 							// extract unit from old value and assign it to newValue
-							if (isString(value))
+							if (isString(value)) {
 								newValue =
 									newValue + value.replace(/[0-9|-]/gi, '');
-
-							setValue(newValue);
+							}
+							const updatedObject = {
+								...value,
+								inputValue: newValue,
+							};
+							console.log('object:', updatedObject);
+							setValue(updatedObject);
 						}}
 						{...props}
 					/>
