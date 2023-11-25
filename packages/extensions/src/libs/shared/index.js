@@ -5,6 +5,7 @@
 import { __ } from '@wordpress/i18n';
 import type { Node, MixedElement } from 'react';
 import { InspectorControls } from '@wordpress/block-editor';
+import { select } from '@wordpress/data';
 
 /**
  * Publisher dependencies
@@ -131,6 +132,13 @@ export function SharedBlockExtension({
 
 	props = { ...props, attributes };
 
+	const parentClientIds = select('core/block-editor').getBlockParents(
+		props.clientId
+	);
+	const directParentBlock = select('core/block-editor').getBlock(
+		parentClientIds[parentClientIds.length - 1]
+	);
+
 	const MappedExtensions = (tab: {
 		name: string,
 		title: string,
@@ -200,16 +208,6 @@ export function SharedBlockExtension({
 						<BaseExtension
 							{...props}
 							initialOpen={true}
-							extensionId={'FlexChild'}
-							title={__('Flex Child', 'publisher-core')}
-							values={include(attributes, flexChild, 'publisher')}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-							icon={<FlexChildExtensionIcon />}
-						/>
-
-						<BaseExtension
-							{...props}
-							initialOpen={true}
 							extensionId={'Layout'}
 							title={__('Layout', 'publisher-core')}
 							values={include(attributes, layout, 'publisher')}
@@ -217,6 +215,26 @@ export function SharedBlockExtension({
 							handleOnChangeAttributes={handleOnChangeAttributes}
 							icon={<LayoutExtensionIcon />}
 						/>
+
+						{directParentBlock?.innerBlocks.length &&
+							directParentBlock?.attributes.publisherDisplay ===
+								'flex' && (
+								<BaseExtension
+									{...props}
+									initialOpen={true}
+									extensionId={'FlexChild'}
+									title={__('Flex Child', 'publisher-core')}
+									values={include(
+										attributes,
+										flexChild,
+										'publisher'
+									)}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+									icon={<FlexChildExtensionIcon />}
+								/>
+							)}
 
 						<BaseExtension
 							{...props}
