@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { useMemo } from '@wordpress/element';
+import { useMemo, useEffect } from '@wordpress/element';
 import PropTypes from 'prop-types';
 
 /**
@@ -17,8 +17,7 @@ import { useControlContext } from '../../context';
 import { BaseControl, RangeControl } from './../index';
 import { UnitInput } from './UnitInput';
 import { Input } from './input';
-import { getCSSUnits } from './utils';
-
+import { getCSSUnits, isSpecialUnit } from './utils';
 export function PublisherInputControl({
 	unitType,
 	units,
@@ -76,6 +75,24 @@ export function PublisherInputControl({
 		return {};
 	}, [max]); // eslint-disable-line
 
+	useEffect(() => {
+		if (isNumber(value)) {
+			setValue({
+				inputValue: value,
+			});
+		}
+		if (isString(value)) {
+			if (isSpecialUnit(value)) {
+				setValue({
+					inputValue: value,
+					isSpecial: true,
+					type: 'text',
+					unit: value,
+				});
+			}
+		}
+	}, []);
+
 	console.log('value:', value);
 
 	return (
@@ -88,16 +105,17 @@ export function PublisherInputControl({
 			<div
 				className={controlClassNames(
 					'input-2',
-					range && 'input-range',
+					range && value?.unit !== 'func' && 'input-range',
 					noBorder && 'no-border',
 					value?.isSpecial && 'publisher-control-unit-special',
 					className
 				)}
 			>
-				{range && (
+				{range && value?.unit !== 'func' && (
 					<RangeControl
 						id={id}
 						withInputField={false}
+						sideEffect={false}
 						className={className}
 						onChange={(newValue) => {
 							// extract unit from old value and assign it to newValue
@@ -109,7 +127,6 @@ export function PublisherInputControl({
 								...value,
 								inputValue: newValue,
 							};
-							console.log('object:', updatedObject);
 							setValue(updatedObject);
 						}}
 						{...props}
@@ -238,4 +255,7 @@ PublisherInputControl.defaultProps = {
 	range: false,
 	noBorder: false,
 	field: 'input',
+	defaultValue: {
+		unit: 'em',
+	},
 };

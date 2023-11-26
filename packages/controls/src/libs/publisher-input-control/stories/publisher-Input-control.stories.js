@@ -350,7 +350,7 @@ export const UnitsInput = {
 						Control={PublisherInputControl}
 						{...args}
 						unitType={'letter-spacing'}
-						type="number"
+						validator={[]}
 					/>
 				</ControlContextProvider>
 				<ControlContextProvider
@@ -363,8 +363,8 @@ export const UnitsInput = {
 						Control={PublisherInputControl}
 						{...args}
 						units={units}
-						type="number"
 						className="is-hovered"
+						validator={[]}
 					/>
 				</ControlContextProvider>
 				<ControlContextProvider
@@ -377,8 +377,8 @@ export const UnitsInput = {
 						Control={PublisherInputControl}
 						{...args}
 						units={units}
-						type="number"
 						className="is-focused"
+						validator={[]}
 					/>
 				</ControlContextProvider>
 				<ControlContextProvider
@@ -391,8 +391,8 @@ export const UnitsInput = {
 						Control={PublisherInputControl}
 						{...args}
 						units={units}
-						type="number"
 						noBorder={true}
+						validator={[]}
 					/>
 				</ControlContextProvider>
 				<ControlContextProvider
@@ -405,9 +405,9 @@ export const UnitsInput = {
 						Control={PublisherInputControl}
 						{...args}
 						units={units}
-						type="number"
 						className="is-focused"
 						noBorder={true}
+						validator={[]}
 					/>
 				</ControlContextProvider>
 			</Flex>
@@ -425,7 +425,7 @@ export const UnitsInput = {
 						{...args}
 						range={true}
 						units={units}
-						type="number"
+						validator={[]}
 					/>
 				</ControlContextProvider>
 				<ControlContextProvider
@@ -439,8 +439,8 @@ export const UnitsInput = {
 						{...args}
 						range={true}
 						units={units}
-						type="number"
 						className="is-hovered"
+						validator={[]}
 					/>
 				</ControlContextProvider>
 				<ControlContextProvider
@@ -454,8 +454,8 @@ export const UnitsInput = {
 						{...args}
 						range={true}
 						units={units}
-						type="number"
 						className="is-focused"
+						validator={[]}
 					/>
 				</ControlContextProvider>
 				<ControlContextProvider
@@ -469,8 +469,8 @@ export const UnitsInput = {
 						{...args}
 						range={true}
 						units={units}
-						type="number"
 						noBorder={true}
+						validator={[]}
 					/>
 				</ControlContextProvider>
 				<ControlContextProvider
@@ -484,9 +484,9 @@ export const UnitsInput = {
 						{...args}
 						range={true}
 						units={units}
-						type="number"
 						className="is-focused"
 						noBorder={true}
+						validator={[]}
 					/>
 				</ControlContextProvider>
 			</Flex>
@@ -512,6 +512,21 @@ export const CssInput = {
 			>
 				<ControlWithHooks
 					Control={PublisherInputControl}
+					defaultValue="10"
+					{...args}
+					unitType="general"
+					validator={[]}
+				/>
+			</ControlContextProvider>
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.value,
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					defaultValue="10"
 					{...args}
 					unitType="general"
 					validator={[]}
@@ -526,21 +541,10 @@ export const CssInput = {
 				<ControlWithHooks
 					Control={PublisherInputControl}
 					{...args}
-					unitType="general"
-				/>
-			</ControlContextProvider>
-			<ControlContextProvider
-				value={{
-					name: nanoid(),
-					value: args.value,
-				}}
-			>
-				<ControlWithHooks
-					Control={PublisherInputControl}
-					{...args}
 					range={true}
 					defaultValue="10"
 					unitType="general"
+					validator={[]}
 				/>
 			</ControlContextProvider>
 			<ControlContextProvider
@@ -554,6 +558,7 @@ export const CssInput = {
 					range={true}
 					defaultValue="auto"
 					unitType="general"
+					validator={[]}
 				/>
 			</ControlContextProvider>
 		</Flex>

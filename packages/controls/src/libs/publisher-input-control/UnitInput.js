@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { useState, useEffect, useMemo } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -76,17 +76,19 @@ export function UnitInput({
 		}
 	};
 
-	const getInputType = useMemo(() => {
-		let type = 'number';
-		if (value && value.unit) {
-			const unit = getUnitByValue(value.unit);
-			if (unit) {
-				type = unit.type;
-			}
+	useEffect(() => {
+		if (value?.unit) {
+			setValue({
+				...value,
+				unit: value.unit,
+			});
+		} else if (units.length) {
+			setValue({
+				...value,
+				units: units[0]?.value,
+			});
 		}
-		console.log('type:', type);
-		return type;
-	}, [value]);
+	}, []); // eslint-disable-line
 
 	// validator checking
 	useEffect(() => {
@@ -95,7 +97,6 @@ export function UnitInput({
 			setIsValidValue(true);
 		} else {
 			if (value?.unit !== 'func') return;
-
 			let isValid = false;
 			if (isFunction(validator)) {
 				isValid = validator(value.inputValue);
@@ -109,6 +110,7 @@ export function UnitInput({
 	}, [value]); // eslint-disable-line
 
 	console.log('value:', value);
+	console.log('type:', getUnitByValue(value?.unit)?.type || 'number');
 
 	return (
 		<div className={controlClassNames('unit-input-container')}>
@@ -122,14 +124,14 @@ export function UnitInput({
 					!isValidValue && 'invalid',
 					className
 				)}
-				type={getInputType}
+				type={'number'}
 				{...props}
 			/>
 			<span className={controlClassNames('input-suffix')}>
 				<select
 					disabled={disabled}
 					onChange={(e) => onChangeSelect(e.target.value)}
-					value={value?.unit || units?.[0]}
+					value={value?.unit || units?.[0]?.value}
 					className={controlClassNames(
 						'unit-select',
 						!isSpecial && 'hide-arrow'

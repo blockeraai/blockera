@@ -38,9 +38,9 @@ export function Input({
 
 		let isValid = false;
 		if (isFunction(validator)) {
-			isValid = validator(value);
+			isValid = validator(value?.inputValue);
 		} else if (isArray(validator)) {
-			isValid = checkCSSFunctions(validator, value);
+			isValid = checkCSSFunctions(validator, value?.inputValue);
 		}
 
 		// Update validValue based on the result of validation
@@ -49,8 +49,8 @@ export function Input({
 
 	return (
 		<input
-			value={value}
-			onChange={(e) => setValue(e.target.value)}
+			value={value?.inputValue}
+			onChange={(e) => setValue({ inputValue: e.target.value })}
 			disabled={disabled}
 			className={controlClassNames(
 				'single-input',
