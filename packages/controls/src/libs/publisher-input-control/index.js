@@ -17,7 +17,9 @@ import { useControlContext } from '../../context';
 import { BaseControl, RangeControl } from './../index';
 import { UnitInput } from './UnitInput';
 import { Input } from './input';
+import { NumberInput } from './number-input';
 import { getCSSUnits, isSpecialUnit } from './utils';
+
 export function PublisherInputControl({
 	unitType,
 	units,
@@ -133,18 +135,33 @@ export function PublisherInputControl({
 					/>
 				)}
 				{isEmpty(units) ? (
-					<Input
-						value={value}
-						setValue={setValue}
-						type={type}
-						getMaxValue={getMaxValue}
-						getMinValue={getMinValue}
-						noBorder={noBorder}
-						className={className}
-						disabled={disabled}
-						validator={validator}
-						{...props}
-					/>
+					<>
+						{type === 'number' ? (
+							<NumberInput
+								value={value}
+								setValue={setValue}
+								type={type}
+								getMaxValue={getMaxValue}
+								getMinValue={getMinValue}
+								noBorder={noBorder}
+								className={className}
+								disabled={disabled}
+								validator={validator}
+								{...props}
+							/>
+						) : (
+							<Input
+								value={value}
+								setValue={setValue}
+								type={type}
+								noBorder={noBorder}
+								className={className}
+								disabled={disabled}
+								validator={validator}
+								{...props}
+							/>
+						)}
+					</>
 				) : (
 					<UnitInput
 						units={units}
