@@ -34,11 +34,14 @@ describe('icon-control', () => {
 			// data assertion
 
 			// eslint-disable-next-line cypress/no-unnecessary-waiting
-			cy.wait(100);
-			getWPDataObject().then((data) => {
-				const uploadedFileName = getSelectedBlock(data, 'publisherIcon')
-					.uploadSVG.filename;
-				expect(uploadedFileName).to.match(/home(-\d+)?.svg/);
+			cy.wait(200).then(() => {
+				getWPDataObject().then((data) => {
+					const uploadedFileName = getSelectedBlock(
+						data,
+						'publisherIcon'
+					).uploadSVG.filename;
+					expect(uploadedFileName).to.match(/home(-\d+)?.svg/);
+				});
 			});
 		});
 
