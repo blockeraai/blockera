@@ -15,7 +15,7 @@ describe('Color-Picker Control', () => {
 				value: '#eee',
 			});
 
-			cy.get('.publisher-component-popover-body');
+			cy.getByDataTest('popover-body');
 		});
 
 		it('should be rendered without popover when isPopover=false', () => {
@@ -26,7 +26,7 @@ describe('Color-Picker Control', () => {
 				value: '#eee',
 			});
 
-			cy.get('.publisher-component-popover-body').should('not.exist');
+			cy.getByDataTest('popover-body').should('not.exist');
 		});
 	});
 
