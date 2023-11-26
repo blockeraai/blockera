@@ -37,7 +37,7 @@ describe('background extension', () => {
 			cy.getIframeBody()
 				.find(`[data-type="core/paragraph"]`)
 				.type("life is too short. isn't it?");
-			cy.get('[aria-label="Settings"]').click({ force: true });
+			cy.get('[aria-label="Settings"]').eq(1).click({ force: true });
 			cy.getByDataTest('style-tab').click();
 		});
 
@@ -667,7 +667,7 @@ describe('background extension', () => {
 		beforeEach(() => {
 			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 			cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
-			cy.get('[aria-label="Settings"]').click({ force: true });
+			cy.get('[aria-label="Settings"]').eq(1).click({ force: true });
 			cy.getByDataTest('style-tab').click();
 
 			// add alias to the feature container
@@ -727,7 +727,7 @@ describe('background extension', () => {
 		beforeEach(() => {
 			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 			cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
-			cy.get('[aria-label="Settings"]').click({ force: true });
+			cy.get('[aria-label="Settings"]').eq(1).click({ force: true });
 			cy.getByDataTest('style-tab').click();
 
 			// add alias to the feature container
