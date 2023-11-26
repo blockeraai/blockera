@@ -12,12 +12,21 @@ import { useDragValue } from '../index';
 // Create a test component that uses the hook
 function TestComponent({ movement = 'vertical' }) {
 	const [value, setValue] = useState(0);
-	const onStart = useDragValue({ value, setValue, movement });
+	const [onEndFired, setOnEndFired] = useState('');
+	const onStart = useDragValue({
+		value,
+		setValue,
+		movement,
+		onEnd: () => {
+			setOnEndFired('fired');
+		},
+	});
 
 	return (
 		<div data-testid="draggable" onMouseDown={onStart}>
 			Draggable Element
 			<div data-testid="value-display">{value}</div>
+			<div data-testid="on-end-fired">{onEndFired}</div>
 		</div>
 	);
 }
@@ -56,6 +65,7 @@ describe('testing use drag value hook', () => {
 		const { getByTestId } = render(<TestComponent />);
 		const draggableElement = getByTestId('draggable');
 		const valueDisplay = getByTestId('value-display');
+		const onEndFired = getByTestId('on-end-fired');
 
 		// Simulate a mouse down event to start the vertical drag
 		fireEvent.mouseDown(draggableElement, { clientY: 100 });
@@ -70,12 +80,16 @@ describe('testing use drag value hook', () => {
 		expect(updatedValue).toBe(expectedValue);
 
 		fireEvent.mouseUp(draggableElement);
+
+		// on End callback fired
+		expect(onEndFired.textContent).toBe('fired');
 	});
 
 	it('useDragValue updates value on horizontal mouse drag', () => {
 		const { getByTestId } = render(<TestComponent movement="horizontal" />);
 		const draggableElement = getByTestId('draggable');
 		const valueDisplay = getByTestId('value-display');
+		const onEndFired = getByTestId('on-end-fired');
 
 		// Simulate a mouse down event to start the horizontal drag
 		fireEvent.mouseDown(draggableElement, { clientX: 50 });
@@ -90,6 +104,9 @@ describe('testing use drag value hook', () => {
 		expect(updatedValue).toBe(expectedValue);
 
 		fireEvent.mouseUp(draggableElement);
+
+		// on End callback fired
+		expect(onEndFired.textContent).toBe('fired');
 	});
 
 	it('should render an element with className "virtual-cursor-box" in the document', () => {
