@@ -21,20 +21,13 @@ class Background extends BaseStyleDefinition {
 	];
 
 	/**
-	 * @throws BaseException
-	 * @return array
+	 * Retrieve css properties.
+	 *
+	 * @return array the css properties.
 	 */
 	public function getProperties(): array {
 
-		foreach ( $this->settings as $setting ) {
-
-			if ( ! isset( $setting['isVisible'] ) || ! $setting['isVisible'] ) {
-
-				continue;
-			}
-
-			$this->collectProps( $setting );
-		}
+		array_map( [ $this, 'collectProps' ], $this->settings );
 
 		return $this->properties;
 	}
@@ -42,11 +35,18 @@ class Background extends BaseStyleDefinition {
 	/**
 	 * Check is valid setting for style?
 	 *
-	 * @param array $setting array of style setting
+	 * @param array $setting array of style setting.
 	 *
 	 * @return bool true on success, false on otherwise.
 	 */
 	protected function isValidSetting( array $setting ): bool {
+
+		$repeaterItemType = [ 'image', 'linear-gradient', 'radial-gradient', 'mesh-gradient' ];
+
+		if ( in_array( $setting['type'], $repeaterItemType, true ) ) {
+
+			return ! empty( $setting[ $setting['type'] ] ) && ! empty( $setting['isVisible'] );
+		}
 
 		return ! empty( $setting[ $setting['type'] ] );
 	}
@@ -60,10 +60,32 @@ class Background extends BaseStyleDefinition {
 	 */
 	protected function collectProps( array $setting ): void {
 
+		if ( ! $this->isValidSetting( $setting ) ) {
+
+			return;
+		}
+
 		// Image Background
 		switch ( $setting['type'] ) {
 			case 'clip':
+
+				if ( 'text' === $setting[ $setting['type'] ] ) {
+					$this->setProperties( [
+						'-webkit-text-fill-color' => 'transparent',
+					] );
+				}
+
+				$this->setProperties( array_merge(
+					$this->properties,
+					[
+						$setting['type']          => $setting[ $setting['type'] ],
+						'-webkit-background-clip' => $setting[ $setting['type'] ],
+					]
+				) );
+				break;
+
 			case 'color':
+
 				$this->setProperties( [
 					$setting['type'] => $setting[ $setting['type'] ] . $this->getImportant(),
 				] );
@@ -98,14 +120,9 @@ class Background extends BaseStyleDefinition {
 	 *
 	 * @param array $setting the background image setting
 	 *
-	 * @return array retrieve background image style props as array
+	 * @return void
 	 */
-	protected function setBackground( array $setting ): array {
-
-		if ( ! $this->isValidSetting( $setting ) ) {
-
-			return [];
-		}
+	protected function setBackground( array $setting ): void {
 
 		$props = [
 			//Background Image
@@ -120,9 +137,7 @@ class Background extends BaseStyleDefinition {
 			'attachment' => ( $setting['image-attachment'] ?? '' ) . $this->getImportant(),
 		];
 
-		$this->setProperties( $props );
-
-		return $props;
+		$this->setProperties( $this->modifyProperties( $props ) );
 	}
 
 	/**
@@ -130,14 +145,9 @@ class Background extends BaseStyleDefinition {
 	 *
 	 * @param array $setting the radial gradient setting
 	 *
-	 * @return array retrieve radial gradient style props as array
+	 * @return void
 	 */
-	protected function setLinearGradient( array $setting ): array {
-
-		if ( ! $this->isValidSetting( $setting ) ) {
-
-			return [];
-		}
+	protected function setLinearGradient( array $setting ): void {
 
 		$gradient = $setting['linear-gradient'];
 
@@ -163,9 +173,7 @@ class Background extends BaseStyleDefinition {
 			]
 		);
 
-		$this->setProperties( $props );
-
-		return $props;
+		$this->setProperties( $this->modifyProperties( $props ) );
 	}
 
 	/**
@@ -173,14 +181,9 @@ class Background extends BaseStyleDefinition {
 	 *
 	 * @param array $setting the radial gradient setting
 	 *
-	 * @return array retrieve radial gradient style props as array
+	 * @return void
 	 */
-	protected function setRadialGradient( array $setting ): array {
-
-		if ( ! $this->isValidSetting( $setting ) ) {
-
-			return [];
-		}
+	protected function setRadialGradient( array $setting ): void {
 
 		$radialGradient = $setting['radial-gradient'];
 
@@ -225,9 +228,7 @@ class Background extends BaseStyleDefinition {
 			]
 		);
 
-		$this->setProperties( $props );
-
-		return $props;
+		$this->setProperties( $this->modifyProperties( $props ) );
 	}
 
 	/**
@@ -235,14 +236,9 @@ class Background extends BaseStyleDefinition {
 	 *
 	 * @param array $setting the mesh gradient setting
 	 *
-	 * @return array retrieve mesh gradient style props as array
+	 * @return void
 	 */
-	protected function setMeshGradient( array $setting ): array {
-
-		if ( ! $this->isValidSetting( $setting ) ) {
-
-			return [];
-		}
+	protected function setMeshGradient( array $setting ): void {
 
 		$gradient = $setting['mesh-gradient'];
 
@@ -271,7 +267,36 @@ class Background extends BaseStyleDefinition {
 			]
 		);
 
-		$this->setProperties( $props );
+		$this->setProperties( $this->modifyProperties( $props ) );
+	}
+
+	/**
+	 * Modify css properties.
+	 *
+	 * @param array $props the css properties.
+	 *
+	 * @return array the modified props by merge with perv values.
+	 */
+	protected function modifyProperties( array $props ): array {
+
+		if ( empty( $this->properties['image'] ) ) {
+
+			return $props;
+		}
+
+		foreach ( $props as $prop => $propValue ) {
+
+			if ( empty( $this->properties[ $prop ] ) ) {
+
+				continue;
+			}
+
+			$props[ $prop ] = sprintf(
+				'%s, %s',
+				str_replace( '!important', '', $this->properties[ $prop ] ),
+				$propValue
+			);
+		}
 
 		return $props;
 	}

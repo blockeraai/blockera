@@ -78,6 +78,8 @@ final class StyleEngine {
 		$styles[] = 'backface-visibility';
 		$styles[] = 'background-position';
 		$styles[] = 'border-top-left-radius';
+		$styles[] = '-webkit-background-clip';
+		$styles[] = '-webkit-text-fill-color';
 		$styles[] = 'border-top-right-radius';
 		$styles[] = 'border-bottom-left-radius';
 		$styles[] = 'border-bottom-right-radius';
