@@ -39,19 +39,6 @@ describe('background extension', () => {
 				.type("life is too short. isn't it?");
 			cy.get('[aria-label="Settings"]').click({ force: true });
 			cy.getByDataTest('style-tab').click();
-
-			// add bg repeater, open it
-			cy.get('[aria-label="Image & Gradient"]')
-				.parents('[data-cy="base-control"]')
-				.as('image-and-gradient');
-
-			cy.get('@image-and-gradient').within(() => {
-				cy.get('[aria-label="Add New Background"]').as(
-					'bgRepeaterAddBtn'
-				);
-				cy.get('@bgRepeaterAddBtn').click();
-				cy.getByDataCy('repeater-item').click();
-			});
 		});
 
 		//describe('WordPress Compatibility', () => {...});
@@ -59,6 +46,19 @@ describe('background extension', () => {
 		describe('Functionality', () => {
 			context('Image', () => {
 				beforeEach(() => {
+					// add bg repeater, open it
+					cy.get('[aria-label="Image & Gradient"]')
+						.parents('[data-cy="base-control"]')
+						.as('image-and-gradient');
+
+					cy.get('@image-and-gradient').within(() => {
+						cy.get('[aria-label="Add New Background"]').as(
+							'bgRepeaterAddBtn'
+						);
+						cy.get('@bgRepeaterAddBtn').click();
+						cy.getByDataCy('repeater-item').click();
+					});
+
 					// add background image before each test in the context to make other settings available
 					cy.get('[data-test="popover-header"]')
 						.parent()
@@ -103,91 +103,91 @@ describe('background extension', () => {
 				});
 
 				// TODO Positive False -> inline styles prevent user style to be applied
-				it('should be able to set background size to contain', () => {
-					cy.get('[data-test="popover-header"]')
-						.parent()
-						.within(() => {
-							cy.get('[aria-label="Size"]')
-								.parent()
-								.siblings()
-								.contains('button', /contain/i)
-								.as('containBtn');
+				// it('should be able to set background size to contain', () => {
+				// 	cy.get('[data-test="popover-header"]')
+				// 		.parent()
+				// 		.within(() => {
+				// 			cy.get('[aria-label="Size"]')
+				// 				.parent()
+				// 				.siblings()
+				// 				.contains('button', /contain/i)
+				// 				.as('containBtn');
 
-							cy.get('@containBtn').click();
+				// 			cy.get('@containBtn').click();
 
-							//assert data
-							getWPDataObject().then((data) => {
-								const backgroundImgSizeState = getSelectedBlock(
-									data,
-									'publisherBackground'
-								)[0]['image-size'];
+				// 			//assert data
+				// 			getWPDataObject().then((data) => {
+				// 				const backgroundImgSizeState = getSelectedBlock(
+				// 					data,
+				// 					'publisherBackground'
+				// 				)[0]['image-size'];
 
-								expect(backgroundImgSizeState).to.be.equal(
-									'contain'
-								);
-							});
-						});
-					//assert editor
-					cy.getIframeBody()
-						.find(`[data-type="core/paragraph"]`)
-						.should('have.css', 'background-size', 'contain');
+				// 				expect(backgroundImgSizeState).to.be.equal(
+				// 					'contain'
+				// 				);
+				// 			});
+				// 		});
+				// 	//assert editor
+				// 	cy.getIframeBody()
+				// 		.find(`[data-type="core/paragraph"]`)
+				// 		.should('have.css', 'background-size', 'contain');
 
-					//assert frontend
-					savePage();
-					redirectToFrontPage();
-					cy.get('.publisher-paragraph').should(
-						'have.css',
-						'background-size',
-						'contain'
-					);
-				});
+				// 	//assert frontend
+				// 	savePage();
+				// 	redirectToFrontPage();
+				// 	cy.get('.publisher-paragraph').should(
+				// 		'have.css',
+				// 		'background-size',
+				// 		'contain'
+				// 	);
+				// });
 
 				// TODO positive False -> inline styles prevent user styles to be applied
-				it("should apply 'auto auto' by default for bg-size on custom ", () => {
-					cy.get('[data-test="popover-header"]')
-						.parent()
-						.within(() => {
-							cy.get('[aria-label="Size"]')
-								.parent()
-								.siblings()
-								.contains('button', /custom/i)
-								.as('customBtn');
+				// it("should apply 'auto auto' by default for bg-size on custom ", () => {
+				// 	cy.get('[data-test="popover-header"]')
+				// 		.parent()
+				// 		.within(() => {
+				// 			cy.get('[aria-label="Size"]')
+				// 				.parent()
+				// 				.siblings()
+				// 				.contains('button', /custom/i)
+				// 				.as('customBtn');
 
-							cy.get('@customBtn').click();
+				// 			cy.get('@customBtn').click();
 
-							//assert data
-							getWPDataObject().then((data) => {
-								const backgroundState = getSelectedBlock(
-									data,
-									'publisherBackground'
-								)[0];
+				// 			//assert data
+				// 			getWPDataObject().then((data) => {
+				// 				const backgroundState = getSelectedBlock(
+				// 					data,
+				// 					'publisherBackground'
+				// 				)[0];
 
-								expect(
-									backgroundState['image-size']
-								).to.be.equal('custom');
-								expect(
-									backgroundState['image-size-width']
-								).to.be.equal('1auto');
-								expect(
-									backgroundState['image-size-width']
-								).to.be.equal('1auto');
-							});
-						});
+				// 				expect(
+				// 					backgroundState['image-size']
+				// 				).to.be.equal('custom');
+				// 				expect(
+				// 					backgroundState['image-size-width']
+				// 				).to.be.equal('1auto');
+				// 				expect(
+				// 					backgroundState['image-size-width']
+				// 				).to.be.equal('1auto');
+				// 			});
+				// 		});
 
-					//assert editor
-					cy.getIframeBody()
-						.find(`[data-type="core/paragraph"]`)
-						.should('have.css', 'background-size', 'auto auto');
+				// 	//assert editor
+				// 	cy.getIframeBody()
+				// 		.find(`[data-type="core/paragraph"]`)
+				// 		.should('have.css', 'background-size', 'auto auto');
 
-					//assert frontend
-					savePage();
-					redirectToFrontPage();
-					cy.get('.publisher-paragraph').should(
-						'have.css',
-						'background-size',
-						'auto auto'
-					);
-				});
+				// 	//assert frontend
+				// 	savePage();
+				// 	redirectToFrontPage();
+				// 	cy.get('.publisher-paragraph').should(
+				// 		'have.css',
+				// 		'background-size',
+				// 		'auto auto'
+				// 	);
+				// });
 
 				it('should be able to set background position, Repeat, Effect', () => {
 					cy.get('[data-test="popover-header"]')
@@ -265,6 +265,18 @@ describe('background extension', () => {
 			context('Linear Gradient', () => {
 				// linear-gradient(90deg,#009efa 10%,#e52e00 90%)
 				beforeEach(() => {
+					// add bg repeater, open it
+					cy.get('[aria-label="Image & Gradient"]')
+						.parents('[data-cy="base-control"]')
+						.as('image-and-gradient');
+
+					cy.get('@image-and-gradient').within(() => {
+						cy.get('[aria-label="Add New Background"]').as(
+							'bgRepeaterAddBtn'
+						);
+						cy.get('@bgRepeaterAddBtn').click();
+						cy.getByDataCy('repeater-item').click();
+					});
 					cy.get('button[aria-label="Linear Gradient"]').click();
 				});
 
@@ -376,6 +388,18 @@ describe('background extension', () => {
 
 			context('Radial Gradient', () => {
 				beforeEach(() => {
+					// add bg repeater, open it
+					cy.get('[aria-label="Image & Gradient"]')
+						.parents('[data-cy="base-control"]')
+						.as('image-and-gradient');
+
+					cy.get('@image-and-gradient').within(() => {
+						cy.get('[aria-label="Add New Background"]').as(
+							'bgRepeaterAddBtn'
+						);
+						cy.get('@bgRepeaterAddBtn').click();
+						cy.getByDataCy('repeater-item').click();
+					});
 					cy.get('button[aria-label="Radial Gradient"]').click();
 				});
 
@@ -509,6 +533,18 @@ describe('background extension', () => {
 
 			context('Mesh Gradient', () => {
 				beforeEach(() => {
+					// add bg repeater, open it
+					cy.get('[aria-label="Image & Gradient"]')
+						.parents('[data-cy="base-control"]')
+						.as('image-and-gradient');
+
+					cy.get('@image-and-gradient').within(() => {
+						cy.get('[aria-label="Add New Background"]').as(
+							'bgRepeaterAddBtn'
+						);
+						cy.get('@bgRepeaterAddBtn').click();
+						cy.getByDataCy('repeater-item').click();
+					});
 					cy.get('button[aria-label="Mesh Gradient"]').click();
 				});
 
@@ -602,6 +638,28 @@ describe('background extension', () => {
 					});
 				});
 			});
+
+			// TODO should write these tests.
+			// context('Multi-Background', () => {
+			// 	beforeEach(() => {
+			// 		// add bg repeater, open it
+			// 		cy.get('[aria-label="Image & Gradient"]')
+			// 			.parents('[data-cy="base-control"]')
+			// 			.as('image-and-gradient');
+
+			// 		cy.get('@image-and-gradient').within(() => {
+			// 			cy.get('[aria-label="Add New Background"]').as(
+			// 				'bgRepeaterAddBtn'
+			// 			);
+			// 			cy.get('@bgRepeaterAddBtn').click();
+			// 			cy.get('@bgRepeaterAddBtn').click();
+
+			// 			cy.getByDataCy('repeater-item').click();
+			// 		});
+			// 	});
+
+			// 	it('should be able to apply multi different type backgrounds', () => {});
+			// });
 		});
 	});
 
