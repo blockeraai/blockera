@@ -146,6 +146,13 @@ describe('box spacing control component testing', () => {
 			'span[aria-label="Top Margin"][data-cy="label-control"]'
 		).click();
 
+		cy.getByDataCy('box-spacing-set-auto').click();
+		// Check data provider value!
+		cy.then(() => {
+			const expectValue = '0auto';
+			return expect(getControlValue(name).margin.top).to.eq(expectValue);
+		});
+
 		cy.getByDataCy('box-spacing-set-0').click();
 		// Check data provider value!
 		cy.then(() => {
@@ -199,13 +206,6 @@ describe('box spacing control component testing', () => {
 		// Check data provider value!
 		cy.then(() => {
 			const expectValue = '120px';
-			return expect(getControlValue(name).margin.top).to.eq(expectValue);
-		});
-
-		cy.getByDataCy('box-spacing-set-auto').click();
-		// Check data provider value!
-		cy.then(() => {
-			const expectValue = '0auto';
 			return expect(getControlValue(name).margin.top).to.eq(expectValue);
 		});
 	});
