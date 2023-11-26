@@ -9,6 +9,7 @@ export const useDragValue = ({
 	movement = 'vertical',
 	min,
 	max,
+	onEnd: callbackOnEnd = () => {},
 }) => {
 	// We are creating a snapshot of the values when the drag starts
 	// because the [value] will itself change & we need the original
@@ -111,6 +112,9 @@ export const useDragValue = ({
 
 			// remove cursor
 			deleteVisualDivCursor();
+
+			// call outside callback
+			callbackOnEnd();
 		};
 
 		document.addEventListener('mousemove', onUpdate);
