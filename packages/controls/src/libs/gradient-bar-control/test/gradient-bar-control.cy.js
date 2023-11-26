@@ -104,13 +104,16 @@ describe('gradient bar control component testing', () => {
 		});
 
 		cy.getByDataCy('gradient-bar-control').click();
-		cy.get('[aria-label="Color"]').click();
+		// eslint-disable-next-line
+		cy.get('[data-wp-component="ColorPicker"] input')
+			.clear()
+			.type('#ff0000');
 		cy.get('.components-popover').clickOutside();
 
 		// Check data provider value!
 		cy.then(() => {
 			return expect(getControlValue(name)).to.eq(
-				'linear-gradient(135deg,rgb(6,147,227) 0%,rgb(128,64,64) 50%,rgb(155,81,224) 100%)'
+				'linear-gradient(135deg,rgb(6,147,227) 0%,rgb(255,0,0) 50%,rgb(155,81,224) 100%)'
 			);
 		});
 	});
