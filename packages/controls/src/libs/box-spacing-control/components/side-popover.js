@@ -55,7 +55,11 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 0px"
 					onClick={() => {
-						setValue('0' + unitType);
+						if (unitType === 'auto') {
+							setValue('0px');
+						} else {
+							setValue('0' + unitType);
+						}
 					}}
 					style={{
 						padding: '2px 0',
@@ -69,7 +73,11 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 10px"
 					onClick={() => {
-						setValue('10' + unitType);
+						if (unitType === 'auto') {
+							setValue('10px');
+						} else {
+							setValue('10' + unitType);
+						}
 					}}
 					style={{
 						padding: '2px 0',
@@ -83,7 +91,11 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 20px"
 					onClick={() => {
-						setValue('20' + unitType);
+						if (unitType === 'auto') {
+							setValue('20px');
+						} else {
+							setValue('20' + unitType);
+						}
 					}}
 					style={{
 						padding: '2px 0',
@@ -97,7 +109,11 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 30px"
 					onClick={() => {
-						setValue('30' + unitType);
+						if (unitType === 'auto') {
+							setValue('30px');
+						} else {
+							setValue('30' + unitType);
+						}
 					}}
 					style={{
 						padding: '2px 0',
@@ -111,7 +127,11 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 60px"
 					onClick={() => {
-						setValue('60' + unitType);
+						if (unitType === 'auto') {
+							setValue('60px');
+						} else {
+							setValue('60' + unitType);
+						}
 					}}
 					style={{
 						padding: '2px 0',
@@ -125,7 +145,11 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 80px"
 					onClick={() => {
-						setValue('80' + unitType);
+						if (unitType === 'auto') {
+							setValue('80px');
+						} else {
+							setValue('80' + unitType);
+						}
 					}}
 					style={{
 						padding: '2px 0',
@@ -139,7 +163,11 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 100px"
 					onClick={() => {
-						setValue('100' + unitType);
+						if (unitType === 'auto') {
+							setValue('100px');
+						} else {
+							setValue('100' + unitType);
+						}
 					}}
 					style={{
 						padding: '2px 0',
@@ -153,7 +181,11 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 120px"
 					onClick={() => {
-						setValue('120' + unitType);
+						if (unitType === 'auto') {
+							setValue('120px');
+						} else {
+							setValue('120' + unitType);
+						}
 					}}
 					style={{
 						padding: '2px 0',
