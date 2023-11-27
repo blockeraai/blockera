@@ -17,16 +17,12 @@ import { ControlContextProvider, PublisherInputControl } from '../../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
+import { fireEvent, waitFor, within } from '@storybook/testing-library';
 
-const { WithInspectorStyles, SharedDecorators } = Decorators;
+const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
+	Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
-
-const units = [
-	{ value: 'px', label: 'px', default: 0 },
-	{ value: '%', label: '%', default: 10 },
-	{ value: 'em', label: 'em', default: 0 },
-];
 
 export default {
 	title: 'Controls/PublisherInputControl',
@@ -59,10 +55,10 @@ export const TextInput = {
 	args: {
 		controlInfo: {
 			name: nanoid(),
-			value: '20px',
+			value: 'text',
 		},
 		type: 'text',
-		defaultValue: '10px',
+		defaultValue: 'default',
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
@@ -72,12 +68,28 @@ export const TextInput = {
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
-					value: args.value,
+					value: '',
 				}}
 			>
 				<ControlWithHooks
 					Control={PublisherInputControl}
 					type="text"
+					label="Empty"
+					{...args}
+					defaultValue=""
+				/>
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.controlInfo.value,
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					type="text"
+					label="Normal"
 					{...args}
 				/>
 			</ControlContextProvider>
@@ -85,13 +97,14 @@ export const TextInput = {
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
-					value: args.value,
+					value: args.controlInfo.value,
 				}}
 			>
 				<ControlWithHooks
 					Control={PublisherInputControl}
 					type="text"
 					className="is-hovered"
+					label="is-hovered"
 					{...args}
 				/>
 			</ControlContextProvider>
@@ -99,13 +112,14 @@ export const TextInput = {
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
-					value: args.value,
+					value: args.controlInfo.value,
 				}}
 			>
 				<ControlWithHooks
 					Control={PublisherInputControl}
 					type="text"
 					className="is-focused"
+					label="is-focused"
 					{...args}
 				/>
 			</ControlContextProvider>
@@ -113,13 +127,14 @@ export const TextInput = {
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
-					value: args.value,
+					value: args.controlInfo.value,
 				}}
 			>
 				<ControlWithHooks
 					Control={PublisherInputControl}
 					type="text"
 					noBorder={true}
+					label="no-border"
 					{...args}
 				/>
 			</ControlContextProvider>
@@ -127,7 +142,7 @@ export const TextInput = {
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
-					value: args.value,
+					value: args.controlInfo.value,
 				}}
 			>
 				<ControlWithHooks
@@ -135,19 +150,21 @@ export const TextInput = {
 					type="number"
 					className="is-focused"
 					noBorder={true}
+					label="is-focused & no-border"
 					{...args}
 				/>
 			</ControlContextProvider>
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
-					value: args.value,
+					value: args.controlInfo.value,
 				}}
 			>
 				<ControlWithHooks
 					Control={PublisherInputControl}
 					type="number"
 					disabled
+					label="disabled"
 					{...args}
 				/>
 			</ControlContextProvider>
@@ -159,8 +176,9 @@ export const NumberInput = {
 	args: {
 		controlInfo: {
 			name: nanoid(),
-			value: 'text',
+			value: '20',
 		},
+		defaultValue: '',
 	},
 	render: (args) => (
 		<Flex direction="column" gap="30px">
@@ -170,11 +188,26 @@ export const NumberInput = {
 				<ControlContextProvider
 					value={{
 						name: nanoid(),
+						value: '',
+					}}
+				>
+					<ControlWithHooks
+						Control={PublisherInputControl}
+						label="Empty"
+						{...args}
+						type="number"
+					/>
+				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
 						value: 0,
 					}}
 				>
 					<ControlWithHooks
 						Control={PublisherInputControl}
+						label="Normal"
 						{...args}
 						type="number"
 					/>
@@ -188,6 +221,7 @@ export const NumberInput = {
 				>
 					<ControlWithHooks
 						Control={PublisherInputControl}
+						label="is-hovered"
 						{...args}
 						type="number"
 						className="is-hovered"
@@ -202,6 +236,7 @@ export const NumberInput = {
 				>
 					<ControlWithHooks
 						Control={PublisherInputControl}
+						label="is-focused"
 						{...args}
 						type="number"
 						className="is-focused"
@@ -216,6 +251,7 @@ export const NumberInput = {
 				>
 					<ControlWithHooks
 						Control={PublisherInputControl}
+						label="no-border"
 						{...args}
 						type="number"
 						noBorder={true}
@@ -230,10 +266,58 @@ export const NumberInput = {
 				>
 					<ControlWithHooks
 						Control={PublisherInputControl}
+						label="no-border & is-focused"
 						{...args}
 						type="number"
 						className="is-focused"
 						noBorder={true}
+					/>
+				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 50,
+					}}
+				>
+					<ControlWithHooks
+						Control={PublisherInputControl}
+						label="Arrows"
+						{...args}
+						type="number"
+						arrows={true}
+					/>
+				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 3,
+					}}
+				>
+					<ControlWithHooks
+						Control={PublisherInputControl}
+						label="Arrows → Arrow up disabled"
+						{...args}
+						type="number"
+						max={3}
+						min={-3}
+						arrows={true}
+					/>
+				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 50,
+					}}
+				>
+					<ControlWithHooks
+						Control={PublisherInputControl}
+						label="disabled"
+						{...args}
+						type="number"
+						disabled={true}
 					/>
 				</ControlContextProvider>
 			</Flex>
@@ -244,11 +328,28 @@ export const NumberInput = {
 				<ControlContextProvider
 					value={{
 						name: nanoid(),
+						value: '',
+					}}
+				>
+					<ControlWithHooks
+						Control={PublisherInputControl}
+						label="Empty"
+						{...args}
+						range={true}
+						type="number"
+						defaultValue=""
+					/>
+				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
 						value: 50,
 					}}
 				>
 					<ControlWithHooks
 						Control={PublisherInputControl}
+						label="Normal"
 						{...args}
 						range={true}
 						type="number"
@@ -263,6 +364,7 @@ export const NumberInput = {
 				>
 					<ControlWithHooks
 						Control={PublisherInputControl}
+						label="is-hovered"
 						{...args}
 						range={true}
 						type="number"
@@ -278,6 +380,7 @@ export const NumberInput = {
 				>
 					<ControlWithHooks
 						Control={PublisherInputControl}
+						label="is-focused"
 						{...args}
 						range={true}
 						type="number"
@@ -293,6 +396,7 @@ export const NumberInput = {
 				>
 					<ControlWithHooks
 						Control={PublisherInputControl}
+						label="no-border"
 						{...args}
 						range={true}
 						type="number"
@@ -308,11 +412,62 @@ export const NumberInput = {
 				>
 					<ControlWithHooks
 						Control={PublisherInputControl}
+						label="no-border & is-focused"
 						{...args}
 						range={true}
 						type="number"
 						className="is-focused"
 						noBorder={true}
+					/>
+				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 50,
+					}}
+				>
+					<ControlWithHooks
+						Control={PublisherInputControl}
+						label="Arrows"
+						{...args}
+						type="number"
+						arrows={true}
+						range={true}
+					/>
+				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 3,
+					}}
+				>
+					<ControlWithHooks
+						Control={PublisherInputControl}
+						label="Arrows → Arrow up disabled"
+						{...args}
+						type="number"
+						max={3}
+						min={-3}
+						arrows={true}
+						range={true}
+					/>
+				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 100,
+					}}
+				>
+					<ControlWithHooks
+						Control={PublisherInputControl}
+						label="disabled"
+						{...args}
+						range={true}
+						type="number"
+						disabled={true}
 					/>
 				</ControlContextProvider>
 			</Flex>
@@ -328,176 +483,9 @@ export const NumberInput = {
 	},
 };
 
-export const UnitsInput = {
-	args: {
-		controlInfo: {
-			name: nanoid(),
-			value: '20',
-		},
-	},
-	decorators: [WithInspectorStyles, ...SharedDecorators],
-	render: (args) => (
-		<Flex direction="column" gap="30px">
-			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">Units Input</h2>
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-						value: 40,
-					}}
-				>
-					<ControlWithHooks
-						Control={PublisherInputControl}
-						{...args}
-						unitType={'letter-spacing'}
-						validator={[]}
-					/>
-				</ControlContextProvider>
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-						value: 50,
-					}}
-				>
-					<ControlWithHooks
-						Control={PublisherInputControl}
-						{...args}
-						units={units}
-						className="is-hovered"
-						validator={[]}
-					/>
-				</ControlContextProvider>
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-						value: 60,
-					}}
-				>
-					<ControlWithHooks
-						Control={PublisherInputControl}
-						{...args}
-						units={units}
-						className="is-focused"
-						validator={[]}
-					/>
-				</ControlContextProvider>
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-						value: 70,
-					}}
-				>
-					<ControlWithHooks
-						Control={PublisherInputControl}
-						{...args}
-						units={units}
-						noBorder={true}
-						validator={[]}
-					/>
-				</ControlContextProvider>
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-						value: 90,
-					}}
-				>
-					<ControlWithHooks
-						Control={PublisherInputControl}
-						{...args}
-						units={units}
-						className="is-focused"
-						noBorder={true}
-						validator={[]}
-					/>
-				</ControlContextProvider>
-			</Flex>
-
-			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">Range Units Input</h2>
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-						value: 20,
-					}}
-				>
-					<ControlWithHooks
-						Control={PublisherInputControl}
-						{...args}
-						range={true}
-						units={units}
-						validator={[]}
-					/>
-				</ControlContextProvider>
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-						value: 30,
-					}}
-				>
-					<ControlWithHooks
-						Control={PublisherInputControl}
-						{...args}
-						range={true}
-						units={units}
-						className="is-hovered"
-						validator={[]}
-					/>
-				</ControlContextProvider>
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-						value: 40,
-					}}
-				>
-					<ControlWithHooks
-						Control={PublisherInputControl}
-						{...args}
-						range={true}
-						units={units}
-						className="is-focused"
-						validator={[]}
-					/>
-				</ControlContextProvider>
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-						value: 50,
-					}}
-				>
-					<ControlWithHooks
-						Control={PublisherInputControl}
-						{...args}
-						range={true}
-						units={units}
-						noBorder={true}
-						validator={[]}
-					/>
-				</ControlContextProvider>
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-						value: 60,
-					}}
-				>
-					<ControlWithHooks
-						Control={PublisherInputControl}
-						{...args}
-						range={true}
-						units={units}
-						className="is-focused"
-						noBorder={true}
-						validator={[]}
-					/>
-				</ControlContextProvider>
-			</Flex>
-		</Flex>
-	),
-};
-
 export const CssInput = {
 	args: {
-		unitType: 'general',
-		// defaultValue: '10px',
+		defaultValue: '1px',
 		className: 'publisher-input',
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
@@ -507,81 +495,246 @@ export const CssInput = {
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
-					value: args.value,
+					value: '12px',
 				}}
 			>
 				<ControlWithHooks
 					Control={PublisherInputControl}
-					defaultValue="10"
 					{...args}
-					unitType="general"
-					validator={[]}
+					unitType="order"
+					label="No Value"
+					defaultValue=""
 				/>
 			</ControlContextProvider>
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
-					value: args.value,
+					value: '10px',
 				}}
 			>
 				<ControlWithHooks
 					Control={PublisherInputControl}
-					defaultValue="10"
 					{...args}
 					unitType="general"
-					validator={[]}
+					label="With PX Value"
 				/>
 			</ControlContextProvider>
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
-					value: args.value,
+					value: '20em',
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					{...args}
+					unitType="general"
+					label="With EM Value"
+				/>
+			</ControlContextProvider>
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: '30px',
 				}}
 			>
 				<ControlWithHooks
 					Control={PublisherInputControl}
 					{...args}
 					range={true}
-					defaultValue="10"
 					unitType="general"
-					validator={[]}
+					label="With Range"
 				/>
 			</ControlContextProvider>
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
+					value: '30px',
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					{...args}
+					unitType="general"
+					label="Arrows + Units"
+					arrows={true}
+				/>
+			</ControlContextProvider>
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: '30px',
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					{...args}
+					unitType="general"
+					label="Arrows + Units + Range"
+					arrows={true}
+					range={true}
+				/>
+			</ControlContextProvider>
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: 'auto',
 				}}
 			>
 				<ControlWithHooks
 					Control={PublisherInputControl}
 					{...args}
 					range={true}
-					defaultValue="auto"
 					unitType="general"
-					validator={[]}
+					label="Special Value"
 				/>
 			</ControlContextProvider>
-		</Flex>
-	),
-};
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: 'calc(20px + 12px)func',
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					{...args}
+					range={true}
+					unitType="general"
+					label="Advanced"
+				/>
+			</ControlContextProvider>
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: '1px',
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					{...args}
+					range={true}
+					unitType="general"
+					min={0}
+					max={50}
+					label="Min=0 Max=50"
+				/>
+			</ControlContextProvider>
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: '-5px',
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					{...args}
+					range={true}
+					unitType="general"
+					min={-20}
+					max={20}
+					label="Min=-20 Max=20"
+				/>
+			</ControlContextProvider>
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: '10px',
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					{...args}
+					units={[
+						{
+							value: 'px',
+							label: 'PX',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'em',
+							label: 'EM',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'auto',
+							label: 'Auto',
+							default: 0,
+							format: 'text',
+						},
+					]}
+					label="Custom Units"
+				/>
+			</ControlContextProvider>
 
-export const Field = {
-	args: {
-		label: 'Field',
-		type: 'number',
-		defaultValue: '20',
-	},
-	decorators: [WithInspectorStyles, ...SharedDecorators],
-	render: (args) => (
-		<Flex direction="column" gap="20px">
-			<h2 className="story-heading">With Field</h2>
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
-					value: args.value,
+					value: '10xyz',
 				}}
 			>
-				<ControlWithHooks Control={PublisherInputControl} {...args} />
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					{...args}
+					unitType="general"
+					label="Unit passed by value but not in units list"
+				/>
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: '10',
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					{...args}
+					units={[
+						{
+							value: '',
+							label: '-',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'px',
+							label: 'PX',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'em',
+							label: 'EM',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'auto',
+							label: 'Auto',
+							default: 0,
+							format: 'text',
+						},
+					]}
+					label="Unit value is empty but have label"
+				/>
+			</ControlContextProvider>
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: '10px',
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					{...args}
+					range={true}
+					arrows={true}
+					unitType="general"
+					label="disabled"
+					disabled={true}
+				/>
 			</ControlContextProvider>
 		</Flex>
 	),
@@ -608,6 +761,62 @@ export const WithCssValidator = {
 		jest: ['input.spec.js'],
 	},
 };
+
+export const PlayNumber = {
+	args: {
+		type: 'number',
+		unitType: 'general',
+		controlInfo: {
+			name: nanoid(),
+			value: '20px',
+		},
+		range: true,
+		arrows: true,
+	},
+	decorators: [
+		WithInspectorStyles,
+		WithStoryContextProvider,
+		WithControlDataProvider,
+		...SharedDecorators,
+	],
+	render: (args) => (
+		<ControlWithHooks Control={PublisherInputControl} {...args} />
+	),
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+
+		const currentValue = canvas.getByTestId('current-value');
+		const input = canvas.getByRole('spinbutton', {
+			type: 'number',
+		});
+
+		await step('Story data is available', async () => {
+			await expect(currentValue).toBeInTheDocument();
+		});
+
+		await step('Input control test', async () => {
+			await expect(input).toBeInTheDocument();
+
+			await expect(input).toHaveValue(20);
+			await expect(currentValue).toHaveTextContent('20');
+
+			// type 30
+			fireEvent.change(input, {
+				target: {
+					value: '30',
+				},
+			});
+			await waitFor(
+				async () => {
+					await expect(input).toHaveValue(30);
+					await expect(currentValue).toHaveTextContent('30');
+				},
+				{ timeout: 1000 }
+			);
+		});
+	},
+};
+PlayNumber.storyName = 'Play';
 
 export const WithCustomValidator = {
 	args: {

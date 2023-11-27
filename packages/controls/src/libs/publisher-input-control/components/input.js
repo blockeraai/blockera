@@ -12,14 +12,12 @@ import { isArray, isFunction } from '@publisher/utils';
 /**
  * Internal dependencies
  */
-import { checkCSSFunctions } from './utils';
+import { checkCSSFunctions } from '../utils';
 
 export function Input({
 	value,
 	setValue,
 	type,
-	getMaxValue,
-	getMinValue,
 	noBorder,
 	className,
 	disabled,
@@ -49,19 +47,17 @@ export function Input({
 
 	return (
 		<input
-			value={value?.inputValue}
-			onChange={(e) => setValue({ inputValue: e.target.value })}
+			value={value}
 			disabled={disabled}
 			className={controlClassNames(
-				'single-input',
+				'input-tag',
 				!isValidValue && 'invalid',
 				noBorder && 'no-border',
 				className
 			)}
 			type={type}
-			{...getMinValue}
-			{...getMaxValue}
 			{...props}
+			onChange={(e) => setValue(e.target.value)}
 		/>
 	);
 }

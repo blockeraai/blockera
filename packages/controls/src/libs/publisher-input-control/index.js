@@ -1,24 +1,23 @@
 /**
  * External dependencies
  */
-import { useMemo, useEffect } from '@wordpress/element';
 import PropTypes from 'prop-types';
 
 /**
  * Publisher dependencies
  */
+import { isEmpty, isUndefined } from '@publisher/utils';
 import { controlClassNames } from '@publisher/classnames';
-import { isEmpty, isNumber, isString, isUndefined } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
 import { useControlContext } from '../../context';
-import { BaseControl, RangeControl } from './../index';
-import { UnitInput } from './UnitInput';
-import { Input } from './input';
-import { NumberInput } from './number-input';
-import { getCSSUnits, isSpecialUnit } from './utils';
+import { BaseControl } from './../index';
+import { UnitInput } from './components/unit-input';
+import { Input } from './components/input';
+import { NumberInput } from './components/number-input';
+import { getCSSUnits } from './utils';
 
 export function PublisherInputControl({
 	unitType,
@@ -28,7 +27,7 @@ export function PublisherInputControl({
 	range,
 	label,
 	columns,
-	defaultValue,
+	defaultValue = '',
 	onChange,
 	field, //
 	className,
@@ -39,17 +38,6 @@ export function PublisherInputControl({
 	disabled = false,
 	...props
 }) {
-	/**
-	 * value: {
-	 * 	inputValue: string,
-	 * 	type: string | number
-	 * 	oldInputValue: string | number
-	 * 	oldUnit: string
-	 *  unit: string
-	 *  isSpecial: true | false
-	 * }
-	 *
-	 */
 	const { value, setValue } = useControlContext({
 		id,
 		defaultValue,
@@ -61,42 +49,6 @@ export function PublisherInputControl({
 		units = getCSSUnits(unitType);
 	}
 
-	// get the minimum value in number type
-	const getMinValue = useMemo(() => {
-		if (type === 'number' && !isUndefined(min) && isNumber(+min)) {
-			return { min };
-		}
-		return {};
-	}, [min]); // eslint-disable-line
-
-	// get the maximum value in number type
-	const getMaxValue = useMemo(() => {
-		if (type === 'number' && !isUndefined(max) && isNumber(+max)) {
-			return { max };
-		}
-		return {};
-	}, [max]); // eslint-disable-line
-
-	useEffect(() => {
-		if (isNumber(value)) {
-			setValue({
-				inputValue: value,
-			});
-		}
-		if (isString(value)) {
-			if (isSpecialUnit(value)) {
-				setValue({
-					inputValue: value,
-					isSpecial: true,
-					type: 'text',
-					unit: value,
-				});
-			}
-		}
-	}, []);
-
-	console.log('value:', value);
-
 	return (
 		<BaseControl
 			label={label}
@@ -104,52 +56,55 @@ export function PublisherInputControl({
 			controlName={field}
 			className={className}
 		>
-			<div
-				className={controlClassNames(
-					'input-2',
-					range && value?.unit !== 'func' && 'input-range',
-					noBorder && 'no-border',
-					value?.isSpecial && 'publisher-control-unit-special',
-					className
-				)}
-			>
-				{range && value?.unit !== 'func' && (
-					<RangeControl
-						id={id}
-						withInputField={false}
-						sideEffect={false}
-						className={className}
-						onChange={(newValue) => {
-							// extract unit from old value and assign it to newValue
-							if (isString(value)) {
-								newValue =
-									newValue + value.replace(/[0-9|-]/gi, '');
-							}
-							const updatedObject = {
-								...value,
-								inputValue: newValue,
-							};
-							setValue(updatedObject);
-						}}
-						{...props}
-					/>
-				)}
-				{isEmpty(units) ? (
-					<>
-						{type === 'number' ? (
+			{!isEmpty(units) ? (
+				<UnitInput
+					range={range}
+					units={units}
+					value={value}
+					setValue={setValue}
+					defaultValue={defaultValue}
+					type={type}
+					noBorder={noBorder}
+					className={className}
+					disabled={disabled}
+					validator={validator}
+					min={min}
+					max={max}
+					{...props}
+				/>
+			) : (
+				<>
+					{type === 'number' ? (
+						<div
+							className={controlClassNames(
+								'input-2',
+								'input-number',
+								range && 'is-range-active',
+								className
+							)}
+						>
 							<NumberInput
 								value={value}
 								setValue={setValue}
 								type={type}
-								getMaxValue={getMaxValue}
-								getMinValue={getMinValue}
 								noBorder={noBorder}
 								className={className}
 								disabled={disabled}
 								validator={validator}
+								min={min}
+								max={max}
+								range={range}
 								{...props}
 							/>
-						) : (
+						</div>
+					) : (
+						<div
+							className={controlClassNames(
+								'input-2',
+								'input-' + type,
+								className
+							)}
+						>
 							<Input
 								value={value}
 								setValue={setValue}
@@ -160,23 +115,10 @@ export function PublisherInputControl({
 								validator={validator}
 								{...props}
 							/>
-						)}
-					</>
-				) : (
-					<UnitInput
-						units={units}
-						value={value}
-						setValue={setValue}
-						type={type}
-						noBorder={noBorder}
-						className={className}
-						isSpecial={value?.isSpecial}
-						disabled={disabled}
-						validator={validator}
-						{...props}
-					/>
-				)}
-			</div>
+						</div>
+					)}
+				</>
+			)}
 		</BaseControl>
 	);
 }
