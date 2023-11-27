@@ -1,6 +1,17 @@
 .publisher-control-range {
 
-	.components-range-control__thumb-wrapper {
-		box-shadow: 0 0 0 2px #ffffff;
+	&.is-disabled {
+
+		pointer-events: none;
+		user-select: none;
+		opacity: 0.5;
+
 	}
+
+	.components-range-control__thumb-wrapper {
+
+		box-shadow: 0 0 0 2px #ffffff;
+
+	}
+
 }

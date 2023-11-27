@@ -59,6 +59,7 @@ export default function RangeControl({
 	onChange,
 	sideEffect,
 	defaultValue,
+	disabled,
 	field,
 }: TRangeControlProps): MixedElement {
 	let { value, setValue } = useControlContext({
@@ -93,7 +94,11 @@ export default function RangeControl({
 
 					onChange(newValue);
 				}}
-				className={controlClassNames('range', className)}
+				className={controlClassNames(
+					'range',
+					className,
+					disabled && 'is-disabled'
+				)}
 				withInputField={withInputField}
 				__nextHasNoMarginBottom={false}
 				data-test="range-control"

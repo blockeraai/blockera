@@ -100,6 +100,19 @@ export const States = {
 				>
 					<ControlWithHooks Control={RangeControl} {...args} />
 				</ControlContextProvider>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: args.value,
+					}}
+				>
+					<ControlWithHooks
+						Control={RangeControl}
+						{...args}
+						disabled={true}
+						label="disabled"
+					/>
+				</ControlContextProvider>
 			</Flex>
 		);
 	},
