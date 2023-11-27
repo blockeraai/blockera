@@ -34,6 +34,7 @@ export function LayoutStyles({
 		publisherFlexDirection,
 		publisherAlignItems,
 		publisherJustifyContent,
+		publisherGap,
 		publisherGapRows,
 		publisherGapColumns,
 		publisherFlexWrap,
@@ -60,7 +61,9 @@ export function LayoutStyles({
 			_attributes.publisherFlexDirection !==
 				attributes.publisherFlexDirection.default
 		) {
-			properties['flex-direction'] = _attributes.publisherFlexDirection;
+			properties['flex-direction'] = `${
+				_attributes.publisherFlexDirection.value
+			}${_attributes.publisherFlexDirection.reverse ? '-reverse' : ''}`;
 		}
 
 		if (
@@ -77,6 +80,13 @@ export function LayoutStyles({
 				attributes.publisherJustifyContent.default
 		) {
 			properties['justify-content'] = _attributes.publisherJustifyContent;
+		}
+
+		if (
+			isActiveField(publisherGap) &&
+			_attributes.publisherGap !== attributes.publisherGap.default
+		) {
+			properties.gap = _attributes.publisherGap;
 		}
 
 		if (
@@ -99,7 +109,12 @@ export function LayoutStyles({
 			_attributes.publisherFlexWrap !==
 				attributes.publisherFlexWrap.default
 		) {
-			properties['flex-wrap'] = _attributes.publisherFlexWrap;
+			properties['flex-wrap'] = `${_attributes.publisherFlexWrap.value}${
+				_attributes.publisherFlexWrap.reverse &&
+				_attributes.publisherFlexWrap.value === 'wrap'
+					? '-reverse'
+					: ''
+			}`;
 		}
 
 		if (

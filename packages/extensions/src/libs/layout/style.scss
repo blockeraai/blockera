@@ -1,3 +1,7 @@
+.publisher-direction-column-reverse,
+.publisher-direction-column,
+.publisher-direction-row-reverse,
+.publisher-direction-row,
 .publisher-flex-align-content,
 .publisher-flex-wrap,
 .publisher-flex-justify-content,
@@ -61,6 +65,10 @@
 
 .publisher-direction-column-reverse {
 
+    svg {
+		transform: rotate(180deg);
+	}
+
 	&.publisher-flex-justify-content {
 
 		.publisher-field-control {
@@ -71,9 +79,27 @@
 			}
 		}
 	}
+
+		&.publisher-flex-wrap {
+
+			.publisher-field-control {
+
+				svg {
+					transform: rotate(270deg);
+				}
+
+				svg.publisher-wrap-wrap {
+					transform: rotate(270deg) scaleY(-1);
+				}
+			}
+		}
 }
 
 .publisher-direction-row-reverse {
+
+	svg {
+			transform: rotate(180deg);
+		}
 
 	&.publisher-flex-justify-content {
 
@@ -98,6 +124,14 @@
 				transform: rotate(180deg) scaleY(-1);
 			}
 		}
+	}
+
+}
+
+.publisher-flex-wrap-reverse {
+
+	svg {
+		  transform: scaleX(-1);
 	}
 
 }

@@ -3,7 +3,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo } from '@wordpress/element';
+import { memo, useState } from '@wordpress/element';
 import type { MixedElement } from 'react';
 
 /**
@@ -15,8 +15,7 @@ import {
 	InputControl,
 	ToggleSelectControl,
 } from '@publisher/controls';
-import { Flex } from '@publisher/components';
-
+import { Flex, Button } from '@publisher/components';
 /**
  * Internal dependencies
  */
@@ -49,13 +48,15 @@ import { default as AlignContentFlexStartIcon } from './icons/align-content-flex
 import { default as AlignItemsFlexStartBlockIcon } from './icons/align-items-flex-start';
 import { default as AlignContentSpaceAroundIcon } from './icons/align-content-space-around';
 import { default as AlignContentSpaceBetweenIcon } from './icons/align-content-space-between';
-import { default as FlexDirectionRowReverseBlockIcon } from './icons/flex-direction-row-reverse';
-import { default as FlexDirectionColumnReverseBlockIcon } from './icons/flex-direction-column-reverse';
+import { default as ReverseIcon } from './icons/reverse';
+import { default as LockIcon } from './icons/lock';
+import { default as UnlockIcon } from './icons/unlock';
 
 export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 	({
 		block,
 		values: {
+			gap,
 			gapRows,
 			display,
 			flexWrap,
@@ -88,6 +89,8 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 				publisherAlignContent,
 			},
 		} = config;
+
+		const [isGapLock, setIsGapLock] = useState(true);
 
 		return (
 			<>
@@ -144,65 +147,104 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 				{display === 'flex' && (
 					<>
 						{isActiveField(publisherFlexDirection) && (
-							<ControlContextProvider
-								value={{
-									name: generateExtensionId(
-										block,
-										'direction'
-									),
-									value: flexDirection,
-								}}
-							>
-								<ToggleSelectControl
-									label={__('Direction', 'publisher-core')}
-									columns="1fr 2.65fr"
-									options={[
-										{
-											label: __('Row', 'publisher-core'),
-											value: 'row',
-											icon: <FlexDirectionRowBlockIcon />,
-										},
-										{
-											label: __(
-												'column',
+							<BaseControl columns="columns-1">
+								<Flex>
+									<ControlContextProvider
+										value={{
+											name: generateExtensionId(
+												block,
+												'direction'
+											),
+											value: flexDirection.value,
+										}}
+									>
+										<ToggleSelectControl
+											className={
+												'publisher-direction-' +
+												flexDirection.value +
+												(flexDirection.reverse
+													? '-reverse'
+													: '')
+											}
+											label={__(
+												'Direction',
 												'publisher-core'
+											)}
+											columns="1fr 2fr"
+											options={[
+												{
+													label: __(
+														'Row',
+														'publisher-core'
+													),
+													value: 'row',
+													icon: (
+														<FlexDirectionRowBlockIcon />
+													),
+												},
+												{
+													label: __(
+														'Column',
+														'publisher-core'
+													),
+													value: 'column',
+													icon: (
+														<FlexDirectionColumnBlockIcon />
+													),
+												},
+											]}
+											defaultValue={
+												flexDirection.value || 'row'
+											}
+											onChange={(newValue) => {
+												handleOnChangeAttributes(
+													'publisherFlexDirection',
+													{
+														...flexDirection,
+														value: newValue,
+													}
+												);
+											}}
+										></ToggleSelectControl>
+									</ControlContextProvider>
+
+									<ControlContextProvider
+										value={{
+											name: generateExtensionId(
+												block,
+												'direction'
 											),
-											value: 'column',
-											icon: (
-												<FlexDirectionColumnBlockIcon />
-											),
-										},
-										{
-											label: __(
-												'Row Reverse',
+											value: flexDirection.reverse,
+										}}
+									>
+										<Button
+											aria-label={__(
+												'Reverse Direction',
 												'publisher-core'
-											),
-											value: 'row-reverse',
-											icon: (
-												<FlexDirectionRowReverseBlockIcon />
-											),
-										},
-										{
-											label: __(
-												'Column Reverse',
-												'publisher-core'
-											),
-											value: 'column-reverse',
-											icon: (
-												<FlexDirectionColumnReverseBlockIcon />
-											),
-										},
-									]}
-									//
-									defaultValue="row"
-									onChange={(newValue) =>
-										handleOnChangeAttributes(
-											'publisherFlexDirection',
-											newValue
-										)
-									}
-								/>
-							</ControlContextProvider>
+											)}
+											size="small"
+											style={{
+												color: flexDirection?.reverse
+													? 'var(--publisher-controls-border-color-focus)'
+													: 'var(--publisher-controls-color)',
+												padding: '6px',
+											}}
+											onClick={() => {
+												handleOnChangeAttributes(
+													'publisherFlexDirection',
+													{
+														...flexDirection,
+														reverse:
+															!flexDirection.reverse,
+													}
+												);
+											}}
+										>
+											<ReverseIcon />
+										</Button>
+									</ControlContextProvider>
+								</Flex>
+							</BaseControl>
 						)}
 
 						{isActiveField(publisherAlignItems) && (
@@ -220,7 +262,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									controlName="toggle-select"
 									className={
 										'publisher-direction-' +
-										flexDirection +
+										flexDirection.value +
 										' publisher-flex-align-items'
 									}
 									label={__('Align Items', 'publisher-core')}
@@ -291,7 +333,6 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 								</BaseControl>
 							</ControlContextProvider>
 						)}
-
 						{isActiveField(publisherJustifyContent) && (
 							<ControlContextProvider
 								value={{
@@ -306,7 +347,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									columns="1fr 2.65fr"
 									className={
 										'publisher-direction-' +
-										flexDirection +
+										flexDirection.value +
 										' publisher-flex-justify-content'
 									}
 									controlName="toggle-select"
@@ -388,80 +429,159 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 								label={__('Gap', 'publisher-core')}
 								columns="1fr 2.65fr"
 							>
-								<Flex direction="row" gap="10px">
-									{isActiveField(publisherGapRows) && (
-										<ControlContextProvider
-											value={{
-												name: generateExtensionId(
-													block,
-													'gap-rows'
-												),
-												value: gapRows,
-											}}
-										>
-											<BaseControl
-												controlName="input"
-												columns="columns-1"
-												className="control-first label-center small-gap"
-												label={__(
-													'Rows',
-													'publisher-core'
-												)}
+								<Flex gap="10px">
+									{isGapLock ? (
+										isActiveField(publisherGap) && (
+											<ControlContextProvider
+												value={{
+													name: generateExtensionId(
+														block,
+														'gap'
+													),
+													value: gap,
+												}}
 											>
-												<InputControl
-													{...{
-														...props,
-														unitType: 'essential',
-														min: 0,
-														max: 200,
-														defaultValue: '',
-														onChange: (newValue) =>
-															handleOnChangeAttributes(
-																'publisherGapRows',
+												<BaseControl
+													controlName="input"
+													columns="columns-1"
+													className="control-first label-center small-gap"
+													aria-label={__(
+														'Gap',
+														'publisher-core'
+													)}
+												>
+													<InputControl
+														{...{
+															...props,
+															unitType:
+																'essential',
+															min: 0,
+															max: 200,
+															defaultValue: '',
+															onChange: (
 																newValue
-															),
+															) =>
+																handleOnChangeAttributes(
+																	'publisherGap',
+																	newValue
+																),
+														}}
+													/>
+												</BaseControl>
+											</ControlContextProvider>
+										)
+									) : (
+										<Flex direction="row" gap="10px">
+											{isActiveField(
+												publisherGapColumns
+											) && (
+												<ControlContextProvider
+													value={{
+														name: generateExtensionId(
+															block,
+															'gap-columns'
+														),
+														value: gapColumns,
 													}}
-												/>
-											</BaseControl>
-										</ControlContextProvider>
-									)}
+												>
+													<BaseControl
+														controlName="input"
+														columns="columns-1"
+														className="control-first label-center small-gap"
+														label={__(
+															'Columns',
+															'publisher-core'
+														)}
+													>
+														<InputControl
+															{...{
+																...props,
+																unitType:
+																	'essential',
+																min: 0,
+																max: 200,
+																defaultValue:
+																	gap,
+																onChange: (
+																	newValue
+																) =>
+																	handleOnChangeAttributes(
+																		'publisherGapColumns',
+																		newValue
+																	),
+															}}
+														/>
+													</BaseControl>
+												</ControlContextProvider>
+											)}
 
-									{isActiveField(publisherGapColumns) && (
-										<ControlContextProvider
-											value={{
-												name: generateExtensionId(
-													block,
-													'gap-columns'
-												),
-												value: gapColumns,
-											}}
-										>
-											<BaseControl
-												controlName="input"
-												columns="columns-1"
-												className="control-first label-center small-gap"
-												label={__(
-													'Columns',
-													'publisher-core'
-												)}
-											>
-												<InputControl
-													{...{
-														...props,
-														unitType: 'essential',
-														min: 0,
-														max: 200,
-														defaultValue: '',
-														onChange: (newValue) =>
-															handleOnChangeAttributes(
-																'publisherGapColumns',
-																newValue
-															),
+											{isActiveField(
+												publisherGapRows
+											) && (
+												<ControlContextProvider
+													value={{
+														name: generateExtensionId(
+															block,
+															'gap-rows'
+														),
+														value: gapRows,
 													}}
-												/>
-											</BaseControl>
-										</ControlContextProvider>
+												>
+													<BaseControl
+														controlName="input"
+														columns="columns-1"
+														className="control-first label-center small-gap"
+														label={__(
+															'Rows',
+															'publisher-core'
+														)}
+													>
+														<InputControl
+															{...{
+																...props,
+																unitType:
+																	'essential',
+																min: 0,
+																max: 200,
+																defaultValue:
+																	gap,
+																onChange: (
+																	newValue
+																) =>
+																	handleOnChangeAttributes(
+																		'publisherGapRows',
+																		newValue
+																	),
+															}}
+														/>
+													</BaseControl>
+												</ControlContextProvider>
+											)}
+										</Flex>
 									)}
+									<Button
+										aria-label={__(
+											'Lock Gap',
+											'publisher-core'
+										)}
+										noBorder={isGapLock}
+										size="small"
+										onClick={() => {
+											setIsGapLock(!isGapLock);
+										}}
+										style={{
+											color: isGapLock
+												? 'var(--publisher-controls-color)'
+												: 'var(--publisher-controls-border-color-focus)',
+											padding: '6px',
+										}}
+									>
+										{isGapLock ? (
+											<LockIcon />
+										) : (
+											<UnlockIcon />
+										)}
+									</Button>
 								</Flex>
 							</BaseControl>
 						)}
@@ -474,52 +594,104 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 											block,
 											'flex-wrap'
 										),
-										value: flexWrap,
+										value: flexWrap.value,
 									}}
 								>
-									<BaseControl
-										columns="1fr 2.65fr"
-										className={
-											'publisher-direction-' +
-											flexDirection +
-											' publisher-flex-wrap'
-										}
-										controlName="toggle-select"
-										label={__('Children', 'publisher-core')}
-									>
-										<ToggleSelectControl
-											options={[
-												{
-													label: __(
-														'No Wrap',
-														'publisher-core'
-													),
-													value: 'nowrap',
-													icon: <WrapNoWrapIcon />,
-												},
-												{
-													label: __(
-														'Wrap',
-														'publisher-core'
-													),
-													value: 'wrap',
-													icon: <WrapWrapIcon />,
-												},
-											]}
-											//
-											defaultValue="nowrap"
-											onChange={(newValue) =>
-												handleOnChangeAttributes(
-													'publisherFlexWrap',
-													newValue
-												)
-											}
-										/>
+									<BaseControl columns="columns-1">
+										<Flex>
+											<BaseControl
+												columns="1fr 2fr"
+												className={
+													'publisher-direction-' +
+													flexDirection.value +
+													`${
+														flexDirection.reverse
+															? '-reverse'
+															: ''
+													}` +
+													' publisher-flex-wrap' +
+													`${
+														flexWrap.reverse
+															? '-reverse'
+															: ''
+													}`
+												}
+												controlName="toggle-select"
+												label={__(
+													'Children',
+													'publisher-core'
+												)}
+											>
+												<ToggleSelectControl
+													options={[
+														{
+															label: __(
+																'No Wrap',
+																'publisher-core'
+															),
+															value: 'nowrap',
+															icon: (
+																<WrapNoWrapIcon />
+															),
+														},
+														{
+															label: __(
+																'Wrap',
+																'publisher-core'
+															),
+															value: 'wrap',
+															icon: (
+																<WrapWrapIcon />
+															),
+														},
+													]}
+													//
+													defaultValue={
+														flexWrap.value ||
+														'nowrap'
+													}
+													onChange={(newValue) =>
+														handleOnChangeAttributes(
+															'publisherFlexWrap',
+															{
+																...flexWrap,
+																value: newValue,
+															}
+														)
+													}
+												/>
+											</BaseControl>
+											<Button
+												aria-label={__(
+													'Reverse Warp',
+													'publisher-core'
+												)}
+												size="small"
+												style={{
+													color: flexWrap?.reverse
+														? 'var(--publisher-controls-border-color-focus)'
+														: 'var(--publisher-controls-color)',
+													padding: '6px',
+												}}
+												onClick={() => {
+													handleOnChangeAttributes(
+														'publisherFlexWrap',
+														{
+															...flexWrap,
+															reverse:
+																!flexWrap.reverse,
+														}
+													);
+												}}
+											>
+												<ReverseIcon />
+											</Button>
+										</Flex>
 									</BaseControl>
 								</ControlContextProvider>
 
 								{isActiveField(publisherAlignContent) &&
-									flexWrap === 'wrap' && (
+									flexWrap.value === 'wrap' && (
 										<ControlContextProvider
 											value={{
 												name: generateExtensionId(
@@ -538,7 +710,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												columns="1fr 2.65fr"
 												className={
 													'publisher-direction-' +
-													flexDirection +
+													flexDirection.value +
 													' publisher-flex-align-content'
 												}
 											>

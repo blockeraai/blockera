@@ -4,14 +4,18 @@ export const attributes = {
 		default: '',
 	},
 	publisherFlexDirection: {
-		type: 'string',
-		default: '',
+		type: 'object',
+		default: { value: 'row', reverse: false },
 	},
 	publisherAlignItems: {
 		type: 'string',
 		default: '',
 	},
 	publisherJustifyContent: {
+		type: 'string',
+		default: '',
+	},
+	publisherGap: {
 		type: 'string',
 		default: '',
 	},
@@ -24,8 +28,8 @@ export const attributes = {
 		default: '',
 	},
 	publisherFlexWrap: {
-		type: 'string',
-		default: '',
+		type: 'object',
+		default: { value: 'nowrap', reverse: false },
 	},
 	publisherAlignContent: {
 		type: 'string',

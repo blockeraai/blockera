@@ -20,6 +20,7 @@
 	],
 	"layout": [
 		"publisherGapRows",
+		"publisherGap",
 		"publisherDisplay",
 		"publisherFlexWrap",
 		"publisherGapColumns",

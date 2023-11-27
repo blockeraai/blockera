@@ -22,13 +22,14 @@ export type TCssProps = {
 
 export type TLayoutProps = {
 	values: {
+		gap: string,
 		gapRows: string,
 		display: string,
-		flexWrap: string,
+		flexWrap: { value: string, reverse: boolean },
 		gapColumns: string,
 		alignItems: string,
 		alignContent: string,
-		flexDirection: string,
+		flexDirection: { value: string, reverse: boolean },
 		justifyContent: string,
 	},
 	// defaultValue: {

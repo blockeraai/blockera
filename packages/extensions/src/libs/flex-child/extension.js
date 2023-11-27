@@ -30,6 +30,8 @@ import { default as AlignFlexEndIcon } from './icons/align-flex-end';
 import { default as AlignBaselineIcon } from './icons/align-baseline';
 import { default as AlignFlexStartIcon } from './icons/align-flex-start';
 import { default as AlignFlexCenterIcon } from './icons/align-flex-center';
+import { default as OrderFirst } from './icons/order-first';
+import { default as OrderLast } from './icons/order-last';
 import type { TFlexChildProps } from './types/flex-child-props';
 
 export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
@@ -271,10 +273,12 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 									{
 										label: __('First', 'publisher-core'),
 										value: 'first',
+										icon: <OrderFirst />,
 									},
 									{
 										label: __('Last', 'publisher-core'),
 										value: 'last',
+										icon: <OrderLast />,
 									},
 									{
 										label: __(
