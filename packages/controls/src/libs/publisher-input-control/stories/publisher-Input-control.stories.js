@@ -168,6 +168,40 @@ export const TextInput = {
 					{...args}
 				/>
 			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: args.controlInfo.value,
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					type="text"
+					label="Validator → Valid"
+					{...args}
+					validator={(value) => {
+						return value === 'text';
+					}}
+				/>
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: 'not text',
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					type="text"
+					label="Validator → Not Valid"
+					{...args}
+					validator={(value) => {
+						return value === 'text';
+					}}
+				/>
+			</ControlContextProvider>
 		</Flex>
 	),
 };
@@ -318,6 +352,40 @@ export const NumberInput = {
 						{...args}
 						type="number"
 						disabled={true}
+					/>
+				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 0,
+					}}
+				>
+					<ControlWithHooks
+						Control={PublisherInputControl}
+						label="Validator → Valid"
+						{...args}
+						type="number"
+						validator={(value) => {
+							return value !== 0;
+						}}
+					/>
+				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 0,
+					}}
+				>
+					<ControlWithHooks
+						Control={PublisherInputControl}
+						label="Validator → Not Valid"
+						{...args}
+						type="number"
+						validator={(value) => {
+							return value === 1;
+						}}
 					/>
 				</ControlContextProvider>
 			</Flex>
@@ -506,6 +574,7 @@ export const CssInput = {
 					defaultValue=""
 				/>
 			</ControlContextProvider>
+
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
@@ -519,6 +588,7 @@ export const CssInput = {
 					label="With PX Value"
 				/>
 			</ControlContextProvider>
+
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
@@ -532,6 +602,7 @@ export const CssInput = {
 					label="With EM Value"
 				/>
 			</ControlContextProvider>
+
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
@@ -546,6 +617,7 @@ export const CssInput = {
 					label="With Range"
 				/>
 			</ControlContextProvider>
+
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
@@ -560,6 +632,7 @@ export const CssInput = {
 					arrows={true}
 				/>
 			</ControlContextProvider>
+
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
@@ -575,6 +648,7 @@ export const CssInput = {
 					range={true}
 				/>
 			</ControlContextProvider>
+
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
@@ -589,6 +663,7 @@ export const CssInput = {
 					label="Special Value"
 				/>
 			</ControlContextProvider>
+
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
@@ -603,6 +678,7 @@ export const CssInput = {
 					label="Advanced"
 				/>
 			</ControlContextProvider>
+
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
@@ -619,6 +695,7 @@ export const CssInput = {
 					label="Min=0 Max=50"
 				/>
 			</ControlContextProvider>
+
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
@@ -635,6 +712,7 @@ export const CssInput = {
 					label="Min=-20 Max=20"
 				/>
 			</ControlContextProvider>
+
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
@@ -720,6 +798,7 @@ export const CssInput = {
 					label="Unit value is empty but have label"
 				/>
 			</ControlContextProvider>
+
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
@@ -736,30 +815,42 @@ export const CssInput = {
 					disabled={true}
 				/>
 			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: '10px',
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					{...args}
+					unitType="general"
+					label="Validator → Valid"
+					validator={(value) => {
+						return value === '10px';
+					}}
+				/>
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: '10%',
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					{...args}
+					unitType="general"
+					label="Validator → Not Valid"
+					validator={(value) => {
+						return value === '10px';
+					}}
+				/>
+			</ControlContextProvider>
 		</Flex>
 	),
-};
-
-export const WithCssValidator = {
-	args: {
-		controlInfo: {
-			name: nanoid(),
-			value: 'calc(50px - 20px)',
-		},
-		label: 'My Label',
-		validator: ['rgb', 'min'],
-	},
-	render: (args) => (
-		<ControlWithHooks Control={PublisherInputControl} {...args} />
-	),
-	decorators: [
-		WithInspectorStyles,
-		WithControlDataProvider,
-		...SharedDecorators,
-	],
-	parameters: {
-		jest: ['input.spec.js'],
-	},
 };
 
 export const PlayNumber = {
@@ -817,36 +908,3 @@ export const PlayNumber = {
 	},
 };
 PlayNumber.storyName = 'Play';
-
-export const WithCustomValidator = {
-	args: {
-		validator: (value) => {
-			if (value === 'valid') {
-				return true;
-			}
-			return false;
-		},
-		controlInfo: {
-			name: nanoid(),
-		},
-	},
-
-	render: (args) => (
-		<Flex direction="column" gap="15px">
-			<h2 className="story-heading">Valid Input</h2>
-			<ControlWithHooks
-				Control={PublisherInputControl}
-				{...args}
-				defaultValue="valid"
-			/>
-		</Flex>
-	),
-	decorators: [
-		WithInspectorStyles,
-		WithControlDataProvider,
-		...SharedDecorators,
-	],
-	parameters: {
-		jest: ['input.spec.js'],
-	},
-};

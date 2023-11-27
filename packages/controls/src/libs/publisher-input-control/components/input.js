@@ -7,12 +7,11 @@ import { useEffect, useState } from '@wordpress/element';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { isArray, isFunction } from '@publisher/utils';
+import { isFunction } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
-import { checkCSSFunctions } from '../utils';
 
 export function Input({
 	value,
@@ -28,21 +27,18 @@ export function Input({
 
 	// validator checking
 	useEffect(() => {
-		if (!validator || type !== 'text') {
-			// If no validator is provided, assume the value is valid
-			setIsValidValue(true);
+		if (!validator) {
 			return;
 		}
 
 		let isValid = false;
+
 		if (isFunction(validator)) {
-			isValid = validator(value?.inputValue);
-		} else if (isArray(validator)) {
-			isValid = checkCSSFunctions(validator, value?.inputValue);
+			isValid = validator(value);
 		}
 
-		// Update validValue based on the result of validation
-		setIsValidValue(!!isValid);
+		// Update isValidValue based on the result of validation
+		setIsValidValue(isValid);
 	}, [value]); // eslint-disable-line
 
 	return (

@@ -2,7 +2,7 @@
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { isNumber, isString, isUndefined } from '@publisher/utils';
+import { isFunction, isNumber, isString, isUndefined } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -10,6 +10,7 @@ import { isNumber, isString, isUndefined } from '@publisher/utils';
 import { RangeControl } from '../../index';
 import { default as ArrowUpIcon } from '../icons/arrow-up';
 import { default as ArrowDownIcon } from '../icons/arrow-down';
+import { useEffect, useState } from '@wordpress/element';
 
 export function NumberInput({
 	value,
@@ -108,6 +109,24 @@ export function NumberInput({
 		setValue(value);
 	};
 
+	const [isValidValue, setIsValidValue] = useState(true);
+
+	// validator checking
+	useEffect(() => {
+		if (!validator) {
+			return;
+		}
+
+		let isValid = false;
+
+		if (isFunction(validator)) {
+			isValid = validator(value);
+		}
+
+		// Update isValidValue based on the result of validation
+		setIsValidValue(isValid);
+	}, [value]); // eslint-disable-line
+
 	return (
 		<>
 			{range && (
@@ -131,6 +150,7 @@ export function NumberInput({
 					'input-tag',
 					'input-tag-number',
 					noBorder && 'no-border',
+					!isValidValue && 'invalid',
 					className
 				)}
 				onKeyDown={handleKeyDown}

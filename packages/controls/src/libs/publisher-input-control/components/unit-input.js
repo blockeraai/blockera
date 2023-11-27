@@ -7,7 +7,7 @@ import { useState, useEffect } from '@wordpress/element';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { isUndefined } from '@publisher/utils';
+import { isFunction, isUndefined } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -75,6 +75,24 @@ export function UnitInput({
 	const isActiveRange =
 		range && !isSpecialUnit(unitValue.value) && unitValue.value !== 'func';
 
+	const [isValidValue, setIsValidValue] = useState(true);
+
+	// validator checking
+	useEffect(() => {
+		if (!validator) {
+			return;
+		}
+
+		let isValid = false;
+
+		if (isFunction(validator)) {
+			isValid = validator(value);
+		}
+
+		// Update isValidValue based on the result of validation
+		setIsValidValue(isValid);
+	}, [value]); // eslint-disable-line
+
 	return (
 		<div
 			className={controlClassNames(
@@ -95,11 +113,11 @@ export function UnitInput({
 							className={controlClassNames(
 								'single-input',
 								noBorder && 'no-border',
+								!isValidValue && 'invalid',
 								className
 							)}
 							min={min}
 							max={max}
-							validator={validator}
 							setValue={setInputValue}
 							range={isActiveRange}
 							{...props}
@@ -112,9 +130,9 @@ export function UnitInput({
 							className={controlClassNames(
 								'single-input',
 								noBorder && 'no-border',
+								!isValidValue && 'invalid',
 								className
 							)}
-							validator={validator}
 							{...props}
 							type={unitValue?.format}
 						/>

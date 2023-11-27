@@ -33,7 +33,7 @@
 		border: 1px solid var(--publisher-controls-border-color);
 		border-radius: 2px;
 
-		&:hover:not(:disabled):not(.no-border) {
+		&:hover:not(:disabled):not(.no-border):not(.invalid) {
 
 			border-color: var(--publisher-controls-border-color-hover);
 
@@ -48,8 +48,8 @@
 
 		&.invalid {
 
-			border: 1px solid var(--publisher-controls-invalid-input-border-color) !important;
-			box-shadow: 0 0 0 1px var(--publisher-controls-invalid-input-border-color) !important;
+			--publisher-controls-border-color-focus: var(--publisher-controls-invalid-input-border-color);
+			--publisher-controls-border-color: var(--publisher-controls-invalid-input-border-color);
 
 		}
 
