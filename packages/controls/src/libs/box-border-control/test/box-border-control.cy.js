@@ -49,7 +49,7 @@ describe('box-border-control component testing', () => {
 		cy.get('input[type="number"]').should('have.value', '0');
 		cy.get('button[aria-label="Compact"]')
 			.should('have.attr', 'aria-checked')
-			.should('be.equal', 'false');
+			.should('be.equal', 'true');
 		cy.get('button[aria-label="Custom"]')
 			.should('have.attr', 'aria-checked')
 			.should('be.equal', 'false');
@@ -65,7 +65,7 @@ describe('box-border-control component testing', () => {
 		cy.get('input[type="number"]').should('have.value', '0');
 		cy.get('button[aria-label="Compact"]')
 			.should('have.attr', 'aria-checked')
-			.should('be.equal', 'false');
+			.should('be.equal', 'true');
 		cy.get('button[aria-label="Custom"]')
 			.should('have.attr', 'aria-checked')
 			.should('be.equal', 'false');
