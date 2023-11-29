@@ -674,11 +674,17 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												)}
 												size="small"
 												style={{
-													color: flexWrap?.reverse
-														? 'var(--publisher-controls-border-color-focus)'
-														: 'var(--publisher-controls-color)',
+													color:
+														flexWrap?.value ===
+														'wrap-reverse'
+															? 'var(--publisher-controls-border-color-focus)'
+															: 'var(--publisher-controls-color)',
 													padding: '6px',
 												}}
+												disabled={
+													flexWrap.value ===
+														'nowrap' || ''
+												}
 												onClick={() => {
 													handleOnChangeAttributes(
 														'publisherFlexWrap',
