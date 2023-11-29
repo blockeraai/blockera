@@ -181,8 +181,8 @@ export const Border = ({
 		return {
 			all: {
 				color: getColorValue(defaultValue.borderColor),
-				style: defaultValue.border?.style || 'solid',
-				width: defaultValue.border?.width || '1px',
+				style: defaultValue.border?.style || '',
+				width: defaultValue.border?.width || '',
 			},
 			type: 'all',
 		};
