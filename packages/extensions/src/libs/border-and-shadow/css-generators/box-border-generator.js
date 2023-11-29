@@ -16,7 +16,7 @@ export function BoxBorderGenerator(id, props, styleEngine) {
 		if (attributes.publisherBorder.all.width) {
 			properties.border = `${attributes.publisherBorder.all.width} ${attributes.publisherBorder.all.style} ${attributes.publisherBorder.all.color}`;
 		}
-	} else if (attributes.publisherBorder.top.width) {
+	} else {
 		if (attributes.publisherBorder.top.width) {
 			properties[
 				'border-top'
