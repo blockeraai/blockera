@@ -57,6 +57,7 @@ final class StyleEngine {
 		$styles[] = 'align-self';
 		$styles[] = 'transition';
 		$styles[] = 'column-gap';
+		$styles[] = 'gap';
 //		$styles[] = 'line-height';
 		$styles[] = 'border-top';
 		$styles[] = 'perspective';

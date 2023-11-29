@@ -82,6 +82,7 @@ class LayoutStyle extends SimpleStyle {
 			'publisherFlexChildOrder'  => 'order',
 			'publisherDisplay'         => 'display',
 			'publisherGapRows'         => 'row-gap',
+			'publisherGap'         => 'gap',
 			'publisherFlexWrap'        => 'flex-wrap',
 			'publisherFlexChildAlign'  => 'align-self',
 			'publisherGapColumns'      => 'column-gap',

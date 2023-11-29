@@ -61,9 +61,8 @@ export function LayoutStyles({
 			_attributes.publisherFlexDirection !==
 				attributes.publisherFlexDirection.default
 		) {
-			properties['flex-direction'] = `${
-				_attributes.publisherFlexDirection.value
-			}${_attributes.publisherFlexDirection.reverse ? '-reverse' : ''}`;
+			properties['flex-direction'] =
+				_attributes.publisherFlexDirection.value;
 		}
 
 		if (
@@ -109,12 +108,7 @@ export function LayoutStyles({
 			_attributes.publisherFlexWrap !==
 				attributes.publisherFlexWrap.default
 		) {
-			properties['flex-wrap'] = `${_attributes.publisherFlexWrap.value}${
-				_attributes.publisherFlexWrap.reverse &&
-				_attributes.publisherFlexWrap.value === 'wrap'
-					? '-reverse'
-					: ''
-			}`;
+			properties['flex-wrap'] = _attributes.publisherFlexWrap.value;
 		}
 
 		if (

@@ -79,6 +79,7 @@ class Parser {
 		],
 		'layout'            => [
 			'publisherDisplay',
+			'publisherGap',
 			'publisherGapRows',
 			'publisherFlexWrap',
 			'publisherAlignItems',

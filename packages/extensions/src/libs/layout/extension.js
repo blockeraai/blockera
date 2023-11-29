@@ -161,10 +161,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 										<ToggleSelectControl
 											className={
 												'publisher-direction-' +
-												flexDirection.value +
-												(flexDirection.reverse
-													? '-reverse'
-													: '')
+												flexDirection.value
 											}
 											label={__(
 												'Direction',
@@ -201,7 +198,11 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													'publisherFlexDirection',
 													{
 														...flexDirection,
-														value: newValue,
+														value: flexDirection.reverse
+															? `${newValue}-reverse`
+															: newValue.split(
+																	'-'
+															  )[0],
 													}
 												);
 											}}
@@ -233,7 +234,11 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												handleOnChangeAttributes(
 													'publisherFlexDirection',
 													{
-														...flexDirection,
+														value: flexDirection.reverse
+															? flexDirection.value.split(
+																	'-'
+															  )[0]
+															: `${flexDirection.value}-reverse`,
 														reverse:
 															!flexDirection.reverse,
 													}
@@ -604,11 +609,6 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												className={
 													'publisher-direction-' +
 													flexDirection.value +
-													`${
-														flexDirection.reverse
-															? '-reverse'
-															: ''
-													}` +
 													' publisher-flex-wrap' +
 													`${
 														flexWrap.reverse
@@ -655,7 +655,13 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 															'publisherFlexWrap',
 															{
 																...flexWrap,
-																value: newValue,
+																value: flexWrap.reverse
+																	? newValue ===
+																			'wrap' &&
+																	  `${newValue}-reverse`
+																	: newValue.split(
+																			'-'
+																	  )[0],
 															}
 														)
 													}
@@ -677,7 +683,13 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													handleOnChangeAttributes(
 														'publisherFlexWrap',
 														{
-															...flexWrap,
+															value: flexWrap.reverse
+																? flexWrap.value.split(
+																		'-'
+																  )[0]
+																: flexWrap.value ===
+																		'wrap' &&
+																  `${flexWrap.value}-reverse`,
 															reverse:
 																!flexWrap.reverse,
 														}
@@ -691,7 +703,8 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 								</ControlContextProvider>
 
 								{isActiveField(publisherAlignContent) &&
-									flexWrap.value === 'wrap' && (
+									(flexWrap.value === 'wrap' ||
+										flexWrap.value === 'wrap-reverse') && (
 										<ControlContextProvider
 											value={{
 												name: generateExtensionId(
