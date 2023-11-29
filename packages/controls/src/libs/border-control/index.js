@@ -73,7 +73,19 @@ export default function BorderControl({
 					)}
 					noBorder={true}
 					onChange={(newValue) => {
-						setValue({ ...value, width: newValue });
+						const edited = { ...value, width: newValue };
+
+						if (edited?.width !== '' && edited?.style === '') {
+							edited.style = 'solid';
+						} else if (
+							edited?.width === '' &&
+							edited?.color === '' &&
+							edited?.style !== ''
+						) {
+							edited.style = '';
+						}
+
+						setValue(edited);
 					}}
 					data-test="border-control-width"
 					placeholder="0"
@@ -84,7 +96,19 @@ export default function BorderControl({
 					type="minimal"
 					noBorder={true}
 					onChange={(newValue) => {
-						setValue({ ...value, color: newValue });
+						const edited = { ...value, color: newValue };
+
+						if (edited?.color !== '' && edited?.style === '') {
+							edited.style = 'solid';
+						} else if (
+							edited?.width === '' &&
+							edited?.color === '' &&
+							edited?.style !== ''
+						) {
+							edited.style = '';
+						}
+
+						setValue(edited);
 					}}
 					className={__isColorFocused && 'is-focused'}
 					data-test="border-control-color"
@@ -147,7 +171,18 @@ export default function BorderControl({
 						},
 					]}
 					onChange={(newValue) => {
-						setValue({ ...value, style: newValue });
+						const edited = { ...value, style: newValue };
+
+						if (
+							edited?.width === '' &&
+							edited?.color === '' &&
+							edited?.style !== '' &&
+							edited?.style === 'solid'
+						) {
+							edited.style = '';
+						}
+
+						setValue(edited);
 					}}
 					defaultValue={defaultValue && defaultValue.style}
 				/>
