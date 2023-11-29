@@ -569,7 +569,7 @@ export const CssInput = {
 				<ControlWithHooks
 					Control={PublisherInputControl}
 					{...args}
-					unitType="order"
+					unitType="general"
 					label="No Value"
 					defaultValue=""
 				/>

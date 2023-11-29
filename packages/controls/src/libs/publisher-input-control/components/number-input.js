@@ -1,3 +1,9 @@
+// @flow
+/**
+ * External dependencies
+ */
+import type { MixedElement } from 'react';
+
 /**
  * Publisher dependencies
  */
@@ -11,6 +17,7 @@ import { RangeControl } from '../../index';
 import { default as ArrowUpIcon } from '../icons/arrow-up';
 import { default as ArrowDownIcon } from '../icons/arrow-down';
 import { useEffect, useState } from '@wordpress/element';
+import type { TNumberInput } from '../types';
 
 export function NumberInput({
 	value,
@@ -21,13 +28,12 @@ export function NumberInput({
 	validator,
 	min,
 	max,
-	type,
 	range = false,
 	arrows = false,
 	...props
-}) {
+}: TNumberInput): MixedElement {
 	// get the minimum value in number type
-	const getMinValue = () => {
+	const getMinValue: Object = () => {
 		if (!isUndefined(min) && isNumber(+min)) {
 			return { min: +min };
 		}
@@ -35,7 +41,7 @@ export function NumberInput({
 	};
 
 	// get the maximum value in number type
-	const getMaxValue = () => {
+	const getMaxValue: Object = () => {
 		if (!isUndefined(max) && isNumber(+max)) {
 			return { max: +max };
 		}
@@ -43,7 +49,7 @@ export function NumberInput({
 		return {};
 	};
 
-	const handleKeyDown = (event) => {
+	const handleKeyDown = (event: Object) => {
 		// supports negative values
 		const regex = new RegExp(
 			value === ''
@@ -68,10 +74,10 @@ export function NumberInput({
 	};
 
 	// Handle paste event to allow only numeric content
-	const handlePaste = (event) => {
+	const handlePaste = (event: Object) => {
 		const clipboardData = event.clipboardData || window.clipboardData;
 
-		const pastedText = clipboardData.getData('text');
+		const pastedText: string = clipboardData.getData('text');
 
 		// if (value !== '' && /^(-?)$/.test(pastedText)) {
 		// 	event.preventDefault();
@@ -95,7 +101,7 @@ export function NumberInput({
 		}
 	};
 
-	const handleInputChange = (event) => {
+	const handleInputChange = (event: Object) => {
 		let value = event.target.value.replace(/[^-0-9]/g, '');
 
 		if (getMinValue()?.min !== '' && value < getMinValue().min) {
@@ -144,6 +150,7 @@ export function NumberInput({
 			)}
 
 			<input
+				//$FlowFixMe
 				value={isString(value) ? value.replace(/[^-0-9]/g, '') : +value}
 				disabled={disabled}
 				className={controlClassNames(
@@ -174,12 +181,12 @@ export function NumberInput({
 							'input-arrow',
 							'input-arrow-up',
 							getMaxValue()?.max !== '' &&
-								value >= +getMaxValue().max
+								+value >= +getMaxValue().max
 								? 'is-disabled'
 								: ''
 						)}
 						onClick={() => {
-							let newValue = value !== '' ? value : 0;
+							let newValue = value !== '' ? +value : 0;
 
 							newValue += 1;
 
@@ -202,12 +209,12 @@ export function NumberInput({
 							'input-arrow',
 							'input-arrow-down',
 							getMinValue()?.min !== '' &&
-								value <= +getMinValue().min
+								+value <= +getMinValue().min
 								? 'is-disabled'
 								: ''
 						)}
 						onClick={() => {
-							let newValue = value !== '' ? value : 0;
+							let newValue = value !== '' ? +value : 0;
 
 							newValue -= 1;
 

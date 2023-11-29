@@ -1,7 +1,9 @@
+// @flow
 /**
  * External dependencies
  */
 import { useState, useEffect } from '@wordpress/element';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -19,7 +21,8 @@ import {
 	getFirstUnit,
 } from '../utils';
 import { NumberInput } from './number-input';
-import { Input } from './input';
+import { OtherInput } from './other-input';
+import type { TUnitInput } from '../types';
 
 export function UnitInput({
 	value,
@@ -29,13 +32,12 @@ export function UnitInput({
 	noBorder,
 	className,
 	units = [],
-	setIsSpecial,
 	disabled,
 	validator,
 	min,
 	max,
 	...props
-}) {
+}: TUnitInput): MixedElement {
 	const extractedValue = extractNumberAndUnit(value);
 
 	const [unitValue, setUnitValue] = useState(
@@ -56,7 +58,7 @@ export function UnitInput({
 		}
 	}, [unitValue, inputValue]);
 
-	const onChangeSelect = (value) => {
+	const onChangeSelect = (value: string) => {
 		setUnitValue(getUnitByValue(value, units));
 
 		// old unit is special && current is not && value is empty
@@ -123,7 +125,7 @@ export function UnitInput({
 							{...props}
 						/>
 					) : (
-						<Input
+						<OtherInput
 							value={inputValue}
 							setValue={setInputValue}
 							disabled={disabled}

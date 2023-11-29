@@ -1,7 +1,9 @@
+// @flow
 /**
  * External dependencies
  */
 import PropTypes from 'prop-types';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -15,21 +17,22 @@ import { controlClassNames } from '@publisher/classnames';
 import { useControlContext } from '../../context';
 import { BaseControl } from './../index';
 import { UnitInput } from './components/unit-input';
-import { Input } from './components/input';
+import { OtherInput } from './components/other-input';
 import { NumberInput } from './components/number-input';
 import { getCSSUnits } from './utils';
+import type { TInputItem } from './types';
 
 export function PublisherInputControl({
 	unitType,
 	units,
-	noBorder, //
+	noBorder,
 	id,
 	range,
 	label,
 	columns,
 	defaultValue = '',
 	onChange,
-	field, //
+	field,
 	className,
 	type = 'text',
 	min,
@@ -37,7 +40,7 @@ export function PublisherInputControl({
 	validator,
 	disabled = false,
 	...props
-}) {
+}: TInputItem): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
 		defaultValue,
@@ -63,7 +66,6 @@ export function PublisherInputControl({
 					value={value}
 					setValue={setValue}
 					defaultValue={defaultValue}
-					type={type}
 					noBorder={noBorder}
 					className={className}
 					disabled={disabled}
@@ -86,7 +88,6 @@ export function PublisherInputControl({
 							<NumberInput
 								value={value}
 								setValue={setValue}
-								type={type}
 								noBorder={noBorder}
 								className={className}
 								disabled={disabled}
@@ -105,7 +106,7 @@ export function PublisherInputControl({
 								className
 							)}
 						>
-							<Input
+							<OtherInput
 								value={value}
 								setValue={setValue}
 								type={type}
@@ -143,6 +144,7 @@ PublisherInputControl.propTypes = {
 	/**
 	 * Type of CSS units from presets
 	 */
+	//$FlowFixMe
 	unitType: PropTypes.oneOf([
 		'outline',
 		'text-shadow',
@@ -162,6 +164,7 @@ PublisherInputControl.propTypes = {
 	/**
 	 * Indicates units for showing unit for value.
 	 */
+	//$FlowFixMe
 	units: PropTypes.arrayOf(
 		PropTypes.shape({
 			value: PropTypes.string,
@@ -180,14 +183,17 @@ PublisherInputControl.propTypes = {
 	/**
 	 * The minimum `value` allowed.
 	 */
+	//$FlowFixMe
 	min: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	/**
 	 * The maximum `value` allowed.
 	 */
+	//$FlowFixMe
 	max: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	/**
 	 * check the `input`,  A function used to validate input values.
 	 */
+	//$FlowFixMe
 	validator: PropTypes.oneOfType([
 		PropTypes.func,
 		PropTypes.arrayOf(
@@ -213,8 +219,7 @@ PublisherInputControl.propTypes = {
 PublisherInputControl.defaultProps = {
 	range: false,
 	noBorder: false,
+	arrows: false,
 	field: 'input',
-	defaultValue: {
-		unit: 'em',
-	},
+	defaultValue: '',
 };

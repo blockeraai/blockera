@@ -1,7 +1,9 @@
+// @flow
 /**
  * External dependencies
  */
 import { useEffect, useState } from '@wordpress/element';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -12,8 +14,9 @@ import { isFunction } from '@publisher/utils';
 /**
  * Internal dependencies
  */
+import type { TOtherInput } from '../types';
 
-export function Input({
+export function OtherInput({
 	value,
 	setValue,
 	type,
@@ -22,7 +25,7 @@ export function Input({
 	disabled,
 	validator,
 	...props
-}) {
+}: TOtherInput): MixedElement {
 	const [isValidValue, setIsValidValue] = useState(true);
 
 	// validator checking
