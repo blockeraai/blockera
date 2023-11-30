@@ -187,7 +187,7 @@ export const Border = ({
 			value={{
 				name: generateExtensionId(block, 'border'),
 				value:
-					border && Array.from(border).length > 0
+					border && Object.values(border).length > 0
 						? border
 						: getNormalDefaultValue(),
 			}}
