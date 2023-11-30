@@ -56,6 +56,7 @@ final class StyleEngine {
 		$styles[] = 'flex-wrap';
 		$styles[] = 'column-gap';
 		$styles[] = 'word-break';
+		$styles[] = 'word-spacing';
 		$styles[] = 'align-self';
 		$styles[] = 'transition';
 		$styles[] = 'column-gap';
