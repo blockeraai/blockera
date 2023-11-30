@@ -162,6 +162,8 @@ InputControl.propTypes = {
 		'width',
 		'essential',
 		'general',
+		'basis',
+		'order',
 		'custom',
 	]),
 	/**

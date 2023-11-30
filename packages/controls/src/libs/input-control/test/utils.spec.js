@@ -45,6 +45,10 @@ describe('Util functions', () => {
 			expect(isSpecialUnit('revert')).toBe(false);
 		});
 
+		test('content', () => {
+			expect(isSpecialUnit('content')).toBe(false);
+		});
+
 		test('false', () => {
 			expect(isSpecialUnit('false')).toBe(false);
 		});

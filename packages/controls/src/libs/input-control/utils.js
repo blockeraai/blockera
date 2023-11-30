@@ -10,6 +10,7 @@ const specialUnits = [
 	'unset',
 	'revert-layer',
 	'revert',
+	'content',
 ];
 
 // todo: write test
@@ -992,6 +993,103 @@ export function getCSSUnits(unitType = '') {
 							label: 'Unset',
 							default: '',
 							format: 'text',
+						},
+					],
+				},
+				{
+					label: 'Advanced',
+					options: [
+						{
+							value: 'func',
+							label: 'CSS Functions and Variables',
+							default: '',
+							format: 'text',
+						},
+					],
+				},
+			];
+			break;
+
+		case 'basis':
+			cssUnits = [
+				{
+					label: 'Special Values',
+					options: [
+						{
+							value: 'auto',
+							label: 'Auto',
+							default: '',
+							format: 'text',
+						},
+						{
+							value: 'content',
+							label: 'Content',
+							default: '',
+							format: 'text',
+						},
+					],
+				},
+				{
+					label: 'Common Values',
+					options: [
+						{
+							value: 'px',
+							label: 'PX',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: '%',
+							label: '%',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'em',
+							label: 'EM',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'rem',
+							label: 'REM',
+							default: 0,
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Other Values',
+					options: [
+						{
+							value: 'ch',
+							label: 'CH',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'vw',
+							label: 'VW',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'vh',
+							label: 'VH',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'dvw',
+							label: 'DVW',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'dvh',
+							label: 'DVH',
+							default: 0,
+							format: 'number',
 						},
 					],
 				},

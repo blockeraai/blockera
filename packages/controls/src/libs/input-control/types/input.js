@@ -18,7 +18,8 @@ export type TInputItem = {
 		| 'essential'
 		| 'general'
 		| 'margin'
-		| 'order',
+		| 'order'
+		| 'basis',
 	units?: Array<Object>,
 	noBorder?: boolean,
 	id?: number | string,

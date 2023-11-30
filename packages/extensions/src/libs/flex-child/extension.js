@@ -179,7 +179,7 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 											columns="columns-2"
 											{...{
 												...props,
-												unitType: 'essential',
+												unitType: 'basis',
 												min: 0,
 												defaultValue: 'auto',
 												onChange: (newValue) =>
