@@ -40,6 +40,7 @@ export function InputControl({
 	validator,
 	disabled = false,
 	drag = true,
+	float = true,
 	...props
 }: TInputItem): MixedElement {
 	const { value, setValue } = useControlContext({
@@ -74,6 +75,7 @@ export function InputControl({
 					min={min}
 					max={max}
 					drag={drag}
+					float={float}
 					{...props}
 				/>
 			) : (
@@ -98,6 +100,7 @@ export function InputControl({
 								max={max}
 								range={range}
 								drag={drag}
+								float={float}
 								{...props}
 							/>
 						</div>

@@ -41,6 +41,7 @@ export function UnitInput({
 	min,
 	max,
 	drag,
+	float,
 	...props
 }: TUnitInput): MixedElement {
 	const extractedValue = extractNumberAndUnit(value);
@@ -128,6 +129,7 @@ export function UnitInput({
 							setValue={setInputValue}
 							range={isActiveRange}
 							drag={drag}
+							float={float}
 							{...props}
 						/>
 					) : (

@@ -12,4 +12,5 @@ export type TNumberInput = {
 	range?: boolean,
 	arrows?: boolean,
 	drag?: boolean,
+	float?: boolean,
 };

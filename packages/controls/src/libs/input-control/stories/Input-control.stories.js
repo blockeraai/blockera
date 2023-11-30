@@ -433,6 +433,36 @@ export const NumberInput = {
 						drag={false}
 					/>
 				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 1.2,
+					}}
+				>
+					<ControlWithHooks
+						Control={InputControl}
+						label="Float Number"
+						{...args}
+						type="number"
+						float={true}
+					/>
+				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 1,
+					}}
+				>
+					<ControlWithHooks
+						Control={InputControl}
+						label="Integer Number"
+						{...args}
+						type="number"
+						float={false}
+					/>
+				</ControlContextProvider>
 			</Flex>
 
 			<Flex direction="column" gap="15px">
@@ -939,6 +969,36 @@ export const CssInput = {
 					unitType="general"
 					label="Drag Disable"
 					drag={false}
+				/>
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: '1.2px',
+				}}
+			>
+				<ControlWithHooks
+					Control={InputControl}
+					{...args}
+					unitType="general"
+					label="Float Number"
+					float={true}
+				/>
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: '1px',
+				}}
+			>
+				<ControlWithHooks
+					Control={InputControl}
+					{...args}
+					unitType="general"
+					label="Integer Number"
+					float={false}
 				/>
 			</ControlContextProvider>
 		</Flex>

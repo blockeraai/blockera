@@ -36,4 +36,5 @@ export type TInputItem = {
 	validator?: (value: string | number) => boolean,
 	disabled?: boolean,
 	drag?: boolean,
+	float?: boolean,
 };

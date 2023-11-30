@@ -1191,12 +1191,12 @@ export function extractNumberAndUnit(value) {
 	}
 
 	// Using a regular expression to match the number and unit
-	const match = value.match(/(^-?\d+)?(?:([a-zA-Z%]+)?)?$/);
+	const match = value.match(/(^-?\d+(\.\d+)?)\s*([a-zA-Z%]+)/);
 
 	if (match) {
 		// Extracting the number and unit from the regex match
 		const value = parseFloat(match[1]);
-		const unit = match[2];
+		const unit = match[3];
 
 		// Returning an object with the extracted values
 		return {

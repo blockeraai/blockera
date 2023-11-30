@@ -37,6 +37,7 @@ export function NumberInput({
 	range = false,
 	arrows = false,
 	drag = true,
+	float = true,
 	...props
 }: TNumberInput): MixedElement {
 	// get the minimum value in number type
@@ -59,9 +60,11 @@ export function NumberInput({
 	const handleKeyDown = (event: Object) => {
 		// supports negative values
 		const regex = new RegExp(
-			value === ''
-				? /(^-?\d*$)|(Backspace|Tab|Delete|ArrowLeft|ArrowRight|ArrowUp|ArrowDown)/
-				: /(^\d*$)|(Backspace|Tab|Delete|ArrowLeft|ArrowRight|ArrowUp|ArrowDown)/
+			`${
+				value === '' ? '(^-?\\d*$)' : '(^\\d*$)'
+			}|(Backspace|Tab|Delete|ArrowLeft|ArrowRight|ArrowUp|ArrowDown${
+				float ? '|\\.' : ''
+			})`
 		);
 
 		// Allow Ctrl+A (Windows) or Command+A (Mac) to select all text
@@ -91,7 +94,7 @@ export function NumberInput({
 		// 	return;
 		// }
 
-		if (!/^(-?\d+)?$/.test(pastedText)) {
+		if (!/^(-?\d+(\.\d+)?)$/.test(pastedText)) {
 			event.preventDefault();
 			return;
 		}
@@ -109,7 +112,10 @@ export function NumberInput({
 	};
 
 	const handleInputChange = (event: Object) => {
-		let value = parseInt(event.target.value.replace(/[^-0-9]/g, ''));
+		let value = event.target.value.replace(
+			float ? /[^-\.0-9]/g : /[^-0-9]/g,
+			''
+		);
 
 		if (getMinValue()?.min !== '' && value < getMinValue().min) {
 			value = getMinValue().min;
@@ -141,8 +147,10 @@ export function NumberInput({
 	}, [value]); // eslint-disable-line
 
 	const dragValueHandler = useDragValue({
-		//$FlowFixMe
-		value: isString(value) ? value.replace(/[^-0-9]/g, '') : +value,
+		value: isString(value)
+			? //$FlowFixMe
+			  value.replace(float ? /[^-\.0-9]/g : /[^-0-9]/g, '')
+			: +value,
 		setValue: (newValue) => {
 			setValue(newValue);
 		},

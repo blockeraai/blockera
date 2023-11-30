@@ -13,4 +13,5 @@ export type TUnitInput = {
 	min?: number,
 	max?: number,
 	drag?: boolean,
+	float?: boolean,
 };
