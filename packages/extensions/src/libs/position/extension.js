@@ -89,6 +89,7 @@ export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 											newValue
 										),
 								}}
+								arrows={true}
 							/>
 						</ControlContextProvider>
 					)}
