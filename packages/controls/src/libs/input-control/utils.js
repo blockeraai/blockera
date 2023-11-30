@@ -1010,7 +1010,7 @@ export function getCSSUnits(unitType = '') {
 			];
 			break;
 
-		case 'basis':
+		case 'flex-basis':
 			cssUnits = [
 				{
 					label: 'Special Values',
@@ -1090,6 +1090,69 @@ export function getCSSUnits(unitType = '') {
 							label: 'DVH',
 							default: 0,
 							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Advanced',
+					options: [
+						{
+							value: 'func',
+							label: 'CSS Functions and Variables',
+							default: '',
+							format: 'text',
+						},
+					],
+				},
+			];
+			break;
+
+		case 'flex-shrink':
+		case 'flex-grow':
+			cssUnits = [
+				{
+					label: 'Common Values',
+					options: [
+						{
+							value: '',
+							label: '-',
+							default: '',
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Special Values',
+					options: [
+						{
+							value: 'revert',
+							label: 'Revert',
+							default: '',
+							format: 'text',
+						},
+						{
+							value: 'revert-layer',
+							label: 'Revert Layer',
+							default: '',
+							format: 'text',
+						},
+						{
+							value: 'inherit',
+							label: 'Inherit',
+							default: '',
+							format: 'text',
+						},
+						{
+							value: 'initial',
+							label: 'Initial',
+							default: '',
+							format: 'text',
+						},
+						{
+							value: 'unset',
+							label: 'Unset',
+							default: '',
+							format: 'text',
 						},
 					],
 				},

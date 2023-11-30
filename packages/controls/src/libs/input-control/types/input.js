@@ -19,7 +19,9 @@ export type TInputItem = {
 		| 'general'
 		| 'margin'
 		| 'order'
-		| 'basis',
+		| 'flex-basis'
+		| 'flex-shrink'
+		| 'flex-grow',
 	units?: Array<Object>,
 	noBorder?: boolean,
 	id?: number | string,

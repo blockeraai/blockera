@@ -165,9 +165,11 @@ InputControl.propTypes = {
 		'width',
 		'essential',
 		'general',
-		'basis',
 		'order',
 		'custom',
+		'flex-grow',
+		'flex-shrink',
+		'fex-basis',
 	]),
 	/**
 	 * Indicates units for showing unit for value.

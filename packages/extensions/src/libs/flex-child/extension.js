@@ -123,6 +123,10 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 											controlName="input"
 											label={__('Grow', 'publisher-core')}
 											columns="columns-2"
+											unitType="flex-grow"
+											type="number"
+											float={true}
+											arrows={true}
 											{...{
 												...props,
 												min: 0,
@@ -150,6 +154,10 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 												'publisher-core'
 											)}
 											columns="columns-2"
+											unitType="flex-shrink"
+											type="number"
+											float={true}
+											arrows={true}
 											{...{
 												...props,
 												min: 0,
@@ -177,9 +185,10 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 												'publisher-core'
 											)}
 											columns="columns-2"
+											arrows={true}
 											{...{
 												...props,
-												unitType: 'basis',
+												unitType: 'flex-basis',
 												min: 0,
 												defaultValue: 'auto',
 												onChange: (newValue) =>
@@ -314,6 +323,7 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 											)}
 											columns="2fr 3fr"
 											unitType="order"
+											arrows={true}
 											{...{
 												...props,
 												min: -1,
