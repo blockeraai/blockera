@@ -8,7 +8,13 @@ import type { MixedElement } from 'react';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { isFunction, isNumber, isString, isUndefined } from '@publisher/utils';
+import {
+	isFunction,
+	isNumber,
+	isString,
+	isUndefined,
+	useDragValue,
+} from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -30,6 +36,7 @@ export function NumberInput({
 	max,
 	range = false,
 	arrows = false,
+	drag = true,
 	...props
 }: TNumberInput): MixedElement {
 	// get the minimum value in number type
@@ -133,6 +140,27 @@ export function NumberInput({
 		setIsValidValue(isValid);
 	}, [value]); // eslint-disable-line
 
+	const dragValueHandler = useDragValue({
+		//$FlowFixMe
+		value: isString(value) ? value.replace(/[^-0-9]/g, '') : +value,
+		setValue: (newValue) => {
+			setValue(newValue);
+		},
+		movement: 'vertical',
+		...getMinValue(),
+		...getMaxValue(),
+	});
+
+	const getDragEvent: Object = () => {
+		return drag
+			? {
+					onMouseDown: (event) => {
+						dragValueHandler(event);
+					},
+			  }
+			: {};
+	};
+
 	return (
 		<>
 			{range && (
@@ -158,6 +186,7 @@ export function NumberInput({
 					'input-tag-number',
 					noBorder && 'no-border',
 					!isValidValue && 'invalid',
+					drag && 'is-drag-active',
 					className
 				)}
 				onKeyDown={handleKeyDown}
@@ -167,6 +196,7 @@ export function NumberInput({
 				{...getMaxValue()}
 				onChange={handleInputChange}
 				type="number"
+				{...getDragEvent()}
 			/>
 
 			{arrows && (

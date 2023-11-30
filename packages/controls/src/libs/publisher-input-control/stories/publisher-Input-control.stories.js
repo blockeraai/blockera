@@ -388,6 +388,21 @@ export const NumberInput = {
 						}}
 					/>
 				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 0,
+					}}
+				>
+					<ControlWithHooks
+						Control={PublisherInputControl}
+						label="Drag Disabled"
+						{...args}
+						type="number"
+						drag={false}
+					/>
+				</ControlContextProvider>
 			</Flex>
 
 			<Flex direction="column" gap="15px">
@@ -536,6 +551,22 @@ export const NumberInput = {
 						range={true}
 						type="number"
 						disabled={true}
+					/>
+				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 0,
+					}}
+				>
+					<ControlWithHooks
+						Control={PublisherInputControl}
+						label="Drag Disabled"
+						{...args}
+						range={true}
+						type="number"
+						drag={false}
 					/>
 				</ControlContextProvider>
 			</Flex>
@@ -847,6 +878,21 @@ export const CssInput = {
 					validator={(value) => {
 						return value === '10px';
 					}}
+				/>
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: '10px',
+				}}
+			>
+				<ControlWithHooks
+					Control={PublisherInputControl}
+					{...args}
+					unitType="general"
+					label="Drag Disable"
+					drag={false}
 				/>
 			</ControlContextProvider>
 		</Flex>

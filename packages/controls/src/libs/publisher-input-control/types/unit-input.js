@@ -12,4 +12,5 @@ export type TUnitInput = {
 	validator?: (value: string) => boolean,
 	min?: number,
 	max?: number,
+	drag?: boolean,
 };

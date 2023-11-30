@@ -39,6 +39,7 @@ export function PublisherInputControl({
 	max,
 	validator,
 	disabled = false,
+	drag = true,
 	...props
 }: TInputItem): MixedElement {
 	const { value, setValue } = useControlContext({
@@ -72,6 +73,7 @@ export function PublisherInputControl({
 					validator={validator}
 					min={min}
 					max={max}
+					drag={drag}
 					{...props}
 				/>
 			) : (
@@ -95,6 +97,7 @@ export function PublisherInputControl({
 								min={min}
 								max={max}
 								range={range}
+								drag={drag}
 								{...props}
 							/>
 						</div>
@@ -220,6 +223,7 @@ PublisherInputControl.defaultProps = {
 	range: false,
 	noBorder: false,
 	arrows: false,
+	drag: true,
 	field: 'input',
 	defaultValue: '',
 };

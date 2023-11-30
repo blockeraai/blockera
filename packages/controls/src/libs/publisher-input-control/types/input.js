@@ -34,4 +34,5 @@ export type TInputItem = {
 	max?: number,
 	validator?: (value: string | number) => boolean,
 	disabled?: boolean,
+	drag?: boolean,
 };

@@ -11,4 +11,5 @@ export type TNumberInput = {
 	max?: number,
 	range?: boolean,
 	arrows?: boolean,
+	drag?: boolean,
 };
