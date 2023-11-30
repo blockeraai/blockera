@@ -35,26 +35,43 @@ export const Border = ({
 		setAttributes: (attributes: Object) => void
 	): void => {
 		if ('all' === newValue.type) {
-			if (attributes.borderColor) {
-				setAttributes({
-					...attributes,
-					borderColor: newValue.all.color,
-					style: {
-						...(attributes?.style ?? {}),
-						border: {
-							...(attributes?.style?.border ?? {}),
-							width: newValue.all.width,
-							style: newValue.all.style,
-						},
-					},
-				});
+			const radius =
+				attributes.publisherBorderRadius?.all ||
+				(attributes?.style?.border?.radius ?? '');
 
-				return;
-			}
+			const customized = {
+				...attributes,
+				borderColor:
+					newValue?.all?.color ||
+					attributes.borderColor ||
+					attributes?.style?.border?.color,
+				style: {
+					...(attributes?.style ?? {}),
+					border: {
+						radius,
+						...(attributes?.style?.border ?? {}),
+						color:
+							newValue?.all?.color ||
+							attributes.borderColor ||
+							attributes?.style?.border?.color,
+						width: newValue?.all?.width,
+						style: newValue?.all?.style,
+					},
+				},
+			};
+
+			delete customized?.style?.border?.top;
+			delete customized?.style?.border?.right;
+			delete customized?.style?.border?.bottom;
+			delete customized?.style?.border?.left;
+
+			setAttributes(customized);
+
+			return;
 		}
 
 		if (
-			!Array.from(attributes.publisherBorderRadius).length ||
+			!Object.values(attributes.publisherBorderRadius).length ||
 			'all' === attributes.publisherBorderRadius.type
 		) {
 			const radius =
@@ -69,25 +86,21 @@ export const Border = ({
 					border: {
 						radius,
 						top: {
-							radius,
 							width: newValue?.top?.width,
 							color: newValue?.top?.color,
 							style: newValue?.top?.style,
 						},
 						right: {
-							radius,
 							width: newValue?.right?.width,
 							color: newValue?.right?.color,
 							style: newValue?.right?.style,
 						},
 						bottom: {
-							radius,
 							width: newValue?.bottom?.width,
 							color: newValue?.bottom?.color,
 							style: newValue?.bottom?.style,
 						},
 						left: {
-							radius,
 							width: newValue?.left?.width,
 							color: newValue?.left?.color,
 							style: newValue?.left?.style,
@@ -107,37 +120,21 @@ export const Border = ({
 							attributes.style?.border?.radius ||
 							'',
 						top: {
-							radius:
-								attributes.publisherBorderRadius.topLeft ||
-								attributes.style?.border?.radius?.topLeft ||
-								'',
 							width: newValue?.top?.width,
 							color: newValue?.top?.color,
 							style: newValue?.top?.style,
 						},
 						right: {
-							radius:
-								attributes.publisherBorderRadius.topRight ||
-								attributes.style?.border?.radius?.topRight ||
-								'',
 							width: newValue?.right?.width,
 							color: newValue?.right?.color,
 							style: newValue?.right?.style,
 						},
 						bottom: {
-							radius:
-								attributes.publisherBorderRadius.bottomRight ||
-								attributes.style?.border?.radius?.bottomRight ||
-								'',
 							width: newValue?.bottom?.width,
 							color: newValue?.bottom?.color,
 							style: newValue?.bottom?.style,
 						},
 						left: {
-							radius:
-								attributes.publisherBorderRadius.bottomLeft ||
-								attributes.style?.border?.radius?.bottomLeft ||
-								'',
 							width: newValue?.left?.width,
 							color: newValue?.left?.color,
 							style: newValue?.left?.style,
