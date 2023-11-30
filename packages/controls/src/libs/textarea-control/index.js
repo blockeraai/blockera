@@ -57,6 +57,7 @@ export default function TextAreaControl({
 				{...props}
 				onChange={(e) => setValue(e.target.value)}
 				onKeyUp={onKeyUp}
+				{...props}
 			/>
 		</BaseControl>
 	);
