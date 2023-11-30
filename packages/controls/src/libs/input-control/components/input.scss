@@ -12,12 +12,25 @@
 		padding-left: 8px;
 		padding-right: 5px;
 
-	}
+		&::placeholder {
 
-	input::-webkit-outer-spin-button,
-	input::-webkit-inner-spin-button {
+			color: var(--publisher-controls-placeholder-color);
+			opacity: 1;
 
-		-webkit-appearance: none;
+		}
+
+		&::-ms-input-placeholder {
+
+			color: var(--publisher-controls-placeholder-color);
+
+		}
+
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button {
+
+			-webkit-appearance: none;
+
+		}
 
 	}
 

@@ -200,6 +200,22 @@ export const TextInput = {
 					}}
 				/>
 			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: '',
+				}}
+			>
+				<ControlWithHooks
+					Control={InputControl}
+					type="text"
+					label="Placeholder"
+					{...args}
+					placeholder="Placeholder text..."
+					defaultValue=""
+				/>
+			</ControlContextProvider>
 		</Flex>
 	),
 };
@@ -384,6 +400,22 @@ export const NumberInput = {
 						validator={(value) => {
 							return value === 1;
 						}}
+					/>
+				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: '',
+					}}
+				>
+					<ControlWithHooks
+						Control={InputControl}
+						label="Placeholder"
+						{...args}
+						type="number"
+						placeholder="Placeholder text here..."
+						defaultValue=""
 					/>
 				</ControlContextProvider>
 
@@ -876,6 +908,22 @@ export const CssInput = {
 					validator={(value) => {
 						return value === '10px';
 					}}
+				/>
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: '',
+				}}
+			>
+				<ControlWithHooks
+					Control={InputControl}
+					{...args}
+					unitType="general"
+					label="Placeholder"
+					placeholder="Placeholder text here..."
+					defaultValue=""
 				/>
 			</ControlContextProvider>
 
