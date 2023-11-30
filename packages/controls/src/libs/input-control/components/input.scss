@@ -144,7 +144,7 @@
 		top: 4px;
 		flex-direction: column;
 		gap: 0;
-		color: #aeaeae;
+		color: var(--publisher-controls-placeholder-color);
 
 		&.is-disabled {
 
