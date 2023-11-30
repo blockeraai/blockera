@@ -38,11 +38,12 @@ export const LetterSpacing = ({
 		>
 			<InputControl
 				controlName="input"
-				columns="2fr 2.4fr"
+				columns="2fr 2.6fr"
 				label={__('Letters', 'publisher-core')}
 				{...{
 					...parentProps,
 					defaultValue,
+					arrows: true,
 					unitType: 'letter-spacing',
 					onValidate: (newValue) => {
 						return newValue;

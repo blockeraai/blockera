@@ -422,7 +422,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 									>
 										<BaseControl
 											controlName="input"
-											columns="2fr 2.4fr"
+											columns="2fr 2.6fr"
 											label={__(
 												'Words',
 												'publisher-core'
@@ -431,6 +431,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											<InputControl
 												{...{
 													...props,
+													arrows: true,
 													unitType: 'letter-spacing',
 													step: 'any',
 													defaultValue: '',
@@ -457,7 +458,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 									>
 										<BaseControl
 											controlName="input"
-											columns="2fr 2.4fr"
+											columns="2fr 2.6fr"
 											label={__(
 												'Text Indent',
 												'publisher-core'
@@ -466,6 +467,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											<InputControl
 												{...{
 													...props,
+													arrows: true,
 													unitType: 'text-indent',
 													defaultValue: '',
 													onChange: (newValue) =>
@@ -652,7 +654,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 																...props,
 																unitType:
 																	'essential',
-																range: true,
+																range: false,
+																arrows: true,
 																min: 0,
 																max: 200,
 																defaultValue:
