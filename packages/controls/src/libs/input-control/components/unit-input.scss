@@ -3,6 +3,7 @@
 	&:not(.publisher-control-unit-special) {
 
 		.publisher-control-unit-select {
+
 			appearance: none;
 			border: none;
 			display: block;
@@ -92,6 +93,55 @@
 				background: transparent;
 
 			}
+
+		}
+
+	}
+
+	&.publisher-control-unit-func {
+
+		.publisher-control-input-tag {
+
+			padding-right: 65px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+
+		}
+
+	}
+
+	.components-button.publisher-component-button.publisher-control-maximise-btn {
+
+		font-size: 11px;
+		color: var(--publisher-controls-placeholder-color);
+		padding: 0;
+		text-align: center;
+		width: 20px;
+		height: 20px;
+		line-height: 20px;
+		position: absolute;
+		top: 5px;
+		right: 40px;
+		justify-content: center !important;
+
+		&:hover:not(.is-open-popover) {
+
+			color: var(--publisher-controls-color);
+
+		}
+
+		&.is-focused {
+
+			color: var(--publisher-controls-border-color-focus);
+
+		}
+
+		&.is-open-popover {
+
+			color: #ffffff;
+			background: var(--publisher-controls-border-color-focus) !important;
+			box-shadow: none;
 
 		}
 

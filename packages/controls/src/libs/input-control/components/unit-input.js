@@ -14,6 +14,7 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { isFunction, isUndefined } from '@publisher/utils';
+import { Popover, Button, Flex } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -27,6 +28,9 @@ import {
 import { NumberInput } from './number-input';
 import { OtherInput } from './other-input';
 import type { TUnitInput } from '../types';
+import MaximizeIcon from '../icons/maximize';
+import TextAreaControl from '../../textarea-control';
+import InfoIcon from '../icons/info';
 
 export function UnitInput({
 	value,
@@ -101,6 +105,12 @@ export function UnitInput({
 		setIsValidValue(isValid);
 	}, [value]); // eslint-disable-line
 
+	const [isMaximizeVisible, setIsMaximizeVisible] = useState('');
+
+	const toggleIsMaximizeVisible = () => {
+		setIsMaximizeVisible((state) => !state);
+	};
+
 	return (
 		<div
 			className={controlClassNames(
@@ -108,7 +118,9 @@ export function UnitInput({
 				'input-unit',
 				isSpecialUnit(unitValue?.value) &&
 					'publisher-control-unit-special',
+				'publisher-control-unit-' + unitValue.value,
 				isActiveRange && 'is-range-active',
+				isMaximizeVisible && 'is-focused',
 				className
 			)}
 		>
@@ -185,6 +197,71 @@ export function UnitInput({
 						</option>
 					)}
 			</select>
+
+			{unitValue.value === 'func' && (
+				<>
+					<Button
+						size="input"
+						contentAlign="left"
+						onClick={() => {
+							toggleIsMaximizeVisible();
+						}}
+						className={controlInnerClassNames(
+							'maximise-btn',
+							isMaximizeVisible && 'is-open-popover'
+						)}
+						noBorder={true}
+					>
+						<MaximizeIcon />
+					</Button>
+
+					{isMaximizeVisible && (
+						<Popover
+							title={__(
+								'CSS Functions and Vars',
+								'publisher-core'
+							)}
+							offset={125}
+							placement="left-start"
+							className={controlInnerClassNames(
+								'typography-popover'
+							)}
+							onClose={() => {
+								setIsMaximizeVisible(false);
+							}}
+						>
+							<TextAreaControl
+								value={inputValue}
+								defaultValue={defaultValue}
+								onChange={(value) => {
+									setInputValue(value);
+									return value;
+								}}
+								height={100}
+							/>
+
+							<Flex
+								style={{
+									color: 'var(--publisher-controls-placeholder-color)',
+									gap: '8px',
+									padding: '10px 0px 5px',
+									fontSize: '12px',
+								}}
+							>
+								<span>
+									<InfoIcon />
+								</span>
+								<span>
+									{__(
+										'You can use CSS functions like calc, min, max, etc., and also CSS variables.',
+										'publisher-core'
+									)}
+								</span>
+							</Flex>
+						</Popover>
+					)}
+				</>
+			)}
 		</div>
 	);
 }
