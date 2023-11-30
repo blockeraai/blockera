@@ -109,7 +109,7 @@ export function NumberInput({
 	};
 
 	const handleInputChange = (event: Object) => {
-		let value = event.target.value.replace(/[^-0-9]/g, '');
+		let value = parseInt(event.target.value.replace(/[^-0-9]/g, ''));
 
 		if (getMinValue()?.min !== '' && value < getMinValue().min) {
 			value = getMinValue().min;
@@ -179,7 +179,7 @@ export function NumberInput({
 
 			<input
 				//$FlowFixMe
-				value={isString(value) ? value.replace(/[^-0-9]/g, '') : +value}
+				value={value}
 				disabled={disabled}
 				className={controlClassNames(
 					'input-tag',

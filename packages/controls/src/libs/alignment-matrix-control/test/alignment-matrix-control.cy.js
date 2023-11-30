@@ -68,7 +68,14 @@ describe('alignment-matrix control', () => {
 
 					// 2. should de-select active point by adding 1 to current value of inputs
 					cy.get('@inputLeft').clear();
-					cy.get('@inputLeft').type(left + 1);
+
+					if (left === 100) {
+						cy.get('@inputLeft').type(left - 1);
+					} else {
+						cy.get('@inputLeft').type(
+							left === 0 ? left + 1 : left - 1
+						);
+					}
 
 					// visual assertion is enough
 					cy.get('[role="row"]')

@@ -1,13 +1,13 @@
-.publisher-control-input-2 {
+.publisher-control-input {
 
 	position: relative;
 
-	[type="text"],
-	[type="number"] {
+	input {
 
-		line-height: 30px;
-		height: 30px;
-		min-height: 30px;
+		outline: none;
+		line-height: 30px !important;
+		height: 30px !important;
+		min-height: 30px !important;
 		font-size: 12px;
 		padding-left: 8px;
 		padding-right: 5px;
@@ -198,7 +198,7 @@
 
 }
 
-.publisher-control-input-2.is-range-active {
+.publisher-control-input.is-range-active {
 
 	display: grid;
 	grid-template-columns: 1fr 1fr;

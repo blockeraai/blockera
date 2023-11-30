@@ -33,6 +33,18 @@ describe('Util functions', () => {
 			expect(isSpecialUnit('min-content')).toBe(true);
 		});
 
+		test('unset', () => {
+			expect(isSpecialUnit('unset')).toBe(false);
+		});
+
+		test('revert-layer', () => {
+			expect(isSpecialUnit('revert-layer')).toBe(false);
+		});
+
+		test('revert', () => {
+			expect(isSpecialUnit('revert')).toBe(false);
+		});
+
 		test('false', () => {
 			expect(isSpecialUnit('false')).toBe(false);
 		});

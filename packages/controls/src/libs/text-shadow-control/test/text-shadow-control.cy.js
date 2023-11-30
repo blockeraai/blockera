@@ -147,19 +147,19 @@ describe('ext shadow control component testing', () => {
 			cy.getByDataCy('repeater-item').click();
 
 			/* eslint-disable cypress/unsafe-to-chain-command */
-			cy.get('#inspector-input-control-3')
+			cy.get('[aria-label="Vertical Distance"]')
 				.clear()
 				.type(50)
 				.should('have.value', '50');
 
 			/* eslint-disable cypress/unsafe-to-chain-command */
-			cy.get('#inspector-input-control-4')
+			cy.get('[aria-label="Horizontal Distance"]')
 				.clear()
 				.type(50)
 				.should('have.value', '50');
 
 			/* eslint-disable cypress/unsafe-to-chain-command */
-			cy.get('#inspector-input-control-5')
+			cy.get('[aria-label="Blur Effect"]')
 				.clear()
 				.type(50)
 				.should('have.value', '50');

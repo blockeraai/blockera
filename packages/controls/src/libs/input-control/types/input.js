@@ -1,7 +1,7 @@
 // @flow
 
 export type TInputItem = {
-	unitType:
+	unitType?:
 		| ''
 		| 'outline'
 		| 'text-shadow'
@@ -21,7 +21,7 @@ export type TInputItem = {
 		| 'order',
 	units?: Array<Object>,
 	noBorder?: boolean,
-	id?: number,
+	id?: number | string,
 	range?: boolean,
 	label?: string,
 	columns?: string,
@@ -29,7 +29,7 @@ export type TInputItem = {
 	onChange: (event: Object) => string | number,
 	field?: string,
 	className?: string,
-	type: 'text' | 'number',
+	type?: 'text' | 'number',
 	min?: number,
 	max?: number,
 	validator?: (value: string | number) => boolean,

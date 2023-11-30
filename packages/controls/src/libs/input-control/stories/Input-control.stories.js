@@ -13,7 +13,7 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 /**
  * Internal dependencies
  */
-import { ControlContextProvider, PublisherInputControl } from '../../../index';
+import { ControlContextProvider, InputControl } from '../../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
@@ -25,8 +25,8 @@ const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
 SharedDecorators.push(WithPlaygroundStyles);
 
 export default {
-	title: 'Controls/PublisherInputControl',
-	component: PublisherInputControl,
+	title: 'Controls/InputControl',
+	component: InputControl,
 	tags: ['autodocs'],
 };
 
@@ -38,9 +38,7 @@ export const Default = {
 		},
 		label: 'My Label',
 	},
-	render: (args) => (
-		<ControlWithHooks Control={PublisherInputControl} {...args} />
-	),
+	render: (args) => <ControlWithHooks Control={InputControl} {...args} />,
 	decorators: [
 		WithInspectorStyles,
 		WithControlDataProvider,
@@ -72,7 +70,7 @@ export const TextInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					type="text"
 					label="Empty"
 					{...args}
@@ -87,7 +85,7 @@ export const TextInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					type="text"
 					label="Normal"
 					{...args}
@@ -101,7 +99,7 @@ export const TextInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					type="text"
 					className="is-hovered"
 					label="is-hovered"
@@ -116,7 +114,7 @@ export const TextInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					type="text"
 					className="is-focused"
 					label="is-focused"
@@ -131,7 +129,7 @@ export const TextInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					type="text"
 					noBorder={true}
 					label="no-border"
@@ -146,7 +144,7 @@ export const TextInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					type="number"
 					className="is-focused"
 					noBorder={true}
@@ -161,7 +159,7 @@ export const TextInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					type="number"
 					disabled
 					label="disabled"
@@ -176,7 +174,7 @@ export const TextInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					type="text"
 					label="Validator → Valid"
 					{...args}
@@ -193,7 +191,7 @@ export const TextInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					type="text"
 					label="Validator → Not Valid"
 					{...args}
@@ -226,7 +224,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="Empty"
 						{...args}
 						type="number"
@@ -240,7 +238,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="Normal"
 						{...args}
 						type="number"
@@ -254,7 +252,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="is-hovered"
 						{...args}
 						type="number"
@@ -269,7 +267,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="is-focused"
 						{...args}
 						type="number"
@@ -284,7 +282,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="no-border"
 						{...args}
 						type="number"
@@ -299,7 +297,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="no-border & is-focused"
 						{...args}
 						type="number"
@@ -315,7 +313,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="Arrows"
 						{...args}
 						type="number"
@@ -330,7 +328,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="Arrows → Arrow up disabled"
 						{...args}
 						type="number"
@@ -347,7 +345,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="disabled"
 						{...args}
 						type="number"
@@ -362,7 +360,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="Validator → Valid"
 						{...args}
 						type="number"
@@ -379,7 +377,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="Validator → Not Valid"
 						{...args}
 						type="number"
@@ -396,7 +394,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="Drag Disabled"
 						{...args}
 						type="number"
@@ -415,7 +413,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="Empty"
 						{...args}
 						range={true}
@@ -431,7 +429,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="Normal"
 						{...args}
 						range={true}
@@ -446,7 +444,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="is-hovered"
 						{...args}
 						range={true}
@@ -462,7 +460,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="is-focused"
 						{...args}
 						range={true}
@@ -478,7 +476,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="no-border"
 						{...args}
 						range={true}
@@ -494,7 +492,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="no-border & is-focused"
 						{...args}
 						range={true}
@@ -511,7 +509,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="Arrows"
 						{...args}
 						type="number"
@@ -527,7 +525,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="Arrows → Arrow up disabled"
 						{...args}
 						type="number"
@@ -545,7 +543,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="disabled"
 						{...args}
 						range={true}
@@ -561,7 +559,7 @@ export const NumberInput = {
 					}}
 				>
 					<ControlWithHooks
-						Control={PublisherInputControl}
+						Control={InputControl}
 						label="Drag Disabled"
 						{...args}
 						range={true}
@@ -598,7 +596,7 @@ export const CssInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					{...args}
 					unitType="general"
 					label="No Value"
@@ -613,7 +611,7 @@ export const CssInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					{...args}
 					unitType="general"
 					label="With PX Value"
@@ -627,7 +625,7 @@ export const CssInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					{...args}
 					unitType="general"
 					label="With EM Value"
@@ -641,7 +639,7 @@ export const CssInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					{...args}
 					range={true}
 					unitType="general"
@@ -656,7 +654,7 @@ export const CssInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					{...args}
 					unitType="general"
 					label="Arrows + Units"
@@ -671,7 +669,7 @@ export const CssInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					{...args}
 					unitType="general"
 					label="Arrows + Units + Range"
@@ -687,7 +685,7 @@ export const CssInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					{...args}
 					range={true}
 					unitType="general"
@@ -702,7 +700,7 @@ export const CssInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					{...args}
 					range={true}
 					unitType="general"
@@ -717,7 +715,7 @@ export const CssInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					{...args}
 					range={true}
 					unitType="general"
@@ -734,7 +732,7 @@ export const CssInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					{...args}
 					range={true}
 					unitType="general"
@@ -751,7 +749,7 @@ export const CssInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					{...args}
 					units={[
 						{
@@ -784,7 +782,7 @@ export const CssInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					{...args}
 					unitType="general"
 					label="Unit passed by value but not in units list"
@@ -798,7 +796,7 @@ export const CssInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					{...args}
 					units={[
 						{
@@ -837,7 +835,7 @@ export const CssInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					{...args}
 					range={true}
 					arrows={true}
@@ -854,7 +852,7 @@ export const CssInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					{...args}
 					unitType="general"
 					label="Validator → Valid"
@@ -871,7 +869,7 @@ export const CssInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					{...args}
 					unitType="general"
 					label="Validator → Not Valid"
@@ -888,7 +886,7 @@ export const CssInput = {
 				}}
 			>
 				<ControlWithHooks
-					Control={PublisherInputControl}
+					Control={InputControl}
 					{...args}
 					unitType="general"
 					label="Drag Disable"
@@ -916,9 +914,7 @@ export const PlayNumber = {
 		WithControlDataProvider,
 		...SharedDecorators,
 	],
-	render: (args) => (
-		<ControlWithHooks Control={PublisherInputControl} {...args} />
-	),
+	render: (args) => <ControlWithHooks Control={InputControl} {...args} />,
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 

@@ -63,10 +63,17 @@ export default function BorderControl({
 			>
 				<InputControl
 					id={getId(id, 'width')}
+					type="number"
 					min="0"
-					unitType="custom"
 					defaultValue={defaultValue ? defaultValue.width : '0'}
-					units={[{ value: 'px', label: 'PX', default: 0 }]}
+					units={[
+						{
+							value: 'px',
+							label: 'PX',
+							default: 0,
+							format: 'number',
+						},
+					]}
 					className={controlClassNames(
 						'input',
 						__isWidthFocused && 'is-focused'

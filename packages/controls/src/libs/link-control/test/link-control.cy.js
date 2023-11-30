@@ -80,7 +80,7 @@ describe('link control component testing', () => {
 			cy.get('input[placeholder="https://your-link.com"]').type(myLink);
 			cy.get('[aria-label="Open Advanced Settings"]').click();
 
-			cy.get('input#inspector-text-control-7').type('My Link Label');
+			cy.get('[aria-label="Link Label"]').type('My Link Label');
 
 			// Check data provider value!
 			cy.then(() => {

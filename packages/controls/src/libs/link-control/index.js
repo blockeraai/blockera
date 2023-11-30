@@ -144,6 +144,7 @@ export default function LinkControl({
 									label: newValue,
 								});
 							}}
+							aria-label={__('Link Label', 'publisher-core')}
 						/>
 
 						<ControlContextProvider

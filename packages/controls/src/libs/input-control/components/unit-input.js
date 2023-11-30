@@ -3,12 +3,16 @@
  * External dependencies
  */
 import { useState, useEffect } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import {
+	controlClassNames,
+	controlInnerClassNames,
+} from '@publisher/classnames';
 import { isFunction, isUndefined } from '@publisher/utils';
 
 /**
@@ -99,7 +103,7 @@ export function UnitInput({
 	return (
 		<div
 			className={controlClassNames(
-				'input-2',
+				'input',
 				'input-unit',
 				isSpecialUnit(unitValue?.value) &&
 					'publisher-control-unit-special',
@@ -113,7 +117,7 @@ export function UnitInput({
 						<NumberInput
 							value={inputValue}
 							disabled={disabled}
-							className={controlClassNames(
+							className={controlInnerClassNames(
 								'single-input',
 								noBorder && 'no-border',
 								!isValidValue && 'invalid',
@@ -131,7 +135,7 @@ export function UnitInput({
 							value={inputValue}
 							setValue={setInputValue}
 							disabled={disabled}
-							className={controlClassNames(
+							className={controlInnerClassNames(
 								'single-input',
 								noBorder && 'no-border',
 								!isValidValue && 'invalid',
@@ -148,10 +152,11 @@ export function UnitInput({
 				disabled={disabled}
 				onChange={(e) => onChangeSelect(e.target.value)}
 				value={unitValue.value}
-				className={controlClassNames(
+				className={controlInnerClassNames(
 					'unit-select',
 					!isSpecialUnit(unitValue.value) && 'hide-arrow'
 				)}
+				aria-label={__('Select unit', 'publisher-blocks')}
 			>
 				{units.map((unit, key) => (
 					<>

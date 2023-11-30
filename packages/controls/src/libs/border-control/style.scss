@@ -28,36 +28,29 @@
 	> .publisher-control-input {
 		margin-right: auto;
 
-		.components-input-control__suffix {
-			display: none;
-		}
+		.publisher-control-input-tag {
 
-		.components-input-control__container {
-			background: transparent;
+			border-radius: 2px 0 0 2px !important;
+			z-index: 1;
+			padding: 6px 0 !important;
+			text-align: center;
+			font-size: 12px !important;
+			height: 30px;
 
-			.components-input-control__input {
-				border-radius: 2px 0 0 2px !important;
-				z-index: 1;
-				padding: 6px 0 !important;
-				text-align: center;
-				font-size: 12px !important;
+			&:focus {
 
-				&:focus {
-					z-index: 10;
-					box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
-					border: 1px solid var(--publisher-controls-border-color-focus);
-				}
-			}
-		}
-
-		&.is-focused .components-input-control__container {
-
-			.components-input-control__input {
 				z-index: 10;
-				box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
-				border: 1px solid var(--publisher-controls-border-color-focus);
+
 			}
+
 		}
+
+		.publisher-control-unit-select {
+
+			display: none;
+
+		}
+
 	}
 
 	.publisher-control-color {

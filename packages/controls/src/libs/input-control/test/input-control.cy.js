@@ -1,28 +1,8 @@
 /// <reference types="Cypress" />
 
 import { getControlValue } from '../../../store/selectors';
-import { InputControl } from '../input';
+import { InputControl } from '../index';
 import { nanoid } from 'nanoid';
-
-function InputValueCleanup(value) {
-	let updatedValue = value;
-
-	if (typeof value === 'string') {
-		const strValue = value.toString();
-
-		if (strValue.includes('auto')) {
-			updatedValue = 'auto';
-		}
-		if (strValue.includes('initial')) {
-			updatedValue = 'initial';
-		}
-		if (strValue.includes('inherit')) {
-			updatedValue = 'inherit';
-		}
-	}
-
-	return updatedValue;
-}
 
 describe('input control component testing', () => {
 	beforeEach(() => {
@@ -329,11 +309,17 @@ describe('input control component testing', () => {
 		it('should change value by range control ', () => {
 			const name = nanoid();
 			cy.withDataProvider({
-				component: <InputControl range />,
+				component: (
+					<InputControl
+						range={true}
+						type="number"
+						unitType="general"
+					/>
+				),
 				name,
 			});
 			cy.get('input[type=range]').setSliderValue(25);
-			cy.get('input[type=text]').should('have.value', '25px');
+			cy.get('input[type=number]').should('have.value', '25');
 
 			// Check data provider value!
 			cy.then(() => {
@@ -342,13 +328,13 @@ describe('input control component testing', () => {
 		});
 		it('should render range unit input', () => {
 			const units = [
-				{ value: 'px', label: 'px', default: 0 },
-				{ value: '%', label: '%', default: 10 },
-				{ value: 'em', label: 'em', default: 0 },
+				{ value: 'px', label: 'px', default: 0, format: 'number' },
+				{ value: '%', label: '%', default: 10, format: 'number' },
+				{ value: 'em', label: 'em', default: 0, format: 'number' },
 			];
 			const name = nanoid();
 			cy.withDataProvider({
-				component: <InputControl range units={units} />,
+				component: <InputControl range={true} units={units} />,
 				name,
 			});
 
@@ -376,7 +362,7 @@ describe('input control component testing', () => {
 		it('should render css units', () => {
 			const name = nanoid();
 			cy.withDataProvider({
-				component: <InputControl range unitType="general" />,
+				component: <InputControl range={true} unitType="general" />,
 				name,
 			});
 			cy.get('[aria-label="Select unit"]')
@@ -398,35 +384,29 @@ describe('input control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				return expect(InputValueCleanup(getControlValue(name))).to.eq(
-					'auto'
-				);
+				return expect(getControlValue(name)).to.eq('auto');
 			});
 
-			cy.get('input[type=range]').should('not.be.visible');
+			cy.get('input[type=range]').should('not.exist');
 			cy.get('[aria-label="Select unit"]')
 				.select('inherit')
 				.should('have.value', 'inherit');
 
 			// Check data provider value!
 			cy.then(() => {
-				return expect(InputValueCleanup(getControlValue(name))).to.eq(
-					'inherit'
-				);
+				return expect(getControlValue(name)).to.eq('inherit');
 			});
 
-			cy.get('input[type=range]').should('not.be.visible');
+			cy.get('input[type=range]').should('not.exist');
 			cy.get('[aria-label="Select unit"]')
 				.select('initial')
 				.should('have.value', 'initial');
 
 			// Check data provider value!
 			cy.then(() => {
-				return expect(InputValueCleanup(getControlValue(name))).to.eq(
-					'initial'
-				);
+				return expect(getControlValue(name)).to.eq('initial');
 			});
-			cy.get('input[type=range]').should('not.be.visible');
+			cy.get('input[type=range]').should('not.exist');
 		});
 	});
 });

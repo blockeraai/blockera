@@ -53,6 +53,7 @@ describe('Transform Control', () => {
 				cy.get('[aria-label="Item 1"]').click();
 
 				cy.get('input[type="number"]').each(($input, idx) => {
+					cy.wrap($input).clear();
 					cy.wrap($input).type('20');
 					cy.getByDataCy('repeater-item').then(($el) => {
 						// visual assertion
@@ -167,6 +168,7 @@ describe('Transform Control', () => {
 				cy.get('[aria-label="Rotate"]').click();
 
 				cy.get('input[type="number"]').each(($input, idx) => {
+					cy.wrap($input).clear();
 					cy.wrap($input).type('20');
 					cy.getByDataCy('repeater-item').then(($el) => {
 						// visual assertion

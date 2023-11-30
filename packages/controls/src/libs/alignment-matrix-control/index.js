@@ -108,16 +108,17 @@ export default function AlignmentMatrixControl({
 							columns="columns-2"
 							id={id === undefined ? 'top' : `${id}.top`}
 							label={__('Top', 'publisher-core')}
-							type="css"
 							min={0}
 							max={100}
 							unitType="background-position"
 							defaultValue={value.top}
-							onChange={(newValue) => {
+							onChange={(newValue: Object) => {
 								setValue({
 									...value,
 									top: newValue,
 								});
+
+								return newValue;
 							}}
 						/>
 
@@ -125,7 +126,6 @@ export default function AlignmentMatrixControl({
 							columns="columns-2"
 							id={id === undefined ? 'left' : `${id}.left`}
 							label={__('Left', 'publisher-core')}
-							type="css"
 							min={0}
 							max={100}
 							unitType="background-position"
@@ -135,6 +135,8 @@ export default function AlignmentMatrixControl({
 									...value,
 									left: newValue,
 								});
+
+								return newValue;
 							}}
 						/>
 					</Flex>

@@ -322,14 +322,6 @@ describe('transition control component testing', () => {
 			cy.get('@popover').getByDataTest('transition-input-delay').clear();
 			cy.get('@popover').getByDataTest('transition-input-delay').type(3);
 
-			//delay format
-			cy.get('@popover')
-				.getByDataTest('transition-input-delay')
-				.next()
-				.children()
-				.first()
-				.select('s');
-
 			//check current data
 			cy.get('@popover')
 				.get('select')
@@ -360,7 +352,7 @@ describe('transition control component testing', () => {
 						type: 'opacity',
 						duration: '100ms',
 						timing: 'ease-out',
-						delay: '3s',
+						delay: '3ms',
 						isVisible: true,
 					},
 				]).to.be.deep.equal(getControlValue(name, STORE_NAME));

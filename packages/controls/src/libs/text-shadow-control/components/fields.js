@@ -38,6 +38,7 @@ const Fields = ({ itemId, item }) => {
 						value: { ...item, x },
 					})
 				}
+				aria-label={__('Vertical Distance', 'publisher-core')}
 			/>
 
 			<InputControl
@@ -57,6 +58,7 @@ const Fields = ({ itemId, item }) => {
 						value: { ...item, y },
 					})
 				}
+				aria-label={__('Horizontal Distance', 'publisher-core')}
 			/>
 
 			<InputControl
@@ -76,6 +78,7 @@ const Fields = ({ itemId, item }) => {
 						value: { ...item, blur },
 					})
 				}
+				aria-label={__('Blur Effect', 'publisher-core')}
 			/>
 
 			<ColorControl
@@ -91,6 +94,7 @@ const Fields = ({ itemId, item }) => {
 						value: { ...item, color },
 					})
 				}
+				aria-label={__('Shadow Color', 'publisher-core')}
 			/>
 		</div>
 	);
