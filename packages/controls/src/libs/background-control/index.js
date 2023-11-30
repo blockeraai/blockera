@@ -153,8 +153,8 @@ BackgroundControl.defaultProps = {
 		type: 'image',
 		image: '',
 		'image-size': 'custom',
-		'image-size-width': '1auto',
-		'image-size-height': '1auto',
+		'image-size-width': 'auto',
+		'image-size-height': 'auto',
 		'image-position': {
 			top: '50%',
 			left: '50%',
