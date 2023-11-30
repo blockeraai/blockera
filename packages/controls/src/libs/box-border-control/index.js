@@ -154,16 +154,18 @@ export default function BoxBorderControl({
 							)}
 							style={{
 								'--pb-top-width': value.top.width,
-								'--pb-top-style': value.top.style,
+								'--pb-top-style': value.top.style || 'solid',
 								'--pb-top-color': value.top.color,
 								'--pb-right-width': value.right.width,
-								'--pb-right-style': value.right.style,
+								'--pb-right-style':
+									value.right.style || 'solid',
 								'--pb-right-color': value.right.color,
 								'--pb-bottom-width': value.bottom.width,
-								'--pb-bottom-style': value.bottom.style,
+								'--pb-bottom-style':
+									value.bottom.style || 'solid',
 								'--pb-bottom-color': value.bottom.color,
 								'--pb-left-width': value.left.width,
-								'--pb-left-style': value.left.style,
+								'--pb-left-style': value.left.style || 'solid',
 								'--pb-left-color': value.left.color,
 							}}
 						>

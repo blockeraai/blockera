@@ -88,6 +88,66 @@ describe('Border and Shadow extension', () => {
 					.should('equal', '5px dashed rgb(55, 230, 212)');
 			});
 
+			it('all side but not select border style', () => {
+				cy.getByDataTest('style-tab').click();
+
+				//add data
+				cy.get('[aria-label="Border Line"]')
+					.parents('[data-cy="base-control"]')
+					.within(() => {
+						cy.getByDataTest('border-control-width').clear();
+						cy.getByDataTest('border-control-width').type(5, {
+							force: true,
+						});
+					});
+
+				cy.get('[aria-label="Border Line"]')
+					.parents('[data-cy="base-control"]')
+					.within(() => {
+						cy.getByDataTest('border-control-color').click();
+					});
+
+				cy.getByDataTest('popover-body').within(() => {
+					cy.get('input[maxlength="9"]').clear();
+					cy.get('input[maxlength="9"]').type('37e6d4');
+				});
+
+				//Check block
+				cy.getIframeBody()
+					.find(`[data-type="core/paragraph"]`)
+					.should(
+						'have.css',
+						'border',
+						'5px solid rgb(55, 230, 212)'
+					);
+
+				//Check store
+				getWPDataObject().then((data) => {
+					expect({
+						type: 'all',
+						all: {
+							width: '5px',
+							style: '',
+							color: '#37e6d4',
+						},
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'publisherBorder')
+					);
+				});
+
+				//Check frontend
+				savePage();
+
+				redirectToFrontPage();
+
+				cy.get('.publisher-paragraph')
+					.then(($el) => {
+						return window.getComputedStyle($el[0]);
+					})
+					.invoke('getPropertyValue', 'border')
+					.should('equal', '5px solid rgb(55, 230, 212)');
+			});
+
 			context('custom', () => {
 				it('should update correctly, when add data to top border', () => {
 					cy.getByDataTest('style-tab').click();
@@ -140,10 +200,10 @@ describe('Border and Shadow extension', () => {
 					getWPDataObject().then((data) => {
 						expect({
 							type: 'custom',
-							all: { color: '', style: 'solid', width: '1px' },
-							left: { color: '', style: 'solid', width: '1px' },
-							right: { color: '', style: 'solid', width: '1px' },
-							bottom: { color: '', style: 'solid', width: '1px' },
+							all: { color: '', style: '', width: '' },
+							left: { color: '', style: '', width: '' },
+							right: { color: '', style: '', width: '' },
+							bottom: { color: '', style: '', width: '' },
 							top: {
 								color: '#73ddab',
 								style: 'dotted',
@@ -220,13 +280,13 @@ describe('Border and Shadow extension', () => {
 							type: 'custom',
 							all: {
 								color: '',
-								style: 'solid',
-								width: '1px',
+								style: '',
+								width: '',
 							},
 							left: {
 								color: '',
-								style: 'solid',
-								width: '1px',
+								style: '',
+								width: '',
 							},
 							right: {
 								color: '#9958e3',
@@ -235,13 +295,13 @@ describe('Border and Shadow extension', () => {
 							},
 							bottom: {
 								color: '',
-								style: 'solid',
-								width: '1px',
+								style: '',
+								width: '',
 							},
 							top: {
 								color: '',
-								style: 'solid',
-								width: '1px',
+								style: '',
+								width: '',
 							},
 						}).to.be.deep.equal(
 							getSelectedBlock(data, 'publisherBorder')
@@ -286,7 +346,7 @@ describe('Border and Shadow extension', () => {
 								cy.get('[aria-haspopup="listbox"]').trigger(
 									'click'
 								);
-								cy.get('li').eq(2).trigger('click');
+								cy.get('li').eq(0).trigger('click');
 
 								cy.getByDataTest(
 									'border-control-color'
@@ -305,7 +365,7 @@ describe('Border and Shadow extension', () => {
 						.should(
 							'have.css',
 							'border-bottom',
-							'3px dotted rgb(235, 164, 146)'
+							'3px solid rgb(235, 164, 146)'
 						);
 
 					//Check store
@@ -314,28 +374,28 @@ describe('Border and Shadow extension', () => {
 							type: 'custom',
 							all: {
 								color: '',
-								style: 'solid',
-								width: '1px',
+								style: '',
+								width: '',
 							},
 							left: {
 								color: '',
-								style: 'solid',
-								width: '1px',
+								style: '',
+								width: '',
 							},
 							right: {
 								color: '',
-								style: 'solid',
-								width: '1px',
+								style: '',
+								width: '',
 							},
 							bottom: {
 								color: '#eba492',
-								style: 'dotted',
+								style: 'solid',
 								width: '3px',
 							},
 							top: {
 								color: '',
-								style: 'solid',
-								width: '1px',
+								style: '',
+								width: '',
 							},
 						}).to.be.deep.equal(
 							getSelectedBlock(data, 'publisherBorder')
@@ -352,7 +412,7 @@ describe('Border and Shadow extension', () => {
 							return window.getComputedStyle($el[0]);
 						})
 						.invoke('getPropertyValue', 'border-bottom')
-						.should('equal', '3px dotted rgb(235, 164, 146)');
+						.should('equal', '3px solid rgb(235, 164, 146)');
 				});
 
 				it('should update correctly, when add data to left border', () => {
@@ -408,8 +468,8 @@ describe('Border and Shadow extension', () => {
 							type: 'custom',
 							all: {
 								color: '',
-								style: 'solid',
-								width: '1px',
+								style: '',
+								width: '',
 							},
 							left: {
 								color: '#1893da',
@@ -418,18 +478,18 @@ describe('Border and Shadow extension', () => {
 							},
 							right: {
 								color: '',
-								style: 'solid',
-								width: '1px',
+								style: '',
+								width: '',
 							},
 							bottom: {
 								color: '',
-								style: 'solid',
-								width: '1px',
+								style: '',
+								width: '',
 							},
 							top: {
 								color: '',
-								style: 'solid',
-								width: '1px',
+								style: '',
+								width: '',
 							},
 						}).to.be.deep.equal(
 							getSelectedBlock(data, 'publisherBorder')
