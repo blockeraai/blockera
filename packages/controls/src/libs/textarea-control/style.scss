@@ -1,0 +1,59 @@
+textarea.publisher-control-textarea {
+
+	outline: none;
+	font-size: 12px;
+	padding: 5px 8px;
+	width: 100%;
+	border: 1px solid var(--publisher-controls-border-color);
+	border-radius: 2px;
+	color: var(--publisher-controls-color);
+	box-shadow: 0 0 0 transparent;
+	background-color: #ffffff;
+
+	&:hover {
+
+		border-color: var(--publisher-controls-border-color-hover);
+
+	}
+
+	&:focus {
+
+		border-color: var(--publisher-controls-border-color-focus);
+		box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+
+	}
+
+	&:disabled {
+
+		pointer-events: none;
+		user-select: none;
+
+	}
+
+	&::placeholder {
+
+		color: var(--publisher-controls-placeholder-color);
+		opacity: 1;
+
+	}
+
+	&::-ms-input-placeholder {
+
+		color: var(--publisher-controls-placeholder-color);
+
+	}
+
+	&.is-hovered:not(:hover, :focus, .is-focused) {
+
+		border-color: var(--publisher-controls-border-color-hover);
+
+	}
+
+	&.is-focused {
+
+		border-color: var(--publisher-controls-border-color-focus);
+		box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+
+	}
+
+}

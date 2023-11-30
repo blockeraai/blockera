@@ -22,7 +22,7 @@ import { NumberInput } from './components/number-input';
 import { getCSSUnits } from './utils';
 import type { TInputItem } from './types';
 
-export function InputControl({
+export default function InputControl({
 	unitType = '',
 	units = [],
 	noBorder,
