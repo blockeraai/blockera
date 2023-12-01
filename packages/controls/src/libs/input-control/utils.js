@@ -1,3 +1,4 @@
+// @flow
 import { isString, isArray, isObject, isUndefined } from '@publisher/utils';
 
 const specialUnits = [
@@ -13,9 +14,12 @@ const specialUnits = [
 	'content',
 ];
 
-// todo: write test
 // Function to get a unit object based on a specific value
-export const getUnitByValue = (value, units) => {
+export const getUnitByValue = (value: string, units: Array<any>): Object => {
+	if (value === '' || isUndefined(value)) {
+		return {};
+	}
+
 	if (isArray(units))
 		// Check each unit for a matching value
 		for (const unit of units) {
@@ -44,18 +48,18 @@ export const getUnitByValue = (value, units) => {
 };
 
 // Validates the value is with a special CSS units or not
-export function isSpecialUnit(value) {
+export function isSpecialUnit(value: string): boolean {
 	return (
 		isString(value) && specialUnits.some((item) => value?.endsWith(item))
 	);
 }
 
-export function getCSSUnits(unitType = '') {
+export function getCSSUnits(unitType: string = ''): Array<any> {
 	if (unitType === '' || !isString(unitType)) {
 		return [];
 	}
 
-	let cssUnits = [];
+	let cssUnits: Array<any> = [];
 
 	switch (unitType) {
 		case 'outline':
@@ -1174,16 +1178,15 @@ export function getCSSUnits(unitType = '') {
 	return cssUnits;
 }
 
-// todo: write test
-export function extractNumberAndUnit(value) {
+export function extractNumberAndUnit(value: Object | string): Object {
 	if (isObject(value)) {
 		return {
-			value: value?.value,
-			unit: value?.unit,
+			value: value?.value || '',
+			unit: value?.unit || 'func',
 		};
 	}
 
-	if (value === '') {
+	if (value === '' || isUndefined(value)) {
 		return {
 			value: '',
 			unit: '',
@@ -1223,13 +1226,17 @@ export function extractNumberAndUnit(value) {
 
 	// If no match is found, return null or handle the error as needed
 	return {
-		value: '',
-		unit: 'px',
+		value,
+		unit: 'func',
 	};
 }
 
 // todo: write test
-export function getFirstUnit(units) {
+export function getFirstUnit(units: Array<any>): Object {
+	if (isUndefined(units)) {
+		return {};
+	}
+
 	if (!isUndefined(units[0])) {
 		if (
 			!isUndefined(units[0].options) &&
@@ -1241,5 +1248,5 @@ export function getFirstUnit(units) {
 		return units[0];
 	}
 
-	return [];
+	return {};
 }
