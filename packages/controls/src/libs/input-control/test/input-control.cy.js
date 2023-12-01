@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
 import { getControlValue } from '../../../store/selectors';
-import { InputControl } from '../index';
+import { default as InputControl } from '../index';
 import { nanoid } from 'nanoid';
 
 describe('input control component testing', () => {
