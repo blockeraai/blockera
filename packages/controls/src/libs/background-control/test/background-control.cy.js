@@ -44,16 +44,18 @@ describe('background control', () => {
 
 					cy.get('[aria-label="Custom"]').click();
 
-					cy.get('[aria-label="Select unit"]')
+					//
+					// Width
+					//
+					cy.get('[aria-label="Select Unit"]')
 						.eq(0)
 						.as('widthSelect');
 
+					cy.get('@widthSelect').select('px');
+
 					cy.get('@widthSelect')
-						.parent()
 						.siblings('input[type="number"]')
 						.as('widthInput');
-
-					cy.get('@widthSelect').select('px');
 
 					cy.get('@widthInput').clear();
 					cy.get('@widthInput').type('50');
@@ -64,6 +66,31 @@ describe('background control', () => {
 						];
 
 						expect(imageWidth).to.be.equal('50px');
+					});
+
+					//
+					// Height
+					//
+					cy.get('[aria-label="Select Unit"]')
+						.eq(1)
+						.as('heightSelect');
+
+					cy.get('@heightSelect').select('px');
+
+					cy.get('@heightSelect')
+						.siblings('input[type="number"]')
+						.as('heightInput');
+
+					cy.get('@heightInput').clear();
+					cy.get('@heightInput').type('40');
+
+					cy.get('@heightInput').then(() => {
+						const imageHeight = getControlValue(
+							name,
+							STORE_NAME
+						)[0]['image-size-height'];
+
+						expect(imageHeight).to.be.equal('40px');
 					});
 				});
 			});
@@ -78,7 +105,7 @@ describe('background control', () => {
 						name,
 					});
 
-					cy.get('input[type="number"]').eq(2).as('positionTopInput');
+					cy.get('input[type="number"]').eq(1).as('positionTopInput');
 					cy.get('@positionTopInput').clear();
 					cy.get('@positionTopInput').type('80');
 					cy.get('@positionTopInput').then(() => {
