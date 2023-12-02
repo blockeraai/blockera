@@ -1754,12 +1754,12 @@ describe('Util functions', () => {
 
 			expect(extractNumberAndUnit({ noValue: '' })).toStrictEqual({
 				value: '',
-				unit: 'func',
+				unit: '',
 			});
 
 			expect(extractNumberAndUnit({ value: '12' })).toStrictEqual({
 				value: '12',
-				unit: 'func',
+				unit: '',
 			});
 
 			expect(extractNumberAndUnit({ unit: 'px' })).toStrictEqual({
