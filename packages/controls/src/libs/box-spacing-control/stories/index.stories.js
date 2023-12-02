@@ -86,12 +86,12 @@ export const Filled = {
 								margin: {
 									top: '10px',
 									right: '20%',
-									bottom: '30vh',
+									bottom: 'auto',
 									left: '40dvh',
 								},
 								padding: {
-									top: '',
-									right: '',
+									top: 'calc(10px + 10px)func',
+									right: 'calc(10px + 10px)func',
 									bottom: '',
 									left: '',
 								},
@@ -176,16 +176,47 @@ export const Filled = {
 							name: nanoid(),
 							value: {
 								margin: {
-									top: '10px',
+									top: '10em',
 									right: '20%',
 									bottom: '30vh',
 									left: '40dvh',
 								},
 								padding: {
-									top: '50px',
+									top: '50em',
 									right: '60%',
 									bottom: '70vh',
 									left: '80dvh',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">
+						Fill<span>Func Unite</span>
+					</h2>
+
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								margin: {
+									top: 'calc(10px + 10px)func',
+									right: 'calc(10px + 10px)func',
+									bottom: 'calc(10px + 10px)func',
+									left: 'calc(10px + 10px)func',
+								},
+								padding: {
+									top: 'calc(10px + 10px)func',
+									right: 'calc(10px + 10px)func',
+									bottom: 'calc(10px + 10px)func',
+									left: 'calc(10px + 10px)func',
 								},
 							},
 						}}

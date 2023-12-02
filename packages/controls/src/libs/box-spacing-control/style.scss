@@ -52,12 +52,15 @@
 			pointer-events: all;
 			cursor: pointer;
 			font-size: 10px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 
 			i {
 				font-size: 8px;
 				color: #b9b9b9;
 				position: absolute;
-				transform: translate(3px, -5px);
+				transform: translate(12px, -8px);
 			}
 		}
 
