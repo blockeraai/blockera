@@ -41,7 +41,10 @@ describe('Flex Child', () => {
 		//describe('WordPress Compatibility', () => {...});
 
 		describe('Functionality', () => {
-			it('should add flex, when click on shrink shortcut', () => {
+			it('Sizing Buttons (Shrink & Grow)', () => {
+				//
+				// Shrink
+				//
 				cy.getParentContainer('Sizing', 'base-control').within(() => {
 					cy.getByAriaLabel('Shrink').click();
 				});
@@ -58,19 +61,9 @@ describe('Flex Child', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'flex',
-					'0 1 auto'
-				);
-			});
-
-			it('should add flex, when click on grow shortcut', () => {
+				//
+				// Grow
+				//
 				cy.getParentContainer('Sizing', 'base-control').within(() => {
 					cy.getByAriaLabel('Grow').click();
 				});
@@ -87,19 +80,9 @@ describe('Flex Child', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'flex',
-					'1 1 0%'
-				);
-			});
-
-			it('should add flex, when click on no grow or shrink shortcut', () => {
+				//
+				// No Grow or Shrink
+				//
 				cy.getParentContainer('Sizing', 'base-control').within(() => {
 					cy.getByAriaLabel('No Grow or Shrink').click();
 				});
@@ -173,7 +156,13 @@ describe('Flex Child', () => {
 	});
 
 	describe('Align', () => {
-		beforeEach(() => {
+		// beforeEach(() => {
+		//
+		// });
+
+		//describe('WordPress Compatibility', () => {...});
+
+		it('Functionality', () => {
 			const code = `<!-- wp:group {"className":"publisher-group","layout":{"type":"constrained"},"publisherDisplay":"flex","publisherPropsId":"1025111558103"} -->
 <div class="wp-block-group publisher-group"><!-- wp:paragraph {"className":"publisher-paragraph","publisherAttributes":[],"publisherPropsId":"102511163356"} -->
 <p class="publisher-paragraph">This is a test text.</p>
@@ -183,175 +172,131 @@ describe('Flex Child', () => {
 
 			cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
 			cy.getByDataTest('style-tab').click();
-		});
 
-		//describe('WordPress Compatibility', () => {...});
+			//
+			// Flex Start
+			//
+			cy.getParentContainer('Align', 'base-control').within(() => {
+				cy.getByAriaLabel('Flex Start').click();
+			});
 
-		describe('Functionality', () => {
-			it('should add align-self, when click on flex-start shortcut', () => {
-				cy.getParentContainer('Align', 'base-control').within(() => {
-					cy.getByAriaLabel('Flex Start').click();
-				});
+			//Check block
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.should('have.css', 'align-self', 'flex-start');
 
-				//Check block
-				cy.getIframeBody()
-					.find(`[data-type="core/paragraph"]`)
-					.should('have.css', 'align-self', 'flex-start');
-
-				//Check store
-				getWPDataObject().then((data) => {
-					expect('flex-start').to.be.equal(
-						getSelectedBlock(data, 'publisherFlexChildAlign')
-					);
-				});
-
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'align-self',
-					'flex-start'
+			//Check store
+			getWPDataObject().then((data) => {
+				expect('flex-start').to.be.equal(
+					getSelectedBlock(data, 'publisherFlexChildAlign')
 				);
 			});
 
-			it('should add align-self, when click on center shortcut', () => {
-				cy.getParentContainer('Align', 'base-control').within(() => {
-					cy.getByAriaLabel('Center').click();
-				});
+			//
+			// Center
+			//
+			cy.getParentContainer('Align', 'base-control').within(() => {
+				cy.getByAriaLabel('Center').click();
+			});
 
-				//Check block
-				cy.getIframeBody()
-					.find(`[data-type="core/paragraph"]`)
-					.should('have.css', 'align-self', 'center');
+			//Check block
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.should('have.css', 'align-self', 'center');
 
-				//Check store
-				getWPDataObject().then((data) => {
-					expect('center').to.be.equal(
-						getSelectedBlock(data, 'publisherFlexChildAlign')
-					);
-				});
-
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'align-self',
-					'center'
+			//Check store
+			getWPDataObject().then((data) => {
+				expect('center').to.be.equal(
+					getSelectedBlock(data, 'publisherFlexChildAlign')
 				);
 			});
 
-			it('should add align-self, when click on flex-end shortcut', () => {
-				cy.getParentContainer('Align', 'base-control').within(() => {
-					cy.getByAriaLabel('Flex End').click();
-				});
+			//
+			// Flex End
+			//
+			cy.getParentContainer('Align', 'base-control').within(() => {
+				cy.getByAriaLabel('Flex End').click();
+			});
 
-				//Check block
-				cy.getIframeBody()
-					.find(`[data-type="core/paragraph"]`)
-					.should('have.css', 'align-self', 'flex-end');
+			//Check block
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.should('have.css', 'align-self', 'flex-end');
 
-				//Check store
-				getWPDataObject().then((data) => {
-					expect('flex-end').to.be.equal(
-						getSelectedBlock(data, 'publisherFlexChildAlign')
-					);
-				});
-
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'align-self',
-					'flex-end'
+			//Check store
+			getWPDataObject().then((data) => {
+				expect('flex-end').to.be.equal(
+					getSelectedBlock(data, 'publisherFlexChildAlign')
 				);
 			});
 
-			it('should add align-self, when click on stretch shortcut', () => {
-				cy.getParentContainer('Align', 'base-control').within(() => {
-					cy.getByAriaLabel('Stretch').click();
-				});
+			//
+			// Stretch
+			//
+			cy.getParentContainer('Align', 'base-control').within(() => {
+				cy.getByAriaLabel('Stretch').click();
+			});
 
-				//Check block
-				cy.getIframeBody()
-					.find(`[data-type="core/paragraph"]`)
-					.should('have.css', 'align-self', 'stretch');
+			//Check block
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.should('have.css', 'align-self', 'stretch');
 
-				//Check store
-				getWPDataObject().then((data) => {
-					expect('stretch').to.be.equal(
-						getSelectedBlock(data, 'publisherFlexChildAlign')
-					);
-				});
-
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'align-self',
-					'stretch'
+			//Check store
+			getWPDataObject().then((data) => {
+				expect('stretch').to.be.equal(
+					getSelectedBlock(data, 'publisherFlexChildAlign')
 				);
 			});
 
-			it('should add align-self, when click on baseline shortcut', () => {
-				cy.getParentContainer('Align', 'base-control').within(() => {
-					cy.getByAriaLabel('Baseline').click();
-				});
+			//
+			// Baseline
+			//
+			cy.getParentContainer('Align', 'base-control').within(() => {
+				cy.getByAriaLabel('Baseline').click();
+			});
 
-				//Check block
-				cy.getIframeBody()
-					.find(`[data-type="core/paragraph"]`)
-					.should('have.css', 'align-self', 'baseline');
+			//Check block
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.should('have.css', 'align-self', 'baseline');
 
-				//Check store
-				getWPDataObject().then((data) => {
-					expect('baseline').to.be.equal(
-						getSelectedBlock(data, 'publisherFlexChildAlign')
-					);
-				});
-
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'align-self',
-					'baseline'
+			//Check store
+			getWPDataObject().then((data) => {
+				expect('baseline').to.be.equal(
+					getSelectedBlock(data, 'publisherFlexChildAlign')
 				);
 			});
+
+			//Check frontend
+			savePage();
+
+			redirectToFrontPage();
+
+			cy.get('.publisher-paragraph').should(
+				'have.css',
+				'align-self',
+				'baseline'
+			);
 		});
 	});
 
 	describe('Order', () => {
-		beforeEach(() => {
-			const code = `<!-- wp:group {"className":"publisher-group","layout":{"type":"constrained"},"publisherDisplay":"flex","publisherPropsId":"1025111558103"} -->
+		describe('Functionality', () => {
+			it('first and last options', () => {
+				const code = `<!-- wp:group {"className":"publisher-group","layout":{"type":"constrained"},"publisherDisplay":"flex","publisherPropsId":"1025111558103"} -->
 <div class="wp-block-group publisher-group"><!-- wp:paragraph {"className":"publisher-paragraph","publisherAttributes":[],"publisherPropsId":"102511163356"} -->
 <p class="publisher-paragraph">This is a test text.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->`;
-			appendBlocks(code);
+				appendBlocks(code);
 
-			cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
-			cy.getByDataTest('style-tab').click();
-		});
+				cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
+				cy.getByDataTest('style-tab').click();
 
-		//describe('WordPress Compatibility', () => {...});
-
-		describe('Functionality', () => {
-			it('should add order, when click on first shortcut', () => {
+				//
+				// First
+				//
 				cy.getParentContainer('Order', 'base-control').within(() => {
 					cy.getByAriaLabel('First').click();
 				});
@@ -368,19 +313,9 @@ describe('Flex Child', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'order',
-					'-1'
-				);
-			});
-
-			it('should add order, when click on last shortcut', () => {
+				//
+				// Last
+				//
 				cy.getParentContainer('Order', 'base-control').within(() => {
 					cy.getByAriaLabel('Last').click();
 				});
