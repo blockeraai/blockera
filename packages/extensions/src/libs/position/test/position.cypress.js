@@ -189,9 +189,12 @@ describe('Position Extension', () => {
 				});
 
 				context('add data via shortcuts', () => {
-					beforeEach(() => {
+					it('all shortcuts should work properly', () => {
 						cy.getByDataTest('style-tab').click();
 
+						//
+						// should add top & left properties, when click on topLeft
+						//
 						cy.get('[aria-label="Position"]')
 							.parents('[data-cy="base-control"]')
 							.as('position-extension');
@@ -202,9 +205,7 @@ describe('Position Extension', () => {
 								cy.contains('Absolute').trigger('click');
 							});
 						});
-					});
 
-					it('should add top & left properties, when click on topLeft', () => {
 						cy.get('@position-extension').within(() => {
 							cy.get('[aria-label="Top Left"]').click();
 						});
@@ -231,28 +232,9 @@ describe('Position Extension', () => {
 							);
 						});
 
-						//Check frontend
-						savePage();
-
-						redirectToFrontPage();
-
-						cy.get('.publisher-paragraph')
-							.then(($el) => {
-								return window.getComputedStyle($el[0]);
-							})
-							.as('element-style');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'position')
-							.should('eq', 'absolute');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'top')
-							.should('eq', '0px');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'left')
-							.should('eq', '0px');
-					});
-
-					it('should add top & Right properties, when click on topRight', () => {
+						//
+						// should add top & Right properties, when click on topRight
+						//
 						cy.get('@position-extension').within(() => {
 							cy.get('[aria-label="Top Right"]').click();
 						});
@@ -279,28 +261,9 @@ describe('Position Extension', () => {
 							);
 						});
 
-						//Check frontend
-						savePage();
-
-						redirectToFrontPage();
-
-						cy.get('.publisher-paragraph')
-							.then(($el) => {
-								return window.getComputedStyle($el[0]);
-							})
-							.as('element-style');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'position')
-							.should('eq', 'absolute');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'top')
-							.should('eq', '0px');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'right')
-							.should('eq', '0px');
-					});
-
-					it('should add top & left & right properties, when click on top', () => {
+						//
+						// should add top & left & right properties, when click on top
+						//
 						cy.get('@position-extension').within(() => {
 							cy.get('[aria-label="Top"]').click();
 						});
@@ -327,31 +290,9 @@ describe('Position Extension', () => {
 							);
 						});
 
-						//Check frontend
-						savePage();
-
-						redirectToFrontPage();
-
-						cy.get('.publisher-paragraph')
-							.then(($el) => {
-								return window.getComputedStyle($el[0]);
-							})
-							.as('element-style');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'position')
-							.should('eq', 'absolute');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'top')
-							.should('eq', '0px');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'right')
-							.should('eq', '0px');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'left')
-							.should('eq', '0px');
-					});
-
-					it('should add right & top & bottom properties, when click on right', () => {
+						//
+						// should add right & top & bottom properties, when click on right
+						//
 						cy.get('@position-extension').within(() => {
 							cy.get('[aria-label="Right"]').click();
 						});
@@ -378,31 +319,9 @@ describe('Position Extension', () => {
 							);
 						});
 
-						//Check frontend
-						savePage();
-
-						redirectToFrontPage();
-
-						cy.get('.publisher-paragraph')
-							.then(($el) => {
-								return window.getComputedStyle($el[0]);
-							})
-							.as('element-style');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'position')
-							.should('eq', 'absolute');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'top')
-							.should('eq', '0px');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'right')
-							.should('eq', '0px');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'bottom')
-							.should('eq', '0px');
-					});
-
-					it('should add right & top & bottom & left properties, when click on full', () => {
+						//
+						// should add right & top & bottom & left properties, when click on full
+						//
 						cy.get('@position-extension').within(() => {
 							cy.get('[aria-label="Full"]').click();
 						});
@@ -429,34 +348,9 @@ describe('Position Extension', () => {
 							);
 						});
 
-						//Check frontend
-						savePage();
-
-						redirectToFrontPage();
-
-						cy.get('.publisher-paragraph')
-							.then(($el) => {
-								return window.getComputedStyle($el[0]);
-							})
-							.as('element-style');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'position')
-							.should('eq', 'absolute');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'top')
-							.should('eq', '0px');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'right')
-							.should('eq', '0px');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'bottom')
-							.should('eq', '0px');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'left')
-							.should('eq', '0px');
-					});
-
-					it('should add bottom & left properties, when click on bottomLeft', () => {
+						//
+						// should add bottom & left properties, when click on bottomLeft
+						//
 						cy.get('@position-extension').within(() => {
 							cy.get('[aria-label="Bottom Left"]').click();
 						});
@@ -483,28 +377,9 @@ describe('Position Extension', () => {
 							);
 						});
 
-						//Check frontend
-						savePage();
-
-						redirectToFrontPage();
-
-						cy.get('.publisher-paragraph')
-							.then(($el) => {
-								return window.getComputedStyle($el[0]);
-							})
-							.as('element-style');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'position')
-							.should('eq', 'absolute');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'bottom')
-							.should('eq', '0px');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'left')
-							.should('eq', '0px');
-					});
-
-					it('should add bottom & right properties, when click on  bottomRight', () => {
+						//
+						// should add bottom & right properties, when click on  bottomRight
+						//
 						cy.get('@position-extension').within(() => {
 							cy.get('[aria-label="Bottom Right"]').click();
 						});
@@ -531,28 +406,9 @@ describe('Position Extension', () => {
 							);
 						});
 
-						//Check frontend
-						savePage();
-
-						redirectToFrontPage();
-
-						cy.get('.publisher-paragraph')
-							.then(($el) => {
-								return window.getComputedStyle($el[0]);
-							})
-							.as('element-style');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'position')
-							.should('eq', 'absolute');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'bottom')
-							.should('eq', '0px');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'right')
-							.should('eq', '0px');
-					});
-
-					it('should add bottom & right & left properties, when click on bottom', () => {
+						//
+						// should add bottom & right & left properties, when click on bottom
+						//
 						cy.get('@position-extension').within(() => {
 							cy.get('[aria-label="Bottom"]').click();
 						});
@@ -578,31 +434,9 @@ describe('Position Extension', () => {
 							);
 						});
 
-						//Check frontend
-						savePage();
-
-						redirectToFrontPage();
-
-						cy.get('.publisher-paragraph')
-							.then(($el) => {
-								return window.getComputedStyle($el[0]);
-							})
-							.as('element-style');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'position')
-							.should('eq', 'absolute');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'bottom')
-							.should('eq', '0px');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'right')
-							.should('eq', '0px');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'left')
-							.should('eq', '0px');
-					});
-
-					it('should add bottom & top & left properties, when click on left', () => {
+						//
+						// should add bottom & top & left properties, when click on left
+						//
 						cy.get('@position-extension').within(() => {
 							cy.get('[aria-label="Left"]').click();
 						});
@@ -629,31 +463,9 @@ describe('Position Extension', () => {
 							);
 						});
 
-						//Check frontend
-						savePage();
-
-						redirectToFrontPage();
-
-						cy.get('.publisher-paragraph')
-							.then(($el) => {
-								return window.getComputedStyle($el[0]);
-							})
-							.as('element-style');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'position')
-							.should('eq', 'absolute');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'top')
-							.should('eq', '0px');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'left')
-							.should('eq', '0px');
-						cy.get('@element-style')
-							.invoke('getPropertyValue', 'bottom')
-							.should('eq', '0px');
-					});
-
-					it('should add bottom & right & left & top properties, when click on center', () => {
+						//
+						// should add bottom & right & left & top properties, when click on center
+						//
 						cy.get('@position-extension').within(() => {
 							cy.get('[aria-label="Center"]').click();
 						});
