@@ -21,6 +21,7 @@
 	"layout": [
 		"publisherGapRows",
 		"publisherGap",
+		"publisherGapLock",
 		"publisherDisplay",
 		"publisherFlexWrap",
 		"publisherGapColumns",

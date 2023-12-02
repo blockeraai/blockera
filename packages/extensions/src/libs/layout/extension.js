@@ -3,7 +3,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo, useState } from '@wordpress/element';
+import { memo } from '@wordpress/element';
 import type { MixedElement } from 'react';
 
 /**
@@ -57,6 +57,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 		block,
 		values: {
 			gap,
+			gapLock,
 			gapRows,
 			display,
 			flexWrap,
@@ -89,8 +90,6 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 				publisherAlignContent,
 			},
 		} = config;
-
-		const [isGapLock, setIsGapLock] = useState(true);
 
 		return (
 			<>
@@ -219,7 +218,9 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 										}}
 									>
 										<Button
-											aria-label={__(
+											showTooltip={true}
+											tooltipPosition="top"
+											label={__(
 												'Reverse Direction',
 												'publisher-core'
 											)}
@@ -435,7 +436,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 								columns="1fr 2.65fr"
 							>
 								<Flex gap="10px">
-									{isGapLock ? (
+									{gapLock ? (
 										isActiveField(publisherGap) && (
 											<ControlContextProvider
 												value={{
@@ -467,8 +468,14 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 																newValue
 															) =>
 																handleOnChangeAttributes(
-																	'publisherGap',
-																	newValue
+																	{
+																		publisherGap:
+																			newValue,
+																		publisherGapRows:
+																			newValue,
+																		publisherGapColumns:
+																			newValue,
+																	}
 																),
 														}}
 													/>
@@ -565,23 +572,28 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 										</Flex>
 									)}
 									<Button
-										aria-label={__(
-											'Lock Gap',
+										showTooltip={true}
+										tooltipPosition="top"
+										label={__(
+											'Custom Row Column Gap',
 											'publisher-core'
 										)}
-										noBorder={isGapLock}
+										noBorder={gapLock}
 										size="small"
 										onClick={() => {
-											setIsGapLock(!isGapLock);
+											handleOnChangeAttributes(
+												'publisherGapLock',
+												!gapLock
+											);
 										}}
 										style={{
-											color: isGapLock
+											color: gapLock
 												? 'var(--publisher-controls-color)'
 												: 'var(--publisher-controls-border-color-focus)',
-											padding: '6px',
+											padding: '6px 3px',
 										}}
 									>
-										{isGapLock ? (
+										{gapLock ? (
 											<LockIcon />
 										) : (
 											<UnlockIcon />
@@ -609,12 +621,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												className={
 													'publisher-direction-' +
 													flexDirection.value +
-													' publisher-flex-wrap' +
-													`${
-														flexWrap.reverse
-															? '-reverse'
-															: ''
-													}`
+													' publisher-flex-wrap'
 												}
 												controlName="toggle-select"
 												label={__(
@@ -646,10 +653,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 														},
 													]}
 													//
-													defaultValue={
-														flexWrap.value ||
-														'nowrap'
-													}
+													defaultValue={'nowrap'}
 													onChange={(newValue) =>
 														handleOnChangeAttributes(
 															'publisherFlexWrap',
@@ -668,8 +672,10 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												/>
 											</BaseControl>
 											<Button
-												aria-label={__(
-													'Reverse Warp',
+												showTooltip={true}
+												tooltipPosition="top"
+												label={__(
+													'Reverse Children Wrapping',
 													'publisher-core'
 												)}
 												size="small"
@@ -730,7 +736,12 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												className={
 													'publisher-direction-' +
 													flexDirection.value +
-													' publisher-flex-align-content'
+													' publisher-flex-align-content' +
+													`${
+														flexWrap.reverse
+															? ' reverse'
+															: ''
+													}`
 												}
 											>
 												<ToggleSelectControl

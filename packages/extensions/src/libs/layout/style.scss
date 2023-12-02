@@ -1,7 +1,3 @@
-.publisher-direction-column-reverse,
-.publisher-direction-column,
-.publisher-direction-row-reverse,
-.publisher-direction-row,
 .publisher-flex-align-content,
 .publisher-flex-wrap,
 .publisher-flex-justify-content,
@@ -37,37 +33,9 @@
 			}
 		}
 	}
-
-	&.publisher-flex-wrap {
-
-		.publisher-field-control {
-
-			svg {
-				transform: rotate(90deg);
-			}
-
-			svg.publisher-wrap-wrap {
-				transform: rotate(90deg) scaleY(-1);
-			}
-		}
-	}
-
-	&.publisher-flex-align-content {
-
-		.publisher-field-control {
-
-			svg {
-				transform: rotate(-90deg);
-			}
-		}
-	}
 }
 
 .publisher-direction-column-reverse {
-
-    svg {
-		transform: rotate(180deg);
-	}
 
 	&.publisher-flex-justify-content {
 
@@ -85,21 +53,17 @@
 			.publisher-field-control {
 
 				svg {
-					transform: rotate(270deg);
+					transform: rotate(180deg);
 				}
 
 				svg.publisher-wrap-wrap {
-					transform: rotate(270deg) scaleY(-1);
+					transform: rotate(180deg) scaleY(-1);
 				}
 			}
 		}
 }
 
 .publisher-direction-row-reverse {
-
-	svg {
-			transform: rotate(180deg);
-		}
 
 	&.publisher-flex-justify-content {
 
@@ -128,10 +92,22 @@
 
 }
 
-.publisher-flex-wrap-reverse {
+.publisher-flex-align-content.reverse {
 
-	svg {
-		  transform: scaleX(-1);
+	svg.align-content-flex-end,
+	svg.align-content-flex-start {
+        transform: rotate(180deg) scaleX(-1);
+	}
+
+}
+
+.publisher-direction-row-reverse,
+.publisher-direction-column-reverse {
+
+    svg.direction-row,
+    svg.direction-column {
+
+		transform: rotate(180deg);
 	}
 
 }

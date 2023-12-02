@@ -23,6 +23,11 @@ export const useAttributes = (
 		query,
 		callback
 	): void => {
+		if (typeof attributeId === 'object') {
+			setAttributes({ ...attributes, ...attributeId });
+
+			return;
+		}
 		const afterAll = (_attributes: Object): void =>
 			isFunction(callback) &&
 			callback &&

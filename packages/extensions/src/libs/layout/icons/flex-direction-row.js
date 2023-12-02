@@ -5,6 +5,7 @@ export default function FlexDirectionRowBlockIcon({}) {
 			height="18"
 			viewBox="0 0 18 18"
 			xmlns="http://www.w3.org/2000/svg"
+			className="direction-row"
 		>
 			<path d="M3.93672 5C4.62183 5 5.17723 5.58795 5.17723 6.31323L5.17723 11.6868C5.17723 12.412 4.62183 13 3.93672 13H2.24051C1.5554 13 1 12.412 1 11.6868V6.31323C1 5.58796 1.5554 5 2.24051 5H3.93672Z" />
 			<path

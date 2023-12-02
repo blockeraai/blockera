@@ -5,6 +5,7 @@ export default function FlexDirectionColumnBlockIcon({}) {
 			height="18"
 			viewBox="0 0 18 18"
 			xmlns="http://www.w3.org/2000/svg"
+			className="direction-column"
 		>
 			<path d="M11.7595 2C12.4446 2 13 2.58795 13 3.31323L13 4.68677C13 5.41205 12.4446 6 11.7595 6H6.24053C5.55542 6 5.00002 5.41205 5.00002 4.68677L5 3.31323C5 2.58796 5.5554 2 6.24051 2L11.7595 2Z" />
 			<path

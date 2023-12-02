@@ -19,6 +19,10 @@ export const attributes = {
 		type: 'string',
 		default: '',
 	},
+	publisherGapLock: {
+		type: 'boolean',
+		default: true,
+	},
 	publisherGapRows: {
 		type: 'string',
 		default: '',

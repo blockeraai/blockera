@@ -18,7 +18,7 @@ export type TCssProps = {
 export type TFlexChildProps = {
 	values: {
 		flexChildGrow?: string,
-		flexDirection: string,
+		flexDirection: { value: string, reverse: boolean },
 		flexChildAlign?: string,
 		flexChildBasis?: string,
 		flexChildOrder?: string,
