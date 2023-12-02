@@ -4,7 +4,7 @@ export const useDragSetValues = ({ value, setValue }) => {
 	const setDragValue = (mode, property, newValue) => {
 		const extracted = extractNumberAndUnit(value[mode][property]);
 
-		if (extracted.unit === 'auto') {
+		if (extracted.unit === 'auto' || extracted.unit === '') {
 			extracted.unit = 'px';
 		}
 

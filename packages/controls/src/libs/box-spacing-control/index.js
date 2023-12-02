@@ -39,7 +39,6 @@ import { default as PaddingTopIcon } from './icons/padding-top';
 import { default as PaddingRightIcon } from './icons/padding-right';
 import { default as PaddingBottomIcon } from './icons/padding-bottom';
 import { default as PaddingLeftIcon } from './icons/padding-left';
-import { default as CssValueIcon } from './icons/css-value';
 
 export default function BoxSpacingControl({
 	className,
@@ -61,6 +60,16 @@ export default function BoxSpacingControl({
 		mergeInitialAndDefault: true,
 	});
 
+	const marginTop = extractNumberAndUnit(value.margin.top);
+	const marginRight = extractNumberAndUnit(value.margin.right);
+	const marginBottom = extractNumberAndUnit(value.margin.bottom);
+	const marginLeft = extractNumberAndUnit(value.margin.left);
+
+	const paddingTop = extractNumberAndUnit(value.padding.top);
+	const paddingRight = extractNumberAndUnit(value.padding.right);
+	const paddingBottom = extractNumberAndUnit(value.padding.bottom);
+	const paddingLeft = extractNumberAndUnit(value.padding.left);
+
 	const {
 		// margin set values
 		topMarginDragSetValue,
@@ -76,7 +85,7 @@ export default function BoxSpacingControl({
 	} = useDragSetValues({ value, setValue });
 
 	const topMarginDragValueHandler = useDragValue({
-		value: extractNumberAndUnit(value.margin.top).value || 0,
+		value: marginTop.value !== '' ? marginTop.value : 0,
 		setValue: topMarginDragSetValue,
 		movement: 'vertical',
 		onEnd: () => {
@@ -85,7 +94,7 @@ export default function BoxSpacingControl({
 	});
 
 	const leftMarginDragValueHandler = useDragValue({
-		value: extractNumberAndUnit(value.margin.left).value || 0,
+		value: marginLeft.value || 0,
 		setValue: leftMarginDragSetValue,
 		movement: 'horizontal',
 		onEnd: () => {
@@ -94,7 +103,7 @@ export default function BoxSpacingControl({
 	});
 
 	const rightMarginDragValueHandler = useDragValue({
-		value: extractNumberAndUnit(value.margin.right).value || 0,
+		value: marginRight.value || 0,
 		setValue: rightMarginDragSetValue,
 		movement: 'horizontal',
 		onEnd: () => {
@@ -103,7 +112,7 @@ export default function BoxSpacingControl({
 	});
 
 	const bottomMarginDragValueHandler = useDragValue({
-		value: extractNumberAndUnit(value.margin.bottom).value || 0,
+		value: marginBottom.value || 0,
 		setValue: bottomMarginDragSetValue,
 		movement: 'vertical',
 		onEnd: () => {
@@ -112,7 +121,7 @@ export default function BoxSpacingControl({
 	});
 
 	const topPaddingDragValueHandler = useDragValue({
-		value: extractNumberAndUnit(value.padding.top).value || 0,
+		value: paddingTop.value || 0,
 		setValue: topPaddingDragSetValue,
 		movement: 'vertical',
 		min: 0,
@@ -122,7 +131,7 @@ export default function BoxSpacingControl({
 	});
 
 	const leftPaddingDragValueHandler = useDragValue({
-		value: extractNumberAndUnit(value.padding.left).value || 0,
+		value: paddingLeft.value || 0,
 		setValue: leftPaddingDragSetValue,
 		movement: 'horizontal',
 		min: 0,
@@ -132,7 +141,7 @@ export default function BoxSpacingControl({
 	});
 
 	const rightPaddingDragValueHandler = useDragValue({
-		value: extractNumberAndUnit(value.padding.right).value || 0,
+		value: paddingRight.value || 0,
 		setValue: rightPaddingDragSetValue,
 		movement: 'horizontal',
 		min: 0,
@@ -142,7 +151,7 @@ export default function BoxSpacingControl({
 	});
 
 	const bottomPaddingDragValueHandler = useDragValue({
-		value: extractNumberAndUnit(value.padding.bottom).value || 0,
+		value: paddingBottom.value || 0,
 		setValue: bottomPaddingDragSetValue,
 		movement: 'vertical',
 		min: 0,
@@ -154,27 +163,31 @@ export default function BoxSpacingControl({
 	const [openPopover, setOpenPopover] = useState(openSide);
 	const [focusSide, setFocusSide] = useState('');
 
-	function fixLabelText(value: string | MixedElement): any {
+	function fixLabelText(value: Object | string): any {
 		if (value === '') {
 			return '-';
 		}
 
 		const extracted = extractNumberAndUnit(value);
 
+		if (extracted.value === '' && extracted.unit === '') {
+			return '-';
+		}
+
 		switch (extracted.unit) {
 			case 'func':
-				return <CssValueIcon />;
+				return <b>CSS</b>;
 
 			case 'px':
-				return extracted.value;
+				return extracted.value !== '' ? extracted.value : '0';
 
 			case 'auto':
-				return __('Auto', 'publisher-core');
+				return <b>AUTO</b>;
 
 			default:
 				return (
 					<>
-						{extracted.value}
+						{extracted.value !== '' ? extracted.value : '0'}
 						<i>{extracted.unit}</i>
 					</>
 				);
@@ -365,7 +378,7 @@ export default function BoxSpacingControl({
 				>
 					<LabelControl
 						ariaLabel={__('Top Margin', 'publisher-core')}
-						label={fixLabelText(value.margin.top)}
+						label={fixLabelText(marginTop)}
 						onClick={() => setOpenPopover('margin-top')}
 					/>
 
@@ -375,7 +388,7 @@ export default function BoxSpacingControl({
 						onClose={() => setOpenPopover('')}
 						title={__('Top Margin', 'publisher-core')}
 						isOpen={openPopover === 'margin-top'}
-						unit={extractNumberAndUnit(value.margin.top).unit}
+						unit={marginTop.unit}
 						onChange={(newValue) => {
 							setValue({
 								...value,
@@ -398,7 +411,7 @@ export default function BoxSpacingControl({
 				>
 					<LabelControl
 						ariaLabel={__('Right Margin', 'publisher-core')}
-						label={fixLabelText(value.margin.right)}
+						label={fixLabelText(marginRight)}
 						onClick={() => setOpenPopover('margin-right')}
 					/>
 
@@ -409,7 +422,7 @@ export default function BoxSpacingControl({
 						onClose={() => setOpenPopover('')}
 						title={__('Right Margin', 'publisher-core')}
 						isOpen={openPopover === 'margin-right'}
-						unit={extractNumberAndUnit(value.margin.right).unit}
+						unit={marginRight.unit}
 						onChange={(newValue) => {
 							setValue({
 								...value,
@@ -432,7 +445,7 @@ export default function BoxSpacingControl({
 				>
 					<LabelControl
 						ariaLabel={__('Bottom Margin', 'publisher-core')}
-						label={fixLabelText(value.margin.bottom)}
+						label={fixLabelText(marginBottom)}
 						onClick={() => setOpenPopover('margin-bottom')}
 					/>
 
@@ -442,7 +455,7 @@ export default function BoxSpacingControl({
 						onClose={() => setOpenPopover('')}
 						title={__('Bottom Margin', 'publisher-core')}
 						isOpen={openPopover === 'margin-bottom'}
-						unit={extractNumberAndUnit(value.margin.bottom).unit}
+						unit={marginBottom.unit}
 						onChange={(newValue) => {
 							setValue({
 								...value,
@@ -465,7 +478,7 @@ export default function BoxSpacingControl({
 				>
 					<LabelControl
 						ariaLabel={__('Left Margin', 'publisher-core')}
-						label={fixLabelText(value.margin.left)}
+						label={fixLabelText(marginLeft)}
 						onClick={() => setOpenPopover('margin-left')}
 					/>
 
@@ -475,7 +488,7 @@ export default function BoxSpacingControl({
 						onClose={() => setOpenPopover('')}
 						title={__('Left Margin', 'publisher-core')}
 						isOpen={openPopover === 'margin-left'}
-						unit={extractNumberAndUnit(value.margin.left).unit}
+						unit={marginLeft.unit}
 						onChange={(newValue) => {
 							setValue({
 								...value,
@@ -498,7 +511,7 @@ export default function BoxSpacingControl({
 				>
 					<LabelControl
 						ariaLabel={__('Top Padding', 'publisher-core')}
-						label={fixLabelText(value.padding.top)}
+						label={fixLabelText(paddingTop)}
 						onClick={() => setOpenPopover('padding-top')}
 					/>
 
@@ -532,7 +545,7 @@ export default function BoxSpacingControl({
 				>
 					<LabelControl
 						ariaLabel={__('Right Padding', 'publisher-core')}
-						label={fixLabelText(value.padding.right)}
+						label={fixLabelText(paddingRight)}
 						onClick={() => setOpenPopover('padding-right')}
 					/>
 
@@ -568,7 +581,7 @@ export default function BoxSpacingControl({
 				>
 					<LabelControl
 						ariaLabel={__('Bottom Padding', 'publisher-core')}
-						label={fixLabelText(value.padding.bottom)}
+						label={fixLabelText(paddingBottom)}
 						onClick={() => setOpenPopover('padding-bottom')}
 					/>
 
@@ -602,7 +615,7 @@ export default function BoxSpacingControl({
 				>
 					<LabelControl
 						ariaLabel={__('Left Padding', 'publisher-core')}
-						label={fixLabelText(value.padding.left)}
+						label={fixLabelText(paddingLeft)}
 						onClick={() => setOpenPopover('padding-left')}
 					/>
 
