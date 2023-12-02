@@ -58,7 +58,7 @@ export const TextArea = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => (
 		<Flex direction="column" gap="15px">
-			<h2 className="story-heading">Text Input</h2>
+			<h2 className="story-heading">Textarea Input</h2>
 
 			<ControlContextProvider
 				value={{
@@ -153,7 +153,6 @@ export const TextArea = {
 			>
 				<ControlWithHooks
 					Control={TextAreaControl}
-					disabled
 					label="Custom height"
 					height={100}
 					{...args}
