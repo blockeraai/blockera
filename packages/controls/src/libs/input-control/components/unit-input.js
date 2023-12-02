@@ -216,6 +216,9 @@ export function UnitInput({
 							isMaximizeVisible && 'is-open-popover'
 						)}
 						noBorder={true}
+						showTooltip={true}
+						label={__('Open Editor', 'publisher-core')}
+						disabled={disabled}
 					>
 						<MaximizeIcon />
 					</Button>
