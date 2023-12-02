@@ -199,7 +199,7 @@
 		"test:e2e:headed": "npm run test:e2e --headed",
 		"test:e2e:record": "npx cypress run --browser chrome",
 		"test:js": "wp-scripts test-unit-js --config .dev/tests/jest/jest.config.js",
-		"test:js:coverage": "npm run test:js --coverage",
+		"test:js:coverage": "wp-scripts test-unit-js --config .dev/tests/jest/jest.config.js --coverage",
 		"test:js:update": "npm run test:js -u",
 		"test:generate-output": "jest --json --outputFile=.jest-test-results.json",
 		"test:generate-output:dev": "jest --json --outputFile=.jest-test-results.json -- --watch",
