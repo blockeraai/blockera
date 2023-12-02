@@ -1231,7 +1231,6 @@ export function extractNumberAndUnit(value: Object | string): Object {
 	};
 }
 
-// todo: write test
 export function getFirstUnit(units: Array<any>): Object {
 	if (isUndefined(units)) {
 		return {};
