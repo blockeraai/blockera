@@ -9,9 +9,9 @@ import { memo, useContext } from '@wordpress/element';
  * Internal dependencies
  */
 import { ColorPickerControl } from '../../../index';
+import type { TMeshGradientProps } from '../../types';
 import { useControlContext } from '../../../../context';
 import { RepeaterContext } from '../../../repeater-control/context';
-import type { TMeshGradientProps } from '../../types';
 
 type TFieldsProps = {
 	itemId: number,
