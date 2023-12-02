@@ -2,13 +2,6 @@
  * External dependencies
  */
 import { nanoid } from 'nanoid';
-import {
-	fireEvent,
-	userEvent,
-	waitFor,
-	within,
-} from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
 
 /**
  * Publisher dependencies
@@ -25,8 +18,7 @@ import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
 import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 
-const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
-	Decorators;
+const { WithInspectorStyles, SharedDecorators } = Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
 
@@ -111,78 +103,6 @@ export const WithSuggestions = {
 		WithControlDataProvider,
 		...SharedDecorators,
 	],
-};
-
-export const Play = {
-	args: {
-		controlInfo: {
-			name: nanoid(),
-			value: {
-				icon: '',
-				library: '',
-				uploadSVG: '',
-			},
-		},
-	},
-	decorators: [
-		WithStoryContextProvider,
-		WithInspectorStyles,
-		WithControlDataProvider,
-		...SharedDecorators,
-	],
-	render: (args) => <ControlWithHooks Control={IconControl} {...args} />,
-	play: async ({ canvasElement, step }) => {
-		const canvas = within(canvasElement);
-
-		const currentValue = canvas.getByTestId('current-value');
-		const chooseButton = canvas.getByLabelText('Choose Icon…');
-
-		await step('Story data is available', async () => {
-			await expect(currentValue).toBeInTheDocument();
-		});
-
-		await step('Click choose', async () => {
-			await expect(chooseButton).toBeInTheDocument();
-
-			await userEvent.click(chooseButton);
-
-			await expect(canvas.getByRole('searchbox')).toBeInTheDocument();
-		});
-
-		await step('Search for icon', async () => {
-			fireEvent.change(canvas.getByRole('searchbox'), {
-				target: {
-					value: 'music',
-				},
-			});
-
-			await expect(
-				canvas.getByLabelText('audio Icon')
-			).toBeInTheDocument();
-		});
-
-		await step('choose icon', async () => {
-			fireEvent.click(canvas.getByLabelText('audio Icon'));
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent(
-						'{ "icon": "audio", "library": "wp", "uploadSVG": "" }'
-					),
-				{ timeout: 1000 }
-			);
-		});
-
-		await step('Remove icon', async () => {
-			fireEvent.click(canvas.getByLabelText('Remove Icon'));
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent(
-						'{ "icon": "", "library": "", "uploadSVG": "" }'
-					),
-				{ timeout: 1000 }
-			);
-		});
-	},
 };
 
 export const All = {

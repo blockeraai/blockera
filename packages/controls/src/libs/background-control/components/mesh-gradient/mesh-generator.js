@@ -66,12 +66,21 @@ const generateColors = (length: number, baseColor: number): Object => {
 	});
 };
 
-const generateGradient = (length: number): Object => {
+export const generateGradient = (length: number): Object => {
 	return Array.from({ length }, (_: void, i: number): string => {
 		return `radial-gradient(at ${getPercent(i)}% ${getPercent(
 			i * 10
 		)}%, var(--c${i}) 0px, transparent ${getRandomNumber(40, 70)}%)`;
 	});
+};
+
+export const getRandomHexColor = (): string => {
+	const letters = '0123456789ABCDEF';
+	let color = '#';
+	for (let i = 0; i < 6; i++) {
+		color += letters[Math.floor(Math.random() * 16)];
+	}
+	return color;
 };
 
 export default function generateMeshGradient(length: number): Object {

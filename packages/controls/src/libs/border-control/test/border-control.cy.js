@@ -164,7 +164,7 @@ describe('border-control component testing', () => {
 
 				//Clear color
 				cy.getByDataTest('border-control-color').click();
-				cy.contains('Clear').click();
+				cy.get('[aria-label="reset-color"]').click();
 				cy.getByDataTest('border-control-color')
 					.should('have.attr', 'style')
 					.should('be.empty');
