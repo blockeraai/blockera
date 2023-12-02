@@ -1,35 +1,18 @@
-const getValueType = (mode, value, property) => {
-	const units = [
-		'auto',
-		'px',
-		'%',
-		'rem',
-		'em',
-		'ch',
-		'dvw',
-		'vw',
-		'dvh',
-		'vh',
-	];
-	if (value) {
-		for (const unit of units) {
-			if (value[mode][property].includes(unit)) {
-				return unit;
-			}
-		}
-	}
-
-	return 'px';
-};
+import { extractNumberAndUnit } from '../../input-control/utils';
 
 export const useDragSetValues = ({ value, setValue }) => {
 	const setDragValue = (mode, property, newValue) => {
-		const unit = getValueType(mode, value, property);
+		const extracted = extractNumberAndUnit(value[mode][property]);
+
+		if (extracted.unit === 'auto') {
+			extracted.unit = 'px';
+		}
+
 		setValue({
 			...value,
 			[mode]: {
 				...value[mode],
-				[property]: `${newValue}${unit}`,
+				[property]: `${newValue}${extracted.unit}`,
 			},
 		});
 	};
