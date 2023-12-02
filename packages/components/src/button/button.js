@@ -132,4 +132,5 @@ Button.defaultProps = {
 	contentAlign: 'center',
 	noBorder: false,
 	isFocus: null,
+	tooltipPosition: 'top',
 };
