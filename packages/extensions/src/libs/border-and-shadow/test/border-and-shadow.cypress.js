@@ -148,366 +148,282 @@ describe('Border and Shadow extension', () => {
 					.should('equal', '5px solid rgb(55, 230, 212)');
 			});
 
-			context('custom', () => {
-				it('should update correctly, when add data to top border', () => {
-					cy.getByDataTest('style-tab').click();
+			it('custom', () => {
+				cy.getByDataTest('style-tab').click();
 
-					//add data
-					cy.get('[aria-label="Border Line"]')
-						.parents('[data-cy="base-control"]')
-						.as('border-line');
+				//add data
+				cy.get('[aria-label="Border Line"]')
+					.parents('[data-cy="base-control"]')
+					.as('border-line');
 
-					cy.get('@border-line').within(() => {
-						cy.get('[aria-label="Custom"]').click();
-						cy.getByDataTest('border-control-component')
-							.eq(0)
-							.within(() => {
-								cy.getByDataTest(
-									'border-control-width'
-								).clear();
-								cy.getByDataTest('border-control-width').type(
-									5,
-									{
-										force: true,
-									}
-								);
-								cy.get('[aria-haspopup="listbox"]').trigger(
-									'click'
-								);
-								cy.get('li').eq(2).trigger('click');
-
-								cy.getByDataTest(
-									'border-control-color'
-								).click();
+				//
+				// Top Border
+				//
+				cy.get('@border-line').within(() => {
+					cy.get('[aria-label="Custom"]').click();
+					cy.getByDataTest('border-control-component')
+						.eq(0)
+						.within(() => {
+							cy.getByDataTest('border-control-width').clear();
+							cy.getByDataTest('border-control-width').type(1, {
+								force: true,
 							});
-					});
+							cy.get('[aria-haspopup="listbox"]').trigger(
+								'click'
+							);
+							cy.get('li').eq(0).trigger('click');
 
-					cy.getByDataTest('popover-body').within(() => {
-						cy.get('input[maxlength="9"]').clear();
-						cy.get('input[maxlength="9"]').type('73ddab');
-					});
-
-					//Check block
-					cy.getIframeBody()
-						.find(`[data-type="core/paragraph"]`)
-						.should(
-							'have.css',
-							'border-top',
-							'5px dotted rgb(115, 221, 171)'
-						);
-
-					//Check store
-					getWPDataObject().then((data) => {
-						expect({
-							type: 'custom',
-							all: { color: '', style: '', width: '' },
-							left: { color: '', style: '', width: '' },
-							right: { color: '', style: '', width: '' },
-							bottom: { color: '', style: '', width: '' },
-							top: {
-								color: '#73ddab',
-								style: 'dotted',
-								width: '5px',
-							},
-						}).to.be.deep.equal(
-							getSelectedBlock(data, 'publisherBorder')
-						);
-					});
-
-					// 	Check frontend
-					savePage();
-
-					redirectToFrontPage();
-
-					cy.get('.publisher-paragraph')
-						.then(($el) => {
-							return window.getComputedStyle($el[0]);
-						})
-						.invoke('getPropertyValue', 'border-top')
-						.should('equal', '5px dotted rgb(115, 221, 171)');
+							cy.getByDataTest('border-control-color').click();
+						});
 				});
 
-				it('should update correctly, when add data to right border', () => {
-					cy.getByDataTest('style-tab').click();
-
-					//add data
-					cy.get('[aria-label="Border Line"]')
-						.parents('[data-cy="base-control"]')
-						.as('border-line');
-
-					cy.get('@border-line').within(() => {
-						cy.get('[aria-label="Custom"]').click();
-						cy.getByDataTest('border-control-component')
-							.eq(1)
-							.within(() => {
-								cy.getByDataTest(
-									'border-control-width'
-								).clear();
-								cy.getByDataTest('border-control-width').type(
-									10,
-									{
-										force: true,
-									}
-								);
-								cy.get('[aria-haspopup="listbox"]').trigger(
-									'click'
-								);
-								cy.get('li').eq(1).trigger('click');
-
-								cy.getByDataTest(
-									'border-control-color'
-								).click();
-							});
-					});
-
-					cy.getByDataTest('popover-body').within(() => {
-						cy.get('input[maxlength="9"]').clear();
-						cy.get('input[maxlength="9"]').type('9958e3');
-					});
-					//'rgb(153, 88, 227)'
-					//Check block
-					cy.getIframeBody()
-						.find(`[data-type="core/paragraph"]`)
-						.should(
-							'have.css',
-							'border-right',
-							'10px dashed rgb(153, 88, 227)'
-						);
-
-					//Check store
-					getWPDataObject().then((data) => {
-						expect({
-							type: 'custom',
-							all: {
-								color: '',
-								style: '',
-								width: '',
-							},
-							left: {
-								color: '',
-								style: '',
-								width: '',
-							},
-							right: {
-								color: '#9958e3',
-								style: 'dashed',
-								width: '10px',
-							},
-							bottom: {
-								color: '',
-								style: '',
-								width: '',
-							},
-							top: {
-								color: '',
-								style: '',
-								width: '',
-							},
-						}).to.be.deep.equal(
-							getSelectedBlock(data, 'publisherBorder')
-						);
-					});
-
-					// 	Check frontend
-					savePage();
-
-					redirectToFrontPage();
-
-					cy.get('.publisher-paragraph')
-						.then(($el) => {
-							return window.getComputedStyle($el[0]);
-						})
-						.invoke('getPropertyValue', 'border-right')
-						.should('equal', '10px dashed rgb(153, 88, 227)');
+				cy.getByDataTest('popover-body').within(() => {
+					cy.get('input[maxlength="9"]').clear();
+					cy.get('input[maxlength="9"]').type('73ddab');
 				});
 
-				it('should update correctly, when add data to bottom border', () => {
-					cy.getByDataTest('style-tab').click();
+				//Check block
+				cy.getIframeBody()
+					.find(`[data-type="core/paragraph"]`)
+					.should(
+						'have.css',
+						'border-top',
+						'1px solid rgb(115, 221, 171)'
+					);
 
-					//add data
-					cy.get('[aria-label="Border Line"]')
-						.parents('[data-cy="base-control"]')
-						.as('border-line');
-
-					cy.get('@border-line').within(() => {
-						cy.get('[aria-label="Custom"]').click();
-						cy.getByDataTest('border-control-component')
-							.eq(2)
-							.within(() => {
-								cy.getByDataTest(
-									'border-control-width'
-								).clear();
-								cy.getByDataTest('border-control-width').type(
-									3,
-									{
-										force: true,
-									}
-								);
-								cy.get('[aria-haspopup="listbox"]').trigger(
-									'click'
-								);
-								cy.get('li').eq(0).trigger('click');
-
-								cy.getByDataTest(
-									'border-control-color'
-								).click();
-							});
-					});
-
-					cy.getByDataTest('popover-body').within(() => {
-						cy.get('input[maxlength="9"]').clear();
-						cy.get('input[maxlength="9"]').type('eba492');
-					});
-
-					//Check block
-					cy.getIframeBody()
-						.find(`[data-type="core/paragraph"]`)
-						.should(
-							'have.css',
-							'border-bottom',
-							'3px solid rgb(235, 164, 146)'
-						);
-
-					//Check store
-					getWPDataObject().then((data) => {
-						expect({
-							type: 'custom',
-							all: {
-								color: '',
-								style: '',
-								width: '',
-							},
-							left: {
-								color: '',
-								style: '',
-								width: '',
-							},
-							right: {
-								color: '',
-								style: '',
-								width: '',
-							},
-							bottom: {
-								color: '#eba492',
-								style: 'solid',
-								width: '3px',
-							},
-							top: {
-								color: '',
-								style: '',
-								width: '',
-							},
-						}).to.be.deep.equal(
-							getSelectedBlock(data, 'publisherBorder')
-						);
-					});
-
-					// 	Check frontend
-					savePage();
-
-					redirectToFrontPage();
-
-					cy.get('.publisher-paragraph')
-						.then(($el) => {
-							return window.getComputedStyle($el[0]);
-						})
-						.invoke('getPropertyValue', 'border-bottom')
-						.should('equal', '3px solid rgb(235, 164, 146)');
+				//Check store
+				getWPDataObject().then((data) => {
+					expect({
+						type: 'custom',
+						all: { color: '', style: '', width: '' },
+						left: { color: '', style: '', width: '' },
+						right: { color: '', style: '', width: '' },
+						bottom: { color: '', style: '', width: '' },
+						top: {
+							color: '#73ddab',
+							style: 'solid',
+							width: '1px',
+						},
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'publisherBorder')
+					);
 				});
 
-				it('should update correctly, when add data to left border', () => {
-					cy.getByDataTest('style-tab').click();
-
-					//add data
-					cy.get('[aria-label="Border Line"]')
-						.parents('[data-cy="base-control"]')
-						.as('border-line');
-
-					cy.get('@border-line').within(() => {
-						cy.get('[aria-label="Custom"]').click();
-						cy.getByDataTest('border-control-component')
-							.eq(3)
-							.within(() => {
-								cy.getByDataTest(
-									'border-control-width'
-								).clear();
-								cy.getByDataTest('border-control-width').type(
-									8,
-									{
-										force: true,
-									}
-								);
-								cy.get('[aria-haspopup="listbox"]').trigger(
-									'click'
-								);
-								cy.get('li').eq(3).trigger('click');
-
-								cy.getByDataTest(
-									'border-control-color'
-								).click();
+				//
+				// Right Border
+				//
+				cy.get('@border-line').within(() => {
+					cy.get('[aria-label="Custom"]').click();
+					cy.getByDataTest('border-control-component')
+						.eq(1)
+						.within(() => {
+							cy.getByDataTest('border-control-width').clear();
+							cy.getByDataTest('border-control-width').type(2, {
+								force: true,
 							});
-					});
+							cy.get('[aria-haspopup="listbox"]').trigger(
+								'click'
+							);
+							cy.get('li').eq(1).trigger('click');
 
-					cy.getByDataTest('popover-body').within(() => {
-						cy.get('input[maxlength="9"]').clear();
-						cy.get('input[maxlength="9"]').type('1893da');
-					});
-
-					//Check block
-					cy.getIframeBody()
-						.find(`[data-type="core/paragraph"]`)
-						.should(
-							'have.css',
-							'border-left',
-							'8px double rgb(24, 147, 218)'
-						);
-
-					//Check store
-					getWPDataObject().then((data) => {
-						expect({
-							type: 'custom',
-							all: {
-								color: '',
-								style: '',
-								width: '',
-							},
-							left: {
-								color: '#1893da',
-								style: 'double',
-								width: '8px',
-							},
-							right: {
-								color: '',
-								style: '',
-								width: '',
-							},
-							bottom: {
-								color: '',
-								style: '',
-								width: '',
-							},
-							top: {
-								color: '',
-								style: '',
-								width: '',
-							},
-						}).to.be.deep.equal(
-							getSelectedBlock(data, 'publisherBorder')
-						);
-					});
-
-					// 	Check frontend
-					savePage();
-
-					redirectToFrontPage();
-
-					cy.get('.publisher-paragraph')
-						.then(($el) => {
-							return window.getComputedStyle($el[0]);
-						})
-						.invoke('getPropertyValue', 'border-left')
-						.should('equal', '8px double rgb(24, 147, 218)');
+							cy.getByDataTest('border-control-color').click();
+						});
 				});
+
+				cy.getByDataTest('popover-body').within(() => {
+					cy.get('input[maxlength="9"]').clear();
+					cy.get('input[maxlength="9"]').type('9958e3');
+				});
+
+				//Check block
+				cy.getIframeBody()
+					.find(`[data-type="core/paragraph"]`)
+					.should(
+						'have.css',
+						'border-right',
+						'2px dashed rgb(153, 88, 227)'
+					);
+
+				//Check store
+				getWPDataObject().then((data) => {
+					expect({
+						type: 'custom',
+						all: { color: '', style: '', width: '' },
+						left: { color: '', style: '', width: '' },
+						right: {
+							color: '#9958e3',
+							style: 'dashed',
+							width: '2px',
+						},
+						bottom: { color: '', style: '', width: '' },
+						top: {
+							color: '#73ddab',
+							style: 'solid',
+							width: '1px',
+						},
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'publisherBorder')
+					);
+				});
+
+				//
+				// Bottom Border
+				//
+				cy.get('@border-line').within(() => {
+					cy.get('[aria-label="Custom"]').click();
+					cy.getByDataTest('border-control-component')
+						.eq(2)
+						.within(() => {
+							cy.getByDataTest('border-control-width').clear();
+							cy.getByDataTest('border-control-width').type(3, {
+								force: true,
+							});
+							cy.get('[aria-haspopup="listbox"]').trigger(
+								'click'
+							);
+							cy.get('li').eq(2).trigger('click');
+
+							cy.getByDataTest('border-control-color').click();
+						});
+				});
+
+				cy.getByDataTest('popover-body').within(() => {
+					cy.get('input[maxlength="9"]').clear();
+					cy.get('input[maxlength="9"]').type('eba492');
+				});
+
+				//Check block
+				cy.getIframeBody()
+					.find(`[data-type="core/paragraph"]`)
+					.should(
+						'have.css',
+						'border-bottom',
+						'3px dotted rgb(235, 164, 146)'
+					);
+
+				//Check store
+				getWPDataObject().then((data) => {
+					expect({
+						type: 'custom',
+						all: { color: '', style: '', width: '' },
+						left: { color: '', style: '', width: '' },
+						right: {
+							color: '#9958e3',
+							style: 'dashed',
+							width: '2px',
+						},
+						bottom: {
+							color: '#eba492',
+							style: 'dotted',
+							width: '3px',
+						},
+						top: {
+							color: '#73ddab',
+							style: 'solid',
+							width: '1px',
+						},
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'publisherBorder')
+					);
+				});
+
+				//
+				// Left Border
+				//
+				cy.get('@border-line').within(() => {
+					cy.get('[aria-label="Custom"]').click();
+					cy.getByDataTest('border-control-component')
+						.eq(3)
+						.within(() => {
+							cy.getByDataTest('border-control-width').clear();
+							cy.getByDataTest('border-control-width').type(4, {
+								force: true,
+							});
+							cy.get('[aria-haspopup="listbox"]').trigger(
+								'click'
+							);
+							cy.get('li').eq(3).trigger('click');
+
+							cy.getByDataTest('border-control-color').click();
+						});
+				});
+
+				cy.getByDataTest('popover-body').within(() => {
+					cy.get('input[maxlength="9"]').clear();
+					cy.get('input[maxlength="9"]').type('1893da');
+				});
+
+				//Check block
+				cy.getIframeBody()
+					.find(`[data-type="core/paragraph"]`)
+					.should(
+						'have.css',
+						'border-left',
+						'4px double rgb(24, 147, 218)'
+					);
+
+				//Check store
+				getWPDataObject().then((data) => {
+					expect({
+						type: 'custom',
+						all: { color: '', style: '', width: '' },
+						left: {
+							color: '#1893da',
+							style: 'double',
+							width: '4px',
+						},
+						right: {
+							color: '#9958e3',
+							style: 'dashed',
+							width: '2px',
+						},
+						bottom: {
+							color: '#eba492',
+							style: 'dotted',
+							width: '3px',
+						},
+						top: {
+							color: '#73ddab',
+							style: 'solid',
+							width: '1px',
+						},
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'publisherBorder')
+					);
+				});
+
+				// 	Check frontend
+				savePage();
+
+				redirectToFrontPage();
+
+				cy.get('.publisher-paragraph')
+					.then(($el) => {
+						return window.getComputedStyle($el[0]);
+					})
+					.invoke('getPropertyValue', 'border-top')
+					.should('equal', '1px solid rgb(115, 221, 171)');
+
+				cy.get('.publisher-paragraph')
+					.then(($el) => {
+						return window.getComputedStyle($el[0]);
+					})
+					.invoke('getPropertyValue', 'border-right')
+					.should('equal', '2px dashed rgb(153, 88, 227)');
+
+				cy.get('.publisher-paragraph')
+					.then(($el) => {
+						return window.getComputedStyle($el[0]);
+					})
+					.invoke('getPropertyValue', 'border-bottom')
+					.should('equal', '3px dotted rgb(235, 164, 146)');
+
+				cy.get('.publisher-paragraph')
+					.then(($el) => {
+						return window.getComputedStyle($el[0]);
+					})
+					.invoke('getPropertyValue', 'border-left')
+					.should('equal', '4px double rgb(24, 147, 218)');
 			});
 		});
 	});
@@ -617,175 +533,162 @@ describe('Border and Shadow extension', () => {
 				.invoke('getPropertyValue', 'border-top-right-radius')
 				.should('equal', '25px');
 			cy.get('@element-style')
-				.invoke('getPropertyValue', 'border-bottom-left-radius')
+				.invoke('getPropertyValue', 'border-bottom-right-radius')
 				.should('equal', '25px');
 			cy.get('@element-style')
 				.invoke('getPropertyValue', 'border-bottom-left-radius')
 				.should('equal', '25px');
 		});
 
-		context('custom', () => {
-			it('should update correctly, when add data to topLeft', () => {
-				cy.get('[aria-label="Radius"]')
-					.parents('[data-cy="base-control"]')
-					.within(() => {
-						cy.get('[aria-label="Custom"]').click();
-						cy.get('input[type="number"]').eq(0).clear();
-						cy.get('input[type="number"]').eq(0).type(25, {
-							force: true,
-						});
+		it('custom', () => {
+			//
+			// topLeft
+			//
+			cy.get('[aria-label="Radius"]')
+				.parents('[data-cy="base-control"]')
+				.within(() => {
+					cy.get('[aria-label="Custom"]').click();
+					cy.get('input[type="number"]').eq(0).type(25, {
+						force: true,
 					});
-
-				//Check block
-				cy.getIframeBody()
-					.find(`[data-type="core/paragraph"]`)
-					.should('have.css', 'border-top-left-radius', '25px');
-
-				//Check store
-				getWPDataObject().then((data) => {
-					expect('custom').to.be.equal(
-						getSelectedBlock(data, 'publisherBorderRadius').type
-					);
-
-					expect('25px').to.be.equal(
-						getSelectedBlock(data, 'publisherBorderRadius').topLeft
-					);
 				});
 
-				//Check frontend
-				savePage();
+			//Check block
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.should('have.css', 'border-top-left-radius', '25px');
 
-				redirectToFrontPage();
+			//Check store
+			getWPDataObject().then((data) => {
+				expect('custom').to.be.equal(
+					getSelectedBlock(data, 'publisherBorderRadius').type
+				);
 
-				cy.get('.publisher-paragraph')
-					.then(($el) => {
-						return window.getComputedStyle($el[0]);
-					})
-					.invoke('getPropertyValue', 'border-top-left-radius')
-					.should('eq', '25px');
+				expect('25px').to.be.equal(
+					getSelectedBlock(data, 'publisherBorderRadius').topLeft
+				);
 			});
 
-			it('should update correctly, when add data to topRight', () => {
-				cy.get('[aria-label="Radius"]')
-					.parents('[data-cy="base-control"]')
-					.within(() => {
-						cy.get('[aria-label="Custom"]').click();
-						cy.get('input[type="number"]').eq(1).clear();
-						cy.get('input[type="number"]').eq(1).type(35, {
-							force: true,
-						});
+			//
+			// topRight
+			//
+			//
+			cy.get('[aria-label="Radius"]')
+				.parents('[data-cy="base-control"]')
+				.within(() => {
+					cy.get('[aria-label="Custom"]').click();
+					// cy.get('input[type="number"]').eq(1).clear();
+					cy.get('input[type="number"]').eq(1).type(35, {
+						force: true,
 					});
-
-				//Check block
-				cy.getIframeBody()
-					.find(`[data-type="core/paragraph"]`)
-					.should('have.css', 'border-top-right-radius', '35px');
-
-				//Check store
-				getWPDataObject().then((data) => {
-					expect('custom').to.be.equal(
-						getSelectedBlock(data, 'publisherBorderRadius').type
-					);
-
-					expect('35px').to.be.equal(
-						getSelectedBlock(data, 'publisherBorderRadius').topRight
-					);
 				});
 
-				//Check frontend
-				savePage();
+			//Check block
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.should('have.css', 'border-top-right-radius', '35px');
 
-				redirectToFrontPage();
+			//Check store
+			getWPDataObject().then((data) => {
+				expect('custom').to.be.equal(
+					getSelectedBlock(data, 'publisherBorderRadius').type
+				);
 
-				cy.get('.publisher-paragraph')
-					.then(($el) => {
-						return window.getComputedStyle($el[0]);
-					})
-					.invoke('getPropertyValue', 'border-top-right-radius')
-					.should('eq', '35px');
+				expect('35px').to.be.equal(
+					getSelectedBlock(data, 'publisherBorderRadius').topRight
+				);
 			});
 
-			it('should update correctly, when add data to bottomLeft ', () => {
-				cy.get('[aria-label="Radius"]')
-					.parents('[data-cy="base-control"]')
-					.within(() => {
-						cy.get('[aria-label="Custom"]').click();
-						cy.get('input[type="number"]').eq(2).clear();
-						cy.get('input[type="number"]').eq(2).type(50, {
-							force: true,
-						});
+			//
+			// bottomLeft
+			//
+			cy.get('[aria-label="Radius"]')
+				.parents('[data-cy="base-control"]')
+				.within(() => {
+					cy.get('[aria-label="Custom"]').click();
+					// cy.get('input[type="number"]').eq(2).clear();
+					cy.get('input[type="number"]').eq(2).type(45, {
+						force: true,
 					});
-
-				//Check block
-				cy.getIframeBody()
-					.find(`[data-type="core/paragraph"]`)
-					.should('have.css', 'border-bottom-left-radius', '50px');
-
-				//Check store
-				getWPDataObject().then((data) => {
-					expect('custom').to.be.equal(
-						getSelectedBlock(data, 'publisherBorderRadius').type
-					);
-
-					expect('50px').to.be.equal(
-						getSelectedBlock(data, 'publisherBorderRadius')
-							.bottomLeft
-					);
 				});
 
-				//Check frontend
-				savePage();
+			//Check block
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.should('have.css', 'border-bottom-left-radius', '45px');
 
-				redirectToFrontPage();
+			//Check store
+			getWPDataObject().then((data) => {
+				expect('custom').to.be.equal(
+					getSelectedBlock(data, 'publisherBorderRadius').type
+				);
 
-				cy.get('.publisher-paragraph')
-					.then(($el) => {
-						return window.getComputedStyle($el[0]);
-					})
-					.invoke('getPropertyValue', 'border-bottom-left-radius')
-					.should('eq', '50px');
+				expect('45px').to.be.equal(
+					getSelectedBlock(data, 'publisherBorderRadius').bottomLeft
+				);
 			});
 
-			it('should update correctly, when add data to bottomRight  ', () => {
-				cy.get('[aria-label="Radius"]')
-					.parents('[data-cy="base-control"]')
-					.within(() => {
-						cy.get('[aria-label="Custom"]').click();
-						cy.get('input[type="number"]').eq(3).clear();
-						cy.get('input[type="number"]').eq(3).type(15, {
-							force: true,
-						});
+			//
+			// bottomRight
+			//
+			cy.get('[aria-label="Radius"]')
+				.parents('[data-cy="base-control"]')
+				.within(() => {
+					cy.get('[aria-label="Custom"]').click();
+					// cy.get('input[type="number"]').eq(3).clear();
+					cy.get('input[type="number"]').eq(3).type(55, {
+						force: true,
 					});
-
-				//Check block
-				cy.getIframeBody()
-					.find(`[data-type="core/paragraph"]`)
-					.should('have.css', 'border-bottom-right-radius', '15px');
-
-				//Check store
-				getWPDataObject().then((data) => {
-					expect('custom').to.be.equal(
-						getSelectedBlock(data, 'publisherBorderRadius').type
-					);
-
-					expect('15px').to.be.equal(
-						getSelectedBlock(data, 'publisherBorderRadius')
-							.bottomRight
-					);
 				});
 
-				//Check frontend
-				savePage();
+			//Check block
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.should('have.css', 'border-bottom-right-radius', '55px');
 
-				redirectToFrontPage();
+			//Check store
+			getWPDataObject().then((data) => {
+				expect('custom').to.be.equal(
+					getSelectedBlock(data, 'publisherBorderRadius').type
+				);
 
-				cy.get('.publisher-paragraph')
-					.then(($el) => {
-						return window.getComputedStyle($el[0]);
-					})
-					.invoke('getPropertyValue', 'border-bottom-right-radius')
-					.should('eq', '15px');
+				expect('55px').to.be.equal(
+					getSelectedBlock(data, 'publisherBorderRadius').bottomRight
+				);
 			});
+
+			//Check frontend
+			savePage();
+
+			redirectToFrontPage();
+
+			cy.get('.publisher-paragraph')
+				.then(($el) => {
+					return window.getComputedStyle($el[0]);
+				})
+				.invoke('getPropertyValue', 'border-top-left-radius')
+				.should('eq', '25px');
+
+			cy.get('.publisher-paragraph')
+				.then(($el) => {
+					return window.getComputedStyle($el[0]);
+				})
+				.invoke('getPropertyValue', 'border-top-right-radius')
+				.should('eq', '35px');
+
+			cy.get('.publisher-paragraph')
+				.then(($el) => {
+					return window.getComputedStyle($el[0]);
+				})
+				.invoke('getPropertyValue', 'border-bottom-left-radius')
+				.should('eq', '45px');
+
+			cy.get('.publisher-paragraph')
+				.then(($el) => {
+					return window.getComputedStyle($el[0]);
+				})
+				.invoke('getPropertyValue', 'border-bottom-right-radius')
+				.should('eq', '55px');
 		});
 	});
 
@@ -1060,9 +963,11 @@ describe('Border and Shadow extension', () => {
 					return window.getComputedStyle($el[0]);
 				})
 				.as('element-style');
+
 			cy.get('@element-style')
 				.invoke('getPropertyValue', 'outline')
 				.should('eq', 'rgba(197, 238, 240, 0.67) dashed 3px');
+
 			cy.get('@element-style')
 				.invoke('getPropertyValue', 'outline-offset')
 				.should('eq', '10px');
