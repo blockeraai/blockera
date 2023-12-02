@@ -8,7 +8,7 @@ export type TRangeControlProps = {
 	field?: string,
 	columns?: string,
 	defaultValue?: number | string,
-	onChange?: () => {},
+	onChange?: (number | string) => number | string,
 	min?: number,
 	max?: number,
 	withInputField?: boolean,
