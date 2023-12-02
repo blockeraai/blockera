@@ -7,7 +7,10 @@ import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import {
+	controlClassNames,
+	controlInnerClassNames,
+} from '@publisher/classnames';
 import {
 	isFunction,
 	isNumber,
@@ -38,6 +41,7 @@ export function NumberInput({
 	arrows = false,
 	drag = true,
 	float = true,
+	actions = '',
 	...props
 }: TNumberInput): MixedElement {
 	// get the minimum value in number type
@@ -209,73 +213,77 @@ export function NumberInput({
 				{...getDragEvent()}
 			/>
 
-			{arrows && (
-				<div
-					className={controlClassNames(
-						'input-arrows',
-						disabled && 'is-disabled'
-					)}
-					data-test="arrows-container"
-				>
-					<span
+			<div className={controlInnerClassNames('input-actions')}>
+				{actions}
+
+				{arrows && (
+					<div
 						className={controlClassNames(
-							'input-arrow',
-							'input-arrow-up',
-							getMaxValue()?.max !== '' &&
-								+value >= +getMaxValue().max
-								? 'is-disabled'
-								: ''
+							'input-arrows',
+							disabled && 'is-disabled'
 						)}
-						onClick={() => {
-							let newValue = value !== '' ? +value : 0;
-
-							newValue += 1;
-
-							// don't let user set value bigger than max value
-							if (
+						data-test="arrows-container"
+					>
+						<span
+							className={controlClassNames(
+								'input-arrow',
+								'input-arrow-up',
 								getMaxValue()?.max !== '' &&
-								newValue > +getMaxValue().max
-							) {
-								newValue = +getMaxValue().max;
-							}
+									+value >= +getMaxValue().max
+									? 'is-disabled'
+									: ''
+							)}
+							onClick={() => {
+								let newValue = value !== '' ? +value : 0;
 
-							setValue(newValue);
-						}}
-						data-test="arrow-up"
-					>
-						<ArrowUpIcon />
-					</span>
+								newValue += 1;
 
-					<span
-						className={controlClassNames(
-							'input-arrow',
-							'input-arrow-down',
-							getMinValue()?.min !== '' &&
-								+value <= +getMinValue().min
-								? 'is-disabled'
-								: ''
-						)}
-						onClick={() => {
-							let newValue = value !== '' ? +value : 0;
+								// don't let user set value bigger than max value
+								if (
+									getMaxValue()?.max !== '' &&
+									newValue > +getMaxValue().max
+								) {
+									newValue = +getMaxValue().max;
+								}
 
-							newValue -= 1;
+								setValue(newValue);
+							}}
+							data-test="arrow-up"
+						>
+							<ArrowUpIcon />
+						</span>
 
-							// don't let user set value bigger than max value
-							if (
+						<span
+							className={controlClassNames(
+								'input-arrow',
+								'input-arrow-down',
 								getMinValue()?.min !== '' &&
-								newValue < +getMinValue()?.min
-							) {
-								newValue = +getMinValue()?.min;
-							}
+									+value <= +getMinValue().min
+									? 'is-disabled'
+									: ''
+							)}
+							onClick={() => {
+								let newValue = value !== '' ? +value : 0;
 
-							setValue(newValue);
-						}}
-						data-test="arrow-down"
-					>
-						<ArrowDownIcon />
-					</span>
-				</div>
-			)}
+								newValue -= 1;
+
+								// don't let user set value bigger than max value
+								if (
+									getMinValue()?.min !== '' &&
+									newValue < +getMinValue()?.min
+								) {
+									newValue = +getMinValue()?.min;
+								}
+
+								setValue(newValue);
+							}}
+							data-test="arrow-down"
+						>
+							<ArrowDownIcon />
+						</span>
+					</div>
+				)}
+			</div>
 		</>
 	);
 }

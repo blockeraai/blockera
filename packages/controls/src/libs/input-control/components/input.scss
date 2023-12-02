@@ -138,10 +138,7 @@
 
 	.publisher-control-input-arrows {
 
-		position: absolute;
 		display: flex;
-		right: 3px;
-		top: 4px;
 		flex-direction: column;
 		gap: 0;
 		color: var(--publisher-controls-placeholder-color);
@@ -152,6 +149,10 @@
 			user-select: none;
 			opacity: 0.5;
 
+		}
+
+		&:first-child {
+			margin-right: 3px;
 		}
 
 		.publisher-control-input-arrow {
@@ -182,12 +183,6 @@
 
 	}
 
-	&.input-unit .publisher-control-input-arrows {
-
-		right: 38px;
-
-	}
-
 	&:hover:not(.is-disabled) {
 
 		.publisher-control-input-arrows {
@@ -207,6 +202,17 @@
 
 		}
 
+	}
+
+	.publisher-control-input-actions {
+		position: absolute;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		display: flex;
+		gap: 2px;
+		align-items: center;
+		flex-direction: row-reverse;
 	}
 
 }

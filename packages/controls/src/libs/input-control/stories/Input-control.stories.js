@@ -1001,6 +1001,121 @@ export const CssInput = {
 					float={false}
 				/>
 			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: {
+						percent: '10%',
+						px: '10px',
+						rem: '10rem',
+						deg: '10deg',
+						dvw: '10dvw',
+						xyzg: '10xyzg',
+						func: 'calc(10px + 10px)func',
+					},
+				}}
+			>
+				<Flex direction="column" gap="10px">
+					<ControlWithHooks
+						Control={InputControl}
+						{...args}
+						unitType="general"
+						label="Units Length"
+						id="percent"
+					/>
+
+					<ControlWithHooks
+						Control={InputControl}
+						{...args}
+						unitType="general"
+						id="percent"
+						arrows={true}
+					/>
+
+					<ControlWithHooks
+						Control={InputControl}
+						{...args}
+						unitType="general"
+						id="px"
+					/>
+
+					<ControlWithHooks
+						Control={InputControl}
+						{...args}
+						unitType="general"
+						id="px"
+						arrows={true}
+					/>
+
+					<ControlWithHooks
+						Control={InputControl}
+						{...args}
+						unitType="general"
+						id="rem"
+					/>
+
+					<ControlWithHooks
+						Control={InputControl}
+						{...args}
+						unitType="general"
+						id="rem"
+						arrows={true}
+					/>
+
+					<ControlWithHooks
+						Control={InputControl}
+						{...args}
+						unitType="general"
+						id="deg"
+					/>
+
+					<ControlWithHooks
+						Control={InputControl}
+						{...args}
+						unitType="general"
+						id="deg"
+						arrows={true}
+					/>
+
+					<ControlWithHooks
+						Control={InputControl}
+						{...args}
+						unitType="general"
+						id="dvw"
+					/>
+
+					<ControlWithHooks
+						Control={InputControl}
+						{...args}
+						unitType="general"
+						id="dvw"
+						arrows={true}
+					/>
+
+					<ControlWithHooks
+						Control={InputControl}
+						{...args}
+						unitType="general"
+						id="xyzg"
+					/>
+
+					<ControlWithHooks
+						Control={InputControl}
+						{...args}
+						unitType="general"
+						id="xyzg"
+						arrows={true}
+					/>
+
+					<ControlWithHooks
+						Control={InputControl}
+						{...args}
+						unitType="general"
+						id="func"
+					/>
+				</Flex>
+			</ControlContextProvider>
 		</Flex>
 	),
 };

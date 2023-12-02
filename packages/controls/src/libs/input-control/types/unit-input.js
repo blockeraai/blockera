@@ -1,5 +1,7 @@
 // @flow
 
+import type { Node } from 'react';
+
 export type TUnitInput = {
 	value: string,
 	setValue: (value: string) => void,
@@ -14,4 +16,5 @@ export type TUnitInput = {
 	max?: number,
 	drag?: boolean,
 	float?: boolean,
+	actions?: Node,
 };

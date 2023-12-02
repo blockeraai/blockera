@@ -117,6 +117,133 @@ export function UnitInput({
 		setIsMaximizeVisible((state) => !state);
 	};
 
+	function getInputActions() {
+		return (
+			<>
+				<ConditionalWrapper
+					condition={!disabled}
+					wrapper={(children) => (
+						<Tooltip text={__('Select Unit', 'publisher-core')}>
+							{children}
+						</Tooltip>
+					)}
+				>
+					<select
+						disabled={disabled}
+						onChange={(e) => onChangeSelect(e.target.value)}
+						value={unitValue.value}
+						className={controlInnerClassNames(
+							'unit-select',
+							!isSpecialUnit(unitValue.value) && 'hide-arrow',
+							'unit-length-' + unitValue.value.length,
+							'unit-' + unitValue.value
+						)}
+						aria-label={__('Select Unit', 'publisher-blocks')}
+					>
+						{units.map((unit, key) => (
+							<>
+								{!isUndefined(unit?.options) ? (
+									<optgroup label={unit.label}>
+										{unit?.options.map((_unit, _key) => (
+											<option
+												key={_key}
+												value={_unit?.value}
+											>
+												{_unit?.label}
+											</option>
+										))}
+									</optgroup>
+								) : (
+									<option key={key} value={unit?.value}>
+										{unit?.label}
+									</option>
+								)}
+							</>
+						))}
+
+						{!isUndefined(unitValue?.notFound) &&
+							unitValue.notFound === true && (
+								<option
+									key={unitValue.value}
+									value={unitValue.value}
+								>
+									{unitValue.label}
+								</option>
+							)}
+					</select>
+				</ConditionalWrapper>
+
+				{unitValue.value === 'func' && (
+					<>
+						<Button
+							size="input"
+							contentAlign="left"
+							onClick={() => {
+								toggleIsMaximizeVisible();
+							}}
+							className={controlInnerClassNames(
+								'maximise-btn',
+								isMaximizeVisible && 'is-open-popover'
+							)}
+							noBorder={true}
+							showTooltip={!disabled}
+							label={__('Open Editor', 'publisher-core')}
+							disabled={disabled}
+						>
+							<MaximizeIcon />
+						</Button>
+
+						{isMaximizeVisible && (
+							<Popover
+								title={__(
+									'CSS Functions and Vars',
+									'publisher-core'
+								)}
+								offset={125}
+								placement="left-start"
+								className={controlInnerClassNames(
+									'typography-popover'
+								)}
+								onClose={() => {
+									setIsMaximizeVisible(false);
+								}}
+							>
+								<TextAreaControl
+									value={inputValue}
+									defaultValue={defaultValue}
+									onChange={(value) => {
+										setInputValue(value);
+										return value;
+									}}
+									height={100}
+								/>
+
+								<Flex
+									style={{
+										color: 'var(--publisher-controls-placeholder-color)',
+										gap: '8px',
+										padding: '10px 0px 5px',
+										fontSize: '12px',
+									}}
+								>
+									<span>
+										<InfoIcon />
+									</span>
+									<span>
+										{__(
+											'You can use CSS functions like calc, min, max, etc., and also CSS variables.',
+											'publisher-core'
+										)}
+									</span>
+								</Flex>
+							</Popover>
+						)}
+					</>
+				)}
+			</>
+		);
+	}
+
 	return (
 		<div
 			className={controlClassNames(
@@ -130,7 +257,7 @@ export function UnitInput({
 				className
 			)}
 		>
-			{!isSpecialUnit(unitValue?.value) && (
+			{!isSpecialUnit(unitValue?.value) ? (
 				<>
 					{unitValue.format === 'number' ? (
 						<NumberInput
@@ -148,6 +275,7 @@ export function UnitInput({
 							range={isActiveRange}
 							drag={drag}
 							float={float}
+							actions={getInputActions()}
 							{...props}
 						/>
 					) : (
@@ -161,127 +289,14 @@ export function UnitInput({
 								!isValidValue && 'invalid',
 								className
 							)}
+							actions={getInputActions()}
 							{...props}
 							type={unitValue?.format}
 						/>
 					)}
 				</>
-			)}
-
-			<ConditionalWrapper
-				condition={!disabled}
-				wrapper={(children) => (
-					<Tooltip text={__('Select Unit', 'publisher-core')}>
-						{children}
-					</Tooltip>
-				)}
-			>
-				<select
-					disabled={disabled}
-					onChange={(e) => onChangeSelect(e.target.value)}
-					value={unitValue.value}
-					className={controlInnerClassNames(
-						'unit-select',
-						!isSpecialUnit(unitValue.value) && 'hide-arrow'
-					)}
-					aria-label={__('Select Unit', 'publisher-blocks')}
-				>
-					{units.map((unit, key) => (
-						<>
-							{!isUndefined(unit?.options) ? (
-								<optgroup label={unit.label}>
-									{unit?.options.map((_unit, _key) => (
-										<option key={_key} value={_unit?.value}>
-											{_unit?.label}
-										</option>
-									))}
-								</optgroup>
-							) : (
-								<option key={key} value={unit?.value}>
-									{unit?.label}
-								</option>
-							)}
-						</>
-					))}
-
-					{!isUndefined(unitValue?.notFound) &&
-						unitValue.notFound === true && (
-							<option
-								key={unitValue.value}
-								value={unitValue.value}
-							>
-								{unitValue.label}
-							</option>
-						)}
-				</select>
-			</ConditionalWrapper>
-
-			{unitValue.value === 'func' && (
-				<>
-					<Button
-						size="input"
-						contentAlign="left"
-						onClick={() => {
-							toggleIsMaximizeVisible();
-						}}
-						className={controlInnerClassNames(
-							'maximise-btn',
-							isMaximizeVisible && 'is-open-popover'
-						)}
-						noBorder={true}
-						showTooltip={!disabled}
-						label={__('Open Editor', 'publisher-core')}
-						disabled={disabled}
-					>
-						<MaximizeIcon />
-					</Button>
-
-					{isMaximizeVisible && (
-						<Popover
-							title={__(
-								'CSS Functions and Vars',
-								'publisher-core'
-							)}
-							offset={125}
-							placement="left-start"
-							className={controlInnerClassNames(
-								'typography-popover'
-							)}
-							onClose={() => {
-								setIsMaximizeVisible(false);
-							}}
-						>
-							<TextAreaControl
-								value={inputValue}
-								defaultValue={defaultValue}
-								onChange={(value) => {
-									setInputValue(value);
-									return value;
-								}}
-								height={100}
-							/>
-
-							<Flex
-								style={{
-									color: 'var(--publisher-controls-placeholder-color)',
-									gap: '8px',
-									padding: '10px 0px 5px',
-									fontSize: '12px',
-								}}
-							>
-								<span>
-									<InfoIcon />
-								</span>
-								<span>
-									{__(
-										'You can use CSS functions like calc, min, max, etc., and also CSS variables.',
-										'publisher-core'
-									)}
-								</span>
-							</Flex>
-						</Popover>
-					)}
-				</>
+			) : (
+				<>{getInputActions()}</>
 			)}
 		</div>
 	);

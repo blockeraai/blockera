@@ -1,5 +1,7 @@
 // @flow
 
+import type { Node } from 'react';
+
 export type TInputItem = {
 	unitType?:
 		| ''
@@ -39,4 +41,5 @@ export type TInputItem = {
 	disabled?: boolean,
 	drag?: boolean,
 	float?: boolean,
+	actions?: Node,
 };

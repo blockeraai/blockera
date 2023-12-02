@@ -8,7 +8,10 @@ import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import {
+	controlClassNames,
+	controlInnerClassNames,
+} from '@publisher/classnames';
 import { isFunction } from '@publisher/utils';
 
 /**
@@ -24,6 +27,7 @@ export function OtherInput({
 	className,
 	disabled,
 	validator,
+	actions,
 	...props
 }: TOtherInput): MixedElement {
 	const [isValidValue, setIsValidValue] = useState(true);
@@ -45,18 +49,23 @@ export function OtherInput({
 	}, [value]); // eslint-disable-line
 
 	return (
-		<input
-			value={value}
-			disabled={disabled}
-			className={controlClassNames(
-				'input-tag',
-				!isValidValue && 'invalid',
-				noBorder && 'no-border',
-				className
-			)}
-			type={type}
-			{...props}
-			onChange={(e) => setValue(e.target.value)}
-		/>
+		<>
+			<input
+				value={value}
+				disabled={disabled}
+				className={controlClassNames(
+					'input-tag',
+					!isValidValue && 'invalid',
+					noBorder && 'no-border',
+					className
+				)}
+				type={type}
+				{...props}
+				onChange={(e) => setValue(e.target.value)}
+			/>
+			<div className={controlInnerClassNames('input-actions')}>
+				{actions}
+			</div>
+		</>
 	);
 }

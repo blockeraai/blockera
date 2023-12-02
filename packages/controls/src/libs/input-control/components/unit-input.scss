@@ -3,29 +3,25 @@
 	&:not(.publisher-control-unit-special) {
 
 		.publisher-control-unit-select {
-
 			appearance: none;
 			border: none;
 			display: block;
 			outline: none;
-			margin: 0;
 			min-height: auto;
-			position: absolute;
-			width: 35px;
+			width: 38px;
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			font-size: 11px;
 			color: var(--publisher-controls-placeholder-color);
 			font-weight: 500;
-			padding: 0;
+			padding: 0 5px 0 0;
 			text-align: center;
 			height: 28px;
 			line-height: 28px;
-			top: 1px;
-			right: 0;
 			border-radius: 0 2px 2px 0;
 			transition: box-shadow 0.1s linear, border 0.1s linear;
+			margin: 1px 0 0;
 
 			&:not(:disabled) {
 				cursor: pointer;
@@ -46,6 +42,22 @@
 				background: transparent;
 			}
 
+			&.unit-length-1 {
+				width: 22px;
+			}
+
+			&.unit-length-2 {
+				width: 24px;
+			}
+
+			&.unit-length-3 {
+				width: 35px;
+			}
+
+			&.unit-func {
+				padding-left: 2px;
+				width: 40px;
+			}
 		}
 
 	}
@@ -120,10 +132,8 @@
 		width: 20px;
 		height: 20px;
 		line-height: 20px;
-		position: absolute;
-		top: 5px;
-		right: 40px;
 		justify-content: center !important;
+		margin-right: 2px;
 
 		&:hover:not(.is-open-popover) {
 

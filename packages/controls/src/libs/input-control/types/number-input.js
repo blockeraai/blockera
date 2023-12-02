@@ -1,4 +1,5 @@
 // @flow
+import type { Node } from 'react';
 
 export type TNumberInput = {
 	value: number | string,
@@ -13,4 +14,5 @@ export type TNumberInput = {
 	arrows?: boolean,
 	drag?: boolean,
 	float?: boolean,
+	actions?: Node,
 };
