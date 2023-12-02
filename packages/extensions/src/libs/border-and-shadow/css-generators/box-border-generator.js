@@ -14,31 +14,41 @@ export function BoxBorderGenerator(id, props, styleEngine) {
 
 	if (attributes?.publisherBorder?.type === 'all') {
 		if (attributes.publisherBorder.all.width) {
-			properties.border = `${attributes.publisherBorder.all.width} ${attributes.publisherBorder.all.style} ${attributes.publisherBorder.all.color}`;
+			properties.border = `${attributes.publisherBorder.all.width} ${
+				attributes.publisherBorder.all.style || 'solid'
+			} ${attributes.publisherBorder.all.color}`;
 		}
-	} else if (attributes.publisherBorder.top.width) {
+	} else {
 		if (attributes.publisherBorder.top.width) {
-			properties[
-				'border-top'
-			] = `${attributes.publisherBorder.top.width} ${attributes.publisherBorder.top.style} ${attributes.publisherBorder.top.color}`;
+			properties['border-top'] = `${
+				attributes.publisherBorder.top.width
+			} ${attributes.publisherBorder.top.style || 'solid'} ${
+				attributes.publisherBorder.top.color
+			}`;
 		}
 
 		if (attributes.publisherBorder.right.width) {
-			properties[
-				'border-right'
-			] = `${attributes.publisherBorder.right.width} ${attributes.publisherBorder.right.style} ${attributes.publisherBorder.right.color}`;
+			properties['border-right'] = `${
+				attributes.publisherBorder.right.width
+			} ${attributes.publisherBorder.right.style || 'solid'} ${
+				attributes.publisherBorder.right.color
+			}`;
 		}
 
 		if (attributes.publisherBorder.bottom.width) {
-			properties[
-				'border-bottom'
-			] = `${attributes.publisherBorder.bottom.width} ${attributes.publisherBorder.bottom.style} ${attributes.publisherBorder.bottom.color}`;
+			properties['border-bottom'] = `${
+				attributes.publisherBorder.bottom.width
+			} ${attributes.publisherBorder.bottom.style || 'solid'} ${
+				attributes.publisherBorder.bottom.color
+			}`;
 		}
 
 		if (attributes.publisherBorder.left.width) {
-			properties[
-				'border-left'
-			] = `${attributes.publisherBorder.left.width} ${attributes.publisherBorder.left.style} ${attributes.publisherBorder.left.color}`;
+			properties['border-left'] = `${
+				attributes.publisherBorder.left.width
+			} ${attributes.publisherBorder.left.style || 'solid'} ${
+				attributes.publisherBorder.left.color
+			}`;
 		}
 	}
 

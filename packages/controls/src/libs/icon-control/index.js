@@ -1,9 +1,11 @@
+// @flow
 /**
  * External dependencies
  */
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 import { memo, useState, useReducer } from '@wordpress/element';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -26,6 +28,7 @@ import { default as DeleteIcon } from './icons/delete';
 import { default as Suggestions } from './components/suggestions';
 import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
 import { BaseControl } from '../index';
+import type { Props } from './types';
 
 function IconControl({
 	suggestionsQuery,
@@ -42,7 +45,7 @@ function IconControl({
 	onChange,
 	//
 	className,
-}) {
+}: Props): MixedElement {
 	const { value, setValue } = useControlContext({
 		defaultValue,
 		onChange,
@@ -56,6 +59,7 @@ function IconControl({
 
 	const [isOpenModal, setOpenModal] = useState(false);
 
+	// $FlowFixMe
 	const openModal = (event) => {
 		const target = event.target;
 		if (
@@ -75,6 +79,7 @@ function IconControl({
 		handleIconSelect,
 	};
 
+	// $FlowFixMe
 	function dispatchActions(action) {
 		currentIconDispatch(action);
 		setOpenModal(false);
@@ -96,6 +101,7 @@ function IconControl({
 		return currentIcon.icon !== '';
 	}
 
+	// $FlowFixMe
 	function handleIconSelect(event, action) {
 		event.stopPropagation();
 
@@ -193,6 +199,7 @@ function IconControl({
 									mode="upload"
 									render={({ open }) => (
 										<Button
+											data-cy="upload-svg-btn"
 											className="btn-upload"
 											noBorder={true}
 											onClick={(event) => {
@@ -274,4 +281,5 @@ IconControl.defaultProps = {
 	field: 'icon',
 };
 
+// $FlowFixMe
 export default memo(IconControl, hasSameProps);

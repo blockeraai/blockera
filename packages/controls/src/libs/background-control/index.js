@@ -74,6 +74,7 @@ export default function BackgroundControl({
 
 	return (
 		<RepeaterControl
+			defaultValue={defaultValue}
 			className={controlClassNames('background', className)}
 			popoverLabel={popoverLabel}
 			repeaterItemHeader={RepeaterItemHeader}

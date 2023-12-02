@@ -31,53 +31,62 @@ class Border extends BaseStyleDefinition {
 
 				if ( count( $value ) < 3 ) {
 
-					$props['border'] = implode(
-						' ',
-						array_filter(
-							array_map(
-								static function ( string $item ) {
-
-									return $item;
-								},
-								$value['all'] ?? []
+					if ( $value['all']['width'] !== '' ) {
+						$props['border'] = trim(
+							sprintf(
+								'%s %s %s',
+								$value['all']['width'],
+								$value['all']['style'] !== '' ? $value['all']['style'] : 'solid',
+								$value['all']['color'] ?? '',
 							)
-						)
-					);
+						);
+					}
 
 				} else {
 
-					$props['border-top']    = trim(
-						sprintf(
-							'%s %s %s',
-							$value['top']['width'] ?? '',
-							$value['top']['style'] ?? '',
-							$value['top']['color'] ?? '',
-						)
-					);
-					$props['border-right']  = trim(
-						sprintf(
-							'%s %s %s',
-							$value['right']['width'] ?? '',
-							$value['right']['style'] ?? '',
-							$value['right']['color'] ?? '',
-						)
-					);
-					$props['border-bottom'] = trim(
-						sprintf(
-							'%s %s %s',
-							$value['bottom']['width'] ?? '',
-							$value['bottom']['style'] ?? '',
-							$value['bottom']['color'] ?? '',
-						)
-					);
-					$props['border-left']   = trim(
-						sprintf(
-							'%s %s %s',
-							$value['left']['width'] ?? '',
-							$value['left']['style'] ?? '',
-							$value['left']['color'] ?? '',
-						)
-					);
+					if ( $value['top']['width'] !== '' ) {
+						$props['border-top'] = trim(
+							sprintf(
+								'%s %s %s',
+								$value['top']['width'],
+								$value['top']['style'] !== '' ? $value['top']['style'] : 'solid',
+								$value['top']['color'] ?? '',
+							)
+						);
+					}
+
+					if ( $value['right']['width'] !== '' ) {
+						$props['border-right'] = trim(
+							sprintf(
+								'%s %s %s',
+								$value['right']['width'],
+								$value['right']['style'] !== '' ? $value['right']['style'] : 'solid',
+								$value['right']['color'] ?? '',
+							)
+						);
+					}
+
+					if ( $value['bottom']['width'] !== '' ) {
+						$props['border-bottom'] = trim(
+							sprintf(
+								'%s %s %s',
+								$value['bottom']['width'],
+								$value['bottom']['style'] !== '' ? $value['bottom']['style'] : 'solid',
+								$value['bottom']['color'] ?? '',
+							)
+						);
+					}
+
+					if ( $value['left']['width'] !== '' ) {
+						$props['border-left'] = trim(
+							sprintf(
+								'%s %s %s',
+								$value['left']['width'],
+								$value['left']['style'] !== '' ? $value['left']['style'] : 'solid',
+								$value['left']['color'] ?? '',
+							)
+						);
+					}
 				}
 				break;
 			case 'border-radius':
