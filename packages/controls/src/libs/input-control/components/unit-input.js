@@ -14,7 +14,7 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { isFunction, isUndefined } from '@publisher/utils';
-import { Popover, Button, Flex } from '@publisher/components';
+import { Popover, Button, Flex, Tooltip } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -162,41 +162,46 @@ export function UnitInput({
 				</>
 			)}
 
-			<select
-				disabled={disabled}
-				onChange={(e) => onChangeSelect(e.target.value)}
-				value={unitValue.value}
-				className={controlInnerClassNames(
-					'unit-select',
-					!isSpecialUnit(unitValue.value) && 'hide-arrow'
-				)}
-				aria-label={__('Select unit', 'publisher-blocks')}
-			>
-				{units.map((unit, key) => (
-					<>
-						{!isUndefined(unit?.options) ? (
-							<optgroup label={unit.label}>
-								{unit?.options.map((_unit, _key) => (
-									<option key={_key} value={_unit?.value}>
-										{_unit?.label}
-									</option>
-								))}
-							</optgroup>
-						) : (
-							<option key={key} value={unit?.value}>
-								{unit?.label}
+			<Tooltip text="Select Unit">
+				<select
+					disabled={disabled}
+					onChange={(e) => onChangeSelect(e.target.value)}
+					value={unitValue.value}
+					className={controlInnerClassNames(
+						'unit-select',
+						!isSpecialUnit(unitValue.value) && 'hide-arrow'
+					)}
+					aria-label={__('Select Unit', 'publisher-blocks')}
+				>
+					{units.map((unit, key) => (
+						<>
+							{!isUndefined(unit?.options) ? (
+								<optgroup label={unit.label}>
+									{unit?.options.map((_unit, _key) => (
+										<option key={_key} value={_unit?.value}>
+											{_unit?.label}
+										</option>
+									))}
+								</optgroup>
+							) : (
+								<option key={key} value={unit?.value}>
+									{unit?.label}
+								</option>
+							)}
+						</>
+					))}
+
+					{!isUndefined(unitValue?.notFound) &&
+						unitValue.notFound === true && (
+							<option
+								key={unitValue.value}
+								value={unitValue.value}
+							>
+								{unitValue.label}
 							</option>
 						)}
-					</>
-				))}
-
-				{!isUndefined(unitValue?.notFound) &&
-					unitValue.notFound === true && (
-						<option key={unitValue.value} value={unitValue.value}>
-							{unitValue.label}
-						</option>
-					)}
-			</select>
+				</select>
+			</Tooltip>
 
 			{unitValue.value === 'func' && (
 				<>
