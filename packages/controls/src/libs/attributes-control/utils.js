@@ -1,7 +1,13 @@
+// @flow
 /**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
+
+/**
+ * External dependencies
+ */
+import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
@@ -18,8 +24,15 @@ import { default as OlReversedIcon } from './icons/ol-reversed';
 import { default as OlStartIcon } from './icons/ol-start';
 import { default as AttributeDataIcon } from './icons/attribute-data';
 import { default as AttributeRequiredIcon } from './icons/attribute-required';
+import type {
+	TAttributeFieldKeyOptions,
+	TAttributeFieldValueOptions,
+	TOptionsReturn,
+} from './types';
 
-export function getAttributeFieldKeyOptions({ element = '' }) {
+export function getAttributeFieldKeyOptions({
+	element = '',
+}: TAttributeFieldKeyOptions): TOptionsReturn {
 	switch (element) {
 		case 'a':
 			return [
@@ -114,7 +127,7 @@ export function getAttributeFieldKeyOptions({ element = '' }) {
 export function getAttributeFieldValueOptions({
 	element = '',
 	attribute = '',
-}) {
+}: TAttributeFieldValueOptions): TOptionsReturn {
 	switch (element) {
 		case 'a':
 			switch (attribute) {
@@ -337,7 +350,10 @@ export function getAttributeFieldValueOptions({
 	return [];
 }
 
-export function getAttributeItemIcon({ element, attribute }) {
+export function getAttributeItemIcon({
+	element,
+	attribute,
+}: TAttributeFieldValueOptions): MixedElement {
 	switch (element) {
 		case 'a':
 			switch (attribute) {

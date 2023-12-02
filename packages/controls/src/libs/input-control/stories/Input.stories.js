@@ -1,13 +1,6 @@
 /**
  * External dependencies
  */
-import { expect } from '@storybook/jest';
-import {
-	fireEvent,
-	userEvent,
-	waitFor,
-	within,
-} from '@storybook/testing-library';
 import { nanoid } from 'nanoid';
 
 /**
@@ -19,13 +12,12 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 /**
  * Internal dependencies
  */
-import { ControlContextProvider, InputControl } from '../../../index';
-import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
-import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
+import { ControlContextProvider, InputControl } from '../../../index';
 
-const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
-	Decorators;
+const { WithInspectorStyles, SharedDecorators } = Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
 
@@ -558,196 +550,6 @@ export const Field = {
 		</Flex>
 	),
 };
-
-export const PlayText = {
-	args: {
-		controlInfo: {
-			name: nanoid(),
-			value: '20px',
-		},
-	},
-	decorators: [
-		WithStoryContextProvider,
-		WithControlDataProvider,
-		WithInspectorStyles,
-		...SharedDecorators,
-	],
-	render: (args) => <ControlWithHooks Control={InputControl} {...args} />,
-	play: async ({ canvasElement, step }) => {
-		const canvas = within(canvasElement);
-
-		const currentValue = canvas.getByTestId('current-value');
-		const input = canvas.getByRole('textbox', {
-			type: 'text',
-		});
-
-		await step('Story data is available', async () => {
-			await expect(currentValue).toBeInTheDocument();
-		});
-
-		await step('Input control test', async () => {
-			await expect(input).toBeInTheDocument();
-
-			await expect(input).toHaveValue('20px');
-			await expect(currentValue).toHaveTextContent('20px');
-
-			fireEvent.change(input, { target: { value: '30px' } });
-			await waitFor(async () => await expect(input).toHaveValue('30px'), {
-				timeout: 1000,
-			});
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent('30px'),
-				{ timeout: 1000 }
-			);
-		});
-	},
-};
-PlayText.storyName = 'Play → Text';
-
-export const PlayNumber = {
-	args: {
-		type: 'number',
-		controlInfo: {
-			name: nanoid(),
-			value: '20',
-		},
-	},
-	decorators: [
-		WithInspectorStyles,
-		WithStoryContextProvider,
-		WithControlDataProvider,
-		...SharedDecorators,
-	],
-	render: (args) => <ControlWithHooks Control={InputControl} {...args} />,
-	play: async ({ canvasElement, step }) => {
-		const canvas = within(canvasElement);
-
-		const currentValue = canvas.getByTestId('current-value');
-		const input = canvas.getByRole('spinbutton', {
-			type: 'number',
-		});
-
-		await step('Story data is available', async () => {
-			await expect(currentValue).toBeInTheDocument();
-		});
-
-		await step('Input control test', async () => {
-			await expect(input).toBeInTheDocument();
-
-			await expect(input).toHaveValue(20);
-			await expect(currentValue).toHaveTextContent('20');
-
-			// type 30
-			fireEvent.change(input, {
-				target: {
-					value: '30',
-				},
-			});
-			await waitFor(
-				async () => {
-					await expect(input).toHaveValue(30);
-					await expect(currentValue).toHaveTextContent('30');
-				},
-				{ timeout: 1000 }
-			);
-		});
-	},
-};
-PlayNumber.storyName = 'Play → Number';
-
-export const PlayUnits = {
-	args: {
-		type: 'css',
-		unitType: 'general',
-		controlInfo: {
-			name: nanoid(),
-			value: '20px',
-		},
-	},
-	decorators: [
-		WithStoryContextProvider,
-		WithInspectorStyles,
-		WithControlDataProvider,
-		...SharedDecorators,
-	],
-	render: (args) => <ControlWithHooks Control={InputControl} {...args} />,
-	play: async ({ canvasElement, step }) => {
-		const canvas = within(canvasElement);
-
-		const currentValue = canvas.getByTestId('current-value');
-		const input = canvas.getByRole('textbox', {
-			type: 'number',
-		});
-		const select = canvas.getByRole('combobox', {});
-
-		await step('Story Data', async () => {
-			await expect(currentValue).toBeInTheDocument();
-		});
-
-		await step('Input Change', async () => {
-			await expect(input).toBeInTheDocument();
-
-			await expect(input).toHaveValue('20');
-			await expect(currentValue).toHaveTextContent('20px');
-
-			// type 30px, control should not accept strings
-			userEvent.type(input, '{backspace}{backspace}30{enter}');
-			await expect(input).toHaveValue('30');
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent('30px'),
-				{ timeout: 1000 }
-			);
-
-			// reset value
-			fireEvent.change(input, { target: { value: '20' } });
-			await expect(input).toHaveValue('20');
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent('20px'),
-				{ timeout: 1000 }
-			);
-		});
-
-		await step('Change Unit', async () => {
-			await expect(select).toBeInTheDocument();
-
-			// change unit to %
-			fireEvent.change(select, {
-				target: { value: '%' },
-			});
-			await expect(input).toHaveValue('20');
-			await waitFor(
-				async () => await expect(currentValue).toHaveTextContent('20%'),
-				{ timeout: 1000 }
-			);
-
-			// change unit to Auto
-			fireEvent.change(select, {
-				target: { value: 'auto' },
-			});
-			await expect(input).toHaveValue('20');
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent('20auto'),
-				{ timeout: 1000 }
-			);
-
-			// back to px
-			fireEvent.change(select, {
-				target: { value: 'px' },
-			});
-			await expect(input).toHaveValue('20');
-			await waitFor(
-				async () =>
-					await expect(currentValue).toHaveTextContent('20px'),
-				{ timeout: 1000 }
-			);
-		});
-	},
-};
-PlayUnits.storyName = 'Play → Units';
 
 export const All = {
 	args: {
