@@ -229,7 +229,7 @@ export function UnitInput({
 							isMaximizeVisible && 'is-open-popover'
 						)}
 						noBorder={true}
-						showTooltip={true}
+						showTooltip={!disabled}
 						label={__('Open Editor', 'publisher-core')}
 						disabled={disabled}
 					>
