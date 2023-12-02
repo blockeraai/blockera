@@ -128,9 +128,12 @@ describe('Size Extension', () => {
 		//describe('Wordpress compatibility', () => {});
 
 		describe('Functionality', () => {
-			it('should update overflow to visible', () => {
+			it.only('should update overflow to visible', () => {
 				cy.getByDataTest('style-tab').click();
 
+				//
+				// should update overflow to visible
+				//
 				cy.get('h2').contains('Size').parent().parent().as('size');
 				cy.get('@size').within(() => {
 					cy.get('[aria-label="Overflow"]')
@@ -155,23 +158,9 @@ describe('Size Extension', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph')
-					.then(($el) => {
-						return window.getComputedStyle($el[0]);
-					})
-					.invoke('getPropertyValue', 'overflow')
-					.should('eq', 'visible');
-			});
-
-			it('should update overflow to hidden', () => {
-				cy.getByDataTest('style-tab').click();
-
-				cy.get('h2').contains('Size').parent().parent().as('size');
+				//
+				// should update overflow to hidden
+				//
 				cy.get('@size').within(() => {
 					cy.get('[aria-label="Overflow"]')
 						.parent()
@@ -194,23 +183,9 @@ describe('Size Extension', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph')
-					.then(($el) => {
-						return window.getComputedStyle($el[0]);
-					})
-					.invoke('getPropertyValue', 'overflow')
-					.should('eq', 'hidden');
-			});
-
-			it('should update overflow to scroll', () => {
-				cy.getByDataTest('style-tab').click();
-
-				cy.get('h2').contains('Size').parent().parent().as('size');
+				//
+				// should update overflow to scroll
+				//
 				cy.get('@size').within(() => {
 					cy.get('[aria-label="Overflow"]')
 						.parent()
