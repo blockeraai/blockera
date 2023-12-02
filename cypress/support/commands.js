@@ -77,3 +77,14 @@ Cypress.Commands.add(
 		element.dispatchEvent(new Event('input', { bubbles: true }));
 	}
 );
+// simulate paste event
+Cypress.Commands.add(
+	'pasteText',
+	{ prevSubject: 'element' },
+	(subject, text) => {
+		// eslint-disable-next-line cypress/unsafe-to-chain-command
+		cy.wrap(subject)
+			.type(text, { parseSpecialCharSequences: false })
+			.trigger('paste', { force: true });
+	}
+);
