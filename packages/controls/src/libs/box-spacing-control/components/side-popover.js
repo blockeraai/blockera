@@ -244,7 +244,7 @@ export function SidePopover({
 											aria-label="Set Auto"
 											className="auto-btn"
 											onClick={() => {
-												setValue('0auto');
+												setValue('auto');
 											}}
 											data-cy="box-spacing-set-auto"
 										>

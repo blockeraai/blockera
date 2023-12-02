@@ -149,7 +149,7 @@ describe('box spacing control component testing', () => {
 		cy.getByDataCy('box-spacing-set-auto').click();
 		// Check data provider value!
 		cy.then(() => {
-			const expectValue = '0auto';
+			const expectValue = 'auto';
 			return expect(getControlValue(name).margin.top).to.eq(expectValue);
 		});
 
