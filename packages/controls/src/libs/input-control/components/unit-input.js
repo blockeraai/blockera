@@ -14,7 +14,13 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { isFunction, isUndefined } from '@publisher/utils';
-import { Popover, Button, Flex, Tooltip } from '@publisher/components';
+import {
+	Popover,
+	Button,
+	Flex,
+	Tooltip,
+	ConditionalWrapper,
+} from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -162,7 +168,14 @@ export function UnitInput({
 				</>
 			)}
 
-			<Tooltip text="Select Unit">
+			<ConditionalWrapper
+				condition={!disabled}
+				wrapper={(children) => (
+					<Tooltip text={__('Select Unit', 'publisher-core')}>
+						{children}
+					</Tooltip>
+				)}
+			>
 				<select
 					disabled={disabled}
 					onChange={(e) => onChangeSelect(e.target.value)}
@@ -201,7 +214,7 @@ export function UnitInput({
 							</option>
 						)}
 				</select>
-			</Tooltip>
+			</ConditionalWrapper>
 
 			{unitValue.value === 'func' && (
 				<>
