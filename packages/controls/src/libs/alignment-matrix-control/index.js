@@ -16,7 +16,7 @@ import { Flex } from '@publisher/components';
  * Internal dependencies
  */
 import BaseControl from '../base-control';
-import { InputControl } from '../input-control';
+import { default as InputControl } from '../input-control';
 import { useControlContext } from '../../context';
 import { convertAlignmentMatrixCoordinates } from './utils';
 import type { Props } from './types';

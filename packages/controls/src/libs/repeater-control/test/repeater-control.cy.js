@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
 import { useControlContext } from '../../../context';
-import { InputControl } from '../../input-control';
+import { default as InputControl } from '../../input-control';
 import { STORE_NAME } from '../../repeater-control/store';
 import { RepeaterContext } from '../context';
 import RepeaterControl from '../index';
