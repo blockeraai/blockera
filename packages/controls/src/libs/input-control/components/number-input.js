@@ -201,9 +201,9 @@ export function NumberInput({
 				)}
 				onKeyDown={handleKeyDown}
 				onPaste={handlePaste}
-				{...props}
 				{...getMinValue()}
 				{...getMaxValue()}
+				{...props}
 				onChange={handleInputChange}
 				type="number"
 				{...getDragEvent()}
@@ -215,6 +215,7 @@ export function NumberInput({
 						'input-arrows',
 						disabled && 'is-disabled'
 					)}
+					data-test="arrows-container"
 				>
 					<span
 						className={controlClassNames(
@@ -230,7 +231,7 @@ export function NumberInput({
 
 							newValue += 1;
 
-							// dont let user to paste value bigger than max value
+							// don't let user set value bigger than max value
 							if (
 								getMaxValue()?.max !== '' &&
 								newValue > +getMaxValue().max
@@ -240,6 +241,7 @@ export function NumberInput({
 
 							setValue(newValue);
 						}}
+						data-test="arrow-up"
 					>
 						<ArrowUpIcon />
 					</span>
@@ -258,7 +260,7 @@ export function NumberInput({
 
 							newValue -= 1;
 
-							// dont let user to paste value bigger than max value
+							// don't let user set value bigger than max value
 							if (
 								getMinValue()?.min !== '' &&
 								newValue < +getMinValue()?.min
@@ -268,6 +270,7 @@ export function NumberInput({
 
 							setValue(newValue);
 						}}
+						data-test="arrow-down"
 					>
 						<ArrowDownIcon />
 					</span>
