@@ -199,6 +199,37 @@ export const Filled = {
 
 				<Flex direction="column" gap="15px">
 					<h2 className="story-heading">
+						Fill<span>All Auto</span>
+					</h2>
+
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								margin: {
+									top: 'auto',
+									right: 'auto',
+									bottom: 'auto',
+									left: 'auto',
+								},
+								padding: {
+									top: 'auto',
+									right: 'auto',
+									bottom: 'auto',
+									left: 'auto',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">
 						Fill<span>Func Unite</span>
 					</h2>
 
