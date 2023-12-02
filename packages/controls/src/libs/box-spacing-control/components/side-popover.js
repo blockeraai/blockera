@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useState, useEffect } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -21,6 +22,7 @@ export function SidePopover({
 	icon = '',
 	isOpen,
 	type = 'margin',
+	unit,
 	offset = 35,
 	onClose = () => {},
 	onChange = (newValue) => {
@@ -34,6 +36,14 @@ export function SidePopover({
 		defaultValue,
 	});
 
+	const [unitType, setUnitType] = useState('px');
+
+	useEffect(() => {
+		if (unit) {
+			setUnitType(unit);
+		}
+	}, [unit]);
+
 	function getAllActionButtons() {
 		return (
 			<Grid
@@ -45,11 +55,16 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 0px"
 					onClick={() => {
-						setValue('0px');
+						if (unitType === 'auto') {
+							setValue('0px');
+						} else {
+							setValue('0' + unitType);
+						}
 					}}
 					style={{
 						padding: '2px 0',
 					}}
+					data-cy="box-spacing-set-0"
 				>
 					0
 				</Button>
@@ -57,10 +72,17 @@ export function SidePopover({
 				<Button
 					size="small"
 					aria-label="Set 10px"
-					onClick={() => setValue('10px')}
+					onClick={() => {
+						if (unitType === 'auto') {
+							setValue('10px');
+						} else {
+							setValue('10' + unitType);
+						}
+					}}
 					style={{
 						padding: '2px 0',
 					}}
+					data-cy="box-spacing-set-10"
 				>
 					10
 				</Button>
@@ -68,10 +90,17 @@ export function SidePopover({
 				<Button
 					size="small"
 					aria-label="Set 20px"
-					onClick={() => setValue('20px')}
+					onClick={() => {
+						if (unitType === 'auto') {
+							setValue('20px');
+						} else {
+							setValue('20' + unitType);
+						}
+					}}
 					style={{
 						padding: '2px 0',
 					}}
+					data-cy="box-spacing-set-20"
 				>
 					20
 				</Button>
@@ -79,10 +108,17 @@ export function SidePopover({
 				<Button
 					size="small"
 					aria-label="Set 30px"
-					onClick={() => setValue('30px')}
+					onClick={() => {
+						if (unitType === 'auto') {
+							setValue('30px');
+						} else {
+							setValue('30' + unitType);
+						}
+					}}
 					style={{
 						padding: '2px 0',
 					}}
+					data-cy="box-spacing-set-30"
 				>
 					30
 				</Button>
@@ -91,11 +127,16 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 60px"
 					onClick={() => {
-						setValue('60px');
+						if (unitType === 'auto') {
+							setValue('60px');
+						} else {
+							setValue('60' + unitType);
+						}
 					}}
 					style={{
 						padding: '2px 0',
 					}}
+					data-cy="box-spacing-set-60"
 				>
 					60
 				</Button>
@@ -103,10 +144,17 @@ export function SidePopover({
 				<Button
 					size="small"
 					aria-label="Set 80px"
-					onClick={() => setValue('80px')}
+					onClick={() => {
+						if (unitType === 'auto') {
+							setValue('80px');
+						} else {
+							setValue('80' + unitType);
+						}
+					}}
 					style={{
 						padding: '2px 0',
 					}}
+					data-cy="box-spacing-set-80"
 				>
 					80
 				</Button>
@@ -114,10 +162,17 @@ export function SidePopover({
 				<Button
 					size="small"
 					aria-label="Set 100px"
-					onClick={() => setValue('100px')}
+					onClick={() => {
+						if (unitType === 'auto') {
+							setValue('100px');
+						} else {
+							setValue('100' + unitType);
+						}
+					}}
 					style={{
 						padding: '2px 0',
 					}}
+					data-cy="box-spacing-set-100"
 				>
 					100
 				</Button>
@@ -125,10 +180,17 @@ export function SidePopover({
 				<Button
 					size="small"
 					aria-label="Set 120px"
-					onClick={() => setValue('120px')}
+					onClick={() => {
+						if (unitType === 'auto') {
+							setValue('120px');
+						} else {
+							setValue('120' + unitType);
+						}
+					}}
 					style={{
 						padding: '2px 0',
 					}}
+					data-cy="box-spacing-set-120"
 				>
 					120
 				</Button>
@@ -184,6 +246,7 @@ export function SidePopover({
 											onClick={() => {
 												setValue('0auto');
 											}}
+											data-cy="box-spacing-set-auto"
 										>
 											{__('Auto', 'publisher-core')}
 										</Button>
