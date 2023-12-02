@@ -117,15 +117,17 @@ export function NumberInput({
 			''
 		);
 
-		if (getMinValue()?.min !== '' && value < getMinValue().min) {
-			value = getMinValue().min;
+		if (value !== '') {
+			if (getMinValue()?.min !== '' && value < getMinValue().min) {
+				value = getMinValue().min;
+			}
+
+			if (getMaxValue()?.max !== '' && value > getMaxValue().max) {
+				value = getMaxValue().max;
+			}
 		}
 
-		if (getMaxValue()?.max !== '' && value > getMaxValue().max) {
-			value = getMaxValue().max;
-		}
-
-		setValue(value);
+		setValue(value !== '' ? +value : value);
 	};
 
 	const [isValidValue, setIsValidValue] = useState(true);
@@ -233,7 +235,7 @@ export function NumberInput({
 								getMaxValue()?.max !== '' &&
 								newValue > +getMaxValue().max
 							) {
-								newValue = getMaxValue().max;
+								newValue = +getMaxValue().max;
 							}
 
 							setValue(newValue);
@@ -261,7 +263,7 @@ export function NumberInput({
 								getMinValue()?.min !== '' &&
 								newValue < +getMinValue()?.min
 							) {
-								newValue = getMinValue()?.min;
+								newValue = +getMinValue()?.min;
 							}
 
 							setValue(newValue);
