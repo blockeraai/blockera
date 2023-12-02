@@ -1182,7 +1182,7 @@ export function extractNumberAndUnit(value: Object | string): Object {
 	if (isObject(value)) {
 		return {
 			value: value?.value || '',
-			unit: value?.unit || 'func',
+			unit: value?.unit || '',
 		};
 	}
 
