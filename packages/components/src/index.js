@@ -9,3 +9,4 @@ export { default as Divider } from './divider';
 export { default as Popover } from './popover';
 export { default as MediaUploader } from './media-uploader';
 export { default as Tooltip } from './tooltip';
+export { default as ConditionalWrapper } from './conditional-wrapper';
