@@ -1,7 +1,9 @@
 module.exports = {
+	parser: 'hermes-eslint',
 	extends: [
 		'plugin:@wordpress/eslint-plugin/recommended',
 		'plugin:cypress/recommended',
+		'plugin:ft-flow/recommended',
 	],
 	rules: {
 		'prettier/prettier': [
