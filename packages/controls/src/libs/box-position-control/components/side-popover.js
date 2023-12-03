@@ -79,7 +79,11 @@ export function SidePopover({
 								aria-label={__('Set 0px', 'publisher-core')}
 								size="small"
 								onClick={() => {
-									setValue('0' + unitType);
+									if (unitType === 'func') {
+										setValue('0px');
+									} else {
+										setValue('0' + unitType);
+									}
 								}}
 								data-cy="set-0"
 							>
@@ -89,7 +93,13 @@ export function SidePopover({
 							<Button
 								aria-label={__('Set 10px', 'publisher-core')}
 								size="small"
-								onClick={() => setValue('10' + unitType)}
+								onClick={() => {
+									if (unitType === 'func') {
+										setValue('10px');
+									} else {
+										setValue('10' + unitType);
+									}
+								}}
 								data-cy="set-10"
 							>
 								10
@@ -98,7 +108,13 @@ export function SidePopover({
 							<Button
 								aria-label={__('Set 20px', 'publisher-core')}
 								size="small"
-								onClick={() => setValue('20' + unitType)}
+								onClick={() => {
+									if (unitType === 'func') {
+										setValue('20px');
+									} else {
+										setValue('20' + unitType);
+									}
+								}}
 								data-cy="set-20"
 							>
 								20
@@ -107,7 +123,13 @@ export function SidePopover({
 							<Button
 								aria-label={__('Set 30px', 'publisher-core')}
 								size="small"
-								onClick={() => setValue('30' + unitType)}
+								onClick={() => {
+									if (unitType === 'func') {
+										setValue('30px');
+									} else {
+										setValue('30' + unitType);
+									}
+								}}
 								data-cy="set-30"
 							>
 								30
@@ -117,7 +139,11 @@ export function SidePopover({
 								aria-label={__('Set 60px', 'publisher-core')}
 								size="small"
 								onClick={() => {
-									setValue('60' + unitType);
+									if (unitType === 'func') {
+										setValue('60px');
+									} else {
+										setValue('60' + unitType);
+									}
 								}}
 								data-cy="set-60"
 							>
@@ -127,7 +153,13 @@ export function SidePopover({
 							<Button
 								aria-label={__('Set 80px', 'publisher-core')}
 								size="small"
-								onClick={() => setValue('80' + unitType)}
+								onClick={() => {
+									if (unitType === 'func') {
+										setValue('80px');
+									} else {
+										setValue('80' + unitType);
+									}
+								}}
 								data-cy="set-80"
 							>
 								80
@@ -136,7 +168,13 @@ export function SidePopover({
 							<Button
 								aria-label={__('Set 100px', 'publisher-core')}
 								size="small"
-								onClick={() => setValue('100' + unitType)}
+								onClick={() => {
+									if (unitType === 'func') {
+										setValue('100px');
+									} else {
+										setValue('100' + unitType);
+									}
+								}}
 								data-cy="set-100"
 							>
 								100
@@ -145,7 +183,13 @@ export function SidePopover({
 							<Button
 								aria-label={__('Set 120px', 'publisher-core')}
 								size="small"
-								onClick={() => setValue('120' + unitType)}
+								onClick={() => {
+									if (unitType === 'func') {
+										setValue('120px');
+									} else {
+										setValue('120' + unitType);
+									}
+								}}
 								data-cy="set-120"
 							>
 								120
