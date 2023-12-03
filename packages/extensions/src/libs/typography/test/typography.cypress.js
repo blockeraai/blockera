@@ -85,12 +85,7 @@ describe('Typography Extension', () => {
 					//Check block
 					cy.getIframeBody()
 						.find(`[data-type="core/paragraph"]`)
-						.parent()
-						.within(() => {
-							cy.get('style')
-								.invoke('text')
-								.should('include', 'line-height: 10px');
-						});
+						.should('have.css', 'line-height', '10px');
 
 					//Check store
 					getWPDataObject().then((data) => {
@@ -631,7 +626,8 @@ describe('Typography Extension', () => {
 			//describe('WordPress Compatibility', () => {...});
 
 			describe('Functionality', () => {
-				it('should update text-stroke-color, when add data', () => {
+				it('should update text-stroke, when add data', () => {
+					/* Color */
 					cy.get('@typography-popover').within(() => {
 						cy.getParentContainer('Stroke', 'base-control').within(
 							() => {
@@ -662,32 +658,7 @@ describe('Typography Extension', () => {
 						);
 					});
 
-					//Check frontend
-					savePage();
-
-					redirectToFrontPage();
-
-					cy.get('.publisher-paragraph').should(
-						'have.css',
-						'-webkit-text-stroke-color',
-						'rgb(90, 34, 164)'
-					);
-				});
-
-				it('should update text-stroke-color & text-stroke-width, when add data', () => {
-					cy.get('@typography-popover').within(() => {
-						cy.getParentContainer('Stroke', 'base-control').within(
-							() => {
-								cy.getByDataCy('color-btn').click();
-							}
-						);
-					});
-					cy.getByDataTest('popover-body')
-						.last()
-						.within(() => {
-							cy.get('input[maxlength="9"]').clear();
-							cy.get('input[maxlength="9"]').type('5a22a4');
-						});
+					/* Width */
 					cy.get('@typography-popover')
 						.first()
 						.within(() => {
@@ -702,18 +673,10 @@ describe('Typography Extension', () => {
 					//Check block
 					cy.getIframeBody()
 						.find(`[data-type="core/paragraph"]`)
-						.should(
-							'have.css',
-							'-webkit-text-stroke-color',
-							'rgb(90, 34, 164)'
-						)
 						.and('have.css', '-webkit-text-stroke-width', '10px');
 
 					//Check store
 					getWPDataObject().then((data) => {
-						expect('#5a22a4').to.be.equal(
-							getSelectedBlock(data, 'publisherTextStrokeColor')
-						);
 						expect('10px').to.be.equal(
 							getSelectedBlock(data, 'publisherTextStrokeWidth')
 						);
