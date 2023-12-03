@@ -76,6 +76,7 @@ const Fields = ({ itemId, item }) => {
 					<InputControl
 						controlName="input"
 						label={<XCoordinateIcon />}
+						aria-label={__('Move-X', 'publisher-core')}
 						columns="columns-2"
 						id={getControlId(itemId, 'move-x')}
 						unitType="essential"
@@ -95,6 +96,7 @@ const Fields = ({ itemId, item }) => {
 					<InputControl
 						controlName="input"
 						label={<YCoordinateIcon />}
+						aria-label={__('Move-Y', 'publisher-core')}
 						columns="columns-2"
 						id={getControlId(itemId, 'move-y')}
 						unitType="essential"
@@ -114,6 +116,7 @@ const Fields = ({ itemId, item }) => {
 					<InputControl
 						controlName="input"
 						label={<ZCoordinateIcon />}
+						aria-label={__('Move-Z', 'publisher-core')}
 						columns="columns-2"
 						id={getControlId(itemId, 'move-z')}
 						unitType="essential"
@@ -160,6 +163,7 @@ const Fields = ({ itemId, item }) => {
 					<InputControl
 						controlName="input"
 						label={<RotateXCoordinateIcon />}
+						aria-label={__('Rotate-X', 'publisher-core')}
 						columns="columns-2"
 						id={getControlId(itemId, 'rotate-x')}
 						unitType="angle"
@@ -179,6 +183,7 @@ const Fields = ({ itemId, item }) => {
 					<InputControl
 						controlName="input"
 						label={<RotateYCoordinateIcon />}
+						aria-label={__('Rotate-Y', 'publisher-core')}
 						columns="columns-2"
 						id={getControlId(itemId, 'rotate-y')}
 						unitType="angle"
@@ -198,6 +203,7 @@ const Fields = ({ itemId, item }) => {
 					<InputControl
 						controlName="input"
 						label={<RotateZCoordinateIcon />}
+						aria-label={__('Rotate-Z', 'publisher-core')}
 						columns="columns-2"
 						id={getControlId(itemId, 'rotate-z')}
 						unitType="angle"
@@ -222,6 +228,7 @@ const Fields = ({ itemId, item }) => {
 						id={getControlId(itemId, 'skew-x')}
 						controlName="input"
 						label={<XCoordinateIcon />}
+						aria-label={__('Skew-X', 'publisher-core')}
 						columns="columns-2"
 						unitType="angle"
 						range={true}
@@ -240,6 +247,7 @@ const Fields = ({ itemId, item }) => {
 					<InputControl
 						controlName="input"
 						label={<YCoordinateIcon />}
+						aria-label={__('Skew-Y', 'publisher-core')}
 						columns="columns-2"
 						id={getControlId(itemId, 'skew-y')}
 						unitType="angle"
