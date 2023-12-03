@@ -83,6 +83,7 @@ export default function BorderRadiusControl({
 							'--pb-all': value.all,
 						}}
 						defaultValue={value.all}
+						placeholder="0"
 					/>
 				)}
 

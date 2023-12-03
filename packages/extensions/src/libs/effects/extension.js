@@ -11,18 +11,11 @@ import type { MixedElement } from 'react';
  */
 import {
 	BaseControl,
-	InputControl,
-	SelectControl,
-	FilterControl,
 	TransformControl,
-	TransitionControl,
-	ToggleSelectControl,
 	ControlContextProvider,
-	convertAlignmentMatrixCoordinates,
-	AlignmentMatrixControl,
 } from '@publisher/controls';
 import { isInteger } from '@publisher/utils';
-import { Button, Popover } from '@publisher/components';
+import { Button } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
@@ -32,7 +25,13 @@ import { isActiveField } from '../../api/utils';
 import { default as GearIcon } from './icons/gear';
 import type { TEffectsProps } from './types/effects-props';
 import { generateExtensionId, hasSameProps } from '../utils';
-import { cursorFieldOptions, blendModeFieldOptions } from './utils';
+import { TransformSettings } from './components/transform-setting';
+import { Opacity } from './components/opacity';
+import { Transition } from './components/transition';
+import { Filter } from './components/filter';
+import { BackdropFilter } from './components/backdrop-filter';
+import { Cursor } from './components/cursor';
+import { Blending } from './components/blending';
 
 export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 	({
@@ -74,34 +73,12 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 		return (
 			<>
 				{isActiveField(publisherOpacity) && (
-					<ControlContextProvider
-						value={{
-							name: generateExtensionId(block, 'opacity'),
-							value: opacity,
-						}}
-					>
-						<InputControl
-							controlName="input"
-							label={__('Opacity', 'publisher-core')}
-							columns="columns-2"
-							{...{
-								...props,
-								unitType: 'percent',
-								range: true,
-								min: 0,
-								max: 100,
-								initialPosition: 100,
-								defaultValue: '100%',
-								onChange: (newValue) =>
-									handleOnChangeAttributes(
-										'publisherOpacity',
-										isInteger(newValue)
-											? `${newValue}%`
-											: newValue
-									),
-							}}
-						/>
-					</ControlContextProvider>
+					<Opacity
+						block={block}
+						opacity={opacity}
+						props={props}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+					/>
 				)}
 
 				{isActiveField(publisherTransform) && (
@@ -164,202 +141,29 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 								/>
 
 								{isTransformSettingsVisible && (
-									<Popover
-										title={__(
-											'Transform Settings',
-											'publisher-core'
-										)}
-										offset={35}
-										placement="left-start"
-										className={controlInnerClassNames(
-											'transform-settings-popover'
-										)}
-										onClose={() => {
-											setIsTransformSettingsVisible(
-												false
-											);
-										}}
-									>
-										<ControlContextProvider
-											value={{
-												name: generateExtensionId(
-													block,
-													'self-perspective'
-												),
-												value: transformSelfPerspective,
-											}}
-										>
-											<InputControl
-												controlName="input"
-												label={__(
-													'Self Perspective',
-													'publisher-core'
-												)}
-												columns="columns-2"
-												{...{
-													...props,
-													unitType: 'essential',
-													range: true,
-													min: 0,
-													max: 2000,
-													initialPosition: 100,
-													defaultValue: '0px',
-													onChange: (newValue) =>
-														handleOnChangeAttributes(
-															'publisherTransformSelfPerspective',
-															newValue
-														),
-												}}
-											/>
-										</ControlContextProvider>
-
-										<ControlContextProvider
-											value={{
-												name: generateExtensionId(
-													block,
-													'self-origin'
-												),
-												value: {
-													...transformSelfOrigin,
-													coordinates:
-														convertAlignmentMatrixCoordinates(
-															transformSelfOrigin
-														)?.compact,
-												},
-											}}
-										>
-											<AlignmentMatrixControl
-												label={__(
-													'Self Origin',
-													'publisher-core'
-												)}
-												columns="columns-2"
-												inputFields={true}
-												onChange={({ top, left }) =>
-													handleOnChangeAttributes(
-														'publisherTransformSelfOrigin',
-														{
-															...transformSelfOrigin,
-															top,
-															left,
-														}
-													)
-												}
-											/>
-										</ControlContextProvider>
-
-										<ControlContextProvider
-											value={{
-												name: generateExtensionId(
-													block,
-													'backface-visibility'
-												),
-												value: backfaceVisibility,
-											}}
-										>
-											<ToggleSelectControl
-												controlName="toggle-select"
-												label={__(
-													'Backface Visibility',
-													'publisher-core'
-												)}
-												columns="columns-2"
-												options={[
-													{
-														label: __(
-															'Visible',
-															'publisher-core'
-														),
-														value: 'visible',
-													},
-													{
-														label: __(
-															'Hidden',
-															'publisher-core'
-														),
-														value: 'hidden',
-													},
-												]}
-												defaultValue="visible"
-												onChange={(newValue) =>
-													handleOnChangeAttributes(
-														'publisherBackfaceVisibility',
-														newValue
-													)
-												}
-											/>
-										</ControlContextProvider>
-
-										<ControlContextProvider
-											value={{
-												name: generateExtensionId(
-													block,
-													'child-perspective'
-												),
-												value: transformChildPerspective
-													? transformChildPerspective
-													: '0px',
-											}}
-										>
-											<InputControl
-												controlName="input"
-												label={__(
-													'Child Perspective',
-													'publisher-core'
-												)}
-												columns="columns-2"
-												{...{
-													...props,
-													unitType: 'essential',
-													range: true,
-													min: 0,
-													max: 2000,
-													defaultValue: '0px',
-													onChange: (newValue) =>
-														handleOnChangeAttributes(
-															'publisherTransformChildPerspective',
-															newValue
-														),
-												}}
-											/>
-										</ControlContextProvider>
-
-										<ControlContextProvider
-											value={{
-												name: generateExtensionId(
-													block,
-													'child-origin'
-												),
-												value: {
-													top: transformChildOrigin?.top,
-													left: transformChildOrigin?.left,
-													coordinates:
-														convertAlignmentMatrixCoordinates(
-															transformChildOrigin
-														)?.compact,
-												},
-											}}
-										>
-											<AlignmentMatrixControl
-												label={__(
-													'Child Origin',
-													'publisher-core'
-												)}
-												columns="columns-2"
-												inputFields={true}
-												onChange={({ top, left }) =>
-													handleOnChangeAttributes(
-														'publisherTransformChildOrigin',
-														{
-															...transformChildOrigin,
-															top,
-															left,
-														}
-													)
-												}
-											/>
-										</ControlContextProvider>
-									</Popover>
+									<TransformSettings
+										setIsTransformSettingsVisible={
+											setIsTransformSettingsVisible
+										}
+										transformSelfPerspective={
+											transformSelfPerspective
+										}
+										block={block}
+										handleOnChangeAttributes={
+											handleOnChangeAttributes
+										}
+										backfaceVisibility={backfaceVisibility}
+										transformChildPerspective={
+											transformChildPerspective
+										}
+										props={props}
+										transformChildOrigin={
+											transformChildOrigin
+										}
+										transformSelfOrigin={
+											transformSelfOrigin
+										}
+									/>
 								)}
 							</BaseControl>
 						</ControlContextProvider>
@@ -367,139 +171,48 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 				)}
 
 				{isActiveField(publisherTransition) && (
-					<ControlContextProvider
-						value={{
-							name: generateExtensionId(block, 'transition'),
-							value: transition,
-						}}
-						storeName={'publisher-core/controls/repeater'}
-					>
-						<BaseControl
-							controlName="transition"
-							columns="columns-1"
-						>
-							<TransitionControl
-								label={__('Transitions', 'publisher-core')}
-								onChange={(newValue) =>
-									handleOnChangeAttributes(
-										'publisherTransition',
-										newValue
-									)
-								}
-								{...props}
-							/>
-						</BaseControl>
-					</ControlContextProvider>
+					<Transition
+						transition={transition}
+						block={block}
+						props={props}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+					/>
 				)}
 
 				{isActiveField(publisherFilter) && (
-					<ControlContextProvider
-						value={{
-							name: generateExtensionId(block, 'filters'),
-							value: filter,
-						}}
-						storeName={'publisher-core/controls/repeater'}
-					>
-						<BaseControl controlName="filter" columns="columns-1">
-							<FilterControl
-								label={__('Filters', 'publisher-core')}
-								onChange={(newValue) =>
-									handleOnChangeAttributes(
-										'publisherFilter',
-										newValue
-									)
-								}
-								{...props}
-							/>
-						</BaseControl>
-					</ControlContextProvider>
+					<Filter
+						filter={filter}
+						block={block}
+						props={props}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+					/>
 				)}
 
 				{isActiveField(publisherBackdropFilter) && (
-					<ControlContextProvider
-						value={{
-							name: generateExtensionId(
-								block,
-								'backdrop-filters'
-							),
-							value: backdropFilter,
-						}}
-						storeName={'publisher-core/controls/repeater'}
-					>
-						<BaseControl columns="columns-1" controlName="filter">
-							<FilterControl
-								label={__('Backdrop Filters', 'publisher-core')}
-								popoverLabel={__(
-									'Backdrop Filter',
-									'publisher-core'
-								)}
-								onChange={(newValue) =>
-									handleOnChangeAttributes(
-										'publisherBackdropFilter',
-										newValue
-									)
-								}
-								{...props}
-							/>
-						</BaseControl>
-					</ControlContextProvider>
+					<BackdropFilter
+						backdropFilter={backdropFilter}
+						block={block}
+						props={props}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+					/>
 				)}
 
 				{isActiveField(publisherCursor) && (
-					<ControlContextProvider
-						value={{
-							name: generateExtensionId(block, 'cursor'),
-							value: cursor,
-						}}
-					>
-						<SelectControl
-							controlName="select"
-							label={__('Cursor', 'publisher-core')}
-							columns="columns-2"
-							{...{
-								...props,
-								options: cursorFieldOptions(),
-								type: 'custom',
-								customMenuPosition: 'top',
-								//
-								defaultValue: 'default',
-								onChange: (newValue) =>
-									handleOnChangeAttributes(
-										'publisherCursor',
-										newValue
-									),
-							}}
-						/>
-					</ControlContextProvider>
+					<Cursor
+						cursor={cursor}
+						block={block}
+						props={props}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+					/>
 				)}
 
 				{isActiveField(publisherBlendMode) && (
-					<ControlContextProvider
-						value={{
-							name: generateExtensionId(block, 'blend-mode'),
-							value: blendMode,
-						}}
-					>
-						<SelectControl
-							controlName="select"
-							label={__('Blending', 'publisher-core')}
-							columns="columns-2"
-							{...{
-								...props,
-								options: blendModeFieldOptions(),
-								type: 'custom',
-								customMenuPosition: 'top',
-								//
-								defaultValue: 'normal',
-								value: blendMode,
-								onChange: (newValue) =>
-									handleOnChangeAttributes(
-										'publisherBlendMode',
-										newValue
-									),
-							}}
-						/>
-					</ControlContextProvider>
+					<Blending
+						blendMode={blendMode}
+						block={block}
+						props={props}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+					/>
 				)}
 			</>
 		);

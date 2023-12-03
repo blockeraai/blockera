@@ -2,7 +2,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-
+import { useState, useEffect } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
@@ -19,6 +19,7 @@ export function SidePopover({
 	id,
 	title = '',
 	icon = '',
+	unit,
 	isOpen,
 	offset = 35,
 	onClose = () => {},
@@ -31,6 +32,14 @@ export function SidePopover({
 		onChange,
 		defaultValue: '0px',
 	});
+
+	const [unitType, setUnitType] = useState('px');
+
+	useEffect(() => {
+		if (unit) {
+			setUnitType(unit);
+		}
+	}, [unit]);
 
 	return (
 		<>
@@ -70,8 +79,9 @@ export function SidePopover({
 								aria-label={__('Set 0px', 'publisher-core')}
 								size="small"
 								onClick={() => {
-									setValue('0px');
+									setValue('0' + unitType);
 								}}
+								data-cy="set-0"
 							>
 								0
 							</Button>
@@ -79,7 +89,8 @@ export function SidePopover({
 							<Button
 								aria-label={__('Set 10px', 'publisher-core')}
 								size="small"
-								onClick={() => setValue('10px')}
+								onClick={() => setValue('10' + unitType)}
+								data-cy="set-10"
 							>
 								10
 							</Button>
@@ -87,7 +98,8 @@ export function SidePopover({
 							<Button
 								aria-label={__('Set 20px', 'publisher-core')}
 								size="small"
-								onClick={() => setValue('20px')}
+								onClick={() => setValue('20' + unitType)}
+								data-cy="set-20"
 							>
 								20
 							</Button>
@@ -95,7 +107,8 @@ export function SidePopover({
 							<Button
 								aria-label={__('Set 30px', 'publisher-core')}
 								size="small"
-								onClick={() => setValue('30px')}
+								onClick={() => setValue('30' + unitType)}
+								data-cy="set-30"
 							>
 								30
 							</Button>
@@ -104,8 +117,9 @@ export function SidePopover({
 								aria-label={__('Set 60px', 'publisher-core')}
 								size="small"
 								onClick={() => {
-									setValue('60px');
+									setValue('60' + unitType);
 								}}
+								data-cy="set-60"
 							>
 								60
 							</Button>
@@ -113,7 +127,8 @@ export function SidePopover({
 							<Button
 								aria-label={__('Set 80px', 'publisher-core')}
 								size="small"
-								onClick={() => setValue('80px')}
+								onClick={() => setValue('80' + unitType)}
+								data-cy="set-80"
 							>
 								80
 							</Button>
@@ -121,7 +136,8 @@ export function SidePopover({
 							<Button
 								aria-label={__('Set 100px', 'publisher-core')}
 								size="small"
-								onClick={() => setValue('100px')}
+								onClick={() => setValue('100' + unitType)}
+								data-cy="set-100"
 							>
 								100
 							</Button>
@@ -129,7 +145,8 @@ export function SidePopover({
 							<Button
 								aria-label={__('Set 120px', 'publisher-core')}
 								size="small"
-								onClick={() => setValue('120px')}
+								onClick={() => setValue('120' + unitType)}
+								data-cy="set-120"
 							>
 								120
 							</Button>

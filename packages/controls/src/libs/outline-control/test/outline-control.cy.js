@@ -245,8 +245,8 @@ describe('outline control component testing', () => {
 			});
 
 			cy.getByDataTest('border-control-color').click();
-			cy.contains('Color Picker')
-				.parent()
+			cy.getByDataTest('popover-body')
+				.last()
 				.within(() => {
 					cy.get('input[maxlength="9"]').clear();
 					cy.get('input[maxlength="9"]').type('ad2dcc');
