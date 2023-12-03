@@ -2,6 +2,7 @@
  * Publisher dependencies
  */
 import { createCssRule } from '@publisher/style-engine';
+import { getValueAddonRealValue } from '@publisher/hooks';
 
 export function BoxBorderGenerator(id, props, styleEngine) {
 	const { attributes } = props;
@@ -13,42 +14,60 @@ export function BoxBorderGenerator(id, props, styleEngine) {
 	const properties = {};
 
 	if (attributes?.publisherBorder?.type === 'all') {
-		if (attributes.publisherBorder.all.width) {
-			properties.border = `${attributes.publisherBorder.all.width} ${
-				attributes.publisherBorder.all.style || 'solid'
-			} ${attributes.publisherBorder.all.color}`;
+		const borderAllWidth = getValueAddonRealValue(
+			attributes.publisherBorder.all.width
+		);
+		if (borderAllWidth) {
+			properties.border = `${borderAllWidth} ${
+				getValueAddonRealValue(attributes.publisherBorder.all.style) ||
+				'solid'
+			} ${getValueAddonRealValue(attributes.publisherBorder.all.color)}`;
 		}
 	} else {
-		if (attributes.publisherBorder.top.width) {
-			properties['border-top'] = `${
-				attributes.publisherBorder.top.width
-			} ${attributes.publisherBorder.top.style || 'solid'} ${
-				attributes.publisherBorder.top.color
-			}`;
+		const borderTopWidth = getValueAddonRealValue(
+			attributes.publisherBorder.top.width
+		);
+		if (borderTopWidth) {
+			properties['border-top'] = `${borderTopWidth} ${
+				getValueAddonRealValue(attributes.publisherBorder.top.style) ||
+				'solid'
+			} ${getValueAddonRealValue(attributes.publisherBorder.top.color)}`;
 		}
 
-		if (attributes.publisherBorder.right.width) {
-			properties['border-right'] = `${
-				attributes.publisherBorder.right.width
-			} ${attributes.publisherBorder.right.style || 'solid'} ${
+		const borderRightWidth = getValueAddonRealValue(
+			attributes.publisherBorder.right.width
+		);
+		if (borderRightWidth) {
+			properties['border-right'] = `${borderRightWidth} ${
+				getValueAddonRealValue(
+					attributes.publisherBorder.right.style
+				) || 'solid'
+			} ${getValueAddonRealValue(
 				attributes.publisherBorder.right.color
-			}`;
+			)}`;
 		}
 
-		if (attributes.publisherBorder.bottom.width) {
-			properties['border-bottom'] = `${
-				attributes.publisherBorder.bottom.width
-			} ${attributes.publisherBorder.bottom.style || 'solid'} ${
+		const borderBottomWidth = getValueAddonRealValue(
+			attributes.publisherBorder.bottom.width
+		);
+		if (borderBottomWidth) {
+			properties['border-bottom'] = `${borderBottomWidth} ${
+				getValueAddonRealValue(
+					attributes.publisherBorder.bottom.style
+				) || 'solid'
+			} ${getValueAddonRealValue(
 				attributes.publisherBorder.bottom.color
-			}`;
+			)}`;
 		}
 
-		if (attributes.publisherBorder.left.width) {
-			properties['border-left'] = `${
-				attributes.publisherBorder.left.width
-			} ${attributes.publisherBorder.left.style || 'solid'} ${
-				attributes.publisherBorder.left.color
-			}`;
+		const borderLeftWidth = getValueAddonRealValue(
+			attributes.publisherBorder.left.width
+		);
+		if (borderLeftWidth) {
+			properties['border-left'] = `${borderLeftWidth} ${
+				getValueAddonRealValue(attributes.publisherBorder.left.style) ||
+				'solid'
+			} ${getValueAddonRealValue(attributes.publisherBorder.left.color)}`;
 		}
 	}
 

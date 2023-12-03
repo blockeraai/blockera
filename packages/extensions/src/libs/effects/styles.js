@@ -3,6 +3,7 @@
  * Publisher dependencies
  */
 import { computedCssRules } from '@publisher/style-engine';
+import { getValueAddonRealValue } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -85,16 +86,30 @@ export function EffectsStyles({
 
 				switch (item.type) {
 					case 'move':
-						return `translate3d(${item['move-x']}, ${item['move-y']}, ${item['move-z']})`;
+						return `translate3d(${getValueAddonRealValue(
+							item['move-x']
+						)}, ${getValueAddonRealValue(
+							item['move-y']
+						)}, ${getValueAddonRealValue(item['move-z'])})`;
 
 					case 'scale':
-						return `scale3d(${item.scale}, ${item.scale}, 50%)`;
+						return `scale3d(${getValueAddonRealValue(
+							item.scale
+						)}, ${getValueAddonRealValue(item.scale)}, 50%)`;
 
 					case 'rotate':
-						return `rotateX(${item['rotate-x']}) rotateY(${item['rotate-y']}) rotateZ(${item['rotate-z']})`;
+						return `rotateX(${getValueAddonRealValue(
+							item['rotate-x']
+						)}) rotateY(${getValueAddonRealValue(
+							item['rotate-y']
+						)}) rotateZ(${getValueAddonRealValue(
+							item['rotate-z']
+						)})`;
 
 					case 'skew':
-						return `skew(${item['skew-x']}, ${item['skew-y']})`;
+						return `skew(${getValueAddonRealValue(
+							item['skew-x']
+						)}, ${getValueAddonRealValue(item['skew-y'])})`;
 				}
 
 				return null;
@@ -103,7 +118,9 @@ export function EffectsStyles({
 			.join(' ');
 
 		if (blockProps.attributes.publisherTransformSelfPerspective) {
-			transformProperty = `perspective(${blockProps.attributes.publisherTransformSelfPerspective}) ${transformProperty}`;
+			transformProperty = `perspective(${getValueAddonRealValue(
+				blockProps.attributes.publisherTransformSelfPerspective
+			)}) ${transformProperty}`;
 		}
 
 		if (transformProperty) {
@@ -116,9 +133,11 @@ export function EffectsStyles({
 				blockProps.attributes.publisherTransformSelfOrigin
 			)
 		) {
-			transformProperties[
-				'transform-origin'
-			] = `${blockProps.attributes.publisherTransformSelfOrigin?.top} ${blockProps.attributes.publisherTransformSelfOrigin?.left}`;
+			transformProperties['transform-origin'] = `${getValueAddonRealValue(
+				blockProps.attributes.publisherTransformSelfOrigin?.top
+			)} ${getValueAddonRealValue(
+				blockProps.attributes.publisherTransformSelfOrigin?.left
+			)}`;
 		}
 
 		if (blockProps.attributes.publisherBackfaceVisibility) {
@@ -127,10 +146,13 @@ export function EffectsStyles({
 		}
 
 		if (blockProps.attributes.publisherTransformChildPerspective) {
+			const childTransformChildPers = getValueAddonRealValue(
+				blockProps.attributes.publisherTransformChildPerspective
+			);
+
 			transformProperties.perspective =
-				blockProps.attributes.publisherTransformChildPerspective !==
-				'0px'
-					? blockProps.attributes.publisherTransformChildPerspective
+				childTransformChildPers !== '0px'
+					? childTransformChildPers
 					: 'none';
 		}
 
@@ -142,7 +164,11 @@ export function EffectsStyles({
 		) {
 			transformProperties[
 				'perspective-origin'
-			] = `${blockProps.attributes.publisherTransformChildOrigin?.top} ${blockProps.attributes.publisherTransformChildOrigin?.left}`;
+			] = `${getValueAddonRealValue(
+				blockProps.attributes.publisherTransformChildOrigin?.top
+			)} ${getValueAddonRealValue(
+				blockProps.attributes.publisherTransformChildOrigin?.left
+			)}`;
 		}
 
 		if (transformProperties) {

@@ -3,6 +3,7 @@
  * Publisher dependencies
  */
 import { computedCssRules } from '@publisher/style-engine';
+import { getValueAddonRealValue } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -30,38 +31,48 @@ function updateCssProps(spacingProps: TSpacingDefaultProps): TCssProps {
 	}
 
 	if (!isUndefined(spacingProps.margin)) {
-		if (spacingProps.margin.top !== '') {
-			properties['margin-top'] = spacingProps.margin.top;
+		const marginTop = getValueAddonRealValue(spacingProps.margin.top);
+		if (marginTop !== '') {
+			properties['margin-top'] = marginTop;
 		}
 
-		if (spacingProps.margin.right !== '') {
-			properties['margin-right'] = spacingProps.margin.right;
+		const marginRight = getValueAddonRealValue(spacingProps.margin.right);
+		if (marginRight !== '') {
+			properties['margin-right'] = marginRight;
 		}
 
-		if (spacingProps.margin.bottom !== '') {
-			properties['margin-bottom'] = spacingProps.margin.bottom;
+		const marginBottom = getValueAddonRealValue(spacingProps.margin.bottom);
+		if (marginBottom !== '') {
+			properties['margin-bottom'] = marginBottom;
 		}
 
-		if (spacingProps.margin.left !== '') {
-			properties['margin-left'] = spacingProps.margin.left;
+		const marginLeft = getValueAddonRealValue(spacingProps.margin.left);
+		if (marginLeft !== '') {
+			properties['margin-left'] = marginLeft;
 		}
 	}
 
 	if (!isUndefined(spacingProps.padding)) {
-		if (spacingProps.padding.top !== '') {
-			properties['padding-top'] = spacingProps.padding.top;
+		const paddingTop = getValueAddonRealValue(spacingProps.padding.top);
+		if (paddingTop !== '') {
+			properties['padding-top'] = paddingTop;
 		}
 
-		if (spacingProps.padding.right !== '') {
-			properties['padding-right'] = spacingProps.padding.right;
+		const paddingRight = getValueAddonRealValue(spacingProps.padding.right);
+		if (paddingRight !== '') {
+			properties['padding-right'] = paddingRight;
 		}
 
-		if (spacingProps.padding.bottom !== '') {
-			properties['padding-bottom'] = spacingProps.padding.bottom;
+		const paddingBottom = getValueAddonRealValue(
+			spacingProps.padding.bottom
+		);
+		if (paddingBottom !== '') {
+			properties['padding-bottom'] = paddingBottom;
 		}
 
-		if (spacingProps.padding.left !== '') {
-			properties['padding-left'] = spacingProps.padding.left;
+		const paddingLeft = getValueAddonRealValue(spacingProps.padding.left);
+		if (paddingLeft !== '') {
+			properties['padding-left'] = paddingLeft;
 		}
 	}
 

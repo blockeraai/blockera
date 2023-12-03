@@ -2,8 +2,9 @@
 /**
  * Publisher dependencies
  */
-import { isUndefined } from '@publisher/utils';
+import { isUndefined, isEmpty } from '@publisher/utils';
 import { computedCssRules } from '@publisher/style-engine';
+import { getValueAddonRealValue } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -33,7 +34,7 @@ export function SizeStyles({
 	},
 	blockProps,
 }: IConfigs): string {
-	const { attributes: _attributes, blockName } = blockProps;
+	const { attributes: currBlockAttributes, blockName } = blockProps;
 	const selector = useCssSelector({
 		blockName,
 		supportId: 'publisherSize',
@@ -41,35 +42,49 @@ export function SizeStyles({
 	const generators = [];
 	const properties: TSizeCssProps = {};
 
-	if (
-		isActiveField(publisherWidth) &&
-		_attributes.publisherWidth !== attributes.publisherWidth.default
-	) {
-		properties.width = _attributes.publisherWidth;
-	} else if (
-		isUndefined(properties.width) &&
-		!isUndefined(_attributes.width)
-	) {
-		properties.width = _attributes.width;
+	if (isActiveField(publisherWidth)) {
+		const width = getValueAddonRealValue(
+			currBlockAttributes.publisherWidth
+		);
+
+		if (width !== attributes.publisherWidth.default)
+			properties.width = width;
+		else if (
+			!isUndefined(currBlockAttributes.width) &&
+			!isEmpty(currBlockAttributes.width)
+		) {
+			properties.width = currBlockAttributes.width;
+		}
 	}
 
-	if (
-		isActiveField(publisherHeight) &&
-		_attributes.publisherHeight !== attributes.publisherHeight.default
-	) {
-		properties.height = _attributes.publisherHeight;
-	} else if (
-		isUndefined(properties.height) &&
-		!isUndefined(_attributes.height)
-	) {
-		properties.height = _attributes.height;
+	if (isActiveField(publisherHeight)) {
+		const height = getValueAddonRealValue(
+			currBlockAttributes.publisherHeight
+		);
+
+		if (
+			currBlockAttributes.publisherHeight !==
+			attributes.publisherHeight.default
+		)
+			properties.height = height;
+		else if (
+			!isUndefined(currBlockAttributes.height) &&
+			!isEmpty(currBlockAttributes.height)
+		) {
+			properties.height = currBlockAttributes.height;
+		}
 	}
 
-	if (
-		isActiveField(publisherOverflow) &&
-		_attributes.publisherOverflow !== attributes.publisherOverflow.default
-	) {
-		properties.overflow = _attributes.publisherOverflow;
+	if (isActiveField(publisherOverflow)) {
+		const overflow = getValueAddonRealValue(
+			currBlockAttributes.publisherOverflow
+		);
+
+		if (
+			currBlockAttributes.publisherOverflow !==
+			attributes.publisherOverflow.default
+		)
+			properties.overflow = overflow;
 	}
 
 	if (Object.keys(properties).length > 0) {

@@ -3,6 +3,7 @@
  * Publisher dependencies
  */
 import { computedCssRules } from '@publisher/style-engine';
+import { getValueAddonRealValue } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -37,7 +38,6 @@ export function BackgroundStyles({
 	const selector = useCssSelector({
 		blockName: blockProps.blockName,
 		supportId: 'publisherBackground',
-		// fallbackSupportId: 'background'
 	});
 
 	if (
@@ -66,30 +66,35 @@ export function BackgroundStyles({
 		);
 	}
 
-	if (
-		isActiveField(publisherBackgroundColor) &&
-		blockProps.attributes.publisherBackgroundColor !==
-			attributes.publisherBackgroundColor.default
-	) {
-		generators.push(
-			computedCssRules(
-				{
-					cssGenerators: {
-						publisherBackgroundColor: [
-							{
-								type: 'static',
-								selector: '.{{BLOCK_ID}}',
-								properties: {
-									'background-color':
-										'{{publisherBackgroundColor}}',
-								},
-							},
-						],
-					},
-				},
-				blockProps
-			)
+	if (isActiveField(publisherBackgroundColor)) {
+		const publisherBackgroundColor = getValueAddonRealValue(
+			blockProps.attributes.publisherBackgroundColor
 		);
+
+		if (
+			publisherBackgroundColor !==
+			attributes.publisherBackgroundColor.default
+		) {
+			generators.push(
+				computedCssRules(
+					{
+						cssGenerators: {
+							publisherBackgroundColor: [
+								{
+									type: 'static',
+									selector: '.{{BLOCK_ID}}',
+									properties: {
+										'background-color':
+											publisherBackgroundColor,
+									},
+								},
+							],
+						},
+					},
+					blockProps
+				)
+			);
+		}
 	}
 
 	if (

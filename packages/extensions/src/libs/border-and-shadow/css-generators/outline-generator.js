@@ -2,6 +2,7 @@
  * Publisher dependencies
  */
 import { createCssRule } from '@publisher/style-engine';
+import { getValueAddonRealValue } from '@publisher/hooks';
 
 export function OutlineGenerator(id, props, styleEngine) {
 	const { attributes } = props;
@@ -21,9 +22,13 @@ export function OutlineGenerator(id, props, styleEngine) {
 		}
 
 		properties.outlines.push(
-			`${item.border.width} ${item.border.style} ${item.border.color}`
+			`${getValueAddonRealValue(
+				item.border.width
+			)} ${getValueAddonRealValue(
+				item.border.style
+			)} ${getValueAddonRealValue(item.border.color)}`
 		);
-		properties.offset.push(item.offset);
+		properties.offset.push(getValueAddonRealValue(item.offset));
 
 		return undefined;
 	});

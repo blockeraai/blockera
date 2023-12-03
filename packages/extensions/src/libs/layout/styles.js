@@ -3,6 +3,7 @@
  * Publisher dependencies
  */
 import { computedCssRules } from '@publisher/style-engine';
+import { getValueAddonRealValue } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -79,19 +80,22 @@ export function LayoutStyles({
 			properties['justify-content'] = _attributes.publisherJustifyContent;
 		}
 
-		if (
-			isActiveField(publisherGapRows) &&
-			_attributes.publisherGapRows !== attributes.publisherGapRows.default
-		) {
-			properties['row-gap'] = _attributes.publisherGapRows;
+		// todo add support for locked gap
+
+		if (isActiveField(publisherGapRows)) {
+			const gapRow = getValueAddonRealValue(_attributes.publisherGapRows);
+
+			if (gapRow !== attributes.publisherGapRows.default)
+				properties['row-gap'] = gapRow;
 		}
 
-		if (
-			isActiveField(publisherGapColumns) &&
-			_attributes.publisherGapColumns !==
-				attributes.publisherGapColumns.default
-		) {
-			properties['column-gap'] = _attributes.publisherGapColumns;
+		if (isActiveField(publisherGapColumns)) {
+			const gapColumns = getValueAddonRealValue(
+				_attributes.publisherGapColumns
+			);
+
+			if (gapColumns !== attributes.publisherGapColumns.default)
+				properties['column-gap'] = gapColumns;
 		}
 
 		if (

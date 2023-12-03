@@ -2,6 +2,7 @@
  * Publisher dependencies
  */
 import { createCssRule } from '@publisher/style-engine';
+import { getValueAddonRealValue } from '@publisher/hooks';
 
 export function BoxShadowGenerator(id, props, styleEngine) {
 	const { attributes } = props;
@@ -16,9 +17,13 @@ export function BoxShadowGenerator(id, props, styleEngine) {
 				return null;
 			}
 
-			return `${item.type === 'inner' ? 'inset' : ''} ${item.x} ${
+			return `${
+				item.type === 'inner' ? 'inset' : ''
+			} ${getValueAddonRealValue(item.x)} ${getValueAddonRealValue(
 				item.y
-			} ${item.blur} ${item.spread} ${item.color}`;
+			)} ${getValueAddonRealValue(item.blur)} ${getValueAddonRealValue(
+				item.spread
+			)} ${getValueAddonRealValue(item.color)}`;
 		})
 		?.filter((item) => null !== item);
 

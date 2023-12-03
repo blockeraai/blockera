@@ -70,13 +70,16 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											setAttributes: (
 												attributes: Object
 											) => void
-										): void =>
-											setAttributes({
-												...attributes,
-												width: convertToPercent(
-													newValue
-												),
-											})
+										): void => {
+											// do not sync if unit type is func
+											if (!newValue.endsWith('func'))
+												setAttributes({
+													...attributes,
+													width: convertToPercent(
+														newValue
+													),
+												});
+										}
 									),
 							}}
 						/>
@@ -109,13 +112,16 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											setAttributes: (
 												attributes: Object
 											) => void
-										): void =>
-											setAttributes({
-												...attributes,
-												height: convertToPercent(
-													newValue
-												),
-											})
+										): void => {
+											// do not sync if unit type is func
+											if (!newValue.endsWith('func'))
+												setAttributes({
+													...attributes,
+													height: convertToPercent(
+														newValue
+													),
+												});
+										}
 									),
 							}}
 						/>

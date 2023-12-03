@@ -2,6 +2,7 @@
  * Publisher dependencies
  */
 import { createCssRule } from '@publisher/style-engine';
+import { getValueAddonRealValue } from '@publisher/hooks';
 
 export function TextShadowGenerator(id, props, styleEngine) {
 	const { attributes } = props;
@@ -16,7 +17,11 @@ export function TextShadowGenerator(id, props, styleEngine) {
 				return null;
 			}
 
-			return `${item.x} ${item.y} ${item.blur} ${item.color}`;
+			return `${getValueAddonRealValue(item.x)} ${getValueAddonRealValue(
+				item.y
+			)} ${getValueAddonRealValue(item.blur)} ${getValueAddonRealValue(
+				item.color
+			)}`;
 		})
 		?.filter((item) => null !== item);
 

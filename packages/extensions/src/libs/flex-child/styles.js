@@ -3,6 +3,7 @@
  * Publisher dependencies
  */
 import { computedCssRules } from '@publisher/style-engine';
+import { getValueAddonRealValue } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -56,20 +57,20 @@ export function FlexChildStyles({
 				break;
 
 			case 'custom':
-				properties.flex = `${
+				const grow = getValueAddonRealValue(
 					_attributes.publisherFlexChildGrow
-						? _attributes.publisherFlexChildGrow
-						: 0
-				}`;
-				properties.flex += ` ${
+				);
+
+				const shrink = getValueAddonRealValue(
 					_attributes.publisherFlexChildShrink
-						? _attributes.publisherFlexChildShrink
-						: 0
-				}`;
-				properties.flex += ` ${
+				);
+
+				const basis = getValueAddonRealValue(
 					_attributes.publisherFlexChildBasis
-						? _attributes.publisherFlexChildBasis
-						: 'auto'
+				);
+
+				properties.flex = `${grow ? grow : 0} ${shrink ? shrink : 0} ${
+					basis ? basis : 'auto'
 				}`;
 				break;
 		}
@@ -98,9 +99,12 @@ export function FlexChildStyles({
 				break;
 
 			case 'custom':
-				if (_attributes.publisherFlexChildOrderCustom)
-					properties.order =
-						_attributes.publisherFlexChildOrderCustom;
+				const order = getValueAddonRealValue(
+					_attributes.publisherFlexChildOrderCustom
+				);
+
+				if (order) properties.order = order;
+
 				break;
 		}
 	}

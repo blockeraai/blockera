@@ -2,22 +2,25 @@
  * Publisher dependencies
  */
 import { createCssRule } from '@publisher/style-engine';
+import { getValueAddonRealValue } from '@publisher/hooks';
 
 export function backgroundClipGenerator(id, props, styleEngine) {
 	const { attributes } = props;
 
-	if (attributes?.publisherBackgroundClip === 'none') {
+	const value = getValueAddonRealValue(attributes.publisherBackgroundClip);
+
+	if (value === 'none') {
 		return '';
 	}
 
-	if (attributes.publisherBackgroundClip === 'text') {
+	if (value === 'text') {
 		return createCssRule({
 			selector: `#block-${props.clientId}${
 				styleEngine.selector ? ' ' + styleEngine.selector : ''
 			}`,
 			properties: {
-				'background-clip': attributes.publisherBackgroundClip,
-				'-webkit-background-clip': attributes.publisherBackgroundClip,
+				'background-clip': 'text',
+				'-webkit-background-clip': 'text',
 				'-webkit-text-fill-color': 'transparent',
 			},
 		});
@@ -28,8 +31,8 @@ export function backgroundClipGenerator(id, props, styleEngine) {
 			styleEngine.selector ? ' ' + styleEngine.selector : ''
 		}`,
 		properties: {
-			'background-clip': attributes.publisherBackgroundClip,
-			'-webkit-background-clip': attributes.publisherBackgroundClip,
+			'background-clip': value,
+			'-webkit-background-clip': value,
 		},
 	});
 }

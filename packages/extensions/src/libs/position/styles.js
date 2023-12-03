@@ -3,6 +3,7 @@
  * Publisher dependencies
  */
 import { computedCssRules } from '@publisher/style-engine';
+import { getValueAddonRealValue } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -47,27 +48,39 @@ export function PositionStyles({
 	) {
 		properties.position = _attributes.publisherPosition.type;
 
-		if (_attributes.publisherPosition.position?.top !== '') {
-			properties.top = _attributes.publisherPosition.position?.top;
+		const positionTop = getValueAddonRealValue(
+			_attributes.publisherPosition.position?.top
+		);
+		if (positionTop !== '') {
+			properties.top = positionTop;
 		}
 
-		if (_attributes.publisherPosition.position?.right !== '') {
-			properties.right = _attributes.publisherPosition.position?.right;
+		const positionRight = getValueAddonRealValue(
+			_attributes.publisherPosition.position?.right
+		);
+		if (positionRight !== '') {
+			properties.right = positionRight;
 		}
 
-		if (_attributes.publisherPosition.position?.bottom !== '') {
-			properties.bottom = _attributes.publisherPosition.position?.bottom;
+		const positionBottom = getValueAddonRealValue(
+			_attributes.publisherPosition.position?.bottom
+		);
+		if (positionBottom !== '') {
+			properties.bottom = positionBottom;
 		}
 
-		if (_attributes.publisherPosition.position?.left !== '') {
-			properties.left = _attributes.publisherPosition.position?.left;
+		const positionLeft = getValueAddonRealValue(
+			_attributes.publisherPosition.position?.left
+		);
+		if (positionLeft !== '') {
+			properties.left = positionLeft;
 		}
 
-		if (
-			isActiveField(publisherZIndex) &&
-			_attributes.publisherZIndex !== attributes.publisherZIndex.default
-		) {
-			properties['z-index'] = _attributes.publisherZIndex;
+		if (isActiveField(publisherZIndex)) {
+			const zIndex = getValueAddonRealValue(_attributes.publisherZIndex);
+
+			if (zIndex !== attributes.publisherZIndex.default)
+				properties['z-index'] = zIndex;
 		}
 	}
 

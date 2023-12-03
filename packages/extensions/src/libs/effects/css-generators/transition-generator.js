@@ -3,6 +3,7 @@
  */
 import { isUndefined } from '@publisher/utils';
 import { createCssRule } from '@publisher/style-engine';
+import { getValueAddonRealValue } from '@publisher/hooks';
 
 export function TransitionGenerator(id, props, styleEngine) {
 	const { attributes } = props;
@@ -17,9 +18,11 @@ export function TransitionGenerator(id, props, styleEngine) {
 				return null;
 			}
 
-			return `${item.type} ${item.duration} ${getTimingCSS(
-				item.timing
-			)} ${item.delay}`;
+			return `${item.type} ${getValueAddonRealValue(
+				item.duration
+			)} ${getTimingCSS(item.timing)} ${getValueAddonRealValue(
+				item.delay
+			)}`;
 		})
 		?.filter((item) => null !== item);
 

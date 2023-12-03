@@ -3,6 +3,7 @@
  * Internal dependencies
  */
 import type { TDefaultRepeaterItemValue } from './types';
+import { getValueAddonRealValue } from '@publisher/hooks';
 
 export function getBackgroundItemBGProperty(
 	item: TDefaultRepeaterItemValue
@@ -58,7 +59,11 @@ export function getBackgroundItemBGProperty(
 			) {
 				radialGradient = radialGradient.replace(
 					'gradient(',
-					`gradient( circle at ${item['radial-gradient-position'].left} ${item['radial-gradient-position'].top}, `
+					`gradient( circle at ${getValueAddonRealValue(
+						item['radial-gradient-position'].left
+					)} ${getValueAddonRealValue(
+						item['radial-gradient-position'].top
+					)}, `
 				);
 			}
 

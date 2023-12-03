@@ -7,6 +7,7 @@ import { useContext } from '@wordpress/element';
  * Publisher dependencies
  */
 import { computedCssRules } from '@publisher/style-engine';
+import { getValueAddonRealValue } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -38,101 +39,114 @@ export function TypographyStyles({
 		publisherWordBreak,
 	},
 }) {
-	const { attributes: _attributes, ...blockProps } =
+	const { attributes: currBlockAttributes, ...blockProps } =
 		useContext(BlockEditContext);
 
 	const properties = {};
 	const generators = [];
 
-	if (
-		isActiveField(publisherFontColor) &&
-		_attributes.publisherFontColor !== attributes.publisherFontColor.default
-	) {
-		properties.color = _attributes.publisherFontColor;
+	if (isActiveField(publisherFontColor)) {
+		const color = getValueAddonRealValue(
+			currBlockAttributes.publisherFontColor
+		);
+
+		if (color !== attributes.publisherFontColor.default)
+			properties.color = color;
 	}
 
-	if (
-		isActiveField(publisherFontSize) &&
-		_attributes.publisherFontSize !== attributes.publisherFontSize.default
-	) {
-		properties['font-size'] = _attributes.publisherFontSize;
+	if (isActiveField(publisherFontSize)) {
+		const fontSize = getValueAddonRealValue(
+			currBlockAttributes.publisherFontSize
+		);
+
+		if (fontSize !== attributes.publisherFontSize.default)
+			properties['font-size'] = fontSize;
 	}
 
-	if (
-		isActiveField(publisherLineHeight) &&
-		_attributes.publisherLineHeight !==
-			attributes.publisherLineHeight.default
-	) {
-		properties['line-height'] = _attributes.publisherLineHeight;
+	if (isActiveField(publisherLineHeight)) {
+		const lineHeight = getValueAddonRealValue(
+			currBlockAttributes.publisherLineHeight
+		);
+
+		if (lineHeight !== attributes.publisherLineHeight.default)
+			properties['line-height'] = lineHeight;
 	}
 
 	if (
 		isActiveField(publisherTextAlign) &&
-		_attributes.publisherTextAlign !== attributes.publisherTextAlign.default
+		currBlockAttributes.publisherTextAlign !==
+			attributes.publisherTextAlign.default
 	) {
-		properties['text-align'] = _attributes.publisherTextAlign;
+		properties['text-align'] = currBlockAttributes.publisherTextAlign;
 	}
 
 	if (
 		isActiveField(publisherTextDecoration) &&
-		_attributes.publisherTextDecoration !==
+		currBlockAttributes.publisherTextDecoration !==
 			attributes.publisherTextDecoration.default
 	) {
-		properties['text-decoration'] = _attributes.publisherTextDecoration;
+		properties['text-decoration'] =
+			currBlockAttributes.publisherTextDecoration;
 	}
 
 	if (
 		isActiveField(publisherFontStyle) &&
-		_attributes.publisherFontStyle !== attributes.publisherFontStyle.default
+		currBlockAttributes.publisherFontStyle !==
+			attributes.publisherFontStyle.default
 	) {
-		properties['font-style'] = _attributes.publisherFontStyle;
+		properties['font-style'] = currBlockAttributes.publisherFontStyle;
 	}
 
 	if (
 		isActiveField(publisherTextTransform) &&
-		_attributes.publisherTextTransform !==
+		currBlockAttributes.publisherTextTransform !==
 			attributes.publisherTextTransform.default
 	) {
-		properties['text-transform'] = _attributes.publisherTextTransform;
+		properties['text-transform'] =
+			currBlockAttributes.publisherTextTransform;
 	}
 
 	if (
 		isActiveField(publisherDirection) &&
-		_attributes.publisherDirection !== attributes.publisherDirection.default
+		currBlockAttributes.publisherDirection !==
+			attributes.publisherDirection.default
 	) {
-		properties.direction = _attributes.publisherDirection;
+		properties.direction = currBlockAttributes.publisherDirection;
 	}
 
-	if (
-		isActiveField(publisherLetterSpacing) &&
-		_attributes.publisherLetterSpacing !==
-			attributes.publisherLetterSpacing.default
-	) {
-		properties['letter-spacing'] = _attributes.publisherLetterSpacing;
+	if (isActiveField(publisherLetterSpacing)) {
+		const letterSpacing = getValueAddonRealValue(
+			currBlockAttributes.publisherLetterSpacing
+		);
+
+		if (letterSpacing !== attributes.publisherLetterSpacing.default)
+			properties['letter-spacing'] = letterSpacing;
 	}
 
-	if (
-		isActiveField(publisherWordSpacing) &&
-		_attributes.publisherWordSpacing !==
-			attributes.publisherWordSpacing.default
-	) {
-		properties['word-spacing'] = _attributes.publisherWordSpacing;
+	if (isActiveField(publisherWordSpacing)) {
+		const wordSpacing = getValueAddonRealValue(
+			currBlockAttributes.publisherWordSpacing
+		);
+
+		if (wordSpacing !== attributes.publisherWordSpacing.default)
+			properties['word-spacing'] = wordSpacing;
 	}
 
-	if (
-		isActiveField(publisherTextIndent) &&
-		_attributes.publisherTextIndent !==
-			attributes.publisherTextIndent.default
-	) {
-		properties['text-indent'] = _attributes.publisherTextIndent;
+	if (isActiveField(publisherTextIndent)) {
+		const textIndent = getValueAddonRealValue(
+			currBlockAttributes.publisherTextIndent
+		);
+
+		if (textIndent !== attributes.publisherTextIndent.default)
+			properties['text-indent'] = textIndent;
 	}
 
 	if (
 		isActiveField(publisherTextOrientation) &&
-		_attributes.publisherTextOrientation !==
+		currBlockAttributes.publisherTextOrientation !==
 			attributes.publisherTextOrientation.default
 	) {
-		switch (_attributes.publisherTextOrientation) {
+		switch (currBlockAttributes.publisherTextOrientation) {
 			case 'style-1':
 				properties['writing-mode'] = 'vertical-lr';
 				properties['text-orientation'] = 'mixed';
@@ -162,10 +176,10 @@ export function TypographyStyles({
 
 	if (
 		isActiveField(publisherTextColumns) &&
-		_attributes.publisherTextColumns !==
+		currBlockAttributes.publisherTextColumns !==
 			attributes.publisherTextColumns.default
 	) {
-		switch (_attributes.publisherTextColumns) {
+		switch (currBlockAttributes.publisherTextColumns) {
 			case '2-columns':
 				properties['column-count'] = '2';
 				break;
@@ -187,42 +201,45 @@ export function TypographyStyles({
 				break;
 		}
 
-		switch (_attributes.publisherTextColumns) {
+		switch (currBlockAttributes.publisherTextColumns) {
 			case '2-columns':
 			case '3-columns':
 			case '4-columns':
 			case '5-columns':
 			case 'none':
-				if (
-					_attributes.publisherTextColumnsGap !==
-					attributes.publisherTextColumnsGap.default
-				) {
-					properties['column-gap'] =
-						_attributes.publisherTextColumnsGap;
+				const gap = getValueAddonRealValue(
+					currBlockAttributes.publisherTextColumnsGap
+				);
+
+				if (gap !== attributes.publisherTextColumnsGap.default) {
+					properties['column-gap'] = gap;
 				}
 
+				const color = getValueAddonRealValue(
+					currBlockAttributes.publisherTextColumnsDividerColor
+				);
+
 				if (
-					_attributes.publisherTextColumnsDividerColor !==
+					color !==
 					attributes.publisherTextColumnsDividerColor.default
 				) {
-					properties['column-rule-color'] =
-						_attributes.publisherTextColumnsDividerColor;
+					properties['column-rule-color'] = color;
 				}
 
 				if (
-					_attributes.publisherTextColumnsDividerStyle !==
+					currBlockAttributes.publisherTextColumnsDividerStyle !==
 					attributes.publisherTextColumnsDividerStyle.default
 				) {
 					properties['column-rule-style'] =
-						_attributes.publisherTextColumnsDividerStyle;
+						currBlockAttributes.publisherTextColumnsDividerStyle;
 				}
 
 				if (
-					_attributes.publisherTextColumnsDividerWidth !==
+					currBlockAttributes.publisherTextColumnsDividerWidth !==
 					attributes.publisherTextColumnsDividerWidth.default
 				) {
 					properties['column-rule-width'] =
-						_attributes.publisherTextColumnsDividerWidth;
+						currBlockAttributes.publisherTextColumnsDividerWidth;
 				}
 
 				break;
@@ -231,22 +248,24 @@ export function TypographyStyles({
 
 	if (
 		isActiveField(publisherTextStrokeColor) &&
-		_attributes.publisherTextStrokeColor !==
+		currBlockAttributes.publisherTextStrokeColor !==
 			attributes.publisherTextStrokeColor.default
 	) {
 		properties['-webkit-text-stroke'] =
-			_attributes.publisherTextStrokeWidth +
+			getValueAddonRealValue(
+				currBlockAttributes.publisherTextStrokeWidth
+			) +
 			' ' +
-			_attributes.publisherTextStrokeColor;
+			currBlockAttributes.publisherTextStrokeColor;
 	}
 
 	if (
 		isActiveField(publisherWordBreak) &&
-		_attributes.publisherWordBreak !==
+		currBlockAttributes.publisherWordBreak !==
 			attributes.publisherWordBreak.default &&
-		_attributes.publisherWordBreak !== 'normal'
+		currBlockAttributes.publisherWordBreak !== 'normal'
 	) {
-		properties['word-break'] = _attributes.publisherWordBreak;
+		properties['word-break'] = currBlockAttributes.publisherWordBreak;
 	}
 
 	//
@@ -264,7 +283,7 @@ export function TypographyStyles({
 						],
 					},
 				},
-				{ attributes: _attributes, ...blockProps }
+				{ attributes: currBlockAttributes, ...blockProps }
 			)
 		);
 	}
@@ -273,7 +292,7 @@ export function TypographyStyles({
 		isActiveField(publisherTextShadow) &&
 		!arrayEquals(
 			attributes.publisherTextShadow.default,
-			_attributes.publisherTextShadow
+			currBlockAttributes.publisherTextShadow
 		)
 	) {
 		generators.push(
@@ -289,7 +308,7 @@ export function TypographyStyles({
 						...(publisherTextShadow?.cssGenerators || {}),
 					},
 				},
-				{ attributes: _attributes, ...blockProps }
+				{ attributes: currBlockAttributes, ...blockProps }
 			)
 		);
 	}
@@ -301,7 +320,7 @@ export function TypographyStyles({
 					...(cssGenerators || {}),
 				},
 			},
-			{ attributes: _attributes, ...blockProps }
+			{ attributes: currBlockAttributes, ...blockProps }
 		)
 	);
 

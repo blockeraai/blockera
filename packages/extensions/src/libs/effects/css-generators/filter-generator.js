@@ -3,6 +3,7 @@
  */
 import { isUndefined } from '@publisher/utils';
 import { createCssRule } from '@publisher/style-engine';
+import { getValueAddonRealValue } from '@publisher/hooks';
 
 export function FilterGenerator(id, props, styleEngine) {
 	const {
@@ -21,10 +22,16 @@ export function FilterGenerator(id, props, styleEngine) {
 			}
 
 			if (item.type === 'drop-shadow') {
-				return `${item.type}(${item['drop-shadow-x']} ${item['drop-shadow-y']} ${item['drop-shadow-blur']} ${item['drop-shadow-color']})`;
+				return `${item.type}(${getValueAddonRealValue(
+					item['drop-shadow-x']
+				)} ${getValueAddonRealValue(
+					item['drop-shadow-y']
+				)} ${getValueAddonRealValue(
+					item['drop-shadow-blur']
+				)} ${getValueAddonRealValue(item['drop-shadow-color'])})`;
 			}
 
-			return `${item.type}(${item[item.type]})`;
+			return `${item.type}(${getValueAddonRealValue(item[item.type])})`;
 		})
 		?.filter((item) => null !== item);
 

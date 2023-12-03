@@ -3,6 +3,7 @@
  */
 import { createCssRule } from '@publisher/style-engine';
 import { getBackgroundItemBGProperty } from '@publisher/controls';
+import { getValueAddonRealValue } from '@publisher/hooks';
 
 export function backgroundGenerator(id, props, styleEngine) {
 	const { attributes } = props;
@@ -41,7 +42,9 @@ export function backgroundGenerator(id, props, styleEngine) {
 				// Background Size
 				if (item['image-size'] === 'custom') {
 					properties.size.push(
-						`${item['image-size-width']} ${item['image-size-height']}`
+						`${getValueAddonRealValue(
+							item['image-size-width']
+						)} ${getValueAddonRealValue(item['image-size-height'])}`
 					);
 				} else {
 					properties.size.push(item['image-size']);
@@ -49,7 +52,9 @@ export function backgroundGenerator(id, props, styleEngine) {
 
 				// Background Position
 				properties.position.push(
-					`${item['image-position'].left} ${item['image-position'].top}`
+					`${getValueAddonRealValue(
+						item['image-position'].left
+					)} ${getValueAddonRealValue(item['image-position'].top)}`
 				);
 
 				// Background Repeat

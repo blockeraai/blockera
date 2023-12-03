@@ -1,5 +1,5 @@
 // @flow
-
+// todo check to remove this
 export function convertToPercent(value: string): number | string {
 	const match = value.match(/^(\d+(?:\.\d+)?)(\w+)$/);
 
