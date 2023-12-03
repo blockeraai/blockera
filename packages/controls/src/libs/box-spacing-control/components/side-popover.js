@@ -55,7 +55,7 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 0px"
 					onClick={() => {
-						if (unitType === 'auto') {
+						if (unitType === 'auto' || unitType === 'func') {
 							setValue('0px');
 						} else {
 							setValue('0' + unitType);
@@ -73,7 +73,7 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 10px"
 					onClick={() => {
-						if (unitType === 'auto') {
+						if (unitType === 'auto' || unitType === 'func') {
 							setValue('10px');
 						} else {
 							setValue('10' + unitType);
@@ -91,7 +91,7 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 20px"
 					onClick={() => {
-						if (unitType === 'auto') {
+						if (unitType === 'auto' || unitType === 'func') {
 							setValue('20px');
 						} else {
 							setValue('20' + unitType);
@@ -109,7 +109,7 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 30px"
 					onClick={() => {
-						if (unitType === 'auto') {
+						if (unitType === 'auto' || unitType === 'func') {
 							setValue('30px');
 						} else {
 							setValue('30' + unitType);
@@ -127,7 +127,7 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 60px"
 					onClick={() => {
-						if (unitType === 'auto') {
+						if (unitType === 'auto' || unitType === 'func') {
 							setValue('60px');
 						} else {
 							setValue('60' + unitType);
@@ -145,7 +145,7 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 80px"
 					onClick={() => {
-						if (unitType === 'auto') {
+						if (unitType === 'auto' || unitType === 'func') {
 							setValue('80px');
 						} else {
 							setValue('80' + unitType);
@@ -163,7 +163,7 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 100px"
 					onClick={() => {
-						if (unitType === 'auto') {
+						if (unitType === 'auto' || unitType === 'func') {
 							setValue('100px');
 						} else {
 							setValue('100' + unitType);
@@ -181,7 +181,7 @@ export function SidePopover({
 					size="small"
 					aria-label="Set 120px"
 					onClick={() => {
-						if (unitType === 'auto') {
+						if (unitType === 'auto' || unitType === 'func') {
 							setValue('120px');
 						} else {
 							setValue('120' + unitType);
