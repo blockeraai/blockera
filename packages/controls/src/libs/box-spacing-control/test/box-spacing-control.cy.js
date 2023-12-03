@@ -285,4 +285,75 @@ describe('box spacing control component testing', () => {
 			return expect(getControlValue(name)).to.deep.eq(expectValue);
 		});
 	});
+
+	it('Labels', () => {
+		const name = nanoid();
+		cy.withDataProvider({
+			component: <BoxSpacingControl label="My Label" />,
+			name,
+		});
+
+		const items = [
+			'Top Margin',
+			'Right Margin',
+			'Bottom Margin',
+			'Left Margin',
+			'Top Padding',
+			'Right Padding',
+			'Bottom Padding',
+			'Left Padding',
+		];
+
+		items.forEach((item) => {
+			cy.get(`span[aria-label="${item}"][data-cy="label-control"]`).as(
+				'Position'
+			);
+
+			cy.get('@Position').click();
+			cy.get('input[type=number]').clear();
+			cy.get('input[type=number]').type(10);
+			cy.get('@Position').contains(/^10$/);
+
+			//
+			// Change to EM
+			//
+			cy.get('[aria-label="Select Unit"]').select('em');
+			cy.get('@Position')
+				.invoke('text')
+				.then((text) => {
+					expect(text.trim()).to.eq('10em');
+				});
+
+			//
+			// Change to Auto (only in margin)
+			//
+			if (
+				[
+					'Top Margin',
+					'Right Margin',
+					'Bottom Margin',
+					'Left Margin',
+				].includes(item)
+			) {
+				cy.get('[aria-label="Select Unit"]').select('auto');
+				cy.get('@Position')
+					.invoke('text')
+					.then((text) => {
+						expect(text.trim()).to.eq('AUTO');
+					});
+			}
+
+			//
+			// Change to CSS Func
+			//
+			cy.get('[aria-label="Select Unit"]').select('func');
+			cy.get('input[type=text]').clear();
+			cy.get('input[type=text]').type('calc(10px + 10px)');
+			cy.get('@Position')
+				.invoke('text')
+				.then((text) => {
+					expect(text.trim()).to.eq('CSS');
+				});
+		});
+	});
 });
