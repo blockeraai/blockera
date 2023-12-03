@@ -219,6 +219,61 @@ describe('box position control component testing', () => {
 				);
 			});
 		});
+
+		it('Labels', () => {
+			const name = nanoid();
+			cy.withDataProvider({
+				component: (
+					<BoxPositionControl
+						label="My Label"
+						className="custom-class"
+					/>
+				),
+				name,
+			});
+			cy.get('.publisher-control-select').click();
+			cy.get('ul > li').contains('Relative').click();
+
+			const positions = [
+				'Top Position',
+				'Right Position',
+				'Bottom Position',
+				'Left Position',
+			];
+
+			positions.forEach((position) => {
+				cy.get(
+					`span[aria-label="${position}"][data-cy="label-control"]`
+				).as('Position');
+
+				cy.get('@Position').click();
+				cy.get('input[type=number]').clear();
+				cy.get('input[type=number]').type(10);
+				cy.get('@Position').contains(/^10$/);
+
+				//
+				// Change to EM
+				//
+				cy.get('[aria-label="Select Unit"]').select('em');
+				cy.get('@Position')
+					.invoke('text')
+					.then((text) => {
+						expect(text.trim()).to.eq('10em');
+					});
+
+				//
+				// Change to CSS Func
+				//
+				cy.get('[aria-label="Select Unit"]').select('func');
+				cy.get('input[type=text]').clear();
+				cy.get('input[type=text]').type('calc(10px + 10px)');
+				cy.get('@Position')
+					.invoke('text')
+					.then((text) => {
+						expect(text.trim()).to.eq('CSS');
+					});
+			});
+		});
 	});
 
 	describe('relative - fixed - sticky', () => {
