@@ -74,14 +74,68 @@ export function UnitInput({
 		}
 	}, [unitValue, inputValue]);
 
-	const onChangeSelect = (value: string) => {
-		setUnitValue(getUnitByValue(value, units));
+	const onChangeSelect = (newUnitValue: string) => {
+		// new unit is func
+		// then append old unit to value and show it in the input
+		if (
+			newUnitValue === 'func' &&
+			inputValue !== '' &&
+			!isSpecialUnit(unitValue.value)
+		) {
+			setUnitValue(getUnitByValue(newUnitValue, units));
+			setInputValue(inputValue + unitValue.value);
+			return;
+		}
+
+		// old unit is func and new unit is not special
+		// extract number from old input value (func value)
+		if (
+			!isSpecialUnit(newUnitValue) &&
+			unitValue.value === 'func' &&
+			inputValue !== ''
+		) {
+			const extractedValue = extractNumberAndUnit(inputValue);
+
+			setUnitValue(getUnitByValue(newUnitValue, units));
+
+			if (extractedValue.unit !== 'func') {
+				setInputValue(extractedValue.value);
+			} else {
+				setInputValue('');
+			}
+			return;
+		}
+
+		// old unit is func and new is not
+		// then extract number value from value and keep it for next change
+		if (
+			isSpecialUnit(newUnitValue) &&
+			!isSpecialUnit(unitValue.value) &&
+			unitValue.value === 'func'
+		) {
+			const extractedValue = extractNumberAndUnit(inputValue);
+			setInputValue(extractedValue.value); // save value for next change
+			setUnitValue(getUnitByValue(newUnitValue, units));
+			return;
+		}
+
+		if (
+			newUnitValue === 'func' &&
+			isSpecialUnit(unitValue.value) &&
+			inputValue !== ''
+		) {
+			setInputValue('');
+			setUnitValue(getUnitByValue(newUnitValue, units));
+			return;
+		}
+
+		setUnitValue(getUnitByValue(newUnitValue, units));
 
 		// old unit is special && current is not && value is empty
 		// then try to catch value from default value
 		if (
 			isSpecialUnit(unitValue.value) &&
-			!isSpecialUnit(value) &&
+			!isSpecialUnit(newUnitValue) &&
 			inputValue === '' &&
 			defaultValue !== ''
 		) {

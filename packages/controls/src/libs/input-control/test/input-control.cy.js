@@ -734,7 +734,7 @@ describe('input control component testing', () => {
 				});
 			});
 
-			it('should change and handle units dropdown ', () => {
+			it('extracted unit is not in list but should be appended to list and clear after change', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: <InputControl unitType="general" />,
@@ -774,6 +774,115 @@ describe('input control component testing', () => {
 
 				cy.get('input[type=number]').should('be.disabled');
 				cy.get('select').should('be.disabled');
+			});
+
+			it.only('handling data while switching between func, special and normal units', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+					value: '12px',
+				});
+
+				// default value render
+				cy.get('input').should('have.value', 12);
+				cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('12px');
+				});
+
+				// change to func
+				cy.get('[aria-label="Select Unit"]').select('func');
+				cy.get('[aria-label="Select Unit"]').should(
+					'have.value',
+					'func'
+				);
+				cy.get('input').should('have.value', '12px');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('12pxfunc');
+				});
+
+				// change to em
+				cy.get('[aria-label="Select Unit"]').select('em');
+				cy.get('[aria-label="Select Unit"]').should('have.value', 'em');
+				cy.get('input').should('have.value', 12);
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('12em');
+				});
+
+				// change to initial
+				cy.get('[aria-label="Select Unit"]').select('initial');
+				cy.get('[aria-label="Select Unit"]').should(
+					'have.value',
+					'initial'
+				);
+				cy.get('input').should('not.exist');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('initial');
+				});
+
+				// change to ch
+				cy.get('[aria-label="Select Unit"]').select('ch');
+				cy.get('[aria-label="Select Unit"]').should('have.value', 'ch');
+				cy.get('input').should('have.value', '12');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('12ch');
+				});
+
+				// change to initial
+				cy.get('[aria-label="Select Unit"]').select('initial');
+				cy.get('[aria-label="Select Unit"]').should(
+					'have.value',
+					'initial'
+				);
+				cy.get('input').should('not.exist');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('initial');
+				});
+
+				// change to func
+				cy.get('[aria-label="Select Unit"]').select('func');
+				cy.get('[aria-label="Select Unit"]').should(
+					'have.value',
+					'func'
+				);
+				cy.get('input').should('have.value', '');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('');
+				});
+
+				// change to px
+				cy.get('[aria-label="Select Unit"]').select('px');
+				cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+				cy.get('input').should('have.value', '');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('');
+				});
+
+				// change to func
+				cy.get('[aria-label="Select Unit"]').select('func');
+				cy.get('[aria-label="Select Unit"]').should(
+					'have.value',
+					'func'
+				);
+				cy.get('input').should('have.value', '');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('');
+				});
+				cy.get('input').type('calc(11px)');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq(
+						'calc(11px)func'
+					);
+				});
+
+				// change to px
+				cy.get('[aria-label="Select Unit"]').select('px');
+				cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+				cy.get('input').should('have.value', '');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('');
+				});
 			});
 		});
 
