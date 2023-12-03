@@ -461,6 +461,9 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													)}
 												>
 													<InputControl
+														style={{
+															width: '133px',
+														}}
 														{...{
 															...props,
 															unitType:
@@ -495,7 +498,13 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												</BaseControl>
 											)
 										) : (
-											<Flex direction="row" gap="10px">
+											<Flex
+												direction="row"
+												gap="10px"
+												style={{
+													width: '133px',
+												}}
+											>
 												{isActiveField(
 													publisherGapColumns
 												) && (
@@ -572,7 +581,6 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												'Custom Row Column Gap',
 												'publisher-core'
 											)}
-											noBorder={gapLock}
 											size="small"
 											onClick={() => {
 												handleOnChangeAttributes(
