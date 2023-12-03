@@ -657,21 +657,31 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													]}
 													//
 													defaultValue={'nowrap'}
-													onChange={(newValue) =>
-														handleOnChangeAttributes(
-															'publisherFlexWrap',
-															{
-																...flexWrap,
-																value: flexWrap.reverse
-																	? newValue ===
-																			'wrap' &&
-																	  `${newValue}-reverse`
-																	: newValue.split(
-																			'-'
-																	  )[0],
-															}
-														)
-													}
+													onChange={(newValue) => {
+														if (
+															newValue ===
+															'nowrap'
+														) {
+															handleOnChangeAttributes(
+																'publisherFlexWrap',
+																{
+																	...flexWrap,
+																	value: 'nowrap',
+																	reverse: false,
+																}
+															);
+														} else {
+															handleOnChangeAttributes(
+																'publisherFlexWrap',
+																{
+																	...flexWrap,
+																	value: flexWrap.reverse
+																		? 'wrap-reverse'
+																		: 'wrap',
+																}
+															);
+														}
+													}}
 												/>
 											</BaseControl>
 											<Button
