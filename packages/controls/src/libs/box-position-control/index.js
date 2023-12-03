@@ -48,6 +48,7 @@ import { default as AbsoluteBottomIcon } from './icons/absolute-bottom';
 import { default as AbsoluteLeftIcon } from './icons/absolute-left';
 import { default as AbsoluteFullIcon } from './icons/absolute-full';
 import { default as AbsoluteCenterIcon } from './icons/absolute-center';
+import { extractNumberAndUnit } from '../input-control/utils';
 
 const Component = ({
 	openSide,
@@ -66,6 +67,12 @@ const Component = ({
 		defaultValue,
 		mergeInitialAndDefault: true,
 	});
+
+	const positionTop = extractNumberAndUnit(value.position.top);
+	const positionLeft = extractNumberAndUnit(value.position.left);
+	const positionRight = extractNumberAndUnit(value.position.right);
+	const positionBottom = extractNumberAndUnit(value.position.bottom);
+
 	const {
 		topDragSetValue,
 		rightDragSetValue,
@@ -73,18 +80,8 @@ const Component = ({
 		leftDragSetValue,
 	} = useDragSetValues({ value, setValue });
 
-	const fixLabelToNumber = (labelValue: string): string => {
-		if (labelValue) {
-			return labelValue.replace(
-				/(auto|px|%|em|rem|ch|vw|vh|dvw|dvh)$/,
-				''
-			);
-		}
-		return '';
-	};
-
 	const topDragValueHandler = useDragValue({
-		value: fixLabelToNumber(value.position.top) || 0,
+		value: positionTop.value !== '' ? positionTop.value : 0,
 		setValue: topDragSetValue,
 		movement: 'vertical',
 		onEnd: () => {
@@ -93,7 +90,7 @@ const Component = ({
 	});
 
 	const leftDragValueHandler = useDragValue({
-		value: fixLabelToNumber(value.position.left) || 0,
+		value: positionLeft.value !== '' ? positionLeft.value : 0,
 		setValue: leftDragSetValue,
 		movement: 'horizontal',
 		onEnd: () => {
@@ -102,7 +99,7 @@ const Component = ({
 	});
 
 	const rightDragValueHandler = useDragValue({
-		value: fixLabelToNumber(value.position.right) || 0,
+		value: positionRight.value !== '' ? positionRight.value : 0,
 		setValue: rightDragSetValue,
 		movement: 'horizontal',
 		onEnd: () => {
@@ -111,7 +108,7 @@ const Component = ({
 	});
 
 	const bottomDragValueHandler = useDragValue({
-		value: fixLabelToNumber(value.position.bottom) || 0,
+		value: positionBottom.value !== '' ? positionBottom.value : 0,
 		setValue: bottomDragSetValue,
 		movement: 'vertical',
 		onEnd: () => {
@@ -122,40 +119,35 @@ const Component = ({
 	const [openPopover, setOpenPopover] = useState(openSide);
 	const [focusSide, setFocusSide] = useState('');
 
-	function fixLabelText(value: string | MixedElement): any {
+	function fixLabelText(value: Object | string): any {
 		if (value === '') {
-			value = '-';
-		} else if ('string' === typeof value) {
-			// remove px
-			value = value.replace('px', '');
-
-			const match = /(\d+)(auto|px|%|em|rem|ch|vw|vh|dvw|dvh)/gi.exec(
-				value
-			);
-			if (match) {
-				if (match[2] === 'auto') {
-					value = <>Auto</>;
-				} else {
-					const inputValue = match.input.replace(
-						/(auto|px|%|em|rem|ch|vw|vh|dvw|dvh)/,
-						''
-					);
-					value = (
-						<>
-							{inputValue}
-							<i>{match[2]}</i>
-						</>
-					);
-				}
-			}
+			return '-';
 		}
 
-		return value;
-	}
+		const extracted = extractNumberAndUnit(value);
 
-	function getUnitType(value: string) {
-		const match = value.match(/(auto|px|%|em|rem|ch|vw|vh|dvw|dvh)/);
-		return match ? match[0] : '';
+		if (extracted.value === '' && extracted.unit === '') {
+			return '-';
+		}
+
+		switch (extracted.unit) {
+			case 'func':
+				return <b>CSS</b>;
+
+			case 'px':
+				return extracted.value !== '' ? extracted.value : '0';
+
+			case 'auto':
+				return <b>AUTO</b>;
+
+			default:
+				return (
+					<>
+						{extracted.value !== '' ? extracted.value : '0'}
+						<i>{extracted.unit}</i>
+					</>
+				);
+		}
 	}
 
 	return (
@@ -234,11 +226,24 @@ const Component = ({
 								'side-top',
 								openPopover === 'top' || focusSide === 'top'
 									? 'selected-side'
+									: '',
+								positionTop.unit !== 'func'
+									? 'side-drag-active'
 									: ''
 							)}
 							onMouseDown={(event) => {
+								if (positionTop.unit === 'func') {
+									event.preventDefault();
+									return;
+								}
+
 								topDragValueHandler(event);
 								setFocusSide('top');
+							}}
+							onClick={() => {
+								if (positionTop.unit === 'func') {
+									setOpenPopover('top');
+								}
 							}}
 							d="M5.242 0.5H244.757C246.094 0.5 246.763 2.11572 245.818 3.06066L220.697 28.182C219.853 29.0259 218.708 29.5 217.515 29.5H32.4846C31.2912 29.5 30.1466 29.0259 29.3027 28.182L4.18134 3.06066C3.23639 2.11571 3.90564 0.5 5.242 0.5Z"
 						/>
@@ -250,11 +255,24 @@ const Component = ({
 								'side-right',
 								openPopover === 'right' || focusSide === 'right'
 									? 'selected-side'
+									: '',
+								positionRight.unit !== 'func'
+									? 'side-drag-active'
 									: ''
 							)}
 							onMouseDown={(event) => {
+								if (positionRight.unit === 'func') {
+									event.preventDefault();
+									return;
+								}
+
 								rightDragValueHandler(event);
 								setFocusSide('right');
+							}}
+							onClick={() => {
+								if (positionRight.unit === 'func') {
+									setOpenPopover('right');
+								}
 							}}
 							d="M220.5 42.4679V34.4854C220.5 33.2919 220.974 32.1473 221.818 31.3034L246.939 6.18207C247.884 5.23713 249.5 5.90638 249.5 7.24273V69.7106C249.5 71.0469 247.884 71.7162 246.939 70.7712L221.818 45.6499C220.974 44.806 220.5 43.6614 220.5 42.4679Z"
 						/>
@@ -267,11 +285,24 @@ const Component = ({
 								openPopover === 'bottom' ||
 									focusSide === 'bottom'
 									? 'selected-side'
+									: '',
+								positionBottom.unit !== 'func'
+									? 'side-drag-active'
 									: ''
 							)}
 							onMouseDown={(event) => {
+								if (positionBottom.unit === 'func') {
+									event.preventDefault();
+									return;
+								}
+
 								bottomDragValueHandler(event);
 								setFocusSide('bottom');
+							}}
+							onClick={() => {
+								if (positionBottom.unit === 'func') {
+									setOpenPopover('bottom');
+								}
 							}}
 							d="M32.4387 47.5H217.562C218.755 47.5 219.9 47.9741 220.744 48.818L245.865 73.9393C246.81 74.8843 246.141 76.5 244.804 76.5H5.19611C3.85975 76.5 3.1905 74.8843 4.13544 73.9393L29.2568 48.818C30.1007 47.9741 31.2453 47.5 32.4387 47.5Z"
 						/>
@@ -283,11 +314,24 @@ const Component = ({
 								'side-left',
 								openPopover === 'left' || focusSide === 'left'
 									? 'selected-side'
+									: '',
+								positionLeft.unit !== 'func'
+									? 'side-drag-active'
 									: ''
 							)}
 							onMouseDown={(event) => {
+								if (positionLeft.unit === 'func') {
+									event.preventDefault();
+									return;
+								}
+
 								leftDragValueHandler(event);
 								setFocusSide('left');
+							}}
+							onClick={() => {
+								if (positionLeft.unit === 'func') {
+									setOpenPopover('left');
+								}
 							}}
 							d="M0.5 69.7106V7.24322C0.5 5.90687 2.11571 5.23761 3.06066 6.18256L28.182 31.3039C29.0259 32.1478 29.5 33.2924 29.5 34.4859V42.468C29.5 43.6615 29.0259 44.8061 28.182 45.65L3.06066 70.7713C2.11571 71.7163 0.5 71.047 0.5 69.7106Z"
 						/>
@@ -322,7 +366,7 @@ const Component = ({
 					>
 						<LabelControl
 							ariaLabel={__('Top Position', 'publisher-core')}
-							label={fixLabelText(value.position.top)}
+							label={fixLabelText(positionTop)}
 							onClick={() => setOpenPopover('top')}
 						/>
 
@@ -332,7 +376,7 @@ const Component = ({
 							onClose={() => setOpenPopover('')}
 							title={__('Top Position', 'publisher-core')}
 							isOpen={openPopover === 'top'}
-							unit={getUnitType(value.position.top)}
+							unit={positionTop.unit}
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -354,7 +398,7 @@ const Component = ({
 					>
 						<LabelControl
 							ariaLabel={__('Right Position', 'publisher-core')}
-							label={fixLabelText(value.position.right)}
+							label={fixLabelText(positionRight)}
 							onClick={() => setOpenPopover('right')}
 						/>
 
@@ -365,7 +409,7 @@ const Component = ({
 							onClose={() => setOpenPopover('')}
 							title={__('Right Position', 'publisher-core')}
 							isOpen={openPopover === 'right'}
-							unit={getUnitType(value.position.right)}
+							unit={positionRight.unit}
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -387,7 +431,7 @@ const Component = ({
 					>
 						<LabelControl
 							ariaLabel={__('Bottom Position', 'publisher-core')}
-							label={fixLabelText(value.position.bottom)}
+							label={fixLabelText(positionBottom)}
 							onClick={() => setOpenPopover('bottom')}
 						/>
 
@@ -397,7 +441,7 @@ const Component = ({
 							onClose={() => setOpenPopover('')}
 							title={__('Bottom Position', 'publisher-core')}
 							isOpen={openPopover === 'bottom'}
-							unit={getUnitType(value.position.bottom)}
+							unit={positionBottom.unit}
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -419,7 +463,7 @@ const Component = ({
 					>
 						<LabelControl
 							ariaLabel={__('Left Position', 'publisher-core')}
-							label={fixLabelText(value.position.left)}
+							label={fixLabelText(positionLeft)}
 							onClick={() => setOpenPopover('left')}
 						/>
 
@@ -429,7 +473,7 @@ const Component = ({
 							onClose={() => setOpenPopover('')}
 							title={__('Left Position', 'publisher-core')}
 							isOpen={openPopover === 'left'}
-							unit={getUnitType(value.position.left)}
+							unit={positionLeft.unit}
 							onChange={(newValue) => {
 								setValue({
 									...value,

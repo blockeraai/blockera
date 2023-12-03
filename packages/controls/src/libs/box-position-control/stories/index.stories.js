@@ -266,6 +266,37 @@ export const FilledRelative = {
 						/>
 					</ControlContextProvider>
 				</Flex>
+
+				<Flex
+					direction="column"
+					gap="15px"
+					style={{ marginBottom: '150px' }}
+				>
+					<h2 className="story-heading">
+						Relative<span>CSS Func Value</span>
+					</h2>
+
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								type: 'relative',
+								position: {
+									top: 'calc(10px + 10px)func',
+									right: 'calc(10px + 10px)func',
+									bottom: 'calc(10px + 10px)func',
+									left: 'calc(10px + 10px)func',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxPositionControl}
+							{...args}
+							openSide="left"
+						/>
+					</ControlContextProvider>
+				</Flex>
 			</Flex>
 		);
 	},
