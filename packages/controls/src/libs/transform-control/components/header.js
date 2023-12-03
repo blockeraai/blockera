@@ -8,6 +8,7 @@ import { __, sprintf } from '@wordpress/i18n';
  * Publisher dependencies
  */
 import { controlInnerClassNames } from '@publisher/classnames';
+import { convertDegToCharacter } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -43,13 +44,19 @@ const RepeaterItemHeader = ({
 
 		case 'rotate':
 			label = __('Rotate', 'publisher-core');
-			value = `${item['rotate-x']} ${item['rotate-y']} ${item['rotate-z']}`;
+			value = `${convertDegToCharacter(
+				item['rotate-x']
+			)} ${convertDegToCharacter(
+				item['rotate-y']
+			)} ${convertDegToCharacter(item['rotate-z'])}`;
 			icon = <RotateIcon />;
 			break;
 
 		case 'skew':
 			label = __('Skew', 'publisher-core');
-			value = `${item['skew-x']} ${item['skew-y']}`;
+			value = `${convertDegToCharacter(
+				item['skew-x']
+			)} ${convertDegToCharacter(item['skew-y'])}`;
 			icon = <SkewIcon />;
 			break;
 	}

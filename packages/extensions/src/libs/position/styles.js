@@ -47,20 +47,20 @@ export function PositionStyles({
 	) {
 		properties.position = _attributes.publisherPosition.type;
 
-		if (_attributes.publisherPosition.position.top !== '') {
-			properties.top = _attributes.publisherPosition.position.top;
+		if (_attributes.publisherPosition.position?.top !== '') {
+			properties.top = _attributes.publisherPosition.position?.top;
 		}
 
-		if (_attributes.publisherPosition.position.right !== '') {
-			properties.right = _attributes.publisherPosition.position.right;
+		if (_attributes.publisherPosition.position?.right !== '') {
+			properties.right = _attributes.publisherPosition.position?.right;
 		}
 
-		if (_attributes.publisherPosition.position.bottom !== '') {
-			properties.bottom = _attributes.publisherPosition.position.bottom;
+		if (_attributes.publisherPosition.position?.bottom !== '') {
+			properties.bottom = _attributes.publisherPosition.position?.bottom;
 		}
 
-		if (_attributes.publisherPosition.position.left !== '') {
-			properties.left = _attributes.publisherPosition.position.left;
+		if (_attributes.publisherPosition.position?.left !== '') {
+			properties.left = _attributes.publisherPosition.position?.left;
 		}
 
 		if (
