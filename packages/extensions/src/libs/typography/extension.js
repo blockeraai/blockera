@@ -551,7 +551,6 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 										//
 										defaultValue=""
 										onChange={(newValue) => {
-											console.log(newValue);
 											let textOriented;
 											switch (newValue) {
 												case 'style-1':
