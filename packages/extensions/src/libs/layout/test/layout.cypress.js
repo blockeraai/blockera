@@ -554,12 +554,32 @@ describe('Layout Extension', () => {
 			});
 
 			it('should update row-gap & column-gap correctly, when add data', () => {
+				// gapRows and columns should have gap value on render
 				cy.getParentContainer('Gap', 'base-control')
 					.first()
 					.within(() => {
+						cy.get('input').type(8);
 						cy.get('[aria-label="Custom Row Column Gap"]').click();
-						cy.get('input').eq(0).type(10);
-						cy.get('input').eq(1).type(15);
+					});
+
+				//Check store
+				getWPDataObject().then((data) => {
+					expect('8px').to.be.deep.equal(
+						getSelectedBlock(data, 'publisherGapRows')
+					);
+					expect('8px').to.be.deep.equal(
+						getSelectedBlock(data, 'publisherGapColumns')
+					);
+				});
+
+				//Change value
+				cy.getParentContainer('Gap', 'base-control')
+					.first()
+					.within(() => {
+						cy.get('input').eq(0).clear();
+						cy.get('input').eq(0).type(10, { force: true });
+						cy.get('input').eq(1).clear();
+						cy.get('input').eq(1).type(15, { force: true });
 					});
 
 				//Check block

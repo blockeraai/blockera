@@ -39,7 +39,7 @@ blocksInitializer({
 			attributes,
 			setAttributes
 		);
-		console.log(attributes.publisherFlexWrap);
+
 		return (
 			<>
 				<InspectorControls>
@@ -48,6 +48,7 @@ blocksInitializer({
 						initialOpen={true}
 						values={{
 							gap: attributes?.publisherGap || '',
+							gapLock: attributes?.publisherGapLock,
 							gapRows: attributes?.publisherGapRows || '',
 							display: attributes?.publisherDisplay || '',
 							flexWrap: attributes?.publisherFlexWrap || {},
@@ -101,12 +102,13 @@ export const Default = {
 					...(wrapperBlock?.attributes || {}),
 					publisherGapRows: '',
 					publisherGap: '',
+					publisherGapLock: true,
 					publisherDisplay: '',
 					publisherFlexWrap: { value: 'nowrap', reverse: false },
 					publisherGapColumns: '',
 					publisherAlignItems: '',
 					publisherAlignContent: '',
-					publisherFlexDirection: { value: 'wrap', reverse: false },
+					publisherFlexDirection: { value: 'row', reverse: false },
 					publisherJustifyContent: '',
 				},
 			},
