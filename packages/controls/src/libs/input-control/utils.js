@@ -16,7 +16,7 @@ const specialUnits = [
 
 // Function to get a unit object based on a specific value
 export const getUnitByValue = (value: string, units: Array<any>): Object => {
-	if (value === '' || isUndefined(value)) {
+	if (isUndefined(value)) {
 		return {};
 	}
 
@@ -36,6 +36,10 @@ export const getUnitByValue = (value: string, units: Array<any>): Object => {
 				}
 			}
 		}
+
+	if (value === '') {
+		return {};
+	}
 
 	// Return a new custom option for exact founded unit
 	return {

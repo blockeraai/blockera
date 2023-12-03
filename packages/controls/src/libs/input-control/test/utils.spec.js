@@ -1720,6 +1720,15 @@ describe('Util functions', () => {
 				format: 'number',
 			});
 		});
+
+		test('value is empty but there is a unit with value of empty!', () => {
+			expect(getUnitByValue('', getCSSUnits('z-index'))).toStrictEqual({
+				value: '',
+				label: '-',
+				default: '',
+				format: 'number',
+			});
+		});
 	});
 
 	describe('extractNumberAndUnit', () => {
