@@ -1478,6 +1478,33 @@ describe('Util functions', () => {
 				},
 			]);
 		});
+
+		test('z-index', () => {
+			expect(getCSSUnits('z-index')).toStrictEqual([
+				{
+					label: 'Common Values',
+					options: [
+						{
+							value: '',
+							label: '-',
+							default: '',
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Advanced',
+					options: [
+						{
+							value: 'func',
+							label: 'CSS Functions and Variables',
+							default: '',
+							format: 'text',
+						},
+					],
+				},
+			]);
+		});
 	});
 
 	describe('getUnitByValue', () => {

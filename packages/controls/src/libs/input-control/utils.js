@@ -1177,6 +1177,33 @@ export function getCSSUnits(unitType: string = ''): Array<any> {
 				},
 			];
 			break;
+
+		case 'z-index':
+			cssUnits = [
+				{
+					label: 'Common Values',
+					options: [
+						{
+							value: '',
+							label: '-',
+							default: '',
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Advanced',
+					options: [
+						{
+							value: 'func',
+							label: 'CSS Functions and Variables',
+							default: '',
+							format: 'text',
+						},
+					],
+				},
+			];
+			break;
 	}
 
 	return cssUnits;

@@ -3,6 +3,7 @@
 import type { Node } from 'react';
 
 export type TInputItem = {
+	// eslint-disable-next-line
 	unitType?:
 		| ''
 		| 'outline'
@@ -23,7 +24,8 @@ export type TInputItem = {
 		| 'order'
 		| 'flex-basis'
 		| 'flex-shrink'
-		| 'flex-grow',
+		| 'flex-grow'
+		| 'z-index',
 	units?: Array<Object>,
 	noBorder?: boolean,
 	id?: number | string,
