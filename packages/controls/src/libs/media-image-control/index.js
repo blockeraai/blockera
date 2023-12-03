@@ -1,8 +1,10 @@
+// @flow
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -19,7 +21,7 @@ import {
 import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
 import { default as DeleteIcon } from './icons/delete';
-
+import type { Props } from './types';
 export default function MediaImageControl({
 	labelChoose,
 	labelMediaLibrary,
@@ -33,7 +35,7 @@ export default function MediaImageControl({
 	field,
 	//
 	className,
-}) {
+}: Props): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
 		onChange,
@@ -56,6 +58,7 @@ export default function MediaImageControl({
 			>
 				{value && (
 					<Button
+						data-cy="delete-bg-img"
 						className="btn-delete"
 						noBorder={true}
 						icon={<DeleteIcon />}
@@ -172,11 +175,11 @@ MediaImageControl.propTypes = {
 	onChange: PropTypes.func,
 };
 
-MediaImageControl.defaultProps = {
+MediaImageControl.defaultProps = ({
 	label: '',
 	field: 'media-image',
 	defaultValue: '',
 	labelChoose: __('Choose Image…', 'publisher-core'),
 	labelMediaLibrary: __('Media Library', 'publisher-core'),
 	labelUploadImage: __('Upload Image', 'publisher-core'),
-};
+}: any);

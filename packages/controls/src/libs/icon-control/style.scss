@@ -58,13 +58,6 @@
 			}
 		}
 
-		&:hover {
-
-			.publisher-control-action-btns {
-				opacity: 1;
-				visibility: visible;
-			}
-		}
 
 		.publisher-component-button.btn-delete {
 			position: absolute;
@@ -83,12 +76,16 @@
 			transition: all 0.15s ease;
 		}
 
-		.publisher-component-button.btn-delete:hover {
+		&:hover {
+
+			.publisher-control-action-btns {
+				opacity: 1;
+				visibility: visible;
+			}
 
 			.publisher-component-button.btn-delete {
 				visibility: visible;
 				opacity: 1;
-				background: #ffffff;
 			}
 		}
 	}

@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -8,20 +9,24 @@ import { __ } from '@wordpress/i18n';
 /**
  * Publisher dependencies
  */
-import { Button, Popover } from '@publisher/components';
+import { Button, Flex, Popover } from '@publisher/components';
 
 /**
  * Internal dependencies
  */
 import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
+import type { MixedElement } from 'react';
+import ResetColorIcon from './ResetColorIcon';
+import type { Props } from './types';
 
 export default function ColorPickerControl({
 	popoverTitle,
 	isOpen,
 	onClose,
 	placement,
-	isPopover = true,
+	isPopover,
+	hasClearBtn,
 	//
 	id,
 	label,
@@ -32,7 +37,7 @@ export default function ColorPickerControl({
 	//
 	className,
 	...props
-}) {
+}: Props): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
 		onChange,
@@ -41,7 +46,7 @@ export default function ColorPickerControl({
 	});
 
 	// make sure always we treat colors as lower case
-	function valueCleanup(value) {
+	function valueCleanup(value: string) {
 		if (value !== '') {
 			value = value.toLowerCase();
 		}
@@ -59,7 +64,26 @@ export default function ColorPickerControl({
 			>
 				{isOpen && (
 					<Popover
-						title={popoverTitle}
+						title={
+							<Flex
+								justifyContent={'space-between'}
+								alignItems={'center'}
+								style={{ width: '100%' }}
+							>
+								<p>{popoverTitle}</p>
+								{hasClearBtn && (
+									<Button
+										isFocus={false}
+										size={'extra-small'}
+										onClick={() => setValue('')}
+										style={{ padding: '5px' }}
+										aria-label="reset-color"
+									>
+										<ResetColorIcon />
+									</Button>
+								)}
+							</Flex>
+						}
 						offset={20}
 						placement={placement}
 						className="components-palette-edit-popover"
@@ -71,10 +95,6 @@ export default function ColorPickerControl({
 							onChangeComplete={(color) => setValue(color.hex)}
 							{...props}
 						/>
-
-						<Button onClick={() => onChange('')}>
-							{__('Clear', 'publisher-core')}
-						</Button>
 					</Popover>
 				)}
 			</BaseControl>
@@ -94,6 +114,11 @@ export default function ColorPickerControl({
 				onChangeComplete={(color) => setValue(color.hex)}
 				{...props}
 			/>
+			{hasClearBtn && (
+				<Button onClick={() => setValue('')} aria-label="reset-color">
+					{__('Clear', 'publisher-core')}
+				</Button>
+			)}
 		</BaseControl>
 	);
 }
@@ -150,9 +175,10 @@ ColorPickerControl.propTypes = {
 ColorPickerControl.defaultProps = {
 	label: '',
 	field: 'color-picker',
-	popoverTitle: __('Color Picker', 'publisher-core'),
+	popoverTitle: (__('Color Picker', 'publisher-core'): string),
 	isPopover: true,
 	defaultValue: '',
+	hasClearBtn: true,
 	isOpen: false,
 	placement: 'left-start',
 	onClose: () => {},

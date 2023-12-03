@@ -43,7 +43,7 @@ export default function SearchControl({
 			className={className}
 		>
 			<WPSearchControl
-				value={value}
+				value={typeof value === 'object' ? '' : value}
 				onChange={setValue}
 				className={controlClassNames('search', className)}
 				{...props}

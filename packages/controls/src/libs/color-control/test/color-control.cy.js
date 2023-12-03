@@ -85,7 +85,7 @@ describe('Color Control', () => {
 			});
 
 			cy.getByDataCy('color-btn').click();
-			cy.contains(/clear/i).as('clearBtn').click();
+			cy.get('[aria-label="reset-color"]').as('clearBtn').click();
 
 			// visual and data assertion
 			cy.getByDataCy('color-label')
