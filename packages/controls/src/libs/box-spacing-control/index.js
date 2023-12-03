@@ -176,7 +176,7 @@ export default function BoxSpacingControl({
 
 		switch (extracted.unit) {
 			case 'func':
-				return <b>CSS</b>;
+				return <b>CSS...</b>;
 
 			case 'px':
 				return extracted.value !== '' ? extracted.value : '0';
