@@ -535,11 +535,8 @@ describe('Effects Extension', () => {
 					//Add data
 					cy.getByDataTest('popover-body').within(() => {
 						cy.get('[aria-label="Rotate"]').click();
-						cy.get('[aria-label="Rotate-X"]').clear();
 						cy.get('[aria-label="Rotate-X"]').type(10);
-						cy.get('[aria-label="Rotate-Y"]').clear();
 						cy.get('[aria-label="Rotate-Y"]').type(20);
-						cy.get('[aria-label="Rotate-Z"]').clear();
 						cy.get('[aria-label="Rotate-Z"]').type(30);
 					});
 
@@ -613,10 +610,8 @@ describe('Effects Extension', () => {
 					cy.getByDataTest('popover-body').within(() => {
 						cy.get('[aria-label="Skew"]').click();
 
-						cy.get('[aria-label="Skew-X"]').clear();
 						cy.get('[aria-label="Skew-X"]').type(10);
 
-						cy.get('[aria-label="Skew-Y"]').clear();
 						cy.get('[aria-label="Skew-Y"]').type(20);
 					});
 
@@ -690,10 +685,8 @@ describe('Effects Extension', () => {
 					cy.getByDataTest('popover-body').within(() => {
 						cy.get('[aria-label="Skew"]').click();
 
-						cy.get('[aria-label="Skew-X"]').clear();
 						cy.get('[aria-label="Skew-X"]').type(10);
 
-						cy.get('[aria-label="Skew-Y"]').clear();
 						cy.get('[aria-label="Skew-Y"]').type(20);
 					});
 
@@ -994,8 +987,8 @@ describe('Effects Extension', () => {
 					cy.getByDataTest('filter-drop-shadow-color').click();
 				});
 
-				cy.contains('Color Picker')
-					.parent()
+				cy.getByDataTest('popover-body')
+					.last()
 					.within(() => {
 						cy.get('input[maxlength="9"]').clear();
 						cy.get('input[maxlength="9"]').type('cccccc');
