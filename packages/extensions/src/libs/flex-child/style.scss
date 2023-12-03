@@ -10,5 +10,10 @@
 		svg {
 			transform: rotate(-90deg);
 		}
+
+		svg.publisher-custom-order,
+		svg.publisher-align-baseline {
+			transform: rotate(0deg);
+		}
 	}
 }

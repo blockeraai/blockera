@@ -15,6 +15,7 @@ export type TCssProps = {
 	'align-items'?: string,
 	'justify-content'?: string,
 	'row-gap'?: string,
+	gap?: string,
 	'column-gap'?: string,
 	'flex-wrap'?: string,
 	'align-content'?: string,
@@ -23,6 +24,7 @@ export type TCssProps = {
 export type TLayoutProps = {
 	values: {
 		gap: string,
+		gapLock: boolean,
 		gapRows: string,
 		display: string,
 		flexWrap: { value: string, reverse: boolean },

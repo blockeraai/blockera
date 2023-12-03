@@ -19,6 +19,7 @@ interface IConfigs {
 		publisherFlexDirection: string,
 		publisherAlignItems: string,
 		publisherJustifyContent: string,
+		publisherGap: string,
 		publisherGapRows: string,
 		publisherGapColumns: string,
 		publisherFlexWrap: string,
