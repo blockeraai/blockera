@@ -23,8 +23,8 @@ export const useAttributes = (
 		query,
 		callback
 	): void => {
-		if (typeof attributeId === 'object') {
-			setAttributes({ ...attributes, ...attributeId });
+		if (null === attributeId && 'object' === typeof attributeValue) {
+			setAttributes({ ...attributes, ...attributeValue });
 
 			return;
 		}

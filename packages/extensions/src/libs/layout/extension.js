@@ -205,7 +205,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													}
 												);
 											}}
-										></ToggleSelectControl>
+										/>
 									</ControlContextProvider>
 
 									<ControlContextProvider
@@ -436,17 +436,21 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 								columns="1fr 2.65fr"
 							>
 								<Flex gap="10px">
-									{gapLock ? (
-										isActiveField(publisherGap) && (
-											<ControlContextProvider
-												value={{
-													name: generateExtensionId(
-														block,
-														'gap'
-													),
-													value: gap,
-												}}
-											>
+									<ControlContextProvider
+										value={{
+											name: generateExtensionId(
+												block,
+												'gap'
+											),
+											value: {
+												gap,
+												gapRows,
+												gapColumns,
+											},
+										}}
+									>
+										{gapLock ? (
+											isActiveField(publisherGap) && (
 												<BaseControl
 													controlName="input"
 													columns="columns-1"
@@ -463,39 +467,38 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 																'essential',
 															min: 0,
 															max: 200,
-															defaultValue: '',
+															defaultValue: gap,
+															id: 'gap',
 															onChange: (
 																newValue
 															) =>
 																handleOnChangeAttributes(
-																	{
-																		publisherGap:
-																			newValue,
-																		publisherGapRows:
-																			newValue,
-																		publisherGapColumns:
-																			newValue,
-																	}
+																	'publisherGap',
+																	newValue,
+																	'',
+																	(
+																		attributes,
+																		setAttributes
+																	): void =>
+																		setAttributes(
+																			{
+																				...attributes,
+																				publisherGapRows:
+																					newValue,
+																				publisherGapColumns:
+																					newValue,
+																			}
+																		)
 																),
 														}}
 													/>
 												</BaseControl>
-											</ControlContextProvider>
-										)
-									) : (
-										<Flex direction="row" gap="10px">
-											{isActiveField(
-												publisherGapColumns
-											) && (
-												<ControlContextProvider
-													value={{
-														name: generateExtensionId(
-															block,
-															'gap-columns'
-														),
-														value: gapColumns,
-													}}
-												>
+											)
+										) : (
+											<Flex direction="row" gap="10px">
+												{isActiveField(
+													publisherGapColumns
+												) && (
 													<BaseControl
 														controlName="input"
 														columns="columns-1"
@@ -513,7 +516,8 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 																min: 0,
 																max: 200,
 																defaultValue:
-																	gap,
+																	gapColumns,
+																id: 'gapColumns',
 																onChange: (
 																	newValue
 																) =>
@@ -524,21 +528,11 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 															}}
 														/>
 													</BaseControl>
-												</ControlContextProvider>
-											)}
+												)}
 
-											{isActiveField(
-												publisherGapRows
-											) && (
-												<ControlContextProvider
-													value={{
-														name: generateExtensionId(
-															block,
-															'gap-rows'
-														),
-														value: gapRows,
-													}}
-												>
+												{isActiveField(
+													publisherGapRows
+												) && (
 													<BaseControl
 														controlName="input"
 														columns="columns-1"
@@ -556,7 +550,8 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 																min: 0,
 																max: 200,
 																defaultValue:
-																	gap,
+																	gapRows,
+																id: 'gapRows',
 																onChange: (
 																	newValue
 																) =>
@@ -567,38 +562,38 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 															}}
 														/>
 													</BaseControl>
-												</ControlContextProvider>
+												)}
+											</Flex>
+										)}
+										<Button
+											showTooltip={true}
+											tooltipPosition="top"
+											label={__(
+												'Custom Row Column Gap',
+												'publisher-core'
 											)}
-										</Flex>
-									)}
-									<Button
-										showTooltip={true}
-										tooltipPosition="top"
-										label={__(
-											'Custom Row Column Gap',
-											'publisher-core'
-										)}
-										noBorder={gapLock}
-										size="small"
-										onClick={() => {
-											handleOnChangeAttributes(
-												'publisherGapLock',
-												!gapLock
-											);
-										}}
-										style={{
-											color: gapLock
-												? 'var(--publisher-controls-color)'
-												: 'var(--publisher-controls-border-color-focus)',
-											padding: '6px 3px',
-										}}
-									>
-										{gapLock ? (
-											<LockIcon />
-										) : (
-											<UnlockIcon />
-										)}
-									</Button>
+											noBorder={gapLock}
+											size="small"
+											onClick={() => {
+												handleOnChangeAttributes(
+													'publisherGapLock',
+													!gapLock
+												);
+											}}
+											style={{
+												color: gapLock
+													? 'var(--publisher-controls-color)'
+													: 'var(--publisher-controls-border-color-focus)',
+												padding: '6px 3px',
+											}}
+										>
+											{gapLock ? (
+												<LockIcon />
+											) : (
+												<UnlockIcon />
+											)}
+										</Button>
+									</ControlContextProvider>
 								</Flex>
 							</BaseControl>
 						)}
