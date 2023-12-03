@@ -23,7 +23,8 @@ describe('Layout Extension', () => {
 		//describe('WordPress Compatibility', () => {...});
 
 		describe('Functionality', () => {
-			it('should update display correctly, when click on block', () => {
+			it('should update display correctly, when click on buttons', () => {
+				/* Block */
 				cy.getParentContainer('Display', 'base-control').within(() => {
 					cy.getByAriaLabel('Block').click();
 				});
@@ -40,19 +41,7 @@ describe('Layout Extension', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'display',
-					'block'
-				);
-			});
-
-			it('should update display correctly, when click on flex', () => {
+				/* Flex */
 				cy.getParentContainer('Display', 'base-control').within(() => {
 					cy.getByAriaLabel('Flex').click();
 				});
@@ -69,19 +58,7 @@ describe('Layout Extension', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'display',
-					'flex'
-				);
-			});
-
-			it('should update display correctly, when click on inline-block', () => {
+				/* Inline Block */
 				cy.getParentContainer('Display', 'base-control').within(() => {
 					cy.get('[aria-label="Inline Block"]').click();
 				});
@@ -98,19 +75,7 @@ describe('Layout Extension', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'display',
-					'inline-block'
-				);
-			});
-
-			it('should update display correctly, when click on inline', () => {
+				/* Inline */
 				cy.getParentContainer('Display', 'base-control').within(() => {
 					cy.getByAriaLabel('Inline').click();
 				});
@@ -127,19 +92,7 @@ describe('Layout Extension', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'display',
-					'inline'
-				);
-			});
-
-			it('should update display correctly, when click on none', () => {
+				/* None */
 				cy.getParentContainer('Display', 'base-control').within(() => {
 					cy.getByAriaLabel('None').click();
 				});
@@ -188,7 +141,8 @@ describe('Layout Extension', () => {
 		//describe('WordPress Compatibility', () => {...});
 
 		describe('Functionality', () => {
-			it('should update flex-direction correctly, when click on row', () => {
+			it('should update flex-direction correctly, when click on buttons', () => {
+				/* Row */
 				cy.getParentContainer('Direction', 'base-control')
 					.first()
 					.within(() => {
@@ -207,19 +161,7 @@ describe('Layout Extension', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'flex-direction',
-					'row'
-				);
-			});
-
-			it('should update flex-direction correctly, when click on column', () => {
+				/* Column */
 				cy.getParentContainer('Direction', 'base-control')
 					.first()
 					.within(() => {
@@ -241,29 +183,33 @@ describe('Layout Extension', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'flex-direction',
-					'column'
-				);
-			});
-
-			it('should reverse flex-direction correctly, when click on reverse (row)', () => {
-				cy.getParentContainer('Direction', 'base-control')
-					.first()
-					.within(() => {
-						cy.getByAriaLabel('Row').click();
-					});
-
+				/* Column-reverse */
 				cy.getParentContainer('Direction', 'base-control')
 					.last()
 					.within(() => {
 						cy.get('[aria-label="Reverse Direction"]').click();
+					});
+
+				//Check block
+				cy.getIframeBody()
+					.find(`[data-type="core/paragraph"]`)
+					.should('have.css', 'flex-direction', 'column-reverse');
+
+				//Check store
+				getWPDataObject().then((data) => {
+					expect({
+						value: 'column-reverse',
+						reverse: true,
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'publisherFlexDirection')
+					);
+				});
+
+				/* Row-reverse */
+				cy.getParentContainer('Direction', 'base-control')
+					.first()
+					.within(() => {
+						cy.getByAriaLabel('Row').click();
 					});
 
 				//Check block
@@ -292,46 +238,6 @@ describe('Layout Extension', () => {
 					'row-reverse'
 				);
 			});
-
-			it('should reverse flex-direction correctly, when click on reverse (column)', () => {
-				cy.getParentContainer('Direction', 'base-control')
-					.first()
-					.within(() => {
-						cy.get('[aria-label="Column"]').click();
-					});
-
-				cy.getParentContainer('Direction', 'base-control')
-					.last()
-					.within(() => {
-						cy.get('[aria-label="Reverse Direction"]').click();
-					});
-
-				//Check block
-				cy.getIframeBody()
-					.find(`[data-type="core/paragraph"]`)
-					.should('have.css', 'flex-direction', 'column-reverse');
-
-				//Check store
-				getWPDataObject().then((data) => {
-					expect({
-						value: 'column-reverse',
-						reverse: true,
-					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherFlexDirection')
-					);
-				});
-
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'flex-direction',
-					'column-reverse'
-				);
-			});
 		});
 	});
 
@@ -353,7 +259,8 @@ describe('Layout Extension', () => {
 		//describe('WordPress Compatibility', () => {...});
 
 		describe('Functionality', () => {
-			it('should update align-items correctly, when click on center', () => {
+			it('should update align-items correctly, when click on buttons', () => {
+				/*Center */
 				cy.getParentContainer('Align Items', 'base-control').within(
 					() => {
 						cy.getByAriaLabel('Center').click();
@@ -372,19 +279,7 @@ describe('Layout Extension', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'align-items',
-					'center'
-				);
-			});
-
-			it('should update align-items correctly, when click on flex-start', () => {
+				/* Flex Start */
 				cy.getParentContainer('Align Items', 'base-control').within(
 					() => {
 						cy.get('[aria-label="Flex Start"]').click();
@@ -403,19 +298,7 @@ describe('Layout Extension', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'align-items',
-					'flex-start'
-				);
-			});
-
-			it('should update align-items correctly, when click on flex-end', () => {
+				/* Flex End */
 				cy.getParentContainer('Align Items', 'base-control').within(
 					() => {
 						cy.get('[aria-label="Flex End"]').click();
@@ -434,19 +317,7 @@ describe('Layout Extension', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'align-items',
-					'flex-end'
-				);
-			});
-
-			it('should update align-items correctly, when click on stretch', () => {
+				/* Stretch */
 				cy.getParentContainer('Align Items', 'base-control').within(
 					() => {
 						cy.getByAriaLabel('Stretch').click();
@@ -465,19 +336,7 @@ describe('Layout Extension', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'align-items',
-					'stretch'
-				);
-			});
-
-			it('should update align-items correctly, when click on baseline', () => {
+				/* Baseline */
 				cy.getParentContainer('Align Items', 'base-control').within(
 					() => {
 						cy.getByAriaLabel('Baseline').click();
@@ -528,7 +387,8 @@ describe('Layout Extension', () => {
 		//describe('WordPress Compatibility', () => {...});
 
 		describe('Functionality', () => {
-			it('should update justify-content correctly, when click on center', () => {
+			it('should update justify-content correctly, when click on buttons', () => {
+				/* Center */
 				cy.getParentContainer('Justify', 'base-control').within(() => {
 					cy.getByAriaLabel('Center').click();
 				});
@@ -545,19 +405,7 @@ describe('Layout Extension', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'justify-content',
-					'center'
-				);
-			});
-
-			it('should update justify-content correctly, when click on flex-start', () => {
+				/* Flex Start */
 				cy.getParentContainer('Justify', 'base-control').within(() => {
 					cy.get('[aria-label="Flex Start"]').click();
 				});
@@ -574,19 +422,7 @@ describe('Layout Extension', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'justify-content',
-					'flex-start'
-				);
-			});
-
-			it('should update justify-content correctly, when click on flex-end', () => {
+				/* Flex End */
 				cy.getParentContainer('Justify', 'base-control').within(() => {
 					cy.get('[aria-label="Flex End"]').click();
 				});
@@ -603,19 +439,7 @@ describe('Layout Extension', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'justify-content',
-					'flex-end'
-				);
-			});
-
-			it('should update justify-content correctly, when click on space-between', () => {
+				/* Space Between */
 				cy.getParentContainer('Justify', 'base-control').within(() => {
 					cy.get('[aria-label="Space Between"]').click();
 				});
@@ -632,19 +456,7 @@ describe('Layout Extension', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'justify-content',
-					'space-between'
-				);
-			});
-
-			it('should update justify-content correctly, when click on space-around', () => {
+				/* Space Around */
 				cy.getParentContainer('Justify', 'base-control').within(() => {
 					cy.get('[aria-label="Space Around"]').click();
 				});
@@ -661,19 +473,7 @@ describe('Layout Extension', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'justify-content',
-					'space-around'
-				);
-			});
-
-			it('should update justify-content correctly, when click on space-evenly', () => {
+				/* Space Evenly */
 				cy.getParentContainer('Justify', 'base-control').within(() => {
 					cy.get('[aria-label="Space Evenly"]').click();
 				});
@@ -757,7 +557,7 @@ describe('Layout Extension', () => {
 				cy.getParentContainer('Gap', 'base-control')
 					.first()
 					.within(() => {
-						cy.get('[aria-label="Lock Gap"]').click();
+						cy.get('[aria-label="Custom Row Column Gap"]').click();
 						cy.get('input').eq(0).type(10);
 						cy.get('input').eq(1).type(15);
 					});
@@ -808,7 +608,8 @@ describe('Layout Extension', () => {
 		//describe('WordPress Compatibility', () => {...});
 
 		describe('Functionality', () => {
-			it('should update flex-wrap correctly, when click on nowrap', () => {
+			it('should update flex-wrap correctly, when click buttons', () => {
+				/* Nowrap */
 				cy.getParentContainer('Children', 'base-control')
 					.first()
 					.within(() => {
@@ -830,19 +631,7 @@ describe('Layout Extension', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'flex-wrap',
-					'nowrap'
-				);
-			});
-
-			it('should update flex-wrap correctly, when click on wrap', () => {
+				/* Wrap */
 				cy.getParentContainer('Children', 'base-control')
 					.last()
 					.within(() => {
@@ -864,28 +653,13 @@ describe('Layout Extension', () => {
 					);
 				});
 
-				//Check frontend
-				savePage();
-
-				redirectToFrontPage();
-
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'flex-wrap',
-					'wrap'
-				);
-			});
-
-			it('should reverse flex-wrap correctly, when click on wrap reverse ', () => {
-				cy.getParentContainer('Children', 'base-control')
-					.first()
-					.within(() => {
-						cy.get('[aria-label="Wrap"]').click();
-					});
+				/* Wrap-reverse */
 				cy.getParentContainer('Children', 'base-control')
 					.last()
 					.within(() => {
-						cy.get('[aria-label="Reverse Warp"]').click();
+						cy.get(
+							'[aria-label="Reverse Children Wrapping"]'
+						).click();
 					});
 
 				//Check block
