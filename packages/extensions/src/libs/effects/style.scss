@@ -1,0 +1,18 @@
+.publisher-transform-child-perspective,
+.publisher-transform-self-perspective {
+
+	& > .publisher-field.publisher-field-control {
+
+		flex-direction: row;
+	}
+
+	.publisher-control.publisher-control-input.input-range {
+
+		gap: 10px;
+
+		& > .components-base-control {
+			min-width: 50px;
+		}
+
+	}
+}
