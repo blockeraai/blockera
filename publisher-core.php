@@ -22,6 +22,10 @@ define( 'PB_CORE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'PB_CORE_VERSION', '1.0.0' );
 define( 'PB_ENV', 'wp-env' );
 
+$whoops = new \Whoops\Run();
+$whoops->pushHandler( new \Whoops\Handler\PrettyPageHandler() );
+$whoops->register();
+
 
 # loading front controller
 require __DIR__ . '/bootstrap/app.php';
