@@ -35,10 +35,6 @@ export const Border = ({
 		setAttributes: (attributes: Object) => void
 	): void => {
 		if ('all' === newValue.type) {
-			const radius =
-				attributes.publisherBorderRadius?.all ||
-				(attributes?.style?.border?.radius ?? '');
-
 			const customized = {
 				...attributes,
 				borderColor:
@@ -48,7 +44,6 @@ export const Border = ({
 				style: {
 					...(attributes?.style ?? {}),
 					border: {
-						radius,
 						...(attributes?.style?.border ?? {}),
 						color:
 							newValue?.all?.color ||
@@ -66,59 +61,14 @@ export const Border = ({
 			delete customized?.style?.border?.left;
 
 			setAttributes(customized);
-
-			return;
-		}
-
-		if (
-			!Object.values(attributes.publisherBorderRadius).length ||
-			'all' === attributes.publisherBorderRadius.type
-		) {
-			const radius =
-				attributes.publisherBorderRadius?.all ||
-				(attributes?.style?.border?.radius ?? '');
-
-			setAttributes({
-				...attributes,
-				borderColor: undefined,
-				style: {
-					...(attributes?.style ?? {}),
-					border: {
-						radius,
-						top: {
-							width: newValue?.top?.width,
-							color: newValue?.top?.color,
-							style: newValue?.top?.style,
-						},
-						right: {
-							width: newValue?.right?.width,
-							color: newValue?.right?.color,
-							style: newValue?.right?.style,
-						},
-						bottom: {
-							width: newValue?.bottom?.width,
-							color: newValue?.bottom?.color,
-							style: newValue?.bottom?.style,
-						},
-						left: {
-							width: newValue?.left?.width,
-							color: newValue?.left?.color,
-							style: newValue?.left?.style,
-						},
-					},
-				},
-			});
 		} else {
-			setAttributes({
+			const customized = {
 				...attributes,
 				borderColor: undefined,
 				style: {
 					...(attributes?.style ?? {}),
 					border: {
-						radius:
-							attributes.publisherBorderRadius.all ||
-							attributes.style?.border?.radius ||
-							'',
+						...(attributes?.style?.border ?? {}),
 						top: {
 							width: newValue?.top?.width,
 							color: newValue?.top?.color,
@@ -141,7 +91,13 @@ export const Border = ({
 						},
 					},
 				},
-			});
+			};
+
+			delete customized.style.border.color;
+			delete customized.style.border.width;
+			delete customized.style.border.style;
+
+			setAttributes(customized);
 		}
 	};
 	const getNormalDefaultValue = (): Object => {
