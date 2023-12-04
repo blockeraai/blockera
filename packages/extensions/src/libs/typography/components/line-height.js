@@ -8,7 +8,11 @@ import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
-import { ControlContextProvider, InputControl } from '@publisher/controls';
+import {
+	ControlContextProvider,
+	InputControl,
+	extractNumberAndUnit,
+} from '@publisher/controls';
 
 /**
  * Internal dependencies
