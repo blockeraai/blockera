@@ -25,6 +25,7 @@ export type TInputItem = {
 		| 'flex-basis'
 		| 'flex-shrink'
 		| 'flex-grow'
+		| 'line-height'
 		| 'z-index',
 	units?: Array<Object>,
 	noBorder?: boolean,

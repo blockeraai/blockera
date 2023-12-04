@@ -1505,6 +1505,92 @@ describe('Util functions', () => {
 				},
 			]);
 		});
+
+		test('line-height', () => {
+			expect(getCSSUnits('line-height')).toStrictEqual([
+				{
+					label: 'Common Values',
+					options: [
+						{
+							value: '',
+							label: '-',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'px',
+							label: 'PX',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: '%',
+							label: '%',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'em',
+							label: 'EM',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'rem',
+							label: 'REM',
+							default: 0,
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Other Values',
+					options: [
+						{
+							value: 'ch',
+							label: 'CH',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'vw',
+							label: 'VW',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'vh',
+							label: 'VH',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'dvw',
+							label: 'DVW',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'dvh',
+							label: 'DVH',
+							default: 0,
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Advanced',
+					options: [
+						{
+							value: 'func',
+							label: 'CSS Functions and Variables',
+							default: '',
+							format: 'text',
+						},
+					],
+				},
+			]);
+		});
 	});
 
 	describe('getUnitByValue', () => {

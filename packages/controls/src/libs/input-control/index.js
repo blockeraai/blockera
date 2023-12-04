@@ -170,6 +170,7 @@ InputControl.propTypes = {
 		'flex-grow',
 		'flex-shrink',
 		'fex-basis',
+		'line-height',
 	]),
 	/**
 	 * Indicates units for showing unit for value.
