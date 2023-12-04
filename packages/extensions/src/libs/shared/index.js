@@ -224,11 +224,16 @@ export function SharedBlockExtension({
 									initialOpen={true}
 									extensionId={'FlexChild'}
 									title={__('Flex Child', 'publisher-core')}
-									values={include(
-										attributes,
-										flexChild,
-										'publisher'
-									)}
+									values={{
+										...include(
+											attributes,
+											flexChild,
+											'publisher'
+										),
+										flexDirection:
+											directParentBlock?.attributes
+												.publisherFlexDirection,
+									}}
 									handleOnChangeAttributes={
 										handleOnChangeAttributes
 									}
