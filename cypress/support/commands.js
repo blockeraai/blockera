@@ -40,7 +40,7 @@ Cypress.Commands.add('getByDataTest', (selector, ...args) => {
 	return cy.get(`[data-test=${selector}]`, ...args);
 });
 Cypress.Commands.add('getByAriaLabel', (selector, ...args) => {
-	return cy.get(`[aria-label=${selector}]`, ...args);
+	return cy.get(`[aria-label="${selector}"]`, ...args);
 });
 // get parent container to have isolate aria for testing
 Cypress.Commands.add('getParentContainer', (ariaLabel, parentsDataCy) => {
