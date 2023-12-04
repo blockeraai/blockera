@@ -776,7 +776,7 @@ describe('input control component testing', () => {
 				cy.get('select').should('be.disabled');
 			});
 
-			it.only('handling data while switching between func, special and normal units', () => {
+			it('handling data while switching between func, special and normal units', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: <InputControl unitType="general" />,
@@ -879,6 +879,57 @@ describe('input control component testing', () => {
 				// change to px
 				cy.get('[aria-label="Select Unit"]').select('px');
 				cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+				cy.get('input').should('have.value', '');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('');
+				});
+			});
+
+			it('value is number and there is a unit with empty value', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="line-height" />,
+					name,
+					value: '12',
+				});
+
+				// default value render
+				cy.get('input').should('have.value', 12);
+				cy.get('[aria-label="Select Unit"]').should('have.value', '');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('12');
+				});
+
+				// switch to px
+				cy.get('[aria-label="Select Unit"]').select('px');
+				cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+				cy.get('input').should('have.value', '12');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('12px');
+				});
+
+				// switch to empty
+				cy.get('[aria-label="Select Unit"]').select('');
+				cy.get('[aria-label="Select Unit"]').should('have.value', '');
+				cy.get('input').should('have.value', '12');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('12');
+				});
+
+				// switch to func
+				cy.get('[aria-label="Select Unit"]').select('func');
+				cy.get('[aria-label="Select Unit"]').should(
+					'have.value',
+					'func'
+				);
+				cy.get('input').should('have.value', '12');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('12func');
+				});
+
+				// switch to empty
+				cy.get('[aria-label="Select Unit"]').select('');
+				cy.get('[aria-label="Select Unit"]').should('have.value', '');
 				cy.get('input').should('have.value', '');
 				cy.then(() => {
 					return expect(getControlValue(name)).to.eq('');

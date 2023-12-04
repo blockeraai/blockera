@@ -1759,121 +1759,173 @@ describe('Util functions', () => {
 	});
 
 	describe('extractNumberAndUnit', () => {
-		test('no param', () => {
-			expect(extractNumberAndUnit()).toStrictEqual({
-				value: '',
-				unit: '',
+		describe('General', () => {
+			test('no param', () => {
+				expect(extractNumberAndUnit()).toStrictEqual({
+					value: '',
+					unit: '',
+				});
+			});
+
+			test('empty', () => {
+				expect(extractNumberAndUnit('')).toStrictEqual({
+					value: '',
+					unit: '',
+				});
+			});
+
+			test('invalid value', () => {
+				expect(extractNumberAndUnit('invalid')).toStrictEqual({
+					value: 'invalid',
+					unit: 'func',
+					unitSimulated: true,
+				});
 			});
 		});
 
-		test('empty', () => {
-			expect(extractNumberAndUnit('')).toStrictEqual({
-				value: '',
-				unit: '',
+		describe('object value', () => {
+			test('valid object', () => {
+				expect(
+					extractNumberAndUnit({ value: '12', unit: 'px' })
+				).toStrictEqual({
+					value: '12',
+					unit: 'px',
+				});
+			});
+
+			test('invalid object', () => {
+				expect(extractNumberAndUnit({ noValue: '' })).toStrictEqual({
+					value: '',
+					unit: '',
+				});
+			});
+
+			test('object missing unit', () => {
+				expect(extractNumberAndUnit({ value: '12' })).toStrictEqual({
+					value: '12',
+					unit: '',
+				});
+			});
+
+			test('object missing value', () => {
+				expect(extractNumberAndUnit({ unit: 'px' })).toStrictEqual({
+					value: '',
+					unit: 'px',
+				});
 			});
 		});
 
-		test('invalid value', () => {
-			expect(extractNumberAndUnit('invalid')).toStrictEqual({
-				value: 'invalid',
-				unit: 'func',
+		describe('special value', () => {
+			test('auto', () => {
+				expect(extractNumberAndUnit('auto')).toStrictEqual({
+					value: 0,
+					unit: 'auto',
+				});
+			});
+
+			test('inherit', () => {
+				expect(extractNumberAndUnit('inherit')).toStrictEqual({
+					value: 0,
+					unit: 'inherit',
+				});
 			});
 		});
 
-		test('object value', () => {
-			expect(
-				extractNumberAndUnit({ value: '12', unit: 'px' })
-			).toStrictEqual({
-				value: '12',
-				unit: 'px',
+		describe('css unit values', () => {
+			test('12px', () => {
+				expect(extractNumberAndUnit('12px')).toStrictEqual({
+					value: 12,
+					unit: 'px',
+				});
 			});
 
-			expect(extractNumberAndUnit({ noValue: '' })).toStrictEqual({
-				value: '',
-				unit: '',
+			test('1.2px', () => {
+				expect(extractNumberAndUnit('1.2px')).toStrictEqual({
+					value: 1.2,
+					unit: 'px',
+				});
 			});
 
-			expect(extractNumberAndUnit({ value: '12' })).toStrictEqual({
-				value: '12',
-				unit: '',
+			test('-1.2px', () => {
+				expect(extractNumberAndUnit('-1.2px')).toStrictEqual({
+					value: -1.2,
+					unit: 'px',
+				});
 			});
 
-			expect(extractNumberAndUnit({ unit: 'px' })).toStrictEqual({
-				value: '',
-				unit: 'px',
-			});
-		});
-
-		test('special value', () => {
-			expect(extractNumberAndUnit('auto')).toStrictEqual({
-				value: 0,
-				unit: 'auto',
-			});
-
-			expect(extractNumberAndUnit('inherit')).toStrictEqual({
-				value: 0,
-				unit: 'inherit',
+			test('-1.2%', () => {
+				expect(extractNumberAndUnit('-1.2%')).toStrictEqual({
+					value: -1.2,
+					unit: '%',
+				});
 			});
 		});
 
-		test('css unit values', () => {
-			expect(extractNumberAndUnit('12px')).toStrictEqual({
-				value: 12,
-				unit: 'px',
+		describe('func value', () => {
+			test('12', () => {
+				expect(extractNumberAndUnit(12)).toStrictEqual({
+					value: 12,
+					unit: 'func',
+					unitSimulated: true,
+				});
 			});
 
-			expect(extractNumberAndUnit('1.2px')).toStrictEqual({
-				value: 1.2,
-				unit: 'px',
+			test('12func', () => {
+				expect(extractNumberAndUnit('12func')).toStrictEqual({
+					value: '12',
+					unit: 'func',
+				});
 			});
 
-			expect(extractNumberAndUnit('-1.2px')).toStrictEqual({
-				value: -1.2,
-				unit: 'px',
+			test('12pxfunc', () => {
+				expect(extractNumberAndUnit('12pxfunc')).toStrictEqual({
+					value: '12px',
+					unit: 'func',
+				});
 			});
 
-			expect(extractNumberAndUnit('-1.2%')).toStrictEqual({
-				value: -1.2,
-				unit: '%',
-			});
-		});
-
-		test('func value', () => {
-			expect(extractNumberAndUnit('12pxfunc')).toStrictEqual({
-				value: '12px',
-				unit: 'func',
+			test('12%func', () => {
+				expect(extractNumberAndUnit('12%func')).toStrictEqual({
+					value: '12%',
+					unit: 'func',
+				});
 			});
 
-			expect(extractNumberAndUnit('12%func')).toStrictEqual({
-				value: '12%',
-				unit: 'func',
+			test('12.2%func', () => {
+				expect(extractNumberAndUnit('12.2%func')).toStrictEqual({
+					value: '12.2%',
+					unit: 'func',
+				});
 			});
 
-			expect(extractNumberAndUnit('12.2%func')).toStrictEqual({
-				value: '12.2%',
-				unit: 'func',
+			test('-12.2%func', () => {
+				expect(extractNumberAndUnit('-12.2%func')).toStrictEqual({
+					value: '-12.2%',
+					unit: 'func',
+				});
 			});
 
-			expect(extractNumberAndUnit('-12.2%func')).toStrictEqual({
-				value: '-12.2%',
-				unit: 'func',
-			});
-
-			expect(extractNumberAndUnit('calc(12px + 12px)func')).toStrictEqual(
-				{
+			test('calc(12px + 12px)func', () => {
+				expect(
+					extractNumberAndUnit('calc(12px + 12px)func')
+				).toStrictEqual({
 					value: 'calc(12px + 12px)',
 					unit: 'func',
-				}
-			);
-
-			expect(extractNumberAndUnit('inheritfunc')).toStrictEqual({
-				value: 'inherit',
-				unit: 'func',
+				});
 			});
 
-			expect(extractNumberAndUnit('initialfunc')).toStrictEqual({
-				value: 'initial',
-				unit: 'func',
+			test('inheritfunc', () => {
+				expect(extractNumberAndUnit('inheritfunc')).toStrictEqual({
+					value: 'inherit',
+					unit: 'func',
+				});
+			});
+
+			test('initialfunc', () => {
+				expect(extractNumberAndUnit('initialfunc')).toStrictEqual({
+					value: 'initial',
+					unit: 'func',
+				});
 			});
 		});
 	});

@@ -54,11 +54,22 @@ export function UnitInput({
 	float,
 	...props
 }: TUnitInput): MixedElement {
-	const extractedValue = extractNumberAndUnit(value);
+	// added to temp to fix rerender
+	const temp = extractNumberAndUnit(value);
+
+	const firstUnit = getFirstUnit(units);
+
+	// Unit is not provided and there is a unit with empty value
+	// clear unit to let the empty unit be selected
+	if (temp?.unitSimulated && firstUnit.value === '') {
+		temp.unit = '';
+	}
+
+	const extractedValue = temp;
 
 	const [unitValue, setUnitValue] = useState(
 		isUndefined(extractedValue.unit) || extractedValue.unit === ''
-			? getFirstUnit(units)
+			? firstUnit
 			: getUnitByValue(extractedValue.unit, units)
 	);
 

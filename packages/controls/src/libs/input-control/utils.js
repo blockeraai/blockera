@@ -44,7 +44,7 @@ export const getUnitByValue = (value: string, units: Array<any>): Object => {
 	// Return a new custom option for exact founded unit
 	return {
 		value,
-		label: value.toUpperCase(),
+		label: isString(value) ? value.toUpperCase() : value.toString(),
 		default: '',
 		format: 'number',
 		notFound: true,
@@ -1232,33 +1232,36 @@ export function extractNumberAndUnit(value: Object | string): Object {
 		};
 	}
 
-	// detect if type is func
-	if (isString(value) && value.endsWith('func')) {
-		return {
-			value: value.substring(0, value.lastIndexOf('func')),
-			unit: 'func',
-		};
-	}
+	if (isString(value)) {
+		// detect if type is func
+		if (value.endsWith('func')) {
+			return {
+				value: value.substring(0, value.lastIndexOf('func')),
+				unit: 'func',
+			};
+		}
 
-	// Using a regular expression to match the number and unit
-	const match = value.match(/(^-?\d+(\.\d+)?)\s*([a-zA-Z%]+)/);
+		// Using a regular expression to match the number and unit
+		const match = value.match(/(^-?\d+(\.\d+)?)\s*([a-zA-Z%]+)/);
 
-	if (match) {
-		// Extracting the number and unit from the regex match
-		const value = parseFloat(match[1]);
-		const unit = match[3];
+		if (match) {
+			// Extracting the number and unit from the regex match
+			const value = parseFloat(match[1]);
+			const unit = match[3];
 
-		// Returning an object with the extracted values
-		return {
-			value,
-			unit,
-		};
+			// Returning an object with the extracted values
+			return {
+				value,
+				unit,
+			};
+		}
 	}
 
 	// If no match is found, return null or handle the error as needed
 	return {
 		value,
 		unit: 'func',
+		unitSimulated: true,
 	};
 }
 
