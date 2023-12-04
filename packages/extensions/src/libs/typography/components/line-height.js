@@ -46,7 +46,7 @@ export const LineHeight = ({
 					range: true,
 					min: 0,
 					max: 100,
-					defaultValue: defaultValue || '14px',
+					defaultValue: defaultValue || '',
 					onChange: (newValue) => {
 						onChange(
 							'publisherLineHeight',
