@@ -50,33 +50,44 @@ export const LineHeight = ({
 					onChange: (newValue) => {
 						onChange(
 							'publisherLineHeight',
-							newValue
-							//TODO: return back WP value sync compatibility
-							//'',
-							// (
-							// 	attributes: Object,
-							// 	setAttributes: (attributes: Object) => void
-							// ): void =>
-							// 	setAttributes({
-							// 		...attributes,
-							// 		style: {
-							// 			...(attributes?.style ?? {}),
-							// 			typography: {
-							// 				...(attributes?.style?.typography ??
-							// 					{}),
-							// 				lineHeight: !isNumber(newValue)
-							// 					? Number(
-							// 							newValue
-							// 								.replace(
-							// 									/[a-zA-Z]+$/g,
-							// 									''
-							// 								)
-							// 								.trim()
-							// 					  )
-							// 					: newValue,
-							// 			},
-							// 		},
-							// 	})
+							newValue,
+							'',
+							(
+								attributes: Object,
+								setAttributes: (attributes: Object) => void
+							): void => {
+								const extractedValue =
+									extractNumberAndUnit(newValue);
+
+								if (
+									extractedValue.unit === '' ||
+									(extractedValue.unit === 'func' &&
+										extractedValue?.unitSimulated)
+								) {
+									setAttributes({
+										...attributes,
+										style: {
+											...(attributes?.style ?? {}),
+											typography: {
+												...(attributes?.style
+													?.typography ?? {}),
+												lineHeight:
+													extractedValue.value,
+											},
+										},
+									});
+								} else {
+									// remove old lineHeight
+									const newAttrs = { ...attributes };
+									if (
+										newAttrs?.style?.typography?.lineHeight
+									) {
+										delete newAttrs.style.typography
+											.lineHeight;
+										setAttributes(newAttrs);
+									}
+								}
+							}
 						);
 					},
 				}}
