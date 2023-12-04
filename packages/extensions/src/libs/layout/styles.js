@@ -110,6 +110,7 @@ export function LayoutStyles({
 			_attributes.publisherFlexWrap !==
 				attributes.publisherFlexWrap.default
 		) {
+			properties['flex-wrap'] = _attributes.publisherFlexWrap.value;
 		}
 
 		if (
