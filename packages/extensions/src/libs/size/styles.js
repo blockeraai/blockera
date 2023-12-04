@@ -20,6 +20,8 @@ interface IConfigs {
 		publisherWidth: string,
 		publisherHeight: string,
 		publisherOverflow: string,
+		publisherRatio: string,
+		publisherCustomRatio: Object,
 	};
 	blockProps: TBlockProps;
 }
@@ -30,6 +32,7 @@ export function SizeStyles({
 		publisherWidth,
 		publisherHeight,
 		publisherOverflow,
+		publisherRatio,
 	},
 	blockProps,
 }: IConfigs): string {
@@ -70,6 +73,31 @@ export function SizeStyles({
 		_attributes.publisherOverflow !== attributes.publisherOverflow.default
 	) {
 		properties.overflow = _attributes.publisherOverflow;
+	}
+	if (
+		isActiveField(publisherRatio) &&
+		_attributes.publisherRatio !== attributes.publisherRatio.default
+	) {
+		switch (_attributes.publisherRatio) {
+			case 'none':
+				{
+					properties['aspect-ratio'] = 'auto';
+				}
+				break;
+			case 'custom':
+				{
+					properties['aspect-ratio'] = `${
+						_attributes.publisherCustomRatio.width
+					} ${
+						_attributes.publisherCustomRatio.width &&
+						_attributes.publisherCustomRatio.height &&
+						' / '
+					} ${_attributes.publisherCustomRatio.height}`;
+				}
+				break;
+			default:
+				properties['aspect-ratio'] = _attributes.publisherRatio;
+		}
 	}
 
 	if (Object.keys(properties).length > 0) {

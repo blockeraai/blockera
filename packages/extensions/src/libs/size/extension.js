@@ -13,7 +13,10 @@ import {
 	ControlContextProvider,
 	InputControl,
 	ToggleSelectControl,
+	SelectControl,
+	BaseControl,
 } from '@publisher/controls';
+import { Flex } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -34,14 +37,23 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 		config,
 		overflow,
 		children,
+		ratio,
+		customRatio,
+		fit,
+		fitPosition,
 		defaultValue: { width: _width, height: _height, overflow: _overflow },
 		handleOnChangeAttributes,
 		...props
 	}: TSizeProps): MixedElement => {
 		const {
-			sizeConfig: { publisherWidth, publisherHeight, publisherOverflow },
+			sizeConfig: {
+				publisherWidth,
+				publisherHeight,
+				publisherOverflow,
+				publisherRatio,
+			},
 		} = config;
-
+		console.log(publisherRatio, 'ratios');
 		return (
 			<>
 				{isActiveField(publisherWidth) && (
@@ -169,6 +181,186 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 								)
 							}
 						/>
+					</ControlContextProvider>
+				)}
+
+				{isActiveField(publisherRatio) && (
+					<ControlContextProvider
+						value={{
+							name: generateExtensionId(block, 'ratio'),
+							value: ratio,
+						}}
+					>
+						<BaseControl
+							columns="columns-2"
+							controlName="toggle-select"
+							label={__('Ratio', 'publisher-core')}
+						>
+							<SelectControl
+								controlName="select"
+								aria-label={__('Ratio', 'publisher-core')}
+								{...{
+									...props,
+									options: [
+										{
+											label: __('Auto', 'publisher-core'),
+											value: 'none',
+										},
+										{
+											label: __(
+												'Square 1:1',
+												'publisher-core'
+											),
+											value: '1 / 1',
+										},
+										{
+											label: __(
+												'Standard 4:3',
+												'publisher-core'
+											),
+											value: '4 / 3',
+										},
+										{
+											label: __(
+												'Portrait 3:4',
+												'publisher-core'
+											),
+											value: '3 / 4',
+										},
+										{
+											label: __(
+												'Landscape 3:2',
+												'publisher-core'
+											),
+											value: '3 / 2',
+										},
+										{
+											label: __(
+												'Classic Portrait 2:3',
+												'publisher-core'
+											),
+											value: '2 / 3',
+										},
+										{
+											label: __(
+												'Widescreen 16:9',
+												'publisher-core'
+											),
+											value: '16 / 9',
+										},
+										{
+											label: __(
+												'Tall 9:16',
+												'publisher-core'
+											),
+											value: '9 / 16',
+										},
+										{
+											label: __(
+												'Custom',
+												'publisher-core'
+											),
+											value: 'custom',
+										},
+									], //
+									type: 'native',
+									defaultValue: 'none',
+									onChange: (newValue) =>
+										handleOnChangeAttributes(
+											'publisherRatio',
+											newValue
+										),
+								}}
+							/>
+							{ratio === 'custom' && (
+								<Flex alignItems="flex-start">
+									<ControlContextProvider
+										value={{
+											name: generateExtensionId(
+												block,
+												'custom-ratio-width'
+											),
+											value: customRatio.width,
+										}}
+									>
+										<BaseControl
+											controlName="input"
+											columns="columns-1"
+											className="control-first label-center small-gap"
+											label={__(
+												'Width',
+												'publisher-core'
+											)}
+										>
+											<InputControl
+												{...{
+													...props,
+													//	min: 0,
+													//	max: 200,
+													defaultValue:
+														customRatio.width || '',
+													onChange: (newValue) =>
+														handleOnChangeAttributes(
+															'publisherCustomRatio',
+															{
+																...customRatio,
+																width: newValue,
+															}
+														),
+												}}
+											/>
+										</BaseControl>
+									</ControlContextProvider>
+									<p
+										style={{
+											fontSize: '14px',
+											fontWeight: '500',
+											lineHeight: '30px',
+										}}
+									>
+										:
+									</p>
+									<ControlContextProvider
+										value={{
+											name: generateExtensionId(
+												block,
+												'custom-ratio-height'
+											),
+											value: customRatio.height,
+										}}
+									>
+										<BaseControl
+											controlName="input"
+											columns="columns-1"
+											className="control-first label-center small-gap"
+											label={__(
+												'Height',
+												'publisher-core'
+											)}
+										>
+											<InputControl
+												{...{
+													...props,
+													//		min: 0,
+													//	max: 200,
+													defaultValue:
+														customRatio.height ||
+														'',
+													onChange: (newValue) =>
+														handleOnChangeAttributes(
+															'publisherCustomRatio',
+															{
+																...customRatio,
+																height: newValue,
+															}
+														),
+												}}
+											/>
+										</BaseControl>
+									</ControlContextProvider>
+								</Flex>
+							)}
+						</BaseControl>
 					</ControlContextProvider>
 				)}
 			</>
