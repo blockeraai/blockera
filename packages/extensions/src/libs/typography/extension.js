@@ -186,7 +186,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 									parentProps={props}
 									onChange={handleOnChangeAttributes}
 									value={fontSize || fontSizeCalculated}
-									defaultValue={fontSizeCalculated || '14px'}
+									defaultValue={fontSizeCalculated || ''}
 								/>
 							)}
 
@@ -196,7 +196,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 									parentProps={props}
 									value={lineHeight || _lineHeight}
 									onChange={handleOnChangeAttributes}
-									defaultValue={_lineHeight || '14px'}
+									defaultValue={_lineHeight || ''}
 								/>
 							)}
 
