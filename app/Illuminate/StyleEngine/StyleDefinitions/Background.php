@@ -242,6 +242,11 @@ class Background extends BaseStyleDefinition {
 
 		$gradient = $setting['mesh-gradient'];
 
+		if ( is_array( $gradient ) ) {
+			
+			$gradient = implode( ', ', $gradient );
+		}
+
 		foreach ( $setting['mesh-gradient-colors'] as $index => $color ) {
 
 			if ( ! isset( $setting['mesh-gradient-colors'][ $index ]['color'] ) ) {
