@@ -35,6 +35,7 @@ final class StyleEngine {
 	public function filter_safe_style_css( array $styles ): array {
 
 		$styles[] = 'top';
+		$styles[] = 'gap';
 		$styles[] = 'flex';
 		$styles[] = 'left';
 		$styles[] = 'order';
@@ -54,16 +55,23 @@ final class StyleEngine {
 		$styles[] = 'overflow';
 		$styles[] = 'transform';
 		$styles[] = 'flex-wrap';
+		$styles[] = 'column-gap';
+		$styles[] = 'word-break';
+		$styles[] = 'word-spacing';
 		$styles[] = 'align-self';
 		$styles[] = 'transition';
 		$styles[] = 'column-gap';
 //		$styles[] = 'line-height';
 		$styles[] = 'border-top';
+		$styles[] = 'text-stroke';
+		$styles[] = 'text-indent';
 		$styles[] = 'perspective';
 		$styles[] = 'border-left';
 		$styles[] = 'text-shadow';
 		$styles[] = 'align-items';
 		$styles[] = 'border-right';
+		$styles[] = 'writing-mode';
+		$styles[] = 'column-count';
 		$styles[] = 'align-content';
 		$styles[] = 'border-bottom';
 		$styles[] = 'border-radius';
@@ -72,7 +80,11 @@ final class StyleEngine {
 		$styles[] = 'mix-blend-mode';
 		$styles[] = 'backdrop-filter';
 		$styles[] = 'background-clip';
+		$styles[] = 'text-orientation';
 		$styles[] = 'transform-origin';
+		$styles[] = 'column-rule-width';
+		$styles[] = 'column-rule-color';
+		$styles[] = 'column-rule-style';
 		$styles[] = 'background-repeat';
 		$styles[] = 'perspective-origin';
 		$styles[] = 'backface-visibility';
@@ -81,6 +93,8 @@ final class StyleEngine {
 		$styles[] = '-webkit-background-clip';
 		$styles[] = '-webkit-text-fill-color';
 		$styles[] = 'border-top-right-radius';
+		$styles[] = '-webkit-text-stroke-color';
+		$styles[] = '-webkit-text-stroke-width';
 		$styles[] = 'border-bottom-left-radius';
 		$styles[] = 'border-bottom-right-radius';
 

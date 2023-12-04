@@ -14,6 +14,7 @@ import type { Element } from 'react';
  * Publisher dependencies
  */
 import { controlInnerClassNames } from '@publisher/classnames';
+import { convertDegToCharacter } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -68,7 +69,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 
 			case 'hue-rotate':
 				label = __('Hue Rotate', 'publisher-core');
-				value = item['hue-rotate'];
+				value = convertDegToCharacter(item['hue-rotate']);
 				icon = <HueRotateIcon />;
 				break;
 

@@ -198,7 +198,7 @@ export function getCSSUnits(unitType = '') {
 
 		case 'order':
 			cssUnits = [
-				{ value: '-', label: '-', default: 0 },
+				{ value: '', label: '-', default: 0 },
 				//
 				{ value: 'revert', label: 'Revert', default: 0 },
 				{ value: 'revert-layer', label: 'Revert Layer', default: 0 },

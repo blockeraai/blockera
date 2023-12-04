@@ -15,7 +15,6 @@ import { ControlContextProvider, InputControl } from '@publisher/controls';
  */
 import { generateExtensionId } from '../../utils';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
-import { isNumber } from '@publisher/utils';
 
 export const LineHeight = ({
 	block,
@@ -51,32 +50,33 @@ export const LineHeight = ({
 					onChange: (newValue) => {
 						onChange(
 							'publisherLineHeight',
-							newValue,
-							'',
-							(
-								attributes: Object,
-								setAttributes: (attributes: Object) => void
-							): void =>
-								setAttributes({
-									...attributes,
-									style: {
-										...(attributes?.style ?? {}),
-										typography: {
-											...(attributes?.style?.typography ??
-												{}),
-											lineHeight: !isNumber(newValue)
-												? Number(
-														newValue
-															.replace(
-																/[a-zA-Z]+$/g,
-																''
-															)
-															.trim()
-												  )
-												: newValue,
-										},
-									},
-								})
+							newValue
+							//TODO: return back WP value sync compatibility
+							//'',
+							// (
+							// 	attributes: Object,
+							// 	setAttributes: (attributes: Object) => void
+							// ): void =>
+							// 	setAttributes({
+							// 		...attributes,
+							// 		style: {
+							// 			...(attributes?.style ?? {}),
+							// 			typography: {
+							// 				...(attributes?.style?.typography ??
+							// 					{}),
+							// 				lineHeight: !isNumber(newValue)
+							// 					? Number(
+							// 							newValue
+							// 								.replace(
+							// 									/[a-zA-Z]+$/g,
+							// 									''
+							// 								)
+							// 								.trim()
+							// 					  )
+							// 					: newValue,
+							// 			},
+							// 		},
+							// 	})
 						);
 					},
 				}}

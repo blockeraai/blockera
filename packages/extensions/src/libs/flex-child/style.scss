@@ -1,10 +1,24 @@
 .publisher-field-toggle-select {
 
+	&.items-flex-direction-row,
+	&.items-flex-direction-column {
+
+		svg {
+			transition: all 0.45s cubic-bezier(0, 0, 0.2, 1);
+		}
+
+	}
+
 	&.items-flex-direction-column-reverse,
 	&.items-flex-direction-column {
 
 		svg {
 			transform: rotate(-90deg);
+		}
+
+		svg.publisher-custom-order,
+		svg.publisher-align-baseline {
+			transform: rotate(0deg);
 		}
 	}
 }

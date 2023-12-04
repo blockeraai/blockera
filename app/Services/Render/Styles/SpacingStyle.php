@@ -46,6 +46,7 @@ class SpacingStyle extends Style {
 	protected function generate( array $setting, string $selector ): array {
 
 		$this->definition->setSettings( $setting );
+		$this->definition->setOptions( [ 'is-important' => true ] );
 
 		try {
 
@@ -55,7 +56,6 @@ class SpacingStyle extends Style {
 
 			throw new BaseException( __( 'invalid css properties, ' . $handler->getMessage(), 'publisher-core' ) );
 		}
-
 
 		$block_attributes = [
 			'style' => [

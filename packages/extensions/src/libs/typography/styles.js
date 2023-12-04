@@ -129,35 +129,15 @@ export function TypographyStyles({
 
 	if (
 		isActiveField(publisherTextOrientation) &&
-		_attributes.publisherTextOrientation !==
-			attributes.publisherTextOrientation.default
+		_attributes.publisherTextOrientation['text-orientation'] !==
+			attributes.publisherTextOrientation.default[['text-orientation']] &&
+		_attributes.publisherTextOrientation['writing-mode'] !==
+			attributes.publisherTextOrientation.default[['writing-mode']]
 	) {
-		switch (_attributes.publisherTextOrientation) {
-			case 'style-1':
-				properties['writing-mode'] = 'vertical-lr';
-				properties['text-orientation'] = 'mixed';
-				break;
-
-			case 'style-2':
-				properties['writing-mode'] = 'vertical-rl';
-				properties['text-orientation'] = 'mixed';
-				break;
-
-			case 'style-3':
-				properties['writing-mode'] = 'vertical-lr';
-				properties['text-orientation'] = 'upright';
-				break;
-
-			case 'style-4':
-				properties['writing-mode'] = 'vertical-rl';
-				properties['text-orientation'] = 'upright';
-				break;
-
-			case 'none':
-				properties['writing-mode'] = 'initial';
-				properties['text-orientation'] = 'initial';
-				break;
-		}
+		properties['writing-mode'] =
+			_attributes.publisherTextOrientation['writing-mode'];
+		properties['text-orientation'] =
+			_attributes.publisherTextOrientation['text-orientation'];
 	}
 
 	if (
