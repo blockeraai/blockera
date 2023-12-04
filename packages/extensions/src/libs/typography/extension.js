@@ -502,7 +502,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 										options={[
 											{
 												label: __(
-													'vertically from top to bottom, and the next vertical line is positioned to the right of the previous line',
+													'Text will display vertically from left to right with a mixed orientation',
 													'publisher-core'
 												),
 												value: 'style-1',
@@ -512,7 +512,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											},
 											{
 												label: __(
-													'vertically from top to bottom, and the next vertical line is positioned to the left of the previous line',
+													'Text will display vertically from right to left with a mixed orientation',
 													'publisher-core'
 												),
 												value: 'style-2',
@@ -522,7 +522,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											},
 											{
 												label: __(
-													'Right',
+													'Text will appear vertically from left to right with an upright orientation',
 													'publisher-core'
 												),
 												value: 'style-3',
@@ -532,7 +532,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											},
 											{
 												label: __(
-													'Right',
+													'Text will appear vertically from right to left with an upright orientation',
 													'publisher-core'
 												),
 												value: 'style-4',
@@ -542,7 +542,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											},
 											{
 												label: __(
-													'None',
+													'No text orientation',
 													'publisher-core'
 												),
 												value: 'initial',
@@ -553,6 +553,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 										//
 										defaultValue=""
 										onChange={(newValue) => {
+											if (!newValue) return;
+
 											let textOriented;
 											switch (newValue) {
 												case 'style-1':
@@ -587,12 +589,12 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 															'upright',
 													};
 													break;
-												case 'none':
+												case 'initial':
 													textOriented = {
 														'writing-mode':
-															'initial',
+															'horizontal-tb',
 														'text-orientation':
-															'initial',
+															'mixed',
 													};
 											}
 

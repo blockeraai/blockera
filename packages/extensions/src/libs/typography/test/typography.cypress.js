@@ -392,9 +392,12 @@ describe('Typography Extension', () => {
 
 			describe('Functionality', () => {
 				it('should add two property to css:writing-mode & text-orientation, when click on shortcut', () => {
+					//
+					// Style 1
+					//
 					cy.get('@typography-popover').within(() => {
 						cy.get(
-							'[aria-label="vertically from top to bottom, and the next vertical line is positioned to the right of the previous line"]'
+							'[aria-label="Text will display vertically from left to right with a mixed orientation"]'
 						).click();
 					});
 
@@ -414,13 +417,111 @@ describe('Typography Extension', () => {
 						);
 					});
 
+					//
+					// Style 2
+					//
+					cy.get('@typography-popover').within(() => {
+						cy.get(
+							'[aria-label="Text will display vertically from right to left with a mixed orientation"]'
+						).click();
+					});
+
+					//Check block
+					cy.getIframeBody()
+						.find(`[data-type="core/paragraph"]`)
+						.should('have.css', 'writing-mode', 'vertical-rl')
+						.and('have.css', 'text-orientation', 'mixed');
+
+					//Check store
+					getWPDataObject().then((data) => {
+						expect({
+							'writing-mode': 'vertical-rl',
+							'text-orientation': 'mixed',
+						}).to.be.deep.equal(
+							getSelectedBlock(data, 'publisherTextOrientation')
+						);
+					});
+
+					//
+					// Style 3
+					//
+					cy.get('@typography-popover').within(() => {
+						cy.get(
+							'[aria-label="Text will appear vertically from left to right with an upright orientation"]'
+						).click();
+					});
+
+					//Check block
+					cy.getIframeBody()
+						.find(`[data-type="core/paragraph"]`)
+						.should('have.css', 'writing-mode', 'vertical-lr')
+						.and('have.css', 'text-orientation', 'upright');
+
+					//Check store
+					getWPDataObject().then((data) => {
+						expect({
+							'writing-mode': 'vertical-lr',
+							'text-orientation': 'upright',
+						}).to.be.deep.equal(
+							getSelectedBlock(data, 'publisherTextOrientation')
+						);
+					});
+
+					//
+					// Style 4
+					//
+					cy.get('@typography-popover').within(() => {
+						cy.get(
+							'[aria-label="Text will appear vertically from right to left with an upright orientation"]'
+						).click();
+					});
+
+					//Check block
+					cy.getIframeBody()
+						.find(`[data-type="core/paragraph"]`)
+						.should('have.css', 'writing-mode', 'vertical-rl')
+						.and('have.css', 'text-orientation', 'upright');
+
+					//Check store
+					getWPDataObject().then((data) => {
+						expect({
+							'writing-mode': 'vertical-rl',
+							'text-orientation': 'upright',
+						}).to.be.deep.equal(
+							getSelectedBlock(data, 'publisherTextOrientation')
+						);
+					});
+
+					//
+					// Style None
+					//
+					cy.get('@typography-popover').within(() => {
+						cy.get('[aria-label="No text orientation"]').click();
+					});
+
+					//Check block
+					cy.getIframeBody()
+						.find(`[data-type="core/paragraph"]`)
+						.should('have.css', 'writing-mode', 'horizontal-tb')
+						.and('have.css', 'text-orientation', 'mixed');
+
+					//Check store
+					getWPDataObject().then((data) => {
+						expect({
+							'writing-mode': 'horizontal-tb',
+							'text-orientation': 'mixed',
+						}).to.be.deep.equal(
+							getSelectedBlock(data, 'publisherTextOrientation')
+						);
+					});
+
 					//Check frontend
 					savePage();
 
 					redirectToFrontPage();
 
 					cy.get('.publisher-paragraph')
-						.should('have.css', 'writing-mode', 'vertical-lr')
+						.should('have.css', 'writing-mode', 'horizontal-tb')
 						.and('have.css', 'text-orientation', 'mixed');
 				});
 			});
