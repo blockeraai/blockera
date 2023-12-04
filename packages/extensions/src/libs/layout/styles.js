@@ -21,8 +21,6 @@ interface IConfigs {
 		publisherAlignItems: string,
 		publisherJustifyContent: string,
 		publisherGap: string,
-		publisherGapRows: string,
-		publisherGapColumns: string,
 		publisherFlexWrap: string,
 		publisherAlignContent: string,
 	};
@@ -37,8 +35,6 @@ export function LayoutStyles({
 		publisherAlignItems,
 		publisherJustifyContent,
 		publisherGap,
-		publisherGapRows,
-		publisherGapColumns,
 		publisherFlexWrap,
 		publisherAlignContent,
 	},
@@ -87,23 +83,26 @@ export function LayoutStyles({
 			isActiveField(publisherGap) &&
 			_attributes.publisherGap !== attributes.publisherGap.default
 		) {
-			properties.gap = _attributes.publisherGap;
-		}
+			if (_attributes.publisherGap?.lock) {
+				const gap = getValueAddonRealValue(
+					_attributes.publisherGap?.gap
+				);
+				if (gap) properties.gap = gap;
+			} else {
+				const rows = getValueAddonRealValue(
+					_attributes.publisherGap?.rows
+				);
+				if (rows) {
+					properties['row-gap'] = rows;
+				}
 
-		if (
-			isActiveField(publisherGapRows) &&
-			_attributes.publisherGapRows !== attributes.publisherGapRows.default
-		) {
-			properties['row-gap'] = _attributes.publisherGapRows;
-		}
-
-		if (isActiveField(publisherGapColumns)) {
-			const gapColumns = getValueAddonRealValue(
-				_attributes.publisherGapColumns
-			);
-
-			if (gapColumns !== attributes.publisherGapColumns.default)
-				properties['column-gap'] = gapColumns;
+				const columns = getValueAddonRealValue(
+					_attributes.publisherGap?.columns
+				);
+				if (columns) {
+					properties['column-gap'] = columns;
+				}
+			}
 		}
 
 		if (

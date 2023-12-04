@@ -23,12 +23,9 @@ export type TCssProps = {
 
 export type TLayoutProps = {
 	values: {
-		gap: string,
-		gapLock: boolean,
-		gapRows: string,
+		gap: { lock: boolean, gap: string, columns: string, rows: string },
 		display: string,
 		flexWrap: { value: string, reverse: boolean },
-		gapColumns: string,
 		alignItems: string,
 		alignContent: string,
 		flexDirection: { value: string, reverse: boolean },

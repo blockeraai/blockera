@@ -61,6 +61,28 @@ class Layout extends BaseStyleDefinition {
 				}
 
 				break;
+
+			case 'gap':
+
+				$gap = $this->settings['gap'];
+
+				if( $gap['lock'] ){
+
+					if( $gap['gap'] ){
+						$props['gap'] = $gap['gap'];
+					}
+				}else{
+
+					if( $gap['rows'] ){
+						$props['row-gap'] = $gap['rows'];
+					}
+
+					if( $gap['columns'] ){
+						$props['column-gap'] = $gap['columns'];
+					}
+				}
+
+				break;
 			default:
 				$props[ $this->settings['type'] ] = $this->settings[ $this->settings['type'] ];
 				break;

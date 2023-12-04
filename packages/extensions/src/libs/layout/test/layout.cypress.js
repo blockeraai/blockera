@@ -536,9 +536,12 @@ describe('Layout Extension', () => {
 
 				//Check store
 				getWPDataObject().then((data) => {
-					expect('10px').to.be.deep.equal(
-						getSelectedBlock(data, 'publisherGap')
-					);
+					expect({
+						lock: true,
+						gap: '10px',
+						rows: '',
+						columns: '',
+					}).to.be.deep.equal(getSelectedBlock(data, 'publisherGap'));
 				});
 
 				//Check frontend
@@ -554,7 +557,6 @@ describe('Layout Extension', () => {
 			});
 
 			it('should update row-gap & column-gap correctly, when add data', () => {
-				// gapRows and columns should have gap value on render
 				cy.getParentContainer('Gap', 'base-control')
 					.first()
 					.within(() => {
@@ -564,12 +566,12 @@ describe('Layout Extension', () => {
 
 				//Check store
 				getWPDataObject().then((data) => {
-					expect('8px').to.be.deep.equal(
-						getSelectedBlock(data, 'publisherGapRows')
-					);
-					expect('8px').to.be.deep.equal(
-						getSelectedBlock(data, 'publisherGapColumns')
-					);
+					expect({
+						lock: false,
+						gap: '8px',
+						rows: '8px',
+						columns: '8px',
+					}).to.be.deep.equal(getSelectedBlock(data, 'publisherGap'));
 				});
 
 				//Change value
@@ -590,12 +592,12 @@ describe('Layout Extension', () => {
 
 				//Check store
 				getWPDataObject().then((data) => {
-					expect('15px').to.be.deep.equal(
-						getSelectedBlock(data, 'publisherGapRows')
-					);
-					expect('10px').to.be.deep.equal(
-						getSelectedBlock(data, 'publisherGapColumns')
-					);
+					expect({
+						lock: false,
+						gap: '8px',
+						rows: '15px',
+						columns: '10px',
+					}).to.be.deep.equal(getSelectedBlock(data, 'publisherGap'));
 				});
 
 				//Check frontend

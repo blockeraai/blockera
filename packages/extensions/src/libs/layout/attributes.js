@@ -16,20 +16,8 @@ export const attributes = {
 		default: '',
 	},
 	publisherGap: {
-		type: 'string',
-		default: '',
-	},
-	publisherGapLock: {
-		type: 'boolean',
-		default: true,
-	},
-	publisherGapRows: {
-		type: 'string',
-		default: '',
-	},
-	publisherGapColumns: {
-		type: 'string',
-		default: '',
+		type: 'object',
+		default: { lock: true, gap: '', columns: '', rows: '' },
 	},
 	publisherFlexWrap: {
 		type: 'object',

@@ -544,7 +544,7 @@ return [
 			'property_keys' => [
 				'default' => 'row-gap',
 			],
-			'path'          => [ 'publisherLayout', 'publisherGapRows' ],
+			'path'          => [ 'publisherLayout', 'row-gap' ],
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
@@ -560,7 +560,7 @@ return [
 			'property_keys' => [
 				'default' => 'column-gap',
 			],
-			'path'          => [ 'publisherLayout', 'publisherGapColumns' ],
+			'path'          => [ 'publisherLayout', 'column-gap' ],
 			'css_vars'      => [],
 			'classnames'    => [],
 		],

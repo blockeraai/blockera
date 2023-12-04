@@ -57,11 +57,8 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 		block,
 		values: {
 			gap,
-			gapLock,
-			gapRows,
 			display,
 			flexWrap,
-			gapColumns,
 			alignItems,
 			alignContent,
 			flexDirection,
@@ -84,8 +81,6 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 				publisherAlignItems,
 				publisherJustifyContent,
 				publisherGap,
-				publisherGapRows,
-				publisherGapColumns,
 				publisherFlexWrap,
 				publisherAlignContent,
 			},
@@ -442,14 +437,10 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												block,
 												'gap'
 											),
-											value: {
-												gap,
-												gapRows,
-												gapColumns,
-											},
+											value: gap,
 										}}
 									>
-										{gapLock ? (
+										{gap?.lock ? (
 											isActiveField(publisherGap) && (
 												<BaseControl
 													controlName="input"
@@ -459,39 +450,29 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 														'Gap',
 														'publisher-core'
 													)}
+													style={{
+														width: '133px',
+													}}
 												>
 													<InputControl
-														style={{
-															width: '133px',
-														}}
 														{...{
 															...props,
 															unitType:
 																'essential',
 															min: 0,
 															max: 200,
-															defaultValue: gap,
+															defaultValue:
+																gap?.gap,
 															id: 'gap',
 															onChange: (
 																newValue
 															) =>
 																handleOnChangeAttributes(
 																	'publisherGap',
-																	newValue,
-																	'',
-																	(
-																		attributes,
-																		setAttributes
-																	): void =>
-																		setAttributes(
-																			{
-																				...attributes,
-																				publisherGapRows:
-																					newValue,
-																				publisherGapColumns:
-																					newValue,
-																			}
-																		)
+																	{
+																		...gap,
+																		gap: newValue,
+																	}
 																),
 														}}
 													/>
@@ -505,73 +486,72 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													width: '133px',
 												}}
 											>
-												{isActiveField(
-													publisherGapColumns
-												) && (
-													<BaseControl
-														controlName="input"
-														columns="columns-1"
-														className="control-first label-center small-gap"
-														label={__(
-															'Columns',
-															'publisher-core'
-														)}
-													>
-														<InputControl
-															{...{
-																...props,
-																unitType:
-																	'essential',
-																min: 0,
-																max: 200,
-																defaultValue:
-																	gapColumns,
-																id: 'gapColumns',
-																onChange: (
-																	newValue
-																) =>
-																	handleOnChangeAttributes(
-																		'publisherGapColumns',
-																		newValue
-																	),
-															}}
-														/>
-													</BaseControl>
-												)}
+												<BaseControl
+													controlName="input"
+													columns="columns-1"
+													className="control-first label-center small-gap"
+													label={__(
+														'Columns',
+														'publisher-core'
+													)}
+												>
+													<InputControl
+														{...{
+															...props,
+															unitType:
+																'essential',
+															min: 0,
+															max: 200,
+															defaultValue:
+																gap?.columns,
+															id: 'columns',
+															onChange: (
+																newValue
+															) =>
+																handleOnChangeAttributes(
+																	'publisherGap',
+																	{
+																		...gap,
+																		columns:
+																			newValue,
+																	}
+																),
+														}}
+													/>
+												</BaseControl>
 
-												{isActiveField(
-													publisherGapRows
-												) && (
-													<BaseControl
-														controlName="input"
-														columns="columns-1"
-														className="control-first label-center small-gap"
-														label={__(
-															'Rows',
-															'publisher-core'
-														)}
-													>
-														<InputControl
-															{...{
-																...props,
-																unitType:
-																	'essential',
-																min: 0,
-																max: 200,
-																defaultValue:
-																	gapRows,
-																id: 'gapRows',
-																onChange: (
-																	newValue
-																) =>
-																	handleOnChangeAttributes(
-																		'publisherGapRows',
-																		newValue
-																	),
-															}}
-														/>
-													</BaseControl>
-												)}
+												<BaseControl
+													controlName="input"
+													columns="columns-1"
+													className="control-first label-center small-gap"
+													label={__(
+														'Rows',
+														'publisher-core'
+													)}
+												>
+													<InputControl
+														{...{
+															...props,
+															unitType:
+																'essential',
+															min: 0,
+															max: 200,
+															defaultValue:
+																gap?.rows,
+															id: 'rows',
+															onChange: (
+																newValue
+															) =>
+																handleOnChangeAttributes(
+																	'publisherGap',
+																	{
+																		...gap,
+																		rows: newValue,
+																	}
+																),
+														}}
+													/>
+												</BaseControl>
 											</Flex>
 										)}
 										<Button
@@ -583,19 +563,36 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 											)}
 											size="small"
 											onClick={() => {
-												handleOnChangeAttributes(
-													'publisherGapLock',
-													!gapLock
-												);
+												if (gap?.lock) {
+													handleOnChangeAttributes(
+														'publisherGap',
+														{
+															...gap,
+															lock: !gap?.lock,
+															rows: gap?.gap,
+															columns: gap?.gap,
+														}
+													);
+												} else {
+													handleOnChangeAttributes(
+														'publisherGap',
+														{
+															lock: !gap?.lock,
+															gap: gap?.gap,
+															columns: '',
+															rows: '',
+														}
+													);
+												}
 											}}
 											style={{
-												color: gapLock
+												color: gap?.lock
 													? 'var(--publisher-controls-color)'
 													: 'var(--publisher-controls-border-color-focus)',
 												padding: '6px 3px',
 											}}
 										>
-											{gapLock ? (
+											{gap?.lock ? (
 												<LockIcon />
 											) : (
 												<UnlockIcon />

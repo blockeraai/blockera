@@ -48,11 +48,8 @@ blocksInitializer({
 						initialOpen={true}
 						values={{
 							gap: attributes?.publisherGap || '',
-							gapLock: attributes?.publisherGapLock,
-							gapRows: attributes?.publisherGapRows || '',
 							display: attributes?.publisherDisplay || '',
 							flexWrap: attributes?.publisherFlexWrap || {},
-							gapColumns: attributes?.publisherGapColumns || '',
 							alignItems: attributes?.publisherAlignItems || '',
 							flexDirection:
 								attributes?.publisherFlexDirection || {},
@@ -100,12 +97,9 @@ export const Default = {
 				...wrapperBlock,
 				attributes: {
 					...(wrapperBlock?.attributes || {}),
-					publisherGapRows: '',
 					publisherGap: '',
-					publisherGapLock: true,
 					publisherDisplay: '',
 					publisherFlexWrap: { value: 'nowrap', reverse: false },
-					publisherGapColumns: '',
 					publisherAlignItems: '',
 					publisherAlignContent: '',
 					publisherFlexDirection: { value: 'row', reverse: false },

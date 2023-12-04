@@ -80,10 +80,8 @@ class Parser {
 		'layout'            => [
 			'publisherGap',
 			'publisherDisplay',
-			'publisherGapRows',
 			'publisherFlexWrap',
 			'publisherAlignItems',
-			'publisherGapColumns',
 			'publisherAlignContent',
 			'publisherFlexDirection',
 			'publisherJustifyContent',
