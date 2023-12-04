@@ -30,6 +30,8 @@ import { default as AlignFlexEndIcon } from './icons/align-flex-end';
 import { default as AlignBaselineIcon } from './icons/align-baseline';
 import { default as AlignFlexStartIcon } from './icons/align-flex-start';
 import { default as AlignFlexCenterIcon } from './icons/align-flex-center';
+import { default as OrderFirst } from './icons/order-first';
+import { default as OrderLast } from './icons/order-last';
 import type { TFlexChildProps } from './types/flex-child-props';
 
 export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
@@ -70,7 +72,9 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 							columns="1fr 2.65fr"
 							controlName="toggle-select"
 							label={__('Sizing', 'publisher-core')}
-							className={'items-flex-direction-' + flexDirection}
+							className={
+								'items-flex-direction-' + flexDirection.value
+							}
 						>
 							<ToggleSelectControl
 								options={[
@@ -207,7 +211,9 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 							columns="1fr 2.65fr"
 							controlName="toggle-select"
 							label={__('Align', 'publisher-core')}
-							className={'items-flex-direction-' + flexDirection}
+							className={
+								'items-flex-direction-' + flexDirection.value
+							}
 						>
 							<ToggleSelectControl
 								options={[
@@ -265,16 +271,21 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 							columns="1fr 2.65fr"
 							controlName="toggle-select"
 							label={__('Order', 'publisher-core')}
+							className={
+								'items-flex-direction-' + flexDirection.value
+							}
 						>
 							<ToggleSelectControl
 								options={[
 									{
 										label: __('First', 'publisher-core'),
 										value: 'first',
+										icon: <OrderFirst />,
 									},
 									{
 										label: __('Last', 'publisher-core'),
 										value: 'last',
+										icon: <OrderLast />,
 									},
 									{
 										label: __(

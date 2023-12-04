@@ -19,6 +19,7 @@ interface IConfigs {
 		publisherFlexDirection: string,
 		publisherAlignItems: string,
 		publisherJustifyContent: string,
+		publisherGap: string,
 		publisherGapRows: string,
 		publisherGapColumns: string,
 		publisherFlexWrap: string,
@@ -34,6 +35,7 @@ export function LayoutStyles({
 		publisherFlexDirection,
 		publisherAlignItems,
 		publisherJustifyContent,
+		publisherGap,
 		publisherGapRows,
 		publisherGapColumns,
 		publisherFlexWrap,
@@ -60,7 +62,8 @@ export function LayoutStyles({
 			_attributes.publisherFlexDirection !==
 				attributes.publisherFlexDirection.default
 		) {
-			properties['flex-direction'] = _attributes.publisherFlexDirection;
+			properties['flex-direction'] =
+				_attributes.publisherFlexDirection.value;
 		}
 
 		if (
@@ -77,6 +80,13 @@ export function LayoutStyles({
 				attributes.publisherJustifyContent.default
 		) {
 			properties['justify-content'] = _attributes.publisherJustifyContent;
+		}
+
+		if (
+			isActiveField(publisherGap) &&
+			_attributes.publisherGap !== attributes.publisherGap.default
+		) {
+			properties.gap = _attributes.publisherGap;
 		}
 
 		if (
@@ -99,7 +109,7 @@ export function LayoutStyles({
 			_attributes.publisherFlexWrap !==
 				attributes.publisherFlexWrap.default
 		) {
-			properties['flex-wrap'] = _attributes.publisherFlexWrap;
+			properties['flex-wrap'] = _attributes.publisherFlexWrap.value;
 		}
 
 		if (

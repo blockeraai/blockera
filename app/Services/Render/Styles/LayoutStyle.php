@@ -45,7 +45,7 @@ class LayoutStyle extends SimpleStyle {
 				);
 			}
 
-			if ('publisherFlexChildOrder' === $key){
+			if ( 'publisherFlexChildOrder' === $key ) {
 
 				add_filter(
 					'publisher-core/services/render/styles/share/settings-format',
@@ -78,6 +78,7 @@ class LayoutStyle extends SimpleStyle {
 	protected function getValidCssProp( string $propId ): string {
 
 		$mappedProps = [
+			'publisherGap'             => 'gap',
 			'publisherFlexChildSizing' => 'flex',
 			'publisherFlexChildOrder'  => 'order',
 			'publisherDisplay'         => 'display',

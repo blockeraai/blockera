@@ -18,13 +18,13 @@ export type TCssProps = {
 export type TFlexChildProps = {
 	values: {
 		flexChildGrow?: string,
-		flexDirection: string,
 		flexChildAlign?: string,
 		flexChildBasis?: string,
 		flexChildOrder?: string,
 		flexChildSizing?: string,
 		flexChildShrink?: string,
 		flexChildOrderCustom?: string,
+		flexDirection: { value: string, reverse: boolean },
 	},
 	block: TBlockProps,
 	config: Object,
