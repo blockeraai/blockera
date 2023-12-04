@@ -285,7 +285,7 @@ export const PlayImage = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "type": "image", "image": "", "image-size": "custom", "image-size-width": "1auto", "image-size-height": "1auto", "image-position": { "top": "50%", "left": "50%" }, "image-repeat": "repeat", "image-attachment": "scroll", "isVisible": true } ]'
+						'[ { "type": "image", "image": "", "image-size": "custom", "image-size-width": "auto", "image-size-height": "auto", "image-position": { "top": "50%", "left": "50%" }, "image-repeat": "repeat", "image-attachment": "scroll", "isVisible": true } ]'
 					),
 				{ timeout: 1000 }
 			);
@@ -303,7 +303,7 @@ export const PlayImage = {
 			await waitFor(
 				async () =>
 					await expect(currentValue).toHaveTextContent(
-						'[ { "type": "image", "image": "", "image-size": "cover", "image-size-width": "1auto", "image-size-height": "1auto", "image-position": { "top": "50%", "left": "50%" }, "image-repeat": "repeat", "image-attachment": "scroll", "isVisible": true } ]'
+						'[ { "type": "image", "image": "", "image-size": "cover", "image-size-width": "auto", "image-size-height": "auto", "image-position": { "top": "50%", "left": "50%" }, "image-repeat": "repeat", "image-attachment": "scroll", "isVisible": true } ]'
 					),
 				{ timeout: 2000 }
 			);
