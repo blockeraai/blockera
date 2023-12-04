@@ -3,7 +3,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo } from '@wordpress/element';
+import { memo, useState } from '@wordpress/element';
 import type { MixedElement } from 'react';
 
 /**
@@ -16,7 +16,7 @@ import {
 	SelectControl,
 	BaseControl,
 } from '@publisher/controls';
-import { Flex } from '@publisher/components';
+import { Flex, Button } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -28,6 +28,8 @@ import { default as OverflowHiddenIcon } from './icons/overflow-hidden';
 import { default as OverflowVisibleIcon } from './icons/overflow-visible';
 import { default as OverflowScrollIcon } from './icons/overflow-scroll';
 import { convertToPercent } from './utils';
+import OriginCustom from './icons/origin/custom';
+import { FitPosition } from './components/fit-position';
 
 export const SizeExtension: MixedElement = memo<TSizeProps>(
 	({
@@ -51,9 +53,12 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 				publisherHeight,
 				publisherOverflow,
 				publisherRatio,
+				publisherFit,
 			},
 		} = config;
-		console.log(publisherRatio, 'ratios');
+
+		const [isFitPositionVisible, setIsFitPositionVisible] = useState(false);
+
 		return (
 			<>
 				{isActiveField(publisherWidth) && (
@@ -268,11 +273,11 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									onChange: (newValue) =>
 										handleOnChangeAttributes(
 											'publisherRatio',
-											newValue
+											{ ...ratio, value: newValue }
 										),
 								}}
 							/>
-							{ratio === 'custom' && (
+							{ratio.value === 'custom' && (
 								<Flex alignItems="flex-start">
 									<ControlContextProvider
 										value={{
@@ -280,7 +285,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 												block,
 												'custom-ratio-width'
 											),
-											value: customRatio.width,
+											value: ratio.width,
 										}}
 									>
 										<BaseControl
@@ -293,17 +298,19 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											)}
 										>
 											<InputControl
+												style={{ margin: '0px' }}
 												{...{
 													...props,
-													//	min: 0,
-													//	max: 200,
+													type: 'number',
+													min: 0,
 													defaultValue:
-														customRatio.width || '',
+														ratio.width || '',
+
 													onChange: (newValue) =>
 														handleOnChangeAttributes(
-															'publisherCustomRatio',
+															'publisherRatio',
 															{
-																...customRatio,
+																...ratio,
 																width: newValue,
 															}
 														),
@@ -311,22 +318,16 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											/>
 										</BaseControl>
 									</ControlContextProvider>
-									<p
-										style={{
-											fontSize: '14px',
-											fontWeight: '500',
-											lineHeight: '30px',
-										}}
-									>
-										:
-									</p>
+
+									<p className="publisher-colon">:</p>
+
 									<ControlContextProvider
 										value={{
 											name: generateExtensionId(
 												block,
 												'custom-ratio-height'
 											),
-											value: customRatio.height,
+											value: ratio.height,
 										}}
 									>
 										<BaseControl
@@ -339,18 +340,18 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											)}
 										>
 											<InputControl
+												style={{ margin: '0px' }}
 												{...{
 													...props,
-													//		min: 0,
-													//	max: 200,
+													min: 0,
+													type: 'number',
 													defaultValue:
-														customRatio.height ||
-														'',
+														ratio.height || '',
 													onChange: (newValue) =>
 														handleOnChangeAttributes(
-															'publisherCustomRatio',
+															'publisherRatio',
 															{
-																...customRatio,
+																...ratio,
 																height: newValue,
 															}
 														),
@@ -359,6 +360,105 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										</BaseControl>
 									</ControlContextProvider>
 								</Flex>
+							)}
+						</BaseControl>
+					</ControlContextProvider>
+				)}
+
+				{isActiveField(publisherFit) && (
+					<ControlContextProvider
+						value={{
+							name: generateExtensionId(block, 'fit'),
+							value: fit,
+						}}
+					>
+						<BaseControl
+							label={__('Fit', 'publisher-core')}
+							columns="columns-2"
+							className={'publisher-object-fit'}
+						>
+							<SelectControl
+								controlName="select"
+								columns="columns-1"
+								{...{
+									...props,
+									options: [
+										{
+											label: __('Auto', 'publisher-core'),
+											value: '',
+										},
+										{
+											label: __('Fill', 'publisher-core'),
+											value: 'fill',
+										},
+										{
+											label: __(
+												'Contain',
+												'publisher-core'
+											),
+											value: 'contain',
+										},
+										{
+											label: __(
+												'Cover',
+												'publisher-core'
+											),
+											value: 'cover',
+										},
+										{
+											label: __('None', 'publisher-core'),
+											value: 'none',
+										},
+										{
+											label: __(
+												'Scale Down',
+												'publisher-core'
+											),
+											value: 'scale-down',
+										},
+									], //
+									type: 'native',
+									defaultValue: '',
+									onChange: (newValue) =>
+										handleOnChangeAttributes(
+											'publisherFit',
+											newValue
+										),
+								}}
+							/>
+							<Button
+								label={__('Fit Position', 'publisher-core')}
+								showTooltip={true}
+								tooltipPosition="top"
+								onClick={() => {
+									setIsFitPositionVisible(
+										!isFitPositionVisible
+									);
+								}}
+								size="small"
+								style={{
+									padding: '5px',
+									width: '30px',
+									height: '30px',
+									color:
+										!fitPosition?.top || !fitPosition?.left
+											? 'var(--publisher-controls-color)'
+											: 'var(--publisher-controls-border-color-focus)',
+								}}
+							>
+								<OriginCustom />
+							</Button>
+							{isFitPositionVisible && (
+								<FitPosition
+									fitPosition={fitPosition}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+									setIsFitPositionVisible={
+										setIsFitPositionVisible
+									}
+									block={block}
+								/>
 							)}
 						</BaseControl>
 					</ControlContextProvider>

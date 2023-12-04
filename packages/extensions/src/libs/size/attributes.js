@@ -12,19 +12,15 @@ export const attributes = {
 		default: '',
 	},
 	publisherRatio: {
-		type: 'string',
-		default: '',
-	},
-	publisherCustomRatio: {
 		type: 'object',
-		default: { width: '', height: '' },
+		default: { value: '', width: '', height: '' },
 	},
 	publisherFit: {
 		type: 'string',
 		default: '',
 	},
 	publisherFitPosition: {
-		type: 'string',
-		default: '',
+		type: 'object',
+		default: { top: '', left: '' },
 	},
 };
