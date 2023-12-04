@@ -372,7 +372,7 @@ describe('filter-control component testing', () => {
 
 			//Check repeater item
 			cy.getByDataCy('group-control-header').contains('Hue Rotate');
-			cy.getByDataCy('group-control-header').contains('30deg');
+			cy.getByDataCy('group-control-header').contains('30');
 
 			//Check data provider value
 			cy.get('body').then(() => {

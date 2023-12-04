@@ -27,7 +27,9 @@
 		"publisherFlexChildOrderCustom"
 	],
 	"layout": [
+		"publisherGap",
 		"publisherGapRows",
+		"publisherGapLock",
 		"publisherDisplay",
 		"publisherFlexWrap",
 		"publisherGapColumns",

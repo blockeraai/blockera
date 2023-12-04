@@ -35,6 +35,7 @@ final class StyleEngine {
 	public function filter_safe_style_css( array $styles ): array {
 
 		$styles[] = 'top';
+		$styles[] = 'gap';
 		$styles[] = 'flex';
 		$styles[] = 'left';
 		$styles[] = 'order';

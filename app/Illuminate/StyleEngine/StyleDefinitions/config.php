@@ -5,9 +5,44 @@ return [
 		'padding' => [
 			'property_keys' => [
 				'default'    => 'padding',
-				'individual' => 'padding-%s',
 			],
 			'path'          => [ 'publisherSpacing', 'padding' ],
+			'css_vars'      => [
+				'spacing' => '--publisher--preset--spacing--$slug',
+			],
+		],
+		'padding-top' => [
+			'property_keys' => [
+				'default'    => 'padding-top',
+			],
+			'path'          => [ 'publisherSpacing', 'padding-top' ],
+			'css_vars'      => [
+				'spacing' => '--publisher--preset--spacing--$slug',
+			],
+		],
+		'padding-right' => [
+			'property_keys' => [
+				'default'    => 'padding-right',
+			],
+			'path'          => [ 'publisherSpacing', 'padding-right' ],
+			'css_vars'      => [
+				'spacing' => '--publisher--preset--spacing--$slug',
+			],
+		],
+		'padding-bottom' => [
+			'property_keys' => [
+				'default'    => 'padding-bottom',
+			],
+			'path'          => [ 'publisherSpacing', 'padding-bottom' ],
+			'css_vars'      => [
+				'spacing' => '--publisher--preset--spacing--$slug',
+			],
+		],
+		'padding-left' => [
+			'property_keys' => [
+				'default'    => 'padding-left',
+			],
+			'path'          => [ 'publisherSpacing', 'padding-left' ],
 			'css_vars'      => [
 				'spacing' => '--publisher--preset--spacing--$slug',
 			],
@@ -18,6 +53,42 @@ return [
 				'individual' => 'margin-%s',
 			],
 			'path'          => [ 'publisherSpacing', 'margin' ],
+			'css_vars'      => [
+				'spacing' => '--publisher--preset--spacing--$slug',
+			],
+		],
+		'margin-top' => [
+			'property_keys' => [
+				'default'    => 'margin-top',
+			],
+			'path'          => [ 'publisherSpacing', 'margin-top' ],
+			'css_vars'      => [
+				'spacing' => '--publisher--preset--spacing--$slug',
+			],
+		],
+		'margin-right' => [
+			'property_keys' => [
+				'default'    => 'margin-right',
+			],
+			'path'          => [ 'publisherSpacing', 'margin-right' ],
+			'css_vars'      => [
+				'spacing' => '--publisher--preset--spacing--$slug',
+			],
+		],
+		'margin-bottom' => [
+			'property_keys' => [
+				'default'    => 'margin-bottom',
+			],
+			'path'          => [ 'publisherSpacing', 'margin-bottom' ],
+			'css_vars'      => [
+				'spacing' => '--publisher--preset--spacing--$slug',
+			],
+		],
+		'margin-left' => [
+			'property_keys' => [
+				'default'    => 'margin-left',
+			],
+			'path'          => [ 'publisherSpacing', 'margin-left' ],
 			'css_vars'      => [
 				'spacing' => '--publisher--preset--spacing--$slug',
 			],
@@ -485,6 +556,14 @@ return [
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
+		'gap'             => [
+			'property_keys' => [
+				'default' => 'gap',
+			],
+			'path'          => [ 'publisherLayout', 'publisherGap' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
 		'row-gap'         => [
 			'property_keys' => [
 				'default' => 'row-gap',
@@ -497,7 +576,7 @@ return [
 			'property_keys' => [
 				'default' => 'flex-wrap',
 			],
-			'path'          => [ 'publisherLayout', 'publisherFlexWrap' ],
+			'path'          => [ 'publisherLayout', 'publisherFlexWrap', 'value' ],
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
@@ -529,7 +608,7 @@ return [
 			'property_keys' => [
 				'default' => 'flex-direction',
 			],
-			'path'          => [ 'publisherLayout', 'publisherFlexDirection' ],
+			'path'          => [ 'publisherLayout', 'publisherFlexDirection', 'value' ],
 			'css_vars'      => [],
 			'classnames'    => [],
 		],

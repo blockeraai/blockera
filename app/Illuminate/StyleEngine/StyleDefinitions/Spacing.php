@@ -16,37 +16,39 @@ class Spacing extends BaseStyleDefinition {
 			];
 		}
 
-		$padding = is_array( $padding ) ? implode(
-			' ',
-			array_map(
-				static function ( string $item ) {
 
-					if ( empty( $item ) ) {
-						return 'unset';
-					}
-
-					return $item;
-				},
-				$padding
-			)
+		$padding = is_array( $padding ) ? array_filter(
+			$padding,
+			[ $this, 'filteredItems' ]
 		) : $padding;
 
-		$margin = is_array( $margin ) ? implode(
-			' ',
-			array_map(
-				static function ( string $item ) {
-
-					if ( empty( $item ) ) {
-						return 'unset';
-					}
-
-					return $item;
-				},
-				$margin
-			)
+		$margin = is_array( $margin ) ? array_filter(
+			$margin,
+			[ $this, 'filteredItems' ]
 		) : $margin;
 
-		$this->setProperties( compact( 'padding', 'margin' ) );
+		$isImportant = $this->getImportant();
+
+		$this->setProperties(
+			array_merge(
+				...array_map(
+				static function ( string $item, string $property ) use ( $isImportant ): array {
+
+					return [ "padding-{$property}" => $item . $isImportant ];
+				},
+				$padding,
+				array_keys( $padding )
+			),
+				...array_map(
+				static function ( string $item, string $property ) use ( $isImportant ): array {
+
+					return [ "margin-{$property}" => $item . $isImportant ];
+				},
+				$margin,
+				array_keys( $margin )
+			),
+			),
+		);
 
 		return $this->properties;
 	}
@@ -54,6 +56,11 @@ class Spacing extends BaseStyleDefinition {
 	protected function getCacheKey( string $suffix = '' ): string {
 
 		return getClassname( __NAMESPACE__, __CLASS__ ) . parent::getCacheKey( $suffix );
+	}
+
+	private function filteredItems( string $item ): bool {
+
+		return ! empty( $item );
 	}
 
 }
