@@ -65,14 +65,6 @@ export function UnitInput({
 	const [inputValue, setInputValue] = useState(extractedValue.value);
 
 	useEffect(() => {
-		// eslint-disable-next-line no-unused-expressions
-		isUndefined(extractedValue.unit) || extractedValue.unit === ''
-			? getFirstUnit(units)
-			: getUnitByValue(extractedValue.unit, units);
-		setInputValue(extractedValue.value);
-	}, [extractedValue]);
-
-	useEffect(() => {
 		if (isSpecialUnit(unitValue.value)) {
 			setValue(unitValue.value);
 		} else if (inputValue === '') {
