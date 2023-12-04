@@ -532,6 +532,14 @@ return [
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
+		'gap'             => [
+			'property_keys' => [
+				'default' => 'gap',
+			],
+			'path'          => [ 'publisherLayout', 'publisherGap' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
 		'row-gap'         => [
 			'property_keys' => [
 				'default' => 'row-gap',
@@ -544,7 +552,7 @@ return [
 			'property_keys' => [
 				'default' => 'flex-wrap',
 			],
-			'path'          => [ 'publisherLayout', 'publisherFlexWrap' ],
+			'path'          => [ 'publisherLayout', 'publisherFlexWrap', 'value' ],
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
@@ -576,7 +584,7 @@ return [
 			'property_keys' => [
 				'default' => 'flex-direction',
 			],
-			'path'          => [ 'publisherLayout', 'publisherFlexDirection' ],
+			'path'          => [ 'publisherLayout', 'publisherFlexDirection', 'value' ],
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
