@@ -283,7 +283,7 @@ describe('Flex Child', () => {
 
 	describe('Order', () => {
 		describe('Functionality', () => {
-			it('first and last options', () => {
+			beforeEach(() => {
 				const code = `<!-- wp:group {"className":"publisher-group","layout":{"type":"constrained"},"publisherDisplay":"flex","publisherPropsId":"1025111558103"} -->
 <div class="wp-block-group publisher-group"><!-- wp:paragraph {"className":"publisher-paragraph","publisherAttributes":[],"publisherPropsId":"102511163356"} -->
 <p class="publisher-paragraph">This is a test text.</p>
@@ -293,7 +293,9 @@ describe('Flex Child', () => {
 
 				cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
 				cy.getByDataTest('style-tab').click();
+			});
 
+			it('first and last options', () => {
 				//
 				// First
 				//
