@@ -319,6 +319,30 @@ return [
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
+		'aspect-ratio' => [
+			'property_keys' => [
+				'default' => 'aspect-ratio',
+			],
+			'path'          => [ 'publisherSizing', 'publisherRatio' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
+		'object-fit' => [
+			'property_keys' => [
+				'default' => 'object-fit',
+			],
+			'path'          => [ 'publisherSizing', 'publisherFit' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
+		'object-position' => [
+			'property_keys' => [
+				'default' => 'object-position',
+			],
+			'path'          => [ 'publisherSizing', 'publisherFitPosition' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
 	],
 	'publisherBorder'     => [
 		'border'                     => [

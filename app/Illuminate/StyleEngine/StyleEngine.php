@@ -81,6 +81,9 @@ final class StyleEngine {
 		$styles[] = 'border-top-right-radius';
 		$styles[] = 'border-bottom-left-radius';
 		$styles[] = 'border-bottom-right-radius';
+		$styles[] = 'aspect-ratio';
+		$styles[] = 'object-fit';
+		$styles[] = 'object-position';
 
 		return $styles;
 	}

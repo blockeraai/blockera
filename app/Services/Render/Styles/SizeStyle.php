@@ -15,6 +15,9 @@ class SizeStyle extends SimpleStyle {
 			'publisherWidth'    => 'width',
 			'publisherHeight'   => 'height',
 			'publisherOverflow' => 'overflow',
+			'publisherRatio'    => 'aspect-ratio',
+			'publisherFit'      => 'object-fit',
+			'publisherFitPosition'      => 'object-position',
 		];
 
 		return $mappedProps[ $propId ] ?? $propId;
