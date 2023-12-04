@@ -46,10 +46,9 @@ export const LineHeight = ({
 				columns="columns-2"
 				{...{
 					...parentProps,
-					unitType: 'essential',
+					unitType: 'line-height',
 					range: true,
 					min: 0,
-					max: 100,
 					defaultValue: defaultValue || '',
 					onChange: (newValue) => {
 						onChange(
