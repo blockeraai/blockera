@@ -50,7 +50,7 @@ export const FontStyle = ({
 						icon: <FontStyleNormalIcon />,
 					},
 					{
-						label: __('Line Through', 'publisher-core'),
+						label: __('Italic', 'publisher-core'),
 						value: 'italic',
 						icon: <FontStyleItalicIcon />,
 					},

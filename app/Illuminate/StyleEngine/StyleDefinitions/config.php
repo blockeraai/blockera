@@ -222,7 +222,7 @@ return [
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
-		'letter-spacing'  => [
+		'letter-spacing'    => [
 			'property_keys' => [
 				'default' => 'letter-spacing',
 			],
@@ -243,6 +243,94 @@ return [
 				'default' => 'direction',
 			],
 			'path'          => [ 'publisherTypography', 'publisherDirection' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
+		'text-indent'       => [
+			'property_keys' => [
+				'default' => 'text-indent',
+			],
+			'path'          => [ 'publisherTypography', 'publisherTextIndent' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
+		'-webkit-text-stroke-width'       => [
+			'property_keys' => [
+				'default' => '-webkit-text-stroke-width',
+			],
+			'path'          => [ 'publisherTypography', 'publisherTextStrokeWidth' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
+		'-webkit-text-stroke-color'       => [
+			'property_keys' => [
+				'default' => '-webkit-text-stroke-color',
+			],
+			'path'          => [ 'publisherTypography', 'publisherTextStrokeColor' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
+		'text-orientation'  => [
+			'property_keys' => [
+				'default' => 'text-orientation',
+			],
+			'path'          => [ 'publisherTypography', 'text-orientation' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
+		'writing-mode'  => [
+			'property_keys' => [
+				'default' => 'writing-mode',
+			],
+			'path'          => [ 'publisherTypography', 'writing-mode' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
+		'column-count'      => [
+			'property_keys' => [
+				'default' => 'column-count',
+			],
+			'path'          => [ 'publisherTypography', 'publisherTextColumns' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
+		'column-gap'        => [
+			'property_keys' => [
+				'default' => 'column-gap',
+			],
+			'path'          => [ 'publisherTypography', 'publisherTextColumnsGap' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
+		'column-rule-width' => [
+			'property_keys' => [
+				'default' => 'column-rule-width',
+			],
+			'path'          => [ 'publisherTypography', 'publisherTextColumnsDividerWidth' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
+		'column-rule-color' => [
+			'property_keys' => [
+				'default' => 'column-rule-color',
+			],
+			'path'          => [ 'publisherTypography', 'publisherTextColumnsDividerColor' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
+		'column-rule-style' => [
+			'property_keys' => [
+				'default' => 'column-rule-style',
+			],
+			'path'          => [ 'publisherTypography', 'publisherTextColumnsDividerStyle' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
+		'word-break'        => [
+			'property_keys' => [
+				'default' => 'word-break',
+			],
+			'path'          => [ 'publisherTypography', 'publisherWordBreak' ],
 			'css_vars'      => [],
 			'classnames'    => [],
 		],

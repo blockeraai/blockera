@@ -552,12 +552,55 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 										isDeselectable={true}
 										//
 										defaultValue=""
-										onChange={(newValue) =>
+										onChange={(newValue) => {
+											let textOriented;
+											switch (newValue) {
+												case 'style-1':
+													textOriented = {
+														'writing-mode':
+															'vertical-lr',
+														'text-orientation':
+															'mixed',
+													};
+													break;
+												case 'style-2':
+													textOriented = {
+														'writing-mode':
+															'vertical-rl',
+														'text-orientation':
+															'mixed',
+													};
+													break;
+												case 'style-3':
+													textOriented = {
+														'writing-mode':
+															'vertical-lr',
+														'text-orientation':
+															'upright',
+													};
+													break;
+												case 'style-4':
+													textOriented = {
+														'writing-mode':
+															'vertical-rl',
+														'text-orientation':
+															'upright',
+													};
+													break;
+												case 'none':
+													textOriented = {
+														'writing-mode':
+															'initial',
+														'text-orientation':
+															'initial',
+													};
+											}
+
 											handleOnChangeAttributes(
 												'publisherTextOrientation',
-												newValue
-											)
-										}
+												textOriented
+											);
+										}}
 									/>
 								</ControlContextProvider>
 							)}
@@ -694,21 +737,39 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 															className="control-first label-center small-gap"
 															lines="vertical"
 															customMenuPosition="top"
-															onValueChange={(
+															onChange={(
 																newValue
 															) => {
-																handleOnChangeAttributes(
-																	'publisherTextColumnsDividerWidth',
+																console.log(
 																	newValue
 																);
-																handleOnChangeAttributes(
-																	'publisherTextColumnsDividerStyle',
-																	newValue
-																);
-																handleOnChangeAttributes(
-																	'publisherTextColumnsDividerColor',
-																	newValue
-																);
+																if (
+																	newValue.width !==
+																	textColumnsDividerWidth
+																) {
+																	handleOnChangeAttributes(
+																		'publisherTextColumnsDividerWidth',
+																		newValue.width
+																	);
+																}
+																if (
+																	newValue.style !==
+																	textColumnsDividerStyle
+																) {
+																	handleOnChangeAttributes(
+																		'publisherTextColumnsDividerStyle',
+																		newValue.style
+																	);
+																}
+																if (
+																	newValue.color !==
+																	textColumnsDividerColor
+																) {
+																	handleOnChangeAttributes(
+																		'publisherTextColumnsDividerColor',
+																		newValue.color
+																	);
+																}
 															}}
 														/>
 													</ControlContextProvider>
