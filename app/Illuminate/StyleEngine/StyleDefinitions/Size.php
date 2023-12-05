@@ -13,7 +13,7 @@ class Size extends BaseStyleDefinition {
 
 		$this->setProperties(
 			[
-				$this->settings['type'] => $this->settings[ $this->settings['type'] ] . $this->getImportant(),
+				$this->settings['type'] => pb_get_value_addon_real_value( $this->settings[ $this->settings['type'] ] ) . $this->getImportant(),
 			]
 		);
 
