@@ -7,7 +7,7 @@ describe('Helper Functions', () => {
 		});
 
 		test('empty', () => {
-			expect(getValueAddonRealValue()).toBe('');
+			expect(getValueAddonRealValue('')).toBe('');
 		});
 
 		test('number', () => {
@@ -30,7 +30,7 @@ describe('Helper Functions', () => {
 			expect(getValueAddonRealValue('var(--is-publisher)func')).toBe(
 				'var(--is-publisher)'
 			);
+			expect(getValueAddonRealValue('func')).toBe('');
 		});
 	});
 });
-//

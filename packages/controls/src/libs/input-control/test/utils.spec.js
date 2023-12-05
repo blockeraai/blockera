@@ -1514,7 +1514,7 @@ describe('Util functions', () => {
 						{
 							value: '',
 							label: '-',
-							default: 0,
+							default: '',
 							format: 'number',
 						},
 						{
