@@ -32,13 +32,12 @@ class Layout extends BaseStyleDefinition {
 					case 'no':
 						$props['flex'] = '0 0 auto';
 						break;
-						//FIXME: publisherFlexChildBasis value has a bug!
 					case 'custom':
 						$props['flex'] = sprintf(
 							'%s %s %s',
-							$this->settings['flex-child']['publisherFlexChildGrow'] ?? 0,
-							$this->settings['flex-child']['publisherFlexChildShrink'] ?? 0,
-							$this->settings['flex-child']['publisherFlexChildBasis'] ?? 'auto'
+							$this->settings['flex-child']['publisherFlexChildGrow'] ? pb_get_value_addon_real_value( $this->settings['flex-child']['publisherFlexChildGrow'] ) : 0,
+							$this->settings['flex-child']['publisherFlexChildShrink'] ? pb_get_value_addon_real_value( $this->settings['flex-child']['publisherFlexChildShrink'] ) : 0,
+							$this->settings['flex-child']['publisherFlexChildBasis'] ? pb_get_value_addon_real_value( $this->settings['flex-child']['publisherFlexChildBasis'] ) : 'auto'
 						);
 						break;
 				}
@@ -56,7 +55,7 @@ class Layout extends BaseStyleDefinition {
 						$props['order'] = '100';
 						break;
 					case 'custom':
-						$props['order'] = $this->settings['custom'] ?? '100';
+						$props['order'] = $this->settings['custom'] ? pb_get_value_addon_real_value( $this->settings['custom'] ) : '100';
 						break;
 				}
 
@@ -66,19 +65,19 @@ class Layout extends BaseStyleDefinition {
 
 				$gap = $this->settings['gap'];
 
-				if( $gap['lock'] ){
+				if ( $gap['lock'] ) {
 
-					if( $gap['gap'] ){
-						$props['gap'] = $gap['gap'];
+					if ( $gap['gap'] ) {
+						$props['gap'] = pb_get_value_addon_real_value( $gap['gap'] );
 					}
-				}else{
+				} else {
 
-					if( $gap['rows'] ){
-						$props['row-gap'] = $gap['rows'];
+					if ( $gap['rows'] ) {
+						$props['row-gap'] = pb_get_value_addon_real_value( $gap['rows'] );
 					}
 
-					if( $gap['columns'] ){
-						$props['column-gap'] = $gap['columns'];
+					if ( $gap['columns'] ) {
+						$props['column-gap'] = pb_get_value_addon_real_value( $gap['columns'] );
 					}
 				}
 

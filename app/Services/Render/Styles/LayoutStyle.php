@@ -51,7 +51,7 @@ class LayoutStyle extends SimpleStyle {
 					'publisher-core/services/render/styles/share/settings-format',
 					static function ( array $settings ) use ( $attributes ): array {
 
-						$settings['custom'] = $attributes['publisherFlexChildOrderCustom'] ?? '100';
+						$settings['custom'] = $attributes['publisherFlexChildOrderCustom'] ? pb_get_value_addon_real_value( $attributes['publisherFlexChildOrderCustom'] ) : '100';
 
 						return $settings;
 					}
