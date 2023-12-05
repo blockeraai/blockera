@@ -69,6 +69,18 @@ abstract class BaseStyleDefinition implements Style {
 	}
 
 	/**
+	 * @param string $id
+	 * @param        $value
+	 *
+	 *
+	 * @return void
+	 */
+	protected function setProperty( string $id, $value ): void {
+
+		$this->properties[ $id ] = $value;
+	}
+
+	/**
 	 * @param array $settings
 	 *
 	 * @return void
