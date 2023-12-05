@@ -86,7 +86,9 @@ export default function PositionButtonControl({
 				>
 					<AlignmentMatrixControl
 						label={alignmentMatrixLabel}
-						columns="columns-2"
+						columns={
+							alignmentMatrixLabel ? 'columns-2' : 'columns-1'
+						}
 						inputFields={true}
 						onChange={setValue}
 						defaultValue={defaultValue}
