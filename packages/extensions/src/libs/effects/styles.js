@@ -71,62 +71,63 @@ export function EffectsStyles({
 		);
 	}
 
-	if (
-		isActiveField(publisherTransform) &&
-		!arrayEquals(
-			attributes.publisherTransform.default,
-			blockProps.attributes.publisherTransform
-		)
-	) {
+	if (isActiveField(publisherTransform)) {
 		const transformProperties: TTransformCssProps = {};
 
-		let transformProperty = blockProps.attributes.publisherTransform
-			?.map((item) => {
-				if (!item.isVisible) {
+		if (
+			!arrayEquals(
+				attributes.publisherTransform.default,
+				blockProps.attributes.publisherTransform
+			)
+		) {
+			let transformProperty = blockProps.attributes.publisherTransform
+				?.map((item) => {
+					if (!item.isVisible) {
+						return null;
+					}
+
+					switch (item.type) {
+						case 'move':
+							return `translate3d(${getValueAddonRealValue(
+								item['move-x']
+							)}, ${getValueAddonRealValue(
+								item['move-y']
+							)}, ${getValueAddonRealValue(item['move-z'])})`;
+
+						case 'scale':
+							return `scale3d(${getValueAddonRealValue(
+								item.scale
+							)}, ${getValueAddonRealValue(item.scale)}, 50%)`;
+
+						case 'rotate':
+							return `rotateX(${getValueAddonRealValue(
+								item['rotate-x']
+							)}) rotateY(${getValueAddonRealValue(
+								item['rotate-y']
+							)}) rotateZ(${getValueAddonRealValue(
+								item['rotate-z']
+							)})`;
+
+						case 'skew':
+							return `skew(${getValueAddonRealValue(
+								item['skew-x']
+							)}, ${getValueAddonRealValue(item['skew-y'])})`;
+					}
+
 					return null;
-				}
+				})
+				?.filter((item) => null !== item)
+				.join(' ');
 
-				switch (item.type) {
-					case 'move':
-						return `translate3d(${getValueAddonRealValue(
-							item['move-x']
-						)}, ${getValueAddonRealValue(
-							item['move-y']
-						)}, ${getValueAddonRealValue(item['move-z'])})`;
+			if (blockProps.attributes.publisherTransformSelfPerspective) {
+				transformProperty = `perspective(${getValueAddonRealValue(
+					blockProps.attributes.publisherTransformSelfPerspective
+				)}) ${transformProperty}`;
+			}
 
-					case 'scale':
-						return `scale3d(${getValueAddonRealValue(
-							item.scale
-						)}, ${getValueAddonRealValue(item.scale)}, 50%)`;
-
-					case 'rotate':
-						return `rotateX(${getValueAddonRealValue(
-							item['rotate-x']
-						)}) rotateY(${getValueAddonRealValue(
-							item['rotate-y']
-						)}) rotateZ(${getValueAddonRealValue(
-							item['rotate-z']
-						)})`;
-
-					case 'skew':
-						return `skew(${getValueAddonRealValue(
-							item['skew-x']
-						)}, ${getValueAddonRealValue(item['skew-y'])})`;
-				}
-
-				return null;
-			})
-			?.filter((item) => null !== item)
-			.join(' ');
-
-		if (blockProps.attributes.publisherTransformSelfPerspective) {
-			transformProperty = `perspective(${getValueAddonRealValue(
-				blockProps.attributes.publisherTransformSelfPerspective
-			)}) ${transformProperty}`;
-		}
-
-		if (transformProperty) {
-			transformProperties.transform = transformProperty;
+			if (transformProperty) {
+				transformProperties.transform = transformProperty;
+			}
 		}
 
 		if (
