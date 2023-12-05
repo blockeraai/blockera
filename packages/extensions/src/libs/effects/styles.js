@@ -58,7 +58,9 @@ export function EffectsStyles({
 								type: 'static',
 								selector: '.{{BLOCK_ID}}',
 								properties: {
-									opacity: '{{publisherOpacity}}',
+									opacity: getValueAddonRealValue(
+										blockProps.attributes.publisherOpacity
+									),
 								},
 							},
 						],
