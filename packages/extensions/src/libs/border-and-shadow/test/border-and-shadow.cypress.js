@@ -1006,17 +1006,19 @@ describe('Border and Shadow extension', () => {
 				});
 
 			//add data
-			cy.getByDataTest('popover-body').within(() => {
-				cy.getByDataTest('border-control-width').clear();
-				cy.getByDataTest('border-control-width').type(3);
+			cy.getByDataTest('popover-body')
+				.first()
+				.within(() => {
+					cy.getByDataTest('border-control-width').clear();
+					cy.getByDataTest('border-control-width').type(3);
 
-				cy.get('[aria-haspopup="listbox"]').click();
-				cy.get('li').eq(1).trigger('click');
+					cy.get('[aria-haspopup="listbox"]').click();
+					cy.get('li').eq(1).trigger('click');
 
-				cy.get('input[type="range"]').setSliderValue(10);
+					cy.get('input[type="range"]').setSliderValue(10);
 
-				cy.getByDataTest('border-control-color').click();
-			});
+					cy.getByDataTest('border-control-color').click();
+				});
 
 			cy.getByDataTest('popover-body')
 				.last()
