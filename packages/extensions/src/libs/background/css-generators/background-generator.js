@@ -118,13 +118,27 @@ export function backgroundGenerator(id, props, styleEngine) {
 
 				let gradient = item['mesh-gradient'];
 
-				item['mesh-gradient-colors'].map((value, index) => {
-					gradient = gradient.replace(
-						`var(--c${index})`,
-						item['mesh-gradient-colors'][index].color
-					);
-					return null;
-				});
+				if ('string' === typeof gradient) {
+					item['mesh-gradient-colors'].map((value, index) => {
+						gradient = gradient.replace(
+							`var(--c${index})`,
+							item['mesh-gradient-colors'][index].color
+						);
+						return null;
+					});
+				} else {
+					gradient = gradient.join(', ');
+				}
+
+				item['mesh-gradient-colors'].map(
+					(value: { color: string }, index: number): Object => {
+						const newVar = '--c' + index;
+
+						properties[newVar] = value.color;
+
+						return properties;
+					}
+				);
 
 				// override bg color
 				properties['background-color'] =
@@ -151,21 +165,31 @@ export function backgroundGenerator(id, props, styleEngine) {
 		return undefined;
 	});
 
+	const { image, size, position, repeat, attachment, ..._properties } =
+		properties;
+
+	const toReturnProperties = {
+		'background-image': image.join(', '),
+		'background-size': size.join(', '),
+		'background-position': position.join(', '),
+		'background-repeat': repeat.join(', '),
+		'background-attachment': attachment.join(', '),
+		..._properties,
+	};
+
+	if (properties['background-color'])
+		toReturnProperties['background-color'] =
+			properties['background-color'] + ' !important';
+
+	if (properties.size[0] === '1auto 1auto')
+		toReturnProperties['background-size'] = 'auto auto';
+
 	return createCssRule({
 		selector: `${
 			styleEngine.selector
 				? `#block-${props.clientId}` + styleEngine.selector
 				: ''
 		}`,
-		properties: {
-			'background-color': properties['background-color']
-				? properties['background-color'] + ' !important'
-				: '',
-			'background-image': properties.image.join(', '),
-			'background-size': properties.size.join(', '),
-			'background-position': properties.position.join(', '),
-			'background-repeat': properties.repeat.join(', '),
-			'background-attachment': properties.attachment.join(', '),
-		},
+		properties: toReturnProperties,
 	});
 }

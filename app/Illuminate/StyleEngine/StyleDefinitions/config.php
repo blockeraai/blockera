@@ -164,6 +164,22 @@ return [
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
+		'-webkit-background-clip'       => [
+			'property_keys' => [
+				'default' => '-webkit-background-clip',
+			],
+			'path'          => [ 'publisherBackground', '-webkit-background-clip' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
+		'-webkit-text-fill-color'       => [
+			'property_keys' => [
+				'default' => '-webkit-text-fill-color',
+			],
+			'path'          => [ 'publisherBackground', '-webkit-text-fill-color' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
 	],
 	'publisherTypography' => [
 		'color'           => [

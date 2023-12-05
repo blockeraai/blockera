@@ -90,6 +90,8 @@ final class StyleEngine {
 		$styles[] = 'backface-visibility';
 		$styles[] = 'background-position';
 		$styles[] = 'border-top-left-radius';
+		$styles[] = '-webkit-background-clip';
+		$styles[] = '-webkit-text-fill-color';
 		$styles[] = 'border-top-right-radius';
 		$styles[] = '-webkit-text-stroke-color';
 		$styles[] = '-webkit-text-stroke-width';
