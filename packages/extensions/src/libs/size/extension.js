@@ -16,6 +16,7 @@ import {
 	SelectControl,
 	BaseControl,
 	convertAlignmentMatrixCoordinates,
+	PositionButtonControl,
 } from '@publisher/controls';
 import { Flex } from '@publisher/components';
 
@@ -29,7 +30,6 @@ import { default as OverflowHiddenIcon } from './icons/overflow-hidden';
 import { default as OverflowVisibleIcon } from './icons/overflow-visible';
 import { default as OverflowScrollIcon } from './icons/overflow-scroll';
 import { convertToPercent } from './utils';
-import PositionButton from '@publisher/controls/src/libs/position-button';
 
 export const SizeExtension: MixedElement = memo<TSizeProps>(
 	({
@@ -439,7 +439,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									},
 								}}
 							>
-								<PositionButton
+								<PositionButtonControl
 									label={__('Fit Position', 'publisher-core')}
 									popoverLabel={__(
 										'Setting',
