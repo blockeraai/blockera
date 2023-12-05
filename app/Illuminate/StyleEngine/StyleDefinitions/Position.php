@@ -16,21 +16,29 @@ class Position extends BaseStyleDefinition {
 		switch ( $this->settings['type'] ) {
 
 			case 'position':
-				$index   = $this->settings['type'];
-				$setting = $this->settings[ $index ];
 				[
 					'type'     => $position,
 					'position' => $value,
-				] = $setting;
-
+				] = $this->settings['position'];
 
 				$props['position'] = $position;
 
-				$props = array_merge( $props, $value );
+				$props = array_merge( $props,
+					array_merge(
+						...array_map(
+							static function ( string $item, string $property ): array {
+
+								return [ $property => pb_get_value_addon_real_value( $item ) ];
+							},
+							$value,
+							array_keys( $value )
+						)
+					)
+				);
 
 				break;
 			case 'z-index':
-				$props['z-index'] = $this->settings['z-index'];
+				$props['z-index'] = pb_get_value_addon_real_value( $this->settings['z-index'] );
 				break;
 		}
 
