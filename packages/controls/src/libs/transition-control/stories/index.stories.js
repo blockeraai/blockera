@@ -49,33 +49,68 @@ export const Fill = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => {
 		return (
-			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">Filled</h2>
+			<Flex direction="column" gap="50px">
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">Filled</h2>
 
-				<ControlContextProvider
-					storeName={STORE_NAME}
-					value={{
-						name: nanoid(),
-						value: [
-							{
-								type: 'all',
-								duration: '250ms',
-								timing: 'ease',
-								delay: '10ms',
-								isVisible: true,
-							},
-							{
-								type: 'opacity',
-								duration: '600ms',
-								timing: 'ease',
-								delay: '0ms',
-								isVisible: true,
-							},
-						],
-					}}
-				>
-					<TransitionControl {...args} label="Transitions" />
-				</ControlContextProvider>
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									type: 'all',
+									duration: '2.5s',
+									timing: 'ease',
+									delay: '10ms',
+									isVisible: true,
+									isOpen: false,
+								},
+								{
+									type: 'opacity',
+									duration: '600ms',
+									timing: 'ease',
+									delay: '0ms',
+									isVisible: true,
+								},
+							],
+						}}
+					>
+						<TransitionControl {...args} label="Transitions" />
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">
+						Filled<span>CSS Values</span>
+					</h2>
+
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									type: 'all',
+									duration: '2.5sfunc',
+									timing: 'ease',
+									delay: '10msfunc',
+									isVisible: true,
+									isOpen: false,
+								},
+								{
+									type: 'opacity',
+									duration: '600msfunc',
+									timing: 'ease',
+									delay: '0msfunc',
+									isVisible: true,
+								},
+							],
+						}}
+					>
+						<TransitionControl {...args} label="Transitions" />
+					</ControlContextProvider>
+				</Flex>
 			</Flex>
 		);
 	},
@@ -102,7 +137,7 @@ export const Open = {
 						value: [
 							{
 								type: 'all',
-								duration: '250ms',
+								duration: '2.5s',
 								timing: 'ease',
 								delay: '10ms',
 								isVisible: true,

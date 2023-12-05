@@ -17,6 +17,7 @@ import { controlInnerClassNames } from '@publisher/classnames';
 import { getTypeLabel } from '../utils';
 import { default as TransitionIcon } from '../icons/transition';
 import type { THeaderItem } from '../types';
+import { prepValueForHeader } from '../../repeater-control/utils';
 
 const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 	({
@@ -48,7 +49,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 				</span>
 
 				<span className={controlInnerClassNames('header-values')}>
-					{duration}
+					{prepValueForHeader(duration)}
 				</span>
 
 				{children}

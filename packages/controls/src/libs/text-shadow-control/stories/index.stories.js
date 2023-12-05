@@ -50,26 +50,80 @@ export const Fill = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: (args) => {
 		return (
-			<Flex direction="column" gap="30px">
-				<h2 className="story-heading">Filled</h2>
+			<Flex direction="column" gap="50px">
+				<Flex direction="column" gap="30px">
+					<h2 className="story-heading">Filled</h2>
 
-				<ControlContextProvider
-					storeName={STORE_NAME}
-					value={{
-						name: nanoid(),
-						value: [
-							{
-								x: '2px',
-								y: '3px',
-								blur: '4px',
-								color: '#0947eb',
-								isVisible: true,
-							},
-						],
-					}}
-				>
-					<TextShadowControl {...args} label="Text Shadows" />
-				</ControlContextProvider>
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									x: '2px',
+									y: '3px',
+									blur: '4px',
+									color: '#0947eb',
+									isVisible: true,
+								},
+								{
+									x: '5px',
+									y: '10px',
+									blur: '20px',
+									color: '#616161',
+									isVisible: true,
+								},
+							],
+						}}
+					>
+						<TextShadowControl {...args} label="Text Shadows" />
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="30px">
+					<h2 className="story-heading">
+						Filled<span>CSS Values</span>
+					</h2>
+
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									x: 'calc(10px)func',
+									y: 'calc(10px)func',
+									blur: 'calc(10px)func',
+									color: '#0947eb',
+									isVisible: true,
+								},
+								{
+									x: 'calc(10px)func',
+									y: '12px',
+									blur: '13px',
+									color: '#0947eb',
+									isVisible: true,
+								},
+								{
+									x: '12px',
+									y: 'calc(10px)func',
+									blur: '11px',
+									color: '#0947eb',
+									isVisible: true,
+								},
+								{
+									x: '12px',
+									y: '11px',
+									blur: 'calc(10px)func',
+									color: '#0947eb',
+									isVisible: true,
+								},
+							],
+						}}
+					>
+						<TextShadowControl {...args} label="All CSS Values" />
+					</ControlContextProvider>
+				</Flex>
 			</Flex>
 		);
 	},

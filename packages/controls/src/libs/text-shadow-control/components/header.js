@@ -10,6 +10,11 @@ import { __, sprintf } from '@wordpress/i18n';
 import { controlInnerClassNames } from '@publisher/classnames';
 import { ColorIndicator } from '@publisher/components';
 
+/**
+ * Internal dependencies
+ */
+import { prepValueForHeader } from '../../repeater-control/utils';
+
 const RepeaterItemHeader = ({
 	item: { x, y, blur, color = '#fff' },
 	itemId,
@@ -47,7 +52,9 @@ const RepeaterItemHeader = ({
 				className={controlInnerClassNames('header-values')}
 				data-cy="header-values"
 			>
-				{`${x} ${y} ${blur}`}
+				{prepValueForHeader(x)}
+				{prepValueForHeader(y)}
+				{prepValueForHeader(blur)}
 			</span>
 
 			{children}

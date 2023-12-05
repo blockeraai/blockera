@@ -165,6 +165,52 @@ export const Fill = {
 						/>
 					</ControlContextProvider>
 				</Flex>
+
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">
+						Filled<span>CSS Value</span>
+					</h2>
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									type: 'outer',
+									x: '2pxfunc',
+									y: '2pxfunc',
+									blur: '2pxfunc',
+									spread: '2pxfunc',
+									color: '#0947eb',
+									isVisible: true,
+								},
+								{
+									type: 'outer',
+									x: '-2px',
+									y: '-2pxfunc',
+									blur: '2pxfunc',
+									spread: '0pxfunc',
+									color: '#00762a',
+									isVisible: true,
+								},
+								{
+									type: 'inner',
+									x: '5pxfunc',
+									y: '5px',
+									blur: '5pxfunc',
+									spread: '0pxfunc',
+									color: '#dedede',
+									isVisible: true,
+								},
+							],
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxShadowControl}
+							{...args}
+						/>
+					</ControlContextProvider>
+				</Flex>
 			</Flex>
 		);
 	},

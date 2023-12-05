@@ -63,8 +63,24 @@
 				min-width: 20px;
 				justify-content: flex-end;
 				align-content: center;
-				gap: 8px;
+				gap: 5px;
 				text-transform: capitalize;
+				flex-wrap: nowrap;
+				max-width: 70%;
+
+				.unit-value {
+					font-size: 12px;
+					font-weight: 400;
+					display: inline-block;
+					max-width: 30px;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+
+					&:first-child:last-child {
+						max-width: 100%;
+					}
+				}
 			}
 
 		}

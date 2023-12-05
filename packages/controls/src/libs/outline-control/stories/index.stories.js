@@ -158,6 +158,31 @@ export const Fill = {
 					</ControlContextProvider>
 				</Flex>
 
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">
+						Filled<span>CSS Value</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									border: {
+										width: '4pxfunc',
+										style: 'double',
+										color: '#ab3a00',
+									},
+									offset: '4px',
+									isVisible: true,
+								},
+							],
+						}}
+						storeName={STORE_NAME}
+					>
+						<OutlineControl {...args} storeName={STORE_NAME} />
+					</ControlContextProvider>
+				</Flex>
+
 				<Flex
 					direction="column"
 					gap="15px"

@@ -1906,6 +1906,7 @@ describe('Util functions', () => {
 				expect(extractNumberAndUnit('auto')).toStrictEqual({
 					value: 0,
 					unit: 'auto',
+					specialUnit: true,
 				});
 			});
 
@@ -1913,6 +1914,7 @@ describe('Util functions', () => {
 				expect(extractNumberAndUnit('inherit')).toStrictEqual({
 					value: 0,
 					unit: 'inherit',
+					specialUnit: true,
 				});
 			});
 		});

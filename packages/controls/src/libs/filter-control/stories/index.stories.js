@@ -128,6 +128,71 @@ export const Fill = {
 						<ControlWithHooks Control={FilterControl} {...args} />
 					</ControlContextProvider>
 				</Flex>
+
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">
+						Filled<span>CSS Values</span>
+					</h2>
+
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									type: 'blur',
+									blur: 'calc(10px)func',
+									isVisible: true,
+								},
+								{
+									type: 'drop-shadow',
+									'drop-shadow-x': '20pxfunc',
+									'drop-shadow-y': '20pxfunc',
+									'drop-shadow-blur': '20pxfunc',
+									'drop-shadow-color': '#0947eb',
+									isVisible: true,
+								},
+								{
+									type: 'brightness',
+									brightness: '30%func',
+									isVisible: true,
+								},
+								{
+									type: 'contrast',
+									contrast: '40%func',
+									isVisible: true,
+								},
+								{
+									type: 'hue-rotate',
+									'hue-rotate': '50degfunc',
+									isVisible: true,
+								},
+								{
+									type: 'saturate',
+									saturate: '60%func',
+									isVisible: true,
+								},
+								{
+									type: 'grayscale',
+									grayscale: '70%func',
+									isVisible: true,
+								},
+								{
+									type: 'invert',
+									invert: '80%func',
+									isVisible: true,
+								},
+								{
+									type: 'sepia',
+									sepia: '90%func',
+									isVisible: true,
+								},
+							],
+						}}
+					>
+						<ControlWithHooks Control={FilterControl} {...args} />
+					</ControlContextProvider>
+				</Flex>
 			</Flex>
 		);
 	},

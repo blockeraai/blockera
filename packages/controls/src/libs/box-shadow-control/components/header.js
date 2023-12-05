@@ -14,6 +14,7 @@ import type { Element } from 'react';
  * Internal dependencies
  */
 import type { THeaderItem } from '../types';
+import { prepValueForHeader } from '../../repeater-control/utils';
 
 /**
  * Publisher dependencies
@@ -30,10 +31,6 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 		children,
 		isOpenPopoverEvent,
 	}: THeaderItem): Element<any> => {
-		const heading = () => {
-			return `${x} ${y} ${blur} ${spread}`;
-		};
-
 		return (
 			<div
 				className={controlInnerClassNames('repeater-group-header')}
@@ -57,7 +54,10 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 				</span>
 
 				<span className={controlInnerClassNames('header-values')}>
-					{heading()}
+					{prepValueForHeader(x)}
+					{prepValueForHeader(y)}
+					{prepValueForHeader(blur)}
+					{prepValueForHeader(spread)}
 				</span>
 
 				{children}

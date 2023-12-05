@@ -25,6 +25,7 @@ import type { Element } from 'react';
  * Internal dependencies
  */
 import type { THeaderItem } from '../types';
+import { prepValueForHeader } from '../../repeater-control/utils';
 
 const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 	({
@@ -69,8 +70,11 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 					{__('Outline', 'publisher-core')}
 				</span>
 
-				<span className={controlInnerClassNames('header-values')}>
-					<span>{width}</span>
+				<span
+					className={controlInnerClassNames('header-values')}
+					style={{ gap: '10px' }}
+				>
+					{prepValueForHeader(width)}
 
 					{getStyleIcon()}
 

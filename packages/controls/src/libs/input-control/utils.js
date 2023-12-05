@@ -1315,6 +1315,7 @@ export function extractNumberAndUnit(value: Object | string): Object {
 		return {
 			value: 0,
 			unit: value,
+			specialUnit: true,
 		};
 	}
 

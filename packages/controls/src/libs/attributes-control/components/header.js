@@ -61,7 +61,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 					className={controlInnerClassNames('header-values')}
 					style={{ textTransform: 'initial' }}
 				>
-					{value}
+					<span className="unit-value">{value}</span>
 				</span>
 
 				{children}

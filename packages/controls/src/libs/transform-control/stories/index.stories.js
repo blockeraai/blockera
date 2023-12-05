@@ -90,6 +90,102 @@ export const Fill = {
 						<TransformControl {...args} />
 					</ControlContextProvider>
 				</Flex>
+
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">
+						Filled<span>CSS Values</span>
+					</h2>
+
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									type: 'move',
+									'move-x': '10pxfunc',
+									'move-y': '10pxfunc',
+									'move-z': '10pxfunc',
+									isVisible: true,
+								},
+								{
+									type: 'move',
+									'move-x': '10px',
+									'move-y': '10pxfunc',
+									'move-z': '10pxfunc',
+									isVisible: true,
+								},
+								{
+									type: 'move',
+									'move-x': '10pxfunc',
+									'move-y': '10px',
+									'move-z': '10pxfunc',
+									isVisible: true,
+								},
+								{
+									type: 'move',
+									'move-x': '10pxfunc',
+									'move-y': '10pxfunc',
+									'move-z': '10px',
+									isVisible: true,
+								},
+								{
+									type: 'scale',
+									scale: '20%func',
+									isVisible: true,
+								},
+								{
+									type: 'rotate',
+									'rotate-x': '30degfunc',
+									'rotate-y': '30degfunc',
+									'rotate-z': '30degfunc',
+									isVisible: true,
+								},
+								{
+									type: 'rotate',
+									'rotate-x': '30deg',
+									'rotate-y': '30degfunc',
+									'rotate-z': '30degfunc',
+									isVisible: true,
+								},
+								{
+									type: 'rotate',
+									'rotate-x': '30degfunc',
+									'rotate-y': '30deg',
+									'rotate-z': '30degfunc',
+									isVisible: true,
+								},
+								{
+									type: 'rotate',
+									'rotate-x': '30degfunc',
+									'rotate-y': '30degfunc',
+									'rotate-z': '30deg',
+									isVisible: true,
+								},
+								{
+									type: 'skew',
+									'skew-x': '40degfunc',
+									'skew-y': '40degfunc',
+									isVisible: true,
+								},
+								{
+									type: 'skew',
+									'skew-x': '40deg',
+									'skew-y': '40degfunc',
+									isVisible: true,
+								},
+								{
+									type: 'skew',
+									'skew-x': '40degfunc',
+									'skew-y': '40deg',
+									isVisible: true,
+								},
+							],
+						}}
+					>
+						<TransformControl {...args} />
+					</ControlContextProvider>
+				</Flex>
 			</Flex>
 		);
 	},
