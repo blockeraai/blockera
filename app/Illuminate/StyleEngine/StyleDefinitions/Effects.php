@@ -22,7 +22,7 @@ class Effects extends BaseStyleDefinition {
 
 			switch ( $this->settings['type'] ) {
 				case 'transform':
-					array_map( [ $this, 'setTransform' ], array_filter( $this->settings['transform'], [ $this, 'isVisibleSetting' ] ) );
+					$this->setTransforms();
 					break;
 				case 'transition':
 					array_map( [ $this, 'setTransition' ], array_filter( $this->settings['transition'], [ $this, 'isVisibleSetting' ] ) );
@@ -94,6 +94,15 @@ class Effects extends BaseStyleDefinition {
 					]
 				);
 				break;
+
+			case 'opacity':
+				$this->setProperties(
+					[
+						'opacity' => pb_get_value_addon_real_value( $setting[ $setting['type'] ] ),
+					]
+				);
+				break;
+
 			default:
 				$this->setProperties(
 					[
@@ -123,61 +132,55 @@ class Effects extends BaseStyleDefinition {
 	 *
 	 * @return void
 	 */
-	protected function setTransform( array $setting ): void {
+	protected function setTransforms(): void {
 
-		if ( empty( $setting ) ) {
-
-			return;
+		// add all transform items
+		if ( ! empty( $this->settings['transform'] ) ) {
+			array_map( [ $this, 'setTransformItem' ], array_filter( $this->settings['transform'], [ $this, 'isVisibleSetting' ] ) );
 		}
 
-		$props     = [];
-		$transform = '';
+		if ( ! empty( $this->properties['transform'] ) && ! empty( $this->settings['attributes']['publisherTransformSelfPerspective'] ) ) {
 
-		switch ( $setting['type'] ) {
-			case 'move':
-				$transform = "translate3d({$setting['move-x']}, {$setting['move-y']}, {$setting['move-z']})";
-				break;
+			$perspective = pb_get_value_addon_real_value( $this->settings['attributes']['publisherTransformSelfPerspective'] );
 
-			case 'scale':
-				$transform = "scale3d({$setting['scale']}, {$setting['scale']}, 50%)";
-				break;
+			if ( ! empty( $perspective ) ) {
+				$this->setProperty(
+					'transform',
+					sprintf(
+						'perspective(%s) %s',
+						$perspective,
+						$this->properties['transform']
+					)
+				);
+			}
 
-			case 'rotate':
-				$transform = "rotateX({$setting['rotate-x']}) rotateY({$setting['rotate-y']}) rotateZ({$setting['rotate-z']})";
-				break;
-
-			case 'skew':
-				$transform = "skew({$setting['skew-x']}, {$setting['skew-y']})";
-				break;
-		}
-
-		if ( ! empty( $this->settings['attributes']['publisherTransformSelfPerspective'] ) ) {
-
-			$props['transform'] = sprintf(
-				'perspective(%s) %s',
-				$this->settings['attributes']['publisherTransformSelfPerspective'],
-				$transform
-			);
 		}
 
 		if ( ! empty( $this->settings['attributes']['publisherTransformSelfOrigin'] ) ) {
 
-			$top  = $this->settings['attributes']['publisherTransformSelfOrigin']['top'] ?? '';
-			$left = $this->settings['attributes']['publisherTransformSelfOrigin']['left'] ?? '';
+			$top  = isset( $this->settings['attributes']['publisherTransformSelfOrigin']['top'] ) ? pb_get_value_addon_real_value( $this->settings['attributes']['publisherTransformSelfOrigin']['top'] ) : '';
+			$left = isset( $this->settings['attributes']['publisherTransformSelfOrigin']['left'] ) ? pb_get_value_addon_real_value( $this->settings['attributes']['publisherTransformSelfOrigin']['left'] ) : '';
 
-			$props['transform-origin'] = "{$top} {$left}";
+			if ( ! empty( $top ) && ! empty( $left ) ) {
+				$this->setProperty( 'transform-origin', "{$top} {$left}" );
+			}
 		}
 
 		if ( ! empty( $this->settings['attributes']['publisherBackfaceVisibility'] ) ) {
 
-			$props['backface-visibility'] = $this->settings['attributes']['publisherBackfaceVisibility'];
+			$this->setProperty( 'backface-visibility', $this->settings['attributes']['publisherBackfaceVisibility'] );
 		}
 
 		if ( ! empty( $this->settings['attributes']['publisherTransformChildPerspective'] ) ) {
 
-			$props['perspective'] = '0px' !== $this->settings['attributes']['publisherTransformChildPerspective'] ?
-				$this->settings['attributes']['publisherTransformChildPerspective'] :
-				'none';
+			$childPerspective = pb_get_value_addon_real_value( $this->settings['attributes']['publisherTransformChildPerspective'] );
+
+			if ( ! empty( $childPerspective ) ) {
+				$this->setProperty(
+					'perspective',
+					'0px' !== $childPerspective ? $childPerspective : 'none'
+				);
+			}
 		}
 
 		if ( ! empty( $this->settings['attributes']['publisherTransformChildOrigin'] ) ) {
@@ -185,22 +188,84 @@ class Effects extends BaseStyleDefinition {
 			$top  = $this->settings['attributes']['publisherTransformChildOrigin']['top'] ?? '';
 			$left = $this->settings['attributes']['publisherTransformChildOrigin']['left'] ?? '';
 
-			$props['perspective-origin'] = "{$top} {$left}";
+			if ( ! empty( $top ) && ! empty( $left ) ) {
+				$this->setProperty( 'perspective-origin', "{$top} {$left}" );
+			}
 		}
 
-		if ( ! empty( $this->properties['transform'] ) ) {
+	}
 
-			$this->setProperties(
-				empty( $props ) ?
-					[ 'transform' => sprintf( '%s %s', $this->properties['transform'], $transform ) ] :
-					[ 'transform' => sprintf( '%s %s', $this->properties['transform'], $props['transform'] ) ]
-			);
+
+	/**
+	 * Setup transform style properties into stack properties.
+	 *
+	 * @param array $setting the transform setting.
+	 *
+	 * @return void
+	 */
+	protected function setTransformItem( array $setting ): void {
+
+		if ( empty( $setting ) ) {
 
 			return;
 		}
 
-		$this->setProperties( empty( $props ) ? compact( 'transform' ) : $props );
+		$transform = '';
+
+		switch ( $setting['type'] ) {
+			case 'move':
+				$transform = sprintf(
+					'translate3d(%s, %s, %s)',
+					pb_get_value_addon_real_value( $setting['move-x'] ),
+					pb_get_value_addon_real_value( $setting['move-y'] ),
+					pb_get_value_addon_real_value( $setting['move-z'] ),
+				);
+				break;
+
+			case 'scale':
+				$scale = pb_get_value_addon_real_value( $setting['scale'] );
+
+				$transform = sprintf(
+					'scale3d(%s, %s, 50%%)',
+					$scale,
+					$scale,
+				);
+				break;
+
+			case 'rotate':
+				$transform = sprintf(
+					'rotateX(%s) rotateY(%s) rotateZ(%s)',
+					pb_get_value_addon_real_value( $setting['rotate-x'] ),
+					pb_get_value_addon_real_value( $setting['rotate-y'] ),
+					pb_get_value_addon_real_value( $setting['rotate-z'] ),
+				);
+				break;
+
+			case 'skew':
+				$transform = sprintf(
+					'skew(%s, %s)',
+					pb_get_value_addon_real_value( $setting['skew-x'] ),
+					pb_get_value_addon_real_value( $setting['skew-y'] ),
+				);
+				break;
+		}
+
+		if ( $transform ) {
+			if ( ! empty( $this->properties['transform'] ) ) {
+				$this->setProperty(
+					'transform',
+					sprintf(
+						'%s %s',
+						$this->properties['transform'],
+						$transform
+					)
+				);
+			} else {
+				$this->setProperty( 'transform', $transform );
+			}
+		}
 	}
+
 
 	/**
 	 * Setup transition style properties into stack properties.
@@ -248,25 +313,28 @@ class Effects extends BaseStyleDefinition {
 			'ease-in-out-back'  => 'cubic-bezier(0.680, -0.550, 0.265, 1.550)',
 		];
 
-		$timing = $allTimings[ $setting['timing'] ];
+		$transition = sprintf(
+			"%s %s %s %s",
+			$setting['type'],
+			pb_get_value_addon_real_value( $setting['duration'] ),
+			$allTimings[ $setting['timing'] ],
+			pb_get_value_addon_real_value( $setting['delay'] )
+		);
 
-		$props = [
-			// Transition.
-			'transition' => "{$setting['type']} {$setting['duration']} {$timing} {$setting['delay']}",
-		];
-
-		if ( ! empty( $this->properties['transition'] ) ) {
-
-			$this->setProperties(
-				[
-					'transition' => sprintf( '%s, %s', $this->properties['transition'], $props['transition'] ),
-				]
-			);
-
-			return;
+		if ( $transition ) {
+			if ( ! empty( $this->properties['transition'] ) ) {
+				$this->setProperty(
+					'transition',
+					sprintf(
+						'%s, %s',
+						$this->properties['transition'],
+						$transition
+					)
+				);
+			} else {
+				$this->setProperty( 'transition', $transition );
+			}
 		}
-
-		$this->setProperties( $props );
 	}
 
 	/**
@@ -283,25 +351,39 @@ class Effects extends BaseStyleDefinition {
 			return;
 		}
 
-		$props = [
-			// Filter.
-			'filter' => 'drop-shadow' === $setting['type'] ?
-				"{$setting['type']}({$setting['drop-shadow-x']} {$setting['drop-shadow-y']} {$setting['drop-shadow-blur']} {$setting['drop-shadow-color']})" :
-				"{$setting['type']}({$setting[$setting['type']]})",
-		];
-
-		if ( ! empty( $this->properties['filter'] ) ) {
-
-			$this->setProperties(
-				[
-					'filter' => sprintf( '%s %s', $this->properties['filter'], $props['filter'] ),
-				]
-			);
-
-			return;
+		if ( 'drop-shadow' === $setting['type'] ) {
+			$filter =
+				sprintf(
+					'drop-shadow(%s %s %s %s)',
+					pb_get_value_addon_real_value( $setting['drop-shadow-x'] ),
+					pb_get_value_addon_real_value( $setting['drop-shadow-y'] ),
+					pb_get_value_addon_real_value( $setting['drop-shadow-blur'] ),
+					pb_get_value_addon_real_value( $setting['drop-shadow-color'] )
+				);
+		} else {
+			$filter =
+				sprintf(
+					'%s(%s)',
+					$setting['type'],
+					pb_get_value_addon_real_value( $setting[ $setting['type'] ] ),
+				);
 		}
 
-		$this->setProperties( $props );
+
+		if ( $filter ) {
+			if ( ! empty( $this->properties['filter'] ) ) {
+				$this->setProperty(
+					'filter',
+					sprintf(
+						'%s %s',
+						$this->properties['filter'],
+						$filter
+					)
+				);
+			} else {
+				$this->setProperty( 'filter', $filter );
+			}
+		}
 	}
 
 	/**
@@ -318,30 +400,40 @@ class Effects extends BaseStyleDefinition {
 			return;
 		}
 
-		$currentBackdrop = 'drop-shadow' === $setting['type'] ?
-			"{$setting['type']}({$setting['drop-shadow-x']} {$setting['drop-shadow-y']} {$setting['drop-shadow-blur']} {$setting['drop-shadow-color']})" :
-			"{$setting['type']}({$setting[$setting['type']]})";
 
-		if ( ! empty( $this->properties['backdrop-filter'] ) ) {
-
-			$this->setProperties(
-				[
-					'backdrop-filter' => sprintf(
-						'%s %s',
-						$this->properties['backdrop-filter'],
-						$currentBackdrop
-					),
-				]
-			);
-
-			return;
+		if ( 'drop-shadow' === $setting['type'] ) {
+			$filter =
+				sprintf(
+					'drop-shadow(%s %s %s %s)',
+					pb_get_value_addon_real_value( $setting['drop-shadow-x'] ),
+					pb_get_value_addon_real_value( $setting['drop-shadow-y'] ),
+					pb_get_value_addon_real_value( $setting['drop-shadow-blur'] ),
+					pb_get_value_addon_real_value( $setting['drop-shadow-color'] )
+				);
+		} else {
+			$filter =
+				sprintf(
+					'%s(%s)',
+					$setting['type'],
+					pb_get_value_addon_real_value( $setting[ $setting['type'] ] ),
+				);
 		}
 
-		$this->setProperties(
-			[
-				'backdrop-filter' => $currentBackdrop,
-			]
-		);
+
+		if ( $filter ) {
+			if ( ! empty( $this->properties['backdrop-filter'] ) ) {
+				$this->setProperty(
+					'backdrop-filter',
+					sprintf(
+						'%s %s',
+						$this->properties['backdrop-filter'],
+						$filter
+					)
+				);
+			} else {
+				$this->setProperty( 'backdrop-filter', $filter );
+			}
+		}
 	}
 
 }

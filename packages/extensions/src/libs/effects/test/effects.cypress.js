@@ -140,6 +140,7 @@ describe('Effects Extension', () => {
 						'Self Perspective',
 						'base-control'
 					).within(() => {
+						cy.get('input[type="number"]').focus();
 						cy.get('input[type="number"]').clear();
 						cy.get('input[type="number"]').type(150);
 					});
@@ -281,6 +282,7 @@ describe('Effects Extension', () => {
 						'Child Perspective',
 						'base-control'
 					).within(() => {
+						cy.get('input[type="number"]').focus();
 						cy.get('input[type="number"]').clear();
 						cy.get('input[type="number"]').type(150);
 					});
