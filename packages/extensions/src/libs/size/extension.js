@@ -440,7 +440,10 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 								}}
 							>
 								<PositionButtonControl
-									label={__('Fit Position', 'publisher-core')}
+									buttonLabel={__(
+										'Fit Position',
+										'publisher-core'
+									)}
 									popoverLabel={__(
 										'Setting',
 										'publisher-core'

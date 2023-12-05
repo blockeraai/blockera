@@ -97,7 +97,7 @@ export const TransformSettings = ({
 						}}
 					>
 						<PositionButtonControl
-							label={__(
+							buttonLabel={__(
 								'Self Perspective Origin',
 								'publisher-core'
 							)}
@@ -198,7 +198,7 @@ export const TransformSettings = ({
 						}}
 					>
 						<PositionButtonControl
-							label={__(
+							buttonLabel={__(
 								'Child Perspective Origin',
 								'publisher-core'
 							)}

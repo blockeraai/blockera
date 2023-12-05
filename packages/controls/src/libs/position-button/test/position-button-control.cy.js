@@ -29,7 +29,12 @@ describe('position-button-control component testing', () => {
 				),
 			});
 
+			//Check icon
 			cy.getByDataTest('position-icon-center-center').should('exist');
+			//Check color
+			cy.getByDataTest('position-button')
+				.invoke('attr', 'style')
+				.should('include', '--publisher-controls-color');
 		});
 
 		it('should render correctly, when passing label', () => {
@@ -174,6 +179,21 @@ describe('position-button-control component testing', () => {
 			//Check icon
 			cy.getByDataTest('position-icon-bottom-right').should('exist');
 		});
+
+		it('should render icon correctly, when add custom position', () => {
+			cy.withDataProvider({
+				component: <PositionButtonControl />,
+			});
+
+			cy.getByDataTest('position-button').click();
+			cy.getByDataTest('popover-body').within(() => {
+				cy.get('input').eq(0).type(10);
+				cy.get('input').eq(1).type(20);
+			});
+
+			//Check icon
+			cy.getByDataTest('position-icon-custom').should('exist');
+		});
 	});
 
 	context('interaction test', () => {
@@ -195,6 +215,27 @@ describe('position-button-control component testing', () => {
 					getControlValue(name)
 				);
 			});
+		});
+
+		it('should update button color, when interacting', () => {
+			const name = nanoid();
+			cy.withDataProvider({
+				component: <PositionButtonControl />,
+				name,
+			});
+
+			cy.getByDataTest('position-button').click();
+			cy.getByDataTest('popover-body').within(() => {
+				cy.contains('center center').click({ force: true });
+			});
+
+			//Check color
+			cy.getByDataTest('position-button')
+				.invoke('attr', 'style')
+				.should(
+					'include',
+					'var(--publisher-controls-border-color-focus)'
+				);
 		});
 
 		it('should onChange be called, when interacting', () => {

@@ -8,6 +8,10 @@ export type TPositionButtonProps = {
 	onChange?: () => {},
 	defaultValue?: { top: string, left: string },
 	props?: Object,
+	columns?: string,
+	field?: string,
+	className?: string,
+	buttonLabel?: string,
 };
 
 export type TRenderPositionIcon = {
