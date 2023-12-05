@@ -3,7 +3,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo, useState } from '@wordpress/element';
+import { memo } from '@wordpress/element';
 import type { MixedElement } from 'react';
 
 /**
@@ -15,8 +15,9 @@ import {
 	ToggleSelectControl,
 	SelectControl,
 	BaseControl,
+	convertAlignmentMatrixCoordinates,
 } from '@publisher/controls';
-import { Flex, Button } from '@publisher/components';
+import { Flex } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -28,8 +29,7 @@ import { default as OverflowHiddenIcon } from './icons/overflow-hidden';
 import { default as OverflowVisibleIcon } from './icons/overflow-visible';
 import { default as OverflowScrollIcon } from './icons/overflow-scroll';
 import { convertToPercent } from './utils';
-import OriginCustom from './icons/origin/custom';
-import { FitPosition } from './components/fit-position';
+import PositionButton from '@publisher/controls/src/libs/position-button';
 
 export const SizeExtension: MixedElement = memo<TSizeProps>(
 	({
@@ -56,8 +56,6 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 				publisherFit,
 			},
 		} = config;
-
-		const [isFitPositionVisible, setIsFitPositionVisible] = useState(false);
 
 		return (
 			<>
@@ -426,40 +424,45 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										),
 								}}
 							/>
-							<Button
-								label={__('Fit Position', 'publisher-core')}
-								showTooltip={true}
-								tooltipPosition="top"
-								onClick={() => {
-									setIsFitPositionVisible(
-										!isFitPositionVisible
-									);
-								}}
-								size="small"
-								style={{
-									padding: '5px',
-									width: '30px',
-									height: '30px',
-									color:
-										!fitPosition?.top || !fitPosition?.left
-											? 'var(--publisher-controls-color)'
-											: 'var(--publisher-controls-border-color-focus)',
+							<ControlContextProvider
+								value={{
+									name: generateExtensionId(
+										block,
+										'fit-position'
+									),
+									value: {
+										...fitPosition,
+										coordinates:
+											convertAlignmentMatrixCoordinates(
+												fitPosition
+											)?.compact,
+									},
 								}}
 							>
-								<OriginCustom />
-							</Button>
-							{isFitPositionVisible && (
-								<FitPosition
-									fitPosition={fitPosition}
-									handleOnChangeAttributes={
-										handleOnChangeAttributes
-									}
-									setIsFitPositionVisible={
-										setIsFitPositionVisible
-									}
-									block={block}
+								<PositionButton
+									label={__('Fit Position', 'publisher-core')}
+									popoverLabel={__(
+										'Setting',
+										'publisher-core'
+									)}
+									alignmentMatrixLabel={__(
+										'Position',
+										'publisher-core'
+									)}
+									size="small"
+									defaultValue={{ top: '', left: '' }}
+									onChange={({ top, left }) => {
+										handleOnChangeAttributes(
+											'publisherFitPosition',
+											{
+												...fitPosition,
+												top,
+												left,
+											}
+										);
+									}}
 								/>
-							)}
+							</ControlContextProvider>
 						</BaseControl>
 					</ControlContextProvider>
 				)}
