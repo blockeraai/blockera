@@ -44,7 +44,7 @@ if ( ! function_exists( 'pb_core_env' ) ) {
 	/**
 	 * Gets the value of an environment variable.
 	 *
-	 * @param string $key the key of config.
+	 * @param string $key     the key of config.
 	 * @param mixed  $default the default value.
 	 *
 	 * @return mixed
@@ -52,5 +52,28 @@ if ( ! function_exists( 'pb_core_env' ) ) {
 	function pb_core_env( string $key, $default = null ) {
 
 		return Env::get( $key, $default );
+	}
+}
+
+if ( ! function_exists( 'pb_get_value_addon_real_value' ) ) {
+
+	/**
+	 * Gets the real value that can be used (Fianl Value)
+	 *
+	 * @param string $value value
+	 *
+	 * @return mixed
+	 */
+	function pb_get_value_addon_real_value( $value ) {
+
+		if ( is_numeric( $value ) ) {
+			return $value;
+		}
+
+		if ( is_string( $value ) ) {
+			return substr( $value, -4 ) === 'func' ? substr( $value, 0, -4 ) : $value;
+		}
+
+		return $value;
 	}
 }
