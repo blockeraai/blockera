@@ -130,15 +130,13 @@ export function backgroundGenerator(id, props, styleEngine) {
 					gradient = gradient.join(', ');
 				}
 
-				item['mesh-gradient-colors'].map(
-					(value: { color: string }, index: number): Object => {
-						const newVar = '--c' + index;
+				item['mesh-gradient-colors'].map((value, index) => {
+					const newVar = '--c' + index;
 
-						properties[newVar] = value.color;
+					properties[newVar] = value.color;
 
-						return properties;
-					}
-				);
+					return properties;
+				});
 
 				// override bg color
 				properties['background-color'] =
@@ -170,7 +168,7 @@ export function backgroundGenerator(id, props, styleEngine) {
 
 	const toReturnProperties = {
 		'background-image': image.join(', '),
-		'background-size': size.join(', '),
+		'background-size': size.join(', ') + ' !important',
 		'background-position': position.join(', '),
 		'background-repeat': repeat.join(', '),
 		'background-attachment': attachment.join(', '),
@@ -180,9 +178,6 @@ export function backgroundGenerator(id, props, styleEngine) {
 	if (properties['background-color'])
 		toReturnProperties['background-color'] =
 			properties['background-color'] + ' !important';
-
-	if (properties.size[0] === '1auto 1auto')
-		toReturnProperties['background-size'] = 'auto auto';
 
 	return createCssRule({
 		selector: `${

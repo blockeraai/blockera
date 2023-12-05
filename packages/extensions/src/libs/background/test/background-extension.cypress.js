@@ -82,92 +82,90 @@ describe('background extension', () => {
 						.and('match', /bg-extension-test/);
 				});
 
-				// TODO Positive False -> inline styles prevent user style to be applied
-				// it('should be able to set background size to contain', () => {
-				// 	cy.get('[data-test="popover-header"]')
-				// 		.parent()
-				// 		.within(() => {
-				// 			cy.get('[aria-label="Size"]')
-				// 				.parent()
-				// 				.siblings()
-				// 				.contains('button', /contain/i)
-				// 				.as('containBtn');
+				it('should be able to set background size to contain', () => {
+					cy.get('[data-test="popover-header"]')
+						.parent()
+						.within(() => {
+							cy.get('[aria-label="Size"]')
+								.parent()
+								.siblings()
+								.contains('button', /contain/i)
+								.as('containBtn');
 
-				// 			cy.get('@containBtn').click();
+							cy.get('@containBtn').click();
 
-				// 			//assert data
-				// 			getWPDataObject().then((data) => {
-				// 				const backgroundImgSizeState = getSelectedBlock(
-				// 					data,
-				// 					'publisherBackground'
-				// 				)[0]['image-size'];
+							//assert data
+							getWPDataObject().then((data) => {
+								const backgroundImgSizeState = getSelectedBlock(
+									data,
+									'publisherBackground'
+								)[0]['image-size'];
 
-				// 				expect(backgroundImgSizeState).to.be.equal(
-				// 					'contain'
-				// 				);
-				// 			});
-				// 		});
-				// 	//assert editor
-				// 	cy.getIframeBody()
-				// 		.find(`[data-type="core/paragraph"]`)
-				// 		.should('have.css', 'background-size', 'contain');
+								expect(backgroundImgSizeState).to.be.equal(
+									'contain'
+								);
+							});
+						});
+					//assert editor
+					cy.getIframeBody()
+						.find(`[data-type="core/paragraph"]`)
+						.should('have.css', 'background-size', 'contain');
 
-				// 	//assert frontend
-				// 	savePage();
-				// 	redirectToFrontPage();
-				// 	cy.get('.publisher-paragraph').should(
-				// 		'have.css',
-				// 		'background-size',
-				// 		'contain'
-				// 	);
-				// });
+					//assert frontend
+					savePage();
+					redirectToFrontPage();
+					cy.get('.publisher-paragraph').should(
+						'have.css',
+						'background-size',
+						'contain'
+					);
+				});
 
-				// TODO positive False -> inline styles prevent user styles to be applied
-				// it("should apply 'auto auto' by default for bg-size on custom ", () => {
-				// 	cy.get('[data-test="popover-header"]')
-				// 		.parent()
-				// 		.within(() => {
-				// 			cy.get('[aria-label="Size"]')
-				// 				.parent()
-				// 				.siblings()
-				// 				.contains('button', /custom/i)
-				// 				.as('customBtn');
+				it("should apply 'auto auto' by default for bg-size on custom ", () => {
+					cy.get('[data-test="popover-header"]')
+						.parent()
+						.within(() => {
+							cy.get('[aria-label="Size"]')
+								.parent()
+								.siblings()
+								.contains('button', /custom/i)
+								.as('customBtn');
 
-				// 			cy.get('@customBtn').click();
+							cy.get('@customBtn').click();
 
-				// 			//assert data
-				// 			getWPDataObject().then((data) => {
-				// 				const backgroundState = getSelectedBlock(
-				// 					data,
-				// 					'publisherBackground'
-				// 				)[0];
+							//assert data
+							getWPDataObject().then((data) => {
+								const backgroundState = getSelectedBlock(
+									data,
+									'publisherBackground'
+								)[0];
 
-				// 				expect(
-				// 					backgroundState['image-size']
-				// 				).to.be.equal('custom');
-				// 				expect(
-				// 					backgroundState['image-size-width']
-				// 				).to.be.equal('1auto');
-				// 				expect(
-				// 					backgroundState['image-size-width']
-				// 				).to.be.equal('1auto');
-				// 			});
-				// 		});
+								expect(
+									backgroundState['image-size']
+								).to.be.equal('custom');
+								expect(
+									backgroundState['image-size-width']
+								).to.be.equal('auto');
+								expect(
+									backgroundState['image-size-width']
+								).to.be.equal('auto');
+							});
+						});
 
-				// 	//assert editor
-				// 	cy.getIframeBody()
-				// 		.find(`[data-type="core/paragraph"]`)
-				// 		.should('have.css', 'background-size', 'auto auto');
+					//assert editor
+					cy.getIframeBody()
+						.find(`[data-type="core/paragraph"]`)
+						.should('have.css', 'background-size', 'auto');
 
-				// 	//assert frontend
-				// 	savePage();
-				// 	redirectToFrontPage();
-				// 	cy.get('.publisher-paragraph').should(
-				// 		'have.css',
-				// 		'background-size',
-				// 		'auto auto'
-				// 	);
-				// });
+					//assert frontend
+					savePage();
+					redirectToFrontPage();
+					cy.get('.publisher-paragraph').should(
+						'have.css',
+						'background-size',
+						'auto'
+					);
+				});
 
 				it('should be able to set background position, Repeat, Effect', () => {
 					cy.get('[data-test="popover-header"]')

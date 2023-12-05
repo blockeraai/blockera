@@ -54,6 +54,7 @@ describe('background control', () => {
 					cy.get('@widthSelect').select('px');
 
 					cy.get('@widthSelect')
+						.parent()
 						.siblings('input[type="number"]')
 						.as('widthInput');
 
@@ -78,6 +79,7 @@ describe('background control', () => {
 					cy.get('@heightSelect').select('px');
 
 					cy.get('@heightSelect')
+						.parent()
 						.siblings('input[type="number"]')
 						.as('heightInput');
 
