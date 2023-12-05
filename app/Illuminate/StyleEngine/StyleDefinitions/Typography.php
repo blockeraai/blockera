@@ -32,6 +32,7 @@ class Typography extends BaseStyleDefinition {
 				break;
 
 
+			case 'color':
 			case '-webkit-text-stroke-width':
 			case 'letter-spacing':
 			case 'word-spacing':
