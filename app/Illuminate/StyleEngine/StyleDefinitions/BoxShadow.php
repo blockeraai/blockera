@@ -18,13 +18,13 @@ class BoxShadow extends BaseStyleDefinition {
 			}
 
 			return sprintf(
-				'%1$s %2$s %3$s %4$s %5$s %6$s',
+				'%s %s %s %s %s %s',
 				$prop['type'] === 'inner' ? 'inset' : '',
-				$prop['x'] ?? '',
-				$prop['y'] ?? '',
-				$prop['blur'] ?? '',
-				$prop['spread'] ?? '',
-				$prop['color'] ?? ''
+				! empty( $prop['x'] ) ? pb_get_value_addon_real_value( $prop['x'] ) : '',
+				! empty( $prop['y'] ) ? pb_get_value_addon_real_value( $prop['y'] ) : '',
+				! empty( $prop['blur'] ) ? pb_get_value_addon_real_value( $prop['blur'] ) : '',
+				! empty( $prop['spread'] ) ? pb_get_value_addon_real_value( $prop['spread'] ) : '',
+				! empty( $prop['color'] ) ? pb_get_value_addon_real_value( $prop['color'] ) : ''
 			);
 		}, $this->settings );
 	}

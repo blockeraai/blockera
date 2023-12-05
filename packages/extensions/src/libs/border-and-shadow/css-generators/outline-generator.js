@@ -22,11 +22,9 @@ export function OutlineGenerator(id, props, styleEngine) {
 		}
 
 		properties.outlines.push(
-			`${getValueAddonRealValue(
-				item.border.width
-			)} ${getValueAddonRealValue(
-				item.border.style
-			)} ${getValueAddonRealValue(item.border.color)}`
+			`${item.border.width} ${item.border.style} ${getValueAddonRealValue(
+				item.border.color
+			)}`
 		);
 		properties.offset.push(getValueAddonRealValue(item.offset));
 

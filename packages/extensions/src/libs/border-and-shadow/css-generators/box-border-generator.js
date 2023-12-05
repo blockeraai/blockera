@@ -14,59 +14,42 @@ export function BoxBorderGenerator(id, props, styleEngine) {
 	const properties = {};
 
 	if (attributes?.publisherBorder?.type === 'all') {
-		const borderAllWidth = getValueAddonRealValue(
-			attributes.publisherBorder.all.width
-		);
+		const borderAllWidth = attributes.publisherBorder.all.width;
 		if (borderAllWidth) {
 			properties.border = `${borderAllWidth} ${
-				getValueAddonRealValue(attributes.publisherBorder.all.style) ||
-				'solid'
+				attributes.publisherBorder.all.style || 'solid'
 			} ${getValueAddonRealValue(attributes.publisherBorder.all.color)}`;
 		}
 	} else {
-		const borderTopWidth = getValueAddonRealValue(
-			attributes.publisherBorder.top.width
-		);
+		const borderTopWidth = attributes.publisherBorder.top.width;
 		if (borderTopWidth) {
 			properties['border-top'] = `${borderTopWidth} ${
-				getValueAddonRealValue(attributes.publisherBorder.top.style) ||
-				'solid'
+				attributes.publisherBorder.top.style || 'solid'
 			} ${getValueAddonRealValue(attributes.publisherBorder.top.color)}`;
 		}
 
-		const borderRightWidth = getValueAddonRealValue(
-			attributes.publisherBorder.right.width
-		);
+		const borderRightWidth = attributes.publisherBorder.right.width;
 		if (borderRightWidth) {
 			properties['border-right'] = `${borderRightWidth} ${
-				getValueAddonRealValue(
-					attributes.publisherBorder.right.style
-				) || 'solid'
+				attributes.publisherBorder.right.style || 'solid'
 			} ${getValueAddonRealValue(
 				attributes.publisherBorder.right.color
 			)}`;
 		}
 
-		const borderBottomWidth = getValueAddonRealValue(
-			attributes.publisherBorder.bottom.width
-		);
+		const borderBottomWidth = attributes.publisherBorder.bottom.width;
 		if (borderBottomWidth) {
 			properties['border-bottom'] = `${borderBottomWidth} ${
-				getValueAddonRealValue(
-					attributes.publisherBorder.bottom.style
-				) || 'solid'
+				attributes.publisherBorder.bottom.style || 'solid'
 			} ${getValueAddonRealValue(
 				attributes.publisherBorder.bottom.color
 			)}`;
 		}
 
-		const borderLeftWidth = getValueAddonRealValue(
-			attributes.publisherBorder.left.width
-		);
+		const borderLeftWidth = attributes.publisherBorder.left.width;
 		if (borderLeftWidth) {
 			properties['border-left'] = `${borderLeftWidth} ${
-				getValueAddonRealValue(attributes.publisherBorder.left.style) ||
-				'solid'
+				attributes.publisherBorder.left.style || 'solid'
 			} ${getValueAddonRealValue(attributes.publisherBorder.left.color)}`;
 		}
 	}

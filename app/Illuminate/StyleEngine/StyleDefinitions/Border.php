@@ -36,8 +36,8 @@ class Border extends BaseStyleDefinition {
 							sprintf(
 								'%s %s %s',
 								$value['all']['width'],
-								$value['all']['style'] !== '' ? $value['all']['style'] : 'solid',
-								$value['all']['color'] ?? '',
+								! empty( $value['all']['style'] ) ? $value['all']['style'] : 'solid',
+								! empty( $value['all']['color'] ) ? pb_get_value_addon_real_value( $value['all']['color'] ) : '',
 							)
 						);
 					}
@@ -49,8 +49,8 @@ class Border extends BaseStyleDefinition {
 							sprintf(
 								'%s %s %s',
 								$value['top']['width'],
-								$value['top']['style'] !== '' ? $value['top']['style'] : 'solid',
-								$value['top']['color'] ?? '',
+								! empty( $value['top']['style'] ) ? $value['top']['style'] : 'solid',
+								! empty( $value['top']['color'] ) ? pb_get_value_addon_real_value( $value['top']['color'] ) : '',
 							)
 						);
 					}
@@ -60,8 +60,8 @@ class Border extends BaseStyleDefinition {
 							sprintf(
 								'%s %s %s',
 								$value['right']['width'],
-								$value['right']['style'] !== '' ? $value['right']['style'] : 'solid',
-								$value['right']['color'] ?? '',
+								! empty( $value['right']['style'] ) ? $value['right']['style'] : 'solid',
+								! empty( $value['right']['color'] ) ? pb_get_value_addon_real_value( $value['right']['color'] ) : '',
 							)
 						);
 					}
@@ -71,8 +71,8 @@ class Border extends BaseStyleDefinition {
 							sprintf(
 								'%s %s %s',
 								$value['bottom']['width'],
-								$value['bottom']['style'] !== '' ? $value['bottom']['style'] : 'solid',
-								$value['bottom']['color'] ?? '',
+								! empty( $value['bottom']['style'] ) ? $value['bottom']['style'] : 'solid',
+								! empty( $value['bottom']['color'] ) ? pb_get_value_addon_real_value( $value['bottom']['color'] ) : '',
 							)
 						);
 					}
@@ -82,8 +82,8 @@ class Border extends BaseStyleDefinition {
 							sprintf(
 								'%s %s %s',
 								$value['left']['width'],
-								$value['left']['style'] !== '' ? $value['left']['style'] : 'solid',
-								$value['left']['color'] ?? '',
+								! empty( $value['left']['style'] ) ? $value['left']['style'] : 'solid',
+								! empty( $value['left']['color'] ) ? pb_get_value_addon_real_value( $value['left']['color'] ) : '',
 							)
 						);
 					}
@@ -94,14 +94,14 @@ class Border extends BaseStyleDefinition {
 
 				if ( ! empty( $value['type'] ) && 'all' === $value['type'] ) {
 
-					$props['border-radius'] = $value['all'] ?? '';
+					$props['border-radius'] = ! empty( $value['all'] ) ? pb_get_value_addon_real_value( $value['all'] ) : '';
 
 				} else {
 
-					$props['border-top-left-radius']     = $value['topLeft'] ?? '';
-					$props['border-top-right-radius']    = $value['topRight'] ?? '';
-					$props['border-bottom-right-radius'] = $value['bottomRight'] ?? '';
-					$props['border-bottom-left-radius']  = $value['bottomLeft'] ?? '';
+					$props['border-top-left-radius']     = ! empty( $value['topLeft'] ) ? pb_get_value_addon_real_value( $value['topLeft'] ) : '';
+					$props['border-top-right-radius']    = ! empty( $value['topRight'] ) ? pb_get_value_addon_real_value( $value['topRight'] ) : '';
+					$props['border-bottom-right-radius'] = ! empty( $value['bottomRight'] ) ? pb_get_value_addon_real_value( $value['bottomRight'] ) : '';
+					$props['border-bottom-left-radius']  = ! empty( $value['bottomLeft'] ) ? pb_get_value_addon_real_value( $value['bottomLeft'] ) : '';
 				}
 				break;
 		}

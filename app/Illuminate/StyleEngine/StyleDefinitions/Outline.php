@@ -18,8 +18,14 @@ class Outline extends BaseStyleDefinition {
 				continue;
 			}
 
-			$css['outlines'][] = "{$setting['border']['width']} {$setting['border']['style']} {$setting['border']['color']}";
-			$css['offset'][]   = $setting['offset'];
+			$css['outlines'][] = sprintf(
+				'%s %s %s',
+				$setting['border']['width'],
+				$setting['border']['style'],
+				! empty( $setting['border']['color'] ) ? pb_get_value_addon_real_value( $setting['border']['color'] ) : '',
+			);
+
+			$css['offset'][] = ! empty( $setting['offset'] ) ? pb_get_value_addon_real_value( $setting['offset'] ) : '';
 		}
 
 		return $css;
