@@ -124,13 +124,26 @@ class Background extends BaseStyleDefinition {
 	 */
 	protected function setBackground( array $setting ): void {
 
+		if ( $setting['image-size'] === 'custom' ) {
+			$size = sprintf(
+				'%s %s',
+				! empty( $setting['image-size-width'] ) ? pb_get_value_addon_real_value( $setting['image-size-width'] ) : '',
+				! empty( $setting['image-size-height'] ) ? pb_get_value_addon_real_value( $setting['image-size-height'] ) : ''
+			);
+		} else {
+			$size = $setting['image-size'];
+		}
+
+		$left = ! empty( $setting['image-position']['left'] ) ? pb_get_value_addon_real_value( $setting['image-position']['left'] ) : '';
+		$top  = ! empty( $setting['image-position']['top'] ) ? pb_get_value_addon_real_value( $setting['image-position']['top'] ) : '';
+
 		$props = [
 			//Background Image
 			'image'      => "url('{$setting['image']}'){$this->getImportant()}",
 			// Background Size
-			'size'       => ( $setting['image-size'] === 'custom' ? "{$setting['image-size-width']} {$setting['image-size-height']}" : $setting['image-size'] ) . $this->getImportant(),
+			'size'       => $size . $this->getImportant(),
 			// Background Position
-			'position'   => ( ( $setting['image-position']['left'] ?? '' ) . ' ' . ( $setting['image-position']['top'] ?? '' ) ) . $this->getImportant(),
+			'position'   => ( $left . ' ' . $top ) . $this->getImportant(),
 			// Background Repeat
 			'repeat'     => ( $setting['image-repeat'] ?? '' ) . $this->getImportant(),
 			// Background Attachment
@@ -195,14 +208,17 @@ class Background extends BaseStyleDefinition {
 			);
 		}
 
+		$left = ! empty( $setting['radial-gradient-position']['left'] ) ? pb_get_value_addon_real_value( $setting['radial-gradient-position']['left'] ) : '';
+		$top  = ! empty( $setting['radial-gradient-position']['top'] ) ? pb_get_value_addon_real_value( $setting['radial-gradient-position']['top'] ) : '';
+
 		// Gradient Position
 		if (
-			$setting['radial-gradient-position']['left'] &&
-			$setting['radial-gradient-position']['top']
+			$left &&
+			$top
 		) {
 			$radialGradient = str_replace(
 				'gradient(',
-				"gradient( circle at {$setting['radial-gradient-position']['left']} {$setting['radial-gradient-position']['top']},",
+				"gradient( circle at {$left} {$top},",
 				$radialGradient
 			);
 		}
@@ -243,7 +259,7 @@ class Background extends BaseStyleDefinition {
 		$gradient = $setting['mesh-gradient'];
 
 		if ( is_array( $gradient ) ) {
-			
+
 			$gradient = implode( ', ', $gradient );
 		}
 
@@ -255,7 +271,7 @@ class Background extends BaseStyleDefinition {
 
 			$gradient = str_replace(
 				"var(--c{$index})",
-				$setting['mesh-gradient-colors'][ $index ]['color'],
+				pb_get_value_addon_real_value( $setting['mesh-gradient-colors'][ $index ]['color'] ),
 				$gradient
 			);
 		}
@@ -264,7 +280,7 @@ class Background extends BaseStyleDefinition {
 			$this->defaultProps,
 			[
 				// override bg color
-				'color'      => ( $setting['mesh-gradient-colors'][0]['color'] ?? '' ) . $this->getImportant(),
+				'color'      => ( $setting['mesh-gradient-colors'][0]['color'] ? pb_get_value_addon_real_value( $setting['mesh-gradient-colors'][0]['color'] ) : '' ) . $this->getImportant(),
 				// Image
 				'image'      => $gradient . $this->getImportant(),
 				// Background Attachment

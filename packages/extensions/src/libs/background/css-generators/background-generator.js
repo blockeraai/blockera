@@ -122,7 +122,9 @@ export function backgroundGenerator(id, props, styleEngine) {
 					item['mesh-gradient-colors'].map((value, index) => {
 						gradient = gradient.replace(
 							`var(--c${index})`,
-							item['mesh-gradient-colors'][index].color
+							getValueAddonRealValue(
+								item['mesh-gradient-colors'][index].color
+							)
 						);
 						return null;
 					});
@@ -133,7 +135,7 @@ export function backgroundGenerator(id, props, styleEngine) {
 				item['mesh-gradient-colors'].map((value, index) => {
 					const newVar = '--c' + index;
 
-					properties[newVar] = value.color;
+					properties[newVar] = getValueAddonRealValue(value.color);
 
 					return properties;
 				});
@@ -143,7 +145,7 @@ export function backgroundGenerator(id, props, styleEngine) {
 					item['mesh-gradient-colors'][0].color;
 
 				// Image
-				properties.image.push(gradient);
+				properties.image.push(gradient ? gradient + ' !important' : '');
 
 				// Background Size
 				properties.size.push('auto');
@@ -177,7 +179,8 @@ export function backgroundGenerator(id, props, styleEngine) {
 
 	if (properties['background-color'])
 		toReturnProperties['background-color'] =
-			properties['background-color'] + ' !important';
+			getValueAddonRealValue(properties['background-color']) +
+			' !important';
 
 	return createCssRule({
 		selector: `${
