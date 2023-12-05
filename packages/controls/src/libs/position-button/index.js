@@ -46,6 +46,8 @@ export default function PositionButtonControl({
 				onClick={() => {
 					setIsPopoverActive(!isPopoverActive);
 				}}
+				showTooltip={true}
+				tooltipPosition="top"
 				style={{
 					padding: '5px',
 					width: '30px',
@@ -56,6 +58,7 @@ export default function PositionButtonControl({
 							: 'var(--publisher-controls-border-color-focus)',
 				}}
 				{...props}
+				data-test="position-button"
 			>
 				{renderPositionIcon(value)}
 			</Button>
@@ -74,6 +77,7 @@ export default function PositionButtonControl({
 						columns="columns-2"
 						inputFields={true}
 						onChange={setValue}
+						defaultValue={defaultValue}
 					/>
 				</Popover>
 			)}
