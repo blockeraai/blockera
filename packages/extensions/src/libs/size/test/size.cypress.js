@@ -128,7 +128,7 @@ describe('Size Extension', () => {
 		//describe('Wordpress compatibility', () => {});
 
 		describe('Functionality', () => {
-			it.only('should update overflow to visible', () => {
+			it('should update overflow correctly, when add value', () => {
 				cy.getByDataTest('style-tab').click();
 
 				//
@@ -220,6 +220,212 @@ describe('Size Extension', () => {
 					})
 					.invoke('getPropertyValue', 'overflow')
 					.should('eq', 'scroll');
+			});
+		});
+	});
+
+	describe('Ratio', () => {
+		beforeEach(() => {
+			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+
+			cy.getIframeBody()
+				.find('[data-type="core/paragraph"]')
+				.type('This is a test text.');
+
+			cy.getByDataTest('style-tab').click();
+		});
+
+		//describe('Wordpress compatibility', () => {});
+
+		describe('Functionality', () => {
+			it('should update aspect-ratio correctly, when add value', () => {
+				/* Standard 1:1 */
+				cy.getParentContainer('Ratio', 'base-control').within(() => {
+					cy.get('select').select('1 / 1');
+				});
+
+				//Check block
+				cy.getIframeBody()
+					.find('[data-type="core/paragraph"]')
+					.should('have.css', 'aspect-ratio', '1 / 1');
+
+				//Check store
+				getWPDataObject().then((data) => {
+					expect({
+						value: '1 / 1',
+						width: '',
+						height: '',
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'publisherRatio')
+					);
+				});
+
+				/* Custom */
+				cy.getParentContainer('Ratio', 'base-control').within(() => {
+					cy.get('select').select('custom');
+					cy.get('input').eq(0).type(2);
+					cy.get('input').eq(1).type(5);
+				});
+
+				//Check block
+				cy.getIframeBody()
+					.find('[data-type="core/paragraph"]')
+					.should('have.css', 'aspect-ratio', '2 / 5');
+
+				//Check store
+				getWPDataObject().then((data) => {
+					expect({
+						value: 'custom',
+						width: '2',
+						height: '5',
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'publisherRatio')
+					);
+				});
+
+				//Check frontend
+				savePage();
+
+				redirectToFrontPage();
+
+				cy.get('.publisher-paragraph').should(
+					'have.css',
+					'aspect-ratio',
+					'2 / 5'
+				);
+			});
+		});
+	});
+
+	describe('Fit', () => {
+		beforeEach(() => {
+			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+
+			cy.getIframeBody()
+				.find('[data-type="core/paragraph"]')
+				.type('This is a test text.');
+
+			cy.getByDataTest('style-tab').click();
+		});
+
+		//describe('Wordpress compatibility', () => {});
+
+		describe('Functionality', () => {
+			it('should update object-fit correctly, when add value', () => {
+				/* Contain */
+				cy.getParentContainer('Fit', 'base-control').within(() => {
+					cy.get('select').select('contain');
+				});
+
+				//Check block
+				cy.getIframeBody()
+					.find('[data-type="core/paragraph"]')
+					.should('have.css', 'object-fit', 'contain');
+
+				//Check store
+				getWPDataObject().then((data) => {
+					expect('contain').to.be.deep.equal(
+						getSelectedBlock(data, 'publisherFit')
+					);
+				});
+
+				/* Scale Down */
+				cy.getParentContainer('Fit', 'base-control').within(() => {
+					cy.get('select').select('scale-down');
+				});
+
+				//Check block
+				cy.getIframeBody()
+					.find('[data-type="core/paragraph"]')
+					.should('have.css', 'object-fit', 'scale-down');
+
+				//Check store
+				getWPDataObject().then((data) => {
+					expect('scale-down').to.be.deep.equal(
+						getSelectedBlock(data, 'publisherFit')
+					);
+				});
+
+				//Check frontend
+				savePage();
+
+				redirectToFrontPage();
+
+				cy.get('.publisher-paragraph').should(
+					'have.css',
+					'object-fit',
+					'scale-down'
+				);
+			});
+		});
+	});
+
+	describe('Fit Position', () => {
+		beforeEach(() => {
+			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+
+			cy.getIframeBody()
+				.find('[data-type="core/paragraph"]')
+				.type('This is a test text.');
+
+			cy.getByDataTest('style-tab').click();
+		});
+
+		//describe('Wordpress compatibility', () => {});
+
+		describe('Functionality', () => {
+			it('should update object-position correctly, when add value', () => {
+				/* Top Center */
+				cy.getParentContainer('Fit', 'base-control').within(() => {
+					cy.getByAriaLabel('Fit Position').click();
+				});
+
+				cy.getByDataTest('popover-body').within(() => {
+					cy.contains('top center').click({ force: true });
+				});
+
+				//Check block
+				cy.getIframeBody()
+					.find('[data-type="core/paragraph"]')
+					.should('have.css', 'object-Position', '0% 50%');
+
+				//Check store
+				getWPDataObject().then((data) => {
+					expect({ top: '0%', left: '50%' }).to.be.deep.equal(
+						getSelectedBlock(data, 'publisherFitPosition')
+					);
+				});
+
+				/* Custom */
+				cy.getByDataTest('popover-body').within(() => {
+					cy.get('input').eq(0).clear();
+					cy.get('input').eq(0).type(10);
+					cy.get('input').eq(1).clear();
+					cy.get('input').eq(1).type(30);
+				});
+
+				//Check block
+				cy.getIframeBody()
+					.find('[data-type="core/paragraph"]')
+					.should('have.css', 'object-position', '10% 30%');
+
+				//Check store
+				getWPDataObject().then((data) => {
+					expect({ top: '10%', left: '30%' }).to.be.deep.equal(
+						getSelectedBlock(data, 'publisherFitPosition')
+					);
+				});
+
+				//Check frontend
+				savePage();
+
+				redirectToFrontPage();
+
+				cy.get('.publisher-paragraph').should(
+					'have.css',
+					'object-position',
+					'10% 30%'
+				);
 			});
 		});
 	});
