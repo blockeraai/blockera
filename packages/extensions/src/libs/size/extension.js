@@ -40,7 +40,6 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 		overflow,
 		children,
 		ratio,
-		customRatio,
 		fit,
 		fitPosition,
 		defaultValue: { width: _width, height: _height, overflow: _overflow },
