@@ -34,7 +34,7 @@ class Spacing extends BaseStyleDefinition {
 				...array_map(
 				static function ( string $item, string $property ) use ( $isImportant ): array {
 
-					return [ "padding-{$property}" => $item . $isImportant ];
+					return [ "padding-{$property}" => pb_get_value_addon_real_value($item) . $isImportant ];
 				},
 				$padding,
 				array_keys( $padding )
@@ -42,7 +42,7 @@ class Spacing extends BaseStyleDefinition {
 				...array_map(
 				static function ( string $item, string $property ) use ( $isImportant ): array {
 
-					return [ "margin-{$property}" => $item . $isImportant ];
+					return [ "margin-{$property}" => pb_get_value_addon_real_value($item) . $isImportant ];
 				},
 				$margin,
 				array_keys( $margin )
