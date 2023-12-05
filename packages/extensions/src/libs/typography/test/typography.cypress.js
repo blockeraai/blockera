@@ -77,8 +77,43 @@ describe('Typography Extension', () => {
 							'Line Height',
 							'base-control'
 						).within(() => {
-							cy.get('input[type="number"]').clear();
+							cy.get('input[type="number"]').focus();
 							cy.get('input[type="number"]').type(10);
+						});
+					});
+
+					//Check block
+					cy.getIframeBody()
+						.find(`[data-type="core/paragraph"]`)
+						.should('have.css', 'line-height');
+
+					//Check store
+					getWPDataObject().then((data) => {
+						expect('10').to.be.equal(
+							getSelectedBlock(data, 'publisherLineHeight')
+						);
+					});
+
+					//Check frontend
+					savePage();
+
+					redirectToFrontPage();
+
+					cy.get('.publisher-paragraph').should(
+						'have.css',
+						'line-height'
+					);
+				});
+
+				it('change line height to px', () => {
+					cy.get('@typography-popover').within(() => {
+						cy.getParentContainer(
+							'Line Height',
+							'base-control'
+						).within(() => {
+							cy.get('input[type="number"]').focus();
+							cy.get('input[type="number"]').type(10);
+							cy.get('[aria-label="Select Unit"]').select('px');
 						});
 					});
 
@@ -253,17 +288,17 @@ describe('Typography Extension', () => {
 			describe('Functionality', () => {
 				it('should update direction, when add ltr', () => {
 					cy.get('@typography-popover').within(() => {
-						cy.get('[aria-label="Left to Right"]').click();
+						cy.get('[aria-label="Right to Left"]').click();
 					});
 
 					//Check block
 					cy.getIframeBody()
 						.find(`[data-type="core/paragraph"]`)
-						.should('have.css', 'direction', 'ltr');
+						.should('have.css', 'direction', 'rtl');
 
 					//Check store
 					getWPDataObject().then((data) => {
-						expect('ltr').to.be.equal(
+						expect('rtl').to.be.equal(
 							getSelectedBlock(data, 'publisherDirection')
 						);
 					});
@@ -276,7 +311,7 @@ describe('Typography Extension', () => {
 					cy.get('.publisher-paragraph').should(
 						'have.css',
 						'direction',
-						'ltr'
+						'rtl'
 					);
 				});
 			});
@@ -286,16 +321,35 @@ describe('Typography Extension', () => {
 			//describe('WordPress Compatibility', () => {...});
 
 			describe('Functionality', () => {
-				it('should update letter-spacing, when add data', () => {
+				it('all together', () => {
 					cy.get('@typography-popover').within(() => {
 						cy.getParentContainer('Letters', 'base-control')
 							.first()
 							.within(() => {
+								cy.get('input').focus();
 								cy.get('input').type(5);
 							});
 					});
 
-					//Check block
+					cy.get('@typography-popover').within(() => {
+						cy.getParentContainer('Words', 'base-control')
+							.first()
+							.within(() => {
+								cy.get('input').focus();
+								cy.get('input').type(5);
+							});
+					});
+
+					cy.get('@typography-popover').within(() => {
+						cy.getParentContainer('Text Indent', 'base-control')
+							.first()
+							.within(() => {
+								cy.get('input').focus();
+								cy.get('input').type(5);
+							});
+					});
+
+					//Check letter spacing
 					cy.getIframeBody()
 						.find(`[data-type="core/paragraph"]`)
 						.should('have.css', 'letter-spacing', '5px');
@@ -307,28 +361,7 @@ describe('Typography Extension', () => {
 						);
 					});
 
-					//Check frontend
-					savePage();
-
-					redirectToFrontPage();
-
-					cy.get('.publisher-paragraph').should(
-						'have.css',
-						'letter-spacing',
-						'5px'
-					);
-				});
-
-				it('should update word-spacing, when add data', () => {
-					cy.get('@typography-popover').within(() => {
-						cy.getParentContainer('Words', 'base-control')
-							.first()
-							.within(() => {
-								cy.get('input').type(5);
-							});
-					});
-
-					//Check block
+					//Check letter spacing
 					cy.getIframeBody()
 						.find(`[data-type="core/paragraph"]`)
 						.should('have.css', 'word-spacing', '5px');
@@ -340,28 +373,7 @@ describe('Typography Extension', () => {
 						);
 					});
 
-					//Check frontend
-					savePage();
-
-					redirectToFrontPage();
-
-					cy.get('.publisher-paragraph').should(
-						'have.css',
-						'word-spacing',
-						'5px'
-					);
-				});
-
-				it('should update text-indent, when add data', () => {
-					cy.get('@typography-popover').within(() => {
-						cy.getParentContainer('Text Indent', 'base-control')
-							.first()
-							.within(() => {
-								cy.get('input').type(5);
-							});
-					});
-
-					//Check block
+					//Check text indent
 					cy.getIframeBody()
 						.find(`[data-type="core/paragraph"]`)
 						.should('have.css', 'text-indent', '5px');
@@ -377,6 +389,18 @@ describe('Typography Extension', () => {
 					savePage();
 
 					redirectToFrontPage();
+
+					cy.get('.publisher-paragraph').should(
+						'have.css',
+						'letter-spacing',
+						'5px'
+					);
+
+					cy.get('.publisher-paragraph').should(
+						'have.css',
+						'word-spacing',
+						'5px'
+					);
 
 					cy.get('.publisher-paragraph').should(
 						'have.css',
@@ -574,41 +598,14 @@ describe('Typography Extension', () => {
 					);
 				});
 
-				it('should update column-count, when add column-2', () => {
-					cy.get('@typography-popover').within(() => {
-						cy.get('[aria-label="2 Columns Text"]').click();
-					});
-
-					//Check block
-					cy.getIframeBody()
-						.find(`[data-type="core/paragraph"]`)
-						.should('have.css', 'column-count', '2');
-
-					//Check store
-					getWPDataObject().then((data) => {
-						expect('2-columns').to.be.equal(
-							getSelectedBlock(data, 'publisherTextColumns')
-						);
-					});
-
-					//Check frontend
-					savePage();
-
-					redirectToFrontPage();
-
-					cy.get('.publisher-paragraph').should(
-						'have.css',
-						'column-count',
-						'2'
-					);
-				});
-
 				it('should update column-count & column-gap, when add column2 + gap', () => {
 					cy.get('@typography-popover').within(() => {
 						cy.getParentContainer('Columns', 'base-control').within(
 							() => {
 								cy.get('[aria-label="2 Columns Text"]').click();
-								cy.get('input[type="range"]').setSliderValue(5);
+								cy.get('input[type=number]').eq(0).focus();
+								cy.get('input[type=number]').eq(0).clear();
+								cy.get('input[type=number]').eq(0).type(5);
 							}
 						);
 					});
