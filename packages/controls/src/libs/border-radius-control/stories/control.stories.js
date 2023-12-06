@@ -90,6 +90,22 @@ export const AllCorners = {
 					label="Empty"
 				/>
 			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: {
+						type: 'all',
+						all: '10pxfunc',
+					},
+				}}
+			>
+				<ControlWithHooks
+					Control={BorderRadiusControl}
+					{...args}
+					label="CSS Value"
+				/>
+			</ControlContextProvider>
 		</Flex>
 	),
 };
@@ -137,6 +153,26 @@ export const CustomCorners = {
 					Control={BorderRadiusControl}
 					{...args}
 					label="Customized"
+				/>
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
+					value: {
+						type: 'custom',
+						all: '10%func',
+						topLeft: '10%func',
+						topRight: '50%func',
+						bottomRight: '10%func',
+						bottomLeft: '50%func',
+					},
+				}}
+			>
+				<ControlWithHooks
+					Control={BorderRadiusControl}
+					{...args}
+					label="CSS Values"
 				/>
 			</ControlContextProvider>
 		</Flex>

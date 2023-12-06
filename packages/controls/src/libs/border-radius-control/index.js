@@ -12,6 +12,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
+import { getValueAddonRealValue } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -21,6 +22,7 @@ import { default as CompactIcon } from './icons/compact';
 import { default as CustomIcon } from './icons/custom';
 import { useControlContext } from '../../context';
 import type { TBorderRadiusControlProps, TValue } from './types/control-type';
+
 export default function BorderRadiusControl({
 	id,
 	label,
@@ -56,7 +58,12 @@ export default function BorderRadiusControl({
 
 	return (
 		<div className={controlClassNames('border-radius', className)}>
-			<div className={controlInnerClassNames('border-header')}>
+			<div
+				className={controlInnerClassNames('border-header')}
+				style={{
+					'--pb-all': getValueAddonRealValue(value.all),
+				}}
+			>
 				{label && (
 					<div className={controlInnerClassNames('label')}>
 						<LabelControl label={label} />
@@ -79,11 +86,9 @@ export default function BorderRadiusControl({
 								},
 							});
 						}}
-						style={{
-							'--pb-all': value.all,
-						}}
 						defaultValue={value.all}
 						placeholder="0"
+						smallWidth={true}
 					/>
 				)}
 
@@ -148,10 +153,18 @@ export default function BorderRadiusControl({
 							'border-corners-preview'
 						)}
 						style={{
-							'--pb-top-left': value.topLeft,
-							'--pb-top-right': value.topRight,
-							'--pb-bottom-left': value.bottomLeft,
-							'--pb-bottom-right': value.bottomRight,
+							'--pb-top-left': getValueAddonRealValue(
+								value.topLeft
+							),
+							'--pb-top-right': getValueAddonRealValue(
+								value.topRight
+							),
+							'--pb-bottom-left': getValueAddonRealValue(
+								value.bottomLeft
+							),
+							'--pb-bottom-right': getValueAddonRealValue(
+								value.bottomRight
+							),
 						}}
 					>
 						<InputControl
@@ -178,6 +191,7 @@ export default function BorderRadiusControl({
 									},
 								});
 							}}
+							smallWidth={true}
 						/>
 						<InputControl
 							id="topRight"
@@ -203,6 +217,7 @@ export default function BorderRadiusControl({
 									},
 								});
 							}}
+							smallWidth={true}
 						/>
 						<InputControl
 							id="bottomLeft"
@@ -228,6 +243,7 @@ export default function BorderRadiusControl({
 									},
 								});
 							}}
+							smallWidth={true}
 						/>
 						<InputControl
 							id="bottomRight"
@@ -253,6 +269,7 @@ export default function BorderRadiusControl({
 									},
 								});
 							}}
+							smallWidth={true}
 						/>
 					</div>
 				</div>
