@@ -837,4 +837,179 @@ describe('Typography Extension', () => {
 			});
 		});
 	});
+
+	describe('Text Color', () => {
+		beforeEach(() => {
+			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.type('This is test text.');
+
+			cy.getByDataTest('style-tab').click();
+		});
+		it('should update text-color, when add data', () => {
+			cy.getParentContainer('Text Color', 'base-control').within(() => {
+				cy.getByDataCy('color-btn').click();
+			});
+
+			cy.getByDataTest('popover-body').within(() => {
+				cy.get('input[maxlength="9"]').clear();
+				cy.get('input[maxlength="9"]').type('70ca9e');
+			});
+
+			//Check block
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.should('have.css', 'color', 'rgb(112, 202, 158)');
+
+			//Check store
+			getWPDataObject().then((data) => {
+				expect('#70ca9e').to.be.equal(
+					getSelectedBlock(data, 'publisherFontColor')
+				);
+			});
+
+			//Check frontend
+			savePage();
+
+			redirectToFrontPage();
+
+			cy.get('.publisher-paragraph').should(
+				'have.css',
+				'color',
+				'rgb(112, 202, 158)'
+			);
+		});
+	});
+
+	describe('Text Shadow', () => {
+		beforeEach(() => {
+			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.type('This is test text.');
+
+			cy.getByDataTest('style-tab').click();
+		});
+
+		it('should update text-shadow, when add data', () => {
+			/* One Text Shadow */
+			cy.getParentContainer('Text Shadows', 'base-control').within(() => {
+				cy.getByAriaLabel('Add New Text Shadow').click();
+				cy.getByDataCy('group-control-header').click();
+			});
+
+			cy.getByDataTest('popover-body').within(() => {
+				cy.get('input[type="number"]').eq(0).clear();
+				cy.get('input[type="number"]').eq(0).type(2);
+				cy.get('input[type="number"]').eq(1).clear();
+				cy.get('input[type="number"]').eq(1).type(3);
+				cy.get('input[type="number"]').eq(2).clear();
+				cy.get('input[type="number"]').eq(2).type(4);
+				cy.getByDataCy('color-btn').click();
+			});
+
+			cy.getByDataTest('popover-body')
+				.last()
+				.within(() => {
+					cy.get('input[maxlength="9"]').clear({ force: true });
+					cy.get('input[maxlength="9"]').type('70ca9e', {
+						force: true,
+					});
+				});
+
+			//Check block
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.should(
+					'have.css',
+					'text-shadow',
+					'rgb(112, 202, 158) 2px 3px 4px'
+				);
+
+			//Check store
+			getWPDataObject().then((data) => {
+				expect([
+					{
+						x: '2px',
+						y: '3px',
+						blur: '4px',
+						color: '#70ca9e',
+						isVisible: true,
+					},
+				]).to.be.deep.equal(
+					getSelectedBlock(data, 'publisherTextShadow')
+				);
+			});
+
+			/* Multiple Text Shadow */
+			cy.getParentContainer('Text Shadows', 'base-control').within(() => {
+				cy.getByAriaLabel('Add New Text Shadow').click();
+				cy.getByDataCy('group-control-header').eq(1).click();
+			});
+
+			cy.getByDataTest('popover-body').within(() => {
+				cy.get('input[type="number"]').eq(0).clear();
+				cy.get('input[type="number"]').eq(0).type(5);
+				cy.get('input[type="number"]').eq(1).clear();
+				cy.get('input[type="number"]').eq(1).type(6);
+				cy.get('input[type="number"]').eq(2).clear();
+				cy.get('input[type="number"]').eq(2).type(7);
+				cy.getByDataCy('color-btn').click();
+			});
+
+			cy.getByDataTest('popover-body')
+				.last()
+				.within(() => {
+					cy.get('input[maxlength="9"]').clear({ force: true });
+					cy.get('input[maxlength="9"]').type('70ca9e', {
+						force: true,
+					});
+				});
+
+			//Check block
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.should(
+					'have.css',
+					'text-shadow',
+					'rgb(112, 202, 158) 2px 3px 4px, rgb(112, 202, 158) 5px 6px 7px'
+				);
+
+			//Check store
+			getWPDataObject().then((data) => {
+				expect([
+					{
+						x: '2px',
+						y: '3px',
+						blur: '4px',
+						color: '#70ca9e',
+						isVisible: true,
+					},
+					{
+						x: '5px',
+						y: '6px',
+						blur: '7px',
+						color: '#70ca9e',
+						isVisible: true,
+					},
+				]).to.be.deep.equal(
+					getSelectedBlock(data, 'publisherTextShadow')
+				);
+			});
+
+			//Check frontend
+			savePage();
+
+			redirectToFrontPage();
+
+			cy.get('.publisher-paragraph').should(
+				'have.css',
+				'text-shadow',
+				'rgb(112, 202, 158) 2px 3px 4px, rgb(112, 202, 158) 5px 6px 7px'
+			);
+		});
+	});
 });
