@@ -191,6 +191,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 						value={{
 							name: generateExtensionId(block, 'ratio'),
 							value: ratio,
+							type: 'nested',
 						}}
 					>
 						<BaseControl
@@ -199,6 +200,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 							label={__('Ratio', 'publisher-core')}
 						>
 							<SelectControl
+								id="value"
 								controlName="select"
 								aria-label={__('Ratio', 'publisher-core')}
 								{...{
@@ -276,86 +278,57 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 							/>
 							{ratio.value === 'custom' && (
 								<Flex alignItems="flex-start">
-									<ControlContextProvider
-										value={{
-											name: generateExtensionId(
-												block,
-												'custom-ratio-width'
-											),
-											value: ratio.width,
-										}}
-									>
-										<BaseControl
-											controlName="input"
-											columns="columns-1"
-											className="control-first label-center small-gap"
-											label={__(
-												'Width',
-												'publisher-core'
-											)}
-										>
-											<InputControl
-												style={{ margin: '0px' }}
-												{...{
-													...props,
-													type: 'number',
-													min: 0,
-													defaultValue:
-														ratio.width || '',
+									<InputControl
+										id="width"
+										columns="columns-1"
+										className="control-first label-center small-gap"
+										label={__('Width', 'publisher-core')}
+										style={{ margin: '0px' }}
+										{...{
+											...props,
+											type: 'number',
+											min: 0,
+											defaultValue: ratio.width || '',
 
-													onChange: (newValue) =>
-														handleOnChangeAttributes(
-															'publisherRatio',
-															{
-																...ratio,
-																width: newValue,
-															}
-														),
-												}}
-											/>
-										</BaseControl>
-									</ControlContextProvider>
+											onChange: (newValue) =>
+												handleOnChangeAttributes(
+													'publisherRatio',
+													{
+														...ratio,
+														width: newValue,
+													}
+												),
+										}}
+									/>
 
 									<p className="publisher-colon">:</p>
 
-									<ControlContextProvider
-										value={{
-											name: generateExtensionId(
-												block,
-												'custom-ratio-height'
-											),
-											value: ratio.height,
-										}}
+									<BaseControl
+										controlName="input"
+										columns="columns-1"
+										className="control-first label-center small-gap"
+										label={__('Height', 'publisher-core')}
 									>
-										<BaseControl
-											controlName="input"
-											columns="columns-1"
-											className="control-first label-center small-gap"
-											label={__(
-												'Height',
-												'publisher-core'
-											)}
-										>
-											<InputControl
-												style={{ margin: '0px' }}
-												{...{
-													...props,
-													min: 0,
-													type: 'number',
-													defaultValue:
-														ratio.height || '',
-													onChange: (newValue) =>
-														handleOnChangeAttributes(
-															'publisherRatio',
-															{
-																...ratio,
-																height: newValue,
-															}
-														),
-												}}
-											/>
-										</BaseControl>
-									</ControlContextProvider>
+										<InputControl
+											id="height"
+											style={{ margin: '0px' }}
+											{...{
+												...props,
+												min: 0,
+												type: 'number',
+												defaultValue:
+													ratio.height || '',
+												onChange: (newValue) =>
+													handleOnChangeAttributes(
+														'publisherRatio',
+														{
+															...ratio,
+															height: newValue,
+														}
+													),
+											}}
+										/>
+									</BaseControl>
 								</Flex>
 							)}
 						</BaseControl>
