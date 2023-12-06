@@ -32,7 +32,7 @@ export default function NoticeControl({
 	isDismissible,
 	onDismiss,
 }: TNoticeControlProps): MixedElement {
-	const [isShown, setIsShown] = useState(true);
+	const [isShown, setIsShown] = useState(children ? true : false);
 
 	const handleOnDismiss = () => {
 		if (isFunction(onDismiss)) {
@@ -111,11 +111,16 @@ NoticeControl.propTypes = {
 	/**
 	 * define colors and icons based on type
 	 */
-	type: PropTypes.oneOf(['information', 'warning', 'success', 'error']),
+	type: (PropTypes.oneOf([
+		'information',
+		'warning',
+		'success',
+		'error',
+	]): any),
 	/**
 	 * string or jsx to place in content
 	 */
-	children: PropTypes.string,
+	children: PropTypes.string.isRequired,
 	/**
 	 * flag to show dismiss or not
 	 */
@@ -123,8 +128,7 @@ NoticeControl.propTypes = {
 };
 
 NoticeControl.defaultProps = {
-	type: 'information',
-	children: 'Information',
+	type: 'warning',
 	showIcon: true,
 	isDismissible: false,
 };

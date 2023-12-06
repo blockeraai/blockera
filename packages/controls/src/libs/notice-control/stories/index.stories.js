@@ -40,7 +40,10 @@ export const Default = {
 						name: nanoid(),
 					}}
 				>
-					<ControlWithHooks Control={NoticeControl} />
+					<ControlWithHooks
+						Control={NoticeControl}
+						children="Warning"
+					/>
 				</ControlContextProvider>
 			</Flex>
 		);
@@ -63,6 +66,7 @@ export const States = {
 						Control={NoticeControl}
 						type="information"
 						label="Information"
+						children="Information"
 					/>
 				</ControlContextProvider>
 

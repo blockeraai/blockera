@@ -13,17 +13,11 @@ describe('notice-control component testing', () => {
 	});
 
 	describe('rendering test', () => {
-		it('should render correctly, when passing no props', () => {
-			cy.withDataProvider({
-				component: <NoticeControl />,
-			});
-
-			cy.getByDataTest('notice-control').should('exist');
-		});
-
 		it('should render correctly, when passing label', () => {
 			cy.withDataProvider({
-				component: <NoticeControl label="Notice Label" />,
+				component: (
+					<NoticeControl label="Notice Label" {...defaultProps} />
+				),
 			});
 
 			cy.contains('Notice Label').should('exist');
@@ -98,6 +92,14 @@ describe('notice-control component testing', () => {
 		});
 
 		context('children', () => {
+			it('should not render, when passing no children', () => {
+				cy.withDataProvider({
+					component: <NoticeControl />,
+				});
+
+				cy.getByDataTest('notice-control').should('not.exist');
+			});
+
 			it('should render correctly, when passing string', () => {
 				cy.withDataProvider({
 					component: (
@@ -190,7 +192,9 @@ describe('notice-control component testing', () => {
 	context('interaction test', () => {
 		it('should remove notice, when click on dismiss', () => {
 			cy.withDataProvider({
-				component: <NoticeControl isDismissible={true} />,
+				component: (
+					<NoticeControl isDismissible={true} {...defaultProps} />
+				),
 			});
 
 			cy.getByDataTest('notice-control-dismiss').click();
@@ -210,6 +214,7 @@ describe('notice-control component testing', () => {
 						})
 					);
 				},
+				children: 'This is a test text.',
 			};
 			cy.stub(defaultProps, 'onDismiss').as('onDismiss');
 
