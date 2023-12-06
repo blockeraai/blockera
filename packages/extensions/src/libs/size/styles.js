@@ -84,8 +84,6 @@ export function SizeStyles({
 			attributes.publisherRatio.default.value
 	) {
 		switch (_attributes.publisherRatio.value) {
-			case 'none':
-				break;
 			case 'custom':
 				{
 					properties['aspect-ratio'] = `${

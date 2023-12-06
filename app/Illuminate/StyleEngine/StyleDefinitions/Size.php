@@ -14,37 +14,38 @@ class Size extends BaseStyleDefinition {
 		$cssProperty   = $this->settings['type'];
 		$propertyValue = $this->settings[ $cssProperty ];
 
-		if('aspect-ratio' === $cssProperty ){
-          $props=[];
-		
-          switch($propertyValue['value']){
-			case 'none':
-				break;
+		if ( 'aspect-ratio' === $cssProperty ) {
+			$props = [];
+
+			switch ( $propertyValue['value'] ) {
 				case 'custom':
-			       $props['aspect-ratio']=$propertyValue['width'] . ( !empty($propertyValue['width']) && !empty($propertyValue['height']) ?' / ': '' ). $propertyValue['height'] . $this->getImportant();
-			    break;
-				default:  $props[$cssProperty]=$propertyValue['value'] . $this->getImportant();
+					$props['aspect-ratio'] = $propertyValue['width'] . ( ! empty( $propertyValue['width'] ) && ! empty( $propertyValue['height'] ) ? ' / ' : '' ) . $propertyValue['height'] . $this->getImportant();
+					break;
+				default:
+					$props[ $cssProperty ] = $propertyValue['value'] . $this->getImportant();
+			}
+
+			$this->setProperties( $props );
+
+			return $this->properties;
 		}
 
-		    $this->setProperties($props);
-
-	        return $this->properties;
-	    }
-
-		if('object-position' === $cssProperty){
+		if ( 'object-position' === $cssProperty ) {
 			$this->setProperties(
-	    	   [
-		         $cssProperty => $propertyValue['top'] . ' ' . $propertyValue['left']  . $this->getImportant(),
-			   ]
-		);
-		return $this->properties;
+				[
+					$cssProperty => $propertyValue['top'] . ' ' . $propertyValue['left'] . $this->getImportant(),
+				]
+			);
+
+			return $this->properties;
 		}
-	 
-	    $this->setProperties(
-	    	[
-		      $cssProperty => $propertyValue . $this->getImportant(),
+
+		$this->setProperties(
+			[
+				$cssProperty => $propertyValue . $this->getImportant(),
 			]
 		);
+
 		return $this->properties;
 	}
 
