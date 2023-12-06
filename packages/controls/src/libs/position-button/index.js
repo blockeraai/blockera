@@ -72,7 +72,7 @@ export default function PositionButtonControl({
 				{...props}
 				data-test="position-button"
 			>
-				{renderPositionIcon(value)}
+				{renderPositionIcon({ ...value, defaultValue })}
 			</Button>
 			{isPopoverActive && (
 				<Popover

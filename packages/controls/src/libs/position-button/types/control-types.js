@@ -17,4 +17,5 @@ export type TPositionButtonProps = {
 export type TRenderPositionIcon = {
 	top: string,
 	left: string,
+	defaultValue?: { top: string, left: string },
 };

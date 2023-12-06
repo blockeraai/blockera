@@ -14,8 +14,16 @@ import OriginCenterRight from './icons/center-right';
 import OriginBottomLeft from './icons/bottom-left';
 import OriginBottomCenter from './icons/bottom-center';
 import OriginBottomRight from './icons/bottom-right';
+import OriginEmpty from './icons/empty';
 
-export const renderPositionIcon = ({ top, left }: TRenderPositionIcon): any => {
+export const renderPositionIcon = ({
+	top,
+	left,
+	defaultValue,
+}: TRenderPositionIcon): any => {
+	if ((!top || !left) && !defaultValue?.top && !defaultValue?.left)
+		return <OriginEmpty />;
+
 	if (top === '0%' && left === '0%') return <OriginTopLeft />;
 	if (top === '0%' && left === '50%') return <OriginTopCenter />;
 	if (top === '0%' && left === '100%') return <OriginTopRight />;
