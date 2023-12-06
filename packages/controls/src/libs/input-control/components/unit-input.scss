@@ -160,4 +160,20 @@
 
 	}
 
+	.input-tag-placeholder {
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		gap: 3px;
+		padding-right: 35px !important;
+		font-size: 12px;
+	}
+
+	&.is-focused {
+
+		.input-tag-placeholder {
+
+			color: var(--publisher-controls-border-color-focus);
+		}
+	}
 }

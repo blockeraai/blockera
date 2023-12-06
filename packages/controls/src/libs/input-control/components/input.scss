@@ -1,7 +1,11 @@
 .publisher-control-input {
 
 	position: relative;
+	height: 30px;
+	display: block;
+	width: 100%;
 
+	.publisher-control-input-tag,
 	input {
 
 		outline: none;
@@ -11,6 +15,7 @@
 		font-size: 12px;
 		padding-left: 8px;
 		padding-right: 5px;
+		display: block;
 
 		&::placeholder {
 
@@ -105,8 +110,8 @@
 
 		.publisher-control-input-tag {
 
-			border-color: var(--publisher-controls-border-color-focus);
-			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+			border-color: var(--publisher-controls-border-color-focus) !important;
+			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
 
 		}
 

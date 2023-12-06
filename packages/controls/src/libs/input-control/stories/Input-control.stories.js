@@ -773,6 +773,42 @@ export const CssInput = {
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
+					value: 'calc(20px + 12px)func',
+				}}
+			>
+				<div
+					style={{
+						width: '100px',
+					}}
+				>
+					<ControlWithHooks
+						Control={InputControl}
+						{...args}
+						range={true}
+						unitType="general"
+						label="Advanced (Small)"
+						smallWidth={true}
+					/>
+				</div>
+				<div
+					style={{
+						width: '120px',
+					}}
+				>
+					<ControlWithHooks
+						Control={InputControl}
+						{...args}
+						range={true}
+						unitType="general"
+						label="Advanced (Small)"
+						smallWidth={true}
+					/>
+				</div>
+			</ControlContextProvider>
+
+			<ControlContextProvider
+				value={{
+					name: nanoid(),
 					value: '1px',
 				}}
 			>

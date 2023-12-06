@@ -1045,6 +1045,79 @@ describe('input control component testing', () => {
 			});
 		});
 
+		describe('CSS Func Value', () => {
+			it('should render and work', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: (
+						<InputControl type="number" unitType="general" />
+					),
+					name,
+					value: 'calc(1px + 1px)func',
+				});
+
+				// open editor
+				cy.get('[aria-label="Open Editor"]').should('exist');
+				cy.get('[aria-label="Open Editor"]').click();
+				cy.get('textarea').should('exist');
+
+				// change editor
+				cy.get('textarea').clear();
+				cy.get('textarea').type('min(10%, 100px)');
+				cy.get('input[type=text]').should(
+					'have.value',
+					'min(10%, 100px)'
+				);
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq(
+						'min(10%, 100px)func'
+					);
+				});
+			});
+
+			it('disabled button', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: (
+						<InputControl unitType="general" disabled={true} />
+					),
+					name,
+					value: 'calc(1px + 1px)func',
+				});
+
+				cy.get('[aria-label="Open Editor"]').should('be.disabled');
+			});
+
+			it('small width input', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: (
+						<InputControl
+							type="number"
+							unitType="general"
+							smallWidth={true}
+						/>
+					),
+					name,
+					value: 'calc(1px + 1px)func',
+				});
+
+				// open editor
+				cy.get('[aria-label="Open Editor"]').should('exist');
+				cy.get('[aria-label="Open Editor"]').click();
+				cy.get('textarea').should('exist');
+
+				// change editor
+				cy.get('textarea').clear();
+				cy.get('textarea').type('min(10%, 100px)');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq(
+						'min(10%, 100px)func'
+					);
+				});
+			});
+		});
+
 		describe('Special Units', () => {
 			it('select and deselect special units', () => {
 				const name = nanoid();
@@ -1244,50 +1317,6 @@ describe('input control component testing', () => {
 				cy.get('input').type('10');
 				cy.get('input').should('have.value', 10);
 				cy.get('input').should('have.not.class', 'invalid');
-			});
-		});
-
-		describe('Maximize Func Editor', () => {
-			it('should render and work', () => {
-				const name = nanoid();
-				cy.withDataProvider({
-					component: (
-						<InputControl type="number" unitType="general" />
-					),
-					name,
-					value: 'calc(1px + 1px)func',
-				});
-
-				// open editor
-				cy.get('[aria-label="Open Editor"]').should('exist');
-				cy.get('[aria-label="Open Editor"]').click();
-				cy.get('textarea').should('exist');
-
-				// change editor
-				cy.get('textarea').clear();
-				cy.get('textarea').type('min(10%, 100px)');
-				cy.get('input[type=text]').should(
-					'have.value',
-					'min(10%, 100px)'
-				);
-				cy.then(() => {
-					return expect(getControlValue(name)).to.eq(
-						'min(10%, 100px)func'
-					);
-				});
-			});
-
-			it('disabled button', () => {
-				const name = nanoid();
-				cy.withDataProvider({
-					component: (
-						<InputControl unitType="general" disabled={true} />
-					),
-					name,
-					value: 'calc(1px + 1px)func',
-				});
-
-				cy.get('[aria-label="Open Editor"]').should('be.disabled');
 			});
 		});
 	});

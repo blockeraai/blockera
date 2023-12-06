@@ -16,5 +16,6 @@ export type TUnitInput = {
 	max?: number,
 	drag?: boolean,
 	float?: boolean,
+	smallWidth?: boolean,
 	actions?: Node,
 };

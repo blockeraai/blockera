@@ -52,6 +52,7 @@ export function UnitInput({
 	max,
 	drag,
 	float,
+	smallWidth,
 	...props
 }: TUnitInput): MixedElement {
 	// added to temp to fix rerender
@@ -240,23 +241,24 @@ export function UnitInput({
 
 				{unitValue.value === 'func' && (
 					<>
-						<Button
-							size="input"
-							contentAlign="left"
-							onClick={() => {
-								toggleIsMaximizeVisible();
-							}}
-							className={controlInnerClassNames(
-								'maximise-btn',
-								isMaximizeVisible && 'is-open-popover'
-							)}
-							noBorder={true}
-							showTooltip={!disabled}
-							label={__('Open Editor', 'publisher-core')}
-							disabled={disabled}
-						>
-							<MaximizeIcon />
-						</Button>
+						{!smallWidth && (
+							<Button
+								size="input"
+								onClick={() => {
+									toggleIsMaximizeVisible();
+								}}
+								className={controlInnerClassNames(
+									'maximise-btn',
+									isMaximizeVisible && 'is-open-popover'
+								)}
+								noBorder={true}
+								showTooltip={!disabled}
+								label={__('Open Editor', 'publisher-core')}
+								disabled={disabled}
+							>
+								<MaximizeIcon />
+							</Button>
+						)}
 
 						{isMaximizeVisible && (
 							<Popover
@@ -324,40 +326,68 @@ export function UnitInput({
 		>
 			{!isSpecialUnit(unitValue?.value) ? (
 				<>
-					{unitValue.format === 'number' ? (
-						<NumberInput
-							value={inputValue}
-							disabled={disabled}
-							className={controlInnerClassNames(
-								'single-input',
-								noBorder && 'no-border',
-								!isValidValue && 'invalid',
-								className
-							)}
-							min={min}
-							max={max}
-							setValue={setInputValue}
-							range={isActiveRange}
-							drag={drag}
-							float={float}
-							actions={getInputActions()}
-							{...props}
-						/>
+					{unitValue.value === 'func' && smallWidth ? (
+						<>
+							<span
+								className={controlClassNames(
+									'input-tag',
+									'input-tag-placeholder',
+									noBorder && 'no-border',
+									className
+								)}
+								aria-label={__('Open Editor', 'publisher-core')}
+								onClick={() => {
+									toggleIsMaximizeVisible();
+								}}
+							>
+								{__('Edit', 'publisher-core')}
+							</span>
+
+							<div
+								className={controlInnerClassNames(
+									'input-actions'
+								)}
+							>
+								{getInputActions()}
+							</div>
+						</>
 					) : (
-						<OtherInput
-							value={inputValue}
-							setValue={setInputValue}
-							disabled={disabled}
-							className={controlInnerClassNames(
-								'single-input',
-								noBorder && 'no-border',
-								!isValidValue && 'invalid',
-								className
+						<>
+							{unitValue.format === 'number' ? (
+								<NumberInput
+									value={inputValue}
+									disabled={disabled}
+									className={controlInnerClassNames(
+										'single-input',
+										noBorder && 'no-border',
+										!isValidValue && 'invalid'
+									)}
+									min={min}
+									max={max}
+									setValue={setInputValue}
+									range={isActiveRange}
+									drag={drag}
+									float={float}
+									actions={getInputActions()}
+									{...props}
+								/>
+							) : (
+								<OtherInput
+									value={inputValue}
+									setValue={setInputValue}
+									disabled={disabled}
+									className={controlInnerClassNames(
+										'single-input',
+										noBorder && 'no-border',
+										!isValidValue && 'invalid',
+										className
+									)}
+									actions={getInputActions()}
+									{...props}
+									type={unitValue?.format}
+								/>
 							)}
-							actions={getInputActions()}
-							{...props}
-							type={unitValue?.format}
-						/>
+						</>
 					)}
 				</>
 			) : (

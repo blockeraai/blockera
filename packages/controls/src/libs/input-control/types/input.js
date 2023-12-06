@@ -44,5 +44,6 @@ export type TInputItem = {
 	disabled?: boolean,
 	drag?: boolean,
 	float?: boolean,
+	smallWidth?: boolean,
 	actions?: Node,
 };
