@@ -55,150 +55,169 @@ export const States = {
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 	render: () => {
 		return (
-			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">Notice Control</h2>
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-					}}
-				>
-					<ControlWithHooks
-						Control={NoticeControl}
-						type="information"
-						label="Information"
-						children="Information"
-					/>
-				</ControlContextProvider>
-
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-					}}
-				>
-					<ControlWithHooks
-						Control={NoticeControl}
-						type="success"
-						children="Success"
-						label="Success"
-					/>
-				</ControlContextProvider>
-
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-					}}
-				>
-					<ControlWithHooks
-						Control={NoticeControl}
-						type="error"
-						children="Error"
-						label="Error"
-					/>
-				</ControlContextProvider>
-
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-					}}
-				>
-					<ControlWithHooks
-						Control={NoticeControl}
-						type="warning"
-						children="Warning"
-						label="Warning"
-					/>
-				</ControlContextProvider>
-
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-					}}
-				>
-					<ControlWithHooks
-						Control={NoticeControl}
-						type="information"
-						children="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-						label="Multi-line text"
-					/>
-				</ControlContextProvider>
-
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-					}}
-				>
-					<ControlWithHooks
-						Control={NoticeControl}
-						type="warning"
-						isDismissible={true}
-						children="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-						label="Multi-line text & Dismissible"
-					/>
-				</ControlContextProvider>
-
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-					}}
-				>
-					<ControlWithHooks
-						Control={NoticeControl}
-						type="success"
-						children="Dismissible"
-						isDismissible={true}
-						label="Dismissible"
-					/>
-				</ControlContextProvider>
-
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-					}}
-				>
-					<ControlWithHooks
-						Control={NoticeControl}
-						isDismissible={true}
-						type="error"
-						children="alert on dismiss"
-						onDismiss={() => {
-							// eslint-disable-next-line no-alert
-							alert('Dismiss notice !!');
+			<Flex direction="column" gap="50px">
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">Notice Control</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
 						}}
-						label="Action on dismiss"
-					/>
-				</ControlContextProvider>
+					>
+						<ControlWithHooks
+							Control={NoticeControl}
+							type="information"
+							label="Information"
+							children="Information"
+						/>
+					</ControlContextProvider>
+				</Flex>
 
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-					}}
-				>
-					<ControlWithHooks
-						Control={NoticeControl}
-						type="success"
-						children="Success"
-						showIcon={false}
-						label="No Icon"
-					/>
-				</ControlContextProvider>
+				<Flex direction="column" gap="15px">
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+						}}
+					>
+						<ControlWithHooks
+							Control={NoticeControl}
+							type="success"
+							children="Success"
+							label="Success"
+						/>
+					</ControlContextProvider>
+				</Flex>
+				<Flex direction="column" gap="15px">
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+						}}
+					>
+						<ControlWithHooks
+							Control={NoticeControl}
+							type="error"
+							children="Error"
+							label="Error"
+						/>
+					</ControlContextProvider>
+				</Flex>
 
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-					}}
-				>
-					<ControlWithHooks
-						Control={NoticeControl}
-						type="error"
-						children={
-							<div>
-								<span>Error</span>
-								<p>Lorem ipsum dolor sit amet.</p>
-							</div>
-						}
-						label="JSX Children"
-					/>
-				</ControlContextProvider>
+				<Flex direction="column" gap="15px">
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+						}}
+					>
+						<ControlWithHooks
+							Control={NoticeControl}
+							type="warning"
+							children="Warning"
+							label="Warning"
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="15px">
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+						}}
+					>
+						<ControlWithHooks
+							Control={NoticeControl}
+							type="information"
+							children="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+							label="Multi-line text"
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="15px">
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+						}}
+					>
+						<ControlWithHooks
+							Control={NoticeControl}
+							type="warning"
+							isDismissible={true}
+							children="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+							label="Multi-line text & Dismissible"
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="15px">
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+						}}
+					>
+						<ControlWithHooks
+							Control={NoticeControl}
+							type="success"
+							children="Dismissible"
+							isDismissible={true}
+							label="Dismissible"
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="15px">
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+						}}
+					>
+						<ControlWithHooks
+							Control={NoticeControl}
+							isDismissible={true}
+							type="error"
+							children="alert on dismiss"
+							onDismiss={() => {
+								// eslint-disable-next-line no-alert
+								alert('Dismiss notice !!');
+							}}
+							label="Action on dismiss"
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="15px">
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+						}}
+					>
+						<ControlWithHooks
+							Control={NoticeControl}
+							type="success"
+							children="Success"
+							showIcon={false}
+							label="No Icon"
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="15px">
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+						}}
+					>
+						<ControlWithHooks
+							Control={NoticeControl}
+							type="error"
+							children={
+								<div>
+									<span>Error</span>
+									<p>Lorem ipsum dolor sit amet.</p>
+								</div>
+							}
+							label="JSX Children"
+						/>
+					</ControlContextProvider>
+				</Flex>
 			</Flex>
 		);
 	},

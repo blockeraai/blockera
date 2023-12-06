@@ -118,7 +118,7 @@ NoticeControl.propTypes = {
 		'error',
 	]): any),
 	/**
-	 * string or jsx to place in content
+	 * string or jsx to place in content.If you pass empty value, component will not render.
 	 */
 	children: PropTypes.string.isRequired,
 	/**
