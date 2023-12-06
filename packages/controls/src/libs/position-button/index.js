@@ -151,6 +151,7 @@ PositionButtonControl.propTypes = {
 
 PositionButtonControl.defaultProps = {
 	popoverLabel: (__('Setting', 'publisher-core'): any),
+	alignmentMatrixLabel: (__('Position', 'publisher-core'): any),
 	defaultValue: {
 		top: '',
 		left: '',
