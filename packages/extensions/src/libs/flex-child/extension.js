@@ -144,6 +144,7 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 														newValue
 													),
 											}}
+											smallWidth={true}
 										/>
 									</ControlContextProvider>
 									<ControlContextProvider
@@ -179,6 +180,7 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 														newValue
 													),
 											}}
+											smallWidth={true}
 										/>
 									</ControlContextProvider>
 									<ControlContextProvider
@@ -213,6 +215,7 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 														newValue
 													),
 											}}
+											smallWidth={true}
 										/>
 									</ControlContextProvider>
 								</>
@@ -356,6 +359,7 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 														newValue
 													),
 											}}
+											smallWidth={true}
 										/>
 									</ControlContextProvider>
 								)}

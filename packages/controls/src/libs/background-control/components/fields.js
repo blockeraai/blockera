@@ -214,6 +214,7 @@ const Fields: FieldItem = memo<FieldItem>(
 												},
 											})
 										}
+										smallWidth={true}
 									/>
 
 									<InputControl
@@ -237,6 +238,7 @@ const Fields: FieldItem = memo<FieldItem>(
 												},
 											})
 										}
+										smallWidth={true}
 									/>
 								</Flex>
 							)}

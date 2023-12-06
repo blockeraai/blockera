@@ -120,6 +120,7 @@ export default function AlignmentMatrixControl({
 
 								return newValue;
 							}}
+							smallWidth={true}
 						/>
 
 						<InputControl
@@ -138,6 +139,7 @@ export default function AlignmentMatrixControl({
 
 								return newValue;
 							}}
+							smallWidth={true}
 						/>
 					</Flex>
 				</div>

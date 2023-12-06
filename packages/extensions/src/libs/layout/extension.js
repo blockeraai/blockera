@@ -517,6 +517,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 																	}
 																),
 														}}
+														smallWidth={true}
 													/>
 												</BaseControl>
 
@@ -550,6 +551,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 																	}
 																),
 														}}
+														smallWidth={true}
 													/>
 												</BaseControl>
 											</Flex>

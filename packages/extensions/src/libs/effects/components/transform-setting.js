@@ -88,6 +88,7 @@ export const TransformSettings = ({
 									newValue
 								),
 						}}
+						smallWidth={true}
 					/>
 					<Button
 						label={__('Self Perspective Origin', 'publisher-core')}
@@ -182,6 +183,7 @@ export const TransformSettings = ({
 									newValue
 								),
 						}}
+						smallWidth={true}
 					/>
 					<Button
 						onClick={() => {
