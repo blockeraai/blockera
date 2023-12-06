@@ -902,12 +902,24 @@ describe('Typography Extension', () => {
 			});
 
 			cy.getByDataTest('popover-body').within(() => {
-				cy.get('input[type="number"]').eq(0).clear();
-				cy.get('input[type="number"]').eq(0).type(2);
-				cy.get('input[type="number"]').eq(1).clear();
-				cy.get('input[type="number"]').eq(1).type(3);
-				cy.get('input[type="number"]').eq(2).clear();
-				cy.get('input[type="number"]').eq(2).type(4);
+				/* eslint-disable cypress/unsafe-to-chain-command */
+				cy.get('[aria-label="Vertical Distance"]')
+					.clear()
+					.type(2)
+					.should('have.value', '2');
+
+				/* eslint-disable cypress/unsafe-to-chain-command */
+				cy.get('[aria-label="Horizontal Distance"]')
+					.clear()
+					.type(3)
+					.should('have.value', '3');
+
+				/* eslint-disable cypress/unsafe-to-chain-command */
+				cy.get('[aria-label="Blur Effect"]')
+					.clear()
+					.type(4)
+					.should('have.value', '4');
+
 				cy.getByDataCy('color-btn').click();
 			});
 
@@ -951,12 +963,24 @@ describe('Typography Extension', () => {
 			});
 
 			cy.getByDataTest('popover-body').within(() => {
-				cy.get('input[type="number"]').eq(0).clear();
-				cy.get('input[type="number"]').eq(0).type(5);
-				cy.get('input[type="number"]').eq(1).clear();
-				cy.get('input[type="number"]').eq(1).type(6);
-				cy.get('input[type="number"]').eq(2).clear();
-				cy.get('input[type="number"]').eq(2).type(7);
+				/* eslint-disable cypress/unsafe-to-chain-command */
+				cy.get('[aria-label="Vertical Distance"]')
+					.clear()
+					.type(5)
+					.should('have.value', '5');
+
+				/* eslint-disable cypress/unsafe-to-chain-command */
+				cy.get('[aria-label="Horizontal Distance"]')
+					.clear()
+					.type(6)
+					.should('have.value', '6');
+
+				/* eslint-disable cypress/unsafe-to-chain-command */
+				cy.get('[aria-label="Blur Effect"]')
+					.clear()
+					.type(7)
+					.should('have.value', '7');
+
 				cy.getByDataCy('color-btn').click();
 			});
 
