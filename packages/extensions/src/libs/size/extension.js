@@ -108,30 +108,27 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 							controlName="input"
 							label={__('Height', 'publisher-core')}
 							columns="columns-2"
-							{...{
-								...props,
-								unitType: 'essential',
-								min: 0,
-								defaultValue: _height,
-								onChange: (newValue) =>
-									handleOnChangeAttributes(
-										'publisherHeight',
-										newValue,
-										'',
-										(
-											attributes: Object,
-											setAttributes: (
-												attributes: Object
-											) => void
-										): void =>
-											setAttributes({
-												...attributes,
-												height: convertToPercent(
-													newValue
-												),
-											})
-									),
-							}}
+							unitType="essential"
+							min={0}
+							defaultValue={_height}
+							onChange={(newValue) =>
+								handleOnChangeAttributes(
+									'publisherHeight',
+									newValue,
+									'',
+									(
+										attributes: Object,
+										setAttributes: (
+											attributes: Object
+										) => void
+									): void =>
+										setAttributes({
+											...attributes,
+											height: convertToPercent(newValue),
+										})
+								)
+							}
+							{...props}
 						/>
 					</ControlContextProvider>
 				)}
@@ -284,51 +281,43 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										className="control-first label-center small-gap"
 										label={__('Width', 'publisher-core')}
 										style={{ margin: '0px' }}
-										{...{
-											...props,
-											type: 'number',
-											min: 0,
-											defaultValue: ratio.width || '',
-
-											onChange: (newValue) =>
-												handleOnChangeAttributes(
-													'publisherRatio',
-													{
-														...ratio,
-														width: newValue,
-													}
-												),
-										}}
+										type="number"
+										min={0}
+										defaultValue=""
+										onChange={(newValue) =>
+											handleOnChangeAttributes(
+												'publisherRatio',
+												{
+													...ratio,
+													width: newValue,
+												}
+											)
+										}
+										{...props}
 									/>
 
 									<p className="publisher-colon">:</p>
 
-									<BaseControl
-										controlName="input"
+									<InputControl
+										id="height"
 										columns="columns-1"
 										className="control-first label-center small-gap"
 										label={__('Height', 'publisher-core')}
-									>
-										<InputControl
-											id="height"
-											style={{ margin: '0px' }}
-											{...{
-												...props,
-												min: 0,
-												type: 'number',
-												defaultValue:
-													ratio.height || '',
-												onChange: (newValue) =>
-													handleOnChangeAttributes(
-														'publisherRatio',
-														{
-															...ratio,
-															height: newValue,
-														}
-													),
-											}}
-										/>
-									</BaseControl>
+										style={{ margin: '0px' }}
+										min={0}
+										type="number"
+										defaultValue=""
+										onChange={(newValue) =>
+											handleOnChangeAttributes(
+												'publisherRatio',
+												{
+													...ratio,
+													height: newValue,
+												}
+											)
+										}
+										{...props}
+									/>
 								</Flex>
 							)}
 						</BaseControl>
@@ -350,51 +339,44 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 							<SelectControl
 								controlName="select"
 								columns="columns-1"
-								{...{
-									...props,
-									options: [
-										{
-											label: __('Auto', 'publisher-core'),
-											value: '',
-										},
-										{
-											label: __('Fill', 'publisher-core'),
-											value: 'fill',
-										},
-										{
-											label: __(
-												'Contain',
-												'publisher-core'
-											),
-											value: 'contain',
-										},
-										{
-											label: __(
-												'Cover',
-												'publisher-core'
-											),
-											value: 'cover',
-										},
-										{
-											label: __('None', 'publisher-core'),
-											value: 'none',
-										},
-										{
-											label: __(
-												'Scale Down',
-												'publisher-core'
-											),
-											value: 'scale-down',
-										},
-									], //
-									type: 'native',
-									defaultValue: '',
-									onChange: (newValue) =>
-										handleOnChangeAttributes(
-											'publisherFit',
-											newValue
+								{...props}
+								options={[
+									{
+										label: __('Auto', 'publisher-core'),
+										value: '',
+									},
+									{
+										label: __('Fill', 'publisher-core'),
+										value: 'fill',
+									},
+									{
+										label: __('Contain', 'publisher-core'),
+										value: 'contain',
+									},
+									{
+										label: __('Cover', 'publisher-core'),
+										value: 'cover',
+									},
+									{
+										label: __('None', 'publisher-core'),
+										value: 'none',
+									},
+									{
+										label: __(
+											'Scale Down',
+											'publisher-core'
 										),
-								}}
+										value: 'scale-down',
+									},
+								]}
+								type="native"
+								defaultValue=""
+								onChange={(newValue) =>
+									handleOnChangeAttributes(
+										'publisherFit',
+										newValue
+									)
+								}
 							/>
 							<ControlContextProvider
 								value={{
