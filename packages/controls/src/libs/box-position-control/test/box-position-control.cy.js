@@ -270,7 +270,7 @@ describe('box position control component testing', () => {
 				cy.get('@Position')
 					.invoke('text')
 					.then((text) => {
-						expect(text.trim()).to.eq('CSS...');
+						expect(text.trim()).to.eq('CSS');
 					});
 			});
 		});
