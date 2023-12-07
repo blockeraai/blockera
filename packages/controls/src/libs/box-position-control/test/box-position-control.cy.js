@@ -430,4 +430,45 @@ describe('box position control component testing', () => {
 			});
 		});
 	});
+
+	describe('sticky', () => {
+		it('should render the suggestion for sticky position', () => {
+			const name = nanoid();
+			cy.withDataProvider({
+				component: <BoxPositionControl label="My Label" />,
+				name,
+			});
+
+			cy.get('.publisher-control-select').click();
+			cy.get('ul > li').contains('Sticky').click();
+
+			// check sticky to top
+			cy.getByDataCy('stick-to-top').click();
+			cy.then(() => {
+				return expect(getControlValue(name)).to.deep.eq({
+					type: 'sticky',
+					position: {
+						top: '0px',
+						right: '',
+						bottom: '',
+						left: '',
+					},
+				});
+			});
+
+			// check sticky to bottom
+			cy.getByDataCy('stick-to-bottom').click();
+			cy.then(() => {
+				return expect(getControlValue(name)).to.deep.eq({
+					type: 'sticky',
+					position: {
+						top: '',
+						right: '',
+						bottom: '0px',
+						left: '',
+					},
+				});
+			});
+		});
+	});
 });

@@ -725,6 +725,70 @@ const Component = ({
 							</Grid>
 						</Flex>
 					)}
+
+					{value.type === 'sticky' && (
+						<Flex
+							direction="row"
+							justifyContent="center"
+							alignItems="flex-start"
+							gap="20px"
+							style={{
+								marginTop: '10px',
+							}}
+						>
+							<Grid
+								gridTemplateColumns="repeat(2, 1fr)"
+								gap="10px"
+							>
+								<Button
+									aria-label={__(
+										'Stick To Top',
+										'publisher-core'
+									)}
+									className="position-quick-btn"
+									size="small"
+									data-cy="stick-to-top"
+									onClick={() => {
+										setValue({
+											...value,
+											position: {
+												...value.position,
+												top: '0px',
+												right: '',
+												bottom: '',
+												left: '',
+											},
+										});
+									}}
+								>
+									<AbsoluteTopIcon />
+								</Button>
+								<Button
+									aria-label={__(
+										'Stick To Bottom',
+										'publisher-core'
+									)}
+									className="position-quick-btn"
+									size="small"
+									data-cy="stick-to-bottom"
+									onClick={() => {
+										setValue({
+											...value,
+											position: {
+												...value.position,
+												top: '',
+												right: '',
+												bottom: '0px',
+												left: '',
+											},
+										});
+									}}
+								>
+									<AbsoluteBottomIcon />
+								</Button>
+							</Grid>
+						</Flex>
+					)}
 				</div>
 			)}
 		</div>
