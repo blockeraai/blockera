@@ -50,7 +50,7 @@ export const Border = ({
 							attributes.borderColor ||
 							attributes?.style?.border?.color,
 						width: newValue?.all?.width,
-						style: newValue?.all?.style,
+						style: newValue?.all?.width ? newValue?.all?.style : '',
 					},
 				},
 			};
@@ -72,22 +72,30 @@ export const Border = ({
 						top: {
 							width: newValue?.top?.width,
 							color: newValue?.top?.color,
-							style: newValue?.top?.style,
+							style: newValue?.top?.width
+								? newValue?.top?.style
+								: '',
 						},
 						right: {
 							width: newValue?.right?.width,
 							color: newValue?.right?.color,
-							style: newValue?.right?.style,
+							style: newValue?.right?.width
+								? newValue?.right?.style
+								: '',
 						},
 						bottom: {
 							width: newValue?.bottom?.width,
 							color: newValue?.bottom?.color,
-							style: newValue?.bottom?.style,
+							style: newValue?.bottom?.width
+								? newValue?.bottom?.style
+								: '',
 						},
 						left: {
 							width: newValue?.left?.width,
 							color: newValue?.left?.color,
-							style: newValue?.left?.style,
+							style: newValue?.left?.width
+								? newValue?.left?.style
+								: '',
 						},
 					},
 				},
