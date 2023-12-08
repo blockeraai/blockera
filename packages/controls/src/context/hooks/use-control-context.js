@@ -152,12 +152,24 @@ export const useControlContext = (args) => {
 			}
 		}
 
-		// eslint-disable-next-line no-nested-ternary
-		return isUndefined(id)
-			? savedValue
-			: isEmpty(savedValue)
-			? defaultValue
-			: prepare(id, savedValue) || defaultValue;
+		if (isUndefined(id)) {
+			if (isEmpty(savedValue)) {
+				return defaultValue;
+			}
+
+			return savedValue;
+		}
+
+		if (isEmpty(savedValue)) {
+			return defaultValue;
+		}
+
+		const prep = prepare(id, savedValue);
+		if (prep !== '' && !isUndefined(prep)) {
+			return prep;
+		}
+
+		return defaultValue;
 	}
 
 	return {
