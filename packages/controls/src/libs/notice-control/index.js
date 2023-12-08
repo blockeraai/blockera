@@ -4,7 +4,6 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
-import type { MixedElement } from 'react';
 import { useState } from '@wordpress/element';
 
 /**
@@ -12,6 +11,7 @@ import { useState } from '@wordpress/element';
  */
 import { Flex } from '@publisher/components';
 import { isFunction } from '@publisher/utils';
+import { controlClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -31,8 +31,10 @@ export default function NoticeControl({
 	children,
 	isDismissible,
 	onDismiss,
-}: TNoticeControlProps): MixedElement {
-	const [isShown, setIsShown] = useState(children ? true : false);
+	isShown: _isShown,
+	onShown,
+}: TNoticeControlProps): any {
+	const [isShown, setIsShown] = useState(_isShown);
 
 	const handleOnDismiss = () => {
 		if (isFunction(onDismiss)) {
@@ -41,8 +43,11 @@ export default function NoticeControl({
 		setIsShown(false);
 	};
 
+	if (isShown && children && isFunction(onShown)) onShown();
+
 	return (
-		isShown && (
+		isShown &&
+		children && (
 			<BaseControl
 				label={label}
 				columns={columns}
@@ -52,11 +57,16 @@ export default function NoticeControl({
 				<Flex
 					alignItems="flex-start"
 					gap="8px"
-					className={`publisher-notice-control publisher-${type}`}
+					className={`${controlClassNames(
+						'notice'
+					)} publisher-${type}`}
 					data-test="notice-control"
 				>
 					{showIcon && (
-						<span data-test="notice-control-icon">
+						<span
+							data-test="notice-control-icon"
+							className="notice-control-icon"
+						>
 							{NoticeIcon(type)}
 						</span>
 					)}
@@ -68,7 +78,7 @@ export default function NoticeControl({
 					</div>
 					{isDismissible && (
 						<span
-							className="notice-control-dismiss"
+							className="notice-control-icon dismiss"
 							onClick={handleOnDismiss}
 							data-test="notice-control-dismiss"
 						>
@@ -125,10 +135,19 @@ NoticeControl.propTypes = {
 	 * flag to show dismiss or not
 	 */
 	isDismissible: PropTypes.bool,
+	/**
+	 * flag to render control or not
+	 */
+	isShown: PropTypes.bool,
+	/**
+	 * Function that will be fired when control rendered
+	 */
+	onShown: PropTypes.func,
 };
 
 NoticeControl.defaultProps = {
 	type: 'warning',
 	showIcon: true,
 	isDismissible: false,
+	isShown: true,
 };

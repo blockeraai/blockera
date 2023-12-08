@@ -10,18 +10,18 @@
 
 }
 
-.publisher-notice-control {
+.publisher-control-notice {
 	width: 250px;
 	padding: 12px 11px !important;
 
-	span {
+	.notice-control-icon {
 		width: 19px;
 		height: 16px;
 	    display: flex;
         align-items: center;
         justify-content: center;
 
-	  &.notice-control-dismiss {
+	  &.dismiss {
 		cursor: pointer;
 	  }
 	}
@@ -30,7 +30,7 @@
         background-color: var(--publisher-notice-warning-primary);
         border-left: 2px solid var(--publisher-notice-warning-border);
 
-		span {
+		.notice-control-icon {
 
 			svg {
 				fill: var(--publisher-notice-warning-border);
@@ -42,7 +42,7 @@
 		background-color: var(--publisher-notice-info-primary);
 		border-left: 2px solid var(--publisher-notice-info-border);
 
-        span {
+        .notice-control-icon {
 
 			svg {
 				fill: var(--publisher-notice-info-border);
@@ -54,7 +54,7 @@
 		background-color: var(--publisher-notice-error-primary);
 		border-left: 2px solid var(--publisher-notice-error-border);
 
-		span {
+		.notice-control-icon {
 
 			svg {
 				fill: var(--publisher-notice-error-border);
@@ -66,7 +66,7 @@
 		background-color: var(--publisher-notice-success-primary);
 		border-left: 2px solid var(--publisher-notice-success-border);
 
-    	span {
+    	.notice-control-icon {
 
 			svg {
 				fill: var(--publisher-notice-success-border);

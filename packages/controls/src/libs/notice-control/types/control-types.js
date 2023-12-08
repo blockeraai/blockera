@@ -10,4 +10,6 @@ export type TNoticeControlProps = {
 	type: 'information' | 'warning' | 'success' | 'error',
 	children: string | any,
 	isDismissible?: boolean,
+	onShown: () => {},
+	isShown?: boolean,
 };
