@@ -23,6 +23,14 @@ describe('notice-control component testing', () => {
 			cy.contains('Notice Label').should('exist');
 		});
 
+		it('should not render, when passing false to isShown', () => {
+			cy.withDataProvider({
+				component: <NoticeControl isShown={false} {...defaultProps} />,
+			});
+
+			cy.contains('Notice Label').should('not.exist');
+		});
+
 		context('type', () => {
 			it('should render correctly, when passing information', () => {
 				cy.withDataProvider({
@@ -228,6 +236,22 @@ describe('notice-control component testing', () => {
 			cy.getByDataTest('notice-control-dismiss').click();
 
 			cy.get('@onDismiss').should('have.been.called');
+		});
+
+		it('should onShown be called, when render', () => {
+			const name = nanoid();
+			const defaultProps = {
+				onShown: () => {},
+				children: 'This is a test text.',
+			};
+			cy.stub(defaultProps, 'onShown').as('onShown');
+
+			cy.withDataProvider({
+				component: <NoticeControl {...defaultProps} />,
+				name,
+			});
+
+			cy.get('@onShown').should('have.been.called');
 		});
 	});
 });
