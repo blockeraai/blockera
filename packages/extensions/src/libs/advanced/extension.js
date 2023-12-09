@@ -11,6 +11,7 @@ import type { MixedElement } from 'react';
  */
 import {
 	AttributesControl,
+	CustomPropertyControl,
 	BaseControl,
 	ControlContextProvider,
 } from '@publisher/controls';
@@ -28,11 +29,15 @@ export const AdvancedExtension: TAdvancedProps = memo<TAdvancedProps>(
 		config,
 		children,
 		attributes,
+		properties,
 		handleOnChangeAttributes,
 		...props
 	}: TAdvancedProps): MixedElement => {
 		const {
-			advancedConfig: { publisherAttributes: publisherAttributesConfig },
+			advancedConfig: {
+				publisherAttributes: publisherAttributesConfig,
+				publisherCSSProperties,
+			},
 		} = config;
 
 		return (
@@ -62,6 +67,35 @@ export const AdvancedExtension: TAdvancedProps = memo<TAdvancedProps>(
 								}
 								{...props}
 								attributeElement={'a'}
+							/>
+						</BaseControl>
+					</ControlContextProvider>
+				)}
+
+				{isActiveField(publisherCSSProperties) && (
+					<ControlContextProvider
+						value={{
+							name: generateExtensionId(block, 'properties'),
+							value: properties,
+						}}
+						storeName={'publisher-core/controls/repeater'}
+					>
+						<BaseControl
+							controlName="properties"
+							columns="columns-1"
+						>
+							<CustomPropertyControl
+								label={__(
+									'Custom CSS Properties',
+									'publisher-core'
+								)}
+								onChange={(newValue) =>
+									handleOnChangeAttributes(
+										'publisherCSSProperties',
+										newValue
+									)
+								}
+								{...props}
 							/>
 						</BaseControl>
 					</ControlContextProvider>
