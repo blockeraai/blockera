@@ -53,6 +53,7 @@ export function UnitInput({
 	drag,
 	float,
 	smallWidth,
+	children,
 	...props
 }: TUnitInput): MixedElement {
 	// added to temp to fix rerender
@@ -393,6 +394,7 @@ export function UnitInput({
 			) : (
 				<>{getInputActions()}</>
 			)}
+			{children}
 		</div>
 	);
 }

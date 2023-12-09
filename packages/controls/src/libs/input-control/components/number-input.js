@@ -42,6 +42,7 @@ export function NumberInput({
 	drag = true,
 	float = true,
 	actions = '',
+	children,
 	...props
 }: TNumberInput): MixedElement {
 	// get the minimum value in number type
@@ -284,6 +285,8 @@ export function NumberInput({
 					</div>
 				)}
 			</div>
+
+			{children}
 		</>
 	);
 }

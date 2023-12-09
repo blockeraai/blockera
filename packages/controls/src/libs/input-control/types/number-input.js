@@ -15,4 +15,5 @@ export type TNumberInput = {
 	drag?: boolean,
 	float?: boolean,
 	actions?: Node,
+	children?: Node,
 };

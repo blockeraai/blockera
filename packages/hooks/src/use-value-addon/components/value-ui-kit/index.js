@@ -7,39 +7,72 @@ import type { Element } from 'react';
 /**
  * Publisher dependencies
  */
-import { Flex } from '@publisher/components';
+import {
+	controlClassNames,
+	controlInnerClassNames,
+} from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
 import Pointer from '../pointer';
+import { getVariableIcon } from '../../helpers';
 import type { PointerProps } from '../pointer/types';
-import type { AddonTypes, ValueAddon } from '../../types';
+import type { ValueAddon } from '../../types';
 
 export default function ({
-	types,
 	value,
 	classNames,
 	pointerProps,
 }: {
-	types: AddonTypes,
 	value: ValueAddon,
 	classNames?: string,
 	pointerProps: PointerProps,
 }): Element<any> {
+	const icon = getVariableIcon({
+		type: value?.settings?.type,
+		value: value?.settings?.value,
+	});
+
 	return (
-		<div
-			data-type={JSON.stringify(types)}
-			className={classNames || 'publisher-value-addon-wrapper'}
-		>
-			<Flex
-				direction={'row'}
-				style={{ border: 'solid 1px green' }}
-				justifyContent={'space-between'}
+		<>
+			<div
+				className={controlClassNames(
+					'value-addon-wrapper',
+					'type-' + (value?.valueType || 'unknown'),
+					classNames
+				)}
+				onClick={(event) => {
+					switch (value?.valueType) {
+						case 'variable':
+							if (!pointerProps.isOpenVariables)
+								event.preventDefault();
+
+							pointerProps.setOpenVariables(
+								!pointerProps.isOpenVariables
+							);
+
+							break;
+						case 'dynamic-value':
+							pointerProps.setOpenVariables(
+								!pointerProps.isOpenDynamicValues
+							);
+							event.preventDefault();
+							break;
+					}
+				}}
 			>
-				<Pointer {...pointerProps} />
-				<div>{value?.settings?.name || 'Value Addon'}</div>
-			</Flex>
-		</div>
+				{icon && (
+					<span className={controlInnerClassNames('item-icon')}>
+						{icon}
+					</span>
+				)}
+
+				<span className={controlClassNames('item-name')}>
+					<>{value?.settings?.name || 'Value Addon'}</>
+				</span>
+			</div>
+			<Pointer {...pointerProps} />
+		</>
 	);
 }

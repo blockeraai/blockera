@@ -18,4 +18,5 @@ export type TUnitInput = {
 	float?: boolean,
 	smallWidth?: boolean,
 	actions?: Node,
+	children?: Node,
 };

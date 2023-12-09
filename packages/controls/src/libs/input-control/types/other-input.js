@@ -11,4 +11,5 @@ export type TOtherInput = {
 	disabled?: boolean,
 	validator?: (value: string) => boolean,
 	actions?: Node,
+	children?: Node,
 };

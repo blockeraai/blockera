@@ -74,6 +74,8 @@ if ( ! function_exists( 'pb_get_value_addon_real_value' ) ) {
 			return substr( $value, -4 ) === 'func' ? substr( $value, 0, -4 ) : $value;
 		}
 
+		// todo write real data implementation for variable
+
 		return $value;
 	}
 }

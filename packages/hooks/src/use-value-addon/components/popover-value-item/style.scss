@@ -1,0 +1,30 @@
+.publisher-control-value-addon-popover-item {
+	display: flex;
+	height: 30px;
+	flex-direction: row;
+	gap: 8px;
+	padding: 0 12px;
+	border: 1px solid var(--publisher-controls-border-color-soft);
+	border-radius: 2px;
+	align-items: center;
+	cursor: pointer;
+	transition: var(--publisher-controls-transition);
+
+	&:hover {
+		border-color: var(--publisher-controls-border-color-hover);
+	}
+
+	.publisher-control-item-icon {
+		pointer-events: none;
+		display: flex;
+		align-items: center;
+	}
+
+	.publisher-control-item-name {
+		width: 70%;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		pointer-events: none;
+	}
+}

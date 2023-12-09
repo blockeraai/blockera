@@ -28,6 +28,7 @@ export function OtherInput({
 	disabled,
 	validator,
 	actions,
+	children,
 	...props
 }: TOtherInput): MixedElement {
 	const [isValidValue, setIsValidValue] = useState(true);
@@ -66,6 +67,7 @@ export function OtherInput({
 			<div className={controlInnerClassNames('input-actions')}>
 				{actions}
 			</div>
+			{children}
 		</>
 	);
 }

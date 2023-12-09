@@ -2,17 +2,31 @@
 /**
  * Internal dependencies
  */
-import type { AddonTypesItem } from './use-value-addon-props';
-import type { VariableTypes } from '../components/pointer/types';
+import type {
+	AddonTypesItem,
+	DynamicValueTypes,
+	VariableTypes,
+} from './use-value-addon-props';
 
 export type ValueAddon = {
 	id: string,
 	settings: {
 		...Object,
 		var?: string,
-		valueType: AddonTypesItem,
+		type: VariableTypes | DynamicValueTypes,
 		reference?: 'preset' | 'custom',
 	},
-	type?: VariableTypes,
+	valueType?: AddonTypesItem,
 	isValueAddon: boolean,
+};
+
+export type VariableItem = {
+	name: string,
+	slug: string,
+	value: string,
+};
+
+export type VariableItems = {
+	name: string,
+	variables: Array<VariableItem>,
 };

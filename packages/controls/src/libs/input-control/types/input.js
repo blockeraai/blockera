@@ -36,7 +36,7 @@ export type TInputItem = {
 	defaultValue: string | number,
 	onChange: (event: Object) => string | number,
 	field?: string,
-	className?: string,
+	className: string,
 	type?: 'text' | 'number',
 	min?: number,
 	max?: number,
@@ -46,4 +46,8 @@ export type TInputItem = {
 	float?: boolean,
 	smallWidth?: boolean,
 	actions?: Node,
+	controlAddonTypes?: Array<string>,
+	variableTypes?: Array<string>,
+	dynamicValueTypes?: Array<string>,
+	children?: Node,
 };

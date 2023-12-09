@@ -1156,6 +1156,75 @@ export const CssInput = {
 	),
 };
 
+export const ValueAddon = {
+	args: {
+		controlInfo: {
+			name: nanoid(),
+			value: 'text',
+		},
+		type: 'text',
+		defaultValue: 'default',
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => (
+		<Flex direction="column" gap="50px">
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">
+					Value Addon<span>Variable</span>
+				</h2>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 'hello',
+					}}
+				>
+					<ControlWithHooks
+						Control={InputControl}
+						type="text"
+						label="Field"
+						{...args}
+						defaultValue=""
+						controlAddonTypes={['variable', 'dynamic-value']}
+						variableTypes={['FONT_SIZE']}
+						dynamicValueTypes={['TEXT']}
+					/>
+				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: {
+							settings: {
+								name: 'Medium',
+								size: 20,
+								slug: 'medium',
+								reference: 'preset',
+								var: 'var:preset|font-size|medium',
+								type: 'FONT_SIZE',
+							},
+							id: 'medium',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
+					}}
+				>
+					<ControlWithHooks
+						Control={InputControl}
+						type="text"
+						label="Field"
+						{...args}
+						defaultValue=""
+						controlAddonTypes={['variable', 'dynamic-value']}
+						variableTypes={['FONT_SIZE', 'GRADIENT']}
+						dynamicValueTypes={['TEXT']}
+					/>
+				</ControlContextProvider>
+			</Flex>
+		</Flex>
+	),
+};
+
 export const PlayNumber = {
 	args: {
 		type: 'number',

@@ -10,6 +10,7 @@ import type { MixedElement } from 'react';
  */
 import { isEmpty, isUndefined } from '@publisher/utils';
 import { controlClassNames } from '@publisher/classnames';
+import { useValueAddon } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -42,6 +43,12 @@ export default function InputControl({
 	drag = true,
 	float = true,
 	smallWidth = false,
+	//
+	controlAddonTypes,
+	variableTypes,
+	dynamicValueTypes,
+	//
+	children,
 	...props
 }: TInputItem): MixedElement {
 	const { value, setValue } = useControlContext({
@@ -49,6 +56,42 @@ export default function InputControl({
 		defaultValue,
 		onChange,
 	});
+
+	const {
+		valueAddonClassNames,
+		isSetValueAddon,
+		ValueAddonUI,
+		ValueAddonPointer,
+	} = useValueAddon({
+		types: controlAddonTypes,
+		value,
+		variableTypes,
+		dynamicValueTypes,
+		onChange: setValue,
+	});
+
+	if (isSetValueAddon()) {
+		return (
+			<BaseControl
+				label={label}
+				columns={columns}
+				controlName={field}
+				className={className}
+			>
+				<div
+					className={controlClassNames(
+						'input',
+						range && 'input-range',
+						noBorder && 'no-border',
+						className,
+						valueAddonClassNames
+					)}
+				>
+					<ValueAddonUI />
+				</div>
+			</BaseControl>
+		);
+	}
 
 	// add css units
 	if (unitType !== '' && (isUndefined(units) || isEmpty(units))) {
@@ -60,7 +103,7 @@ export default function InputControl({
 			label={label}
 			columns={columns}
 			controlName={field}
-			className={className}
+			className={className + ' ' + valueAddonClassNames}
 		>
 			{!isEmpty(units) ? (
 				<UnitInput
@@ -70,7 +113,7 @@ export default function InputControl({
 					setValue={setValue}
 					defaultValue={defaultValue}
 					noBorder={noBorder}
-					className={className}
+					className={className + ' ' + valueAddonClassNames}
 					disabled={disabled}
 					validator={validator}
 					min={min}
@@ -78,8 +121,11 @@ export default function InputControl({
 					drag={drag}
 					float={float}
 					smallWidth={smallWidth}
+					children={children}
 					{...props}
-				/>
+				>
+					<ValueAddonPointer />
+				</UnitInput>
 			) : (
 				<>
 					{type === 'number' ? (
@@ -88,7 +134,8 @@ export default function InputControl({
 								'input',
 								'input-number',
 								range && 'is-range-active',
-								className
+								className,
+								valueAddonClassNames
 							)}
 						>
 							<NumberInput
@@ -103,14 +150,18 @@ export default function InputControl({
 								drag={drag}
 								float={float}
 								{...props}
-							/>
+							>
+								<ValueAddonPointer />
+							</NumberInput>
+							{children}
 						</div>
 					) : (
 						<div
 							className={controlClassNames(
 								'input',
 								'input-' + type,
-								className
+								className,
+								valueAddonClassNames
 							)}
 						>
 							<OtherInput
@@ -121,7 +172,10 @@ export default function InputControl({
 								disabled={disabled}
 								validator={validator}
 								{...props}
-							/>
+							>
+								<ValueAddonPointer />
+							</OtherInput>
+							{children}
 						</div>
 					)}
 				</>
@@ -233,4 +287,5 @@ InputControl.defaultProps = {
 	drag: true,
 	field: 'input',
 	defaultValue: '',
+	className: '',
 };

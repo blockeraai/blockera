@@ -8,7 +8,7 @@ export type ValueAddonProps = {
 	/**
 	 * The css class names.
 	 */
-	classNames: string,
+	valueAddonClassNames: string,
 	/**
 	 * The value pointer as react element.
 	 */
@@ -16,7 +16,7 @@ export type ValueAddonProps = {
 	/**
 	 * Has set control value?
 	 */
-	issetValueAddon: () => boolean,
+	isSetValueAddon: () => boolean,
 	/**
 	 * The control addon user interface to show addon value like: css variables or any other core entity value of WordPress as react component.
 	 */
@@ -33,11 +33,10 @@ export type ValueAddonProps = {
 	/**
 	 * Handle on click icon of dynamic values on control.
 	 *
-	 * TODO: please uncomment after final implements DynamicValuePicker component.
 	 * The callback function
 	 */
-	// handleOnClickDynamicValue: (
-	// 	// eslint-disable-next-line
-	// 	event: SyntheticMouseEvent<EventTarget>
-	// ) => void,
+	handleOnClickDynamicValue: (
+		// eslint-disable-next-line
+		event: SyntheticMouseEvent<EventTarget>
+	) => void,
 };

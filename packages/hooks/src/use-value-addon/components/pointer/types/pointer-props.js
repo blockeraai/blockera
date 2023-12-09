@@ -2,17 +2,24 @@
 /**
  * Internal dependencies
  */
-import type { VariableTypes } from './variable-types';
+import type {
+	ValueAddon,
+	VariableTypes,
+	DynamicValueTypes,
+} from '../../../types';
 
 export type PointerProps = {
+	value: ValueAddon,
 	types: Array<'variable' | 'dynamic-value'>,
-	variableType: VariableTypes,
-	dynamicValueType: string,
-	/**
-	 * TODO: please uncomment after final implements DynamicValuePicker component.
-	 */
+	variableTypes: Array<VariableTypes>,
+	dynamicValueTypes: Array<DynamicValueTypes>,
 	handleOnClickDynamicValue: (
 		event: SyntheticMouseEvent<EventTarget>
 	) => void,
 	handleOnClickVariable: (event: SyntheticMouseEvent<EventTarget>) => void,
+	handleOnClickRemove: (event: SyntheticMouseEvent<EventTarget>) => void,
+	isOpenVariables: boolean,
+	setOpenVariables: (value: boolean) => void,
+	isOpenDynamicValues: boolean,
+	setOpenDynamicValues: (value: boolean) => void,
 };

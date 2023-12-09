@@ -2,12 +2,12 @@
 /**
  * External dependencies
  */
-import { useState, useEffect } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
  */
-import { isObject } from '@publisher/utils';
+import { isObject, isUndefined, useLateEffect } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -20,13 +20,20 @@ import type { UseValueAddonProps, ValueAddonProps } from './types';
 export const useValueAddon = ({
 	types,
 	value: _value,
-	variableType,
-	dynamicValueType,
+	variableTypes,
+	dynamicValueTypes,
 	onChange,
 }: UseValueAddonProps): {} | ValueAddonProps => {
 	// type is empty
-	if (!types.length) {
-		return {};
+	if (isUndefined(types) || !types.length) {
+		return {
+			isSetValueAddon: () => false,
+			valueAddonClassNames: '',
+			ValueAddonPointer: () => <></>,
+			ValueAddonUI: () => <></>,
+			handleOnClickVariable: () => {},
+			handleOnClickDynamicValue: () => {},
+		};
 	}
 
 	const initialState = isObject(_value)
@@ -45,67 +52,110 @@ export const useValueAddon = ({
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const [value, setValue] = useState(initialState);
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	const [isOpenVariables, setOpenVariables] = useState(false);
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	const [isOpenDynamicValues, setOpenDynamicValues] = useState(false);
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
-	useEffect(() => {
+	useLateEffect(() => {
 		if (isValid(value)) {
 			onChange(value);
+		} else {
+			onChange('');
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [value]);
 
-	const classNames = types
-		.map((type) => `publisher-support-${type}`)
+	const valueAddonClassNames = types
+		.map((type) => `publisher-value-addon-support-${type}`)
 		.join(' ');
+
 	const handleOnClickVariable = (
 		event: SyntheticMouseEvent<EventTarget>
 	): void => {
+		if (event.target !== event.currentTarget) {
+			return;
+		}
+
 		// $FlowFixMe
-		const variable = JSON.parse(event.target.getAttribute('data-variable'));
+		const item = JSON.parse(event.target.getAttribute('data-item'));
 
 		setValue({
 			settings: {
-				...variable,
+				...item,
 			},
-			id: variable.slug,
+			id: item.slug,
 			isValueAddon: true,
 			valueType: 'variable',
 		});
+
+		setOpenVariables(false);
 	};
+
 	const handleOnClickDynamicValue = (
 		event: SyntheticMouseEvent<EventTarget>
 	): void => {
-		/**
-		 * TODO: please complete this handler after final implements DynamicValuePicker component.
-		 */
-		console.log(event);
+		if (event.target !== event.currentTarget) {
+			return;
+		}
+
+		// $FlowFixMe
+		const item = JSON.parse(event.target.getAttribute('data-item'));
+
+		setValue({
+			settings: {
+				...item,
+			},
+			id: item.slug,
+			isValueAddon: true,
+			valueType: 'dynamic-value',
+		});
+
+		setOpenDynamicValues(false);
 	};
 
+	const handleOnClickRemove = (): void => {
+		setValue({
+			isValueAddon: false,
+			valueType: null,
+			id: null,
+			settings: {},
+		});
+		setOpenVariables(false);
+		setOpenDynamicValues(false);
+	};
+
+	if (typeof variableTypes === 'string') {
+		variableTypes = [variableTypes];
+	}
+
 	const pointerProps: PointerProps = {
+		value,
 		types,
-		variableType,
-		dynamicValueType,
+		variableTypes:
+			typeof variableTypes === 'string' ? [variableTypes] : variableTypes,
+		dynamicValueTypes:
+			typeof dynamicValueTypes === 'string'
+				? [dynamicValueTypes]
+				: dynamicValueTypes,
 		handleOnClickVariable,
 		handleOnClickDynamicValue,
+		handleOnClickRemove,
+		isOpenVariables,
+		setOpenVariables,
+		isOpenDynamicValues,
+		setOpenDynamicValues,
 	};
 
 	return {
-		classNames,
+		valueAddonClassNames,
 		ValueAddonPointer: () => <Pointer {...pointerProps} />,
-		issetValueAddon: () => isValid(value),
+		isSetValueAddon: () => isValid(value),
 		ValueAddonUI: () => (
-			<ValueUIKit
-				pointerProps={pointerProps}
-				{...{
-					value,
-					types,
-				}}
-			/>
+			<ValueUIKit pointerProps={pointerProps} value={value} />
 		),
 		handleOnClickVariable,
-		/**
-		 * TODO: please uncomment below property after final implements DynamicValuePicker component.
-		 */
-		// handleOnClickDynamicValue,
+		handleOnClickDynamicValue,
 	};
 };
