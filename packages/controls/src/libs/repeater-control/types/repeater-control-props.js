@@ -9,14 +9,15 @@ type ID = string | number;
 export type TRepeaterControlProps = {
 	design: 'minimal',
 	mode: 'popover' | 'accordion',
-	popoverLabel?: string,
+	popoverTitle?: string,
+	addNewButtonLabel?: string,
 	popoverClassName?: string,
 	maxItems?: number,
 	minItems?: number,
-	actionButtonAdd?: Boolean | true,
-	actionButtonVisibility?: Boolean | true,
-	actionButtonDelete?: Boolean | true,
-	actionButtonClone?: Boolean | true,
+	actionButtonAdd?: boolean | true,
+	actionButtonVisibility?: boolean | true,
+	actionButtonDelete?: boolean | true,
+	actionButtonClone?: boolean | true,
 	injectHeaderButtonsStart?: MixedElement | null | string,
 	injectHeaderButtonsEnd?: MixedElement | null | string,
 	//
@@ -40,5 +41,5 @@ export type TRepeaterDefaultStateProps = {
 	repeaterItems?: Array<mixed>,
 	repeaterId?: ID,
 	customProps?: Object,
-	popoverLabel: string,
+	popoverTitle: string,
 };

@@ -23,7 +23,7 @@ import type { TBackgroundControlProps } from './types';
 export default function BackgroundControl({
 	defaultValue,
 	defaultRepeaterItemValue,
-	popoverLabel,
+	popoverTitle,
 	className,
 	...props
 }: TBackgroundControlProps): MixedElement {
@@ -76,11 +76,12 @@ export default function BackgroundControl({
 		<RepeaterControl
 			defaultValue={defaultValue}
 			className={controlClassNames('background', className)}
-			popoverLabel={popoverLabel}
+			popoverTitle={popoverTitle}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			popoverClassName={controlClassNames('background-popover')}
+			addNewButtonLabel={__('Add New Background', 'publisher-core')}
 			{...props}
 			valueCleanup={valueCleanup}
 		/>
@@ -143,7 +144,7 @@ BackgroundControl.propTypes = {
 	/**
 	 * Label for popover
 	 */
-	popoverLabel: PropTypes.string,
+	popoverTitle: PropTypes.string,
 };
 
 BackgroundControl.defaultProps = {
@@ -182,5 +183,5 @@ BackgroundControl.defaultProps = {
 		isVisible: true,
 	},
 	// $FlowFixMe
-	popoverLabel: __('Background', 'publisher-core'),
+	popoverTitle: __('Background', 'publisher-core'),
 };

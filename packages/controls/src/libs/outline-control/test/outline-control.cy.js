@@ -92,7 +92,7 @@ describe('outline control component testing', () => {
 
 		it('should popover not be open at first rendering, when passing false to isOpen(default)', () => {
 			cy.withDataProvider({
-				component: <OutlineControl popoverLabel="Outline Popover" />,
+				component: <OutlineControl popoverTitle="Outline Popover" />,
 				store: STORE_NAME,
 				value: [
 					{
@@ -113,7 +113,7 @@ describe('outline control component testing', () => {
 
 		it('should popover be open at first rendering, when passing true to isOpen', () => {
 			cy.withDataProvider({
-				component: <OutlineControl popoverLabel="Outline Popover" />,
+				component: <OutlineControl popoverTitle="Outline Popover" />,
 				store: STORE_NAME,
 				value: [
 					{

@@ -23,7 +23,7 @@ import type { TAttributesControlProps } from './types';
 export default function AttributesControl({
 	id,
 	defaultRepeaterItemValue,
-	popoverLabel,
+	popoverTitle,
 	//
 	className,
 	...props
@@ -31,10 +31,11 @@ export default function AttributesControl({
 	return (
 		<RepeaterControl
 			id={id}
-			popoverLabel={popoverLabel}
+			popoverTitle={popoverTitle}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
+			addNewButtonLabel={__('Add New HTML Attribute', 'publisher-core')}
 			// custom prop for this control
 			className={controlClassNames('attributes', className)}
 			{...props}
@@ -67,7 +68,7 @@ AttributesControl.propTypes = {
 	/**
 	 * Label for popover
 	 */
-	popoverLabel: PropTypes.string,
+	popoverTitle: PropTypes.string,
 };
 
 AttributesControl.defaultProps = {
@@ -78,5 +79,5 @@ AttributesControl.defaultProps = {
 		value: '',
 		isVisible: true,
 	},
-	popoverLabel: (__('HTML Attribute', 'publisher-core'): any),
+	popoverTitle: (__('HTML Attribute', 'publisher-core'): any),
 };

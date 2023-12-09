@@ -13,7 +13,7 @@ export type TItem = {
 export type TBoxShadowControlProps = {
 	id?: string,
 	defaultRepeaterItemValue?: TItem,
-	popoverLabel?: string,
+	popoverTitle?: string,
 	className?: string,
 	defaultValue?: Array<Object>,
 	onChange?: () => {},

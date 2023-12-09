@@ -373,7 +373,7 @@ describe('transition control component testing', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: (
-					<TransitionControl popoverLabel="Transition Control" />
+					<TransitionControl popoverTitle="Transition Control" />
 				),
 				value: [
 					{
@@ -395,7 +395,7 @@ describe('transition control component testing', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: (
-					<TransitionControl popoverLabel="Transition Control" />
+					<TransitionControl popoverTitle="Transition Control" />
 				),
 				value: [
 					{

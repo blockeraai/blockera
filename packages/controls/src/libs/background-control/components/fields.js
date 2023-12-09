@@ -655,8 +655,12 @@ const Fields: FieldItem = memo<FieldItem>(
 								className={controlClassNames(
 									'mesh-gradient-background'
 								)}
-								popoverLabel={__(
+								popoverTitle={__(
 									'Mesh Gradient Color',
+									'publisher-color'
+								)}
+								addNewButtonLabel={__(
+									'Add New Mesh Gradient Color',
 									'publisher-color'
 								)}
 								repeaterItemHeader={MeshGradientHeader}

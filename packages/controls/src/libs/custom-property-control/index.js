@@ -24,7 +24,7 @@ import PropertyIcon from './icons/property';
 export default function CustomPropertyControl({
 	id,
 	defaultRepeaterItemValue,
-	popoverLabel,
+	popoverTitle,
 	//
 	className,
 	...props
@@ -32,7 +32,8 @@ export default function CustomPropertyControl({
 	return (
 		<RepeaterControl
 			id={id}
-			popoverLabel={popoverLabel}
+			popoverTitle={popoverTitle}
+			addNewButtonLabel={__('Add New CSS Property', 'publisher-core')}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
@@ -66,7 +67,7 @@ CustomPropertyControl.propTypes = {
 	/**
 	 * Label for popover
 	 */
-	popoverLabel: PropTypes.string,
+	popoverTitle: PropTypes.string,
 };
 
 CustomPropertyControl.defaultProps = {
@@ -76,7 +77,7 @@ CustomPropertyControl.defaultProps = {
 		value: '',
 		isVisible: true,
 	},
-	popoverLabel: ((
+	popoverTitle: ((
 		<>
 			<PropertyIcon />
 			{__('CSS Property', 'publisher-core')}

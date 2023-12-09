@@ -75,7 +75,7 @@ describe('custom-property-control component testing', () => {
 		it('should popover not be open at first rendering, when passing false to isOpen(default)', () => {
 			cy.withDataProvider({
 				component: (
-					<CustomPropertyControl popoverLabel="Custom CSS Property Popover" />
+					<CustomPropertyControl popoverTitle="Custom CSS Property Popover" />
 				),
 				store: STORE_NAME,
 				value: [{ name: '', value: '', isOpen: false }],
@@ -87,7 +87,7 @@ describe('custom-property-control component testing', () => {
 		it('should popover be open at first rendering, when passing true to isOpen', () => {
 			cy.withDataProvider({
 				component: (
-					<CustomPropertyControl popoverLabel="Custom CSS Property Popover" />
+					<CustomPropertyControl popoverTitle="Custom CSS Property Popover" />
 				),
 				store: STORE_NAME,
 				value: [{ name: '', value: '', isOpen: true }],

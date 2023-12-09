@@ -11,6 +11,6 @@ export type TCustomPropertyControlProps = {
 	defaultValue?: [],
 	onChange?: () => {},
 	defaultRepeaterItemValue?: TItem,
-	popoverLabel?: string,
+	popoverTitle?: string,
 	className?: string,
 };

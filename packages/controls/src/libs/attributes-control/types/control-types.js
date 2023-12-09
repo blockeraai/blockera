@@ -12,6 +12,6 @@ export type TAttributesControlProps = {
 	defaultValue?: [],
 	onChange?: () => {},
 	defaultRepeaterItemValue?: TItem,
-	popoverLabel?: string,
+	popoverTitle?: string,
 	className?: string,
 };
