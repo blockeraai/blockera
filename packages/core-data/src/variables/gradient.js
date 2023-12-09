@@ -7,9 +7,15 @@ import { getBlockEditorSettings } from './selectors';
 export const getGradients = (): Array<{
 	slug: string,
 	name: string,
-	gradient: string,
+	value: string,
 }> => {
-	return getBlockEditorSettings().gradients;
+	return getBlockEditorSettings().gradients.map((item) => {
+		return {
+			name: item.name,
+			slug: item.slug,
+			value: item.gradient,
+		};
+	});
 };
 
 export const getGradient = (
@@ -17,7 +23,7 @@ export const getGradient = (
 ): ?{
 	slug: string,
 	name: string,
-	gradient: string,
+	value: string,
 } => {
 	return getGradients().find((item) => item.name === slug);
 };
@@ -28,7 +34,7 @@ export const getGradientBy = (
 ): ?{
 	slug: string,
 	name: string,
-	gradient: string,
+	value: string,
 } => {
 	return getGradients().find((item) => item[field] === value);
 };
