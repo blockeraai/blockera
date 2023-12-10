@@ -46,6 +46,9 @@ class Parser {
 			'publisherMaxWidth',
 			'publisherMaxHeight',
 			'publisherOverflow',
+			'publisherRatio',
+			'publisherFit',
+			'publisherFitPosition',
 		],
 		'effects'           => [
 			'publisherCursor',

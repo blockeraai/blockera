@@ -14,6 +14,7 @@ import type { TBlockProps } from '../types';
 import { useCssSelector } from '../../hooks';
 import { isActiveField } from '../../api/utils';
 import type { TSizeCssProps } from './types/size-props';
+import { arrayEquals } from '../utils';
 
 interface IConfigs {
 	sizeConfig: {
@@ -21,6 +22,9 @@ interface IConfigs {
 		publisherWidth: string,
 		publisherHeight: string,
 		publisherOverflow: string,
+		publisherRatio: Object,
+		publisherFit: string,
+		publisherFitPosition: Object,
 		publisherMinWidth: string,
 		publisherMinHeight: string,
 		publisherMaxWidth: string,
@@ -39,6 +43,8 @@ export function SizeStyles({
 		publisherMaxWidth,
 		publisherMaxHeight,
 		publisherOverflow,
+		publisherRatio,
+		publisherFit,
 	},
 	blockProps,
 }: IConfigs): string {
@@ -159,6 +165,47 @@ export function SizeStyles({
 			attributes.publisherOverflow.default
 		)
 			properties.overflow = overflow;
+	}
+
+	if (
+		isActiveField(publisherRatio) &&
+		currBlockAttributes.publisherRatio.value !==
+			attributes.publisherRatio.default.value
+	) {
+		switch (currBlockAttributes.publisherRatio.value) {
+			case 'custom':
+				{
+					properties['aspect-ratio'] = `${
+						currBlockAttributes.publisherRatio.width
+					} ${
+						currBlockAttributes.publisherRatio.width &&
+						currBlockAttributes.publisherRatio.height &&
+						' / '
+					} ${currBlockAttributes.publisherRatio.height}`;
+				}
+				break;
+			default:
+				properties['aspect-ratio'] =
+					currBlockAttributes.publisherRatio.value;
+		}
+	}
+
+	if (
+		isActiveField(publisherFit) &&
+		currBlockAttributes.publisherFit !== attributes.publisherFit.default
+	) {
+		properties['object-fit'] = currBlockAttributes.publisherFit;
+	}
+
+	if (
+		!arrayEquals(
+			currBlockAttributes.publisherFitPosition,
+			attributes.publisherFitPosition.default
+		)
+	) {
+		properties[
+			'object-position'
+		] = `${currBlockAttributes.publisherFitPosition.top} ${currBlockAttributes.publisherFitPosition.left}`;
 	}
 
 	if (Object.keys(properties).length > 0) {

@@ -17,6 +17,9 @@ export type TSizeCssProps = {
 	'min-height'?: string,
 	'max-height'?: string,
 	overflow?: string,
+	'aspect-ratio'?: string,
+	'object-fit'?: string,
+	'object-position'?: string,
 };
 
 export type TSizeProps = {
@@ -27,6 +30,9 @@ export type TSizeProps = {
 	maxWidth: string,
 	maxHeight: string,
 	overflow: string,
+	ratio: { value: string, width: string, height: string },
+	fit: string,
+	fitPosition: { top: string, left: string },
 	block: TBlockProps,
 	config: Object,
 	children?: MixedElement,
