@@ -13,7 +13,12 @@ import {
 	ControlContextProvider,
 	InputControl,
 	ToggleSelectControl,
+	SelectControl,
+	BaseControl,
+	convertAlignmentMatrixCoordinates,
+	PositionButtonControl,
 } from '@publisher/controls';
+import { Flex } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -34,12 +39,21 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 		config,
 		overflow,
 		children,
+		ratio,
+		fit,
+		fitPosition,
 		defaultValue: { width: _width, height: _height, overflow: _overflow },
 		handleOnChangeAttributes,
 		...props
 	}: TSizeProps): MixedElement => {
 		const {
-			sizeConfig: { publisherWidth, publisherHeight, publisherOverflow },
+			sizeConfig: {
+				publisherWidth,
+				publisherHeight,
+				publisherOverflow,
+				publisherRatio,
+				publisherFit,
+			},
 		} = config;
 
 		return (
@@ -94,30 +108,27 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 							controlName="input"
 							label={__('Height', 'publisher-core')}
 							columns="columns-2"
-							{...{
-								...props,
-								unitType: 'essential',
-								min: 0,
-								defaultValue: _height,
-								onChange: (newValue) =>
-									handleOnChangeAttributes(
-										'publisherHeight',
-										newValue,
-										'',
-										(
-											attributes: Object,
-											setAttributes: (
-												attributes: Object
-											) => void
-										): void =>
-											setAttributes({
-												...attributes,
-												height: convertToPercent(
-													newValue
-												),
-											})
-									),
-							}}
+							unitType="essential"
+							min={0}
+							defaultValue={_height}
+							onChange={(newValue) =>
+								handleOnChangeAttributes(
+									'publisherHeight',
+									newValue,
+									'',
+									(
+										attributes: Object,
+										setAttributes: (
+											attributes: Object
+										) => void
+									): void =>
+										setAttributes({
+											...attributes,
+											height: convertToPercent(newValue),
+										})
+								)
+							}
+							{...props}
 						/>
 					</ControlContextProvider>
 				)}
@@ -169,6 +180,247 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 								)
 							}
 						/>
+					</ControlContextProvider>
+				)}
+
+				{isActiveField(publisherRatio) && (
+					<ControlContextProvider
+						value={{
+							name: generateExtensionId(block, 'ratio'),
+							value: ratio,
+							type: 'nested',
+						}}
+					>
+						<BaseControl
+							columns="columns-2"
+							controlName="toggle-select"
+							label={__('Ratio', 'publisher-core')}
+						>
+							<SelectControl
+								id="value"
+								controlName="select"
+								aria-label={__('Ratio', 'publisher-core')}
+								{...{
+									...props,
+									options: [
+										{
+											label: __('Auto', 'publisher-core'),
+											value: 'none',
+										},
+										{
+											label: __(
+												'Square 1:1',
+												'publisher-core'
+											),
+											value: '1 / 1',
+										},
+										{
+											label: __(
+												'Standard 4:3',
+												'publisher-core'
+											),
+											value: '4 / 3',
+										},
+										{
+											label: __(
+												'Portrait 3:4',
+												'publisher-core'
+											),
+											value: '3 / 4',
+										},
+										{
+											label: __(
+												'Landscape 3:2',
+												'publisher-core'
+											),
+											value: '3 / 2',
+										},
+										{
+											label: __(
+												'Classic Portrait 2:3',
+												'publisher-core'
+											),
+											value: '2 / 3',
+										},
+										{
+											label: __(
+												'Widescreen 16:9',
+												'publisher-core'
+											),
+											value: '16 / 9',
+										},
+										{
+											label: __(
+												'Tall 9:16',
+												'publisher-core'
+											),
+											value: '9 / 16',
+										},
+										{
+											label: __(
+												'Custom',
+												'publisher-core'
+											),
+											value: 'custom',
+										},
+									], //
+									type: 'native',
+									defaultValue: 'none',
+									onChange: (newValue) =>
+										handleOnChangeAttributes(
+											'publisherRatio',
+											{ ...ratio, value: newValue }
+										),
+								}}
+							/>
+							{ratio.value === 'custom' && (
+								<Flex alignItems="flex-start">
+									<InputControl
+										id="width"
+										columns="columns-1"
+										className="control-first label-center small-gap"
+										label={__('Width', 'publisher-core')}
+										style={{ margin: '0px' }}
+										type="number"
+										min={0}
+										defaultValue=""
+										onChange={(newValue) =>
+											handleOnChangeAttributes(
+												'publisherRatio',
+												{
+													...ratio,
+													width: newValue,
+												}
+											)
+										}
+										{...props}
+									/>
+
+									<p className="publisher-colon">:</p>
+
+									<InputControl
+										id="height"
+										columns="columns-1"
+										className="control-first label-center small-gap"
+										label={__('Height', 'publisher-core')}
+										style={{ margin: '0px' }}
+										min={0}
+										type="number"
+										defaultValue=""
+										onChange={(newValue) =>
+											handleOnChangeAttributes(
+												'publisherRatio',
+												{
+													...ratio,
+													height: newValue,
+												}
+											)
+										}
+										{...props}
+									/>
+								</Flex>
+							)}
+						</BaseControl>
+					</ControlContextProvider>
+				)}
+
+				{isActiveField(publisherFit) && (
+					<ControlContextProvider
+						value={{
+							name: generateExtensionId(block, 'fit'),
+							value: fit,
+						}}
+					>
+						<BaseControl
+							label={__('Fit', 'publisher-core')}
+							columns="columns-2"
+							className={'publisher-object-fit'}
+						>
+							<SelectControl
+								controlName="select"
+								columns="columns-1"
+								{...props}
+								options={[
+									{
+										label: __('Auto', 'publisher-core'),
+										value: '',
+									},
+									{
+										label: __('Fill', 'publisher-core'),
+										value: 'fill',
+									},
+									{
+										label: __('Contain', 'publisher-core'),
+										value: 'contain',
+									},
+									{
+										label: __('Cover', 'publisher-core'),
+										value: 'cover',
+									},
+									{
+										label: __('None', 'publisher-core'),
+										value: 'none',
+									},
+									{
+										label: __(
+											'Scale Down',
+											'publisher-core'
+										),
+										value: 'scale-down',
+									},
+								]}
+								type="native"
+								defaultValue=""
+								onChange={(newValue) =>
+									handleOnChangeAttributes(
+										'publisherFit',
+										newValue
+									)
+								}
+							/>
+							<ControlContextProvider
+								value={{
+									name: generateExtensionId(
+										block,
+										'fit-position'
+									),
+									value: {
+										...fitPosition,
+										coordinates:
+											convertAlignmentMatrixCoordinates(
+												fitPosition
+											)?.compact,
+									},
+								}}
+							>
+								<PositionButtonControl
+									buttonLabel={__(
+										'Fit Position',
+										'publisher-core'
+									)}
+									popoverLabel={__(
+										'Setting',
+										'publisher-core'
+									)}
+									alignmentMatrixLabel={__(
+										'Position',
+										'publisher-core'
+									)}
+									size="small"
+									defaultValue={{ top: '', left: '' }}
+									onChange={({ top, left }) => {
+										handleOnChangeAttributes(
+											'publisherFitPosition',
+											{
+												...fitPosition,
+												top,
+												left,
+											}
+										);
+									}}
+								/>
+							</ControlContextProvider>
+						</BaseControl>
 					</ControlContextProvider>
 				)}
 			</>

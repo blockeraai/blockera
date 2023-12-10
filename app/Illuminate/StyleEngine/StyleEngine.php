@@ -97,6 +97,9 @@ final class StyleEngine {
 		$styles[] = '-webkit-text-stroke-width';
 		$styles[] = 'border-bottom-left-radius';
 		$styles[] = 'border-bottom-right-radius';
+		$styles[] = 'aspect-ratio';
+		$styles[] = 'object-fit';
+		$styles[] = 'object-position';
 
 		return $styles;
 	}

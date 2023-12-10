@@ -3,7 +3,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
 import type { MixedElement } from 'react';
 
 /**
@@ -14,8 +13,10 @@ import {
 	InputControl,
 	ToggleSelectControl,
 	ControlContextProvider,
+	convertAlignmentMatrixCoordinates,
+	PositionButtonControl,
 } from '@publisher/controls';
-import { Button, Popover } from '@publisher/components';
+import { Popover } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
@@ -23,9 +24,6 @@ import { controlInnerClassNames } from '@publisher/classnames';
  */
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 import { generateExtensionId } from '../../utils';
-import { OriginIcon } from './origin-icon';
-import { SelfOrigin } from './self-origin';
-import { ChildOrigin } from './child-origin';
 
 export const TransformSettings = ({
 	setIsTransformSettingsVisible,
@@ -48,9 +46,6 @@ export const TransformSettings = ({
 	transformChildOrigin: Object,
 	transformSelfOrigin: Object,
 }): MixedElement => {
-	const [isSelfOriginVisible, setIsSelfOriginVisible] = useState(false);
-	const [isChildOriginVisible, setIsChildOriginVisible] = useState(false);
-
 	return (
 		<Popover
 			title={__('Transform Settings', 'publisher-core')}
@@ -89,38 +84,45 @@ export const TransformSettings = ({
 								),
 						}}
 					/>
-					<Button
-						label={__('Self Perspective Origin', 'publisher-core')}
-						showTooltip={true}
-						tooltipPosition="top"
-						onClick={() => {
-							setIsSelfOriginVisible(!isSelfOriginVisible);
-						}}
-						size="small"
-						style={{
-							padding: '5px',
-							width: '30px',
-							height: '30px',
-							color:
-								!transformSelfOrigin?.top ||
-								!transformSelfOrigin?.left
-									? 'var(--publisher-controls-color)'
-									: 'var(--publisher-controls-border-color-focus)',
+					<ControlContextProvider
+						value={{
+							name: generateExtensionId(block, 'self-origin'),
+							value: {
+								...transformSelfOrigin,
+								coordinates:
+									convertAlignmentMatrixCoordinates(
+										transformSelfOrigin
+									)?.compact,
+							},
 						}}
 					>
-						{OriginIcon(
-							transformSelfOrigin?.top,
-							transformSelfOrigin?.left
-						)}
-					</Button>
-					{isSelfOriginVisible && (
-						<SelfOrigin
-							transformSelfOrigin={transformSelfOrigin}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-							setIsSelfOriginVisible={setIsSelfOriginVisible}
-							block={block}
+						<PositionButtonControl
+							buttonLabel={__(
+								'Self Perspective Origin',
+								'publisher-core'
+							)}
+							popoverLabel={__(
+								'Perspective Position',
+								'publisher-core'
+							)}
+							alignmentMatrixLabel={__(
+								'Self Origin',
+								'publisher-core'
+							)}
+							size="small"
+							defaultValue={{ top: '', left: '' }}
+							onChange={({ top, left }) => {
+								handleOnChangeAttributes(
+									'publisherTransformSelfOrigin',
+									{
+										...transformSelfOrigin,
+										top,
+										left,
+									}
+								);
+							}}
 						/>
-					)}
+					</ControlContextProvider>
 				</BaseControl>
 			</ControlContextProvider>
 
@@ -183,38 +185,45 @@ export const TransformSettings = ({
 								),
 						}}
 					/>
-					<Button
-						onClick={() => {
-							setIsChildOriginVisible(!isChildOriginVisible);
-						}}
-						label={__('Child Perspective Origin', 'publisher-core')}
-						showTooltip={true}
-						tooltipPosition="top"
-						size="small"
-						style={{
-							padding: '5px',
-							width: '30px',
-							height: '30px',
-							color:
-								!transformChildOrigin.top ||
-								!transformChildOrigin.left
-									? 'var(--publisher-controls-color)'
-									: 'var(--publisher-controls-border-color-focus)',
+					<ControlContextProvider
+						value={{
+							name: generateExtensionId(block, 'child-origin'),
+							value: {
+								...transformChildOrigin,
+								coordinates:
+									convertAlignmentMatrixCoordinates(
+										transformChildOrigin
+									)?.compact,
+							},
 						}}
 					>
-						{OriginIcon(
-							transformChildOrigin.top,
-							transformChildOrigin.left
-						)}
-					</Button>
-					{isChildOriginVisible && (
-						<ChildOrigin
-							setIsChildOriginVisible={setIsChildOriginVisible}
-							transformChildOrigin={transformChildOrigin}
-							block={block}
-							handleOnChangeAttributes={handleOnChangeAttributes}
+						<PositionButtonControl
+							buttonLabel={__(
+								'Child Perspective Origin',
+								'publisher-core'
+							)}
+							popoverLabel={__(
+								'Perspective Position',
+								'publisher-core'
+							)}
+							alignmentMatrixLabel={__(
+								'Child Origin',
+								'publisher-core'
+							)}
+							size="small"
+							defaultValue={{ top: '', left: '' }}
+							onChange={({ top, left }) => {
+								handleOnChangeAttributes(
+									'publisherTransformChildOrigin',
+									{
+										...transformChildOrigin,
+										top,
+										left,
+									}
+								);
+							}}
 						/>
-					)}
+					</ControlContextProvider>
 				</BaseControl>
 			</ControlContextProvider>
 		</Popover>
