@@ -78,12 +78,6 @@ export function SizeStyles({
 
 		if (minWidth !== attributes.publisherMinWidth.default)
 			properties['min-width'] = minWidth;
-		else if (
-			!isUndefined(currBlockAttributes.minWidth) &&
-			!isEmpty(currBlockAttributes.minWidth)
-		) {
-			properties['min-width'] = currBlockAttributes.minWidth;
-		}
 	}
 
 	if (isActiveField(publisherMaxWidth)) {
@@ -93,12 +87,6 @@ export function SizeStyles({
 
 		if (maxWidth !== attributes.publisherMaxWidth.default)
 			properties['max-width'] = maxWidth;
-		else if (
-			!isUndefined(currBlockAttributes.maxWidth) &&
-			!isEmpty(currBlockAttributes.maxWidth)
-		) {
-			properties['max-width'] = currBlockAttributes.maxWidth;
-		}
 	}
 
 	if (isActiveField(publisherHeight)) {
@@ -106,10 +94,7 @@ export function SizeStyles({
 			currBlockAttributes.publisherHeight
 		);
 
-		if (
-			currBlockAttributes.publisherHeight !==
-			attributes.publisherHeight.default
-		)
+		if (height !== attributes.publisherHeight.default)
 			properties.height = height;
 		else if (
 			!isUndefined(currBlockAttributes.height) &&
@@ -124,17 +109,8 @@ export function SizeStyles({
 			currBlockAttributes.publisherMinHeight
 		);
 
-		if (
-			currBlockAttributes.publisherMinHeight !==
-			attributes.publisherMinHeight.default
-		)
+		if (minHeight !== attributes.publisherMinHeight.default)
 			properties['min-height'] = minHeight;
-		else if (
-			!isUndefined(currBlockAttributes.minHeight) &&
-			!isEmpty(currBlockAttributes.minHeight)
-		) {
-			properties['min-height'] = currBlockAttributes.minHeight;
-		}
 	}
 
 	if (isActiveField(publisherMaxHeight)) {
@@ -142,52 +118,40 @@ export function SizeStyles({
 			currBlockAttributes.publisherMaxHeight
 		);
 
-		if (
-			currBlockAttributes.publisherMaxHeight !==
-			attributes.publisherMaxHeight.default
-		)
+		if (maxHeight !== attributes.publisherMaxHeight.default)
 			properties['max-height'] = maxHeight;
-		else if (
-			!isUndefined(currBlockAttributes.maxHeight) &&
-			!isEmpty(currBlockAttributes.maxHeight)
-		) {
-			properties['max-height'] = currBlockAttributes.maxHeight;
-		}
 	}
 
 	if (isActiveField(publisherOverflow)) {
-		const overflow = getValueAddonRealValue(
-			currBlockAttributes.publisherOverflow
-		);
-
 		if (
 			currBlockAttributes.publisherOverflow !==
 			attributes.publisherOverflow.default
 		)
-			properties.overflow = overflow;
+			properties.overflow = currBlockAttributes.publisherOverflow;
 	}
 
-	if (
-		isActiveField(publisherRatio) &&
-		currBlockAttributes.publisherRatio.value !==
-			attributes.publisherRatio.default.value
-	) {
-		switch (currBlockAttributes.publisherRatio.value) {
-			case 'custom':
-				{
-					properties['aspect-ratio'] = `${
-						currBlockAttributes.publisherRatio.width
-					} ${
-						currBlockAttributes.publisherRatio.width &&
-						currBlockAttributes.publisherRatio.height &&
-						' / '
-					} ${currBlockAttributes.publisherRatio.height}`;
-				}
-				break;
-			default:
-				properties['aspect-ratio'] =
-					currBlockAttributes.publisherRatio.value;
-		}
+	if (isActiveField(publisherRatio)) {
+		const ratio = currBlockAttributes.publisherRatio.value;
+
+		if (ratio !== attributes.publisherRatio.default.value)
+			switch (ratio) {
+				case 'custom':
+					{
+						const width = getValueAddonRealValue(
+							currBlockAttributes.publisherRatio.width
+						);
+						const height = getValueAddonRealValue(
+							currBlockAttributes.publisherRatio.height
+						);
+
+						properties['aspect-ratio'] = `${width} ${
+							width && height && ' / '
+						} ${height}`;
+					}
+					break;
+				default:
+					properties['aspect-ratio'] = ratio;
+			}
 	}
 
 	if (
@@ -203,9 +167,11 @@ export function SizeStyles({
 			attributes.publisherFitPosition.default
 		)
 	) {
-		properties[
-			'object-position'
-		] = `${currBlockAttributes.publisherFitPosition.top} ${currBlockAttributes.publisherFitPosition.left}`;
+		properties['object-position'] = `${getValueAddonRealValue(
+			currBlockAttributes.publisherFitPosition.top
+		)} ${getValueAddonRealValue(
+			currBlockAttributes.publisherFitPosition.left
+		)}`;
 	}
 
 	if (Object.keys(properties).length > 0) {
