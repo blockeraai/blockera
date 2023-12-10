@@ -522,6 +522,545 @@ describe('Util functions', () => {
 							default: 0,
 							format: 'number',
 						},
+						{
+							value: 'auto',
+							label: 'Auto',
+							default: 0,
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Advanced',
+					options: [
+						{
+							value: 'func',
+							label: 'CSS Functions and Variables',
+							default: '',
+							format: 'text',
+						},
+					],
+				},
+			]);
+		});
+
+		test('height', () => {
+			expect(getCSSUnits('height')).toStrictEqual([
+				{
+					label: 'Common Values',
+					options: [
+						{
+							value: 'px',
+							label: 'PX',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: '%',
+							label: '%',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'em',
+							label: 'EM',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'rem',
+							label: 'REM',
+							default: 0,
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Other Values',
+					options: [
+						{
+							value: 'ch',
+							label: 'CH',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'vw',
+							label: 'VW',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'vh',
+							label: 'VH',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'dvw',
+							label: 'DVW',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'dvh',
+							label: 'DVH',
+							default: 0,
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Special Values',
+					options: [
+						{
+							value: 'fit-content',
+							label: 'Fit Content',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'max-content',
+							label: 'Max Content',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'min-content',
+							label: 'Min Content',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'auto',
+							label: 'Auto',
+							default: 0,
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Advanced',
+					options: [
+						{
+							value: 'func',
+							label: 'CSS Functions and Variables',
+							default: '',
+							format: 'text',
+						},
+					],
+				},
+			]);
+		});
+
+		test('min-width', () => {
+			expect(getCSSUnits('min-width')).toStrictEqual([
+				{
+					label: 'Common Values',
+					options: [
+						{
+							value: 'px',
+							label: 'PX',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: '%',
+							label: '%',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'em',
+							label: 'EM',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'rem',
+							label: 'REM',
+							default: 0,
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Other Values',
+					options: [
+						{
+							value: 'ch',
+							label: 'CH',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'vw',
+							label: 'VW',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'vh',
+							label: 'VH',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'dvw',
+							label: 'DVW',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'dvh',
+							label: 'DVH',
+							default: 0,
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Special Values',
+					options: [
+						{
+							value: 'fit-content',
+							label: 'Fit Content',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'max-content',
+							label: 'Max Content',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'min-content',
+							label: 'Min Content',
+							default: 0,
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Advanced',
+					options: [
+						{
+							value: 'func',
+							label: 'CSS Functions and Variables',
+							default: '',
+							format: 'text',
+						},
+					],
+				},
+			]);
+		});
+
+		test('min-height', () => {
+			expect(getCSSUnits('min-height')).toStrictEqual([
+				{
+					label: 'Common Values',
+					options: [
+						{
+							value: 'px',
+							label: 'PX',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: '%',
+							label: '%',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'em',
+							label: 'EM',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'rem',
+							label: 'REM',
+							default: 0,
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Other Values',
+					options: [
+						{
+							value: 'ch',
+							label: 'CH',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'vw',
+							label: 'VW',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'vh',
+							label: 'VH',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'dvw',
+							label: 'DVW',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'dvh',
+							label: 'DVH',
+							default: 0,
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Special Values',
+					options: [
+						{
+							value: 'fit-content',
+							label: 'Fit Content',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'max-content',
+							label: 'Max Content',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'min-content',
+							label: 'Min Content',
+							default: 0,
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Advanced',
+					options: [
+						{
+							value: 'func',
+							label: 'CSS Functions and Variables',
+							default: '',
+							format: 'text',
+						},
+					],
+				},
+			]);
+		});
+
+		test('max-width', () => {
+			expect(getCSSUnits('max-width')).toStrictEqual([
+				{
+					label: 'Common Values',
+					options: [
+						{
+							value: 'px',
+							label: 'PX',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: '%',
+							label: '%',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'em',
+							label: 'EM',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'rem',
+							label: 'REM',
+							default: 0,
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Other Values',
+					options: [
+						{
+							value: 'ch',
+							label: 'CH',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'vw',
+							label: 'VW',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'vh',
+							label: 'VH',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'dvw',
+							label: 'DVW',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'dvh',
+							label: 'DVH',
+							default: 0,
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Special Values',
+					options: [
+						{
+							value: 'fit-content',
+							label: 'Fit Content',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'max-content',
+							label: 'Max Content',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'min-content',
+							label: 'Min Content',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'none',
+							label: 'None',
+							default: 0,
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Advanced',
+					options: [
+						{
+							value: 'func',
+							label: 'CSS Functions and Variables',
+							default: '',
+							format: 'text',
+						},
+					],
+				},
+			]);
+		});
+
+		test('max-height', () => {
+			expect(getCSSUnits('max-height')).toStrictEqual([
+				{
+					label: 'Common Values',
+					options: [
+						{
+							value: 'px',
+							label: 'PX',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: '%',
+							label: '%',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'em',
+							label: 'EM',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'rem',
+							label: 'REM',
+							default: 0,
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Other Values',
+					options: [
+						{
+							value: 'ch',
+							label: 'CH',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'vw',
+							label: 'VW',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'vh',
+							label: 'VH',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'dvw',
+							label: 'DVW',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'dvh',
+							label: 'DVH',
+							default: 0,
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Special Values',
+					options: [
+						{
+							value: 'fit-content',
+							label: 'Fit Content',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'max-content',
+							label: 'Max Content',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'min-content',
+							label: 'Min Content',
+							default: 0,
+							format: 'number',
+						},
+						{
+							value: 'none',
+							label: 'None',
+							default: 0,
+							format: 'number',
+						},
 					],
 				},
 				{
