@@ -60,7 +60,11 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 			<>
 				<BaseControl columns="columns-1">
 					<Flex>
-						<Flex gap="10px" direction="column">
+						<Flex
+							gap="10px"
+							direction="column"
+							style={{ width: '120px' }}
+						>
 							{isActiveField(publisherWidth) && (
 								<ControlContextProvider
 									value={{
@@ -74,39 +78,38 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									<InputControl
 										controlName="input"
 										label={__('Width', 'publisher-core')}
-										columns="columns-2"
+										columns="1.1fr 1.9fr"
 										placeholder="0"
-										{...{
-											...props,
-											unitType: 'width',
-											min: 0,
-											defaultValue: _width,
-											onChange: (newValue) =>
-												handleOnChangeAttributes(
-													'publisherWidth',
-													newValue,
-													'',
-													(
-														attributes: Object,
-														setAttributes: (
-															attributes: Object
-														) => void
-													): void => {
-														// do not sync if unit type is func
-														if (
-															!newValue.endsWith(
-																'func'
-															)
+										unitType="width"
+										min="0"
+										defaultValue={_width}
+										onChange={(newValue) =>
+											handleOnChangeAttributes(
+												'publisherWidth',
+												newValue,
+												'',
+												(
+													attributes: Object,
+													setAttributes: (
+														attributes: Object
+													) => void
+												): void => {
+													// do not sync if unit type is func
+													if (
+														!newValue.endsWith(
+															'func'
 														)
-															setAttributes({
-																...attributes,
-																width: convertToPercent(
-																	newValue
-																),
-															});
-													}
-												),
-										}}
+													)
+														setAttributes({
+															...attributes,
+															width: convertToPercent(
+																newValue
+															),
+														});
+												}
+											)
+										}
+										{...props}
 									/>
 								</ControlContextProvider>
 							)}
@@ -124,40 +127,38 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									<InputControl
 										controlName="input"
 										label={__('Min W', 'publisher-core')}
-										columns="columns-2"
+										columns="1.1fr 1.9fr"
 										placeholder="0"
-										{...{
-											...props,
-											unitType: 'min-width',
-											min: 0,
-											// defaultValue: ,
-											onChange: (newValue) =>
-												handleOnChangeAttributes(
-													'publisherMinWidth',
-													newValue,
-													'',
-													(
-														attributes: Object,
-														setAttributes: (
-															attributes: Object
-														) => void
-													): void => {
-														// do not sync if unit type is func
-														if (
-															!newValue.endsWith(
-																'func'
-															)
+										unitType="min-width"
+										min="0"
+										onChange={(newValue) =>
+											handleOnChangeAttributes(
+												'publisherMinWidth',
+												newValue,
+												'',
+												(
+													attributes: Object,
+													setAttributes: (
+														attributes: Object
+													) => void
+												): void => {
+													// do not sync if unit type is func
+													if (
+														!newValue.endsWith(
+															'func'
 														)
-															setAttributes({
-																...attributes,
-																minWidth:
-																	convertToPercent(
-																		newValue
-																	),
-															});
-													}
-												),
-										}}
+													)
+														setAttributes({
+															...attributes,
+															minWidth:
+																convertToPercent(
+																	newValue
+																),
+														});
+												}
+											)
+										}
+										{...props}
 									/>
 								</ControlContextProvider>
 							)}
@@ -175,46 +176,48 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									<InputControl
 										controlName="input"
 										label={__('Max W', 'publisher-core')}
-										columns="columns-2"
+										columns="1.1fr 1.9fr"
 										placeholder="0"
-										{...{
-											...props,
-											unitType: 'max-width',
-											min: 0,
-											// defaultValue: _height,
-											onChange: (newValue) =>
-												handleOnChangeAttributes(
-													'publisherMaxWidth',
-													newValue,
-													'',
-													(
-														attributes: Object,
-														setAttributes: (
-															attributes: Object
-														) => void
-													): void => {
-														// do not sync if unit type is func
-														if (
-															!newValue.endsWith(
-																'func'
-															)
+										unitType="max-width"
+										min="0"
+										onChange={(newValue) =>
+											handleOnChangeAttributes(
+												'publisherMaxWidth',
+												newValue,
+												'',
+												(
+													attributes: Object,
+													setAttributes: (
+														attributes: Object
+													) => void
+												): void => {
+													// do not sync if unit type is func
+													if (
+														!newValue.endsWith(
+															'func'
 														)
-															setAttributes({
-																...attributes,
-																maxWidth:
-																	convertToPercent(
-																		newValue
-																	),
-															});
-													}
-												),
-										}}
+													)
+														setAttributes({
+															...attributes,
+															maxWidth:
+																convertToPercent(
+																	newValue
+																),
+														});
+												}
+											)
+										}
+										{...props}
 									/>
 								</ControlContextProvider>
 							)}
 						</Flex>
 
-						<Flex gap="10px" direction="column">
+						<Flex
+							gap="10px"
+							direction="column"
+							style={{ width: '120px' }}
+						>
 							{isActiveField(publisherHeight) && (
 								<ControlContextProvider
 									value={{
@@ -228,39 +231,38 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									<InputControl
 										controlName="input"
 										label={__('Height', 'publisher-core')}
-										columns="columns-2"
+										columns="1.1fr 1.9fr"
 										placeholder="0"
-										{...{
-											...props,
-											unitType: 'height',
-											min: 0,
-											defaultValue: _height,
-											onChange: (newValue) =>
-												handleOnChangeAttributes(
-													'publisherHeight',
-													newValue,
-													'',
-													(
-														attributes: Object,
-														setAttributes: (
-															attributes: Object
-														) => void
-													): void => {
-														// do not sync if unit type is func
-														if (
-															!newValue.endsWith(
-																'func'
-															)
+										unitType="height"
+										min="0"
+										defaultValue={_height}
+										onChange={(newValue) =>
+											handleOnChangeAttributes(
+												'publisherHeight',
+												newValue,
+												'',
+												(
+													attributes: Object,
+													setAttributes: (
+														attributes: Object
+													) => void
+												): void => {
+													// do not sync if unit type is func
+													if (
+														!newValue.endsWith(
+															'func'
 														)
-															setAttributes({
-																...attributes,
-																height: convertToPercent(
-																	newValue
-																),
-															});
-													}
-												),
-										}}
+													)
+														setAttributes({
+															...attributes,
+															height: convertToPercent(
+																newValue
+															),
+														});
+												}
+											)
+										}
+										{...props}
 									/>
 								</ControlContextProvider>
 							)}
@@ -278,41 +280,38 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									<InputControl
 										controlName="input"
 										label={__('Min H', 'publisher-core')}
-										columns="columns-2"
+										columns="1.1fr 1.9fr"
 										placeholder="0"
-										{...{
-											...props,
-											unitType: 'min-height',
-											min: 0,
-											// defaultValue: _height,
-
-											onChange: (newValue) =>
-												handleOnChangeAttributes(
-													'publisherMinHeight',
-													newValue,
-													'',
-													(
-														attributes: Object,
-														setAttributes: (
-															attributes: Object
-														) => void
-													): void => {
-														// do not sync if unit type is func
-														if (
-															!newValue.endsWith(
-																'func'
-															)
+										unitType="min-height"
+										min="0"
+										onChange={(newValue) =>
+											handleOnChangeAttributes(
+												'publisherMinHeight',
+												newValue,
+												'',
+												(
+													attributes: Object,
+													setAttributes: (
+														attributes: Object
+													) => void
+												): void => {
+													// do not sync if unit type is func
+													if (
+														!newValue.endsWith(
+															'func'
 														)
-															setAttributes({
-																...attributes,
-																minHeight:
-																	convertToPercent(
-																		newValue
-																	),
-															});
-													}
-												),
-										}}
+													)
+														setAttributes({
+															...attributes,
+															minHeight:
+																convertToPercent(
+																	newValue
+																),
+														});
+												}
+											)
+										}
+										{...props}
 									/>
 								</ControlContextProvider>
 							)}
@@ -330,40 +329,38 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									<InputControl
 										controlName="input"
 										label={__('Max H', 'publisher-core')}
-										columns="columns-2"
+										columns="1.1fr 1.9fr"
 										placeholder="0"
-										{...{
-											...props,
-											unitType: 'max-height',
-											min: 0,
-											// defaultValue: _height,
-											onChange: (newValue) =>
-												handleOnChangeAttributes(
-													'publisherMaxHeight',
-													newValue,
-													'',
-													(
-														attributes: Object,
-														setAttributes: (
-															attributes: Object
-														) => void
-													): void => {
-														// do not sync if unit type is func
-														if (
-															!newValue.endsWith(
-																'func'
-															)
+										unitType="max-height"
+										min="0"
+										onChange={(newValue) =>
+											handleOnChangeAttributes(
+												'publisherMaxHeight',
+												newValue,
+												'',
+												(
+													attributes: Object,
+													setAttributes: (
+														attributes: Object
+													) => void
+												): void => {
+													// do not sync if unit type is func
+													if (
+														!newValue.endsWith(
+															'func'
 														)
-															setAttributes({
-																...attributes,
-																maxHeight:
-																	convertToPercent(
-																		newValue
-																	),
-															});
-													}
-												),
-										}}
+													)
+														setAttributes({
+															...attributes,
+															maxHeight:
+																convertToPercent(
+																	newValue
+																),
+														});
+												}
+											)
+										}
+										{...props}
 									/>
 								</ControlContextProvider>
 							)}
