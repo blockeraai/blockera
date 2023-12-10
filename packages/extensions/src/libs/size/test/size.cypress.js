@@ -460,8 +460,8 @@ describe('Size Extension', () => {
 				getWPDataObject().then((data) => {
 					expect({
 						value: 'custom',
-						width: '2',
-						height: '5',
+						width: 2,
+						height: 5,
 					}).to.be.deep.equal(
 						getSelectedBlock(data, 'publisherRatio')
 					);
