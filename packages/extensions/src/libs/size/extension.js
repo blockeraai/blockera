@@ -142,28 +142,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
 												'publisherMinWidth',
-												newValue,
-												'',
-												(
-													attributes: Object,
-													setAttributes: (
-														attributes: Object
-													) => void
-												): void => {
-													// do not sync if unit type is func
-													if (
-														!newValue.endsWith(
-															'func'
-														)
-													)
-														setAttributes({
-															...attributes,
-															minWidth:
-																convertToPercent(
-																	newValue
-																),
-														});
-												}
+												newValue
 											)
 										}
 										{...props}
@@ -191,28 +170,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
 												'publisherMaxWidth',
-												newValue,
-												'',
-												(
-													attributes: Object,
-													setAttributes: (
-														attributes: Object
-													) => void
-												): void => {
-													// do not sync if unit type is func
-													if (
-														!newValue.endsWith(
-															'func'
-														)
-													)
-														setAttributes({
-															...attributes,
-															maxWidth:
-																convertToPercent(
-																	newValue
-																),
-														});
-												}
+												newValue
 											)
 										}
 										{...props}
@@ -295,28 +253,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
 												'publisherMinHeight',
-												newValue,
-												'',
-												(
-													attributes: Object,
-													setAttributes: (
-														attributes: Object
-													) => void
-												): void => {
-													// do not sync if unit type is func
-													if (
-														!newValue.endsWith(
-															'func'
-														)
-													)
-														setAttributes({
-															...attributes,
-															minHeight:
-																convertToPercent(
-																	newValue
-																),
-														});
-												}
+												newValue
 											)
 										}
 										{...props}
@@ -344,28 +281,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
 												'publisherMaxHeight',
-												newValue,
-												'',
-												(
-													attributes: Object,
-													setAttributes: (
-														attributes: Object
-													) => void
-												): void => {
-													// do not sync if unit type is func
-													if (
-														!newValue.endsWith(
-															'func'
-														)
-													)
-														setAttributes({
-															...attributes,
-															maxHeight:
-																convertToPercent(
-																	newValue
-																),
-														});
-												}
+												newValue
 											)
 										}
 										{...props}
