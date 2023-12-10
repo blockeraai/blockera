@@ -13,6 +13,7 @@ import type { TBlockProps } from '../types';
 import { useCssSelector } from '../../hooks';
 import { isActiveField } from '../../api/utils';
 import type { TSizeCssProps } from './types/size-props';
+import { arrayEquals } from '../utils';
 
 interface IConfigs {
 	sizeConfig: {
@@ -20,6 +21,9 @@ interface IConfigs {
 		publisherWidth: string,
 		publisherHeight: string,
 		publisherOverflow: string,
+		publisherRatio: Object,
+		publisherFit: string,
+		publisherFitPosition: Object,
 	};
 	blockProps: TBlockProps;
 }
@@ -30,6 +34,8 @@ export function SizeStyles({
 		publisherWidth,
 		publisherHeight,
 		publisherOverflow,
+		publisherRatio,
+		publisherFit,
 	},
 	blockProps,
 }: IConfigs): string {
@@ -70,6 +76,46 @@ export function SizeStyles({
 		_attributes.publisherOverflow !== attributes.publisherOverflow.default
 	) {
 		properties.overflow = _attributes.publisherOverflow;
+	}
+
+	if (
+		isActiveField(publisherRatio) &&
+		_attributes.publisherRatio.value !==
+			attributes.publisherRatio.default.value
+	) {
+		switch (_attributes.publisherRatio.value) {
+			case 'custom':
+				{
+					properties['aspect-ratio'] = `${
+						_attributes.publisherRatio.width
+					} ${
+						_attributes.publisherRatio.width &&
+						_attributes.publisherRatio.height &&
+						' / '
+					} ${_attributes.publisherRatio.height}`;
+				}
+				break;
+			default:
+				properties['aspect-ratio'] = _attributes.publisherRatio.value;
+		}
+	}
+
+	if (
+		isActiveField(publisherFit) &&
+		_attributes.publisherFit !== attributes.publisherFit.default
+	) {
+		properties['object-fit'] = _attributes.publisherFit;
+	}
+
+	if (
+		!arrayEquals(
+			_attributes.publisherFitPosition,
+			attributes.publisherFitPosition.default
+		)
+	) {
+		properties[
+			'object-position'
+		] = `${_attributes.publisherFitPosition.top} ${_attributes.publisherFitPosition.left}`;
 	}
 
 	if (Object.keys(properties).length > 0) {

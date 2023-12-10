@@ -11,4 +11,16 @@ export const attributes = {
 		type: 'string',
 		default: '',
 	},
+	publisherRatio: {
+		type: 'object',
+		default: { value: '', width: '', height: '' },
+	},
+	publisherFit: {
+		type: 'string',
+		default: '',
+	},
+	publisherFitPosition: {
+		type: 'object',
+		default: { top: '', left: '' },
+	},
 };

@@ -5,6 +5,7 @@ export default function OriginBottomCenter() {
 			height="20"
 			viewBox="0 0 20 20"
 			xmlns="http://www.w3.org/2000/svg"
+			data-test="position-icon-bottom-center"
 		>
 			<rect x="7.5" y="14" width="5" height="5" rx="2.5" />
 			<path
