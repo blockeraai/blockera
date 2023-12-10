@@ -64,6 +64,98 @@ describe('Size Extension', () => {
 		});
 	});
 
+	describe('Min Width', () => {
+		beforeEach(() => {
+			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+
+			cy.getIframeBody()
+				.find('[data-type="core/paragraph"]')
+				.type('This is a test text.');
+		});
+
+		// describe('Wordpress compatibility',()=>{});
+
+		describe('Functionality', () => {
+			it('should update min-width when adding value', () => {
+				cy.getByDataTest('style-tab').click();
+				cy.getParentContainer('Min W', 'base-control')
+					.first()
+					.within(() => {
+						cy.get('input').type(10);
+					});
+
+				//Check block
+				cy.getIframeBody()
+					.find('[data-type="core/paragraph"]')
+					.should('have.css', 'min-width', '10px');
+
+				//Check store
+				getWPDataObject().then((data) => {
+					expect('10px').to.be.equal(
+						getSelectedBlock(data, 'publisherMinWidth')
+					);
+				});
+
+				//Check frontend
+				savePage();
+
+				redirectToFrontPage();
+
+				cy.get('.publisher-paragraph').should(
+					'have.css',
+					'min-width',
+					'10px'
+				);
+			});
+		});
+	});
+
+	describe('Max Width', () => {
+		beforeEach(() => {
+			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+
+			cy.getIframeBody()
+				.find('[data-type="core/paragraph"]')
+				.type('This is a test text.');
+		});
+
+		// describe('Wordpress compatibility',()=>{});
+
+		describe('Functionality', () => {
+			it('should update max-width when adding value', () => {
+				cy.getByDataTest('style-tab').click();
+				cy.getParentContainer('Max W', 'base-control')
+					.first()
+					.within(() => {
+						cy.get('input').type(200);
+					});
+
+				//Check block
+				cy.getIframeBody()
+					.find('[data-type="core/paragraph"]')
+					.should('have.css', 'max-width', '200px');
+
+				//Check store
+				getWPDataObject().then((data) => {
+					expect('200px').to.be.equal(
+						getSelectedBlock(data, 'publisherMaxWidth')
+					);
+				});
+
+				//Check frontend
+				savePage();
+
+				redirectToFrontPage();
+
+				cy.get('.publisher-paragraph').should(
+					'have.css',
+					'max-width',
+					'200px'
+				);
+			});
+		});
+	});
+
 	describe('Height', () => {
 		beforeEach(() => {
 			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
@@ -116,6 +208,98 @@ describe('Size Extension', () => {
 		});
 	});
 
+	describe('Min Height', () => {
+		beforeEach(() => {
+			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+
+			cy.getIframeBody()
+				.find('[data-type="core/paragraph"]')
+				.type('This is a test text.');
+		});
+
+		// describe('Wordpress compatibility',()=>{});
+
+		describe('Functionality', () => {
+			it('should update min-height when adding value', () => {
+				cy.getByDataTest('style-tab').click();
+				cy.getParentContainer('Min H', 'base-control')
+					.first()
+					.within(() => {
+						cy.get('input').type(20);
+					});
+
+				//Check block
+				cy.getIframeBody()
+					.find('[data-type="core/paragraph"]')
+					.should('have.css', 'min-height', '20px');
+
+				//Check store
+				getWPDataObject().then((data) => {
+					expect('20px').to.be.equal(
+						getSelectedBlock(data, 'publisherMinHeight')
+					);
+				});
+
+				//Check frontend
+				savePage();
+
+				redirectToFrontPage();
+
+				cy.get('.publisher-paragraph').should(
+					'have.css',
+					'min-height',
+					'20px'
+				);
+			});
+		});
+	});
+
+	describe('Max Height', () => {
+		beforeEach(() => {
+			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+
+			cy.getIframeBody()
+				.find('[data-type="core/paragraph"]')
+				.type('This is a test text.');
+		});
+
+		// describe('Wordpress compatibility',()=>{});
+
+		describe('Functionality', () => {
+			it('should update max-height when adding value', () => {
+				cy.getByDataTest('style-tab').click();
+				cy.getParentContainer('Max H', 'base-control')
+					.first()
+					.within(() => {
+						cy.get('input').type(200);
+					});
+
+				//Check block
+				cy.getIframeBody()
+					.find('[data-type="core/paragraph"]')
+					.should('have.css', 'max-height', '200px');
+
+				//Check store
+				getWPDataObject().then((data) => {
+					expect('200px').to.be.equal(
+						getSelectedBlock(data, 'publisherMaxHeight')
+					);
+				});
+
+				//Check frontend
+				savePage();
+
+				redirectToFrontPage();
+
+				cy.get('.publisher-paragraph').should(
+					'have.css',
+					'max-height',
+					'200px'
+				);
+			});
+		});
+	});
+
 	describe('Overflow', () => {
 		beforeEach(() => {
 			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
@@ -128,7 +312,7 @@ describe('Size Extension', () => {
 		//describe('Wordpress compatibility', () => {});
 
 		describe('Functionality', () => {
-			it.only('should update overflow to visible', () => {
+			it('should update overflow to visible', () => {
 				cy.getByDataTest('style-tab').click();
 
 				//
