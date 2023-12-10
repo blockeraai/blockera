@@ -7,7 +7,15 @@
 		"publisherIconColor",
 		"publisherIconPosition"
 	],
-	"size": ["publisherWidth", "publisherHeight", "publisherOverflow"],
+	"size": [
+		"publisherWidth",
+		"publisherHeight",
+		"publisherMinWidth",
+		"publisherMinHeight",
+		"publisherMaxWidth",
+		"publisherMaxHeight",
+		"publisherOverflow"
+	],
 	"flexChild": [
 		"publisherFlexChildGrow",
 		"publisherFlexDirection",

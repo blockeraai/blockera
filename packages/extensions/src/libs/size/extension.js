@@ -13,7 +13,9 @@ import {
 	ControlContextProvider,
 	InputControl,
 	ToggleSelectControl,
+	BaseControl,
 } from '@publisher/controls';
+import { Flex } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -31,6 +33,10 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 		block,
 		width,
 		height,
+		minWidth,
+		minHeight,
+		maxWidth,
+		maxHeight,
 		config,
 		overflow,
 		children,
@@ -39,94 +45,331 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 		...props
 	}: TSizeProps): MixedElement => {
 		const {
-			sizeConfig: { publisherWidth, publisherHeight, publisherOverflow },
+			sizeConfig: {
+				publisherWidth,
+				publisherHeight,
+				publisherMinWidth,
+				publisherMinHeight,
+				publisherMaxWidth,
+				publisherMaxHeight,
+				publisherOverflow,
+			},
 		} = config;
 
 		return (
 			<>
-				{isActiveField(publisherWidth) && (
-					<ControlContextProvider
-						value={{
-							name: generateExtensionId(block, 'width'),
-							value: width,
-						}}
-					>
-						<InputControl
-							controlName="input"
-							label={__('Width', 'publisher-core')}
-							columns="columns-2"
-							{...{
-								...props,
-								unitType: 'essential',
-								min: 0,
-								defaultValue: _width,
-								onChange: (newValue) =>
-									handleOnChangeAttributes(
-										'publisherWidth',
-										newValue,
-										'',
-										(
-											attributes: Object,
-											setAttributes: (
-												attributes: Object
-											) => void
-										): void => {
-											// do not sync if unit type is func
-											if (!newValue.endsWith('func'))
-												setAttributes({
-													...attributes,
-													width: convertToPercent(
-														newValue
-													),
-												});
-										}
-									),
-							}}
-						/>
-					</ControlContextProvider>
-				)}
+				<BaseControl columns="columns-1">
+					<Flex>
+						<Flex gap="10px" direction="column">
+							{isActiveField(publisherWidth) && (
+								<ControlContextProvider
+									value={{
+										name: generateExtensionId(
+											block,
+											'width'
+										),
+										value: width,
+									}}
+								>
+									<InputControl
+										controlName="input"
+										label={__('Width', 'publisher-core')}
+										columns="columns-2"
+										placeholder="0"
+										{...{
+											...props,
+											unitType: 'width',
+											min: 0,
+											defaultValue: _width,
+											onChange: (newValue) =>
+												handleOnChangeAttributes(
+													'publisherWidth',
+													newValue,
+													'',
+													(
+														attributes: Object,
+														setAttributes: (
+															attributes: Object
+														) => void
+													): void => {
+														// do not sync if unit type is func
+														if (
+															!newValue.endsWith(
+																'func'
+															)
+														)
+															setAttributes({
+																...attributes,
+																width: convertToPercent(
+																	newValue
+																),
+															});
+													}
+												),
+										}}
+									/>
+								</ControlContextProvider>
+							)}
 
-				{isActiveField(publisherHeight) && (
-					<ControlContextProvider
-						value={{
-							name: generateExtensionId(block, 'height'),
-							value: height,
-						}}
-					>
-						<InputControl
-							controlName="input"
-							label={__('Height', 'publisher-core')}
-							columns="columns-2"
-							{...{
-								...props,
-								unitType: 'essential',
-								min: 0,
-								defaultValue: _height,
-								onChange: (newValue) =>
-									handleOnChangeAttributes(
-										'publisherHeight',
-										newValue,
-										'',
-										(
-											attributes: Object,
-											setAttributes: (
-												attributes: Object
-											) => void
-										): void => {
-											// do not sync if unit type is func
-											if (!newValue.endsWith('func'))
-												setAttributes({
-													...attributes,
-													height: convertToPercent(
-														newValue
-													),
-												});
-										}
-									),
-							}}
-						/>
-					</ControlContextProvider>
-				)}
+							{isActiveField(publisherMinWidth) && (
+								<ControlContextProvider
+									value={{
+										name: generateExtensionId(
+											block,
+											'minWidth'
+										),
+										value: minWidth,
+									}}
+								>
+									<InputControl
+										controlName="input"
+										label={__('Min W', 'publisher-core')}
+										columns="columns-2"
+										placeholder="0"
+										{...{
+											...props,
+											unitType: 'min-width',
+											min: 0,
+											// defaultValue: ,
+											onChange: (newValue) =>
+												handleOnChangeAttributes(
+													'publisherMinWidth',
+													newValue,
+													'',
+													(
+														attributes: Object,
+														setAttributes: (
+															attributes: Object
+														) => void
+													): void => {
+														// do not sync if unit type is func
+														if (
+															!newValue.endsWith(
+																'func'
+															)
+														)
+															setAttributes({
+																...attributes,
+																minWidth:
+																	convertToPercent(
+																		newValue
+																	),
+															});
+													}
+												),
+										}}
+									/>
+								</ControlContextProvider>
+							)}
+
+							{isActiveField(publisherMaxWidth) && (
+								<ControlContextProvider
+									value={{
+										name: generateExtensionId(
+											block,
+											'maxWidth'
+										),
+										value: maxWidth,
+									}}
+								>
+									<InputControl
+										controlName="input"
+										label={__('Max W', 'publisher-core')}
+										columns="columns-2"
+										placeholder="0"
+										{...{
+											...props,
+											unitType: 'max-width',
+											min: 0,
+											// defaultValue: _height,
+											onChange: (newValue) =>
+												handleOnChangeAttributes(
+													'publisherMaxWidth',
+													newValue,
+													'',
+													(
+														attributes: Object,
+														setAttributes: (
+															attributes: Object
+														) => void
+													): void => {
+														// do not sync if unit type is func
+														if (
+															!newValue.endsWith(
+																'func'
+															)
+														)
+															setAttributes({
+																...attributes,
+																maxWidth:
+																	convertToPercent(
+																		newValue
+																	),
+															});
+													}
+												),
+										}}
+									/>
+								</ControlContextProvider>
+							)}
+						</Flex>
+
+						<Flex gap="10px" direction="column">
+							{isActiveField(publisherHeight) && (
+								<ControlContextProvider
+									value={{
+										name: generateExtensionId(
+											block,
+											'height'
+										),
+										value: height,
+									}}
+								>
+									<InputControl
+										controlName="input"
+										label={__('Height', 'publisher-core')}
+										columns="columns-2"
+										placeholder="0"
+										{...{
+											...props,
+											unitType: 'height',
+											min: 0,
+											defaultValue: _height,
+											onChange: (newValue) =>
+												handleOnChangeAttributes(
+													'publisherHeight',
+													newValue,
+													'',
+													(
+														attributes: Object,
+														setAttributes: (
+															attributes: Object
+														) => void
+													): void => {
+														// do not sync if unit type is func
+														if (
+															!newValue.endsWith(
+																'func'
+															)
+														)
+															setAttributes({
+																...attributes,
+																height: convertToPercent(
+																	newValue
+																),
+															});
+													}
+												),
+										}}
+									/>
+								</ControlContextProvider>
+							)}
+
+							{isActiveField(publisherMinHeight) && (
+								<ControlContextProvider
+									value={{
+										name: generateExtensionId(
+											block,
+											'minHeight'
+										),
+										value: minHeight,
+									}}
+								>
+									<InputControl
+										controlName="input"
+										label={__('Min H', 'publisher-core')}
+										columns="columns-2"
+										placeholder="0"
+										{...{
+											...props,
+											unitType: 'min-height',
+											min: 0,
+											// defaultValue: _height,
+
+											onChange: (newValue) =>
+												handleOnChangeAttributes(
+													'publisherMinHeight',
+													newValue,
+													'',
+													(
+														attributes: Object,
+														setAttributes: (
+															attributes: Object
+														) => void
+													): void => {
+														// do not sync if unit type is func
+														if (
+															!newValue.endsWith(
+																'func'
+															)
+														)
+															setAttributes({
+																...attributes,
+																minHeight:
+																	convertToPercent(
+																		newValue
+																	),
+															});
+													}
+												),
+										}}
+									/>
+								</ControlContextProvider>
+							)}
+
+							{isActiveField(publisherMaxHeight) && (
+								<ControlContextProvider
+									value={{
+										name: generateExtensionId(
+											block,
+											'maxHeight'
+										),
+										value: maxHeight,
+									}}
+								>
+									<InputControl
+										controlName="input"
+										label={__('Max H', 'publisher-core')}
+										columns="columns-2"
+										placeholder="0"
+										{...{
+											...props,
+											unitType: 'max-height',
+											min: 0,
+											// defaultValue: _height,
+											onChange: (newValue) =>
+												handleOnChangeAttributes(
+													'publisherMaxHeight',
+													newValue,
+													'',
+													(
+														attributes: Object,
+														setAttributes: (
+															attributes: Object
+														) => void
+													): void => {
+														// do not sync if unit type is func
+														if (
+															!newValue.endsWith(
+																'func'
+															)
+														)
+															setAttributes({
+																...attributes,
+																maxHeight:
+																	convertToPercent(
+																		newValue
+																	),
+															});
+													}
+												),
+										}}
+									/>
+								</ControlContextProvider>
+							)}
+						</Flex>
+					</Flex>
+				</BaseControl>
 
 				{isActiveField(publisherOverflow) && (
 					<ControlContextProvider

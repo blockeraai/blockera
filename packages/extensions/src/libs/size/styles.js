@@ -30,6 +30,10 @@ export function SizeStyles({
 		cssGenerators,
 		publisherWidth,
 		publisherHeight,
+		publisherMinWidth,
+		publisherMinHeight,
+		publisherMaxWidth,
+		publisherMaxHeight,
 		publisherOverflow,
 	},
 	blockProps,
@@ -57,6 +61,36 @@ export function SizeStyles({
 		}
 	}
 
+	if (isActiveField(publisherMinWidth)) {
+		const minWidth = getValueAddonRealValue(
+			currBlockAttributes.publisherMinWidth
+		);
+
+		if (minWidth !== attributes.publisherMinWidth.default)
+			properties['min-width'] = minWidth;
+		else if (
+			!isUndefined(currBlockAttributes.minWidth) &&
+			!isEmpty(currBlockAttributes.minWidth)
+		) {
+			properties['min-width'] = currBlockAttributes.minWidth;
+		}
+	}
+
+	if (isActiveField(publisherMaxWidth)) {
+		const maxWidth = getValueAddonRealValue(
+			currBlockAttributes.publisherMaxWidth
+		);
+
+		if (maxWidth !== attributes.publisherMaxWidth.default)
+			properties['max-width'] = maxWidth;
+		else if (
+			!isUndefined(currBlockAttributes.maxWidth) &&
+			!isEmpty(currBlockAttributes.maxWidth)
+		) {
+			properties['max-width'] = currBlockAttributes.maxWidth;
+		}
+	}
+
 	if (isActiveField(publisherHeight)) {
 		const height = getValueAddonRealValue(
 			currBlockAttributes.publisherHeight
@@ -72,6 +106,42 @@ export function SizeStyles({
 			!isEmpty(currBlockAttributes.height)
 		) {
 			properties.height = currBlockAttributes.height;
+		}
+	}
+
+	if (isActiveField(publisherMinHeight)) {
+		const minHeight = getValueAddonRealValue(
+			currBlockAttributes.publisherMinHeight
+		);
+
+		if (
+			currBlockAttributes.publisherMinHeight !==
+			attributes.publisherMinHeight.default
+		)
+			properties['min-height'] = minHeight;
+		else if (
+			!isUndefined(currBlockAttributes.minHeight) &&
+			!isEmpty(currBlockAttributes.minHeight)
+		) {
+			properties['min-height'] = currBlockAttributes.minHeight;
+		}
+	}
+
+	if (isActiveField(publisherMaxHeight)) {
+		const maxHeight = getValueAddonRealValue(
+			currBlockAttributes.publisherMaxHeight
+		);
+
+		if (
+			currBlockAttributes.publisherMaxHeight !==
+			attributes.publisherMaxHeight.default
+		)
+			properties['max-height'] = maxHeight;
+		else if (
+			!isUndefined(currBlockAttributes.maxHeight) &&
+			!isEmpty(currBlockAttributes.maxHeight)
+		) {
+			properties['max-height'] = currBlockAttributes.maxHeight;
 		}
 	}
 
