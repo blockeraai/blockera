@@ -21,6 +21,10 @@ interface IConfigs {
 		publisherWidth: string,
 		publisherHeight: string,
 		publisherOverflow: string,
+		publisherMinWidth: string,
+		publisherMinHeight: string,
+		publisherMaxWidth: string,
+		publisherMaxHeight: string,
 	};
 	blockProps: TBlockProps;
 }
