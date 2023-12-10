@@ -486,6 +486,38 @@ return [
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
+		'min-width'    => [
+			'property_keys' => [
+				'default' => 'min-width',
+			],
+			'path'          => [ 'publisherSizing', 'publisherMinWidth' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
+		'min-height'   => [
+			'property_keys' => [
+				'default' => 'min-height',
+			],
+			'path'          => [ 'publisherSizing', 'publisherMinHeight' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
+		'max-width'    => [
+			'property_keys' => [
+				'default' => 'max-width',
+			],
+			'path'          => [ 'publisherSizing', 'publisherMaxWidth' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
+		'max-height'   => [
+			'property_keys' => [
+				'default' => 'max-height',
+			],
+			'path'          => [ 'publisherSizing', 'publisherMaxHeight' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
 		'overflow' => [
 			'property_keys' => [
 				'default' => 'overflow',

@@ -41,6 +41,10 @@ class Parser {
 		'size'              => [
 			'publisherWidth',
 			'publisherHeight',
+			'publisherMinWidth',
+			'publisherMinHeight',
+			'publisherMaxWidth',
+			'publisherMaxHeight',
 			'publisherOverflow',
 		],
 		'effects'           => [
