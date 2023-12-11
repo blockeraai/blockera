@@ -9,22 +9,44 @@
 	align-items: center;
 	cursor: pointer;
 	transition: var(--publisher-controls-transition);
+	color: var(--publisher-controls-color);
 
 	&:hover {
 		border-color: var(--publisher-controls-border-color-hover);
+	}
+
+	&.is-active-item {
+		box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+		color: var(--publisher-controls-border-color-focus);
+		border-color: var(--publisher-controls-border-color-focus);
 	}
 
 	.publisher-control-item-icon {
 		pointer-events: none;
 		display: flex;
 		align-items: center;
+		opacity: 0.5;
+
+		svg {
+			fill: currentColor;
+		}
 	}
 
 	.publisher-control-item-name {
-		width: 70%;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		pointer-events: none;
+	}
+
+	.publisher-control-item-value {
+		margin-left: auto;
+		opacity: 0.5;
+		font-size: 10px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		pointer-events: none;
+		max-width: 120px;
 	}
 }

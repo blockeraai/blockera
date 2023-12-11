@@ -10,5 +10,17 @@ export const getBlockEditorSettings = (): Object => {
 	return getSettings();
 };
 
-export { getGradients, getGradientBy, getGradient } from './gradient';
+export {
+	getLinearGradients,
+	getLinearGradientBy,
+	getLinearGradient,
+} from './linear-gradient';
+export {
+	getRadialGradients,
+	getRadialGradientBy,
+	getRadialGradient,
+} from './radial-gradient';
 export { getFontSizes, getFontSizeBy, getFontSize } from './font-size';
+export { getSpacings, getSpacingBy, getSpacing } from './spacing';
+export { getWidthSizes, getWidthSizeBy, getWidthSize } from './width-size';
+export { getThemeColors, getThemeColorBy, getThemeColor } from './theme-color';

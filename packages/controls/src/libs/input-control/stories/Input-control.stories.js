@@ -1186,7 +1186,7 @@ export const ValueAddon = {
 						{...args}
 						defaultValue=""
 						controlAddonTypes={['variable', 'dynamic-value']}
-						variableTypes={['FONT_SIZE']}
+						variableTypes={['font-size']}
 						dynamicValueTypes={['TEXT']}
 					/>
 				</ControlContextProvider>
@@ -1201,7 +1201,7 @@ export const ValueAddon = {
 								slug: 'medium',
 								reference: 'preset',
 								var: 'var:preset|font-size|medium',
-								type: 'FONT_SIZE',
+								type: 'font-size',
 							},
 							id: 'medium',
 							isValueAddon: true,
@@ -1216,7 +1216,12 @@ export const ValueAddon = {
 						{...args}
 						defaultValue=""
 						controlAddonTypes={['variable', 'dynamic-value']}
-						variableTypes={['FONT_SIZE', 'GRADIENT']}
+						variableTypes={[
+							'font-size',
+							'width-size',
+							'spacing',
+							'gradient',
+						]}
 						dynamicValueTypes={['TEXT']}
 					/>
 				</ControlContextProvider>

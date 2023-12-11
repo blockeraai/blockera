@@ -15,5 +15,11 @@ export type UseValueAddonProps = {
 	dynamicValueTypes: Array<DynamicValueTypes>,
 };
 
-export type VariableTypes = 'FONT_SIZE' | 'GRADIENT';
+export type VariableTypes =
+	| 'font-size'
+	| 'linear-gradient'
+	| 'radial-gradient'
+	| 'spacing'
+	| 'width-size'
+	| 'theme-color';
 export type DynamicValueTypes = 'TEXT' | 'MEDIA';
