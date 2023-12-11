@@ -58,9 +58,7 @@ describe('border-radius-control component testing', () => {
 					all: '0px',
 				},
 			});
-			cy.get('button[data-value="all"]')
-				.should('have.attr', 'aria-checked')
-				.should('be.equal', 'true');
+			cy.getByDataTest('border-radius-input-all').should('exist');
 		});
 
 		describe('interaction test', () => {
@@ -97,11 +95,14 @@ describe('border-radius-control component testing', () => {
 					name,
 				});
 
-				cy.get('button[data-value="custom"]').click();
+				cy.getByAriaLabel('Custom Border Radius').click();
 
-				cy.get('button[data-value="custom"]')
-					.should('have.attr', 'aria-checked')
-					.should('be.equal', 'true');
+				cy.getByAriaLabel('Custom Border Radius')
+					.should('have.attr', 'style')
+					.should(
+						'include',
+						'var(--publisher-controls-border-color-focus)'
+					);
 
 				//Check data provider value
 				cy.get('input').then(() => {
@@ -143,7 +144,7 @@ describe('border-radius-control component testing', () => {
 					name,
 				});
 
-				cy.get('button[data-value="custom"]').click();
+				cy.getByAriaLabel('Custom Border Radius').click();
 				cy.get('input').should('have.value', '10');
 
 				//Check data provider value

@@ -1,12 +1,12 @@
 
 :root {
-	--publisher-value-addon-var-color: #009E10 ;
-	--publisher-value-addon-var-bg-color: #E6F5E8 ;
-	--publisher-value-addon-dv-color: #7405FF ;
-	--publisher-value-addon-dv-bg-color: #F1E7FF ;
+	--publisher-value-addon-var-color: #009e10;
+	--publisher-value-addon-var-bg-color: #e6f5e8;
+	--publisher-value-addon-dv-color: #7405ff;
+	--publisher-value-addon-dv-bg-color: #f1e7ff;
 }
 
-.publisher-control.publisher-control-value-addon-pointers{
+.publisher-control.publisher-control-value-addon-pointers {
 	position: absolute;
 	top: -8px;
 	right: -8px;
@@ -19,7 +19,7 @@
 		width: 16px;
 		height: 16px;
 		border-radius: 50%;
-		color: #fff;
+		color: #ffffff;
 		box-sizing: content-box;
 		cursor: pointer;
 		transition: all 0.15s ease;
@@ -37,6 +37,7 @@
 			transform: scale(1);
 
 			&:hover {
+
 				.publisher-control-var-pointer-icon {
 					display: none;
 				}
@@ -62,6 +63,7 @@
 }
 
 .publisher-field {
+
 	& > .publisher-field.publisher-field-control {
 		position: relative;
 	}
@@ -72,7 +74,9 @@
 	}
 
 	&:hover {
+
 		& > .publisher-field.publisher-field-control {
+
 			.publisher-control-value-addon-pointer {
 				transform: scale(1);
 
@@ -85,12 +89,14 @@
 }
 
 .publisher-control {
+
 	&.publisher-value-addon-support-dynamic-value,
 	&.publisher-value-addon-support-variable {
 		position: relative;
 	}
 
 	&:hover {
+
 		& > .publisher-control.publisher-control-value-addon-pointers .publisher-control-value-addon-pointer {
 			transform: scale(1);
 

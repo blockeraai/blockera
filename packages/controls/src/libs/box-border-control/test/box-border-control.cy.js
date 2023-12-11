@@ -47,12 +47,10 @@ describe('box-border-control component testing', () => {
 		});
 
 		cy.get('input[type="number"]').should('have.value', '0');
-		cy.get('button[aria-label="Compact"]')
-			.should('have.attr', 'aria-checked')
-			.should('be.equal', 'true');
-		cy.get('button[aria-label="Custom"]')
-			.should('have.attr', 'aria-checked')
-			.should('be.equal', 'false');
+
+		cy.getByAriaLabel('Custom Box Border')
+			.should('have.attr', 'style')
+			.should('include', 'var(--publisher-controls-color)');
 	});
 
 	it('should render correctly with no value and default value', () => {
@@ -63,12 +61,10 @@ describe('box-border-control component testing', () => {
 		});
 
 		cy.get('input[type="number"]').should('have.value', '0');
-		cy.get('button[aria-label="Compact"]')
-			.should('have.attr', 'aria-checked')
-			.should('be.equal', 'true');
-		cy.get('button[aria-label="Custom"]')
-			.should('have.attr', 'aria-checked')
-			.should('be.equal', 'false');
+
+		cy.getByAriaLabel('Custom Box Border')
+			.should('have.attr', 'style')
+			.should('include', 'var(--publisher-controls-color)');
 	});
 
 	describe('interaction test (type : all)', () => {
@@ -115,10 +111,13 @@ describe('box-border-control component testing', () => {
 				name,
 			});
 
-			cy.get('button[aria-label="Custom"]').click();
-			cy.get('button[aria-label="Custom"]')
-				.should('have.attr', 'aria-checked')
-				.should('be.equal', 'true');
+			cy.getByAriaLabel('Custom Box Border').click();
+			cy.getByAriaLabel('Custom Box Border')
+				.should('have.attr', 'style')
+				.should(
+					'include',
+					'var(--publisher-controls-border-color-focus)'
+				);
 
 			//Check data provider
 			cy.get('body').then(() => {
@@ -173,7 +172,7 @@ describe('box-border-control component testing', () => {
 				name,
 			});
 
-			cy.get('button[aria-label="Custom"]').click();
+			cy.getByAriaLabel('Custom Box Border').click();
 
 			cy.get('input[type="number"]').should('have.value', '2');
 
@@ -232,7 +231,7 @@ describe('box-border-control component testing', () => {
 				name,
 			});
 
-			cy.get('button[type="button"]').eq(1).as('right-color-button');
+			cy.getByDataCy('color-btn').eq(1).as('right-color-button');
 			cy.get('@right-color-button').click();
 			cy.get('input[maxlength="9"]').clear();
 			cy.get('input[maxlength="9"]').type('b0da3b');

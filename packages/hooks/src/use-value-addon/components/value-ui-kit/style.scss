@@ -15,30 +15,30 @@
 	color: var(--va-color);
 	border: 1px solid var(--va-color);
 	background-color: var(--va-bg-color);
-	
+
 
 	&.type-variable {
 		--va-color: var(--publisher-value-addon-var-color);
 		--va-bg-color: var(--publisher-value-addon-var-bg-color);
 	}
-	
+
 	&.type-dynamic-value {
 		--va-color: var(--publisher-value-addon-dv-color);
 		--va-bg-color: var(--publisher-value-addon-dv-bg-color);
 	}
-	
+
 	.publisher-control-item-name {
 		width: calc(100% - 26px);
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
-	
+
 	.publisher-control-item-icon {
 		pointer-events: none;
 		display: flex;
 		align-items: center;
-		
+
 		svg {
 			fill: currentColor;
 		}
