@@ -170,3 +170,22 @@ export function generateVariableString({
 
 	return `--wp--${reference}--${type}--${slug}`;
 }
+
+export function canUnlinkVariable(value: ValueAddon): boolean {
+	if (isValid(value)) {
+		if (
+			!isUndefined(value?.settings?.value) &&
+			value?.settings?.value !== ''
+		) {
+			return true;
+		}
+
+		const variable = getVariable(value.settings.slug);
+
+		if (!isUndefined(variable?.value) && variable?.value !== '') {
+			return true;
+		}
+	}
+
+	return false;
+}

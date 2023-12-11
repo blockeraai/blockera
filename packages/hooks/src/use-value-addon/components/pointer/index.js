@@ -28,6 +28,7 @@ export default function ({
 	variableTypes,
 	dynamicValueTypes,
 	handleOnClickVariable,
+	handleOnUnlinkVariable,
 	handleOnClickDynamicValue,
 	handleOnClickRemove,
 	isOpenVariables,
@@ -104,6 +105,7 @@ export default function ({
 				<VariablePicker
 					types={variableTypes}
 					onChoice={handleOnClickVariable}
+					onUnlink={handleOnUnlinkVariable}
 					onClose={() => {
 						setOpenVariables(false);
 					}}

@@ -8,11 +8,12 @@ import { useState } from '@wordpress/element';
  * Publisher dependencies
  */
 import { isObject, isUndefined, useLateEffect } from '@publisher/utils';
+import { getVariable } from '@publisher/core-data';
 
 /**
  * Internal dependencies
  */
-import { isValid } from './helpers';
+import { canUnlinkVariable, isValid } from './helpers';
 import { ValueUIKit, Pointer } from './components';
 import type { PointerProps } from './components/pointer/types';
 import type { UseValueAddonProps, ValueAddonProps } from './types';
@@ -93,6 +94,32 @@ export const useValueAddon = ({
 		setOpenVariables(false);
 	};
 
+	const handleOnUnlinkVariable = (): void => {
+		if (canUnlinkVariable(value)) {
+			setValue({
+				isValueAddon: false,
+				valueType: null,
+				id: null,
+				settings: {},
+			});
+
+			if (
+				!isUndefined(value?.settings?.value) &&
+				value?.settings?.value !== ''
+			) {
+				onChange(value?.settings?.value);
+			}
+
+			const variable = getVariable(value.settings.slug);
+
+			if (!isUndefined(variable?.value) && variable?.value !== '') {
+				onChange(variable?.value);
+			}
+
+			setOpenVariables(false);
+		}
+	};
+
 	const handleOnClickDynamicValue = (
 		event: SyntheticMouseEvent<EventTarget>
 	): void => {
@@ -140,6 +167,7 @@ export const useValueAddon = ({
 				? [dynamicValueTypes]
 				: dynamicValueTypes,
 		handleOnClickVariable,
+		handleOnUnlinkVariable,
 		handleOnClickDynamicValue,
 		handleOnClickRemove,
 		isOpenVariables,
@@ -157,6 +185,7 @@ export const useValueAddon = ({
 			<ValueUIKit pointerProps={pointerProps} value={value} />
 		),
 		handleOnClickVariable,
+		handleOnUnlinkVariable,
 		handleOnClickDynamicValue,
 	};
 };

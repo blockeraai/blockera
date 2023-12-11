@@ -20,20 +20,24 @@ import {
 	getVariables,
 	getVariableIcon,
 	generateVariableString,
+	canUnlinkVariable,
 } from '../../helpers';
 import { PickerTypeHeader, PopoverValueItem } from '../index';
 import PlusIcon from '../../icons/plus';
+import UnlinkIcon from '../../icons/unlink';
 
 export default function ({
 	value,
 	types,
 	onChoice,
 	onClose,
+	onUnlink,
 }: {
 	value: ValueAddon,
 	types: Array<VariableTypes>,
 	onChoice: (event: SyntheticMouseEvent<EventTarget>) => void,
 	onClose: (event: SyntheticMouseEvent<EventTarget>) => void,
+	onUnlink: (event: SyntheticMouseEvent<EventTarget>) => void,
 }): Element<any> {
 	let noVariablesText = __('No variable!', 'publisher-core');
 	const _isBlockTheme = isBlockTheme();
@@ -150,6 +154,19 @@ export default function ({
 			placement="left-start"
 			onClose={onClose}
 			className={controlInnerClassNames('popover-variables')}
+			titleButtonsRight={
+				canUnlinkVariable(value) && (
+					<Button
+						tabIndex="-1"
+						size={'extra-small'}
+						onClick={onUnlink}
+						style={{ padding: '5px' }}
+						label={__('Unlink Variable Value', 'publisher-core')}
+					>
+						<UnlinkIcon />
+					</Button>
+				)
+			}
 		>
 			<Flex direction="column" gap="25px">
 				<Variables />
