@@ -3,7 +3,7 @@
 	.components-panel__body-title {
 
 		.components-panel__body-toggle {
-			color: var(--publisher-controls-border-color-focus);
+			color: var(--publisher-controls-primary-color);
 			font-weight: 600;
 			font-size: 13px;
 			padding: 0 16px;
@@ -15,7 +15,7 @@
 				display: inline-flex;
 
 				svg {
-					color: var(--publisher-controls-border-color-focus);
+					color: var(--publisher-controls-primary-color);
 					fill: currentcolor;
 				}
 			}

@@ -28,8 +28,8 @@
 			}
 
 			&:focus {
-				border-color: var(--publisher-controls-border-color-focus);
-				box-shadow: 0 0 0 2px var(--publisher-controls-border-color-focus);
+				border-color: var(--publisher-controls-primary-color);
+				box-shadow: 0 0 0 2px var(--publisher-controls-primary-color);
 				color: var(--publisher-controls-color);
 			}
 
@@ -92,8 +92,8 @@
 
 			&:focus {
 
-				border-color: var(--publisher-controls-border-color-focus);
-				box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+				border-color: var(--publisher-controls-primary-color);
+				box-shadow: 0 0 0 1px var(--publisher-controls-primary-color);
 
 			}
 
@@ -146,14 +146,14 @@
 
 		&.is-focused {
 
-			color: var(--publisher-controls-border-color-focus);
+			color: var(--publisher-controls-primary-color);
 
 		}
 
 		&.is-open-popover {
 
 			color: #ffffff;
-			background: var(--publisher-controls-border-color-focus) !important;
+			background: var(--publisher-controls-primary-color) !important;
 			box-shadow: none;
 
 		}
@@ -173,7 +173,7 @@
 
 		.input-tag-placeholder {
 
-			color: var(--publisher-controls-border-color-focus);
+			color: var(--publisher-controls-primary-color);
 		}
 	}
 }

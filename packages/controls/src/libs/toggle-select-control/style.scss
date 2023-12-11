@@ -12,8 +12,8 @@
 
 		&.is-focused,
 		&:focus-within {
-			border-color: var(--publisher-controls-border-color-focus) !important;
-			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+			border-color: var(--publisher-controls-primary-color) !important;
+			box-shadow: 0 0 0 1px var(--publisher-controls-primary-color);
 		}
 
 		.components-toggle-group-control-option-base {
@@ -38,7 +38,7 @@
 		}
 
 		div[role="presentation"] {
-			background: var(--publisher-controls-border-color-focus);
+			background: var(--publisher-controls-primary-color);
 		}
 	}
 }

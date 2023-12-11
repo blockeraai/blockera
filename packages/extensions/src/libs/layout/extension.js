@@ -222,7 +222,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 											size="small"
 											style={{
 												color: flexDirection?.reverse
-													? 'var(--publisher-controls-border-color-focus)'
+													? 'var(--publisher-controls-primary-color)'
 													: 'var(--publisher-controls-color)',
 												padding: '6px',
 											}}
@@ -590,7 +590,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 											style={{
 												color: gap?.lock
 													? 'var(--publisher-controls-color)'
-													: 'var(--publisher-controls-border-color-focus)',
+													: 'var(--publisher-controls-primary-color)',
 												padding: '6px 3px',
 											}}
 										>
@@ -695,7 +695,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													color:
 														flexWrap?.value ===
 														'wrap-reverse'
-															? 'var(--publisher-controls-border-color-focus)'
+															? 'var(--publisher-controls-primary-color)'
 															: 'var(--publisher-controls-color)',
 													padding: '6px',
 												}}

@@ -67,7 +67,7 @@ export default function PositionButtonControl({
 						(defaultValue?.top === value?.top &&
 							defaultValue?.left === value?.left)
 							? 'var(--publisher-controls-color)'
-							: 'var(--publisher-controls-border-color-focus)',
+							: 'var(--publisher-controls-primary-color)',
 				}}
 				{...props}
 				data-test="position-button"

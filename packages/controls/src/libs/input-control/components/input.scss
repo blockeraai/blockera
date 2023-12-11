@@ -65,14 +65,14 @@
 
 		&:focus {
 
-			border-color: var(--publisher-controls-border-color-focus);
-			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+			border-color: var(--publisher-controls-primary-color);
+			box-shadow: 0 0 0 1px var(--publisher-controls-primary-color);
 
 		}
 
 		&.invalid {
 
-			--publisher-controls-border-color-focus: var(--publisher-controls-invalid-input-border-color);
+			--publisher-controls-primary-color: var(--publisher-controls-invalid-input-border-color);
 			--publisher-controls-border-color: var(--publisher-controls-invalid-input-border-color);
 
 		}
@@ -110,8 +110,8 @@
 
 		.publisher-control-input-tag {
 
-			border-color: var(--publisher-controls-border-color-focus) !important;
-			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
+			border-color: var(--publisher-controls-primary-color) !important;
+			box-shadow: 0 0 0 1px var(--publisher-controls-primary-color) !important;
 
 		}
 
@@ -127,15 +127,15 @@
 		&:focus {
 
 			border-radius: 2px;
-			border: 1px solid var(--publisher-controls-border-color-focus);
-			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+			border: 1px solid var(--publisher-controls-primary-color);
+			box-shadow: 0 0 0 1px var(--publisher-controls-primary-color);
 
 		}
 
 		&.is-focused {
 
-			border: 1px solid var(--publisher-controls-border-color-focus);
-			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+			border: 1px solid var(--publisher-controls-primary-color);
+			box-shadow: 0 0 0 1px var(--publisher-controls-primary-color);
 
 		}
 
@@ -198,7 +198,7 @@
 
 				&:hover {
 
-					background-color: var(--publisher-controls-border-color-focus);
+					background-color: var(--publisher-controls-primary-color);
 					color: #ffffff;
 
 				}

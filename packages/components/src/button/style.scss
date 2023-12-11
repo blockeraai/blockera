@@ -48,7 +48,7 @@
 
 		&.is-focus:not(:disabled),
 		&:focus:not(:disabled, .no-border) {
-			box-shadow: inset 0 0 0 1px var(--publisher-controls-border-color-focus, #ffffff), 0 0 0 1px var(--publisher-controls-background-color), 0 0 0 2.5px var(--publisher-controls-border-color-focus) !important;
+			box-shadow: inset 0 0 0 1px var(--publisher-controls-primary-color, #ffffff), 0 0 0 1px var(--publisher-controls-background-color), 0 0 0 2.5px var(--publisher-controls-primary-color) !important;
 		}
 
 		&:disabled,
@@ -64,12 +64,12 @@
 		outline: 3px solid transparent;
 
 		&:hover:not(:disabled, .no-border) {
-			box-shadow: inset 0 0 0 1px var(--publisher-controls-border-color-focus, #ffffff);
+			box-shadow: inset 0 0 0 1px var(--publisher-controls-primary-color, #ffffff);
 		}
 
 		&.is-focus:not(:disabled),
 		&:focus:not(:disabled, .no-border) {
-			box-shadow: inset 0 0 0 1px var(--publisher-controls-border-color-focus, #ffffff), 0 0 0 1px var(--publisher-controls-background-color), 0 0 0 2.5px var(--publisher-controls-border-color-focus) !important;
+			box-shadow: inset 0 0 0 1px var(--publisher-controls-primary-color, #ffffff), 0 0 0 1px var(--publisher-controls-background-color), 0 0 0 2.5px var(--publisher-controls-primary-color) !important;
 		}
 
 		&:disabled,
@@ -110,7 +110,7 @@
 
 		&.is-focus:not(:disabled),
 		&:focus:not(:disabled, .no-border, .toggle-focus) {
-			box-shadow: inset 0 0 0 1px var(--publisher-controls-border-color-focus), 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
+			box-shadow: inset 0 0 0 1px var(--publisher-controls-primary-color), 0 0 0 1px var(--publisher-controls-primary-color) !important;
 			outline: 2px solid transparent !important;
 		}
 

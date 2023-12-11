@@ -80,7 +80,7 @@ export default function ColorControl({
 				onClick={() => setOpen(!isOpen)}
 				style={{
 					...style,
-					'--publisher-controls-border-color-focus': value,
+					'--publisher-controls-primary-color': value,
 				}}
 				data-cy="color-btn"
 				{...props}
