@@ -19,6 +19,7 @@ import {
 	PositionButtonControl,
 } from '@publisher/controls';
 import { Flex } from '@publisher/components';
+import { isString } from '@publisher/utils';
 import { extensionInnerClassNames } from '@publisher/classnames';
 
 /**
@@ -157,6 +158,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 												): void => {
 													// do not sync if unit type is func
 													if (
+														isString(newValue) &&
 														!newValue.endsWith(
 															'func'
 														)
@@ -171,6 +173,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											)
 										}
 										{...props}
+										controlAddonTypes={['variable']}
+										variableTypes={['width-size']}
 									/>
 								</ControlContextProvider>
 							)}
@@ -208,6 +212,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											)
 										}
 										{...props}
+										controlAddonTypes={['variable']}
+										variableTypes={['width-size']}
 									/>
 								</ControlContextProvider>
 							)}
@@ -245,6 +251,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											)
 										}
 										{...props}
+										controlAddonTypes={['variable']}
+										variableTypes={['width-size']}
 									/>
 								</ControlContextProvider>
 							)}
@@ -301,6 +309,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 												): void => {
 													// do not sync if unit type is func
 													if (
+														isString(newValue) &&
 														!newValue.endsWith(
 															'func'
 														)
@@ -315,6 +324,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											)
 										}
 										{...props}
+										controlAddonTypes={['variable']}
+										variableTypes={['width-size']}
 									/>
 								</ControlContextProvider>
 							)}
@@ -352,6 +363,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											)
 										}
 										{...props}
+										controlAddonTypes={['variable']}
+										variableTypes={['width-size']}
 									/>
 								</ControlContextProvider>
 							)}
@@ -389,6 +402,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											)
 										}
 										{...props}
+										controlAddonTypes={['variable']}
+										variableTypes={['width-size']}
 									/>
 								</ControlContextProvider>
 							)}

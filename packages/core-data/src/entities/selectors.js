@@ -10,5 +10,4 @@ export const getCore = (entity: string): ?Object => {
 	return !coreData[entity] ? null : coreData[entity]();
 };
 
-///
-///
+export { getCurrentTheme } from './current-theme';

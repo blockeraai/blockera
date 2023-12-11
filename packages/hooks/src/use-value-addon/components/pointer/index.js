@@ -104,6 +104,7 @@ export default function ({
 				<VariablePicker
 					types={variableTypes}
 					onChoice={handleOnClickVariable}
+					value={value}
 				/>
 			)}
 
@@ -111,6 +112,7 @@ export default function ({
 				<DynamicValuePicker
 					types={dynamicValueTypes}
 					onChoice={handleOnClickDynamicValue}
+					value={value}
 				/>
 			)}
 

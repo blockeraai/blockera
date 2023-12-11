@@ -68,20 +68,20 @@
 		position: relative;
 	}
 
-	.publisher-value-addon-support-dynamic-value,
-	.publisher-value-addon-support-variable {
+	&.publisher-value-addon-support-dynamic-value,
+	&.publisher-value-addon-support-variable {
 		position: relative;
-	}
 
-	&:hover {
+		&:hover {
 
-		& > .publisher-field.publisher-field-control {
+			& > .publisher-field.publisher-field-control {
 
-			.publisher-control-value-addon-pointer {
-				transform: scale(1);
+				.publisher-control-value-addon-pointer {
+					transform: scale(1);
 
-				&:nth-child(2) {
-					transition: all 0.15s ease 0.06s; // delay
+					&:nth-child(2) {
+						transition: all 0.15s ease 0.06s; // delay
+					}
 				}
 			}
 		}
@@ -93,15 +93,15 @@
 	&.publisher-value-addon-support-dynamic-value,
 	&.publisher-value-addon-support-variable {
 		position: relative;
-	}
 
-	&:hover {
+		&:hover {
 
-		& > .publisher-control.publisher-control-value-addon-pointers .publisher-control-value-addon-pointer {
-			transform: scale(1);
+			& > .publisher-control.publisher-control-value-addon-pointers .publisher-control-value-addon-pointer {
+				transform: scale(1);
 
-			&:nth-child(2) {
-				transition: all 0.15s ease 0.06s; // delay
+				&:nth-child(2) {
+					transition: all 0.15s ease 0.06s; // delay
+				}
 			}
 		}
 	}
