@@ -5,6 +5,7 @@ export * from './object';
 export * from './string';
 export * from './use-value';
 export * from './var-export';
+export * from './is-block-theme';
 export * from './use-is-visible';
 export * from './use-late-effect';
 export * from './use-outside-click';
