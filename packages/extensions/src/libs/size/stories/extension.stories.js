@@ -51,6 +51,18 @@ blocksInitializer({
 							height: attributes?.publisherHeight || '',
 							overflow: attributes?.publisherOverflow || '',
 						}}
+						{...{
+							ratio: attributes?.publisherRatio || {
+								value: '',
+								width: '',
+								height: '',
+							},
+							fit: attributes?.publisherFit || '',
+							fitPosition: attributes?.publisherFitPosition || {
+								top: '',
+								left: '',
+							},
+						}}
 						extensionId={'Size'}
 						icon={<SizeExtensionIcon />}
 						storeName={'publisher-core/controls/repeater'}
@@ -95,6 +107,16 @@ export const Default = {
 					publisherWidth: '',
 					publisherHeight: '',
 					publisherOverflow: '',
+					publisherRatio: {
+						value: '',
+						width: '',
+						height: '',
+					},
+					publisherFit: '',
+					publisherFitPosition: {
+						top: '',
+						left: '',
+					},
 				},
 			},
 		],

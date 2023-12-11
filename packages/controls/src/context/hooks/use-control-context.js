@@ -183,6 +183,14 @@ export const useControlContext = (args) => {
 					value,
 					controlId: controlInfo.name,
 				});
+				// extends setValue default operation to modify nested control value!
+			} else if ('nested' === controlInfo?.type) {
+				modifyControlValue({
+					value,
+					propId: id,
+					valueCleanup,
+					controlId: controlInfo.name,
+				});
 			}
 		},
 		value: calculatedValue,

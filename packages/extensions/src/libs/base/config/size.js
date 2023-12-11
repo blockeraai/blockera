@@ -6,4 +6,6 @@ export const sizeConfig = {
 	publisherMaxWidth: true,
 	publisherMaxHeight: true,
 	publisherOverflow: true,
+	publisherRatio: true,
+	publisherFit: true,
 };
