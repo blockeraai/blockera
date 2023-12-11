@@ -160,7 +160,7 @@ describe('Border and Shadow extension', () => {
 				// Top Border
 				//
 				cy.get('@border-line').within(() => {
-					cy.get('[aria-label="Custom"]').click();
+					cy.getByAriaLabel('Custom Box Border').click();
 					cy.getByDataTest('border-control-component')
 						.eq(0)
 						.within(() => {
@@ -213,7 +213,6 @@ describe('Border and Shadow extension', () => {
 				// Right Border
 				//
 				cy.get('@border-line').within(() => {
-					cy.get('[aria-label="Custom"]').click();
 					cy.getByDataTest('border-control-component')
 						.eq(1)
 						.within(() => {
@@ -270,7 +269,6 @@ describe('Border and Shadow extension', () => {
 				// Bottom Border
 				//
 				cy.get('@border-line').within(() => {
-					cy.get('[aria-label="Custom"]').click();
 					cy.getByDataTest('border-control-component')
 						.eq(2)
 						.within(() => {
@@ -331,7 +329,6 @@ describe('Border and Shadow extension', () => {
 				// Left Border
 				//
 				cy.get('@border-line').within(() => {
-					cy.get('[aria-label="Custom"]').click();
 					cy.getByDataTest('border-control-component')
 						.eq(3)
 						.within(() => {
@@ -490,7 +487,7 @@ describe('Border and Shadow extension', () => {
 					cy.get('input[type="number"]').clear();
 					cy.get('input[type="number"]').type(25, { force: true });
 
-					cy.get('[aria-label="Custom"]').click();
+					cy.getByAriaLabel('Custom Border Radius').click();
 				});
 
 			//Check block
@@ -547,7 +544,7 @@ describe('Border and Shadow extension', () => {
 			cy.get('[aria-label="Radius"]')
 				.parents('[data-cy="base-control"]')
 				.within(() => {
-					cy.get('[aria-label="Custom"]').click();
+					cy.getByAriaLabel('Custom Border Radius').click();
 					cy.get('input[type="number"]').eq(0).type(25, {
 						force: true,
 					});
@@ -576,7 +573,6 @@ describe('Border and Shadow extension', () => {
 			cy.get('[aria-label="Radius"]')
 				.parents('[data-cy="base-control"]')
 				.within(() => {
-					cy.get('[aria-label="Custom"]').click();
 					// cy.get('input[type="number"]').eq(1).clear();
 					cy.get('input[type="number"]').eq(1).type(35, {
 						force: true,
@@ -605,7 +601,6 @@ describe('Border and Shadow extension', () => {
 			cy.get('[aria-label="Radius"]')
 				.parents('[data-cy="base-control"]')
 				.within(() => {
-					cy.get('[aria-label="Custom"]').click();
 					// cy.get('input[type="number"]').eq(2).clear();
 					cy.get('input[type="number"]').eq(2).type(45, {
 						force: true,
@@ -634,7 +629,6 @@ describe('Border and Shadow extension', () => {
 			cy.get('[aria-label="Radius"]')
 				.parents('[data-cy="base-control"]')
 				.within(() => {
-					cy.get('[aria-label="Custom"]').click();
 					// cy.get('input[type="number"]').eq(3).clear();
 					cy.get('input[type="number"]').eq(3).type(55, {
 						force: true,

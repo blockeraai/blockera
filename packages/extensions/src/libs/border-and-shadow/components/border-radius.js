@@ -13,6 +13,7 @@ import {
 	BorderRadiusControl,
 	ControlContextProvider,
 } from '@publisher/controls';
+import { extensionInnerClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -58,7 +59,11 @@ export const BorderRadius = ({
 				})(),
 			}}
 		>
-			<BaseControl columns="columns-1" controlName="border-radius">
+			<BaseControl
+				columns="columns-1"
+				controlName="border-radius"
+				className={extensionInnerClassNames('border-radius')}
+			>
 				<BorderRadiusControl
 					label={__('Radius', 'publisher-core')}
 					onChange={(newValue) =>
