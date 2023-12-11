@@ -140,6 +140,7 @@ export default function ({
 			title={__('Choose Variable', 'publisher-core')}
 			offset={125}
 			placement="left-start"
+			className={controlInnerClassNames('popover-variables')}
 		>
 			<Flex direction="column" gap="25px">
 				<Variables />
