@@ -19,6 +19,7 @@ import {
 	PositionButtonControl,
 } from '@publisher/controls';
 import { Flex } from '@publisher/components';
+import { extensionInnerClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -64,14 +65,57 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 			},
 		} = config;
 
+		const isHeightColumnActive = () => {
+			return publisherHeight || publisherMinHeight || publisherMaxHeight;
+		};
+
+		const isWidthColumnActive = () => {
+			return publisherWidth || publisherMinWidth || publisherMaxWidth;
+		};
+
+		const activeFieldLength = () => {
+			const sizeFields = [];
+			for (const key in config.sizeConfig) {
+				if (
+					(key.includes('Width') || key.includes('Height')) &&
+					config.sizeConfig[key]
+				) {
+					sizeFields.push(key);
+				}
+			}
+			return sizeFields.length;
+		};
+
 		return (
 			<>
-				<BaseControl columns="columns-1">
-					<Flex>
+				<BaseControl
+					columns="columns-1"
+					className={`${extensionInnerClassNames('size-input')} ${
+						isHeightColumnActive() &&
+						isWidthColumnActive() &&
+						activeFieldLength() > 2
+							? ''
+							: 'one-column'
+					}`}
+				>
+					<Flex
+						direction={activeFieldLength() <= 2 ? 'column' : 'row'}
+						gap={
+							isHeightColumnActive() && isWidthColumnActive()
+								? '10px'
+								: '0px'
+						}
+					>
 						<Flex
 							gap="10px"
 							direction="column"
-							style={{ width: '120px' }}
+							style={{
+								width:
+									isHeightColumnActive() &&
+									isWidthColumnActive() &&
+									activeFieldLength() > 2 &&
+									'119px',
+							}}
 						>
 							{isActiveField(publisherWidth) && (
 								<ControlContextProvider
@@ -86,11 +130,20 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									<InputControl
 										controlName="input"
 										label={__('Width', 'publisher-core')}
-										columns="1.1fr 1.9fr"
+										columns={
+											isHeightColumnActive() &&
+											activeFieldLength() > 2
+												? '1.1fr 1.9fr'
+												: 'columns-2'
+										}
 										placeholder="0"
 										unitType="width"
 										min="0"
 										defaultValue={_width}
+										smallWidth={
+											isHeightColumnActive() &&
+											activeFieldLength() > 2
+										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
 												'publisherWidth',
@@ -135,10 +188,19 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									<InputControl
 										controlName="input"
 										label={__('Min W', 'publisher-core')}
-										columns="1.1fr 1.9fr"
+										columns={
+											isHeightColumnActive() &&
+											activeFieldLength() > 2
+												? '1.1fr 1.9fr'
+												: 'columns-2'
+										}
 										placeholder="0"
 										unitType="min-width"
 										min="0"
+										smallWidth={
+											isHeightColumnActive() &&
+											activeFieldLength() > 2
+										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
 												'publisherMinWidth',
@@ -163,10 +225,19 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									<InputControl
 										controlName="input"
 										label={__('Max W', 'publisher-core')}
-										columns="1.1fr 1.9fr"
+										columns={
+											isHeightColumnActive() &&
+											activeFieldLength() > 2
+												? '1.1fr 1.9fr'
+												: 'columns-2'
+										}
 										placeholder="0"
 										unitType="max-width"
 										min="0"
+										smallWidth={
+											isHeightColumnActive() &&
+											activeFieldLength() > 2
+										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
 												'publisherMaxWidth',
@@ -182,7 +253,13 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 						<Flex
 							gap="10px"
 							direction="column"
-							style={{ width: '120px' }}
+							style={{
+								width:
+									isWidthColumnActive() &&
+									isHeightColumnActive() &&
+									activeFieldLength() > 2 &&
+									'119px',
+							}}
 						>
 							{isActiveField(publisherHeight) && (
 								<ControlContextProvider
@@ -197,11 +274,20 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									<InputControl
 										controlName="input"
 										label={__('Height', 'publisher-core')}
-										columns="1.1fr 1.9fr"
+										columns={
+											isWidthColumnActive() &&
+											activeFieldLength() > 2
+												? '1.1fr 1.9fr'
+												: 'columns-2'
+										}
 										placeholder="0"
 										unitType="height"
 										min="0"
 										defaultValue={_height}
+										smallWidth={
+											isWidthColumnActive() &&
+											activeFieldLength() > 2
+										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
 												'publisherHeight',
@@ -246,10 +332,19 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									<InputControl
 										controlName="input"
 										label={__('Min H', 'publisher-core')}
-										columns="1.1fr 1.9fr"
+										columns={
+											isWidthColumnActive() &&
+											activeFieldLength() > 2
+												? '1.1fr 1.9fr'
+												: 'columns-2'
+										}
 										placeholder="0"
 										unitType="min-height"
 										min="0"
+										smallWidth={
+											isWidthColumnActive() &&
+											activeFieldLength() > 2
+										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
 												'publisherMinHeight',
@@ -274,10 +369,19 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									<InputControl
 										controlName="input"
 										label={__('Max H', 'publisher-core')}
-										columns="1.1fr 1.9fr"
+										columns={
+											isWidthColumnActive() &&
+											activeFieldLength() > 2
+												? '1.1fr 1.9fr'
+												: 'columns-2'
+										}
 										placeholder="0"
 										unitType="max-height"
 										min="0"
+										smallWidth={
+											isWidthColumnActive() &&
+											activeFieldLength() > 2
+										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
 												'publisherMaxHeight',
