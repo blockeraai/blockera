@@ -83,7 +83,7 @@ export default function AlignmentMatrixControl({
 				justify="space-around"
 				className={controlClassNames('alignment-matrix')}
 			>
-				<div style={{ width: '75%' }}>
+				<div style={{ width: '72px' }}>
 					<WPAlignmentMatrixControl
 						className={controlClassNames('alignment-matrix-box')}
 						value={
@@ -102,7 +102,7 @@ export default function AlignmentMatrixControl({
 					/>
 				</div>
 
-				<div style={{ width: '100%' }}>
+				<div style={{ width: 'calc(100% - 80px)' }}>
 					<Flex direction="column" gap="8px" justify="space-around">
 						<InputControl
 							columns="columns-2"
