@@ -16,7 +16,11 @@ import { controlInnerClassNames } from '@publisher/classnames';
 /**
  * Internal dependencies
  */
-import { getVariables, getVariableIcon } from '../../helpers';
+import {
+	getVariables,
+	getVariableIcon,
+	generateVariableString,
+} from '../../helpers';
 import { PickerTypeHeader, PopoverValueItem } from '../index';
 import PlusIcon from '../../icons/plus';
 
@@ -111,9 +115,11 @@ export default function ({
 							...variable,
 							type,
 							reference: 'preset',
-							var: `var:preset|${type
-								.replace('_', '-')
-								.toLocaleLowerCase()}|${variable.slug}`,
+							var: generateVariableString({
+								reference: 'preset',
+								type,
+								slug: variable.slug,
+							}),
 						};
 
 						return (

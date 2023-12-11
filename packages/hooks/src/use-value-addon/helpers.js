@@ -15,15 +15,20 @@ import {
 	getRadialGradients,
 	getSpacings,
 	getWidthSizes,
+	getFontSize,
+	getWidthSize,
+	getLinearGradient,
+	getRadialGradient,
+	getSpacing,
+	getThemeColor,
 } from '@publisher/core-data';
 import { ColorIndicator } from '@publisher/components';
-import { isBlockTheme } from '@publisher/utils';
+import { isBlockTheme, isObject, isUndefined } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
-import type { ValueAddon, VariableItems } from './types/value-addon';
-import type { VariableTypes } from './types';
+import type { ValueAddon, VariableItems, VariableTypes } from './types';
 import VarTypeFontSizeIcon from './icons/var-font-size';
 import VarTypeSpacingIcon from './icons/var-spacing';
 import VarTypeWidthSizeIcon from './icons/var-width-size';
@@ -42,7 +47,49 @@ export function getValueAddonRealValue(value: ValueAddon | string): string {
 		return value.endsWith('func') ? value.slice(0, -4) : value;
 	}
 
-	// todo write real data implementation for variable
+	if (isObject(value)) {
+		if (!isUndefined(value?.isValueAddon)) {
+			let variable = {};
+
+			switch (value.settings.type) {
+				case 'width-size':
+					variable = getWidthSize(value.settings.slug);
+					break;
+
+				case 'font-size':
+					variable = getFontSize(value.settings.slug);
+					break;
+
+				case 'linear-gradient':
+					variable = getLinearGradient(value.settings.slug);
+					break;
+
+				case 'radial-gradient':
+					variable = getRadialGradient(value.settings.slug);
+					break;
+
+				case 'spacing':
+					variable = getSpacing(value.settings.slug);
+					break;
+
+				case 'theme-color':
+					variable = getThemeColor(value.settings.slug);
+					break;
+			}
+
+			//
+			// use current saved value if variable was not found
+			//
+			if (
+				isUndefined(variable?.value) &&
+				!isUndefined(value.settings.value)
+			) {
+				return value.settings.value;
+			}
+
+			return `var(${value?.settings?.var})`;
+		}
+	}
 
 	//$FlowFixMe
 	return value;
@@ -135,4 +182,22 @@ export function getVariables(type: VariableTypes): VariableItems {
 		variables: [],
 		notFound: true,
 	};
+}
+
+export function generateVariableString({
+	reference,
+	type,
+	slug,
+}: {
+	reference: 'publisher' | 'preset',
+	type: VariableTypes,
+	slug: string,
+}) {
+	type = type.replace(/^linear-|^radial-/i, '');
+
+	if (type === 'theme-color') {
+		type = 'color';
+	}
+
+	return `--wp--${reference}--${type}--${slug}`;
 }
