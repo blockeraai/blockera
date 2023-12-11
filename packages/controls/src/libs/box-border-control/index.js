@@ -12,19 +12,14 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
+import { Button } from '@publisher/components';
 
 /**
  * Internal dependencies
  */
 import { useControlContext } from '../../context';
 import { default as CustomIcon } from './icons/custom';
-import { default as CompactIcon } from './icons/compact';
-import {
-	BaseControl,
-	BorderControl,
-	LabelControl,
-	ToggleSelectControl,
-} from '../index';
+import { BaseControl, BorderControl, LabelControl } from '../index';
 import type { TBoxBorderControl, TValueTypes } from './types';
 
 export default function BoxBorderControl({
@@ -92,27 +87,25 @@ export default function BoxBorderControl({
 							defaultValue={value.all}
 						/>
 					)}
-
-					<ToggleSelectControl
-						id="type"
-						defaultValue={value ? value : ''}
-						options={[
-							{
-								label: __('Compact', 'publisher-core'),
-								value: 'all',
-								icon: <CompactIcon />,
-							},
-							{
-								label: __('Custom', 'publisher-core'),
-								value: 'custom',
-								icon: <CustomIcon />,
-							},
-						]}
-						onChange={(newValue) => {
-							if (newValue === 'custom') {
+					<Button
+						showTooltip={true}
+						tooltipPosition="top"
+						label={__('Custom Box Border', 'publisher-core')}
+						size="extra-small"
+						style={{
+							color:
+								value.type === 'custom'
+									? 'var(--publisher-controls-border-color-focus)'
+									: 'var(--publisher-controls-color)',
+							padding: '5px',
+							width: '30px',
+							height: '30px',
+						}}
+						onClick={() => {
+							if (value.type === 'all') {
 								setValue({
 									...value,
-									type: newValue,
+									type: 'custom',
 									top: value.all,
 									right: value.all,
 									bottom: value.all,
@@ -122,7 +115,7 @@ export default function BoxBorderControl({
 									controlId,
 									value: {
 										...value,
-										type: newValue,
+										type: 'custom',
 										top: value.all,
 										right: value.all,
 										bottom: value.all,
@@ -132,18 +125,20 @@ export default function BoxBorderControl({
 							} else {
 								setValue({
 									...value,
-									type: newValue,
+									type: 'all',
 								});
 								modifyControlValue({
 									controlId,
 									value: {
 										...value,
-										type: newValue,
+										type: 'all',
 									},
 								});
 							}
 						}}
-					/>
+					>
+						<CustomIcon />
+					</Button>
 				</div>
 
 				{value.type === 'custom' && (

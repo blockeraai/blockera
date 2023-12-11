@@ -13,12 +13,12 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { getValueAddonRealValue } from '@publisher/hooks';
+import { Button } from '@publisher/components';
 
 /**
  * Internal dependencies
  */
-import { InputControl, LabelControl, ToggleSelectControl } from '../index';
-import { default as CompactIcon } from './icons/compact';
+import { InputControl, LabelControl } from '../index';
 import { default as CustomIcon } from './icons/custom';
 import { useControlContext } from '../../context';
 import type { TBorderRadiusControlProps, TValue } from './types/control-type';
@@ -89,30 +89,28 @@ export default function BorderRadiusControl({
 						defaultValue={value.all}
 						placeholder="0"
 						smallWidth={true}
+						data-test="border-radius-input-all"
 					/>
 				)}
-
-				<ToggleSelectControl
-					id="type"
-					defaultValue={defaultValue ? defaultValue.type : 'compact'}
-					value={value.type}
-					options={[
-						{
-							label: __('Compact', 'publisher-core'),
-							value: 'all',
-							icon: <CompactIcon />,
-						},
-						{
-							label: __('Custom', 'publisher-core'),
-							value: 'custom',
-							icon: <CustomIcon />,
-						},
-					]}
-					onChange={(newValue) => {
-						if (newValue === 'custom') {
+				<Button
+					showTooltip={true}
+					tooltipPosition="top"
+					label={__('Custom Border Radius', 'publisher-core')}
+					size="extra-small"
+					style={{
+						color:
+							value.type === 'custom'
+								? 'var(--publisher-controls-border-color-focus)'
+								: 'var(--publisher-controls-color)',
+						padding: '5px',
+						width: '30px',
+						height: '30px',
+					}}
+					onClick={() => {
+						if (value.type === 'all') {
 							setValue({
 								...value,
-								type: newValue,
+								type: 'custom',
 								topLeft: value.all,
 								topRight: value.all,
 								bottomLeft: value.all,
@@ -122,7 +120,7 @@ export default function BorderRadiusControl({
 								controlId,
 								value: {
 									...value,
-									type: newValue,
+									type: 'custom',
 									topLeft: value.all,
 									topRight: value.all,
 									bottomLeft: value.all,
@@ -132,18 +130,20 @@ export default function BorderRadiusControl({
 						} else {
 							setValue({
 								...value,
-								type: newValue,
+								type: 'all',
 							});
 							modifyControlValue({
 								controlId,
 								value: {
 									...value,
-									type: newValue,
+									type: 'all',
 								},
 							});
 						}
 					}}
-				/>
+				>
+					<CustomIcon />
+				</Button>
 			</div>
 
 			{value.type === 'custom' && (
