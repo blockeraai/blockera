@@ -46,10 +46,25 @@
 		z-index: 6;
 		border-radius: 2px 2px 0 0;
 
-		.publisher-component-popover-close {
-			margin-left: auto;
-			padding: 0;
-			width: 22px;
+		.publisher-component-button {
+			padding: 0 !important;
+			min-width: 24px;
+			height: 24px;
+		}
+
+		.publisher-component-popover-title-buttons {
+			display: flex;
+			gap: 10px;
+			flex-direction: row;
+
+			&.title-right-buttons {
+				margin-left: auto;
+
+				.publisher-component-button:first-child:last-child {
+					border-color: transparent;
+					box-shadow: inset 0 0 0 1px transparent;
+				}
+			}
 		}
 	}
 
