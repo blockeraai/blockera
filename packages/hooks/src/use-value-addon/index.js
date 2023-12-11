@@ -151,7 +151,8 @@ export const useValueAddon = ({
 	return {
 		valueAddonClassNames,
 		ValueAddonPointer: () => <Pointer {...pointerProps} />,
-		isSetValueAddon: () => isValid(value),
+		isSetValueAddon: () =>
+			isValid(value) || isOpenVariables || isOpenDynamicValues,
 		ValueAddonUI: () => (
 			<ValueUIKit pointerProps={pointerProps} value={value} />
 		),

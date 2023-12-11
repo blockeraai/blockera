@@ -20,11 +20,19 @@
 	&.type-variable {
 		--va-color: var(--publisher-value-addon-var-color);
 		--va-bg-color: var(--publisher-value-addon-var-bg-color);
+
+		&.open-value-addon {
+			box-shadow: 0 0 0 1px var(--va-color);
+		}
 	}
 
 	&.type-dynamic-value {
 		--va-color: var(--publisher-value-addon-dv-color);
 		--va-bg-color: var(--publisher-value-addon-dv-bg-color);
+
+		&.open-value-addon {
+			box-shadow: 0 0 0 1px var(--va-color);
+		}
 	}
 
 	.publisher-control-item-name {

@@ -50,7 +50,7 @@ export default function ({
 					className={controlInnerClassNames(
 						'value-addon-pointer',
 						'var-pointer',
-						isVarActive && 'active-value-addon'
+						(isVarActive || isOpenVariables) && 'active-value-addon'
 					)}
 					onClick={handleVariableModal}
 				>

@@ -77,7 +77,7 @@ export function getVariableIcon({
 			return <VarTypeWidthSizeIcon />;
 	}
 
-	return <></>;
+	return '';
 }
 
 // todo write tests
