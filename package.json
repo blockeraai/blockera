@@ -34,7 +34,8 @@
 		"@publisher/extensions": "file:packages/extensions",
 		"@publisher/hooks": "file:packages/hooks",
 		"@publisher/style-engine": "file:packages/style-engine",
-		"@publisher/utils": "file:packages/utils"
+		"@publisher/utils": "file:packages/utils",
+		"fast-memoize": "^2.5.2"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.22.9",
