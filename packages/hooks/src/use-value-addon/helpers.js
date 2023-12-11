@@ -15,12 +15,7 @@ import {
 	getRadialGradients,
 	getSpacings,
 	getWidthSizes,
-	getFontSize,
-	getWidthSize,
-	getLinearGradient,
-	getRadialGradient,
-	getSpacing,
-	getThemeColor,
+	getVariable,
 } from '@publisher/core-data';
 import { ColorIndicator } from '@publisher/components';
 import { isBlockTheme, isObject, isUndefined } from '@publisher/utils';
@@ -49,33 +44,7 @@ export function getValueAddonRealValue(value: ValueAddon | string): string {
 
 	if (isObject(value)) {
 		if (!isUndefined(value?.isValueAddon)) {
-			let variable = {};
-
-			switch (value.settings.type) {
-				case 'width-size':
-					variable = getWidthSize(value.settings.slug);
-					break;
-
-				case 'font-size':
-					variable = getFontSize(value.settings.slug);
-					break;
-
-				case 'linear-gradient':
-					variable = getLinearGradient(value.settings.slug);
-					break;
-
-				case 'radial-gradient':
-					variable = getRadialGradient(value.settings.slug);
-					break;
-
-				case 'spacing':
-					variable = getSpacing(value.settings.slug);
-					break;
-
-				case 'theme-color':
-					variable = getThemeColor(value.settings.slug);
-					break;
-			}
+			const variable = getVariable(value.settings.slug);
 
 			//
 			// use current saved value if variable was not found
