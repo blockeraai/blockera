@@ -86,34 +86,34 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 			return sizeFields.length;
 		};
 
+		const isHeightActive = isHeightColumnActive();
+		const isWidthActive = isWidthColumnActive();
+		const lengthOfActiveFields = activeFieldLength();
+
 		return (
 			<>
 				<BaseControl
 					columns="columns-1"
 					className={`${extensionInnerClassNames('size-input')} ${
-						isHeightColumnActive() &&
-						isWidthColumnActive() &&
-						activeFieldLength() > 2
+						isHeightActive &&
+						isWidthActive &&
+						lengthOfActiveFields > 2
 							? ''
 							: 'one-column'
 					}`}
 				>
 					<Flex
-						direction={activeFieldLength() <= 2 ? 'column' : 'row'}
-						gap={
-							isHeightColumnActive() && isWidthColumnActive()
-								? '10px'
-								: '0px'
-						}
+						direction={lengthOfActiveFields <= 2 ? 'column' : 'row'}
+						gap={isHeightActive && isWidthActive ? '10px' : '0px'}
 					>
 						<Flex
 							gap="10px"
 							direction="column"
 							style={{
 								width:
-									isHeightColumnActive() &&
-									isWidthColumnActive() &&
-									activeFieldLength() > 2 &&
+									isHeightActive &&
+									isWidthActive &&
+									lengthOfActiveFields > 2 &&
 									'119px',
 							}}
 						>
@@ -131,8 +131,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										controlName="input"
 										label={__('Width', 'publisher-core')}
 										columns={
-											isHeightColumnActive() &&
-											activeFieldLength() > 2
+											isHeightActive &&
+											lengthOfActiveFields > 2
 												? '1.1fr 1.9fr'
 												: 'columns-2'
 										}
@@ -141,8 +141,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										min="0"
 										defaultValue={_width}
 										smallWidth={
-											isHeightColumnActive() &&
-											activeFieldLength() > 2
+											isHeightActive &&
+											lengthOfActiveFields > 2
 										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
@@ -189,8 +189,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										controlName="input"
 										label={__('Min W', 'publisher-core')}
 										columns={
-											isHeightColumnActive() &&
-											activeFieldLength() > 2
+											isHeightActive &&
+											lengthOfActiveFields > 2
 												? '1.1fr 1.9fr'
 												: 'columns-2'
 										}
@@ -198,8 +198,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										unitType="min-width"
 										min="0"
 										smallWidth={
-											isHeightColumnActive() &&
-											activeFieldLength() > 2
+											isHeightActive &&
+											lengthOfActiveFields > 2
 										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
@@ -226,8 +226,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										controlName="input"
 										label={__('Max W', 'publisher-core')}
 										columns={
-											isHeightColumnActive() &&
-											activeFieldLength() > 2
+											isHeightActive &&
+											lengthOfActiveFields > 2
 												? '1.1fr 1.9fr'
 												: 'columns-2'
 										}
@@ -235,8 +235,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										unitType="max-width"
 										min="0"
 										smallWidth={
-											isHeightColumnActive() &&
-											activeFieldLength() > 2
+											isHeightActive &&
+											lengthOfActiveFields > 2
 										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
@@ -255,9 +255,9 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 							direction="column"
 							style={{
 								width:
-									isWidthColumnActive() &&
-									isHeightColumnActive() &&
-									activeFieldLength() > 2 &&
+									isHeightActive &&
+									isWidthActive &&
+									lengthOfActiveFields > 2 &&
 									'119px',
 							}}
 						>
@@ -275,8 +275,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										controlName="input"
 										label={__('Height', 'publisher-core')}
 										columns={
-											isWidthColumnActive() &&
-											activeFieldLength() > 2
+											isWidthActive &&
+											lengthOfActiveFields > 2
 												? '1.1fr 1.9fr'
 												: 'columns-2'
 										}
@@ -285,8 +285,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										min="0"
 										defaultValue={_height}
 										smallWidth={
-											isWidthColumnActive() &&
-											activeFieldLength() > 2
+											isWidthActive &&
+											lengthOfActiveFields > 2
 										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
@@ -333,8 +333,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										controlName="input"
 										label={__('Min H', 'publisher-core')}
 										columns={
-											isWidthColumnActive() &&
-											activeFieldLength() > 2
+											isWidthActive &&
+											lengthOfActiveFields > 2
 												? '1.1fr 1.9fr'
 												: 'columns-2'
 										}
@@ -342,8 +342,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										unitType="min-height"
 										min="0"
 										smallWidth={
-											isWidthColumnActive() &&
-											activeFieldLength() > 2
+											isWidthActive &&
+											lengthOfActiveFields > 2
 										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
@@ -370,8 +370,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										controlName="input"
 										label={__('Max H', 'publisher-core')}
 										columns={
-											isWidthColumnActive() &&
-											activeFieldLength() > 2
+											isWidthActive &&
+											lengthOfActiveFields > 2
 												? '1.1fr 1.9fr'
 												: 'columns-2'
 										}
@@ -379,8 +379,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										unitType="max-height"
 										min="0"
 										smallWidth={
-											isWidthColumnActive() &&
-											activeFieldLength() > 2
+											isWidthActive &&
+											lengthOfActiveFields > 2
 										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
