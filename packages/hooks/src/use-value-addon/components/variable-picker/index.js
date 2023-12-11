@@ -24,10 +24,12 @@ export default function ({
 	value,
 	types,
 	onChoice,
+	onClose,
 }: {
 	value: ValueAddon,
 	types: Array<VariableTypes>,
 	onChoice: (event: SyntheticMouseEvent<EventTarget>) => void,
+	onClose: (event: SyntheticMouseEvent<EventTarget>) => void,
 }): Element<any> {
 	let noVariablesText = __('No variable!', 'publisher-core');
 	const _isBlockTheme = isBlockTheme();
@@ -140,6 +142,7 @@ export default function ({
 			title={__('Choose Variable', 'publisher-core')}
 			offset={125}
 			placement="left-start"
+			onClose={onClose}
 			className={controlInnerClassNames('popover-variables')}
 		>
 			<Flex direction="column" gap="25px">

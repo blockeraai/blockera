@@ -104,6 +104,9 @@ export default function ({
 				<VariablePicker
 					types={variableTypes}
 					onChoice={handleOnClickVariable}
+					onClose={() => {
+						setOpenVariables(false);
+					}}
 					value={value}
 				/>
 			)}
@@ -112,6 +115,9 @@ export default function ({
 				<DynamicValuePicker
 					types={dynamicValueTypes}
 					onChoice={handleOnClickDynamicValue}
+					onClose={() => {
+						isOpenDynamicValues(false);
+					}}
 					value={value}
 				/>
 			)}
