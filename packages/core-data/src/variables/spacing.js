@@ -1,5 +1,10 @@
 // @flow
 /**
+ * External dependencies
+ */
+import { default as memoize } from 'fast-memoize';
+
+/**
  * Internal dependencies
  */
 import { getBlockEditorSettings } from './selectors';
@@ -9,11 +14,7 @@ import { getBlockEditorSettings } from './selectors';
  */
 import { isUndefined } from '@publisher/utils';
 
-export const getSpacings = (): Array<{
-	slug: string,
-	name: string,
-	value: string,
-}> => {
+const _getSpacings = function () {
 	// todo improve this to support all states and be more safe
 	const spaces =
 		getBlockEditorSettings()?.__experimentalFeatures?.spacing?.spacingSizes
@@ -32,6 +33,27 @@ export const getSpacings = (): Array<{
 	});
 };
 
+// eslint-disable-next-line no-unused-vars
+const _getSpacingsMemoized = memoize(_getSpacings);
+
+export const getSpacings = (): Array<{
+	slug: string,
+	name: string,
+	value: string,
+}> => {
+	return _getSpacingsMemoized();
+};
+
+const _getSpacing = function (slug: string): ?{
+	slug: string,
+	name: string,
+	value: string,
+} {
+	return getSpacings().find((item) => item.slug === slug);
+};
+
+const _getSpacingMemoized = memoize(_getSpacing);
+
 export const getSpacing = (
 	slug: string
 ): ?{
@@ -39,8 +61,21 @@ export const getSpacing = (
 	name: string,
 	value: string,
 } => {
-	return getSpacings().find((item) => item.name === slug);
+	return _getSpacingMemoized(slug);
 };
+
+const _getSpacingBy = function (
+	field: string,
+	value: any
+): ?{
+	slug: string,
+	name: string,
+	value: string,
+} {
+	return getSpacings().find((item) => item[field] === value);
+};
+
+const _getSpacingByMemoized = memoize(_getSpacingBy);
 
 export const getSpacingBy = (
 	field: string,
@@ -50,5 +85,5 @@ export const getSpacingBy = (
 	name: string,
 	value: string,
 } => {
-	return getSpacings().find((item) => item[field] === value);
+	return _getSpacingByMemoized(field, value);
 };

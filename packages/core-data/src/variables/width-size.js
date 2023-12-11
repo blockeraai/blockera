@@ -3,6 +3,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { default as memoize } from 'fast-memoize';
 
 /**
  * Publisher dependencies
@@ -14,11 +15,7 @@ import { isUndefined } from '@publisher/utils';
  */
 import { getBlockEditorSettings } from './selectors';
 
-export const getWidthSizes = (): Array<{
-	slug: string,
-	name: string,
-	value: string,
-}> => {
+const _getWidthSizes = function () {
 	// todo improve this to support all states and be more safe
 	const layout = getBlockEditorSettings()?.__experimentalFeatures?.layout;
 
@@ -47,6 +44,26 @@ export const getWidthSizes = (): Array<{
 	return items;
 };
 
+const _getWidthSizesMemoized = memoize(_getWidthSizes);
+
+export const getWidthSizes = (): Array<{
+	slug: string,
+	name: string,
+	value: string,
+}> => {
+	return _getWidthSizesMemoized();
+};
+
+const _getWidthSize = function (slug: string): {
+	slug: string,
+	name: string,
+	value: string,
+} {
+	return getWidthSizes().find((item) => item.slug === slug);
+};
+
+const _getWidthSizeMemoized = memoize(_getWidthSize);
+
 export const getWidthSize = (
 	slug: string
 ): ?{
@@ -54,8 +71,21 @@ export const getWidthSize = (
 	name: string,
 	value: string,
 } => {
-	return getWidthSizes().find((item) => item.name === slug);
+	return _getWidthSizeMemoized(slug);
 };
+
+const _getWidthSizeBy = function (
+	field: string,
+	value: any
+): ?{
+	slug: string,
+	name: string,
+	value: string,
+} {
+	return getWidthSizes().find((item) => item[field] === value);
+};
+
+const _getWidthSizeByMemoized = memoize(_getWidthSizeBy);
 
 export const getWidthSizeBy = (
 	field: string,
@@ -65,5 +95,5 @@ export const getWidthSizeBy = (
 	name: string,
 	value: string,
 } => {
-	return getWidthSizes().find((item) => item[field] === value);
+	return _getWidthSizeByMemoized(field, value);
 };
