@@ -106,6 +106,7 @@ export default function ({
 					types={variableTypes}
 					onChoice={handleOnClickVariable}
 					onUnlink={handleOnUnlinkVariable}
+					onRemove={handleOnClickRemove}
 					onClose={() => {
 						setOpenVariables(false);
 					}}
