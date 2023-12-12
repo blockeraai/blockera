@@ -17,6 +17,7 @@ export type PointerProps = {
 		event: SyntheticMouseEvent<EventTarget>
 	) => void,
 	handleOnClickVariable: (event: SyntheticMouseEvent<EventTarget>) => void,
+	handleOnUnlinkVariable: (event: SyntheticMouseEvent<EventTarget>) => void,
 	handleOnClickRemove: (event: SyntheticMouseEvent<EventTarget>) => void,
 	isOpenVariables: boolean,
 	setOpenVariables: (value: boolean) => void,

@@ -14,6 +14,7 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 import { WithPlaygroundStyles } from '../../../../../.storybook/decorators/with-playground-styles';
 import Flex from '../../flex';
 import Popover from '../index';
+import { Button } from '../../button';
 
 const { WithInspectorStyles, SharedDecorators } = Decorators;
 
@@ -320,6 +321,107 @@ export const Placements = {
 						{...args}
 						anchor={leftEndAnchor}
 						placement="left-end"
+					/>
+				</Flex>
+			</Flex>
+		);
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+};
+
+export const TitleButtons = {
+	args: {
+		...Default.args,
+	},
+	render: (args) => {
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+		const [title1Anchor, setTitle1Anchor] = useState();
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+		const [title2Anchor, setTitle2Anchor] = useState();
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+		const [title3Anchor, setTitle3Anchor] = useState();
+
+		return (
+			<Flex direction="column" gap="100px">
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">
+						Popover<span>Left Custom Button</span>
+					</h2>
+					<p
+						ref={setTitle1Anchor}
+						style={{
+							backgroundColor: '#eee',
+							padding: '20px',
+							marginTop: '100px',
+						}}
+					>
+						Popover Anchor
+					</p>
+					<Popover
+						{...args}
+						anchor={title1Anchor}
+						placement="top-start"
+						titleButtonsLeft={
+							<Button
+								size="extra-small"
+								align="center"
+								tabIndex="-1"
+							>
+								←
+							</Button>
+						}
+					/>
+				</Flex>
+
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">
+						Popover<span>Right Custom Button</span>
+					</h2>
+					<p
+						ref={setTitle2Anchor}
+						style={{
+							backgroundColor: '#eee',
+							padding: '20px',
+							marginTop: '100px',
+						}}
+					>
+						Popover Anchor
+					</p>
+					<Popover
+						{...args}
+						anchor={title2Anchor}
+						placement="top-start"
+						titleButtonsRight={
+							<Button
+								size="extra-small"
+								align="center"
+								tabIndex="-1"
+							>
+								👋
+							</Button>
+						}
+					/>
+				</Flex>
+
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">
+						Popover<span>No Buttons</span>
+					</h2>
+					<p
+						ref={setTitle3Anchor}
+						style={{
+							backgroundColor: '#eee',
+							padding: '20px',
+							marginTop: '100px',
+						}}
+					>
+						Popover Anchor
+					</p>
+					<Popover
+						{...args}
+						anchor={title3Anchor}
+						placement="top-start"
+						closeButton={false}
 					/>
 				</Flex>
 			</Flex>

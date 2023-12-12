@@ -12,12 +12,12 @@
 		border-color: var(--publisher-controls-border-color);
 
 		&:checked {
-			border-color: var(--publisher-controls-border-color-focus) !important;
-			background-color: var(--publisher-controls-border-color-focus) !important;
+			border-color: var(--publisher-controls-primary-color) !important;
+			background-color: var(--publisher-controls-primary-color) !important;
 		}
 
 		&:focus {
-			box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px var(--publisher-controls-border-color-focus);
+			box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px var(--publisher-controls-primary-color);
 			outline: 2px solid transparent;
 		}
 	}

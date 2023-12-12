@@ -15,15 +15,15 @@ import {
 	getRadialGradients,
 	getSpacings,
 	getWidthSizes,
+	getVariable,
 } from '@publisher/core-data';
 import { ColorIndicator } from '@publisher/components';
-import { isBlockTheme } from '@publisher/utils';
+import { isBlockTheme, isObject, isUndefined } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
-import type { ValueAddon, VariableItems } from './types/value-addon';
-import type { VariableTypes } from './types';
+import type { ValueAddon, VariableItems, VariableTypes } from './types';
 import VarTypeFontSizeIcon from './icons/var-font-size';
 import VarTypeSpacingIcon from './icons/var-spacing';
 import VarTypeWidthSizeIcon from './icons/var-width-size';
@@ -42,7 +42,23 @@ export function getValueAddonRealValue(value: ValueAddon | string): string {
 		return value.endsWith('func') ? value.slice(0, -4) : value;
 	}
 
-	// todo write real data implementation for variable
+	if (isObject(value)) {
+		if (!isUndefined(value?.isValueAddon)) {
+			const variable = getVariable(value.settings.slug);
+
+			//
+			// use current saved value if variable was not found
+			//
+			if (
+				isUndefined(variable?.value) &&
+				!isUndefined(value.settings.value)
+			) {
+				return value.settings.value;
+			}
+
+			return `var(${value?.settings?.var})`;
+		}
+	}
 
 	//$FlowFixMe
 	return value;
@@ -77,7 +93,7 @@ export function getVariableIcon({
 			return <VarTypeWidthSizeIcon />;
 	}
 
-	return <></>;
+	return '';
 }
 
 // todo write tests
@@ -135,4 +151,41 @@ export function getVariables(type: VariableTypes): VariableItems {
 		variables: [],
 		notFound: true,
 	};
+}
+
+export function generateVariableString({
+	reference,
+	type,
+	slug,
+}: {
+	reference: 'publisher' | 'preset',
+	type: VariableTypes,
+	slug: string,
+}) {
+	type = type.replace(/^linear-|^radial-/i, '');
+
+	if (type === 'theme-color') {
+		type = 'color';
+	}
+
+	return `--wp--${reference}--${type}--${slug}`;
+}
+
+export function canUnlinkVariable(value: ValueAddon): boolean {
+	if (isValid(value)) {
+		if (
+			!isUndefined(value?.settings?.value) &&
+			value?.settings?.value !== ''
+		) {
+			return true;
+		}
+
+		const variable = getVariable(value.settings.slug);
+
+		if (!isUndefined(variable?.value) && variable?.value !== '') {
+			return true;
+		}
+	}
+
+	return false;
 }

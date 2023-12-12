@@ -28,6 +28,7 @@ export default function ({
 	variableTypes,
 	dynamicValueTypes,
 	handleOnClickVariable,
+	handleOnUnlinkVariable,
 	handleOnClickDynamicValue,
 	handleOnClickRemove,
 	isOpenVariables,
@@ -50,7 +51,7 @@ export default function ({
 					className={controlInnerClassNames(
 						'value-addon-pointer',
 						'var-pointer',
-						isVarActive && 'active-value-addon'
+						(isVarActive || isOpenVariables) && 'active-value-addon'
 					)}
 					onClick={handleVariableModal}
 				>
@@ -104,6 +105,11 @@ export default function ({
 				<VariablePicker
 					types={variableTypes}
 					onChoice={handleOnClickVariable}
+					onUnlink={handleOnUnlinkVariable}
+					onRemove={handleOnClickRemove}
+					onClose={() => {
+						setOpenVariables(false);
+					}}
 					value={value}
 				/>
 			)}
@@ -112,6 +118,9 @@ export default function ({
 				<DynamicValuePicker
 					types={dynamicValueTypes}
 					onChoice={handleOnClickDynamicValue}
+					onClose={() => {
+						isOpenDynamicValues(false);
+					}}
 					value={value}
 				/>
 			)}

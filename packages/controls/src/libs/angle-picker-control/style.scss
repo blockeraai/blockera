@@ -27,8 +27,8 @@
 		}
 
 		.components-input-control__input:focus + .components-input-control__suffix + .components-input-control__backdrop {
-			border-color: var(--publisher-controls-border-color-focus) !important;
-			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus) !important;
+			border-color: var(--publisher-controls-primary-color) !important;
+			box-shadow: 0 0 0 1px var(--publisher-controls-primary-color) !important;
 		}
 
 		.components-input-control__suffix {

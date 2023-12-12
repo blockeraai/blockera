@@ -63,7 +63,7 @@ describe('Color-Picker Control', () => {
 
 			cy.get('[id^=inspector-input-control-]').clear();
 			cy.get('[id^=inspector-input-control-]').type('283f8a');
-			cy.get('[aria-label=reset-color]').click();
+			cy.get('[aria-label="Reset Color (Clear)"]').click();
 
 			// visual and data assertion
 			cy.get('[id^=inspector-input-control-]')

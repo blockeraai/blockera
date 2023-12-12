@@ -101,7 +101,7 @@ describe('border-radius-control component testing', () => {
 					.should('have.attr', 'style')
 					.should(
 						'include',
-						'var(--publisher-controls-border-color-focus)'
+						'var(--publisher-controls-primary-color)'
 					);
 
 				//Check data provider value

@@ -232,10 +232,7 @@ describe('position-button-control component testing', () => {
 			//Check color
 			cy.getByDataTest('position-button')
 				.invoke('attr', 'style')
-				.should(
-					'include',
-					'var(--publisher-controls-border-color-focus)'
-				);
+				.should('include', 'var(--publisher-controls-primary-color)');
 		});
 
 		it('should onChange be called, when interacting', () => {

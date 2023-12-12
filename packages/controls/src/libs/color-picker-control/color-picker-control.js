@@ -9,7 +9,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Publisher dependencies
  */
-import { Button, Flex, Popover } from '@publisher/components';
+import { Button, ColorIndicator, Popover } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -17,7 +17,6 @@ import { Button, Flex, Popover } from '@publisher/components';
 import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
 import type { MixedElement } from 'react';
-import ResetColorIcon from './ResetColorIcon';
 import type { Props } from './types';
 
 export default function ColorPickerControl({
@@ -64,30 +63,29 @@ export default function ColorPickerControl({
 			>
 				{isOpen && (
 					<Popover
-						title={
-							<Flex
-								justifyContent={'space-between'}
-								alignItems={'center'}
-								style={{ width: '100%' }}
-							>
-								<p>{popoverTitle}</p>
-								{hasClearBtn && (
-									<Button
-										isFocus={false}
-										size={'extra-small'}
-										onClick={() => setValue('')}
-										style={{ padding: '5px' }}
-										aria-label="reset-color"
-									>
-										<ResetColorIcon />
-									</Button>
-								)}
-							</Flex>
-						}
+						title={popoverTitle}
 						offset={20}
 						placement={placement}
 						className="components-palette-edit-popover"
 						onClose={onClose}
+						titleButtonsRight={
+							<Button
+								tabIndex="-1"
+								size={'extra-small'}
+								onClick={() => setValue('')}
+								style={{ padding: '5px' }}
+								aria-label={__(
+									'Reset Color (Clear)',
+									'publisher-core'
+								)}
+							>
+								<ColorIndicator
+									type="color"
+									value=""
+									size={16}
+								/>
+							</Button>
+						}
 					>
 						<WPColorPicker
 							enableAlpha={false}
@@ -115,7 +113,10 @@ export default function ColorPickerControl({
 				{...props}
 			/>
 			{hasClearBtn && (
-				<Button onClick={() => setValue('')} aria-label="reset-color">
+				<Button
+					onClick={() => setValue('')}
+					aria-label={__('Reset Color (Clear)', 'publisher-core')}
+				>
 					{__('Clear', 'publisher-core')}
 				</Button>
 			)}

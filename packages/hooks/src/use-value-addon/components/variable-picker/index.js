@@ -16,18 +16,32 @@ import { controlInnerClassNames } from '@publisher/classnames';
 /**
  * Internal dependencies
  */
-import { getVariables, getVariableIcon } from '../../helpers';
+import {
+	getVariables,
+	getVariableIcon,
+	generateVariableString,
+	canUnlinkVariable,
+	isValid,
+} from '../../helpers';
 import { PickerTypeHeader, PopoverValueItem } from '../index';
 import PlusIcon from '../../icons/plus';
+import UnlinkIcon from '../../icons/unlink';
+import TrashIcon from '../../icons/trash';
 
 export default function ({
 	value,
 	types,
 	onChoice,
+	onClose,
+	onUnlink,
+	onRemove,
 }: {
 	value: ValueAddon,
 	types: Array<VariableTypes>,
 	onChoice: (event: SyntheticMouseEvent<EventTarget>) => void,
+	onClose: (event: SyntheticMouseEvent<EventTarget>) => void,
+	onUnlink: (event: SyntheticMouseEvent<EventTarget>) => void,
+	onRemove: (event: SyntheticMouseEvent<EventTarget>) => void,
 }): Element<any> {
 	let noVariablesText = __('No variable!', 'publisher-core');
 	const _isBlockTheme = isBlockTheme();
@@ -109,9 +123,11 @@ export default function ({
 							...variable,
 							type,
 							reference: 'preset',
-							var: `var:preset|${type
-								.replace('_', '-')
-								.toLocaleLowerCase()}|${variable.slug}`,
+							var: generateVariableString({
+								reference: 'preset',
+								type,
+								slug: variable.slug,
+							}),
 						};
 
 						return (
@@ -140,6 +156,38 @@ export default function ({
 			title={__('Choose Variable', 'publisher-core')}
 			offset={125}
 			placement="left-start"
+			onClose={onClose}
+			className={controlInnerClassNames('popover-variables')}
+			titleButtonsRight={
+				<>
+					{canUnlinkVariable(value) && (
+						<Button
+							tabIndex="-1"
+							size={'extra-small'}
+							onClick={onUnlink}
+							style={{ padding: '5px' }}
+							label={__(
+								'Unlink Variable Value',
+								'publisher-core'
+							)}
+						>
+							<UnlinkIcon />
+						</Button>
+					)}
+
+					{isValid(value) && (
+						<Button
+							tabIndex="-1"
+							size={'extra-small'}
+							onClick={onRemove}
+							style={{ padding: '5px' }}
+							label={__('Remove', 'publisher-core')}
+						>
+							<TrashIcon />
+						</Button>
+					)}
+				</>
+			}
 		>
 			<Flex direction="column" gap="25px">
 				<Variables />

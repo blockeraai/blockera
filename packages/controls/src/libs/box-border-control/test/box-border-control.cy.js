@@ -114,10 +114,7 @@ describe('box-border-control component testing', () => {
 			cy.getByAriaLabel('Custom Box Border').click();
 			cy.getByAriaLabel('Custom Box Border')
 				.should('have.attr', 'style')
-				.should(
-					'include',
-					'var(--publisher-controls-border-color-focus)'
-				);
+				.should('include', 'var(--publisher-controls-primary-color)');
 
 			//Check data provider
 			cy.get('body').then(() => {

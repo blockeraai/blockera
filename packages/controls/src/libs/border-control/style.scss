@@ -59,8 +59,8 @@
 		background: none !important;
 
 		&.is-focus {
-			box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
-			border: 1px solid var(--publisher-controls-border-color-focus);
+			box-shadow: 0 0 0 1px var(--publisher-controls-primary-color);
+			border: 1px solid var(--publisher-controls-primary-color);
 		}
 	}
 

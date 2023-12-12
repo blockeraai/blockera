@@ -33,6 +33,9 @@ export default function Popover({
 	resize: _resize,
 	shift: _shift,
 	flip: _flip,
+	closeButton,
+	titleButtonsRight,
+	titleButtonsLeft,
 	...props
 }: TPopoverProps): MixedElement {
 	const [isVisible, setIsVisible] = useState(true);
@@ -94,27 +97,53 @@ export default function Popover({
 							)}
 							data-test="popover-header"
 						>
+							{titleButtonsLeft && (
+								<div
+									className={componentInnerClassNames(
+										'popover-title-buttons',
+										'title-left-buttons'
+									)}
+								>
+									{titleButtonsLeft}
+								</div>
+							)}
+
 							{title}
 
-							<Button
-								className={componentInnerClassNames(
-									'popover-close'
-								)}
-								noBorder={true}
-								size="extra-small"
-								align="center"
-								onClick={() => {
-									setIsVisible(false);
-									onClose();
-								}}
-								tabIndex="-1"
-								label={__('Close', 'publisher')}
-								aria-label={__('Close', 'publisher-core')}
-								tooltipPosition="top"
-								showTooltip={true}
-							>
-								<CloseIcon />
-							</Button>
+							{(closeButton || titleButtonsRight) && (
+								<div
+									className={componentInnerClassNames(
+										'popover-title-buttons',
+										'title-right-buttons'
+									)}
+								>
+									{titleButtonsRight && (
+										<>{titleButtonsRight}</>
+									)}
+
+									<Button
+										className={componentInnerClassNames(
+											'popover-close'
+										)}
+										size="extra-small"
+										align="center"
+										onClick={() => {
+											setIsVisible(false);
+											onClose();
+										}}
+										tabIndex="-1"
+										label={__('Close', 'publisher')}
+										aria-label={__(
+											'Close',
+											'publisher-core'
+										)}
+										tooltipPosition="top"
+										showTooltip={true}
+									>
+										<CloseIcon />
+									</Button>
+								</div>
+							)}
 						</div>
 					)}
 
@@ -204,4 +233,7 @@ Popover.defaultProps = {
 	flip: true,
 	animate: true,
 	onClose: () => {},
+	closeButton: true,
+	titleButtonsRight: '',
+	titleButtonsLeft: '',
 };

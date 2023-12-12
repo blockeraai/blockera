@@ -18,8 +18,8 @@ textarea.publisher-control-textarea {
 
 	&:focus {
 
-		border-color: var(--publisher-controls-border-color-focus);
-		box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+		border-color: var(--publisher-controls-primary-color);
+		box-shadow: 0 0 0 1px var(--publisher-controls-primary-color);
 
 	}
 
@@ -51,8 +51,8 @@ textarea.publisher-control-textarea {
 
 	&.is-focused {
 
-		border-color: var(--publisher-controls-border-color-focus);
-		box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+		border-color: var(--publisher-controls-primary-color);
+		box-shadow: 0 0 0 1px var(--publisher-controls-primary-color);
 
 	}
 

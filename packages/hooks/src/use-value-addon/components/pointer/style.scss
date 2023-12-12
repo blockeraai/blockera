@@ -50,6 +50,10 @@
 
 		&.var-pointer {
 			background-color: var(--publisher-value-addon-var-color);
+
+			&:hover {
+				transform: scale(1.25) rotate(180deg) !important;
+			}
 		}
 
 		&.dv-pointer {
@@ -78,6 +82,10 @@
 
 				.publisher-control-value-addon-pointer {
 					transform: scale(1);
+
+					&.var-pointer {
+						transform: scale(1);
+					}
 
 					&:nth-child(2) {
 						transition: all 0.15s ease 0.06s; // delay

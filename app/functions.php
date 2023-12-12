@@ -56,7 +56,6 @@ if ( ! function_exists( 'pb_core_env' ) ) {
 }
 
 if ( ! function_exists( 'pb_get_value_addon_real_value' ) ) {
-
 	/**
 	 * Gets the real value that can be used (Fianl Value)
 	 *
@@ -74,7 +73,14 @@ if ( ! function_exists( 'pb_get_value_addon_real_value' ) ) {
 			return substr( $value, -4 ) === 'func' ? substr( $value, 0, -4 ) : $value;
 		}
 
-		// todo write real data implementation for variable
+		if ( is_array( $value ) && isset( $value['isValueAddon'] ) && $value['isValueAddon'] ) {
+
+			// todo validate that variable is currently available or not
+
+			if ( isset( $value['valueType'] ) && $value['valueType'] === 'variable' && isset( $value['settings']['var'] ) ) {
+				return "var(" . $value['settings']['var'] . ")";
+			}
+		}
 
 		return $value;
 	}

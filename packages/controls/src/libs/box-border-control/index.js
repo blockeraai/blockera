@@ -95,7 +95,7 @@ export default function BoxBorderControl({
 						style={{
 							color:
 								value.type === 'custom'
-									? 'var(--publisher-controls-border-color-focus)'
+									? 'var(--publisher-controls-primary-color)'
 									: 'var(--publisher-controls-color)',
 							padding: '5px',
 							width: '30px',

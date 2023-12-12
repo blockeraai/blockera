@@ -5,6 +5,7 @@ export type TPopoverProps = {
 	onClose: () => {},
 	children?: string | Element<any>,
 	className?: string,
+	/* eslint-disable ft-flow/space-after-type-colon */
 	placement?:
 		| 'top-start'
 		| 'top'
@@ -23,4 +24,7 @@ export type TPopoverProps = {
 	flip?: boolean,
 	animate?: boolean,
 	offset?: number,
+	closeButton?: boolean,
+	titleButtonsRight?: string | Element<any>,
+	titleButtonsLeft?: string | Element<any>,
 };

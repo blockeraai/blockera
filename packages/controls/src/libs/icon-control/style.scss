@@ -124,8 +124,8 @@
 	}
 
 	&.is-open-icon-picker {
-		box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
-		border-color: var(--publisher-controls-border-color-focus);
+		box-shadow: 0 0 0 1px var(--publisher-controls-primary-color);
+		border-color: var(--publisher-controls-primary-color);
 	}
 
 	.publisher-control-icon-suggestions + .publisher-control-icon-preview {
@@ -172,7 +172,7 @@
 	text-align: center;
 
 	&:hover {
-		color: var(--publisher-controls-border-color-focus);
+		color: var(--publisher-controls-primary-color);
 
 		svg {
 			transform: scale(1.4);

@@ -39,4 +39,13 @@ export type ValueAddonProps = {
 		// eslint-disable-next-line
 		event: SyntheticMouseEvent<EventTarget>
 	) => void,
+	/**
+	 * Handle click on unlink button
+	 *
+	 * The callback function
+	 */
+	handleOnUnlinkVariable: (
+		// eslint-disable-next-line
+		event: SyntheticMouseEvent<EventTarget>
+	) => void,
 };

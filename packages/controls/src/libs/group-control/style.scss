@@ -38,7 +38,7 @@
 				padding: 0;
 
 				&:hover {
-					color: var(--publisher-controls-border-color-focus);
+					color: var(--publisher-controls-primary-color);
 				}
 			}
 		}
@@ -52,8 +52,8 @@
 .publisher-control-group.mode-accordion {
 
 	&.is-open.toggle-open-border {
-		border-color: var(--publisher-controls-border-color-focus);
-		box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+		border-color: var(--publisher-controls-primary-color);
+		box-shadow: 0 0 0 1px var(--publisher-controls-primary-color);
 	}
 
 	.publisher-control-group-content {
@@ -66,7 +66,7 @@
 .publisher-control-group.mode-popover {
 
 	&.is-open {
-		border-color: var(--publisher-controls-border-color-focus);
-		box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+		border-color: var(--publisher-controls-primary-color);
+		box-shadow: 0 0 0 1px var(--publisher-controls-primary-color);
 	}
 }
