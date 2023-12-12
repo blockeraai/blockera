@@ -28,6 +28,7 @@ export default function ({
 	value,
 	classNames,
 	pointerProps,
+	...props
 }: {
 	value: ValueAddon,
 	classNames?: string,
@@ -100,6 +101,7 @@ export default function ({
 							break;
 					}
 				}}
+				{...props}
 			>
 				{icon && (
 					<span className={controlInnerClassNames('item-icon')}>

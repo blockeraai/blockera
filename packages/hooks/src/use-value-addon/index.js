@@ -185,8 +185,8 @@ export const useValueAddon = ({
 		ValueAddonPointer: () => <Pointer {...pointerProps} />,
 		isSetValueAddon: () =>
 			isValid(value) || isOpenVariables || isOpenDynamicValues,
-		ValueAddonUI: () => (
-			<ValueUIKit pointerProps={pointerProps} value={value} />
+		ValueAddonUI: ({ ...props }) => (
+			<ValueUIKit pointerProps={pointerProps} value={value} {...props} />
 		),
 		handleOnClickVariable,
 		handleOnUnlinkVariable,
