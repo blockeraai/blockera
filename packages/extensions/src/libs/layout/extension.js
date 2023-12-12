@@ -455,26 +455,27 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													}}
 												>
 													<InputControl
-														{...{
-															...props,
-															unitType:
-																'essential',
-															min: 0,
-															max: 200,
-															defaultValue:
-																gap?.gap,
-															id: 'gap',
-															onChange: (
-																newValue
-															) =>
-																handleOnChangeAttributes(
-																	'publisherGap',
-																	{
-																		...gap,
-																		gap: newValue,
-																	}
-																),
-														}}
+														{...props}
+														unitType="essential"
+														min={0}
+														max={200}
+														defaultValue={gap?.gap}
+														id={'gap'}
+														onChange={(newValue) =>
+															handleOnChangeAttributes(
+																'publisherGap',
+																{
+																	...gap,
+																	gap: newValue,
+																}
+															)
+														}
+														controlAddonTypes={[
+															'variable',
+														]}
+														variableTypes={[
+															'spacing',
+														]}
 													/>
 												</BaseControl>
 											)
@@ -496,28 +497,31 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													)}
 												>
 													<InputControl
-														{...{
-															...props,
-															unitType:
-																'essential',
-															min: 0,
-															max: 200,
-															defaultValue:
-																gap?.columns,
-															id: 'columns',
-															onChange: (
-																newValue
-															) =>
-																handleOnChangeAttributes(
-																	'publisherGap',
-																	{
-																		...gap,
-																		columns:
-																			newValue,
-																	}
-																),
-														}}
+														{...props}
+														unitType="essential"
+														min={0}
+														max={200}
+														defaultValue={
+															gap?.columns
+														}
+														id={'columns'}
+														onChange={(newValue) =>
+															handleOnChangeAttributes(
+																'publisherGap',
+																{
+																	...gap,
+																	columns:
+																		newValue,
+																}
+															)
+														}
 														smallWidth={true}
+														controlAddonTypes={[
+															'variable',
+														]}
+														variableTypes={[
+															'spacing',
+														]}
 													/>
 												</BaseControl>
 
@@ -531,27 +535,28 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													)}
 												>
 													<InputControl
-														{...{
-															...props,
-															unitType:
-																'essential',
-															min: 0,
-															max: 200,
-															defaultValue:
-																gap?.rows,
-															id: 'rows',
-															onChange: (
-																newValue
-															) =>
-																handleOnChangeAttributes(
-																	'publisherGap',
-																	{
-																		...gap,
-																		rows: newValue,
-																	}
-																),
-														}}
+														{...props}
+														unitType="essential"
+														min={0}
+														max={200}
+														defaultValue={gap?.rows}
+														id={'rows'}
+														onChange={(newValue) =>
+															handleOnChangeAttributes(
+																'publisherGap',
+																{
+																	...gap,
+																	rows: newValue,
+																}
+															)
+														}
 														smallWidth={true}
+														controlAddonTypes={[
+															'variable',
+														]}
+														variableTypes={[
+															'spacing',
+														]}
 													/>
 												</BaseControl>
 											</Flex>

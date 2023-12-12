@@ -929,15 +929,16 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 							controlName="color"
 							label={__('Text Color', 'publisher-core')}
 							columns="columns-2"
-							{...{
-								...props, //
-								defaultValue: '',
-								onChange: (newValue) =>
-									handleOnChangeAttributes(
-										'publisherFontColor',
-										newValue
-									),
-							}}
+							{...props}
+							defaultValue=""
+							onChange={(newValue) =>
+								handleOnChangeAttributes(
+									'publisherFontColor',
+									newValue
+								)
+							}
+							controlAddonTypes={['variable', 'dynamic-value']}
+							variableTypes={['theme-color']}
 						/>
 					</ControlContextProvider>
 				)}

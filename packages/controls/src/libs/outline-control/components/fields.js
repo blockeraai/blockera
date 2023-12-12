@@ -86,6 +86,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					}
 					defaultValue={item.offset}
 					data-test="outline-offset-input"
+					controlAddonTypes={['variable']}
+					variableTypes={['spacing']}
 				/>
 			</div>
 		);

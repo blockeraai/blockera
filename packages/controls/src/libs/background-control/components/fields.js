@@ -215,6 +215,8 @@ const Fields: FieldItem = memo<FieldItem>(
 											})
 										}
 										smallWidth={true}
+										controlAddonTypes={['variable']}
+										variableTypes={['width-size']}
 									/>
 
 									<InputControl
@@ -239,6 +241,8 @@ const Fields: FieldItem = memo<FieldItem>(
 											})
 										}
 										smallWidth={true}
+										controlAddonTypes={['variable']}
+										variableTypes={['width-size']}
 									/>
 								</Flex>
 							)}
