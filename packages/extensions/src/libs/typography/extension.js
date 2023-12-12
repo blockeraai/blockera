@@ -19,6 +19,7 @@ import {
 	TextShadowControl,
 	ToggleSelectControl,
 	ControlContextProvider,
+	NoticeControl,
 } from '@publisher/controls';
 import { Popover, Button, Flex } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
@@ -102,6 +103,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 			textColumnsDividerStyle,
 			textColumnsDividerColor,
 		},
+		backgroundClip,
 		defaultValue: {
 			fontSize: defaultFontSize,
 			typography: {
@@ -925,20 +927,30 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 							value: fontColor,
 						}}
 					>
-						<ColorControl
-							controlName="color"
-							label={__('Text Color', 'publisher-core')}
-							columns="columns-2"
-							{...{
-								...props, //
-								defaultValue: '',
-								onChange: (newValue) =>
-									handleOnChangeAttributes(
-										'publisherFontColor',
-										newValue
-									),
-							}}
-						/>
+						<BaseControl columns="columns-1">
+							<ColorControl
+								controlName="color"
+								label={__('Text Color', 'publisher-core')}
+								columns="columns-2"
+								{...{
+									...props, //
+									defaultValue: '',
+									onChange: (newValue) =>
+										handleOnChangeAttributes(
+											'publisherFontColor',
+											newValue
+										),
+								}}
+							/>
+							{backgroundClip === 'text' && fontColor && (
+								<NoticeControl type="error">
+									{__(
+										`Text clipping was applied; the current text color won't display. You have to disable clipping settings to use Text Color.`,
+										'publisher-core'
+									)}
+								</NoticeControl>
+							)}
+						</BaseControl>
 					</ControlContextProvider>
 				)}
 
