@@ -19,7 +19,7 @@ export default function ColorIndicator({
 	const customStyle = {};
 	let styleClassName = '';
 
-	if (size !== 18) {
+	if (size !== 16) {
 		customStyle.width = Number(size) + 'px';
 		customStyle.height = Number(size) + 'px';
 	}
@@ -97,5 +97,5 @@ ColorIndicator.propTypes = {
 ColorIndicator.defaultProps = {
 	type: 'color',
 	value: '',
-	size: 18,
+	size: 16,
 };
