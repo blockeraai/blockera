@@ -15,8 +15,9 @@ import {
 	SelectControl,
 	BackgroundControl,
 	ControlContextProvider,
+	NoticeControl,
 } from '@publisher/controls';
-import { isArray, isEmpty } from '@publisher/utils';
+import { isArray, isEmpty, checkVisibleItemLength } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -47,6 +48,8 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 				publisherBackgroundClip,
 			},
 		} = config;
+
+		const visibleBackgroundLength = checkVisibleItemLength(background);
 
 		return (
 			<>
@@ -203,6 +206,19 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 									),
 							}}
 						/>
+						{!visibleBackgroundLength &&
+							!backgroundColor &&
+							backgroundClip === 'text' && (
+								<NoticeControl
+									type="error"
+									style={{ marginTop: '10px' }}
+								>
+									{__(
+										`You've applied text clipping without setting a background color or image. Make sure to add a background to the block.`,
+										'publisher-core'
+									)}
+								</NoticeControl>
+							)}
 					</ControlContextProvider>
 				)}
 			</>
