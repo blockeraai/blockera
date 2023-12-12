@@ -28,6 +28,7 @@ export default function GradientBarControl({
 	defaultValue,
 	onChange,
 	field,
+	height,
 	//
 	className,
 }: TGradientBarControlProps): MixedElement {
@@ -47,6 +48,7 @@ export default function GradientBarControl({
 			<div
 				data-cy="gradient-bar-control"
 				className={controlClassNames('gradient-bar', className)}
+				style={{ '--gradient-bar-height': height + 'px' }}
 			>
 				<WPGradientPicker
 					value={value}
@@ -95,4 +97,5 @@ GradientBarControl.propTypes = {
 GradientBarControl.defaultProps = {
 	defaultValue: null,
 	field: 'gradient-bar',
+	height: 30,
 };

@@ -358,6 +358,7 @@ const Fields: FieldItem = memo<FieldItem>(
 									},
 								});
 							}}
+							height={40}
 						/>
 
 						<AnglePickerControl
@@ -460,6 +461,7 @@ const Fields: FieldItem = memo<FieldItem>(
 									},
 								})
 							}
+							height={40}
 						/>
 
 						<AlignmentMatrixControl

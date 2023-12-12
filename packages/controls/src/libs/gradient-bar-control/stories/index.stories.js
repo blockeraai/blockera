@@ -79,6 +79,24 @@ export const Filled = {
 						/>
 					</ControlContextProvider>
 				</Flex>
+
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">
+						Gradient<span>Custom Height</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: 'radial-gradient(rgb(250,0,247) 0%,rgb(255,213,0) 64%)',
+						}}
+					>
+						<ControlWithHooks
+							Control={GradientBarControl}
+							{...args}
+							height={100}
+						/>
+					</ControlContextProvider>
+				</Flex>
 			</Flex>
 		);
 	},
