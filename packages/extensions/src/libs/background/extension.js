@@ -136,14 +136,15 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 							controlName="color"
 							label={__('BG Color', 'publisher-core')}
 							columns="columns-2"
-							{...{
-								...props, //
-								onChange: (newValue) =>
-									handleOnChangeAttributes(
-										'publisherBackgroundColor',
-										newValue
-									),
-							}}
+							{...props}
+							onChange={(newValue) =>
+								handleOnChangeAttributes(
+									'publisherBackgroundColor',
+									newValue
+								)
+							}
+							controlAddonTypes={['variable']}
+							variableTypes={['theme-color']}
 						/>
 					</ControlContextProvider>
 				)}
