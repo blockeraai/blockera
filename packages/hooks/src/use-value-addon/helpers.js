@@ -44,7 +44,7 @@ export function getValueAddonRealValue(value: ValueAddon | string): string {
 
 	if (isObject(value)) {
 		if (!isUndefined(value?.isValueAddon)) {
-			const variable = getVariable(value.settings.slug);
+			const variable = getVariable(value.valueType, value.settings.slug);
 
 			//
 			// use current saved value if variable was not found
@@ -180,7 +180,7 @@ export function canUnlinkVariable(value: ValueAddon): boolean {
 			return true;
 		}
 
-		const variable = getVariable(value.settings.slug);
+		const variable = getVariable(value.valueType, value.settings.slug);
 
 		if (!isUndefined(variable?.value) && variable?.value !== '') {
 			return true;

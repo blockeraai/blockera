@@ -110,7 +110,7 @@ export const useValueAddon = ({
 				onChange(value?.settings?.value);
 			}
 
-			const variable = getVariable(value.settings.slug);
+			const variable = getVariable(value.valueType, value.settings.slug);
 
 			if (!isUndefined(variable?.value) && variable?.value !== '') {
 				onChange(variable?.value);
