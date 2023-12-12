@@ -17,7 +17,6 @@ import { isFunction, isUndefined } from '@publisher/utils';
 import {
 	Popover,
 	Button,
-	Flex,
 	Tooltip,
 	ConditionalWrapper,
 } from '@publisher/components';
@@ -36,7 +35,7 @@ import { OtherInput } from './other-input';
 import type { TUnitInput } from '../types';
 import MaximizeIcon from '../icons/maximize';
 import TextAreaControl from '../../textarea-control';
-import InfoIcon from '../icons/info';
+import NoticeControl from '../../notice-control';
 
 export function UnitInput({
 	value,
@@ -286,24 +285,15 @@ export function UnitInput({
 									height={100}
 								/>
 
-								<Flex
-									style={{
-										color: 'var(--publisher-controls-placeholder-color)',
-										gap: '8px',
-										padding: '10px 0px 5px',
-										fontSize: '12px',
-									}}
+								<NoticeControl
+									type="information"
+									style={{ marginTop: '10px' }}
 								>
-									<span>
-										<InfoIcon />
-									</span>
-									<span>
-										{__(
-											'You can use CSS functions like calc, min, max, etc., and also CSS variables.',
-											'publisher-core'
-										)}
-									</span>
-								</Flex>
+									{__(
+										'You can use CSS functions like calc, min, max, etc., and also CSS variables.',
+										'publisher-core'
+									)}
+								</NoticeControl>
 							</Popover>
 						)}
 					</>
