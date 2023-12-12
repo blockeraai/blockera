@@ -2,7 +2,10 @@
 :root {
 	--publisher-value-addon-var-color: #009e10;
 	--publisher-value-addon-var-color-darker-20: #00800d;
-	--publisher-value-addon-var-bg-color: #e6f5e8;
+	--publisher-value-addon-var-bg-color: #f3faf4;
+	--publisher-value-addon-var-deleted-color: #ff5454;
+	--publisher-value-addon-var-deleted-color-darker-20: #dc4444;
+	--publisher-value-addon-var-deleted-bg-color: #fff6f6;
 	--publisher-value-addon-dv-color: #7405ff;
 	--publisher-value-addon-dv-color-darker-20: #5f00da;
 	--publisher-value-addon-dv-bg-color: #f1e7ff;
@@ -35,6 +38,7 @@
 			display: none;
 		}
 
+		&.open-value-addon,
 		&.active-value-addon {
 			transform: scale(1);
 
@@ -48,6 +52,10 @@
 					display: block;
 				}
 			}
+		}
+
+		&.open-value-addon {
+			transform: scale(1.25) !important;
 		}
 
 		&.var-pointer {

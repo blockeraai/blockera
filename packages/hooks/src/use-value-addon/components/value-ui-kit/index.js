@@ -11,15 +11,18 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
+import { isUndefined } from '@publisher/utils';
+import { getVariable } from '@publisher/core-data';
 
 /**
  * Internal dependencies
  */
-import Pointer from '../pointer';
-import { getVariableIcon } from '../../helpers';
 import type { PointerProps } from '../pointer/types';
 import type { ValueAddon } from '../../types';
+import Pointer from '../pointer';
+import { getVariableIcon, isValid } from '../../helpers';
 import EmptyIcon from '../../icons/empty';
+import DeletedVariableUI from './deleted-variable';
 
 export default function ({
 	value,
@@ -30,6 +33,30 @@ export default function ({
 	classNames?: string,
 	pointerProps: PointerProps,
 }): Element<any> {
+	// Variable is deleted
+	if (isValid(value) && value.valueType === 'variable') {
+		let isDeleted = false;
+
+		const variable = getVariable(
+			value?.settings?.type,
+			value?.settings?.slug
+		);
+
+		if (isUndefined(variable?.value)) {
+			isDeleted = true;
+		}
+
+		if (isDeleted) {
+			return (
+				<DeletedVariableUI
+					pointerProps={pointerProps}
+					value={value}
+					classNames={classNames}
+				/>
+			);
+		}
+	}
+
 	let icon = getVariableIcon({
 		type: value?.settings?.type,
 		value: value?.settings?.value,

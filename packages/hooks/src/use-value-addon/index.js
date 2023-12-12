@@ -57,6 +57,8 @@ export const useValueAddon = ({
 	const [isOpenVariables, setOpenVariables] = useState(false);
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const [isOpenDynamicValues, setOpenDynamicValues] = useState(false);
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	const [isOpenVariableDeleted, setIsOpenVariableDeleted] = useState(false);
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	useLateEffect(() => {
@@ -65,7 +67,6 @@ export const useValueAddon = ({
 		} else {
 			onChange('');
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [value]);
 
 	const valueAddonClassNames = types
@@ -143,6 +144,7 @@ export const useValueAddon = ({
 	};
 
 	const handleOnClickRemove = (): void => {
+		onChange('');
 		setValue({
 			isValueAddon: false,
 			valueType: null,
@@ -174,6 +176,8 @@ export const useValueAddon = ({
 		setOpenVariables,
 		isOpenDynamicValues,
 		setOpenDynamicValues,
+		isOpenVariableDeleted,
+		setIsOpenVariableDeleted,
 	};
 
 	return {
