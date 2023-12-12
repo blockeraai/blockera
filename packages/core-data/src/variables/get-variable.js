@@ -54,5 +54,5 @@ export const getVariable = (
 	name: string,
 	value: string,
 } => {
-	return _getVariableMemoized(slug);
+	return _getVariableMemoized(type, slug);
 };
