@@ -5,11 +5,11 @@ export type TNoticeControlProps = {
 	field?: string,
 	columns?: string,
 	className?: string,
-	onDismiss: () => {},
+	onDismiss?: () => void,
 	showIcon?: boolean,
 	type: 'information' | 'warning' | 'success' | 'error',
 	children: string | any,
 	isDismissible?: boolean,
-	onShown: () => {},
+	onShown?: () => void,
 	isShown?: boolean,
 };
