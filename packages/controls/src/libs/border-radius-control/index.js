@@ -178,6 +178,7 @@ export default function BorderRadiusControl({
 							noBorder={true}
 							value={value.topLeft}
 							defaultValue={value.topLeft || '0'}
+							placeholder="0"
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -204,6 +205,7 @@ export default function BorderRadiusControl({
 							noBorder={true}
 							value={value.topRight}
 							defaultValue={value.topRight || '0'}
+							placeholder="0"
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -230,6 +232,7 @@ export default function BorderRadiusControl({
 							noBorder={true}
 							value={value.bottomLeft}
 							defaultValue={value.bottomLeft || '0'}
+							placeholder="0"
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -256,6 +259,7 @@ export default function BorderRadiusControl({
 							noBorder={true}
 							value={value.bottomRight}
 							defaultValue={value.bottomRight || '0'}
+							placeholder="0"
 							onChange={(newValue) => {
 								setValue({
 									...value,
