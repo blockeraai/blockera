@@ -74,7 +74,7 @@ export default function ColorControl({
 			>
 				<div
 					className={controlClassNames(
-						'input',
+						'color',
 						noBorder && 'no-border',
 						className,
 						valueAddonClassNames
