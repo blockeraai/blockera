@@ -14,6 +14,7 @@ import {
 	BoxPositionControl,
 	ControlContextProvider,
 	InputControl,
+	NoticeControl,
 } from '@publisher/controls';
 
 /**
@@ -62,6 +63,16 @@ export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 										),
 								}}
 							/>
+							{positionValue?.type === 'sticky' &&
+								positionValue.position.top &&
+								positionValue.position.bottom && (
+									<NoticeControl type="error">
+										{__(
+											`Selecting both ‘Top‘ and ‘Bottom‘ for sticky positioning can lead to issues.Set value only for ‘Top‘ or ‘Bottom‘ toensure smooth functionality.`,
+											'publisher-core'
+										)}
+									</NoticeControl>
+								)}
 						</BaseControl>
 					</ControlContextProvider>
 				)}
