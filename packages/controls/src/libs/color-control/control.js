@@ -10,6 +10,7 @@ import { useState } from '@wordpress/element';
  */
 import { controlClassNames } from '@publisher/classnames';
 import { ColorIndicator, Button } from '@publisher/components';
+import { useValueAddon } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -35,6 +36,11 @@ export default function ColorControl({
 	//
 	className,
 	style,
+	//
+	controlAddonTypes,
+	variableTypes,
+	dynamicValueTypes,
+	//
 	...props
 }: Props): MixedElement {
 	const { value, setValue } = useControlContext({
@@ -44,6 +50,41 @@ export default function ColorControl({
 	});
 
 	const [isOpen, setOpen] = useState(false);
+
+	const {
+		valueAddonClassNames,
+		isSetValueAddon,
+		ValueAddonUI,
+		ValueAddonPointer,
+	} = useValueAddon({
+		types: controlAddonTypes,
+		value,
+		variableTypes,
+		dynamicValueTypes,
+		onChange: setValue,
+	});
+
+	if (isSetValueAddon()) {
+		return (
+			<BaseControl
+				label={label}
+				columns={columns}
+				controlName={field}
+				className={className}
+			>
+				<div
+					className={controlClassNames(
+						'input',
+						noBorder && 'no-border',
+						className,
+						valueAddonClassNames
+					)}
+				>
+					<ValueAddonUI />
+				</div>
+			</BaseControl>
+		);
+	}
 
 	let buttonLabel: MixedElement;
 
@@ -64,7 +105,7 @@ export default function ColorControl({
 			label={label}
 			columns={columns}
 			controlName={field}
-			className={className}
+			className={className + ' ' + valueAddonClassNames}
 		>
 			<Button
 				size="input"
@@ -72,7 +113,7 @@ export default function ColorControl({
 					'color',
 					'color-type-' + type,
 					value ? 'is-not-empty' : 'is-empty',
-					className
+					className + ' ' + valueAddonClassNames
 				)}
 				noBorder={noBorder || type === 'minimal'}
 				isFocus={isOpen}
@@ -105,6 +146,8 @@ export default function ColorControl({
 					{...props}
 				/>
 			)}
+
+			<ValueAddonPointer />
 		</BaseControl>
 	);
 }
@@ -158,4 +201,5 @@ ColorControl.defaultProps = {
 	type: 'normal',
 	contentAlign: 'left',
 	field: 'color',
+	className: '',
 };
