@@ -14,7 +14,11 @@
 		height: 30px;
 		padding: 2px 10px;
 		line-height: 30px;
-		font-size: 12.4px;
+		font-size: 12px;
+	}
+
+	&.size-input {
+		gap: 6px;
 	}
 
 	&.size-extra-small {
