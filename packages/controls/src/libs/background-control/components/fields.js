@@ -538,6 +538,7 @@ const Fields: FieldItem = memo<FieldItem>(
 									},
 								})
 							}
+							isDeselectable={true}
 						/>
 
 						<ToggleSelectControl

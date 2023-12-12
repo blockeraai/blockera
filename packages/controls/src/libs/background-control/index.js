@@ -157,8 +157,8 @@ BackgroundControl.defaultProps = {
 		'image-size-width': 'auto',
 		'image-size-height': 'auto',
 		'image-position': {
-			top: '50%',
-			left: '50%',
+			top: '',
+			left: '',
 		},
 		'image-repeat': 'repeat',
 		'image-attachment': 'scroll',
@@ -169,10 +169,10 @@ BackgroundControl.defaultProps = {
 		'radial-gradient':
 			'radial-gradient(rgb(0,159,251) 0%,rgb(229,46,0) 100%)',
 		'radial-gradient-position': {
-			top: '50%',
-			left: '50%',
+			top: '',
+			left: '',
 		},
-		'radial-gradient-size': 'farthest-corner',
+		'radial-gradient-size': '',
 		'radial-gradient-repeat': 'no-repeat',
 		'radial-gradient-attachment': 'scroll',
 		'mesh-gradient': '',
