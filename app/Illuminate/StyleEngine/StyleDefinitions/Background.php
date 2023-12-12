@@ -162,25 +162,33 @@ class Background extends BaseStyleDefinition {
 	 */
 	protected function setLinearGradient( array $setting ): void {
 
-		$gradient = $setting['linear-gradient'];
+		$gradient     = $setting['linear-gradient'];
+		$isValueAddon = is_array( $gradient ) && isset( $gradient['isValueAddon'] ) && $gradient['isValueAddon'];
 
-		if ( $setting['linear-gradient-repeat'] === 'repeat' ) {
-			$gradient = str_replace(
-				'linear-gradient(',
-				'repeating-linear-gradient(',
+		if ( $isValueAddon ) {
+			$gradient = pb_get_value_addon_real_value( $gradient );
+		} else {
+
+			$gradient = preg_replace(
+				'/linear-gradient\(\s*(.*?),/im',
+				'linear-gradient(' . $setting['linear-gradient-angel'] . 'deg,',
 				$gradient
 			);
+
+			if ( $setting['linear-gradient-repeat'] === 'repeat' ) {
+				$gradient = str_replace(
+					'linear-gradient(',
+					'repeating-linear-gradient(',
+					$gradient
+				);
+			}
 		}
 
 		$props = array_merge(
 			$this->defaultProps,
 			[
 				//Background Image
-				'image'      => ( preg_replace(
-						'/(\d.*)deg,/im',
-						$setting['linear-gradient-angel'] . 'deg,',
-						$gradient
-					) ) . $this->getImportant(),
+				'image'      => $gradient . $this->getImportant(),
 				// Background Attachment
 				'attachment' => ( $setting['linear-gradient-attachment'] ?? 'scroll' ) . $this->getImportant(),
 			]
@@ -198,51 +206,68 @@ class Background extends BaseStyleDefinition {
 	 */
 	protected function setRadialGradient( array $setting ): void {
 
-		$radialGradient = $setting['radial-gradient'];
+		$gradient     = $setting['radial-gradient'];
+		$isValueAddon = is_array( $gradient ) && isset( $gradient['isValueAddon'] ) && $gradient['isValueAddon'];
 
-		if ( $setting['radial-gradient-repeat'] === 'repeat' ) {
-			$radialGradient = str_replace(
-				'radial-gradient(',
-				'repeating-radial-gradient(',
-				$radialGradient
+
+		if ( $isValueAddon ) {
+			$gradient = pb_get_value_addon_real_value( $gradient );
+
+			$props = array_merge(
+				$this->defaultProps,
+				[
+					//Background Image
+					'image'      => $gradient . $this->getImportant(),
+					// Background Attachment
+					'attachment' => ( $setting['radial-gradient-attachment'] ?? 'scroll' ) . $this->getImportant(),
+				]
+			);
+		} else {
+
+			if ( $setting['radial-gradient-repeat'] === 'repeat' ) {
+				$gradient = str_replace(
+					'radial-gradient(',
+					'repeating-radial-gradient(',
+					$gradient
+				);
+			}
+
+			$left = ! empty( $setting['radial-gradient-position']['left'] ) ? pb_get_value_addon_real_value( $setting['radial-gradient-position']['left'] ) : '';
+			$top  = ! empty( $setting['radial-gradient-position']['top'] ) ? pb_get_value_addon_real_value( $setting['radial-gradient-position']['top'] ) : '';
+
+			// Gradient Position
+			if (
+				$left &&
+				$top
+			) {
+				$gradient = str_replace(
+					'gradient(',
+					"gradient( circle at {$left} {$top},",
+					$gradient
+				);
+			}
+
+			// Gradient Size
+			if ( $setting['radial-gradient-size'] ) {
+				$gradient = str_replace(
+					'circle at ',
+					"circle {$setting['radial-gradient-size']} at ",
+					$gradient
+				);
+			}
+
+			$props = array_merge(
+				$this->defaultProps,
+				[
+					//Background Image
+					'image'      => $gradient . $this->getImportant(),
+					//Background Repeat
+					'repeat'     => ( $setting['radial-gradient-repeat'] ?? $this->defaultProps['repeat'] ) . $this->getImportant(),
+					// Background Attachment
+					'attachment' => ( $setting['radial-gradient-attachment'] ?? 'scroll' ) . $this->getImportant(),
+				]
 			);
 		}
-
-		$left = ! empty( $setting['radial-gradient-position']['left'] ) ? pb_get_value_addon_real_value( $setting['radial-gradient-position']['left'] ) : '';
-		$top  = ! empty( $setting['radial-gradient-position']['top'] ) ? pb_get_value_addon_real_value( $setting['radial-gradient-position']['top'] ) : '';
-
-		// Gradient Position
-		if (
-			$left &&
-			$top
-		) {
-			$radialGradient = str_replace(
-				'gradient(',
-				"gradient( circle at {$left} {$top},",
-				$radialGradient
-			);
-		}
-
-		// Gradient Size
-		if ( $setting['radial-gradient-size'] ) {
-			$radialGradient = str_replace(
-				'circle at ',
-				"circle {$setting['radial-gradient-size']} at ",
-				$radialGradient
-			);
-		}
-
-		$props = array_merge(
-			$this->defaultProps,
-			[
-				//Background Image
-				'image'      => $radialGradient . $this->getImportant(),
-				//Background Repeat
-				'repeat'     => ( $setting['radial-gradient-repeat'] ?? $this->defaultProps['repeat'] ) . $this->getImportant(),
-				// Background Attachment
-				'attachment' => ( $setting['radial-gradient-attachment'] ?? 'scroll' ) . $this->getImportant(),
-			]
-		);
 
 		$this->setProperties( $this->modifyProperties( $props ) );
 	}

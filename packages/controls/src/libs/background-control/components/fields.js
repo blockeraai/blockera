@@ -359,6 +359,8 @@ const Fields: FieldItem = memo<FieldItem>(
 								});
 							}}
 							height={40}
+							controlAddonTypes={['variable']}
+							variableTypes={['linear-gradient']}
 						/>
 
 						<AnglePickerControl
@@ -462,6 +464,8 @@ const Fields: FieldItem = memo<FieldItem>(
 								})
 							}
 							height={40}
+							controlAddonTypes={['variable']}
+							variableTypes={['radial-gradient']}
 						/>
 
 						<AlignmentMatrixControl
