@@ -15,10 +15,11 @@ import {
 	ControlContextProvider,
 	convertAlignmentMatrixCoordinates,
 	PositionButtonControl,
+	NoticeControl,
 } from '@publisher/controls';
 import { Popover } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
-
+import { checkVisibleItemLength } from '@publisher/utils';
 /**
  * Internal dependencies
  */
@@ -35,6 +36,7 @@ export const TransformSettings = ({
 	props,
 	transformChildOrigin,
 	transformSelfOrigin,
+	transform,
 }: {
 	setIsTransformSettingsVisible: (arg: boolean) => any,
 	transformSelfPerspective: string | void,
@@ -45,7 +47,10 @@ export const TransformSettings = ({
 	props: Object,
 	transformChildOrigin: Object,
 	transformSelfOrigin: Object,
+	transform: Array<Object>,
 }): MixedElement => {
+	const visibleTransformLength = checkVisibleItemLength(transform);
+
 	return (
 		<Popover
 			title={__('Transform Settings', 'publisher-core')}
@@ -62,68 +67,80 @@ export const TransformSettings = ({
 					value: transformSelfPerspective,
 				}}
 			>
-				<BaseControl
-					label={__('Self Perspective', 'publisher-core')}
-					columns="columns-2"
-					className={'publisher-transform-self-perspective'}
-				>
-					<InputControl
-						controlName="input"
-						{...{
-							...props,
-							unitType: 'essential',
-							range: true,
-							min: 0,
-							max: 2000,
-							initialPosition: 100,
-							defaultValue: '0px',
-							onChange: (newValue) =>
-								handleOnChangeAttributes(
-									'publisherTransformSelfPerspective',
-									newValue
-								),
-						}}
-						smallWidth={true}
-					/>
-					<ControlContextProvider
-						value={{
-							name: generateExtensionId(block, 'self-origin'),
-							value: {
-								...transformSelfOrigin,
-								coordinates:
-									convertAlignmentMatrixCoordinates(
-										transformSelfOrigin
-									)?.compact,
-							},
-						}}
+				<BaseControl columns="column-1">
+					<BaseControl
+						label={__('Self Perspective', 'publisher-core')}
+						columns="columns-2"
+						className={`publisher-transform-self-perspective ${
+							!visibleTransformLength && 'de-active'
+						}`}
 					>
-						<PositionButtonControl
-							buttonLabel={__(
-								'Self Perspective Origin',
-								'publisher-core'
-							)}
-							popoverLabel={__(
-								'Perspective Position',
-								'publisher-core'
-							)}
-							alignmentMatrixLabel={__(
-								'Self Origin',
-								'publisher-core'
-							)}
-							size="small"
-							defaultValue={{ top: '', left: '' }}
-							onChange={({ top, left }) => {
-								handleOnChangeAttributes(
-									'publisherTransformSelfOrigin',
-									{
-										...transformSelfOrigin,
-										top,
-										left,
-									}
-								);
+						<InputControl
+							controlName="input"
+							{...{
+								...props,
+								unitType: 'essential',
+								range: true,
+								min: 0,
+								max: 2000,
+								initialPosition: 100,
+								defaultValue: '0px',
+								onChange: (newValue) =>
+									handleOnChangeAttributes(
+										'publisherTransformSelfPerspective',
+										newValue
+									),
 							}}
+							smallWidth={true}
 						/>
-					</ControlContextProvider>
+						<ControlContextProvider
+							value={{
+								name: generateExtensionId(block, 'self-origin'),
+								value: {
+									...transformSelfOrigin,
+									coordinates:
+										convertAlignmentMatrixCoordinates(
+											transformSelfOrigin
+										)?.compact,
+								},
+							}}
+						>
+							<PositionButtonControl
+								buttonLabel={__(
+									'Self Perspective Origin',
+									'publisher-core'
+								)}
+								popoverLabel={__(
+									'Perspective Position',
+									'publisher-core'
+								)}
+								alignmentMatrixLabel={__(
+									'Self Origin',
+									'publisher-core'
+								)}
+								size="small"
+								defaultValue={{ top: '', left: '' }}
+								onChange={({ top, left }) => {
+									handleOnChangeAttributes(
+										'publisherTransformSelfOrigin',
+										{
+											...transformSelfOrigin,
+											top,
+											left,
+										}
+									);
+								}}
+							/>
+						</ControlContextProvider>
+					</BaseControl>
+					{!visibleTransformLength && (
+						<NoticeControl type="warning">
+							{__(
+								`For using Self Perspective your block should have at least one transform.`,
+								'publisher-core'
+							)}
+						</NoticeControl>
+					)}
 				</BaseControl>
 			</ControlContextProvider>
 
