@@ -13,12 +13,15 @@ import { getLinearGradient } from './linear-gradient';
 import { getRadialGradient } from './radial-gradient';
 import { getThemeColor } from './theme-color';
 
-const _getVariable = function (slug: string): ?{
+const _getVariable = function (
+	type: string,
+	slug: string
+): ?{
 	slug: string,
 	name: string,
 	value: string,
 } {
-	switch (slug) {
+	switch (type) {
 		case 'width-size':
 			return getWidthSize(slug);
 
@@ -44,6 +47,7 @@ const _getVariable = function (slug: string): ?{
 const _getVariableMemoized = memoize(_getVariable);
 
 export const getVariable = (
+	type: string,
 	slug: string
 ): ?{
 	slug: string,
