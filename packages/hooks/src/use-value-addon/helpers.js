@@ -129,8 +129,8 @@ export function getVariables(type: VariableTypes): VariableItems {
 		case 'width-size':
 			return {
 				name: isBlockTheme()
-					? __('Theme Width Sizes', 'publisher-core')
-					: __('Width Sizes', 'publisher-core'),
+					? __('Theme Width & Height Sizes', 'publisher-core')
+					: __('Width & Height Sizes', 'publisher-core'),
 				variables: getWidthSizes(),
 			};
 
