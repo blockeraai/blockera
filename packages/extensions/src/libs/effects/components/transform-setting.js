@@ -72,7 +72,8 @@ export const TransformSettings = ({
 						label={__('Self Perspective', 'publisher-core')}
 						columns="columns-2"
 						className={`publisher-transform-self-perspective ${
-							!visibleTransformLength && 'de-active'
+							!visibleTransformLength &&
+							'publisher-control-is-not-active'
 						}`}
 					>
 						<InputControl

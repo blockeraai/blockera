@@ -942,9 +942,13 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 								}
 								controlAddonTypes={['variable']}
 								variableTypes={['theme-color']}
+								className={
+									backgroundClip === 'text' &&
+									'publisher-control-is-not-active'
+								}
 							/>
-							{backgroundClip === 'text' && fontColor && (
-								<NoticeControl type="error">
+							{backgroundClip === 'text' && (
+								<NoticeControl type="information">
 									{__(
 										`Text clipping was applied; the current text color won't display. You have to disable clipping settings to use Text Color.`,
 										'publisher-core'
