@@ -7,6 +7,11 @@ import PropTypes from 'prop-types';
  * Publisher dependencies
  */
 import { componentClassNames } from '@publisher/classnames';
+import { isObject } from '@publisher/utils';
+import {
+	getValueAddonRealValue,
+	isValid as isValidVariable,
+} from '@publisher/hooks';
 
 export default function ColorIndicator({
 	className,
@@ -16,6 +21,10 @@ export default function ColorIndicator({
 	style,
 	...props
 }) {
+	if (isObject(value) && isValidVariable(value)) {
+		value = getValueAddonRealValue(value);
+	}
+
 	const customStyle = {};
 	let styleClassName = '';
 
@@ -71,7 +80,7 @@ export default function ColorIndicator({
 				styleClassName,
 				className
 			)}
-		></span>
+		/>
 	);
 }
 
