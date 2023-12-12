@@ -8,7 +8,12 @@ import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
-import { InputControl, ControlContextProvider } from '@publisher/controls';
+import {
+	InputControl,
+	ControlContextProvider,
+	NoticeControl,
+	BaseControl,
+} from '@publisher/controls';
 import { isInteger } from '@publisher/utils';
 
 /**
@@ -35,25 +40,35 @@ export const Opacity = ({
 				value: opacity,
 			}}
 		>
-			<InputControl
-				controlName="input"
-				label={__('Opacity', 'publisher-core')}
-				columns="columns-2"
-				{...{
-					...props,
-					unitType: 'percent',
-					range: true,
-					min: 0,
-					max: 100,
-					initialPosition: 100,
-					defaultValue: '100%',
-					onChange: (newValue) =>
-						handleOnChangeAttributes(
-							'publisherOpacity',
-							isInteger(newValue) ? `${newValue}%` : newValue
-						),
-				}}
-			/>
+			<BaseControl columns="columns-1">
+				<InputControl
+					controlName="input"
+					label={__('Opacity', 'publisher-core')}
+					columns="columns-2"
+					{...{
+						...props,
+						unitType: 'percent',
+						range: true,
+						min: 0,
+						max: 100,
+						initialPosition: 100,
+						defaultValue: '100%',
+						onChange: (newValue) =>
+							handleOnChangeAttributes(
+								'publisherOpacity',
+								isInteger(newValue) ? `${newValue}%` : newValue
+							),
+					}}
+				></InputControl>
+				{opacity === '0%' && (
+					<NoticeControl type="warning">
+						{__(
+							`Your block’s opacity is set to 0, making it invisible.If you're wondering why it's not showing.`,
+							'publisher-core'
+						)}
+					</NoticeControl>
+				)}
+			</BaseControl>
 		</ControlContextProvider>
 	);
 };

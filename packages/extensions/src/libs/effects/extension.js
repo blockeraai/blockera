@@ -163,6 +163,7 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 										transformSelfOrigin={
 											transformSelfOrigin
 										}
+										transform={transform}
 									/>
 								)}
 							</BaseControl>

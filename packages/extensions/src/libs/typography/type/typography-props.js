@@ -33,6 +33,7 @@ export type TTypographyProps = {
 		textColumnsDividerStyle: string,
 		textColumnsDividerColor: string,
 	},
+	backgroundClip?: string,
 	block: TBlockProps,
 	config: Object,
 	children?: MixedElement,

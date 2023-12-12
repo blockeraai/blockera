@@ -251,6 +251,7 @@ export function SharedBlockExtension({
 								typography,
 								'publisher'
 							)}
+							backgroundClip={attributes?.publisherBackgroundClip}
 							defaultValue={{
 								fontSize:
 									attributes.fontSize ||

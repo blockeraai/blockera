@@ -14,6 +14,7 @@ import {
 	ControlContextProvider,
 	InputControl,
 	ToggleSelectControl,
+	NoticeControl,
 } from '@publisher/controls';
 import { Flex, Button } from '@publisher/components';
 /**
@@ -135,6 +136,17 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 								)
 							}
 						/>
+						{display === 'none' && (
+							<NoticeControl
+								type="information"
+								style={{ marginTop: '10px' }}
+							>
+								{__(
+									`Your block is set to 'display: none,' which hides it from view. Double-check and ensure this is intentional.`,
+									'publisher-core'
+								)}
+							</NoticeControl>
+						)}
 					</ControlContextProvider>
 				)}
 
