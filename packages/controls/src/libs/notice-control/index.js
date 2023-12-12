@@ -33,6 +33,7 @@ export default function NoticeControl({
 	onDismiss,
 	isShown: _isShown,
 	onShown,
+	...props
 }: TNoticeControlProps): any {
 	const [isShown, setIsShown] = useState(_isShown);
 
@@ -61,6 +62,7 @@ export default function NoticeControl({
 						'notice'
 					)} publisher-${type}`}
 					data-test="notice-control"
+					{...props}
 				>
 					{showIcon && (
 						<span
