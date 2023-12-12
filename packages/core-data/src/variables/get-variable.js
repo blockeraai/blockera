@@ -12,6 +12,7 @@ import { getFontSize } from './font-size';
 import { getLinearGradient } from './linear-gradient';
 import { getRadialGradient } from './radial-gradient';
 import { getThemeColor } from './theme-color';
+import { getSpacing } from './spacing';
 
 const _getVariable = function (
 	type: string,
