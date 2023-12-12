@@ -11,3 +11,4 @@ export * from './use-late-effect';
 export * from './use-outside-click';
 export * from './use-drag-value';
 export * from './convert-to-character/degree';
+export * from './check-visible-item';
