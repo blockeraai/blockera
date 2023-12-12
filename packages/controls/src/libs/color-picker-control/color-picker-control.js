@@ -9,7 +9,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Publisher dependencies
  */
-import { Button, ColorIndicator, Popover } from '@publisher/components';
+import { Button, Popover } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -18,6 +18,7 @@ import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
 import type { MixedElement } from 'react';
 import type { Props } from './types';
+import TrashIcon from './icons/trash';
 
 export default function ColorPickerControl({
 	popoverTitle,
@@ -79,11 +80,7 @@ export default function ColorPickerControl({
 									'publisher-core'
 								)}
 							>
-								<ColorIndicator
-									type="color"
-									value=""
-									size={16}
-								/>
+								<TrashIcon />
 							</Button>
 						}
 					>
