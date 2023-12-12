@@ -44,7 +44,10 @@ export function getValueAddonRealValue(value: ValueAddon | string): string {
 
 	if (isObject(value)) {
 		if (!isUndefined(value?.isValueAddon)) {
-			const variable = getVariable(value.valueType, value.settings.slug);
+			const variable = getVariable(
+				value?.settings?.type,
+				value?.settings?.slug
+			);
 
 			//
 			// use current saved value if variable was not found
