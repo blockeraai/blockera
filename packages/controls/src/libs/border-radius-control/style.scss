@@ -14,7 +14,7 @@
 		}
 
 		.publisher-control-input {
-			width: 90px;
+			width: 122px;
 		}
 	}
 
@@ -35,15 +35,15 @@
 
 		&.publisher-control-border-corner-top-left {
 			position: absolute;
-			top: 15px;
-			left: 15px;
+			top: 20px;
+			left: 30px;
 		}
 
 		&.publisher-control-border-corner-bottom-right,
 		&.publisher-control-border-corner-top-right {
 			position: absolute;
-			right: 15px;
-			top: 15px;
+			right: 30px;
+			top: 20px;
 
 			.publisher-control-input-tag {
 				text-align: right;
@@ -73,14 +73,14 @@
 
 		&.publisher-control-input.publisher-control-border-corner-bottom-left {
 			position: absolute;
-			bottom: 15px;
-			left: 15px;
+			bottom: 20px;
+			left: 30px;
 		}
 
 		&.publisher-control-input.publisher-control-border-corner-bottom-right {
 			position: absolute;
-			right: 15px;
-			bottom: 15px;
+			right: 30px;
+			bottom: 20px;
 			top: initial;
 		}
 	}
@@ -120,7 +120,7 @@
 
 		.publisher-control-input {
 
-			width: 95px;
+			width: 80px;
 
 			.publisher-control-unit-select {
 				border-radius: 3px !important;
