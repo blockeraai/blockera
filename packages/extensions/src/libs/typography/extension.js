@@ -940,10 +940,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 										newValue
 									)
 								}
-								controlAddonTypes={[
-									'variable',
-									'dynamic-value',
-								]}
+								controlAddonTypes={['variable']}
 								variableTypes={['theme-color']}
 							/>
 							{backgroundClip === 'text' && fontColor && (
