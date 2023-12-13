@@ -142,7 +142,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 										id={shape.id}
 										key={shape.id}
 										icon={shape.icon}
-										bottom={item.position === 'bottom'}
+										isBottom={item.position === 'bottom'}
 										selected={shape.id === item.shape.id}
 										onClick={(id) =>
 											changeRepeaterItem({

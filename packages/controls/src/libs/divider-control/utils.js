@@ -1,6 +1,11 @@
 // @flow
 
 /**
+ * External dependencies
+ */
+import type { Element } from 'react';
+
+/**
  * Internal dependencies
  */
 import WaveOpacity from './icons/shapes/wave-opacity';
@@ -27,29 +32,29 @@ import Arrow2Icon from './icons/shapes/arrow-2';
 import Arrow3Icon from './icons/shapes/arrow-3';
 
 export const shapeIcons = [
-	{ id: 'wave-opacity', icon: <WaveOpacity /> },
-	{ id: 'wave-1', icon: <Wave1Icon /> },
-	{ id: 'wave-2', icon: <Wave2Icon /> },
-	{ id: 'curve-1', icon: <Curve1Icon /> },
-	{ id: 'curve-2', icon: <Curve2Icon /> },
-	{ id: 'triangle-1', icon: <Triangle1Icon /> },
-	{ id: 'triangle-2', icon: <Triangle2Icon /> },
-	{ id: 'triangle-3', icon: <Triangle3Icon /> },
-	{ id: 'triangle-4', icon: <Triangle4Icon /> },
-	{ id: 'triangle-5', icon: <Triangle5Icon /> },
-	{ id: 'triangle-6', icon: <Triangle6Icon /> },
-	{ id: 'title-1', icon: <Title1Icon /> },
-	{ id: 'title-2', icon: <Title2Icon /> },
-	{ id: 'title-3', icon: <Title3Icon /> },
-	{ id: 'title-4', icon: <Title4Icon /> },
-	{ id: 'title-5', icon: <Title5Icon /> },
-	{ id: 'title-6', icon: <Title6Icon /> },
-	{ id: 'title-7', icon: <Title7Icon /> },
-	{ id: 'title-8', icon: <Title8Icon /> },
-	{ id: 'arrow-1', icon: <Arrow1Icon /> },
-	{ id: 'arrow-2', icon: <Arrow2Icon /> },
-	{ id: 'arrow-3', icon: <Arrow3Icon /> },
+	{ id: 'wave-opacity', icon: (<WaveOpacity />: Element<any>) },
+	{ id: 'wave-1', icon: (<Wave1Icon />: Element<any>) },
+	{ id: 'wave-2', icon: (<Wave2Icon />: Element<any>) },
+	{ id: 'curve-1', icon: (<Curve1Icon />: Element<any>) },
+	{ id: 'curve-2', icon: (<Curve2Icon />: Element<any>) },
+	{ id: 'triangle-1', icon: (<Triangle1Icon />: Element<any>) },
+	{ id: 'triangle-2', icon: (<Triangle2Icon />: Element<any>) },
+	{ id: 'triangle-3', icon: (<Triangle3Icon />: Element<any>) },
+	{ id: 'triangle-4', icon: (<Triangle4Icon />: Element<any>) },
+	{ id: 'triangle-5', icon: (<Triangle5Icon />: Element<any>) },
+	{ id: 'triangle-6', icon: (<Triangle6Icon />: Element<any>) },
+	{ id: 'title-1', icon: (<Title1Icon />: Element<any>) },
+	{ id: 'title-2', icon: (<Title2Icon />: Element<any>) },
+	{ id: 'title-3', icon: (<Title3Icon />: Element<any>) },
+	{ id: 'title-4', icon: (<Title4Icon />: Element<any>) },
+	{ id: 'title-5', icon: (<Title5Icon />: Element<any>) },
+	{ id: 'title-6', icon: (<Title6Icon />: Element<any>) },
+	{ id: 'title-7', icon: (<Title7Icon />: Element<any>) },
+	{ id: 'title-8', icon: (<Title8Icon />: Element<any>) },
+	{ id: 'arrow-1', icon: (<Arrow1Icon />: Element<any>) },
+	{ id: 'arrow-2', icon: (<Arrow2Icon />: Element<any>) },
+	{ id: 'arrow-3', icon: (<Arrow3Icon />: Element<any>) },
 ];
 
-export const selectedShape = (selectedId) =>
+export const selectedShape = (selectedId: string): Object =>
 	shapeIcons.find((item) => item.id === selectedId);

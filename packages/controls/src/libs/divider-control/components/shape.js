@@ -6,16 +6,32 @@
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
+ * External dependencies
+ */
+import type { MixedElement } from 'react';
+
+/**
  * Publisher dependencies
  */
 import { controlInnerClassNames } from '@publisher/classnames';
 
-export const Shape = ({ id, icon, selected, onClick, bottom }) => {
+/**
+ * Internal dependencies
+ */
+import type { TShapeProps } from '../types';
+
+export const Shape = ({
+	id,
+	icon,
+	selected,
+	onClick,
+	isBottom,
+}: TShapeProps): MixedElement => {
 	return (
 		<div
 			className={`${controlInnerClassNames('shape')} ${
 				selected ? 'selected' : ''
-			} ${bottom ? 'bottom' : ''}`}
+			} ${isBottom ? 'bottom' : ''}`}
 			onClick={() => onClick(id)}
 			aria-label={
 				// translators: it's the aria label for shape item

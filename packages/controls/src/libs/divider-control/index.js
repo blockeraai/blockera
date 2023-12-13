@@ -1,9 +1,12 @@
 // @flow
+
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
+import type { MixedElement } from 'react';
+
 /**
  * Publisher dependencies
  */
@@ -15,6 +18,7 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import Fields from './components/fields';
 import RepeaterControl from '../repeater-control';
+import type { TDividerControlProps } from './types';
 
 export default function DividerControl({
 	id,
@@ -22,7 +26,7 @@ export default function DividerControl({
 	popoverLabel,
 	className,
 	...props
-}) {
+}: TDividerControlProps): MixedElement {
 	return (
 		<RepeaterControl
 			id={id}
