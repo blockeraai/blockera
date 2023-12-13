@@ -53,12 +53,13 @@ export default function BoxSpacingControl({
 	//
 	...props
 }: TBoxSpacingControlProps): MixedElement {
-	const { value, setValue, getId } = useControlContext({
-		id,
-		onChange,
-		defaultValue,
-		mergeInitialAndDefault: true,
-	});
+	const { value, setValue, getId, description, resetToDefault } =
+		useControlContext({
+			id,
+			onChange,
+			defaultValue,
+			mergeInitialAndDefault: true,
+		});
 
 	const marginTop = extractNumberAndUnit(value.margin.top);
 	const marginRight = extractNumberAndUnit(value.margin.right);
@@ -200,6 +201,7 @@ export default function BoxSpacingControl({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{ description, resetToDefault }}
 		>
 			<div
 				{...props}
@@ -454,7 +456,12 @@ export default function BoxSpacingControl({
 						'box-mode-margin'
 					)}
 				>
-					{__('Margin', 'publisher-core')}
+					<LabelControl
+						mode={'advanced'}
+						aria-label={__('Margin Spacing')}
+						label={__('Margin', 'publisher-core')}
+						{...{ description, resetToDefault, path: 'margin' }}
+					/>
 				</span>
 
 				<span
@@ -463,7 +470,12 @@ export default function BoxSpacingControl({
 						'box-mode-padding'
 					)}
 				>
-					{__('Padding', 'publisher-core')}
+					<LabelControl
+						mode={'advanced'}
+						aria-label={__('Margin Spacing')}
+						label={__('Padding', 'publisher-core')}
+						{...{ description, resetToDefault, path: 'padding' }}
+					/>
 				</span>
 
 				<div

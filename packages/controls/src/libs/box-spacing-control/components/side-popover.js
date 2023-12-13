@@ -231,6 +231,7 @@ export function SidePopover({
 						className={controlInnerClassNames(
 							'side-popover-action-buttons'
 						)}
+						mode={'simple'}
 					>
 						<>
 							{type === 'margin' && (
