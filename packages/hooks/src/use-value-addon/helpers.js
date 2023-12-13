@@ -171,6 +171,18 @@ export function generateVariableString({
 		type = 'color';
 	}
 
+	if (type === 'width-size') {
+		if (slug === 'contentSize') {
+			slug = 'content-size';
+			type = 'global';
+			reference = 'style';
+		} else if (slug === 'wideSize') {
+			slug = 'wide-size';
+			type = 'global';
+			reference = 'style';
+		}
+	}
+
 	return `--wp--${reference}--${type}--${slug}`;
 }
 
