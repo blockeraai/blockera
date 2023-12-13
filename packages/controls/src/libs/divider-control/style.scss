@@ -1,3 +1,15 @@
+.publisher-control-divider {
+
+	.publisher-control-group-header {
+		padding: 0 10px !important;
+
+		.shape-icon {
+			display: flex;
+		}
+	}
+}
+
+
 .publisher-control-divider-popover,
 .publisher-control-divider-shape-popover {
 
@@ -37,6 +49,23 @@
 			}
 		}
 	   }
+	}
+
+	.publisher-control-shape-button {
+
+        .shape-icon {
+
+			svg {
+				transform: scaleY(1.5);
+			}
+
+			&.bottom {
+
+				svg {
+					transform: scaleX(-1) scaleY(1.5) rotate(180deg);
+				}
+			}
+		}
 	}
 
 	.shapes {
