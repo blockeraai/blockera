@@ -41,3 +41,4 @@ export { default as TransformControl } from './transform-control';
 export { default as PanelBodyControl } from './panel-body-control';
 export { default as NoticeControl } from './notice-control';
 export { default as PositionButtonControl } from './position-button';
+export { default as DividerControl } from './divider-control';
