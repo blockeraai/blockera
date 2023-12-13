@@ -5,6 +5,7 @@ export default function Title3Icon() {
 			height="17"
 			viewBox="0 0 230 17"
 			xmlns="http://www.w3.org/2000/svg"
+			data-test="title-3"
 		>
 			<path opacity="0.5" d="M0 0.800049H230V16.8L0 0.800049Z" />
 			<path opacity="0.5" d="M0 0.800049H230V12.9143L0 0.800049Z" />

@@ -33,10 +33,11 @@ export const Shape = ({
 				selected ? 'selected' : ''
 			} ${isBottom ? 'bottom' : ''}`}
 			onClick={() => onClick(id)}
-			aria-label={
+			aria-label={sprintf(
 				// translators: it's the aria label for shape item
-				sprintf(__('Icon %d', 'publisher-core'), id)
-			}
+				__('Icon %s', 'publisher-core'),
+				id
+			)}
 		>
 			{icon}
 		</div>

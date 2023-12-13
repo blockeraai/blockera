@@ -81,6 +81,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					<div
 						className={controlInnerClassNames('shape-button')}
 						onClick={() => setIsSelectShapeOpen(true)}
+						data-test="divider-shape-button"
 					>
 						<span
 							className={`shape-icon ${
@@ -103,6 +104,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								'divider-shape-popover'
 							)}
 							onClose={() => setIsSelectShapeOpen(false)}
+							data-test="divider-shape-popover"
 						>
 							<ToggleSelectControl
 								id={getControlId(itemId, 'shape.type')}
@@ -197,6 +199,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							defaultValue={item.size.width}
 							unitType="width"
 							smallWidth={true}
+							data-test="divider-width-input"
 							onChange={(width) =>
 								changeRepeaterItem({
 									controlId,
@@ -222,6 +225,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							defaultValue={item.size.height}
 							unitType="height"
 							smallWidth={true}
+							data-test="divider-height-input"
 							onChange={(height) =>
 								changeRepeaterItem({
 									controlId,
@@ -268,6 +272,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							defaultValue={item.duration}
 							unitType="duration"
 							smallWidth={true}
+							data-test="divider-duration-input"
 							onChange={(duration) =>
 								changeRepeaterItem({
 									controlId,

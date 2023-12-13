@@ -5,6 +5,7 @@ export default function Arrow1Icon() {
 			height="17"
 			viewBox="0 0 230 17"
 			xmlns="http://www.w3.org/2000/svg"
+			data-test="arrow-1"
 		>
 			<path d="M230 0.399902H0V1.31419H105.422L114.983 13.6845L124.578 1.31419H230V0.399902Z" />
 		</svg>

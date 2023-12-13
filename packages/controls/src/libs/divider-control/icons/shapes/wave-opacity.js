@@ -5,6 +5,7 @@ export default function WaveOpacityIcon() {
 			height="16"
 			viewBox="0 0 230 16"
 			xmlns="http://www.w3.org/2000/svg"
+			data-test="wave-opacity"
 		>
 			<path d="M0 3.88727C20.0142 8.16327 60.4337 0.621963 105.221 3.88727C150.074 6.99709 194.861 8.31876 230 3.03207V0H0V3.88727Z" />
 			<path

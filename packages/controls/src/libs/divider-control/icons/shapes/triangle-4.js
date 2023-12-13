@@ -5,6 +5,7 @@ export default function Triangle4Icon() {
 			height="17"
 			viewBox="0 0 230 17"
 			xmlns="http://www.w3.org/2000/svg"
+			data-test="triangle-4"
 		>
 			<path opacity="0.5" d="M0 0.800049H230L57.5 16.8L0 0.800049Z" />
 			<path opacity="0.5" d="M0 0.800049H230L57.5 13.6L0 0.800049Z" />

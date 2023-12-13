@@ -44,6 +44,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 				)}
 			>
 				<span
+					data-test="divider-item-header"
 					className={`shape-icon ${
 						position === 'bottom' ? 'bottom' : ''
 					}`}
