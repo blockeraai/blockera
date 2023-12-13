@@ -13,7 +13,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
-import { isFunction, isUndefined } from '@publisher/utils';
+import { isEquals, isFunction, isUndefined } from '@publisher/utils';
 import {
 	Popover,
 	Button,
@@ -55,33 +55,39 @@ export function UnitInput({
 	children,
 	...props
 }: TUnitInput): MixedElement {
-	// added to temp to fix rerender
-	const temp = extractNumberAndUnit(value);
+	const extractedValue = extractNumberAndUnit(value);
 
 	const firstUnit = getFirstUnit(units);
 
 	// Unit is not provided and there is a unit with empty value
 	// clear unit to let the empty unit be selected
-	if (temp?.unitSimulated && firstUnit.value === '') {
-		temp.unit = '';
+	if (extractedValue?.unitSimulated && firstUnit.value === '') {
+		extractedValue.unit = '';
 	}
 
-	const extractedValue = temp;
+	const extractedNoUnit =
+		isUndefined(extractedValue.unit) || extractedValue.unit === '';
 
-	const [unitValue, setUnitValue] = useState(
-		isUndefined(extractedValue.unit) || extractedValue.unit === ''
-			? firstUnit
-			: getUnitByValue(extractedValue.unit, units)
-	);
+	const initialUnit = extractedNoUnit
+		? firstUnit
+		: getUnitByValue(extractedValue.unit, units);
+
+	const [unitValue, setUnitValue] = useState(initialUnit);
 
 	const [inputValue, setInputValue] = useState(extractedValue.value);
 
 	useEffect(() => {
-		if (isSpecialUnit(unitValue.value)) {
+		if (isSpecialUnit(unitValue.value) && value !== unitValue.value) {
 			setValue(unitValue.value);
-		} else if (inputValue === '') {
+		} else if (inputValue === '' && value) {
 			setValue('');
-		} else {
+		} else if (
+			(extractedNoUnit || !value) &&
+			inputValue &&
+			unitValue.value
+		) {
+			setValue(inputValue + unitValue.value);
+		} else if (!extractedNoUnit && value && value !== unitValue.value) {
 			setValue(inputValue + unitValue.value);
 		}
 	}, [unitValue, inputValue]);
@@ -163,18 +169,28 @@ export function UnitInput({
 
 	// validator checking
 	useEffect(() => {
-		if (!validator) {
-			return;
+		if (validator) {
+			let isValid = false;
+
+			if (isFunction(validator)) {
+				isValid = validator(value);
+			}
+
+			// Update isValidValue based on the result of validation
+			setIsValidValue(isValid);
+
+			return undefined;
 		}
 
-		let isValid = false;
-
-		if (isFunction(validator)) {
-			isValid = validator(value);
+		if (!isEquals(initialUnit, unitValue)) {
+			setUnitValue(initialUnit);
 		}
 
-		// Update isValidValue based on the result of validation
-		setIsValidValue(isValid);
+		if (extractedValue?.value !== inputValue) {
+			setInputValue(extractedValue.value);
+		}
+
+		return undefined;
 	}, [value]); // eslint-disable-line
 
 	const [isMaximizeVisible, setIsMaximizeVisible] = useState('');
