@@ -2,7 +2,7 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { useState, memo } from '@wordpress/element';
 import PropTypes from 'prop-types';
 
@@ -13,21 +13,24 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
-import { Button, Flex, Grid } from '@publisher/components';
+import { useDragValue } from '@publisher/utils';
 import { hasSameProps } from '@publisher/extensions';
+import { Button, Flex, Grid } from '@publisher/components';
+
 /**
  * Internal dependencies
  */
 import { LabelControl, SelectControl } from '../index';
 import { SidePopover } from './components/side-popover';
-import { useDragValue } from '@publisher/utils';
 import { useDragSetValues } from './hooks/use-drag-setValues';
 import { useControlContext } from '../../context';
+
 /**
  * Types
  */
 import type { TBoxPositionControlProps } from './types/box-position-control-props';
 import type { MixedElement } from 'react';
+
 // icons
 import { default as SideTopIcon } from './icons/side-top';
 import { default as SideRightIcon } from './icons/side-right';
@@ -61,12 +64,13 @@ const Component = ({
 	className,
 	...props
 }: TBoxPositionControlProps): MixedElement => {
-	const { value, setValue, getId } = useControlContext({
-		id,
-		onChange,
-		defaultValue,
-		mergeInitialAndDefault: true,
-	});
+	const { value, setValue, getId, description, resetToDefault } =
+		useControlContext({
+			id,
+			onChange,
+			defaultValue,
+			mergeInitialAndDefault: true,
+		});
 
 	const positionTop = extractNumberAndUnit(value.position.top);
 	const positionLeft = extractNumberAndUnit(value.position.left);
@@ -159,7 +163,15 @@ const Component = ({
 			<div className={controlInnerClassNames('position-header')}>
 				{label && (
 					<div className={controlInnerClassNames('label')}>
-						<LabelControl label={label} />
+						<LabelControl
+							label={label}
+							{...{
+								description,
+								path: 'type',
+								resetToDefault,
+								mode: 'advanced',
+							}}
+						/>
 					</div>
 				)}
 
@@ -338,23 +350,21 @@ const Component = ({
 					</svg>
 
 					<span className={controlInnerClassNames('box-model-label')}>
-						<>
-							{value.type === 'relative' && (
-								<>{__('Relative Position', 'publisher-core')}</>
-							)}
-
-							{value.type === 'absolute' && (
-								<>{__('Absolute Position', 'publisher-core')}</>
-							)}
-
-							{value.type === 'fixed' && (
-								<>{__('Fixed Position', 'publisher-core')}</>
-							)}
-
-							{value.type === 'sticky' && (
-								<>{__('Sticky Position', 'publisher-core')}</>
-							)}
-						</>
+						<LabelControl
+							label={
+								//eslint-disable-next-line @wordpress/i18n-no-variables
+								__(
+									sprintf('%s Position', value.type),
+									'publisher-core'
+								)
+							}
+							{...{
+								mode: 'advanced',
+								path: 'position',
+								description,
+								resetToDefault,
+							}}
+						/>
 					</span>
 
 					<div
