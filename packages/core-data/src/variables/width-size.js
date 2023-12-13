@@ -35,7 +35,7 @@ const _getWidthSizes = function () {
 
 	if (!isUndefined(layout?.wideSize)) {
 		items.push({
-			name: __('Site Width', 'publisher-core'),
+			name: __('Site Wide Width', 'publisher-core'),
 			slug: 'wideSize',
 			value: layout?.wideSize,
 		});
