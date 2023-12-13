@@ -35,7 +35,7 @@ export function TypographyStyles({
 		publisherTextIndent,
 		publisherTextOrientation,
 		publisherTextColumns,
-		publisherTextStrokeColor,
+		publisherTextStroke,
 		publisherWordBreak,
 	},
 }) {
@@ -191,16 +191,20 @@ export function TypographyStyles({
 	}
 
 	if (
-		isActiveField(publisherTextStrokeColor) &&
-		currBlockAttributes.publisherTextStrokeColor !==
-			attributes.publisherTextStrokeColor.default
+		isActiveField(publisherTextStroke) &&
+		currBlockAttributes.publisherTextStroke !==
+			attributes.publisherTextStroke.default
 	) {
-		properties['-webkit-text-stroke'] =
-			getValueAddonRealValue(
-				currBlockAttributes.publisherTextStrokeWidth
-			) +
-			' ' +
-			currBlockAttributes.publisherTextStrokeColor;
+		const textStrokeColor = getValueAddonRealValue(
+			currBlockAttributes.publisherTextStroke?.color
+		);
+
+		if (textStrokeColor !== '') {
+			properties['-webkit-text-stroke'] =
+				currBlockAttributes.publisherTextStroke?.width +
+				' ' +
+				textStrokeColor;
+		}
 	}
 
 	if (

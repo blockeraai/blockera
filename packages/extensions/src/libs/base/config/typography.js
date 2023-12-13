@@ -13,6 +13,6 @@ export const typographyConfig = {
 	publisherTextIndent: true,
 	publisherTextOrientation: true,
 	publisherTextColumns: true,
-	publisherTextStrokeColor: true,
+	publisherTextStroke: true,
 	publisherWordBreak: true,
 };

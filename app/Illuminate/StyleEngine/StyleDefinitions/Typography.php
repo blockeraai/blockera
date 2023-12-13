@@ -27,6 +27,23 @@ class Typography extends BaseStyleDefinition {
 
 				return $this->properties;
 
+			case '-webkit-text-stroke-color':
+				$props = [];
+				$color = pb_get_value_addon_real_value( $propertyValue['color'] );
+
+				if ( ! empty( $color ) ) {
+
+					$props['-webkit-text-stroke-color'] = $color;
+
+					if ( ! empty( $propertyValue['width'] ) ) {
+						$props['-webkit-text-stroke-width'] = $propertyValue['width'];
+					}
+
+					$this->setProperties( $props );
+				}
+
+				return $this->properties;
+
 			case 'column-count':
 				$props = [];
 

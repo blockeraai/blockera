@@ -72,10 +72,7 @@ blocksInitializer({
 								attributes?.publisherTextDecoration || '',
 							textOrientation:
 								attributes?.publisherTextOrientation || '',
-							textColumnsGap:
-								attributes?.publisherTextStrokeWidth || '',
-							textStrokeColor:
-								attributes?.publisherTextStrokeColor || '',
+							textStroke: attributes?.publisherTextStroke || '',
 						}}
 						extensionId={'Typography'}
 						icon={<TypographyExtensionIcon />}

@@ -760,8 +760,11 @@ describe('Typography Extension', () => {
 
 					//Check store
 					getWPDataObject().then((data) => {
-						expect('#5a22a4').to.be.equal(
-							getSelectedBlock(data, 'publisherTextStrokeColor')
+						expect({
+							color: '#5a22a4',
+							width: '1px',
+						}).to.be.deep.equal(
+							getSelectedBlock(data, 'publisherTextStroke')
 						);
 					});
 
@@ -773,6 +776,7 @@ describe('Typography Extension', () => {
 								'Stroke',
 								'base-control'
 							).within(() => {
+								cy.get('input[type="number"]').clear();
 								cy.get('input[type="number"]').type(10);
 							});
 						});
@@ -784,8 +788,11 @@ describe('Typography Extension', () => {
 
 					//Check store
 					getWPDataObject().then((data) => {
-						expect('10px').to.be.equal(
-							getSelectedBlock(data, 'publisherTextStrokeWidth')
+						expect({
+							color: '#5a22a4',
+							width: '10px',
+						}).to.be.deep.equal(
+							getSelectedBlock(data, 'publisherTextStroke')
 						);
 					});
 

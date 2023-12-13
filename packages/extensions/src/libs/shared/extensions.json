@@ -55,8 +55,7 @@
 		"publisherLetterSpacing",
 		"publisherTextDecoration",
 		"publisherTextOrientation",
-		"publisherTextStrokeWidth",
-		"publisherTextStrokeColor",
+		"publisherTextStroke"
 	],
 	"background": [
 		"publisherBackground",

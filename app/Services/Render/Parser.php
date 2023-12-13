@@ -79,8 +79,7 @@ class Parser {
 			'publisherLetterSpacing',
 			'publisherTextDecoration',
 			'publisherTextOrientation',
-			'publisherTextStrokeWidth',
-			'publisherTextStrokeColor',
+			'publisherTextStroke',
 		],
 		'border-and-shadow' => [
 			'publisherBorder',

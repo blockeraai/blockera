@@ -96,8 +96,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 			letterSpacing,
 			textDecoration,
 			textOrientation,
-			textStrokeWidth,
-			textStrokeColor,
+			textStroke,
 		},
 		backgroundClip,
 		defaultValue: {
@@ -132,7 +131,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 				publisherTextIndent,
 				publisherTextOrientation,
 				publisherTextColumns,
-				publisherTextStrokeColor,
+				publisherTextStroke,
 				publisherWordBreak,
 			},
 		} = config;
@@ -760,68 +759,74 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 								</ControlContextProvider>
 							)}
 
-							{isActiveField(publisherTextStrokeColor) && (
-								<BaseControl
-									label={__('Stroke', 'publisher-core')}
-									columns="columns-2"
+							{isActiveField(publisherTextStroke) && (
+								<ControlContextProvider
+									value={{
+										name: generateExtensionId(
+											block,
+											'text-stroke'
+										),
+										value: textStroke,
+										type: 'nested',
+									}}
 								>
-									<ControlContextProvider
-										value={{
-											name: generateExtensionId(
-												block,
-												'text-stroke-color'
-											),
-											value: textStrokeColor,
-										}}
+									<BaseControl
+										label={__('Stroke', 'publisher-core')}
+										columns="columns-2"
 									>
 										<ColorControl
-											controlName="color"
+											id={'color'}
 											label={__(
 												'Color',
 												'publisher-core'
 											)}
 											columns="columns-2"
 											defaultValue=""
-											onChange={(newValue) =>
-												handleOnChangeAttributes(
-													'publisherTextStrokeColor',
-													newValue
-												)
-											}
-										/>
-									</ControlContextProvider>
-
-									{textStrokeColor && (
-										<ControlContextProvider
-											value={{
-												name: generateExtensionId(
-													block,
-													'text-stroke-width'
-												),
-												value: textStrokeWidth,
+											onChange={(newValue) => {
+												if (newValue === '') {
+													handleOnChangeAttributes(
+														'publisherTextStroke',
+														{
+															color: '',
+															width: '',
+														}
+													);
+												} else {
+													handleOnChangeAttributes(
+														'publisherTextStroke',
+														{
+															...textStroke,
+															color: newValue,
+														}
+													);
+												}
 											}}
-										>
+										/>
+
+										{textStroke.color && (
 											<InputControl
-												controlName="input"
+												id={'width'}
 												label={__(
 													'Width',
 													'publisher-core'
 												)}
 												columns="columns-2"
-												{...{
-													...props,
-													unitType: 'essential',
-													defaultValue: '',
-													onChange: (newValue) =>
-														handleOnChangeAttributes(
-															'publisherTextStrokeWidth',
-															newValue
-														),
-												}}
+												{...props}
+												unitType="essential"
+												defaultValue="1px"
+												onChange={(newValue) =>
+													handleOnChangeAttributes(
+														'publisherTextStroke',
+														{
+															...textStroke,
+															width: newValue,
+														}
+													)
+												}
 											/>
-										</ControlContextProvider>
-									)}
-								</BaseControl>
+										)}
+									</BaseControl>
+								</ControlContextProvider>
 							)}
 
 							{isActiveField(publisherWordBreak) && (

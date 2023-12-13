@@ -274,7 +274,7 @@ return [
 			'property_keys' => [
 				'default' => '-webkit-text-stroke-width',
 			],
-			'path'          => [ 'publisherTypography', 'publisherTextStrokeWidth' ],
+			'path'          => [ 'publisherTypography', '-webkit-text-stroke-width' ],
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
@@ -282,7 +282,7 @@ return [
 			'property_keys' => [
 				'default' => '-webkit-text-stroke-color',
 			],
-			'path'          => [ 'publisherTypography', 'publisherTextStrokeColor' ],
+			'path'          => [ 'publisherTypography', '-webkit-text-stroke-color' ],
 			'css_vars'      => [],
 			'classnames'    => [],
 		],

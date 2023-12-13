@@ -63,13 +63,12 @@ export const attributes = {
 			},
 		},
 	},
-	publisherTextStrokeWidth: {
-		type: 'string',
-		default: '',
-	},
-	publisherTextStrokeColor: {
-		type: 'string',
-		default: '',
+	publisherTextStroke: {
+		type: 'object',
+		default: {
+			color: '',
+			width: '',
+		},
 	},
 	publisherWordBreak: {
 		type: 'string',
