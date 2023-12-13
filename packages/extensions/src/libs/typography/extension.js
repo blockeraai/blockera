@@ -96,12 +96,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 			letterSpacing,
 			textDecoration,
 			textOrientation,
-			textColumnsGap,
 			textStrokeWidth,
 			textStrokeColor,
-			textColumnsDividerWidth,
-			textColumnsDividerStyle,
-			textColumnsDividerColor,
 		},
 		backgroundClip,
 		defaultValue: {
@@ -617,6 +613,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											'text-columns'
 										),
 										value: textColumns,
+										type: 'nested',
 									}}
 								>
 									<BaseControl
@@ -625,6 +622,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 										columns="columns-2"
 									>
 										<ToggleSelectControl
+											id={'columns'}
 											options={[
 												{
 													label: __(
@@ -670,113 +668,92 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											isDeselectable={true}
 											//
 											defaultValue=""
-											onChange={(newValue) =>
-												handleOnChangeAttributes(
-													'publisherTextColumns',
-													newValue
-												)
-											}
-										/>
-										{!isEmpty(textColumns) &&
-											textColumns !== 'none' &&
-											!isUndefined(textColumns) && (
-												<>
-													<ControlContextProvider
-														value={{
-															name: generateExtensionId(
-																block,
-																'text-columns-gap'
-															),
-															value: textColumnsGap,
-														}}
-													>
-														<InputControl
-															controlName="input"
-															label={__(
-																'Gap',
-																'publisher-core'
-															)}
-															columns="columns-2"
-															{...{
-																...props,
-																unitType:
-																	'essential',
-																range: false,
-																arrows: true,
-																min: 0,
-																max: 200,
-																defaultValue:
-																	'20px',
-																onChange: (
-																	newValue
-																) =>
-																	handleOnChangeAttributes(
-																		'publisherTextColumnsGap',
-																		newValue
-																	),
-															}}
-														/>
-													</ControlContextProvider>
-
-													<ControlContextProvider
-														value={{
-															name: generateExtensionId(
-																block,
-																'divider'
-															),
-															value: {
-																width: textColumnsDividerWidth,
-																style: textColumnsDividerStyle,
-																color: textColumnsDividerColor,
+											onChange={(newValue) => {
+												if (newValue === '') {
+													handleOnChangeAttributes(
+														'publisherTextColumns',
+														{
+															columns: '',
+															gap: '',
+															divider: {
+																width: '',
+																color: '',
+																style: 'solid',
 															},
+														}
+													);
+												} else {
+													handleOnChangeAttributes(
+														'publisherTextColumns',
+														{
+															...textColumns,
+															columns: newValue,
+														}
+													);
+												}
+											}}
+										/>
+										{!isEmpty(textColumns?.columns) &&
+											textColumns?.columns !== 'none' &&
+											!isUndefined(
+												textColumns?.columns
+											) && (
+												<>
+													<InputControl
+														id={'gap'}
+														controlName="input"
+														label={__(
+															'Gap',
+															'publisher-core'
+														)}
+														columns="columns-2"
+														{...props}
+														unitType="essential"
+														range={false}
+														arrows={true}
+														min={0}
+														max={200}
+														defaultValue=""
+														onChange={(newValue) =>
+															handleOnChangeAttributes(
+																'publisherTextColumns',
+																{
+																	...textColumns,
+																	gap: newValue,
+																}
+															)
+														}
+													/>
+
+													<BorderControl
+														id={'divider'}
+														controlName="border"
+														label={__(
+															'Divider',
+															'publisher-core'
+														)}
+														columns="columns-1"
+														className="control-first label-center small-gap"
+														lines="vertical"
+														customMenuPosition="top"
+														defaultValue={{
+															width: '',
+															color: '',
+															style: 'solid',
 														}}
-													>
-														<BorderControl
-															controlName="border"
-															label={__(
-																'Divider',
-																'publisher-core'
-															)}
-															columns="columns-1"
-															className="control-first label-center small-gap"
-															lines="vertical"
-															customMenuPosition="top"
-															onChange={(
-																newValue
-															) => {
-																console.log(
-																	newValue
-																);
-																if (
-																	newValue.width !==
-																	textColumnsDividerWidth
-																) {
-																	handleOnChangeAttributes(
-																		'publisherTextColumnsDividerWidth',
-																		newValue.width
-																	);
+														onChange={(
+															newValue
+														) => {
+															handleOnChangeAttributes(
+																'publisherTextColumns',
+																{
+																	...textColumns,
+																	divider:
+																		newValue,
 																}
-																if (
-																	newValue.style !==
-																	textColumnsDividerStyle
-																) {
-																	handleOnChangeAttributes(
-																		'publisherTextColumnsDividerStyle',
-																		newValue.style
-																	);
-																}
-																if (
-																	newValue.color !==
-																	textColumnsDividerColor
-																) {
-																	handleOnChangeAttributes(
-																		'publisherTextColumnsDividerColor',
-																		newValue.color
-																	);
-																}
-															}}
-														/>
-													</ControlContextProvider>
+															);
+														}}
+													/>
 												</>
 											)}
 									</BaseControl>

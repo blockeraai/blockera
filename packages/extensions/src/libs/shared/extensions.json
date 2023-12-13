@@ -53,14 +53,10 @@
 		"publisherTextColumns",
 		"publisherTextTransform",
 		"publisherLetterSpacing",
-		"publisherTextColumnsGap",
 		"publisherTextDecoration",
 		"publisherTextOrientation",
 		"publisherTextStrokeWidth",
 		"publisherTextStrokeColor",
-		"publisherTextColumnsDividerWidth",
-		"publisherTextColumnsDividerStyle",
-		"publisherTextColumnsDividerColor"
 	],
 	"background": [
 		"publisherBackground",

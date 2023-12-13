@@ -52,24 +52,16 @@ export const attributes = {
 		default: { 'writing-mode': '', 'text-orientation': '' },
 	},
 	publisherTextColumns: {
-		type: 'string',
-		default: '',
-	},
-	publisherTextColumnsGap: {
-		type: 'string',
-		default: '',
-	},
-	publisherTextColumnsDividerWidth: {
-		type: 'string',
-		default: '',
-	},
-	publisherTextColumnsDividerColor: {
-		type: 'string',
-		default: '',
-	},
-	publisherTextColumnsDividerStyle: {
-		type: 'string',
-		default: '',
+		type: 'object',
+		default: {
+			columns: '',
+			gap: '',
+			divider: {
+				width: '',
+				color: '',
+				style: 'solid',
+			},
+		},
 	},
 	publisherTextStrokeWidth: {
 		type: 'string',

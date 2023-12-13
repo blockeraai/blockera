@@ -28,9 +28,33 @@ class Typography extends BaseStyleDefinition {
 				return $this->properties;
 
 			case 'column-count':
-				$propertyValue = 'none' === $propertyValue ? 'initial' : preg_replace( '/\b-columns\b/i', '', $propertyValue );
-				break;
+				$props = [];
 
+				if ( ! empty( $propertyValue['columns'] ) ) {
+					$props['column-count'] = 'none' === $propertyValue['columns'] ? 'initial' : preg_replace( '/\b-columns\b/i', '', $propertyValue['columns'] );
+
+					if ( $props['column-count'] !== 'initial' ) {
+						if ( ! empty( $propertyValue['gap'] ) ) {
+							$props['column-gap'] = $propertyValue['gap'];
+						}
+
+						if ( ! empty( $propertyValue['divider']['width'] ) ) {
+
+							$color = pb_get_value_addon_real_value( $propertyValue['divider']['color'] );
+
+							if ( $color ) {
+								$props['column-rule-color'] = $color;
+							}
+
+							$props['column-rule-style'] = $propertyValue['divider']['style'] ?? 'solid';
+							$props['column-rule-width'] = $propertyValue['divider']['width'];
+						}
+					}
+
+					$this->setProperties( $props );
+				}
+
+				return $this->properties;
 
 			case 'color':
 			case '-webkit-text-stroke-width':
@@ -38,7 +62,6 @@ class Typography extends BaseStyleDefinition {
 			case 'word-spacing':
 			case 'line-height':
 			case 'text-indent':
-			case 'column-gap':
 			case 'font-size':
 				$propertyValue = $propertyValue ? pb_get_value_addon_real_value( $propertyValue ) : '';
 				break;

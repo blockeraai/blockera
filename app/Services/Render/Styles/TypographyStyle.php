@@ -13,7 +13,6 @@ class TypographyStyle extends SimpleStyle {
 			'publisherTextAlign'               => 'text-align',
 			'publisherFontStyle'               => 'font-style',
 			'publisherWordBreak'               => 'word-break',
-			'publisherTextColumnsGap'          => 'column-gap',
 			'publisherTextIndent'              => 'text-indent',
 			'publisherLineHeight'              => 'line-height',
 			'publisherWordSpacing'             => 'word-spacing',
@@ -22,11 +21,6 @@ class TypographyStyle extends SimpleStyle {
 			'publisherLetterSpacing'           => 'letter-spacing',
 			'publisherTextDecoration'          => 'text-decoration',
 			'publisherTextOrientation'         => 'text-orientation',
-			'publisherTextColumnsDividerWidth' => 'column-rule-width',
-			'publisherTextColumnsDividerColor' => 'column-rule-color',
-			'publisherTextColumnsDividerStyle' => 'column-rule-style',
-			'publisherTextStrokeColor'         => '-webkit-text-stroke-color',
-			'publisherTextStrokeWidth'         => '-webkit-text-stroke-width',
 		];
 
 		return $mappedProps[ $propId ] ?? $propId;
