@@ -274,7 +274,7 @@ return [
 			'property_keys' => [
 				'default' => '-webkit-text-stroke-width',
 			],
-			'path'          => [ 'publisherTypography', 'publisherTextStrokeWidth' ],
+			'path'          => [ 'publisherTypography', '-webkit-text-stroke-width' ],
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
@@ -282,7 +282,7 @@ return [
 			'property_keys' => [
 				'default' => '-webkit-text-stroke-color',
 			],
-			'path'          => [ 'publisherTypography', 'publisherTextStrokeColor' ],
+			'path'          => [ 'publisherTypography', '-webkit-text-stroke-color' ],
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
@@ -306,7 +306,7 @@ return [
 			'property_keys' => [
 				'default' => 'column-count',
 			],
-			'path'          => [ 'publisherTypography', 'publisherTextColumns' ],
+			'path'          => [ 'publisherTypography', 'column-count' ],
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
@@ -314,7 +314,7 @@ return [
 			'property_keys' => [
 				'default' => 'column-gap',
 			],
-			'path'          => [ 'publisherTypography', 'publisherTextColumnsGap' ],
+			'path'          => [ 'publisherTypography', 'column-gap' ],
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
@@ -322,7 +322,7 @@ return [
 			'property_keys' => [
 				'default' => 'column-rule-width',
 			],
-			'path'          => [ 'publisherTypography', 'publisherTextColumnsDividerWidth' ],
+			'path'          => [ 'publisherTypography', 'column-rule-width' ],
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
@@ -330,7 +330,7 @@ return [
 			'property_keys' => [
 				'default' => 'column-rule-color',
 			],
-			'path'          => [ 'publisherTypography', 'publisherTextColumnsDividerColor' ],
+			'path'          => [ 'publisherTypography', 'column-rule-color' ],
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
@@ -338,7 +338,7 @@ return [
 			'property_keys' => [
 				'default' => 'column-rule-style',
 			],
-			'path'          => [ 'publisherTypography', 'publisherTextColumnsDividerStyle' ],
+			'path'          => [ 'publisherTypography', 'column-rule-style' ],
 			'css_vars'      => [],
 			'classnames'    => [],
 		],

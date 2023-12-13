@@ -68,6 +68,18 @@ export const Empty = {
 	),
 };
 
+export const EmptyWithLabel = {
+	args: {
+		label: 'Spacing:',
+	},
+	decorators: [
+		WithInspectorStyles,
+		WithPopoverDataProvider,
+		...SharedDecorators,
+	],
+	render: Empty.render,
+};
+
 export const Filled = {
 	args: {},
 	decorators: [WithInspectorStyles, ...SharedDecorators],

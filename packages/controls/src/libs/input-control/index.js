@@ -51,7 +51,7 @@ export default function InputControl({
 	children,
 	...props
 }: TInputItem): MixedElement {
-	const { value, setValue } = useControlContext({
+	const { value, setValue, description, resetToDefault } = useControlContext({
 		id,
 		defaultValue,
 		onChange,
@@ -77,6 +77,7 @@ export default function InputControl({
 				columns={columns}
 				controlName={field}
 				className={className}
+				{...{ mode: 'advanced', path: id, description, resetToDefault }}
 			>
 				<div
 					className={controlClassNames(
@@ -104,6 +105,7 @@ export default function InputControl({
 			columns={columns}
 			controlName={field}
 			className={className + ' ' + valueAddonClassNames}
+			{...{ mode: 'advanced', path: id, description, resetToDefault }}
 		>
 			{!isEmpty(units) ? (
 				<UnitInput

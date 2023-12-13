@@ -52,32 +52,23 @@ export const attributes = {
 		default: { 'writing-mode': '', 'text-orientation': '' },
 	},
 	publisherTextColumns: {
-		type: 'string',
-		default: '',
+		type: 'object',
+		default: {
+			columns: '',
+			gap: '',
+			divider: {
+				width: '',
+				color: '',
+				style: 'solid',
+			},
+		},
 	},
-	publisherTextColumnsGap: {
-		type: 'string',
-		default: '',
-	},
-	publisherTextColumnsDividerWidth: {
-		type: 'string',
-		default: '',
-	},
-	publisherTextColumnsDividerColor: {
-		type: 'string',
-		default: '',
-	},
-	publisherTextColumnsDividerStyle: {
-		type: 'string',
-		default: '',
-	},
-	publisherTextStrokeWidth: {
-		type: 'string',
-		default: '',
-	},
-	publisherTextStrokeColor: {
-		type: 'string',
-		default: '',
+	publisherTextStroke: {
+		type: 'object',
+		default: {
+			color: '',
+			width: '',
+		},
 	},
 	publisherWordBreak: {
 		type: 'string',

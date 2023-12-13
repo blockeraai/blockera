@@ -25,8 +25,11 @@ class BackgroundStyle extends Style {
 		switch ( $key ) {
 
 			case 'publisherBackgroundClip':
-			case 'publisherBackgroundColor':
 				$style = $this->generate( $attributes[ $key ], $selector, $key );
+				break;
+
+			case 'publisherBackgroundColor':
+				$style = $this->generate( pb_get_value_addon_real_value( $attributes[ $key ] ), $selector, $key );
 				break;
 
 			default:

@@ -1,13 +1,24 @@
 // @flow
 /**
+ * Publisher dependencies
+ */
+import {
+	getValueAddonRealValue,
+	isValid as isValidVariable,
+} from '@publisher/hooks';
+import { isObject } from '@publisher/utils';
+
+/**
  * Internal dependencies
  */
 import type { TDefaultRepeaterItemValue } from './types';
-import { getValueAddonRealValue } from '@publisher/hooks';
 
 export function getBackgroundItemBGProperty(
 	item: TDefaultRepeaterItemValue
 ): string {
+	let gradient = '';
+	let isValueAddon = false;
+
 	switch (item.type) {
 		case 'image':
 			if (!item.image) {
@@ -22,19 +33,27 @@ export function getBackgroundItemBGProperty(
 				return '';
 			}
 
-			let gradient = item['linear-gradient'];
+			gradient = item['linear-gradient'];
+			isValueAddon = false;
 
-			if (item['linear-gradient-repeat'] === 'repeat') {
-				gradient = gradient.replace(
-					'linear-gradient(',
-					'repeating-linear-gradient('
-				);
+			if (isObject(gradient) && isValidVariable(gradient)) {
+				gradient = getValueAddonRealValue(gradient);
+				isValueAddon = true;
 			}
 
-			gradient = gradient.replace(
-				/(\d.*)deg,/im,
-				item['linear-gradient-angel'] + 'deg,'
-			);
+			if (!isValueAddon) {
+				gradient = gradient.replace(
+					/linear-gradient\(\s*(.*?),/im,
+					'linear-gradient(' + item['linear-gradient-angel'] + 'deg,'
+				);
+
+				if (item['linear-gradient-repeat'] === 'repeat') {
+					gradient = gradient.replace(
+						'linear-gradient(',
+						'repeating-linear-gradient('
+					);
+				}
+			}
 
 			return gradient;
 
@@ -43,39 +62,47 @@ export function getBackgroundItemBGProperty(
 				return '';
 			}
 
-			let radialGradient = item['radial-gradient'];
+			gradient = item['radial-gradient'];
+			isValueAddon = false;
 
-			if (item['radial-gradient-repeat'] === 'repeat') {
-				radialGradient = radialGradient.replace(
-					'radial-gradient(',
-					'repeating-radial-gradient('
-				);
+			if (isObject(gradient) && isValidVariable(gradient)) {
+				gradient = getValueAddonRealValue(gradient);
+				isValueAddon = true;
 			}
 
-			// Gradient Position
-			if (
-				item['radial-gradient-position']?.left &&
-				item['radial-gradient-position']?.top
-			) {
-				radialGradient = radialGradient.replace(
-					'gradient(',
-					`gradient( circle at ${getValueAddonRealValue(
-						item['radial-gradient-position'].left
-					)} ${getValueAddonRealValue(
-						item['radial-gradient-position'].top
-					)}, `
-				);
+			if (!isValueAddon) {
+				if (item['radial-gradient-repeat'] === 'repeat') {
+					gradient = gradient.replace(
+						'radial-gradient(',
+						'repeating-radial-gradient('
+					);
+				}
+
+				// Gradient Position
+				if (
+					item['radial-gradient-position']?.left &&
+					item['radial-gradient-position']?.top
+				) {
+					gradient = gradient.replace(
+						'gradient(',
+						`gradient( circle at ${getValueAddonRealValue(
+							item['radial-gradient-position'].left
+						)} ${getValueAddonRealValue(
+							item['radial-gradient-position'].top
+						)}, `
+					);
+				}
+
+				// Gradient Size
+				if (item['radial-gradient-size']) {
+					gradient = gradient.replace(
+						'circle at ',
+						`circle ${item['radial-gradient-size']} at `
+					);
+				}
 			}
 
-			// Gradient Size
-			if (item['radial-gradient-size']) {
-				radialGradient = radialGradient.replace(
-					'circle at ',
-					`circle ${item['radial-gradient-size']} at `
-				);
-			}
-
-			return radialGradient;
+			return gradient;
 	}
 
 	return '';

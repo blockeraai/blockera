@@ -12,6 +12,7 @@ import { getFontSize } from './font-size';
 import { getLinearGradient } from './linear-gradient';
 import { getRadialGradient } from './radial-gradient';
 import { getThemeColor } from './theme-color';
+import { getSpacing } from './spacing';
 
 const _getVariable = function (
 	type: string,
@@ -54,5 +55,5 @@ export const getVariable = (
 	name: string,
 	value: string,
 } => {
-	return _getVariableMemoized(slug);
+	return _getVariableMemoized(type, slug);
 };

@@ -81,6 +81,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 		config,
 		children,
 		values: {
+			display,
 			fontSize,
 			textAlign,
 			fontStyle,
@@ -96,12 +97,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 			letterSpacing,
 			textDecoration,
 			textOrientation,
-			textColumnsGap,
-			textStrokeWidth,
-			textStrokeColor,
-			textColumnsDividerWidth,
-			textColumnsDividerStyle,
-			textColumnsDividerColor,
+			textStroke,
 		},
 		backgroundClip,
 		defaultValue: {
@@ -136,7 +132,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 				publisherTextIndent,
 				publisherTextOrientation,
 				publisherTextColumns,
-				publisherTextStrokeColor,
+				publisherTextStroke,
 				publisherWordBreak,
 			},
 		} = config;
@@ -617,121 +613,132 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											'text-columns'
 										),
 										value: textColumns,
+										type: 'nested',
 									}}
 								>
-									<BaseControl
-										controlName="toggle-select"
-										label={__('Columns', 'publisher-core')}
-										columns="columns-2"
-									>
-										<ToggleSelectControl
-											options={[
-												{
-													label: __(
-														'2 Columns Text',
-														'publisher-core'
-													),
-													value: '2-columns',
-													icon: <Columns2Icon />,
-												},
-												{
-													label: __(
-														'3 Columns Text',
-														'publisher-core'
-													),
-													value: '3-columns',
-													icon: <Columns3Icon />,
-												},
-												{
-													label: __(
-														'4 Columns Text',
-														'publisher-core'
-													),
-													value: '4-columns',
-													icon: <Columns4Icon />,
-												},
-												{
-													label: __(
-														'5 Columns Text',
-														'publisher-core'
-													),
-													value: '5-columns',
-													icon: <Columns5Icon />,
-												},
-												{
-													label: __(
-														'None',
-														'publisher-core'
-													),
-													value: 'none',
-													icon: <NoneIcon />,
-												},
-											]}
-											isDeselectable={true}
-											//
-											defaultValue=""
-											onChange={(newValue) =>
-												handleOnChangeAttributes(
-													'publisherTextColumns',
-													newValue
-												)
+									<BaseControl columns="columns-1">
+										<BaseControl
+											controlName="toggle-select"
+											label={__(
+												'Columns',
+												'publisher-core'
+											)}
+											columns="columns-2"
+											className={
+												display === 'flex' &&
+												'publisher-control-is-not-active'
 											}
-										/>
-										{!isEmpty(textColumns) &&
-											textColumns !== 'none' &&
-											!isUndefined(textColumns) && (
-												<>
-													<ControlContextProvider
-														value={{
-															name: generateExtensionId(
-																block,
-																'text-columns-gap'
-															),
-															value: textColumnsGap,
-														}}
-													>
+										>
+											<ToggleSelectControl
+												id={'columns'}
+												options={[
+													{
+														label: __(
+															'2 Columns Text',
+															'publisher-core'
+														),
+														value: '2-columns',
+														icon: <Columns2Icon />,
+													},
+													{
+														label: __(
+															'3 Columns Text',
+															'publisher-core'
+														),
+														value: '3-columns',
+														icon: <Columns3Icon />,
+													},
+													{
+														label: __(
+															'4 Columns Text',
+															'publisher-core'
+														),
+														value: '4-columns',
+														icon: <Columns4Icon />,
+													},
+													{
+														label: __(
+															'5 Columns Text',
+															'publisher-core'
+														),
+														value: '5-columns',
+														icon: <Columns5Icon />,
+													},
+													{
+														label: __(
+															'None',
+															'publisher-core'
+														),
+														value: 'none',
+														icon: <NoneIcon />,
+													},
+												]}
+												isDeselectable={true}
+												//
+												defaultValue=""
+												onChange={(newValue) => {
+													if (newValue === '') {
+														handleOnChangeAttributes(
+															'publisherTextColumns',
+															{
+																columns: '',
+																gap: '',
+																divider: {
+																	width: '',
+																	color: '',
+																	style: 'solid',
+																},
+															}
+														);
+													} else {
+														handleOnChangeAttributes(
+															'publisherTextColumns',
+															{
+																...textColumns,
+																columns:
+																	newValue,
+															}
+														);
+													}
+												}}
+											/>
+											{!isEmpty(textColumns?.columns) &&
+												textColumns?.columns !==
+													'none' &&
+												!isUndefined(
+													textColumns?.columns
+												) && (
+													<>
 														<InputControl
+															id={'gap'}
 															controlName="input"
 															label={__(
 																'Gap',
 																'publisher-core'
 															)}
 															columns="columns-2"
-															{...{
-																...props,
-																unitType:
-																	'essential',
-																range: false,
-																arrows: true,
-																min: 0,
-																max: 200,
-																defaultValue:
-																	'20px',
-																onChange: (
-																	newValue
-																) =>
-																	handleOnChangeAttributes(
-																		'publisherTextColumnsGap',
-																		newValue
-																	),
-															}}
+															{...props}
+															unitType="essential"
+															range={false}
+															arrows={true}
+															min={0}
+															max={200}
+															defaultValue=""
+															onChange={(
+																newValue
+															) =>
+																handleOnChangeAttributes(
+																	'publisherTextColumns',
+																	{
+																		...textColumns,
+																		gap: newValue,
+																	}
+																)
+															}
 														/>
-													</ControlContextProvider>
 
-													<ControlContextProvider
-														value={{
-															name: generateExtensionId(
-																block,
-																'divider'
-															),
-															value: {
-																width: textColumnsDividerWidth,
-																style: textColumnsDividerStyle,
-																color: textColumnsDividerColor,
-															},
-														}}
-													>
 														<BorderControl
+															id={'divider'}
 															controlName="border"
 															label={__(
 																'Divider',
@@ -741,110 +748,108 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 															className="control-first label-center small-gap"
 															lines="vertical"
 															customMenuPosition="top"
+															defaultValue={{
+																width: '',
+																color: '',
+																style: 'solid',
+															}}
 															onChange={(
 																newValue
 															) => {
-																console.log(
-																	newValue
+																handleOnChangeAttributes(
+																	'publisherTextColumns',
+																	{
+																		...textColumns,
+																		divider:
+																			newValue,
+																	}
 																);
-																if (
-																	newValue.width !==
-																	textColumnsDividerWidth
-																) {
-																	handleOnChangeAttributes(
-																		'publisherTextColumnsDividerWidth',
-																		newValue.width
-																	);
-																}
-																if (
-																	newValue.style !==
-																	textColumnsDividerStyle
-																) {
-																	handleOnChangeAttributes(
-																		'publisherTextColumnsDividerStyle',
-																		newValue.style
-																	);
-																}
-																if (
-																	newValue.color !==
-																	textColumnsDividerColor
-																) {
-																	handleOnChangeAttributes(
-																		'publisherTextColumnsDividerColor',
-																		newValue.color
-																	);
-																}
 															}}
 														/>
-													</ControlContextProvider>
-												</>
-											)}
+													</>
+												)}
+										</BaseControl>
+
+										{display === 'flex' && (
+											<NoticeControl type="information">
+												{__(
+													"Text columns can't be applied for flex blocks. Disable the flex on this block or wrap it in another container and apply the flex to the container.",
+													'publisher-core'
+												)}
+											</NoticeControl>
+										)}
 									</BaseControl>
 								</ControlContextProvider>
 							)}
 
-							{isActiveField(publisherTextStrokeColor) && (
-								<BaseControl
-									label={__('Stroke', 'publisher-core')}
-									columns="columns-2"
+							{isActiveField(publisherTextStroke) && (
+								<ControlContextProvider
+									value={{
+										name: generateExtensionId(
+											block,
+											'text-stroke'
+										),
+										value: textStroke,
+										type: 'nested',
+									}}
 								>
-									<ControlContextProvider
-										value={{
-											name: generateExtensionId(
-												block,
-												'text-stroke-color'
-											),
-											value: textStrokeColor,
-										}}
+									<BaseControl
+										label={__('Stroke', 'publisher-core')}
+										columns="columns-2"
 									>
 										<ColorControl
-											controlName="color"
+											id={'color'}
 											label={__(
 												'Color',
 												'publisher-core'
 											)}
 											columns="columns-2"
 											defaultValue=""
-											onChange={(newValue) =>
-												handleOnChangeAttributes(
-													'publisherTextStrokeColor',
-													newValue
-												)
-											}
-										/>
-									</ControlContextProvider>
-
-									{textStrokeColor && (
-										<ControlContextProvider
-											value={{
-												name: generateExtensionId(
-													block,
-													'text-stroke-width'
-												),
-												value: textStrokeWidth,
+											onChange={(newValue) => {
+												if (newValue === '') {
+													handleOnChangeAttributes(
+														'publisherTextStroke',
+														{
+															color: '',
+															width: '',
+														}
+													);
+												} else {
+													handleOnChangeAttributes(
+														'publisherTextStroke',
+														{
+															...textStroke,
+															color: newValue,
+														}
+													);
+												}
 											}}
-										>
+										/>
+
+										{textStroke.color && (
 											<InputControl
-												controlName="input"
+												id={'width'}
 												label={__(
 													'Width',
 													'publisher-core'
 												)}
 												columns="columns-2"
-												{...{
-													...props,
-													unitType: 'essential',
-													defaultValue: '',
-													onChange: (newValue) =>
-														handleOnChangeAttributes(
-															'publisherTextStrokeWidth',
-															newValue
-														),
-												}}
+												{...props}
+												unitType="essential"
+												defaultValue="1px"
+												onChange={(newValue) =>
+													handleOnChangeAttributes(
+														'publisherTextStroke',
+														{
+															...textStroke,
+															width: newValue,
+														}
+													)
+												}
 											/>
-										</ControlContextProvider>
-									)}
-								</BaseControl>
+										)}
+									</BaseControl>
+								</ControlContextProvider>
 							)}
 
 							{isActiveField(publisherWordBreak) && (
@@ -932,18 +937,23 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 								controlName="color"
 								label={__('Text Color', 'publisher-core')}
 								columns="columns-2"
-								{...{
-									...props, //
-									defaultValue: '',
-									onChange: (newValue) =>
-										handleOnChangeAttributes(
-											'publisherFontColor',
-											newValue
-										),
-								}}
+								{...props}
+								defaultValue=""
+								onChange={(newValue) =>
+									handleOnChangeAttributes(
+										'publisherFontColor',
+										newValue
+									)
+								}
+								controlAddonTypes={['variable']}
+								variableTypes={['theme-color']}
+								className={
+									backgroundClip === 'text' &&
+									'publisher-control-is-not-active'
+								}
 							/>
-							{backgroundClip === 'text' && fontColor && (
-								<NoticeControl type="error">
+							{backgroundClip === 'text' && (
+								<NoticeControl type="information">
 									{__(
 										`Text clipping was applied; the current text color won't display. You have to disable clipping settings to use Text Color.`,
 										'publisher-core'

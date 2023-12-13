@@ -72,12 +72,14 @@ export default function NoticeControl({
 							{NoticeIcon(type)}
 						</span>
 					)}
+
 					<div
 						data-test="notice-control-content"
 						className="notice-control-content"
 					>
 						{children}
 					</div>
+
 					{isDismissible && (
 						<span
 							className="notice-control-icon dismiss"

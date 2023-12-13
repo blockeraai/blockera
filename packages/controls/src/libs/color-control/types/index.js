@@ -15,4 +15,8 @@ export type Props = {
 	//
 	className?: string,
 	style?: Object,
+	//
+	controlAddonTypes?: Array<string>,
+	variableTypes?: Array<string>,
+	dynamicValueTypes?: Array<string>,
 };

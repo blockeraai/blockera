@@ -72,21 +72,7 @@ blocksInitializer({
 								attributes?.publisherTextDecoration || '',
 							textOrientation:
 								attributes?.publisherTextOrientation || '',
-							textColumnsGap:
-								attributes?.publisherTextColumnsGap || '',
-							textStrokeWidth:
-								attributes?.publisherTextStrokeWidth || '',
-							textStrokeColor:
-								attributes?.publisherTextStrokeColor || '',
-							textColumnsDividerWidth:
-								attributes?.publisherTextColumnsDividerWidth ||
-								'',
-							textColumnsDividerStyle:
-								attributes?.publisherTextColumnsDividerStyle ||
-								'',
-							textColumnsDividerColor:
-								attributes?.publisherTextColumnsDividerColor ||
-								'',
+							textStroke: attributes?.publisherTextStroke || '',
 						}}
 						extensionId={'Typography'}
 						icon={<TypographyExtensionIcon />}

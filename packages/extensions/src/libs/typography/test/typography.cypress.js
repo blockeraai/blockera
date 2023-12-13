@@ -576,7 +576,15 @@ describe('Typography Extension', () => {
 
 					//Check store
 					getWPDataObject().then((data) => {
-						expect('none').to.be.equal(
+						expect({
+							columns: 'none',
+							gap: '',
+							divider: {
+								width: '',
+								color: '',
+								style: 'solid',
+							},
+						}).to.be.deep.equal(
 							getSelectedBlock(data, 'publisherTextColumns')
 						);
 					});
@@ -617,8 +625,16 @@ describe('Typography Extension', () => {
 
 					//Check store
 					getWPDataObject().then((data) => {
-						expect('5px').to.be.equal(
-							getSelectedBlock(data, 'publisherTextColumnsGap')
+						expect({
+							columns: '2-columns',
+							gap: '5px',
+							divider: {
+								width: '',
+								color: '',
+								style: 'solid',
+							},
+						}).to.be.deep.equal(
+							getSelectedBlock(data, 'publisherTextColumns')
 						);
 					});
 
@@ -683,23 +699,16 @@ describe('Typography Extension', () => {
 
 					//Check store
 					getWPDataObject().then((data) => {
-						expect('1px').to.be.equal(
-							getSelectedBlock(
-								data,
-								'publisherTextColumnsDividerWidth'
-							)
-						);
-						expect('#36eade').to.be.equal(
-							getSelectedBlock(
-								data,
-								'publisherTextColumnsDividerColor'
-							)
-						);
-						expect('dotted').to.be.equal(
-							getSelectedBlock(
-								data,
-								'publisherTextColumnsDividerStyle'
-							)
+						expect({
+							columns: '2-columns',
+							gap: '',
+							divider: {
+								width: '1px',
+								color: '#36eade',
+								style: 'dotted',
+							},
+						}).to.be.deep.equal(
+							getSelectedBlock(data, 'publisherTextColumns')
 						);
 					});
 
@@ -751,8 +760,11 @@ describe('Typography Extension', () => {
 
 					//Check store
 					getWPDataObject().then((data) => {
-						expect('#5a22a4').to.be.equal(
-							getSelectedBlock(data, 'publisherTextStrokeColor')
+						expect({
+							color: '#5a22a4',
+							width: '1px',
+						}).to.be.deep.equal(
+							getSelectedBlock(data, 'publisherTextStroke')
 						);
 					});
 
@@ -764,6 +776,7 @@ describe('Typography Extension', () => {
 								'Stroke',
 								'base-control'
 							).within(() => {
+								cy.get('input[type="number"]').clear();
 								cy.get('input[type="number"]').type(10);
 							});
 						});
@@ -775,8 +788,11 @@ describe('Typography Extension', () => {
 
 					//Check store
 					getWPDataObject().then((data) => {
-						expect('10px').to.be.equal(
-							getSelectedBlock(data, 'publisherTextStrokeWidth')
+						expect({
+							color: '#5a22a4',
+							width: '10px',
+						}).to.be.deep.equal(
+							getSelectedBlock(data, 'publisherTextStroke')
 						);
 					});
 

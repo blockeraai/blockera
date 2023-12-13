@@ -153,6 +153,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					}
 					data-test="box-shadow-color-control"
 					defaultValue={item.color}
+					controlAddonTypes={['variable']}
+					variableTypes={['theme-color']}
 				/>
 			</div>
 		);

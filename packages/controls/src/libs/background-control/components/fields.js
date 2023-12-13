@@ -14,6 +14,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
+import { isValid as isValidVariable } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -26,6 +27,7 @@ import {
 	AnglePickerControl,
 	ToggleSelectControl,
 	AlignmentMatrixControl,
+	NoticeControl,
 } from '../../index';
 import RepeaterControl from '../../repeater-control';
 import { useControlContext } from '../../../context';
@@ -215,6 +217,8 @@ const Fields: FieldItem = memo<FieldItem>(
 											})
 										}
 										smallWidth={true}
+										controlAddonTypes={['variable']}
+										variableTypes={['width-size']}
 									/>
 
 									<InputControl
@@ -239,6 +243,8 @@ const Fields: FieldItem = memo<FieldItem>(
 											})
 										}
 										smallWidth={true}
+										controlAddonTypes={['variable']}
+										variableTypes={['width-size']}
 									/>
 								</Flex>
 							)}
@@ -354,12 +360,19 @@ const Fields: FieldItem = memo<FieldItem>(
 									},
 								});
 							}}
+							height={40}
+							controlAddonTypes={['variable']}
+							variableTypes={['linear-gradient']}
 						/>
 
 						<AnglePickerControl
 							label={__('Angel', 'publisher-core')}
 							columns="columns-2"
 							id={getControlId(itemId, '[linear-gradient-angel]')}
+							className={
+								isValidVariable(item['linear-gradient']) &&
+								'publisher-control-is-not-active'
+							}
 							onChange={(newValue) => {
 								// update linear gradient value
 								changeRepeaterItem({
@@ -374,38 +387,56 @@ const Fields: FieldItem = memo<FieldItem>(
 							}}
 						/>
 
-						<ToggleSelectControl
-							label={__('Repeat', 'publisher-core')}
-							columns="columns-2"
-							options={[
-								{
-									label: __("Don't Repeat", 'publisher-core'),
-									value: 'no-repeat',
-									icon: <LinearGradientNoRepeatIcon />,
-								},
-								{
-									label: __('Repeat', 'publisher-core'),
-									value: 'repeat',
-									icon: <LinearGradientRepeatIcon />,
-								},
-							]}
-							//
-							id={getControlId(
-								itemId,
-								'[linear-gradient-repeat]'
-							)}
-							onChange={(newValue) =>
-								changeRepeaterItem({
-									controlId,
-									repeaterId,
-									itemId,
-									value: {
-										...item,
-										'linear-gradient-repeat': newValue,
+						<BaseControl columns="columns-1">
+							<ToggleSelectControl
+								label={__('Repeat', 'publisher-core')}
+								columns="columns-2"
+								options={[
+									{
+										label: __(
+											"Don't Repeat",
+											'publisher-core'
+										),
+										value: 'no-repeat',
+										icon: <LinearGradientNoRepeatIcon />,
 									},
-								})
-							}
-						/>
+									{
+										label: __('Repeat', 'publisher-core'),
+										value: 'repeat',
+										icon: <LinearGradientRepeatIcon />,
+									},
+								]}
+								//
+								id={getControlId(
+									itemId,
+									'[linear-gradient-repeat]'
+								)}
+								onChange={(newValue) =>
+									changeRepeaterItem({
+										controlId,
+										repeaterId,
+										itemId,
+										value: {
+											...item,
+											'linear-gradient-repeat': newValue,
+										},
+									})
+								}
+								className={
+									isValidVariable(item['linear-gradient']) &&
+									'publisher-control-is-not-active'
+								}
+							/>
+
+							{isValidVariable(item['linear-gradient']) && (
+								<NoticeControl type="information">
+									{__(
+										"These options can't work for variables. Use custom gradient or unlink current variable.",
+										'publisher-core'
+									)}
+								</NoticeControl>
+							)}
+						</BaseControl>
 
 						<ToggleSelectControl
 							label={__('Effect', 'publisher-core')}
@@ -456,6 +487,9 @@ const Fields: FieldItem = memo<FieldItem>(
 									},
 								})
 							}
+							height={40}
+							controlAddonTypes={['variable']}
+							variableTypes={['radial-gradient']}
 						/>
 
 						<AlignmentMatrixControl
@@ -477,6 +511,10 @@ const Fields: FieldItem = memo<FieldItem>(
 									},
 								});
 							}}
+							className={
+								isValidVariable(item['radial-gradient']) &&
+								'publisher-control-is-not-active'
+							}
 						/>
 
 						<ToggleSelectControl
@@ -528,39 +566,61 @@ const Fields: FieldItem = memo<FieldItem>(
 									},
 								})
 							}
-						/>
-
-						<ToggleSelectControl
-							label={__('Repeat', 'publisher-core')}
-							columns="columns-2"
-							options={[
-								{
-									label: __("Don't Repeat", 'publisher-core'),
-									value: 'no-repeat',
-									icon: <RadialGradientNoRepeatIcon />,
-								},
-								{
-									label: __('Repeat', 'publisher-core'),
-									value: 'repeat',
-									icon: <RadialGradientRepeatIcon />,
-								},
-							]}
-							id={getControlId(
-								itemId,
-								'[radial-gradient-repeat]'
-							)}
-							onChange={(newValue) =>
-								changeRepeaterItem({
-									controlId,
-									repeaterId,
-									itemId,
-									value: {
-										...item,
-										'radial-gradient-repeat': newValue,
-									},
-								})
+							className={
+								isValidVariable(item['radial-gradient']) &&
+								'publisher-control-is-not-active'
 							}
 						/>
+
+						<BaseControl columns="columns-1">
+							<ToggleSelectControl
+								label={__('Repeat', 'publisher-core')}
+								columns="columns-2"
+								options={[
+									{
+										label: __(
+											"Don't Repeat",
+											'publisher-core'
+										),
+										value: 'no-repeat',
+										icon: <RadialGradientNoRepeatIcon />,
+									},
+									{
+										label: __('Repeat', 'publisher-core'),
+										value: 'repeat',
+										icon: <RadialGradientRepeatIcon />,
+									},
+								]}
+								id={getControlId(
+									itemId,
+									'[radial-gradient-repeat]'
+								)}
+								onChange={(newValue) =>
+									changeRepeaterItem({
+										controlId,
+										repeaterId,
+										itemId,
+										value: {
+											...item,
+											'radial-gradient-repeat': newValue,
+										},
+									})
+								}
+								className={
+									isValidVariable(item['radial-gradient']) &&
+									'publisher-control-is-not-active'
+								}
+							/>
+
+							{isValidVariable(item['radial-gradient']) && (
+								<NoticeControl type="information">
+									{__(
+										"These options can't work for variables. Use custom gradient or unlink current variable.",
+										'publisher-core'
+									)}
+								</NoticeControl>
+							)}
+						</BaseControl>
 
 						<ToggleSelectControl
 							label={__('Effect', 'publisher-core')}

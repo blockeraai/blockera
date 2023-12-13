@@ -23,4 +23,6 @@ export type PointerProps = {
 	setOpenVariables: (value: boolean) => void,
 	isOpenDynamicValues: boolean,
 	setOpenDynamicValues: (value: boolean) => void,
+	isOpenVariableDeleted: boolean,
+	setIsOpenVariableDeleted: (value: boolean) => void,
 };

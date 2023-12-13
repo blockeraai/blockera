@@ -42,7 +42,7 @@ class Size extends BaseStyleDefinition {
 
 		$this->setProperties(
 			[
-				$cssProperty => $propertyValue . $this->getImportant(),
+				$cssProperty => pb_get_value_addon_real_value( $propertyValue ) . $this->getImportant(),
 			]
 		);
 

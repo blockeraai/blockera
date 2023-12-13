@@ -44,7 +44,10 @@ export function getValueAddonRealValue(value: ValueAddon | string): string {
 
 	if (isObject(value)) {
 		if (!isUndefined(value?.isValueAddon)) {
-			const variable = getVariable(value.settings.slug);
+			const variable = getVariable(
+				value?.settings?.type,
+				value?.settings?.slug
+			);
 
 			//
 			// use current saved value if variable was not found
@@ -126,8 +129,8 @@ export function getVariables(type: VariableTypes): VariableItems {
 		case 'width-size':
 			return {
 				name: isBlockTheme()
-					? __('Theme Width Sizes', 'publisher-core')
-					: __('Width Sizes', 'publisher-core'),
+					? __('Theme Width & Height Sizes', 'publisher-core')
+					: __('Width & Height Sizes', 'publisher-core'),
 				variables: getWidthSizes(),
 			};
 
@@ -168,6 +171,18 @@ export function generateVariableString({
 		type = 'color';
 	}
 
+	if (type === 'width-size') {
+		if (slug === 'contentSize') {
+			slug = 'content-size';
+			type = 'global';
+			reference = 'style';
+		} else if (slug === 'wideSize') {
+			slug = 'wide-size';
+			type = 'global';
+			reference = 'style';
+		}
+	}
+
 	return `--wp--${reference}--${type}--${slug}`;
 }
 
@@ -180,7 +195,7 @@ export function canUnlinkVariable(value: ValueAddon): boolean {
 			return true;
 		}
 
-		const variable = getVariable(value.settings.slug);
+		const variable = getVariable(value.valueType, value.settings.slug);
 
 		if (!isUndefined(variable?.value) && variable?.value !== '') {
 			return true;

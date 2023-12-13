@@ -555,8 +555,6 @@ describe('background extension', () => {
 							'publisherBackground'
 						)[0];
 
-						console.log(backgroundState);
-
 						// colors
 						backgroundState['mesh-gradient-colors'].forEach(
 							(colorInState, idx) => {
@@ -584,10 +582,6 @@ describe('background extension', () => {
 								).to.contain(rgbColorInUi);
 							});
 
-							console.log(
-								'attach',
-								$block.css('background-attachment')
-							);
 							// effect
 							expect(
 								$block.css('background-attachment')

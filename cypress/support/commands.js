@@ -42,6 +42,23 @@ Cypress.Commands.add('getByDataTest', (selector, ...args) => {
 Cypress.Commands.add('getByAriaLabel', (selector, ...args) => {
 	return cy.get(`[aria-label="${selector}"]`, ...args);
 });
+Cypress.Commands.add('cssVar', (cssVarName, selector) => {
+	if (selector) {
+		return cy.document().then((doc) => {
+			return window
+				.getComputedStyle(doc.body.querySelector(selector))
+				.getPropertyValue(cssVarName)
+				.trim();
+		});
+	}
+
+	return cy.document().then((doc) => {
+		return window
+			.getComputedStyle(doc.body)
+			.getPropertyValue(cssVarName)
+			.trim();
+	});
+});
 // get parent container to have isolate aria for testing
 Cypress.Commands.add('getParentContainer', (ariaLabel, parentsDataCy) => {
 	return cy

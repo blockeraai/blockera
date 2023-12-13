@@ -69,6 +69,7 @@ export default function PositionButtonControl({
 							? 'var(--publisher-controls-color)'
 							: 'var(--publisher-controls-primary-color)',
 				}}
+				className={isPopoverActive && 'is-focus'}
 				{...props}
 				data-test="position-button"
 			>

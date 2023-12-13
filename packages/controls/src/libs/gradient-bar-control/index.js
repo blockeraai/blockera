@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
+import { useValueAddon } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -28,8 +29,13 @@ export default function GradientBarControl({
 	defaultValue,
 	onChange,
 	field,
+	height,
 	//
 	className,
+	//
+	controlAddonTypes,
+	variableTypes,
+	dynamicValueTypes,
 }: TGradientBarControlProps): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
@@ -37,16 +43,60 @@ export default function GradientBarControl({
 		onChange,
 	});
 
+	const {
+		valueAddonClassNames,
+		isSetValueAddon,
+		ValueAddonUI,
+		ValueAddonPointer,
+	} = useValueAddon({
+		types: controlAddonTypes,
+		value,
+		variableTypes,
+		dynamicValueTypes,
+		onChange: setValue,
+	});
+
+	if (isSetValueAddon()) {
+		return (
+			<BaseControl
+				label={label}
+				columns={columns}
+				controlName={field}
+				className={className}
+			>
+				<div
+					className={controlClassNames(
+						'gradient-bar',
+						className,
+						valueAddonClassNames
+					)}
+				>
+					<ValueAddonUI
+						style={{
+							height: height + 'px',
+							padding: '0 max(min(' + height + 'px, 15px), 15px)',
+						}}
+					/>
+				</div>
+			</BaseControl>
+		);
+	}
+
 	return (
 		<BaseControl
 			label={label}
 			columns={columns}
 			controlName={field}
-			className={className}
+			className={className + ' ' + valueAddonClassNames}
 		>
 			<div
 				data-cy="gradient-bar-control"
-				className={controlClassNames('gradient-bar', className)}
+				className={controlClassNames(
+					'gradient-bar',
+					className,
+					valueAddonClassNames
+				)}
+				style={{ '--gradient-bar-height': height + 'px' }}
 			>
 				<WPGradientPicker
 					value={value}
@@ -54,6 +104,7 @@ export default function GradientBarControl({
 					clearable={false}
 					onChange={setValue}
 				/>
+				<ValueAddonPointer />
 			</div>
 		</BaseControl>
 	);
@@ -95,4 +146,5 @@ GradientBarControl.propTypes = {
 GradientBarControl.defaultProps = {
 	defaultValue: null,
 	field: 'gradient-bar',
+	height: 30,
 };

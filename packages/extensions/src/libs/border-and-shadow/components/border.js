@@ -9,7 +9,6 @@ import type { MixedElement } from 'react';
  * Publisher dependencies
  */
 import { BoxBorderControl, ControlContextProvider } from '@publisher/controls';
-import { extensionInnerClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -155,7 +154,6 @@ export const Border = ({
 			}}
 		>
 			<BoxBorderControl
-				className={extensionInnerClassNames('box-border')}
 				columns="columns-1"
 				label={__('Border Line', 'publisher-core')}
 				onChange={(newValue) => {

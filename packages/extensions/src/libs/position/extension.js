@@ -68,7 +68,7 @@ export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 								positionValue.position.bottom && (
 									<NoticeControl type="error">
 										{__(
-											`Selecting both ‘Top‘ and ‘Bottom‘ for sticky positioning can lead to issues.Set value only for ‘Top‘ or ‘Bottom‘ toensure smooth functionality.`,
+											'Selecting both "Top" and "Bottom" for sticky positioning can lead to issues. Set value only for "Top" or "Bottom" to ensure smooth functionality.',
 											'publisher-core'
 										)}
 									</NoticeControl>

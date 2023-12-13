@@ -7,7 +7,7 @@ import { useState } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { isObject, isUndefined, useLateEffect } from '@publisher/utils';
+import { isObject, isUndefined } from '@publisher/utils';
 import { getVariable } from '@publisher/core-data';
 
 /**
@@ -57,16 +57,8 @@ export const useValueAddon = ({
 	const [isOpenVariables, setOpenVariables] = useState(false);
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const [isOpenDynamicValues, setOpenDynamicValues] = useState(false);
-
 	// eslint-disable-next-line react-hooks/rules-of-hooks
-	useLateEffect(() => {
-		if (isValid(value)) {
-			onChange(value);
-		} else {
-			onChange('');
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [value]);
+	const [isOpenVariableDeleted, setIsOpenVariableDeleted] = useState(false);
 
 	const valueAddonClassNames = types
 		.map((type) => `publisher-value-addon-support-${type}`)
@@ -82,14 +74,17 @@ export const useValueAddon = ({
 		// $FlowFixMe
 		const item = JSON.parse(event.target.getAttribute('data-item'));
 
-		setValue({
+		const newValue = {
 			settings: {
 				...item,
 			},
 			id: item.slug,
 			isValueAddon: true,
 			valueType: 'variable',
-		});
+		};
+
+		setValue(newValue);
+		onChange(newValue);
 
 		setOpenVariables(false);
 	};
@@ -108,12 +103,15 @@ export const useValueAddon = ({
 				value?.settings?.value !== ''
 			) {
 				onChange(value?.settings?.value);
-			}
+			} else {
+				const variable = getVariable(
+					value.valueType,
+					value.settings.slug
+				);
 
-			const variable = getVariable(value.settings.slug);
-
-			if (!isUndefined(variable?.value) && variable?.value !== '') {
-				onChange(variable?.value);
+				if (!isUndefined(variable?.value) && variable?.value !== '') {
+					onChange(variable?.value);
+				}
 			}
 
 			setOpenVariables(false);
@@ -143,6 +141,7 @@ export const useValueAddon = ({
 	};
 
 	const handleOnClickRemove = (): void => {
+		onChange('');
 		setValue({
 			isValueAddon: false,
 			valueType: null,
@@ -174,6 +173,8 @@ export const useValueAddon = ({
 		setOpenVariables,
 		isOpenDynamicValues,
 		setOpenDynamicValues,
+		isOpenVariableDeleted,
+		setIsOpenVariableDeleted,
 	};
 
 	return {
@@ -181,8 +182,8 @@ export const useValueAddon = ({
 		ValueAddonPointer: () => <Pointer {...pointerProps} />,
 		isSetValueAddon: () =>
 			isValid(value) || isOpenVariables || isOpenDynamicValues,
-		ValueAddonUI: () => (
-			<ValueUIKit pointerProps={pointerProps} value={value} />
+		ValueAddonUI: ({ ...props }) => (
+			<ValueUIKit pointerProps={pointerProps} value={value} {...props} />
 		),
 		handleOnClickVariable,
 		handleOnUnlinkVariable,

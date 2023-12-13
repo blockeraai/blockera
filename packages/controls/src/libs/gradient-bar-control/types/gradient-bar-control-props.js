@@ -8,4 +8,9 @@ export type TGradientBarControlProps = {
 	onChange?: () => void,
 	field?: string,
 	className?: string,
+	height?: number,
+	//
+	controlAddonTypes?: Array<string>,
+	variableTypes?: Array<string>,
+	dynamicValueTypes?: Array<string>,
 };

@@ -14,7 +14,6 @@ import {
 	NoticeControl,
 	BaseControl,
 } from '@publisher/controls';
-import { isInteger } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -45,25 +44,21 @@ export const Opacity = ({
 					controlName="input"
 					label={__('Opacity', 'publisher-core')}
 					columns="columns-2"
-					{...{
-						...props,
-						unitType: 'percent',
-						range: true,
-						min: 0,
-						max: 100,
-						initialPosition: 100,
-						defaultValue: '100%',
-						onChange: (newValue) =>
-							handleOnChangeAttributes(
-								'publisherOpacity',
-								isInteger(newValue) ? `${newValue}%` : newValue
-							),
-					}}
-				></InputControl>
+					{...props}
+					unitType="percent"
+					range={true}
+					min={0}
+					max={100}
+					initialPosition={100}
+					defaultValue="100%"
+					onChange={(newValue) =>
+						handleOnChangeAttributes('publisherOpacity', newValue)
+					}
+				/>
 				{opacity === '0%' && (
 					<NoticeControl type="warning">
 						{__(
-							`Your block’s opacity is set to 0, making it invisible.If you're wondering why it's not showing.`,
+							'Your block’s opacity is set to "0", making it invisible. If you\'re wondering why it\'s not showing.',
 							'publisher-core'
 						)}
 					</NoticeControl>

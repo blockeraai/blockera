@@ -16,9 +16,12 @@
 	}
 
 	&.is-active-item {
-		box-shadow: 0 0 0 1px var(--publisher-controls-primary-color);
 		color: var(--publisher-controls-primary-color);
-		border-color: var(--publisher-controls-primary-color);
+
+		.publisher-control-item-value,
+		.publisher-control-item-icon {
+			opacity: 1;
+		}
 	}
 
 	.publisher-control-item-icon {

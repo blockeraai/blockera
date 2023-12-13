@@ -35,7 +35,7 @@ export function TypographyStyles({
 		publisherTextIndent,
 		publisherTextOrientation,
 		publisherTextColumns,
-		publisherTextStrokeColor,
+		publisherTextStroke,
 		publisherWordBreak,
 	},
 }) {
@@ -157,84 +157,54 @@ export function TypographyStyles({
 		currBlockAttributes.publisherTextColumns !==
 			attributes.publisherTextColumns.default
 	) {
-		switch (currBlockAttributes.publisherTextColumns) {
-			case '2-columns':
-				properties['column-count'] = '2';
-				break;
+		properties['column-count'] =
+			currBlockAttributes.publisherTextColumns.columns
+				.replace('-columns', '')
+				.replace('none', 'initial');
 
-			case '3-columns':
-				properties['column-count'] = '3';
-				break;
+		if (properties['column-count'] !== 'initial') {
+			const gap = getValueAddonRealValue(
+				currBlockAttributes.publisherTextColumns.gap
+			);
 
-			case '4-columns':
-				properties['column-count'] = '4';
-				break;
+			if (gap !== '') {
+				properties['column-gap'] = gap;
+			}
 
-			case '5-columns':
-				properties['column-count'] = '5';
-				break;
-
-			case 'none':
-				properties['column-count'] = 'initial';
-				break;
-		}
-
-		switch (currBlockAttributes.publisherTextColumns) {
-			case '2-columns':
-			case '3-columns':
-			case '4-columns':
-			case '5-columns':
-			case 'none':
-				const gap = getValueAddonRealValue(
-					currBlockAttributes.publisherTextColumnsGap
-				);
-
-				if (gap !== attributes.publisherTextColumnsGap.default) {
-					properties['column-gap'] = gap;
-				}
-
+			if (currBlockAttributes.publisherTextColumns.divider.width !== '') {
 				const color = getValueAddonRealValue(
-					currBlockAttributes.publisherTextColumnsDividerColor
+					currBlockAttributes.publisherTextColumns?.divider?.color
 				);
 
-				if (
-					color !==
-					attributes.publisherTextColumnsDividerColor.default
-				) {
+				if (color !== '') {
 					properties['column-rule-color'] = color;
 				}
 
-				if (
-					currBlockAttributes.publisherTextColumnsDividerStyle !==
-					attributes.publisherTextColumnsDividerStyle.default
-				) {
-					properties['column-rule-style'] =
-						currBlockAttributes.publisherTextColumnsDividerStyle;
-				}
+				properties['column-rule-width'] =
+					currBlockAttributes.publisherTextColumns.divider.width;
 
-				if (
-					currBlockAttributes.publisherTextColumnsDividerWidth !==
-					attributes.publisherTextColumnsDividerWidth.default
-				) {
-					properties['column-rule-width'] =
-						currBlockAttributes.publisherTextColumnsDividerWidth;
-				}
-
-				break;
+				properties['column-rule-style'] =
+					currBlockAttributes.publisherTextColumns.divider.style ||
+					'solid';
+			}
 		}
 	}
 
 	if (
-		isActiveField(publisherTextStrokeColor) &&
-		currBlockAttributes.publisherTextStrokeColor !==
-			attributes.publisherTextStrokeColor.default
+		isActiveField(publisherTextStroke) &&
+		currBlockAttributes.publisherTextStroke !==
+			attributes.publisherTextStroke.default
 	) {
-		properties['-webkit-text-stroke'] =
-			getValueAddonRealValue(
-				currBlockAttributes.publisherTextStrokeWidth
-			) +
-			' ' +
-			currBlockAttributes.publisherTextStrokeColor;
+		const textStrokeColor = getValueAddonRealValue(
+			currBlockAttributes.publisherTextStroke?.color
+		);
+
+		if (textStrokeColor !== '') {
+			properties['-webkit-text-stroke'] =
+				currBlockAttributes.publisherTextStroke?.width +
+				' ' +
+				textStrokeColor;
+		}
 	}
 
 	if (

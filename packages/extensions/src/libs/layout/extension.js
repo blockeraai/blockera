@@ -139,10 +139,10 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 						{display === 'none' && (
 							<NoticeControl
 								type="information"
-								style={{ marginTop: '10px' }}
+								style={{ marginTop: '20px' }}
 							>
 								{__(
-									`Your block is set to 'display: none,' which hides it from view. Double-check and ensure this is intentional.`,
+									'Your block is set to "display: none", which hides it from view on page. Double-check and ensure this is intentional.',
 									'publisher-core'
 								)}
 							</NoticeControl>
@@ -467,26 +467,27 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													}}
 												>
 													<InputControl
-														{...{
-															...props,
-															unitType:
-																'essential',
-															min: 0,
-															max: 200,
-															defaultValue:
-																gap?.gap,
-															id: 'gap',
-															onChange: (
-																newValue
-															) =>
-																handleOnChangeAttributes(
-																	'publisherGap',
-																	{
-																		...gap,
-																		gap: newValue,
-																	}
-																),
-														}}
+														{...props}
+														unitType="essential"
+														min={0}
+														max={200}
+														defaultValue={gap?.gap}
+														id={'gap'}
+														onChange={(newValue) =>
+															handleOnChangeAttributes(
+																'publisherGap',
+																{
+																	...gap,
+																	gap: newValue,
+																}
+															)
+														}
+														controlAddonTypes={[
+															'variable',
+														]}
+														variableTypes={[
+															'spacing',
+														]}
 													/>
 												</BaseControl>
 											)
@@ -508,28 +509,31 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													)}
 												>
 													<InputControl
-														{...{
-															...props,
-															unitType:
-																'essential',
-															min: 0,
-															max: 200,
-															defaultValue:
-																gap?.columns,
-															id: 'columns',
-															onChange: (
-																newValue
-															) =>
-																handleOnChangeAttributes(
-																	'publisherGap',
-																	{
-																		...gap,
-																		columns:
-																			newValue,
-																	}
-																),
-														}}
+														{...props}
+														unitType="essential"
+														min={0}
+														max={200}
+														defaultValue={
+															gap?.columns
+														}
+														id={'columns'}
+														onChange={(newValue) =>
+															handleOnChangeAttributes(
+																'publisherGap',
+																{
+																	...gap,
+																	columns:
+																		newValue,
+																}
+															)
+														}
 														smallWidth={true}
+														controlAddonTypes={[
+															'variable',
+														]}
+														variableTypes={[
+															'spacing',
+														]}
 													/>
 												</BaseControl>
 
@@ -543,27 +547,28 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													)}
 												>
 													<InputControl
-														{...{
-															...props,
-															unitType:
-																'essential',
-															min: 0,
-															max: 200,
-															defaultValue:
-																gap?.rows,
-															id: 'rows',
-															onChange: (
-																newValue
-															) =>
-																handleOnChangeAttributes(
-																	'publisherGap',
-																	{
-																		...gap,
-																		rows: newValue,
-																	}
-																),
-														}}
+														{...props}
+														unitType="essential"
+														min={0}
+														max={200}
+														defaultValue={gap?.rows}
+														id={'rows'}
+														onChange={(newValue) =>
+															handleOnChangeAttributes(
+																'publisherGap',
+																{
+																	...gap,
+																	rows: newValue,
+																}
+															)
+														}
 														smallWidth={true}
+														controlAddonTypes={[
+															'variable',
+														]}
+														variableTypes={[
+															'spacing',
+														]}
 													/>
 												</BaseControl>
 											</Flex>

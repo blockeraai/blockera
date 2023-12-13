@@ -51,7 +51,8 @@ export default function ({
 					className={controlInnerClassNames(
 						'value-addon-pointer',
 						'var-pointer',
-						(isVarActive || isOpenVariables) && 'active-value-addon'
+						isVarActive && 'active-value-addon',
+						isOpenVariables && 'open-value-addon'
 					)}
 					onClick={handleVariableModal}
 				>
@@ -74,7 +75,8 @@ export default function ({
 					className={controlInnerClassNames(
 						'value-addon-pointer',
 						'dv-pointer',
-						isDVActive && 'active-value-addon'
+						isDVActive && 'active-value-addon',
+						isOpenDynamicValues && 'open-value-addon'
 					)}
 					onClick={handleDynamicValueModal}
 				>
