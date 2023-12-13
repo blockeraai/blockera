@@ -81,6 +81,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 		config,
 		children,
 		values: {
+			display,
 			fontSize,
 			textAlign,
 			fontStyle,
@@ -615,146 +616,168 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 										type: 'nested',
 									}}
 								>
-									<BaseControl
-										controlName="toggle-select"
-										label={__('Columns', 'publisher-core')}
-										columns="columns-2"
-									>
-										<ToggleSelectControl
-											id={'columns'}
-											options={[
-												{
-													label: __(
-														'2 Columns Text',
-														'publisher-core'
-													),
-													value: '2-columns',
-													icon: <Columns2Icon />,
-												},
-												{
-													label: __(
-														'3 Columns Text',
-														'publisher-core'
-													),
-													value: '3-columns',
-													icon: <Columns3Icon />,
-												},
-												{
-													label: __(
-														'4 Columns Text',
-														'publisher-core'
-													),
-													value: '4-columns',
-													icon: <Columns4Icon />,
-												},
-												{
-													label: __(
-														'5 Columns Text',
-														'publisher-core'
-													),
-													value: '5-columns',
-													icon: <Columns5Icon />,
-												},
-												{
-													label: __(
-														'None',
-														'publisher-core'
-													),
-													value: 'none',
-													icon: <NoneIcon />,
-												},
-											]}
-											isDeselectable={true}
-											//
-											defaultValue=""
-											onChange={(newValue) => {
-												if (newValue === '') {
-													handleOnChangeAttributes(
-														'publisherTextColumns',
-														{
-															columns: '',
-															gap: '',
-															divider: {
+									<BaseControl columns="columns-1">
+										<BaseControl
+											controlName="toggle-select"
+											label={__(
+												'Columns',
+												'publisher-core'
+											)}
+											columns="columns-2"
+											className={
+												display === 'flex' &&
+												'publisher-control-is-not-active'
+											}
+										>
+											<ToggleSelectControl
+												id={'columns'}
+												options={[
+													{
+														label: __(
+															'2 Columns Text',
+															'publisher-core'
+														),
+														value: '2-columns',
+														icon: <Columns2Icon />,
+													},
+													{
+														label: __(
+															'3 Columns Text',
+															'publisher-core'
+														),
+														value: '3-columns',
+														icon: <Columns3Icon />,
+													},
+													{
+														label: __(
+															'4 Columns Text',
+															'publisher-core'
+														),
+														value: '4-columns',
+														icon: <Columns4Icon />,
+													},
+													{
+														label: __(
+															'5 Columns Text',
+															'publisher-core'
+														),
+														value: '5-columns',
+														icon: <Columns5Icon />,
+													},
+													{
+														label: __(
+															'None',
+															'publisher-core'
+														),
+														value: 'none',
+														icon: <NoneIcon />,
+													},
+												]}
+												isDeselectable={true}
+												//
+												defaultValue=""
+												onChange={(newValue) => {
+													if (newValue === '') {
+														handleOnChangeAttributes(
+															'publisherTextColumns',
+															{
+																columns: '',
+																gap: '',
+																divider: {
+																	width: '',
+																	color: '',
+																	style: 'solid',
+																},
+															}
+														);
+													} else {
+														handleOnChangeAttributes(
+															'publisherTextColumns',
+															{
+																...textColumns,
+																columns:
+																	newValue,
+															}
+														);
+													}
+												}}
+											/>
+											{!isEmpty(textColumns?.columns) &&
+												textColumns?.columns !==
+													'none' &&
+												!isUndefined(
+													textColumns?.columns
+												) && (
+													<>
+														<InputControl
+															id={'gap'}
+															controlName="input"
+															label={__(
+																'Gap',
+																'publisher-core'
+															)}
+															columns="columns-2"
+															{...props}
+															unitType="essential"
+															range={false}
+															arrows={true}
+															min={0}
+															max={200}
+															defaultValue=""
+															onChange={(
+																newValue
+															) =>
+																handleOnChangeAttributes(
+																	'publisherTextColumns',
+																	{
+																		...textColumns,
+																		gap: newValue,
+																	}
+																)
+															}
+														/>
+
+														<BorderControl
+															id={'divider'}
+															controlName="border"
+															label={__(
+																'Divider',
+																'publisher-core'
+															)}
+															columns="columns-1"
+															className="control-first label-center small-gap"
+															lines="vertical"
+															customMenuPosition="top"
+															defaultValue={{
 																width: '',
 																color: '',
 																style: 'solid',
-															},
-														}
-													);
-												} else {
-													handleOnChangeAttributes(
-														'publisherTextColumns',
-														{
-															...textColumns,
-															columns: newValue,
-														}
-													);
-												}
-											}}
-										/>
-										{!isEmpty(textColumns?.columns) &&
-											textColumns?.columns !== 'none' &&
-											!isUndefined(
-												textColumns?.columns
-											) && (
-												<>
-													<InputControl
-														id={'gap'}
-														controlName="input"
-														label={__(
-															'Gap',
-															'publisher-core'
-														)}
-														columns="columns-2"
-														{...props}
-														unitType="essential"
-														range={false}
-														arrows={true}
-														min={0}
-														max={200}
-														defaultValue=""
-														onChange={(newValue) =>
-															handleOnChangeAttributes(
-																'publisherTextColumns',
-																{
-																	...textColumns,
-																	gap: newValue,
-																}
-															)
-														}
-													/>
+															}}
+															onChange={(
+																newValue
+															) => {
+																handleOnChangeAttributes(
+																	'publisherTextColumns',
+																	{
+																		...textColumns,
+																		divider:
+																			newValue,
+																	}
+																);
+															}}
+														/>
+													</>
+												)}
+										</BaseControl>
 
-													<BorderControl
-														id={'divider'}
-														controlName="border"
-														label={__(
-															'Divider',
-															'publisher-core'
-														)}
-														columns="columns-1"
-														className="control-first label-center small-gap"
-														lines="vertical"
-														customMenuPosition="top"
-														defaultValue={{
-															width: '',
-															color: '',
-															style: 'solid',
-														}}
-														onChange={(
-															newValue
-														) => {
-															handleOnChangeAttributes(
-																'publisherTextColumns',
-																{
-																	...textColumns,
-																	divider:
-																		newValue,
-																}
-															);
-														}}
-													/>
-												</>
-											)}
+										{display === 'flex' && (
+											<NoticeControl type="information">
+												{__(
+													"Text columns can't be applied for flex blocks. Disable the flex on this block or wrap it in another container and apply the flex to the container.",
+													'publisher-core'
+												)}
+											</NoticeControl>
+										)}
 									</BaseControl>
 								</ControlContextProvider>
 							)}

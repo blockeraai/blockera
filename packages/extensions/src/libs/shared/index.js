@@ -246,11 +246,10 @@ export function SharedBlockExtension({
 							initialOpen={true}
 							extensionId={'Typography'}
 							title={__('Typography', 'publisher-core')}
-							values={include(
-								attributes,
-								typography,
-								'publisher'
-							)}
+							values={{
+								...include(attributes, typography, 'publisher'),
+								display: attributes.publisherDisplay,
+							}}
 							backgroundClip={attributes?.publisherBackgroundClip}
 							defaultValue={{
 								fontSize:
