@@ -44,55 +44,51 @@ export const LineHeight = ({
 				controlName="input"
 				label={__('Line Height', 'publisher-core')}
 				columns="columns-2"
-				{...{
-					...parentProps,
-					unitType: 'line-height',
-					range: true,
-					min: 0,
-					defaultValue: defaultValue || '',
-					onChange: (newValue) => {
-						onChange(
-							'publisherLineHeight',
-							newValue,
-							'',
-							(
-								attributes: Object,
-								setAttributes: (attributes: Object) => void
-							): void => {
-								const extractedValue =
-									extractNumberAndUnit(newValue);
+				controlAddonTypes={['variable']}
+				variableTypes={['font-size']}
+				{...parentProps}
+				unitType="line-height"
+				range={true}
+				min={0}
+				defaultValue={defaultValue || ''}
+				onChange={(newValue) => {
+					onChange(
+						'publisherLineHeight',
+						newValue,
+						'',
+						(
+							attributes: Object,
+							setAttributes: (attributes: Object) => void
+						): void => {
+							const extractedValue =
+								extractNumberAndUnit(newValue);
 
-								if (
-									extractedValue.unit === '' ||
-									(extractedValue.unit === 'func' &&
-										extractedValue?.unitSimulated)
-								) {
-									setAttributes({
-										...attributes,
-										style: {
-											...(attributes?.style ?? {}),
-											typography: {
-												...(attributes?.style
-													?.typography ?? {}),
-												lineHeight:
-													extractedValue.value,
-											},
+							if (
+								extractedValue.unit === '' ||
+								(extractedValue.unit === 'func' &&
+									extractedValue?.unitSimulated)
+							) {
+								setAttributes({
+									...attributes,
+									style: {
+										...(attributes?.style ?? {}),
+										typography: {
+											...(attributes?.style?.typography ??
+												{}),
+											lineHeight: extractedValue.value,
 										},
-									});
-								} else {
-									// remove old lineHeight
-									const newAttrs = { ...attributes };
-									if (
-										newAttrs?.style?.typography?.lineHeight
-									) {
-										delete newAttrs.style.typography
-											.lineHeight;
-										setAttributes(newAttrs);
-									}
+									},
+								});
+							} else {
+								// remove old lineHeight
+								const newAttrs = { ...attributes };
+								if (newAttrs?.style?.typography?.lineHeight) {
+									delete newAttrs.style.typography.lineHeight;
+									setAttributes(newAttrs);
 								}
 							}
-						);
-					},
+						}
+					);
 				}}
 			/>
 		</ControlContextProvider>
