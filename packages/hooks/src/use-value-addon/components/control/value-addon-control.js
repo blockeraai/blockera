@@ -88,7 +88,7 @@ export default function ({
 							event.preventDefault();
 							break;
 						case 'dynamic-value':
-							controlProps.setOpen('dv');
+							controlProps.setOpen('dv-settings');
 							event.preventDefault();
 							break;
 					}
