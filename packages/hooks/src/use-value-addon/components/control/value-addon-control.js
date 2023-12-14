@@ -21,7 +21,8 @@ import type { ValueAddonControlProps } from './types';
 import { ValueAddonPointer } from './index';
 import { getDynamicValueIcon, getVariableIcon, isValid } from '../../helpers';
 import EmptyIcon from '../../icons/empty';
-import { VarDeleted } from '../index';
+import DeletedVariableIcon from '../../icons/deleted-variable';
+import { __ } from '@wordpress/i18n';
 
 export default function ({
 	classNames,
@@ -31,11 +32,12 @@ export default function ({
 	classNames?: string,
 	controlProps: ValueAddonControlProps,
 }): Element<any> {
-	// Variable is deleted
+	let icon: Element<any> = <></>;
+	let label = '';
+	let isDeleted = false;
+
 	if (isValid(controlProps.value)) {
 		if (controlProps.value.valueType === 'variable') {
-			let isDeleted = false;
-
 			const variable = getVariable(
 				controlProps.value?.settings?.type,
 				controlProps.value?.settings?.slug
@@ -43,29 +45,17 @@ export default function ({
 
 			if (isUndefined(variable?.value)) {
 				isDeleted = true;
+				label = __('Deleted Variable', 'publisher-core');
+				icon = <DeletedVariableIcon />;
+			} else {
+				label = controlProps.value?.settings?.name;
+				icon = getVariableIcon({
+					type: controlProps.value?.settings?.type,
+					value: controlProps.value?.settings?.value,
+				});
 			}
-
-			if (isDeleted) {
-				return (
-					<VarDeleted
-						controlProps={controlProps}
-						value={controlProps.value}
-						classNames={controlProps}
-					/>
-				);
-			}
-		}
-	}
-
-	let icon: Element<any> = <></>;
-
-	if (isValid(controlProps.value)) {
-		if (controlProps.value.valueType === 'variable') {
-			icon = getVariableIcon({
-				type: controlProps.value?.settings?.type,
-				value: controlProps.value?.settings?.value,
-			});
 		} else if (controlProps.value.valueType === 'dynamic-value') {
+			label = controlProps.value?.settings?.name;
 			icon = getDynamicValueIcon(controlProps.value?.settings?.type);
 		} else {
 			icon = <EmptyIcon />;
@@ -80,6 +70,7 @@ export default function ({
 				className={controlClassNames(
 					'value-addon',
 					'type-' + (controlProps.value?.valueType || 'unknown'),
+					isDeleted && 'type-variable-deleted',
 					['var', 'var-deleted'].includes(controlProps.isOpen) &&
 						'open-value-addon type-variable',
 					['dv', 'dv-settings'].includes(controlProps.isOpen) &&
@@ -89,7 +80,11 @@ export default function ({
 				onClick={(event) => {
 					switch (controlProps.value?.valueType) {
 						case 'variable':
-							controlProps.setOpen('var');
+							if (isDeleted) {
+								controlProps.setOpen('var-deleted');
+							} else {
+								controlProps.setOpen('var');
+							}
 							event.preventDefault();
 							break;
 						case 'dynamic-value':
@@ -106,9 +101,7 @@ export default function ({
 					</span>
 				)}
 
-				<span className={controlClassNames('item-name')}>
-					<>{controlProps.value?.settings?.name || ''}</>
-				</span>
+				<span className={controlClassNames('item-name')}>{label}</span>
 			</div>
 			<ValueAddonPointer controlProps={controlProps} />
 		</>

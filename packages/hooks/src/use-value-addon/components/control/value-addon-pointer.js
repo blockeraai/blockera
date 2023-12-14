@@ -19,7 +19,7 @@ import { isValid } from '../../helpers';
 import VariableIcon from '../../icons/variable';
 import DynamicValueIcon from '../../icons/dynamic-value';
 import RemoveIcon from '../../icons/remove';
-import { DVPicker, DVSettings, VarPicker } from '../index';
+import { DVPicker, DVSettings, VarPicker, VarDeleted } from '../index';
 import type { ValueAddonControlProps } from './types';
 
 export default function ({
@@ -107,6 +107,11 @@ export default function ({
 			{controlProps.isOpen === 'var' &&
 				controlProps.types.includes('variable') && (
 					<VarPicker controlProps={controlProps} />
+				)}
+
+			{controlProps.isOpen === 'var-deleted' &&
+				controlProps.types.includes('variable') && (
+					<VarDeleted controlProps={controlProps} />
 				)}
 
 			{controlProps.isOpen === 'dv' &&
