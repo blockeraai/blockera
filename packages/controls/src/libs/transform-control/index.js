@@ -21,14 +21,15 @@ import type { Props, RepeaterItem } from './types';
 
 export default function TransformControl({
 	defaultRepeaterItemValue,
-	popoverLabel,
+	popoverTitle,
 	className,
 	...props
 }: Props): MixedElement {
 	return (
 		<RepeaterControl
 			className={controlClassNames('transform', className)}
-			popoverLabel={popoverLabel}
+			popoverTitle={popoverTitle}
+			addNewButtonLabel={__('Add New Transform', 'publisher-core')}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
@@ -65,7 +66,7 @@ TransformControl.propTypes = {
 	/**
 	 * Label for popover
 	 */
-	popoverLabel: PropTypes.string,
+	popoverTitle: PropTypes.string,
 };
 
 TransformControl.defaultProps = {
@@ -82,5 +83,5 @@ TransformControl.defaultProps = {
 		'skew-y': '0deg',
 		isVisible: true,
 	},
-	popoverLabel: (__('Transform', 'publisher-core'): string),
+	popoverTitle: (__('Transform', 'publisher-core'): string),
 };

@@ -179,7 +179,7 @@ describe('group control component testing', () => {
 				component: (
 					<GroupControl
 						mode="popover"
-						popoverLabel="Label Text"
+						popoverTitle="Label Text"
 						header="Header Text"
 						children="Body Text"
 						toggleOpenBorder
@@ -199,7 +199,7 @@ describe('group control component testing', () => {
 				component: (
 					<GroupControl
 						mode="popover"
-						popoverLabel="Label Text"
+						popoverTitle="Label Text"
 						header="Header Text"
 						children="Body Text"
 						toggleOpenBorder
@@ -221,7 +221,7 @@ describe('group control component testing', () => {
 				component: (
 					<GroupControl
 						mode="popover"
-						popoverLabel="Label Text"
+						popoverTitle="Label Text"
 						header="Header Text"
 						children="Body Text"
 						toggleOpenBorder
@@ -242,7 +242,7 @@ describe('group control component testing', () => {
 				component: (
 					<GroupControl
 						mode="popover"
-						popoverLabel="Label Text"
+						popoverTitle="Label Text"
 						header="Header Text"
 						children="Body Text"
 						toggleOpenBorder
@@ -263,7 +263,7 @@ describe('group control component testing', () => {
 				component: (
 					<GroupControl
 						mode="popover"
-						popoverLabel="Label Text"
+						popoverTitle="Label Text"
 						header="Header Text"
 						children="Body Text"
 						toggleOpenBorder
@@ -293,7 +293,7 @@ describe('group control component testing', () => {
 						toggleOpenBorder
 						injectHeaderButtonsStart={<AccordionCustomOpenIcon />}
 						injectHeaderButtonsEnd={<AccordionCustomCloseIcon />}
-						popoverLabel="👋 Popover Title"
+						popoverTitle="👋 Popover Title"
 						className="custom-classname"
 						isOpen
 					/>

@@ -9,7 +9,7 @@ export type TItem = {
 };
 export type TTransitionControlProps = {
 	defaultRepeaterItemValue?: TItem,
-	popoverLabel?: string,
+	popoverTitle?: string,
 	className?: string,
 	defaultValue?: Array<Object>,
 	onChange?: () => {},

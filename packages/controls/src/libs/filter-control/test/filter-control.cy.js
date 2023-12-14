@@ -612,7 +612,7 @@ describe('filter-control component testing', () => {
 		it('should popover not be open at first rendering, when passing false (default)', () => {
 			const name = nanoid();
 			cy.withDataProvider({
-				component: <FilterControl popoverLabel="Filter Control" />,
+				component: <FilterControl popoverTitle="Filter Control" />,
 				value: [
 					{
 						type: 'blur',
@@ -630,7 +630,7 @@ describe('filter-control component testing', () => {
 		it('should popover be open at first rendering, when passing true', () => {
 			const name = nanoid();
 			cy.withDataProvider({
-				component: <FilterControl popoverLabel="Filter Control" />,
+				component: <FilterControl popoverTitle="Filter Control" />,
 				value: [
 					{
 						type: 'blur',

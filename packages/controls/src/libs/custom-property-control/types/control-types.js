@@ -1,13 +1,12 @@
 // @flow
 
 export type TItem = {
-	key: string,
-	__key: string,
+	name: string,
 	value: string,
 	isVisible: boolean,
 };
 
-export type TAttributesControlProps = {
+export type TCustomPropertyControlProps = {
 	id?: string,
 	defaultValue?: [],
 	onChange?: () => {},

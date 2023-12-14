@@ -108,7 +108,7 @@ describe('box-shadow-control component testing', () => {
 			cy.withDataProvider({
 				component: (
 					<BoxShadowControl
-						popoverLabel="Box Shadow"
+						popoverTitle="Box Shadow"
 						{...defaultProps}
 					/>
 				),
@@ -167,7 +167,7 @@ describe('box-shadow-control component testing', () => {
 		it('should context and local value be updated, when changing values (type:outer)', () => {
 			const name = nanoid();
 			cy.withDataProvider({
-				component: <BoxShadowControl popoverLabel={'Box Shadow'} />,
+				component: <BoxShadowControl popoverTitle={'Box Shadow'} />,
 				value: [
 					{
 						type: 'outer',
@@ -254,7 +254,7 @@ describe('box-shadow-control component testing', () => {
 		it('should context and local value be updated, when changing values (type:inner)', () => {
 			const name = nanoid();
 			cy.withDataProvider({
-				component: <BoxShadowControl popoverLabel={'Box Shadow'} />,
+				component: <BoxShadowControl popoverTitle={'Box Shadow'} />,
 				value: [
 					{
 						type: 'outer',
@@ -346,7 +346,7 @@ describe('box-shadow-control component testing', () => {
 		it('should popover not be open at first rendering, when passing false (default)', () => {
 			const name = nanoid();
 			cy.withDataProvider({
-				component: <BoxShadowControl popoverLabel="Box Shadow" />,
+				component: <BoxShadowControl popoverTitle="Box Shadow" />,
 				value: [
 					{
 						type: 'outer',
@@ -369,7 +369,7 @@ describe('box-shadow-control component testing', () => {
 		it('should popover be open at first rendering, when passing true', () => {
 			const name = nanoid();
 			cy.withDataProvider({
-				component: <BoxShadowControl popoverLabel="Box Shadow" />,
+				component: <BoxShadowControl popoverTitle="Box Shadow" />,
 				value: [
 					{
 						type: 'outer',

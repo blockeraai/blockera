@@ -50,6 +50,10 @@ export const BackdropFilter = ({
 							newValue
 						)
 					}
+					addNewButtonLabel={__(
+						'Add New Backdrop Filter',
+						'publisher-core'
+					)}
 					{...props}
 				/>
 			</BaseControl>

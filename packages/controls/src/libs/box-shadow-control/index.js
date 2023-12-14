@@ -20,7 +20,7 @@ import type { TBoxShadowControlProps } from './types';
 export default function BoxShadowControl({
 	id,
 	defaultRepeaterItemValue,
-	popoverLabel,
+	popoverTitle,
 	className,
 	...props
 }: TBoxShadowControlProps): MixedElement {
@@ -28,7 +28,8 @@ export default function BoxShadowControl({
 		<RepeaterControl
 			id={id}
 			className={controlClassNames('box-shadow', className)}
-			popoverLabel={popoverLabel}
+			popoverTitle={popoverTitle}
+			addNewButtonLabel={__('Add New Box Shadow', 'publisher-core')}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
@@ -65,7 +66,7 @@ BoxShadowControl.propTypes = {
 	/**
 	 * Label for popover
 	 */
-	popoverLabel: PropTypes.string,
+	popoverTitle: PropTypes.string,
 };
 
 BoxShadowControl.defaultProps = {
@@ -79,5 +80,5 @@ BoxShadowControl.defaultProps = {
 		color: '#000000ab',
 		isVisible: true,
 	},
-	popoverLabel: (__('Box Shadow', 'publisher-core'): any),
+	popoverTitle: (__('Box Shadow', 'publisher-core'): any),
 };

@@ -51,7 +51,7 @@ export type TDefaultRepeaterItemValue = {
 };
 
 export type TBackgroundControlProps = {
-	popoverLabel: string,
+	popoverTitle: string,
 	className: string | Object,
 	defaultValue: [] | Array<TDefaultRepeaterItemValue>,
 	defaultRepeaterItemValue: TDefaultRepeaterItemValue,

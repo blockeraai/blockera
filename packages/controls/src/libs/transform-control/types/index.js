@@ -15,7 +15,7 @@ export type RepeaterItem = {
 };
 
 export type Props = {
-	popoverLabel?: string,
+	popoverTitle?: string,
 	className?: string,
 	defaultValue?: RepeaterItem[],
 	onChange?: () => void,

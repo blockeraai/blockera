@@ -9,7 +9,8 @@ type ID = string | number;
 export type TRepeaterControlProps = {
 	design: 'minimal',
 	mode: 'popover' | 'accordion',
-	popoverLabel?: string,
+	popoverTitle?: string,
+	addNewButtonLabel?: string,
 	popoverClassName?: string,
 	maxItems?: number,
 	minItems?: number,
@@ -40,5 +41,5 @@ export type TRepeaterDefaultStateProps = {
 	repeaterItems?: Array<mixed>,
 	repeaterId?: ID,
 	customProps?: Object,
-	popoverLabel: string,
+	popoverTitle: string,
 };

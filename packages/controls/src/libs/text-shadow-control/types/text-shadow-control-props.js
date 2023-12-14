@@ -9,7 +9,7 @@ type DefaultRepeaterItemValue = {
 };
 export type TTextShadowControlProps = {
 	defaultRepeaterItemValue?: DefaultRepeaterItemValue,
-	popoverLabel?: string,
+	popoverTitle?: string,
 	className?: string,
 	props?: Object,
 };

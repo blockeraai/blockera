@@ -307,7 +307,8 @@ export function SharedBlockExtension({
 						<BaseExtension
 							initialOpen={true}
 							extensionId={'Advanced'}
-							attributes={attributes.publisherAttributes}
+							attributes={attributes?.publisherAttributes}
+							properties={attributes?.publisherCSSProperties}
 							handleOnChangeAttributes={handleOnChangeAttributes}
 							title={__('Advanced', 'publisher-core')}
 							icon={<AdvancedExtensionIcon />}

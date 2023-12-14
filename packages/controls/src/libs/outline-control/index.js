@@ -22,7 +22,7 @@ import type { TOutlineControlProps } from './types';
 export default function OutlineControl({
 	id,
 	className,
-	popoverLabel,
+	popoverTitle,
 	defaultRepeaterItemValue,
 	...props
 }: TOutlineControlProps): MixedElement {
@@ -30,7 +30,8 @@ export default function OutlineControl({
 		<RepeaterControl
 			id={id}
 			className={controlClassNames('outline', className)}
-			popoverLabel={popoverLabel}
+			popoverTitle={popoverTitle}
+			addNewButtonLabel={__('Add New Outline', 'publisher-core')}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
@@ -66,9 +67,9 @@ OutlineControl.propTypes = {
 		isVisible: PropTypes.bool,
 	}): any),
 	/**
-	 * Label for popover
+	 * Title for popover
 	 */
-	popoverLabel: PropTypes.string,
+	popoverTitle: PropTypes.string,
 };
 
 OutlineControl.defaultProps = {
@@ -81,5 +82,5 @@ OutlineControl.defaultProps = {
 		offset: '2px',
 		isVisible: true,
 	},
-	popoverLabel: (__('Outline', 'publisher-core'): any),
+	popoverTitle: (__('Outline', 'publisher-core'): any),
 };

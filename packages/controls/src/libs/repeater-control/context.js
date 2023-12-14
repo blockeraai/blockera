@@ -7,7 +7,7 @@ import { isFunction, isUndefined } from '@publisher/utils';
 const RepeaterContext = createContext({
 	design: 'minimal',
 	mode: 'popover',
-	popoverLabel: '',
+	popoverTitle: '',
 	popoverClassName: '',
 	maxItems: -1,
 	minItems: 0,
