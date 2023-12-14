@@ -33,17 +33,20 @@ export default function NoticeControl({
 	onDismiss,
 	isShown: _isShown,
 	onShown,
+	style,
 	...props
 }: TNoticeControlProps): any {
 	const [isShown, setIsShown] = useState(_isShown);
 
 	const handleOnDismiss = () => {
 		if (isFunction(onDismiss)) {
+			// $FlowFixMe
 			onDismiss();
 		}
 		setIsShown(false);
 	};
 
+	// $FlowFixMe
 	if (isShown && children && isFunction(onShown)) onShown();
 
 	return (
@@ -62,6 +65,7 @@ export default function NoticeControl({
 						'notice'
 					)} publisher-${type}`}
 					data-test="notice-control"
+					style={style}
 					{...props}
 				>
 					{showIcon && (
