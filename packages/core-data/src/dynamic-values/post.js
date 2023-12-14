@@ -70,24 +70,56 @@ export const getPostDynamicValueItems = (): Array<{
 	return _getPostDynamicValueItemsMemoized();
 };
 
-const _getPostDynamicValueItem = function (types: Array<string>): ?Array<{
+const _getPostDynamicValueItem = function (id: Array<string>): ?{
 	name: string,
 	id: string,
 	type: string,
-}> {
-	return getPostDynamicValueItems().filter((item) =>
-		types.includes(item.type)
-	);
+} {
+	return getPostDynamicValueItems().find((item) => id === item?.id);
 };
 
 const _getPostDynamicValueItemMemoized = memoize(_getPostDynamicValueItem);
 
 export const getPostDynamicValueItem = (
 	types: Array<string>
+): ?{
+	name: string,
+	id: string,
+	type: string,
+} => {
+	return _getPostDynamicValueItemMemoized(types);
+};
+
+const _getPostDVItemsBy = function (
+	field: string,
+	value: string | Array<string>
+): ?Array<{
+	name: string,
+	id: string,
+	type: string,
+}> {
+	return getPostDynamicValueItems().filter((item) => {
+		if (field === 'type') {
+			if (value.includes('all')) {
+				return getPostDynamicValueItems();
+			}
+
+			return value.includes(item.type);
+		}
+
+		return item[field] === value;
+	});
+};
+
+const _getPostDVItemsByMemoized = memoize(_getPostDVItemsBy);
+
+export const getPostDynamicValueItemsBy = (
+	field: string,
+	value: string | Array<string>
 ): ?Array<{
 	name: string,
 	id: string,
 	type: string,
 }> => {
-	return _getPostDynamicValueItemMemoized(types);
+	return _getPostDVItemsByMemoized(field, value);
 };

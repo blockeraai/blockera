@@ -57,28 +57,56 @@ export const getFeaturedImageDynamicValueItems = (): Array<{
 	return _getFeaturedImageDynamicValueItemsMemoized();
 };
 
-const _getFeaturedImageDynamicValueItem = function (
+const _getFeaturedImageDVItem = function (id: Array<string>): ?{
+	name: string,
+	id: string,
+	type: string,
+} {
+	return getFeaturedImageDynamicValueItems().find((item) => id === item?.id);
+};
+
+const _getFeaturedImageDVItemMemoized = memoize(_getFeaturedImageDVItem);
+
+export const getFeaturedImageDynamicValueItem = (
 	types: Array<string>
+): ?{
+	name: string,
+	id: string,
+	type: string,
+} => {
+	return _getFeaturedImageDVItemMemoized(types);
+};
+
+const _getFeaturedImageDVItemsBy = function (
+	field: string,
+	value: string | Array<string>
 ): ?Array<{
 	name: string,
 	id: string,
 	type: string,
 }> {
-	return _getFeaturedImageDynamicValueItems().filter((item) =>
-		types.includes(item.type)
-	);
+	return getFeaturedImageDynamicValueItems().filter((item) => {
+		if (field === 'type') {
+			if (value.includes('all')) {
+				return getFeaturedImageDynamicValueItems();
+			}
+
+			return value.includes(item.type);
+		}
+
+		return item[field] === value;
+	});
 };
 
-const _getFeaturedImageDynamicValueItemMemoized = memoize(
-	_getFeaturedImageDynamicValueItem
-);
+const _getFeaturedImageDVItemsByMemoized = memoize(_getFeaturedImageDVItemsBy);
 
-export const getFeaturedImageDynamicValueItem = (
-	types: Array<string>
+export const getFeaturedImageDynamicValueItemsBy = (
+	field: string,
+	value: string | Array<string>
 ): ?Array<{
 	name: string,
 	id: string,
 	type: string,
 }> => {
-	return _getFeaturedImageDynamicValueItemMemoized(types);
+	return _getFeaturedImageDVItemsByMemoized(field, value);
 };

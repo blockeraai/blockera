@@ -16,8 +16,8 @@ import {
 	getSpacings,
 	getWidthSizes,
 	getVariable,
-	getPostDynamicValueItem,
-	getFeaturedImageDynamicValueItem,
+	getPostDynamicValueItemsBy,
+	getFeaturedImageDynamicValueItemsBy,
 } from '@publisher/core-data';
 import { ColorIndicator } from '@publisher/components';
 import { isBlockTheme, isObject, isUndefined } from '@publisher/utils';
@@ -209,12 +209,12 @@ export function getDynamicValueItems(
 		case 'post':
 			return {
 				name: __('Posts and Pages', 'publisher-core'),
-				items: getPostDynamicValueItem(types),
+				items: getPostDynamicValueItemsBy('type', types),
 			};
 		case 'featured-image':
 			return {
 				name: __('Post Featured Image', 'publisher-core'),
-				items: getFeaturedImageDynamicValueItem(types),
+				items: getFeaturedImageDynamicValueItemsBy('type', types),
 			};
 	}
 
