@@ -17,7 +17,7 @@ import {
 	SearchReplaceControl,
 	BaseControl,
 } from '@publisher/controls';
-import { isUndefined, isEmpty } from '@publisher/utils';
+import { isUndefined } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -187,30 +187,17 @@ export default function ({
 				<BaseControl controlName="dv-search" columns="columns-1">
 					<SearchReplaceControl
 						label="Search and Replace"
-						onChange={(search) => {
-							// TODO Fix state problem and remove this
-							if (
-								isEmpty(search) &&
-								(isUndefined(
-									controlProps.value?.settings?.search
-								) ||
-									isEmpty(
-										controlProps.value?.settings?.search
-									))
-							) {
-								return;
-							}
-
-							const newValue = {
-								...controlProps.value,
-								settings: {
-									...controlProps.value.settings,
-									search,
-								},
-							};
-
-							controlProps.setValue(newValue);
-							controlProps.onChange(newValue);
+						onChange={() => {
+							// const newValue = {
+							// 	...controlProps.value,
+							// 	settings: {
+							// 		...controlProps.value.settings,
+							// 		search,
+							// 	},
+							// };
+							//
+							// controlProps.setValue(newValue);
+							// controlProps.onChange(newValue);
 						}}
 						defaultRepeaterItemValue={{ search: '', replace: '' }}
 					/>
