@@ -51,6 +51,7 @@ export function UnitInput({
 	max,
 	drag,
 	float,
+	arrows,
 	smallWidth,
 	children,
 	...props
@@ -375,6 +376,7 @@ export function UnitInput({
 									range={isActiveRange}
 									drag={drag}
 									float={float}
+									arrows={arrows}
 									actions={getInputActions()}
 									{...props}
 								/>

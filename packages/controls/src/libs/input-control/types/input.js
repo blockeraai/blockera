@@ -44,6 +44,7 @@ export type TInputItem = {
 	disabled?: boolean,
 	drag?: boolean,
 	float?: boolean,
+	arrows?: boolean,
 	smallWidth?: boolean,
 	actions?: Node,
 	controlAddonTypes?: Array<string>,
