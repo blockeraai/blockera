@@ -164,26 +164,28 @@ export function generateVariableString({
 	reference: 'publisher' | 'preset',
 	type: VariableTypes,
 	slug: string,
-}) {
-	type = type.replace(/^linear-|^radial-/i, '');
+}): string {
+	let _type: string = type;
 
 	if (type === 'theme-color') {
-		type = 'color';
-	}
-
-	if (type === 'width-size') {
+		_type = 'color';
+	} else if (type === 'width-size') {
 		if (slug === 'contentSize') {
 			slug = 'content-size';
-			type = 'global';
+			_type = 'global';
+			// $FlowFixMe
 			reference = 'style';
 		} else if (slug === 'wideSize') {
 			slug = 'wide-size';
-			type = 'global';
+			_type = 'global';
+			// $FlowFixMe
 			reference = 'style';
 		}
+	} else {
+		_type = type.replace(/^linear-|^radial-/i, '');
 	}
 
-	return `--wp--${reference}--${type}--${slug}`;
+	return `--wp--${reference}--${_type}--${slug}`;
 }
 
 export function canUnlinkVariable(value: ValueAddon): boolean {
