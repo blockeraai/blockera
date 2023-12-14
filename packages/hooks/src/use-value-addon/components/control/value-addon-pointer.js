@@ -19,7 +19,13 @@ import { isValid } from '../../helpers';
 import VariableIcon from '../../icons/variable';
 import DynamicValueIcon from '../../icons/dynamic-value';
 import RemoveIcon from '../../icons/remove';
-import { DVPicker, DVSettings, VarPicker, VarDeleted } from '../index';
+import {
+	DVPicker,
+	DVSettings,
+	VarPicker,
+	VarDeleted,
+	DVSettingsAdvanced,
+} from '../index';
 import type { ValueAddonControlProps } from './types';
 
 export default function ({
@@ -124,6 +130,11 @@ export default function ({
 			{controlProps.isOpen === 'dv-settings' &&
 				controlProps.types.includes('dynamic-value') && (
 					<DVSettings controlProps={controlProps} />
+				)}
+
+			{controlProps.isOpen === 'dv-settings-advanced' &&
+				controlProps.types.includes('dynamic-value') && (
+					<DVSettingsAdvanced controlProps={controlProps} />
 				)}
 
 			<MappedPointers

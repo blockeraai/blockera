@@ -74,9 +74,12 @@ export default function ({
 					['var-picker', 'var-deleted'].includes(
 						controlProps.isOpen
 					) && 'open-value-addon type-variable',
-					['dv-picker', 'dv-settings'].includes(
-						controlProps.isOpen
-					) && 'open-value-addon type-dynamic-value',
+					[
+						'dv-picker',
+						'dv-settings',
+						'dv-settings-advanced',
+					].includes(controlProps.isOpen) &&
+						'open-value-addon type-dynamic-value',
 					classNames
 				)}
 				onClick={(event) => {
