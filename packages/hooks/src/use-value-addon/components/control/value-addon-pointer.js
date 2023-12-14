@@ -48,8 +48,9 @@ export default function ({
 						'value-addon-pointer',
 						'dv-pointer',
 						isDVActive && 'active-value-addon',
-						['dv', 'dv-settings'].includes(controlProps.isOpen) &&
-							'open-value-addon'
+						['dv-picker', 'dv-settings'].includes(
+							controlProps.isOpen
+						) && 'open-value-addon'
 					)}
 					onClick={handleDynamicValueModal}
 				>
@@ -70,8 +71,9 @@ export default function ({
 						'value-addon-pointer',
 						'var-pointer',
 						isVarActive && 'active-value-addon',
-						['var', 'var-deleted'].includes(controlProps.isOpen) &&
-							'open-value-addon'
+						['var-picker', 'var-deleted'].includes(
+							controlProps.isOpen
+						) && 'open-value-addon'
 					)}
 					onClick={handleVariableModal}
 				>
@@ -104,7 +106,7 @@ export default function ({
 
 	return (
 		<>
-			{controlProps.isOpen === 'var' &&
+			{controlProps.isOpen === 'var-picker' &&
 				controlProps.types.includes('variable') && (
 					<VarPicker controlProps={controlProps} />
 				)}
@@ -114,7 +116,7 @@ export default function ({
 					<VarDeleted controlProps={controlProps} />
 				)}
 
-			{controlProps.isOpen === 'dv' &&
+			{controlProps.isOpen === 'dv-picker' &&
 				controlProps.types.includes('dynamic-value') && (
 					<DVPicker controlProps={controlProps} />
 				)}
@@ -129,10 +131,12 @@ export default function ({
 					e: SyntheticMouseEvent<EventTarget>
 				) => {
 					if (isValid(controlProps.value)) {
-						controlProps.setOpen(controlProps.isOpen ? '' : 'dv');
+						controlProps.setOpen(
+							controlProps.isOpen ? '' : 'dv-picker'
+						);
 						controlProps.handleOnClickRemove(e);
 					} else {
-						controlProps.setOpen('dv');
+						controlProps.setOpen('dv-picker');
 					}
 
 					e.stopPropagation();
@@ -142,7 +146,7 @@ export default function ({
 						controlProps.setOpen('');
 						controlProps.handleOnClickRemove(e);
 					} else {
-						controlProps.setOpen('var');
+						controlProps.setOpen('var-picker');
 					}
 
 					e.stopPropagation();

@@ -71,10 +71,12 @@ export default function ({
 					'value-addon',
 					'type-' + (controlProps.value?.valueType || 'unknown'),
 					isDeleted && 'type-variable-deleted',
-					['var', 'var-deleted'].includes(controlProps.isOpen) &&
-						'open-value-addon type-variable',
-					['dv', 'dv-settings'].includes(controlProps.isOpen) &&
-						'open-value-addon type-dynamic-value',
+					['var-picker', 'var-deleted'].includes(
+						controlProps.isOpen
+					) && 'open-value-addon type-variable',
+					['dv-picker', 'dv-settings'].includes(
+						controlProps.isOpen
+					) && 'open-value-addon type-dynamic-value',
 					classNames
 				)}
 				onClick={(event) => {
@@ -83,7 +85,7 @@ export default function ({
 							if (isDeleted) {
 								controlProps.setOpen('var-deleted');
 							} else {
-								controlProps.setOpen('var');
+								controlProps.setOpen('var-picker');
 							}
 							event.preventDefault();
 							break;
