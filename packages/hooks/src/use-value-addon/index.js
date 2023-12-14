@@ -90,10 +90,6 @@ export const useValueAddon = ({
 	const handleOnClickVar = (
 		event: SyntheticMouseEvent<EventTarget>
 	): void => {
-		if (event.target !== event.currentTarget) {
-			return;
-		}
-
 		// $FlowFixMe
 		const item = JSON.parse(event.target.getAttribute('data-item'));
 
@@ -108,7 +104,6 @@ export const useValueAddon = ({
 
 		setValue(newValue);
 		onChange(newValue);
-
 		setOpen('');
 	};
 
@@ -142,22 +137,20 @@ export const useValueAddon = ({
 	};
 
 	const handleOnClickDV = (event: SyntheticMouseEvent<EventTarget>): void => {
-		if (event.target !== event.currentTarget) {
-			return;
-		}
-
 		// $FlowFixMe
 		const item = JSON.parse(event.target.getAttribute('data-item'));
 
-		setValue({
+		const newValue = {
 			settings: {
 				...item,
 			},
-			id: item.slug,
+			id: item.id,
 			isValueAddon: true,
 			valueType: 'dynamic-value',
-		});
+		};
 
+		setValue(newValue);
+		onChange(newValue);
 		setOpen('dv-settings');
 	};
 
