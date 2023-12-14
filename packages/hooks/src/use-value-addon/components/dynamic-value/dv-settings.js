@@ -22,6 +22,7 @@ import {
 	BaseControl,
 	ControlContextProvider,
 	InputControl,
+	LinkControl,
 } from '@publisher/controls';
 import SearchIcon from '../../icons/search';
 import CaretRightIcon from '../../icons/caret-right';
@@ -214,6 +215,34 @@ export default function ({
 									settings: {
 										...controlProps.value.settings,
 										limit,
+									},
+								};
+								controlProps.setValue(newValue);
+								controlProps.onChange(newValue);
+							}}
+						/>
+					</ControlContextProvider>
+
+					<ControlContextProvider
+						value={{
+							name: 'dv-link',
+							value: !isUndefined(
+								controlProps.value?.settings?.link
+							)
+								? controlProps.value?.settings?.link
+								: {},
+						}}
+					>
+						<LinkControl
+							columns="columns-2"
+							label={__('Link', 'publisher-core')}
+							//
+							onChange={(link) => {
+								const newValue = {
+									...controlProps.value,
+									settings: {
+										...controlProps.value.settings,
+										link,
 									},
 								};
 								controlProps.setValue(newValue);
