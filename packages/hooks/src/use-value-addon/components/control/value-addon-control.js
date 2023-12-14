@@ -17,28 +17,28 @@ import { getVariable } from '@publisher/core-data';
 /**
  * Internal dependencies
  */
-import type { PointerProps } from '../pointer/types';
-import Pointer from '../pointer';
+import type { ValueAddonControlProps } from './types';
+import { ValueAddonPointer } from './index';
 import { getDynamicValueIcon, getVariableIcon, isValid } from '../../helpers';
 import EmptyIcon from '../../icons/empty';
-import DeletedVariableUI from '../variable-picker/deleted-variable';
+import { VarDeleted } from '../index';
 
 export default function ({
 	classNames,
-	pointerProps,
+	controlProps,
 	...props
 }: {
 	classNames?: string,
-	pointerProps: PointerProps,
+	controlProps: ValueAddonControlProps,
 }): Element<any> {
 	// Variable is deleted
-	if (isValid(pointerProps.value)) {
-		if (pointerProps.value.valueType === 'variable') {
+	if (isValid(controlProps.value)) {
+		if (controlProps.value.valueType === 'variable') {
 			let isDeleted = false;
 
 			const variable = getVariable(
-				pointerProps.value?.settings?.type,
-				pointerProps.value?.settings?.slug
+				controlProps.value?.settings?.type,
+				controlProps.value?.settings?.slug
 			);
 
 			if (isUndefined(variable?.value)) {
@@ -47,10 +47,10 @@ export default function ({
 
 			if (isDeleted) {
 				return (
-					<DeletedVariableUI
-						pointerProps={pointerProps}
-						value={pointerProps.value}
-						classNames={classNames}
+					<VarDeleted
+						controlProps={controlProps}
+						value={controlProps.value}
+						classNames={controlProps}
 					/>
 				);
 			}
@@ -59,14 +59,14 @@ export default function ({
 
 	let icon: Element<any> = <></>;
 
-	if (isValid(pointerProps.value)) {
-		if (pointerProps.value.valueType === 'variable') {
+	if (isValid(controlProps.value)) {
+		if (controlProps.value.valueType === 'variable') {
 			icon = getVariableIcon({
-				type: pointerProps.value?.settings?.type,
-				value: pointerProps.value?.settings?.value,
+				type: controlProps.value?.settings?.type,
+				value: controlProps.value?.settings?.value,
 			});
-		} else if (pointerProps.value.valueType === 'dynamic-value') {
-			icon = getDynamicValueIcon(pointerProps.value?.settings?.type);
+		} else if (controlProps.value.valueType === 'dynamic-value') {
+			icon = getDynamicValueIcon(controlProps.value?.settings?.type);
 		} else {
 			icon = <EmptyIcon />;
 		}
@@ -78,26 +78,22 @@ export default function ({
 		<>
 			<div
 				className={controlClassNames(
-					'value-addon-wrapper',
-					'type-' + (pointerProps.value?.valueType || 'unknown'),
-					['var', 'var-deleted'].includes(pointerProps.isOpen) &&
+					'value-addon',
+					'type-' + (controlProps.value?.valueType || 'unknown'),
+					['var', 'var-deleted'].includes(controlProps.isOpen) &&
 						'open-value-addon type-variable',
-					['dv', 'dv-settings'].includes(pointerProps.isOpen) &&
+					['dv', 'dv-settings'].includes(controlProps.isOpen) &&
 						'open-value-addon type-dynamic-value',
 					classNames
 				)}
 				onClick={(event) => {
-					switch (pointerProps.value?.valueType) {
+					switch (controlProps.value?.valueType) {
 						case 'variable':
-							pointerProps.setOpen(
-								pointerProps.isOpen === 'var' ? '' : 'var'
-							);
+							controlProps.setOpen('var');
 							event.preventDefault();
 							break;
 						case 'dynamic-value':
-							pointerProps.setOpen(
-								!pointerProps.isOpen === 'dv' ? '' : ' dv'
-							);
+							controlProps.setOpen('dv');
 							event.preventDefault();
 							break;
 					}
@@ -111,10 +107,10 @@ export default function ({
 				)}
 
 				<span className={controlClassNames('item-name')}>
-					<>{pointerProps.value?.settings?.name || ''}</>
+					<>{controlProps.value?.settings?.name || ''}</>
 				</span>
 			</div>
-			<Pointer pointerProps={pointerProps} />
+			<ValueAddonPointer controlProps={controlProps} />
 		</>
 	);
 }

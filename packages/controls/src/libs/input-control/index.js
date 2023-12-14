@@ -61,7 +61,7 @@ export default function InputControl({
 	const {
 		valueAddonClassNames,
 		isSetValueAddon,
-		ValueAddonUI,
+		ValueAddonControl,
 		ValueAddonPointer,
 	} = useValueAddon({
 		types: controlAddonTypes,
@@ -89,7 +89,7 @@ export default function InputControl({
 						valueAddonClassNames
 					)}
 				>
-					<ValueAddonUI />
+					<ValueAddonControl />
 				</div>
 			</BaseControl>
 		);

@@ -15,7 +15,7 @@ import { Button, Popover } from '@publisher/components';
 /**
  * Internal dependencies
  */
-import type { PointerProps } from '../pointer/types';
+import type { ValueAddonControlProps } from '../control/types';
 import { getDynamicValueIcon, isValid } from '../../helpers';
 import TrashIcon from '../../icons/trash';
 import {
@@ -28,10 +28,10 @@ import CaretRightIcon from '../../icons/caret-right';
 import GearIcon from '../../icons/gear';
 import { isUndefined } from '@publisher/utils';
 
-export default function DynamicValueSettingsUI({
-	pointerProps,
+export default function ({
+	controlProps,
 }: {
-	pointerProps: PointerProps,
+	controlProps: ValueAddonControlProps,
 }): Element<any> {
 	const [isOpenDVSettingsAdv, setIsOpenDVSettingsAdv] = useState(false);
 
@@ -41,16 +41,16 @@ export default function DynamicValueSettingsUI({
 			offset={125}
 			placement="left-start"
 			onClose={() => {
-				pointerProps.setOpen('');
+				controlProps.setOpen('');
 			}}
 			className={controlInnerClassNames('popover-dynamic-values')}
 			titleButtonsRight={
 				<>
-					{isValid(pointerProps.value) && (
+					{isValid(controlProps.value) && (
 						<Button
 							tabIndex="-1"
 							size={'extra-small'}
-							onClick={pointerProps.handleOnClickRemove}
+							onClick={controlProps.handleOnClickRemove}
 							style={{ padding: '5px' }}
 							label={__('Remove', 'publisher-core')}
 						>
@@ -68,11 +68,11 @@ export default function DynamicValueSettingsUI({
 					size="input"
 					contentAlign="left"
 					onClick={() => {
-						pointerProps.setOpen('dv');
+						controlProps.setOpen('dv');
 					}}
 				>
-					{getDynamicValueIcon(pointerProps.value?.settings?.type)}
-					{pointerProps.value?.settings?.name}
+					{getDynamicValueIcon(controlProps.value?.settings?.type)}
+					{controlProps.value?.settings?.name}
 					<SearchIcon style={{ marginLeft: 'auto' }} />
 				</Button>
 			</BaseControl>
@@ -108,9 +108,9 @@ export default function DynamicValueSettingsUI({
 						value={{
 							name: 'dv-prepend',
 							value: !isUndefined(
-								pointerProps.value?.settings?.prepend
+								controlProps.value?.settings?.prepend
 							)
-								? pointerProps.value?.settings?.prepend
+								? controlProps.value?.settings?.prepend
 								: '',
 						}}
 					>
@@ -121,14 +121,14 @@ export default function DynamicValueSettingsUI({
 							defaultValue={''}
 							onChange={(prepend) => {
 								const newValue = {
-									...pointerProps.value,
+									...controlProps.value,
 									settings: {
-										...pointerProps.value.settings,
+										...controlProps.value.settings,
 										prepend,
 									},
 								};
-								pointerProps.setValue(newValue);
-								pointerProps.onChange(newValue);
+								controlProps.setValue(newValue);
+								controlProps.onChange(newValue);
 							}}
 						/>
 					</ControlContextProvider>
@@ -137,9 +137,9 @@ export default function DynamicValueSettingsUI({
 						value={{
 							name: 'dv-append',
 							value: !isUndefined(
-								pointerProps.value?.settings?.append
+								controlProps.value?.settings?.append
 							)
-								? pointerProps.value?.settings?.append
+								? controlProps.value?.settings?.append
 								: '',
 						}}
 					>
@@ -150,14 +150,14 @@ export default function DynamicValueSettingsUI({
 							defaultValue={''}
 							onChange={(append) => {
 								const newValue = {
-									...pointerProps.value,
+									...controlProps.value,
 									settings: {
-										...pointerProps.value.settings,
+										...controlProps.value.settings,
 										append,
 									},
 								};
-								pointerProps.setValue(newValue);
-								pointerProps.onChange(newValue);
+								controlProps.setValue(newValue);
+								controlProps.onChange(newValue);
 							}}
 						/>
 					</ControlContextProvider>
@@ -166,9 +166,9 @@ export default function DynamicValueSettingsUI({
 						value={{
 							name: 'dv-fallback',
 							value: !isUndefined(
-								pointerProps.value?.settings?.fallback
+								controlProps.value?.settings?.fallback
 							)
-								? pointerProps.value?.settings?.fallback
+								? controlProps.value?.settings?.fallback
 								: '',
 						}}
 					>
@@ -179,14 +179,14 @@ export default function DynamicValueSettingsUI({
 							defaultValue={''}
 							onChange={(fallback) => {
 								const newValue = {
-									...pointerProps.value,
+									...controlProps.value,
 									settings: {
-										...pointerProps.value.settings,
+										...controlProps.value.settings,
 										fallback,
 									},
 								};
-								pointerProps.setValue(newValue);
-								pointerProps.onChange(newValue);
+								controlProps.setValue(newValue);
+								controlProps.onChange(newValue);
 							}}
 						/>
 					</ControlContextProvider>
@@ -195,9 +195,9 @@ export default function DynamicValueSettingsUI({
 						value={{
 							name: 'dv-limit',
 							value: !isUndefined(
-								pointerProps.value?.settings?.limit
+								controlProps.value?.settings?.limit
 							)
-								? pointerProps.value?.settings?.limit
+								? controlProps.value?.settings?.limit
 								: '',
 						}}
 					>
@@ -210,14 +210,14 @@ export default function DynamicValueSettingsUI({
 							arrows={true}
 							onChange={(limit) => {
 								const newValue = {
-									...pointerProps.value,
+									...controlProps.value,
 									settings: {
-										...pointerProps.value.settings,
+										...controlProps.value.settings,
 										limit,
 									},
 								};
-								pointerProps.setValue(newValue);
-								pointerProps.onChange(newValue);
+								controlProps.setValue(newValue);
+								controlProps.onChange(newValue);
 							}}
 						/>
 					</ControlContextProvider>

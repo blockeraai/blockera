@@ -16,25 +16,24 @@ import {
  * Internal dependencies
  */
 import { isValid } from '../../helpers';
-import type { PointerProps } from './types';
-import { DynamicValuePicker, VariablePicker } from '../index';
 import VariableIcon from '../../icons/variable';
 import DynamicValueIcon from '../../icons/dynamic-value';
 import RemoveIcon from '../../icons/remove';
-import DynamicValueSettingsUI from '../dynamic-value-picker/dynamic-value-settings';
+import { DVPicker, DVSettings, VarPicker } from '../index';
+import type { ValueAddonControlProps } from './types';
 
 export default function ({
-	pointerProps,
+	controlProps,
 }: {
-	pointerProps: PointerProps,
+	controlProps: ValueAddonControlProps,
 }): Element<any> {
 	const isVarActive =
-		isValid(pointerProps.value) &&
-		pointerProps.value?.valueType === 'variable';
+		isValid(controlProps.value) &&
+		controlProps.value?.valueType === 'variable';
 
 	const isDVActive =
-		isValid(pointerProps.value) &&
-		pointerProps.value?.valueType === 'dynamic-value';
+		isValid(controlProps.value) &&
+		controlProps.value?.valueType === 'dynamic-value';
 
 	const MappedPointers = ({
 		handleVariableModal,
@@ -42,14 +41,14 @@ export default function ({
 	}: Object): Element<any> => {
 		const pointers = [];
 
-		if (pointerProps.types.includes('dynamic-value')) {
+		if (controlProps.types.includes('dynamic-value')) {
 			pointers.push(
 				<div
 					className={controlInnerClassNames(
 						'value-addon-pointer',
 						'dv-pointer',
 						isDVActive && 'active-value-addon',
-						['dv', 'dv-settings'].includes(pointerProps.isOpen) &&
+						['dv', 'dv-settings'].includes(controlProps.isOpen) &&
 							'open-value-addon'
 					)}
 					onClick={handleDynamicValueModal}
@@ -64,14 +63,14 @@ export default function ({
 			);
 		}
 
-		if (pointerProps.types.includes('variable')) {
+		if (controlProps.types.includes('variable')) {
 			pointers.push(
 				<div
 					className={controlInnerClassNames(
 						'value-addon-pointer',
 						'var-pointer',
 						isVarActive && 'active-value-addon',
-						['var', 'var-deleted'].includes(pointerProps.isOpen) &&
+						['var', 'var-deleted'].includes(controlProps.isOpen) &&
 							'open-value-addon'
 					)}
 					onClick={handleVariableModal}
@@ -91,7 +90,7 @@ export default function ({
 				<div
 					className={controlClassNames(
 						'value-addon-pointers',
-						(isVarActive || pointerProps.isOpen || isDVActive) &&
+						(isVarActive || controlProps.isOpen || isDVActive) &&
 							'active-addon-pointers'
 					)}
 				>
@@ -105,40 +104,40 @@ export default function ({
 
 	return (
 		<>
-			{pointerProps.isOpen === 'var' &&
-				pointerProps.types.includes('variable') && (
-					<VariablePicker pointerProps={pointerProps} />
+			{controlProps.isOpen === 'var' &&
+				controlProps.types.includes('variable') && (
+					<VarPicker controlProps={controlProps} />
 				)}
 
-			{pointerProps.isOpen === 'dv' &&
-				pointerProps.types.includes('dynamic-value') && (
-					<DynamicValuePicker pointerProps={pointerProps} />
+			{controlProps.isOpen === 'dv' &&
+				controlProps.types.includes('dynamic-value') && (
+					<DVPicker controlProps={controlProps} />
 				)}
 
-			{pointerProps.isOpen === 'dv-settings' &&
-				pointerProps.types.includes('dynamic-value') && (
-					<DynamicValueSettingsUI pointerProps={pointerProps} />
+			{controlProps.isOpen === 'dv-settings' &&
+				controlProps.types.includes('dynamic-value') && (
+					<DVSettings controlProps={controlProps} />
 				)}
 
 			<MappedPointers
 				handleDynamicValueModal={(
 					e: SyntheticMouseEvent<EventTarget>
 				) => {
-					if (isValid(pointerProps.value)) {
-						pointerProps.setOpen('');
-						pointerProps.handleOnClickRemove(e);
+					if (isValid(controlProps.value)) {
+						controlProps.setOpen(controlProps.isOpen ? '' : 'dv');
+						controlProps.handleOnClickRemove(e);
 					} else {
-						pointerProps.setOpen('dv');
+						controlProps.setOpen('dv');
 					}
 
 					e.stopPropagation();
 				}}
 				handleVariableModal={(e: SyntheticMouseEvent<EventTarget>) => {
-					if (isValid(pointerProps.value)) {
-						pointerProps.setOpen('');
-						pointerProps.handleOnClickRemove(e);
+					if (isValid(controlProps.value)) {
+						controlProps.setOpen('');
+						controlProps.handleOnClickRemove(e);
 					} else {
-						pointerProps.setOpen('var');
+						controlProps.setOpen('var');
 					}
 
 					e.stopPropagation();

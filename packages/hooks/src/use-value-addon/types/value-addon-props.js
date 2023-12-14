@@ -4,6 +4,11 @@
  */
 import type { Element } from 'react';
 
+/**
+ * Internal dependencies
+ */
+import type { ValueAddonControlProps } from '../components/control/types';
+
 export type ValueAddonProps = {
 	/**
 	 * The css class names.
@@ -20,7 +25,11 @@ export type ValueAddonProps = {
 	/**
 	 * The control addon user interface to show addon value like: css variables or any other core entity value of WordPress as react component.
 	 */
-	ValueAddonUI: () => Element<any>,
+	ValueAddonControl: () => Element<any>,
+	/**
+	 * The control addon user interface to show addon value like: css variables or any other core entity value of WordPress as react component.
+	 */
+	valueAddonControlProps: ValueAddonControlProps,
 	/**
 	 * Handle on click icon of variables on control.
 	 *

@@ -14,9 +14,11 @@ import { getVariable } from '@publisher/core-data';
  * Internal dependencies
  */
 import { canUnlinkVariable, isValid } from './helpers';
-import { ValueUIKit, Pointer } from './components';
-import type { PointerProps } from './components/pointer/types';
+import { ValueAddonControl, ValueAddonPointer } from './components';
 import type { UseValueAddonProps, ValueAddonProps } from './types';
+import type { ValueAddonControlProps } from './components/control/types';
+
+export type { ValueAddonControlProps } from './components/control/types';
 
 export const useValueAddon = ({
 	types,
@@ -31,7 +33,31 @@ export const useValueAddon = ({
 			isSetValueAddon: () => false,
 			valueAddonClassNames: '',
 			ValueAddonPointer: () => <></>,
-			ValueAddonUI: () => <></>,
+			ValueAddonControl: () => <></>,
+			valueAddonControlProps: {
+				value: {
+					isValueAddon: false,
+					id: '',
+					settings: {},
+				},
+				setValue: () => {},
+				onChange,
+				types,
+				variableTypes:
+					typeof variableTypes === 'string'
+						? [variableTypes]
+						: variableTypes,
+				dynamicValueTypes:
+					typeof dynamicValueTypes === 'string'
+						? [dynamicValueTypes]
+						: dynamicValueTypes,
+				handleOnClickVar: () => {},
+				handleOnUnlinkVar: () => {},
+				handleOnClickDV: () => {},
+				handleOnClickRemove: () => {},
+				isOpen: '',
+				setOpen: () => {},
+			},
 			handleOnClickVar: () => {},
 			handleOnClickDV: () => {},
 			handleOnUnlinkVar: () => {},
@@ -48,7 +74,7 @@ export const useValueAddon = ({
 		: {
 				isValueAddon: false,
 				valueType: null,
-				id: null,
+				id: '',
 				settings: {},
 		  };
 
@@ -150,7 +176,7 @@ export const useValueAddon = ({
 		variableTypes = [variableTypes];
 	}
 
-	const pointerProps: PointerProps = {
+	const controlProps: ValueAddonControlProps = {
 		value,
 		setValue,
 		onChange,
@@ -171,11 +197,14 @@ export const useValueAddon = ({
 
 	return {
 		valueAddonClassNames,
-		ValueAddonPointer: () => <Pointer pointerProps={pointerProps} />,
 		isSetValueAddon: () => isValid(value) || isOpen,
-		ValueAddonUI: ({ ...props }) => (
-			<ValueUIKit pointerProps={pointerProps} {...props} />
+		ValueAddonPointer: () => (
+			<ValueAddonPointer controlProps={controlProps} />
 		),
+		ValueAddonControl: ({ ...props }) => (
+			<ValueAddonControl controlProps={controlProps} {...props} />
+		),
+		valueAddonControlProps: controlProps,
 		handleOnClickVar,
 		handleOnUnlinkVar,
 		handleOnClickDV,

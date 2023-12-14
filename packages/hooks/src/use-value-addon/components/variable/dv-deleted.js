@@ -18,22 +18,22 @@ import { Button, Flex, Popover } from '@publisher/components';
 /**
  * Internal dependencies
  */
-import { Pointer } from '../index';
-import type { PointerProps } from '../pointer/types';
+import type { ValueAddonControlProps } from '../control/types';
 import type { ValueAddon } from '../../types';
 import DeletedVariableIcon from '../../icons/deleted-variable';
 import { canUnlinkVariable, isValid } from '../../helpers';
 import UnlinkIcon from '../../icons/unlink';
 import TrashIcon from '../../icons/trash';
+import { ValueAddonPointer } from '../control';
 
-export default function DeletedVariableUI({
+export default function ({
 	value,
 	classNames,
-	pointerProps,
+	controlProps,
 }: {
 	value: ValueAddon,
 	classNames?: string,
-	pointerProps: PointerProps,
+	controlProps: ValueAddonControlProps,
 }): Element<any> {
 	const valueAvailable =
 		!isUndefined(value?.settings?.value) && value?.settings?.value !== '';
@@ -51,20 +51,20 @@ export default function DeletedVariableUI({
 		<>
 			<div
 				className={controlClassNames(
-					'value-addon-wrapper',
+					'value-addon',
 					'type-variable-deleted',
-					['var', 'var-deleted'].includes(pointerProps.isOpen) &&
+					['var', 'var-deleted'].includes(controlProps.isOpen) &&
 						'open-value-addon type-variable',
-					['dv', 'dv-settings'].includes(pointerProps.isOpen) &&
+					['dv', 'dv-settings'].includes(controlProps.isOpen) &&
 						'open-value-addon type-dynamic-value',
 					classNames
 				)}
 				onClick={(event) => {
-					if (!pointerProps.isOpen === 'var-deleted')
+					if (!controlProps.isOpen === 'var-deleted')
 						event.preventDefault();
 
-					pointerProps.setOpen(
-						pointerProps.isOpen ? '' : 'var-deleted'
+					controlProps.setOpen(
+						controlProps.isOpen ? '' : 'var-deleted'
 					);
 				}}
 			>
@@ -77,14 +77,14 @@ export default function DeletedVariableUI({
 				</span>
 			</div>
 
-			<Pointer pointerProps={pointerProps} />
+			<ValueAddonPointer controlProps={controlProps} />
 
-			{pointerProps.isOpen === 'var-deleted' && (
+			{controlProps.isOpen === 'var-deleted' && (
 				<Popover
 					title={__('Deleted Variable', 'publisher-core')}
 					offset={125}
 					placement="left-start"
-					onClose={() => pointerProps.setOpen('')}
+					onClose={() => controlProps.setOpen('')}
 					className={controlInnerClassNames(
 						'popover-variable-deleted'
 					)}
@@ -94,7 +94,7 @@ export default function DeletedVariableUI({
 								<Button
 									tabIndex="-1"
 									size={'extra-small'}
-									onClick={pointerProps.handleOnUnlinkVar}
+									onClick={controlProps.handleOnUnlinkVar}
 									style={{ padding: '5px' }}
 									label={__(
 										'Unlink Variable Value',
@@ -109,7 +109,7 @@ export default function DeletedVariableUI({
 								<Button
 									tabIndex="-1"
 									size={'extra-small'}
-									onClick={pointerProps.handleOnClickRemove}
+									onClick={controlProps.handleOnClickRemove}
 									style={{ padding: '5px' }}
 									label={__('Remove', 'publisher-core')}
 								>
@@ -152,7 +152,7 @@ export default function DeletedVariableUI({
 									variant="primary"
 									tabIndex="-1"
 									size={'small'}
-									onClick={pointerProps.handleOnUnlinkVar}
+									onClick={controlProps.handleOnUnlinkVar}
 									label={__(
 										'Unlink Variable Value',
 										'publisher-core'
@@ -167,7 +167,7 @@ export default function DeletedVariableUI({
 									tabIndex="-1"
 									size={'small'}
 									onClick={() => {
-										pointerProps.setOpen('var');
+										controlProps.setOpen('var');
 									}}
 									label={__(
 										'Switch To Another Variable',
@@ -215,7 +215,7 @@ export default function DeletedVariableUI({
 									variant="primary"
 									tabIndex="-1"
 									size={'small'}
-									onClick={pointerProps.handleOnClickRemove}
+									onClick={controlProps.handleOnClickRemove}
 									label={__(
 										'Remove Variable Usage',
 										'publisher-core'
@@ -230,7 +230,7 @@ export default function DeletedVariableUI({
 									tabIndex="-1"
 									size={'small'}
 									onClick={() => {
-										pointerProps.setOpen('var');
+										controlProps.setOpen('var');
 									}}
 									label={__(
 										'Switch To Another Variable',

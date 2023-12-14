@@ -22,24 +22,25 @@ import {
 	canUnlinkVariable,
 	isValid,
 } from '../../helpers';
-import { PickerTypeHeader, PopoverValueItem } from '../index';
+import { PickerValueItem, PickerCategory } from '../index';
 import PlusIcon from '../../icons/plus';
 import UnlinkIcon from '../../icons/unlink';
 import TrashIcon from '../../icons/trash';
-import type { PointerProps } from '../pointer/types';
+import type { ValueAddonControlProps } from '../control/types';
 
-export default function ({
-	pointerProps,
+export default function VarPicker({
+	controlProps,
 }: {
-	pointerProps: PointerProps,
+	controlProps: ValueAddonControlProps,
 }): Element<any> {
 	let noVariablesText = __('No variable!', 'publisher-core');
 	const _isBlockTheme = isBlockTheme();
 
 	const CustomVariables = (): Element<any> => {
 		return (
-			<Flex direction="column" key={`type-custom-variabes`} gap={'10px'}>
-				<PickerTypeHeader>
+			<PickerCategory
+				key={`type-custom-variabes`}
+				title={
 					<>
 						{__('Custom Variables', 'publisher-core')}
 
@@ -56,17 +57,17 @@ export default function ({
 							<PlusIcon />
 						</Button>
 					</>
-				</PickerTypeHeader>
-
+				}
+			>
 				<span style={{ opacity: '0.5', fontSize: '12px' }}>
 					{__('Coming soon…', 'publisher-core')}
 				</span>
-			</Flex>
+			</PickerCategory>
 		);
 	};
 
 	const Variables = (): Array<Element<any>> => {
-		return pointerProps.variableTypes.map((type, index) => {
+		return controlProps.variableTypes.map((type, index) => {
 			const data = getVariables(type);
 
 			if (data?.name === '') {
@@ -82,32 +83,19 @@ export default function ({
 
 			if (data.variables?.length === 0) {
 				return (
-					<Flex
-						direction="column"
+					<PickerCategory
 						key={`type-${type}-${index}`}
-						gap={'10px'}
+						title={data.name}
 					>
-						<PickerTypeHeader>
-							<>{data.name}</>
-						</PickerTypeHeader>
-
 						<span style={{ opacity: '0.5', fontSize: '12px' }}>
 							{noVariablesText}
 						</span>
-					</Flex>
+					</PickerCategory>
 				);
 			}
 
 			return (
-				<Flex
-					direction="column"
-					key={`type-${type}-${index}`}
-					gap={'10px'}
-				>
-					<PickerTypeHeader>
-						<>{data.name}</>
-					</PickerTypeHeader>
-
+				<PickerCategory key={`type-${type}-${index}`} title={data.name}>
 					{data.variables.map((variable, _index) => {
 						const itemData = {
 							...variable,
@@ -121,18 +109,18 @@ export default function ({
 						};
 
 						return (
-							<PopoverValueItem
-								value={pointerProps.value}
+							<PickerValueItem
+								value={controlProps.value}
 								data={itemData}
-								onClick={pointerProps.handleOnClickVar}
+								onClick={controlProps.handleOnClickVar}
 								key={`${type}-${_index}-value-type`}
 								name={variable.name}
 								type={type}
 								valueType="variable"
 								isCurrent={
-									isValid(pointerProps.value) &&
-									pointerProps.value.settings.type === type &&
-									pointerProps.value.settings.slug ===
+									isValid(controlProps.value) &&
+									controlProps.value.settings.type === type &&
+									controlProps.value.settings.slug ===
 										itemData.slug
 								}
 								icon={getVariableIcon({
@@ -142,7 +130,7 @@ export default function ({
 							/>
 						);
 					})}
-				</Flex>
+				</PickerCategory>
 			);
 		});
 	};
@@ -152,15 +140,15 @@ export default function ({
 			title={__('Choose Variable', 'publisher-core')}
 			offset={125}
 			placement="left-start"
-			onClose={() => pointerProps.setOpen('')}
+			onClose={() => controlProps.setOpen('')}
 			className={controlInnerClassNames('popover-variables')}
 			titleButtonsRight={
 				<>
-					{canUnlinkVariable(pointerProps.value) && (
+					{canUnlinkVariable(controlProps.value) && (
 						<Button
 							tabIndex="-1"
 							size={'extra-small'}
-							onClick={pointerProps.handleOnUnlinkVar}
+							onClick={controlProps.handleOnUnlinkVar}
 							style={{ padding: '5px' }}
 							label={__(
 								'Unlink Variable Value',
@@ -171,11 +159,11 @@ export default function ({
 						</Button>
 					)}
 
-					{isValid(pointerProps.value) && (
+					{isValid(controlProps.value) && (
 						<Button
 							tabIndex="-1"
 							size={'extra-small'}
-							onClick={pointerProps.handleOnClickRemove}
+							onClick={controlProps.handleOnClickRemove}
 							style={{ padding: '5px' }}
 							label={__('Remove', 'publisher-core')}
 						>

@@ -8,7 +8,7 @@ import type {
 	DynamicValueTypes,
 } from '../../../types';
 
-export type PointerProps = {
+export type ValueAddonControlProps = {
 	value: ValueAddon,
 	setValue: (value: Object | string) => void,
 	onChange: (value: Object | string) => void,

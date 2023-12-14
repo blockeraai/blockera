@@ -19,14 +19,14 @@ import {
 	isValid,
 	getDynamicValueItems,
 } from '../../helpers';
-import { PickerTypeHeader, PopoverValueItem } from '../index';
+import { PickerCategory, PickerValueItem } from '../index';
 import TrashIcon from '../../icons/trash';
-import type { PointerProps } from '../pointer/types';
+import type { ValueAddonControlProps } from '../control/types';
 
 export default function ({
-	pointerProps,
+	controlProps,
 }: {
-	pointerProps: PointerProps,
+	controlProps: ValueAddonControlProps,
 }): Element<any> {
 	const DynamicValues = (): Array<Element<any>> => {
 		const categories = ['post', 'featured-image'];
@@ -34,7 +34,7 @@ export default function ({
 		return categories.map((item, index) => {
 			const data = getDynamicValueItems(
 				item,
-				pointerProps.dynamicValueTypes
+				controlProps.dynamicValueTypes
 			);
 
 			if (data?.name === '') {
@@ -46,15 +46,7 @@ export default function ({
 			}
 
 			return (
-				<Flex
-					direction="column"
-					key={`type-${item}-${index}`}
-					gap={'10px'}
-				>
-					<PickerTypeHeader>
-						<>{data.name}</>
-					</PickerTypeHeader>
-
+				<PickerCategory key={`type-${item}-${index}`} title={data.name}>
 					<Grid gridTemplateColumns="120px 120px" gap="10px">
 						{data.items.map((_item, _index) => {
 							const itemData = {
@@ -62,17 +54,17 @@ export default function ({
 							};
 
 							return (
-								<PopoverValueItem
-									value={pointerProps.value}
+								<PickerValueItem
+									value={controlProps.value}
 									data={itemData}
-									onClick={pointerProps.handleOnClickDV}
+									onClick={controlProps.handleOnClickDV}
 									key={`${item}-${_index}-value-type`}
 									name={_item.name}
 									type={_item.type}
 									valueType="dynamic-value"
 									isCurrent={
-										isValid(pointerProps.value) &&
-										pointerProps.value.settings.id ===
+										isValid(controlProps.value) &&
+										controlProps.value.settings.id ===
 											itemData.id
 									}
 									icon={getDynamicValueIcon(itemData.type)}
@@ -80,7 +72,7 @@ export default function ({
 							);
 						})}
 					</Grid>
-				</Flex>
+				</PickerCategory>
 			);
 		});
 	};
@@ -91,16 +83,16 @@ export default function ({
 			offset={125}
 			placement="left-start"
 			onClose={() => {
-				pointerProps.setOpen('');
+				controlProps.setOpen('');
 			}}
 			className={controlInnerClassNames('popover-dynamic-values')}
 			titleButtonsRight={
 				<>
-					{isValid(pointerProps.value) && (
+					{isValid(controlProps.value) && (
 						<Button
 							tabIndex="-1"
 							size={'extra-small'}
-							onClick={pointerProps.handleOnClickRemove}
+							onClick={controlProps.handleOnClickRemove}
 							style={{ padding: '5px' }}
 							label={__('Remove', 'publisher-core')}
 						>

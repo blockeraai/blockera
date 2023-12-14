@@ -1,4 +1,4 @@
-.publisher-control-value-addon-wrapper {
+.publisher-control-value-addon {
 	height: 30px;
 	display: grid;
 	gap: 6px;
@@ -15,6 +15,7 @@
 	color: var(--va-color);
 	border: 1px solid var(--va-color);
 	background-color: var(--va-bg-color);
+	user-select: none;
 
 	&.type-variable {
 		--va-color: var(--publisher-value-addon-var-color);
