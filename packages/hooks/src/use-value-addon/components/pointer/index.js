@@ -49,8 +49,7 @@ export default function ({
 						'value-addon-pointer',
 						'dv-pointer',
 						isDVActive && 'active-value-addon',
-						(pointerProps.isOpenDV ||
-							pointerProps.isOpenDVSettings) &&
+						['dv', 'dv-settings'].includes(pointerProps.isOpen) &&
 							'open-value-addon'
 					)}
 					onClick={handleDynamicValueModal}
@@ -72,7 +71,8 @@ export default function ({
 						'value-addon-pointer',
 						'var-pointer',
 						isVarActive && 'active-value-addon',
-						pointerProps.isOpenVar && 'open-value-addon'
+						['var', 'var-deleted'].includes(pointerProps.isOpen) &&
+							'open-value-addon'
 					)}
 					onClick={handleVariableModal}
 				>
@@ -91,11 +91,7 @@ export default function ({
 				<div
 					className={controlClassNames(
 						'value-addon-pointers',
-						(isVarActive ||
-							pointerProps.isOpenVar ||
-							isDVActive ||
-							pointerProps.isOpenDV ||
-							pointerProps.isOpenDVSettings) &&
+						(isVarActive || pointerProps.isOpen || isDVActive) &&
 							'active-addon-pointers'
 					)}
 				>
@@ -109,17 +105,17 @@ export default function ({
 
 	return (
 		<>
-			{pointerProps.isOpenVar &&
+			{pointerProps.isOpen === 'var' &&
 				pointerProps.types.includes('variable') && (
 					<VariablePicker pointerProps={pointerProps} />
 				)}
 
-			{pointerProps.isOpenDV &&
+			{pointerProps.isOpen === 'dv' &&
 				pointerProps.types.includes('dynamic-value') && (
 					<DynamicValuePicker pointerProps={pointerProps} />
 				)}
 
-			{pointerProps.isOpenDVSettings &&
+			{pointerProps.isOpen === 'dv-settings' &&
 				pointerProps.types.includes('dynamic-value') && (
 					<DynamicValueSettingsUI pointerProps={pointerProps} />
 				)}
@@ -129,20 +125,20 @@ export default function ({
 					e: SyntheticMouseEvent<EventTarget>
 				) => {
 					if (isValid(pointerProps.value)) {
-						pointerProps.setOpenDV(false);
+						pointerProps.setOpen('');
 						pointerProps.handleOnClickRemove(e);
 					} else {
-						pointerProps.setOpenDV(true);
+						pointerProps.setOpen('dv');
 					}
 
 					e.stopPropagation();
 				}}
 				handleVariableModal={(e: SyntheticMouseEvent<EventTarget>) => {
 					if (isValid(pointerProps.value)) {
-						pointerProps.setOpenVar(false);
+						pointerProps.setOpen('');
 						pointerProps.handleOnClickRemove(e);
 					} else {
-						pointerProps.setOpenVar(true);
+						pointerProps.setOpen('var');
 					}
 
 					e.stopPropagation();

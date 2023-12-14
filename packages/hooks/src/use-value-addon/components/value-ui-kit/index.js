@@ -80,20 +80,23 @@ export default function ({
 				className={controlClassNames(
 					'value-addon-wrapper',
 					'type-' + (pointerProps.value?.valueType || 'unknown'),
-					pointerProps.isOpenVar && 'open-value-addon type-variable',
-					pointerProps.isOpenDV &&
+					['var', 'var-deleted'].includes(pointerProps.isOpen) &&
+						'open-value-addon type-variable',
+					['dv', 'dv-settings'].includes(pointerProps.isOpen) &&
 						'open-value-addon type-dynamic-value',
 					classNames
 				)}
 				onClick={(event) => {
 					switch (pointerProps.value?.valueType) {
 						case 'variable':
-							pointerProps.setOpenVar(!pointerProps.isOpenVar);
+							pointerProps.setOpen(
+								pointerProps.isOpen === 'var' ? '' : 'var'
+							);
 							event.preventDefault();
 							break;
 						case 'dynamic-value':
-							pointerProps.setIsOpenDVSettings(
-								!pointerProps.isOpenDVSettings
+							pointerProps.setOpen(
+								!pointerProps.isOpen === 'dv' ? '' : ' dv'
 							);
 							event.preventDefault();
 							break;

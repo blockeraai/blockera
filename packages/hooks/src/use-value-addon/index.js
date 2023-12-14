@@ -55,13 +55,7 @@ export const useValueAddon = ({
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const [value, setValue] = useState(initialState);
 	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const [isOpenVar, setOpenVar] = useState(false);
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const [isOpenDV, setOpenDV] = useState(false);
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const [isOpenVarDeleted, setIsOpenVarDeleted] = useState(false);
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const [isOpenDVSettings, setIsOpenDVSettings] = useState(false);
+	const [isOpen, setOpen] = useState('');
 
 	const valueAddonClassNames = types
 		.map((type) => `publisher-value-addon-support-${type}`)
@@ -89,7 +83,7 @@ export const useValueAddon = ({
 		setValue(newValue);
 		onChange(newValue);
 
-		setOpenVar(false);
+		setOpen('');
 	};
 
 	const handleOnUnlinkVar = (): void => {
@@ -117,7 +111,7 @@ export const useValueAddon = ({
 				}
 			}
 
-			setOpenVar(false);
+			setOpen('');
 		}
 	};
 
@@ -138,8 +132,7 @@ export const useValueAddon = ({
 			valueType: 'dynamic-value',
 		});
 
-		setOpenDV(false);
-		setIsOpenDVSettings(true);
+		setOpen('dv-settings');
 	};
 
 	const handleOnClickRemove = (): void => {
@@ -150,9 +143,7 @@ export const useValueAddon = ({
 			id: null,
 			settings: {},
 		});
-		setOpenVar(false);
-		setOpenDV(false);
-		setIsOpenDVSettings(false);
+		setOpen('');
 	};
 
 	if (typeof variableTypes === 'string') {
@@ -174,20 +165,14 @@ export const useValueAddon = ({
 		handleOnUnlinkVar,
 		handleOnClickDV,
 		handleOnClickRemove,
-		isOpenVar,
-		setOpenVar,
-		isOpenDV,
-		setOpenDV,
-		isOpenVarDeleted,
-		setIsOpenVarDeleted,
-		isOpenDVSettings,
-		setIsOpenDVSettings,
+		isOpen,
+		setOpen,
 	};
 
 	return {
 		valueAddonClassNames,
 		ValueAddonPointer: () => <Pointer pointerProps={pointerProps} />,
-		isSetValueAddon: () => isValid(value) || isOpenVar || isOpenDV,
+		isSetValueAddon: () => isValid(value) || isOpen,
 		ValueAddonUI: ({ ...props }) => (
 			<ValueUIKit pointerProps={pointerProps} {...props} />
 		),

@@ -152,7 +152,7 @@ export default function ({
 			title={__('Choose Variable', 'publisher-core')}
 			offset={125}
 			placement="left-start"
-			onClose={() => pointerProps.setOpenVar(false)}
+			onClose={() => pointerProps.setOpen('')}
 			className={controlInnerClassNames('popover-variables')}
 			titleButtonsRight={
 				<>

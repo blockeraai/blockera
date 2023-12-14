@@ -91,7 +91,7 @@ export default function ({
 			offset={125}
 			placement="left-start"
 			onClose={() => {
-				pointerProps.setOpenDV(false);
+				pointerProps.setOpen('');
 			}}
 			className={controlInnerClassNames('popover-dynamic-values')}
 			titleButtonsRight={

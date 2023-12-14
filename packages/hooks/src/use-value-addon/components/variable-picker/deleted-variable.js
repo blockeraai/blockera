@@ -53,19 +53,19 @@ export default function DeletedVariableUI({
 				className={controlClassNames(
 					'value-addon-wrapper',
 					'type-variable-deleted',
-					(pointerProps.isOpenVar || pointerProps.isOpenVarDeleted) &&
+					['var', 'var-deleted'].includes(pointerProps.isOpen) &&
 						'open-value-addon type-variable',
-					pointerProps.isOpenDV &&
+					['dv', 'dv-settings'].includes(pointerProps.isOpen) &&
 						'open-value-addon type-dynamic-value',
 					classNames
 				)}
 				onClick={(event) => {
-					if (!pointerProps.isOpenVarDeleted) event.preventDefault();
+					if (!pointerProps.isOpen === 'var-deleted')
+						event.preventDefault();
 
-					pointerProps.setIsOpenVarDeleted(
-						!pointerProps.isOpenVarDeleted
+					pointerProps.setOpen(
+						pointerProps.isOpen ? '' : 'var-deleted'
 					);
-					pointerProps.setOpenVar(false);
 				}}
 			>
 				<span className={controlInnerClassNames('item-icon')}>
@@ -79,12 +79,12 @@ export default function DeletedVariableUI({
 
 			<Pointer pointerProps={pointerProps} />
 
-			{pointerProps.isOpenVarDeleted && (
+			{pointerProps.isOpen === 'var-deleted' && (
 				<Popover
 					title={__('Deleted Variable', 'publisher-core')}
 					offset={125}
 					placement="left-start"
-					onClose={() => pointerProps.setIsOpenVarDeleted(false)}
+					onClose={() => pointerProps.setOpen('')}
 					className={controlInnerClassNames(
 						'popover-variable-deleted'
 					)}
@@ -167,8 +167,7 @@ export default function DeletedVariableUI({
 									tabIndex="-1"
 									size={'small'}
 									onClick={() => {
-										pointerProps.setIsOpenVarDeleted(false);
-										pointerProps.setOpenVar(true);
+										pointerProps.setOpen('var');
 									}}
 									label={__(
 										'Switch To Another Variable',
@@ -231,8 +230,7 @@ export default function DeletedVariableUI({
 									tabIndex="-1"
 									size={'small'}
 									onClick={() => {
-										pointerProps.setIsOpenVarDeleted(false);
-										pointerProps.setOpenVar(true);
+										pointerProps.setOpen('var');
 									}}
 									label={__(
 										'Switch To Another Variable',

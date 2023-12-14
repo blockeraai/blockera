@@ -41,8 +41,7 @@ export default function DynamicValueSettingsUI({
 			offset={125}
 			placement="left-start"
 			onClose={() => {
-				pointerProps.setOpenDV(false);
-				pointerProps.setIsOpenDVSettings(false);
+				pointerProps.setOpen('');
 			}}
 			className={controlInnerClassNames('popover-dynamic-values')}
 			titleButtonsRight={
@@ -69,8 +68,7 @@ export default function DynamicValueSettingsUI({
 					size="input"
 					contentAlign="left"
 					onClick={() => {
-						pointerProps.setOpenDV(true);
-						pointerProps.setIsOpenDVSettings(false);
+						pointerProps.setOpen('dv');
 					}}
 				>
 					{getDynamicValueIcon(pointerProps.value?.settings?.type)}
