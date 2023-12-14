@@ -48,7 +48,7 @@ export default function ({
 			return (
 				<PickerCategory key={`type-${item}-${index}`} title={data.name}>
 					<Grid gridTemplateColumns="120px 120px" gap="10px">
-						{data.items.map((_item, _index) => {
+						{data.items.map((_item) => {
 							const itemData = {
 								..._item,
 							};
@@ -58,14 +58,12 @@ export default function ({
 									value={controlProps.value}
 									data={itemData}
 									onClick={controlProps.handleOnClickDV}
-									key={`${item}-${_index}-value-type`}
+									key={`${_item?.id}-value-type`}
 									name={_item.name}
 									type={_item.type}
 									valueType="dynamic-value"
 									isCurrent={
-										isValid(controlProps.value) &&
-										controlProps.value.settings.id ===
-											itemData.id
+										controlProps.value?.id === itemData.id
 									}
 									icon={getDynamicValueIcon(itemData.type)}
 								/>
