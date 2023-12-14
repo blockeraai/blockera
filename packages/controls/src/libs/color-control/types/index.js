@@ -13,7 +13,7 @@ export type Props = {
 	field?: string,
 	//
 	//
-	className?: string,
+	className: string,
 	style?: Object,
 	//
 	controlAddonTypes?: Array<string>,

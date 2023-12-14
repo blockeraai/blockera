@@ -26,7 +26,10 @@ export const getFontSizes = (): Array<{
 	name: string,
 	slug: string,
 	value: string,
-	fluid: string | Object,
+	fluid?: {
+		min: string,
+		max: string,
+	},
 }> => {
 	return _getFontSizesMemoized();
 };
@@ -35,7 +38,10 @@ const _getFontSize = function (slug: string): ?{
 	name: string,
 	slug: string,
 	value: string,
-	fluid: string | Object,
+	fluid?: {
+		min: string,
+		max: string,
+	},
 } {
 	return getFontSizes().find((item) => item.slug === slug);
 };
@@ -48,7 +54,10 @@ export const getFontSize = (
 	name: string,
 	slug: string,
 	value: string,
-	fluid: string | Object,
+	fluid?: {
+		min: string,
+		max: string,
+	},
 } => {
 	return _getFontSizeMemoized(slug);
 };
@@ -60,7 +69,10 @@ const _getFontSizeBy = function (
 	name: string,
 	slug: string,
 	value: string,
-	fluid: string | Object,
+	fluid?: {
+		min: string,
+		max: string,
+	},
 } {
 	return getFontSizes().find((item) => item[field] === value);
 };
@@ -74,7 +86,10 @@ export const getFontSizeBy = (
 	name: string,
 	slug: string,
 	value: string,
-	fluid: string | Object,
+	fluid?: {
+		min: string,
+		max: string,
+	},
 } => {
 	return _getFontSizeByMemoized(field, value);
 };

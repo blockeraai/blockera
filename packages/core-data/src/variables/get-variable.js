@@ -18,9 +18,14 @@ const _getVariable = function (
 	type: string,
 	slug: string
 ): ?{
+	...Object,
 	slug: string,
 	name: string,
 	value: string,
+	fluid?: {
+		min: string,
+		max: string,
+	},
 } {
 	switch (type) {
 		case 'width-size':
