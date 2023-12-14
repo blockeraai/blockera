@@ -21,62 +21,37 @@ import { DynamicValuePicker, VariablePicker } from '../index';
 import VariableIcon from '../../icons/variable';
 import DynamicValueIcon from '../../icons/dynamic-value';
 import RemoveIcon from '../../icons/remove';
+import DynamicValueSettingsUI from '../dynamic-value-picker/dynamic-value-settings';
 
 export default function ({
-	value,
-	types,
-	variableTypes,
-	dynamicValueTypes,
-	handleOnClickVariable,
-	handleOnUnlinkVariable,
-	handleOnClickDynamicValue,
-	handleOnClickRemove,
-	isOpenVariables,
-	setOpenVariables,
-	isOpenDynamicValues,
-	setOpenDynamicValues,
-}: PointerProps): Element<any> {
+	pointerProps,
+}: {
+	pointerProps: PointerProps,
+}): Element<any> {
+	const isVarActive =
+		isValid(pointerProps.value) &&
+		pointerProps.value?.valueType === 'variable';
+
+	const isDVActive =
+		isValid(pointerProps.value) &&
+		pointerProps.value?.valueType === 'dynamic-value';
+
 	const MappedPointers = ({
 		handleVariableModal,
 		handleDynamicValueModal,
 	}: Object): Element<any> => {
 		const pointers = [];
 
-		if (types.includes('variable')) {
-			const isVarActive =
-				isValid(value) && value?.valueType === 'variable';
-
-			pointers.push(
-				<div
-					className={controlInnerClassNames(
-						'value-addon-pointer',
-						'var-pointer',
-						isVarActive && 'active-value-addon',
-						isOpenVariables && 'open-value-addon'
-					)}
-					onClick={handleVariableModal}
-				>
-					<VariableIcon
-						className={controlInnerClassNames('var-pointer-icon')}
-					/>
-					<RemoveIcon
-						className={controlInnerClassNames('remove-icon')}
-					/>
-				</div>
-			);
-		}
-
-		if (types.includes('dynamic-value')) {
-			const isDVActive =
-				isValid(value) && value?.valueType === 'dynamic-value';
-
+		if (pointerProps.types.includes('dynamic-value')) {
 			pointers.push(
 				<div
 					className={controlInnerClassNames(
 						'value-addon-pointer',
 						'dv-pointer',
 						isDVActive && 'active-value-addon',
-						isOpenDynamicValues && 'open-value-addon'
+						(pointerProps.isOpenDV ||
+							pointerProps.isOpenDVSettings) &&
+							'open-value-addon'
 					)}
 					onClick={handleDynamicValueModal}
 				>
@@ -90,9 +65,40 @@ export default function ({
 			);
 		}
 
+		if (pointerProps.types.includes('variable')) {
+			pointers.push(
+				<div
+					className={controlInnerClassNames(
+						'value-addon-pointer',
+						'var-pointer',
+						isVarActive && 'active-value-addon',
+						pointerProps.isOpenVar && 'open-value-addon'
+					)}
+					onClick={handleVariableModal}
+				>
+					<VariableIcon
+						className={controlInnerClassNames('var-pointer-icon')}
+					/>
+					<RemoveIcon
+						className={controlInnerClassNames('remove-icon')}
+					/>
+				</div>
+			);
+		}
+
 		if (pointers.length) {
 			return (
-				<div className={controlClassNames('value-addon-pointers')}>
+				<div
+					className={controlClassNames(
+						'value-addon-pointers',
+						(isVarActive ||
+							pointerProps.isOpenVar ||
+							isDVActive ||
+							pointerProps.isOpenDV ||
+							pointerProps.isOpenDVSettings) &&
+							'active-addon-pointers'
+					)}
+				>
 					{pointers}
 				</div>
 			);
@@ -103,49 +109,40 @@ export default function ({
 
 	return (
 		<>
-			{isOpenVariables && types.includes('variable') && (
-				<VariablePicker
-					types={variableTypes}
-					onChoice={handleOnClickVariable}
-					onUnlink={handleOnUnlinkVariable}
-					onRemove={handleOnClickRemove}
-					onClose={() => {
-						setOpenVariables(false);
-					}}
-					value={value}
-				/>
-			)}
+			{pointerProps.isOpenVar &&
+				pointerProps.types.includes('variable') && (
+					<VariablePicker pointerProps={pointerProps} />
+				)}
 
-			{isOpenDynamicValues && types.includes('dynamic-value') && (
-				<DynamicValuePicker
-					types={dynamicValueTypes}
-					onChoice={handleOnClickDynamicValue}
-					onClose={() => {
-						isOpenDynamicValues(false);
-					}}
-					value={value}
-				/>
-			)}
+			{pointerProps.isOpenDV &&
+				pointerProps.types.includes('dynamic-value') && (
+					<DynamicValuePicker pointerProps={pointerProps} />
+				)}
+
+			{pointerProps.isOpenDVSettings &&
+				pointerProps.types.includes('dynamic-value') && (
+					<DynamicValueSettingsUI pointerProps={pointerProps} />
+				)}
 
 			<MappedPointers
 				handleDynamicValueModal={(
 					e: SyntheticMouseEvent<EventTarget>
 				) => {
-					if (isValid(value)) {
-						setOpenDynamicValues(false);
-						handleOnClickRemove(e);
+					if (isValid(pointerProps.value)) {
+						pointerProps.setOpenDV(false);
+						pointerProps.handleOnClickRemove(e);
 					} else {
-						setOpenDynamicValues(true);
+						pointerProps.setOpenDV(true);
 					}
 
 					e.stopPropagation();
 				}}
 				handleVariableModal={(e: SyntheticMouseEvent<EventTarget>) => {
-					if (isValid(value)) {
-						setOpenVariables(false);
-						handleOnClickRemove(e);
+					if (isValid(pointerProps.value)) {
+						pointerProps.setOpenVar(false);
+						pointerProps.handleOnClickRemove(e);
 					} else {
-						setOpenVariables(true);
+						pointerProps.setOpenVar(true);
 					}
 
 					e.stopPropagation();

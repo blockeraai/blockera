@@ -32,8 +32,9 @@ export const useValueAddon = ({
 			valueAddonClassNames: '',
 			ValueAddonPointer: () => <></>,
 			ValueAddonUI: () => <></>,
-			handleOnClickVariable: () => {},
-			handleOnClickDynamicValue: () => {},
+			handleOnClickVar: () => {},
+			handleOnClickDV: () => {},
+			handleOnUnlinkVar: () => {},
 		};
 	}
 
@@ -54,17 +55,19 @@ export const useValueAddon = ({
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const [value, setValue] = useState(initialState);
 	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const [isOpenVariables, setOpenVariables] = useState(false);
+	const [isOpenVar, setOpenVar] = useState(false);
 	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const [isOpenDynamicValues, setOpenDynamicValues] = useState(false);
+	const [isOpenDV, setOpenDV] = useState(false);
 	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const [isOpenVariableDeleted, setIsOpenVariableDeleted] = useState(false);
+	const [isOpenVarDeleted, setIsOpenVarDeleted] = useState(false);
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	const [isOpenDVSettings, setIsOpenDVSettings] = useState(false);
 
 	const valueAddonClassNames = types
 		.map((type) => `publisher-value-addon-support-${type}`)
 		.join(' ');
 
-	const handleOnClickVariable = (
+	const handleOnClickVar = (
 		event: SyntheticMouseEvent<EventTarget>
 	): void => {
 		if (event.target !== event.currentTarget) {
@@ -86,10 +89,10 @@ export const useValueAddon = ({
 		setValue(newValue);
 		onChange(newValue);
 
-		setOpenVariables(false);
+		setOpenVar(false);
 	};
 
-	const handleOnUnlinkVariable = (): void => {
+	const handleOnUnlinkVar = (): void => {
 		if (canUnlinkVariable(value)) {
 			setValue({
 				isValueAddon: false,
@@ -114,13 +117,11 @@ export const useValueAddon = ({
 				}
 			}
 
-			setOpenVariables(false);
+			setOpenVar(false);
 		}
 	};
 
-	const handleOnClickDynamicValue = (
-		event: SyntheticMouseEvent<EventTarget>
-	): void => {
+	const handleOnClickDV = (event: SyntheticMouseEvent<EventTarget>): void => {
 		if (event.target !== event.currentTarget) {
 			return;
 		}
@@ -137,7 +138,8 @@ export const useValueAddon = ({
 			valueType: 'dynamic-value',
 		});
 
-		setOpenDynamicValues(false);
+		setOpenDV(false);
+		setIsOpenDVSettings(true);
 	};
 
 	const handleOnClickRemove = (): void => {
@@ -148,8 +150,9 @@ export const useValueAddon = ({
 			id: null,
 			settings: {},
 		});
-		setOpenVariables(false);
-		setOpenDynamicValues(false);
+		setOpenVar(false);
+		setOpenDV(false);
+		setIsOpenDVSettings(false);
 	};
 
 	if (typeof variableTypes === 'string') {
@@ -158,6 +161,8 @@ export const useValueAddon = ({
 
 	const pointerProps: PointerProps = {
 		value,
+		setValue,
+		onChange,
 		types,
 		variableTypes:
 			typeof variableTypes === 'string' ? [variableTypes] : variableTypes,
@@ -165,28 +170,29 @@ export const useValueAddon = ({
 			typeof dynamicValueTypes === 'string'
 				? [dynamicValueTypes]
 				: dynamicValueTypes,
-		handleOnClickVariable,
-		handleOnUnlinkVariable,
-		handleOnClickDynamicValue,
+		handleOnClickVar,
+		handleOnUnlinkVar,
+		handleOnClickDV,
 		handleOnClickRemove,
-		isOpenVariables,
-		setOpenVariables,
-		isOpenDynamicValues,
-		setOpenDynamicValues,
-		isOpenVariableDeleted,
-		setIsOpenVariableDeleted,
+		isOpenVar,
+		setOpenVar,
+		isOpenDV,
+		setOpenDV,
+		isOpenVarDeleted,
+		setIsOpenVarDeleted,
+		isOpenDVSettings,
+		setIsOpenDVSettings,
 	};
 
 	return {
 		valueAddonClassNames,
-		ValueAddonPointer: () => <Pointer {...pointerProps} />,
-		isSetValueAddon: () =>
-			isValid(value) || isOpenVariables || isOpenDynamicValues,
+		ValueAddonPointer: () => <Pointer pointerProps={pointerProps} />,
+		isSetValueAddon: () => isValid(value) || isOpenVar || isOpenDV,
 		ValueAddonUI: ({ ...props }) => (
-			<ValueUIKit pointerProps={pointerProps} value={value} {...props} />
+			<ValueUIKit pointerProps={pointerProps} {...props} />
 		),
-		handleOnClickVariable,
-		handleOnUnlinkVariable,
-		handleOnClickDynamicValue,
+		handleOnClickVar,
+		handleOnUnlinkVar,
+		handleOnClickDV,
 	};
 };

@@ -10,19 +10,21 @@ import type {
 
 export type PointerProps = {
 	value: ValueAddon,
+	setValue: (value: Object | string) => void,
+	onChange: (value: Object | string) => void,
 	types: Array<'variable' | 'dynamic-value'>,
 	variableTypes: Array<VariableTypes>,
 	dynamicValueTypes: Array<DynamicValueTypes>,
-	handleOnClickDynamicValue: (
-		event: SyntheticMouseEvent<EventTarget>
-	) => void,
-	handleOnClickVariable: (event: SyntheticMouseEvent<EventTarget>) => void,
-	handleOnUnlinkVariable: (event: SyntheticMouseEvent<EventTarget>) => void,
+	handleOnClickDV: (event: SyntheticMouseEvent<EventTarget>) => void,
+	handleOnClickVar: (event: SyntheticMouseEvent<EventTarget>) => void,
+	handleOnUnlinkVar: (event: SyntheticMouseEvent<EventTarget>) => void,
 	handleOnClickRemove: (event: SyntheticMouseEvent<EventTarget>) => void,
-	isOpenVariables: boolean,
-	setOpenVariables: (value: boolean) => void,
-	isOpenDynamicValues: boolean,
-	setOpenDynamicValues: (value: boolean) => void,
-	isOpenVariableDeleted: boolean,
-	setIsOpenVariableDeleted: (value: boolean) => void,
+	isOpenVar: boolean,
+	setOpenVar: (value: boolean) => void,
+	isOpenDV: boolean,
+	setOpenDV: (value: boolean) => void,
+	isOpenVarDeleted: boolean,
+	setIsOpenVarDeleted: (value: boolean) => void,
+	isOpenDVSettings: boolean,
+	setIsOpenDVSettings: (value: boolean) => void,
 };

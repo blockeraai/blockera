@@ -13,8 +13,12 @@ export type ValueAddon = {
 	settings: {
 		...Object,
 		var?: string,
+		slug?: string,
 		type: VariableTypes | DynamicValueTypes,
 		reference?: 'preset' | 'custom',
+		prepend?: string,
+		append?: string,
+		limit?: string,
 	},
 	valueType?: AddonTypesItem,
 	isValueAddon: boolean,
@@ -29,4 +33,17 @@ export type VariableItem = {
 export type VariableItems = {
 	name: string,
 	variables: Array<VariableItem>,
+	notFound?: boolean,
+};
+
+export type DynamicValueItem = {
+	name: string,
+	id: string,
+	type: DynamicValueTypes,
+};
+
+export type DynamicValueItems = {
+	name: string,
+	items: Array<DynamicValueItem>,
+	notFound?: boolean,
 };

@@ -16,6 +16,8 @@ import {
 	getSpacings,
 	getWidthSizes,
 	getVariable,
+	getPostDynamicValueItem,
+	getFeaturedImageDynamicValueItem,
 } from '@publisher/core-data';
 import { ColorIndicator } from '@publisher/components';
 import { isBlockTheme, isObject, isUndefined } from '@publisher/utils';
@@ -23,10 +25,24 @@ import { isBlockTheme, isObject, isUndefined } from '@publisher/utils';
 /**
  * Internal dependencies
  */
-import type { ValueAddon, VariableItems, VariableTypes } from './types';
+import type {
+	ValueAddon,
+	VariableItems,
+	VariableTypes,
+	DynamicValueCategories,
+	DynamicValueItems,
+	DynamicValueTypes,
+} from './types';
 import VarTypeFontSizeIcon from './icons/var-font-size';
 import VarTypeSpacingIcon from './icons/var-spacing';
 import VarTypeWidthSizeIcon from './icons/var-width-size';
+import DVTypeTextIcon from './icons/dv-text';
+import DVTypeLinkIcon from './icons/dv-link';
+import DVTypeIDIcon from './icons/dv-id';
+import DVTypeDateIcon from './icons/dv-date';
+import DVTypeTimeIcon from './icons/dv-time';
+import DVTypeMetaIcon from './icons/dv-meta';
+import DVTypeImageIcon from './icons/dv-image';
 
 // todo improve and write tests
 export const isValid = ({ isValueAddon = false }: ValueAddon): boolean => {
@@ -96,7 +112,7 @@ export function getVariableIcon({
 			return <VarTypeWidthSizeIcon />;
 	}
 
-	return '';
+	return <></>;
 }
 
 // todo write tests
@@ -152,6 +168,59 @@ export function getVariables(type: VariableTypes): VariableItems {
 	return {
 		name: '',
 		variables: [],
+		notFound: true,
+	};
+}
+
+// todo write tests
+export function getDynamicValueIcon(type: DynamicValueTypes): MixedElement {
+	switch (type) {
+		case 'text':
+			return <DVTypeTextIcon />;
+
+		case 'link':
+			return <DVTypeLinkIcon />;
+
+		case 'image':
+			return <DVTypeImageIcon />;
+
+		case 'id':
+			return <DVTypeIDIcon />;
+
+		case 'date':
+			return <DVTypeDateIcon />;
+
+		case 'time':
+			return <DVTypeTimeIcon />;
+
+		case 'meta':
+			return <DVTypeMetaIcon />;
+	}
+
+	return <></>;
+}
+
+// todo write tests
+export function getDynamicValueItems(
+	category: DynamicValueCategories,
+	types: Array<DynamicValueTypes>
+): DynamicValueItems {
+	switch (category) {
+		case 'post':
+			return {
+				name: __('Posts and Pages', 'publisher-core'),
+				items: getPostDynamicValueItem(types),
+			};
+		case 'featured-image':
+			return {
+				name: __('Post Featured Image', 'publisher-core'),
+				items: getFeaturedImageDynamicValueItem(types),
+			};
+	}
+
+	return {
+		name: '',
+		items: [],
 		notFound: true,
 	};
 }

@@ -13,25 +13,46 @@
 
 .publisher-control.publisher-control-value-addon-pointers {
 	position: absolute;
-	top: -8px;
-	right: -8px;
-	display: flex;
-	gap: 4px;
-	flex-direction: row-reverse;
+	top: -11px;
+	right: -11px;
 	z-index: 1;
+	width: 100px;
+	pointer-events: none;
+	direction: revert;
+	text-align: right;
+
+	&.active-addon-pointers {
+
+		.publisher-control-value-addon-pointer:not(.open-value-addon):not(.active-value-addon) {
+			width: 0;
+			height: 0;
+			visibility: hidden;
+			transition: all 1.15s ease;
+ 		}
+	}
 
 	.publisher-control-value-addon-pointer {
-		width: 16px;
-		height: 16px;
+		width: 22px;
+		height: 22px;
 		border-radius: 50%;
 		color: #ffffff;
 		box-sizing: content-box;
 		cursor: pointer;
-		transition: all 0.15s ease;
-		transform: scale(0);
+		transition: all 0.15s cubic-bezier(1, 0.76, 0, 0.89);
+		transform: scale(0.3);
+		order: 10;
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		overflow: hidden;
+		pointer-events: all;
 
 		svg {
-			fill: currentColor;
+			width: 16px;
+			height: 16px;
+			fill: transparent;
+			border-radius: 50%;
+			transition: all 0.15s cubic-bezier(1, 0.76, 0, 0.89);
 		}
 
 		.publisher-control-remove-icon {
@@ -40,10 +61,16 @@
 
 		&.open-value-addon,
 		&.active-value-addon {
-			transform: scale(1);
+			transform: scale3d(1, 1, 1);
+			order: 1;
+
+			svg {
+				fill: currentColor;
+			}
 
 			&:hover {
 
+				.publisher-control-dv-pointer-icon,
 				.publisher-control-var-pointer-icon {
 					display: none;
 				}
@@ -55,24 +82,105 @@
 		}
 
 		&.open-value-addon {
-			transform: scale(1.25) !important;
+			transform: scale3d(1.25, 1.25, 1.25) !important;
 		}
 
 		&.var-pointer {
-			background-color: var(--publisher-value-addon-var-color);
+
+			svg {
+				background-color: var(--publisher-value-addon-var-color);
+			}
 
 			&:hover {
-				transform: scale(1.25) rotate(180deg) !important;
+				transform: scale3d(1.25, 1.25, 1.25) rotate(180deg) !important;
+
+				svg {
+					fill: currentColor;
+				}
+			}
+
+			&:hover,
+			&.open-value-addon {
+
+				.publisher-control-var-pointer-icon {
+					animation: variable-pointer-rotate 2s linear infinite normal forwards;
+				}
 			}
 		}
 
 		&.dv-pointer {
-			background-color: var(--publisher-value-addon-dv-color);
-		}
 
-		&:hover {
-			transform: scale(1.25) !important;
+			svg {
+				background-color: var(--publisher-value-addon-dv-color);
+			}
+
+			&:hover {
+				transform: scale3d(1.25, 1.25, 1.25) !important;
+			}
+
+			&.open-value-addon {
+				transform: scale3d(1.25, 1.25, 1.25) rotate(360deg) !important;
+			}
+
+			&:hover,
+			&.open-value-addon {
+
+				svg .dv-pointer-1 {
+					animation: dv-pointer-shaking-1 0.8s infinite;
+					transition: all 0.15s linear;
+				}
+
+				svg .dv-pointer-3 {
+					animation: dv-pointer-shaking-2 0.8s infinite;
+					transition: all 0.15s ease;
+				}
+			}
 		}
+	}
+}
+
+@keyframes dv-pointer-shaking-1 {
+
+	0% {
+		transform: translateY(0);
+	}
+
+	50% {
+		transform: translateY(-0.6px);
+	}
+
+	100% {
+		transform: translateY(0);
+	}
+}
+
+@keyframes dv-pointer-shaking-2 {
+
+	0% {
+		transform: translateY(0);
+	}
+
+	50% {
+		transform: translateY(0.6px);
+	}
+
+	100% {
+		transform: translateY(0);
+	}
+}
+
+@keyframes variable-pointer-rotate {
+
+	0% {
+		transform: rotate(0deg);
+	}
+
+	50% {
+		transform: rotate(180deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
 	}
 }
 
@@ -93,12 +201,16 @@
 				.publisher-control-value-addon-pointer {
 					transform: scale(1);
 
+					svg {
+						fill: currentColor;
+					}
+
 					&.var-pointer {
 						transform: scale(1);
 					}
 
 					&:nth-child(2) {
-						transition: all 0.15s ease 0.06s; // delay
+						transition: all 0.15s ease 0.04s; // delay
 					}
 				}
 			}
@@ -117,8 +229,12 @@
 			& > .publisher-control.publisher-control-value-addon-pointers .publisher-control-value-addon-pointer {
 				transform: scale(1);
 
-				&:nth-child(2) {
+				&:nth-child(1) {
 					transition: all 0.15s ease 0.06s; // delay
+				}
+
+				svg {
+					fill: currentColor;
 				}
 			}
 		}

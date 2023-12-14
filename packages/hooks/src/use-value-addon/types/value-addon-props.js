@@ -26,7 +26,7 @@ export type ValueAddonProps = {
 	 *
 	 * The callback function
 	 */
-	handleOnClickVariable: (
+	handleOnClickVar: (
 		// eslint-disable-next-line
 		event: SyntheticMouseEvent<EventTarget>
 	) => void,
@@ -35,7 +35,7 @@ export type ValueAddonProps = {
 	 *
 	 * The callback function
 	 */
-	handleOnClickDynamicValue: (
+	handleOnClickDV: (
 		// eslint-disable-next-line
 		event: SyntheticMouseEvent<EventTarget>
 	) => void,
@@ -44,7 +44,7 @@ export type ValueAddonProps = {
 	 *
 	 * The callback function
 	 */
-	handleOnUnlinkVariable: (
+	handleOnUnlinkVar: (
 		// eslint-disable-next-line
 		event: SyntheticMouseEvent<EventTarget>
 	) => void,

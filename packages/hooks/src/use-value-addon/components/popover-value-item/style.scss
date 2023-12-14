@@ -10,6 +10,7 @@
 	cursor: pointer;
 	transition: var(--publisher-controls-transition);
 	color: var(--publisher-controls-color);
+	font-size: 12px;
 
 	&:hover {
 		border-color: var(--publisher-controls-border-color-hover);
@@ -32,6 +33,15 @@
 
 		svg {
 			fill: currentColor;
+		}
+	}
+
+	&.item-value-type-dynamic-value {
+		padding: 0 5px 0 8px;
+
+		.publisher-control-item-icon {
+			order: 100;
+			margin-left: auto;
 		}
 	}
 

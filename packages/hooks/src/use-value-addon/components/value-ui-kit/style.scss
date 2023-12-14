@@ -10,7 +10,6 @@
 	font-size: 12px;
 	font-weight: 400;
 	cursor: pointer;
-
 	--va-color: #1e1e1e;
 	--va-bg-color: #dcdcdc;
 	color: var(--va-color);
@@ -45,7 +44,6 @@
 	}
 
 	.publisher-control-item-name {
-		//width: calc(100% - 26px);
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -59,13 +57,5 @@
 		svg {
 			fill: currentColor;
 		}
-	}
-}
-
-.publisher-component-popover {
-
-	&.publisher-control-popover-variable-deleted {
-		--publisher-controls-primary-color: var(--publisher-value-addon-var-deleted-color);
-		--publisher-controls-primary-color-darker-20: var(--publisher-value-addon-var-deleted-color-darker-20);
 	}
 }

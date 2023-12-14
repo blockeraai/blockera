@@ -18,7 +18,7 @@ import { Button, Flex, Popover } from '@publisher/components';
 /**
  * Internal dependencies
  */
-import Pointer from '../pointer';
+import { Pointer } from '../index';
 import type { PointerProps } from '../pointer/types';
 import type { ValueAddon } from '../../types';
 import DeletedVariableIcon from '../../icons/deleted-variable';
@@ -53,22 +53,19 @@ export default function DeletedVariableUI({
 				className={controlClassNames(
 					'value-addon-wrapper',
 					'type-variable-deleted',
-					(pointerProps.isOpenVariables ||
-						pointerProps.isOpenVariableDeleted) &&
+					(pointerProps.isOpenVar || pointerProps.isOpenVarDeleted) &&
 						'open-value-addon type-variable',
-					pointerProps.isOpenDynamicValues &&
+					pointerProps.isOpenDV &&
 						'open-value-addon type-dynamic-value',
 					classNames
 				)}
 				onClick={(event) => {
-					if (!pointerProps.isOpenVariableDeleted)
-						event.preventDefault();
+					if (!pointerProps.isOpenVarDeleted) event.preventDefault();
 
-					pointerProps.setIsOpenVariableDeleted(
-						!pointerProps.isOpenVariableDeleted
+					pointerProps.setIsOpenVarDeleted(
+						!pointerProps.isOpenVarDeleted
 					);
-					pointerProps.setOpenVariables(false);
-					pointerProps.setOpenVariables(false);
+					pointerProps.setOpenVar(false);
 				}}
 			>
 				<span className={controlInnerClassNames('item-icon')}>
@@ -79,14 +76,15 @@ export default function DeletedVariableUI({
 					{__('Deleted Variable', 'publisher-core')}
 				</span>
 			</div>
-			<Pointer {...pointerProps} />
 
-			{pointerProps.isOpenVariableDeleted && (
+			<Pointer pointerProps={pointerProps} />
+
+			{pointerProps.isOpenVarDeleted && (
 				<Popover
 					title={__('Deleted Variable', 'publisher-core')}
 					offset={125}
 					placement="left-start"
-					onClose={() => pointerProps.setIsOpenVariableDeleted(false)}
+					onClose={() => pointerProps.setIsOpenVarDeleted(false)}
 					className={controlInnerClassNames(
 						'popover-variable-deleted'
 					)}
@@ -96,9 +94,7 @@ export default function DeletedVariableUI({
 								<Button
 									tabIndex="-1"
 									size={'extra-small'}
-									onClick={
-										pointerProps.handleOnUnlinkVariable
-									}
+									onClick={pointerProps.handleOnUnlinkVar}
 									style={{ padding: '5px' }}
 									label={__(
 										'Unlink Variable Value',
@@ -156,9 +152,7 @@ export default function DeletedVariableUI({
 									variant="primary"
 									tabIndex="-1"
 									size={'small'}
-									onClick={
-										pointerProps.handleOnUnlinkVariable
-									}
+									onClick={pointerProps.handleOnUnlinkVar}
 									label={__(
 										'Unlink Variable Value',
 										'publisher-core'
@@ -173,10 +167,8 @@ export default function DeletedVariableUI({
 									tabIndex="-1"
 									size={'small'}
 									onClick={() => {
-										pointerProps.setIsOpenVariableDeleted(
-											false
-										);
-										pointerProps.setOpenVariables(true);
+										pointerProps.setIsOpenVarDeleted(false);
+										pointerProps.setOpenVar(true);
 									}}
 									label={__(
 										'Switch To Another Variable',
@@ -239,10 +231,8 @@ export default function DeletedVariableUI({
 									tabIndex="-1"
 									size={'small'}
 									onClick={() => {
-										pointerProps.setIsOpenVariableDeleted(
-											false
-										);
-										pointerProps.setOpenVariables(true);
+										pointerProps.setIsOpenVarDeleted(false);
+										pointerProps.setOpenVar(true);
 									}}
 									label={__(
 										'Switch To Another Variable',

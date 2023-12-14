@@ -17,7 +17,6 @@ import { isUndefined, isNumber } from '@publisher/utils';
  * Internal dependencies
  */
 import type { AddonTypesItem, ValueAddon } from '../../types';
-import { isValid } from '../../helpers';
 
 export default function ({
 	value,
@@ -27,15 +26,17 @@ export default function ({
 	valueType,
 	data,
 	onClick,
+	isCurrent = false,
 	...props
 }: {
 	value: ValueAddon,
-	data: Object,
-	onClick: (event: SyntheticMouseEvent<EventTarget>) => void,
-	type: string,
-	valueType: AddonTypesItem,
 	name: string | MixedElement,
 	icon: string | MixedElement,
+	type: string,
+	valueType: AddonTypesItem,
+	data: Object,
+	onClick: (event: SyntheticMouseEvent<EventTarget>) => void,
+	isCurrent: boolean,
 }): MixedElement {
 	let itemValue = '';
 
@@ -71,10 +72,8 @@ export default function ({
 			className={controlClassNames(
 				'value-addon-popover-item',
 				'item-type-' + type,
-				isValid(value) &&
-					value.settings.type === type &&
-					value.settings.slug === data.slug &&
-					'is-active-item'
+				'item-value-type-' + valueType,
+				isCurrent && 'is-active-item'
 			)}
 			data-item={JSON.stringify(data)}
 			onClick={onClick}

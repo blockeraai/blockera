@@ -8,7 +8,6 @@ import { __ } from '@wordpress/i18n';
 /**
  * Publisher dependencies
  */
-import type { ValueAddon, VariableTypes } from '../../types';
 import { Button, Flex, Popover } from '@publisher/components';
 import { isBlockTheme } from '@publisher/utils';
 import { controlInnerClassNames } from '@publisher/classnames';
@@ -27,26 +26,17 @@ import { PickerTypeHeader, PopoverValueItem } from '../index';
 import PlusIcon from '../../icons/plus';
 import UnlinkIcon from '../../icons/unlink';
 import TrashIcon from '../../icons/trash';
+import type { PointerProps } from '../pointer/types';
 
 export default function ({
-	value,
-	types,
-	onChoice,
-	onClose,
-	onUnlink,
-	onRemove,
+	pointerProps,
 }: {
-	value: ValueAddon,
-	types: Array<VariableTypes>,
-	onChoice: (event: SyntheticMouseEvent<EventTarget>) => void,
-	onClose: (event: SyntheticMouseEvent<EventTarget>) => void,
-	onUnlink: (event: SyntheticMouseEvent<EventTarget>) => void,
-	onRemove: (event: SyntheticMouseEvent<EventTarget>) => void,
+	pointerProps: PointerProps,
 }): Element<any> {
 	let noVariablesText = __('No variable!', 'publisher-core');
 	const _isBlockTheme = isBlockTheme();
 
-	const CustomVariables = (): Element => {
+	const CustomVariables = (): Element<any> => {
 		return (
 			<Flex direction="column" key={`type-custom-variabes`} gap={'10px'}>
 				<PickerTypeHeader>
@@ -76,7 +66,7 @@ export default function ({
 	};
 
 	const Variables = (): Array<Element<any>> => {
-		return types.map((type, index) => {
+		return pointerProps.variableTypes.map((type, index) => {
 			const data = getVariables(type);
 
 			if (data?.name === '') {
@@ -132,13 +122,19 @@ export default function ({
 
 						return (
 							<PopoverValueItem
-								value={value}
+								value={pointerProps.value}
 								data={itemData}
-								onClick={onChoice}
+								onClick={pointerProps.handleOnClickVar}
 								key={`${type}-${_index}-value-type`}
 								name={variable.name}
 								type={type}
 								valueType="variable"
+								isCurrent={
+									isValid(pointerProps.value) &&
+									pointerProps.value.settings.type === type &&
+									pointerProps.value.settings.slug ===
+										itemData.slug
+								}
 								icon={getVariableIcon({
 									type,
 									value: variable.value,
@@ -156,15 +152,15 @@ export default function ({
 			title={__('Choose Variable', 'publisher-core')}
 			offset={125}
 			placement="left-start"
-			onClose={onClose}
+			onClose={() => pointerProps.setOpenVar(false)}
 			className={controlInnerClassNames('popover-variables')}
 			titleButtonsRight={
 				<>
-					{canUnlinkVariable(value) && (
+					{canUnlinkVariable(pointerProps.value) && (
 						<Button
 							tabIndex="-1"
 							size={'extra-small'}
-							onClick={onUnlink}
+							onClick={pointerProps.handleOnUnlinkVar}
 							style={{ padding: '5px' }}
 							label={__(
 								'Unlink Variable Value',
@@ -175,11 +171,11 @@ export default function ({
 						</Button>
 					)}
 
-					{isValid(value) && (
+					{isValid(pointerProps.value) && (
 						<Button
 							tabIndex="-1"
 							size={'extra-small'}
-							onClick={onRemove}
+							onClick={pointerProps.handleOnClickRemove}
 							style={{ padding: '5px' }}
 							label={__('Remove', 'publisher-core')}
 						>

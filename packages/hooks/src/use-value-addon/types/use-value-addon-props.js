@@ -22,4 +22,14 @@ export type VariableTypes =
 	| 'spacing'
 	| 'width-size'
 	| 'theme-color';
-export type DynamicValueTypes = 'TEXT' | 'MEDIA';
+
+export type DynamicValueTypes =
+	| 'text'
+	| 'link'
+	| 'image'
+	| 'id'
+	| 'date'
+	| 'meta'
+	| 'time';
+
+export type DynamicValueCategories = 'post' | 'featured-image';

@@ -13,7 +13,7 @@ export default function ({
 	children,
 	...props
 }: {
-	children: Element,
+	children: Element<any>,
 }): Element<any> {
 	return (
 		<div
