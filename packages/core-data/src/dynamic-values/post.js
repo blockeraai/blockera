@@ -23,12 +23,12 @@ const _getPostDynamicValueItems = function (): Array<{
 		},
 		{
 			name: __('Post Content', 'publisher-core'),
-			id: 'post-excerpt',
+			id: 'post-content',
 			type: 'text',
 		},
 		{
 			name: __('Post ID', 'publisher-core'),
-			id: 'post-excerpt',
+			id: 'post-id',
 			type: 'id',
 		},
 		{
