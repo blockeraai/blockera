@@ -25,10 +25,7 @@ export default function ({
 			gap={'10px'}
 			{...props}
 		>
-			<div
-				className={controlInnerClassNames('picker-category-header')}
-				{...props}
-			>
+			<div className={controlInnerClassNames('picker-category-header')}>
 				{title}
 			</div>
 			{children}

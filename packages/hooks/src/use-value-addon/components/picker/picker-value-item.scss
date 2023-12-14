@@ -18,6 +18,7 @@
 
 	&.is-active-item {
 		color: var(--publisher-controls-primary-color);
+		border-color: currentColor;
 
 		.publisher-control-item-value,
 		.publisher-control-item-icon {
