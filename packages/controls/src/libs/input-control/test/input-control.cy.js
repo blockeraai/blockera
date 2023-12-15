@@ -1095,7 +1095,7 @@ describe('input control component testing', () => {
 						<InputControl
 							type="number"
 							unitType="general"
-							smallWidth={true}
+							size={true}
 						/>
 					),
 					name,

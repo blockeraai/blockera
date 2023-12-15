@@ -527,7 +527,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 																}
 															)
 														}
-														smallWidth={true}
+														size="small"
 														controlAddonTypes={[
 															'variable',
 														]}
@@ -562,7 +562,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 																}
 															)
 														}
-														smallWidth={true}
+														size="small"
 														controlAddonTypes={[
 															'variable',
 														]}

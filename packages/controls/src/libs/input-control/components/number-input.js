@@ -43,6 +43,7 @@ export function NumberInput({
 	float = true,
 	actions = '',
 	children,
+	size,
 	...props
 }: TNumberInput): MixedElement {
 	// get the minimum value in number type
@@ -178,7 +179,7 @@ export function NumberInput({
 
 	return (
 		<>
-			{range && (
+			{range && !['small', 'extra-small'].includes(size) && (
 				<RangeControl
 					withInputField={false}
 					sideEffect={false}
@@ -217,7 +218,7 @@ export function NumberInput({
 			<div className={controlInnerClassNames('input-actions')}>
 				{actions}
 
-				{arrows && (
+				{arrows && size !== 'extra-small' && (
 					<div
 						className={controlClassNames(
 							'input-arrows',

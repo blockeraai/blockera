@@ -52,7 +52,7 @@ export function UnitInput({
 	drag,
 	float,
 	arrows,
-	smallWidth,
+	size,
 	children,
 	...props
 }: TUnitInput): MixedElement {
@@ -258,7 +258,7 @@ export function UnitInput({
 
 				{unitValue.value === 'func' && (
 					<>
-						{!smallWidth && (
+						{!['small', 'extra-small', 'input'].includes(size) && (
 							<Button
 								size="input"
 								onClick={() => {
@@ -334,7 +334,8 @@ export function UnitInput({
 		>
 			{!isSpecialUnit(unitValue?.value) ? (
 				<>
-					{unitValue.value === 'func' && smallWidth ? (
+					{unitValue.value === 'func' &&
+					['small', 'extra-small'].includes(size) ? (
 						<>
 							<span
 								className={controlClassNames(
@@ -377,6 +378,7 @@ export function UnitInput({
 									drag={drag}
 									float={float}
 									arrows={arrows}
+									size={size}
 									actions={getInputActions()}
 									{...props}
 								/>

@@ -92,7 +92,7 @@ export const TransformSettings = ({
 										newValue
 									),
 							}}
-							smallWidth={true}
+							size="small"
 						/>
 						<ControlContextProvider
 							value={{
@@ -203,7 +203,7 @@ export const TransformSettings = ({
 									newValue
 								),
 						}}
-						smallWidth={true}
+						size="small"
 					/>
 					<ControlContextProvider
 						value={{

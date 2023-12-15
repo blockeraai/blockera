@@ -629,6 +629,44 @@ export const NumberInput = {
 						drag={false}
 					/>
 				</ControlContextProvider>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 0,
+					}}
+				>
+					<p>Range + Small Size → Should hide range</p>
+					<div style={{ width: '100px' }}>
+						<ControlWithHooks
+							Control={InputControl}
+							label=""
+							{...args}
+							range={true}
+							arrows={true}
+							type="number"
+							size="small"
+						/>
+					</div>
+				</ControlContextProvider>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 0,
+					}}
+				>
+					<p>Arrows + Extra Small Size → Should hide arrows</p>
+					<div style={{ width: '50px' }}>
+						<ControlWithHooks
+							Control={InputControl}
+							label=""
+							{...args}
+							range={true}
+							arrows={true}
+							type="number"
+							size="extra-small"
+						/>
+					</div>
+				</ControlContextProvider>
 			</Flex>
 		</Flex>
 	),
@@ -776,6 +814,9 @@ export const CssInput = {
 					value: 'calc(20px + 12px)func',
 				}}
 			>
+				<h2 className="story-heading">
+					Size<span>small</span>
+				</h2>
 				<div
 					style={{
 						width: '100px',
@@ -787,7 +828,7 @@ export const CssInput = {
 						range={true}
 						unitType="general"
 						label="Advanced (Small)"
-						smallWidth={true}
+						size="small"
 					/>
 				</div>
 				<div
@@ -801,7 +842,7 @@ export const CssInput = {
 						range={true}
 						unitType="general"
 						label="Advanced (Small)"
-						smallWidth={true}
+						size="small"
 					/>
 				</div>
 			</ControlContextProvider>

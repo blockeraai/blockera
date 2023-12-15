@@ -1,6 +1,14 @@
 // @flow
 
+/**
+ * External dependencies
+ */
 import type { Node } from 'react';
+
+/**
+ * Internal dependencies
+ */
+import type { ControlSize } from '../../../types';
 
 export type TInputItem = {
 	// eslint-disable-next-line
@@ -45,7 +53,7 @@ export type TInputItem = {
 	drag?: boolean,
 	float?: boolean,
 	arrows?: boolean,
-	smallWidth?: boolean,
+	size?: ControlSize,
 	actions?: Node,
 	controlAddonTypes?: Array<string>,
 	variableTypes?: Array<string>,

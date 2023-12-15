@@ -43,7 +43,7 @@ export default function InputControl({
 	drag = true,
 	float = true,
 	arrows = false,
-	smallWidth = false,
+	size = 'normal',
 	//
 	controlAddonTypes,
 	variableTypes,
@@ -124,7 +124,7 @@ export default function InputControl({
 					drag={drag}
 					float={float}
 					arrows={arrows}
-					smallWidth={smallWidth}
+					size={size}
 					children={children}
 					{...props}
 				>
@@ -137,7 +137,9 @@ export default function InputControl({
 							className={controlClassNames(
 								'input',
 								'input-number',
-								range && 'is-range-active',
+								range &&
+									!['small', 'extra-small'].includes(size) &&
+									'is-range-active',
 								className,
 								valueAddonClassNames
 							)}
@@ -154,6 +156,7 @@ export default function InputControl({
 								drag={drag}
 								float={float}
 								arrows={arrows}
+								size={size}
 								{...props}
 							>
 								<ValueAddonPointer />
