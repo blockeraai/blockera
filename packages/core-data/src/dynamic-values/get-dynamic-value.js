@@ -11,6 +11,10 @@ import type { DynamicValueItem } from './types';
 import {
 	getPostDynamicValueItem,
 	getFeaturedImageDynamicValueItem,
+	getArchiveDynamicValueItem,
+	getOtherDynamicValueItem,
+	getSiteDynamicValueItem,
+	getUserDynamicValueItem,
 } from './index';
 
 const _getDynamicValue = function (
@@ -22,6 +26,14 @@ const _getDynamicValue = function (
 			return getPostDynamicValueItem(id);
 		case 'featured-image':
 			return getFeaturedImageDynamicValueItem(id);
+		case 'archive':
+			return getArchiveDynamicValueItem(id);
+		case 'other':
+			return getOtherDynamicValueItem(id);
+		case 'site':
+			return getSiteDynamicValueItem(id);
+		case 'user':
+			return getUserDynamicValueItem(id);
 	}
 
 	return null;
