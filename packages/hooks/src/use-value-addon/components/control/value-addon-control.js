@@ -3,6 +3,7 @@
  * External dependencies
  */
 import type { Element } from 'react';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Publisher dependencies
@@ -12,7 +13,7 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { isUndefined } from '@publisher/utils';
-import { getVariable } from '@publisher/core-data';
+import { getVariable, getDynamicValue } from '@publisher/core-data';
 
 /**
  * Internal dependencies
@@ -22,7 +23,6 @@ import { ValueAddonPointer } from './index';
 import { getDynamicValueIcon, getVariableIcon, isValid } from '../../helpers';
 import EmptyIcon from '../../icons/empty';
 import DeletedVariableIcon from '../../icons/deleted-variable';
-import { __ } from '@wordpress/i18n';
 
 export default function ({
 	classNames,
@@ -55,7 +55,12 @@ export default function ({
 				});
 			}
 		} else if (controlProps.value.valueType === 'dynamic-value') {
-			label = controlProps.value?.settings?.name;
+			const item = getDynamicValue(
+				controlProps.value.settings.category,
+				controlProps.value.id
+			);
+
+			label = !isUndefined(item?.name) ? item.name : '';
 			icon = getDynamicValueIcon(controlProps.value?.settings?.type);
 		} else {
 			icon = <EmptyIcon />;

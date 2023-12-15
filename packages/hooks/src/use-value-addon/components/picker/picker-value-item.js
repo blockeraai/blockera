@@ -14,6 +14,11 @@ import {
 } from '@publisher/classnames';
 import { isUndefined, isNumber } from '@publisher/utils';
 import { Tooltip, ConditionalWrapper } from '@publisher/components';
+import type {
+	VariableItem,
+	DynamicValueItem,
+	DynamicValueItemStatus,
+} from '@publisher/core-data';
 
 /**
  * Internal dependencies
@@ -36,13 +41,17 @@ export default function ({
 	name: string | MixedElement,
 	icon: string | MixedElement,
 	type: string,
-	status: 'active' | 'soon' | 'pro',
+	status: DynamicValueItemStatus,
 	valueType: AddonTypesItem,
-	data: Object,
-	onClick: (event: SyntheticMouseEvent<EventTarget>) => void,
+	data: VariableItem | DynamicValueItem,
+	onClick: (data: VariableItem | DynamicValueItem) => void,
 	isCurrent: boolean,
 }): MixedElement {
 	let itemValue = '';
+
+	if (status === 'free') {
+		status = 'active';
+	}
 
 	if (valueType === 'variable') {
 		switch (type) {
@@ -51,10 +60,13 @@ export default function ({
 					!isUndefined(data?.fluid?.min) &&
 					!isUndefined(data?.fluid?.max)
 				) {
+					// $FlowFixMe
 					itemValue = `${data.fluid.min} → ${data.fluid.max}`;
 				} else if (isNumber(data.value)) {
+					// $FlowFixMe
 					itemValue = data.value + 'px';
 				} else {
+					// $FlowFixMe
 					itemValue = data.value;
 				}
 
@@ -66,6 +78,7 @@ export default function ({
 				break;
 
 			default:
+				// $FlowFixMe
 				itemValue = data.value;
 				break;
 		}
@@ -95,9 +108,8 @@ export default function ({
 					'item-value-type-' + valueType,
 					isCurrent && 'is-active-item'
 				)}
-				data-item={JSON.stringify(data)}
-				onClick={(event) => {
-					if (status === 'free') onClick(event);
+				onClick={() => {
+					if (status === 'active') onClick(data);
 				}}
 				{...(status !== 'active' ? props : {})} // destruct if it was not wrapped!
 			>

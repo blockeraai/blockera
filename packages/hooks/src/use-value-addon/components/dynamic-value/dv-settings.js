@@ -21,12 +21,19 @@ import TrashIcon from '../../icons/trash';
 import SearchIcon from '../../icons/search';
 import CaretRightIcon from '../../icons/caret-right';
 import GearIcon from '../../icons/gear';
+import { getDynamicValue } from '@publisher/core-data';
+import { isUndefined } from '@publisher/utils';
 
 export default function ({
 	controlProps,
 }: {
 	controlProps: ValueAddonControlProps,
 }): Element<any> {
+	const item = getDynamicValue(
+		controlProps.value.settings.category,
+		controlProps.value.id
+	);
+
 	return (
 		<Popover
 			title={__('Dynamic Value Setting', 'publisher-core')}
@@ -64,7 +71,7 @@ export default function ({
 					}}
 				>
 					{getDynamicValueIcon(controlProps.value?.settings?.type)}
-					{controlProps.value?.settings?.name}
+					{!isUndefined(item?.name) ? item.name : ''}
 					<SearchIcon style={{ marginLeft: 'auto' }} />
 				</Button>
 			</BaseControl>

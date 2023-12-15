@@ -8,7 +8,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import type { DynamicValueItem } from './types/dynamic-value-item';
+import type { DynamicValueItem, DynamicValueTypes } from './types';
 
 const _getFeaturedImageDynamicValueItems =
 	function (): Array<DynamicValueItem> {
@@ -18,36 +18,42 @@ const _getFeaturedImageDynamicValueItems =
 				id: 'featured-image-title',
 				type: 'text',
 				status: 'soon',
+				category: 'image',
 			},
 			{
 				name: __('Image Alt', 'publisher-core'),
 				id: 'featured-image-alt',
 				type: 'text',
 				status: 'soon',
+				category: 'image',
 			},
 			{
 				name: __('Image Caption', 'publisher-core'),
 				id: 'featured-image-caption',
 				type: 'text',
 				status: 'soon',
+				category: 'image',
 			},
 			{
 				name: __('Image Desc', 'publisher-core'),
 				id: 'featured-image-desc',
 				type: 'text',
 				status: 'soon',
+				category: 'image',
 			},
 			{
 				name: __('Image ID', 'publisher-core'),
 				id: 'featured-image-id',
 				type: 'id',
 				status: 'free',
+				category: 'image',
 			},
 			{
 				name: __('Image URL', 'publisher-core'),
 				id: 'featured-image-url',
 				type: 'image',
 				status: 'free',
+				category: 'image',
 			},
 		];
 	};
@@ -62,24 +68,22 @@ export const getFeaturedImageDynamicValueItems =
 		return _getFeaturedImageDynamicValueItemsMemoized();
 	};
 
-const _getFeaturedImageDVItem = function (
-	id: Array<string>
-): ?DynamicValueItem {
+const _getFeaturedImageDVItem = function (id: string): ?DynamicValueItem {
 	return getFeaturedImageDynamicValueItems().find((item) => id === item?.id);
 };
 
 const _getFeaturedImageDVItemMemoized = memoize(_getFeaturedImageDVItem);
 
 export const getFeaturedImageDynamicValueItem = (
-	types: Array<string>
+	types: string
 ): ?DynamicValueItem => {
 	return _getFeaturedImageDVItemMemoized(types);
 };
 
 const _getFeaturedImageDVItemsBy = function (
 	field: string,
-	value: string | Array<string>
-): ?Array<DynamicValueItem> {
+	value: DynamicValueTypes | Array<DynamicValueTypes>
+): Array<DynamicValueItem> | void {
 	return getFeaturedImageDynamicValueItems().filter((item) => {
 		if (field === 'type') {
 			if (value.includes('all')) {
@@ -97,7 +101,7 @@ const _getFeaturedImageDVItemsByMemoized = memoize(_getFeaturedImageDVItemsBy);
 
 export const getFeaturedImageDynamicValueItemsBy = (
 	field: string,
-	value: string | Array<string>
-): ?Array<DynamicValueItem> => {
+	value: DynamicValueTypes | Array<DynamicValueTypes>
+): Array<DynamicValueItem> | void => {
 	return _getFeaturedImageDVItemsByMemoized(field, value);
 };

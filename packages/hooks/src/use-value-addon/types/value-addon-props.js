@@ -3,6 +3,7 @@
  * External dependencies
  */
 import type { Element } from 'react';
+import type { VariableItem, DynamicValueItem } from '@publisher/core-data';
 
 /**
  * Internal dependencies
@@ -35,19 +36,13 @@ export type ValueAddonProps = {
 	 *
 	 * The callback function
 	 */
-	handleOnClickVar: (
-		// eslint-disable-next-line
-		event: SyntheticMouseEvent<EventTarget>
-	) => void,
+	handleOnClickVar: (data: VariableItem) => void,
 	/**
 	 * Handle on click icon of dynamic values on control.
 	 *
 	 * The callback function
 	 */
-	handleOnClickDV: (
-		// eslint-disable-next-line
-		event: SyntheticMouseEvent<EventTarget>
-	) => void,
+	handleOnClickDV: (data: DynamicValueItem) => void,
 	/**
 	 * Handle click on unlink button
 	 *

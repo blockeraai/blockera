@@ -16,7 +16,7 @@ import { controlInnerClassNames } from '@publisher/classnames';
  * Internal dependencies
  */
 import {
-	getVariables,
+	getVariableCategory,
 	getVariableIcon,
 	generateVariableString,
 	canUnlinkVariable,
@@ -68,20 +68,23 @@ export default function VarPicker({
 
 	const Variables = (): Array<Element<any>> => {
 		return controlProps.variableTypes.map((type, index) => {
-			const data = getVariables(type);
+			const data = getVariableCategory(type);
 
 			if (data?.name === '') {
 				return <></>;
 			}
 
-			if (data.variables?.length === 0 && !_isBlockTheme) {
-				noVariablesText = __(
-					'Your theme is not a block theme.',
-					'publisher-core'
-				);
-			}
+			if (
+				typeof data.variables === 'undefined' ||
+				data.variables?.length === 0
+			) {
+				if (!_isBlockTheme) {
+					noVariablesText = __(
+						'Your theme is not a block theme.',
+						'publisher-core'
+					);
+				}
 
-			if (data.variables?.length === 0) {
 				return (
 					<PickerCategory
 						key={`type-${type}-${index}`}
@@ -127,6 +130,7 @@ export default function VarPicker({
 									type,
 									value: variable.value,
 								})}
+								status="active"
 							/>
 						);
 					})}

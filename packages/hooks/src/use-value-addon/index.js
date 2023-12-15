@@ -9,6 +9,8 @@ import { useState } from '@wordpress/element';
  */
 import { isObject, isUndefined } from '@publisher/utils';
 import { getVariable } from '@publisher/core-data';
+// eslint-disable-next-line no-duplicate-imports
+import type { VariableItem, DynamicValueItem } from '@publisher/core-data';
 
 /**
  * Internal dependencies
@@ -87,17 +89,12 @@ export const useValueAddon = ({
 		.map((type) => `publisher-value-addon-support-${type}`)
 		.join(' ');
 
-	const handleOnClickVar = (
-		event: SyntheticMouseEvent<EventTarget>
-	): void => {
-		// $FlowFixMe
-		const item = JSON.parse(event.target.getAttribute('data-item'));
-
+	const handleOnClickVar = (data: VariableItem): void => {
 		const newValue = {
 			settings: {
-				...item,
+				...data,
 			},
-			id: item.slug,
+			id: data.slug,
 			isValueAddon: true,
 			valueType: 'variable',
 		};
@@ -136,18 +133,20 @@ export const useValueAddon = ({
 		}
 	};
 
-	const handleOnClickDV = (event: SyntheticMouseEvent<EventTarget>): void => {
-		// $FlowFixMe
-		const item = JSON.parse(event.target.getAttribute('data-item'));
-
+	const handleOnClickDV = (data: DynamicValueItem): void => {
 		const newValue = {
 			settings: {
-				...item,
+				...data,
 			},
-			id: item.id,
+			id: data.id,
 			isValueAddon: true,
 			valueType: 'dynamic-value',
 		};
+
+		// $FlowFixMe
+		delete newValue?.settings?.name;
+		// $FlowFixMe
+		delete newValue?.settings?.status;
 
 		setValue(newValue);
 		onChange(newValue);

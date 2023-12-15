@@ -10,6 +10,7 @@ import { __ } from '@wordpress/i18n';
  */
 import { Button, Flex, Popover, Grid } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
+import type { DynamicValueCategory } from '@publisher/core-data';
 
 /**
  * Internal dependencies
@@ -17,7 +18,7 @@ import { controlInnerClassNames } from '@publisher/classnames';
 import {
 	getDynamicValueIcon,
 	isValid,
-	getDynamicValueItems,
+	getDynamicValueCategory,
 } from '../../helpers';
 import { PickerCategory, PickerValueItem } from '../index';
 import TrashIcon from '../../icons/trash';
@@ -29,10 +30,10 @@ export default function ({
 	controlProps: ValueAddonControlProps,
 }): Element<any> {
 	const DynamicValues = (): Array<Element<any>> => {
-		const categories = ['post', 'featured-image'];
+		const categories: Array<DynamicValueCategory> = ['post', 'image'];
 
 		return categories.map((item, index) => {
-			const data = getDynamicValueItems(
+			const data = getDynamicValueCategory(
 				item,
 				controlProps.dynamicValueTypes
 			);
@@ -52,8 +53,6 @@ export default function ({
 							const itemData = {
 								..._item,
 							};
-
-							delete itemData?.status;
 
 							return (
 								<PickerValueItem

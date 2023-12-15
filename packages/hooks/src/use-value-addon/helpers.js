@@ -19,6 +19,12 @@ import {
 	getPostDynamicValueItemsBy,
 	getFeaturedImageDynamicValueItemsBy,
 } from '@publisher/core-data';
+// eslint-disable-next-line no-duplicate-imports
+import type {
+	VariableCategory,
+	DynamicValueTypes,
+	DynamicValueCategory,
+} from '@publisher/core-data';
 import { ColorIndicator } from '@publisher/components';
 import { isBlockTheme, isObject, isUndefined } from '@publisher/utils';
 
@@ -27,11 +33,8 @@ import { isBlockTheme, isObject, isUndefined } from '@publisher/utils';
  */
 import type {
 	ValueAddon,
-	VariableItems,
-	VariableTypes,
-	DynamicValueCategories,
-	DynamicValueItems,
-	DynamicValueTypes,
+	DynamicValueCategoryDetail,
+	VariableCategoryDetail,
 } from './types';
 import VarTypeFontSizeIcon from './icons/var-font-size';
 import VarTypeSpacingIcon from './icons/var-spacing';
@@ -116,8 +119,10 @@ export function getVariableIcon({
 }
 
 // todo write tests
-export function getVariables(type: VariableTypes): VariableItems {
-	switch (type) {
+export function getVariableCategory(
+	category: VariableCategory
+): VariableCategoryDetail {
+	switch (category) {
 		case 'font-size':
 			return {
 				name: isBlockTheme()
@@ -201,17 +206,17 @@ export function getDynamicValueIcon(type: DynamicValueTypes): MixedElement {
 }
 
 // todo write tests
-export function getDynamicValueItems(
-	category: DynamicValueCategories,
+export function getDynamicValueCategory(
+	category: DynamicValueCategory,
 	types: Array<DynamicValueTypes>
-): DynamicValueItems {
+): DynamicValueCategoryDetail {
 	switch (category) {
 		case 'post':
 			return {
 				name: __('Posts and Pages', 'publisher-core'),
 				items: getPostDynamicValueItemsBy('type', types),
 			};
-		case 'featured-image':
+		case 'image':
 			return {
 				name: __('Post Featured Image', 'publisher-core'),
 				items: getFeaturedImageDynamicValueItemsBy('type', types),
@@ -231,7 +236,7 @@ export function generateVariableString({
 	slug,
 }: {
 	reference: 'publisher' | 'preset',
-	type: VariableTypes,
+	type: VariableCategory,
 	slug: string,
 }): string {
 	let _type: string = type;
@@ -266,6 +271,7 @@ export function canUnlinkVariable(value: ValueAddon): boolean {
 			return true;
 		}
 
+		// $FlowFixMe
 		const variable = getVariable(value.valueType, value.settings.slug);
 
 		if (!isUndefined(variable?.value) && variable?.value !== '') {

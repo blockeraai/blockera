@@ -1,12 +1,19 @@
 // @flow
+
+/**
+ * Publisher dependencies
+ */
+import type {
+	VariableItem,
+	VariableCategory,
+	DynamicValueItem,
+	DynamicValueCategory,
+} from '@publisher/core-data';
+
 /**
  * Internal dependencies
  */
-import type {
-	AddonTypesItem,
-	DynamicValueTypes,
-	VariableTypes,
-} from './use-value-addon-props';
+import type { AddonTypesItem } from './use-value-addon-props';
 
 export type ValueAddon = {
 	id: string,
@@ -14,7 +21,7 @@ export type ValueAddon = {
 		...Object,
 		var?: string,
 		slug?: string,
-		type: VariableTypes | DynamicValueTypes,
+		type: VariableCategory | DynamicValueCategory,
 		reference?: 'preset' | 'custom',
 		prepend?: string,
 		append?: string,
@@ -24,27 +31,14 @@ export type ValueAddon = {
 	isValueAddon: boolean,
 };
 
-export type VariableItem = {
-	name: string,
-	slug: string,
-	value: string,
-};
-
-export type VariableItems = {
-	name: string,
-	variables: Array<VariableItem>,
+export type VariableCategoryDetail = {
+	name?: string,
+	variables?: Array<VariableItem> | void,
 	notFound?: boolean,
 };
 
-export type DynamicValueItem = {
-	name: string,
-	id: string,
-	type: DynamicValueTypes,
-	status?: 'soon' | 'free' | 'pro',
-};
-
-export type DynamicValueItems = {
-	name: string,
-	items: Array<DynamicValueItem>,
+export type DynamicValueCategoryDetail = {
+	name?: DynamicValueCategory | '',
+	items?: Array<DynamicValueItem> | void,
 	notFound?: boolean,
 };

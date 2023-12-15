@@ -1,22 +1,27 @@
 // @flow
 /**
- * Internal dependencies
+ * Publisher dependencies
  */
 import type {
-	ValueAddon,
-	VariableTypes,
+	VariableCategory,
 	DynamicValueTypes,
-} from '../../../types';
+	VariableItem,
+} from '@publisher/core-data';
+
+/**
+ * Internal dependencies
+ */
+import type { ValueAddon } from '../../../types';
 
 export type ValueAddonControlProps = {
 	value: ValueAddon,
 	setValue: (value: Object | string) => void,
 	onChange: (value: Object | string) => void,
 	types: Array<'variable' | 'dynamic-value'>,
-	variableTypes: Array<VariableTypes>,
+	variableTypes: Array<VariableCategory>,
 	dynamicValueTypes: Array<DynamicValueTypes>,
-	handleOnClickDV: (event: SyntheticMouseEvent<EventTarget>) => void,
-	handleOnClickVar: (event: SyntheticMouseEvent<EventTarget>) => void,
+	handleOnClickDV: (data: VariableItem) => void,
+	handleOnClickVar: (data: VariableItem) => void,
 	handleOnUnlinkVar: (event: SyntheticMouseEvent<EventTarget>) => void,
 	handleOnClickRemove: (event: SyntheticMouseEvent<EventTarget>) => void,
 	isOpen: string,
