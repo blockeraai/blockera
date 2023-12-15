@@ -28,7 +28,7 @@ import UnlinkIcon from '../../icons/unlink';
 import TrashIcon from '../../icons/trash';
 import type { ValueAddonControlProps } from '../control/types';
 
-export default function VarPicker({
+export default function ({
 	controlProps,
 }: {
 	controlProps: ValueAddonControlProps,
