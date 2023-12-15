@@ -58,6 +58,7 @@ import TextOrientationStyle1Icon from './icons/text-orientation-style-1';
 import TextOrientationStyle2Icon from './icons/text-orientation-style-2';
 import TextOrientationStyle3Icon from './icons/text-orientation-style-3';
 import TextOrientationStyle4Icon from './icons/text-orientation-style-4';
+import PenIcon from './icons/pen';
 
 function getFontSizeAccurate(value: string) {
 	const sizes = {
@@ -164,6 +165,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 					>
 						<TypographyButtonIcon />
 						{__('Customize', 'publisher-core')}
+						<PenIcon style={{ marginLeft: 'auto' }} />
 					</Button>
 
 					{isVisible && (
