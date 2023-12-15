@@ -69,5 +69,9 @@
 		min-height: calc(var(--popover-min-height) - var(--popover-header-height));
 		max-height: calc(var(--popover-height) - var(--popover-header-height));
 		overflow: var(--popover-overflow) !important;
+
+		& > :last-child {
+			padding-bottom: 18px;
+		}
 	}
 }
