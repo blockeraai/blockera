@@ -70,18 +70,22 @@ export default function ColorPickerControl({
 						className="components-palette-edit-popover"
 						onClose={onClose}
 						titleButtonsRight={
-							<Button
-								tabIndex="-1"
-								size={'extra-small'}
-								onClick={() => setValue('')}
-								style={{ padding: '5px' }}
-								aria-label={__(
-									'Reset Color (Clear)',
-									'publisher-core'
+							<>
+								{value && (
+									<Button
+										tabIndex="-1"
+										size={'extra-small'}
+										onClick={() => setValue('')}
+										style={{ padding: '5px' }}
+										aria-label={__(
+											'Reset Color (Clear)',
+											'publisher-core'
+										)}
+									>
+										<TrashIcon />
+									</Button>
 								)}
-							>
-								<TrashIcon />
-							</Button>
+							</>
 						}
 					>
 						<WPColorPicker
