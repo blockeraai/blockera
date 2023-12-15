@@ -26,6 +26,11 @@
 		}
 	}
 
+	&.item-status-pro,
+	&.item-status-soon {
+		opacity: 0.5;
+	}
+
 	.publisher-control-item-icon {
 		pointer-events: none;
 		display: flex;

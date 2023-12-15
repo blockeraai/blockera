@@ -53,6 +53,8 @@ export default function ({
 								..._item,
 							};
 
+							delete itemData?.status;
+
 							return (
 								<PickerValueItem
 									value={controlProps.value}
@@ -66,6 +68,7 @@ export default function ({
 										controlProps.value?.id === itemData.id
 									}
 									icon={getDynamicValueIcon(itemData.type)}
+									status={_item?.status}
 								/>
 							);
 						})}

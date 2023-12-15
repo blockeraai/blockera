@@ -40,6 +40,7 @@ export type DynamicValueItem = {
 	name: string,
 	id: string,
 	type: DynamicValueTypes,
+	status?: 'soon' | 'free' | 'pro',
 };
 
 export type DynamicValueItems = {

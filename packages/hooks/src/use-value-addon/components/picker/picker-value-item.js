@@ -3,6 +3,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Publisher dependencies
@@ -12,6 +13,7 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { isUndefined, isNumber } from '@publisher/utils';
+import { Tooltip, ConditionalWrapper } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -27,12 +29,14 @@ export default function ({
 	data,
 	onClick,
 	isCurrent = false,
+	status = 'pro',
 	...props
 }: {
 	value: ValueAddon,
 	name: string | MixedElement,
 	icon: string | MixedElement,
 	type: string,
+	status: 'active' | 'soon' | 'pro',
 	valueType: AddonTypesItem,
 	data: Object,
 	onClick: (event: SyntheticMouseEvent<EventTarget>) => void,
@@ -68,31 +72,50 @@ export default function ({
 	}
 
 	return (
-		<div
-			className={controlClassNames(
-				'value-addon-popover-item',
-				'item-type-' + type,
-				'item-value-type-' + valueType,
-				isCurrent && 'is-active-item'
+		<ConditionalWrapper
+			condition={status !== 'active'}
+			wrapper={(children) => (
+				<Tooltip
+					text={
+						status === 'soon'
+							? __('Coming soon…', 'publisher-core')
+							: __('Pro Feature', 'publisher-core')
+					}
+					{...props}
+				>
+					{children}
+				</Tooltip>
 			)}
-			data-item={JSON.stringify(data)}
-			onClick={onClick}
-			{...props}
 		>
-			{icon && (
-				<span className={controlInnerClassNames('item-icon')}>
-					{icon}
+			<div
+				className={controlClassNames(
+					'value-addon-popover-item',
+					'item-status-' + status,
+					'item-type-' + type,
+					'item-value-type-' + valueType,
+					isCurrent && 'is-active-item'
+				)}
+				data-item={JSON.stringify(data)}
+				onClick={(event) => {
+					if (status === 'free') onClick(event);
+				}}
+				{...(status !== 'active' ? props : {})} // destruct if it was not wrapped!
+			>
+				{icon && (
+					<span className={controlInnerClassNames('item-icon')}>
+						{icon}
+					</span>
+				)}
+				<span className={controlInnerClassNames('item-name')}>
+					{name !== '' && !isUndefined(name) ? name : data.slug}
 				</span>
-			)}
-			<span className={controlInnerClassNames('item-name')}>
-				{name !== '' && !isUndefined(name) ? name : data.slug}
-			</span>
 
-			{itemValue && (
-				<span className={controlInnerClassNames('item-value')}>
-					{itemValue}
-				</span>
-			)}
-		</div>
+				{itemValue && (
+					<span className={controlInnerClassNames('item-value')}>
+						{itemValue}
+					</span>
+				)}
+			</div>
+		</ConditionalWrapper>
 	);
 }
