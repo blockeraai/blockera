@@ -8,7 +8,7 @@ export type Props = {
 	type?: 'normal' | 'minimal',
 	noBorder?: boolean,
 	contentAlign?: 'left' | 'center' | 'right',
-	size: ControlSize,
+	size?: ControlSize,
 	//
 	id?: string,
 	label?: string,
