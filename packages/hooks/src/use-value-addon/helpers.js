@@ -18,6 +18,10 @@ import {
 	getVariable,
 	getPostDynamicValueItemsBy,
 	getFeaturedImageDynamicValueItemsBy,
+	getArchiveDynamicValueItemsBy,
+	getSiteDynamicValueItemsBy,
+	getUserDynamicValueItemsBy,
+	getOtherDynamicValueItemsBy,
 } from '@publisher/core-data';
 // eslint-disable-next-line no-duplicate-imports
 import type {
@@ -46,6 +50,12 @@ import DVTypeDateIcon from './icons/dv-date';
 import DVTypeTimeIcon from './icons/dv-time';
 import DVTypeMetaIcon from './icons/dv-meta';
 import DVTypeImageIcon from './icons/dv-image';
+import DVTypeCategoryIcon from './icons/dv-category';
+import DVTypeTagIcon from './icons/dv-tag';
+import DVTypeTermIcon from './icons/dv-terms';
+import DVTypeShortcodeIcon from './icons/dv-shortcode';
+import DVTypeEmailIcon from './icons/dv-email';
+import DVTypeCommentIcon from './icons/dv-comment';
 
 // todo improve and write tests
 export const isValid = ({ isValueAddon = false }: ValueAddon): boolean => {
@@ -198,6 +208,24 @@ export function getDynamicValueIcon(type: DynamicValueTypes): MixedElement {
 		case 'time':
 			return <DVTypeTimeIcon />;
 
+		case 'category':
+			return <DVTypeCategoryIcon />;
+
+		case 'tag':
+			return <DVTypeTagIcon />;
+
+		case 'term':
+			return <DVTypeTermIcon />;
+
+		case 'shortcode':
+			return <DVTypeShortcodeIcon />;
+
+		case 'email':
+			return <DVTypeEmailIcon />;
+
+		case 'comment':
+			return <DVTypeCommentIcon />;
+
 		case 'meta':
 			return <DVTypeMetaIcon />;
 	}
@@ -216,10 +244,35 @@ export function getDynamicValueCategory(
 				name: __('Posts and Pages', 'publisher-core'),
 				items: getPostDynamicValueItemsBy('type', types),
 			};
-		case 'image':
+
+		case 'featured-image':
 			return {
 				name: __('Post Featured Image', 'publisher-core'),
 				items: getFeaturedImageDynamicValueItemsBy('type', types),
+			};
+
+		case 'archive':
+			return {
+				name: __('Archive', 'publisher-core'),
+				items: getArchiveDynamicValueItemsBy('type', types),
+			};
+
+		case 'site':
+			return {
+				name: __('Site Information', 'publisher-core'),
+				items: getSiteDynamicValueItemsBy('type', types),
+			};
+
+		case 'user':
+			return {
+				name: __('User & Authors', 'publisher-core'),
+				items: getUserDynamicValueItemsBy('type', types),
+			};
+
+		case 'other':
+			return {
+				name: __('Utilities', 'publisher-core'),
+				items: getOtherDynamicValueItemsBy('type', types),
 			};
 	}
 

@@ -30,7 +30,14 @@ export default function ({
 	controlProps: ValueAddonControlProps,
 }): Element<any> {
 	const DynamicValues = (): Array<Element<any>> => {
-		const categories: Array<DynamicValueCategory> = ['post', 'image'];
+		const categories: Array<DynamicValueCategory> = [
+			'post',
+			'featured-image',
+			'archive',
+			'site',
+			'user',
+			'other',
+		];
 
 		return categories.map((item, index) => {
 			const data = getDynamicValueCategory(

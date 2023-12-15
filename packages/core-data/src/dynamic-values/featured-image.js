@@ -14,46 +14,46 @@ const _getFeaturedImageDynamicValueItems =
 	function (): Array<DynamicValueItem> {
 		return [
 			{
+				name: __('Image URL', 'publisher-core'),
+				id: 'featured-image-url',
+				type: 'image',
+				status: 'free',
+				category: 'featured-image',
+			},
+			{
+				name: __('Image ID', 'publisher-core'),
+				id: 'featured-image-id',
+				type: 'id',
+				status: 'soon',
+				category: 'featured-image',
+			},
+			{
 				name: __('Image Title', 'publisher-core'),
 				id: 'featured-image-title',
 				type: 'text',
 				status: 'soon',
-				category: 'image',
+				category: 'featured-image',
 			},
 			{
 				name: __('Image Alt', 'publisher-core'),
 				id: 'featured-image-alt',
 				type: 'text',
 				status: 'soon',
-				category: 'image',
+				category: 'featured-image',
 			},
 			{
 				name: __('Image Caption', 'publisher-core'),
 				id: 'featured-image-caption',
 				type: 'text',
 				status: 'soon',
-				category: 'image',
+				category: 'featured-image',
 			},
 			{
 				name: __('Image Desc', 'publisher-core'),
 				id: 'featured-image-desc',
 				type: 'text',
 				status: 'soon',
-				category: 'image',
-			},
-			{
-				name: __('Image ID', 'publisher-core'),
-				id: 'featured-image-id',
-				type: 'id',
-				status: 'free',
-				category: 'image',
-			},
-			{
-				name: __('Image URL', 'publisher-core'),
-				id: 'featured-image-url',
-				type: 'image',
-				status: 'free',
-				category: 'image',
+				category: 'featured-image',
 			},
 		];
 	};

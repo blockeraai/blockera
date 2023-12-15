@@ -2,7 +2,13 @@
 
 export type DynamicValueItemStatus = 'soon' | 'free' | 'pro' | 'active';
 
-export type DynamicValueCategory = 'post' | 'image';
+export type DynamicValueCategory =
+	| 'post'
+	| 'featured-image'
+	| 'archive'
+	| 'user'
+	| 'other'
+	| 'site';
 
 export type DynamicValueTypes =
 	| 'text'
@@ -11,6 +17,12 @@ export type DynamicValueTypes =
 	| 'id'
 	| 'date'
 	| 'meta'
+	| 'email'
+	| 'shortcode'
+	| 'category'
+	| 'tag'
+	| 'term'
+	| 'comment'
 	| 'time';
 
 export type DynamicValueItem = {
