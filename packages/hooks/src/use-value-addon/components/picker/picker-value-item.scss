@@ -28,7 +28,12 @@
 
 	&.item-status-pro,
 	&.item-status-soon {
-		opacity: 0.5;
+		border-color: #e1e1e1;
+		color: #b4b4b4;
+
+		& > * {
+			opacity: 0.4 !important;
+		}
 	}
 
 	.publisher-control-item-icon {
