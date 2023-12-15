@@ -38,17 +38,19 @@ export default function ({
 
 	if (isValid(controlProps.value)) {
 		if (controlProps.value.valueType === 'variable') {
-			const variable = getVariable(
+			const item = getVariable(
 				controlProps.value?.settings?.type,
 				controlProps.value?.settings?.slug
 			);
 
-			if (isUndefined(variable?.value)) {
+			if (isUndefined(item?.value)) {
 				isDeleted = true;
 				label = __('Deleted Variable', 'publisher-core');
 				icon = <DeletedVariableIcon />;
 			} else {
-				label = controlProps.value?.settings?.name;
+				label = !isUndefined(item?.name)
+					? item?.name
+					: controlProps.value?.settings?.name;
 				icon = getVariableIcon({
 					type: controlProps.value?.settings?.type,
 					value: controlProps.value?.settings?.value,
@@ -60,8 +62,16 @@ export default function ({
 				controlProps.value.id
 			);
 
-			label = !isUndefined(item?.name) ? item.name : '';
-			icon = getDynamicValueIcon(controlProps.value?.settings?.type);
+			if (isUndefined(item?.id)) {
+				isDeleted = true;
+				label = __('Missing Item', 'publisher-core');
+				icon = <DeletedVariableIcon />;
+			} else {
+				label = !isUndefined(item?.name)
+					? item?.name
+					: controlProps.value?.settings?.name;
+				icon = getDynamicValueIcon(controlProps.value?.settings?.type);
+			}
 		}
 	}
 
@@ -76,32 +86,27 @@ export default function ({
 				className={controlClassNames(
 					'value-addon',
 					'type-' + (controlProps.value?.valueType || 'unknown'),
-					'value-addon-size' + controlProps.size,
+					'value-addon-size-' + controlProps.size,
 					isIconActive && 'value-addon-with-icon',
-					isDeleted && 'type-variable-deleted',
-					['var-picker', 'var-deleted'].includes(
-						controlProps.isOpen
-					) && 'open-value-addon type-variable',
-					[
-						'dv-picker',
-						'dv-settings',
-						'dv-settings-advanced',
-					].includes(controlProps.isOpen) &&
+					isDeleted && 'type-deleted',
+					controlProps.isOpen.startsWith('var-') &&
+						'open-value-addon type-variable',
+					controlProps.isOpen.startsWith('dv-') &&
 						'open-value-addon type-dynamic-value',
 					classNames
 				)}
 				onClick={(event) => {
 					switch (controlProps.value?.valueType) {
 						case 'variable':
-							if (isDeleted) {
-								controlProps.setOpen('var-deleted');
-							} else {
-								controlProps.setOpen('var-picker');
-							}
+							controlProps.setOpen(
+								isDeleted ? 'var-deleted' : 'var-picker'
+							);
 							event.preventDefault();
 							break;
 						case 'dynamic-value':
-							controlProps.setOpen('dv-settings');
+							controlProps.setOpen(
+								isDeleted ? 'dv-deleted' : 'dv-settings'
+							);
 							event.preventDefault();
 							break;
 					}

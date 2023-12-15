@@ -146,8 +146,6 @@ export const useValueAddon = ({
 		};
 
 		// $FlowFixMe
-		delete newValue?.settings?.name;
-		// $FlowFixMe
 		delete newValue?.settings?.status;
 
 		setValue(newValue);

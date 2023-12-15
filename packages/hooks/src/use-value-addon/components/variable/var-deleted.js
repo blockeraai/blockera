@@ -25,18 +25,13 @@ export default function ({
 }: {
 	controlProps: ValueAddonControlProps,
 }): Element<any> {
-	const valueAvailable =
+	const isValueAvailable =
 		!isUndefined(controlProps.value?.settings?.value) &&
 		controlProps.value?.settings?.value !== '';
 
-	let label =
+	const isLabelAvailable =
 		!isUndefined(controlProps.value?.settings?.name) &&
-		controlProps.value?.settings?.name !== '' &&
-		controlProps.value?.settings?.name;
-
-	if (label) {
-		label = controlProps.value?.settings?.slug;
-	}
+		controlProps.value?.settings?.name !== '';
 
 	return (
 		<Popover
@@ -44,7 +39,7 @@ export default function ({
 			offset={125}
 			placement="left-start"
 			onClose={() => controlProps.setOpen('')}
-			className={controlInnerClassNames('popover-variable-deleted')}
+			className={controlInnerClassNames('popover-value-addon-deleted')}
 			titleButtonsRight={
 				<>
 					{canUnlinkVariable(controlProps.value) && (
@@ -76,8 +71,12 @@ export default function ({
 				</>
 			}
 		>
-			{valueAvailable ? (
-				<Flex direction="column" gap={15}>
+			{isValueAvailable ? (
+				<Flex
+					direction="column"
+					gap={15}
+					style={{ paddingBottom: '0' }}
+				>
 					<p style={{ fontSize: '12px', margin: 0 }}>
 						{__(
 							"There was a deletion or disappearance of this variable, however it's value is still used here.",
@@ -85,13 +84,17 @@ export default function ({
 						)}
 					</p>
 					<p style={{ fontSize: '12px', margin: 0 }}>
-						{__('Variable:', 'publisher-core')}{' '}
+						{isLabelAvailable
+							? __('Variable Name:', 'publisher-core')
+							: __('Variable ID:', 'publisher-core')}{' '}
 						<b
 							style={{
 								color: 'var(--publisher-value-addon-var-deleted-color)',
 							}}
 						>
-							{label}
+							{isLabelAvailable
+								? controlProps.value?.settings?.name
+								: controlProps.value?.settings?.slug}
 						</b>
 					</p>
 					<p style={{ fontSize: '12px', margin: 0 }}>
@@ -124,7 +127,7 @@ export default function ({
 							tabIndex="-1"
 							size={'small'}
 							onClick={() => {
-								controlProps.setOpen('var');
+								controlProps.setOpen('var-picker');
 							}}
 							label={__(
 								'Switch To Another Variable',
@@ -140,21 +143,29 @@ export default function ({
 					</Flex>
 				</Flex>
 			) : (
-				<Flex direction="column" gap={15}>
+				<Flex
+					direction="column"
+					gap={15}
+					style={{ paddingBottom: '0' }}
+				>
 					<p style={{ fontSize: '12px', margin: 0 }}>
 						{__(
-							'There was a deletion or disappearance of the this variable and the value is not available.',
+							'There was a deletion or disappearance of this variable and the value is not available.',
 							'publisher-core'
 						)}
 					</p>
 					<p style={{ fontSize: '12px', margin: 0 }}>
-						{__('Variable:', 'publisher-core')}{' '}
+						{isLabelAvailable
+							? __('Variable Name:', 'publisher-core')
+							: __('Variable ID:', 'publisher-core')}{' '}
 						<b
 							style={{
 								color: 'var(--publisher-value-addon-var-deleted-color)',
 							}}
 						>
-							{label}
+							{isLabelAvailable
+								? controlProps.value?.settings?.name
+								: controlProps.value?.settings?.slug}
 						</b>
 					</p>
 					<p style={{ fontSize: '12px', margin: 0 }}>
@@ -187,7 +198,7 @@ export default function ({
 							tabIndex="-1"
 							size={'small'}
 							onClick={() => {
-								controlProps.setOpen('var');
+								controlProps.setOpen('var-picker');
 							}}
 							label={__(
 								'Switch To Another Variable',

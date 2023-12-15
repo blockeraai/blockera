@@ -4,9 +4,4 @@
 		--publisher-controls-primary-color: var(--publisher-value-addon-var-color);
 		--publisher-controls-primary-color-darker-20: var(--publisher-value-addon-var-color-darker-20);
 	}
-
-	&.publisher-control-popover-variable-deleted {
-		--publisher-controls-primary-color: var(--publisher-value-addon-var-deleted-color);
-		--publisher-controls-primary-color-darker-20: var(--publisher-value-addon-var-deleted-color-darker-20);
-	}
 }
