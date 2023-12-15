@@ -1,10 +1,10 @@
 .publisher-component-popover {
 	position: relative;
+	--popover-overflow: visible;
 	--popover-min-height: auto;
-	--popover-height: auto;
+	--popover-height: 400px;
 	--popover-width: 290px;
 	--popover-header-height: 42px;
-	--popover-overflow: visible;
 	overflow: var(--popover-overflow) !important;
 
 	.components-popover__content {
@@ -17,7 +17,7 @@
 		position: relative;
 		min-height: auto;
 		height: auto;
-		overflow: var(--popover-overflow) !important;
+		overflow: auto !important;
 	}
 
 	&.with-header {
