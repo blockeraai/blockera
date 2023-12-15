@@ -1266,6 +1266,44 @@ export const ValueAddon = {
 						dynamicValueTypes={['TEXT']}
 					/>
 				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: {
+							settings: {
+								name: 'Medium',
+								size: 20,
+								slug: 'medium',
+								reference: 'preset',
+								var: 'var:preset|font-size|medium',
+								type: 'font-size',
+							},
+							id: 'medium',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
+					}}
+				>
+					<div style={{ width: '100px' }}>
+						<ControlWithHooks
+							Control={InputControl}
+							type="text"
+							label="Small Width"
+							{...args}
+							defaultValue=""
+							controlAddonTypes={['variable', 'dynamic-value']}
+							variableTypes={[
+								'font-size',
+								'width-size',
+								'spacing',
+								'gradient',
+							]}
+							dynamicValueTypes={['TEXT']}
+							size="small"
+						/>
+					</div>
+				</ControlContextProvider>
 			</Flex>
 		</Flex>
 	),
@@ -1288,7 +1326,22 @@ export const PlayNumber = {
 		WithControlDataProvider,
 		...SharedDecorators,
 	],
-	render: (args) => <ControlWithHooks Control={InputControl} {...args} />,
+	render: (args) => (
+		<ControlWithHooks
+			Control={InputControl}
+			controlAddonTypes={['variable', 'dynamic-value']}
+			variableTypes={[
+				'theme-color',
+				'font-size',
+				'width-size',
+				'spacing',
+				'linear-gradient',
+				'radial-gradient',
+			]}
+			dynamicValueTypes={['TEXT']}
+			{...args}
+		/>
+	),
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 

@@ -7,6 +7,7 @@ import type {
 	DynamicValueTypes,
 	VariableItem,
 } from '@publisher/core-data';
+import type { ControlSize } from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -26,4 +27,5 @@ export type ValueAddonControlProps = {
 	handleOnClickRemove: (event: SyntheticMouseEvent<EventTarget>) => void,
 	isOpen: string,
 	setOpen: (value: string) => void,
+	size: ControlSize,
 };

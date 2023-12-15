@@ -1,9 +1,14 @@
 // @flow
+/**
+ * Internal dependencies
+ */
+import type { ControlSize } from '../../../types';
 
 export type Props = {
 	type?: 'normal' | 'minimal',
 	noBorder?: boolean,
 	contentAlign?: 'left' | 'center' | 'right',
+	size: ControlSize,
 	//
 	id?: string,
 	label?: string,

@@ -69,6 +69,7 @@ export default function InputControl({
 		variableTypes,
 		dynamicValueTypes,
 		onChange: setValue,
+		size,
 	});
 
 	if (isSetValueAddon()) {

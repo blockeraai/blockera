@@ -40,6 +40,7 @@ export default function ColorControl({
 	controlAddonTypes,
 	variableTypes,
 	dynamicValueTypes,
+	size = 'normal',
 	//
 	...props
 }: Props): MixedElement {
@@ -62,6 +63,7 @@ export default function ColorControl({
 		variableTypes,
 		dynamicValueTypes,
 		onChange: setValue,
+		size,
 	});
 
 	if (isSetValueAddon()) {
@@ -112,6 +114,7 @@ export default function ColorControl({
 				className={controlClassNames(
 					'color',
 					'color-type-' + type,
+					'control-size' + size,
 					value ? 'is-not-empty' : 'is-empty',
 					className + ' ' + valueAddonClassNames
 				)}

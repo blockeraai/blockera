@@ -32,7 +32,7 @@ export default function ({
 	classNames?: string,
 	controlProps: ValueAddonControlProps,
 }): Element<any> {
-	let icon: Element<any> = <></>;
+	let icon: Element<any> = <EmptyIcon />;
 	let label = '';
 	let isDeleted = false;
 
@@ -62,11 +62,12 @@ export default function ({
 
 			label = !isUndefined(item?.name) ? item.name : '';
 			icon = getDynamicValueIcon(controlProps.value?.settings?.type);
-		} else {
-			icon = <EmptyIcon />;
 		}
-	} else {
-		icon = <EmptyIcon />;
+	}
+
+	let isIconActive = true;
+	if (controlProps.size === 'small') {
+		isIconActive = !isValid(controlProps.value);
 	}
 
 	return (
@@ -75,6 +76,8 @@ export default function ({
 				className={controlClassNames(
 					'value-addon',
 					'type-' + (controlProps.value?.valueType || 'unknown'),
+					'value-addon-size' + controlProps.size,
+					isIconActive && 'value-addon-with-icon',
 					isDeleted && 'type-variable-deleted',
 					['var-picker', 'var-deleted'].includes(
 						controlProps.isOpen
@@ -105,7 +108,7 @@ export default function ({
 				}}
 				{...props}
 			>
-				{icon && (
+				{isIconActive && (
 					<span className={controlInnerClassNames('item-icon')}>
 						{icon}
 					</span>

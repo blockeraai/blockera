@@ -3,6 +3,7 @@
  * Publisher dependencies
  */
 import type { DynamicValueTypes, VariableCategory } from '@publisher/core-data';
+import type { ControlSize } from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -19,4 +20,5 @@ export type UseValueAddonProps = {
 	onChange: (value: string | ValueAddon) => void,
 	variableTypes: Array<VariableCategory>,
 	dynamicValueTypes: Array<DynamicValueTypes>,
+	size: ControlSize,
 };

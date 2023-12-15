@@ -2,7 +2,7 @@
 	height: 30px;
 	display: grid;
 	gap: 6px;
-	grid-template-columns: 20px auto;
+	grid-template-columns: 1fr;
 	align-items: center;
 	align-content: center;
 	padding: 0 5px 0 8px;
@@ -16,6 +16,10 @@
 	border: 1px solid var(--va-color);
 	background-color: var(--va-bg-color);
 	user-select: none;
+
+	&.value-addon-with-icon {
+		grid-template-columns: 20px auto;
+	}
 
 	&.type-variable {
 		--va-color: var(--publisher-value-addon-var-color);

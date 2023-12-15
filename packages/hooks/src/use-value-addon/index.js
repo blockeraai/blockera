@@ -28,6 +28,7 @@ export const useValueAddon = ({
 	variableTypes,
 	dynamicValueTypes,
 	onChange,
+	size = 'normal',
 }: UseValueAddonProps): {} | ValueAddonProps => {
 	// type is empty
 	if (isUndefined(types) || !types.length) {
@@ -59,6 +60,7 @@ export const useValueAddon = ({
 				handleOnClickRemove: () => {},
 				isOpen: '',
 				setOpen: () => {},
+				size,
 			},
 			handleOnClickVar: () => {},
 			handleOnClickDV: () => {},
@@ -185,6 +187,7 @@ export const useValueAddon = ({
 		handleOnClickRemove,
 		isOpen,
 		setOpen,
+		size,
 	};
 
 	return {
