@@ -163,12 +163,12 @@ export const Popover = {
 					<GroupControl
 						{...args}
 						isOpen={false}
-						popoverLabel="👋 Popover Title"
+						popoverTitle="👋 Popover Title"
 					/>
 					<GroupControl
 						{...args}
 						isOpen={true}
-						popoverLabel="👋 Popover Title"
+						popoverTitle="👋 Popover Title"
 					/>
 				</Flex>
 			</Flex>

@@ -2130,6 +2130,23 @@ describe('Util functions', () => {
 				},
 			]);
 		});
+
+		test('text-length', () => {
+			expect(getCSSUnits('text-length')).toStrictEqual([
+				{
+					value: 'chars',
+					label: 'Chars',
+					default: '',
+					format: 'number',
+				},
+				{
+					value: 'words',
+					label: 'Words',
+					default: '',
+					format: 'number',
+				},
+			]);
+		});
 	});
 
 	describe('getUnitByValue', () => {

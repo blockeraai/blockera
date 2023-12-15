@@ -1,0 +1,62 @@
+.publisher-control-value-addon {
+	height: 30px;
+	display: grid;
+	gap: 6px;
+	grid-template-columns: 20px auto;
+	align-items: center;
+	align-content: center;
+	padding: 0 5px 0 8px;
+	border-radius: 2px;
+	font-size: 12px;
+	font-weight: 400;
+	cursor: pointer;
+	--va-color: #1e1e1e;
+	--va-bg-color: #dcdcdc;
+	color: var(--va-color);
+	border: 1px solid var(--va-color);
+	background-color: var(--va-bg-color);
+	user-select: none;
+
+	&.type-variable {
+		--va-color: var(--publisher-value-addon-var-color);
+		--va-bg-color: var(--publisher-value-addon-var-bg-color);
+
+		&.open-value-addon {
+			box-shadow: 0 0 0 1px var(--va-color);
+		}
+	}
+
+	&.type-variable-deleted {
+		--va-color: var(--publisher-value-addon-var-deleted-color);
+		--va-bg-color: var(--publisher-value-addon-var-deleted-bg-color);
+
+		&.open-value-addon {
+			box-shadow: 0 0 0 1px var(--va-color);
+		}
+	}
+
+	&.type-dynamic-value {
+		--va-color: var(--publisher-value-addon-dv-color);
+		--va-bg-color: var(--publisher-value-addon-dv-bg-color);
+
+		&.open-value-addon {
+			box-shadow: 0 0 0 1px var(--va-color);
+		}
+	}
+
+	.publisher-control-item-name {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.publisher-control-item-icon {
+		pointer-events: none;
+		display: flex;
+		align-items: center;
+
+		svg {
+			fill: currentColor;
+		}
+	}
+}

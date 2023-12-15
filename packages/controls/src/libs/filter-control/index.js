@@ -21,7 +21,7 @@ import type { TFilterControlProps, TValueCleanUp } from './types';
 export default function FilterControl({
 	id,
 	defaultRepeaterItemValue,
-	popoverLabel,
+	popoverTitle,
 	className,
 	...props
 }: TFilterControlProps): MixedElement {
@@ -81,7 +81,7 @@ export default function FilterControl({
 		<RepeaterControl
 			id={id}
 			className={controlClassNames('filter', className)}
-			popoverLabel={popoverLabel}
+			popoverTitle={popoverTitle}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
@@ -132,7 +132,7 @@ FilterControl.propTypes = {
 	/**
 	 * Label for popover
 	 */
-	popoverLabel: PropTypes.string,
+	popoverTitle: PropTypes.string,
 };
 
 FilterControl.defaultProps = {
@@ -153,5 +153,5 @@ FilterControl.defaultProps = {
 		'drop-shadow-color': '',
 		isVisible: true,
 	},
-	popoverLabel: (__('Filter Effect', 'publisher-core'): any),
+	popoverTitle: (__('Filter Effect', 'publisher-core'): any),
 };

@@ -7,7 +7,8 @@ import { default as memoize } from 'fast-memoize';
 /**
  * Internal dependencies
  */
-import { getBlockEditorSettings } from './selectors';
+import { getBlockEditorSettings } from './index';
+import type { VariableItem } from './types';
 
 const _getLinearGradients = function () {
 	return getBlockEditorSettings()
@@ -23,42 +24,24 @@ const _getLinearGradients = function () {
 
 const _getLinearGradientsMemoized = memoize(_getLinearGradients);
 
-export const getLinearGradients = (): Array<{
-	slug: string,
-	name: string,
-	value: string,
-}> => {
+export const getLinearGradients = (): Array<VariableItem> => {
 	return _getLinearGradientsMemoized();
 };
 
-const _getLinearGradient = function (slug: string): ?{
-	slug: string,
-	name: string,
-	value: string,
-} {
+const _getLinearGradient = function (slug: string): ?VariableItem {
 	return getLinearGradients().find((item) => item.slug === slug);
 };
 
 const _getLinearGradientMemoized = memoize(_getLinearGradient);
 
-export const getLinearGradient = (
-	slug: string
-): ?{
-	slug: string,
-	name: string,
-	value: string,
-} => {
+export const getLinearGradient = (slug: string): ?VariableItem => {
 	return _getLinearGradientMemoized(slug);
 };
 
 const _getLinearGradientBy = function (
 	field: string,
 	value: any
-): ?{
-	slug: string,
-	name: string,
-	value: string,
-} {
+): ?VariableItem {
 	return getLinearGradients().find((item) => item[field] === value);
 };
 
@@ -67,10 +50,6 @@ const _getLinearGradientByMemoized = memoize(_getLinearGradientBy);
 export const getLinearGradientBy = (
 	field: string,
 	value: any
-): ?{
-	slug: string,
-	name: string,
-	value: string,
-} => {
+): ?VariableItem => {
 	return _getLinearGradientByMemoized(field, value);
 };

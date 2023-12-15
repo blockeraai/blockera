@@ -71,7 +71,7 @@ describe('attributes-control component testing', () => {
 		it('should popover not be open at first rendering, when passing false to isOpen(default)', () => {
 			cy.withDataProvider({
 				component: (
-					<AttributesControl popoverLabel="Attributes Popover" />
+					<AttributesControl popoverTitle="Attributes Popover" />
 				),
 				store: STORE_NAME,
 				value: [{ key: '', __key: '', value: '', isOpen: false }],
@@ -83,7 +83,7 @@ describe('attributes-control component testing', () => {
 		it('should popover be open at first rendering, when passing true to isOpen', () => {
 			cy.withDataProvider({
 				component: (
-					<AttributesControl popoverLabel="Attributes Popover" />
+					<AttributesControl popoverTitle="Attributes Popover" />
 				),
 				store: STORE_NAME,
 				value: [{ key: '', __key: '', value: '', isOpen: true }],
@@ -95,7 +95,7 @@ describe('attributes-control component testing', () => {
 		it('should repeater item have is-active class, when passing true to isVisible(default)', () => {
 			cy.withDataProvider({
 				component: (
-					<AttributesControl popoverLabel="Attributes Popover" />
+					<AttributesControl popoverTitle="Attributes Popover" />
 				),
 				store: STORE_NAME,
 				value: [{ key: '', __key: '', value: '', isVisible: true }],
@@ -110,7 +110,7 @@ describe('attributes-control component testing', () => {
 		it('should repeater item have is-inactive class, when passing false to isVisible', () => {
 			cy.withDataProvider({
 				component: (
-					<AttributesControl popoverLabel="Attributes Popover" />
+					<AttributesControl popoverTitle="Attributes Popover" />
 				),
 				store: STORE_NAME,
 				value: [{ key: '', __key: '', value: '', isVisible: false }],
@@ -126,7 +126,7 @@ describe('attributes-control component testing', () => {
 	describe('attributeElement is general(default)', () => {
 		const defaultProps = {
 			label: 'Attributes Control',
-			popoverLabel: 'Popover',
+			popoverTitle: 'Popover',
 		};
 
 		describe('interaction test', () => {
@@ -190,7 +190,7 @@ describe('attributes-control component testing', () => {
 					name,
 				});
 
-				cy.get('[aria-label="Add New Popover"]').click();
+				cy.get('[aria-label="Add New HTML Attribute"]').click();
 				cy.getByDataCy('group-control-header').should(
 					'have.length',
 					'2'
@@ -239,7 +239,7 @@ describe('attributes-control component testing', () => {
 	describe('attributeElement is a', () => {
 		const defaultProps = {
 			label: 'A Tag',
-			popoverLabel: 'Popover',
+			popoverTitle: 'Popover',
 			attributeElement: 'a',
 		};
 
@@ -458,7 +458,7 @@ describe('attributes-control component testing', () => {
 	describe('attributeElement is button', () => {
 		const defaultProps = {
 			label: 'Button',
-			popoverLabel: 'Popover',
+			popoverTitle: 'Popover',
 			attributeElement: 'button',
 		};
 
@@ -560,7 +560,7 @@ describe('attributes-control component testing', () => {
 	describe('attributeElement is ol', () => {
 		const defaultProps = {
 			label: 'Ol',
-			popoverLabel: 'Popover',
+			popoverTitle: 'Popover',
 			attributeElement: 'ol',
 		};
 

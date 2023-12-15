@@ -14,7 +14,7 @@ export type TOutlineControlProps = {
 	id?: string,
 	className?: string,
 	defaultRepeaterItemValue?: TItem,
-	popoverLabel?: string,
+	popoverTitle?: string,
 	defaultValue?: Array<Object>,
 	onChange?: () => {},
 };

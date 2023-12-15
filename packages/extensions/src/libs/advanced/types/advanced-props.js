@@ -11,6 +11,7 @@ import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 
 export type TAdvancedProps = {
 	attributes: Array<Object>,
+	properties: Array<Object>,
 	block: TBlockProps,
 	config: Object,
 	children?: MixedElement,

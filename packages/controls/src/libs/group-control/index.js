@@ -28,7 +28,7 @@ export default function GroupControl({
 	isOpen: _isOpen,
 	//
 	mode,
-	popoverLabel,
+	popoverTitle,
 	popoverClassName,
 	//
 	header,
@@ -157,7 +157,7 @@ export default function GroupControl({
 						'group-popover',
 						popoverClassName
 					)}
-					title={popoverLabel || header}
+					title={popoverTitle || header}
 					onClose={() => {
 						onClose();
 
@@ -236,7 +236,7 @@ GroupControl.propTypes = {
 	/**
 	 * Popover custom  title if `mode` is `popover`
 	 */
-	popoverLabel: PropTypes.string,
+	popoverTitle: PropTypes.string,
 	/**
 	 * Custom className for adding to popover
 	 */

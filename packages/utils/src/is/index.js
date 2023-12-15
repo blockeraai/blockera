@@ -1,10 +1,11 @@
+// @flow
 /**
  * is a given value String?
  *
  * @param {*} [value]
  * @return {boolean} boolean
  */
-export function isUndefined(value) {
+export function isUndefined(value: any): boolean {
 	return value === undefined;
 }
 
@@ -14,7 +15,7 @@ export function isUndefined(value) {
  * @param {*} [value]
  * @return {boolean} boolean
  */
-export function isEmpty(value) {
+export function isEmpty(value: any): boolean {
 	if (isArray(value)) {
 		return value.length === 0;
 	} else if (isObject(value)) {
@@ -30,7 +31,7 @@ export function isEmpty(value) {
  * @param {*} [value]
  * @return {boolean} boolean
  */
-export function isNull(value) {
+export function isNull(value: any): boolean {
 	return value === null;
 }
 
@@ -40,7 +41,7 @@ export function isNull(value) {
  * @param {*} [value]
  * @return {boolean} boolean
  */
-export function isNumber(value) {
+export function isNumber(value: any): boolean {
 	return Number.isFinite(value);
 }
 
@@ -50,9 +51,10 @@ export function isNumber(value) {
  * @param {*} [value]
  * @return {boolean} boolean
  */
-export function isArray(value) {
+export function isArray(value: any): boolean {
 	return (
 		Array.isArray(value) ||
+		// $FlowFixMe
 		Object.prototype.toString.call(value) === '[object Array]'
 	);
 }
@@ -63,10 +65,11 @@ export function isArray(value) {
  * @param {*} [value]
  * @return {boolean} boolean
  */
-export function isBoolean(value) {
+export function isBoolean(value: any): boolean {
 	return (
 		value === true ||
 		value === false ||
+		// $FlowFixMe
 		Object.prototype.toString.call(value) === '[object Boolean]'
 	);
 }
@@ -77,8 +80,9 @@ export function isBoolean(value) {
  * @param {*} [value]
  * @return {boolean} boolean
  */
-export function isFunction(value) {
+export function isFunction(value: any): boolean {
 	return (
+		// $FlowFixMe
 		Object.prototype.toString.call(value) === '[object Function]' ||
 		typeof value === 'function'
 	);
@@ -90,7 +94,8 @@ export function isFunction(value) {
  * @param {*} [value]
  * @return {boolean} boolean
  */
-export function isJSON(value) {
+export function isJSON(value: any): boolean {
+	// $FlowFixMe
 	return Object.prototype.toString.call(value) === '[object Object]';
 }
 
@@ -100,10 +105,12 @@ export function isJSON(value) {
  * @param {*} [value]
  * @return {boolean} boolean
  */
-export function isObject(value) {
+export function isObject(value: any): boolean {
 	return (
 		Object(value) === value &&
+		// $FlowFixMe
 		Object.prototype.toString.call(value) !== '[object Array]' &&
+		// $FlowFixMe
 		Object.prototype.toString.call(value) !== '[object Function]'
 	);
 }
@@ -114,7 +121,8 @@ export function isObject(value) {
  * @param {*} [value]
  * @return {boolean} boolean
  */
-export function isString(value) {
+export function isString(value: any): boolean {
+	// $FlowFixMe
 	return Object.prototype.toString.call(value) === '[object String]';
 }
 
@@ -124,7 +132,7 @@ export function isString(value) {
  * @param {*} [value]
  * @return {boolean} boolean
  */
-export function isInteger(value) {
+export function isInteger(value: any): boolean {
 	return Number.isInteger(value);
 }
 
@@ -135,7 +143,7 @@ export function isInteger(value) {
  * @param {string} [target]
  * @return {boolean} boolean
  */
-export function isEndWith(string, target) {
+export function isEndWith(string: string, target: string): boolean {
 	if (!isString(string)) {
 		return false;
 	}
@@ -154,7 +162,7 @@ export function isEndWith(string, target) {
  * @param {string} [target]
  * @return {boolean} boolean
  */
-export function isStartWith(string, target) {
+export function isStartWith(string: string, target: string): boolean {
 	if (!isString(string)) {
 		return false;
 	}
@@ -171,7 +179,7 @@ export function isStartWith(string, target) {
  * @param {string} [target]
  * @return {boolean} boolean
  */
-export function isIncludes(string, target) {
+export function isIncludes(string: string, target: string): boolean {
 	if (!isString(string)) {
 		return false;
 	}

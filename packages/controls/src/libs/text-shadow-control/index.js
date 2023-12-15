@@ -24,14 +24,15 @@ import type { MixedElement } from 'react';
 
 export default function TextShadowControl({
 	defaultRepeaterItemValue,
-	popoverLabel,
+	popoverTitle,
 	className,
 	...props
 }: TTextShadowControlProps): MixedElement {
 	return (
 		<RepeaterControl
 			className={controlClassNames('text-shadow', className)}
-			popoverLabel={popoverLabel}
+			popoverTitle={popoverTitle}
+			addNewButtonLabel={__('Add New Text Shadow', 'publisher-core')}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
@@ -67,7 +68,7 @@ TextShadowControl.propTypes = {
 	/**
 	 * Label for popover
 	 */
-	popoverLabel: PropTypes.string,
+	popoverTitle: PropTypes.string,
 };
 
 TextShadowControl.defaultProps = {
@@ -81,5 +82,5 @@ TextShadowControl.defaultProps = {
 		isVisible: true,
 	},
 	// $FlowFixMe
-	popoverLabel: __('Text Shadow', 'publisher-core'),
+	popoverTitle: __('Text Shadow', 'publisher-core'),
 };

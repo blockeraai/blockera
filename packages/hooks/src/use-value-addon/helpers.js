@@ -16,6 +16,18 @@ import {
 	getSpacings,
 	getWidthSizes,
 	getVariable,
+	getPostDynamicValueItemsBy,
+	getFeaturedImageDynamicValueItemsBy,
+	getArchiveDynamicValueItemsBy,
+	getSiteDynamicValueItemsBy,
+	getUserDynamicValueItemsBy,
+	getOtherDynamicValueItemsBy,
+} from '@publisher/core-data';
+// eslint-disable-next-line no-duplicate-imports
+import type {
+	VariableCategory,
+	DynamicValueTypes,
+	DynamicValueCategory,
 } from '@publisher/core-data';
 import { ColorIndicator } from '@publisher/components';
 import { isBlockTheme, isObject, isUndefined } from '@publisher/utils';
@@ -23,10 +35,27 @@ import { isBlockTheme, isObject, isUndefined } from '@publisher/utils';
 /**
  * Internal dependencies
  */
-import type { ValueAddon, VariableItems, VariableTypes } from './types';
+import type {
+	ValueAddon,
+	DynamicValueCategoryDetail,
+	VariableCategoryDetail,
+} from './types';
 import VarTypeFontSizeIcon from './icons/var-font-size';
 import VarTypeSpacingIcon from './icons/var-spacing';
 import VarTypeWidthSizeIcon from './icons/var-width-size';
+import DVTypeTextIcon from './icons/dv-text';
+import DVTypeLinkIcon from './icons/dv-link';
+import DVTypeIDIcon from './icons/dv-id';
+import DVTypeDateIcon from './icons/dv-date';
+import DVTypeTimeIcon from './icons/dv-time';
+import DVTypeMetaIcon from './icons/dv-meta';
+import DVTypeImageIcon from './icons/dv-image';
+import DVTypeCategoryIcon from './icons/dv-category';
+import DVTypeTagIcon from './icons/dv-tag';
+import DVTypeTermIcon from './icons/dv-terms';
+import DVTypeShortcodeIcon from './icons/dv-shortcode';
+import DVTypeEmailIcon from './icons/dv-email';
+import DVTypeCommentIcon from './icons/dv-comment';
 
 // todo improve and write tests
 export const isValid = ({ isValueAddon = false }: ValueAddon): boolean => {
@@ -96,12 +125,14 @@ export function getVariableIcon({
 			return <VarTypeWidthSizeIcon />;
 	}
 
-	return '';
+	return <></>;
 }
 
 // todo write tests
-export function getVariables(type: VariableTypes): VariableItems {
-	switch (type) {
+export function getVariableCategory(
+	category: VariableCategory
+): VariableCategoryDetail {
+	switch (category) {
 		case 'font-size':
 			return {
 				name: isBlockTheme()
@@ -156,34 +187,132 @@ export function getVariables(type: VariableTypes): VariableItems {
 	};
 }
 
+// todo write tests
+export function getDynamicValueIcon(type: DynamicValueTypes): MixedElement {
+	switch (type) {
+		case 'text':
+			return <DVTypeTextIcon />;
+
+		case 'link':
+			return <DVTypeLinkIcon />;
+
+		case 'image':
+			return <DVTypeImageIcon />;
+
+		case 'id':
+			return <DVTypeIDIcon />;
+
+		case 'date':
+			return <DVTypeDateIcon />;
+
+		case 'time':
+			return <DVTypeTimeIcon />;
+
+		case 'category':
+			return <DVTypeCategoryIcon />;
+
+		case 'tag':
+			return <DVTypeTagIcon />;
+
+		case 'term':
+			return <DVTypeTermIcon />;
+
+		case 'shortcode':
+			return <DVTypeShortcodeIcon />;
+
+		case 'email':
+			return <DVTypeEmailIcon />;
+
+		case 'comment':
+			return <DVTypeCommentIcon />;
+
+		case 'meta':
+			return <DVTypeMetaIcon />;
+	}
+
+	return <></>;
+}
+
+// todo write tests
+export function getDynamicValueCategory(
+	category: DynamicValueCategory,
+	types: Array<DynamicValueTypes>
+): DynamicValueCategoryDetail {
+	switch (category) {
+		case 'post':
+			return {
+				name: __('Posts and Pages', 'publisher-core'),
+				items: getPostDynamicValueItemsBy('type', types),
+			};
+
+		case 'featured-image':
+			return {
+				name: __('Post Featured Image', 'publisher-core'),
+				items: getFeaturedImageDynamicValueItemsBy('type', types),
+			};
+
+		case 'archive':
+			return {
+				name: __('Archive', 'publisher-core'),
+				items: getArchiveDynamicValueItemsBy('type', types),
+			};
+
+		case 'site':
+			return {
+				name: __('Site Information', 'publisher-core'),
+				items: getSiteDynamicValueItemsBy('type', types),
+			};
+
+		case 'user':
+			return {
+				name: __('User & Authors', 'publisher-core'),
+				items: getUserDynamicValueItemsBy('type', types),
+			};
+
+		case 'other':
+			return {
+				name: __('Utilities', 'publisher-core'),
+				items: getOtherDynamicValueItemsBy('type', types),
+			};
+	}
+
+	return {
+		name: '',
+		items: [],
+		notFound: true,
+	};
+}
+
 export function generateVariableString({
 	reference,
 	type,
 	slug,
 }: {
 	reference: 'publisher' | 'preset',
-	type: VariableTypes,
+	type: VariableCategory,
 	slug: string,
-}) {
-	type = type.replace(/^linear-|^radial-/i, '');
+}): string {
+	let _type: string = type;
 
 	if (type === 'theme-color') {
-		type = 'color';
-	}
-
-	if (type === 'width-size') {
+		_type = 'color';
+	} else if (type === 'width-size') {
 		if (slug === 'contentSize') {
 			slug = 'content-size';
-			type = 'global';
+			_type = 'global';
+			// $FlowFixMe
 			reference = 'style';
 		} else if (slug === 'wideSize') {
 			slug = 'wide-size';
-			type = 'global';
+			_type = 'global';
+			// $FlowFixMe
 			reference = 'style';
 		}
+	} else {
+		_type = type.replace(/^linear-|^radial-/i, '');
 	}
 
-	return `--wp--${reference}--${type}--${slug}`;
+	return `--wp--${reference}--${_type}--${slug}`;
 }
 
 export function canUnlinkVariable(value: ValueAddon): boolean {
@@ -195,6 +324,7 @@ export function canUnlinkVariable(value: ValueAddon): boolean {
 			return true;
 		}
 
+		// $FlowFixMe
 		const variable = getVariable(value.valueType, value.settings.slug);
 
 		if (!isUndefined(variable?.value) && variable?.value !== '') {

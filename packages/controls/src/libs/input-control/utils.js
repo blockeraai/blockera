@@ -1512,6 +1512,23 @@ export function getCSSUnits(unitType: string = ''): Array<any> {
 				},
 			];
 			break;
+
+		case 'text-length':
+			cssUnits = [
+				{
+					value: 'chars',
+					label: 'Chars',
+					default: '',
+					format: 'number',
+				},
+				{
+					value: 'words',
+					label: 'Words',
+					default: '',
+					format: 'number',
+				},
+			];
+			break;
 	}
 
 	return cssUnits;

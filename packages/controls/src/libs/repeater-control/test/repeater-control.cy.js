@@ -54,7 +54,7 @@ describe('repeater control component testing', () => {
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
-						label="Items"
+						addNewButtonLabel="Add New Items"
 						repeaterItemChildren={() => <RepeaterItemChildren />}
 					/>
 				),
@@ -78,7 +78,7 @@ describe('repeater control component testing', () => {
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
-						label="Items"
+						addNewButtonLabel="Add New Items"
 						repeaterItemChildren={() => <RepeaterItemChildren />}
 					/>
 				),
@@ -106,7 +106,7 @@ describe('repeater control component testing', () => {
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
-						label="Items"
+						addNewButtonLabel="Add New Items"
 						repeaterItemChildren={() => <RepeaterItemChildren />}
 					/>
 				),
@@ -134,7 +134,7 @@ describe('repeater control component testing', () => {
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
-						label="Items"
+						addNewButtonLabel="Add New Items"
 						repeaterItemChildren={() => <RepeaterItemChildren />}
 					/>
 				),
@@ -198,7 +198,7 @@ describe('repeater control component testing', () => {
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
-						label="Items"
+						addNewButtonLabel="Add New Items"
 						repeaterItemChildren={RepeaterItemChildren}
 						maxItems={4}
 					/>
@@ -216,7 +216,7 @@ describe('repeater control component testing', () => {
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
-						label="Items"
+						addNewButtonLabel="Add New Items"
 						repeaterItemChildren={RepeaterItemChildren}
 						minItems={3}
 					/>
@@ -336,7 +336,7 @@ describe('repeater control component testing', () => {
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
-						label="Items"
+						addNewButtonLabel="Add New Items"
 						mode="accordion"
 						repeaterItemChildren={RepeaterFilledItemChildren}
 						actionButtonAdd={false}
@@ -440,7 +440,7 @@ describe('repeater control component testing', () => {
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
-						label="My Label"
+						addNewButtonLabel="Add New My Label"
 						mode="accordion"
 						repeaterItemChildren={RepeaterFilledItemChildren}
 						onChange={onChangeMock}
@@ -460,7 +460,7 @@ describe('repeater control component testing', () => {
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
-						label="My Label"
+						addNewButtonLabel="Add New My Label"
 						mode="accordion"
 						repeaterItemChildren={RepeaterFilledItemChildren}
 					/>

@@ -12,4 +12,5 @@ export type TNoticeControlProps = {
 	isDismissible?: boolean,
 	onShown?: () => void,
 	isShown?: boolean,
+	style?: Object,
 };

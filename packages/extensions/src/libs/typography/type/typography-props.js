@@ -11,6 +11,7 @@ import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 
 export type TTypographyProps = {
 	values: {
+		display: string,
 		fontSize: string,
 		textAlign: string,
 		fontStyle: string,
@@ -21,14 +22,24 @@ export type TTypographyProps = {
 		textShadow: string,
 		lineHeight: string,
 		wordSpacing: string,
-		textColumns: string,
+		textColumns: {
+			columns: string,
+			gap: string,
+			divider: {
+				width: string,
+				style: string,
+				color: string,
+			},
+		},
 		textTransform: string,
 		letterSpacing: string,
 		textDecoration: string,
 		textOrientation: string,
-		textColumnsGap: string,
-		textStrokeWidth: string,
-		textStrokeColor: string,
+		textStroke: {
+			width: string,
+			style: string,
+			color: string,
+		},
 		textColumnsDividerWidth: string,
 		textColumnsDividerStyle: string,
 		textColumnsDividerColor: string,

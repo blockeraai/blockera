@@ -9,14 +9,18 @@ import { useState } from '@wordpress/element';
  */
 import { isObject, isUndefined } from '@publisher/utils';
 import { getVariable } from '@publisher/core-data';
+// eslint-disable-next-line no-duplicate-imports
+import type { VariableItem, DynamicValueItem } from '@publisher/core-data';
 
 /**
  * Internal dependencies
  */
 import { canUnlinkVariable, isValid } from './helpers';
-import { ValueUIKit, Pointer } from './components';
-import type { PointerProps } from './components/pointer/types';
+import { ValueAddonControl, ValueAddonPointer } from './components';
 import type { UseValueAddonProps, ValueAddonProps } from './types';
+import type { ValueAddonControlProps } from './components/control/types';
+
+export type { ValueAddonControlProps } from './components/control/types';
 
 export const useValueAddon = ({
 	types,
@@ -31,9 +35,34 @@ export const useValueAddon = ({
 			isSetValueAddon: () => false,
 			valueAddonClassNames: '',
 			ValueAddonPointer: () => <></>,
-			ValueAddonUI: () => <></>,
-			handleOnClickVariable: () => {},
-			handleOnClickDynamicValue: () => {},
+			ValueAddonControl: () => <></>,
+			valueAddonControlProps: {
+				value: {
+					isValueAddon: false,
+					id: '',
+					settings: {},
+				},
+				setValue: () => {},
+				onChange,
+				types,
+				variableTypes:
+					typeof variableTypes === 'string'
+						? [variableTypes]
+						: variableTypes,
+				dynamicValueTypes:
+					typeof dynamicValueTypes === 'string'
+						? [dynamicValueTypes]
+						: dynamicValueTypes,
+				handleOnClickVar: () => {},
+				handleOnUnlinkVar: () => {},
+				handleOnClickDV: () => {},
+				handleOnClickRemove: () => {},
+				isOpen: '',
+				setOpen: () => {},
+			},
+			handleOnClickVar: () => {},
+			handleOnClickDV: () => {},
+			handleOnUnlinkVar: () => {},
 		};
 	}
 
@@ -47,49 +76,35 @@ export const useValueAddon = ({
 		: {
 				isValueAddon: false,
 				valueType: null,
-				id: null,
+				id: '',
 				settings: {},
 		  };
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const [value, setValue] = useState(initialState);
 	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const [isOpenVariables, setOpenVariables] = useState(false);
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const [isOpenDynamicValues, setOpenDynamicValues] = useState(false);
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const [isOpenVariableDeleted, setIsOpenVariableDeleted] = useState(false);
+	const [isOpen, setOpen] = useState('');
 
 	const valueAddonClassNames = types
 		.map((type) => `publisher-value-addon-support-${type}`)
 		.join(' ');
 
-	const handleOnClickVariable = (
-		event: SyntheticMouseEvent<EventTarget>
-	): void => {
-		if (event.target !== event.currentTarget) {
-			return;
-		}
-
-		// $FlowFixMe
-		const item = JSON.parse(event.target.getAttribute('data-item'));
-
+	const handleOnClickVar = (data: VariableItem): void => {
 		const newValue = {
 			settings: {
-				...item,
+				...data,
 			},
-			id: item.slug,
+			id: data.slug,
 			isValueAddon: true,
 			valueType: 'variable',
 		};
 
 		setValue(newValue);
 		onChange(newValue);
-
-		setOpenVariables(false);
+		setOpen('');
 	};
 
-	const handleOnUnlinkVariable = (): void => {
+	const handleOnUnlinkVar = (): void => {
 		if (canUnlinkVariable(value)) {
 			setValue({
 				isValueAddon: false,
@@ -114,30 +129,28 @@ export const useValueAddon = ({
 				}
 			}
 
-			setOpenVariables(false);
+			setOpen('');
 		}
 	};
 
-	const handleOnClickDynamicValue = (
-		event: SyntheticMouseEvent<EventTarget>
-	): void => {
-		if (event.target !== event.currentTarget) {
-			return;
-		}
-
-		// $FlowFixMe
-		const item = JSON.parse(event.target.getAttribute('data-item'));
-
-		setValue({
+	const handleOnClickDV = (data: DynamicValueItem): void => {
+		const newValue = {
 			settings: {
-				...item,
+				...data,
 			},
-			id: item.slug,
+			id: data.id,
 			isValueAddon: true,
 			valueType: 'dynamic-value',
-		});
+		};
 
-		setOpenDynamicValues(false);
+		// $FlowFixMe
+		delete newValue?.settings?.name;
+		// $FlowFixMe
+		delete newValue?.settings?.status;
+
+		setValue(newValue);
+		onChange(newValue);
+		setOpen('dv-settings');
 	};
 
 	const handleOnClickRemove = (): void => {
@@ -148,16 +161,17 @@ export const useValueAddon = ({
 			id: null,
 			settings: {},
 		});
-		setOpenVariables(false);
-		setOpenDynamicValues(false);
+		setOpen('');
 	};
 
 	if (typeof variableTypes === 'string') {
 		variableTypes = [variableTypes];
 	}
 
-	const pointerProps: PointerProps = {
+	const controlProps: ValueAddonControlProps = {
 		value,
+		setValue,
+		onChange,
 		types,
 		variableTypes:
 			typeof variableTypes === 'string' ? [variableTypes] : variableTypes,
@@ -165,28 +179,26 @@ export const useValueAddon = ({
 			typeof dynamicValueTypes === 'string'
 				? [dynamicValueTypes]
 				: dynamicValueTypes,
-		handleOnClickVariable,
-		handleOnUnlinkVariable,
-		handleOnClickDynamicValue,
+		handleOnClickVar,
+		handleOnUnlinkVar,
+		handleOnClickDV,
 		handleOnClickRemove,
-		isOpenVariables,
-		setOpenVariables,
-		isOpenDynamicValues,
-		setOpenDynamicValues,
-		isOpenVariableDeleted,
-		setIsOpenVariableDeleted,
+		isOpen,
+		setOpen,
 	};
 
 	return {
 		valueAddonClassNames,
-		ValueAddonPointer: () => <Pointer {...pointerProps} />,
-		isSetValueAddon: () =>
-			isValid(value) || isOpenVariables || isOpenDynamicValues,
-		ValueAddonUI: ({ ...props }) => (
-			<ValueUIKit pointerProps={pointerProps} value={value} {...props} />
+		isSetValueAddon: () => isValid(value) || isOpen,
+		ValueAddonPointer: () => (
+			<ValueAddonPointer controlProps={controlProps} />
 		),
-		handleOnClickVariable,
-		handleOnUnlinkVariable,
-		handleOnClickDynamicValue,
+		ValueAddonControl: ({ ...props }) => (
+			<ValueAddonControl controlProps={controlProps} {...props} />
+		),
+		valueAddonControlProps: controlProps,
+		handleOnClickVar,
+		handleOnUnlinkVar,
+		handleOnClickDV,
 	};
 };

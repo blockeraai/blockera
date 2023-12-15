@@ -39,6 +39,8 @@ export { default as LinkControl } from './link-control';
 export { default as CheckboxControl } from './checkbox-control';
 export { default as TransformControl } from './transform-control';
 export { default as PanelBodyControl } from './panel-body-control';
+export { default as CustomPropertyControl } from './custom-property-control';
+export { default as SearchReplaceControl } from './search-replace-control';
 export { default as NoticeControl } from './notice-control';
 export { default as PositionButtonControl } from './position-button';
 export { default as DividerControl } from './divider-control';

@@ -87,7 +87,7 @@ describe('ext shadow control component testing', () => {
 				component: (
 					<TextShadowControl
 						label="text shadow"
-						popoverLabel="My Popover Label"
+						popoverTitle="My Popover Label"
 					/>
 				),
 
@@ -112,7 +112,7 @@ describe('ext shadow control component testing', () => {
 				component: (
 					<TextShadowControl
 						label="text shadow"
-						popoverLabel="Text Shadow"
+						popoverTitle="Text Shadow"
 						className="custom-class"
 					/>
 				),
@@ -134,7 +134,7 @@ describe('ext shadow control component testing', () => {
 				component: (
 					<TextShadowControl
 						label="text shadow"
-						popoverLabel="Text Shadow"
+						popoverTitle="Text Shadow"
 					/>
 				),
 

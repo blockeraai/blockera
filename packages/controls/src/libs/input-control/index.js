@@ -42,6 +42,7 @@ export default function InputControl({
 	disabled = false,
 	drag = true,
 	float = true,
+	arrows = false,
 	smallWidth = false,
 	//
 	controlAddonTypes,
@@ -60,7 +61,7 @@ export default function InputControl({
 	const {
 		valueAddonClassNames,
 		isSetValueAddon,
-		ValueAddonUI,
+		ValueAddonControl,
 		ValueAddonPointer,
 	} = useValueAddon({
 		types: controlAddonTypes,
@@ -88,7 +89,7 @@ export default function InputControl({
 						valueAddonClassNames
 					)}
 				>
-					<ValueAddonUI />
+					<ValueAddonControl />
 				</div>
 			</BaseControl>
 		);
@@ -122,6 +123,7 @@ export default function InputControl({
 					max={max}
 					drag={drag}
 					float={float}
+					arrows={arrows}
 					smallWidth={smallWidth}
 					children={children}
 					{...props}
@@ -151,6 +153,7 @@ export default function InputControl({
 								range={range}
 								drag={drag}
 								float={float}
+								arrows={arrows}
 								{...props}
 							>
 								<ValueAddonPointer />
@@ -203,6 +206,10 @@ InputControl.propTypes = {
 	 * Sets to show range control for input or not
 	 */
 	range: PropTypes.bool,
+	/**
+	 * Show up and down arrow buttons or not
+	 */
+	arrows: PropTypes.bool,
 	/**
 	 * Type of CSS units from presets
 	 */

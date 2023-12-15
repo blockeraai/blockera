@@ -45,6 +45,10 @@ export const Filter = ({
 					onChange={(newValue) =>
 						handleOnChangeAttributes('publisherFilter', newValue)
 					}
+					addNewButtonLabel={__(
+						'Add New Filter Effect',
+						'publisher-core'
+					)}
 					{...props}
 				/>
 			</BaseControl>

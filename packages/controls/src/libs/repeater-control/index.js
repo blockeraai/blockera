@@ -37,7 +37,8 @@ import type { MixedElement } from 'react';
 export default function RepeaterControl({
 	design,
 	mode,
-	popoverLabel,
+	popoverTitle,
+	addNewButtonLabel,
 	popoverClassName,
 	maxItems,
 	minItems,
@@ -82,7 +83,7 @@ export default function RepeaterControl({
 	const defaultRepeaterState: TRepeaterDefaultStateProps = {
 		design,
 		mode,
-		popoverLabel: popoverLabel || label || '',
+		popoverTitle: popoverTitle || label || '',
 		popoverClassName,
 		maxItems,
 		minItems,
@@ -133,12 +134,8 @@ export default function RepeaterControl({
 								showTooltip={true}
 								tooltipPosition="top"
 								label={
-									__('Add New', 'publisher-core') +
-									` ${defaultRepeaterState.popoverLabel}`
-								}
-								aria-label={
-									__('Add New', 'publisher-core') +
-									` ${defaultRepeaterState.popoverLabel}`
+									addNewButtonLabel ||
+									__('Add New', 'publisher-core')
 								}
 								onClick={() => {
 									if (
@@ -198,7 +195,7 @@ RepeaterControl.propTypes = {
 	/**
 	 * Specifies the popover title if `mode` was `popover`. by default the repeater label will be shown as popover title.
 	 */
-	popoverLabel: PropTypes.string,
+	popoverTitle: PropTypes.string,
 	/**
 	 * Specifies custom css classes that should be added to popover
 	 *

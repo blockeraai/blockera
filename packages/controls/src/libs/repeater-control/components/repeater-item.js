@@ -42,7 +42,7 @@ const RepeaterItem = ({ item, itemId }) => {
 		mode,
 		design,
 		repeaterId,
-		popoverLabel,
+		popoverTitle,
 		popoverClassName,
 		repeaterItems: items,
 		repeaterItemHeader: RepeaterItemHeader,
@@ -123,7 +123,7 @@ const RepeaterItem = ({ item, itemId }) => {
 				mode={mode}
 				toggleOpenBorder={true}
 				design={design}
-				popoverLabel={popoverLabel}
+				popoverTitle={popoverTitle}
 				popoverClassName={popoverClassName}
 				className={controlInnerClassNames(
 					'repeater-item-group',

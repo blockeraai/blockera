@@ -54,7 +54,7 @@ export default function ColorControl({
 	const {
 		valueAddonClassNames,
 		isSetValueAddon,
-		ValueAddonUI,
+		ValueAddonControl,
 		ValueAddonPointer,
 	} = useValueAddon({
 		types: controlAddonTypes,
@@ -80,7 +80,7 @@ export default function ColorControl({
 						valueAddonClassNames
 					)}
 				>
-					<ValueAddonUI />
+					<ValueAddonControl />
 				</div>
 			</BaseControl>
 		);

@@ -1,0 +1,17 @@
+.publisher-control-picker-category {
+
+	.publisher-control-picker-category-header {
+		font-size: 12px;
+		font-weight: 600;
+		display: flex;
+		gap: 10px;
+		align-items: center;
+
+		.publisher-control-btn-add {
+			margin-left: auto;
+			width: 22px;
+			height: 22px !important;
+			padding: 0 !important;
+		}
+	}
+}

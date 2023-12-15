@@ -26,7 +26,7 @@ describe('Transform Control', () => {
 			const name = 'transform-control-f1';
 			cy.withDataProvider({
 				component: (
-					<TransformControl popoverLabel="test popover title" />
+					<TransformControl popoverTitle="test popover title" />
 				),
 				value: [contextDefaultValue],
 				store: STORE_NAME,
