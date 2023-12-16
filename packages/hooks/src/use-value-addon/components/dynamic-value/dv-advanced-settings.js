@@ -130,7 +130,6 @@ export default function ({
 			>
 				<InputControl
 					label={__('Limit', 'publisher-core')}
-					desc={__('test', 'publisher-core')}
 					unitType="text-length"
 					columns="columns-2"
 					defaultValue={''}
