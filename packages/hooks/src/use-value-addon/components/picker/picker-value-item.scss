@@ -11,6 +11,7 @@
 	transition: var(--publisher-controls-transition);
 	color: var(--publisher-controls-color);
 	font-size: 12px;
+	letter-spacing: -0.2px;
 
 	&:hover {
 		border-color: var(--publisher-controls-border-color-hover);

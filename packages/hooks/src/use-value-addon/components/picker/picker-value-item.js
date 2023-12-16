@@ -17,7 +17,7 @@ import { Tooltip, ConditionalWrapper } from '@publisher/components';
 import type {
 	VariableItem,
 	DynamicValueItem,
-	DynamicValueItemStatus,
+	ValueAddonItemStatus,
 } from '@publisher/core-data';
 
 /**
@@ -34,26 +34,28 @@ export default function ({
 	data,
 	onClick,
 	isCurrent = false,
-	status = 'pro',
+	status = 'core-pro',
+	showValue = true,
 	...props
 }: {
 	value: ValueAddon,
 	name: string | MixedElement,
 	icon: string | MixedElement,
 	type: string,
-	status: DynamicValueItemStatus,
+	status: ValueAddonItemStatus,
 	valueType: AddonTypesItem,
 	data: VariableItem | DynamicValueItem,
 	onClick: (data: VariableItem | DynamicValueItem) => void,
 	isCurrent: boolean,
+	showValue: boolean,
 }): MixedElement {
 	let itemValue = '';
 
-	if (status === 'free') {
+	if (status === 'core') {
 		status = 'active';
 	}
 
-	if (valueType === 'variable') {
+	if (showValue && valueType === 'variable') {
 		switch (type) {
 			case 'font-size':
 				if (
@@ -111,7 +113,7 @@ export default function ({
 				onClick={() => {
 					if (status === 'active') onClick(data);
 				}}
-				{...(status !== 'active' ? props : {})} // destruct if it was not wrapped!
+				{...props}
 			>
 				{icon && (
 					<span className={controlInnerClassNames('item-icon')}>

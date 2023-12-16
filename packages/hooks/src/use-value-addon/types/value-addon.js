@@ -33,12 +33,12 @@ export type ValueAddon = {
 
 export type VariableCategoryDetail = {
 	name?: string,
-	variables?: Array<VariableItem> | void,
+	variables: Array<VariableItem> | [],
 	notFound?: boolean,
 };
 
 export type DynamicValueCategoryDetail = {
 	name?: DynamicValueCategory | '',
-	items?: Array<DynamicValueItem> | void,
+	items: Array<DynamicValueItem> | [],
 	notFound?: boolean,
 };

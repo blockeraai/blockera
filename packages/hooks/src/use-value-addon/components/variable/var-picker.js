@@ -8,7 +8,13 @@ import { __ } from '@wordpress/i18n';
 /**
  * Publisher dependencies
  */
-import { Button, Flex, Popover } from '@publisher/components';
+import {
+	Button,
+	Flex,
+	Grid,
+	Popover,
+	ConditionalWrapper,
+} from '@publisher/components';
 import { isBlockTheme } from '@publisher/utils';
 import { controlInnerClassNames } from '@publisher/classnames';
 
@@ -97,43 +103,68 @@ export default function ({
 				);
 			}
 
+			const showTwoColumns = ['theme-color'].includes(type);
+
 			return (
 				<PickerCategory key={`type-${type}-${index}`} title={data.name}>
-					{data.variables.map((variable, _index) => {
-						const itemData = {
-							...variable,
-							type,
-							reference: 'preset',
-							var: generateVariableString({
-								reference: 'preset',
+					<ConditionalWrapper
+						condition={showTwoColumns}
+						wrapper={(children) => (
+							<Grid gridTemplateColumns="120px 120px" gap="10px">
+								{children}
+							</Grid>
+						)}
+						elseWrapper={(children) => (
+							<Flex gap="10px" direction="column">
+								{children}
+							</Flex>
+						)}
+					>
+						{data.variables.map((variable, _index) => {
+							const itemData = {
+								...variable,
 								type,
-								slug: variable.slug,
-							}),
-						};
-
-						return (
-							<PickerValueItem
-								value={controlProps.value}
-								data={itemData}
-								onClick={controlProps.handleOnClickVar}
-								key={`${type}-${_index}-value-type`}
-								name={variable.name}
-								type={type}
-								valueType="variable"
-								isCurrent={
-									isValid(controlProps.value) &&
-									controlProps.value.settings.type === type &&
-									controlProps.value.settings.slug ===
-										itemData.slug
-								}
-								icon={getVariableIcon({
+								var: generateVariableString({
+									reference: 'preset',
 									type,
-									value: variable.value,
-								})}
-								status="active"
-							/>
-						);
-					})}
+									slug: variable.slug,
+								}),
+							};
+
+							return (
+								<PickerValueItem
+									showValue={!showTwoColumns}
+									value={controlProps.value}
+									data={itemData}
+									onClick={controlProps.handleOnClickVar}
+									key={`${type}-${_index}-value-type`}
+									name={variable.name}
+									type={type}
+									valueType="variable"
+									isCurrent={
+										isValid(controlProps.value) &&
+										controlProps.value.settings.type ===
+											type &&
+										controlProps.value.settings.slug ===
+											itemData.slug
+									}
+									icon={getVariableIcon({
+										type,
+										value: variable.value,
+									})}
+									status="active"
+									style={{
+										...(showTwoColumns
+											? {
+													gap: '5px',
+													padding: '0px 4px 0px 6px',
+											  }
+											: {}),
+									}}
+								/>
+							);
+						})}
+					</ConditionalWrapper>
 				</PickerCategory>
 			);
 		});
