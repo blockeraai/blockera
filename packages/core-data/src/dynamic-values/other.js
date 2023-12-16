@@ -65,7 +65,7 @@ export const getOtherDynamicValueItem = (types: string): ?DynamicValueItem => {
 const _getOtherDVItemsBy = function (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): ?Array<DynamicValueItem> | void {
+): ?Array<DynamicValueItem> {
 	return getOtherDynamicValueItems().filter((item) => {
 		if (field === 'type') {
 			if (value.includes('all')) {
@@ -84,6 +84,6 @@ const _getOtherDVItemsByMemoized = memoize(_getOtherDVItemsBy);
 export const getOtherDynamicValueItemsBy = (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): Array<DynamicValueItem> | void => {
+): Array<DynamicValueItem> => {
 	return _getOtherDVItemsByMemoized(field, value);
 };

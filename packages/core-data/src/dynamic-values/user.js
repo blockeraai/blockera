@@ -145,7 +145,7 @@ export const getUserDynamicValueItem = (types: string): ?DynamicValueItem => {
 const _getUserDVItemsBy = function (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): ?Array<DynamicValueItem> | void {
+): ?Array<DynamicValueItem> {
 	return getUserDynamicValueItems().filter((item) => {
 		if (field === 'type') {
 			if (value.includes('all')) {
@@ -164,6 +164,6 @@ const _getUserDVItemsByMemoized = memoize(_getUserDVItemsBy);
 export const getUserDynamicValueItemsBy = (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): Array<DynamicValueItem> | void => {
+): Array<DynamicValueItem> => {
 	return _getUserDVItemsByMemoized(field, value);
 };

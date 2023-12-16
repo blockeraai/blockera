@@ -135,7 +135,7 @@ export const getSiteDynamicValueItem = (types: string): ?DynamicValueItem => {
 const _getSiteDVItemsBy = function (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): ?Array<DynamicValueItem> | void {
+): ?Array<DynamicValueItem> {
 	return getSiteDynamicValueItems().filter((item) => {
 		if (field === 'type') {
 			if (value.includes('all')) {
@@ -154,6 +154,6 @@ const _getSiteDVItemsByMemoized = memoize(_getSiteDVItemsBy);
 export const getSiteDynamicValueItemsBy = (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): Array<DynamicValueItem> | void => {
+): Array<DynamicValueItem> => {
 	return _getSiteDVItemsByMemoized(field, value);
 };

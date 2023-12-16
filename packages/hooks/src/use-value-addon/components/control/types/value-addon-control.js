@@ -6,6 +6,7 @@ import type {
 	VariableCategory,
 	DynamicValueTypes,
 	VariableItem,
+	DynamicValueItem,
 } from '@publisher/core-data';
 import type { ControlSize } from '@publisher/controls';
 
@@ -21,7 +22,7 @@ export type ValueAddonControlProps = {
 	types: Array<'variable' | 'dynamic-value'>,
 	variableTypes: Array<VariableCategory>,
 	dynamicValueTypes: Array<DynamicValueTypes>,
-	handleOnClickDV: (data: VariableItem) => void,
+	handleOnClickDV: (data: DynamicValueItem) => void,
 	handleOnClickVar: (data: VariableItem) => void,
 	handleOnUnlinkVar: (event: SyntheticMouseEvent<EventTarget>) => void,
 	handleOnClickRemove: (event: SyntheticMouseEvent<EventTarget>) => void,

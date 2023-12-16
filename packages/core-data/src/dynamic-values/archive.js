@@ -87,7 +87,7 @@ export const getArchiveDynamicValueItem = (
 const _getArchiveDVItemsBy = function (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): ?Array<DynamicValueItem> | void {
+): ?Array<DynamicValueItem> {
 	return getArchiveDynamicValueItems().filter((item) => {
 		if (field === 'type') {
 			if (value.includes('all')) {
@@ -106,6 +106,6 @@ const _getArchiveDVItemsByMemoized = memoize(_getArchiveDVItemsBy);
 export const getArchiveDynamicValueItemsBy = (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): Array<DynamicValueItem> | void => {
+): Array<DynamicValueItem> => {
 	return _getArchiveDVItemsByMemoized(field, value);
 };

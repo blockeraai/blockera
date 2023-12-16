@@ -101,7 +101,7 @@ export const getFeaturedImageDynamicValueItem = (
 const _getFeaturedImageDVItemsBy = function (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): Array<DynamicValueItem> | void {
+): Array<DynamicValueItem> {
 	return getFeaturedImageDynamicValueItems().filter((item) => {
 		if (field === 'type') {
 			if (value.includes('all')) {
@@ -120,6 +120,6 @@ const _getFeaturedImageDVItemsByMemoized = memoize(_getFeaturedImageDVItemsBy);
 export const getFeaturedImageDynamicValueItemsBy = (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): Array<DynamicValueItem> | void => {
+): Array<DynamicValueItem> => {
 	return _getFeaturedImageDVItemsByMemoized(field, value);
 };
