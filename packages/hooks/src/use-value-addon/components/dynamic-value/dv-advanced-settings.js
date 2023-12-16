@@ -199,7 +199,11 @@ export default function ({
 							// controlProps.setValue(newValue);
 							// controlProps.onChange(newValue);
 						}}
-						defaultRepeaterItemValue={{ search: '', replace: '' }}
+						defaultRepeaterItemValue={{
+							search: '',
+							replace: '',
+							isVisible: true,
+						}}
 					/>
 				</BaseControl>
 			</ControlContextProvider>
