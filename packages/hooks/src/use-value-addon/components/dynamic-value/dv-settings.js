@@ -69,6 +69,8 @@ export default function ({
 					onClick={() => {
 						controlProps.setOpen('dv-picker');
 					}}
+					label={__('Change Dynamic Value', 'publisher-core')}
+					showTooltip={true}
 				>
 					{getDynamicValueIcon(controlProps.value?.settings?.type)}
 					{!isUndefined(item?.name) ? item.name : ''}
@@ -86,6 +88,11 @@ export default function ({
 					onClick={() => {
 						controlProps.setOpen('dv-settings-advanced');
 					}}
+					label={__(
+						'Advanced Customization Options',
+						'publisher-core'
+					)}
+					showTooltip={true}
 				>
 					<GearIcon />
 					{__('Customize', 'publisher-core')}

@@ -14,6 +14,7 @@ import {
 } from '@publisher/classnames';
 import { isUndefined } from '@publisher/utils';
 import { getVariable, getDynamicValue } from '@publisher/core-data';
+import { Tooltip } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -82,45 +83,55 @@ export default function ({
 
 	return (
 		<>
-			<div
-				className={controlClassNames(
-					'value-addon',
-					'type-' + (controlProps.value?.valueType || 'unknown'),
-					'value-addon-size-' + controlProps.size,
-					isIconActive && 'value-addon-with-icon',
-					isDeleted && 'type-deleted',
-					controlProps.isOpen.startsWith('var-') &&
-						'open-value-addon type-variable',
-					controlProps.isOpen.startsWith('dv-') &&
-						'open-value-addon type-dynamic-value',
-					classNames
-				)}
-				onClick={(event) => {
-					switch (controlProps.value?.valueType) {
-						case 'variable':
-							controlProps.setOpen(
-								isDeleted ? 'var-deleted' : 'var-picker'
-							);
-							event.preventDefault();
-							break;
-						case 'dynamic-value':
-							controlProps.setOpen(
-								isDeleted ? 'dv-deleted' : 'dv-settings'
-							);
-							event.preventDefault();
-							break;
-					}
-				}}
-				{...props}
+			<Tooltip
+				text={
+					controlProps.value?.valueType === 'variable'
+						? __('Change Variable', 'publisher-core')
+						: __('Change Dynamic Value', 'publisher-core')
+				}
 			>
-				{isIconActive && (
-					<span className={controlInnerClassNames('item-icon')}>
-						{icon}
-					</span>
-				)}
+				<div
+					className={controlClassNames(
+						'value-addon',
+						'type-' + (controlProps.value?.valueType || 'unknown'),
+						'value-addon-size-' + controlProps.size,
+						isIconActive && 'value-addon-with-icon',
+						isDeleted && 'type-deleted',
+						controlProps.isOpen.startsWith('var-') &&
+							'open-value-addon type-variable',
+						controlProps.isOpen.startsWith('dv-') &&
+							'open-value-addon type-dynamic-value',
+						classNames
+					)}
+					onClick={(event) => {
+						switch (controlProps.value?.valueType) {
+							case 'variable':
+								controlProps.setOpen(
+									isDeleted ? 'var-deleted' : 'var-picker'
+								);
+								event.preventDefault();
+								break;
+							case 'dynamic-value':
+								controlProps.setOpen(
+									isDeleted ? 'dv-deleted' : 'dv-settings'
+								);
+								event.preventDefault();
+								break;
+						}
+					}}
+					{...props}
+				>
+					{isIconActive && (
+						<span className={controlInnerClassNames('item-icon')}>
+							{icon}
+						</span>
+					)}
 
-				<span className={controlClassNames('item-name')}>{label}</span>
-			</div>
+					<span className={controlClassNames('item-name')}>
+						{label}
+					</span>
+				</div>
+			</Tooltip>
 			<ValueAddonPointer controlProps={controlProps} />
 		</>
 	);
