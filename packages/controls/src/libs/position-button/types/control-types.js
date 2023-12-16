@@ -2,7 +2,7 @@
 
 export type TPositionButtonProps = {
 	label?: string,
-	popoverLabel?: string,
+	popoverTitle?: string,
 	alignmentMatrixLabel?: string,
 	id?: string,
 	onChange?: () => {},

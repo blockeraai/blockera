@@ -676,7 +676,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										'Fit Position',
 										'publisher-core'
 									)}
-									popoverLabel={__(
+									popoverTitle={__(
 										'Setting',
 										'publisher-core'
 									)}

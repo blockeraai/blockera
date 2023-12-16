@@ -25,7 +25,7 @@ import type { TPositionButtonProps } from './types';
 export default function PositionButtonControl({
 	label,
 	buttonLabel,
-	popoverLabel,
+	popoverTitle,
 	alignmentMatrixLabel,
 	id,
 	onChange,
@@ -77,7 +77,7 @@ export default function PositionButtonControl({
 			</Button>
 			{isPopoverActive && (
 				<Popover
-					title={popoverLabel}
+					title={popoverTitle}
 					offset={121}
 					placement="left"
 					className={controlInnerClassNames('position-popover')}
@@ -118,7 +118,7 @@ PositionButtonControl.propTypes = {
 	/**
 	 * Label for popover
 	 */
-	popoverLabel: PropTypes.string,
+	popoverTitle: PropTypes.string,
 	/**
 	 * Label for field alignment-matrix. If you pass empty value the field will not be added and simple control will be rendered
 	 *
@@ -151,7 +151,7 @@ PositionButtonControl.propTypes = {
 };
 
 PositionButtonControl.defaultProps = {
-	popoverLabel: (__('Setting', 'publisher-core'): any),
+	popoverTitle: (__('Setting', 'publisher-core'): any),
 	alignmentMatrixLabel: (__('Position', 'publisher-core'): any),
 	defaultValue: {
 		top: '',

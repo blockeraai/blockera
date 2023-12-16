@@ -43,7 +43,7 @@ export const BackdropFilter = ({
 			<BaseControl columns="columns-1" controlName="filter">
 				<FilterControl
 					label={__('Backdrop Filters', 'publisher-core')}
-					popoverLabel={__('Backdrop Filter', 'publisher-core')}
+					popoverTitle={__('Backdrop Filter', 'publisher-core')}
 					onChange={(newValue) =>
 						handleOnChangeAttributes(
 							'publisherBackdropFilter',

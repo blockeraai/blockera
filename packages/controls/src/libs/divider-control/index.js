@@ -23,7 +23,7 @@ import type { TDividerControlProps } from './types';
 export default function DividerControl({
 	id,
 	defaultRepeaterItemValue,
-	popoverLabel,
+	popoverTitle,
 	className,
 	...props
 }: TDividerControlProps): MixedElement {
@@ -31,7 +31,7 @@ export default function DividerControl({
 		<RepeaterControl
 			id={id}
 			className={controlClassNames('divider', className)}
-			popoverLabel={popoverLabel}
+			popoverTitle={popoverTitle}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
@@ -76,7 +76,7 @@ DividerControl.propTypes = {
 	/**
 	 * Label for popover
 	 */
-	popoverLabel: PropTypes.string,
+	popoverTitle: PropTypes.string,
 };
 
 DividerControl.defaultProps = {
@@ -92,5 +92,5 @@ DividerControl.defaultProps = {
 		onFront: false,
 		isVisible: true,
 	},
-	popoverLabel: (__('Divider', 'publisher-core'): any),
+	popoverTitle: (__('Divider', 'publisher-core'): any),
 };
