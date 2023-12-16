@@ -1,6 +1,8 @@
 // @flow
-
-export type DynamicValueItemStatus = 'soon' | 'free' | 'pro' | 'active';
+/**
+ * Internal dependencies
+ */
+import type { ValueAddonReference, ValueAddonItemStatus } from '../../types';
 
 export type DynamicValueCategory =
 	| 'post'
@@ -29,6 +31,7 @@ export type DynamicValueItem = {
 	name: string,
 	id: string,
 	type: DynamicValueTypes,
-	status: DynamicValueItemStatus,
+	status: ValueAddonItemStatus,
 	category: DynamicValueCategory,
+	reference: ValueAddonReference,
 };

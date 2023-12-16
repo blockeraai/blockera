@@ -18,6 +18,9 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			type: 'text',
 			status: 'free',
 			category: 'site',
+			reference: {
+				type: 'core',
+			},
 		},
 		{
 			name: __('Site Tagline', 'publisher-core'),
@@ -25,6 +28,9 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			type: 'text',
 			status: 'free',
 			category: 'site',
+			reference: {
+				type: 'core',
+			},
 		},
 		{
 			name: __('Home URL', 'publisher-core'),
@@ -32,6 +38,9 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			type: 'link',
 			status: 'free',
 			category: 'site',
+			reference: {
+				type: 'core',
+			},
 		},
 		{
 			name: __('Site URL', 'publisher-core'),
@@ -39,6 +48,9 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			type: 'link',
 			status: 'free',
 			category: 'site',
+			reference: {
+				type: 'core',
+			},
 		},
 		{
 			name: __('Site Logo URL', 'publisher-core'),
@@ -46,6 +58,9 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			type: 'image',
 			status: 'soon',
 			category: 'site',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Admin Email', 'publisher-core'),
@@ -53,6 +68,9 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			type: 'email',
 			status: 'soon',
 			category: 'site',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('RSS URL', 'publisher-core'),
@@ -60,6 +78,9 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			type: 'link',
 			status: 'soon',
 			category: 'site',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Login URL', 'publisher-core'),
@@ -67,6 +88,9 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			type: 'link',
 			status: 'soon',
 			category: 'site',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Logout URL', 'publisher-core'),
@@ -74,6 +98,9 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			type: 'link',
 			status: 'soon',
 			category: 'site',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Site Meta', 'publisher-core'),
@@ -81,6 +108,9 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			type: 'meta',
 			status: 'soon',
 			category: 'site',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 	];
 };

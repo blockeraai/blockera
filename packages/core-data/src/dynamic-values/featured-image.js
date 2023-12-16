@@ -19,6 +19,9 @@ const _getFeaturedImageDynamicValueItems =
 				type: 'image',
 				status: 'free',
 				category: 'featured-image',
+				reference: {
+					type: 'core',
+				},
 			},
 			{
 				name: __('Image ID', 'publisher-core'),
@@ -26,6 +29,9 @@ const _getFeaturedImageDynamicValueItems =
 				type: 'id',
 				status: 'soon',
 				category: 'featured-image',
+				reference: {
+					type: 'core-pro',
+				},
 			},
 			{
 				name: __('Image Title', 'publisher-core'),
@@ -33,6 +39,9 @@ const _getFeaturedImageDynamicValueItems =
 				type: 'text',
 				status: 'soon',
 				category: 'featured-image',
+				reference: {
+					type: 'core-pro',
+				},
 			},
 			{
 				name: __('Image Alt', 'publisher-core'),
@@ -40,6 +49,9 @@ const _getFeaturedImageDynamicValueItems =
 				type: 'text',
 				status: 'soon',
 				category: 'featured-image',
+				reference: {
+					type: 'core-pro',
+				},
 			},
 			{
 				name: __('Image Caption', 'publisher-core'),
@@ -47,6 +59,9 @@ const _getFeaturedImageDynamicValueItems =
 				type: 'text',
 				status: 'soon',
 				category: 'featured-image',
+				reference: {
+					type: 'core-pro',
+				},
 			},
 			{
 				name: __('Image Desc', 'publisher-core'),
@@ -54,6 +69,9 @@ const _getFeaturedImageDynamicValueItems =
 				type: 'text',
 				status: 'soon',
 				category: 'featured-image',
+				reference: {
+					type: 'core-pro',
+				},
 			},
 		];
 	};

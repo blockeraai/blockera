@@ -18,6 +18,9 @@ const _getArchiveDVItems = function (): Array<DynamicValueItem> {
 			type: 'text',
 			status: 'free',
 			category: 'archive',
+			reference: {
+				type: 'core',
+			},
 		},
 		{
 			name: __('Archive Desc', 'publisher-core'),
@@ -25,6 +28,9 @@ const _getArchiveDVItems = function (): Array<DynamicValueItem> {
 			type: 'text',
 			status: 'soon',
 			category: 'archive',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Archive Link', 'publisher-core'),
@@ -32,6 +38,9 @@ const _getArchiveDVItems = function (): Array<DynamicValueItem> {
 			type: 'link',
 			status: 'soon',
 			category: 'archive',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Archive ID', 'publisher-core'),
@@ -39,6 +48,9 @@ const _getArchiveDVItems = function (): Array<DynamicValueItem> {
 			type: 'id',
 			status: 'soon',
 			category: 'archive',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Archive Meta', 'publisher-core'),
@@ -46,6 +58,9 @@ const _getArchiveDVItems = function (): Array<DynamicValueItem> {
 			type: 'meta',
 			status: 'soon',
 			category: 'archive',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 	];
 };

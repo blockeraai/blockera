@@ -18,6 +18,9 @@ const _getOtherDVItems = function (): Array<DynamicValueItem> {
 			type: 'date',
 			status: 'free',
 			category: 'other',
+			reference: {
+				type: 'core',
+			},
 		},
 		{
 			name: __('Shortcode', 'publisher-core'),
@@ -25,6 +28,9 @@ const _getOtherDVItems = function (): Array<DynamicValueItem> {
 			type: 'shortcode',
 			status: 'soon',
 			category: 'other',
+			reference: {
+				type: 'core',
+			},
 		},
 		{
 			name: __('Request Parameter', 'publisher-core'),
@@ -32,6 +38,9 @@ const _getOtherDVItems = function (): Array<DynamicValueItem> {
 			type: 'text',
 			status: 'soon',
 			category: 'other',
+			reference: {
+				type: 'core',
+			},
 		},
 	];
 };
