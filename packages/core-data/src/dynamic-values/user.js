@@ -16,7 +16,7 @@ const _getUserDVItems = function (): Array<DynamicValueItem> {
 			name: __('User Display Name', 'publisher-core'),
 			id: 'user-display-name',
 			type: 'text',
-			status: 'free',
+			status: 'core',
 			category: 'user',
 			reference: {
 				type: 'core',

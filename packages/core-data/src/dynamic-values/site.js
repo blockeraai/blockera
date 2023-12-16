@@ -16,7 +16,7 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			name: __('Site Title', 'publisher-core'),
 			id: 'site-title',
 			type: 'text',
-			status: 'free',
+			status: 'core',
 			category: 'site',
 			reference: {
 				type: 'core',
@@ -26,7 +26,7 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			name: __('Site Tagline', 'publisher-core'),
 			id: 'site-desc',
 			type: 'text',
-			status: 'free',
+			status: 'core',
 			category: 'site',
 			reference: {
 				type: 'core',
@@ -36,7 +36,7 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			name: __('Home URL', 'publisher-core'),
 			id: 'home-url',
 			type: 'link',
-			status: 'free',
+			status: 'core',
 			category: 'site',
 			reference: {
 				type: 'core',
@@ -46,7 +46,7 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			name: __('Site URL', 'publisher-core'),
 			id: 'site-url',
 			type: 'link',
-			status: 'free',
+			status: 'core',
 			category: 'site',
 			reference: {
 				type: 'core',

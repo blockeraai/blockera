@@ -16,7 +16,7 @@ const _getPostDynamicValueItems = function (): Array<DynamicValueItem> {
 			name: __('Post Title', 'publisher-core'),
 			id: 'post-title',
 			type: 'text',
-			status: 'free',
+			status: 'core',
 			category: 'post',
 			reference: {
 				type: 'core',
@@ -26,7 +26,7 @@ const _getPostDynamicValueItems = function (): Array<DynamicValueItem> {
 			name: __('Post Excerpt', 'publisher-core'),
 			id: 'post-excerpt',
 			type: 'text',
-			status: 'free',
+			status: 'core',
 			category: 'post',
 			reference: {
 				type: 'core',

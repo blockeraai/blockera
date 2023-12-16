@@ -16,7 +16,7 @@ const _getOtherDVItems = function (): Array<DynamicValueItem> {
 			name: __('Current Date', 'publisher-core'),
 			id: 'date',
 			type: 'date',
-			status: 'free',
+			status: 'core',
 			category: 'other',
 			reference: {
 				type: 'core',

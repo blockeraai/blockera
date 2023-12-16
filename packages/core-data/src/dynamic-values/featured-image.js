@@ -17,7 +17,7 @@ const _getFeaturedImageDynamicValueItems =
 				name: __('Image URL', 'publisher-core'),
 				id: 'featured-image-url',
 				type: 'image',
-				status: 'free',
+				status: 'core',
 				category: 'featured-image',
 				reference: {
 					type: 'core',

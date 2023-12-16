@@ -16,7 +16,7 @@ const _getArchiveDVItems = function (): Array<DynamicValueItem> {
 			name: __('Archive Title', 'publisher-core'),
 			id: 'archive-title',
 			type: 'text',
-			status: 'free',
+			status: 'core',
 			category: 'archive',
 			reference: {
 				type: 'core',
