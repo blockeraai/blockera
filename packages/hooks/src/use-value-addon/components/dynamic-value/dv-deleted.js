@@ -28,6 +28,7 @@ export default function ({
 		!isUndefined(controlProps.value?.settings?.name) &&
 		controlProps.value?.settings?.name !== '';
 
+	// todo update this to show related messages by using status of item and also the reference of DV item
 	return (
 		<Popover
 			title={__('Missing Dynamic Value Item', 'publisher-core')}
