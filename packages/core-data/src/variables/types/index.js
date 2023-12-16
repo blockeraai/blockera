@@ -1,4 +1,8 @@
 // @flow
+/**
+ * Internal dependencies
+ */
+import type { ValueAddonReference } from '../../types';
 
 export type VariableCategory =
 	| 'font-size'
@@ -6,10 +10,9 @@ export type VariableCategory =
 	| 'radial-gradient'
 	| 'spacing'
 	| 'width-size'
-	| 'theme-color';
+	| 'color';
 
 export type VariableItem = {
-	...Object,
 	name: string,
 	slug: string,
 	value: string,
@@ -17,4 +20,5 @@ export type VariableItem = {
 		min?: string,
 		max?: string,
 	},
+	reference: ValueAddonReference,
 };

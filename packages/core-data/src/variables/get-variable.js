@@ -11,7 +11,7 @@ import { getWidthSize } from './width-size';
 import { getFontSize } from './font-size';
 import { getLinearGradient } from './linear-gradient';
 import { getRadialGradient } from './radial-gradient';
-import { getThemeColor } from './theme-color';
+import { getColor } from './color';
 import { getSpacing } from './spacing';
 import type { VariableItem } from './types';
 
@@ -32,11 +32,11 @@ const _getVariable = function (type: string, slug: string): ?VariableItem {
 		case 'spacing':
 			return getSpacing(slug);
 
-		case 'theme-color':
-			return getThemeColor(slug);
+		case 'color':
+			return getColor(slug);
 	}
 
-	return {};
+	return null;
 };
 
 const _getVariableMemoized = memoize(_getVariable);

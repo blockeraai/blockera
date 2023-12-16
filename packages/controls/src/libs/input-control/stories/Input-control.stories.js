@@ -1331,7 +1331,7 @@ export const PlayNumber = {
 			Control={InputControl}
 			controlAddonTypes={['variable', 'dynamic-value']}
 			variableTypes={[
-				'theme-color',
+				'color',
 				'font-size',
 				'width-size',
 				'spacing',

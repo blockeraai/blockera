@@ -948,7 +948,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 									)
 								}
 								controlAddonTypes={['variable']}
-								variableTypes={['theme-color']}
+								variableTypes={['color']}
 								className={
 									backgroundClip === 'text' &&
 									'publisher-control-is-not-active'

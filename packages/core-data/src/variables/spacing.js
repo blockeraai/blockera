@@ -13,13 +13,39 @@ import type { VariableItem } from './types';
 /**
  * Publisher dependencies
  */
-import { isUndefined } from '@publisher/utils';
+import { isBlockTheme, isUndefined } from '@publisher/utils';
+import { getCurrentTheme } from '../index';
 
 const _getSpacings = function (): Array<VariableItem> {
-	// todo improve this to support all states and be more safe
+	let reference = {
+		type: 'preset',
+	};
+
+	if (isBlockTheme()) {
+		const {
+			name: { rendered: themeName },
+		} = getCurrentTheme();
+
+		reference = {
+			type: 'theme',
+			theme: themeName,
+		};
+
+		return getBlockEditorSettings()?.__experimentalFeatures?.spacing?.spacingSizes?.theme.map(
+			(item) => {
+				return {
+					name: item.name,
+					slug: item.slug,
+					value: item.size,
+					reference,
+				};
+			}
+		);
+	}
+
 	const spaces =
 		getBlockEditorSettings()?.__experimentalFeatures?.spacing?.spacingSizes
-			?.theme;
+			?.default;
 
 	if (isUndefined(spaces)) {
 		return [];

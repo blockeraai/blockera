@@ -15,7 +15,6 @@ import {
 	Popover,
 	ConditionalWrapper,
 } from '@publisher/components';
-import { isBlockTheme } from '@publisher/utils';
 import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
@@ -39,9 +38,6 @@ export default function ({
 }: {
 	controlProps: ValueAddonControlProps,
 }): Element<any> {
-	let noVariablesText = __('No variable!', 'publisher-core');
-	const _isBlockTheme = isBlockTheme();
-
 	const CustomVariables = (): Element<any> => {
 		return (
 			<PickerCategory
@@ -84,26 +80,24 @@ export default function ({
 				typeof data.variables === 'undefined' ||
 				data.variables?.length === 0
 			) {
-				if (!_isBlockTheme) {
-					noVariablesText = __(
-						'Your theme is not a block theme.',
-						'publisher-core'
-					);
-				}
-
 				return (
 					<PickerCategory
 						key={`type-${type}-${index}`}
 						title={data.name}
 					>
 						<span style={{ opacity: '0.5', fontSize: '12px' }}>
-							{noVariablesText}
+							{__('No variable!', 'publisher-core')}
 						</span>
 					</PickerCategory>
 				);
 			}
 
-			const showTwoColumns = ['theme-color'].includes(type);
+			const showTwoColumns = [
+				'color',
+				'linear-gradient',
+				'radial-gradient',
+				'spacing',
+			].includes(type);
 
 			return (
 				<PickerCategory key={`type-${type}-${index}`} title={data.name}>
@@ -209,9 +203,9 @@ export default function ({
 			}
 		>
 			<Flex direction="column" gap="25px">
-				<Variables />
-
 				<CustomVariables />
+
+				<Variables />
 			</Flex>
 		</Popover>
 	);

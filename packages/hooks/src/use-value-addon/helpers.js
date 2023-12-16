@@ -9,7 +9,7 @@ import { __ } from '@wordpress/i18n';
  * Publisher dependencies
  */
 import {
-	getThemeColors,
+	getColors,
 	getFontSizes,
 	getLinearGradients,
 	getRadialGradients,
@@ -22,12 +22,9 @@ import {
 	getSiteDynamicValueItemsBy,
 	getUserDynamicValueItemsBy,
 	getOtherDynamicValueItemsBy,
-} from '@publisher/core-data';
-// eslint-disable-next-line no-duplicate-imports
-import type {
-	VariableCategory,
-	DynamicValueTypes,
-	DynamicValueCategory,
+	type VariableCategory,
+	type DynamicValueTypes,
+	type DynamicValueCategory,
 } from '@publisher/core-data';
 import { ColorIndicator } from '@publisher/components';
 import { isBlockTheme, isObject, isUndefined } from '@publisher/utils';
@@ -115,7 +112,7 @@ export function getVariableIcon({
 			}
 			break;
 
-		case 'theme-color':
+		case 'color':
 			return <ColorIndicator type="color" value={value} />;
 
 		case 'spacing':
@@ -132,12 +129,14 @@ export function getVariableIcon({
 export function getVariableCategory(
 	category: VariableCategory
 ): VariableCategoryDetail {
+	console.log(category);
+
 	switch (category) {
 		case 'font-size':
 			return {
 				name: isBlockTheme()
 					? __('Theme Font Sizes', 'publisher-core')
-					: __('Font Sizes', 'publisher-core'),
+					: __('Editor Font Sizes', 'publisher-core'),
 				variables: getFontSizes(),
 			};
 
@@ -145,7 +144,7 @@ export function getVariableCategory(
 			return {
 				name: isBlockTheme()
 					? __('Theme Linear Gradients', 'publisher-core')
-					: __('Linear Gradients', 'publisher-core'),
+					: __('Editor Linear Gradients', 'publisher-core'),
 				variables: getLinearGradients(),
 			};
 
@@ -153,7 +152,7 @@ export function getVariableCategory(
 			return {
 				name: isBlockTheme()
 					? __('Theme Radial Gradients', 'publisher-core')
-					: __('Radial Gradients', 'publisher-core'),
+					: __('Editor Radial Gradients', 'publisher-core'),
 				variables: getRadialGradients(),
 			};
 
@@ -169,14 +168,16 @@ export function getVariableCategory(
 			return {
 				name: isBlockTheme()
 					? __('Theme Spacing Sizes', 'publisher-core')
-					: __('Spacing Sizes', 'publisher-core'),
+					: __('Editor Spacing Sizes', 'publisher-core'),
 				variables: getSpacings(),
 			};
 
-		case 'theme-color':
+		case 'color':
 			return {
-				name: __('Theme Colors', 'publisher-core'),
-				variables: getThemeColors(),
+				name: isBlockTheme()
+					? __('Theme Colors', 'publisher-core')
+					: __('Editor Colors', 'publisher-core'),
+				variables: getColors(),
 			};
 	}
 
@@ -294,7 +295,7 @@ export function generateVariableString({
 }): string {
 	let _type: string = type;
 
-	if (type === 'theme-color') {
+	if (type === 'color') {
 		_type = 'color';
 	} else if (type === 'width-size') {
 		if (slug === 'contentSize') {
