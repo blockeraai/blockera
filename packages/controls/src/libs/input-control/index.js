@@ -21,20 +21,20 @@ import { UnitInput } from './components/unit-input';
 import { OtherInput } from './components/other-input';
 import { NumberInput } from './components/number-input';
 import { getCSSUnits } from './utils';
-import type { TInputItem } from './types';
+import type { InputControlProps } from './types';
 
 export default function InputControl({
 	unitType = '',
 	units = [],
-	noBorder,
+	noBorder = false,
 	id,
-	range,
+	range = false,
 	label,
 	columns,
 	defaultValue = '',
 	onChange,
-	field,
-	className,
+	field = 'input',
+	className = '',
 	type = 'text',
 	min,
 	max,
@@ -51,7 +51,7 @@ export default function InputControl({
 	//
 	children,
 	...props
-}: TInputItem): MixedElement {
+}: InputControlProps): MixedElement {
 	const { value, setValue, description, resetToDefault } = useControlContext({
 		id,
 		defaultValue,
@@ -292,13 +292,4 @@ InputControl.propTypes = {
 			])
 		),
 	]),
-};
-
-InputControl.defaultProps = {
-	range: false,
-	noBorder: false,
-	drag: true,
-	field: 'input',
-	defaultValue: '',
-	className: '',
 };

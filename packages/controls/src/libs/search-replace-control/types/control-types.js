@@ -1,4 +1,8 @@
 // @flow
+/**
+ * Internal dependencies
+ */
+import type { RepeaterControlProps } from '../../repeater-control/types';
 
 export type TItem = {
 	search: string,
@@ -7,10 +11,7 @@ export type TItem = {
 };
 
 export type TSearchReplaceControlProps = {
-	id?: string,
+	...RepeaterControlProps,
 	defaultValue?: [],
-	onChange?: () => {},
 	defaultRepeaterItemValue?: TItem,
-	popoverTitle?: string,
-	className?: string,
 };

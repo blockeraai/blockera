@@ -1,4 +1,8 @@
 // @flow
+/**
+ * Internal dependencies
+ */
+import type { RepeaterControlProps } from '../../repeater-control/types/repeater-control-props';
 
 export type TImageProps = {
 	image: string,
@@ -51,8 +55,7 @@ export type TDefaultRepeaterItemValue = {
 };
 
 export type TBackgroundControlProps = {
-	popoverTitle: string,
-	className: string | Object,
+	...RepeaterControlProps,
 	defaultValue: [] | Array<TDefaultRepeaterItemValue>,
 	defaultRepeaterItemValue: TDefaultRepeaterItemValue,
 };

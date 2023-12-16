@@ -1,6 +1,10 @@
 // @flow
+/**
+ * External dependencies
+ */
+import type { RepeaterControlProps } from '../../repeater-control/types';
 
-export type TItem = {
+export type TransitionControlItemValue = {
 	type: string,
 	duration: string,
 	timing: string,
@@ -8,9 +12,6 @@ export type TItem = {
 	isVisible: boolean,
 };
 export type TTransitionControlProps = {
-	defaultRepeaterItemValue?: TItem,
-	popoverTitle?: string,
-	className?: string,
-	defaultValue?: Array<Object>,
-	onChange?: () => {},
+	...RepeaterControlProps,
+	defaultRepeaterItemValue?: TransitionControlItemValue,
 };

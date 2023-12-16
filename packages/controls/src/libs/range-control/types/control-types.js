@@ -1,17 +1,19 @@
 // @flow
+/**
+ * Internal dependencies
+ */
+import type { ControlGeneralTypes } from '../../../types';
 
 export type TValueCleanup = string | number;
 
 export type TRangeControlProps = {
-	id?: string,
-	label?: string,
-	field?: string,
-	columns?: string,
+	...ControlGeneralTypes,
 	defaultValue?: number | string,
-	onChange?: (number | string) => number | string,
+	onChange: (number | string) => number | string,
 	min?: number,
 	max?: number,
 	withInputField?: boolean,
+	disabled?: boolean,
 	initialPosition?: number,
-	className?: string,
+	sideEffect?: boolean,
 };

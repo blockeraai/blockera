@@ -1,9 +1,11 @@
 // @flow
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
+import PropTypes from 'prop-types';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -16,25 +18,22 @@ import { useValueAddon } from '@publisher/hooks';
  * Internal dependencies
  */
 import { BaseControl, ColorPickerControl } from '../index';
-import PropTypes from 'prop-types';
 import { useControlContext } from '../../context';
-import type { MixedElement } from 'react';
-import type { Props } from './types';
+import type { ColorControlProps } from './types';
 
 export default function ColorControl({
 	type = 'normal',
 	noBorder,
-	contentAlign,
+	contentAlign = 'left',
 	//
 	id,
 	label,
 	columns,
 	defaultValue,
 	onChange,
-	field,
+	field = 'color',
 	//
-	//
-	className,
+	className = '',
 	style,
 	//
 	controlAddonTypes,
@@ -43,7 +42,7 @@ export default function ColorControl({
 	size = 'normal',
 	//
 	...props
-}: Props): MixedElement {
+}: ColorControlProps): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
 		onChange,
@@ -198,11 +197,4 @@ ColorControl.propTypes = {
 	 * Function that will be fired while the control value state changes.
 	 */
 	onChange: PropTypes.func,
-};
-
-ColorControl.defaultProps = {
-	type: 'normal',
-	contentAlign: 'left',
-	field: 'color',
-	className: '',
 };

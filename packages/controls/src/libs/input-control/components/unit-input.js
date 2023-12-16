@@ -32,7 +32,7 @@ import {
 } from '../utils';
 import { NumberInput } from './number-input';
 import { OtherInput } from './other-input';
-import type { TUnitInput } from '../types';
+import type { InnerInputControlProps } from '../types';
 import MaximizeIcon from '../icons/maximize';
 import TextAreaControl from '../../textarea-control';
 import NoticeControl from '../../notice-control';
@@ -55,7 +55,7 @@ export function UnitInput({
 	size,
 	children,
 	...props
-}: TUnitInput): MixedElement {
+}: InnerInputControlProps): MixedElement {
 	const extractedValue = extractNumberAndUnit(value);
 
 	const firstUnit = getFirstUnit(units);
@@ -91,7 +91,7 @@ export function UnitInput({
 		} else if (!extractedNoUnit && value && value !== unitValue.value) {
 			setValue(inputValue + unitValue.value);
 		}
-	}, [unitValue, inputValue]);
+	}, [unitValue, inputValue]); // eslint-disable-line
 
 	const onChangeSelect = (newUnitValue: string) => {
 		// new unit is func
@@ -293,7 +293,6 @@ export function UnitInput({
 								}}
 							>
 								<TextAreaControl
-									value={inputValue}
 									defaultValue={defaultValue}
 									onChange={(value) => {
 										setInputValue(value);

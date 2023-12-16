@@ -1,4 +1,8 @@
 // @flow
+/**
+ * Internal dependencies
+ */
+import type { ControlGeneralTypes } from '../../../types';
 
 export type TValue = {
 	type: 'all' | 'custom',
@@ -9,10 +13,7 @@ export type TValue = {
 	bottomRight?: string,
 };
 
-export type TBorderRadiusControlProps = {
-	id?: string,
-	label?: string,
+export type BorderRadiusControlProps = {
+	...ControlGeneralTypes,
 	defaultValue?: TValue,
-	className?: string,
-	onChange?: () => {},
 };

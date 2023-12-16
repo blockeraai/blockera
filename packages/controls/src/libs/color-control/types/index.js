@@ -2,26 +2,17 @@
 /**
  * Internal dependencies
  */
-import type { ControlSize } from '../../../types';
+import type {
+	ControlGeneralTypes,
+	ControlValueAddonTypes,
+	ControlSize,
+} from '../../../types';
 
-export type Props = {
+export type ColorControlProps = {
+	...ControlGeneralTypes,
+	...ControlValueAddonTypes,
 	type?: 'normal' | 'minimal',
 	noBorder?: boolean,
 	contentAlign?: 'left' | 'center' | 'right',
 	size?: ControlSize,
-	//
-	id?: string,
-	label?: string,
-	columns?: string,
-	defaultValue?: string,
-	onChange?: () => void,
-	field?: string,
-	//
-	//
-	className: string,
-	style?: Object,
-	//
-	controlAddonTypes?: Array<string>,
-	variableTypes?: Array<string>,
-	dynamicValueTypes?: Array<string>,
 };

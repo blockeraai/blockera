@@ -22,9 +22,10 @@ export default function SearchControl({
 	id,
 	label,
 	columns,
-	defaultValue,
+	defaultValue = '',
 	onChange,
-	field,
+	field = 'search',
+	placeholder = __('Search…', 'publisher-core'),
 	//
 	className,
 	...props
@@ -45,6 +46,7 @@ export default function SearchControl({
 			<WPSearchControl
 				value={typeof value === 'object' ? '' : value}
 				onChange={setValue}
+				placeholder={placeholder}
 				className={controlClassNames('search', className)}
 				{...props}
 			/>
@@ -87,11 +89,4 @@ SearchControl.propTypes = {
 	 * A placeholder for the input.
 	 */
 	placeholder: PropTypes.string,
-};
-
-SearchControl.defaultProps = {
-	// $FlowFixMe
-	placeholder: __('Search…', 'publisher-core'),
-	defaultValue: '',
-	field: 'search',
 };

@@ -13,8 +13,6 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { Button } from '@publisher/components';
-// import { isUndefined } from '@publisher/utils';
-// import { prepare } from '@publisher/data-extractor';
 
 /**
  * Internal dependencies.
@@ -28,40 +26,37 @@ import MappedItems from './components/mapped-items';
 /**
  * Types
  */
-import type {
-	TRepeaterControlProps,
-	TRepeaterDefaultStateProps,
-} from './types/repeater-control-props';
+import type { RepeaterControlProps, TRepeaterDefaultStateProps } from './types';
 import type { MixedElement } from 'react';
 
 export default function RepeaterControl({
-	design,
-	mode,
+	design = 'minimal',
+	mode = 'popover',
 	popoverTitle,
 	addNewButtonLabel,
 	popoverClassName,
-	maxItems,
-	minItems,
-	actionButtonAdd,
-	actionButtonVisibility,
-	actionButtonDelete,
-	actionButtonClone,
-	injectHeaderButtonsStart,
-	injectHeaderButtonsEnd,
+	maxItems = -1,
+	minItems = 0,
+	actionButtonAdd = true,
+	actionButtonVisibility = true,
+	actionButtonDelete = true,
+	actionButtonClone = true,
+	injectHeaderButtonsStart = '',
+	injectHeaderButtonsEnd = '',
 	//
 	label,
 	id: repeaterId,
 	repeaterItemHeader,
 	repeaterItemChildren,
 	//
-	defaultValue,
-	defaultRepeaterItemValue,
+	defaultValue = [],
+	defaultRepeaterItemValue = { isVisible: true },
 	onChange,
 	valueCleanup,
 	//
 	className,
 	...props
-}: TRepeaterControlProps): MixedElement {
+}: RepeaterControlProps): MixedElement {
 	const {
 		value,
 		dispatch: { addRepeaterItem },
@@ -274,20 +269,4 @@ RepeaterControl.propTypes = {
 		PropTypes.func,
 		PropTypes.object,
 	]),
-};
-// $FlowFixMe
-RepeaterControl.defaultProps = {
-	// $FlowFixMe
-	defaultValue: [],
-	defaultRepeaterItemValue: { isVisible: true },
-	design: 'minimal',
-	mode: 'popover',
-	maxItems: -1,
-	minItems: 0,
-	actionButtonAdd: true,
-	actionButtonVisibility: true,
-	actionButtonDelete: true,
-	actionButtonClone: true,
-	injectHeaderButtonsStart: '',
-	injectHeaderButtonsEnd: '',
 };

@@ -25,31 +25,21 @@ import { useControlContext } from '../../context';
 import { addAngle, subtractAngle } from './utils';
 import { default as RotateLeftIcon } from './icons/rotate-left';
 import { default as RotateRightIcon } from './icons/rotate-right';
-
-type Props = {
-	rotateButtons?: Boolean,
-	id?: string,
-	label?: string,
-	columns?: string,
-	defaultValue?: string,
-	onChange?: () => void,
-	field?: string,
-	className?: string,
-};
+import type { AnglePickerControlProps } from './types';
 
 export default function AnglePickerControl({
-	rotateButtons,
+	rotateButtons = true,
 	//
 	id,
 	label,
 	columns,
-	defaultValue,
+	defaultValue = 0,
 	onChange,
-	field,
+	field = 'angle-picker',
 	//
 	className,
 	...props
-}: Props): MixedElement {
+}: AnglePickerControlProps): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
 		onChange,
@@ -144,10 +134,4 @@ AnglePickerControl.propTypes = {
 	 * Sets the rotate buttons to be available or not.
 	 */
 	rotateButtons: PropTypes.bool,
-};
-
-AnglePickerControl.defaultProps = {
-	defaultValue: 0,
-	rotateButtons: true,
-	field: 'angle-picker',
 };

@@ -25,11 +25,14 @@ import type { TPositionButtonProps } from './types';
 export default function PositionButtonControl({
 	label,
 	buttonLabel,
-	popoverLabel,
-	alignmentMatrixLabel,
+	popoverLabel = __('Setting', 'publisher-core'),
+	alignmentMatrixLabel = __('Position', 'publisher-core'),
 	id,
 	onChange,
-	defaultValue,
+	defaultValue = {
+		top: '',
+		left: '',
+	},
 	columns,
 	field,
 	className,
@@ -148,13 +151,4 @@ PositionButtonControl.propTypes = {
 	 * @default "columns-2"
 	 */
 	columns: PropTypes.string,
-};
-
-PositionButtonControl.defaultProps = {
-	popoverLabel: (__('Setting', 'publisher-core'): any),
-	alignmentMatrixLabel: (__('Position', 'publisher-core'): any),
-	defaultValue: {
-		top: '',
-		left: '',
-	},
 };

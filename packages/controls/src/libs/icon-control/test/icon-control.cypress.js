@@ -18,7 +18,7 @@ describe('icon-control', () => {
 			cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
 		});
 
-		it.only('should be able to upload custom svg when there is selected icon', () => {
+		it('should be able to upload custom svg when there is selected icon', () => {
 			// act
 			cy.get('[aria-label="button Icon"]').click();
 			cy.contains('button', /upload svg/i).click({ force: true });

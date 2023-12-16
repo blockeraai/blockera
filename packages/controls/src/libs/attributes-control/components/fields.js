@@ -141,6 +141,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			) {
 				handleOnChange('');
 			}
+			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, []);
 
 		return (
@@ -153,7 +154,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							options={keyFieldOptions}
 							id={getControlId(itemId, '__key')}
 							defaultValue=""
-							onChange={(newValue) => {
+							onChange={(newValue: string) => {
 								handleOnChange(newValue);
 							}}
 						/>

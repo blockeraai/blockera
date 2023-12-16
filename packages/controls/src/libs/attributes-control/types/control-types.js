@@ -1,4 +1,8 @@
 // @flow
+/**
+ * Internal dependencies
+ */
+import type { RepeaterControlProps } from '../../repeater-control/types/repeater-control-props';
 
 export type TItem = {
 	key: string,
@@ -7,11 +11,13 @@ export type TItem = {
 	isVisible: boolean,
 };
 
-export type TAttributesControlProps = {
-	id?: string,
+export type AttributesControlElement = 'a' | 'button' | 'ol';
+
+export type AttributesControlProps = {
+	...RepeaterControlProps,
 	defaultValue?: [],
-	onChange?: () => {},
 	defaultRepeaterItemValue?: TItem,
 	popoverTitle?: string,
 	className?: string,
+	attributeElement: AttributesControlElement,
 };

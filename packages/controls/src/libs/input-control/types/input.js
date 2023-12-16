@@ -8,43 +8,50 @@ import type { Node } from 'react';
 /**
  * Internal dependencies
  */
-import type { ControlSize } from '../../../types';
+import type {
+	ControlGeneralTypes,
+	ControlValueAddonTypes,
+	ControlSize,
+} from '../../../types';
 
-export type TInputItem = {
+export type InputUnitTypes =
+	| 'outline'
+	| 'text-shadow'
+	| 'box-shadow'
+	| 'background-size'
+	| 'letter-spacing'
+	| 'text-indent'
+	| 'background-position'
+	| 'duration'
+	| 'angle'
+	| 'percent'
+	| 'width'
+	| 'height'
+	| 'min-height'
+	| 'max-width'
+	| 'max-height'
+	| 'text-length'
+	| 'padding'
+	| 'essential'
+	| 'general'
+	| 'margin'
+	| 'order'
+	| 'flex-basis'
+	| 'flex-shrink'
+	| 'flex-grow'
+	| 'line-height'
+	| 'min-width'
+	| 'z-index';
+
+export type InputControlProps = {
+	...ControlGeneralTypes,
+	...ControlValueAddonTypes,
 	// eslint-disable-next-line
-	unitType?:
-		| ''
-		| 'outline'
-		| 'text-shadow'
-		| 'box-shadow'
-		| 'background-size'
-		| 'letter-spacing'
-		| 'text-indent'
-		| 'background-position'
-		| 'duration'
-		| 'angle'
-		| 'percent'
-		| 'width'
-		| 'padding'
-		| 'essential'
-		| 'general'
-		| 'margin'
-		| 'order'
-		| 'flex-basis'
-		| 'flex-shrink'
-		| 'flex-grow'
-		| 'line-height'
-		| 'z-index',
+	unitType?: InputUnitTypes,
 	units?: Array<Object>,
 	noBorder?: boolean,
-	id?: number | string,
 	range?: boolean,
-	label?: string,
-	columns?: string,
-	defaultValue: string | number,
-	onChange: (event: Object) => string | number,
 	field?: string,
-	className: string,
 	type?: 'text' | 'number',
 	min?: number,
 	max?: number,
@@ -53,10 +60,13 @@ export type TInputItem = {
 	drag?: boolean,
 	float?: boolean,
 	arrows?: boolean,
-	size?: ControlSize,
 	actions?: Node,
-	controlAddonTypes?: Array<string>,
-	variableTypes?: Array<string>,
-	dynamicValueTypes?: Array<string>,
-	children?: Node,
+	placeholder?: string,
+	size?: ControlSize,
+};
+
+export type InnerInputControlProps = {
+	...InputControlProps,
+	value: any,
+	setValue: (any) => void,
 };

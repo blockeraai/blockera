@@ -21,10 +21,40 @@ import Fields from './components/fields';
 import type { TBackgroundControlProps } from './types';
 
 export default function BackgroundControl({
-	defaultValue,
-	defaultRepeaterItemValue,
-	popoverTitle,
-	className,
+	defaultValue = [],
+	defaultRepeaterItemValue = {
+		type: 'image',
+		image: '',
+		'image-size': 'custom',
+		'image-size-width': 'auto',
+		'image-size-height': 'auto',
+		'image-position': {
+			top: '50%',
+			left: '50%',
+		},
+		'image-repeat': 'repeat',
+		'image-attachment': 'scroll',
+		'linear-gradient': 'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
+		'linear-gradient-angel': '90',
+		'linear-gradient-repeat': 'no-repeat',
+		'linear-gradient-attachment': 'scroll',
+		'radial-gradient':
+			'radial-gradient(rgb(0,159,251) 0%,rgb(229,46,0) 100%)',
+		'radial-gradient-position': {
+			top: '50%',
+			left: '50%',
+		},
+		'radial-gradient-size': 'farthest-corner',
+		'radial-gradient-repeat': 'no-repeat',
+		'radial-gradient-attachment': 'scroll',
+		'mesh-gradient': '',
+		// $FlowFixMe
+		'mesh-gradient-colors': [],
+		'mesh-gradient-attachment': 'scroll',
+		isVisible: true,
+	},
+	popoverTitle = __('Background', 'publisher-core'),
+	className = '',
 	...props
 }: TBackgroundControlProps): MixedElement {
 	// it's commented because we wait for field context provider to use it.
@@ -145,43 +175,4 @@ BackgroundControl.propTypes = {
 	 * Label for popover
 	 */
 	popoverTitle: PropTypes.string,
-};
-
-BackgroundControl.defaultProps = {
-	className: '',
-	// $FlowFixMe
-	defaultValue: [],
-	defaultRepeaterItemValue: {
-		type: 'image',
-		image: '',
-		'image-size': 'custom',
-		'image-size-width': 'auto',
-		'image-size-height': 'auto',
-		'image-position': {
-			top: '50%',
-			left: '50%',
-		},
-		'image-repeat': 'repeat',
-		'image-attachment': 'scroll',
-		'linear-gradient': 'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
-		'linear-gradient-angel': '90',
-		'linear-gradient-repeat': 'no-repeat',
-		'linear-gradient-attachment': 'scroll',
-		'radial-gradient':
-			'radial-gradient(rgb(0,159,251) 0%,rgb(229,46,0) 100%)',
-		'radial-gradient-position': {
-			top: '50%',
-			left: '50%',
-		},
-		'radial-gradient-size': 'farthest-corner',
-		'radial-gradient-repeat': 'no-repeat',
-		'radial-gradient-attachment': 'scroll',
-		'mesh-gradient': '',
-		// $FlowFixMe
-		'mesh-gradient-colors': [],
-		'mesh-gradient-attachment': 'scroll',
-		isVisible: true,
-	},
-	// $FlowFixMe
-	popoverTitle: __('Background', 'publisher-core'),
 };

@@ -22,16 +22,27 @@ import SearchReplaceIcon from './icons/search-replace';
 
 export default function SearchReplaceControl({
 	id,
-	defaultRepeaterItemValue,
-	popoverTitle,
+	defaultRepeaterItemValue = {
+		search: '',
+		replace: '',
+		isVisible: true,
+	},
+	popoverTitle = (
+		<>
+			<SearchReplaceIcon />
+			{__('Search and Replace', 'publisher-core')}
+		</>
+	),
 	//
 	className,
+	defaultValue = [],
 	...props
 }: TSearchReplaceControlProps): MixedElement {
 	return (
 		<RepeaterControl
 			id={id}
 			popoverTitle={popoverTitle}
+			defaultValue={defaultValue}
 			addNewButtonLabel={__(
 				'Add New Search and Replace',
 				'publisher-core'
@@ -70,19 +81,4 @@ SearchReplaceControl.propTypes = {
 	 * Label for popover
 	 */
 	popoverTitle: PropTypes.string,
-};
-
-SearchReplaceControl.defaultProps = {
-	defaultValue: ([]: any),
-	defaultRepeaterItemValue: {
-		search: '',
-		replace: '',
-		isVisible: true,
-	},
-	popoverTitle: ((
-		<>
-			<SearchReplaceIcon />
-			{__('Search and Replace', 'publisher-core')}
-		</>
-	): any),
 };

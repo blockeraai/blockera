@@ -1,6 +1,8 @@
+// @flow
 /**
  * External dependencies
  */
+import type { MixedElement } from 'react';
 import { __ } from '@wordpress/i18n';
 import { useState, useEffect } from '@wordpress/element';
 
@@ -15,6 +17,7 @@ import { Button, Flex, Grid, Popover } from '@publisher/components';
  */
 import { useControlContext } from '../../../context';
 import { BaseControl, InputControl } from '../../index';
+import type { SidePopoverProps } from '../types';
 
 export function SidePopover({
 	id,
@@ -29,7 +32,7 @@ export function SidePopover({
 		return newValue;
 	},
 	defaultValue = '0px',
-}) {
+}: SidePopoverProps): MixedElement {
 	const { setValue } = useControlContext({
 		id,
 		onChange,

@@ -1,13 +1,9 @@
 // @flow
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { memo } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
-
-/**
- * External dependencies
- */
 import type { Element } from 'react';
 
 /**

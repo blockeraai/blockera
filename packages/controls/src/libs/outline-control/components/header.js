@@ -1,9 +1,10 @@
 // @flow
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { memo } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
+import type { Element } from 'react';
 
 /**
  * Publisher dependencies
@@ -11,21 +12,16 @@ import { __, sprintf } from '@wordpress/i18n';
 import { ColorIndicator } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
 
-import CloneIcon from './../icons/outline';
-import BorderStyleHSolidIcon from '../../border-control/icons/style-h-solid';
-import BorderStyleHDashedIcon from '../../border-control/icons/style-h-dashed';
-import BorderStyleHDottedIcon from '../../border-control/icons/style-h-dotted';
-import BorderStyleHDoubleIcon from '../../border-control/icons/style-h-double';
-
-/**
- * External dependencies
- */
-import type { Element } from 'react';
 /**
  * Internal dependencies
  */
 import type { THeaderItem } from '../types';
 import { prepValueForHeader } from '../../repeater-control/utils';
+import CloneIcon from './../icons/outline';
+import BorderStyleHSolidIcon from '../../border-control/icons/style-h-solid';
+import BorderStyleHDashedIcon from '../../border-control/icons/style-h-dashed';
+import BorderStyleHDottedIcon from '../../border-control/icons/style-h-dotted';
+import BorderStyleHDoubleIcon from '../../border-control/icons/style-h-double';
 
 const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 	({

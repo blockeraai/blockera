@@ -26,7 +26,7 @@ import { RangeControl } from '../../index';
 import { default as ArrowUpIcon } from '../icons/arrow-up';
 import { default as ArrowDownIcon } from '../icons/arrow-down';
 import { useEffect, useState } from '@wordpress/element';
-import type { TNumberInput } from '../types';
+import type { InnerInputControlProps } from '../types';
 
 export function NumberInput({
 	value,
@@ -45,7 +45,7 @@ export function NumberInput({
 	children,
 	size,
 	...props
-}: TNumberInput): MixedElement {
+}: InnerInputControlProps): MixedElement {
 	// get the minimum value in number type
 	const getMinValue: Object = () => {
 		if (!isUndefined(min) && isNumber(+min)) {
@@ -183,7 +183,7 @@ export function NumberInput({
 				<RangeControl
 					withInputField={false}
 					sideEffect={false}
-					onChange={(newValue) => {
+					onChange={(newValue: number) => {
 						setValue(newValue);
 					}}
 					disabled={disabled}

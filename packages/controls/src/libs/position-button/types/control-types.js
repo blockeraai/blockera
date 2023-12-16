@@ -1,16 +1,14 @@
 // @flow
+/**
+ * Internal dependencies
+ */
+import type { ControlGeneralTypes } from '../../../types';
 
 export type TPositionButtonProps = {
-	label?: string,
+	...ControlGeneralTypes,
 	popoverLabel?: string,
 	alignmentMatrixLabel?: string,
-	id?: string,
-	onChange?: () => {},
 	defaultValue?: { top: string, left: string },
-	props?: Object,
-	columns?: string,
-	field?: string,
-	className?: string,
 	buttonLabel?: string,
 };
 

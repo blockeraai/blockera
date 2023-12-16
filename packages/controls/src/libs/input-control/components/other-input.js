@@ -17,7 +17,7 @@ import { isFunction } from '@publisher/utils';
 /**
  * Internal dependencies
  */
-import type { TOtherInput } from '../types';
+import type { InnerInputControlProps } from '../types';
 
 export function OtherInput({
 	value,
@@ -30,7 +30,7 @@ export function OtherInput({
 	actions,
 	children,
 	...props
-}: TOtherInput): MixedElement {
+}: InnerInputControlProps): MixedElement {
 	const [isValidValue, setIsValidValue] = useState(true);
 
 	// validator checking

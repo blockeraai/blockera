@@ -1,8 +1,11 @@
+// @flow
 /**
  * External dependencies
  */
 import PropTypes from 'prop-types';
 import { useState } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -11,15 +14,20 @@ import { isEmpty, isFunction, isNull, isUndefined } from '@publisher/utils';
 import { Button, Popover } from '@publisher/components';
 import { controlClassNames } from '@publisher/classnames';
 
+/**
+ * Internal dependencies
+ */
+import type { LabelControlProps, AdvancedLabelControlProps } from './types';
+
 const AdvancedLabelControl = ({
-	path,
+	path = null,
 	label,
 	className,
 	ariaLabel,
 	description,
 	resetToDefault,
 	...props
-}) => {
+}: AdvancedLabelControlProps) => {
 	const [isOpenModal, setOpenModal] = useState(false);
 
 	return (
@@ -45,12 +53,12 @@ const AdvancedLabelControl = ({
 					onClose={() => setOpenModal(!isOpenModal)}
 					placement={'left-start'}
 				>
-					{description && description()}
+					{description}
 
 					<Button
 						variant={'primary'}
-						text={'Reset To Default'}
-						label={'Reset To Default'}
+						text={__('Reset To Default', 'publisher-core')}
+						label={__('Reset To Default', 'publisher-core')}
 						onClick={() => {
 							if (
 								!resetToDefault ||
@@ -79,14 +87,14 @@ const AdvancedLabelControl = ({
 };
 
 const LabelControl = ({
-	mode,
-	label,
+	mode = 'simple',
+	label = '',
 	className,
-	ariaLabel,
+	ariaLabel = '',
 	description,
 	resetToDefault,
 	...props
-}) => {
+}: LabelControlProps): MixedElement => {
 	if ('advanced' === mode || isFunction(resetToDefault)) {
 		return (
 			<AdvancedLabelControl
@@ -134,13 +142,8 @@ LabelControl.propTypes = {
 	/**
 	 * The mode of label control
 	 */
+	// $FlowFixMe
 	mode: PropTypes.oneOf(['simple', 'advanced']),
-};
-
-LabelControl.defaultProps = {
-	label: '',
-	ariaLabel: '',
-	mode: 'simple',
 };
 
 export default LabelControl;

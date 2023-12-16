@@ -1,5 +1,13 @@
 // @flow
+/**
+ * Publisher dependencies
+ */
 import { isString, isArray, isObject, isUndefined } from '@publisher/utils';
+
+/**
+ * Internal dependencies
+ */
+import type { InputUnitTypes } from './types';
 
 const specialUnits = [
 	'auto',
@@ -59,8 +67,8 @@ export function isSpecialUnit(value: string): boolean {
 	);
 }
 
-export function getCSSUnits(unitType: string = ''): Array<any> {
-	if (unitType === '' || !isString(unitType)) {
+export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
+	if (isUndefined(unitType) || !isString(unitType)) {
 		return [];
 	}
 

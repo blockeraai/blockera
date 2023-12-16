@@ -22,15 +22,18 @@ import { convertAlignmentMatrixCoordinates } from './utils';
 import type { Props } from './types';
 import type { MixedElement } from 'react';
 export default function AlignmentMatrixControl({
-	inputFields,
-	size,
+	inputFields = false,
+	size = 68,
 	//
 	id,
 	label,
 	columns,
-	defaultValue,
+	defaultValue = {
+		top: '50%',
+		left: '50%',
+	},
 	onChange,
-	field,
+	field = 'alignment-matrix',
 	//
 	className,
 }: Props): MixedElement {
@@ -120,7 +123,7 @@ export default function AlignmentMatrixControl({
 
 								return newValue;
 							}}
-							smallWidth={true}
+							size="small"
 						/>
 
 						<InputControl
@@ -139,7 +142,7 @@ export default function AlignmentMatrixControl({
 
 								return newValue;
 							}}
-							smallWidth={true}
+							size="small"
 						/>
 					</Flex>
 				</div>
@@ -192,16 +195,6 @@ AlignmentMatrixControl.propTypes = {
 	 * Show advanced input fields for changing top and left position or not?
 	 */
 	inputFields: PropTypes.bool,
-};
-
-AlignmentMatrixControl.defaultProps = {
-	defaultValue: {
-		top: '50%',
-		left: '50%',
-	},
-	size: 68,
-	field: 'alignment-matrix',
-	inputFields: false,
 };
 
 export { convertAlignmentMatrixCoordinates } from './utils';

@@ -1,8 +1,10 @@
+// @flow
 /**
  * External dependencies
  */
 import { __, sprintf } from '@wordpress/i18n';
 import { useContext } from '@wordpress/element';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -19,13 +21,14 @@ import EnableIcon from '../icons/enable';
 import DisableIcon from '../icons/disable';
 import CloneIcon from '../icons/clone';
 import { useControlContext } from '../../../context';
+import type { RepeaterItemActionsProps } from '../types';
 
 export default function RepeaterItemActions({
 	item,
 	itemId,
 	isVisible,
 	setVisibility,
-}) {
+}: RepeaterItemActionsProps): MixedElement {
 	const {
 		controlId,
 		maxItems,

@@ -3,21 +3,19 @@
  * External dependencies
  */
 import { PanelBody as WPPanelBody } from '@wordpress/components';
-import type { MixedElement, Node } from 'react';
+import type { MixedElement } from 'react';
+
 /**
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
 import { PropTypes } from 'prop-types';
 
-type Props = {
-	title: string,
-	initialOpen?: boolean,
-	className?: string,
-	icon?: Node,
-	onToggle?: () => void,
-	children: Node,
-};
+/**
+ * Internal Dependencies
+ */
+import type { PanelBodyControlProps } from './types';
+
 export default function PanelBodyControl({
 	title,
 	initialOpen = true,
@@ -26,7 +24,7 @@ export default function PanelBodyControl({
 	children,
 	onToggle,
 	...props
-}: Props): MixedElement {
+}: PanelBodyControlProps): MixedElement {
 	return (
 		<WPPanelBody
 			title={title}
@@ -58,7 +56,4 @@ PanelBodyControl.propTypes = {
 	 * Function that will be fired while opening or closing of panel body
 	 */
 	onToggle: PropTypes.element,
-};
-PanelBodyControl.defaultProps = {
-	initialOpen: true,
 };

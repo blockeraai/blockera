@@ -5,6 +5,7 @@
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import PropTypes from 'prop-types';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -27,23 +28,25 @@ import {
 	AttributesControl,
 } from '../index';
 import { ControlContextProvider, useControlContext } from '../../context';
-/**
- * types
- */
-import type { MixedElement } from 'react';
-import type { TLinkControlProps } from './types/link-control-props';
+import type { LinkControlProps } from './types/link-control-props';
 
 export default function LinkControl({
 	label,
 	columns,
-	field,
+	field = 'link',
 	onChange,
 	className,
-	placeholder,
+	placeholder = 'https://your-link.com',
 	attributesId = 'link-control-attributes',
-	defaultValue,
-	advancedOpen,
-}: TLinkControlProps): MixedElement {
+	defaultValue = {
+		link: '',
+		target: false,
+		nofollow: false,
+		label: '',
+		attributes: [],
+	},
+	advancedOpen = 'auto',
+}: LinkControlProps): MixedElement {
 	const {
 		controlInfo: { name: controlId },
 		value,
@@ -213,19 +216,4 @@ LinkControl.propTypes = {
 	 * link input placeholder text
 	 */
 	placeholder: PropTypes.string,
-};
-// $FlowFixMe
-LinkControl.defaultProps = {
-	attributesId: 'link-control-attributes',
-	placeholder: 'https://your-link.com',
-	advancedOpen: 'auto',
-	defaultValue: {
-		link: '',
-		target: false,
-		nofollow: false,
-		label: '',
-		// $FlowFixMe
-		attributes: [],
-	},
-	field: 'link',
 };

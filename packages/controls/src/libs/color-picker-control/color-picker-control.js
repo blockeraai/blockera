@@ -5,6 +5,7 @@
 import { ColorPicker as WPColorPicker } from '@wordpress/components';
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -16,28 +17,27 @@ import { Button, Popover } from '@publisher/components';
  */
 import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
-import type { MixedElement } from 'react';
-import type { Props } from './types';
+import type { ColorPickerControlProps } from './types';
 import TrashIcon from './icons/trash';
 
 export default function ColorPickerControl({
-	popoverTitle,
-	isOpen,
-	onClose,
-	placement,
-	isPopover,
-	hasClearBtn,
+	popoverTitle = __('Color Picker', 'publisher-core'),
+	isOpen = false,
+	onClose = () => {},
+	placement = 'left-start',
+	isPopover = true,
+	hasClearBtn = true,
 	//
 	id,
-	label,
+	label = '',
 	columns,
-	defaultValue,
+	defaultValue = '',
 	onChange,
-	field,
+	field = 'color-picker',
 	//
 	className,
 	...props
-}: Props): MixedElement {
+}: ColorPickerControlProps): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
 		onChange,
@@ -172,16 +172,4 @@ ColorPickerControl.propTypes = {
 	 * Function that will be fired while the control value state changes.
 	 */
 	onChange: PropTypes.func,
-};
-
-ColorPickerControl.defaultProps = {
-	label: '',
-	field: 'color-picker',
-	popoverTitle: (__('Color Picker', 'publisher-core'): string),
-	isPopover: true,
-	defaultValue: '',
-	hasClearBtn: true,
-	isOpen: false,
-	placement: 'left-start',
-	onClose: () => {},
 };

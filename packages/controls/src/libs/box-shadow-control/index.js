@@ -16,14 +16,23 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import Fields from './components/fields';
 import RepeaterControl from '../repeater-control';
-import type { TBoxShadowControlProps } from './types';
+import type { BoxShadowControlProps } from './types';
 export default function BoxShadowControl({
 	id,
-	defaultRepeaterItemValue,
-	popoverTitle,
+	popoverTitle = __('Box Shadow', 'publisher-core'),
 	className,
+	defaultValue = [],
+	defaultRepeaterItemValue = {
+		type: 'outer',
+		x: '0px',
+		y: '0px',
+		blur: '0px',
+		spread: '0px',
+		color: '#000000ab',
+		isVisible: true,
+	},
 	...props
-}: TBoxShadowControlProps): MixedElement {
+}: BoxShadowControlProps): MixedElement {
 	return (
 		<RepeaterControl
 			id={id}
@@ -33,6 +42,7 @@ export default function BoxShadowControl({
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
+			defaultValue={defaultValue}
 			{...props}
 		/>
 	);
@@ -67,18 +77,4 @@ BoxShadowControl.propTypes = {
 	 * Label for popover
 	 */
 	popoverTitle: PropTypes.string,
-};
-
-BoxShadowControl.defaultProps = {
-	defaultValue: ([]: any),
-	defaultRepeaterItemValue: {
-		type: 'outer',
-		x: '0px',
-		y: '0px',
-		blur: '0px',
-		spread: '0px',
-		color: '#000000ab',
-		isVisible: true,
-	},
-	popoverTitle: (__('Box Shadow', 'publisher-core'): any),
 };

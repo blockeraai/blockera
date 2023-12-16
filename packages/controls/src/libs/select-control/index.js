@@ -24,22 +24,22 @@ import { useControlContext } from '../../context';
 import { renderSelectNativeOption, prepareSelectCustomOptions } from './utils';
 
 const SelectControl = ({
-	type,
+	type = 'native',
 	options,
-	customMenuPosition,
-	customHideInputIcon,
-	customHideInputLabel,
-	customHideInputCaret,
-	customInputCenterContent,
-	noBorder,
-	multiple,
+	customMenuPosition = 'bottom',
+	customHideInputIcon = false,
+	customHideInputLabel = false,
+	customHideInputCaret = false,
+	customInputCenterContent = false,
+	noBorder = false,
+	multiple = false,
 	//
 	id,
-	label,
+	label = '',
 	columns,
-	defaultValue,
+	defaultValue = '',
 	onChange,
-	field,
+	field = 'select',
 	//
 	className,
 }: TSelectControlProps): MixedElement => {
@@ -180,18 +180,4 @@ SelectControl.propTypes = {
 	 * @default false
 	 */
 	multiple: PropTypes.bool,
-};
-
-SelectControl.defaultProps = {
-	type: 'native',
-	customMenuPosition: 'bottom',
-	customHideInputIcon: false,
-	customHideInputLabel: false,
-	customHideInputCaret: false,
-	customInputCenterContent: false,
-	noBorder: false,
-	multiple: false,
-	label: '',
-	defaultValue: '',
-	field: 'select',
 };

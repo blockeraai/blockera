@@ -1,3 +1,4 @@
+// @flow
 /**
  * WordPress dependencies
  */
@@ -18,6 +19,7 @@ import { default as RotateIcon } from '../icons/rotate';
 import { default as ScaleIcon } from '../icons/scale';
 import { default as SkewIcon } from '../icons/skew';
 import { prepValueForHeader } from '../../repeater-control/utils';
+import type { TransformControlRepeaterItemValue } from '../types';
 
 const RepeaterItemHeader = ({
 	item,
@@ -26,6 +28,13 @@ const RepeaterItemHeader = ({
 	setOpen,
 	children,
 	isOpenPopoverEvent,
+}: {
+	item: TransformControlRepeaterItemValue,
+	itemId: number,
+	isOpen: boolean,
+	setOpen: (state: boolean) => void,
+	children: any,
+	isOpenPopoverEvent: (event: MouseEvent) => boolean,
 }) => {
 	let label, icon, value;
 
@@ -99,4 +108,5 @@ const RepeaterItemHeader = ({
 	);
 };
 
+// $FlowFixMe
 export default memo(RepeaterItemHeader);

@@ -39,11 +39,6 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					columns="columns-2"
 					id={getControlId(itemId, 'border')}
 					linesDirection="horizontal"
-					value={{
-						width: item.border.width,
-						style: item.border.style,
-						color: item.border.color,
-					}}
 					onChange={(newValue) =>
 						changeRepeaterItem({
 							controlId,

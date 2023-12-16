@@ -23,7 +23,7 @@ export default function TextAreaControl({
 	columns,
 	defaultValue = '',
 	onChange,
-	field,
+	field = 'textarea',
 	className,
 	disabled = false,
 	height = 55,
@@ -84,9 +84,4 @@ TextAreaControl.propTypes = {
 	 * Textarea custom height
 	 */
 	height: PropTypes.number,
-};
-
-TextAreaControl.defaultProps = {
-	field: 'textarea',
-	defaultValue: '',
 };

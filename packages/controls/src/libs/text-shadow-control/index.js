@@ -4,6 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -16,15 +17,17 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
-/**
- * Types
- */
-import type { TTextShadowControlProps } from './types/text-shadow-control-props';
-import type { MixedElement } from 'react';
+import type { TTextShadowControlProps } from './types';
 
 export default function TextShadowControl({
-	defaultRepeaterItemValue,
-	popoverTitle,
+	defaultRepeaterItemValue = {
+		x: '1px',
+		y: '1px',
+		blur: '1px',
+		color: '',
+		isVisible: true,
+	},
+	popoverTitle = __('Text Shadow', 'publisher-core'),
 	className,
 	...props
 }: TTextShadowControlProps): MixedElement {
@@ -69,18 +72,4 @@ TextShadowControl.propTypes = {
 	 * Label for popover
 	 */
 	popoverTitle: PropTypes.string,
-};
-
-TextShadowControl.defaultProps = {
-	// $FlowFixMe
-	value: [],
-	defaultRepeaterItemValue: {
-		x: '1px',
-		y: '1px',
-		blur: '1px',
-		color: '',
-		isVisible: true,
-	},
-	// $FlowFixMe
-	popoverTitle: __('Text Shadow', 'publisher-core'),
 };

@@ -28,7 +28,7 @@ import { useControlContext } from '../../context';
 /**
  * Types
  */
-import type { TBoxPositionControlProps } from './types/box-position-control-props';
+import type { BoxPositionControlProps } from './types';
 import type { MixedElement } from 'react';
 
 // icons
@@ -54,16 +54,24 @@ import { default as AbsoluteCenterIcon } from './icons/absolute-center';
 import { extractNumberAndUnit } from '../input-control/utils';
 
 const Component = ({
-	openSide,
+	openSide = '',
 	//
 	id,
-	label,
-	defaultValue,
+	label = __('Position', 'publisher-core'),
+	defaultValue = {
+		type: 'static',
+		position: {
+			top: '',
+			right: '',
+			bottom: '',
+			left: '',
+		},
+	},
 	onChange,
 	//
 	className,
 	...props
-}: TBoxPositionControlProps): MixedElement => {
+}: BoxPositionControlProps): MixedElement => {
 	const { value, setValue, getId, description, resetToDefault } =
 		useControlContext({
 			id,
@@ -864,21 +872,7 @@ Component.propTypes = {
 	openSide: PropTypes.oneOf(['top', 'right', 'bottom', 'left', '']),
 };
 
-Component.defaultProps = {
-	defaultValue: {
-		type: 'static',
-		position: {
-			top: '',
-			right: '',
-			bottom: '',
-			left: '',
-		},
-	},
-	openSide: '',
-	label: (__('Position', 'publisher-core'): any),
-};
-
-const BoxPositionControl: TBoxPositionControlProps =
-	memo<TBoxPositionControlProps>(Component, hasSameProps);
+const BoxPositionControl: BoxPositionControlProps =
+	memo<BoxPositionControlProps>(Component, hasSameProps);
 
 export default BoxPositionControl;

@@ -1,16 +1,22 @@
 // @flow
+/**
+ * Internal dependencies
+ */
+import type { RepeaterControlProps } from '../../repeater-control/types/repeater-control-props';
+
+export type FilterTypes =
+	| 'blur'
+	| 'drop-shadow'
+	| 'brightness'
+	| 'contrast'
+	| 'hue-rotate'
+	| 'saturate'
+	| 'grayscale'
+	| 'invert'
+	| 'sepia';
 
 export type TItem = {
-	type:
-		| 'blur'
-		| 'drop-shadow'
-		| 'brightness'
-		| 'contrast'
-		| 'hue-rotate'
-		| 'saturate'
-		| 'grayscale'
-		| 'invert'
-		| 'sepia',
+	type: FilterTypes,
 	blur: string,
 	brightness: string,
 	contrast: string,
@@ -26,13 +32,9 @@ export type TItem = {
 	isVisible: boolean,
 };
 
-export type TFilterControlProps = {
-	id?: string,
+export type FilterControlProps = {
+	...RepeaterControlProps,
 	defaultRepeaterItemValue?: TItem,
-	popoverTitle?: string,
-	className?: string,
-	defaultValue?: Array<Object>,
-	onChange?: () => {},
 };
 
 export type TValueCleanUp = Array<Object> | any;

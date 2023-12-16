@@ -21,34 +21,7 @@ import type { MixedElement } from 'react';
  */
 import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
-
-type IconOption = {
-	label: string,
-	value: string,
-	icon: MixedElement,
-};
-
-type TextOption = {
-	label: string,
-	value: string,
-};
-
-type Option = IconOption | TextOption;
-
-type Props = {
-	isDeselectable?: boolean,
-	options: Option[],
-	//
-	id?: string,
-	label?: string,
-	columns?: string,
-	defaultValue?: string,
-	onChange?: string,
-	field?: string,
-	//
-	className?: string,
-	children?: string,
-};
+import type { ToggleSelectControlProps } from './types';
 
 export default function ToggleSelectControl({
 	isDeselectable,
@@ -64,7 +37,7 @@ export default function ToggleSelectControl({
 	className,
 	children,
 	...props
-}: Props): MixedElement {
+}: ToggleSelectControlProps): MixedElement {
 	const { value, setValue } = useControlContext({
 		id,
 		onChange,

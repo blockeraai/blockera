@@ -26,12 +26,12 @@ export default function NoticeControl({
 	columns,
 	field,
 	className,
-	showIcon,
-	type,
+	showIcon = true,
+	type = 'warning',
 	children,
-	isDismissible,
+	isDismissible = false,
 	onDismiss,
-	isShown: _isShown,
+	isShown: _isShown = true,
 	onShown,
 	style,
 	...props
@@ -151,11 +151,4 @@ NoticeControl.propTypes = {
 	 * Function that will be fired when control rendered
 	 */
 	onShown: PropTypes.func,
-};
-
-NoticeControl.defaultProps = {
-	type: 'warning',
-	showIcon: true,
-	isDismissible: false,
-	isShown: true,
 };

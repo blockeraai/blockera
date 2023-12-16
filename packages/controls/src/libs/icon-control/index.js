@@ -16,6 +16,7 @@ import {
 } from '@publisher/classnames';
 import { Button, Icon, MediaUploader } from '@publisher/components';
 import { isEmpty, isUndefined, useLateEffect } from '@publisher/utils';
+import { hasSameProps } from '@publisher/extensions';
 
 /**
  * Internal dependencies
@@ -23,29 +24,28 @@ import { isEmpty, isUndefined, useLateEffect } from '@publisher/utils';
 import { iconReducer } from './store/reducer';
 import { IconContextProvider } from './context';
 import { useControlContext } from '../../context';
-import { hasSameProps } from '@publisher/extensions';
 import { default as DeleteIcon } from './icons/delete';
 import { default as Suggestions } from './components/suggestions';
 import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
 import { BaseControl } from '../index';
-import type { Props } from './types';
+import type { IconControlProps } from './types';
 
 function IconControl({
 	suggestionsQuery,
 	//
 	label,
 	columns,
-	field,
+	field = 'icon',
 	//
-	labelChoose,
-	labelIconLibrary,
-	labelUploadSvg,
+	labelChoose = __('Choose Icon…', 'publisher-blocks'),
+	labelIconLibrary = __('Icon Library', 'publisher-blocks'),
+	labelUploadSvg = __('Upload SVG', 'publisher-blocks'),
 	//
 	defaultValue,
 	onChange,
 	//
 	className,
-}: Props): MixedElement {
+}: IconControlProps): MixedElement {
 	const { value, setValue } = useControlContext({
 		defaultValue,
 		onChange,
@@ -272,13 +272,6 @@ IconControl.propTypes = {
 	 * upload svg label
 	 */
 	labelUploadSvg: PropTypes.string,
-};
-
-IconControl.defaultProps = {
-	labelChoose: __('Choose Icon…', 'publisher-blocks'),
-	labelIconLibrary: __('Icon Library', 'publisher-blocks'),
-	labelUploadSvg: __('Upload SVG', 'publisher-blocks'),
-	field: 'icon',
 };
 
 // $FlowFixMe
