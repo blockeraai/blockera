@@ -45,10 +45,12 @@
 	}
 
 	&.type-deleted {
-		--va-color: var(--publisher-value-addon-var-deleted-color);
-		--va-bg-color: var(--publisher-value-addon-var-deleted-bg-color);
+		--va-color: var(--publisher-value-addon-deleted-color);
+		--va-border-color: var(--publisher-value-addon-deleted-border-color);
+		--va-bg-color: var(--publisher-value-addon-deleted-bg-color);
 
 		&.open-value-addon {
+			--va-border-color: var(--publisher-value-addon-deleted-color);
 			box-shadow: 0 0 0 1px var(--va-color);
 		}
 
@@ -56,8 +58,8 @@
 		& + span + .publisher-control-value-addon-pointers {
 
 			.publisher-control-value-addon-pointer.active-value-addon {
-				--publisher-value-addon-dv-color: var(--publisher-value-addon-var-deleted-color);
-				--publisher-value-addon-var-color: var(--publisher-value-addon-var-deleted-color);
+				--publisher-value-addon-dv-color: var(--publisher-value-addon-deleted-color);
+				--publisher-value-addon-var-color: var(--publisher-value-addon-deleted-color);
 			}
 		}
 	}

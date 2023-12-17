@@ -65,7 +65,7 @@ export default function ({
 						: __('Item ID:', 'publisher-core')}{' '}
 					<b
 						style={{
-							color: 'var(--publisher-value-addon-var-deleted-color)',
+							color: 'var(--publisher-value-addon-deleted-color)',
 						}}
 					>
 						{isLabelAvailable

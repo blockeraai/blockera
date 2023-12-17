@@ -4,8 +4,8 @@
 .publisher-component-popover {
 
 	&.publisher-control-popover-value-addon-deleted {
-		--publisher-controls-primary-color: var(--publisher-value-addon-var-deleted-color);
-		--publisher-controls-primary-color-darker-20: var(--publisher-value-addon-var-deleted-color-darker-20);
+		--publisher-controls-primary-color: var(--publisher-value-addon-deleted-color);
+		--publisher-controls-primary-color-darker-20: var(--publisher-value-addon-deleted-color-darker-20);
 	}
 }
 

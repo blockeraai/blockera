@@ -46,7 +46,7 @@ export default function ({
 
 			if (isUndefined(item?.value)) {
 				isDeleted = true;
-				label = __('Deleted Variable', 'publisher-core');
+				label = __('Missing Variable', 'publisher-core');
 				icon = <DeletedVariableIcon />;
 			} else {
 				label = !isUndefined(item?.name)

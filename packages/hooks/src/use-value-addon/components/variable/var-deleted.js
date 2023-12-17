@@ -35,7 +35,7 @@ export default function ({
 
 	return (
 		<Popover
-			title={__('Deleted Variable', 'publisher-core')}
+			title={__('Missing Variable', 'publisher-core')}
 			offset={125}
 			placement="left-start"
 			onClose={() => controlProps.setOpen('')}
@@ -89,7 +89,7 @@ export default function ({
 							: __('Variable ID:', 'publisher-core')}{' '}
 						<b
 							style={{
-								color: 'var(--publisher-value-addon-var-deleted-color)',
+								color: 'var(--publisher-value-addon-deleted-color)',
 							}}
 						>
 							{isLabelAvailable
@@ -160,7 +160,7 @@ export default function ({
 							: __('Variable ID:', 'publisher-core')}{' '}
 						<b
 							style={{
-								color: 'var(--publisher-value-addon-var-deleted-color)',
+								color: 'var(--publisher-value-addon-deleted-color)',
 							}}
 						>
 							{isLabelAvailable
