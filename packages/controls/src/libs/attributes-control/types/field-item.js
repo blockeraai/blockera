@@ -1,7 +1,7 @@
 // @flow
-import type { TItem } from './control-types';
+import type { AttributeControlValue } from './control-types';
 
 export type TFieldItem = {
-	item: TItem,
+	item: AttributeControlValue,
 	itemId: number,
 };

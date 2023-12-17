@@ -31,6 +31,7 @@ export default function AttributesControl({
 	popoverTitle = __('HTML Attribute', 'publisher-core'),
 	attributeElement = 'a',
 	defaultValue = [],
+	mode = 'popover',
 	//
 	className,
 	...props
@@ -47,6 +48,7 @@ export default function AttributesControl({
 			className={controlClassNames('attributes', className)}
 			attributeElement={attributeElement}
 			defaultValue={defaultValue}
+			mode={mode}
 			{...props}
 		/>
 	);
