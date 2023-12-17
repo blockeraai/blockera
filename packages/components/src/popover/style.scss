@@ -2,7 +2,7 @@
 	position: relative;
 	--popover-overflow: visible;
 	--popover-min-height: auto;
-	--popover-height: 400px;
+	--popover-height: 430px;
 	--popover-width: 290px;
 	--popover-header-height: 42px;
 	overflow: var(--popover-overflow) !important;
@@ -38,7 +38,7 @@
 		margin: 0;
 		height: var(--popover-header-height);
 		display: flex;
-		gap: 10px;
+		gap: 6px;
 		align-items: center;
 		font-weight: 500;
 		color: #1e1e1e;
