@@ -1,3 +1,7 @@
 // @flow
 
-export { ValueAddonReference, ValueAddonItemStatus } from './general-types';
+export {
+	ValueAddonReference,
+	ValueAddonItemStatus,
+	ValueAddonReferenceType,
+} from './general-types';
