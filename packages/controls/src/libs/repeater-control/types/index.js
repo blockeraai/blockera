@@ -20,6 +20,7 @@ export type RepeaterItemActionsProps = {
 type ID = string | number;
 
 export type RepeaterControlProps = {
+	...Object,
 	...ControlGeneralTypes,
 	design?: 'minimal',
 	mode?: GroupControlMode,
