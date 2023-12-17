@@ -277,7 +277,6 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 												isDeselectable={true}
 												//
 												defaultValue=""
-												value={textAlign}
 												onChange={(newValue) =>
 													handleOnChangeAttributes(
 														'publisherTextAlign',
@@ -429,18 +428,16 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											)}
 										>
 											<InputControl
-												{...{
-													...props,
-													arrows: true,
-													unitType: 'letter-spacing',
-													step: 'any',
-													defaultValue: '',
-													onChange: (newValue) =>
-														handleOnChangeAttributes(
-															'publisherWordSpacing',
-															newValue
-														),
-												}}
+												{...props}
+												arrows={true}
+												unitType="letter-spacing"
+												defaultValue=""
+												onChange={(newValue) =>
+													handleOnChangeAttributes(
+														'publisherWordSpacing',
+														newValue
+													)
+												}
 											/>
 										</BaseControl>
 									</ControlContextProvider>
@@ -627,8 +624,9 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											)}
 											columns="columns-2"
 											className={
-												display === 'flex' &&
-												'publisher-control-is-not-active'
+												display === 'flex'
+													? 'publisher-control-is-not-active'
+													: ''
 											}
 										>
 											<ToggleSelectControl
@@ -748,7 +746,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 															)}
 															columns="columns-1"
 															className="control-first label-center small-gap"
-															lines="vertical"
+															linesDirection="vertical"
 															customMenuPosition="top"
 															defaultValue={{
 																width: '',
