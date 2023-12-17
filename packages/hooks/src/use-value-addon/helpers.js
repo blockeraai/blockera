@@ -137,7 +137,6 @@ export function getVariableIcon({
 	return <></>;
 }
 
-// todo write tests
 export function getVariableCategory(
 	category: VariableCategory
 ): VariableCategoryDetail {

@@ -1,4 +1,10 @@
-import { getValueAddonRealValue, getVariableIcon, isValid } from '../helpers';
+import {
+	getValueAddonRealValue,
+	getVariableCategory,
+	getVariableIcon,
+	isValid,
+} from '../helpers';
+import { __ } from '@wordpress/i18n';
 
 describe('Helper Functions', () => {
 	describe('getValueAddonRealValue', () => {
@@ -234,6 +240,62 @@ describe('Helper Functions', () => {
 			expect(
 				getVariableIcon({ type: 'width-size', value: '1200px' })
 			).not.toBe(<></>);
+		});
+	});
+
+	describe('getVariableCategory', () => {
+		test('invalid item', () => {
+			expect(getVariableCategory('invalid')).toStrictEqual({
+				name: '',
+				variables: [],
+				notFound: true,
+			});
+		});
+
+		test('font size', () => {
+			const category = getVariableCategory('font-size');
+
+			expect(category.name).toBe(
+				__('Editor Font Sizes', 'publisher-core')
+			);
+		});
+
+		test('linear gradients', () => {
+			const category = getVariableCategory('linear-gradient');
+
+			expect(category.name).toBe(
+				__('Editor Linear Gradients', 'publisher-core')
+			);
+		});
+
+		test('radial-gradient', () => {
+			const category = getVariableCategory('radial-gradient');
+
+			expect(category.name).toBe(
+				__('Editor Radial Gradients', 'publisher-core')
+			);
+		});
+
+		test('width-size', () => {
+			const category = getVariableCategory('width-size');
+
+			expect(category.name).toBe(
+				__('Width & Height Sizes', 'publisher-core')
+			);
+		});
+
+		test('spacing', () => {
+			const category = getVariableCategory('spacing');
+
+			expect(category.name).toBe(
+				__('Editor Spacing Sizes', 'publisher-core')
+			);
+		});
+
+		test('color', () => {
+			const category = getVariableCategory('color');
+
+			expect(category.name).toBe(__('Editor Colors', 'publisher-core'));
 		});
 	});
 });
