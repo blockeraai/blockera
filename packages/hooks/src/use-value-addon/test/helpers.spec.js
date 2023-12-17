@@ -1,4 +1,5 @@
 import {
+	getDynamicValueIcon,
 	getValueAddonRealValue,
 	getVariableCategory,
 	getVariableIcon,
@@ -296,6 +297,65 @@ describe('Helper Functions', () => {
 			const category = getVariableCategory('color');
 
 			expect(category.name).toBe(__('Editor Colors', 'publisher-core'));
+		});
+	});
+
+	describe('getDynamicValueIcon', () => {
+		test('invalid item', () => {
+			expect(getDynamicValueIcon('invalid')).toStrictEqual(<></>);
+			expect(getDynamicValueIcon(undefined)).toStrictEqual(<></>);
+		});
+
+		test('text', () => {
+			expect(getDynamicValueIcon('text')).not.toBe(<></>);
+		});
+
+		test('link', () => {
+			expect(getDynamicValueIcon('link')).not.toBe(<></>);
+		});
+
+		test('image', () => {
+			expect(getDynamicValueIcon('image')).not.toBe(<></>);
+		});
+
+		test('id', () => {
+			expect(getDynamicValueIcon('id')).not.toBe(<></>);
+		});
+
+		test('date', () => {
+			expect(getDynamicValueIcon('date')).not.toBe(<></>);
+		});
+
+		test('time', () => {
+			expect(getDynamicValueIcon('time')).not.toBe(<></>);
+		});
+
+		test('category', () => {
+			expect(getDynamicValueIcon('category')).not.toBe(<></>);
+		});
+
+		test('tag', () => {
+			expect(getDynamicValueIcon('tag')).not.toBe(<></>);
+		});
+
+		test('term', () => {
+			expect(getDynamicValueIcon('term')).not.toBe(<></>);
+		});
+
+		test('shortcode', () => {
+			expect(getDynamicValueIcon('shortcode')).not.toBe(<></>);
+		});
+
+		test('email', () => {
+			expect(getDynamicValueIcon('email')).not.toBe(<></>);
+		});
+
+		test('comment', () => {
+			expect(getDynamicValueIcon('comment')).not.toBe(<></>);
+		});
+
+		test('meta', () => {
+			expect(getDynamicValueIcon('meta')).not.toBe(<></>);
 		});
 	});
 });

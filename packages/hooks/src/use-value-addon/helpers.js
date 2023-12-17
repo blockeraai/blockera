@@ -197,7 +197,6 @@ export function getVariableCategory(
 	};
 }
 
-// todo write tests
 export function getDynamicValueIcon(type: DynamicValueTypes): MixedElement {
 	switch (type) {
 		case 'text':
