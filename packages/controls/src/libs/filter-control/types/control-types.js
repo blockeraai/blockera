@@ -2,7 +2,7 @@
 /**
  * Internal dependencies
  */
-import type { RepeaterControlProps } from '../../repeater-control/types/repeater-control-props';
+import type { RepeaterControlProps } from '../../repeater-control/types';
 
 export type FilterTypes =
 	| 'blur'

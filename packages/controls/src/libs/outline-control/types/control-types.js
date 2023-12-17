@@ -2,7 +2,7 @@
 /**
  * Internal dependencies
  */
-import type { RepeaterControlProps } from '../../repeater-control/types/repeater-control-props';
+import type { RepeaterControlProps } from '../../repeater-control/types';
 import type { BorderControlBorderStyle } from '../../border-control/types';
 
 export type TItem = {
