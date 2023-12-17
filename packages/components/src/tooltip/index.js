@@ -12,14 +12,22 @@ import PropTypes from 'prop-types';
  */
 import type { TTooltipItem } from './types';
 
-export default function Tooltip({
+export function Tooltip({
+	hideOnClick = true,
+	placement = 'top',
+	position = 'top',
 	children,
 	className,
+	text,
 	...props
 }: TTooltipItem): Node {
 	return (
 		<WPTooltip
 			className={componentClassNames('tooltip', className)}
+			hideOnClick={hideOnClick}
+			placement={placement}
+			position={position}
+			text={text}
 			{...props}
 		>
 			{children}
@@ -51,10 +59,4 @@ Tooltip.propTypes = {
 	//$FlowFixMe
 	shortcut: PropTypes.oneOf(PropTypes.string, PropTypes.object),
 	text: PropTypes.string,
-};
-
-Tooltip.defaultProps = {
-	hideOnClick: true,
-	placement: 'top',
-	position: 'top',
 };
