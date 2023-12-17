@@ -9,22 +9,23 @@ import { __, sprintf } from '@wordpress/i18n';
  * Publisher dependencies
  */
 import {
+	type DynamicValueCategory,
+	type DynamicValueTypes,
+	getArchiveDynamicValueItemsBy,
 	getColors,
+	getFeaturedImageDynamicValueItemsBy,
 	getFontSizes,
 	getLinearGradients,
-	getRadialGradients,
-	getSpacings,
-	getWidthSizes,
-	getVariable,
-	getPostDynamicValueItemsBy,
-	getFeaturedImageDynamicValueItemsBy,
-	getArchiveDynamicValueItemsBy,
-	getSiteDynamicValueItemsBy,
-	getUserDynamicValueItemsBy,
 	getOtherDynamicValueItemsBy,
+	getPostDynamicValueItemsBy,
+	getRadialGradients,
+	getSiteDynamicValueItemsBy,
+	getSpacings,
+	getUserDynamicValueItemsBy,
+	getVariable,
+	getWidthSizes,
+	type ValueAddonReference,
 	type VariableCategory,
-	type DynamicValueTypes,
-	type DynamicValueCategory,
 } from '@publisher/core-data';
 import { ColorIndicator } from '@publisher/components';
 import { isBlockTheme, isObject, isUndefined } from '@publisher/utils';
@@ -34,8 +35,8 @@ import { NoticeControl } from '@publisher/controls';
  * Internal dependencies
  */
 import type {
-	ValueAddon,
 	DynamicValueCategoryDetail,
+	ValueAddon,
 	VariableCategoryDetail,
 } from './types';
 import VarTypeFontSizeIcon from './icons/var-font-size';
@@ -55,10 +56,9 @@ import DVTypeShortcodeIcon from './icons/dv-shortcode';
 import DVTypeEmailIcon from './icons/dv-email';
 import DVTypeCommentIcon from './icons/dv-comment';
 
-// todo improve and write tests
-export const isValid = ({ isValueAddon = false }: ValueAddon): boolean => {
-	return isValueAddon;
-};
+export function isValid(value: ValueAddon): boolean {
+	return !isUndefined(value?.isValueAddon) && value?.isValueAddon;
+}
 
 export function getValueAddonRealValue(value: ValueAddon | string): string {
 	if (typeof value === 'number') {
@@ -81,13 +81,23 @@ export function getValueAddonRealValue(value: ValueAddon | string): string {
 			//
 			if (
 				isUndefined(variable?.value) &&
-				!isUndefined(value.settings.value)
+				!isUndefined(value.settings.value) &&
+				value.settings.value !== ''
 			) {
 				return value.settings.value;
 			}
 
+			if (
+				isUndefined(value?.settings?.var) ||
+				value?.settings?.var === ''
+			) {
+				return '';
+			}
+
 			return `var(${value?.settings?.var})`;
 		}
+
+		return ''; // return empty string because there is no real string value
 	}
 
 	//$FlowFixMe
@@ -288,11 +298,12 @@ export function generateVariableString({
 	type,
 	slug,
 }: {
-	reference: 'publisher' | 'preset',
+	reference: ValueAddonReference,
 	type: VariableCategory,
 	slug: string,
 }): string {
 	let _type: string = type;
+	let _reference: string = reference.type;
 
 	if (type === 'color') {
 		_type = 'color';
@@ -301,18 +312,27 @@ export function generateVariableString({
 			slug = 'content-size';
 			_type = 'global';
 			// $FlowFixMe
-			reference = 'style';
+			_reference = 'style';
 		} else if (slug === 'wideSize') {
 			slug = 'wide-size';
 			_type = 'global';
 			// $FlowFixMe
-			reference = 'style';
+			_reference = 'style';
 		}
 	} else {
 		_type = type.replace(/^linear-|^radial-/i, '');
 	}
 
-	return `--wp--${reference}--${_type}--${slug}`;
+	switch (_reference) {
+		case 'custom':
+			_reference = 'publisher';
+			break;
+
+		default:
+			_reference = 'preset';
+	}
+
+	return `--wp--${_reference}--${_type}--${slug}`;
 }
 
 export function canUnlinkVariable(value: ValueAddon): boolean {

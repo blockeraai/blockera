@@ -8,9 +8,11 @@ import { useState } from '@wordpress/element';
  * Publisher dependencies
  */
 import { isObject, isUndefined } from '@publisher/utils';
-import { getVariable } from '@publisher/core-data';
-// eslint-disable-next-line no-duplicate-imports
-import type { VariableItem, DynamicValueItem } from '@publisher/core-data';
+import {
+	getVariable,
+	type VariableItem,
+	type DynamicValueItem,
+} from '@publisher/core-data';
 
 /**
  * Internal dependencies

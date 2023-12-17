@@ -119,7 +119,7 @@ export default function ({
 								...variable,
 								type,
 								var: generateVariableString({
-									reference: 'preset',
+									reference: variable.reference,
 									type,
 									slug: variable.slug,
 								}),
