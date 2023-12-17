@@ -28,7 +28,8 @@ import {
 	AttributesControl,
 } from '../index';
 import { ControlContextProvider, useControlContext } from '../../context';
-import type { LinkControlProps } from './types/link-control-props';
+import type { LinkControlProps } from './types';
+import { linkControlValueCleaner } from './utils';
 
 export default function LinkControl({
 	label,
@@ -55,6 +56,7 @@ export default function LinkControl({
 		onChange,
 		defaultValue,
 		mergeInitialAndDefault: true,
+		valueCleanup: linkControlValueCleaner,
 	});
 
 	const [isAdvancedMode, setIsAdvancedMode] = useState(
@@ -165,7 +167,6 @@ export default function LinkControl({
 									});
 								}}
 								attributeElement="a"
-								isPopover={true}
 								label={__('Attributes', 'publisher-core')}
 							/>
 						</ControlContextProvider>
