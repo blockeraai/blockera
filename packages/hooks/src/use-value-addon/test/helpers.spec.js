@@ -1,4 +1,4 @@
-import { getValueAddonRealValue, isValid } from '../helpers';
+import { getValueAddonRealValue, getVariableIcon, isValid } from '../helpers';
 
 describe('Helper Functions', () => {
 	describe('getValueAddonRealValue', () => {
@@ -187,6 +187,53 @@ describe('Helper Functions', () => {
 
 		test('valid object - valid value addon', () => {
 			expect(isValid({ isValueAddon: true })).toBe(true);
+		});
+	});
+
+	describe('getVariableIcon', () => {
+		test('invalid item', () => {
+			expect(
+				getVariableIcon({ type: 'jon-doe', value: '12px' })
+			).not.toBe(<></>);
+		});
+
+		test('font size', () => {
+			expect(
+				getVariableIcon({ type: 'font-size', value: '12px' })
+			).not.toBe(<></>);
+		});
+
+		test('radial-gradient', () => {
+			expect(
+				getVariableIcon({ type: 'radial-gradient', value: '12px' })
+			).not.toBe(<></>);
+			expect(
+				getVariableIcon({ type: 'radial-gradient', value: '' })
+			).not.toBe(<></>);
+		});
+
+		test('linear-gradient', () => {
+			expect(
+				getVariableIcon({ type: 'linear-gradient', value: '12px' })
+			).not.toBe(<></>);
+		});
+
+		test('color', () => {
+			expect(
+				getVariableIcon({ type: 'color', value: '#ffffff' })
+			).not.toBe(<></>);
+		});
+
+		test('spacing', () => {
+			expect(
+				getVariableIcon({ type: 'spacing', value: '12px' })
+			).not.toBe(<></>);
+		});
+
+		test('width-size', () => {
+			expect(
+				getVariableIcon({ type: 'width-size', value: '1200px' })
+			).not.toBe(<></>);
 		});
 	});
 });

@@ -104,7 +104,6 @@ export function getValueAddonRealValue(value: ValueAddon | string): string {
 	return value;
 }
 
-// todo write tests
 export function getVariableIcon({
 	type,
 	value,
@@ -118,10 +117,12 @@ export function getVariableIcon({
 
 		case 'radial-gradient':
 		case 'linear-gradient':
-			if (value !== '') {
-				return <ColorIndicator type="gradient" value={value} />;
-			}
-			break;
+			return (
+				<ColorIndicator
+					type="gradient"
+					value={value !== '' ? value : ''}
+				/>
+			);
 
 		case 'color':
 			return <ColorIndicator type="color" value={value} />;
