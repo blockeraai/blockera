@@ -9,14 +9,13 @@ import { __ } from '@wordpress/i18n';
  * Publisher dependencies
  */
 import { controlInnerClassNames } from '@publisher/classnames';
-import { isUndefined } from '@publisher/utils';
 import { Button, Flex, Popover } from '@publisher/components';
 
 /**
  * Internal dependencies
  */
 import type { ValueAddonControlProps } from '../control/types';
-import { isValid } from '../../helpers';
+import { getDeletedItemInfo } from '../../helpers';
 import TrashIcon from '../../icons/trash';
 
 export default function ({
@@ -24,11 +23,8 @@ export default function ({
 }: {
 	controlProps: ValueAddonControlProps,
 }): Element<any> {
-	const isLabelAvailable =
-		!isUndefined(controlProps.value?.settings?.name) &&
-		controlProps.value?.settings?.name !== '';
+	const deletedItem = getDeletedItemInfo(controlProps.value);
 
-	// todo update this to show related messages by using status of item and also the reference of DV item
 	return (
 		<Popover
 			title={__('Missing Dynamic Value Item', 'publisher-core')}
@@ -36,60 +32,87 @@ export default function ({
 			placement="left-start"
 			onClose={() => controlProps.setOpen('')}
 			className={controlInnerClassNames('popover-value-addon-deleted')}
-			titleButtonsRight={
-				<>
-					{isValid(controlProps.value) && (
-						<Button
-							tabIndex="-1"
-							size={'extra-small'}
-							onClick={controlProps.handleOnClickRemove}
-							style={{ padding: '5px' }}
-							label={__('Remove', 'publisher-core')}
-						>
-							<TrashIcon />
-						</Button>
-					)}
-				</>
-			}
 		>
-			<Flex direction="column" gap={15} style={{ paddingBottom: '0' }}>
-				<p style={{ fontSize: '12px', margin: 0 }}>
-					{__(
-						'There was a deletion or disappearance of this dynamic value item. It can be result of deactivating a plugin or removing a custom code.',
-						'publisher-core'
+			<Flex direction="column" gap={10} style={{ paddingBottom: '0' }}>
+				{deletedItem.before !== '' && (
+					<p style={{ fontSize: '12px', margin: 0 }}>
+						{deletedItem.before}
+					</p>
+				)}
+
+				<Flex direction="column" gap={3} style={{ paddingBottom: '0' }}>
+					<Flex
+						direction="row"
+						alignItems="center"
+						gap={4}
+						style={{ fontSize: '12px', margin: 0 }}
+					>
+						{deletedItem.name !== ''
+							? __('Item:', 'publisher-core')
+							: __('Item ID:', 'publisher-core')}
+						<b
+							style={{
+								color: 'var(--publisher-value-addon-deleted-color)',
+							}}
+						>
+							{deletedItem.name !== ''
+								? controlProps.value?.settings?.name
+								: controlProps.value?.settings?.id}
+						</b>
+					</Flex>
+
+					{deletedItem.referenceType !== '' && (
+						<Flex
+							direction="row"
+							alignItems="center"
+							gap={4}
+							style={{ fontSize: '12px', margin: 0 }}
+						>
+							{__('Reference:', 'publisher-core')}
+							<b
+								style={{
+									color: 'var(--publisher-value-addon-deleted-color)',
+									textTransform: 'capitalize',
+								}}
+							>
+								{deletedItem.referenceName}
+							</b>
+						</Flex>
 					)}
-				</p>
-				<p style={{ fontSize: '12px', margin: 0 }}>
-					{isLabelAvailable
-						? __('Item Name:', 'publisher-core')
-						: __('Item ID:', 'publisher-core')}{' '}
-					<b
+				</Flex>
+
+				{deletedItem.after !== '' && (
+					<p style={{ fontSize: '12px', margin: 0 }}>
+						{deletedItem.after}
+					</p>
+				)}
+
+				{deletedItem.after2 !== '' && (
+					<p
 						style={{
-							color: 'var(--publisher-value-addon-deleted-color)',
+							fontSize: '12px',
+							margin: 0,
+							fontWeight: '500',
 						}}
 					>
-						{isLabelAvailable
-							? controlProps.value?.settings?.name
-							: controlProps.value?.settings?.id}
-					</b>
-				</p>
-				<p style={{ fontSize: '12px', margin: 0 }}>
-					{__(
-						'It is possible to switch this item. Also, you can find the deactivated plugin or removed code to return this item to functionality.',
-						'publisher-core'
-					)}
-				</p>
+						{deletedItem.after2}
+					</p>
+				)}
+
 				<Flex
 					direction="row-reverse"
 					gap={8}
-					style={{ marginTop: '25px' }}
+					style={{ marginTop: '10px' }}
 				>
 					<Button
 						variant="primary"
 						tabIndex="-1"
 						size={'small'}
 						onClick={controlProps.handleOnClickRemove}
-						label={__('Remove Variable Usage', 'publisher-core')}
+						label={__(
+							'Remove Dynamic Value Usage',
+							'publisher-core'
+						)}
 						style={{ padding: '2px 8px' }}
 					>
 						<TrashIcon />
@@ -103,7 +126,7 @@ export default function ({
 							controlProps.setOpen('dv-picker');
 						}}
 						label={__(
-							'Switch To Another Variable',
+							'Switch To Another Dynamic Value',
 							'publisher-core'
 						)}
 						style={{

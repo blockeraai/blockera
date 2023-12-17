@@ -3,7 +3,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Publisher dependencies
@@ -28,6 +28,7 @@ import {
 } from '@publisher/core-data';
 import { ColorIndicator } from '@publisher/components';
 import { isBlockTheme, isObject, isUndefined } from '@publisher/utils';
+import { NoticeControl } from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -129,8 +130,6 @@ export function getVariableIcon({
 export function getVariableCategory(
 	category: VariableCategory
 ): VariableCategoryDetail {
-	console.log(category);
-
 	switch (category) {
 		case 'font-size':
 			return {
@@ -334,4 +333,284 @@ export function canUnlinkVariable(value: ValueAddon): boolean {
 	}
 
 	return false;
+}
+
+export function getDeletedItemInfo(item: ValueAddon): {
+	name: string,
+	id: string,
+	value: string,
+	referenceType: string,
+	referenceName: string,
+	tooltip: string,
+	before: string,
+	after: string,
+	after2: string,
+} {
+	const result = {
+		name: '',
+		id: '',
+		value: '',
+		referenceType: '',
+		referenceName: '',
+		before: '',
+		after: '',
+		after2: '',
+		tooltip: '',
+	};
+
+	if (!isUndefined(item?.settings?.value) && item?.settings?.value !== '') {
+		result.value = item?.settings?.value;
+
+		switch (item.valueType) {
+			case 'variable':
+				result.after = __(
+					'You have the option to either switch it with another variable or unlink it to use the value directly.',
+					'publisher-core'
+				);
+				break;
+		}
+	}
+
+	if (!isUndefined(item?.settings?.name) && item?.settings?.name !== '') {
+		result.name = item?.settings?.name;
+	} else {
+		result.id = item?.settings?.id;
+	}
+
+	if (
+		!isUndefined(item?.settings?.reference?.type) &&
+		item?.settings?.reference?.type !== ''
+	) {
+		result.referenceType = item?.settings?.reference?.type;
+
+		switch (result.referenceType) {
+			case 'preset':
+				result.referenceName = __('Block Editor', 'publisher-core');
+				break;
+
+			case 'core':
+				result.referenceName = __('Publisher Blocks', 'publisher-core');
+				break;
+
+			case 'core-pro':
+				result.referenceName = __(
+					'Publisher Blocks Pro',
+					'publisher-core'
+				);
+
+				switch (item.valueType) {
+					case 'variable':
+						result.after2 = (
+							<NoticeControl type="success">
+								{__(
+									'Activating Publisher Blocks Pro plugin may potentially restore this variable.',
+									'publisher-blocks'
+								)}
+							</NoticeControl>
+						);
+						break;
+
+					case 'dynamic-value':
+						result.after2 = (
+							<NoticeControl type="success">
+								{__(
+									'Activating Publisher Blocks Pro plugin restores functionality for this dynamic value item.',
+									'publisher-blocks'
+								)}
+							</NoticeControl>
+						);
+
+						break;
+				}
+				break;
+
+			case 'custom':
+				switch (item.valueType) {
+					case 'variable':
+						result.referenceName = __('Custom', 'publisher-core');
+						result.after2 = (
+							<NoticeControl type="information">
+								{__(
+									'You can create a custom variable with the exact same name to restore this variable across all its usages.',
+									'publisher-blocks'
+								)}
+							</NoticeControl>
+						);
+						break;
+
+					case 'dynamic-value':
+						result.referenceName = __(
+							'Custom Code',
+							'publisher-core'
+						);
+						result.after2 = (
+							<NoticeControl type="information">
+								{__(
+									'Find and restore the custom code to return back functionality for this dynamic value item.',
+									'publisher-blocks'
+								)}
+							</NoticeControl>
+						);
+
+						break;
+				}
+				break;
+
+			case 'plugin':
+				let pluginName = '';
+
+				if (
+					!isUndefined(item?.settings?.reference?.plugin) &&
+					item?.settings?.reference?.plugin !== ''
+				) {
+					pluginName = item?.settings?.reference?.plugin;
+					result.referenceName = sprintf(
+						// Translators: %s is plugin name
+						__('%s plugin', 'publisher-core'),
+						pluginName
+					);
+				} else {
+					pluginName = 'unknown';
+					result.referenceName = __(
+						'unknown plugin',
+						'publisher-core'
+					);
+				}
+
+				switch (item.valueType) {
+					case 'variable':
+						result.after2 = (
+							<NoticeControl type="information">
+								{sprintf(
+									// Translators: %s is plugin name
+									__(
+										'Activating %s plugin may potentially restore this variable.',
+										'publisher-blocks'
+									),
+									pluginName
+								)}
+							</NoticeControl>
+						);
+						break;
+
+					case 'dynamic-value':
+						result.after2 = (
+							<NoticeControl type="success">
+								{sprintf(
+									// Translators: %s is plugin name
+									__(
+										'Activating %s plugin restores functionality for this dynamic value item.',
+										'publisher-blocks'
+									),
+									pluginName
+								)}
+							</NoticeControl>
+						);
+
+						break;
+				}
+
+				break;
+
+			case 'theme':
+				let themeName = '';
+
+				if (
+					!isUndefined(item?.settings?.reference?.theme) &&
+					item?.settings?.reference?.theme !== ''
+				) {
+					themeName = item?.settings?.reference?.theme;
+					result.referenceName = sprintf(
+						// Translators: %s is plugin name
+						__('%s theme', 'publisher-core'),
+						themeName
+					);
+				} else {
+					themeName = 'unknown';
+					result.referenceName = __(
+						'unknown theme',
+						'publisher-core'
+					);
+				}
+
+				switch (item.valueType) {
+					case 'variable':
+						result.after2 = (
+							<NoticeControl type="information">
+								{sprintf(
+									// Translators: %s is plugin name
+									__(
+										'Activating %s theme may potentially restore this variable.',
+										'publisher-blocks'
+									),
+									themeName
+								)}
+							</NoticeControl>
+						);
+						break;
+
+					case 'dynamic-value':
+						result.after2 = (
+							<NoticeControl type="success">
+								{sprintf(
+									// Translators: %s is plugin name
+									__(
+										'Activating %s theme restores functionality for this dynamic value item.',
+										'publisher-blocks'
+									),
+									themeName
+								)}
+							</NoticeControl>
+						);
+
+						break;
+				}
+
+				break;
+		}
+	}
+
+	switch (item.valueType) {
+		case 'variable':
+			if (result.tooltip === '') {
+				result.tooltip = __(
+					'This is the latest value identified by Publisher Blocks, which may differ from the final value of this variable.',
+					'publisher-blocks'
+				);
+			}
+
+			if (result.before === '') {
+				result.before = __(
+					"There was a deletion or disappearance of this variable, however it's value is still used here.",
+					'publisher-core'
+				);
+			}
+
+			if (result.after === '') {
+				result.after = __(
+					'You have the option to either switch it with another variable or remove it.',
+					'publisher-core'
+				);
+			}
+
+			break;
+
+		case 'dynamic-value':
+			if (result.before === '') {
+				result.before = __(
+					'The dynamic value item is inactive or has been removed.',
+					'publisher-core'
+				);
+			}
+
+			if (result.after === '') {
+				result.after = __(
+					'You have the option to either switch this item or remove its usage.',
+					'publisher-core'
+				);
+			}
+			break;
+	}
+
+	return result;
 }

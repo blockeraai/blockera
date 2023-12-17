@@ -23,7 +23,7 @@ import type { ValueAddonControlProps } from './types';
 import { ValueAddonPointer } from './index';
 import { getDynamicValueIcon, getVariableIcon, isValid } from '../../helpers';
 import EmptyIcon from '../../icons/empty';
-import DeletedVariableIcon from '../../icons/deleted-variable';
+import DeletedIcon from '../../icons/deleted';
 
 export default function ({
 	classNames,
@@ -47,7 +47,7 @@ export default function ({
 			if (isUndefined(item?.value)) {
 				isDeleted = true;
 				label = __('Missing Variable', 'publisher-core');
-				icon = <DeletedVariableIcon />;
+				icon = <DeletedIcon />;
 			} else {
 				label = !isUndefined(item?.name)
 					? item?.name
@@ -66,7 +66,7 @@ export default function ({
 			if (isUndefined(item?.id)) {
 				isDeleted = true;
 				label = __('Missing Item', 'publisher-core');
-				icon = <DeletedVariableIcon />;
+				icon = <DeletedIcon />;
 			} else {
 				label = !isUndefined(item?.name)
 					? item?.name

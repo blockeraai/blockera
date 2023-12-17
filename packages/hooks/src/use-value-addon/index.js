@@ -145,9 +145,6 @@ export const useValueAddon = ({
 			valueType: 'dynamic-value',
 		};
 
-		// $FlowFixMe
-		delete newValue?.settings?.status;
-
 		setValue(newValue);
 		onChange(newValue);
 		setOpen('dv-settings');
