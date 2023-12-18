@@ -16,7 +16,8 @@ import {
 	ToggleSelectControl,
 	NoticeControl,
 } from '@publisher/controls';
-import { Flex, Button } from '@publisher/components';
+import { Flex, Button, Grid } from '@publisher/components';
+
 /**
  * Internal dependencies
  */
@@ -100,7 +101,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 					>
 						<ToggleSelectControl
 							label={__('Display', 'publisher-core')}
-							columns="1fr 2.65fr"
+							columns="1fr 160px"
 							options={[
 								{
 									label: __('Block', 'publisher-core'),
@@ -177,7 +178,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												'Direction',
 												'publisher-core'
 											)}
-											columns="1fr 2fr"
+											columns="80px 120px"
 											options={[
 												{
 													label: __(
@@ -201,7 +202,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												},
 											]}
 											defaultValue={
-												flexDirection.value || 'row'
+												flexDirection.value || ''
 											}
 											onChange={(newValue) => {
 												handleOnChangeAttributes(
@@ -278,80 +279,74 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									blockName: block.blockName,
 								}}
 							>
-								<BaseControl
-									columns="1fr 2.65fr"
-									controlName="toggle-select"
+								<ToggleSelectControl
+									columns="80px 160px"
 									className={
 										'publisher-direction-' +
 										flexDirection.value +
 										' publisher-flex-align-items'
 									}
 									label={__('Align Items', 'publisher-core')}
-								>
-									<ToggleSelectControl
-										options={[
-											{
-												label: __(
-													'Center',
-													'publisher-core'
-												),
-												value: 'center',
-												icon: (
-													<AlignItemsCenterBlockIcon />
-												),
-											},
-											{
-												label: __(
-													'Flex Start',
-													'publisher-core'
-												),
-												value: 'flex-start',
-												icon: (
-													<AlignItemsFlexStartBlockIcon />
-												),
-											},
-											{
-												label: __(
-													'Flex End',
-													'publisher-core'
-												),
-												value: 'flex-end',
-												icon: (
-													<AlignItemsFlexEndBlockIcon />
-												),
-											},
-											{
-												label: __(
-													'Stretch',
-													'publisher-core'
-												),
-												value: 'stretch',
-												icon: (
-													<AlignItemsStretchBlockIcon />
-												),
-											},
-											{
-												label: __(
-													'Baseline',
-													'publisher-core'
-												),
-												value: 'baseline',
-												icon: (
-													<AlignItemsBaselineBlockIcon />
-												),
-											},
-										]}
-										isDeselectable={true}
-										//
-										defaultValue=""
-										onChange={(newValue) =>
-											handleOnChangeAttributes(
-												'publisherAlignItems',
-												newValue
-											)
-										}
-									/>
-								</BaseControl>
+									isDeselectable={true}
+									//
+									defaultValue=""
+									onChange={(newValue) =>
+										handleOnChangeAttributes(
+											'publisherAlignItems',
+											newValue
+										)
+									}
+									options={[
+										{
+											label: __(
+												'Center',
+												'publisher-core'
+											),
+											value: 'center',
+											icon: <AlignItemsCenterBlockIcon />,
+										},
+										{
+											label: __(
+												'Flex Start',
+												'publisher-core'
+											),
+											value: 'flex-start',
+											icon: (
+												<AlignItemsFlexStartBlockIcon />
+											),
+										},
+										{
+											label: __(
+												'Flex End',
+												'publisher-core'
+											),
+											value: 'flex-end',
+											icon: (
+												<AlignItemsFlexEndBlockIcon />
+											),
+										},
+										{
+											label: __(
+												'Stretch',
+												'publisher-core'
+											),
+											value: 'stretch',
+											icon: (
+												<AlignItemsStretchBlockIcon />
+											),
+										},
+										{
+											label: __(
+												'Baseline',
+												'publisher-core'
+											),
+											value: 'baseline',
+											icon: (
+												<AlignItemsBaselineBlockIcon />
+											),
+										},
+									]}
+								/>
 							</ControlContextProvider>
 						)}
 						{isActiveField(publisherJustifyContent) && (
@@ -366,8 +361,8 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									blockName: block.blockName,
 								}}
 							>
-								<BaseControl
-									columns="1fr 2.65fr"
+								<ToggleSelectControl
+									columns="80px 160px"
 									className={
 										'publisher-direction-' +
 										flexDirection.value +
@@ -375,143 +370,127 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									}
 									controlName="toggle-select"
 									label={__('Justify', 'publisher-core')}
-								>
-									<ToggleSelectControl
-										options={[
-											{
-												label: __(
-													'Center',
-													'publisher-core'
-												),
-												value: 'center',
-												icon: <JustifyCenterIcon />,
-											},
-											{
-												label: __(
-													'Flex Start',
-													'publisher-core'
-												),
-												value: 'flex-start',
-												icon: <JustifyFlexStartIcon />,
-											},
-											{
-												label: __(
-													'Flex End',
-													'publisher-core'
-												),
-												value: 'flex-end',
-												icon: <JustifyFlexEndIcon />,
-											},
-											{
-												label: __(
-													'Space Between',
-													'publisher-core'
-												),
-												value: 'space-between',
-												icon: (
-													<JustifySpaceBetweenIcon />
-												),
-											},
-											{
-												label: __(
-													'Space Around',
-													'publisher-core'
-												),
-												value: 'space-around',
-												icon: (
-													<JustifySpaceAroundIcon />
-												),
-											},
-											{
-												label: __(
-													'Space Evenly',
-													'publisher-core'
-												),
-												value: 'space-evenly',
-												icon: (
-													<JustifySpaceEvenlyIcon />
-												),
-											},
-										]}
-										isDeselectable={true}
-										//
-										defaultValue=""
-										onChange={(newValue) =>
-											handleOnChangeAttributes(
-												'publisherJustifyContent',
-												newValue
-											)
-										}
-									/>
-								</BaseControl>
+									options={[
+										{
+											label: __(
+												'Center',
+												'publisher-core'
+											),
+											value: 'center',
+											icon: <JustifyCenterIcon />,
+										},
+										{
+											label: __(
+												'Flex Start',
+												'publisher-core'
+											),
+											value: 'flex-start',
+											icon: <JustifyFlexStartIcon />,
+										},
+										{
+											label: __(
+												'Flex End',
+												'publisher-core'
+											),
+											value: 'flex-end',
+											icon: <JustifyFlexEndIcon />,
+										},
+										{
+											label: __(
+												'Space Between',
+												'publisher-core'
+											),
+											value: 'space-between',
+											icon: <JustifySpaceBetweenIcon />,
+										},
+										{
+											label: __(
+												'Space Around',
+												'publisher-core'
+											),
+											value: 'space-around',
+											icon: <JustifySpaceAroundIcon />,
+										},
+										{
+											label: __(
+												'Space Evenly',
+												'publisher-core'
+											),
+											value: 'space-evenly',
+											icon: <JustifySpaceEvenlyIcon />,
+										},
+									]}
+									isDeselectable={true}
+									//
+									defaultValue=""
+									onChange={(newValue) =>
+										handleOnChangeAttributes(
+											'publisherJustifyContent',
+											newValue
+										)
+									}
+								/>
 							</ControlContextProvider>
 						)}
 
 						{isActiveField(publisherGap) && (
-							<BaseControl
-								label={__('Gap', 'publisher-core')}
-								columns="1fr 2.65fr"
+							<ControlContextProvider
+								value={{
+									name: generateExtensionId(block, 'gap'),
+									value: gap,
+									attribute: 'publisherGap',
+									blockName: block.blockName,
+								}}
 							>
-								<Flex gap="10px">
-									<ControlContextProvider
-										value={{
-											name: generateExtensionId(
-												block,
-												'gap'
-											),
-											value: gap,
-											attribute: 'publisherGap',
-											blockName: block.blockName,
-										}}
+								<BaseControl
+									label={__('Gap', 'publisher-core')}
+									columns="80px 160px"
+									id={'gap'}
+									attribute="publisherGap"
+									blockName={block.blockName}
+									mode={'advanced'}
+									path={'gap'}
+								>
+									<Grid
+										gap="10px"
+										gridTemplateColumns="120px 30px"
 									>
 										{gap?.lock ? (
 											isActiveField(publisherGap) && (
-												<BaseControl
-													controlName="input"
-													columns="columns-1"
+												<InputControl
+													{...props}
 													className="control-first label-center small-gap"
 													aria-label={__(
 														'Gap',
 														'publisher-core'
 													)}
-													style={{
-														width: '133px',
-													}}
-												>
-													<InputControl
-														{...props}
-														unitType="essential"
-														min={0}
-														max={200}
-														defaultValue={gap?.gap}
-														id={'gap'}
-														onChange={(newValue) =>
-															handleOnChangeAttributes(
-																'publisherGap',
-																{
-																	...gap,
-																	gap: newValue,
-																}
-															)
-														}
-														controlAddonTypes={[
-															'variable',
-														]}
-														variableTypes={[
-															'spacing',
-														]}
-													/>
-												</BaseControl>
+													unitType="essential"
+													min={0}
+													max={200}
+													defaultValue={gap?.gap}
+													id={'gap'}
+													onChange={(newValue) =>
+														handleOnChangeAttributes(
+															'publisherGap',
+															{
+																...gap,
+																gap: newValue,
+															}
+														)
+													}
+													controlAddonTypes={[
+														'variable',
+													]}
+													variableTypes={['spacing']}
+												/>
 											)
 										) : (
-											<Flex
-												direction="row"
+											<Grid
+												gridTemplateColumns="50px 50px"
 												gap="10px"
-												style={{
-													width: '133px',
-												}}
 											>
-												<BaseControl
+												<InputControl
+													{...props}
 													controlName="input"
 													columns="columns-1"
 													className="control-first label-center small-gap"
@@ -519,37 +498,30 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 														'Columns',
 														'publisher-core'
 													)}
-												>
-													<InputControl
-														{...props}
-														unitType="essential"
-														min={0}
-														max={200}
-														defaultValue={
-															gap?.columns
-														}
-														id={'columns'}
-														onChange={(newValue) =>
-															handleOnChangeAttributes(
-																'publisherGap',
-																{
-																	...gap,
-																	columns:
-																		newValue,
-																}
-															)
-														}
-														size="small"
-														controlAddonTypes={[
-															'variable',
-														]}
-														variableTypes={[
-															'spacing',
-														]}
-													/>
-												</BaseControl>
+													unitType="essential"
+													min={0}
+													max={200}
+													defaultValue={gap?.columns}
+													id={'columns'}
+													onChange={(newValue) =>
+														handleOnChangeAttributes(
+															'publisherGap',
+															{
+																...gap,
+																columns:
+																	newValue,
+															}
+														)
+													}
+													size="small"
+													controlAddonTypes={[
+														'variable',
+													]}
+													variableTypes={['spacing']}
+												/>
 
-												<BaseControl
+												<InputControl
+													{...props}
 													controlName="input"
 													columns="columns-1"
 													className="control-first label-center small-gap"
@@ -557,33 +529,27 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 														'Rows',
 														'publisher-core'
 													)}
-												>
-													<InputControl
-														{...props}
-														unitType="essential"
-														min={0}
-														max={200}
-														defaultValue={gap?.rows}
-														id={'rows'}
-														onChange={(newValue) =>
-															handleOnChangeAttributes(
-																'publisherGap',
-																{
-																	...gap,
-																	rows: newValue,
-																}
-															)
-														}
-														size="small"
-														controlAddonTypes={[
-															'variable',
-														]}
-														variableTypes={[
-															'spacing',
-														]}
-													/>
-												</BaseControl>
-											</Flex>
+													unitType="essential"
+													min={0}
+													max={200}
+													defaultValue={gap?.rows}
+													id={'rows'}
+													onChange={(newValue) =>
+														handleOnChangeAttributes(
+															'publisherGap',
+															{
+																...gap,
+																rows: newValue,
+															}
+														)
+													}
+													size="small"
+													controlAddonTypes={[
+														'variable',
+													]}
+													variableTypes={['spacing']}
+												/>
+											</Grid>
 										)}
 										<Button
 											showTooltip={true}
@@ -629,9 +595,9 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												<UnlockIcon />
 											)}
 										</Button>
-									</ControlContextProvider>
-								</Flex>
-							</BaseControl>
+									</Grid>
+								</BaseControl>
+							</ControlContextProvider>
 						)}
 
 						{isActiveField(publisherFlexWrap) && (
@@ -649,8 +615,8 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 								>
 									<BaseControl columns="columns-1">
 										<Flex>
-											<BaseControl
-												columns="1fr 2fr"
+											<ToggleSelectControl
+												columns="80px 120px"
 												className={
 													'publisher-direction-' +
 													flexDirection.value +
@@ -661,59 +627,51 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													'Children',
 													'publisher-core'
 												)}
-											>
-												<ToggleSelectControl
-													options={[
-														{
-															label: __(
-																'No Wrap',
-																'publisher-core'
-															),
-															value: 'nowrap',
-															icon: (
-																<WrapNoWrapIcon />
-															),
-														},
-														{
-															label: __(
-																'Wrap',
-																'publisher-core'
-															),
-															value: 'wrap',
-															icon: (
-																<WrapWrapIcon />
-															),
-														},
-													]}
-													//
-													defaultValue={'nowrap'}
-													onChange={(newValue) => {
-														if (
-															newValue ===
-															'nowrap'
-														) {
-															handleOnChangeAttributes(
-																'publisherFlexWrap',
-																{
-																	...flexWrap,
-																	value: 'nowrap',
-																	reverse: false,
-																}
-															);
-														} else {
-															handleOnChangeAttributes(
-																'publisherFlexWrap',
-																{
-																	...flexWrap,
-																	value: flexWrap.reverse
-																		? 'wrap-reverse'
-																		: 'wrap',
-																}
-															);
-														}
-													}}
-												/>
-											</BaseControl>
+												options={[
+													{
+														label: __(
+															'No Wrap',
+															'publisher-core'
+														),
+														value: 'nowrap',
+														icon: (
+															<WrapNoWrapIcon />
+														),
+													},
+													{
+														label: __(
+															'Wrap',
+															'publisher-core'
+														),
+														value: 'wrap',
+														icon: <WrapWrapIcon />,
+													},
+												]}
+												//
+												defaultValue={'nowrap'}
+												onChange={(newValue) => {
+													if (newValue === 'nowrap') {
+														handleOnChangeAttributes(
+															'publisherFlexWrap',
+															{
+																...flexWrap,
+																value: 'nowrap',
+																reverse: false,
+															}
+														);
+													} else {
+														handleOnChangeAttributes(
+															'publisherFlexWrap',
+															{
+																...flexWrap,
+																value: flexWrap.reverse
+																	? 'wrap-reverse'
+																	: 'wrap',
+															}
+														);
+													}
+												}}
+											/>
 											<Button
 												showTooltip={true}
 												tooltipPosition="top"
@@ -772,13 +730,12 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												blockName: block.blockName,
 											}}
 										>
-											<BaseControl
-												controlName="toggle-select"
+											<ToggleSelectControl
 												label={__(
 													'Align Content',
 													'publisher-core'
 												)}
-												columns="1fr 2.65fr"
+												columns="80px 160px"
 												className={
 													'publisher-direction-' +
 													flexDirection.value +
@@ -789,81 +746,78 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 															: ''
 													}`
 												}
-											>
-												<ToggleSelectControl
-													options={[
-														{
-															label: __(
-																'center',
-																'publisher-core'
-															),
-															value: 'center',
-															icon: (
-																<AlignContentCenterIcon />
-															),
-														},
-														{
-															label: __(
-																'Flex Start',
-																'publisher-core'
-															),
-															value: 'flex-start',
-															icon: (
-																<AlignContentFlexStartIcon />
-															),
-														},
-														{
-															label: __(
-																'Flex End',
-																'publisher-core'
-															),
-															value: 'flex-end',
-															icon: (
-																<AlignContentFlexEndIcon />
-															),
-														},
-														{
-															label: __(
-																'Space Around',
-																'publisher-core'
-															),
-															value: 'space-around',
-															icon: (
-																<AlignContentSpaceAroundIcon />
-															),
-														},
-														{
-															label: __(
-																'Space Between',
-																'publisher-core'
-															),
-															value: 'space-between',
-															icon: (
-																<AlignContentSpaceBetweenIcon />
-															),
-														},
-														{
-															label: __(
-																'Stretch',
-																'publisher-core'
-															),
-															value: 'stretch',
-															icon: (
-																<AlignContentStretchIcon />
-															),
-														},
-													]}
-													isDeselectable={true}
-													//
-													defaultValue=""
-													onChange={(newValue) =>
-														handleOnChangeAttributes(
-															'publisherAlignContent',
-															newValue
-														)
-													}
-												/>
-											</BaseControl>
+												options={[
+													{
+														label: __(
+															'center',
+															'publisher-core'
+														),
+														value: 'center',
+														icon: (
+															<AlignContentCenterIcon />
+														),
+													},
+													{
+														label: __(
+															'Flex Start',
+															'publisher-core'
+														),
+														value: 'flex-start',
+														icon: (
+															<AlignContentFlexStartIcon />
+														),
+													},
+													{
+														label: __(
+															'Flex End',
+															'publisher-core'
+														),
+														value: 'flex-end',
+														icon: (
+															<AlignContentFlexEndIcon />
+														),
+													},
+													{
+														label: __(
+															'Space Around',
+															'publisher-core'
+														),
+														value: 'space-around',
+														icon: (
+															<AlignContentSpaceAroundIcon />
+														),
+													},
+													{
+														label: __(
+															'Space Between',
+															'publisher-core'
+														),
+														value: 'space-between',
+														icon: (
+															<AlignContentSpaceBetweenIcon />
+														),
+													},
+													{
+														label: __(
+															'Stretch',
+															'publisher-core'
+														),
+														value: 'stretch',
+														icon: (
+															<AlignContentStretchIcon />
+														),
+													},
+												]}
+												isDeselectable={true}
+												//
+												defaultValue=""
+												onChange={(newValue) =>
+													handleOnChangeAttributes(
+														'publisherAlignContent',
+														newValue
+													)
+												}
+											/>
 										</ControlContextProvider>
 									)}
 							</>

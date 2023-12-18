@@ -177,7 +177,13 @@ const Component = ({
 		>
 			<div className={controlInnerClassNames('position-header')}>
 				{label && (
-					<div className={controlInnerClassNames('label')}>
+					<span
+						style={{
+							display: 'flex',
+							alignItems: 'center',
+							minHeight: '30px',
+						}}
+					>
 						<LabelControl
 							label={label}
 							{...{
@@ -189,7 +195,7 @@ const Component = ({
 								mode: 'advanced',
 							}}
 						/>
-					</div>
+					</span>
 				)}
 
 				<SelectControl

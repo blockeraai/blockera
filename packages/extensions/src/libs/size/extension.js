@@ -487,10 +487,14 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 							columns="columns-2"
 							controlName="toggle-select"
 							label={__('Ratio', 'publisher-core')}
+							id={'value'}
+							attribute="publisherRatio"
+							blockName={block.blockName}
+							mode={'advanced'}
+							path={'value'}
 						>
 							<SelectControl
 								id="value"
-								controlName="select"
 								aria-label={__('Ratio', 'publisher-core')}
 								{...{
 									...props,

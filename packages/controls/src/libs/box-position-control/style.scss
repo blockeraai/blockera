@@ -7,12 +7,6 @@
 		display: grid;
 		grid-template-columns: 1fr 2fr;
 		gap: var(--gap);
-
-		.publisher-control-label {
-			display: flex;
-			align-items: center;
-			min-height: 30px;
-		}
 	}
 
 	.publisher-control-position-body {
