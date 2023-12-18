@@ -144,7 +144,7 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 								)
 							}
 							controlAddonTypes={['variable']}
-							variableTypes={['theme-color']}
+							variableTypes={['color']}
 						/>
 					</ControlContextProvider>
 				)}
