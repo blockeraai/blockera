@@ -19,4 +19,5 @@ export type TDividerControlProps = {
 	className?: string,
 	defaultValue?: Array<Object>,
 	onChange?: () => {},
+	value: Array<Object>,
 };

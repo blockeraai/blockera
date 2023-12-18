@@ -6,6 +6,7 @@
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
+import { useEffect, useContext } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -19,14 +20,43 @@ import RepeaterItemHeader from './components/header';
 import Fields from './components/fields';
 import RepeaterControl from '../repeater-control';
 import type { TDividerControlProps } from './types';
-
+import { useControlContext } from '../../context';
+import { RepeaterContext } from '../repeater-control/context';
 export default function DividerControl({
 	id,
 	defaultRepeaterItemValue,
 	popoverTitle,
 	className,
+	value,
 	...props
 }: TDividerControlProps): MixedElement {
+	console.log(props);
+	const {
+		controlInfo: { name: controlId },
+		dispatch: { changeRepeaterItem },
+	} = useControlContext();
+
+	const { repeaterId } = useContext(RepeaterContext);
+
+	useEffect(() => {
+		if (value.length < 2) return;
+		if (value.length === 2 && value[0].position === 'top') {
+			changeRepeaterItem({
+				controlId,
+				repeaterId,
+				itemId: 1,
+				value: { ...value[1], position: 'bottom' },
+			});
+		} else if (value.length === 2 && value[0].position === 'bottom') {
+			changeRepeaterItem({
+				controlId,
+				repeaterId,
+				itemId: 1,
+				value: { ...value[1], position: 'top' },
+			});
+		}
+	}, [value.length]);
+
 	return (
 		<RepeaterControl
 			id={id}
@@ -77,6 +107,10 @@ DividerControl.propTypes = {
 	 * Label for popover
 	 */
 	popoverTitle: PropTypes.string,
+	/**
+	 * value
+	 */
+	value: PropTypes.array,
 };
 
 DividerControl.defaultProps = {
@@ -85,7 +119,7 @@ DividerControl.defaultProps = {
 		position: 'top',
 		shape: { type: 'shape', id: 'wave-opacity' },
 		color: '',
-		size: { width: '', height: '' },
+		size: { width: '100%', height: '100px' },
 		animate: false,
 		duration: '',
 		flip: false,

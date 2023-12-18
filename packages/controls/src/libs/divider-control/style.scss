@@ -13,6 +13,10 @@
 .publisher-control-divider-popover,
 .publisher-control-divider-shape-popover {
 
+	.disabled-element-wrapper {
+       width: 100% !important;
+	}
+
 	.publisher-control-shape-button:focus {
 		border: 2px solid var(--publisher-controls-border-color-focus);
 	}
@@ -45,7 +49,7 @@
 		&.bottom {
 
 			svg {
-				transform: scaleX(-1) rotate(180deg);
+				transform: rotate(180deg);
 			}
 		}
 	   }
@@ -62,7 +66,7 @@
 			&.bottom {
 
 				svg {
-					transform: scaleX(-1) scaleY(1.5) rotate(180deg);
+					transform: scaleY(1.5) rotate(180deg);
 				}
 			}
 		}
@@ -90,7 +94,7 @@
 				&.bottom {
 
 					svg {
-						transform: scaleX(-1) rotate(180deg);
+						transform: rotate(180deg);
 					}
 				}
 			}
@@ -113,7 +117,7 @@
 					&.bottom {
 
 						svg {
-							transform: scaleX(-1) rotate(180deg);
+							transform: rotate(180deg);
 						}
 					}
 				}

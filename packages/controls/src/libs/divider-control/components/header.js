@@ -48,7 +48,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 					className={`shape-icon ${
 						position === 'bottom' ? 'bottom' : ''
 					}`}
-					style={{ fill: color }}
+					style={{ fill: color !== '#ffffff' && color }}
 				>
 					{selectedShape(shape?.id)?.icon}
 				</span>

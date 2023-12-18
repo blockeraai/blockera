@@ -13,7 +13,7 @@ import type { Element } from 'react';
 /**
  * Publisher dependencies
  */
-import { Flex, Popover } from '@publisher/components';
+import { Flex, Popover, ConditionalWrapper } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
@@ -27,6 +27,7 @@ import {
 	ToggleSelectControl,
 	BaseControl,
 	ToggleControl,
+	NoticeControl,
 } from '../../index';
 import { shapeIcons, selectedShape } from '../utils';
 import { Shape } from './shape';
@@ -41,8 +42,24 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
 
-		const { repeaterId, getControlId } = useContext(RepeaterContext);
+		const {
+			repeaterId,
+			getControlId,
+			repeaterItems: items,
+		} = useContext(RepeaterContext);
+
 		const [isSelectShapeOpen, setIsSelectShapeOpen] = useState(false);
+
+		const isPositionDisabled = (
+			id: string,
+			items: Array<Object>,
+			value: string
+		) => {
+			if (items.length < 2) return false;
+			if (id === 0 && items[1]?.position === value) return true;
+			if (id === 1 && items[0]?.position === value) return true;
+			return false;
+		};
 
 		return (
 			<div
@@ -58,10 +75,38 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						{
 							label: __('Top', 'publisher-core'),
 							value: 'top',
+							disabled: isPositionDisabled(itemId, items, 'top'),
+							showTooltip: true,
+							'aria-label': isPositionDisabled(
+								itemId,
+								items,
+								'top'
+							)
+								? __(
+										'You can only add one top divider',
+										'publisher-core'
+								  )
+								: __('Top', 'publisher-core'),
 						},
 						{
 							label: __('Bottom', 'publisher-core'),
 							value: 'bottom',
+							disabled: isPositionDisabled(
+								itemId,
+								items,
+								'bottom'
+							),
+							showTooltip: true,
+							'aria-label': isPositionDisabled(
+								itemId,
+								items,
+								'bottom'
+							)
+								? __(
+										'You can only add one bottom divider',
+										'publisher-core'
+								  )
+								: __('Bottom', 'publisher-core'),
 						},
 					]}
 					onChange={(position) =>
@@ -87,7 +132,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							className={`shape-icon ${
 								item.position === 'bottom' ? 'bottom' : ''
 							}`}
-							style={{ fill: item?.color }}
+							style={{
+								fill: item.color !== '#ffffff' && item?.color,
+							}}
 						>
 							{selectedShape(item.shape.id).icon}
 						</span>
@@ -120,6 +167,11 @@ const Fields: TFieldItem = memo<TFieldItem>(
 										label: __('Custom', 'publisher-core'),
 										value: 'custom',
 										disabled: true,
+										showTooltip: true,
+										'aria-label': __(
+											'Coming soon …',
+											'publisher-core'
+										),
 									},
 								]}
 								onChange={(type) =>
@@ -134,6 +186,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 									})
 								}
 							/>
+
 							<BaseControl
 								columns={'columns-1'}
 								label={__('Shapes', 'publisher-core')}
@@ -182,64 +235,89 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					}
 				></ColorControl>
 
-				<BaseControl
-					columns="columns-2"
-					label={__('Size', 'publisher-core')}
+				<ConditionalWrapper
+					condition={!item.size.width || !item.size.height}
+					wrapper={(children) => (
+						<BaseControl columns="columns-1">
+							{children}
+						</BaseControl>
+					)}
 				>
-					<Flex alignItems="flex-start">
-						<InputControl
-							id={getControlId(itemId, 'size.width')}
-							columns="columns-1"
-							label={__('Width', 'publisher-core')}
-							className="control-first label-center small-gap"
-							style={{ margin: '0px' }}
-							placeholder="0"
-							type="number"
-							min={0}
-							defaultValue={item.size.width}
-							unitType="width"
-							smallWidth={true}
-							data-test="divider-width-input"
-							onChange={(width) =>
-								changeRepeaterItem({
-									controlId,
-									repeaterId,
-									itemId,
-									value: {
-										...item,
-										size: { ...item.size, width },
-									},
-								})
-							}
-						/>
+					<BaseControl
+						columns="columns-2"
+						label={__('Size', 'publisher-core')}
+					>
+						<Flex alignItems="flex-start">
+							<InputControl
+								id={getControlId(itemId, 'size.width')}
+								columns="columns-1"
+								label={__('Width', 'publisher-core')}
+								className="control-first label-center small-gap"
+								style={{ margin: '0px' }}
+								placeholder="0"
+								type="number"
+								min={0}
+								defaultValue={item.size.width}
+								unitType="width"
+								smallWidth={true}
+								data-test="divider-width-input"
+								onChange={(width) =>
+									changeRepeaterItem({
+										controlId,
+										repeaterId,
+										itemId,
+										value: {
+											...item,
+											size: { ...item.size, width },
+										},
+									})
+								}
+							/>
 
-						<InputControl
-							id={getControlId(itemId, 'size.height')}
-							columns="columns-1"
-							label={__('Height', 'publisher-core')}
-							className="control-first label-center small-gap"
-							style={{ margin: '0px' }}
-							placeholder="0"
-							type="number"
-							min={0}
-							defaultValue={item.size.height}
-							unitType="height"
-							smallWidth={true}
-							data-test="divider-height-input"
-							onChange={(height) =>
-								changeRepeaterItem({
-									controlId,
-									repeaterId,
-									itemId,
-									value: {
-										...item,
-										size: { ...item.size, height },
-									},
-								})
-							}
-						/>
-					</Flex>
-				</BaseControl>
+							<InputControl
+								id={getControlId(itemId, 'size.height')}
+								columns="columns-1"
+								label={__('Height', 'publisher-core')}
+								className="control-first label-center small-gap"
+								style={{ margin: '0px' }}
+								placeholder="0"
+								type="number"
+								min={0}
+								defaultValue={item.size.height}
+								unitType="height"
+								smallWidth={true}
+								data-test="divider-height-input"
+								onChange={(height) =>
+									changeRepeaterItem({
+										controlId,
+										repeaterId,
+										itemId,
+										value: {
+											...item,
+											size: { ...item.size, height },
+										},
+									})
+								}
+							/>
+						</Flex>
+					</BaseControl>
+					{(!item.size.width || !item.size.height) && (
+						<NoticeControl type="error">
+							{item.size.height &&
+								!item.size.width &&
+								__('You must add width', 'publisher-core')}
+							{item.size.width &&
+								!item.size.height &&
+								__('You must add height', 'publisher-core')}
+							{!item.size.width &&
+								!item.size.height &&
+								__(
+									'You must add width and height',
+									'publisher-core'
+								)}
+						</NoticeControl>
+					)}
+				</ConditionalWrapper>
 
 				<BaseControl
 					columns="columns-2"
@@ -249,6 +327,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					<ToggleControl
 						id={getControlId(itemId, 'animate')}
 						defaultValue={item.animate}
+						value={item.animate}
 						onChange={(animate) =>
 							changeRepeaterItem({
 								controlId,
@@ -296,6 +375,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					<ToggleControl
 						id={getControlId(itemId, 'flip')}
 						defaultValue={item.flip}
+						value={item.flip}
 						onChange={(flip) =>
 							changeRepeaterItem({
 								controlId,
@@ -318,6 +398,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					<ToggleControl
 						id={getControlId(itemId, 'onFront')}
 						defaultValue={item.onFront}
+						value={item.onFront}
 						onChange={(onFront) =>
 							changeRepeaterItem({
 								controlId,
