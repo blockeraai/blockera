@@ -129,7 +129,13 @@ const AdvancedLabelControl = ({
 		return null;
 	}
 
-	const states = getStatesGraph({ controlId: attribute, blockName });
+	const states = getStatesGraph({
+		path,
+		fieldId,
+		blockName,
+		repeaterItem,
+		controlId: attribute,
+	});
 	const currentGraph = states.find(
 		(state: LabelStates) => state?.graph?.type === getBreakpoint()?.type
 	);
@@ -188,41 +194,11 @@ const AdvancedLabelControl = ({
 
 					<StatesGraph controlId={attribute} blockName={blockName} />
 
-					<Button
-						variant={'primary'}
-						text={__('Reset To Default', 'publisher-core')}
-						label={__('Reset To Default', 'publisher-core')}
-						onClick={() => {
-							if (
-								!resetToDefault ||
-								!isFunction(resetToDefault)
-							) {
-								return;
-							}
-
-							setOpenModal(!isOpenModal);
-
-							if (
-								isNull(path) ||
-								isEmpty(path) ||
-								isUndefined(path)
-							) {
-								return resetToDefault();
-							}
-
-							resetToDefault({
-								path,
-								repeaterItem,
-								propId: fieldId,
-							});
-						}}
-					/>
-
-					{!isNormalState() && (
+					<Flex direction={'row'} justifyContent={'space-between'}>
 						<Button
 							variant={'primary'}
-							text={__('Reset To Normal', 'publisher-core')}
-							label={__('Reset To Normal', 'publisher-core')}
+							text={__('Reset To Default', 'publisher-core')}
+							label={__('Reset To Default', 'publisher-core')}
 							onClick={() => {
 								if (
 									!resetToDefault ||
@@ -245,11 +221,43 @@ const AdvancedLabelControl = ({
 									path,
 									repeaterItem,
 									propId: fieldId,
-									attributes: getAttributes(),
 								});
 							}}
 						/>
-					)}
+
+						{!isNormalState() && (
+							<Button
+								variant={'primary'}
+								text={__('Reset To Normal', 'publisher-core')}
+								label={__('Reset To Normal', 'publisher-core')}
+								onClick={() => {
+									if (
+										!resetToDefault ||
+										!isFunction(resetToDefault)
+									) {
+										return;
+									}
+
+									setOpenModal(!isOpenModal);
+
+									if (
+										isNull(path) ||
+										isEmpty(path) ||
+										isUndefined(path)
+									) {
+										return resetToDefault();
+									}
+
+									resetToDefault({
+										path,
+										repeaterItem,
+										propId: fieldId,
+										attributes: getAttributes(),
+									});
+								}}
+							/>
+						)}
+					</Flex>
 				</Popover>
 			)}
 		</>
