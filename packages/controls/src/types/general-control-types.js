@@ -1,5 +1,7 @@
 // @flow
 
+import type { VariableCategory, DynamicValueTypes } from '@publisher/core-data';
+
 export type ControlSize = 'normal' | 'input' | 'small' | 'extra-small';
 
 export type ControlGeneralTypes = {
@@ -23,6 +25,6 @@ export type ControlGeneralTypes = {
 
 export type ControlValueAddonTypes = {
 	controlAddonTypes?: Array<string>,
-	variableTypes?: Array<string>,
-	dynamicValueTypes?: Array<string>,
+	variableTypes?: Array<VariableCategory>,
+	dynamicValueTypes?: Array<DynamicValueTypes>,
 };
