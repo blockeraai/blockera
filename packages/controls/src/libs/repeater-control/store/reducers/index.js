@@ -1,12 +1,8 @@
+// @flow
 /**
  * External dependencies
  */
 import { combineReducers } from '@wordpress/data';
-
-/**
- * Publisher dependencies
- */
-import { isArray, isObject, isUndefined } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -26,20 +22,12 @@ import { controlReducer } from '../../../../store/reducers/control-reducer';
  * @param {Object} action the action details for reduce state
  * @return {{}} the current state of control
  */
-export function repeaterReducer(state = {}, action): Object {
+export function repeaterReducer(state: Object = {}, action: Object): Object {
 	switch (action.type) {
 		case 'ADD_UNPROCESSED_CONTROL':
 		case 'REMOVE_CONTROL':
 		case 'MODIFY_CONTROL_VALUE':
 		case 'MODIFY_CONTROL_INFO':
-			if (
-				!isUndefined(action.value) &&
-				!isArray(action.value) &&
-				!isObject(action.value)
-			) {
-				return state;
-			}
-
 			return controlReducer(state, action);
 
 		case 'ADD_REPEATER_ITEM':
