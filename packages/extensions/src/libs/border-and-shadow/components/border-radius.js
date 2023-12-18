@@ -13,6 +13,7 @@ import {
 	BorderRadiusControl,
 	ControlContextProvider,
 } from '@publisher/controls';
+import { isString, isUndefined } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -41,6 +42,7 @@ export const BorderRadius = ({
 						return borderRadius;
 					}
 
+					// an object contains radius values
 					if (
 						typeof defaultValue.border.radius === 'object' &&
 						defaultValue.border.radius !== null
@@ -53,7 +55,9 @@ export const BorderRadius = ({
 
 					return {
 						type: 'all',
-						all: defaultValue.border.radius,
+						all: !isUndefined(defaultValue.border.radius)
+							? defaultValue.border.radius
+							: '',
 					};
 				})(),
 			}}
@@ -101,19 +105,35 @@ export const BorderRadius = ({
 										bottomLeft,
 									} = newValue;
 
-									if (topLeft.endsWith('func')) {
+									if (isString(topLeft)) {
+										if (topLeft.endsWith('func')) {
+											topLeft = '';
+										}
+									} else {
 										topLeft = '';
 									}
 
-									if (topRight.endsWith('func')) {
+									if (isString(topRight)) {
+										if (topRight.endsWith('func')) {
+											topRight = '';
+										}
+									} else {
 										topRight = '';
 									}
 
-									if (bottomRight.endsWith('func')) {
+									if (isString(bottomRight)) {
+										if (bottomRight.endsWith('func')) {
+											bottomRight = '';
+										}
+									} else {
 										bottomRight = '';
 									}
 
-									if (bottomLeft.endsWith('func')) {
+									if (isString(bottomLeft)) {
+										if (bottomLeft.endsWith('func')) {
+											bottomLeft = '';
+										}
+									} else {
 										bottomLeft = '';
 									}
 
