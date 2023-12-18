@@ -1276,6 +1276,11 @@ describe('Effects Extension', () => {
 				//Check static properties
 				cy.getIframeBody()
 					.find(`[data-type="core/paragraph"]`)
+					.should('have.css', 'position', 'relative')
+					.and('have.css', 'overflow', 'hidden');
+
+				cy.getIframeBody()
+					.find(`[data-type="core/paragraph"]`)
 					.then(($el) => {
 						return window.getComputedStyle($el[0], '::before');
 					})
@@ -1424,6 +1429,11 @@ describe('Effects Extension', () => {
 				cy.multiClick('[aria-label="Add New Divider"]', 2);
 
 				//Check static properties
+				cy.getIframeBody()
+					.find(`[data-type="core/paragraph"]`)
+					.should('have.css', 'position', 'relative')
+					.and('have.css', 'overflow', 'hidden');
+
 				cy.getIframeBody()
 					.find(`[data-type="core/paragraph"]`)
 					.then(($el) => {
