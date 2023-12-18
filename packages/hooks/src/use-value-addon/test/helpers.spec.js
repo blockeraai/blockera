@@ -1,4 +1,5 @@
 import {
+	canUnlinkVariable,
 	generateVariableString,
 	getDynamicValueCategory,
 	getDynamicValueIcon,
@@ -498,6 +499,67 @@ describe('Helper Functions', () => {
 					slug: 'wideSize',
 				})
 			).toBe('--wp--style--global--wide-size');
+		});
+	});
+
+	describe('canUnlinkVariable', () => {
+		test('invalid value', () => {
+			expect(canUnlinkVariable('invalid')).toBe(false);
+		});
+
+		test('valid value', () => {
+			expect(
+				canUnlinkVariable({
+					settings: {
+						name: 'Small',
+						slug: 'small',
+						value: '13px',
+						fluid: null,
+						reference: { type: 'preset' },
+						type: 'font-size',
+						var: '--wp--preset--font-size--small',
+					},
+					id: 'small',
+					isValueAddon: true,
+					valueType: 'variable',
+				})
+			).toBe(true);
+		});
+
+		test('empty value but the variable is available', () => {
+			expect(
+				canUnlinkVariable({
+					settings: {
+						name: 'Small',
+						slug: 'small',
+						fluid: null,
+						reference: { type: 'preset' },
+						type: 'font-size',
+						var: '--wp--preset--font-size--small',
+					},
+					id: 'small',
+					isValueAddon: true,
+					valueType: 'variable',
+				})
+			).toBe(true);
+		});
+
+		test('empty value and variable is not available', () => {
+			expect(
+				canUnlinkVariable({
+					settings: {
+						name: 'Small',
+						slug: 'small-1',
+						fluid: null,
+						reference: { type: 'preset' },
+						type: 'font-size',
+						var: '--wp--preset--font-size--small',
+					},
+					id: 'small-1',
+					isValueAddon: true,
+					valueType: 'variable',
+				})
+			).toBe(false);
 		});
 	});
 });

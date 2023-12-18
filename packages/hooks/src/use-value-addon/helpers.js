@@ -342,8 +342,7 @@ export function canUnlinkVariable(value: ValueAddon): boolean {
 			return true;
 		}
 
-		// $FlowFixMe
-		const variable = getVariable(value.valueType, value.settings.slug);
+		const variable = getVariable(value?.settings.type, value.settings.slug);
 
 		if (!isUndefined(variable?.value) && variable?.value !== '') {
 			return true;
