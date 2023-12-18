@@ -83,7 +83,10 @@ export default function ColorPickerControl({
 									<Button
 										tabIndex="-1"
 										size={'extra-small'}
-										onClick={() => setValue('')}
+										onClick={() => {
+											setValue('');
+											onClose();
+										}}
 										style={{ padding: '5px' }}
 										aria-label={__(
 											'Reset Color (Clear)',
