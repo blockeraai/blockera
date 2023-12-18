@@ -51,7 +51,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 		const [isSelectShapeOpen, setIsSelectShapeOpen] = useState(false);
 
 		const isPositionDisabled = (
-			id: string,
+			id: number,
 			items: Array<Object>,
 			value: string
 		) => {
