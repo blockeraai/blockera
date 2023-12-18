@@ -47,18 +47,33 @@ blocksInitializer({
 						{...{ ...props, attributes, setAttributes }}
 						initialOpen={true}
 						values={{
-							publisherFilter: [],
-							publisherCursor: '',
-							publisherOpacity: '',
-							publisherTransform: [],
-							publisherBlendMode: '',
-							publisherTransition: [],
-							publisherBackdropFilter: [],
-							publisherBackfaceVisibility: '',
-							publisherTransformSelfOrigin: {},
-							publisherTransformChildOrigin: {},
-							publisherTransformSelfPerspective: '',
-							publisherTransformChildPerspective: '',
+							opacity: attributes?.publisherOpacity || '',
+							transform: attributes?.publisherTransform || [],
+							transition: attributes?.publisherTransition || [],
+							filter: attributes?.publisherFilter || [],
+							cursor: attributes?.publisherCursor || '',
+							blendMode: attributes?.publisherBlendMode || '',
+							backdropFilter:
+								attributes?.publisherBackdropFilter || [],
+							backfaceVisibility:
+								attributes?.publisherBackfaceVisibility || '',
+							transformSelfOrigin:
+								attributes?.publisherTransformSelfOrigin || {
+									top: '',
+									left: '',
+								},
+							transformChildOrigin:
+								attributes?.publisherTransformChildOrigin || {
+									top: '',
+									left: '',
+								},
+							transformSelfPerspective:
+								attributes?.publisherTransformSelfPerspective ||
+								'',
+							transformChildPerspective:
+								attributes?.publisherTransformChildPerspective ||
+								'',
+							divider: attributes?.publisherDivider || [],
 						}}
 						extensionId={'Effects'}
 						icon={<EffectsExtensionIcon />}
@@ -108,9 +123,10 @@ export const Default = {
 					publisherBlendMode: '',
 					publisherTransition: [],
 					publisherBackdropFilter: [],
+					publisherDivider: [],
 					publisherBackfaceVisibility: '',
-					publisherTransformSelfOrigin: {},
-					publisherTransformChildOrigin: {},
+					publisherTransformSelfOrigin: { top: '', left: '' },
+					publisherTransformChildOrigin: { top: '', left: '' },
 					publisherTransformSelfPerspective: '',
 					publisherTransformChildPerspective: '',
 				},
