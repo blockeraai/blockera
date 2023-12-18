@@ -215,10 +215,25 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		attribute: controlInfo.attribute,
 		description: controlInfo.description,
 		controlInfo: getControl(controlInfo.name),
+		getControlPath(controlID: string, childControlId: string): string {
+			// Assume childControlId is undefined, then hint to context provider main value.
+			if (isUndefined(childControlId)) {
+				return controlID;
+			}
+			// Assume childControlId started with open bracket char as an example: "[0].toggleOption", then concat controlID and childControlId with no separator.
+			if ('[' === childControlId[0]) {
+				return `${controlID}${childControlId}`;
+			}
+
+			// Assume childControlId started with property word name as an example: "toggleOption", then concatenate "controlID" and "childControlId" with "dot | ." separator.
+			return `${controlID}.${childControlId}`;
+		},
 		/**
 		 * Reset control value to default value.
 		 */
 		resetToDefault: (args: Object): any => {
+			const dataset = args?.attributes || defaultValue;
+
 			if (isUndefined(args?.path)) {
 				modifyControlValue({
 					valueCleanup,
@@ -231,33 +246,66 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 				return defaultValue;
 			}
 
-			let value = prepare(args?.path, defaultValue);
+			let value = prepare(args?.path, dataset);
 
-			if (isUndefined(value) || '' === value) {
-				value = defaultValue;
+			const callback = (
+				item: Object,
+				itemId: number,
+				value: any
+			): Object => {
+				if (itemId === args?.repeaterItem) {
+					return {
+						...item,
+						[args?.propId]: value,
+					};
+				}
+
+				return item;
+			};
+
+			if (isUndefined(value)) {
+				if (isArray(savedValue)) {
+					value = savedValue.map(
+						(item: Object, itemId: number): Object =>
+							callback(
+								item,
+								itemId,
+								defaultRepeaterItemValue && args?.propId
+									? defaultRepeaterItemValue[args.propId]
+									: defaultValue
+							)
+					);
+				} else if (isObject(savedValue)) {
+					value = {
+						...savedValue,
+						[args?.propId]: defaultValue[args?.propId],
+					};
+				}
+
 				modifyControlValue({
-					valueCleanup,
 					value,
+					valueCleanup,
 					controlId: controlInfo.name,
 				});
-
-				setValue(value);
 
 				return value;
 			}
 
-			modifyControlValue({
-				valueCleanup,
-				value: {
+			if (isArray(savedValue)) {
+				value = savedValue.map((item: Object, itemId: number): Object =>
+					callback(item, itemId, value)
+				);
+			} else if (isObject(savedValue)) {
+				value = {
 					...savedValue,
-					[args?.path]: value,
-				},
-				controlId: controlInfo.name,
-			});
+					[args?.propId]: value,
+				};
+			}
 
-			setValue({
-				...savedValue,
-				[args?.path]: value,
+			modifyControlValue({
+				value,
+				valueCleanup,
+				controlId: controlInfo.name,
 			});
 
 			return value;
