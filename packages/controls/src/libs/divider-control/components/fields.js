@@ -13,7 +13,7 @@ import type { Element } from 'react';
 /**
  * Publisher dependencies
  */
-import { Flex, Popover, ConditionalWrapper } from '@publisher/components';
+import { Flex, Popover } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
@@ -235,14 +235,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					}
 				></ColorControl>
 
-				<ConditionalWrapper
-					condition={!item.size.width || !item.size.height}
-					wrapper={(children) => (
-						<BaseControl columns="columns-1">
-							{children}
-						</BaseControl>
-					)}
-				>
+				<BaseControl columns="columns-1">
 					<BaseControl
 						columns="columns-2"
 						label={__('Size', 'publisher-core')}
@@ -317,7 +310,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								)}
 						</NoticeControl>
 					)}
-				</ConditionalWrapper>
+				</BaseControl>
 
 				<BaseControl
 					columns="columns-2"

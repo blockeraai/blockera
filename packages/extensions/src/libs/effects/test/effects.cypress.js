@@ -6,10 +6,6 @@ import {
 	redirectToFrontPage,
 } from '../../../../../../cypress/helpers';
 
-// const cy.getParentContainer = (ariaLabel, dataCy) => {
-// 	return cy.get(`[aria-label="${ariaLabel}"]`).parents(`[data-cy=${dataCy}]`);
-// };
-
 const calcMatrix = ({ type, matrix }) => {
 	/*
 		    matrix3d( scaleX, shearYX, shearZX, perspectiveX,
@@ -85,8 +81,8 @@ describe('Effects Extension', () => {
 
 		describe('Functionality', () => {
 			it('should update opacity, when adding value', () => {
-				cy.get('[aria-label="Opacity"]')
-					.parents('[data-cy="base-control"]')
+				cy.getParentContainer('Opacity', 'base-control')
+					.first()
 					.within(() => {
 						cy.get('input[type=range]').setSliderValue(50);
 					});
@@ -136,14 +132,13 @@ describe('Effects Extension', () => {
 					cy.get('[aria-label="Add New Transform"]').click();
 					cy.get('[aria-label="Transformation Settings"]').click();
 
-					cy.getParentContainer(
-						'Self Perspective',
-						'base-control'
-					).within(() => {
-						cy.get('input[type="number"]').focus();
-						cy.get('input[type="number"]').clear();
-						cy.get('input[type="number"]').type(150);
-					});
+					cy.getParentContainer('Self Perspective', 'base-control')
+						.first()
+						.within(() => {
+							cy.get('input[type="number"]').focus();
+							cy.get('input[type="number"]').clear();
+							cy.get('input[type="number"]').type(150);
+						});
 
 					//Check block
 					cy.getIframeBody()
@@ -1258,6 +1253,331 @@ describe('Effects Extension', () => {
 					'backdrop-filter',
 					`brightness(${100 / 100}) invert(${50 / 100})`
 				);
+			});
+		});
+	});
+
+	describe('Divider', () => {
+		beforeEach(() => {
+			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.type('this is test text.');
+
+			cy.getByDataTest('style-tab').click();
+		});
+		//describe('WordPress Compatibility', () => {...});
+
+		describe('Functionality', () => {
+			it('should add ::before to element,when add first divider', () => {
+				cy.getByAriaLabel('Add New Divider').click();
+
+				//Check static properties
+				cy.getIframeBody()
+					.find(`[data-type="core/paragraph"]`)
+					.then(($el) => {
+						return window.getComputedStyle($el[0], '::before');
+					})
+					.as('element-before');
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'content')
+					.should('eq', '""');
+
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'position')
+					.should('eq', 'absolute');
+
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'left')
+					.should('eq', '0px');
+
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'background-size')
+					.should('eq', '100%');
+
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'background-repeat')
+					.should('eq', 'no-repeat');
+
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'z-index')
+					.should('eq', '1');
+
+				cy.getByDataTest('divider-item-header').click();
+
+				//add data
+				cy.getByDataTest('popover-body').within(() => {
+					cy.getByAriaLabel('Bottom').click();
+
+					cy.getByDataTest('divider-width-input').clear();
+					cy.getByDataTest('divider-width-input').type(300, {
+						force: true,
+					});
+
+					cy.getByDataTest('divider-height-input').clear();
+					cy.getByDataTest('divider-height-input').type(200, {
+						force: true,
+					});
+
+					cy.getParentContainer('Animate', 'base-control').within(
+						() => {
+							cy.get('input[type="checkbox"]').click({
+								force: true,
+							});
+							cy.get('input[type="number"]').type(2);
+						}
+					);
+
+					cy.getParentContainer('Flip', 'base-control').within(() => {
+						cy.get('input[type="checkbox"]').click({ force: true });
+					});
+
+					cy.getParentContainer('On Front', 'base-control').within(
+						() => {
+							cy.get('input[type="checkbox"]').click({
+								force: true,
+							});
+						}
+					);
+
+					cy.getByDataTest('divider-shape-button').click();
+				});
+
+				cy.getByDataTest('divider-shape-popover').within(() => {
+					cy.getByDataTest('wave-2').click({ force: true });
+					cy.getByAriaLabel('Close').click();
+				});
+
+				cy.getByDataTest('popover-body').within(() => {
+					cy.getByDataCy('color-btn').click();
+				});
+
+				cy.getByDataTest('popover-body')
+					.last()
+					.within(() => {
+						cy.get('input[maxlength="9"]').clear();
+						cy.get('input[maxlength="9"]').type('cecece');
+					});
+
+				//Check block
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'bottom')
+					.should('eq', '0px');
+
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'width')
+					.should('eq', '300px');
+
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'height')
+					.should('eq', '200px');
+
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'z-index')
+					.should('eq', '1000');
+
+				cy.getIframeBody()
+					.find(`[data-type="core/paragraph"]`)
+					.parent()
+					.within(() => {
+						cy.get('style')
+							.invoke('text')
+							.should('include', 'transform')
+							.and('include', 'scaleX(-1)');
+					});
+
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'bottom')
+					.should('eq', '0px');
+
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'background-image')
+					.should(
+						'eq',
+						`url("data:image/svg+xml,%3Csvg width='1200' height='70' viewBox='0 0 1200 70' fill='%23cecece' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 34.0136C107.823 61.2245 247.959 21.0884 341.497 15.3061C435.034 9.52381 656.122 65.3061 772.449 59.5238C889.116 53.7415 930.612 30.9524 1012.24 29.932C1093.88 29.2517 1200 59.8639 1200 59.8639V0H0V34.0136Z' fill='%23cecece'/%3E%3C/svg%3E%0A")`
+					);
+
+				//Check store
+				getWPDataObject().then((data) => {
+					expect([
+						{
+							position: 'bottom',
+							shape: { type: 'shape', id: 'wave-2' },
+							color: '#cecece',
+							size: { width: '300px', height: '200px' },
+							animate: true,
+							duration: '2ms',
+							flip: true,
+							onFront: true,
+							isVisible: true,
+						},
+					]).to.be.deep.equal(
+						getSelectedBlock(data, 'publisherDivider')
+					);
+				});
+
+				//Check frontend
+			});
+
+			it('should add ::after to element,when add second divider', () => {
+				cy.multiClick('[aria-label="Add New Divider"]', 2);
+
+				//Check static properties
+				cy.getIframeBody()
+					.find(`[data-type="core/paragraph"]`)
+					.then(($el) => {
+						return window.getComputedStyle($el[0], '::after');
+					})
+					.as('element-before');
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'content')
+					.should('eq', '""');
+
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'position')
+					.should('eq', 'absolute');
+
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'left')
+					.should('eq', '0px');
+
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'background-size')
+					.should('eq', '100%');
+
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'background-repeat')
+					.should('eq', 'no-repeat');
+
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'z-index')
+					.should('eq', '1');
+
+				cy.getByDataTest('divider-item-header').last().click();
+
+				//add data
+				cy.getByDataTest('popover-body').within(() => {
+					cy.getByDataTest('divider-width-input').clear();
+					cy.getByDataTest('divider-width-input').type(300, {
+						force: true,
+					});
+
+					cy.getByDataTest('divider-height-input').clear();
+					cy.getByDataTest('divider-height-input').type(200, {
+						force: true,
+					});
+
+					cy.getParentContainer('Animate', 'base-control').within(
+						() => {
+							cy.get('input[type="checkbox"]').click({
+								force: true,
+							});
+							cy.get('input[type="number"]').type(2);
+						}
+					);
+
+					cy.getParentContainer('Flip', 'base-control').within(() => {
+						cy.get('input[type="checkbox"]').click({ force: true });
+					});
+
+					cy.getParentContainer('On Front', 'base-control').within(
+						() => {
+							cy.get('input[type="checkbox"]').click({
+								force: true,
+							});
+						}
+					);
+
+					cy.getByDataTest('divider-shape-button').click();
+				});
+
+				cy.getByDataTest('divider-shape-popover').within(() => {
+					cy.getByDataTest('wave-2').click({ force: true });
+					cy.getByAriaLabel('Close').click();
+				});
+
+				cy.getByDataTest('popover-body').within(() => {
+					cy.getByDataCy('color-btn').click();
+				});
+
+				cy.getByDataTest('popover-body')
+					.last()
+					.within(() => {
+						cy.get('input[maxlength="9"]').clear();
+						cy.get('input[maxlength="9"]').type('cecece');
+					});
+
+				//Check block
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'bottom')
+					.should('eq', '0px');
+
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'width')
+					.should('eq', '300px');
+
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'height')
+					.should('eq', '200px');
+
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'z-index')
+					.should('eq', '1000');
+
+				cy.getIframeBody()
+					.find(`[data-type="core/paragraph"]`)
+					.parent()
+					.within(() => {
+						cy.get('style')
+							.invoke('text')
+							.should('include', 'transform')
+							.and('include', 'scaleX(-1)');
+					});
+
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'bottom')
+					.should('eq', '0px');
+
+				cy.get('@element-before')
+					.invoke('getPropertyValue', 'background-image')
+					.should(
+						'eq',
+						`url("data:image/svg+xml,%3Csvg width='1200' height='70' viewBox='0 0 1200 70' fill='%23cecece' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 34.0136C107.823 61.2245 247.959 21.0884 341.497 15.3061C435.034 9.52381 656.122 65.3061 772.449 59.5238C889.116 53.7415 930.612 30.9524 1012.24 29.932C1093.88 29.2517 1200 59.8639 1200 59.8639V0H0V34.0136Z' fill='%23cecece'/%3E%3C/svg%3E%0A")`
+					);
+
+				//Check store
+				getWPDataObject().then((data) => {
+					expect([
+						{
+							position: 'top',
+							shape: { type: 'shape', id: 'wave-opacity' },
+							color: '',
+							size: { width: '100%', height: '100px' },
+							animate: false,
+							duration: '',
+							flip: false,
+							onFront: false,
+							isVisible: true,
+						},
+
+						{
+							position: 'bottom',
+							shape: { type: 'shape', id: 'wave-2' },
+							color: '#cecece',
+							size: { width: '300px', height: '200px' },
+							animate: true,
+							duration: '2ms',
+							flip: true,
+							onFront: true,
+							isVisible: true,
+						},
+					]).to.be.deep.equal(
+						getSelectedBlock(data, 'publisherDivider')
+					);
+				});
+
+				//Check frontend
 			});
 		});
 	});

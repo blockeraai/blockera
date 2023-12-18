@@ -30,7 +30,6 @@ export default function DividerControl({
 	value,
 	...props
 }: TDividerControlProps): MixedElement {
-	console.log(props);
 	const {
 		controlInfo: { name: controlId },
 		dispatch: { changeRepeaterItem },
