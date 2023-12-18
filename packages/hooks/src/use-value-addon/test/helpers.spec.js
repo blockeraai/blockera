@@ -1,4 +1,5 @@
 import {
+	generateVariableString,
 	getDynamicValueCategory,
 	getDynamicValueIcon,
 	getValueAddonRealValue,
@@ -409,6 +410,94 @@ describe('Helper Functions', () => {
 			const category = getDynamicValueCategory('other', ['all']);
 
 			expect(category.name).toBe(__('Utilities', 'publisher-core'));
+		});
+	});
+
+	describe('generateVariableString', () => {
+		test('valid - type core', () => {
+			expect(
+				generateVariableString({
+					reference: {
+						type: 'core',
+					},
+					type: 'color',
+					slug: 'base-1',
+				})
+			).toBe('--wp--preset--color--base-1');
+		});
+
+		test('valid - type core-pro', () => {
+			expect(
+				generateVariableString({
+					reference: {
+						type: 'core-pro',
+					},
+					type: 'color',
+					slug: 'base-1',
+				})
+			).toBe('--wp--preset--color--base-1');
+		});
+
+		test('valid - type plugin', () => {
+			expect(
+				generateVariableString({
+					reference: {
+						type: 'plugin',
+						plugin: 'WooCommerce',
+					},
+					type: 'color',
+					slug: 'base-1',
+				})
+			).toBe('--wp--preset--color--base-1');
+		});
+
+		test('valid - type theme', () => {
+			expect(
+				generateVariableString({
+					reference: {
+						type: 'theme',
+						theme: 'Publisher SE',
+					},
+					type: 'color',
+					slug: 'base-1',
+				})
+			).toBe('--wp--preset--color--base-1');
+		});
+
+		test('valid - type custom', () => {
+			expect(
+				generateVariableString({
+					reference: {
+						type: 'custom',
+					},
+					type: 'color',
+					slug: 'base-1',
+				})
+			).toBe('--wp--publisher--color--base-1');
+		});
+
+		test('contentSize', () => {
+			expect(
+				generateVariableString({
+					reference: {
+						type: 'core',
+					},
+					type: 'width-size',
+					slug: 'contentSize',
+				})
+			).toBe('--wp--style--global--content-size');
+		});
+
+		test('wideSize', () => {
+			expect(
+				generateVariableString({
+					reference: {
+						type: 'core',
+					},
+					type: 'width-size',
+					slug: 'wideSize',
+				})
+			).toBe('--wp--style--global--wide-size');
 		});
 	});
 });

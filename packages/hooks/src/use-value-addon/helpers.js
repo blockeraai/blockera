@@ -301,20 +301,16 @@ export function generateVariableString({
 	slug: string,
 }): string {
 	let _type: string = type;
-	let _reference: string = reference.type;
+	let _reference: string = reference?.type;
 
-	if (type === 'color') {
-		_type = 'color';
-	} else if (type === 'width-size') {
+	if (type === 'width-size') {
 		if (slug === 'contentSize') {
 			slug = 'content-size';
 			_type = 'global';
-			// $FlowFixMe
 			_reference = 'style';
 		} else if (slug === 'wideSize') {
 			slug = 'wide-size';
 			_type = 'global';
-			// $FlowFixMe
 			_reference = 'style';
 		}
 	} else {
@@ -326,8 +322,12 @@ export function generateVariableString({
 			_reference = 'publisher';
 			break;
 
-		default:
+		case 'theme':
+		case 'plugin':
+		case 'core':
+		case 'core-pro':
 			_reference = 'preset';
+			break;
 	}
 
 	return `--wp--${_reference}--${_type}--${slug}`;
