@@ -13,6 +13,10 @@ export type DynamicValueCategory =
 	| 'site';
 
 export type DynamicValueTypes =
+	/**
+	 * all means the value addon supports all types
+	 */
+	| 'all'
 	| 'text'
 	| 'link'
 	| 'image'
