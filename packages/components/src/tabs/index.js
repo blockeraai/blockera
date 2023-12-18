@@ -3,13 +3,14 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import type { Element } from 'react';
 import { useRef } from '@wordpress/element';
 
 /**
  * Publisher dependencies
  */
-import classnames from 'classnames';
+import { useBlockContext } from '@publisher/extensions/src/hooks/context';
 
 /**
  * Internal dependencies
@@ -22,11 +23,17 @@ import type { TTabsProps, TTabProps } from './types';
  * Handle on select event!
  *
  * @param {string} tabName the name of tab
+ * @param {Function} setCurrentTab the set current tab to block high level state.
  */
-const onSelect = (tabName: string): void => {
+const onSelect = (
+	tabName: string,
+	setCurrentTab: (tabName: string) => void
+): void => {
 	const tab = document.querySelector(`.bf-${tabName}-tab`);
 	// eslint-disable-next-line
 	tab && tab.classList.add('is-active');
+
+	setCurrentTab(tabName);
 };
 
 export function Tabs(props: TTabsProps): Element<any> {
@@ -55,6 +62,7 @@ export function Tabs(props: TTabsProps): Element<any> {
 		})
 	);
 	const ref = useRef();
+	const { setCurrentTab } = useBlockContext();
 	const classes = classnames('publisher-tab-panel');
 
 	return (
@@ -62,7 +70,9 @@ export function Tabs(props: TTabsProps): Element<any> {
 			<TabPanel
 				className={classes}
 				activeClass="active-tab"
-				onSelect={onSelect}
+				onSelect={(tabName) => {
+					onSelect(tabName, setCurrentTab);
+				}}
 				tabs={tabsRef.current}
 			>
 				{(tab) => getPanel(tab)}

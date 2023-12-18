@@ -43,7 +43,14 @@ export default function ColorControl({
 	//
 	...props
 }: ColorControlProps): MixedElement {
-	const { value, setValue } = useControlContext({
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
@@ -72,6 +79,7 @@ export default function ColorControl({
 				columns={columns}
 				controlName={field}
 				className={className}
+				{...{ attribute, blockName, description, resetToDefault }}
 			>
 				<div
 					className={controlClassNames(
@@ -107,6 +115,7 @@ export default function ColorControl({
 			columns={columns}
 			controlName={field}
 			className={className + ' ' + valueAddonClassNames}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<Button
 				size="input"

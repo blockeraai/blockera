@@ -65,6 +65,8 @@ export const TransformSettings = ({
 				value={{
 					name: generateExtensionId(block, 'self-perspective'),
 					value: transformSelfPerspective,
+					attribute: 'publisherTransformSelfPerspective',
+					blockName: block.blockName,
 				}}
 			>
 				<BaseControl columns="column-1">
@@ -104,6 +106,8 @@ export const TransformSettings = ({
 											transformSelfOrigin
 										)?.compact,
 								},
+								attribute: 'publisherTransformSelfOrigin',
+								blockName: block.blockName,
 							}}
 						>
 							<PositionButtonControl
@@ -149,6 +153,8 @@ export const TransformSettings = ({
 				value={{
 					name: generateExtensionId(block, 'backface-visibility'),
 					value: backfaceVisibility,
+					attribute: 'publisherBackfaceVisibility',
+					blockName: block.blockName,
 				}}
 			>
 				<ToggleSelectControl
@@ -181,6 +187,8 @@ export const TransformSettings = ({
 					value: transformChildPerspective
 						? transformChildPerspective
 						: '0px',
+					attribute: 'publisherTransformChildPerspective',
+					blockName: block.blockName,
 				}}
 			>
 				<BaseControl
@@ -215,6 +223,8 @@ export const TransformSettings = ({
 										transformChildOrigin
 									)?.compact,
 							},
+							attribute: 'publisherTransformChildOrigin',
+							blockName: block.blockName,
 						}}
 					>
 						<PositionButtonControl

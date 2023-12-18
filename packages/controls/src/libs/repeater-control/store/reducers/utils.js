@@ -1,3 +1,4 @@
+// @flow
 /**
  * Publisher dependencies
  */
@@ -32,17 +33,17 @@ export function getControlInfo(state: Object, action: Object): null | any {
 /**
  * has repeaterId prop exists in action and check is valid?
  *
- * @param {Object} controlValue the control value
- * @param {Object} action the action of dispatcher
- * @param {boolean} checkIsArray the flag for check prepare data value is Array?
- * @return {boolean|false} true on success, false when otherwise
+ * @param {Object} controlValue the control value.
+ * @param {Object} action the action of dispatcher.
+ * @param {boolean} checkIsNested the flag for check prepare data value is nested repeater?
+ * @return {boolean|false} true on success, false when otherwise.
  */
 export function hasRepeaterId(
 	controlValue: Object,
 	action: Object,
-	checkIsArray: boolean = true
-) {
-	return checkIsArray
+	checkIsNested: boolean = true
+): boolean {
+	return checkIsNested
 		? isString(action.repeaterId) &&
 				action.repeaterId.length &&
 				isArray(prepare(action.repeaterId, controlValue))

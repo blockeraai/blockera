@@ -46,7 +46,15 @@ export default function BorderControl({
 	__isColorFocused,
 	__isStyleFocused,
 }: BorderControlProps): MixedElement {
-	const { value, setValue, getId } = useControlContext({
+	const {
+		value,
+		setValue,
+		getId,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
@@ -59,6 +67,7 @@ export default function BorderControl({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<div
 				className={controlClassNames('border', className)}

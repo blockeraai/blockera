@@ -52,6 +52,10 @@ export default function LinkControl({
 		controlInfo: { name: controlId },
 		value,
 		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
 	} = useControlContext({
 		onChange,
 		defaultValue,
@@ -76,6 +80,7 @@ export default function LinkControl({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<div className={controlClassNames('link', className)}>
 				<div className={controlInnerClassNames('link-row-link')}>

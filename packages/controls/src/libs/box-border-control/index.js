@@ -63,6 +63,10 @@ export default function BoxBorderControl({
 	const {
 		value,
 		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
 		controlInfo: { name: controlId },
 		dispatch: { modifyControlValue },
 	} = useControlContext({
@@ -96,7 +100,15 @@ export default function BoxBorderControl({
 				<div className={controlInnerClassNames('border-header')}>
 					{label && (
 						<div className={controlInnerClassNames('label')}>
-							<LabelControl label={label} />
+							<LabelControl
+								label={label}
+								{...{
+									attribute,
+									blockName,
+									description,
+									resetToDefault,
+								}}
+							/>
 						</div>
 					)}
 

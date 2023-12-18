@@ -40,7 +40,14 @@ export default function AnglePickerControl({
 	className,
 	...props
 }: AnglePickerControlProps): MixedElement {
-	const { value, setValue } = useControlContext({
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
@@ -52,6 +59,7 @@ export default function AnglePickerControl({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<Flex
 				direction="row"

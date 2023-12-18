@@ -15,7 +15,7 @@ import type { Element } from 'react';
 /**
  * Publisher dependencies
  */
-import { isBoolean } from '@publisher/utils';
+import { isBoolean, isFunction } from '@publisher/utils';
 import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
@@ -28,7 +28,10 @@ import GroupControl from '../../group-control';
 import { useControlContext } from '../../../context';
 import type { RepeaterItemProps } from '../types';
 
-const RepeaterItem = ({ item, itemId }: RepeaterItemProps): Element<any> => {
+const RepeaterItem = ({
+	item,
+	itemId,
+}: RepeaterItemProps): null | Element<any> => {
 	const [isOpen, setOpen] = useState(
 		isBoolean(item?.isOpen) ? item?.isOpen : false
 	);
@@ -38,16 +41,18 @@ const RepeaterItem = ({ item, itemId }: RepeaterItemProps): Element<any> => {
 
 	const {
 		controlInfo: { name: controlId },
-		dispatch,
+		dispatch: { sortRepeaterItem, modifyControlValue },
 	} = useControlContext();
 
 	const {
 		mode,
 		design,
+		onSelect,
 		repeaterId,
 		popoverTitle,
 		popoverClassName,
 		repeaterItems: items,
+		repeaterItemOpener: RepeaterItemOpener,
 		repeaterItemHeader: RepeaterItemHeader,
 		repeaterItemChildren: RepeaterItemChildren,
 	} = useContext(RepeaterContext);
@@ -97,7 +102,6 @@ const RepeaterItem = ({ item, itemId }: RepeaterItemProps): Element<any> => {
 			setDraggingIndex(index);
 
 			const toIndex = index;
-			const { sortRepeaterItem } = dispatch;
 			const fromIndex = parseInt(
 				e.dataTransfer?.getData('text/plain'),
 				10
@@ -112,6 +116,10 @@ const RepeaterItem = ({ item, itemId }: RepeaterItemProps): Element<any> => {
 			});
 		}
 	};
+
+	if (!item?.display) {
+		return null;
+	}
 
 	return (
 		<div
@@ -130,14 +138,23 @@ const RepeaterItem = ({ item, itemId }: RepeaterItemProps): Element<any> => {
 			style={styleRef.current}
 		>
 			<GroupControl
-				mode={mode}
+				mode={
+					isFunction(RepeaterItemChildren?.getMode)
+						? RepeaterItemChildren.getMode(item, itemId)
+						: mode
+				}
 				toggleOpenBorder={true}
 				design={design}
 				popoverTitle={popoverTitle}
 				popoverClassName={popoverClassName}
 				className={controlInnerClassNames(
 					'repeater-item-group',
-					item?.__className
+					item?.__className,
+					{
+						'is-selected-item': item.selectable
+							? item.isSelected
+							: false,
+					}
 				)}
 				header={
 					!RepeaterItemHeader ? (
@@ -164,7 +181,16 @@ const RepeaterItem = ({ item, itemId }: RepeaterItemProps): Element<any> => {
 						<RepeaterItemHeader {...repeaterItemActionsProps} />
 					)
 				}
-				headerOpenButton={false}
+				headerOpenIcon={
+					RepeaterItemOpener && (
+						<RepeaterItemOpener {...repeaterItemActionsProps} />
+					)
+				}
+				headerOpenButton={
+					RepeaterItemOpener?.hasButton
+						? RepeaterItemOpener.hasButton(item, itemId)
+						: false
+				}
 				injectHeaderButtonsStart={
 					<RepeaterItemActions
 						item={repeaterItemActionsProps.item}
@@ -177,6 +203,34 @@ const RepeaterItem = ({ item, itemId }: RepeaterItemProps): Element<any> => {
 				isOpen={isOpen}
 				onClose={() => {
 					setOpen(false);
+				}}
+				onClick={(event): boolean => {
+					if (item.selectable) {
+						const newItems = items.map((_item, _itemId) => {
+							if (_itemId === itemId) {
+								return {
+									..._item,
+									isSelected: true,
+								};
+							}
+
+							return {
+								..._item,
+								isSelected: false,
+							};
+						});
+
+						modifyControlValue({
+							controlId,
+							value: newItems,
+						});
+
+						return isFunction(onSelect)
+							? onSelect(event, item)
+							: false;
+					}
+
+					return true;
 				}}
 			/>
 		</div>

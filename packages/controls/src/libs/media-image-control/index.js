@@ -37,7 +37,14 @@ export default function MediaImageControl({
 	//
 	className,
 }: MediaImageControlProps): MixedElement {
-	const { value, setValue } = useControlContext({
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
@@ -49,6 +56,7 @@ export default function MediaImageControl({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<div
 				className={controlClassNames(

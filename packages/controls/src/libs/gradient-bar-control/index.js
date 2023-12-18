@@ -34,7 +34,14 @@ export default function GradientBarControl({
 	variableTypes,
 	dynamicValueTypes,
 }: GradientBarControlProps): MixedElement {
-	const { value, setValue } = useControlContext({
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		defaultValue,
 		onChange,
@@ -60,6 +67,7 @@ export default function GradientBarControl({
 				columns={columns}
 				controlName={field}
 				className={className}
+				{...{ attribute, blockName, description, resetToDefault }}
 			>
 				<div
 					className={controlClassNames(
@@ -85,6 +93,7 @@ export default function GradientBarControl({
 			columns={columns}
 			controlName={field}
 			className={className + ' ' + valueAddonClassNames}
+			{...{ description, resetToDefault }}
 		>
 			<div
 				data-cy="gradient-bar-control"

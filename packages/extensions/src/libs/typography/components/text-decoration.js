@@ -33,27 +33,22 @@ export const TextDecoration = ({
 	value: string | void,
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
-	const callback = (
-		attributes: Object,
-		setAttributes: (attributes: Object) => void,
-		newValue: string
-	) => {
+	const toWPCompatible = (newValue: Object): Object => {
 		const _newValue = newValue === 'initial' ? 'none' : newValue;
 
 		if ('overline' === newValue) {
-			return;
+			return {};
 		}
 
-		setAttributes({
-			...attributes,
+		return {
 			style: {
-				...(attributes?.style ?? {}),
+				...(block.attributes?.style ?? {}),
 				typography: {
-					...(attributes?.style?.typography ?? {}),
+					...(block.attributes?.style?.typography ?? {}),
 					textDecoration: _newValue,
 				},
 			},
-		});
+		};
 	};
 
 	return (
@@ -61,6 +56,8 @@ export const TextDecoration = ({
 			value={{
 				name: generateExtensionId(block, 'text-decoration'),
 				value,
+				attribute: 'publisherTextDecoration',
+				blockName: block.blockName,
 			}}
 		>
 			<BaseControl
@@ -95,16 +92,9 @@ export const TextDecoration = ({
 					//
 					defaultValue="initial"
 					onChange={(newValue) =>
-						onChange(
-							'publisherTextDecoration',
-							newValue,
-							'',
-							(
-								attributes: Object,
-								setAttributes: (attributes: Object) => void
-							): void =>
-								callback(attributes, setAttributes, newValue)
-						)
+						onChange('publisherTextDecoration', newValue, {
+							addOrModifyRootItems: toWPCompatible(),
+						})
 					}
 				/>
 			</BaseControl>

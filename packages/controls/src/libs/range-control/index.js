@@ -62,12 +62,13 @@ export default function RangeControl({
 		return value;
 	}
 
-	let { value, setValue } = useControlContext({
-		id,
-		onChange,
-		defaultValue,
-		valueCleanup,
-	});
+	let { value, setValue, attribute, blockName, description, resetToDefault } =
+		useControlContext({
+			id,
+			onChange,
+			defaultValue,
+			valueCleanup,
+		});
 
 	if (isString(value)) {
 		value = valueCleanup(value);
@@ -79,6 +80,7 @@ export default function RangeControl({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<WordPressRangeControl
 				min={min}
@@ -92,7 +94,7 @@ export default function RangeControl({
 						return false;
 					}
 
-					onChange(newValue);
+					if ('undefined' !== typeof onChange) onChange(newValue);
 				}}
 				className={controlClassNames(
 					'range',

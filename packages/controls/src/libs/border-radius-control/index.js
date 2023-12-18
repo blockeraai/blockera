@@ -43,6 +43,10 @@ export default function BorderRadiusControl({
 		setValue,
 		controlInfo: { name: controlId },
 		dispatch: { modifyControlValue },
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
 	} = useControlContext({
 		id,
 		onChange,
@@ -73,7 +77,15 @@ export default function BorderRadiusControl({
 			>
 				{label && (
 					<div className={controlInnerClassNames('label')}>
-						<LabelControl label={label} />
+						<LabelControl
+							label={label}
+							{...{
+								attribute,
+								blockName,
+								description,
+								resetToDefault,
+							}}
+						/>
 					</div>
 				)}
 

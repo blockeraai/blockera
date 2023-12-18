@@ -135,3 +135,9 @@
 		}
 	}
 }
+
+.publisher-control-group.mode-popover.is-selected-item,
+ .publisher-control-group.mode-nothing.is-selected-item {
+	border-color: var(--publisher-controls-border-color-focus);
+	box-shadow: 0 0 0 1px var(--publisher-controls-border-color-focus);
+}

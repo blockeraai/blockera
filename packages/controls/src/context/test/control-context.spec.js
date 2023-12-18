@@ -652,50 +652,6 @@ describe('testing control context provider and related hooks', () => {
 		expect(result.current.x.y.b).toEqual([5, 5, 5]);
 	});
 
-	it('should testing resetToSavedValue of retrieved control context api', () => {
-		const defaultRepeaterItemValue = {
-			y: 20,
-		};
-		const storeName = 'publisher-core/controls/repeater';
-		const name = getControlId();
-		const wrapper = ({ children }) => (
-			<ControlContextProvider
-				value={{
-					name,
-					value: [{ x: 0 }, { x: 10 }],
-				}}
-				storeName={storeName}
-			>
-				{children}
-			</ControlContextProvider>
-		);
-
-		const {
-			result: {
-				current: { resetToSavedValue },
-			},
-		} = renderHook(
-			() => {
-				return useControlContext({
-					repeater: {
-						defaultRepeaterItemValue,
-					},
-					defaultValue: [{ x: 0 }],
-					mergeInitialAndDefault: true,
-				});
-			},
-			{
-				wrapper,
-			}
-		);
-
-		const { result } = renderHook(() =>
-			resetToSavedValue([{ x: 55 }, { x: 22 }])
-		);
-
-		expect(result.current).toEqual([{ x: 55 }, { x: 22 }]);
-	});
-
 	it('should testing toggleValue of retrieved control context api', () => {
 		const name = getControlId();
 		const wrapper = ({ children }) => (

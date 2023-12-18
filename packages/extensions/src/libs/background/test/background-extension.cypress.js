@@ -36,7 +36,6 @@ describe('background extension', () => {
 							'bgRepeaterAddBtn'
 						);
 						cy.get('@bgRepeaterAddBtn').click();
-						cy.getByDataCy('repeater-item').click();
 					});
 
 					// add background image before each test in the context to make other settings available

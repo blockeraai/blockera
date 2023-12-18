@@ -1,0 +1,28 @@
+.block-editor-block-inspector .components-panel__body.publisher-not-allowed {
+	opacity: 0.5;
+	user-select: none;
+	cursor: not-allowed;
+
+	input,
+ textarea {
+		pointer-events: none;
+	}
+}
+
+.publisher-current-state {
+	height: 25px;
+	padding: 0 10px;
+	font-size: 13px;
+	line-height: 25px;
+	text-align: center;
+	position: absolute;
+	display: inline-block;
+	color: rgb(255, 255, 255);
+	transition: all 0.3s cubic-bezier(0.22, -0.06, 0.94, 1.35) 0s;
+	will-change: color, font-size, padding, position, display, transition, background;
+}
+
+.publisher-arrow-right {
+	margin-left: 7.5px;
+	display: inline-block;
+}

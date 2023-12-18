@@ -21,6 +21,7 @@ import { useControlContext } from '../../context';
 import { convertAlignmentMatrixCoordinates } from './utils';
 import type { Props } from './types';
 import type { MixedElement } from 'react';
+
 export default function AlignmentMatrixControl({
 	inputFields = false,
 	size = 68,
@@ -37,7 +38,14 @@ export default function AlignmentMatrixControl({
 	//
 	className,
 }: Props): MixedElement {
-	const { value, setValue } = useControlContext({
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
@@ -50,6 +58,7 @@ export default function AlignmentMatrixControl({
 				columns={columns}
 				controlName={field}
 				className={className}
+				{...{ attribute, blockName, description, resetToDefault }}
 			>
 				<div className={controlClassNames('alignment-matrix')}>
 					<WPAlignmentMatrixControl

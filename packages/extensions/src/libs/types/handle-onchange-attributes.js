@@ -1,11 +1,14 @@
 // @flow
 
 export type THandleOnChangeAttributes = (
-	attributeId: string,
-	attributeValue: any,
-	query?: string,
-	callback?: (
-		attributes: Object,
-		setAttributes: (attributes: Object) => void
-	) => void
+	attributeId?: string,
+	newValue?: any,
+	// eslint-disable-next-line
+	options:
+		| Object
+		| {
+				updateItems?: Object,
+				deleteItems?: Array<string>,
+				addOrModifyRootItems?: Object,
+		  }
 ) => void;

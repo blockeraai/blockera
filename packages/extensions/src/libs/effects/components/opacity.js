@@ -37,6 +37,8 @@ export const Opacity = ({
 			value={{
 				name: generateExtensionId(block, 'opacity'),
 				value: opacity,
+				attribute: 'publisherOpacity',
+				blockName: block.blockName,
 			}}
 		>
 			<BaseControl columns="columns-1">

@@ -36,6 +36,8 @@ export const Transition = ({
 			value={{
 				name: generateExtensionId(block, 'transition'),
 				value: transition,
+				attribute: 'publisherTransition',
+				blockName: block.blockName,
 			}}
 			storeName={'publisher-core/controls/repeater'}
 		>

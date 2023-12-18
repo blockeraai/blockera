@@ -29,7 +29,14 @@ export default function TextAreaControl({
 	height = 55,
 	...props
 }: TTextAreaItem): MixedElement {
-	const { value, setValue } = useControlContext({
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		defaultValue,
 		onChange,
@@ -48,6 +55,12 @@ export default function TextAreaControl({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{
+				attribute,
+				blockName,
+				description,
+				resetToDefault,
+			}}
 		>
 			<textarea
 				value={value}

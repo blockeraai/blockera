@@ -4,10 +4,113 @@
 		"force": false,
 		"id": "normal",
 		"label": "Normal",
+		"settings": {
+			"max": 1,
+			//clone => disable
+			"min": 1,
+			//delete => disable
+		}
 	},
 	"hover": {
 		"force": false,
 		"id": "hover",
 		"label": "Hover",
-	}
+		"settings": {
+			"max": 1,
+			//clone => enable => isVisible => false
+			"min": 0,
+			//delete => enable
+			"css-selector": "@SELECTOR:hover"
+		},
+	},
+	"active": {
+		"force": false,
+		"id": "active",
+		"label": "Active",
+		"settings": {
+			"max": 1,
+			//clone => enable => isVisible => false
+			"min": 0,
+			//delete => enable
+			"css-selector": "@SELECTOR:active"
+		},
+	},
+	"focus": {
+		"force": false,
+		"id": "focus",
+		"label": "Focus",
+		"settings": {
+			"max": 1,
+			//clone => enable => isVisible => false
+			"min": 0,
+			//delete => enable
+			"css-selector": "@SELECTOR:focus"
+		},
+	},
+	"visited": {
+		"force": false,
+		"id": "visited",
+		"label": "Visited",
+		"settings": {
+			"max": 1,
+			//clone => enable => isVisible => false
+			"min": 0,
+			//delete => enable
+			"css-selector": "@SELECTOR:visited"
+		},
+	},
+	"before": {
+		"force": false,
+		"id": "before",
+		"label": "Before",
+		"settings": {
+			"max": 1,
+			//clone => enable => isVisible => false
+			"min": 0,
+			//delete => enable
+			"css-selector": "@SELECTOR:before"
+		},
+	},
+	"after": {
+		"force": false,
+		"id": "after",
+		"label": "After",
+		"settings": {
+			"max": 1,
+			//clone => enable => isVisible => false
+			"min": 0,
+			//delete => enable
+			"css-selector": "@SELECTOR:after"
+		},
+	},
+	"custom-class": {
+		"force": false,
+		"id": "custom-class",
+		"label": "Custom Class",
+		"settings": {
+			"max": -1,
+			"min": 0,
+			"css-selector": "@SELECTOR.className"
+		}
+	},
+	"parent-class": {
+		"force": false,
+		"id": "parent-class",
+		"label": "Parent Class",
+		"settings": {
+			"max": -1,
+			"min": 0,
+			"css-selector": "#parentClientId @SELECTOR"
+		}
+	},
+	"parent-hover": {
+		"force": false,
+		"id": "parent-hover",
+		"label": "Parent Hover",
+		"settings": {
+			"max": -1,
+			"min": 0,
+			"css-selector": "#parentClientId:hover @SELECTOR"
+		}
+	},
 }

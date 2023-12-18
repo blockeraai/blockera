@@ -30,7 +30,14 @@ export default function SearchControl({
 	className,
 	...props
 }: TSearchControlProps): MixedElement {
-	const { value, setValue } = useControlContext({
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
@@ -42,6 +49,7 @@ export default function SearchControl({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<WPSearchControl
 				value={typeof value === 'object' ? '' : value}

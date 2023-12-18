@@ -38,7 +38,14 @@ export default function ColorPickerControl({
 	className,
 	...props
 }: ColorPickerControlProps): MixedElement {
-	const { value, setValue } = useControlContext({
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
@@ -61,6 +68,7 @@ export default function ColorPickerControl({
 				columns={columns}
 				controlName={field}
 				className={className}
+				{...{ attribute, blockName, description, resetToDefault }}
 			>
 				{isOpen && (
 					<Popover
@@ -106,6 +114,7 @@ export default function ColorPickerControl({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<WPColorPicker
 				enableAlpha={false}

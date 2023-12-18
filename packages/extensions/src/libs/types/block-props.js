@@ -5,4 +5,5 @@ export type TBlockProps = {
 	supports: Object,
 	blockName: string,
 	attributes: Object,
+	setAttributes: (attributes: Object) => void,
 };

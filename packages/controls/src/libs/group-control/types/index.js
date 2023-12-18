@@ -4,15 +4,15 @@
  */
 import type { MixedElement } from 'react';
 
-export type GroupControlMode = 'popover' | 'accordion';
+export type GroupControlMode = 'popover' | 'accordion' | 'nothing';
 
 export type GroupControlProps = {
 	/**
 	 * The design style of group.
 	 */
-	design: 'minimal',
-	toggleOpenBorder: boolean,
-	isOpen: boolean,
+	design?: 'minimal',
+	toggleOpenBorder?: boolean,
+	isOpen?: boolean,
 	//
 	mode: GroupControlMode,
 	popoverTitle?: string | MixedElement,
@@ -25,9 +25,10 @@ export type GroupControlProps = {
 	injectHeaderButtonsStart?: string | MixedElement,
 	injectHeaderButtonsEnd?: string | MixedElement,
 	//
-	children: string | MixedElement,
+	children?: string | MixedElement,
 	//
 	className?: string,
 	onClose?: () => void,
 	onOpen?: () => void,
+	onClick?: (event?: MouseEvent) => boolean,
 };

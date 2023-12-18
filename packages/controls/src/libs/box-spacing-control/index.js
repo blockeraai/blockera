@@ -66,13 +66,20 @@ export default function BoxSpacingControl({
 	//
 	...props
 }: BoxSpacingControlProps): MixedElement {
-	const { value, setValue, getId, description, resetToDefault } =
-		useControlContext({
-			id,
-			onChange,
-			defaultValue,
-			mergeInitialAndDefault: true,
-		});
+	const {
+		value,
+		setValue,
+		getId,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
+		id,
+		onChange,
+		defaultValue,
+		mergeInitialAndDefault: true,
+	});
 
 	const marginTop = extractNumberAndUnit(value.margin.top);
 	const marginRight = extractNumberAndUnit(value.margin.right);
@@ -214,7 +221,7 @@ export default function BoxSpacingControl({
 			columns={columns}
 			controlName={field}
 			className={className}
-			{...{ description, resetToDefault }}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<div
 				{...props}
@@ -473,7 +480,13 @@ export default function BoxSpacingControl({
 						mode={'advanced'}
 						ariaLabel={__('Margin Spacing')}
 						label={__('Margin', 'publisher-core')}
-						{...{ description, resetToDefault, path: 'margin' }}
+						{...{
+							attribute,
+							blockName,
+							description,
+							resetToDefault,
+							path: 'margin',
+						}}
 					/>
 				</span>
 
@@ -487,7 +500,13 @@ export default function BoxSpacingControl({
 						mode={'advanced'}
 						ariaLabel={__('Margin Spacing')}
 						label={__('Padding', 'publisher-core')}
-						{...{ description, resetToDefault, path: 'padding' }}
+						{...{
+							attribute,
+							blockName,
+							description,
+							resetToDefault,
+							path: 'padding',
+						}}
 					/>
 				</span>
 

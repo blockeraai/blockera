@@ -14,6 +14,8 @@ export type BaseControlProps = {
 	controlName?: 'empty' | 'general' | string,
 	mode?: 'advanced' | 'simple',
 	path?: string,
+	blockName?: string,
+	attribute?: string,
 	description?: string | MixedElement,
 	resetToDefault?: () => void,
 };

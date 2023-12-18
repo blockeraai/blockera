@@ -72,13 +72,20 @@ const Component = ({
 	className,
 	...props
 }: BoxPositionControlProps): MixedElement => {
-	const { value, setValue, getId, description, resetToDefault } =
-		useControlContext({
-			id,
-			onChange,
-			defaultValue,
-			mergeInitialAndDefault: true,
-		});
+	const {
+		value,
+		setValue,
+		getId,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
+		id,
+		onChange,
+		defaultValue,
+		mergeInitialAndDefault: true,
+	});
 
 	const positionTop = extractNumberAndUnit(value.position.top);
 	const positionLeft = extractNumberAndUnit(value.position.left);
@@ -174,6 +181,8 @@ const Component = ({
 						<LabelControl
 							label={label}
 							{...{
+								attribute,
+								blockName,
 								description,
 								path: 'type',
 								resetToDefault,
