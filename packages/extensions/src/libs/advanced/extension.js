@@ -91,6 +91,8 @@ export const AdvancedExtension: TAdvancedProps = memo<TAdvancedProps>(
 						value={{
 							name: generateExtensionId(block, 'properties'),
 							value: properties,
+							attribute: 'publisherCSSProperties',
+							blockName: block.blockName,
 						}}
 						storeName={'publisher-core/controls/repeater'}
 					>
