@@ -39,6 +39,10 @@ export const attributes = {
 		type: 'array',
 		default: [],
 	},
+	publisherDivider: {
+		type: 'array',
+		default: [],
+	},
 	publisherCursor: {
 		type: 'string',
 		default: 'default',
