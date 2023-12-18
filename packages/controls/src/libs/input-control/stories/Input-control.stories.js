@@ -1197,7 +1197,7 @@ export const CssInput = {
 	),
 };
 
-export const ValueAddon = {
+export const ValueAddonSupport = {
 	args: {
 		controlInfo: {
 			name: nanoid(),
@@ -1210,9 +1210,7 @@ export const ValueAddon = {
 	render: (args) => (
 		<Flex direction="column" gap="50px">
 			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">
-					Value Addon<span>Variable</span>
-				</h2>
+				<h2 className="story-heading">Value Addon</h2>
 
 				<ControlContextProvider
 					value={{
@@ -1227,8 +1225,8 @@ export const ValueAddon = {
 						{...args}
 						defaultValue=""
 						controlAddonTypes={['variable', 'dynamic-value']}
-						variableTypes={['font-size']}
-						dynamicValueTypes={['TEXT']}
+						variableTypes={['font-size', 'spacing']}
+						dynamicValueTypes={['text']}
 					/>
 				</ControlContextProvider>
 
@@ -1238,10 +1236,12 @@ export const ValueAddon = {
 						value: {
 							settings: {
 								name: 'Medium',
-								size: 20,
+								value: 20,
 								slug: 'medium',
-								reference: 'preset',
-								var: 'var:preset|font-size|medium',
+								reference: {
+									type: 'preset',
+								},
+								var: '--wp--preset--font-size--medium',
 								type: 'font-size',
 							},
 							id: 'medium',
@@ -1257,13 +1257,8 @@ export const ValueAddon = {
 						{...args}
 						defaultValue=""
 						controlAddonTypes={['variable', 'dynamic-value']}
-						variableTypes={[
-							'font-size',
-							'width-size',
-							'spacing',
-							'gradient',
-						]}
-						dynamicValueTypes={['TEXT']}
+						variableTypes={['font-size']}
+						dynamicValueTypes={['all']}
 					/>
 				</ControlContextProvider>
 
@@ -1272,37 +1267,29 @@ export const ValueAddon = {
 						name: nanoid(),
 						value: {
 							settings: {
-								name: 'Medium',
-								size: 20,
-								slug: 'medium',
-								reference: 'preset',
-								var: 'var:preset|font-size|medium',
-								type: 'font-size',
+								name: 'Post Title',
+								id: 'post-title',
+								reference: {
+									type: 'core',
+								},
+								category: 'post',
+								type: 'text',
 							},
-							id: 'medium',
+							id: 'post-title',
 							isValueAddon: true,
-							valueType: 'variable',
+							valueType: 'dynamic-value',
 						},
 					}}
 				>
-					<div style={{ width: '100px' }}>
-						<ControlWithHooks
-							Control={InputControl}
-							type="text"
-							label="Small Width"
-							{...args}
-							defaultValue=""
-							controlAddonTypes={['variable', 'dynamic-value']}
-							variableTypes={[
-								'font-size',
-								'width-size',
-								'spacing',
-								'gradient',
-							]}
-							dynamicValueTypes={['TEXT']}
-							size="small"
-						/>
-					</div>
+					<ControlWithHooks
+						Control={InputControl}
+						type="text"
+						label="Post Title"
+						{...args}
+						defaultValue=""
+						controlAddonTypes={['dynamic-value']}
+						dynamicValueTypes={['all']}
+					/>
 				</ControlContextProvider>
 			</Flex>
 		</Flex>
