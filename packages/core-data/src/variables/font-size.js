@@ -5,18 +5,40 @@
 import { default as memoize } from 'fast-memoize';
 
 /**
+ * Publisher dependencies
+ */
+import { isBlockTheme } from '@publisher/utils';
+
+/**
  * Internal dependencies
  */
 import { getBlockEditorSettings } from './index';
 import type { VariableItem } from './types';
+import { getCurrentTheme } from '../index';
 
-const _getFontSizes = function () {
+const _getFontSizes = function (): Array<VariableItem> {
+	let reference = {
+		type: 'preset',
+	};
+
+	if (isBlockTheme()) {
+		const {
+			name: { rendered: themeName },
+		} = getCurrentTheme();
+
+		reference = {
+			type: 'theme',
+			theme: themeName,
+		};
+	}
+
 	return getBlockEditorSettings().fontSizes.map((item) => {
 		return {
 			name: item.name,
 			slug: item.slug,
 			value: item.size,
 			fluid: item?.fluid || null,
+			reference,
 		};
 	});
 };

@@ -3,10 +3,15 @@
 	&.publisher-control-popover-variables {
 		--publisher-controls-primary-color: var(--publisher-value-addon-var-color);
 		--publisher-controls-primary-color-darker-20: var(--publisher-value-addon-var-color-darker-20);
-	}
+		--va-color: var(--publisher-value-addon-var-color);
+		--va-border-color: var(--publisher-value-addon-var-border-color);
+		--va-bg-color: var(--publisher-value-addon-var-bg-color);
 
-	&.publisher-control-popover-variable-deleted {
-		--publisher-controls-primary-color: var(--publisher-value-addon-var-deleted-color);
-		--publisher-controls-primary-color-darker-20: var(--publisher-value-addon-var-deleted-color-darker-20);
+		.publisher-control-picker-category {
+
+			.publisher-control-picker-category-header {
+				color: var(--publisher-controls-primary-color);
+			}
+		}
 	}
 }

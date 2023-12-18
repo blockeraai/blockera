@@ -51,6 +51,8 @@ export const SpacingExtension: TSpacingProps = memo<TSpacingProps>(
 						value={{
 							name: generateExtensionId(block, 'spacing'),
 							value: spacingValue,
+							attribute: 'publisherSpacing',
+							blockName: block.blockName,
 						}}
 					>
 						<BaseControl controlName="box-spacing">
@@ -75,34 +77,29 @@ export const SpacingExtension: TSpacingProps = memo<TSpacingProps>(
 												}),
 										  },
 									//
-									onChange: (newValue) =>
+									onChange: (newValue) => {
+										const toWPCompatible =
+											!defaultValue.padding &&
+											!defaultValue.margin
+												? {
+														style: {
+															...(block
+																?.attributes
+																?.style ?? {}),
+															spacing: newValue,
+														},
+												  }
+												: {};
+
 										handleOnChangeAttributes(
 											'publisherSpacing',
 											newValue,
-											'',
-											(
-												attributes: Object,
-												setAttributes: (
-													attributes: Object
-												) => void
-											): void => {
-												if (
-													!defaultValue.padding &&
-													!defaultValue.margin
-												) {
-													return;
-												}
-
-												setAttributes({
-													...attributes,
-													style: {
-														...(attributes?.style ??
-															{}),
-														spacing: newValue,
-													},
-												});
+											{
+												addOrModifyRootItems:
+													toWPCompatible,
 											}
-										),
+										);
+									},
 								}}
 							/>
 						</BaseControl>

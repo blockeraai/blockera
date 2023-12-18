@@ -4,7 +4,7 @@
  */
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
-import { memo, useState, useReducer } from '@wordpress/element';
+import { memo, useState, useReducer, useEffect } from '@wordpress/element';
 import type { MixedElement } from 'react';
 
 /**
@@ -15,7 +15,14 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { Button, Icon, MediaUploader } from '@publisher/components';
-import { isEmpty, isUndefined, useLateEffect } from '@publisher/utils';
+import { hasSameProps } from '@publisher/extensions';
+import {
+	isEmpty,
+	isObject,
+	isEquals,
+	isUndefined,
+	useLateEffect,
+} from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -23,30 +30,36 @@ import { isEmpty, isUndefined, useLateEffect } from '@publisher/utils';
 import { iconReducer } from './store/reducer';
 import { IconContextProvider } from './context';
 import { useControlContext } from '../../context';
-import { hasSameProps } from '@publisher/extensions';
 import { default as DeleteIcon } from './icons/delete';
 import { default as Suggestions } from './components/suggestions';
 import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
 import { BaseControl } from '../index';
-import type { Props } from './types';
+import type { IconControlProps } from './types';
 
 function IconControl({
 	suggestionsQuery,
 	//
 	label,
 	columns,
-	field,
+	field = 'icon',
 	//
-	labelChoose,
-	labelIconLibrary,
-	labelUploadSvg,
+	labelChoose = __('Choose Icon…', 'publisher-blocks'),
+	labelIconLibrary = __('Icon Library', 'publisher-blocks'),
+	labelUploadSvg = __('Upload SVG', 'publisher-blocks'),
 	//
 	defaultValue,
 	onChange,
 	//
 	className,
-}: Props): MixedElement {
-	const { value, setValue } = useControlContext({
+}: IconControlProps): MixedElement {
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		defaultValue,
 		onChange,
 	});
@@ -56,6 +69,27 @@ function IconControl({
 	useLateEffect(() => {
 		setValue(currentIcon);
 	}, [currentIcon]);
+
+	useEffect(() => {
+		if (isObject(value) && !isEquals(value, currentIcon)) {
+			currentIconDispatch({
+				type: 'UPDATE_ICON',
+				icon: value.icon,
+				library: value.library,
+			});
+
+			return undefined;
+		}
+
+		if (!value) {
+			currentIconDispatch({
+				type: 'DELETE_ICON',
+			});
+		}
+
+		return undefined;
+		// eslint-disable-next-line
+	}, [value]);
 
 	const [isOpenModal, setOpenModal] = useState(false);
 
@@ -125,6 +159,12 @@ function IconControl({
 				columns={columns}
 				controlName={field}
 				className={className}
+				{...{
+					attribute,
+					blockName,
+					description,
+					resetToDefault,
+				}}
 			>
 				<div
 					className={controlClassNames(
@@ -272,13 +312,6 @@ IconControl.propTypes = {
 	 * upload svg label
 	 */
 	labelUploadSvg: PropTypes.string,
-};
-
-IconControl.defaultProps = {
-	labelChoose: __('Choose Icon…', 'publisher-blocks'),
-	labelIconLibrary: __('Icon Library', 'publisher-blocks'),
-	labelUploadSvg: __('Upload SVG', 'publisher-blocks'),
-	field: 'icon',
 };
 
 // $FlowFixMe

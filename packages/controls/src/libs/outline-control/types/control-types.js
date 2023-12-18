@@ -1,9 +1,14 @@
 // @flow
+/**
+ * Internal dependencies
+ */
+import type { RepeaterControlProps } from '../../repeater-control/types';
+import type { BorderControlBorderStyle } from '../../border-control/types';
 
 export type TItem = {
 	border: {
 		width: string,
-		style: string,
+		style: BorderControlBorderStyle,
 		color: string,
 	},
 	offset: string,
@@ -11,10 +16,6 @@ export type TItem = {
 };
 
 export type TOutlineControlProps = {
-	id?: string,
-	className?: string,
+	...RepeaterControlProps,
 	defaultRepeaterItemValue?: TItem,
-	popoverTitle?: string,
-	defaultValue?: Array<Object>,
-	onChange?: () => {},
 };

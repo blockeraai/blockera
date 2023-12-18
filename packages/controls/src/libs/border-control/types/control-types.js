@@ -1,23 +1,23 @@
 // @flow
+/**
+ * Internal dependencies
+ */
+import type { ControlGeneralTypes } from '../../../types';
+
+export type BorderControlBorderStyle = 'solid' | 'dashed' | 'dotted' | 'double';
 
 export type TDefaultValue = {
 	width: string,
-	style: 'solid' | 'dashed' | 'dotted' | 'double',
+	style: BorderControlBorderStyle,
 	color: string,
 };
 
-export type TBorderControlProps = {
+export type BorderControlProps = {
+	...ControlGeneralTypes,
 	linesDirection?: 'horizontal' | 'vertical',
-	id?: string,
-	label?: string,
-	field?: string,
-	columns?: string,
 	defaultValue?: TDefaultValue,
-	onChange?: () => {},
 	customMenuPosition?: 'top' | 'bottom',
 	__isWidthFocused?: boolean,
 	__isColorFocused?: boolean,
 	__isStyleFocused?: boolean,
-	style?: Object,
-	className?: string,
 };

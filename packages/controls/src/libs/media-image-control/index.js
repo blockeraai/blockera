@@ -21,22 +21,30 @@ import {
 import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
 import { default as DeleteIcon } from './icons/delete';
-import type { Props } from './types';
+import type { MediaImageControlProps } from './types';
+
 export default function MediaImageControl({
-	labelChoose,
-	labelMediaLibrary,
-	labelUploadImage,
+	labelChoose = __('Choose Image…', 'publisher-core'),
+	labelMediaLibrary = __('Media Library', 'publisher-core'),
+	labelUploadImage = __('Upload Image', 'publisher-core'),
 	//
 	id,
-	label,
+	label = '',
 	columns,
-	defaultValue,
+	defaultValue = '',
 	onChange,
-	field,
+	field = 'media-image',
 	//
 	className,
-}: Props): MixedElement {
-	const { value, setValue } = useControlContext({
+}: MediaImageControlProps): MixedElement {
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
@@ -48,6 +56,7 @@ export default function MediaImageControl({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<div
 				className={controlClassNames(
@@ -174,12 +183,3 @@ MediaImageControl.propTypes = {
 	 */
 	onChange: PropTypes.func,
 };
-
-MediaImageControl.defaultProps = ({
-	label: '',
-	field: 'media-image',
-	defaultValue: '',
-	labelChoose: __('Choose Image…', 'publisher-core'),
-	labelMediaLibrary: __('Media Library', 'publisher-core'),
-	labelUploadImage: __('Upload Image', 'publisher-core'),
-}: any);

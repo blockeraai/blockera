@@ -1,32 +1,20 @@
 // @flow
-export type Placement =
-	| 'top-start'
-	| 'top'
-	| 'top-end'
-	| 'right-start'
-	| 'right'
-	| 'right-end'
-	| 'bottom-start'
-	| 'bottom'
-	| 'bottom-end'
-	| 'left-start'
-	| 'left'
-	| 'left-end';
+/**
+ * Publisher dependencies
+ */
+import type { PopoverPlacement } from '@publisher/components';
 
-export type Props = {
+/**
+ * Internal dependencies
+ */
+import type { ControlGeneralTypes } from '../../../types';
+
+export type ColorPickerControlProps = {
+	...ControlGeneralTypes,
 	popoverTitle?: string,
 	isOpen?: boolean,
 	onClose?: () => void,
-	placement?: Placement,
+	placement?: PopoverPlacement,
 	isPopover?: boolean,
 	hasClearBtn?: boolean,
-	//
-	id?: string,
-	label?: string,
-	columns?: string,
-	defaultValue?: string,
-	onChange?: () => void,
-	field?: string,
-	//
-	className?: string,
 };

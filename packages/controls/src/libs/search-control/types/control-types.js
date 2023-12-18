@@ -1,12 +1,11 @@
 // @flow
+/**
+ * Internal dependencies
+ */
+import type { ControlGeneralTypes } from '../../../types';
 
 export type TSearchControlProps = {
-	id?: string,
-	label?: string,
-	columns?: string,
-	onChange?: () => {},
-	field?: string,
-	className?: string,
+	...ControlGeneralTypes,
 	placeholder?: string,
 	defaultValue?: string,
 };

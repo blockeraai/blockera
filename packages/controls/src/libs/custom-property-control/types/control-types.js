@@ -1,4 +1,8 @@
 // @flow
+/**
+ * Internal dependencies
+ */
+import type { RepeaterControlProps } from '../../repeater-control/types';
 
 export type TItem = {
 	name: string,
@@ -6,11 +10,7 @@ export type TItem = {
 	isVisible: boolean,
 };
 
-export type TCustomPropertyControlProps = {
-	id?: string,
-	defaultValue?: [],
-	onChange?: () => {},
+export type CustomPropertyControlProps = {
+	...RepeaterControlProps,
 	defaultRepeaterItemValue?: TItem,
-	popoverTitle?: string,
-	className?: string,
 };

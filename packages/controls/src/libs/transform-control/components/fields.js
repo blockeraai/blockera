@@ -1,5 +1,6 @@
+// @flow
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { memo, useContext } from '@wordpress/element';
@@ -20,8 +21,15 @@ import { BaseControl, InputControl, ToggleSelectControl } from '../../index';
 import { default as RotateXCoordinateIcon } from '../icons/coordinate-rotate-x';
 import { default as RotateYCoordinateIcon } from '../icons/coordinate-rotate-y';
 import { default as RotateZCoordinateIcon } from '../icons/coordinate-rotate-z';
+import type { RepeaterItemDefaultValue } from '../types';
 
-const Fields = ({ itemId, item }) => {
+const Fields = ({
+	itemId,
+	item,
+}: {
+	itemId: number,
+	item: RepeaterItemDefaultValue,
+}) => {
 	const {
 		controlInfo: { name: controlId },
 		dispatch: { changeRepeaterItem },
@@ -269,4 +277,5 @@ const Fields = ({ itemId, item }) => {
 	);
 };
 
+// $FlowFixMe
 export default memo(Fields);

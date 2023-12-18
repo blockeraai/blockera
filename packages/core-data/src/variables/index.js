@@ -23,7 +23,7 @@ export {
 export { getFontSizes, getFontSizeBy, getFontSize } from './font-size';
 export { getSpacings, getSpacingBy, getSpacing } from './spacing';
 export { getWidthSizes, getWidthSizeBy, getWidthSize } from './width-size';
-export { getThemeColors, getThemeColorBy, getThemeColor } from './theme-color';
+export { getColors, getColorBy, getColor } from './color';
 export { getVariable } from './get-variable';
 
 export * from './types';

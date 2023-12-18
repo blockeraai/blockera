@@ -130,7 +130,6 @@ export default function ({
 			>
 				<InputControl
 					label={__('Limit', 'publisher-core')}
-					desc={__('test', 'publisher-core')}
 					unitType="text-length"
 					columns="columns-2"
 					defaultValue={''}
@@ -199,7 +198,11 @@ export default function ({
 							// controlProps.setValue(newValue);
 							// controlProps.onChange(newValue);
 						}}
-						defaultRepeaterItemValue={{ search: '', replace: '' }}
+						defaultRepeaterItemValue={{
+							search: '',
+							replace: '',
+							isVisible: true,
+						}}
 					/>
 				</BaseControl>
 			</ControlContextProvider>

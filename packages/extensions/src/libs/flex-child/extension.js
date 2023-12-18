@@ -66,6 +66,8 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 						value={{
 							name: generateExtensionId(block, 'sizing'),
 							value: flexChildSizing,
+							attribute: 'publisherFlexChildSizing',
+							blockName: block.blockName,
 						}}
 					>
 						<BaseControl
@@ -121,6 +123,8 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 												'grow'
 											),
 											value: flexChildGrow,
+											attribute: 'publisherFlexChildGrow',
+											blockName: block.blockName,
 										}}
 									>
 										<InputControl
@@ -144,7 +148,7 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 														newValue
 													),
 											}}
-											smallWidth={true}
+											size="small"
 										/>
 									</ControlContextProvider>
 									<ControlContextProvider
@@ -154,6 +158,9 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 												'shrink'
 											),
 											value: flexChildShrink,
+											attribute:
+												'publisherFlexChildShrink',
+											blockName: block.blockName,
 										}}
 									>
 										<InputControl
@@ -180,7 +187,7 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 														newValue
 													),
 											}}
-											smallWidth={true}
+											size="small"
 										/>
 									</ControlContextProvider>
 									<ControlContextProvider
@@ -190,6 +197,9 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 												'basis'
 											),
 											value: flexChildBasis,
+											attribute:
+												'publisherFlexChildBasis',
+											blockName: block.blockName,
 										}}
 									>
 										<InputControl
@@ -215,7 +225,7 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 														newValue
 													),
 											}}
-											smallWidth={true}
+											size="small"
 										/>
 									</ControlContextProvider>
 								</>
@@ -229,6 +239,8 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 						value={{
 							name: generateExtensionId(block, 'align'),
 							value: flexChildAlign,
+							attribute: 'publisherFlexChildAlign',
+							blockName: block.blockName,
 						}}
 					>
 						<BaseControl
@@ -289,6 +301,8 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 						value={{
 							name: generateExtensionId(block, 'order'),
 							value: flexChildOrder,
+							attribute: 'publisherFlexChildOrder',
+							blockName: block.blockName,
 						}}
 					>
 						<BaseControl
@@ -339,6 +353,9 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 												'order-custom'
 											),
 											value: flexChildOrderCustom,
+											attribute:
+												'publisherFlexChildOrderCustom',
+											blockName: block.blockName,
 										}}
 									>
 										<InputControl
@@ -359,7 +376,7 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 														newValue
 													),
 											}}
-											smallWidth={true}
+											size="small"
 										/>
 									</ControlContextProvider>
 								)}

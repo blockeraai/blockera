@@ -33,6 +33,8 @@ export const Blending = ({
 			value={{
 				name: generateExtensionId(block, 'blend-mode'),
 				value: blendMode,
+				attribute: 'publisherBlendMode',
+				blockName: block.blockName,
 			}}
 		>
 			<SelectControl

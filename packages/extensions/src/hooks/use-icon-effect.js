@@ -79,50 +79,58 @@ const IconComponent = ({ el, iconNode, position }) => {
 
 const allowedBlocks = ['core/button', 'core/site-title'];
 
-export const useIconEffect = ({
-	name,
-	clientId,
-	blockRefId,
-	publisherIcon,
-	publisherIconGap = '5px',
-	publisherIconSize = 25,
-	publisherIconColor = '',
-	publisherIconPosition = 'left',
-}) => {
-	if (!allowedBlocks.includes(name)) {
-		return;
-	}
+export const useIconEffect = (
+	{
+		name,
+		clientId,
+		blockRefId,
+		publisherIcon,
+		publisherIconGap = '5px',
+		publisherIconSize = 25,
+		publisherIconColor = '',
+		publisherIconPosition = 'left',
+	},
+	dependencies
+) => {
+	useEffect(() => {
+		if (!allowedBlocks.includes(name)) {
+			return;
+		}
 
-	const blockElement = blockRefId.current;
-	const el = blockElement.parentElement.querySelector(`#block-${clientId}`);
+		const blockElement = blockRefId.current;
+		const el = blockElement.parentElement.querySelector(
+			`#block-${clientId}`
+		);
 
-	if (isUndefined(publisherIcon) || isEmpty(publisherIcon) || !el) {
-		return;
-	}
+		if (isUndefined(publisherIcon) || isEmpty(publisherIcon) || !el) {
+			return;
+		}
 
-	const root = createRoot(el);
-	const iconNode = document.createElement('span');
-	const icon = createRoot(iconNode);
-	const iconSize = publisherIconSize.replace(/[a-z]+/g, '');
+		const root = createRoot(el);
+		const iconNode = document.createElement('span');
+		const icon = createRoot(iconNode);
+		const iconSize = publisherIconSize.replace(/[a-z]+/g, '');
 
-	icon.render(
-		<Icon
-			style={{
-				fill: publisherIconColor,
-				color: publisherIconColor,
-				marginLeft: publisherIconGap,
-				marginRight: publisherIconGap,
-			}}
-			{...(publisherIcon ?? {})}
-			size={iconSize}
-		/>
-	);
+		icon.render(
+			<Icon
+				style={{
+					fill: publisherIconColor,
+					color: publisherIconColor,
+					marginLeft: publisherIconGap,
+					marginRight: publisherIconGap,
+				}}
+				{...(publisherIcon ?? {})}
+				size={iconSize}
+			/>
+		);
 
-	root.render(
-		<IconComponent
-			el={el}
-			iconNode={iconNode}
-			position={publisherIconPosition}
-		/>
-	);
+		root.render(
+			<IconComponent
+				el={el}
+				iconNode={iconNode}
+				position={publisherIconPosition}
+			/>
+		);
+		// eslint-disable-next-line
+	}, dependencies);
 };

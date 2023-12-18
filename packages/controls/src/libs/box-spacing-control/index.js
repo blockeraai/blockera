@@ -27,7 +27,7 @@ import { extractNumberAndUnit } from '../input-control/utils';
 /**
  * Types
  */
-import type { TBoxSpacingControlProps } from './types/box-spacing-control-props';
+import type { BoxSpacingControlProps } from './types';
 import type { MixedElement } from 'react';
 
 // icons
@@ -42,24 +42,44 @@ import { default as PaddingLeftIcon } from './icons/padding-left';
 
 export default function BoxSpacingControl({
 	className,
-	openSide,
+	openSide = '',
 	//
 	id,
-	label,
-	columns,
-	defaultValue,
+	label = '',
+	columns = '',
+	defaultValue = {
+		margin: {
+			top: '',
+			right: '',
+			bottom: '',
+			left: '',
+		},
+		padding: {
+			top: '',
+			right: '',
+			bottom: '',
+			left: '',
+		},
+	},
 	onChange,
 	field,
 	//
 	...props
-}: TBoxSpacingControlProps): MixedElement {
-	const { value, setValue, getId, description, resetToDefault } =
-		useControlContext({
-			id,
-			onChange,
-			defaultValue,
-			mergeInitialAndDefault: true,
-		});
+}: BoxSpacingControlProps): MixedElement {
+	const {
+		value,
+		setValue,
+		getId,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
+		id,
+		onChange,
+		defaultValue,
+		mergeInitialAndDefault: true,
+	});
 
 	const marginTop = extractNumberAndUnit(value.margin.top);
 	const marginRight = extractNumberAndUnit(value.margin.right);
@@ -201,7 +221,7 @@ export default function BoxSpacingControl({
 			columns={columns}
 			controlName={field}
 			className={className}
-			{...{ description, resetToDefault }}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<div
 				{...props}
@@ -458,9 +478,15 @@ export default function BoxSpacingControl({
 				>
 					<LabelControl
 						mode={'advanced'}
-						aria-label={__('Margin Spacing')}
+						ariaLabel={__('Margin Spacing')}
 						label={__('Margin', 'publisher-core')}
-						{...{ description, resetToDefault, path: 'margin' }}
+						{...{
+							attribute,
+							blockName,
+							description,
+							resetToDefault,
+							path: 'margin',
+						}}
 					/>
 				</span>
 
@@ -472,9 +498,15 @@ export default function BoxSpacingControl({
 				>
 					<LabelControl
 						mode={'advanced'}
-						aria-label={__('Margin Spacing')}
+						ariaLabel={__('Margin Spacing')}
 						label={__('Padding', 'publisher-core')}
-						{...{ description, resetToDefault, path: 'padding' }}
+						{...{
+							attribute,
+							blockName,
+							description,
+							resetToDefault,
+							path: 'padding',
+						}}
 					/>
 				</span>
 
@@ -666,7 +698,6 @@ export default function BoxSpacingControl({
 						icon={<PaddingRightIcon />}
 						onClose={() => setOpenPopover('')}
 						title={__('Right Padding', 'publisher-core')}
-						value={value.padding.right}
 						isOpen={openPopover === 'padding-right'}
 						unit={extractNumberAndUnit(value.padding.right).unit}
 						onChange={(newValue) => {
@@ -795,24 +826,4 @@ BoxSpacingControl.propTypes = {
 	 * @default ``
 	 */
 	openSide: PropTypes.string,
-};
-// $FlowFixMe
-BoxSpacingControl.defaultProps = {
-	defaultValue: {
-		margin: {
-			top: '',
-			right: '',
-			bottom: '',
-			left: '',
-		},
-		padding: {
-			top: '',
-			right: '',
-			bottom: '',
-			left: '',
-		},
-	},
-	openSide: '',
-	label: '',
-	columns: 'columns-1',
 };

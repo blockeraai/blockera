@@ -1,12 +1,10 @@
 // @flow
+/**
+ * Internal dependencies
+ */
+import type { ControlGeneralTypes } from '../../../types';
 
-export type Props = {
+export type CheckboxControlProps = {
+	...ControlGeneralTypes,
 	checkboxLabel: string,
-	id?: string,
-	label?: string,
-	columns?: string,
-	defaultValue?: boolean,
-	onChange?: () => void,
-	field?: string,
-	className?: string,
 };

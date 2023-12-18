@@ -16,8 +16,10 @@ import { isUndefined } from '@publisher/utils';
 import { getBlockEditorSettings } from './index';
 import type { VariableItem } from './types';
 
-const _getWidthSizes = function (): Array<VariableItem> {
-	// todo improve this to support all states and be more safe
+const _getWidthSizes = function (): Array<VariableItem> | [] {
+	const reference = {
+		type: 'preset',
+	};
 	const layout = getBlockEditorSettings()?.__experimentalFeatures?.layout;
 
 	if (isUndefined(layout)) {
@@ -31,6 +33,7 @@ const _getWidthSizes = function (): Array<VariableItem> {
 			name: __('Content Width', 'publisher-core'),
 			slug: 'contentSize',
 			value: layout?.contentSize,
+			reference,
 		});
 	}
 
@@ -39,6 +42,7 @@ const _getWidthSizes = function (): Array<VariableItem> {
 			name: __('Site Wide Width', 'publisher-core'),
 			slug: 'wideSize',
 			value: layout?.wideSize,
+			reference,
 		});
 	}
 
@@ -47,11 +51,11 @@ const _getWidthSizes = function (): Array<VariableItem> {
 
 const _getWidthSizesMemoized = memoize(_getWidthSizes);
 
-export const getWidthSizes = (): Array<VariableItem> => {
+export const getWidthSizes = (): Array<VariableItem> | [] => {
 	return _getWidthSizesMemoized();
 };
 
-const _getWidthSize = function (slug: string): VariableItem {
+const _getWidthSize = function (slug: string): ?VariableItem {
 	return getWidthSizes().find((item) => item.slug === slug);
 };
 

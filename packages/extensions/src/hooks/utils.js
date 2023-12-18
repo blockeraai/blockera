@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -7,7 +8,15 @@ import { withSelect } from '@wordpress/data';
 /**
  * Publisher dependencies
  */
-import { isUndefined } from '@publisher/utils';
+import { omit, omitWithPattern } from '@publisher/utils';
+
+/**
+ * Internal dependencies
+ */
+import {
+	sharedBlockExtensionAttributes,
+	blockStatesAttributes,
+} from '../index';
 
 /**
  * Upper Case first character of word
@@ -25,10 +34,10 @@ export function ucFirstWord(word: string): string {
  * @param {string} name
  * @return {string} return the blockId as string
  */
-export const getCurrentBlockId = (name: string) =>
+export const getCurrentBlockId = (name: string): string =>
 	ucFirstWord(name.replace('core/', ''));
 
-export const enhance = compose(
+export const enhance: Object = compose(
 	/**
 	 * @param {Function} WrappedBlockEdit A filtered BlockEdit instance.
 	 * @return {Function} Enhanced component with merged state data props.
@@ -44,26 +53,35 @@ export const enhance = compose(
 	})
 );
 
-/**
- * Add custom Publisher props identifier to selected blocks
- *
- * @param {Object} props Block props
- * @return {{}|Object} Block props extended with Publisher Extensions.
- */
-export const useAttributes = (props: Object): Object => {
-	const extendedProps = { ...props };
+export const sanitizedBlockAttributes = (attributes: Object): Object => {
+	const omittedWPAttributes = omitWithPattern(
+		attributes,
+		/^(?!publisher\w+).*/i
+	);
 
-	if (isUndefined(extendedProps.attributes.publisherPropsId)) {
-		const d = new Date();
-		extendedProps.attributes.publisherPropsId =
-			'' +
-			d.getMonth() +
-			d.getDate() +
-			d.getHours() +
-			d.getMinutes() +
-			d.getSeconds() +
-			d.getMilliseconds();
-	}
+	const availableAttributes = {
+		...blockStatesAttributes,
+		...sharedBlockExtensionAttributes,
+	};
 
-	return extendedProps;
+	const cleanupKeys = [];
+	const attributeKeys = Object.keys(omittedWPAttributes);
+	const attributeValues = Object.values(omittedWPAttributes);
+
+	attributeValues.forEach((attributeValue: Object, index: number): void => {
+		const attributeKey = attributeKeys[index];
+
+		if ('publisherIconLink' === attributeKey) {
+			cleanupKeys.push(attributeKeys[index]);
+			return;
+		}
+
+		if (attributeValue !== availableAttributes[attributeKey]?.default) {
+			return;
+		}
+
+		cleanupKeys.push(attributeKeys[index]);
+	});
+
+	return omit(attributes, cleanupKeys);
 };

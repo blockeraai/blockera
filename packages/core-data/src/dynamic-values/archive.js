@@ -16,8 +16,11 @@ const _getArchiveDVItems = function (): Array<DynamicValueItem> {
 			name: __('Archive Title', 'publisher-core'),
 			id: 'archive-title',
 			type: 'text',
-			status: 'free',
+			status: 'core',
 			category: 'archive',
+			reference: {
+				type: 'core',
+			},
 		},
 		{
 			name: __('Archive Desc', 'publisher-core'),
@@ -25,6 +28,9 @@ const _getArchiveDVItems = function (): Array<DynamicValueItem> {
 			type: 'text',
 			status: 'soon',
 			category: 'archive',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Archive Link', 'publisher-core'),
@@ -32,6 +38,9 @@ const _getArchiveDVItems = function (): Array<DynamicValueItem> {
 			type: 'link',
 			status: 'soon',
 			category: 'archive',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Archive ID', 'publisher-core'),
@@ -39,6 +48,9 @@ const _getArchiveDVItems = function (): Array<DynamicValueItem> {
 			type: 'id',
 			status: 'soon',
 			category: 'archive',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Archive Meta', 'publisher-core'),
@@ -46,6 +58,9 @@ const _getArchiveDVItems = function (): Array<DynamicValueItem> {
 			type: 'meta',
 			status: 'soon',
 			category: 'archive',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 	];
 };
@@ -72,7 +87,7 @@ export const getArchiveDynamicValueItem = (
 const _getArchiveDVItemsBy = function (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): ?Array<DynamicValueItem> | void {
+): ?Array<DynamicValueItem> {
 	return getArchiveDynamicValueItems().filter((item) => {
 		if (field === 'type') {
 			if (value.includes('all')) {
@@ -91,6 +106,6 @@ const _getArchiveDVItemsByMemoized = memoize(_getArchiveDVItemsBy);
 export const getArchiveDynamicValueItemsBy = (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): Array<DynamicValueItem> | void => {
+): Array<DynamicValueItem> => {
 	return _getArchiveDVItemsByMemoized(field, value);
 };

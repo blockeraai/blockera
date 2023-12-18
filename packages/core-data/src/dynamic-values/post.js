@@ -16,15 +16,21 @@ const _getPostDynamicValueItems = function (): Array<DynamicValueItem> {
 			name: __('Post Title', 'publisher-core'),
 			id: 'post-title',
 			type: 'text',
-			status: 'free',
+			status: 'core',
 			category: 'post',
+			reference: {
+				type: 'core',
+			},
 		},
 		{
 			name: __('Post Excerpt', 'publisher-core'),
 			id: 'post-excerpt',
 			type: 'text',
-			status: 'free',
+			status: 'core',
 			category: 'post',
+			reference: {
+				type: 'core',
+			},
 		},
 		{
 			name: __('Post Content', 'publisher-core'),
@@ -32,13 +38,19 @@ const _getPostDynamicValueItems = function (): Array<DynamicValueItem> {
 			type: 'text',
 			status: 'soon',
 			category: 'post',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Post ID', 'publisher-core'),
 			id: 'post-id',
 			type: 'id',
-			status: 'soon',
+			status: 'core',
 			category: 'post',
+			reference: {
+				type: 'core',
+			},
 		},
 		{
 			name: __('Post Link', 'publisher-core'),
@@ -46,6 +58,9 @@ const _getPostDynamicValueItems = function (): Array<DynamicValueItem> {
 			type: 'link',
 			status: 'soon',
 			category: 'post',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Post Date', 'publisher-core'),
@@ -53,6 +68,9 @@ const _getPostDynamicValueItems = function (): Array<DynamicValueItem> {
 			type: 'date',
 			status: 'soon',
 			category: 'post',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Post Time', 'publisher-core'),
@@ -60,6 +78,9 @@ const _getPostDynamicValueItems = function (): Array<DynamicValueItem> {
 			type: 'time',
 			status: 'soon',
 			category: 'post',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Reading Time', 'publisher-core'),
@@ -67,6 +88,9 @@ const _getPostDynamicValueItems = function (): Array<DynamicValueItem> {
 			type: 'time',
 			status: 'soon',
 			category: 'post',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Post Categories', 'publisher-core'),
@@ -74,6 +98,9 @@ const _getPostDynamicValueItems = function (): Array<DynamicValueItem> {
 			type: 'category',
 			status: 'soon',
 			category: 'post',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Post Tags', 'publisher-core'),
@@ -81,6 +108,9 @@ const _getPostDynamicValueItems = function (): Array<DynamicValueItem> {
 			type: 'tag',
 			status: 'soon',
 			category: 'post',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Post Terms', 'publisher-core'),
@@ -88,6 +118,9 @@ const _getPostDynamicValueItems = function (): Array<DynamicValueItem> {
 			type: 'term',
 			status: 'soon',
 			category: 'post',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Post Comments', 'publisher-core'),
@@ -95,6 +128,9 @@ const _getPostDynamicValueItems = function (): Array<DynamicValueItem> {
 			type: 'comment',
 			status: 'soon',
 			category: 'post',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Post Meta', 'publisher-core'),
@@ -102,6 +138,9 @@ const _getPostDynamicValueItems = function (): Array<DynamicValueItem> {
 			type: 'meta',
 			status: 'soon',
 			category: 'post',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 	];
 };
@@ -126,7 +165,7 @@ export const getPostDynamicValueItem = (types: string): ?DynamicValueItem => {
 const _getPostDVItemsBy = function (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): ?Array<DynamicValueItem> | void {
+): ?Array<DynamicValueItem> {
 	return getPostDynamicValueItems().filter((item) => {
 		if (field === 'type') {
 			if (value.includes('all')) {
@@ -145,6 +184,6 @@ const _getPostDVItemsByMemoized = memoize(_getPostDVItemsBy);
 export const getPostDynamicValueItemsBy = (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): Array<DynamicValueItem> | void => {
+): Array<DynamicValueItem> => {
 	return _getPostDVItemsByMemoized(field, value);
 };

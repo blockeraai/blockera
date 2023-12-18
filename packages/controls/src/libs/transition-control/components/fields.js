@@ -1,13 +1,9 @@
 // @flow
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { memo, useContext } from '@wordpress/element';
-
-/**
- * External dependencies
- */
 import type { Element } from 'react';
 
 /**
@@ -25,7 +21,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			controlInfo: { name: controlId },
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
-		// console.log(item, itemId);
+
 		const { repeaterId, getControlId } = useContext(RepeaterContext);
 
 		return (
@@ -105,7 +101,6 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							value: { ...item, delay },
 						})
 					}
-					initialPosition={0}
 					data-test="transition-input-delay"
 					defaultValue={item.delay}
 				/>

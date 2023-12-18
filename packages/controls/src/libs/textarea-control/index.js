@@ -23,13 +23,20 @@ export default function TextAreaControl({
 	columns,
 	defaultValue = '',
 	onChange,
-	field,
+	field = 'textarea',
 	className,
 	disabled = false,
 	height = 55,
 	...props
 }: TTextAreaItem): MixedElement {
-	const { value, setValue } = useControlContext({
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		defaultValue,
 		onChange,
@@ -48,6 +55,12 @@ export default function TextAreaControl({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{
+				attribute,
+				blockName,
+				description,
+				resetToDefault,
+			}}
 		>
 			<textarea
 				value={value}
@@ -84,9 +97,4 @@ TextAreaControl.propTypes = {
 	 * Textarea custom height
 	 */
 	height: PropTypes.number,
-};
-
-TextAreaControl.defaultProps = {
-	field: 'textarea',
-	defaultValue: '',
 };

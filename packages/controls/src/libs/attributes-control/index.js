@@ -18,16 +18,24 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
-import type { TAttributesControlProps } from './types';
+import type { AttributesControlProps } from './types';
 
 export default function AttributesControl({
 	id,
-	defaultRepeaterItemValue,
-	popoverTitle,
+	defaultRepeaterItemValue = {
+		key: '',
+		__key: '',
+		value: '',
+		isVisible: true,
+	},
+	popoverTitle = __('HTML Attribute', 'publisher-core'),
+	attributeElement = 'a',
+	defaultValue = [],
+	mode = 'popover',
 	//
 	className,
 	...props
-}: TAttributesControlProps): MixedElement {
+}: AttributesControlProps): MixedElement {
 	return (
 		<RepeaterControl
 			id={id}
@@ -38,6 +46,9 @@ export default function AttributesControl({
 			addNewButtonLabel={__('Add New HTML Attribute', 'publisher-core')}
 			// custom prop for this control
 			className={controlClassNames('attributes', className)}
+			attributeElement={attributeElement}
+			defaultValue={defaultValue}
+			mode={mode}
 			{...props}
 		/>
 	);
@@ -69,15 +80,4 @@ AttributesControl.propTypes = {
 	 * Label for popover
 	 */
 	popoverTitle: PropTypes.string,
-};
-
-AttributesControl.defaultProps = {
-	defaultValue: ([]: any),
-	defaultRepeaterItemValue: {
-		key: '',
-		__key: '',
-		value: '',
-		isVisible: true,
-	},
-	popoverTitle: (__('HTML Attribute', 'publisher-core'): any),
 };

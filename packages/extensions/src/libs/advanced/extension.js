@@ -47,6 +47,20 @@ export const AdvancedExtension: TAdvancedProps = memo<TAdvancedProps>(
 						value={{
 							name: generateExtensionId(block, 'attributes'),
 							value: attributes,
+							description: () => (
+								<div
+									className={
+										'publisher-label-control-popover'
+									}
+								>
+									{__(
+										'Sets the custom HTML attributes for block.',
+										'publisher-core'
+									)}
+								</div>
+							),
+							attribute: 'publisherAttributes',
+							blockName: block.blockName,
 						}}
 						storeName={'publisher-core/controls/repeater'}
 					>
@@ -77,6 +91,8 @@ export const AdvancedExtension: TAdvancedProps = memo<TAdvancedProps>(
 						value={{
 							name: generateExtensionId(block, 'properties'),
 							value: properties,
+							attribute: 'publisherCSSProperties',
+							blockName: block.blockName,
 						}}
 						storeName={'publisher-core/controls/repeater'}
 					>

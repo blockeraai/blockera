@@ -1,6 +1,10 @@
 // @flow
+/**
+ * Internal dependencies
+ */
+import type { RepeaterControlProps } from '../../repeater-control/types';
 
-export type RepeaterItem = {
+export type TransformControlRepeaterItemValue = {
 	type: 'move' | 'scale' | 'rotate' | 'skew',
 	'move-x': string,
 	'move-y': string,
@@ -14,10 +18,8 @@ export type RepeaterItem = {
 	isVisible: boolean,
 };
 
-export type Props = {
-	popoverTitle?: string,
-	className?: string,
-	defaultValue?: RepeaterItem[],
+export type TransformControlProps = {
+	...RepeaterControlProps,
 	onChange?: () => void,
-	defaultRepeaterItemValue?: RepeaterItem,
+	defaultRepeaterItemValue?: TransformControlRepeaterItemValue,
 };

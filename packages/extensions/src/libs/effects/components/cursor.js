@@ -32,6 +32,8 @@ export const Cursor = ({
 			value={{
 				name: generateExtensionId(block, 'cursor'),
 				value: cursor,
+				attribute: 'publisherCursor',
+				blockName: block.blockName,
 			}}
 		>
 			<SelectControl

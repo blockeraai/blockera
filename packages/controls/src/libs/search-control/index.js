@@ -22,14 +22,22 @@ export default function SearchControl({
 	id,
 	label,
 	columns,
-	defaultValue,
+	defaultValue = '',
 	onChange,
-	field,
+	field = 'search',
+	placeholder = __('Search…', 'publisher-core'),
 	//
 	className,
 	...props
 }: TSearchControlProps): MixedElement {
-	const { value, setValue } = useControlContext({
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
@@ -41,10 +49,12 @@ export default function SearchControl({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<WPSearchControl
 				value={typeof value === 'object' ? '' : value}
 				onChange={setValue}
+				placeholder={placeholder}
 				className={controlClassNames('search', className)}
 				{...props}
 			/>
@@ -87,11 +97,4 @@ SearchControl.propTypes = {
 	 * A placeholder for the input.
 	 */
 	placeholder: PropTypes.string,
-};
-
-SearchControl.defaultProps = {
-	// $FlowFixMe
-	placeholder: __('Search…', 'publisher-core'),
-	defaultValue: '',
-	field: 'search',
 };

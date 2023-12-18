@@ -3,41 +3,40 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Publisher dependencies
  */
 import {
-	getThemeColors,
+	type DynamicValueCategory,
+	type DynamicValueTypes,
+	getArchiveDynamicValueItemsBy,
+	getColors,
+	getFeaturedImageDynamicValueItemsBy,
 	getFontSizes,
 	getLinearGradients,
-	getRadialGradients,
-	getSpacings,
-	getWidthSizes,
-	getVariable,
-	getPostDynamicValueItemsBy,
-	getFeaturedImageDynamicValueItemsBy,
-	getArchiveDynamicValueItemsBy,
-	getSiteDynamicValueItemsBy,
-	getUserDynamicValueItemsBy,
 	getOtherDynamicValueItemsBy,
-} from '@publisher/core-data';
-// eslint-disable-next-line no-duplicate-imports
-import type {
-	VariableCategory,
-	DynamicValueTypes,
-	DynamicValueCategory,
+	getPostDynamicValueItemsBy,
+	getRadialGradients,
+	getSiteDynamicValueItemsBy,
+	getSpacings,
+	getUserDynamicValueItemsBy,
+	getVariable,
+	getWidthSizes,
+	type ValueAddonReference,
+	type VariableCategory,
 } from '@publisher/core-data';
 import { ColorIndicator } from '@publisher/components';
 import { isBlockTheme, isObject, isUndefined } from '@publisher/utils';
+import { NoticeControl } from '@publisher/controls';
 
 /**
  * Internal dependencies
  */
 import type {
-	ValueAddon,
 	DynamicValueCategoryDetail,
+	ValueAddon,
 	VariableCategoryDetail,
 } from './types';
 import VarTypeFontSizeIcon from './icons/var-font-size';
@@ -57,10 +56,9 @@ import DVTypeShortcodeIcon from './icons/dv-shortcode';
 import DVTypeEmailIcon from './icons/dv-email';
 import DVTypeCommentIcon from './icons/dv-comment';
 
-// todo improve and write tests
-export const isValid = ({ isValueAddon = false }: ValueAddon): boolean => {
-	return isValueAddon;
-};
+export function isValid(value: ValueAddon): boolean {
+	return !isUndefined(value?.isValueAddon) && value?.isValueAddon;
+}
 
 export function getValueAddonRealValue(value: ValueAddon | string): string {
 	if (typeof value === 'number') {
@@ -83,20 +81,29 @@ export function getValueAddonRealValue(value: ValueAddon | string): string {
 			//
 			if (
 				isUndefined(variable?.value) &&
-				!isUndefined(value.settings.value)
+				!isUndefined(value.settings.value) &&
+				value.settings.value !== ''
 			) {
 				return value.settings.value;
 			}
 
+			if (
+				isUndefined(value?.settings?.var) ||
+				value?.settings?.var === ''
+			) {
+				return '';
+			}
+
 			return `var(${value?.settings?.var})`;
 		}
+
+		return ''; // return empty string because there is no real string value
 	}
 
 	//$FlowFixMe
 	return value;
 }
 
-// todo write tests
 export function getVariableIcon({
 	type,
 	value,
@@ -110,12 +117,14 @@ export function getVariableIcon({
 
 		case 'radial-gradient':
 		case 'linear-gradient':
-			if (value !== '') {
-				return <ColorIndicator type="gradient" value={value} />;
-			}
-			break;
+			return (
+				<ColorIndicator
+					type="gradient"
+					value={value !== '' ? value : ''}
+				/>
+			);
 
-		case 'theme-color':
+		case 'color':
 			return <ColorIndicator type="color" value={value} />;
 
 		case 'spacing':
@@ -128,7 +137,6 @@ export function getVariableIcon({
 	return <></>;
 }
 
-// todo write tests
 export function getVariableCategory(
 	category: VariableCategory
 ): VariableCategoryDetail {
@@ -137,7 +145,7 @@ export function getVariableCategory(
 			return {
 				name: isBlockTheme()
 					? __('Theme Font Sizes', 'publisher-core')
-					: __('Font Sizes', 'publisher-core'),
+					: __('Editor Font Sizes', 'publisher-core'),
 				variables: getFontSizes(),
 			};
 
@@ -145,7 +153,7 @@ export function getVariableCategory(
 			return {
 				name: isBlockTheme()
 					? __('Theme Linear Gradients', 'publisher-core')
-					: __('Linear Gradients', 'publisher-core'),
+					: __('Editor Linear Gradients', 'publisher-core'),
 				variables: getLinearGradients(),
 			};
 
@@ -153,7 +161,7 @@ export function getVariableCategory(
 			return {
 				name: isBlockTheme()
 					? __('Theme Radial Gradients', 'publisher-core')
-					: __('Radial Gradients', 'publisher-core'),
+					: __('Editor Radial Gradients', 'publisher-core'),
 				variables: getRadialGradients(),
 			};
 
@@ -169,14 +177,16 @@ export function getVariableCategory(
 			return {
 				name: isBlockTheme()
 					? __('Theme Spacing Sizes', 'publisher-core')
-					: __('Spacing Sizes', 'publisher-core'),
+					: __('Editor Spacing Sizes', 'publisher-core'),
 				variables: getSpacings(),
 			};
 
-		case 'theme-color':
+		case 'color':
 			return {
-				name: __('Theme Colors', 'publisher-core'),
-				variables: getThemeColors(),
+				name: isBlockTheme()
+					? __('Theme Colors', 'publisher-core')
+					: __('Editor Colors', 'publisher-core'),
+				variables: getColors(),
 			};
 	}
 
@@ -187,7 +197,6 @@ export function getVariableCategory(
 	};
 }
 
-// todo write tests
 export function getDynamicValueIcon(type: DynamicValueTypes): MixedElement {
 	switch (type) {
 		case 'text':
@@ -233,7 +242,6 @@ export function getDynamicValueIcon(type: DynamicValueTypes): MixedElement {
 	return <></>;
 }
 
-// todo write tests
 export function getDynamicValueCategory(
 	category: DynamicValueCategory,
 	types: Array<DynamicValueTypes>
@@ -288,31 +296,41 @@ export function generateVariableString({
 	type,
 	slug,
 }: {
-	reference: 'publisher' | 'preset',
+	reference: ValueAddonReference,
 	type: VariableCategory,
 	slug: string,
 }): string {
 	let _type: string = type;
+	let _reference: string = reference?.type;
 
-	if (type === 'theme-color') {
-		_type = 'color';
-	} else if (type === 'width-size') {
+	if (type === 'width-size') {
 		if (slug === 'contentSize') {
 			slug = 'content-size';
 			_type = 'global';
-			// $FlowFixMe
-			reference = 'style';
+			_reference = 'style';
 		} else if (slug === 'wideSize') {
 			slug = 'wide-size';
 			_type = 'global';
-			// $FlowFixMe
-			reference = 'style';
+			_reference = 'style';
 		}
 	} else {
 		_type = type.replace(/^linear-|^radial-/i, '');
 	}
 
-	return `--wp--${reference}--${_type}--${slug}`;
+	switch (_reference) {
+		case 'custom':
+			_reference = 'publisher';
+			break;
+
+		case 'theme':
+		case 'plugin':
+		case 'core':
+		case 'core-pro':
+			_reference = 'preset';
+			break;
+	}
+
+	return `--wp--${_reference}--${_type}--${slug}`;
 }
 
 export function canUnlinkVariable(value: ValueAddon): boolean {
@@ -324,8 +342,7 @@ export function canUnlinkVariable(value: ValueAddon): boolean {
 			return true;
 		}
 
-		// $FlowFixMe
-		const variable = getVariable(value.valueType, value.settings.slug);
+		const variable = getVariable(value?.settings.type, value.settings.slug);
 
 		if (!isUndefined(variable?.value) && variable?.value !== '') {
 			return true;
@@ -333,4 +350,284 @@ export function canUnlinkVariable(value: ValueAddon): boolean {
 	}
 
 	return false;
+}
+
+export function getDeletedItemInfo(item: ValueAddon): {
+	name: string,
+	id: string,
+	value: string,
+	referenceType: string,
+	referenceName: string,
+	tooltip: string,
+	before: string,
+	after: string,
+	after2: string,
+} {
+	const result = {
+		name: '',
+		id: '',
+		value: '',
+		referenceType: '',
+		referenceName: '',
+		before: '',
+		after: '',
+		after2: '',
+		tooltip: '',
+	};
+
+	if (!isUndefined(item?.settings?.value) && item?.settings?.value !== '') {
+		result.value = item?.settings?.value;
+
+		switch (item.valueType) {
+			case 'variable':
+				result.after = __(
+					'You have the option to either switch it with another variable or unlink it to use the value directly.',
+					'publisher-core'
+				);
+				break;
+		}
+	}
+
+	if (!isUndefined(item?.settings?.name) && item?.settings?.name !== '') {
+		result.name = item?.settings?.name;
+	} else {
+		result.id = item?.settings?.id;
+	}
+
+	if (
+		!isUndefined(item?.settings?.reference?.type) &&
+		item?.settings?.reference?.type !== ''
+	) {
+		result.referenceType = item?.settings?.reference?.type;
+
+		switch (result.referenceType) {
+			case 'preset':
+				result.referenceName = __('Block Editor', 'publisher-core');
+				break;
+
+			case 'core':
+				result.referenceName = __('Publisher Blocks', 'publisher-core');
+				break;
+
+			case 'core-pro':
+				result.referenceName = __(
+					'Publisher Blocks Pro',
+					'publisher-core'
+				);
+
+				switch (item.valueType) {
+					case 'variable':
+						result.after2 = (
+							<NoticeControl type="success">
+								{__(
+									'Activating Publisher Blocks Pro plugin may potentially restore this variable.',
+									'publisher-blocks'
+								)}
+							</NoticeControl>
+						);
+						break;
+
+					case 'dynamic-value':
+						result.after2 = (
+							<NoticeControl type="success">
+								{__(
+									'Activating Publisher Blocks Pro plugin restores functionality for this dynamic value item.',
+									'publisher-blocks'
+								)}
+							</NoticeControl>
+						);
+
+						break;
+				}
+				break;
+
+			case 'custom':
+				switch (item.valueType) {
+					case 'variable':
+						result.referenceName = __('Custom', 'publisher-core');
+						result.after2 = (
+							<NoticeControl type="information">
+								{__(
+									'You can create a custom variable with the exact same name to restore this variable across all its usages.',
+									'publisher-blocks'
+								)}
+							</NoticeControl>
+						);
+						break;
+
+					case 'dynamic-value':
+						result.referenceName = __(
+							'Custom Code',
+							'publisher-core'
+						);
+						result.after2 = (
+							<NoticeControl type="information">
+								{__(
+									'Find and restore the custom code to return back functionality for this dynamic value item.',
+									'publisher-blocks'
+								)}
+							</NoticeControl>
+						);
+
+						break;
+				}
+				break;
+
+			case 'plugin':
+				let pluginName = '';
+
+				if (
+					!isUndefined(item?.settings?.reference?.plugin) &&
+					item?.settings?.reference?.plugin !== ''
+				) {
+					pluginName = item?.settings?.reference?.plugin;
+					result.referenceName = sprintf(
+						// Translators: %s is plugin name
+						__('%s plugin', 'publisher-core'),
+						pluginName
+					);
+				} else {
+					pluginName = 'unknown';
+					result.referenceName = __(
+						'unknown plugin',
+						'publisher-core'
+					);
+				}
+
+				switch (item.valueType) {
+					case 'variable':
+						result.after2 = (
+							<NoticeControl type="information">
+								{sprintf(
+									// Translators: %s is plugin name
+									__(
+										'Activating %s plugin may potentially restore this variable.',
+										'publisher-blocks'
+									),
+									pluginName
+								)}
+							</NoticeControl>
+						);
+						break;
+
+					case 'dynamic-value':
+						result.after2 = (
+							<NoticeControl type="success">
+								{sprintf(
+									// Translators: %s is plugin name
+									__(
+										'Activating %s plugin restores functionality for this dynamic value item.',
+										'publisher-blocks'
+									),
+									pluginName
+								)}
+							</NoticeControl>
+						);
+
+						break;
+				}
+
+				break;
+
+			case 'theme':
+				let themeName = '';
+
+				if (
+					!isUndefined(item?.settings?.reference?.theme) &&
+					item?.settings?.reference?.theme !== ''
+				) {
+					themeName = item?.settings?.reference?.theme;
+					result.referenceName = sprintf(
+						// Translators: %s is plugin name
+						__('%s theme', 'publisher-core'),
+						themeName
+					);
+				} else {
+					themeName = 'unknown';
+					result.referenceName = __(
+						'unknown theme',
+						'publisher-core'
+					);
+				}
+
+				switch (item.valueType) {
+					case 'variable':
+						result.after2 = (
+							<NoticeControl type="information">
+								{sprintf(
+									// Translators: %s is plugin name
+									__(
+										'Activating %s theme may potentially restore this variable.',
+										'publisher-blocks'
+									),
+									themeName
+								)}
+							</NoticeControl>
+						);
+						break;
+
+					case 'dynamic-value':
+						result.after2 = (
+							<NoticeControl type="success">
+								{sprintf(
+									// Translators: %s is plugin name
+									__(
+										'Activating %s theme restores functionality for this dynamic value item.',
+										'publisher-blocks'
+									),
+									themeName
+								)}
+							</NoticeControl>
+						);
+
+						break;
+				}
+
+				break;
+		}
+	}
+
+	switch (item.valueType) {
+		case 'variable':
+			if (result.tooltip === '') {
+				result.tooltip = __(
+					'This is the latest value identified by Publisher Blocks, which may differ from the final value of this variable.',
+					'publisher-blocks'
+				);
+			}
+
+			if (result.before === '') {
+				result.before = __(
+					"There was a deletion or disappearance of this variable, however it's value is still used here.",
+					'publisher-core'
+				);
+			}
+
+			if (result.after === '') {
+				result.after = __(
+					'You have the option to either switch it with another variable or remove it.',
+					'publisher-core'
+				);
+			}
+
+			break;
+
+		case 'dynamic-value':
+			if (result.before === '') {
+				result.before = __(
+					'The dynamic value item is inactive or has been removed.',
+					'publisher-core'
+				);
+			}
+
+			if (result.after === '') {
+				result.after = __(
+					'You have the option to either switch this item or remove its usage.',
+					'publisher-core'
+				);
+			}
+			break;
+	}
+
+	return result;
 }

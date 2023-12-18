@@ -17,8 +17,11 @@ const _getFeaturedImageDynamicValueItems =
 				name: __('Image URL', 'publisher-core'),
 				id: 'featured-image-url',
 				type: 'image',
-				status: 'free',
+				status: 'core',
 				category: 'featured-image',
+				reference: {
+					type: 'core',
+				},
 			},
 			{
 				name: __('Image ID', 'publisher-core'),
@@ -26,6 +29,9 @@ const _getFeaturedImageDynamicValueItems =
 				type: 'id',
 				status: 'soon',
 				category: 'featured-image',
+				reference: {
+					type: 'core-pro',
+				},
 			},
 			{
 				name: __('Image Title', 'publisher-core'),
@@ -33,6 +39,9 @@ const _getFeaturedImageDynamicValueItems =
 				type: 'text',
 				status: 'soon',
 				category: 'featured-image',
+				reference: {
+					type: 'core-pro',
+				},
 			},
 			{
 				name: __('Image Alt', 'publisher-core'),
@@ -40,6 +49,9 @@ const _getFeaturedImageDynamicValueItems =
 				type: 'text',
 				status: 'soon',
 				category: 'featured-image',
+				reference: {
+					type: 'core-pro',
+				},
 			},
 			{
 				name: __('Image Caption', 'publisher-core'),
@@ -47,6 +59,9 @@ const _getFeaturedImageDynamicValueItems =
 				type: 'text',
 				status: 'soon',
 				category: 'featured-image',
+				reference: {
+					type: 'core-pro',
+				},
 			},
 			{
 				name: __('Image Desc', 'publisher-core'),
@@ -54,6 +69,9 @@ const _getFeaturedImageDynamicValueItems =
 				type: 'text',
 				status: 'soon',
 				category: 'featured-image',
+				reference: {
+					type: 'core-pro',
+				},
 			},
 		];
 	};
@@ -83,7 +101,7 @@ export const getFeaturedImageDynamicValueItem = (
 const _getFeaturedImageDVItemsBy = function (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): Array<DynamicValueItem> | void {
+): Array<DynamicValueItem> {
 	return getFeaturedImageDynamicValueItems().filter((item) => {
 		if (field === 'type') {
 			if (value.includes('all')) {
@@ -102,6 +120,6 @@ const _getFeaturedImageDVItemsByMemoized = memoize(_getFeaturedImageDVItemsBy);
 export const getFeaturedImageDynamicValueItemsBy = (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): Array<DynamicValueItem> | void => {
+): Array<DynamicValueItem> => {
 	return _getFeaturedImageDVItemsByMemoized(field, value);
 };

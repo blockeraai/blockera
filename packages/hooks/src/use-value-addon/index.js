@@ -8,9 +8,11 @@ import { useState } from '@wordpress/element';
  * Publisher dependencies
  */
 import { isObject, isUndefined } from '@publisher/utils';
-import { getVariable } from '@publisher/core-data';
-// eslint-disable-next-line no-duplicate-imports
-import type { VariableItem, DynamicValueItem } from '@publisher/core-data';
+import {
+	getVariable,
+	type VariableItem,
+	type DynamicValueItem,
+} from '@publisher/core-data';
 
 /**
  * Internal dependencies
@@ -28,6 +30,7 @@ export const useValueAddon = ({
 	variableTypes,
 	dynamicValueTypes,
 	onChange,
+	size = 'normal',
 }: UseValueAddonProps): {} | ValueAddonProps => {
 	// type is empty
 	if (isUndefined(types) || !types.length) {
@@ -59,6 +62,7 @@ export const useValueAddon = ({
 				handleOnClickRemove: () => {},
 				isOpen: '',
 				setOpen: () => {},
+				size,
 			},
 			handleOnClickVar: () => {},
 			handleOnClickDV: () => {},
@@ -143,11 +147,6 @@ export const useValueAddon = ({
 			valueType: 'dynamic-value',
 		};
 
-		// $FlowFixMe
-		delete newValue?.settings?.name;
-		// $FlowFixMe
-		delete newValue?.settings?.status;
-
 		setValue(newValue);
 		onChange(newValue);
 		setOpen('dv-settings');
@@ -185,6 +184,7 @@ export const useValueAddon = ({
 		handleOnClickRemove,
 		isOpen,
 		setOpen,
+		size,
 	};
 
 	return {

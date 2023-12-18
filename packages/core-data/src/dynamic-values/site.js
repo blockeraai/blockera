@@ -16,29 +16,41 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			name: __('Site Title', 'publisher-core'),
 			id: 'site-title',
 			type: 'text',
-			status: 'free',
+			status: 'core',
 			category: 'site',
+			reference: {
+				type: 'core',
+			},
 		},
 		{
 			name: __('Site Tagline', 'publisher-core'),
 			id: 'site-desc',
 			type: 'text',
-			status: 'free',
+			status: 'core',
 			category: 'site',
+			reference: {
+				type: 'core',
+			},
 		},
 		{
 			name: __('Home URL', 'publisher-core'),
 			id: 'home-url',
 			type: 'link',
-			status: 'free',
+			status: 'core',
 			category: 'site',
+			reference: {
+				type: 'core',
+			},
 		},
 		{
 			name: __('Site URL', 'publisher-core'),
 			id: 'site-url',
 			type: 'link',
-			status: 'free',
+			status: 'core',
 			category: 'site',
+			reference: {
+				type: 'core',
+			},
 		},
 		{
 			name: __('Site Logo URL', 'publisher-core'),
@@ -46,6 +58,9 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			type: 'image',
 			status: 'soon',
 			category: 'site',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Admin Email', 'publisher-core'),
@@ -53,6 +68,9 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			type: 'email',
 			status: 'soon',
 			category: 'site',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('RSS URL', 'publisher-core'),
@@ -60,6 +78,9 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			type: 'link',
 			status: 'soon',
 			category: 'site',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Login URL', 'publisher-core'),
@@ -67,6 +88,9 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			type: 'link',
 			status: 'soon',
 			category: 'site',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Logout URL', 'publisher-core'),
@@ -74,6 +98,9 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			type: 'link',
 			status: 'soon',
 			category: 'site',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('Site Meta', 'publisher-core'),
@@ -81,6 +108,9 @@ const _getSiteDVItems = function (): Array<DynamicValueItem> {
 			type: 'meta',
 			status: 'soon',
 			category: 'site',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 	];
 };
@@ -105,7 +135,7 @@ export const getSiteDynamicValueItem = (types: string): ?DynamicValueItem => {
 const _getSiteDVItemsBy = function (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): ?Array<DynamicValueItem> | void {
+): ?Array<DynamicValueItem> {
 	return getSiteDynamicValueItems().filter((item) => {
 		if (field === 'type') {
 			if (value.includes('all')) {
@@ -124,6 +154,6 @@ const _getSiteDVItemsByMemoized = memoize(_getSiteDVItemsBy);
 export const getSiteDynamicValueItemsBy = (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): Array<DynamicValueItem> | void => {
+): Array<DynamicValueItem> => {
 	return _getSiteDVItemsByMemoized(field, value);
 };

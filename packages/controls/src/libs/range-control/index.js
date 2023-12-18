@@ -20,54 +20,55 @@ import BaseControl from '../base-control';
 import { useControlContext } from '../../context';
 import type { TRangeControlProps, TValueCleanup } from './types';
 
-function valueCleanup(value: TValueCleanup) {
-	if (typeof value === 'string') {
-		const units = [
-			'px',
-			'%',
-			'em',
-			'rem',
-			'ch',
-			'vw',
-			'vh',
-			'ms',
-			's',
-			'dvw',
-			'dvh',
-			'deg',
-			'rad',
-			'grad',
-		];
-		const regexp = new RegExp(units.join('|'), 'gi');
-
-		return Number(value.replace(regexp, ''));
-	}
-
-	return value;
-}
-
 export default function RangeControl({
 	min,
 	max,
 	className,
-	withInputField,
+	withInputField = true,
 	initialPosition,
 	//
 	id,
 	label,
 	columns,
 	onChange,
-	sideEffect,
+	sideEffect = true,
 	defaultValue,
 	disabled,
-	field,
+	field = 'range',
 }: TRangeControlProps): MixedElement {
-	let { value, setValue } = useControlContext({
-		id,
-		onChange,
-		defaultValue,
-		valueCleanup,
-	});
+	function valueCleanup(value: TValueCleanup) {
+		if (typeof value === 'string') {
+			const units = [
+				'px',
+				'%',
+				'em',
+				'rem',
+				'ch',
+				'vw',
+				'vh',
+				'ms',
+				's',
+				'dvw',
+				'dvh',
+				'deg',
+				'rad',
+				'grad',
+			];
+			const regexp = new RegExp(units.join('|'), 'gi');
+
+			return Number(value.replace(regexp, ''));
+		}
+
+		return value;
+	}
+
+	let { value, setValue, attribute, blockName, description, resetToDefault } =
+		useControlContext({
+			id,
+			onChange,
+			defaultValue,
+			valueCleanup,
+		});
 
 	if (isString(value)) {
 		value = valueCleanup(value);
@@ -79,6 +80,7 @@ export default function RangeControl({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<WordPressRangeControl
 				min={min}
@@ -92,7 +94,7 @@ export default function RangeControl({
 						return false;
 					}
 
-					onChange(newValue);
+					if ('undefined' !== typeof onChange) onChange(newValue);
 				}}
 				className={controlClassNames(
 					'range',
@@ -166,10 +168,4 @@ RangeControl.propTypes = {
 	 * and `max` prop values.
 	 */
 	initialPosition: PropTypes.number,
-};
-
-RangeControl.defaultProps = {
-	field: 'range',
-	sideEffect: true,
-	withInputField: true,
 };

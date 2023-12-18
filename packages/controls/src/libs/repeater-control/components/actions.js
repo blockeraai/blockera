@@ -1,8 +1,10 @@
+// @flow
 /**
  * External dependencies
  */
 import { __, sprintf } from '@wordpress/i18n';
 import { useContext } from '@wordpress/element';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -19,18 +21,20 @@ import EnableIcon from '../icons/enable';
 import DisableIcon from '../icons/disable';
 import CloneIcon from '../icons/clone';
 import { useControlContext } from '../../../context';
+import type { RepeaterItemActionsProps } from '../types';
 
 export default function RepeaterItemActions({
 	item,
 	itemId,
 	isVisible,
 	setVisibility,
-}) {
+}: RepeaterItemActionsProps): MixedElement {
 	const {
 		controlId,
 		maxItems,
 		minItems,
 		repeaterId,
+		overrideItem,
 		actionButtonVisibility,
 		actionButtonDelete,
 		actionButtonClone,
@@ -42,7 +46,7 @@ export default function RepeaterItemActions({
 
 	return (
 		<>
-			{actionButtonVisibility && (
+			{actionButtonVisibility && item?.visibilitySupport && (
 				<Button
 					className={controlInnerClassNames('btn-visibility')}
 					noBorder={true}
@@ -52,13 +56,21 @@ export default function RepeaterItemActions({
 					onClick={(event) => {
 						event.stopPropagation();
 						setVisibility(!isVisible);
+						const value = item?.selectable
+							? {
+									...item,
+									isVisible: !isVisible,
+									isSelected: false,
+							  }
+							: {
+									...item,
+									isVisible: !isVisible,
+							  };
+
 						changeRepeaterItem({
 							controlId,
 							itemId,
-							value: {
-								...item,
-								isVisible: !isVisible,
-							},
+							value,
 							repeaterId,
 						});
 					}}
@@ -84,6 +96,7 @@ export default function RepeaterItemActions({
 			)}
 
 			{actionButtonClone &&
+				item?.cloneable &&
 				(maxItems === -1 || repeaterItems?.length < maxItems) && (
 					<Button
 						className={controlInnerClassNames('btn-clone')}
@@ -94,10 +107,13 @@ export default function RepeaterItemActions({
 						label={__('Clone', 'publisher')}
 						onClick={(event) => {
 							event.stopPropagation();
+
 							cloneRepeaterItem({
+								item,
 								itemId,
 								controlId,
 								repeaterId,
+								overrideItem,
 							});
 						}}
 						aria-label={sprintf(
@@ -109,6 +125,7 @@ export default function RepeaterItemActions({
 				)}
 
 			{actionButtonDelete &&
+				item?.deletable &&
 				(minItems === 0 || repeaterItems?.length > minItems) && (
 					<Button
 						className={controlInnerClassNames('btn-delete')}

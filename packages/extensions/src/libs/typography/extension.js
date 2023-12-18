@@ -58,6 +58,7 @@ import TextOrientationStyle1Icon from './icons/text-orientation-style-1';
 import TextOrientationStyle2Icon from './icons/text-orientation-style-2';
 import TextOrientationStyle3Icon from './icons/text-orientation-style-3';
 import TextOrientationStyle4Icon from './icons/text-orientation-style-4';
+import PenIcon from './icons/pen';
 
 function getFontSizeAccurate(value: string) {
 	const sizes = {
@@ -164,6 +165,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 					>
 						<TypographyButtonIcon />
 						{__('Customize', 'publisher-core')}
+						<PenIcon style={{ marginLeft: 'auto' }} />
 					</Button>
 
 					{isVisible && (
@@ -210,6 +212,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 												'text-align'
 											),
 											value: textAlign,
+											attribute: 'publisherTextAlign',
+											blockName: block.blockName,
 										}}
 									>
 										<BaseControl
@@ -275,7 +279,6 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 												isDeselectable={true}
 												//
 												defaultValue=""
-												value={textAlign}
 												onChange={(newValue) =>
 													handleOnChangeAttributes(
 														'publisherTextAlign',
@@ -344,6 +347,9 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 														'direction'
 													),
 													value: direction,
+													attribute:
+														'publisherDirection',
+													blockName: block.blockName,
 												}}
 											>
 												<BaseControl
@@ -416,6 +422,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 												'word-spacing'
 											),
 											value: wordSpacing,
+											attribute: 'publisherWordSpacing',
+											blockName: block.blockName,
 										}}
 									>
 										<BaseControl
@@ -427,18 +435,16 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											)}
 										>
 											<InputControl
-												{...{
-													...props,
-													arrows: true,
-													unitType: 'letter-spacing',
-													step: 'any',
-													defaultValue: '',
-													onChange: (newValue) =>
-														handleOnChangeAttributes(
-															'publisherWordSpacing',
-															newValue
-														),
-												}}
+												{...props}
+												arrows={true}
+												unitType="letter-spacing"
+												defaultValue=""
+												onChange={(newValue) =>
+													handleOnChangeAttributes(
+														'publisherWordSpacing',
+														newValue
+													)
+												}
 											/>
 										</BaseControl>
 									</ControlContextProvider>
@@ -452,6 +458,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 												'text-indent'
 											),
 											value: textIndent,
+											attribute: 'publisherTextIndent',
+											blockName: block.blockName,
 										}}
 									>
 										<BaseControl
@@ -488,6 +496,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											'text-orientation'
 										),
 										value: textOrientation,
+										attribute: 'publisherTextOrientation',
+										blockName: block.blockName,
 									}}
 								>
 									<ToggleSelectControl
@@ -614,6 +624,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 										),
 										value: textColumns,
 										type: 'nested',
+										attribute: 'publisherTextColumns',
+										blockName: block.blockName,
 									}}
 								>
 									<BaseControl columns="columns-1">
@@ -625,8 +637,9 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											)}
 											columns="columns-2"
 											className={
-												display === 'flex' &&
-												'publisher-control-is-not-active'
+												display === 'flex'
+													? 'publisher-control-is-not-active'
+													: ''
 											}
 										>
 											<ToggleSelectControl
@@ -746,7 +759,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 															)}
 															columns="columns-1"
 															className="control-first label-center small-gap"
-															lines="vertical"
+															linesDirection="vertical"
 															customMenuPosition="top"
 															defaultValue={{
 																width: '',
@@ -791,6 +804,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 										),
 										value: textStroke,
 										type: 'nested',
+										attribute: 'publisherTextStroke',
+										blockName: block.blockName,
 									}}
 								>
 									<BaseControl
@@ -860,6 +875,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											'word-break'
 										),
 										value: wordBreak,
+										attribute: 'publisherWordBreak',
+										blockName: block.blockName,
 									}}
 								>
 									<SelectControl
@@ -930,6 +947,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 						value={{
 							name: generateExtensionId(block, 'font-color'),
 							value: fontColor,
+							attribute: 'publisherFontColor',
+							blockName: block.blockName,
 						}}
 					>
 						<BaseControl columns="columns-1">
@@ -946,7 +965,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 									)
 								}
 								controlAddonTypes={['variable']}
-								variableTypes={['theme-color']}
+								variableTypes={['color']}
 								className={
 									backgroundClip === 'text' &&
 									'publisher-control-is-not-active'
@@ -969,6 +988,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 						value={{
 							name: generateExtensionId(block, 'text-shadow'),
 							value: textShadow,
+							attribute: 'publisherTextShadow',
+							blockName: block.blockName,
 						}}
 						storeName={'publisher-core/controls/repeater'}
 					>

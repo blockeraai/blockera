@@ -10,11 +10,11 @@ import { getCurrentTheme } from '@publisher/core-data';
 import { isUndefined } from '../index';
 
 export function isBlockTheme(): boolean {
-	const { is_block_Theme: isBlockTheme } = getCurrentTheme();
+	const theme = getCurrentTheme();
 
-	if (!isUndefined(isBlockTheme)) {
+	if (isUndefined(theme?.is_block_theme)) {
 		return false;
 	}
 
-	return isBlockTheme;
+	return theme?.is_block_theme;
 }

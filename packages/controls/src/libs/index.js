@@ -1,11 +1,12 @@
+// @flow
 export { default as BaseControl } from './base-control';
 export {
 	default as AlignmentMatrixControl,
 	convertAlignmentMatrixCoordinates,
 } from './alignment-matrix-control';
 export { default as IconControl } from './icon-control';
-export * from './color-control';
-export * from './color-picker-control';
+export { ColorControl } from './color-control';
+export { ColorPickerControl } from './color-picker-control';
 export { default as GroupControl } from './group-control';
 export { default as RangeControl } from './range-control';
 export { default as InputControl } from './input-control';

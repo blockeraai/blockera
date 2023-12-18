@@ -21,21 +21,32 @@ import { Button } from '@publisher/components';
 import { InputControl, LabelControl } from '../index';
 import { default as CustomIcon } from './icons/custom';
 import { useControlContext } from '../../context';
-import type { TBorderRadiusControlProps, TValue } from './types/control-type';
+import type { BorderRadiusControlProps, TValue } from './types';
 
 export default function BorderRadiusControl({
 	id,
-	label,
-	defaultValue,
+	label = '',
+	defaultValue = {
+		type: 'all',
+		all: '',
+		topLeft: '',
+		topRight: '',
+		bottomLeft: '',
+		bottomRight: '',
+	},
 	onChange,
 	//
 	className,
-}: TBorderRadiusControlProps): MixedElement {
+}: BorderRadiusControlProps): MixedElement {
 	const {
 		value,
 		setValue,
 		controlInfo: { name: controlId },
 		dispatch: { modifyControlValue },
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
 	} = useControlContext({
 		id,
 		onChange,
@@ -66,15 +77,22 @@ export default function BorderRadiusControl({
 			>
 				{label && (
 					<div className={controlInnerClassNames('label')}>
-						<LabelControl label={label} />
+						<LabelControl
+							label={label}
+							{...{
+								attribute,
+								blockName,
+								description,
+								resetToDefault,
+							}}
+						/>
 					</div>
 				)}
 
 				{value.type === 'all' && (
 					<InputControl
 						id="all"
-						min="0"
-						type="css"
+						min={0}
 						unitType="essential"
 						onChange={(newValue) => {
 							setValue({ ...value, all: newValue });
@@ -86,9 +104,9 @@ export default function BorderRadiusControl({
 								},
 							});
 						}}
-						defaultValue={value.all}
-						placeholder="0"
-						smallWidth={true}
+						defaultValue={value.all || ''}
+						placeholder="-"
+						size="small"
 						data-test="border-radius-input-all"
 					/>
 				)}
@@ -107,6 +125,7 @@ export default function BorderRadiusControl({
 						height: '30px',
 					}}
 					onClick={() => {
+						// old type
 						if (value.type === 'all') {
 							setValue({
 								...value,
@@ -169,16 +188,14 @@ export default function BorderRadiusControl({
 					>
 						<InputControl
 							id="topLeft"
-							min="0"
-							type="css"
+							min={0}
 							unitType="essential"
 							className={controlInnerClassNames(
 								'border-corner-top-left'
 							)}
 							noBorder={true}
-							value={value.topLeft}
-							defaultValue={value.topLeft || '0'}
-							placeholder="0"
+							defaultValue={value.topLeft || ''}
+							placeholder="-"
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -192,20 +209,18 @@ export default function BorderRadiusControl({
 									},
 								});
 							}}
-							smallWidth={true}
+							size="small"
 						/>
 						<InputControl
 							id="topRight"
-							min="0"
-							type="css"
+							min={0}
 							unitType="essential"
 							className={controlInnerClassNames(
 								'border-corner-top-right'
 							)}
 							noBorder={true}
-							value={value.topRight}
-							defaultValue={value.topRight || '0'}
-							placeholder="0"
+							defaultValue={value.topRight || ''}
+							placeholder="-"
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -219,20 +234,18 @@ export default function BorderRadiusControl({
 									},
 								});
 							}}
-							smallWidth={true}
+							size="small"
 						/>
 						<InputControl
 							id="bottomLeft"
-							min="0"
-							type="css"
+							min={0}
 							unitType="essential"
 							className={controlInnerClassNames(
 								'border-corner-bottom-left'
 							)}
 							noBorder={true}
-							value={value.bottomLeft}
-							defaultValue={value.bottomLeft || '0'}
-							placeholder="0"
+							defaultValue={value.bottomLeft || ''}
+							placeholder="-"
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -246,20 +259,18 @@ export default function BorderRadiusControl({
 									},
 								});
 							}}
-							smallWidth={true}
+							size="small"
 						/>
 						<InputControl
 							id="bottomRight"
-							min="0"
-							type="css"
+							min={0}
 							unitType="essential"
 							className={controlInnerClassNames(
 								'border-corner-bottom-right'
 							)}
 							noBorder={true}
-							value={value.bottomRight}
-							defaultValue={value.bottomRight || '0'}
-							placeholder="0"
+							defaultValue={value.bottomRight || ''}
+							placeholder="-"
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -273,7 +284,7 @@ export default function BorderRadiusControl({
 									},
 								});
 							}}
-							smallWidth={true}
+							size="small"
 						/>
 					</div>
 				</div>
@@ -307,16 +318,4 @@ BorderRadiusControl.propTypes = {
 	 * Label of control
 	 */
 	label: PropTypes.string,
-};
-
-BorderRadiusControl.defaultProps = {
-	label: '',
-	defaultValue: {
-		type: 'all',
-		all: '0px',
-		topLeft: '0px',
-		topRight: '0px',
-		bottomLeft: '0px',
-		bottomRight: '0px',
-	},
 };

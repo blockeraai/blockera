@@ -12,7 +12,7 @@ import type { MixedElement } from 'react';
 import { controlClassNames } from '@publisher/classnames';
 
 /**
- * Publisher dependencies
+ * Internal dependencies
  */
 import BaseControl from '../base-control';
 import { useControlContext } from '../../context';
@@ -25,24 +25,36 @@ import BorderStyleVDashedIcon from './icons/style-v-dashed';
 import BorderStyleVDottedIcon from './icons/style-v-dotted';
 import BorderStyleVDoubleIcon from './icons/style-v-double';
 import { InputControl, SelectControl, ColorControl } from '../index';
-import type { TBorderControlProps } from './types';
+import type { BorderControlProps } from './types';
 
 export default function BorderControl({
-	linesDirection,
+	linesDirection = 'horizontal',
 	customMenuPosition,
 	style, //
 	id,
 	label,
 	columns,
-	defaultValue,
+	defaultValue = {
+		width: '0px',
+		style: 'solid',
+		color: '',
+	},
 	onChange,
-	field, //
+	field = 'border',
 	className, // internal usage for stories
 	__isWidthFocused,
 	__isColorFocused,
 	__isStyleFocused,
-}: TBorderControlProps): MixedElement {
-	const { value, setValue, getId } = useControlContext({
+}: BorderControlProps): MixedElement {
+	const {
+		value,
+		setValue,
+		getId,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
@@ -55,6 +67,7 @@ export default function BorderControl({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<div
 				className={controlClassNames('border', className)}
@@ -64,7 +77,7 @@ export default function BorderControl({
 				<InputControl
 					id={getId(id, 'width')}
 					type="number"
-					min="0"
+					min={0}
 					defaultValue={defaultValue ? defaultValue.width : '0'}
 					units={[
 						{
@@ -83,7 +96,7 @@ export default function BorderControl({
 						setValue({ ...value, width: newValue });
 					}}
 					data-test="border-control-width"
-					placeholder="0"
+					placeholder="-"
 				/>
 
 				<ColorControl
@@ -100,7 +113,7 @@ export default function BorderControl({
 
 				<SelectControl
 					id={getId(id, 'style')}
-					className={__isStyleFocused && 'is-focused'}
+					className={__isStyleFocused ? 'is-focused' : ''}
 					customMenuPosition={customMenuPosition}
 					type="custom"
 					customInputCenterContent={true}
@@ -204,14 +217,4 @@ BorderControl.propTypes = {
 	 * Function that will be fired while the control value state changes.
 	 */
 	onChange: PropTypes.func,
-};
-
-BorderControl.defaultProps = {
-	field: 'border',
-	linesDirection: 'horizontal',
-	defaultValue: {
-		width: '0px',
-		style: 'solid',
-		color: '',
-	},
 };

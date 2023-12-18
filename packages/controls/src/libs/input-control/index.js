@@ -21,20 +21,20 @@ import { UnitInput } from './components/unit-input';
 import { OtherInput } from './components/other-input';
 import { NumberInput } from './components/number-input';
 import { getCSSUnits } from './utils';
-import type { TInputItem } from './types';
+import type { InputControlProps } from './types';
 
 export default function InputControl({
 	unitType = '',
 	units = [],
-	noBorder,
+	noBorder = false,
 	id,
-	range,
+	range = false,
 	label,
 	columns,
 	defaultValue = '',
 	onChange,
-	field,
-	className,
+	field = 'input',
+	className = '',
 	type = 'text',
 	min,
 	max,
@@ -43,7 +43,7 @@ export default function InputControl({
 	drag = true,
 	float = true,
 	arrows = false,
-	smallWidth = false,
+	size = 'normal',
 	//
 	controlAddonTypes,
 	variableTypes,
@@ -51,8 +51,15 @@ export default function InputControl({
 	//
 	children,
 	...props
-}: TInputItem): MixedElement {
-	const { value, setValue, description, resetToDefault } = useControlContext({
+}: InputControlProps): MixedElement {
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		defaultValue,
 		onChange,
@@ -69,6 +76,7 @@ export default function InputControl({
 		variableTypes,
 		dynamicValueTypes,
 		onChange: setValue,
+		size,
 	});
 
 	if (isSetValueAddon()) {
@@ -78,7 +86,14 @@ export default function InputControl({
 				columns={columns}
 				controlName={field}
 				className={className}
-				{...{ mode: 'advanced', path: id, description, resetToDefault }}
+				{...{
+					mode: 'advanced',
+					path: id,
+					attribute,
+					blockName,
+					description,
+					resetToDefault,
+				}}
 			>
 				<div
 					className={controlClassNames(
@@ -124,7 +139,7 @@ export default function InputControl({
 					drag={drag}
 					float={float}
 					arrows={arrows}
-					smallWidth={smallWidth}
+					size={size}
 					children={children}
 					{...props}
 				>
@@ -137,7 +152,9 @@ export default function InputControl({
 							className={controlClassNames(
 								'input',
 								'input-number',
-								range && 'is-range-active',
+								range &&
+									!['small', 'extra-small'].includes(size) &&
+									'is-range-active',
 								className,
 								valueAddonClassNames
 							)}
@@ -154,6 +171,7 @@ export default function InputControl({
 								drag={drag}
 								float={float}
 								arrows={arrows}
+								size={size}
 								{...props}
 							>
 								<ValueAddonPointer />
@@ -288,13 +306,4 @@ InputControl.propTypes = {
 			])
 		),
 	]),
-};
-
-InputControl.defaultProps = {
-	range: false,
-	noBorder: false,
-	drag: true,
-	field: 'input',
-	defaultValue: '',
-	className: '',
 };

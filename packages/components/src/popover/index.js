@@ -25,17 +25,18 @@ import CloseIcon from './icons/close';
 import type { TPopoverProps } from './types';
 
 export default function Popover({
-	title,
-	onClose,
+	title = '',
+	onClose = () => {},
 	children,
 	className,
-	placement,
-	resize: _resize,
-	shift: _shift,
-	flip: _flip,
-	closeButton,
-	titleButtonsRight,
-	titleButtonsLeft,
+	placement = 'bottom-start',
+	resize: _resize = true,
+	shift: _shift = true,
+	flip: _flip = true,
+	animate = true,
+	closeButton = true,
+	titleButtonsRight = '',
+	titleButtonsLeft = '',
 	...props
 }: TPopoverProps): MixedElement {
 	const [isVisible, setIsVisible] = useState(true);
@@ -86,6 +87,7 @@ export default function Popover({
 					shift={!isUndefined(shift) ? shift : _shift}
 					resize={!isUndefined(resize) ? resize : _resize}
 					flip={!isUndefined(flip) ? flip : _flip}
+					animate={animate}
 					placement={placement}
 					{...props}
 					ref={popoverRef}
@@ -223,17 +225,4 @@ Popover.propTypes = {
 	 * The distance (in px) between the anchor and the popover.
 	 */
 	offset: PropTypes.number,
-};
-
-Popover.defaultProps = {
-	title: '',
-	placement: 'bottom-start',
-	resize: true,
-	shift: true,
-	flip: true,
-	animate: true,
-	onClose: () => {},
-	closeButton: true,
-	titleButtonsRight: '',
-	titleButtonsLeft: '',
 };

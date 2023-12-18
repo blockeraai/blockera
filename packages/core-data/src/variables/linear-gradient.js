@@ -5,19 +5,65 @@
 import { default as memoize } from 'fast-memoize';
 
 /**
+ * Publisher dependencies
+ */
+import { isBlockTheme, isUndefined } from '@publisher/utils';
+
+/**
  * Internal dependencies
  */
 import { getBlockEditorSettings } from './index';
 import type { VariableItem } from './types';
+import { getCurrentTheme } from '../index';
 
 const _getLinearGradients = function () {
+	let reference = {
+		type: 'preset',
+	};
+
+	if (isBlockTheme()) {
+		const {
+			name: { rendered: themeName },
+		} = getCurrentTheme();
+
+		reference = {
+			type: 'theme',
+			theme: themeName,
+		};
+
+		return getBlockEditorSettings()
+			?.__experimentalFeatures?.color?.gradients?.theme.filter((item) =>
+				item.gradient.startsWith('linear-gradient')
+			)
+			.map((item) => {
+				return {
+					name: item.name,
+					slug: item.slug,
+					value: item.gradient,
+					reference,
+				};
+			});
+	}
+
+	if (
+		isUndefined(
+			getBlockEditorSettings()?.__experimentalFeatures?.color?.gradients
+				?.default
+		)
+	) {
+		return [];
+	}
+
 	return getBlockEditorSettings()
-		.gradients.filter((item) => item.gradient.startsWith('linear-gradient'))
+		?.__experimentalFeatures?.color?.gradients?.default.filter((item) =>
+			item.gradient.startsWith('linear-gradient')
+		)
 		.map((item) => {
 			return {
 				name: item.name,
 				slug: item.slug,
 				value: item.gradient,
+				reference,
 			};
 		});
 };

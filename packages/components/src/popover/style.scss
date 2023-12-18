@@ -1,10 +1,10 @@
 .publisher-component-popover {
 	position: relative;
+	--popover-overflow: visible;
 	--popover-min-height: auto;
-	--popover-height: auto;
+	--popover-height: 430px;
 	--popover-width: 290px;
 	--popover-header-height: 42px;
-	--popover-overflow: visible;
 	overflow: var(--popover-overflow) !important;
 
 	.components-popover__content {
@@ -17,7 +17,7 @@
 		position: relative;
 		min-height: auto;
 		height: auto;
-		overflow: var(--popover-overflow) !important;
+		overflow: auto !important;
 	}
 
 	&.with-header {
@@ -28,7 +28,7 @@
 	}
 
 	.publisher-component-popover-header {
-		padding: 0 15px;
+		padding: 0 18px;
 		box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1882352941);
 		position: fixed;
 		top: 2px;
@@ -38,7 +38,7 @@
 		margin: 0;
 		height: var(--popover-header-height);
 		display: flex;
-		gap: 10px;
+		gap: 6px;
 		align-items: center;
 		font-weight: 500;
 		color: #1e1e1e;
@@ -50,6 +50,7 @@
 			padding: 0 !important;
 			min-width: 24px;
 			height: 24px;
+			--publisher-controls-border-color: var(--publisher-controls-border-color-soft);
 		}
 
 		.publisher-component-popover-title-buttons {
@@ -59,11 +60,6 @@
 
 			&.title-right-buttons {
 				margin-left: auto;
-
-				.publisher-component-button:first-child:last-child {
-					border-color: transparent;
-					box-shadow: inset 0 0 0 1px transparent;
-				}
 			}
 		}
 	}
@@ -73,5 +69,9 @@
 		min-height: calc(var(--popover-min-height) - var(--popover-header-height));
 		max-height: calc(var(--popover-height) - var(--popover-header-height));
 		overflow: var(--popover-overflow) !important;
+
+		& > :last-child {
+			padding-bottom: 18px;
+		}
 	}
 }

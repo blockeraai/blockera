@@ -95,8 +95,8 @@ const Fields = ({ itemId, item }) => {
 					})
 				}
 				aria-label={__('Shadow Color', 'publisher-core')}
-				controlAddonTypes={['variable', 'dynamic-value']}
-				variableTypes={['theme-color']}
+				controlAddonTypes={['variable']}
+				variableTypes={['color']}
 			/>
 		</div>
 	);

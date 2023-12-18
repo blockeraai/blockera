@@ -9,6 +9,7 @@ import type { MixedElement } from 'react';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
+import { isArray } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -16,15 +17,31 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
-import { isArray } from '@publisher/utils';
-import type { TFilterControlProps, TValueCleanUp } from './types';
+import type { FilterControlProps, TValueCleanUp } from './types';
+
 export default function FilterControl({
 	id,
-	defaultRepeaterItemValue,
-	popoverTitle,
+	defaultRepeaterItemValue = {
+		type: 'blur',
+		blur: '3px',
+		brightness: '200%',
+		contrast: '200%',
+		'hue-rotate': '45deg',
+		saturate: '200%',
+		grayscale: '100%',
+		invert: '100%',
+		sepia: '100%',
+		'drop-shadow-x': '10px',
+		'drop-shadow-y': '10px',
+		'drop-shadow-blur': '10px',
+		'drop-shadow-color': '',
+		isVisible: true,
+	},
+	popoverTitle = __('Filter Effect', 'publisher-core'),
 	className,
+	defaultValue = [],
 	...props
-}: TFilterControlProps): MixedElement {
+}: FilterControlProps): MixedElement {
 	function valueCleanup(value: TValueCleanUp) {
 		if (!isArray(value)) {
 			return value;
@@ -85,6 +102,7 @@ export default function FilterControl({
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
+			defaultValue={defaultValue}
 			{...props}
 			valueCleanup={valueCleanup}
 		/>
@@ -133,25 +151,4 @@ FilterControl.propTypes = {
 	 * Label for popover
 	 */
 	popoverTitle: PropTypes.string,
-};
-
-FilterControl.defaultProps = {
-	defaultValue: ([]: any),
-	defaultRepeaterItemValue: {
-		type: 'blur',
-		blur: '3px',
-		brightness: '200%',
-		contrast: '200%',
-		'hue-rotate': '45deg',
-		saturate: '200%',
-		grayscale: '100%',
-		invert: '100%',
-		sepia: '100%',
-		'drop-shadow-x': '10px',
-		'drop-shadow-y': '10px',
-		'drop-shadow-blur': '10px',
-		'drop-shadow-color': '',
-		isVisible: true,
-	},
-	popoverTitle: (__('Filter Effect', 'publisher-core'): any),
 };

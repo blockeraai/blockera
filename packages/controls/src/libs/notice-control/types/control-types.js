@@ -1,16 +1,17 @@
 // @flow
+/**
+ * Internal dependencies
+ */
+import type { ControlGeneralTypes } from '../../../types';
+
+export type NoticeControlType = 'information' | 'warning' | 'success' | 'error';
 
 export type TNoticeControlProps = {
-	label?: string,
-	field?: string,
-	columns?: string,
-	className?: string,
+	...ControlGeneralTypes,
 	onDismiss?: () => void,
 	showIcon?: boolean,
-	type: 'information' | 'warning' | 'success' | 'error',
-	children: string | any,
+	type: NoticeControlType,
 	isDismissible?: boolean,
 	onShown?: () => void,
 	isShown?: boolean,
-	style?: Object,
 };

@@ -1,9 +1,11 @@
 // @flow
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
+import PropTypes from 'prop-types';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -16,34 +18,39 @@ import { useValueAddon } from '@publisher/hooks';
  * Internal dependencies
  */
 import { BaseControl, ColorPickerControl } from '../index';
-import PropTypes from 'prop-types';
 import { useControlContext } from '../../context';
-import type { MixedElement } from 'react';
-import type { Props } from './types';
+import type { ColorControlProps } from './types';
 
 export default function ColorControl({
 	type = 'normal',
 	noBorder,
-	contentAlign,
+	contentAlign = 'left',
 	//
 	id,
 	label,
 	columns,
 	defaultValue,
 	onChange,
-	field,
+	field = 'color',
 	//
-	//
-	className,
+	className = '',
 	style,
 	//
 	controlAddonTypes,
 	variableTypes,
 	dynamicValueTypes,
+	size = 'normal',
 	//
 	...props
-}: Props): MixedElement {
-	const { value, setValue } = useControlContext({
+}: ColorControlProps): MixedElement {
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
@@ -62,6 +69,7 @@ export default function ColorControl({
 		variableTypes,
 		dynamicValueTypes,
 		onChange: setValue,
+		size,
 	});
 
 	if (isSetValueAddon()) {
@@ -71,6 +79,7 @@ export default function ColorControl({
 				columns={columns}
 				controlName={field}
 				className={className}
+				{...{ attribute, blockName, description, resetToDefault }}
 			>
 				<div
 					className={controlClassNames(
@@ -106,12 +115,14 @@ export default function ColorControl({
 			columns={columns}
 			controlName={field}
 			className={className + ' ' + valueAddonClassNames}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<Button
 				size="input"
 				className={controlClassNames(
 					'color',
 					'color-type-' + type,
+					'control-size' + size,
 					value ? 'is-not-empty' : 'is-empty',
 					className + ' ' + valueAddonClassNames
 				)}
@@ -195,11 +206,4 @@ ColorControl.propTypes = {
 	 * Function that will be fired while the control value state changes.
 	 */
 	onChange: PropTypes.func,
-};
-
-ColorControl.defaultProps = {
-	type: 'normal',
-	contentAlign: 'left',
-	field: 'color',
-	className: '',
 };

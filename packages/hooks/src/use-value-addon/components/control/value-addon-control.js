@@ -14,6 +14,7 @@ import {
 } from '@publisher/classnames';
 import { isUndefined } from '@publisher/utils';
 import { getVariable, getDynamicValue } from '@publisher/core-data';
+import { Tooltip } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -22,7 +23,7 @@ import type { ValueAddonControlProps } from './types';
 import { ValueAddonPointer } from './index';
 import { getDynamicValueIcon, getVariableIcon, isValid } from '../../helpers';
 import EmptyIcon from '../../icons/empty';
-import DeletedVariableIcon from '../../icons/deleted-variable';
+import DeletedIcon from '../../icons/deleted';
 
 export default function ({
 	classNames,
@@ -32,23 +33,25 @@ export default function ({
 	classNames?: string,
 	controlProps: ValueAddonControlProps,
 }): Element<any> {
-	let icon: Element<any> = <></>;
+	let icon: Element<any> = <EmptyIcon />;
 	let label = '';
 	let isDeleted = false;
 
 	if (isValid(controlProps.value)) {
 		if (controlProps.value.valueType === 'variable') {
-			const variable = getVariable(
+			const item = getVariable(
 				controlProps.value?.settings?.type,
 				controlProps.value?.settings?.slug
 			);
 
-			if (isUndefined(variable?.value)) {
+			if (isUndefined(item?.value)) {
 				isDeleted = true;
-				label = __('Deleted Variable', 'publisher-core');
-				icon = <DeletedVariableIcon />;
+				label = __('Missing Variable', 'publisher-core');
+				icon = <DeletedIcon />;
 			} else {
-				label = controlProps.value?.settings?.name;
+				label = !isUndefined(item?.name)
+					? item?.name
+					: controlProps.value?.settings?.name;
 				icon = getVariableIcon({
 					type: controlProps.value?.settings?.type,
 					value: controlProps.value?.settings?.value,
@@ -60,59 +63,75 @@ export default function ({
 				controlProps.value.id
 			);
 
-			label = !isUndefined(item?.name) ? item.name : '';
-			icon = getDynamicValueIcon(controlProps.value?.settings?.type);
-		} else {
-			icon = <EmptyIcon />;
+			if (isUndefined(item?.id)) {
+				isDeleted = true;
+				label = __('Missing Item', 'publisher-core');
+				icon = <DeletedIcon />;
+			} else {
+				label = !isUndefined(item?.name)
+					? item?.name
+					: controlProps.value?.settings?.name;
+				icon = getDynamicValueIcon(controlProps.value?.settings?.type);
+			}
 		}
-	} else {
-		icon = <EmptyIcon />;
+	}
+
+	let isIconActive = true;
+	if (controlProps.size === 'small') {
+		isIconActive = !isValid(controlProps.value);
 	}
 
 	return (
 		<>
-			<div
-				className={controlClassNames(
-					'value-addon',
-					'type-' + (controlProps.value?.valueType || 'unknown'),
-					isDeleted && 'type-variable-deleted',
-					['var-picker', 'var-deleted'].includes(
-						controlProps.isOpen
-					) && 'open-value-addon type-variable',
-					[
-						'dv-picker',
-						'dv-settings',
-						'dv-settings-advanced',
-					].includes(controlProps.isOpen) &&
-						'open-value-addon type-dynamic-value',
-					classNames
-				)}
-				onClick={(event) => {
-					switch (controlProps.value?.valueType) {
-						case 'variable':
-							if (isDeleted) {
-								controlProps.setOpen('var-deleted');
-							} else {
-								controlProps.setOpen('var-picker');
-							}
-							event.preventDefault();
-							break;
-						case 'dynamic-value':
-							controlProps.setOpen('dv-settings');
-							event.preventDefault();
-							break;
-					}
-				}}
-				{...props}
+			<Tooltip
+				text={
+					controlProps.value?.valueType === 'variable'
+						? __('Change Variable', 'publisher-core')
+						: __('Change Dynamic Value', 'publisher-core')
+				}
 			>
-				{icon && (
-					<span className={controlInnerClassNames('item-icon')}>
-						{icon}
-					</span>
-				)}
+				<div
+					className={controlClassNames(
+						'value-addon',
+						'type-' + (controlProps.value?.valueType || 'unknown'),
+						'value-addon-size-' + controlProps.size,
+						isIconActive && 'value-addon-with-icon',
+						isDeleted && 'type-deleted',
+						controlProps.isOpen.startsWith('var-') &&
+							'open-value-addon type-variable',
+						controlProps.isOpen.startsWith('dv-') &&
+							'open-value-addon type-dynamic-value',
+						classNames
+					)}
+					onClick={(event) => {
+						switch (controlProps.value?.valueType) {
+							case 'variable':
+								controlProps.setOpen(
+									isDeleted ? 'var-deleted' : 'var-picker'
+								);
+								event.preventDefault();
+								break;
+							case 'dynamic-value':
+								controlProps.setOpen(
+									isDeleted ? 'dv-deleted' : 'dv-settings'
+								);
+								event.preventDefault();
+								break;
+						}
+					}}
+					{...props}
+				>
+					{isIconActive && (
+						<span className={controlInnerClassNames('item-icon')}>
+							{icon}
+						</span>
+					)}
 
-				<span className={controlClassNames('item-name')}>{label}</span>
-			</div>
+					<span className={controlClassNames('item-name')}>
+						{label}
+					</span>
+				</div>
+			</Tooltip>
 			<ValueAddonPointer controlProps={controlProps} />
 		</>
 	);

@@ -1,6 +1,6 @@
 // @flow
 
-export type Props = {
+export type IconControlProps = {
 	suggestionsQuery: string | (() => void),
 	//
 	label: string,

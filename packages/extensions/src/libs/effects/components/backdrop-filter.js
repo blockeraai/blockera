@@ -37,6 +37,8 @@ export const BackdropFilter = ({
 			value={{
 				name: generateExtensionId(block, 'backdrop-filters'),
 				value: backdropFilter,
+				attribute: 'publisherBackdropFilter',
+				blockName: block.blockName,
 			}}
 			storeName={'publisher-core/controls/repeater'}
 		>

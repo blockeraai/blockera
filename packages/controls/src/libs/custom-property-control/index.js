@@ -18,17 +18,27 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
-import type { TCustomPropertyControlProps } from './types';
+import type { CustomPropertyControlProps } from './types';
 import PropertyIcon from './icons/property';
 
 export default function CustomPropertyControl({
 	id,
-	defaultRepeaterItemValue,
-	popoverTitle,
+	defaultRepeaterItemValue = {
+		name: '',
+		value: '',
+		isVisible: true,
+	},
+	popoverTitle = (
+		<>
+			<PropertyIcon />
+			{__('CSS Property', 'publisher-core')}
+		</>
+	),
+	defaultValue = [],
 	//
 	className,
 	...props
-}: TCustomPropertyControlProps): MixedElement {
+}: CustomPropertyControlProps): MixedElement {
 	return (
 		<RepeaterControl
 			id={id}
@@ -38,6 +48,7 @@ export default function CustomPropertyControl({
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			className={controlClassNames('custom-property', className)}
+			defaultValue={defaultValue}
 			{...props}
 		/>
 	);
@@ -68,19 +79,4 @@ CustomPropertyControl.propTypes = {
 	 * Label for popover
 	 */
 	popoverTitle: PropTypes.string,
-};
-
-CustomPropertyControl.defaultProps = {
-	defaultValue: ([]: any),
-	defaultRepeaterItemValue: {
-		name: '',
-		value: '',
-		isVisible: true,
-	},
-	popoverTitle: ((
-		<>
-			<PropertyIcon />
-			{__('CSS Property', 'publisher-core')}
-		</>
-	): any),
 };

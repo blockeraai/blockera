@@ -16,8 +16,11 @@ const _getOtherDVItems = function (): Array<DynamicValueItem> {
 			name: __('Current Date', 'publisher-core'),
 			id: 'date',
 			type: 'date',
-			status: 'free',
+			status: 'core',
 			category: 'other',
+			reference: {
+				type: 'core',
+			},
 		},
 		{
 			name: __('Shortcode', 'publisher-core'),
@@ -25,6 +28,9 @@ const _getOtherDVItems = function (): Array<DynamicValueItem> {
 			type: 'shortcode',
 			status: 'soon',
 			category: 'other',
+			reference: {
+				type: 'core',
+			},
 		},
 		{
 			name: __('Request Parameter', 'publisher-core'),
@@ -32,6 +38,9 @@ const _getOtherDVItems = function (): Array<DynamicValueItem> {
 			type: 'text',
 			status: 'soon',
 			category: 'other',
+			reference: {
+				type: 'core',
+			},
 		},
 	];
 };
@@ -56,7 +65,7 @@ export const getOtherDynamicValueItem = (types: string): ?DynamicValueItem => {
 const _getOtherDVItemsBy = function (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): ?Array<DynamicValueItem> | void {
+): ?Array<DynamicValueItem> {
 	return getOtherDynamicValueItems().filter((item) => {
 		if (field === 'type') {
 			if (value.includes('all')) {
@@ -75,6 +84,6 @@ const _getOtherDVItemsByMemoized = memoize(_getOtherDVItemsBy);
 export const getOtherDynamicValueItemsBy = (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): Array<DynamicValueItem> | void => {
+): Array<DynamicValueItem> => {
 	return _getOtherDVItemsByMemoized(field, value);
 };

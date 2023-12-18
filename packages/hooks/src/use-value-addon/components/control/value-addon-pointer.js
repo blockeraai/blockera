@@ -22,9 +22,10 @@ import RemoveIcon from '../../icons/remove';
 import {
 	DVPicker,
 	DVSettings,
+	DVDeleted,
+	DVSettingsAdvanced,
 	VarPicker,
 	VarDeleted,
-	DVSettingsAdvanced,
 } from '../index';
 import type { ValueAddonControlProps } from './types';
 
@@ -54,9 +55,8 @@ export default function ({
 						'value-addon-pointer',
 						'dv-pointer',
 						isDVActive && 'active-value-addon',
-						['dv-picker', 'dv-settings'].includes(
-							controlProps.isOpen
-						) && 'open-value-addon'
+						controlProps.isOpen.startsWith('dv-') &&
+							'open-value-addon'
 					)}
 					onClick={handleDynamicValueModal}
 				>
@@ -77,9 +77,8 @@ export default function ({
 						'value-addon-pointer',
 						'var-pointer',
 						isVarActive && 'active-value-addon',
-						['var-picker', 'var-deleted'].includes(
-							controlProps.isOpen
-						) && 'open-value-addon'
+						controlProps.isOpen.startsWith('var-') &&
+							'open-value-addon'
 					)}
 					onClick={handleVariableModal}
 				>
@@ -135,6 +134,11 @@ export default function ({
 			{controlProps.isOpen === 'dv-settings-advanced' &&
 				controlProps.types.includes('dynamic-value') && (
 					<DVSettingsAdvanced controlProps={controlProps} />
+				)}
+
+			{controlProps.isOpen === 'dv-deleted' &&
+				controlProps.types.includes('dynamic-value') && (
+					<DVDeleted controlProps={controlProps} />
 				)}
 
 			<MappedPointers

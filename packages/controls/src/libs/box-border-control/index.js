@@ -20,23 +20,53 @@ import { Button } from '@publisher/components';
 import { useControlContext } from '../../context';
 import { default as CustomIcon } from './icons/custom';
 import { BaseControl, BorderControl, LabelControl } from '../index';
-import type { TBoxBorderControl, TValueTypes } from './types';
+import type { BoxBorderControlProps, TValueTypes } from './types';
 
 export default function BoxBorderControl({
 	id,
-	label,
-	defaultValue,
+	label = '',
+	defaultValue = {
+		type: 'all',
+		all: {
+			width: '0px',
+			style: 'solid',
+			color: '',
+		},
+		left: {
+			width: '0px',
+			style: 'solid',
+			color: '',
+		},
+		right: {
+			width: '0px',
+			style: 'solid',
+			color: '',
+		},
+		top: {
+			width: '0px',
+			style: 'solid',
+			color: '',
+		},
+		bottom: {
+			width: '0px',
+			style: 'solid',
+			color: '',
+		},
+	},
 	onChange,
 	//
 	columns,
-	field,
-	//
+	field = 'box-border',
 	//
 	className,
-}: TBoxBorderControl): MixedElement {
+}: BoxBorderControlProps): MixedElement {
 	const {
 		value,
 		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
 		controlInfo: { name: controlId },
 		dispatch: { modifyControlValue },
 	} = useControlContext({
@@ -70,7 +100,15 @@ export default function BoxBorderControl({
 				<div className={controlInnerClassNames('border-header')}>
 					{label && (
 						<div className={controlInnerClassNames('label')}>
-							<LabelControl label={label} />
+							<LabelControl
+								label={label}
+								{...{
+									attribute,
+									blockName,
+									description,
+									resetToDefault,
+								}}
+							/>
 						</div>
 					)}
 
@@ -313,37 +351,4 @@ BoxBorderControl.propTypes = {
 	 * Function that will be fired while the control value state changes.
 	 */
 	onChange: PropTypes.func,
-};
-
-BoxBorderControl.defaultProps = {
-	label: '',
-	field: 'box-border',
-	defaultValue: {
-		type: 'all',
-		all: {
-			width: '0px',
-			style: 'solid',
-			color: '',
-		},
-		left: {
-			width: '0px',
-			style: 'solid',
-			color: '',
-		},
-		right: {
-			width: '0px',
-			style: 'solid',
-			color: '',
-		},
-		top: {
-			width: '0px',
-			style: 'solid',
-			color: '',
-		},
-		bottom: {
-			width: '0px',
-			style: 'solid',
-			color: '',
-		},
-	},
 };

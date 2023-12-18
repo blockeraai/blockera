@@ -1,4 +1,5 @@
 // @flow
+import type { RepeaterControlProps } from '../../repeater-control/types';
 
 export type TItem = {
 	type: 'outer' | 'inner',
@@ -10,11 +11,7 @@ export type TItem = {
 	isVisible: boolean,
 };
 
-export type TBoxShadowControlProps = {
-	id?: string,
+export type BoxShadowControlProps = {
+	...RepeaterControlProps,
 	defaultRepeaterItemValue?: TItem,
-	popoverTitle?: string,
-	className?: string,
-	defaultValue?: Array<Object>,
-	onChange?: () => {},
 };

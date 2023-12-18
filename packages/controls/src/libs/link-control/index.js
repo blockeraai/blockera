@@ -5,6 +5,7 @@
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import PropTypes from 'prop-types';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -27,31 +28,39 @@ import {
 	AttributesControl,
 } from '../index';
 import { ControlContextProvider, useControlContext } from '../../context';
-/**
- * types
- */
-import type { MixedElement } from 'react';
-import type { TLinkControlProps } from './types/link-control-props';
+import type { LinkControlProps } from './types';
+import { linkControlValueCleaner } from './utils';
 
 export default function LinkControl({
 	label,
 	columns,
-	field,
+	field = 'link',
 	onChange,
 	className,
-	placeholder,
+	placeholder = 'https://your-link.com',
 	attributesId = 'link-control-attributes',
-	defaultValue,
-	advancedOpen,
-}: TLinkControlProps): MixedElement {
+	defaultValue = {
+		link: '',
+		target: false,
+		nofollow: false,
+		label: '',
+		attributes: [],
+	},
+	advancedOpen = 'auto',
+}: LinkControlProps): MixedElement {
 	const {
 		controlInfo: { name: controlId },
 		value,
 		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
 	} = useControlContext({
 		onChange,
 		defaultValue,
 		mergeInitialAndDefault: true,
+		valueCleanup: linkControlValueCleaner,
 	});
 
 	const [isAdvancedMode, setIsAdvancedMode] = useState(
@@ -71,6 +80,7 @@ export default function LinkControl({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<div className={controlClassNames('link', className)}>
 				<div className={controlInnerClassNames('link-row-link')}>
@@ -162,7 +172,6 @@ export default function LinkControl({
 									});
 								}}
 								attributeElement="a"
-								isPopover={true}
 								label={__('Attributes', 'publisher-core')}
 							/>
 						</ControlContextProvider>
@@ -213,19 +222,4 @@ LinkControl.propTypes = {
 	 * link input placeholder text
 	 */
 	placeholder: PropTypes.string,
-};
-// $FlowFixMe
-LinkControl.defaultProps = {
-	attributesId: 'link-control-attributes',
-	placeholder: 'https://your-link.com',
-	advancedOpen: 'auto',
-	defaultValue: {
-		link: '',
-		target: false,
-		nofollow: false,
-		label: '',
-		// $FlowFixMe
-		attributes: [],
-	},
-	field: 'link',
 };

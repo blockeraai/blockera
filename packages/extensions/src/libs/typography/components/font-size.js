@@ -33,6 +33,8 @@ export const FontSize = ({
 			value={{
 				name: generateExtensionId(block, 'font-size'),
 				value,
+				attribute: 'publisherFontSize',
+				blockName: block.blockName,
 			}}
 		>
 			<InputControl
@@ -46,20 +48,11 @@ export const FontSize = ({
 				max={200}
 				defaultValue={defaultValue}
 				onChange={(newValue) =>
-					onChange(
-						'publisherFontSize',
-						newValue,
-						'',
-						(
-							attributes: Object,
-							setAttributes: (attributes: Object) => void
-						) => {
-							setAttributes({
-								...attributes,
-								fontSize: undefined,
-							});
-						}
-					)
+					onChange('publisherFontSize', newValue, {
+						addOrModifyRootItems: {
+							fontSize: undefined,
+						},
+					})
 				}
 				controlAddonTypes={['variable']}
 				variableTypes={['font-size']}

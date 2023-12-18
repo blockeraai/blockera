@@ -126,6 +126,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											'width'
 										),
 										value: width,
+										attribute: 'publisherWidth',
+										blockName: block.blockName,
 									}}
 								>
 									<InputControl
@@ -139,39 +141,34 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										}
 										placeholder="0"
 										unitType="width"
-										min="0"
+										min={0}
 										defaultValue={_width}
-										smallWidth={
+										size={
 											isHeightActive &&
 											lengthOfActiveFields > 2
+												? 'small'
+												: 'normal'
 										}
-										onChange={(newValue) =>
-											handleOnChangeAttributes(
-												'publisherWidth',
-												newValue,
-												'',
-												(
-													attributes: Object,
-													setAttributes: (
-														attributes: Object
-													) => void
-												): void => {
-													// do not sync if unit type is func
-													if (
-														isString(newValue) &&
-														!newValue.endsWith(
-															'func'
-														)
-													)
-														setAttributes({
-															...attributes,
+										onChange={(newValue) => {
+											const toWPCompatible =
+												isString(newValue) &&
+												!newValue.endsWith('func')
+													? {
 															width: convertToPercent(
 																newValue
 															),
-														});
+													  }
+													: {};
+
+											handleOnChangeAttributes(
+												'publisherWidth',
+												newValue,
+												{
+													addOrModifyRootItems:
+														toWPCompatible,
 												}
-											)
-										}
+											);
+										}}
 										{...props}
 										controlAddonTypes={['variable']}
 										variableTypes={['width-size']}
@@ -187,6 +184,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											'minWidth'
 										),
 										value: minWidth,
+										attribute: 'publisherMinWidth',
+										blockName: block.blockName,
 									}}
 								>
 									<InputControl
@@ -200,10 +199,12 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										}
 										placeholder="0"
 										unitType="min-width"
-										min="0"
-										smallWidth={
+										min={0}
+										size={
 											isHeightActive &&
 											lengthOfActiveFields > 2
+												? 'small'
+												: 'normal'
 										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
@@ -226,6 +227,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											'maxWidth'
 										),
 										value: maxWidth,
+										attribute: 'publisherMaxWidth',
+										blockName: block.blockName,
 									}}
 								>
 									<InputControl
@@ -239,10 +242,12 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										}
 										placeholder="0"
 										unitType="max-width"
-										min="0"
-										smallWidth={
+										min={0}
+										size={
 											isHeightActive &&
 											lengthOfActiveFields > 2
+												? 'small'
+												: 'normal'
 										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
@@ -277,6 +282,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											'height'
 										),
 										value: height,
+										attribute: 'publisherHeight',
+										blockName: block.blockName,
 									}}
 								>
 									<InputControl
@@ -290,39 +297,34 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										}
 										placeholder="0"
 										unitType="height"
-										min="0"
+										min={0}
 										defaultValue={_height}
-										smallWidth={
+										size={
 											isWidthActive &&
 											lengthOfActiveFields > 2
+												? 'small'
+												: 'normal'
 										}
-										onChange={(newValue) =>
-											handleOnChangeAttributes(
-												'publisherHeight',
-												newValue,
-												'',
-												(
-													attributes: Object,
-													setAttributes: (
-														attributes: Object
-													) => void
-												): void => {
-													// do not sync if unit type is func
-													if (
-														isString(newValue) &&
-														!newValue.endsWith(
-															'func'
-														)
-													)
-														setAttributes({
-															...attributes,
+										onChange={(newValue) => {
+											const toWPCompatible =
+												isString(newValue) &&
+												!newValue.endsWith('func')
+													? {
 															height: convertToPercent(
 																newValue
 															),
-														});
+													  }
+													: {};
+
+											handleOnChangeAttributes(
+												'publisherHeight',
+												newValue,
+												{
+													addOrModifyRootItems:
+														toWPCompatible,
 												}
-											)
-										}
+											);
+										}}
 										{...props}
 										controlAddonTypes={['variable']}
 										variableTypes={['width-size']}
@@ -338,6 +340,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											'minHeight'
 										),
 										value: minHeight,
+										attribute: 'publisherMinHeight',
+										blockName: block.blockName,
 									}}
 								>
 									<InputControl
@@ -351,10 +355,12 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										}
 										placeholder="0"
 										unitType="min-height"
-										min="0"
-										smallWidth={
+										min={0}
+										size={
 											isWidthActive &&
 											lengthOfActiveFields > 2
+												? 'small'
+												: 'normal'
 										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
@@ -377,6 +383,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											'maxHeight'
 										),
 										value: maxHeight,
+										attribute: 'publisherMaxHeight',
+										blockName: block.blockName,
 									}}
 								>
 									<InputControl
@@ -390,10 +398,12 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										}
 										placeholder="0"
 										unitType="max-height"
-										min="0"
-										smallWidth={
+										min={0}
+										size={
 											isWidthActive &&
 											lengthOfActiveFields > 2
+												? 'small'
+												: 'normal'
 										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
@@ -416,6 +426,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 						value={{
 							name: generateExtensionId(block, 'overflow'),
 							value: overflow,
+							attribute: 'publisherOverflow',
+							blockName: block.blockName,
 						}}
 					>
 						<ToggleSelectControl
@@ -467,6 +479,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 							name: generateExtensionId(block, 'ratio'),
 							value: ratio,
 							type: 'nested',
+							attribute: 'publisherRatio',
+							blockName: block.blockName,
 						}}
 					>
 						<BaseControl
@@ -607,6 +621,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 						value={{
 							name: generateExtensionId(block, 'fit'),
 							value: fit,
+							attribute: 'publisherFit',
+							blockName: block.blockName,
 						}}
 					>
 						<BaseControl
@@ -669,6 +685,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 												fitPosition
 											)?.compact,
 									},
+									attribute: 'publisherFitPosition',
+									blockName: block.blockName,
 								}}
 							>
 								<PositionButtonControl

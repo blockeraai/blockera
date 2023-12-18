@@ -199,7 +199,6 @@ const Fields: FieldItem = memo<FieldItem>(
 										label={__('Width', 'publisher-core')}
 										columns="columns-1"
 										className="control-first label-center small-gap"
-										type="css"
 										unitType="background-size"
 										id={getControlId(
 											itemId,
@@ -216,7 +215,7 @@ const Fields: FieldItem = memo<FieldItem>(
 												},
 											})
 										}
-										smallWidth={true}
+										size="small"
 										controlAddonTypes={['variable']}
 										variableTypes={['width-size']}
 									/>
@@ -225,7 +224,6 @@ const Fields: FieldItem = memo<FieldItem>(
 										label={__('Height', 'publisher-core')}
 										columns="columns-1"
 										className="control-first label-center small-gap"
-										type="css"
 										unitType="background-size"
 										id={getControlId(
 											itemId,
@@ -242,7 +240,7 @@ const Fields: FieldItem = memo<FieldItem>(
 												},
 											})
 										}
-										smallWidth={true}
+										size="small"
 										controlAddonTypes={['variable']}
 										variableTypes={['width-size']}
 									/>
@@ -349,7 +347,7 @@ const Fields: FieldItem = memo<FieldItem>(
 							label=""
 							field="empty"
 							id={getControlId(itemId, '[linear-gradient]')}
-							onChange={(newValue) => {
+							onChange={(newValue: string) => {
 								changeRepeaterItem({
 									controlId,
 									repeaterId,
@@ -373,7 +371,7 @@ const Fields: FieldItem = memo<FieldItem>(
 								isValidVariable(item['linear-gradient']) &&
 								'publisher-control-is-not-active'
 							}
-							onChange={(newValue) => {
+							onChange={(newValue: string) => {
 								// update linear gradient value
 								changeRepeaterItem({
 									controlId,

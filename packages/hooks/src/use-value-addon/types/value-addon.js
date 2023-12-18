@@ -8,6 +8,7 @@ import type {
 	VariableCategory,
 	DynamicValueItem,
 	DynamicValueCategory,
+	ValueAddonReferenceType,
 } from '@publisher/core-data';
 
 /**
@@ -22,7 +23,7 @@ export type ValueAddon = {
 		var?: string,
 		slug?: string,
 		type: VariableCategory | DynamicValueCategory,
-		reference?: 'preset' | 'custom',
+		reference?: ValueAddonReferenceType,
 		prepend?: string,
 		append?: string,
 		limit?: string,
@@ -33,12 +34,12 @@ export type ValueAddon = {
 
 export type VariableCategoryDetail = {
 	name?: string,
-	variables?: Array<VariableItem> | void,
+	variables: Array<VariableItem> | [],
 	notFound?: boolean,
 };
 
 export type DynamicValueCategoryDetail = {
 	name?: DynamicValueCategory | '',
-	items?: Array<DynamicValueItem> | void,
+	items: Array<DynamicValueItem> | [],
 	notFound?: boolean,
 };

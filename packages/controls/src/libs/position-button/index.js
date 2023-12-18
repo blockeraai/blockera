@@ -29,13 +29,23 @@ export default function PositionButtonControl({
 	alignmentMatrixLabel,
 	id,
 	onChange,
-	defaultValue,
+	defaultValue = {
+		top: '',
+		left: '',
+	},
 	columns,
 	field,
 	className,
 	...props
 }: TPositionButtonProps): MixedElement {
-	const { value, setValue } = useControlContext({
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
@@ -49,6 +59,7 @@ export default function PositionButtonControl({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<Button
 				label={buttonLabel}

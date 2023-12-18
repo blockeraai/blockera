@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -9,11 +10,12 @@ import {
 	useRef,
 	useState,
 } from '@wordpress/element';
+import type { Element } from 'react';
 
 /**
  * Publisher dependencies
  */
-import { isBoolean } from '@publisher/utils';
+import { isBoolean, isFunction } from '@publisher/utils';
 import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
@@ -24,8 +26,12 @@ import { RepeaterContext } from '../context';
 import { isOpenPopoverEvent } from '../utils';
 import GroupControl from '../../group-control';
 import { useControlContext } from '../../../context';
+import type { RepeaterItemProps } from '../types';
 
-const RepeaterItem = ({ item, itemId }) => {
+const RepeaterItem = ({
+	item,
+	itemId,
+}: RepeaterItemProps): null | Element<any> => {
 	const [isOpen, setOpen] = useState(
 		isBoolean(item?.isOpen) ? item?.isOpen : false
 	);
@@ -35,16 +41,18 @@ const RepeaterItem = ({ item, itemId }) => {
 
 	const {
 		controlInfo: { name: controlId },
-		dispatch,
+		dispatch: { sortRepeaterItem, modifyControlValue },
 	} = useControlContext();
 
 	const {
 		mode,
 		design,
+		onSelect,
 		repeaterId,
 		popoverTitle,
 		popoverClassName,
 		repeaterItems: items,
+		repeaterItemOpener: RepeaterItemOpener,
 		repeaterItemHeader: RepeaterItemHeader,
 		repeaterItemChildren: RepeaterItemChildren,
 	} = useContext(RepeaterContext);
@@ -68,40 +76,50 @@ const RepeaterItem = ({ item, itemId }) => {
 		};
 	}, [draggingIndex, itemId]);
 
-	const handleDragStart = (e, index) => {
-		e.dataTransfer.setData('text/plain', index);
-		setDraggingIndex(index);
+	const handleDragStart = (e: DragEvent, index: number) => {
+		if (e.dataTransfer) {
+			e.dataTransfer.setData('text/plain', index.toString());
+			setDraggingIndex(index);
+		}
 	};
 
-	const handleDragOver = (e) => {
+	const handleDragOver = (e: MouseEvent) => {
 		e.preventDefault();
 	};
 
-	const handleDragLeave = (e) => {
+	const handleDragLeave = (e: MouseEvent) => {
 		e.preventDefault();
 	};
 
-	const handleDragEnter = (e) => {
+	const handleDragEnter = (e: MouseEvent) => {
 		e.preventDefault();
 	};
 
-	const handleDrop = (e, index) => {
+	const handleDrop = (e: DragEvent, index: number) => {
 		e.preventDefault();
 
-		setDraggingIndex(index);
+		if (e.dataTransfer) {
+			setDraggingIndex(index);
 
-		const toIndex = index;
-		const { sortRepeaterItem } = dispatch;
-		const fromIndex = parseInt(e.dataTransfer.getData('text/plain'), 10);
+			const toIndex = index;
+			const fromIndex = parseInt(
+				e.dataTransfer?.getData('text/plain'),
+				10
+			);
 
-		sortRepeaterItem({
-			controlId,
-			items,
-			fromIndex,
-			toIndex,
-			repeaterId,
-		});
+			sortRepeaterItem({
+				controlId,
+				items,
+				fromIndex,
+				toIndex,
+				repeaterId,
+			});
+		}
 	};
+
+	if (!item?.display) {
+		return null;
+	}
 
 	return (
 		<div
@@ -120,14 +138,23 @@ const RepeaterItem = ({ item, itemId }) => {
 			style={styleRef.current}
 		>
 			<GroupControl
-				mode={mode}
+				mode={
+					isFunction(RepeaterItemChildren?.getMode)
+						? RepeaterItemChildren.getMode(item, itemId)
+						: mode
+				}
 				toggleOpenBorder={true}
 				design={design}
 				popoverTitle={popoverTitle}
 				popoverClassName={popoverClassName}
 				className={controlInnerClassNames(
 					'repeater-item-group',
-					item?.__className
+					item?.__className,
+					{
+						'is-selected-item': item.selectable
+							? item.isSelected
+							: false,
+					}
 				)}
 				header={
 					!RepeaterItemHeader ? (
@@ -154,18 +181,61 @@ const RepeaterItem = ({ item, itemId }) => {
 						<RepeaterItemHeader {...repeaterItemActionsProps} />
 					)
 				}
-				headerOpenButton={false}
+				headerOpenIcon={
+					RepeaterItemOpener && (
+						<RepeaterItemOpener {...repeaterItemActionsProps} />
+					)
+				}
+				headerOpenButton={
+					RepeaterItemOpener?.hasButton
+						? RepeaterItemOpener.hasButton(item, itemId)
+						: false
+				}
 				injectHeaderButtonsStart={
-					<RepeaterItemActions {...repeaterItemActionsProps} />
+					<RepeaterItemActions
+						item={repeaterItemActionsProps.item}
+						itemId={repeaterItemActionsProps.itemId}
+						isVisible={repeaterItemActionsProps.isVisible}
+						setVisibility={repeaterItemActionsProps.setVisibility}
+					/>
 				}
 				children={<RepeaterItemChildren {...{ item, itemId }} />}
 				isOpen={isOpen}
 				onClose={() => {
 					setOpen(false);
 				}}
+				onClick={(event): boolean => {
+					if (item.selectable) {
+						const newItems = items.map((_item, _itemId) => {
+							if (_itemId === itemId) {
+								return {
+									..._item,
+									isSelected: true,
+								};
+							}
+
+							return {
+								..._item,
+								isSelected: false,
+							};
+						});
+
+						modifyControlValue({
+							controlId,
+							value: newItems,
+						});
+
+						return isFunction(onSelect)
+							? onSelect(event, item)
+							: false;
+					}
+
+					return true;
+				}}
 			/>
 		</div>
 	);
 };
 
-export default memo(RepeaterItem);
+// $FlowFixMe
+export default memo<RepeaterItemProps>(RepeaterItem);

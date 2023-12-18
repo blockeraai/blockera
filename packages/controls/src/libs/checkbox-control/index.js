@@ -16,7 +16,7 @@ import { controlClassNames } from '@publisher/classnames';
 import BaseControl from '../base-control';
 import { useControlContext } from '../../context';
 import type { MixedElement } from 'react';
-import type { Props } from './types';
+import type { CheckboxControlProps } from './types';
 
 export default function CheckboxControl({
 	checkboxLabel,
@@ -24,14 +24,21 @@ export default function CheckboxControl({
 	id,
 	label,
 	columns,
-	defaultValue,
+	defaultValue = false,
 	onChange,
-	field,
+	field = 'checkbox',
 	//
 	className,
 	...props
-}: Props): MixedElement {
-	const { value, setValue } = useControlContext({
+}: CheckboxControlProps): MixedElement {
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
@@ -43,6 +50,7 @@ export default function CheckboxControl({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<WPCheckboxControl
 				className={controlClassNames('checkbox', className)}
@@ -93,9 +101,4 @@ CheckboxControl.propTypes = {
 	 * Function that will be fired while the control value state changes.
 	 */
 	onChange: PropTypes.func,
-};
-
-CheckboxControl.defaultProps = {
-	defaultValue: false,
-	field: 'checkbox',
 };

@@ -629,6 +629,44 @@ export const NumberInput = {
 						drag={false}
 					/>
 				</ControlContextProvider>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 0,
+					}}
+				>
+					<p>Range + Small Size → Should hide range</p>
+					<div style={{ width: '100px' }}>
+						<ControlWithHooks
+							Control={InputControl}
+							label=""
+							{...args}
+							range={true}
+							arrows={true}
+							type="number"
+							size="small"
+						/>
+					</div>
+				</ControlContextProvider>
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: 0,
+					}}
+				>
+					<p>Arrows + Extra Small Size → Should hide arrows</p>
+					<div style={{ width: '50px' }}>
+						<ControlWithHooks
+							Control={InputControl}
+							label=""
+							{...args}
+							range={true}
+							arrows={true}
+							type="number"
+							size="extra-small"
+						/>
+					</div>
+				</ControlContextProvider>
 			</Flex>
 		</Flex>
 	),
@@ -776,6 +814,9 @@ export const CssInput = {
 					value: 'calc(20px + 12px)func',
 				}}
 			>
+				<h2 className="story-heading">
+					Size<span>small</span>
+				</h2>
 				<div
 					style={{
 						width: '100px',
@@ -787,7 +828,7 @@ export const CssInput = {
 						range={true}
 						unitType="general"
 						label="Advanced (Small)"
-						smallWidth={true}
+						size="small"
 					/>
 				</div>
 				<div
@@ -801,7 +842,7 @@ export const CssInput = {
 						range={true}
 						unitType="general"
 						label="Advanced (Small)"
-						smallWidth={true}
+						size="small"
 					/>
 				</div>
 			</ControlContextProvider>
@@ -1156,7 +1197,7 @@ export const CssInput = {
 	),
 };
 
-export const ValueAddon = {
+export const ValueAddonSupport = {
 	args: {
 		controlInfo: {
 			name: nanoid(),
@@ -1169,9 +1210,7 @@ export const ValueAddon = {
 	render: (args) => (
 		<Flex direction="column" gap="50px">
 			<Flex direction="column" gap="15px">
-				<h2 className="story-heading">
-					Value Addon<span>Variable</span>
-				</h2>
+				<h2 className="story-heading">Value Addon</h2>
 
 				<ControlContextProvider
 					value={{
@@ -1186,8 +1225,8 @@ export const ValueAddon = {
 						{...args}
 						defaultValue=""
 						controlAddonTypes={['variable', 'dynamic-value']}
-						variableTypes={['font-size']}
-						dynamicValueTypes={['TEXT']}
+						variableTypes={['font-size', 'spacing']}
+						dynamicValueTypes={['text']}
 					/>
 				</ControlContextProvider>
 
@@ -1197,10 +1236,12 @@ export const ValueAddon = {
 						value: {
 							settings: {
 								name: 'Medium',
-								size: 20,
+								value: 20,
 								slug: 'medium',
-								reference: 'preset',
-								var: 'var:preset|font-size|medium',
+								reference: {
+									type: 'preset',
+								},
+								var: '--wp--preset--font-size--medium',
 								type: 'font-size',
 							},
 							id: 'medium',
@@ -1216,13 +1257,38 @@ export const ValueAddon = {
 						{...args}
 						defaultValue=""
 						controlAddonTypes={['variable', 'dynamic-value']}
-						variableTypes={[
-							'font-size',
-							'width-size',
-							'spacing',
-							'gradient',
-						]}
-						dynamicValueTypes={['TEXT']}
+						variableTypes={['font-size']}
+						dynamicValueTypes={['all']}
+					/>
+				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: {
+							settings: {
+								name: 'Post Title',
+								id: 'post-title',
+								reference: {
+									type: 'core',
+								},
+								category: 'post',
+								type: 'text',
+							},
+							id: 'post-title',
+							isValueAddon: true,
+							valueType: 'dynamic-value',
+						},
+					}}
+				>
+					<ControlWithHooks
+						Control={InputControl}
+						type="text"
+						label="Post Title"
+						{...args}
+						defaultValue=""
+						controlAddonTypes={['dynamic-value']}
+						dynamicValueTypes={['all']}
 					/>
 				</ControlContextProvider>
 			</Flex>
@@ -1247,7 +1313,22 @@ export const PlayNumber = {
 		WithControlDataProvider,
 		...SharedDecorators,
 	],
-	render: (args) => <ControlWithHooks Control={InputControl} {...args} />,
+	render: (args) => (
+		<ControlWithHooks
+			Control={InputControl}
+			controlAddonTypes={['variable', 'dynamic-value']}
+			variableTypes={[
+				'color',
+				'font-size',
+				'width-size',
+				'spacing',
+				'linear-gradient',
+				'radial-gradient',
+			]}
+			dynamicValueTypes={['TEXT']}
+			{...args}
+		/>
+	),
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 

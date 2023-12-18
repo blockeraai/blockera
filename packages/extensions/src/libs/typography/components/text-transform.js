@@ -38,6 +38,8 @@ export const TextTransform = ({
 			value={{
 				name: generateExtensionId(block, 'text-transform'),
 				value,
+				attribute: 'publisherTextTransform',
+				blockName: block.blockName,
 			}}
 		>
 			<BaseControl
@@ -72,29 +74,21 @@ export const TextTransform = ({
 					//
 					defaultValue="initial"
 					onChange={(newValue) =>
-						onChange(
-							'publisherTextTransform',
-							newValue,
-							'',
-							(
-								attributes: Object,
-								setAttributes: (attributes: Object) => void
-							): void =>
-								setAttributes({
-									...attributes,
-									style: {
-										...(attributes?.style ?? {}),
-										typography: {
-											...(attributes?.style?.typography ??
-												{}),
-											textTransform:
-												'initial' === newValue
-													? 'none'
-													: newValue,
-										},
+						onChange('publisherTextTransform', newValue, {
+							addOrModifyRootItems: {
+								style: {
+									...(block.attributes?.style ?? {}),
+									typography: {
+										...(block.attributes?.style
+											?.typography ?? {}),
+										textTransform:
+											'initial' === newValue
+												? 'none'
+												: newValue,
 									},
-								})
-						)
+								},
+							},
+						})
 					}
 				/>
 			</BaseControl>

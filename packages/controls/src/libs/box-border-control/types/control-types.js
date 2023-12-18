@@ -1,13 +1,13 @@
 // @flow
 
-export type TBoxBorderControl = {
-	id?: String,
-	label?: String,
+/**
+ * Internal dependencies
+ */
+import type { ControlGeneralTypes } from '../../../types';
+
+export type BoxBorderControlProps = {
+	...ControlGeneralTypes,
 	defaultValue?: TValueTypes,
-	onChange?: () => {},
-	columns?: String,
-	field?: string,
-	className?: string,
 };
 
 export type TValueTypes = {

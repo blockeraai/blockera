@@ -11,6 +11,7 @@
 	transition: var(--publisher-controls-transition);
 	color: var(--publisher-controls-color);
 	font-size: 12px;
+	letter-spacing: -0.2px;
 
 	&:hover {
 		border-color: var(--publisher-controls-border-color-hover);
@@ -18,7 +19,7 @@
 
 	&.is-active-item {
 		color: var(--publisher-controls-primary-color);
-		border-color: currentColor;
+		border-color: var(--va-border-color, var(--publisher-controls-primary-color));
 
 		.publisher-control-item-value,
 		.publisher-control-item-icon {
@@ -28,7 +29,12 @@
 
 	&.item-status-pro,
 	&.item-status-soon {
-		opacity: 0.5;
+		border-color: #e1e1e1;
+		color: #b4b4b4;
+
+		& > * {
+			opacity: 0.4 !important;
+		}
 	}
 
 	.publisher-control-item-icon {
@@ -66,6 +72,6 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		pointer-events: none;
-		max-width: 120px;
+		max-width: min(50%, 120px);
 	}
 }

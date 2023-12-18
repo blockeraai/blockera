@@ -16,8 +16,11 @@ const _getUserDVItems = function (): Array<DynamicValueItem> {
 			name: __('User Display Name', 'publisher-core'),
 			id: 'user-display-name',
 			type: 'text',
-			status: 'free',
+			status: 'core',
 			category: 'user',
+			reference: {
+				type: 'core',
+			},
 		},
 		{
 			name: __('User First Name', 'publisher-core'),
@@ -25,6 +28,9 @@ const _getUserDVItems = function (): Array<DynamicValueItem> {
 			type: 'text',
 			status: 'soon',
 			category: 'user',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('User Last Name', 'publisher-core'),
@@ -32,6 +38,9 @@ const _getUserDVItems = function (): Array<DynamicValueItem> {
 			type: 'text',
 			status: 'soon',
 			category: 'user',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('User Username', 'publisher-core'),
@@ -39,6 +48,9 @@ const _getUserDVItems = function (): Array<DynamicValueItem> {
 			type: 'text',
 			status: 'soon',
 			category: 'user',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('User Biography', 'publisher-core'),
@@ -46,6 +58,9 @@ const _getUserDVItems = function (): Array<DynamicValueItem> {
 			type: 'text',
 			status: 'soon',
 			category: 'user',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('User Email', 'publisher-core'),
@@ -53,6 +68,9 @@ const _getUserDVItems = function (): Array<DynamicValueItem> {
 			type: 'email',
 			status: 'soon',
 			category: 'user',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('User Website', 'publisher-core'),
@@ -60,6 +78,9 @@ const _getUserDVItems = function (): Array<DynamicValueItem> {
 			type: 'link',
 			status: 'soon',
 			category: 'user',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('User ID', 'publisher-core'),
@@ -67,6 +88,9 @@ const _getUserDVItems = function (): Array<DynamicValueItem> {
 			type: 'id',
 			status: 'soon',
 			category: 'user',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('User Avatar URL', 'publisher-core'),
@@ -74,6 +98,9 @@ const _getUserDVItems = function (): Array<DynamicValueItem> {
 			type: 'image',
 			status: 'soon',
 			category: 'user',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('User Profile URL', 'publisher-core'),
@@ -81,6 +108,9 @@ const _getUserDVItems = function (): Array<DynamicValueItem> {
 			type: 'link',
 			status: 'soon',
 			category: 'user',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 		{
 			name: __('User Meta', 'publisher-core'),
@@ -88,6 +118,9 @@ const _getUserDVItems = function (): Array<DynamicValueItem> {
 			type: 'meta',
 			status: 'soon',
 			category: 'user',
+			reference: {
+				type: 'core-pro',
+			},
 		},
 	];
 };
@@ -112,7 +145,7 @@ export const getUserDynamicValueItem = (types: string): ?DynamicValueItem => {
 const _getUserDVItemsBy = function (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): ?Array<DynamicValueItem> | void {
+): ?Array<DynamicValueItem> {
 	return getUserDynamicValueItems().filter((item) => {
 		if (field === 'type') {
 			if (value.includes('all')) {
@@ -131,6 +164,6 @@ const _getUserDVItemsByMemoized = memoize(_getUserDVItemsBy);
 export const getUserDynamicValueItemsBy = (
 	field: string,
 	value: DynamicValueTypes | Array<DynamicValueTypes>
-): Array<DynamicValueItem> | void => {
+): Array<DynamicValueItem> => {
 	return _getUserDVItemsByMemoized(field, value);
 };

@@ -93,6 +93,8 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 									'transform-2d-3d'
 								),
 								value: transform,
+								attribute: 'publisherTransform',
+								blockName: block.blockName,
 							}}
 							storeName={'publisher-core/controls/repeater'}
 						>
@@ -105,7 +107,6 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 										'2D & 3D Transforms',
 										'publisher-core'
 									)}
-									value={transform}
 									onChange={(newValue) =>
 										handleOnChangeAttributes(
 											'publisherTransform',

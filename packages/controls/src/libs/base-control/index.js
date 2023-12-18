@@ -1,7 +1,8 @@
+// @flow
 /**
  * External dependencies
  */
-import PropTypes from 'prop-types';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -9,13 +10,19 @@ import PropTypes from 'prop-types';
 import { LabelControl } from '@publisher/controls';
 import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
 
+/**
+ * Internal dependencies
+ */
+import type { BaseControlProps } from './types';
+
 export default function BaseControl({
-	label,
+	label = '',
 	children,
-	columns,
+	columns = '',
 	className,
-	controlName,
-}) {
+	controlName = 'general',
+	...props
+}: BaseControlProps): MixedElement {
 	let cssColumns = '';
 
 	if (columns !== '' && columns !== 'columns-1' && columns !== 'columns-2') {
@@ -53,7 +60,7 @@ export default function BaseControl({
 		>
 			{label !== '' && (
 				<div className={fieldsClassNames('label')}>
-					<LabelControl label={label} />
+					<LabelControl label={label} {...props} />
 				</div>
 			)}
 
@@ -61,32 +68,3 @@ export default function BaseControl({
 		</div>
 	);
 }
-
-BaseControl.propTypes = {
-	/**
-	 * The label for child control.
-	 */
-	label: PropTypes.string,
-	/**
-	 * The child control.
-	 */
-	children: PropTypes.node,
-	/**
-	 * The classname for number of columns in wrapper(BaseControl).
-	 */
-	columns: PropTypes.string,
-	/**
-	 * The custom classname.
-	 */
-	className: PropTypes.string,
-	/**
-	 * The name of control to choose render with label or not!
-	 */
-	controlName: PropTypes.oneOfType(['empty', 'general']),
-};
-
-BaseControl.defaultProps = {
-	label: '',
-	columns: '',
-	controlName: 'general',
-};

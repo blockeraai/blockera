@@ -1,3 +1,11 @@
+// @flow
+
+/**
+ * Internal dependencies
+ */
+import { getCamelCase } from '../string';
+import { isArray, isObject } from '../is';
+
 /**
  * Return a new object with the specified keys omitted.
  *
@@ -6,12 +14,15 @@
  *
  * @return {Object} Object with omitted keys.
  */
-import { getCamelCase } from '../string';
-import { isArray, isObject } from '../is';
-
-export function omit(object, keys) {
+export function omit(object: Object, keys: Array<string>): Object {
 	return Object.fromEntries(
 		Object.entries(object).filter(([key]) => !keys.includes(key))
+	);
+}
+
+export function omitWithPattern(object: Object, pattern: string): Object {
+	return Object.fromEntries(
+		Object.entries(object).filter(([key]) => !pattern.test(key))
 	);
 }
 
@@ -24,7 +35,11 @@ export function omit(object, keys) {
  * @param {string} deletePrefixSuffix
  * @return {Object} Object with included keys.
  */
-export function include(object, keys, deletePrefixSuffix = '') {
+export function include(
+	object: Object,
+	keys: Array<string>,
+	deletePrefixSuffix: string = ''
+): Object {
 	return Object.fromEntries(
 		Object.entries(object)
 			.filter(([key]) => keys.includes(key))

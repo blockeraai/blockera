@@ -4,6 +4,7 @@
  */
 import { GradientPicker as WPGradientPicker } from '@wordpress/components';
 import PropTypes from 'prop-types';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -16,28 +17,31 @@ import { useValueAddon } from '@publisher/hooks';
  */
 import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
-/**
- * Types
- */
-import type { TGradientBarControlProps } from './types/gradient-bar-control-props';
-import type { MixedElement } from 'react';
+import type { GradientBarControlProps } from './types';
 
 export default function GradientBarControl({
 	id,
 	label,
 	columns,
-	defaultValue,
+	defaultValue = '',
 	onChange,
-	field,
-	height,
+	field = 'gradient-bar',
+	height = 30,
 	//
-	className,
+	className = '',
 	//
 	controlAddonTypes,
 	variableTypes,
 	dynamicValueTypes,
-}: TGradientBarControlProps): MixedElement {
-	const { value, setValue } = useControlContext({
+}: GradientBarControlProps): MixedElement {
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		defaultValue,
 		onChange,
@@ -63,6 +67,7 @@ export default function GradientBarControl({
 				columns={columns}
 				controlName={field}
 				className={className}
+				{...{ attribute, blockName, description, resetToDefault }}
 			>
 				<div
 					className={controlClassNames(
@@ -88,6 +93,7 @@ export default function GradientBarControl({
 			columns={columns}
 			controlName={field}
 			className={className + ' ' + valueAddonClassNames}
+			{...{ description, resetToDefault }}
 		>
 			<div
 				data-cy="gradient-bar-control"
@@ -141,10 +147,4 @@ GradientBarControl.propTypes = {
 	 * Function that will be fired while the control value state changes.
 	 */
 	onChange: PropTypes.func,
-};
-
-GradientBarControl.defaultProps = {
-	defaultValue: null,
-	field: 'gradient-bar',
-	height: 30,
 };

@@ -69,6 +69,8 @@ export const BorderAndShadowExtension: TBorderAndShadowProps =
 							value={{
 								name: generateExtensionId(block, 'box-shadow'),
 								value: boxShadow,
+								attribute: 'publisherBoxShadow',
+								blockName: block.blockName,
 							}}
 							storeName={'publisher-core/controls/repeater'}
 						>
@@ -95,6 +97,8 @@ export const BorderAndShadowExtension: TBorderAndShadowProps =
 							value={{
 								name: generateExtensionId(block, 'outline'),
 								value: outline,
+								attribute: 'publisherOutline',
+								blockName: block.blockName,
 							}}
 							storeName={'publisher-core/controls/repeater'}
 						>

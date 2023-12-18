@@ -1,14 +1,11 @@
 // @flow
+/**
+ * Internal dependencies
+ */
+import type { ControlGeneralTypes } from '../../../types';
 
 export type TTextAreaItem = {
-	value: string,
-	id?: number | string,
-	label?: string,
-	columns?: string,
-	defaultValue: string | number,
-	onChange: (event: Object) => string | number,
-	field?: string,
-	className?: string,
+	...ControlGeneralTypes,
 	disabled?: boolean,
 	height?: number,
 };

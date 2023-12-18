@@ -1,6 +1,11 @@
 // @flow
 import type { Element } from 'React';
 
+/**
+ * Internal dependencies
+ */
+import type { ControlGeneralTypes } from '../../../types';
+
 export type TNativeOption = {
 	label: string,
 	value: string,
@@ -15,20 +20,15 @@ export type TNativeOption = {
 export type TSelectOptions = TNativeOption[];
 
 export type TSelectControlProps = {
-	id?: string,
-	label?: string,
-	field?: string,
-	columns?: string,
+	...ControlGeneralTypes,
 	defaultValue?: string,
-	onChange?: () => {},
-	type: 'native' | 'custom',
+	type?: 'native' | 'custom',
 	options: TSelectOptions,
-	customMenuPosition: 'bottom' | 'top',
+	customMenuPosition?: 'bottom' | 'top',
 	customHideInputIcon?: boolean,
 	customHideInputLabel?: boolean,
 	customInputCenterContent?: boolean,
 	customHideInputCaret?: boolean,
 	noBorder?: boolean,
 	multiple?: boolean,
-	className?: string,
 };
