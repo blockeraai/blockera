@@ -242,7 +242,6 @@ export function getDynamicValueIcon(type: DynamicValueTypes): MixedElement {
 	return <></>;
 }
 
-// todo write tests
 export function getDynamicValueCategory(
 	category: DynamicValueCategory,
 	types: Array<DynamicValueTypes>

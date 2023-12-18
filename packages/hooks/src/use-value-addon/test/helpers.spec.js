@@ -1,4 +1,5 @@
 import {
+	getDynamicValueCategory,
 	getDynamicValueIcon,
 	getValueAddonRealValue,
 	getVariableCategory,
@@ -356,6 +357,58 @@ describe('Helper Functions', () => {
 
 		test('meta', () => {
 			expect(getDynamicValueIcon('meta')).not.toBe(<></>);
+		});
+	});
+
+	describe('getDynamicValueCategory', () => {
+		test('invalid item', () => {
+			expect(getDynamicValueCategory('invalid', 'invalid')).toStrictEqual(
+				{
+					name: '',
+					items: [],
+					notFound: true,
+				}
+			);
+		});
+
+		test('post', () => {
+			const category = getDynamicValueCategory('post', ['all']);
+
+			expect(category.name).toBe(__('Posts and Pages', 'publisher-core'));
+		});
+
+		test('featured-image', () => {
+			const category = getDynamicValueCategory('featured-image', ['all']);
+
+			expect(category.name).toBe(
+				__('Post Featured Image', 'publisher-core')
+			);
+		});
+
+		test('archive', () => {
+			const category = getDynamicValueCategory('archive', ['all']);
+
+			expect(category.name).toBe(__('Archive', 'publisher-core'));
+		});
+
+		test('site', () => {
+			const category = getDynamicValueCategory('site', ['all']);
+
+			expect(category.name).toBe(
+				__('Site Information', 'publisher-core')
+			);
+		});
+
+		test('user', () => {
+			const category = getDynamicValueCategory('user', ['all']);
+
+			expect(category.name).toBe(__('User & Authors', 'publisher-core'));
+		});
+
+		test('other', () => {
+			const category = getDynamicValueCategory('other', ['all']);
+
+			expect(category.name).toBe(__('Utilities', 'publisher-core'));
 		});
 	});
 });
