@@ -114,6 +114,7 @@ DividerControl.propTypes = {
 
 DividerControl.defaultProps = {
 	defaultValue: ([]: any),
+	value: ([]: any),
 	defaultRepeaterItemValue: {
 		position: 'top',
 		shape: { type: 'shape', id: 'wave-opacity' },

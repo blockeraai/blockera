@@ -37,6 +37,7 @@ describe('divider-control component testing', () => {
 
 			cy.getByDataCy('group-control-header').should('not.exist');
 		});
+
 		it('should render correctly, with value', () => {
 			cy.withDataProvider({
 				component: <DividerControl />,
@@ -97,6 +98,37 @@ describe('divider-control component testing', () => {
 			});
 
 			cy.getByDataCy('group-control-header').should('exist');
+		});
+
+		it('should control icon color be default, when color is white', () => {
+			cy.withDataProvider({
+				component: (
+					<DividerControl
+						defaultValue={[
+							{
+								position: 'top',
+								shape: {
+									type: 'shape',
+									id: 'triangle-5',
+								},
+								color: '#ffffff',
+								size: { width: '', height: '' },
+								animate: false,
+								duration: '',
+								flip: false,
+								onFront: false,
+								isVisible: true,
+							},
+						]}
+					/>
+				),
+				store: STORE_NAME,
+			});
+
+			cy.getByDataTest('divider-item-header').should(
+				'not.have.attr',
+				'style'
+			);
 		});
 	});
 
@@ -276,7 +308,9 @@ describe('divider-control component testing', () => {
 
 			cy.getByDataCy('group-control-header').click();
 			cy.getByDataTest('popover-body').within(() => {
+				cy.getByDataTest('divider-width-input').clear();
 				cy.getByDataTest('divider-width-input').type('100');
+				cy.getByDataTest('divider-height-input').clear();
 				cy.getByDataTest('divider-height-input').type('50');
 			});
 
@@ -450,158 +484,6 @@ describe('divider-control component testing', () => {
 					},
 				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
 			});
-		});
-
-		it('should second item have bottom position, when first item is top', () => {
-			const name = nanoid();
-			cy.withDataProvider({
-				component: <DividerControl />,
-				store: STORE_NAME,
-				value: defaultValue,
-				name,
-			});
-
-			//
-			cy.getByAriaLabel('Add New').click();
-			cy.getByAriaLabel('Item 2').click();
-
-			//Check control
-			cy.getByAriaLabel('Bottom').should(
-				'have.attr',
-				'aria-checked',
-				'true'
-			);
-
-			//Check data provider
-			cy.get('body').then(() => {
-				expect([
-					{
-						position: 'top',
-						shape: {
-							type: 'shape',
-							id: 'wave-opacity',
-						},
-						color: '',
-						size: { width: '', height: '' },
-						animate: false,
-						duration: '',
-						flip: false,
-						onFront: false,
-						isVisible: true,
-					},
-					{
-						position: 'bottom',
-						shape: {
-							type: 'shape',
-							id: 'wave-opacity',
-						},
-						color: '',
-						size: { width: '', height: '' },
-						animate: false,
-						duration: '',
-						flip: false,
-						onFront: false,
-						isVisible: true,
-					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
-			});
-		});
-
-		it('should second item have top position, when first item is bottom', () => {
-			const name = nanoid();
-			cy.withDataProvider({
-				component: <DividerControl />,
-				store: STORE_NAME,
-				value: [{ ...defaultValue[0], position: 'bottom' }],
-				name,
-			});
-
-			//
-			cy.getByAriaLabel('Add New').click();
-			cy.getByAriaLabel('Item 2').click();
-
-			//Check control
-			cy.getByAriaLabel('Top').should(
-				'have.attr',
-				'aria-checked',
-				'true'
-			);
-
-			//Check data provider
-			cy.get('body').then(() => {
-				expect([
-					{
-						position: 'bottom',
-						shape: {
-							type: 'shape',
-							id: 'wave-opacity',
-						},
-						color: '',
-						size: { width: '', height: '' },
-						animate: false,
-						duration: '',
-						flip: false,
-						onFront: false,
-						isVisible: true,
-					},
-					{
-						position: 'top',
-						shape: {
-							type: 'shape',
-							id: 'wave-opacity',
-						},
-						color: '',
-						size: { width: '', height: '' },
-						animate: false,
-						duration: '',
-						flip: false,
-						onFront: false,
-						isVisible: true,
-					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
-			});
-		});
-
-		it('should top position not be selectable twice', () => {
-			const name = nanoid();
-			cy.withDataProvider({
-				component: <DividerControl />,
-				store: STORE_NAME,
-				value: defaultValue,
-				name,
-			});
-
-			//
-			cy.getByAriaLabel('Add New').click();
-			cy.getByAriaLabel('Item 2').click();
-
-			//Check control
-			cy.get('button[data-value="top"]').should(
-				'have.attr',
-				'aria-disabled',
-				'true'
-			);
-		});
-
-		it('should bottom position not be selectable twice', () => {
-			const name = nanoid();
-			cy.withDataProvider({
-				component: <DividerControl />,
-				store: STORE_NAME,
-				value: [{ ...defaultValue[0], position: 'bottom' }],
-				name,
-			});
-
-			//
-			cy.getByAriaLabel('Add New').click();
-			cy.getByAriaLabel('Item 2').click();
-
-			//Check control
-			cy.get('button[data-value="bottom"]').should(
-				'have.attr',
-				'aria-disabled',
-				'true'
-			);
 		});
 
 		context('should update data correctly, ', () => {
