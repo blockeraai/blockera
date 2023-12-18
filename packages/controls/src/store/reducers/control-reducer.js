@@ -1,3 +1,4 @@
+// @flow
 /**
  * Publisher dependencies
  */
@@ -10,7 +11,7 @@ import { isFunction, isUndefined, omit } from '@publisher/utils';
  * @param {Object} action the action details for reduce state
  * @return {{}} the current state of control
  */
-export function controlReducer(state = {}, action) {
+export function controlReducer(state: Object = {}, action: Object): Object {
 	switch (action.type) {
 		case 'ADD_UNPROCESSED_CONTROL':
 			return {
