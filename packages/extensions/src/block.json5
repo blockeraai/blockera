@@ -1,53 +1,88 @@
 {
-	"publisherDefaultProps": {
-		"textColor": "",
-		"bgColor": "",
-		"borderColor": "#eee",
-	},
-	"publisherAdvancedProps": {
-		// Publisher Extension
-		// WP Supports
-		"width": true,
-	},
-	"publisherProps": {
-		"desktop": {
-			"type": "breakpoint",
-			"id": "desktop",
-			states: {
-				"hover": {
-					"status": "disable",
-					"props": {
-						"textColor": "black"
-					}
+	"publisherTextColor": "black",//#block-id, .a{color: "black"
+	"publisherBlockStates": [
+		{
+			"type": "normal",
+			"force": true,
+			"status": "enable",
+			"settings": {},
+			"breakpoints": [
+				{
+					"type": "desktop",
+					"force": "true",
 				},
-				"custom-class-akbar": {
-					"type": "class",
-					"id": "custom-class-akbar",
-					"props": {
-						"textColor": "blue"
-					}
+				{
+					"type": "tablet",
+					"force": "true",
+					"settings": {
+						"publisherTextColor": "blue"
+					},
 				},
-			},
+			],
 		},
-		"mobile": {
-			"type": "breakpoint",
-			"id": "mobile",
-			"states": {
-				"normal": {
-					"type": "state",
-					"id": "normal",
-					"props": {
-						"textColor": "red",
+		{
+			"type": "hover",
+			"status": "disable",
+			"force" : false,
+			"settings": {},
+			"breakpoints": [
+				{
+					"type": "desktop",
+					"force": "true",
+					"settings": {
+						"publisherTextColor": "red",//#block-id, .a:hover{color: "black"
 					}
 				},
-				"hover": {
-					"type": "state",
-					"id": "hover",
-					"props": {
-						"textColor": "green"
-					}
+				{
+					"type": "tablet",
+					"force": "true",
+					"settings": {
+						"publisherTextColor": "green",//media(){#block-id, .a{color: "black"}
+					},
 				}
+			],
+		},
+		{
+			"type": "custom-class",
+			"force": false,
+			"status": "enable",
+			"settings": {
+				"className": ".akbar",
 			},
+			"breakpoints": [
+				{
+					"type": "desktop",
+					"force": "true",
+				},
+				{
+					"type": "tablet",
+					"force": "true",
+					"settings": {
+						"publisherTextColor": "blue"
+					},
+				},
+			],
+		},
+		{
+			"type": "parent-hover",
+			"force": false,
+			"status": "enable",
+			"settings": {
+				"parentClientId": "sdfsdfsdf85465456sdf",
+			},
+			"breakpoints": [
+				{
+					"type": "desktop",
+					"force": "true",
+				},
+				{
+					"type": "tablet",
+					"force": "true",
+					"settings": {
+						"publisherTextColor": "blue"
+					},
+				},
+			],
 		}
-	}
+	]
 }

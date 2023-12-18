@@ -38,7 +38,14 @@ export default function ToggleSelectControl({
 	children,
 	...props
 }: ToggleSelectControlProps): MixedElement {
-	const { value, setValue } = useControlContext({
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
@@ -56,6 +63,7 @@ export default function ToggleSelectControl({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<div className={controlClassNames('toggle-select', className)}>
 				<WPToggleGroupControl

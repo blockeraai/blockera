@@ -29,26 +29,23 @@ export const Border = ({
 	onChange: THandleOnChangeAttributes,
 	defaultValue: TBorderAndShadowDefaultProp,
 }): MixedElement => {
-	const callback = (
-		newValue: Object,
-		attributes: Object,
-		setAttributes: (attributes: Object) => void
-	): void => {
+	const toWPCompatible = (newValue: Object): Object => {
+		let customized;
+
 		if ('all' === newValue.type) {
-			const customized = {
-				...attributes,
+			customized = {
 				borderColor:
 					newValue?.all?.color ||
-					attributes.borderColor ||
-					attributes?.style?.border?.color,
+					block.attributes.borderColor ||
+					block.attributes?.style?.border?.color,
 				style: {
-					...(attributes?.style ?? {}),
+					...(block.attributes?.style ?? {}),
 					border: {
-						...(attributes?.style?.border ?? {}),
+						...(block.attributes?.style?.border ?? {}),
 						color:
 							newValue?.all?.color ||
-							attributes.borderColor ||
-							attributes?.style?.border?.color,
+							block.attributes.borderColor ||
+							block.attributes?.style?.border?.color,
 						width: newValue?.all?.width,
 						style: newValue?.all?.width ? newValue?.all?.style : '',
 					},
@@ -59,16 +56,13 @@ export const Border = ({
 			delete customized?.style?.border?.right;
 			delete customized?.style?.border?.bottom;
 			delete customized?.style?.border?.left;
-
-			setAttributes(customized);
 		} else {
-			const customized = {
-				...attributes,
+			customized = {
 				borderColor: undefined,
 				style: {
-					...(attributes?.style ?? {}),
+					...(block.attributes?.style ?? {}),
 					border: {
-						...(attributes?.style?.border ?? {}),
+						...(block.attributes?.style?.border ?? {}),
 						top: {
 							width: newValue?.top?.width,
 							color: newValue?.top?.color,
@@ -104,9 +98,9 @@ export const Border = ({
 			delete customized.style.border.color;
 			delete customized.style.border.width;
 			delete customized.style.border.style;
-
-			setAttributes(customized);
 		}
+
+		return customized;
 	};
 	const getNormalDefaultValue = (): Object => {
 		const { top, right, bottom, left } = defaultValue.border;
@@ -151,21 +145,17 @@ export const Border = ({
 					border && Object.values(border).length > 0
 						? border
 						: getNormalDefaultValue(),
+				attribute: 'publisherBorder',
+				blockName: block.blockName,
 			}}
 		>
 			<BoxBorderControl
 				columns="columns-1"
 				label={__('Border Line', 'publisher-core')}
 				onChange={(newValue) => {
-					onChange(
-						'publisherBorder',
-						newValue,
-						'',
-						(
-							attributes: Object,
-							setAttributes: (attributes: Object) => void
-						): void => callback(newValue, attributes, setAttributes)
-					);
+					onChange('publisherBorder', newValue, {
+						addOrModifyRootItems: toWPCompatible(newValue),
+					});
 				}}
 			/>
 		</ControlContextProvider>

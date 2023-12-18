@@ -37,6 +37,8 @@ export const FontStyle = ({
 			value={{
 				name: generateExtensionId(block, 'font-style'),
 				value,
+				attribute: 'publisherFontStyle',
+				blockName: block.blockName,
 			}}
 		>
 			<ToggleSelectControl
@@ -59,22 +61,14 @@ export const FontStyle = ({
 				//
 				defaultValue={defaultValue || 'normal'}
 				onChange={(newValue) =>
-					onChange(
-						'publisherFontStyle',
-						newValue,
-						'',
-						(
-							attributes: Object,
-							setAttributes: (attributes: Object) => void
-						): void =>
-							setAttributes({
-								...attributes,
-								style: {
-									...(attributes?.style ?? {}),
-									fontStyle: newValue,
-								},
-							})
-					)
+					onChange('publisherFontStyle', newValue, {
+						addOrModifyRootItems: {
+							style: {
+								...(block.attributes?.style ?? {}),
+								fontStyle: newValue,
+							},
+						},
+					})
 				}
 			/>
 		</ControlContextProvider>

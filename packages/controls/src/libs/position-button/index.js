@@ -38,7 +38,14 @@ export default function PositionButtonControl({
 	className,
 	...props
 }: TPositionButtonProps): MixedElement {
-	const { value, setValue } = useControlContext({
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
@@ -52,6 +59,7 @@ export default function PositionButtonControl({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<Button
 				label={buttonLabel}

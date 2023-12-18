@@ -212,6 +212,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 												'text-align'
 											),
 											value: textAlign,
+											attribute: 'publisherTextAlign',
+											blockName: block.blockName,
 										}}
 									>
 										<BaseControl
@@ -345,6 +347,9 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 														'direction'
 													),
 													value: direction,
+													attribute:
+														'publisherDirection',
+													blockName: block.blockName,
 												}}
 											>
 												<BaseControl
@@ -417,6 +422,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 												'word-spacing'
 											),
 											value: wordSpacing,
+											attribute: 'publisherWordSpacing',
+											blockName: block.blockName,
 										}}
 									>
 										<BaseControl
@@ -451,6 +458,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 												'text-indent'
 											),
 											value: textIndent,
+											attribute: 'publisherTextIndent',
+											blockName: block.blockName,
 										}}
 									>
 										<BaseControl
@@ -487,6 +496,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											'text-orientation'
 										),
 										value: textOrientation,
+										attribute: 'publisherTextOrientation',
+										blockName: block.blockName,
 									}}
 								>
 									<ToggleSelectControl
@@ -613,6 +624,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 										),
 										value: textColumns,
 										type: 'nested',
+										attribute: 'publisherTextColumns',
+										blockName: block.blockName,
 									}}
 								>
 									<BaseControl columns="columns-1">
@@ -791,6 +804,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 										),
 										value: textStroke,
 										type: 'nested',
+										attribute: 'publisherTextStroke',
+										blockName: block.blockName,
 									}}
 								>
 									<BaseControl
@@ -860,6 +875,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											'word-break'
 										),
 										value: wordBreak,
+										attribute: 'publisherWordBreak',
+										blockName: block.blockName,
 									}}
 								>
 									<SelectControl
@@ -930,6 +947,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 						value={{
 							name: generateExtensionId(block, 'font-color'),
 							value: fontColor,
+							attribute: 'publisherFontColor',
+							blockName: block.blockName,
 						}}
 					>
 						<BaseControl columns="columns-1">
@@ -969,6 +988,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 						value={{
 							name: generateExtensionId(block, 'text-shadow'),
 							value: textShadow,
+							attribute: 'publisherTextShadow',
+							blockName: block.blockName,
 						}}
 						storeName={'publisher-core/controls/repeater'}
 					>

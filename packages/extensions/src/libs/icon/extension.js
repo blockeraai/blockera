@@ -56,6 +56,8 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 						value={{
 							name: generateExtensionId(block, 'icon'),
 							value: icon,
+							attribute: 'publisherIcon',
+							blockName: block.blockName,
 						}}
 					>
 						<IconControl
@@ -88,6 +90,8 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 											'icon-position'
 										),
 										value: iconPosition,
+										attribute: 'publisherIconPosition',
+										blockName: block.blockName,
 									}}
 								>
 									<ToggleSelectControl
@@ -133,6 +137,8 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 											'icon-gap'
 										),
 										value: iconGap,
+										attribute: 'publisherIconGap',
+										blockName: block.blockName,
 									}}
 								>
 									<InputControl
@@ -162,6 +168,8 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 											'icon-size'
 										),
 										value: iconSize,
+										attribute: 'publisherIconSize',
+										blockName: block.blockName,
 									}}
 								>
 									<InputControl
@@ -191,6 +199,8 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 											'icon-color'
 										),
 										value: iconColor,
+										attribute: 'publisherIconColor',
+										blockName: block.blockName,
 									}}
 								>
 									<ColorControl
@@ -219,6 +229,8 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 										'icon-link'
 									),
 									value: iconLink,
+									attribute: 'publisherIconLink',
+									blockName: block.blockName,
 								}}
 							>
 								<LinkControl

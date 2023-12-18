@@ -45,6 +45,8 @@ export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 						value={{
 							name: generateExtensionId(block, 'position'),
 							value: positionValue,
+							attribute: 'publisherPosition',
+							blockName: block.blockName,
 						}}
 					>
 						<BaseControl
@@ -84,6 +86,8 @@ export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 							value={{
 								name: generateExtensionId(block, 'z-index'),
 								value: zIndexValue,
+								attribute: 'publisherZIndex',
+								blockName: block.blockName,
 							}}
 						>
 							<InputControl

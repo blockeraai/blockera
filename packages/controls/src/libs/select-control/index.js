@@ -43,7 +43,14 @@ const SelectControl = ({
 	//
 	className,
 }: TSelectControlProps): MixedElement => {
-	const { value, setValue } = useControlContext({
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
@@ -57,6 +64,13 @@ const SelectControl = ({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{
+				attribute,
+				blockName,
+				description,
+				resetToDefault,
+				mode: 'advanced',
+			}}
 		>
 			{type === 'native' && (
 				<WPSelectControl

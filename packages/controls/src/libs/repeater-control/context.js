@@ -1,7 +1,11 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { createContext } from '@wordpress/element';
+
+/**
+ * Publisher dependencies
+ */
 import { isFunction, isUndefined } from '@publisher/utils';
 
 const RepeaterContext = createContext({

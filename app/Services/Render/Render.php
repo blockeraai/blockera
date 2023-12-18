@@ -85,7 +85,7 @@ class Render {
 	public function parser( string $html, array $block ): string {
 
 		//Just running for publisher extensions settings!
-		if ( empty( $block['attrs']['publisherPropsId'] ) ) {
+		if ( empty( $block['attrs']['publisherPropsId'] ) || is_admin() ) {
 
 			return $html;
 		}

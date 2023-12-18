@@ -1,3 +1,4 @@
+// @flow
 /**
  * Publisher dependencies
  */
@@ -33,7 +34,7 @@ export function update(
 		currentObj = currentObj[key];
 	}
 
-	if ('replace' === type) {
+	if ('mute' === type) {
 		currentObj[lastKey] = value;
 
 		return isObject(object) ? { ...object } : [...object];

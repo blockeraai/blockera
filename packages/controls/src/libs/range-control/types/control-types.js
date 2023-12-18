@@ -16,4 +16,5 @@ export type TRangeControlProps = {
 	disabled?: boolean,
 	initialPosition?: number,
 	sideEffect?: boolean,
+	className?: string,
 };

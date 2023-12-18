@@ -8,13 +8,10 @@ import { useEffect } from '@wordpress/element';
  */
 import { isFunction } from '@publisher/utils';
 
-export default function useControlEffect({
-	value: controlValue,
-	onChange,
-	sideEffect,
-	valueCleanup,
-	dependencies = [],
-}) {
+export default function useControlEffect(
+	{ onChange, sideEffect, valueCleanup, value: controlValue },
+	dependencies = []
+) {
 	const setValue = (value) => {
 		if (isFunction(onChange)) {
 			// eslint-disable-next-line no-unused-expressions
@@ -22,7 +19,6 @@ export default function useControlEffect({
 				? onChange(valueCleanup(value))
 				: onChange(value);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	};
 
 	if (!sideEffect) {
@@ -33,7 +29,7 @@ export default function useControlEffect({
 	useEffect(
 		() => setValue(controlValue),
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[...dependencies]
+		dependencies
 	);
 
 	return setValue;

@@ -21,6 +21,7 @@ export default function BaseControl({
 	columns = '',
 	className,
 	controlName = 'general',
+	...props
 }: BaseControlProps): MixedElement {
 	let cssColumns = '';
 
@@ -59,7 +60,7 @@ export default function BaseControl({
 		>
 			{label !== '' && (
 				<div className={fieldsClassNames('label')}>
-					<LabelControl label={label} />
+					<LabelControl label={label} {...props} />
 				</div>
 			)}
 

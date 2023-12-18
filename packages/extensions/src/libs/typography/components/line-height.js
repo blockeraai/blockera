@@ -13,6 +13,7 @@ import {
 	InputControl,
 	extractNumberAndUnit,
 } from '@publisher/controls';
+import { isArray } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -38,6 +39,8 @@ export const LineHeight = ({
 			value={{
 				name: generateExtensionId(block, 'line-height'),
 				value,
+				attribute: 'publisherLineHeight',
+				blockName: block.blockName,
 			}}
 		>
 			<InputControl
@@ -52,43 +55,43 @@ export const LineHeight = ({
 				min={0}
 				defaultValue={defaultValue || ''}
 				onChange={(newValue) => {
-					onChange(
-						'publisherLineHeight',
-						newValue,
-						'',
-						(
-							attributes: Object,
-							setAttributes: (attributes: Object) => void
-						): void => {
-							const extractedValue =
-								extractNumberAndUnit(newValue);
+					const toWPCompatible = (newValue: Object): Object => {
+						const extractedValue = extractNumberAndUnit(newValue);
 
-							if (
-								extractedValue.unit === '' ||
-								(extractedValue.unit === 'func' &&
-									extractedValue?.unitSimulated)
-							) {
-								setAttributes({
-									...attributes,
-									style: {
-										...(attributes?.style ?? {}),
-										typography: {
-											...(attributes?.style?.typography ??
-												{}),
-											lineHeight: extractedValue.value,
-										},
+						if (
+							extractedValue.unit === '' ||
+							(extractedValue.unit === 'func' &&
+								extractedValue?.unitSimulated)
+						) {
+							return {
+								style: {
+									...(block.attributes?.style ?? {}),
+									typography: {
+										...(block.attributes?.style
+											?.typography ?? {}),
+										lineHeight: extractedValue.value,
 									},
-								});
-							} else {
-								// remove old lineHeight
-								const newAttrs = { ...attributes };
-								if (newAttrs?.style?.typography?.lineHeight) {
-									delete newAttrs.style.typography.lineHeight;
-									setAttributes(newAttrs);
-								}
-							}
+								},
+							};
 						}
-					);
+						// remove old lineHeight
+						if (block.attributes?.style?.typography?.lineHeight) {
+							return ['style.typography.lineHeight'];
+						}
+					};
+
+					const backwardCompatibilityValue = toWPCompatible();
+
+					onChange('publisherLineHeight', newValue, {
+						addOrModifyRootItems: !isArray(
+							backwardCompatibilityValue
+						)
+							? backwardCompatibilityValue
+							: {},
+						deleteItems: isArray(backwardCompatibilityValue)
+							? backwardCompatibilityValue
+							: [],
+					});
 				}}
 			/>
 		</ControlContextProvider>

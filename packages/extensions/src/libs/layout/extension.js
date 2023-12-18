@@ -94,6 +94,8 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 						value={{
 							name: generateExtensionId(block, 'display'),
 							value: display,
+							attribute: 'publisherDisplay',
+							blockName: block.blockName,
 						}}
 					>
 						<ToggleSelectControl
@@ -162,6 +164,8 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												'direction'
 											),
 											value: flexDirection.value,
+											attribute: 'publisherFlexDirection',
+											blockName: block.blockName,
 										}}
 									>
 										<ToggleSelectControl
@@ -222,6 +226,8 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												'direction'
 											),
 											value: flexDirection.reverse,
+											attribute: 'publisherFlexDirection',
+											blockName: block.blockName,
 										}}
 									>
 										<Button
@@ -268,6 +274,8 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 										'align-items'
 									),
 									value: alignItems,
+									attribute: 'publisherAlignItems',
+									blockName: block.blockName,
 								}}
 							>
 								<BaseControl
@@ -354,6 +362,8 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 										'justify-content'
 									),
 									value: justifyContent,
+									attribute: 'publisherJustifyContent',
+									blockName: block.blockName,
 								}}
 							>
 								<BaseControl
@@ -450,6 +460,8 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												'gap'
 											),
 											value: gap,
+											attribute: 'publisherGap',
+											blockName: block.blockName,
 										}}
 									>
 										{gap?.lock ? (
@@ -631,6 +643,8 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 											'flex-wrap'
 										),
 										value: flexWrap.value,
+										attribute: 'publisherFlexWrap',
+										blockName: block.blockName,
 									}}
 								>
 									<BaseControl columns="columns-1">
@@ -753,6 +767,9 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													'align-content'
 												),
 												value: alignContent,
+												attribute:
+													'publisherAlignContent',
+												blockName: block.blockName,
 											}}
 										>
 											<BaseControl

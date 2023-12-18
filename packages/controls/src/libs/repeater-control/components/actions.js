@@ -34,6 +34,7 @@ export default function RepeaterItemActions({
 		maxItems,
 		minItems,
 		repeaterId,
+		overrideItem,
 		actionButtonVisibility,
 		actionButtonDelete,
 		actionButtonClone,
@@ -45,7 +46,7 @@ export default function RepeaterItemActions({
 
 	return (
 		<>
-			{actionButtonVisibility && (
+			{actionButtonVisibility && item?.visibilitySupport && (
 				<Button
 					className={controlInnerClassNames('btn-visibility')}
 					noBorder={true}
@@ -55,13 +56,21 @@ export default function RepeaterItemActions({
 					onClick={(event) => {
 						event.stopPropagation();
 						setVisibility(!isVisible);
+						const value = item?.selectable
+							? {
+									...item,
+									isVisible: !isVisible,
+									isSelected: false,
+							  }
+							: {
+									...item,
+									isVisible: !isVisible,
+							  };
+
 						changeRepeaterItem({
 							controlId,
 							itemId,
-							value: {
-								...item,
-								isVisible: !isVisible,
-							},
+							value,
 							repeaterId,
 						});
 					}}
@@ -87,6 +96,7 @@ export default function RepeaterItemActions({
 			)}
 
 			{actionButtonClone &&
+				item?.cloneable &&
 				(maxItems === -1 || repeaterItems?.length < maxItems) && (
 					<Button
 						className={controlInnerClassNames('btn-clone')}
@@ -97,10 +107,13 @@ export default function RepeaterItemActions({
 						label={__('Clone', 'publisher')}
 						onClick={(event) => {
 							event.stopPropagation();
+
 							cloneRepeaterItem({
+								item,
 								itemId,
 								controlId,
 								repeaterId,
+								overrideItem,
 							});
 						}}
 						aria-label={sprintf(
@@ -112,6 +125,7 @@ export default function RepeaterItemActions({
 				)}
 
 			{actionButtonDelete &&
+				item?.deletable &&
 				(minItems === 0 || repeaterItems?.length > minItems) && (
 					<Button
 						className={controlInnerClassNames('btn-delete')}

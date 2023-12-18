@@ -1,17 +1,30 @@
 {
 	"desktop": {
+		"type": "desktop",
 		"force": true,
 		"default": true,
-		"id": "desktop",
 		"label": "Desktop",
-		"min": "980px",
-		"max": "1800px",
+		"settings": {
+			"min": "980px",
+			"max": "1800px"
+		}
 	},
 	"mobile": {
+		"type": "mobile",
 		"force": false,
-		"id": "mobile",
 		"label": "Mobile",
-		"min": "",
-		"max": "680px",
+		"settings": {
+			"min": "",
+			"max": "680px"
+		}
+	},
+	"custom": {
+		"type": "custom",
+		force: false,
+		label: "Custom",
+		settings: {
+			"min": "",
+			"max": "680px"
+		}
 	}
 }

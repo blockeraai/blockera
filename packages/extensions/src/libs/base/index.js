@@ -15,8 +15,7 @@ import { PanelBodyControl, STORE_NAME } from '@publisher/controls';
  */
 import * as extensions from '../';
 import * as config from './config';
-import { SideEffect } from './components/side-effect';
-import { useDisplayBlockControls } from '../../hooks/hooks';
+import { useDisplayBlockControls } from '../../hooks';
 import { BaseExtensionContextProvider, BaseExtensionContext } from './context';
 
 export const BaseExtension = memo(
@@ -43,7 +42,6 @@ export const BaseExtension = memo(
 
 		return (
 			<BaseExtensionContextProvider {...contextValue}>
-				<SideEffect />
 				{useDisplayBlockControls() && (
 					<PanelBodyControl
 						title={title}

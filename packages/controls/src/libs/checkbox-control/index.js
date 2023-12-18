@@ -31,7 +31,14 @@ export default function CheckboxControl({
 	className,
 	...props
 }: CheckboxControlProps): MixedElement {
-	const { value, setValue } = useControlContext({
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
@@ -43,6 +50,7 @@ export default function CheckboxControl({
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...{ attribute, blockName, description, resetToDefault }}
 		>
 			<WPCheckboxControl
 				className={controlClassNames('checkbox', className)}

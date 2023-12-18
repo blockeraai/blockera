@@ -36,6 +36,8 @@ export const Filter = ({
 			value={{
 				name: generateExtensionId(block, 'filters'),
 				value: filter,
+				attribute: 'publisherFilter',
+				blockName: block.blockName,
 			}}
 			storeName={'publisher-core/controls/repeater'}
 		>

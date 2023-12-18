@@ -61,16 +61,20 @@ export function sortRepeaterItem({
 }
 
 export function cloneRepeaterItem({
+	item,
 	itemId,
 	controlId,
 	maxItems = -1,
 	repeaterId = null,
+	overrideItem = null,
 }) {
 	return {
+		item,
 		itemId,
 		controlId,
 		maxItems,
 		repeaterId,
+		overrideItem,
 		type: 'CLONE_REPEATER_ITEM',
 	};
 }

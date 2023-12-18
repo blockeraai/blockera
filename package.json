@@ -111,6 +111,8 @@
 		"cypress": "^13.3.0",
 		"cypress-log-to-output": "^1.1.2",
 		"cypress-real-events": "^1.10.3",
+		"deep-object-diff": "^1.1.9",
+		"deep-state-observer": "^5.5.13",
 		"eslint-plugin-cypress": "^2.13.3",
 		"eslint-plugin-ft-flow": "^3.0.1",
 		"eslint-plugin-storybook": "^0.6.12",

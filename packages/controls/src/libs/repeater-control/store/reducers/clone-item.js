@@ -1,7 +1,7 @@
 /**
  * Publisher dependencies
  */
-import { isObject } from '@publisher/utils';
+import { isFunction, isObject } from '@publisher/utils';
 import { prepare, update } from '@publisher/data-extractor';
 
 /**
@@ -19,9 +19,24 @@ function handleActionIncludeRepeaterId(controlValue, action) {
 			return controlValue;
 		}
 
+		let clonedItem = targetRepeater[action.itemId];
+
+		if (0 === action.itemId && action?.overrideItem) {
+			clonedItem = {
+				...clonedItem,
+				...action.overrideItem,
+			};
+		}
+
+		if (clonedItem?.selectable) {
+			targetRepeater[action.itemId].isSelected = false;
+		}
+
 		return update(controlValue, action.repeaterId, [
 			...targetRepeater.slice(0, action.itemId + 1),
-			targetRepeater[action.itemId],
+			clonedItem?.selectable
+				? { ...clonedItem, isSelected: true }
+				: clonedItem,
 			...targetRepeater.slice(action.itemId + 1),
 		]);
 	}
@@ -34,11 +49,26 @@ function handleActionIncludeRepeaterId(controlValue, action) {
 		return controlValue;
 	}
 
+	let clonedItem = controlValue[action.repeaterId][action.itemId];
+
+	if (0 === action.itemId && action?.overrideItem) {
+		clonedItem = {
+			...clonedItem,
+			...action.overrideItem,
+		};
+	}
+
+	if (clonedItem?.selectable) {
+		controlValue[action.repeaterId][action.itemId].isSelected = false;
+	}
+
 	return {
 		...controlValue,
 		[action.repeaterId]: [
 			...controlValue[action.repeaterId].slice(0, action.itemId + 1),
-			controlValue[action.repeaterId][action.itemId],
+			clonedItem?.selectable
+				? { ...clonedItem, isSelected: true }
+				: clonedItem,
 			...controlValue[action.repeaterId].slice(action.itemId + 1),
 		],
 	};
@@ -74,6 +104,21 @@ export function cloneItem(state = {}, action) {
 		return state;
 	}
 
+	let clonedItem = controlInfo.value[action.itemId];
+
+	if (0 === action.itemId && action?.overrideItem) {
+		clonedItem = {
+			...clonedItem,
+			...(isFunction(action.overrideItem)
+				? action.overrideItem(action.item, action.itemId) || {}
+				: action.overrideItem),
+		};
+	}
+
+	if (clonedItem?.selectable) {
+		controlInfo.value[action.itemId].isSelected = false;
+	}
+
 	//by default behavior of "cloneRepeaterItem" action
 	return {
 		...state,
@@ -81,7 +126,9 @@ export function cloneItem(state = {}, action) {
 			...controlInfo,
 			value: [
 				...controlInfo.value.slice(0, action.itemId + 1),
-				controlInfo.value[action.itemId],
+				clonedItem?.selectable
+					? { ...clonedItem, isSelected: true }
+					: clonedItem,
 				...controlInfo.value.slice(action.itemId + 1),
 			],
 		},

@@ -1,19 +1,32 @@
+// @flow
+
 /**
  * External dependencies
  */
-import { createContext } from '@wordpress/element';
+import type { MixedElement } from 'react';
 import { useDispatch, useSelect } from '@wordpress/data';
+import { createContext, useEffect, useState } from '@wordpress/element';
+
+/**
+ * Publisher dependencies
+ */
+import { useBlockContext } from '@publisher/extensions/src/hooks';
 
 /**
  * Internal dependencies
  */
 import { STORE_NAME } from '../store';
 import { registerControl } from '../api';
+import type { ControlContextProviderProps } from './types';
 
-export const ControlContext = createContext({
+export const ControlContext: Object = createContext({
 	controlInfo: {
 		name: null,
 		value: null,
+		attribute: null,
+		blockName: null,
+		description: null,
+		hasSideEffect: false,
 	},
 	value: null,
 	dispatch: null,
@@ -24,11 +37,15 @@ export const ControlContextProvider = ({
 	children,
 	storeName = STORE_NAME,
 	...props
-}) => {
+}: ControlContextProviderProps): MixedElement | null => {
 	registerControl({
 		...controlInfo,
 		type: storeName,
 	});
+
+	const { blockStateId, currentTab } = useBlockContext();
+
+	const [forceUpdate, setForceUpdate] = useState(blockStateId);
 
 	//Prepare control status and value!
 	const { status, value } = useSelect(
@@ -42,6 +59,27 @@ export const ControlContextProvider = ({
 	);
 	//control dispatch for available actions
 	const dispatch = useDispatch(storeName);
+	const { modifyControlValue } = dispatch;
+
+	// Assume switch between block states, then needs to re-render all controls.
+	useEffect(() => {
+		if (forceUpdate !== blockStateId) {
+			setForceUpdate(blockStateId);
+
+			modifyControlValue({
+				controlId: controlInfo.name,
+				value: controlInfo?.hasSideEffect ? value : controlInfo.value,
+			});
+		}
+		return undefined;
+	}, [blockStateId]);
+
+	useEffect(() => {
+		modifyControlValue({
+			controlId: controlInfo.name,
+			value: controlInfo?.hasSideEffect ? value : controlInfo.value,
+		});
+	}, [currentTab]);
 
 	//You can to enable||disable current control with status column!
 	if (!status) {

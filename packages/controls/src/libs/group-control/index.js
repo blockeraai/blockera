@@ -4,8 +4,8 @@
  */
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
+import type { Element, MixedElement } from 'react';
 import { useState } from '@wordpress/element';
-import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -46,14 +46,15 @@ export default function GroupControl({
 	className,
 	onClose: fnOnClose = () => {},
 	onOpen: fnOnOpen = () => {},
+	onClick = () => true,
 }: GroupControlProps): MixedElement {
 	const [isOpen, setOpen] = useState(_isOpen);
-	const [isActivePopover, setActivePopover] = useState(_isOpen);
+	const [isOpenPopover, setOpenPopover] = useState(_isOpen);
 	const { ref } = useOutsideClick({
 		onOutsideClick: () => setOpen(false),
 	});
 
-	function getHeaderOpenIcon() {
+	const getHeaderOpenIcon = (): Element<any> | string => {
 		if (headerOpenIcon) {
 			return headerOpenIcon;
 		}
@@ -62,9 +63,9 @@ export default function GroupControl({
 		else if (mode === 'popover') return <PopoverOpenIcon />;
 
 		return '';
-	}
+	};
 
-	function getHeaderCloseIcon() {
+	const getHeaderCloseIcon = () => {
 		if (headerCloseIcon) {
 			return headerCloseIcon;
 		}
@@ -73,19 +74,44 @@ export default function GroupControl({
 		else if (mode === 'popover') return <PopoverOpenIcon />;
 
 		return '';
-	}
+	};
 
-	function onOpen() {
+	const onOpen = () => {
 		if (isFunction(fnOnOpen)) {
 			fnOnOpen();
 		}
-	}
+	};
 
-	function onClose() {
+	const onClose = () => {
 		if (isFunction(fnOnClose)) {
 			fnOnClose();
 		}
-	}
+	};
+
+	const onClickCallback = () => {
+		if (isOpen) {
+			onClose();
+		} else {
+			onOpen();
+		}
+
+		setOpen(!isOpen);
+		setOpenPopover(!isOpenPopover);
+	};
+
+	const isCallbackEligible = (event: MouseEvent) => {
+		return isFunction(onClick) && onClick && onClick(event);
+	};
+
+	const handleOnClick = (event: MouseEvent): void => {
+		event.stopPropagation();
+
+		if (!isCallbackEligible(event)) {
+			return;
+		}
+
+		onClickCallback();
+	};
 
 	return (
 		<div
@@ -94,26 +120,18 @@ export default function GroupControl({
 				'design-' + design,
 				'mode-' + mode,
 
-				isOpen || (isActivePopover && !isOpen) ? 'is-open' : 'is-close',
+				isOpen || (isOpenPopover && !isOpen) ? 'is-open' : 'is-close',
 				toggleOpenBorder ? 'toggle-open-border' : '',
 				className
 			)}
 			data-cy="control-group"
+			aria-label={'group-control'}
 		>
 			<div
 				ref={ref}
 				className={controlInnerClassNames('group-header')}
 				data-cy="group-control-header"
-				onClick={() => {
-					if (isOpen) {
-						onClose();
-					} else {
-						onOpen();
-					}
-
-					setOpen(!isOpen);
-					setActivePopover(!isActivePopover);
-				}}
+				onClick={handleOnClick}
 			>
 				{header}
 
@@ -133,17 +151,7 @@ export default function GroupControl({
 									? __('Close Settings', 'publisher')
 									: __('Open Settings', 'publisher')
 							}
-							onClick={(event) => {
-								event.stopPropagation();
-								if (isOpen) {
-									onClose();
-								} else {
-									onOpen();
-								}
-
-								setOpen(!isOpen);
-								setActivePopover(!isActivePopover);
-							}}
+							onClick={onClickCallback}
 							noBorder={true}
 						/>
 					)}
@@ -152,7 +160,7 @@ export default function GroupControl({
 				</div>
 			</div>
 
-			{mode === 'popover' && isActivePopover && (
+			{mode === 'popover' && isOpenPopover && (
 				<Popover
 					offset={35}
 					placement="left-start"
@@ -164,7 +172,7 @@ export default function GroupControl({
 					onClose={() => {
 						onClose();
 
-						setActivePopover(false);
+						setOpenPopover(false);
 					}}
 				>
 					{children}

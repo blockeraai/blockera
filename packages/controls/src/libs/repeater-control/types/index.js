@@ -41,6 +41,13 @@ export type RepeaterControlProps = {
 	//
 	defaultValue?: Array<Object> | [],
 	defaultRepeaterItemValue?: Object,
+	getDynamicDefaultRepeaterItem?: (
+		itemsCount: number,
+		defaultRepeaterItemValue: Object
+	) => Object,
+	onSelect?: (event: MouseEvent, item: Object) => boolean,
+	overrideItem?: (item: Object) => Object,
+	repeaterItemOpener?: (props: Object) => boolean | MixedElement,
 	valueCleanup?: (any | Array<Object>) => any | Array<Object>,
 };
 
@@ -50,6 +57,9 @@ export type TRepeaterDefaultStateProps = {
 	repeaterItems?: Array<Object>,
 	repeaterId?: ID,
 	customProps?: Object,
+	onSelect?: (event: MouseEvent, item: Object) => boolean,
+	overrideItem?: (item: Object) => Object,
+	repeaterItemOpener?: (props: Object) => boolean | MixedElement,
 	popoverTitle: string | MixedElement,
 };
 

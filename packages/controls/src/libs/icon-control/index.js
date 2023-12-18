@@ -4,7 +4,7 @@
  */
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
-import { memo, useState, useReducer } from '@wordpress/element';
+import { memo, useState, useReducer, useEffect } from '@wordpress/element';
 import type { MixedElement } from 'react';
 
 /**
@@ -15,8 +15,14 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { Button, Icon, MediaUploader } from '@publisher/components';
-import { isEmpty, isUndefined, useLateEffect } from '@publisher/utils';
 import { hasSameProps } from '@publisher/extensions';
+import {
+	isEmpty,
+	isObject,
+	isEquals,
+	isUndefined,
+	useLateEffect,
+} from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -46,7 +52,14 @@ function IconControl({
 	//
 	className,
 }: IconControlProps): MixedElement {
-	const { value, setValue } = useControlContext({
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		defaultValue,
 		onChange,
 	});
@@ -56,6 +69,27 @@ function IconControl({
 	useLateEffect(() => {
 		setValue(currentIcon);
 	}, [currentIcon]);
+
+	useEffect(() => {
+		if (isObject(value) && !isEquals(value, currentIcon)) {
+			currentIconDispatch({
+				type: 'UPDATE_ICON',
+				icon: value.icon,
+				library: value.library,
+			});
+
+			return undefined;
+		}
+
+		if (!value) {
+			currentIconDispatch({
+				type: 'DELETE_ICON',
+			});
+		}
+
+		return undefined;
+		// eslint-disable-next-line
+	}, [value]);
 
 	const [isOpenModal, setOpenModal] = useState(false);
 
@@ -125,6 +159,12 @@ function IconControl({
 				columns={columns}
 				controlName={field}
 				className={className}
+				{...{
+					attribute,
+					blockName,
+					description,
+					resetToDefault,
+				}}
 			>
 				<div
 					className={controlClassNames(

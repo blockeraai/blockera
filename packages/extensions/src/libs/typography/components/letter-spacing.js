@@ -34,6 +34,8 @@ export const LetterSpacing = ({
 			value={{
 				name: generateExtensionId(block, 'letter-spacing'),
 				value,
+				attribute: 'publisherLetterSpacing',
+				blockName: block.blockName,
 			}}
 		>
 			<InputControl
@@ -49,26 +51,18 @@ export const LetterSpacing = ({
 						return newValue;
 					},
 					onChange: (newValue) =>
-						onChange(
-							'publisherLetterSpacing',
-							newValue,
-							'',
-							(
-								attributes: Object,
-								setAttributes: (attributes: Object) => void
-							): void =>
-								setAttributes({
-									...attributes,
-									style: {
-										...(attributes?.style ?? {}),
-										typography: {
-											...(attributes?.style?.typography ??
-												{}),
-											letterSpacing: newValue,
-										},
+						onChange('publisherLetterSpacing', newValue, {
+							addOrModifyRootItems: {
+								style: {
+									...(block.attributes?.style ?? {}),
+									typography: {
+										...(block.attributes?.style
+											?.typography ?? {}),
+										letterSpacing: newValue,
 									},
-								})
-						),
+								},
+							},
+						}),
 				}}
 			/>
 		</ControlContextProvider>

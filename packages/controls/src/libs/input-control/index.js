@@ -52,7 +52,14 @@ export default function InputControl({
 	children,
 	...props
 }: InputControlProps): MixedElement {
-	const { value, setValue, description, resetToDefault } = useControlContext({
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+	} = useControlContext({
 		id,
 		defaultValue,
 		onChange,
@@ -79,7 +86,14 @@ export default function InputControl({
 				columns={columns}
 				controlName={field}
 				className={className}
-				{...{ mode: 'advanced', path: id, description, resetToDefault }}
+				{...{
+					mode: 'advanced',
+					path: id,
+					attribute,
+					blockName,
+					description,
+					resetToDefault,
+				}}
 			>
 				<div
 					className={controlClassNames(

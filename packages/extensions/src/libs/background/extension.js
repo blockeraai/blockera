@@ -73,6 +73,8 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 									isVisible: true,
 								},
 							],
+							attribute: 'publisherBackground',
+							blockName: block.blockName,
 						}}
 						storeName={'publisher-core/controls/repeater'}
 					>
@@ -82,40 +84,38 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 						>
 							<BackgroundControl
 								label={__('Image & Gradient', 'publisher-core')}
-								onChange={(newValue) =>
+								onChange={(newValue) => {
+									const toWPCompatibleValue =
+										isArray(newValue) &&
+										!isEmpty(newValue) &&
+										newValue[0]?.image
+											? {
+													style: {
+														...(block?.attributes
+															?.style ?? {}),
+														background: {
+															...(block
+																?.attributes
+																?.style
+																?.background ??
+																{}),
+															backgroundImage:
+																newValue[0]
+																	.image,
+														},
+													},
+											  }
+											: {};
+
 									handleOnChangeAttributes(
 										'publisherBackground',
 										newValue,
-										'',
-										(
-											attributes: Object,
-											setAttributes: (
-												attributes: Object
-											) => void
-										): void => {
-											if (
-												!isArray(newValue) ||
-												isEmpty(newValue)
-											) {
-												return;
-											}
-
-											setAttributes({
-												...attributes,
-												style: {
-													...(attributes?.style ??
-														{}),
-													background: {
-														...(attributes?.style
-															?.background ?? {}),
-														backgroundImage:
-															newValue[0].image,
-													},
-												},
-											});
+										{
+											addOrModifyRootItems:
+												toWPCompatibleValue,
 										}
-									)
-								}
+									);
+								}}
 								{...props}
 							/>
 						</BaseControl>
@@ -130,6 +130,8 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 								'background-color'
 							),
 							value: backgroundColor,
+							attribute: 'publisherBackgroundColor',
+							blockName: block.blockName,
 						}}
 					>
 						<ColorControl
@@ -154,6 +156,8 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 						value={{
 							name: generateExtensionId(block, 'background-clip'),
 							value: backgroundClip,
+							attribute: 'publisherBackgroundClip',
+							blockName: block.blockName,
 						}}
 					>
 						<SelectControl

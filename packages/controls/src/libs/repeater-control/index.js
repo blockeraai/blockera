@@ -19,7 +19,7 @@ import { Button } from '@publisher/components';
  */
 import PlusIcon from './icons/plus';
 import LabelControl from '../label-control';
-import { useControlContext } from '../../context';
+import { useControlContext } from '../../context/hooks/use-control-context';
 import { RepeaterContextProvider } from './context';
 import MappedItems from './components/mapped-items';
 
@@ -28,6 +28,16 @@ import MappedItems from './components/mapped-items';
  */
 import type { RepeaterControlProps, TRepeaterDefaultStateProps } from './types';
 import type { MixedElement } from 'react';
+
+export const defaultItemValue = {
+	isOpen: true,
+	display: true,
+	cloneable: true,
+	isVisible: true,
+	deletable: true,
+	selectable: false,
+	visibilitySupport: true,
+};
 
 export default function RepeaterControl({
 	design = 'minimal',
@@ -46,21 +56,31 @@ export default function RepeaterControl({
 	//
 	label,
 	id: repeaterId,
+	repeaterItemOpener,
 	repeaterItemHeader,
 	repeaterItemChildren,
+	getDynamicDefaultRepeaterItem,
 	//
 	defaultValue = [],
 	defaultRepeaterItemValue = { isVisible: true },
 	onChange,
+	onSelect,
+	overrideItem,
 	valueCleanup,
 	//
 	className,
 	...props
 }: RepeaterControlProps): MixedElement {
+	defaultRepeaterItemValue = {
+		...defaultItemValue,
+		...defaultRepeaterItemValue,
+	};
+
 	const {
 		value,
-		dispatch: { addRepeaterItem },
-		controlInfo: { name: controlId },
+		dispatch: { addRepeaterItem, modifyControlValue },
+		controlInfo: { name: controlId, description, attribute, blockName },
+		resetToDefault,
 	} = useControlContext({
 		defaultValue,
 		sideEffect: true,
@@ -87,8 +107,11 @@ export default function RepeaterControl({
 		actionButtonDelete,
 		actionButtonClone,
 		//
+		onSelect,
 		controlId,
 		repeaterId,
+		overrideItem,
+		repeaterItemOpener,
 		repeaterItemHeader,
 		repeaterItemChildren,
 		//
@@ -109,7 +132,14 @@ export default function RepeaterControl({
 				data-cy="publisher-repeater-control"
 			>
 				<div className={controlInnerClassNames('header')}>
-					<LabelControl label={label} />
+					<LabelControl
+						label={label}
+						mode={'advanced'}
+						blockName={blockName}
+						attribute={attribute}
+						description={description}
+						resetToDefault={resetToDefault}
+					/>
 
 					<div
 						className={controlInnerClassNames(
@@ -133,10 +163,71 @@ export default function RepeaterControl({
 									__('Add New', 'publisher-core')
 								}
 								onClick={() => {
+									const callback = (value?: Object): void => {
+										if (
+											!defaultRepeaterItemValue?.selectable
+										) {
+											return;
+										}
+
+										modifyControlValue({
+											controlId,
+											value: [
+												...repeaterItems.map(
+													(item) => ({
+														...item,
+														isSelected: false,
+													})
+												),
+												value
+													? value
+													: {
+															...defaultRepeaterItemValue,
+															isSelected: true,
+													  },
+											],
+										});
+									};
+
 									if (
 										maxItems === -1 ||
 										repeaterItems?.length < maxItems
 									) {
+										if (
+											'function' ===
+											typeof getDynamicDefaultRepeaterItem
+										) {
+											const value =
+												getDynamicDefaultRepeaterItem(
+													repeaterItems?.length,
+													defaultRepeaterItemValue
+												);
+
+											if (value?.selectable) {
+												return callback({
+													...value,
+													isSelected: true,
+												});
+											}
+
+											addRepeaterItem({
+												controlId,
+												repeaterId,
+												value: getDynamicDefaultRepeaterItem(
+													repeaterItems?.length,
+													defaultRepeaterItemValue
+												),
+											});
+
+											return;
+										}
+
+										if (
+											defaultRepeaterItemValue?.selectable
+										) {
+											return callback();
+										}
+
 										addRepeaterItem({
 											controlId,
 											repeaterId,
@@ -269,4 +360,5 @@ RepeaterControl.propTypes = {
 		PropTypes.func,
 		PropTypes.object,
 	]),
+	getDynamicDefaultRepeaterItem: PropTypes.func,
 };
