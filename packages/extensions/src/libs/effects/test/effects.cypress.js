@@ -1466,8 +1466,21 @@ describe('Effects Extension', () => {
 
 				cy.getByDataTest('divider-item-header').last().click();
 
-				//add data
 				cy.getByDataTest('popover-body').within(() => {
+					//Check position
+					cy.getByAriaLabel('Bottom').should(
+						'have.attr',
+						'aria-checked',
+						'true'
+					);
+
+					cy.get('button[data-value="top"]').should(
+						'have.attr',
+						'aria-disabled',
+						'true'
+					);
+
+					//add data
 					cy.getByDataTest('divider-width-input').clear();
 					cy.getByDataTest('divider-width-input').type(300, {
 						force: true,
