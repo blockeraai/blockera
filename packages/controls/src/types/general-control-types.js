@@ -10,6 +10,8 @@ export type ControlGeneralTypes = {
 	children?: any,
 	className?: string,
 	field?: string,
+	fieldId?: string,
+	repeaterItem?: number,
 	//
 	label?: any,
 	columns?: string,

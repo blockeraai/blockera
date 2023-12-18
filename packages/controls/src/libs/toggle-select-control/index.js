@@ -31,8 +31,10 @@ export default function ToggleSelectControl({
 	label,
 	columns,
 	defaultValue,
-	onChange,
+	onChange = () => {},
 	field,
+	fieldId,
+	repeaterItem,
 	//
 	className,
 	children,
@@ -44,6 +46,7 @@ export default function ToggleSelectControl({
 		attribute,
 		blockName,
 		description,
+		getControlPath,
 		resetToDefault,
 	} = useControlContext({
 		id,
@@ -63,7 +66,16 @@ export default function ToggleSelectControl({
 			columns={columns}
 			controlName={field}
 			className={className}
-			{...{ attribute, blockName, description, resetToDefault }}
+			{...{
+				fieldId,
+				attribute,
+				blockName,
+				description,
+				repeaterItem,
+				resetToDefault,
+				mode: 'advanced',
+				path: getControlPath(attribute, id),
+			}}
 		>
 			<div className={controlClassNames('toggle-select', className)}>
 				<WPToggleGroupControl

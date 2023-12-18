@@ -71,6 +71,18 @@ export const BorderAndShadowExtension: TBorderAndShadowProps =
 								value: boxShadow,
 								attribute: 'publisherBoxShadow',
 								blockName: block.blockName,
+								description: () => (
+									<div
+										className={
+											'publisher-label-control-popover'
+										}
+									>
+										{__(
+											'Sets the border and box-shadow css properties for block.',
+											'publisher-core'
+										)}
+									</div>
+								),
 							}}
 							storeName={'publisher-core/controls/repeater'}
 						>

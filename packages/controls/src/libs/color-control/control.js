@@ -30,8 +30,10 @@ export default function ColorControl({
 	label,
 	columns,
 	defaultValue,
-	onChange,
+	onChange = () => {},
 	field = 'color',
+	fieldId,
+	repeaterItem,
 	//
 	className = '',
 	style,
@@ -50,6 +52,7 @@ export default function ColorControl({
 		blockName,
 		description,
 		resetToDefault,
+		getControlPath,
 	} = useControlContext({
 		id,
 		onChange,
@@ -72,6 +75,17 @@ export default function ColorControl({
 		size,
 	});
 
+	const labelProps = {
+		fieldId,
+		attribute,
+		blockName,
+		description,
+		repeaterItem,
+		resetToDefault,
+		mode: 'advanced',
+		path: getControlPath(attribute, id),
+	};
+
 	if (isSetValueAddon()) {
 		return (
 			<BaseControl
@@ -79,7 +93,7 @@ export default function ColorControl({
 				columns={columns}
 				controlName={field}
 				className={className}
-				{...{ attribute, blockName, description, resetToDefault }}
+				{...labelProps}
 			>
 				<div
 					className={controlClassNames(
@@ -115,7 +129,7 @@ export default function ColorControl({
 			columns={columns}
 			controlName={field}
 			className={className + ' ' + valueAddonClassNames}
-			{...{ attribute, blockName, description, resetToDefault }}
+			{...labelProps}
 		>
 			<Button
 				size="input"

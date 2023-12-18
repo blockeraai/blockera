@@ -7,11 +7,13 @@ import type { MixedElement } from 'react';
 
 export type LabelControlProps = {
 	label?: string,
-	blockName: string,
-	attribute: string,
+	blockName?: string,
+	attribute?: string,
 	className?: string,
 	ariaLabel?: string,
 	path?: string | null,
+	repeaterItem?: number,
+	fieldId?: string | null,
 	mode?: 'advanced' | 'simple',
 	description?: string | MixedElement,
 	onClick?: (event: MouseEvent) => void,

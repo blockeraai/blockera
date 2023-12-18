@@ -111,16 +111,23 @@ const StatesGraph = ({
 const AdvancedLabelControl = ({
 	path = null,
 	label,
+	fieldId,
 	className,
 	ariaLabel,
 	attribute,
 	blockName,
 	description,
+	repeaterItem,
 	resetToDefault,
 	...props
-}: AdvancedLabelControlProps) => {
+}: AdvancedLabelControlProps): null | MixedElement => {
 	const [isOpenModal, setOpenModal] = useState(false);
-	const { getCurrentState, getBreakpoint, isNormalState } = useBlockContext();
+	const { getBreakpoint, isNormalState, getAttributes, getCurrentState } =
+		useBlockContext();
+
+	if ('undefined' === typeof attribute || 'undefined' === typeof blockName) {
+		return null;
+	}
 
 	const states = getStatesGraph({ controlId: attribute, blockName });
 	const currentGraph = states.find(
@@ -131,7 +138,7 @@ const AdvancedLabelControl = ({
 		'undefined' !== typeof currentGraph &&
 		currentGraph?.isChangedState(getCurrentState());
 
-	const normalIsChanged = currentGraph?.changedStates.find(
+	const normalHasChanges = currentGraph?.changedStates.find(
 		(state) => 'normal' === state.type
 	);
 
@@ -154,7 +161,7 @@ const AdvancedLabelControl = ({
 							isChangedInOtherStates,
 						'changed-in-normal-state':
 							(isNormalState() && isChangedValue) ||
-							normalIsChanged,
+							normalHasChanges,
 						'changed-in-secondary-state':
 							!isNormalState() && isChangedValue,
 					})}
@@ -177,7 +184,7 @@ const AdvancedLabelControl = ({
 					onClose={() => setOpenModal(!isOpenModal)}
 					placement={'left-start'}
 				>
-					{description}
+					{isFunction(description) ? description() : description}
 
 					<StatesGraph controlId={attribute} blockName={blockName} />
 
@@ -203,9 +210,46 @@ const AdvancedLabelControl = ({
 								return resetToDefault();
 							}
 
-							resetToDefault({ path });
+							resetToDefault({
+								path,
+								repeaterItem,
+								propId: fieldId,
+							});
 						}}
 					/>
+
+					{!isNormalState() && (
+						<Button
+							variant={'primary'}
+							text={__('Reset To Normal', 'publisher-core')}
+							label={__('Reset To Normal', 'publisher-core')}
+							onClick={() => {
+								if (
+									!resetToDefault ||
+									!isFunction(resetToDefault)
+								) {
+									return;
+								}
+
+								setOpenModal(!isOpenModal);
+
+								if (
+									isNull(path) ||
+									isEmpty(path) ||
+									isUndefined(path)
+								) {
+									return resetToDefault();
+								}
+
+								resetToDefault({
+									path,
+									repeaterItem,
+									propId: fieldId,
+									attributes: getAttributes(),
+								});
+							}}
+						/>
+					)}
 				</Popover>
 			)}
 		</>
@@ -215,11 +259,14 @@ const AdvancedLabelControl = ({
 const LabelControl = ({
 	mode = 'simple',
 	label = '',
+	path,
+	fieldId,
 	className,
 	ariaLabel = '',
 	attribute,
 	blockName,
 	description,
+	repeaterItem,
 	resetToDefault,
 	...props
 }: LabelControlProps): MixedElement => {
@@ -228,13 +275,15 @@ const LabelControl = ({
 			<AdvancedLabelControl
 				{...{
 					label,
+					fieldId,
 					className,
 					ariaLabel,
 					attribute,
 					blockName,
 					description,
+					repeaterItem,
 					resetToDefault,
-					path: attribute,
+					path: path || attribute,
 					...props,
 				}}
 			/>

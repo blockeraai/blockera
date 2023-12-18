@@ -32,7 +32,7 @@ export default function InputControl({
 	label,
 	columns,
 	defaultValue = '',
-	onChange,
+	onChange = () => {},
 	field = 'input',
 	className = '',
 	type = 'text',
@@ -45,6 +45,8 @@ export default function InputControl({
 	arrows = false,
 	size = 'normal',
 	//
+	fieldId,
+	repeaterItem,
 	controlAddonTypes,
 	variableTypes,
 	dynamicValueTypes,
@@ -59,6 +61,7 @@ export default function InputControl({
 		blockName,
 		description,
 		resetToDefault,
+		getControlPath,
 	} = useControlContext({
 		id,
 		defaultValue,
@@ -79,6 +82,17 @@ export default function InputControl({
 		size,
 	});
 
+	const labelProps = {
+		fieldId,
+		attribute,
+		blockName,
+		description,
+		repeaterItem,
+		resetToDefault,
+		mode: 'advanced',
+		path: getControlPath(attribute, id),
+	};
+
 	if (isSetValueAddon()) {
 		return (
 			<BaseControl
@@ -86,14 +100,7 @@ export default function InputControl({
 				columns={columns}
 				controlName={field}
 				className={className}
-				{...{
-					mode: 'advanced',
-					path: id,
-					attribute,
-					blockName,
-					description,
-					resetToDefault,
-				}}
+				{...labelProps}
 			>
 				<div
 					className={controlClassNames(
@@ -121,7 +128,7 @@ export default function InputControl({
 			columns={columns}
 			controlName={field}
 			className={className + ' ' + valueAddonClassNames}
-			{...{ mode: 'advanced', path: id, description, resetToDefault }}
+			{...labelProps}
 		>
 			{!isEmpty(units) ? (
 				<UnitInput

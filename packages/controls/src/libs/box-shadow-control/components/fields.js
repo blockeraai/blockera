@@ -25,11 +25,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
 
-		const { repeaterId, getControlId } = useContext(RepeaterContext);
+		const { repeaterId, getControlId, defaultRepeaterItemValue } =
+			useContext(RepeaterContext);
 
 		return (
 			<div id={`repeater-item-${itemId}`}>
 				<ToggleSelectControl
+					fieldId={'type'}
+					repeaterItem={itemId}
 					id={getControlId(itemId, 'type')}
 					label={__('Position', 'publisher-core')}
 					columns="columns-2"
@@ -52,10 +55,12 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						})
 					}
 					data-test="box-shadow-type-select"
-					defaultValue={item.type}
+					defaultValue={defaultRepeaterItemValue.type}
 				/>
 
 				<InputControl
+					fieldId={'x'}
+					repeaterItem={itemId}
 					id={getControlId(itemId, 'x')}
 					label={__('X', 'publisher-core')}
 					columns="columns-2"
@@ -72,10 +77,12 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						})
 					}
 					data-test="box-shadow-x-input"
-					defaultValue={item.x}
+					defaultValue={defaultRepeaterItemValue.x}
 				/>
 
 				<InputControl
+					fieldId={'y'}
+					repeaterItem={itemId}
 					id={getControlId(itemId, 'y')}
 					label={__('Y', 'publisher-core')}
 					columns="columns-2"
@@ -92,10 +99,12 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						})
 					}
 					data-test="box-shadow-y-input"
-					defaultValue={item.y}
+					defaultValue={defaultRepeaterItemValue.y}
 				/>
 
 				<InputControl
+					fieldId={'blur'}
+					repeaterItem={itemId}
 					id={getControlId(itemId, 'blur')}
 					label={__('Blur', 'publisher-core')}
 					columns="columns-2"
@@ -112,10 +121,12 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						})
 					}
 					data-test="box-shadow-blur-input"
-					defaultValue={item.blur}
+					defaultValue={defaultRepeaterItemValue.blur}
 				/>
 
 				<InputControl
+					fieldId={'spread'}
+					repeaterItem={itemId}
 					id={getControlId(itemId, 'spread')}
 					label={__('Spread', 'publisher-core')}
 					columns="columns-2"
@@ -132,10 +143,12 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						})
 					}
 					data-test="box-shadow-spread-input"
-					defaultValue={item.spread}
+					defaultValue={defaultRepeaterItemValue.spread}
 				/>
 
 				<ColorControl
+					fieldId={'color'}
+					repeaterItem={itemId}
 					id={getControlId(itemId, 'color')}
 					label={__('Color', 'publisher-core')}
 					columns="columns-2"
@@ -148,7 +161,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						})
 					}
 					data-test="box-shadow-color-control"
-					defaultValue={item.color}
+					defaultValue={defaultRepeaterItemValue.color}
 					controlAddonTypes={['variable']}
 					variableTypes={['color']}
 				/>
