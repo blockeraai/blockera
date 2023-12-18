@@ -39,51 +39,48 @@ export function AfterDividerGenerator(id, props, styleEngine) {
 }
 
 function DividerGenerator(attributes) {
-	const value = attributes?.publisherDivider
-		?.map((item) => {
-			const properties = {};
-			if (!item.isVisible) {
-				return null;
-			}
+	const value = attributes?.publisherDivider?.map((item) => {
+		const properties = {};
+		if (!item.isVisible) {
+			return {};
+		}
 
-			properties.content = '""';
-			properties.position = 'absolute';
-			properties.left = '0px';
+		properties.content = '""';
+		properties.position = 'absolute';
+		properties.left = '0px';
 
-			if (item.onFront) properties['z-index'] = '1000';
-			else properties['z-index'] = '1';
+		if (item.onFront) properties['z-index'] = '1000';
+		else properties['z-index'] = '1';
 
-			switch (item.position) {
-				case 'top':
-					{
-						properties.top = '0px';
-						if (item.flip) properties.transform = 'scaleX(-1)';
-					}
-					break;
-				case 'bottom':
-					{
-						properties.bottom = '0px';
-						if (item.flip)
-							properties.transform = 'scaleX(-1) rotate(180deg)';
-						else properties.transform = 'rotate(180deg)';
-					}
-					break;
-			}
+		switch (item.position) {
+			case 'top':
+				{
+					properties.top = '0px';
+					if (item.flip) properties.transform = 'scaleX(-1)';
+				}
+				break;
+			case 'bottom':
+				{
+					properties.bottom = '0px';
+					if (item.flip)
+						properties.transform = 'scaleX(-1) rotate(180deg)';
+					else properties.transform = 'rotate(180deg)';
+				}
+				break;
+		}
 
-			properties.width =
-				getValueAddonRealValue(item.size?.width) || '100%';
-			properties.height =
-				getValueAddonRealValue(item.size?.height) || '100px';
-			properties['background-size'] = '100%';
-			properties['background-repeat'] = 'no-repeat';
-			properties['background-image'] = `url("${getSelectedShape(
-				item.shape.id,
-				item.color
-			)}")`;
+		properties.width = getValueAddonRealValue(item.size?.width) || '100%';
+		properties.height =
+			getValueAddonRealValue(item.size?.height) || '100px';
+		properties['background-size'] = '100%';
+		properties['background-repeat'] = 'no-repeat';
+		properties['background-image'] = `url("${getSelectedShape(
+			item.shape.id,
+			item.color
+		)}")`;
 
-			return properties;
-		})
-		?.filter((item) => null !== item);
+		return properties;
+	});
 
 	return value;
 }
