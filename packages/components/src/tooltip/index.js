@@ -56,7 +56,5 @@ Tooltip.propTypes = {
 		'left-end',
 	]),
 	position: PropTypes.string,
-	//$FlowFixMe
-	shortcut: PropTypes.oneOf(PropTypes.string, PropTypes.object),
 	text: PropTypes.string,
 };
