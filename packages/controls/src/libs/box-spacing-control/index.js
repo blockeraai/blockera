@@ -61,7 +61,7 @@ export default function BoxSpacingControl({
 			left: '',
 		},
 	},
-	onChange,
+	onChange = () => {},
 	field,
 	//
 	...props
@@ -74,6 +74,7 @@ export default function BoxSpacingControl({
 		blockName,
 		description,
 		resetToDefault,
+		getControlPath,
 	} = useControlContext({
 		id,
 		onChange,
@@ -221,7 +222,13 @@ export default function BoxSpacingControl({
 			columns={columns}
 			controlName={field}
 			className={className}
-			{...{ attribute, blockName, description, resetToDefault }}
+			{...{
+				mode: 'advanced',
+				attribute,
+				blockName,
+				description,
+				resetToDefault,
+			}}
 		>
 			<div
 				{...props}
@@ -485,7 +492,8 @@ export default function BoxSpacingControl({
 							blockName,
 							description,
 							resetToDefault,
-							path: 'margin',
+							fieldId: 'margin',
+							path: getControlPath(attribute, 'margin'),
 						}}
 					/>
 				</span>
@@ -505,7 +513,8 @@ export default function BoxSpacingControl({
 							blockName,
 							description,
 							resetToDefault,
-							path: 'padding',
+							fieldId: 'padding',
+							path: getControlPath(attribute, 'padding'),
 						}}
 					/>
 				</span>
