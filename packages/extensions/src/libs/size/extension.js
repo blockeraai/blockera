@@ -139,12 +139,13 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										}
 										placeholder="0"
 										unitType="width"
-										min="0"
+										min={0}
 										defaultValue={_width}
 										size={
 											isHeightActive &&
-											lengthOfActiveFields > 2 &&
-											'small'
+											lengthOfActiveFields > 2
+												? 'small'
+												: 'normal'
 										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
@@ -201,11 +202,12 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										}
 										placeholder="0"
 										unitType="min-width"
-										min="0"
+										min={0}
 										size={
 											isHeightActive &&
-											lengthOfActiveFields > 2 &&
-											'small'
+											lengthOfActiveFields > 2
+												? 'small'
+												: 'normal'
 										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
@@ -241,11 +243,12 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										}
 										placeholder="0"
 										unitType="max-width"
-										min="0"
+										min={0}
 										size={
 											isHeightActive &&
-											lengthOfActiveFields > 2 &&
-											'small'
+											lengthOfActiveFields > 2
+												? 'small'
+												: 'normal'
 										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
@@ -293,12 +296,13 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										}
 										placeholder="0"
 										unitType="height"
-										min="0"
+										min={0}
 										defaultValue={_height}
 										size={
 											isWidthActive &&
-											lengthOfActiveFields > 2 &&
-											'small'
+											lengthOfActiveFields > 2
+												? 'small'
+												: 'normal'
 										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
@@ -355,11 +359,12 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										}
 										placeholder="0"
 										unitType="min-height"
-										min="0"
+										min={0}
 										size={
 											isWidthActive &&
-											lengthOfActiveFields > 2 &&
-											'small'
+											lengthOfActiveFields > 2
+												? 'small'
+												: 'normal'
 										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
@@ -395,11 +400,12 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										}
 										placeholder="0"
 										unitType="max-height"
-										min="0"
+										min={0}
 										size={
 											isWidthActive &&
-											lengthOfActiveFields > 2 &&
-											'small'
+											lengthOfActiveFields > 2
+												? 'small'
+												: 'normal'
 										}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
