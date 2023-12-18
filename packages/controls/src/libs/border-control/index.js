@@ -87,7 +87,7 @@ export default function BorderControl({
 						setValue({ ...value, width: newValue });
 					}}
 					data-test="border-control-width"
-					placeholder="0"
+					placeholder="-"
 				/>
 
 				<ColorControl

@@ -21,18 +21,18 @@ import { Button } from '@publisher/components';
 import { InputControl, LabelControl } from '../index';
 import { default as CustomIcon } from './icons/custom';
 import { useControlContext } from '../../context';
-import type { BorderRadiusControlProps, TValue } from './types/control-type';
+import type { BorderRadiusControlProps, TValue } from './types';
 
 export default function BorderRadiusControl({
 	id,
 	label = '',
 	defaultValue = {
 		type: 'all',
-		all: '0px',
-		topLeft: '0px',
-		topRight: '0px',
-		bottomLeft: '0px',
-		bottomRight: '0px',
+		all: '',
+		topLeft: '',
+		topRight: '',
+		bottomLeft: '',
+		bottomRight: '',
 	},
 	onChange,
 	//
@@ -92,8 +92,8 @@ export default function BorderRadiusControl({
 								},
 							});
 						}}
-						defaultValue={value.all}
-						placeholder="0"
+						defaultValue={value.all || ''}
+						placeholder="-"
 						size="small"
 						data-test="border-radius-input-all"
 					/>
@@ -113,6 +113,7 @@ export default function BorderRadiusControl({
 						height: '30px',
 					}}
 					onClick={() => {
+						// old type
 						if (value.type === 'all') {
 							setValue({
 								...value,
@@ -181,8 +182,8 @@ export default function BorderRadiusControl({
 								'border-corner-top-left'
 							)}
 							noBorder={true}
-							defaultValue={value.topLeft || '0'}
-							placeholder="0"
+							defaultValue={value.topLeft || ''}
+							placeholder="-"
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -206,8 +207,8 @@ export default function BorderRadiusControl({
 								'border-corner-top-right'
 							)}
 							noBorder={true}
-							defaultValue={value.topRight || '0'}
-							placeholder="0"
+							defaultValue={value.topRight || ''}
+							placeholder="-"
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -231,8 +232,8 @@ export default function BorderRadiusControl({
 								'border-corner-bottom-left'
 							)}
 							noBorder={true}
-							defaultValue={value.bottomLeft || '0'}
-							placeholder="0"
+							defaultValue={value.bottomLeft || ''}
+							placeholder="-"
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -256,8 +257,8 @@ export default function BorderRadiusControl({
 								'border-corner-bottom-right'
 							)}
 							noBorder={true}
-							defaultValue={value.bottomRight || '0'}
-							placeholder="0"
+							defaultValue={value.bottomRight || ''}
+							placeholder="-"
 							onChange={(newValue) => {
 								setValue({
 									...value,
