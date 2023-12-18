@@ -127,7 +127,10 @@ export default function ({
 
 							return (
 								<PickerValueItem
-									showValue={!showTwoColumns}
+									showValue={
+										variable.name.length < 4 ||
+										!showTwoColumns
+									}
 									value={controlProps.value}
 									data={itemData}
 									onClick={controlProps.handleOnClickVar}

@@ -72,6 +72,6 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		pointer-events: none;
-		max-width: 120px;
+		max-width: min(50%, 120px);
 	}
 }
