@@ -46,10 +46,10 @@ const _getPostDynamicValueItems = function (): Array<DynamicValueItem> {
 			name: __('Post ID', 'publisher-core'),
 			id: 'post-id',
 			type: 'id',
-			status: 'soon',
+			status: 'core',
 			category: 'post',
 			reference: {
-				type: 'core-pro',
+				type: 'core',
 			},
 		},
 		{
