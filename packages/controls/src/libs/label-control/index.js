@@ -16,6 +16,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
+import { useAdvancedLabelProps } from '@publisher/hooks';
 import { useBlockContext } from '@publisher/extensions/src/hooks/context';
 
 /**
@@ -24,10 +25,11 @@ import { useBlockContext } from '@publisher/extensions/src/hooks/context';
 import { GroupControl } from '../index';
 import { getStatesGraph } from './states-graph';
 import type {
-	LabelStates,
 	LabelControlProps,
+	LabelStates,
 	AdvancedLabelControlProps,
 } from './types';
+import type { StateTypes } from '@publisher/extensions/src/libs/block-states/types';
 
 const StatesGraph = ({
 	controlId,
@@ -40,7 +42,7 @@ const StatesGraph = ({
 		return null;
 	}
 
-	const renderedBreakpoints = [];
+	const renderedBreakpoints: Array<string> = [];
 
 	const statesGraph = getStatesGraph({ controlId, blockName });
 
@@ -54,56 +56,67 @@ const StatesGraph = ({
 				'publisher-control-states-changes'
 			)}
 		>
-			{statesGraph?.map((state, index) => {
-				const breakpoint = state?.graph;
+			{statesGraph?.map(
+				(state: LabelStates, index: number): null | MixedElement => {
+					if ('undefined' === typeof state?.graph) {
+						return null;
+					}
 
-				if (isEmpty(breakpoint.states)) {
-					return null;
+					if (isEmpty(state.graph.states)) {
+						return null;
+					}
+
+					const isRenderedBreakpoint = renderedBreakpoints.includes(
+						state.graph.type
+					);
+
+					const renderedStates: Array<string> = [];
+
+					renderedBreakpoints.push(breakpoint.type);
+
+					return (
+						<Flex
+							direction={'column'}
+							key={`${state.graph.type}-${index}`}
+						>
+							{!isRenderedBreakpoint && (
+								<div>{state.graph.label}</div>
+							)}
+							{state.graph.states?.map(
+								(
+									state: StateTypes,
+									_index: number
+								): MixedElement => {
+									if (renderedStates.includes(state?.type)) {
+										return null;
+									}
+
+									renderedStates.push(state.type);
+
+									const key = `${state.graph.type}-${index}-${state.type}-${_index}-${controlId}`;
+
+									const MappedHeader = () => {
+										return [
+											':' + state.type.slice(0, 3),
+											<div key={`${key}-label`}>
+												{state.label}
+											</div>,
+										];
+									};
+
+									return (
+										<GroupControl
+											mode={'nothing'}
+											key={`${key}-state`}
+											header={<MappedHeader />}
+										/>
+									);
+								}
+							)}
+						</Flex>
+					);
 				}
-
-				const isRenderedBreakpoint = renderedBreakpoints.includes(
-					breakpoint.type
-				);
-
-				const renderedStates = [];
-
-				renderedBreakpoints.push(breakpoint.type);
-
-				return (
-					<Flex
-						direction={'column'}
-						key={`${breakpoint.type}-${index}`}
-					>
-						{!isRenderedBreakpoint && <div>{breakpoint.label}</div>}
-						{breakpoint.states?.map((state, _index) => {
-							if (renderedStates.includes(state?.type)) {
-								return null;
-							}
-
-							renderedStates.push(state.type);
-
-							const key = `${breakpoint.type}-${index}-${state.type}-${_index}-${controlId}`;
-
-							const MappedHeader = () => {
-								return [
-									':' + state.type.slice(0, 3),
-									<div key={`${key}-label`}>
-										{state.label}
-									</div>,
-								];
-							};
-
-							return (
-								<GroupControl
-									mode={'nothing'}
-									key={`${key}-state`}
-									header={<MappedHeader />}
-								/>
-							);
-						})}
-					</Flex>
-				);
-			})}
+			)}
 		</Flex>
 	);
 };
@@ -111,87 +124,88 @@ const StatesGraph = ({
 const AdvancedLabelControl = ({
 	path = null,
 	label,
-	popoverTitle,
+	value,
 	fieldId,
 	className,
 	ariaLabel,
 	attribute,
 	blockName,
+	isRepeater,
 	description,
+	defaultValue,
+	popoverTitle,
 	repeaterItem,
 	resetToDefault,
 	...props
 }: AdvancedLabelControlProps): null | MixedElement => {
 	const [isOpenModal, setOpenModal] = useState(false);
-	const { getBreakpoint, isNormalState, getAttributes, getCurrentState } =
-		useBlockContext();
+
+	const {
+		getAttributes,
+		getCurrentState,
+		isNormalState,
+		blockStateId,
+		breakpointId,
+	} = useBlockContext();
 
 	if ('undefined' === typeof attribute || 'undefined' === typeof blockName) {
 		return null;
 	}
 
-	const states = getStatesGraph({
-		path,
-		fieldId,
-		blockName,
-		repeaterItem,
-		controlId: attribute,
-	});
-	const currentGraph = states.find(
-		(state: LabelStates) => state?.graph?.type === getBreakpoint()?.type
-	);
+	const { isChanged, isChangedOnNormal, isChangedOnOtherStates } =
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+		useAdvancedLabelProps({
+			path,
+			value,
+			fieldId,
+			attribute,
+			isRepeater,
+			defaultValue,
+			repeaterItem,
+			blockStateId,
+			breakpointId,
+			isNormalState: isNormalState(),
+			currentState: getCurrentState(),
+			blockAttributes: getAttributes(),
+		});
 
 	const isChangedValue =
-		'undefined' !== typeof currentGraph &&
-		currentGraph?.isChangedState(getCurrentState());
-
-	const normalHasChanges = currentGraph?.changedStates.find(
-		(state) => 'normal' === state.type
-	);
-
-	const isChangedInOtherStates =
-		'undefined' !== typeof currentGraph &&
-		currentGraph?.changedStates?.length > 0;
+		isChanged || isChangedOnNormal || isChangedOnOtherStates;
 
 	return (
 		<>
 			{label && (
 				<span
 					{...props}
-					onClick={() =>
-						(isChangedValue || isChangedInOtherStates) &&
-						setOpenModal(true)
-					}
+					onClick={() => isChangedValue && setOpenModal(true)}
 					className={controlClassNames('label', className, {
-						'label-changed changed-in-other-state':
-							'undefined' !== typeof currentGraph &&
-							isChangedInOtherStates,
-						'label-changed changed-in-normal-state':
-							(isNormalState() && isChangedValue) ||
-							normalHasChanges,
-						'label-changed changed-in-secondary-state':
-							!isNormalState() && isChangedValue,
+						'changed-in-other-state': isChangedOnOtherStates,
+						'changed-in-normal-state':
+							(isNormalState() && isChanged) ||
+							(!isNormalState() && isChangedOnNormal),
+						'changed-in-secondary-state':
+							!isNormalState() && isChanged,
 					})}
 					aria-label={ariaLabel || label}
 					data-cy="label-control"
 					style={{
-						cursor:
-							isChangedValue || isChangedInOtherStates
-								? 'pointer'
-								: 'auto',
+						cursor: isChangedValue ? 'pointer' : 'auto',
 					}}
 				>
 					{label}
 				</span>
 			)}
-			{isOpenModal && (isChangedValue || isChangedInOtherStates) && (
+			{isOpenModal && isChangedValue && (
 				<Popover
 					offset={35}
 					title={popoverTitle !== '' ? popoverTitle : label}
 					onClose={() => setOpenModal(!isOpenModal)}
 					placement={'left-start'}
 				>
-					{isFunction(description) ? description() : description}
+					{'string' !== typeof description &&
+					'function' === typeof description
+						? description()
+						: description}
 
 					<StatesGraph controlId={attribute} blockName={blockName} />
 
@@ -211,15 +225,17 @@ const AdvancedLabelControl = ({
 								setOpenModal(!isOpenModal);
 
 								if (
-									isNull(path) ||
-									isEmpty(path) ||
-									isUndefined(path)
+									(isNull(path) ||
+										isEmpty(path) ||
+										isUndefined(path)) &&
+									!isRepeater
 								) {
 									return resetToDefault();
 								}
 
 								resetToDefault({
 									path,
+									isRepeater,
 									repeaterItem,
 									propId: fieldId,
 								});
@@ -242,15 +258,17 @@ const AdvancedLabelControl = ({
 									setOpenModal(!isOpenModal);
 
 									if (
-										isNull(path) ||
-										isEmpty(path) ||
-										isUndefined(path)
+										(isNull(path) ||
+											isEmpty(path) ||
+											isUndefined(path)) &&
+										!isRepeater
 									) {
 										return resetToDefault();
 									}
 
 									resetToDefault({
 										path,
+										isRepeater,
 										repeaterItem,
 										propId: fieldId,
 										attributes: getAttributes(),
@@ -275,6 +293,7 @@ const LabelControl = ({
 	ariaLabel = '',
 	attribute,
 	blockName,
+	isRepeater = false,
 	description,
 	repeaterItem,
 	resetToDefault,
@@ -285,16 +304,17 @@ const LabelControl = ({
 			<AdvancedLabelControl
 				{...{
 					label,
-					popoverTitle,
 					fieldId,
 					className,
 					ariaLabel,
 					attribute,
 					blockName,
+					isRepeater,
 					description,
+					popoverTitle,
 					repeaterItem,
 					resetToDefault,
-					path: path || attribute,
+					path: isRepeater ? path || attribute : path,
 					...props,
 				}}
 			/>

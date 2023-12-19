@@ -24,6 +24,7 @@ export type RepeaterControlProps = {
 	...ControlGeneralTypes,
 	design?: 'minimal',
 	mode?: GroupControlMode,
+	withoutAdvancedLabel?: boolean,
 	popoverTitle?: string | MixedElement,
 	addNewButtonLabel?: string,
 	popoverClassName?: string,
@@ -59,6 +60,7 @@ export type TRepeaterDefaultStateProps = {
 	customProps?: Object,
 	onSelect?: (event: MouseEvent, item: Object) => boolean,
 	overrideItem?: (item: Object) => Object,
+	getControlPath: (controlID: string, childControlId: string) => string,
 	repeaterItemOpener?: (props: Object) => boolean | MixedElement,
 	popoverTitle: string | MixedElement,
 };

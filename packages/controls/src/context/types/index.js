@@ -24,7 +24,7 @@ export type ControlContextHookProps = {
 		repeaterId?: string | null,
 		defaultRepeaterItemValue: Object,
 	},
-	onChange?: (newValue: any) => void,
+	onChange?: (newValue: any) => any,
 	valueCleanup?: (newValue: any) => any,
 	defaultValue: any,
 	sideEffect?: boolean,

@@ -234,14 +234,26 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		resetToDefault: (args: Object): any => {
 			const dataset = args?.attributes || defaultValue;
 
+			if (args?.isRepeater) {
+				const value = prepare(args?.path, dataset);
+
+				modifyControlValue({
+					value,
+					valueCleanup,
+					controlId: controlInfo.name,
+				});
+
+				return value;
+			}
+
 			if (isUndefined(args?.path)) {
+				setValue(defaultValue);
+
 				modifyControlValue({
 					valueCleanup,
 					value: defaultValue,
 					controlId: controlInfo.name,
 				});
-
-				setValue(defaultValue);
 
 				return defaultValue;
 			}
@@ -282,6 +294,8 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 					};
 				}
 
+				setValue(value);
+
 				modifyControlValue({
 					value,
 					valueCleanup,
@@ -301,6 +315,8 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 					[args?.propId]: value,
 				};
 			}
+
+			setValue(value);
 
 			modifyControlValue({
 				value,
