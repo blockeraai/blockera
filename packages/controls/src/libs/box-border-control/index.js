@@ -84,6 +84,14 @@ export default function BoxBorderControl({
 			delete value?.right;
 			delete value?.bottom;
 			delete value?.left;
+
+			if (
+				value?.all?.color === '' &&
+				value?.all?.width === '' &&
+				value?.all?.style === ''
+			) {
+				return '';
+			}
 		}
 
 		return value;

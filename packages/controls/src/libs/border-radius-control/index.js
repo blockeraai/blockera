@@ -62,6 +62,10 @@ export default function BorderRadiusControl({
 			delete value?.topRight;
 			delete value?.bottomLeft;
 			delete value?.bottomRight;
+
+			if (value?.all === '') {
+				return '';
+			}
 		}
 
 		return value;
