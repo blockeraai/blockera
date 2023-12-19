@@ -12,8 +12,8 @@ import { isFunction } from '@publisher/utils';
 export default function useControlEffect(
 	{ onChange, sideEffect, valueCleanup, value: controlValue }: Object,
 	dependencies: Array<any> = []
-): void {
-	const setValue = (value) => {
+): (data: any) => any {
+	const setValue = (value: any): any => {
 		if (isFunction(onChange)) {
 			// eslint-disable-next-line no-unused-expressions
 			isFunction(valueCleanup)
