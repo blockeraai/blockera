@@ -49,6 +49,8 @@ export const MouseExtension: MixedElement = memo<TMouseProps>(
 						value={{
 							name: generateExtensionId(block, 'cursor'),
 							value: cursor,
+							attribute: 'publisherCursor',
+							blockName: block.blockName,
 						}}
 					>
 						<SelectControl
@@ -75,6 +77,8 @@ export const MouseExtension: MixedElement = memo<TMouseProps>(
 						value={{
 							name: generateExtensionId(block, 'user-select'),
 							value: userSelect,
+							attribute: 'publisherUserSelect',
+							blockName: block.blockName,
 						}}
 					>
 						<SelectControl
@@ -83,7 +87,6 @@ export const MouseExtension: MixedElement = memo<TMouseProps>(
 							columns="columns-2"
 							options={userSelectOptions()}
 							type="native"
-							customMenuPosition="top"
 							defaultValue="auto"
 							onChange={(newValue) =>
 								handleOnChangeAttributes(
@@ -101,6 +104,8 @@ export const MouseExtension: MixedElement = memo<TMouseProps>(
 						value={{
 							name: generateExtensionId(block, 'pointer-events'),
 							value: userSelect,
+							attribute: 'publisherPointerEvents',
+							blockName: block.blockName,
 						}}
 					>
 						<SelectControl
@@ -109,7 +114,6 @@ export const MouseExtension: MixedElement = memo<TMouseProps>(
 							columns="columns-2"
 							options={pointerEventsOptions()}
 							type="native"
-							customMenuPosition="top"
 							defaultValue="auto"
 							onChange={(newValue) =>
 								handleOnChangeAttributes(
