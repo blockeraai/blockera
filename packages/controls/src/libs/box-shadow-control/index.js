@@ -24,9 +24,9 @@ export default function BoxShadowControl({
 	defaultValue = [],
 	defaultRepeaterItemValue = {
 		type: 'outer',
-		x: '0px',
-		y: '0px',
-		blur: '0px',
+		x: '10px',
+		y: '10px',
+		blur: '10px',
 		spread: '0px',
 		color: '#000000ab',
 		isVisible: true,

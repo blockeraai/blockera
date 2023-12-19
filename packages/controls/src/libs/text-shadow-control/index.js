@@ -24,7 +24,7 @@ export default function TextShadowControl({
 		x: '1px',
 		y: '1px',
 		blur: '1px',
-		color: '',
+		color: '#000000ab',
 		isVisible: true,
 	},
 	popoverTitle = __('Text Shadow', 'publisher-core'),
