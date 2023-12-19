@@ -23,11 +23,7 @@ import { useBlockContext } from '@publisher/extensions/src/hooks/context';
  */
 import { GroupControl } from '../index';
 import { getStatesGraph } from './states-graph';
-import type {
-	LabelStates,
-	LabelControlProps,
-	AdvancedLabelControlProps,
-} from './types';
+import type { LabelControlProps, AdvancedLabelControlProps } from './types';
 
 const StatesGraph = ({
 	controlId,
@@ -119,71 +115,45 @@ const AdvancedLabelControl = ({
 	description,
 	repeaterItem,
 	resetToDefault,
+	isChanged = false,
+	isChangedOnNormal = false,
+	isChangedOnOtherStates = false,
 	...props
 }: AdvancedLabelControlProps): null | MixedElement => {
 	const [isOpenModal, setOpenModal] = useState(false);
-	const { getBreakpoint, isNormalState, getAttributes, getCurrentState } =
-		useBlockContext();
+
+	const { isNormalState, getAttributes } = useBlockContext();
+
+	const isChangedValue =
+		isChanged || isChangedOnNormal || isChangedOnOtherStates;
 
 	if ('undefined' === typeof attribute || 'undefined' === typeof blockName) {
 		return null;
 	}
-
-	const states = getStatesGraph({
-		path,
-		fieldId,
-		blockName,
-		repeaterItem,
-		controlId: attribute,
-	});
-	const currentGraph = states.find(
-		(state: LabelStates) => state?.graph?.type === getBreakpoint()?.type
-	);
-
-	const isChangedValue =
-		'undefined' !== typeof currentGraph &&
-		currentGraph?.isChangedState(getCurrentState());
-
-	const normalHasChanges = currentGraph?.changedStates.find(
-		(state) => 'normal' === state.type
-	);
-
-	const isChangedInOtherStates =
-		'undefined' !== typeof currentGraph &&
-		currentGraph?.changedStates?.length > 0;
 
 	return (
 		<>
 			{label && (
 				<span
 					{...props}
-					onClick={() =>
-						(isChangedValue || isChangedInOtherStates) &&
-						setOpenModal(true)
-					}
+					onClick={() => isChangedValue && setOpenModal(true)}
 					className={controlClassNames('label', className, {
-						'changed-in-other-state':
-							'undefined' !== typeof currentGraph &&
-							isChangedInOtherStates,
+						'changed-in-other-state': isChangedOnOtherStates,
 						'changed-in-normal-state':
-							(isNormalState() && isChangedValue) ||
-							normalHasChanges,
+							(isNormalState() && isChanged) || isChangedOnNormal,
 						'changed-in-secondary-state':
-							!isNormalState() && isChangedValue,
+							!isNormalState() && isChanged,
 					})}
 					aria-label={ariaLabel || label}
 					data-cy="label-control"
 					style={{
-						cursor:
-							isChangedValue || isChangedInOtherStates
-								? 'pointer'
-								: 'auto',
+						cursor: isChangedValue ? 'pointer' : 'auto',
 					}}
 				>
 					{label}
 				</span>
 			)}
-			{isOpenModal && (isChangedValue || isChangedInOtherStates) && (
+			{isOpenModal && isChangedValue && (
 				<Popover
 					offset={35}
 					title={label}
@@ -269,6 +239,7 @@ const LabelControl = ({
 	label = '',
 	path,
 	fieldId,
+	isChanged,
 	className,
 	ariaLabel = '',
 	attribute,
@@ -276,6 +247,8 @@ const LabelControl = ({
 	description,
 	repeaterItem,
 	resetToDefault,
+	isChangedOnNormal,
+	isChangedOnOtherStates,
 	...props
 }: LabelControlProps): MixedElement => {
 	if ('advanced' === mode || isFunction(resetToDefault)) {
@@ -288,9 +261,12 @@ const LabelControl = ({
 					ariaLabel,
 					attribute,
 					blockName,
+					isChanged,
 					description,
 					repeaterItem,
 					resetToDefault,
+					isChangedOnNormal,
+					isChangedOnOtherStates,
 					path: path || attribute,
 					...props,
 				}}
