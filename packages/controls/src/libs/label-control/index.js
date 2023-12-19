@@ -163,13 +163,13 @@ const AdvancedLabelControl = ({
 						setOpenModal(true)
 					}
 					className={controlClassNames('label', className, {
-						'changed-in-other-state':
+						'label-changed changed-in-other-state':
 							'undefined' !== typeof currentGraph &&
 							isChangedInOtherStates,
-						'changed-in-normal-state':
+						'label-changed changed-in-normal-state':
 							(isNormalState() && isChangedValue) ||
 							normalHasChanges,
-						'changed-in-secondary-state':
+						'label-changed changed-in-secondary-state':
 							!isNormalState() && isChangedValue,
 					})}
 					aria-label={ariaLabel || label}
