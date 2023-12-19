@@ -76,7 +76,14 @@ export default function BorderRadiusControl({
 				}}
 			>
 				{label && (
-					<div className={controlInnerClassNames('label')}>
+					<span
+						style={{
+							display: 'flex',
+							alignItems: 'center',
+							minHeight: '30px',
+							marginRight: 'auto',
+						}}
+					>
 						<LabelControl
 							label={label}
 							{...{
@@ -86,7 +93,7 @@ export default function BorderRadiusControl({
 								resetToDefault,
 							}}
 						/>
-					</div>
+					</span>
 				)}
 
 				{value.type === 'all' && (

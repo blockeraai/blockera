@@ -99,7 +99,14 @@ export default function BoxBorderControl({
 			<div className={controlClassNames('box-border', className)}>
 				<div className={controlInnerClassNames('border-header')}>
 					{label && (
-						<div className={controlInnerClassNames('label')}>
+						<span
+							style={{
+								display: 'flex',
+								alignItems: 'center',
+								minHeight: '30px',
+								marginRight: 'auto',
+							}}
+						>
 							<LabelControl
 								label={label}
 								{...{
@@ -109,7 +116,7 @@ export default function BoxBorderControl({
 									resetToDefault,
 								}}
 							/>
-						</div>
+						</span>
 					)}
 
 					{value.type === 'all' && (
