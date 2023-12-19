@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -9,9 +10,9 @@ import { useEffect } from '@wordpress/element';
 import { isFunction } from '@publisher/utils';
 
 export default function useControlEffect(
-	{ onChange, sideEffect, valueCleanup, value: controlValue },
-	dependencies = []
-) {
+	{ onChange, sideEffect, valueCleanup, value: controlValue }: Object,
+	dependencies: Array<any> = []
+): void {
 	const setValue = (value) => {
 		if (isFunction(onChange)) {
 			// eslint-disable-next-line no-unused-expressions
