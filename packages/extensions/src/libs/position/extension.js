@@ -96,16 +96,15 @@ export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 								label={__('z-index', 'publisher-core')}
 								type="number"
 								unitType="z-index"
-								{...{
-									...props,
-									defaultValue: '',
-									onChange: (newValue) =>
-										handleOnChangeAttributes(
-											'publisherZIndex',
-											newValue
-										),
-								}}
 								arrows={true}
+								defaultValue=""
+								onChange={(newValue) =>
+									handleOnChangeAttributes(
+										'publisherZIndex',
+										newValue
+									)
+								}
+								{...props}
 							/>
 						</ControlContextProvider>
 					)}

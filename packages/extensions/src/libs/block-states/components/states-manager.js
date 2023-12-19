@@ -3,10 +3,12 @@
  * External dependencies
  */
 import type { Element } from 'react';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Publisher dependencies
  */
+import { controlInnerClassNames } from '@publisher/classnames';
 import { ControlContextProvider, RepeaterControl } from '@publisher/controls';
 import { STORE_NAME } from '@publisher/controls/src/libs/repeater-control/store';
 
@@ -59,139 +61,132 @@ export default function StatesManager({
 	};
 
 	return (
-		<>
-			<div style={{ padding: '10px' }}>
-				<ControlContextProvider
-					storeName={STORE_NAME}
-					value={contextValue}
-				>
-					<RepeaterControl
-						{...{
-							withoutAdvancedLabel: true,
-							valueCleanup,
-							/**
-							 * Retrieve dynamic default value for repeater items.
-							 *
-							 * @param {number} statesCount the states counter.
-							 * @param {Object} defaultRepeaterItemValue the state item default value.
-							 * @return {{settings: {max: number, min: number, color: string, cssSelector?: string}, force: boolean, label: string, breakpoints: Array<Object>, type: TStates}} the
-							 * state item with dynamic default value.
-							 */
-							getDynamicDefaultRepeaterItem: (
-								statesCount: number,
-								defaultRepeaterItemValue: Object
-							): Object => {
-								const defaultItem = {
-									...defaultRepeaterItemValue,
-									...getStateInfo(statesCount),
-								};
+		<div style={{ padding: '0 20px 23px' }}>
+			<ControlContextProvider storeName={STORE_NAME} value={contextValue}>
+				<RepeaterControl
+					{...{
+						valueCleanup,
+						/**
+						 * Retrieve dynamic default value for repeater items.
+						 *
+						 * @param {number} statesCount the states counter.
+						 * @param {Object} defaultRepeaterItemValue the state item default value.
+						 * @return {{settings: {max: number, min: number, color: string, cssSelector?: string}, force: boolean, label: string, breakpoints: Array<Object>, type: TStates}} the
+						 * state item with dynamic default value.
+						 */
+						getDynamicDefaultRepeaterItem: (
+							statesCount: number,
+							defaultRepeaterItemValue: Object
+						): Object => {
+							const defaultItem = {
+								...defaultRepeaterItemValue,
+								...getStateInfo(statesCount),
+							};
 
-								defaultItem.breakpoints = getBreakpoints(
-									defaultItem.type
-								);
+							defaultItem.breakpoints = getBreakpoints(
+								defaultItem.type
+							);
 
-								return defaultItem;
-							},
-							defaultRepeaterItemValue: {
-								getBreakpoints,
-								callback: getStateInfo,
-								...StateSettings.publisherBlockStates
-									.default[0],
-								deletable: true,
-								visibilitySupport: true,
-							},
-							onChange: (newValue) => {
-								if (newValue.length === states.length) {
-									return;
+							return defaultItem;
+						},
+						defaultRepeaterItemValue: {
+							getBreakpoints,
+							callback: getStateInfo,
+							...StateSettings.publisherBlockStates.default[0],
+							deletable: true,
+							visibilitySupport: true,
+						},
+						onChange: (newValue) => {
+							if (newValue.length === states.length) {
+								return;
+							}
+
+							const selectedState = newValue.find(
+								(item) => item.isSelected
+							);
+
+							if (!selectedState) {
+								return;
+							}
+
+							handleOnChangeAttributes(
+								'publisherBlockStates',
+								newValue,
+								{
+									addOrModifyRootItems: {
+										publisherCurrentState:
+											selectedState.type,
+									},
 								}
-
-								const selectedState = newValue.find(
-									(item) => item.isSelected
-								);
-
-								if (!selectedState) {
-									return;
-								}
-
-								handleOnChangeAttributes(
-									'publisherBlockStates',
-									newValue,
-									{
-										addOrModifyRootItems: {
-											publisherCurrentState:
-												selectedState.type,
-										},
-									}
-								);
-							},
-							overrideItem: (item) => {
-								if ('normal' === item.type) {
-									return {
-										deletable: true,
-										visibilitySupport: true,
-										breakpoints: item?.breakpoints?.map(
-											(
-												b: BreakpointTypes
-											): BreakpointTypes => {
-												if ('desktop' === b.type) {
-													return {
-														...b,
-														attributes: {},
-													};
-												}
-
-												return b;
+							);
+						},
+						overrideItem: (item) => {
+							if ('normal' === item.type) {
+								return {
+									deletable: true,
+									visibilitySupport: true,
+									breakpoints: item?.breakpoints?.map(
+										(
+											b: BreakpointTypes
+										): BreakpointTypes => {
+											if ('desktop' === b.type) {
+												return {
+													...b,
+													attributes: {},
+												};
 											}
-										),
-									};
-								}
 
-								return {};
-							},
-							onSelect: (event, item) => {
-								handleOnChangeAttributes(
-									'publisherCurrentState',
-									item.type,
-									{
-										addOrModifyRootItems: {
-											publisherBlockStates:
-												block?.attributes?.publisherBlockStates.map(
-													(
-														state: StateTypes
-													): {
-														...StateTypes,
-														isSelected: boolean,
-													} => {
-														if (
-															state.type ===
-															item.type
-														) {
-															return {
-																...state,
-																isSelected: true,
-															};
-														}
+											return b;
+										}
+									),
+								};
+							}
 
+							return {};
+						},
+						onSelect: (event, item) => {
+							handleOnChangeAttributes(
+								'publisherCurrentState',
+								item.type,
+								{
+									addOrModifyRootItems: {
+										publisherBlockStates:
+											block?.attributes?.publisherBlockStates.map(
+												(
+													state: StateTypes
+												): {
+													...StateTypes,
+													isSelected: boolean,
+												} => {
+													if (
+														state.type === item.type
+													) {
 														return {
 															...state,
-															isSelected: false,
+															isSelected: true,
 														};
 													}
-												),
-										},
-									}
-								);
 
-								return false;
-							},
-							repeaterItemHeader: ItemHeader,
-							repeaterItemOpener: ItemOpener,
-							repeaterItemChildren: ItemBody,
-						}}
-						label="Block States"
-					/>
-				</ControlContextProvider>
-			</div>
-		</>
+													return {
+														...state,
+														isSelected: false,
+													};
+												}
+											),
+									},
+								}
+							);
+
+							return false;
+						},
+						repeaterItemHeader: ItemHeader,
+						repeaterItemOpener: ItemOpener,
+						repeaterItemChildren: ItemBody,
+					}}
+					label={__('Block States', 'publisher-core')}
+					className={controlInnerClassNames('block-states-repeater')}
+				/>
+			</ControlContextProvider>
+		</div>
 	);
 }

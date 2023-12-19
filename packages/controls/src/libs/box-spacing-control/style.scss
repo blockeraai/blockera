@@ -69,6 +69,15 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
+			padding: 0 3px;
+			min-width: 15px;
+			height: 16px;
+			min-height: 16px;
+
+			&:hover:not(.label-changed) {
+				background: #ffffff;
+				border: 1px solid var(--publisher-controls-border-color);
+			}
 
 			i {
 				font-size: 8px;
@@ -131,7 +140,7 @@
 		}
 
 		&.side-padding-top {
-			top: 42px;
+			top: 39px;
 			right: 0;
 			left: 0;
 			height: 28px;
@@ -139,13 +148,13 @@
 
 		&.side-padding-right {
 			top: 0;
-			right: 42px;
+			right: 38px;
 			bottom: 0;
 			width: 28px;
 		}
 
 		&.side-padding-bottom {
-			bottom: 42px;
+			bottom: 39px;
 			right: 0;
 			left: 0;
 			height: 28px;
@@ -154,7 +163,7 @@
 		&.side-padding-left {
 			top: 0;
 			bottom: 0;
-			left: 42px;
+			left: 38px;
 			width: 28px;
 		}
 	}
@@ -169,19 +178,34 @@
 			display: block;
 			text-align: center;
 			position: absolute;
-			left: 0;
-			right: 0;
 			bottom: -20px;
+			width: auto;
+			left: 50%;
+			transform: translateX(-50%);
 		}
 
 		&.box-mode-padding {
-			width: 100%;
 			display: block;
 			text-align: center;
 			position: absolute;
-			top: 71px;
+			top: 73px;
+			width: auto;
+			left: 50%;
+			transform: translateX(-50%);
 		}
 
+		.publisher-control-label {
+			font-size: 11px;
+			min-height: 12px;
+			line-height: 12px;
+			height: 12px;
+			font-weight: 500;
+
+			&.label-changed {
+				font-weight: 600;
+				font-size: 10px;
+			}
+		}
 	}
 }
 

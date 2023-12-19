@@ -84,6 +84,14 @@ export default function BoxBorderControl({
 			delete value?.right;
 			delete value?.bottom;
 			delete value?.left;
+
+			if (
+				value?.all?.color === '' &&
+				value?.all?.width === '' &&
+				value?.all?.style === ''
+			) {
+				return '';
+			}
 		}
 
 		return value;
@@ -99,7 +107,14 @@ export default function BoxBorderControl({
 			<div className={controlClassNames('box-border', className)}>
 				<div className={controlInnerClassNames('border-header')}>
 					{label && (
-						<div className={controlInnerClassNames('label')}>
+						<span
+							style={{
+								display: 'flex',
+								alignItems: 'center',
+								minHeight: '30px',
+								marginRight: 'auto',
+							}}
+						>
 							<LabelControl
 								label={label}
 								{...{
@@ -109,7 +124,7 @@ export default function BoxBorderControl({
 									resetToDefault,
 								}}
 							/>
-						</div>
+						</span>
 					)}
 
 					{value.type === 'all' && (

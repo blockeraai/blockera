@@ -1,6 +1,16 @@
 .publisher-control-label {
 	font-weight: 500;
 	font-size: 12px;
+	display: flex;
+	align-items: center;
+	height: 20px;
+	min-height: 20px;
+	border-radius: 2px;
+	letter-spacing: -0.2px;
+	transition: all 85ms ease-out;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .publisher-control-label.changed-in-other-state,
@@ -8,12 +18,9 @@
 .publisher-control-label.changed-in-secondary-state {
 	--publisher-block-other-state-color: rgb(106, 104, 104);
 	--publisher-block-normal-state-color: rgba(20, 126, 184, 1);
-	--publisher-block-secondary-state-color: rgba(212, 124, 20, 1);
-	width: auto;
-	height: 21px;
-	padding: 0 2px;
-	line-height: 18px;
-	border: solid 1px transparent;
+	--publisher-block-secondary-state-color: #d47c14;
+	padding: 0 3px;
+	box-shadow: 0 0 0 1px transparent;
 }
 
 .publisher-control-label.changed-in-other-state {
@@ -23,15 +30,15 @@
 }
 
 .publisher-control-label.changed-in-normal-state {
-	background: #147eb833;
-	border-color: var(--publisher-block-normal-state-color);
-	color: var(--publisher-block-normal-state-color);
+	background: #f3f8fb;
+	box-shadow: 0 0 0 1px #c7e0ee;
+	color: #147eb8;
 }
 
 .publisher-control-label.changed-in-secondary-state {
-	background: #d47c1433;
-	border: var(--publisher-block-secondary-state-color);
-	color: var(--publisher-block-secondary-state-color);
+	background: #fdf8f3;
+	box-shadow: 0 0 0 1px #efd4b3;
+	color: #d47c14;
 }
 
 .publisher-label-control-popover {

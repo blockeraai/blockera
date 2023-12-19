@@ -1,5 +1,5 @@
 .publisher-field {
-	--gap: 10px;
+	--gap: 8px;
 	width: 100%;
 
 	&.small-gap {
@@ -13,13 +13,8 @@
 	.publisher-field-label {
 		order: 2;
 		display: flex;
-		align-items: flex-start;
-
-		.publisher-control-label {
-			display: flex;
-			align-items: center;
-			min-height: 30px;
-		}
+		align-items: center;
+		min-height: 30px;
 	}
 
 	&.small-gap .publisher-field-label .publisher-control-label {
@@ -30,6 +25,7 @@
 		margin-left: auto;
 		margin-right: auto;
 		justify-content: center;
+		min-height: auto;
 	}
 
 	.publisher-field-control {
@@ -66,6 +62,7 @@
 		display: grid;
 		grid-template-columns: 1fr 2fr;
 		gap: var(--gap);
+		align-items: start;
 	}
 
 	.publisher-control-group-popover &.columns-2 {

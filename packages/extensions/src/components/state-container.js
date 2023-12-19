@@ -29,8 +29,6 @@ export default function StateContainer({
 				color: 'inherit',
 				'--publisher-controls-primary-color': activeColor,
 				'--publisher-tab-panel-active-color': activeColor,
-				'--publisher-controls-border-color-focus': activeColor,
-				'--publisher-controls-border-color-hover': activeColor,
 			}}
 		>
 			{children}
