@@ -14,8 +14,6 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { Button } from '@publisher/components';
-import { isEquals } from '@publisher/utils';
-import { useBlockContext } from '@publisher/extensions/src/hooks';
 
 /**
  * Internal dependencies.
@@ -83,6 +81,7 @@ export default function RepeaterControl({
 		value,
 		dispatch: { addRepeaterItem, modifyControlValue },
 		controlInfo: { name: controlId, description, attribute, blockName },
+		getControlPath,
 		resetToDefault,
 	} = useControlContext({
 		defaultValue,
@@ -95,9 +94,6 @@ export default function RepeaterControl({
 		valueCleanup,
 		mergeInitialAndDefault: true,
 	});
-
-	const { getAttributes, getCurrentState, isNormalState } = useBlockContext();
-	const blockAttributes = getAttributes();
 
 	const repeaterItems = value;
 
@@ -117,6 +113,7 @@ export default function RepeaterControl({
 		controlId,
 		repeaterId,
 		overrideItem,
+		getControlPath,
 		repeaterItemOpener,
 		repeaterItemHeader,
 		repeaterItemChildren,
@@ -141,58 +138,14 @@ export default function RepeaterControl({
 					{!withoutAdvancedLabel && (
 						<LabelControl
 							label={label}
+							value={value}
 							mode={'advanced'}
+							isRepeater={true}
 							blockName={blockName}
 							attribute={attribute}
 							description={description}
+							defaultValue={defaultValue}
 							resetToDefault={resetToDefault}
-							{...{
-								isChanged: !isEquals(defaultValue, value),
-								isChangedOnNormal: !isEquals(
-									blockAttributes[attribute],
-									value
-								),
-								isChangedOnOtherStates:
-									blockAttributes?.publisherBlockStates?.filter(
-										(s: Object): boolean => {
-											if (s.type === getCurrentState()) {
-												return false;
-											}
-
-											return (
-												s.breakpoints.filter((b) => {
-													if (
-														isNormalState() &&
-														!isEquals(
-															blockAttributes[
-																attribute
-															],
-															value
-														)
-													) {
-														return true;
-													}
-													if (
-														b?.attributes &&
-														b?.attributes[
-															attribute
-														] &&
-														!isEquals(
-															b.attributes[
-																attribute
-															],
-															value
-														)
-													) {
-														return true;
-													}
-
-													return false;
-												}).length > 0
-											);
-										}
-									)?.length > 0,
-							}}
 						/>
 					)}
 					{withoutAdvancedLabel && (
