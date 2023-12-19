@@ -52,6 +52,10 @@ blocksInitializer({
 							overflow: attributes?.publisherOverflow || '',
 						}}
 						{...{
+							minWidth: attributes?.publisherMinWidth || '',
+							maxWidth: attributes?.publisherMaxWidth || '',
+							minHeight: attributes?.publisherMinHeight || '',
+							maxHeight: attributes?.publisherMaxHeight || '',
 							ratio: attributes?.publisherRatio || {
 								value: '',
 								width: '',
@@ -105,6 +109,10 @@ export const Default = {
 				attributes: {
 					...(wrapperBlock?.attributes || {}),
 					publisherWidth: '',
+					publisherMinWidth: '',
+					publisherMaxWidth: '',
+					publisherMinHeight: '',
+					publisherMaxHeight: '',
 					publisherHeight: '',
 					publisherOverflow: '',
 					publisherRatio: {
