@@ -241,8 +241,6 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 					controlId: controlInfo.name,
 				});
 
-				setValue(defaultValue);
-
 				return defaultValue;
 			}
 
