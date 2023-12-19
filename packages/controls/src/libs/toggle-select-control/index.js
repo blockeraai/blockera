@@ -8,13 +8,13 @@ import {
 	__experimentalToggleGroupControlOption as WPToggleGroupControlOption,
 	__experimentalToggleGroupControlOptionIcon as WPToggleGroupControlOptionIcon,
 } from '@wordpress/components';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
  */
 import { isUndefined } from '@publisher/utils';
 import { controlClassNames } from '@publisher/classnames';
-import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
@@ -67,10 +67,12 @@ export default function ToggleSelectControl({
 			controlName={field}
 			className={className}
 			{...{
+				value,
 				fieldId,
 				attribute,
 				blockName,
 				description,
+				defaultValue,
 				repeaterItem,
 				resetToDefault,
 				mode: 'advanced',

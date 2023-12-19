@@ -222,13 +222,17 @@ export default function BoxSpacingControl({
 			columns={columns}
 			controlName={field}
 			className={className}
-			{...{
-				mode: 'advanced',
-				attribute,
-				blockName,
-				description,
-				resetToDefault,
-			}}
+			{...(label
+				? {
+						value,
+						attribute,
+						blockName,
+						description,
+						defaultValue,
+						resetToDefault,
+						mode: 'advanced',
+				  }
+				: {})}
 		>
 			<div
 				{...props}
@@ -488,9 +492,11 @@ export default function BoxSpacingControl({
 						ariaLabel={__('Margin Spacing')}
 						label={__('Margin', 'publisher-core')}
 						{...{
+							value,
 							attribute,
 							blockName,
 							description,
+							defaultValue,
 							resetToDefault,
 							fieldId: 'margin',
 							path: getControlPath(attribute, 'margin'),
@@ -506,12 +512,14 @@ export default function BoxSpacingControl({
 				>
 					<LabelControl
 						mode={'advanced'}
-						ariaLabel={__('Margin Spacing')}
+						ariaLabel={__('Padding Spacing')}
 						label={__('Padding', 'publisher-core')}
 						{...{
+							value,
 							attribute,
 							blockName,
 							description,
+							defaultValue,
 							resetToDefault,
 							fieldId: 'padding',
 							path: getControlPath(attribute, 'padding'),
@@ -532,14 +540,6 @@ export default function BoxSpacingControl({
 						label={fixLabelText(marginTop)}
 						popoverTitle={__('Top Margin', 'publisher-core')}
 						onClick={() => setOpenPopover('margin-top')}
-						{...{
-							attribute,
-							blockName,
-							description,
-							resetToDefault,
-							fieldId: 'margin.top',
-							path: getControlPath(attribute, 'margin.top'),
-						}}
 					/>
 
 					<SidePopover
@@ -574,14 +574,6 @@ export default function BoxSpacingControl({
 						popoverTitle={__('Right Margin', 'publisher-core')}
 						label={fixLabelText(marginRight)}
 						onClick={() => setOpenPopover('margin-right')}
-						{...{
-							attribute,
-							blockName,
-							description,
-							resetToDefault,
-							fieldId: 'margin.right',
-							path: getControlPath(attribute, 'margin.right'),
-						}}
 					/>
 
 					<SidePopover
@@ -617,14 +609,6 @@ export default function BoxSpacingControl({
 						popoverTitle={__('Bottom Margin', 'publisher-core')}
 						label={fixLabelText(marginBottom)}
 						onClick={() => setOpenPopover('margin-bottom')}
-						{...{
-							attribute,
-							blockName,
-							description,
-							resetToDefault,
-							fieldId: 'margin.bottom',
-							path: getControlPath(attribute, 'margin.bottom'),
-						}}
 					/>
 
 					<SidePopover
@@ -659,14 +643,6 @@ export default function BoxSpacingControl({
 						popoverTitle={__('Left Margin', 'publisher-core')}
 						label={fixLabelText(marginLeft)}
 						onClick={() => setOpenPopover('margin-left')}
-						{...{
-							attribute,
-							blockName,
-							description,
-							resetToDefault,
-							fieldId: 'margin.left',
-							path: getControlPath(attribute, 'margin.left'),
-						}}
 					/>
 
 					<SidePopover
@@ -701,14 +677,6 @@ export default function BoxSpacingControl({
 						popoverTitle={__('Top Padding', 'publisher-core')}
 						label={fixLabelText(paddingTop)}
 						onClick={() => setOpenPopover('padding-top')}
-						{...{
-							attribute,
-							blockName,
-							description,
-							resetToDefault,
-							fieldId: 'padding.top',
-							path: getControlPath(attribute, 'padding-top'),
-						}}
 					/>
 
 					<SidePopover
@@ -744,14 +712,6 @@ export default function BoxSpacingControl({
 						popoverTitle={__('Right Padding', 'publisher-core')}
 						label={fixLabelText(paddingRight)}
 						onClick={() => setOpenPopover('padding-right')}
-						{...{
-							attribute,
-							blockName,
-							description,
-							resetToDefault,
-							fieldId: 'padding.right',
-							path: getControlPath(attribute, 'padding.right'),
-						}}
 					/>
 
 					<SidePopover
@@ -788,14 +748,6 @@ export default function BoxSpacingControl({
 						popoverTitle={__('Bottom Padding', 'publisher-core')}
 						label={fixLabelText(paddingBottom)}
 						onClick={() => setOpenPopover('padding-bottom')}
-						{...{
-							attribute,
-							blockName,
-							description,
-							resetToDefault,
-							fieldId: 'padding.bottom',
-							path: getControlPath(attribute, 'padding.bottom'),
-						}}
 					/>
 
 					<SidePopover
@@ -831,14 +783,6 @@ export default function BoxSpacingControl({
 						popoverTitle={__('Left Padding', 'publisher-core')}
 						label={fixLabelText(paddingLeft)}
 						onClick={() => setOpenPopover('padding-left')}
-						{...{
-							attribute,
-							blockName,
-							description,
-							resetToDefault,
-							fieldId: 'padding.left',
-							path: getControlPath(attribute, 'padding.left'),
-						}}
 					/>
 
 					<SidePopover
