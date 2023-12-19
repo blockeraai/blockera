@@ -24,6 +24,7 @@ export type RepeaterControlProps = {
 	...ControlGeneralTypes,
 	design?: 'minimal',
 	mode?: GroupControlMode,
+	withoutAdvancedLabel?: boolean,
 	popoverTitle?: string | MixedElement,
 	addNewButtonLabel?: string,
 	popoverClassName?: string,

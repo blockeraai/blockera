@@ -67,6 +67,7 @@ export default function StatesManager({
 				>
 					<RepeaterControl
 						{...{
+							withoutAdvancedLabel: true,
 							valueCleanup,
 							/**
 							 * Retrieve dynamic default value for repeater items.

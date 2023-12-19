@@ -4,6 +4,7 @@
  */
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -13,13 +14,15 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { Button } from '@publisher/components';
+import { isEquals } from '@publisher/utils';
+import { useBlockContext } from '@publisher/extensions/src/hooks';
 
 /**
  * Internal dependencies.
  */
 import PlusIcon from './icons/plus';
 import LabelControl from '../label-control';
-import { useControlContext } from '../../context/hooks/use-control-context';
+import { useControlContext } from '../../context';
 import { RepeaterContextProvider } from './context';
 import MappedItems from './components/mapped-items';
 
@@ -27,7 +30,6 @@ import MappedItems from './components/mapped-items';
  * Types
  */
 import type { RepeaterControlProps, TRepeaterDefaultStateProps } from './types';
-import type { MixedElement } from 'react';
 
 export const defaultItemValue = {
 	isOpen: true,
@@ -53,6 +55,7 @@ export default function RepeaterControl({
 	actionButtonClone = true,
 	injectHeaderButtonsStart = '',
 	injectHeaderButtonsEnd = '',
+	withoutAdvancedLabel = false,
 	//
 	label,
 	id: repeaterId,
@@ -93,6 +96,9 @@ export default function RepeaterControl({
 		mergeInitialAndDefault: true,
 	});
 
+	const { getAttributes, getCurrentState, isNormalState } = useBlockContext();
+	const blockAttributes = getAttributes();
+
 	const repeaterItems = value;
 
 	const defaultRepeaterState: TRepeaterDefaultStateProps = {
@@ -132,14 +138,66 @@ export default function RepeaterControl({
 				data-cy="publisher-repeater-control"
 			>
 				<div className={controlInnerClassNames('header')}>
-					<LabelControl
-						label={label}
-						mode={'advanced'}
-						blockName={blockName}
-						attribute={attribute}
-						description={description}
-						resetToDefault={resetToDefault}
-					/>
+					{!withoutAdvancedLabel && (
+						<LabelControl
+							label={label}
+							mode={'advanced'}
+							blockName={blockName}
+							attribute={attribute}
+							description={description}
+							resetToDefault={resetToDefault}
+							{...{
+								isChanged: !isEquals(defaultValue, value),
+								isChangedOnNormal: !isEquals(
+									blockAttributes[attribute],
+									value
+								),
+								isChangedOnOtherStates:
+									blockAttributes?.publisherBlockStates?.filter(
+										(s: Object): boolean => {
+											if (s.type === getCurrentState()) {
+												return false;
+											}
+
+											return (
+												s.breakpoints.filter((b) => {
+													if (
+														isNormalState() &&
+														!isEquals(
+															blockAttributes[
+																attribute
+															],
+															value
+														)
+													) {
+														return true;
+													}
+													if (
+														b?.attributes &&
+														b?.attributes[
+															attribute
+														] &&
+														!isEquals(
+															b.attributes[
+																attribute
+															],
+															value
+														)
+													) {
+														return true;
+													}
+
+													return false;
+												}).length > 0
+											);
+										}
+									)?.length > 0,
+							}}
+						/>
+					)}
+					{withoutAdvancedLabel && (
+						<LabelControl label={label} mode={'simple'} />
+					)}
 
 					<div
 						className={controlInnerClassNames(
