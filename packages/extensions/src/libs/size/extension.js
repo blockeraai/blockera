@@ -20,7 +20,6 @@ import {
 } from '@publisher/controls';
 import { Flex } from '@publisher/components';
 import { isString } from '@publisher/utils';
-import { extensionInnerClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -66,360 +65,310 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 			},
 		} = config;
 
-		const isHeightColumnActive = () => {
-			return publisherHeight || publisherMinHeight || publisherMaxHeight;
-		};
-
-		const isWidthColumnActive = () => {
-			return publisherWidth || publisherMinWidth || publisherMaxWidth;
-		};
-
-		const activeFieldLength = () => {
-			const sizeFields = [];
-			for (const key in config.sizeConfig) {
-				if (
-					(key.includes('Width') || key.includes('Height')) &&
-					config.sizeConfig[key]
-				) {
-					sizeFields.push(key);
-				}
-			}
-			return sizeFields.length;
-		};
-
-		const isHeightActive = isHeightColumnActive();
-		const isWidthActive = isWidthColumnActive();
-		const lengthOfActiveFields = activeFieldLength();
-
 		return (
 			<>
-				<BaseControl
-					columns="columns-1"
-					className={`${extensionInnerClassNames('size-input')} ${
-						isHeightActive &&
-						isWidthActive &&
-						lengthOfActiveFields > 2
-							? ''
-							: 'one-column'
-					}`}
-				>
-					<Flex
-						direction={lengthOfActiveFields <= 2 ? 'column' : 'row'}
-						gap={isHeightActive && isWidthActive ? '10px' : '0px'}
-					>
-						<Flex
-							gap="10px"
-							direction="column"
-							style={{
-								width:
-									isHeightActive &&
-									isWidthActive &&
-									lengthOfActiveFields > 2 &&
-									'119px',
+				{isActiveField(publisherWidth) && (
+					<BaseControl columns="columns-1">
+						<ControlContextProvider
+							value={{
+								name: generateExtensionId(block, 'width'),
+								value: width,
+								attribute: 'publisherWidth',
+								blockName: block.blockName,
 							}}
 						>
-							{isActiveField(publisherWidth) && (
-								<ControlContextProvider
-									value={{
-										name: generateExtensionId(
-											block,
-											'width'
-										),
-										value: width,
-										attribute: 'publisherWidth',
-										blockName: block.blockName,
-									}}
-								>
-									<InputControl
-										controlName="input"
-										label={__('Width', 'publisher-core')}
-										columns={
-											isHeightActive &&
-											lengthOfActiveFields > 2
-												? '1.1fr 1.9fr'
-												: 'columns-2'
-										}
-										placeholder="0"
-										unitType="width"
-										min={0}
-										defaultValue={_width}
-										size={
-											isHeightActive &&
-											lengthOfActiveFields > 2
-												? 'small'
-												: 'normal'
-										}
-										onChange={(newValue) => {
-											const toWPCompatible =
-												isString(newValue) &&
-												!newValue.endsWith('func')
-													? {
-															width: convertToPercent(
-																newValue
-															),
-													  }
-													: {};
+							<InputControl
+								controlName="input"
+								label={__('Width', 'publisher-core')}
+								columns="columns-2"
+								placeholder="0"
+								unitType="width"
+								min={0}
+								defaultValue={_width}
+								onChange={(newValue) => {
+									const toWPCompatible =
+										isString(newValue) &&
+										!newValue.endsWith('func')
+											? {
+													width: convertToPercent(
+														newValue
+													),
+											  }
+											: {};
 
-											handleOnChangeAttributes(
-												'publisherWidth',
-												newValue,
-												{
-													addOrModifyRootItems:
-														toWPCompatible,
-												}
-											);
+									handleOnChangeAttributes(
+										'publisherWidth',
+										newValue,
+										{
+											addOrModifyRootItems:
+												toWPCompatible,
+										}
+									);
+								}}
+								{...props}
+								controlAddonTypes={['variable']}
+								variableTypes={['width-size']}
+							/>
+						</ControlContextProvider>
+
+						{(isActiveField(publisherMinWidth) ||
+							isActiveField(publisherMaxWidth)) && (
+							<Flex
+								style={{
+									width: '160px',
+									alignSelf: 'flex-end',
+								}}
+							>
+								{isActiveField(publisherMinWidth) && (
+									<ControlContextProvider
+										value={{
+											name: generateExtensionId(
+												block,
+												'minWidth'
+											),
+											value: minWidth,
+											attribute: 'publisherMinWidth',
+											blockName: block.blockName,
 										}}
-										{...props}
-										controlAddonTypes={['variable']}
-										variableTypes={['width-size']}
-									/>
-								</ControlContextProvider>
-							)}
+									>
+										<InputControl
+											controlName="input"
+											label={__('Min', 'publisher-core')}
+											aria-label={__(
+												'Min Width',
+												'publisher-core'
+											)}
+											columns={
+												isActiveField(publisherMaxWidth)
+													? 'columns-1'
+													: 'columns-2'
+											}
+											className={
+												isActiveField(
+													publisherMaxWidth
+												) &&
+												'control-first label-center small-gap'
+											}
+											placeholder="0"
+											unitType="min-width"
+											min={0}
+											size="small"
+											onChange={(newValue) =>
+												handleOnChangeAttributes(
+													'publisherMinWidth',
+													newValue
+												)
+											}
+											{...props}
+											controlAddonTypes={['variable']}
+											variableTypes={['width-size']}
+										/>
+									</ControlContextProvider>
+								)}
 
-							{isActiveField(publisherMinWidth) && (
-								<ControlContextProvider
-									value={{
-										name: generateExtensionId(
-											block,
-											'minWidth'
-										),
-										value: minWidth,
-										attribute: 'publisherMinWidth',
-										blockName: block.blockName,
-									}}
-								>
-									<InputControl
-										controlName="input"
-										label={__('Min W', 'publisher-core')}
-										columns={
-											isHeightActive &&
-											lengthOfActiveFields > 2
-												? '1.1fr 1.9fr'
-												: 'columns-2'
-										}
-										placeholder="0"
-										unitType="min-width"
-										min={0}
-										size={
-											isHeightActive &&
-											lengthOfActiveFields > 2
-												? 'small'
-												: 'normal'
-										}
-										onChange={(newValue) =>
-											handleOnChangeAttributes(
-												'publisherMinWidth',
-												newValue
-											)
-										}
-										{...props}
-										controlAddonTypes={['variable']}
-										variableTypes={['width-size']}
-									/>
-								</ControlContextProvider>
-							)}
+								{isActiveField(publisherMaxWidth) && (
+									<ControlContextProvider
+										value={{
+											name: generateExtensionId(
+												block,
+												'maxWidth'
+											),
+											value: maxWidth,
+											attribute: 'publisherMaxWidth',
+											blockName: block.blockName,
+										}}
+									>
+										<InputControl
+											controlName="input"
+											label={__('Max', 'publisher-core')}
+											aria-label={__(
+												'Max Width',
+												'publisher-core'
+											)}
+											columns={
+												isActiveField(publisherMinWidth)
+													? 'columns-1'
+													: 'columns-2'
+											}
+											className={
+												isActiveField(
+													publisherMinWidth
+												) &&
+												'control-first label-center small-gap'
+											}
+											placeholder="0"
+											unitType="max-width"
+											min={0}
+											size="small"
+											onChange={(newValue) =>
+												handleOnChangeAttributes(
+													'publisherMaxWidth',
+													newValue
+												)
+											}
+											{...props}
+											controlAddonTypes={['variable']}
+											variableTypes={['width-size']}
+										/>
+									</ControlContextProvider>
+								)}
+							</Flex>
+						)}
+					</BaseControl>
+				)}
 
-							{isActiveField(publisherMaxWidth) && (
-								<ControlContextProvider
-									value={{
-										name: generateExtensionId(
-											block,
-											'maxWidth'
-										),
-										value: maxWidth,
-										attribute: 'publisherMaxWidth',
-										blockName: block.blockName,
-									}}
-								>
-									<InputControl
-										controlName="input"
-										label={__('Max W', 'publisher-core')}
-										columns={
-											isHeightActive &&
-											lengthOfActiveFields > 2
-												? '1.1fr 1.9fr'
-												: 'columns-2'
-										}
-										placeholder="0"
-										unitType="max-width"
-										min={0}
-										size={
-											isHeightActive &&
-											lengthOfActiveFields > 2
-												? 'small'
-												: 'normal'
-										}
-										onChange={(newValue) =>
-											handleOnChangeAttributes(
-												'publisherMaxWidth',
-												newValue
-											)
-										}
-										{...props}
-										controlAddonTypes={['variable']}
-										variableTypes={['width-size']}
-									/>
-								</ControlContextProvider>
-							)}
-						</Flex>
-
-						<Flex
-							gap="10px"
-							direction="column"
-							style={{
-								width:
-									isHeightActive &&
-									isWidthActive &&
-									lengthOfActiveFields > 2 &&
-									'119px',
+				{isActiveField(publisherHeight) && (
+					<BaseControl columns="columns-1">
+						<ControlContextProvider
+							value={{
+								name: generateExtensionId(block, 'height'),
+								value: height,
+								attribute: 'publisherHeight',
+								blockName: block.blockName,
 							}}
 						>
-							{isActiveField(publisherHeight) && (
-								<ControlContextProvider
-									value={{
-										name: generateExtensionId(
-											block,
-											'height'
-										),
-										value: height,
-										attribute: 'publisherHeight',
-										blockName: block.blockName,
-									}}
-								>
-									<InputControl
-										controlName="input"
-										label={__('Height', 'publisher-core')}
-										columns={
-											isWidthActive &&
-											lengthOfActiveFields > 2
-												? '1.1fr 1.9fr'
-												: 'columns-2'
-										}
-										placeholder="0"
-										unitType="height"
-										min={0}
-										defaultValue={_height}
-										size={
-											isWidthActive &&
-											lengthOfActiveFields > 2
-												? 'small'
-												: 'normal'
-										}
-										onChange={(newValue) => {
-											const toWPCompatible =
-												isString(newValue) &&
-												!newValue.endsWith('func')
-													? {
-															height: convertToPercent(
-																newValue
-															),
-													  }
-													: {};
+							<InputControl
+								controlName="input"
+								label={__('Height', 'publisher-core')}
+								columns="columns-2"
+								placeholder="0"
+								unitType="height"
+								min={0}
+								defaultValue={_height}
+								onChange={(newValue) => {
+									const toWPCompatible =
+										isString(newValue) &&
+										!newValue.endsWith('func')
+											? {
+													height: convertToPercent(
+														newValue
+													),
+											  }
+											: {};
 
-											handleOnChangeAttributes(
-												'publisherHeight',
-												newValue,
-												{
-													addOrModifyRootItems:
-														toWPCompatible,
-												}
-											);
+									handleOnChangeAttributes(
+										'publisherHeight',
+										newValue,
+										{
+											addOrModifyRootItems:
+												toWPCompatible,
+										}
+									);
+								}}
+								{...props}
+								controlAddonTypes={['variable']}
+								variableTypes={['width-size']}
+							/>
+						</ControlContextProvider>
+						{(isActiveField(publisherMinHeight) ||
+							isActiveField(publisherMaxHeight)) && (
+							<Flex
+								style={{
+									width: '160px',
+									alignSelf: 'flex-end',
+								}}
+							>
+								{isActiveField(publisherMinHeight) && (
+									<ControlContextProvider
+										value={{
+											name: generateExtensionId(
+												block,
+												'minHeight'
+											),
+											value: minHeight,
+											attribute: 'publisherMinHeight',
+											blockName: block.blockName,
 										}}
-										{...props}
-										controlAddonTypes={['variable']}
-										variableTypes={['width-size']}
-									/>
-								</ControlContextProvider>
-							)}
+									>
+										<InputControl
+											controlName="input"
+											label={__('Min', 'publisher-core')}
+											aria-label={__(
+												'Min Height',
+												'publisher-core'
+											)}
+											columns={
+												isActiveField(
+													publisherMaxHeight
+												)
+													? 'columns-1'
+													: 'columns-2'
+											}
+											className={
+												isActiveField(
+													publisherMaxHeight
+												) &&
+												'control-first label-center small-gap'
+											}
+											placeholder="0"
+											unitType="min-height"
+											min={0}
+											size="small"
+											onChange={(newValue) =>
+												handleOnChangeAttributes(
+													'publisherMinHeight',
+													newValue
+												)
+											}
+											{...props}
+											controlAddonTypes={['variable']}
+											variableTypes={['width-size']}
+										/>
+									</ControlContextProvider>
+								)}
 
-							{isActiveField(publisherMinHeight) && (
-								<ControlContextProvider
-									value={{
-										name: generateExtensionId(
-											block,
-											'minHeight'
-										),
-										value: minHeight,
-										attribute: 'publisherMinHeight',
-										blockName: block.blockName,
-									}}
-								>
-									<InputControl
-										controlName="input"
-										label={__('Min H', 'publisher-core')}
-										columns={
-											isWidthActive &&
-											lengthOfActiveFields > 2
-												? '1.1fr 1.9fr'
-												: 'columns-2'
-										}
-										placeholder="0"
-										unitType="min-height"
-										min={0}
-										size={
-											isWidthActive &&
-											lengthOfActiveFields > 2
-												? 'small'
-												: 'normal'
-										}
-										onChange={(newValue) =>
-											handleOnChangeAttributes(
-												'publisherMinHeight',
-												newValue
-											)
-										}
-										{...props}
-										controlAddonTypes={['variable']}
-										variableTypes={['width-size']}
-									/>
-								</ControlContextProvider>
-							)}
-
-							{isActiveField(publisherMaxHeight) && (
-								<ControlContextProvider
-									value={{
-										name: generateExtensionId(
-											block,
-											'maxHeight'
-										),
-										value: maxHeight,
-										attribute: 'publisherMaxHeight',
-										blockName: block.blockName,
-									}}
-								>
-									<InputControl
-										controlName="input"
-										label={__('Max H', 'publisher-core')}
-										columns={
-											isWidthActive &&
-											lengthOfActiveFields > 2
-												? '1.1fr 1.9fr'
-												: 'columns-2'
-										}
-										placeholder="0"
-										unitType="max-height"
-										min={0}
-										size={
-											isWidthActive &&
-											lengthOfActiveFields > 2
-												? 'small'
-												: 'normal'
-										}
-										onChange={(newValue) =>
-											handleOnChangeAttributes(
-												'publisherMaxHeight',
-												newValue
-											)
-										}
-										{...props}
-										controlAddonTypes={['variable']}
-										variableTypes={['width-size']}
-									/>
-								</ControlContextProvider>
-							)}
-						</Flex>
-					</Flex>
-				</BaseControl>
+								{isActiveField(publisherMaxHeight) && (
+									<ControlContextProvider
+										value={{
+											name: generateExtensionId(
+												block,
+												'maxHeight'
+											),
+											value: maxHeight,
+											attribute: 'publisherMaxHeight',
+											blockName: block.blockName,
+										}}
+									>
+										<InputControl
+											controlName="input"
+											label={__('Max', 'publisher-core')}
+											aria-label={__(
+												'Max Height',
+												'publisher-core'
+											)}
+											columns={
+												isActiveField(
+													publisherMinHeight
+												)
+													? 'columns-1'
+													: 'columns-2'
+											}
+											className={
+												isActiveField(
+													publisherMinHeight
+												) &&
+												'control-first label-center small-gap'
+											}
+											placeholder="0"
+											unitType="max-height"
+											min={0}
+											size="small"
+											onChange={(newValue) =>
+												handleOnChangeAttributes(
+													'publisherMaxHeight',
+													newValue
+												)
+											}
+											{...props}
+											controlAddonTypes={['variable']}
+											variableTypes={['width-size']}
+										/>
+									</ControlContextProvider>
+								)}
+							</Flex>
+						)}
+					</BaseControl>
+				)}
 
 				{isActiveField(publisherOverflow) && (
 					<ControlContextProvider
