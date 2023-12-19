@@ -12,7 +12,7 @@ import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 export type TCssProps = {
 	cursor?: string,
 	'user-select'?: string,
-	'pointer-event'?: string,
+	'pointer-events'?: string,
 };
 
 export type TMouseProps = {

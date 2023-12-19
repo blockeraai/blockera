@@ -11,10 +11,11 @@ import { attributes } from './attributes';
 import type { TBlockProps } from '../types';
 import { useCssSelector } from '../../hooks';
 import { isActiveField } from '../../api/utils';
-import type { TMouseCssProps } from './types/mouse-props';
+import type { TCssProps } from './types/mouse-props';
 
 interface IConfigs {
 	mouseConfig: {
+		cssGenerators: Object,
 		publisherCursor: string,
 		publisherUserSelect: string,
 		publisherPointerEvents: string,
@@ -38,7 +39,7 @@ export function MouseStyles({
 	});
 
 	const generators = [];
-	const properties: TMouseCssProps = {};
+	const properties: TCssProps = {};
 
 	if (
 		isActiveField(publisherCursor) &&
