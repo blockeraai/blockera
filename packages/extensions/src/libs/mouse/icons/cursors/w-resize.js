@@ -1,0 +1,20 @@
+export default function CursorWResizeIcon({}) {
+	return (
+		<svg
+			width="20"
+			height="20"
+			viewBox="0 0 20 20"
+			fill="none"
+			xmlns="http://www.w3.org/2000/svg"
+		>
+			<path
+				d="M3 10L8.999 16.001L9 12H16V8.004L9 8.002V4L3 10Z"
+				fill="white"
+			/>
+			<path
+				d="M15 11H8V13.587L4.414 10L8 6.41504V9.00104L15 9.00404V11Z"
+				fill="black"
+			/>
+		</svg>
+	);
+}
