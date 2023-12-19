@@ -111,6 +111,7 @@ const StatesGraph = ({
 const AdvancedLabelControl = ({
 	path = null,
 	label,
+	popoverTitle,
 	fieldId,
 	className,
 	ariaLabel,
@@ -186,7 +187,7 @@ const AdvancedLabelControl = ({
 			{isOpenModal && (isChangedValue || isChangedInOtherStates) && (
 				<Popover
 					offset={35}
-					title={label}
+					title={popoverTitle !== '' ? popoverTitle : label}
 					onClose={() => setOpenModal(!isOpenModal)}
 					placement={'left-start'}
 				>
@@ -267,6 +268,7 @@ const AdvancedLabelControl = ({
 const LabelControl = ({
 	mode = 'simple',
 	label = '',
+	popoverTitle = '',
 	path,
 	fieldId,
 	className,
@@ -283,6 +285,7 @@ const LabelControl = ({
 			<AdvancedLabelControl
 				{...{
 					label,
+					popoverTitle,
 					fieldId,
 					className,
 					ariaLabel,

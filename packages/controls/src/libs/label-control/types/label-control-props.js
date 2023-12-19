@@ -7,6 +7,7 @@ import type { MixedElement } from 'react';
 
 export type LabelControlProps = {
 	label?: string,
+	popoverTitle?: string,
 	blockName?: string,
 	attribute?: string,
 	className?: string,
