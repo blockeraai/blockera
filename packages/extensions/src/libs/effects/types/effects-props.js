@@ -23,7 +23,6 @@ export type TEffectsProps = {
 		transform: Array<Object>,
 		transition: Array<Object>,
 		filter: Array<Object>,
-		cursor: string,
 		blendMode: string,
 		backdropFilter: Array<Object>,
 		backfaceVisibility: string,
