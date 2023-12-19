@@ -4,7 +4,7 @@
 	cursor: not-allowed;
 
 	input,
- textarea {
+ 	textarea {
 		pointer-events: none;
 	}
 }
@@ -18,7 +18,7 @@
 	position: absolute;
 	display: inline-block;
 	color: rgb(255, 255, 255);
-	transition: all 0.3s cubic-bezier(0.22, -0.06, 0.94, 1.35) 0s;
+	transition: none;
 	will-change: color, font-size, padding, position, display, transition, background;
 }
 
