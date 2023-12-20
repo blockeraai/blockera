@@ -130,8 +130,8 @@ export const Border = ({
 		return {
 			all: {
 				color: getColorValue(defaultValue.borderColor),
-				style: defaultValue.border?.style || '',
-				width: defaultValue.border?.width || '',
+				style: defaultValue.border?.style || 'solid',
+				width: defaultValue.border?.width || '0px',
 			},
 			type: 'all',
 		};
@@ -152,8 +152,12 @@ export const Border = ({
 			<BoxBorderControl
 				columns="columns-1"
 				label={__('Border Line', 'publisher-core')}
-				onChange={(newValue) => {
+				onChange={(
+					newValue: Array<Object>,
+					ref?: Object = undefined
+				): void => {
 					onChange('publisherBorder', newValue, {
+						ref,
 						addOrModifyRootItems: toWPCompatible(newValue),
 					});
 				}}

@@ -92,10 +92,14 @@ export const BorderAndShadowExtension: TBorderAndShadowProps =
 							>
 								<BoxShadowControl
 									label={__('Box Shadows', 'publisher-core')}
-									onChange={(newValue) =>
+									onChange={(
+										newValue: Array<Object>,
+										ref?: Object = undefined
+									): void =>
 										handleOnChangeAttributes(
 											'publisherBoxShadow',
-											newValue
+											newValue,
+											{ ref }
 										)
 									}
 									{...props}
