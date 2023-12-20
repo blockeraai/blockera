@@ -107,6 +107,9 @@ export const useDragValue = ({
 
 		// Stop the drag operation now.
 		const onEnd = () => {
+			// stop only if the drag was actually started
+			if (!dragStarted) return;
+
 			setStartVal(0);
 			setDragStarted(false);
 
