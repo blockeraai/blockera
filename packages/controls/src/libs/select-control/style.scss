@@ -79,7 +79,6 @@
 	}
 
 	.components-input-control__backdrop {
-		//border-color: var(--publisher-fields-border-color);
 		border-style: solid;
 		border-width: 1px;
 		border-color: var(--publisher-controls-border-color) !important;
@@ -98,11 +97,6 @@
 			background: none;
 		}
 	}
-
-	//.components-input-control__backdrop {
-	//	border-color: var(--publisher-controls-border-color) !important;
-	//	box-shadow: 0 0 0 1px var(--publisher-border-color, transparent) !important;
-	//}
 
 	&:not(.no-border).is-hovered .components-input-control__backdrop,
 	&:not(.no-border, .is-focused):hover .components-input-control__backdrop {
@@ -130,7 +124,7 @@
 			min-height: 30px;
 			gap: 10px;
 			cursor: pointer;
-			font-size: 13px;
+			font-size: 12px;
 			margin: 0 0 5px;
 			padding: 0 5px 0 6px;
 
