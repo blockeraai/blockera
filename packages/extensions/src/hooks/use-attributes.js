@@ -4,6 +4,7 @@
  * Internal dependencies
  */
 import type { THandleOnChangeAttributes } from '../libs/types';
+import { deletePropertyByPath } from '@publisher/utils';
 
 export const useAttributes = (
 	attributes: Object,
@@ -20,26 +21,13 @@ export const useAttributes = (
 ): {
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 } => {
-	function deletePropertyByPath(obj: Object, path: string): void {
-		const keys = path.split('.');
-		let current = obj;
-
-		for (let i = 0; i < keys.length - 1; i++) {
-			if (!current[keys[i]]) {
-				return; // Property doesn't exist, nothing to delete
-			}
-			current = current[keys[i]];
-		}
-
-		delete current[keys[keys.length - 1]];
-	}
-
 	const handleOnChangeAttributes: THandleOnChangeAttributes = (
 		attributeId,
 		newValue,
 		options = {}
 	): void => {
 		const {
+			ref,
 			updateItems = {},
 			deleteItems = [],
 			addOrModifyRootItems = {},
@@ -71,6 +59,22 @@ export const useAttributes = (
 					attributeId
 				))
 		) {
+			if (ref?.reset) {
+				const newAttributes = {
+					..._attributes,
+				};
+
+				deletePropertyByPath(
+					newAttributes,
+					ref.path.replace(/\[/g, '.').replace(/]/g, '')
+				);
+
+				return {
+					...newAttributes,
+					[attributeId]: newValue,
+				};
+			}
+
 			setAttributes({
 				..._attributes,
 				[attributeId]: newValue,
@@ -93,6 +97,24 @@ export const useAttributes = (
 						breakpoints: state.breakpoints.map((breakpoint, id) => {
 							if (breakpointId !== id) {
 								return breakpoint;
+							}
+
+							if (ref?.reset) {
+								const newAttributes = {
+									...breakpoint.attributes,
+								};
+
+								deletePropertyByPath(
+									newAttributes,
+									ref.path
+										.replace(/\[/g, '.')
+										.replace(/]/g, '')
+								);
+
+								return {
+									...breakpoint,
+									attributes: newAttributes,
+								};
 							}
 
 							if ('string' !== typeof attributeId) {
