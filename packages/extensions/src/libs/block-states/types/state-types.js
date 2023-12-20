@@ -1,5 +1,7 @@
 // @flow
 
+import type { BreakpointTypes } from './breakpoint-types';
+
 export type TStates =
 	| 'normal'
 	| 'hover'
@@ -34,5 +36,5 @@ export type StateTypes = {
 		color: string,
 		cssSelector?: string,
 	},
-	breakpoints: Array<Object>,
+	breakpoints: BreakpointTypes,
 };

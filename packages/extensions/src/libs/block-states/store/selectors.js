@@ -26,8 +26,11 @@ export type State = {
 
 export type StateGraphItem = {
 	type: TStates,
+	force: boolean,
+	settings: Object,
+	// attributes: Object,
 	label: TStatesLabel,
-	attributes: Object,
+	breakpoints: BreakpointTypes,
 };
 
 export type StateGraphStates = Array<StateGraphItem>;
