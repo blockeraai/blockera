@@ -10,7 +10,7 @@ export default function MarginTopIcon({}) {
 				opacity="0.3"
 				fillRule="evenodd"
 				clipRule="evenodd"
-				d="M18 0H0V18H18V0ZM17 1H1V17H17V1Z"
+				d="M0 6H18V18H17V7H1V18H0V6Z"
 			/>
 			<rect width="18" height="5" />
 		</svg>

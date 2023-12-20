@@ -1,4 +1,4 @@
-export default function PaddingBottomIcon({}) {
+export default function MarginAllIcon({}) {
 	return (
 		<svg
 			width="18"
@@ -10,9 +10,13 @@ export default function PaddingBottomIcon({}) {
 				opacity="0.3"
 				fillRule="evenodd"
 				clipRule="evenodd"
-				d="M18 0H0V18H18V0ZM17 1H1V17H17V1Z"
+				d="M13 5L13 13H5L5 5L13 5ZM6 6L6 12H12L12 6L6 6Z"
 			/>
-			<rect x="2" y="12" width="14" height="4" />
+			<path
+				fillRule="evenodd"
+				clipRule="evenodd"
+				d="M0 18V0H18L18 18H0ZM4 14H14V4H4L4 14Z"
+			/>
 		</svg>
 	);
 }

@@ -95,9 +95,8 @@ export const prepareSelectCustomOptions = function (options: TSelectOptions) {
 				selectOptions.push(convertOption(_item, 'level-2-item'));
 				return null;
 			});
-		} else {
+		} else if (!isUndefined(item.value))
 			selectOptions.push(convertOption(item));
-		}
 
 		return null;
 	});

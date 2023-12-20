@@ -57,12 +57,38 @@ export const SpacingExtension: TSpacingProps = memo<TSpacingProps>(
 					>
 						<BaseControl controlName="box-spacing">
 							<BoxSpacingControl
-								{...{
-									...props,
-									defaultValue: isUndefined(defaultValue)
+								{...props}
+								onChange={(newValue) => {
+									const toWPCompatible =
+										!defaultValue.padding &&
+										!defaultValue.margin
+											? {
+													style: {
+														...(block?.attributes
+															?.style ?? {}),
+														spacing: newValue,
+													},
+											  }
+											: {};
+
+									handleOnChangeAttributes(
+										'publisherSpacing',
+										newValue,
+										{
+											addOrModifyRootItems:
+												toWPCompatible,
+										}
+									);
+								}}
+								defaultValue={
+									isUndefined(defaultValue)
 										? {
 												margin: fallbackValue,
+												marginLock:
+													'vertical-horizontal',
 												padding: fallbackValue,
+												paddingLock:
+													'vertical-horizontal',
 										  }
 										: {
 												padding: getSpacingValue({
@@ -70,37 +96,19 @@ export const SpacingExtension: TSpacingProps = memo<TSpacingProps>(
 													propId: 'padding',
 													defaultValue: fallbackValue,
 												}),
+												paddingLock:
+													defaultValue.paddingLock ??
+													'vertical-horizontal',
 												margin: getSpacingValue({
 													spacing: defaultValue,
 													propId: 'margin',
 													defaultValue: fallbackValue,
 												}),
-										  },
-									//
-									onChange: (newValue) => {
-										const toWPCompatible =
-											!defaultValue.padding &&
-											!defaultValue.margin
-												? {
-														style: {
-															...(block
-																?.attributes
-																?.style ?? {}),
-															spacing: newValue,
-														},
-												  }
-												: {};
-
-										handleOnChangeAttributes(
-											'publisherSpacing',
-											newValue,
-											{
-												addOrModifyRootItems:
-													toWPCompatible,
-											}
-										);
-									},
-								}}
+												marginLock:
+													defaultValue.marginLock ??
+													'vertical-horizontal',
+										  }
+								}
 							/>
 						</BaseControl>
 					</ControlContextProvider>

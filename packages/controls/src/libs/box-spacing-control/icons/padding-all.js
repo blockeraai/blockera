@@ -1,4 +1,4 @@
-export default function PaddingBottomIcon({}) {
+export default function PaddingAllIcon({}) {
 	return (
 		<svg
 			width="18"
@@ -12,7 +12,11 @@ export default function PaddingBottomIcon({}) {
 				clipRule="evenodd"
 				d="M18 0H0V18H18V0ZM17 1H1V17H17V1Z"
 			/>
-			<rect x="2" y="12" width="14" height="4" />
+			<path
+				fillRule="evenodd"
+				clipRule="evenodd"
+				d="M16 2H2V16H16V2ZM6 12H12V6H6V12Z"
+			/>
 		</svg>
 	);
 }
