@@ -46,7 +46,7 @@ export const isEquals = (
 				if (!isEquals(a[i], b[i])) {
 					return false;
 				}
-			} else if (a[i] !== b[i]) {
+			} else if (!isEquals(a[i], b[i])) {
 				return false;
 			}
 		}
