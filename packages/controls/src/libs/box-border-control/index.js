@@ -67,6 +67,7 @@ export default function BoxBorderControl({
 		blockName,
 		description,
 		resetToDefault,
+		getControlPath,
 		controlInfo: { name: controlId },
 		dispatch: { modifyControlValue },
 	} = useControlContext({
@@ -118,10 +119,14 @@ export default function BoxBorderControl({
 							<LabelControl
 								label={label}
 								{...{
+									value,
 									attribute,
 									blockName,
 									description,
+									defaultValue,
 									resetToDefault,
+									mode: 'advanced',
+									path: getControlPath(attribute, id),
 								}}
 							/>
 						</span>
