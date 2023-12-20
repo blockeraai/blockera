@@ -1,0 +1,20 @@
+export default function LockVerticalHorizontalIcon({}) {
+	return (
+		<svg
+			width="18"
+			height="18"
+			viewBox="0 0 18 18"
+			xmlns="http://www.w3.org/2000/svg"
+		>
+			<rect x="6" y="4" width="7" height="1" />
+			<rect x="14" y="6" width="1" height="7" />
+			<rect x="4" y="6" width="1" height="7" />
+			<rect x="6" y="14" width="7" height="1" />
+			<path
+				fillRule="evenodd"
+				clipRule="evenodd"
+				d="M9 4H10V5H9V4ZM9 6V7H10V6H9ZM10 8H9V9H8V10H9V11H10V10H11V9H10V8ZM12 9V10H13V9H12ZM10 12H9V13H10V12ZM7 10V9H6V10H7Z"
+			/>
+		</svg>
+	);
+}

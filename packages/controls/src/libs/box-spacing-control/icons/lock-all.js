@@ -1,4 +1,4 @@
-export default function PaddingBottomIcon({}) {
+export default function LockAllIcon({}) {
 	return (
 		<svg
 			width="18"
@@ -7,12 +7,10 @@ export default function PaddingBottomIcon({}) {
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			<path
-				opacity="0.3"
 				fillRule="evenodd"
 				clipRule="evenodd"
-				d="M18 0H0V18H18V0ZM17 1H1V17H17V1Z"
+				d="M15 4H5H4V5V14V15H5H15V14V5V4ZM14 14V5H5V14H14Z"
 			/>
-			<rect x="2" y="12" width="14" height="4" />
 		</svg>
 	);
 }
