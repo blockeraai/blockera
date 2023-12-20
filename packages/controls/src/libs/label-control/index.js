@@ -72,7 +72,7 @@ const StatesGraph = ({
 
 					const renderedStates: Array<string> = [];
 
-					renderedBreakpoints.push(breakpoint.type);
+					renderedBreakpoints.push(state.graph.type);
 
 					return (
 						<Flex
@@ -84,22 +84,22 @@ const StatesGraph = ({
 							)}
 							{state.graph.states?.map(
 								(
-									state: StateTypes,
+									_state: StateTypes,
 									_index: number
-								): MixedElement => {
-									if (renderedStates.includes(state?.type)) {
+								): MixedElement | null => {
+									if (renderedStates.includes(_state?.type)) {
 										return null;
 									}
 
-									renderedStates.push(state.type);
+									renderedStates.push(_state.type);
 
-									const key = `${state.graph.type}-${index}-${state.type}-${_index}-${controlId}`;
+									const key = `${state.graph.type}-${index}-${_state.type}-${_index}-${controlId}`;
 
 									const MappedHeader = () => {
 										return [
-											':' + state.type.slice(0, 3),
+											':' + _state.type.slice(0, 3),
 											<div key={`${key}-label`}>
-												{state.label}
+												{_state.label}
 											</div>,
 										];
 									};
@@ -152,7 +152,12 @@ const AdvancedLabelControl = ({
 		return null;
 	}
 
-	const { isChanged, isChangedOnNormal, isChangedOnOtherStates } =
+	const {
+		isChanged,
+		isChangedOnNormal,
+		isChangedOnOtherStates,
+		isChangedOnCurrentState,
+	} =
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		useAdvancedLabelProps({
 			path,
@@ -161,7 +166,6 @@ const AdvancedLabelControl = ({
 			attribute,
 			isRepeater,
 			defaultValue,
-			repeaterItem,
 			blockStateId,
 			breakpointId,
 			isNormalState: isNormalState(),
@@ -179,12 +183,19 @@ const AdvancedLabelControl = ({
 					{...props}
 					onClick={() => isChangedValue && setOpenModal(true)}
 					className={controlClassNames('label', className, {
-						'changed-in-other-state': isChangedOnOtherStates,
+						'changed-in-other-state':
+							!isChanged && isChangedOnOtherStates,
 						'changed-in-normal-state':
-							(isNormalState() && isChanged) ||
-							(!isNormalState() && isChangedOnNormal),
+							(isNormalState() &&
+								isChanged &&
+								isChangedOnCurrentState) ||
+							(!isNormalState() &&
+								isChangedOnNormal &&
+								!isChangedOnCurrentState),
 						'changed-in-secondary-state':
-							!isNormalState() && isChanged,
+							!isNormalState() &&
+							isChanged &&
+							isChangedOnCurrentState,
 					})}
 					aria-label={ariaLabel || label}
 					data-cy="label-control"
@@ -238,6 +249,7 @@ const AdvancedLabelControl = ({
 									isRepeater,
 									repeaterItem,
 									propId: fieldId,
+									action: 'RESET_TO_DEFAULT',
 								});
 							}}
 						/>
@@ -271,6 +283,7 @@ const AdvancedLabelControl = ({
 										isRepeater,
 										repeaterItem,
 										propId: fieldId,
+										action: 'RESET_TO_NORMAL',
 										attributes: getAttributes(),
 									});
 								}}
