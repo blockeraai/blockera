@@ -3,7 +3,13 @@
 /**
  * External dependencies
  */
-import { isEquals, isObject } from '@publisher/utils';
+import {
+	isEquals,
+	isObject,
+	isArray,
+	isEmpty,
+	isUndefined,
+} from '@publisher/utils';
 import { prepare } from '@publisher/data-extractor';
 
 /**
@@ -17,17 +23,20 @@ import type {
 export const useAdvancedLabelProps = ({
 	path,
 	value,
-	fieldId,
+	//TODO: Please commented after complete debug!
+	// fieldId,
 	attribute,
 	isRepeater,
 	defaultValue,
+	blockStateId,
 	currentState,
+	breakpointId,
 	isNormalState,
 	blockAttributes,
-	blockStateId,
-	breakpointId,
 }: AdvancedLabelHookProps): CalculatedAdvancedLabelProps => {
-	const debugKey = 'publisherSpacing';
+	//TODO: Please commented after complete debug!
+	// const debugKey = 'publisherBorder';
+
 	if ('publisherBlockStates' === attribute) {
 		return {
 			isChanged: false,
@@ -38,20 +47,14 @@ export const useAdvancedLabelProps = ({
 
 	let _blockAttributes = blockAttributes[attribute];
 
-	if (fieldId && !isRepeater) {
-		if (debugKey === attribute) {
-			console.log(debugKey, 1);
-		}
-		// Assume control has object type value.
-		if (isObject(defaultValue)) {
-			value = value[fieldId];
-			defaultValue = defaultValue[fieldId];
-			_blockAttributes = _blockAttributes[fieldId];
-		}
-	} else if (path && !isRepeater) {
-		if (debugKey === attribute) {
-			console.log(debugKey, 2);
-		}
+	const stateAttributes =
+		blockAttributes.publisherBlockStates[blockStateId].breakpoints[
+			breakpointId
+		].attributes;
+
+	let stateValue = stateAttributes ? stateAttributes[attribute] : {};
+
+	if (path && !isRepeater) {
 		const _value = prepare(path, value);
 
 		if (_value) {
@@ -64,48 +67,68 @@ export const useAdvancedLabelProps = ({
 			defaultValue = _defaultValue;
 		}
 
+		if (stateValue) {
+			stateValue = prepare(path, stateValue);
+		}
+
 		_blockAttributes = prepare(path, blockAttributes);
 	}
 
 	const isChangedOnOtherStates =
 		blockAttributes?.publisherBlockStates?.filter(
 			(state: Object): boolean => {
-				if (state.type === currentState) {
-					return false;
-				}
-
 				return (
 					state.breakpoints.filter((breakpoint) => {
-						if (
-							isNormalState &&
-							!isEquals(_blockAttributes, value)
-						) {
-							return true;
-						}
-
 						let stateValue =
-							breakpoint?.attributes &&
-							breakpoint?.attributes[attribute];
+							'normal' === state.type &&
+							'desktop' === breakpoint.type
+								? blockAttributes
+								: breakpoint?.attributes;
 
-						if (!stateValue) {
+						if (isEmpty(stateValue)) {
 							return false;
 						}
 
 						// Assume control is repeater.
 						if (isRepeater) {
-							return !isEquals(stateValue, value);
+							if (!isNormalState && 'normal' === state.type) {
+								return (
+									!isEmpty(stateValue[attribute]) &&
+									!isUndefined(stateValue[attribute]) &&
+									!isEquals(
+										stateValue[attribute],
+										defaultValue
+									)
+								);
+							}
+
+							return (
+								!isEmpty(stateValue[attribute]) &&
+								!isUndefined(stateValue[attribute]) &&
+								!isEquals(stateValue[attribute], defaultValue)
+							);
 						}
 
-						if (fieldId) {
-							// Assume control has object type value.
-							if (isObject(defaultValue)) {
-								stateValue = stateValue[fieldId];
-							}
-						} else if (path) {
+						if (
+							(path && isObject(stateValue)) ||
+							isArray(stateValue)
+						) {
 							stateValue = prepare(path, stateValue);
 						}
 
-						return !isEquals(stateValue, value);
+						if (!isNormalState && 'normal' === state.type) {
+							return (
+								!isEmpty(stateValue) &&
+								!isUndefined(stateValue) &&
+								!isEquals(stateValue, defaultValue)
+							);
+						}
+
+						return (
+							!isEmpty(stateValue) &&
+							!isUndefined(stateValue) &&
+							!isEquals(stateValue, defaultValue)
+						);
 					}).length > 0
 				);
 			}
@@ -113,42 +136,57 @@ export const useAdvancedLabelProps = ({
 
 	let isChanged = !isEquals(defaultValue, value);
 
-	const stateAttributes =
-		blockAttributes.publisherBlockStates[blockStateId].breakpoints[
-			breakpointId
-		].attributes;
-
 	if (!isNormalState) {
-		isChanged = stateAttributes[attribute]
-			? !isEquals(stateAttributes[attribute], defaultValue)
-			: false;
+		if (stateValue) {
+			isChanged = !isEquals(stateValue, value);
+		}
+
+		if (!isChanged && stateValue) {
+			isChanged = !isEquals(stateValue, defaultValue);
+		}
 	}
 
-	const isChangedOnNormal = !isEquals(_blockAttributes, defaultValue);
+	let isChangedOnNormal =
+		isChangedOnOtherStates?.find(
+			(state: Object): boolean => 'normal' === state.type
+		) || false;
 
-	if (debugKey === attribute) {
-		// console.log(
-		// 	isChangedOnNormal,
-		// 	_blockAttributes,
-		// 	defaultValue,
-		// 	fieldId,
-		// 	path
-		// );
-		// console.log(isChanged, isChangedOnNormal, isChangedOnOtherStates);
-		// console.log(
-		// 	attribute,
-		// 	value,
-		// 	defaultValue,
-		// 	blockAttributes,
-		// 	isChanged,
-		// 	isChangedOnNormal,
-		// 	isChangedOnOtherStates
-		// );
+	if (isObject(isChangedOnNormal)) {
+		isChangedOnNormal = true;
 	}
+
+	if (isEmpty(isChangedOnOtherStates) && !isChanged && _blockAttributes) {
+		//FIXME: please double check all attributes default values and check controls valueCleanup()!!
+		// FIXME: The below statement is very important because "isChangedOnNormal" var should not false when defaultValue of control and attribute of block is not equals!
+		// isChangedOnNormal = !isEquals(_blockAttributes, defaultValue);
+	}
+
+	const isChangedOnCurrentState =
+		isChangedOnOtherStates.filter(
+			(item: Object): boolean => currentState === item.type
+		).length > 0;
+
+	//TODO: Please commented after complete debug!
+	// if (debugKey === attribute && !fieldId) {
+	// 	console.table({
+	// 		isChanged,
+	// 		stateValue,
+	// 		value,
+	// 		defaultValue,
+	// 		isChangedOnNormal,
+	// 		isChangedOnOtherStates,
+	// 		isChangedOnCurrentState,
+	// 		path,
+	// 	});
+	// }
 
 	return {
 		isChanged,
 		isChangedOnNormal,
-		isChangedOnOtherStates: isChangedOnOtherStates?.length > 0,
+		isChangedOnCurrentState,
+		isChangedOnOtherStates:
+			isChangedOnOtherStates.filter(
+				(item: Object): boolean => 'normal' !== item.type
+			).length > 0,
 	};
 };
