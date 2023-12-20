@@ -3,7 +3,7 @@
  * External dependencies
  */
 import { select } from '@wordpress/data';
-import { useContext } from '@wordpress/element';
+import { useContext, useRef } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -48,6 +48,13 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			controlInfo,
 		};
 	}
+
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	const ref = useRef({
+		reset: false,
+		keys: [],
+		path: '',
+	});
 
 	const { getControl } = isRepeaterControl()
 		? select(REPEATER_STORE_NAME)
@@ -96,11 +103,13 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const setValue = useControlEffect(
 		{
+			ref,
 			onChange,
 			sideEffect,
 			modifyValue,
 			valueCleanup,
 			value: calculatedValue,
+			resetToNormal: controlInfo.resetToNormal,
 		},
 		[savedValue]
 	);
@@ -205,8 +214,8 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 
 	return {
 		dispatch,
-		setValue: (value) => {
-			setValue(value);
+		setValue: (value, ref = undefined) => {
+			setValue(value, ref);
 
 			modifyValue(value);
 		},
@@ -234,6 +243,16 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		resetToDefault: (args: Object): any => {
 			const dataset = args?.attributes || defaultValue;
 
+			if (
+				['RESET_TO_NORMAL', 'RESET_TO_DEFAULT'].includes(args?.action)
+			) {
+				ref.current = {
+					reset: true,
+					keys: [],
+					path: args?.path,
+				};
+			}
+
 			if (args?.isRepeater) {
 				const value = prepare(args?.path, dataset);
 
@@ -247,7 +266,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			}
 
 			if (isUndefined(args?.path)) {
-				setValue(defaultValue);
+				setValue(defaultValue, ref);
 
 				modifyControlValue({
 					valueCleanup,
@@ -279,22 +298,21 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 				if (isArray(savedValue)) {
 					value = savedValue.map(
 						(item: Object, itemId: number): Object =>
-							callback(
-								item,
-								itemId,
-								defaultRepeaterItemValue && args?.propId
-									? defaultRepeaterItemValue[args.propId]
-									: defaultValue
-							)
+							callback(item, itemId, defaultValue)
 					);
-				} else if (isObject(savedValue)) {
+				} else if (isObject(savedValue) && args?.propId) {
 					value = {
 						...savedValue,
 						[args?.propId]: defaultValue[args?.propId],
 					};
+				} else if (isObject(savedValue) && isObject(defaultValue)) {
+					value = {
+						...savedValue,
+						...defaultValue,
+					};
 				}
 
-				setValue(value);
+				setValue(value, ref);
 
 				modifyControlValue({
 					value,
@@ -309,14 +327,19 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 				value = savedValue.map((item: Object, itemId: number): Object =>
 					callback(item, itemId, value)
 				);
-			} else if (isObject(savedValue)) {
+			} else if (isObject(savedValue) && args?.propId) {
 				value = {
 					...savedValue,
 					[args?.propId]: value,
 				};
+			} else if (isObject(savedValue) && isObject(value)) {
+				value = {
+					...savedValue,
+					...value,
+				};
 			}
 
-			setValue(value);
+			setValue(value, ref);
 
 			modifyControlValue({
 				value,
