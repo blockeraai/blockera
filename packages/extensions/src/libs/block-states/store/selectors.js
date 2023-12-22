@@ -25,10 +25,11 @@ export type State = {
 };
 
 export type StateGraphItem = {
+	id: number,
 	type: TStates,
 	force: boolean,
 	settings: Object,
-	// attributes: Object,
+	attributes: Object,
 	label: TStatesLabel,
 	breakpoints: BreakpointTypes,
 };
@@ -97,25 +98,28 @@ export const getBlockStates = (): Array<StateGraph> => {
 		.map((graph: StateGraph): StateGraph => {
 			return {
 				...graph,
-				states: graph.states.filter((state: State): boolean => {
-					if (
-						'normal' === state.type &&
-						!isEmpty(normals) &&
-						isEmpty(
-							normals.filter(
-								(normal) => !isEquals(normal, state.attributes)
+				states: graph.states.filter(
+					(state: { ...State, ...StateGraphItem }): boolean => {
+						if (
+							'normal' === state.type &&
+							!isEmpty(normals) &&
+							isEmpty(
+								normals.filter(
+									(normal) =>
+										!isEquals(normal, state.attributes)
+								)
 							)
-						)
-					) {
-						return false;
-					}
+						) {
+							return false;
+						}
 
-					if ('normal' === state.type) {
-						normals.push(state.attributes);
-					}
+						if ('normal' === state.type) {
+							normals.push(state.attributes);
+						}
 
-					return true;
-				}),
+						return true;
+					}
+				),
 			};
 		});
 };

@@ -36,5 +36,5 @@ export type StateTypes = {
 		color: string,
 		cssSelector?: string,
 	},
-	breakpoints: BreakpointTypes,
+	breakpoints: Array<BreakpointTypes>,
 };
