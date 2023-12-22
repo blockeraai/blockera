@@ -91,7 +91,7 @@ export default function BoxBorderControl({
 				value?.all?.width === '' &&
 				value?.all?.style === ''
 			) {
-				return '';
+				return value;
 			}
 		}
 
@@ -123,10 +123,10 @@ export default function BoxBorderControl({
 									attribute,
 									blockName,
 									description,
-									defaultValue,
 									resetToDefault,
 									mode: 'advanced',
 									path: getControlPath(attribute, id),
+									defaultValue: valueCleanup(defaultValue),
 								}}
 							/>
 						</span>

@@ -96,9 +96,9 @@ export default function BorderRadiusControl({
 								attribute,
 								blockName,
 								description,
-								defaultValue,
 								resetToDefault,
 								path: getControlPath(attribute, id),
+								defaultValue: valueCleanup(defaultValue),
 							}}
 						/>
 					</span>

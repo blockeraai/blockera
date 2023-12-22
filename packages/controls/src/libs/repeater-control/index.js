@@ -13,6 +13,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
+import { isFunction } from '@publisher/utils';
 import { Button } from '@publisher/components';
 
 /**
@@ -144,8 +145,12 @@ export default function RepeaterControl({
 							blockName={blockName}
 							attribute={attribute}
 							description={description}
-							defaultValue={defaultValue}
 							resetToDefault={resetToDefault}
+							defaultValue={
+								isFunction(valueCleanup)
+									? valueCleanup(defaultValue)
+									: defaultValue
+							}
 						/>
 					)}
 					{withoutAdvancedLabel && (

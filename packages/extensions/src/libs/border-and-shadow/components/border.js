@@ -14,6 +14,7 @@ import { BoxBorderControl, ControlContextProvider } from '@publisher/controls';
  * Internal dependencies
  */
 import { getColorValue } from '../utils';
+import { useBlockContext } from '../../../hooks';
 import { generateExtensionId } from '../../utils';
 import type { THandleOnChangeAttributes } from '../../types';
 import type { TBorderAndShadowDefaultProp } from '../types/border-and-shadow-props';
@@ -29,7 +30,13 @@ export const Border = ({
 	onChange: THandleOnChangeAttributes,
 	defaultValue: TBorderAndShadowDefaultProp,
 }): MixedElement => {
+	const { isNormalState } = useBlockContext();
+
 	const toWPCompatible = (newValue: Object): Object => {
+		if (!isNormalState()) {
+			return {};
+		}
+
 		let customized;
 
 		if ('all' === newValue.type) {
@@ -153,11 +160,20 @@ export const Border = ({
 				columns="columns-1"
 				label={__('Border Line', 'publisher-core')}
 				onChange={(
-					newValue: Array<Object>,
+					newValue: Object,
 					ref?: Object = undefined
 				): void => {
 					onChange('publisherBorder', newValue, {
 						ref,
+						deleteItems: [
+							'style.border.style',
+							'style.border.width',
+							'style.border.color',
+							'style.border.top',
+							'style.border.right',
+							'style.border.bottom',
+							'style.border.left',
+						],
 						addOrModifyRootItems: toWPCompatible(newValue),
 					});
 				}}
