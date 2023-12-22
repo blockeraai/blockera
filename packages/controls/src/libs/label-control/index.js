@@ -137,7 +137,7 @@ const AdvancedLabelControl = ({
 	repeaterItem,
 	resetToDefault,
 	...props
-}: AdvancedLabelControlProps): null | MixedElement => {
+}: AdvancedLabelControlProps): MixedElement => {
 	const [isOpenModal, setOpenModal] = useState(false);
 
 	const {
@@ -149,7 +149,7 @@ const AdvancedLabelControl = ({
 	} = useBlockContext();
 
 	if ('undefined' === typeof attribute || 'undefined' === typeof blockName) {
-		return null;
+		return <></>;
 	}
 
 	const {
@@ -174,7 +174,9 @@ const AdvancedLabelControl = ({
 		});
 
 	const isChangedValue =
-		isChanged || isChangedOnNormal || isChangedOnOtherStates;
+		(isChanged && isChangedOnCurrentState) ||
+		isChangedOnNormal ||
+		isChangedOnOtherStates;
 
 	return (
 		<>
@@ -184,7 +186,7 @@ const AdvancedLabelControl = ({
 					onClick={() => isChangedValue && setOpenModal(true)}
 					className={controlClassNames('label', className, {
 						'changed-in-other-state':
-							!isChanged && isChangedOnOtherStates,
+							!isChangedOnCurrentState && isChangedOnOtherStates,
 						'changed-in-normal-state':
 							(isNormalState() &&
 								isChanged &&
