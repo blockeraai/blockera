@@ -10,4 +10,5 @@ export type BaseControlProps = {
 	...ControlGeneralTypes,
 	...LabelControlProps,
 	controlName?: 'empty' | 'general' | string,
+	style?: Object,
 };
