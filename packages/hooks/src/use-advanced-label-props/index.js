@@ -42,6 +42,7 @@ export const useAdvancedLabelProps = ({
 			isChanged: false,
 			isChangedOnNormal: false,
 			isChangedOnOtherStates: false,
+			isChangedOnCurrentState: false,
 		};
 	}
 
