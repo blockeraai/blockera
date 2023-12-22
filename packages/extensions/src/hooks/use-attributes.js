@@ -53,26 +53,20 @@ export const useAttributes = (
 
 		// Assume attribute id is string, and activated state is normal, or attribute ["publisherCurrentState" or "publisherBlockStates"] will change!
 		if (
-			'string' === typeof attributeId &&
-			(isNormalState() ||
-				['publisherCurrentState', 'publisherBlockStates'].includes(
-					attributeId
-				))
+			isNormalState() ||
+			['publisherCurrentState', 'publisherBlockStates'].includes(
+				attributeId
+			)
 		) {
-			if (ref?.reset) {
+			if (ref?.current?.reset) {
 				const newAttributes = {
 					..._attributes,
 				};
 
 				deletePropertyByPath(
 					newAttributes,
-					ref.path.replace(/\[/g, '.').replace(/]/g, '')
+					ref.current.path.replace(/\[/g, '.').replace(/]/g, '')
 				);
-
-				return {
-					...newAttributes,
-					[attributeId]: newValue,
-				};
 			}
 
 			setAttributes({
@@ -99,14 +93,14 @@ export const useAttributes = (
 								return breakpoint;
 							}
 
-							if (ref?.reset) {
+							if (ref?.current?.reset) {
 								const newAttributes = {
 									...breakpoint.attributes,
 								};
 
 								deletePropertyByPath(
 									newAttributes,
-									ref.path
+									ref.current.path
 										.replace(/\[/g, '.')
 										.replace(/]/g, '')
 								);
