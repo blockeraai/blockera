@@ -34,9 +34,11 @@ import type { StateTypes } from '@publisher/extensions/src/libs/block-states/typ
 const StatesGraph = ({
 	controlId,
 	blockName,
+	defaultValue,
 }: {
 	controlId: string,
 	blockName: string,
+	defaultValue: any,
 }): null | MixedElement => {
 	if (!controlId) {
 		return null;
@@ -44,7 +46,7 @@ const StatesGraph = ({
 
 	const renderedBreakpoints: Array<string> = [];
 
-	const statesGraph = getStatesGraph({ controlId, blockName });
+	const statesGraph = getStatesGraph({ controlId, blockName, defaultValue });
 
 	return (
 		<Flex
@@ -220,7 +222,11 @@ const AdvancedLabelControl = ({
 						? description()
 						: description}
 
-					<StatesGraph controlId={attribute} blockName={blockName} />
+					<StatesGraph
+						controlId={attribute}
+						blockName={blockName}
+						defaultValue={defaultValue}
+					/>
 
 					<Flex direction={'row'} justifyContent={'space-between'}>
 						<Button
