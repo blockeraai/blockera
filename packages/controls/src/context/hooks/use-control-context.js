@@ -49,12 +49,20 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		};
 	}
 
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const ref = useRef({
-		reset: false,
-		keys: [],
+	const initialRef = {
 		path: '',
-	});
+		reset: false,
+		action: 'normal',
+	};
+
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	const ref = useRef(initialRef);
+
+	const resetRef = (): void => {
+		if (ref) {
+			ref.current = initialRef;
+		}
+	};
 
 	const { getControl } = isRepeaterControl()
 		? select(REPEATER_STORE_NAME)
@@ -105,6 +113,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		{
 			ref,
 			onChange,
+			resetRef,
 			sideEffect,
 			modifyValue,
 			valueCleanup,
@@ -218,6 +227,8 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			setValue(value, ref);
 
 			modifyValue(value);
+
+			resetRef();
 		},
 		value: calculatedValue,
 		blockName: controlInfo.blockName,
@@ -248,9 +259,11 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			) {
 				ref.current = {
 					reset: true,
-					keys: [],
+					action: 'reset',
 					path: args?.path,
 				};
+			} else {
+				resetRef();
 			}
 
 			if (args?.isRepeater) {

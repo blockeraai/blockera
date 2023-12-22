@@ -9,11 +9,23 @@ import { useEffect } from '@wordpress/element';
  */
 import { isFunction } from '@publisher/utils';
 
+/**
+ * Internal dependencies
+ */
+import type { ControlEffectType } from '../types';
+
 export default function useControlEffect(
-	{ ref, onChange, sideEffect, valueCleanup, value: controlValue }: Object,
+	{
+		ref,
+		onChange,
+		resetRef,
+		sideEffect,
+		valueCleanup,
+		value: controlValue,
+	}: Object,
 	dependencies: Array<any> = []
-): (data: any) => any {
-	const refId = ref && ref?.current?.reset ? ref.current : undefined;
+): ControlEffectType {
+	const refId = ref && ref?.current?.reset ? ref : undefined;
 
 	const setValue = (value: any, _ref?: Object = undefined): any => {
 		if (refId) {
@@ -37,13 +49,7 @@ export default function useControlEffect(
 		() => {
 			setValue(controlValue);
 
-			if (ref) {
-				ref.current = {
-					reset: false,
-					keys: [],
-					path: '',
-				};
-			}
+			resetRef();
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		dependencies
