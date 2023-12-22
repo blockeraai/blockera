@@ -138,6 +138,7 @@ const AdvancedLabelControl = ({
 	popoverTitle,
 	repeaterItem,
 	resetToDefault,
+	onClick,
 	...props
 }: AdvancedLabelControlProps): MixedElement => {
 	const [isOpenModal, setOpenModal] = useState(false);
@@ -185,7 +186,11 @@ const AdvancedLabelControl = ({
 			{label && (
 				<span
 					{...props}
-					onClick={() => isChangedValue && setOpenModal(true)}
+					onClick={
+						onClick
+							? onClick
+							: () => isChangedValue && setOpenModal(true)
+					}
 					className={controlClassNames('label', className, {
 						'changed-in-other-state':
 							!isChangedOnCurrentState && isChangedOnOtherStates,
