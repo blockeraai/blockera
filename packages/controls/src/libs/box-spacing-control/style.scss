@@ -4,6 +4,7 @@
 	width: 250px;
 	margin: 0 auto 15px;
 	z-index: 1; // for advanced select control
+	user-select: none;
 
 	svg {
 		overflow: visible;
@@ -99,46 +100,52 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			padding: 0 3px;
+			padding: 0 2px;
 			min-width: 15px;
-			height: 16px;
-			min-height: 16px;
+			height: 12px;
+			min-height: 12px;
+			letter-spacing: -0.3px;
 
-			&:hover:not(.label-changed) {
+			&:hover:not(.changed-in-other-state):not(.changed-in-normal-state):not(.changed-in-secondary-state) {
 				background: #ffffff;
 				border: 1px solid var(--publisher-controls-border-color);
+				cursor: pointer !important;
 			}
 
 			i {
 				font-size: 8px;
 				color: #b9b9b9;
 				position: absolute;
-				transform: translate(12px, -8px);
+				transform: translate(calc(100% + -2px), -16px);
 			}
 
 			b {
 				font-size: 8px;
-				font-weight: 700;
-				letter-spacing: 0.2px;
 			}
 		}
 
 		&.side-vertical i {
-			transform: translate(-4px, -11px);
-			right: 0;
+			transform: translate(calc(100% + 7px), -4px);
+			position: absolute;
 		}
 
-		&.side-vertical.side-padding-left i {
-			transform: translate(0, -11px);
-			left: 7px;
-			text-align: left;
-		}
-
-		&.side-vertical.side-padding-right i {
-			transform: translate(0, -11px);
-			left: 0;
-			right: 7px;
+		&.side-horizontal.side-margin-right i,
+		&.side-horizontal.side-margin-left i {
+			transform: translate(calc(100% - 26px), -16px);
 			text-align: right;
+			width: 80%;
+		}
+
+		&.side-horizontal.side-padding-left i {
+			transform: translate(calc(100% - 23px), -16px);
+			text-align: left;
+			width: 80%;
+		}
+
+		&.side-horizontal.side-padding-right i {
+			transform: translate(calc(100% - 26px), -16px);
+			text-align: right;
+			width: 80%;
 		}
 
 		&.side-margin-top {
@@ -178,7 +185,7 @@
 
 		&.side-padding-right {
 			top: 0;
-			right: 38px;
+			right: 37px;
 			bottom: 0;
 			width: 30px;
 		}
@@ -193,7 +200,7 @@
 		&.side-padding-left {
 			top: 0;
 			bottom: 0;
-			left: 38px;
+			left: 37px;
 			width: 30px;
 		}
 	}

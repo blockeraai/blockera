@@ -9,7 +9,7 @@ import type { MixedElement } from 'react';
  */
 import type { ControlGeneralTypes } from '../../../types';
 
-type BoxSpacingLock =
+export type BoxSpacingLock =
 	| 'none'
 	| 'vertical'
 	| 'horizontal'
@@ -47,12 +47,12 @@ export type BoxSpacingControlProps = {
 	 * @default ``
 	 */
 	openSide?: 'top' | 'right' | 'bottom' | 'left' | '',
-	paddingDisable: BoxSpacingSideDisable,
-	marginDisable: BoxSpacingSideDisable,
+	paddingDisable?: BoxSpacingSideDisable,
+	marginDisable?: BoxSpacingSideDisable,
 };
 
 export type SidePopoverProps = {
-	id: string,
+	id?: string,
 	title: string,
 	icon: MixedElement | string,
 	isOpen: boolean,
@@ -61,5 +61,55 @@ export type SidePopoverProps = {
 	offset?: number,
 	onClose: () => void,
 	onChange: (data: string) => string | void,
-	defaultValue?: TDefaultValue,
+	defaultValue?: string,
+};
+
+export type Side =
+	| ''
+	| 'margin-all'
+	| 'margin-vertical'
+	| 'margin-horizontal'
+	| 'margin-top'
+	| 'margin-right'
+	| 'margin-bottom'
+	| 'margin-left'
+	| 'padding-all'
+	| 'padding-vertical'
+	| 'padding-horizontal'
+	| 'padding-top'
+	| 'padding-right'
+	| 'padding-bottom'
+	| 'padding-left';
+
+export type SideProps = {
+	id?: string,
+	getId: (?string, ?string) => string,
+	//
+	value: TDefaultValue,
+	setValue: (Object) => void,
+	attribute: string,
+	blockName: string,
+	description: string,
+	defaultValue: any,
+	resetToDefault: () => void,
+	getControlPath: (controlID: string, childControlId: string) => string,
+	//
+	focusSide: Side,
+	setFocusSide: (side: Side) => void,
+	openPopover: Side,
+	setOpenPopover: (side: Side) => void,
+	paddingDisable: BoxSpacingSideDisable,
+	marginDisable: BoxSpacingSideDisable,
+	setControlClassName: (string) => void,
+};
+
+export type SideReturn = {
+	shape: MixedElement,
+	label: MixedElement,
+};
+
+export type SideShapeProps = {
+	...Object,
+	shape?: string,
+	className?: string | Array<string>,
 };

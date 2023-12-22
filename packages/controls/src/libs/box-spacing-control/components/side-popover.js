@@ -33,7 +33,15 @@ export function SidePopover({
 	},
 	defaultValue = '0px',
 }: SidePopoverProps): MixedElement {
-	const { setValue } = useControlContext({
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		description,
+		resetToDefault,
+		getControlPath,
+	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
@@ -215,7 +223,22 @@ export function SidePopover({
 					className="spacing-edit-popover"
 					onClose={onClose}
 				>
-					<BaseControl controlName="input">
+					<BaseControl
+						controlName="input"
+						label={__('Space', 'publisher-blocks')}
+						columns={'columns-2'}
+						style={{ marginTop: '10px', marginBottom: '25px' }}
+						{...{
+							value,
+							attribute,
+							blockName,
+							description,
+							defaultValue,
+							resetToDefault,
+							fieldId: id,
+							path: getControlPath(attribute, id),
+						}}
+					>
 						<InputControl
 							id={id}
 							unitType={type}
