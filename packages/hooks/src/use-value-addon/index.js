@@ -12,6 +12,7 @@ import {
 	getVariable,
 	type VariableItem,
 	type DynamicValueItem,
+	getDynamicValue,
 } from '@publisher/core-data';
 
 /**
@@ -67,6 +68,8 @@ export const useValueAddon = ({
 				size,
 				pickerProps: {},
 				pointerProps: {},
+				isDeletedVar: false,
+				isDeletedDV: false,
 			},
 			handleOnClickVar: () => {},
 			handleOnClickDV: () => {},
@@ -167,10 +170,6 @@ export const useValueAddon = ({
 		setOpen('');
 	};
 
-	if (typeof variableTypes === 'string') {
-		variableTypes = [variableTypes];
-	}
-
 	const controlProps: ValueAddonControlProps = {
 		value,
 		setValue,
@@ -191,7 +190,36 @@ export const useValueAddon = ({
 		size,
 		pointerProps,
 		pickerProps,
+		isDeletedVar: false,
+		isDeletedDV: false,
 	};
+
+	/**
+	 * Detect and add is deleted items to controlProps
+	 * we use it inside ValueAddonControl
+	 * also we use it outside of component for advanced implementation (ex: BoxSpacingControl)
+	 */
+	if (isValid(controlProps.value)) {
+		if (controlProps.value.valueType === 'variable') {
+			const item = getVariable(
+				controlProps.value?.settings?.type,
+				controlProps.value?.settings?.slug
+			);
+
+			if (isUndefined(item?.value)) {
+				controlProps.isDeletedVar = true;
+			}
+		} else if (controlProps.value.valueType === 'dynamic-value') {
+			const item = getDynamicValue(
+				controlProps.value.settings.category,
+				controlProps.value.id
+			);
+
+			if (isUndefined(item?.id)) {
+				controlProps.isDeletedDV = true;
+			}
+		}
+	}
 
 	return {
 		valueAddonClassNames,
