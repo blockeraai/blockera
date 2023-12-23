@@ -241,6 +241,7 @@ export function PaddingHorizontal({
 							resetToDefault,
 							singularId: 'padding.right',
 							path: getControlPath(attribute, 'padding.right'),
+							mode: 'advanced',
 						}}
 					/>
 
@@ -280,6 +281,7 @@ export function PaddingHorizontal({
 							resetToDefault,
 							singularId: 'padding.left',
 							path: getControlPath(attribute, 'padding.left'),
+							mode: 'advanced',
 						}}
 					/>
 				</div>

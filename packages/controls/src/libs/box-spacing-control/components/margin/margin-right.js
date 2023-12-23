@@ -227,6 +227,7 @@ export function MarginRight({
 								resetToDefault,
 								singularId: 'margin.right',
 								path: getControlPath(attribute, 'margin.right'),
+								mode: 'advanced',
 							}}
 						/>
 

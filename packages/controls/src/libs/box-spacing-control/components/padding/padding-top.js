@@ -230,6 +230,7 @@ export function PaddingTop({
 							resetToDefault,
 							singularId: 'padding.top',
 							path: getControlPath(attribute, 'padding.top'),
+							mode: 'advanced',
 						}}
 					/>
 

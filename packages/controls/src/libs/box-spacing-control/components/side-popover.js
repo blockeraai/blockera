@@ -237,6 +237,7 @@ export function SidePopover({
 							resetToDefault,
 							singularId: id,
 							path: getControlPath(attribute, id),
+							mode: 'advanced',
 						}}
 					>
 						<InputControl

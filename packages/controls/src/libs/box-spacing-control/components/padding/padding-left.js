@@ -230,6 +230,7 @@ export function PaddingLeft({
 							resetToDefault,
 							singularId: 'padding.left',
 							path: getControlPath(attribute, 'padding.left'),
+							mode: 'advanced',
 						}}
 					/>
 

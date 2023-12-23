@@ -230,6 +230,7 @@ export function PaddingRight({
 							resetToDefault,
 							singularId: 'padding.right',
 							path: getControlPath(attribute, 'padding.right'),
+							mode: 'advanced',
 						}}
 					/>
 

@@ -247,6 +247,7 @@ export function MarginHorizontal({
 							resetToDefault,
 							singularId: 'margin.right',
 							path: getControlPath(attribute, 'margin.right'),
+							mode: 'advanced',
 						}}
 					/>
 
@@ -286,6 +287,7 @@ export function MarginHorizontal({
 							resetToDefault,
 							singularId: 'margin.left',
 							path: getControlPath(attribute, 'margin.left'),
+							mode: 'advanced',
 						}}
 					/>
 				</div>

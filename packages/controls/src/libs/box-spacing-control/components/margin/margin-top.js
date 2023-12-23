@@ -229,6 +229,7 @@ export function MarginTop({
 							resetToDefault,
 							singularId: 'margin.top',
 							path: getControlPath(attribute, 'margin.top'),
+							mode: 'advanced',
 						}}
 					/>
 

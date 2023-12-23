@@ -240,6 +240,7 @@ export function MarginVertical({
 							resetToDefault,
 							singularId: 'margin.top',
 							path: getControlPath(attribute, 'margin.top'),
+							mode: 'advanced',
 						}}
 					/>
 

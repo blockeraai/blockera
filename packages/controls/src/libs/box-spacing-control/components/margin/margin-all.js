@@ -248,6 +248,7 @@ export function MarginAll({
 							resetToDefault,
 							singularId: 'margin.right',
 							path: getControlPath(attribute, 'margin.right'),
+							mode: 'advanced',
 						}}
 					/>
 				</div>
@@ -282,6 +283,7 @@ export function MarginAll({
 							resetToDefault,
 							singularId: 'margin.bottom',
 							path: getControlPath(attribute, 'margin.bottom'),
+							mode: 'advanced',
 						}}
 					/>
 				</div>
@@ -316,6 +318,7 @@ export function MarginAll({
 							resetToDefault,
 							singularId: 'margin.left',
 							path: getControlPath(attribute, 'margin.left'),
+							mode: 'advanced',
 						}}
 					/>
 				</div>

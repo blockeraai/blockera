@@ -214,6 +214,7 @@ export function PaddingAll({
 							resetToDefault,
 							singularId: 'padding.top',
 							path: getControlPath(attribute, 'padding.top'),
+							mode: 'advanced',
 						}}
 					/>
 
@@ -250,6 +251,7 @@ export function PaddingAll({
 							resetToDefault,
 							singularId: 'padding.right',
 							path: getControlPath(attribute, 'padding.right'),
+							mode: 'advanced',
 						}}
 					/>
 				</div>
@@ -284,6 +286,7 @@ export function PaddingAll({
 							resetToDefault,
 							singularId: 'padding.bottom',
 							path: getControlPath(attribute, 'padding.bottom'),
+							mode: 'advanced',
 						}}
 					/>
 				</div>
@@ -318,6 +321,7 @@ export function PaddingAll({
 							resetToDefault,
 							singularId: 'padding.left',
 							path: getControlPath(attribute, 'padding.left'),
+							mode: 'advanced',
 						}}
 					/>
 				</div>

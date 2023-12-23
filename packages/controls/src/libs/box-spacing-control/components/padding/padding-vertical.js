@@ -241,6 +241,7 @@ export function PaddingVertical({
 							resetToDefault,
 							singularId: 'padding.top',
 							path: getControlPath(attribute, 'padding.top'),
+							mode: 'advanced',
 						}}
 					/>
 
@@ -280,6 +281,7 @@ export function PaddingVertical({
 							resetToDefault,
 							singularId: 'padding.bottom',
 							path: getControlPath(attribute, 'padding.bottom'),
+							mode: 'advanced',
 						}}
 					/>
 				</div>

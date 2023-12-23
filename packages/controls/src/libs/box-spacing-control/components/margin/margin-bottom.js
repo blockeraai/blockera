@@ -229,6 +229,7 @@ export function MarginBottom({
 							resetToDefault,
 							singularId: 'margin.bottom',
 							path: getControlPath(attribute, 'margin.bottom'),
+							mode: 'advanced',
 						}}
 					/>
 
