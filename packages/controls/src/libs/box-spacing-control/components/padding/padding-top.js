@@ -228,7 +228,7 @@ export function PaddingTop({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'padding.top',
+							singularId: 'padding.top',
 							path: getControlPath(attribute, 'padding.top'),
 						}}
 					/>

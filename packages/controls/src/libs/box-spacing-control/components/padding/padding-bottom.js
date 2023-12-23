@@ -228,7 +228,7 @@ export function PaddingBottom({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'padding.bottom',
+							singularId: 'padding.bottom',
 							path: getControlPath(attribute, 'padding.bottom'),
 						}}
 					/>

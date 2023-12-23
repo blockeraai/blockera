@@ -159,13 +159,10 @@ export const Border = ({
 			<BoxBorderControl
 				columns="columns-1"
 				label={__('Border Line', 'publisher-core')}
-				onChange={(
-					newValue: Object,
-					ref?: Object = undefined
-				): void => {
+				onChange={(newValue: Object, ref?: Object): void => {
 					onChange('publisherBorder', newValue, {
 						ref,
-						deleteItems: [
+						deleteItemsOnResetAction: [
 							'style.border.style',
 							'style.border.width',
 							'style.border.color',

@@ -139,14 +139,11 @@ export const BorderRadius = ({
 			<BaseControl columns="columns-1" controlName="border-radius">
 				<BorderRadiusControl
 					label={__('Radius', 'publisher-core')}
-					onChange={(
-						newValue: Object,
-						ref?: Object = undefined
-					): void =>
+					onChange={(newValue: Object, ref?: Object): void =>
 						onChange('publisherBorderRadius', newValue, {
 							ref,
 							addOrModifyRootItems: toWPCompatible(newValue),
-							deleteItems:
+							deleteItemsOnResetAction:
 								'all' === newValue?.type &&
 								block.attributes?.style?.border?.radius
 									? ['style.border.radius']

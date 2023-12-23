@@ -54,7 +54,7 @@ export const LineHeight = ({
 				range={true}
 				min={0}
 				defaultValue={defaultValue || ''}
-				onChange={(newValue) => {
+				onChange={(newValue, ref) => {
 					const toWPCompatible = (newValue: Object): Object => {
 						const extractedValue = extractNumberAndUnit(newValue);
 
@@ -83,12 +83,15 @@ export const LineHeight = ({
 					const backwardCompatibilityValue = toWPCompatible();
 
 					onChange('publisherLineHeight', newValue, {
+						ref,
 						addOrModifyRootItems: !isArray(
 							backwardCompatibilityValue
 						)
 							? backwardCompatibilityValue
 							: {},
-						deleteItems: isArray(backwardCompatibilityValue)
+						deleteItemsOnResetAction: isArray(
+							backwardCompatibilityValue
+						)
 							? backwardCompatibilityValue
 							: [],
 					});

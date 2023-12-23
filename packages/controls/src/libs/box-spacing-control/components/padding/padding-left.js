@@ -228,7 +228,7 @@ export function PaddingLeft({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'padding.left',
+							singularId: 'padding.left',
 							path: getControlPath(attribute, 'padding.left'),
 						}}
 					/>

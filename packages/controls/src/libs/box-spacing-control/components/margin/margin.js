@@ -67,7 +67,7 @@ export function Margin({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'margin',
+							singularId: 'margin',
 							path: getControlPath(attribute, 'margin'),
 						}}
 					/>
