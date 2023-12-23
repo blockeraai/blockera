@@ -21,4 +21,6 @@ export type UseValueAddonProps = {
 	variableTypes: Array<VariableCategory>,
 	dynamicValueTypes: Array<DynamicValueTypes>,
 	size: ControlSize,
+	pointerProps: Object,
+	pickerProps: Object,
 };

@@ -29,4 +29,6 @@ export type ValueAddonControlProps = {
 	isOpen: string,
 	setOpen: (value: string) => void,
 	size: ControlSize,
+	pickerProps: Object,
+	pointerProps: Object,
 };

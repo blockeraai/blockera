@@ -26,8 +26,10 @@ import type { ValueAddonControlProps } from '../control/types';
 
 export default function ({
 	controlProps,
+	onClose,
 }: {
 	controlProps: ValueAddonControlProps,
+	onClose?: () => void,
 }): Element<any> {
 	const DynamicValues = (): Array<Element<any>> => {
 		const categories: Array<DynamicValueCategory> = [
@@ -91,6 +93,7 @@ export default function ({
 			placement="left-start"
 			onClose={() => {
 				controlProps.setOpen('');
+				if (onClose) onClose();
 			}}
 			className={controlInnerClassNames('popover-dynamic-values')}
 			titleButtonsRight={
