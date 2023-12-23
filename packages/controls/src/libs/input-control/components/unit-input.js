@@ -36,6 +36,7 @@ import type { InnerInputControlProps } from '../types';
 import MaximizeIcon from '../icons/maximize';
 import TextAreaControl from '../../textarea-control';
 import NoticeControl from '../../notice-control';
+import { ControlContextProvider } from '../../../context';
 
 export function UnitInput({
 	value,
@@ -292,14 +293,21 @@ export function UnitInput({
 									setIsMaximizeVisible(false);
 								}}
 							>
-								<TextAreaControl
-									defaultValue={defaultValue}
-									onChange={(value) => {
-										setInputValue(value);
-										return value;
+								<ControlContextProvider
+									value={{
+										name: 'unit-textarea',
+										value: inputValue,
 									}}
-									height={100}
-								/>
+								>
+									<TextAreaControl
+										defaultValue={defaultValue}
+										onChange={(value) => {
+											setInputValue(value);
+											return value;
+										}}
+										height={100}
+									/>
+								</ControlContextProvider>
 
 								<NoticeControl
 									type="information"
