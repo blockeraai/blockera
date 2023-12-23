@@ -31,13 +31,19 @@ export const useAttributes = (
 			updateItems = {},
 			deleteItems = [],
 			addOrModifyRootItems = {},
+			deleteItemsOnResetAction = [],
 		} = options;
 		let _attributes = { ...attributes, ...addOrModifyRootItems };
 
-		// Assume existed deleteItems.
-		for (let i = 0; i < deleteItems?.length - 1; i++) {
-			deletePropertyByPath(_attributes, deleteItems[i]);
-		}
+		const deleteExtraItems = (items: Array<string>, from: Object): void => {
+			// Assume existed deleteItems.
+			for (let i = 0; i < items?.length - 1; i++) {
+				deletePropertyByPath(from, items[i]);
+			}
+		};
+
+		// if handler has any delete items!
+		deleteExtraItems(deleteItems, _attributes);
 
 		// Assume activated state is normal and existed "updateItems" has items!
 		if (
@@ -67,6 +73,9 @@ export const useAttributes = (
 					newAttributes,
 					ref.current.path.replace(/\[/g, '.').replace(/]/g, '')
 				);
+
+				// if handler has deleteItemsOnResetAction.
+				deleteExtraItems(deleteItemsOnResetAction, _attributes);
 			}
 
 			setAttributes({
@@ -103,6 +112,12 @@ export const useAttributes = (
 									ref.current.path
 										.replace(/\[/g, '.')
 										.replace(/]/g, '')
+								);
+
+								// if handler has deleteItemsOnResetAction.
+								deleteExtraItems(
+									deleteItemsOnResetAction,
+									newAttributes
 								);
 
 								return {
