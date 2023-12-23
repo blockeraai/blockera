@@ -1,10 +1,21 @@
 // @flow
+/**
+ * Publisher Dependencies
+ */
+import { isValid } from '@publisher/hooks';
 
+/**
+ * Internal Dependencies
+ */
 import { extractNumberAndUnit } from '../input-control/utils';
 
 export function fixLabelText(value: Object | string): any {
 	if (value === '') {
 		return '-';
+	}
+
+	if (isValid(value)) {
+		return <b>VAR</b>;
 	}
 
 	const extracted = extractNumberAndUnit(value);

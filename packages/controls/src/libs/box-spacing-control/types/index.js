@@ -57,7 +57,7 @@ export type SidePopoverProps = {
 	icon: MixedElement | string,
 	isOpen: boolean,
 	type?: 'margin' | 'padding',
-	unit: string,
+	unit?: string,
 	offset?: number,
 	onClose: () => void,
 	onChange: (data: string) => string | void,
@@ -81,6 +81,8 @@ export type Side =
 	| 'padding-bottom'
 	| 'padding-left';
 
+export type OpenPopover = Side | 'variable-picker';
+
 export type SideProps = {
 	id?: string,
 	getId: (?string, ?string) => string,
@@ -96,8 +98,8 @@ export type SideProps = {
 	//
 	focusSide: Side,
 	setFocusSide: (side: Side) => void,
-	openPopover: Side,
-	setOpenPopover: (side: Side) => void,
+	openPopover: OpenPopover,
+	setOpenPopover: (side: OpenPopover) => void,
 	paddingDisable: BoxSpacingSideDisable,
 	marginDisable: BoxSpacingSideDisable,
 	setControlClassName: (string) => void,

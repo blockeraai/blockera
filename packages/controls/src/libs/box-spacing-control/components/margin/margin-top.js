@@ -3,18 +3,20 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
  */
 import { controlInnerClassNames } from '@publisher/classnames';
 import { useDragValue } from '@publisher/utils';
+import { useValueAddon } from '@publisher/hooks';
 
 /**
  * Internal dependencies
  */
 import { extractNumberAndUnit, LabelControl } from '../../../index';
-import type { SideProps, SideReturn } from '../../types';
+import type { Side, SideProps, SideReturn } from '../../types';
 import { SidePopover } from '../side-popover';
 import { useDragSetValues } from '../../hooks/use-drag-setValues';
 import { fixLabelText } from '../../utils';
@@ -40,19 +42,68 @@ export function MarginTop({
 	setOpenPopover,
 	marginDisable,
 }: SideProps): SideReturn {
-	const marginTop = extractNumberAndUnit(value.margin.top);
+	const sideId: Side = 'margin-top';
 
-	const { topMarginDragSetValue } = useDragSetValues({
+	const { topMarginDragSetValue: onDragSetValue } = useDragSetValues({
 		value,
 		setValue,
 	});
 
-	const topMarginDragValueHandler = useDragValue({
-		value: marginTop.value !== '' ? marginTop.value : 0,
-		setValue: topMarginDragSetValue,
+	const [labelClassName, setLabelClassName] = useState('');
+
+	// $FlowFixMe
+	const { isSetValueAddon, ValueAddonPointer, valueAddonControlProps } =
+		useValueAddon({
+			types: ['variable'],
+			value: value.margin.top,
+			variableTypes: ['spacing'],
+			onChange: (newValue) => {
+				setOpenPopover('');
+				setFocusSide('');
+				onDragSetValue(newValue);
+			},
+			size: 'normal',
+			pointerProps: {
+				onMouseEnter: () => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setFocusSide(sideId);
+						setLabelClassName('label-hover');
+					}
+				},
+				onMouseLeave: () => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setLabelClassName('');
+						setFocusSide('');
+					}
+				},
+			},
+			pickerProps: {
+				onClose: () => {
+					setOpenPopover('');
+					setFocusSide('');
+					setLabelClassName('');
+				},
+				onShown: () => {
+					setOpenPopover('variable-picker');
+				},
+			},
+		});
+
+	const _isSetValueAddon = isSetValueAddon();
+
+	let sideSpace: { value?: string, unit?: string } = {};
+	if (!_isSetValueAddon) {
+		sideSpace = extractNumberAndUnit(value.margin.top);
+	}
+
+	const { onDragStart, isDragStarted } = useDragValue({
+		value:
+			!_isSetValueAddon && sideSpace?.value !== '' ? sideSpace?.value : 0,
+		setValue: onDragSetValue,
 		movement: 'vertical',
 		onEnd: () => {
 			if (!openPopover) setFocusSide('');
+			setLabelClassName('');
 		},
 	});
 
@@ -84,33 +135,64 @@ export function MarginTop({
 				className={[
 					'side-vertical',
 					'side-margin-top',
-					focusSide === 'margin-top' ? 'selected-side' : '',
-					marginTop.unit !== 'func' ? 'side-drag-active' : '',
+					focusSide === sideId ? 'selected-side' : '',
+					valueAddonControlProps.isOpen
+						? 'selected-side selected-side-value-addon'
+						: '',
+					_isSetValueAddon ? 'is-value-addon-side' : '',
+					!_isSetValueAddon && sideSpace?.unit !== 'func'
+						? 'side-drag-active'
+						: '',
 				]}
-				onMouseDown={(event) => {
-					// prevent to catch double click
-					if (event.detail > 1) {
-						return;
-					}
+				{...(!_isSetValueAddon
+					? {
+							onMouseDown: (event) => {
+								// prevent to catch double click
+								if (event.detail > 1) {
+									return;
+								}
 
-					if (marginTop.unit === 'func') {
-						event.preventDefault();
-						return;
-					}
+								if (
+									_isSetValueAddon ||
+									sideSpace?.unit === 'func'
+								) {
+									event.preventDefault();
+									return;
+								}
 
-					topMarginDragValueHandler(event);
-					setFocusSide('margin-top');
+								onDragStart(event);
+								setFocusSide(sideId);
+							},
+					  }
+					: {})}
+				onMouseEnter={() => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setFocusSide(sideId);
+						setLabelClassName('label-hover');
+					}
+				}}
+				onMouseLeave={() => {
+					if (
+						!openPopover &&
+						!isDragStarted &&
+						!valueAddonControlProps.isOpen
+					) {
+						setOpenPopover('');
+						setFocusSide('');
+						setLabelClassName('');
+					}
 				}}
 				onClick={(event) => {
 					// open on double click
-					if (event.detail > 1) {
-						setFocusSide('margin-top');
-						setOpenPopover('margin-top');
-						return;
-					}
-
-					if (marginTop.unit === 'func') {
-						setOpenPopover('margin-top');
+					// or value addon
+					// or CSS Value
+					if (
+						_isSetValueAddon ||
+						sideSpace?.unit === 'func' ||
+						event.detail > 1
+					) {
+						setFocusSide(sideId);
+						setOpenPopover(sideId);
 					}
 				}}
 			/>
@@ -121,17 +203,22 @@ export function MarginTop({
 					className={controlInnerClassNames(
 						'label-side',
 						'side-vertical',
-						'side-margin-top'
+						'side-margin-top',
+						labelClassName
 					)}
 					data-cy="box-spacing-margin-top"
 				>
 					<LabelControl
 						ariaLabel={__('Top Margin', 'publisher-core')}
-						label={fixLabelText(marginTop)}
+						label={
+							_isSetValueAddon
+								? fixLabelText(value.margin.top)
+								: fixLabelText(sideSpace)
+						}
 						popoverTitle={__('Top Margin', 'publisher-core')}
 						onClick={() => {
-							setFocusSide('margin-top');
-							setOpenPopover('margin-top');
+							setFocusSide(sideId);
+							setOpenPopover(sideId);
 						}}
 						{...{
 							value,
@@ -145,27 +232,29 @@ export function MarginTop({
 						}}
 					/>
 
-					<SidePopover
-						id={getId(id, 'margin.top')}
-						icon={<MarginTopIcon />}
-						onClose={() => {
-							setFocusSide('');
-							setOpenPopover('');
-						}}
-						title={__('Top Margin', 'publisher-core')}
-						isOpen={openPopover === 'margin-top'}
-						unit={marginTop.unit}
-						onChange={(newValue) => {
-							setValue({
-								...value,
-								margin: {
-									...value.margin,
-									top: newValue,
-								},
-							});
-						}}
-					/>
+					<ValueAddonPointer />
 				</div>
+
+				<SidePopover
+					id={getId(id, 'margin.top')}
+					icon={<MarginTopIcon />}
+					onClose={() => {
+						setFocusSide('');
+						setOpenPopover('');
+					}}
+					title={__('Top Margin', 'publisher-core')}
+					isOpen={openPopover === sideId}
+					unit={sideSpace?.unit}
+					onChange={(newValue) => {
+						setValue({
+							...value,
+							margin: {
+								...value.margin,
+								top: newValue,
+							},
+						});
+					}}
+				/>
 			</>
 		),
 	};

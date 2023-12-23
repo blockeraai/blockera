@@ -3,18 +3,20 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
  */
 import { controlInnerClassNames } from '@publisher/classnames';
 import { useDragValue } from '@publisher/utils';
+import { useValueAddon } from '@publisher/hooks';
 
 /**
  * Internal dependencies
  */
 import { extractNumberAndUnit, LabelControl } from '../../../index';
-import type { SideProps, SideReturn } from '../../types';
+import type { Side, SideProps, SideReturn } from '../../types';
 import { SidePopover } from '../side-popover';
 import { useDragSetValues } from '../../hooks/use-drag-setValues';
 import { fixLabelText } from '../../utils';
@@ -40,20 +42,69 @@ export function PaddingRight({
 	setOpenPopover,
 	paddingDisable,
 }: SideProps): SideReturn {
-	const paddingRight = extractNumberAndUnit(value.padding.right);
+	const sideId: Side = 'padding-right';
 
-	const { rightPaddingDragSetValue } = useDragSetValues({
+	const { rightPaddingDragSetValue: onDragSetValue } = useDragSetValues({
 		value,
 		setValue,
 	});
 
-	const rightPaddingDragValueHandler = useDragValue({
-		value: paddingRight.value || 0,
-		setValue: rightPaddingDragSetValue,
+	const [labelClassName, setLabelClassName] = useState('');
+
+	// $FlowFixMe
+	const { isSetValueAddon, ValueAddonPointer, valueAddonControlProps } =
+		useValueAddon({
+			types: ['variable'],
+			value: value.padding.right,
+			variableTypes: ['spacing'],
+			onChange: (newValue) => {
+				setOpenPopover('');
+				setFocusSide('');
+				onDragSetValue(newValue);
+			},
+			size: 'normal',
+			pointerProps: {
+				onMouseEnter: () => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setFocusSide(sideId);
+						setLabelClassName('label-hover');
+					}
+				},
+				onMouseLeave: () => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setLabelClassName('');
+						setFocusSide('');
+					}
+				},
+			},
+			pickerProps: {
+				onClose: () => {
+					setOpenPopover('');
+					setFocusSide('');
+					setLabelClassName('');
+				},
+				onShown: () => {
+					setOpenPopover('variable-picker');
+				},
+			},
+		});
+
+	const _isSetValueAddon = isSetValueAddon();
+
+	let sideSpace: { value?: string, unit?: string } = {};
+	if (!_isSetValueAddon) {
+		sideSpace = extractNumberAndUnit(value.padding.right);
+	}
+
+	const { onDragStart, isDragStarted } = useDragValue({
+		value:
+			!_isSetValueAddon && sideSpace?.value !== '' ? sideSpace?.value : 0,
+		setValue: onDragSetValue,
 		movement: 'horizontal',
 		min: 0,
 		onEnd: () => {
 			if (!openPopover) setFocusSide('');
+			setLabelClassName('');
 		},
 	});
 
@@ -85,36 +136,64 @@ export function PaddingRight({
 				className={[
 					'side-horizontal',
 					'side-padding-right',
-					openPopover === 'padding-right' ||
-					focusSide === 'padding-right'
-						? 'selected-side'
+					focusSide === sideId ? 'selected-side' : '',
+					valueAddonControlProps.isOpen
+						? 'selected-side selected-side-value-addon'
 						: '',
-					paddingRight.unit !== 'func' ? 'side-drag-active' : '',
+					_isSetValueAddon ? 'is-value-addon-side' : '',
+					!_isSetValueAddon && sideSpace?.unit !== 'func'
+						? 'side-drag-active'
+						: '',
 				]}
-				onMouseDown={(event) => {
-					// prevent to catch double click
-					if (event.detail > 1) {
-						return;
-					}
+				{...(!_isSetValueAddon
+					? {
+							onMouseDown: (event) => {
+								// prevent to catch double click
+								if (event.detail > 1) {
+									return;
+								}
 
-					if (paddingRight.unit === 'func') {
-						event.preventDefault();
-						return;
-					}
+								if (
+									_isSetValueAddon ||
+									sideSpace?.unit === 'func'
+								) {
+									event.preventDefault();
+									return;
+								}
 
-					rightPaddingDragValueHandler(event);
-					setFocusSide('padding-right');
+								onDragStart(event);
+								setFocusSide(sideId);
+							},
+					  }
+					: {})}
+				onMouseEnter={() => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setFocusSide(sideId);
+						setLabelClassName('label-hover');
+					}
+				}}
+				onMouseLeave={() => {
+					if (
+						!openPopover &&
+						!isDragStarted &&
+						!valueAddonControlProps.isOpen
+					) {
+						setOpenPopover('');
+						setFocusSide('');
+						setLabelClassName('');
+					}
 				}}
 				onClick={(event) => {
 					// open on double click
-					if (event.detail > 1) {
-						setFocusSide('padding-right');
-						setOpenPopover('padding-right');
-						return;
-					}
-
-					if (paddingRight.unit === 'func') {
-						setOpenPopover('padding-right');
+					// or value addon
+					// or CSS Value
+					if (
+						_isSetValueAddon ||
+						sideSpace?.unit === 'func' ||
+						event.detail > 1
+					) {
+						setFocusSide(sideId);
+						setOpenPopover(sideId);
 					}
 				}}
 			/>
@@ -125,17 +204,22 @@ export function PaddingRight({
 					className={controlInnerClassNames(
 						'label-side',
 						'side-horizontal',
-						'side-padding-right'
+						'side-padding-right',
+						labelClassName
 					)}
 					data-cy="box-spacing-padding-right"
 				>
 					<LabelControl
 						ariaLabel={__('Right Padding', 'publisher-core')}
-						label={fixLabelText(paddingRight)}
+						label={
+							_isSetValueAddon
+								? fixLabelText(value.padding.right)
+								: fixLabelText(sideSpace)
+						}
 						popoverTitle={__('Right Padding', 'publisher-core')}
 						onClick={() => {
-							setFocusSide('padding-right');
-							setOpenPopover('padding-right');
+							setFocusSide(sideId);
+							setOpenPopover(sideId);
 						}}
 						{...{
 							value,
@@ -148,6 +232,8 @@ export function PaddingRight({
 							path: getControlPath(attribute, 'padding.right'),
 						}}
 					/>
+
+					<ValueAddonPointer />
 				</div>
 
 				<SidePopover
@@ -160,8 +246,8 @@ export function PaddingRight({
 						setOpenPopover('');
 					}}
 					title={__('Right Padding', 'publisher-core')}
-					isOpen={openPopover === 'padding-right'}
-					unit={paddingRight.unit}
+					isOpen={openPopover === sideId}
+					unit={sideSpace.unit}
 					onChange={(newValue) => {
 						setValue({
 							...value,

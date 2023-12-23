@@ -3,18 +3,20 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
  */
 import { controlInnerClassNames } from '@publisher/classnames';
 import { useDragValue } from '@publisher/utils';
+import { useValueAddon } from '@publisher/hooks';
 
 /**
  * Internal dependencies
  */
 import { extractNumberAndUnit, LabelControl } from '../../../index';
-import type { SideProps, SideReturn } from '../../types';
+import type { Side, SideProps, SideReturn } from '../../types';
 import { SidePopover } from '../side-popover';
 import { useDragSetValues } from '../../hooks/use-drag-setValues';
 import { fixLabelText } from '../../utils';
@@ -40,19 +42,68 @@ export function MarginLeft({
 	setOpenPopover,
 	marginDisable,
 }: SideProps): SideReturn {
-	const marginLeft = extractNumberAndUnit(value.margin.left);
+	const sideId: Side = 'margin-left';
 
-	const { leftMarginDragSetValue } = useDragSetValues({
+	const { leftMarginDragSetValue: onDragSetValue } = useDragSetValues({
 		value,
 		setValue,
 	});
 
-	const leftMarginDragValueHandler = useDragValue({
-		value: marginLeft.value || 0,
-		setValue: leftMarginDragSetValue,
+	const [labelClassName, setLabelClassName] = useState('');
+
+	// $FlowFixMe
+	const { isSetValueAddon, ValueAddonPointer, valueAddonControlProps } =
+		useValueAddon({
+			types: ['variable'],
+			value: value.margin.left,
+			variableTypes: ['spacing'],
+			onChange: (newValue) => {
+				setOpenPopover('');
+				setFocusSide('');
+				onDragSetValue(newValue);
+			},
+			size: 'normal',
+			pointerProps: {
+				onMouseEnter: () => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setFocusSide(sideId);
+						setLabelClassName('label-hover');
+					}
+				},
+				onMouseLeave: () => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setLabelClassName('');
+						setFocusSide('');
+					}
+				},
+			},
+			pickerProps: {
+				onClose: () => {
+					setOpenPopover('');
+					setFocusSide('');
+					setLabelClassName('');
+				},
+				onShown: () => {
+					setOpenPopover('variable-picker');
+				},
+			},
+		});
+
+	const _isSetValueAddon = isSetValueAddon();
+
+	let sideSpace: { value?: string, unit?: string } = {};
+	if (!_isSetValueAddon) {
+		sideSpace = extractNumberAndUnit(value.margin.left);
+	}
+
+	const { onDragStart, isDragStarted } = useDragValue({
+		value:
+			!_isSetValueAddon && sideSpace?.value !== '' ? sideSpace?.value : 0,
+		setValue: onDragSetValue,
 		movement: 'horizontal',
 		onEnd: () => {
 			if (!openPopover) setFocusSide('');
+			setLabelClassName('');
 		},
 	});
 
@@ -84,35 +135,61 @@ export function MarginLeft({
 				className={[
 					'side-horizontal',
 					'side-margin-left',
-					openPopover === 'margin-left' || focusSide === 'margin-left'
-						? 'selected-side'
+					focusSide === sideId ? 'selected-side' : '',
+					valueAddonControlProps.isOpen
+						? 'selected-side selected-side-value-addon'
 						: '',
-					marginLeft.unit !== 'func' ? 'side-drag-active' : '',
+					_isSetValueAddon ? 'is-value-addon-side' : '',
+					!_isSetValueAddon && sideSpace?.unit !== 'func'
+						? 'side-drag-active'
+						: '',
 				]}
-				onMouseDown={(event) => {
-					// prevent to catch double click
-					if (event.detail > 1) {
-						return;
-					}
+				{...(!_isSetValueAddon
+					? {
+							onMouseDown: (event) => {
+								// prevent to catch double click
+								if (event.detail > 1) {
+									return;
+								}
 
-					if (marginLeft.unit === 'func') {
-						event.preventDefault();
-						return;
-					}
+								if (sideSpace.unit === 'func') {
+									event.preventDefault();
+									return;
+								}
 
-					leftMarginDragValueHandler(event);
-					setFocusSide('margin-left');
+								onDragStart(event);
+								setFocusSide(sideId);
+							},
+					  }
+					: {})}
+				onMouseEnter={() => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setFocusSide(sideId);
+						setLabelClassName('label-hover');
+					}
+				}}
+				onMouseLeave={() => {
+					if (
+						!openPopover &&
+						!isDragStarted &&
+						!valueAddonControlProps.isOpen
+					) {
+						setOpenPopover('');
+						setFocusSide('');
+						setLabelClassName('');
+					}
 				}}
 				onClick={(event) => {
 					// open on double click
-					if (event.detail > 1) {
-						setFocusSide('margin-left');
-						setOpenPopover('margin-left');
-						return;
-					}
-
-					if (marginLeft.unit === 'func') {
-						setOpenPopover('margin-left');
+					// or value addon
+					// or CSS Value
+					if (
+						_isSetValueAddon ||
+						sideSpace?.unit === 'func' ||
+						event.detail > 1
+					) {
+						setFocusSide(sideId);
+						setOpenPopover(sideId);
 					}
 				}}
 			/>
@@ -123,17 +200,22 @@ export function MarginLeft({
 					className={controlInnerClassNames(
 						'label-side',
 						'side-horizontal',
-						'side-margin-left'
+						'side-margin-left',
+						labelClassName
 					)}
 					data-cy="box-spacing-margin-left"
 				>
 					<LabelControl
 						ariaLabel={__('Left Margin', 'publisher-core')}
 						popoverTitle={__('Left Margin', 'publisher-core')}
-						label={fixLabelText(marginLeft)}
+						label={
+							_isSetValueAddon
+								? fixLabelText(value.margin.left)
+								: fixLabelText(sideSpace)
+						}
 						onClick={() => {
-							setFocusSide('margin-left');
-							setOpenPopover('margin-left');
+							setFocusSide(sideId);
+							setOpenPopover(sideId);
 						}}
 						{...{
 							value,
@@ -147,27 +229,29 @@ export function MarginLeft({
 						}}
 					/>
 
-					<SidePopover
-						id={getId(id, 'margin.left')}
-						icon={<MarginLeftIcon />}
-						onClose={() => {
-							setFocusSide('');
-							setOpenPopover('');
-						}}
-						title={__('Left Margin', 'publisher-core')}
-						isOpen={openPopover === 'margin-left'}
-						unit={marginLeft.unit}
-						onChange={(newValue) => {
-							setValue({
-								...value,
-								margin: {
-									...value.margin,
-									left: newValue,
-								},
-							});
-						}}
-					/>
+					<ValueAddonPointer />
 				</div>
+
+				<SidePopover
+					id={getId(id, 'margin.left')}
+					icon={<MarginLeftIcon />}
+					onClose={() => {
+						setFocusSide('');
+						setOpenPopover('');
+					}}
+					title={__('Left Margin', 'publisher-core')}
+					isOpen={openPopover === sideId}
+					unit={sideSpace.unit}
+					onChange={(newValue) => {
+						setValue({
+							...value,
+							margin: {
+								...value.margin,
+								left: newValue,
+							},
+						});
+					}}
+				/>
 			</>
 		),
 	};

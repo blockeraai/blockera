@@ -248,6 +248,8 @@ export function SidePopover({
 							//
 							defaultValue={defaultValue}
 							onChange={setValue}
+							controlAddonTypes={['variable']}
+							variableTypes={['spacing']}
 						/>
 					</BaseControl>
 

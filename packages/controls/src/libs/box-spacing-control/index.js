@@ -13,7 +13,7 @@ import { controlClassNames } from '@publisher/classnames';
 /**
  * Internal dependencies
  */
-import type { BoxSpacingControlProps, Side } from './types';
+import type { BoxSpacingControlProps, Side, OpenPopover } from './types';
 import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
 import { MarginAll } from './components/margin/margin-all';
@@ -79,7 +79,7 @@ export default function BoxSpacingControl({
 		mergeInitialAndDefault: true,
 	});
 
-	const [openPopover, setOpenPopover]: [Side, (Side) => void] =
+	const [openPopover, setOpenPopover]: [OpenPopover, (OpenPopover) => void] =
 		useState(openSide);
 	const [focusSide, setFocusSide]: [Side, (Side) => void] = useState('');
 	const [controlClassName, setControlClassName]: [string, (string) => void] =

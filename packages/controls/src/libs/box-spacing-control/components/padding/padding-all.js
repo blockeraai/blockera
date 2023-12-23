@@ -3,18 +3,20 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
  */
 import { useDragValue } from '@publisher/utils';
 import { controlInnerClassNames } from '@publisher/classnames';
+import { useValueAddon } from '@publisher/hooks';
 
 /**
  * Internal dependencies
  */
 import { extractNumberAndUnit, LabelControl } from '../../../index';
-import type { SideProps, SideReturn } from '../../types';
+import type { Side, SideProps, SideReturn } from '../../types';
 import { SidePopover } from '../side-popover';
 import { useDragSetValues } from '../../hooks/use-drag-setValues';
 import PaddingAllIcon from '../../icons/padding-all';
@@ -39,17 +41,69 @@ export function PaddingAll({
 	openPopover,
 	setOpenPopover,
 }: SideProps): SideReturn {
-	const paddingTop = extractNumberAndUnit(value.padding.top);
+	const sideId: Side = 'padding-all';
 
-	const { allPaddingDragSetValue } = useDragSetValues({ value, setValue });
+	const { allPaddingDragSetValue: onDragSetValue } = useDragSetValues({
+		value,
+		setValue,
+	});
 
-	const allPaddingDragValueHandler = useDragValue({
-		value: paddingTop.value !== '' ? paddingTop.value : 0,
-		setValue: allPaddingDragSetValue,
+	const [labelClassName, setLabelClassName] = useState('');
+
+	// $FlowFixMe
+	const { isSetValueAddon, ValueAddonPointer, valueAddonControlProps } =
+		useValueAddon({
+			types: ['variable'],
+			value: value.padding.top,
+			variableTypes: ['spacing'],
+			onChange: (newValue) => {
+				setOpenPopover('');
+				setFocusSide('');
+				onDragSetValue(newValue);
+			},
+			size: 'normal',
+			pointerProps: {
+				onMouseEnter: () => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setFocusSide(sideId);
+						setLabelClassName('label-hover');
+					}
+				},
+				onMouseLeave: () => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setLabelClassName('');
+						setFocusSide('');
+					}
+				},
+			},
+			pickerProps: {
+				onClose: () => {
+					setOpenPopover('');
+					setFocusSide('');
+					setLabelClassName('');
+				},
+				onShown: () => {
+					setOpenPopover('variable-picker');
+				},
+			},
+		});
+
+	const _isSetValueAddon = isSetValueAddon();
+
+	let sideSpace: { value?: string, unit?: string } = {};
+	if (!_isSetValueAddon) {
+		sideSpace = extractNumberAndUnit(value.padding.top);
+	}
+
+	const { onDragStart, isDragStarted } = useDragValue({
+		value:
+			!_isSetValueAddon && sideSpace?.value !== '' ? sideSpace?.value : 0,
+		setValue: onDragSetValue,
 		movement: 'vertical',
 		min: 0,
 		onEnd: () => {
 			if (!openPopover) setFocusSide('');
+			setLabelClassName('');
 		},
 	});
 
@@ -66,33 +120,64 @@ export function PaddingAll({
 				className={[
 					'side-all',
 					'side-padding-all',
-					focusSide === 'padding-all' ? 'selected-side' : '',
-					paddingTop.unit !== 'func' ? 'side-drag-active' : '',
+					focusSide === sideId ? 'selected-side' : '',
+					valueAddonControlProps.isOpen
+						? 'selected-side selected-side-value-addon'
+						: '',
+					_isSetValueAddon ? 'is-value-addon-side' : '',
+					!_isSetValueAddon && sideSpace?.unit !== 'func'
+						? 'side-drag-active'
+						: '',
 				]}
-				onMouseDown={(event) => {
-					// prevent to catch double click
-					if (event.detail > 1) {
-						return;
-					}
+				{...(!_isSetValueAddon
+					? {
+							onMouseDown: (event) => {
+								// prevent to catch double click
+								if (event.detail > 1) {
+									return;
+								}
 
-					if (paddingTop.unit === 'func') {
-						event.preventDefault();
-						return;
-					}
+								if (
+									_isSetValueAddon ||
+									sideSpace?.unit === 'func'
+								) {
+									event.preventDefault();
+									return;
+								}
 
-					allPaddingDragValueHandler(event);
-					setFocusSide('padding-all');
+								onDragStart(event);
+								setFocusSide(sideId);
+							},
+					  }
+					: {})}
+				onMouseEnter={() => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setFocusSide(sideId);
+						setLabelClassName('label-hover');
+					}
+				}}
+				onMouseLeave={() => {
+					if (
+						!openPopover &&
+						!isDragStarted &&
+						!valueAddonControlProps.isOpen
+					) {
+						setOpenPopover('');
+						setFocusSide('');
+						setLabelClassName('');
+					}
 				}}
 				onClick={(event) => {
 					// open on double click
-					if (event.detail > 1) {
-						setFocusSide('padding-all');
-						setOpenPopover('padding-all');
-						return;
-					}
-
-					if (paddingTop.unit === 'func') {
-						setOpenPopover('padding-all');
+					// or value addon
+					// or CSS Value
+					if (
+						_isSetValueAddon ||
+						sideSpace?.unit === 'func' ||
+						event.detail > 1
+					) {
+						setFocusSide(sideId);
+						setOpenPopover(sideId);
 					}
 				}}
 			/>
@@ -103,17 +188,22 @@ export function PaddingAll({
 					className={controlInnerClassNames(
 						'label-side',
 						'side-vertical',
-						'side-padding-top'
+						'side-padding-top',
+						labelClassName
 					)}
 					data-cy="box-spacing-padding-top"
 				>
 					<LabelControl
 						ariaLabel={__('All Sides Padding', 'publisher-core')}
-						label={fixLabelText(paddingTop)}
+						label={
+							_isSetValueAddon
+								? fixLabelText(value.padding.top)
+								: fixLabelText(sideSpace)
+						}
 						popoverTitle={__('All Sides Padding', 'publisher-core')}
 						onClick={() => {
-							setFocusSide('padding-all');
-							setOpenPopover('padding-all');
+							setFocusSide(sideId);
+							setOpenPopover(sideId);
 						}}
 						{...{
 							value,
@@ -126,23 +216,30 @@ export function PaddingAll({
 							path: getControlPath(attribute, 'padding.top'),
 						}}
 					/>
+
+					<ValueAddonPointer />
 				</div>
 
 				<div
 					className={controlInnerClassNames(
 						'label-side',
 						'side-horizontal',
-						'side-padding-right'
+						'side-padding-right',
+						labelClassName
 					)}
 					data-cy="box-spacing-padding-right"
 				>
 					<LabelControl
 						ariaLabel={__('All Sides Padding', 'publisher-core')}
-						label={fixLabelText(paddingTop)}
+						label={
+							_isSetValueAddon
+								? fixLabelText(value.padding.top)
+								: fixLabelText(sideSpace)
+						}
 						popoverTitle={__('All Sides Padding', 'publisher-core')}
 						onClick={() => {
-							setFocusSide('padding-all');
-							setOpenPopover('padding-all');
+							setFocusSide(sideId);
+							setOpenPopover(sideId);
 						}}
 						{...{
 							value,
@@ -161,17 +258,22 @@ export function PaddingAll({
 					className={controlInnerClassNames(
 						'label-side',
 						'side-vertical',
-						'side-padding-bottom'
+						'side-padding-bottom',
+						labelClassName
 					)}
 					data-cy="box-spacing-padding-bottom"
 				>
 					<LabelControl
 						ariaLabel={__('All Sides Padding', 'publisher-core')}
-						label={fixLabelText(paddingTop)}
+						label={
+							_isSetValueAddon
+								? fixLabelText(value.padding.top)
+								: fixLabelText(sideSpace)
+						}
 						popoverTitle={__('All Sides Padding', 'publisher-core')}
 						onClick={() => {
-							setFocusSide('padding-all');
-							setOpenPopover('padding-all');
+							setFocusSide(sideId);
+							setOpenPopover(sideId);
 						}}
 						{...{
 							value,
@@ -190,17 +292,22 @@ export function PaddingAll({
 					className={controlInnerClassNames(
 						'label-side',
 						'side-horizontal',
-						'side-padding-left'
+						'side-padding-left',
+						labelClassName
 					)}
 					data-cy="box-spacing-padding-left"
 				>
 					<LabelControl
 						ariaLabel={__('All Sides Padding', 'publisher-core')}
-						label={fixLabelText(paddingTop)}
+						label={
+							_isSetValueAddon
+								? fixLabelText(value.padding.top)
+								: fixLabelText(sideSpace)
+						}
 						popoverTitle={__('All Sides Padding', 'publisher-core')}
 						onClick={() => {
-							setFocusSide('padding-all');
-							setOpenPopover('padding-all');
+							setFocusSide(sideId);
+							setOpenPopover(sideId);
 						}}
 						{...{
 							value,
@@ -224,8 +331,8 @@ export function PaddingAll({
 						setOpenPopover('');
 					}}
 					title={__('All Sides Padding', 'publisher-core')}
-					isOpen={openPopover === 'padding-all'}
-					unit={paddingTop.unit}
+					isOpen={openPopover === sideId}
+					unit={sideSpace.unit}
 					onChange={(newValue) => {
 						setValue({
 							...value,

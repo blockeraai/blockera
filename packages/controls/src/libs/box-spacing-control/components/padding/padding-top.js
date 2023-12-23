@@ -3,18 +3,20 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
  */
 import { controlInnerClassNames } from '@publisher/classnames';
 import { useDragValue } from '@publisher/utils';
+import { useValueAddon } from '@publisher/hooks';
 
 /**
  * Internal dependencies
  */
 import { extractNumberAndUnit, LabelControl } from '../../../index';
-import type { SideProps, SideReturn } from '../../types';
+import type { Side, SideProps, SideReturn } from '../../types';
 import { SidePopover } from '../side-popover';
 import { useDragSetValues } from '../../hooks/use-drag-setValues';
 import { fixLabelText } from '../../utils';
@@ -40,20 +42,69 @@ export function PaddingTop({
 	setOpenPopover,
 	paddingDisable,
 }: SideProps): SideReturn {
-	const paddingTop = extractNumberAndUnit(value.padding.top);
+	const sideId: Side = 'padding-top';
 
-	const { topPaddingDragSetValue } = useDragSetValues({
+	const { topPaddingDragSetValue: onDragSetValue } = useDragSetValues({
 		value,
 		setValue,
 	});
 
-	const topPaddingDragValueHandler = useDragValue({
-		value: paddingTop.value || 0,
-		setValue: topPaddingDragSetValue,
+	const [labelClassName, setLabelClassName] = useState('');
+
+	// $FlowFixMe
+	const { isSetValueAddon, ValueAddonPointer, valueAddonControlProps } =
+		useValueAddon({
+			types: ['variable'],
+			value: value.padding.top,
+			variableTypes: ['spacing'],
+			onChange: (newValue) => {
+				setOpenPopover('');
+				setFocusSide('');
+				onDragSetValue(newValue);
+			},
+			size: 'normal',
+			pointerProps: {
+				onMouseEnter: () => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setFocusSide(sideId);
+						setLabelClassName('label-hover');
+					}
+				},
+				onMouseLeave: () => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setLabelClassName('');
+						setFocusSide('');
+					}
+				},
+			},
+			pickerProps: {
+				onClose: () => {
+					setOpenPopover('');
+					setFocusSide('');
+					setLabelClassName('');
+				},
+				onShown: () => {
+					setOpenPopover('variable-picker');
+				},
+			},
+		});
+
+	const _isSetValueAddon = isSetValueAddon();
+
+	let sideSpace: { value?: string, unit?: string } = {};
+	if (!_isSetValueAddon) {
+		sideSpace = extractNumberAndUnit(value.padding.top);
+	}
+
+	const { onDragStart, isDragStarted } = useDragValue({
+		value:
+			!_isSetValueAddon && sideSpace?.value !== '' ? sideSpace?.value : 0,
+		setValue: onDragSetValue,
 		movement: 'vertical',
 		min: 0,
 		onEnd: () => {
 			if (!openPopover) setFocusSide('');
+			setLabelClassName('');
 		},
 	});
 
@@ -85,35 +136,64 @@ export function PaddingTop({
 				className={[
 					'side-vertical',
 					'side-padding-top',
-					openPopover === 'padding-top' || focusSide === 'padding-top'
-						? 'selected-side'
+					focusSide === sideId ? 'selected-side' : '',
+					valueAddonControlProps.isOpen
+						? 'selected-side selected-side-value-addon'
 						: '',
-					paddingTop.unit !== 'func' ? 'side-drag-active' : '',
+					_isSetValueAddon ? 'is-value-addon-side' : '',
+					!_isSetValueAddon && sideSpace?.unit !== 'func'
+						? 'side-drag-active'
+						: '',
 				]}
-				onMouseDown={(event) => {
-					// prevent to catch double click
-					if (event.detail > 1) {
-						return;
-					}
+				{...(!_isSetValueAddon
+					? {
+							onMouseDown: (event) => {
+								// prevent to catch double click
+								if (event.detail > 1) {
+									return;
+								}
 
-					if (paddingTop.unit === 'func') {
-						event.preventDefault();
-						return;
-					}
+								if (
+									_isSetValueAddon ||
+									sideSpace?.unit === 'func'
+								) {
+									event.preventDefault();
+									return;
+								}
 
-					topPaddingDragValueHandler(event);
-					setFocusSide('padding-top');
+								onDragStart(event);
+								setFocusSide(sideId);
+							},
+					  }
+					: {})}
+				onMouseEnter={() => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setFocusSide(sideId);
+						setLabelClassName('label-hover');
+					}
+				}}
+				onMouseLeave={() => {
+					if (
+						!openPopover &&
+						!isDragStarted &&
+						!valueAddonControlProps.isOpen
+					) {
+						setOpenPopover('');
+						setFocusSide('');
+						setLabelClassName('');
+					}
 				}}
 				onClick={(event) => {
 					// open on double click
-					if (event.detail > 1) {
-						setFocusSide('padding-top');
-						setOpenPopover('padding-top');
-						return;
-					}
-
-					if (paddingTop.unit === 'func') {
-						setOpenPopover('padding-top');
+					// or value addon
+					// or CSS Value
+					if (
+						_isSetValueAddon ||
+						sideSpace?.unit === 'func' ||
+						event.detail > 1
+					) {
+						setFocusSide(sideId);
+						setOpenPopover(sideId);
 					}
 				}}
 			/>
@@ -124,17 +204,22 @@ export function PaddingTop({
 					className={controlInnerClassNames(
 						'label-side',
 						'side-vertical',
-						'side-padding-top'
+						'side-padding-top',
+						labelClassName
 					)}
 					data-cy="box-spacing-padding-top"
 				>
 					<LabelControl
 						ariaLabel={__('Top Padding', 'publisher-core')}
-						label={fixLabelText(paddingTop)}
+						label={
+							_isSetValueAddon
+								? fixLabelText(value.padding.top)
+								: fixLabelText(sideSpace)
+						}
 						popoverTitle={__('Top Padding', 'publisher-core')}
 						onClick={() => {
-							setFocusSide('padding-top');
-							setOpenPopover('padding-top');
+							setFocusSide(sideId);
+							setOpenPopover(sideId);
 						}}
 						{...{
 							value,
@@ -147,6 +232,8 @@ export function PaddingTop({
 							path: getControlPath(attribute, 'padding.top'),
 						}}
 					/>
+
+					<ValueAddonPointer />
 				</div>
 
 				<SidePopover
@@ -158,8 +245,8 @@ export function PaddingTop({
 						setOpenPopover('');
 					}}
 					title={__('Top Padding', 'publisher-core')}
-					isOpen={openPopover === 'padding-top'}
-					unit={paddingTop.unit}
+					isOpen={openPopover === sideId}
+					unit={sideSpace.unit}
 					onChange={(newValue) => {
 						setValue({
 							...value,

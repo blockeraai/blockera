@@ -3,18 +3,20 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
  */
 import { controlInnerClassNames } from '@publisher/classnames';
 import { useDragValue } from '@publisher/utils';
+import { useValueAddon } from '@publisher/hooks';
 
 /**
  * Internal dependencies
  */
 import { extractNumberAndUnit, LabelControl } from '../../../index';
-import type { SideProps, SideReturn } from '../../types';
+import type { Side, SideProps, SideReturn } from '../../types';
 import { SidePopover } from '../side-popover';
 import { useDragSetValues } from '../../hooks/use-drag-setValues';
 import { fixLabelText } from '../../utils';
@@ -40,20 +42,69 @@ export function PaddingBottom({
 	setOpenPopover,
 	paddingDisable,
 }: SideProps): SideReturn {
-	const paddingBottom = extractNumberAndUnit(value.padding.bottom);
+	const sideId: Side = 'padding-bottom';
 
-	const { bottomPaddingDragSetValue } = useDragSetValues({
+	const { bottomPaddingDragSetValue: onDragSetValue } = useDragSetValues({
 		value,
 		setValue,
 	});
 
-	const bottomPaddingDragValueHandler = useDragValue({
-		value: paddingBottom.value || 0,
-		setValue: bottomPaddingDragSetValue,
+	const [labelClassName, setLabelClassName] = useState('');
+
+	// $FlowFixMe
+	const { isSetValueAddon, ValueAddonPointer, valueAddonControlProps } =
+		useValueAddon({
+			types: ['variable'],
+			value: value.padding.bottom,
+			variableTypes: ['spacing'],
+			onChange: (newValue) => {
+				setOpenPopover('');
+				setFocusSide('');
+				onDragSetValue(newValue);
+			},
+			size: 'normal',
+			pointerProps: {
+				onMouseEnter: () => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setFocusSide(sideId);
+						setLabelClassName('label-hover');
+					}
+				},
+				onMouseLeave: () => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setLabelClassName('');
+						setFocusSide('');
+					}
+				},
+			},
+			pickerProps: {
+				onClose: () => {
+					setOpenPopover('');
+					setFocusSide('');
+					setLabelClassName('');
+				},
+				onShown: () => {
+					setOpenPopover('variable-picker');
+				},
+			},
+		});
+
+	const _isSetValueAddon = isSetValueAddon();
+
+	let sideSpace: { value?: string, unit?: string } = {};
+	if (!_isSetValueAddon) {
+		sideSpace = extractNumberAndUnit(value.padding.bottom);
+	}
+
+	const { onDragStart, isDragStarted } = useDragValue({
+		value:
+			!_isSetValueAddon && sideSpace?.value !== '' ? sideSpace?.value : 0,
+		setValue: onDragSetValue,
 		movement: 'vertical',
 		min: 0,
 		onEnd: () => {
 			if (!openPopover) setFocusSide('');
+			setLabelClassName('');
 		},
 	});
 
@@ -85,36 +136,64 @@ export function PaddingBottom({
 				className={[
 					'side-vertical',
 					'side-padding-bottom',
-					openPopover === 'padding-bottom' ||
-					focusSide === 'padding-bottom'
-						? 'selected-side'
+					focusSide === sideId ? 'selected-side' : '',
+					valueAddonControlProps.isOpen
+						? 'selected-side selected-side-value-addon'
 						: '',
-					paddingBottom.unit !== 'func' ? 'side-drag-active' : '',
+					_isSetValueAddon ? 'is-value-addon-side' : '',
+					!_isSetValueAddon && sideSpace?.unit !== 'func'
+						? 'side-drag-active'
+						: '',
 				]}
-				onMouseDown={(event) => {
-					// prevent to catch double click
-					if (event.detail > 1) {
-						return;
-					}
+				{...(!_isSetValueAddon
+					? {
+							onMouseDown: (event) => {
+								// prevent to catch double click
+								if (event.detail > 1) {
+									return;
+								}
 
-					if (paddingBottom.unit === 'func') {
-						event.preventDefault();
-						return;
-					}
+								if (
+									_isSetValueAddon ||
+									sideSpace?.unit === 'func'
+								) {
+									event.preventDefault();
+									return;
+								}
 
-					bottomPaddingDragValueHandler(event);
-					setFocusSide('padding-bottom');
+								onDragStart(event);
+								setFocusSide(sideId);
+							},
+					  }
+					: {})}
+				onMouseEnter={() => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setFocusSide(sideId);
+						setLabelClassName('label-hover');
+					}
+				}}
+				onMouseLeave={() => {
+					if (
+						!openPopover &&
+						!isDragStarted &&
+						!valueAddonControlProps.isOpen
+					) {
+						setOpenPopover('');
+						setFocusSide('');
+						setLabelClassName('');
+					}
 				}}
 				onClick={(event) => {
 					// open on double click
-					if (event.detail > 1) {
-						setFocusSide('padding-bottom');
-						setOpenPopover('padding-bottom');
-						return;
-					}
-
-					if (paddingBottom.unit === 'func') {
-						setOpenPopover('padding-bottom');
+					// or value addon
+					// or CSS Value
+					if (
+						_isSetValueAddon ||
+						sideSpace?.unit === 'func' ||
+						event.detail > 1
+					) {
+						setFocusSide(sideId);
+						setOpenPopover(sideId);
 					}
 				}}
 			/>
@@ -125,17 +204,22 @@ export function PaddingBottom({
 					className={controlInnerClassNames(
 						'label-side',
 						'side-vertical',
-						'side-padding-bottom'
+						'side-padding-bottom',
+						labelClassName
 					)}
 					data-cy="box-spacing-padding-bottom"
 				>
 					<LabelControl
 						ariaLabel={__('Bottom Padding', 'publisher-core')}
-						label={fixLabelText(paddingBottom)}
+						label={
+							_isSetValueAddon
+								? fixLabelText(value.padding.bottom)
+								: fixLabelText(sideSpace)
+						}
 						popoverTitle={__('Bottom Padding', 'publisher-core')}
 						onClick={() => {
-							setFocusSide('padding-bottom');
-							setOpenPopover('padding-bottom');
+							setFocusSide(sideId);
+							setOpenPopover(sideId);
 						}}
 						{...{
 							value,
@@ -148,6 +232,8 @@ export function PaddingBottom({
 							path: getControlPath(attribute, 'padding.bottom'),
 						}}
 					/>
+
+					<ValueAddonPointer />
 				</div>
 
 				<SidePopover
@@ -159,8 +245,8 @@ export function PaddingBottom({
 						setOpenPopover('');
 					}}
 					title={__('Bottom Padding', 'publisher-core')}
-					isOpen={openPopover === 'padding-bottom'}
-					unit={paddingBottom.unit}
+					isOpen={openPopover === sideId}
+					unit={sideSpace.unit}
 					onChange={(newValue) => {
 						setValue({
 							...value,

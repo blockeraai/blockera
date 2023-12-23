@@ -3,18 +3,20 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
  */
 import { controlInnerClassNames } from '@publisher/classnames';
 import { useDragValue } from '@publisher/utils';
+import { useValueAddon } from '@publisher/hooks';
 
 /**
  * Internal dependencies
  */
 import { extractNumberAndUnit, LabelControl } from '../../../index';
-import type { SideProps, SideReturn } from '../../types';
+import type { SideProps, SideReturn, Side } from '../../types';
 import { SidePopover } from '../side-popover';
 import { useDragSetValues } from '../../hooks/use-drag-setValues';
 import { fixLabelText } from '../../utils';
@@ -40,19 +42,68 @@ export function MarginRight({
 	setOpenPopover,
 	marginDisable,
 }: SideProps): SideReturn {
-	const marginRight = extractNumberAndUnit(value.margin.right);
+	const sideId: Side = 'margin-right';
 
-	const { rightMarginDragSetValue } = useDragSetValues({
+	const { rightMarginDragSetValue: onDragSetValue } = useDragSetValues({
 		value,
 		setValue,
 	});
 
-	const rightMarginDragValueHandler = useDragValue({
-		value: marginRight.value || 0,
-		setValue: rightMarginDragSetValue,
+	const [labelClassName, setLabelClassName] = useState('');
+
+	// $FlowFixMe
+	const { isSetValueAddon, ValueAddonPointer, valueAddonControlProps } =
+		useValueAddon({
+			types: ['variable'],
+			value: value.margin.right,
+			variableTypes: ['spacing'],
+			onChange: (newValue) => {
+				setOpenPopover('');
+				setFocusSide('');
+				onDragSetValue(newValue);
+			},
+			size: 'normal',
+			pointerProps: {
+				onMouseEnter: () => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setFocusSide(sideId);
+						setLabelClassName('label-hover');
+					}
+				},
+				onMouseLeave: () => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setLabelClassName('');
+						setFocusSide('');
+					}
+				},
+			},
+			pickerProps: {
+				onClose: () => {
+					setOpenPopover('');
+					setFocusSide('');
+					setLabelClassName('');
+				},
+				onShown: () => {
+					setOpenPopover('variable-picker');
+				},
+			},
+		});
+
+	const _isSetValueAddon = isSetValueAddon();
+
+	let sideSpace: { value?: string, unit?: string } = {};
+	if (!_isSetValueAddon) {
+		sideSpace = extractNumberAndUnit(value.margin.right);
+	}
+
+	const { onDragStart, isDragStarted } = useDragValue({
+		value:
+			!_isSetValueAddon && sideSpace?.value !== '' ? sideSpace?.value : 0,
+		setValue: onDragSetValue,
 		movement: 'horizontal',
 		onEnd: () => {
 			if (!openPopover) setFocusSide('');
+			setLabelClassName('');
 		},
 	});
 
@@ -84,36 +135,61 @@ export function MarginRight({
 				className={[
 					'side-horizontal',
 					'side-margin-right',
-					openPopover === 'margin-right' ||
-					focusSide === 'margin-right'
-						? 'selected-side'
+					focusSide === sideId ? 'selected-side' : '',
+					valueAddonControlProps.isOpen
+						? 'selected-side selected-side-value-addon'
 						: '',
-					marginRight.unit !== 'func' ? 'side-drag-active' : '',
+					_isSetValueAddon ? 'is-value-addon-side' : '',
+					!_isSetValueAddon && sideSpace?.unit !== 'func'
+						? 'side-drag-active'
+						: '',
 				]}
-				onMouseDown={(event) => {
-					// prevent to catch double click
-					if (event.detail > 1) {
-						return;
-					}
+				{...(!_isSetValueAddon
+					? {
+							onMouseDown: (event) => {
+								// prevent to catch double click
+								if (event.detail > 1) {
+									return;
+								}
 
-					if (marginRight.unit === 'func') {
-						event.preventDefault();
-						return;
-					}
+								if (sideSpace.unit === 'func') {
+									event.preventDefault();
+									return;
+								}
 
-					rightMarginDragValueHandler(event);
-					setFocusSide('margin-right');
+								onDragStart(event);
+								setFocusSide(sideId);
+							},
+					  }
+					: {})}
+				onMouseEnter={() => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setFocusSide(sideId);
+						setLabelClassName('label-hover');
+					}
+				}}
+				onMouseLeave={() => {
+					if (
+						!openPopover &&
+						!isDragStarted &&
+						!valueAddonControlProps.isOpen
+					) {
+						setOpenPopover('');
+						setFocusSide('');
+						setLabelClassName('');
+					}
 				}}
 				onClick={(event) => {
 					// open on double click
-					if (event.detail > 1) {
-						setFocusSide('margin-right');
-						setOpenPopover('margin-right');
-						return;
-					}
-
-					if (marginRight.unit === 'func') {
-						setOpenPopover('margin-right');
+					// or value addon
+					// or CSS Value
+					if (
+						_isSetValueAddon ||
+						sideSpace?.unit === 'func' ||
+						event.detail > 1
+					) {
+						setFocusSide(sideId);
+						setOpenPopover(sideId);
 					}
 				}}
 			/>
@@ -125,17 +201,22 @@ export function MarginRight({
 						className={controlInnerClassNames(
 							'label-side',
 							'side-horizontal',
-							'side-margin-right'
+							'side-margin-right',
+							labelClassName
 						)}
 						data-cy="box-spacing-margin-right"
 					>
 						<LabelControl
 							ariaLabel={__('Right Margin', 'publisher-core')}
 							popoverTitle={__('Right Margin', 'publisher-core')}
-							label={fixLabelText(marginRight)}
+							label={
+								_isSetValueAddon
+									? fixLabelText(value.margin.right)
+									: fixLabelText(sideSpace)
+							}
 							onClick={() => {
-								setFocusSide('margin-right');
-								setOpenPopover('margin-right');
+								setFocusSide(sideId);
+								setOpenPopover(sideId);
 							}}
 							{...{
 								value,
@@ -149,6 +230,8 @@ export function MarginRight({
 							}}
 						/>
 
+						<ValueAddonPointer />
+
 						<SidePopover
 							id={getId(id, 'margin.right')}
 							offset={255}
@@ -158,8 +241,8 @@ export function MarginRight({
 								setOpenPopover('');
 							}}
 							title={__('Right Margin', 'publisher-core')}
-							isOpen={openPopover === 'margin-right'}
-							unit={marginRight.unit}
+							isOpen={openPopover === sideId}
+							unit={sideSpace.unit}
 							onChange={(newValue) => {
 								setValue({
 									...value,

@@ -3,18 +3,20 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
  */
 import { controlInnerClassNames } from '@publisher/classnames';
 import { useDragValue } from '@publisher/utils';
+import { useValueAddon } from '@publisher/hooks';
 
 /**
  * Internal dependencies
  */
 import { extractNumberAndUnit, LabelControl } from '../../../index';
-import type { SideProps, SideReturn } from '../../types';
+import type { Side, SideProps, SideReturn } from '../../types';
 import { SidePopover } from '../side-popover';
 import { useDragSetValues } from '../../hooks/use-drag-setValues';
 import { fixLabelText } from '../../utils';
@@ -40,20 +42,69 @@ export function PaddingLeft({
 	setOpenPopover,
 	paddingDisable,
 }: SideProps): SideReturn {
-	const paddingLeft = extractNumberAndUnit(value.padding.left);
+	const sideId: Side = 'padding-left';
 
-	const { leftPaddingDragSetValue } = useDragSetValues({
+	const { leftPaddingDragSetValue: onDragSetValue } = useDragSetValues({
 		value,
 		setValue,
 	});
 
-	const leftPaddingDragValueHandler = useDragValue({
-		value: paddingLeft.value || 0,
-		setValue: leftPaddingDragSetValue,
+	const [labelClassName, setLabelClassName] = useState('');
+
+	// $FlowFixMe
+	const { isSetValueAddon, ValueAddonPointer, valueAddonControlProps } =
+		useValueAddon({
+			types: ['variable'],
+			value: value.padding.left,
+			variableTypes: ['spacing'],
+			onChange: (newValue) => {
+				setOpenPopover('');
+				setFocusSide('');
+				onDragSetValue(newValue);
+			},
+			size: 'normal',
+			pointerProps: {
+				onMouseEnter: () => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setFocusSide(sideId);
+						setLabelClassName('label-hover');
+					}
+				},
+				onMouseLeave: () => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setLabelClassName('');
+						setFocusSide('');
+					}
+				},
+			},
+			pickerProps: {
+				onClose: () => {
+					setOpenPopover('');
+					setFocusSide('');
+					setLabelClassName('');
+				},
+				onShown: () => {
+					setOpenPopover('variable-picker');
+				},
+			},
+		});
+
+	const _isSetValueAddon = isSetValueAddon();
+
+	let sideSpace: { value?: string, unit?: string } = {};
+	if (!_isSetValueAddon) {
+		sideSpace = extractNumberAndUnit(value.padding.left);
+	}
+
+	const { onDragStart, isDragStarted } = useDragValue({
+		value:
+			!_isSetValueAddon && sideSpace?.value !== '' ? sideSpace?.value : 0,
+		setValue: onDragSetValue,
 		movement: 'horizontal',
 		min: 0,
 		onEnd: () => {
 			if (!openPopover) setFocusSide('');
+			setLabelClassName('');
 		},
 	});
 
@@ -85,36 +136,64 @@ export function PaddingLeft({
 				className={[
 					'side-left',
 					'side-padding-left',
-					openPopover === 'padding-left' ||
-					focusSide === 'padding-left'
-						? 'selected-side'
+					focusSide === sideId ? 'selected-side' : '',
+					valueAddonControlProps.isOpen
+						? 'selected-side selected-side-value-addon'
 						: '',
-					paddingLeft.unit !== 'func' ? 'side-drag-active' : '',
+					_isSetValueAddon ? 'is-value-addon-side' : '',
+					!_isSetValueAddon && sideSpace?.unit !== 'func'
+						? 'side-drag-active'
+						: '',
 				]}
-				onMouseDown={(event) => {
-					// prevent to catch double click
-					if (event.detail > 1) {
-						return;
-					}
+				{...(!_isSetValueAddon
+					? {
+							onMouseDown: (event) => {
+								// prevent to catch double click
+								if (event.detail > 1) {
+									return;
+								}
 
-					if (paddingLeft.unit === 'func') {
-						event.preventDefault();
-						return;
-					}
+								if (
+									_isSetValueAddon ||
+									sideSpace?.unit === 'func'
+								) {
+									event.preventDefault();
+									return;
+								}
 
-					leftPaddingDragValueHandler(event);
-					setFocusSide('padding-left');
+								onDragStart(event);
+								setFocusSide(sideId);
+							},
+					  }
+					: {})}
+				onMouseEnter={() => {
+					if (!openPopover && !valueAddonControlProps.isOpen) {
+						setFocusSide(sideId);
+						setLabelClassName('label-hover');
+					}
+				}}
+				onMouseLeave={() => {
+					if (
+						!openPopover &&
+						!isDragStarted &&
+						!valueAddonControlProps.isOpen
+					) {
+						setOpenPopover('');
+						setFocusSide('');
+						setLabelClassName('');
+					}
 				}}
 				onClick={(event) => {
 					// open on double click
-					if (event.detail > 1) {
-						setFocusSide('padding-left');
-						setOpenPopover('padding-left');
-						return;
-					}
-
-					if (paddingLeft.unit === 'func') {
-						setOpenPopover('padding-left');
+					// or value addon
+					// or CSS Value
+					if (
+						_isSetValueAddon ||
+						sideSpace?.unit === 'func' ||
+						event.detail > 1
+					) {
+						setFocusSide(sideId);
+						setOpenPopover(sideId);
 					}
 				}}
 			/>
@@ -125,17 +204,22 @@ export function PaddingLeft({
 					className={controlInnerClassNames(
 						'label-side',
 						'side-horizontal',
-						'side-padding-left'
+						'side-padding-left',
+						labelClassName
 					)}
 					data-cy="box-spacing-padding-left"
 				>
 					<LabelControl
 						ariaLabel={__('Left Padding', 'publisher-core')}
-						label={fixLabelText(paddingLeft)}
+						label={
+							_isSetValueAddon
+								? fixLabelText(value.padding.left)
+								: fixLabelText(sideSpace)
+						}
 						popoverTitle={__('Left Padding', 'publisher-core')}
 						onClick={() => {
-							setFocusSide('padding-left');
-							setOpenPopover('padding-left');
+							setFocusSide(sideId);
+							setOpenPopover(sideId);
 						}}
 						{...{
 							value,
@@ -148,6 +232,8 @@ export function PaddingLeft({
 							path: getControlPath(attribute, 'padding.left'),
 						}}
 					/>
+
+					<ValueAddonPointer />
 				</div>
 
 				<SidePopover
@@ -160,8 +246,8 @@ export function PaddingLeft({
 						setOpenPopover('');
 					}}
 					title={__('Left Padding', 'publisher-core')}
-					isOpen={openPopover === 'padding-left'}
-					unit={paddingLeft.unit}
+					isOpen={openPopover === sideId}
+					unit={sideSpace.unit}
 					onChange={(newValue) => {
 						setValue({
 							...value,
