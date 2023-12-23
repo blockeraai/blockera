@@ -99,6 +99,21 @@
 			stroke-width: 2px !important;
 			fill: var(--publisher-value-addon-var-bg-color) !important;
 		}
+
+		&.is-value-addon-deleted {
+			--publisher-controls-primary-color: var(--publisher-value-addon-deleted-color);
+			stroke: var(--publisher-value-addon-deleted-border-color);
+			stroke-width: 1px;
+			fill: var(--publisher-value-addon-deleted-bg-color);
+
+			&.selected-side.is-value-addon-side,
+			&.selected-side-value-addon {
+				--publisher-controls-primary-color: var(--publisher-value-addon-deleted-color);
+				stroke: var(--publisher-controls-primary-color) !important;
+				stroke-width: 2px !important;
+				fill: var(--publisher-value-addon-deleted-bg-color) !important;
+			}
+		}
 	}
 
 	.publisher-control-label-side {
