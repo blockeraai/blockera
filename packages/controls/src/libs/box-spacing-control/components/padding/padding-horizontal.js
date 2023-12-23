@@ -239,7 +239,7 @@ export function PaddingHorizontal({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'padding.right',
+							singularId: 'padding.right',
 							path: getControlPath(attribute, 'padding.right'),
 						}}
 					/>
@@ -278,7 +278,7 @@ export function PaddingHorizontal({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'padding.left',
+							singularId: 'padding.left',
 							path: getControlPath(attribute, 'padding.left'),
 						}}
 					/>

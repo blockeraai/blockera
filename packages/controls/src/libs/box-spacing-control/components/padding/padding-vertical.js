@@ -239,7 +239,7 @@ export function PaddingVertical({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'padding.top',
+							singularId: 'padding.top',
 							path: getControlPath(attribute, 'padding.top'),
 						}}
 					/>
@@ -278,7 +278,7 @@ export function PaddingVertical({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'padding.bottom',
+							singularId: 'padding.bottom',
 							path: getControlPath(attribute, 'padding.bottom'),
 						}}
 					/>

@@ -227,7 +227,7 @@ export function MarginTop({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'margin.top',
+							singularId: 'margin.top',
 							path: getControlPath(attribute, 'margin.top'),
 						}}
 					/>

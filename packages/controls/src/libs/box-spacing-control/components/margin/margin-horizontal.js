@@ -245,7 +245,7 @@ export function MarginHorizontal({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'margin.right',
+							singularId: 'margin.right',
 							path: getControlPath(attribute, 'margin.right'),
 						}}
 					/>
@@ -284,7 +284,7 @@ export function MarginHorizontal({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'margin.left',
+							singularId: 'margin.left',
 							path: getControlPath(attribute, 'margin.left'),
 						}}
 					/>

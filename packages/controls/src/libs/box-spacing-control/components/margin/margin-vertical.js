@@ -238,7 +238,7 @@ export function MarginVertical({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'margin.top',
+							singularId: 'margin.top',
 							path: getControlPath(attribute, 'margin.top'),
 						}}
 					/>
@@ -277,7 +277,7 @@ export function MarginVertical({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'margin.bottom',
+							singularId: 'margin.bottom',
 							path: getControlPath(attribute, 'margin.bottom'),
 						}}
 					/>

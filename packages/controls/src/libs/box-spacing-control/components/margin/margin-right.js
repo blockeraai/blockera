@@ -225,7 +225,7 @@ export function MarginRight({
 								description,
 								defaultValue,
 								resetToDefault,
-								fieldId: 'margin.right',
+								singularId: 'margin.right',
 								path: getControlPath(attribute, 'margin.right'),
 							}}
 						/>

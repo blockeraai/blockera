@@ -210,7 +210,7 @@ export function MarginAll({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'margin.top',
+							singularId: 'margin.top',
 							path: getControlPath(attribute, 'margin.top'),
 						}}
 					/>
@@ -246,7 +246,7 @@ export function MarginAll({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'margin.right',
+							singularId: 'margin.right',
 							path: getControlPath(attribute, 'margin.right'),
 						}}
 					/>
@@ -280,7 +280,7 @@ export function MarginAll({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'margin.bottom',
+							singularId: 'margin.bottom',
 							path: getControlPath(attribute, 'margin.bottom'),
 						}}
 					/>
@@ -314,7 +314,7 @@ export function MarginAll({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'margin.left',
+							singularId: 'margin.left',
 							path: getControlPath(attribute, 'margin.left'),
 						}}
 					/>
