@@ -21,9 +21,11 @@ import type { TMaskControlProps } from './types';
 export default function MaskControl({
 	defaultRepeaterItemValue = {
 		shape: { type: 'shape', id: 'Blob 1' },
-		size: 'fit',
+		size: 'custom',
+		'size-width': '',
+		'size-height': '',
 		repeat: 'no-repeat',
-		position: { top: '', left: '' },
+		position: { top: '50%', left: '50%' },
 		'horizontally-flip': false,
 		'vertically-flip': false,
 		isVisible: true,
@@ -64,7 +66,9 @@ MaskControl.propTypes = {
 			type: PropTypes.string,
 			id: PropTypes.string,
 		}),
-		size: PropTypes.oneOf(['fit', 'cover', 'contain']),
+		size: PropTypes.oneOf(['custom', 'cover', 'contain']),
+		'size-width': PropTypes.string,
+		'size-height': PropTypes.string,
 		repeat: PropTypes.oneOf([
 			'no-repeat',
 			'repeat',

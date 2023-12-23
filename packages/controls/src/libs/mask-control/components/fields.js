@@ -9,7 +9,7 @@ import { memo, useContext, useState } from '@wordpress/element';
  * External dependencies
  */
 import type { Element } from 'react';
-import { Popover } from '@publisher/components';
+import { Popover, Flex } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
@@ -23,6 +23,7 @@ import {
 	AlignmentMatrixControl,
 	BaseControl,
 	ToggleControl,
+	InputControl,
 } from '../../index';
 import type { TFieldItem } from '../types';
 import SearchIcon from '../icons/search';
@@ -156,8 +157,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					columns="columns-2"
 					options={[
 						{
-							label: __('Fit', 'publisher-core'),
-							value: 'fit',
+							label: __('Custom', 'publisher-core'),
+							value: 'custom',
 						},
 						{
 							label: __('Cover', 'publisher-core'),
@@ -180,7 +181,63 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							},
 						})
 					}
-				/>
+				>
+					{item.size === 'custom' && (
+						<Flex
+							direction="row"
+							gap="8px"
+							justifyContent="space-around"
+						>
+							<InputControl
+								label={__('Width', 'publisher-core')}
+								columns="columns-1"
+								className="control-first label-center small-gap"
+								unitType="width"
+								placeholder="Auto"
+								defaultValue={item['size-width']}
+								id={getControlId(itemId, 'size-width')}
+								onChange={(width) =>
+									changeRepeaterItem({
+										controlId,
+										repeaterId,
+										itemId,
+										value: {
+											...item,
+											'size-width': width,
+										},
+									})
+								}
+								size="small"
+								controlAddonTypes={['variable']}
+								variableTypes={['width-size']}
+							/>
+
+							<InputControl
+								label={__('Height', 'publisher-core')}
+								columns="columns-1"
+								className="control-first label-center small-gap"
+								unitType="height"
+								placeholder="Auto"
+								defaultValue={item['size-height']}
+								id={getControlId(itemId, 'size-height')}
+								onChange={(height) =>
+									changeRepeaterItem({
+										controlId,
+										repeaterId,
+										itemId,
+										value: {
+											...item,
+											'size-height': height,
+										},
+									})
+								}
+								size="small"
+								controlAddonTypes={['variable']}
+								variableTypes={['width-size']}
+							/>
+						</Flex>
+					)}
+				</ToggleSelectControl>
 
 				<SelectControl
 					id={getControlId(itemId, 'repeat')}

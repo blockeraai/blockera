@@ -14,7 +14,9 @@ type TRepeatTypes =
 
 export type TItem = {
 	shape: { type: 'shape' | 'custom', id: string },
-	size: 'fit' | 'cover' | 'contain',
+	size: 'custom' | 'cover' | 'contain',
+	'size-width': string,
+	'size-height': string,
 	repeat: TRepeatTypes,
 	position: { top: string, left: string },
 	'horizontally-flip': boolean,

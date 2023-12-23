@@ -45,8 +45,8 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 			>
 				<span
 					className={`${controlInnerClassNames('header-icon')} ${
-						item['horizontally-flip'] && 'h-flip'
-					} ${item['vertically-flip'] && 'v-flip'}`}
+						item['horizontally-flip'] ? 'h-flip' : ''
+					} ${item['vertically-flip'] ? 'v-flip' : ''}`}
 				>
 					{selectedShape(item.shape?.id)?.icon}
 				</span>
