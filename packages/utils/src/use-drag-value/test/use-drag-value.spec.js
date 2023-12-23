@@ -13,7 +13,7 @@ import { useDragValue } from '../index';
 function TestComponent({ movement = 'vertical' }) {
 	const [value, setValue] = useState(0);
 	const [onEndFired, setOnEndFired] = useState('');
-	const onStart = useDragValue({
+	const { onDragStart } = useDragValue({
 		value,
 		setValue,
 		movement,
@@ -23,7 +23,7 @@ function TestComponent({ movement = 'vertical' }) {
 	});
 
 	return (
-		<div data-testid="draggable" onMouseDown={onStart}>
+		<div data-testid="draggable" onMouseDown={onDragStart}>
 			Draggable Element
 			<div data-testid="value-display">{value}</div>
 			<div data-testid="on-end-fired">{onEndFired}</div>
@@ -41,7 +41,7 @@ describe('testing use drag value hook', () => {
 		const { result } = renderHook(() =>
 			useDragValue({ value: 10, setValue: myMock, movement: 'vertical' })
 		);
-		expect(typeof result.current).toBe('function');
+		expect(typeof result.current.onDragStart).toBe('function');
 	});
 
 	it('useDragValue updates value on mouse drag', () => {

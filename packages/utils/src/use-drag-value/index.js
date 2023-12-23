@@ -110,14 +110,14 @@ export const useDragValue = ({
 			// stop only if the drag was actually started
 			if (!dragStarted) return;
 
+			// call outside callback
+			callbackOnEnd();
+
 			setStartVal(0);
 			setDragStarted(false);
 
 			// remove cursor
 			deleteVisualDivCursor();
-
-			// call outside callback
-			callbackOnEnd();
 		};
 
 		document.addEventListener('mousemove', onUpdate);
@@ -128,5 +128,8 @@ export const useDragValue = ({
 		};
 	}, [snapshot, movement, dragStarted, value]); // eslint-disable-line
 
-	return onStart;
+	return {
+		onDragStart: onStart,
+		isDragStarted: dragStarted,
+	};
 };
