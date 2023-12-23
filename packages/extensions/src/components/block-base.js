@@ -146,10 +146,11 @@ export function BlockBase({
 		<BlockEditContextProvider
 			{...{
 				block: {
+					blockName: props.name,
 					clientId: props.clientId,
-					storeName: 'publisher-core/controls',
-					blockName: props.blockName,
+					handleOnChangeAttributes,
 					attributes: props.attributes,
+					storeName: 'publisher-core/controls',
 				},
 				attributes,
 				blockStateId,

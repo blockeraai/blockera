@@ -10,10 +10,18 @@ import {
 	useMemo,
 	useState,
 } from '@wordpress/element';
+import { dispatch } from '@wordpress/data';
+
+/**
+ * Publisher dependencies
+ */
+import { isFunction } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
+import { generateExtensionId } from '../libs';
+import type { THandleOnChangeAttributes } from '../libs/types';
 import type { BreakpointTypes, TStates } from '../libs/block-states/types';
 
 const BlockEditContext: Object = createContext({});
@@ -33,13 +41,17 @@ const BlockEditContextProvider = ({
 		getCurrentState: () => TStates,
 		getBreakpoint: () => BreakpointTypes,
 		setCurrentTab: (tabName: string) => void,
+		switchBlockState: (state: string) => void,
+		handleOnChangeAttributes: THandleOnChangeAttributes,
 	} = useMemo(() => {
 		const {
+			block,
 			getBlockType,
 			blockStateId,
 			breakpointId,
 			getAttributes,
 			isNormalState,
+			handleOnChangeAttributes,
 		} = props;
 
 		return {
@@ -49,6 +61,45 @@ const BlockEditContextProvider = ({
 			breakpointId,
 			getAttributes,
 			isNormalState,
+			handleOnChangeAttributes,
+			switchBlockState: (state: string) => {
+				const newValue = getAttributes().publisherBlockStates.map(
+					(s: Object) => {
+						if (state === s?.type) {
+							return {
+								...s,
+								isSelected: true,
+							};
+						}
+
+						return {
+							...s,
+							isSelected: false,
+						};
+					}
+				);
+
+				handleOnChangeAttributes('publisherBlockStates', newValue, {
+					addOrModifyRootItems: {
+						publisherCurrentState: state,
+					},
+				});
+
+				const { modifyControlValue } = dispatch(
+					'publisher-core/controls/repeater'
+				);
+
+				if (!isFunction(modifyControlValue)) {
+					return;
+				}
+
+				const controlId = generateExtensionId(block, 'block-states');
+
+				modifyControlValue({
+					controlId,
+					value: newValue,
+				});
+			},
 			setCurrentTab: (tabName: string): void => {
 				if (tabName === currentTab) {
 					return;
