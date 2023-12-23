@@ -610,6 +610,610 @@ export const Field = {
 	),
 };
 
+export const LockedSides = {
+	args: {
+		label: 'Box Spacing',
+	},
+	decorators: [
+		WithInspectorStyles,
+		WithPopoverDataProvider,
+		...SharedDecorators,
+	],
+	render: (args) => (
+		<Flex direction="column" gap="100px">
+			<Flex direction="column" gap="150px">
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Margin<span>No Lock</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								marginLock: 'none',
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								paddingLock: 'none',
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Margin<span>Horizontal Lock</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								marginLock: 'horizontal',
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								paddingLock: 'none',
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Margin<span>Vertical Lock</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								marginLock: 'vertical',
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								paddingLock: 'none',
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Margin<span>Vertical & Horizontal Lock</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								marginLock: 'vertical-horizontal',
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								paddingLock: 'none',
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Margin<span>Lock All</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								marginLock: 'all',
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								paddingLock: 'none',
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+						/>
+					</ControlContextProvider>
+				</Flex>
+			</Flex>
+
+			<Flex direction="column" gap="100px">
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Padding<span>No Lock</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								marginLock: 'none',
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								paddingLock: 'none',
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Padding<span>Horizontal Lock</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								marginLock: 'none',
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								paddingLock: 'horizontal',
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Padding<span>Vertical Lock</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								marginLock: 'none',
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								paddingLock: 'vertical',
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Padding<span>Vertical & Horizontal Lock</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								marginLock: 'none',
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								paddingLock: 'vertical-horizontal',
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Padding<span>Lock All</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								marginLock: 'none',
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								paddingLock: 'all',
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+						/>
+					</ControlContextProvider>
+				</Flex>
+			</Flex>
+		</Flex>
+	),
+};
+
+export const DisabledSides = {
+	args: {
+		label: 'Box Spacing',
+	},
+	decorators: [
+		WithInspectorStyles,
+		WithPopoverDataProvider,
+		...SharedDecorators,
+	],
+	render: (args) => (
+		<Flex direction="column" gap="100px">
+			<Flex direction="column" gap="150px">
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Margin<span>No Disable</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+							marginDisable="none"
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Margin<span>Horizontal Disable</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+							marginDisable="horizontal"
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Margin<span>Vertical Disable</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+							marginDisable="vertical"
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Margin<span>All Disable</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+							marginDisable="all"
+						/>
+					</ControlContextProvider>
+				</Flex>
+			</Flex>
+
+			<Flex direction="column" gap="150px">
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Padding<span>No Disable</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+							paddingDisable="none"
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Padding<span>Horizontal Disable</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+							paddingDisable="horizontal"
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Padding<span>Vertical Disable</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+							paddingDisable="vertical"
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="20px">
+					<h2 className="story-heading">
+						Padding<span>All Disable</span>
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={BoxSpacingControl}
+							{...args}
+							paddingDisable="all"
+						/>
+					</ControlContextProvider>
+				</Flex>
+			</Flex>
+		</Flex>
+	),
+};
+
 export const All = {
 	args: {},
 	decorators: [

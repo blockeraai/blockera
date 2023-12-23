@@ -18,6 +18,7 @@ import { isString, isUndefined } from '@publisher/utils';
 /**
  * Internal dependencies
  */
+import { useBlockContext } from '../../../hooks';
 import { generateExtensionId } from '../../utils';
 import type { THandleOnChangeAttributes } from '../../types';
 import type { TBorderAndShadowDefaultProp } from '../types/border-and-shadow-props';
@@ -33,7 +34,13 @@ export const BorderRadius = ({
 	onChange: THandleOnChangeAttributes,
 	defaultValue: TBorderAndShadowDefaultProp,
 }): MixedElement => {
+	const { isNormalState } = useBlockContext();
+
 	const toWPCompatible = (newValue: Object): Object => {
+		if (!isNormalState()) {
+			return {};
+		}
+
 		if ('all' === newValue?.type) {
 			if (isString(newValue?.all) && !newValue?.all?.endsWith('func')) {
 				return {
@@ -103,7 +110,7 @@ export const BorderRadius = ({
 			value={{
 				name: generateExtensionId(block, 'border-radius'),
 				value: ((): Object => {
-					if (borderRadius && Array.from(borderRadius).length) {
+					if (borderRadius && borderRadius?.type) {
 						return borderRadius;
 					}
 
@@ -132,8 +139,12 @@ export const BorderRadius = ({
 			<BaseControl columns="columns-1" controlName="border-radius">
 				<BorderRadiusControl
 					label={__('Radius', 'publisher-core')}
-					onChange={(newValue) =>
+					onChange={(
+						newValue: Object,
+						ref?: Object = undefined
+					): void =>
 						onChange('publisherBorderRadius', newValue, {
+							ref,
 							addOrModifyRootItems: toWPCompatible(newValue),
 							deleteItems:
 								'all' === newValue?.type &&

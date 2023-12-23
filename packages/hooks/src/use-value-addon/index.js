@@ -31,6 +31,8 @@ export const useValueAddon = ({
 	dynamicValueTypes,
 	onChange,
 	size = 'normal',
+	pointerProps = {},
+	pickerProps = {},
 }: UseValueAddonProps): {} | ValueAddonProps => {
 	// type is empty
 	if (isUndefined(types) || !types.length) {
@@ -63,6 +65,8 @@ export const useValueAddon = ({
 				isOpen: '',
 				setOpen: () => {},
 				size,
+				pickerProps: {},
+				pointerProps: {},
 			},
 			handleOnClickVar: () => {},
 			handleOnClickDV: () => {},
@@ -185,13 +189,19 @@ export const useValueAddon = ({
 		isOpen,
 		setOpen,
 		size,
+		pointerProps,
+		pickerProps,
 	};
 
 	return {
 		valueAddonClassNames,
 		isSetValueAddon: () => isValid(value) || isOpen,
 		ValueAddonPointer: () => (
-			<ValueAddonPointer controlProps={controlProps} />
+			<ValueAddonPointer
+				controlProps={controlProps}
+				pointerProps={pointerProps}
+				pickerProps={pickerProps}
+			/>
 		),
 		ValueAddonControl: ({ ...props }) => (
 			<ValueAddonControl controlProps={controlProps} {...props} />

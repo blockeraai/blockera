@@ -154,7 +154,7 @@ export function NumberInput({
 		setIsValidValue(isValid);
 	}, [value]); // eslint-disable-line
 
-	const dragValueHandler = useDragValue({
+	const { onDragStart } = useDragValue({
 		value: isString(value)
 			? //$FlowFixMe
 			  value.replace(float ? /[^-\.0-9]/g : /[^-0-9]/g, '')
@@ -171,7 +171,7 @@ export function NumberInput({
 		return drag
 			? {
 					onMouseDown: (event) => {
-						dragValueHandler(event);
+						onDragStart(event);
 					},
 			  }
 			: {};

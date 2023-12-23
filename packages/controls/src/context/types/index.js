@@ -30,3 +30,5 @@ export type ControlContextHookProps = {
 	sideEffect?: boolean,
 	mergeInitialAndDefault?: boolean,
 };
+
+export * from './control-effect-type';

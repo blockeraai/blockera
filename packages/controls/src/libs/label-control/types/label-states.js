@@ -14,7 +14,7 @@ export type LabelChangedStates = Array<{
 }>;
 
 export type LabelStates = {
-	graph?: {
+	graph: {
 		id: number,
 		...StateGraph,
 	},

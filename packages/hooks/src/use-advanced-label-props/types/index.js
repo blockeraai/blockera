@@ -6,9 +6,10 @@
 import type { AdvancedLabelControlProps } from '@publisher/controls/src/libs/label-control/types';
 
 export type CalculatedAdvancedLabelProps = {
-	isChangedOnOtherStates: boolean,
 	isChanged: boolean,
 	isChangedOnNormal: boolean,
+	isChangedOnOtherStates: boolean,
+	isChangedOnCurrentState: boolean,
 };
 
 export type AdvancedLabelHookProps = {

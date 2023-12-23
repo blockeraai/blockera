@@ -34,9 +34,11 @@ import type { StateTypes } from '@publisher/extensions/src/libs/block-states/typ
 const StatesGraph = ({
 	controlId,
 	blockName,
+	defaultValue,
 }: {
 	controlId: string,
 	blockName: string,
+	defaultValue: any,
 }): null | MixedElement => {
 	if (!controlId) {
 		return null;
@@ -44,7 +46,7 @@ const StatesGraph = ({
 
 	const renderedBreakpoints: Array<string> = [];
 
-	const statesGraph = getStatesGraph({ controlId, blockName });
+	const statesGraph = getStatesGraph({ controlId, blockName, defaultValue });
 
 	return (
 		<Flex
@@ -72,7 +74,7 @@ const StatesGraph = ({
 
 					const renderedStates: Array<string> = [];
 
-					renderedBreakpoints.push(breakpoint.type);
+					renderedBreakpoints.push(state.graph.type);
 
 					return (
 						<Flex
@@ -84,22 +86,22 @@ const StatesGraph = ({
 							)}
 							{state.graph.states?.map(
 								(
-									state: StateTypes,
+									_state: StateTypes,
 									_index: number
-								): MixedElement => {
-									if (renderedStates.includes(state?.type)) {
+								): MixedElement | null => {
+									if (renderedStates.includes(_state?.type)) {
 										return null;
 									}
 
-									renderedStates.push(state.type);
+									renderedStates.push(_state.type);
 
-									const key = `${state.graph.type}-${index}-${state.type}-${_index}-${controlId}`;
+									const key = `${state.graph.type}-${index}-${_state.type}-${_index}-${controlId}`;
 
 									const MappedHeader = () => {
 										return [
-											':' + state.type.slice(0, 3),
+											':' + _state.type.slice(0, 3),
 											<div key={`${key}-label`}>
-												{state.label}
+												{_state.label}
 											</div>,
 										];
 									};
@@ -136,8 +138,9 @@ const AdvancedLabelControl = ({
 	popoverTitle,
 	repeaterItem,
 	resetToDefault,
+	onClick,
 	...props
-}: AdvancedLabelControlProps): null | MixedElement => {
+}: AdvancedLabelControlProps): MixedElement => {
 	const [isOpenModal, setOpenModal] = useState(false);
 
 	const {
@@ -149,10 +152,15 @@ const AdvancedLabelControl = ({
 	} = useBlockContext();
 
 	if ('undefined' === typeof attribute || 'undefined' === typeof blockName) {
-		return null;
+		return <></>;
 	}
 
-	const { isChanged, isChangedOnNormal, isChangedOnOtherStates } =
+	const {
+		isChanged,
+		isChangedOnNormal,
+		isChangedOnOtherStates,
+		isChangedOnCurrentState,
+	} =
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		useAdvancedLabelProps({
 			path,
@@ -161,7 +169,6 @@ const AdvancedLabelControl = ({
 			attribute,
 			isRepeater,
 			defaultValue,
-			repeaterItem,
 			blockStateId,
 			breakpointId,
 			isNormalState: isNormalState(),
@@ -170,21 +177,34 @@ const AdvancedLabelControl = ({
 		});
 
 	const isChangedValue =
-		isChanged || isChangedOnNormal || isChangedOnOtherStates;
+		(isChanged && isChangedOnCurrentState) ||
+		isChangedOnNormal ||
+		isChangedOnOtherStates;
 
 	return (
 		<>
 			{label && (
 				<span
 					{...props}
-					onClick={() => isChangedValue && setOpenModal(true)}
+					onClick={
+						onClick
+							? onClick
+							: () => isChangedValue && setOpenModal(true)
+					}
 					className={controlClassNames('label', className, {
-						'changed-in-other-state': isChangedOnOtherStates,
+						'changed-in-other-state':
+							!isChangedOnCurrentState && isChangedOnOtherStates,
 						'changed-in-normal-state':
-							(isNormalState() && isChanged) ||
-							(!isNormalState() && isChangedOnNormal),
+							(isNormalState() &&
+								isChanged &&
+								isChangedOnCurrentState) ||
+							(!isNormalState() &&
+								isChangedOnNormal &&
+								!isChangedOnCurrentState),
 						'changed-in-secondary-state':
-							!isNormalState() && isChanged,
+							!isNormalState() &&
+							isChanged &&
+							isChangedOnCurrentState,
 					})}
 					aria-label={ariaLabel || label}
 					data-cy="label-control"
@@ -207,7 +227,11 @@ const AdvancedLabelControl = ({
 						? description()
 						: description}
 
-					<StatesGraph controlId={attribute} blockName={blockName} />
+					<StatesGraph
+						controlId={attribute}
+						blockName={blockName}
+						defaultValue={defaultValue}
+					/>
 
 					<Flex direction={'row'} justifyContent={'space-between'}>
 						<Button
@@ -238,6 +262,7 @@ const AdvancedLabelControl = ({
 									isRepeater,
 									repeaterItem,
 									propId: fieldId,
+									action: 'RESET_TO_DEFAULT',
 								});
 							}}
 						/>
@@ -271,6 +296,7 @@ const AdvancedLabelControl = ({
 										isRepeater,
 										repeaterItem,
 										propId: fieldId,
+										action: 'RESET_TO_NORMAL',
 										attributes: getAttributes(),
 									});
 								}}

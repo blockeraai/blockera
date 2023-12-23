@@ -99,7 +99,7 @@ const Component = ({
 		leftDragSetValue,
 	} = useDragSetValues({ value, setValue });
 
-	const topDragValueHandler = useDragValue({
+	const { onDragStart: topDragValueHandler } = useDragValue({
 		value: positionTop.value !== '' ? positionTop.value : 0,
 		setValue: topDragSetValue,
 		movement: 'vertical',
@@ -108,7 +108,7 @@ const Component = ({
 		},
 	});
 
-	const leftDragValueHandler = useDragValue({
+	const { onDragStart: leftDragValueHandler } = useDragValue({
 		value: positionLeft.value !== '' ? positionLeft.value : 0,
 		setValue: leftDragSetValue,
 		movement: 'horizontal',
@@ -117,7 +117,7 @@ const Component = ({
 		},
 	});
 
-	const rightDragValueHandler = useDragValue({
+	const { onDragStart: rightDragValueHandler } = useDragValue({
 		value: positionRight.value !== '' ? positionRight.value : 0,
 		setValue: rightDragSetValue,
 		movement: 'horizontal',
@@ -126,7 +126,7 @@ const Component = ({
 		},
 	});
 
-	const bottomDragValueHandler = useDragValue({
+	const { onDragStart: bottomDragValueHandler } = useDragValue({
 		value: positionBottom.value !== '' ? positionBottom.value : 0,
 		setValue: bottomDragSetValue,
 		movement: 'vertical',

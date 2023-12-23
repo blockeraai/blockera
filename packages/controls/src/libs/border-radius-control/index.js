@@ -47,6 +47,7 @@ export default function BorderRadiusControl({
 		blockName,
 		description,
 		resetToDefault,
+		getControlPath,
 	} = useControlContext({
 		id,
 		onChange,
@@ -91,10 +92,13 @@ export default function BorderRadiusControl({
 						<LabelControl
 							label={label}
 							{...{
+								value,
 								attribute,
 								blockName,
 								description,
 								resetToDefault,
+								path: getControlPath(attribute, id),
+								defaultValue: valueCleanup(defaultValue),
 							}}
 						/>
 					</span>

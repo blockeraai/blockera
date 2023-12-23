@@ -4,7 +4,6 @@
  * Internal dependencies
  */
 import { getCamelCase } from '../string';
-import { isArray, isObject } from '../is';
 
 /**
  * Return a new object with the specified keys omitted.
@@ -20,7 +19,7 @@ export function omit(object: Object, keys: Array<string>): Object {
 	);
 }
 
-export function omitWithPattern(object: Object, pattern: string): Object {
+export function omitWithPattern(object: Object, pattern: Object): Object {
 	return Object.fromEntries(
 		Object.entries(object).filter(([key]) => !pattern.test(key))
 	);
@@ -48,50 +47,37 @@ export function include(
 }
 
 /**
- * Merging objects
+ * Delete recieved path of main object.
  *
- * @param {Object} a the object first
- * @param {Object} b the object second
- * @return {Object} merged second object into first
+ * @param {Object} obj the main object.
+ * @param {string} path the delete property path.
  */
-export const merge = (a: Object, b: Object): Object => {
-	for (const key in b) {
-		if (!Object.hasOwnProperty.call(b, key)) {
-			continue;
+export const deletePropertyByPath = (obj: Object, path: string): Object => {
+	const keys = path.split('.');
+	let current = obj;
+
+	for (let i = 0; i < keys.length - 1; i++) {
+		let key = keys[i];
+
+		if (/\d+/.test(key)) {
+			key = Number(key);
+			// console.log(key);
 		}
 
-		const element = b[key];
-
-		if (!element) {
-			continue;
+		if (!current[key]) {
+			return; // Property doesn't exist, nothing to delete
 		}
 
-		if (isObject(element)) {
-			a = {
-				...a,
-				key: {
-					...(a[key] || {}),
-					...element,
-				},
-			};
-
-			continue;
-		}
-
-		if (isArray(element)) {
-			a = {
-				...a,
-				key: [...(a[key] || []), ...element],
-			};
-
-			continue;
-		}
-
-		a = {
-			...a,
-			[!a[key] ? key : a[key]]: b[key],
-		};
+		current = current[key];
 	}
 
-	return a;
+	let key = keys[keys.length - 1];
+
+	if (/\d+/.test(key)) {
+		key = Number(key);
+	}
+
+	delete current[key];
+
+	return obj;
 };

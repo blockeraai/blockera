@@ -76,11 +76,13 @@ export default function ColorControl({
 	});
 
 	const labelProps = {
+		value,
 		fieldId,
 		attribute,
 		blockName,
 		description,
 		repeaterItem,
+		defaultValue,
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
