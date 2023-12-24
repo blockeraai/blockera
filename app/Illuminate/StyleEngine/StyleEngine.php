@@ -104,6 +104,9 @@ final class StyleEngine {
 		$styles[] = 'min-height';
 		$styles[] = 'max-width';
 		$styles[] = 'max-height';
+		$styles[] = 'cursor';
+		$styles[] = 'user-select';
+		$styles[] = 'pointer-events';
 
 		return $styles;
 	}

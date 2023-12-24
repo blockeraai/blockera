@@ -27,6 +27,7 @@ use Publisher\Framework\Services\Render\Styles\SpacingStyle;
 use Publisher\Framework\Services\Render\Styles\Style;
 use Publisher\Framework\Services\Render\Styles\TextShadowStyle;
 use Publisher\Framework\Services\Render\Styles\TypographyStyle;
+use Publisher\Framework\Services\Render\Styles\MouseStyle;
 
 class Parser {
 
@@ -100,6 +101,11 @@ class Parser {
 			'publisherFlexChildAlign',
 			'publisherFlexChildOrder',
 			'publisherFlexChildSizing',
+		],
+		'mouse'            => [
+			'publisherCursor',
+			'publisherUserSelect',
+			'publisherPointerEvents', 
 		]
 	];
 
@@ -149,6 +155,7 @@ class Parser {
 			$typography      = $this->app->make( TypographyStyle::class );
 			$textShadow      = $this->app->make( TextShadowStyle::class );
 			$background      = $this->app->make( BackgroundStyle::class );
+			$mouse           = $this->app->make( MouseStyle::class );
 		}
 
 		/**
@@ -164,6 +171,7 @@ class Parser {
 		 * @var TypographyStyle $typography
 		 * @var BackgroundStyle $background
 		 * @var BorderStyle     $borderAndShadow
+		 * @var MouseStyle      $mouse
 		 */
 		$textShadow
 			->setNext( $size )
@@ -175,7 +183,8 @@ class Parser {
 			->setNext( $boxShadow )
 			->setNext( $background )
 			->setNext( $typography )
-			->setNext( $borderAndShadow );
+			->setNext( $borderAndShadow )
+			->setNext( $mouse );
 
 		//Usage of Styles
 		{
@@ -188,6 +197,7 @@ class Parser {
 			$this->setGroupStyle( $setting, $background, 'background' );
 			$this->setGroupStyle( $setting, $typography, 'typography' );
 			$this->setGroupStyle( $setting, $borderAndShadow, 'border-and-shadow' );
+			$this->setGroupStyle( $setting, $mouse, 'mouse' );
 
 			$spacing->style( $setting );
 			$outline->style( $setting );
