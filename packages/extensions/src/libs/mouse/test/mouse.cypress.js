@@ -42,16 +42,16 @@ describe('Mouse Extension', () => {
 					);
 				});
 
-				// //Check frontend
-				// savePage();
+				//Check frontend
+				savePage();
 
-				// redirectToFrontPage();
+				redirectToFrontPage();
 
-				// cy.get('.publisher-paragraph').should(
-				// 	'have.css',
-				// 	'cursor',
-				// 	'wait'
-				// );
+				cy.get('.publisher-paragraph').should(
+					'have.css',
+					'cursor',
+					'wait'
+				);
 			});
 		});
 	});
@@ -89,16 +89,16 @@ describe('Mouse Extension', () => {
 					);
 				});
 
-				// //Check frontend
-				// savePage();
+				//Check frontend
+				savePage();
 
-				// redirectToFrontPage();
+				redirectToFrontPage();
 
-				// cy.get('.publisher-paragraph').should(
-				// 	'have.css',
-				// 	'user-select',
-				// 	'text'
-				// );
+				cy.get('.publisher-paragraph').should(
+					'have.css',
+					'user-select',
+					'text'
+				);
 			});
 		});
 	});
@@ -136,16 +136,16 @@ describe('Mouse Extension', () => {
 					);
 				});
 
-				// //Check frontend
-				// savePage();
+				//Check frontend
+				savePage();
 
-				// redirectToFrontPage();
+				redirectToFrontPage();
 
-				// cy.get('.publisher-paragraph').should(
-				// 	'have.css',
-				// 	'pointer-events',
-				// 	'all'
-				// );
+				cy.get('.publisher-paragraph').should(
+					'have.css',
+					'pointer-events',
+					'all'
+				);
 			});
 		});
 	});

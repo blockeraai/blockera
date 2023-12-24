@@ -103,7 +103,7 @@ export const MouseExtension: MixedElement = memo<TMouseProps>(
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'pointer-events'),
-							value: userSelect,
+							value: pointerEvents,
 							attribute: 'publisherPointerEvents',
 							blockName: block.blockName,
 						}}
