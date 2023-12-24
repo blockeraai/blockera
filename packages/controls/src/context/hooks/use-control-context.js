@@ -143,7 +143,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 	 *
 	 * @return {null|*} retrieved standard calculated value for current control!
 	 */
-	function getCalculatedInitValue(currentValue?: any = null): any {
+	function getCalculatedInitValue(currentValue: any = null): any {
 		if (isNull(currentValue)) {
 			currentValue = savedValue;
 		}

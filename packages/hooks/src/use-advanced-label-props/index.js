@@ -24,7 +24,7 @@ export const useAdvancedLabelProps = ({
 	path,
 	value,
 	//TODO: Please commented after complete debug!
-	// fieldId,
+	// singularId,
 	attribute,
 	isRepeater,
 	defaultValue,
@@ -168,7 +168,7 @@ export const useAdvancedLabelProps = ({
 		).length > 0;
 
 	//TODO: Please commented after complete debug!
-	// if (debugKey === attribute && !fieldId) {
+	// if (debugKey === attribute && !singularId) {
 	// 	console.table({
 	// 		isChanged,
 	// 		stateValue,

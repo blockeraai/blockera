@@ -41,7 +41,7 @@ export default function BorderControl({
 	},
 	onChange,
 	field = 'border',
-	fieldId,
+	singularId,
 	repeaterItem,
 	className, // internal usage for stories
 	__isWidthFocused,
@@ -72,13 +72,14 @@ export default function BorderControl({
 			className={className}
 			{...{
 				value,
-				fieldId,
 				attribute,
 				blockName,
+				singularId,
 				description,
 				defaultValue,
 				repeaterItem,
 				resetToDefault,
+				mode: 'advanced',
 				path: getControlPath(attribute, id),
 			}}
 		>

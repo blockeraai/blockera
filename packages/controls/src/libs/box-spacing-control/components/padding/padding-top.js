@@ -144,6 +144,9 @@ export function PaddingTop({
 					!_isSetValueAddon && sideSpace?.unit !== 'func'
 						? 'side-drag-active'
 						: '',
+					valueAddonControlProps.isDeletedVar
+						? 'is-value-addon-deleted'
+						: '',
 				]}
 				{...(!_isSetValueAddon
 					? {
@@ -228,8 +231,9 @@ export function PaddingTop({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'padding.top',
+							singularId: 'padding.top',
 							path: getControlPath(attribute, 'padding.top'),
+							mode: 'advanced',
 						}}
 					/>
 

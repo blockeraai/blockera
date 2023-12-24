@@ -126,6 +126,9 @@ export function MarginAll({
 					!_isSetValueAddon && sideSpace?.unit !== 'func'
 						? 'side-drag-active'
 						: '',
+					valueAddonControlProps.isDeletedVar
+						? 'is-value-addon-deleted'
+						: '',
 				]}
 				{...(!_isSetValueAddon
 					? {
@@ -210,7 +213,7 @@ export function MarginAll({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'margin.top',
+							singularId: 'margin.top',
 							path: getControlPath(attribute, 'margin.top'),
 						}}
 					/>
@@ -246,8 +249,9 @@ export function MarginAll({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'margin.right',
+							singularId: 'margin.right',
 							path: getControlPath(attribute, 'margin.right'),
+							mode: 'advanced',
 						}}
 					/>
 				</div>
@@ -280,8 +284,9 @@ export function MarginAll({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'margin.bottom',
+							singularId: 'margin.bottom',
 							path: getControlPath(attribute, 'margin.bottom'),
+							mode: 'advanced',
 						}}
 					/>
 				</div>
@@ -314,8 +319,9 @@ export function MarginAll({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'margin.left',
+							singularId: 'margin.left',
 							path: getControlPath(attribute, 'margin.left'),
+							mode: 'advanced',
 						}}
 					/>
 				</div>

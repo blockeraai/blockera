@@ -10,5 +10,6 @@ export type THandleOnChangeAttributes = (
 				updateItems?: Object,
 				deleteItems?: Array<string>,
 				addOrModifyRootItems?: Object,
+				deleteItemsOnResetAction?: Array<string>,
 		  }
 ) => void;

@@ -32,6 +32,7 @@ import type {
 import type { StateTypes } from '@publisher/extensions/src/libs/block-states/types';
 
 const StatesGraph = ({
+	onClick,
 	controlId,
 	blockName,
 	defaultValue,
@@ -39,6 +40,7 @@ const StatesGraph = ({
 	controlId: string,
 	blockName: string,
 	defaultValue: any,
+	onClick: (state: string) => void,
 }): null | MixedElement => {
 	if (!controlId) {
 		return null;
@@ -111,6 +113,7 @@ const StatesGraph = ({
 											mode={'nothing'}
 											key={`${key}-state`}
 											header={<MappedHeader />}
+											onClick={() => onClick(_state.type)}
 										/>
 									);
 								}
@@ -127,12 +130,12 @@ const AdvancedLabelControl = ({
 	path = null,
 	label,
 	value,
-	fieldId,
 	className,
 	ariaLabel,
 	attribute,
 	blockName,
 	isRepeater,
+	singularId,
 	description,
 	defaultValue,
 	popoverTitle,
@@ -149,6 +152,7 @@ const AdvancedLabelControl = ({
 		isNormalState,
 		blockStateId,
 		breakpointId,
+		switchBlockState,
 	} = useBlockContext();
 
 	if ('undefined' === typeof attribute || 'undefined' === typeof blockName) {
@@ -165,7 +169,7 @@ const AdvancedLabelControl = ({
 		useAdvancedLabelProps({
 			path,
 			value,
-			fieldId,
+			singularId,
 			attribute,
 			isRepeater,
 			defaultValue,
@@ -186,11 +190,7 @@ const AdvancedLabelControl = ({
 			{label && (
 				<span
 					{...props}
-					onClick={
-						onClick
-							? onClick
-							: () => isChangedValue && setOpenModal(true)
-					}
+					onClick={onClick ? onClick : () => setOpenModal(true)}
 					className={controlClassNames('label', className, {
 						'changed-in-other-state':
 							!isChangedOnCurrentState && isChangedOnOtherStates,
@@ -209,13 +209,13 @@ const AdvancedLabelControl = ({
 					aria-label={ariaLabel || label}
 					data-cy="label-control"
 					style={{
-						cursor: isChangedValue ? 'pointer' : 'auto',
+						cursor: 'pointer',
 					}}
 				>
 					{label}
 				</span>
 			)}
-			{isOpenModal && isChangedValue && (
+			{isOpenModal && (
 				<Popover
 					offset={35}
 					title={popoverTitle !== '' ? popoverTitle : label}
@@ -230,79 +230,139 @@ const AdvancedLabelControl = ({
 					<StatesGraph
 						controlId={attribute}
 						blockName={blockName}
+						onClick={switchBlockState}
 						defaultValue={defaultValue}
 					/>
 
-					<Flex direction={'row'} justifyContent={'space-between'}>
-						<Button
-							variant={'primary'}
-							text={__('Reset To Default', 'publisher-core')}
-							label={__('Reset To Default', 'publisher-core')}
-							onClick={() => {
-								if (
-									!resetToDefault ||
-									!isFunction(resetToDefault)
-								) {
-									return;
-								}
+					{isFunction(resetToDefault) && (
+						<Flex
+							direction={'row'}
+							justifyContent={'space-between'}
+						>
+							{isChangedValue && (
+								<Button
+									variant={'primary'}
+									text={__('Reset All', 'publisher-core')}
+									label={__('Reset All', 'publisher-core')}
+									onClick={() => {
+										if (
+											!resetToDefault ||
+											!isFunction(resetToDefault)
+										) {
+											return;
+										}
 
-								setOpenModal(!isOpenModal);
+										setOpenModal(!isOpenModal);
 
-								if (
-									(isNull(path) ||
-										isEmpty(path) ||
-										isUndefined(path)) &&
-									!isRepeater
-								) {
-									return resetToDefault();
-								}
+										if (
+											(isNull(path) ||
+												isEmpty(path) ||
+												isUndefined(path)) &&
+											!isRepeater
+										) {
+											return resetToDefault();
+										}
 
-								resetToDefault({
-									path,
-									isRepeater,
-									repeaterItem,
-									propId: fieldId,
-									action: 'RESET_TO_DEFAULT',
-								});
-							}}
-						/>
+										//FIXME: please implements reset_all action!
+										resetToDefault({
+											path,
+											isRepeater,
+											repeaterItem,
+											propId: singularId,
+											action: 'RESET_All',
+										});
+									}}
+								/>
+							)}
 
-						{!isNormalState() && (
-							<Button
-								variant={'primary'}
-								text={__('Reset To Normal', 'publisher-core')}
-								label={__('Reset To Normal', 'publisher-core')}
-								onClick={() => {
-									if (
-										!resetToDefault ||
-										!isFunction(resetToDefault)
-									) {
-										return;
-									}
+							{isNormalState() && isChangedOnCurrentState && (
+								<Button
+									variant={'primary'}
+									text={__(
+										'Reset To Default',
+										'publisher-core'
+									)}
+									label={__(
+										'Reset To Default',
+										'publisher-core'
+									)}
+									onClick={() => {
+										if (
+											!resetToDefault ||
+											!isFunction(resetToDefault)
+										) {
+											return;
+										}
 
-									setOpenModal(!isOpenModal);
+										setOpenModal(!isOpenModal);
 
-									if (
-										(isNull(path) ||
-											isEmpty(path) ||
-											isUndefined(path)) &&
-										!isRepeater
-									) {
-										return resetToDefault();
-									}
+										if (
+											(isNull(path) ||
+												isEmpty(path) ||
+												isUndefined(path)) &&
+											!isRepeater
+										) {
+											return resetToDefault();
+										}
 
-									resetToDefault({
-										path,
-										isRepeater,
-										repeaterItem,
-										propId: fieldId,
-										action: 'RESET_TO_NORMAL',
-										attributes: getAttributes(),
-									});
-								}}
-							/>
-						)}
-					</Flex>
+										resetToDefault({
+											path,
+											isRepeater,
+											repeaterItem,
+											propId: singularId,
+											action: 'RESET_TO_DEFAULT',
+										});
+									}}
+								/>
+							)}
+
+							{!isNormalState() && (
+								<Button
+									variant={'primary'}
+									text={__(
+										'Reset To Normal',
+										'publisher-core'
+									)}
+									label={__(
+										'Reset To Normal',
+										'publisher-core'
+									)}
+									onClick={() => {
+										if (
+											!resetToDefault ||
+											!isFunction(resetToDefault)
+										) {
+											return;
+										}
+
+										setOpenModal(!isOpenModal);
+
+										if (!isFunction(resetToDefault)) {
+											return;
+										}
+
+										if (
+											(isNull(path) ||
+												isEmpty(path) ||
+												isUndefined(path)) &&
+											!isRepeater
+										) {
+											return resetToDefault();
+										}
+
+										resetToDefault({
+											path,
+											isRepeater,
+											repeaterItem,
+											propId: singularId,
+											action: 'RESET_TO_NORMAL',
+											attributes: getAttributes(),
+										});
+									}}
+								/>
+							)}
+						</Flex>
+					)}
 				</Popover>
 			)}
 		</>
@@ -314,7 +374,7 @@ const LabelControl = ({
 	label = '',
 	popoverTitle = '',
 	path,
-	fieldId,
+	singularId,
 	className,
 	ariaLabel = '',
 	attribute,
@@ -325,12 +385,12 @@ const LabelControl = ({
 	resetToDefault,
 	...props
 }: LabelControlProps): MixedElement => {
-	if ('advanced' === mode || isFunction(resetToDefault)) {
+	if ('advanced' === mode) {
 		return (
 			<AdvancedLabelControl
 				{...{
 					label,
-					fieldId,
+					singularId,
 					className,
 					ariaLabel,
 					attribute,

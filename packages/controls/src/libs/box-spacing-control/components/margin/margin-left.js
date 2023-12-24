@@ -143,6 +143,9 @@ export function MarginLeft({
 					!_isSetValueAddon && sideSpace?.unit !== 'func'
 						? 'side-drag-active'
 						: '',
+					valueAddonControlProps.isDeletedVar
+						? 'is-value-addon-deleted'
+						: '',
 				]}
 				{...(!_isSetValueAddon
 					? {
@@ -224,8 +227,9 @@ export function MarginLeft({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'margin.left',
+							singularId: 'margin.left',
 							path: getControlPath(attribute, 'margin.left'),
+							mode: 'advanced',
 						}}
 					/>
 

@@ -31,9 +31,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 		return (
 			<div id={`repeater-item-${itemId}`}>
 				<ToggleSelectControl
-					fieldId={'type'}
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'type')}
+					singularId={'type'}
 					label={__('Position', 'publisher-core')}
 					columns="columns-2"
 					options={[
@@ -59,9 +59,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 				/>
 
 				<InputControl
-					fieldId={'x'}
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'x')}
+					singularId={'x'}
 					label={__('X', 'publisher-core')}
 					columns="columns-2"
 					unitType="box-shadow"
@@ -81,9 +81,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 				/>
 
 				<InputControl
-					fieldId={'y'}
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'y')}
+					singularId={'y'}
 					label={__('Y', 'publisher-core')}
 					columns="columns-2"
 					unitType="box-shadow"
@@ -103,9 +103,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 				/>
 
 				<InputControl
-					fieldId={'blur'}
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'blur')}
+					singularId={'blur'}
 					label={__('Blur', 'publisher-core')}
 					columns="columns-2"
 					unitType="box-shadow"
@@ -125,9 +125,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 				/>
 
 				<InputControl
-					fieldId={'spread'}
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'spread')}
+					singularId={'spread'}
 					label={__('Spread', 'publisher-core')}
 					columns="columns-2"
 					unitType="box-shadow"
@@ -147,9 +147,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 				/>
 
 				<ColorControl
-					fieldId={'color'}
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'color')}
+					singularId={'color'}
 					label={__('Color', 'publisher-core')}
 					columns="columns-2"
 					onChange={(color) =>

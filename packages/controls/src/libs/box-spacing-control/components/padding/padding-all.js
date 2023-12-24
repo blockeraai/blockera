@@ -128,6 +128,9 @@ export function PaddingAll({
 					!_isSetValueAddon && sideSpace?.unit !== 'func'
 						? 'side-drag-active'
 						: '',
+					valueAddonControlProps.isDeletedVar
+						? 'is-value-addon-deleted'
+						: '',
 				]}
 				{...(!_isSetValueAddon
 					? {
@@ -212,8 +215,9 @@ export function PaddingAll({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'padding.top',
+							singularId: 'padding.top',
 							path: getControlPath(attribute, 'padding.top'),
+							mode: 'advanced',
 						}}
 					/>
 
@@ -248,8 +252,9 @@ export function PaddingAll({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'padding.right',
+							singularId: 'padding.right',
 							path: getControlPath(attribute, 'padding.right'),
+							mode: 'advanced',
 						}}
 					/>
 				</div>
@@ -282,8 +287,9 @@ export function PaddingAll({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'padding.bottom',
+							singularId: 'padding.bottom',
 							path: getControlPath(attribute, 'padding.bottom'),
+							mode: 'advanced',
 						}}
 					/>
 				</div>
@@ -316,8 +322,9 @@ export function PaddingAll({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'padding.left',
+							singularId: 'padding.left',
 							path: getControlPath(attribute, 'padding.left'),
+							mode: 'advanced',
 						}}
 					/>
 				</div>

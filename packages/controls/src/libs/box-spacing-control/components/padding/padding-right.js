@@ -144,6 +144,9 @@ export function PaddingRight({
 					!_isSetValueAddon && sideSpace?.unit !== 'func'
 						? 'side-drag-active'
 						: '',
+					valueAddonControlProps.isDeletedVar
+						? 'is-value-addon-deleted'
+						: '',
 				]}
 				{...(!_isSetValueAddon
 					? {
@@ -228,8 +231,9 @@ export function PaddingRight({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'padding.right',
+							singularId: 'padding.right',
 							path: getControlPath(attribute, 'padding.right'),
+							mode: 'advanced',
 						}}
 					/>
 

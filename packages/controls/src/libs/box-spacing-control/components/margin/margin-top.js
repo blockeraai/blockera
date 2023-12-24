@@ -143,6 +143,9 @@ export function MarginTop({
 					!_isSetValueAddon && sideSpace?.unit !== 'func'
 						? 'side-drag-active'
 						: '',
+					valueAddonControlProps.isDeletedVar
+						? 'is-value-addon-deleted'
+						: '',
 				]}
 				{...(!_isSetValueAddon
 					? {
@@ -227,8 +230,9 @@ export function MarginTop({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'margin.top',
+							singularId: 'margin.top',
 							path: getControlPath(attribute, 'margin.top'),
+							mode: 'advanced',
 						}}
 					/>
 

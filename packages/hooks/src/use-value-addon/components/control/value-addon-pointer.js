@@ -60,7 +60,8 @@ export default function ({
 						'dv-pointer',
 						isDVActive && 'active-value-addon',
 						controlProps.isOpen.startsWith('dv-') &&
-							'open-value-addon'
+							'open-value-addon',
+						controlProps.isDeletedDV && 'is-value-addon-deleted'
 					)}
 					onClick={handleDynamicValueModal}
 					{...pointerProps}
@@ -83,7 +84,8 @@ export default function ({
 						'var-pointer',
 						isVarActive && 'active-value-addon',
 						controlProps.isOpen.startsWith('var-') &&
-							'open-value-addon'
+							'open-value-addon',
+						controlProps.isDeletedVar && 'is-value-addon-deleted'
 					)}
 					onClick={handleVariableModal}
 					{...pointerProps}

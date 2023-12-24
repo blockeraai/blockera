@@ -16,7 +16,7 @@ export type LabelControlProps = {
 	path?: string | null,
 	popoverTitle?: string,
 	repeaterItem?: number,
-	fieldId?: string | null,
+	singularId?: string | null,
 	mode?: 'advanced' | 'simple',
 	isRepeater?: void | boolean,
 	description?: string | MixedElement,

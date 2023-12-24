@@ -67,7 +67,7 @@ export function Padding({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'padding',
+							singularId: 'padding',
 							path: getControlPath(attribute, 'padding'),
 						}}
 					/>

@@ -94,7 +94,7 @@ export const BorderAndShadowExtension: TBorderAndShadowProps =
 									label={__('Box Shadows', 'publisher-core')}
 									onChange={(
 										newValue: Array<Object>,
-										ref?: Object = undefined
+										ref?: Object
 									): void =>
 										handleOnChangeAttributes(
 											'publisherBoxShadow',
@@ -124,10 +124,11 @@ export const BorderAndShadowExtension: TBorderAndShadowProps =
 							>
 								<OutlineControl
 									label={__('Outline', 'publisher-core')}
-									onChange={(newValue) =>
+									onChange={(newValue, ref) =>
 										handleOnChangeAttributes(
 											'publisherOutline',
-											newValue
+											newValue,
+											{ ref }
 										)
 									}
 									{...props}

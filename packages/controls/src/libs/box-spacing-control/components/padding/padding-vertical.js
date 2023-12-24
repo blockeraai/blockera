@@ -152,6 +152,9 @@ export function PaddingVertical({
 					!_isSetValueAddon && sideSpace?.unit !== 'func'
 						? 'side-drag-active'
 						: '',
+					valueAddonControlProps.isDeletedVar
+						? 'is-value-addon-deleted'
+						: '',
 				]}
 				{...(!_isSetValueAddon
 					? {
@@ -239,8 +242,9 @@ export function PaddingVertical({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'padding.top',
+							singularId: 'padding.top',
 							path: getControlPath(attribute, 'padding.top'),
+							mode: 'advanced',
 						}}
 					/>
 
@@ -278,8 +282,9 @@ export function PaddingVertical({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'padding.bottom',
+							singularId: 'padding.bottom',
 							path: getControlPath(attribute, 'padding.bottom'),
+							mode: 'advanced',
 						}}
 					/>
 				</div>

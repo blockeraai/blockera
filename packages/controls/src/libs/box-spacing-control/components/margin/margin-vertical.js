@@ -151,6 +151,9 @@ export function MarginVertical({
 					!_isSetValueAddon && sideSpace?.unit !== 'func'
 						? 'side-drag-active'
 						: '',
+					valueAddonControlProps.isDeletedVar
+						? 'is-value-addon-deleted'
+						: '',
 				]}
 				{...(!_isSetValueAddon
 					? {
@@ -238,8 +241,9 @@ export function MarginVertical({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'margin.top',
+							singularId: 'margin.top',
 							path: getControlPath(attribute, 'margin.top'),
+							mode: 'advanced',
 						}}
 					/>
 
@@ -277,7 +281,7 @@ export function MarginVertical({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: 'margin.bottom',
+							singularId: 'margin.bottom',
 							path: getControlPath(attribute, 'margin.bottom'),
 						}}
 					/>

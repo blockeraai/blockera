@@ -135,6 +135,11 @@
 				}
 			}
 		}
+
+		&.is-value-addon-deleted {
+			--publisher-value-addon-dv-color: var(--publisher-value-addon-deleted-color);
+			--publisher-value-addon-var-color: var(--publisher-value-addon-deleted-color);
+		}
 	}
 }
 

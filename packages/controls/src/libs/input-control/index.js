@@ -45,7 +45,7 @@ export default function InputControl({
 	arrows = false,
 	size = 'normal',
 	//
-	fieldId,
+	singularId,
 	repeaterItem,
 	controlAddonTypes,
 	variableTypes,
@@ -84,7 +84,7 @@ export default function InputControl({
 
 	const labelProps = {
 		value,
-		fieldId,
+		singularId,
 		attribute,
 		blockName,
 		description,

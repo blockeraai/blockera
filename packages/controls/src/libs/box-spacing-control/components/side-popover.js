@@ -235,8 +235,9 @@ export function SidePopover({
 							description,
 							defaultValue,
 							resetToDefault,
-							fieldId: id,
+							singularId: id,
 							path: getControlPath(attribute, id),
+							mode: 'advanced',
 						}}
 					>
 						<InputControl

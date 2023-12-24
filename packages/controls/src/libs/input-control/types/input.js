@@ -52,7 +52,7 @@ export type InputControlProps = {
 	noBorder?: boolean,
 	range?: boolean,
 	field?: string,
-	fieldId?: string,
+	singularId?: string,
 	repeaterItem?: number,
 	type?: 'text' | 'number',
 	min?: number,
