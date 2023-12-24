@@ -32,6 +32,7 @@ import { Filter } from './components/filter';
 import { BackdropFilter } from './components/backdrop-filter';
 import { Cursor } from './components/cursor';
 import { Blending } from './components/blending';
+import { Mask } from './components/mask';
 
 export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 	({
@@ -49,6 +50,7 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 			transformChildOrigin,
 			transformSelfPerspective,
 			transformChildPerspective,
+			mask,
 		},
 		block,
 		config,
@@ -64,6 +66,7 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 				publisherCursor,
 				publisherBlendMode,
 				publisherBackdropFilter,
+				publisherMask,
 			},
 		} = config;
 
@@ -193,6 +196,15 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 				{isActiveField(publisherBackdropFilter) && (
 					<BackdropFilter
 						backdropFilter={backdropFilter}
+						block={block}
+						props={props}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+					/>
+				)}
+
+				{isActiveField(publisherMask) && (
+					<Mask
+						mask={mask}
 						block={block}
 						props={props}
 						handleOnChangeAttributes={handleOnChangeAttributes}

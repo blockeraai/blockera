@@ -80,6 +80,7 @@
 		"publisherTransformSelfOrigin",
 		"publisherTransformChildOrigin",
 		"publisherTransformSelfPerspective",
-		"publisherTransformChildPerspective"
+		"publisherTransformChildPerspective",
+		"publisherMask"
 	]
 }

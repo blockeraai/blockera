@@ -8,7 +8,11 @@ import { getValueAddonRealValue } from '@publisher/hooks';
 /**
  * Internal dependencies
  */
-import { FilterGenerator, TransitionGenerator } from './css-generators';
+import {
+	FilterGenerator,
+	TransitionGenerator,
+	MaskGenerator,
+} from './css-generators';
 import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
 import { isActiveField } from '../../api/utils';
@@ -25,6 +29,7 @@ interface IConfigs {
 		publisherTransform?: Array<Object>,
 		publisherTransition?: Array<Object>,
 		publisherBackdropFilter?: Array<Object>,
+		publisherMask?: Array<Object>,
 	};
 	blockProps: TBlockProps;
 }
@@ -39,6 +44,7 @@ export function EffectsStyles({
 		publisherBlendMode,
 		publisherTransition,
 		publisherBackdropFilter,
+		publisherMask,
 	},
 	blockProps,
 }: IConfigs): string {
@@ -274,6 +280,30 @@ export function EffectsStyles({
 						id: 'publisherBackdropFilter',
 					},
 				}
+			)
+		);
+	}
+
+	if (
+		isActiveField(publisherMask) &&
+		!arrayEquals(
+			attributes.publisherMask.default,
+			blockProps.attributes.publisherMask
+		)
+	) {
+		generators.push(
+			computedCssRules(
+				{
+					cssGenerators: {
+						publisherMask: [
+							{
+								type: 'function',
+								function: MaskGenerator,
+							},
+						],
+					},
+				},
+				blockProps
 			)
 		);
 	}

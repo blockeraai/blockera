@@ -104,6 +104,7 @@ final class StyleEngine {
 		$styles[] = 'min-height';
 		$styles[] = 'max-width';
 		$styles[] = 'max-height';
+		$styles[] = 'mask';
 
 		return $styles;
 	}

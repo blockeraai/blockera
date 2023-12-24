@@ -47,4 +47,8 @@ export const attributes = {
 		type: 'string',
 		default: 'normal',
 	},
+	publisherMask: {
+		type: 'array',
+		default: [],
+	},
 };

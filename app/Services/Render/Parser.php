@@ -58,6 +58,7 @@ class Parser {
 			'publisherTransform',
 			'publisherTransition',
 			'publisherBackdropFilter',
+			'publisherMask',
 		],
 		'background'        => [
 			'publisherBackground',

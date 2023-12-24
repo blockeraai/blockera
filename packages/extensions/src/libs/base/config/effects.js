@@ -6,4 +6,5 @@ export const effectsConfig = {
 	publisherBackdropFilter: true,
 	publisherCursor: true,
 	publisherBlendMode: true,
+	publisherMask: true,
 };
