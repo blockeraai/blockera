@@ -452,14 +452,6 @@ return [
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
-		'cursor'              => [
-			'property_keys' => [
-				'default' => 'cursor',
-			],
-			'path'          => [ 'publisherEffects', 'publisherCursor', 'cursor' ],
-			'css_vars'      => [],
-			'classnames'    => [],
-		],
 		'mix-blend-mode'      => [
 			'property_keys' => [
 				'default' => 'mix-blend-mode',

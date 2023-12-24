@@ -45,7 +45,6 @@ final class StyleEngine {
 		$styles[] = 'border';
 		$styles[] = 'height';
 		$styles[] = 'filter';
-		$styles[] = 'cursor';
 		$styles[] = 'display';
 		$styles[] = 'row-gap';
 		$styles[] = 'opacity';

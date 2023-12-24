@@ -52,7 +52,6 @@ class Parser {
 			'publisherFitPosition',
 		],
 		'effects'           => [
-			'publisherCursor',
 			'publisherFilter',
 			'publisherOpacity',
 			'publisherBlendMode',
