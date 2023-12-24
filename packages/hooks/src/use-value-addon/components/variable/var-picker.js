@@ -35,8 +35,10 @@ import type { ValueAddonControlProps } from '../control/types';
 
 export default function ({
 	controlProps,
+	onClose,
 }: {
 	controlProps: ValueAddonControlProps,
+	onClose?: () => void,
 }): Element<any> {
 	const CustomVariables = (): Element<any> => {
 		return (
@@ -172,7 +174,10 @@ export default function ({
 			title={__('Choose Variable', 'publisher-core')}
 			offset={125}
 			placement="left-start"
-			onClose={() => controlProps.setOpen('')}
+			onClose={() => {
+				controlProps.setOpen('');
+				if (onClose) onClose();
+			}}
 			className={controlInnerClassNames('popover-variables')}
 			titleButtonsRight={
 				<>

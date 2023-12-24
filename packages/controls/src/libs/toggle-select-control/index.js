@@ -33,7 +33,7 @@ export default function ToggleSelectControl({
 	defaultValue,
 	onChange = () => {},
 	field,
-	fieldId,
+	singularId,
 	repeaterItem,
 	//
 	className,
@@ -68,7 +68,7 @@ export default function ToggleSelectControl({
 			className={className}
 			{...{
 				value,
-				fieldId,
+				singularId,
 				attribute,
 				blockName,
 				description,

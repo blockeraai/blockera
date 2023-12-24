@@ -12,7 +12,7 @@ export default function PaddingTopIcon({}) {
 				clipRule="evenodd"
 				d="M18 0H0V18H18V0ZM17 1H1V17H17V1Z"
 			/>
-			<rect x="2" y="2" width="14" height="5" />
+			<rect x="2" y="2" width="14" height="4" />
 		</svg>
 	);
 }

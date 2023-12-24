@@ -29,4 +29,14 @@ export type ValueAddonControlProps = {
 	isOpen: string,
 	setOpen: (value: string) => void,
 	size: ControlSize,
+	pickerProps: Object,
+	pointerProps: Object,
+	/*
+	 * Variable is deleted or not
+	 */
+	isDeletedVar: boolean,
+	/**
+	 * Dynamic value is deleted or not
+	 */
+	isDeletedDV: boolean,
 };

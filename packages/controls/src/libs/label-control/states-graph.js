@@ -30,9 +30,11 @@ import type { LabelStates, LabelChangedStates } from './types';
 export const getStatesGraph = ({
 	controlId,
 	blockName,
+	defaultValue,
 }: {
 	controlId: string,
 	blockName: string,
+	defaultValue: any,
 }): Array<LabelStates> => {
 	const blockStates = controlId ? getBlockStates() : [];
 
@@ -71,10 +73,13 @@ export const getStatesGraph = ({
 								}
 
 								const value = state.attributes[controlId];
-								const defaultValue =
-									getBlockType(blockName)?.attributes[
-										controlId
-									]?.default;
+
+								if (!defaultValue) {
+									defaultValue =
+										getBlockType(blockName)?.attributes[
+											controlId
+										]?.default;
+								}
 
 								if (
 									isArray(value) &&

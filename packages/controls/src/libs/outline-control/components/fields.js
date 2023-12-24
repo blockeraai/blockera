@@ -30,11 +30,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
 
-		const { repeaterId, getControlId } = useContext(RepeaterContext);
+		const { repeaterId, getControlId, defaultRepeaterItemValue } =
+			useContext(RepeaterContext);
 
 		return (
 			<div id={`repeater-item-${itemId}`}>
 				<BorderControl
+					singularId={'color'}
+					repeaterItem={itemId}
 					label={__('Outline', 'publisher-core')}
 					columns="columns-2"
 					id={getControlId(itemId, 'border')}
@@ -54,10 +57,12 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							},
 						})
 					}
-					defaultValue={item.border}
+					defaultValue={defaultRepeaterItemValue.border}
 				/>
 
 				<InputControl
+					singularId={'color'}
+					repeaterItem={itemId}
 					controlName="input"
 					label={__('Offset', 'publisher-core')}
 					columns="columns-2"
@@ -79,7 +84,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							},
 						})
 					}
-					defaultValue={item.offset}
+					defaultValue={defaultRepeaterItemValue.offset}
 					data-test="outline-offset-input"
 					controlAddonTypes={['variable']}
 					variableTypes={['spacing']}

@@ -35,6 +35,7 @@ export default function BorderRadiusControl({
 		bottomRight: '',
 	},
 	onChange,
+	singularId,
 	//
 	className,
 }: BorderRadiusControlProps): MixedElement {
@@ -47,6 +48,7 @@ export default function BorderRadiusControl({
 		blockName,
 		description,
 		resetToDefault,
+		getControlPath,
 	} = useControlContext({
 		id,
 		onChange,
@@ -91,10 +93,15 @@ export default function BorderRadiusControl({
 						<LabelControl
 							label={label}
 							{...{
+								value,
 								attribute,
 								blockName,
+								singularId,
 								description,
 								resetToDefault,
+								mode: 'advanced',
+								path: getControlPath(attribute, id),
+								defaultValue: valueCleanup(defaultValue),
 							}}
 						/>
 					</span>

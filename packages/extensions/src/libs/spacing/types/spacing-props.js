@@ -9,6 +9,13 @@ import type { MixedElement } from 'react';
  */
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 
+type BoxSpacingLock =
+	| 'none'
+	| 'vertical'
+	| 'horizontal'
+	| 'all'
+	| 'vertical-horizontal';
+
 export type TSpacingDefaultProps = {
 	margin: {
 		top: string,
@@ -16,12 +23,14 @@ export type TSpacingDefaultProps = {
 		bottom: string,
 		left: string,
 	},
+	marginLock: BoxSpacingLock,
 	padding: {
 		top: string,
 		right: string,
 		bottom: string,
 		left: string,
 	},
+	paddingLock: BoxSpacingLock,
 };
 
 export type TCssProps = {

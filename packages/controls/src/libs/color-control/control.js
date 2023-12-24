@@ -32,7 +32,7 @@ export default function ColorControl({
 	defaultValue,
 	onChange = () => {},
 	field = 'color',
-	fieldId,
+	singularId,
 	repeaterItem,
 	//
 	className = '',
@@ -76,11 +76,13 @@ export default function ColorControl({
 	});
 
 	const labelProps = {
-		fieldId,
+		value,
+		singularId,
 		attribute,
 		blockName,
 		description,
 		repeaterItem,
+		defaultValue,
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),

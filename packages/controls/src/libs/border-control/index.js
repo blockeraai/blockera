@@ -41,6 +41,8 @@ export default function BorderControl({
 	},
 	onChange,
 	field = 'border',
+	singularId,
+	repeaterItem,
 	className, // internal usage for stories
 	__isWidthFocused,
 	__isColorFocused,
@@ -54,6 +56,7 @@ export default function BorderControl({
 		blockName,
 		description,
 		resetToDefault,
+		getControlPath,
 	} = useControlContext({
 		id,
 		onChange,
@@ -67,7 +70,18 @@ export default function BorderControl({
 			columns={columns}
 			controlName={field}
 			className={className}
-			{...{ attribute, blockName, description, resetToDefault }}
+			{...{
+				value,
+				attribute,
+				blockName,
+				singularId,
+				description,
+				defaultValue,
+				repeaterItem,
+				resetToDefault,
+				mode: 'advanced',
+				path: getControlPath(attribute, id),
+			}}
 		>
 			<div
 				className={controlClassNames('border', className)}

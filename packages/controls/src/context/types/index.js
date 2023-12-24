@@ -8,8 +8,8 @@ export type ControlContextProviderProps = {
 	value: {
 		value: any,
 		name: string,
-		attribute: string,
-		blockName: string,
+		attribute?: string,
+		blockName?: string,
 		hasSideEffect?: boolean,
 		description?: string | MixedElement | any,
 	},
@@ -30,3 +30,5 @@ export type ControlContextHookProps = {
 	sideEffect?: boolean,
 	mergeInitialAndDefault?: boolean,
 };
+
+export * from './control-effect-type';

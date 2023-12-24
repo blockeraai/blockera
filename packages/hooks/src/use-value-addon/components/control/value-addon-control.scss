@@ -53,15 +53,6 @@
 			--va-border-color: var(--publisher-value-addon-deleted-color);
 			box-shadow: 0 0 0 1px var(--va-color);
 		}
-
-		& + .publisher-control-value-addon-pointers,
-		& + span + .publisher-control-value-addon-pointers {
-
-			.publisher-control-value-addon-pointer.active-value-addon {
-				--publisher-value-addon-dv-color: var(--publisher-value-addon-deleted-color);
-				--publisher-value-addon-var-color: var(--publisher-value-addon-deleted-color);
-			}
-		}
 	}
 
 	.publisher-control-item-name {
