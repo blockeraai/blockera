@@ -2179,7 +2179,7 @@ describe('Util functions', () => {
 		describe('special value', () => {
 			test('auto', () => {
 				expect(extractNumberAndUnit('auto')).toStrictEqual({
-					value: 0,
+					value: '',
 					unit: 'auto',
 					specialUnit: true,
 				});
@@ -2187,7 +2187,7 @@ describe('Util functions', () => {
 
 			test('inherit', () => {
 				expect(extractNumberAndUnit('inherit')).toStrictEqual({
-					value: 0,
+					value: '',
 					unit: 'inherit',
 					specialUnit: true,
 				});

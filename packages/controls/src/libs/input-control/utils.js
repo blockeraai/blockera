@@ -1384,7 +1384,7 @@ export function extractNumberAndUnit(value: Object | string): Object {
 	// handle special value
 	if (isSpecialUnit(value)) {
 		return {
-			value: 0,
+			value: '',
 			unit: value,
 			specialUnit: true,
 		};
