@@ -76,6 +76,10 @@ export function UnitInput({
 
 	const [unitValue, setUnitValue] = useState(initialUnit);
 
+	// this state used to cache last unit value
+	// because while value is empty, control should be on the user selected unit and not reset
+	const [unitCache, setUnitCache] = useState(initialUnit);
+
 	const [inputValue, setInputValue] = useState(extractedValue.value);
 
 	useEffect(() => {
@@ -83,6 +87,7 @@ export function UnitInput({
 			setValue(unitValue.value);
 		} else if (inputValue === '' && value) {
 			setValue('');
+			setUnitCache(unitValue);
 		} else if (
 			(extractedNoUnit || !value) &&
 			inputValue &&
@@ -94,6 +99,36 @@ export function UnitInput({
 		}
 	}, [unitValue, inputValue]); // eslint-disable-line
 
+	// validator checking
+	useEffect(() => {
+		if (validator) {
+			let isValid = false;
+
+			if (isFunction(validator)) {
+				isValid = validator(value);
+			}
+
+			// Update isValidValue based on the result of validation
+			setIsValidValue(isValid);
+
+			return undefined;
+		}
+
+		if (!isEquals(initialUnit, unitValue)) {
+			if (value === '') {
+				setUnitValue(unitCache);
+			} else {
+				setUnitValue(initialUnit);
+			}
+		}
+
+		if (extractedValue?.value !== inputValue) {
+			setInputValue(extractedValue.value);
+		}
+
+		return undefined;
+	}, [value]); // eslint-disable-line
+
 	const onChangeSelect = (newUnitValue: string) => {
 		// new unit is func
 		// then append old unit to value and show it in the input
@@ -102,6 +137,7 @@ export function UnitInput({
 			inputValue !== '' &&
 			!isSpecialUnit(unitValue.value)
 		) {
+			setUnitCache(getUnitByValue(newUnitValue, units));
 			setUnitValue(getUnitByValue(newUnitValue, units));
 			setInputValue(inputValue + unitValue.value);
 			return;
@@ -117,6 +153,7 @@ export function UnitInput({
 			const extractedValue = extractNumberAndUnit(inputValue);
 
 			setUnitValue(getUnitByValue(newUnitValue, units));
+			setUnitCache(getUnitByValue(newUnitValue, units));
 
 			if (extractedValue.unit !== 'func') {
 				setInputValue(extractedValue.value);
@@ -136,6 +173,7 @@ export function UnitInput({
 			const extractedValue = extractNumberAndUnit(inputValue);
 			setInputValue(extractedValue.value); // save value for next change
 			setUnitValue(getUnitByValue(newUnitValue, units));
+			setUnitCache(getUnitByValue(newUnitValue, units));
 			return;
 		}
 
@@ -146,10 +184,12 @@ export function UnitInput({
 		) {
 			setInputValue('');
 			setUnitValue(getUnitByValue(newUnitValue, units));
+			// setUnitCache(getUnitByValue(newUnitValue, units));
 			return;
 		}
 
 		setUnitValue(getUnitByValue(newUnitValue, units));
+		setUnitCache(getUnitByValue(newUnitValue, units));
 
 		// old unit is special && current is not && value is empty
 		// then try to catch value from default value
@@ -168,32 +208,6 @@ export function UnitInput({
 		range && !isSpecialUnit(unitValue.value) && unitValue.value !== 'func';
 
 	const [isValidValue, setIsValidValue] = useState(true);
-
-	// validator checking
-	useEffect(() => {
-		if (validator) {
-			let isValid = false;
-
-			if (isFunction(validator)) {
-				isValid = validator(value);
-			}
-
-			// Update isValidValue based on the result of validation
-			setIsValidValue(isValid);
-
-			return undefined;
-		}
-
-		if (!isEquals(initialUnit, unitValue)) {
-			setUnitValue(initialUnit);
-		}
-
-		if (extractedValue?.value !== inputValue) {
-			setInputValue(extractedValue.value);
-		}
-
-		return undefined;
-	}, [value]); // eslint-disable-line
 
 	const [isMaximizeVisible, setIsMaximizeVisible] = useState('');
 
