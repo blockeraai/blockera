@@ -19,7 +19,8 @@ import {
 	PositionButtonControl,
 } from '@publisher/controls';
 import { Flex } from '@publisher/components';
-import { isString } from '@publisher/utils';
+import { isString, isUndefined } from '@publisher/utils';
+import { isValid } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -31,6 +32,7 @@ import { default as OverflowHiddenIcon } from './icons/overflow-hidden';
 import { default as OverflowVisibleIcon } from './icons/overflow-visible';
 import { default as OverflowScrollIcon } from './icons/overflow-scroll';
 import { convertToPercent } from './utils';
+import { useBlockContext } from '../../hooks';
 
 export const SizeExtension: MixedElement = memo<TSizeProps>(
 	({
@@ -65,6 +67,8 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 			},
 		} = config;
 
+		const { isNormalState } = useBlockContext();
+
 		return (
 			<>
 				{isActiveField(publisherWidth) && (
@@ -85,25 +89,32 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 								unitType="width"
 								min={0}
 								defaultValue={_width}
-								onChange={(newValue) => {
-									const toWPCompatible =
-										isString(newValue) &&
-										!newValue.endsWith('func')
+								onChange={(newValue, ref) => {
+									const toWPCompatible = (
+										newValue: string
+									): string | Object => {
+										if (
+											!isNormalState() ||
+											newValue === '' ||
+											isUndefined(newValue) ||
+											isValid(newValue)
+										) {
+											return {};
+										}
+
+										return isString(newValue) &&
+											!newValue.endsWith('func')
 											? {
-													width: convertToPercent(
-														newValue
-													),
+													width: newValue,
 											  }
 											: {};
-
-									handleOnChangeAttributes(
-										'publisherWidth',
-										newValue,
-										{
-											addOrModifyRootItems:
-												toWPCompatible,
-										}
-									);
+									};
+									onChange('publisherWidth', newValue, {
+										ref,
+										addOrModifyRootItems:
+											toWPCompatible(newValue),
+										deleteItemsOnResetAction: ['width'],
+									});
 								}}
 								{...props}
 								controlAddonTypes={['variable']}

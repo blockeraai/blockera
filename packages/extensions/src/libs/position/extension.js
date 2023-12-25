@@ -55,16 +55,15 @@ export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 							label=""
 						>
 							<BoxPositionControl
-								{...{
-									...props,
-									//
-									onChange: (newValue) =>
-										handleOnChangeAttributes(
-											'publisherPosition',
-											newValue
-										),
-								}}
+								{...props}
+								onChange={(newValue) =>
+									handleOnChangeAttributes(
+										'publisherPosition',
+										newValue
+									)
+								}
 							/>
+
 							{positionValue?.type === 'sticky' &&
 								positionValue.position.top &&
 								positionValue.position.bottom && (

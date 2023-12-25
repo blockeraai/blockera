@@ -6,7 +6,7 @@ import type { ControlGeneralTypes } from '../../../types';
 
 export type TValue = {
 	type: 'all' | 'custom',
-	all: string,
+	all?: string,
 	topLeft?: string,
 	topRight?: string,
 	bottomLeft?: string,

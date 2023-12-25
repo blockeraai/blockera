@@ -28,27 +28,27 @@ export default function BoxBorderControl({
 	defaultValue = {
 		type: 'all',
 		all: {
-			width: '0px',
+			width: '',
 			style: 'solid',
 			color: '',
 		},
 		left: {
-			width: '0px',
+			width: '',
 			style: 'solid',
 			color: '',
 		},
 		right: {
-			width: '0px',
+			width: '',
 			style: 'solid',
 			color: '',
 		},
 		top: {
-			width: '0px',
+			width: '',
 			style: 'solid',
 			color: '',
 		},
 		bottom: {
-			width: '0px',
+			width: '',
 			style: 'solid',
 			color: '',
 		},
@@ -86,12 +86,13 @@ export default function BoxBorderControl({
 			delete value?.bottom;
 			delete value?.left;
 
+			// return empty object if all values are empty
 			if (
 				value?.all?.color === '' &&
 				value?.all?.width === '' &&
-				value?.all?.style === ''
+				(value?.all?.style === 'solid' || value?.all?.style === '')
 			) {
-				return value;
+				return {};
 			}
 		}
 

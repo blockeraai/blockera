@@ -151,6 +151,7 @@ export const SharedBlockExtension: Props = memo(
 			borderAndShadow,
 			icon,
 		} = extensions;
+
 		props = {
 			...props,
 			attributes,

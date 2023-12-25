@@ -12,6 +12,7 @@ import {
 	ToggleSelectControl,
 	ControlContextProvider,
 } from '@publisher/controls';
+import { isEmpty } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -20,18 +21,34 @@ import { generateExtensionId } from '../../utils';
 import FontStyleNormalIcon from '../icons/font-style-normal';
 import FontStyleItalicIcon from '../icons/font-style-italic';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import { useBlockContext } from '../../../hooks';
 
 export const FontStyle = ({
 	block,
 	value,
 	onChange,
-	defaultValue,
 }: {
 	block: TBlockProps,
 	value: string | void,
-	defaultValue?: string,
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
+	const { isNormalState, getAttributes } = useBlockContext();
+
+	const toWPCompatible = (newValue: Object): Object => {
+		if (!isNormalState() || isEmpty(newValue)) {
+			return {};
+		}
+
+		const blockAttributes = getAttributes();
+
+		return {
+			style: {
+				...(blockAttributes.attributes?.style ?? {}),
+				fontStyle: newValue,
+			},
+		};
+	};
+
 	return (
 		<ControlContextProvider
 			value={{
@@ -59,17 +76,14 @@ export const FontStyle = ({
 				]}
 				isDeselectable={true}
 				//
-				defaultValue={defaultValue || 'normal'}
-				onChange={(newValue) =>
+				defaultValue=""
+				onChange={(newValue, ref) => {
 					onChange('publisherFontStyle', newValue, {
-						addOrModifyRootItems: {
-							style: {
-								...(block.attributes?.style ?? {}),
-								fontStyle: newValue,
-							},
-						},
-					})
-				}
+						ref,
+						addOrModifyRootItems: toWPCompatible(newValue),
+						deleteItemsOnResetAction: ['style.fontStyle'],
+					});
+				}}
 			/>
 		</ControlContextProvider>
 	);

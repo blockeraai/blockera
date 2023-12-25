@@ -13,6 +13,7 @@ import {
 	ControlContextProvider,
 	ToggleSelectControl,
 } from '@publisher/controls';
+import { isEmpty } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -23,6 +24,7 @@ import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 import TextTransformLowercaseIcon from '../icons/text-transform-lowercase';
 import TextTransformUppercaseIcon from '../icons/text-transform-uppercase';
 import TextTransformCapitalizeIcon from '../icons/text-transform-capitalize';
+import { useBlockContext } from '../../../hooks';
 
 export const TextTransform = ({
 	block,
@@ -33,6 +35,26 @@ export const TextTransform = ({
 	value: string | void,
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
+	const { isNormalState, getAttributes } = useBlockContext();
+
+	const toWPCompatible = (newValue: Object): Object => {
+		if (!isNormalState() || isEmpty(newValue)) {
+			return {};
+		}
+
+		const blockAttributes = getAttributes();
+
+		return {
+			style: {
+				...(blockAttributes.attributes?.style ?? {}),
+				typography: {
+					...(blockAttributes.attributes?.style?.typography ?? {}),
+					textTransform: 'initial' === newValue ? 'none' : newValue,
+				},
+			},
+		};
+	};
+
 	return (
 		<ControlContextProvider
 			value={{
@@ -72,24 +94,16 @@ export const TextTransform = ({
 					]}
 					isDeselectable={true}
 					//
-					defaultValue="initial"
-					onChange={(newValue) =>
+					defaultValue=""
+					onChange={(newValue, ref) => {
 						onChange('publisherTextTransform', newValue, {
-							addOrModifyRootItems: {
-								style: {
-									...(block.attributes?.style ?? {}),
-									typography: {
-										...(block.attributes?.style
-											?.typography ?? {}),
-										textTransform:
-											'initial' === newValue
-												? 'none'
-												: newValue,
-									},
-								},
-							},
-						})
-					}
+							ref,
+							addOrModifyRootItems: toWPCompatible(newValue),
+							deleteItemsOnResetAction: [
+								'style.typography.textTransform',
+							],
+						});
+					}}
 				/>
 			</BaseControl>
 		</ControlContextProvider>

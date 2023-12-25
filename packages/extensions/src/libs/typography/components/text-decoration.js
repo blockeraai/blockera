@@ -13,6 +13,7 @@ import {
 	ControlContextProvider,
 	ToggleSelectControl,
 } from '@publisher/controls';
+import { isEmpty } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -23,6 +24,7 @@ import TextDecorationLineThroughIcon from '../icons/text-dectoration-line-throug
 import TextDecorationOverlineIcon from '../icons/text-decoration-overline';
 import NoneIcon from '../icons/none';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import { useBlockContext } from '../../../hooks';
 
 export const TextDecoration = ({
 	block,
@@ -33,18 +35,26 @@ export const TextDecoration = ({
 	value: string | void,
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
+	const { isNormalState, getAttributes } = useBlockContext();
+
 	const toWPCompatible = (newValue: Object): Object => {
+		if (!isNormalState() || isEmpty(newValue)) {
+			return {};
+		}
+
 		const _newValue = newValue === 'initial' ? 'none' : newValue;
 
 		if ('overline' === newValue) {
 			return {};
 		}
 
+		const blockAttributes = getAttributes();
+
 		return {
 			style: {
-				...(block.attributes?.style ?? {}),
+				...(blockAttributes.attributes?.style ?? {}),
 				typography: {
-					...(block.attributes?.style?.typography ?? {}),
+					...(blockAttributes.attributes?.style?.typography ?? {}),
 					textDecoration: _newValue,
 				},
 			},
@@ -90,12 +100,16 @@ export const TextDecoration = ({
 					]}
 					isDeselectable={true}
 					//
-					defaultValue="initial"
-					onChange={(newValue) =>
+					defaultValue=""
+					onChange={(newValue, ref) => {
 						onChange('publisherTextDecoration', newValue, {
-							addOrModifyRootItems: toWPCompatible(),
-						})
-					}
+							ref,
+							addOrModifyRootItems: toWPCompatible(newValue),
+							deleteItemsOnResetAction: [
+								'style.typography.textDecoration',
+							],
+						});
+					}}
 				/>
 			</BaseControl>
 		</ControlContextProvider>
