@@ -2,7 +2,7 @@
 /**
  * External dependencies
  */
-import { useState, useEffect } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
@@ -13,7 +13,12 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
-import { isEquals, isFunction, isUndefined } from '@publisher/utils';
+import {
+	isEquals,
+	isFunction,
+	isUndefined,
+	useLateEffect,
+} from '@publisher/utils';
 import {
 	Popover,
 	Button,
@@ -82,7 +87,7 @@ export function UnitInput({
 
 	const [inputValue, setInputValue] = useState(extractedValue.value);
 
-	useEffect(() => {
+	useLateEffect(() => {
 		if (isSpecialUnit(unitValue.value) && value !== unitValue.value) {
 			setValue(unitValue.value);
 		} else if (inputValue === '' && value) {
@@ -100,7 +105,7 @@ export function UnitInput({
 	}, [unitValue, inputValue]); // eslint-disable-line
 
 	// validator checking
-	useEffect(() => {
+	useLateEffect(() => {
 		if (validator) {
 			let isValid = false;
 
