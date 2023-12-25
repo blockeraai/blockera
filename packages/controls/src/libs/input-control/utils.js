@@ -54,7 +54,6 @@ export const getUnitByValue = (value: string, units: Array<any>): Object => {
 	return {
 		value,
 		label: isString(value) ? value.toUpperCase() : value.toString(),
-		default: '',
 		format: 'number',
 		notFound: true,
 	};
@@ -85,19 +84,16 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'px',
 							label: 'PX',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'em',
 							label: 'EM',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'rem',
 							label: 'REM',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -108,31 +104,26 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'ch',
 							label: 'CH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vw',
 							label: 'VW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vh',
 							label: 'VH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvw',
 							label: 'DVW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvh',
 							label: 'DVH',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -143,7 +134,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'func',
 							label: 'CSS Functions and Variables',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -159,7 +149,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'auto',
 							label: 'Auto',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -170,25 +159,21 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: '%',
 							label: '%',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'px',
 							label: 'PX',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'em',
 							label: 'EM',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'rem',
 							label: 'REM',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -199,31 +184,26 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'ch',
 							label: 'CH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vw',
 							label: 'VW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vh',
 							label: 'VH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvw',
 							label: 'DVW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvh',
 							label: 'DVH',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -234,7 +214,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'func',
 							label: 'CSS Functions and Variables',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -250,19 +229,16 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'px',
 							label: 'PX',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'em',
 							label: 'EM',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'rem',
 							label: 'REM',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -273,31 +249,26 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'ch',
 							label: 'CH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vw',
 							label: 'VW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vh',
 							label: 'VH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvw',
 							label: 'DVW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvh',
 							label: 'DVH',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -308,13 +279,11 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'inherit',
 							label: 'Inherit',
-							default: '',
 							format: 'text',
 						},
 						{
 							value: 'initial',
 							label: 'Initial',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -325,7 +294,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'func',
 							label: 'CSS Functions and Variables',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -341,25 +309,21 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'px',
 							label: 'PX',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: '%',
 							label: '%',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'em',
 							label: 'EM',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'rem',
 							label: 'REM',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -370,31 +334,26 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'ch',
 							label: 'CH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vw',
 							label: 'VW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vh',
 							label: 'VH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvw',
 							label: 'DVW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvh',
 							label: 'DVH',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -405,13 +364,11 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'inherit',
 							label: 'Inherit',
-							default: '',
 							format: 'text',
 						},
 						{
 							value: 'initial',
 							label: 'Initial',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -422,7 +379,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'func',
 							label: 'CSS Functions and Variables',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -438,13 +394,11 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: '%',
 							label: '%',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'px',
 							label: 'PX',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -455,25 +409,21 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'vw',
 							label: 'VW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vh',
 							label: 'VH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvw',
 							label: 'DVW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvh',
 							label: 'DVH',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -484,7 +434,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'func',
 							label: 'CSS Functions and Variables',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -500,13 +449,11 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'ms',
 							label: 'MS',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 's',
 							label: 'S',
-							default: 1,
 							format: 'number',
 						},
 					],
@@ -517,7 +464,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'func',
 							label: 'CSS Functions and Variables',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -533,19 +479,16 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'deg',
 							label: 'DEG',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'rad',
 							label: 'RAD',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'grad',
 							label: 'GRAD',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -556,7 +499,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'func',
 							label: 'CSS Functions and Variables',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -566,14 +508,13 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 
 		case 'percent':
 			cssUnits = [
-				{ value: '%', label: '%', default: 0, format: 'number' },
+				{ value: '%', label: '%', format: 'number' },
 				{
 					label: 'Advanced',
 					options: [
 						{
 							value: 'func',
 							label: 'CSS Functions and Variables',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -590,25 +531,21 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'px',
 							label: 'PX',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: '%',
 							label: '%',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'em',
 							label: 'EM',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'rem',
 							label: 'REM',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -619,31 +556,26 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'ch',
 							label: 'CH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vw',
 							label: 'VW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vh',
 							label: 'VH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvw',
 							label: 'DVW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvh',
 							label: 'DVH',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -654,25 +586,21 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'fit-content',
 							label: 'Fit Content',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'max-content',
 							label: 'Max Content',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'min-content',
 							label: 'Min Content',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'auto',
 							label: 'Auto',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -683,7 +611,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'func',
 							label: 'CSS Functions and Variables',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -700,25 +627,21 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'px',
 							label: 'PX',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: '%',
 							label: '%',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'em',
 							label: 'EM',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'rem',
 							label: 'REM',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -729,31 +652,26 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'ch',
 							label: 'CH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vw',
 							label: 'VW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vh',
 							label: 'VH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvw',
 							label: 'DVW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvh',
 							label: 'DVH',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -764,19 +682,16 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'fit-content',
 							label: 'Fit Content',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'max-content',
 							label: 'Max Content',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'min-content',
 							label: 'Min Content',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -787,7 +702,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'func',
 							label: 'CSS Functions and Variables',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -804,25 +718,21 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'px',
 							label: 'PX',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: '%',
 							label: '%',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'em',
 							label: 'EM',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'rem',
 							label: 'REM',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -833,31 +743,26 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'ch',
 							label: 'CH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vw',
 							label: 'VW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vh',
 							label: 'VH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvw',
 							label: 'DVW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvh',
 							label: 'DVH',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -868,25 +773,21 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'fit-content',
 							label: 'Fit Content',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'max-content',
 							label: 'Max Content',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'min-content',
 							label: 'Min Content',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'none',
 							label: 'None',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -897,7 +798,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'func',
 							label: 'CSS Functions and Variables',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -914,25 +814,21 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'px',
 							label: 'PX',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: '%',
 							label: '%',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'em',
 							label: 'EM',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'rem',
 							label: 'REM',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -943,31 +839,26 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'ch',
 							label: 'CH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vw',
 							label: 'VW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vh',
 							label: 'VH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvw',
 							label: 'DVW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvh',
 							label: 'DVH',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -978,7 +869,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'func',
 							label: 'CSS Functions and Variables',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -994,25 +884,21 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'px',
 							label: 'PX',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: '%',
 							label: '%',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'em',
 							label: 'EM',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'rem',
 							label: 'REM',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -1023,31 +909,26 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'ch',
 							label: 'CH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vw',
 							label: 'VW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vh',
 							label: 'VH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvw',
 							label: 'DVW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvh',
 							label: 'DVH',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -1058,19 +939,16 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'auto',
 							label: 'Auto',
-							default: '',
 							format: 'text',
 						},
 						{
 							value: 'inherit',
 							label: 'Inherit',
-							default: '',
 							format: 'text',
 						},
 						{
 							value: 'initial',
 							label: 'Initial',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -1081,7 +959,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'func',
 							label: 'CSS Functions and Variables',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -1097,25 +974,21 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'px',
 							label: 'PX',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: '%',
 							label: '%',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'em',
 							label: 'EM',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'rem',
 							label: 'REM',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -1126,31 +999,26 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'ch',
 							label: 'CH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vw',
 							label: 'VW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vh',
 							label: 'VH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvw',
 							label: 'DVW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvh',
 							label: 'DVH',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -1161,7 +1029,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'auto',
 							label: 'Auto',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -1172,7 +1039,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'func',
 							label: 'CSS Functions and Variables',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -1188,13 +1054,11 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: '',
 							label: '-',
-							default: '',
 							format: 'number',
 						},
 						{
 							value: 'ps',
 							label: 'ps',
-							default: '',
 							format: 'number',
 						},
 					],
@@ -1205,31 +1069,26 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'revert',
 							label: 'Revert',
-							default: '',
 							format: 'text',
 						},
 						{
 							value: 'revert-layer',
 							label: 'Revert Layer',
-							default: '',
 							format: 'text',
 						},
 						{
 							value: 'inherit',
 							label: 'Inherit',
-							default: '',
 							format: 'text',
 						},
 						{
 							value: 'initial',
 							label: 'Initial',
-							default: '',
 							format: 'text',
 						},
 						{
 							value: 'unset',
 							label: 'Unset',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -1240,7 +1099,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'func',
 							label: 'CSS Functions and Variables',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -1256,13 +1114,11 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'auto',
 							label: 'Auto',
-							default: '',
 							format: 'text',
 						},
 						{
 							value: 'content',
 							label: 'Content',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -1273,25 +1129,21 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'px',
 							label: 'PX',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: '%',
 							label: '%',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'em',
 							label: 'EM',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'rem',
 							label: 'REM',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -1302,31 +1154,26 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'ch',
 							label: 'CH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vw',
 							label: 'VW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vh',
 							label: 'VH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvw',
 							label: 'DVW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvh',
 							label: 'DVH',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -1337,7 +1184,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'func',
 							label: 'CSS Functions and Variables',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -1354,7 +1200,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: '',
 							label: '-',
-							default: '',
 							format: 'number',
 						},
 					],
@@ -1365,31 +1210,26 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'revert',
 							label: 'Revert',
-							default: '',
 							format: 'text',
 						},
 						{
 							value: 'revert-layer',
 							label: 'Revert Layer',
-							default: '',
 							format: 'text',
 						},
 						{
 							value: 'inherit',
 							label: 'Inherit',
-							default: '',
 							format: 'text',
 						},
 						{
 							value: 'initial',
 							label: 'Initial',
-							default: '',
 							format: 'text',
 						},
 						{
 							value: 'unset',
 							label: 'Unset',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -1400,7 +1240,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'func',
 							label: 'CSS Functions and Variables',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -1416,7 +1255,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: '',
 							label: '-',
-							default: '',
 							format: 'number',
 						},
 					],
@@ -1427,7 +1265,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'func',
 							label: 'CSS Functions and Variables',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -1443,31 +1280,26 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: '',
 							label: '-',
-							default: '',
 							format: 'number',
 						},
 						{
 							value: 'px',
 							label: 'PX',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: '%',
 							label: '%',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'em',
 							label: 'EM',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'rem',
 							label: 'REM',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -1478,31 +1310,26 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'ch',
 							label: 'CH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vw',
 							label: 'VW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'vh',
 							label: 'VH',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvw',
 							label: 'DVW',
-							default: 0,
 							format: 'number',
 						},
 						{
 							value: 'dvh',
 							label: 'DVH',
-							default: 0,
 							format: 'number',
 						},
 					],
@@ -1513,7 +1340,6 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						{
 							value: 'func',
 							label: 'CSS Functions and Variables',
-							default: '',
 							format: 'text',
 						},
 					],
@@ -1526,13 +1352,11 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 				{
 					value: 'chars',
 					label: 'Chars',
-					default: '',
 					format: 'number',
 				},
 				{
 					value: 'words',
 					label: 'Words',
-					default: '',
 					format: 'number',
 				},
 			];
