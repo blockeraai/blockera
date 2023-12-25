@@ -2,8 +2,6 @@
 /**
  * External dependencies
  */
-import { ColorPicker as WPColorPicker } from '@wordpress/components';
-import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
@@ -19,6 +17,7 @@ import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
 import type { ColorPickerControlProps } from './types';
 import TrashIcon from './icons/trash';
+import { ColorPallet } from './components';
 
 export default function ColorPickerControl({
 	popoverTitle = __('Color Picker', 'publisher-core'),
@@ -99,8 +98,8 @@ export default function ColorPickerControl({
 							</>
 						}
 					>
-						<WPColorPicker
-							enableAlpha={false}
+						<ColorPallet
+							enableAlpha={true}
 							color={value}
 							onChangeComplete={(color) => setValue(color.hex)}
 							{...props}
@@ -119,7 +118,7 @@ export default function ColorPickerControl({
 			className={className}
 			{...{ attribute, blockName, description, resetToDefault }}
 		>
-			<WPColorPicker
+			<ColorPallet
 				enableAlpha={false}
 				color={value}
 				onChangeComplete={(color) => setValue(color.hex)}
@@ -136,52 +135,3 @@ export default function ColorPickerControl({
 		</BaseControl>
 	);
 }
-
-ColorPickerControl.propTypes = {
-	/**
-	 * is ColorPicker popover open  by default or not?
-	 */
-	isOpen: PropTypes.bool,
-	/**
-	 * Popover title
-	 */
-	popoverTitle: PropTypes.string,
-	/**
-	 * Popover placement
-	 */
-	placement: PropTypes.string,
-	/**
-	 * event that will be fired while closing popover
-	 */
-	onClose: PropTypes.func,
-	/**
-	 * ID for retrieving value from control context
-	 */
-	id: PropTypes.string.isRequired,
-	/**
-	 * Label for field. If you pass empty value the field will not be added and simple control will be rendered
-	 *
-	 * @default ""
-	 */
-	label: PropTypes.string,
-	/**
-	 * Field id for passing into child Field component
-	 *
-	 * @default "toggle-select"
-	 */
-	field: PropTypes.string,
-	/**
-	 * Columns setting for Field grid.
-	 *
-	 * @default "columns-2"
-	 */
-	columns: PropTypes.string,
-	/**
-	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
-	 */
-	defaultValue: PropTypes.string,
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
-};
