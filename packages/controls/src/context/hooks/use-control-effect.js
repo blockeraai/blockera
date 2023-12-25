@@ -27,7 +27,7 @@ export default function useControlEffect(
 ): ControlEffectType {
 	const refId = ref && ref?.current?.reset ? ref : undefined;
 
-	const setValue = (value: any, _ref?: Object = undefined): any => {
+	const setValue = (value: any, _ref?: Object): any => {
 		if (refId) {
 			_ref = refId;
 		}
