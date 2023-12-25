@@ -4,6 +4,8 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+import useEyeDropper from 'use-eye-dropper';
+import { useCallback, useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -18,6 +20,7 @@ import { useControlContext } from '../../context';
 import type { ColorPickerControlProps } from './types';
 import TrashIcon from './icons/trash';
 import { ColorPallet } from './components';
+import PickerIcon from './icons/picker';
 
 export default function ColorPickerControl({
 	popoverTitle = __('Color Picker', 'publisher-core'),
@@ -51,6 +54,24 @@ export default function ColorPickerControl({
 		valueCleanup,
 	});
 
+	const [isPopoverHidden, setIsPopoverHidden] = useState(false);
+
+	const { open, isSupported } = useEyeDropper();
+
+	const pickColor = useCallback(() => {
+		const openPicker = async () => {
+			try {
+				const color = await open();
+				setValue(color.sRGBHex);
+				setIsPopoverHidden(false);
+			} catch (e) {
+				console.log(e);
+				setIsPopoverHidden(false);
+			}
+		};
+		openPicker();
+	}, [open]);
+
 	// make sure always we treat colors as lower case
 	function valueCleanup(value: string) {
 		if (value !== '') {
@@ -74,10 +95,33 @@ export default function ColorPickerControl({
 						title={popoverTitle}
 						offset={20}
 						placement={placement}
-						className="components-palette-edit-popover"
+						className={`components-palette-edit-popover ${
+							isPopoverHidden ? 'hidden' : ''
+						}`}
 						onClose={onClose}
 						titleButtonsRight={
 							<>
+								<Button
+									tabIndex="-1"
+									size={'extra-small'}
+									onClick={() => {
+										setIsPopoverHidden(true);
+										pickColor();
+									}}
+									style={{ padding: '5px' }}
+									aria-label={__(
+										'Pick Color',
+										'publisher-core'
+									)}
+									label={__(
+										'Please use a newer browser version or Google Chrome',
+										'publisher-core'
+									)}
+									disabled={!isSupported()}
+									showTooltip={!isSupported()}
+								>
+									<PickerIcon />
+								</Button>
 								{value && (
 									<Button
 										tabIndex="-1"

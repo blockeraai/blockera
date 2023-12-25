@@ -1,5 +1,9 @@
 .publisher-control-color-pallet {
 
+	&.hidden {
+		display: hidden;
+	}
+
 	.components-color-picker {
 		width: 100% !important;
 		margin-bottom: -20px;
