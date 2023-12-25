@@ -91,7 +91,7 @@ export function UnitInput({
 		} else if (
 			(extractedNoUnit || !value) &&
 			inputValue &&
-			unitValue.value
+			(unitValue.value || extractedValue.unit === '')
 		) {
 			setValue(inputValue + unitValue.value);
 		} else if (!extractedNoUnit && value && value !== unitValue.value) {
