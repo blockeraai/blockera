@@ -109,12 +109,16 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											  }
 											: {};
 									};
-									onChange('publisherWidth', newValue, {
-										ref,
-										addOrModifyRootItems:
-											toWPCompatible(newValue),
-										deleteItemsOnResetAction: ['width'],
-									});
+									handleOnChangeAttributes(
+										'publisherWidth',
+										newValue,
+										{
+											ref,
+											addOrModifyRootItems:
+												toWPCompatible(newValue),
+											deleteItemsOnResetAction: ['width'],
+										}
+									);
 								}}
 								{...props}
 								controlAddonTypes={['variable']}
