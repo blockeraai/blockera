@@ -145,6 +145,23 @@ export const BorderRadius = ({
 			<BaseControl columns="columns-1" controlName="border-radius">
 				<BorderRadiusControl
 					label={__('Radius', 'publisher-core')}
+					labelDescription={
+						<>
+							<p>
+								{__(
+									'Softens the edges of block by rounding corners.',
+									'publisher-core'
+								)}
+							</p>
+							<p>
+								{__(
+									'Sharp borders offer a modern, structured look, while soft, rounded corners create a friendly and inviting feel',
+									'publisher-core'
+								)}
+							</p>
+							<code>{'border-radius: 5px;'}</code>
+						</>
+					}
 					onChange={(newValue: Object, ref?: Object): void =>
 						onChange('publisherBorderRadius', newValue, {
 							ref,

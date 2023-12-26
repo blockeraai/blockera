@@ -163,6 +163,23 @@ export const Border = ({
 			<BoxBorderControl
 				columns="columns-1"
 				label={__('Border Line', 'publisher-core')}
+				labelDescription={
+					<>
+						<p>
+							{__(
+								'Define clear boundaries for elements with customizable lines, enhancing structure and design.',
+								'publisher-core'
+							)}
+						</p>
+						<p>
+							{__(
+								'Solid borders offer a classic, defined look, while dotted or dashed styles can create a more playful visual effect.',
+								'publisher-core'
+							)}
+						</p>
+						<code>{'border: 2px solid #eee;'}</code>
+					</>
+				}
 				onChange={(newValue: Object, ref?: Object): void => {
 					const deleteWPItems = [
 						'style.border.style',
