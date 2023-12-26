@@ -40,19 +40,13 @@ export default function ColorPickerControl({
 	className,
 	...props
 }: ColorPickerControlProps): MixedElement {
-	const {
-		value,
-		setValue,
-		attribute,
-		blockName,
-		description,
-		resetToDefault,
-	} = useControlContext({
-		id,
-		onChange,
-		defaultValue,
-		valueCleanup,
-	});
+	const { value, setValue, attribute, blockName, resetToDefault } =
+		useControlContext({
+			id,
+			onChange,
+			defaultValue,
+			valueCleanup,
+		});
 
 	const [isPopoverHidden, setIsPopoverHidden] = useState(false);
 
@@ -88,7 +82,7 @@ export default function ColorPickerControl({
 				columns={columns}
 				controlName={field}
 				className={className}
-				{...{ attribute, blockName, description, resetToDefault }}
+				{...{ attribute, blockName, resetToDefault }}
 			>
 				{isOpen && (
 					<Popover
@@ -114,12 +108,6 @@ export default function ColorPickerControl({
 										'Pick Color',
 										'publisher-core'
 									)}
-									// label={__(
-									// 	'Please use a newer browser version or Google Chrome',
-									// 	'publisher-core'
-									// )}
-									// disabled={!isSupported()}
-									// showTooltip={!isSupported()}
 								>
 									<PickerIcon />
 								</Button>
@@ -161,7 +149,7 @@ export default function ColorPickerControl({
 			columns={columns}
 			controlName={field}
 			className={className}
-			{...{ attribute, blockName, description, resetToDefault }}
+			{...{ attribute, blockName, resetToDefault }}
 		>
 			<ColorPallet
 				enableAlpha={false}
