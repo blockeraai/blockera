@@ -25,6 +25,10 @@ import type { BoxBorderControlProps, TValueTypes } from './types';
 export default function BoxBorderControl({
 	id,
 	label = '',
+	labelPopoverTitle,
+	labelDescription,
+	repeaterItem,
+	singularId,
 	defaultValue = {
 		type: 'all',
 		all: {
@@ -65,7 +69,6 @@ export default function BoxBorderControl({
 		setValue,
 		attribute,
 		blockName,
-		description,
 		resetToDefault,
 		getControlPath,
 		controlInfo: { name: controlId },
@@ -99,6 +102,21 @@ export default function BoxBorderControl({
 		return value;
 	}
 
+	const labelProps = {
+		value,
+		singularId,
+		attribute,
+		blockName,
+		label,
+		labelPopoverTitle,
+		labelDescription,
+		repeaterItem,
+		defaultValue,
+		resetToDefault,
+		mode: 'advanced',
+		path: getControlPath(attribute, id),
+	};
+
 	return (
 		<BaseControl
 			label=""
@@ -117,19 +135,7 @@ export default function BoxBorderControl({
 								marginRight: 'auto',
 							}}
 						>
-							<LabelControl
-								label={label}
-								{...{
-									value,
-									attribute,
-									blockName,
-									description,
-									resetToDefault,
-									mode: 'advanced',
-									path: getControlPath(attribute, id),
-									defaultValue: valueCleanup(defaultValue),
-								}}
-							/>
+							<LabelControl {...labelProps} />
 						</span>
 					)}
 

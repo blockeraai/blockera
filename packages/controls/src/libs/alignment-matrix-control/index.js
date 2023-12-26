@@ -28,6 +28,8 @@ export default function AlignmentMatrixControl({
 	//
 	id,
 	label,
+	labelPopoverTitle,
+	labelDescription,
 	columns,
 	defaultValue = {
 		top: '50%',
@@ -35,6 +37,8 @@ export default function AlignmentMatrixControl({
 	},
 	onChange,
 	field = 'alignment-matrix',
+	singularId,
+	repeaterItem,
 	//
 	className,
 }: Props): MixedElement {
@@ -43,22 +47,36 @@ export default function AlignmentMatrixControl({
 		setValue,
 		attribute,
 		blockName,
-		description,
 		resetToDefault,
+		getControlPath,
 	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
 	});
 
+	const labelProps = {
+		value,
+		singularId,
+		attribute,
+		blockName,
+		label,
+		labelDescription,
+		labelPopoverTitle,
+		repeaterItem,
+		defaultValue,
+		resetToDefault,
+		mode: 'advanced',
+		path: getControlPath(attribute, id),
+	};
+
 	if (!inputFields) {
 		return (
 			<BaseControl
-				label={label}
 				columns={columns}
 				controlName={field}
 				className={className}
-				{...{ attribute, blockName, description, resetToDefault }}
+				{...labelProps}
 			>
 				<div className={controlClassNames('alignment-matrix')}>
 					<WPAlignmentMatrixControl
@@ -84,10 +102,10 @@ export default function AlignmentMatrixControl({
 
 	return (
 		<BaseControl
-			label={label}
 			columns={columns}
 			controlName={field}
 			className={className}
+			{...labelProps}
 		>
 			<Flex
 				gap="8px"

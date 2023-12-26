@@ -36,7 +36,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 		return (
 			<div id={`repeater-item-${itemId}`}>
 				<BorderControl
-					singularId={'color'}
+					singularId={'border'}
 					repeaterItem={itemId}
 					label={__('Outline', 'publisher-core')}
 					columns="columns-2"

@@ -39,6 +39,10 @@ export default function BoxSpacingControl({
 	//
 	id,
 	label = '',
+	labelPopoverTitle,
+	labelDescription,
+	repeaterItem,
+	singularId,
 	columns = '',
 	defaultValue = {
 		margin: {
@@ -123,23 +127,27 @@ export default function BoxSpacingControl({
 	const paddingBottom = PaddingBottom(sideProps);
 	const paddingLeft = PaddingLeft(sideProps);
 
+	const labelProps = {
+		value,
+		singularId,
+		attribute,
+		blockName,
+		label,
+		labelPopoverTitle,
+		labelDescription,
+		repeaterItem,
+		defaultValue,
+		resetToDefault,
+		mode: 'advanced',
+		path: getControlPath(attribute, id),
+	};
+
 	return (
 		<BaseControl
-			label={label}
 			columns={columns}
 			controlName={field}
 			className={className}
-			{...(label
-				? {
-						value,
-						attribute,
-						blockName,
-						description,
-						defaultValue,
-						resetToDefault,
-						mode: 'advanced',
-				  }
-				: {})}
+			{...(label ? labelProps : {})}
 		>
 			<div
 				{...props}

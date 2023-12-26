@@ -12,7 +12,10 @@ import { __ } from '@wordpress/i18n';
  */
 import { useBlockContext } from '@publisher/extensions/src/hooks/context';
 import { useAdvancedLabelProps } from '@publisher/hooks';
-import { controlClassNames } from '@publisher/classnames';
+import {
+	controlClassNames,
+	controlInnerClassNames,
+} from '@publisher/classnames';
 import { Button, Flex, Popover } from '@publisher/components';
 import { isEmpty, isFunction, isNull, isUndefined } from '@publisher/utils';
 
@@ -22,6 +25,7 @@ import { isEmpty, isFunction, isNull, isUndefined } from '@publisher/utils';
 import type { AdvancedLabelControlProps } from '../types';
 import { SimpleLabelControl } from './simple-label';
 import { StatesGraph } from './states-graph';
+import HelpIcon from '../icons/help';
 
 export const AdvancedLabelControl = ({
 	path = null,
@@ -33,9 +37,9 @@ export const AdvancedLabelControl = ({
 	blockName,
 	isRepeater,
 	singularId,
-	description,
+	labelDescription,
 	defaultValue,
-	popoverTitle,
+	labelPopoverTitle,
 	repeaterItem,
 	resetToDefault,
 	onClick,
@@ -58,6 +62,7 @@ export const AdvancedLabelControl = ({
 				label={label}
 				ariaLabel={ariaLabel}
 				className={className}
+				labelDescription={labelDescription}
 			/>
 		);
 	}
@@ -94,6 +99,8 @@ export const AdvancedLabelControl = ({
 				<SimpleLabelControl
 					label={label}
 					ariaLabel={ariaLabel}
+					labelDescription={labelDescription}
+					advancedIsOpen={isOpenModal}
 					className={controlClassNames('label', className, {
 						'changed-in-other-state':
 							!isChangedOnCurrentState && isChangedOnOtherStates,
@@ -108,9 +115,20 @@ export const AdvancedLabelControl = ({
 							!isNormalState() &&
 							isChanged &&
 							isChangedOnCurrentState,
+						'is-open': isOpenModal,
 					})}
 					{...props}
-					onClick={onClick ? onClick : () => setOpenModal(true)}
+					onClick={
+						onClick
+							? onClick
+							: () => {
+									if (isOpenModal) {
+										setOpenModal(false);
+									} else {
+										setOpenModal(true);
+									}
+							  }
+					}
 					style={{
 						cursor: 'pointer',
 					}}
@@ -120,14 +138,26 @@ export const AdvancedLabelControl = ({
 			{isOpenModal && (
 				<Popover
 					offset={35}
-					title={popoverTitle !== '' ? popoverTitle : label}
-					onClose={() => setOpenModal(!isOpenModal)}
+					title={
+						<>
+							<HelpIcon />
+							{labelPopoverTitle !== ''
+								? labelPopoverTitle
+								: label}
+						</>
+					}
+					onClose={() => setOpenModal(false)}
 					placement={'left-start'}
+					className={controlInnerClassNames('label-popover')}
 				>
-					{'string' !== typeof description &&
-					'function' === typeof description
-						? description()
-						: description}
+					{labelDescription && (
+						<div className={controlInnerClassNames('label-desc')}>
+							{'string' !== typeof labelDescription &&
+							'function' === typeof labelDescription
+								? labelDescription()
+								: labelDescription}
+						</div>
+					)}
 
 					<StatesGraph
 						controlId={attribute}
@@ -136,7 +166,7 @@ export const AdvancedLabelControl = ({
 						defaultValue={defaultValue}
 					/>
 
-					{isFunction(resetToDefault) && (
+					{isFunction(resetToDefault) && isChangedValue && (
 						<Flex
 							direction={'row'}
 							justifyContent={'space-between'}

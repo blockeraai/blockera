@@ -28,6 +28,8 @@ export default function ColorControl({
 	//
 	id,
 	label,
+	labelDescription,
+	labelPopoverTitle,
 	columns,
 	defaultValue,
 	onChange = () => {},
@@ -50,7 +52,6 @@ export default function ColorControl({
 		setValue,
 		attribute,
 		blockName,
-		description,
 		resetToDefault,
 		getControlPath,
 	} = useControlContext({
@@ -80,7 +81,9 @@ export default function ColorControl({
 		singularId,
 		attribute,
 		blockName,
-		description,
+		label,
+		labelPopoverTitle,
+		labelDescription,
 		repeaterItem,
 		defaultValue,
 		resetToDefault,
@@ -91,7 +94,6 @@ export default function ColorControl({
 	if (isSetValueAddon()) {
 		return (
 			<BaseControl
-				label={label}
 				columns={columns}
 				controlName={field}
 				className={className}

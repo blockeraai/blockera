@@ -38,6 +38,10 @@ export const StatesGraph = ({
 
 	const statesGraph = getStatesGraph({ controlId, blockName, defaultValue });
 
+	if (statesGraph.length === 0) {
+		return <></>;
+	}
+
 	return (
 		<Flex
 			direction={'column'}
@@ -101,7 +105,9 @@ export const StatesGraph = ({
 											mode={'nothing'}
 											key={`${key}-state`}
 											header={<MappedHeader />}
-											onClick={() => onClick(_state.type)}
+											onClick={(): void => {
+												onClick(_state.type);
+											}}
 										/>
 									);
 								}

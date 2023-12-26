@@ -58,6 +58,10 @@ const Component = ({
 	//
 	id,
 	label = __('Position', 'publisher-core'),
+	labelPopoverTitle,
+	labelDescription,
+	repeaterItem,
+	singularId,
 	defaultValue = {
 		type: 'static',
 		position: {
@@ -78,8 +82,8 @@ const Component = ({
 		getId,
 		attribute,
 		blockName,
-		description,
 		resetToDefault,
+		getControlPath,
 	} = useControlContext({
 		id,
 		onChange,
@@ -169,6 +173,21 @@ const Component = ({
 		}
 	}
 
+	const labelProps = {
+		value,
+		singularId,
+		attribute,
+		blockName,
+		label,
+		labelPopoverTitle,
+		labelDescription,
+		repeaterItem,
+		defaultValue,
+		resetToDefault,
+		mode: 'advanced',
+		path: getControlPath(attribute, id),
+	};
+
 	return (
 		<div
 			{...props}
@@ -184,17 +203,7 @@ const Component = ({
 							minHeight: '30px',
 						}}
 					>
-						<LabelControl
-							label={label}
-							{...{
-								attribute,
-								blockName,
-								description,
-								path: 'type',
-								resetToDefault,
-								mode: 'advanced',
-							}}
-						/>
+						<LabelControl {...labelProps} path={'type'} />
 					</span>
 				)}
 
@@ -374,19 +383,13 @@ const Component = ({
 
 					<span className={controlInnerClassNames('box-model-label')}>
 						<LabelControl
-							label={
-								//eslint-disable-next-line @wordpress/i18n-no-variables
-								__(
-									sprintf('%s Position', value.type),
-									'publisher-core'
-								)
-							}
-							{...{
-								mode: 'advanced',
-								path: 'position',
-								description,
-								resetToDefault,
-							}}
+							label={sprintf(
+								// translators: %s is the position type
+								__('%s Position', 'publisher-core'),
+								value.type
+							)}
+							{...labelProps}
+							path="position"
 						/>
 					</span>
 

@@ -46,7 +46,7 @@ export default function GroupControl({
 	className,
 	onClose: fnOnClose = () => {},
 	onOpen: fnOnOpen = () => {},
-	onClick = () => true,
+	onClick = () => {},
 }: GroupControlProps): MixedElement {
 	const [isOpen, setOpen] = useState(_isOpen);
 	const [isOpenPopover, setOpenPopover] = useState(_isOpen);

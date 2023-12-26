@@ -13,7 +13,8 @@ import { AdvancedLabelControl, SimpleLabelControl } from './components';
 const LabelControl = ({
 	mode = 'simple',
 	label = '',
-	popoverTitle = '',
+	labelPopoverTitle = '',
+	labelDescription,
 	path,
 	singularId,
 	className,
@@ -21,7 +22,6 @@ const LabelControl = ({
 	attribute,
 	blockName,
 	isRepeater = false,
-	description,
 	repeaterItem,
 	resetToDefault,
 	...props
@@ -37,8 +37,8 @@ const LabelControl = ({
 					attribute,
 					blockName,
 					isRepeater,
-					description,
-					popoverTitle,
+					labelDescription,
+					labelPopoverTitle,
 					repeaterItem,
 					resetToDefault,
 					path: isRepeater ? path || attribute : path,
@@ -53,6 +53,7 @@ const LabelControl = ({
 			label={label}
 			ariaLabel={ariaLabel}
 			className={className}
+			labelDescription={labelDescription}
 			{...props}
 		/>
 	);
