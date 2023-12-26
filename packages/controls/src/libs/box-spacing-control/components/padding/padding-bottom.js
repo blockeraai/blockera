@@ -31,7 +31,6 @@ export function PaddingBottom({
 	setValue,
 	attribute,
 	blockName,
-	description,
 	defaultValue,
 	resetToDefault,
 	getControlPath,
@@ -219,7 +218,6 @@ export function PaddingBottom({
 								? fixLabelText(value.padding.bottom)
 								: fixLabelText(sideSpace)
 						}
-						popoverTitle={__('Bottom Padding', 'publisher-core')}
 						onClick={() => {
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
@@ -228,7 +226,6 @@ export function PaddingBottom({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'padding.bottom',

@@ -91,7 +91,6 @@ export type SideProps = {
 	setValue: (Object) => void,
 	attribute: string,
 	blockName: string,
-	description: string,
 	defaultValue: any,
 	resetToDefault: () => void,
 	getControlPath: (controlID: string, childControlId: string) => string,

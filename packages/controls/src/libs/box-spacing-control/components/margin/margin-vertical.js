@@ -31,7 +31,6 @@ export function MarginVertical({
 	setValue,
 	attribute,
 	blockName,
-	description,
 	defaultValue,
 	resetToDefault,
 	getControlPath,
@@ -226,10 +225,6 @@ export function MarginVertical({
 								? fixLabelText(value.margin.top)
 								: fixLabelText(sideSpace)
 						}
-						popoverTitle={__(
-							'Top & Bottom Margin',
-							'publisher-core'
-						)}
 						onClick={() => {
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
@@ -238,7 +233,6 @@ export function MarginVertical({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'margin.top',
@@ -266,10 +260,6 @@ export function MarginVertical({
 								? fixLabelText(value.margin.top)
 								: fixLabelText(sideSpace)
 						}
-						popoverTitle={__(
-							'Top & Bottom Margin',
-							'publisher-core'
-						)}
 						onClick={() => {
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
@@ -278,7 +268,6 @@ export function MarginVertical({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'margin.bottom',

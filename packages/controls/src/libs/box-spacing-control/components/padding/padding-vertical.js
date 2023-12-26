@@ -31,7 +31,6 @@ export function PaddingVertical({
 	setValue,
 	attribute,
 	blockName,
-	description,
 	defaultValue,
 	resetToDefault,
 	getControlPath,
@@ -227,10 +226,6 @@ export function PaddingVertical({
 								? fixLabelText(value.padding.top)
 								: fixLabelText(sideSpace)
 						}
-						popoverTitle={__(
-							'Top & Bottom Padding',
-							'publisher-core'
-						)}
 						onClick={() => {
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
@@ -239,7 +234,6 @@ export function PaddingVertical({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'padding.top',
@@ -267,10 +261,6 @@ export function PaddingVertical({
 								? fixLabelText(value.padding.top)
 								: fixLabelText(sideSpace)
 						}
-						popoverTitle={__(
-							'Top & Bottom Padding',
-							'publisher-core'
-						)}
 						onClick={() => {
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
@@ -279,7 +269,6 @@ export function PaddingVertical({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'padding.bottom',

@@ -31,7 +31,6 @@ export function MarginBottom({
 	setValue,
 	attribute,
 	blockName,
-	description,
 	defaultValue,
 	resetToDefault,
 	getControlPath,
@@ -213,7 +212,6 @@ export function MarginBottom({
 				>
 					<LabelControl
 						ariaLabel={__('Bottom Margin', 'publisher-core')}
-						popoverTitle={__('Bottom Margin', 'publisher-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.bottom)
@@ -227,7 +225,6 @@ export function MarginBottom({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'margin.bottom',

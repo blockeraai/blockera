@@ -31,7 +31,6 @@ export function PaddingAll({
 	setValue,
 	attribute,
 	blockName,
-	description,
 	defaultValue,
 	resetToDefault,
 	getControlPath,
@@ -203,7 +202,6 @@ export function PaddingAll({
 								? fixLabelText(value.padding.top)
 								: fixLabelText(sideSpace)
 						}
-						popoverTitle={__('All Sides Padding', 'publisher-core')}
 						onClick={() => {
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
@@ -212,7 +210,6 @@ export function PaddingAll({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'padding.top',
@@ -240,7 +237,6 @@ export function PaddingAll({
 								? fixLabelText(value.padding.top)
 								: fixLabelText(sideSpace)
 						}
-						popoverTitle={__('All Sides Padding', 'publisher-core')}
 						onClick={() => {
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
@@ -249,7 +245,6 @@ export function PaddingAll({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'padding.right',
@@ -275,7 +270,6 @@ export function PaddingAll({
 								? fixLabelText(value.padding.top)
 								: fixLabelText(sideSpace)
 						}
-						popoverTitle={__('All Sides Padding', 'publisher-core')}
 						onClick={() => {
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
@@ -284,7 +278,6 @@ export function PaddingAll({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'padding.bottom',
@@ -310,7 +303,6 @@ export function PaddingAll({
 								? fixLabelText(value.padding.top)
 								: fixLabelText(sideSpace)
 						}
-						popoverTitle={__('All Sides Padding', 'publisher-core')}
 						onClick={() => {
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
@@ -319,7 +311,6 @@ export function PaddingAll({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'padding.left',

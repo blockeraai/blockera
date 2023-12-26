@@ -31,7 +31,6 @@ export function PaddingRight({
 	setValue,
 	attribute,
 	blockName,
-	description,
 	defaultValue,
 	resetToDefault,
 	getControlPath,
@@ -219,7 +218,6 @@ export function PaddingRight({
 								? fixLabelText(value.padding.right)
 								: fixLabelText(sideSpace)
 						}
-						popoverTitle={__('Right Padding', 'publisher-core')}
 						onClick={() => {
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
@@ -228,7 +226,6 @@ export function PaddingRight({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'padding.right',

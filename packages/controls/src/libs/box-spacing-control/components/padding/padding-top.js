@@ -31,7 +31,6 @@ export function PaddingTop({
 	setValue,
 	attribute,
 	blockName,
-	description,
 	defaultValue,
 	resetToDefault,
 	getControlPath,
@@ -219,7 +218,6 @@ export function PaddingTop({
 								? fixLabelText(value.padding.top)
 								: fixLabelText(sideSpace)
 						}
-						popoverTitle={__('Top Padding', 'publisher-core')}
 						onClick={() => {
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
@@ -228,7 +226,6 @@ export function PaddingTop({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'padding.top',

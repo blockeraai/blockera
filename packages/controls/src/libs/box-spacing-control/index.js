@@ -73,7 +73,6 @@ export default function BoxSpacingControl({
 		getId,
 		attribute,
 		blockName,
-		description,
 		resetToDefault,
 		getControlPath,
 	} = useControlContext({
@@ -97,7 +96,6 @@ export default function BoxSpacingControl({
 		setValue,
 		attribute,
 		blockName,
-		description,
 		defaultValue,
 		resetToDefault,
 		getControlPath,
