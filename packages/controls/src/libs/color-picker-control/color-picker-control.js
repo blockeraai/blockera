@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import useEyeDropper from 'use-eye-dropper';
+import 'eyedropper-polyfill';
 import { useCallback, useState } from '@wordpress/element';
 
 /**
@@ -56,12 +56,12 @@ export default function ColorPickerControl({
 
 	const [isPopoverHidden, setIsPopoverHidden] = useState(false);
 
-	const { open, isSupported } = useEyeDropper();
+	const eyeDropper = new window.EyeDropper();
 
 	const pickColor = useCallback(() => {
 		const openPicker = async () => {
 			try {
-				const color = await open();
+				const color = await eyeDropper.open();
 				setValue(color.sRGBHex);
 				setIsPopoverHidden(false);
 			} catch (e) {
@@ -70,7 +70,7 @@ export default function ColorPickerControl({
 			}
 		};
 		openPicker();
-	}, [open]);
+	}, [eyeDropper.open]);
 
 	// make sure always we treat colors as lower case
 	function valueCleanup(value: string) {
@@ -104,6 +104,7 @@ export default function ColorPickerControl({
 								<Button
 									tabIndex="-1"
 									size={'extra-small'}
+									className="btn-pick-color"
 									onClick={() => {
 										setIsPopoverHidden(true);
 										pickColor();
@@ -113,12 +114,12 @@ export default function ColorPickerControl({
 										'Pick Color',
 										'publisher-core'
 									)}
-									label={__(
-										'Please use a newer browser version or Google Chrome',
-										'publisher-core'
-									)}
-									disabled={!isSupported()}
-									showTooltip={!isSupported()}
+									// label={__(
+									// 	'Please use a newer browser version or Google Chrome',
+									// 	'publisher-core'
+									// )}
+									// disabled={!isSupported()}
+									// showTooltip={!isSupported()}
 								>
 									<PickerIcon />
 								</Button>

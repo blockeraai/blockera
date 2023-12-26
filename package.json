@@ -118,6 +118,7 @@
 		"eslint-plugin-storybook": "^0.6.12",
 		"esm": "^3.2.25",
 		"expect-puppeteer": "^6.0.2",
+		"eyedropper-polyfill": "^1.0.2",
 		"flow-bin": "^0.203.1",
 		"framer-motion": "^10.12.15",
 		"fs": "^0.0.1-security",
