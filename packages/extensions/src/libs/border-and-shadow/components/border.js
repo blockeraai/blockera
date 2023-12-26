@@ -164,18 +164,24 @@ export const Border = ({
 				columns="columns-1"
 				label={__('Border Line', 'publisher-core')}
 				onChange={(newValue: Object, ref?: Object): void => {
+					const deleteWPItems = [
+						'style.border.style',
+						'style.border.width',
+						'style.border.color',
+						'style.border.top',
+						'style.border.right',
+						'style.border.bottom',
+						'style.border.left',
+					];
+
 					onChange('publisherBorder', newValue, {
 						ref,
 						addOrModifyRootItems: toWPCompatible(newValue),
-						deleteItemsOnResetAction: [
-							'style.border.style',
-							'style.border.width',
-							'style.border.color',
-							'style.border.top',
-							'style.border.right',
-							'style.border.bottom',
-							'style.border.left',
-						],
+						deleteItems:
+							isEmpty(newValue) && isNormalState()
+								? deleteWPItems
+								: [],
+						deleteItemsOnResetAction: deleteWPItems,
 					});
 				}}
 			/>
