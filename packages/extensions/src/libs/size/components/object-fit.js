@@ -27,6 +27,7 @@ import FitContainIcon from '../icons/fit-contain';
 import FitCoverIcon from '../icons/fit-cover';
 import FitScaleDownIcon from '../icons/fit-scale-down';
 import { generateExtensionId } from '../../utils';
+import FitNoneIcon from '../icons/fit-none';
 
 export default function ObjectFit({
 	block,
@@ -102,7 +103,7 @@ export default function ObjectFit({
 						)}
 					</p>
 					<h3>
-						<FitNormalIcon />
+						<FitNoneIcon />
 						{__('None', 'publisher-core')}
 					</h3>
 					<p>
