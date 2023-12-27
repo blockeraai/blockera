@@ -11,6 +11,7 @@
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	position: relative;
+	user-select: none;
 
 	.publisher-control-help-icon {
 		fill: var(--publisher-controls-primary-color);
@@ -40,7 +41,7 @@
 
 		.publisher-control-help-icon {
 			animation: publisher-label-control-animation-bounce 0.1s 1, publisher-label-control-animation 0.8s infinite;
-			animation-delay: 400ms, 500ms;
+			animation-delay: 400ms, 700ms;
 			animation-fill-mode: forwards, forwards;
 		}
 	}
