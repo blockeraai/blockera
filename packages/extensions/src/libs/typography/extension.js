@@ -9,19 +9,18 @@ import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
-import { isEmpty, isUndefined } from '@publisher/utils';
+import { isUndefined } from '@publisher/utils';
 import {
 	BaseControl,
 	ColorControl,
 	InputControl,
 	SelectControl,
-	BorderControl,
 	TextShadowControl,
 	ToggleSelectControl,
 	ControlContextProvider,
 	NoticeControl,
 } from '@publisher/controls';
-import { Popover, Button, Flex } from '@publisher/components';
+import { Popover, Button, Flex, Grid } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
@@ -37,13 +36,11 @@ import {
 	TextTransform,
 	TextDecoration,
 	LetterSpacing,
+	TextColumns,
+	TextStroke,
 } from './components';
 // icons
 import NoneIcon from './icons/none';
-import Columns2Icon from './icons/columns-2';
-import Columns3Icon from './icons/columns-3';
-import Columns4Icon from './icons/columns-4';
-import Columns5Icon from './icons/columns-5';
 import InheritIcon from '../../icons/inherit';
 import DirectionRtlIcon from './icons/direction-rtl';
 import DirectionLtrIcon from './icons/direction-ltr';
@@ -193,7 +190,6 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 							{isActiveField(publisherLineHeight) && (
 								<LineHeight
 									block={block}
-									parentProps={props}
 									value={lineHeight || _lineHeight}
 									onChange={handleOnChangeAttributes}
 									defaultValue={_lineHeight || ''}
@@ -216,77 +212,81 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											blockName: block.blockName,
 										}}
 									>
-										<BaseControl
+										<ToggleSelectControl
 											columns="columns-1"
-											controlName="toggle-select"
 											className="control-first label-center small-gap"
 											label={__(
-												'Align',
+												'Text Align',
 												'publisher-core'
 											)}
-										>
-											<ToggleSelectControl
-												options={[
-													{
-														label: __(
-															'Left',
+											labelDescription={
+												<>
+													<p>
+														{__(
+															'It sets the horizontal alignment of text within an element, offering alignment options like left, right, center, and justify.',
 															'publisher-core'
-														),
-														value: 'left',
-														icon: (
-															<TextAlignLeftIcon />
-														),
-													},
-													{
-														label: __(
-															'Center',
-															'publisher-core'
-														),
-														value: 'center',
-														icon: (
-															<TextAlignCenterIcon />
-														),
-													},
-													{
-														label: __(
-															'Right',
-															'publisher-core'
-														),
-														value: 'right',
-														icon: (
-															<TextAlignRightIcon />
-														),
-													},
-													{
-														label: __(
-															'Justify',
-															'publisher-core'
-														),
-														value: 'justify',
-														icon: (
-															<TextAlignJustifyIcon />
-														),
-													},
-													{
-														label: __(
-															'None',
-															'publisher-core'
-														),
-														value: 'initial',
-														icon: <NoneIcon />,
-													},
-												]}
-												isDeselectable={true}
-												//
-												defaultValue=""
-												onChange={(newValue) =>
-													handleOnChangeAttributes(
-														'publisherTextAlign',
-														newValue
-													)
-												}
-											/>
-										</BaseControl>
+														)}
+													</p>
+												</>
+											}
+											options={[
+												{
+													label: __(
+														'Left',
+														'publisher-core'
+													),
+													value: 'left',
+													icon: <TextAlignLeftIcon />,
+												},
+												{
+													label: __(
+														'Center',
+														'publisher-core'
+													),
+													value: 'center',
+													icon: (
+														<TextAlignCenterIcon />
+													),
+												},
+												{
+													label: __(
+														'Right',
+														'publisher-core'
+													),
+													value: 'right',
+													icon: (
+														<TextAlignRightIcon />
+													),
+												},
+												{
+													label: __(
+														'Justify',
+														'publisher-core'
+													),
+													value: 'justify',
+													icon: (
+														<TextAlignJustifyIcon />
+													),
+												},
+												{
+													label: __(
+														'None',
+														'publisher-core'
+													),
+													value: 'initial',
+													icon: <NoneIcon />,
+												},
+											]}
+											isDeselectable={true}
+											//
+											defaultValue=""
+											onChange={(newValue) =>
+												handleOnChangeAttributes(
+													'publisherTextAlign',
+													newValue
+												)
+											}
+										/>
 									</ControlContextProvider>
 								)}
 
@@ -297,10 +297,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 										) && (
 											<TextDecoration
 												block={block}
-												value={
-													_textDecoration ||
-													textDecoration
-												}
+												value={textDecoration}
+												defaultValue={_textDecoration}
 												onChange={
 													handleOnChangeAttributes
 												}
@@ -352,48 +350,85 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 													blockName: block.blockName,
 												}}
 											>
-												<BaseControl
+												<ToggleSelectControl
 													label={__(
 														'Direction',
 														'publisher-core'
 													)}
+													labelPopoverTitle={__(
+														'Text Direction',
+														'publisher-core'
+													)}
+													labelDescription={
+														<>
+															<p>
+																{__(
+																	'It sets the text direction and layout directionality of block.',
+																	'publisher-core'
+																)}
+															</p>
+															<h3>
+																<DirectionLtrIcon />
+																{__(
+																	'LTR',
+																	'publisher-core'
+																)}
+															</h3>
+															<p>
+																{__(
+																	'Sets the direction of text from left to right, used for languages written in this manner.',
+																	'publisher-core'
+																)}
+															</p>
+															<h3>
+																<DirectionRtlIcon />
+																{__(
+																	'RTL',
+																	'publisher-core'
+																)}
+															</h3>
+															<p>
+																{__(
+																	' Sets the direction from right to left, essential for languages such as Arabic, Farsi and Hebrew.',
+																	'publisher-core'
+																)}
+															</p>
+														</>
+													}
 													columns="columns-1"
 													className="control-first label-center small-gap"
-												>
-													<ToggleSelectControl
-														options={[
-															{
-																label: __(
-																	'Left to Right',
-																	'publisher-core'
-																),
-																value: 'ltr',
-																icon: (
-																	<DirectionLtrIcon />
-																),
-															},
-															{
-																label: __(
-																	'Right to Left',
-																	'publisher-core'
-																),
-																value: 'rtl',
-																icon: (
-																	<DirectionRtlIcon />
-																),
-															},
-														]}
-														isDeselectable={true}
-														//
-														defaultValue=""
-														onChange={(newValue) =>
-															handleOnChangeAttributes(
-																'publisherDirection',
-																newValue
-															)
-														}
-													/>
-												</BaseControl>
+													options={[
+														{
+															label: __(
+																'Left to Right',
+																'publisher-core'
+															),
+															value: 'ltr',
+															icon: (
+																<DirectionLtrIcon />
+															),
+														},
+														{
+															label: __(
+																'Right to Left',
+																'publisher-core'
+															),
+															value: 'rtl',
+															icon: (
+																<DirectionRtlIcon />
+															),
+														},
+													]}
+													isDeselectable={true}
+													//
+													defaultValue=""
+													onChange={(newValue) =>
+														handleOnChangeAttributes(
+															'publisherDirection',
+															newValue
+														)
+													}
+												/>
 											</ControlContextProvider>
 										)}
 									</div>
@@ -426,27 +461,37 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											blockName: block.blockName,
 										}}
 									>
-										<BaseControl
-											controlName="input"
+										<InputControl
 											columns="2fr 2.6fr"
 											label={__(
 												'Words',
 												'publisher-core'
 											)}
-										>
-											<InputControl
-												{...props}
-												arrows={true}
-												unitType="letter-spacing"
-												defaultValue=""
-												onChange={(newValue) =>
-													handleOnChangeAttributes(
-														'publisherWordSpacing',
-														newValue
-													)
-												}
-											/>
-										</BaseControl>
+											labelPopoverTitle={__(
+												'Words Spacing',
+												'publisher-core'
+											)}
+											labelDescription={
+												<>
+													<p>
+														{__(
+															'It sets the space between words in text content, an essential tool for enhancing readability and typographic aesthetics, particularly in text-heavy layouts.',
+															'publisher-core'
+														)}
+													</p>
+												</>
+											}
+											{...props}
+											arrows={true}
+											unitType="letter-spacing"
+											defaultValue=""
+											onChange={(newValue) =>
+												handleOnChangeAttributes(
+													'publisherWordSpacing',
+													newValue
+												)
+											}
+										/>
 									</ControlContextProvider>
 								)}
 
@@ -462,28 +507,34 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											blockName: block.blockName,
 										}}
 									>
-										<BaseControl
-											controlName="input"
+										<InputControl
 											columns="2fr 2.6fr"
 											label={__(
 												'Text Indent',
 												'publisher-core'
 											)}
-										>
-											<InputControl
-												{...{
-													...props,
-													arrows: true,
-													unitType: 'text-indent',
-													defaultValue: '',
-													onChange: (newValue) =>
-														handleOnChangeAttributes(
-															'publisherTextIndent',
-															newValue
-														),
-												}}
-											/>
-										</BaseControl>
+											labelDescription={
+												<>
+													<p>
+														{__(
+															'It sets the indentation of the first line in a text block, offering a stylistic tool for enhancing text layout and readability, especially in paragraphs and articles.',
+															'publisher-core'
+														)}
+													</p>
+												</>
+											}
+											{...{
+												...props,
+												arrows: true,
+												unitType: 'text-indent',
+												defaultValue: '',
+												onChange: (newValue) =>
+													handleOnChangeAttributes(
+														'publisherTextIndent',
+														newValue
+													),
+											}}
+										/>
 									</ControlContextProvider>
 								)}
 							</BaseControl>
@@ -506,6 +557,110 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 											'Orientation',
 											'publisher-core'
 										)}
+										labelDescription={
+											<>
+												<p>
+													{__(
+														'It sets the orientation of characters in vertical text layouts, pivotal for typesetting in languages that use vertical writing modes.',
+														'publisher-core'
+													)}
+												</p>
+												<Grid
+													gap="10px"
+													gridTemplateColumns="20px 1fr"
+												>
+													<h3
+														style={{
+															paddingTop: '5px',
+														}}
+													>
+														<TextOrientationStyle1Icon />
+													</h3>
+													<p>
+														{__(
+															'Text will display vertically from left to right with a mixed orientation.',
+															'publisher-core'
+														)}
+													</p>
+												</Grid>
+
+												<Grid
+													gap="10px"
+													gridTemplateColumns="20px 1fr"
+												>
+													<h3
+														style={{
+															paddingTop: '5px',
+														}}
+													>
+														<TextOrientationStyle2Icon />
+													</h3>
+													<p>
+														{__(
+															'Text will display vertically from right to left with a mixed orientation.',
+															'publisher-core'
+														)}
+													</p>
+												</Grid>
+
+												<Grid
+													gap="10px"
+													gridTemplateColumns="20px 1fr"
+												>
+													<h3
+														style={{
+															paddingTop: '5px',
+														}}
+													>
+														<TextOrientationStyle3Icon />
+													</h3>
+													<p>
+														{__(
+															'Text will appear vertically from left to right with an upright orientation.',
+															'publisher-core'
+														)}
+													</p>
+												</Grid>
+
+												<Grid
+													gap="10px"
+													gridTemplateColumns="20px 1fr"
+												>
+													<h3
+														style={{
+															paddingTop: '5px',
+														}}
+													>
+														<TextOrientationStyle4Icon />
+													</h3>
+													<p>
+														{__(
+															'Text will appear vertically from right to left with an upright orientation.',
+															'publisher-core'
+														)}
+													</p>
+												</Grid>
+
+												<Grid
+													gap="10px"
+													gridTemplateColumns="20px 1fr"
+												>
+													<h3
+														style={{
+															paddingTop: '2px',
+														}}
+													>
+														<NoneIcon />
+													</h3>
+													<p>
+														{__(
+															'No text orientation',
+															'publisher-core'
+														)}
+													</p>
+												</Grid>
+											</>
+										}
 										columns="columns-2"
 										options={[
 											{
@@ -628,170 +783,13 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 										blockName: block.blockName,
 									}}
 								>
-									<BaseControl columns="columns-1">
-										<BaseControl
-											controlName="toggle-select"
-											label={__(
-												'Columns',
-												'publisher-core'
-											)}
-											columns="columns-2"
-											className={
-												display === 'flex'
-													? 'publisher-control-is-not-active'
-													: ''
-											}
-										>
-											<ToggleSelectControl
-												id={'columns'}
-												options={[
-													{
-														label: __(
-															'2 Columns Text',
-															'publisher-core'
-														),
-														value: '2-columns',
-														icon: <Columns2Icon />,
-													},
-													{
-														label: __(
-															'3 Columns Text',
-															'publisher-core'
-														),
-														value: '3-columns',
-														icon: <Columns3Icon />,
-													},
-													{
-														label: __(
-															'4 Columns Text',
-															'publisher-core'
-														),
-														value: '4-columns',
-														icon: <Columns4Icon />,
-													},
-													{
-														label: __(
-															'5 Columns Text',
-															'publisher-core'
-														),
-														value: '5-columns',
-														icon: <Columns5Icon />,
-													},
-													{
-														label: __(
-															'None',
-															'publisher-core'
-														),
-														value: 'none',
-														icon: <NoneIcon />,
-													},
-												]}
-												isDeselectable={true}
-												//
-												defaultValue=""
-												onChange={(newValue) => {
-													if (newValue === '') {
-														handleOnChangeAttributes(
-															'publisherTextColumns',
-															{
-																columns: '',
-																gap: '',
-																divider: {
-																	width: '',
-																	color: '',
-																	style: 'solid',
-																},
-															}
-														);
-													} else {
-														handleOnChangeAttributes(
-															'publisherTextColumns',
-															{
-																...textColumns,
-																columns:
-																	newValue,
-															}
-														);
-													}
-												}}
-											/>
-											{!isEmpty(textColumns?.columns) &&
-												textColumns?.columns !==
-													'none' &&
-												!isUndefined(
-													textColumns?.columns
-												) && (
-													<>
-														<InputControl
-															id={'gap'}
-															controlName="input"
-															label={__(
-																'Gap',
-																'publisher-core'
-															)}
-															columns="columns-2"
-															{...props}
-															unitType="essential"
-															range={false}
-															arrows={true}
-															min={0}
-															max={200}
-															defaultValue=""
-															onChange={(
-																newValue
-															) =>
-																handleOnChangeAttributes(
-																	'publisherTextColumns',
-																	{
-																		...textColumns,
-																		gap: newValue,
-																	}
-																)
-															}
-														/>
-
-														<BorderControl
-															id={'divider'}
-															controlName="border"
-															label={__(
-																'Divider',
-																'publisher-core'
-															)}
-															columns="columns-1"
-															className="control-first label-center small-gap"
-															linesDirection="vertical"
-															customMenuPosition="top"
-															defaultValue={{
-																width: '',
-																color: '',
-																style: 'solid',
-															}}
-															onChange={(
-																newValue
-															) => {
-																handleOnChangeAttributes(
-																	'publisherTextColumns',
-																	{
-																		...textColumns,
-																		divider:
-																			newValue,
-																	}
-																);
-															}}
-														/>
-													</>
-												)}
-										</BaseControl>
-
-										{display === 'flex' && (
-											<NoticeControl type="information">
-												{__(
-													"Text columns can't be applied for flex blocks. Disable the flex on this block or wrap it in another container and apply the flex to the container.",
-													'publisher-core'
-												)}
-											</NoticeControl>
-										)}
-									</BaseControl>
+									<TextColumns
+										value={textColumns}
+										display={display}
+										handleOnChangeAttributes={
+											handleOnChangeAttributes
+										}
+									/>
 								</ControlContextProvider>
 							)}
 
@@ -808,62 +806,12 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 										blockName: block.blockName,
 									}}
 								>
-									<BaseControl
-										label={__('Stroke', 'publisher-core')}
-										columns="columns-2"
-									>
-										<ColorControl
-											id={'color'}
-											label={__(
-												'Color',
-												'publisher-core'
-											)}
-											columns="columns-2"
-											defaultValue=""
-											onChange={(newValue) => {
-												if (newValue === '') {
-													handleOnChangeAttributes(
-														'publisherTextStroke',
-														{
-															color: '',
-															width: '',
-														}
-													);
-												} else {
-													handleOnChangeAttributes(
-														'publisherTextStroke',
-														{
-															...textStroke,
-															color: newValue,
-														}
-													);
-												}
-											}}
-										/>
-
-										{textStroke.color && (
-											<InputControl
-												id={'width'}
-												label={__(
-													'Width',
-													'publisher-core'
-												)}
-												columns="columns-2"
-												{...props}
-												unitType="essential"
-												defaultValue="1px"
-												onChange={(newValue) =>
-													handleOnChangeAttributes(
-														'publisherTextStroke',
-														{
-															...textStroke,
-															width: newValue,
-														}
-													)
-												}
-											/>
-										)}
-									</BaseControl>
+									<TextStroke
+										value={textStroke}
+										handleOnChangeAttributes={
+											handleOnChangeAttributes
+										}
+									/>
 								</ControlContextProvider>
 							)}
 
@@ -882,6 +830,91 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 									<SelectControl
 										controlName="select"
 										label={__('Breaking', 'publisher-core')}
+										labelPopoverTitle={__(
+											'Word Breaking',
+											'publisher-core'
+										)}
+										labelDescription={
+											<>
+												<p>
+													{__(
+														'Word-Break controls how words are broken at the end of a line for influencing text wrapping and layout within containers.',
+														'publisher-core'
+													)}
+												</p>
+												<p>
+													{__(
+														'It is essential for managing text flow, especially in narrow containers or with long words/URLs, ensuring readability and a clean layout in multilingual contexts.',
+														'publisher-core'
+													)}
+												</p>
+												<h3>
+													<BreakingNormalIcon />
+													{__(
+														'Normal',
+														'publisher-core'
+													)}
+												</h3>
+												<p>
+													{__(
+														'Follows default line-breaking rules.',
+														'publisher-core'
+													)}
+												</p>
+												<h3>
+													<BreakingBreakAllIcon />
+													{__(
+														'Break All Words',
+														'publisher-core'
+													)}
+												</h3>
+												<p>
+													{__(
+														'Allows words to be broken at any character, useful in narrow containers.',
+														'publisher-core'
+													)}
+												</p>
+												<h3>
+													<BreakingNormalIcon />
+													{__(
+														'Keep All Words',
+														'publisher-core'
+													)}
+												</h3>
+												<p>
+													{__(
+														'Avoids breaking words, particularly for East Asian scripts.',
+														'publisher-core'
+													)}
+												</p>
+												<h3>
+													<BreakingBreakAllIcon />
+													{__(
+														'Break Word',
+														'publisher-core'
+													)}
+												</h3>
+												<p>
+													{__(
+														'Breaks words at appropriate break points, maintaining layout integrity by preventing overflow.',
+														'publisher-core'
+													)}
+												</p>
+												<h3>
+													<InheritIcon />
+													{__(
+														'Inherit',
+														'publisher-core'
+													)}
+												</h3>
+												<p>
+													{__(
+														'Follows containers line-breaking rules.',
+														'publisher-core'
+													)}
+												</p>
+											</>
+										}
 										columns="columns-2"
 										options={[
 											{
@@ -955,6 +988,16 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 							<ColorControl
 								controlName="color"
 								label={__('Text Color', 'publisher-core')}
+								labelDescription={
+									<>
+										<p>
+											{__(
+												'It sets the color of the text within an element, playing a crucial role in enhancing readability, attracting attention, and maintaining consistent branding.',
+												'publisher-core'
+											)}
+										</p>
+									</>
+								}
 								columns="columns-2"
 								{...props}
 								defaultValue=""

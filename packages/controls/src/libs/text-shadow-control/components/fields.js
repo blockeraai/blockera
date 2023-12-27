@@ -24,6 +24,26 @@ const Fields = ({ itemId, item }) => {
 			<InputControl
 				controlName="input"
 				label={__('X', 'publisher-core')}
+				labelPopoverTitle={__(
+					'Horizontal Offset (X)',
+					'publisher-core'
+				)}
+				labelDescription={
+					<>
+						<p>
+							{__(
+								'The horizontal (X) offset adds a shadow to text with a specified distance to the right or left.',
+								'publisher-core'
+							)}
+						</p>
+						<p>
+							{__(
+								'Use it for creating a horizontal depth effect that enhances text visibility and style.',
+								'publisher-core'
+							)}
+						</p>
+					</>
+				}
 				columns="columns-2"
 				id={getControlId(itemId, 'x')}
 				unitType="text-shadow"
@@ -44,6 +64,23 @@ const Fields = ({ itemId, item }) => {
 			<InputControl
 				controlName="input"
 				label={__('Y', 'publisher-core')}
+				labelPopoverTitle={__('Vertical Offset (Y)', 'publisher-core')}
+				labelDescription={
+					<>
+						<p>
+							{__(
+								'The vertical (X) offset adds a shadow to text with a specified distance to the top or bottom.',
+								'publisher-core'
+							)}
+						</p>
+						<p>
+							{__(
+								'Use it for creating a horizontal depth effect that enhances text visibility and style.',
+								'publisher-core'
+							)}
+						</p>
+					</>
+				}
 				columns="columns-2"
 				id={getControlId(itemId, 'y')}
 				unitType="text-shadow"
@@ -64,6 +101,23 @@ const Fields = ({ itemId, item }) => {
 			<InputControl
 				controlName="input"
 				label={__('Blur', 'publisher-core')}
+				labelPopoverTitle={__('Blur Effect', 'publisher-core')}
+				labelDescription={
+					<>
+						<p>
+							{__(
+								'The blur radius adds a soft, diffused shadow to text, enhancing its visual appeal.',
+								'publisher-core'
+							)}
+						</p>
+						<p>
+							{__(
+								'A blurred shadow effect is crucial for adding depth and emphasis to text while maintaining readability, ideal for titles, banners, and other key text elements in web design.',
+								'publisher-core'
+							)}
+						</p>
+					</>
+				}
 				columns="columns-2"
 				id={getControlId(itemId, 'blur')}
 				unitType="text-shadow"
@@ -84,6 +138,17 @@ const Fields = ({ itemId, item }) => {
 			<ColorControl
 				controlName="color"
 				label={__('Color', 'publisher-core')}
+				labelPopoverTitle={__('Shadow Color', 'publisher-core')}
+				labelDescription={
+					<>
+						<p>
+							{__(
+								'IT adds a colored shadow to text, enhancing visual interest and emphasis.',
+								'publisher-core'
+							)}
+						</p>
+					</>
+				}
 				columns="columns-2"
 				id={getControlId(itemId, 'color')}
 				onChange={(color) =>

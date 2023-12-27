@@ -29,8 +29,8 @@ export const LineHeight = ({
 	defaultValue,
 }: {
 	block: TBlockProps,
-	parentProps: Object,
 	value: string | void,
+	defaultValue: string | void,
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
 	const { isNormalState, getAttributes } = useBlockContext();
@@ -70,6 +70,22 @@ export const LineHeight = ({
 		>
 			<InputControl
 				label={__('Line Height', 'publisher-core')}
+				labelDescription={
+					<>
+						<p>
+							{__(
+								'It sets the height of a line box, crucial for determining the vertical spacing within text content, enhancing readability and text flow.',
+								'publisher-core'
+							)}
+						</p>
+						<p>
+							{__(
+								'Line height can be specified without a unit, as a multiplier of the font size (1.5), or with length units like pixels (px), ems (em).',
+								'publisher-core'
+							)}
+						</p>
+					</>
+				}
 				columns="columns-2"
 				unitType="line-height"
 				range={true}

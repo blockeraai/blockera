@@ -64,6 +64,23 @@ export const LetterSpacing = ({
 				controlName="input"
 				columns="2fr 2.6fr"
 				label={__('Letters', 'publisher-core')}
+				labelPopoverTitle={__('Letters Spacing', 'publisher-core')}
+				labelDescription={
+					<>
+						<p>
+							{__(
+								'It adjusts the space between characters in text, enhancing readability and visual appeal, especially useful in headings, logos, and graphic text.',
+								'publisher-core'
+							)}
+						</p>
+						<p>
+							{__(
+								'It is vital for typographic refinement, allowing control over text density and improving legibility, particularly in creative and web design contexts.',
+								'publisher-core'
+							)}
+						</p>
+					</>
+				}
 				{...{
 					...parentProps,
 					defaultValue,
