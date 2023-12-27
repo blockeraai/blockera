@@ -15,8 +15,6 @@ import {
 	ToggleSelectControl,
 	BaseControl,
 	SelectControl,
-	convertAlignmentMatrixCoordinates,
-	PositionButtonControl,
 } from '@publisher/controls';
 import { Flex } from '@publisher/components';
 import { isString, isUndefined } from '@publisher/utils';
@@ -33,6 +31,7 @@ import { default as OverflowVisibleIcon } from './icons/overflow-visible';
 import { default as OverflowScrollIcon } from './icons/overflow-scroll';
 import { convertToPercent } from './utils';
 import { useBlockContext } from '../../hooks';
+import { ObjectFit } from './components';
 
 export const SizeExtension: MixedElement = memo<TSizeProps>(
 	({
@@ -84,6 +83,23 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 							<InputControl
 								controlName="input"
 								label={__('Width', 'publisher-core')}
+								labelDescription={
+									<>
+										<p>
+											{__(
+												'Provides the ability to define the horizontal space of the block, crucial for layout precision and design consistency.',
+												'publisher-core'
+											)}
+										</p>
+										<p>
+											{__(
+												'Ideal for responsive design, it ensures block adapt smoothly to different screen sizes, enhancing user experience and interface scalability.',
+												'publisher-core'
+											)}
+										</p>
+										<code>width: 80%;</code>
+									</>
+								}
 								columns="columns-2"
 								placeholder="0"
 								unitType="width"
@@ -149,6 +165,29 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										<InputControl
 											controlName="input"
 											label={__('Min', 'publisher-core')}
+											labelPopoverTitle={__(
+												'Min-Width',
+												'publisher-core'
+											)}
+											labelDescription={
+												<>
+													<p>
+														{__(
+															"Min-Width ensures block don't shrink below a set value, crucial for maintaining content integrity and layout consistency on smaller screens.",
+															'publisher-core'
+														)}
+													</p>
+													<p>
+														{__(
+															'Ideal for preventing layout breakage on mobile devices, this feature helps in creating responsive designs that adapt while retaining legibility and structure.',
+															'publisher-core'
+														)}
+													</p>
+													<code>
+														min-width: 300px;
+													</code>
+												</>
+											}
 											aria-label={__(
 												'Min Width',
 												'publisher-core'
@@ -196,6 +235,29 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										<InputControl
 											controlName="input"
 											label={__('Max', 'publisher-core')}
+											labelPopoverTitle={__(
+												'Max-Width',
+												'publisher-core'
+											)}
+											labelDescription={
+												<>
+													<p>
+														{__(
+															'Max-Width restricts the maximum width of block, ensuring it doesn’t exceed a specified width, crucial for maintaining design coherence.',
+															'publisher-core'
+														)}
+													</p>
+													<p>
+														{__(
+															'This feature is essential in responsive design, preventing block from stretching too wide on larger screens, thus preserving readability and layout aesthetics.',
+															'publisher-core'
+														)}
+													</p>
+													<code>
+														max-width: 700px;
+													</code>
+												</>
+											}
 											aria-label={__(
 												'Max Width',
 												'publisher-core'
@@ -245,6 +307,23 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 							<InputControl
 								controlName="input"
 								label={__('Height', 'publisher-core')}
+								labelDescription={
+									<>
+										<p>
+											{__(
+												'Provides the ability to define the vertical space of the block, crucial for layout precision and design consistency.',
+												'publisher-core'
+											)}
+										</p>
+										<p>
+											{__(
+												'This feature is key for achieving uniformity and balance in your layout, especially useful for aligning elements vertically and creating cohesive visual structures.',
+												'publisher-core'
+											)}
+										</p>
+										<code>height: 100vh;</code>
+									</>
+								}
 								columns="columns-2"
 								placeholder="0"
 								unitType="height"
@@ -298,6 +377,29 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										<InputControl
 											controlName="input"
 											label={__('Min', 'publisher-core')}
+											labelPopoverTitle={__(
+												'Min-Height',
+												'publisher-core'
+											)}
+											labelDescription={
+												<>
+													<p>
+														{__(
+															"Min-Height ensures block don't shrink below a set value, crucial for maintaining content integrity and layout consistency on smaller screens.",
+															'publisher-core'
+														)}
+													</p>
+													<p>
+														{__(
+															'Ideal for preventing layout breakage on mobile devices, this feature helps in creating responsive designs that adapt while retaining legibility and structure.',
+															'publisher-core'
+														)}
+													</p>
+													<code>
+														min-height: 100px;
+													</code>
+												</>
+											}
 											aria-label={__(
 												'Min Height',
 												'publisher-core'
@@ -347,6 +449,29 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										<InputControl
 											controlName="input"
 											label={__('Max', 'publisher-core')}
+											labelPopoverTitle={__(
+												'Max-Width',
+												'publisher-core'
+											)}
+											labelDescription={
+												<>
+													<p>
+														{__(
+															'Max-height restricts the maximum height of block, ensuring it doesn’t exceed a specified height, crucial for maintaining design coherence.',
+															'publisher-core'
+														)}
+													</p>
+													<p>
+														{__(
+															'This feature is essential in responsive design, preventing block from stretching too taller on larger screens, thus preserving readability and layout aesthetics.',
+															'publisher-core'
+														)}
+													</p>
+													<code>
+														max-height: 500px;
+													</code>
+												</>
+											}
 											aria-label={__(
 												'Max Height',
 												'publisher-core'
@@ -397,6 +522,46 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 						<ToggleSelectControl
 							controlName="toggle-select"
 							label={__('Overflow', 'publisher-core')}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											"Overflow manages how content is displayed when it exceeds its block's boundaries, offering options like scroll or hidden to maintain layout integrity.",
+											'publisher-core'
+										)}
+									</p>
+									<h3>
+										<OverflowVisibleIcon />
+										{__('Visible', 'publisher-core')}
+									</h3>
+									<p>
+										{__(
+											'Visible ensures that any content exceeding the boundaries of its container is still visible, extending beyond the set dimensions.',
+											'publisher-core'
+										)}
+									</p>
+									<h3>
+										<OverflowVisibleIcon />
+										{__('Hidden', 'publisher-core')}
+									</h3>
+									<p>
+										{__(
+											'Hidden effectively clips any content that exceeds the boundaries of its container, ensuring a clean, uncluttered appearance for your layout.',
+											'publisher-core'
+										)}
+									</p>
+									<h3>
+										<OverflowVisibleIcon />
+										{__('Scroll', 'publisher-core')}
+									</h3>
+									<p>
+										{__(
+											'Scroll ensures that any excess content within an element is accessible via scrollbars, ideal for maintaining a fixed size for content areas.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							columns="columns-2"
 							isDeselectable={true}
 							options={[
@@ -450,7 +615,35 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 						<BaseControl
 							columns="columns-2"
 							controlName="toggle-select"
-							label={__('Ratio', 'publisher-core')}
+							label={__('Aspect Ratio', 'publisher-core')}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'Aspect Ratio Control allows for maintaining a specific width-to-height ratio for blocks, ensuring consistent and responsive sizing across devices.',
+											'publisher-core'
+										)}
+									</p>
+									<p>
+										{__(
+											'Crucial for media blocks like images and videos, this feature preserves the original proportions, enhancing visual appeal and preventing distortion.',
+											'publisher-core'
+										)}
+									</p>
+									<p>
+										{__(
+											'The aspect ratio is calculated in this format:',
+											'publisher-core'
+										)}{' '}
+										<>
+											<code>width</code>
+											{' / '}
+											<code>height</code>
+										</>
+									</p>
+									<code>aspect-ratio: 16 / 9;</code>
+								</>
+							}
 							id={'value'}
 							attribute="publisherRatio"
 							blockName={block.blockName}
@@ -464,7 +657,10 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									...props,
 									options: [
 										{
-											label: __('Auto', 'publisher-core'),
+											label: __(
+												'Default',
+												'publisher-core'
+											),
 											value: 'none',
 										},
 										{
@@ -540,6 +736,22 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										columns="columns-1"
 										className="control-first label-center small-gap"
 										label={__('Width', 'publisher-core')}
+										labelDescription={
+											<>
+												<p>
+													{__(
+														'Represents the width part of the ratio.',
+														'publisher-core'
+													)}
+												</p>
+												<p>
+													{__(
+														'In the "16 / 9" example, 16 is the width.',
+														'publisher-core'
+													)}
+												</p>
+											</>
+										}
 										style={{ margin: '0px' }}
 										type="number"
 										min={0}
@@ -556,13 +768,29 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										{...props}
 									/>
 
-									<p className="publisher-colon">:</p>
+									<p className="publisher-colon">/</p>
 
 									<InputControl
 										id="height"
 										columns="columns-1"
 										className="control-first label-center small-gap"
 										label={__('Height', 'publisher-core')}
+										labelDescription={
+											<>
+												<p>
+													{__(
+														'Represents the height part of the ratio.',
+														'publisher-core'
+													)}
+												</p>
+												<p>
+													{__(
+														'In the "16 / 9" example, 9 is the height.',
+														'publisher-core'
+													)}
+												</p>
+											</>
+										}
 										style={{ margin: '0px' }}
 										min={0}
 										type="number"
@@ -593,98 +821,11 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 							blockName: block.blockName,
 						}}
 					>
-						<BaseControl
-							label={__('Fit', 'publisher-core')}
-							columns="columns-2"
-							className={'publisher-object-fit'}
-						>
-							<SelectControl
-								controlName="select"
-								columns="columns-1"
-								{...props}
-								options={[
-									{
-										label: __('Auto', 'publisher-core'),
-										value: '',
-									},
-									{
-										label: __('Fill', 'publisher-core'),
-										value: 'fill',
-									},
-									{
-										label: __('Contain', 'publisher-core'),
-										value: 'contain',
-									},
-									{
-										label: __('Cover', 'publisher-core'),
-										value: 'cover',
-									},
-									{
-										label: __('None', 'publisher-core'),
-										value: 'none',
-									},
-									{
-										label: __(
-											'Scale Down',
-											'publisher-core'
-										),
-										value: 'scale-down',
-									},
-								]}
-								type="native"
-								defaultValue=""
-								onChange={(newValue) =>
-									handleOnChangeAttributes(
-										'publisherFit',
-										newValue
-									)
-								}
-							/>
-							<ControlContextProvider
-								value={{
-									name: generateExtensionId(
-										block,
-										'fit-position'
-									),
-									value: {
-										...fitPosition,
-										coordinates:
-											convertAlignmentMatrixCoordinates(
-												fitPosition
-											)?.compact,
-									},
-									attribute: 'publisherFitPosition',
-									blockName: block.blockName,
-								}}
-							>
-								<PositionButtonControl
-									buttonLabel={__(
-										'Fit Position',
-										'publisher-core'
-									)}
-									popoverLabel={__(
-										'Setting',
-										'publisher-core'
-									)}
-									alignmentMatrixLabel={__(
-										'Position',
-										'publisher-core'
-									)}
-									size="small"
-									defaultValue={{ top: '', left: '' }}
-									onChange={({ top, left }) => {
-										handleOnChangeAttributes(
-											'publisherFitPosition',
-											{
-												...fitPosition,
-												top,
-												left,
-											}
-										);
-									}}
-								/>
-							</ControlContextProvider>
-						</BaseControl>
+						<ObjectFit
+							block={block}
+							fitPosition={fitPosition}
+							handleOnChangeAttributes={handleOnChangeAttributes}
+						/>
 					</ControlContextProvider>
 				)}
 			</>
