@@ -39,9 +39,9 @@
 	&:hover:not(.show-help) {
 
 		.publisher-control-help-icon {
-			animation: publisher-label-control-animation 0.1s 1;
-			animation-delay: 400ms;
-			animation-fill-mode: forwards;
+			animation: publisher-label-control-animation-bounce 0.1s 1, publisher-label-control-animation 0.8s infinite;
+			animation-delay: 400ms, 500ms;
+			animation-fill-mode: forwards, forwards;
 		}
 	}
 
@@ -52,6 +52,27 @@
 }
 
 @keyframes publisher-label-control-animation {
+
+	0% {
+		transform: translateY(-50%) scale(1);
+		opacity: 1;
+		visibility: visible;
+	}
+
+	50% {
+		transform: translateY(-50%) scale(0.8);
+		opacity: 1;
+		visibility: visible;
+	}
+
+	100% {
+		transform: translateY(-50%) scale(1);
+		opacity: 1;
+		visibility: visible;
+	}
+}
+
+@keyframes publisher-label-control-animation-bounce {
 
 	0% {
 		transform: translateY(-50%) scale(0.5);
