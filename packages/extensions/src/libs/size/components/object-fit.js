@@ -3,6 +3,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -36,7 +37,7 @@ export default function ObjectFit({
 	block: TBlockProps,
 	fitPosition: { top: string, left: string },
 	handleOnChangeAttributes: THandleOnChangeAttributes,
-}) {
+}): MixedElement {
 	const { value, attribute, blockName, resetToDefault } = useControlContext({
 		onChange: (newValue) =>
 			handleOnChangeAttributes('publisherFit', newValue),
