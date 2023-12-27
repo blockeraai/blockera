@@ -109,8 +109,26 @@
 
 	.publisher-control-label-desc {
 
+		svg {
+			fill: currentColor;
+		}
+
+		div,
 		p {
 			margin: 0 0 12px;
+		}
+
+		h3 {
+			display: flex;
+			gap: 10px;
+			color: var(--publisher-controls-primary-color);
+			font-weight: 600;
+			margin: 0 0 4px;
+			font-size: 12px;
+		}
+
+		p + h3 {
+			margin-top: 15px;
 		}
 
 		code {
@@ -123,7 +141,7 @@
 			unicode-bidi: embed;
 		}
 
-		& > :last-child {
+		:last-child {
 			margin-bottom: 0;
 		}
 
