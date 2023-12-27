@@ -143,7 +143,7 @@ const Fields = ({ itemId, item }) => {
 					<>
 						<p>
 							{__(
-								'IT adds a colored shadow to text, enhancing visual interest and emphasis.',
+								'It adds a colored shadow to text, enhancing visual interest and emphasis.',
 								'publisher-core'
 							)}
 						</p>

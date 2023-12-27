@@ -72,7 +72,6 @@ export default function ({
 							'publisher-core'
 						)}
 					</p>
-					<code>gap: 20px;</code>
 				</>
 			}
 			columns="80px 160px"
@@ -119,7 +118,6 @@ export default function ({
 											'publisher-core'
 										)}
 									</p>
-									<code>row-gap: 30px;</code>
 								</>
 							}
 							unitType="essential"
@@ -156,7 +154,6 @@ export default function ({
 											'publisher-core'
 										)}
 									</p>
-									<code>column-gap: 30px;</code>
 								</>
 							}
 							unitType="essential"

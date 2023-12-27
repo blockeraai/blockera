@@ -53,7 +53,6 @@ const Fields: TFieldItem = memo<TFieldItem>(
 									'publisher-core'
 								)}
 							</p>
-							<code>{'outline: 2px solid #eee;'}</code>
 						</>
 					}
 					columns="columns-2"

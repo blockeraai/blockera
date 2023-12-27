@@ -177,7 +177,6 @@ export const Border = ({
 								'publisher-core'
 							)}
 						</p>
-						<code>{'border: 2px solid #eee;'}</code>
 					</>
 				}
 				onChange={(newValue: Object, ref?: Object): void => {

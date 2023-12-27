@@ -66,7 +66,6 @@ export function Margin({
 										'publisher-core'
 									)}
 								</p>
-								<code>margin: 20px;</code>
 							</>
 						}
 						label={__('Margin', 'publisher-core')}

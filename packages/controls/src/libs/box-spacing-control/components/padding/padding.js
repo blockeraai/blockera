@@ -67,7 +67,6 @@ export function Padding({
 										'publisher-core'
 									)}
 								</p>
-								<code>padding: 20px;</code>
 							</>
 						}
 						{...{

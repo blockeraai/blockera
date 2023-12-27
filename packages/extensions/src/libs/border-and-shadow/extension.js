@@ -94,9 +94,6 @@ export const BorderAndShadowExtension: TBorderAndShadowProps =
 													'publisher-core'
 												)}
 											</p>
-											<code>
-												box-shadow: 2px 2px 5px #eee;
-											</code>
 										</>
 									}
 									onChange={(
@@ -145,10 +142,6 @@ export const BorderAndShadowExtension: TBorderAndShadowProps =
 													'publisher-core'
 												)}
 											</p>
-
-											<code>
-												{'outline: 2px solid #eee;'}
-											</code>
 										</>
 									}
 									onChange={(newValue, ref) =>

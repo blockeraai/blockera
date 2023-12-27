@@ -159,7 +159,6 @@ export const BorderRadius = ({
 									'publisher-core'
 								)}
 							</p>
-							<code>{'border-radius: 5px;'}</code>
 						</>
 					}
 					onChange={(newValue: Object, ref?: Object): void =>

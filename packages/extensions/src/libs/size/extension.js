@@ -97,7 +97,6 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 												'publisher-core'
 											)}
 										</p>
-										<code>width: 80%;</code>
 									</>
 								}
 								columns="columns-2"
@@ -183,9 +182,6 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 															'publisher-core'
 														)}
 													</p>
-													<code>
-														min-width: 300px;
-													</code>
 												</>
 											}
 											aria-label={__(
@@ -253,9 +249,6 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 															'publisher-core'
 														)}
 													</p>
-													<code>
-														max-width: 700px;
-													</code>
 												</>
 											}
 											aria-label={__(
@@ -321,7 +314,6 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 												'publisher-core'
 											)}
 										</p>
-										<code>height: 100vh;</code>
 									</>
 								}
 								columns="columns-2"
@@ -395,9 +387,6 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 															'publisher-core'
 														)}
 													</p>
-													<code>
-														min-height: 100px;
-													</code>
 												</>
 											}
 											aria-label={__(
@@ -467,9 +456,6 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 															'publisher-core'
 														)}
 													</p>
-													<code>
-														max-height: 500px;
-													</code>
 												</>
 											}
 											aria-label={__(
@@ -641,7 +627,6 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											<code>height</code>
 										</>
 									</p>
-									<code>aspect-ratio: 16 / 9;</code>
 								</>
 							}
 							id={'value'}
