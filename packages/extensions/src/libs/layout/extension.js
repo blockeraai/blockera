@@ -139,7 +139,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									</p>
 									<p
 										style={{
-											color: 'var(--publisher-controls-primary-color)',
+											color: '#666b71',
 											fontStyle: 'italic',
 											display: 'inline-block',
 											marginBottom: '0',
