@@ -172,6 +172,16 @@
 			font-weight: 600;
 			margin: 0 0 4px;
 			font-size: 12px;
+
+			span {
+				color: rgb(102, 107, 113);
+				font-style: italic;
+				display: inline-block;
+				margin-bottom: 0;
+				margin-left: auto;
+				font-size: 12px;
+				font-weight: 400;
+			}
 		}
 
 		p + h3 {

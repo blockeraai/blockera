@@ -527,7 +527,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										)}
 									</p>
 									<h3>
-										<OverflowVisibleIcon />
+										<OverflowHiddenIcon />
 										{__('Hidden', 'publisher-core')}
 									</h3>
 									<p>
@@ -537,7 +537,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										)}
 									</p>
 									<h3>
-										<OverflowVisibleIcon />
+										<OverflowScrollIcon />
 										{__('Scroll', 'publisher-core')}
 									</h3>
 									<p>

@@ -130,22 +130,18 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									<h3>
 										<DisplayGridIcon />
 										{__('Grid', 'publisher-core')}
+										<span>
+											{__(
+												'Coming soon…',
+												'publisher-core'
+											)}
+										</span>
 									</h3>
-									<p style={{ marginBottom: '0' }}>
+									<p>
 										{__(
 											'Creates a grid-based layout, providing precise control over rows and columns.',
 											'publisher-core'
 										)}
-									</p>
-									<p
-										style={{
-											color: '#666b71',
-											fontStyle: 'italic',
-											display: 'inline-block',
-											marginBottom: '0',
-										}}
-									>
-										{__('Coming soon…', 'publisher-core')}
 									</p>
 									<h3>
 										<DisplayInlineBlockIcon />
