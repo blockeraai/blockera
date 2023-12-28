@@ -59,6 +59,7 @@ import RadialGradientClosestSideIcon from '../icons/radial-gradient-closest-side
 import RadialGradientFarthestSideIcon from '../icons/radial-gradient-farthest-side';
 import RadialGradientClosestCornerIcon from '../icons/radial-gradient-closest-corner';
 import RadialGradientFarthestCornerIcon from '../icons/radial-gradient-farthest-corner';
+import { LabelDescription } from './label-description';
 
 /**
  * Providing mesh gradient colors details.
@@ -102,6 +103,8 @@ const Fields: FieldItem = memo<FieldItem>(
 			<div id={`repeater-item-${itemId}`}>
 				<ToggleSelectControl
 					label={__('Type', 'publisher-core')}
+					labelPopoverTitle={__('Background Type', 'publisher-core')}
+					labelDescription={<LabelDescription />}
 					columns="columns-2"
 					options={[
 						{
@@ -142,7 +145,21 @@ const Fields: FieldItem = memo<FieldItem>(
 				{item.type === 'image' && (
 					<>
 						<MediaImageControl
-							label=""
+							label={__('Image', 'publisher-core')}
+							labelPopoverTitle={__(
+								'Background Image',
+								'publisher-core'
+							)}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'It sets an image as the background of block, offering a significant enhancement in visual design and allowing for creative expression in web layouts.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							field="empty"
 							columns="columns-1"
 							id={getControlId(itemId, 'image')}
@@ -161,6 +178,32 @@ const Fields: FieldItem = memo<FieldItem>(
 
 						<ToggleSelectControl
 							label={__('Size', 'publisher-core')}
+							labelPopoverTitle={__(
+								'Background Size',
+								'publisher-core'
+							)}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'It controls the scaling of background images, determining how an image covers or fits within an element.',
+											'publisher-core'
+										)}
+									</p>
+									<p>
+										{__(
+											'It offers settings like cover, contain, or custom specific dimensions.',
+											'publisher-core'
+										)}
+									</p>
+									<p>
+										{__(
+											'This feature is essential for responsive design, ensuring background images adapt seamlessly across different devices and screen sizes, enhancing the visual impact and consistency.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							columns="columns-2"
 							options={[
 								{
@@ -197,6 +240,20 @@ const Fields: FieldItem = memo<FieldItem>(
 								>
 									<InputControl
 										label={__('Width', 'publisher-core')}
+										labelPopoverTitle={__(
+											'Background Width Size',
+											'publisher-core'
+										)}
+										labelDescription={
+											<>
+												<p>
+													{__(
+														'Specifies the exact width size for background image.',
+														'publisher-core'
+													)}
+												</p>
+											</>
+										}
 										columns="columns-1"
 										className="control-first label-center small-gap"
 										unitType="background-size"
@@ -222,6 +279,20 @@ const Fields: FieldItem = memo<FieldItem>(
 
 									<InputControl
 										label={__('Height', 'publisher-core')}
+										labelPopoverTitle={__(
+											'Background Height Size',
+											'publisher-core'
+										)}
+										labelDescription={
+											<>
+												<p>
+													{__(
+														'Specifies the exact height size for background image.',
+														'publisher-core'
+													)}
+												</p>
+											</>
+										}
 										columns="columns-1"
 										className="control-first label-center small-gap"
 										unitType="background-size"
@@ -251,8 +322,30 @@ const Fields: FieldItem = memo<FieldItem>(
 						<AlignmentMatrixControl
 							inputFields={true}
 							label={__('Position', 'publisher-core')}
+							labelPopoverTitle={__(
+								'Background Position',
+								'publisher-core'
+							)}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'Adjusts the positioning of a background image within a block.',
+											'publisher-core'
+										)}
+									</p>
+									<p>
+										{__(
+											'Useful for aligning images to specific areas.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							columns="columns-2"
+							repeaterItem={itemId}
 							id={getControlId(itemId, '[image-position]')}
+							singularId={'image-position'}
 							onChange={(newValue) => {
 								changeRepeaterItem({
 									controlId,
@@ -268,6 +361,26 @@ const Fields: FieldItem = memo<FieldItem>(
 
 						<ToggleSelectControl
 							label={__('Repeat', 'publisher-core')}
+							labelPopoverTitle={__(
+								'Background Repeat',
+								'publisher-core'
+							)}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'It defines how a background image is repeated within an element.',
+											'publisher-core'
+										)}
+									</p>
+									<p>
+										{__(
+											'It controls whether the image repeats along the x-axis, y-axis, both, or not at all.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							columns="columns-2"
 							options={[
 								{
@@ -314,6 +427,34 @@ const Fields: FieldItem = memo<FieldItem>(
 
 						<ToggleSelectControl
 							label={__('Effect', 'publisher-core')}
+							labelPopoverTitle={__(
+								'Background Effect',
+								'publisher-core'
+							)}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'It specifies how the background behaves when the user scrolls.',
+											'publisher-core'
+										)}
+									</p>
+									<h3>{__('Fix', 'publisher-core')}</h3>
+									<p>
+										{__(
+											'The background scrolls with the content of the element. (The default setting)',
+											'publisher-core'
+										)}
+									</p>
+									<h3>{__('Parallax', 'publisher-core')}</h3>
+									<p>
+										{__(
+											'The background is fixed with respect to the viewport, creating a parallax scrolling effect.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							columns="columns-2"
 							options={[
 								{
@@ -344,7 +485,23 @@ const Fields: FieldItem = memo<FieldItem>(
 				{item.type === 'linear-gradient' && (
 					<>
 						<GradientBarControl
-							label=""
+							label={__('Linear Gradient', 'publisher-core')}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'Linear Gradient creates a smooth transition between multiple colors in a straight line. ',
+											'publisher-core'
+										)}
+									</p>
+									<p>
+										{__(
+											'Linear gradients are ideal for creating vibrant backgrounds, adding dimension, or emphasizing branding elements.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							field="empty"
 							id={getControlId(itemId, '[linear-gradient]')}
 							onChange={(newValue: string) => {
@@ -365,6 +522,26 @@ const Fields: FieldItem = memo<FieldItem>(
 
 						<AnglePickerControl
 							label={__('Angel', 'publisher-core')}
+							labelPopoverTitle={__(
+								'Linear Gradient Angel',
+								'publisher-core'
+							)}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'It specifies the gradient line angle.',
+											'publisher-core'
+										)}
+									</p>
+									<p>
+										{__(
+											"It can be used to direct the viewer's attention or to create a sense of movement and depth.",
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							columns="columns-2"
 							id={getControlId(itemId, '[linear-gradient-angel]')}
 							className={
@@ -388,6 +565,26 @@ const Fields: FieldItem = memo<FieldItem>(
 						<BaseControl columns="columns-1">
 							<ToggleSelectControl
 								label={__('Repeat', 'publisher-core')}
+								labelPopoverTitle={__(
+									'Repeating Linear Gradient',
+									'publisher-core'
+								)}
+								labelDescription={
+									<>
+										<p>
+											{__(
+												'It creates a background pattern with a linear gradient that repeats at regular intervals.',
+												'publisher-core'
+											)}
+										</p>
+										<p>
+											{__(
+												'This is ideal for creating textured gradient backgrounds or complex patterns.',
+												'publisher-core'
+											)}
+										</p>
+									</>
+								}
 								columns="columns-2"
 								options={[
 									{
@@ -438,6 +635,34 @@ const Fields: FieldItem = memo<FieldItem>(
 
 						<ToggleSelectControl
 							label={__('Effect', 'publisher-core')}
+							labelPopoverTitle={__(
+								'Background Effect',
+								'publisher-core'
+							)}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'It specifies how the background behaves when the user scrolls.',
+											'publisher-core'
+										)}
+									</p>
+									<h3>{__('Fix', 'publisher-core')}</h3>
+									<p>
+										{__(
+											'The background scrolls with the content of the element. (The default setting)',
+											'publisher-core'
+										)}
+									</p>
+									<h3>{__('Parallax', 'publisher-core')}</h3>
+									<p>
+										{__(
+											'The background is fixed with respect to the viewport, creating a parallax scrolling effect.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							columns="columns-2"
 							options={[
 								{
@@ -471,7 +696,23 @@ const Fields: FieldItem = memo<FieldItem>(
 				{item.type === 'radial-gradient' && (
 					<>
 						<GradientBarControl
-							label=""
+							label={__('Radial Gradient', 'publisher-core')}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'A radial gradient background creates a circular or elliptical color transition, emanating from a single point and radiating outward, offering a unique and visually dynamic background option.',
+											'publisher-core'
+										)}
+									</p>
+									<p>
+										{__(
+											'This type of background gradient is perfect for creating focal points, adding depth, or crafting visually intriguing backgrounds.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							field="empty"
 							id={getControlId(itemId, '[radial-gradient]')}
 							onChange={(newValue) =>
@@ -493,6 +734,26 @@ const Fields: FieldItem = memo<FieldItem>(
 						<AlignmentMatrixControl
 							inputFields={true}
 							label={__('Position', 'publisher-core')}
+							labelPopoverTitle={__(
+								'Background Position',
+								'publisher-core'
+							)}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'Adjusts the positioning of a radial gradient background within a block.',
+											'publisher-core'
+										)}
+									</p>
+									<p>
+										{__(
+											'Useful for aligning gradient to specific areas.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							columns="columns-2"
 							id={getControlId(
 								itemId,
@@ -517,6 +778,69 @@ const Fields: FieldItem = memo<FieldItem>(
 
 						<ToggleSelectControl
 							label={__('Size', 'publisher-core')}
+							labelPopoverTitle={__(
+								'Background Position',
+								'publisher-core'
+							)}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											"In a radial gradient background, the size determines the extent of the gradient's shape, which can be circular or elliptical.",
+											'publisher-core'
+										)}
+									</p>
+									<p>
+										{__(
+											'It controls how the gradient spreads within the element.',
+											'publisher-core'
+										)}
+									</p>
+									<h3>
+										<RadialGradientFarthestCornerIcon />
+										{__(
+											'Farthest Corner',
+											'publisher-core'
+										)}
+									</h3>
+									<p>
+										{__(
+											"The gradient's final color reaches the farthest corner of the box containing the gradient.",
+											'publisher-core'
+										)}
+									</p>
+									<h3>
+										<RadialGradientFarthestSideIcon />
+										{__('Farthest Side', 'publisher-core')}
+									</h3>
+									<p>
+										{__(
+											"The gradient extends to the farthest side of the container, creating a gradient that is visually aligned with the container's widest point.",
+											'publisher-core'
+										)}
+									</p>
+									<h3>
+										<RadialGradientClosestCornerIcon />
+										{__('Closest Corner', 'publisher-core')}
+									</h3>
+									<p>
+										{__(
+											"The gradient's radius extends to the closest corner of the container, resulting in a more focused and concentrated radial effect.",
+											'publisher-core'
+										)}
+									</p>
+									<h3>
+										<RadialGradientClosestSideIcon />
+										{__('Closest Side', 'publisher-core')}
+									</h3>
+									<p>
+										{__(
+											'The gradient extends to the side of the container that is closest to its center, creating a gradient that closely follows the shape of the container.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							columns="columns-2"
 							options={[
 								{
@@ -573,6 +897,26 @@ const Fields: FieldItem = memo<FieldItem>(
 						<BaseControl columns="columns-1">
 							<ToggleSelectControl
 								label={__('Repeat', 'publisher-core')}
+								labelPopoverTitle={__(
+									'Repeating Radial Gradient',
+									'publisher-core'
+								)}
+								labelDescription={
+									<>
+										<p>
+											{__(
+												'It creates a background pattern with a radial gradient that repeats at regular intervals.',
+												'publisher-core'
+											)}
+										</p>
+										<p>
+											{__(
+												'This is ideal for creating textured gradient backgrounds or complex patterns.',
+												'publisher-core'
+											)}
+										</p>
+									</>
+								}
 								columns="columns-2"
 								options={[
 									{
@@ -622,6 +966,34 @@ const Fields: FieldItem = memo<FieldItem>(
 
 						<ToggleSelectControl
 							label={__('Effect', 'publisher-core')}
+							labelPopoverTitle={__(
+								'Background Effect',
+								'publisher-core'
+							)}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'It specifies how the background behaves when the user scrolls.',
+											'publisher-core'
+										)}
+									</p>
+									<h3>{__('Fix', 'publisher-core')}</h3>
+									<p>
+										{__(
+											'The background scrolls with the content of the element. (The default setting)',
+											'publisher-core'
+										)}
+									</p>
+									<h3>{__('Parallax', 'publisher-core')}</h3>
+									<p>
+										{__(
+											'The background is fixed with respect to the viewport, creating a parallax scrolling effect.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							columns="columns-2"
 							options={[
 								{
@@ -712,6 +1084,26 @@ const Fields: FieldItem = memo<FieldItem>(
 									'[mesh-gradient-colors]'
 								)}
 								label={__('Colors', 'publisher-core')}
+								labelPopoverTitle={__(
+									'Mesh Gradient Colors',
+									'publisher-core'
+								)}
+								labelDescription={
+									<>
+										<p>
+											{__(
+												'It specifies the colors of the mesh gradient points.',
+												'publisher-core'
+											)}
+										</p>
+										<p>
+											{__(
+												'You can add as many colors as you like. The fist color will be the base background color.',
+												'publisher-core'
+											)}
+										</p>
+									</>
+								}
 								className={controlClassNames(
 									'mesh-gradient-background'
 								)}
@@ -748,6 +1140,34 @@ const Fields: FieldItem = memo<FieldItem>(
 
 						<ToggleSelectControl
 							label={__('Effect', 'publisher-core')}
+							labelPopoverTitle={__(
+								'Background Effect',
+								'publisher-core'
+							)}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'It specifies how the background behaves when the user scrolls.',
+											'publisher-core'
+										)}
+									</p>
+									<h3>{__('Fix', 'publisher-core')}</h3>
+									<p>
+										{__(
+											'The background scrolls with the content of the element. (The default setting)',
+											'publisher-core'
+										)}
+									</p>
+									<h3>{__('Parallax', 'publisher-core')}</h3>
+									<p>
+										{__(
+											'The background is fixed with respect to the viewport, creating a parallax scrolling effect.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							columns="columns-2"
 							options={[
 								{
