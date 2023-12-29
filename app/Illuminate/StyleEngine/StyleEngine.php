@@ -45,7 +45,6 @@ final class StyleEngine {
 		$styles[] = 'border';
 		$styles[] = 'height';
 		$styles[] = 'filter';
-		$styles[] = 'cursor';
 		$styles[] = 'display';
 		$styles[] = 'row-gap';
 		$styles[] = 'opacity';
@@ -104,6 +103,9 @@ final class StyleEngine {
 		$styles[] = 'min-height';
 		$styles[] = 'max-width';
 		$styles[] = 'max-height';
+		$styles[] = 'cursor';
+		$styles[] = 'user-select';
+		$styles[] = 'pointer-events';
 
 		return $styles;
 	}

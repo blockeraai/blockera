@@ -39,10 +39,6 @@ export const attributes = {
 		type: 'array',
 		default: [],
 	},
-	publisherCursor: {
-		type: 'string',
-		default: 'default',
-	},
 	publisherBlendMode: {
 		type: 'string',
 		default: 'normal',

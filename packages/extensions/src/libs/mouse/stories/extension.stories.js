@@ -19,7 +19,7 @@ import {
 import { Playground } from '@publisher/storybook/components';
 import { supports } from '../supports';
 import { attributes } from '../attributes';
-import EffectsExtensionIcon from '../icons/extension-icon';
+import MouseExtensionIcon from '../icons/extension-icon';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/decorators/with-playground-styles';
 import { useAttributes } from '../../shared/use-attributes';
 import { InspectorControls } from '@wordpress/block-editor';
@@ -29,7 +29,7 @@ const { SharedDecorators } = Decorators;
 SharedDecorators.push(WithPlaygroundStyles);
 
 blocksInitializer({
-	name: 'publisherEffectsExtension',
+	name: 'publisherMouseExtension',
 	targetBlock: 'core/paragraph',
 	attributes,
 	supports,
@@ -47,28 +47,21 @@ blocksInitializer({
 						{...{ ...props, attributes, setAttributes }}
 						initialOpen={true}
 						values={{
-							publisherFilter: [],
-							publisherOpacity: '',
-							publisherTransform: [],
-							publisherBlendMode: '',
-							publisherTransition: [],
-							publisherBackdropFilter: [],
-							publisherBackfaceVisibility: '',
-							publisherTransformSelfOrigin: {},
-							publisherTransformChildOrigin: {},
-							publisherTransformSelfPerspective: '',
-							publisherTransformChildPerspective: '',
+							cursor: attributes?.publisherCursor || '',
+							userSelect: attributes?.publisherUserSelect || '',
+							pointerEvents:
+								attributes?.publisherPointerEvents || '',
 						}}
-						extensionId={'Effects'}
-						icon={<EffectsExtensionIcon />}
-						storeName={'publisher-core/controls/repeater'}
+						extensionId={'Mouse'}
+						icon={<MouseExtensionIcon />}
+						storeName={'publisher-core/controls'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						title={__('Effects', 'publisher-core')}
+						title={__('Mouse', 'publisher-core')}
 					/>
 				</InspectorControls>
 
 				<ExtensionStyle
-					extensions={['Effects']}
+					extensions={['Mouse']}
 					{...{
 						...props,
 						attributes,
@@ -88,7 +81,7 @@ const wrapperBlock = createBlockEditorContent({
 });
 
 export default {
-	title: 'Extensions/Effects',
+	title: 'Extensions/Mouse',
 	component: Playground,
 	tags: ['autodocs'],
 };
@@ -100,17 +93,9 @@ export const Default = {
 				...wrapperBlock,
 				attributes: {
 					...(wrapperBlock?.attributes || {}),
-					publisherFilter: [],
-					publisherOpacity: '',
-					publisherTransform: [],
-					publisherBlendMode: '',
-					publisherTransition: [],
-					publisherBackdropFilter: [],
-					publisherBackfaceVisibility: '',
-					publisherTransformSelfOrigin: {},
-					publisherTransformChildOrigin: {},
-					publisherTransformSelfPerspective: '',
-					publisherTransformChildPerspective: '',
+					publisherCursor: '',
+					publisherUserSelect: '',
+					publisherPointerEvents: '',
 				},
 			},
 		],
