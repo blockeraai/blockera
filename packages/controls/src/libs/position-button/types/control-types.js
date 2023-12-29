@@ -2,10 +2,11 @@
 /**
  * Internal dependencies
  */
-import type { ControlGeneralTypes } from '../../../types';
+import type { ControlSize, ControlGeneralTypes } from '../../../types';
 
 export type TPositionButtonProps = {
 	...ControlGeneralTypes,
+	size: ControlSize,
 	popoverLabel?: string,
 	alignmentMatrixLabel?: string,
 	defaultValue?: { top: string, left: string },

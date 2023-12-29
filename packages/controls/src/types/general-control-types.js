@@ -1,11 +1,23 @@
 // @flow
+/**
+ * External Dependencies
+ */
+import type { MixedElement } from 'react';
 
+/**
+ * Publisher Dependencies
+ */
 import type { VariableCategory, DynamicValueTypes } from '@publisher/core-data';
 
 export type ControlSize = 'normal' | 'input' | 'small' | 'extra-small';
 
 export type ControlGeneralTypes = {
 	id?: string,
+	/**
+	 * This is the singular id of control that is being used in repeater for
+	 * advanced usages like resetting value
+	 */
+	singularId?: string,
 	controlName?: string,
 	children?: any,
 	className?: string,
@@ -14,6 +26,8 @@ export type ControlGeneralTypes = {
 	repeaterItem?: number,
 	//
 	label?: any,
+	labelPopoverTitle?: string | MixedElement,
+	labelDescription?: string | MixedElement,
 	columns?: string,
 	style?: Object,
 	//

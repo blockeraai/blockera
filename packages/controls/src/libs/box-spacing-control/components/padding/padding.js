@@ -25,7 +25,6 @@ export function Padding({
 	setValue,
 	attribute,
 	blockName,
-	description,
 	defaultValue,
 	resetToDefault,
 	getControlPath,
@@ -60,11 +59,20 @@ export function Padding({
 						mode={'advanced'}
 						ariaLabel={__('Padding Spacing')}
 						label={__('Padding', 'publisher-core')}
+						labelDescription={
+							<>
+								<p>
+									{__(
+										"Define the spacing between the block's content and its border, ensuring control over layout and aesthetics.",
+										'publisher-core'
+									)}
+								</p>
+							</>
+						}
 						{...{
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'padding',

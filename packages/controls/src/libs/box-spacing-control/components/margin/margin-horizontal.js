@@ -31,7 +31,6 @@ export function MarginHorizontal({
 	setValue,
 	attribute,
 	blockName,
-	description,
 	defaultValue,
 	resetToDefault,
 	getControlPath,
@@ -233,10 +232,6 @@ export function MarginHorizontal({
 								? fixLabelText(value.margin.right)
 								: fixLabelText(sideSpace)
 						}
-						popoverTitle={__(
-							'Left & Right Margin',
-							'publisher-core'
-						)}
 						onClick={() => {
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
@@ -245,7 +240,6 @@ export function MarginHorizontal({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'margin.right',
@@ -273,10 +267,6 @@ export function MarginHorizontal({
 								? fixLabelText(value.margin.right)
 								: fixLabelText(sideSpace)
 						}
-						popoverTitle={__(
-							'Left & Right Margin',
-							'publisher-core'
-						)}
 						onClick={() => {
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
@@ -285,7 +275,6 @@ export function MarginHorizontal({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'margin.left',

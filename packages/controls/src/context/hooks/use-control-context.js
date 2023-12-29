@@ -233,7 +233,6 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		value: calculatedValue,
 		blockName: controlInfo.blockName,
 		attribute: controlInfo.attribute,
-		description: controlInfo.description,
 		controlInfo: getControl(controlInfo.name),
 		getControlPath(controlID: string, childControlId: string): string {
 			// Assume childControlId is undefined, then hint to context provider main value.

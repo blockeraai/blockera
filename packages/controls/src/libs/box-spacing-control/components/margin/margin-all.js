@@ -30,7 +30,6 @@ export function MarginAll({
 	setValue,
 	attribute,
 	blockName,
-	description,
 	defaultValue,
 	resetToDefault,
 	getControlPath,
@@ -201,7 +200,6 @@ export function MarginAll({
 								? fixLabelText(value.margin.top)
 								: fixLabelText(sideSpace)
 						}
-						popoverTitle={__('All Sides Margin', 'publisher-core')}
 						onClick={() => {
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
@@ -210,7 +208,6 @@ export function MarginAll({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'margin.top',
@@ -237,7 +234,6 @@ export function MarginAll({
 								? fixLabelText(value.margin.top)
 								: fixLabelText(sideSpace)
 						}
-						popoverTitle={__('All Sides Margin', 'publisher-core')}
 						onClick={() => {
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
@@ -246,7 +242,6 @@ export function MarginAll({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'margin.right',
@@ -272,7 +267,6 @@ export function MarginAll({
 								? fixLabelText(value.margin.top)
 								: fixLabelText(sideSpace)
 						}
-						popoverTitle={__('All Sides Margin', 'publisher-core')}
 						onClick={() => {
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
@@ -281,7 +275,6 @@ export function MarginAll({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'margin.bottom',
@@ -307,7 +300,6 @@ export function MarginAll({
 								? fixLabelText(value.margin.top)
 								: fixLabelText(sideSpace)
 						}
-						popoverTitle={__('All Sides Margin', 'publisher-core')}
 						onClick={() => {
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
@@ -316,7 +308,6 @@ export function MarginAll({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'margin.left',

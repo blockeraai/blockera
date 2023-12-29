@@ -71,18 +71,6 @@ export const BorderAndShadowExtension: TBorderAndShadowProps =
 								value: boxShadow,
 								attribute: 'publisherBoxShadow',
 								blockName: block.blockName,
-								description: () => (
-									<div
-										className={
-											'publisher-label-control-popover'
-										}
-									>
-										{__(
-											'Sets the border and box-shadow css properties for block.',
-											'publisher-core'
-										)}
-									</div>
-								),
 							}}
 							storeName={'publisher-core/controls/repeater'}
 						>
@@ -92,6 +80,22 @@ export const BorderAndShadowExtension: TBorderAndShadowProps =
 							>
 								<BoxShadowControl
 									label={__('Box Shadows', 'publisher-core')}
+									labelDescription={
+										<>
+											<p>
+												{__(
+													'Creates a shadow effect around block for depth and focus.',
+													'publisher-core'
+												)}
+											</p>
+											<p>
+												{__(
+													'Soft shadows create a subtle effect, while bold shadows make the block more noticeable.',
+													'publisher-core'
+												)}
+											</p>
+										</>
+									}
 									onChange={(
 										newValue: Array<Object>,
 										ref?: Object
@@ -124,6 +128,22 @@ export const BorderAndShadowExtension: TBorderAndShadowProps =
 							>
 								<OutlineControl
 									label={__('Outline', 'publisher-core')}
+									labelDescription={
+										<>
+											<p>
+												{__(
+													'Add distinct borders to elements without affecting layout, enhancing visual hierarchy and focus.',
+													'publisher-core'
+												)}
+											</p>
+											<p>
+												{__(
+													'Useful for highlighting elements without space adjustments, unlike borders. Perfect for focus states and accessibility.',
+													'publisher-core'
+												)}
+											</p>
+										</>
+									}
 									onChange={(newValue, ref) =>
 										handleOnChangeAttributes(
 											'publisherOutline',

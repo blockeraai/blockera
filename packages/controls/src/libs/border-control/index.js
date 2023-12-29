@@ -33,6 +33,8 @@ export default function BorderControl({
 	style, //
 	id,
 	label,
+	labelPopoverTitle,
+	labelDescription,
 	columns,
 	defaultValue = {
 		width: '0px',
@@ -54,7 +56,6 @@ export default function BorderControl({
 		getId,
 		attribute,
 		blockName,
-		description,
 		resetToDefault,
 		getControlPath,
 	} = useControlContext({
@@ -64,24 +65,28 @@ export default function BorderControl({
 		mergeInitialAndDefault: true,
 	});
 
+	const labelProps = {
+		value,
+		singularId,
+		attribute,
+		blockName,
+		label,
+		labelPopoverTitle,
+		labelDescription,
+		repeaterItem,
+		defaultValue,
+		resetToDefault,
+		mode: 'advanced',
+		path: getControlPath(attribute, id),
+	};
+
 	return (
 		<BaseControl
 			label={label}
 			columns={columns}
 			controlName={field}
 			className={className}
-			{...{
-				value,
-				attribute,
-				blockName,
-				singularId,
-				description,
-				defaultValue,
-				repeaterItem,
-				resetToDefault,
-				mode: 'advanced',
-				path: getControlPath(attribute, id),
-			}}
+			{...labelProps}
 		>
 			<div
 				className={controlClassNames('border', className)}

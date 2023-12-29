@@ -44,6 +44,8 @@ export default function InputControl({
 	float = true,
 	arrows = false,
 	size = 'normal',
+	labelDescription,
+	labelPopoverTitle,
 	//
 	singularId,
 	repeaterItem,
@@ -59,7 +61,6 @@ export default function InputControl({
 		setValue,
 		attribute,
 		blockName,
-		description,
 		resetToDefault,
 		getControlPath,
 	} = useControlContext({
@@ -87,7 +88,9 @@ export default function InputControl({
 		singularId,
 		attribute,
 		blockName,
-		description,
+		label,
+		labelDescription,
+		labelPopoverTitle,
 		repeaterItem,
 		defaultValue,
 		resetToDefault,
@@ -98,7 +101,6 @@ export default function InputControl({
 	if (isSetValueAddon()) {
 		return (
 			<BaseControl
-				label={label}
 				columns={columns}
 				controlName={field}
 				className={className}

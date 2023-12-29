@@ -12,11 +12,10 @@ import type { MixedElement } from 'react';
 import {
 	BaseControl,
 	ControlContextProvider,
-	InputControl,
 	ToggleSelectControl,
 	NoticeControl,
 } from '@publisher/controls';
-import { Flex, Button, Grid } from '@publisher/components';
+import { Flex, Button } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -51,8 +50,8 @@ import { default as AlignItemsFlexStartBlockIcon } from './icons/align-items-fle
 import { default as AlignContentSpaceAroundIcon } from './icons/align-content-space-around';
 import { default as AlignContentSpaceBetweenIcon } from './icons/align-content-space-between';
 import { default as ReverseIcon } from './icons/reverse';
-import { default as LockIcon } from './icons/lock';
-import { default as UnlockIcon } from './icons/unlock';
+import DisplayGridIcon from './icons/display-grid';
+import { FlexGap } from './components';
 
 export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 	({
@@ -74,7 +73,6 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 		// },
 		handleOnChangeAttributes,
 		config,
-		...props
 	}: TLayoutProps): MixedElement => {
 		const {
 			layoutConfig: {
@@ -101,6 +99,82 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 					>
 						<ToggleSelectControl
 							label={__('Display', 'publisher-core')}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'The Display is essential to defining how elements are formatted and arranged on the page.',
+											'publisher-core'
+										)}
+									</p>
+									<h3>
+										<DisplayBlockIcon />
+										{__('Block', 'publisher-core')}
+									</h3>
+									<p>
+										{__(
+											'Block take up the full width available, starting on a new line.',
+											'publisher-core'
+										)}
+									</p>
+									<h3>
+										<DisplayFlexIcon />
+										{__('Flex', 'publisher-core')}
+									</h3>
+									<p>
+										{__(
+											'Implements a flexible box layout, making it easier to design responsive layouts.',
+											'publisher-core'
+										)}
+									</p>
+									<h3>
+										<DisplayGridIcon />
+										{__('Grid', 'publisher-core')}
+										<span>
+											{__(
+												'Coming soon…',
+												'publisher-core'
+											)}
+										</span>
+									</h3>
+									<p>
+										{__(
+											'Creates a grid-based layout, providing precise control over rows and columns.',
+											'publisher-core'
+										)}
+									</p>
+									<h3>
+										<DisplayInlineBlockIcon />
+										{__('Inline Block', 'publisher-core')}
+									</h3>
+									<p>
+										{__(
+											'Behaves like "inline" but respects width and height values.',
+											'publisher-core'
+										)}
+									</p>
+									<h3>
+										<DisplayInlineIcon />
+										{__('Inline', 'publisher-core')}
+									</h3>
+									<p>
+										{__(
+											'Elements do not start on a new line and only occupy as much width as necessary.',
+											'publisher-core'
+										)}
+									</p>
+									<h3>
+										<DisplayNoneIcon />
+										{__('None', 'publisher-core')}
+									</h3>
+									<p>
+										{__(
+											'Completely hides the element from the layout, but note that the element remains in the HTML document.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							columns="1fr 160px"
 							options={[
 								{
@@ -178,6 +252,64 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												'Direction',
 												'publisher-core'
 											)}
+											labelPopoverTitle={__(
+												'Flex Direction',
+												'publisher-core'
+											)}
+											labelDescription={
+												<>
+													<p>
+														{__(
+															'Flex Direction controls the direction in which flex items are placed in the flex container.',
+															'publisher-core'
+														)}
+													</p>
+													<h3>
+														<FlexDirectionRowBlockIcon />
+														{__(
+															'Row Direction',
+															'publisher-core'
+														)}
+													</h3>
+													<p>
+														{__(
+															'Positions items in a horizontal row, following the text direction.',
+															'publisher-core'
+														)}
+													</p>
+													<h3>
+														<FlexDirectionColumnBlockIcon />
+														{__(
+															'Column Direction',
+															'publisher-core'
+														)}
+													</h3>
+													<p>
+														{__(
+															'Aligns items vertically, stacking them from top to bottom.',
+															'publisher-core'
+														)}
+													</p>
+													<p>
+														<span
+															style={{
+																fontWeight:
+																	'600',
+															}}
+														>
+															{__(
+																'Note:',
+																'publisher-core'
+															)}
+														</span>{' '}
+														{__(
+															'Using the reverse function will reorder items in a row or column in the opposite direction!',
+															'publisher-core'
+														)}
+													</p>
+												</>
+											}
+											isDeselectable={true}
 											columns="80px 120px"
 											options={[
 												{
@@ -287,6 +419,78 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 										' publisher-flex-align-items'
 									}
 									label={__('Align Items', 'publisher-core')}
+									labelDescription={
+										<>
+											<p>
+												{__(
+													'Align-Items controls the alignment of items on the cross axis in a flex container',
+													'publisher-core'
+												)}
+											</p>
+											<h3>
+												<AlignItemsFlexStartBlockIcon />
+												{__(
+													'Flex Start',
+													'publisher-core'
+												)}
+											</h3>
+											<p>
+												{__(
+													"Aligns items to the start of the container's cross axis.",
+													'publisher-core'
+												)}
+											</p>
+											<h3>
+												<AlignItemsCenterBlockIcon />
+												{__('Center', 'publisher-core')}
+											</h3>
+											<p>
+												{__(
+													'Centers items along the cross axis.',
+													'publisher-core'
+												)}
+											</p>
+											<h3>
+												<AlignItemsFlexEndBlockIcon />
+												{__(
+													'Flex End',
+													'publisher-core'
+												)}
+											</h3>
+											<p>
+												{__(
+													'Aligns items to the end of the cross axis.',
+													'publisher-core'
+												)}
+											</p>
+											<h3>
+												<AlignItemsFlexEndBlockIcon />
+												{__(
+													'Stretch',
+													'publisher-core'
+												)}
+											</h3>
+											<p>
+												{__(
+													'Stretches items to fill the container (default behavior).',
+													'publisher-core'
+												)}
+											</p>
+											<h3>
+												<AlignItemsBaselineBlockIcon />
+												{__(
+													'Baseline',
+													'publisher-core'
+												)}
+											</h3>
+											<p>
+												{__(
+													'Aligns items based on their baseline.',
+													'publisher-core'
+												)}
+											</p>
+										</>
+									}
 									isDeselectable={true}
 									//
 									defaultValue=""
@@ -299,14 +503,6 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									options={[
 										{
 											label: __(
-												'Center',
-												'publisher-core'
-											),
-											value: 'center',
-											icon: <AlignItemsCenterBlockIcon />,
-										},
-										{
-											label: __(
 												'Flex Start',
 												'publisher-core'
 											),
@@ -314,6 +510,14 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 											icon: (
 												<AlignItemsFlexStartBlockIcon />
 											),
+										},
+										{
+											label: __(
+												'Center',
+												'publisher-core'
+											),
+											value: 'center',
+											icon: <AlignItemsCenterBlockIcon />,
 										},
 										{
 											label: __(
@@ -370,15 +574,96 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									}
 									controlName="toggle-select"
 									label={__('Justify', 'publisher-core')}
+									labelPopoverTitle={__(
+										'Justify Content',
+										'publisher-core'
+									)}
+									labelDescription={
+										<>
+											<p>
+												{__(
+													'Justify-Content determines the distribution of flex items along the main axis in a flex container.',
+													'publisher-core'
+												)}
+											</p>
+											<h3>
+												<JustifyFlexStartIcon />
+												{__(
+													'Flex Start',
+													'publisher-core'
+												)}
+											</h3>
+											<p>
+												{__(
+													'Aligns items to the start of the main axis.',
+													'publisher-core'
+												)}
+											</p>
+											<h3>
+												<JustifyCenterIcon />
+												{__('Center', 'publisher-core')}
+											</h3>
+											<p>
+												{__(
+													'Centers items along the main axis.',
+													'publisher-core'
+												)}
+											</p>
+											<h3>
+												<JustifyFlexEndIcon />
+												{__(
+													'Flex End',
+													'publisher-core'
+												)}
+											</h3>
+											<p>
+												{__(
+													'Aligns items at the end of the main axis.',
+													'publisher-core'
+												)}
+											</p>
+											<h3>
+												<JustifySpaceBetweenIcon />
+												{__(
+													'Space Between',
+													'publisher-core'
+												)}
+											</h3>
+											<p>
+												{__(
+													'Distributes items evenly, with the first item at the start and the last at the end.',
+													'publisher-core'
+												)}
+											</p>
+											<h3>
+												<JustifySpaceAroundIcon />
+												{__(
+													'Space Around',
+													'publisher-core'
+												)}
+											</h3>
+											<p>
+												{__(
+													'Distributes items evenly with equal space around each item.',
+													'publisher-core'
+												)}
+											</p>
+											<h3>
+												<JustifySpaceEvenlyIcon />
+												{__(
+													'Space Evenly',
+													'publisher-core'
+												)}
+											</h3>
+											<p>
+												{__(
+													'Distributes items with equal spacing between each item.',
+													'publisher-core'
+												)}
+											</p>
+										</>
+									}
 									options={[
-										{
-											label: __(
-												'Center',
-												'publisher-core'
-											),
-											value: 'center',
-											icon: <JustifyCenterIcon />,
-										},
 										{
 											label: __(
 												'Flex Start',
@@ -386,6 +671,14 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 											),
 											value: 'flex-start',
 											icon: <JustifyFlexStartIcon />,
+										},
+										{
+											label: __(
+												'Center',
+												'publisher-core'
+											),
+											value: 'center',
+											icon: <JustifyCenterIcon />,
 										},
 										{
 											label: __(
@@ -442,161 +735,14 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									blockName: block.blockName,
 								}}
 							>
-								<BaseControl
-									label={__('Gap', 'publisher-core')}
-									columns="80px 160px"
-									id={'gap'}
-									attribute="publisherGap"
-									blockName={block.blockName}
-									mode={'advanced'}
-									path={'gap'}
-								>
-									<Grid
-										gap="10px"
-										gridTemplateColumns="120px 30px"
-									>
-										{gap?.lock ? (
-											isActiveField(publisherGap) && (
-												<InputControl
-													{...props}
-													className="control-first label-center small-gap"
-													aria-label={__(
-														'Gap',
-														'publisher-core'
-													)}
-													unitType="essential"
-													min={0}
-													max={200}
-													defaultValue={gap?.gap}
-													id={'gap'}
-													onChange={(newValue) =>
-														handleOnChangeAttributes(
-															'publisherGap',
-															{
-																...gap,
-																gap: newValue,
-															}
-														)
-													}
-													controlAddonTypes={[
-														'variable',
-													]}
-													variableTypes={['spacing']}
-												/>
-											)
-										) : (
-											<Grid
-												gridTemplateColumns="50px 50px"
-												gap="10px"
-											>
-												<InputControl
-													{...props}
-													controlName="input"
-													columns="columns-1"
-													className="control-first label-center small-gap"
-													label={__(
-														'Columns',
-														'publisher-core'
-													)}
-													unitType="essential"
-													min={0}
-													max={200}
-													defaultValue={gap?.columns}
-													id={'columns'}
-													onChange={(newValue) =>
-														handleOnChangeAttributes(
-															'publisherGap',
-															{
-																...gap,
-																columns:
-																	newValue,
-															}
-														)
-													}
-													size="small"
-													controlAddonTypes={[
-														'variable',
-													]}
-													variableTypes={['spacing']}
-												/>
-
-												<InputControl
-													{...props}
-													controlName="input"
-													columns="columns-1"
-													className="control-first label-center small-gap"
-													label={__(
-														'Rows',
-														'publisher-core'
-													)}
-													unitType="essential"
-													min={0}
-													max={200}
-													defaultValue={gap?.rows}
-													id={'rows'}
-													onChange={(newValue) =>
-														handleOnChangeAttributes(
-															'publisherGap',
-															{
-																...gap,
-																rows: newValue,
-															}
-														)
-													}
-													size="small"
-													controlAddonTypes={[
-														'variable',
-													]}
-													variableTypes={['spacing']}
-												/>
-											</Grid>
-										)}
-										<Button
-											showTooltip={true}
-											tooltipPosition="top"
-											label={__(
-												'Custom Row Column Gap',
-												'publisher-core'
-											)}
-											size="small"
-											onClick={() => {
-												if (gap?.lock) {
-													handleOnChangeAttributes(
-														'publisherGap',
-														{
-															...gap,
-															lock: !gap?.lock,
-															rows: gap?.gap,
-															columns: gap?.gap,
-														}
-													);
-												} else {
-													handleOnChangeAttributes(
-														'publisherGap',
-														{
-															lock: !gap?.lock,
-															gap: gap?.gap,
-															columns: '',
-															rows: '',
-														}
-													);
-												}
-											}}
-											style={{
-												color: gap?.lock
-													? 'var(--publisher-controls-color)'
-													: 'var(--publisher-controls-primary-color)',
-												padding: '6px 3px',
-											}}
-										>
-											{gap?.lock ? (
-												<LockIcon />
-											) : (
-												<UnlockIcon />
-											)}
-										</Button>
-									</Grid>
-								</BaseControl>
+								<FlexGap
+									block={block}
+									gap={gap}
+									publisherGap={publisherGap}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+								/>
 							</ControlContextProvider>
 						)}
 
@@ -627,6 +773,70 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													'Children',
 													'publisher-core'
 												)}
+												labelPopoverTitle={__(
+													'Children Wrap',
+													'publisher-core'
+												)}
+												labelDescription={
+													<>
+														<p>
+															{__(
+																'It controls whether flex items are forced into a single line or can be wrapped onto multiple lines, adjusting layout flexibility and responsiveness.',
+																'publisher-core'
+															)}
+														</p>
+														<p>
+															{__(
+																'It is crucial for managing the layout of flex items, especially when the container cannot accommodate all items in one row, ensuring content adaptability and orderliness.',
+																'publisher-core'
+															)}
+														</p>
+
+														<h3>
+															<WrapNoWrapIcon />
+															{__(
+																'No Wrap',
+																'publisher-core'
+															)}
+														</h3>
+														<p>
+															{__(
+																'All flex items will be on one line regardless of their size.',
+																'publisher-core'
+															)}
+														</p>
+														<h3>
+															<WrapWrapIcon />
+															{__(
+																'Wrap',
+																'publisher-core'
+															)}
+														</h3>
+														<p>
+															{__(
+																'Flex items will wrap onto multiple lines, from top to bottom.',
+																'publisher-core'
+															)}
+														</p>
+														<p>
+															<span
+																style={{
+																	fontWeight:
+																		'600',
+																}}
+															>
+																{__(
+																	'Note:',
+																	'publisher-core'
+																)}
+															</span>{' '}
+															{__(
+																'Using the reverse function flex items will wrap onto multiple lines in reverse order.',
+																'publisher-core'
+															)}
+														</p>
+													</>
+												}
 												options={[
 													{
 														label: __(
@@ -735,6 +945,100 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													'Align Content',
 													'publisher-core'
 												)}
+												labelDescription={
+													<>
+														<p>
+															{__(
+																'Align-Content controls the alignment and distribution of lines within a flex container when there is extra space along the cross-axis, offering various alignment options.',
+																'publisher-core'
+															)}
+														</p>
+														<p>
+															{__(
+																'This property is vital in multi-line flex containers, especially when the height of the container is greater than that of the flex items, ensuring a balanced, visually appealing layout.',
+																'publisher-core'
+															)}
+														</p>
+														<h3>
+															<AlignContentFlexStartIcon />
+															{__(
+																'Flex Start',
+																'publisher-core'
+															)}
+														</h3>
+														<p>
+															{__(
+																'Packs lines toward the start of the container.',
+																'publisher-core'
+															)}
+														</p>
+														<h3>
+															<AlignContentCenterIcon />
+															{__(
+																'Center',
+																'publisher-core'
+															)}
+														</h3>
+														<p>
+															{__(
+																'Centers lines within the container.',
+																'publisher-core'
+															)}
+														</p>
+														<h3>
+															<AlignContentFlexEndIcon />
+															{__(
+																'Flex End',
+																'publisher-core'
+															)}
+														</h3>
+														<p>
+															{__(
+																'Packs lines toward the end of the container.',
+																'publisher-core'
+															)}
+														</p>
+														<h3>
+															<AlignContentSpaceAroundIcon />
+															{__(
+																'Space Around',
+																'publisher-core'
+															)}
+														</h3>
+														<p>
+															{__(
+																'Distributes lines evenly, with equal space around each line.',
+																'publisher-core'
+															)}
+														</p>
+														<h3>
+															<AlignContentSpaceBetweenIcon />
+															{__(
+																'Space Between',
+																'publisher-core'
+															)}
+														</h3>
+														<p>
+															{__(
+																'Distributes lines evenly, with the first line at the start and the last at the end.',
+																'publisher-core'
+															)}
+														</p>
+														<h3>
+															<AlignContentStretchIcon />
+															{__(
+																'Stretch',
+																'publisher-core'
+															)}
+														</h3>
+														<p>
+															{__(
+																'Stretches lines to fill the container (default behavior).',
+																'publisher-core'
+															)}
+														</p>
+													</>
+												}
 												columns="80px 160px"
 												className={
 													'publisher-direction-' +
@@ -749,22 +1053,22 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												options={[
 													{
 														label: __(
-															'center',
-															'publisher-core'
-														),
-														value: 'center',
-														icon: (
-															<AlignContentCenterIcon />
-														),
-													},
-													{
-														label: __(
 															'Flex Start',
 															'publisher-core'
 														),
 														value: 'flex-start',
 														icon: (
 															<AlignContentFlexStartIcon />
+														),
+													},
+													{
+														label: __(
+															'Center',
+															'publisher-core'
+														),
+														value: 'center',
+														icon: (
+															<AlignContentCenterIcon />
 														),
 													},
 													{

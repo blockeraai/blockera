@@ -25,30 +25,34 @@ import type { BoxBorderControlProps, TValueTypes } from './types';
 export default function BoxBorderControl({
 	id,
 	label = '',
+	labelPopoverTitle,
+	labelDescription,
+	repeaterItem,
+	singularId,
 	defaultValue = {
 		type: 'all',
 		all: {
-			width: '0px',
+			width: '',
 			style: 'solid',
 			color: '',
 		},
 		left: {
-			width: '0px',
+			width: '',
 			style: 'solid',
 			color: '',
 		},
 		right: {
-			width: '0px',
+			width: '',
 			style: 'solid',
 			color: '',
 		},
 		top: {
-			width: '0px',
+			width: '',
 			style: 'solid',
 			color: '',
 		},
 		bottom: {
-			width: '0px',
+			width: '',
 			style: 'solid',
 			color: '',
 		},
@@ -65,7 +69,6 @@ export default function BoxBorderControl({
 		setValue,
 		attribute,
 		blockName,
-		description,
 		resetToDefault,
 		getControlPath,
 		controlInfo: { name: controlId },
@@ -86,17 +89,33 @@ export default function BoxBorderControl({
 			delete value?.bottom;
 			delete value?.left;
 
+			// return empty object if all values are empty
 			if (
 				value?.all?.color === '' &&
 				value?.all?.width === '' &&
-				value?.all?.style === ''
+				(value?.all?.style === 'solid' || value?.all?.style === '')
 			) {
-				return value;
+				return {};
 			}
 		}
 
 		return value;
 	}
+
+	const labelProps = {
+		value,
+		singularId,
+		attribute,
+		blockName,
+		label,
+		labelPopoverTitle,
+		labelDescription,
+		repeaterItem,
+		defaultValue,
+		resetToDefault,
+		mode: 'advanced',
+		path: getControlPath(attribute, id),
+	};
 
 	return (
 		<BaseControl
@@ -116,19 +135,7 @@ export default function BoxBorderControl({
 								marginRight: 'auto',
 							}}
 						>
-							<LabelControl
-								label={label}
-								{...{
-									value,
-									attribute,
-									blockName,
-									description,
-									resetToDefault,
-									mode: 'advanced',
-									path: getControlPath(attribute, id),
-									defaultValue: valueCleanup(defaultValue),
-								}}
-							/>
+							<LabelControl {...labelProps} />
 						</span>
 					)}
 

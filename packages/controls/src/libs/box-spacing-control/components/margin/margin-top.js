@@ -31,7 +31,6 @@ export function MarginTop({
 	setValue,
 	attribute,
 	blockName,
-	description,
 	defaultValue,
 	resetToDefault,
 	getControlPath,
@@ -218,7 +217,6 @@ export function MarginTop({
 								? fixLabelText(value.margin.top)
 								: fixLabelText(sideSpace)
 						}
-						popoverTitle={__('Top Margin', 'publisher-core')}
 						onClick={() => {
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
@@ -227,7 +225,6 @@ export function MarginTop({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'margin.top',

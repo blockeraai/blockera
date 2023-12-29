@@ -31,7 +31,6 @@ export function PaddingHorizontal({
 	setValue,
 	attribute,
 	blockName,
-	description,
 	defaultValue,
 	resetToDefault,
 	getControlPath,
@@ -227,10 +226,6 @@ export function PaddingHorizontal({
 								? fixLabelText(value.padding.right)
 								: fixLabelText(sideSpace)
 						}
-						popoverTitle={__(
-							'left & Right Padding',
-							'publisher-core'
-						)}
 						onClick={() => {
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
@@ -239,7 +234,6 @@ export function PaddingHorizontal({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'padding.right',
@@ -267,10 +261,6 @@ export function PaddingHorizontal({
 								? fixLabelText(value.padding.right)
 								: fixLabelText(sideSpace)
 						}
-						popoverTitle={__(
-							'left & Right Padding',
-							'publisher-core'
-						)}
 						onClick={() => {
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
@@ -279,7 +269,6 @@ export function PaddingHorizontal({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'padding.left',

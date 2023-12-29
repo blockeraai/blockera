@@ -40,6 +40,22 @@ export const FontSize = ({
 			<InputControl
 				controlName="input"
 				label={__('Font Size', 'publisher-core')}
+				labelDescription={
+					<>
+						<p>
+							{__(
+								'It sets the size of the font for text content, allowing customization of text appearance for readability and aesthetic appeal in various contexts.',
+								'publisher-core'
+							)}
+						</p>
+						<p>
+							{__(
+								'Relative units like "em" and "rem" are recommended for responsive designs as they adjust based on parent font size or root font size, respectively.',
+								'publisher-core'
+							)}
+						</p>
+					</>
+				}
 				columns="columns-2"
 				{...parentProps}
 				unitType="essential"

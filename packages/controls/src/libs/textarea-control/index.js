@@ -20,6 +20,10 @@ import type { TTextAreaItem } from './types';
 export default function TextAreaControl({
 	id,
 	label,
+	labelPopoverTitle,
+	labelDescription,
+	repeaterItem,
+	singularId,
 	columns,
 	defaultValue = '',
 	onChange,
@@ -34,8 +38,8 @@ export default function TextAreaControl({
 		setValue,
 		attribute,
 		blockName,
-		description,
 		resetToDefault,
+		getControlPath,
 	} = useControlContext({
 		id,
 		defaultValue,
@@ -49,18 +53,27 @@ export default function TextAreaControl({
 		)}px`;
 	}
 
+	const labelProps = {
+		value,
+		singularId,
+		attribute,
+		blockName,
+		label,
+		labelPopoverTitle,
+		labelDescription,
+		repeaterItem,
+		defaultValue,
+		resetToDefault,
+		mode: 'advanced',
+		path: getControlPath(attribute, id),
+	};
+
 	return (
 		<BaseControl
-			label={label}
 			columns={columns}
 			controlName={field}
 			className={className}
-			{...{
-				attribute,
-				blockName,
-				description,
-				resetToDefault,
-			}}
+			{...labelProps}
 		>
 			<textarea
 				value={value}

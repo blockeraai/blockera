@@ -13,7 +13,7 @@ import {
 	BorderRadiusControl,
 	ControlContextProvider,
 } from '@publisher/controls';
-import { isString, isUndefined } from '@publisher/utils';
+import { isString, isUndefined, isEmpty } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -34,20 +34,22 @@ export const BorderRadius = ({
 	onChange: THandleOnChangeAttributes,
 	defaultValue: TBorderAndShadowDefaultProp,
 }): MixedElement => {
-	const { isNormalState } = useBlockContext();
+	const { isNormalState, getAttributes } = useBlockContext();
 
 	const toWPCompatible = (newValue: Object): Object => {
-		if (!isNormalState()) {
+		if (!isNormalState() || isEmpty(newValue)) {
 			return {};
 		}
+
+		const blockAttributes = getAttributes();
 
 		if ('all' === newValue?.type) {
 			if (isString(newValue?.all) && !newValue?.all?.endsWith('func')) {
 				return {
 					style: {
-						...(block.attributes?.style ?? {}),
+						...(blockAttributes?.style ?? {}),
 						border: {
-							...(block.attributes?.style?.border ?? {}),
+							...(blockAttributes?.style?.border ?? {}),
 							radius: newValue.all,
 						},
 					},
@@ -90,9 +92,9 @@ export const BorderRadius = ({
 
 			return {
 				style: {
-					...(block.attributes?.style ?? {}),
+					...(blockAttributes?.style ?? {}),
 					border: {
-						...(block.attributes?.style?.border ?? {}),
+						...(blockAttributes?.style?.border ?? {}),
 						radius: {
 							topLeft,
 							topRight,
@@ -105,6 +107,26 @@ export const BorderRadius = ({
 		}
 	};
 
+	function getDefaultValue() {
+		// an object contains radius values
+		if (
+			typeof defaultValue.border.radius === 'object' &&
+			defaultValue.border.radius !== null
+		) {
+			return {
+				type: 'custom',
+				...defaultValue.border.radius,
+			};
+		}
+
+		return {
+			type: 'all',
+			all: !isUndefined(defaultValue.border.radius)
+				? defaultValue.border.radius
+				: '',
+		};
+	}
+
 	return (
 		<ControlContextProvider
 			value={{
@@ -114,23 +136,7 @@ export const BorderRadius = ({
 						return borderRadius;
 					}
 
-					// an object contains radius values
-					if (
-						typeof defaultValue.border.radius === 'object' &&
-						defaultValue.border.radius !== null
-					) {
-						return {
-							type: 'custom',
-							...defaultValue.border.radius,
-						};
-					}
-
-					return {
-						type: 'all',
-						all: !isUndefined(defaultValue.border.radius)
-							? defaultValue.border.radius
-							: '',
-					};
+					return getDefaultValue();
 				})(),
 				attribute: 'publisherBorderRadius',
 				blockName: block.blockName,
@@ -139,15 +145,27 @@ export const BorderRadius = ({
 			<BaseControl columns="columns-1" controlName="border-radius">
 				<BorderRadiusControl
 					label={__('Radius', 'publisher-core')}
+					labelDescription={
+						<>
+							<p>
+								{__(
+									'Softens the edges of block by rounding corners.',
+									'publisher-core'
+								)}
+							</p>
+							<p>
+								{__(
+									'Sharp borders offer a modern, structured look, while soft, rounded corners create a friendly and inviting feel',
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
 					onChange={(newValue: Object, ref?: Object): void =>
 						onChange('publisherBorderRadius', newValue, {
 							ref,
 							addOrModifyRootItems: toWPCompatible(newValue),
-							deleteItemsOnResetAction:
-								'all' === newValue?.type &&
-								block.attributes?.style?.border?.radius
-									? ['style.border.radius']
-									: [],
+							deleteItemsOnResetAction: ['style.border.radius'],
 						})
 					}
 				/>

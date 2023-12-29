@@ -29,6 +29,8 @@ export default function ToggleSelectControl({
 	//
 	id,
 	label,
+	labelDescription,
+	labelPopoverTitle,
 	columns,
 	defaultValue,
 	onChange = () => {},
@@ -45,7 +47,6 @@ export default function ToggleSelectControl({
 		setValue,
 		attribute,
 		blockName,
-		description,
 		getControlPath,
 		resetToDefault,
 	} = useControlContext({
@@ -62,7 +63,6 @@ export default function ToggleSelectControl({
 
 	return (
 		<BaseControl
-			label={label}
 			columns={columns}
 			controlName={field}
 			className={className}
@@ -71,7 +71,9 @@ export default function ToggleSelectControl({
 				singularId,
 				attribute,
 				blockName,
-				description,
+				label,
+				labelDescription,
+				labelPopoverTitle,
 				defaultValue,
 				repeaterItem,
 				resetToDefault,

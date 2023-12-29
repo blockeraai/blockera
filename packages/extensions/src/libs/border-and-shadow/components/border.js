@@ -9,6 +9,7 @@ import type { MixedElement } from 'react';
  * Publisher dependencies
  */
 import { BoxBorderControl, ControlContextProvider } from '@publisher/controls';
+import { isEmpty } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -30,29 +31,31 @@ export const Border = ({
 	onChange: THandleOnChangeAttributes,
 	defaultValue: TBorderAndShadowDefaultProp,
 }): MixedElement => {
-	const { isNormalState } = useBlockContext();
+	const { isNormalState, getAttributes } = useBlockContext();
 
 	const toWPCompatible = (newValue: Object): Object => {
-		if (!isNormalState()) {
+		if (!isNormalState() || isEmpty(newValue)) {
 			return {};
 		}
 
 		let customized;
 
+		const blockAttributes = getAttributes();
+
 		if ('all' === newValue.type) {
 			customized = {
 				borderColor:
 					newValue?.all?.color ||
-					block.attributes.borderColor ||
-					block.attributes?.style?.border?.color,
+					blockAttributes.borderColor ||
+					blockAttributes?.style?.border?.color,
 				style: {
-					...(block.attributes?.style ?? {}),
+					...(blockAttributes?.style ?? {}),
 					border: {
-						...(block.attributes?.style?.border ?? {}),
+						...(blockAttributes?.style?.border ?? {}),
 						color:
 							newValue?.all?.color ||
-							block.attributes.borderColor ||
-							block.attributes?.style?.border?.color,
+							blockAttributes.borderColor ||
+							blockAttributes?.style?.border?.color,
 						width: newValue?.all?.width,
 						style: newValue?.all?.width ? newValue?.all?.style : '',
 					},
@@ -67,9 +70,9 @@ export const Border = ({
 			customized = {
 				borderColor: undefined,
 				style: {
-					...(block.attributes?.style ?? {}),
+					...(blockAttributes?.style ?? {}),
 					border: {
-						...(block.attributes?.style?.border ?? {}),
+						...(blockAttributes?.style?.border ?? {}),
 						top: {
 							width: newValue?.top?.width,
 							color: newValue?.top?.color,
@@ -109,6 +112,7 @@ export const Border = ({
 
 		return customized;
 	};
+
 	const getNormalDefaultValue = (): Object => {
 		const { top, right, bottom, left } = defaultValue.border;
 
@@ -138,7 +142,7 @@ export const Border = ({
 			all: {
 				color: getColorValue(defaultValue.borderColor),
 				style: defaultValue.border?.style || 'solid',
-				width: defaultValue.border?.width || '0px',
+				width: defaultValue.border?.width || '',
 			},
 			type: 'all',
 		};
@@ -159,19 +163,41 @@ export const Border = ({
 			<BoxBorderControl
 				columns="columns-1"
 				label={__('Border Line', 'publisher-core')}
+				labelDescription={
+					<>
+						<p>
+							{__(
+								'Define clear boundaries for elements with customizable lines, enhancing structure and design.',
+								'publisher-core'
+							)}
+						</p>
+						<p>
+							{__(
+								'Solid borders offer a classic, defined look, while dotted or dashed styles can create a more playful visual effect.',
+								'publisher-core'
+							)}
+						</p>
+					</>
+				}
 				onChange={(newValue: Object, ref?: Object): void => {
+					const deleteWPItems = [
+						'style.border.style',
+						'style.border.width',
+						'style.border.color',
+						'style.border.top',
+						'style.border.right',
+						'style.border.bottom',
+						'style.border.left',
+					];
+
 					onChange('publisherBorder', newValue, {
 						ref,
-						deleteItemsOnResetAction: [
-							'style.border.style',
-							'style.border.width',
-							'style.border.color',
-							'style.border.top',
-							'style.border.right',
-							'style.border.bottom',
-							'style.border.left',
-						],
 						addOrModifyRootItems: toWPCompatible(newValue),
+						deleteItems:
+							isEmpty(newValue) && isNormalState()
+								? deleteWPItems
+								: [],
+						deleteItemsOnResetAction: deleteWPItems,
 					});
 				}}
 			/>

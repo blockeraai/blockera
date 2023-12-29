@@ -22,6 +22,10 @@ import type { GradientBarControlProps } from './types';
 export default function GradientBarControl({
 	id,
 	label,
+	labelPopoverTitle,
+	labelDescription,
+	repeaterItem,
+	singularId,
 	columns,
 	defaultValue = '',
 	onChange,
@@ -39,8 +43,8 @@ export default function GradientBarControl({
 		setValue,
 		attribute,
 		blockName,
-		description,
 		resetToDefault,
+		getControlPath,
 	} = useControlContext({
 		id,
 		defaultValue,
@@ -60,14 +64,28 @@ export default function GradientBarControl({
 		onChange: setValue,
 	});
 
+	const labelProps = {
+		value,
+		singularId,
+		attribute,
+		blockName,
+		label,
+		labelPopoverTitle,
+		labelDescription,
+		repeaterItem,
+		defaultValue,
+		resetToDefault,
+		mode: 'advanced',
+		path: getControlPath(attribute, id),
+	};
+
 	if (isSetValueAddon()) {
 		return (
 			<BaseControl
-				label={label}
 				columns={columns}
 				controlName={field}
 				className={className}
-				{...{ attribute, blockName, description, resetToDefault }}
+				{...labelProps}
 			>
 				<div
 					className={controlClassNames(
@@ -89,11 +107,10 @@ export default function GradientBarControl({
 
 	return (
 		<BaseControl
-			label={label}
 			columns={columns}
 			controlName={field}
 			className={className + ' ' + valueAddonClassNames}
-			{...{ description, resetToDefault }}
+			{...labelProps}
 		>
 			<div
 				data-cy="gradient-bar-control"
