@@ -9,22 +9,19 @@ import type { MixedElement } from 'react';
  * Publisher dependencies
  */
 import {
-	BaseControl,
-	InputControl,
 	ToggleSelectControl,
 	ControlContextProvider,
-	convertAlignmentMatrixCoordinates,
-	PositionButtonControl,
-	NoticeControl,
 } from '@publisher/controls';
 import { Popover } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
-import { checkVisibleItemLength } from '@publisher/utils';
+
 /**
  * Internal dependencies
  */
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 import { generateExtensionId } from '../../utils';
+import { SelfPerspective } from './self-perspective';
+import { ChildPerspective } from './child-perspective';
 
 export const TransformSettings = ({
 	setIsTransformSettingsVisible,
@@ -33,7 +30,6 @@ export const TransformSettings = ({
 	handleOnChangeAttributes,
 	backfaceVisibility,
 	transformChildPerspective,
-	props,
 	transformChildOrigin,
 	transformSelfOrigin,
 	transform,
@@ -49,8 +45,6 @@ export const TransformSettings = ({
 	transformSelfOrigin: Object,
 	transform: Array<Object>,
 }): MixedElement => {
-	const visibleTransformLength = checkVisibleItemLength(transform);
-
 	return (
 		<Popover
 			title={__('Transform Settings', 'publisher-core')}
@@ -60,6 +54,7 @@ export const TransformSettings = ({
 			onClose={() => {
 				setIsTransformSettingsVisible(false);
 			}}
+			focusOnMount={false}
 		>
 			<ControlContextProvider
 				value={{
@@ -69,84 +64,12 @@ export const TransformSettings = ({
 					blockName: block.blockName,
 				}}
 			>
-				<BaseControl columns="column-1">
-					<BaseControl
-						label={__('Self Perspective', 'publisher-core')}
-						columns="columns-2"
-						className={`publisher-transform-self-perspective ${
-							!visibleTransformLength &&
-							'publisher-control-is-not-active'
-						}`}
-					>
-						<InputControl
-							controlName="input"
-							{...{
-								...props,
-								unitType: 'essential',
-								range: true,
-								min: 0,
-								max: 2000,
-								initialPosition: 100,
-								defaultValue: '0px',
-								onChange: (newValue) =>
-									handleOnChangeAttributes(
-										'publisherTransformSelfPerspective',
-										newValue
-									),
-							}}
-							size="small"
-						/>
-						<ControlContextProvider
-							value={{
-								name: generateExtensionId(block, 'self-origin'),
-								value: {
-									...transformSelfOrigin,
-									coordinates:
-										convertAlignmentMatrixCoordinates(
-											transformSelfOrigin
-										)?.compact,
-								},
-								attribute: 'publisherTransformSelfOrigin',
-								blockName: block.blockName,
-							}}
-						>
-							<PositionButtonControl
-								buttonLabel={__(
-									'Self Perspective Origin',
-									'publisher-core'
-								)}
-								popoverTitle={__(
-									'Perspective Position',
-									'publisher-core'
-								)}
-								alignmentMatrixLabel={__(
-									'Self Origin',
-									'publisher-core'
-								)}
-								size="small"
-								defaultValue={{ top: '', left: '' }}
-								onChange={({ top, left }) => {
-									handleOnChangeAttributes(
-										'publisherTransformSelfOrigin',
-										{
-											...transformSelfOrigin,
-											top,
-											left,
-										}
-									);
-								}}
-							/>
-						</ControlContextProvider>
-					</BaseControl>
-					{!visibleTransformLength && (
-						<NoticeControl type="warning">
-							{__(
-								`For using Self Perspective your block should have at least one transform.`,
-								'publisher-core'
-							)}
-						</NoticeControl>
-					)}
-				</BaseControl>
+				<SelfPerspective
+					block={block}
+					handleOnChangeAttributes={handleOnChangeAttributes}
+					transform={transform}
+					transformSelfOrigin={transformSelfOrigin}
+				/>
 			</ControlContextProvider>
 
 			<ControlContextProvider
@@ -160,6 +83,22 @@ export const TransformSettings = ({
 				<ToggleSelectControl
 					controlName="toggle-select"
 					label={__('Backface Visibility', 'publisher-core')}
+					labelDescription={
+						<>
+							<p>
+								{__(
+									'It sets whether the backside of a transformed block is visible when turned towards the viewer.',
+									'publisher-core'
+								)}
+							</p>
+							<p>
+								{__(
+									"It controls the visibility of the element's reverse side during 3D transformations.",
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
 					columns="columns-2"
 					options={[
 						{
@@ -191,70 +130,11 @@ export const TransformSettings = ({
 					blockName: block.blockName,
 				}}
 			>
-				<BaseControl
-					label={__('Child Perspective', 'publisher-core')}
-					columns="columns-2"
-					className={'publisher-transform-child-perspective'}
-				>
-					<InputControl
-						controlName="input"
-						{...{
-							...props,
-							unitType: 'essential',
-							range: true,
-							min: 0,
-							max: 2000,
-							defaultValue: '0px',
-							onChange: (newValue) =>
-								handleOnChangeAttributes(
-									'publisherTransformChildPerspective',
-									newValue
-								),
-						}}
-						size="small"
-					/>
-					<ControlContextProvider
-						value={{
-							name: generateExtensionId(block, 'child-origin'),
-							value: {
-								...transformChildOrigin,
-								coordinates:
-									convertAlignmentMatrixCoordinates(
-										transformChildOrigin
-									)?.compact,
-							},
-							attribute: 'publisherTransformChildOrigin',
-							blockName: block.blockName,
-						}}
-					>
-						<PositionButtonControl
-							buttonLabel={__(
-								'Child Perspective Origin',
-								'publisher-core'
-							)}
-							popoverTitle={__(
-								'Perspective Position',
-								'publisher-core'
-							)}
-							alignmentMatrixLabel={__(
-								'Child Origin',
-								'publisher-core'
-							)}
-							size="small"
-							defaultValue={{ top: '', left: '' }}
-							onChange={({ top, left }) => {
-								handleOnChangeAttributes(
-									'publisherTransformChildOrigin',
-									{
-										...transformChildOrigin,
-										top,
-										left,
-									}
-								);
-							}}
-						/>
-					</ControlContextProvider>
-				</BaseControl>
+				<ChildPerspective
+					block={block}
+					transformChildOrigin={transformChildOrigin}
+					handleOnChangeAttributes={handleOnChangeAttributes}
+				/>
 			</ControlContextProvider>
 		</Popover>
 	);

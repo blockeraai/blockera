@@ -20,6 +20,7 @@ import type {
 	TTransitionControlProps,
 	TransitionControlItemValue,
 } from './types';
+import { LabelDescription } from './components/label-description';
 
 export default function TransitionControl({
 	defaultRepeaterItemValue = {
@@ -29,14 +30,18 @@ export default function TransitionControl({
 		delay: '0ms',
 		isVisible: true,
 	},
-	popoverTitle = __('Transition', 'publisher-core'),
+	popoverTitle,
+	label,
+	labelDescription,
 	className,
 	...props
 }: TTransitionControlProps): MixedElement {
 	return (
 		<RepeaterControl
 			className={controlClassNames('transition', className)}
-			popoverTitle={popoverTitle}
+			popoverTitle={popoverTitle || __('Transitions', 'publisher-core')}
+			label={label || __('Transitions', 'publisher-core')}
+			labelDescription={labelDescription || <LabelDescription />}
 			addNewButtonLabel={__('Add New Transition', 'publisher-core')}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}

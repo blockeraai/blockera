@@ -4,6 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -16,11 +17,11 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
-import type { MixedElement } from 'react';
 import type {
 	TransformControlProps,
 	TransformControlRepeaterItemValue,
 } from './types';
+import { LabelDescription } from './components/label-description';
 
 export default function TransformControl({
 	defaultRepeaterItemValue = {
@@ -36,14 +37,20 @@ export default function TransformControl({
 		'skew-y': '0deg',
 		isVisible: true,
 	},
-	popoverTitle = __('Transform', 'publisher-core'),
+	popoverTitle,
+	label,
+	labelDescription,
 	className,
 	...props
 }: TransformControlProps): MixedElement {
 	return (
 		<RepeaterControl
 			className={controlClassNames('transform', className)}
-			popoverTitle={popoverTitle}
+			popoverTitle={
+				popoverTitle || __('2D & 3D Transforms', 'publisher-core')
+			}
+			label={label || __('2D & 3D Transforms', 'publisher-core')}
+			labelDescription={labelDescription || <LabelDescription />}
 			addNewButtonLabel={__('Add New Transform', 'publisher-core')}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}

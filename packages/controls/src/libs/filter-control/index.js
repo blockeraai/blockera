@@ -18,6 +18,7 @@ import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 import type { FilterControlProps, TValueCleanUp } from './types';
+import { FilterLabelDescription } from './components/filter-label-description';
 
 export default function FilterControl({
 	id,
@@ -37,7 +38,10 @@ export default function FilterControl({
 		'drop-shadow-color': '',
 		isVisible: true,
 	},
-	popoverTitle = __('Filter Effect', 'publisher-core'),
+	popoverTitle,
+	label,
+	labelPopoverTitle,
+	labelDescription,
 	className,
 	defaultValue = [],
 	...props
@@ -98,7 +102,35 @@ export default function FilterControl({
 		<RepeaterControl
 			id={id}
 			className={controlClassNames('filter', className)}
-			popoverTitle={popoverTitle}
+			popoverTitle={
+				popoverTitle || __('Filter Effects', 'publisher-core')
+			}
+			label={label || __('Filters', 'publisher-core')}
+			labelPopoverTitle={
+				labelPopoverTitle || __('Filter Effects', 'publisher-core')
+			}
+			labelDescription={
+				labelDescription || (
+					<FilterLabelDescription
+						labelDescription={
+							<>
+								<p>
+									{__(
+										'The Filter applies on-the-fly image adjustments and graphical effects to block and its content.',
+										'publisher-core'
+									)}
+								</p>
+								<p>
+									{__(
+										'It is widely used for image manipulation, creating hover effects, or enhancing the aesthetics of web elements.',
+										'publisher-core'
+									)}
+								</p>
+							</>
+						}
+					/>
+				)
+			}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}

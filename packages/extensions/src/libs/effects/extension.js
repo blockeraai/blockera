@@ -103,10 +103,6 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 								controlName="transform"
 							>
 								<TransformControl
-									label={__(
-										'2D & 3D Transforms',
-										'publisher-core'
-									)}
 									onChange={(newValue) =>
 										handleOnChangeAttributes(
 											'publisherTransform',

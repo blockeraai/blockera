@@ -10,21 +10,27 @@ import type { MixedElement } from 'react';
  */
 import type { ControlGeneralTypes } from '../../../types';
 
-type IconOption = {
+type Option = {
+	'aria-label'?: string,
 	label: string,
 	value: string,
+	disabled?: boolean,
+	showTooltip?: boolean,
+};
+
+type IconOption = {
+	...Option,
 	icon: MixedElement,
 };
 
 type TextOption = {
-	label: string,
-	value: string,
+	...Option,
 };
 
-type Option = IconOption | TextOption;
+type OptionItem = IconOption | TextOption;
 
 export type ToggleSelectControlProps = {
 	...ControlGeneralTypes,
 	isDeselectable?: boolean,
-	options: Option[],
+	options: Array<OptionItem>,
 };

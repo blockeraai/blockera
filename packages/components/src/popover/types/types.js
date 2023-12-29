@@ -28,4 +28,6 @@ export type TPopoverProps = {
 	closeButton?: boolean,
 	titleButtonsRight?: any,
 	titleButtonsLeft?: any,
+	focusOnMount?: 'firstElement' | boolean,
+	'data-test'?: string,
 };

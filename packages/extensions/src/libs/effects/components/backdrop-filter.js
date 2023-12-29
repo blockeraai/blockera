@@ -13,6 +13,7 @@ import {
 	BaseControl,
 	FilterControl,
 	ControlContextProvider,
+	FilterLabelDescription,
 } from '@publisher/controls';
 
 /**
@@ -46,6 +47,33 @@ export const BackdropFilter = ({
 				<FilterControl
 					label={__('Backdrop Filters', 'publisher-core')}
 					popoverTitle={__('Backdrop Filter', 'publisher-core')}
+					labelPopoverTitle={__('Backdrop Filter', 'publisher-core')}
+					labelDescription={
+						<FilterLabelDescription
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'The Backdrop filter applies a filter effect to the area behind an element.',
+											'publisher-core'
+										)}
+									</p>
+									<p>
+										{__(
+											'Unlike the "Filter", which affects the block itself, "Backdrop Filter" impacts the space beneath the block.',
+											'publisher-core'
+										)}
+									</p>
+									<p>
+										{__(
+											'It is essential for creating frosted glass effects, blurring background content behind modal windows, tooltips, or navigation bars.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
+						/>
+					}
 					onChange={(newValue) =>
 						handleOnChangeAttributes(
 							'publisherBackdropFilter',

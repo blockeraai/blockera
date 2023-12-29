@@ -104,6 +104,8 @@ export default function RepeaterControl({
 		design,
 		mode,
 		popoverTitle: popoverTitle || label || '',
+		labelPopoverTitle,
+		labelDescription,
 		popoverClassName,
 		maxItems,
 		minItems,

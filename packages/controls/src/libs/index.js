@@ -22,6 +22,7 @@ export { default as TextShadowControl } from './text-shadow-control';
 export { default as TransitionControl } from './transition-control';
 export { default as AttributesControl } from './attributes-control';
 export { default as FilterControl } from './filter-control';
+export { FilterLabelDescription } from './filter-control/components/filter-label-description';
 export { default as OutlineControl } from './outline-control';
 export {
 	default as BackgroundControl,

@@ -45,6 +45,22 @@ export const Opacity = ({
 				<InputControl
 					controlName="input"
 					label={__('Opacity', 'publisher-core')}
+					labelDescription={
+						<>
+							<p>
+								{__(
+									'Opacity controls the transparency level of block, ranging from 0 (completely transparent) to 1 (fully opaque).',
+									'publisher-core'
+								)}
+							</p>
+							<p>
+								{__(
+									"It's widely used in animations, UI interactions, and to draw attention or de-emphasize blocks.",
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
 					columns="columns-2"
 					{...props}
 					unitType="percent"

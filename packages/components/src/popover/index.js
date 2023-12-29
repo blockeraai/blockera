@@ -35,6 +35,7 @@ export default function Popover({
 	flip: _flip = true,
 	animate = true,
 	closeButton = true,
+	focusOnMount = 'firstElement',
 	titleButtonsRight = '',
 	titleButtonsLeft = '',
 	...props
@@ -90,6 +91,7 @@ export default function Popover({
 					flip={!isUndefined(flip) ? flip : _flip}
 					animate={animate}
 					placement={placement}
+					focusOnMount={focusOnMount}
 					{...props}
 					ref={popoverRef}
 				>
