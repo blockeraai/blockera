@@ -55,16 +55,15 @@ export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 							label=""
 						>
 							<BoxPositionControl
-								{...{
-									...props,
-									//
-									onChange: (newValue) =>
-										handleOnChangeAttributes(
-											'publisherPosition',
-											newValue
-										),
-								}}
+								{...props}
+								onChange={(newValue) =>
+									handleOnChangeAttributes(
+										'publisherPosition',
+										newValue
+									)
+								}
 							/>
+
 							{positionValue?.type === 'sticky' &&
 								positionValue.position.top &&
 								positionValue.position.bottom && (
@@ -94,6 +93,22 @@ export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 								controlName="input"
 								columns="columns-2"
 								label={__('z-index', 'publisher-core')}
+								labelDescription={
+									<>
+										<p>
+											{__(
+												'Control the stacking order of blocks with z-index, a CSS property that manages the layering and overlap of components on your website.',
+												'publisher-core'
+											)}
+										</p>
+										<p>
+											{__(
+												'z-index is crucial for creating visually appealing layouts, especially in complex designs, allowing you to prioritize content visibility and interaction.',
+												'publisher-core'
+											)}
+										</p>
+									</>
+								}
 								type="number"
 								unitType="z-index"
 								arrows={true}

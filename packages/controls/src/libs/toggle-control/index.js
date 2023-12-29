@@ -9,32 +9,72 @@ import { ToggleControl as WPToggleControl } from '@wordpress/components';
 /**
  * Publisher dependencies
  */
+import { controlClassNames } from '@publisher/classnames';
+
+/**
+ * Internal dependencies
+ */
 import type { TToggleControlProps } from './types/toggle-control-props';
 import { useControlContext } from '../../context';
-import { controlClassNames } from '@publisher/classnames';
+import { BaseControl } from '../index';
 
 export default function ToggleControl({
 	id,
 	label,
+	labelPopoverTitle,
+	labelDescription,
+	repeaterItem,
+	singularId,
 	defaultValue,
+	field = 'toggle',
+	columns,
 	onChange,
 	className,
 	...props
 }: TToggleControlProps): MixedElement {
-	const { value, setValue } = useControlContext({
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		resetToDefault,
+		getControlPath,
+	} = useControlContext({
 		id,
 		defaultValue,
 		onChange,
 	});
 
+	const labelProps = {
+		value,
+		singularId,
+		attribute,
+		blockName,
+		label,
+		labelPopoverTitle,
+		labelDescription,
+		repeaterItem,
+		defaultValue,
+		resetToDefault,
+		mode: 'advanced',
+		path: getControlPath(attribute, id),
+	};
+
 	return (
-		<WPToggleControl
-			label={label}
-			checked={value}
-			onChange={setValue}
-			className={controlClassNames('toggle', className)}
-			{...props}
-		/>
+		<BaseControl
+			columns={columns}
+			controlName={field}
+			className={className}
+			{...labelProps}
+		>
+			<WPToggleControl
+				label={label}
+				checked={value}
+				onChange={setValue}
+				className={controlClassNames('toggle', className)}
+				{...props}
+			/>
+		</BaseControl>
 	);
 }
 

@@ -22,7 +22,6 @@ import type { TTransformCssProps } from './types/effects-props';
 interface IConfigs {
 	effectsConfig: {
 		cssGenerators: Object,
-		publisherCursor?: string,
 		publisherOpacity?: string,
 		publisherBlendMode?: string,
 		publisherFilter?: Array<Object>,
@@ -38,7 +37,6 @@ export function EffectsStyles({
 	effectsConfig: {
 		cssGenerators,
 		publisherFilter,
-		publisherCursor,
 		publisherOpacity,
 		publisherTransform,
 		publisherBlendMode,
@@ -304,31 +302,6 @@ export function EffectsStyles({
 					},
 				},
 				blockProps
-			)
-		);
-	}
-
-	if (
-		isActiveField(publisherCursor) &&
-		blockProps.attributes.publisherCursor !==
-			attributes.publisherCursor.default
-	) {
-		generators.push(
-			computedCssRules(
-				{
-					cssGenerators: {
-						publisherCursor: [
-							{
-								type: 'static',
-								selector: '.{{BLOCK_ID}}',
-								properties: {
-									cursor: '{{publisherCursor}}',
-								},
-							},
-						],
-					},
-				},
-				{ attributes: blockProps.attributes, ...blockProps }
 			)
 		);
 	}

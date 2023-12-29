@@ -36,9 +36,11 @@ export const useAttributes = (
 		let _attributes = { ...attributes, ...addOrModifyRootItems };
 
 		const deleteExtraItems = (items: Array<string>, from: Object): void => {
-			// Assume existed deleteItems.
-			for (let i = 0; i < items?.length - 1; i++) {
-				deletePropertyByPath(from, items[i]);
+			if (items?.length) {
+				// Assume existed deleteItems.
+				for (let i = 0; i < items?.length; i++) {
+					deletePropertyByPath(from, items[i]);
+				}
 			}
 		};
 

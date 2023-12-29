@@ -31,7 +31,6 @@ export function MarginRight({
 	setValue,
 	attribute,
 	blockName,
-	description,
 	defaultValue,
 	resetToDefault,
 	getControlPath,
@@ -211,7 +210,6 @@ export function MarginRight({
 					>
 						<LabelControl
 							ariaLabel={__('Right Margin', 'publisher-core')}
-							popoverTitle={__('Right Margin', 'publisher-core')}
 							label={
 								_isSetValueAddon
 									? fixLabelText(value.margin.right)
@@ -225,7 +223,6 @@ export function MarginRight({
 								value,
 								attribute,
 								blockName,
-								description,
 								defaultValue,
 								resetToDefault,
 								singularId: 'margin.right',

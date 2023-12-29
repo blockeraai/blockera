@@ -73,6 +73,11 @@ import {
 	attributes as advancedAttributes,
 	supports as advancedSupports,
 } from '../advanced';
+import {
+	MouseExtensionIcon,
+	attributes as mouseAttributes,
+	supports as mouseSupports,
+} from '../mouse';
 import { hasSameProps } from '../utils';
 import extensions from './extensions.json';
 import { ExtensionStyle } from '../base/style';
@@ -94,6 +99,7 @@ export const attributes = {
 	...flexChildAttributes,
 	...iconAttributes,
 	...advancedAttributes,
+	...mouseAttributes,
 };
 export const supports = {
 	...typographySupports,
@@ -107,6 +113,7 @@ export const supports = {
 	...flexChildSupports,
 	...iconSupports,
 	...advancedSupports,
+	...mouseSupports,
 };
 
 type Props = {
@@ -150,7 +157,9 @@ export const SharedBlockExtension: Props = memo(
 			background,
 			borderAndShadow,
 			icon,
+			mouse,
 		} = extensions;
+
 		props = {
 			...props,
 			attributes,
@@ -375,6 +384,18 @@ export const SharedBlockExtension: Props = memo(
 							/>
 
 							<BaseExtension
+								{...props}
+								initialOpen={true}
+								extensionId={'Mouse'}
+								values={include(attributes, mouse, 'publisher')}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+								title={__('Mouse', 'publisher-core')}
+								icon={<MouseExtensionIcon />}
+							/>
+
+							<BaseExtension
 								initialOpen={true}
 								extensionId={'Advanced'}
 								attributes={attributes?.publisherAttributes}
@@ -436,6 +457,7 @@ export const SharedBlockExtension: Props = memo(
 						'Typography',
 						'Background',
 						'BorderAndShadow',
+						'Mouse',
 					]}
 				/>
 			</>

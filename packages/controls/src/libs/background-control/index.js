@@ -19,6 +19,7 @@ import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 import type { TBackgroundControlProps } from './types';
+import { LabelDescription } from './components/label-description';
 
 export default function BackgroundControl({
 	defaultValue = [],
@@ -54,6 +55,9 @@ export default function BackgroundControl({
 		isVisible: true,
 	},
 	popoverTitle = __('Background', 'publisher-core'),
+	label,
+	labelPopoverTitle,
+	labelDescription,
 	className = '',
 	...props
 }: TBackgroundControlProps): MixedElement {
@@ -112,6 +116,11 @@ export default function BackgroundControl({
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			popoverClassName={controlClassNames('background-popover')}
 			addNewButtonLabel={__('Add New Background', 'publisher-core')}
+			label={label || __('Background', 'publisher-core')}
+			labelPopoverTitle={
+				labelPopoverTitle || __('Block Background', 'publisher-core')
+			}
+			labelDescription={labelDescription || <LabelDescription />}
 			{...props}
 			valueCleanup={valueCleanup}
 		/>

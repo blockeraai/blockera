@@ -30,6 +30,10 @@ export default function MediaImageControl({
 	//
 	id,
 	label = '',
+	labelPopoverTitle,
+	labelDescription,
+	repeaterItem,
+	singularId,
 	columns,
 	defaultValue = '',
 	onChange,
@@ -42,21 +46,35 @@ export default function MediaImageControl({
 		setValue,
 		attribute,
 		blockName,
-		description,
 		resetToDefault,
+		getControlPath,
 	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
 	});
 
+	const labelProps = {
+		value,
+		singularId,
+		attribute,
+		blockName,
+		label,
+		labelPopoverTitle,
+		labelDescription,
+		repeaterItem,
+		defaultValue,
+		resetToDefault,
+		mode: 'advanced',
+		path: getControlPath(attribute, id),
+	};
+
 	return (
 		<BaseControl
-			label={label}
 			columns={columns}
 			controlName={field}
 			className={className}
-			{...{ attribute, blockName, description, resetToDefault }}
+			{...labelProps}
 		>
 			<div
 				className={controlClassNames(

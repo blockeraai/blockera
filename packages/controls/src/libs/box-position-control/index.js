@@ -2,7 +2,7 @@
 /**
  * External dependencies
  */
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import { useState, memo } from '@wordpress/element';
 import PropTypes from 'prop-types';
 
@@ -58,6 +58,10 @@ const Component = ({
 	//
 	id,
 	label = __('Position', 'publisher-core'),
+	labelPopoverTitle,
+	labelDescription,
+	repeaterItem,
+	singularId,
 	defaultValue = {
 		type: 'static',
 		position: {
@@ -78,8 +82,8 @@ const Component = ({
 		getId,
 		attribute,
 		blockName,
-		description,
 		resetToDefault,
+		getControlPath,
 	} = useControlContext({
 		id,
 		onChange,
@@ -169,6 +173,89 @@ const Component = ({
 		}
 	}
 
+	const labelProps = {
+		value,
+		singularId,
+		attribute,
+		blockName,
+		label,
+		labelPopoverTitle,
+		repeaterItem,
+		defaultValue,
+		resetToDefault,
+		mode: 'advanced',
+		path: getControlPath(attribute, id),
+		labelDescription: labelDescription ? (
+			labelDescription
+		) : (
+			<>
+				<p>
+					{__(
+						'Easily manipulate the placement of block with using CSS positioning.',
+						'publisher-core'
+					)}
+				</p>
+				<h3>
+					<RelativeIcon />
+					{__('Relative', 'publisher-core')}
+				</h3>
+				<p>
+					{__(
+						'Positions an element relative to its normal position, allowing adjustments.',
+						'publisher-core'
+					)}
+				</p>
+				<h3>
+					<AbsoluteIcon />
+					{__('Absolute', 'publisher-core')}
+				</h3>
+				<p>
+					{__(
+						'Removes the element from the document flow. Positioned relative to its nearest positioned ancestor.',
+						'publisher-core'
+					)}
+				</p>
+				<h3>
+					<FixedIcon />
+					{__('Fixed', 'publisher-core')}
+				</h3>
+				<p>
+					{__(
+						'Positions the element relative to the browser window, remaining fixed during scrolling.',
+						'publisher-core'
+					)}
+				</p>
+				<h3>
+					<StickyIcon />
+					{__('Sticky', 'publisher-core')}
+				</h3>
+				<p>
+					{__(
+						'A hybrid of relative and fixed. The element is treated as relative until it crosses a specified threshold, then it becomes fixed.',
+						'publisher-core'
+					)}
+				</p>
+			</>
+		),
+	};
+
+	let labelText = '';
+
+	switch (value.type) {
+		case 'absolute':
+			labelText = __('Absolute', 'publisher-core');
+			break;
+		case 'fixed':
+			labelText = __('Fixed', 'publisher-core');
+			break;
+		case 'sticky':
+			labelText = __('Sticky', 'publisher-core');
+			break;
+		default:
+			labelText = __('Relative', 'publisher-core');
+			break;
+	}
+
 	return (
 		<div
 			{...props}
@@ -184,17 +271,7 @@ const Component = ({
 							minHeight: '30px',
 						}}
 					>
-						<LabelControl
-							label={label}
-							{...{
-								attribute,
-								blockName,
-								description,
-								path: 'type',
-								resetToDefault,
-								mode: 'advanced',
-							}}
-						/>
+						<LabelControl {...labelProps} path={'type'} />
 					</span>
 				)}
 
@@ -374,19 +451,77 @@ const Component = ({
 
 					<span className={controlInnerClassNames('box-model-label')}>
 						<LabelControl
-							label={
-								//eslint-disable-next-line @wordpress/i18n-no-variables
-								__(
-									sprintf('%s Position', value.type),
-									'publisher-core'
-								)
+							{...labelProps}
+							label={labelText}
+							path="position"
+							labelDescription={
+								<>
+									{value.type === 'relative' && (
+										<>
+											<p>
+												{__(
+													"Position Relative sets a block's position in relation to its normal position, allowing for fine-tuning without affecting the document flow.",
+													'publisher-core'
+												)}
+											</p>
+											<p>
+												{__(
+													'This feature is crucial for subtle adjustments or for setting a positioning context for absolutely positioned child blocks.',
+													'publisher-core'
+												)}
+											</p>
+										</>
+									)}
+									{value.type === 'absolute' && (
+										<>
+											<p>
+												{__(
+													'Position Absolute allows for precise block placement relative to the nearest positioned ancestor, enabling pixel-perfect layout control.',
+													'publisher-core'
+												)}
+											</p>
+											<p>
+												{__(
+													'Ideal for creating fixed blocks in dynamic layouts, this feature offers unparalleled control for overlaying and aligning content accurately.',
+													'publisher-core'
+												)}
+											</p>
+										</>
+									)}
+									{value.type === 'fixed' && (
+										<>
+											<p>
+												{__(
+													'Position Fixed anchors block to a specific spot on the page, regardless of scrolling, ensuring constant visibility and placement.',
+													'publisher-core'
+												)}
+											</p>
+											<p>
+												{__(
+													'Ideal for persistent navigation menus, back to top buttons or call-to-action buttons, it enhances user experience by keeping important elements accessible.',
+													'publisher-core'
+												)}
+											</p>
+										</>
+									)}
+									{value.type === 'sticky' && (
+										<>
+											<p>
+												{__(
+													'Position Sticky offers a hybrid approach, keeping elements static until a specified point, then fixing them as the page scrolls.',
+													'publisher-core'
+												)}
+											</p>
+											<p>
+												{__(
+													'This feature is great for headers or important information, as it ensures visibility without disrupting the natural flow of the page.',
+													'publisher-core'
+												)}
+											</p>
+										</>
+									)}
+								</>
 							}
-							{...{
-								mode: 'advanced',
-								path: 'position',
-								description,
-								resetToDefault,
-							}}
 						/>
 					</span>
 
@@ -534,10 +669,11 @@ const Component = ({
 								gap="10px"
 							>
 								<Button
-									aria-label={__(
-										'Top Left',
+									label={__(
+										'Fix At Top Left Corner',
 										'publisher-core'
 									)}
+									showTooltip={true}
 									className="position-quick-btn"
 									size="small"
 									data-cy="absolute-top-left"
@@ -557,10 +693,11 @@ const Component = ({
 									<AbsoluteTopLeftIcon />
 								</Button>
 								<Button
-									aria-label={__(
-										'Top Right',
+									label={__(
+										'Fix At Top Right Corner',
 										'publisher-core'
 									)}
+									showTooltip={true}
 									className="position-quick-btn"
 									size="small"
 									data-cy="absolute-top-right"
@@ -580,10 +717,11 @@ const Component = ({
 									<AbsoluteTopRightIcon />
 								</Button>
 								<Button
-									aria-label={__(
-										'Bottom Left',
+									label={__(
+										'Fix At Bottom Left Corner',
 										'publisher-core'
 									)}
+									showTooltip={true}
 									className="position-quick-btn"
 									size="small"
 									data-cy="absolute-bottom-left"
@@ -604,10 +742,11 @@ const Component = ({
 								</Button>
 
 								<Button
-									aria-label={__(
-										'Bottom Right',
+									label={__(
+										'Fix At Bottom Right Corner',
 										'publisher-core'
 									)}
+									showTooltip={true}
 									className="position-quick-btn"
 									size="small"
 									data-cy="absolute-bottom-right"
@@ -633,7 +772,11 @@ const Component = ({
 								gap="10px"
 							>
 								<Button
-									aria-label={__('Top', 'publisher-core')}
+									label={__(
+										'Position As Full-Width At Top Side',
+										'publisher-core'
+									)}
+									showTooltip={true}
 									className="position-quick-btn"
 									size="small"
 									data-cy="absolute-top"
@@ -653,7 +796,11 @@ const Component = ({
 									<AbsoluteTopIcon />
 								</Button>
 								<Button
-									aria-label={__('Right', 'publisher-core')}
+									label={__(
+										'Position As Full-Height At Right Side',
+										'publisher-core'
+									)}
+									showTooltip={true}
 									className="position-quick-btn"
 									size="small"
 									data-cy="absolute-right"
@@ -673,7 +820,11 @@ const Component = ({
 									<AbsoluteRightIcon />
 								</Button>
 								<Button
-									aria-label={__('Bottom', 'publisher-core')}
+									label={__(
+										'Position As Full-Width At Bottom Side',
+										'publisher-core'
+									)}
+									showTooltip={true}
 									className="position-quick-btn"
 									size="small"
 									data-cy="absolute-bottom"
@@ -693,7 +844,11 @@ const Component = ({
 									<AbsoluteBottomIcon />
 								</Button>
 								<Button
-									aria-label={__('Left', 'publisher-core')}
+									label={__(
+										'Position As Full-Height At Left Side',
+										'publisher-core'
+									)}
+									showTooltip={true}
 									className="position-quick-btn"
 									size="small"
 									data-cy="absolute-left"
@@ -716,7 +871,11 @@ const Component = ({
 
 							<Grid gridTemplateColumns="1fr" gap="10px">
 								<Button
-									aria-label={__('Full', 'publisher-core')}
+									label={__(
+										'Position As Full-Width and Full-Height',
+										'publisher-core'
+									)}
+									showTooltip={true}
 									className="position-quick-btn"
 									size="small"
 									data-cy="absolute-full"
@@ -736,7 +895,11 @@ const Component = ({
 									<AbsoluteFullIcon />
 								</Button>
 								<Button
-									aria-label={__('Center', 'publisher-core')}
+									label={__(
+										'Position Centrally With Equal Margins (20%) From All Edges',
+										'publisher-core'
+									)}
+									showTooltip={true}
 									className="position-quick-btn"
 									size="small"
 									data-cy="absolute-center"
@@ -774,10 +937,8 @@ const Component = ({
 								gap="10px"
 							>
 								<Button
-									aria-label={__(
-										'Stick To Top',
-										'publisher-core'
-									)}
+									label={__('Stick To Top', 'publisher-core')}
+									showTooltip={true}
 									className="position-quick-btn"
 									size="small"
 									data-cy="stick-to-top"
@@ -797,10 +958,11 @@ const Component = ({
 									<AbsoluteTopIcon />
 								</Button>
 								<Button
-									aria-label={__(
+									label={__(
 										'Stick To Bottom',
 										'publisher-core'
 									)}
+									showTooltip={true}
 									className="position-quick-btn"
 									size="small"
 									data-cy="stick-to-bottom"

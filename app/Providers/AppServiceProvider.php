@@ -27,7 +27,8 @@ use Publisher\Framework\Illuminate\{Foundation\Application,
 	StyleEngine\StyleDefinitions\BoxShadow,
 	StyleEngine\StyleDefinitions\Background,
 	StyleEngine\StyleDefinitions\TextShadow,
-	StyleEngine\StyleDefinitions\Typography
+	StyleEngine\StyleDefinitions\Typography,
+	StyleEngine\StyleDefinitions\Mouse
 };
 use Publisher\Framework\Services\Render\{Render,
 	Parser,
@@ -42,7 +43,8 @@ use Publisher\Framework\Services\Render\{Render,
 	Styles\SizeStyle,
 	Styles\SpacingStyle,
 	Styles\TextShadowStyle,
-	Styles\TypographyStyle
+	Styles\TypographyStyle,
+	Styles\MouseStyle
 };
 
 class AppServiceProvider extends ServiceProvider {
@@ -69,6 +71,11 @@ class AppServiceProvider extends ServiceProvider {
 			$this->app->singleton( PositionStyle::class, static function () {
 
 				return new PositionStyle( new Position() );
+			} );
+
+			$this->app->singleton( MouseStyle::class, static function () {
+
+				return new MouseStyle( new Mouse() );
 			} );
 
 			$this->app->singleton( BorderStyle::class, static function () {

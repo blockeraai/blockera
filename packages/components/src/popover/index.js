@@ -75,6 +75,7 @@ export default function Popover({
 										'btn-choose-image',
 										'btn-media-library',
 										'btn-upload',
+										'btn-pick-color',
 									];
 
 									return excludeClasses.filter((className) =>

@@ -1,5 +1,61 @@
 import { getControlValue } from '../../../store/selectors';
 import ColorPickerControl from '../color-picker-control';
+import { nanoid } from 'nanoid';
+
+class DOMException extends Error {
+	constructor(message) {
+		super(message);
+		this.name = 'DOMException';
+	}
+}
+
+const abortSignal = () => {
+	return new DOMException(
+		"Failed to execute 'open' on 'EyeDropper': Color selection aborted."
+	);
+};
+const abortSignalDuring = () => {
+	return new DOMException('Color selection aborted.');
+};
+
+class EyeDropper {
+	_getColor() {
+		return 'rgb(255, 255, 255)';
+	}
+	_setOpen() {
+		EyeDropper.isOpen = true;
+	}
+	_setClosed() {
+		EyeDropper.isOpen = false;
+	}
+	_getTimeout() {
+		return 2000;
+	}
+	open(options) {
+		return new Promise((resolve, reject) => {
+			const signal = options?.signal;
+			const onAbortDuring = () => {
+				clearTimeout(resolveTimeout);
+				this._setClosed();
+				reject(abortSignalDuring());
+			};
+			if (signal) {
+				if (signal.aborted) {
+					reject(abortSignal());
+					return;
+				}
+				signal.addEventListener('abort', onAbortDuring);
+			}
+			this._setOpen();
+			const resolveTimeout = setTimeout(() => {
+				if (signal) signal.removeEventListener('abort', onAbortDuring);
+				this._setClosed();
+				resolve({ sRGBHex: this._getColor() });
+			}, this._getTimeout());
+		});
+	}
+}
+
 describe('Color-Picker Control', () => {
 	const name = 'color-picker-control';
 	beforeEach(() => {
@@ -63,7 +119,7 @@ describe('Color-Picker Control', () => {
 
 			cy.get('[id^=inspector-input-control-]').clear();
 			cy.get('[id^=inspector-input-control-]').type('283f8a');
-			cy.get('[aria-label="Reset Color (Clear)"]').click();
+			cy.get('[aria-label="Reset Color (Clear)"]').click({ force: true });
 
 			// visual and data assertion
 			cy.get('[id^=inspector-input-control-]')
@@ -71,6 +127,40 @@ describe('Color-Picker Control', () => {
 				.then(() => {
 					expect(Boolean(getControlValue(name))).to.be.equal(false);
 				});
+		});
+
+		it('should EyeDropper works right', () => {
+			global.window.EyeDropper = EyeDropper;
+			global.window.EyeDropper.isOpen = false;
+
+			const name = nanoid();
+			cy.withDataProvider({
+				component: (
+					<ColorPickerControl isOpen={true} isPopover={true} />
+				),
+				value: '#ccc',
+				name,
+			});
+
+			cy.getByAriaLabel('Pick Color').click();
+			cy.getByDataTest('popover-header')
+				.parent()
+				.parent()
+				.should('have.attr', 'class')
+				.should('include', 'hidden');
+
+			// eslint-disable-next-line cypress/no-unnecessary-waiting
+			cy.wait(3000);
+
+			cy.getByDataTest('popover-header')
+				.parent()
+				.parent()
+				.should('have.attr', 'class')
+				.should('not.include', 'hidden');
+
+			cy.get('body').then(() => {
+				expect('rgb(255, 255, 255)').to.be.equal(getControlValue(name));
+			});
 		});
 	});
 

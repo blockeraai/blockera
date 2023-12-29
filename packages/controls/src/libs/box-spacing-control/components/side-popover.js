@@ -227,7 +227,7 @@ export function SidePopover({
 						controlName="input"
 						label={__('Space', 'publisher-blocks')}
 						columns={'columns-2'}
-						style={{ marginTop: '10px', marginBottom: '25px' }}
+						style={{ marginBottom: '25px' }}
 						{...{
 							value,
 							attribute,

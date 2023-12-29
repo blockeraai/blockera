@@ -30,7 +30,6 @@ import { Opacity } from './components/opacity';
 import { Transition } from './components/transition';
 import { Filter } from './components/filter';
 import { BackdropFilter } from './components/backdrop-filter';
-import { Cursor } from './components/cursor';
 import { Blending } from './components/blending';
 import { Mask } from './components/mask';
 
@@ -42,7 +41,6 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 			transform,
 			transition,
 			filter,
-			cursor,
 			blendMode,
 			backdropFilter,
 			backfaceVisibility,
@@ -63,7 +61,6 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 				publisherTransform,
 				publisherTransition,
 				publisherFilter,
-				publisherCursor,
 				publisherBlendMode,
 				publisherBackdropFilter,
 				publisherMask,
@@ -210,16 +207,6 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 						handleOnChangeAttributes={handleOnChangeAttributes}
 					/>
 				)}
-
-				{isActiveField(publisherCursor) && (
-					<Cursor
-						cursor={cursor}
-						block={block}
-						props={props}
-						handleOnChangeAttributes={handleOnChangeAttributes}
-					/>
-				)}
-
 				{isActiveField(publisherBlendMode) && (
 					<Blending
 						blendMode={blendMode}

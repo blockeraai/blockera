@@ -116,6 +116,11 @@ export const getStatesGraph = ({
 							(item): boolean => item.type === activeState
 						);
 
+					// no changes
+					if (changedStates.length === 0) {
+						return null;
+					}
+
 					return {
 						controlId,
 						graph: {

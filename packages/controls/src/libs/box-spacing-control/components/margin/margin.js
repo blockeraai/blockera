@@ -25,7 +25,6 @@ export function Margin({
 	setValue,
 	attribute,
 	blockName,
-	description,
 	defaultValue,
 	resetToDefault,
 	getControlPath,
@@ -59,12 +58,21 @@ export function Margin({
 					<LabelControl
 						mode={'advanced'}
 						ariaLabel={__('Margin Spacing')}
+						labelDescription={
+							<>
+								<p>
+									{__(
+										'Use margin to create separation between elements, optimizing layout and enhancing visual balance.',
+										'publisher-core'
+									)}
+								</p>
+							</>
+						}
 						label={__('Margin', 'publisher-core')}
 						{...{
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: 'margin',

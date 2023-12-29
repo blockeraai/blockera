@@ -32,6 +32,10 @@ export default function AnglePickerControl({
 	//
 	id,
 	label,
+	labelPopoverTitle,
+	labelDescription,
+	repeaterItem,
+	singularId,
 	columns,
 	defaultValue = 0,
 	onChange,
@@ -45,21 +49,35 @@ export default function AnglePickerControl({
 		setValue,
 		attribute,
 		blockName,
-		description,
 		resetToDefault,
+		getControlPath,
 	} = useControlContext({
 		id,
 		onChange,
 		defaultValue,
 	});
 
+	const labelProps = {
+		value,
+		singularId,
+		attribute,
+		blockName,
+		label,
+		labelPopoverTitle,
+		labelDescription,
+		repeaterItem,
+		defaultValue,
+		resetToDefault,
+		mode: 'advanced',
+		path: getControlPath(attribute, id),
+	};
+
 	return (
 		<BaseControl
-			label={label}
 			columns={columns}
 			controlName={field}
 			className={className}
-			{...{ attribute, blockName, description, resetToDefault }}
+			{...labelProps}
 		>
 			<Flex
 				direction="row"

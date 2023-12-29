@@ -82,5 +82,10 @@
 		"publisherTransformSelfPerspective",
 		"publisherTransformChildPerspective",
 		"publisherMask"
+	],
+	"mouse": [
+		"publisherCursor",
+		"publisherUserSelect",
+		"publisherPointerEvents"
 	]
 }

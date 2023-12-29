@@ -57,6 +57,8 @@ export default function RepeaterControl({
 	withoutAdvancedLabel = false,
 	//
 	label,
+	labelPopoverTitle,
+	labelDescription,
 	id: repeaterId,
 	repeaterItemOpener,
 	repeaterItemHeader,
@@ -81,7 +83,7 @@ export default function RepeaterControl({
 	const {
 		value,
 		dispatch: { addRepeaterItem, modifyControlValue },
-		controlInfo: { name: controlId, description, attribute, blockName },
+		controlInfo: { name: controlId, attribute, blockName },
 		getControlPath,
 		resetToDefault,
 	} = useControlContext({
@@ -139,12 +141,13 @@ export default function RepeaterControl({
 					{!withoutAdvancedLabel && (
 						<LabelControl
 							label={label}
+							labelPopoverTitle={labelPopoverTitle}
+							labelDescription={labelDescription}
 							value={value}
 							mode={'advanced'}
 							isRepeater={true}
 							blockName={blockName}
 							attribute={attribute}
-							description={description}
 							resetToDefault={resetToDefault}
 							defaultValue={
 								isFunction(valueCleanup)

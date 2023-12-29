@@ -452,14 +452,6 @@ return [
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
-		'cursor'              => [
-			'property_keys' => [
-				'default' => 'cursor',
-			],
-			'path'          => [ 'publisherEffects', 'publisherCursor', 'cursor' ],
-			'css_vars'      => [],
-			'classnames'    => [],
-		],
 		'mix-blend-mode'      => [
 			'property_keys' => [
 				'default' => 'mix-blend-mode',
@@ -788,5 +780,32 @@ return [
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
+	],
+	'publisherMouse'     => [
+		'cursor'         => [
+			'property_keys' => [
+				'default' => 'cursor',
+			],
+			'path'          => [ 'publisherMouse', 'publisherCursor' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
+		'user-select'             => [
+			'property_keys' => [
+				'default' => 'user-select',
+			],
+			'path'          => [ 'publisherMouse', 'publisherUserSelect' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
+		'pointer-events'         => [
+			'property_keys' => [
+				'default' => 'pointer-events',
+			],
+			'path'          => [ 'publisherMouse', 'publisherPointerEvents' ],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
+ 
 	],
 ];

@@ -48,7 +48,6 @@ blocksInitializer({
 						initialOpen={true}
 						values={{
 							publisherFilter: [],
-							publisherCursor: '',
 							publisherOpacity: '',
 							publisherTransform: [],
 							publisherBlendMode: '',
@@ -102,7 +101,6 @@ export const Default = {
 				attributes: {
 					...(wrapperBlock?.attributes || {}),
 					publisherFilter: [],
-					publisherCursor: '',
 					publisherOpacity: '',
 					publisherTransform: [],
 					publisherBlendMode: '',

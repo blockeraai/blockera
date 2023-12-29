@@ -8,6 +8,7 @@ import type { MixedElement } from 'react';
  * Internal dependencies
  */
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { BorderRadiusValue } from '@publisher/controls';
 
 export type TBorderAndShadowDefaultProp = {
 	borderColor?: string,
@@ -19,14 +20,7 @@ export type TBorderAndShadowDefaultProp = {
 		left?: Object,
 		right?: Object,
 		bottom?: Object,
-		radius?:
-			| string
-			| {
-					topLeft: string,
-					topRight: string,
-					bottomLeft: string,
-					bottomRight: string,
-			  },
+		radius?: BorderRadiusValue,
 	},
 };
 

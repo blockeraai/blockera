@@ -56,6 +56,13 @@ export {
 	supports as effectsExtensionSupports,
 } from './effects';
 export {
+	MouseExtensionIcon,
+	MouseStyles,
+	MouseExtension,
+	attributes as mouseExtensionAttributes,
+	supports as mouseExtensionSupports,
+} from './mouse';
+export {
 	AdvancedExtensionIcon,
 	AdvancedStyles,
 	AdvancedExtension,

@@ -4,9 +4,9 @@
  */
 import type { ControlGeneralTypes } from '../../../types';
 
-export type TValue = {
+export type BorderRadiusValue = {
 	type: 'all' | 'custom',
-	all: string,
+	all?: string,
 	topLeft?: string,
 	topRight?: string,
 	bottomLeft?: string,
@@ -15,5 +15,8 @@ export type TValue = {
 
 export type BorderRadiusControlProps = {
 	...ControlGeneralTypes,
-	defaultValue?: TValue,
+	/**
+	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
+	 */
+	defaultValue?: BorderRadiusValue,
 };

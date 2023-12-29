@@ -36,6 +36,10 @@ const SelectControl = ({
 	//
 	id,
 	label = '',
+	labelPopoverTitle,
+	labelDescription,
+	repeaterItem,
+	singularId,
 	columns,
 	defaultValue = '',
 	onChange,
@@ -48,8 +52,8 @@ const SelectControl = ({
 		setValue,
 		attribute,
 		blockName,
-		description,
 		resetToDefault,
+		getControlPath,
 	} = useControlContext({
 		id,
 		onChange,
@@ -58,19 +62,27 @@ const SelectControl = ({
 
 	if (type === 'custom') options = prepareSelectCustomOptions(options);
 
+	const labelProps = {
+		value,
+		singularId,
+		attribute,
+		blockName,
+		label,
+		labelPopoverTitle,
+		labelDescription,
+		repeaterItem,
+		defaultValue,
+		resetToDefault,
+		mode: 'advanced',
+		path: getControlPath(attribute, id),
+	};
+
 	return (
 		<BaseControl
-			label={label}
 			columns={columns}
 			controlName={field}
 			className={className}
-			{...{
-				attribute,
-				blockName,
-				description,
-				resetToDefault,
-				mode: 'advanced',
-			}}
+			{...labelProps}
 		>
 			{type === 'native' && (
 				<WPSelectControl
