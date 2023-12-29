@@ -80,7 +80,8 @@
 		"publisherTransformSelfOrigin",
 		"publisherTransformChildOrigin",
 		"publisherTransformSelfPerspective",
-		"publisherTransformChildPerspective"
+		"publisherTransformChildPerspective",
+		"publisherMask"
 	],
 	"mouse": [
 		"publisherCursor",

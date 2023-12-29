@@ -460,6 +460,14 @@ return [
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
+		'mask'      => [
+			'property_keys' => [
+				'default' => 'mask',
+			],
+			'path'          => [ 'publisherEffects', 'publisherMask','mask'],
+			'css_vars'      => [],
+			'classnames'    => [],
+		],
 	],
 	'publisherSizing'     => [
 		'width'    => [

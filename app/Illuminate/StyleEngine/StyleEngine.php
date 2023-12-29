@@ -106,6 +106,7 @@ final class StyleEngine {
 		$styles[] = 'cursor';
 		$styles[] = 'user-select';
 		$styles[] = 'pointer-events';
+		$styles[] = 'mask';
 
 		return $styles;
 	}
