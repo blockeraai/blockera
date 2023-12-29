@@ -21,6 +21,7 @@ export default function BaseControl({
 	columns = '',
 	className,
 	controlName = 'general',
+	style = {},
 	...props
 }: BaseControlProps): MixedElement {
 	let cssColumns = '';
@@ -39,7 +40,7 @@ export default function BaseControl({
 						columns,
 						className
 					)}
-					style={{ gridTemplateColumns: cssColumns || '' }}
+					style={{ ...style, gridTemplateColumns: cssColumns || '' }}
 					data-cy="base-control"
 				>
 					<div className={fieldsInnerClassNames('control')}>
@@ -55,7 +56,7 @@ export default function BaseControl({
 	return (
 		<div
 			className={fieldsClassNames(controlName, columns, className)}
-			style={{ gridTemplateColumns: cssColumns || '' }}
+			style={{ ...style, gridTemplateColumns: cssColumns || '' }}
 			data-cy="base-control"
 		>
 			{label !== '' && (

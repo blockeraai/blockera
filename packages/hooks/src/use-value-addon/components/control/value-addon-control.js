@@ -39,16 +39,16 @@ export default function ({
 
 	if (isValid(controlProps.value)) {
 		if (controlProps.value.valueType === 'variable') {
-			const item = getVariable(
-				controlProps.value?.settings?.type,
-				controlProps.value?.settings?.slug
-			);
-
-			if (isUndefined(item?.value)) {
+			if (controlProps.isDeletedVar) {
 				isDeleted = true;
 				label = __('Missing Variable', 'publisher-core');
 				icon = <DeletedIcon />;
 			} else {
+				const item = getVariable(
+					controlProps.value?.settings?.type,
+					controlProps.value?.settings?.slug
+				);
+
 				label = !isUndefined(item?.name)
 					? item?.name
 					: controlProps.value?.settings?.name;
@@ -58,16 +58,16 @@ export default function ({
 				});
 			}
 		} else if (controlProps.value.valueType === 'dynamic-value') {
-			const item = getDynamicValue(
-				controlProps.value.settings.category,
-				controlProps.value.id
-			);
-
-			if (isUndefined(item?.id)) {
+			if (controlProps.isDeletedDV) {
 				isDeleted = true;
 				label = __('Missing Item', 'publisher-core');
 				icon = <DeletedIcon />;
 			} else {
+				const item = getDynamicValue(
+					controlProps.value.settings.category,
+					controlProps.value.id
+				);
+
 				label = !isUndefined(item?.name)
 					? item?.name
 					: controlProps.value?.settings?.name;

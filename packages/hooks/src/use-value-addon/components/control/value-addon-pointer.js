@@ -31,8 +31,12 @@ import type { ValueAddonControlProps } from './types';
 
 export default function ({
 	controlProps,
+	pointerProps = {},
+	pickerProps = {},
 }: {
 	controlProps: ValueAddonControlProps,
+	pointerProps: Object,
+	pickerProps: Object,
 }): Element<any> {
 	const isVarActive =
 		isValid(controlProps.value) &&
@@ -56,9 +60,11 @@ export default function ({
 						'dv-pointer',
 						isDVActive && 'active-value-addon',
 						controlProps.isOpen.startsWith('dv-') &&
-							'open-value-addon'
+							'open-value-addon',
+						controlProps.isDeletedDV && 'is-value-addon-deleted'
 					)}
 					onClick={handleDynamicValueModal}
+					{...pointerProps}
 				>
 					<DynamicValueIcon
 						className={controlInnerClassNames('dv-pointer-icon')}
@@ -78,9 +84,11 @@ export default function ({
 						'var-pointer',
 						isVarActive && 'active-value-addon',
 						controlProps.isOpen.startsWith('var-') &&
-							'open-value-addon'
+							'open-value-addon',
+						controlProps.isDeletedVar && 'is-value-addon-deleted'
 					)}
 					onClick={handleVariableModal}
+					{...pointerProps}
 				>
 					<VariableIcon
 						className={controlInnerClassNames('var-pointer-icon')}
@@ -113,7 +121,7 @@ export default function ({
 		<>
 			{controlProps.isOpen === 'var-picker' &&
 				controlProps.types.includes('variable') && (
-					<VarPicker controlProps={controlProps} />
+					<VarPicker controlProps={controlProps} {...pickerProps} />
 				)}
 
 			{controlProps.isOpen === 'var-deleted' &&
@@ -152,6 +160,7 @@ export default function ({
 						controlProps.handleOnClickRemove(e);
 					} else {
 						controlProps.setOpen('dv-picker');
+						if (pickerProps.onShown) pickerProps.onShown();
 					}
 
 					e.stopPropagation();
@@ -162,6 +171,7 @@ export default function ({
 						controlProps.handleOnClickRemove(e);
 					} else {
 						controlProps.setOpen('var-picker');
+						if (pickerProps.onShown) pickerProps.onShown();
 					}
 
 					e.stopPropagation();

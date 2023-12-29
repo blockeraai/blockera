@@ -8,13 +8,13 @@ import {
 	__experimentalToggleGroupControlOption as WPToggleGroupControlOption,
 	__experimentalToggleGroupControlOptionIcon as WPToggleGroupControlOptionIcon,
 } from '@wordpress/components';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
  */
 import { isUndefined } from '@publisher/utils';
 import { controlClassNames } from '@publisher/classnames';
-import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
@@ -29,10 +29,14 @@ export default function ToggleSelectControl({
 	//
 	id,
 	label,
+	labelDescription,
+	labelPopoverTitle,
 	columns,
 	defaultValue,
-	onChange,
+	onChange = () => {},
 	field,
+	singularId,
+	repeaterItem,
 	//
 	className,
 	children,
@@ -43,7 +47,7 @@ export default function ToggleSelectControl({
 		setValue,
 		attribute,
 		blockName,
-		description,
+		getControlPath,
 		resetToDefault,
 	} = useControlContext({
 		id,
@@ -59,11 +63,23 @@ export default function ToggleSelectControl({
 
 	return (
 		<BaseControl
-			label={label}
 			columns={columns}
 			controlName={field}
 			className={className}
-			{...{ attribute, blockName, description, resetToDefault }}
+			{...{
+				value,
+				singularId,
+				attribute,
+				blockName,
+				label,
+				labelDescription,
+				labelPopoverTitle,
+				defaultValue,
+				repeaterItem,
+				resetToDefault,
+				mode: 'advanced',
+				path: getControlPath(attribute, id),
+			}}
 		>
 			<div className={controlClassNames('toggle-select', className)}>
 				<WPToggleGroupControl

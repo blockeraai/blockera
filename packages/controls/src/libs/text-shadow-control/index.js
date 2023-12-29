@@ -24,10 +24,33 @@ export default function TextShadowControl({
 		x: '1px',
 		y: '1px',
 		blur: '1px',
-		color: '',
+		color: '#000000ab',
 		isVisible: true,
 	},
 	popoverTitle = __('Text Shadow', 'publisher-core'),
+	label = __('Text Shadow', 'publisher-core'),
+	labelDescription = (
+		<>
+			<p>
+				{__(
+					'It adds shadow effect to text, enhancing its visual depth and emphasis.',
+					'publisher-core'
+				)}
+			</p>
+			<p>
+				{__(
+					'It is ideal for creating visually striking text effects, improving legibility over contrasting backgrounds, and adding a layer of sophistication to web typography.',
+					'publisher-core'
+				)}
+			</p>
+			<p>
+				{__(
+					'You can add multiple shadows for advanced effects.',
+					'publisher-core'
+				)}
+			</p>
+		</>
+	),
 	className,
 	...props
 }: TTextShadowControlProps): MixedElement {
@@ -39,6 +62,8 @@ export default function TextShadowControl({
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
+			label={label}
+			labelDescription={labelDescription}
 			{...props}
 		/>
 	);

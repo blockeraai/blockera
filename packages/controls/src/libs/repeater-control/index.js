@@ -4,6 +4,7 @@
  */
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -12,6 +13,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
+import { isFunction } from '@publisher/utils';
 import { Button } from '@publisher/components';
 
 /**
@@ -19,7 +21,7 @@ import { Button } from '@publisher/components';
  */
 import PlusIcon from './icons/plus';
 import LabelControl from '../label-control';
-import { useControlContext } from '../../context/hooks/use-control-context';
+import { useControlContext } from '../../context';
 import { RepeaterContextProvider } from './context';
 import MappedItems from './components/mapped-items';
 
@@ -27,7 +29,6 @@ import MappedItems from './components/mapped-items';
  * Types
  */
 import type { RepeaterControlProps, TRepeaterDefaultStateProps } from './types';
-import type { MixedElement } from 'react';
 
 export const defaultItemValue = {
 	isOpen: true,
@@ -53,8 +54,11 @@ export default function RepeaterControl({
 	actionButtonClone = true,
 	injectHeaderButtonsStart = '',
 	injectHeaderButtonsEnd = '',
+	withoutAdvancedLabel = false,
 	//
 	label,
+	labelPopoverTitle,
+	labelDescription,
 	id: repeaterId,
 	repeaterItemOpener,
 	repeaterItemHeader,
@@ -79,7 +83,8 @@ export default function RepeaterControl({
 	const {
 		value,
 		dispatch: { addRepeaterItem, modifyControlValue },
-		controlInfo: { name: controlId, description, attribute, blockName },
+		controlInfo: { name: controlId, attribute, blockName },
+		getControlPath,
 		resetToDefault,
 	} = useControlContext({
 		defaultValue,
@@ -111,6 +116,7 @@ export default function RepeaterControl({
 		controlId,
 		repeaterId,
 		overrideItem,
+		getControlPath,
 		repeaterItemOpener,
 		repeaterItemHeader,
 		repeaterItemChildren,
@@ -132,14 +138,27 @@ export default function RepeaterControl({
 				data-cy="publisher-repeater-control"
 			>
 				<div className={controlInnerClassNames('header')}>
-					<LabelControl
-						label={label}
-						mode={'advanced'}
-						blockName={blockName}
-						attribute={attribute}
-						description={description}
-						resetToDefault={resetToDefault}
-					/>
+					{!withoutAdvancedLabel && (
+						<LabelControl
+							label={label}
+							labelPopoverTitle={labelPopoverTitle}
+							labelDescription={labelDescription}
+							value={value}
+							mode={'advanced'}
+							isRepeater={true}
+							blockName={blockName}
+							attribute={attribute}
+							resetToDefault={resetToDefault}
+							defaultValue={
+								isFunction(valueCleanup)
+									? valueCleanup(defaultValue)
+									: defaultValue
+							}
+						/>
+					)}
+					{withoutAdvancedLabel && (
+						<LabelControl label={label} mode={'simple'} />
+					)}
 
 					<div
 						className={controlInnerClassNames(

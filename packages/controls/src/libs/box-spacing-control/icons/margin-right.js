@@ -8,11 +8,9 @@ export default function MarginRightIcon({}) {
 		>
 			<path
 				opacity="0.3"
-				fillRule="evenodd"
-				clipRule="evenodd"
-				d="M18 0H0V18H18V0ZM17 1H1V17H17V1Z"
+				d="M12 0L12 18L1.09677e-06 18L1.00935e-06 17L11 17L11 1L-1.34309e-06 1L-1.43051e-06 2.95642e-06L12 0Z"
 			/>
-			<rect x="13" width="5" height="18" />
+			<path d="M18 0L18 18H13L13 4.37114e-07L18 0Z" />
 		</svg>
 	);
 }

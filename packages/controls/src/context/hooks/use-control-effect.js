@@ -1,3 +1,4 @@
+// @flow
 /**
  * External dependencies
  */
@@ -8,16 +9,34 @@ import { useEffect } from '@wordpress/element';
  */
 import { isFunction } from '@publisher/utils';
 
+/**
+ * Internal dependencies
+ */
+import type { ControlEffectType } from '../types';
+
 export default function useControlEffect(
-	{ onChange, sideEffect, valueCleanup, value: controlValue },
-	dependencies = []
-) {
-	const setValue = (value) => {
+	{
+		ref,
+		onChange,
+		resetRef,
+		sideEffect,
+		valueCleanup,
+		value: controlValue,
+	}: Object,
+	dependencies: Array<any> = []
+): ControlEffectType {
+	const refId = ref && ref?.current?.reset ? ref : undefined;
+
+	const setValue = (value: any, _ref?: Object): any => {
+		if (refId) {
+			_ref = refId;
+		}
+
 		if (isFunction(onChange)) {
 			// eslint-disable-next-line no-unused-expressions
 			isFunction(valueCleanup)
-				? onChange(valueCleanup(value))
-				: onChange(value);
+				? onChange(valueCleanup(value), _ref)
+				: onChange(value, _ref);
 		}
 	};
 
@@ -27,7 +46,11 @@ export default function useControlEffect(
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	useEffect(
-		() => setValue(controlValue),
+		() => {
+			setValue(controlValue);
+
+			resetRef();
+		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		dependencies
 	);

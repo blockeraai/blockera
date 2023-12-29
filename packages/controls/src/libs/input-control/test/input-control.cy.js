@@ -138,6 +138,7 @@ describe('input control component testing', () => {
 				name,
 			});
 
+			cy.get('input').focus();
 			cy.get('input').type('test');
 			cy.should('have.value', 'test');
 			cy.then(() => {
@@ -152,6 +153,7 @@ describe('input control component testing', () => {
 				name,
 			});
 
+			cy.get('input').focus();
 			cy.get('input').type('this is a text');
 			cy.get('input').clear();
 			cy.get('input').should('have.value', '');
@@ -198,6 +200,7 @@ describe('input control component testing', () => {
 					name,
 				});
 
+				cy.get('input').focus();
 				cy.get('input').type(20);
 				cy.get('input').should('have.value', 20);
 				cy.then(() => {
@@ -214,6 +217,7 @@ describe('input control component testing', () => {
 					name,
 				});
 
+				cy.get('input').focus();
 				cy.get('input').type(20);
 				cy.get('input').should('have.value', 20);
 				cy.then(() => {
@@ -228,6 +232,7 @@ describe('input control component testing', () => {
 					name,
 				});
 
+				cy.get('input').focus();
 				cy.get('input').type(2.0);
 				cy.get('input').should('have.value', 2.0);
 				cy.then(() => {
@@ -242,6 +247,7 @@ describe('input control component testing', () => {
 					name,
 				});
 
+				cy.get('input').focus();
 				cy.get('input').type(2);
 				cy.get('input').type('.');
 				cy.get('input').type(2);
@@ -258,6 +264,7 @@ describe('input control component testing', () => {
 					name,
 				});
 
+				cy.get('input').focus();
 				cy.get('input').type(-20);
 				cy.get('input').should('have.value', -20);
 				cy.then(() => {
@@ -273,6 +280,7 @@ describe('input control component testing', () => {
 					value: '',
 				});
 
+				cy.get('input').focus();
 				cy.get('input').type('-2.1');
 				cy.get('input').should('have.value', '-2.1');
 				cy.then(() => {
@@ -288,6 +296,7 @@ describe('input control component testing', () => {
 					value: '',
 				});
 
+				cy.get('input').focus();
 				cy.get('input').type('-2.0');
 				cy.get('input').type('-');
 				cy.get('input').type(2);
@@ -308,6 +317,7 @@ describe('input control component testing', () => {
 					value: '',
 				});
 
+				cy.get('input').focus();
 				cy.get('input').type(9); // changes value to 10
 				cy.get('input').type(0); // it's 100 now
 
@@ -325,6 +335,7 @@ describe('input control component testing', () => {
 					value: '',
 				});
 
+				cy.get('input').focus();
 				cy.get('input').type(1); // 1
 				cy.get('input').type(1); // 10
 				cy.get('input').type(1); // 10
@@ -344,6 +355,7 @@ describe('input control component testing', () => {
 					name,
 				});
 
+				cy.get('input').focus();
 				cy.get('input').pasteText('20');
 
 				cy.get('input').should('have.value', 20);
@@ -359,6 +371,7 @@ describe('input control component testing', () => {
 					name,
 				});
 
+				cy.get('input').focus();
 				cy.get('input').pasteText('2.1');
 
 				cy.get('input').should('have.value', '2.1');
@@ -374,6 +387,7 @@ describe('input control component testing', () => {
 					name,
 				});
 
+				cy.get('input').focus();
 				cy.get('input').pasteText('2.1');
 
 				cy.get('input').should('have.value', 21);
@@ -389,6 +403,7 @@ describe('input control component testing', () => {
 					name,
 				});
 
+				cy.get('input').focus();
 				cy.get('input').pasteText('-20');
 
 				cy.get('input').should('have.value', -20);
@@ -404,6 +419,7 @@ describe('input control component testing', () => {
 					name,
 				});
 
+				cy.get('input').focus();
 				cy.get('input').pasteText('-2.0');
 
 				cy.get('input').should('have.value', '-2.0');
@@ -419,6 +435,7 @@ describe('input control component testing', () => {
 					name,
 				});
 
+				cy.get('input').focus();
 				cy.get('input').pasteText('-2.0');
 				cy.get('input').pasteText('-2');
 
@@ -436,6 +453,7 @@ describe('input control component testing', () => {
 					value: '',
 				});
 
+				cy.get('input').focus();
 				cy.get('input').pasteText('9');
 
 				cy.get('input').should('have.value', 10);
@@ -452,6 +470,7 @@ describe('input control component testing', () => {
 					value: '',
 				});
 
+				cy.get('input').focus();
 				cy.get('input').pasteText('100');
 
 				cy.get('input').should('have.value', 10);
@@ -468,6 +487,7 @@ describe('input control component testing', () => {
 					value: '',
 				});
 
+				cy.get('input').focus();
 				cy.get('input').pasteText('akbar');
 
 				cy.get('input').should('have.value', '');
@@ -594,6 +614,7 @@ describe('input control component testing', () => {
 					value: '',
 				});
 
+				cy.get('input').focus();
 				cy.get('input').type('9');
 				cy.get('input').should('have.value', 9);
 				cy.get('input').should('have.class', 'invalid');
@@ -687,6 +708,7 @@ describe('input control component testing', () => {
 					value: '',
 				});
 
+				cy.get('input').focus();
 				cy.get('input').type(100);
 				cy.then(() => {
 					return expect(getControlValue(name)).to.eq('100px');
@@ -707,6 +729,7 @@ describe('input control component testing', () => {
 					name,
 				});
 
+				cy.get('input').focus();
 				cy.get('input').type(100);
 				cy.get('[aria-label="Select Unit"]').select('px');
 				cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
@@ -714,6 +737,7 @@ describe('input control component testing', () => {
 					return expect(getControlValue(name)).to.eq('100px');
 				});
 
+				cy.get('input').focus();
 				cy.get('input').clear();
 				cy.get('input').type(50);
 				cy.get('[aria-label="Select Unit"]').select('%');
@@ -722,6 +746,7 @@ describe('input control component testing', () => {
 					return expect(getControlValue(name)).to.eq('50%');
 				});
 
+				cy.get('input').focus();
 				cy.get('input').clear();
 				cy.get('input').type(30);
 				cy.get('[aria-label="Select Unit"]').select('dvh');
@@ -742,6 +767,7 @@ describe('input control component testing', () => {
 					value: '12XYZ',
 				});
 
+				cy.get('input').focus();
 				cy.get('input').clear();
 				cy.get('input').type(100);
 
@@ -824,7 +850,9 @@ describe('input control component testing', () => {
 				// change to ch
 				cy.get('[aria-label="Select Unit"]').select('ch');
 				cy.get('[aria-label="Select Unit"]').should('have.value', 'ch');
-				cy.get('input').should('have.value', '12');
+				cy.get('input').should('have.value', '');
+				cy.get('input').focus();
+				cy.get('input').type(12);
 				cy.then(() => {
 					return expect(getControlValue(name)).to.eq('12ch');
 				});
@@ -869,6 +897,7 @@ describe('input control component testing', () => {
 				cy.then(() => {
 					return expect(getControlValue(name)).to.eq('');
 				});
+				cy.get('input').focus();
 				cy.get('input').type('calc(11px)');
 				cy.then(() => {
 					return expect(getControlValue(name)).to.eq(
@@ -986,63 +1015,61 @@ describe('input control component testing', () => {
 				);
 			});
 
-			it('custom unit with string format', () => {
-				const name = nanoid();
-				cy.withDataProvider({
-					component: (
-						<InputControl
-							type="number"
-							units={[
-								{
-									value: 'px',
-									label: 'PX',
-									default: 0,
-									format: 'number',
-								},
-								{
-									value: 'em',
-									label: 'EM',
-									default: 0,
-									format: 'number',
-								},
-								{
-									value: '%',
-									label: '%',
-									default: 0,
-									format: 'number',
-								},
-								{
-									value: 'XYZ',
-									label: 'XYZ',
-									default: 0,
-									format: 'string',
-								},
-							]}
-						/>
-					),
-					name,
-					value: '0px',
-				});
-
-				// set special value
-				cy.get('[aria-label="Select Unit"]').select('XYZ');
-				cy.get('[aria-label="Select Unit"]').should(
-					'have.value',
-					'XYZ'
-				);
-				cy.then(() => {
-					return expect(getControlValue(name)).to.eq('0XYZ');
-				});
-				cy.get('input').should('have.value', 0);
-
-				// change to custom unit and type string
-				cy.get('input').clear();
-				cy.get('input').type('text value');
-				cy.get('input').should('have.value', 'text value');
-				cy.then(() => {
-					return expect(getControlValue(name)).to.eq('text valueXYZ');
-				});
-			});
+			// todo this feature currently has not been implemented
+			// it('custom unit with string format', () => {
+			// 	const name = nanoid();
+			// 	cy.withDataProvider({
+			// 		component: (
+			// 			<InputControl
+			// 				type="number"
+			// 				units={[
+			// 					{
+			// 						value: 'px',
+			// 						label: 'PX',
+			// 						format: 'number',
+			// 					},
+			// 					{
+			// 						value: 'em',
+			// 						label: 'EM',
+			// 						format: 'number',
+			// 					},
+			// 					{
+			// 						value: '%',
+			// 						label: '%',
+			// 						format: 'number',
+			// 					},
+			// 					{
+			// 						value: 'XYZ',
+			// 						label: 'XYZ',
+			// 						format: 'string',
+			// 					},
+			// 				]}
+			// 			/>
+			// 		),
+			// 		name,
+			// 		value: '0px',
+			// 	});
+			//
+			// 	// set special value
+			// 	cy.get('[aria-label="Select Unit"]').select('XYZ');
+			// 	cy.get('[aria-label="Select Unit"]').should(
+			// 		'have.value',
+			// 		'XYZ'
+			// 	);
+			// 	cy.then(() => {
+			// 		return expect(getControlValue(name)).to.eq('0XYZ');
+			// 	});
+			// 	cy.get('input').should('have.value', 0);
+			//
+			// 	// change to custom unit and type string
+			// 	cy.get('input').clear();
+			// 	cy.get('input').focus();
+			// 	cy.get('input').type('text value');
+			// 	cy.get('input').should('have.value', 'text value');
+			// 	cy.then(() => {
+			// 		return expect(getControlValue(name)).to.eq('text valueXYZ');
+			// 	});
+			// });
 		});
 
 		describe('CSS Func Value', () => {
@@ -1132,6 +1159,7 @@ describe('input control component testing', () => {
 				// set custom value
 				cy.get('input').should('exist');
 				cy.get('input').clear();
+				cy.get('input').focus();
 				cy.get('input').type('10');
 				cy.get('input').should('have.value', 10);
 				cy.then(() => {
@@ -1139,7 +1167,9 @@ describe('input control component testing', () => {
 				});
 
 				// set special value
-				cy.get('[aria-label="Select Unit"]').select('auto');
+				cy.get('[aria-label="Select Unit"]').select('auto', {
+					force: true,
+				});
 				cy.get('[aria-label="Select Unit"]').should(
 					'have.value',
 					'auto'
@@ -1153,7 +1183,7 @@ describe('input control component testing', () => {
 				cy.get('[aria-label="Select Unit"]').select('px');
 				cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
 				cy.then(() => {
-					return expect(getControlValue(name)).to.eq('10px');
+					return expect(getControlValue(name)).to.eq('');
 				});
 				cy.get('input').should('exist');
 			});

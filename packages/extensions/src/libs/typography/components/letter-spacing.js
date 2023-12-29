@@ -9,10 +9,12 @@ import type { MixedElement } from 'react';
  * Publisher dependencies
  */
 import { ControlContextProvider, InputControl } from '@publisher/controls';
+import { isEmpty } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
+import { useBlockContext } from '../../../hooks';
 import { generateExtensionId } from '../../utils';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 
@@ -29,6 +31,26 @@ export const LetterSpacing = ({
 	defaultValue?: string,
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
+	const { isNormalState, getAttributes } = useBlockContext();
+
+	const toWPCompatible = (newValue: Object): Object => {
+		if (!isNormalState() || isEmpty(newValue)) {
+			return {};
+		}
+
+		const blockAttributes = getAttributes();
+
+		return {
+			style: {
+				...(blockAttributes?.style ?? {}),
+				typography: {
+					...(blockAttributes?.style?.typography ?? {}),
+					letterSpacing: newValue,
+				},
+			},
+		};
+	};
+
 	return (
 		<ControlContextProvider
 			value={{
@@ -42,27 +64,37 @@ export const LetterSpacing = ({
 				controlName="input"
 				columns="2fr 2.6fr"
 				label={__('Letters', 'publisher-core')}
+				labelPopoverTitle={__('Letters Spacing', 'publisher-core')}
+				labelDescription={
+					<>
+						<p>
+							{__(
+								'It adjusts the space between characters in text, enhancing readability and visual appeal, especially useful in headings, logos, and graphic text.',
+								'publisher-core'
+							)}
+						</p>
+						<p>
+							{__(
+								'It is vital for typographic refinement, allowing control over text density and improving legibility, particularly in creative and web design contexts.',
+								'publisher-core'
+							)}
+						</p>
+					</>
+				}
 				{...{
 					...parentProps,
 					defaultValue,
 					arrows: true,
 					unitType: 'letter-spacing',
-					onValidate: (newValue) => {
-						return newValue;
-					},
-					onChange: (newValue) =>
+					onChange: (newValue: Object, ref?: Object): void => {
 						onChange('publisherLetterSpacing', newValue, {
-							addOrModifyRootItems: {
-								style: {
-									...(block.attributes?.style ?? {}),
-									typography: {
-										...(block.attributes?.style
-											?.typography ?? {}),
-										letterSpacing: newValue,
-									},
-								},
-							},
-						}),
+							ref,
+							addOrModifyRootItems: toWPCompatible(newValue),
+							deleteItemsOnResetAction: [
+								'style.typography.letterSpacing',
+							],
+						});
+					},
 				}}
 			/>
 		</ControlContextProvider>

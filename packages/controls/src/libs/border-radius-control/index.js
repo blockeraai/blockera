@@ -3,7 +3,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
@@ -21,11 +20,17 @@ import { Button } from '@publisher/components';
 import { InputControl, LabelControl } from '../index';
 import { default as CustomIcon } from './icons/custom';
 import { useControlContext } from '../../context';
-import type { BorderRadiusControlProps, TValue } from './types';
+import type { BorderRadiusControlProps, BorderRadiusValue } from './types';
+
+export type * from './types';
 
 export default function BorderRadiusControl({
 	id,
 	label = '',
+	labelPopoverTitle,
+	labelDescription,
+	repeaterItem,
+	singularId,
 	defaultValue = {
 		type: 'all',
 		all: '',
@@ -45,8 +50,8 @@ export default function BorderRadiusControl({
 		dispatch: { modifyControlValue },
 		attribute,
 		blockName,
-		description,
 		resetToDefault,
+		getControlPath,
 	} = useControlContext({
 		id,
 		onChange,
@@ -56,16 +61,36 @@ export default function BorderRadiusControl({
 	});
 
 	// value clean up for removing extra values to prevent saving extra data!
-	function valueCleanup(value: TValue) {
+	function valueCleanup(value: BorderRadiusValue) {
 		if (value.type === 'all') {
 			delete value?.topLeft;
 			delete value?.topRight;
 			delete value?.bottomLeft;
 			delete value?.bottomRight;
+
+			if (value?.all === '') {
+				return '';
+			}
 		}
 
 		return value;
 	}
+
+	const labelProps = {
+		value,
+		singularId,
+		attribute,
+		blockName,
+		label,
+		labelPopoverTitle:
+			labelPopoverTitle || __('Border Radius', 'publisher-core'),
+		labelDescription,
+		repeaterItem,
+		defaultValue,
+		resetToDefault,
+		mode: 'advanced',
+		path: getControlPath(attribute, id),
+	};
 
 	return (
 		<div className={controlClassNames('border-radius', className)}>
@@ -76,17 +101,16 @@ export default function BorderRadiusControl({
 				}}
 			>
 				{label && (
-					<div className={controlInnerClassNames('label')}>
-						<LabelControl
-							label={label}
-							{...{
-								attribute,
-								blockName,
-								description,
-								resetToDefault,
-							}}
-						/>
-					</div>
+					<span
+						style={{
+							display: 'flex',
+							alignItems: 'center',
+							minHeight: '30px',
+							marginRight: 'auto',
+						}}
+					>
+						<LabelControl {...labelProps} />
+					</span>
 				)}
 
 				{value.type === 'all' && (
@@ -292,30 +316,3 @@ export default function BorderRadiusControl({
 		</div>
 	);
 }
-
-BorderRadiusControl.propTypes = {
-	/**
-	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
-	 */
-	// $FlowFixMe
-	defaultValue: PropTypes.shape({
-		type: PropTypes.oneOf(['all', 'custom']),
-		all: PropTypes.string,
-		topLeft: PropTypes.string,
-		topRight: PropTypes.string,
-		bottomLeft: PropTypes.string,
-		bottomRight: PropTypes.string,
-	}),
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
-	/**
-	 * ID for retrieving value from control context
-	 */
-	id: PropTypes.string,
-	/**
-	 * Label of control
-	 */
-	label: PropTypes.string,
-};

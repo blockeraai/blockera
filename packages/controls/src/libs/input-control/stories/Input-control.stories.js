@@ -1325,7 +1325,7 @@ export const PlayNumber = {
 				'linear-gradient',
 				'radial-gradient',
 			]}
-			dynamicValueTypes={['TEXT']}
+			dynamicValueTypes={['text']}
 			{...args}
 		/>
 	),

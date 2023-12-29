@@ -96,4 +96,4 @@ export const ControlContextProvider = ({
 	);
 };
 
-export * from './hooks';
+export { useControlContext, useControlEffect } from './hooks';

@@ -8,10 +8,11 @@ export type ControlContextProviderProps = {
 	value: {
 		value: any,
 		name: string,
-		attribute: string,
-		blockName: string,
+		attribute?: string,
+		blockName?: string,
 		hasSideEffect?: boolean,
 		description?: string | MixedElement | any,
+		type?: 'simple' | 'nested',
 	},
 	storeName?: string,
 	children: MixedElement | any,
@@ -24,9 +25,11 @@ export type ControlContextHookProps = {
 		repeaterId?: string | null,
 		defaultRepeaterItemValue: Object,
 	},
-	onChange: (newValue: any) => void,
-	valueCleanup?: (newValue: any) => void,
+	onChange?: (newValue: any) => any,
+	valueCleanup?: (newValue: any) => any,
 	defaultValue: any,
 	sideEffect?: boolean,
 	mergeInitialAndDefault?: boolean,
 };
+
+export * from './control-effect-type';

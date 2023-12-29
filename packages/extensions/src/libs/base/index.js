@@ -8,7 +8,7 @@ import { useContext, memo } from '@wordpress/element';
  */
 import { isObject } from '@publisher/utils';
 import { componentClassNames } from '@publisher/classnames';
-import { PanelBodyControl, STORE_NAME } from '@publisher/controls';
+import { PanelBodyControl } from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -29,7 +29,6 @@ export const BaseExtension = memo(
 		attributes,
 		extensionId,
 		initialOpen,
-		storeName = STORE_NAME,
 		...props
 	}) => {
 		const context = useContext(BaseExtensionContext);
@@ -57,9 +56,7 @@ export const BaseExtension = memo(
 								{...props}
 								block={{
 									clientId,
-									storeName,
 									blockName,
-									attributes,
 								}}
 								config={config}
 							/>

@@ -29,6 +29,10 @@ export default function RangeControl({
 	//
 	id,
 	label,
+	labelPopoverTitle,
+	labelDescription,
+	repeaterItem,
+	singularId,
 	columns,
 	onChange,
 	sideEffect = true,
@@ -62,25 +66,45 @@ export default function RangeControl({
 		return value;
 	}
 
-	let { value, setValue, attribute, blockName, description, resetToDefault } =
-		useControlContext({
-			id,
-			onChange,
-			defaultValue,
-			valueCleanup,
-		});
+	let {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		resetToDefault,
+		getControlPath,
+	} = useControlContext({
+		id,
+		onChange,
+		defaultValue,
+		valueCleanup,
+	});
 
 	if (isString(value)) {
 		value = valueCleanup(value);
 	}
 
+	const labelProps = {
+		value,
+		singularId,
+		attribute,
+		blockName,
+		label,
+		labelPopoverTitle,
+		labelDescription,
+		repeaterItem,
+		defaultValue,
+		resetToDefault,
+		mode: 'advanced',
+		path: getControlPath(attribute, id),
+	};
+
 	return (
 		<BaseControl
-			label={label}
 			columns={columns}
 			controlName={field}
 			className={className}
-			{...{ attribute, blockName, description, resetToDefault }}
+			{...labelProps}
 		>
 			<WordPressRangeControl
 				min={min}

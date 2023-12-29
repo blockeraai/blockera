@@ -2,10 +2,10 @@
 /**
  * External dependencies
  */
-import { ColorPicker as WPColorPicker } from '@wordpress/components';
-import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+import 'eyedropper-polyfill';
+import { useCallback, useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -19,6 +19,8 @@ import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
 import type { ColorPickerControlProps } from './types';
 import TrashIcon from './icons/trash';
+import { ColorPallet } from './components';
+import PickerIcon from './icons/picker';
 
 export default function ColorPickerControl({
 	popoverTitle = __('Color Picker', 'publisher-core'),
@@ -38,19 +40,31 @@ export default function ColorPickerControl({
 	className,
 	...props
 }: ColorPickerControlProps): MixedElement {
-	const {
-		value,
-		setValue,
-		attribute,
-		blockName,
-		description,
-		resetToDefault,
-	} = useControlContext({
-		id,
-		onChange,
-		defaultValue,
-		valueCleanup,
-	});
+	const { value, setValue, attribute, blockName, resetToDefault } =
+		useControlContext({
+			id,
+			onChange,
+			defaultValue,
+			valueCleanup,
+		});
+
+	const [isPopoverHidden, setIsPopoverHidden] = useState(false);
+
+	const eyeDropper = new window.EyeDropper();
+
+	const pickColor = useCallback(() => {
+		const openPicker = async () => {
+			try {
+				const color = await eyeDropper.open();
+				setValue(color.sRGBHex);
+				setIsPopoverHidden(false);
+			} catch (e) {
+				console.log(e);
+				setIsPopoverHidden(false);
+			}
+		};
+		openPicker();
+	}, [eyeDropper.open]);
 
 	// make sure always we treat colors as lower case
 	function valueCleanup(value: string) {
@@ -68,22 +82,43 @@ export default function ColorPickerControl({
 				columns={columns}
 				controlName={field}
 				className={className}
-				{...{ attribute, blockName, description, resetToDefault }}
+				{...{ attribute, blockName, resetToDefault }}
 			>
 				{isOpen && (
 					<Popover
 						title={popoverTitle}
 						offset={20}
 						placement={placement}
-						className="components-palette-edit-popover"
+						className={`components-palette-edit-popover ${
+							isPopoverHidden ? 'hidden' : ''
+						}`}
 						onClose={onClose}
 						titleButtonsRight={
 							<>
+								<Button
+									tabIndex="-1"
+									size={'extra-small'}
+									className="btn-pick-color"
+									onClick={() => {
+										setIsPopoverHidden(true);
+										pickColor();
+									}}
+									style={{ padding: '5px' }}
+									aria-label={__(
+										'Pick Color',
+										'publisher-core'
+									)}
+								>
+									<PickerIcon />
+								</Button>
 								{value && (
 									<Button
 										tabIndex="-1"
 										size={'extra-small'}
-										onClick={() => setValue('')}
+										onClick={() => {
+											setValue('');
+											onClose();
+										}}
 										style={{ padding: '5px' }}
 										aria-label={__(
 											'Reset Color (Clear)',
@@ -96,8 +131,8 @@ export default function ColorPickerControl({
 							</>
 						}
 					>
-						<WPColorPicker
-							enableAlpha={false}
+						<ColorPallet
+							enableAlpha={true}
 							color={value}
 							onChangeComplete={(color) => setValue(color.hex)}
 							{...props}
@@ -114,9 +149,9 @@ export default function ColorPickerControl({
 			columns={columns}
 			controlName={field}
 			className={className}
-			{...{ attribute, blockName, description, resetToDefault }}
+			{...{ attribute, blockName, resetToDefault }}
 		>
-			<WPColorPicker
+			<ColorPallet
 				enableAlpha={false}
 				color={value}
 				onChangeComplete={(color) => setValue(color.hex)}
@@ -133,52 +168,3 @@ export default function ColorPickerControl({
 		</BaseControl>
 	);
 }
-
-ColorPickerControl.propTypes = {
-	/**
-	 * is ColorPicker popover open  by default or not?
-	 */
-	isOpen: PropTypes.bool,
-	/**
-	 * Popover title
-	 */
-	popoverTitle: PropTypes.string,
-	/**
-	 * Popover placement
-	 */
-	placement: PropTypes.string,
-	/**
-	 * event that will be fired while closing popover
-	 */
-	onClose: PropTypes.func,
-	/**
-	 * ID for retrieving value from control context
-	 */
-	id: PropTypes.string.isRequired,
-	/**
-	 * Label for field. If you pass empty value the field will not be added and simple control will be rendered
-	 *
-	 * @default ""
-	 */
-	label: PropTypes.string,
-	/**
-	 * Field id for passing into child Field component
-	 *
-	 * @default "toggle-select"
-	 */
-	field: PropTypes.string,
-	/**
-	 * Columns setting for Field grid.
-	 *
-	 * @default "columns-2"
-	 */
-	columns: PropTypes.string,
-	/**
-	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
-	 */
-	defaultValue: PropTypes.string,
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
-};

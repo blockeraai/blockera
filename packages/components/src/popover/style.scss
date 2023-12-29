@@ -5,19 +5,30 @@
 	--popover-height: 430px;
 	--popover-width: 290px;
 	--popover-header-height: 42px;
+	--popover-color: #1e1e1e;
+	--popover-bg-color: #ffffff;
+	--popover-border-color: var(--publisher-controls-primary-color);
+	--popover-header-color: var(--popover-color);
+	--popover-header-bg-color: #ffffff;
+	--popover-header-shadow-color: #00000029;
+	--popover-header-btn-color: #1e1e1e;
+	--popover-header-btn-border-color: var(--publisher-controls-border-color-soft);
 	overflow: var(--popover-overflow) !important;
+	background-color: var(--popover-bg-color);
+	color: var(--popover-color);
+	border-radius: 4px;
 
 	.components-popover__content {
 		padding: 0;
-		border: 2px solid var(--publisher-controls-primary-color);
+		border: 2px solid var(--popover-border-color);
 		box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
 		min-width: var(--popover-width);
 		width: var(--popover-width);
-		border-radius: 3px;
 		position: relative;
 		min-height: auto;
 		height: auto;
 		overflow: auto !important;
+		background-color: var(--popover-bg-color);
 	}
 
 	&.with-header {
@@ -29,22 +40,26 @@
 
 	.publisher-component-popover-header {
 		padding: 0 18px;
-		box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1882352941);
+		box-shadow: 0 2px 6px 0 var(--popover-header-shadow-color);
 		position: fixed;
 		top: 2px;
 		left: 2px;
 		right: 2px;
-		background: #ffffff;
+		background: var(--popover-header-bg-color);
 		margin: 0;
 		height: var(--popover-header-height);
 		display: flex;
-		gap: 6px;
+		gap: 10px;
 		align-items: center;
 		font-weight: 500;
-		color: #1e1e1e;
+		color: var(--popover-header-color);
 		font-size: 13px;
 		z-index: 6;
-		border-radius: 2px 2px 0 0;
+		border-radius: 4px 4px 0 0;
+
+		svg {
+			fill: currentColor;
+		}
 
 		.publisher-component-button {
 			padding: 0 !important;
@@ -65,13 +80,14 @@
 	}
 
 	.publisher-component-popover-body {
-		padding: 18px 18px 18px;
+		padding: 25px 18px 0 18px;
 		min-height: calc(var(--popover-min-height) - var(--popover-header-height));
 		max-height: calc(var(--popover-height) - var(--popover-header-height));
 		overflow: var(--popover-overflow) !important;
+		background-color: var(--popover-bg-color);
 
 		& > :last-child {
-			padding-bottom: 18px;
+			padding-bottom: 20px;
 		}
 	}
 }

@@ -30,12 +30,31 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
 
-		const { repeaterId, getControlId } = useContext(RepeaterContext);
+		const { repeaterId, getControlId, defaultRepeaterItemValue } =
+			useContext(RepeaterContext);
 
 		return (
 			<div id={`repeater-item-${itemId}`}>
 				<BorderControl
+					singularId={'border'}
+					repeaterItem={itemId}
 					label={__('Outline', 'publisher-core')}
+					labelDescription={
+						<>
+							<p>
+								{__(
+									'Add distinct borders to elements without affecting layout, enhancing visual hierarchy and focus.',
+									'publisher-core'
+								)}
+							</p>
+							<p>
+								{__(
+									'Useful for highlighting elements without space adjustments, unlike borders. Perfect for focus states and accessibility.',
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
 					columns="columns-2"
 					id={getControlId(itemId, 'border')}
 					linesDirection="horizontal"
@@ -54,12 +73,25 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							},
 						})
 					}
-					defaultValue={item.border}
+					defaultValue={defaultRepeaterItemValue.border}
 				/>
 
 				<InputControl
+					singularId={'color'}
+					repeaterItem={itemId}
 					controlName="input"
 					label={__('Offset', 'publisher-core')}
+					labelPopoverTitle={__('Outline Offset', 'publisher-core')}
+					labelDescription={
+						<>
+							<p>
+								{__(
+									'Control the distance between a block and its outline, offering precision in visual design.',
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
 					columns="columns-2"
 					min={0}
 					max={40}
@@ -79,7 +111,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							},
 						})
 					}
-					defaultValue={item.offset}
+					defaultValue={defaultRepeaterItemValue.offset}
 					data-test="outline-offset-input"
 					controlAddonTypes={['variable']}
 					variableTypes={['spacing']}

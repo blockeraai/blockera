@@ -4,16 +4,35 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
+import type { ControlGeneralTypes } from '../../../types';
 
 export type LabelControlProps = {
-	label?: string,
-	blockName: string,
-	attribute: string,
-	className?: string,
+	...ControlGeneralTypes,
+	value?: any,
+	blockName?: string,
+	attribute?: string,
 	ariaLabel?: string,
 	path?: string | null,
+	repeaterItem?: number,
+	singularId?: string | null,
 	mode?: 'advanced' | 'simple',
-	description?: string | MixedElement,
+	isRepeater?: void | boolean,
 	onClick?: (event: MouseEvent) => void,
-	resetToDefault?: (args?: { path?: null | string }) => any,
+	resetToDefault?: (args?: {
+		attributes?: Object,
+		isRepeater: boolean | void,
+		repeaterItem?: number,
+		path?: null | string,
+		propId?: string | null,
+		action?: string,
+	}) => any,
+};
+
+export type SimpleLabelControlProps = {
+	...Object,
+	label?: string,
+	className?: string,
+	ariaLabel?: string,
+	labelDescription?: string | MixedElement,
+	advancedIsOpen?: boolean,
 };

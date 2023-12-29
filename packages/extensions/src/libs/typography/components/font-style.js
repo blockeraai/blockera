@@ -12,6 +12,7 @@ import {
 	ToggleSelectControl,
 	ControlContextProvider,
 } from '@publisher/controls';
+import { isEmpty } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -20,6 +21,7 @@ import { generateExtensionId } from '../../utils';
 import FontStyleNormalIcon from '../icons/font-style-normal';
 import FontStyleItalicIcon from '../icons/font-style-italic';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import { useBlockContext } from '../../../hooks';
 
 export const FontStyle = ({
 	block,
@@ -29,9 +31,26 @@ export const FontStyle = ({
 }: {
 	block: TBlockProps,
 	value: string | void,
-	defaultValue?: string,
+	defaultValue: string | void,
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
+	const { isNormalState, getAttributes } = useBlockContext();
+
+	const toWPCompatible = (newValue: Object): Object => {
+		if (!isNormalState() || isEmpty(newValue)) {
+			return {};
+		}
+
+		const blockAttributes = getAttributes();
+
+		return {
+			style: {
+				...(blockAttributes.attributes?.style ?? {}),
+				fontStyle: newValue,
+			},
+		};
+	};
+
 	return (
 		<ControlContextProvider
 			value={{
@@ -42,7 +61,38 @@ export const FontStyle = ({
 			}}
 		>
 			<ToggleSelectControl
-				label={__('Italicize', 'publisher-core')}
+				label={__('Style', 'publisher-core')}
+				labelPopoverTitle={__('Font Style', 'publisher-core')}
+				labelDescription={
+					<>
+						<p>
+							{__(
+								'It sets the style of font for adding an artistic or emphatic touch to text content in web design.',
+								'publisher-core'
+							)}
+						</p>
+						<h3>
+							<FontStyleNormalIcon />
+							{__('Normal', 'publisher-core')}
+						</h3>
+						<p>
+							{__(
+								'Displays the text in a standard, upright font style.',
+								'publisher-core'
+							)}
+						</p>
+						<h3>
+							<FontStyleItalicIcon />
+							{__('Italic', 'publisher-core')}
+						</h3>
+						<p>
+							{__(
+								'Displays the text in italic, with a slight right tilt, commonly used for emphasis.',
+								'publisher-core'
+							)}
+						</p>
+					</>
+				}
 				columns="columns-1"
 				className="control-first label-center small-gap"
 				options={[
@@ -59,17 +109,14 @@ export const FontStyle = ({
 				]}
 				isDeselectable={true}
 				//
-				defaultValue={defaultValue || 'normal'}
-				onChange={(newValue) =>
+				defaultValue={defaultValue}
+				onChange={(newValue, ref) => {
 					onChange('publisherFontStyle', newValue, {
-						addOrModifyRootItems: {
-							style: {
-								...(block.attributes?.style ?? {}),
-								fontStyle: newValue,
-							},
-						},
-					})
-				}
+						ref,
+						addOrModifyRootItems: toWPCompatible(newValue),
+						deleteItemsOnResetAction: ['style.fontStyle'],
+					});
+				}}
 			/>
 		</ControlContextProvider>
 	);

@@ -16,6 +16,7 @@ export function Tooltip({
 	hideOnClick = true,
 	placement = 'top',
 	position = 'top',
+	delay = 600,
 	children,
 	className,
 	text,
@@ -28,6 +29,7 @@ export function Tooltip({
 			placement={placement}
 			position={position}
 			text={text}
+			delay={delay}
 			{...props}
 		>
 			{children}

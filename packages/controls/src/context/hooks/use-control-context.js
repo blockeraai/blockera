@@ -3,7 +3,7 @@
  * External dependencies
  */
 import { select } from '@wordpress/data';
-import { useContext } from '@wordpress/element';
+import { useContext, useRef } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -48,6 +48,21 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			controlInfo,
 		};
 	}
+
+	const initialRef = {
+		path: '',
+		reset: false,
+		action: 'normal',
+	};
+
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	const ref = useRef(initialRef);
+
+	const resetRef = (): void => {
+		if (ref) {
+			ref.current = initialRef;
+		}
+	};
 
 	const { getControl } = isRepeaterControl()
 		? select(REPEATER_STORE_NAME)
@@ -96,11 +111,14 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const setValue = useControlEffect(
 		{
+			ref,
 			onChange,
+			resetRef,
 			sideEffect,
 			modifyValue,
 			valueCleanup,
 			value: calculatedValue,
+			resetToNormal: controlInfo.resetToNormal,
 		},
 		[savedValue]
 	);
@@ -125,7 +143,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 	 *
 	 * @return {null|*} retrieved standard calculated value for current control!
 	 */
-	function getCalculatedInitValue(currentValue?: any = null): any {
+	function getCalculatedInitValue(currentValue: any = null): any {
 		if (isNull(currentValue)) {
 			currentValue = savedValue;
 		}
@@ -205,59 +223,140 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 
 	return {
 		dispatch,
-		setValue: (value) => {
-			setValue(value);
+		setValue: (value, ref = undefined) => {
+			setValue(value, ref);
 
 			modifyValue(value);
+
+			resetRef();
 		},
 		value: calculatedValue,
 		blockName: controlInfo.blockName,
 		attribute: controlInfo.attribute,
-		description: controlInfo.description,
 		controlInfo: getControl(controlInfo.name),
+		getControlPath(controlID: string, childControlId: string): string {
+			// Assume childControlId is undefined, then hint to context provider main value.
+			if (isUndefined(childControlId)) {
+				return controlID;
+			}
+			// Assume childControlId started with open bracket char as an example: "[0].toggleOption", then concat controlID and childControlId with no separator.
+			if ('[' === childControlId[0]) {
+				return `${controlID}${childControlId}`;
+			}
+
+			// Assume childControlId started with property word name as an example: "toggleOption", then concatenate "controlID" and "childControlId" with "dot | ." separator.
+			return `${controlID}.${childControlId}`;
+		},
 		/**
 		 * Reset control value to default value.
 		 */
 		resetToDefault: (args: Object): any => {
+			const dataset = args?.attributes || defaultValue;
+
+			if (
+				['RESET_TO_NORMAL', 'RESET_TO_DEFAULT'].includes(args?.action)
+			) {
+				ref.current = {
+					reset: true,
+					action: 'reset',
+					path: args?.path,
+				};
+			} else {
+				resetRef();
+			}
+
+			if (args?.isRepeater) {
+				const value = prepare(args?.path, dataset);
+
+				modifyControlValue({
+					value,
+					valueCleanup,
+					controlId: controlInfo.name,
+				});
+
+				return value;
+			}
+
 			if (isUndefined(args?.path)) {
+				setValue(defaultValue, ref);
+
 				modifyControlValue({
 					valueCleanup,
 					value: defaultValue,
 					controlId: controlInfo.name,
 				});
 
-				setValue(defaultValue);
-
 				return defaultValue;
 			}
 
-			let value = prepare(args?.path, defaultValue);
+			let value = prepare(args?.path, dataset);
 
-			if (isUndefined(value) || '' === value) {
-				value = defaultValue;
+			const callback = (
+				item: Object,
+				itemId: number,
+				value: any
+			): Object => {
+				if (itemId === args?.repeaterItem) {
+					return {
+						...item,
+						[args?.propId]: value,
+					};
+				}
+
+				return item;
+			};
+
+			if (isUndefined(value)) {
+				if (isArray(savedValue)) {
+					value = savedValue.map(
+						(item: Object, itemId: number): Object =>
+							callback(item, itemId, defaultValue)
+					);
+				} else if (isObject(savedValue) && args?.propId) {
+					value = {
+						...savedValue,
+						[args?.propId]: defaultValue[args?.propId],
+					};
+				} else if (isObject(savedValue) && isObject(defaultValue)) {
+					value = {
+						...savedValue,
+						...defaultValue,
+					};
+				}
+
+				setValue(value, ref);
+
 				modifyControlValue({
-					valueCleanup,
 					value,
+					valueCleanup,
 					controlId: controlInfo.name,
 				});
-
-				setValue(value);
 
 				return value;
 			}
 
-			modifyControlValue({
-				valueCleanup,
-				value: {
+			if (isArray(savedValue)) {
+				value = savedValue.map((item: Object, itemId: number): Object =>
+					callback(item, itemId, value)
+				);
+			} else if (isObject(savedValue) && args?.propId) {
+				value = {
 					...savedValue,
-					[args?.path]: value,
-				},
-				controlId: controlInfo.name,
-			});
+					[args?.propId]: value,
+				};
+			} else if (isObject(savedValue) && isObject(value)) {
+				value = {
+					...savedValue,
+					...value,
+				};
+			}
 
-			setValue({
-				...savedValue,
-				[args?.path]: value,
+			setValue(value, ref);
+
+			modifyControlValue({
+				value,
+				valueCleanup,
+				controlId: controlInfo.name,
 			});
 
 			return value;

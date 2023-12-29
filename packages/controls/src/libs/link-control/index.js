@@ -32,7 +32,12 @@ import type { LinkControlProps } from './types';
 import { linkControlValueCleaner } from './utils';
 
 export default function LinkControl({
+	id,
 	label,
+	labelPopoverTitle,
+	labelDescription,
+	singularId,
+	repeaterItem,
 	columns,
 	field = 'link',
 	onChange,
@@ -54,8 +59,8 @@ export default function LinkControl({
 		setValue,
 		attribute,
 		blockName,
-		description,
 		resetToDefault,
+		getControlPath,
 	} = useControlContext({
 		onChange,
 		defaultValue,
@@ -74,13 +79,27 @@ export default function LinkControl({
 			  )
 	);
 
+	const labelProps = {
+		value,
+		singularId,
+		attribute,
+		blockName,
+		label,
+		labelPopoverTitle,
+		labelDescription,
+		repeaterItem,
+		defaultValue,
+		resetToDefault,
+		mode: 'advanced',
+		path: getControlPath(attribute, id),
+	};
+
 	return (
 		<BaseControl
-			label={label}
 			columns={columns}
 			controlName={field}
 			className={className}
-			{...{ attribute, blockName, description, resetToDefault }}
+			{...labelProps}
 		>
 			<div className={controlClassNames('link', className)}>
 				<div className={controlInnerClassNames('link-row-link')}>

@@ -41,7 +41,7 @@ const RepeaterItem = ({
 
 	const {
 		controlInfo: { name: controlId },
-		dispatch: { sortRepeaterItem, modifyControlValue },
+		dispatch: { sortRepeaterItem, modifyControlValue, changeRepeaterItem },
 	} = useControlContext();
 
 	const {
@@ -162,9 +162,18 @@ const RepeaterItem = ({
 							className={controlInnerClassNames(
 								'repeater-group-header'
 							)}
-							onClick={(event) =>
-								isOpenPopoverEvent(event) && setOpen(!isOpen)
-							}
+							onClick={(event) => {
+								if (isOpenPopoverEvent(event)) setOpen(!isOpen);
+								changeRepeaterItem({
+									itemId,
+									value: {
+										...item,
+										isOpen: !isOpen,
+									},
+									controlId,
+									repeaterId,
+								});
+							}}
 							aria-label={sprintf(
 								// translators: %d is the repeater item id. It's the aria label for repeater item
 								__('Item %d', 'publisher-core'),
@@ -203,6 +212,15 @@ const RepeaterItem = ({
 				isOpen={isOpen}
 				onClose={() => {
 					setOpen(false);
+					changeRepeaterItem({
+						itemId,
+						value: {
+							...item,
+							isOpen: !isOpen,
+						},
+						controlId,
+						repeaterId,
+					});
 				}}
 				onClick={(event): boolean => {
 					if (item.selectable) {

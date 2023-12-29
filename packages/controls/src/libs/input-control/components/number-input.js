@@ -76,12 +76,14 @@ export function NumberInput({
 		// Allow Ctrl+A (Windows) or Command+A (Mac) to select all text
 		// Allow Ctrl+C (Windows) or Command+C (Mac) to copy text
 		// Allow Ctrl+V (Windows) or Command+V (Mac) to paste text
+		// Allow Ctrl+R (Windows) or Command+R (Mac) to refresh page
 		if (
 			!(
 				(event.ctrlKey || event.metaKey) &&
 				(event.key.toLowerCase() === 'a' ||
 					event.key.toLowerCase() === 'v' ||
-					event.key.toLowerCase() === 'c')
+					event.key.toLowerCase() === 'c' ||
+					event.key.toLowerCase() === 'r')
 			) &&
 			!event.key.match(regex)
 		) {
@@ -154,7 +156,7 @@ export function NumberInput({
 		setIsValidValue(isValid);
 	}, [value]); // eslint-disable-line
 
-	const dragValueHandler = useDragValue({
+	const { onDragStart } = useDragValue({
 		value: isString(value)
 			? //$FlowFixMe
 			  value.replace(float ? /[^-\.0-9]/g : /[^-0-9]/g, '')
@@ -171,7 +173,7 @@ export function NumberInput({
 		return drag
 			? {
 					onMouseDown: (event) => {
-						dragValueHandler(event);
+						onDragStart(event);
 					},
 			  }
 			: {};

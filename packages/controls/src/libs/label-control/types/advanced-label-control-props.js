@@ -1,18 +1,8 @@
 // @flow
 
 /**
- * External dependencies
+ * Internal dependencies
  */
-import type { MixedElement } from 'react';
+import type { LabelControlProps } from './label-control-props';
 
-export type AdvancedLabelControlProps = {
-	label?: string,
-	attribute: string,
-	blockName: string,
-	className?: string,
-	ariaLabel?: string,
-	path?: null | string,
-	description?: string | MixedElement,
-	onClick?: (event: MouseEvent) => void,
-	resetToDefault?: (args?: { path?: null | string }) => any,
-};
+export type AdvancedLabelControlProps = LabelControlProps;

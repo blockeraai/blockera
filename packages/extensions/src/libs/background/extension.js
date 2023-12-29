@@ -137,6 +137,26 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 						<ColorControl
 							controlName="color"
 							label={__('BG Color', 'publisher-core')}
+							labelPopoverTitle={__(
+								'Background Color',
+								'publisher-core'
+							)}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'It sets the color of an Block’s background, providing a simple yet powerful way to apply solid color.',
+											'publisher-core'
+										)}
+									</p>
+									<p>
+										{__(
+											'You can use variables to use color from your site design system.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							columns="columns-2"
 							{...props}
 							onChange={(newValue) =>
@@ -163,6 +183,78 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 						<SelectControl
 							controlName="select"
 							label={__('Clipping', 'publisher-core')}
+							labelPopoverTitle={__(
+								'Background Clipping',
+								'publisher-core'
+							)}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'It defines how far the background (color or image) extends within an element.',
+											'publisher-core'
+										)}
+									</p>
+									<p>
+										{__(
+											'It is useful for creating special effects with backgrounds, such as having a background only within the content area or under the borders.',
+											'publisher-core'
+										)}
+									</p>
+									<h3>
+										<ClipPaddingIcon />
+										{__(
+											'Clip to Padding',
+											'publisher-core'
+										)}
+									</h3>
+									<p>
+										{__(
+											'The background stops at the padding edge, not extending behind the border.',
+											'publisher-core'
+										)}
+									</p>
+									<h3>
+										<ClipContentIcon />
+										{__(
+											'Clip to Content',
+											'publisher-core'
+										)}
+									</h3>
+									<p>
+										{__(
+											'The background is applied only to the content area.',
+											'publisher-core'
+										)}
+									</p>
+									<h3>
+										<ClipTextIcon />
+										{__('Clip to Text', 'publisher-core')}
+									</h3>
+									<p>
+										{__(
+											'Advanced feature that allows the background to only be visible through the text of an element.',
+											'publisher-core'
+										)}
+									</p>
+									<p>
+										{__(
+											'This creates an eye-catching effect where the text acts as a mask for the background image or video.',
+											'publisher-core'
+										)}
+									</p>
+									<h3>
+										<InheritIcon />
+										{__('Inherit', 'publisher-core')}
+									</h3>
+									<p>
+										{__(
+											'Clipping inherit from the parent block.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							columns="columns-2"
 							{...{
 								...props,

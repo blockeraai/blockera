@@ -24,6 +24,10 @@ import type { TPositionButtonProps } from './types';
 
 export default function PositionButtonControl({
 	label,
+	labelPopoverTitle,
+	labelDescription,
+	repeaterItem,
+	singularId,
 	buttonLabel,
 	popoverTitle,
 	alignmentMatrixLabel,
@@ -43,8 +47,8 @@ export default function PositionButtonControl({
 		setValue,
 		attribute,
 		blockName,
-		description,
 		resetToDefault,
+		getControlPath,
 	} = useControlContext({
 		id,
 		onChange,
@@ -53,13 +57,27 @@ export default function PositionButtonControl({
 
 	const [isPopoverActive, setIsPopoverActive] = useState(false);
 
+	const labelProps = {
+		value,
+		singularId,
+		attribute,
+		blockName,
+		label,
+		labelPopoverTitle,
+		labelDescription,
+		repeaterItem,
+		defaultValue,
+		resetToDefault,
+		mode: 'advanced',
+		path: getControlPath(attribute, id),
+	};
+
 	return (
 		<BaseControl
-			label={label}
 			columns={columns}
 			controlName={field}
 			className={className}
-			{...{ attribute, blockName, description, resetToDefault }}
+			{...labelProps}
 		>
 			<Button
 				label={buttonLabel}

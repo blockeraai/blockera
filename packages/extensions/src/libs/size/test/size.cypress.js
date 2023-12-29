@@ -78,11 +78,7 @@ describe('Size Extension', () => {
 		describe('Functionality', () => {
 			it('should update min-width when adding value', () => {
 				cy.getByDataTest('style-tab').click();
-				cy.getParentContainer('Min W', 'base-control')
-					.first()
-					.within(() => {
-						cy.get('input').type(10);
-					});
+				cy.getByAriaLabel('Min Width').type(10);
 
 				//Check block
 				cy.getIframeBody()
@@ -124,11 +120,7 @@ describe('Size Extension', () => {
 		describe('Functionality', () => {
 			it('should update max-width when adding value', () => {
 				cy.getByDataTest('style-tab').click();
-				cy.getParentContainer('Max W', 'base-control')
-					.first()
-					.within(() => {
-						cy.get('input').type(200);
-					});
+				cy.getByAriaLabel('Max Width').type(200);
 
 				//Check block
 				cy.getIframeBody()
@@ -222,11 +214,7 @@ describe('Size Extension', () => {
 		describe('Functionality', () => {
 			it('should update min-height when adding value', () => {
 				cy.getByDataTest('style-tab').click();
-				cy.getParentContainer('Min H', 'base-control')
-					.first()
-					.within(() => {
-						cy.get('input').type(20);
-					});
+				cy.getByAriaLabel('Min Height').type(20);
 
 				//Check block
 				cy.getIframeBody()
@@ -268,11 +256,7 @@ describe('Size Extension', () => {
 		describe('Functionality', () => {
 			it('should update max-height when adding value', () => {
 				cy.getByDataTest('style-tab').click();
-				cy.getParentContainer('Max H', 'base-control')
-					.first()
-					.within(() => {
-						cy.get('input').type(200);
-					});
+				cy.getByAriaLabel('Max Height').type(200);
 
 				//Check block
 				cy.getIframeBody()

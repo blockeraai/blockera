@@ -1,6 +1,19 @@
 export const attributes = {
 	publisherSpacing: {
 		type: 'object',
-		default: {},
+		default: {
+			margin: {
+				top: '',
+				right: '',
+				bottom: '',
+				left: '',
+			},
+			padding: {
+				top: '',
+				right: '',
+				bottom: '',
+				left: '',
+			},
+		},
 	},
 };
