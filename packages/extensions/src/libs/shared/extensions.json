@@ -81,6 +81,7 @@
 		"publisherTransformChildOrigin",
 		"publisherTransformSelfPerspective",
 		"publisherTransformChildPerspective",
+		"publisherDivider",
 		"publisherMask"
 	],
 	"mouse": [

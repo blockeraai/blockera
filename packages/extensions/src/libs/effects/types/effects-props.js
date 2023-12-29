@@ -36,6 +36,7 @@ export type TEffectsProps = {
 		},
 		transformSelfPerspective: string,
 		transformChildPerspective: string,
+		divider: Array<Object>,
 		mask: Array<Object>,
 	},
 	block: TBlockProps,

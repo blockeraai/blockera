@@ -58,6 +58,7 @@ blocksInitializer({
 							publisherTransformChildOrigin: {},
 							publisherTransformSelfPerspective: '',
 							publisherTransformChildPerspective: '',
+							divider: [],
 						}}
 						extensionId={'Effects'}
 						icon={<EffectsExtensionIcon />}
@@ -106,6 +107,7 @@ export const Default = {
 					publisherBlendMode: '',
 					publisherTransition: [],
 					publisherBackdropFilter: [],
+					publisherDivider: [],
 					publisherBackfaceVisibility: '',
 					publisherTransformSelfOrigin: {},
 					publisherTransformChildOrigin: {},

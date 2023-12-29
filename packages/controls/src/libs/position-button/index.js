@@ -29,8 +29,8 @@ export default function PositionButtonControl({
 	repeaterItem,
 	singularId,
 	buttonLabel,
-	popoverLabel = __('Setting', 'publisher-core'),
-	alignmentMatrixLabel = __('Position', 'publisher-core'),
+	popoverTitle,
+	alignmentMatrixLabel,
 	id,
 	onChange,
 	defaultValue = {
@@ -106,7 +106,7 @@ export default function PositionButtonControl({
 			</Button>
 			{isPopoverActive && (
 				<Popover
-					title={popoverLabel}
+					title={popoverTitle}
 					offset={121}
 					placement="left"
 					className={controlInnerClassNames('position-popover')}
@@ -147,7 +147,7 @@ PositionButtonControl.propTypes = {
 	/**
 	 * Label for popover
 	 */
-	popoverLabel: PropTypes.string,
+	popoverTitle: PropTypes.string,
 	/**
 	 * Label for field alignment-matrix. If you pass empty value the field will not be added and simple control will be rendered
 	 *
@@ -177,4 +177,13 @@ PositionButtonControl.propTypes = {
 	 * @default "columns-2"
 	 */
 	columns: PropTypes.string,
+};
+
+PositionButtonControl.defaultProps = {
+	popoverTitle: (__('Setting', 'publisher-core'): any),
+	alignmentMatrixLabel: (__('Position', 'publisher-core'): any),
+	defaultValue: {
+		top: '',
+		left: '',
+	},
 };

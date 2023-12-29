@@ -115,7 +115,7 @@ export const TransformSettings = ({
 									'Self Perspective Origin',
 									'publisher-core'
 								)}
-								popoverLabel={__(
+								popoverTitle={__(
 									'Perspective Position',
 									'publisher-core'
 								)}
@@ -232,7 +232,7 @@ export const TransformSettings = ({
 								'Child Perspective Origin',
 								'publisher-core'
 							)}
-							popoverLabel={__(
+							popoverTitle={__(
 								'Perspective Position',
 								'publisher-core'
 							)}

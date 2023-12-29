@@ -3,7 +3,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-
 import type { MixedElement } from 'react';
 
 /**
@@ -11,7 +10,7 @@ import type { MixedElement } from 'react';
  */
 import {
 	BaseControl,
-	FilterControl,
+	DividerControl,
 	ControlContextProvider,
 } from '@publisher/controls';
 
@@ -21,13 +20,13 @@ import {
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 import { generateExtensionId } from '../../utils';
 
-export const BackdropFilter = ({
-	backdropFilter,
+export const Divider = ({
+	divider,
 	block,
 	props,
 	handleOnChangeAttributes,
 }: {
-	backdropFilter: Array<Object> | void,
+	divider: Array<Object> | void,
 	props: Object,
 	block: TBlockProps,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
@@ -35,27 +34,21 @@ export const BackdropFilter = ({
 	return (
 		<ControlContextProvider
 			value={{
-				name: generateExtensionId(block, 'backdrop-filters'),
-				value: backdropFilter,
-				attribute: 'publisherBackdropFilter',
-				blockName: block.blockName,
+				name: generateExtensionId(block, 'divider'),
+				value: divider,
 			}}
 			storeName={'publisher-core/controls/repeater'}
 		>
-			<BaseControl columns="columns-1" controlName="filter">
-				<FilterControl
-					label={__('Backdrop Filters', 'publisher-core')}
-					popoverTitle={__('Backdrop Filter', 'publisher-core')}
+			<BaseControl columns="columns-1" controlName="divider">
+				<DividerControl
+					label={__('Dividers', 'publisher-core')}
+					popoverTitle={__('Divider', 'publisher-core')}
 					onChange={(newValue) =>
-						handleOnChangeAttributes(
-							'publisherBackdropFilter',
-							newValue
-						)
+						handleOnChangeAttributes('publisherDivider', newValue)
 					}
-					addNewButtonLabel={__(
-						'Add New Backdrop Filter',
-						'publisher-core'
-					)}
+					value={divider}
+					maxItems={2}
+					addNewButtonLabel={__('Add New Divider', 'publisher-core')}
 					{...props}
 				/>
 			</BaseControl>

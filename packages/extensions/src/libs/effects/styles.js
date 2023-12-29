@@ -18,6 +18,10 @@ import { attributes } from './attributes';
 import { isActiveField } from '../../api/utils';
 import type { TBlockProps } from '../types';
 import type { TTransformCssProps } from './types/effects-props';
+import {
+	AfterDividerGenerator,
+	BeforeDividerGenerator,
+} from './css-generators/divider-generator';
 
 interface IConfigs {
 	effectsConfig: {
@@ -28,6 +32,7 @@ interface IConfigs {
 		publisherTransform?: Array<Object>,
 		publisherTransition?: Array<Object>,
 		publisherBackdropFilter?: Array<Object>,
+		publisherDivider?: Array<Object>,
 		publisherMask?: Array<Object>,
 	};
 	blockProps: TBlockProps;
@@ -42,6 +47,7 @@ export function EffectsStyles({
 		publisherBlendMode,
 		publisherTransition,
 		publisherBackdropFilter,
+		publisherDivider,
 		publisherMask,
 	},
 	blockProps,
@@ -280,6 +286,68 @@ export function EffectsStyles({
 				}
 			)
 		);
+	}
+
+	if (
+		isActiveField(publisherDivider) &&
+		!arrayEquals(
+			attributes.publisherDivider.default,
+			blockProps.attributes.publisherDivider
+		)
+	) {
+		generators.push(
+			computedCssRules(
+				{
+					cssGenerators: {
+						publisherDivider: [
+							{
+								type: 'static',
+								selector: '.{{BLOCK_ID}}',
+								properties: {
+									position: 'relative',
+									overflow: 'hidden',
+								},
+							},
+						],
+					},
+				},
+				{ attributes: blockProps.attributes, ...blockProps }
+			)
+		);
+
+		generators.push(
+			computedCssRules(
+				{
+					cssGenerators: {
+						publisherDivider: [
+							{
+								type: 'function',
+								function: BeforeDividerGenerator,
+							},
+						],
+					},
+				},
+				blockProps
+			)
+		);
+
+		if (blockProps.attributes.publisherDivider.length === 2) {
+			generators.push(
+				computedCssRules(
+					{
+						cssGenerators: {
+							publisherDivider: [
+								{
+									type: 'function',
+									function: AfterDividerGenerator,
+								},
+							],
+						},
+					},
+					blockProps
+				)
+			);
+		}
 	}
 
 	if (

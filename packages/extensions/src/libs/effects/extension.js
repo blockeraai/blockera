@@ -31,6 +31,7 @@ import { Transition } from './components/transition';
 import { Filter } from './components/filter';
 import { BackdropFilter } from './components/backdrop-filter';
 import { Blending } from './components/blending';
+import { Divider } from './components/divider';
 import { Mask } from './components/mask';
 
 export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
@@ -48,6 +49,7 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 			transformChildOrigin,
 			transformSelfPerspective,
 			transformChildPerspective,
+			divider,
 			mask,
 		},
 		block,
@@ -63,6 +65,7 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 				publisherFilter,
 				publisherBlendMode,
 				publisherBackdropFilter,
+				publisherDivider,
 				publisherMask,
 			},
 		} = config;
@@ -193,6 +196,15 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 				{isActiveField(publisherBackdropFilter) && (
 					<BackdropFilter
 						backdropFilter={backdropFilter}
+						block={block}
+						props={props}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+					/>
+				)}
+
+				{isActiveField(publisherDivider) && (
+					<Divider
+						divider={divider}
 						block={block}
 						props={props}
 						handleOnChangeAttributes={handleOnChangeAttributes}

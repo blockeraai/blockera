@@ -42,7 +42,7 @@ describe('position-button-control component testing', () => {
 				component: (
 					<PositionButtonControl
 						label="Label for button"
-						popoverLabel="Title for popover"
+						popoverTitle="Title for popover"
 						alignmentMatrixLabel="Alignment matrix field"
 					/>
 				),
