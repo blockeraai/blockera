@@ -95,7 +95,7 @@ abstract class ValueAddonType {
 		 * @since 1.0.0
 		 *
 		 */
-		$args = apply_filters( 'publisher-core/' . $this->getValueType() . '/register/args', $args );
+		$args = apply_filters( 'publisher-core/' . $this->valueAddonType() . '/register/args', $args );
 
 		foreach ( $args as $propertyName => $propertyValue ) {
 
