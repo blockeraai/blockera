@@ -1,3 +1,18 @@
+/**
+ * External dependencies
+ */
+import { select } from '@wordpress/data';
+import domReady from '@wordpress/dom-ready';
+
+/**
+ * Publisher dependencies
+ */
+import {
+	store,
+	unstableBootstrapServerSideVariableDefinitions,
+	unstableBootstrapServerSideDynamicValueDefinitions,
+} from '@publisher/core-data';
+
 export { store } from './store';
 export * from './api';
 export * from './libs';
@@ -7,3 +22,11 @@ export {
 	BlockEditContext,
 	BlockEditContextProvider,
 } from './hooks';
+
+domReady(() => {
+	window.publisher.coreData = {
+		select: select(store?.name),
+		unstableBootstrapServerSideVariableDefinitions,
+		unstableBootstrapServerSideDynamicValueDefinitions,
+	};
+});

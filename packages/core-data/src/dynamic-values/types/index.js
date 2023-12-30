@@ -38,4 +38,6 @@ export type DynamicValueItem = {
 	status: ValueAddonItemStatus,
 	category: DynamicValueCategory,
 	reference: ValueAddonReference,
+	//TODO: fix this type!
+	settings: Array<Object>,
 };
