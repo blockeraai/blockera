@@ -31,7 +31,7 @@ const _getWidthSizes = function (): Array<VariableItem> | [] {
 	if (!isUndefined(layout?.contentSize)) {
 		items.push({
 			name: __('Content Width', 'publisher-core'),
-			slug: 'contentSize',
+			id: 'contentSize',
 			value: layout?.contentSize,
 			reference,
 		});
@@ -40,7 +40,7 @@ const _getWidthSizes = function (): Array<VariableItem> | [] {
 	if (!isUndefined(layout?.wideSize)) {
 		items.push({
 			name: __('Site Wide Width', 'publisher-core'),
-			slug: 'wideSize',
+			id: 'wideSize',
 			value: layout?.wideSize,
 			reference,
 		});
@@ -55,14 +55,14 @@ export const getWidthSizes = (): Array<VariableItem> | [] => {
 	return _getWidthSizesMemoized();
 };
 
-const _getWidthSize = function (slug: string): ?VariableItem {
-	return getWidthSizes().find((item) => item.slug === slug);
+const _getWidthSize = function (id: string): ?VariableItem {
+	return getWidthSizes().find((item) => item.id === id);
 };
 
 const _getWidthSizeMemoized = memoize(_getWidthSize);
 
-export const getWidthSize = (slug: string): ?VariableItem => {
-	return _getWidthSizeMemoized(slug);
+export const getWidthSize = (id: string): ?VariableItem => {
+	return _getWidthSizeMemoized(id);
 };
 
 const _getWidthSizeBy = function (field: string, value: any): ?VariableItem {

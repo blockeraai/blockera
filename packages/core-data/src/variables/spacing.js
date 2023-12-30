@@ -35,7 +35,7 @@ const _getSpacings = function (): Array<VariableItem> {
 			(item) => {
 				return {
 					name: item.name,
-					slug: item.slug,
+					id: item.slug,
 					value: item.size,
 					reference,
 				};
@@ -54,7 +54,7 @@ const _getSpacings = function (): Array<VariableItem> {
 	return spaces.map((item) => {
 		return {
 			name: item.name,
-			slug: item.slug,
+			id: item.slug,
 			value: item.size,
 		};
 	});
@@ -67,14 +67,14 @@ export const getSpacings = (): Array<VariableItem> => {
 	return _getSpacingsMemoized();
 };
 
-const _getSpacing = function (slug: string): ?VariableItem {
-	return getSpacings().find((item) => item.slug === slug);
+const _getSpacing = function (id: string): ?VariableItem {
+	return getSpacings().find((item) => item.id === id);
 };
 
 const _getSpacingMemoized = memoize(_getSpacing);
 
-export const getSpacing = (slug: string): ?VariableItem => {
-	return _getSpacingMemoized(slug);
+export const getSpacing = (id: string): ?VariableItem => {
+	return _getSpacingMemoized(id);
 };
 
 const _getSpacingBy = function (field: string, value: any): ?VariableItem {

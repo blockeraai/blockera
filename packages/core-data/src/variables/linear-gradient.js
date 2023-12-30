@@ -38,7 +38,7 @@ const _getLinearGradients = function () {
 			.map((item) => {
 				return {
 					name: item.name,
-					slug: item.slug,
+					id: item.slug,
 					value: item.gradient,
 					reference,
 				};
@@ -61,7 +61,7 @@ const _getLinearGradients = function () {
 		.map((item) => {
 			return {
 				name: item.name,
-				slug: item.slug,
+				id: item.slug,
 				value: item.gradient,
 				reference,
 			};
@@ -74,14 +74,14 @@ export const getLinearGradients = (): Array<VariableItem> => {
 	return _getLinearGradientsMemoized();
 };
 
-const _getLinearGradient = function (slug: string): ?VariableItem {
-	return getLinearGradients().find((item) => item.slug === slug);
+const _getLinearGradient = function (id: string): ?VariableItem {
+	return getLinearGradients().find((item) => item.id === id);
 };
 
 const _getLinearGradientMemoized = memoize(_getLinearGradient);
 
-export const getLinearGradient = (slug: string): ?VariableItem => {
-	return _getLinearGradientMemoized(slug);
+export const getLinearGradient = (id: string): ?VariableItem => {
+	return _getLinearGradientMemoized(id);
 };
 
 const _getLinearGradientBy = function (

@@ -35,7 +35,7 @@ const _getFontSizes = function (): Array<VariableItem> {
 	return getBlockEditorSettings().fontSizes.map((item) => {
 		return {
 			name: item.name,
-			slug: item.slug,
+			id: item.slug,
 			value: item.size,
 			fluid: item?.fluid || null,
 			reference,
@@ -49,14 +49,14 @@ export const getFontSizes = (): Array<VariableItem> => {
 	return _getFontSizesMemoized();
 };
 
-const _getFontSize = function (slug: string): ?VariableItem {
-	return getFontSizes().find((item) => item.slug === slug);
+const _getFontSize = function (id: string): ?VariableItem {
+	return getFontSizes().find((item) => item.id === id);
 };
 
 const _getFontSizeMemoized = memoize(_getFontSize);
 
-export const getFontSize = (slug: string): ?VariableItem => {
-	return _getFontSizeMemoized(slug);
+export const getFontSize = (id: string): ?VariableItem => {
+	return _getFontSizeMemoized(id);
 };
 
 const _getFontSizeBy = function (field: string, value: any): ?VariableItem {

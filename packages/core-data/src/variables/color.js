@@ -35,7 +35,7 @@ const _getColors = function (): Array<VariableItem> {
 			(item) => {
 				return {
 					name: item.name,
-					slug: item.slug,
+					id: item.slug,
 					value: item.color,
 					reference,
 				};
@@ -56,7 +56,7 @@ const _getColors = function (): Array<VariableItem> {
 		(item) => {
 			return {
 				name: item.name,
-				slug: item.slug,
+				id: item.slug,
 				value: item.color,
 				reference,
 			};
@@ -71,14 +71,14 @@ export const getColors = (): Array<VariableItem> => {
 	return _getColorsMemoized();
 };
 
-const _getColor = function (slug: string): ?VariableItem {
-	return getColors().find((item) => item.slug === slug);
+const _getColor = function (id: string): ?VariableItem {
+	return getColors().find((item) => item.id === id);
 };
 
 const _getColorMemoized = memoize(_getColor);
 
-export const getColor = (slug: string): ?VariableItem => {
-	return _getColorMemoized(slug);
+export const getColor = (id: string): ?VariableItem => {
+	return _getColorMemoized(id);
 };
 
 const _getColorBy = function (field: string, value: any): ?VariableItem {

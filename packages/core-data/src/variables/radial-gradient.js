@@ -38,7 +38,7 @@ const _getRadialGradients = function () {
 			.map((item) => {
 				return {
 					name: item.name,
-					slug: item.slug,
+					id: item.slug,
 					value: item.gradient,
 					reference,
 				};
@@ -61,7 +61,7 @@ const _getRadialGradients = function () {
 		.map((item) => {
 			return {
 				name: item.name,
-				slug: item.slug,
+				id: item.slug,
 				value: item.gradient,
 				reference,
 			};
@@ -75,14 +75,14 @@ export const getRadialGradients = (): Array<VariableItem> => {
 	return _getRadialGradientsMemoized();
 };
 
-const _getRadialGradient = function (slug: string): ?VariableItem {
-	return getRadialGradients().find((item) => item.slug === slug);
+const _getRadialGradient = function (id: string): ?VariableItem {
+	return getRadialGradients().find((item) => item.id === id);
 };
 
 const _getRadialGradientMemoized = memoize(_getRadialGradient);
 
-export const getRadialGradient = (slug: string): ?VariableItem => {
-	return _getRadialGradientMemoized(slug);
+export const getRadialGradient = (id: string): ?VariableItem => {
+	return _getRadialGradientMemoized(id);
 };
 
 const _getRadialGradientBy = function (

@@ -14,7 +14,7 @@ export type VariableCategory =
 
 export type VariableItem = {
 	name: string,
-	slug: string,
+	id: string,
 	value: string,
 	fluid?: {
 		min?: string,
