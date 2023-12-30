@@ -3,6 +3,7 @@ export * from './get';
 export * from './array';
 export * from './object';
 export * from './string';
+export * from './matchers';
 export * from './use-value';
 export * from './var-export';
 export * from './is-block-theme';
