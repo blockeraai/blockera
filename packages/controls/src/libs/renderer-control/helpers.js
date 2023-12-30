@@ -6,11 +6,6 @@
 import { isEmpty, isObject, truthy } from '@publisher/utils';
 
 /**
- * Internal dependencies
- */
-import type { RendererControlCondition } from './types';
-
-/**
  * Retrieve normalized select control options.
  *
  * @param {Array<Object>} options the select control props.
@@ -34,7 +29,7 @@ export const normalizedSelectOptions = (
 /**
  * Is enable renderer control status?
  *
- * @param {Array<RendererControlCondition>} conditions the conditions array.
+ * @param {Array<string>} conditions the conditions array.
  * @param {Object} value the parent control context provider value.
  * @return {boolean} true on success, false on otherwise!
  */
