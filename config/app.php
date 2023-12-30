@@ -9,9 +9,14 @@ return [
 	'version'   => PB_CORE_VERSION,
 	'dist_url'  => PB_CORE_URI . '/dist/',
 	'dist_path' => PB_CORE_PATH . '/dist/',
+	'namespaces'    => [
+		'controllers' => '\Publisher\Framework\Http\Controllers\\',
+	],
 	'debug'     => pb_core_env( 'APP_MODE' ) && 'development' === pb_core_env( 'APP_MODE' ) || ( ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ),
 	'providers' => [
+		\Publisher\Framework\Providers\StyleProviders::class,
 		\Publisher\Framework\Providers\AssetsProvider::class,
+		\Publisher\Framework\Providers\RestAPIProvider::class,
 		\Publisher\Framework\Providers\AppServiceProvider::class,
 	],
 	'blocks'    => [

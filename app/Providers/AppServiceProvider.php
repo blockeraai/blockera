@@ -13,38 +13,18 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  */
 
 use Publisher\Framework\Exceptions\BaseException;
-use Publisher\Framework\Illuminate\{Foundation\Application,
-	StyleEngine\StyleDefinitions\Border,
-	StyleEngine\StyleDefinitions\Layout,
-	StyleEngine\StyleDefinitions\Position,
-	StyleEngine\StyleDefinitions\Size,
-	StyleEngine\StyleDefinitions\Spacing,
+use Publisher\Framework\Illuminate\{
+	Foundation\Application,
 	Support\ServiceProvider,
 	StyleEngine\StyleEngine,
 	Support\Adapters\DomParser,
-	StyleEngine\StyleDefinitions\Effects,
-	StyleEngine\StyleDefinitions\Outline,
-	StyleEngine\StyleDefinitions\BoxShadow,
-	StyleEngine\StyleDefinitions\Background,
-	StyleEngine\StyleDefinitions\TextShadow,
-	StyleEngine\StyleDefinitions\Typography,
-	StyleEngine\StyleDefinitions\Mouse
+	Foundation\ValueAddon\Variable\VariableType,
 };
-use Publisher\Framework\Services\Render\{Render,
+use Publisher\Framework\Illuminate\Foundation\ValueAddon\ValueAddonRegistry;
+use Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType;
+use Publisher\Framework\Services\Render\{
+	Render,
 	Parser,
-	Blocks\Icon,
-	Styles\BorderStyle,
-	Styles\EffectsStyle,
-	Styles\LayoutStyle,
-	Styles\OutlineStyle,
-	Styles\BoxShadowStyle,
-	Styles\BackgroundStyle,
-	Styles\PositionStyle,
-	Styles\SizeStyle,
-	Styles\SpacingStyle,
-	Styles\TextShadowStyle,
-	Styles\TypographyStyle,
-	Styles\MouseStyle
 };
 
 class AppServiceProvider extends ServiceProvider {
@@ -58,69 +38,19 @@ class AppServiceProvider extends ServiceProvider {
 
 		try {
 
-			$this->app->singleton( Icon::class, static function ( Application $app ) {
+			$this->app->singleton( VariableType::class, static function ( Application $app ): VariableType {
 
-				return new Icon( $app );
+				return new VariableType( $app );
 			} );
 
-			$this->app->singleton( LayoutStyle::class, static function () {
+			$this->app->singleton( DynamicValueType::class, static function ( Application $app ): DynamicValueType {
 
-				return new LayoutStyle( new Layout() );
+				return new DynamicValueType( $app );
 			} );
 
-			$this->app->singleton( PositionStyle::class, static function () {
+			$this->app->singleton( ValueAddonRegistry::class, static function ( Application $app, array $params = [] ): ValueAddonRegistry {
 
-				return new PositionStyle( new Position() );
-			} );
-
-			$this->app->singleton( MouseStyle::class, static function () {
-
-				return new MouseStyle( new Mouse() );
-			} );
-
-			$this->app->singleton( BorderStyle::class, static function () {
-
-				return new BorderStyle( new Border() );
-			} );
-
-			$this->app->singleton( SizeStyle::class, static function () {
-
-				return new SizeStyle( new Size() );
-			} );
-
-			$this->app->singleton( SpacingStyle::class, static function () {
-
-				return new SpacingStyle( new Spacing() );
-			} );
-
-			$this->app->singleton( TextShadowStyle::class, static function () {
-
-				return new TextShadowStyle( new TextShadow() );
-			} );
-
-			$this->app->singleton( BackgroundStyle::class, static function () {
-
-				return new BackgroundStyle( new Background() );
-			} );
-
-			$this->app->singleton( TypographyStyle::class, static function () {
-
-				return new TypographyStyle( new Typography() );
-			} );
-
-			$this->app->singleton( BoxShadowStyle::class, static function () {
-
-				return new BoxShadowStyle( new BoxShadow() );
-			} );
-
-			$this->app->singleton( OutlineStyle::class, static function () {
-
-				return new OutlineStyle( new Outline() );
-			} );
-
-			$this->app->singleton( EffectsStyle::class, static function () {
-
-				return new EffectsStyle( new Effects() );
+				return new ValueAddonRegistry( $app, ...$params );
 			} );
 
 			$this->app->bind( StyleEngine::class, static function () {
