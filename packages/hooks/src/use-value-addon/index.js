@@ -2,6 +2,7 @@
 /**
  * External dependencies
  */
+import { select } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 
 /**
@@ -12,7 +13,7 @@ import {
 	getVariable,
 	type VariableItem,
 	type DynamicValueItem,
-	getDynamicValue,
+	STORE_NAME,
 } from '@publisher/core-data';
 
 /**
@@ -77,6 +78,8 @@ export const useValueAddon = ({
 		};
 	}
 
+	const { getDynamicValue, getVariableType } = select(STORE_NAME);
+
 	const initialState = isObject(_value)
 		? {
 				isValueAddon: _value?.isValueAddon || false,
@@ -105,7 +108,7 @@ export const useValueAddon = ({
 			settings: {
 				...data,
 			},
-			id: data.slug,
+			name: data.name,
 			isValueAddon: true,
 			valueType: 'variable',
 		};
@@ -120,7 +123,7 @@ export const useValueAddon = ({
 			setValue({
 				isValueAddon: false,
 				valueType: null,
-				id: null,
+				name: null,
 				settings: {},
 			});
 
@@ -132,7 +135,7 @@ export const useValueAddon = ({
 			} else {
 				const variable = getVariable(
 					value.valueType,
-					value.settings.slug
+					value.settings.id
 				);
 
 				if (!isUndefined(variable?.value) && variable?.value !== '') {
@@ -149,7 +152,7 @@ export const useValueAddon = ({
 			settings: {
 				...data,
 			},
-			id: data.id,
+			name: data.name,
 			isValueAddon: true,
 			valueType: 'dynamic-value',
 		};
@@ -164,7 +167,7 @@ export const useValueAddon = ({
 		setValue({
 			isValueAddon: false,
 			valueType: null,
-			id: null,
+			name: null,
 			settings: {},
 		});
 		setOpen('');
@@ -201,21 +204,26 @@ export const useValueAddon = ({
 	 */
 	if (isValid(controlProps.value)) {
 		if (controlProps.value.valueType === 'variable') {
-			const item = getVariable(
+			let item: VariableItem = getVariable(
 				controlProps.value?.settings?.type,
-				controlProps.value?.settings?.slug
+				controlProps.value?.settings?.id
 			);
 
 			if (isUndefined(item?.value)) {
-				controlProps.isDeletedVar = true;
+				item = getVariableType(
+					controlProps.value?.settings?.type,
+					controlProps.value?.settings?.name
+				);
+
+				controlProps.isDeletedVar = isUndefined(item?.value);
 			}
 		} else if (controlProps.value.valueType === 'dynamic-value') {
 			const item = getDynamicValue(
-				controlProps.value.settings.category,
-				controlProps.value.id
+				controlProps.value.settings.group,
+				controlProps.value.name
 			);
 
-			if (isUndefined(item?.id)) {
+			if (isUndefined(item?.name)) {
 				controlProps.isDeletedDV = true;
 			}
 		}

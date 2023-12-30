@@ -69,7 +69,7 @@ describe('Helper Functions', () => {
 							getValueAddonRealValue({
 								settings: {
 									name: 'Small',
-									slug: 'small',
+									id: 'small',
 									value: '13px',
 									fluid: null,
 									reference: { type: 'preset' },
@@ -88,7 +88,7 @@ describe('Helper Functions', () => {
 							getValueAddonRealValue({
 								settings: {
 									name: 'Small',
-									slug: 'not-found',
+									id: 'not-found',
 									value: '13px',
 									fluid: null,
 									reference: { type: 'preset' },
@@ -107,7 +107,7 @@ describe('Helper Functions', () => {
 							getValueAddonRealValue({
 								settings: {
 									name: 'Small',
-									slug: 'not-found',
+									id: 'not-found',
 									value: '',
 									fluid: null,
 									reference: { type: 'preset' },
@@ -126,7 +126,7 @@ describe('Helper Functions', () => {
 							getValueAddonRealValue({
 								settings: {
 									name: 'Small',
-									slug: 'not-found',
+									id: 'not-found',
 									fluid: null,
 									reference: { type: 'preset' },
 									type: 'font-size',
@@ -144,7 +144,7 @@ describe('Helper Functions', () => {
 							getValueAddonRealValue({
 								settings: {
 									name: 'Small',
-									slug: 'not-found',
+									id: 'not-found',
 									fluid: null,
 									reference: { type: 'preset' },
 									type: 'font-size',
@@ -162,7 +162,7 @@ describe('Helper Functions', () => {
 							getValueAddonRealValue({
 								settings: {
 									name: 'Small',
-									slug: 'not-found',
+									id: 'not-found',
 									fluid: null,
 									reference: { type: 'preset' },
 									type: 'font-size',
@@ -251,7 +251,7 @@ describe('Helper Functions', () => {
 		test('invalid item', () => {
 			expect(getVariableCategory('invalid')).toStrictEqual({
 				name: '',
-				variables: [],
+				items: [],
 				notFound: true,
 			});
 		});
@@ -422,7 +422,7 @@ describe('Helper Functions', () => {
 						type: 'core',
 					},
 					type: 'color',
-					slug: 'base-1',
+					id: 'base-1',
 				})
 			).toBe('--wp--preset--color--base-1');
 		});
@@ -434,7 +434,7 @@ describe('Helper Functions', () => {
 						type: 'core-pro',
 					},
 					type: 'color',
-					slug: 'base-1',
+					id: 'base-1',
 				})
 			).toBe('--wp--preset--color--base-1');
 		});
@@ -447,7 +447,7 @@ describe('Helper Functions', () => {
 						plugin: 'WooCommerce',
 					},
 					type: 'color',
-					slug: 'base-1',
+					id: 'base-1',
 				})
 			).toBe('--wp--preset--color--base-1');
 		});
@@ -460,7 +460,7 @@ describe('Helper Functions', () => {
 						theme: 'Publisher SE',
 					},
 					type: 'color',
-					slug: 'base-1',
+					id: 'base-1',
 				})
 			).toBe('--wp--preset--color--base-1');
 		});
@@ -472,7 +472,7 @@ describe('Helper Functions', () => {
 						type: 'custom',
 					},
 					type: 'color',
-					slug: 'base-1',
+					id: 'base-1',
 				})
 			).toBe('--wp--publisher--color--base-1');
 		});
@@ -484,7 +484,7 @@ describe('Helper Functions', () => {
 						type: 'core',
 					},
 					type: 'width-size',
-					slug: 'contentSize',
+					id: 'contentSize',
 				})
 			).toBe('--wp--style--global--content-size');
 		});
@@ -496,7 +496,7 @@ describe('Helper Functions', () => {
 						type: 'core',
 					},
 					type: 'width-size',
-					slug: 'wideSize',
+					id: 'wideSize',
 				})
 			).toBe('--wp--style--global--wide-size');
 		});
@@ -512,7 +512,7 @@ describe('Helper Functions', () => {
 				canUnlinkVariable({
 					settings: {
 						name: 'Small',
-						slug: 'small',
+						id: 'small',
 						value: '13px',
 						fluid: null,
 						reference: { type: 'preset' },
@@ -531,7 +531,7 @@ describe('Helper Functions', () => {
 				canUnlinkVariable({
 					settings: {
 						name: 'Small',
-						slug: 'small',
+						id: 'small',
 						fluid: null,
 						reference: { type: 'preset' },
 						type: 'font-size',
@@ -549,7 +549,7 @@ describe('Helper Functions', () => {
 				canUnlinkVariable({
 					settings: {
 						name: 'Small',
-						slug: 'small-1',
+						id: 'small-1',
 						fluid: null,
 						reference: { type: 'preset' },
 						type: 'font-size',

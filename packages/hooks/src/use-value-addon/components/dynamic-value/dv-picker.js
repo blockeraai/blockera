@@ -10,19 +10,16 @@ import { __ } from '@wordpress/i18n';
  */
 import { Button, Flex, Popover, Grid } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
-import type { DynamicValueCategory } from '@publisher/core-data';
+import { STORE_NAME } from '@publisher/core-data';
 
 /**
  * Internal dependencies
  */
-import {
-	getDynamicValueIcon,
-	isValid,
-	getDynamicValueCategory,
-} from '../../helpers';
+import { getDynamicValueIcon, isValid } from '../../helpers';
 import { PickerCategory, PickerValueItem } from '../index';
 import TrashIcon from '../../icons/trash';
 import type { ValueAddonControlProps } from '../control/types';
+import { select } from '@wordpress/data';
 
 export default function ({
 	controlProps,
@@ -32,33 +29,22 @@ export default function ({
 	onClose?: () => void,
 }): Element<any> {
 	const DynamicValues = (): Array<Element<any>> => {
-		const categories: Array<DynamicValueCategory> = [
-			'post',
-			'featured-image',
-			'archive',
-			'site',
-			'user',
-			'other',
-		];
+		const { getDynamicValueGroups } = select(STORE_NAME);
 
-		return categories.map((item, index) => {
-			const data = getDynamicValueCategory(
-				item,
-				controlProps.dynamicValueTypes
-			);
+		const groups = getDynamicValueGroups();
 
-			if (data?.name === '') {
-				return <></>;
-			}
-
-			if (typeof data.items === 'undefined' || data.items?.length === 0) {
+		return Object.entries(groups).map(([name, item], index) => {
+			if (!item?.label || !item.items) {
 				return <></>;
 			}
 
 			return (
-				<PickerCategory key={`type-${item}-${index}`} title={data.name}>
+				<PickerCategory
+					key={`type-${name}-${index}`}
+					title={item?.label}
+				>
 					<Grid gridTemplateColumns="120px 120px" gap="10px">
-						{data.items.map((_item) => {
+						{Object.values(item.items).map((_item) => {
 							const itemData = {
 								..._item,
 							};

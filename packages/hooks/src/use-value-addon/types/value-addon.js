@@ -17,11 +17,14 @@ import type {
 import type { AddonTypesItem } from './use-value-addon-props';
 
 export type ValueAddon = {
-	id: string,
+	name: string,
 	settings: {
 		...Object,
 		var?: string,
-		slug?: string,
+		name?: string,
+		id?: string,
+		label: string,
+		group: string,
 		type: VariableCategory | DynamicValueCategory,
 		reference?: ValueAddonReferenceType,
 		prepend?: string,
@@ -33,13 +36,13 @@ export type ValueAddon = {
 };
 
 export type VariableCategoryDetail = {
-	name?: string,
-	variables: Array<VariableItem> | [],
+	label?: string,
+	items: Array<VariableItem> | [],
 	notFound?: boolean,
 };
 
 export type DynamicValueCategoryDetail = {
-	name?: DynamicValueCategory | '',
+	label?: DynamicValueCategory | '',
 	items: Array<DynamicValueItem> | [],
 	notFound?: boolean,
 };

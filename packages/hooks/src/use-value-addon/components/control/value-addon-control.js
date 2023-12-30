@@ -4,6 +4,7 @@
  */
 import type { Element } from 'react';
 import { __ } from '@wordpress/i18n';
+import { select } from '@wordpress/data';
 
 /**
  * Publisher dependencies
@@ -13,7 +14,7 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { isUndefined } from '@publisher/utils';
-import { getVariable, getDynamicValue } from '@publisher/core-data';
+import { getVariable, STORE_NAME } from '@publisher/core-data';
 import { Tooltip } from '@publisher/components';
 
 /**
@@ -37,6 +38,8 @@ export default function ({
 	let label = '';
 	let isDeleted = false;
 
+	const { getDynamicValue } = select(STORE_NAME);
+
 	if (isValid(controlProps.value)) {
 		if (controlProps.value.valueType === 'variable') {
 			if (controlProps.isDeletedVar) {
@@ -46,7 +49,7 @@ export default function ({
 			} else {
 				const item = getVariable(
 					controlProps.value?.settings?.type,
-					controlProps.value?.settings?.slug
+					controlProps.value?.settings?.id
 				);
 
 				label = !isUndefined(item?.name)
@@ -64,8 +67,8 @@ export default function ({
 				icon = <DeletedIcon />;
 			} else {
 				const item = getDynamicValue(
-					controlProps.value.settings.category,
-					controlProps.value.id
+					controlProps.value.settings.group,
+					controlProps.value.name
 				);
 
 				label = !isUndefined(item?.name)

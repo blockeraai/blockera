@@ -4,6 +4,7 @@
  */
 import type { Element } from 'react';
 import { __ } from '@wordpress/i18n';
+import { select } from '@wordpress/data';
 
 /**
  * Publisher dependencies
@@ -15,7 +16,9 @@ import {
 	Popover,
 	ConditionalWrapper,
 } from '@publisher/components';
+import { STORE_NAME } from '@publisher/core-data';
 import { controlInnerClassNames } from '@publisher/classnames';
+import type { DynamicVariableGroup } from '@publisher/core-data/src/variables/store/types';
 
 /**
  * Internal dependencies
@@ -32,6 +35,7 @@ import PlusIcon from '../../icons/plus';
 import UnlinkIcon from '../../icons/unlink';
 import TrashIcon from '../../icons/trash';
 import type { ValueAddonControlProps } from '../control/types';
+import type { VariableCategoryDetail } from '../../types';
 
 export default function ({
 	controlProps,
@@ -72,20 +76,24 @@ export default function ({
 
 	const Variables = (): Array<Element<any>> => {
 		return controlProps.variableTypes.map((type, index) => {
-			const data = getVariableCategory(type);
+			let data: DynamicVariableGroup | VariableCategoryDetail =
+				getVariableCategory(type);
 
-			if (data?.name === '') {
-				return <></>;
+			if (data?.label === '') {
+				const { getVariableGroup } = select(STORE_NAME);
+
+				data = getVariableGroup(type);
+
+				if (!data?.type) {
+					return <></>;
+				}
 			}
 
-			if (
-				typeof data.variables === 'undefined' ||
-				data.variables?.length === 0
-			) {
+			if (data.items?.length === 0) {
 				return (
 					<PickerCategory
 						key={`type-${type}-${index}`}
-						title={data.name}
+						title={data.label}
 					>
 						<span style={{ opacity: '0.5', fontSize: '12px' }}>
 							{__('No variable!', 'publisher-core')}
@@ -102,7 +110,10 @@ export default function ({
 			].includes(type);
 
 			return (
-				<PickerCategory key={`type-${type}-${index}`} title={data.name}>
+				<PickerCategory
+					key={`type-${type}-${index}`}
+					title={data.label}
+				>
 					<ConditionalWrapper
 						condition={showTwoColumns}
 						wrapper={(children) => (
@@ -116,14 +127,14 @@ export default function ({
 							</Flex>
 						)}
 					>
-						{data.variables.map((variable, _index) => {
+						{Object.values(data.items).map((variable, _index) => {
 							const itemData = {
 								...variable,
 								type,
 								var: generateVariableString({
 									reference: variable.reference,
 									type,
-									slug: variable.slug,
+									id: variable.id,
 								}),
 							};
 
@@ -144,8 +155,8 @@ export default function ({
 										isValid(controlProps.value) &&
 										controlProps.value.settings.type ===
 											type &&
-										controlProps.value.settings.slug ===
-											itemData.slug
+										controlProps.value.settings.id ===
+											itemData.id
 									}
 									icon={getVariableIcon({
 										type,

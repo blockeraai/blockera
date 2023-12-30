@@ -121,7 +121,7 @@ export default function ({
 					</span>
 				)}
 				<span className={controlInnerClassNames('item-name')}>
-					{name !== '' && !isUndefined(name) ? name : data.slug}
+					{name !== '' && !isUndefined(name) ? name : data.id}
 				</span>
 
 				{itemValue && (

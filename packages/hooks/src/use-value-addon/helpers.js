@@ -73,7 +73,7 @@ export function getValueAddonRealValue(value: ValueAddon | string): string {
 		if (!isUndefined(value?.isValueAddon)) {
 			const variable = getVariable(
 				value?.settings?.type,
-				value?.settings?.slug
+				value?.settings?.id
 			);
 
 			//
@@ -143,56 +143,56 @@ export function getVariableCategory(
 	switch (category) {
 		case 'font-size':
 			return {
-				name: isBlockTheme()
+				label: isBlockTheme()
 					? __('Theme Font Sizes', 'publisher-core')
 					: __('Editor Font Sizes', 'publisher-core'),
-				variables: getFontSizes(),
+				items: getFontSizes(),
 			};
 
 		case 'linear-gradient':
 			return {
-				name: isBlockTheme()
+				label: isBlockTheme()
 					? __('Theme Linear Gradients', 'publisher-core')
 					: __('Editor Linear Gradients', 'publisher-core'),
-				variables: getLinearGradients(),
+				items: getLinearGradients(),
 			};
 
 		case 'radial-gradient':
 			return {
-				name: isBlockTheme()
+				label: isBlockTheme()
 					? __('Theme Radial Gradients', 'publisher-core')
 					: __('Editor Radial Gradients', 'publisher-core'),
-				variables: getRadialGradients(),
+				items: getRadialGradients(),
 			};
 
 		case 'width-size':
 			return {
-				name: isBlockTheme()
+				label: isBlockTheme()
 					? __('Theme Width & Height Sizes', 'publisher-core')
 					: __('Width & Height Sizes', 'publisher-core'),
-				variables: getWidthSizes(),
+				items: getWidthSizes(),
 			};
 
 		case 'spacing':
 			return {
-				name: isBlockTheme()
+				label: isBlockTheme()
 					? __('Theme Spacing Sizes', 'publisher-core')
 					: __('Editor Spacing Sizes', 'publisher-core'),
-				variables: getSpacings(),
+				items: getSpacings(),
 			};
 
 		case 'color':
 			return {
-				name: isBlockTheme()
+				label: isBlockTheme()
 					? __('Theme Colors', 'publisher-core')
 					: __('Editor Colors', 'publisher-core'),
-				variables: getColors(),
+				items: getColors(),
 			};
 	}
 
 	return {
-		name: '',
-		variables: [],
+		label: '',
+		items: [],
 		notFound: true,
 	};
 }
@@ -249,43 +249,43 @@ export function getDynamicValueCategory(
 	switch (category) {
 		case 'post':
 			return {
-				name: __('Posts and Pages', 'publisher-core'),
+				label: __('Posts and Pages', 'publisher-core'),
 				items: getPostDynamicValueItemsBy('type', types),
 			};
 
 		case 'featured-image':
 			return {
-				name: __('Post Featured Image', 'publisher-core'),
+				label: __('Post Featured Image', 'publisher-core'),
 				items: getFeaturedImageDynamicValueItemsBy('type', types),
 			};
 
 		case 'archive':
 			return {
-				name: __('Archive', 'publisher-core'),
+				label: __('Archive', 'publisher-core'),
 				items: getArchiveDynamicValueItemsBy('type', types),
 			};
 
 		case 'site':
 			return {
-				name: __('Site Information', 'publisher-core'),
+				label: __('Site Information', 'publisher-core'),
 				items: getSiteDynamicValueItemsBy('type', types),
 			};
 
 		case 'user':
 			return {
-				name: __('User & Authors', 'publisher-core'),
+				label: __('User & Authors', 'publisher-core'),
 				items: getUserDynamicValueItemsBy('type', types),
 			};
 
 		case 'other':
 			return {
-				name: __('Utilities', 'publisher-core'),
+				label: __('Utilities', 'publisher-core'),
 				items: getOtherDynamicValueItemsBy('type', types),
 			};
 	}
 
 	return {
-		name: '',
+		label: '',
 		items: [],
 		notFound: true,
 	};
@@ -294,22 +294,22 @@ export function getDynamicValueCategory(
 export function generateVariableString({
 	reference,
 	type,
-	slug,
+	id,
 }: {
 	reference: ValueAddonReference,
 	type: VariableCategory,
-	slug: string,
+	id: string,
 }): string {
 	let _type: string = type;
 	let _reference: string = reference?.type;
 
 	if (type === 'width-size') {
-		if (slug === 'contentSize') {
-			slug = 'content-size';
+		if (id === 'contentSize') {
+			id = 'content-size';
 			_type = 'global';
 			_reference = 'style';
-		} else if (slug === 'wideSize') {
-			slug = 'wide-size';
+		} else if (id === 'wideSize') {
+			id = 'wide-size';
 			_type = 'global';
 			_reference = 'style';
 		}
@@ -330,7 +330,7 @@ export function generateVariableString({
 			break;
 	}
 
-	return `--wp--${_reference}--${_type}--${slug}`;
+	return `--wp--${_reference}--${_type}--${id}`;
 }
 
 export function canUnlinkVariable(value: ValueAddon): boolean {
@@ -342,7 +342,7 @@ export function canUnlinkVariable(value: ValueAddon): boolean {
 			return true;
 		}
 
-		const variable = getVariable(value?.settings.type, value.settings.slug);
+		const variable = getVariable(value?.settings.type, value.settings.id);
 
 		if (!isUndefined(variable?.value) && variable?.value !== '') {
 			return true;

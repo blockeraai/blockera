@@ -59,7 +59,7 @@ export default function ({
 						>
 							{deletedItem.name !== ''
 								? controlProps.value?.settings?.name
-								: controlProps.value?.settings?.slug}
+								: controlProps.value?.settings?.id}
 						</b>
 					</Flex>
 

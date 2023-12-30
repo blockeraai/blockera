@@ -113,7 +113,7 @@ export const Variable = {
 							settings: {
 								name: 'Medium',
 								value: 20,
-								slug: 'medium',
+								id: 'medium',
 								reference: {
 									type: 'preset',
 								},
@@ -144,7 +144,7 @@ export const Variable = {
 							settings: {
 								name: 'Medium',
 								value: 20,
-								slug: 'medium',
+								id: 'medium',
 								reference: {
 									type: 'preset',
 								},
@@ -182,7 +182,7 @@ export const Variable = {
 							settings: {
 								name: 'Medium',
 								value: 20,
-								slug: 'not-found',
+								id: 'not-found',
 								reference: {
 									type: 'preset',
 								},
@@ -212,7 +212,7 @@ export const Variable = {
 						value: {
 							settings: {
 								name: 'Medium',
-								slug: 'not-found',
+								id: 'not-found',
 								reference: {
 									type: 'preset',
 								},
@@ -241,7 +241,7 @@ export const Variable = {
 						name: nanoid(),
 						value: {
 							settings: {
-								slug: 'not-found',
+								id: 'not-found',
 								reference: {
 									type: 'preset',
 								},
@@ -278,7 +278,7 @@ export const Variable = {
 							settings: {
 								name: 'Medium',
 								value: 20,
-								slug: 'not-found',
+								id: 'not-found',
 								reference: {
 									type: 'core',
 								},
@@ -308,7 +308,7 @@ export const Variable = {
 						value: {
 							settings: {
 								name: 'Medium',
-								slug: 'not-found',
+								id: 'not-found',
 								reference: {
 									type: 'core',
 								},
@@ -337,7 +337,7 @@ export const Variable = {
 						name: nanoid(),
 						value: {
 							settings: {
-								slug: 'not-found',
+								id: 'not-found',
 								reference: {
 									type: 'core',
 								},
@@ -374,7 +374,7 @@ export const Variable = {
 							settings: {
 								name: 'Medium',
 								value: 20,
-								slug: 'not-found',
+								id: 'not-found',
 								reference: {
 									type: 'core-pro',
 								},
@@ -404,7 +404,7 @@ export const Variable = {
 						value: {
 							settings: {
 								name: 'Medium',
-								slug: 'not-found',
+								id: 'not-found',
 								reference: {
 									type: 'core-pro',
 								},
@@ -433,7 +433,7 @@ export const Variable = {
 						name: nanoid(),
 						value: {
 							settings: {
-								slug: 'not-found',
+								id: 'not-found',
 								reference: {
 									type: 'core-pro',
 								},
@@ -470,7 +470,7 @@ export const Variable = {
 							settings: {
 								name: 'Medium',
 								value: 20,
-								slug: 'not-found',
+								id: 'not-found',
 								reference: {
 									type: 'custom',
 								},
@@ -500,7 +500,7 @@ export const Variable = {
 						value: {
 							settings: {
 								name: 'Medium',
-								slug: 'not-found',
+								id: 'not-found',
 								reference: {
 									type: 'custom',
 								},
@@ -529,7 +529,7 @@ export const Variable = {
 						name: nanoid(),
 						value: {
 							settings: {
-								slug: 'not-found',
+								id: 'not-found',
 								reference: {
 									type: 'custom',
 								},
@@ -566,7 +566,7 @@ export const Variable = {
 							settings: {
 								name: 'Medium',
 								value: 20,
-								slug: 'not-found',
+								id: 'not-found',
 								reference: {
 									type: 'theme',
 									theme: 'Publisher SE',
@@ -597,7 +597,7 @@ export const Variable = {
 						value: {
 							settings: {
 								name: 'Medium',
-								slug: 'not-found',
+								id: 'not-found',
 								reference: {
 									type: 'theme',
 									theme: 'Publisher SE',
@@ -627,7 +627,7 @@ export const Variable = {
 						name: nanoid(),
 						value: {
 							settings: {
-								slug: 'not-found',
+								id: 'not-found',
 								reference: {
 									type: 'theme',
 									theme: 'Publisher SE',
@@ -665,7 +665,7 @@ export const Variable = {
 							settings: {
 								name: 'Medium',
 								value: 20,
-								slug: 'not-found',
+								id: 'not-found',
 								reference: {
 									type: 'plugin',
 									plugin: 'WooCommerce',
@@ -696,7 +696,7 @@ export const Variable = {
 						value: {
 							settings: {
 								name: 'Medium',
-								slug: 'not-found',
+								id: 'not-found',
 								reference: {
 									type: 'plugin',
 									plugin: 'WooCommerce',
@@ -726,7 +726,7 @@ export const Variable = {
 						name: nanoid(),
 						value: {
 							settings: {
-								slug: 'not-found',
+								id: 'not-found',
 								reference: {
 									type: 'plugin',
 									plugin: 'WooCommerce',

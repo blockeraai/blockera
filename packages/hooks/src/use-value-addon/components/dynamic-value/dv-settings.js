@@ -4,13 +4,22 @@
  */
 import type { Element } from 'react';
 import { __ } from '@wordpress/i18n';
+import { select } from '@wordpress/data';
 
 /**
  * Publisher dependencies
  */
 import { controlInnerClassNames } from '@publisher/classnames';
 import { Button, Popover } from '@publisher/components';
-import { BaseControl } from '@publisher/controls';
+import {
+	BaseControl,
+	ControlContextProvider,
+	RendererControl,
+} from '@publisher/controls';
+import { generateExtensionId } from '@publisher/extensions';
+import { useBlockContext } from '@publisher/extensions/src/hooks';
+import { STORE_NAME } from '@publisher/core-data';
+import { isUndefined } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -21,18 +30,43 @@ import TrashIcon from '../../icons/trash';
 import SearchIcon from '../../icons/search';
 import CaretRightIcon from '../../icons/caret-right';
 import GearIcon from '../../icons/gear';
-import { getDynamicValue } from '@publisher/core-data';
-import { isUndefined } from '@publisher/utils';
 
 export default function ({
 	controlProps,
 }: {
 	controlProps: ValueAddonControlProps,
 }): Element<any> {
+	const { getDynamicValue } = select(STORE_NAME);
+
 	const item = getDynamicValue(
-		controlProps.value.settings.category,
-		controlProps.value.id
+		controlProps.value.settings.group,
+		controlProps.value.name
 	);
+
+	const {
+		value: {
+			settings: { settings = [], name: valueName },
+		},
+	} = controlProps;
+
+	const { block } = useBlockContext();
+
+	const contextDefaultValue = settings
+		.map((s) => ({ [s.id]: s.defaultValue }))
+		.reduce((result, currentObject) => {
+			return { ...result, ...currentObject };
+		}, {});
+
+	const MappedSettings = () =>
+		settings.map((setting, index) => (
+			<RendererControl
+				key={`${setting?.id}-${index}`}
+				{...{
+					...setting,
+					parentDefaultValue: contextDefaultValue,
+				}}
+			/>
+		));
 
 	return (
 		<Popover
@@ -73,10 +107,20 @@ export default function ({
 					showTooltip={true}
 				>
 					{getDynamicValueIcon(controlProps.value?.settings?.type)}
-					{!isUndefined(item?.name) ? item.name : ''}
+					{!isUndefined(item?.label) ? item.label : ''}
 					<SearchIcon style={{ marginLeft: 'auto' }} />
 				</Button>
 			</BaseControl>
+
+			<ControlContextProvider
+				value={{
+					name: generateExtensionId(block, `${valueName}-dv-value`),
+					value: contextDefaultValue,
+				}}
+				type={'nested'}
+			>
+				<MappedSettings />
+			</ControlContextProvider>
 
 			<BaseControl
 				label={__('Advanced', 'publisher-core')}
