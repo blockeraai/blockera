@@ -2,7 +2,11 @@
 
 namespace Publisher\Framework\Services;
 
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Publisher\Framework\Illuminate\Foundation\Application;
+use Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType;
+use Publisher\Framework\Illuminate\Foundation\ValueAddon\ValueAddonRegistry;
+use Publisher\Framework\Illuminate\Foundation\ValueAddon\Variable\VariableType;
 
 /**
  * PackagesService developed to register all publisher core assets into WordPress CMS.
@@ -38,6 +42,8 @@ class PublisherAssets {
 		],
 	];
 
+	protected Application $application;
+
 	/**
 	 * AssetsProvider constructor method,
 	 * when create new instance of current class,
@@ -46,6 +52,8 @@ class PublisherAssets {
 	 * @since 1.0.0
 	 */
 	public function __construct( Application $app ) {
+
+		$this->application = $app;
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ), 10 );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'register_assets' ), 10 );
@@ -65,7 +73,7 @@ class PublisherAssets {
 	 * @return void
 	 */
 	public function enqueue_editor_assets(): void {
-		
+
 		if ( ! is_admin() ) {
 
 			return;
@@ -131,10 +139,12 @@ class PublisherAssets {
 	/**
 	 * Register all assets in WordPress.
 	 *
+	 * @throws BindingResolutionException
 	 * @return void
 	 */
 	public function register_assets() {
 
+		// FIXME: remove temp font-awesome icon library!
 		wp_enqueue_style( 'fs', pb_core_config( 'app.rootURL' ) . '/assets/all.min.css' );
 		wp_enqueue_script( 'fs', pb_core_config( 'app.rootURL' ) . '/assets/all.min.js' );
 
@@ -166,6 +176,33 @@ class PublisherAssets {
 				true
 			);
 		}
+
+		if ( ! is_admin() ) {
+
+			return;
+		}
+
+		/**
+		 * @var ValueAddonRegistry $dynamicValueRegistry
+		 */
+		$dynamicValueRegistry = $this->application->make( ValueAddonRegistry::class, [ DynamicValueType::class ] );
+
+		/**
+		 * @var ValueAddonRegistry $dynamicValueRegistry
+		 */
+		$variableRegistry = $this->application->make( ValueAddonRegistry::class, [ VariableType::class ] );
+
+		// publisher-core server side dynamic value definitions.
+		wp_add_inline_script(
+			'@publisher/extensions',
+			'
+			window.onload = () => {
+				publisher.coreData.unstableBootstrapServerSideDynamicValueDefinitions(' . wp_json_encode( $dynamicValueRegistry->getRegistered() ) . ');
+				publisher.coreData.unstableBootstrapServerSideVariableDefinitions(' . wp_json_encode( $variableRegistry->getRegistered() ) . ');
+			};
+			',
+			'after'
+		);
 	}
 
 	/**
