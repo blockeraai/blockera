@@ -26,9 +26,7 @@ import type { TMouseProps } from './types/mouse-props';
 export const MouseExtension: MixedElement = memo<TMouseProps>(
 	({
 		block,
-		cursor,
-		userSelect,
-		pointerEvents,
+		values: { cursor, userSelect, pointerEvents },
 		config,
 		children,
 		handleOnChangeAttributes,
