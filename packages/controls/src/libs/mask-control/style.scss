@@ -2,8 +2,11 @@
 .publisher-control-mask-popover {
 
 	.publisher-control-header-icon {
-		max-width: 18px !important;
-		min-width: 18px !important;
+
+		svg {
+			width: 18px;
+			height: auto;
+		}
 
 		&.h-flip {
 			transform: scaleX(-1);
