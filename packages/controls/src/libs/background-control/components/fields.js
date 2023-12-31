@@ -60,6 +60,9 @@ import RadialGradientFarthestSideIcon from '../icons/radial-gradient-farthest-si
 import RadialGradientClosestCornerIcon from '../icons/radial-gradient-closest-corner';
 import RadialGradientFarthestCornerIcon from '../icons/radial-gradient-farthest-corner';
 import { LabelDescription } from './label-description';
+import FitNormalIcon from '../icons/fit-normal';
+import FitCoverIcon from '../icons/fit-cover';
+import FitContainIcon from '../icons/fit-contain';
 
 /**
  * Providing mesh gradient colors details.
@@ -186,7 +189,7 @@ const Fields: FieldItem = memo<FieldItem>(
 								<>
 									<p>
 										{__(
-											'It controls the scaling of background images, determining how an image covers or fits within an element.',
+											'It controls the scaling of background images, determining how an image covers or fits within the block.',
 											'publisher-core'
 										)}
 									</p>
@@ -209,14 +212,17 @@ const Fields: FieldItem = memo<FieldItem>(
 								{
 									label: __('Custom', 'publisher-core'),
 									value: 'custom',
+									icon: <FitNormalIcon />,
 								},
 								{
 									label: __('Cover', 'publisher-core'),
 									value: 'cover',
+									icon: <FitCoverIcon />,
 								},
 								{
 									label: __('Contain', 'publisher-core'),
 									value: 'contain',
+									icon: <FitContainIcon />,
 								},
 							]}
 							id={getControlId(itemId, 'image-size')}
@@ -369,7 +375,7 @@ const Fields: FieldItem = memo<FieldItem>(
 								<>
 									<p>
 										{__(
-											'It defines how a background image is repeated within an element.',
+											'It defines how a background image is repeated within the block.',
 											'publisher-core'
 										)}
 									</p>
@@ -442,7 +448,7 @@ const Fields: FieldItem = memo<FieldItem>(
 									<h3>{__('Fix', 'publisher-core')}</h3>
 									<p>
 										{__(
-											'The background scrolls with the content of the element. (The default setting)',
+											'The background scrolls with the content of the block. (The default setting)',
 											'publisher-core'
 										)}
 									</p>
@@ -496,7 +502,7 @@ const Fields: FieldItem = memo<FieldItem>(
 									</p>
 									<p>
 										{__(
-											'Linear gradients are ideal for creating vibrant backgrounds, adding dimension, or emphasizing branding elements.',
+											'Linear gradients are ideal for creating vibrant backgrounds, adding dimension, or emphasizing branding blocks.',
 											'publisher-core'
 										)}
 									</p>
@@ -650,7 +656,7 @@ const Fields: FieldItem = memo<FieldItem>(
 									<h3>{__('Fix', 'publisher-core')}</h3>
 									<p>
 										{__(
-											'The background scrolls with the content of the element. (The default setting)',
+											'The background scrolls with the content of the block. (The default setting)',
 											'publisher-core'
 										)}
 									</p>
@@ -792,7 +798,7 @@ const Fields: FieldItem = memo<FieldItem>(
 									</p>
 									<p>
 										{__(
-											'It controls how the gradient spreads within the element.',
+											'It controls how the gradient spreads within the block.',
 											'publisher-core'
 										)}
 									</p>
@@ -981,7 +987,7 @@ const Fields: FieldItem = memo<FieldItem>(
 									<h3>{__('Fix', 'publisher-core')}</h3>
 									<p>
 										{__(
-											'The background scrolls with the content of the element. (The default setting)',
+											'The background scrolls with the content of the block. (The default setting)',
 											'publisher-core'
 										)}
 									</p>
@@ -1155,7 +1161,7 @@ const Fields: FieldItem = memo<FieldItem>(
 									<h3>{__('Fix', 'publisher-core')}</h3>
 									<p>
 										{__(
-											'The background scrolls with the content of the element. (The default setting)',
+											'The background scrolls with the content of the block. (The default setting)',
 											'publisher-core'
 										)}
 									</p>
