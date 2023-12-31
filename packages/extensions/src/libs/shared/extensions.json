@@ -88,5 +88,6 @@
 		"publisherCursor",
 		"publisherUserSelect",
 		"publisherPointerEvents"
-	]
+	],
+	"advanced": ["publisherAttributes", "publisherCSSProperties"]
 }

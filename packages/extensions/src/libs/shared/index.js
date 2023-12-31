@@ -158,6 +158,7 @@ export const SharedBlockExtension: Props = memo(
 			borderAndShadow,
 			icon,
 			mouse,
+			advanced,
 		} = extensions;
 
 		props = {
@@ -396,10 +397,14 @@ export const SharedBlockExtension: Props = memo(
 							/>
 
 							<BaseExtension
+								{...props}
 								initialOpen={true}
 								extensionId={'Advanced'}
-								attributes={attributes?.publisherAttributes}
-								properties={attributes?.publisherCSSProperties}
+								values={include(
+									attributes,
+									advanced,
+									'publisher'
+								)}
 								handleOnChangeAttributes={
 									handleOnChangeAttributes
 								}

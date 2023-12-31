@@ -28,8 +28,7 @@ export const AdvancedExtension: TAdvancedProps = memo<TAdvancedProps>(
 		block,
 		config,
 		children,
-		attributes,
-		properties,
+		values: { attributes, cSSProperties: properties },
 		handleOnChangeAttributes,
 		...props
 	}: TAdvancedProps): MixedElement => {

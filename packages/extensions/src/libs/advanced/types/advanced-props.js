@@ -10,8 +10,10 @@ import type { MixedElement } from 'react';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 
 export type TAdvancedProps = {
-	attributes: Array<Object>,
-	properties: Array<Object>,
+	values: {
+		attributes: Array<Object>,
+		cSSProperties: Array<Object>,
+	},
 	block: TBlockProps,
 	config: Object,
 	children?: MixedElement,
