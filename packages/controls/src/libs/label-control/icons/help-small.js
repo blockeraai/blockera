@@ -1,12 +1,20 @@
 export default function HelpSmallIcon({ ...props }) {
 	return (
 		<svg
-			width="20"
+			width="21"
 			height="16"
-			viewBox="0 0 20 16"
+			viewBox="0 0 21 16"
+			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 			{...props}
 		>
+			<path
+				className="circle-bg"
+				fillRule="evenodd"
+				clipRule="evenodd"
+				d="M21 8C21 12.4184 17.4184 16 13 16C8.5816 16 5 12.4184 5 8C5 3.5816 8.5816 0 13 0C17.4184 0 21 3.5816 21 8Z"
+				fill="white"
+			/>
 			<path
 				fillRule="evenodd"
 				clipRule="evenodd"

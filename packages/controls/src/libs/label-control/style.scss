@@ -18,7 +18,7 @@
 		position: absolute;
 		opacity: 0;
 		visibility: hidden;
-		right: -20px;
+		right: -21px;
 		top: 50%;
 		transition: all 100ms linear;
 		transform: translateY(-50%) scale(0.5);
@@ -158,6 +158,10 @@
 
 		svg {
 			fill: currentColor;
+
+			.circle-bg {
+				fill: var(--publisher-controls-background-color);
+			}
 		}
 
 		div,
