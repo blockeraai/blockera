@@ -38,7 +38,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 				<BorderControl
 					singularId={'border'}
 					repeaterItem={itemId}
-					label={__('Outline', 'publisher-core')}
+					label={__('Border', 'publisher-core')}
+					labelPopoverTitle={__('Outline Border', 'publisher-core')}
 					labelDescription={
 						<>
 							<p>
