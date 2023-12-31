@@ -18,6 +18,8 @@ import { RepeaterContext } from '../../repeater-control/context';
 import { useControlContext } from '../../../context';
 import { ColorControl, InputControl, SelectControl } from '../../index';
 import type { TFieldItem } from '../types';
+import XCoordinateIcon from '../icons/coordinate-x';
+import YCoordinateIcon from '../../box-shadow-control/icons/coordinate-y';
 
 const Fields: TFieldItem = memo<TFieldItem>(
 	({ itemId, item }: TFieldItem): Element<any> => {
@@ -96,7 +98,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					<>
 						<InputControl
 							id={getControlId(itemId, 'drop-shadow-x')}
-							label={__('X', 'publisher-core')}
+							label={<XCoordinateIcon />}
 							labelPopoverTitle={__(
 								'Shadow Horizontal Offset',
 								'publisher-core'
@@ -133,7 +135,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 
 						<InputControl
 							id={getControlId(itemId, 'drop-shadow-y')}
-							label={__('Y', 'publisher-core')}
+							label={<YCoordinateIcon />}
 							labelPopoverTitle={__(
 								'Shadow Vertical Offset',
 								'publisher-core'
