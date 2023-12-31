@@ -1,5 +1,7 @@
 // @flow
 
+import type { RepeaterControlProps } from '../../repeater-control/types';
+
 export type TItem = {
 	position: 'top' | 'bottom',
 	shape: { type: 'shape' | 'custom', id: string },
@@ -13,11 +15,8 @@ export type TItem = {
 };
 
 export type TDividerControlProps = {
-	id?: string,
+	...RepeaterControlProps,
 	defaultRepeaterItemValue?: TItem,
-	popoverTitle?: string,
-	className?: string,
-	defaultValue?: Array<Object>,
-	onChange?: () => {},
-	value: Array<Object>,
+	defaultValue?: Array<TItem>,
+	value: Array<TItem>,
 };

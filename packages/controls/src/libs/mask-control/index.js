@@ -3,7 +3,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
@@ -30,7 +29,10 @@ export default function MaskControl({
 		'vertically-flip': false,
 		isVisible: true,
 	},
-	popoverTitle = __('Mask', 'publisher-core'),
+	popoverTitle,
+	label,
+	labelPopoverTitle,
+	labelDescription,
 	className,
 	defaultValue = [],
 	...props
@@ -38,7 +40,29 @@ export default function MaskControl({
 	return (
 		<RepeaterControl
 			className={controlClassNames('mask', className)}
-			popoverTitle={popoverTitle}
+			popoverTitle={popoverTitle || __('Block Mask', 'publisher-core')}
+			label={label || __('Mask', 'publisher-core')}
+			labelPopoverTitle={
+				labelPopoverTitle || __('Block Mask', 'publisher-core')
+			}
+			labelDescription={
+				labelDescription || (
+					<>
+						<p>
+							{__(
+								'It allows you to apply a mask over the block content using an image.',
+								'publisher-core'
+							)}
+						</p>
+						<p>
+							{__(
+								'The mask can be chosen from a pre-existing library or uploaded as a custom image.',
+								'publisher-core'
+							)}
+						</p>
+					</>
+				)
+			}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
@@ -48,45 +72,3 @@ export default function MaskControl({
 		/>
 	);
 }
-
-MaskControl.propTypes = {
-	/**
-	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
-	 */
-	defaultValue: PropTypes.array,
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
-	/**
-	 * Default value of each repeater item
-	 */
-	defaultRepeaterItemValue: (PropTypes.shape({
-		shape: PropTypes.shape({
-			type: PropTypes.string,
-			id: PropTypes.string,
-		}),
-		size: PropTypes.oneOf(['custom', 'cover', 'contain']),
-		'size-width': PropTypes.string,
-		'size-height': PropTypes.string,
-		repeat: PropTypes.oneOf([
-			'no-repeat',
-			'repeat',
-			'repeat-x',
-			'repeat-y',
-			'round',
-			'space',
-		]),
-		position: PropTypes.shape({
-			top: PropTypes.string,
-			left: PropTypes.string,
-		}),
-		'horizontally-flip': PropTypes.bool,
-		'vertically-flip': PropTypes.bool,
-		isVisible: PropTypes.bool,
-	}): any),
-	/**
-	 * Label for popover
-	 */
-	popoverTitle: PropTypes.string,
-};

@@ -1,18 +1,15 @@
 // @flow
 
 /**
- * WordPress dependencies
- */
-import { __, sprintf } from '@wordpress/i18n';
-
-/**
  * External dependencies
  */
 import type { MixedElement } from 'react';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Publisher dependencies
  */
+import { Button } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
@@ -28,18 +25,20 @@ export const Shape = ({
 	isBottom,
 }: TShapeProps): MixedElement => {
 	return (
-		<div
-			className={`${controlInnerClassNames('shape')} ${
-				selected ? 'selected' : ''
-			} ${isBottom ? 'bottom' : ''}`}
+		<Button
+			className={controlInnerClassNames(
+				'shape',
+				selected ? 'is-focus' : '',
+				isBottom ? 'bottom' : ''
+			)}
 			onClick={() => onClick(id)}
 			aria-label={sprintf(
-				// translators: it's the aria label for shape item
+				// translators: %s is a shape name.
 				__('Icon %s', 'publisher-core'),
 				id
 			)}
 		>
 			{icon}
-		</div>
+		</Button>
 	);
 };

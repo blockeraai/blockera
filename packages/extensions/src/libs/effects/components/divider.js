@@ -36,13 +36,13 @@ export const Divider = ({
 			value={{
 				name: generateExtensionId(block, 'divider'),
 				value: divider,
+				attribute: 'publisherDivider',
+				blockName: block.blockName,
 			}}
 			storeName={'publisher-core/controls/repeater'}
 		>
 			<BaseControl columns="columns-1" controlName="divider">
 				<DividerControl
-					label={__('Dividers', 'publisher-core')}
-					popoverTitle={__('Divider', 'publisher-core')}
 					onChange={(newValue) =>
 						handleOnChangeAttributes('publisherDivider', newValue)
 					}

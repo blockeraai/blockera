@@ -2,58 +2,38 @@
 .publisher-control-mask-popover {
 
 	.publisher-control-header-icon {
-        max-width: 18px;
+		max-width: 18px !important;
+		min-width: 18px !important;
 
 		&.h-flip {
-         transform: scaleX(-1);
+			transform: scaleX(-1);
 		}
 
 		&.v-flip {
-         transform: scaleY(-1);
+			transform: scaleY(-1);
 		}
 
 		&.h-flip.v-flip {
-         transform: scaleY(-1) scaleX(-1);
+			transform: scaleY(-1) scaleX(-1);
 		}
 	}
 
-	.shape-button {
-	    width: 100%;
-		height: 30px;
-		border-radius: 2px;
-		border: 1px solid var(--publisher-controls-border-color);
-		display: flex;
-		justify-content: flex-start;
-		align-items: center;
-		padding: 7px 3px 7px 10px;
-		gap: 10px;
-		cursor: pointer;
+	.publisher-control-shape-button {
 
-		&:focus {
-			border: 2px solid var(--publisher-controls-border-color-focus);
-		}
-
-		.shape-title {
-			width: 100%;
-		}
-
-		.search-icon,
-		.shape-icon {
-			display: flex;
-			align-items: stretch;
-		}
-
-		.search-icon {
+		.publisher-control-search-icon {
 			width: 100%;
 			justify-content: flex-end;
+			display: flex;
+			align-items: center;
 		}
 
-		.shape-icon {
-
-			svg {
-				width: 18px;
-				height: 18px;
-			}
+		.publisher-control-shape-icon {
+			display: flex;
+			align-items: center;
+			width: 100%;
+			height: auto;
+			max-width: 18px;
+			max-height: 18px;
 
 			&.h-flip {
      			transform: scaleX(-1);
@@ -70,17 +50,12 @@
 	    }
     }
 
-	.mask-control-flip {
-       align-items: center;
-	}
+	.publisher-field-toggle.flip-toggle {
 
-	.flip-toggle {
-
-		label {
-			order: -2;
+		.publisher-control.publisher-control-toggle {
+			margin-left: auto !important;
 		}
 	}
-
 }
 
 .publisher-control-mask-shape-popover {
@@ -95,32 +70,19 @@
 	 	gap: 10px;
 		row-gap: 10px;
 
-		.shape {
+		.publisher-control-shape {
 			display: flex;
 			width: auto;
 		    height: 50px;
 			justify-content: center;
 			align-items: center;
-	     	gap: 16px;
-			border-radius: 2px;
-			border: 1px solid var(--publisher-controls-border-color);
-
-			&:focus {
-				border: 2px solid var(--publisher-controls-border-color-focus);
-			}
-
-	        &.selected {
-                border: 2px solid var(--publisher-controls-border-color-focus);
-				fill: var(--publisher-controls-border-color-focus);
-			}
 
 			svg {
-				width: 30px;
-				height: 30px;
+				width: 100%;
+				height: auto;
+				max-width: 30px;
+				max-height: 30px;
 			}
 		}
-
-
 	}
 }
-

@@ -13,7 +13,7 @@ import type { Element } from 'react';
 /**
  * Publisher dependencies
  */
-import { Flex, Popover } from '@publisher/components';
+import { Flex, Popover, Button } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
@@ -40,6 +40,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 		const {
 			controlInfo: { name: controlId },
 			dispatch: { changeRepeaterItem },
+			blockName,
 		} = useControlContext();
 
 		const {
@@ -69,6 +70,17 @@ const Fields: TFieldItem = memo<TFieldItem>(
 				<ToggleSelectControl
 					id={getControlId(itemId, 'position')}
 					label={__('Position', 'publisher-core')}
+					labelPopoverTitle={__('Divider Position', 'publisher-core')}
+					labelDescription={
+						<>
+							<p>
+								{__(
+									'Block Divider Positions refer to placing decorative dividers at the top or bottom of content sections on a webpage.',
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
 					columns="columns-2"
 					defaultValue={item.position}
 					options={[
@@ -122,9 +134,39 @@ const Fields: TFieldItem = memo<TFieldItem>(
 				<BaseControl
 					columns="columns-2"
 					label={__('Shape', 'publisher-core')}
+					labelPopoverTitle={__('Divider Shape', 'publisher-core')}
+					labelDescription={
+						<>
+							<p>
+								{__(
+									"It's collection of pre-designed divider shapes that can be easily inserted into web pages.",
+									'publisher-core'
+								)}
+							</p>
+							<p>
+								{__(
+									'Additionally, an option to upload custom divider shapes allows for personalized and brand-specific designs.',
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
+					id={getControlId(itemId, 'shape')}
+					attribute={'shape'}
+					singularId={'shape'}
+					mode="advanced"
+					path={'shape'}
+					blockName={blockName}
+					value={item.shape}
+					defaultValue={item.shape}
+					repeaterItem={itemId}
 				>
-					<div
-						className={controlInnerClassNames('shape-button')}
+					<Button
+						size="input"
+						className={controlInnerClassNames(
+							'shape-button',
+							isSelectShapeOpen && 'is-focus'
+						)}
 						onClick={() => setIsSelectShapeOpen(true)}
 						data-test="divider-shape-button"
 					>
@@ -142,7 +184,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						<span className="search-icon">
 							<SearchIcon />
 						</span>
-					</div>
+					</Button>
 
 					{isSelectShapeOpen && (
 						<Popover
@@ -156,11 +198,31 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							<ToggleSelectControl
 								id={getControlId(itemId, 'shape.type')}
 								label={__('Type', 'publisher-core')}
+								labelPopoverTitle={__(
+									'Divider Shape Type',
+									'publisher-core'
+								)}
+								labelDescription={
+									<>
+										<p>
+											{__(
+												"It's collection of pre-designed divider shapes that can be easily inserted into web pages.",
+												'publisher-core'
+											)}
+										</p>
+										<p>
+											{__(
+												'Additionally, an option to upload custom divider shapes allows for personalized and brand-specific designs.',
+												'publisher-core'
+											)}
+										</p>
+									</>
+								}
 								columns="columns-2"
 								defaultValue={item.position}
 								options={[
 									{
-										label: __('Shape', 'publisher-core'),
+										label: __('Library', 'publisher-core'),
 										value: 'shape',
 									},
 									{
@@ -199,7 +261,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 										icon={shape.icon}
 										isBottom={item.position === 'bottom'}
 										selected={shape.id === item.shape.id}
-										onClick={(id) =>
+										onClick={(id) => {
 											changeRepeaterItem({
 												controlId,
 												repeaterId,
@@ -211,8 +273,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 														id,
 													},
 												},
-											})
-										}
+											});
+											setIsSelectShapeOpen(false);
+										}}
 									/>
 								))}
 							</BaseControl>
@@ -224,6 +287,17 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					id={getControlId(itemId, 'color')}
 					columns="columns-2"
 					label={__('Color', 'publisher-core')}
+					labelPopoverTitle={__('Divider Color', 'publisher-core')}
+					labelDescription={
+						<>
+							<p>
+								{__(
+									'It the color of shape used as divider between content blocks.',
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
 					defaultValue={item.color}
 					onChange={(color) =>
 						changeRepeaterItem({
@@ -233,7 +307,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							value: { ...item, color },
 						})
 					}
-				></ColorControl>
+				/>
 
 				<BaseControl columns="columns-1">
 					<BaseControl
@@ -245,6 +319,26 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								id={getControlId(itemId, 'size.width')}
 								columns="columns-1"
 								label={__('Width', 'publisher-core')}
+								labelPopoverTitle={__(
+									'Divider Width',
+									'publisher-core'
+								)}
+								labelDescription={
+									<>
+										<p>
+											{__(
+												'It refers to the horizontal thickness of divider used to separate content sections.',
+												'publisher-core'
+											)}
+										</p>
+										<p>
+											{__(
+												'Typically, a full-width (100%) divider is recommended for clear and consistent separation.',
+												'publisher-core'
+											)}
+										</p>
+									</>
+								}
 								className="control-first label-center small-gap"
 								style={{ margin: '0px' }}
 								placeholder="0"
@@ -252,7 +346,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								min={0}
 								defaultValue={item.size.width}
 								unitType="width"
-								smallWidth={true}
+								size={'small'}
 								data-test="divider-width-input"
 								onChange={(width) =>
 									changeRepeaterItem({
@@ -271,6 +365,26 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								id={getControlId(itemId, 'size.height')}
 								columns="columns-1"
 								label={__('Height', 'publisher-core')}
+								labelPopoverTitle={__(
+									'Divider Height',
+									'publisher-core'
+								)}
+								labelDescription={
+									<>
+										<p>
+											{__(
+												'It refers to the vertical thickness of divider used to separate content sections.',
+												'publisher-core'
+											)}
+										</p>
+										<p>
+											{__(
+												'A thinner height is often used for a minimalistic look, while a greater height can serve as a bold statement piece or even a functional space for additional content or design elements.',
+												'publisher-core'
+											)}
+										</p>
+									</>
+								}
 								className="control-first label-center small-gap"
 								style={{ margin: '0px' }}
 								placeholder="0"
@@ -278,7 +392,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								min={0}
 								defaultValue={item.size.height}
 								unitType="height"
-								smallWidth={true}
+								size={'small'}
 								data-test="divider-height-input"
 								onChange={(height) =>
 									changeRepeaterItem({
@@ -298,52 +412,89 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						<NoticeControl type="error">
 							{item.size.height &&
 								!item.size.width &&
-								__('You must add width', 'publisher-core')}
+								__(
+									'Width is required; please provide a value. 100% is recommended.',
+									'publisher-core'
+								)}
 							{item.size.width &&
 								!item.size.height &&
-								__('You must add height', 'publisher-core')}
+								__(
+									'Width is required; please provide a value.',
+									'publisher-core'
+								)}
 							{!item.size.width &&
 								!item.size.height &&
 								__(
-									'You must add width and height',
+									'Width and height are required; please provide values.',
 									'publisher-core'
 								)}
 						</NoticeControl>
 					)}
 				</BaseControl>
 
-				<BaseControl
+				<ToggleControl
+					id={getControlId(itemId, 'animate')}
+					defaultValue={item.animate}
 					columns="columns-2"
-					label={__('Animate', 'publisher-core')}
+					label={__('Animation', 'publisher-core')}
+					labelPopoverTitle={__(
+						'Divider Animation',
+						'publisher-core'
+					)}
+					labelDescription={
+						<>
+							<p>
+								{__(
+									'It adds dynamic visual effects to divider to draw attention to specific sections.',
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
 					className={controlInnerClassNames('toggle-field')}
+					onChange={(animate) =>
+						changeRepeaterItem({
+							controlId,
+							repeaterId,
+							itemId,
+							value: {
+								...item,
+								animate,
+							},
+						})
+					}
 				>
-					<ToggleControl
-						id={getControlId(itemId, 'animate')}
-						defaultValue={item.animate}
-						value={item.animate}
-						onChange={(animate) =>
-							changeRepeaterItem({
-								controlId,
-								repeaterId,
-								itemId,
-								value: {
-									...item,
-									animate,
-								},
-							})
-						}
-					/>
 					{item.animate && (
 						<InputControl
 							id={getControlId(itemId, 'duration')}
 							label={__('Duration', 'publisher-core')}
+							labelPopoverTitle={__(
+								'Divider Animation Duration',
+								'publisher-core'
+							)}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'It sets the length of time it takes for an animation to complete on a divider.',
+											'publisher-core'
+										)}
+									</p>
+									<p>
+										{__(
+											'A faster animation can create a snappy, responsive feel, while a slower animation can impart a sense of elegance and smoothness.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							columns="1fr 1.4fr"
 							placeholder="0"
 							type="number"
 							min={0}
 							defaultValue={item.duration}
 							unitType="duration"
-							smallWidth={true}
+							size="small"
 							data-test="divider-duration-input"
 							onChange={(duration) =>
 								changeRepeaterItem({
@@ -358,53 +509,73 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							}
 						/>
 					)}
-				</BaseControl>
+				</ToggleControl>
 
-				<BaseControl
+				<ToggleControl
 					columns="columns-2"
 					label={__('Flip', 'publisher-core')}
+					labelPopoverTitle={__('Horizontal Flip', 'publisher-core')}
+					labelDescription={
+						<>
+							<p>
+								{__(
+									'It allows a horizontal inversion or mirroring of divider.',
+									'publisher-core'
+								)}
+							</p>
+							<p>
+								{__(
+									'A faster animation can create a snappy, responsive feel, while a slower animation can impart a sense of elegance and smoothness.',
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
 					className={controlInnerClassNames('toggle-field')}
-				>
-					<ToggleControl
-						id={getControlId(itemId, 'flip')}
-						defaultValue={item.flip}
-						value={item.flip}
-						onChange={(flip) =>
-							changeRepeaterItem({
-								controlId,
-								repeaterId,
-								itemId,
-								value: {
-									...item,
-									flip,
-								},
-							})
-						}
-					/>
-				</BaseControl>
+					id={getControlId(itemId, 'flip')}
+					defaultValue={item.flip}
+					onChange={(flip) =>
+						changeRepeaterItem({
+							controlId,
+							repeaterId,
+							itemId,
+							value: {
+								...item,
+								flip,
+							},
+						})
+					}
+				/>
 
-				<BaseControl
+				<ToggleControl
+					id={getControlId(itemId, 'onFront')}
 					columns="columns-2"
 					label={__('On Front', 'publisher-core')}
+					labelPopoverTitle={__('Bring On Front', 'publisher-core')}
+					labelDescription={
+						<>
+							<p>
+								{__(
+									'It sets a high z-index value on the block divider, which brings it to the forefront, layered above all other block contents.',
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
 					className={controlInnerClassNames('toggle-field')}
-				>
-					<ToggleControl
-						id={getControlId(itemId, 'onFront')}
-						defaultValue={item.onFront}
-						value={item.onFront}
-						onChange={(onFront) =>
-							changeRepeaterItem({
-								controlId,
-								repeaterId,
-								itemId,
-								value: {
-									...item,
-									onFront,
-								},
-							})
-						}
-					/>
-				</BaseControl>
+					defaultValue={item.onFront}
+					onChange={(onFront) =>
+						changeRepeaterItem({
+							controlId,
+							repeaterId,
+							itemId,
+							value: {
+								...item,
+								onFront,
+							},
+						})
+					}
+				/>
 			</div>
 		);
 	}

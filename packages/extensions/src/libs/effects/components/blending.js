@@ -40,21 +40,27 @@ export const Blending = ({
 			<SelectControl
 				controlName="select"
 				label={__('Blending', 'publisher-core')}
+				labelPopoverTitle={__('Mix Blending Mode', 'publisher-core')}
+				labelDescription={
+					<>
+						<p>
+							{__(
+								'It allows for the blending of an element with its background.',
+								'publisher-core'
+							)}
+						</p>
+					</>
+				}
+				{...props}
 				columns="columns-2"
-				{...{
-					...props,
-					options: blendModeFieldOptions(),
-					type: 'custom',
-					customMenuPosition: 'top',
-					//
-					defaultValue: 'normal',
-					value: blendMode,
-					onChange: (newValue) =>
-						handleOnChangeAttributes(
-							'publisherBlendMode',
-							newValue
-						),
-				}}
+				options={blendModeFieldOptions()}
+				onChange={(newValue) =>
+					handleOnChangeAttributes('publisherBlendMode', newValue)
+				}
+				value={blendMode}
+				type="custom"
+				customMenuPosition="top"
+				defaultValue="normal"
 			/>
 		</ControlContextProvider>
 	);

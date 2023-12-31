@@ -4,7 +4,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 import { useEffect, useContext } from '@wordpress/element';
 
@@ -24,10 +23,24 @@ import { useControlContext } from '../../context';
 import { RepeaterContext } from '../repeater-control/context';
 export default function DividerControl({
 	id,
-	defaultRepeaterItemValue,
+	defaultValue = [],
+	value = [],
+	defaultRepeaterItemValue = {
+		position: 'top',
+		shape: { type: 'shape', id: 'wave-opacity' },
+		color: '',
+		size: { width: '100%', height: '100px' },
+		animate: false,
+		duration: '',
+		flip: false,
+		onFront: false,
+		isVisible: true,
+	},
 	popoverTitle,
+	label,
+	labelPopoverTitle,
+	labelDescription,
 	className,
-	value,
 	...props
 }: TDividerControlProps): MixedElement {
 	const {
@@ -60,71 +73,40 @@ export default function DividerControl({
 		<RepeaterControl
 			id={id}
 			className={controlClassNames('divider', className)}
-			popoverTitle={popoverTitle}
+			popoverTitle={popoverTitle || __('Block Divider', 'publisher-core')}
+			label={label || __('Dividers', 'publisher-core')}
+			labelPopoverTitle={
+				labelPopoverTitle || __('Block Dividers', 'publisher-core')
+			}
+			labelDescription={
+				labelDescription || (
+					<>
+						<p>
+							{__(
+								'Block Dividers are design elements used to visually separate different sections or blocks of content on a webpage.',
+								'publisher-core'
+							)}
+						</p>
+						<p>
+							{__(
+								'Dividers are essential for breaking up long stretches of content, making web pages easier to navigate and read.',
+								'publisher-core'
+							)}
+						</p>
+						<p>
+							{__(
+								"They help in guiding the user's eye through the content and can be used to highlight key sections or create a rhythm in the page layout.",
+								'publisher-core'
+							)}
+						</p>
+					</>
+				)
+			}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
+			defaultValue={defaultValue}
 			{...props}
 		/>
 	);
 }
-
-DividerControl.propTypes = {
-	/**
-	 * The control identifier
-	 */
-	id: PropTypes.string,
-	/**
-	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
-	 */
-	defaultValue: PropTypes.array,
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
-	/**
-	 * Default value of each repeater item
-	 */
-	defaultRepeaterItemValue: (PropTypes.shape({
-		position: PropTypes.oneOf(['top', 'bottom']),
-		shape: PropTypes.shape({
-			type: PropTypes.string,
-			id: PropTypes.string,
-		}),
-		color: PropTypes.string,
-		size: PropTypes.shape({
-			width: PropTypes.string,
-			height: PropTypes.string,
-		}),
-		animate: PropTypes.bool,
-		duration: PropTypes.string,
-		flip: PropTypes.bool,
-		onFront: PropTypes.bool,
-		isVisible: PropTypes.bool,
-	}): any),
-	/**
-	 * Label for popover
-	 */
-	popoverTitle: PropTypes.string,
-	/**
-	 * value
-	 */
-	value: PropTypes.array,
-};
-
-DividerControl.defaultProps = {
-	defaultValue: ([]: any),
-	value: ([]: any),
-	defaultRepeaterItemValue: {
-		position: 'top',
-		shape: { type: 'shape', id: 'wave-opacity' },
-		color: '',
-		size: { width: '100%', height: '100px' },
-		animate: false,
-		duration: '',
-		flip: false,
-		onFront: false,
-		isVisible: true,
-	},
-	popoverTitle: (__('Divider', 'publisher-core'): any),
-};
