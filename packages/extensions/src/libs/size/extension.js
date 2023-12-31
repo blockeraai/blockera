@@ -310,7 +310,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										</p>
 										<p>
 											{__(
-												'This feature is key for achieving uniformity and balance in your layout, especially useful for aligning elements vertically and creating cohesive visual structures.',
+												'This feature is key for achieving uniformity and balance in your layout, especially useful for aligning blocks vertically and creating cohesive visual structures.',
 												'publisher-core'
 											)}
 										</p>
@@ -370,7 +370,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											controlName="input"
 											label={__('Min', 'publisher-core')}
 											labelPopoverTitle={__(
-												'Min-Height',
+												'Min Height',
 												'publisher-core'
 											)}
 											labelDescription={
@@ -439,7 +439,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											controlName="input"
 											label={__('Max', 'publisher-core')}
 											labelPopoverTitle={__(
-												'Max-Width',
+												'Max Height',
 												'publisher-core'
 											)}
 											labelDescription={
@@ -542,7 +542,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									</h3>
 									<p>
 										{__(
-											'Scroll ensures that any excess content within an element is accessible via scrollbars, ideal for maintaining a fixed size for content areas.',
+											'Scroll ensures that any excess content within the block is accessible via scrollbars, ideal for maintaining a fixed size for content areas.',
 											'publisher-core'
 										)}
 									</p>

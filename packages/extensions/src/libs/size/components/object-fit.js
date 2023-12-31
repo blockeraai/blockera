@@ -88,7 +88,7 @@ export default function ObjectFit({
 					</h3>
 					<p>
 						{__(
-							'The entire image is scaled to fit inside the container, maintaining its aspect ratio but might leave empty space.',
+							'The entire image or video is scaled to fit inside the container, maintaining its aspect ratio but might leave empty space.',
 							'publisher-core'
 						)}
 					</p>
@@ -108,7 +108,7 @@ export default function ObjectFit({
 					</h3>
 					<p>
 						{__(
-							'The image is displayed at its true size, ignoring the container size.',
+							'The image or video is displayed at its true size, ignoring the container size.',
 							'publisher-core'
 						)}
 					</p>
@@ -118,7 +118,7 @@ export default function ObjectFit({
 					</h3>
 					<p>
 						{__(
-							'Behaves like "none" or "contain", whichever results in a smaller image.',
+							'Behaves like "none" or "contain", whichever results in a smaller image or video.',
 							'publisher-core'
 						)}
 					</p>

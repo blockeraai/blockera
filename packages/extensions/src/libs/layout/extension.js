@@ -103,7 +103,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 								<>
 									<p>
 										{__(
-											'The Display is essential to defining how elements are formatted and arranged on the page.',
+											'The Display is essential to defining how blocks are formatted and arranged on the page.',
 											'publisher-core'
 										)}
 									</p>
@@ -169,7 +169,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									</h3>
 									<p>
 										{__(
-											'Completely hides the element from the layout, but note that the element remains in the HTML document.',
+											'Completely hides the block from the layout, but note that the block remains in the HTML document.',
 											'publisher-core'
 										)}
 									</p>
@@ -295,6 +295,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 															style={{
 																fontWeight:
 																	'600',
+																color: '#fff',
 															}}
 														>
 															{__(
@@ -824,6 +825,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 																style={{
 																	fontWeight:
 																		'600',
+																	color: '#fff',
 																}}
 															>
 																{__(

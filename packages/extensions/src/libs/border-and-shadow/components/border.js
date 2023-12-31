@@ -167,7 +167,7 @@ export const Border = ({
 					<>
 						<p>
 							{__(
-								'Define clear boundaries for elements with customizable lines, enhancing structure and design.',
+								'Define clear boundaries for blocks with customizable lines, enhancing structure and design.',
 								'publisher-core'
 							)}
 						</p>

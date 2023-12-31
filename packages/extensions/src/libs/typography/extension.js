@@ -223,7 +223,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 												<>
 													<p>
 														{__(
-															'It sets the horizontal alignment of text within an element, offering alignment options like left, right, center, and justify.',
+															'It sets the horizontal alignment of text within the block, offering alignment options like left, right, center, and justify.',
 															'publisher-core'
 														)}
 													</p>
@@ -992,7 +992,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 									<>
 										<p>
 											{__(
-												'It sets the color of the text within an element, playing a crucial role in enhancing readability, attracting attention, and maintaining consistent branding.',
+												'It sets the color of the text within the block, playing a crucial role in enhancing readability, attracting attention, and maintaining consistent branding.',
 												'publisher-core'
 											)}
 										</p>

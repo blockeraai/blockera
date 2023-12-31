@@ -145,7 +145,7 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 								<>
 									<p>
 										{__(
-											'It sets the color of an Block’s background, providing a simple yet powerful way to apply solid color.',
+											'It sets the color of the block’s background, providing a simple yet powerful way to apply solid color.',
 											'publisher-core'
 										)}
 									</p>
@@ -191,7 +191,7 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 								<>
 									<p>
 										{__(
-											'It defines how far the background (color or image) extends within an element.',
+											'It defines how far the background (color or image) extends within the block.',
 											'publisher-core'
 										)}
 									</p>
@@ -233,7 +233,7 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 									</h3>
 									<p>
 										{__(
-											'Advanced feature that allows the background to only be visible through the text of an element.',
+											'Advanced feature that allows the background to only be visible through the text of block.',
 											'publisher-core'
 										)}
 									</p>

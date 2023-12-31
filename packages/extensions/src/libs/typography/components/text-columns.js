@@ -85,12 +85,6 @@ export const TextColumns = ({
 								'publisher-core'
 							)}
 						</p>
-						<p>
-							{__(
-								'It is perfect for creating multi-column layouts, offering a visually engaging and easily navigable text format, especially useful for long-form content.',
-								'publisher-core'
-							)}
-						</p>
 					</>
 				}
 				columns="columns-2"

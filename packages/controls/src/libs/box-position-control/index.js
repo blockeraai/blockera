@@ -201,7 +201,7 @@ const Component = ({
 				</h3>
 				<p>
 					{__(
-						'Positions an element relative to its normal position, allowing adjustments.',
+						'Positions the block relative to its normal position, allowing adjustments.',
 						'publisher-core'
 					)}
 				</p>
@@ -211,7 +211,7 @@ const Component = ({
 				</h3>
 				<p>
 					{__(
-						'Removes the element from the document flow. Positioned relative to its nearest positioned ancestor.',
+						'Removes the block from the document flow. Positioned relative to its nearest positioned ancestor.',
 						'publisher-core'
 					)}
 				</p>
@@ -221,7 +221,7 @@ const Component = ({
 				</h3>
 				<p>
 					{__(
-						'Positions the element relative to the browser window, remaining fixed during scrolling.',
+						'Positions the block relative to the browser window, remaining fixed during scrolling.',
 						'publisher-core'
 					)}
 				</p>
@@ -231,7 +231,7 @@ const Component = ({
 				</h3>
 				<p>
 					{__(
-						'A hybrid of relative and fixed. The element is treated as relative until it crosses a specified threshold, then it becomes fixed.',
+						'A hybrid of relative and fixed. The block is treated as relative until it crosses a specified threshold, then it becomes fixed.',
 						'publisher-core'
 					)}
 				</p>
@@ -498,7 +498,7 @@ const Component = ({
 											</p>
 											<p>
 												{__(
-													'Ideal for persistent navigation menus, back to top buttons or call-to-action buttons, it enhances user experience by keeping important elements accessible.',
+													'Ideal for persistent navigation menus, back to top buttons or call-to-action buttons, it enhances user experience by keeping important blocks accessible.',
 													'publisher-core'
 												)}
 											</p>
@@ -508,7 +508,7 @@ const Component = ({
 										<>
 											<p>
 												{__(
-													'Position Sticky offers a hybrid approach, keeping elements static until a specified point, then fixing them as the page scrolls.',
+													'Position Sticky offers a hybrid approach, keeping blocks static until a specified point, then fixing them as the page scrolls.',
 													'publisher-core'
 												)}
 											</p>

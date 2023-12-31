@@ -132,13 +132,13 @@ export const BorderAndShadowExtension: TBorderAndShadowProps =
 										<>
 											<p>
 												{__(
-													'Add distinct borders to elements without affecting layout, enhancing visual hierarchy and focus.',
+													'Add distinct borders to blocks without affecting layout, enhancing visual hierarchy and focus.',
 													'publisher-core'
 												)}
 											</p>
 											<p>
 												{__(
-													'Useful for highlighting elements without space adjustments, unlike borders. Perfect for focus states and accessibility.',
+													'Useful for highlighting blocks without space adjustments, unlike borders. Perfect for focus states and accessibility.',
 													'publisher-core'
 												)}
 											</p>

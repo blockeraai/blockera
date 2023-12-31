@@ -62,7 +62,13 @@ export function Margin({
 							<>
 								<p>
 									{__(
-										'Use margin to create separation between elements, optimizing layout and enhancing visual balance.',
+										'Use margin to create separation between blocks, optimizing layout and enhancing visual balance.',
+										'publisher-core'
+									)}
+								</p>
+								<p>
+									{__(
+										"It's beneficial for improving layout and boosting visual harmony, especially in adaptive, responsive designs.",
 										'publisher-core'
 									)}
 								</p>
