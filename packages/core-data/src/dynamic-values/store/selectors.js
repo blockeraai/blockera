@@ -16,7 +16,7 @@ const _getDynamicValue = (
 	group: string,
 	name: string
 ) => {
-	return dynamicValues[group].items.find(
+	return Object.values(dynamicValues[group].items).find(
 		(i: { ...Object, name: string }): boolean => i.name === name
 	);
 };
