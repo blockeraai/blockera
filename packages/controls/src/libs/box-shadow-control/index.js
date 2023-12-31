@@ -3,7 +3,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
@@ -47,34 +46,3 @@ export default function BoxShadowControl({
 		/>
 	);
 }
-
-BoxShadowControl.propTypes = {
-	/**
-	 * The control identifier
-	 */
-	id: PropTypes.string,
-	/**
-	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
-	 */
-	defaultValue: PropTypes.array,
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
-	/**
-	 * Default value of each repeater item
-	 */
-	defaultRepeaterItemValue: (PropTypes.shape({
-		type: PropTypes.oneOf(['outer', 'inner']),
-		x: PropTypes.string,
-		y: PropTypes.string,
-		blur: PropTypes.string,
-		spread: PropTypes.string,
-		color: PropTypes.string,
-		isVisible: PropTypes.bool,
-	}): any),
-	/**
-	 * Label for popover
-	 */
-	popoverTitle: PropTypes.string,
-};
