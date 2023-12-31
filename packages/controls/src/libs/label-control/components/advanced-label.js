@@ -56,37 +56,24 @@ export const AdvancedLabelControl = ({
 		switchBlockState,
 	} = useBlockContext();
 
-	if ('undefined' === typeof attribute || 'undefined' === typeof blockName) {
-		return (
-			<SimpleLabelControl
-				label={label}
-				ariaLabel={ariaLabel}
-				className={className}
-				labelDescription={labelDescription}
-			/>
-		);
-	}
-
 	const {
 		isChanged,
 		isChangedOnNormal,
 		isChangedOnOtherStates,
 		isChangedOnCurrentState,
-	} =
-		// eslint-disable-next-line react-hooks/rules-of-hooks
-		useAdvancedLabelProps({
-			path,
-			value,
-			singularId,
-			attribute,
-			isRepeater,
-			defaultValue,
-			blockStateId,
-			breakpointId,
-			isNormalState: isNormalState(),
-			currentState: getCurrentState(),
-			blockAttributes: getAttributes(),
-		});
+	} = useAdvancedLabelProps({
+		path,
+		value,
+		singularId,
+		attribute,
+		isRepeater,
+		defaultValue,
+		blockStateId,
+		breakpointId,
+		isNormalState: isNormalState(),
+		currentState: getCurrentState(),
+		blockAttributes: getAttributes(),
+	});
 
 	const isChangedValue =
 		(isChanged && isChangedOnCurrentState) ||
