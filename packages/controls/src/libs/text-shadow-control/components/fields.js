@@ -10,6 +10,8 @@ import { memo, useContext } from '@wordpress/element';
 import { useControlContext } from '../../../context';
 import { RepeaterContext } from '../../repeater-control/context';
 import { ColorControl, InputControl } from '../../index';
+import XCoordinateIcon from '../icons/coordinate-x';
+import YCoordinateIcon from '../icons/coordinate-y';
 
 const Fields = ({ itemId, item }) => {
 	const {
@@ -23,7 +25,7 @@ const Fields = ({ itemId, item }) => {
 		<div id={`repeater-item-${itemId}`}>
 			<InputControl
 				controlName="input"
-				label={__('X', 'publisher-core')}
+				label={<XCoordinateIcon />}
 				labelPopoverTitle={__(
 					'Horizontal Offset (X)',
 					'publisher-core'
@@ -63,7 +65,7 @@ const Fields = ({ itemId, item }) => {
 
 			<InputControl
 				controlName="input"
-				label={__('Y', 'publisher-core')}
+				label={<YCoordinateIcon />}
 				labelPopoverTitle={__('Vertical Offset (Y)', 'publisher-core')}
 				labelDescription={
 					<>
@@ -112,7 +114,7 @@ const Fields = ({ itemId, item }) => {
 						</p>
 						<p>
 							{__(
-								'A blurred shadow effect is crucial for adding depth and emphasis to text while maintaining readability, ideal for titles, banners, and other key text elements in web design.',
+								'A blurred shadow effect is crucial for adding depth and emphasis to text while maintaining readability, ideal for titles, banners, and other key text blocks in web design.',
 								'publisher-core'
 							)}
 						</p>
