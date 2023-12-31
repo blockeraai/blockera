@@ -2,14 +2,24 @@
 /**
  * Internal dependencies
  */
-import type { ControlSize, ControlGeneralTypes } from '../../../types';
+import type { ControlGeneralTypes } from '../../../types';
 
 export type TPositionButtonProps = {
 	...ControlGeneralTypes,
-	size: ControlSize,
-	popoverTitle?: string,
-	alignmentMatrixLabel?: string,
 	defaultValue?: { top: string, left: string },
+	/**
+	 * Label for popover
+	 */
+	popoverTitle?: string,
+	/**
+	 * Label for field alignment-matrix. If you pass empty value the field will not be added and simple control will be rendered
+	 *
+	 * @default ""
+	 */
+	alignmentMatrixLabel?: string,
+	/**
+	 * Label for Button tooltip
+	 */
 	buttonLabel?: string,
 };
 

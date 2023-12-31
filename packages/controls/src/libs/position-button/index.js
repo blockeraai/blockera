@@ -5,7 +5,6 @@
  */
 import type { MixedElement } from 'react';
 import { useState } from '@wordpress/element';
-import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 
 /**
@@ -29,8 +28,8 @@ export default function PositionButtonControl({
 	repeaterItem,
 	singularId,
 	buttonLabel,
-	popoverTitle,
-	alignmentMatrixLabel,
+	popoverTitle = __('Setting', 'publisher-core'),
+	alignmentMatrixLabel = __('Position', 'publisher-core'),
 	id,
 	onChange,
 	defaultValue = {
@@ -128,62 +127,3 @@ export default function PositionButtonControl({
 		</BaseControl>
 	);
 }
-
-PositionButtonControl.propTypes = {
-	/**
-	 * ID for retrieving value from control context
-	 */
-	id: PropTypes.string,
-	/**
-	 * Label for field. If you pass empty value the field will not be added and simple control will be rendered
-	 *
-	 * @default ""
-	 */
-	label: PropTypes.string,
-	/**
-	 * Label for Button tooltip
-	 */
-	buttonLabel: PropTypes.string,
-	/**
-	 * Label for popover
-	 */
-	popoverTitle: PropTypes.string,
-	/**
-	 * Label for field alignment-matrix. If you pass empty value the field will not be added and simple control will be rendered
-	 *
-	 * @default ""
-	 */
-	alignmentMatrixLabel: PropTypes.string,
-	/**
-	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
-	 */
-	defaultValue: (PropTypes.shape({
-		top: PropTypes.string,
-		left: PropTypes.string,
-	}): any),
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
-	/**
-	 * Field id for passing into child Field component
-	 *
-	 * @default "toggle-select"
-	 */
-	field: PropTypes.string,
-	/**
-	 * Columns setting for Field grid.
-	 *
-	 * @default "columns-2"
-	 */
-	columns: PropTypes.string,
-};
-
-PositionButtonControl.defaultProps = {
-	popoverTitle: (__('Setting', 'publisher-core'): any),
-	alignmentMatrixLabel: (__('Position', 'publisher-core'): any),
-	defaultValue: {
-		top: '',
-		left: '',
-	},
-};
