@@ -19,7 +19,7 @@ import {
 	getAttributeFieldKeyOptions,
 } from '../utils';
 import { useControlContext } from '../../../context';
-import { InputControl, SelectControl } from '../../index';
+import { InputControl, NoticeControl, SelectControl } from '../../index';
 import type { TFieldItem } from '../types';
 
 const Fields: TFieldItem = memo<TFieldItem>(
@@ -150,6 +150,22 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					<>
 						<SelectControl
 							label={__('Attribute', 'publisher-core')}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'HTML Attribute provides additional information about the block and the code.',
+											'publisher-core'
+										)}
+									</p>
+									<p>
+										{__(
+											'You can select an attribute from the list for current block or use Custom Attribute.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							columns="columns-2"
 							options={keyFieldOptions}
 							id={getControlId(itemId, '__key')}
@@ -164,6 +180,20 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								{item.key !== '' && valueFieldOptions.length ? (
 									<SelectControl
 										label={__('Value', 'publisher-core')}
+										labelPopoverTitle={__(
+											'Attribute Value',
+											'publisher-core'
+										)}
+										labelDescription={
+											<>
+												<p>
+													{__(
+														'Value for HTML Attribute.',
+														'publisher-core'
+													)}
+												</p>
+											</>
+										}
 										columns="columns-2"
 										options={valueFieldOptions}
 										id={getControlId(itemId, 'value')}
@@ -188,6 +218,20 @@ const Fields: TFieldItem = memo<TFieldItem>(
 													'Value',
 													'publisher-core'
 												)}
+												labelPopoverTitle={__(
+													'Attribute Value',
+													'publisher-core'
+												)}
+												labelDescription={
+													<>
+														<p>
+															{__(
+																'Value for HTML Attribute.',
+																'publisher-core'
+															)}
+														</p>
+													</>
+												}
 												columns="columns-2"
 												type="text"
 												id={getControlId(
@@ -219,6 +263,20 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					<>
 						<InputControl
 							label={__('Key', 'publisher-core')}
+							labelPopoverTitle={__(
+								'Attribute Key',
+								'publisher-core'
+							)}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'Key for HTML Attribute.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							columns="columns-2"
 							type="text"
 							id={getControlId(itemId, 'key')}
@@ -234,15 +292,38 @@ const Fields: TFieldItem = memo<TFieldItem>(
 									},
 								});
 							}}
-						/>
+						>
+							{!item?.key && (
+								<NoticeControl
+									type="error"
+									style={{ marginTop: '10px' }}
+								>
+									{__('Key is required.', 'publisher-core')}
+								</NoticeControl>
+							)}
+						</InputControl>
+
 						<InputControl
 							label={__('Value', 'publisher-core')}
+							labelPopoverTitle={__(
+								'Attribute Value',
+								'publisher-core'
+							)}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'Value for HTML Attribute.',
+											'publisher-core'
+										)}
+									</p>
+								</>
+							}
 							columns="columns-2"
 							id={getControlId(itemId, 'value')}
 							type="text"
 							defaultValue=""
 							onChange={(newValue) => {
-								// setCurrentValue(newValue);
 								changeRepeaterItem({
 									controlId,
 									repeaterId,
@@ -253,7 +334,16 @@ const Fields: TFieldItem = memo<TFieldItem>(
 									},
 								});
 							}}
-						/>
+						>
+							{!item?.value && (
+								<NoticeControl
+									type="error"
+									style={{ marginTop: '10px' }}
+								>
+									{__('Value is required.', 'publisher-core')}
+								</NoticeControl>
+							)}
+						</InputControl>
 					</>
 				)}
 			</div>

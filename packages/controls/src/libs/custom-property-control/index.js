@@ -28,12 +28,10 @@ export default function CustomPropertyControl({
 		value: '',
 		isVisible: true,
 	},
-	popoverTitle = (
-		<>
-			<PropertyIcon />
-			{__('CSS Property', 'publisher-core')}
-		</>
-	),
+	popoverTitle,
+	label,
+	labelPopoverTitle,
+	labelDescription,
 	defaultValue = [],
 	//
 	className,
@@ -42,8 +40,37 @@ export default function CustomPropertyControl({
 	return (
 		<RepeaterControl
 			id={id}
-			popoverTitle={popoverTitle}
 			addNewButtonLabel={__('Add New CSS Property', 'publisher-core')}
+			popoverTitle={
+				popoverTitle || (
+					<>
+						<PropertyIcon />
+						{__('CSS Property', 'publisher-core')}
+					</>
+				)
+			}
+			label={label || __('CSS Properties', 'publisher-core')}
+			labelPopoverTitle={
+				labelPopoverTitle || __('CSS Properties', 'publisher-core')
+			}
+			labelDescription={
+				labelDescription || (
+					<>
+						<p>
+							{__(
+								'It enables you to directly apply custom CSS properties to block by defining key-value pairs.',
+								'publisher-core'
+							)}
+						</p>
+						<p>
+							{__(
+								"It's ideal for implementing unique styling that goes beyond the standard options offered and its easy to use for responsive customization and block states.",
+								'publisher-core'
+							)}
+						</p>
+					</>
+				)
+			}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}

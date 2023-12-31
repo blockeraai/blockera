@@ -4,7 +4,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 
 /**
@@ -28,10 +27,12 @@ export default function AttributesControl({
 		value: '',
 		isVisible: true,
 	},
-	popoverTitle = __('HTML Attribute', 'publisher-core'),
+	popoverTitle,
+	label,
+	labelPopoverTitle,
+	labelDescription,
 	attributeElement = 'a',
 	defaultValue = [],
-	mode = 'popover',
 	//
 	className,
 	...props
@@ -39,45 +40,41 @@ export default function AttributesControl({
 	return (
 		<RepeaterControl
 			id={id}
-			popoverTitle={popoverTitle}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
+			popoverTitle={
+				popoverTitle || __('HTML Attributes', 'publisher-core')
+			}
+			label={label || __('HTML Attributes', 'publisher-core')}
+			labelPopoverTitle={
+				labelPopoverTitle ||
+				__('Custom HTML Attributes', 'publisher-core')
+			}
+			labelDescription={
+				labelDescription || (
+					<>
+						<p>
+							{__(
+								'It enables you to add custom HTML attributes to the block.',
+								'publisher-core'
+							)}
+						</p>
+						<p>
+							{__(
+								'You can define key-value pairs as attributes, which are then added to the HTML markup of the block, allowing for enhanced customization and functionality.',
+								'publisher-core'
+							)}
+						</p>
+					</>
+				)
+			}
 			addNewButtonLabel={__('Add New HTML Attribute', 'publisher-core')}
 			// custom prop for this control
 			className={controlClassNames('attributes', className)}
 			attributeElement={attributeElement}
 			defaultValue={defaultValue}
-			mode={mode}
 			{...props}
 		/>
 	);
 }
-
-AttributesControl.propTypes = {
-	/**
-	 * The control identifier
-	 */
-	id: PropTypes.string,
-	/**
-	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
-	 */
-	defaultValue: PropTypes.array,
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
-	/**
-	 * Default value of each repeater item
-	 */
-	defaultRepeaterItemValue: (PropTypes.shape({
-		key: PropTypes.string,
-		__key: PropTypes.string,
-		value: PropTypes.string,
-		isVisible: PropTypes.bool,
-	}): any),
-	/**
-	 * Label for popover
-	 */
-	popoverTitle: PropTypes.string,
-};
