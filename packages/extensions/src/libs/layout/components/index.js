@@ -1,2 +1,2 @@
 // @flow
-export { default as FlexGap } from './flex-gap';
+export { default as Gap } from './gap';

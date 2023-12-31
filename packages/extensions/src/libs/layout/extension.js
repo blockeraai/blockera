@@ -51,7 +51,7 @@ import { default as AlignContentSpaceAroundIcon } from './icons/align-content-sp
 import { default as AlignContentSpaceBetweenIcon } from './icons/align-content-space-between';
 import { default as ReverseIcon } from './icons/reverse';
 import DisplayGridIcon from './icons/display-grid';
-import { FlexGap } from './components';
+import { Gap } from './components';
 
 export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 	({
@@ -735,10 +735,11 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									blockName: block.blockName,
 								}}
 							>
-								<FlexGap
+								<Gap
 									block={block}
 									gap={gap}
-									publisherGap={publisherGap}
+									field={publisherGap}
+									attributeId="publisherGap"
 									handleOnChangeAttributes={
 										handleOnChangeAttributes
 									}

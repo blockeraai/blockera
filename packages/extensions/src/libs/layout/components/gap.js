@@ -25,13 +25,15 @@ import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 
 export default function ({
 	gap,
-	publisherGap,
+	field,
+	attributeId,
 	block,
 	handleOnChangeAttributes,
 	...props
 }: {
 	gap: { lock: boolean, gap: string, columns: string, rows: string },
-	publisherGap: Object,
+	field: Object,
+	attributeId: string,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	block: TBlockProps,
 }): MixedElement {
@@ -39,7 +41,7 @@ export default function ({
 		useControlContext({
 			defaultValue: '',
 			onChange: (newValue) =>
-				handleOnChangeAttributes('publisherGap', {
+				handleOnChangeAttributes(attributeId, {
 					...gap,
 					gap: newValue,
 				}),
@@ -81,7 +83,7 @@ export default function ({
 		>
 			<Grid gap="10px" gridTemplateColumns="120px 30px">
 				{gap?.lock ? (
-					isActiveField(publisherGap) && (
+					isActiveField(field) && (
 						<InputControl
 							{...props}
 							className="control-first label-center small-gap"
@@ -92,7 +94,7 @@ export default function ({
 							defaultValue={gap?.gap}
 							id={'gap'}
 							onChange={(newValue) =>
-								handleOnChangeAttributes('publisherGap', {
+								handleOnChangeAttributes(attributeId, {
 									...gap,
 									gap: newValue,
 								})
@@ -126,7 +128,7 @@ export default function ({
 							defaultValue={gap?.rows}
 							id={'rows'}
 							onChange={(newValue) =>
-								handleOnChangeAttributes('publisherGap', {
+								handleOnChangeAttributes(attributeId, {
 									...gap,
 									rows: newValue,
 								})
@@ -162,7 +164,7 @@ export default function ({
 							defaultValue={gap?.columns}
 							id={'columns'}
 							onChange={(newValue) =>
-								handleOnChangeAttributes('publisherGap', {
+								handleOnChangeAttributes(attributeId, {
 									...gap,
 									columns: newValue,
 								})
@@ -180,14 +182,14 @@ export default function ({
 					size="small"
 					onClick={() => {
 						if (gap?.lock) {
-							handleOnChangeAttributes('publisherGap', {
+							handleOnChangeAttributes(attributeId, {
 								...gap,
 								lock: !gap?.lock,
 								rows: gap?.gap,
 								columns: gap?.gap,
 							});
 						} else {
-							handleOnChangeAttributes('publisherGap', {
+							handleOnChangeAttributes(attributeId, {
 								lock: !gap?.lock,
 								gap: gap?.gap,
 								columns: '',
