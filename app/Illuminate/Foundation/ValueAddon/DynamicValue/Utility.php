@@ -13,12 +13,17 @@ class Utility {
 	/**
 	 * Is empty value?
 	 *
-	 * @param array  $source the data source.
-	 * @param string $key    the key of source value.
+	 * @param array|string|bool $source the data source.
+	 * @param string            $key    the key of source value.
 	 *
 	 * @return bool true on success, false on otherwise!
 	 */
-	public static function isEmpty( array $source, string $key ): bool {
+	public static function isEmpty( $source, string $key = '' ): bool {
+
+		if ( empty( $key ) ) {
+
+			return empty( $source );
+		}
 
 		return empty( $source[ $key ] );
 	}
@@ -174,8 +179,8 @@ class Utility {
 	/**
 	 * Retrieve title when $include_context is set true with the context otherwise result: original title.
 	 *
-	 * @param string $original_title the original title.
-	 * @param string $page_type the page type.
+	 * @param string $original_title  the original title.
+	 * @param string $page_type       the page type.
 	 * @param bool   $include_context to include context value.
 	 *
 	 *
@@ -194,7 +199,7 @@ class Utility {
 			case 'singular':
 
 				$post_type_object = get_post_type_object( get_post_type() );
-
+				dd( $post_type_object );
 				$original_title = sprintf( __( '%1$s: %2$s', 'publisher-core' ), $post_type_object->labels->singular_name, $original_title );
 
 				break;
@@ -392,7 +397,7 @@ class Utility {
 	 */
 	public static function getPlaceholderImage(): string {
 
-		$placeholder_image = pb_core_config('app.rootPath') . 'images/placeholder.png';
+		$placeholder_image = pb_core_config( 'app.rootPath' ) . 'images/placeholder.png';
 
 		/**
 		 * Get placeholder image source.

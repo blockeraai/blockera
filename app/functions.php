@@ -1,5 +1,6 @@
 <?php
 
+use Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType;
 use Publisher\Framework\Illuminate\Support\Env;
 
 if ( ! function_exists( 'pb_core_config' ) ) {
@@ -20,8 +21,8 @@ if ( ! function_exists( 'pb_core_config' ) ) {
 
 		$key_parts       = explode( '.', $key );
 		$config_includes = array(
-			'app' => PB_CORE_PATH . '/config/app.php',
-			'valueAddon' => PB_CORE_PATH .'/config/value-addon.php',
+			'app'        => PB_CORE_PATH . '/config/app.php',
+			'valueAddon' => PB_CORE_PATH . '/config/value-addon.php',
 		);
 
 		if ( ! $config_includes[ $key_parts[0] ] ) {
@@ -94,6 +95,8 @@ if ( ! function_exists( 'pb_get_value_addon_real_value' ) ) {
 	 */
 	function pb_get_value_addon_real_value( $value ) {
 
+		global $publisherApp;
+
 		if ( is_numeric( $value ) ) {
 			return $value;
 		}
@@ -102,11 +105,39 @@ if ( ! function_exists( 'pb_get_value_addon_real_value' ) ) {
 			return substr( $value, -4 ) === 'func' ? substr( $value, 0, -4 ) : $value;
 		}
 
-		if ( is_array( $value ) && isset( $value['isValueAddon'] ) && $value['isValueAddon'] ) {
+		if ( is_array( $value ) && ! empty( $value['isValueAddon'] ) && ! empty( $value['valueType'] ) ) {
+
+			if ( 'dynamic-value' === $value['valueType'] ) {
+
+				$valueAddons = $publisherApp->getRegisteredValueAddons( $value['valueType'] );
+
+				if ( empty( $valueAddons ) ) {
+
+					return '';
+				}
+
+				$groupName = $value['settings']['group'];
+
+				$groupItems = $valueAddons[ $groupName ]['items'];
+
+				foreach ( $groupItems as $name => $item ) {
+
+					if ( $name !== $value['name'] ) {
+
+						continue;
+					}
+
+					$callback = $item['properties']['callback'];
+
+					if ( is_callable( $callback ) ) {
+
+						return $callback( $item['instance'] );
+					}
+				}
+			}
 
 			// todo validate that variable is currently available or not
-
-			if ( isset( $value['valueType'] ) && $value['valueType'] === 'variable' && isset( $value['settings']['var'] ) ) {
+			if ( 'variable' === $value['valueType'] && isset( $value['settings']['var'] ) ) {
 				return "var(" . $value['settings']['var'] . ")";
 			}
 		}

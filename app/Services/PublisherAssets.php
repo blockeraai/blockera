@@ -182,23 +182,13 @@ class PublisherAssets {
 			return;
 		}
 
-		/**
-		 * @var ValueAddonRegistry $dynamicValueRegistry
-		 */
-		$dynamicValueRegistry = $this->application->make( ValueAddonRegistry::class, [ DynamicValueType::class ] );
-
-		/**
-		 * @var ValueAddonRegistry $dynamicValueRegistry
-		 */
-		$variableRegistry = $this->application->make( ValueAddonRegistry::class, [ VariableType::class ] );
-
 		// publisher-core server side dynamic value definitions.
 		wp_add_inline_script(
 			'@publisher/extensions',
 			'
 			window.onload = () => {
-				publisher.coreData.unstableBootstrapServerSideDynamicValueDefinitions(' . wp_json_encode( $dynamicValueRegistry->getRegistered() ) . ');
-				publisher.coreData.unstableBootstrapServerSideVariableDefinitions(' . wp_json_encode( $variableRegistry->getRegistered() ) . ');
+				publisher.coreData.unstableBootstrapServerSideDynamicValueDefinitions(' . wp_json_encode( $this->application->getRegisteredValueAddons( 'dynamic-value', false ) ) . ');
+				publisher.coreData.unstableBootstrapServerSideVariableDefinitions(' . wp_json_encode( $this->application->getRegisteredValueAddons( 'variable', false ) ) . ');
 			};
 			',
 			'after'

@@ -10,42 +10,53 @@ return [
 		],
 		'group'     => 'archive',
 		'name'      => 'archive-title',
-		// TODO: please remove commented settings,
+		// TODO: please remove commented settings
 		// TODO: This is example of settings array.
-//		'settings'  => [
-//			[
-//				'type'         => 'select',
-//				'label'        => __( 'Types', 'publisher-core' ),
-//				'id'           => 'type',
-//				'defaultValue' => '',
-//				'options'      => [
-//					'user'     => 'User',
-//					'post'     => 'Post',
-//					'category' => 'Category',
-//				],
-//			],
-//			[
-//				'type'         => 'text',
-//				'label'        => __( 'User Name', 'publisher-core' ),
-//				'id'           => 'user',
-//				'defaultValue' => 'User',
-//				'conditions'   => ['type=user']
-//			],
-//			[
-//				'type'         => 'text',
-//				'label'        => __( 'Post', 'publisher-core' ),
-//				'id'           => 'post',
-//				'defaultValue' => 'Post',
-//				'conditions'   => ['type=post']
-//			],
-//			[
-//				'type'         => 'text',
-//				'label'        => __( 'Category Name', 'publisher-core' ),
-//				'id'           => 'category',
-//				'defaultValue' => 'Category',
-//				'conditions'   => ['type=category']
-//			],
-//		],
+		//		'settings'  => [
+		//			[
+		//				'type'         => 'select',
+		//				'label'        => __( 'Types', 'publisher-core' ),
+		//				'id'           => 'type',
+		//				'defaultValue' => '',
+		//				'options'      => [
+		//					'user'     => 'User',
+		//					'post'     => 'Post',
+		//					'category' => 'Category',
+		//				],
+		//			],
+		//			[
+		//				'type'         => 'text',
+		//				'label'        => __( 'User Name', 'publisher-core' ),
+		//				'id'           => 'user',
+		//				'defaultValue' => 'User',
+		//				'conditions'   => ['type=user']
+		//			],
+		//			[
+		//				'type'         => 'text',
+		//				'label'        => __( 'Post', 'publisher-core' ),
+		//				'id'           => 'post',
+		//				'defaultValue' => 'Post',
+		//				'conditions'   => ['type=post']
+		//			],
+		//			[
+		//				'type'         => 'text',
+		//				'label'        => __( 'Category Name', 'publisher-core' ),
+		//				'id'           => 'category',
+		//				'defaultValue' => 'Category',
+		//				'conditions'   => ['type=category']
+		//			],
+		//		],
+		'callback'  => static function ( \Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType $instance ) {
+
+			$handler = $instance->getHandler( 'archive-title' );
+
+			if ( ! $handler instanceof \Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields\ArchiveTitle ) {
+
+				return '';
+			}
+
+			return $handler->theValue();
+		},
 	],
 	[
 		'label'     => __( 'Archive Desc', 'publisher-core' ),
@@ -56,6 +67,17 @@ return [
 		'reference' => [
 			'type' => 'core-pro',
 		],
+		'callback'  => static function ( \Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType $instance ) {
+
+			$handler = $instance->getHandler( 'archive-desc' );
+
+			if ( ! $handler instanceof \Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields\ArchiveDescription ) {
+
+				return '';
+			}
+
+			return $handler->theValue();
+		},
 	],
 	[
 		'label'     => __( 'Archive Link', 'publisher-core' ),
@@ -66,6 +88,17 @@ return [
 		'reference' => [
 			'type' => 'core-pro',
 		],
+		'callback'  => static function ( \Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType $instance ) {
+
+			$handler = $instance->getHandler( 'archive-link' );
+
+			if ( ! $handler instanceof \Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields\ArchiveLink ) {
+
+				return '';
+			}
+
+			return $handler->theValue();
+		},
 	],
 	[
 		'label'     => __( 'Archive ID', 'publisher-core' ),

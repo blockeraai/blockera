@@ -4,6 +4,7 @@ namespace Publisher\Framework\Illuminate\Foundation\ValueAddon;
 
 use Publisher\Framework\Illuminate\Foundation\Application;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Class ValueAddonRegistry
@@ -49,6 +50,11 @@ class ValueAddonRegistry {
 
 		$this->application = $app;
 		$this->abstract    = $abstract;
+
+		if ( ! $this->abstract ) {
+
+			return;
+		}
 
 		$this->register();
 	}
@@ -104,7 +110,12 @@ class ValueAddonRegistry {
 
 			if ( empty( $item['type'] ) ) {
 
-				$this->registered[ $group ] = $item;
+				$this->registered[ $group ] = array_merge(
+					$item,
+					[
+						'items' => $this->registerItems( $group, $item['items'] )
+					]
+				);
 
 				continue;
 			}
@@ -152,7 +163,7 @@ class ValueAddonRegistry {
 	protected function registerItems( string $group, array $valueAddonTypes = [] ): array {
 
 		$registered = [];
-		$instance = $this->getInstance();
+		$instance   = $this->getInstance();
 
 		foreach ( $valueAddonTypes as $valueAddonType ) {
 
@@ -172,9 +183,10 @@ class ValueAddonRegistry {
 
 			try {
 
-				$instance->setProps( $valueAddonType );
-
-				$registered[ $name ] = $instance->toArray();
+				$registered[ $name ] = [
+					'instance'   => $instance,
+					'properties' => $valueAddonType,
+				];
 
 			} catch ( \Exception $exception ) {
 

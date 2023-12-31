@@ -86,6 +86,21 @@ class AppServiceProvider extends ServiceProvider {
 
 		parent::boot();
 
+		/**
+		 * @var ValueAddonRegistry $dynamicValueRegistry
+		 */
+		$dynamicValueRegistry = $this->app->make( ValueAddonRegistry::class, [ DynamicValueType::class ] );
+
+		/**
+		 * @var ValueAddonRegistry $dynamicValueRegistry
+		 */
+		$variableRegistry = $this->app->make( ValueAddonRegistry::class, [ VariableType::class ] );
+
+		$this->app->setRegisteredValueAddons( [
+			'variable'      => $variableRegistry->getRegistered(),
+			'dynamic-value' => $dynamicValueRegistry->getRegistered(),
+		] );
+
 		$this->app->make( StyleEngine::class );
 
 		foreach ( pb_core_config( 'app.blocks' ) as $block ) {
