@@ -116,6 +116,7 @@ export default function InputControl({
 					)}
 				>
 					<ValueAddonControl />
+					{children}
 				</div>
 			</BaseControl>
 		);
