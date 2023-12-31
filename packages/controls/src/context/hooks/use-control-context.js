@@ -46,6 +46,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			value: savedValue,
 			dispatch,
 			controlInfo,
+			blockName: controlInfo.blockName,
 		};
 	}
 
