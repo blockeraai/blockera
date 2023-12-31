@@ -17,6 +17,8 @@ import { RepeaterContext } from '../../repeater-control/context';
 import { ColorControl, InputControl, ToggleSelectControl } from '../../index';
 import { useControlContext } from '../../../context';
 import type { TFieldItem } from '../types';
+import XCoordinateIcon from '../icons/coordinate-x';
+import YCoordinateIcon from '../icons/coordinate-y';
 
 const Fields: TFieldItem = memo<TFieldItem>(
 	({ itemId, item }: TFieldItem): Element<any> => {
@@ -79,7 +81,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'x')}
 					singularId={'x'}
-					label={__('X', 'publisher-core')}
+					label={<XCoordinateIcon />}
 					labelPopoverTitle={__(
 						'Horizontal Offset',
 						'publisher-core'
@@ -121,7 +123,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'y')}
 					singularId={'y'}
-					label={__('Y', 'publisher-core')}
+					label={<YCoordinateIcon />}
 					labelPopoverTitle={__('Vertical Offset', 'publisher-core')}
 					labelDescription={
 						<>
