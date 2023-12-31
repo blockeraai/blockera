@@ -17,7 +17,7 @@ import { Button } from '@publisher/components';
 /**
  * Internal dependencies
  */
-import { InputControl, LabelControl } from '../index';
+import { InputControl, LabelControl, LabelControlContainer } from '../index';
 import { default as CustomIcon } from './icons/custom';
 import { useControlContext } from '../../context';
 import type { BorderRadiusControlProps, BorderRadiusValue } from './types';
@@ -101,16 +101,13 @@ export default function BorderRadiusControl({
 				}}
 			>
 				{label && (
-					<span
+					<LabelControlContainer
 						style={{
-							display: 'flex',
-							alignItems: 'center',
-							minHeight: '30px',
 							marginRight: 'auto',
 						}}
 					>
 						<LabelControl {...labelProps} />
-					</span>
+					</LabelControlContainer>
 				)}
 
 				{value.type === 'all' && (

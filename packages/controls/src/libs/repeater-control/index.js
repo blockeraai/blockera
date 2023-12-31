@@ -19,7 +19,7 @@ import { Button } from '@publisher/components';
  * Internal dependencies.
  */
 import PlusIcon from './icons/plus';
-import LabelControl from '../label-control';
+import { LabelControl } from '../label-control';
 import { useControlContext } from '../../context';
 import { RepeaterContextProvider } from './context';
 import MappedItems from './components/mapped-items';

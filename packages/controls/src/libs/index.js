@@ -12,7 +12,7 @@ export { default as RangeControl } from './range-control';
 export { default as InputControl } from './input-control';
 export * from './input-control/utils';
 export { default as TextAreaControl } from './textarea-control';
-export { default as LabelControl } from './label-control';
+export { LabelControl, LabelControlContainer } from './label-control';
 export { default as ToggleControl } from './toggle-control';
 export { default as SelectControl } from './select-control';
 export { default as ToggleSelectControl } from './toggle-select-control';

@@ -19,7 +19,12 @@ import { Button } from '@publisher/components';
  */
 import { useControlContext } from '../../context';
 import { default as CustomIcon } from './icons/custom';
-import { BaseControl, BorderControl, LabelControl } from '../index';
+import {
+	BaseControl,
+	BorderControl,
+	LabelControl,
+	LabelControlContainer,
+} from '../index';
 import type { BoxBorderControlProps, TValueTypes } from './types';
 
 export default function BoxBorderControl({
@@ -127,16 +132,13 @@ export default function BoxBorderControl({
 			<div className={controlClassNames('box-border', className)}>
 				<div className={controlInnerClassNames('border-header')}>
 					{label && (
-						<span
+						<LabelControlContainer
 							style={{
-								display: 'flex',
-								alignItems: 'center',
-								minHeight: '30px',
 								marginRight: 'auto',
 							}}
 						>
 							<LabelControl {...labelProps} />
-						</span>
+						</LabelControlContainer>
 					)}
 
 					{value.type === 'all' && (

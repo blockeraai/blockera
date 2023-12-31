@@ -52,6 +52,7 @@ import { default as AbsoluteLeftIcon } from './icons/absolute-left';
 import { default as AbsoluteFullIcon } from './icons/absolute-full';
 import { default as AbsoluteCenterIcon } from './icons/absolute-center';
 import { extractNumberAndUnit } from '../input-control/utils';
+import { LabelControlContainer } from '../label-control';
 
 const Component = ({
 	openSide = '',
@@ -264,15 +265,12 @@ const Component = ({
 		>
 			<div className={controlInnerClassNames('position-header')}>
 				{label && (
-					<span
-						style={{
-							display: 'flex',
-							alignItems: 'center',
-							minHeight: '30px',
-						}}
-					>
-						<LabelControl {...labelProps} path={'type'} />
-					</span>
+					<LabelControlContainer>
+						<LabelControl
+							{...labelProps}
+							path={getControlPath(attribute, 'type')}
+						/>
+					</LabelControlContainer>
 				)}
 
 				<SelectControl
