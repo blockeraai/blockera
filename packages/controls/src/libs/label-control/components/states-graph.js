@@ -37,7 +37,7 @@ export const StatesGraph = ({
 	const renderedBreakpoints: Array<string> = [];
 
 	const statesGraph = getStatesGraph({ controlId, blockName, defaultValue });
-	console.log(statesGraph);
+
 	if (statesGraph.length === 0) {
 		return <></>;
 	}
