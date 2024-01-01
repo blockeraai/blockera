@@ -3,8 +3,8 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo } from '@wordpress/element';
 import type { MixedElement } from 'react';
+import { memo, useEffect } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -20,6 +20,7 @@ import { Flex, Button } from '@publisher/components';
 /**
  * Internal dependencies
  */
+import { useBlockContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
 import type { TLayoutProps } from './types/layout-props';
 import { default as WrapWrapIcon } from './icons/wrap-wrap';
@@ -85,6 +86,21 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 				publisherAlignContent,
 			},
 		} = config;
+
+		const { setOpenGridBuilder } = useBlockContext();
+
+		useEffect(() => {
+			//FIXME: please implements handler for "setOpenGridBuilder"!
+			// that handler must be order by display grid value and should have flag for open or not open grid builder!
+			if ('grid' === display) {
+				// FIXME: replace "true" with implemented internal flag to open Grid Builder.
+				setOpenGridBuilder(true);
+			} else {
+				// FIXME: replace "false" with implemented internal flag to close Grid Builder.
+				setOpenGridBuilder(false);
+			}
+			// eslint-disable-next-line
+		}, [display]);
 
 		return (
 			<>
@@ -187,6 +203,11 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									value: 'flex',
 									icon: <DisplayFlexIcon />,
 								},
+								// {
+								// 	label: __('Grid', 'publisher-core'),
+								// 	value: 'grid',
+								// 	icon: <DisplayGridIcon />,
+								// },
 								{
 									label: __('Inline Block', 'publisher-core'),
 									value: 'inline-block',
@@ -295,7 +316,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 															style={{
 																fontWeight:
 																	'600',
-																color: '#fff',
+																color: '#ffffff',
 															}}
 														>
 															{__(
@@ -825,7 +846,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 																style={{
 																	fontWeight:
 																		'600',
-																	color: '#fff',
+																	color: '#ffffff',
 																}}
 															>
 																{__(
