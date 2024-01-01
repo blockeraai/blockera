@@ -1,12 +1,13 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { useState, useEffect } from '@wordpress/element';
+
 /**
  * Publisher dependencies
  */
-import { Button, Grid, Popover } from '@publisher/components';
+import { Button, Flex, Grid, Popover } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
@@ -14,9 +15,14 @@ import { controlInnerClassNames } from '@publisher/classnames';
  */
 import { BaseControl, InputControl } from '../../index';
 import { useControlContext } from '../../../context';
+import ShortcutIcon from '../icons/shortcut';
 
 export function SidePopover({
 	id,
+	getId,
+	property,
+	sideId,
+	sideLabel,
 	title = '',
 	icon = '',
 	unit,
@@ -26,11 +32,19 @@ export function SidePopover({
 	onChange = (newValue) => {
 		return newValue;
 	},
+	defaultValue = '',
 }) {
-	const { setValue } = useControlContext({
-		id,
+	const {
+		value,
+		setValue,
+		attribute,
+		blockName,
+		resetToDefault,
+		getControlPath,
+	} = useControlContext({
+		id: property,
 		onChange,
-		defaultValue: '0px',
+		defaultValue,
 	});
 
 	const [unitType, setUnitType] = useState('px');
@@ -55,20 +69,60 @@ export function SidePopover({
 					className="spacing-edit-popover"
 					onClose={onClose}
 				>
-					<InputControl
-						id={id}
-						label=""
-						type="css"
-						unitType="essential"
-						range={true}
-						min={-250}
-						max={250}
-						defaultValue="0px"
-						onChange={setValue}
-					/>
+					<BaseControl
+						controlName="input"
+						label={sideLabel}
+						labelPopoverTitle={sprintf(
+							// Translators: %s is the position name (top, right, bottom, left)
+							__('%s Position', 'publisher-core'),
+							sideLabel
+						)}
+						labelDescription={
+							<>
+								{sprintf(
+									// Translators: %1$s and %2$s both are edge in the position (top, right, left, bottom)
+									__(
+										'It sets the distance from the %1$s edge of the block to the %1$s edge of its nearest positioned ancestor or containing block.',
+										'publisher-core'
+									),
+									sideId,
+									sideId
+								)}
+							</>
+						}
+						columns={'columns-2'}
+						style={{ marginBottom: '25px' }}
+						{...{
+							value,
+							attribute,
+							blockName,
+							defaultValue,
+							resetToDefault,
+							path: getControlPath(attribute, property),
+							mode: 'advanced',
+						}}
+					>
+						<InputControl
+							id={getId(id, property)}
+							unitType="essential"
+							range={true}
+							min={-250}
+							max={250}
+							//
+							defaultValue={defaultValue}
+							onChange={setValue}
+							controlAddonTypes={['variable']}
+							variableTypes={['spacing']}
+						/>
+					</BaseControl>
 
 					<BaseControl
-						label={__('Shortcuts', 'publisher-core')}
+						label={
+							<Flex gap="8px" alignItems="center">
+								<ShortcutIcon />
+								{__('Shortcuts', 'publisher-core')}
+							</Flex>
+						}
 						columns="columns-1"
 						className={controlInnerClassNames(
 							'side-popover-action-buttons'
