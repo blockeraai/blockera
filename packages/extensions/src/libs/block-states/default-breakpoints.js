@@ -21,6 +21,16 @@ export default function (
 
 	return [
 		{
+			type: 'extra-large',
+			force: false,
+			label: __('Extra Large Screen', 'publisher-core'),
+			settings: {
+				min: '2561px',
+				max: '',
+			},
+			attributes: {},
+		},
+		{
 			type: 'large',
 			force: false,
 			label: __('Large Screen', 'publisher-core'),
@@ -77,16 +87,6 @@ export default function (
 			settings: {
 				min: '',
 				max: '480px',
-			},
-			attributes: {},
-		},
-		{
-			type: 'extra-large',
-			force: false,
-			label: __('Extra Large Screen', 'publisher-core'),
-			settings: {
-				min: '2561px',
-				max: '',
 			},
 			attributes: {},
 		},
