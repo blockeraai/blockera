@@ -104,12 +104,21 @@ export type RepeaterControlProps = {
 	 * It sets the default of each repeater item.
 	 */
 	defaultRepeaterItemValue?: Object,
+	/**
+	 * The callback to retrieve dynamic default repeater item.
+	 */
 	getDynamicDefaultRepeaterItem?: (
 		itemsCount: number,
 		defaultRepeaterItemValue: Object
 	) => Object,
 	onSelect?: (event: MouseEvent, item: Object) => boolean,
+	/**
+	 * The override repeater item before modify current item.
+	 */
 	overrideItem?: (item: Object) => Object,
+	/**
+	 * The repeater item popover panel opener component.
+	 */
 	repeaterItemOpener?: (props: Object) => boolean | MixedElement,
 	/**
 	 * Function that runs before firing onChange. You can use it cleanup values
