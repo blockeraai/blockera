@@ -1,2 +1,3 @@
 // @flow
-export * from './selectors';
+export * from './selector';
+export type * from './selector';

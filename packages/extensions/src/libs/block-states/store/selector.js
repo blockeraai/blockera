@@ -39,10 +39,6 @@ export type StateGraphStates = Array<StateGraphItem>;
 export type StateGraph = {
 	type: TBreakpoint,
 	label: TBreakpointLabel,
-	icon: {
-		library: string,
-		icon: string,
-	},
 	states: StateGraphStates,
 };
 
@@ -88,10 +84,6 @@ export const getBlockStates = (): Array<StateGraph> => {
 			return {
 				type: breakpoint.type,
 				label: breakpoint.label,
-				icon: {
-					library: 'wp',
-					icon: '',
-				},
 				states,
 			};
 		})

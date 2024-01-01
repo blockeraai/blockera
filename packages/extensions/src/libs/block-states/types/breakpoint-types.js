@@ -1,6 +1,13 @@
 // @flow
 
-export type TBreakpoint = 'desktop' | 'tablet' | 'mobile';
+export type TBreakpoint =
+	| 'laptop'
+	| 'extra-large'
+	| 'large'
+	| 'desktop'
+	| 'tablet'
+	| 'mobile-landscape'
+	| 'mobile';
 export type TBreakpointLabel = 'Desktop' | 'Tablet' | 'Mobile';
 
 export type BreakpointTypes = {

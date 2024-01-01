@@ -26,6 +26,8 @@ import type { AdvancedLabelControlProps } from '../types';
 import { SimpleLabelControl } from './simple-label';
 import { StatesGraph } from './states-graph';
 import HelpIcon from '../icons/help';
+import EditsIcon from '../icons/edits';
+import RevertIcon from '../icons/revert';
 
 export const AdvancedLabelControl = ({
 	path = null,
@@ -137,150 +139,213 @@ export const AdvancedLabelControl = ({
 					placement={'left-start'}
 					className={controlInnerClassNames('label-popover')}
 				>
+					{isChangedValue && (
+						<div
+							className={controlInnerClassNames(
+								'label-section',
+								'label-changes'
+							)}
+						>
+							<h3
+								className={controlInnerClassNames(
+									'label-section-title'
+								)}
+							>
+								<EditsIcon />
+								{__('Customization', 'publisher-core')}
+							</h3>
+
+							<StatesGraph
+								controlId={attribute}
+								blockName={blockName}
+								onClick={switchBlockState}
+								defaultValue={defaultValue}
+							/>
+
+							{isFunction(resetToDefault) && (
+								<Flex
+									direction={'row'}
+									justifyContent={'space-between'}
+									style={{
+										marginTop: '15px',
+									}}
+								>
+									{isChangedValue && (
+										<Button
+											variant={'tertiary'}
+											size="input"
+											text={__(
+												'Reset All',
+												'publisher-core'
+											)}
+											label={__(
+												'Reset All Changes in All States',
+												'publisher-core'
+											)}
+											onClick={() => {
+												if (
+													!resetToDefault ||
+													!isFunction(resetToDefault)
+												) {
+													return;
+												}
+
+												setOpenModal(!isOpenModal);
+
+												if (
+													(isNull(path) ||
+														isEmpty(path) ||
+														isUndefined(path)) &&
+													!isRepeater
+												) {
+													return resetToDefault();
+												}
+
+												//FIXME: please implements reset_all action!
+												resetToDefault({
+													path,
+													isRepeater,
+													repeaterItem,
+													propId: singularId,
+													action: 'RESET_All',
+												});
+											}}
+										/>
+									)}
+
+									{isNormalState() &&
+										isChangedOnCurrentState && (
+											<Button
+												variant={'primary'}
+												size="input"
+												text={
+													<>
+														{__(
+															'Reset',
+															'publisher-core'
+														)}
+														<RevertIcon />
+													</>
+												}
+												label={__(
+													'Reset To Default Setting',
+													'publisher-core'
+												)}
+												onClick={() => {
+													if (
+														!resetToDefault ||
+														!isFunction(
+															resetToDefault
+														)
+													) {
+														return;
+													}
+
+													setOpenModal(!isOpenModal);
+
+													if (
+														(isNull(path) ||
+															isEmpty(path) ||
+															isUndefined(
+																path
+															)) &&
+														!isRepeater
+													) {
+														return resetToDefault();
+													}
+
+													resetToDefault({
+														path,
+														isRepeater,
+														repeaterItem,
+														propId: singularId,
+														action: 'RESET_TO_DEFAULT',
+													});
+												}}
+											/>
+										)}
+
+									{!isNormalState() && (
+										<Button
+											variant={'primary'}
+											size="input"
+											text={
+												<>
+													{__(
+														'Reset',
+														'publisher-core'
+													)}
+													<RevertIcon />
+												</>
+											}
+											label={__(
+												'Reset To Normal Setting',
+												'publisher-core'
+											)}
+											onClick={() => {
+												if (
+													!resetToDefault ||
+													!isFunction(resetToDefault)
+												) {
+													return;
+												}
+
+												setOpenModal(!isOpenModal);
+
+												if (
+													!isFunction(resetToDefault)
+												) {
+													return;
+												}
+
+												if (
+													(isNull(path) ||
+														isEmpty(path) ||
+														isUndefined(path)) &&
+													!isRepeater
+												) {
+													return resetToDefault();
+												}
+
+												resetToDefault({
+													path,
+													isRepeater,
+													repeaterItem,
+													propId: singularId,
+													action: 'RESET_TO_NORMAL',
+													attributes: getAttributes(),
+												});
+											}}
+										/>
+									)}
+								</Flex>
+							)}
+						</div>
+					)}
+
 					{labelDescription && (
-						<div className={controlInnerClassNames('label-desc')}>
+						<div
+							className={controlInnerClassNames(
+								'label-section',
+								'label-desc'
+							)}
+						>
+							{isChangedValue && (
+								<h3
+									className={controlInnerClassNames(
+										'label-section-title'
+									)}
+								>
+									<HelpIcon />
+									{__('Overview', 'publisher-core')}
+								</h3>
+							)}
+
 							{'string' !== typeof labelDescription &&
 							'function' === typeof labelDescription
 								? labelDescription()
 								: labelDescription}
 						</div>
-					)}
-
-					<StatesGraph
-						controlId={attribute}
-						blockName={blockName}
-						onClick={switchBlockState}
-						defaultValue={defaultValue}
-					/>
-
-					{isFunction(resetToDefault) && isChangedValue && (
-						<Flex
-							direction={'row'}
-							justifyContent={'space-between'}
-						>
-							{isChangedValue && (
-								<Button
-									variant={'primary'}
-									text={__('Reset All', 'publisher-core')}
-									label={__('Reset All', 'publisher-core')}
-									onClick={() => {
-										if (
-											!resetToDefault ||
-											!isFunction(resetToDefault)
-										) {
-											return;
-										}
-
-										setOpenModal(!isOpenModal);
-
-										if (
-											(isNull(path) ||
-												isEmpty(path) ||
-												isUndefined(path)) &&
-											!isRepeater
-										) {
-											return resetToDefault();
-										}
-
-										//FIXME: please implements reset_all action!
-										resetToDefault({
-											path,
-											isRepeater,
-											repeaterItem,
-											propId: singularId,
-											action: 'RESET_All',
-										});
-									}}
-								/>
-							)}
-
-							{isNormalState() && isChangedOnCurrentState && (
-								<Button
-									variant={'primary'}
-									text={__(
-										'Reset To Default',
-										'publisher-core'
-									)}
-									label={__(
-										'Reset To Default',
-										'publisher-core'
-									)}
-									onClick={() => {
-										if (
-											!resetToDefault ||
-											!isFunction(resetToDefault)
-										) {
-											return;
-										}
-
-										setOpenModal(!isOpenModal);
-
-										if (
-											(isNull(path) ||
-												isEmpty(path) ||
-												isUndefined(path)) &&
-											!isRepeater
-										) {
-											return resetToDefault();
-										}
-
-										resetToDefault({
-											path,
-											isRepeater,
-											repeaterItem,
-											propId: singularId,
-											action: 'RESET_TO_DEFAULT',
-										});
-									}}
-								/>
-							)}
-
-							{!isNormalState() && (
-								<Button
-									variant={'primary'}
-									text={__(
-										'Reset To Normal',
-										'publisher-core'
-									)}
-									label={__(
-										'Reset To Normal',
-										'publisher-core'
-									)}
-									onClick={() => {
-										if (
-											!resetToDefault ||
-											!isFunction(resetToDefault)
-										) {
-											return;
-										}
-
-										setOpenModal(!isOpenModal);
-
-										if (!isFunction(resetToDefault)) {
-											return;
-										}
-
-										if (
-											(isNull(path) ||
-												isEmpty(path) ||
-												isUndefined(path)) &&
-											!isRepeater
-										) {
-											return resetToDefault();
-										}
-
-										resetToDefault({
-											path,
-											isRepeater,
-											repeaterItem,
-											propId: singularId,
-											action: 'RESET_TO_NORMAL',
-											attributes: getAttributes(),
-										});
-									}}
-								/>
-							)}
-						</Flex>
 					)}
 				</Popover>
 			)}

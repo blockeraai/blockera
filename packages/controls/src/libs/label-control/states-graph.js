@@ -59,6 +59,7 @@ export const getStatesGraph = ({
 								if (stateStack.includes(state?.type)) {
 									return null;
 								}
+
 								if (
 									isEmpty(state.attributes) ||
 									isUndefined(state.attributes) ||
@@ -66,6 +67,7 @@ export const getStatesGraph = ({
 								) {
 									return null;
 								}
+
 								if (
 									!state.attributes.hasOwnProperty(controlId)
 								) {
@@ -88,6 +90,7 @@ export const getStatesGraph = ({
 								) {
 									return null;
 								}
+
 								if (
 									isObject(value) &&
 									isObject(defaultValue) &&
@@ -95,6 +98,7 @@ export const getStatesGraph = ({
 								) {
 									return null;
 								}
+
 								if (value === defaultValue) {
 									return null;
 								}

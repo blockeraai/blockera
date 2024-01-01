@@ -7,17 +7,17 @@ import type { MixedElement } from 'react';
 /**
  * Publisher Dependencies
  */
-import { Flex } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
 import type { StateTypes } from '@publisher/extensions/src/libs/block-states/types';
 import { isEmpty } from '@publisher/utils';
+import { getBreakpointIcon } from '@publisher/extensions/src/libs/block-states/helpers';
 
 /**
  * Internal Dependencies
  */
-import { GroupControl } from '../../index';
 import type { LabelStates } from '../types';
 import { getStatesGraph } from '../states-graph';
+import EditedItem from './edited-item';
 
 export const StatesGraph = ({
 	onClick,
@@ -37,21 +37,13 @@ export const StatesGraph = ({
 	const renderedBreakpoints: Array<string> = [];
 
 	const statesGraph = getStatesGraph({ controlId, blockName, defaultValue });
-
+	console.log(statesGraph);
 	if (statesGraph.length === 0) {
 		return <></>;
 	}
 
 	return (
-		<Flex
-			direction={'column'}
-			style={{
-				marginBottom: '10px',
-			}}
-			className={controlInnerClassNames(
-				'publisher-control-states-changes'
-			)}
-		>
+		<div className={controlInnerClassNames('states-changes')}>
 			{statesGraph?.map(
 				(state: LabelStates, index: number): null | MixedElement => {
 					if ('undefined' === typeof state?.graph) {
@@ -71,51 +63,64 @@ export const StatesGraph = ({
 					renderedBreakpoints.push(state.graph.type);
 
 					return (
-						<Flex
-							direction={'column'}
+						<div
+							className={controlInnerClassNames(
+								'states-changes-breakpoint'
+							)}
 							key={`${state.graph.type}-${index}`}
 						>
 							{!isRenderedBreakpoint && (
-								<div>{state.graph.label}</div>
+								<div
+									className={controlInnerClassNames(
+										'states-changes-breakpoint-title'
+									)}
+								>
+									{getBreakpointIcon(state.graph.type)}
+									{state.graph.label}
+								</div>
 							)}
-							{state.graph.states?.map(
-								(
-									_state: StateTypes,
-									_index: number
-								): MixedElement | null => {
-									if (renderedStates.includes(_state?.type)) {
-										return null;
+
+							<div
+								className={controlInnerClassNames(
+									'states-changes-items'
+								)}
+							>
+								{state.graph.states?.map(
+									(
+										_state: StateTypes,
+										_index: number
+									): MixedElement | null => {
+										if (
+											renderedStates.includes(
+												_state?.type
+											)
+										) {
+											return null;
+										}
+
+										renderedStates.push(_state.type);
+
+										const key = `${state.graph.type}-${index}-${_state.type}-${_index}-${controlId}`;
+
+										return (
+											<EditedItem
+												label={_state.label}
+												state={_state.type}
+												breakpoint={state.graph.label}
+												key={`${key}-state`}
+												onClick={(): void => {
+													onClick(_state.type);
+												}}
+												current={false}
+											/>
+										);
 									}
-
-									renderedStates.push(_state.type);
-
-									const key = `${state.graph.type}-${index}-${_state.type}-${_index}-${controlId}`;
-
-									const MappedHeader = () => {
-										return [
-											':' + _state.type.slice(0, 3),
-											<div key={`${key}-label`}>
-												{_state.label}
-											</div>,
-										];
-									};
-
-									return (
-										<GroupControl
-											mode={'nothing'}
-											key={`${key}-state`}
-											header={<MappedHeader />}
-											onClick={(): void => {
-												onClick(_state.type);
-											}}
-										/>
-									);
-								}
-							)}
-						</Flex>
+								)}
+							</div>
+						</div>
 					);
 				}
 			)}
-		</Flex>
+		</div>
 	);
 };
