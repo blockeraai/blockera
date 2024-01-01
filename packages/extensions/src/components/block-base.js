@@ -2,7 +2,7 @@
 /**
  * External dependencies
  */
-import type { Element } from 'react';
+import type { Element, MixedElement } from 'react';
 import { select, useSelect } from '@wordpress/data';
 import { InspectorControls } from '@wordpress/block-editor';
 import { StrictMode, useMemo, useRef, useEffect } from '@wordpress/element';
@@ -25,11 +25,16 @@ import { BlockStates } from '../libs';
 import { sanitizedBlockAttributes } from '../hooks/utils';
 import { SideEffect } from '../libs/base/components/side-effect';
 import type { BreakpointTypes, StateTypes } from '../libs/block-states/types';
+import { GridBuilder } from './grid-builder';
 
 export function BlockBase({
 	additional,
+	children,
 	...props
-}: Object): Element<any> | null {
+}: {
+	additional: Object,
+	children: MixedElement,
+}): Element<any> | null {
 	const { supports } = useSelect((select) => {
 		const { getBlockType } = select('core/blocks');
 
@@ -142,6 +147,17 @@ export function BlockBase({
 		}
 	);
 
+	const blockEditComponentAttributes = isNormalState()
+		? props.attributes
+		: {
+				...props.attributes,
+				...(props.attributes.publisherBlockStates[blockStateId]
+					.breakpoints[breakpointId]
+					? props.attributes.publisherBlockStates[blockStateId]
+							.breakpoints[breakpointId].attributes
+					: {}),
+		  };
+
 	return (
 		<BlockEditContextProvider
 			{...{
@@ -156,6 +172,7 @@ export function BlockBase({
 				blockStateId,
 				breakpointId,
 				isNormalState,
+				setAttributes: props.setAttributes,
 				getAttributes: () => props.attributes,
 				activeDeviceType: getDeviceType(),
 				handleOnChangeAttributes,
@@ -180,25 +197,25 @@ export function BlockBase({
 				<BlockEditComponent
 					supports={supports}
 					blockName={props.name}
-					attributes={
-						isNormalState()
-							? props.attributes
-							: {
-									...props.attributes,
-									...(props.attributes.publisherBlockStates[
-										blockStateId
-									].breakpoints[breakpointId]
-										? props.attributes.publisherBlockStates[
-												blockStateId
-										  ].breakpoints[breakpointId].attributes
-										: {}),
-							  }
-					}
 					clientId={props.clientId}
 					setAttributes={props.setAttributes}
+					attributes={blockEditComponentAttributes}
 					currentState={props.attributes.publisherCurrentState}
 				/>
 			</StrictMode>
+
+			{blockEditComponentAttributes.publisherIsOpenGridBuilder && (
+				<GridBuilder
+					type={props.name}
+					id={props.clientId}
+					position={{ top: 0, left: 0 }}
+					dimension={{ width: 320, height: 200 }}
+				>
+					{children}
+				</GridBuilder>
+			)}
+			{!blockEditComponentAttributes.publisherIsOpenGridBuilder &&
+				children}
 		</BlockEditContextProvider>
 	);
 }

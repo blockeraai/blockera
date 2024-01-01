@@ -11,11 +11,13 @@ import { __ } from '@wordpress/i18n';
 import { controlInnerClassNames } from '@publisher/classnames';
 import { ControlContextProvider, RepeaterControl } from '@publisher/controls';
 import { STORE_NAME } from '@publisher/controls/src/libs/repeater-control/store';
+import { defaultItemValue } from '@publisher/controls/src/libs/repeater-control';
 
 /**
  * Internal dependencies
  */
 import ItemBody from './item-body';
+import defaultStates from '../states';
 import ItemHeader from './item-header';
 import ItemOpener from './item-opener';
 import { getStateInfo } from '../helpers';
@@ -36,7 +38,20 @@ export default function StatesManager({
 }): Element<any> {
 	const contextValue = {
 		block,
-		value: states,
+		value: !states.length
+			? [
+					{
+						...defaultStates.normal,
+						...defaultItemValue,
+						display: false,
+						deletable: false,
+						selectable: true,
+						isSelected: true,
+						visibilitySupport: false,
+						breakpoints: getBreakpoints('normal'),
+					},
+			  ]
+			: states,
 		hasSideEffect: true,
 		attribute: 'publisherBlockStates',
 		blockName: block.blockName,
@@ -81,6 +96,7 @@ export default function StatesManager({
 							const defaultItem = {
 								...defaultRepeaterItemValue,
 								...getStateInfo(statesCount),
+								display: true,
 							};
 
 							defaultItem.breakpoints = getBreakpoints(
@@ -94,6 +110,7 @@ export default function StatesManager({
 							callback: getStateInfo,
 							...StateSettings.publisherBlockStates.default[0],
 							deletable: true,
+							selectable: true,
 							visibilitySupport: true,
 						},
 						onChange: (newValue) => {
@@ -115,7 +132,7 @@ export default function StatesManager({
 								{
 									addOrModifyRootItems: {
 										publisherCurrentState:
-											selectedState.type,
+											selectedState.type || 'normal',
 									},
 								}
 							);

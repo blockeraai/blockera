@@ -11,7 +11,7 @@ import { InspectorControls } from '@wordpress/block-editor';
  */
 import type { PropTypes } from './types';
 import { getStateInfo } from './helpers';
-import { useBlockContext } from '../../hooks/context';
+import { useBlockContext } from '../../hooks';
 import StatesManager from './components/states-manager';
 import { CurrentState } from './components/current-state';
 import StateContainer from '../../components/state-container';

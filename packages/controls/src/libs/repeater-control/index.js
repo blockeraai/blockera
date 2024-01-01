@@ -192,12 +192,20 @@ export default function RepeaterControl({
 										modifyControlValue({
 											controlId,
 											value: [
-												...repeaterItems.map(
-													(item) => ({
+												...repeaterItems.map((item) => {
+													if (item.display) {
+														return {
+															...item,
+															isSelected: false,
+														};
+													}
+
+													return {
 														...item,
+														display: true,
 														isSelected: false,
-													})
-												),
+													};
+												}),
 												value
 													? value
 													: {

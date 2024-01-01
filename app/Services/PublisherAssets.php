@@ -55,6 +55,9 @@ class PublisherAssets {
 
 		$this->application = $app;
 
+		//TODO: fix correctly assets to enqueue when block rendering.
+		add_action('enqueue_block_assets' , [$this , 'enqueue_editor_assets']);
+
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ), 10 );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'register_assets' ), 10 );
 	}
