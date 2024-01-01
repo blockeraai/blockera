@@ -4,7 +4,6 @@
  */
 import { __ } from '@wordpress/i18n';
 import { useState, memo } from '@wordpress/element';
-import PropTypes from 'prop-types';
 
 /**
  * Publisher dependencies
@@ -986,65 +985,6 @@ const Component = ({
 			)}
 		</div>
 	);
-};
-
-Component.propTypes = {
-	/**
-	 * ID for retrieving value from control context
-	 */
-	id: PropTypes.string,
-	/**
-	 * Control Label
-	 *
-	 * @default `Position`
-	 */
-	label: PropTypes.string,
-	/**
-	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
-	 */
-	defaultValue: PropTypes.shape({
-		type: PropTypes.oneOf([
-			'static',
-			'relative',
-			'absolute',
-			'sticky',
-			'fixed',
-		]),
-		position: PropTypes.shape({
-			top: PropTypes.string,
-			right: PropTypes.string,
-			bottom: PropTypes.string,
-			left: PropTypes.string,
-		}),
-	}),
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
-	/**
-	 * The current value.
-	 */
-	value: PropTypes.shape({
-		type: PropTypes.oneOf([
-			'static',
-			'relative',
-			'absolute',
-			'sticky',
-			'fixed',
-		]),
-		position: {
-			top: PropTypes.string,
-			right: PropTypes.string,
-			bottom: PropTypes.string,
-			left: PropTypes.string,
-		},
-	}),
-	/**
-	 * Specifies which side is open by default.
-	 *
-	 * @default ``
-	 */
-	openSide: PropTypes.oneOf(['top', 'right', 'bottom', 'left', '']),
 };
 
 const BoxPositionControl: BoxPositionControlProps =

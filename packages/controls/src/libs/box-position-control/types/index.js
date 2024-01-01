@@ -17,5 +17,10 @@ type TDefaultValue = {
 export type BoxPositionControlProps = {
 	...RepeaterControlProps,
 	defaultValue?: TDefaultValue,
+	/**
+	 * Specifies which side is open by default.
+	 *
+	 * @default ``
+	 */
 	openSide?: 'top' | 'right' | 'bottom' | 'left' | '',
 };
