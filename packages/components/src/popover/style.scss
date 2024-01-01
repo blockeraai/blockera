@@ -85,6 +85,8 @@
 		max-height: calc(var(--popover-height) - var(--popover-header-height));
 		overflow: var(--popover-overflow) !important;
 		background-color: var(--popover-bg-color);
+		z-index: 1;
+		position: relative;
 
 		& > :last-child {
 			padding-bottom: 20px;
