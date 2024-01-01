@@ -21,12 +21,12 @@ export default function (
 
 	return [
 		{
-			type: 'desktop',
+			type: 'laptop',
 			force: true,
-			label: __('Desktop', 'publisher-core'),
+			label: __('Laptop', 'publisher-core'),
 			settings: {
-				min: '980px',
-				max: '1800px',
+				min: '1025px',
+				max: '1440px',
 			},
 			...attributes,
 		},
@@ -35,8 +35,18 @@ export default function (
 			force: false,
 			label: __('Tablet', 'publisher-core'),
 			settings: {
-				min: '810px',
-				max: '1080px',
+				min: '768px',
+				max: '1024px',
+			},
+			attributes: {},
+		},
+		{
+			type: 'mobile-landscape',
+			force: false,
+			label: __('Mobile Landscape', 'publisher-core'),
+			settings: {
+				min: '481px',
+				max: '767px',
 			},
 			attributes: {},
 		},
@@ -45,10 +55,40 @@ export default function (
 			force: false,
 			label: __('Mobile', 'publisher-core'),
 			settings: {
-				min: '412px',
-				max: '915px',
+				min: '',
+				max: '480px',
 			},
 			attributes: {},
+		},
+		{
+			type: 'extra-large',
+			force: false,
+			label: __('Extra Large Screen', 'publisher-core'),
+			settings: {
+				min: '2561px',
+				max: '',
+			},
+			...attributes,
+		},
+		{
+			type: 'large',
+			force: false,
+			label: __('Large Screen', 'publisher-core'),
+			settings: {
+				min: '1921px',
+				max: '2560px',
+			},
+			...attributes,
+		},
+		{
+			type: 'desktop',
+			force: false,
+			label: __('Desktop', 'publisher-core'),
+			settings: {
+				min: '1441px',
+				max: '1920px',
+			},
+			...attributes,
 		},
 	];
 }
