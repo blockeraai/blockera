@@ -72,6 +72,7 @@ export default function RepeaterControl({
 	valueCleanup,
 	//
 	className,
+	emptyItemPlaceholder,
 	...props
 }: RepeaterControlProps): MixedElement {
 	defaultRepeaterItemValue = {
@@ -124,6 +125,7 @@ export default function RepeaterControl({
 		//
 		defaultRepeaterItemValue,
 		repeaterItems, // value
+		emptyItemPlaceholder,
 		//
 		customProps: { ...props },
 	};
