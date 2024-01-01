@@ -1,3 +1,8 @@
+/**
+ * This file just must be load on Gutenberg editor iframe.
+ * So, you should not import this file in global styles.
+ */
+
 .showHandles .handle {
 	display: block;
 }
