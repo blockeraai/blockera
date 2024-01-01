@@ -11,7 +11,7 @@
 
 	.publisher-control-position-body {
 		position: relative;
-		height: 77px;
+		height: 84px;
 		width: 250px;
 		margin: 0 auto;
 
@@ -40,7 +40,6 @@
 		stroke: var(--publisher-controls-border-color);
 		user-select: none;
 		stroke-linejoin: round;
-
 
 		&.selected-side,
 		&:hover {
@@ -72,6 +71,36 @@
 		&.side-left:not(.side-drag-active) {
 			cursor: pointer;
 		}
+
+		&.is-value-addon-side {
+			--publisher-controls-primary-color: var(--publisher-value-addon-var-color);
+			stroke: var(--publisher-value-addon-var-border-color);
+			stroke-width: 1px;
+			fill: var(--publisher-value-addon-var-bg-color);
+		}
+
+		&.selected-side.is-value-addon-side,
+		&.selected-side-value-addon {
+			--publisher-controls-primary-color: var(--publisher-value-addon-var-color);
+			stroke: var(--publisher-controls-primary-color) !important;
+			stroke-width: 2px !important;
+			fill: var(--publisher-value-addon-var-bg-color) !important;
+		}
+
+		&.is-value-addon-deleted {
+			--publisher-controls-primary-color: var(--publisher-value-addon-deleted-color);
+			stroke: var(--publisher-value-addon-deleted-border-color);
+			stroke-width: 1px;
+			fill: var(--publisher-value-addon-deleted-bg-color);
+
+			&.selected-side.is-value-addon-side,
+			&.selected-side-value-addon {
+				--publisher-controls-primary-color: var(--publisher-value-addon-deleted-color);
+				stroke: var(--publisher-controls-primary-color) !important;
+				stroke-width: 2px !important;
+				fill: var(--publisher-value-addon-deleted-bg-color) !important;
+			}
+		}
 	}
 
 	.publisher-control-label-side {
@@ -85,6 +114,20 @@
 			pointer-events: all;
 			cursor: pointer;
 			font-size: 10px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 0 2px;
+			min-width: 15px;
+			height: 12px;
+			min-height: 12px;
+			letter-spacing: -0.3px;
+
+			&:hover:not(.changed-in-other-state):not(.changed-in-normal-state):not(.changed-in-secondary-state) {
+				background: #ffffff;
+				border: 1px solid var(--publisher-controls-border-color);
+				cursor: pointer !important;
+			}
 
 			i {
 				font-size: 8px;
@@ -100,11 +143,39 @@
 			}
 		}
 
+		.publisher-control-value-addon-pointers {
+
+			.publisher-control-value-addon-pointer {
+				transform: scale(0);
+				transition: all 0.15s cubic-bezier(1, 0.76, 0, 0.89);
+			}
+		}
+
+		&.label-hover {
+
+			.publisher-control.publisher-control-value-addon-pointers {
+
+				svg {
+					fill: #ffffff;
+				}
+
+				.publisher-control-value-addon-pointer {
+					transform: scale3d(1, 1, 1);
+					transition: all 0.15s cubic-bezier(1, 0.76, 0, 0.89);
+				}
+			}
+		}
+
 		&.side-top {
 			top: 0;
 			right: 0;
 			left: 0;
-			height: 31px;
+			height: 30px;
+
+			.publisher-control-value-addon-pointers {
+				top: -10.5px;
+				right: 15px;
+			}
 		}
 
 		&.side-right {
@@ -112,13 +183,26 @@
 			right: 0;
 			bottom: 0;
 			width: 30px;
+
+			.publisher-control-value-addon-pointers {
+				right: -10.5px;
+				top: 15px;
+			}
 		}
 
 		&.side-bottom {
 			bottom: 0;
 			right: 0;
 			left: 0;
-			height: 31px;
+			height: 30px;
+
+			.publisher-control-value-addon-pointers {
+				right: initial;
+				top: initial;
+				bottom: -11.5px;
+				left: 15px;
+				text-align: left;
+			}
 		}
 
 		&.side-left {
@@ -126,6 +210,14 @@
 			bottom: 0;
 			left: 0;
 			width: 30px;
+
+			.publisher-control-value-addon-pointers {
+				text-align: left;
+				top: initial;
+				right: initial;
+				bottom: 15px;
+				left: -10.5px;
+			}
 		}
 
 		&.side-vertical i {
@@ -148,15 +240,25 @@
 	}
 
 	.publisher-control-box-model-label {
-		font-size: 11px;
-		font-weight: 500;
 		color: #d6d6d6;
 		text-transform: uppercase;
-		width: 100%;
-		display: block;
-		text-align: center;
+		width: auto;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		height: 24px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		position: absolute;
-		top: 29px;
+
+		.publisher-control-label {
+			font-size: 11px;
+			min-height: 12px;
+			line-height: 12px;
+			height: 12px;
+			font-weight: 500;
+		}
 	}
 }
 
