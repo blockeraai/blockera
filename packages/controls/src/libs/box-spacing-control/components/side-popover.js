@@ -18,6 +18,7 @@ import { Button, Flex, Grid, Popover } from '@publisher/components';
 import { useControlContext } from '../../../context';
 import { BaseControl, InputControl } from '../../index';
 import type { SidePopoverProps } from '../types';
+import ShortcutIcon from '../../box-position-control/icons/shortcut';
 
 export function SidePopover({
 	id,
@@ -38,7 +39,6 @@ export function SidePopover({
 		setValue,
 		attribute,
 		blockName,
-		description,
 		resetToDefault,
 		getControlPath,
 	} = useControlContext({
@@ -232,7 +232,6 @@ export function SidePopover({
 							value,
 							attribute,
 							blockName,
-							description,
 							defaultValue,
 							resetToDefault,
 							singularId: id,
@@ -255,7 +254,12 @@ export function SidePopover({
 					</BaseControl>
 
 					<BaseControl
-						label={__('Shortcuts', 'publisher-core')}
+						label={
+							<Flex gap="8px" alignItems="center">
+								<ShortcutIcon />
+								{__('Shortcuts', 'publisher-core')}
+							</Flex>
+						}
 						columns="columns-1"
 						className={controlInnerClassNames(
 							'side-popover-action-buttons'

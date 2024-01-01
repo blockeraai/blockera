@@ -7,7 +7,7 @@ import { useState, useEffect } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { Button, Grid, Popover } from '@publisher/components';
+import { Button, Flex, Grid, Popover } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
 
 /**
@@ -15,6 +15,7 @@ import { controlInnerClassNames } from '@publisher/classnames';
  */
 import { BaseControl, InputControl } from '../../index';
 import { useControlContext } from '../../../context';
+import ShortcutIcon from '../icons/shortcut';
 
 export function SidePopover({
 	id,
@@ -116,7 +117,12 @@ export function SidePopover({
 					</BaseControl>
 
 					<BaseControl
-						label={__('Shortcuts', 'publisher-core')}
+						label={
+							<Flex gap="8px" alignItems="center">
+								<ShortcutIcon />
+								{__('Shortcuts', 'publisher-core')}
+							</Flex>
+						}
 						columns="columns-1"
 						className={controlInnerClassNames(
 							'side-popover-action-buttons'
