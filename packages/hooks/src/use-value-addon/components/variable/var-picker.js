@@ -115,7 +115,7 @@ export default function ({
 				'linear-gradient',
 				'radial-gradient',
 				'spacing',
-			].includes(type);
+			].includes(data.type || type);
 
 			return (
 				<PickerCategory
@@ -157,7 +157,7 @@ export default function ({
 									onClick={controlProps.handleOnClickVar}
 									key={`${type}-${_index}-value-type`}
 									name={variable.name}
-									type={type}
+									type={data.type || type}
 									valueType="variable"
 									isCurrent={
 										isValid(controlProps.value) &&
@@ -167,7 +167,7 @@ export default function ({
 											itemData.id
 									}
 									icon={getVariableIcon({
-										type,
+										type: data.type || type,
 										value: variable.value,
 									})}
 									status="active"
