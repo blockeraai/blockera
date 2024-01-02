@@ -51,7 +51,7 @@ import { default as AlignContentSpaceAroundIcon } from './icons/align-content-sp
 import { default as AlignContentSpaceBetweenIcon } from './icons/align-content-space-between';
 import { default as ReverseIcon } from './icons/reverse';
 import DisplayGridIcon from './icons/display-grid';
-import { Gap } from './components';
+import { Gap, GridLayout } from './components';
 
 export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 	({
@@ -64,6 +64,15 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 			alignContent,
 			flexDirection,
 			justifyContent,
+			gridAlignItems,
+			gridJustifyItems,
+			gridAlignContent,
+			gridJustifyContent,
+			gridGap,
+			gridDirection,
+			gridColumns,
+			gridRows,
+			gridAreas,
 		},
 		// defaultValue: {
 		// 	type,
@@ -186,6 +195,11 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									label: __('Flex', 'publisher-core'),
 									value: 'flex',
 									icon: <DisplayFlexIcon />,
+								},
+								{
+									label: __('Grid', 'publisher-core'),
+									value: 'grid',
+									icon: <DisplayGridIcon />,
 								},
 								{
 									label: __('Inline Block', 'publisher-core'),
@@ -1130,6 +1144,23 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 							</>
 						)}
 					</>
+				)}
+
+				{display === 'grid' && (
+					<GridLayout
+						config={config}
+						block={block}
+						gridAlignItems={gridAlignItems}
+						gridJustifyItems={gridJustifyItems}
+						gridAlignContent={gridAlignContent}
+						gridJustifyContent={gridJustifyContent}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+						gridGap={gridGap}
+						gridDirection={gridDirection}
+						gridColumns={gridColumns}
+						gridRows={gridRows}
+						gridAreas={gridAreas}
+					/>
 				)}
 			</>
 		);

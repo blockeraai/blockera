@@ -37,7 +37,16 @@
 		"publisherAlignItems",
 		"publisherAlignContent",
 		"publisherFlexDirection",
-		"publisherJustifyContent"
+		"publisherJustifyContent",
+		"publisherGridAlignItems",
+		"publisherGridJustifyItems",
+		"publisherGridAlignContent",
+		"publisherGridJustifyContent",
+		"publisherGridGap",
+		"publisherGridDirection",
+		"publisherGridColumns",
+		"publisherGridRows",
+		"publisherGridAreas"
 	],
 	"typography": [
 		"publisherFontSize",

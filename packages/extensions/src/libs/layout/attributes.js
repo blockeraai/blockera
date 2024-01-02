@@ -27,4 +27,75 @@ export const attributes = {
 		type: 'string',
 		default: '',
 	},
+	publisherGridAlignItems: {
+		type: 'string',
+		default: '',
+	},
+	publisherGridJustifyItems: {
+		type: 'string',
+		default: '',
+	},
+
+	publisherGridAlignContent: {
+		type: 'string',
+		default: '',
+	},
+	publisherGridJustifyContent: {
+		type: 'string',
+		default: '',
+	},
+	publisherGridGap: {
+		type: 'object',
+		default: { lock: true, gap: '', columns: '', rows: '' },
+	},
+	publisherGridDirection: {
+		type: 'object',
+		default: { value: '', dense: false },
+	},
+	publisherGridColumns: {
+		type: 'array',
+		default: [
+			{
+				'sizing-mode': 'normal',
+				size: '1fr',
+				'min-size': '',
+				'max-size': '',
+				'auto-fit': false,
+				isVisible: true,
+			},
+			{
+				'sizing-mode': 'normal',
+				size: '1fr',
+				'min-size': '',
+				'max-size': '',
+				'auto-fit': false,
+				isVisible: true,
+			},
+		],
+	},
+	publisherGridRows: {
+		type: 'array',
+		default: [
+			{
+				'sizing-mode': 'normal',
+				size: '1fr',
+				'min-size': '',
+				'max-size': '',
+				'auto-fit': false,
+				isVisible: true,
+			},
+			{
+				'sizing-mode': 'normal',
+				size: '1fr',
+				'min-size': '',
+				'max-size': '',
+				'auto-fit': false,
+				isVisible: true,
+			},
+		],
+	},
+	publisherGridAreas: {
+		type: 'array',
+		default: [],
+	},
 };
