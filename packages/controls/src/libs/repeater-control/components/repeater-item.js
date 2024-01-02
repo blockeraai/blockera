@@ -222,7 +222,7 @@ const RepeaterItem = ({
 						repeaterId,
 					});
 				}}
-				onClick={(event): boolean => {
+				onClick={(event): void | boolean => {
 					if (item.selectable) {
 						const newItems = items.map((_item, _itemId) => {
 							if (_itemId === itemId) {

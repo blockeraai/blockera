@@ -30,5 +30,5 @@ export type GroupControlProps = {
 	className?: string,
 	onClose?: () => void,
 	onOpen?: () => void,
-	onClick?: (event?: MouseEvent) => void,
+	onClick?: (event?: MouseEvent) => void | boolean,
 };
