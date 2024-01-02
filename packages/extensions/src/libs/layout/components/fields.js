@@ -67,7 +67,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						singularId={'size'}
 						label={__('Size', 'publisher-core')}
 						columns="columns-2"
-						unitType="grid-col"
+						unitType="grid-size"
 						range={true}
 						min={0}
 						onChange={(size) =>
@@ -90,7 +90,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							singularId={'[min-size]'}
 							label={__('Min', 'publisher-core')}
 							columns="columns-2"
-							unitType="grid-col"
+							unitType="grid-size"
 							range={true}
 							min={0}
 							onChange={(newValue) =>
@@ -112,7 +112,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							singularId={'[max-size]'}
 							label={__('Max', 'publisher-core')}
 							columns="columns-2"
-							unitType="grid-col"
+							unitType="grid-size"
 							range={true}
 							min={0}
 							onChange={(newValue) =>

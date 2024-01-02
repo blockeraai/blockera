@@ -1361,6 +1361,96 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 				},
 			];
 			break;
+
+		case 'grid-size':
+			cssUnits = [
+				{
+					label: 'Common Values',
+					options: [
+						{
+							value: 'fr',
+							label: 'FR',
+							format: 'number',
+						},
+						{
+							value: 'px',
+							label: 'PX',
+							format: 'number',
+						},
+						{
+							value: '%',
+							label: '%',
+							format: 'number',
+						},
+						{
+							value: 'em',
+							label: 'EM',
+							format: 'number',
+						},
+						{
+							value: 'rem',
+							label: 'REM',
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Other Values',
+					options: [
+						{
+							value: 'ch',
+							label: 'CH',
+							format: 'number',
+						},
+						{
+							value: 'vw',
+							label: 'VW',
+							format: 'number',
+						},
+						{
+							value: 'vh',
+							label: 'VH',
+							format: 'number',
+						},
+						{
+							value: 'dvw',
+							label: 'DVW',
+							format: 'number',
+						},
+						{
+							value: 'dvh',
+							label: 'DVH',
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Special Values',
+					options: [
+						{
+							value: 'fit-content',
+							label: 'Fit Content',
+							format: 'number',
+						},
+						{
+							value: 'max-content',
+							label: 'Max Content',
+							format: 'number',
+						},
+						{
+							value: 'min-content',
+							label: 'Min Content',
+							format: 'number',
+						},
+						{
+							value: 'auto',
+							label: 'Auto',
+							format: 'number',
+						},
+					],
+				},
+			];
+			break;
 	}
 
 	return cssUnits;
