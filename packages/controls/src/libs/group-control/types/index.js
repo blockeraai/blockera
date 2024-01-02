@@ -16,6 +16,7 @@ export type GroupControlProps = {
 	//
 	mode: GroupControlMode,
 	popoverTitle?: string | MixedElement,
+	popoverTitleButtonsRight?: string | MixedElement,
 	popoverClassName?: string,
 	//
 	header?: string | MixedElement,
