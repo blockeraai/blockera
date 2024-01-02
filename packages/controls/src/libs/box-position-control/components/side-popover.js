@@ -118,7 +118,7 @@ export function SidePopover({
 
 					<BaseControl
 						label={
-							<Flex gap="8px" alignItems="center">
+							<Flex gap="4px" alignItems="center">
 								<ShortcutIcon />
 								{__('Shortcuts', 'publisher-core')}
 							</Flex>
