@@ -173,7 +173,13 @@ export function BlockBase({
 				breakpointId,
 				isNormalState,
 				setAttributes: props.setAttributes,
-				getAttributes: () => props.attributes,
+				getAttributes: (key: string): any => {
+					if (key && props.attributes[key]) {
+						return props.attributes[key];
+					}
+
+					return props.attributes;
+				},
 				activeDeviceType: getDeviceType(),
 				handleOnChangeAttributes,
 				getBlockType: () =>
