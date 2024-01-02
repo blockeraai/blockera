@@ -111,6 +111,9 @@ export type RepeaterControlProps = {
 		itemsCount: number,
 		defaultRepeaterItemValue: Object
 	) => Object,
+	/**
+	 * The handle on select repeater item.
+	 */
 	onSelect?: (event: MouseEvent, item: Object) => boolean,
 	/**
 	 * The override repeater item before modify current item.

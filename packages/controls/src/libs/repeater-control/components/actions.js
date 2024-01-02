@@ -41,7 +41,12 @@ export default function RepeaterItemActions({
 		repeaterItems,
 	} = useContext(RepeaterContext);
 	const {
-		dispatch: { changeRepeaterItem, cloneRepeaterItem, removeRepeaterItem },
+		dispatch: {
+			changeRepeaterItem,
+			cloneRepeaterItem,
+			removeRepeaterItem,
+			modifyControlValue,
+		},
 	} = useControlContext();
 
 	return (
@@ -135,10 +140,33 @@ export default function RepeaterItemActions({
 						tooltipPosition="top"
 						onClick={(event) => {
 							event.stopPropagation();
-							removeRepeaterItem({
-								itemId,
+
+							if (!item.selectable) {
+								removeRepeaterItem({
+									itemId,
+									controlId,
+									repeaterId,
+								});
+
+								return;
+							}
+
+							const filteredItems = repeaterItems.filter(
+								(_item, _itemId) => itemId !== _itemId
+							);
+
+							modifyControlValue({
 								controlId,
-								repeaterId,
+								value: filteredItems.map((_item, _itemId) => {
+									if (itemId - 1 === _itemId) {
+										return {
+											..._item,
+											isSelected: true,
+										};
+									}
+
+									return _item;
+								}),
 							});
 						}}
 						label={__('Delete', 'publisher')}
