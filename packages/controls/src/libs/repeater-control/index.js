@@ -13,7 +13,7 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { isFunction } from '@publisher/utils';
-import { Button } from '@publisher/components';
+import { Button, Grid } from '@publisher/components';
 
 /**
  * Internal dependencies.
@@ -63,6 +63,7 @@ export default function RepeaterControl({
 	repeaterItemHeader,
 	repeaterItemChildren,
 	getDynamicDefaultRepeaterItem,
+	itemColumns = 1,
 	//
 	defaultValue = [],
 	defaultRepeaterItemValue = { isVisible: true },
@@ -270,7 +271,24 @@ export default function RepeaterControl({
 						{injectHeaderButtonsEnd}
 					</div>
 				</div>
-				<MappedItems />
+
+				{repeaterItems.length > 0 && (
+					<>
+						{itemColumns > 1 ? (
+							<Grid
+								className={controlInnerClassNames(
+									'repeater-items-container'
+								)}
+								gridTemplateColumns={`repeat(${itemColumns}, 1fr)`}
+								gap="10px"
+							>
+								<MappedItems />
+							</Grid>
+						) : (
+							<MappedItems />
+						)}
+					</>
+				)}
 			</div>
 		</RepeaterContextProvider>
 	);

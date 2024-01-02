@@ -127,6 +127,10 @@ export type RepeaterControlProps = {
 	 * Function that runs before firing onChange. You can use it cleanup values
 	 */
 	valueCleanup?: (any | Array<Object>) => any | Array<Object>,
+	/**
+	 * The callback to retrieve dynamic default repeater item.
+	 */
+	itemColumns?: number,
 };
 
 export type TRepeaterDefaultStateProps = {

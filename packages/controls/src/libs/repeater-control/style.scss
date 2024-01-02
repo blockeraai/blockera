@@ -134,6 +134,13 @@
 			width: 22px;
 		}
 	}
+
+	.publisher-control-repeater-items-container {
+
+		&:empty {
+			display: none;
+		}
+	}
 }
 
 .publisher-control-group.mode-popover.is-selected-item,
