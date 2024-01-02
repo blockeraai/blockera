@@ -263,14 +263,9 @@ export const SharedBlockExtension: Props = memo(
 									publisherFit: {},
 									publisherFitPosition: {},
 								}}
-								defaultValue={{
-									width:
-										attributes.width ||
-										attributes.publisherWidth,
-									height:
-										attributes.height ||
-										attributes.publisherHeight,
-									overflow: attributes.publisherOverflow,
+								inheritValue={{
+									width: attributes.width,
+									height: attributes.height,
 								}}
 								initialOpen={true}
 								extensionId={'Size'}

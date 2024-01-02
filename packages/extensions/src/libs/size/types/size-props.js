@@ -36,10 +36,9 @@ export type TSizeProps = {
 	block: TBlockProps,
 	config: Object,
 	children?: MixedElement,
-	defaultValue: {
+	inheritValue: {
 		width?: string,
 		height?: string,
-		overflow?: string,
 	},
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	extensionProps: {
