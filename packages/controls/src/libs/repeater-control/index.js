@@ -43,6 +43,7 @@ export default function RepeaterControl({
 	design = 'minimal',
 	mode = 'popover',
 	popoverTitle,
+	popoverTitleButtonsRight,
 	addNewButtonLabel,
 	popoverClassName,
 	maxItems = -1,
@@ -104,8 +105,11 @@ export default function RepeaterControl({
 		design,
 		mode,
 		popoverTitle: popoverTitle || label || '',
+		popoverTitleButtonsRight,
+		//
 		labelPopoverTitle,
 		labelDescription,
+		//
 		popoverClassName,
 		maxItems,
 		minItems,

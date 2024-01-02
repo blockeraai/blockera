@@ -51,6 +51,7 @@ const RepeaterItem = ({
 		repeaterId,
 		popoverTitle,
 		popoverClassName,
+		popoverTitleButtonsRight: PopoverTitleButtonsRight,
 		repeaterItems: items,
 		repeaterItemOpener: RepeaterItemOpener,
 		repeaterItemHeader: RepeaterItemHeader,
@@ -146,6 +147,13 @@ const RepeaterItem = ({
 				toggleOpenBorder={true}
 				design={design}
 				popoverTitle={popoverTitle}
+				popoverTitleButtonsRight={
+					PopoverTitleButtonsRight && (
+						<PopoverTitleButtonsRight
+							{...repeaterItemActionsProps}
+						/>
+					)
+				}
 				popoverClassName={popoverClassName}
 				className={controlInnerClassNames(
 					'repeater-item-group',

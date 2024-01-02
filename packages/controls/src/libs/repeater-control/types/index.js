@@ -37,6 +37,13 @@ export type RepeaterControlProps = {
 	 * Specifies the popover title if `mode` was `popover`. by default the repeater label will be shown as popover title.
 	 */
 	popoverTitle?: string | MixedElement,
+	/**
+	 * Specifies the popover title right buttons if `mode` was `popover`.
+	 */
+	popoverTitleButtonsRight?: string | MixedElement,
+	/**
+	 * Specifies the button label for adding new repeater item.
+	 */
 	addNewButtonLabel?: string,
 	/**
 	 * Specifies custom css classes that should be added to popover
