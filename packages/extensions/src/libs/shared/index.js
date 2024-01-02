@@ -193,19 +193,6 @@ export const SharedBlockExtension: Props = memo(
 						<>
 							<BaseExtension
 								{...props}
-								attributes={{
-									publisherIcon: attributes.publisherIcon,
-									publisherIconPosition:
-										attributes.publisherIconPosition,
-									publisherIconGap:
-										attributes.publisherIconGap,
-									publisherIconSize:
-										attributes.publisherIconSize,
-									publisherIconColor:
-										attributes.publisherIconColor,
-									publisherIconLink:
-										attributes.publisherIconLink,
-								}}
 								extensionProps={{
 									publisherIcon: {},
 									publisherIconPosition: {},
@@ -230,10 +217,6 @@ export const SharedBlockExtension: Props = memo(
 						<>
 							<BaseExtension
 								{...props}
-								attributes={{
-									publisherSpacing:
-										attributes.publisherSpacing,
-								}}
 								extensionProps={{
 									publisherSpacing: {},
 								}}
@@ -250,11 +233,6 @@ export const SharedBlockExtension: Props = memo(
 
 							<BaseExtension
 								{...props}
-								attributes={{
-									publisherPosition:
-										attributes.publisherPosition,
-									publisherZIndex: attributes.publisherZIndex,
-								}}
 								extensionProps={{
 									publisherPosition: {},
 									publisherZIndex: {},
@@ -273,24 +251,6 @@ export const SharedBlockExtension: Props = memo(
 							<BaseExtension
 								{...props}
 								{...include(attributes, size, 'publisher')}
-								attributes={{
-									publisherWidth: attributes.publisherWidth,
-									publisherHeight: attributes.publisherHeight,
-									publisherMinWidth:
-										attributes.publisherMinWidth,
-									publisherMinHeight:
-										attributes.publisherMinHeight,
-									publisherMaxWidth:
-										attributes.publisherMaxWidth,
-									publisherMaxHeight:
-										attributes.publisherMaxHeight,
-									publisherOverflow:
-										attributes.publisherOverflow,
-									publisherRatio: attributes.publisherRatio,
-									publisherFit: attributes.publisherFit,
-									publisherFitPosition:
-										attributes.publisherFitPosition,
-								}}
 								extensionProps={{
 									publisherWidth: {},
 									publisherHeight: {},
@@ -323,21 +283,6 @@ export const SharedBlockExtension: Props = memo(
 
 							<BaseExtension
 								{...props}
-								attributes={{
-									publisherDisplay:
-										attributes.publisherDisplay,
-									publisherFlexDirection:
-										attributes.publisherFlexDirection,
-									publisherAlignItems:
-										attributes.publisherAlignItems,
-									publisherJustifyContent:
-										attributes.publisherJustifyContent,
-									publisherGap: attributes.publisherGap,
-									publisherFlexWrap:
-										attributes.publisherFlexWrap,
-									publisherAlignContent:
-										attributes.publisherAlignContent,
-								}}
 								extensionProps={{
 									publisherDisplay: {},
 									publisherFlexDirection: {},
@@ -367,22 +312,6 @@ export const SharedBlockExtension: Props = memo(
 									.publisherDisplay === 'flex' && (
 									<BaseExtension
 										{...props}
-										attributes={{
-											publisherFlexChildSizing:
-												attributes.publisherFlexChildSizing,
-											publisherFlexChildGrow:
-												attributes.publisherFlexChildGrow,
-											publisherFlexChildShrink:
-												attributes.publisherFlexChildShrink,
-											publisherFlexChildBasis:
-												attributes.publisherFlexChildBasis,
-											publisherFlexChildAlign:
-												attributes.publisherFlexChildAlign,
-											publisherFlexChildOrder:
-												attributes.publisherFlexChildOrder,
-											publisherFlexChildOrderCustom:
-												attributes.publisherFlexChildOrderCustom,
-										}}
 										extensionProps={{
 											publisherFlexChildSizing: {},
 											publisherFlexChildGrow: {},
@@ -417,40 +346,6 @@ export const SharedBlockExtension: Props = memo(
 
 							<BaseExtension
 								{...props}
-								attributes={{
-									publisherFontColor:
-										attributes.publisherFontColor,
-									publisherFontSize:
-										attributes.publisherFontSize,
-									publisherLineHeight:
-										attributes.publisherLineHeight,
-									publisherTextAlign:
-										attributes.publisherTextAlign,
-									publisherTextDecoration:
-										attributes.publisherTextDecoration,
-									publisherFontStyle:
-										attributes.publisherFontStyle,
-									publisherTextTransform:
-										attributes.publisherTextTransform,
-									publisherDirection:
-										attributes.publisherDirection,
-									publisherTextShadow:
-										attributes.publisherTextShadow,
-									publisherLetterSpacing:
-										attributes.publisherLetterSpacing,
-									publisherWordSpacing:
-										attributes.publisherWordSpacing,
-									publisherTextIndent:
-										attributes.publisherTextIndent,
-									publisherTextOrientation:
-										attributes.publisherTextOrientation,
-									publisherTextColumns:
-										attributes.publisherTextColumns,
-									publisherTextStroke:
-										attributes.publisherTextStroke,
-									publisherWordBreak:
-										attributes.publisherWordBreak,
-								}}
 								extensionProps={{
 									publisherFontColor: {},
 									publisherFontSize: {},
@@ -498,14 +393,6 @@ export const SharedBlockExtension: Props = memo(
 
 							<BaseExtension
 								{...props}
-								attributes={{
-									publisherBackground:
-										attributes.publisherBackground,
-									publisherBackgroundColor:
-										attributes.publisherBackgroundColor,
-									publisherBackgroundClip:
-										attributes.publisherBackgroundClip,
-								}}
 								extensionProps={{
 									publisherBackground: {},
 									publisherBackgroundColor: {},
@@ -530,15 +417,6 @@ export const SharedBlockExtension: Props = memo(
 
 							<BaseExtension
 								{...props}
-								attributes={{
-									publisherBoxShadow:
-										attributes.publisherBoxShadow,
-									publisherOutline:
-										attributes.publisherOutline,
-									publisherBorder: attributes.publisherBorder,
-									publisherBorderRadius:
-										attributes.publisherBorderRadius,
-								}}
 								extensionProps={{
 									publisherBoxShadow: {},
 									publisherOutline: {},
@@ -568,32 +446,6 @@ export const SharedBlockExtension: Props = memo(
 
 							<BaseExtension
 								{...props}
-								attributes={{
-									publisherOpacity:
-										attributes.publisherOpacity,
-									publisherTransform:
-										attributes.publisherTransform,
-									publisherTransformSelfPerspective:
-										attributes.publisherTransformSelfPerspective,
-									publisherTransformSelfOrigin:
-										attributes.publisherTransformSelfOrigin,
-									publisherBackfaceVisibility:
-										attributes.publisherBackfaceVisibility,
-									publisherTransformChildPerspective:
-										attributes.publisherTransformChildPerspective,
-									publisherTransformChildOrigin:
-										attributes.publisherTransformChildOrigin,
-									publisherTransition:
-										attributes.publisherTransition,
-									publisherFilter: attributes.publisherFilter,
-									publisherBackdropFilter:
-										attributes.publisherBackdropFilter,
-									publisherDivider:
-										attributes.publisherDivider,
-									publisherBlendMode:
-										attributes.publisherBlendMode,
-									publisherMask: attributes.publisherMask,
-								}}
 								extensionProps={{
 									publisherOpacity: {},
 									publisherTransform: {},
@@ -625,13 +477,6 @@ export const SharedBlockExtension: Props = memo(
 
 							<BaseExtension
 								{...props}
-								attributes={{
-									publisherCursor: attributes.publisherCursor,
-									publisherUserSelect:
-										attributes.publisherUserSelect,
-									publisherPointerEvents:
-										attributes.publisherPointerEvents,
-								}}
 								extensionProps={{
 									publisherCursor: {},
 									publisherUserSelect: {},
@@ -649,12 +494,6 @@ export const SharedBlockExtension: Props = memo(
 
 							<BaseExtension
 								{...props}
-								attributes={{
-									publisherAttributes:
-										attributes.publisherAttributes,
-									publisherCSSProperties:
-										attributes.publisherCSSProperties,
-								}}
 								extensionProps={{
 									publisherAttributes: {},
 									publisherCSSProperties: {},
