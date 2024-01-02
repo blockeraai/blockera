@@ -30,6 +30,15 @@ export type TLayoutProps = {
 		alignContent: string,
 		flexDirection: { value: string, reverse: boolean },
 		justifyContent: string,
+		gridAlignItems: string,
+		gridJustifyItems: string,
+		gridAlignContent: string,
+		gridJustifyContent: string,
+		gridGap: { lock: boolean, gap: string, columns: string, rows: string },
+		gridDirection: { value: string, dense: boolean },
+		gridColumns: Array<Object>,
+		gridRows: Array<Object>,
+		gridAreas: Array<Object>,
 	},
 	// defaultValue: {
 	// 	type?: string,
@@ -41,4 +50,50 @@ export type TLayoutProps = {
 	config: Object,
 	children?: MixedElement,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
+};
+
+export type TItem = {
+	'sizing-mode': string,
+	size: string,
+	'min-size': string,
+	'max-size': string,
+	'auto-fit': boolean,
+	isVisible: boolean,
+};
+
+export type TFieldItem = {
+	item: TItem,
+	itemId: number,
+};
+
+export type THeaderItem = {
+	item: TItem,
+	itemId: number,
+	isOpen: boolean,
+	setOpen: (isOpen: boolean) => void,
+	children?: any,
+	isOpenPopoverEvent: (event: Object) => void,
+};
+
+export type TAreaItem = {
+	name: string,
+	'column-start': number,
+	'column-end': number,
+	'row-start': number,
+	'row-end': number,
+	isVisible: boolean,
+};
+
+export type TAreasFieldItem = {
+	item: TAreaItem,
+	itemId: number,
+};
+
+export type TAreasHeaderItem = {
+	item: TAreaItem,
+	itemId: number,
+	isOpen: boolean,
+	setOpen: (isOpen: boolean) => void,
+	children?: any,
+	isOpenPopoverEvent: (event: Object) => void,
 };
