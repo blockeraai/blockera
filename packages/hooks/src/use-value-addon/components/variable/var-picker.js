@@ -75,7 +75,12 @@ export default function ({
 	};
 
 	const Variables = (): Array<Element<any>> => {
-		return controlProps.variableTypes.map((type, index) => {
+		const { getVariableGroups } = select(STORE_NAME);
+
+		return [
+			...controlProps.variableTypes,
+			...Object.keys(getVariableGroups()),
+		].map((type, index) => {
 			let data: DynamicVariableGroup | VariableCategoryDetail =
 				getVariableCategory(type);
 
@@ -84,7 +89,10 @@ export default function ({
 
 				data = getVariableGroup(type);
 
-				if (!data?.type) {
+				if (
+					!data?.type ||
+					!controlProps.variableTypes.includes(data.type)
+				) {
 					return <></>;
 				}
 			}
