@@ -30,6 +30,7 @@ export const TextDecoration = ({
 	value,
 	defaultValue,
 	onChange,
+	...props
 }: {
 	block: TBlockProps,
 	value: string | void,
@@ -160,6 +161,7 @@ export const TextDecoration = ({
 						],
 					});
 				}}
+				{...props}
 			/>
 		</ControlContextProvider>
 	);

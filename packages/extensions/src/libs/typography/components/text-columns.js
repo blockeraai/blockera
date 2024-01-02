@@ -32,6 +32,7 @@ export const TextColumns = ({
 	value,
 	display,
 	handleOnChangeAttributes,
+	...props
 }: {
 	value: {
 		columns: string,
@@ -143,6 +144,7 @@ export const TextColumns = ({
 							});
 						}
 					}}
+					{...props}
 				/>
 				{!isEmpty(value?.columns) &&
 					value?.columns !== 'none' &&

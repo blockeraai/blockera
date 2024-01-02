@@ -28,6 +28,7 @@ export const BorderRadius = ({
 	borderRadius,
 	defaultValue,
 	onChange,
+	...props
 }: {
 	block: Object,
 	borderRadius?: Object,
@@ -168,6 +169,7 @@ export const BorderRadius = ({
 							deleteItemsOnResetAction: ['style.border.radius'],
 						})
 					}
+					{...props}
 				/>
 			</BaseControl>
 		</ControlContextProvider>

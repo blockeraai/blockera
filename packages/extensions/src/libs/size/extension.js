@@ -44,13 +44,12 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 		maxHeight,
 		config,
 		overflow,
-		children,
 		ratio,
 		fit,
 		fitPosition,
 		defaultValue: { width: _width, height: _height, overflow: _overflow },
 		handleOnChangeAttributes,
-		...props
+		extensionProps,
 	}: TSizeProps): MixedElement => {
 		const {
 			sizeConfig: {
@@ -135,9 +134,9 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										}
 									);
 								}}
-								{...props}
 								controlAddonTypes={['variable']}
 								variableTypes={['width-size']}
+								{...extensionProps.publisherWidth}
 							/>
 						</ControlContextProvider>
 
@@ -209,9 +208,9 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 													newValue
 												)
 											}
-											{...props}
 											controlAddonTypes={['variable']}
 											variableTypes={['width-size']}
+											{...extensionProps.publisherMinWidth}
 										/>
 									</ControlContextProvider>
 								)}
@@ -276,9 +275,9 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 													newValue
 												)
 											}
-											{...props}
 											controlAddonTypes={['variable']}
 											variableTypes={['width-size']}
+											{...extensionProps.publisherMaxWidth}
 										/>
 									</ControlContextProvider>
 								)}
@@ -341,9 +340,9 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 										}
 									);
 								}}
-								{...props}
 								controlAddonTypes={['variable']}
 								variableTypes={['width-size']}
+								{...extensionProps.publisherHeight}
 							/>
 						</ControlContextProvider>
 						{(isActiveField(publisherMinHeight) ||
@@ -416,9 +415,9 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 													newValue
 												)
 											}
-											{...props}
 											controlAddonTypes={['variable']}
 											variableTypes={['width-size']}
+											{...extensionProps.publisherMinHeight}
 										/>
 									</ControlContextProvider>
 								)}
@@ -485,9 +484,9 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 													newValue
 												)
 											}
-											{...props}
 											controlAddonTypes={['variable']}
 											variableTypes={['width-size']}
+											{...extensionProps.publisherMaxHeight}
 										/>
 									</ControlContextProvider>
 								)}
@@ -584,6 +583,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									newValue
 								)
 							}
+							{...extensionProps.publisherOverflow}
 						/>
 					</ControlContextProvider>
 				)}
@@ -638,81 +638,74 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 							<SelectControl
 								id="value"
 								aria-label={__('Ratio', 'publisher-core')}
-								{...{
-									...props,
-									options: [
-										{
-											label: __(
-												'Default',
-												'publisher-core'
-											),
-											value: 'none',
-										},
-										{
-											label: __(
-												'Square 1:1',
-												'publisher-core'
-											),
-											value: '1 / 1',
-										},
-										{
-											label: __(
-												'Standard 4:3',
-												'publisher-core'
-											),
-											value: '4 / 3',
-										},
-										{
-											label: __(
-												'Portrait 3:4',
-												'publisher-core'
-											),
-											value: '3 / 4',
-										},
-										{
-											label: __(
-												'Landscape 3:2',
-												'publisher-core'
-											),
-											value: '3 / 2',
-										},
-										{
-											label: __(
-												'Classic Portrait 2:3',
-												'publisher-core'
-											),
-											value: '2 / 3',
-										},
-										{
-											label: __(
-												'Widescreen 16:9',
-												'publisher-core'
-											),
-											value: '16 / 9',
-										},
-										{
-											label: __(
-												'Tall 9:16',
-												'publisher-core'
-											),
-											value: '9 / 16',
-										},
-										{
-											label: __(
-												'Custom',
-												'publisher-core'
-											),
-											value: 'custom',
-										},
-									], //
-									type: 'native',
-									defaultValue: 'none',
-									onChange: (newValue) =>
-										handleOnChangeAttributes(
-											'publisherRatio',
-											{ ...ratio, value: newValue }
+								options={[
+									{
+										label: __('Default', 'publisher-core'),
+										value: 'none',
+									},
+									{
+										label: __(
+											'Square 1:1',
+											'publisher-core'
 										),
-								}}
+										value: '1 / 1',
+									},
+									{
+										label: __(
+											'Standard 4:3',
+											'publisher-core'
+										),
+										value: '4 / 3',
+									},
+									{
+										label: __(
+											'Portrait 3:4',
+											'publisher-core'
+										),
+										value: '3 / 4',
+									},
+									{
+										label: __(
+											'Landscape 3:2',
+											'publisher-core'
+										),
+										value: '3 / 2',
+									},
+									{
+										label: __(
+											'Classic Portrait 2:3',
+											'publisher-core'
+										),
+										value: '2 / 3',
+									},
+									{
+										label: __(
+											'Widescreen 16:9',
+											'publisher-core'
+										),
+										value: '16 / 9',
+									},
+									{
+										label: __(
+											'Tall 9:16',
+											'publisher-core'
+										),
+										value: '9 / 16',
+									},
+									{
+										label: __('Custom', 'publisher-core'),
+										value: 'custom',
+									},
+								]}
+								type="native"
+								defaultValue="none"
+								onChange={(newValue) =>
+									handleOnChangeAttributes('publisherRatio', {
+										...ratio,
+										value: newValue,
+									})
+								}
+								{...extensionProps.publisherRatio}
 							/>
 							{ratio.value === 'custom' && (
 								<Flex alignItems="flex-start">
@@ -750,7 +743,6 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 												}
 											)
 										}
-										{...props}
 									/>
 
 									<p className="publisher-colon">/</p>
@@ -789,7 +781,6 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 												}
 											)
 										}
-										{...props}
 									/>
 								</Flex>
 							)}
@@ -810,6 +801,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 							block={block}
 							fitPosition={fitPosition}
 							handleOnChangeAttributes={handleOnChangeAttributes}
+							{...extensionProps.publisherFit}
 						/>
 					</ControlContextProvider>
 				)}

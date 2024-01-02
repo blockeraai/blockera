@@ -27,10 +27,9 @@ export const AdvancedExtension: TAdvancedProps = memo<TAdvancedProps>(
 	({
 		block,
 		config,
-		children,
 		values: { attributes, cSSProperties: properties },
 		handleOnChangeAttributes,
-		...props
+		extensionProps,
 	}: TAdvancedProps): MixedElement => {
 		const {
 			advancedConfig: {
@@ -66,8 +65,8 @@ export const AdvancedExtension: TAdvancedProps = memo<TAdvancedProps>(
 										newValue
 									)
 								}
-								{...props}
 								attributeElement={'a'}
+								{...extensionProps.publisherAttributes}
 							/>
 						</BaseControl>
 					</ControlContextProvider>
@@ -98,13 +97,11 @@ export const AdvancedExtension: TAdvancedProps = memo<TAdvancedProps>(
 										newValue
 									)
 								}
-								{...props}
+								{...extensionProps.publisherCSSProperties}
 							/>
 						</BaseControl>
 					</ControlContextProvider>
 				)}
-
-				{children}
 			</>
 		);
 	},

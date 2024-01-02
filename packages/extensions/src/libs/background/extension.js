@@ -35,11 +35,10 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 	({
 		block,
 		config,
-		children,
 		values: { background, backgroundClip, backgroundColor },
 		defaultValue,
 		handleOnChangeAttributes,
-		...props
+		extensionProps,
 	}: TBackgroundProps): MixedElement => {
 		const {
 			backgroundConfig: {
@@ -116,7 +115,7 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 										}
 									);
 								}}
-								{...props}
+								{...extensionProps.publisherBackground}
 							/>
 						</BaseControl>
 					</ControlContextProvider>
@@ -158,7 +157,6 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 								</>
 							}
 							columns="columns-2"
-							{...props}
 							onChange={(newValue) =>
 								handleOnChangeAttributes(
 									'publisherBackgroundColor',
@@ -167,6 +165,7 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 							}
 							controlAddonTypes={['variable']}
 							variableTypes={['color']}
+							{...extensionProps.publisherBackgroundColor}
 						/>
 					</ControlContextProvider>
 				)}
@@ -256,52 +255,48 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 								</>
 							}
 							columns="columns-2"
-							{...{
-								...props,
-								options: [
-									{
-										label: __('None', 'publisher-core'),
-										value: 'none',
-										icon: <ClipNoneIcon />,
-									},
-									{
-										label: __(
-											'Clip to Padding',
-											'publisher-core'
-										),
-										value: 'padding-box',
-										icon: <ClipPaddingIcon />,
-									},
-									{
-										label: __(
-											'Clip to Content',
-											'publisher-core'
-										),
-										value: 'content-box',
-										icon: <ClipContentIcon />,
-									},
-									{
-										label: __(
-											'Clip to Text',
-											'publisher-core'
-										),
-										value: 'text',
-										icon: <ClipTextIcon />,
-									},
-									{
-										label: __('Inherit', 'publisher-core'),
-										value: 'inherit',
-										icon: <InheritIcon />,
-									},
-								], //
-								type: 'custom',
-								defaultValue: 'none',
-								onChange: (newValue) =>
-									handleOnChangeAttributes(
-										'publisherBackgroundClip',
-										newValue
+							options={[
+								{
+									label: __('None', 'publisher-core'),
+									value: 'none',
+									icon: <ClipNoneIcon />,
+								},
+								{
+									label: __(
+										'Clip to Padding',
+										'publisher-core'
 									),
-							}}
+									value: 'padding-box',
+									icon: <ClipPaddingIcon />,
+								},
+								{
+									label: __(
+										'Clip to Content',
+										'publisher-core'
+									),
+									value: 'content-box',
+									icon: <ClipContentIcon />,
+								},
+								{
+									label: __('Clip to Text', 'publisher-core'),
+									value: 'text',
+									icon: <ClipTextIcon />,
+								},
+								{
+									label: __('Inherit', 'publisher-core'),
+									value: 'inherit',
+									icon: <InheritIcon />,
+								},
+							]}
+							type="custom"
+							defaultValue="none"
+							onChange={(newValue) =>
+								handleOnChangeAttributes(
+									'publisherBackgroundClip',
+									newValue
+								)
+							}
+							{...extensionProps.publisherBackgroundClip}
 						/>
 						{!visibleBackgroundLength &&
 							!backgroundColor &&

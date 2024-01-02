@@ -40,7 +40,6 @@ export const TransformSettings = ({
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	backfaceVisibility: string | void,
 	transformChildPerspective: string | void,
-	props: Object,
 	transformChildOrigin: Object,
 	transformSelfOrigin: Object,
 	transform: Array<Object>,

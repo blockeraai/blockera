@@ -34,11 +34,10 @@ export const SpacingExtension: TSpacingProps = memo<TSpacingProps>(
 	({
 		block,
 		config,
-		children,
 		defaultValue,
 		spacingValue,
 		handleOnChangeAttributes,
-		...props
+		extensionProps,
 	}: TSpacingProps): MixedElement => {
 		const {
 			spacingConfig: { publisherSpacing },
@@ -57,7 +56,6 @@ export const SpacingExtension: TSpacingProps = memo<TSpacingProps>(
 					>
 						<BaseControl controlName="box-spacing">
 							<BoxSpacingControl
-								{...props}
 								onChange={(newValue) => {
 									const toWPCompatible =
 										!defaultValue.padding &&
@@ -109,6 +107,7 @@ export const SpacingExtension: TSpacingProps = memo<TSpacingProps>(
 													'vertical-horizontal',
 										  }
 								}
+								{...extensionProps.publisherSpacing}
 							/>
 						</BaseControl>
 					</ControlContextProvider>

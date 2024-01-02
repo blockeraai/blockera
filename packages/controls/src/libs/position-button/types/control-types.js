@@ -2,10 +2,11 @@
 /**
  * Internal dependencies
  */
-import type { ControlGeneralTypes } from '../../../types';
+import type { ControlGeneralTypes, ControlSize } from '../../../types';
 
 export type TPositionButtonProps = {
 	...ControlGeneralTypes,
+	size: ControlSize,
 	defaultValue?: { top: string, left: string },
 	/**
 	 * Label for popover

@@ -29,6 +29,7 @@ export const TextTransform = ({
 	block,
 	value,
 	onChange,
+	...props
 }: {
 	block: TBlockProps,
 	value: string | void,
@@ -151,6 +152,7 @@ export const TextTransform = ({
 						],
 					});
 				}}
+				{...props}
 			/>
 		</ControlContextProvider>
 	);

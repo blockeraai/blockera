@@ -20,7 +20,13 @@ export type TMouseProps = {
 	config: Object,
 	children?: MixedElement,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
+	values: { cursor: string, userSelect: string, pointerEvents: string },
 	cursor: string,
 	userSelect: string,
 	pointerEvents: string,
+	extensionProps: {
+		publisherCursor: Object,
+		publisherUserSelect: Object,
+		publisherPointerEvents: Object,
+	},
 };

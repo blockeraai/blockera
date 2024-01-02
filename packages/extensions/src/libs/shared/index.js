@@ -182,6 +182,10 @@ export const SharedBlockExtension: Props = memo(
 			name: string,
 			title: string,
 			className: string,
+			icon: {
+				name: string,
+				library: string,
+			},
 		}): MixedElement => {
 			switch (tab.name) {
 				case 'general':
@@ -201,6 +205,14 @@ export const SharedBlockExtension: Props = memo(
 										attributes.publisherIconColor,
 									publisherIconLink:
 										attributes.publisherIconLink,
+								}}
+								extensionProps={{
+									publisherIcon: {},
+									publisherIconPosition: {},
+									publisherIconGap: {},
+									publisherIconSize: {},
+									publisherIconColor: {},
+									publisherIconLink: {},
 								}}
 								values={include(attributes, icon, 'publisher')}
 								initialOpen={true}
@@ -222,6 +234,9 @@ export const SharedBlockExtension: Props = memo(
 									publisherSpacing:
 										attributes.publisherSpacing,
 								}}
+								extensionProps={{
+									publisherSpacing: {},
+								}}
 								initialOpen={true}
 								extensionId={'Spacing'}
 								defaultValue={attributes.style?.spacing || {}}
@@ -239,6 +254,10 @@ export const SharedBlockExtension: Props = memo(
 									publisherPosition:
 										attributes.publisherPosition,
 									publisherZIndex: attributes.publisherZIndex,
+								}}
+								extensionProps={{
+									publisherPosition: {},
+									publisherZIndex: {},
 								}}
 								initialOpen={true}
 								extensionId={'Position'}
@@ -271,6 +290,18 @@ export const SharedBlockExtension: Props = memo(
 									publisherFit: attributes.publisherFit,
 									publisherFitPosition:
 										attributes.publisherFitPosition,
+								}}
+								extensionProps={{
+									publisherWidth: {},
+									publisherHeight: {},
+									publisherMinWidth: {},
+									publisherMinHeight: {},
+									publisherMaxWidth: {},
+									publisherMaxHeight: {},
+									publisherOverflow: {},
+									publisherRatio: {},
+									publisherFit: {},
+									publisherFitPosition: {},
 								}}
 								defaultValue={{
 									width:
@@ -307,6 +338,15 @@ export const SharedBlockExtension: Props = memo(
 									publisherAlignContent:
 										attributes.publisherAlignContent,
 								}}
+								extensionProps={{
+									publisherDisplay: {},
+									publisherFlexDirection: {},
+									publisherAlignItems: {},
+									publisherJustifyContent: {},
+									publisherGap: {},
+									publisherFlexWrap: {},
+									publisherAlignContent: {},
+								}}
 								initialOpen={true}
 								extensionId={'Layout'}
 								title={__('Layout', 'publisher-core')}
@@ -342,6 +382,15 @@ export const SharedBlockExtension: Props = memo(
 												attributes.publisherFlexChildOrder,
 											publisherFlexChildOrderCustom:
 												attributes.publisherFlexChildOrderCustom,
+										}}
+										extensionProps={{
+											publisherFlexChildSizing: {},
+											publisherFlexChildGrow: {},
+											publisherFlexChildShrink: {},
+											publisherFlexChildBasis: {},
+											publisherFlexChildAlign: {},
+											publisherFlexChildOrder: {},
+											publisherFlexChildOrderCustom: {},
 										}}
 										initialOpen={true}
 										extensionId={'FlexChild'}
@@ -402,6 +451,24 @@ export const SharedBlockExtension: Props = memo(
 									publisherWordBreak:
 										attributes.publisherWordBreak,
 								}}
+								extensionProps={{
+									publisherFontColor: {},
+									publisherFontSize: {},
+									publisherLineHeight: {},
+									publisherTextAlign: {},
+									publisherTextDecoration: {},
+									publisherFontStyle: {},
+									publisherTextTransform: {},
+									publisherDirection: {},
+									publisherTextShadow: {},
+									publisherLetterSpacing: {},
+									publisherWordSpacing: {},
+									publisherTextIndent: {},
+									publisherTextOrientation: {},
+									publisherTextColumns: {},
+									publisherTextStroke: {},
+									publisherWordBreak: {},
+								}}
 								initialOpen={true}
 								extensionId={'Typography'}
 								title={__('Typography', 'publisher-core')}
@@ -439,6 +506,11 @@ export const SharedBlockExtension: Props = memo(
 									publisherBackgroundClip:
 										attributes.publisherBackgroundClip,
 								}}
+								extensionProps={{
+									publisherBackground: {},
+									publisherBackgroundColor: {},
+									publisherBackgroundClip: {},
+								}}
 								initialOpen={true}
 								extensionId={'Background'}
 								values={include(
@@ -466,6 +538,12 @@ export const SharedBlockExtension: Props = memo(
 									publisherBorder: attributes.publisherBorder,
 									publisherBorderRadius:
 										attributes.publisherBorderRadius,
+								}}
+								extensionProps={{
+									publisherBoxShadow: {},
+									publisherOutline: {},
+									publisherBorder: {},
+									publisherBorderRadius: {},
 								}}
 								initialOpen={true}
 								extensionId={'BorderAndShadow'}
@@ -516,6 +594,21 @@ export const SharedBlockExtension: Props = memo(
 										attributes.publisherBlendMode,
 									publisherMask: attributes.publisherMask,
 								}}
+								extensionProps={{
+									publisherOpacity: {},
+									publisherTransform: {},
+									publisherTransformSelfPerspective: {},
+									publisherTransformSelfOrigin: {},
+									publisherBackfaceVisibility: {},
+									publisherTransformChildPerspective: {},
+									publisherTransformChildOrigin: {},
+									publisherTransition: {},
+									publisherFilter: {},
+									publisherBackdropFilter: {},
+									publisherDivider: {},
+									publisherBlendMode: {},
+									publisherMask: {},
+								}}
 								initialOpen={true}
 								extensionId={'Effects'}
 								values={include(
@@ -539,6 +632,11 @@ export const SharedBlockExtension: Props = memo(
 									publisherPointerEvents:
 										attributes.publisherPointerEvents,
 								}}
+								extensionProps={{
+									publisherCursor: {},
+									publisherUserSelect: {},
+									publisherPointerEvents: {},
+								}}
 								initialOpen={true}
 								extensionId={'Mouse'}
 								values={include(attributes, mouse, 'publisher')}
@@ -556,6 +654,10 @@ export const SharedBlockExtension: Props = memo(
 										attributes.publisherAttributes,
 									publisherCSSProperties:
 										attributes.publisherCSSProperties,
+								}}
+								extensionProps={{
+									publisherAttributes: {},
+									publisherCSSProperties: {},
 								}}
 								initialOpen={true}
 								extensionId={'Advanced'}

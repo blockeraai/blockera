@@ -131,7 +131,6 @@ export default function ObjectFit({
 			<SelectControl
 				controlName="select"
 				columns="columns-1"
-				{...props}
 				options={[
 					{
 						label: __('Default', 'publisher-core'),
@@ -169,6 +168,7 @@ export default function ObjectFit({
 				onChange={(newValue) =>
 					handleOnChangeAttributes('publisherFit', newValue)
 				}
+				{...props}
 			/>
 			<ControlContextProvider
 				value={{
@@ -185,7 +185,6 @@ export default function ObjectFit({
 			>
 				<PositionButtonControl
 					buttonLabel={__('Fit Position', 'publisher-core')}
-					popoverLabel={__('Setting', 'publisher-core')}
 					alignmentMatrixLabel={__('Position', 'publisher-core')}
 					size="small"
 					defaultValue={{ top: '', left: '' }}

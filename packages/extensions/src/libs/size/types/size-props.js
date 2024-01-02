@@ -42,4 +42,16 @@ export type TSizeProps = {
 		overflow?: string,
 	},
 	handleOnChangeAttributes: THandleOnChangeAttributes,
+	extensionProps: {
+		publisherWidth: Object,
+		publisherHeight: Object,
+		publisherMinWidth: Object,
+		publisherMinHeight: Object,
+		publisherMaxWidth: Object,
+		publisherMaxHeight: Object,
+		publisherOverflow: Object,
+		publisherRatio: Object,
+		publisherFit: Object,
+		publisherFitPosition: Object,
+	},
 };

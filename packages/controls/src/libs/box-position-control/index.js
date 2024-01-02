@@ -190,9 +190,9 @@ const Component = ({
 
 	return (
 		<div
-			{...props}
 			className={controlClassNames('box-position', className)}
 			data-cy="box-position-control"
+			{...props}
 		>
 			<div className={controlInnerClassNames('position-header')}>
 				{label && (

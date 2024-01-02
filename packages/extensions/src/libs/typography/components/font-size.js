@@ -19,11 +19,10 @@ export const FontSize = ({
 	block,
 	value,
 	onChange,
-	parentProps,
 	defaultValue,
+	...props
 }: {
 	block: TBlockProps,
-	parentProps: Object,
 	value: string | void,
 	defaultValue?: string,
 	onChange: THandleOnChangeAttributes,
@@ -57,7 +56,6 @@ export const FontSize = ({
 					</>
 				}
 				columns="columns-2"
-				{...parentProps}
 				unitType="essential"
 				range={true}
 				min={0}
@@ -72,6 +70,7 @@ export const FontSize = ({
 				}
 				controlAddonTypes={['variable']}
 				variableTypes={['font-size']}
+				{...props}
 			/>
 		</ControlContextProvider>
 	);

@@ -73,6 +73,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 		// 	justifyContent: defaultJustifyContent,
 		// },
 		handleOnChangeAttributes,
+		extensionProps,
 		config,
 	}: TLayoutProps): MixedElement => {
 		const {
@@ -233,6 +234,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									newValue
 								)
 							}
+							{...extensionProps.publisherDisplay}
 						/>
 						{display === 'none' && (
 							<NoticeControl
@@ -371,6 +373,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													}
 												);
 											}}
+											{...extensionProps.publisherFlexDirection}
 										/>
 									</ControlContextProvider>
 
@@ -572,6 +575,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 											),
 										},
 									]}
+									{...extensionProps.publisherAlignItems}
 								/>
 							</ControlContextProvider>
 						)}
@@ -744,6 +748,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 											newValue
 										)
 									}
+									{...extensionProps.publisherJustifyContent}
 								/>
 							</ControlContextProvider>
 						)}
@@ -765,6 +770,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									handleOnChangeAttributes={
 										handleOnChangeAttributes
 									}
+									{...extensionProps.publisherGap}
 								/>
 							</ControlContextProvider>
 						)}
@@ -905,6 +911,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 														);
 													}
 												}}
+												{...extensionProps.publisherFlexWrap}
 											/>
 											<Button
 												showTooltip={true}
@@ -1145,6 +1152,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 														newValue
 													)
 												}
+												{...extensionProps.publisherAlignContent}
 											/>
 										</ControlContextProvider>
 									)}

@@ -85,7 +85,6 @@ export default function ({
 				{gap?.lock ? (
 					isActiveField(field) && (
 						<InputControl
-							{...props}
 							className="control-first label-center small-gap"
 							aria-label={__('Gap', 'publisher-core')}
 							unitType="essential"
@@ -101,12 +100,12 @@ export default function ({
 							}
 							controlAddonTypes={['variable']}
 							variableTypes={['spacing']}
+							{...props}
 						/>
 					)
 				) : (
 					<Grid gridTemplateColumns="50px 50px" gap="10px">
 						<InputControl
-							{...props}
 							controlName="input"
 							columns="columns-1"
 							className="control-first label-center small-gap"
@@ -136,10 +135,10 @@ export default function ({
 							size="small"
 							controlAddonTypes={['variable']}
 							variableTypes={['spacing']}
+							{...props}
 						/>
 
 						<InputControl
-							{...props}
 							controlName="input"
 							columns="columns-1"
 							className="control-first label-center small-gap"
@@ -172,6 +171,7 @@ export default function ({
 							size="small"
 							controlAddonTypes={['variable']}
 							variableTypes={['spacing']}
+							{...props}
 						/>
 					</Grid>
 				)}

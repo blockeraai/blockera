@@ -24,11 +24,10 @@ export const Filter = ({
 	filter,
 	handleOnChangeAttributes,
 	block,
-	props,
+	...props
 }: {
 	filter: Array<Object> | void,
 	block: TBlockProps,
-	props: Object,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 }): MixedElement => {
 	return (

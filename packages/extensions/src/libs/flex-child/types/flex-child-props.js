@@ -30,4 +30,13 @@ export type TFlexChildProps = {
 	config: Object,
 	children?: MixedElement,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
+	extensionProps: {
+		publisherFlexChildSizing: Object,
+		publisherFlexChildGrow: Object,
+		publisherFlexChildShrink: Object,
+		publisherFlexChildBasis: Object,
+		publisherFlexChildAlign: Object,
+		publisherFlexChildOrder: Object,
+		publisherFlexChildOrderCustom: Object,
+	},
 };

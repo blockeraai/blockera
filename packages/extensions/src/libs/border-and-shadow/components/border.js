@@ -25,6 +25,7 @@ export const Border = ({
 	border,
 	onChange,
 	defaultValue,
+	...props
 }: {
 	block: Object,
 	border?: Object,
@@ -200,6 +201,7 @@ export const Border = ({
 						deleteItemsOnResetAction: deleteWPItems,
 					});
 				}}
+				{...props}
 			/>
 		</ControlContextProvider>
 	);
