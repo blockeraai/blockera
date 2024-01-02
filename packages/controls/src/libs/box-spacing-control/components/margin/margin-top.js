@@ -243,7 +243,22 @@ export function MarginTop({
 						setFocusSide('');
 						setOpenPopover('');
 					}}
-					title={__('Top Margin', 'publisher-core')}
+					title={__('Top Margin Space', 'publisher-core')}
+					inputLabel={__('Top Margin', 'publisher-core')}
+					inputLabelPopoverTitle={__(
+						'Top Margin Space',
+						'publisher-core'
+					)}
+					inputLabelDescription={
+						<>
+							<p>
+								{__(
+									'It enables you to set a margin space that applies only to the top edge of the block.',
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
 					isOpen={openPopover === sideId}
 					unit={sideSpace?.unit}
 					onChange={(newValue) => {

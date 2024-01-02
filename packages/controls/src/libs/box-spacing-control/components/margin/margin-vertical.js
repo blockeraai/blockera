@@ -284,7 +284,22 @@ export function MarginVertical({
 						setFocusSide('');
 						setOpenPopover('');
 					}}
-					title={__('Top & Bottom Margin', 'publisher-core')}
+					title={__('Top & Bottom Margin Space', 'publisher-core')}
+					inputLabel={__('Vertical Margin', 'publisher-core')}
+					inputLabelPopoverTitle={__(
+						'Vertical Margin Space',
+						'publisher-core'
+					)}
+					inputLabelDescription={
+						<>
+							<p>
+								{__(
+									'It enables you to set a margin space that applies to both the top and bottom edges of the block.',
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
 					isOpen={openPopover === sideId}
 					unit={sideSpace?.unit}
 					onChange={(newValue) => {

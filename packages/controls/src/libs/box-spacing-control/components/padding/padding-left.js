@@ -246,7 +246,22 @@ export function PaddingLeft({
 						setFocusSide('');
 						setOpenPopover('');
 					}}
-					title={__('Left Padding', 'publisher-core')}
+					title={__('Left Padding Space', 'publisher-core')}
+					inputLabel={__('Left Padding', 'publisher-core')}
+					inputLabelPopoverTitle={__(
+						'Left Padding Space',
+						'publisher-core'
+					)}
+					inputLabelDescription={
+						<>
+							<p>
+								{__(
+									'It enables you to set a padding space that applies only to the left edge of the block.',
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
 					isOpen={openPopover === sideId}
 					unit={sideSpace.unit}
 					onChange={(newValue) => {

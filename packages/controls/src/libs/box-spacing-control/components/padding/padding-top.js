@@ -245,7 +245,22 @@ export function PaddingTop({
 						setFocusSide('');
 						setOpenPopover('');
 					}}
-					title={__('Top Padding', 'publisher-core')}
+					title={__('Top Padding Space', 'publisher-core')}
+					inputLabel={__('Top Padding', 'publisher-core')}
+					inputLabelPopoverTitle={__(
+						'Top Padding Space',
+						'publisher-core'
+					)}
+					inputLabelDescription={
+						<>
+							<p>
+								{__(
+									'It enables you to set a padding space that applies only to the top edge of the block.',
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
 					isOpen={openPopover === sideId}
 					unit={sideSpace.unit}
 					onChange={(newValue) => {

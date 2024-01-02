@@ -286,7 +286,22 @@ export function PaddingVertical({
 						setFocusSide('');
 						setOpenPopover('');
 					}}
-					title={__('Top & Bottom Padding', 'publisher-core')}
+					title={__('Top & Bottom Padding Space', 'publisher-core')}
+					inputLabel={__('Vertical Padding', 'publisher-core')}
+					inputLabelPopoverTitle={__(
+						'Vertical Padding Space',
+						'publisher-core'
+					)}
+					inputLabelDescription={
+						<>
+							<p>
+								{__(
+									'It enables you to set a padding space that applies to both the top and bottom edges of the block.',
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
 					isOpen={openPopover === sideId}
 					unit={sideSpace.unit}
 					onChange={(newValue) => {

@@ -339,6 +339,21 @@ export function MarginAll({
 							},
 						});
 					}}
+					inputLabel={__('Margin', 'publisher-core')}
+					inputLabelPopoverTitle={__(
+						'All Sides Margin',
+						'publisher-core'
+					)}
+					inputLabelDescription={
+						<>
+							<p>
+								{__(
+									'It enables you to set a single margin space that is uniformly applied to all four edges (top, right, bottom, and left) of the block.',
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
 				/>
 			</>
 		),

@@ -33,6 +33,9 @@ export function SidePopover({
 		return newValue;
 	},
 	defaultValue = '0px',
+	inputLabel = __('Space', 'publisher-blocks'),
+	inputLabelDescription = '',
+	inputLabelPopoverTitle = '',
 }: SidePopoverProps): MixedElement {
 	const {
 		value,
@@ -225,19 +228,19 @@ export function SidePopover({
 				>
 					<BaseControl
 						controlName="input"
-						label={__('Space', 'publisher-blocks')}
+						label={inputLabel}
+						labelPopoverTitle={inputLabelPopoverTitle}
+						labelDescription={inputLabelDescription}
 						columns={'columns-2'}
 						style={{ marginBottom: '25px' }}
-						{...{
-							value,
-							attribute,
-							blockName,
-							defaultValue,
-							resetToDefault,
-							singularId: id,
-							path: getControlPath(attribute, id),
-							mode: 'advanced',
-						}}
+						value={value}
+						attribute={attribute}
+						blockName={blockName}
+						defaultValue={defaultValue}
+						resetToDefault={resetToDefault}
+						singularId={id}
+						path={getControlPath(attribute, id)}
+						mode="advanced"
 					>
 						<InputControl
 							id={id}

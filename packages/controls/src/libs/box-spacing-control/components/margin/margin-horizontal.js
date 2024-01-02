@@ -292,7 +292,22 @@ export function MarginHorizontal({
 						setFocusSide('');
 						setOpenPopover('');
 					}}
-					title={__('Left & Right Margin', 'publisher-core')}
+					title={__('Left & Right Margin Space', 'publisher-core')}
+					inputLabel={__('Horizontal Margin', 'publisher-core')}
+					inputLabelPopoverTitle={__(
+						'Horizontal Margin Space',
+						'publisher-core'
+					)}
+					inputLabelDescription={
+						<>
+							<p>
+								{__(
+									'It enables you to set a margin space that applies to both the left and right edges of the block.',
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
 					isOpen={openPopover === sideId}
 					unit={sideSpace?.unit}
 					onChange={(newValue) => {

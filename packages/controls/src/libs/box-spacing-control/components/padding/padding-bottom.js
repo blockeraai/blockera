@@ -245,7 +245,22 @@ export function PaddingBottom({
 						setFocusSide('');
 						setOpenPopover('');
 					}}
-					title={__('Bottom Padding', 'publisher-core')}
+					title={__('Bottom Padding Space', 'publisher-core')}
+					inputLabel={__('Bottom Padding', 'publisher-core')}
+					inputLabelPopoverTitle={__(
+						'Bottom Padding Space',
+						'publisher-core'
+					)}
+					inputLabelDescription={
+						<>
+							<p>
+								{__(
+									'It enables you to set a padding space that applies only to the bottom edge of the block.',
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
 					isOpen={openPopover === sideId}
 					unit={sideSpace.unit}
 					onChange={(newValue) => {

@@ -240,7 +240,22 @@ export function MarginLeft({
 						setFocusSide('');
 						setOpenPopover('');
 					}}
-					title={__('Left Margin', 'publisher-core')}
+					title={__('Left Margin Space', 'publisher-core')}
+					inputLabel={__('Left Margin', 'publisher-core')}
+					inputLabelPopoverTitle={__(
+						'Left Margin Space',
+						'publisher-core'
+					)}
+					inputLabelDescription={
+						<>
+							<p>
+								{__(
+									'It enables you to set a margin space that applies only to the left edge of the block.',
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
 					isOpen={openPopover === sideId}
 					unit={sideSpace.unit}
 					onChange={(newValue) => {

@@ -246,7 +246,22 @@ export function PaddingRight({
 						setFocusSide('');
 						setOpenPopover('');
 					}}
-					title={__('Right Padding', 'publisher-core')}
+					title={__('Right Padding Space', 'publisher-core')}
+					inputLabel={__('Right Padding', 'publisher-core')}
+					inputLabelPopoverTitle={__(
+						'Right Padding Space',
+						'publisher-core'
+					)}
+					inputLabelDescription={
+						<>
+							<p>
+								{__(
+									'It enables you to set a padding space that applies only to the right edge of the block.',
+									'publisher-core'
+								)}
+							</p>
+						</>
+					}
 					isOpen={openPopover === sideId}
 					unit={sideSpace.unit}
 					onChange={(newValue) => {
