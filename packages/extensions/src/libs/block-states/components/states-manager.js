@@ -26,6 +26,7 @@ import getBreakpoints from '../default-breakpoints';
 import { attributes as StateSettings } from '../attributes';
 import type { BreakpointTypes, StateTypes, TStates } from '../types';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import { isEquals } from '@publisher/utils';
 
 export default function StatesManager({
 	block,
@@ -43,6 +44,7 @@ export default function StatesManager({
 					{
 						...defaultStates.normal,
 						...defaultItemValue,
+						isOpen: false,
 						display: false,
 						deletable: false,
 						selectable: true,
@@ -114,15 +116,29 @@ export default function StatesManager({
 							visibilitySupport: true,
 						},
 						onChange: (newValue) => {
-							if (newValue.length === states.length) {
-								return;
-							}
-
 							const selectedState = newValue.find(
 								(item) => item.isSelected
 							);
 
 							if (!selectedState) {
+								return;
+							}
+
+							if (newValue.length === states.length) {
+								if (!isEquals(newValue, states)) {
+									handleOnChangeAttributes(
+										'publisherBlockStates',
+										newValue,
+										{
+											addOrModifyRootItems: {
+												publisherCurrentState:
+													selectedState.type ||
+													'normal',
+											},
+										}
+									);
+								}
+
 								return;
 							}
 
