@@ -388,7 +388,7 @@ export default function ({
 											ref?: Object
 										): void =>
 											handleOnChangeAttributes(
-												'publisherGridRows',
+												'publisherGridAreas',
 												newValue,
 												{ ref }
 											)
