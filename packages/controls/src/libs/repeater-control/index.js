@@ -35,6 +35,7 @@ export const defaultItemValue = {
 	cloneable: true,
 	isVisible: true,
 	deletable: true,
+	isSelected: false,
 	selectable: false,
 	visibilitySupport: true,
 };
