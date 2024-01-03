@@ -279,7 +279,7 @@ export function SideItem({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value,
+							value: value.position[side],
 							attribute,
 							blockName,
 							defaultValue,
@@ -320,6 +320,7 @@ export function SideItem({
 							},
 						});
 					}}
+					defaultValue={defaultValue}
 				/>
 			</>
 		),

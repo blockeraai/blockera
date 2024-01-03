@@ -98,6 +98,7 @@ export function SidePopover({
 							blockName,
 							defaultValue,
 							resetToDefault,
+							singularId: sideId,
 							path: getControlPath(attribute, property),
 							mode: 'advanced',
 						}}

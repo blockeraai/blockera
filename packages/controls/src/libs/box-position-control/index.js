@@ -273,6 +273,9 @@ const Component = ({
 					<span className={controlInnerClassNames('box-model-label')}>
 						<LabelControl
 							{...labelProps}
+							singularId={'position'}
+							defaultValue={defaultValue.position}
+							value={value.position}
 							label={labelText}
 							path={getControlPath(attribute, 'position')}
 							labelDescription={
