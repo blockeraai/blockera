@@ -224,8 +224,8 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 
 	return {
 		dispatch,
-		setValue: (value, ref = undefined) => {
-			setValue(value, ref);
+		setValue: (value, _ref = undefined) => {
+			setValue(value, _ref || ref);
 
 			modifyValue(value);
 

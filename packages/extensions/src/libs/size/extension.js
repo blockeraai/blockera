@@ -107,7 +107,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									const toWPCompatible = (
 										newValue: string
 									): string | Object => {
-										if (!ref) {
+										if ('reset' === ref.current.action) {
 											return {
 												width: undefined,
 											};
