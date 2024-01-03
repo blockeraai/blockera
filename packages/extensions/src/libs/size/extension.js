@@ -107,6 +107,12 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									const toWPCompatible = (
 										newValue: string
 									): string | Object => {
+										if (!ref) {
+											return {
+												width: undefined,
+											};
+										}
+
 										if (
 											!isNormalState() ||
 											newValue === '' ||
@@ -131,7 +137,6 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											ref,
 											addOrModifyRootItems:
 												toWPCompatible(newValue),
-											deleteItemsOnResetAction: ['width'],
 										}
 									);
 								}}
