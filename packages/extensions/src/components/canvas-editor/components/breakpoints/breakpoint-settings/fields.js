@@ -14,6 +14,8 @@ import {
 	InputControl,
 	useControlContext,
 } from '@publisher/controls';
+import { Flex } from '@publisher/components';
+import { controlClassNames } from '@publisher/classnames';
 
 export default function ({
 	item,
@@ -46,49 +48,71 @@ export default function ({
 				}
 				label={__('Name', 'publisher-core')}
 			/>
-			<BaseControl controlName={__('Size', 'publisher-core')}>
-				<InputControl
-					id={'settings.min'}
-					type={'number'}
-					unitType={'width'}
-					columns={'columns-2'}
-					defaultValue={item.settings.min}
-					onChange={(newValue) =>
-						changeRepeaterItem({
-							itemId,
-							controlId,
-							value: {
-								...item,
-								settings: {
-									...item.settings,
-									min: newValue,
+			<BaseControl
+				columns="columns-1"
+				label={__('Size', 'publisher-core')}
+			>
+				<Flex
+					style={{
+						width: '173px',
+						alignSelf: 'flex-end',
+					}}
+				>
+					<InputControl
+						id={'settings.min'}
+						type={'number'}
+						unitType={'width'}
+						columns={'columns-2'}
+						defaultValue={item.settings.min}
+						onChange={(newValue) =>
+							changeRepeaterItem({
+								itemId,
+								controlId,
+								value: {
+									...item,
+									settings: {
+										...item.settings,
+										min: newValue,
+									},
 								},
-							},
-						})
-					}
-					label={__('Min', 'publisher-core')}
-				/>
-				<InputControl
-					id={'settings.max'}
-					type={'number'}
-					unitType={'width'}
-					columns={'columns-2'}
-					defaultValue={item.settings.max}
-					onChange={(newValue) =>
-						changeRepeaterItem({
-							itemId,
-							controlId,
-							value: {
-								...item,
-								settings: {
-									...item.settings,
-									max: newValue,
+							})
+						}
+						placeholder="0"
+						size="small"
+						className={controlClassNames(
+							'control-first label-center small-gap'
+						)}
+						label={__('Min', 'publisher-core')}
+						aria-label={__('Min Width', 'publisher-core')}
+					/>
+					<InputControl
+						id={'settings.max'}
+						type={'number'}
+						unitType={'width'}
+						columns={'columns-2'}
+						defaultValue={item.settings.max}
+						onChange={(newValue) =>
+							changeRepeaterItem({
+								itemId,
+								controlId,
+								value: {
+									...item,
+									settings: {
+										...item.settings,
+										max: newValue,
+									},
 								},
-							},
-						})
-					}
-					label={__('Max', 'publisher-core')}
-				/>
+							})
+						}
+						placeholder="0"
+						size="small"
+						className={controlClassNames(
+							'control-first label-center small-gap'
+						)}
+						label={__('Max', 'publisher-core')}
+						aria-label={__('Max Width', 'publisher-core')}
+					/>
+				</Flex>
 			</BaseControl>
 		</>
 	);

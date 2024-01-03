@@ -40,12 +40,19 @@ export default function ({
 				defaultRepeaterItemValue={{
 					...defaultItemValue,
 					isOpen: false,
+					settings: {
+						min: '',
+						max: '',
+					},
+					type: '',
+					force: false,
+					label: '',
+					attributes: {},
 				}}
 				repeaterItemHeader={Header}
 				repeaterItemChildren={Fields}
 				onChange={(newValue) => onChange('breakpoints', newValue)}
 				defaultValue={defaultBreakpoints()}
-				maxItems={defaultBreakpoints().length}
 			/>
 		</ControlContextProvider>
 	);

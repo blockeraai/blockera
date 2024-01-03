@@ -17,7 +17,11 @@ export const Preview = ({ refId }: { refId: Object }): MixedElement => {
 			target={'_blank'}
 			rel="noreferrer"
 		>
-			<Icon library={'wp'} icon={'external'} />
+			<Icon
+				className={'publisher-canvas-preview-link'}
+				library={'wp'}
+				icon={'external'}
+			/>
 		</a>
 	);
 };
