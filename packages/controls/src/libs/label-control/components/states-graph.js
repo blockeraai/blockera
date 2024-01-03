@@ -10,7 +10,7 @@ import type { MixedElement } from 'react';
 import { controlInnerClassNames } from '@publisher/classnames';
 import type { StateTypes } from '@publisher/extensions/src/libs/block-states/types';
 import { isEmpty } from '@publisher/utils';
-import { getBreakpointIcon } from '@publisher/extensions/src/libs/block-states/helpers';
+import { BreakpointIcon } from '@publisher/extensions/src/libs/block-states/helpers';
 
 /**
  * Internal Dependencies
@@ -75,7 +75,7 @@ export const StatesGraph = ({
 										'states-changes-breakpoint-title'
 									)}
 								>
-									{getBreakpointIcon(state.graph.type)}
+									<BreakpointIcon name={state.graph.type} />
 									{state.graph.label}
 								</div>
 							)}
