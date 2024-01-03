@@ -28,6 +28,7 @@ import { attributes as StateSettings } from '../attributes';
 import type { BreakpointTypes, StateTypes, TStates } from '../types';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 import { PopoverTitleButtons } from './popover-title-buttons';
+import { LabelDescription } from './label-description';
 
 export default function StatesManager({
 	block,
@@ -218,6 +219,7 @@ export default function StatesManager({
 						repeaterItemChildren: ItemBody,
 					}}
 					label={__('Block States', 'publisher-core')}
+					labelDescription={<LabelDescription />}
 					popoverTitle={__('Block State', 'publisher-core')}
 					className={controlInnerClassNames('block-states-repeater')}
 					itemColumns={2}

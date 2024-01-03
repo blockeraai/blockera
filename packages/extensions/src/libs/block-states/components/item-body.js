@@ -15,6 +15,7 @@ import { SelectControl, useControlContext } from '@publisher/controls';
  */
 import states from '../states';
 import type { TStates } from '../types';
+import { LabelDescription } from './label-description';
 
 const ItemBody = ({
 	item,
@@ -37,7 +38,9 @@ const ItemBody = ({
 		<SelectControl
 			id={`[${itemId}].type`}
 			defaultValue={item.type}
-			label={__('State Type', 'publisher-core')}
+			label={__('State', 'publisher-core')}
+			labelPopoverTitle={__('Block States', 'publisher-core')}
+			labelDescription={<LabelDescription />}
 			columns="columns-2"
 			options={Object.values(states)?.map((state) => ({
 				value: state.type,
