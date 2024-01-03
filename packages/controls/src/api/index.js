@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * External dependencies
  */
@@ -16,13 +18,14 @@ import {
 	store as repeaterStore,
 	STORE_NAME as repeaterControlStoreName,
 } from '../libs/repeater-control/store';
+import type { ControlRegistrationProps } from './types';
 
 //Register control into store to use in control context provider
 export function registerControl({
 	name,
 	type: STORE_NAME,
 	...control
-}): Object | undefined {
+}: ControlRegistrationProps): Object | void {
 	if (!isString(name)) {
 		return;
 	}
