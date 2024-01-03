@@ -34,6 +34,101 @@ export default {
 	tags: ['autodocs'],
 };
 
+export const MultiColumn = {
+	args: {
+		label: 'Items',
+		defaultRepeaterItemValue: {
+			name: '',
+			isVisible: true,
+		},
+		repeaterItemChildren: CustomRepeaterItemChildren,
+		storeName: STORE_NAME,
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<Flex direction="column" gap="100px">
+				<Flex
+					direction="column"
+					gap="20px"
+					style={{ marginBottom: '100px' }}
+				>
+					<h2 className="story-heading">
+						Multi-column<span>2 Columns</span>
+					</h2>
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									name: 'Akbar',
+									isVisible: true,
+									isOpen: false,
+								},
+								{
+									name: 'Akbar Ali',
+									isVisible: true,
+									isOpen: false,
+								},
+							],
+						}}
+					>
+						<RepeaterControl
+							{...args}
+							label="Repeater"
+							itemColumns={2}
+							actionButtonVisibility={false}
+							actionButtonClone={false}
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex
+					direction="column"
+					gap="20px"
+					style={{ marginBottom: '100px' }}
+				>
+					<h2 className="story-heading">
+						Multi-column<span>3 Columns</span>
+					</h2>
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [
+								{
+									name: 'Akbar',
+									isVisible: true,
+									isOpen: false,
+								},
+								{
+									name: 'Akbar Ali',
+									isVisible: true,
+									isOpen: false,
+								},
+								{
+									name: 'Akbar Shah',
+									isVisible: true,
+									isOpen: false,
+								},
+							],
+						}}
+					>
+						<RepeaterControl
+							{...args}
+							label="Repeater"
+							itemColumns={3}
+							actionButtonVisibility={false}
+							actionButtonClone={false}
+						/>
+					</ControlContextProvider>
+				</Flex>
+			</Flex>
+		);
+	},
+};
+
 export const PopoverEmpty = {
 	args: {
 		label: 'Items',

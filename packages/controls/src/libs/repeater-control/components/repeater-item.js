@@ -51,6 +51,7 @@ const RepeaterItem = ({
 		repeaterId,
 		popoverTitle,
 		popoverClassName,
+		popoverTitleButtonsRight: PopoverTitleButtonsRight,
 		repeaterItems: items,
 		repeaterItemOpener: RepeaterItemOpener,
 		repeaterItemHeader: RepeaterItemHeader,
@@ -146,6 +147,13 @@ const RepeaterItem = ({
 				toggleOpenBorder={true}
 				design={design}
 				popoverTitle={popoverTitle}
+				popoverTitleButtonsRight={
+					PopoverTitleButtonsRight && (
+						<PopoverTitleButtonsRight
+							{...repeaterItemActionsProps}
+						/>
+					)
+				}
 				popoverClassName={popoverClassName}
 				className={controlInnerClassNames(
 					'repeater-item-group',
@@ -222,7 +230,7 @@ const RepeaterItem = ({
 						repeaterId,
 					});
 				}}
-				onClick={(event): boolean => {
+				onClick={(event): void | boolean => {
 					if (item.selectable) {
 						const newItems = items.map((_item, _itemId) => {
 							if (_itemId === itemId) {

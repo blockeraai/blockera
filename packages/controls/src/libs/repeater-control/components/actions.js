@@ -40,6 +40,7 @@ export default function RepeaterItemActions({
 		actionButtonClone,
 		repeaterItems,
 	} = useContext(RepeaterContext);
+
 	const {
 		dispatch: {
 			changeRepeaterItem,
