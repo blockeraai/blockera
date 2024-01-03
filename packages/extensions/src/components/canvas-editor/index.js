@@ -31,6 +31,7 @@ export const CanvasEditor = (): null => {
 			ref.current?.rootElement.querySelector(`#${identifier}`).remove();
 		}
 
+		//FIXME: please check all states to correctly detect ref elements!
 		ref.current = {
 			rootElement:
 				document.querySelector(
@@ -51,8 +52,12 @@ export const CanvasEditor = (): null => {
 
 		ref.current.rootElement.append(wrapper);
 
-		ref.current.previewElement.style.display = 'none';
-		ref.current.dropDownPreview.style.display = 'none';
+		if (ref.current.previewElement) {
+			ref.current.previewElement.style.display = 'none';
+		}
+		if (ref.current.dropDownPreview) {
+			ref.current.dropDownPreview.style.display = 'none';
+		}
 	}, [selectedBlock]);
 
 	return null;

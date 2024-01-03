@@ -11,9 +11,10 @@ import type { MixedElement } from 'react';
 import { Icon } from '@publisher/components';
 
 export const Preview = ({ refId }: { refId: Object }): MixedElement => {
+	//FIXME: preview link in site editor and edit new post page!
 	return (
 		<a
-			href={refId.current.previewElement.href}
+			href={refId.current.previewElement?.href || ''}
 			target={'_blank'}
 			rel="noreferrer"
 		>
