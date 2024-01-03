@@ -12,6 +12,7 @@ import { controlInnerClassNames } from '@publisher/classnames';
 import { ControlContextProvider, RepeaterControl } from '@publisher/controls';
 import { STORE_NAME } from '@publisher/controls/src/libs/repeater-control/store';
 import { defaultItemValue } from '@publisher/controls/src/libs/repeater-control';
+import { isEquals } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -26,7 +27,7 @@ import getBreakpoints from '../default-breakpoints';
 import { attributes as StateSettings } from '../attributes';
 import type { BreakpointTypes, StateTypes, TStates } from '../types';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
-import { isEquals } from '@publisher/utils';
+import { PopoverTitleButtons } from './popover-title-buttons';
 
 export default function StatesManager({
 	block,
@@ -217,7 +218,12 @@ export default function StatesManager({
 						repeaterItemChildren: ItemBody,
 					}}
 					label={__('Block States', 'publisher-core')}
+					popoverTitle={__('Block State', 'publisher-core')}
 					className={controlInnerClassNames('block-states-repeater')}
+					itemColumns={2}
+					actionButtonClone={false}
+					actionButtonVisibility={false}
+					popoverTitleButtonsRight={PopoverTitleButtons}
 				/>
 			</ControlContextProvider>
 		</div>

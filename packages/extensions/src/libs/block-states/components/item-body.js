@@ -38,6 +38,7 @@ const ItemBody = ({
 			id={`[${itemId}].type`}
 			defaultValue={item.type}
 			label={__('State Type', 'publisher-core')}
+			columns="columns-2"
 			options={Object.values(states)?.map((state) => ({
 				value: state.type,
 				label: state.label,
