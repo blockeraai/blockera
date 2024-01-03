@@ -8,7 +8,7 @@ import { useContext, useRef } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { prepare } from '@publisher/data-extractor';
+import { prepare, update } from '@publisher/data-extractor';
 import {
 	isNull,
 	isObject,
@@ -341,10 +341,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 					callback(item, itemId, value)
 				);
 			} else if (isObject(savedValue) && args?.propId) {
-				value = {
-					...savedValue,
-					[args?.propId]: value,
-				};
+				value = update(savedValue, args.path, value);
 			} else if (isObject(savedValue) && isObject(value)) {
 				value = {
 					...savedValue,
