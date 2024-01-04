@@ -320,44 +320,46 @@ export function PaddingAll({
 					/>
 				</div>
 
-				<SidePopover
-					id={getId(id, 'padding.top')}
-					type="padding"
-					icon={<PaddingAllIcon />}
-					onClose={() => {
-						setFocusSide('');
-						setOpenPopover('');
-					}}
-					title={__('All Sides Padding', 'publisher-core')}
-					inputLabel={__('Padding', 'publisher-core')}
-					inputLabelPopoverTitle={__(
-						'All Sides Padding',
-						'publisher-core'
-					)}
-					inputLabelDescription={
-						<>
-							<p>
-								{__(
-									'It enables you to set a single padding space that is uniformly applied to all four edges (top, right, bottom, and left) of the block.',
-									'publisher-core'
-								)}
-							</p>
-						</>
-					}
-					isOpen={openPopover === sideId}
-					unit={sideSpace.unit}
-					onChange={(newValue) => {
-						setValue({
-							...value,
-							padding: {
-								top: newValue,
-								right: newValue,
-								bottom: newValue,
-								left: newValue,
-							},
-						});
-					}}
-				/>
+				{openPopover === sideId && (
+					<SidePopover
+						id={getId(id, 'padding.top')}
+						type="padding"
+						icon={<PaddingAllIcon />}
+						onClose={() => {
+							setFocusSide('');
+							setOpenPopover('');
+						}}
+						title={__('All Sides Padding', 'publisher-core')}
+						inputLabel={__('Padding', 'publisher-core')}
+						inputLabelPopoverTitle={__(
+							'All Sides Padding',
+							'publisher-core'
+						)}
+						inputLabelDescription={
+							<>
+								<p>
+									{__(
+										'It enables you to set a single padding space that is uniformly applied to all four edges (top, right, bottom, and left) of the block.',
+										'publisher-core'
+									)}
+								</p>
+							</>
+						}
+						isOpen={true}
+						unit={sideSpace.unit}
+						onChange={(newValue) => {
+							setValue({
+								...value,
+								padding: {
+									top: newValue,
+									right: newValue,
+									bottom: newValue,
+									left: newValue,
+								},
+							});
+						}}
+					/>
+				)}
 			</>
 		),
 	};

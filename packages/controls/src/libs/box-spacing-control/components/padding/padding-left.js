@@ -237,43 +237,45 @@ export function PaddingLeft({
 					<ValueAddonPointer />
 				</div>
 
-				<SidePopover
-					id={getId(id, 'padding.left')}
-					offset={78}
-					type="padding"
-					icon={<PaddingLeftIcon />}
-					onClose={() => {
-						setFocusSide('');
-						setOpenPopover('');
-					}}
-					title={__('Left Padding Space', 'publisher-core')}
-					inputLabel={__('Left Padding', 'publisher-core')}
-					inputLabelPopoverTitle={__(
-						'Left Padding Space',
-						'publisher-core'
-					)}
-					inputLabelDescription={
-						<>
-							<p>
-								{__(
-									'It enables you to set a padding space that applies only to the left edge of the block.',
-									'publisher-core'
-								)}
-							</p>
-						</>
-					}
-					isOpen={openPopover === sideId}
-					unit={sideSpace.unit}
-					onChange={(newValue) => {
-						setValue({
-							...value,
-							padding: {
-								...value.padding,
-								left: newValue,
-							},
-						});
-					}}
-				/>
+				{openPopover === sideId && (
+					<SidePopover
+						id={getId(id, 'padding.left')}
+						offset={78}
+						type="padding"
+						icon={<PaddingLeftIcon />}
+						onClose={() => {
+							setFocusSide('');
+							setOpenPopover('');
+						}}
+						title={__('Left Padding Space', 'publisher-core')}
+						inputLabel={__('Left Padding', 'publisher-core')}
+						inputLabelPopoverTitle={__(
+							'Left Padding Space',
+							'publisher-core'
+						)}
+						inputLabelDescription={
+							<>
+								<p>
+									{__(
+										'It enables you to set a padding space that applies only to the left edge of the block.',
+										'publisher-core'
+									)}
+								</p>
+							</>
+						}
+						isOpen={true}
+						unit={sideSpace.unit}
+						onChange={(newValue) => {
+							setValue({
+								...value,
+								padding: {
+									...value.padding,
+									left: newValue,
+								},
+							});
+						}}
+					/>
+				)}
 			</>
 		),
 	};

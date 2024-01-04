@@ -233,42 +233,50 @@ export function MarginRight({
 
 						<ValueAddonPointer />
 
-						<SidePopover
-							id={getId(id, 'margin.right')}
-							offset={255}
-							icon={<MarginRightIcon />}
-							onClose={() => {
-								setFocusSide('');
-								setOpenPopover('');
-							}}
-							title={__('Right Margin Space', 'publisher-core')}
-							inputLabel={__('Right Margin', 'publisher-core')}
-							inputLabelPopoverTitle={__(
-								'Right Margin Space',
-								'publisher-core'
-							)}
-							inputLabelDescription={
-								<>
-									<p>
-										{__(
-											'It enables you to set a margin space that applies only to the right edge of the block.',
-											'publisher-core'
-										)}
-									</p>
-								</>
-							}
-							isOpen={openPopover === sideId}
-							unit={sideSpace.unit}
-							onChange={(newValue) => {
-								setValue({
-									...value,
-									margin: {
-										...value.margin,
-										right: newValue,
-									},
-								});
-							}}
-						/>
+						{openPopover === sideId && (
+							<SidePopover
+								id={getId(id, 'margin.right')}
+								offset={255}
+								icon={<MarginRightIcon />}
+								onClose={() => {
+									setFocusSide('');
+									setOpenPopover('');
+								}}
+								title={__(
+									'Right Margin Space',
+									'publisher-core'
+								)}
+								inputLabel={__(
+									'Right Margin',
+									'publisher-core'
+								)}
+								inputLabelPopoverTitle={__(
+									'Right Margin Space',
+									'publisher-core'
+								)}
+								inputLabelDescription={
+									<>
+										<p>
+											{__(
+												'It enables you to set a margin space that applies only to the right edge of the block.',
+												'publisher-core'
+											)}
+										</p>
+									</>
+								}
+								isOpen={true}
+								unit={sideSpace.unit}
+								onChange={(newValue) => {
+									setValue({
+										...value,
+										margin: {
+											...value.margin,
+											right: newValue,
+										},
+									});
+								}}
+							/>
+						)}
 					</div>
 				)}
 			</>

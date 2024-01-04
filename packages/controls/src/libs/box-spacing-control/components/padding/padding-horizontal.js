@@ -278,43 +278,48 @@ export function PaddingHorizontal({
 					/>
 				</div>
 
-				<SidePopover
-					id={getId(id, 'padding.left')}
-					type="padding"
-					icon={<PaddingLeftRightIcon />}
-					onClose={() => {
-						setFocusSide('');
-						setOpenPopover('');
-					}}
-					title={__('Left & Right Padding Space', 'publisher-core')}
-					inputLabel={__('Horizontal Padding', 'publisher-core')}
-					inputLabelPopoverTitle={__(
-						'Horizontal Padding Space',
-						'publisher-core'
-					)}
-					inputLabelDescription={
-						<>
-							<p>
-								{__(
-									'It enables you to set a padding space that applies to both the left and right edges of the block.',
-									'publisher-core'
-								)}
-							</p>
-						</>
-					}
-					isOpen={openPopover === sideId}
-					unit={sideSpace.unit}
-					onChange={(newValue) => {
-						setValue({
-							...value,
-							padding: {
-								...value.padding,
-								left: newValue,
-								right: newValue,
-							},
-						});
-					}}
-				/>
+				{openPopover === sideId && (
+					<SidePopover
+						id={getId(id, 'padding.left')}
+						type="padding"
+						icon={<PaddingLeftRightIcon />}
+						onClose={() => {
+							setFocusSide('');
+							setOpenPopover('');
+						}}
+						title={__(
+							'Left & Right Padding Space',
+							'publisher-core'
+						)}
+						inputLabel={__('Horizontal Padding', 'publisher-core')}
+						inputLabelPopoverTitle={__(
+							'Horizontal Padding Space',
+							'publisher-core'
+						)}
+						inputLabelDescription={
+							<>
+								<p>
+									{__(
+										'It enables you to set a padding space that applies to both the left and right edges of the block.',
+										'publisher-core'
+									)}
+								</p>
+							</>
+						}
+						isOpen={true}
+						unit={sideSpace.unit}
+						onChange={(newValue) => {
+							setValue({
+								...value,
+								padding: {
+									...value.padding,
+									left: newValue,
+									right: newValue,
+								},
+							});
+						}}
+					/>
+				)}
 			</>
 		),
 	};
