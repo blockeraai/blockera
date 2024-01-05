@@ -39,8 +39,8 @@
 			gap: 8px;
 			align-items: center;
 			flex-wrap: nowrap;
-			padding: 2px 0;
-			height: 30px;
+			padding: 0 0;
+			height: 28px;
 			width: 100%;
 			position: relative;
 			letter-spacing: -0.2px;
@@ -89,6 +89,7 @@
 		.publisher-control-action-buttons {
 			position: absolute;
 			top: 0;
+			bottom: 0;
 			right: 5px;
 			opacity: 0;
 			visibility: hidden;
