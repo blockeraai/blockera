@@ -33,7 +33,7 @@ export function BlockCard({
 
 	return (
 		<div className={extensionClassNames('block-card')}>
-			<div className={extensionClassNames('block-card__inner')}>
+			<div className={extensionInnerClassNames('block-card__inner')}>
 				<BlockIcon icon={blockInformation.icon} />
 
 				<div
