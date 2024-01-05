@@ -56,7 +56,7 @@ export function CurrentState({ state }: { state: StateTypes }): null {
 					size={16}
 					style={{
 						top: '3px',
-						margin: '0 5px',
+						margin: '0',
 						position: 'relative',
 						transition: 'all 0.1s',
 					}}

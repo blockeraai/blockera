@@ -26,19 +26,21 @@ import { generateExtensionId } from '../../utils';
 import getBreakpoints from '../default-breakpoints';
 import { attributes as StateSettings } from '../attributes';
 import type { BreakpointTypes, StateTypes, TStates } from '../types';
-import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { TBlockProps } from '../../types';
 import { PopoverTitleButtons } from './popover-title-buttons';
 import { LabelDescription } from './label-description';
+import { useBlockContext } from '../../../hooks';
+import StateContainer from '../../../components/state-container';
 
 export default function StatesManager({
 	block,
 	states,
-	handleOnChangeAttributes,
 }: {
 	states: Array<Object>,
 	block: TBlockProps,
-	handleOnChangeAttributes: THandleOnChangeAttributes,
 }): Element<any> {
+	const { handleOnChangeAttributes } = useBlockContext();
+
 	const contextValue = {
 		block,
 		value: !states.length
@@ -79,9 +81,11 @@ export default function StatesManager({
 		});
 	};
 
+	const currentState = getStateInfo(block.attributes.publisherCurrentState);
+
 	return (
-		<div style={{ padding: '0 20px 23px' }}>
-			<ControlContextProvider storeName={STORE_NAME} value={contextValue}>
+		<ControlContextProvider storeName={STORE_NAME} value={contextValue}>
+			<StateContainer currentState={currentState}>
 				<RepeaterControl
 					{...{
 						valueCleanup,
@@ -227,7 +231,7 @@ export default function StatesManager({
 					actionButtonVisibility={false}
 					popoverTitleButtonsRight={PopoverTitleButtons}
 				/>
-			</ControlContextProvider>
-		</div>
+			</StateContainer>
+		</ControlContextProvider>
 	);
 }

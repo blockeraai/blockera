@@ -45,7 +45,7 @@ export const GridBuilder = ({
 
 	const handleClass = id && clientId === id ? 'showHandles' : '';
 
-	const style: React.CSSProperties = {
+	const style: Object = {
 		outline: 'none',
 		border: `2px solid ${
 			(id && clientId === id) || showGrids || isDragged.current

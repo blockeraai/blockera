@@ -21,24 +21,33 @@ import {
 	useAttributes,
 	BlockEditContextProvider,
 } from '../hooks';
-import { BlockStates } from '../libs';
 import { sanitizedBlockAttributes } from '../hooks/utils';
 import { SideEffect } from '../libs/base/components/side-effect';
 import type { BreakpointTypes, StateTypes } from '../libs/block-states/types';
 import { GridBuilder } from './grid-builder';
+import { BlockCardWrapper } from '../libs/block-card';
 
 export function BlockBase({
 	additional,
 	children,
-	...props
+	name,
+	clientId,
+	attributes,
+	setAttributes,
+	className,
 }: {
 	additional: Object,
 	children: MixedElement,
+	name: string,
+	clientId: string,
+	attributes: Object,
+	setAttributes: (attributes: Object) => void,
+	className: string,
 }): Element<any> | null {
 	const { supports } = useSelect((select) => {
 		const { getBlockType } = select('core/blocks');
 
-		return getBlockType(props.name);
+		return getBlockType(name);
 	});
 
 	const { __experimentalGetPreviewDeviceType: getDeviceType } = window?.wp
@@ -50,33 +59,33 @@ export function BlockBase({
 
 	useIconEffect(
 		{
-			name: props.name,
-			clientId: props.clientId,
+			name,
+			clientId,
 			blockRefId: blockEditRef,
-			publisherIcon: props?.attributes?.publisherIcon,
-			publisherIconGap: props?.attributes?.publisherIconGap,
-			publisherIconSize: props?.attributes?.publisherIconSize,
-			publisherIconColor: props?.attributes?.publisherIconColor,
-			publisherIconPosition: props?.attributes?.publisherIconPosition,
+			publisherIcon: attributes?.publisherIcon,
+			publisherIconGap: attributes?.publisherIconGap,
+			publisherIconSize: attributes?.publisherIconSize,
+			publisherIconColor: attributes?.publisherIconColor,
+			publisherIconPosition: attributes?.publisherIconPosition,
 		},
-		[props.attributes]
+		[attributes]
 	);
 
 	const { edit: BlockEditComponent } = additional;
 
 	useEffect(() => {
 		const publisherAttributes = omitWithPattern(
-			sanitizedBlockAttributes(props.attributes),
+			sanitizedBlockAttributes(attributes),
 			/^(?!publisher\w+).*/i
 		);
 
 		if (
-			isUndefined(props.attributes.publisherPropsId) &&
+			isUndefined(attributes.publisherPropsId) &&
 			0 < Object.keys(publisherAttributes)?.length
 		) {
 			const d = new Date();
-			props.setAttributes({
-				...props.attributes,
+			setAttributes({
+				...attributes,
 				publisherPropsId:
 					'' +
 					d.getMonth() +
@@ -92,54 +101,52 @@ export function BlockBase({
 		// eslint-disable-next-line
 	}, []);
 
-	const attributes: Object = useMemo(() => {
-		const className = extensionClassNames(
+	const _attributes: Object = useMemo(() => {
+		const _className = extensionClassNames(
 			{
-				[props.className]: true,
+				[className]: true,
 				'publisher-extension-ref': true,
-				[`client-id-${props.clientId}`]: true,
+				[`client-id-${clientId}`]: true,
 			},
 			additional.editorProps.className
 		);
 
 		return {
-			...props.attributes,
-			className,
+			...attributes,
+			_className,
 		};
 		// eslint-disable-next-line
 	}, []);
 
 	const isNormalState = () =>
-		'normal' === props.attributes?.publisherCurrentState &&
+		'normal' === attributes?.publisherCurrentState &&
 		/desktop/i.test(getDeviceType());
 
-	const blockStates = props.attributes?.publisherBlockStates.map(
+	const blockStates = attributes?.publisherBlockStates.map(
 		(state: StateTypes) => state.type
 	);
 
-	let blockStateId = blockStates?.indexOf(
-		props.attributes?.publisherCurrentState
-	);
+	let blockStateId = blockStates?.indexOf(attributes?.publisherCurrentState);
 
 	if (-1 === blockStateId) {
 		blockStateId = 0;
 
-		props.setAttributes({
-			...props.attributes,
+		setAttributes({
+			...attributes,
 			publisherCurrentState: 'normal',
 		});
 	}
 
 	const breakpointId = indexOf(
-		props.attributes?.publisherBlockStates[blockStateId]?.breakpoints.map(
+		attributes?.publisherBlockStates[blockStateId]?.breakpoints.map(
 			(breakpoint: BreakpointTypes) => breakpoint.label
 		),
 		getDeviceType()
 	);
 
 	const { handleOnChangeAttributes } = useAttributes(
-		props.attributes,
-		props.setAttributes,
+		attributes,
+		setAttributes,
 		{
 			blockStateId,
 			breakpointId,
@@ -148,13 +155,15 @@ export function BlockBase({
 	);
 
 	const blockEditComponentAttributes = isNormalState()
-		? props.attributes
+		? attributes
 		: {
-				...props.attributes,
-				...(props.attributes.publisherBlockStates[blockStateId]
-					.breakpoints[breakpointId]
-					? props.attributes.publisherBlockStates[blockStateId]
-							.breakpoints[breakpointId].attributes
+				...attributes,
+				...(attributes.publisherBlockStates[blockStateId].breakpoints[
+					breakpointId
+				]
+					? attributes.publisherBlockStates[blockStateId].breakpoints[
+							breakpointId
+					  ].attributes
 					: {}),
 		  };
 
@@ -162,28 +171,27 @@ export function BlockBase({
 		<BlockEditContextProvider
 			{...{
 				block: {
-					blockName: props.name,
-					clientId: props.clientId,
+					blockName: name,
+					clientId,
 					handleOnChangeAttributes,
-					attributes: props.attributes,
+					attributes,
 					storeName: 'publisher-core/controls',
 				},
-				attributes,
+				attributes: _attributes,
 				blockStateId,
 				breakpointId,
 				isNormalState,
-				setAttributes: props.setAttributes,
+				setAttributes,
 				getAttributes: (key: string): any => {
-					if (key && props.attributes[key]) {
-						return props.attributes[key];
+					if (key && attributes[key]) {
+						return attributes[key];
 					}
 
-					return props.attributes;
+					return attributes;
 				},
 				activeDeviceType: getDeviceType(),
 				handleOnChangeAttributes,
-				getBlockType: () =>
-					select('core/blocks').getBlockType(props.name),
+				getBlockType: () => select('core/blocks').getBlockType(name),
 			}}
 		>
 			<StrictMode>
@@ -192,28 +200,30 @@ export function BlockBase({
 				</InspectorControls>
 				<div ref={blockEditRef} />
 				<InspectorControls>
-					<BlockStates
-						attributes={props.attributes}
-						blockName={props.name}
-						clientId={props.clientId}
-						supports={supports}
-						setAttributes={props.setAttributes}
+					<BlockCardWrapper
+						block={{
+							clientId,
+							supports,
+							blockName: name,
+							attributes,
+							setAttributes,
+						}}
 					/>
 				</InspectorControls>
 				<BlockEditComponent
 					supports={supports}
-					blockName={props.name}
-					clientId={props.clientId}
-					setAttributes={props.setAttributes}
+					blockName={name}
+					clientId={clientId}
+					setAttributes={setAttributes}
 					attributes={blockEditComponentAttributes}
-					currentState={props.attributes.publisherCurrentState}
+					currentState={attributes.publisherCurrentState}
 				/>
 			</StrictMode>
 
 			{blockEditComponentAttributes.publisherIsOpenGridBuilder && (
 				<GridBuilder
-					type={props.name}
-					id={props.clientId}
+					type={name}
+					id={clientId}
 					position={{ top: 0, left: 0 }}
 					dimension={{ width: 320, height: 200 }}
 				>

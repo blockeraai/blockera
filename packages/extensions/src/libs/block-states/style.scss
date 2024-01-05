@@ -10,19 +10,27 @@
 }
 
 .publisher-current-state {
-	height: 25px;
-	padding: 0 10px;
-	font-size: 13px;
-	line-height: 25px;
+	height: 20px;
+	padding: 0 5px;
+	font-size: 12px;
 	text-align: center;
 	position: absolute;
-	display: inline-block;
 	color: rgb(255, 255, 255);
 	transition: none;
 	will-change: color, font-size, padding, position, display, transition, background;
+	display: inline-flex;
+	align-items: center;
+	font-weight: 500;
+	border-radius: 2px;
+	margin: 2px 0;
 }
 
 .publisher-arrow-right {
-	margin-left: 7.5px;
 	display: inline-block;
+	margin: 0 1px;
+	color: #989898;
+
+	svg {
+		fill: currentColor;
+	}
 }

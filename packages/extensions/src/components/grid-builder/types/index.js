@@ -3,6 +3,7 @@
 import type { MixedElement } from 'react';
 
 export type GridBuilderProps = {
+	type: string,
 	id: string,
 	children: MixedElement,
 	position: { top: number, left: number },
