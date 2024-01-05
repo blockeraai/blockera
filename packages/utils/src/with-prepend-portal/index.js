@@ -1,12 +1,21 @@
 // @flow
-import { type MixedElement } from 'react';
+import { type MixedElement, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
 export function withPrependPortal(
 	component: MixedElement,
 	container: Element
 ): MixedElement {
-	const portalElement = document.createElement('div');
-	container.prepend(portalElement);
-	return createPortal(component, portalElement);
+	const portalContainer = document.createElement('div');
+
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	useEffect(() => {
+		container.prepend(portalContainer);
+
+		return () => {
+			container.removeChild(portalContainer);
+		};
+	}, [container, portalContainer]);
+
+	return createPortal(component, portalContainer);
 }
