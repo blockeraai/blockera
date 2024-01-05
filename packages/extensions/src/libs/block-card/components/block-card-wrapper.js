@@ -37,7 +37,10 @@ export function BlockCardWrapper({
 		<>
 			{withPrependPortal(
 				<div className="publisher-block-card-wrapper">
-					<BlockCard clientId={block.clientId}>
+					<BlockCard
+						clientId={block.clientId}
+						states={block.attributes.publisherBlockStates}
+					>
 						<StatesManager
 							states={block.attributes.publisherBlockStates}
 							block={{

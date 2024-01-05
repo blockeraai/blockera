@@ -94,7 +94,4 @@ export {
 } from './base/context';
 export * as extensionConfig from './base/config';
 
-export {
-	default as BlockStates,
-	attributes as blockStatesAttributes,
-} from './block-states';
+export { attributes as blockStatesAttributes } from './block-states';

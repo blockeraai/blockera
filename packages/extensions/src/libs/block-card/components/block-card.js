@@ -21,11 +21,14 @@ import {
  * Internal dependencies
  */
 import { default as BlockIcon } from './block-icon';
+import { Breadcrumb } from './breadcrumb';
 
 export function BlockCard({
+	states,
 	clientId,
 	children,
 }: {
+	states: Object,
 	clientId: string,
 	children?: MixedElement,
 }): MixedElement {
@@ -45,6 +48,7 @@ export function BlockCard({
 						)}
 					>
 						{blockInformation.title}
+						<Breadcrumb states={states} />
 					</h2>
 
 					{blockInformation?.description && (

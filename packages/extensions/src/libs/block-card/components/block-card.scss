@@ -23,11 +23,32 @@
 		gap: 5px;
 
 		.publisher-extension-block-card__title {
-			line-height: 24px;
+			line-height: 16px;
 			margin: 0 0;
-			font-weight: 500;
 			color: #1e1e1e;
 			font-size: 13px;
+			font-weight: 500;
+			display: flex;
+			align-items: center;
+			min-height: 24px;
+			gap: 2px;
+
+			svg {
+				fill: currentColor;
+				opacity: 0.3;
+			}
+
+			.publisher-extension-block-card__title__item {
+				background-color: var(--publisher-controls-primary-color);
+				color: #ffffff;
+				border-radius: 2px;
+				padding: 2px 5px;
+				font-size: 12px;
+			}
+
+			.publisher-extension-block-card__title__item.item-state:not(.item-state-normal) {
+				--publisher-controls-primary-color: #d47c14;
+			}
 		}
 
 		.publisher-extension-block-card__description {
