@@ -42,31 +42,33 @@ export const getBreakpointInfo = (
 
 export function BreakpointIcon({
 	name,
+	onClick,
 	...props
 }: {
 	name: TBreakpoint,
+	onClick?: (event: MouseEvent) => void,
 }): MixedElement {
 	switch (name) {
 		case 'laptop':
-			return <LaptopIcon {...props} />;
+			return <LaptopIcon onClick={onClick} {...props} />;
 
 		case 'desktop':
-			return <DesktopIcon {...props} />;
+			return <DesktopIcon onClick={onClick} {...props} />;
 
 		case 'tablet':
-			return <TabletIcon {...props} />;
+			return <TabletIcon onClick={onClick} {...props} />;
 
 		case 'mobile':
-			return <MobileIcon {...props} />;
+			return <MobileIcon onClick={onClick} {...props} />;
 
 		case 'mobile-landscape':
-			return <MobileLandscapeIcon {...props} />;
+			return <MobileLandscapeIcon onClick={onClick} {...props} />;
 
 		case 'large':
-			return <LargeIcon {...props} />;
+			return <LargeIcon onClick={onClick} {...props} />;
 
 		case 'extra-large':
-			return <ExtraLargeIcon {...props} />;
+			return <ExtraLargeIcon onClick={onClick} {...props} />;
 
 		default:
 			return <></>;

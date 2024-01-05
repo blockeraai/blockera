@@ -1,4 +1,8 @@
 // @flow
+/**
+ * External dependencies
+ */
+import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
