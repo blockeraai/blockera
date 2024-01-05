@@ -79,10 +79,22 @@ export function LabelDescription(): MixedElement {
 					'publisher-core'
 				)}
 			</p>
+			<p>
+				{__(
+					'Its useful to add custom class to block using interactive features to change the design of block dynamically.',
+					'publisher-core'
+				)}
+			</p>
 			<h3>{__('Parent Class', 'publisher-core')}</h3>
 			<p>
 				{__(
 					'Allows customization of the block based on a class applied to its parent block.',
+					'publisher-core'
+				)}
+			</p>
+			<p>
+				{__(
+					'Its useful to add custom class to parent block using interactive features to change the design of this block dynamically.',
 					'publisher-core'
 				)}
 			</p>
