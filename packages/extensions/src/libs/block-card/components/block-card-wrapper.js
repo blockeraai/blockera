@@ -7,6 +7,11 @@ import { useEffect } from '@wordpress/element';
 import type { MixedElement } from 'react';
 
 /**
+ * Publisher dependencies
+ */
+import { withPrependPortal } from '@publisher/utils';
+
+/**
  * Internal dependencies
  */
 import { BlockCard } from './block-card';
@@ -29,19 +34,24 @@ export function BlockCardWrapper({
 	}, []);
 
 	return (
-		<div className="publisher-block-card-wrapper">
-			<BlockCard clientId={block.clientId}>
-				<StatesManager
-					states={block.attributes.publisherBlockStates}
-					block={{
-						clientId: block.clientId,
-						supports: block.supports,
-						blockName: block.blockName,
-						attributes: block.attributes,
-						setAttributes: block.setAttributes,
-					}}
-				/>
-			</BlockCard>
-		</div>
+		<>
+			{withPrependPortal(
+				<div className="publisher-block-card-wrapper">
+					<BlockCard clientId={block.clientId}>
+						<StatesManager
+							states={block.attributes.publisherBlockStates}
+							block={{
+								clientId: block.clientId,
+								supports: block.supports,
+								blockName: block.blockName,
+								attributes: block.attributes,
+								setAttributes: block.setAttributes,
+							}}
+						/>
+					</BlockCard>
+				</div>,
+				document.querySelector('.block-editor-block-inspector')
+			)}
+		</>
 	);
 }
