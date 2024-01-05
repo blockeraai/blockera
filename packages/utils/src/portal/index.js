@@ -2,7 +2,7 @@
 import { type MixedElement, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
-export function withPrependPortal(
+export function prependPortal(
 	component: MixedElement,
 	container: Element
 ): MixedElement {

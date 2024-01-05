@@ -9,7 +9,7 @@ import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
-import { withPrependPortal } from '@publisher/utils';
+import { prependPortal } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -35,7 +35,7 @@ export function BlockCardWrapper({
 
 	return (
 		<>
-			{withPrependPortal(
+			{prependPortal(
 				<div className="publisher-block-card-wrapper">
 					<BlockCard
 						clientId={block.clientId}

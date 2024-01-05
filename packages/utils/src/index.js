@@ -1,6 +1,7 @@
 export * from './is';
 export * from './get';
 export * from './array';
+export * from './portal';
 export * from './object';
 export * from './string';
 export * from './matchers';
@@ -13,4 +14,3 @@ export * from './use-outside-click';
 export * from './use-drag-value';
 export * from './convert-to-character/degree';
 export * from './check-visible-item';
-export * from './with-prepend-portal';
