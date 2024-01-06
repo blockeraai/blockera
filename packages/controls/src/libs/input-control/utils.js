@@ -1449,6 +1449,16 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 						},
 					],
 				},
+				{
+					label: 'Advanced',
+					options: [
+						{
+							value: 'func',
+							label: 'CSS Functions and Variables',
+							format: 'text',
+						},
+					],
+				},
 			];
 			break;
 	}

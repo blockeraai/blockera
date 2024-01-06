@@ -4,6 +4,7 @@
  */
 import { computedCssRules } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
+import { arrayEquals } from '../utils';
 
 /**
  * Internal dependencies
@@ -12,6 +13,11 @@ import { attributes } from './attributes';
 import { isActiveField } from '../../api/utils';
 import type { TBlockProps } from '../types';
 import type { TCssProps } from './types/layout-props';
+import {
+	GridColumnGenerator,
+	GridRowGenerator,
+	GridAreaGenerator,
+} from './css-generators';
 
 interface IConfigs {
 	layoutConfig: {
@@ -23,6 +29,15 @@ interface IConfigs {
 		publisherGap: string,
 		publisherFlexWrap: string,
 		publisherAlignContent: string,
+		publisherGridAlignItems: string,
+		publisherGridJustifyItems: string,
+		publisherGridAlignContent: string,
+		publisherGridJustifyContent: string,
+		publisherGridGap: Object,
+		publisherGridDirection: Object,
+		publisherGridColumns: Array<Object>,
+		publisherGridRows: Array<Object>,
+		publisherGridAreas: Array<Object>,
 	};
 	blockProps: TBlockProps;
 }
@@ -37,6 +52,15 @@ export function LayoutStyles({
 		publisherGap,
 		publisherFlexWrap,
 		publisherAlignContent,
+		publisherGridAlignItems,
+		publisherGridJustifyItems,
+		publisherGridAlignContent,
+		publisherGridJustifyContent,
+		publisherGridGap,
+		publisherGridDirection,
+		publisherGridColumns,
+		publisherGridRows,
+		publisherGridAreas,
 	},
 	blockProps,
 }: IConfigs): string {
@@ -119,6 +143,167 @@ export function LayoutStyles({
 				attributes.publisherAlignContent.default
 		) {
 			properties['align-content'] = _attributes.publisherAlignContent;
+		}
+	}
+
+	if (_attributes.publisherDisplay === 'grid') {
+		if (
+			isActiveField(publisherGridAlignItems) &&
+			_attributes.publisherGridAlignItems !==
+				attributes.publisherGridAlignItems.default
+		) {
+			properties['align-items'] = _attributes.publisherGridAlignItems;
+		}
+
+		if (
+			isActiveField(publisherGridJustifyItems) &&
+			_attributes.publisherGridJustifyItems !==
+				attributes.publisherGridJustifyItems.default
+		) {
+			properties['justify-items'] = _attributes.publisherGridJustifyItems;
+		}
+
+		if (
+			isActiveField(publisherGridAlignContent) &&
+			_attributes.publisherGridAlignContent !==
+				attributes.publisherGridAlignContent.default
+		) {
+			properties['align-content'] = _attributes.publisherGridAlignContent;
+		}
+
+		if (
+			isActiveField(publisherGridJustifyContent) &&
+			_attributes.publisherGridJustifyContent !==
+				attributes.publisherGridJustifyContent.default
+		) {
+			properties['justify-content'] =
+				_attributes.publisherGridJustifyContent;
+		}
+
+		if (
+			isActiveField(publisherGridGap) &&
+			_attributes.publisherGridGap !== attributes.publisherGridGap.default
+		) {
+			if (_attributes.publisherGridGap?.lock) {
+				const gap = getValueAddonRealValue(
+					_attributes.publisherGridGap?.gap
+				);
+				if (gap) properties.gap = gap;
+			} else {
+				const rows = getValueAddonRealValue(
+					_attributes.publisherGridGap?.rows
+				);
+				if (rows) {
+					properties['row-gap'] = rows;
+				}
+
+				const columns = getValueAddonRealValue(
+					_attributes.publisherGridGap?.columns
+				);
+				if (columns) {
+					properties['column-gap'] = columns;
+				}
+			}
+		}
+
+		if (
+			isActiveField(publisherGridDirection) &&
+			!arrayEquals(
+				_attributes.publisherGridDirection,
+				attributes.publisherGridDirection.default
+			)
+		) {
+			properties['grid-auto-flow'] = `${
+				_attributes.publisherGridDirection.value || 'row'
+			} ${_attributes.publisherGridDirection.dense ? 'dense' : ''}`;
+		}
+
+		if (
+			isActiveField(publisherGridColumns) &&
+			!arrayEquals(
+				attributes.publisherGridColumns.default,
+				blockProps.attributes.publisherGridColumns
+			)
+		) {
+			generators.push(
+				computedCssRules(
+					{
+						cssGenerators: {
+							publisherGridColumns: [
+								{
+									type: 'function',
+									function: GridColumnGenerator,
+								},
+							],
+						},
+					},
+					{
+						...blockProps,
+						cssGeneratorEntity: {
+							id: 'publisherGridColumns',
+						},
+					}
+				)
+			);
+		}
+
+		if (
+			isActiveField(publisherGridRows) &&
+			!arrayEquals(
+				attributes.publisherGridRows.default,
+				blockProps.attributes.publisherGridRows
+			)
+		) {
+			generators.push(
+				computedCssRules(
+					{
+						cssGenerators: {
+							publisherGridRows: [
+								{
+									type: 'function',
+									function: GridRowGenerator,
+								},
+							],
+						},
+					},
+					{
+						...blockProps,
+						cssGeneratorEntity: {
+							id: 'publisherGridRows',
+						},
+					}
+				)
+			);
+		}
+
+		if (
+			isActiveField(publisherGridAreas) &&
+			!arrayEquals(
+				attributes.publisherGridAreas.default,
+				blockProps.attributes.publisherGridAreas
+			)
+		) {
+			generators.push(
+				computedCssRules(
+					{
+						cssGenerators: {
+							publisherGridAreas: [
+								{
+									type: 'function',
+									function: GridAreaGenerator,
+								},
+							],
+						},
+					},
+					{
+						...blockProps,
+						cssGeneratorEntity: {
+							property: 'grid-template-areas',
+							id: 'publisherGridAreas',
+						},
+					}
+				)
+			);
 		}
 	}
 

@@ -33,6 +33,11 @@ const Header: THeaderItem = memo<THeaderItem>(
 			label = __('Auto', 'publisher-core');
 			value = '';
 			icon = <AutoFitIcon />;
+		}
+		if (item['auto-generated']) {
+			label = item.size;
+			value = __('auto generated', 'publisher-core');
+			icon = <GridSizeIcon />;
 		} else {
 			switch (item['sizing-mode']) {
 				case 'normal':

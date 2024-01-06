@@ -25,8 +25,12 @@ const AreasFields: TFieldItem = memo<TFieldItem>(
 			controlInfo: { name: controlId },
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
-		const { repeaterId, getControlId, defaultRepeaterItemValue } =
-			useContext(RepeaterContext);
+		const {
+			repeaterId,
+			getControlId,
+			defaultRepeaterItemValue,
+			customProps: { gridRows, gridColumns },
+		} = useContext(RepeaterContext);
 
 		return (
 			<div id={`repeater-item-${itemId}`}>
@@ -47,7 +51,6 @@ const AreasFields: TFieldItem = memo<TFieldItem>(
 						})
 					}
 					defaultValue={defaultRepeaterItemValue.name}
-					placeholder="Area Name"
 				/>
 
 				<BaseControl
@@ -76,8 +79,10 @@ const AreasFields: TFieldItem = memo<TFieldItem>(
 								})
 							}
 							defaultValue={
-								defaultRepeaterItemValue['column-start']
+								defaultRepeaterItemValue['column-start'] || ''
 							}
+							min={0}
+							max={gridColumns.length}
 						/>
 						<InputControl
 							repeaterItem={itemId}
@@ -100,8 +105,10 @@ const AreasFields: TFieldItem = memo<TFieldItem>(
 								})
 							}
 							defaultValue={
-								defaultRepeaterItemValue['column-end']
+								defaultRepeaterItemValue['column-end'] || ''
 							}
+							min={0}
+							max={gridColumns.length}
 						/>
 					</Flex>
 				</BaseControl>
@@ -131,7 +138,11 @@ const AreasFields: TFieldItem = memo<TFieldItem>(
 									},
 								})
 							}
-							defaultValue={defaultRepeaterItemValue['row-start']}
+							defaultValue={
+								defaultRepeaterItemValue['row-start'] || ''
+							}
+							min={0}
+							max={gridRows.length}
 						/>
 						<InputControl
 							repeaterItem={itemId}
@@ -153,7 +164,11 @@ const AreasFields: TFieldItem = memo<TFieldItem>(
 									},
 								})
 							}
-							defaultValue={defaultRepeaterItemValue['row-end']}
+							defaultValue={
+								defaultRepeaterItemValue['row-end'] || ''
+							}
+							min={0}
+							max={gridColumns.length}
 						/>
 					</Flex>
 				</BaseControl>

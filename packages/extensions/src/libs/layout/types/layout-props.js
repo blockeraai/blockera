@@ -19,6 +19,8 @@ export type TCssProps = {
 	'column-gap'?: string,
 	'flex-wrap'?: string,
 	'align-content'?: string,
+	'justify-items'?: string,
+	'grid-auto-flow'?: string,
 };
 
 export type TLayoutProps = {

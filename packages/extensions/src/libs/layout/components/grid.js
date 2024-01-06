@@ -17,6 +17,7 @@ import {
 	CheckboxControl,
 	RepeaterControl,
 } from '@publisher/controls';
+import { checkVisibleItemLength, isNumber } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -27,8 +28,6 @@ import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 import { default as JustifyCenterIcon } from '../icons/justify-center';
 import { default as JustifyFlexEndIcon } from '../icons/justify-flex-end';
 import { default as JustifyFlexStartIcon } from '../icons/justify-flex-start';
-import { default as JustifySpaceAroundIcon } from '../icons/justify-space-around';
-import { default as JustifySpaceEvenlyIcon } from '../icons/justify-space-evenly';
 import { default as AlignContentCenterIcon } from '../icons/align-content-center';
 import { default as FlexDirectionRowBlockIcon } from '../icons/flex-direction-row';
 import { default as JustifySpaceBetweenIcon } from '../icons/justify-space-between';
@@ -50,6 +49,7 @@ import Fields from './fields';
 import Header from './header';
 import AreasFields from './areas-fields';
 import AreasHeader from './areas-header';
+import { calcGridTemplateAreas } from '../utils';
 
 export default function ({
 	config,
@@ -94,6 +94,48 @@ export default function ({
 	} = config;
 
 	const [isGridSettingsOpen, setIsGridSettingsOpen] = useState(false);
+
+	const gridTemplateAreas = calcGridTemplateAreas({
+		gridRows,
+		gridColumns,
+		gridAreas,
+	});
+
+	const firstAvailablePosition = {
+		columnStart: 0,
+		columnEnd: 0,
+		rowStart: 0,
+		rowEnd: 0,
+	};
+
+	let noAvailablePosition;
+
+	for (let i = 0; i <= gridTemplateAreas.length; i++) {
+		const colPosition = gridTemplateAreas[i]?.findIndex(
+			(innerItem) => innerItem === '.'
+		);
+
+		if (colPosition >= 0) {
+			firstAvailablePosition.columnStart = colPosition + 1;
+			firstAvailablePosition.columnEnd = colPosition + 2;
+			firstAvailablePosition.rowStart = i + 1;
+			firstAvailablePosition.rowEnd = i + 2;
+
+			break;
+		}
+		if (
+			(colPosition === -1 || colPosition === undefined) &&
+			i === gridTemplateAreas.length
+		) {
+			noAvailablePosition = true;
+		}
+	}
+
+	const areaNameNumbers = gridAreas?.map((area) => {
+		if (isNumber(Number(area.name.slice(-2))))
+			return Number(area.name.slice(-2));
+		return Number(area.name.slice(-1));
+	});
 
 	return (
 		<>
@@ -277,8 +319,8 @@ export default function ({
 										defaultRepeaterItemValue={{
 											'sizing-mode': 'normal',
 											size: '1fr',
-											'min-size': '',
-											'max-size': '',
+											'min-size': '200px',
+											'max-size': '1fr',
 											'auto-fit': false,
 											isVisible: true,
 										}}
@@ -293,6 +335,7 @@ export default function ({
 												{ ref }
 											)
 										}
+										minItems={2}
 										{...props}
 									/>
 								</BaseControl>
@@ -300,20 +343,21 @@ export default function ({
 						)}
 
 						{isActiveField(publisherGridRows) && (
-							<BaseControl columns="columns-1">
-								<ControlContextProvider
-									value={{
-										name: generateExtensionId(
-											block,
-											'grid-rows'
-										),
-										value: gridRows,
-										attribute: 'publisherGridRows',
-										blockName: block.blockName,
-									}}
-									storeName={
-										'publisher-core/controls/repeater'
-									}
+							<ControlContextProvider
+								value={{
+									name: generateExtensionId(
+										block,
+										'grid-rows'
+									),
+									value: gridRows,
+									attribute: 'publisherGridRows',
+									blockName: block.blockName,
+								}}
+								storeName={'publisher-core/controls/repeater'}
+							>
+								<BaseControl
+									columns="columns-1"
+									controlName="repeater"
 								>
 									<RepeaterControl
 										columns="columns-1"
@@ -327,8 +371,8 @@ export default function ({
 										defaultRepeaterItemValue={{
 											'sizing-mode': 'normal',
 											size: '1fr',
-											'min-size': '',
-											'max-size': '',
+											'min-size': '200px',
+											'max-size': '1fr',
 											'auto-fit': false,
 											isVisible: true,
 										}}
@@ -343,10 +387,11 @@ export default function ({
 												{ ref }
 											)
 										}
+										minItems={2}
 										{...props}
 									/>
-								</ControlContextProvider>
-							</BaseControl>
+								</BaseControl>
+							</ControlContextProvider>
 						)}
 
 						{isActiveField(publisherGridAreas) && (
@@ -375,11 +420,20 @@ export default function ({
 										repeaterItemHeader={AreasHeader}
 										repeaterItemChildren={AreasFields}
 										defaultRepeaterItemValue={{
-											name: '',
-											'column-start': '',
-											'column-end': '',
-											'row-start': '',
-											'row-end': '',
+											name: `Area${
+												Math.max(
+													...areaNameNumbers,
+													0
+												) + 1
+											}`,
+											'column-start':
+												firstAvailablePosition.columnStart,
+											'column-end':
+												firstAvailablePosition.columnEnd,
+											'row-start':
+												firstAvailablePosition.rowStart,
+											'row-end':
+												firstAvailablePosition.rowEnd,
 											isVisible: true,
 										}}
 										defaultValue={[]}
@@ -397,6 +451,12 @@ export default function ({
 											'No Area',
 											'publisher-core'
 										)}
+										gridRows={gridRows}
+										gridColumns={gridColumns}
+										maxItems={
+											noAvailablePosition &&
+											checkVisibleItemLength(gridAreas)
+										}
 										{...props}
 									/>
 								</ControlContextProvider>
@@ -490,19 +550,9 @@ export default function ({
 								icon: <JustifyFlexEndIcon />,
 							},
 							{
-								label: __('Space Between', 'publisher-core'),
-								value: 'space-between',
+								label: __('Stretch', 'publisher-core'),
+								value: 'stretch',
 								icon: <JustifySpaceBetweenIcon />,
-							},
-							{
-								label: __('Space Around', 'publisher-core'),
-								value: 'space-around',
-								icon: <JustifySpaceAroundIcon />,
-							},
-							{
-								label: __('Space Evenly', 'publisher-core'),
-								value: 'space-evenly',
-								icon: <JustifySpaceEvenlyIcon />,
 							},
 						]}
 						isDeselectable={true}
@@ -533,8 +583,8 @@ export default function ({
 						controlName="toggle-select"
 						options={[
 							{
-								label: __('Flex Start', 'publisher-core'),
-								value: 'flex-start',
+								label: __('Start', 'publisher-core'),
+								value: 'start',
 								icon: <AlignContentFlexStartIcon />,
 							},
 							{
@@ -543,8 +593,8 @@ export default function ({
 								icon: <AlignContentCenterIcon />,
 							},
 							{
-								label: __('Flex End', 'publisher-core'),
-								value: 'flex-end',
+								label: __('End', 'publisher-core'),
+								value: 'end',
 								icon: <AlignContentFlexEndIcon />,
 							},
 							{
@@ -595,8 +645,8 @@ export default function ({
 						controlName="toggle-select"
 						options={[
 							{
-								label: __('Flex Start', 'publisher-core'),
-								value: 'flex-start',
+								label: __('Start', 'publisher-core'),
+								value: 'start',
 								icon: <AlignContentFlexStartIcon />,
 							},
 							{
@@ -605,8 +655,8 @@ export default function ({
 								icon: <AlignContentCenterIcon />,
 							},
 							{
-								label: __('Flex End', 'publisher-core'),
-								value: 'flex-end',
+								label: __('End', 'publisher-core'),
+								value: 'end',
 								icon: <AlignContentFlexEndIcon />,
 							},
 							{

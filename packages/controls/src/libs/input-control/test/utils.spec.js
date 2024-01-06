@@ -1984,6 +1984,16 @@ describe('Util functions', () => {
 						},
 					],
 				},
+				{
+					label: 'Advanced',
+					options: [
+						{
+							value: 'func',
+							label: 'CSS Functions and Variables',
+							format: 'text',
+						},
+					],
+				},
 			]);
 		});
 	});
