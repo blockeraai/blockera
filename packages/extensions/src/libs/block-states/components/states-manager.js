@@ -222,6 +222,7 @@ export default function StatesManager({
 						repeaterItemOpener: ItemOpener,
 						repeaterItemChildren: ItemBody,
 					}}
+					addNewButtonLabel={__('Add New State', 'publisher-core')}
 					label={__('Block States', 'publisher-core')}
 					labelDescription={<LabelDescription />}
 					popoverTitle={__('Block State', 'publisher-core')}
