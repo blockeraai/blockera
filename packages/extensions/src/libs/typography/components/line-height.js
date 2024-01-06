@@ -8,12 +8,7 @@ import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
-import {
-	ControlContextProvider,
-	InputControl,
-	extractNumberAndUnit,
-} from '@publisher/controls';
-import { isEmpty } from '@publisher/utils';
+import { ControlContextProvider, InputControl } from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -21,6 +16,7 @@ import { isEmpty } from '@publisher/utils';
 import { generateExtensionId } from '../../utils';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 import { useBlockContext } from '../../../hooks';
+import { toSimpleStyleTypographyWPCompatible } from '../../../utils';
 
 export const LineHeight = ({
 	block,
@@ -35,30 +31,6 @@ export const LineHeight = ({
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
 	const { isNormalState, getAttributes } = useBlockContext();
-
-	const toWPCompatible = (newValue: Object): Object => {
-		if (!isNormalState() || isEmpty(newValue)) {
-			return {};
-		}
-
-		const blockAttributes = getAttributes();
-
-		const extractedValue = extractNumberAndUnit(newValue);
-
-		if (extractedValue.unit === '') {
-			return {
-				style: {
-					...(blockAttributes?.style ?? {}),
-					typography: {
-						...(blockAttributes?.style?.typography ?? {}),
-						lineHeight: extractedValue.value,
-					},
-				},
-			};
-		}
-
-		return {};
-	};
 
 	return (
 		<ControlContextProvider
@@ -95,10 +67,14 @@ export const LineHeight = ({
 				onChange={(newValue, ref) => {
 					onChange('publisherLineHeight', newValue, {
 						ref,
-						addOrModifyRootItems: toWPCompatible(newValue),
-						deleteItemsOnResetAction: [
-							'style.typography.lineHeight',
-						],
+						addOrModifyRootItems:
+							toSimpleStyleTypographyWPCompatible({
+								wpAttribute: 'lineHeight',
+								newValue,
+								isNormalState,
+								ref,
+								getAttributes,
+							}),
 					});
 				}}
 				controlAddonTypes={['variable']}

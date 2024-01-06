@@ -9,7 +9,6 @@ import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
-import { isUndefined } from '@publisher/utils';
 import {
 	BaseControl,
 	ColorControl,
@@ -57,22 +56,6 @@ import TextOrientationStyle3Icon from './icons/text-orientation-style-3';
 import TextOrientationStyle4Icon from './icons/text-orientation-style-4';
 import PenIcon from './icons/pen';
 
-function getFontSizeAccurate(value: string) {
-	const sizes = {
-		small: '1rem',
-		medium: '1.125rem',
-		large: '1.75rem',
-		'x-large': '2.25rem',
-		'xx-large': '10rem',
-	};
-
-	if (isUndefined(sizes[value])) {
-		return value;
-	}
-
-	return sizes[value];
-}
-
 export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 	({
 		block,
@@ -100,8 +83,6 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 		defaultValue: {
 			fontSize: defaultFontSize,
 			typography: {
-				fontSize: _fontSize,
-				fontStyle: _fontStyle,
 				//FIXME: Add fontWeight option into extension!
 				// fontWeight: _fontWeight,
 				textTransform: _textTransform,
@@ -140,10 +121,6 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 			setIsVisible((state) => !state);
 		};
 
-		const fontSizeCalculated = defaultFontSize
-			? getFontSizeAccurate(defaultFontSize)
-			: _fontSize;
-
 		return (
 			<>
 				<BaseControl
@@ -180,8 +157,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 								<FontSize
 									block={block}
 									onChange={handleOnChangeAttributes}
-									value={fontSize || fontSizeCalculated}
-									defaultValue={fontSizeCalculated || ''}
+									value={fontSize || defaultFontSize}
+									defaultValue={''}
 									{...extensionProps.publisherFontSize}
 								/>
 							)}

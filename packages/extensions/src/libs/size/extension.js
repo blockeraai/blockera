@@ -16,8 +16,6 @@ import {
 	BaseControl,
 } from '@publisher/controls';
 import { Flex } from '@publisher/components';
-import { isString, isUndefined } from '@publisher/utils';
-import { isValid } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -28,10 +26,10 @@ import type { TSizeProps } from './types/size-props';
 import { default as OverflowHiddenIcon } from './icons/overflow-hidden';
 import { default as OverflowVisibleIcon } from './icons/overflow-visible';
 import { default as OverflowScrollIcon } from './icons/overflow-scroll';
-import { convertToPercent } from './utils';
 import { useBlockContext } from '../../hooks';
 import { ObjectFit } from './components';
 import AspectRatio from './components/aspect-ratio';
+import { toSimpleStyleWPCompatible } from '../../utils';
 
 export const SizeExtension: MixedElement = memo<TSizeProps>(
 	({
@@ -104,39 +102,18 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 								min={0}
 								defaultValue=""
 								onChange={(newValue, ref) => {
-									const toWPCompatible = (
-										newValue: string
-									): string | Object => {
-										if ('reset' === ref.current.action) {
-											return {
-												width: undefined,
-											};
-										}
-
-										if (
-											!isNormalState() ||
-											newValue === '' ||
-											isUndefined(newValue) ||
-											isValid(newValue)
-										) {
-											return {};
-										}
-
-										return isString(newValue) &&
-											!newValue.endsWith('func')
-											? {
-													width: newValue,
-											  }
-											: {};
-									};
-
 									handleOnChangeAttributes(
 										'publisherWidth',
 										newValue,
 										{
 											ref,
 											addOrModifyRootItems:
-												toWPCompatible(newValue),
+												toSimpleStyleWPCompatible({
+													wpAttribute: 'width',
+													newValue,
+													isNormalState,
+													ref,
+												}),
 										}
 									);
 								}}
@@ -331,23 +308,18 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 								min={0}
 								defaultValue=""
 								onChange={(newValue, ref) => {
-									const toWPCompatible =
-										isString(newValue) &&
-										!newValue.endsWith('func')
-											? {
-													height: convertToPercent(
-														newValue
-													),
-											  }
-											: {};
-
 									handleOnChangeAttributes(
 										'publisherHeight',
 										newValue,
 										{
 											ref,
 											addOrModifyRootItems:
-												toWPCompatible,
+												toSimpleStyleWPCompatible({
+													wpAttribute: 'height',
+													newValue,
+													isNormalState,
+													ref,
+												}),
 										}
 									);
 								}}
