@@ -27,6 +27,7 @@ export const LineHeight = ({
 	value,
 	onChange,
 	defaultValue,
+	...props
 }: {
 	block: TBlockProps,
 	value: string | void,
@@ -102,6 +103,7 @@ export const LineHeight = ({
 				}}
 				controlAddonTypes={['variable']}
 				variableTypes={['font-size']}
+				{...props}
 			/>
 		</ControlContextProvider>
 	);

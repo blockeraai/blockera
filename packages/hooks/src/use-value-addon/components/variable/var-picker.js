@@ -75,7 +75,12 @@ export default function ({
 	};
 
 	const Variables = (): Array<Element<any>> => {
-		return controlProps.variableTypes.map((type, index) => {
+		const { getVariableGroups } = select(STORE_NAME);
+
+		return [
+			...controlProps.variableTypes,
+			...Object.keys(getVariableGroups()),
+		].map((type, index) => {
 			let data: DynamicVariableGroup | VariableCategoryDetail =
 				getVariableCategory(type);
 
@@ -84,7 +89,10 @@ export default function ({
 
 				data = getVariableGroup(type);
 
-				if (!data?.type) {
+				if (
+					!data?.type ||
+					!controlProps.variableTypes.includes(data.type)
+				) {
 					return <></>;
 				}
 			}
@@ -107,7 +115,7 @@ export default function ({
 				'linear-gradient',
 				'radial-gradient',
 				'spacing',
-			].includes(type);
+			].includes(data.type || type);
 
 			return (
 				<PickerCategory
@@ -149,7 +157,7 @@ export default function ({
 									onClick={controlProps.handleOnClickVar}
 									key={`${type}-${_index}-value-type`}
 									name={variable.name}
-									type={type}
+									type={data.type || type}
 									valueType="variable"
 									isCurrent={
 										isValid(controlProps.value) &&
@@ -159,7 +167,7 @@ export default function ({
 											itemData.id
 									}
 									icon={getVariableIcon({
-										type,
+										type: data.type || type,
 										value: variable.value,
 									})}
 									status="active"

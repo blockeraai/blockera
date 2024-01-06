@@ -13,7 +13,7 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { isFunction } from '@publisher/utils';
-import { Button } from '@publisher/components';
+import { Button, Grid } from '@publisher/components';
 
 /**
  * Internal dependencies.
@@ -36,6 +36,7 @@ export const defaultItemValue = {
 	sortable: true,
 	isVisible: true,
 	deletable: true,
+	isSelected: false,
 	selectable: false,
 	visibilitySupport: true,
 	isLastItemSupport: false,
@@ -45,6 +46,7 @@ export default function RepeaterControl({
 	design = 'minimal',
 	mode = 'popover',
 	popoverTitle,
+	popoverTitleButtonsRight,
 	addNewButtonLabel,
 	popoverClassName,
 	maxItems = -1,
@@ -65,6 +67,7 @@ export default function RepeaterControl({
 	repeaterItemHeader,
 	repeaterItemChildren,
 	getDynamicDefaultRepeaterItem,
+	itemColumns = 1,
 	//
 	defaultValue = [],
 	defaultRepeaterItemValue = { isVisible: true },
@@ -106,8 +109,11 @@ export default function RepeaterControl({
 		design,
 		mode,
 		popoverTitle: popoverTitle || label || '',
+		popoverTitleButtonsRight,
+		//
 		labelPopoverTitle,
 		labelDescription,
+		//
 		popoverClassName,
 		maxItems,
 		minItems,
@@ -196,12 +202,20 @@ export default function RepeaterControl({
 										modifyControlValue({
 											controlId,
 											value: [
-												...repeaterItems.map(
-													(item) => ({
+												...repeaterItems.map((item) => {
+													if (item.display) {
+														return {
+															...item,
+															isSelected: false,
+														};
+													}
+
+													return {
 														...item,
+														display: true,
 														isSelected: false,
-													})
-												),
+													};
+												}),
 												value
 													? value
 													: {
@@ -266,7 +280,24 @@ export default function RepeaterControl({
 						{injectHeaderButtonsEnd}
 					</div>
 				</div>
-				<MappedItems />
+
+				{repeaterItems.length > 0 && (
+					<>
+						{itemColumns > 1 ? (
+							<Grid
+								className={controlInnerClassNames(
+									'repeater-items-container'
+								)}
+								gridTemplateColumns={`repeat(${itemColumns}, 1fr)`}
+								gap="10px"
+							>
+								<MappedItems />
+							</Grid>
+						) : (
+							<MappedItems />
+						)}
+					</>
+				)}
 			</div>
 		</RepeaterContextProvider>
 	);

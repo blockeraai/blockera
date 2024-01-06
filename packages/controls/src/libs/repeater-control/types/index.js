@@ -37,6 +37,13 @@ export type RepeaterControlProps = {
 	 * Specifies the popover title if `mode` was `popover`. by default the repeater label will be shown as popover title.
 	 */
 	popoverTitle?: string | MixedElement,
+	/**
+	 * Specifies the popover title right buttons if `mode` was `popover`.
+	 */
+	popoverTitleButtonsRight?: string | MixedElement,
+	/**
+	 * Specifies the button label for adding new repeater item.
+	 */
 	addNewButtonLabel?: string,
 	/**
 	 * Specifies custom css classes that should be added to popover
@@ -104,17 +111,33 @@ export type RepeaterControlProps = {
 	 * It sets the default of each repeater item.
 	 */
 	defaultRepeaterItemValue?: Object,
+	/**
+	 * The callback to retrieve dynamic default repeater item.
+	 */
 	getDynamicDefaultRepeaterItem?: (
 		itemsCount: number,
 		defaultRepeaterItemValue: Object
 	) => Object,
+	/**
+	 * The handle on select repeater item.
+	 */
 	onSelect?: (event: MouseEvent, item: Object) => boolean,
+	/**
+	 * The override repeater item before modify current item.
+	 */
 	overrideItem?: (item: Object) => Object,
+	/**
+	 * The repeater item popover panel opener component.
+	 */
 	repeaterItemOpener?: (props: Object) => boolean | MixedElement,
 	/**
 	 * Function that runs before firing onChange. You can use it cleanup values
 	 */
 	valueCleanup?: (any | Array<Object>) => any | Array<Object>,
+	/**
+	 * The callback to retrieve dynamic default repeater item.
+	 */
+	itemColumns?: number,
 };
 
 export type TRepeaterDefaultStateProps = {

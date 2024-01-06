@@ -77,7 +77,6 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 	({
 		block,
 		config,
-		children,
 		values: {
 			display,
 			fontSize,
@@ -111,8 +110,8 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 				textDecoration: _textDecoration,
 			},
 		},
+		extensionProps,
 		handleOnChangeAttributes,
-		...props
 	}: TTypographyProps): MixedElement => {
 		const {
 			typographyConfig: {
@@ -180,10 +179,10 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 							{isActiveField(publisherFontSize) && (
 								<FontSize
 									block={block}
-									parentProps={props}
 									onChange={handleOnChangeAttributes}
 									value={fontSize || fontSizeCalculated}
 									defaultValue={fontSizeCalculated || ''}
+									{...extensionProps.publisherFontSize}
 								/>
 							)}
 
@@ -193,6 +192,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 									value={lineHeight || _lineHeight}
 									onChange={handleOnChangeAttributes}
 									defaultValue={_lineHeight || ''}
+									{...extensionProps.publisherLineHeight}
 								/>
 							)}
 
@@ -286,6 +286,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 													newValue
 												)
 											}
+											{...extensionProps.publisherTextAlign}
 										/>
 									</ControlContextProvider>
 								)}
@@ -302,6 +303,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 												onChange={
 													handleOnChangeAttributes
 												}
+												{...extensionProps.publisherTextDecoration}
 											/>
 										)}
 									</div>
@@ -314,6 +316,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 													handleOnChangeAttributes
 												}
 												defaultValue={_fontStyle}
+												{...extensionProps.publisherFontStyle}
 											/>
 										)}
 									</div>
@@ -333,6 +336,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 												onChange={
 													handleOnChangeAttributes
 												}
+												{...extensionProps.publisherTextTransform}
 											/>
 										)}
 									</div>
@@ -428,6 +432,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 															newValue
 														)
 													}
+													{...extensionProps.publisherDirection}
 												/>
 											</ControlContextProvider>
 										)}
@@ -443,9 +448,9 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 								{isActiveField(publisherLetterSpacing) && (
 									<LetterSpacing
 										block={block}
-										parentProps={props}
 										value={letterSpacing || _letterSpacing}
 										onChange={handleOnChangeAttributes}
+										{...extensionProps.publisherLetterSpacing}
 									/>
 								)}
 
@@ -481,7 +486,6 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 													</p>
 												</>
 											}
-											{...props}
 											arrows={true}
 											unitType="letter-spacing"
 											defaultValue=""
@@ -491,6 +495,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 													newValue
 												)
 											}
+											{...extensionProps.publisherWordSpacing}
 										/>
 									</ControlContextProvider>
 								)}
@@ -523,17 +528,16 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 													</p>
 												</>
 											}
-											{...{
-												...props,
-												arrows: true,
-												unitType: 'text-indent',
-												defaultValue: '',
-												onChange: (newValue) =>
-													handleOnChangeAttributes(
-														'publisherTextIndent',
-														newValue
-													),
-											}}
+											arrows={true}
+											unitType="text-indent"
+											defaultValue=""
+											onChange={(newValue) =>
+												handleOnChangeAttributes(
+													'publisherTextIndent',
+													newValue
+												)
+											}
+											{...extensionProps.publisherTextIndent}
 										/>
 									</ControlContextProvider>
 								)}
@@ -766,6 +770,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 												textOriented
 											);
 										}}
+										{...extensionProps.publisherTextOrientation}
 									/>
 								</ControlContextProvider>
 							)}
@@ -789,6 +794,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 										handleOnChangeAttributes={
 											handleOnChangeAttributes
 										}
+										{...extensionProps.publisherTextColumns}
 									/>
 								</ControlContextProvider>
 							)}
@@ -811,6 +817,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 										handleOnChangeAttributes={
 											handleOnChangeAttributes
 										}
+										{...extensionProps.publisherTextStroke}
 									/>
 								</ControlContextProvider>
 							)}
@@ -968,6 +975,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 												newValue
 											)
 										}
+										{...extensionProps.publisherWordBreak}
 									/>
 								</ControlContextProvider>
 							)}
@@ -999,7 +1007,6 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 									</>
 								}
 								columns="columns-2"
-								{...props}
 								defaultValue=""
 								onChange={(newValue) =>
 									handleOnChangeAttributes(
@@ -1013,6 +1020,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 									backgroundClip === 'text' &&
 									'publisher-control-is-not-active'
 								}
+								{...extensionProps.publisherFontColor}
 							/>
 							{backgroundClip === 'text' && (
 								<NoticeControl type="information">
@@ -1048,7 +1056,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 										newValue
 									)
 								}
-								{...props}
+								{...extensionProps.publisherTextShadow}
 							/>
 						</BaseControl>
 					</ControlContextProvider>

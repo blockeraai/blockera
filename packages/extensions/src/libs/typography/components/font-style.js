@@ -28,6 +28,7 @@ export const FontStyle = ({
 	value,
 	onChange,
 	defaultValue,
+	...props
 }: {
 	block: TBlockProps,
 	value: string | void,
@@ -117,6 +118,7 @@ export const FontStyle = ({
 						deleteItemsOnResetAction: ['style.fontStyle'],
 					});
 				}}
+				{...props}
 			/>
 		</ControlContextProvider>
 	);

@@ -21,4 +21,12 @@ export type TIconProps = {
 		iconPosition: string,
 	},
 	handleOnChangeAttributes: THandleOnChangeAttributes,
+	extensionProps: {
+		publisherIcon: Object,
+		publisherIconPosition: Object,
+		publisherIconGap: Object,
+		publisherIconSize: Object,
+		publisherIconColor: Object,
+		publisherIconLink: Object,
+	},
 };

@@ -52,6 +52,15 @@ export type TLayoutProps = {
 	config: Object,
 	children?: MixedElement,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
+	extensionProps: {
+		publisherDisplay: Object,
+		publisherFlexDirection: Object,
+		publisherAlignItems: Object,
+		publisherJustifyContent: Object,
+		publisherGap: Object,
+		publisherFlexWrap: Object,
+		publisherAlignContent: Object,
+	},
 };
 
 export type TItem = {

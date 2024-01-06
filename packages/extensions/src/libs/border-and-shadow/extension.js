@@ -29,11 +29,10 @@ export const BorderAndShadowExtension: TBorderAndShadowProps =
 		({
 			block,
 			config,
-			children,
 			defaultValue,
 			handleOnChangeAttributes,
 			values: { border, outline, boxShadow, borderRadius },
-			...props
+			extensionProps,
 		}: TBorderAndShadowProps): MixedElement => {
 			const {
 				borderAndShadowConfig: {
@@ -52,6 +51,7 @@ export const BorderAndShadowExtension: TBorderAndShadowProps =
 							border={border}
 							defaultValue={defaultValue}
 							onChange={handleOnChangeAttributes}
+							{...extensionProps.publisherBorder}
 						/>
 					)}
 
@@ -61,6 +61,7 @@ export const BorderAndShadowExtension: TBorderAndShadowProps =
 							borderRadius={borderRadius}
 							defaultValue={defaultValue}
 							onChange={handleOnChangeAttributes}
+							{...extensionProps.publisherBorderRadius}
 						/>
 					)}
 
@@ -106,7 +107,7 @@ export const BorderAndShadowExtension: TBorderAndShadowProps =
 											{ ref }
 										)
 									}
-									{...props}
+									{...extensionProps.publisherBoxShadow}
 								/>
 							</BaseControl>
 						</ControlContextProvider>
@@ -151,13 +152,11 @@ export const BorderAndShadowExtension: TBorderAndShadowProps =
 											{ ref }
 										)
 									}
-									{...props}
+									{...extensionProps.publisherOutline}
 								/>
 							</BaseControl>
 						</ControlContextProvider>
 					)}
-
-					<div>{children}</div>
 				</>
 			);
 		},

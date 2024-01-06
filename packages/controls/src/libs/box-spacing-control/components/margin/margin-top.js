@@ -236,26 +236,43 @@ export function MarginTop({
 					<ValueAddonPointer />
 				</div>
 
-				<SidePopover
-					id={getId(id, 'margin.top')}
-					icon={<MarginTopIcon />}
-					onClose={() => {
-						setFocusSide('');
-						setOpenPopover('');
-					}}
-					title={__('Top Margin', 'publisher-core')}
-					isOpen={openPopover === sideId}
-					unit={sideSpace?.unit}
-					onChange={(newValue) => {
-						setValue({
-							...value,
-							margin: {
-								...value.margin,
-								top: newValue,
-							},
-						});
-					}}
-				/>
+				{openPopover === sideId && (
+					<SidePopover
+						id={getId(id, 'margin.top')}
+						icon={<MarginTopIcon />}
+						onClose={() => {
+							setFocusSide('');
+							setOpenPopover('');
+						}}
+						title={__('Top Margin Space', 'publisher-core')}
+						inputLabel={__('Top Margin', 'publisher-core')}
+						inputLabelPopoverTitle={__(
+							'Top Margin Space',
+							'publisher-core'
+						)}
+						inputLabelDescription={
+							<>
+								<p>
+									{__(
+										'It enables you to set a margin space that applies only to the top edge of the block.',
+										'publisher-core'
+									)}
+								</p>
+							</>
+						}
+						isOpen={true}
+						unit={sideSpace?.unit}
+						onChange={(newValue) => {
+							setValue({
+								...value,
+								margin: {
+									...value.margin,
+									top: newValue,
+								},
+							});
+						}}
+					/>
+				)}
 			</>
 		),
 	};

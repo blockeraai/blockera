@@ -24,11 +24,10 @@ export const Mask = ({
 	mask,
 	handleOnChangeAttributes,
 	block,
-	props,
+	...props
 }: {
 	mask: Array<Object> | void,
 	block: TBlockProps,
-	props: Object,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 }): MixedElement => {
 	return (

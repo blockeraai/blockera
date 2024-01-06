@@ -126,27 +126,29 @@ export default function Popover({
 										<>{titleButtonsRight}</>
 									)}
 
-									<Button
-										className={componentInnerClassNames(
-											'popover-close'
-										)}
-										size="extra-small"
-										align="center"
-										onClick={() => {
-											setIsVisible(false);
-											onClose();
-										}}
-										tabIndex="-1"
-										label={__('Close', 'publisher')}
-										aria-label={__(
-											'Close',
-											'publisher-core'
-										)}
-										tooltipPosition="top"
-										showTooltip={true}
-									>
-										<CloseIcon />
-									</Button>
+									{closeButton && (
+										<Button
+											className={componentInnerClassNames(
+												'popover-close'
+											)}
+											size="extra-small"
+											align="center"
+											onClick={() => {
+												setIsVisible(false);
+												onClose();
+											}}
+											tabIndex="-1"
+											label={__('Close', 'publisher')}
+											aria-label={__(
+												'Close',
+												'publisher-core'
+											)}
+											tooltipPosition="top"
+											showTooltip={true}
+										>
+											<CloseIcon />
+										</Button>
+									)}
 								</div>
 							)}
 						</div>

@@ -6,6 +6,7 @@ import type { MixedElement } from 'react';
 
 export type ControlContextProviderProps = {
 	value: {
+		block: Object,
 		value: any,
 		name: string,
 		attribute?: string,

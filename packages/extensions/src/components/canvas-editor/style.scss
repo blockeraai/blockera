@@ -1,0 +1,34 @@
+#publisher-core-canvas-editor {
+	display: flex;
+	justify-content: space-between;
+
+	.publisher-canvas-preview-link {
+		position: absolute;
+		top: 18px;
+		margin-left: 15px;
+	}
+}
+
+.publisher-core-canvas-breakpoints {
+	width: 450px;
+	height: 36px;
+	background: #f0f0f0;
+	border-radius: 3px;
+	padding: 0 10px;
+
+	.publisher-control-publisher-core-breakpoints {
+		line-height: 36px;
+
+		svg {
+			top: 6px;
+			cursor: pointer;
+			position: relative;
+			transition: all 0.3s;
+		}
+
+		svg:hover {
+			fill: var(--publisher-controls-primary-color);
+			color: var(--publisher-controls-primary-color);
+		}
+	}
+}

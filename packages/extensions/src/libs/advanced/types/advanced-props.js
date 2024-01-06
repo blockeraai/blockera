@@ -23,4 +23,8 @@ export type TAdvancedProps = {
 		overflow?: string,
 	},
 	handleOnChangeAttributes: THandleOnChangeAttributes,
+	extensionProps: {
+		publisherAttributes: Object,
+		publisherCSSProperties: Object,
+	},
 };

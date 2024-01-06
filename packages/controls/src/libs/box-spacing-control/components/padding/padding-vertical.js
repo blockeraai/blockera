@@ -278,28 +278,48 @@ export function PaddingVertical({
 					/>
 				</div>
 
-				<SidePopover
-					id={getId(id, 'padding.top')}
-					type="padding"
-					icon={<PaddingTopBottomIcon />}
-					onClose={() => {
-						setFocusSide('');
-						setOpenPopover('');
-					}}
-					title={__('Top & Bottom Padding', 'publisher-core')}
-					isOpen={openPopover === sideId}
-					unit={sideSpace.unit}
-					onChange={(newValue) => {
-						setValue({
-							...value,
-							padding: {
-								...value.padding,
-								top: newValue,
-								bottom: newValue,
-							},
-						});
-					}}
-				/>
+				{openPopover === sideId && (
+					<SidePopover
+						id={getId(id, 'padding.top')}
+						type="padding"
+						icon={<PaddingTopBottomIcon />}
+						onClose={() => {
+							setFocusSide('');
+							setOpenPopover('');
+						}}
+						title={__(
+							'Top & Bottom Padding Space',
+							'publisher-core'
+						)}
+						inputLabel={__('Vertical Padding', 'publisher-core')}
+						inputLabelPopoverTitle={__(
+							'Vertical Padding Space',
+							'publisher-core'
+						)}
+						inputLabelDescription={
+							<>
+								<p>
+									{__(
+										'It enables you to set a padding space that applies to both the top and bottom edges of the block.',
+										'publisher-core'
+									)}
+								</p>
+							</>
+						}
+						isOpen={true}
+						unit={sideSpace.unit}
+						onChange={(newValue) => {
+							setValue({
+								...value,
+								padding: {
+									...value.padding,
+									top: newValue,
+									bottom: newValue,
+								},
+							});
+						}}
+					/>
+				)}
 			</>
 		),
 	};

@@ -23,6 +23,7 @@ import type { THandleOnChangeAttributes } from '../../types';
 export const TextStroke = ({
 	value,
 	handleOnChangeAttributes,
+	...props
 }: {
 	value: {
 		width: string,
@@ -108,6 +109,7 @@ export const TextStroke = ({
 						});
 					}
 				}}
+				{...props}
 			/>
 
 			{value.color && (

@@ -5,6 +5,7 @@ const glob = require('glob');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 const styleEntries = {};
+const editorIframeStyles = {};
 const styleFiles = glob.sync('./packages/**/*.scss');
 
 function getPackage(name) {
@@ -22,6 +23,15 @@ function getPackage(name) {
 }
 
 styleFiles.map((currentEntry) => {
+	if (/editor-\w+.scss/.test(currentEntry)) {
+		Object.assign(editorIframeStyles, {
+			'editor-styles': [
+				...(editorIframeStyles['editor-styles'] || []),
+				currentEntry,
+			],
+		});
+	}
+
 	const regex = new RegExp('packages\\/(\\w+)', 'g');
 
 	let m;
@@ -48,7 +58,10 @@ styleFiles.map((currentEntry) => {
 });
 
 module.exports = {
-	entry: styleEntries,
+	entry: {
+		...styleEntries,
+		...editorIframeStyles,
+	},
 	optimization: {
 		minimizer: [new CssMinimizerPlugin()],
 	},

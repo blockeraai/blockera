@@ -32,6 +32,7 @@ export default function GroupControl({
 	//
 	mode = 'popover',
 	popoverTitle,
+	popoverTitleButtonsRight,
 	popoverClassName,
 	//
 	header = 'Title...',
@@ -169,6 +170,7 @@ export default function GroupControl({
 						popoverClassName
 					)}
 					title={popoverTitle || header}
+					titleButtonsRight={popoverTitleButtonsRight}
 					onClose={() => {
 						onClose();
 

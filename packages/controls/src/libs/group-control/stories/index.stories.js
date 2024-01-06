@@ -171,6 +171,22 @@ export const Popover = {
 						popoverTitle="👋 Popover Title"
 					/>
 				</Flex>
+
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">
+						Popover<span>Custom Items Beside Button</span>
+					</h2>
+					<GroupControl
+						{...args}
+						isOpen={false}
+						popoverTitleButtonsRight="👋"
+					/>
+					<GroupControl
+						{...args}
+						isOpen={true}
+						popoverTitleButtonsRight="👋"
+					/>
+				</Flex>
 			</Flex>
 		);
 	},

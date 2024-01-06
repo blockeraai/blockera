@@ -17,4 +17,8 @@ export type TPositionExtensionProps = {
 	zIndexValue: string,
 	positionValue: Object,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
+	extensionProps: {
+		publisherPosition: Object,
+		publisherZIndex: Object,
+	},
 };

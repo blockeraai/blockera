@@ -16,6 +16,7 @@ export type GroupControlProps = {
 	//
 	mode: GroupControlMode,
 	popoverTitle?: string | MixedElement,
+	popoverTitleButtonsRight?: string | MixedElement,
 	popoverClassName?: string,
 	//
 	header?: string | MixedElement,
@@ -30,5 +31,5 @@ export type GroupControlProps = {
 	className?: string,
 	onClose?: () => void,
 	onOpen?: () => void,
-	onClick?: (event?: MouseEvent) => void,
+	onClick?: (event?: MouseEvent) => void | boolean,
 };

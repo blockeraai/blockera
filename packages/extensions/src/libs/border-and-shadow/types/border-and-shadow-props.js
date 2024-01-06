@@ -36,4 +36,10 @@ export type TBorderAndShadowProps = {
 	},
 	defaultValue: TBorderAndShadowDefaultProp,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
+	extensionProps: {
+		publisherBoxShadow: Object,
+		publisherOutline: Object,
+		publisherBorder: Object,
+		publisherBorderRadius: Object,
+	},
 };

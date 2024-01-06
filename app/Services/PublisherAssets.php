@@ -27,6 +27,7 @@ class PublisherAssets {
 		'classnames',
 		'extensions',
 		'style-engine',
+		'editor-styles',
 		'data-extractor',
 	];
 
@@ -55,14 +56,43 @@ class PublisherAssets {
 
 		$this->application = $app;
 
+		add_action( 'enqueue_block_assets', [ $this, 'enqueue_editor_assets' ] );
+
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ), 10 );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'register_assets' ), 10 );
 	}
 
 	public function enqueue() {
 
-		add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_editor_assets' ], 9e2 );
-		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_editor_assets' ], 9e2 );
+		add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_editor_inspector_assets' ], 9e2 );
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_editor_inspector_assets' ], 9e2 );
+	}
+
+	/**
+	 * Enqueue assets just load into gutenberg canvas editor iframe.
+	 *
+	 * @return void
+	 */
+	public function enqueue_editor_assets(): void {
+
+		if ( ! is_admin() ) {
+
+			return;
+		}
+
+		$asset = $this->assetInfo( 'editor-styles' );
+
+		if (empty($asset['style'])){
+
+			return;
+		}
+
+		wp_enqueue_style(
+			'@publisher/editor-styles',
+			$asset['style'],
+			[],
+			$asset['version'],
+		);
 	}
 
 	/**
@@ -72,7 +102,7 @@ class PublisherAssets {
 	 *
 	 * @return void
 	 */
-	public function enqueue_editor_assets(): void {
+	public function enqueue_editor_inspector_assets(): void {
 
 		if ( ! is_admin() ) {
 
@@ -269,18 +299,18 @@ class PublisherAssets {
 		}
 
 		$css_file = sprintf(
-			'%s%s-styles/style%s.css',
+			'%s%s/style%s.css',
 			pb_core_config( 'app.dist_path' ),
-			$name,
+			$_name = str_contains( $name, '-styles' ) ? $name : "{$name}-styles",
 			$isDevelopment ? '' : '.min'
 		);
 
 		if ( file_exists( $css_file ) ) {
 
 			$style = sprintf(
-				'%s%s-styles/style%s.css',
+				'%s%s/style%s.css',
 				pb_core_config( 'app.dist_url' ),
-				$name,
+				$_name,
 				$isDevelopment ? '' : '.min'
 			);
 		} else {

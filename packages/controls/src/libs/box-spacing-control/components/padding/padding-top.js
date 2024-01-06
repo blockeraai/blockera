@@ -237,27 +237,44 @@ export function PaddingTop({
 					<ValueAddonPointer />
 				</div>
 
-				<SidePopover
-					id={getId(id, 'padding.top')}
-					type="padding"
-					icon={<PaddingTopIcon />}
-					onClose={() => {
-						setFocusSide('');
-						setOpenPopover('');
-					}}
-					title={__('Top Padding', 'publisher-core')}
-					isOpen={openPopover === sideId}
-					unit={sideSpace.unit}
-					onChange={(newValue) => {
-						setValue({
-							...value,
-							padding: {
-								...value.padding,
-								top: newValue,
-							},
-						});
-					}}
-				/>
+				{openPopover === sideId && (
+					<SidePopover
+						id={getId(id, 'padding.top')}
+						type="padding"
+						icon={<PaddingTopIcon />}
+						onClose={() => {
+							setFocusSide('');
+							setOpenPopover('');
+						}}
+						title={__('Top Padding Space', 'publisher-core')}
+						inputLabel={__('Top Padding', 'publisher-core')}
+						inputLabelPopoverTitle={__(
+							'Top Padding Space',
+							'publisher-core'
+						)}
+						inputLabelDescription={
+							<>
+								<p>
+									{__(
+										'It enables you to set a padding space that applies only to the top edge of the block.',
+										'publisher-core'
+									)}
+								</p>
+							</>
+						}
+						isOpen={true}
+						unit={sideSpace.unit}
+						onChange={(newValue) => {
+							setValue({
+								...value,
+								padding: {
+									...value.padding,
+									top: newValue,
+								},
+							});
+						}}
+					/>
+				)}
 			</>
 		),
 	};

@@ -22,11 +22,10 @@ export const LetterSpacing = ({
 	block,
 	value,
 	onChange,
-	parentProps,
 	defaultValue = '',
+	...props
 }: {
 	block: TBlockProps,
-	parentProps: Object,
 	value: string | void,
 	defaultValue?: string,
 	onChange: THandleOnChangeAttributes,
@@ -81,21 +80,19 @@ export const LetterSpacing = ({
 						</p>
 					</>
 				}
-				{...{
-					...parentProps,
-					defaultValue,
-					arrows: true,
-					unitType: 'letter-spacing',
-					onChange: (newValue: Object, ref?: Object): void => {
-						onChange('publisherLetterSpacing', newValue, {
-							ref,
-							addOrModifyRootItems: toWPCompatible(newValue),
-							deleteItemsOnResetAction: [
-								'style.typography.letterSpacing',
-							],
-						});
-					},
+				defaultValue={defaultValue}
+				arrows={true}
+				unitType="letter-spacing"
+				onChange={(newValue: Object, ref?: Object): void => {
+					onChange('publisherLetterSpacing', newValue, {
+						ref,
+						addOrModifyRootItems: toWPCompatible(newValue),
+						deleteItemsOnResetAction: [
+							'style.typography.letterSpacing',
+						],
+					});
 				}}
+				{...props}
 			/>
 		</ControlContextProvider>
 	);

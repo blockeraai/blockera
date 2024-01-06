@@ -13,6 +13,11 @@ import {
 	unstableBootstrapServerSideDynamicValueDefinitions,
 } from '@publisher/core-data';
 
+/**
+ * Internal dependencies
+ */
+import bootstrapScripts from './scripts';
+
 export { store } from './store';
 export * from './api';
 export * from './libs';
@@ -29,4 +34,6 @@ domReady(() => {
 		unstableBootstrapServerSideVariableDefinitions,
 		unstableBootstrapServerSideDynamicValueDefinitions,
 	};
+
+	bootstrapScripts(window.wp, window.React);
 });

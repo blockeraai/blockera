@@ -25,11 +25,10 @@ import { generateExtensionId } from '../../utils';
 export const BackdropFilter = ({
 	backdropFilter,
 	block,
-	props,
 	handleOnChangeAttributes,
+	...props
 }: {
 	backdropFilter: Array<Object> | void,
-	props: Object,
 	block: TBlockProps,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 }): MixedElement => {

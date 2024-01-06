@@ -62,6 +62,9 @@ export type SidePopoverProps = {
 	onClose: () => void,
 	onChange: (data: string) => string | void,
 	defaultValue?: string,
+	inputLabel?: string | MixedElement,
+	inputLabelDescription?: string | MixedElement,
+	inputLabelPopoverTitle?: string | MixedElement,
 };
 
 export type Side =

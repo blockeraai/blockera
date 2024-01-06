@@ -21,6 +21,36 @@ export default function (
 
 	return [
 		{
+			type: 'extra-large',
+			force: false,
+			label: __('Extra Large Screen', 'publisher-core'),
+			settings: {
+				min: '2561px',
+				max: '',
+			},
+			attributes: {},
+		},
+		{
+			type: 'large',
+			force: false,
+			label: __('Large Screen', 'publisher-core'),
+			settings: {
+				min: '1921px',
+				max: '2560px',
+			},
+			attributes: {},
+		},
+		{
+			type: 'desktop',
+			force: false,
+			label: __('Desktop', 'publisher-core'),
+			settings: {
+				min: '1441px',
+				max: '1920px',
+			},
+			...attributes,
+		},
+		{
 			type: 'laptop',
 			force: true,
 			label: __('Laptop', 'publisher-core'),
@@ -59,36 +89,6 @@ export default function (
 				max: '480px',
 			},
 			attributes: {},
-		},
-		{
-			type: 'extra-large',
-			force: false,
-			label: __('Extra Large Screen', 'publisher-core'),
-			settings: {
-				min: '2561px',
-				max: '',
-			},
-			attributes: {},
-		},
-		{
-			type: 'large',
-			force: false,
-			label: __('Large Screen', 'publisher-core'),
-			settings: {
-				min: '1921px',
-				max: '2560px',
-			},
-			attributes: {},
-		},
-		{
-			type: 'desktop',
-			force: false,
-			label: __('Desktop', 'publisher-core'),
-			settings: {
-				min: '1441px',
-				max: '1920px',
-			},
-			...attributes,
 		},
 	];
 }

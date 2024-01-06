@@ -1,6 +1,7 @@
 export * from './is';
 export * from './get';
 export * from './array';
+export * from './portal';
 export * from './object';
 export * from './string';
 export * from './matchers';

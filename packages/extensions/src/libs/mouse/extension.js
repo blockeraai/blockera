@@ -28,9 +28,8 @@ export const MouseExtension: MixedElement = memo<TMouseProps>(
 		block,
 		values: { cursor, userSelect, pointerEvents },
 		config,
-		children,
 		handleOnChangeAttributes,
-		...props
+		extensionProps,
 	}: TMouseProps): MixedElement => {
 		const {
 			mouseConfig: {
@@ -81,7 +80,7 @@ export const MouseExtension: MixedElement = memo<TMouseProps>(
 									newValue
 								)
 							}
-							{...props}
+							{...extensionProps.publisherCursor}
 						/>
 					</ControlContextProvider>
 				)}
@@ -133,7 +132,7 @@ export const MouseExtension: MixedElement = memo<TMouseProps>(
 									newValue
 								)
 							}
-							{...props}
+							{...extensionProps.publisherUserSelect}
 						/>
 					</ControlContextProvider>
 				)}
@@ -185,7 +184,7 @@ export const MouseExtension: MixedElement = memo<TMouseProps>(
 									newValue
 								)
 							}
-							{...props}
+							{...extensionProps.publisherPointerEvents}
 						/>
 					</ControlContextProvider>
 				)}

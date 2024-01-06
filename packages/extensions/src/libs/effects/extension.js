@@ -36,7 +36,6 @@ import { Mask } from './components/mask';
 
 export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 	({
-		children,
 		values: {
 			opacity,
 			transform,
@@ -55,7 +54,7 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 		block,
 		config,
 		handleOnChangeAttributes,
-		...props
+		extensionProps,
 	}: TEffectsProps): MixedElement => {
 		const {
 			effectsConfig: {
@@ -79,8 +78,8 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 					<Opacity
 						block={block}
 						opacity={opacity}
-						props={props}
 						handleOnChangeAttributes={handleOnChangeAttributes}
+						{...extensionProps.publisherOpacity}
 					/>
 				)}
 
@@ -137,7 +136,7 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 											</Button>
 										</>
 									}
-									{...props}
+									{...extensionProps.publisherTransform}
 								/>
 
 								{isTransformSettingsVisible && (
@@ -156,7 +155,6 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 										transformChildPerspective={
 											transformChildPerspective
 										}
-										props={props}
 										transformChildOrigin={
 											transformChildOrigin
 										}
@@ -175,8 +173,8 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 					<Transition
 						transition={transition}
 						block={block}
-						props={props}
 						handleOnChangeAttributes={handleOnChangeAttributes}
+						{...extensionProps.publisherTransition}
 					/>
 				)}
 
@@ -184,8 +182,8 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 					<Filter
 						filter={filter}
 						block={block}
-						props={props}
 						handleOnChangeAttributes={handleOnChangeAttributes}
+						{...extensionProps.publisherFilter}
 					/>
 				)}
 
@@ -193,8 +191,8 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 					<BackdropFilter
 						backdropFilter={backdropFilter}
 						block={block}
-						props={props}
 						handleOnChangeAttributes={handleOnChangeAttributes}
+						{...extensionProps.publisherBackdropFilter}
 					/>
 				)}
 
@@ -202,8 +200,8 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 					<Divider
 						divider={divider}
 						block={block}
-						props={props}
 						handleOnChangeAttributes={handleOnChangeAttributes}
+						{...extensionProps.publisherDivider}
 					/>
 				)}
 
@@ -211,16 +209,16 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 					<Mask
 						mask={mask}
 						block={block}
-						props={props}
 						handleOnChangeAttributes={handleOnChangeAttributes}
+						{...extensionProps.publisherMask}
 					/>
 				)}
 				{isActiveField(publisherBlendMode) && (
 					<Blending
 						blendMode={blendMode}
 						block={block}
-						props={props}
 						handleOnChangeAttributes={handleOnChangeAttributes}
+						{...extensionProps.publisherBlendMode}
 					/>
 				)}
 			</>

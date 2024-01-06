@@ -23,10 +23,9 @@ export const Transition = ({
 	transition,
 	block,
 	handleOnChangeAttributes,
-	props,
+	...props
 }: {
 	transition: Array<Object> | void,
-	props: Object,
 	block: TBlockProps,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 }): MixedElement => {

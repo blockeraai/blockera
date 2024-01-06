@@ -20,12 +20,11 @@ import { blendModeFieldOptions } from '../utils';
 export const Blending = ({
 	blendMode,
 	block,
-	props,
 	handleOnChangeAttributes,
+	...props
 }: {
 	blendMode: string | void,
 	block: TBlockProps,
-	props: Object,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 }): MixedElement => {
 	return (
@@ -176,16 +175,15 @@ export const Blending = ({
 						</p>
 					</>
 				}
-				{...props}
 				columns="columns-2"
 				options={blendModeFieldOptions()}
 				onChange={(newValue) =>
 					handleOnChangeAttributes('publisherBlendMode', newValue)
 				}
-				value={blendMode}
 				type="custom"
 				customMenuPosition="top"
 				defaultValue="normal"
+				{...props}
 			/>
 		</ControlContextProvider>
 	);

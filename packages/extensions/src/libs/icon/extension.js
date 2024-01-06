@@ -32,10 +32,9 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 	({
 		block,
 		config,
-		children,
 		values: { icon, iconGap, iconSize, iconLink, iconColor, iconPosition },
 		handleOnChangeAttributes,
-		...props
+		extensionProps,
 	}: TIconProps): MixedElement => {
 		const {
 			iconConfig: {
@@ -61,7 +60,6 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 						}}
 					>
 						<IconControl
-							{...props}
 							columns="columns-1"
 							suggestionsQuery={() => {
 								return 'button';
@@ -72,6 +70,7 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 									newValue
 								)
 							}
+							{...extensionProps.publisherIcon}
 						/>
 					</ControlContextProvider>
 				)}
@@ -125,6 +124,7 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 												newValue
 											)
 										}
+										{...extensionProps.publisherIconPosition}
 									/>
 								</ControlContextProvider>
 							)}
@@ -145,17 +145,16 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 										controlName="input"
 										label={__('Gap', 'publisher-core')}
 										columns="columns-2"
-										{...{
-											...props,
-											unitType: 'essential',
-											defaultValue: '',
-											min: 8,
-											onChange: (newValue) =>
-												handleOnChangeAttributes(
-													'publisherIconGap',
-													newValue
-												),
-										}}
+										unitType="essential"
+										defaultValue=""
+										min={0}
+										onChange={(newValue) =>
+											handleOnChangeAttributes(
+												'publisherIconGap',
+												newValue
+											)
+										}
+										{...extensionProps.publisherIconGap}
 									/>
 								</ControlContextProvider>
 							)}
@@ -176,17 +175,16 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 										controlName="input"
 										label={__('Size', 'publisher-core')}
 										columns="columns-2"
-										{...{
-											...props,
-											unitType: 'essential',
-											defaultValue: '',
-											min: 8,
-											onChange: (newValue) =>
-												handleOnChangeAttributes(
-													'publisherIconSize',
-													newValue
-												),
-										}}
+										unitType="essential"
+										defaultValue=""
+										min={8}
+										onChange={(newValue) =>
+											handleOnChangeAttributes(
+												'publisherIconSize',
+												newValue
+											)
+										}
+										{...extensionProps.publisherIconSize}
 									/>
 								</ControlContextProvider>
 							)}
@@ -207,7 +205,6 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 										controlName="color"
 										label={__('Color', 'publisher-core')}
 										columns="columns-2"
-										{...props}
 										//
 										defaultValue=""
 										onChange={(newValue) =>
@@ -216,6 +213,7 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 												newValue
 											)
 										}
+										{...extensionProps.publisherIconColor}
 									/>
 								</ControlContextProvider>
 							)}
@@ -237,7 +235,6 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 									controlName="link"
 									columns="1fr 3fr"
 									label={__('Link', 'publisher-core')}
-									{...props}
 									id={generateExtensionId(block, 'icon-link')}
 									//
 									onChange={(newValue) =>
@@ -246,13 +243,12 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 											newValue
 										)
 									}
+									{...extensionProps.publisherIconLink}
 								/>
 							</ControlContextProvider>
 						)}
 					</>
 				)}
-
-				{children}
 			</>
 		);
 	},

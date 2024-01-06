@@ -23,11 +23,10 @@ import { generateExtensionId } from '../../utils';
 export const Divider = ({
 	divider,
 	block,
-	props,
 	handleOnChangeAttributes,
+	...props
 }: {
 	divider: Array<Object> | void,
-	props: Object,
 	block: TBlockProps,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 }): MixedElement => {

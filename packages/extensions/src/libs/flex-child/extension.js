@@ -49,7 +49,7 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 			flexChildOrderCustom,
 		},
 		handleOnChangeAttributes,
-		...props
+		extensionProps,
 	}: TFlexChildProps): MixedElement => {
 		const {
 			flexChildConfig: {
@@ -113,6 +113,7 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 										newValue
 									)
 								}
+								{...extensionProps.publisherFlexChildSizing}
 							/>
 							{flexChildSizing === 'custom' && (
 								<>
@@ -139,16 +140,15 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 											type="number"
 											float={true}
 											arrows={true}
-											{...{
-												...props,
-												min: 0,
-												onChange: (newValue) =>
-													handleOnChangeAttributes(
-														'publisherFlexChildGrow',
-														newValue
-													),
-											}}
+											min={0}
+											onChange={(newValue) =>
+												handleOnChangeAttributes(
+													'publisherFlexChildGrow',
+													newValue
+												)
+											}
 											size="small"
+											{...extensionProps.publisherFlexChildGrow}
 										/>
 									</ControlContextProvider>
 									<ControlContextProvider
@@ -178,16 +178,15 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 											type="number"
 											float={true}
 											arrows={true}
-											{...{
-												...props,
-												min: 0,
-												onChange: (newValue) =>
-													handleOnChangeAttributes(
-														'publisherFlexChildShrink',
-														newValue
-													),
-											}}
+											min={0}
+											onChange={(newValue) =>
+												handleOnChangeAttributes(
+													'publisherFlexChildShrink',
+													newValue
+												)
+											}
 											size="small"
+											{...extensionProps.publisherFlexChildShrink}
 										/>
 									</ControlContextProvider>
 									<ControlContextProvider
@@ -214,18 +213,17 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 											)}
 											columns="columns-2"
 											arrows={true}
-											{...{
-												...props,
-												unitType: 'flex-basis',
-												min: 0,
-												defaultValue: 'auto',
-												onChange: (newValue) =>
-													handleOnChangeAttributes(
-														'publisherFlexChildBasis',
-														newValue
-													),
-											}}
+											unitType="flex-basis"
+											min={0}
+											defaultValue="auto"
+											onChange={(newValue) =>
+												handleOnChangeAttributes(
+													'publisherFlexChildBasis',
+													newValue
+												)
+											}
 											size="small"
+											{...extensionProps.publisherFlexChildBasis}
 										/>
 									</ControlContextProvider>
 								</>
@@ -291,6 +289,7 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 										newValue
 									)
 								}
+								{...extensionProps.publisherFlexChildAlign}
 							/>
 						</BaseControl>
 					</ControlContextProvider>
@@ -343,6 +342,7 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 										newValue
 									)
 								}
+								{...extensionProps.publisherFlexChildOrder}
 							/>
 							<>
 								{flexChildOrder === 'custom' && (
@@ -367,16 +367,15 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 											columns="2fr 3fr"
 											unitType="order"
 											arrows={true}
-											{...{
-												...props,
-												min: -1,
-												onChange: (newValue) =>
-													handleOnChangeAttributes(
-														'publisherFlexChildOrderCustom',
-														newValue
-													),
-											}}
+											min={-1}
+											onChange={(newValue) =>
+												handleOnChangeAttributes(
+													'publisherFlexChildOrderCustom',
+													newValue
+												)
+											}
 											size="small"
+											{...extensionProps.publisherFlexChildOrderCustom}
 										/>
 									</ControlContextProvider>
 								)}

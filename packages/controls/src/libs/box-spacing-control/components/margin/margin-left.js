@@ -233,26 +233,43 @@ export function MarginLeft({
 					<ValueAddonPointer />
 				</div>
 
-				<SidePopover
-					id={getId(id, 'margin.left')}
-					icon={<MarginLeftIcon />}
-					onClose={() => {
-						setFocusSide('');
-						setOpenPopover('');
-					}}
-					title={__('Left Margin', 'publisher-core')}
-					isOpen={openPopover === sideId}
-					unit={sideSpace.unit}
-					onChange={(newValue) => {
-						setValue({
-							...value,
-							margin: {
-								...value.margin,
-								left: newValue,
-							},
-						});
-					}}
-				/>
+				{openPopover === sideId && (
+					<SidePopover
+						id={getId(id, 'margin.left')}
+						icon={<MarginLeftIcon />}
+						onClose={() => {
+							setFocusSide('');
+							setOpenPopover('');
+						}}
+						title={__('Left Margin Space', 'publisher-core')}
+						inputLabel={__('Left Margin', 'publisher-core')}
+						inputLabelPopoverTitle={__(
+							'Left Margin Space',
+							'publisher-core'
+						)}
+						inputLabelDescription={
+							<>
+								<p>
+									{__(
+										'It enables you to set a margin space that applies only to the left edge of the block.',
+										'publisher-core'
+									)}
+								</p>
+							</>
+						}
+						isOpen={true}
+						unit={sideSpace.unit}
+						onChange={(newValue) => {
+							setValue({
+								...value,
+								margin: {
+									...value.margin,
+									left: newValue,
+								},
+							});
+						}}
+					/>
+				)}
 			</>
 		),
 	};

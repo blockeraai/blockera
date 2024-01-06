@@ -11,11 +11,14 @@ import { __ } from '@wordpress/i18n';
 import { controlInnerClassNames } from '@publisher/classnames';
 import { ControlContextProvider, RepeaterControl } from '@publisher/controls';
 import { STORE_NAME } from '@publisher/controls/src/libs/repeater-control/store';
+import { defaultItemValue } from '@publisher/controls/src/libs/repeater-control';
+import { isEquals } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
 import ItemBody from './item-body';
+import defaultStates from '../states';
 import ItemHeader from './item-header';
 import ItemOpener from './item-opener';
 import { getStateInfo } from '../helpers';
@@ -23,20 +26,38 @@ import { generateExtensionId } from '../../utils';
 import getBreakpoints from '../default-breakpoints';
 import { attributes as StateSettings } from '../attributes';
 import type { BreakpointTypes, StateTypes, TStates } from '../types';
-import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { TBlockProps } from '../../types';
+import { PopoverTitleButtons } from './popover-title-buttons';
+import { LabelDescription } from './label-description';
+import { useBlockContext } from '../../../hooks';
+import StateContainer from '../../../components/state-container';
 
 export default function StatesManager({
 	block,
 	states,
-	handleOnChangeAttributes,
 }: {
 	states: Array<Object>,
 	block: TBlockProps,
-	handleOnChangeAttributes: THandleOnChangeAttributes,
 }): Element<any> {
+	const { handleOnChangeAttributes } = useBlockContext();
+
 	const contextValue = {
 		block,
-		value: states,
+		value: !states.length
+			? [
+					{
+						...defaultStates.normal,
+						...defaultItemValue,
+						isOpen: false,
+						display: false,
+						deletable: false,
+						selectable: true,
+						isSelected: true,
+						visibilitySupport: false,
+						breakpoints: getBreakpoints('normal'),
+					},
+			  ]
+			: states,
 		hasSideEffect: true,
 		attribute: 'publisherBlockStates',
 		blockName: block.blockName,
@@ -60,9 +81,11 @@ export default function StatesManager({
 		});
 	};
 
+	const currentState = getStateInfo(block.attributes.publisherCurrentState);
+
 	return (
-		<div style={{ padding: '0 20px 23px' }}>
-			<ControlContextProvider storeName={STORE_NAME} value={contextValue}>
+		<ControlContextProvider storeName={STORE_NAME} value={contextValue}>
+			<StateContainer currentState={currentState}>
 				<RepeaterControl
 					{...{
 						valueCleanup,
@@ -81,6 +104,7 @@ export default function StatesManager({
 							const defaultItem = {
 								...defaultRepeaterItemValue,
 								...getStateInfo(statesCount),
+								display: true,
 							};
 
 							defaultItem.breakpoints = getBreakpoints(
@@ -94,18 +118,33 @@ export default function StatesManager({
 							callback: getStateInfo,
 							...StateSettings.publisherBlockStates.default[0],
 							deletable: true,
+							selectable: true,
 							visibilitySupport: true,
 						},
 						onChange: (newValue) => {
-							if (newValue.length === states.length) {
-								return;
-							}
-
 							const selectedState = newValue.find(
 								(item) => item.isSelected
 							);
 
 							if (!selectedState) {
+								return;
+							}
+
+							if (newValue.length === states.length) {
+								if (!isEquals(newValue, states)) {
+									handleOnChangeAttributes(
+										'publisherBlockStates',
+										newValue,
+										{
+											addOrModifyRootItems: {
+												publisherCurrentState:
+													selectedState.type ||
+													'normal',
+											},
+										}
+									);
+								}
+
 								return;
 							}
 
@@ -115,7 +154,7 @@ export default function StatesManager({
 								{
 									addOrModifyRootItems: {
 										publisherCurrentState:
-											selectedState.type,
+											selectedState.type || 'normal',
 									},
 								}
 							);
@@ -184,9 +223,15 @@ export default function StatesManager({
 						repeaterItemChildren: ItemBody,
 					}}
 					label={__('Block States', 'publisher-core')}
+					labelDescription={<LabelDescription />}
+					popoverTitle={__('Block State', 'publisher-core')}
 					className={controlInnerClassNames('block-states-repeater')}
+					itemColumns={2}
+					actionButtonClone={false}
+					actionButtonVisibility={false}
+					popoverTitleButtonsRight={PopoverTitleButtons}
 				/>
-			</ControlContextProvider>
-		</div>
+			</StateContainer>
+		</ControlContextProvider>
 	);
 }

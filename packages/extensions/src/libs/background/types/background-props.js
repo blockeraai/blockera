@@ -23,4 +23,9 @@ export type TBackgroundProps = {
 		backgroundImage?: string,
 	},
 	handleOnChangeAttributes: THandleOnChangeAttributes,
+	extensionProps: {
+		publisherBackground: Object,
+		publisherBackgroundColor: Object,
+		publisherBackgroundClip: Object,
+	},
 };

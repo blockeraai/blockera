@@ -90,8 +90,9 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 								...props,
 								additional,
 							}}
-						/>
-						{settings.edit(props)}
+						>
+							{settings.edit(props)}
+						</BlockBase>
 					</>
 				);
 			}

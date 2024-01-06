@@ -40,28 +40,35 @@ export const getBreakpointInfo = (
 		  });
 };
 
-export function getBreakpointIcon(breakpoint: TBreakpoint): MixedElement {
-	switch (breakpoint) {
+export function BreakpointIcon({
+	name,
+	onClick,
+	...props
+}: {
+	name: TBreakpoint,
+	onClick?: (event: MouseEvent) => void,
+}): MixedElement {
+	switch (name) {
 		case 'laptop':
-			return <LaptopIcon />;
+			return <LaptopIcon onClick={onClick} {...props} />;
 
 		case 'desktop':
-			return <DesktopIcon />;
+			return <DesktopIcon onClick={onClick} {...props} />;
 
 		case 'tablet':
-			return <TabletIcon />;
+			return <TabletIcon onClick={onClick} {...props} />;
 
 		case 'mobile':
-			return <MobileIcon />;
+			return <MobileIcon onClick={onClick} {...props} />;
 
 		case 'mobile-landscape':
-			return <MobileLandscapeIcon />;
+			return <MobileLandscapeIcon onClick={onClick} {...props} />;
 
 		case 'large':
-			return <LargeIcon />;
+			return <LargeIcon onClick={onClick} {...props} />;
 
 		case 'extra-large':
-			return <ExtraLargeIcon />;
+			return <ExtraLargeIcon onClick={onClick} {...props} />;
 
 		default:
 			return <></>;

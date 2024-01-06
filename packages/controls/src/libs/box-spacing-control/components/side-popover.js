@@ -18,6 +18,7 @@ import { Button, Flex, Grid, Popover } from '@publisher/components';
 import { useControlContext } from '../../../context';
 import { BaseControl, InputControl } from '../../index';
 import type { SidePopoverProps } from '../types';
+import ShortcutIcon from '../../box-position-control/icons/shortcut';
 
 export function SidePopover({
 	id,
@@ -32,13 +33,15 @@ export function SidePopover({
 		return newValue;
 	},
 	defaultValue = '0px',
+	inputLabel = __('Space', 'publisher-blocks'),
+	inputLabelDescription = '',
+	inputLabelPopoverTitle = '',
 }: SidePopoverProps): MixedElement {
 	const {
 		value,
 		setValue,
 		attribute,
 		blockName,
-		description,
 		resetToDefault,
 		getControlPath,
 	} = useControlContext({
@@ -225,20 +228,19 @@ export function SidePopover({
 				>
 					<BaseControl
 						controlName="input"
-						label={__('Space', 'publisher-blocks')}
+						label={inputLabel}
+						labelPopoverTitle={inputLabelPopoverTitle}
+						labelDescription={inputLabelDescription}
 						columns={'columns-2'}
 						style={{ marginBottom: '25px' }}
-						{...{
-							value,
-							attribute,
-							blockName,
-							description,
-							defaultValue,
-							resetToDefault,
-							singularId: id,
-							path: getControlPath(attribute, id),
-							mode: 'advanced',
-						}}
+						value={value}
+						attribute={attribute}
+						blockName={blockName}
+						defaultValue={defaultValue}
+						resetToDefault={resetToDefault}
+						singularId={id}
+						path={getControlPath(attribute, id)}
+						mode="advanced"
 					>
 						<InputControl
 							id={id}
@@ -255,7 +257,12 @@ export function SidePopover({
 					</BaseControl>
 
 					<BaseControl
-						label={__('Shortcuts', 'publisher-core')}
+						label={
+							<Flex gap="4px" alignItems="center">
+								<ShortcutIcon />
+								{__('Shortcuts', 'publisher-core')}
+							</Flex>
+						}
 						columns="columns-1"
 						className={controlInnerClassNames(
 							'side-popover-action-buttons'

@@ -237,28 +237,45 @@ export function PaddingRight({
 					<ValueAddonPointer />
 				</div>
 
-				<SidePopover
-					id={getId(id, 'padding.right')}
-					offset={215}
-					type="padding"
-					icon={<PaddingRightIcon />}
-					onClose={() => {
-						setFocusSide('');
-						setOpenPopover('');
-					}}
-					title={__('Right Padding', 'publisher-core')}
-					isOpen={openPopover === sideId}
-					unit={sideSpace.unit}
-					onChange={(newValue) => {
-						setValue({
-							...value,
-							padding: {
-								...value.padding,
-								right: newValue,
-							},
-						});
-					}}
-				/>
+				{openPopover === sideId && (
+					<SidePopover
+						id={getId(id, 'padding.right')}
+						offset={215}
+						type="padding"
+						icon={<PaddingRightIcon />}
+						onClose={() => {
+							setFocusSide('');
+							setOpenPopover('');
+						}}
+						title={__('Right Padding Space', 'publisher-core')}
+						inputLabel={__('Right Padding', 'publisher-core')}
+						inputLabelPopoverTitle={__(
+							'Right Padding Space',
+							'publisher-core'
+						)}
+						inputLabelDescription={
+							<>
+								<p>
+									{__(
+										'It enables you to set a padding space that applies only to the right edge of the block.',
+										'publisher-core'
+									)}
+								</p>
+							</>
+						}
+						isOpen={true}
+						unit={sideSpace.unit}
+						onChange={(newValue) => {
+							setValue({
+								...value,
+								padding: {
+									...value.padding,
+									right: newValue,
+								},
+							});
+						}}
+					/>
+				)}
 			</>
 		),
 	};

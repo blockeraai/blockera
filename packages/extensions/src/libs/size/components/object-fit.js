@@ -40,8 +40,8 @@ export default function ObjectFit({
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 }): MixedElement {
 	const { value, attribute, blockName, resetToDefault } = useControlContext({
-		onChange: (newValue) =>
-			handleOnChangeAttributes('publisherFit', newValue),
+		onChange: (newValue, ref) =>
+			handleOnChangeAttributes('publisherFit', newValue, { ref }),
 		defaultValue: '',
 	});
 
@@ -131,7 +131,6 @@ export default function ObjectFit({
 			<SelectControl
 				controlName="select"
 				columns="columns-1"
-				{...props}
 				options={[
 					{
 						label: __('Default', 'publisher-core'),
@@ -166,9 +165,10 @@ export default function ObjectFit({
 				]}
 				type="custom"
 				defaultValue=""
-				onChange={(newValue) =>
-					handleOnChangeAttributes('publisherFit', newValue)
+				onChange={(newValue, ref) =>
+					handleOnChangeAttributes('publisherFit', newValue, { ref })
 				}
+				{...props}
 			/>
 			<ControlContextProvider
 				value={{
@@ -185,16 +185,19 @@ export default function ObjectFit({
 			>
 				<PositionButtonControl
 					buttonLabel={__('Fit Position', 'publisher-core')}
-					popoverLabel={__('Setting', 'publisher-core')}
 					alignmentMatrixLabel={__('Position', 'publisher-core')}
 					size="small"
 					defaultValue={{ top: '', left: '' }}
-					onChange={({ top, left }) => {
-						handleOnChangeAttributes('publisherFitPosition', {
-							...fitPosition,
-							top,
-							left,
-						});
+					onChange={({ top, left }, ref) => {
+						handleOnChangeAttributes(
+							'publisherFitPosition',
+							{
+								...fitPosition,
+								top,
+								left,
+							},
+							{ ref }
+						);
 					}}
 				/>
 			</ControlContextProvider>

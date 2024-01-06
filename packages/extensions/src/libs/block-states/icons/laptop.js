@@ -1,10 +1,11 @@
-export default function LaptopIcon() {
+export default function LaptopIcon({ onClick }) {
 	return (
 		<svg
 			width="24"
 			height="24"
 			viewBox="0 0 24 24"
 			xmlns="http://www.w3.org/2000/svg"
+			onClick={onClick}
 		>
 			<path d="M18.3476 10L18.4706 7.89063L16.6524 9.05208L16 7.94792L17.9412 7L16 6.05208L16.6524 4.94792L18.4706 6.10937L18.3476 4H19.6471L19.5294 6.10937L21.3476 4.94792L22 6.05208L20.0535 7L22 7.94792L21.3476 9.05208L19.5294 7.89063L19.6471 10H18.3476Z" />
 			<path

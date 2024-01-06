@@ -17,7 +17,8 @@ import type {
 import type { AddonTypesItem } from './use-value-addon-props';
 
 export type ValueAddon = {
-	name: string,
+	id?: string,
+	name?: string,
 	settings: {
 		...Object,
 		var?: string,

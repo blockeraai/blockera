@@ -12,6 +12,7 @@ const RepeaterContext = createContext({
 	design: 'minimal',
 	mode: 'popover',
 	popoverTitle: '',
+	popoverTitleButtonsRight: null,
 	popoverClassName: '',
 	maxItems: -1,
 	minItems: 0,

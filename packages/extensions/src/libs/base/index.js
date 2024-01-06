@@ -26,7 +26,6 @@ export const BaseExtension = memo(
 		clientId,
 		supports,
 		blockName,
-		attributes,
 		extensionId,
 		initialOpen,
 		...props

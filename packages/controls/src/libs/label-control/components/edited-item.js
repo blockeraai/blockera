@@ -8,7 +8,7 @@ import { __, sprintf } from '@wordpress/i18n';
 /**
  * Publisher dependencies
  */
-import { TStates } from '@publisher/extensions/src/libs/block-states/types';
+import type { TStates } from '@publisher/extensions/src/libs/block-states/types';
 import { controlInnerClassNames } from '@publisher/classnames';
 import { Tooltip } from '@publisher/components';
 
@@ -17,12 +17,14 @@ export default function EditedItem({
 	label,
 	breakpoint,
 	current = false,
+	onClick = () => {},
 	...props
 }: {
 	state: TStates,
 	label: string,
 	breakpoint: string,
 	current: boolean,
+	onClick: () => void,
 }): MixedElement {
 	return (
 		<Tooltip
@@ -38,6 +40,7 @@ export default function EditedItem({
 					'states-changes-item',
 					'state-' + state
 				)}
+				onClick={onClick}
 				{...props}
 			>
 				{label}

@@ -28,11 +28,10 @@ export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 	({
 		block,
 		config,
-		children,
 		zIndexValue,
 		positionValue,
 		handleOnChangeAttributes,
-		...props
+		extensionProps,
 	}: TPositionExtensionProps): MixedElement => {
 		const {
 			positionConfig: { publisherPosition, publisherZIndex },
@@ -55,13 +54,17 @@ export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 							label=""
 						>
 							<BoxPositionControl
-								{...props}
-								onChange={(newValue) =>
+								onChange={(
+									newValue: Array<Object>,
+									ref?: Object
+								): void =>
 									handleOnChangeAttributes(
 										'publisherPosition',
-										newValue
+										newValue,
+										{ ref }
 									)
 								}
+								{...extensionProps.publisherPosition}
 							/>
 
 							{positionValue?.type === 'sticky' &&
@@ -119,7 +122,7 @@ export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 										newValue
 									)
 								}
-								{...props}
+								{...extensionProps.publisherZIndex}
 							/>
 						</ControlContextProvider>
 					)}

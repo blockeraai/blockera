@@ -284,28 +284,48 @@ export function MarginHorizontal({
 					/>
 				</div>
 
-				<SidePopover
-					id={getId(id, 'margin.left')}
-					type="margin"
-					icon={<MarginLeftRightIcon />}
-					onClose={() => {
-						setFocusSide('');
-						setOpenPopover('');
-					}}
-					title={__('Left & Right Margin', 'publisher-core')}
-					isOpen={openPopover === sideId}
-					unit={sideSpace?.unit}
-					onChange={(newValue) => {
-						setValue({
-							...value,
-							margin: {
-								...value.margin,
-								left: newValue,
-								right: newValue,
-							},
-						});
-					}}
-				/>
+				{openPopover === sideId && (
+					<SidePopover
+						id={getId(id, 'margin.left')}
+						type="margin"
+						icon={<MarginLeftRightIcon />}
+						onClose={() => {
+							setFocusSide('');
+							setOpenPopover('');
+						}}
+						title={__(
+							'Left & Right Margin Space',
+							'publisher-core'
+						)}
+						inputLabel={__('Horizontal Margin', 'publisher-core')}
+						inputLabelPopoverTitle={__(
+							'Horizontal Margin Space',
+							'publisher-core'
+						)}
+						inputLabelDescription={
+							<>
+								<p>
+									{__(
+										'It enables you to set a margin space that applies to both the left and right edges of the block.',
+										'publisher-core'
+									)}
+								</p>
+							</>
+						}
+						isOpen={true}
+						unit={sideSpace?.unit}
+						onChange={(newValue) => {
+							setValue({
+								...value,
+								margin: {
+									...value.margin,
+									left: newValue,
+									right: newValue,
+								},
+							});
+						}}
+					/>
+				)}
 			</>
 		),
 	};
