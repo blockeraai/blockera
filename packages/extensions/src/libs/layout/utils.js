@@ -8,7 +8,7 @@ export const calcGridTemplateAreas = ({
 	gridColumns: Array<Object>,
 	gridRows: Array<Object>,
 	gridAreas: Array<Object>,
-}) => {
+}): Array<Array> => {
 	const filteredColumns = gridColumns.filter(
 		(item) => !item['auto-generated'] && item.isVisible
 	);
@@ -16,7 +16,7 @@ export const calcGridTemplateAreas = ({
 		(item) => !item['auto-generated'] && item.isVisible
 	);
 
-	const gridTemplateAreas = [];
+	const gridTemplateAreas = ([]: any);
 
 	for (let i = 0; i < filteredRows.length; i++) {
 		gridTemplateAreas.push([]);
@@ -33,9 +33,13 @@ export const calcGridTemplateAreas = ({
 			return null;
 		}
 
-		for (let row = [item['row-start']]; row < [item['row-end']]; row++) {
+		for (
+			let row: any = [item['row-start']];
+			row < [item['row-end']];
+			row++
+		) {
 			for (
-				let col = [item['column-start']];
+				let col: any = [item['column-start']];
 				col < [item['column-end']];
 				col++
 			) {

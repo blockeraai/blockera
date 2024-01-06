@@ -60,6 +60,7 @@ export type TItem = {
 	'min-size': string,
 	'max-size': string,
 	'auto-fit': boolean,
+	'auto-generated'?: boolean,
 	isVisible: boolean,
 };
 
