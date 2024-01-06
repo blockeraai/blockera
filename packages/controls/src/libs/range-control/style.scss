@@ -8,10 +8,17 @@
 
 	}
 
+	span {
+		color: var(--publisher-controls-primary-color);
+	}
+
 	.components-range-control__thumb-wrapper {
 
 		box-shadow: 0 0 0 2px #ffffff;
 
+		& > span {
+			background-color: var(--publisher-controls-primary-color);
+		}
 	}
 
 }
