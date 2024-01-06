@@ -17,7 +17,6 @@ import { STORE_NAME } from '../store/constants';
 import { sanitizedBlockAttributes } from './utils';
 import { blockStatesAttributes } from '../index';
 import { isBlockTypeExtension, isEnableExtension } from '../api/utils';
-import { GridBuilderAttributes } from '../components/grid-builder';
 
 const { getBlockExtension, getBlockExtensionBy } = select(STORE_NAME);
 
@@ -70,7 +69,6 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 			...settings.attributes,
 			...additional.attributes,
 			...blockStatesAttributes,
-			...GridBuilderAttributes,
 			publisherPropsId: {
 				type: 'string',
 			},

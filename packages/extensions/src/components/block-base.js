@@ -19,6 +19,7 @@ import { indexOf, isUndefined, omitWithPattern } from '@publisher/utils';
 import {
 	useIconEffect,
 	useAttributes,
+	BlockEditContext,
 	BlockEditContextProvider,
 } from '../hooks';
 import { sanitizedBlockAttributes } from '../hooks/utils';
@@ -220,18 +221,24 @@ export function BlockBase({
 				/>
 			</StrictMode>
 
-			{blockEditComponentAttributes.publisherIsOpenGridBuilder && (
-				<GridBuilder
-					type={name}
-					id={clientId}
-					position={{ top: 0, left: 0 }}
-					dimension={{ width: 320, height: 200 }}
-				>
-					{children}
-				</GridBuilder>
-			)}
-			{!blockEditComponentAttributes.publisherIsOpenGridBuilder &&
-				children}
+			<BlockEditContext.Consumer>
+				{({ isOpenGridBuilder }) => {
+					if (!isOpenGridBuilder) {
+						return children;
+					}
+
+					return (
+						<GridBuilder
+							type={name}
+							id={clientId}
+							position={{ top: 0, left: 0 }}
+							dimension={{ width: 320, height: 200 }}
+						>
+							{children}
+						</GridBuilder>
+					);
+				}}
+			</BlockEditContext.Consumer>
 		</BlockEditContextProvider>
 	);
 }

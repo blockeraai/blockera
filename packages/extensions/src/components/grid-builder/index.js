@@ -119,5 +119,3 @@ export const GridBuilder = ({
 		</Rnd>
 	);
 };
-
-export * as GridBuilderAttributes from './attributes';

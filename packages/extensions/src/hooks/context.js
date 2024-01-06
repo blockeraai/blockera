@@ -31,6 +31,7 @@ const BlockEditContextProvider = ({
 	...props
 }: Object): MixedElement => {
 	const [currentTab, setCurrentTab] = useState('general');
+	const [isOpenGridBuilder, setOpenGridBuilder] = useState(false);
 	const memoizedValue: {
 		currentTab: string,
 		getBlockType: string,
@@ -53,7 +54,7 @@ const BlockEditContextProvider = ({
 			breakpointId,
 			getAttributes,
 			isNormalState,
-			setAttributes,
+			// setAttributes,
 			handleOnChangeAttributes,
 		} = props;
 
@@ -117,12 +118,8 @@ const BlockEditContextProvider = ({
 			getCurrentState(): TStates {
 				return getAttributes()?.publisherCurrentState;
 			},
-			setOpenGridBuilder(newValue: boolean): void {
-				setAttributes({
-					...getAttributes(),
-					publisherIsOpenGridBuilder: newValue,
-				});
-			},
+			isOpenGridBuilder,
+			setOpenGridBuilder,
 			...props,
 		};
 		// eslint-disable-next-line
