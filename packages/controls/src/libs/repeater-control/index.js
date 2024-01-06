@@ -33,10 +33,12 @@ export const defaultItemValue = {
 	isOpen: true,
 	display: true,
 	cloneable: true,
+	sortable: true,
 	isVisible: true,
 	deletable: true,
 	selectable: false,
 	visibilitySupport: true,
+	isLastItemSupport: false,
 };
 
 export default function RepeaterControl({

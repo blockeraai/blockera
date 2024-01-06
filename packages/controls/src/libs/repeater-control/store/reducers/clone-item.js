@@ -106,6 +106,24 @@ export function cloneItem(state = {}, action) {
 
 	let clonedItem = controlInfo.value[action.itemId];
 
+	//when clone isLastItemSupported item
+	if (clonedItem?.isLastItemSupport) {
+		return {
+			...state,
+			[action.controlId]: {
+				...controlInfo,
+				value: [
+					...controlInfo.value.toSpliced(-1),
+					{
+						...controlInfo.value.slice(-1),
+						isLastItemSupport: false,
+					},
+					clonedItem,
+				],
+			},
+		};
+	}
+
 	if (0 === action.itemId && action?.overrideItem) {
 		clonedItem = {
 			...clonedItem,

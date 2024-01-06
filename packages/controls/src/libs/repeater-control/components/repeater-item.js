@@ -77,6 +77,10 @@ const RepeaterItem = ({
 	}, [draggingIndex, itemId]);
 
 	const handleDragStart = (e: DragEvent, index: number) => {
+		if (!item.sortable) {
+			return;
+		}
+
 		if (e.dataTransfer) {
 			e.dataTransfer.setData('text/plain', index.toString());
 			setDraggingIndex(index);

@@ -65,6 +65,25 @@ export function addItem(state = {}, action) {
 		return state;
 	}
 
+	const lastItem = controlInfo?.value?.find((item) => item.isLastItemSupport);
+	if (lastItem) {
+		const filteredRepeaterItems = controlInfo?.value?.filter(
+			(item) => !item.isLastItemSupport
+		);
+
+		return {
+			...state,
+			[action.controlId]: {
+				...controlInfo,
+				value: [
+					...(filteredRepeaterItems ?? []),
+					...[action.value],
+					lastItem,
+				],
+			},
+		};
+	}
+
 	//by default behavior of "addRepeaterItem" action
 	return {
 		...state,
