@@ -98,3 +98,10 @@ export {
 	default as BlockStates,
 	attributes as blockStatesAttributes,
 } from './block-states';
+export {
+	GridChildExtensionIcon,
+	GridChildStyles,
+	GridChildExtension,
+	attributes as gridChildAttributes,
+	supports as gridChildSupports,
+} from './grid-child';

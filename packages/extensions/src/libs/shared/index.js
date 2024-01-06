@@ -78,6 +78,11 @@ import {
 	attributes as mouseAttributes,
 	supports as mouseSupports,
 } from '../mouse';
+import {
+	GridChildExtensionIcon,
+	attributes as gridChildAttributes,
+	supports as gridChildSupports,
+} from '../grid-child';
 import { hasSameProps } from '../utils';
 import extensions from './extensions.json';
 import { ExtensionStyle } from '../base/style';
@@ -100,6 +105,7 @@ export const attributes = {
 	...iconAttributes,
 	...advancedAttributes,
 	...mouseAttributes,
+	...gridChildAttributes,
 };
 export const supports = {
 	...typographySupports,
@@ -114,6 +120,7 @@ export const supports = {
 	...iconSupports,
 	...advancedSupports,
 	...mouseSupports,
+	...gridChildSupports,
 };
 
 type Props = {
@@ -159,6 +166,7 @@ export const SharedBlockExtension: Props = memo(
 			icon,
 			mouse,
 			advanced,
+			gridChild,
 		} = extensions;
 
 		props = {
@@ -294,6 +302,34 @@ export const SharedBlockExtension: Props = memo(
 											handleOnChangeAttributes
 										}
 										icon={<FlexChildExtensionIcon />}
+									/>
+								)}
+
+							{directParentBlock?.innerBlocks.length &&
+								directParentBlock?.attributes
+									.publisherDisplay === 'grid' && (
+									<BaseExtension
+										{...props}
+										initialOpen={true}
+										extensionId={'GridChild'}
+										title={__(
+											'Grid Child',
+											'publisher-core'
+										)}
+										values={{
+											...include(
+												attributes,
+												gridChild,
+												'publisher'
+											),
+											gridAreas:
+												directParentBlock?.attributes
+													.publisherGridAreas,
+										}}
+										handleOnChangeAttributes={
+											handleOnChangeAttributes
+										}
+										icon={<GridChildExtensionIcon />}
 									/>
 								)}
 
@@ -463,6 +499,7 @@ export const SharedBlockExtension: Props = memo(
 						'Background',
 						'BorderAndShadow',
 						'Mouse',
+						'GridChild',
 					]}
 				/>
 			</>

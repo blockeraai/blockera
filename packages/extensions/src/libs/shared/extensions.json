@@ -98,5 +98,12 @@
 		"publisherUserSelect",
 		"publisherPointerEvents"
 	],
-	"advanced": ["publisherAttributes", "publisherCSSProperties"]
+	"advanced": ["publisherAttributes", "publisherCSSProperties"],
+	"gridChild": [
+		"publisherGridChildPosition",
+		"publisherGridChildAlign",
+		"publisherGridChidJustify",
+		"publisherGridChildOrder",
+		"publisherGridChildOrderCustom"
+	]
 }
