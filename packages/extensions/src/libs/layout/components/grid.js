@@ -131,11 +131,13 @@ export default function ({
 		}
 	}
 
-	const areaNameNumbers = gridAreas?.map((area) => {
-		if (isNumber(Number(area.name.slice(-2))))
-			return Number(area.name.slice(-2));
-		return Number(area.name.slice(-1));
-	});
+	const areaNameNumbers = gridAreas
+		?.map((area) => {
+			if (isNumber(Number(area.name.slice(-2))))
+				return Number(area.name.slice(-2));
+			return Number(area.name.slice(-1));
+		})
+		.filter((item) => isNumber(item));
 
 	return (
 		<>
