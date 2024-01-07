@@ -30,6 +30,7 @@ import { PopoverTitleButtons } from './popover-title-buttons';
 import { LabelDescription } from './label-description';
 import { useBlockContext } from '../../../hooks';
 import StateContainer from '../../../components/state-container';
+import { isEquals } from '@publisher/utils';
 
 export default function StatesManager({
 	block,
@@ -82,6 +83,87 @@ export default function StatesManager({
 
 	const currentState = getStateInfo(block.attributes.publisherCurrentState);
 
+	const getOptions = (
+		selectedState: StateTypes,
+		newValue: Array<StateTypes>
+	) => {
+		type State = {
+			...StateTypes,
+			isSelected: boolean,
+		};
+
+		const getStates = () => {
+			const getNormalizeState = (state: State): State => {
+				if (!state.isSelected) {
+					return state;
+				}
+
+				return {
+					...state,
+					isSelected: false,
+				};
+			};
+
+			if (
+				-1 ===
+					block.attributes.publisherBlockStates.indexOf(
+						selectedState
+					) &&
+				!isEquals(
+					selectedState.type,
+					block.attributes.publisherCurrentState
+				)
+			) {
+				return block.attributes.publisherBlockStates.map(
+					(state: State, stateId: number): State => {
+						if (stateId === newValue.indexOf(selectedState)) {
+							return {
+								...state,
+								isSelected: true,
+								type: selectedState.type,
+								label: selectedState.label,
+							};
+						}
+
+						return getNormalizeState(state);
+					}
+				);
+			}
+
+			return block.attributes.publisherBlockStates.map(
+				(state: State): State => {
+					if (state.type === selectedState.type) {
+						return {
+							...state,
+							isSelected: true,
+						};
+					}
+
+					return getNormalizeState(state);
+				}
+			);
+		};
+
+		let rootItems = {};
+		const newStates = getStates();
+
+		if (
+			!isEquals(
+				selectedState.type,
+				block.attributes.publisherCurrentState
+			) &&
+			!isEquals(block.attributes.publisherBlockStates, newStates)
+		) {
+			rootItems = {
+				publisherBlockStates: newStates,
+			};
+		}
+
+		return {
+			addOrModifyRootItems: rootItems,
+		};
+	};
+
 	return (
 		<ControlContextProvider storeName={STORE_NAME} value={contextValue}>
 			<StateContainer currentState={currentState}>
@@ -125,10 +207,6 @@ export default function StatesManager({
 								(item) => item.isSelected
 							);
 
-							if (!selectedState) {
-								return;
-							}
-
 							if (newValue.length !== states.length) {
 								handleOnChangeAttributes(
 									'publisherBlockStates',
@@ -147,44 +225,7 @@ export default function StatesManager({
 							handleOnChangeAttributes(
 								'publisherCurrentState',
 								selectedState.type || 'normal',
-								selectedState.type !==
-									block.attributes.publisherCurrentState
-									? {
-											addOrModifyRootItems: {
-												publisherBlockStates:
-													block.attributes.publisherBlockStates.map(
-														(state: {
-															...StateTypes,
-															isSelected: boolean,
-														}): {
-															...StateTypes,
-															isSelected: boolean,
-														} => {
-															if (
-																state.type ===
-																selectedState.type
-															) {
-																return {
-																	...state,
-																	isSelected: true,
-																};
-															}
-
-															if (
-																!state.isSelected
-															) {
-																return state;
-															}
-
-															return {
-																...state,
-																isSelected: false,
-															};
-														}
-													),
-											},
-									  }
-									: {}
+								getOptions(selectedState, newValue)
 							);
 						},
 						overrideItem: (item) => {
