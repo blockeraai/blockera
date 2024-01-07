@@ -72,7 +72,9 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(block, 'width'),
-								value: inheritValue.width || width,
+								value: isNormalState()
+									? inheritValue.width || width
+									: width,
 								attribute: 'publisherWidth',
 								blockName: block.blockName,
 							}}
@@ -278,7 +280,9 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(block, 'height'),
-								value: inheritValue.height || height,
+								value: isNormalState()
+									? inheritValue.height || height
+									: height,
 								attribute: 'publisherHeight',
 								blockName: block.blockName,
 							}}
