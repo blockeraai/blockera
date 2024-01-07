@@ -5,6 +5,7 @@
  */
 import { isObject, isString, isUndefined } from '@publisher/utils';
 import { isValid } from '@publisher/hooks';
+import { isSpecialUnit } from '@publisher/controls';
 
 export function toSimpleStyleWPCompatible({
 	wpAttribute,
@@ -43,6 +44,7 @@ export function toSimpleStyleWPCompatible({
 		!isNormalState() ||
 		newValue === '' ||
 		isUndefined(newValue) ||
+		isSpecialUnit(newValue) ||
 		(isObject(newValue) && !isValid(newValue)) ||
 		(isString(newValue) && newValue.endsWith('func'))
 	) {
@@ -109,6 +111,7 @@ export function toSimpleStyleTypographyWPCompatible({
 		!isNormalState() ||
 		newValue === '' ||
 		isUndefined(newValue) ||
+		isSpecialUnit(newValue) ||
 		(isObject(newValue) && !isValid(newValue)) ||
 		(isString(newValue) && newValue.endsWith('func'))
 	) {

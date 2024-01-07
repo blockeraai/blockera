@@ -250,7 +250,15 @@ export const SharedBlockExtension: Props = memo(
 
 							<BaseExtension
 								{...props}
-								{...include(attributes, size, 'publisher')}
+								values={include(attributes, size, 'publisher')}
+								inheritValue={{
+									width: attributes?.width,
+									height: attributes?.height,
+									minHeight: attributes?.minHeight,
+									minHeightUnit: attributes?.minHeightUnit,
+									aspectRatio: attributes?.aspectRatio,
+									scale: attributes?.scale,
+								}}
 								extensionProps={{
 									publisherWidth: {},
 									publisherHeight: {},
@@ -262,10 +270,6 @@ export const SharedBlockExtension: Props = memo(
 									publisherRatio: {},
 									publisherFit: {},
 									publisherFitPosition: {},
-								}}
-								inheritValue={{
-									width: attributes.width,
-									height: attributes.height,
 								}}
 								initialOpen={true}
 								extensionId={'Size'}
