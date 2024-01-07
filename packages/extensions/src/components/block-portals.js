@@ -24,11 +24,15 @@ export const BlockPortals = ({
 
 		const currentRef = ref.current;
 
-		currentRef.contentWindow.addEventListener('load', handleWindowLoad);
+		if (!currentRef) {
+			return;
+		}
+
+		currentRef?.contentWindow?.addEventListener('load', handleWindowLoad);
 
 		// Cleanup function to remove the event listener to prevent maximum update!
 		return () => {
-			currentRef.contentWindow.removeEventListener(
+			currentRef?.contentWindow?.removeEventListener(
 				'load',
 				handleWindowLoad
 			);
