@@ -12,7 +12,6 @@ import { controlInnerClassNames } from '@publisher/classnames';
 import { ControlContextProvider, RepeaterControl } from '@publisher/controls';
 import { STORE_NAME } from '@publisher/controls/src/libs/repeater-control/store';
 import { defaultItemValue } from '@publisher/controls/src/libs/repeater-control';
-import { isEquals } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -130,33 +129,62 @@ export default function StatesManager({
 								return;
 							}
 
-							if (newValue.length === states.length) {
-								if (!isEquals(newValue, states)) {
-									handleOnChangeAttributes(
-										'publisherBlockStates',
-										newValue,
-										{
-											addOrModifyRootItems: {
-												publisherCurrentState:
-													selectedState.type ||
-													'normal',
-											},
-										}
-									);
-								}
+							if (newValue.length !== states.length) {
+								handleOnChangeAttributes(
+									'publisherBlockStates',
+									newValue,
+									{
+										addOrModifyRootItems: {
+											publisherCurrentState:
+												selectedState.type || 'normal',
+										},
+									}
+								);
 
 								return;
 							}
 
 							handleOnChangeAttributes(
-								'publisherBlockStates',
-								newValue,
-								{
-									addOrModifyRootItems: {
-										publisherCurrentState:
-											selectedState.type || 'normal',
-									},
-								}
+								'publisherCurrentState',
+								selectedState.type || 'normal',
+								selectedState.type !==
+									block.attributes.publisherCurrentState
+									? {
+											addOrModifyRootItems: {
+												publisherBlockStates:
+													block.attributes.publisherBlockStates.map(
+														(state: {
+															...StateTypes,
+															isSelected: boolean,
+														}): {
+															...StateTypes,
+															isSelected: boolean,
+														} => {
+															if (
+																state.type ===
+																selectedState.type
+															) {
+																return {
+																	...state,
+																	isSelected: true,
+																};
+															}
+
+															if (
+																!state.isSelected
+															) {
+																return state;
+															}
+
+															return {
+																...state,
+																isSelected: false,
+															};
+														}
+													),
+											},
+									  }
+									: {}
 							);
 						},
 						overrideItem: (item) => {
@@ -182,41 +210,6 @@ export default function StatesManager({
 							}
 
 							return {};
-						},
-						onSelect: (event, item) => {
-							handleOnChangeAttributes(
-								'publisherCurrentState',
-								item.type,
-								{
-									addOrModifyRootItems: {
-										publisherBlockStates:
-											block?.attributes?.publisherBlockStates.map(
-												(
-													state: StateTypes
-												): {
-													...StateTypes,
-													isSelected: boolean,
-												} => {
-													if (
-														state.type === item.type
-													) {
-														return {
-															...state,
-															isSelected: true,
-														};
-													}
-
-													return {
-														...state,
-														isSelected: false,
-													};
-												}
-											),
-									},
-								}
-							);
-
-							return false;
 						},
 						repeaterItemHeader: ItemHeader,
 						repeaterItemOpener: ItemOpener,
