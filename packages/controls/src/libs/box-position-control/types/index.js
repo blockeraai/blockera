@@ -12,7 +12,7 @@ export type PositionType =
 	| 'sticky'
 	| 'fixed';
 
-type TDefaultValue = {
+export type PositionControlValue = {
 	type: PositionType,
 	position: {
 		top: string,
@@ -24,7 +24,7 @@ type TDefaultValue = {
 
 export type BoxPositionControlProps = {
 	...RepeaterControlProps,
-	defaultValue?: TDefaultValue,
+	defaultValue?: PositionControlValue,
 	/**
 	 * Specifies which side is open by default.
 	 *
@@ -47,7 +47,7 @@ export type SideProps = {
 	id?: string,
 	getId: (?string, ?string) => string,
 	//
-	value: TDefaultValue,
+	value: PositionControlValue,
 	setValue: (Object) => void,
 	attribute: string,
 	blockName: string,

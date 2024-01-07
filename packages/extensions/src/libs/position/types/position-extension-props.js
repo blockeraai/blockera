@@ -14,9 +14,30 @@ export type TPositionExtensionProps = {
 	block: TBlockProps,
 	config: Object,
 	children?: MixedElement,
-	zIndexValue: string,
-	positionValue: Object,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
+	values: {
+		position?: {
+			type: string,
+			position: {
+				top: string,
+				right: string,
+				bottom: string,
+				left: string,
+			},
+		},
+		zIndex: string,
+	},
+	inheritValues: {
+		position?: {
+			type: string,
+			position: {
+				top: string,
+				right: string,
+				bottom: string,
+				left: string,
+			},
+		},
+	},
 	extensionProps: {
 		publisherPosition: Object,
 		publisherZIndex: Object,

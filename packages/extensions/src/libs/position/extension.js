@@ -14,7 +14,6 @@ import {
 	BoxPositionControl,
 	ControlContextProvider,
 	InputControl,
-	NoticeControl,
 } from '@publisher/controls';
 
 /**
@@ -23,13 +22,15 @@ import {
 import { isActiveField } from '../../api/utils';
 import { generateExtensionId, hasSameProps } from '../utils';
 import type { TPositionExtensionProps } from './types/position-extension-props';
+import { useBlockContext } from '../../hooks';
+import { positionToWPCompatible } from './utils';
 
 export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 	({
 		block,
 		config,
-		zIndexValue,
-		positionValue,
+		values,
+		inheritValues,
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TPositionExtensionProps): MixedElement => {
@@ -37,13 +38,23 @@ export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 			positionConfig: { publisherPosition, publisherZIndex },
 		} = config;
 
+		const { isNormalState, getAttributes } = useBlockContext();
+
 		return (
 			<>
 				{isActiveField(publisherPosition) && (
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'position'),
-							value: positionValue,
+							value: (() => {
+								if (isNormalState()) {
+									return values.position?.type
+										? values.position
+										: inheritValues.position;
+								}
+
+								return values.position;
+							})(),
 							attribute: 'publisherPosition',
 							blockName: block.blockName,
 						}}
@@ -55,39 +66,38 @@ export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 						>
 							<BoxPositionControl
 								onChange={(
-									newValue: Array<Object>,
+									newValue: Object,
 									ref?: Object
 								): void =>
 									handleOnChangeAttributes(
 										'publisherPosition',
 										newValue,
-										{ ref }
+										{
+											ref,
+											addOrModifyRootItems:
+												positionToWPCompatible({
+													newValue,
+													ref,
+													isNormalState,
+													getAttributes,
+												}),
+										}
 									)
 								}
 								{...extensionProps.publisherPosition}
 							/>
-
-							{positionValue?.type === 'sticky' &&
-								positionValue.position.top &&
-								positionValue.position.bottom && (
-									<NoticeControl type="error">
-										{__(
-											'Selecting both "Top" and "Bottom" for sticky positioning can lead to issues. Set value only for "Top" or "Bottom" to ensure smooth functionality.',
-											'publisher-core'
-										)}
-									</NoticeControl>
-								)}
 						</BaseControl>
 					</ControlContextProvider>
 				)}
 
 				{isActiveField(publisherZIndex) &&
-					positionValue?.type !== undefined &&
-					positionValue?.type !== 'static' && (
+					values.position?.type !== '' &&
+					values.position?.type !== undefined &&
+					values.position?.type !== 'static' && (
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(block, 'z-index'),
-								value: zIndexValue,
+								value: values.zIndex,
 								attribute: 'publisherZIndex',
 								blockName: block.blockName,
 							}}
@@ -116,10 +126,13 @@ export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 								unitType="z-index"
 								arrows={true}
 								defaultValue=""
-								onChange={(newValue) =>
+								onChange={(newValue, ref) =>
 									handleOnChangeAttributes(
 										'publisherZIndex',
-										newValue
+										newValue,
+										{
+											ref,
+										}
 									)
 								}
 								{...extensionProps.publisherZIndex}

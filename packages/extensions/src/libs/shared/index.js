@@ -233,14 +233,34 @@ export const SharedBlockExtension: Props = memo(
 
 							<BaseExtension
 								{...props}
+								values={{
+									position: attributes.publisherPosition,
+									zIndex: attributes.publisherZIndex,
+								}}
+								inheritValues={{
+									position: attributes?.style?.position?.type
+										? {
+												type: attributes?.style
+													?.position?.type,
+												position: {
+													top: attributes?.style
+														?.position?.top,
+													right: attributes?.style
+														?.position?.right,
+													bottom: attributes?.style
+														?.position?.bottom,
+													left: attributes?.style
+														?.position?.left,
+												},
+										  }
+										: undefined,
+								}}
 								extensionProps={{
 									publisherPosition: {},
 									publisherZIndex: {},
 								}}
 								initialOpen={true}
 								extensionId={'Position'}
-								zIndexValue={attributes.publisherZIndex}
-								positionValue={attributes.publisherPosition}
 								title={__('Position', 'publisher-core')}
 								handleOnChangeAttributes={
 									handleOnChangeAttributes
