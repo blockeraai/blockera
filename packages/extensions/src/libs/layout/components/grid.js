@@ -9,7 +9,7 @@ import { useState } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { Button, Popover } from '@publisher/components';
+import { Button, Popover, Tooltip, Flex } from '@publisher/components';
 import {
 	BaseControl,
 	ToggleSelectControl,
@@ -44,6 +44,7 @@ import { default as AlignContentSpaceAroundIcon } from '../icons/align-content-s
 import { default as AlignContentSpaceBetweenIcon } from '../icons/align-content-space-between';
 import { default as EditIcon } from '../icons/edit';
 import { default as GridIcon } from '../icons/display-grid';
+import { default as InformationIcon } from '../icons/information';
 import { Gap } from '.';
 import Fields from './fields';
 import Header from './header';
@@ -262,29 +263,47 @@ export default function ({
 													blockName: block.blockName,
 												}}
 											>
-												<CheckboxControl
-													checkboxLabel={__(
-														'Dense',
-														'publisher-core'
-													)}
-													defaultValue={
-														gridDirection.dense ||
-														false
-													}
-													onChange={(
-														dense: boolean,
-														ref?: Object
-													): void => {
-														handleOnChangeAttributes(
-															'publisherGridDirection',
-															{
-																...gridDirection,
-																dense,
-															},
-															{ ref }
-														);
-													}}
-												/>
+												<Flex gap="3px">
+													<CheckboxControl
+														checkboxLabel={__(
+															'Dense',
+															'publisher-core'
+														)}
+														defaultValue={
+															gridDirection.dense ||
+															false
+														}
+														onChange={(
+															dense: boolean,
+															ref?: Object
+														): void => {
+															handleOnChangeAttributes(
+																'publisherGridDirection',
+																{
+																	...gridDirection,
+																	dense,
+																},
+																{ ref }
+															);
+														}}
+													/>
+													<Tooltip
+														text={__(
+															"Dense tries to fit grid children into empty grid cells, which may impact accessibility. It changes item display, not their position in the page's source, potentially affecting accessibility.",
+															'publisher-core'
+														)}
+													>
+														<span
+															style={{
+																display: 'flex',
+																alignItems:
+																	'flex-end',
+															}}
+														>
+															<InformationIcon />
+														</span>
+													</Tooltip>
+												</Flex>
 											</ControlContextProvider>
 										</ToggleSelectControl>
 									</BaseControl>
