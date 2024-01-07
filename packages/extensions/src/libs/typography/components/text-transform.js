@@ -12,7 +12,6 @@ import {
 	ControlContextProvider,
 	ToggleSelectControl,
 } from '@publisher/controls';
-import { isEmpty } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -24,6 +23,7 @@ import TextTransformLowercaseIcon from '../icons/text-transform-lowercase';
 import TextTransformUppercaseIcon from '../icons/text-transform-uppercase';
 import TextTransformCapitalizeIcon from '../icons/text-transform-capitalize';
 import { useBlockContext } from '../../../hooks';
+import { toSimpleStyleTypographyWPCompatible } from '../../../utils';
 
 export const TextTransform = ({
 	block,
@@ -36,24 +36,6 @@ export const TextTransform = ({
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
 	const { isNormalState, getAttributes } = useBlockContext();
-
-	const toWPCompatible = (newValue: Object): Object => {
-		if (!isNormalState() || isEmpty(newValue)) {
-			return {};
-		}
-
-		const blockAttributes = getAttributes();
-
-		return {
-			style: {
-				...(blockAttributes.attributes?.style ?? {}),
-				typography: {
-					...(blockAttributes.attributes?.style?.typography ?? {}),
-					textTransform: 'initial' === newValue ? 'none' : newValue,
-				},
-			},
-		};
-	};
 
 	return (
 		<ControlContextProvider
@@ -146,10 +128,14 @@ export const TextTransform = ({
 				onChange={(newValue, ref) => {
 					onChange('publisherTextTransform', newValue, {
 						ref,
-						addOrModifyRootItems: toWPCompatible(newValue),
-						deleteItemsOnResetAction: [
-							'style.typography.textTransform',
-						],
+						addOrModifyRootItems:
+							toSimpleStyleTypographyWPCompatible({
+								wpAttribute: 'textTransform',
+								newValue,
+								isNormalState,
+								ref,
+								getAttributes,
+							}),
 					});
 				}}
 				{...props}

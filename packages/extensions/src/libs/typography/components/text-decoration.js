@@ -12,7 +12,6 @@ import {
 	ControlContextProvider,
 	ToggleSelectControl,
 } from '@publisher/controls';
-import { isEmpty } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -24,6 +23,7 @@ import TextDecorationOverlineIcon from '../icons/text-decoration-overline';
 import NoneIcon from '../icons/none';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 import { useBlockContext } from '../../../hooks';
+import { toSimpleStyleTypographyWPCompatible } from '../../../utils';
 
 export const TextDecoration = ({
 	block,
@@ -38,30 +38,6 @@ export const TextDecoration = ({
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
 	const { isNormalState, getAttributes } = useBlockContext();
-
-	const toWPCompatible = (newValue: Object): Object => {
-		if (!isNormalState() || isEmpty(newValue)) {
-			return {};
-		}
-
-		const _newValue = newValue === 'initial' ? 'none' : newValue;
-
-		if ('overline' === newValue) {
-			return {};
-		}
-
-		const blockAttributes = getAttributes();
-
-		return {
-			style: {
-				...(blockAttributes.attributes?.style ?? {}),
-				typography: {
-					...(blockAttributes.attributes?.style?.typography ?? {}),
-					textDecoration: _newValue,
-				},
-			},
-		};
-	};
 
 	return (
 		<ControlContextProvider
@@ -155,10 +131,14 @@ export const TextDecoration = ({
 				onChange={(newValue, ref) => {
 					onChange('publisherTextDecoration', newValue, {
 						ref,
-						addOrModifyRootItems: toWPCompatible(newValue),
-						deleteItemsOnResetAction: [
-							'style.typography.textDecoration',
-						],
+						addOrModifyRootItems:
+							toSimpleStyleTypographyWPCompatible({
+								wpAttribute: 'lineHeight',
+								newValue,
+								isNormalState,
+								ref,
+								getAttributes,
+							}),
 					});
 				}}
 				{...props}

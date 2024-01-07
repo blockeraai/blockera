@@ -410,9 +410,7 @@ export const SharedBlockExtension: Props = memo(
 									attributes?.publisherBackgroundClip
 								}
 								defaultValue={{
-									fontSize:
-										attributes.fontSize ||
-										attributes.publisherFontSize,
+									fontSize: attributes.fontSize || '',
 									typography:
 										attributes.style?.typography || {},
 								}}

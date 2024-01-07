@@ -9,7 +9,6 @@ import type { MixedElement } from 'react';
  * Publisher dependencies
  */
 import { ControlContextProvider, InputControl } from '@publisher/controls';
-import { isEmpty } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -17,6 +16,7 @@ import { isEmpty } from '@publisher/utils';
 import { useBlockContext } from '../../../hooks';
 import { generateExtensionId } from '../../utils';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import { toSimpleStyleTypographyWPCompatible } from '../../../utils';
 
 export const LetterSpacing = ({
 	block,
@@ -31,24 +31,6 @@ export const LetterSpacing = ({
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
 	const { isNormalState, getAttributes } = useBlockContext();
-
-	const toWPCompatible = (newValue: Object): Object => {
-		if (!isNormalState() || isEmpty(newValue)) {
-			return {};
-		}
-
-		const blockAttributes = getAttributes();
-
-		return {
-			style: {
-				...(blockAttributes?.style ?? {}),
-				typography: {
-					...(blockAttributes?.style?.typography ?? {}),
-					letterSpacing: newValue,
-				},
-			},
-		};
-	};
 
 	return (
 		<ControlContextProvider
@@ -86,10 +68,14 @@ export const LetterSpacing = ({
 				onChange={(newValue: Object, ref?: Object): void => {
 					onChange('publisherLetterSpacing', newValue, {
 						ref,
-						addOrModifyRootItems: toWPCompatible(newValue),
-						deleteItemsOnResetAction: [
-							'style.typography.letterSpacing',
-						],
+						addOrModifyRootItems:
+							toSimpleStyleTypographyWPCompatible({
+								wpAttribute: 'letterSpacing',
+								newValue,
+								isNormalState,
+								ref,
+								getAttributes,
+							}),
 					});
 				}}
 				{...props}

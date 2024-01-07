@@ -127,16 +127,10 @@ export function BlockBase({
 		(state: StateTypes) => state.type
 	);
 
-	let blockStateId = blockStates?.indexOf(attributes?.publisherCurrentState);
-
-	if (-1 === blockStateId) {
-		blockStateId = 0;
-
-		setAttributes({
-			...attributes,
-			publisherCurrentState: 'normal',
-		});
-	}
+	const currentStateIndex = blockStates?.indexOf(
+		attributes?.publisherCurrentState
+	);
+	const blockStateId = -1 === currentStateIndex ? 0 : currentStateIndex;
 
 	const breakpointId = indexOf(
 		attributes?.publisherBlockStates[blockStateId]?.breakpoints.map(
