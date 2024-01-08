@@ -13,6 +13,7 @@ const {
 	camelCaseDash,
 } = require('@wordpress/dependency-extraction-webpack-plugin/lib/util');
 const DependencyExtractionWebpackPlugin = require('@wordpress/dependency-extraction-webpack-plugin');
+const defaultConfig = require('@wordpress/scripts/config/webpack.config');
 
 /**
  * Internal dependencies
@@ -78,25 +79,7 @@ module.exports = (env, argv) => {
 		},
 		module: {
 			rules: [
-				{
-					test: /\.(js|jsx)$/,
-					exclude: /node_modules/,
-					resolve: {
-						extensions: ['.js', '.jsx'],
-					},
-					use: {
-						loader: 'babel-loader',
-					},
-				},
-				{
-					test: /\.s[ac]ss$/i,
-					exclude: /node_modules/,
-					use: [
-						MiniCssExtractPlugin.loader,
-						'css-loader',
-						'sass-loader',
-					],
-				},
+				...defaultConfig.module.rules,
 				{
 					test: /\.lazy\.scss$/,
 					use: scssLoaders({ isLazy: true }),
