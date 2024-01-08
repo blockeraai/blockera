@@ -228,4 +228,35 @@ describe('Clone Repeater Item', function () {
 			})
 		).toEqual(initialState);
 	});
+
+	it('should clone isLastItemSupported item correctly', function () {
+		let state = {};
+
+		state = repeaterReducer(
+			state,
+			addControl({
+				value: [{ x: 10 }, { x: 20, isLastItemSupport: true }],
+				name: 'TestRepeaterControl',
+			})
+		);
+
+		expect(
+			repeaterReducer(
+				state,
+				cloneRepeaterItem({
+					itemId: 1,
+					controlId: 'TestRepeaterControl',
+				})
+			)
+		).toEqual({
+			TestRepeaterControl: {
+				name: 'TestRepeaterControl',
+				value: [
+					{ x: 10 },
+					{ x: 20, isLastItemSupport: false },
+					{ x: 20, isLastItemSupport: true },
+				],
+			},
+		});
+	});
 });

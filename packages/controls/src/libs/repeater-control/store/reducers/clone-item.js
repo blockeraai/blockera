@@ -113,9 +113,9 @@ export function cloneItem(state = {}, action) {
 			[action.controlId]: {
 				...controlInfo,
 				value: [
-					...controlInfo.value.toSpliced(-1),
+					...controlInfo.value.slice(0, controlInfo.value.length - 1),
 					{
-						...controlInfo.value.slice(-1),
+						...controlInfo.value.slice(-1)[0],
 						isLastItemSupport: false,
 					},
 					clonedItem,

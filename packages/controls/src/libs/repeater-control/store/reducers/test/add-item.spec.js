@@ -432,4 +432,36 @@ describe('Add Repeater Item', function () {
 			},
 		});
 	});
+
+	it('should add item before last item when there is  isLastItemSupported', function () {
+		let state = {};
+
+		state = repeaterReducer(
+			state,
+			addControl({
+				value: [{ x: 20 }, { x: 30 }, { isLastItemSupport: true }],
+				name: 'TestRepeaterControl',
+			})
+		);
+
+		expect(
+			repeaterReducer(
+				state,
+				addRepeaterItem({
+					value: { x: 10 },
+					controlId: 'TestRepeaterControl',
+				})
+			)
+		).toEqual({
+			TestRepeaterControl: {
+				name: 'TestRepeaterControl',
+				value: [
+					{ x: 20 },
+					{ x: 30 },
+					{ x: 10 },
+					{ isLastItemSupport: true },
+				],
+			},
+		});
+	});
 });
