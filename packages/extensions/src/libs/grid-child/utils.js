@@ -5,7 +5,7 @@
  */
 import { sprintf, __ } from '@wordpress/i18n';
 
-export const createAreasOptions = (areas: Array<Object>) => {
+export const createAreasOptions = (areas: Array<Object>): Array<Object> => {
 	return areas
 		.map((area) => {
 			if (!area.isVisible) return null;

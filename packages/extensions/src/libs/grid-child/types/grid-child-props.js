@@ -20,7 +20,7 @@ export type TCssProps = {
 
 export type TGridChildProps = {
 	values: {
-		gridChildPosition?: {
+		gridChildPosition: {
 			'position-type': string,
 			'column-span': string,
 			'row-span': string,
@@ -30,10 +30,10 @@ export type TGridChildProps = {
 			'row-start': string,
 			'row-end': string,
 		},
-		gridChildAlign?: string,
-		gridChildJustify?: string,
-		gridChildOrder?: string,
-		gridChildOrderCustom?: string,
+		gridChildAlign: string,
+		gridChildJustify: string,
+		gridChildOrder: string,
+		gridChildOrderCustom: string,
 		gridAreas: Array<Object>,
 	},
 	block: TBlockProps,
