@@ -79,6 +79,11 @@ module.exports = (env, argv) => {
 		module: {
 			rules: [
 				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/,
+				},
+				{
 					test: /\.(js|jsx)$/,
 					exclude: /node_modules/,
 					resolve: {
@@ -103,6 +108,9 @@ module.exports = (env, argv) => {
 					include: resolve(__dirname),
 				},
 			],
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js','jsx','scss','sass',],
 		},
 		plugins: [
 			new DependencyExtractionWebpackPlugin({ injectPolyfill: true }),
