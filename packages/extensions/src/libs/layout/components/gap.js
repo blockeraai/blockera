@@ -51,7 +51,7 @@ export default function ({
 		value,
 		attribute,
 		blockName,
-		defaultValue: '',
+		defaultValue: { lock: true, gap: '', columns: '', rows: '' },
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, 'gap'),
@@ -76,9 +76,8 @@ export default function ({
 					</p>
 				</>
 			}
-			columns="80px 160px"
 			id={'gap'}
-			path={'gap'}
+			columns="80px 160px"
 			{...labelProps}
 		>
 			<Grid gap="10px" gridTemplateColumns="120px 30px">
@@ -90,13 +89,17 @@ export default function ({
 							unitType="essential"
 							min={0}
 							max={200}
-							defaultValue={gap?.gap}
+							defaultValue=""
 							id={'gap'}
-							onChange={(newValue) =>
-								handleOnChangeAttributes(attributeId, {
-									...gap,
-									gap: newValue,
-								})
+							onChange={(newValue, ref) =>
+								handleOnChangeAttributes(
+									attributeId,
+									{
+										...gap,
+										gap: newValue,
+									},
+									{ ref }
+								)
 							}
 							controlAddonTypes={['variable']}
 							variableTypes={['spacing']}
@@ -104,7 +107,7 @@ export default function ({
 						/>
 					)
 				) : (
-					<Grid gridTemplateColumns="50px 50px" gap="10px">
+					<Grid gridTemplateColumns="55px 55px" gap="10px">
 						<InputControl
 							controlName="input"
 							columns="columns-1"
@@ -124,13 +127,18 @@ export default function ({
 							unitType="essential"
 							min={0}
 							max={200}
-							defaultValue={gap?.rows}
+							defaultValue=""
 							id={'rows'}
-							onChange={(newValue) =>
-								handleOnChangeAttributes(attributeId, {
-									...gap,
-									rows: newValue,
-								})
+							singularId={'rows'}
+							onChange={(newValue, ref) =>
+								handleOnChangeAttributes(
+									attributeId,
+									{
+										...gap,
+										rows: newValue,
+									},
+									{ ref }
+								)
 							}
 							size="small"
 							controlAddonTypes={['variable']}
@@ -160,13 +168,18 @@ export default function ({
 							unitType="essential"
 							min={0}
 							max={200}
-							defaultValue={gap?.columns}
+							defaultValue=""
 							id={'columns'}
-							onChange={(newValue) =>
-								handleOnChangeAttributes(attributeId, {
-									...gap,
-									columns: newValue,
-								})
+							singularId={'columns'}
+							onChange={(newValue, ref) =>
+								handleOnChangeAttributes(
+									attributeId,
+									{
+										...gap,
+										columns: newValue,
+									},
+									{ ref }
+								)
 							}
 							size="small"
 							controlAddonTypes={['variable']}
@@ -178,7 +191,7 @@ export default function ({
 				<Button
 					showTooltip={true}
 					tooltipPosition="top"
-					label={__('Custom Row Column Gap', 'publisher-core')}
+					label={__('Custom Row & Column Gap', 'publisher-core')}
 					size="small"
 					onClick={() => {
 						if (gap?.lock) {

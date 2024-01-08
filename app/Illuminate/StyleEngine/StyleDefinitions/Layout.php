@@ -61,6 +61,20 @@ class Layout extends BaseStyleDefinition {
 
 				break;
 
+			case 'flex-direction':
+				$flexDirection = $this->settings['flex-direction'];
+
+				$props['flex-direction'] = $flexDirection['value'] . ($flexDirection['reverse'] ? '-reverse' : '');
+
+				break;
+
+			case 'flex-wrap':
+				$flexDirection = $this->settings['flex-wrap'];
+
+				$props['flex-wrap'] = $flexDirection['value'] . ($flexDirection['reverse'] && $flexDirection['value'] === 'wrap' ? '-reverse' : '');
+
+				break;
+
 			case 'gap':
 
 				$gap = $this->settings['gap'];
