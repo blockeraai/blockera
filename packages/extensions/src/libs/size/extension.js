@@ -16,8 +16,6 @@ import {
 	BaseControl,
 } from '@publisher/controls';
 import { Flex } from '@publisher/components';
-import { isString, isUndefined } from '@publisher/utils';
-import { isValid } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -28,26 +26,22 @@ import type { TSizeProps } from './types/size-props';
 import { default as OverflowHiddenIcon } from './icons/overflow-hidden';
 import { default as OverflowVisibleIcon } from './icons/overflow-visible';
 import { default as OverflowScrollIcon } from './icons/overflow-scroll';
-import { convertToPercent } from './utils';
 import { useBlockContext } from '../../hooks';
 import { ObjectFit } from './components';
 import AspectRatio from './components/aspect-ratio';
+import { toSimpleStyleWPCompatible } from '../../utils';
+import {
+	coreWPAspectRatioValues,
+	coreWPFitValues,
+	minHeightToWPCompatible,
+} from './utils';
 
 export const SizeExtension: MixedElement = memo<TSizeProps>(
 	({
 		block,
-		width,
-		height,
-		minWidth,
-		minHeight,
-		maxWidth,
-		maxHeight,
 		config,
-		overflow,
-		ratio,
-		fit,
-		fitPosition,
 		handleOnChangeAttributes,
+		values,
 		inheritValue,
 		extensionProps,
 	}: TSizeProps): MixedElement => {
@@ -74,7 +68,9 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(block, 'width'),
-								value: inheritValue.width || width,
+								value: isNormalState()
+									? values.width || inheritValue.width
+									: values.width,
 								attribute: 'publisherWidth',
 								blockName: block.blockName,
 							}}
@@ -104,39 +100,18 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 								min={0}
 								defaultValue=""
 								onChange={(newValue, ref) => {
-									const toWPCompatible = (
-										newValue: string
-									): string | Object => {
-										if ('reset' === ref.current.action) {
-											return {
-												width: undefined,
-											};
-										}
-
-										if (
-											!isNormalState() ||
-											newValue === '' ||
-											isUndefined(newValue) ||
-											isValid(newValue)
-										) {
-											return {};
-										}
-
-										return isString(newValue) &&
-											!newValue.endsWith('func')
-											? {
-													width: newValue,
-											  }
-											: {};
-									};
-
 									handleOnChangeAttributes(
 										'publisherWidth',
 										newValue,
 										{
 											ref,
 											addOrModifyRootItems:
-												toWPCompatible(newValue),
+												toSimpleStyleWPCompatible({
+													wpAttribute: 'width',
+													newValue,
+													isNormalState,
+													ref,
+												}),
 										}
 									);
 								}}
@@ -161,7 +136,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 												block,
 												'minWidth'
 											),
-											value: minWidth,
+											value: values.minWidth,
 											attribute: 'publisherMinWidth',
 											blockName: block.blockName,
 										}}
@@ -170,7 +145,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											controlName="input"
 											label={__('Min', 'publisher-core')}
 											labelPopoverTitle={__(
-												'Min-Width',
+												'Min Width',
 												'publisher-core'
 											)}
 											labelDescription={
@@ -231,7 +206,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 												block,
 												'maxWidth'
 											),
-											value: maxWidth,
+											value: values.maxWidth,
 											attribute: 'publisherMaxWidth',
 											blockName: block.blockName,
 										}}
@@ -240,7 +215,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 											controlName="input"
 											label={__('Max', 'publisher-core')}
 											labelPopoverTitle={__(
-												'Max-Width',
+												'Max Width',
 												'publisher-core'
 											)}
 											labelDescription={
@@ -301,7 +276,9 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(block, 'height'),
-								value: inheritValue.height || height,
+								value: isNormalState()
+									? values.height || inheritValue.height
+									: values.height,
 								attribute: 'publisherHeight',
 								blockName: block.blockName,
 							}}
@@ -331,23 +308,18 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 								min={0}
 								defaultValue=""
 								onChange={(newValue, ref) => {
-									const toWPCompatible =
-										isString(newValue) &&
-										!newValue.endsWith('func')
-											? {
-													height: convertToPercent(
-														newValue
-													),
-											  }
-											: {};
-
 									handleOnChangeAttributes(
 										'publisherHeight',
 										newValue,
 										{
 											ref,
 											addOrModifyRootItems:
-												toWPCompatible,
+												toSimpleStyleWPCompatible({
+													wpAttribute: 'height',
+													newValue,
+													isNormalState,
+													ref,
+												}),
 										}
 									);
 								}}
@@ -371,13 +343,28 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 												block,
 												'minHeight'
 											),
-											value: minHeight,
+											value: (() => {
+												if (isNormalState()) {
+													if (values.minHeight)
+														return values.minHeight;
+													else if (
+														inheritValue.minHeight
+													) {
+														return inheritValue.minHeightUnit
+															? inheritValue.minHeight +
+																	inheritValue.minHeightUnit
+															: inheritValue.minHeight;
+													}
+												}
+
+												return values.minHeight;
+											})(),
 											attribute: 'publisherMinHeight',
 											blockName: block.blockName,
 										}}
 									>
 										<InputControl
-											controlName="input"
+											defaultValue=""
 											label={__('Min', 'publisher-core')}
 											labelPopoverTitle={__(
 												'Min Height',
@@ -424,7 +411,17 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 												handleOnChangeAttributes(
 													'publisherMinHeight',
 													newValue,
-													{ ref }
+													{
+														ref,
+														addOrModifyRootItems:
+															minHeightToWPCompatible(
+																{
+																	newValue,
+																	ref,
+																	isNormalState,
+																}
+															),
+													}
 												)
 											}
 											controlAddonTypes={['variable']}
@@ -441,7 +438,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 												block,
 												'maxHeight'
 											),
-											value: maxHeight,
+											value: values.maxHeight,
 											attribute: 'publisherMaxHeight',
 											blockName: block.blockName,
 										}}
@@ -512,7 +509,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'overflow'),
-							value: overflow,
+							value: values.overflow,
 							attribute: 'publisherOverflow',
 							blockName: block.blockName,
 						}}
@@ -606,7 +603,26 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'ratio'),
-							value: ratio,
+							value: (() => {
+								if (isNormalState()) {
+									if (values.ratio?.value) {
+										return values.ratio;
+									} else if (
+										inheritValue.aspectRatio &&
+										coreWPAspectRatioValues.indexOf(
+											inheritValue.aspectRatio
+										) !== -1
+									) {
+										return {
+											value: inheritValue.aspectRatio,
+											width: '',
+											height: '',
+										};
+									}
+								}
+
+								return values.ratio;
+							})(),
 							type: 'nested',
 							attribute: 'publisherRatio',
 							blockName: block.blockName,
@@ -614,7 +630,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 					>
 						<AspectRatio
 							block={block}
-							ratio={ratio}
+							ratio={values.ratio}
 							handleOnChangeAttributes={handleOnChangeAttributes}
 							{...extensionProps.publisherRatio}
 						/>
@@ -625,14 +641,29 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'fit'),
-							value: fit,
+							value: (() => {
+								if (isNormalState()) {
+									if (values.fit) {
+										return values.fit;
+									} else if (
+										inheritValue.scale &&
+										coreWPFitValues.indexOf(
+											inheritValue.scale
+										) !== -1
+									) {
+										return inheritValue.scale;
+									}
+								}
+
+								return values.fit;
+							})(),
 							attribute: 'publisherFit',
 							blockName: block.blockName,
 						}}
 					>
 						<ObjectFit
 							block={block}
-							fitPosition={fitPosition}
+							fitPosition={values.fitPosition}
 							handleOnChangeAttributes={handleOnChangeAttributes}
 							{...extensionProps.publisherFit}
 						/>

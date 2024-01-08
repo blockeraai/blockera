@@ -3,6 +3,7 @@
  * External dependencies
  */
 import { select } from '@wordpress/data';
+import { SlotFillProvider, Slot } from '@wordpress/components';
 
 /**
  * Publisher dependencies
@@ -12,10 +13,10 @@ import { isObject, isFunction } from '@publisher/utils';
 /**
  * Internal dependencies
  */
-import { BlockBase } from '../components';
 import { STORE_NAME } from '../store/constants';
-import { sanitizedBlockAttributes } from './utils';
 import { blockStatesAttributes } from '../index';
+import { sanitizedBlockAttributes } from './utils';
+import { BlockBase, BlockPortals } from '../components';
 import { isBlockTypeExtension, isEnableExtension } from '../api/utils';
 
 const { getBlockExtension, getBlockExtensionBy } = select(STORE_NAME);
@@ -84,16 +85,26 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 		edit(props) {
 			if (isFunction(additional?.edit)) {
 				return (
-					<>
+					<SlotFillProvider>
 						<BlockBase
 							{...{
 								...props,
 								additional,
 							}}
 						>
+							<Slot name={'publisher-core-block-before'} />
+
 							{settings.edit(props)}
+
+							<BlockPortals
+								blockId={`#block-${props.clientId}`}
+								mainSlot={'publisher-core-block-slot'}
+								slots={additional?.slotSelectors || {}}
+							/>
+
+							<Slot name={'publisher-core-block-after'} />
 						</BlockBase>
-					</>
+					</SlotFillProvider>
 				);
 			}
 

@@ -12,7 +12,6 @@ import { controlInnerClassNames } from '@publisher/classnames';
 import { ControlContextProvider, RepeaterControl } from '@publisher/controls';
 import { STORE_NAME } from '@publisher/controls/src/libs/repeater-control/store';
 import { defaultItemValue } from '@publisher/controls/src/libs/repeater-control';
-import { isEquals } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -31,6 +30,7 @@ import { PopoverTitleButtons } from './popover-title-buttons';
 import { LabelDescription } from './label-description';
 import { useBlockContext } from '../../../hooks';
 import StateContainer from '../../../components/state-container';
+import { isEquals } from '@publisher/utils';
 
 export default function StatesManager({
 	block,
@@ -83,6 +83,87 @@ export default function StatesManager({
 
 	const currentState = getStateInfo(block.attributes.publisherCurrentState);
 
+	const getOptions = (
+		selectedState: StateTypes,
+		newValue: Array<StateTypes>
+	) => {
+		type State = {
+			...StateTypes,
+			isSelected: boolean,
+		};
+
+		const getStates = () => {
+			const getNormalizeState = (state: State): State => {
+				if (!state.isSelected) {
+					return state;
+				}
+
+				return {
+					...state,
+					isSelected: false,
+				};
+			};
+
+			if (
+				-1 ===
+					block.attributes.publisherBlockStates.indexOf(
+						selectedState
+					) &&
+				!isEquals(
+					selectedState.type,
+					block.attributes.publisherCurrentState
+				)
+			) {
+				return block.attributes.publisherBlockStates.map(
+					(state: State, stateId: number): State => {
+						if (stateId === newValue.indexOf(selectedState)) {
+							return {
+								...state,
+								isSelected: true,
+								type: selectedState.type,
+								label: selectedState.label,
+							};
+						}
+
+						return getNormalizeState(state);
+					}
+				);
+			}
+
+			return block.attributes.publisherBlockStates.map(
+				(state: State): State => {
+					if (state.type === selectedState.type) {
+						return {
+							...state,
+							isSelected: true,
+						};
+					}
+
+					return getNormalizeState(state);
+				}
+			);
+		};
+
+		let rootItems = {};
+		const newStates = getStates();
+
+		if (
+			!isEquals(
+				selectedState.type,
+				block.attributes.publisherCurrentState
+			) &&
+			!isEquals(block.attributes.publisherBlockStates, newStates)
+		) {
+			rootItems = {
+				publisherBlockStates: newStates,
+			};
+		}
+
+		return {
+			addOrModifyRootItems: rootItems,
+		};
+	};
+
 	return (
 		<ControlContextProvider storeName={STORE_NAME} value={contextValue}>
 			<StateContainer currentState={currentState}>
@@ -126,37 +207,25 @@ export default function StatesManager({
 								(item) => item.isSelected
 							);
 
-							if (!selectedState) {
-								return;
-							}
-
-							if (newValue.length === states.length) {
-								if (!isEquals(newValue, states)) {
-									handleOnChangeAttributes(
-										'publisherBlockStates',
-										newValue,
-										{
-											addOrModifyRootItems: {
-												publisherCurrentState:
-													selectedState.type ||
-													'normal',
-											},
-										}
-									);
-								}
+							if (newValue.length !== states.length) {
+								handleOnChangeAttributes(
+									'publisherBlockStates',
+									newValue,
+									{
+										addOrModifyRootItems: {
+											publisherCurrentState:
+												selectedState.type || 'normal',
+										},
+									}
+								);
 
 								return;
 							}
 
 							handleOnChangeAttributes(
-								'publisherBlockStates',
-								newValue,
-								{
-									addOrModifyRootItems: {
-										publisherCurrentState:
-											selectedState.type || 'normal',
-									},
-								}
+								'publisherCurrentState',
+								selectedState.type || 'normal',
+								getOptions(selectedState, newValue)
 							);
 						},
 						overrideItem: (item) => {
@@ -183,45 +252,11 @@ export default function StatesManager({
 
 							return {};
 						},
-						onSelect: (event, item) => {
-							handleOnChangeAttributes(
-								'publisherCurrentState',
-								item.type,
-								{
-									addOrModifyRootItems: {
-										publisherBlockStates:
-											block?.attributes?.publisherBlockStates.map(
-												(
-													state: StateTypes
-												): {
-													...StateTypes,
-													isSelected: boolean,
-												} => {
-													if (
-														state.type === item.type
-													) {
-														return {
-															...state,
-															isSelected: true,
-														};
-													}
-
-													return {
-														...state,
-														isSelected: false,
-													};
-												}
-											),
-									},
-								}
-							);
-
-							return false;
-						},
 						repeaterItemHeader: ItemHeader,
 						repeaterItemOpener: ItemOpener,
 						repeaterItemChildren: ItemBody,
 					}}
+					addNewButtonLabel={__('Add New State', 'publisher-core')}
 					label={__('Block States', 'publisher-core')}
 					labelDescription={<LabelDescription />}
 					popoverTitle={__('Block State', 'publisher-core')}

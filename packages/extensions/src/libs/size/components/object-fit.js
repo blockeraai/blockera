@@ -28,6 +28,8 @@ import FitCoverIcon from '../icons/fit-cover';
 import FitScaleDownIcon from '../icons/fit-scale-down';
 import { generateExtensionId } from '../../utils';
 import FitNoneIcon from '../icons/fit-none';
+import { fitToWPCompatible } from '../utils';
+import { useBlockContext } from '../../../hooks';
 
 export default function ObjectFit({
 	block,
@@ -39,9 +41,18 @@ export default function ObjectFit({
 	fitPosition: { top: string, left: string },
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 }): MixedElement {
+	const { isNormalState } = useBlockContext();
+
 	const { value, attribute, blockName, resetToDefault } = useControlContext({
 		onChange: (newValue, ref) =>
-			handleOnChangeAttributes('publisherFit', newValue, { ref }),
+			handleOnChangeAttributes('publisherFit', newValue, {
+				ref,
+				addOrModifyRootItems: fitToWPCompatible({
+					newValue,
+					ref,
+					isNormalState,
+				}),
+			}),
 		defaultValue: '',
 	});
 
@@ -166,7 +177,14 @@ export default function ObjectFit({
 				type="custom"
 				defaultValue=""
 				onChange={(newValue, ref) =>
-					handleOnChangeAttributes('publisherFit', newValue, { ref })
+					handleOnChangeAttributes('publisherFit', newValue, {
+						ref,
+						addOrModifyRootItems: fitToWPCompatible({
+							newValue,
+							ref,
+							isNormalState,
+						}),
+					})
 				}
 				{...props}
 			/>

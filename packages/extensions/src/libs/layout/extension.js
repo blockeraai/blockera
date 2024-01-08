@@ -103,6 +103,11 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 			// eslint-disable-next-line
 		}, [display]);
 
+		const flexDirectionClassName =
+			'publisher-direction-' +
+			flexDirection.value +
+			(flexDirection.reverse ? '-reverse' : '');
+
 		return (
 			<>
 				{isActiveField(publisherDisplay) && (
@@ -228,10 +233,11 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 							isDeselectable={true}
 							//
 							defaultValue=""
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
 									'publisherDisplay',
-									newValue
+									newValue,
+									{ ref }
 								)
 							}
 							{...extensionProps.publisherDisplay}
@@ -264,12 +270,13 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 											value: flexDirection.value,
 											attribute: 'publisherFlexDirection',
 											blockName: block.blockName,
+											type: 'nested',
 										}}
 									>
 										<ToggleSelectControl
 											className={
-												'publisher-direction-' +
-												flexDirection.value
+												flexDirectionClassName +
+												' publisher-flex-direction'
 											}
 											label={__(
 												'Direction',
@@ -333,7 +340,6 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													</p>
 												</>
 											}
-											isDeselectable={true}
 											columns="80px 120px"
 											options={[
 												{
@@ -357,20 +363,15 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													),
 												},
 											]}
-											defaultValue={
-												flexDirection.value || ''
-											}
-											onChange={(newValue) => {
+											defaultValue="row"
+											onChange={(newValue, ref) => {
 												handleOnChangeAttributes(
 													'publisherFlexDirection',
 													{
 														...flexDirection,
-														value: flexDirection.reverse
-															? `${newValue}-reverse`
-															: newValue.split(
-																	'-'
-															  )[0],
-													}
+														value: newValue,
+													},
+													{ ref }
 												);
 											}}
 											{...extensionProps.publisherFlexDirection}
@@ -392,7 +393,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 											showTooltip={true}
 											tooltipPosition="top"
 											label={__(
-												'Reverse Direction',
+												'Reverse Flex Direction',
 												'publisher-core'
 											)}
 											size="small"
@@ -406,16 +407,15 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												handleOnChangeAttributes(
 													'publisherFlexDirection',
 													{
-														value: flexDirection.reverse
-															? flexDirection.value.split(
-																	'-'
-															  )[0]
-															: `${flexDirection.value}-reverse`,
+														...flexDirection,
 														reverse:
 															!flexDirection.reverse,
 													}
 												);
 											}}
+											disabled={
+												flexDirection.value === ''
+											}
 										>
 											<ReverseIcon />
 										</Button>
@@ -439,8 +439,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 								<ToggleSelectControl
 									columns="80px 160px"
 									className={
-										'publisher-direction-' +
-										flexDirection.value +
+										flexDirectionClassName +
 										' publisher-flex-align-items'
 									}
 									label={__('Align Items', 'publisher-core')}
@@ -519,10 +518,11 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									isDeselectable={true}
 									//
 									defaultValue=""
-									onChange={(newValue) =>
+									onChange={(newValue, ref) =>
 										handleOnChangeAttributes(
 											'publisherAlignItems',
-											newValue
+											newValue,
+											{ ref }
 										)
 									}
 									options={[
@@ -594,8 +594,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 								<ToggleSelectControl
 									columns="80px 160px"
 									className={
-										'publisher-direction-' +
-										flexDirection.value +
+										flexDirectionClassName +
 										' publisher-flex-justify-content'
 									}
 									controlName="toggle-select"
@@ -742,10 +741,11 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									isDeselectable={true}
 									//
 									defaultValue=""
-									onChange={(newValue) =>
+									onChange={(newValue, ref) =>
 										handleOnChangeAttributes(
 											'publisherJustifyContent',
-											newValue
+											newValue,
+											{ ref }
 										)
 									}
 									{...extensionProps.publisherJustifyContent}
@@ -760,6 +760,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									value: gap,
 									attribute: 'publisherGap',
 									blockName: block.blockName,
+									type: 'nested',
 								}}
 							>
 								<Gap
@@ -781,11 +782,12 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 									value={{
 										name: generateExtensionId(
 											block,
-											'flex-wrap'
+											'flexWrap'
 										),
 										value: flexWrap.value,
 										attribute: 'publisherFlexWrap',
 										blockName: block.blockName,
+										type: 'nested',
 									}}
 								>
 									<BaseControl columns="columns-1">
@@ -793,11 +795,9 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 											<ToggleSelectControl
 												columns="80px 120px"
 												className={
-													'publisher-direction-' +
-													flexDirection.value +
+													flexDirectionClassName +
 													' publisher-flex-wrap'
 												}
-												controlName="toggle-select"
 												label={__(
 													'Children',
 													'publisher-core'
@@ -889,25 +889,24 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												]}
 												//
 												defaultValue={'nowrap'}
-												onChange={(newValue) => {
+												onChange={(newValue, ref) => {
 													if (newValue === 'nowrap') {
 														handleOnChangeAttributes(
 															'publisherFlexWrap',
 															{
-																...flexWrap,
-																value: 'nowrap',
+																value: newValue,
 																reverse: false,
-															}
+															},
+															{ ref }
 														);
 													} else {
 														handleOnChangeAttributes(
 															'publisherFlexWrap',
 															{
 																...flexWrap,
-																value: flexWrap.reverse
-																	? 'wrap-reverse'
-																	: 'wrap',
-															}
+																value: 'wrap',
+															},
+															{ ref }
 														);
 													}
 												}}
@@ -922,11 +921,9 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												)}
 												size="small"
 												style={{
-													color:
-														flexWrap?.value ===
-														'wrap-reverse'
-															? 'var(--publisher-controls-primary-color)'
-															: 'var(--publisher-controls-color)',
+													color: flexWrap?.reverse
+														? 'var(--publisher-controls-primary-color)'
+														: 'var(--publisher-controls-color)',
 													padding: '6px',
 												}}
 												disabled={
@@ -937,13 +934,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													handleOnChangeAttributes(
 														'publisherFlexWrap',
 														{
-															value: flexWrap.reverse
-																? flexWrap.value.split(
-																		'-'
-																  )[0]
-																: flexWrap.value ===
-																		'wrap' &&
-																  `${flexWrap.value}-reverse`,
+															...flexWrap,
 															reverse:
 																!flexWrap.reverse,
 														}
@@ -957,8 +948,9 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 								</ControlContextProvider>
 
 								{isActiveField(publisherAlignContent) &&
-									(flexWrap.value === 'wrap' ||
-										flexWrap.value === 'wrap-reverse') && (
+									flexWrap?.value !== '' &&
+									flexWrap?.value !== undefined &&
+									flexWrap?.value !== 'nowrap' && (
 										<ControlContextProvider
 											value={{
 												name: generateExtensionId(
@@ -1072,8 +1064,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												}
 												columns="80px 160px"
 												className={
-													'publisher-direction-' +
-													flexDirection.value +
+													flexDirectionClassName +
 													' publisher-flex-align-content' +
 													`${
 														flexWrap.reverse
@@ -1146,10 +1137,11 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 												isDeselectable={true}
 												//
 												defaultValue=""
-												onChange={(newValue) =>
+												onChange={(newValue, ref) =>
 													handleOnChangeAttributes(
 														'publisherAlignContent',
-														newValue
+														newValue,
+														{ ref }
 													)
 												}
 												{...extensionProps.publisherAlignContent}
