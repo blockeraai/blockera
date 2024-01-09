@@ -85,6 +85,9 @@ export function LayoutStyles({
 		) {
 			properties['flex-direction'] =
 				_attributes.publisherFlexDirection.value;
+
+			if (_attributes.publisherFlexDirection.reverse)
+				properties['flex-direction'] += '-reverse';
 		}
 
 		if (
@@ -135,6 +138,13 @@ export function LayoutStyles({
 				attributes.publisherFlexWrap.default
 		) {
 			properties['flex-wrap'] = _attributes.publisherFlexWrap.value;
+
+			if (
+				_attributes.publisherFlexWrap.value === 'wrap' &&
+				_attributes.publisherFlexWrap.reverse
+			) {
+				properties['flex-wrap'] += '-reverse';
+			}
 		}
 
 		if (

@@ -159,6 +159,14 @@ export default function RepeaterItemActions({
 							modifyControlValue({
 								controlId,
 								value: filteredItems.map((_item, _itemId) => {
+									if (filteredItems.length < 2) {
+										return {
+											..._item,
+											display: false,
+											isSelected: true,
+										};
+									}
+
 									if (itemId - 1 === _itemId) {
 										return {
 											..._item,

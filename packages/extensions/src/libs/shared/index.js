@@ -241,14 +241,34 @@ export const SharedBlockExtension: Props = memo(
 
 							<BaseExtension
 								{...props}
+								values={{
+									position: attributes.publisherPosition,
+									zIndex: attributes.publisherZIndex,
+								}}
+								inheritValues={{
+									position: attributes?.style?.position?.type
+										? {
+												type: attributes?.style
+													?.position?.type,
+												position: {
+													top: attributes?.style
+														?.position?.top,
+													right: attributes?.style
+														?.position?.right,
+													bottom: attributes?.style
+														?.position?.bottom,
+													left: attributes?.style
+														?.position?.left,
+												},
+										  }
+										: undefined,
+								}}
 								extensionProps={{
 									publisherPosition: {},
 									publisherZIndex: {},
 								}}
 								initialOpen={true}
 								extensionId={'Position'}
-								zIndexValue={attributes.publisherZIndex}
-								positionValue={attributes.publisherPosition}
 								title={__('Position', 'publisher-core')}
 								handleOnChangeAttributes={
 									handleOnChangeAttributes
@@ -258,7 +278,15 @@ export const SharedBlockExtension: Props = memo(
 
 							<BaseExtension
 								{...props}
-								{...include(attributes, size, 'publisher')}
+								values={include(attributes, size, 'publisher')}
+								inheritValue={{
+									width: attributes?.width,
+									height: attributes?.height,
+									minHeight: attributes?.minHeight,
+									minHeightUnit: attributes?.minHeightUnit,
+									aspectRatio: attributes?.aspectRatio,
+									scale: attributes?.scale,
+								}}
 								extensionProps={{
 									publisherWidth: {},
 									publisherHeight: {},
@@ -270,10 +298,6 @@ export const SharedBlockExtension: Props = memo(
 									publisherRatio: {},
 									publisherFit: {},
 									publisherFitPosition: {},
-								}}
-								inheritValue={{
-									width: attributes.width,
-									height: attributes.height,
 								}}
 								initialOpen={true}
 								extensionId={'Size'}

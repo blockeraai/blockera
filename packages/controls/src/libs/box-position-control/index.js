@@ -19,7 +19,7 @@ import { Button, Flex, Grid } from '@publisher/components';
 /**
  * Internal dependencies
  */
-import { LabelControl, SelectControl } from '../index';
+import { LabelControl, NoticeControl, SelectControl } from '../index';
 import { useControlContext } from '../../context';
 import type { BoxPositionControlProps } from './types';
 import { LabelControlContainer } from '../label-control';
@@ -681,6 +681,70 @@ const Component = ({
 					)}
 				</div>
 			)}
+
+			{value?.type === 'sticky' &&
+				value?.position?.top &&
+				value?.position?.bottom && (
+					<NoticeControl type="error">
+						<p>
+							{__(
+								'Selecting both "Top" and "Bottom" for sticky positioning can lead to issues. Set value only for "Top" or "Bottom" to ensure smooth functionality.',
+								'publisher-core'
+							)}
+						</p>
+
+						<Flex
+							direction="column"
+							gap="10px"
+							alignItems="flex-start"
+						>
+							<Button
+								label={__('Stick To Top', 'publisher-core')}
+								showTooltip={true}
+								className="position-quick-btn"
+								size="small"
+								data-cy="stick-to-top"
+								onClick={() => {
+									setValue({
+										...value,
+										position: {
+											...value.position,
+											top: '0px',
+											right: '',
+											bottom: '',
+											left: '',
+										},
+									});
+								}}
+							>
+								<AbsoluteTopIcon />
+								{__('Stick To Top', 'publisher-core')}
+							</Button>
+							<Button
+								label={__('Stick To Bottom', 'publisher-core')}
+								showTooltip={true}
+								className="position-quick-btn"
+								size="small"
+								data-cy="stick-to-bottom"
+								onClick={() => {
+									setValue({
+										...value,
+										position: {
+											...value.position,
+											top: '',
+											right: '',
+											bottom: '0px',
+											left: '',
+										},
+									});
+								}}
+							>
+								<AbsoluteBottomIcon />
+								{__('Stick To Bottom', 'publisher-core')}
+							</Button>
+						</Flex>
+					</NoticeControl>
+				)}
 		</div>
 	);
 };

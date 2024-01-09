@@ -20,6 +20,8 @@ import {
  */
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 import { Flex } from '@publisher/components';
+import { aspectRatioToWPCompatible } from '../utils';
+import { useBlockContext } from '../../../hooks';
 
 export default function AspectRatio({
 	block,
@@ -37,9 +39,18 @@ export default function AspectRatio({
 	defaultValue: { value: string, width: string, height: string },
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 }): MixedElement {
+	const { isNormalState } = useBlockContext();
+
 	const { value, attribute, blockName, resetToDefault } = useControlContext({
 		onChange: (newValue, ref) =>
-			handleOnChangeAttributes('publisherRatio', newValue, { ref }),
+			handleOnChangeAttributes('publisherRatio', newValue, {
+				ref,
+				addOrModifyRootItems: aspectRatioToWPCompatible({
+					newValue,
+					ref,
+					isNormalState,
+				}),
+			}),
 		defaultValue,
 	});
 
@@ -92,36 +103,36 @@ export default function AspectRatio({
 				aria-label={__('Ratio', 'publisher-core')}
 				options={[
 					{
-						label: __('Default', 'publisher-core'),
+						label: __('Original', 'publisher-core'),
 						value: '',
 					},
 					{
 						label: __('Square 1:1', 'publisher-core'),
-						value: '1 / 1',
+						value: '1',
 					},
 					{
 						label: __('Standard 4:3', 'publisher-core'),
-						value: '4 / 3',
+						value: '4/3',
 					},
 					{
 						label: __('Portrait 3:4', 'publisher-core'),
-						value: '3 / 4',
+						value: '3/4',
 					},
 					{
 						label: __('Landscape 3:2', 'publisher-core'),
-						value: '3 / 2',
+						value: '3/2',
 					},
 					{
 						label: __('Classic Portrait 2:3', 'publisher-core'),
-						value: '2 / 3',
+						value: '2/3',
 					},
 					{
 						label: __('Widescreen 16:9', 'publisher-core'),
-						value: '16 / 9',
+						value: '16/9',
 					},
 					{
 						label: __('Tall 9:16', 'publisher-core'),
-						value: '9 / 16',
+						value: '9/16',
 					},
 					{
 						label: __('Custom', 'publisher-core'),
@@ -139,7 +150,16 @@ export default function AspectRatio({
 								width: '',
 								height: '',
 							},
-							{ ref }
+							{
+								ref,
+								addOrModifyRootItems: aspectRatioToWPCompatible(
+									{
+										newValue,
+										ref,
+										isNormalState,
+									}
+								),
+							}
 						);
 					} else {
 						handleOnChangeAttributes(
@@ -148,7 +168,16 @@ export default function AspectRatio({
 								...ratio,
 								value: newValue,
 							},
-							{ ref }
+							{
+								ref,
+								addOrModifyRootItems: aspectRatioToWPCompatible(
+									{
+										newValue,
+										ref,
+										isNormalState,
+									}
+								),
+							}
 						);
 					}
 				}}

@@ -23,24 +23,29 @@ export type TSizeCssProps = {
 };
 
 export type TSizeProps = {
-	width: string,
-	height: string,
-	minWidth: string,
-	minHeight: string,
-	maxWidth: string,
-	maxHeight: string,
-	overflow: string,
-	ratio: { value: string, width: string, height: string },
-	fit: string,
-	fitPosition: { top: string, left: string },
 	block: TBlockProps,
 	config: Object,
-	children?: MixedElement,
+	handleOnChangeAttributes: THandleOnChangeAttributes,
+	values: {
+		width: string,
+		height: string,
+		minWidth: string,
+		minHeight: string,
+		maxWidth: string,
+		maxHeight: string,
+		overflow: string,
+		ratio: { value: string, width: string, height: string },
+		fit: string,
+		fitPosition: { top: string, left: string },
+	},
 	inheritValue: {
 		width?: string,
 		height?: string,
+		minHeight?: string,
+		minHeightUnit?: string,
+		aspectRatio?: string,
+		scale: string,
 	},
-	handleOnChangeAttributes: THandleOnChangeAttributes,
 	extensionProps: {
 		publisherWidth: Object,
 		publisherHeight: Object,
@@ -53,4 +58,5 @@ export type TSizeProps = {
 		publisherFit: Object,
 		publisherFitPosition: Object,
 	},
+	children?: MixedElement,
 };
