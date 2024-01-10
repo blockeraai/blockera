@@ -13,7 +13,6 @@ import { attributes } from './attributes';
 import type { TBlockProps } from '../types';
 import { isActiveField } from '../../api/utils';
 import { backgroundGenerator, backgroundClipGenerator } from './css-generators';
-import { useCssSelector } from '../../hooks';
 
 interface IConfigs {
 	backgroundConfig: {
@@ -23,6 +22,8 @@ interface IConfigs {
 		publisherBackgroundClip?: Object,
 	};
 	blockProps: TBlockProps;
+	selector: string;
+	media: string;
 }
 
 export function BackgroundStyles({
@@ -33,12 +34,10 @@ export function BackgroundStyles({
 		publisherBackgroundClip,
 	},
 	blockProps,
+	selector,
+	media,
 }: IConfigs): string {
 	const generators = [];
-	const selector = useCssSelector({
-		blockName: blockProps.blockName,
-		supportId: 'publisherBackground',
-	});
 
 	if (
 		isActiveField(publisherBackground) &&
@@ -50,16 +49,15 @@ export function BackgroundStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherBackground: [
-							{
-								selector: `${selector}, ${selector} .publisher-extension-ref, ${selector} .publisher-icon-element div[contentEditable="true"], .publisher-icon-element div`,
-								type: 'function',
-								function: backgroundGenerator,
-							},
-						],
-						...(publisherBackground?.cssGenerators || {}),
-					},
+					publisherBackground: [
+						{
+							media,
+							selector: `${selector}, ${selector} .publisher-extension-ref, ${selector} .publisher-icon-element div[contentEditable="true"], .publisher-icon-element div`,
+							type: 'function',
+							function: backgroundGenerator,
+						},
+					],
+					...(publisherBackground?.cssGenerators || {}),
 				},
 				blockProps
 			)
@@ -78,18 +76,17 @@ export function BackgroundStyles({
 			generators.push(
 				computedCssRules(
 					{
-						cssGenerators: {
-							publisherBackgroundColor: [
-								{
-									type: 'static',
-									selector: '.{{BLOCK_ID}}',
-									properties: {
-										'background-color':
-											publisherBackgroundColor,
-									},
+						publisherBackgroundColor: [
+							{
+								type: 'static',
+								media,
+								selector,
+								properties: {
+									'background-color':
+										publisherBackgroundColor,
 								},
-							],
-						},
+							},
+						],
 					},
 					blockProps
 				)
@@ -105,14 +102,14 @@ export function BackgroundStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherBackgroundClip: [
-							{
-								type: 'function',
-								function: backgroundClipGenerator,
-							},
-						],
-					},
+					publisherBackgroundClip: [
+						{
+							media,
+							selector,
+							type: 'function',
+							function: backgroundClipGenerator,
+						},
+					],
 				},
 				blockProps
 			)
@@ -122,9 +119,7 @@ export function BackgroundStyles({
 	generators.push(
 		computedCssRules(
 			{
-				cssGenerators: {
-					...(cssGenerators || {}),
-				},
+				...(cssGenerators || {}),
 			},
 			blockProps
 		)

@@ -4,7 +4,7 @@
 import { createCssRule } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
 
-export function backgroundClipGenerator(id, props, styleEngine) {
+export function backgroundClipGenerator(id, props, { media, selector }) {
 	const { attributes } = props;
 
 	const value = getValueAddonRealValue(attributes.publisherBackgroundClip);
@@ -27,9 +27,8 @@ export function backgroundClipGenerator(id, props, styleEngine) {
 	}
 
 	return createCssRule({
-		selector: `#block-${props.clientId}${
-			styleEngine.selector ? ' ' + styleEngine.selector : ''
-		}`,
+		media,
+		selector,
 		properties: {
 			'background-clip': value,
 			'-webkit-background-clip': value,
