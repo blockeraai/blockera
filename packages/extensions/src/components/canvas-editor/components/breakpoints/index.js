@@ -5,7 +5,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useState } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { select, useDispatch } from '@wordpress/data';
 
 /**
@@ -25,6 +25,7 @@ import BreakpointSettings from './breakpoint-settings';
 import type { BreakpointsComponentProps } from './types';
 import defaultBreakpoints from '../../../../libs/block-states/default-breakpoints';
 import { controlInnerClassNames } from '@publisher/classnames';
+import { useStoreDispatchers, useStoreSelectors } from '../../../../hooks';
 
 export const Breakpoints = ({
 	refId,
@@ -46,18 +47,64 @@ export const Breakpoints = ({
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 	} = useDispatch('core/edit-post');
 
+	const {
+		editPost: { __experimentalGetPreviewDeviceType },
+		blockEditor: { getSelectedBlock },
+	} = useStoreSelectors();
+	const {
+		blockEditor: { updateBlockAttributes },
+	} = useStoreDispatchers();
+
+	const initializeDeviceTypeValue =
+		__experimentalGetPreviewDeviceType().toLowerCase();
+
+	const [activeDeviceType, setActiveDeviceType] = useState(
+		initializeDeviceTypeValue
+	);
+
+	useEffect(() => {
+		if (activeDeviceType === initializeDeviceTypeValue) {
+			return;
+		}
+
+		setActiveDeviceType(initializeDeviceTypeValue);
+		// eslint-disable-next-line
+	}, [initializeDeviceTypeValue]);
+
+	const selectedBlock = getSelectedBlock();
+
 	const handleOnClick = (device: string): void => {
 		if (!isFunction(setDeviceType)) {
 			return;
 		}
 
+		const updateSelectedBlock = () => {
+			// Check if a block is selected
+			if (selectedBlock) {
+				// Update the block attributes
+				const updatedAttributes = {
+					publisherCurrentDevice: device,
+				};
+
+				// Dispatch an action to update the selected block
+				updateBlockAttributes(
+					selectedBlock.clientId,
+					updatedAttributes
+				);
+			}
+		};
+
 		if (device === getDeviceType) {
 			setDeviceType('Desktop');
+
+			updateSelectedBlock();
 
 			return;
 		}
 
 		setDeviceType(device);
+
+		updateSelectedBlock();
 	};
 
 	const handleOnChange = (key: string, value: any): void => {
