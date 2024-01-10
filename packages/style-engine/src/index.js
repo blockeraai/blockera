@@ -1,10 +1,14 @@
+// @flow
+
 export {
 	createCssRule,
 	computedCssRules,
 	injectHelpersToCssGenerators,
 } from './utils';
 
-export CssGenerator from './css-generator';
+export { useCssGenerator } from './hooks';
+
+export { default as CssGenerator } from './css-generator';
 
 /**
  * Export @wordpress/style-engine
