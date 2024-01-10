@@ -17,11 +17,15 @@ interface IConfigs {
 		publisherCSSProperties: boolean,
 	};
 	blockProps: TBlockProps;
+	selector: string;
+	media: string;
 }
 
 export function AdvancedStyles({
 	advancedConfig: { cssGenerators, publisherCSSProperties },
 	blockProps,
+	selector,
+	media,
 }: IConfigs): string {
 	const { attributes: _attributes } = blockProps;
 
@@ -50,15 +54,14 @@ export function AdvancedStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherPosition: [
-							{
-								type: 'static',
-								selector: '.{{BLOCK_ID}}',
-								properties,
-							},
-						],
-					},
+					publisherPosition: [
+						{
+							type: 'static',
+							media,
+							selector,
+							properties,
+						},
+					],
 				},
 				blockProps
 			)
@@ -68,9 +71,7 @@ export function AdvancedStyles({
 	generators.push(
 		computedCssRules(
 			{
-				cssGenerators: {
-					...(cssGenerators || {}),
-				},
+				...(cssGenerators || {}),
 			},
 			blockProps
 		)
