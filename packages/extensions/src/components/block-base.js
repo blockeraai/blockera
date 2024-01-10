@@ -36,6 +36,7 @@ export function BlockBase({
 	attributes,
 	setAttributes,
 	className,
+	...props
 }: {
 	additional: Object,
 	children: MixedElement,
@@ -149,19 +150,6 @@ export function BlockBase({
 		}
 	);
 
-	const blockEditComponentAttributes = isNormalState()
-		? attributes
-		: {
-				...attributes,
-				...(attributes.publisherBlockStates[blockStateId].breakpoints[
-					breakpointId
-				]
-					? attributes.publisherBlockStates[blockStateId].breakpoints[
-							breakpointId
-					  ].attributes
-					: {}),
-		  };
-
 	return (
 		<BlockEditContextProvider
 			{...{
@@ -206,12 +194,17 @@ export function BlockBase({
 					/>
 				</InspectorControls>
 				<BlockEditComponent
-					supports={supports}
-					blockName={name}
-					clientId={clientId}
-					setAttributes={setAttributes}
-					attributes={blockEditComponentAttributes}
-					currentState={attributes.publisherCurrentState}
+					{...{
+						// Sending props like exactly "edit" function props of WordPress Block.
+						// Because needs total block props in outside overriding component like "publisher-blocks" in overriding process.
+						name,
+						clientId,
+						supports,
+						className,
+						attributes,
+						setAttributes,
+						...props,
+					}}
 				/>
 			</StrictMode>
 
