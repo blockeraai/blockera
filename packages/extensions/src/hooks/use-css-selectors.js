@@ -36,6 +36,8 @@ export function useCssSelectors({
 				'parent-hover',
 			];
 
+			// FIXME: please implements css custom states support!
+			// this are needs to use infrastructure api to handle.
 			if (cssCustomStates.includes(state)) {
 				return;
 			}
