@@ -21,6 +21,8 @@ interface IConfigs {
 		publisherFlexChildOrder?: string,
 	};
 	blockProps: TBlockProps;
+	selector: string;
+	media: string;
 }
 
 export function FlexChildStyles({
@@ -31,6 +33,8 @@ export function FlexChildStyles({
 		publisherFlexChildOrder,
 	},
 	blockProps,
+	selector,
+	media,
 }: IConfigs): string {
 	const { attributes: _attributes } = blockProps;
 
@@ -113,15 +117,14 @@ export function FlexChildStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherFlexChild: [
-							{
-								type: 'static',
-								selector: '.{{BLOCK_ID}}',
-								properties,
-							},
-						],
-					},
+					publisherFlexChild: [
+						{
+							type: 'static',
+							selector,
+							media,
+							properties,
+						},
+					],
 				},
 				{ attributes: _attributes, ...blockProps }
 			)
@@ -131,9 +134,7 @@ export function FlexChildStyles({
 	generators.push(
 		computedCssRules(
 			{
-				cssGenerators: {
-					...(cssGenerators || {}),
-				},
+				...(cssGenerators || {}),
 			},
 			{ attributes: _attributes, ...blockProps }
 		)
