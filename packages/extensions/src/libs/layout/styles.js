@@ -25,6 +25,8 @@ interface IConfigs {
 		publisherAlignContent: string,
 	};
 	blockProps: TBlockProps;
+	selector: string;
+	media: string;
 }
 
 export function LayoutStyles({
@@ -39,6 +41,8 @@ export function LayoutStyles({
 		publisherAlignContent,
 	},
 	blockProps,
+	selector,
+	media,
 }: IConfigs): string {
 	const { attributes: _attributes } = blockProps;
 
@@ -136,15 +140,14 @@ export function LayoutStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherWidth: [
-							{
-								type: 'static',
-								selector: '.{{BLOCK_ID}}',
-								properties,
-							},
-						],
-					},
+					publisherWidth: [
+						{
+							type: 'static',
+							media,
+							selector,
+							properties,
+						},
+					],
 				},
 				{ attributes: _attributes, ...blockProps }
 			)
@@ -154,9 +157,7 @@ export function LayoutStyles({
 	generators.push(
 		computedCssRules(
 			{
-				cssGenerators: {
-					...(cssGenerators || {}),
-				},
+				...(cssGenerators || {}),
 			},
 			{ attributes: _attributes, ...blockProps }
 		)
