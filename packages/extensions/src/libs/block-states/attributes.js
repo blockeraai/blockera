@@ -7,4 +7,8 @@ export const attributes = {
 		type: 'string',
 		default: 'normal',
 	},
+	publisherCurrentDevice: {
+		type: 'string',
+		default: 'desktop',
+	},
 };

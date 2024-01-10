@@ -6,6 +6,10 @@
 import type { MixedElement } from 'react';
 import { Slot } from '@wordpress/components';
 import { createPortal, useEffect, useRef, useState } from '@wordpress/element';
+
+/**
+ * Internal dependencies
+ */
 import type { BlockPortalsProps } from './types';
 
 export const BlockPortals = ({
@@ -48,6 +52,10 @@ export const BlockPortals = ({
 	};
 
 	const MappedPortals = () => {
+		if ('undefined' === typeof slots) {
+			return <></>;
+		}
+
 		return Object.values(slots).map((_selector) => {
 			const containerElement = querySelector(_selector);
 

@@ -9,7 +9,6 @@ import { computedCssRules } from '@publisher/style-engine';
  */
 import { attributes } from './attributes';
 import type { TBlockProps } from '../types';
-import { useCssSelector } from '../../hooks';
 import { isActiveField } from '../../api/utils';
 import type { TCssProps } from './types/mouse-props';
 
@@ -21,6 +20,8 @@ interface IConfigs {
 		publisherPointerEvents: string,
 	};
 	blockProps: TBlockProps;
+	selector: string;
+	media: string;
 }
 
 export function MouseStyles({
@@ -31,13 +32,10 @@ export function MouseStyles({
 		publisherPointerEvents,
 	},
 	blockProps,
+	selector,
+	media,
 }: IConfigs): string {
-	const { attributes: currBlockAttributes, blockName } = blockProps;
-	const selector = useCssSelector({
-		blockName,
-		supportId: 'publisherMouse',
-	});
-
+	const { attributes: currBlockAttributes } = blockProps;
 	const generators = [];
 	const properties: TCssProps = {};
 
@@ -70,18 +68,17 @@ export function MouseStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherMouse: [
-							{
-								type: 'static',
-								selector,
-								properties,
-								options: {
-									important: true,
-								},
+					publisherMouse: [
+						{
+							type: 'static',
+							media,
+							selector,
+							properties,
+							options: {
+								important: true,
 							},
-						],
-					},
+						},
+					],
 				},
 				blockProps
 			)
@@ -91,9 +88,7 @@ export function MouseStyles({
 	generators.push(
 		computedCssRules(
 			{
-				cssGenerators: {
-					...(cssGenerators || {}),
-				},
+				...(cssGenerators || {}),
 			},
 			blockProps
 		)

@@ -5,7 +5,7 @@ import { createCssRule } from '@publisher/style-engine';
 import { getBackgroundItemBGProperty } from '@publisher/controls';
 import { getValueAddonRealValue } from '@publisher/hooks';
 
-export function backgroundGenerator(id, props, styleEngine) {
+export function backgroundGenerator(id, props, { media, selector }) {
 	const { attributes } = props;
 
 	if (!attributes?.publisherBackground?.length) {
@@ -183,11 +183,8 @@ export function backgroundGenerator(id, props, styleEngine) {
 			' !important';
 
 	return createCssRule({
-		selector: `${
-			styleEngine.selector
-				? `#block-${props.clientId}` + styleEngine.selector
-				: ''
-		}`,
+		media,
+		selector,
 		properties: toReturnProperties,
 	});
 }

@@ -1,24 +1,36 @@
+// @flow
+
 /**
  * Internal dependencies
  */
 import { createCssRule } from './utils';
+import type { DynamicStyleFunction } from './types';
 
 export default class CssGenerator {
-	name = '';
-	options = {};
-	selector = '';
-	type = 'static';
-	properties = {};
-	blockProps = {};
-	function = () => {};
+	name: string = '';
+	options: Object = {};
+	media: string = '';
+	selector: string = '';
+	type: 'static' | 'dynamic' = 'static';
+	properties: Object = {};
+	blockProps: Object = {};
+	function: DynamicStyleFunction = (): void => {};
 
 	constructor(
 		name: string,
-		{ type, function: callback, selector, properties, options }: Object,
+		{
+			type,
+			media,
+			options,
+			selector,
+			properties,
+			function: callback,
+		}: Object,
 		blockProps: Object
 	) {
 		this.name = name;
 		this.type = type;
+		this.media = media;
 		this.options = options || { important: false };
 		this.selector = selector;
 		this.function = callback;
@@ -26,7 +38,7 @@ export default class CssGenerator {
 		this.blockProps = blockProps;
 	}
 
-	getPropValue(attributeName: string) {
+	getPropValue(attributeName: string): string {
 		const { attributes } = this.blockProps;
 
 		return attributeName
@@ -39,10 +51,12 @@ export default class CssGenerator {
 			this.type.charAt(0).toUpperCase() + this.type.slice(1)
 		}Rule`;
 
+		// $FlowFixMe
 		if (!this[addRule]) {
 			return '';
 		}
 
+		// $FlowFixMe
 		return this[addRule]();
 	}
 
@@ -69,19 +83,21 @@ export default class CssGenerator {
 			);
 	}
 
-	addStaticRule() {
+	addStaticRule(): string {
 		this.setUniqueClassName();
 
+		// $FlowFixMe
 		return createCssRule(this);
 	}
 
-	addFunctionRule(): string {
+	addFunctionRule(): string | void {
 		if (!this.getPropValue(this.name)) {
 			return '';
 		}
 
 		this.setUniqueClassName();
 
+		// $FlowFixMe
 		return this.function(this.name, this.blockProps, this);
 	}
 }

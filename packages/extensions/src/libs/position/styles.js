@@ -28,11 +28,15 @@ interface IConfigs {
 		publisherZIndex: string,
 	};
 	blockProps: TBlockProps;
+	selector: string;
+	media: string;
 }
 
 export function PositionStyles({
 	positionConfig: { cssGenerators, publisherPosition, publisherZIndex },
 	blockProps,
+	selector,
+	media,
 }: IConfigs): string {
 	const { attributes: _attributes } = blockProps;
 
@@ -42,6 +46,7 @@ export function PositionStyles({
 
 	if (
 		isActiveField(publisherPosition) &&
+		_attributes?.publisherPosition &&
 		_attributes.publisherPosition !==
 			attributes.publisherPosition.default &&
 		_attributes.publisherPosition.type !== 'static'
@@ -88,15 +93,14 @@ export function PositionStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherPosition: [
-							{
-								type: 'static',
-								selector: '.{{BLOCK_ID}}',
-								properties,
-							},
-						],
-					},
+					publisherPosition: [
+						{
+							type: 'static',
+							media,
+							selector,
+							properties,
+						},
+					],
 				},
 				blockProps
 			)
@@ -106,9 +110,7 @@ export function PositionStyles({
 	generators.push(
 		computedCssRules(
 			{
-				cssGenerators: {
-					...(cssGenerators || {}),
-				},
+				...(cssGenerators || {}),
 			},
 			blockProps
 		)

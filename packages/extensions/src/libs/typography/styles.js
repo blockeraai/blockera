@@ -38,6 +38,8 @@ export function TypographyStyles({
 		publisherTextStroke,
 		publisherWordBreak,
 	},
+	selector,
+	media,
 }) {
 	const { attributes: currBlockAttributes, ...blockProps } =
 		useContext(BlockEditContext);
@@ -221,15 +223,14 @@ export function TypographyStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherTypography: [
-							{
-								type: 'static',
-								selector: '.{{BLOCK_ID}}',
-								properties: { ...properties },
-							},
-						],
-					},
+					publisherTypography: [
+						{
+							type: 'static',
+							media,
+							selector,
+							properties: { ...properties },
+						},
+					],
 				},
 				{ attributes: currBlockAttributes, ...blockProps }
 			)
@@ -246,15 +247,15 @@ export function TypographyStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherTextShadow: [
-							{
-								type: 'function',
-								function: TextShadowGenerator,
-							},
-						],
-						...(publisherTextShadow?.cssGenerators || {}),
-					},
+					publisherTextShadow: [
+						{
+							media,
+							selector,
+							type: 'function',
+							function: TextShadowGenerator,
+						},
+					],
+					...(publisherTextShadow?.cssGenerators || {}),
 				},
 				{ attributes: currBlockAttributes, ...blockProps }
 			)
@@ -264,9 +265,7 @@ export function TypographyStyles({
 	generators.push(
 		computedCssRules(
 			{
-				cssGenerators: {
-					...(cssGenerators || {}),
-				},
+				...(cssGenerators || {}),
 			},
 			{ attributes: currBlockAttributes, ...blockProps }
 		)

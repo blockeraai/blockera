@@ -13,6 +13,8 @@ import { InspectorControls } from '@wordpress/block-editor';
  */
 import { include } from '@publisher/utils';
 import { Tabs } from '@publisher/components';
+// import { useTraceUpdate } from '@publisher/hooks';
+import { useCssGenerator } from '@publisher/style-engine';
 
 /**
  * Internal dependencies
@@ -85,12 +87,12 @@ import {
 } from '../grid-child';
 import { hasSameProps } from '../utils';
 import extensions from './extensions.json';
-import { ExtensionStyle } from '../base/style';
 import type { TStates } from '../block-states/types';
 import { useBlockContext } from '../../hooks';
 import { getStateInfo } from '../block-states/helpers';
 import StateContainer from '../../components/state-container';
-// import { useTraceUpdate } from '@publisher/hooks';
+import * as config from '../base/config';
+import styleGenerators from './style-generators';
 
 export const attributes = {
 	...typographyAttributes,
@@ -124,10 +126,11 @@ export const supports = {
 };
 
 type Props = {
+	name: string,
 	children?: Node,
 	clientId: string,
+	supports: Object,
 	attributes: Object,
-	currentState: TStates,
 	setAttributes: (attributes: Object) => void,
 };
 
@@ -135,10 +138,10 @@ export const SharedBlockExtension: Props = memo(
 	({
 		children,
 		attributes,
-		currentState,
 		setAttributes,
 		...props
 	}: Props): MixedElement => {
+		const currentState: TStates = attributes.publisherCurrentState;
 		// dev-mode codes 👇 : to debug re-rendering
 		// useTraceUpdate({
 		// 	children,
@@ -151,9 +154,21 @@ export const SharedBlockExtension: Props = memo(
 		const {
 			blockStateId,
 			breakpointId,
+			isNormalState,
 			activeDeviceType,
 			handleOnChangeAttributes,
 		} = useBlockContext();
+
+		const currentStateAttributes = isNormalState()
+			? attributes
+			: {
+					...attributes,
+					...(attributes.publisherBlockStates[blockStateId]
+						.breakpoints[breakpointId]
+						? attributes.publisherBlockStates[blockStateId]
+								.breakpoints[breakpointId].attributes
+						: {}),
+			  };
 
 		const {
 			size,
@@ -174,7 +189,6 @@ export const SharedBlockExtension: Props = memo(
 			blockStateId,
 			breakpointId,
 			setAttributes,
-			activeDeviceType,
 			handleOnChangeAttributes,
 		};
 
@@ -209,7 +223,11 @@ export const SharedBlockExtension: Props = memo(
 									publisherIconColor: {},
 									publisherIconLink: {},
 								}}
-								values={include(attributes, icon, 'publisher')}
+								values={include(
+									currentStateAttributes,
+									icon,
+									'publisher'
+								)}
 								initialOpen={true}
 								extensionId={'Icon'}
 								title={__('Icon', 'publisher-core')}
@@ -230,8 +248,12 @@ export const SharedBlockExtension: Props = memo(
 								}}
 								initialOpen={true}
 								extensionId={'Spacing'}
-								defaultValue={attributes.style?.spacing || {}}
-								spacingValue={attributes.publisherSpacing}
+								defaultValue={
+									currentStateAttributes.style?.spacing || {}
+								}
+								spacingValue={
+									currentStateAttributes.publisherSpacing
+								}
 								title={__('Spacing', 'publisher-core')}
 								handleOnChangeAttributes={
 									handleOnChangeAttributes
@@ -242,23 +264,27 @@ export const SharedBlockExtension: Props = memo(
 							<BaseExtension
 								{...props}
 								values={{
-									position: attributes.publisherPosition,
-									zIndex: attributes.publisherZIndex,
+									position:
+										currentStateAttributes.publisherPosition,
+									zIndex: currentStateAttributes.publisherZIndex,
 								}}
 								inheritValues={{
-									position: attributes?.style?.position?.type
+									position: currentStateAttributes?.style
+										?.position?.type
 										? {
-												type: attributes?.style
-													?.position?.type,
+												type: currentStateAttributes
+													?.style?.position?.type,
 												position: {
-													top: attributes?.style
-														?.position?.top,
-													right: attributes?.style
-														?.position?.right,
-													bottom: attributes?.style
-														?.position?.bottom,
-													left: attributes?.style
-														?.position?.left,
+													top: currentStateAttributes
+														?.style?.position?.top,
+													right: currentStateAttributes
+														?.style?.position
+														?.right,
+													bottom: currentStateAttributes
+														?.style?.position
+														?.bottom,
+													left: currentStateAttributes
+														?.style?.position?.left,
 												},
 										  }
 										: undefined,
@@ -278,14 +304,21 @@ export const SharedBlockExtension: Props = memo(
 
 							<BaseExtension
 								{...props}
-								values={include(attributes, size, 'publisher')}
+								values={include(
+									currentStateAttributes,
+									size,
+									'publisher'
+								)}
 								inheritValue={{
-									width: attributes?.width,
-									height: attributes?.height,
-									minHeight: attributes?.minHeight,
-									minHeightUnit: attributes?.minHeightUnit,
-									aspectRatio: attributes?.aspectRatio,
-									scale: attributes?.scale,
+									width: currentStateAttributes?.width,
+									height: currentStateAttributes?.height,
+									minHeight:
+										currentStateAttributes?.minHeight,
+									minHeightUnit:
+										currentStateAttributes?.minHeightUnit,
+									aspectRatio:
+										currentStateAttributes?.aspectRatio,
+									scale: currentStateAttributes?.scale,
 								}}
 								extensionProps={{
 									publisherWidth: {},
@@ -323,11 +356,13 @@ export const SharedBlockExtension: Props = memo(
 								extensionId={'Layout'}
 								title={__('Layout', 'publisher-core')}
 								values={include(
-									attributes,
+									currentStateAttributes,
 									layout,
 									'publisher'
 								)}
-								defaultValue={attributes.layout || {}}
+								defaultValue={
+									currentStateAttributes.layout || {}
+								}
 								handleOnChangeAttributes={
 									handleOnChangeAttributes
 								}
@@ -335,7 +370,7 @@ export const SharedBlockExtension: Props = memo(
 							/>
 
 							{directParentBlock?.innerBlocks.length &&
-								directParentBlock?.attributes
+								directParentBlock?.currentStateAttributes
 									.publisherDisplay === 'flex' && (
 									<BaseExtension
 										{...props}
@@ -356,12 +391,13 @@ export const SharedBlockExtension: Props = memo(
 										)}
 										values={{
 											...include(
-												attributes,
+												currentStateAttributes,
 												flexChild,
 												'publisher'
 											),
 											flexDirection:
-												directParentBlock?.attributes
+												directParentBlock
+													?.currentStateAttributes
 													.publisherFlexDirection,
 										}}
 										handleOnChangeAttributes={
@@ -424,19 +460,22 @@ export const SharedBlockExtension: Props = memo(
 								title={__('Typography', 'publisher-core')}
 								values={{
 									...include(
-										attributes,
+										currentStateAttributes,
 										typography,
 										'publisher'
 									),
-									display: attributes.publisherDisplay,
+									display:
+										currentStateAttributes.publisherDisplay,
 								}}
 								backgroundClip={
-									attributes?.publisherBackgroundClip
+									currentStateAttributes?.publisherBackgroundClip
 								}
 								defaultValue={{
-									fontSize: attributes.fontSize || '',
+									fontSize:
+										currentStateAttributes.fontSize || '',
 									typography:
-										attributes.style?.typography || {},
+										currentStateAttributes.style
+											?.typography || {},
 								}}
 								handleOnChangeAttributes={
 									handleOnChangeAttributes
@@ -454,12 +493,13 @@ export const SharedBlockExtension: Props = memo(
 								initialOpen={true}
 								extensionId={'Background'}
 								values={include(
-									attributes,
+									currentStateAttributes,
 									background,
 									'publisher'
 								)}
 								defaultValue={
-									attributes.style?.background || {}
+									currentStateAttributes.style?.background ||
+									{}
 								}
 								handleOnChangeAttributes={
 									handleOnChangeAttributes
@@ -479,7 +519,7 @@ export const SharedBlockExtension: Props = memo(
 								initialOpen={true}
 								extensionId={'BorderAndShadow'}
 								values={include(
-									attributes,
+									currentStateAttributes,
 									borderAndShadow,
 									'publisher'
 								)}
@@ -487,8 +527,12 @@ export const SharedBlockExtension: Props = memo(
 									handleOnChangeAttributes
 								}
 								defaultValue={{
-									borderColor: attributes?.borderColor || '',
-									border: attributes.style?.border || {},
+									borderColor:
+										currentStateAttributes?.borderColor ||
+										'',
+									border:
+										currentStateAttributes.style?.border ||
+										{},
 								}}
 								title={__(
 									'Border And Shadow',
@@ -517,7 +561,7 @@ export const SharedBlockExtension: Props = memo(
 								initialOpen={true}
 								extensionId={'Effects'}
 								values={include(
-									attributes,
+									currentStateAttributes,
 									effects,
 									'publisher'
 								)}
@@ -537,7 +581,11 @@ export const SharedBlockExtension: Props = memo(
 								}}
 								initialOpen={true}
 								extensionId={'Mouse'}
-								values={include(attributes, mouse, 'publisher')}
+								values={include(
+									currentStateAttributes,
+									mouse,
+									'publisher'
+								)}
 								handleOnChangeAttributes={
 									handleOnChangeAttributes
 								}
@@ -554,7 +602,7 @@ export const SharedBlockExtension: Props = memo(
 								initialOpen={true}
 								extensionId={'Advanced'}
 								values={include(
-									attributes,
+									currentStateAttributes,
 									advanced,
 									'publisher'
 								)}
@@ -592,6 +640,35 @@ export const SharedBlockExtension: Props = memo(
 			},
 		];
 
+		const generatorSharedProps = {
+			attributes,
+			activeDeviceType,
+			blockName: props.name,
+			callbackProps: {
+				...config,
+				blockProps: {
+					setAttributes,
+					clientId: props.clientId,
+					supports: props.supports,
+				},
+			},
+		};
+
+		const styles = [];
+
+		Object.entries(styleGenerators).forEach(
+			([supportId, { callback, fallbackSupportId }]) =>
+				styles.push(
+					// eslint-disable-next-line react-hooks/rules-of-hooks
+					useCssGenerator({
+						callback,
+						supportId,
+						fallbackSupportId,
+						...generatorSharedProps,
+					}).join('\n')
+				)
+		);
+
 		return (
 			<>
 				<InspectorControls>
@@ -601,24 +678,14 @@ export const SharedBlockExtension: Props = memo(
 					</StateContainer>
 				</InspectorControls>
 
-				<ExtensionStyle
-					{...props}
-					attributes={attributes} // todo: check and remove this for optimizing performance because it's a large object
-					extensions={[
-						'Icon',
-						'Size',
-						'Layout',
-						'Spacing',
-						'Effects',
-						'Position',
-						'Advanced',
-						'FlexChild',
-						'Typography',
-						'Background',
-						'BorderAndShadow',
-						'Mouse',
-						'GridChild',
-					]}
+				<style
+					data-block-type={props.name}
+					dangerouslySetInnerHTML={{
+						__html: styles
+							.filter((style: string) => style)
+							.join('\n')
+							.trim(),
+					}}
 				/>
 			</>
 		);

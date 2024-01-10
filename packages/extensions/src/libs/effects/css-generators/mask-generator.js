@@ -3,7 +3,7 @@
  */
 import { createCssRule } from '@publisher/style-engine';
 
-export function MaskGenerator(id, props, styleEngine) {
+export function MaskGenerator(id, props, { media, selector }) {
 	const { attributes } = props;
 
 	if (!attributes?.publisherMask?.length) {
@@ -33,9 +33,8 @@ export function MaskGenerator(id, props, styleEngine) {
 	}
 
 	return createCssRule({
-		selector: `#block-${props.clientId}${
-			styleEngine.selector ? ' ' + styleEngine.selector : ''
-		}`,
+		media,
+		selector,
 		properties,
 	});
 }

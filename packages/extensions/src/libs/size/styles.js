@@ -9,12 +9,11 @@ import { getValueAddonRealValue } from '@publisher/hooks';
 /**
  * Internal dependencies
  */
+import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
 import type { TBlockProps } from '../types';
-import { useCssSelector } from '../../hooks';
 import { isActiveField } from '../../api/utils';
 import type { TSizeCssProps } from './types/size-props';
-import { arrayEquals } from '../utils';
 
 interface IConfigs {
 	sizeConfig: {
@@ -31,6 +30,8 @@ interface IConfigs {
 		publisherMaxHeight: string,
 	};
 	blockProps: TBlockProps;
+	selector: string;
+	media: string;
 }
 
 export function SizeStyles({
@@ -47,16 +48,14 @@ export function SizeStyles({
 		publisherFit,
 	},
 	blockProps,
+	selector,
+	media,
 }: IConfigs): string {
-	const { attributes: currBlockAttributes, blockName } = blockProps;
-	const selector = useCssSelector({
-		blockName,
-		supportId: 'publisherSize',
-	});
+	const { attributes: currBlockAttributes } = blockProps;
 	const generators = [];
 	const properties: TSizeCssProps = {};
 
-	if (isActiveField(publisherWidth)) {
+	if (isActiveField(publisherWidth) && currBlockAttributes?.publisherWidth) {
 		const width = getValueAddonRealValue(
 			currBlockAttributes.publisherWidth
 		);
@@ -71,7 +70,10 @@ export function SizeStyles({
 		}
 	}
 
-	if (isActiveField(publisherMinWidth)) {
+	if (
+		isActiveField(publisherMinWidth) &&
+		currBlockAttributes?.publisherMinWidth
+	) {
 		const minWidth = getValueAddonRealValue(
 			currBlockAttributes.publisherMinWidth
 		);
@@ -80,7 +82,10 @@ export function SizeStyles({
 			properties['min-width'] = minWidth;
 	}
 
-	if (isActiveField(publisherMaxWidth)) {
+	if (
+		isActiveField(publisherMaxWidth) &&
+		currBlockAttributes?.publisherMaxWidth
+	) {
 		const maxWidth = getValueAddonRealValue(
 			currBlockAttributes.publisherMaxWidth
 		);
@@ -89,7 +94,10 @@ export function SizeStyles({
 			properties['max-width'] = maxWidth;
 	}
 
-	if (isActiveField(publisherHeight)) {
+	if (
+		isActiveField(publisherHeight) &&
+		currBlockAttributes?.publisherHeight
+	) {
 		const height = getValueAddonRealValue(
 			currBlockAttributes.publisherHeight
 		);
@@ -104,7 +112,10 @@ export function SizeStyles({
 		}
 	}
 
-	if (isActiveField(publisherMinHeight)) {
+	if (
+		isActiveField(publisherMinHeight) &&
+		currBlockAttributes?.publisherMinHeight
+	) {
 		const minHeight = getValueAddonRealValue(
 			currBlockAttributes.publisherMinHeight
 		);
@@ -113,7 +124,10 @@ export function SizeStyles({
 			properties['min-height'] = minHeight;
 	}
 
-	if (isActiveField(publisherMaxHeight)) {
+	if (
+		isActiveField(publisherMaxHeight) &&
+		currBlockAttributes?.publisherMaxHeight
+	) {
 		const maxHeight = getValueAddonRealValue(
 			currBlockAttributes.publisherMaxHeight
 		);
@@ -122,7 +136,10 @@ export function SizeStyles({
 			properties['max-height'] = maxHeight;
 	}
 
-	if (isActiveField(publisherOverflow)) {
+	if (
+		isActiveField(publisherOverflow) &&
+		currBlockAttributes?.publisherOverflow
+	) {
 		if (
 			currBlockAttributes.publisherOverflow !==
 			attributes.publisherOverflow.default
@@ -130,7 +147,7 @@ export function SizeStyles({
 			properties.overflow = currBlockAttributes.publisherOverflow;
 	}
 
-	if (isActiveField(publisherRatio)) {
+	if (isActiveField(publisherRatio) && currBlockAttributes?.publisherRatio) {
 		const ratio = currBlockAttributes.publisherRatio.value;
 
 		if (ratio !== attributes.publisherRatio.default.value)
@@ -156,12 +173,14 @@ export function SizeStyles({
 
 	if (
 		isActiveField(publisherFit) &&
+		currBlockAttributes?.publisherFit &&
 		currBlockAttributes.publisherFit !== attributes.publisherFit.default
 	) {
 		properties['object-fit'] = currBlockAttributes.publisherFit;
 	}
 
 	if (
+		currBlockAttributes?.publisherFitPosition &&
 		!arrayEquals(
 			currBlockAttributes.publisherFitPosition,
 			attributes.publisherFitPosition.default
@@ -178,18 +197,17 @@ export function SizeStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherWidth: [
-							{
-								type: 'static',
-								selector,
-								properties,
-								options: {
-									important: true,
-								},
+					publisherWidth: [
+						{
+							type: 'static',
+							media,
+							selector,
+							properties,
+							options: {
+								important: true,
 							},
-						],
-					},
+						},
+					],
 				},
 				blockProps
 			)
@@ -199,9 +217,7 @@ export function SizeStyles({
 	generators.push(
 		computedCssRules(
 			{
-				cssGenerators: {
-					...(cssGenerators || {}),
-				},
+				...(cssGenerators || {}),
 			},
 			blockProps
 		)

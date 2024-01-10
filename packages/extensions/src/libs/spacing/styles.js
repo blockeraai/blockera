@@ -10,7 +10,7 @@ import { getValueAddonRealValue } from '@publisher/hooks';
  */
 import { attributes } from './attributes';
 import type { TBlockProps } from '../types';
-import { useBlocksStore, useCssSelector } from '../../hooks';
+import { useBlocksStore } from '../../hooks';
 import { isUndefined } from '@publisher/utils';
 import { isActiveField } from '../../api/utils';
 import type { TSpacingDefaultProps, TCssProps } from './types/spacing-props';
@@ -21,6 +21,8 @@ interface IConfigs {
 		publisherSpacing: TSpacingDefaultProps,
 	};
 	blockProps: TBlockProps;
+	selector: string;
+	media: string;
 }
 
 function updateCssProps(spacingProps: TSpacingDefaultProps): TCssProps {
@@ -82,13 +84,10 @@ function updateCssProps(spacingProps: TSpacingDefaultProps): TCssProps {
 export function SpacingStyles({
 	spacingConfig: { cssGenerators, publisherSpacing },
 	blockProps,
+	selector,
+	media,
 }: IConfigs): string {
 	const { attributes: _attributes, blockName } = blockProps;
-	const selector = useCssSelector({
-		blockName,
-		supportId: 'publisherSpacing',
-		fallbackSupportId: 'spacing',
-	});
 	const { hasBlockSupport } = useBlocksStore();
 	const generators = [];
 	const fallbackProps = !hasBlockSupport(blockName, 'spacing')
@@ -104,18 +103,17 @@ export function SpacingStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherSpacing: [
-							{
-								type: 'static',
-								selector,
-								properties,
-								options: {
-									important: true,
-								},
+					publisherSpacing: [
+						{
+							type: 'static',
+							media,
+							selector,
+							properties,
+							options: {
+								important: true,
 							},
-						],
-					},
+						},
+					],
 				},
 				blockProps
 			)
@@ -125,9 +123,7 @@ export function SpacingStyles({
 	generators.push(
 		computedCssRules(
 			{
-				cssGenerators: {
-					...(cssGenerators || {}),
-				},
+				...(cssGenerators || {}),
 			},
 			blockProps
 		)

@@ -9,42 +9,75 @@ import { prepare } from '@publisher/data-extractor';
  * Internal dependencies
  */
 import { useBlocksStore } from './use-blocks-store';
+import { default as blockStates } from '../libs/block-states/states';
 import type { TUseCssSelectorProps } from './types/css-selector-props';
 
-export function useCssSelector({
+export function useCssSelectors({
 	query,
 	blockName,
 	supportId,
 	fallbackSupportId,
-}: TUseCssSelectorProps): string {
+}: TUseCssSelectorProps): Object {
 	const root = '.{{BLOCK_ID}}';
+	const states: Array<string> = Object.keys(blockStates);
+
+	const getAllSelectors = (rootSelector: string) => {
+		const selectors: Object = {};
+
+		states.forEach((state: string): Object => {
+			if ('normal' === state) {
+				selectors[state] = rootSelector;
+				return;
+			}
+
+			const cssCustomStates = [
+				'parent-class',
+				'custom-class',
+				'parent-hover',
+			];
+
+			// FIXME: please implements css custom states support!
+			// this are needs to use infrastructure api to handle.
+			if (cssCustomStates.includes(state)) {
+				return;
+			}
+
+			selectors[state] = `${rootSelector}:${state}`;
+		});
+
+		return selectors;
+	};
 
 	const { getBlockType } = useBlocksStore();
 
 	if (isUndefined(blockName) || !isFunction(getBlockType)) {
-		return root;
+		return getAllSelectors(root);
 	}
 
 	const { selectors } = getBlockType(blockName);
 
 	if (isUndefined(selectors) || !Array.from(selectors).length) {
-		return root;
+		return getAllSelectors(root);
 	}
 
 	if (!isUndefined(supportId)) {
-		return prepareCssSelector({
-			support: supportId,
-			fallbackSupportId,
-			selectors,
-			query,
-		});
+		return getAllSelectors(
+			prepareCssSelector({
+				support: supportId,
+				fallbackSupportId,
+				selectors,
+				query,
+			})
+		);
 	}
 
-	return prepareCssSelector({
-		support: fallbackSupportId,
-		selectors,
-		query,
-	});
+	return getAllSelectors(
+		prepareCssSelector({
+			support: fallbackSupportId,
+			selectors,
+			query,
+		})
+	);
 }
 
 /**

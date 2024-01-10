@@ -1,15 +1,23 @@
+// @flow
+
+/**
+ * Publisher dependencies
+ */
+import { isString } from '@publisher/utils';
+import { prepare } from '@publisher/data-extractor';
+import type { TBlockProps } from '@publisher/extensions/src/libs/types';
+
 /**
  * Internal dependencies
  */
 import CssGenerators from './css-generator';
-import { isString } from '@publisher/utils';
-import { prepare } from '@publisher/data-extractor';
+import type { StaticStyle, DynamicStyle, CssGeneratorModel } from './types';
 
 /**
- * Has object all passed properties?
+ * Has objected all passed properties?
  *
  * @param {Object} obj the any object
- * @param {Array.<string>} props the props of any object
+ * @param {Array<string>} props the props of any object
  * @return {boolean} true on success, false when otherwise!
  */
 export function hasAllProperties(obj: Object, props: Array<string>): boolean {
@@ -32,7 +40,7 @@ export function hasAllProperties(obj: Object, props: Array<string>): boolean {
 export const injectHelpersToCssGenerators = (
 	helpers: Object,
 	generators: Object
-) => {
+): Object => {
 	Object.values(generators).forEach((generator, index) => {
 		generator.forEach((item) => {
 			if ('function' === item?.type) {
@@ -50,42 +58,40 @@ export const injectHelpersToCssGenerators = (
 /**
  * Retrieve computed css rules with usage of registered CSS Generators runner.
  *
- * @param {Object} blockType The current block type
- * @param {*} blockProps The current block properties
- * @return {string} The current block css output of css generators!
+ * @param {Object} styleDefinitions The style definition.
+ * @param {Object} blockProps The current block properties.
+ * @return {string} The generated stylesheet with style definition and block properties.
  */
 export const computedCssRules = (
-	blockType: Object,
-	blockProps: Object
+	styleDefinitions: Object,
+	blockProps: TBlockProps
 ): string => {
 	let css = '';
-	const { cssGenerators = [] } = blockType;
 
-	for (const controlId in cssGenerators) {
-		if (!Object.hasOwnProperty.call(cssGenerators, controlId)) {
-			continue;
-		}
+	for (const styleKey in styleDefinitions) {
+		const generatorDetails: Array<StaticStyle | DynamicStyle> =
+			styleDefinitions[styleKey];
 
-		const generatorDetails = cssGenerators[controlId];
+		generatorDetails?.forEach(
+			(definition: StaticStyle | DynamicStyle): void => {
+				if (!isValidGenerator(definition)) {
+					console.warn(
+						`${JSON.stringify(
+							definition
+						)} was not a valid style definition!`
+					);
+					return;
+				}
 
-		generatorDetails.forEach((generator) => {
-			if (!isValidGenerator(generator)) {
-				console.warn(
-					`${JSON.stringify(
-						generator
-					)} was not a valid css generator!`
+				const cssGenerator = new CssGenerators(
+					styleKey,
+					definition,
+					blockProps
 				);
-				return;
+
+				css += cssGenerator.rules() + '\n';
 			}
-
-			const cssGenerator = new CssGenerators(
-				controlId,
-				generator,
-				blockProps
-			);
-
-			css += cssGenerator.rules() + '\n';
-		});
+		);
 	}
 
 	return css;
@@ -106,7 +112,7 @@ export const isValidGenerator = (generator: Object): boolean =>
  * @param {Object} style The style object
  * @return {string} The created CSS Rule!
  */
-export const createCssRule = (style: Object): string => {
+export const createCssRule = (style: CssGeneratorModel): string => {
 	if (!hasAllProperties(style, ['selector', 'properties'])) {
 		console.warn(
 			`Style rule: ${JSON.stringify(style)} avoid css rule validation!`
@@ -115,9 +121,11 @@ export const createCssRule = (style: Object): string => {
 	}
 
 	const {
+		media,
 		properties,
 		options = { important: false },
 		selector = '',
+		// $FlowFixMe
 		blockProps = {},
 	} = style;
 
@@ -126,8 +134,12 @@ export const createCssRule = (style: Object): string => {
 		properties,
 	}).join('\n');
 
+	let cssRule = `${selector}{{BODY}}`;
+
 	if (!blockProps?.attributes) {
-		return `${selector}{${styleBody}}`;
+		cssRule = cssRule.replace('{BODY}', styleBody);
+
+		return media ? `${media}{${cssRule}}` : cssRule;
 	}
 
 	getVars(styleBody).forEach((query) => {
@@ -140,24 +152,27 @@ export const createCssRule = (style: Object): string => {
 		styleBody = styleBody.replace(query, replacement).replace(/[{}]/g, '');
 	});
 
-	return `${selector}{
-${styleBody.trim()}
-}`;
+	cssRule = cssRule.replace('{BODY}', styleBody.trim());
+
+	return media ? `${media}{${cssRule}}` : cssRule;
 };
 
 /**
  * Retrieve properties as array with all active options.
  *
- * @param {Object} properties css properties with value
- * @param {Object} options css generator options
- * @return {string[]} the array of strings include css props
+ * @param {Object} props includes css properties with value and css generator options.
+ * @return {Array<string>} the array of strings includes css props
  */
-export const getProperties = ({ properties, options }) => {
-	const _properties = {};
+export const getProperties = (props: {
+	properties: Object,
+	options: Object,
+}): Array<string> => {
+	const { properties, options } = props;
+	const _properties: Object = {};
 	const keys = Object.keys(properties);
 	const lastKeyIndex = keys.length - 1;
 
-	for (const property in properties) {
+	for (const property: string in properties) {
 		if (!Object.hasOwnProperty.call(properties, property)) {
 			continue;
 		}
@@ -171,7 +186,7 @@ export const getProperties = ({ properties, options }) => {
 			continue;
 		}
 
-		let tempValue = '';
+		let tempValue: string = '';
 
 		if (-1 === value.indexOf(';')) {
 			tempValue = `${property}: ${value}${

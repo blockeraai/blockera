@@ -5,7 +5,7 @@ import { isUndefined } from '@publisher/utils';
 import { createCssRule } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
 
-export function TransitionGenerator(id, props, styleEngine) {
+export function TransitionGenerator(id, props, { media, selector }) {
 	const { attributes } = props;
 
 	if (!attributes?.publisherTransition?.length) {
@@ -27,9 +27,8 @@ export function TransitionGenerator(id, props, styleEngine) {
 		?.filter((item) => null !== item);
 
 	return createCssRule({
-		selector: `#block-${props.clientId}${
-			styleEngine.selector ? ' ' + styleEngine.selector : ''
-		}`,
+		media,
+		selector,
 		properties: {
 			transition: value?.join(', '),
 		},
