@@ -4,7 +4,7 @@
 import { createCssRule } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
 
-export function OutlineGenerator(id, props, styleEngine) {
+export function OutlineGenerator(id, props, { media, selector }) {
 	const { attributes } = props;
 
 	if (!attributes?.publisherOutline?.length) {
@@ -32,9 +32,8 @@ export function OutlineGenerator(id, props, styleEngine) {
 	});
 
 	return createCssRule({
-		selector: `#block-${props.clientId}${
-			styleEngine.selector ? ' ' + styleEngine.selector : ''
-		}`,
+		media,
+		selector,
 		properties: {
 			outline: properties.outlines?.join(', '),
 			'outline-offset': properties.offset?.join(', '),

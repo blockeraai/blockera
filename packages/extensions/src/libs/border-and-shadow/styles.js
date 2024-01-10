@@ -1,3 +1,4 @@
+// @flow
 /**
  * Publisher dependencies
  */
@@ -27,6 +28,8 @@ interface IConfigs {
 		publisherBorderRadius?: Object,
 	};
 	blockProps: TBlockProps;
+	selector: string;
+	media: string;
 }
 
 export function BorderAndShadowStyles({
@@ -37,7 +40,9 @@ export function BorderAndShadowStyles({
 		publisherBorderRadius,
 	},
 	blockProps,
-}: IConfigs) {
+	selector,
+	media,
+}: IConfigs): string {
 	const generators = [];
 	const { blockName } = blockProps;
 
@@ -51,15 +56,15 @@ export function BorderAndShadowStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherBoxShadow: [
-							{
-								type: 'function',
-								function: BoxShadowGenerator,
-							},
-						],
-						...(publisherBoxShadow?.cssGenerators || {}),
-					},
+					publisherBoxShadow: [
+						{
+							media,
+							selector,
+							type: 'function',
+							function: BoxShadowGenerator,
+						},
+					],
+					...(publisherBoxShadow?.cssGenerators || {}),
 				},
 				blockProps
 			)
@@ -76,15 +81,15 @@ export function BorderAndShadowStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherOutline: [
-							{
-								type: 'function',
-								function: OutlineGenerator,
-							},
-						],
-						...(publisherOutline?.cssGenerators || {}),
-					},
+					publisherOutline: [
+						{
+							media,
+							selector,
+							type: 'function',
+							function: OutlineGenerator,
+						},
+					],
+					...(publisherOutline?.cssGenerators || {}),
 				},
 				blockProps
 			)
@@ -102,15 +107,15 @@ export function BorderAndShadowStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherBorder: [
-							{
-								type: 'function',
-								function: BoxBorderGenerator,
-							},
-						],
-						...(publisherBorder?.cssGenerators || {}),
-					},
+					publisherBorder: [
+						{
+							media,
+							selector,
+							type: 'function',
+							function: BoxBorderGenerator,
+						},
+					],
+					...(publisherBorder?.cssGenerators || {}),
 				},
 				blockProps
 			)
@@ -128,15 +133,15 @@ export function BorderAndShadowStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherBorder: [
-							{
-								type: 'function',
-								function: BorderRadiusGenerator,
-							},
-						],
-						...(publisherBorderRadius?.cssGenerators || {}),
-					},
+					publisherBorder: [
+						{
+							media,
+							selector,
+							type: 'function',
+							function: BorderRadiusGenerator,
+						},
+					],
+					...(publisherBorderRadius?.cssGenerators || {}),
 				},
 				blockProps
 			)
