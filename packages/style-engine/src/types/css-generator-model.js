@@ -12,6 +12,7 @@ import type { DynamicStyleFunction } from './styles';
 
 export type CssGeneratorModel = {
 	name: string,
+	media: string,
 	type: 'static' | 'function',
 	options: Object,
 	selector: string,

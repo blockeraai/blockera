@@ -125,6 +125,7 @@ export const createCssRule = (style: CssGeneratorModel): string => {
 		properties,
 		options = { important: false },
 		selector = '',
+		// $FlowFixMe
 		blockProps = {},
 	} = style;
 
