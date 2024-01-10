@@ -5,11 +5,11 @@ import { isUndefined } from '@publisher/utils';
 import { createCssRule } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
 
-export function FilterGenerator(id, props, styleEngine) {
-	const {
-		attributes,
-		cssGeneratorEntity: { id: _id, property },
-	} = props;
+export function FilterGenerator(id, props, { media, selector }) {
+	const isBackdrop = 'publisherBackdropFilter' === id;
+	const property = isBackdrop ? 'backdrop-filter' : 'filter';
+	const { attributes } = props;
+	const _id = isBackdrop ? id : 'publisherFilter';
 
 	if (isUndefined(attributes[_id]) || !attributes[_id]?.length) {
 		return '';
@@ -36,9 +36,8 @@ export function FilterGenerator(id, props, styleEngine) {
 		?.filter((item) => null !== item);
 
 	return createCssRule({
-		selector: `#block-${props.clientId}${
-			styleEngine.selector ? ' ' + styleEngine.selector : ''
-		}`,
+		media,
+		selector,
 		properties: {
 			[property]: value?.join(' '),
 		},

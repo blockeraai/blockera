@@ -4,7 +4,7 @@
 import { createCssRule } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
 
-export function BeforeDividerGenerator(id, props, styleEngine) {
+export function BeforeDividerGenerator(id, props, { media, selector }) {
 	const { attributes } = props;
 
 	if (!attributes?.publisherDivider?.length) {
@@ -14,14 +14,13 @@ export function BeforeDividerGenerator(id, props, styleEngine) {
 	const value = DividerGenerator(attributes);
 
 	return createCssRule({
-		selector: `#block-${props.clientId}${
-			styleEngine.selector ? ' ' + styleEngine.selector : ''
-		}::before`,
+		media,
+		selector: `${selector}:before`,
 		properties: value[0],
 	});
 }
 
-export function AfterDividerGenerator(id, props, styleEngine) {
+export function AfterDividerGenerator(id, props, { media, selector }) {
 	const { attributes } = props;
 
 	if (!attributes?.publisherDivider?.length) {
@@ -31,9 +30,8 @@ export function AfterDividerGenerator(id, props, styleEngine) {
 	const value = DividerGenerator(attributes);
 
 	return createCssRule({
-		selector: `#block-${props.clientId}${
-			styleEngine.selector ? ' ' + styleEngine.selector : ''
-		}::after`,
+		media,
+		selector: `${selector}:after`,
 		properties: value[1],
 	});
 }

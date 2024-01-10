@@ -36,6 +36,8 @@ interface IConfigs {
 		publisherMask?: Array<Object>,
 	};
 	blockProps: TBlockProps;
+	selector: string;
+	media: string;
 }
 
 export function EffectsStyles({
@@ -51,6 +53,8 @@ export function EffectsStyles({
 		publisherMask,
 	},
 	blockProps,
+	selector,
+	media,
 }: IConfigs): string {
 	const generators = [];
 
@@ -62,19 +66,18 @@ export function EffectsStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherOpacity: [
-							{
-								type: 'static',
-								selector: '.{{BLOCK_ID}}',
-								properties: {
-									opacity: getValueAddonRealValue(
-										blockProps.attributes.publisherOpacity
-									),
-								},
+					publisherOpacity: [
+						{
+							type: 'static',
+							media,
+							selector,
+							properties: {
+								opacity: getValueAddonRealValue(
+									blockProps.attributes.publisherOpacity
+								),
 							},
-						],
-					},
+						},
+					],
 				},
 				{ attributes: blockProps.attributes, ...blockProps }
 			)
@@ -188,15 +191,14 @@ export function EffectsStyles({
 			generators.push(
 				computedCssRules(
 					{
-						cssGenerators: {
-							publisherTransform: [
-								{
-									type: 'static',
-									selector: '.{{BLOCK_ID}}',
-									properties: { ...transformProperties },
-								},
-							],
-						},
+						publisherTransform: [
+							{
+								type: 'static',
+								media,
+								selector,
+								properties: { ...transformProperties },
+							},
+						],
 					},
 					{ attributes: blockProps.attributes, ...blockProps }
 				)
@@ -214,14 +216,14 @@ export function EffectsStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherTransition: [
-							{
-								type: 'function',
-								function: TransitionGenerator,
-							},
-						],
-					},
+					publisherTransition: [
+						{
+							media,
+							selector,
+							type: 'function',
+							function: TransitionGenerator,
+						},
+					],
 				},
 				blockProps
 			)
@@ -238,22 +240,16 @@ export function EffectsStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherFilter: [
-							{
-								type: 'function',
-								function: FilterGenerator,
-							},
-						],
-					},
+					publisherFilter: [
+						{
+							media,
+							selector,
+							type: 'function',
+							function: FilterGenerator,
+						},
+					],
 				},
-				{
-					...blockProps,
-					cssGeneratorEntity: {
-						property: 'filter',
-						id: 'publisherFilter',
-					},
-				}
+				blockProps
 			)
 		);
 	}
@@ -268,22 +264,16 @@ export function EffectsStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherBackdropFilter: [
-							{
-								type: 'function',
-								function: FilterGenerator,
-							},
-						],
-					},
+					publisherBackdropFilter: [
+						{
+							media,
+							selector,
+							type: 'function',
+							function: FilterGenerator,
+						},
+					],
 				},
-				{
-					...blockProps,
-					cssGeneratorEntity: {
-						property: 'backdrop-filter',
-						id: 'publisherBackdropFilter',
-					},
-				}
+				blockProps
 			)
 		);
 	}
@@ -298,18 +288,17 @@ export function EffectsStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherDivider: [
-							{
-								type: 'static',
-								selector: '.{{BLOCK_ID}}',
-								properties: {
-									position: 'relative',
-									overflow: 'hidden',
-								},
+					publisherDivider: [
+						{
+							type: 'static',
+							media,
+							selector,
+							properties: {
+								position: 'relative',
+								overflow: 'hidden',
 							},
-						],
-					},
+						},
+					],
 				},
 				{ attributes: blockProps.attributes, ...blockProps }
 			)
@@ -318,31 +307,31 @@ export function EffectsStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherDivider: [
-							{
-								type: 'function',
-								function: BeforeDividerGenerator,
-							},
-						],
-					},
+					publisherDivider: [
+						{
+							media,
+							selector,
+							type: 'function',
+							function: BeforeDividerGenerator,
+						},
+					],
 				},
 				blockProps
 			)
 		);
 
-		if (blockProps.attributes.publisherDivider.length === 2) {
+		if (blockProps.attributes?.publisherDivider?.length === 2) {
 			generators.push(
 				computedCssRules(
 					{
-						cssGenerators: {
-							publisherDivider: [
-								{
-									type: 'function',
-									function: AfterDividerGenerator,
-								},
-							],
-						},
+						publisherDivider: [
+							{
+								media,
+								selector,
+								type: 'function',
+								function: AfterDividerGenerator,
+							},
+						],
 					},
 					blockProps
 				)
@@ -360,14 +349,14 @@ export function EffectsStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherMask: [
-							{
-								type: 'function',
-								function: MaskGenerator,
-							},
-						],
-					},
+					publisherMask: [
+						{
+							media,
+							selector,
+							type: 'function',
+							function: MaskGenerator,
+						},
+					],
 				},
 				blockProps
 			)
@@ -382,17 +371,16 @@ export function EffectsStyles({
 		generators.push(
 			computedCssRules(
 				{
-					cssGenerators: {
-						publisherBlendMode: [
-							{
-								type: 'static',
-								selector: '.{{BLOCK_ID}}',
-								properties: {
-									'mix-blend-mode': '{{publisherBlendMode}}',
-								},
+					publisherBlendMode: [
+						{
+							type: 'static',
+							media,
+							selector,
+							properties: {
+								'mix-blend-mode': '{{publisherBlendMode}}',
 							},
-						],
-					},
+						},
+					],
 				},
 				{ attributes: blockProps.attributes, ...blockProps }
 			)
@@ -402,9 +390,7 @@ export function EffectsStyles({
 	generators.push(
 		computedCssRules(
 			{
-				cssGenerators: {
-					...(cssGenerators || {}),
-				},
+				...(cssGenerators || {}),
 			},
 			{ attributes: blockProps.attributes, ...blockProps }
 		)
