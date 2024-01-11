@@ -10,6 +10,7 @@ export type TTabProps = {
 };
 
 export type TTabsProps = {
+	activeTab: string,
 	tabs: Array<TTabProps>,
 	getPanel: (tab: TTabProps) => Object,
 };

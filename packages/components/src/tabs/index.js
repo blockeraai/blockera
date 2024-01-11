@@ -28,16 +28,10 @@ import type { TTabsProps, TTabProps } from './types';
 const onSelect = (
 	tabName: string,
 	setCurrentTab: (tabName: string) => void
-): void => {
-	const tab = document.querySelector(`.bf-${tabName}-tab`);
-	// eslint-disable-next-line
-	tab && tab.classList.add('is-active');
-
-	setCurrentTab(tabName);
-};
+): void => setCurrentTab(tabName);
 
 export function Tabs(props: TTabsProps): Element<any> {
-	const { tabs, getPanel } = props;
+	const { activeTab, tabs, getPanel } = props;
 	const tabsRef: {
 		current: Array<{
 			...TTabProps,
@@ -74,6 +68,7 @@ export function Tabs(props: TTabsProps): Element<any> {
 					onSelect(tabName, setCurrentTab);
 				}}
 				tabs={tabsRef.current}
+				initialTabName={activeTab}
 			>
 				{(tab) => getPanel(tab)}
 			</TabPanel>

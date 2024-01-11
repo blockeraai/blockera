@@ -5,28 +5,34 @@
  */
 import { Rnd } from 'react-rnd';
 import type { MixedElement } from 'react';
-import { useState, useRef } from '@wordpress/element';
-import { select } from '@wordpress/data';
+import { useState, useRef, createPortal } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
 import { resizeHandleClasses } from './utils';
 import type { GridBuilderProps } from './types';
+import { useBlockContext, useStoreSelectors } from '../../hooks';
 
 export const GridBuilder = ({
 	id,
 	children,
 	position: _position,
 	dimension: _dimension,
-}: GridBuilderProps): MixedElement => {
+}: GridBuilderProps): MixedElement | null => {
 	const [position, setPosition] = useState(_position);
 	const [dimension, setDimension] = useState(_dimension);
-	const { getSelectedBlock } = select('core/block-editor');
-	const { clientId } = getSelectedBlock() || {};
 	const [showGrids, setShowGrids] = useState(false);
 	const [isReadOnly, setIsReadOnly] = useState(true);
+
 	const isDragged = useRef(false);
+
+	const {
+		blockEditor: { getSelectedBlock },
+	} = useStoreSelectors();
+	const { isOpenGridBuilder } = useBlockContext();
+
+	const { clientId } = getSelectedBlock() || {};
 
 	const getEnableResize = () => {
 		return {
@@ -73,7 +79,11 @@ export const GridBuilder = ({
 		setIsReadOnly(false);
 	};
 
-	return (
+	if (!isOpenGridBuilder) {
+		return null;
+	}
+
+	return createPortal(
 		<Rnd
 			style={style}
 			size={{
@@ -116,6 +126,12 @@ export const GridBuilder = ({
 			lockAspectRatio={true}
 		>
 			{children}
-		</Rnd>
+		</Rnd>,
+		document
+			.querySelector('iframe[name="editor-canvas"]')
+			// $FlowFixMe
+			?.contentDocument?.body?.querySelector(
+				'.publisher-core.publisher-block-wrapper'
+			)
 	);
 };

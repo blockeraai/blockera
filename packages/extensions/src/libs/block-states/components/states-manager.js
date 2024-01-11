@@ -193,9 +193,9 @@ export default function StatesManager({
 											publisherBlockStates:
 												block.attributes.publisherBlockStates.map(
 													(
-														state: State,
+														state: Object,
 														stateId: number
-													): State => {
+													): Object => {
 														if (
 															stateId ===
 															newValue.indexOf(
