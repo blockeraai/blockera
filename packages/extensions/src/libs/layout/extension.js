@@ -20,9 +20,13 @@ import { Flex, Button } from '@publisher/components';
 /**
  * Internal dependencies
  */
+import { Gap } from './components';
 import { useBlockContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
+import DisplayGridIcon from './icons/display-grid';
+import { default as ReverseIcon } from './icons/reverse';
 import type { TLayoutProps } from './types/layout-props';
+import { GridBuilder } from '../../components/grid-builder';
 import { default as WrapWrapIcon } from './icons/wrap-wrap';
 import { generateExtensionId, hasSameProps } from '../utils';
 import { default as WrapNoWrapIcon } from './icons/wrap-nowrap';
@@ -50,9 +54,6 @@ import { default as AlignContentFlexStartIcon } from './icons/align-content-flex
 import { default as AlignItemsFlexStartBlockIcon } from './icons/align-items-flex-start';
 import { default as AlignContentSpaceAroundIcon } from './icons/align-content-space-around';
 import { default as AlignContentSpaceBetweenIcon } from './icons/align-content-space-between';
-import { default as ReverseIcon } from './icons/reverse';
-import DisplayGridIcon from './icons/display-grid';
-import { Gap } from './components';
 
 export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 	({
@@ -88,7 +89,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 			},
 		} = config;
 
-		const { setOpenGridBuilder } = useBlockContext();
+		const { setOpenGridBuilder, BlockComponent } = useBlockContext();
 
 		useEffect(() => {
 			//FIXME: please implements handler for "setOpenGridBuilder"!
@@ -1151,6 +1152,17 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 							</>
 						)}
 					</>
+				)}
+
+				{'grid' === display && (
+					<GridBuilder
+						type={block.blockName}
+						id={block.clientId}
+						position={{ top: 0, left: 0 }}
+						dimension={{ width: 320, height: 200 }}
+					>
+						<BlockComponent />
+					</GridBuilder>
 				)}
 			</>
 		);

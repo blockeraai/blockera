@@ -21,13 +21,11 @@ import { indexOf, isUndefined, omitWithPattern } from '@publisher/utils';
 import {
 	useIconEffect,
 	useAttributes,
-	BlockEditContext,
 	BlockEditContextProvider,
 } from '../hooks';
 import { sanitizedBlockAttributes } from '../hooks/utils';
 import { SideEffect } from '../libs/base/components/side-effect';
 import type { BreakpointTypes, StateTypes } from '../libs/block-states/types';
-import { GridBuilder } from './grid-builder';
 import { BlockCard } from '../libs/block-card';
 import { BlockPartials } from './block-partials';
 import * as config from '../libs/base/config';
@@ -208,17 +206,16 @@ export function BlockBase({
 				},
 				activeDeviceType: getDeviceType(),
 				handleOnChangeAttributes,
+				BlockComponent: () => children,
 				getBlockType: () => select('core/blocks').getBlockType(name),
 			}}
 		>
 			<StrictMode>
 				<InspectorControls>
 					<SideEffect />
-				</InspectorControls>
-				<div ref={blockEditRef} />
-				<InspectorControls>
 					<BlockPartials />
 				</InspectorControls>
+				<div ref={blockEditRef} />
 
 				<Fill name={'publisher-block-card-content'}>
 					<BlockCard
@@ -266,24 +263,7 @@ export function BlockBase({
 				/>
 			</StrictMode>
 
-			<BlockEditContext.Consumer>
-				{({ isOpenGridBuilder }) => {
-					if (!isOpenGridBuilder) {
-						return children;
-					}
-
-					return (
-						<GridBuilder
-							type={name}
-							id={clientId}
-							position={{ top: 0, left: 0 }}
-							dimension={{ width: 320, height: 200 }}
-						>
-							{children}
-						</GridBuilder>
-					);
-				}}
-			</BlockEditContext.Consumer>
+			{children}
 		</BlockEditContextProvider>
 	);
 }
