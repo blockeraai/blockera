@@ -1,9 +1,4 @@
 /**
- * WordPress dependencies
- */
-import { useContext } from '@wordpress/element';
-
-/**
  * Publisher dependencies
  */
 import { computedCssRules } from '@publisher/style-engine';
@@ -14,7 +9,6 @@ import { getValueAddonRealValue } from '@publisher/hooks';
  */
 import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
-import { BlockEditContext } from '../../hooks';
 import { isActiveField } from '../../api/utils';
 import { TextShadowGenerator } from './css-generators';
 
@@ -38,11 +32,11 @@ export function TypographyStyles({
 		publisherTextStroke,
 		publisherWordBreak,
 	},
+	blockProps,
 	selector,
 	media,
 }) {
-	const { attributes: currBlockAttributes, ...blockProps } =
-		useContext(BlockEditContext);
+	const { attributes: currBlockAttributes } = blockProps;
 
 	const properties = {};
 	const generators = [];
@@ -145,6 +139,7 @@ export function TypographyStyles({
 
 	if (
 		isActiveField(publisherTextOrientation) &&
+		currBlockAttributes.publisherTextOrientation &&
 		currBlockAttributes.publisherTextOrientation !==
 			attributes.publisherTextOrientation.default
 	) {
@@ -156,6 +151,7 @@ export function TypographyStyles({
 
 	if (
 		isActiveField(publisherTextColumns) &&
+		currBlockAttributes.publisherTextColumns &&
 		currBlockAttributes.publisherTextColumns !==
 			attributes.publisherTextColumns.default
 	) {
@@ -194,6 +190,7 @@ export function TypographyStyles({
 
 	if (
 		isActiveField(publisherTextStroke) &&
+		currBlockAttributes.publisherTextStroke &&
 		currBlockAttributes.publisherTextStroke !==
 			attributes.publisherTextStroke.default
 	) {
