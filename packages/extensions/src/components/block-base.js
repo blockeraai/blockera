@@ -2,6 +2,7 @@
 /**
  * External dependencies
  */
+import { Fill } from '@wordpress/components';
 import type { Element, MixedElement } from 'react';
 import { select, useSelect } from '@wordpress/data';
 import { InspectorControls } from '@wordpress/block-editor';
@@ -10,6 +11,7 @@ import { StrictMode, useMemo, useRef, useEffect } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
+import { useCssGenerator } from '@publisher/style-engine';
 import { extensionClassNames } from '@publisher/classnames';
 import { indexOf, isUndefined, omitWithPattern } from '@publisher/utils';
 
@@ -26,7 +28,11 @@ import { sanitizedBlockAttributes } from '../hooks/utils';
 import { SideEffect } from '../libs/base/components/side-effect';
 import type { BreakpointTypes, StateTypes } from '../libs/block-states/types';
 import { GridBuilder } from './grid-builder';
-import { BlockCardWrapper } from '../libs/block-card';
+import { BlockCard } from '../libs/block-card';
+import { BlockPartials } from './block-partials';
+import * as config from '../libs/base/config';
+import styleGenerators from '../libs/shared/style-generators';
+import StatesManager from '../libs/block-states/components/states-manager';
 
 export function BlockBase({
 	additional,
@@ -150,6 +156,34 @@ export function BlockBase({
 		}
 	);
 
+	const styles = [];
+	const generatorSharedProps = {
+		attributes,
+		activeDeviceType: getDeviceType(),
+		blockName: name,
+		callbackProps: {
+			...config,
+			blockProps: {
+				clientId,
+				supports,
+				setAttributes,
+			},
+		},
+	};
+
+	Object.entries(styleGenerators).forEach(
+		([supportId, { callback, fallbackSupportId }]) =>
+			styles.push(
+				// eslint-disable-next-line react-hooks/rules-of-hooks
+				useCssGenerator({
+					callback,
+					supportId,
+					fallbackSupportId,
+					...generatorSharedProps,
+				}).join('\n')
+			)
+	);
+
 	return (
 		<BlockEditContextProvider
 			{...{
@@ -183,27 +217,51 @@ export function BlockBase({
 				</InspectorControls>
 				<div ref={blockEditRef} />
 				<InspectorControls>
-					<BlockCardWrapper
-						block={{
+					<BlockPartials />
+				</InspectorControls>
+
+				<Fill name={'publisher-block-card-content'}>
+					<BlockCard
+						clientId={clientId}
+						states={attributes.publisherBlockStates}
+					>
+						<StatesManager
+							states={attributes.publisherBlockStates}
+							block={{
+								clientId,
+								supports,
+								attributes,
+								setAttributes,
+								blockName: name,
+							}}
+						/>
+					</BlockCard>
+				</Fill>
+
+				<Fill name={'publisher-block-edit-content'}>
+					<BlockEditComponent
+						{...{
+							// Sending props like exactly "edit" function props of WordPress Block.
+							// Because needs total block props in outside overriding component like "publisher-blocks" in overriding process.
+							name,
 							clientId,
 							supports,
-							blockName: name,
+							className,
 							attributes,
 							setAttributes,
+							activeTab: additional?.activeTab || 'style',
+							...props,
 						}}
 					/>
-				</InspectorControls>
-				<BlockEditComponent
-					{...{
-						// Sending props like exactly "edit" function props of WordPress Block.
-						// Because needs total block props in outside overriding component like "publisher-blocks" in overriding process.
-						name,
-						clientId,
-						supports,
-						className,
-						attributes,
-						setAttributes,
-						...props,
+				</Fill>
+
+				<style
+					data-block-type={name}
+					dangerouslySetInnerHTML={{
+						__html: styles
+							.filter((style: string) => style)
+							.join('\n')
+							.trim(),
 					}}
 				/>
 			</StrictMode>

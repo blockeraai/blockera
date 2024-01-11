@@ -6,7 +6,10 @@ import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
 import { memo } from '@wordpress/element';
 import type { Node, MixedElement } from 'react';
-import { InspectorControls } from '@wordpress/block-editor';
+import {
+	Slot,
+	// Fill,
+} from '@wordpress/components';
 
 /**
  * Publisher dependencies
@@ -14,7 +17,6 @@ import { InspectorControls } from '@wordpress/block-editor';
 import { include } from '@publisher/utils';
 import { Tabs } from '@publisher/components';
 // import { useTraceUpdate } from '@publisher/hooks';
-import { useCssGenerator } from '@publisher/style-engine';
 
 /**
  * Internal dependencies
@@ -86,8 +88,7 @@ import type { TStates } from '../block-states/types';
 import { useBlockContext } from '../../hooks';
 import { getStateInfo } from '../block-states/helpers';
 import StateContainer from '../../components/state-container';
-import * as config from '../base/config';
-import styleGenerators from './style-generators';
+import type { TTabProps } from '@publisher/components/src/tabs/types';
 
 export const attributes = {
 	...typographyAttributes,
@@ -123,6 +124,7 @@ type Props = {
 	children?: Node,
 	clientId: string,
 	supports: Object,
+	activeTab: string,
 	attributes: Object,
 	setAttributes: (attributes: Object) => void,
 };
@@ -130,6 +132,7 @@ type Props = {
 export const SharedBlockExtension: Props = memo(
 	({
 		children,
+		activeTab,
 		attributes,
 		setAttributes,
 		...props
@@ -148,7 +151,6 @@ export const SharedBlockExtension: Props = memo(
 			blockStateId,
 			breakpointId,
 			isNormalState,
-			activeDeviceType,
 			handleOnChangeAttributes,
 		} = useBlockContext();
 
@@ -192,17 +194,9 @@ export const SharedBlockExtension: Props = memo(
 			parentClientIds[parentClientIds.length - 1]
 		);
 
-		const MappedExtensions = (tab: {
-			name: string,
-			title: string,
-			className: string,
-			icon: {
-				name: string,
-				library: string,
-			},
-		}): MixedElement => {
+		const MappedExtensions = (tab: TTabProps): MixedElement => {
 			switch (tab.name) {
-				case 'general':
+				case 'settings':
 					return (
 						<>
 							<BaseExtension
@@ -227,6 +221,24 @@ export const SharedBlockExtension: Props = memo(
 									handleOnChangeAttributes
 								}
 								icon={<IconExtensionIcon />}
+							/>
+
+							<Slot
+								name={`block-inspector-tab-${tab.name}-start`}
+							/>
+							<Slot name={`block-inspector-tab-${tab.name}-1`} />
+							<Slot name={`block-inspector-tab-${tab.name}-2`} />
+							<Slot name={`block-inspector-tab-${tab.name}-3`} />
+							<Slot name={`block-inspector-tab-${tab.name}-4`} />
+							<Slot name={`block-inspector-tab-${tab.name}-5`} />
+							<Slot name={`block-inspector-tab-${tab.name}-6`} />
+							<Slot name={`block-inspector-tab-${tab.name}-7`} />
+							<Slot name={`block-inspector-tab-${tab.name}-8`} />
+							<Slot name={`block-inspector-tab-${tab.name}-9`} />
+							<Slot name={`block-inspector-tab-${tab.name}-10`} />
+
+							<Slot
+								name={`block-inspector-tab-${tab.name}-end`}
 							/>
 						</>
 					);
@@ -585,9 +597,9 @@ export const SharedBlockExtension: Props = memo(
 
 		const tabs = [
 			{
-				name: 'general',
-				title: __('General', 'publisher-core'),
-				className: 'general-tab',
+				name: 'settings',
+				title: __('Settings', 'publisher-core'),
+				className: 'settings-tab',
 				icon: {
 					library: 'publisher',
 					name: 'publisherSettings',
@@ -604,54 +616,15 @@ export const SharedBlockExtension: Props = memo(
 			},
 		];
 
-		const generatorSharedProps = {
-			attributes,
-			activeDeviceType,
-			blockName: props.name,
-			callbackProps: {
-				...config,
-				blockProps: {
-					setAttributes,
-					clientId: props.clientId,
-					supports: props.supports,
-				},
-			},
-		};
-
-		const styles = [];
-
-		Object.entries(styleGenerators).forEach(
-			([supportId, { callback, fallbackSupportId }]) =>
-				styles.push(
-					// eslint-disable-next-line react-hooks/rules-of-hooks
-					useCssGenerator({
-						callback,
-						supportId,
-						fallbackSupportId,
-						...generatorSharedProps,
-					}).join('\n')
-				)
-		);
-
 		return (
-			<>
-				<InspectorControls>
-					<StateContainer currentState={getStateInfo(currentState)}>
-						<Tabs tabs={tabs} getPanel={MappedExtensions} />
-						{children}
-					</StateContainer>
-				</InspectorControls>
-
-				<style
-					data-block-type={props.name}
-					dangerouslySetInnerHTML={{
-						__html: styles
-							.filter((style: string) => style)
-							.join('\n')
-							.trim(),
-					}}
+			<StateContainer currentState={getStateInfo(currentState)}>
+				<Tabs
+					tabs={tabs}
+					activeTab={activeTab}
+					getPanel={MappedExtensions}
 				/>
-			</>
+				{children}
+			</StateContainer>
 		);
 	},
 	hasSameProps

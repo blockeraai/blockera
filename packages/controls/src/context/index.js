@@ -38,6 +38,7 @@ export const ControlContextProvider = ({
 	storeName = STORE_NAME,
 	...props
 }: ControlContextProviderProps): MixedElement | null => {
+	// $FlowFixMe
 	registerControl({
 		...controlInfo,
 		type: storeName,
