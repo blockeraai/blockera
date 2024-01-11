@@ -375,7 +375,7 @@ export const SharedBlockExtension: Props = memo(
 
 							{directParentBlock?.innerBlocks.length &&
 								directParentBlock?.currentStateAttributes
-									.publisherDisplay === 'flex' && (
+									?.publisherDisplay === 'flex' && (
 									<BaseExtension
 										{...props}
 										extensionProps={{
