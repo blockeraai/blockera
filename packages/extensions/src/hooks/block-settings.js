@@ -94,7 +94,16 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 						>
 							<Slot name={'publisher-core-block-before'} />
 
-							{settings.edit(props)}
+							<div
+								className={
+									'publisher-core publisher-block-wrapper'
+								}
+								style={{
+									display: 'inline-block',
+								}}
+							>
+								{settings.edit(props)}
+							</div>
 
 							<BlockPortals
 								blockId={`#block-${props.clientId}`}
