@@ -351,6 +351,15 @@ export const SharedBlockExtension: Props = memo(
 									publisherGap: {},
 									publisherFlexWrap: {},
 									publisherAlignContent: {},
+									publisherGridAlignItems: {},
+									publisherGridJustifyItems: {},
+									publisherGridAlignContent: {},
+									publisherGridJustifyContent: {},
+									publisherGridGap: {},
+									publisherGridDirection: {},
+									publisherGridColumns: {},
+									publisherGridRows: {},
+									publisherGridAreas: {},
 								}}
 								initialOpen={true}
 								extensionId={'Layout'}
@@ -414,18 +423,26 @@ export const SharedBlockExtension: Props = memo(
 										{...props}
 										initialOpen={true}
 										extensionId={'GridChild'}
+										extensionProps={{
+											publisherGridChildPosition: {},
+											publisherGridChildAlign: {},
+											publisherGridChildJustify: {},
+											publisherGridChildOrder: {},
+											publisherGridChildOrderCustom: {},
+										}}
 										title={__(
 											'Grid Child',
 											'publisher-core'
 										)}
 										values={{
 											...include(
-												attributes,
+												currentStateAttributes,
 												gridChild,
 												'publisher'
 											),
 											gridAreas:
-												directParentBlock?.attributes
+												directParentBlock
+													?.currentStateAttributes
 													.publisherGridAreas,
 										}}
 										handleOnChangeAttributes={
