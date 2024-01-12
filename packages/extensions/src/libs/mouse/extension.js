@@ -52,7 +52,6 @@ export const MouseExtension: MixedElement = memo<TMouseProps>(
 					>
 						<SelectControl
 							label={__('Cursor', 'publisher-core')}
-							labelPopoverTitle={__('Cursor', 'publisher-core')}
 							labelDescription={
 								<>
 									<p>
@@ -96,10 +95,6 @@ export const MouseExtension: MixedElement = memo<TMouseProps>(
 					>
 						<SelectControl
 							label={__('User Select', 'publisher-core')}
-							labelPopoverTitle={__(
-								'User Select',
-								'publisher-core'
-							)}
 							labelDescription={
 								<>
 									<p>
@@ -148,10 +143,6 @@ export const MouseExtension: MixedElement = memo<TMouseProps>(
 					>
 						<SelectControl
 							label={__('Pointer Events', 'publisher-core')}
-							labelPopoverTitle={__(
-								'User Select',
-								'publisher-core'
-							)}
 							labelDescription={
 								<>
 									<p>
