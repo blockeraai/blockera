@@ -367,7 +367,7 @@ export const SharedBlockExtension: Props = memo(
 							/>
 
 							{directParentBlock?.innerBlocks.length &&
-								directParentBlock?.currentStateAttributes
+								directParentBlock?.attributes
 									.publisherDisplay === 'flex' && (
 									<BaseExtension
 										{...props}
@@ -393,8 +393,7 @@ export const SharedBlockExtension: Props = memo(
 												'publisher'
 											),
 											flexDirection:
-												directParentBlock
-													?.currentStateAttributes
+												directParentBlock?.attributes
 													.publisherFlexDirection,
 										}}
 										handleOnChangeAttributes={
