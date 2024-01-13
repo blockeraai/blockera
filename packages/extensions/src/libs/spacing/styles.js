@@ -4,6 +4,7 @@
  */
 import { computedCssRules } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
+import type { GeneratorReturnType } from '@publisher/style-engine/src/types';
 
 /**
  * Internal dependencies
@@ -86,7 +87,7 @@ export function SpacingStyles({
 	blockProps,
 	selector,
 	media,
-}: IConfigs): string {
+}: IConfigs): Array<GeneratorReturnType> {
 	const { attributes: _attributes, blockName } = blockProps;
 	const { hasBlockSupport } = useBlocksStore();
 	const generators = [];
@@ -129,5 +130,5 @@ export function SpacingStyles({
 		)
 	);
 
-	return generators.length > 1 ? generators.join('\n') : generators.join('');
+	return generators.flat();
 }

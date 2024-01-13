@@ -1,8 +1,8 @@
 // @flow
 
 export type THandleOnChangeAttributes = (
-	attributeId?: string,
-	newValue?: any,
+	attributeId: string,
+	newValue: any,
 	// eslint-disable-next-line
 	options:
 		| Object

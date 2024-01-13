@@ -5,6 +5,12 @@
  */
 import type { TBreakpoint } from '@publisher/extensions/src/libs/block-states/types';
 
+export type GeneratorReturnType = {
+	media: string,
+	selector: string,
+	properties: string,
+};
+
 export type CssGeneratorProps = {
 	blockName: string,
 	supportId: string,
@@ -28,6 +34,6 @@ export type CssGeneratorProps = {
 			supports: Object,
 		},
 	},
-	callback: (stylesProps: Object) => string,
+	callback: (stylesProps: Object) => GeneratorReturnType,
 	fallbackSupportId?: string,
 };

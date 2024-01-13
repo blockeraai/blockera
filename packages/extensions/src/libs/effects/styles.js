@@ -4,6 +4,7 @@
  */
 import { computedCssRules } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
+import type { GeneratorReturnType } from '@publisher/style-engine/src/types';
 
 /**
  * Internal dependencies
@@ -55,7 +56,7 @@ export function EffectsStyles({
 	blockProps,
 	selector,
 	media,
-}: IConfigs): string {
+}: IConfigs): Array<GeneratorReturnType> {
 	const generators = [];
 
 	if (
@@ -396,5 +397,5 @@ export function EffectsStyles({
 		)
 	);
 
-	return generators.length > 1 ? generators.join('\n') : generators.join('');
+	return generators.flat();
 }

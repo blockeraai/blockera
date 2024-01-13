@@ -3,6 +3,7 @@
  * Publisher dependencies
  */
 import { computedCssRules } from '@publisher/style-engine';
+import type { GeneratorReturnType } from '@publisher/style-engine/src/types';
 
 /**
  * Internal dependencies
@@ -11,6 +12,7 @@ import type { TBlockProps } from '../types';
 import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
 import { isActiveField } from '../../api/utils';
+
 interface IConfigs {
 	advancedConfig: {
 		cssGenerators: Object,
@@ -26,7 +28,7 @@ export function AdvancedStyles({
 	blockProps,
 	selector,
 	media,
-}: IConfigs): string {
+}: IConfigs): Array<GeneratorReturnType> {
 	const { attributes: _attributes } = blockProps;
 
 	const generators = [];
@@ -77,5 +79,5 @@ export function AdvancedStyles({
 		)
 	);
 
-	return generators.length > 1 ? generators.join('\n') : generators.join('');
+	return generators.flat();
 }

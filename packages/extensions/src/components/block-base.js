@@ -182,6 +182,19 @@ export function BlockBase({
 			)
 	);
 
+	const currentStateAttributes = isNormalState()
+		? attributes
+		: {
+				...attributes,
+				...(attributes.publisherBlockStates[blockStateId].breakpoints[
+					breakpointId
+				]
+					? attributes.publisherBlockStates[blockStateId].breakpoints[
+							breakpointId
+					  ].attributes
+					: {}),
+		  };
+
 	return (
 		<BlockEditContextProvider
 			{...{
@@ -213,7 +226,9 @@ export function BlockBase({
 			<StrictMode>
 				<InspectorControls>
 					<SideEffect />
-					<BlockPartials />
+					<BlockPartials
+						currentState={attributes.publisherCurrentState}
+					/>
 				</InspectorControls>
 				<div ref={blockEditRef} />
 
@@ -235,7 +250,9 @@ export function BlockBase({
 					</BlockCard>
 				</Fill>
 
-				<Fill name={'publisher-block-edit-content'}>
+				<Fill
+					name={`publisher-block-${attributes.publisherCurrentState}-edit-content`}
+				>
 					<BlockEditComponent
 						{...{
 							// Sending props like exactly "edit" function props of WordPress Block.
@@ -246,6 +263,7 @@ export function BlockBase({
 							className,
 							attributes,
 							setAttributes,
+							currentStateAttributes,
 							activeTab: additional?.activeTab || 'style',
 							...props,
 						}}

@@ -11,7 +11,12 @@ import type { TBlockProps } from '@publisher/extensions/src/libs/types';
  * Internal dependencies
  */
 import CssGenerators from './css-generator';
-import type { StaticStyle, DynamicStyle, CssGeneratorModel } from './types';
+import type {
+	StaticStyle,
+	DynamicStyle,
+	CssGeneratorModel,
+	GeneratorReturnType,
+} from './types';
 
 /**
  * Has objected all passed properties?
@@ -65,8 +70,9 @@ export const injectHelpersToCssGenerators = (
 export const computedCssRules = (
 	styleDefinitions: Object,
 	blockProps: TBlockProps
-): string => {
+): Array<GeneratorReturnType> => {
 	let css = '';
+	const output = [];
 
 	for (const styleKey in styleDefinitions) {
 		const generatorDetails: Array<StaticStyle | DynamicStyle> =
@@ -74,7 +80,7 @@ export const computedCssRules = (
 
 		generatorDetails?.forEach(
 			(definition: StaticStyle | DynamicStyle): void => {
-				if (!isValidGenerator(definition)) {
+				if (!isValidStyleDefinition(definition)) {
 					console.warn(
 						`${JSON.stringify(
 							definition
@@ -89,22 +95,33 @@ export const computedCssRules = (
 					blockProps
 				);
 
-				css += cssGenerator.rules() + '\n';
+				const rules = cssGenerator.rules();
+
+				if ('undefined' === typeof rules.properties) {
+					return;
+				}
+
+				css += rules.properties + '\n';
+				output.push({
+					properties: css,
+					media: cssGenerator.media,
+					selector: cssGenerator.selector,
+				});
 			}
 		);
 	}
 
-	return css;
+	return output;
 };
 
 /**
  * Check is valid css generator?
  *
- * @param {Object} generator the css generator
+ * @param {Object} styleDefinition the css style definition.
  * @return {boolean} true on success, false when otherwise!
  */
-export const isValidGenerator = (generator: Object): boolean =>
-	['function', 'static'].includes(generator?.type);
+export const isValidStyleDefinition = (styleDefinition: Object): boolean =>
+	['function', 'static'].includes(styleDefinition?.type);
 
 /**
  * Creating CSS Rule!
@@ -112,49 +129,59 @@ export const isValidGenerator = (generator: Object): boolean =>
  * @param {Object} style The style object
  * @return {string} The created CSS Rule!
  */
-export const createCssRule = (style: CssGeneratorModel): string => {
+export const createCssRule = (
+	style: CssGeneratorModel
+): GeneratorReturnType => {
 	if (!hasAllProperties(style, ['selector', 'properties'])) {
 		console.warn(
 			`Style rule: ${JSON.stringify(style)} avoid css rule validation!`
 		);
-		return '';
+		return {
+			media: '',
+			selector: '',
+			properties: '',
+		};
 	}
 
 	const {
 		media,
-		properties,
+		properties: _props,
 		options = { important: false },
 		selector = '',
 		// $FlowFixMe
 		blockProps = {},
 	} = style;
 
-	let styleBody = getProperties({
+	let properties = getProperties({
 		options,
-		properties,
+		properties: _props,
 	}).join('\n');
 
-	let cssRule = `${selector}{{BODY}}`;
-
 	if (!blockProps?.attributes) {
-		cssRule = cssRule.replace('{BODY}', styleBody);
-
-		return media ? `${media}{${cssRule}}` : cssRule;
+		return {
+			media,
+			selector,
+			properties,
+		};
 	}
 
-	getVars(styleBody).forEach((query) => {
+	getVars(properties).forEach((query) => {
 		const replacement = prepare(query, blockProps?.attributes);
 
 		if (!replacement) {
 			return;
 		}
 
-		styleBody = styleBody.replace(query, replacement).replace(/[{}]/g, '');
+		properties = properties
+			.replace(query, replacement)
+			.replace(/[{}]/g, '');
 	});
 
-	cssRule = cssRule.replace('{BODY}', styleBody.trim());
-
-	return media ? `${media}{${cssRule}}` : cssRule;
+	return {
+		media,
+		selector,
+		properties,
+	};
 };
 
 /**

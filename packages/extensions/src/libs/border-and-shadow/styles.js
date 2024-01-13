@@ -3,6 +3,7 @@
  * Publisher dependencies
  */
 import { computedCssRules } from '@publisher/style-engine';
+import type { GeneratorReturnType } from '@publisher/style-engine/src/types';
 
 /**
  * Internal dependencies
@@ -42,7 +43,7 @@ export function BorderAndShadowStyles({
 	blockProps,
 	selector,
 	media,
-}: IConfigs): string {
+}: IConfigs): Array<GeneratorReturnType> {
 	const generators = [];
 	const { blockName } = blockProps;
 
@@ -148,5 +149,5 @@ export function BorderAndShadowStyles({
 		);
 	}
 
-	return generators.length > 1 ? generators.join('\n') : generators.join('');
+	return generators.flat();
 }

@@ -3,6 +3,7 @@
  * Publisher dependencies
  */
 import { computedCssRules } from '@publisher/style-engine';
+import type { GeneratorReturnType } from '@publisher/style-engine/src/types';
 
 /**
  * Internal dependencies
@@ -19,7 +20,7 @@ interface IConfigs {
 export function IconStyles({
 	iconConfig: { cssGenerators },
 	blockProps,
-}: IConfigs): string {
+}: IConfigs): Array<GeneratorReturnType> {
 	const generators = [];
 
 	generators.push(
@@ -31,5 +32,5 @@ export function IconStyles({
 		)
 	);
 
-	return generators.length > 1 ? generators.join('\n') : generators.join('');
+	return generators.flat();
 }

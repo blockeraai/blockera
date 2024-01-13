@@ -8,14 +8,15 @@ import { prepare } from '@publisher/data-extractor';
 /**
  * Internal dependencies
  */
-import { useBlocksStore } from './use-blocks-store';
-import { default as blockStates } from '../libs/block-states/states';
-import type { TUseCssSelectorProps } from './types/css-selector-props';
+import type { TUseCssSelectorProps } from '../types';
+import { useBlocksStore } from '@publisher/extensions/src/hooks';
+import { default as blockStates } from '@publisher/extensions/src/libs/block-states/states';
 
 export function useCssSelectors({
 	query,
 	blockName,
 	supportId,
+	currentState,
 	fallbackSupportId,
 }: TUseCssSelectorProps): Object {
 	const root = '.{{BLOCK_ID}}';
@@ -42,7 +43,11 @@ export function useCssSelectors({
 				return;
 			}
 
-			selectors[state] = `${rootSelector}:${state}`;
+			if ('normal' === currentState || state !== currentState) {
+				selectors[state] = `${rootSelector}:${state}`;
+			} else {
+				selectors[state] = `${rootSelector},${rootSelector}:${state}`;
+			}
 		});
 
 		return selectors;

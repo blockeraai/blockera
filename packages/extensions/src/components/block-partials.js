@@ -9,7 +9,7 @@ import { useEffect, memo } from '@wordpress/element';
  */
 import { prependPortal } from '@publisher/utils';
 
-export const BlockPartials = memo(() => {
+export const BlockPartials = memo(({ currentState }) => {
 	useEffect(() => {
 		document.querySelector('.block-editor-block-card')?.remove();
 
@@ -28,7 +28,9 @@ export const BlockPartials = memo(() => {
 						<Slot name={'publisher-block-card-content'} />
 					</div>
 					<div className="publisher-block-edit-wrapper">
-						<Slot name={'publisher-block-edit-content'} />
+						<Slot
+							name={`publisher-block-${currentState}-edit-content`}
+						/>
 					</div>
 				</>,
 				document.querySelector('.block-editor-block-inspector')

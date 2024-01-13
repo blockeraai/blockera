@@ -4,6 +4,7 @@
  */
 import { computedCssRules } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
+import type { GeneratorReturnType } from '@publisher/style-engine/src/types';
 import { arrayEquals } from '../utils';
 
 /**
@@ -67,7 +68,7 @@ export function LayoutStyles({
 	blockProps,
 	selector,
 	media,
-}: IConfigs): string {
+}: IConfigs): Array<GeneratorReturnType> {
 	const { attributes: _attributes } = blockProps;
 
 	const generators = [];
@@ -348,5 +349,5 @@ export function LayoutStyles({
 		)
 	);
 
-	return generators.length > 1 ? generators.join('\n') : generators.join('');
+	return generators.flat();
 }
