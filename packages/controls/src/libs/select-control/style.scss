@@ -49,6 +49,12 @@
 		gap: 8px;
 		padding-left: 10px !important;
 		font-size: 12px !important;
+		height: 30px !important;
+		min-height: 30px !important;
+
+		svg {
+			fill: currentColor;
+		}
 	}
 
 	&.input-align-center .components-custom-select-control__button {
