@@ -53,7 +53,7 @@ export function toSimpleStyleWPCompatible({
 
 		return {
 			style: {
-				...(blockAttributes.attributes?.style ?? {}),
+				...(blockAttributes?.style ?? {}),
 				[wpAttribute]: newValue,
 			},
 		};
