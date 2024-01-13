@@ -23,10 +23,8 @@ export const typoFeatures = {
 		wpAttribute: 'lineHeight',
 		callback: toSimpleStyleTypographyWPCompatible,
 	},
-	// FIXME: please check wp attribute name,
-	// TODO: in old version of compatibility is "lineHeight" It seems to be incorrect!
 	publisherTextDecoration: {
-		wpAttribute: 'lineHeight',
+		wpAttribute: 'textDecoration',
 		callback: toSimpleStyleTypographyWPCompatible,
 	},
 	publisherTextTransform: {
