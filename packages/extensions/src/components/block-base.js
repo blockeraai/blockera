@@ -3,6 +3,7 @@
  * External dependencies
  */
 import { Fill } from '@wordpress/components';
+import { applyFilters } from '@wordpress/hooks';
 import type { Element, MixedElement } from 'react';
 import { select, useSelect } from '@wordpress/data';
 import { InspectorControls } from '@wordpress/block-editor';
@@ -50,6 +51,15 @@ export function BlockBase({
 	setAttributes: (attributes: Object) => void,
 	className: string,
 }): Element<any> | null {
+	/**
+	 * Filterable attributes before initializing block edit component.
+	 *
+	 * hook: 'publisherCore.blockEdit.attributes'
+	 *
+	 * @since 1.0.0
+	 */
+	attributes = applyFilters('publisherCore.blockEdit.attributes', attributes);
+
 	const { supports } = useSelect((select) => {
 		const { getBlockType } = select('core/blocks');
 
