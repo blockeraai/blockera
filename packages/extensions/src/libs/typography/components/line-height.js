@@ -15,8 +15,6 @@ import { ControlContextProvider, InputControl } from '@publisher/controls';
  */
 import { generateExtensionId } from '../../utils';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
-import { useBlockContext } from '../../../hooks';
-import { toSimpleStyleTypographyWPCompatible } from '../../../utils';
 
 export const LineHeight = ({
 	block,
@@ -30,8 +28,6 @@ export const LineHeight = ({
 	defaultValue: string | void,
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
-	const { isNormalState, getAttributes } = useBlockContext();
-
 	return (
 		<ControlContextProvider
 			value={{
@@ -64,19 +60,9 @@ export const LineHeight = ({
 				range={true}
 				min={0}
 				defaultValue={defaultValue || ''}
-				onChange={(newValue, ref) => {
-					onChange('publisherLineHeight', newValue, {
-						ref,
-						addOrModifyRootItems:
-							toSimpleStyleTypographyWPCompatible({
-								wpAttribute: 'lineHeight',
-								newValue,
-								isNormalState,
-								ref,
-								getAttributes,
-							}),
-					});
-				}}
+				onChange={(newValue, ref) =>
+					onChange('publisherLineHeight', newValue, { ref })
+				}
 				controlAddonTypes={['variable']}
 				variableTypes={['font-size']}
 				{...props}

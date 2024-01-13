@@ -22,8 +22,6 @@ import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 import TextTransformLowercaseIcon from '../icons/text-transform-lowercase';
 import TextTransformUppercaseIcon from '../icons/text-transform-uppercase';
 import TextTransformCapitalizeIcon from '../icons/text-transform-capitalize';
-import { useBlockContext } from '../../../hooks';
-import { toSimpleStyleTypographyWPCompatible } from '../../../utils';
 
 export const TextTransform = ({
 	block,
@@ -35,8 +33,6 @@ export const TextTransform = ({
 	value: string | void,
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
-	const { isNormalState, getAttributes } = useBlockContext();
-
 	return (
 		<ControlContextProvider
 			value={{
@@ -125,19 +121,11 @@ export const TextTransform = ({
 				isDeselectable={true}
 				//
 				defaultValue=""
-				onChange={(newValue, ref) => {
+				onChange={(newValue, ref) =>
 					onChange('publisherTextTransform', newValue, {
 						ref,
-						addOrModifyRootItems:
-							toSimpleStyleTypographyWPCompatible({
-								wpAttribute: 'textTransform',
-								newValue,
-								isNormalState,
-								ref,
-								getAttributes,
-							}),
-					});
-				}}
+					})
+				}
 				{...props}
 			/>
 		</ControlContextProvider>

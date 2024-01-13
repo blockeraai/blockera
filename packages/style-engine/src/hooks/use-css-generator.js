@@ -3,7 +3,6 @@
 /**
  * Publisher dependencies
  */
-import { useCssSelectors } from '@publisher/extensions/src/hooks';
 import type {
 	BreakpointTypes,
 	TBreakpoint,
@@ -14,7 +13,8 @@ import breakpoints from '@publisher/extensions/src/libs/block-states/default-bre
 /**
  * Internal dependencies
  */
-import type { CssGeneratorProps } from '../types';
+import type { CssGeneratorProps, GeneratorReturnType } from '../types';
+import { useCssSelectors } from './use-css-selectors';
 
 export const useCssGenerator = ({
 	callback,
@@ -25,12 +25,27 @@ export const useCssGenerator = ({
 	activeDeviceType,
 	fallbackSupportId,
 }: CssGeneratorProps): Array<string> => {
-	const stylesheet: Array<string> = [];
+	const stylesheets: Array<GeneratorReturnType> = [];
 	const selectors = useCssSelectors({
 		blockName,
 		supportId,
 		fallbackSupportId,
+		currentState: attributes.publisherCurrentState,
 	});
+
+	const isValidStylesheet = (stylesheet: GeneratorReturnType): boolean =>
+		!(
+			'undefined' !== typeof stylesheet?.properties &&
+			!stylesheet?.properties.trim()
+		);
+
+	const registerStylesheet = (stylesheet: GeneratorReturnType): void => {
+		if (!isValidStylesheet(stylesheet)) {
+			return;
+		}
+
+		stylesheets.push(stylesheet);
+	};
 
 	Object.entries(selectors).forEach(([state]): void => {
 		const currentState = attributes.publisherBlockStates.find(
@@ -77,7 +92,7 @@ export const useCssGenerator = ({
 			media = '';
 		}
 
-		stylesheet.push(
+		const stylesheet: GeneratorReturnType | Array<GeneratorReturnType> =
 			callback({
 				...callbackProps,
 				selector: selectors[state],
@@ -87,9 +102,31 @@ export const useCssGenerator = ({
 					blockName,
 					attributes: stateAttributes,
 				},
-			})
-		);
+			});
+
+		if (Array.isArray(stylesheet)) {
+			stylesheet?.forEach((_stylesheet) =>
+				registerStylesheet(_stylesheet)
+			);
+
+			return;
+		}
+
+		registerStylesheet(stylesheet);
 	});
 
-	return stylesheet;
+	return stylesheets.map((style) => {
+		if (
+			'undefined' === typeof style?.properties ||
+			'undefined' === typeof style?.selector
+		) {
+			return '';
+		}
+
+		if (!style.media) {
+			return `${style.selector}{${style.properties}}`;
+		}
+
+		return `${style.media}{${style.selector}{${style.properties}}}`;
+	});
 };

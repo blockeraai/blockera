@@ -10,11 +10,9 @@ import { isValid } from '@publisher/hooks';
 export function minHeightToWPCompatible({
 	newValue,
 	ref,
-	isNormalState,
 }: {
 	newValue: string | Object,
 	ref: Object,
-	isNormalState: () => boolean,
 }): {
 	minHeight?: number,
 	minHeightUnit?: string,
@@ -27,7 +25,6 @@ export function minHeightToWPCompatible({
 	}
 
 	if (
-		!isNormalState() ||
 		newValue === '' ||
 		isUndefined(newValue) ||
 		isSpecialUnit(newValue) ||
@@ -59,11 +56,9 @@ export const coreWPAspectRatioValues = [
 export function aspectRatioToWPCompatible({
 	newValue,
 	ref,
-	isNormalState,
 }: {
 	newValue: string | Object,
 	ref: Object,
-	isNormalState: () => boolean,
 }): {
 	aspectRatio?: string,
 } {
@@ -74,7 +69,6 @@ export function aspectRatioToWPCompatible({
 	}
 
 	if (
-		!isNormalState() ||
 		newValue === '' ||
 		isUndefined(newValue) ||
 		// Only valid items
@@ -95,11 +89,9 @@ export const coreWPFitValues = ['cover', 'contain'];
 export function fitToWPCompatible({
 	newValue,
 	ref,
-	isNormalState,
 }: {
 	newValue: string | Object,
 	ref: Object,
-	isNormalState: () => boolean,
 }): {
 	scale?: string,
 } {
@@ -110,7 +102,6 @@ export function fitToWPCompatible({
 	}
 
 	if (
-		!isNormalState() ||
 		newValue === '' ||
 		isUndefined(newValue) ||
 		// Only valid items

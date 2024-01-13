@@ -10,7 +10,6 @@ import { isSpecialUnit } from '@publisher/controls';
 export function toSimpleStyleWPCompatible({
 	wpAttribute,
 	newValue,
-	isNormalState,
 	ref,
 	getAttributes = null,
 }: {
@@ -19,10 +18,9 @@ export function toSimpleStyleWPCompatible({
 	 */
 	wpAttribute: string,
 	newValue: string | Object,
-	isNormalState: () => boolean,
 	ref: Object,
 	getAttributes?: null | (() => Object),
-}): string | Object {
+}): Object {
 	if ('reset' === ref?.current?.action) {
 		if (typeof getAttributes === 'function') {
 			const blockAttributes = getAttributes();
@@ -41,7 +39,6 @@ export function toSimpleStyleWPCompatible({
 	}
 
 	if (
-		!isNormalState() ||
 		newValue === '' ||
 		isUndefined(newValue) ||
 		isSpecialUnit(newValue) ||
@@ -56,7 +53,7 @@ export function toSimpleStyleWPCompatible({
 
 		return {
 			style: {
-				...(blockAttributes.attributes?.style ?? {}),
+				...(blockAttributes?.style ?? {}),
 				[wpAttribute]: newValue,
 			},
 		};
@@ -70,7 +67,6 @@ export function toSimpleStyleWPCompatible({
 export function toSimpleStyleTypographyWPCompatible({
 	wpAttribute,
 	newValue,
-	isNormalState,
 	ref,
 	getAttributes = null,
 }: {
@@ -79,10 +75,9 @@ export function toSimpleStyleTypographyWPCompatible({
 	 */
 	wpAttribute: string,
 	newValue: string | Object,
-	isNormalState: () => boolean,
 	ref: Object,
 	getAttributes?: null | (() => Object),
-}): string | Object {
+}): Object {
 	if ('reset' === ref?.current?.action) {
 		if (typeof getAttributes === 'function') {
 			const blockAttributes = getAttributes();
@@ -108,7 +103,6 @@ export function toSimpleStyleTypographyWPCompatible({
 	}
 
 	if (
-		!isNormalState() ||
 		newValue === '' ||
 		isUndefined(newValue) ||
 		isSpecialUnit(newValue) ||
@@ -123,7 +117,7 @@ export function toSimpleStyleTypographyWPCompatible({
 
 		return {
 			style: {
-				...(blockAttributes.attributes?.style ?? {}),
+				...(blockAttributes?.style ?? {}),
 				typography: {
 					...(blockAttributes?.style?.typography ?? {}),
 					[wpAttribute]: newValue,

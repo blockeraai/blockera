@@ -133,7 +133,10 @@ export default function StatesManager({
 							const isEqualsWithCurrentState = (type: TStates) =>
 								type === block.attributes.publisherCurrentState;
 
-							if (isEqualsWithCurrentState(selectedState.type)) {
+							if (
+								isEqualsWithCurrentState(selectedState.type) &&
+								states.length
+							) {
 								return;
 							}
 

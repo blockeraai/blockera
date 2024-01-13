@@ -5,6 +5,7 @@
 import { isUndefined, isEmpty } from '@publisher/utils';
 import { computedCssRules } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
+import type { GeneratorReturnType } from '@publisher/style-engine/src/types';
 
 /**
  * Internal dependencies
@@ -50,7 +51,7 @@ export function SizeStyles({
 	blockProps,
 	selector,
 	media,
-}: IConfigs): string {
+}: IConfigs): Array<GeneratorReturnType> {
 	const { attributes: currBlockAttributes } = blockProps;
 	const generators = [];
 	const properties: TSizeCssProps = {};
@@ -223,5 +224,5 @@ export function SizeStyles({
 		)
 	);
 
-	return generators.length > 1 ? generators.join('\n') : generators.join('');
+	return generators.flat();
 }

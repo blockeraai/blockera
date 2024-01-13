@@ -14,14 +14,12 @@ import {
 	SelectControl,
 	useControlContext,
 } from '@publisher/controls';
+import { Flex } from '@publisher/components';
 
 /**
  * Internal dependencies
  */
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
-import { Flex } from '@publisher/components';
-import { aspectRatioToWPCompatible } from '../utils';
-import { useBlockContext } from '../../../hooks';
 
 export default function AspectRatio({
 	block,
@@ -39,18 +37,9 @@ export default function AspectRatio({
 	defaultValue: { value: string, width: string, height: string },
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 }): MixedElement {
-	const { isNormalState } = useBlockContext();
-
 	const { value, attribute, blockName, resetToDefault } = useControlContext({
 		onChange: (newValue, ref) =>
-			handleOnChangeAttributes('publisherRatio', newValue, {
-				ref,
-				addOrModifyRootItems: aspectRatioToWPCompatible({
-					newValue,
-					ref,
-					isNormalState,
-				}),
-			}),
+			handleOnChangeAttributes('publisherRatio', newValue, { ref }),
 		defaultValue,
 	});
 
@@ -150,16 +139,7 @@ export default function AspectRatio({
 								width: '',
 								height: '',
 							},
-							{
-								ref,
-								addOrModifyRootItems: aspectRatioToWPCompatible(
-									{
-										newValue,
-										ref,
-										isNormalState,
-									}
-								),
-							}
+							{ ref }
 						);
 					} else {
 						handleOnChangeAttributes(
@@ -168,16 +148,7 @@ export default function AspectRatio({
 								...ratio,
 								value: newValue,
 							},
-							{
-								ref,
-								addOrModifyRootItems: aspectRatioToWPCompatible(
-									{
-										newValue,
-										ref,
-										isNormalState,
-									}
-								),
-							}
+							{ ref }
 						);
 					}
 				}}
@@ -217,9 +188,7 @@ export default function AspectRatio({
 									...ratio,
 									width: newValue,
 								},
-								{
-									ref,
-								}
+								{ ref }
 							)
 						}
 					/>

@@ -268,5 +268,5 @@ export function TypographyStyles({
 		)
 	);
 
-	return generators.length > 1 ? generators.join('\n') : generators.join('');
+	return generators.flat();
 }

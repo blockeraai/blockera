@@ -20,8 +20,6 @@ import { generateExtensionId } from '../../utils';
 import FontStyleNormalIcon from '../icons/font-style-normal';
 import FontStyleItalicIcon from '../icons/font-style-italic';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
-import { useBlockContext } from '../../../hooks';
-import { toSimpleStyleWPCompatible } from '../../../utils';
 
 export const FontStyle = ({
 	block,
@@ -35,8 +33,6 @@ export const FontStyle = ({
 	defaultValue: string | void,
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
-	const { isNormalState, getAttributes } = useBlockContext();
-
 	return (
 		<ControlContextProvider
 			value={{
@@ -96,18 +92,9 @@ export const FontStyle = ({
 				isDeselectable={true}
 				//
 				defaultValue={defaultValue}
-				onChange={(newValue, ref) => {
-					onChange('publisherFontStyle', newValue, {
-						ref,
-						addOrModifyRootItems: toSimpleStyleWPCompatible({
-							wpAttribute: 'fontStyle',
-							newValue,
-							isNormalState,
-							ref,
-							getAttributes,
-						}),
-					});
-				}}
+				onChange={(newValue, ref) =>
+					onChange('publisherFontStyle', newValue, { ref })
+				}
 				{...props}
 			/>
 		</ControlContextProvider>

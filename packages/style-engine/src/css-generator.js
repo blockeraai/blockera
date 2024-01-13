@@ -4,7 +4,7 @@
  * Internal dependencies
  */
 import { createCssRule } from './utils';
-import type { DynamicStyleFunction } from './types';
+import type { DynamicStyleFunction, GeneratorReturnType } from './types';
 
 export default class CssGenerator {
 	name: string = '';
@@ -46,14 +46,18 @@ export default class CssGenerator {
 			: attributes;
 	}
 
-	rules(): string {
+	rules(): GeneratorReturnType {
 		const addRule = `add${
 			this.type.charAt(0).toUpperCase() + this.type.slice(1)
 		}Rule`;
 
 		// $FlowFixMe
 		if (!this[addRule]) {
-			return '';
+			return {
+				media: this.media,
+				selector: this.selector,
+				properties: this.properties,
+			};
 		}
 
 		// $FlowFixMe

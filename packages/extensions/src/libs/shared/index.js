@@ -125,7 +125,7 @@ type Props = {
 	clientId: string,
 	supports: Object,
 	activeTab: string,
-	attributes: Object,
+	currentStateAttributes: Object,
 	setAttributes: (attributes: Object) => void,
 };
 
@@ -133,11 +133,12 @@ export const SharedBlockExtension: Props = memo(
 	({
 		children,
 		activeTab,
-		attributes,
+		currentStateAttributes,
 		setAttributes,
 		...props
 	}: Props): MixedElement => {
-		const currentState: TStates = attributes.publisherCurrentState;
+		const currentState: TStates =
+			currentStateAttributes.publisherCurrentState;
 		// dev-mode codes 👇 : to debug re-rendering
 		// useTraceUpdate({
 		// 	children,
@@ -147,23 +148,8 @@ export const SharedBlockExtension: Props = memo(
 		// 	...props,
 		// });
 
-		const {
-			blockStateId,
-			breakpointId,
-			isNormalState,
-			handleOnChangeAttributes,
-		} = useBlockContext();
-
-		const currentStateAttributes = isNormalState()
-			? attributes
-			: {
-					...attributes,
-					...(attributes.publisherBlockStates[blockStateId]
-						.breakpoints[breakpointId]
-						? attributes.publisherBlockStates[blockStateId]
-								.breakpoints[breakpointId].attributes
-						: {}),
-			  };
+		const { blockStateId, breakpointId, handleOnChangeAttributes } =
+			useBlockContext();
 
 		const {
 			size,
@@ -195,9 +181,13 @@ export const SharedBlockExtension: Props = memo(
 		);
 
 		const MappedExtensions = (tab: TTabProps): MixedElement => {
-			switch (tab.name) {
-				case 'settings':
-					return (
+			return (
+				<>
+					<div
+						style={{
+							display: 'settings' === tab.name ? 'block' : 'none',
+						}}
+					>
 						<>
 							<BaseExtension
 								{...props}
@@ -241,9 +231,12 @@ export const SharedBlockExtension: Props = memo(
 								name={`block-inspector-tab-${tab.name}-end`}
 							/>
 						</>
-					);
-				case 'style':
-					return (
+					</div>
+					<div
+						style={{
+							display: 'style' === tab.name ? 'block' : 'none',
+						}}
+					>
 						<>
 							<BaseExtension
 								{...props}
@@ -449,6 +442,9 @@ export const SharedBlockExtension: Props = memo(
 								defaultValue={{
 									fontSize:
 										currentStateAttributes.fontSize || '',
+									fontStyle:
+										currentStateAttributes.fontStyle ||
+										'normal',
 									typography:
 										currentStateAttributes.style
 											?.typography || {},
@@ -589,10 +585,9 @@ export const SharedBlockExtension: Props = memo(
 								icon={<AdvancedExtensionIcon />}
 							/>
 						</>
-					);
-			}
-
-			return <></>;
+					</div>
+				</>
+			);
 		};
 
 		const tabs = [

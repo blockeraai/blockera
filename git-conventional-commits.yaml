@@ -1,6 +1,7 @@
 ---
 convention:
     commitTypes:
+        - compat
         - feat
         - fix
         - perf
@@ -27,6 +28,7 @@ changelog:
     commitScopes: []
     commitIgnoreRegexPattern: '^WIP '
     headlines:
+        compat: Compatibilities
         feat: Features
         fix: Bug Fixes
         perf: Performance Improvements

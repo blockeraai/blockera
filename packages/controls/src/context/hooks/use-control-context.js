@@ -25,7 +25,7 @@ import { ControlContext } from '../index';
 import { STORE_NAME as CONTROL_STORE_NAME } from '../../store';
 import { STORE_NAME as REPEATER_STORE_NAME } from '../../libs/repeater-control/store/constants';
 import useControlEffect from './use-control-effect';
-import type { ControlContextHookProps } from '../types';
+import type { ControlContextHookProps, ControlContextRef } from '../types';
 
 //eslint-disable-next-line
 /**
@@ -57,7 +57,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 	};
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const ref = useRef(initialRef);
+	const ref: ControlContextRef = useRef(initialRef);
 
 	const resetRef = (): void => {
 		if (ref) {

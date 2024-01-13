@@ -29,12 +29,7 @@ import { default as OverflowScrollIcon } from './icons/overflow-scroll';
 import { useBlockContext } from '../../hooks';
 import { ObjectFit } from './components';
 import AspectRatio from './components/aspect-ratio';
-import { toSimpleStyleWPCompatible } from '../../utils';
-import {
-	coreWPAspectRatioValues,
-	coreWPFitValues,
-	minHeightToWPCompatible,
-} from './utils';
+import { coreWPAspectRatioValues, coreWPFitValues } from './utils';
 
 export const SizeExtension: MixedElement = memo<TSizeProps>(
 	({
@@ -103,16 +98,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									handleOnChangeAttributes(
 										'publisherWidth',
 										newValue,
-										{
-											ref,
-											addOrModifyRootItems:
-												toSimpleStyleWPCompatible({
-													wpAttribute: 'width',
-													newValue,
-													isNormalState,
-													ref,
-												}),
-										}
+										{ ref }
 									);
 								}}
 								controlAddonTypes={['variable']}
@@ -311,16 +297,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									handleOnChangeAttributes(
 										'publisherHeight',
 										newValue,
-										{
-											ref,
-											addOrModifyRootItems:
-												toSimpleStyleWPCompatible({
-													wpAttribute: 'height',
-													newValue,
-													isNormalState,
-													ref,
-												}),
-										}
+										{ ref }
 									);
 								}}
 								controlAddonTypes={['variable']}
@@ -411,17 +388,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 												handleOnChangeAttributes(
 													'publisherMinHeight',
 													newValue,
-													{
-														ref,
-														addOrModifyRootItems:
-															minHeightToWPCompatible(
-																{
-																	newValue,
-																	ref,
-																	isNormalState,
-																}
-															),
-													}
+													{ ref }
 												)
 											}
 											controlAddonTypes={['variable']}
