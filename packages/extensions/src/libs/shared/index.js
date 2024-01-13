@@ -442,6 +442,9 @@ export const SharedBlockExtension: Props = memo(
 								defaultValue={{
 									fontSize:
 										currentStateAttributes.fontSize || '',
+									fontStyle:
+										currentStateAttributes.fontStyle ||
+										'normal',
 									typography:
 										currentStateAttributes.style
 											?.typography || {},

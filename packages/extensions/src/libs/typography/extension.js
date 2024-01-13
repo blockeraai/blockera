@@ -82,6 +82,7 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 		backgroundClip,
 		defaultValue: {
 			fontSize: defaultFontSize,
+			fontStyle: defaultFontStyle,
 			typography: {
 				//FIXME: Add fontWeight option into extension!
 				// fontWeight: _fontWeight,
@@ -288,11 +289,14 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 										{isActiveField(publisherFontStyle) && (
 											<FontStyle
 												block={block}
-												value={fontStyle || _fontStyle}
+												value={
+													fontStyle ||
+													defaultFontStyle
+												}
 												onChange={
 													handleOnChangeAttributes
 												}
-												defaultValue={_fontStyle}
+												defaultValue={defaultFontStyle}
 												{...extensionProps.publisherFontStyle}
 											/>
 										)}
