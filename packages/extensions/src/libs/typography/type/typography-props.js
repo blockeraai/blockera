@@ -50,6 +50,7 @@ export type TTypographyProps = {
 	children?: MixedElement,
 	defaultValue: {
 		fontSize?: string,
+		fontStyle?: string,
 		typography: {
 			fontSize?: string,
 			fontStyle?: string,

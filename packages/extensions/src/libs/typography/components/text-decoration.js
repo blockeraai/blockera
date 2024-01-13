@@ -22,8 +22,6 @@ import TextDecorationLineThroughIcon from '../icons/text-dectoration-line-throug
 import TextDecorationOverlineIcon from '../icons/text-decoration-overline';
 import NoneIcon from '../icons/none';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
-import { useBlockContext } from '../../../hooks';
-import { toSimpleStyleTypographyWPCompatible } from '../../../utils';
 
 export const TextDecoration = ({
 	block,
@@ -37,8 +35,6 @@ export const TextDecoration = ({
 	defaultValue: string | void,
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
-	const { isNormalState, getAttributes } = useBlockContext();
-
 	return (
 		<ControlContextProvider
 			value={{
@@ -128,19 +124,9 @@ export const TextDecoration = ({
 				isDeselectable={true}
 				//
 				defaultValue={defaultValue}
-				onChange={(newValue, ref) => {
-					onChange('publisherTextDecoration', newValue, {
-						ref,
-						addOrModifyRootItems:
-							toSimpleStyleTypographyWPCompatible({
-								wpAttribute: 'lineHeight',
-								newValue,
-								isNormalState,
-								ref,
-								getAttributes,
-							}),
-					});
-				}}
+				onChange={(newValue, ref) =>
+					onChange('publisherTextDecoration', newValue, { ref })
+				}
 				{...props}
 			/>
 		</ControlContextProvider>
