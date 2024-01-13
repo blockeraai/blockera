@@ -144,6 +144,14 @@ export function BlockBase({
 		getDeviceType()
 	);
 
+	const getAttributes = (key: string = ''): any => {
+		if (key && attributes[key]) {
+			return attributes[key];
+		}
+
+		return attributes;
+	};
+
 	const { handleOnChangeAttributes } = useAttributes(
 		attributes,
 		setAttributes,
@@ -151,6 +159,7 @@ export function BlockBase({
 			blockStateId,
 			breakpointId,
 			isNormalState,
+			getAttributes,
 		}
 	);
 
@@ -210,13 +219,7 @@ export function BlockBase({
 				breakpointId,
 				isNormalState,
 				setAttributes,
-				getAttributes: (key: string): any => {
-					if (key && attributes[key]) {
-						return attributes[key];
-					}
-
-					return attributes;
-				},
+				getAttributes,
 				activeDeviceType: getDeviceType(),
 				handleOnChangeAttributes,
 				BlockComponent: () => children,
