@@ -117,7 +117,7 @@ export function toSimpleStyleTypographyWPCompatible({
 
 		return {
 			style: {
-				...(blockAttributes.attributes?.style ?? {}),
+				...(blockAttributes?.style ?? {}),
 				typography: {
 					...(blockAttributes?.style?.typography ?? {}),
 					[wpAttribute]: newValue,
