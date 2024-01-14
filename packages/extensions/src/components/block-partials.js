@@ -9,7 +9,16 @@ import { useEffect, memo } from '@wordpress/element';
  */
 import { prependPortal } from '@publisher/utils';
 
+/**
+ * Internal dependencies
+ */
+import { useBlockContext } from '../hooks';
+
 export const BlockPartials = memo(({ currentState }) => {
+	const {
+		block: { clientId },
+	} = useBlockContext();
+
 	useEffect(() => {
 		document.querySelector('.block-editor-block-card')?.remove();
 
@@ -25,11 +34,13 @@ export const BlockPartials = memo(({ currentState }) => {
 			{prependPortal(
 				<>
 					<div className="publisher-block-card-wrapper">
-						<Slot name={'publisher-block-card-content'} />
+						<Slot
+							name={`publisher-block-card-content-${clientId}`}
+						/>
 					</div>
 					<div className="publisher-block-edit-wrapper">
 						<Slot
-							name={`publisher-block-${currentState}-edit-content`}
+							name={`publisher-block-${currentState}-edit-content-${clientId}`}
 						/>
 					</div>
 				</>,

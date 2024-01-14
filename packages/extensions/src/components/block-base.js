@@ -257,7 +257,7 @@ export const BlockBase: BlockBaseProps = memo(
 					</InspectorControls>
 					<div ref={blockEditRef} />
 
-					<Fill name={'publisher-block-card-content'}>
+					<Fill name={`publisher-block-card-content-${clientId}`}>
 						<BlockCard
 							clientId={clientId}
 							states={attributes.publisherBlockStates}
@@ -276,7 +276,7 @@ export const BlockBase: BlockBaseProps = memo(
 					</Fill>
 
 					<Fill
-						name={`publisher-block-${attributes.publisherCurrentState}-edit-content`}
+						name={`publisher-block-${attributes.publisherCurrentState}-edit-content-${clientId}`}
 					>
 						<BlockEditComponent
 							{...{
