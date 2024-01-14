@@ -1,4 +1,4 @@
-export default function InformationIcon() {
+export default function InformationIcon({ ...props }) {
 	return (
 		<svg
 			width="18"
@@ -6,6 +6,7 @@ export default function InformationIcon() {
 			viewBox="0 0 18 18"
 			xmlns="http://www.w3.org/2000/svg"
 			data-test="notice-control-icon-info"
+			{...props}
 		>
 			<path
 				fillRule="evenodd"
