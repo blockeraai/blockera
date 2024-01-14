@@ -15,19 +15,19 @@
 		justify-content: center;
 		align-content: center;
 		justify-items: center;
+		transition: all 0.15s linear 0s, color 0.1s linear 0s;
 
 		&:focus-within {
-			border-color: var(--publisher-controls-border-color) !important;
-			box-shadow: 0 0 0 1px var(--publisher-border-color) !important;
+			border-color: var(--publisher-controls-primary-color) !important;
+			box-shadow: 0 0 0 1px var(--publisher-controls-primary-color) !important;
 		}
 
-		&.layout-matrix__grid-type-space-around,
 		&.layout-matrix__grid-type-stretch {
-			gap: 0;
-			grid-template-columns: repeat(3, 22px);
+			gap: 2px;
+			grid-template-columns: repeat(3, 20px);
 
 			.publisher-control-matrix-item {
-				width: 22px;
+				width: 20px;
 				height: 66px;
 			}
 		}
@@ -141,7 +141,7 @@
 	.item-icon {
 
 		svg {
-			transition: all 0.45s cubic-bezier(0, 0, 0.2, 1);
+			transition: var(--publisher-controls-transition);
 		}
 	}
 
@@ -149,8 +149,20 @@
 
 		.publisher-control-layout-matrix__grid {
 
-			&.layout-matrix__grid-type-space-between,
+			&.layout-matrix__grid-type-space-between {
+				gap: 4px;
+				grid-auto-flow: column;
+				grid-template-rows: repeat(3, 22px);
+				grid-template-columns: 1fr;
+
+				.publisher-control-matrix-item {
+					width: 66px;
+					height: 22px;
+				}
+			}
+
 			&.layout-matrix__grid-type-space-around {
+				gap: 3px;
 				grid-auto-flow: column;
 				grid-template-rows: repeat(3, 22px);
 				grid-template-columns: 1fr;
@@ -167,14 +179,39 @@
 
 		.publisher-control-layout-matrix__grid {
 
+			&.layout-matrix__grid-type-space-between {
+				gap: 4px;
+				grid-auto-flow: row;
+				grid-template-columns: repeat(3, 22px);
+				grid-template-rows: 1fr;
+
+				.publisher-control-matrix-item {
+					width: 22px;
+					height: 66px;
+				}
+			}
+
+			&.layout-matrix__grid-type-space-around {
+				gap: 3px;
+				grid-auto-flow: row;
+				grid-template-columns: repeat(3, 22px);
+				grid-template-rows: 1fr;
+
+				.publisher-control-matrix-item {
+					width: 22px;
+					height: 66px;
+				}
+			}
+
 			&.layout-matrix__grid-type-stretch {
+				gap: 2px;
 				grid-auto-flow: column;
-				grid-template-rows: repeat(3, 22px);
+				grid-template-rows: repeat(3, 20px);
 				grid-template-columns: 1fr;
 
 				.publisher-control-matrix-item {
 					width: 66px;
-					height: 22px;
+					height: 20px;
 				}
 			}
 		}

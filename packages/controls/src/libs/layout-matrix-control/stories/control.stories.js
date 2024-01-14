@@ -1019,3 +1019,121 @@ export const Column = {
 		</Flex>
 	),
 };
+
+export const DisableDirection = {
+	args: {
+		value: {
+			alignItems: '',
+			JustifyContent: '',
+		},
+		label: 'Layout',
+		columns: 'columns-2',
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => (
+		<Flex direction="column" gap="100px">
+			<Flex direction="column" gap="30px">
+				<h2 className="story-heading">Disable Direction</h2>
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">Row Direction</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								alignItems: '',
+								justifyContent: '',
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={LayoutMatrixControl}
+							{...args}
+							isDirectionActive={false}
+							defaultDirection="row"
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">Column Direction</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								alignItems: '',
+								justifyContent: '',
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={LayoutMatrixControl}
+							{...args}
+							isDirectionActive={false}
+							defaultDirection="column"
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">
+						Direction From defaultValue
+					</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								alignItems: '',
+								justifyContent: '',
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={LayoutMatrixControl}
+							{...args}
+							isDirectionActive={false}
+							defaultValue={{
+								direction: 'column',
+							}}
+						/>
+					</ControlContextProvider>
+				</Flex>
+			</Flex>
+		</Flex>
+	),
+};
+
+export const ActiveDense = {
+	args: {
+		value: {
+			alignItems: '',
+			JustifyContent: '',
+		},
+		label: 'Layout',
+		columns: 'columns-2',
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => (
+		<Flex direction="column" gap="100px">
+			<Flex direction="column" gap="30px">
+				<Flex direction="column" gap="15px">
+					<h2 className="story-heading">Row Direction</h2>
+					<ControlContextProvider
+						value={{
+							name: nanoid(),
+							value: {
+								alignItems: '',
+								justifyContent: '',
+							},
+						}}
+					>
+						<ControlWithHooks
+							Control={LayoutMatrixControl}
+							{...args}
+							isDenseActive={true}
+						/>
+					</ControlContextProvider>
+				</Flex>
+			</Flex>
+		</Flex>
+	),
+};
