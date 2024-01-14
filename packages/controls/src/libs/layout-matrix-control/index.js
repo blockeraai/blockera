@@ -21,6 +21,8 @@ import { useControlContext } from '../../context';
 import type { Props } from './types';
 import type { MixedElement } from 'react';
 import { SelectControl, ToggleSelectControl } from '../index';
+import { MatrixItem } from './components/matrix-item';
+// Icons
 import AlignItemsEmptyBlockIcon from './icons/align-items-empty';
 import AlignItemsFlexStartBlockIcon from './icons/align-items-flex-start';
 import AlignItemsFlexEndBlockIcon from './icons/align-items-flex-end';
@@ -34,7 +36,6 @@ import JustifySpaceBetweenIcon from './icons/justify-space-between';
 import JustifyEmptyIcon from './icons/justify-empty';
 import DirectionRowIcon from './icons/direction-row';
 import DirectionColumnIcon from './icons/direction-column';
-import { MatrixItem } from './components/matrix-item';
 import MatrixNormalEmptyIcon from './icons/matrix/matrix-normal-empty';
 import MatrixNormalTopLeftIcon from './icons/matrix/matrix-normal-top-left';
 import MatrixNormalTopCenterIcon from './icons/matrix/matrix-normal-top-center';
@@ -46,18 +47,11 @@ import MatrixNormalBottomLeftIcon from './icons/matrix/matrix-normal-bottom-left
 import MatrixNormalBottomCenterIcon from './icons/matrix/matrix-normal-bottom-center';
 import MatrixNormalBottomRightIcon from './icons/matrix/matrix-normal-bottom-right';
 import MatrixStretchFillIcon from './icons/matrix/matrix-stretch-fill';
-import MatrixStretchEmptyIcon from './icons/matrix/matrix-stretch-empty';
 import MatrixSpaceAroundStartFillIcon from './icons/matrix/matrix-space-around-start-fill';
-import MatrixSpaceAroundStartEmptyIcon from './icons/matrix/matrix-space-around-start-empty';
-import MatrixSpaceAroundCenterEmptyIcon from './icons/matrix/matrix-space-around-center-empty';
 import MatrixSpaceAroundCenterFillIcon from './icons/matrix/matrix-space-around-center-fill';
-import MatrixSpaceAroundEndEmptyIcon from './icons/matrix/matrix-space-around-end-empty';
 import MatrixSpaceAroundEndFillIcon from './icons/matrix/matrix-space-around-end-fill';
-import MatrixSpaceBetweenStartEmptyIcon from './icons/matrix/matrix-space-between-start-empty';
 import MatrixSpaceBetweenStartFillIcon from './icons/matrix/matrix-space-between-start-fill';
-import MatrixSpaceBetweenCenterEmptyIcon from './icons/matrix/matrix-space-between-center-empty';
 import MatrixSpaceBetweenCenterFillIcon from './icons/matrix/matrix-space-between-center-fill';
-import MatrixSpaceBetweenEndEmptyIcon from './icons/matrix/matrix-space-between-end-empty';
 import MatrixSpaceBetweenEndFillIcon from './icons/matrix/matrix-space-between-end-fill';
 import MatrixStretchSpaceBetweenIcon from './icons/matrix/matrix-stretch-space-between';
 import MatrixStretchSpaceAroundIcon from './icons/matrix/matrix-stretch-space-around';
@@ -180,11 +174,6 @@ export default function LayoutMatrixControl({
 												direction={direction}
 											/>
 										}
-										hoverIcon={
-											<MatrixNormalTopLeftIcon
-												direction={direction}
-											/>
-										}
 										selectedIcon={
 											<MatrixNormalTopLeftIcon
 												direction={direction}
@@ -218,11 +207,6 @@ export default function LayoutMatrixControl({
 										}
 										normalIcon={
 											<MatrixNormalEmptyIcon
-												direction={direction}
-											/>
-										}
-										hoverIcon={
-											<MatrixNormalTopCenterIcon
 												direction={direction}
 											/>
 										}
@@ -269,11 +253,6 @@ export default function LayoutMatrixControl({
 										}
 										normalIcon={
 											<MatrixNormalEmptyIcon
-												direction={direction}
-											/>
-										}
-										hoverIcon={
-											<MatrixNormalTopRightIcon
 												direction={direction}
 											/>
 										}
@@ -324,11 +303,6 @@ export default function LayoutMatrixControl({
 												direction={direction}
 											/>
 										}
-										hoverIcon={
-											<MatrixNormalCenterLeftIcon
-												direction={direction}
-											/>
-										}
 										selectedIcon={
 											<MatrixNormalCenterLeftIcon
 												direction={direction}
@@ -375,11 +349,6 @@ export default function LayoutMatrixControl({
 												direction={direction}
 											/>
 										}
-										hoverIcon={
-											<MatrixNormalCenterCenterIcon
-												direction={direction}
-											/>
-										}
 										selectedIcon={
 											<MatrixNormalCenterCenterIcon
 												direction={direction}
@@ -413,11 +382,6 @@ export default function LayoutMatrixControl({
 										}
 										normalIcon={
 											<MatrixNormalEmptyIcon
-												direction={direction}
-											/>
-										}
-										hoverIcon={
-											<MatrixNormalCenterRightIcon
 												direction={direction}
 											/>
 										}
@@ -467,11 +431,6 @@ export default function LayoutMatrixControl({
 												direction={direction}
 											/>
 										}
-										hoverIcon={
-											<MatrixNormalBottomLeftIcon
-												direction={direction}
-											/>
-										}
 										selectedIcon={
 											<MatrixNormalBottomLeftIcon
 												direction={direction}
@@ -515,11 +474,6 @@ export default function LayoutMatrixControl({
 										}
 										normalIcon={
 											<MatrixNormalEmptyIcon
-												direction={direction}
-											/>
-										}
-										hoverIcon={
-											<MatrixNormalBottomCenterIcon
 												direction={direction}
 											/>
 										}
@@ -568,11 +522,6 @@ export default function LayoutMatrixControl({
 												direction={direction}
 											/>
 										}
-										hoverIcon={
-											<MatrixNormalBottomRightIcon
-												direction={direction}
-											/>
-										}
 										selectedIcon={
 											<MatrixNormalBottomRightIcon
 												direction={direction}
@@ -610,11 +559,6 @@ export default function LayoutMatrixControl({
 												'space-around'
 										}
 										normalIcon={
-											<MatrixStretchSpaceAroundIcon
-												direction={direction}
-											/>
-										}
-										hoverIcon={
 											<MatrixStretchSpaceAroundIcon
 												direction={direction}
 											/>
@@ -659,11 +603,6 @@ export default function LayoutMatrixControl({
 												direction={direction}
 											/>
 										}
-										hoverIcon={
-											<MatrixStretchSpaceBetweenIcon
-												direction={direction}
-											/>
-										}
 										selectedIcon={
 											<MatrixStretchSpaceBetweenIcon
 												direction={direction}
@@ -700,11 +639,6 @@ export default function LayoutMatrixControl({
 												'flex-start'
 										}
 										normalIcon={
-											<MatrixStretchEmptyIcon
-												direction={direction}
-											/>
-										}
-										hoverIcon={
 											<MatrixStretchFillIcon
 												direction={direction}
 											/>
@@ -741,11 +675,6 @@ export default function LayoutMatrixControl({
 											value.justifyContent === 'center'
 										}
 										normalIcon={
-											<MatrixStretchEmptyIcon
-												direction={direction}
-											/>
-										}
-										hoverIcon={
 											<MatrixStretchFillIcon
 												direction={direction}
 											/>
@@ -781,11 +710,6 @@ export default function LayoutMatrixControl({
 											value.justifyContent === 'flex-end'
 										}
 										normalIcon={
-											<MatrixStretchEmptyIcon
-												direction={direction}
-											/>
-										}
-										hoverIcon={
 											<MatrixStretchFillIcon
 												direction={direction}
 											/>
@@ -826,11 +750,6 @@ export default function LayoutMatrixControl({
 												'space-around'
 										}
 										normalIcon={
-											<MatrixSpaceAroundStartEmptyIcon
-												direction={direction}
-											/>
-										}
-										hoverIcon={
 											<MatrixSpaceAroundStartFillIcon
 												direction={direction}
 											/>
@@ -868,11 +787,6 @@ export default function LayoutMatrixControl({
 												'space-around'
 										}
 										normalIcon={
-											<MatrixSpaceAroundCenterEmptyIcon
-												direction={direction}
-											/>
-										}
-										hoverIcon={
 											<MatrixSpaceAroundCenterFillIcon
 												direction={direction}
 											/>
@@ -909,11 +823,6 @@ export default function LayoutMatrixControl({
 												'space-around'
 										}
 										normalIcon={
-											<MatrixSpaceAroundEndEmptyIcon
-												direction={direction}
-											/>
-										}
-										hoverIcon={
 											<MatrixSpaceAroundEndFillIcon
 												direction={direction}
 											/>
@@ -954,11 +863,6 @@ export default function LayoutMatrixControl({
 												'space-between'
 										}
 										normalIcon={
-											<MatrixSpaceBetweenStartEmptyIcon
-												direction={direction}
-											/>
-										}
-										hoverIcon={
 											<MatrixSpaceBetweenStartFillIcon
 												direction={direction}
 											/>
@@ -996,11 +900,6 @@ export default function LayoutMatrixControl({
 												'space-between'
 										}
 										normalIcon={
-											<MatrixSpaceBetweenCenterEmptyIcon
-												direction={direction}
-											/>
-										}
-										hoverIcon={
 											<MatrixSpaceBetweenCenterFillIcon
 												direction={direction}
 											/>
@@ -1038,11 +937,6 @@ export default function LayoutMatrixControl({
 												'space-between'
 										}
 										normalIcon={
-											<MatrixSpaceBetweenEndEmptyIcon
-												direction={direction}
-											/>
-										}
-										hoverIcon={
 											<MatrixSpaceBetweenEndFillIcon
 												direction={direction}
 											/>

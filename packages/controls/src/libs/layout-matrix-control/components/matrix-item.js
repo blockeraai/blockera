@@ -15,14 +15,12 @@ export function MatrixItem({
 	selected = false,
 	normalIcon,
 	selectedIcon,
-	hoverIcon,
 	onClick,
 	onMouseDown,
 }: {
 	id: string,
 	selected: boolean,
 	normalIcon: MixedElement,
-	hoverIcon: MixedElement,
 	selectedIcon: MixedElement,
 	onClick?: () => void,
 	onMouseDown?: (event: MouseEvent) => void,
@@ -45,14 +43,6 @@ export function MatrixItem({
 				)}
 			>
 				{normalIcon}
-			</span>
-			<span
-				className={controlInnerClassNames(
-					'matrix-item-icon',
-					'matrix-item-icon-hover'
-				)}
-			>
-				{hoverIcon}
 			</span>
 			<span
 				className={controlInnerClassNames(
