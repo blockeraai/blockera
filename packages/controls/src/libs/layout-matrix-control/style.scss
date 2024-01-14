@@ -162,7 +162,7 @@
 			}
 
 			&.layout-matrix__grid-type-space-around {
-				gap: 3px;
+				gap: 1px;
 				grid-auto-flow: column;
 				grid-template-rows: repeat(3, 22px);
 				grid-template-columns: 1fr;
@@ -192,7 +192,7 @@
 			}
 
 			&.layout-matrix__grid-type-space-around {
-				gap: 3px;
+				gap: 1px;
 				grid-auto-flow: row;
 				grid-template-columns: repeat(3, 22px);
 				grid-template-rows: 1fr;
