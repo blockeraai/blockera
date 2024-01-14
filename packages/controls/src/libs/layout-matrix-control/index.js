@@ -4,6 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+import { useRef } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -147,6 +148,21 @@ export default function LayoutMatrixControl({
 		direction = defaultDirection || defaultValue?.direction || 'row';
 	}
 
+	const clickTimerRef = useRef();
+
+	const onClickHandler = (
+		event?: MouseEvent,
+		itemEvent?: () => void
+	): void => {
+		clearTimeout(clickTimerRef.current);
+
+		if (event?.detail === 1) {
+			clickTimerRef.current = setTimeout(onClickHandler, 100);
+		} else if (event?.detail === 2 && typeof itemEvent === 'function') {
+			itemEvent();
+		}
+	};
+
 	return (
 		<BaseControl
 			columns={columns}
@@ -198,14 +214,13 @@ export default function LayoutMatrixControl({
 										});
 									}}
 									onMouseDown={(event: MouseEvent) => {
-										// prevent to catch double click
-										if (event.detail > 1) {
+										onClickHandler(event, () => {
 											setValue({
 												...value,
 												alignItems: 'flex-start',
 												justifyContent: 'space-between',
 											});
-										}
+										});
 									}}
 								/>
 
@@ -233,8 +248,7 @@ export default function LayoutMatrixControl({
 										});
 									}}
 									onMouseDown={(event: MouseEvent) => {
-										// prevent to catch double click
-										if (event.detail > 1) {
+										onClickHandler(event, () => {
 											if (direction === 'row') {
 												setValue({
 													...value,
@@ -250,7 +264,7 @@ export default function LayoutMatrixControl({
 														'space-between',
 												});
 											}
-										}
+										});
 									}}
 								/>
 
@@ -278,8 +292,7 @@ export default function LayoutMatrixControl({
 										});
 									}}
 									onMouseDown={(event: MouseEvent) => {
-										// prevent to catch double click
-										if (event.detail > 1) {
+										onClickHandler(event, () => {
 											if (direction === 'row') {
 												setValue({
 													...value,
@@ -295,7 +308,7 @@ export default function LayoutMatrixControl({
 														'space-between',
 												});
 											}
-										}
+										});
 									}}
 								/>
 
@@ -323,8 +336,7 @@ export default function LayoutMatrixControl({
 										});
 									}}
 									onMouseDown={(event: MouseEvent) => {
-										// prevent to catch double click
-										if (event.detail > 1) {
+										onClickHandler(event, () => {
 											if (direction === 'row') {
 												setValue({
 													...value,
@@ -340,7 +352,7 @@ export default function LayoutMatrixControl({
 														'space-between',
 												});
 											}
-										}
+										});
 									}}
 								/>
 
@@ -368,14 +380,13 @@ export default function LayoutMatrixControl({
 										});
 									}}
 									onMouseDown={(event: MouseEvent) => {
-										// prevent to catch double click
-										if (event.detail > 1) {
+										onClickHandler(event, () => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'space-between',
 											});
-										}
+										});
 									}}
 								/>
 
@@ -403,8 +414,7 @@ export default function LayoutMatrixControl({
 										});
 									}}
 									onMouseDown={(event: MouseEvent) => {
-										// prevent to catch double click
-										if (event.detail > 1) {
+										onClickHandler(event, () => {
 											if (direction === 'row') {
 												setValue({
 													...value,
@@ -420,7 +430,7 @@ export default function LayoutMatrixControl({
 														'space-between',
 												});
 											}
-										}
+										});
 									}}
 								/>
 
@@ -448,8 +458,7 @@ export default function LayoutMatrixControl({
 										});
 									}}
 									onMouseDown={(event: MouseEvent) => {
-										// prevent to catch double click
-										if (event.detail > 1) {
+										onClickHandler(event, () => {
 											if (direction === 'row') {
 												setValue({
 													...value,
@@ -465,7 +474,7 @@ export default function LayoutMatrixControl({
 														'space-between',
 												});
 											}
-										}
+										});
 									}}
 								/>
 
@@ -493,8 +502,7 @@ export default function LayoutMatrixControl({
 										});
 									}}
 									onMouseDown={(event: MouseEvent) => {
-										// prevent to catch double click
-										if (event.detail > 1) {
+										onClickHandler(event, () => {
 											if (direction === 'row') {
 												setValue({
 													...value,
@@ -510,7 +518,7 @@ export default function LayoutMatrixControl({
 														'space-between',
 												});
 											}
-										}
+										});
 									}}
 								/>
 
@@ -538,14 +546,13 @@ export default function LayoutMatrixControl({
 										});
 									}}
 									onMouseDown={(event: MouseEvent) => {
-										// prevent to catch double click
-										if (event.detail > 1) {
+										onClickHandler(event, () => {
 											setValue({
 												...value,
 												alignItems: 'flex-end',
 												justifyContent: 'space-between',
 											});
-										}
+										});
 									}}
 								/>
 							</>
@@ -577,14 +584,13 @@ export default function LayoutMatrixControl({
 										});
 									}}
 									onMouseDown={(event: MouseEvent) => {
-										// prevent to catch double click
-										if (event.detail > 1) {
+										onClickHandler(event, () => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'center',
 											});
-										}
+										});
 									}}
 								/>
 							</>
@@ -616,14 +622,13 @@ export default function LayoutMatrixControl({
 										});
 									}}
 									onMouseDown={(event: MouseEvent) => {
-										// prevent to catch double click
-										if (event.detail > 1) {
+										onClickHandler(event, () => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'center',
 											});
-										}
+										});
 									}}
 								/>
 							</>
@@ -655,14 +660,13 @@ export default function LayoutMatrixControl({
 										});
 									}}
 									onMouseDown={(event: MouseEvent) => {
-										// prevent to catch double click
-										if (event.detail > 1) {
+										onClickHandler(event, () => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'flex-start',
 											});
-										}
+										});
 									}}
 								/>
 
@@ -690,14 +694,13 @@ export default function LayoutMatrixControl({
 										});
 									}}
 									onMouseDown={(event: MouseEvent) => {
-										// prevent to catch double click
-										if (event.detail > 1) {
+										onClickHandler(event, () => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'center',
 											});
-										}
+										});
 									}}
 								/>
 
@@ -725,14 +728,13 @@ export default function LayoutMatrixControl({
 										});
 									}}
 									onMouseDown={(event: MouseEvent) => {
-										// prevent to catch double click
-										if (event.detail > 1) {
+										onClickHandler(event, () => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'flex-end',
 											});
-										}
+										});
 									}}
 								/>
 							</>
@@ -764,14 +766,13 @@ export default function LayoutMatrixControl({
 										});
 									}}
 									onMouseDown={(event: MouseEvent) => {
-										// prevent to catch double click
-										if (event.detail > 1) {
+										onClickHandler(event, () => {
 											setValue({
 												...value,
 												alignItems: 'stretch',
 												justifyContent: 'flex-start',
 											});
-										}
+										});
 									}}
 								/>
 
@@ -799,14 +800,13 @@ export default function LayoutMatrixControl({
 										});
 									}}
 									onMouseDown={(event: MouseEvent) => {
-										// prevent to catch double click
-										if (event.detail > 1) {
+										onClickHandler(event, () => {
 											setValue({
 												...value,
 												alignItems: 'stretch',
 												justifyContent: 'center',
 											});
-										}
+										});
 									}}
 								/>
 
@@ -834,14 +834,13 @@ export default function LayoutMatrixControl({
 										});
 									}}
 									onMouseDown={(event: MouseEvent) => {
-										// prevent to catch double click
-										if (event.detail > 1) {
+										onClickHandler(event, () => {
 											setValue({
 												...value,
 												alignItems: 'stretch',
 												justifyContent: 'flex-end',
 											});
-										}
+										});
 									}}
 								/>
 							</>
@@ -873,14 +872,13 @@ export default function LayoutMatrixControl({
 										});
 									}}
 									onMouseDown={(event: MouseEvent) => {
-										// prevent to catch double click
-										if (event.detail > 1) {
+										onClickHandler(event, () => {
 											setValue({
 												...value,
 												alignItems: 'flex-start',
 												justifyContent: 'space-around',
 											});
-										}
+										});
 									}}
 								/>
 
@@ -908,14 +906,13 @@ export default function LayoutMatrixControl({
 										});
 									}}
 									onMouseDown={(event: MouseEvent) => {
-										// prevent to catch double click
-										if (event.detail > 1) {
+										onClickHandler(event, () => {
 											setValue({
 												...value,
 												alignItems: 'center',
 												justifyContent: 'space-around',
 											});
-										}
+										});
 									}}
 								/>
 
@@ -943,14 +940,13 @@ export default function LayoutMatrixControl({
 										});
 									}}
 									onMouseDown={(event: MouseEvent) => {
-										// prevent to catch double click
-										if (event.detail > 1) {
+										onClickHandler(event, () => {
 											setValue({
 												...value,
 												alignItems: 'flex-end',
 												justifyContent: 'space-around',
 											});
-										}
+										});
 									}}
 								/>
 							</>
