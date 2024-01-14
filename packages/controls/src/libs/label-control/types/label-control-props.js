@@ -9,8 +9,8 @@ import type { ControlGeneralTypes } from '../../../types';
 export type LabelControlProps = {
 	...ControlGeneralTypes,
 	value?: any,
-	blockName?: string,
-	attribute?: string,
+	blockName: string,
+	attribute: string,
 	ariaLabel?: string,
 	path?: string | null,
 	repeaterItem?: number,

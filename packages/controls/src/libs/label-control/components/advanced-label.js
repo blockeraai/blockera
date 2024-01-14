@@ -80,7 +80,7 @@ export const AdvancedLabelControl = ({
 	// Assume singularId is set and path include attribute so,
 	// attribute is object has nested props therefore we can exclude attribute from recieved path,
 	// so that we can prepare path to reset actions!
-	if (-1 !== path.indexOf(attribute) && singularId) {
+	if (path && -1 !== path.indexOf(attribute) && singularId) {
 		path = path.replace(`${attribute}.`, '');
 	}
 

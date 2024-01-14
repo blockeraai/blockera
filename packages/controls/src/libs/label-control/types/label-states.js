@@ -19,6 +19,5 @@ export type LabelStates = {
 		...StateGraph,
 	},
 	controlId?: string,
-	changedStates: LabelChangedStates,
 	isChangedState: (activeState: string) => Object,
 };

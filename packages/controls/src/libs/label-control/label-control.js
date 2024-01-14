@@ -26,11 +26,7 @@ const LabelControl = ({
 	resetToDefault,
 	...props
 }: LabelControlProps): MixedElement => {
-	if (
-		'advanced' === mode &&
-		'undefined' !== typeof attribute &&
-		'undefined' !== typeof blockName
-	) {
+	if ('advanced' === mode) {
 		return (
 			<AdvancedLabelControl
 				{...{

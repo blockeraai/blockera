@@ -34,7 +34,7 @@ export type StateGraphItem = {
 	breakpoints: BreakpointTypes,
 };
 
-export type StateGraphStates = Array<StateGraphItem>;
+export type StateGraphStates = Array<StateGraphItem> | [];
 
 export type StateGraph = {
 	type: TBreakpoint,
@@ -57,9 +57,15 @@ export const getBlockStates = (): Array<StateGraph> => {
 
 	return breakpoints
 		.map((breakpoint: BreakpointTypes): StateGraph => {
-			const states = block.attributes.publisherBlockStates
+			let states: StateGraphStates = [];
+
+			states = block.attributes.publisherBlockStates
 				.map((state: StateTypes): State => {
-					if ('normal' === state.type) {
+					if (
+						'normal' === state.type &&
+						breakpoint.type ===
+							block.attributes.publisherCurrentDevice
+					) {
 						return {
 							type: state.type,
 							label: state.label,
@@ -88,8 +94,13 @@ export const getBlockStates = (): Array<StateGraph> => {
 			};
 		})
 		.map((graph: StateGraph): StateGraph => {
+			if (!graph.states.length) {
+				return graph;
+			}
+
 			return {
 				...graph,
+				// $FlowFixMe
 				states: graph.states.filter(
 					(state: { ...State, ...StateGraphItem }): boolean => {
 						if (
