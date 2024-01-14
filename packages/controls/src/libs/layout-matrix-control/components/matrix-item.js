@@ -4,10 +4,11 @@
  * External Dependencies
  */
 import type { MixedElement } from 'react';
-import { useState } from '@wordpress/element';
 
+/**
+ * Publisher Dependencies
+ */
 import { controlInnerClassNames } from '@publisher/classnames';
-import { useLateEffect } from '@publisher/utils';
 
 export function MatrixItem({
 	id,
@@ -26,63 +27,41 @@ export function MatrixItem({
 	onClick?: () => void,
 	onMouseDown?: (event: MouseEvent) => void,
 }): MixedElement {
-	const [itemState, setItemState] = useState(
-		selected ? 'selected' : 'normal'
-	);
-
-	useLateEffect(() => {
-		setItemState(selected ? 'selected' : 'normal');
-	}, [selected]);
-
 	return (
 		<span
 			className={controlInnerClassNames(
 				'matrix-item',
 				'matrix-item-' + id,
-				'matrix-item-' + itemState
+				'matrix-item-' + (selected ? 'selected' : 'normal')
 			)}
 			onClick={onClick}
 			onMouseDown={onMouseDown}
 			tabIndex="0"
-			{...(itemState !== 'selected'
-				? {
-						onMouseEnter: () => {
-							if (itemState === 'selected') {
-								return;
-							}
-
-							setItemState('hover');
-						},
-						onMouseLeave: () => {
-							if (itemState === 'selected') {
-								return;
-							}
-
-							setItemState('normal');
-						},
-						onKeyDown: (event) => {
-							if (itemState === 'selected') {
-								return;
-							}
-
-							if (
-								event.code === 'Enter' ||
-								event.code === 'NumpadEnter'
-							) {
-								event.preventDefault();
-								setItemState('selected');
-
-								if (onClick) {
-									onClick();
-								}
-							}
-						},
-				  }
-				: {})}
 		>
-			{itemState === 'normal' && normalIcon}
-			{itemState === 'hover' && hoverIcon}
-			{itemState === 'selected' && selectedIcon}
+			<span
+				className={controlInnerClassNames(
+					'matrix-item-icon',
+					'matrix-item-icon-normal'
+				)}
+			>
+				{normalIcon}
+			</span>
+			<span
+				className={controlInnerClassNames(
+					'matrix-item-icon',
+					'matrix-item-icon-hover'
+				)}
+			>
+				{hoverIcon}
+			</span>
+			<span
+				className={controlInnerClassNames(
+					'matrix-item-icon',
+					'matrix-item-icon-selected'
+				)}
+			>
+				{selectedIcon}
+			</span>
 		</span>
 	);
 }

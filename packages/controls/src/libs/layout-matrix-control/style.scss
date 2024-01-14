@@ -38,20 +38,44 @@
 			cursor: pointer;
 			color: var(--publisher-controls-color);
 			display: flex;
-			align-items: center;
 			justify-content: center;
+			align-content: flex-end;
+			align-items: center;
 
 			svg {
 				fill: currentColor;
 			}
 
-			&.matrix-item-hover {
-				color: var(--publisher-controls-primary-color);
-				opacity: 0.5;
+			.publisher-control-matrix-item-icon {
+				display: none;
 			}
 
 			&.matrix-item-selected {
-				color: var(--publisher-controls-primary-color);
+
+				.matrix-item-icon-selected {
+					display: flex;
+					color: var(--publisher-controls-primary-color);
+				}
+			}
+
+			&.matrix-item-normal {
+
+				.matrix-item-icon-normal {
+					display: flex;
+				}
+
+				&:hover {
+
+					.matrix-item-icon-normal {
+						display: none;
+					}
+
+					.matrix-item-icon-hover {
+						display: flex;
+						color: var(--publisher-controls-primary-color);
+						opacity: 0.5;
+					}
+				}
 			}
 		}
 
