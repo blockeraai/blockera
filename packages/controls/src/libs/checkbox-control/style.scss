@@ -28,4 +28,15 @@
 			border-color: var(--publisher-controls-border-color-hover);
 		}
 	}
+
+	.components-checkbox-control__label {
+		display: inline-flex;
+		gap: 4px;
+		align-items: center;
+
+		* {
+			display: inline-flex;
+			align-items: center;
+		}
+	}
 }
