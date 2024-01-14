@@ -1,5 +1,6 @@
 // @flow
 
+export * from './utils';
 export * from './block-base';
 export * from './block-portals';
 export * from './canvas-editor';

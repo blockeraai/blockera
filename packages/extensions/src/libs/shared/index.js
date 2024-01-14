@@ -82,7 +82,7 @@ import {
 	attributes as mouseAttributes,
 	supports as mouseSupports,
 } from '../mouse';
-import { hasSameProps } from '../utils';
+import { propsAreEqual } from '../../components';
 import extensions from './extensions.json';
 import type { TStates } from '../block-states/types';
 import { useBlockContext } from '../../hooks';
@@ -619,5 +619,5 @@ export const SharedBlockExtension: Props = memo(
 			</StateContainer>
 		);
 	},
-	hasSameProps
+	propsAreEqual
 );
