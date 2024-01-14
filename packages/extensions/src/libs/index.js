@@ -14,11 +14,12 @@ export {
 	supports as flexChildSupports,
 } from './flex-child';
 export {
-	SizeExtensionIcon,
 	SizeStyles,
 	SizeExtension,
-	attributes as sizeAttributes,
+	SizeExtensionIcon,
 	supports as sizeSupports,
+	attributes as sizeAttributes,
+	bootstrap as bootstrapSizeExtension,
 } from './size';
 export {
 	PositionExtensionIcon,
@@ -70,11 +71,12 @@ export {
 	supports as advancedExtensionSupports,
 } from './advanced';
 export {
-	TypographyExtensionIcon,
 	TypographyStyles,
 	TypographyExtension,
-	attributes as typographyExtensionAttributes,
+	TypographyExtensionIcon,
 	supports as typographyExtensionSupports,
+	bootstrap as bootstrapTypographyExtension,
+	attributes as typographyExtensionAttributes,
 } from './typography';
 export {
 	IconExtension,

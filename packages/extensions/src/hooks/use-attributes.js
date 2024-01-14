@@ -3,6 +3,7 @@
 /**
  * External dependencies
  */
+import { applyFilters } from '@wordpress/hooks';
 import { default as memoize } from 'fast-memoize';
 
 /**
@@ -13,9 +14,7 @@ import { deletePropertyByPath, isEquals } from '@publisher/utils';
 /**
  * Internal dependencies
  */
-import { useFilterAttributes } from './use-filter-attributes';
 import type { THandleOnChangeAttributes } from '../libs/types';
-import { addFilter, applyFilters } from '@wordpress/hooks';
 
 export const useAttributes = (
 	attributes: Object,
@@ -34,7 +33,6 @@ export const useAttributes = (
 ): {
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 } => {
-	const { toWPCompat } = useFilterAttributes();
 	const handleOnChangeAttributes: THandleOnChangeAttributes = (
 		attributeId,
 		newValue,
@@ -48,15 +46,6 @@ export const useAttributes = (
 			deleteItemsOnResetAction = [],
 		} = options;
 		let _attributes = { ...attributes, ...addOrModifyRootItems };
-
-		const hookName = 'publisher-core-block-set-attributes';
-
-		/**
-		 * Fire 'publisher-core/block/extensions/set-attributes' hook to filter nextState.
-		 *
-		 * @since 1.0.0
-		 */
-		addFilter(hookName, `${hookName}-to-wp-compat-support`, toWPCompat, 10);
 
 		const deleteExtraItems = (items: Array<string>, from: Object): void => {
 			if (items?.length) {
@@ -131,7 +120,7 @@ export const useAttributes = (
 				 * @since 1.0.0
 				 */
 				applyFilters(
-					hookName,
+					'publisherCore.blockEdit.setAttributes',
 					{
 						..._attributes,
 						// $FlowFixMe
