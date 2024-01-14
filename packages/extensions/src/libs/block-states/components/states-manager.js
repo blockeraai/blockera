@@ -70,6 +70,10 @@ export default function StatesManager({
 			// delete item.callback;
 			delete item.getBreakpoints;
 
+			if (value.length > 1) {
+				item.display = true;
+			}
+
 			item?.breakpoints?.map((breakpoint) => {
 				delete breakpoint.force;
 				delete breakpoint.settings;
