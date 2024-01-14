@@ -108,7 +108,11 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 							<BlockPortals
 								blockId={`#block-${props.clientId}`}
 								mainSlot={'publisher-core-block-slot'}
-								slots={additional?.slotSelectors || {}}
+								slots={
+									// slot selectors is feature on configuration block to create custom slots for anywhere.
+									// we can add slotSelectors property on block configuration to handle custom preview of block.
+									additional?.slotSelectors || {}
+								}
 							/>
 
 							<Slot name={'publisher-core-block-after'} />
