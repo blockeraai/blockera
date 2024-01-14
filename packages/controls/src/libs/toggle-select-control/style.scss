@@ -19,6 +19,7 @@
 		.components-toggle-group-control-option-base {
 			width: 100% !important;
 			padding: 0 5px !important;
+			transition: all ease 100ms;
 
 			// remove inner item style for focus
 
@@ -26,6 +27,10 @@
 				border: none !important;
 				box-shadow: none !important;
 				outline: none !important;
+			}
+
+			&:hover:not([aria-pressed="true"]) {
+				color: var(--publisher-controls-primary-color);
 			}
 		}
 
