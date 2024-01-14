@@ -93,11 +93,9 @@ class Parser {
 		'layout'            => [
 			'publisherGap',
 			'publisherDisplay',
+			'publisherFlexLayout',
 			'publisherFlexWrap',
-			'publisherAlignItems',
 			'publisherAlignContent',
-			'publisherFlexDirection',
-			'publisherJustifyContent',
 			'publisherFlexChildAlign',
 			'publisherFlexChildOrder',
 			'publisherFlexChildSizing',
