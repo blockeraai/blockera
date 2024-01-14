@@ -84,10 +84,8 @@ class LayoutStyle extends SimpleStyle {
 			'publisherDisplay'         => 'display',
 			'publisherFlexWrap'        => 'flex-wrap',
 			'publisherFlexChildAlign'  => 'align-self',
-			'publisherAlignItems'      => 'align-items',
 			'publisherAlignContent'    => 'align-content',
-			'publisherFlexDirection'   => 'flex-direction',
-			'publisherJustifyContent'  => 'justify-content',
+			'publisherFlexLayout'      => 'flex-direction',
 		];
 
 		return $mappedProps[ $propId ] ?? $propId;

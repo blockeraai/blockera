@@ -25,11 +25,13 @@ export type TLayoutProps = {
 	values: {
 		gap: { lock: boolean, gap: string, columns: string, rows: string },
 		display: string,
+		flexLayout: {
+			direction: string,
+			alignItems: string,
+			justifyContent: string,
+		},
 		flexWrap: { value: string, reverse: boolean },
-		alignItems: string,
 		alignContent: string,
-		flexDirection: { value: string, reverse: boolean },
-		justifyContent: string,
 	},
 	// defaultValue: {
 	// 	type?: string,
@@ -43,6 +45,7 @@ export type TLayoutProps = {
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	extensionProps: {
 		publisherDisplay: Object,
+		publisherFlexLayout: Object,
 		publisherFlexDirection: Object,
 		publisherAlignItems: Object,
 		publisherJustifyContent: Object,

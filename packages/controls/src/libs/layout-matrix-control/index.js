@@ -64,9 +64,9 @@ export default function LayoutMatrixControl({
 	labelDescription,
 	columns,
 	defaultValue = {
+		direction: 'row',
 		alignItems: '',
 		justifyContent: '',
-		direction: 'row',
 		dense: '',
 	},
 	onChange,
@@ -88,6 +88,7 @@ export default function LayoutMatrixControl({
 		id,
 		onChange,
 		defaultValue,
+		mergeInitialAndDefault: true,
 	});
 
 	const labelProps = {
@@ -990,7 +991,7 @@ export default function LayoutMatrixControl({
 										icon: <DirectionColumnIcon />,
 									},
 								]}
-								defaultValue=""
+								defaultValue={defaultValue.direction}
 								onChange={(newValue) =>
 									setValue({
 										...value,
@@ -1058,7 +1059,7 @@ export default function LayoutMatrixControl({
 										})
 									}
 									type="custom"
-									defaultValue="row"
+									defaultValue={defaultValue.alignItems}
 									className="input-hide-label input-hide-caret layout-matrix__align-items"
 								/>
 
@@ -1120,7 +1121,7 @@ export default function LayoutMatrixControl({
 										})
 									}
 									type="custom"
-									defaultValue="row"
+									defaultValue={defaultValue.justifyContent}
 									className="input-hide-label input-hide-caret layout-matrix__justify-content"
 								/>
 							</Flex>

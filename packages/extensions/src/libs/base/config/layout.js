@@ -1,8 +1,6 @@
 export const layoutConfig = {
 	publisherDisplay: true,
-	publisherFlexDirection: true,
-	publisherAlignItems: true,
-	publisherJustifyContent: true,
+	publisherFlexLayout: true,
 	publisherGap: true,
 	publisherFlexWrap: true,
 	publisherAlignContent: true,

@@ -342,9 +342,7 @@ export const SharedBlockExtension: Props = memo(
 								{...props}
 								extensionProps={{
 									publisherDisplay: {},
-									publisherFlexDirection: {},
-									publisherAlignItems: {},
-									publisherJustifyContent: {},
+									publisherFlexLayout: {},
 									publisherGap: {},
 									publisherFlexWrap: {},
 									publisherAlignContent: {},
@@ -395,7 +393,8 @@ export const SharedBlockExtension: Props = memo(
 											flexDirection:
 												directParentBlock
 													?.currentStateAttributes
-													.publisherFlexDirection,
+													?.publisherFlexLayout
+													?.direction || 'row',
 										}}
 										handleOnChangeAttributes={
 											handleOnChangeAttributes

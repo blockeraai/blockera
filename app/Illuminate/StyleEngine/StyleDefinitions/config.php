@@ -728,7 +728,7 @@ return [
 			'property_keys' => [
 				'default' => 'align-items',
 			],
-			'path'          => [ 'publisherLayout', 'publisherAlignItems' ],
+			'path'          => [ 'publisherLayout', 'publisherFlexLayout', 'alignItems' ],
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
@@ -744,7 +744,7 @@ return [
 			'property_keys' => [
 				'default' => 'flex-direction',
 			],
-			'path'          => [ 'publisherLayout', 'publisherFlexDirection', 'value' ],
+			'path'          => [ 'publisherLayout', 'publisherFlexLayout', 'value' ],
 			'css_vars'      => [],
 			'classnames'    => [],
 		],
@@ -752,7 +752,7 @@ return [
 			'property_keys' => [
 				'default' => 'justify-content',
 			],
-			'path'          => [ 'publisherLayout', 'publisherJustifyContent' ],
+			'path'          => [ 'publisherLayout', 'publisherFlexLayout', 'justifyContent' ],
 			'css_vars'      => [],
 			'classnames'    => [],
 		],

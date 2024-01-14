@@ -14,6 +14,7 @@ import {
 	ControlContextProvider,
 	ToggleSelectControl,
 	NoticeControl,
+	LayoutMatrixControl,
 } from '@publisher/controls';
 import { Flex, Button } from '@publisher/components';
 
@@ -34,39 +35,18 @@ import { default as DisplayNoneIcon } from './icons/display-none';
 import { default as DisplayFlexIcon } from './icons/display-flex';
 import { default as DisplayBlockIcon } from './icons/display-block';
 import { default as DisplayInlineIcon } from './icons/display-inline';
-import { default as JustifyCenterIcon } from './icons/justify-center';
-import { default as JustifyFlexEndIcon } from './icons/justify-flex-end';
-import { default as JustifyFlexStartIcon } from './icons/justify-flex-start';
-import { default as JustifySpaceAroundIcon } from './icons/justify-space-around';
-import { default as JustifySpaceEvenlyIcon } from './icons/justify-space-evenly';
 import { default as DisplayInlineBlockIcon } from './icons/display-inline-block';
 import { default as AlignContentCenterIcon } from './icons/align-content-center';
-import { default as FlexDirectionRowBlockIcon } from './icons/flex-direction-row';
-import { default as JustifySpaceBetweenIcon } from './icons/justify-space-between';
-import { default as AlignItemsCenterBlockIcon } from './icons/align-items-center';
 import { default as AlignContentStretchIcon } from './icons/align-content-stretch';
 import { default as AlignContentFlexEndIcon } from './icons/align-content-flex-end';
-import { default as AlignItemsStretchBlockIcon } from './icons/align-items-stretch';
-import { default as AlignItemsFlexEndBlockIcon } from './icons/align-items-flex-end';
-import { default as AlignItemsBaselineBlockIcon } from './icons/align-items-baseline';
-import { default as FlexDirectionColumnBlockIcon } from './icons/flex-direction-column';
 import { default as AlignContentFlexStartIcon } from './icons/align-content-flex-start';
-import { default as AlignItemsFlexStartBlockIcon } from './icons/align-items-flex-start';
 import { default as AlignContentSpaceAroundIcon } from './icons/align-content-space-around';
 import { default as AlignContentSpaceBetweenIcon } from './icons/align-content-space-between';
 
 export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 	({
 		block,
-		values: {
-			gap,
-			display,
-			flexWrap,
-			alignItems,
-			alignContent,
-			flexDirection,
-			justifyContent,
-		},
+		values: { gap, display, flexLayout, flexWrap, alignContent },
 		// defaultValue: {
 		// 	type,
 		// 	wideSize,
@@ -80,9 +60,7 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 		const {
 			layoutConfig: {
 				publisherDisplay,
-				publisherFlexDirection,
-				publisherAlignItems,
-				publisherJustifyContent,
+				publisherFlexLayout,
 				publisherGap,
 				publisherFlexWrap,
 				publisherAlignContent,
@@ -103,11 +81,6 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 			}
 			// eslint-disable-next-line
 		}, [display]);
-
-		const flexDirectionClassName =
-			'publisher-direction-' +
-			flexDirection.value +
-			(flexDirection.reverse ? '-reverse' : '');
 
 		return (
 			<>
@@ -259,497 +232,50 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 
 				{display === 'flex' && (
 					<>
-						{isActiveField(publisherFlexDirection) && (
-							<BaseControl columns="columns-1">
-								<Flex>
-									<ControlContextProvider
-										value={{
-											name: generateExtensionId(
-												block,
-												'direction'
-											),
-											value: flexDirection.value,
-											attribute: 'publisherFlexDirection',
-											blockName: block.blockName,
-											type: 'nested',
-										}}
-									>
-										<ToggleSelectControl
-											className={
-												flexDirectionClassName +
-												' publisher-flex-direction'
-											}
-											label={__(
-												'Direction',
-												'publisher-core'
-											)}
-											labelPopoverTitle={__(
-												'Flex Direction',
-												'publisher-core'
-											)}
-											labelDescription={
-												<>
-													<p>
-														{__(
-															'Flex Direction controls the direction in which flex items are placed in the flex container.',
-															'publisher-core'
-														)}
-													</p>
-													<h3>
-														<FlexDirectionRowBlockIcon />
-														{__(
-															'Row Direction',
-															'publisher-core'
-														)}
-													</h3>
-													<p>
-														{__(
-															'Positions items in a horizontal row, following the text direction.',
-															'publisher-core'
-														)}
-													</p>
-													<h3>
-														<FlexDirectionColumnBlockIcon />
-														{__(
-															'Column Direction',
-															'publisher-core'
-														)}
-													</h3>
-													<p>
-														{__(
-															'Aligns items vertically, stacking them from top to bottom.',
-															'publisher-core'
-														)}
-													</p>
-													<p>
-														<span
-															style={{
-																fontWeight:
-																	'600',
-																color: '#ffffff',
-															}}
-														>
-															{__(
-																'Note:',
-																'publisher-core'
-															)}
-														</span>{' '}
-														{__(
-															'Using the reverse function will reorder items in a row or column in the opposite direction!',
-															'publisher-core'
-														)}
-													</p>
-												</>
-											}
-											columns="80px 120px"
-											options={[
-												{
-													label: __(
-														'Row',
-														'publisher-core'
-													),
-													value: 'row',
-													icon: (
-														<FlexDirectionRowBlockIcon />
-													),
-												},
-												{
-													label: __(
-														'Column',
-														'publisher-core'
-													),
-													value: 'column',
-													icon: (
-														<FlexDirectionColumnBlockIcon />
-													),
-												},
-											]}
-											defaultValue="row"
-											onChange={(newValue, ref) => {
-												handleOnChangeAttributes(
-													'publisherFlexDirection',
-													{
-														...flexDirection,
-														value: newValue,
-													},
-													{ ref }
-												);
-											}}
-											{...extensionProps.publisherFlexDirection}
-										/>
-									</ControlContextProvider>
-
-									<ControlContextProvider
-										value={{
-											name: generateExtensionId(
-												block,
-												'direction'
-											),
-											value: flexDirection.reverse,
-											attribute: 'publisherFlexDirection',
-											blockName: block.blockName,
-										}}
-									>
-										<Button
-											showTooltip={true}
-											tooltipPosition="top"
-											label={__(
-												'Reverse Flex Direction',
-												'publisher-core'
-											)}
-											size="small"
-											style={{
-												color: flexDirection?.reverse
-													? 'var(--publisher-controls-primary-color)'
-													: 'var(--publisher-controls-color)',
-												padding: '6px',
-											}}
-											onClick={() => {
-												handleOnChangeAttributes(
-													'publisherFlexDirection',
-													{
-														...flexDirection,
-														reverse:
-															!flexDirection.reverse,
-													}
-												);
-											}}
-											disabled={
-												flexDirection.value === ''
-											}
-										>
-											<ReverseIcon />
-										</Button>
-									</ControlContextProvider>
-								</Flex>
-							</BaseControl>
-						)}
-
-						{isActiveField(publisherAlignItems) && (
+						{isActiveField(publisherFlexLayout) && (
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(
 										block,
-										'align-items'
+										'flex-layout'
 									),
-									value: alignItems,
-									attribute: 'publisherAlignItems',
+									value: flexLayout,
+									attribute: 'publisherFlexLayout',
 									blockName: block.blockName,
 								}}
 							>
-								<ToggleSelectControl
+								<LayoutMatrixControl
 									columns="80px 160px"
-									className={
-										flexDirectionClassName +
-										' publisher-flex-align-items'
-									}
-									label={__('Align Items', 'publisher-core')}
+									label={__('Flex Layout', 'publisher-core')}
 									labelDescription={
 										<>
 											<p>
 												{__(
-													'Align-Items controls the alignment of items on the cross axis in a flex container',
+													'This is an intuitive interface for you to effortlessly configure Flexbox properties easily.',
 													'publisher-core'
 												)}
 											</p>
-											<h3>
-												<AlignItemsFlexStartBlockIcon />
-												{__(
-													'Flex Start',
-													'publisher-core'
-												)}
-											</h3>
 											<p>
 												{__(
-													"Aligns items to the start of the container's cross axis.",
-													'publisher-core'
-												)}
-											</p>
-											<h3>
-												<AlignItemsCenterBlockIcon />
-												{__('Center', 'publisher-core')}
-											</h3>
-											<p>
-												{__(
-													'Centers items along the cross axis.',
-													'publisher-core'
-												)}
-											</p>
-											<h3>
-												<AlignItemsFlexEndBlockIcon />
-												{__(
-													'Flex End',
-													'publisher-core'
-												)}
-											</h3>
-											<p>
-												{__(
-													'Aligns items to the end of the cross axis.',
-													'publisher-core'
-												)}
-											</p>
-											<h3>
-												<AlignItemsFlexEndBlockIcon />
-												{__(
-													'Stretch',
-													'publisher-core'
-												)}
-											</h3>
-											<p>
-												{__(
-													'Stretches items to fill the container (default behavior).',
-													'publisher-core'
-												)}
-											</p>
-											<h3>
-												<AlignItemsBaselineBlockIcon />
-												{__(
-													'Baseline',
-													'publisher-core'
-												)}
-											</h3>
-											<p>
-												{__(
-													'Aligns items based on their baseline.',
+													'You have the ability to configure the flex direction as either horizontal or vertical, and you can also select how items are aligned along these axes.',
 													'publisher-core'
 												)}
 											</p>
 										</>
 									}
-									isDeselectable={true}
-									//
-									defaultValue=""
+									defaultValue={{
+										direction: 'row',
+										alignItems: '',
+										justifyContent: '',
+									}}
 									onChange={(newValue, ref) =>
 										handleOnChangeAttributes(
-											'publisherAlignItems',
+											'publisherFlexLayout',
 											newValue,
 											{ ref }
 										)
 									}
-									options={[
-										{
-											label: __(
-												'Flex Start',
-												'publisher-core'
-											),
-											value: 'flex-start',
-											icon: (
-												<AlignItemsFlexStartBlockIcon />
-											),
-										},
-										{
-											label: __(
-												'Center',
-												'publisher-core'
-											),
-											value: 'center',
-											icon: <AlignItemsCenterBlockIcon />,
-										},
-										{
-											label: __(
-												'Flex End',
-												'publisher-core'
-											),
-											value: 'flex-end',
-											icon: (
-												<AlignItemsFlexEndBlockIcon />
-											),
-										},
-										{
-											label: __(
-												'Stretch',
-												'publisher-core'
-											),
-											value: 'stretch',
-											icon: (
-												<AlignItemsStretchBlockIcon />
-											),
-										},
-										{
-											label: __(
-												'Baseline',
-												'publisher-core'
-											),
-											value: 'baseline',
-											icon: (
-												<AlignItemsBaselineBlockIcon />
-											),
-										},
-									]}
-									{...extensionProps.publisherAlignItems}
-								/>
-							</ControlContextProvider>
-						)}
-						{isActiveField(publisherJustifyContent) && (
-							<ControlContextProvider
-								value={{
-									name: generateExtensionId(
-										block,
-										'justify-content'
-									),
-									value: justifyContent,
-									attribute: 'publisherJustifyContent',
-									blockName: block.blockName,
-								}}
-							>
-								<ToggleSelectControl
-									columns="80px 160px"
-									className={
-										flexDirectionClassName +
-										' publisher-flex-justify-content'
-									}
-									controlName="toggle-select"
-									label={__('Justify', 'publisher-core')}
-									labelPopoverTitle={__(
-										'Justify Content',
-										'publisher-core'
-									)}
-									labelDescription={
-										<>
-											<p>
-												{__(
-													'Justify-Content determines the distribution of flex items along the main axis in a flex container.',
-													'publisher-core'
-												)}
-											</p>
-											<h3>
-												<JustifyFlexStartIcon />
-												{__(
-													'Flex Start',
-													'publisher-core'
-												)}
-											</h3>
-											<p>
-												{__(
-													'Aligns items to the start of the main axis.',
-													'publisher-core'
-												)}
-											</p>
-											<h3>
-												<JustifyCenterIcon />
-												{__('Center', 'publisher-core')}
-											</h3>
-											<p>
-												{__(
-													'Centers items along the main axis.',
-													'publisher-core'
-												)}
-											</p>
-											<h3>
-												<JustifyFlexEndIcon />
-												{__(
-													'Flex End',
-													'publisher-core'
-												)}
-											</h3>
-											<p>
-												{__(
-													'Aligns items at the end of the main axis.',
-													'publisher-core'
-												)}
-											</p>
-											<h3>
-												<JustifySpaceBetweenIcon />
-												{__(
-													'Space Between',
-													'publisher-core'
-												)}
-											</h3>
-											<p>
-												{__(
-													'Distributes items evenly, with the first item at the start and the last at the end.',
-													'publisher-core'
-												)}
-											</p>
-											<h3>
-												<JustifySpaceAroundIcon />
-												{__(
-													'Space Around',
-													'publisher-core'
-												)}
-											</h3>
-											<p>
-												{__(
-													'Distributes items evenly with equal space around each item.',
-													'publisher-core'
-												)}
-											</p>
-											<h3>
-												<JustifySpaceEvenlyIcon />
-												{__(
-													'Space Evenly',
-													'publisher-core'
-												)}
-											</h3>
-											<p>
-												{__(
-													'Distributes items with equal spacing between each item.',
-													'publisher-core'
-												)}
-											</p>
-										</>
-									}
-									options={[
-										{
-											label: __(
-												'Flex Start',
-												'publisher-core'
-											),
-											value: 'flex-start',
-											icon: <JustifyFlexStartIcon />,
-										},
-										{
-											label: __(
-												'Center',
-												'publisher-core'
-											),
-											value: 'center',
-											icon: <JustifyCenterIcon />,
-										},
-										{
-											label: __(
-												'Flex End',
-												'publisher-core'
-											),
-											value: 'flex-end',
-											icon: <JustifyFlexEndIcon />,
-										},
-										{
-											label: __(
-												'Space Between',
-												'publisher-core'
-											),
-											value: 'space-between',
-											icon: <JustifySpaceBetweenIcon />,
-										},
-										{
-											label: __(
-												'Space Around',
-												'publisher-core'
-											),
-											value: 'space-around',
-											icon: <JustifySpaceAroundIcon />,
-										},
-										{
-											label: __(
-												'Space Evenly',
-												'publisher-core'
-											),
-											value: 'space-evenly',
-											icon: <JustifySpaceEvenlyIcon />,
-										},
-									]}
-									isDeselectable={true}
-									//
-									defaultValue=""
-									onChange={(newValue, ref) =>
-										handleOnChangeAttributes(
-											'publisherJustifyContent',
-											newValue,
-											{ ref }
-										)
-									}
-									{...extensionProps.publisherJustifyContent}
+									{...extensionProps.publisherFlexLayout}
 								/>
 							</ControlContextProvider>
 						)}
@@ -795,10 +321,6 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 										<Flex>
 											<ToggleSelectControl
 												columns="80px 120px"
-												className={
-													flexDirectionClassName +
-													' publisher-flex-wrap'
-												}
 												label={__(
 													'Children',
 													'publisher-core'
@@ -1064,15 +586,6 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 													</>
 												}
 												columns="80px 160px"
-												className={
-													flexDirectionClassName +
-													' publisher-flex-align-content' +
-													`${
-														flexWrap.reverse
-															? ' reverse'
-															: ''
-													}`
-												}
 												options={[
 													{
 														label: __(

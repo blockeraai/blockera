@@ -18,9 +18,6 @@ interface IConfigs {
 	layoutConfig: {
 		cssGenerators: Object,
 		publisherDisplay: string,
-		publisherFlexDirection: string,
-		publisherAlignItems: string,
-		publisherJustifyContent: string,
 		publisherGap: string,
 		publisherFlexWrap: string,
 		publisherAlignContent: string,
@@ -34,9 +31,6 @@ export function LayoutStyles({
 	layoutConfig: {
 		cssGenerators,
 		publisherDisplay,
-		publisherFlexDirection,
-		publisherAlignItems,
-		publisherJustifyContent,
 		publisherGap,
 		publisherFlexWrap,
 		publisherAlignContent,
@@ -59,32 +53,22 @@ export function LayoutStyles({
 	}
 
 	if (_attributes.publisherDisplay === 'flex') {
-		if (
-			isActiveField(publisherFlexDirection) &&
-			_attributes.publisherFlexDirection !==
-				attributes.publisherFlexDirection.default
-		) {
-			properties['flex-direction'] =
-				_attributes.publisherFlexDirection.value;
+		console.log('publisherFlexLayout', _attributes?.publisherFlexLayout);
+		if (_attributes?.publisherFlexLayout !== undefined) {
+			if (_attributes?.publisherFlexLayout.direction) {
+				properties['flex-direction'] =
+					_attributes.publisherFlexLayout.direction;
+			}
 
-			if (_attributes.publisherFlexDirection.reverse)
-				properties['flex-direction'] += '-reverse';
-		}
+			if (_attributes?.publisherFlexLayout.alignItems) {
+				properties['align-items'] =
+					_attributes.publisherFlexLayout.alignItems;
+			}
 
-		if (
-			isActiveField(publisherAlignItems) &&
-			_attributes.publisherAlignItems !==
-				attributes.publisherAlignItems.default
-		) {
-			properties['align-items'] = _attributes.publisherAlignItems;
-		}
-
-		if (
-			isActiveField(publisherJustifyContent) &&
-			_attributes.publisherJustifyContent !==
-				attributes.publisherJustifyContent.default
-		) {
-			properties['justify-content'] = _attributes.publisherJustifyContent;
+			if (_attributes?.publisherFlexLayout.justifyContent) {
+				properties['justify-content'] =
+					_attributes.publisherFlexLayout.justifyContent;
+			}
 		}
 
 		if (

@@ -73,10 +73,8 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 						<BaseControl
 							columns="1fr 2.65fr"
 							controlName="toggle-select"
-							label={__('Sizing', 'publisher-core')}
-							className={
-								'items-flex-direction-' + flexDirection.value
-							}
+							label={__('Self Size', 'publisher-core')}
+							className={'items-flex-direction-' + flexDirection}
 						>
 							<ToggleSelectControl
 								options={[
@@ -244,10 +242,8 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 						<BaseControl
 							columns="1fr 2.65fr"
 							controlName="toggle-select"
-							label={__('Align', 'publisher-core')}
-							className={
-								'items-flex-direction-' + flexDirection.value
-							}
+							label={__('Self Align', 'publisher-core')}
+							className={'items-flex-direction-' + flexDirection}
 						>
 							<ToggleSelectControl
 								options={[
@@ -307,10 +303,8 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 						<BaseControl
 							columns="1fr 2.65fr"
 							controlName="toggle-select"
-							label={__('Order', 'publisher-core')}
-							className={
-								'items-flex-direction-' + flexDirection.value
-							}
+							label={__('Self Order', 'publisher-core')}
+							className={'items-flex-direction-' + flexDirection}
 						>
 							<ToggleSelectControl
 								options={[
