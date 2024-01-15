@@ -9,16 +9,7 @@ import { useEffect, memo } from '@wordpress/element';
  */
 import { prependPortal } from '@publisher/utils';
 
-/**
- * Internal dependencies
- */
-import { useBlockContext } from '../hooks';
-
-export const BlockPartials = memo(({ currentState }) => {
-	const {
-		block: { clientId },
-	} = useBlockContext();
-
+export const BlockPartials = memo(({ currentState, clientId }) => {
 	useEffect(() => {
 		document.querySelector('.block-editor-block-card')?.remove();
 

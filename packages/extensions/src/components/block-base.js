@@ -253,6 +253,7 @@ export const BlockBase: BlockBaseProps = memo(
 					<InspectorControls>
 						<SideEffect />
 						<BlockPartials
+							clientId={clientId}
 							currentState={attributes.publisherCurrentState}
 						/>
 					</InspectorControls>
