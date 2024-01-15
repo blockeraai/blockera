@@ -17,7 +17,7 @@ import { STORE_NAME } from '../store/constants';
 import { blockStatesAttributes } from '../index';
 import { sanitizedBlockAttributes } from './utils';
 import { BlockBase, BlockPortals } from '../components';
-import { isBlockTypeExtension, isEnableExtension } from '../api/utils';
+import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
 
 const { getBlockExtension, getBlockExtensionBy } = select(STORE_NAME);
 
@@ -60,7 +60,7 @@ export default function withBlockSettings(
  * @return {Object} merged settings!
  */
 function mergeBlockSettings(settings: Object, additional: Object): Object {
-	if (!isEnableExtension(additional)) {
+	if (!isEnabledExtension(additional)) {
 		return settings;
 	}
 
