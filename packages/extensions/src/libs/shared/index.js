@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
-import { memo } from '@wordpress/element';
+import { memo, useEffect } from '@wordpress/element';
 import type { Node, MixedElement } from 'react';
 import {
 	Slot,
@@ -124,17 +124,17 @@ type Props = {
 	children?: Node,
 	clientId: string,
 	supports: Object,
-	activeTab: string,
 	currentStateAttributes: Object,
+	publisherInnerBlocks: Array<Object>,
 	setAttributes: (attributes: Object) => void,
 };
 
 export const SharedBlockExtension: Props = memo(
 	({
 		children,
-		activeTab,
-		currentStateAttributes,
 		setAttributes,
+		publisherInnerBlocks,
+		currentStateAttributes,
 		...props
 	}: Props): MixedElement => {
 		const currentState: TStates =
@@ -148,8 +148,12 @@ export const SharedBlockExtension: Props = memo(
 		// 	...props,
 		// });
 
-		const { blockStateId, breakpointId, handleOnChangeAttributes } =
-			useBlockContext();
+		const {
+			currentTab,
+			blockStateId,
+			breakpointId,
+			handleOnChangeAttributes,
+		} = useBlockContext();
 
 		const {
 			size,
@@ -179,6 +183,23 @@ export const SharedBlockExtension: Props = memo(
 		const directParentBlock = select('core/block-editor').getBlock(
 			parentClientIds[parentClientIds.length - 1]
 		);
+
+		useEffect(() => {
+			const coreSettingsWrapper = document.querySelector(
+				'div[id$="-settings-view"]'
+			);
+
+			if (!coreSettingsWrapper) {
+				return;
+			}
+
+			if ('settings' === currentTab) {
+				coreSettingsWrapper.style.display = 'block';
+
+				return;
+			}
+			coreSettingsWrapper.style.display = 'none';
+		}, [currentTab]);
 
 		const MappedExtensions = (tab: TTabProps): MixedElement => {
 			return (
@@ -612,7 +633,7 @@ export const SharedBlockExtension: Props = memo(
 			<StateContainer currentState={getStateInfo(currentState)}>
 				<Tabs
 					tabs={tabs}
-					activeTab={activeTab}
+					activeTab={currentTab}
 					getPanel={MappedExtensions}
 				/>
 				{children}

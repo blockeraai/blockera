@@ -30,7 +30,7 @@ const BlockEditContextProvider = ({
 	children,
 	...props
 }: Object): MixedElement => {
-	const [currentTab, setCurrentTab] = useState('general');
+	const [currentTab, setCurrentTab] = useState(props?.activeTab);
 	const [isOpenGridBuilder, setOpenGridBuilder] = useState(false);
 	const memoizedValue: {
 		currentTab: string,
@@ -53,8 +53,7 @@ const BlockEditContextProvider = ({
 			blockStateId,
 			breakpointId,
 			getAttributes,
-			isNormalState,
-			// setAttributes,
+			isNormalState, // setAttributes,
 			handleOnChangeAttributes,
 		} = props;
 

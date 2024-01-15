@@ -246,6 +246,7 @@ export const BlockBase: BlockBaseProps = memo(
 					BlockComponent: () => children,
 					getBlockType: () =>
 						select('core/blocks').getBlockType(name),
+					activeTab: additional?.activeTab || 'style',
 				}}
 			>
 				<StrictMode>
@@ -289,7 +290,6 @@ export const BlockBase: BlockBaseProps = memo(
 								attributes,
 								setAttributes,
 								currentStateAttributes,
-								activeTab: additional?.activeTab || 'style',
 								...props,
 							}}
 						/>
