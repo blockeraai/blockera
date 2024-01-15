@@ -9,10 +9,11 @@ import { select, useSelect } from '@wordpress/data';
 import { InspectorControls } from '@wordpress/block-editor';
 import {
 	memo,
-	StrictMode,
-	useMemo,
 	useRef,
+	useMemo,
+	useState,
 	useEffect,
+	StrictMode,
 } from '@wordpress/element';
 
 /**
@@ -72,6 +73,11 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			'publisherCore.blockEdit.attributes',
 			attributes
 		);
+
+		const [currentTab, setCurrentTab] = useState(
+			additional?.activeTab || 'style'
+		);
+		const [isOpenGridBuilder, setOpenGridBuilder] = useState(false);
 
 		const { supports } = useSelect((select) => {
 			const { getBlockType } = select('core/blocks');
@@ -238,6 +244,10 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					attributes: _attributes,
 					blockStateId,
 					breakpointId,
+					currentTab,
+					setCurrentTab,
+					isOpenGridBuilder,
+					setOpenGridBuilder,
 					isNormalState,
 					setAttributes,
 					getAttributes,
@@ -246,12 +256,16 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					BlockComponent: () => children,
 					getBlockType: () =>
 						select('core/blocks').getBlockType(name),
-					activeTab: additional?.activeTab || 'style',
 				}}
 			>
 				<StrictMode>
 					<InspectorControls>
-						<SideEffect />
+						<SideEffect
+							{...{
+								currentTab,
+								currentState: attributes.publisherCurrentState,
+							}}
+						/>
 						<BlockPartials
 							clientId={clientId}
 							currentState={attributes.publisherCurrentState}
