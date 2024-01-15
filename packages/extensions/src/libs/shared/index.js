@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
-import { memo, useEffect } from '@wordpress/element';
+import { memo } from '@wordpress/element';
 import type { Node, MixedElement } from 'react';
 import {
 	Slot,
@@ -183,23 +183,6 @@ export const SharedBlockExtension: Props = memo(
 		const directParentBlock = select('core/block-editor').getBlock(
 			parentClientIds[parentClientIds.length - 1]
 		);
-
-		useEffect(() => {
-			const coreSettingsWrapper = document.querySelector(
-				'div[id^="tab-panel-0"]'
-			);
-
-			if (!coreSettingsWrapper) {
-				return;
-			}
-
-			if ('settings' === currentTab) {
-				coreSettingsWrapper.style.display = 'block';
-
-				return;
-			}
-			coreSettingsWrapper.style.display = 'none';
-		}, [currentTab]);
 
 		const MappedExtensions = (tab: TTabProps): MixedElement => {
 			return (
