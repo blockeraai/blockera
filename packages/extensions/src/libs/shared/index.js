@@ -186,7 +186,7 @@ export const SharedBlockExtension: Props = memo(
 
 		useEffect(() => {
 			const coreSettingsWrapper = document.querySelector(
-				'div[id$="-settings-view"]'
+				'div[id^="tab-panel-0"]'
 			);
 
 			if (!coreSettingsWrapper) {
