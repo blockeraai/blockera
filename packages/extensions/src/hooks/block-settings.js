@@ -85,30 +85,31 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 		edit(props) {
 			if (isFunction(additional?.edit)) {
 				return (
-					<SlotFillProvider>
-						<BlockBase
-							{...{
-								...props,
-								additional,
-							}}
-						>
-							<Slot name={'publisher-core-block-before'} />
+					<>
+						<SlotFillProvider>
+							<BlockBase
+								{...{
+									...props,
+									additional,
+								}}
+							>
+								<Slot name={'publisher-core-block-before'} />
 
-							{settings.edit(props)}
+								<BlockPortals
+									blockId={`#block-${props.clientId}`}
+									mainSlot={'publisher-core-block-slot'}
+									slots={
+										// slot selectors is feature on configuration block to create custom slots for anywhere.
+										// we can add slotSelectors property on block configuration to handle custom preview of block.
+										additional?.slotSelectors || {}
+									}
+								/>
 
-							<BlockPortals
-								blockId={`#block-${props.clientId}`}
-								mainSlot={'publisher-core-block-slot'}
-								slots={
-									// slot selectors is feature on configuration block to create custom slots for anywhere.
-									// we can add slotSelectors property on block configuration to handle custom preview of block.
-									additional?.slotSelectors || {}
-								}
-							/>
-
-							<Slot name={'publisher-core-block-after'} />
-						</BlockBase>
-					</SlotFillProvider>
+								<Slot name={'publisher-core-block-after'} />
+							</BlockBase>
+						</SlotFillProvider>
+						{settings.edit(props)}
+					</>
 				);
 			}
 
