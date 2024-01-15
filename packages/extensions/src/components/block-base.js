@@ -4,7 +4,7 @@
  */
 import { Fill } from '@wordpress/components';
 import { applyFilters } from '@wordpress/hooks';
-import type { Element, MixedElement } from 'react';
+import type { Element, MixedElement, ComponentType } from 'react';
 import { select, useSelect } from '@wordpress/data';
 import { InspectorControls } from '@wordpress/block-editor';
 import {
@@ -50,7 +50,7 @@ export type BlockBaseProps = {
 	className: string,
 };
 
-export const BlockBase: BlockBaseProps = memo(
+export const BlockBase: ComponentType<BlockBaseProps> = memo(
 	({
 		additional,
 		children,
