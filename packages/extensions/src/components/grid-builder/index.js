@@ -130,8 +130,6 @@ export const GridBuilder = ({
 		document
 			.querySelector('iframe[name="editor-canvas"]')
 			// $FlowFixMe
-			?.contentDocument?.body?.querySelector(
-				'.publisher-core.publisher-block-wrapper'
-			)
+			?.contentDocument?.body?.querySelector(`#block-${clientId}`)
 	);
 };
