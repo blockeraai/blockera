@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
@@ -24,25 +24,21 @@ import { generateExtensionId, hasSameProps } from '../utils';
 import type { TBorderAndShadowProps } from './types/border-and-shadow-props';
 import { Border, BorderRadius } from './components';
 
-export const BorderAndShadowExtension: TBorderAndShadowProps =
-	memo<TBorderAndShadowProps>(
+export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
+	memo(
 		({
 			block,
-			config,
+			borderAndShadowConfig: {
+				publisherBoxShadow,
+				publisherOutline,
+				publisherBorder,
+				publisherBorderRadius,
+			},
 			defaultValue,
 			handleOnChangeAttributes,
 			values: { border, outline, boxShadow, borderRadius },
 			extensionProps,
 		}: TBorderAndShadowProps): MixedElement => {
-			const {
-				borderAndShadowConfig: {
-					publisherBoxShadow,
-					publisherOutline,
-					publisherBorder,
-					publisherBorderRadius,
-				},
-			} = config;
-
 			return (
 				<>
 					{isActiveField(publisherBorder) && (

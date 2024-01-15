@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { useState, memo } from '@wordpress/element';
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
@@ -56,10 +56,27 @@ import TextOrientationStyle3Icon from './icons/text-orientation-style-3';
 import TextOrientationStyle4Icon from './icons/text-orientation-style-4';
 import PenIcon from './icons/pen';
 
-export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
+export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 	({
 		block,
-		config,
+		typographyConfig: {
+			publisherFontColor,
+			publisherTextShadow,
+			publisherFontSize,
+			publisherLineHeight,
+			publisherTextAlign,
+			publisherTextDecoration,
+			publisherFontStyle,
+			publisherTextTransform,
+			publisherDirection,
+			publisherLetterSpacing,
+			publisherWordSpacing,
+			publisherTextIndent,
+			publisherTextOrientation,
+			publisherTextColumns,
+			publisherTextStroke,
+			publisherWordBreak,
+		},
 		values: {
 			display,
 			fontSize,
@@ -95,27 +112,6 @@ export const TypographyExtension: TTypographyProps = memo<TTypographyProps>(
 		extensionProps,
 		handleOnChangeAttributes,
 	}: TTypographyProps): MixedElement => {
-		const {
-			typographyConfig: {
-				publisherFontColor,
-				publisherTextShadow,
-				publisherFontSize,
-				publisherLineHeight,
-				publisherTextAlign,
-				publisherTextDecoration,
-				publisherFontStyle,
-				publisherTextTransform,
-				publisherDirection,
-				publisherLetterSpacing,
-				publisherWordSpacing,
-				publisherTextIndent,
-				publisherTextOrientation,
-				publisherTextColumns,
-				publisherTextStroke,
-				publisherWordBreak,
-			},
-		} = config;
-
 		const [isVisible, setIsVisible] = useState(false);
 
 		const toggleVisible = () => {

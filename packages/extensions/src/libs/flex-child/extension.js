@@ -3,8 +3,8 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import type { MixedElement } from 'react';
 import { memo } from '@wordpress/element';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
@@ -34,10 +34,14 @@ import { default as OrderFirst } from './icons/order-first';
 import { default as OrderLast } from './icons/order-last';
 import type { TFlexChildProps } from './types/flex-child-props';
 
-export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
+export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 	({
 		block,
-		config,
+		flexChildConfig: {
+			publisherFlexChildSizing,
+			publisherFlexChildAlign,
+			publisherFlexChildOrder,
+		},
 		values: {
 			flexChildGrow,
 			flexDirection,
@@ -51,14 +55,6 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TFlexChildProps): MixedElement => {
-		const {
-			flexChildConfig: {
-				publisherFlexChildSizing,
-				publisherFlexChildAlign,
-				publisherFlexChildOrder,
-			},
-		} = config;
-
 		return (
 			<>
 				{isActiveField(publisherFlexChildSizing) && (

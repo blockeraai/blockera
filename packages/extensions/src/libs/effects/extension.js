@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { memo, useState } from '@wordpress/element';
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
@@ -34,7 +34,7 @@ import { Blending } from './components/blending';
 import { Divider } from './components/divider';
 import { Mask } from './components/mask';
 
-export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
+export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 	({
 		values: {
 			opacity,
@@ -52,23 +52,19 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 			mask,
 		},
 		block,
-		config,
+		effectsConfig: {
+			publisherOpacity,
+			publisherTransform,
+			publisherTransition,
+			publisherFilter,
+			publisherBlendMode,
+			publisherBackdropFilter,
+			publisherDivider,
+			publisherMask,
+		},
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TEffectsProps): MixedElement => {
-		const {
-			effectsConfig: {
-				publisherOpacity,
-				publisherTransform,
-				publisherTransition,
-				publisherFilter,
-				publisherBlendMode,
-				publisherBackdropFilter,
-				publisherDivider,
-				publisherMask,
-			},
-		} = config;
-
 		const [isTransformSettingsVisible, setIsTransformSettingsVisible] =
 			useState(false);
 

@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
@@ -31,29 +31,25 @@ import { ObjectFit } from './components';
 import AspectRatio from './components/aspect-ratio';
 import { coreWPAspectRatioValues, coreWPFitValues } from './utils';
 
-export const SizeExtension: MixedElement = memo<TSizeProps>(
+export const SizeExtension: ComponentType<TSizeProps> = memo(
 	({
 		block,
-		config,
+		sizeConfig: {
+			publisherWidth,
+			publisherHeight,
+			publisherOverflow,
+			publisherRatio,
+			publisherFit,
+			publisherMinWidth,
+			publisherMinHeight,
+			publisherMaxWidth,
+			publisherMaxHeight,
+		},
 		handleOnChangeAttributes,
 		values,
 		inheritValue,
 		extensionProps,
 	}: TSizeProps): MixedElement => {
-		const {
-			sizeConfig: {
-				publisherWidth,
-				publisherHeight,
-				publisherOverflow,
-				publisherRatio,
-				publisherFit,
-				publisherMinWidth,
-				publisherMinHeight,
-				publisherMaxWidth,
-				publisherMaxHeight,
-			},
-		} = config;
-
 		const { isNormalState } = useBlockContext();
 
 		return (

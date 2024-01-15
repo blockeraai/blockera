@@ -10,7 +10,7 @@ import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 
 export type TIconProps = {
 	block: TBlockProps,
-	config: Object,
+	iconConfig: Object,
 	children?: MixedElement,
 	values: {
 		icon: Object,

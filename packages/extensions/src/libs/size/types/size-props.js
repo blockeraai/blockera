@@ -24,7 +24,7 @@ export type TSizeCssProps = {
 
 export type TSizeProps = {
 	block: TBlockProps,
-	config: Object,
+	sizeConfig: Object,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	values: {
 		width: string,

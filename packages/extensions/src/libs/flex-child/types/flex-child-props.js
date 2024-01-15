@@ -27,7 +27,7 @@ export type TFlexChildProps = {
 		flexDirection: string,
 	},
 	block: TBlockProps,
-	config: Object,
+	flexChildConfig: Object,
 	children?: MixedElement,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	extensionProps: {

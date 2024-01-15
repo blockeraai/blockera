@@ -3,7 +3,7 @@
  * External dependencies
  */
 import { memo } from '@wordpress/element';
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
@@ -30,19 +30,15 @@ const fallbackValue = {
 	left: '',
 };
 
-export const SpacingExtension: TSpacingProps = memo<TSpacingProps>(
+export const SpacingExtension: ComponentType<TSpacingProps> = memo(
 	({
 		block,
-		config,
+		spacingConfig: { publisherSpacing },
 		defaultValue,
 		spacingValue,
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TSpacingProps): MixedElement => {
-		const {
-			spacingConfig: { publisherSpacing },
-		} = config;
-
 		return (
 			<>
 				{isActiveField(publisherSpacing) && (

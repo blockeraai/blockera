@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
@@ -23,22 +23,18 @@ import {
 } from './utils';
 import type { TMouseProps } from './types/mouse-props';
 
-export const MouseExtension: MixedElement = memo<TMouseProps>(
+export const MouseExtension: ComponentType<TMouseProps> = memo(
 	({
 		block,
 		values: { cursor, userSelect, pointerEvents },
-		config,
+		mouseConfig: {
+			publisherCursor,
+			publisherUserSelect,
+			publisherPointerEvents,
+		},
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TMouseProps): MixedElement => {
-		const {
-			mouseConfig: {
-				publisherCursor,
-				publisherUserSelect,
-				publisherPointerEvents,
-			},
-		} = config;
-
 		return (
 			<>
 				{isActiveField(publisherCursor) && (

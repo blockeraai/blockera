@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
@@ -31,23 +31,19 @@ import ClipContentIcon from './icons/clip-content';
 import { generateExtensionId, hasSameProps } from '../utils';
 import type { TBackgroundProps } from './types/background-props';
 
-export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
+export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 	({
 		block,
-		config,
+		backgroundConfig: {
+			publisherBackground,
+			publisherBackgroundColor,
+			publisherBackgroundClip,
+		},
 		values: { background, backgroundClip, backgroundColor },
 		defaultValue,
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TBackgroundProps): MixedElement => {
-		const {
-			backgroundConfig: {
-				publisherBackground,
-				publisherBackgroundColor,
-				publisherBackgroundClip,
-			},
-		} = config;
-
 		const visibleBackgroundLength = checkVisibleItemLength(background);
 
 		return (

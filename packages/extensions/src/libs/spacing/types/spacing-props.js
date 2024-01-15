@@ -46,7 +46,7 @@ export type TCssProps = {
 
 export type TSpacingProps = {
 	block: TBlockProps,
-	config: Object,
+	spacingConfig: Object,
 	children?: MixedElement,
 	spacingValue: {},
 	defaultValue: TSpacingDefaultProps,

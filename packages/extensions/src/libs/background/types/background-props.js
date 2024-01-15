@@ -11,7 +11,7 @@ import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 
 export type TBackgroundProps = {
 	block: TBlockProps,
-	config: Object,
+	backgroundConfig: Object,
 	children?: MixedElement,
 	values: {
 		background: Object,

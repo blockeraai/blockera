@@ -40,7 +40,7 @@ export type TLayoutProps = {
 	// 	justifyContent?: string,
 	// },
 	block: TBlockProps,
-	config: Object,
+	layoutConfig: Object,
 	children?: MixedElement,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	extensionProps: {

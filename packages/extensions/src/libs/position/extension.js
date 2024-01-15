@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
@@ -25,19 +25,15 @@ import type { TPositionExtensionProps } from './types/position-extension-props';
 import { useBlockContext } from '../../hooks';
 import { positionToWPCompatible } from './utils';
 
-export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
+export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 	({
 		block,
-		config,
+		positionConfig: { publisherPosition, publisherZIndex },
 		values,
 		inheritValues,
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TPositionExtensionProps): MixedElement => {
-		const {
-			positionConfig: { publisherPosition, publisherZIndex },
-		} = config;
-
 		const { isNormalState, getAttributes } = useBlockContext();
 
 		return (

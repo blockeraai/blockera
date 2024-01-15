@@ -3,8 +3,8 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import type { MixedElement } from 'react';
 import { memo, useEffect } from '@wordpress/element';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
@@ -43,7 +43,7 @@ import { default as AlignContentFlexStartIcon } from './icons/align-content-flex
 import { default as AlignContentSpaceAroundIcon } from './icons/align-content-space-around';
 import { default as AlignContentSpaceBetweenIcon } from './icons/align-content-space-between';
 
-export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
+export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 	({
 		block,
 		values: { gap, display, flexLayout, flexWrap, alignContent },
@@ -55,18 +55,14 @@ export const LayoutExtension: TLayoutProps = memo<TLayoutProps>(
 		// },
 		handleOnChangeAttributes,
 		extensionProps,
-		config,
+		layoutConfig: {
+			publisherDisplay,
+			publisherFlexLayout,
+			publisherGap,
+			publisherFlexWrap,
+			publisherAlignContent,
+		},
 	}: TLayoutProps): MixedElement => {
-		const {
-			layoutConfig: {
-				publisherDisplay,
-				publisherFlexLayout,
-				publisherGap,
-				publisherFlexWrap,
-				publisherAlignContent,
-			},
-		} = config;
-
 		const { setOpenGridBuilder, BlockComponent } = useBlockContext();
 
 		useEffect(() => {

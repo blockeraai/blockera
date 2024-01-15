@@ -88,11 +88,6 @@ export {
 	attributes as sharedBlockExtensionAttributes,
 	supports as sharedBlockExtensionSupports,
 } from './shared';
-export { BaseExtension } from './base';
-export {
-	BaseExtensionContext,
-	BaseExtensionContextProvider,
-} from './base/context';
 export * as extensionConfig from './base/config';
 
 export { attributes as blockStatesAttributes } from './block-states';

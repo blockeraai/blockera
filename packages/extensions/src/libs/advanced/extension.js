@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
@@ -23,21 +23,17 @@ import { isActiveField } from '../../api/utils';
 import { hasSameProps, generateExtensionId } from '../utils';
 import type { TAdvancedProps } from './types/advanced-props';
 
-export const AdvancedExtension: TAdvancedProps = memo<TAdvancedProps>(
+export const AdvancedExtension: ComponentType<TAdvancedProps> = memo(
 	({
 		block,
-		config,
+		advancedConfig: {
+			publisherAttributes: publisherAttributesConfig,
+			publisherCSSProperties,
+		},
 		values: { attributes, cSSProperties: properties },
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TAdvancedProps): MixedElement => {
-		const {
-			advancedConfig: {
-				publisherAttributes: publisherAttributesConfig,
-				publisherCSSProperties,
-			},
-		} = config;
-
 		return (
 			<>
 				{isActiveField(publisherAttributesConfig) && (
