@@ -55,3 +55,62 @@
 	top: 50% !important;
 	transform: translateY(-8px);
 }
+
+.size-handler {
+	border-radius: 3px;
+	background: #147eb8;
+	display: flex;
+	overflow: hidden;
+
+	&.row-handler {
+       width: 26px;
+	   flex-direction: column;
+	   justify-content: space-between;
+	   align-items: center;
+
+	   span {
+         transform: rotate(-90deg);
+	   }
+	}
+
+	&.column-handler {
+		height: 26px;
+		justify-content: space-between;
+	    align-items: center;
+	}
+}
+
+.cell {
+
+	border: 1px dashed rgba(20, 126, 184, 0.5);
+	background: rgba(20, 126, 184, 0.1);
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	 color: #147eb8;
+	 overflow: hidden;
+}
+
+.content-container {
+		display: grid;
+		grid-column: 2 / -1;
+		grid-row: 2 / -1;
+
+    .gap-handlers-container {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		display: grid;
+		grid-column: 2 / -1;
+		grid-row: 2 / -1;
+	}
+}
+
+.add-btn {
+    border-radius: 3px;
+	background-color: #147eb8 !important;
+	width: 26px;
+	height: 26px;
+}

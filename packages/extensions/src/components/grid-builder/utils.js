@@ -19,3 +19,12 @@ export const resizeHandleClasses: {
 	topLeft: 'handle left-handle top-handle',
 	topRight: 'handle right-handle top-handle',
 };
+
+export const extractCssValue = (property, generatedStyle) => {
+	const propertyIndex = generatedStyle.search(property);
+	const slicedProperty = generatedStyle.slice(propertyIndex);
+	const colonIndex = slicedProperty.search(': ');
+	const semicolonIndex = slicedProperty.search(';');
+	const cssValue = slicedProperty.slice(colonIndex + 2, semicolonIndex);
+	return cssValue;
+};

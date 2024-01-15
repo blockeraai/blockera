@@ -100,6 +100,7 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 								}
 								style={{
 									display: 'inline-block',
+									position: 'relative',
 								}}
 							>
 								{settings.edit(props)}
