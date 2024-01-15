@@ -4,20 +4,19 @@
  */
 import type { MixedElement } from 'react';
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
+import { nanoid } from 'nanoid';
 
 /**
  * Publisher dependencies
  */
-import { Button, Popover, Tooltip, Flex } from '@publisher/components';
+import { Button, Flex } from '@publisher/components';
 import {
 	BaseControl,
 	ToggleSelectControl,
 	ControlContextProvider,
-	CheckboxControl,
-	RepeaterControl,
+	InputControl,
 } from '@publisher/controls';
-import { checkVisibleItemLength, isNumber } from '@publisher/utils';
+import { useBlockContext } from '../../../hooks';
 
 /**
  * Internal dependencies
@@ -29,7 +28,6 @@ import { default as JustifyCenterIcon } from '../icons/justify-center';
 import { default as JustifyFlexEndIcon } from '../icons/justify-flex-end';
 import { default as JustifyFlexStartIcon } from '../icons/justify-flex-start';
 import { default as AlignContentCenterIcon } from '../icons/align-content-center';
-import { default as FlexDirectionRowBlockIcon } from '../icons/flex-direction-row';
 import { default as JustifySpaceBetweenIcon } from '../icons/justify-space-between';
 import { default as AlignItemsCenterBlockIcon } from '../icons/align-items-center';
 import { default as AlignContentStretchIcon } from '../icons/align-content-stretch';
@@ -37,20 +35,13 @@ import { default as AlignContentFlexEndIcon } from '../icons/align-content-flex-
 import { default as AlignItemsStretchBlockIcon } from '../icons/align-items-stretch';
 import { default as AlignItemsFlexEndBlockIcon } from '../icons/align-items-flex-end';
 import { default as AlignItemsBaselineBlockIcon } from '../icons/align-items-baseline';
-import { default as FlexDirectionColumnBlockIcon } from '../icons/flex-direction-column';
 import { default as AlignContentFlexStartIcon } from '../icons/align-content-flex-start';
 import { default as AlignItemsFlexStartBlockIcon } from '../icons/align-items-flex-start';
 import { default as AlignContentSpaceAroundIcon } from '../icons/align-content-space-around';
 import { default as AlignContentSpaceBetweenIcon } from '../icons/align-content-space-between';
 import { default as EditIcon } from '../icons/edit';
-import { default as GridIcon } from '../icons/display-grid';
-import { default as InformationIcon } from '../icons/information';
+
 import { Gap } from '.';
-import Fields from './fields';
-import Header from './header';
-import AreasFields from './areas-fields';
-import AreasHeader from './areas-header';
-import { calcGridTemplateAreas } from '../utils';
 
 export default function ({
 	config,
@@ -61,11 +52,10 @@ export default function ({
 	gridAlignContent,
 	gridJustifyContent,
 	gridGap,
-	gridDirection,
+	//gridDirection,
 	gridColumns,
+	//gridAreas,
 	gridRows,
-	gridAreas,
-	...props
 }: {
 	config: Object,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
@@ -87,404 +77,163 @@ export default function ({
 			publisherGridAlignContent,
 			publisherGridJustifyContent,
 			publisherGridGap,
-			publisherGridDirection,
+			// publisherGridDirection,
 			publisherGridColumns,
 			publisherGridRows,
-			publisherGridAreas,
+			//publisherGridAreas,
 		},
 	} = config;
 
-	const [isGridSettingsOpen, setIsGridSettingsOpen] = useState(false);
-
-	const gridTemplateAreas = calcGridTemplateAreas({
-		gridRows,
-		gridColumns,
-		gridAreas,
-	});
-
-	const firstAvailablePosition = {
-		columnStart: 0,
-		columnEnd: 0,
-		rowStart: 0,
-		rowEnd: 0,
+	const defaultGridItemValue = {
+		'sizing-mode': 'normal',
+		size: '1fr',
+		'min-size': '',
+		'max-size': '',
+		'auto-fit': false,
 	};
 
-	let noAvailablePosition;
-
-	for (let i = 0; i <= gridTemplateAreas.length; i++) {
-		const colPosition = gridTemplateAreas[i]?.findIndex(
-			(innerItem) => innerItem === '.'
-		);
-
-		if (colPosition >= 0) {
-			firstAvailablePosition.columnStart = colPosition + 1;
-			firstAvailablePosition.columnEnd = colPosition + 2;
-			firstAvailablePosition.rowStart = i + 1;
-			firstAvailablePosition.rowEnd = i + 2;
-
-			break;
-		}
-		if (
-			(colPosition === -1 || colPosition === undefined) &&
-			i === gridTemplateAreas.length
-		) {
-			noAvailablePosition = true;
-		}
-	}
-
-	const areaNameNumbers = gridAreas
-		?.map((area) => {
-			if (isNumber(Number(area.name.slice(-2))))
-				return Number(area.name.slice(-2));
-			return Number(area.name.slice(-1));
-		})
-		.filter((item) => isNumber(item));
+	const { setOpenGridBuilder, isOpenGridBuilder } = useBlockContext();
 
 	return (
 		<>
 			<BaseControl
 				columns="columns-2"
-				label={__('Grid Builder', 'publisher-core')}
+				label={__('Grid', 'publisher-core')}
 			>
 				<Button
 					size="input"
 					contentAlign="left"
-					onClick={() => setIsGridSettingsOpen(true)}
+					onClick={() => setOpenGridBuilder(!isOpenGridBuilder)}
 				>
 					<EditIcon />
-					Edit Grid
+					Open Grid Builder
 				</Button>
 
-				{isGridSettingsOpen && (
-					<Popover
-						title={
-							<>
-								<GridIcon />
-								{__('Grid Settings', 'publisher-core')}
-							</>
-						}
-						onClose={() => setIsGridSettingsOpen(false)}
-						offset={100}
-						placement="left-start"
-					>
-						{isActiveField(publisherGridGap) && (
-							<ControlContextProvider
-								value={{
-									name: generateExtensionId(
-										block,
-										'grid-gap'
-									),
-									value: gridGap,
-									attribute: 'publisherGridGap',
-									blockName: block.blockName,
-								}}
-							>
-								<Gap
-									block={block}
-									gap={gridGap}
-									field={publisherGridGap}
-									attributeId="publisherGridGap"
-									handleOnChangeAttributes={
-										handleOnChangeAttributes
+				<Flex>
+					{isActiveField(publisherGridRows) && (
+						<ControlContextProvider
+							value={{
+								name: generateExtensionId(
+									block,
+									'grid-rows-length'
+								),
+								value: gridRows,
+								attribute: 'publisherGridRows',
+								blockName: block.blockName,
+							}}
+						>
+							<InputControl
+								id={"['length']"}
+								singularId={"['length']"}
+								label={__('Rows', 'publisher-core')}
+								columns="columns-1"
+								size="small"
+								type="number"
+								className="control-first label-center small-gap"
+								onChange={(
+									length: number,
+									ref?: Object
+								): void => {
+									if (gridRows.value.length < length) {
+										const value = [...gridRows.value];
+										let i = gridRows.value.length;
+										while (i < length) {
+											value.push({
+												...defaultGridItemValue,
+												id: nanoid(),
+											});
+											i++;
+										}
+
+										handleOnChangeAttributes(
+											'publisherGridRows',
+											{ length, value },
+											{ ref }
+										);
 									}
-								/>
-							</ControlContextProvider>
-						)}
 
-						{isActiveField(publisherGridDirection) && (
-							<>
-								<ControlContextProvider
-									value={{
-										name: generateExtensionId(
-											block,
-											'grid-direction'
-										),
-										value: gridDirection?.value,
-										attribute: 'publisherGridDirection',
-										blockName: block.blockName,
-									}}
-								>
-									<BaseControl
-										columns="columns-1"
-										controlName="toggle-select"
-									>
-										<ToggleSelectControl
-											label={__(
-												'Direction',
-												'publisher-core'
-											)}
-											isDeselectable={true}
-											columns="columns-2"
-											options={[
-												{
-													label: __(
-														'Row',
-														'publisher-core'
-													),
-													value: 'row',
-													icon: (
-														<FlexDirectionRowBlockIcon />
-													),
-												},
-												{
-													label: __(
-														'Column',
-														'publisher-core'
-													),
-													value: 'column',
-													icon: (
-														<FlexDirectionColumnBlockIcon />
-													),
-												},
-											]}
-											defaultValue={
-												gridDirection?.value || 'row'
-											}
-											onChange={(
-												value: string,
-												ref?: Object
-											): void => {
-												handleOnChangeAttributes(
-													'publisherGridDirection',
-													{ ...gridDirection, value },
-													{ ref }
-												);
-											}}
-										>
-											<ControlContextProvider
-												value={{
-													name: generateExtensionId(
-														block,
-														'grid-direction-dense'
-													),
-													value: gridDirection?.dense,
-													attribute:
-														'publisherGridDirection',
-													blockName: block.blockName,
-												}}
-											>
-												<Flex gap="3px">
-													<CheckboxControl
-														checkboxLabel={__(
-															'Dense',
-															'publisher-core'
-														)}
-														defaultValue={
-															gridDirection.dense ||
-															false
-														}
-														onChange={(
-															dense: boolean,
-															ref?: Object
-														): void => {
-															handleOnChangeAttributes(
-																'publisherGridDirection',
-																{
-																	...gridDirection,
-																	dense,
-																},
-																{ ref }
-															);
-														}}
-													/>
-													<Tooltip
-														text={__(
-															"Dense tries to fit grid children into empty grid cells, which may impact accessibility. It changes item display, not their position in the page's source, potentially affecting accessibility.",
-															'publisher-core'
-														)}
-													>
-														<span
-															style={{
-																display: 'flex',
-																alignItems:
-																	'flex-end',
-															}}
-														>
-															<InformationIcon />
-														</span>
-													</Tooltip>
-												</Flex>
-											</ControlContextProvider>
-										</ToggleSelectControl>
-									</BaseControl>
-								</ControlContextProvider>
-							</>
-						)}
+									if (gridRows.value.length > length) {
+										const value = [...gridRows.value];
+										value.splice(
+											length,
+											gridRows.value.length - length
+										);
 
-						{isActiveField(publisherGridColumns) && (
-							<ControlContextProvider
-								value={{
-									name: generateExtensionId(
-										block,
-										'grid-columns'
-									),
-									value: gridColumns,
-									attribute: 'publisherGridColumns',
-									blockName: block.blockName,
-								}}
-								storeName={'publisher-core/controls/repeater'}
-							>
-								<BaseControl
-									controlName="repeater"
-									columns="columns-1"
-								>
-									<RepeaterControl
-										columns="columns-1"
-										addNewButtonLabel={__(
-											'Add New Column',
-											'publisher-core'
-										)}
-										label={__('Columns', 'publisher-core')}
-										repeaterItemHeader={Header}
-										repeaterItemChildren={Fields}
-										defaultRepeaterItemValue={{
-											'sizing-mode': 'normal',
-											size: '1fr',
-											'min-size': '200px',
-											'max-size': '1fr',
-											'auto-fit': false,
-											isVisible: true,
-										}}
-										defaultValue={[]}
-										onChange={(
-											newValue: Array<Object>,
-											ref?: Object
-										): void =>
-											handleOnChangeAttributes(
-												'publisherGridColumns',
-												newValue,
-												{ ref }
-											)
-										}
-										minItems={2}
-										{...props}
-									/>
-								</BaseControl>
-							</ControlContextProvider>
-						)}
-
-						{isActiveField(publisherGridRows) && (
-							<ControlContextProvider
-								value={{
-									name: generateExtensionId(
-										block,
-										'grid-rows'
-									),
-									value: gridRows,
-									attribute: 'publisherGridRows',
-									blockName: block.blockName,
-								}}
-								storeName={'publisher-core/controls/repeater'}
-							>
-								<BaseControl
-									columns="columns-1"
-									controlName="repeater"
-								>
-									<RepeaterControl
-										columns="columns-1"
-										addNewButtonLabel={__(
-											'Add New Row',
-											'publisher-core'
-										)}
-										label={__('Rows', 'publisher-core')}
-										repeaterItemHeader={Header}
-										repeaterItemChildren={Fields}
-										defaultRepeaterItemValue={{
-											'sizing-mode': 'normal',
-											size: '1fr',
-											'min-size': '200px',
-											'max-size': '1fr',
-											'auto-fit': false,
-											isVisible: true,
-										}}
-										defaultValue={[]}
-										onChange={(
-											newValue: Array<Object>,
-											ref?: Object
-										): void =>
-											handleOnChangeAttributes(
-												'publisherGridRows',
-												newValue,
-												{ ref }
-											)
-										}
-										minItems={2}
-										{...props}
-									/>
-								</BaseControl>
-							</ControlContextProvider>
-						)}
-
-						{isActiveField(publisherGridAreas) && (
-							<BaseControl columns="columns-1">
-								<ControlContextProvider
-									value={{
-										name: generateExtensionId(
-											block,
-											'grid-areas'
-										),
-										value: gridAreas,
-										attribute: 'publisherGridAreas',
-										blockName: block.blockName,
-									}}
-									storeName={
-										'publisher-core/controls/repeater'
+										handleOnChangeAttributes(
+											'publisherGridRows',
+											{ length, value },
+											{ ref }
+										);
 									}
-								>
-									<RepeaterControl
-										columns="columns-1"
-										addNewButtonLabel={__(
-											'Add New Area',
-											'publisher-core'
-										)}
-										label={__('Areas', 'publisher-core')}
-										repeaterItemHeader={AreasHeader}
-										repeaterItemChildren={AreasFields}
-										defaultRepeaterItemValue={{
-											name: `Area${
-												Math.max(
-													...areaNameNumbers,
-													0
-												) + 1
-											}`,
-											'column-start':
-												firstAvailablePosition.columnStart,
-											'column-end':
-												firstAvailablePosition.columnEnd,
-											'row-start':
-												firstAvailablePosition.rowStart,
-											'row-end':
-												firstAvailablePosition.rowEnd,
-											isVisible: true,
-										}}
-										defaultValue={[]}
-										onChange={(
-											newValue: Array<Object>,
-											ref?: Object
-										): void =>
-											handleOnChangeAttributes(
-												'publisherGridAreas',
-												newValue,
-												{ ref }
-											)
+								}}
+								defaultValue={gridRows.length || 1}
+								min={1}
+							/>
+						</ControlContextProvider>
+					)}
+
+					{isActiveField(publisherGridColumns) && (
+						<ControlContextProvider
+							value={{
+								name: generateExtensionId(
+									block,
+									'grid-columns-length'
+								),
+								value: gridColumns,
+								attribute: 'publisherGridColumns',
+								blockName: block.blockName,
+							}}
+						>
+							<InputControl
+								id={"['length']"}
+								singularId={"['length']"}
+								label={__('Columns', 'publisher-core')}
+								columns="columns-1"
+								size="small"
+								type="number"
+								className="control-first label-center small-gap"
+								onChange={(
+									length: number,
+									ref?: Object
+								): void => {
+									if (gridColumns.value.length < length) {
+										const value = [...gridColumns.value];
+										let i = gridColumns.value.length;
+										while (i < length) {
+											value.push({
+												...defaultGridItemValue,
+												id: nanoid(),
+											});
+											i++;
 										}
-										emptyItemPlaceholder={__(
-											'No Area',
-											'publisher-core'
-										)}
-										gridRows={gridRows}
-										gridColumns={gridColumns}
-										maxItems={
-											noAvailablePosition &&
-											checkVisibleItemLength(gridAreas)
-										}
-										{...props}
-									/>
-								</ControlContextProvider>
-							</BaseControl>
-						)}
-					</Popover>
-				)}
+
+										handleOnChangeAttributes(
+											'publisherGridColumns',
+											{ length, value },
+											{ ref }
+										);
+									}
+
+									if (gridColumns.value.length > length) {
+										const value = [...gridColumns.value];
+										value.splice(
+											length,
+											gridColumns.value.length - length
+										);
+
+										handleOnChangeAttributes(
+											'publisherGridColumns',
+											{ length, value },
+											{ ref }
+										);
+									}
+								}}
+								defaultValue={gridColumns.length || 1}
+								min={1}
+							/>
+						</ControlContextProvider>
+					)}
+				</Flex>
 			</BaseControl>
 
 			{isActiveField(publisherGridAlignItems) && (
@@ -706,6 +455,25 @@ export default function ({
 								{ ref }
 							)
 						}
+					/>
+				</ControlContextProvider>
+			)}
+
+			{isActiveField(publisherGridGap) && (
+				<ControlContextProvider
+					value={{
+						name: generateExtensionId(block, 'grid-gap'),
+						value: gridGap,
+						attribute: 'publisherGridGap',
+						blockName: block.blockName,
+					}}
+				>
+					<Gap
+						block={block}
+						gap={gridGap}
+						field={publisherGridGap}
+						attributeId="publisherGridGap"
+						handleOnChangeAttributes={handleOnChangeAttributes}
 					/>
 				</ControlContextProvider>
 			)}

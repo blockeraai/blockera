@@ -234,59 +234,49 @@ export function LayoutStyles({
 		}
 
 		if (
-			isActiveField(publisherGridColumns) &&
-			!arrayEquals(
-				attributes.publisherGridColumns.default,
-				blockProps.attributes.publisherGridColumns
-			)
+			isActiveField(publisherGridColumns)
+			// !arrayEquals(
+			// 	attributes.publisherGridColumns.default,
+			// 	blockProps.attributes.publisherGridColumns
+			// )
 		) {
 			generators.push(
 				computedCssRules(
 					{
-						cssGenerators: {
-							publisherGridColumns: [
-								{
-									type: 'function',
-									function: GridColumnGenerator,
-								},
-							],
-						},
+						publisherGridColumns: [
+							{
+								media,
+								selector,
+								type: 'function',
+								function: GridColumnGenerator,
+							},
+						],
 					},
-					{
-						...blockProps,
-						cssGeneratorEntity: {
-							id: 'publisherGridColumns',
-						},
-					}
+					blockProps
 				)
 			);
 		}
 
 		if (
-			isActiveField(publisherGridRows) &&
-			!arrayEquals(
-				attributes.publisherGridRows.default,
-				blockProps.attributes.publisherGridRows
-			)
+			isActiveField(publisherGridRows)
+			// !arrayEquals(
+			// 	attributes.publisherGridRows.default,
+			// 	blockProps.attributes.publisherGridRows
+			// )
 		) {
 			generators.push(
 				computedCssRules(
 					{
-						cssGenerators: {
-							publisherGridRows: [
-								{
-									type: 'function',
-									function: GridRowGenerator,
-								},
-							],
-						},
+						publisherGridRows: [
+							{
+								media,
+								selector,
+								type: 'function',
+								function: GridRowGenerator,
+							},
+						],
 					},
-					{
-						...blockProps,
-						cssGeneratorEntity: {
-							id: 'publisherGridRows',
-						},
-					}
+					blockProps
 				)
 			);
 		}

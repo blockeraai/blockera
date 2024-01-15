@@ -5,41 +5,37 @@ import { isUndefined } from '@publisher/utils';
 import { createCssRule } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
 
-export function GridRowGenerator(id, props, styleEngine) {
-	const {
-		attributes,
-		cssGeneratorEntity: { id: _id },
-	} = props;
+export function GridRowGenerator(id, props, { media, selector }) {
+	const { attributes } = props;
 
-	if (isUndefined(attributes[_id]) || !attributes[_id]?.length) {
+	if (
+		isUndefined(attributes.publisherGridRows) ||
+		!attributes.publisherGridRows.value?.length
+	) {
 		return '';
 	}
 	const properties = {};
 
-	const value = attributes[_id]
+	const value = attributes.publisherGridRows.value
 		?.map((item) => {
-			if (!item.isVisible) {
-				return null;
-			}
+			// if (item['auto-generated']) {
+			// 	switch (item['sizing-mode']) {
+			// 		case 'min/max':
+			// 			properties[
+			// 				'grid-auto-columns'
+			// 			] = `minmax(${getValueAddonRealValue(
+			// 				item['min-size']
+			// 			)}, ${getValueAddonRealValue(item['max-size'])})`;
+			// 			break;
+			// 		default:
+			// 			properties[
+			// 				'grid-auto-rows'
+			// 			] = `${getValueAddonRealValue(item.size)}`;
+			// 			break;
+			// 	}
 
-			if (item['auto-generated']) {
-				switch (item['sizing-mode']) {
-					case 'min/max':
-						properties[
-							'grid-auto-columns'
-						] = `minmax(${getValueAddonRealValue(
-							item['min-size']
-						)}, ${getValueAddonRealValue(item['max-size'])})`;
-						break;
-					default:
-						properties[
-							'grid-auto-rows'
-						] = `${getValueAddonRealValue(item.size)}`;
-						break;
-				}
-
-				return null;
-			}
+			// 	return null;
+			// }
 
 			if (item['auto-fit']) {
 				switch (item['sizing-mode']) {
@@ -70,9 +66,8 @@ export function GridRowGenerator(id, props, styleEngine) {
 	properties['grid-template-rows'] = value?.join(' ');
 
 	return createCssRule({
-		selector: `#block-${props.clientId}${
-			styleEngine.selector ? ' ' + styleEngine.selector : ''
-		}`,
+		media,
+		selector,
 		properties,
 	});
 }

@@ -5,41 +5,37 @@ import { isUndefined } from '@publisher/utils';
 import { createCssRule } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
 
-export function GridColumnGenerator(id, props, styleEngine) {
-	const {
-		attributes,
-		cssGeneratorEntity: { id: _id },
-	} = props;
+export function GridColumnGenerator(id, props, { media, selector }) {
+	const { attributes } = props;
 
-	if (isUndefined(attributes[_id]) || !attributes[_id]?.length) {
+	if (
+		isUndefined(attributes.publisherGridColumns) ||
+		!attributes.publisherGridColumns.value?.length
+	) {
 		return '';
 	}
 	const properties = {};
 
-	const value = attributes[_id]
+	const value = attributes.publisherGridColumns.value
 		?.map((item) => {
-			if (!item.isVisible) {
-				return null;
-			}
+			// if (item['auto-generated']) {
+			// 	switch (item['sizing-mode']) {
+			// 		case 'min/max':
+			// 			properties[
+			// 				'grid-auto-columns'
+			// 			] = `minmax(${getValueAddonRealValue(
+			// 				item['min-size']
+			// 			)}, ${getValueAddonRealValue(item['max-size'])})`;
+			// 			break;
+			// 		default:
+			// 			properties[
+			// 				'grid-auto-columns'
+			// 			] = `${getValueAddonRealValue(item.size)}`;
+			// 			break;
+			// 	}
 
-			if (item['auto-generated']) {
-				switch (item['sizing-mode']) {
-					case 'min/max':
-						properties[
-							'grid-auto-columns'
-						] = `minmax(${getValueAddonRealValue(
-							item['min-size']
-						)}, ${getValueAddonRealValue(item['max-size'])})`;
-						break;
-					default:
-						properties[
-							'grid-auto-columns'
-						] = `${getValueAddonRealValue(item.size)}`;
-						break;
-				}
-
-				return null;
-			}
+			// 	return null;
+			// }
 
 			if (item['auto-fit']) {
 				switch (item['sizing-mode']) {
@@ -70,9 +66,8 @@ export function GridColumnGenerator(id, props, styleEngine) {
 	properties['grid-template-columns'] = value?.join(' ');
 
 	return createCssRule({
-		selector: `#block-${props.clientId}${
-			styleEngine.selector ? ' ' + styleEngine.selector : ''
-		}`,
+		media,
+		selector,
 		properties,
 	});
 }
