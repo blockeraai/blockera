@@ -10,7 +10,13 @@ import { Button } from '@publisher/components';
  */
 import AddIcon from '../icons/add';
 
-export const AddButton = ({ type, gridTemplate, onClick }) => {
+export const AddButton = ({
+	type,
+	gridTemplate,
+	onClick,
+	columnGap,
+	rowGap,
+}) => {
 	return (
 		<Button
 			style={{
@@ -31,6 +37,8 @@ export const AddButton = ({ type, gridTemplate, onClick }) => {
 				right: type === 'column' && '-36px',
 				left: type === 'row' && '0px',
 				top: type === 'column' && '0px',
+				marginLeft: type === 'row' && columnGap && '-10px',
+				marginTop: type === 'column' && !rowGap && '-10px',
 			}}
 			onClick={onClick}
 			className="add-btn"

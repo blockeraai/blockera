@@ -96,11 +96,12 @@ export const VirtualGrid = ({}) => {
 			generatedStyle
 		),
 		display: extractCssValue('display', generatedStyle),
-		gap: extractCssValue('gap', generatedStyle),
-		columnGap: extractCssValue('column-gap', generatedStyle),
-		rowGap: extractCssValue('row-gap', generatedStyle),
+		gap: publisherGridGap.gap,
+		columnGap: publisherGridGap.columns,
+		rowGap: publisherGridGap.rows,
 		gridDirection: extractCssValue('grid-auto-flow', generatedStyle),
 	};
+	console.log(styles);
 
 	const gridColumns = publisherGridColumns.value;
 	const gridRows = publisherGridRows.value;
@@ -335,6 +336,8 @@ export const VirtualGrid = ({}) => {
 						],
 					})
 				}
+				columnGap={styles.columnGap || styles.gap}
+				rowGap={styles.rowGap || styles.gap}
 			/>
 
 			<AddButton
