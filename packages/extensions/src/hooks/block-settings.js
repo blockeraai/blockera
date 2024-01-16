@@ -14,7 +14,10 @@ import { isObject, isFunction } from '@publisher/utils';
  * Internal dependencies
  */
 import { STORE_NAME } from '../store/constants';
-import { blockStatesAttributes } from '../index';
+import {
+	blockStatesAttributes,
+	innerBlocksExtensionsAttributes,
+} from '../index';
 import { sanitizedBlockAttributes } from './utils';
 import { BlockBase, BlockPortals } from '../components';
 import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
@@ -70,6 +73,7 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 			...settings.attributes,
 			...additional.attributes,
 			...blockStatesAttributes,
+			...innerBlocksExtensionsAttributes,
 			publisherPropsId: {
 				type: 'string',
 			},
