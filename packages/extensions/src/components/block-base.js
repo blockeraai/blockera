@@ -19,6 +19,7 @@ import {
 /**
  * Publisher dependencies
  */
+import { LoadingComponent } from '@publisher/components';
 import { useCssGenerator } from '@publisher/style-engine';
 import { extensionClassNames } from '@publisher/classnames';
 import { indexOf, isUndefined, omitWithPattern } from '@publisher/utils';
@@ -87,9 +88,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		): void => {
 			setCurrentBlock(_currentBlock);
 		};
-
-		const blockSlotName =
-			'master' === currentBlock ? currentBlock : 'inner';
 
 		const { supports } = useSelect((select) => {
 			const { getBlockType } = select('core/blocks');
@@ -243,6 +241,71 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						: {}),
 			  };
 
+		const FillComponents = (): MixedElement => {
+			// eslint-disable-next-line react-hooks/rules-of-hooks
+			const [isLoad, setParentIsLoad] = useState(false);
+
+			return (
+				<>
+					<Fill name={`publisher-block-card-content-${clientId}`}>
+						<BlockCard
+							clientId={clientId}
+							selectedInnerBlock={
+								'master' === currentBlock
+									? undefined
+									: currentBlock
+							}
+							handleOnClick={handleOnSwitchBlockSettings}
+							states={attributes.publisherBlockStates}
+						>
+							<StatesManager
+								setParentIsLoad={setParentIsLoad}
+								states={attributes.publisherBlockStates}
+								block={{
+									clientId,
+									supports,
+									attributes,
+									setAttributes,
+									blockName: name,
+								}}
+							/>
+						</BlockCard>
+					</Fill>
+					<Fill
+						name={`publisher-${currentBlock}-block-${attributes.publisherCurrentState}-edit-content-${clientId}`}
+					>
+						{!isLoad && (
+							<div
+								className={'publisher-block-inspector loading'}
+							>
+								<LoadingComponent
+									type={'bubbles'}
+									color={'#147eb8'}
+								/>
+							</div>
+						)}
+						<BlockEditComponent
+							{...{
+								// Sending props like exactly "edit" function props of WordPress Block.
+								// Because needs total block props in outside overriding component like "publisher-blocks" in overriding process.
+								name,
+								clientId,
+								supports,
+								className,
+								attributes,
+								setAttributes,
+								setParentIsLoad,
+								currentStateAttributes,
+								publisherInnerBlocks:
+									additional?.publisherInnerBlocks || [],
+								...props,
+							}}
+						/>
+					</Fill>
+				</>
+			);
+		};
+
 		return (
 			<BlockEditContextProvider
 				{...{
@@ -283,55 +346,13 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						/>
 						<BlockPartials
 							clientId={clientId}
+							currentBlock={currentBlock}
 							currentState={attributes.publisherCurrentState}
 						/>
 					</InspectorControls>
 					<div ref={blockEditRef} />
 
-					<Fill name={`publisher-block-card-content-${clientId}`}>
-						<BlockCard
-							clientId={clientId}
-							selectedInnerBlock={
-								'master' === currentBlock
-									? undefined
-									: currentBlock
-							}
-							handleOnClick={handleOnSwitchBlockSettings}
-							states={attributes.publisherBlockStates}
-						>
-							<StatesManager
-								states={attributes.publisherBlockStates}
-								block={{
-									clientId,
-									supports,
-									attributes,
-									setAttributes,
-									blockName: name,
-								}}
-							/>
-						</BlockCard>
-					</Fill>
-
-					<Fill
-						name={`publisher-${blockSlotName}-block-${attributes.publisherCurrentState}-edit-content-${clientId}`}
-					>
-						<BlockEditComponent
-							{...{
-								// Sending props like exactly "edit" function props of WordPress Block.
-								// Because needs total block props in outside overriding component like "publisher-blocks" in overriding process.
-								name,
-								clientId,
-								supports,
-								className,
-								attributes,
-								setAttributes,
-								currentStateAttributes,
-								publisherInnerBlocks:
-									additional?.publisherInnerBlocks || [],
-								...props,
-							}}
-						/>
-					</Fill>
+					<FillComponents />
 
 					<style
 						data-block-type={name}

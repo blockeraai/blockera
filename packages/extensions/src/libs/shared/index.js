@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
-import { memo } from '@wordpress/element';
+import { memo, useEffect } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
@@ -123,12 +123,14 @@ type Props = {
 	children?: ComponentType<any>,
 	currentStateAttributes: Object,
 	publisherInnerBlocks: Array<Object>,
+	setParentIsLoad: (isLoad: boolean) => void,
 	setAttributes: (attributes: Object) => void,
 };
 
 export const SharedBlockExtension: ComponentType<Props> = memo(
 	({
 		children,
+		setParentIsLoad,
 		setAttributes,
 		publisherInnerBlocks,
 		currentStateAttributes,
@@ -153,6 +155,9 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			extensionConfig,
 			handleOnChangeAttributes,
 		} = useBlockContext();
+
+		// eslint-disable-next-line
+		useEffect(() => setParentIsLoad(true), []);
 
 		const {
 			size,
@@ -238,6 +243,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 						}}
 					>
 						<InnerBlocksExtension
+							setParentIsLoad={setParentIsLoad}
 							innerBlocks={publisherInnerBlocks}
 						/>
 

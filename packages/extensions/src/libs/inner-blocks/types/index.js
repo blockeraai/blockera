@@ -14,4 +14,7 @@ export type InnerBlockModel = {
 	attributes: Object,
 };
 
-export type InnerBlocksProps = { innerBlocks: Array<Object> };
+export type InnerBlocksProps = {
+	innerBlocks: Array<Object>,
+	setParentIsLoad: (isLoad: boolean) => void,
+};

@@ -35,9 +35,11 @@ import StateContainer from '../../../components/state-container';
 export default function StatesManager({
 	block,
 	states,
+	setParentIsLoad,
 }: {
 	states: Array<Object>,
 	block: TBlockProps,
+	setParentIsLoad: (isLoad: boolean) => void,
 }): Element<any> {
 	const { handleOnChangeAttributes } = useBlockContext();
 
@@ -156,6 +158,8 @@ export default function StatesManager({
 								const blockStates =
 									block.attributes.publisherBlockStates;
 
+								setParentIsLoad(false);
+
 								handleOnChangeAttributes(
 									'publisherBlockStates',
 									newValue.map((state, index) => {
@@ -229,6 +233,8 @@ export default function StatesManager({
 									}
 								);
 							} else {
+								setParentIsLoad(false);
+
 								handleOnChangeAttributes(
 									'publisherCurrentState',
 									selectedState.type || 'normal'
