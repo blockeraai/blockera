@@ -7,9 +7,8 @@ import type { MixedElement } from 'react';
 /**
  * Publisher Dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import type { StateTypes } from '@publisher/extensions/src/libs/block-states/types';
 import { isEmpty } from '@publisher/utils';
+import { controlInnerClassNames } from '@publisher/classnames';
 import { BreakpointIcon } from '@publisher/extensions/src/libs/block-states/helpers';
 
 /**
@@ -87,7 +86,7 @@ export const StatesGraph = ({
 							>
 								{state.graph.states?.map(
 									(
-										_state: StateTypes,
+										_state: Object,
 										_index: number
 									): MixedElement | null => {
 										if (

@@ -12,7 +12,7 @@ import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 
 export type TPositionExtensionProps = {
 	block: TBlockProps,
-	config: Object,
+	positionConfig: Object,
 	children?: MixedElement,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	values: {

@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
@@ -15,41 +15,45 @@ import {
 	LinkControl,
 	ColorControl,
 	InputControl,
+	PanelBodyControl,
 	ToggleSelectControl,
 	ControlContextProvider,
 } from '@publisher/controls';
+import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
+import { IconExtensionIcon } from './index';
 import { isActiveField } from '../../api/utils';
 import { default as PositionLeftIcon } from './icons/position-left';
 import { generateExtensionId, hasSameProps } from '../utils';
 import { default as PositionRightIcon } from './icons/position-right';
 import type { TIconProps } from './types/icon-extension-props';
 
-export const IconExtension: MixedElement = memo<TIconProps>(
+export const IconExtension: ComponentType<TIconProps> = memo(
 	({
 		block,
-		config,
+		iconConfig: {
+			publisherIcon,
+			publisherIconGap,
+			publisherIconSize,
+			publisherIconLink,
+			publisherIconColor,
+			publisherIconOptions,
+			publisherIconPosition,
+		},
 		values: { icon, iconGap, iconSize, iconLink, iconColor, iconPosition },
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TIconProps): MixedElement => {
-		const {
-			iconConfig: {
-				publisherIcon,
-				publisherIconGap,
-				publisherIconSize,
-				publisherIconLink,
-				publisherIconColor,
-				publisherIconOptions,
-				publisherIconPosition,
-			},
-		} = config;
-
 		return (
-			<>
+			<PanelBodyControl
+				title={__('Icon', 'publisher-core')}
+				initialOpen={true}
+				icon={<IconExtensionIcon />}
+				className={componentClassNames('extension', 'extension-icon')}
+			>
 				{isActiveField(publisherIcon) && (
 					<ControlContextProvider
 						value={{
@@ -249,7 +253,7 @@ export const IconExtension: MixedElement = memo<TIconProps>(
 						)}
 					</>
 				)}
-			</>
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps

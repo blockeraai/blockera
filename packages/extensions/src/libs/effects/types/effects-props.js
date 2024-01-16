@@ -40,7 +40,7 @@ export type TEffectsProps = {
 		mask: Array<Object>,
 	},
 	block: TBlockProps,
-	config: Object,
+	effectsConfig: Object,
 	children?: MixedElement,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	extensionProps: {

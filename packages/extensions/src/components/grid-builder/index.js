@@ -593,7 +593,7 @@ const RndComponent = ({ id, setResizeToElementId, activeAreaId }) => {
 			resizeHandleWrapperClass={handleClass}
 			resizeHandleClasses={resizeHandleClasses}
 			onResize={(e, direction, ref, delta, _position) => {
-				console.log(e);
+				console.log(e, direction, ref, delta, _position);
 				setResizeToElementId(e.toElement.getAttribute('data-id'));
 
 				if (activeAreaId === id) {
@@ -602,10 +602,7 @@ const RndComponent = ({ id, setResizeToElementId, activeAreaId }) => {
 						height: ref.style.height,
 					});
 
-					setPosition({
-						top: _position.y,
-						left: _position.x,
-					});
+					setPosition({ top: position.y, left: position.x });
 				}
 			}}
 			enableResizing={getEnableResize()}

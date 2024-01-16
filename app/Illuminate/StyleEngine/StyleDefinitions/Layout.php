@@ -62,9 +62,20 @@ class Layout extends BaseStyleDefinition {
 				break;
 
 			case 'flex-direction':
-				$flexDirection = $this->settings['flex-direction'];
 
-				$props['flex-direction'] = $flexDirection['value'] . ($flexDirection['reverse'] ? '-reverse' : '');
+				$item = $this->settings['flex-direction'];
+
+				if( $item['direction'] ){
+					$props['flex-direction'] = $item['direction'];
+				}
+
+				if( $item['alignItems'] ){
+					$props['align-items'] = $item['alignItems'];
+				}
+
+				if( $item['justifyContent'] ){
+					$props['justify-content'] = $item['justifyContent'];
+				}
 
 				break;
 

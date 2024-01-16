@@ -15,7 +15,7 @@ export type TAdvancedProps = {
 		cSSProperties: Array<Object>,
 	},
 	block: TBlockProps,
-	config: Object,
+	advancedConfig: Object,
 	children?: MixedElement,
 	defaultValue: {
 		width?: string,

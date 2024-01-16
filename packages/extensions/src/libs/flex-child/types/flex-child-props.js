@@ -24,10 +24,10 @@ export type TFlexChildProps = {
 		flexChildSizing?: string,
 		flexChildShrink?: string,
 		flexChildOrderCustom?: string,
-		flexDirection: { value: string, reverse: boolean },
+		flexDirection: string,
 	},
 	block: TBlockProps,
-	config: Object,
+	flexChildConfig: Object,
 	children?: MixedElement,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	extensionProps: {

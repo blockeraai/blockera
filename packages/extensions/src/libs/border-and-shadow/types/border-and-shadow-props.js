@@ -26,7 +26,7 @@ export type TBorderAndShadowDefaultProp = {
 
 export type TBorderAndShadowProps = {
 	block: TBlockProps,
-	config: Object,
+	borderAndShadowConfig: Object,
 	children?: MixedElement,
 	values: {
 		border: Object,

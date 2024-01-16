@@ -3,18 +3,20 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import type { MixedElement } from 'react';
 import { memo } from '@wordpress/element';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
  */
 import {
 	BaseControl,
+	PanelBodyControl,
 	ControlContextProvider,
 	InputControl,
 	ToggleSelectControl,
 } from '@publisher/controls';
+import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -33,11 +35,16 @@ import { default as AlignFlexCenterIcon } from './icons/align-flex-center';
 import { default as OrderFirst } from './icons/order-first';
 import { default as OrderLast } from './icons/order-last';
 import type { TFlexChildProps } from './types/flex-child-props';
+import { FlexChildExtensionIcon } from './index';
 
-export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
+export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 	({
 		block,
-		config,
+		flexChildConfig: {
+			publisherFlexChildSizing,
+			publisherFlexChildAlign,
+			publisherFlexChildOrder,
+		},
 		values: {
 			flexChildGrow,
 			flexDirection,
@@ -51,16 +58,16 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TFlexChildProps): MixedElement => {
-		const {
-			flexChildConfig: {
-				publisherFlexChildSizing,
-				publisherFlexChildAlign,
-				publisherFlexChildOrder,
-			},
-		} = config;
-
 		return (
-			<>
+			<PanelBodyControl
+				title={__('Flex Child', 'publisher-core')}
+				initialOpen={true}
+				icon={<FlexChildExtensionIcon />}
+				className={componentClassNames(
+					'extension',
+					'extension-flex-child'
+				)}
+			>
 				{isActiveField(publisherFlexChildSizing) && (
 					<ControlContextProvider
 						value={{
@@ -73,10 +80,8 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 						<BaseControl
 							columns="1fr 2.65fr"
 							controlName="toggle-select"
-							label={__('Sizing', 'publisher-core')}
-							className={
-								'items-flex-direction-' + flexDirection.value
-							}
+							label={__('Self Size', 'publisher-core')}
+							className={'items-flex-direction-' + flexDirection}
 						>
 							<ToggleSelectControl
 								options={[
@@ -244,10 +249,8 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 						<BaseControl
 							columns="1fr 2.65fr"
 							controlName="toggle-select"
-							label={__('Align', 'publisher-core')}
-							className={
-								'items-flex-direction-' + flexDirection.value
-							}
+							label={__('Self Align', 'publisher-core')}
+							className={'items-flex-direction-' + flexDirection}
 						>
 							<ToggleSelectControl
 								options={[
@@ -307,10 +310,8 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 						<BaseControl
 							columns="1fr 2.65fr"
 							controlName="toggle-select"
-							label={__('Order', 'publisher-core')}
-							className={
-								'items-flex-direction-' + flexDirection.value
-							}
+							label={__('Self Order', 'publisher-core')}
+							className={'items-flex-direction-' + flexDirection}
 						>
 							<ToggleSelectControl
 								options={[
@@ -383,7 +384,7 @@ export const FlexChildExtension: TFlexChildProps = memo<TFlexChildProps>(
 						</BaseControl>
 					</ControlContextProvider>
 				)}
-			</>
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps

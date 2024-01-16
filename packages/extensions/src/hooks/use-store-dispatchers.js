@@ -5,7 +5,7 @@
  */
 import { dispatch } from '@wordpress/data';
 
-export const useStoreDispatchers = () => {
+export const useStoreDispatchers = (): Object => {
 	const { updateBlockAttributes } = dispatch('core/block-editor');
 
 	return {

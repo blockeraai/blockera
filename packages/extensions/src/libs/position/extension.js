@@ -4,44 +4,51 @@
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
  */
 import {
 	BaseControl,
+	PanelBodyControl,
 	BoxPositionControl,
 	ControlContextProvider,
 	InputControl,
 } from '@publisher/controls';
+import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
+import { PositionExtensionIcon } from './index';
 import { isActiveField } from '../../api/utils';
-import { generateExtensionId, hasSameProps } from '../utils';
-import type { TPositionExtensionProps } from './types/position-extension-props';
 import { useBlockContext } from '../../hooks';
 import { positionToWPCompatible } from './utils';
+import { generateExtensionId, hasSameProps } from '../utils';
+import type { TPositionExtensionProps } from './types/position-extension-props';
 
-export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
+export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 	({
 		block,
-		config,
+		positionConfig: { publisherPosition, publisherZIndex },
 		values,
 		inheritValues,
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TPositionExtensionProps): MixedElement => {
-		const {
-			positionConfig: { publisherPosition, publisherZIndex },
-		} = config;
-
 		const { isNormalState, getAttributes } = useBlockContext();
 
 		return (
-			<>
+			<PanelBodyControl
+				title={__('Position', 'publisher-core')}
+				initialOpen={true}
+				icon={<PositionExtensionIcon />}
+				className={componentClassNames(
+					'extension',
+					'extension-position'
+				)}
+			>
 				{isActiveField(publisherPosition) && (
 					<ControlContextProvider
 						value={{
@@ -139,7 +146,7 @@ export const PositionExtension: MixedElement = memo<TPositionExtensionProps>(
 							/>
 						</ControlContextProvider>
 					)}
-			</>
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps

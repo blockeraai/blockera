@@ -13,10 +13,8 @@ import { ControlContextProvider, InputControl } from '@publisher/controls';
 /**
  * Internal dependencies
  */
-import { useBlockContext } from '../../../hooks';
 import { generateExtensionId } from '../../utils';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
-import { toSimpleStyleTypographyWPCompatible } from '../../../utils';
 
 export const LetterSpacing = ({
 	block,
@@ -30,8 +28,6 @@ export const LetterSpacing = ({
 	defaultValue?: string,
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
-	const { isNormalState, getAttributes } = useBlockContext();
-
 	return (
 		<ControlContextProvider
 			value={{
@@ -65,19 +61,9 @@ export const LetterSpacing = ({
 				defaultValue={defaultValue}
 				arrows={true}
 				unitType="letter-spacing"
-				onChange={(newValue: Object, ref?: Object): void => {
-					onChange('publisherLetterSpacing', newValue, {
-						ref,
-						addOrModifyRootItems:
-							toSimpleStyleTypographyWPCompatible({
-								wpAttribute: 'letterSpacing',
-								newValue,
-								isNormalState,
-								ref,
-								getAttributes,
-							}),
-					});
-				}}
+				onChange={(newValue: Object, ref?: Object): void =>
+					onChange('publisherLetterSpacing', newValue, { ref })
+				}
 				{...props}
 			/>
 		</ControlContextProvider>

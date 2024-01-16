@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
@@ -13,11 +13,13 @@ import {
 	BaseControl,
 	ColorControl,
 	SelectControl,
+	PanelBodyControl,
 	BackgroundControl,
 	ControlContextProvider,
 	NoticeControl,
 } from '@publisher/controls';
 import { isArray, isEmpty, checkVisibleItemLength } from '@publisher/utils';
+import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -30,28 +32,33 @@ import ClipPaddingIcon from './icons/clip-padding';
 import ClipContentIcon from './icons/clip-content';
 import { generateExtensionId, hasSameProps } from '../utils';
 import type { TBackgroundProps } from './types/background-props';
+import { default as BackgroundExtensionIcon } from './icons/extension-icon';
 
-export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
+export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 	({
 		block,
-		config,
+		backgroundConfig: {
+			publisherBackground,
+			publisherBackgroundColor,
+			publisherBackgroundClip,
+		},
 		values: { background, backgroundClip, backgroundColor },
 		defaultValue,
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TBackgroundProps): MixedElement => {
-		const {
-			backgroundConfig: {
-				publisherBackground,
-				publisherBackgroundColor,
-				publisherBackgroundClip,
-			},
-		} = config;
-
 		const visibleBackgroundLength = checkVisibleItemLength(background);
 
 		return (
-			<>
+			<PanelBodyControl
+				title={__('Background', 'publisher-core')}
+				initialOpen={true}
+				icon={<BackgroundExtensionIcon />}
+				className={componentClassNames(
+					'extension',
+					'extension-background'
+				)}
+			>
 				{isActiveField(publisherBackground) && (
 					<ControlContextProvider
 						value={{
@@ -313,7 +320,7 @@ export const BackgroundExtension: TBackgroundProps = memo<TBackgroundProps>(
 							)}
 					</ControlContextProvider>
 				)}
-			</>
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps

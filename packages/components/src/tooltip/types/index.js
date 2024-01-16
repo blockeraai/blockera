@@ -1,5 +1,5 @@
 // @flow
-import type { Node } from 'react';
+import type { Node, MixedElement } from 'react';
 
 export type TooltipPlacement =
 	| 'top'
@@ -53,5 +53,5 @@ export type TTooltipItem = {
 	/**
 	 * The text shown in the tooltip when anchor element is focused or hovered.
 	 */
-	text?: string,
+	text?: string | MixedElement,
 };

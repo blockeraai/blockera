@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * Is empty passed object?
  *

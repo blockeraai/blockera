@@ -8,14 +8,7 @@ import { select } from '@wordpress/data';
 /**
  * Publisher dependencies
  */
-import {
-	isArray,
-	isEmpty,
-	isEquals,
-	isNull,
-	isObject,
-	isUndefined,
-} from '@publisher/utils';
+import { isEmpty, isEquals, isNull, isUndefined } from '@publisher/utils';
 import {
 	getBlockStates,
 	type StateGraph,
@@ -83,23 +76,7 @@ export const getStatesGraph = ({
 										]?.default;
 								}
 
-								if (
-									isArray(value) &&
-									isArray(defaultValue) &&
-									isEquals(value, defaultValue)
-								) {
-									return null;
-								}
-
-								if (
-									isObject(value) &&
-									isObject(defaultValue) &&
-									isEquals(value, defaultValue)
-								) {
-									return null;
-								}
-
-								if (value === defaultValue) {
+								if (isEquals(value, defaultValue)) {
 									return null;
 								}
 
@@ -132,7 +109,6 @@ export const getStatesGraph = ({
 							id: index,
 							states: changedStates,
 						},
-						changedStates,
 						isChangedState,
 					};
 				}

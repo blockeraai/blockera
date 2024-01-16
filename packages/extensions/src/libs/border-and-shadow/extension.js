@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
@@ -12,39 +12,46 @@ import type { MixedElement } from 'react';
 import {
 	BaseControl,
 	OutlineControl,
+	PanelBodyControl,
 	BoxShadowControl,
 	ControlContextProvider,
 } from '@publisher/controls';
+import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
 import { isActiveField } from '../../api/utils';
+import { Border, BorderRadius } from './components';
+import { BorderAndShadowExtensionIcon } from './index';
 import { generateExtensionId, hasSameProps } from '../utils';
 import type { TBorderAndShadowProps } from './types/border-and-shadow-props';
-import { Border, BorderRadius } from './components';
 
-export const BorderAndShadowExtension: TBorderAndShadowProps =
-	memo<TBorderAndShadowProps>(
+export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
+	memo(
 		({
 			block,
-			config,
+			borderAndShadowConfig: {
+				publisherBoxShadow,
+				publisherOutline,
+				publisherBorder,
+				publisherBorderRadius,
+			},
 			defaultValue,
 			handleOnChangeAttributes,
 			values: { border, outline, boxShadow, borderRadius },
 			extensionProps,
 		}: TBorderAndShadowProps): MixedElement => {
-			const {
-				borderAndShadowConfig: {
-					publisherBoxShadow,
-					publisherOutline,
-					publisherBorder,
-					publisherBorderRadius,
-				},
-			} = config;
-
 			return (
-				<>
+				<PanelBodyControl
+					title={__('Border And Shadow', 'publisher-core')}
+					initialOpen={true}
+					icon={<BorderAndShadowExtensionIcon />}
+					className={componentClassNames(
+						'extension',
+						'extension-border-and-shadow'
+					)}
+				>
 					{isActiveField(publisherBorder) && (
 						<Border
 							block={block}
@@ -157,7 +164,7 @@ export const BorderAndShadowExtension: TBorderAndShadowProps =
 							</BaseControl>
 						</ControlContextProvider>
 					)}
-				</>
+				</PanelBodyControl>
 			);
 		},
 		hasSameProps

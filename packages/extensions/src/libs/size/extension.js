@@ -4,18 +4,20 @@
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
  */
 import {
+	PanelBodyControl,
 	ControlContextProvider,
 	InputControl,
 	ToggleSelectControl,
 	BaseControl,
 } from '@publisher/controls';
 import { Flex } from '@publisher/components';
+import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -29,40 +31,37 @@ import { default as OverflowScrollIcon } from './icons/overflow-scroll';
 import { useBlockContext } from '../../hooks';
 import { ObjectFit } from './components';
 import AspectRatio from './components/aspect-ratio';
-import { toSimpleStyleWPCompatible } from '../../utils';
-import {
-	coreWPAspectRatioValues,
-	coreWPFitValues,
-	minHeightToWPCompatible,
-} from './utils';
+import { coreWPAspectRatioValues, coreWPFitValues } from './utils';
+import { SizeExtensionIcon } from './index';
 
-export const SizeExtension: MixedElement = memo<TSizeProps>(
+export const SizeExtension: ComponentType<TSizeProps> = memo(
 	({
 		block,
-		config,
+		sizeConfig: {
+			publisherWidth,
+			publisherHeight,
+			publisherOverflow,
+			publisherRatio,
+			publisherFit,
+			publisherMinWidth,
+			publisherMinHeight,
+			publisherMaxWidth,
+			publisherMaxHeight,
+		},
 		handleOnChangeAttributes,
 		values,
 		inheritValue,
 		extensionProps,
 	}: TSizeProps): MixedElement => {
-		const {
-			sizeConfig: {
-				publisherWidth,
-				publisherHeight,
-				publisherOverflow,
-				publisherRatio,
-				publisherFit,
-				publisherMinWidth,
-				publisherMinHeight,
-				publisherMaxWidth,
-				publisherMaxHeight,
-			},
-		} = config;
-
 		const { isNormalState } = useBlockContext();
 
 		return (
-			<>
+			<PanelBodyControl
+				title={__('Size', 'publisher-core')}
+				initialOpen={true}
+				icon={<SizeExtensionIcon />}
+				className={componentClassNames('extension', 'extension-size')}
+			>
 				{isActiveField(publisherWidth) && (
 					<BaseControl columns="columns-1">
 						<ControlContextProvider
@@ -103,16 +102,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									handleOnChangeAttributes(
 										'publisherWidth',
 										newValue,
-										{
-											ref,
-											addOrModifyRootItems:
-												toSimpleStyleWPCompatible({
-													wpAttribute: 'width',
-													newValue,
-													isNormalState,
-													ref,
-												}),
-										}
+										{ ref }
 									);
 								}}
 								controlAddonTypes={['variable']}
@@ -311,16 +301,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 									handleOnChangeAttributes(
 										'publisherHeight',
 										newValue,
-										{
-											ref,
-											addOrModifyRootItems:
-												toSimpleStyleWPCompatible({
-													wpAttribute: 'height',
-													newValue,
-													isNormalState,
-													ref,
-												}),
-										}
+										{ ref }
 									);
 								}}
 								controlAddonTypes={['variable']}
@@ -411,17 +392,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 												handleOnChangeAttributes(
 													'publisherMinHeight',
 													newValue,
-													{
-														ref,
-														addOrModifyRootItems:
-															minHeightToWPCompatible(
-																{
-																	newValue,
-																	ref,
-																	isNormalState,
-																}
-															),
-													}
+													{ ref }
 												)
 											}
 											controlAddonTypes={['variable']}
@@ -669,7 +640,7 @@ export const SizeExtension: MixedElement = memo<TSizeProps>(
 						/>
 					</ControlContextProvider>
 				)}
-			</>
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps

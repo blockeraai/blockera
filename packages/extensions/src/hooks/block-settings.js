@@ -14,10 +14,13 @@ import { isObject, isFunction } from '@publisher/utils';
  * Internal dependencies
  */
 import { STORE_NAME } from '../store/constants';
-import { blockStatesAttributes } from '../index';
+import {
+	blockStatesAttributes,
+	innerBlocksExtensionsAttributes,
+} from '../index';
 import { sanitizedBlockAttributes } from './utils';
 import { BlockBase, BlockPortals } from '../components';
-import { isBlockTypeExtension, isEnableExtension } from '../api/utils';
+import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
 
 const { getBlockExtension, getBlockExtensionBy } = select(STORE_NAME);
 
@@ -53,6 +56,27 @@ export default function withBlockSettings(
 }
 
 /**
+ * Preparing inner blocks.
+ *
+ * @param {Object} registeredInnerBlocks The register inner blocks on outside of core.
+ * @return {{}|{default}} the merge-able object include "default" key when registered inner blocks has valid blocks, empty object when has not valid items.
+ */
+function prepareInnerBlockTypes(registeredInnerBlocks: Object): Object {
+	const values = Object.values(registeredInnerBlocks);
+
+	if (!values.length) {
+		return {};
+	}
+
+	const types = values.map((innerBlock) => ({
+		...innerBlock,
+		attributes: {},
+	}));
+
+	return { default: types };
+}
+
+/**
  * Merge settings of block type.
  *
  * @param {Object} settings The default WordPress block type settings
@@ -60,7 +84,7 @@ export default function withBlockSettings(
  * @return {Object} merged settings!
  */
 function mergeBlockSettings(settings: Object, additional: Object): Object {
-	if (!isEnableExtension(additional)) {
+	if (!isEnabledExtension(additional)) {
 		return settings;
 	}
 
@@ -70,6 +94,12 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 			...settings.attributes,
 			...additional.attributes,
 			...blockStatesAttributes,
+			publisherInnerBlocks: {
+				...innerBlocksExtensionsAttributes.publisherInnerBlocks,
+				...prepareInnerBlockTypes(
+					additional?.publisherInnerBlocks || {}
+				),
+			},
 			publisherPropsId: {
 				type: 'string',
 			},
@@ -85,36 +115,31 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 		edit(props) {
 			if (isFunction(additional?.edit)) {
 				return (
-					<SlotFillProvider>
-						<BlockBase
-							{...{
-								...props,
-								additional,
-							}}
-						>
-							<Slot name={'publisher-core-block-before'} />
-
-							<div
-								className={
-									'publisher-core publisher-block-wrapper'
-								}
-								style={{
-									display: 'inline-block',
-									position: 'relative',
+					<>
+						<SlotFillProvider>
+							<BlockBase
+								{...{
+									...props,
+									additional,
 								}}
 							>
-								{settings.edit(props)}
-							</div>
+								<Slot name={'publisher-core-block-before'} />
 
-							<BlockPortals
-								blockId={`#block-${props.clientId}`}
-								mainSlot={'publisher-core-block-slot'}
-								slots={additional?.slotSelectors || {}}
-							/>
+								<BlockPortals
+									blockId={`#block-${props.clientId}`}
+									mainSlot={'publisher-core-block-slot'}
+									slots={
+										// slot selectors is feature on configuration block to create custom slots for anywhere.
+										// we can add slotSelectors property on block configuration to handle custom preview of block.
+										additional?.slotSelectors || {}
+									}
+								/>
 
-							<Slot name={'publisher-core-block-after'} />
-						</BlockBase>
-					</SlotFillProvider>
+								<Slot name={'publisher-core-block-after'} />
+							</BlockBase>
+						</SlotFillProvider>
+						{settings.edit(props)}
+					</>
 				);
 			}
 

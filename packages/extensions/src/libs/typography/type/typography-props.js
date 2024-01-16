@@ -46,10 +46,11 @@ export type TTypographyProps = {
 	},
 	backgroundClip?: string,
 	block: TBlockProps,
-	config: Object,
+	typographyConfig: Object,
 	children?: MixedElement,
 	defaultValue: {
 		fontSize?: string,
+		fontStyle?: string,
 		typography: {
 			fontSize?: string,
 			fontStyle?: string,

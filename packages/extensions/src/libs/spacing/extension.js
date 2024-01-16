@@ -2,22 +2,26 @@
 /**
  * External dependencies
  */
+import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
  */
 import {
 	BaseControl,
+	PanelBodyControl,
 	BoxSpacingControl,
 	ControlContextProvider,
 } from '@publisher/controls';
 import { isUndefined } from '@publisher/utils';
+import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
+import { SpacingExtensionIcon } from './index';
 import { isActiveField } from '../../api/utils';
 import { getSpacingValue } from './utils/get-spacing-value';
 import { generateExtensionId, hasSameProps } from '../utils';
@@ -30,21 +34,25 @@ const fallbackValue = {
 	left: '',
 };
 
-export const SpacingExtension: TSpacingProps = memo<TSpacingProps>(
+export const SpacingExtension: ComponentType<TSpacingProps> = memo(
 	({
 		block,
-		config,
+		spacingConfig: { publisherSpacing },
 		defaultValue,
 		spacingValue,
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TSpacingProps): MixedElement => {
-		const {
-			spacingConfig: { publisherSpacing },
-		} = config;
-
 		return (
-			<>
+			<PanelBodyControl
+				title={__('Spacing', 'publisher-core')}
+				initialOpen={true}
+				icon={<SpacingExtensionIcon />}
+				className={componentClassNames(
+					'extension',
+					'extension-spacing'
+				)}
+			>
 				{isActiveField(publisherSpacing) && (
 					<ControlContextProvider
 						value={{
@@ -112,7 +120,7 @@ export const SpacingExtension: TSpacingProps = memo<TSpacingProps>(
 						</BaseControl>
 					</ControlContextProvider>
 				)}
-			</>
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps

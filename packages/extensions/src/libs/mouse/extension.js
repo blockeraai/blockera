@@ -4,12 +4,17 @@
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
  */
-import { ControlContextProvider, SelectControl } from '@publisher/controls';
+import {
+	SelectControl,
+	PanelBodyControl,
+	ControlContextProvider,
+} from '@publisher/controls';
+import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -22,25 +27,27 @@ import {
 	pointerEventsOptions,
 } from './utils';
 import type { TMouseProps } from './types/mouse-props';
+import { MouseExtensionIcon } from './index';
 
-export const MouseExtension: MixedElement = memo<TMouseProps>(
+export const MouseExtension: ComponentType<TMouseProps> = memo(
 	({
 		block,
 		values: { cursor, userSelect, pointerEvents },
-		config,
+		mouseConfig: {
+			publisherCursor,
+			publisherUserSelect,
+			publisherPointerEvents,
+		},
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TMouseProps): MixedElement => {
-		const {
-			mouseConfig: {
-				publisherCursor,
-				publisherUserSelect,
-				publisherPointerEvents,
-			},
-		} = config;
-
 		return (
-			<>
+			<PanelBodyControl
+				title={__('Mouse', 'publisher-core')}
+				initialOpen={true}
+				icon={<MouseExtensionIcon />}
+				className={componentClassNames('extension', 'extension-mouse')}
+			>
 				{isActiveField(publisherCursor) && (
 					<ControlContextProvider
 						value={{
@@ -52,7 +59,6 @@ export const MouseExtension: MixedElement = memo<TMouseProps>(
 					>
 						<SelectControl
 							label={__('Cursor', 'publisher-core')}
-							labelPopoverTitle={__('Cursor', 'publisher-core')}
 							labelDescription={
 								<>
 									<p>
@@ -96,10 +102,6 @@ export const MouseExtension: MixedElement = memo<TMouseProps>(
 					>
 						<SelectControl
 							label={__('User Select', 'publisher-core')}
-							labelPopoverTitle={__(
-								'User Select',
-								'publisher-core'
-							)}
 							labelDescription={
 								<>
 									<p>
@@ -148,10 +150,6 @@ export const MouseExtension: MixedElement = memo<TMouseProps>(
 					>
 						<SelectControl
 							label={__('Pointer Events', 'publisher-core')}
-							labelPopoverTitle={__(
-								'User Select',
-								'publisher-core'
-							)}
 							labelDescription={
 								<>
 									<p>
@@ -188,7 +186,7 @@ export const MouseExtension: MixedElement = memo<TMouseProps>(
 						/>
 					</ControlContextProvider>
 				)}
-			</>
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps

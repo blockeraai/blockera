@@ -1,4 +1,4 @@
-.block-editor-block-inspector .components-panel__body.publisher-not-allowed {
+.block-editor-block-inspector__tabs.publisher-not-allowed {
 	opacity: 0.5;
 	user-select: none;
 	cursor: not-allowed;
@@ -6,31 +6,5 @@
 	input,
  	textarea {
 		pointer-events: none;
-	}
-}
-
-.publisher-current-state {
-	height: 20px;
-	padding: 0 5px;
-	font-size: 12px;
-	text-align: center;
-	position: absolute;
-	color: rgb(255, 255, 255);
-	transition: none;
-	will-change: color, font-size, padding, position, display, transition, background;
-	display: inline-flex;
-	align-items: center;
-	font-weight: 500;
-	border-radius: 2px;
-	margin: 2px 0;
-}
-
-.publisher-arrow-right {
-	display: inline-block;
-	margin: 0 1px;
-	color: #989898;
-
-	svg {
-		fill: currentColor;
 	}
 }

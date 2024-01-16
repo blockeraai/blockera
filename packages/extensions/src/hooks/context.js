@@ -4,13 +4,8 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import {
-	createContext,
-	useContext,
-	useMemo,
-	useState,
-} from '@wordpress/element';
 import { dispatch } from '@wordpress/data';
+import { createContext, useContext, useMemo } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -30,8 +25,6 @@ const BlockEditContextProvider = ({
 	children,
 	...props
 }: Object): MixedElement => {
-	const [currentTab, setCurrentTab] = useState('general');
-	const [isOpenGridBuilder, setOpenGridBuilder] = useState(false);
 	const memoizedValue: {
 		currentTab: string,
 		getBlockType: string,
@@ -49,12 +42,15 @@ const BlockEditContextProvider = ({
 	} = useMemo(() => {
 		const {
 			block,
+			currentTab,
 			getBlockType,
 			blockStateId,
 			breakpointId,
 			getAttributes,
+			setCurrentTab,
 			isNormalState,
-			// setAttributes,
+			isOpenGridBuilder,
+			setOpenGridBuilder,
 			handleOnChangeAttributes,
 		} = props;
 

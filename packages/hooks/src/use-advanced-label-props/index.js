@@ -48,10 +48,11 @@ export const useAdvancedLabelProps = ({
 
 	let _blockAttributes = blockAttributes[attribute];
 
-	const stateAttributes =
-		blockAttributes.publisherBlockStates[blockStateId].breakpoints[
-			breakpointId
-		].attributes;
+	const currentBlockState =
+		blockAttributes?.publisherBlockStates[blockStateId];
+	const currentBreakpoint = currentBlockState?.breakpoints[breakpointId];
+
+	const stateAttributes = currentBreakpoint?.attributes;
 
 	let stateValue = stateAttributes ? stateAttributes[attribute] : {};
 

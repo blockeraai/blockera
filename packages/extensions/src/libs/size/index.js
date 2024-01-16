@@ -1,3 +1,4 @@
+export * from './bootstrap';
 export { supports } from './supports';
 export { SizeStyles } from './styles';
 export { attributes } from './attributes';

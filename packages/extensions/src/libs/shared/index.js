@@ -4,12 +4,8 @@
  */
 import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
-import { memo } from '@wordpress/element';
-import type { Node, MixedElement } from 'react';
-import {
-	Slot,
-	// Fill,
-} from '@wordpress/components';
+import { memo, useEffect } from '@wordpress/element';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
@@ -21,79 +17,80 @@ import { Tabs } from '@publisher/components';
 /**
  * Internal dependencies
  */
-import { BaseExtension } from '../base';
 import {
-	BackgroundExtensionIcon,
 	attributes as backgroundAttributes,
 	supports as backgroundSupports,
+	BackgroundExtension,
 } from '../background';
 import {
-	IconExtensionIcon,
 	attributes as iconAttributes,
 	supports as iconSupports,
+	IconExtension,
 } from '../icon';
 import {
-	BorderAndShadowExtensionIcon,
 	attributes as borderAndShadowAttributes,
 	supports as borderAndShadowSupports,
+	BorderAndShadowExtension,
 } from '../border-and-shadow';
 import {
-	EffectsExtensionIcon,
 	attributes as effectsAttributes,
 	supports as effectsSupports,
+	EffectsExtension,
 } from '../effects';
 import {
-	TypographyExtensionIcon,
 	attributes as typographyAttributes,
 	supports as typographySupports,
+	TypographyExtension,
 } from '../typography';
 import {
-	SpacingExtensionIcon,
 	attributes as spacingAttributes,
 	supports as spacingSupports,
+	SpacingExtension,
 } from '../spacing';
 import {
-	PositionExtensionIcon,
 	attributes as positionAttributes,
 	supports as positionSupports,
+	PositionExtension,
 } from '../position';
 import {
-	SizeExtensionIcon,
 	attributes as sizeAttributes,
 	supports as sizeSupports,
+	SizeExtension,
 } from '../size';
 import {
-	LayoutExtensionIcon,
 	attributes as layoutAttributes,
 	supports as layoutSupports,
+	LayoutExtension,
 } from '../layout';
 import {
-	FlexChildExtensionIcon,
 	attributes as flexChildAttributes,
 	supports as flexChildSupports,
+	FlexChildExtension,
 } from '../flex-child';
 import {
-	AdvancedExtensionIcon,
+	AdvancedExtension,
 	attributes as advancedAttributes,
 	supports as advancedSupports,
 } from '../advanced';
 import {
-	MouseExtensionIcon,
 	attributes as mouseAttributes,
 	supports as mouseSupports,
+	MouseExtension,
 } from '../mouse';
 import {
-	GridChildExtensionIcon,
+	GridChildExtension,
 	attributes as gridChildAttributes,
 	supports as gridChildSupports,
 } from '../grid-child';
-import { hasSameProps } from '../utils';
+import { propsAreEqual } from '../../components';
 import extensions from './extensions.json';
 import type { TStates } from '../block-states/types';
-import { useBlockContext } from '../../hooks';
+import { useBlockContext, useDisplayBlockControls } from '../../hooks';
 import { getStateInfo } from '../block-states/helpers';
 import StateContainer from '../../components/state-container';
 import type { TTabProps } from '@publisher/components/src/tabs/types';
+import * as config from '../base/config';
+import { InnerBlocksExtension } from '../inner-blocks';
 
 export const attributes = {
 	...typographyAttributes,
@@ -128,20 +125,21 @@ export const supports = {
 
 type Props = {
 	name: string,
-	children?: Node,
 	clientId: string,
 	supports: Object,
-	activeTab: string,
+	children?: ComponentType<any>,
 	currentStateAttributes: Object,
+	publisherInnerBlocks: Array<Object>,
+	setParentIsLoad: (isLoad: boolean) => void,
 	setAttributes: (attributes: Object) => void,
 };
 
-export const SharedBlockExtension: Props = memo(
+export const SharedBlockExtension: ComponentType<Props> = memo(
 	({
 		children,
-		activeTab,
-		currentStateAttributes,
+		setParentIsLoad,
 		setAttributes,
+		currentStateAttributes,
 		...props
 	}: Props): MixedElement => {
 		const currentState: TStates =
@@ -155,8 +153,17 @@ export const SharedBlockExtension: Props = memo(
 		// 	...props,
 		// });
 
-		const { blockStateId, breakpointId, handleOnChangeAttributes } =
-			useBlockContext();
+		const {
+			currentTab,
+			currentBlock,
+			blockStateId,
+			breakpointId,
+			extensionConfig,
+			handleOnChangeAttributes,
+		} = useBlockContext();
+
+		// eslint-disable-next-line
+		useEffect(() => setParentIsLoad(true), []);
 
 		const {
 			size,
@@ -188,6 +195,26 @@ export const SharedBlockExtension: Props = memo(
 			parentClientIds[parentClientIds.length - 1]
 		);
 
+		const {
+			iconConfig,
+			mouseConfig,
+			sizeConfig,
+			layoutConfig,
+			spacingConfig,
+			effectsConfig,
+			positionConfig,
+			advancedConfig,
+			flexChildConfig,
+			backgroundConfig,
+			typographyConfig,
+			borderAndShadowConfig,
+		} = extensionConfig[currentBlock] || config;
+
+		const block = {
+			blockName: props.name,
+			clientId: props.clientId,
+		};
+
 		const MappedExtensions = (tab: TTabProps): MixedElement => {
 			return (
 				<>
@@ -196,84 +223,61 @@ export const SharedBlockExtension: Props = memo(
 							display: 'settings' === tab.name ? 'block' : 'none',
 						}}
 					>
-						<>
-							<BaseExtension
-								{...props}
-								extensionProps={{
+						<IconExtension
+							{...{
+								iconConfig,
+								block,
+								values: include(
+									currentStateAttributes,
+									icon,
+									'publisher'
+								),
+								extensionProps: {
 									publisherIcon: {},
 									publisherIconPosition: {},
 									publisherIconGap: {},
 									publisherIconSize: {},
 									publisherIconColor: {},
 									publisherIconLink: {},
-								}}
-								values={include(
-									currentStateAttributes,
-									icon,
-									'publisher'
-								)}
-								initialOpen={true}
-								extensionId={'Icon'}
-								title={__('Icon', 'publisher-core')}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								icon={<IconExtensionIcon />}
-							/>
-
-							<Slot
-								name={`block-inspector-tab-${tab.name}-start`}
-							/>
-							<Slot name={`block-inspector-tab-${tab.name}-1`} />
-							<Slot name={`block-inspector-tab-${tab.name}-2`} />
-							<Slot name={`block-inspector-tab-${tab.name}-3`} />
-							<Slot name={`block-inspector-tab-${tab.name}-4`} />
-							<Slot name={`block-inspector-tab-${tab.name}-5`} />
-							<Slot name={`block-inspector-tab-${tab.name}-6`} />
-							<Slot name={`block-inspector-tab-${tab.name}-7`} />
-							<Slot name={`block-inspector-tab-${tab.name}-8`} />
-							<Slot name={`block-inspector-tab-${tab.name}-9`} />
-							<Slot name={`block-inspector-tab-${tab.name}-10`} />
-
-							<Slot
-								name={`block-inspector-tab-${tab.name}-end`}
-							/>
-						</>
+								},
+								handleOnChangeAttributes,
+							}}
+						/>
 					</div>
 					<div
 						style={{
 							display: 'style' === tab.name ? 'block' : 'none',
 						}}
 					>
-						<>
-							<BaseExtension
-								{...props}
-								extensionProps={{
-									publisherSpacing: {},
-								}}
-								initialOpen={true}
-								extensionId={'Spacing'}
-								defaultValue={
-									currentStateAttributes.style?.spacing || {}
-								}
-								spacingValue={
-									currentStateAttributes.publisherSpacing
-								}
-								title={__('Spacing', 'publisher-core')}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								icon={<SpacingExtensionIcon />}
-							/>
+						<InnerBlocksExtension
+							currentBlock={currentBlock}
+							setParentIsLoad={setParentIsLoad}
+							innerBlocks={
+								currentStateAttributes?.publisherInnerBlocks ||
+								[]
+							}
+						/>
 
-							<BaseExtension
-								{...props}
-								values={{
-									position:
-										currentStateAttributes.publisherPosition,
-									zIndex: currentStateAttributes.publisherZIndex,
-								}}
-								inheritValues={{
+						<SpacingExtension
+							{...{
+								block,
+								spacingConfig,
+								extensionProps: {
+									publisherSpacing: {},
+								},
+								handleOnChangeAttributes,
+								spacingValue:
+									currentStateAttributes.publisherSpacing,
+								defaultValue:
+									currentStateAttributes.style?.spacing || {},
+							}}
+						/>
+
+						<PositionExtension
+							{...{
+								block,
+								positionConfig,
+								inheritValues: {
 									position: currentStateAttributes?.style
 										?.position?.type
 										? {
@@ -293,28 +297,30 @@ export const SharedBlockExtension: Props = memo(
 												},
 										  }
 										: undefined,
-								}}
-								extensionProps={{
+								},
+								values: {
+									position:
+										currentStateAttributes.publisherPosition,
+									zIndex: currentStateAttributes.publisherZIndex,
+								},
+								extensionProps: {
 									publisherPosition: {},
 									publisherZIndex: {},
-								}}
-								initialOpen={true}
-								extensionId={'Position'}
-								title={__('Position', 'publisher-core')}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								icon={<PositionExtensionIcon />}
-							/>
+								},
+								handleOnChangeAttributes,
+							}}
+						/>
 
-							<BaseExtension
-								{...props}
-								values={include(
+						<SizeExtension
+							{...{
+								block,
+								sizeConfig,
+								values: include(
 									currentStateAttributes,
 									size,
 									'publisher'
-								)}
-								inheritValue={{
+								),
+								inheritValue: {
 									width: currentStateAttributes?.width,
 									height: currentStateAttributes?.height,
 									minHeight:
@@ -324,8 +330,8 @@ export const SharedBlockExtension: Props = memo(
 									aspectRatio:
 										currentStateAttributes?.aspectRatio,
 									scale: currentStateAttributes?.scale,
-								}}
-								extensionProps={{
+								},
+								extensionProps: {
 									publisherWidth: {},
 									publisherHeight: {},
 									publisherMinWidth: {},
@@ -336,23 +342,18 @@ export const SharedBlockExtension: Props = memo(
 									publisherRatio: {},
 									publisherFit: {},
 									publisherFitPosition: {},
-								}}
-								initialOpen={true}
-								extensionId={'Size'}
-								title={__('Size', 'publisher-core')}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								icon={<SizeExtensionIcon />}
-							/>
+								},
+								handleOnChangeAttributes,
+							}}
+						/>
 
-							<BaseExtension
-								{...props}
-								extensionProps={{
+						<LayoutExtension
+							{...{
+								block,
+								layoutConfig,
+								extensionProps: {
 									publisherDisplay: {},
-									publisherFlexDirection: {},
-									publisherAlignItems: {},
-									publisherJustifyContent: {},
+									publisherFlexLayout: {},
 									publisherGap: {},
 									publisherFlexWrap: {},
 									publisherAlignContent: {},
@@ -365,30 +366,26 @@ export const SharedBlockExtension: Props = memo(
 									publisherGridColumns: {},
 									publisherGridRows: {},
 									publisherGridAreas: {},
-								}}
-								initialOpen={true}
-								extensionId={'Layout'}
-								title={__('Layout', 'publisher-core')}
-								values={include(
+								},
+								values: include(
 									currentStateAttributes,
 									layout,
 									'publisher'
-								)}
-								defaultValue={
-									currentStateAttributes.layout || {}
-								}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								icon={<LayoutExtensionIcon />}
-							/>
+								),
+								defaultValue:
+									currentStateAttributes.layout || {},
+								handleOnChangeAttributes,
+							}}
+						/>
 
-							{directParentBlock?.innerBlocks.length &&
-								directParentBlock?.currentStateAttributes
-									.publisherDisplay === 'flex' && (
-									<BaseExtension
-										{...props}
-										extensionProps={{
+						{directParentBlock?.innerBlocks.length &&
+							directParentBlock?.attributes.publisherDisplay ===
+								'flex' && (
+								<FlexChildExtension
+									{...{
+										block,
+										flexChildConfig,
+										extensionProps: {
 											publisherFlexChildSizing: {},
 											publisherFlexChildGrow: {},
 											publisherFlexChildShrink: {},
@@ -396,70 +393,59 @@ export const SharedBlockExtension: Props = memo(
 											publisherFlexChildAlign: {},
 											publisherFlexChildOrder: {},
 											publisherFlexChildOrderCustom: {},
-										}}
-										initialOpen={true}
-										extensionId={'FlexChild'}
-										title={__(
-											'Flex Child',
-											'publisher-core'
-										)}
-										values={{
+										},
+										values: {
 											...include(
 												currentStateAttributes,
 												flexChild,
 												'publisher'
 											),
 											flexDirection:
-												directParentBlock
-													?.currentStateAttributes
+												directParentBlock?.attributes
 													.publisherFlexDirection,
-										}}
-										handleOnChangeAttributes={
-											handleOnChangeAttributes
-										}
-										icon={<FlexChildExtensionIcon />}
-									/>
-								)}
+										},
+										handleOnChangeAttributes,
+									}}
+								/>
+							)}
 
-							{directParentBlock?.innerBlocks.length &&
-								directParentBlock?.attributes
-									.publisherDisplay === 'grid' && (
-									<BaseExtension
-										{...props}
-										initialOpen={true}
-										extensionId={'GridChild'}
-										extensionProps={{
-											publisherGridChildPosition: {},
-											publisherGridChildAlign: {},
-											publisherGridChildJustify: {},
-											publisherGridChildOrder: {},
-											publisherGridChildOrderCustom: {},
-										}}
-										title={__(
-											'Grid Child',
-											'publisher-core'
-										)}
-										values={{
-											...include(
-												currentStateAttributes,
-												gridChild,
-												'publisher'
-											),
-											gridAreas:
-												directParentBlock
-													?.currentStateAttributes
-													.publisherGridAreas,
-										}}
-										handleOnChangeAttributes={
-											handleOnChangeAttributes
-										}
-										icon={<GridChildExtensionIcon />}
-									/>
-								)}
+						{directParentBlock?.innerBlocks.length &&
+							directParentBlock?.attributes.publisherDisplay ===
+								'grid' && (
+								<GridChildExtension
+									{...props}
+									initialOpen={true}
+									extensionId={'GridChild'}
+									extensionProps={{
+										publisherGridChildPosition: {},
+										publisherGridChildAlign: {},
+										publisherGridChildJustify: {},
+										publisherGridChildOrder: {},
+										publisherGridChildOrderCustom: {},
+									}}
+									title={__('Grid Child', 'publisher-core')}
+									values={{
+										...include(
+											currentStateAttributes,
+											gridChild,
+											'publisher'
+										),
+										gridAreas:
+											directParentBlock
+												?.currentStateAttributes
+												.publisherGridAreas,
+									}}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+								/>
+							)}
 
-							<BaseExtension
-								{...props}
-								extensionProps={{
+						<TypographyExtension
+							{...{
+								block,
+								typographyConfig,
+								extensionProps: {
 									publisherFontColor: {},
 									publisherFontSize: {},
 									publisherLineHeight: {},
@@ -476,11 +462,8 @@ export const SharedBlockExtension: Props = memo(
 									publisherTextColumns: {},
 									publisherTextStroke: {},
 									publisherWordBreak: {},
-								}}
-								initialOpen={true}
-								extensionId={'Typography'}
-								title={__('Typography', 'publisher-core')}
-								values={{
+								},
+								values: {
 									...include(
 										currentStateAttributes,
 										typography,
@@ -488,84 +471,78 @@ export const SharedBlockExtension: Props = memo(
 									),
 									display:
 										currentStateAttributes.publisherDisplay,
-								}}
-								backgroundClip={
-									currentStateAttributes?.publisherBackgroundClip
-								}
-								defaultValue={{
+								},
+								backgroundClip:
+									currentStateAttributes?.publisherBackgroundClip,
+								defaultValue: {
 									fontSize:
 										currentStateAttributes.fontSize || '',
+									fontStyle:
+										currentStateAttributes.fontStyle ||
+										'normal',
 									typography:
 										currentStateAttributes.style
 											?.typography || {},
-								}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								icon={<TypographyExtensionIcon />}
-							/>
+								},
+								handleOnChangeAttributes,
+							}}
+						/>
 
-							<BaseExtension
-								{...props}
-								extensionProps={{
+						<BackgroundExtension
+							{...{
+								block,
+								backgroundConfig,
+								extensionProps: {
 									publisherBackground: {},
 									publisherBackgroundColor: {},
 									publisherBackgroundClip: {},
-								}}
-								initialOpen={true}
-								extensionId={'Background'}
-								values={include(
+								},
+								values: include(
 									currentStateAttributes,
 									background,
 									'publisher'
-								)}
-								defaultValue={
+								),
+								backgroundClip:
+									currentStateAttributes?.publisherBackgroundClip,
+								defaultValue:
 									currentStateAttributes.style?.background ||
-									{}
-								}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								title={__('Background', 'publisher-core')}
-								icon={<BackgroundExtensionIcon />}
-							/>
+									{},
+								handleOnChangeAttributes,
+							}}
+						/>
 
-							<BaseExtension
-								{...props}
-								extensionProps={{
+						<BorderAndShadowExtension
+							{...{
+								block,
+								borderAndShadowConfig,
+								extensionProps: {
 									publisherBoxShadow: {},
 									publisherOutline: {},
 									publisherBorder: {},
 									publisherBorderRadius: {},
-								}}
-								initialOpen={true}
-								extensionId={'BorderAndShadow'}
-								values={include(
+								},
+								values: include(
 									currentStateAttributes,
 									borderAndShadow,
 									'publisher'
-								)}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								defaultValue={{
+								),
+								defaultValue: {
 									borderColor:
 										currentStateAttributes?.borderColor ||
 										'',
 									border:
 										currentStateAttributes.style?.border ||
 										{},
-								}}
-								title={__(
-									'Border And Shadow',
-									'publisher-core'
-								)}
-								icon={<BorderAndShadowExtensionIcon />}
-							/>
+								},
+								handleOnChangeAttributes,
+							}}
+						/>
 
-							<BaseExtension
-								{...props}
-								extensionProps={{
+						<EffectsExtension
+							{...{
+								block,
+								effectsConfig,
+								extensionProps: {
 									publisherOpacity: {},
 									publisherTransform: {},
 									publisherTransformSelfPerspective: {},
@@ -579,62 +556,50 @@ export const SharedBlockExtension: Props = memo(
 									publisherDivider: {},
 									publisherBlendMode: {},
 									publisherMask: {},
-								}}
-								initialOpen={true}
-								extensionId={'Effects'}
-								values={include(
+								},
+								values: include(
 									currentStateAttributes,
 									effects,
 									'publisher'
-								)}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								title={__('Effects', 'publisher-core')}
-								icon={<EffectsExtensionIcon />}
-							/>
+								),
+								handleOnChangeAttributes,
+							}}
+						/>
 
-							<BaseExtension
-								{...props}
-								extensionProps={{
+						<MouseExtension
+							{...{
+								block,
+								mouseConfig,
+								extensionProps: {
 									publisherCursor: {},
 									publisherUserSelect: {},
 									publisherPointerEvents: {},
-								}}
-								initialOpen={true}
-								extensionId={'Mouse'}
-								values={include(
+								},
+								values: include(
 									currentStateAttributes,
 									mouse,
 									'publisher'
-								)}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								title={__('Mouse', 'publisher-core')}
-								icon={<MouseExtensionIcon />}
-							/>
+								),
+								handleOnChangeAttributes,
+							}}
+						/>
 
-							<BaseExtension
-								{...props}
-								extensionProps={{
+						<AdvancedExtension
+							{...{
+								block,
+								advancedConfig,
+								extensionProps: {
 									publisherAttributes: {},
 									publisherCSSProperties: {},
-								}}
-								initialOpen={true}
-								extensionId={'Advanced'}
-								values={include(
+								},
+								values: include(
 									currentStateAttributes,
 									advanced,
 									'publisher'
-								)}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								title={__('Advanced', 'publisher-core')}
-								icon={<AdvancedExtensionIcon />}
-							/>
-						</>
+								),
+								handleOnChangeAttributes,
+							}}
+						/>
 					</div>
 				</>
 			);
@@ -663,14 +628,16 @@ export const SharedBlockExtension: Props = memo(
 
 		return (
 			<StateContainer currentState={getStateInfo(currentState)}>
-				<Tabs
-					tabs={tabs}
-					activeTab={activeTab}
-					getPanel={MappedExtensions}
-				/>
+				{useDisplayBlockControls() && (
+					<Tabs
+						tabs={tabs}
+						activeTab={currentTab}
+						getPanel={MappedExtensions}
+					/>
+				)}
 				{children}
 			</StateContainer>
 		);
 	},
-	hasSameProps
+	propsAreEqual
 );

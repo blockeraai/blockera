@@ -3,17 +3,9 @@ export const attributes = {
 		type: 'string',
 		default: '',
 	},
-	publisherFlexDirection: {
+	publisherFlexLayout: {
 		type: 'object',
-		default: { value: 'row', reverse: false },
-	},
-	publisherAlignItems: {
-		type: 'string',
-		default: '',
-	},
-	publisherJustifyContent: {
-		type: 'string',
-		default: '',
+		default: { direction: 'row', alignItems: '', justifyContent: '' },
 	},
 	publisherGap: {
 		type: 'object',

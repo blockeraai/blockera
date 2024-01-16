@@ -14,8 +14,6 @@ import { ControlContextProvider, InputControl } from '@publisher/controls';
  */
 import { generateExtensionId } from '../../utils';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
-import { toSimpleStyleWPCompatible } from '../../../utils';
-import { useBlockContext } from '../../../hooks';
 
 export const FontSize = ({
 	block,
@@ -29,8 +27,6 @@ export const FontSize = ({
 	defaultValue?: string,
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
-	const { isNormalState } = useBlockContext();
-
 	return (
 		<ControlContextProvider
 			value={{
@@ -66,14 +62,7 @@ export const FontSize = ({
 				max={200}
 				defaultValue={defaultValue}
 				onChange={(newValue, ref) =>
-					onChange('publisherFontSize', newValue, {
-						addOrModifyRootItems: toSimpleStyleWPCompatible({
-							wpAttribute: 'fontSize',
-							newValue,
-							isNormalState,
-							ref,
-						}),
-					})
+					onChange('publisherFontSize', newValue, { ref })
 				}
 				controlAddonTypes={['variable']}
 				variableTypes={['font-size']}

@@ -14,11 +14,12 @@ export {
 	supports as flexChildSupports,
 } from './flex-child';
 export {
-	SizeExtensionIcon,
 	SizeStyles,
 	SizeExtension,
-	attributes as sizeAttributes,
+	SizeExtensionIcon,
 	supports as sizeSupports,
+	attributes as sizeAttributes,
+	bootstrap as bootstrapSizeExtension,
 } from './size';
 export {
 	PositionExtensionIcon,
@@ -70,11 +71,12 @@ export {
 	supports as advancedExtensionSupports,
 } from './advanced';
 export {
-	TypographyExtensionIcon,
 	TypographyStyles,
 	TypographyExtension,
-	attributes as typographyExtensionAttributes,
+	TypographyExtensionIcon,
 	supports as typographyExtensionSupports,
+	bootstrap as bootstrapTypographyExtension,
+	attributes as typographyExtensionAttributes,
 } from './typography';
 export {
 	IconExtension,
@@ -82,15 +84,16 @@ export {
 	supports as IconExtensionSupports,
 } from './icon';
 export {
+	definitionTypes,
+	InnerBlocksExtension,
+	InnerBlocksExtensionIcon,
+	attributes as innerBlocksExtensionsAttributes,
+} from './inner-blocks';
+export {
 	SharedBlockExtension,
 	attributes as sharedBlockExtensionAttributes,
 	supports as sharedBlockExtensionSupports,
 } from './shared';
-export { BaseExtension } from './base';
-export {
-	BaseExtensionContext,
-	BaseExtensionContextProvider,
-} from './base/context';
 export * as extensionConfig from './base/config';
 
 export { attributes as blockStatesAttributes } from './block-states';

@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { memo, useState } from '@wordpress/element';
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
@@ -12,11 +12,15 @@ import type { MixedElement } from 'react';
 import {
 	BaseControl,
 	TransformControl,
+	PanelBodyControl,
 	ControlContextProvider,
 } from '@publisher/controls';
 import { isInteger } from '@publisher/utils';
 import { Button } from '@publisher/components';
-import { controlInnerClassNames } from '@publisher/classnames';
+import {
+	componentClassNames,
+	controlInnerClassNames,
+} from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -33,8 +37,9 @@ import { BackdropFilter } from './components/backdrop-filter';
 import { Blending } from './components/blending';
 import { Divider } from './components/divider';
 import { Mask } from './components/mask';
+import { EffectsExtensionIcon } from './index';
 
-export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
+export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 	({
 		values: {
 			opacity,
@@ -52,28 +57,32 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 			mask,
 		},
 		block,
-		config,
+		effectsConfig: {
+			publisherOpacity,
+			publisherTransform,
+			publisherTransition,
+			publisherFilter,
+			publisherBlendMode,
+			publisherBackdropFilter,
+			publisherDivider,
+			publisherMask,
+		},
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TEffectsProps): MixedElement => {
-		const {
-			effectsConfig: {
-				publisherOpacity,
-				publisherTransform,
-				publisherTransition,
-				publisherFilter,
-				publisherBlendMode,
-				publisherBackdropFilter,
-				publisherDivider,
-				publisherMask,
-			},
-		} = config;
-
 		const [isTransformSettingsVisible, setIsTransformSettingsVisible] =
 			useState(false);
 
 		return (
-			<>
+			<PanelBodyControl
+				title={__('Effects', 'publisher-core')}
+				initialOpen={true}
+				icon={<EffectsExtensionIcon />}
+				className={componentClassNames(
+					'extension',
+					'extension-effects'
+				)}
+			>
 				{isActiveField(publisherOpacity) && (
 					<Opacity
 						block={block}
@@ -221,7 +230,7 @@ export const EffectsExtension: TEffectsProps = memo<TEffectsProps>(
 						{...extensionProps.publisherBlendMode}
 					/>
 				)}
-			</>
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps

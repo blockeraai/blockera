@@ -1,6 +1,9 @@
+// @flow
+
 /**
  * External dependencies
  */
+import type { MixedElement } from 'react';
 import { select, dispatch } from '@wordpress/data';
 
 /**
@@ -31,6 +34,16 @@ import { store as extensionStore } from '../store';
  *                                              then no preview is shown.
  */
 
+export type publisherBlockExtensionType = {
+	name: string,
+	example: Object,
+	selectors: Object,
+	edit: MixedElement,
+	attributes: Object,
+	save: MixedElement,
+	slotSelectors: Object,
+};
+
 /**
  * Registers a new block extension in three types (field, extension, and block) provided a unique name and an object defining its
  * behavior. Once registered, the block extension is made available as an option to any
@@ -39,6 +52,7 @@ import { store as extensionStore } from '../store';
  * For more in-depth information on registering a custom block extension see the [Create a block extension tutorial](docs/how-to-guides/block-extension-tutorial/README.md)
  *
  * @param {string} name the block extension name
+ * @param type
  * @param {Object} settings the block settings
  *
  * * @example
@@ -58,7 +72,7 @@ import { store as extensionStore } from '../store';
 export function registerBlockExtension(
 	name: string,
 	{ type = 'block', ...settings }: Object
-): Object | undefined {
+): Object | void {
 	if (!isString(name)) {
 		console.error('Block extension names must be strings.');
 		return;
@@ -129,10 +143,10 @@ export function registerBlockExtension(
  * };
  * ```
  *
- * @return {WPBlockType | undefined} The previous block extension value, if it has been successfully
+ * @return {WPBlockType | void} The previous block extension value, if it has been successfully
  *                    unregistered; otherwise `undefined`.
  */
-export function unregisterBlockExtension(name) {
+export function unregisterBlockExtension(name: string): Object | void {
 	const oldExtension = select(extensionStore).getBlockExtension(name);
 
 	if (!oldExtension) {

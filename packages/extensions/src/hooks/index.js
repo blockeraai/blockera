@@ -28,6 +28,6 @@ export { useIconEffect } from './use-icon-effect';
 export { useBlocksStore } from './use-blocks-store';
 export { useStoreSelectors } from './use-store-selectors';
 export { useBlockExtensions } from './use-block-extensions';
-export { useFilterAttributes } from './use-filter-attributes';
 export { useStoreDispatchers } from './use-store-dispatchers';
+export { useBlockSideEffects } from './use-block-side-effects';
 export { useDisplayBlockControls } from './use-display-block-controls';

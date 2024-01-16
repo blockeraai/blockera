@@ -4,6 +4,14 @@
  */
 import type { MixedElement } from 'react';
 
+export type ControlContextRef = {
+	current: {
+		path: string,
+		reset: boolean,
+		action: 'reset' | 'normal',
+	},
+};
+
 export type ControlContextProviderProps = {
 	value: {
 		block?: Object,

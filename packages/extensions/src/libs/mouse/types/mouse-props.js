@@ -17,7 +17,7 @@ export type TCssProps = {
 
 export type TMouseProps = {
 	block: TBlockProps,
-	config: Object,
+	mouseConfig: Object,
 	children?: MixedElement,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	values: { cursor: string, userSelect: string, pointerEvents: string },

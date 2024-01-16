@@ -3,6 +3,7 @@
 /**
  * External dependencies
  */
+import { applyFilters } from '@wordpress/hooks';
 import { default as memoize } from 'fast-memoize';
 
 /**
@@ -22,10 +23,12 @@ export const useAttributes = (
 		breakpointId,
 		blockStateId,
 		isNormalState,
+		getAttributes,
 	}: {
 		blockStateId: number,
 		breakpointId: number,
 		isNormalState: () => boolean,
+		getAttributes: (key: string) => any,
 	}
 ): {
 	handleOnChangeAttributes: THandleOnChangeAttributes,
@@ -107,11 +110,28 @@ export const useAttributes = (
 				return;
 			}
 
-			setAttributes({
-				..._attributes,
-				// $FlowFixMe
-				[attributeId]: newValue,
-			});
+			setAttributes(
+				/**
+				 * Filterable attributes before set next state.
+				 * usefully in add WordPress compatibility and any other filters.
+				 *
+				 * hook: 'publisher-core/block/extensions/set-attributes'
+				 *
+				 * @since 1.0.0
+				 */
+				applyFilters(
+					'publisherCore.blockEdit.setAttributes',
+					{
+						..._attributes,
+						// $FlowFixMe
+						[attributeId]: newValue,
+					},
+					attributeId,
+					newValue,
+					ref,
+					getAttributes
+				)
+			);
 
 			return;
 		}

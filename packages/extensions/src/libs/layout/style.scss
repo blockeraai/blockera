@@ -1,8 +1,6 @@
 .publisher-flex-direction,
 .publisher-flex-align-content,
-.publisher-flex-wrap,
-.publisher-flex-justify-content,
-.publisher-flex-align-items {
+.publisher-flex-wrap {
 
 	.publisher-field-control {
 
@@ -12,103 +10,11 @@
 	}
 }
 
-.publisher-direction-column-reverse,
-.publisher-direction-column {
-
-	&.publisher-flex-align-items {
-
-		.publisher-field-control {
-
-			svg:not(.publisher-align-items-baseline) {
-				transform: rotate(-90deg);
-			}
-		}
-	}
-
-	&.publisher-flex-justify-content {
-
-		.publisher-field-control {
-
-			svg {
-				transform: rotate(90deg);
-			}
-		}
-	}
-}
-
-.publisher-direction-column-reverse {
-
-	&.publisher-flex-justify-content {
-
-		.publisher-field-control {
-
-			svg.publisher-flex-justify-content-flex-end,
-			svg.publisher-flex-justify-content-flex-start {
-				transform: rotate(270deg);
-			}
-		}
-	}
-
-		&.publisher-flex-wrap {
-
-			.publisher-field-control {
-
-				svg {
-					transform: rotate(180deg);
-				}
-
-				svg.publisher-wrap-wrap {
-					transform: rotate(180deg) scaleY(-1);
-				}
-			}
-		}
-}
-
-.publisher-direction-row-reverse {
-
-	&.publisher-flex-justify-content {
-
-		.publisher-field-control {
-
-			svg.publisher-flex-justify-content-flex-end,
-			svg.publisher-flex-justify-content-flex-start {
-				transform: rotate(180deg);
-			}
-		}
-	}
-
-	&.publisher-flex-wrap {
-
-		.publisher-field-control {
-
-			svg {
-				transform: rotate(180deg);
-			}
-
-			svg.publisher-wrap-wrap {
-				transform: rotate(180deg) scaleY(-1);
-			}
-		}
-	}
-
-}
-
 .publisher-flex-align-content.reverse {
 
 	svg.align-content-flex-end,
 	svg.align-content-flex-start {
         transform: rotate(180deg) scaleX(-1);
-	}
-
-}
-
-.publisher-direction-row-reverse,
-.publisher-direction-column-reverse {
-
-    svg.direction-row,
-    svg.direction-column {
-
-		transform: rotate(180deg);
 	}
 
 }
