@@ -22,18 +22,20 @@ import {
  */
 import { Breadcrumb } from './breadcrumb';
 import { default as BlockIcon } from './block-icon';
-import type { InnerBlockType } from '../../inner-blocks/types';
+import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
 
 export function BlockCard({
 	states,
 	clientId,
 	children,
+	innerBlocks,
 	handleOnClick,
 	selectedInnerBlock,
 }: {
 	states: Object,
 	clientId: string,
 	children?: MixedElement,
+	innerBlocks: Array<InnerBlockModel>,
 	selectedInnerBlock?: InnerBlockType,
 	handleOnClick: (blockType: 'master' | InnerBlockType) => void,
 }): MixedElement {
@@ -57,6 +59,7 @@ export function BlockCard({
 						{blockInformation.title}
 						<Breadcrumb
 							states={states}
+							innerBlocks={innerBlocks}
 							innerBlock={selectedInnerBlock}
 						/>
 					</h2>

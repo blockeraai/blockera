@@ -257,6 +257,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							}
 							handleOnClick={handleOnSwitchBlockSettings}
 							states={attributes.publisherBlockStates}
+							innerBlocks={attributes.publisherInnerBlocks}
 						>
 							<StatesManager
 								setParentIsLoad={setParentIsLoad}
@@ -296,8 +297,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 								setAttributes,
 								setParentIsLoad,
 								currentStateAttributes,
-								publisherInnerBlocks:
-									additional?.publisherInnerBlocks || [],
 								...props,
 							}}
 						/>

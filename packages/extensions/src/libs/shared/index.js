@@ -132,7 +132,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		children,
 		setParentIsLoad,
 		setAttributes,
-		publisherInnerBlocks,
 		currentStateAttributes,
 		...props
 	}: Props): MixedElement => {
@@ -245,7 +244,10 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 						<InnerBlocksExtension
 							currentBlock={currentBlock}
 							setParentIsLoad={setParentIsLoad}
-							innerBlocks={publisherInnerBlocks}
+							innerBlocks={
+								currentStateAttributes?.publisherInnerBlocks ||
+								[]
+							}
 						/>
 
 						<SpacingExtension

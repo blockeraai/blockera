@@ -14,25 +14,31 @@ import { extensionInnerClassNames } from '@publisher/classnames';
  * Internal dependencies
  */
 import { CaretIcon } from '../icons';
-import type { InnerBlockType } from '../../inner-blocks/types';
+import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
 
 export function Breadcrumb({
 	states,
 	children,
 	innerBlock,
+	innerBlocks,
 }: {
 	states: Object,
 	children?: MixedElement,
 	innerBlock?: InnerBlockType,
+	innerBlocks: Array<InnerBlockModel>,
 }): MixedElement {
 	// do not show normal state and inner block was not selected
 	if (states.length <= 1 && !innerBlock) {
 		return <></>;
 	}
 
+	const innerBlockName = innerBlocks.find(
+		(_innerBlock: InnerBlockModel) => _innerBlock.type === innerBlock
+	);
+
 	return (
 		<>
-			{innerBlock && (
+			{innerBlock && innerBlockName && (
 				<>
 					<CaretIcon />
 					<span
@@ -41,7 +47,7 @@ export function Breadcrumb({
 							'inner-block'
 						)}
 					>
-						{innerBlock}
+						{innerBlockName.label}
 					</span>
 				</>
 			)}
