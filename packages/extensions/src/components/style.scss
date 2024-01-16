@@ -1,4 +1,9 @@
 .publisher-block-inspector.loading {
+	position: absolute;
+	z-index: 999999999;
+	background: #ffffff;
+	width: 100%;
+	height: 100%;
 
 	div {
 		margin: 0 auto;
