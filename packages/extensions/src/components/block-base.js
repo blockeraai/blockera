@@ -19,7 +19,6 @@ import {
 /**
  * Publisher dependencies
  */
-import { LoadingComponent } from '@publisher/components';
 import { useCssGenerator } from '@publisher/style-engine';
 import { extensionClassNames } from '@publisher/classnames';
 import { indexOf, isUndefined, omitWithPattern } from '@publisher/utils';
@@ -195,6 +194,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			attributes,
 			setAttributes,
 			{
+				currentBlock,
 				blockStateId,
 				breakpointId,
 				isNormalState,
@@ -242,9 +242,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			  };
 
 		const FillComponents = (): MixedElement => {
-			// eslint-disable-next-line react-hooks/rules-of-hooks
-			const [isLoad, setParentIsLoad] = useState(false);
-
 			return (
 				<>
 					<Fill name={`publisher-block-card-content-${clientId}`}>
@@ -260,7 +257,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							innerBlocks={attributes.publisherInnerBlocks}
 						>
 							<StatesManager
-								setParentIsLoad={setParentIsLoad}
 								states={attributes.publisherBlockStates}
 								block={{
 									clientId,
@@ -275,16 +271,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					<Fill
 						name={`publisher-${currentBlock}-block-${attributes.publisherCurrentState}-edit-content-${clientId}`}
 					>
-						{!isLoad && (
-							<div
-								className={'publisher-block-inspector loading'}
-							>
-								<LoadingComponent
-									type={'bubbles'}
-									color={'#147eb8'}
-								/>
-							</div>
-						)}
 						<BlockEditComponent
 							{...{
 								// Sending props like exactly "edit" function props of WordPress Block.
@@ -295,7 +281,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 								className,
 								attributes,
 								setAttributes,
-								setParentIsLoad,
 								currentStateAttributes,
 								...props,
 							}}
