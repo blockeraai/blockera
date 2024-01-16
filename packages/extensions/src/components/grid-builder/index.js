@@ -30,21 +30,26 @@ export const GridBuilder = ({
 	children,
 }: GridBuilderProps): MixedElement | null => {
 	const { isOpenGridBuilder, getAttributes } = useBlockContext();
+
+	const {
+		blockEditor: { getSelectedBlock },
+	} = useStoreSelectors();
+
+	const { clientId } = getSelectedBlock() || {};
+
 	const selectedBlock = document
 		.querySelector('iframe[name="editor-canvas"]')
 		// $FlowFixMe
-		?.contentDocument?.body?.querySelector(
-			'.publisher-core.publisher-block-wrapper :first-child'
-		);
+		?.contentDocument?.body?.querySelector(`#block-${clientId}`);
 
 	useEffect(() => {
 		if (!isOpenGridBuilder) {
-			selectedBlock.style.display = 'grid';
+			selectedBlock.style.visibility = 'visible';
 		} else {
-			selectedBlock.style.display = 'none';
+			selectedBlock.style.visibility = 'hidden';
 		}
 
-		return () => (selectedBlock.style.display = 'grid');
+		return () => (selectedBlock.style.display = 'visible');
 	}, [isOpenGridBuilder]);
 
 	const { publisherWidth, publisherHeight } = getAttributes();
@@ -60,17 +65,19 @@ export const GridBuilder = ({
 			style={{
 				width: publisherWidth || elementStyles.width,
 				height: publisherHeight || elementStyles.height,
+				position: 'absolute',
+				top: elementStyles.marginTop,
+				left: elementStyles.marginLeft,
 			}}
 		>
 			<VirtualGrid />
 			{children}
 		</div>,
-
 		document
 			.querySelector('iframe[name="editor-canvas"]')
-			// $FlowFixMe
+			//$FlowFixMe
 			?.contentDocument?.body?.querySelector(
-				'.publisher-core.publisher-block-wrapper'
+				`div:has(#block-${clientId})`
 			)
 	);
 };
