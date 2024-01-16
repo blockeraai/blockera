@@ -13,11 +13,13 @@ import {
 	BaseControl,
 	ColorControl,
 	SelectControl,
+	PanelBodyControl,
 	BackgroundControl,
 	ControlContextProvider,
 	NoticeControl,
 } from '@publisher/controls';
 import { isArray, isEmpty, checkVisibleItemLength } from '@publisher/utils';
+import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -30,6 +32,7 @@ import ClipPaddingIcon from './icons/clip-padding';
 import ClipContentIcon from './icons/clip-content';
 import { generateExtensionId, hasSameProps } from '../utils';
 import type { TBackgroundProps } from './types/background-props';
+import { default as BackgroundExtensionIcon } from './icons/extension-icon';
 
 export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 	({
@@ -47,7 +50,15 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 		const visibleBackgroundLength = checkVisibleItemLength(background);
 
 		return (
-			<>
+			<PanelBodyControl
+				title={__('Background', 'publisher-core')}
+				initialOpen={true}
+				icon={<BackgroundExtensionIcon />}
+				className={componentClassNames(
+					'extension',
+					'extension-background'
+				)}
+			>
 				{isActiveField(publisherBackground) && (
 					<ControlContextProvider
 						value={{
@@ -309,7 +320,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 							)}
 					</ControlContextProvider>
 				)}
-			</>
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps

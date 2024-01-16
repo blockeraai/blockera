@@ -84,6 +84,12 @@ export {
 	supports as IconExtensionSupports,
 } from './icon';
 export {
+	definitionTypes,
+	InnerBlocksExtension,
+	InnerBlocksExtensionIcon,
+	attributes as innerBlocksExtensionsAttributes,
+} from './inner-blocks';
+export {
 	SharedBlockExtension,
 	attributes as sharedBlockExtensionAttributes,
 	supports as sharedBlockExtensionSupports,

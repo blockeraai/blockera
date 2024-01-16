@@ -14,13 +14,18 @@ import {
 	ColorControl,
 	InputControl,
 	SelectControl,
+	PanelBodyControl,
 	TextShadowControl,
 	ToggleSelectControl,
 	ControlContextProvider,
 	NoticeControl,
 } from '@publisher/controls';
 import { Popover, Button, Flex, Grid } from '@publisher/components';
-import { controlInnerClassNames } from '@publisher/classnames';
+import {
+	componentClassNames,
+	controlInnerClassNames,
+} from '@publisher/classnames';
+import { TypographyExtensionIcon } from './index';
 
 /**
  * Internal dependencies
@@ -119,7 +124,15 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 		};
 
 		return (
-			<>
+			<PanelBodyControl
+				title={__('Typography', 'publisher-core')}
+				initialOpen={true}
+				icon={<TypographyExtensionIcon />}
+				className={componentClassNames(
+					'extension',
+					'extension-typography'
+				)}
+			>
 				<BaseControl
 					controlName="typography"
 					label={__('Typography', 'publisher-core')}
@@ -1038,7 +1051,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 						</BaseControl>
 					</ControlContextProvider>
 				)}
-			</>
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps

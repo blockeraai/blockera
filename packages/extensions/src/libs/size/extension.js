@@ -10,12 +10,14 @@ import type { MixedElement, ComponentType } from 'react';
  * Publisher dependencies
  */
 import {
+	PanelBodyControl,
 	ControlContextProvider,
 	InputControl,
 	ToggleSelectControl,
 	BaseControl,
 } from '@publisher/controls';
 import { Flex } from '@publisher/components';
+import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -30,6 +32,7 @@ import { useBlockContext } from '../../hooks';
 import { ObjectFit } from './components';
 import AspectRatio from './components/aspect-ratio';
 import { coreWPAspectRatioValues, coreWPFitValues } from './utils';
+import { SizeExtensionIcon } from './index';
 
 export const SizeExtension: ComponentType<TSizeProps> = memo(
 	({
@@ -53,7 +56,12 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 		const { isNormalState } = useBlockContext();
 
 		return (
-			<>
+			<PanelBodyControl
+				title={__('Size', 'publisher-core')}
+				initialOpen={true}
+				icon={<SizeExtensionIcon />}
+				className={componentClassNames('extension', 'extension-size')}
+			>
 				{isActiveField(publisherWidth) && (
 					<BaseControl columns="columns-1">
 						<ControlContextProvider
@@ -632,7 +640,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 						/>
 					</ControlContextProvider>
 				)}
-			</>
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps

@@ -2,6 +2,7 @@
 /**
  * External dependencies
  */
+import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
@@ -10,14 +11,17 @@ import type { MixedElement, ComponentType } from 'react';
  */
 import {
 	BaseControl,
+	PanelBodyControl,
 	BoxSpacingControl,
 	ControlContextProvider,
 } from '@publisher/controls';
 import { isUndefined } from '@publisher/utils';
+import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
+import { SpacingExtensionIcon } from './index';
 import { isActiveField } from '../../api/utils';
 import { getSpacingValue } from './utils/get-spacing-value';
 import { generateExtensionId, hasSameProps } from '../utils';
@@ -40,7 +44,15 @@ export const SpacingExtension: ComponentType<TSpacingProps> = memo(
 		extensionProps,
 	}: TSpacingProps): MixedElement => {
 		return (
-			<>
+			<PanelBodyControl
+				title={__('Spacing', 'publisher-core')}
+				initialOpen={true}
+				icon={<SpacingExtensionIcon />}
+				className={componentClassNames(
+					'extension',
+					'extension-spacing'
+				)}
+			>
 				{isActiveField(publisherSpacing) && (
 					<ControlContextProvider
 						value={{
@@ -108,7 +120,7 @@ export const SpacingExtension: ComponentType<TSpacingProps> = memo(
 						</BaseControl>
 					</ControlContextProvider>
 				)}
-			</>
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps

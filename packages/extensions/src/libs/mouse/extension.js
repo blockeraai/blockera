@@ -9,7 +9,12 @@ import type { MixedElement, ComponentType } from 'react';
 /**
  * Publisher dependencies
  */
-import { ControlContextProvider, SelectControl } from '@publisher/controls';
+import {
+	SelectControl,
+	PanelBodyControl,
+	ControlContextProvider,
+} from '@publisher/controls';
+import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -22,6 +27,7 @@ import {
 	pointerEventsOptions,
 } from './utils';
 import type { TMouseProps } from './types/mouse-props';
+import { MouseExtensionIcon } from './index';
 
 export const MouseExtension: ComponentType<TMouseProps> = memo(
 	({
@@ -36,7 +42,12 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 		extensionProps,
 	}: TMouseProps): MixedElement => {
 		return (
-			<>
+			<PanelBodyControl
+				title={__('Mouse', 'publisher-core')}
+				initialOpen={true}
+				icon={<MouseExtensionIcon />}
+				className={componentClassNames('extension', 'extension-mouse')}
+			>
 				{isActiveField(publisherCursor) && (
 					<ControlContextProvider
 						value={{
@@ -175,7 +186,7 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 						/>
 					</ControlContextProvider>
 				)}
-			</>
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps

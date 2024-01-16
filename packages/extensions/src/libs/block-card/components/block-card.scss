@@ -32,6 +32,7 @@
 			align-items: center;
 			min-height: 24px;
 			gap: 2px;
+			cursor: pointer;
 
 			svg {
 				fill: currentColor;
@@ -48,6 +49,10 @@
 
 			.publisher-extension-block-card__title__item.item-state:not(.item-state-normal) {
 				--publisher-controls-primary-color: #d47c14;
+			}
+
+			.publisher-extension-block-card__title__item.inner-block {
+				--publisher-controls-primary-color: #05a0f7;
 			}
 		}
 

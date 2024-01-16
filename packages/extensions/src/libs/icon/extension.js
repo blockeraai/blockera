@@ -15,13 +15,16 @@ import {
 	LinkControl,
 	ColorControl,
 	InputControl,
+	PanelBodyControl,
 	ToggleSelectControl,
 	ControlContextProvider,
 } from '@publisher/controls';
+import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
+import { IconExtensionIcon } from './index';
 import { isActiveField } from '../../api/utils';
 import { default as PositionLeftIcon } from './icons/position-left';
 import { generateExtensionId, hasSameProps } from '../utils';
@@ -45,7 +48,12 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 		extensionProps,
 	}: TIconProps): MixedElement => {
 		return (
-			<>
+			<PanelBodyControl
+				title={__('Icon', 'publisher-core')}
+				initialOpen={true}
+				icon={<IconExtensionIcon />}
+				className={componentClassNames('extension', 'extension-icon')}
+			>
 				{isActiveField(publisherIcon) && (
 					<ControlContextProvider
 						value={{
@@ -245,7 +253,7 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 						)}
 					</>
 				)}
-			</>
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps

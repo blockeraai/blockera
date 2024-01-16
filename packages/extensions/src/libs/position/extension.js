@@ -11,19 +11,22 @@ import type { MixedElement, ComponentType } from 'react';
  */
 import {
 	BaseControl,
+	PanelBodyControl,
 	BoxPositionControl,
 	ControlContextProvider,
 	InputControl,
 } from '@publisher/controls';
+import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
+import { PositionExtensionIcon } from './index';
 import { isActiveField } from '../../api/utils';
-import { generateExtensionId, hasSameProps } from '../utils';
-import type { TPositionExtensionProps } from './types/position-extension-props';
 import { useBlockContext } from '../../hooks';
 import { positionToWPCompatible } from './utils';
+import { generateExtensionId, hasSameProps } from '../utils';
+import type { TPositionExtensionProps } from './types/position-extension-props';
 
 export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 	({
@@ -37,7 +40,15 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 		const { isNormalState, getAttributes } = useBlockContext();
 
 		return (
-			<>
+			<PanelBodyControl
+				title={__('Position', 'publisher-core')}
+				initialOpen={true}
+				icon={<PositionExtensionIcon />}
+				className={componentClassNames(
+					'extension',
+					'extension-position'
+				)}
+			>
 				{isActiveField(publisherPosition) && (
 					<ControlContextProvider
 						value={{
@@ -135,7 +146,7 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 							/>
 						</ControlContextProvider>
 					)}
-			</>
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps

@@ -11,12 +11,14 @@ import type { MixedElement, ComponentType } from 'react';
  */
 import {
 	BaseControl,
+	PanelBodyControl,
 	ControlContextProvider,
 	ToggleSelectControl,
 	NoticeControl,
 	LayoutMatrixControl,
 } from '@publisher/controls';
 import { Flex, Button } from '@publisher/components';
+import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -42,6 +44,7 @@ import { default as AlignContentFlexEndIcon } from './icons/align-content-flex-e
 import { default as AlignContentFlexStartIcon } from './icons/align-content-flex-start';
 import { default as AlignContentSpaceAroundIcon } from './icons/align-content-space-around';
 import { default as AlignContentSpaceBetweenIcon } from './icons/align-content-space-between';
+import { LayoutExtensionIcon } from './index';
 
 export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 	({
@@ -79,7 +82,12 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 		}, [display]);
 
 		return (
-			<>
+			<PanelBodyControl
+				title={__('Layout', 'publisher-core')}
+				initialOpen={true}
+				icon={<LayoutExtensionIcon />}
+				className={componentClassNames('extension', 'extension-layout')}
+			>
 				{isActiveField(publisherDisplay) && (
 					<ControlContextProvider
 						value={{
@@ -673,7 +681,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 						<BlockComponent />
 					</GridBuilder>
 				)}
-			</>
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps

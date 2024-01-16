@@ -12,11 +12,15 @@ import type { MixedElement, ComponentType } from 'react';
 import {
 	BaseControl,
 	TransformControl,
+	PanelBodyControl,
 	ControlContextProvider,
 } from '@publisher/controls';
 import { isInteger } from '@publisher/utils';
 import { Button } from '@publisher/components';
-import { controlInnerClassNames } from '@publisher/classnames';
+import {
+	componentClassNames,
+	controlInnerClassNames,
+} from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -33,6 +37,7 @@ import { BackdropFilter } from './components/backdrop-filter';
 import { Blending } from './components/blending';
 import { Divider } from './components/divider';
 import { Mask } from './components/mask';
+import { EffectsExtensionIcon } from './index';
 
 export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 	({
@@ -69,7 +74,15 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 			useState(false);
 
 		return (
-			<>
+			<PanelBodyControl
+				title={__('Effects', 'publisher-core')}
+				initialOpen={true}
+				icon={<EffectsExtensionIcon />}
+				className={componentClassNames(
+					'extension',
+					'extension-effects'
+				)}
+			>
 				{isActiveField(publisherOpacity) && (
 					<Opacity
 						block={block}
@@ -217,7 +230,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 						{...extensionProps.publisherBlendMode}
 					/>
 				)}
-			</>
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps

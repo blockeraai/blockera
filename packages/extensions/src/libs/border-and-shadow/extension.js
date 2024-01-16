@@ -12,17 +12,20 @@ import type { MixedElement, ComponentType } from 'react';
 import {
 	BaseControl,
 	OutlineControl,
+	PanelBodyControl,
 	BoxShadowControl,
 	ControlContextProvider,
 } from '@publisher/controls';
+import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
 import { isActiveField } from '../../api/utils';
+import { Border, BorderRadius } from './components';
+import { BorderAndShadowExtensionIcon } from './index';
 import { generateExtensionId, hasSameProps } from '../utils';
 import type { TBorderAndShadowProps } from './types/border-and-shadow-props';
-import { Border, BorderRadius } from './components';
 
 export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 	memo(
@@ -40,7 +43,15 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 			extensionProps,
 		}: TBorderAndShadowProps): MixedElement => {
 			return (
-				<>
+				<PanelBodyControl
+					title={__('Border And Shadow', 'publisher-core')}
+					initialOpen={true}
+					icon={<BorderAndShadowExtensionIcon />}
+					className={componentClassNames(
+						'extension',
+						'extension-border-and-shadow'
+					)}
+				>
 					{isActiveField(publisherBorder) && (
 						<Border
 							block={block}
@@ -153,7 +164,7 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 							</BaseControl>
 						</ControlContextProvider>
 					)}
-				</>
+				</PanelBodyControl>
 			);
 		},
 		hasSameProps

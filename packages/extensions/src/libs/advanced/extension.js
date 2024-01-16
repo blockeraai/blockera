@@ -13,8 +13,10 @@ import {
 	AttributesControl,
 	CustomPropertyControl,
 	BaseControl,
+	PanelBodyControl,
 	ControlContextProvider,
 } from '@publisher/controls';
+import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -22,6 +24,7 @@ import {
 import { isActiveField } from '../../api/utils';
 import { hasSameProps, generateExtensionId } from '../utils';
 import type { TAdvancedProps } from './types/advanced-props';
+import { AdvancedExtensionIcon } from './index';
 
 export const AdvancedExtension: ComponentType<TAdvancedProps> = memo(
 	({
@@ -35,7 +38,15 @@ export const AdvancedExtension: ComponentType<TAdvancedProps> = memo(
 		extensionProps,
 	}: TAdvancedProps): MixedElement => {
 		return (
-			<>
+			<PanelBodyControl
+				title={__('Advanced', 'publisher-core')}
+				initialOpen={true}
+				icon={<AdvancedExtensionIcon />}
+				className={componentClassNames(
+					'extension',
+					'extension-advanced'
+				)}
+			>
 				{isActiveField(publisherAttributesConfig) && (
 					<ControlContextProvider
 						value={{
@@ -98,7 +109,7 @@ export const AdvancedExtension: ComponentType<TAdvancedProps> = memo(
 						</BaseControl>
 					</ControlContextProvider>
 				)}
-			</>
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps

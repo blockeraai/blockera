@@ -18,73 +18,61 @@ import { Tabs } from '@publisher/components';
  * Internal dependencies
  */
 import {
-	BackgroundExtensionIcon,
 	attributes as backgroundAttributes,
 	supports as backgroundSupports,
 	BackgroundExtension,
 } from '../background';
 import {
-	IconExtensionIcon,
 	attributes as iconAttributes,
 	supports as iconSupports,
 	IconExtension,
 } from '../icon';
 import {
-	BorderAndShadowExtensionIcon,
 	attributes as borderAndShadowAttributes,
 	supports as borderAndShadowSupports,
 	BorderAndShadowExtension,
 } from '../border-and-shadow';
 import {
-	EffectsExtensionIcon,
 	attributes as effectsAttributes,
 	supports as effectsSupports,
 	EffectsExtension,
 } from '../effects';
 import {
-	TypographyExtensionIcon,
 	attributes as typographyAttributes,
 	supports as typographySupports,
 	TypographyExtension,
 } from '../typography';
 import {
-	SpacingExtensionIcon,
 	attributes as spacingAttributes,
 	supports as spacingSupports,
 	SpacingExtension,
 } from '../spacing';
 import {
-	PositionExtensionIcon,
 	attributes as positionAttributes,
 	supports as positionSupports,
 	PositionExtension,
 } from '../position';
 import {
-	SizeExtensionIcon,
 	attributes as sizeAttributes,
 	supports as sizeSupports,
 	SizeExtension,
 } from '../size';
 import {
-	LayoutExtensionIcon,
 	attributes as layoutAttributes,
 	supports as layoutSupports,
 	LayoutExtension,
 } from '../layout';
 import {
-	FlexChildExtensionIcon,
 	attributes as flexChildAttributes,
 	supports as flexChildSupports,
 	FlexChildExtension,
 } from '../flex-child';
 import {
 	AdvancedExtension,
-	AdvancedExtensionIcon,
 	attributes as advancedAttributes,
 	supports as advancedSupports,
 } from '../advanced';
 import {
-	MouseExtensionIcon,
 	attributes as mouseAttributes,
 	supports as mouseSupports,
 	MouseExtension,
@@ -96,9 +84,8 @@ import { useBlockContext, useDisplayBlockControls } from '../../hooks';
 import { getStateInfo } from '../block-states/helpers';
 import StateContainer from '../../components/state-container';
 import type { TTabProps } from '@publisher/components/src/tabs/types';
-import { componentClassNames } from '@publisher/classnames';
 import * as config from '../base/config';
-import { PanelBodyControl } from '@publisher/controls';
+import { InnerBlocksExtension } from '../inner-blocks';
 
 export const attributes = {
 	...typographyAttributes,
@@ -160,8 +147,10 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 		const {
 			currentTab,
+			currentBlock,
 			blockStateId,
 			breakpointId,
+			extensionConfig,
 			handleOnChangeAttributes,
 		} = useBlockContext();
 
@@ -207,7 +196,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			backgroundConfig,
 			typographyConfig,
 			borderAndShadowConfig,
-		} = config;
+		} = extensionConfig[currentBlock] || config;
 
 		const block = {
 			blockName: props.name,
@@ -222,459 +211,337 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							display: 'settings' === tab.name ? 'block' : 'none',
 						}}
 					>
-						<PanelBodyControl
-							title={__('Icon', 'publisher-core')}
-							initialOpen={true}
-							icon={<IconExtensionIcon />}
-							className={componentClassNames(
-								'extension',
-								'extension-icon'
-							)}
-						>
-							<IconExtension
-								{...{
-									iconConfig,
-									block,
-									values: include(
-										currentStateAttributes,
-										icon,
-										'publisher'
-									),
-									extensionProps: {
-										publisherIcon: {},
-										publisherIconPosition: {},
-										publisherIconGap: {},
-										publisherIconSize: {},
-										publisherIconColor: {},
-										publisherIconLink: {},
-									},
-									handleOnChangeAttributes,
-								}}
-							/>
-						</PanelBodyControl>
+						<IconExtension
+							{...{
+								iconConfig,
+								block,
+								values: include(
+									currentStateAttributes,
+									icon,
+									'publisher'
+								),
+								extensionProps: {
+									publisherIcon: {},
+									publisherIconPosition: {},
+									publisherIconGap: {},
+									publisherIconSize: {},
+									publisherIconColor: {},
+									publisherIconLink: {},
+								},
+								handleOnChangeAttributes,
+							}}
+						/>
 					</div>
 					<div
 						style={{
 							display: 'style' === tab.name ? 'block' : 'none',
 						}}
 					>
-						<PanelBodyControl
-							title={__('Spacing', 'publisher-core')}
-							initialOpen={true}
-							icon={<SpacingExtensionIcon />}
-							className={componentClassNames(
-								'extension',
-								'extension-spacing'
-							)}
-						>
-							<SpacingExtension
-								{...{
-									block,
-									spacingConfig,
-									extensionProps: {
-										publisherSpacing: {},
-									},
-									handleOnChangeAttributes,
-									spacingValue:
-										currentStateAttributes.publisherSpacing,
-									defaultValue:
-										currentStateAttributes.style?.spacing ||
-										{},
-								}}
-							/>
-						</PanelBodyControl>
+						<InnerBlocksExtension
+							innerBlocks={publisherInnerBlocks}
+						/>
 
-						<PanelBodyControl
-							title={__('Position', 'publisher-core')}
-							initialOpen={true}
-							icon={<PositionExtensionIcon />}
-							className={componentClassNames(
-								'extension',
-								'extension-position'
-							)}
-						>
-							<PositionExtension
-								{...{
-									block,
-									positionConfig,
-									inheritValues: {
-										position: currentStateAttributes?.style
-											?.position?.type
-											? {
-													type: currentStateAttributes
-														?.style?.position?.type,
-													position: {
-														top: currentStateAttributes
-															?.style?.position
-															?.top,
-														right: currentStateAttributes
-															?.style?.position
-															?.right,
-														bottom: currentStateAttributes
-															?.style?.position
-															?.bottom,
-														left: currentStateAttributes
-															?.style?.position
-															?.left,
-													},
-											  }
-											: undefined,
-									},
-									values: {
-										position:
-											currentStateAttributes.publisherPosition,
-										zIndex: currentStateAttributes.publisherZIndex,
-									},
-									extensionProps: {
-										publisherPosition: {},
-										publisherZIndex: {},
-									},
-									handleOnChangeAttributes,
-								}}
-							/>
-						</PanelBodyControl>
+						<SpacingExtension
+							{...{
+								block,
+								spacingConfig,
+								extensionProps: {
+									publisherSpacing: {},
+								},
+								handleOnChangeAttributes,
+								spacingValue:
+									currentStateAttributes.publisherSpacing,
+								defaultValue:
+									currentStateAttributes.style?.spacing || {},
+							}}
+						/>
 
-						<PanelBodyControl
-							title={__('Size', 'publisher-core')}
-							initialOpen={true}
-							icon={<SizeExtensionIcon />}
-							className={componentClassNames(
-								'extension',
-								'extension-size'
-							)}
-						>
-							<SizeExtension
-								{...{
-									block,
-									sizeConfig,
-									values: include(
-										currentStateAttributes,
-										size,
-										'publisher'
-									),
-									inheritValue: {
-										width: currentStateAttributes?.width,
-										height: currentStateAttributes?.height,
-										minHeight:
-											currentStateAttributes?.minHeight,
-										minHeightUnit:
-											currentStateAttributes?.minHeightUnit,
-										aspectRatio:
-											currentStateAttributes?.aspectRatio,
-										scale: currentStateAttributes?.scale,
-									},
-									extensionProps: {
-										publisherWidth: {},
-										publisherHeight: {},
-										publisherMinWidth: {},
-										publisherMinHeight: {},
-										publisherMaxWidth: {},
-										publisherMaxHeight: {},
-										publisherOverflow: {},
-										publisherRatio: {},
-										publisherFit: {},
-										publisherFitPosition: {},
-									},
-									handleOnChangeAttributes,
-								}}
-							/>
-						</PanelBodyControl>
+						<PositionExtension
+							{...{
+								block,
+								positionConfig,
+								inheritValues: {
+									position: currentStateAttributes?.style
+										?.position?.type
+										? {
+												type: currentStateAttributes
+													?.style?.position?.type,
+												position: {
+													top: currentStateAttributes
+														?.style?.position?.top,
+													right: currentStateAttributes
+														?.style?.position
+														?.right,
+													bottom: currentStateAttributes
+														?.style?.position
+														?.bottom,
+													left: currentStateAttributes
+														?.style?.position?.left,
+												},
+										  }
+										: undefined,
+								},
+								values: {
+									position:
+										currentStateAttributes.publisherPosition,
+									zIndex: currentStateAttributes.publisherZIndex,
+								},
+								extensionProps: {
+									publisherPosition: {},
+									publisherZIndex: {},
+								},
+								handleOnChangeAttributes,
+							}}
+						/>
 
-						<PanelBodyControl
-							title={__('Layout', 'publisher-core')}
-							initialOpen={true}
-							icon={<LayoutExtensionIcon />}
-							className={componentClassNames(
-								'extension',
-								'extension-layout'
-							)}
-						>
-							<LayoutExtension
-								{...{
-									block,
-									layoutConfig,
-									extensionProps: {
-										publisherDisplay: {},
-										publisherFlexLayout: {},
-										publisherGap: {},
-										publisherFlexWrap: {},
-										publisherAlignContent: {},
-									},
-									values: include(
-										currentStateAttributes,
-										layout,
-										'publisher'
-									),
-									defaultValue:
-										currentStateAttributes.layout || {},
-									handleOnChangeAttributes,
-								}}
-							/>
-						</PanelBodyControl>
+						<SizeExtension
+							{...{
+								block,
+								sizeConfig,
+								values: include(
+									currentStateAttributes,
+									size,
+									'publisher'
+								),
+								inheritValue: {
+									width: currentStateAttributes?.width,
+									height: currentStateAttributes?.height,
+									minHeight:
+										currentStateAttributes?.minHeight,
+									minHeightUnit:
+										currentStateAttributes?.minHeightUnit,
+									aspectRatio:
+										currentStateAttributes?.aspectRatio,
+									scale: currentStateAttributes?.scale,
+								},
+								extensionProps: {
+									publisherWidth: {},
+									publisherHeight: {},
+									publisherMinWidth: {},
+									publisherMinHeight: {},
+									publisherMaxWidth: {},
+									publisherMaxHeight: {},
+									publisherOverflow: {},
+									publisherRatio: {},
+									publisherFit: {},
+									publisherFitPosition: {},
+								},
+								handleOnChangeAttributes,
+							}}
+						/>
+
+						<LayoutExtension
+							{...{
+								block,
+								layoutConfig,
+								extensionProps: {
+									publisherDisplay: {},
+									publisherFlexLayout: {},
+									publisherGap: {},
+									publisherFlexWrap: {},
+									publisherAlignContent: {},
+								},
+								values: include(
+									currentStateAttributes,
+									layout,
+									'publisher'
+								),
+								defaultValue:
+									currentStateAttributes.layout || {},
+								handleOnChangeAttributes,
+							}}
+						/>
 
 						{directParentBlock?.innerBlocks.length &&
 							directParentBlock?.attributes.publisherDisplay ===
 								'flex' && (
-								<PanelBodyControl
-									title={__('Flex Child', 'publisher-core')}
-									initialOpen={true}
-									icon={<FlexChildExtensionIcon />}
-									className={componentClassNames(
-										'extension',
-										'extension-flex-child'
-									)}
-								>
-									<FlexChildExtension
-										{...{
-											block,
-											flexChildConfig,
-											extensionProps: {
-												publisherFlexChildSizing: {},
-												publisherFlexChildGrow: {},
-												publisherFlexChildShrink: {},
-												publisherFlexChildBasis: {},
-												publisherFlexChildAlign: {},
-												publisherFlexChildOrder: {},
-												publisherFlexChildOrderCustom:
-													{},
-											},
-											values: {
-												...include(
-													currentStateAttributes,
-													flexChild,
-													'publisher'
-												),
-												flexDirection:
-													directParentBlock
-														?.attributes
-														.publisherFlexDirection,
-											},
-											handleOnChangeAttributes,
-										}}
-									/>
-								</PanelBodyControl>
+								<FlexChildExtension
+									{...{
+										block,
+										flexChildConfig,
+										extensionProps: {
+											publisherFlexChildSizing: {},
+											publisherFlexChildGrow: {},
+											publisherFlexChildShrink: {},
+											publisherFlexChildBasis: {},
+											publisherFlexChildAlign: {},
+											publisherFlexChildOrder: {},
+											publisherFlexChildOrderCustom: {},
+										},
+										values: {
+											...include(
+												currentStateAttributes,
+												flexChild,
+												'publisher'
+											),
+											flexDirection:
+												directParentBlock?.attributes
+													.publisherFlexDirection,
+										},
+										handleOnChangeAttributes,
+									}}
+								/>
 							)}
 
-						<PanelBodyControl
-							title={__('Typography', 'publisher-core')}
-							initialOpen={true}
-							icon={<TypographyExtensionIcon />}
-							className={componentClassNames(
-								'extension',
-								'extension-typography'
-							)}
-						>
-							<TypographyExtension
-								{...{
-									block,
-									typographyConfig,
-									extensionProps: {
-										publisherFontColor: {},
-										publisherFontSize: {},
-										publisherLineHeight: {},
-										publisherTextAlign: {},
-										publisherTextDecoration: {},
-										publisherFontStyle: {},
-										publisherTextTransform: {},
-										publisherDirection: {},
-										publisherTextShadow: {},
-										publisherLetterSpacing: {},
-										publisherWordSpacing: {},
-										publisherTextIndent: {},
-										publisherTextOrientation: {},
-										publisherTextColumns: {},
-										publisherTextStroke: {},
-										publisherWordBreak: {},
-									},
-									values: {
-										...include(
-											currentStateAttributes,
-											typography,
-											'publisher'
-										),
-										display:
-											currentStateAttributes.publisherDisplay,
-									},
-									backgroundClip:
-										currentStateAttributes?.publisherBackgroundClip,
-									defaultValue: {
-										fontSize:
-											currentStateAttributes.fontSize ||
-											'',
-										fontStyle:
-											currentStateAttributes.fontStyle ||
-											'normal',
-										typography:
-											currentStateAttributes.style
-												?.typography || {},
-									},
-									handleOnChangeAttributes,
-								}}
-							/>
-						</PanelBodyControl>
-
-						<PanelBodyControl
-							title={__('Background', 'publisher-core')}
-							initialOpen={true}
-							icon={<BackgroundExtensionIcon />}
-							className={componentClassNames(
-								'extension',
-								'extension-background'
-							)}
-						>
-							<BackgroundExtension
-								{...{
-									block,
-									backgroundConfig,
-									extensionProps: {
-										publisherBackground: {},
-										publisherBackgroundColor: {},
-										publisherBackgroundClip: {},
-									},
-									values: include(
+						<TypographyExtension
+							{...{
+								block,
+								typographyConfig,
+								extensionProps: {
+									publisherFontColor: {},
+									publisherFontSize: {},
+									publisherLineHeight: {},
+									publisherTextAlign: {},
+									publisherTextDecoration: {},
+									publisherFontStyle: {},
+									publisherTextTransform: {},
+									publisherDirection: {},
+									publisherTextShadow: {},
+									publisherLetterSpacing: {},
+									publisherWordSpacing: {},
+									publisherTextIndent: {},
+									publisherTextOrientation: {},
+									publisherTextColumns: {},
+									publisherTextStroke: {},
+									publisherWordBreak: {},
+								},
+								values: {
+									...include(
 										currentStateAttributes,
-										background,
+										typography,
 										'publisher'
 									),
-									backgroundClip:
-										currentStateAttributes?.publisherBackgroundClip,
-									defaultValue:
+									display:
+										currentStateAttributes.publisherDisplay,
+								},
+								backgroundClip:
+									currentStateAttributes?.publisherBackgroundClip,
+								defaultValue: {
+									fontSize:
+										currentStateAttributes.fontSize || '',
+									fontStyle:
+										currentStateAttributes.fontStyle ||
+										'normal',
+									typography:
 										currentStateAttributes.style
-											?.background || {},
-									handleOnChangeAttributes,
-								}}
-							/>
-						</PanelBodyControl>
+											?.typography || {},
+								},
+								handleOnChangeAttributes,
+							}}
+						/>
 
-						<PanelBodyControl
-							title={__('Border And Shadow', 'publisher-core')}
-							initialOpen={true}
-							icon={<BorderAndShadowExtensionIcon />}
-							className={componentClassNames(
-								'extension',
-								'extension-border-and-shadow'
-							)}
-						>
-							<BorderAndShadowExtension
-								{...{
-									block,
-									borderAndShadowConfig,
-									extensionProps: {
-										publisherBoxShadow: {},
-										publisherOutline: {},
-										publisherBorder: {},
-										publisherBorderRadius: {},
-									},
-									values: include(
-										currentStateAttributes,
-										borderAndShadow,
-										'publisher'
-									),
-									defaultValue: {
-										borderColor:
-											currentStateAttributes?.borderColor ||
-											'',
-										border:
-											currentStateAttributes.style
-												?.border || {},
-									},
-									handleOnChangeAttributes,
-								}}
-							/>
-						</PanelBodyControl>
+						<BackgroundExtension
+							{...{
+								block,
+								backgroundConfig,
+								extensionProps: {
+									publisherBackground: {},
+									publisherBackgroundColor: {},
+									publisherBackgroundClip: {},
+								},
+								values: include(
+									currentStateAttributes,
+									background,
+									'publisher'
+								),
+								backgroundClip:
+									currentStateAttributes?.publisherBackgroundClip,
+								defaultValue:
+									currentStateAttributes.style?.background ||
+									{},
+								handleOnChangeAttributes,
+							}}
+						/>
 
-						<PanelBodyControl
-							title={__('Effects', 'publisher-core')}
-							initialOpen={true}
-							icon={<EffectsExtensionIcon />}
-							className={componentClassNames(
-								'extension',
-								'extension-effects'
-							)}
-						>
-							<EffectsExtension
-								{...{
-									block,
-									effectsConfig,
-									extensionProps: {
-										publisherOpacity: {},
-										publisherTransform: {},
-										publisherTransformSelfPerspective: {},
-										publisherTransformSelfOrigin: {},
-										publisherBackfaceVisibility: {},
-										publisherTransformChildPerspective: {},
-										publisherTransformChildOrigin: {},
-										publisherTransition: {},
-										publisherFilter: {},
-										publisherBackdropFilter: {},
-										publisherDivider: {},
-										publisherBlendMode: {},
-										publisherMask: {},
-									},
-									values: include(
-										currentStateAttributes,
-										effects,
-										'publisher'
-									),
-									handleOnChangeAttributes,
-								}}
-							/>
-						</PanelBodyControl>
+						<BorderAndShadowExtension
+							{...{
+								block,
+								borderAndShadowConfig,
+								extensionProps: {
+									publisherBoxShadow: {},
+									publisherOutline: {},
+									publisherBorder: {},
+									publisherBorderRadius: {},
+								},
+								values: include(
+									currentStateAttributes,
+									borderAndShadow,
+									'publisher'
+								),
+								defaultValue: {
+									borderColor:
+										currentStateAttributes?.borderColor ||
+										'',
+									border:
+										currentStateAttributes.style?.border ||
+										{},
+								},
+								handleOnChangeAttributes,
+							}}
+						/>
 
-						<PanelBodyControl
-							title={__('Mouse', 'publisher-core')}
-							initialOpen={true}
-							icon={<MouseExtensionIcon />}
-							className={componentClassNames(
-								'extension',
-								'extension-mouse'
-							)}
-						>
-							<MouseExtension
-								{...{
-									block,
-									mouseConfig,
-									extensionProps: {
-										publisherCursor: {},
-										publisherUserSelect: {},
-										publisherPointerEvents: {},
-									},
-									values: include(
-										currentStateAttributes,
-										mouse,
-										'publisher'
-									),
-									handleOnChangeAttributes,
-								}}
-							/>
-						</PanelBodyControl>
+						<EffectsExtension
+							{...{
+								block,
+								effectsConfig,
+								extensionProps: {
+									publisherOpacity: {},
+									publisherTransform: {},
+									publisherTransformSelfPerspective: {},
+									publisherTransformSelfOrigin: {},
+									publisherBackfaceVisibility: {},
+									publisherTransformChildPerspective: {},
+									publisherTransformChildOrigin: {},
+									publisherTransition: {},
+									publisherFilter: {},
+									publisherBackdropFilter: {},
+									publisherDivider: {},
+									publisherBlendMode: {},
+									publisherMask: {},
+								},
+								values: include(
+									currentStateAttributes,
+									effects,
+									'publisher'
+								),
+								handleOnChangeAttributes,
+							}}
+						/>
 
-						<PanelBodyControl
-							title={__('Advanced', 'publisher-core')}
-							initialOpen={true}
-							icon={<AdvancedExtensionIcon />}
-							className={componentClassNames(
-								'extension',
-								'extension-advanced'
-							)}
-						>
-							<AdvancedExtension
-								{...{
-									block,
-									advancedConfig,
-									extensionProps: {
-										publisherAttributes: {},
-										publisherCSSProperties: {},
-									},
-									values: include(
-										currentStateAttributes,
-										advanced,
-										'publisher'
-									),
-									handleOnChangeAttributes,
-								}}
-							/>
-						</PanelBodyControl>
+						<MouseExtension
+							{...{
+								block,
+								mouseConfig,
+								extensionProps: {
+									publisherCursor: {},
+									publisherUserSelect: {},
+									publisherPointerEvents: {},
+								},
+								values: include(
+									currentStateAttributes,
+									mouse,
+									'publisher'
+								),
+								handleOnChangeAttributes,
+							}}
+						/>
+
+						<AdvancedExtension
+							{...{
+								block,
+								advancedConfig,
+								extensionProps: {
+									publisherAttributes: {},
+									publisherCSSProperties: {},
+								},
+								values: include(
+									currentStateAttributes,
+									advanced,
+									'publisher'
+								),
+								handleOnChangeAttributes,
+							}}
+						/>
 					</div>
 				</>
 			);

@@ -11,10 +11,12 @@ import type { MixedElement, ComponentType } from 'react';
  */
 import {
 	BaseControl,
+	PanelBodyControl,
 	ControlContextProvider,
 	InputControl,
 	ToggleSelectControl,
 } from '@publisher/controls';
+import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -33,6 +35,7 @@ import { default as AlignFlexCenterIcon } from './icons/align-flex-center';
 import { default as OrderFirst } from './icons/order-first';
 import { default as OrderLast } from './icons/order-last';
 import type { TFlexChildProps } from './types/flex-child-props';
+import { FlexChildExtensionIcon } from './index';
 
 export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 	({
@@ -56,7 +59,15 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 		extensionProps,
 	}: TFlexChildProps): MixedElement => {
 		return (
-			<>
+			<PanelBodyControl
+				title={__('Flex Child', 'publisher-core')}
+				initialOpen={true}
+				icon={<FlexChildExtensionIcon />}
+				className={componentClassNames(
+					'extension',
+					'extension-flex-child'
+				)}
+			>
 				{isActiveField(publisherFlexChildSizing) && (
 					<ControlContextProvider
 						value={{
@@ -373,7 +384,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 						</BaseControl>
 					</ControlContextProvider>
 				)}
-			</>
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps
