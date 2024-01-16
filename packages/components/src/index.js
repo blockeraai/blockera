@@ -16,6 +16,7 @@ export { default as Tabs } from './tabs';
 export { default as Grid } from './grid';
 export { Button, Buttons } from './button';
 export { default as Modal } from './modal';
+export { LoadingComponent } from './loading';
 export { default as Divider } from './divider';
 export { default as Popover } from './popover';
 export type { PopoverPlacement } from './popover/types';
