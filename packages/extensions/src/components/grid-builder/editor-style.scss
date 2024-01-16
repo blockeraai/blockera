@@ -81,7 +81,7 @@
 }
 
 .cell {
-
+    position: relative;
 	border: 1px dashed rgba(20, 126, 184, 0.5);
 	background: rgba(20, 126, 184, 0.1);
 	width: 100%;
@@ -91,6 +91,11 @@
 	justify-content: center;
 	 color: #147eb8;
 	 overflow: hidden;
+
+	 &.hovered {
+		border: 1px dashed #147eb8;
+		background: rgba(20, 126, 184, 0.25);
+	 }
 }
 
 .content-container {
@@ -109,8 +114,11 @@
 }
 
 .add-btn {
-    border-radius: 3px;
 	background-color: #147eb8 !important;
 	width: 26px;
 	height: 26px;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }

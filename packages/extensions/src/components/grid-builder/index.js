@@ -459,17 +459,16 @@ const Cells = ({ hoveredColumn, hoveredRow }) => {
 	return gridAreas.flat().map((item, i) => {
 		return (
 			<div
-				className="cell"
+				className={`cell ${
+					(`${item['column-start']}/${item['column-end']}` ===
+						hoveredColumn ||
+						`${item['row-start']}/${item['row-end']}` ===
+							hoveredRow) &&
+					'hovered'
+				}`}
 				key={item.id}
 				onClick={() => setActiveAreaId(item.id)}
 				style={{
-					backgroundColor:
-						(`${item['column-start']}/${item['column-end']}` ===
-							hoveredColumn ||
-							`${item['row-start']}/${item['row-end']}` ===
-								hoveredRow) &&
-						'red',
-					position: 'relative',
 					gridColumn: `${item['column-start']}/${item['column-end']}`,
 					gridRow: `${item['row-start']}/${item['row-end']}`,
 				}}
