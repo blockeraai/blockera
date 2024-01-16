@@ -22,7 +22,7 @@ import { useCssGenerator } from '@publisher/style-engine';
  */
 import { resizeHandleClasses, extractCssValue } from './utils';
 import type { GridBuilderProps } from './types';
-import { useBlockContext } from '../../hooks';
+import { useBlockContext, useStoreSelectors } from '../../hooks';
 import { GridSizeHandler } from './components/grid-size-handler';
 import { AddButton } from './components/add-button';
 
@@ -82,11 +82,21 @@ export const VirtualGrid = ({}) => {
 	const { publisherGridColumns, publisherGridRows, publisherGridGap } =
 		attributes;
 
+	const {
+		blockEditor: { getSelectedBlock },
+	} = useStoreSelectors();
+	const { clientId } = getSelectedBlock() || {};
+
 	const generatedStyle = useCssGenerator({
 		callback: LayoutStyles,
 		attributes,
 		activeDeviceType,
-		callbackProps: config,
+		callbackProps: {
+			...config,
+			blockProps: {
+				clientId,
+			},
+		},
 	}).join('\n');
 
 	const styles = {
