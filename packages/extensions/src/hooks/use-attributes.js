@@ -24,11 +24,13 @@ export const useAttributes = (
 		blockStateId,
 		isNormalState,
 		getAttributes,
+		blockId,
 	}: {
 		blockStateId: number,
 		breakpointId: number,
 		isNormalState: () => boolean,
 		getAttributes: (key: string) => any,
+		blockId: string,
 	}
 ): {
 	handleOnChangeAttributes: THandleOnChangeAttributes,
@@ -129,7 +131,9 @@ export const useAttributes = (
 					attributeId,
 					newValue,
 					ref,
-					getAttributes
+					getAttributes,
+					isNormalState,
+					blockId
 				)
 			);
 

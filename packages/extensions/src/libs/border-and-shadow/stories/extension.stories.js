@@ -38,7 +38,10 @@ blocksInitializer({
 		// eslint-disable-next-line
 		const { handleOnChangeAttributes } = useAttributes(
 			attributes,
-			setAttributes
+			setAttributes,
+			{
+				targetId: targetBlock,
+			}
 		);
 		//	console.log('attr', attributes);
 		return (

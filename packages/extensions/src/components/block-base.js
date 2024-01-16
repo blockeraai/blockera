@@ -73,7 +73,11 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		 */
 		attributes = applyFilters(
 			'publisherCore.blockEdit.attributes',
-			attributes
+			attributes,
+			{
+				blockId: name,
+				blockClientId: clientId,
+			}
 		);
 
 		const [currentTab, setCurrentTab] = useState(
@@ -199,6 +203,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				breakpointId,
 				isNormalState,
 				getAttributes,
+				blockId: name,
 			}
 		);
 
