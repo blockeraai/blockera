@@ -56,6 +56,27 @@ export default function withBlockSettings(
 }
 
 /**
+ * Preparing inner blocks.
+ *
+ * @param {Object} registeredInnerBlocks The register inner blocks on outside of core.
+ * @return {{}|{default}} the merge-able object include "default" key when registered inner blocks has valid blocks, empty object when has not valid items.
+ */
+function prepareInnerBlockTypes(registeredInnerBlocks: Object): Object {
+	const values = Object.values(registeredInnerBlocks);
+
+	if (!values.length) {
+		return {};
+	}
+
+	const types = values.map((innerBlock) => ({
+		...innerBlock,
+		attributes: {},
+	}));
+
+	return { default: types };
+}
+
+/**
  * Merge settings of block type.
  *
  * @param {Object} settings The default WordPress block type settings
@@ -73,7 +94,12 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 			...settings.attributes,
 			...additional.attributes,
 			...blockStatesAttributes,
-			...innerBlocksExtensionsAttributes,
+			publisherInnerBlocks: {
+				...innerBlocksExtensionsAttributes.publisherInnerBlocks,
+				...prepareInnerBlockTypes(
+					additional?.publisherInnerBlocks || {}
+				),
+			},
 			publisherPropsId: {
 				type: 'string',
 			},
