@@ -71,17 +71,15 @@ export default function ({
 	gridAreas: Array<Object>,
 }): MixedElement {
 	const {
-		layoutConfig: {
-			publisherGridAlignItems,
-			publisherGridJustifyItems,
-			publisherGridAlignContent,
-			publisherGridJustifyContent,
-			publisherGridGap,
-			// publisherGridDirection,
-			publisherGridColumns,
-			publisherGridRows,
-			//publisherGridAreas,
-		},
+		publisherGridAlignItems,
+		publisherGridJustifyItems,
+		publisherGridAlignContent,
+		publisherGridJustifyContent,
+		publisherGridGap,
+		// publisherGridDirection,
+		publisherGridColumns,
+		publisherGridRows,
+		//publisherGridAreas,
 	} = config;
 
 	const defaultGridItemValue = {

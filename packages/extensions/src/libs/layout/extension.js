@@ -79,6 +79,15 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 			publisherGap,
 			publisherFlexWrap,
 			publisherAlignContent,
+			publisherGridAlignItems,
+			publisherGridJustifyItems,
+			publisherGridAlignContent,
+			publisherGridJustifyContent,
+			publisherGridGap,
+			publisherGridDirection,
+			publisherGridColumns,
+			publisherGridRows,
+			publisherGridAreas,
 		},
 	}: TLayoutProps): MixedElement => {
 		const { setOpenGridBuilder, BlockComponent } = useBlockContext();
@@ -704,7 +713,17 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 
 				{display === 'grid' && (
 					<GridLayout
-						config={config}
+						config={{
+							publisherGridAlignItems,
+							publisherGridJustifyItems,
+							publisherGridAlignContent,
+							publisherGridJustifyContent,
+							publisherGridGap,
+							publisherGridDirection,
+							publisherGridColumns,
+							publisherGridRows,
+							publisherGridAreas,
+						}}
 						block={block}
 						gridAlignItems={gridAlignItems}
 						gridJustifyItems={gridJustifyItems}
