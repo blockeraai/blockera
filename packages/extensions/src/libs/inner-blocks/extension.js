@@ -23,7 +23,11 @@ import { InnerBlocksExtensionIcon } from './icons';
 import type { InnerBlockModel, InnerBlocksProps } from './types';
 
 export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
-	({ innerBlocks, setParentIsLoad }: InnerBlocksProps): MixedElement => {
+	({
+		innerBlocks,
+		currentBlock,
+		setParentIsLoad,
+	}: InnerBlocksProps): MixedElement => {
 		const { handleOnSwitchBlockSettings: switchBlockSettings } =
 			useBlockContext();
 
@@ -59,7 +63,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 				}
 			);
 
-		if (!innerBlocks.length) {
+		if (!innerBlocks.length || 'master' !== currentBlock) {
 			return <></>;
 		}
 

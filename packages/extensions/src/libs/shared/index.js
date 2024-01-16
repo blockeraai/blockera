@@ -243,6 +243,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 						}}
 					>
 						<InnerBlocksExtension
+							currentBlock={currentBlock}
 							setParentIsLoad={setParentIsLoad}
 							innerBlocks={publisherInnerBlocks}
 						/>
