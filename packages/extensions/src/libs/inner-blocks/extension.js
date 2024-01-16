@@ -23,11 +23,7 @@ import { InnerBlocksExtensionIcon } from './icons';
 import type { InnerBlockModel, InnerBlocksProps } from './types';
 
 export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
-	({
-		innerBlocks,
-		currentBlock,
-		setParentIsLoad,
-	}: InnerBlocksProps): MixedElement => {
+	({ innerBlocks, currentBlock }: InnerBlocksProps): MixedElement => {
 		const { handleOnSwitchBlockSettings: switchBlockSettings } =
 			useBlockContext();
 
@@ -47,10 +43,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 							<Button
 								size="input"
 								contentAlign="left"
-								onClick={() => {
-									setParentIsLoad(false);
-									switchBlockSettings(type);
-								}}
+								onClick={() => switchBlockSettings(type)}
 							>
 								{icon && (
 									<Icon icon={icon.name} library={icon.lib} />
