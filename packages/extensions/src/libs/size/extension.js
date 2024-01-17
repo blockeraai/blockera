@@ -67,6 +67,8 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(block, 'width'),
+								//FIXME: please compute initial value,
+								// initial value maybe difference between per block!
 								value: isNormalState()
 									? values.width || inheritValue.width
 									: values.width,

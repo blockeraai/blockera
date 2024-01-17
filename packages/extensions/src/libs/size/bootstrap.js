@@ -14,9 +14,23 @@ import {
 
 export const bootstrap = (): void => {
 	addFilter(
+		`publisherCore.blockEdit.core.image.memoization.excludedAttributeKeys`,
+		`publisherCore.blockEdit.core.image.memoization.excludedAttributeKeys.sizeExtension`,
+		(excludedAttributeKeys: Array<string>): Array<string> => {
+			//FIXME: In case a mandatory update of control values is required upon a change in the
+			// high-level block state, it is essential not to omit the associated attribute key. When
+			// adding an attribute key to the "excludedAttributeKeys" stack, any changes to this attribute
+			// key are disregarded in the re-rendering process.
+			// For Example: I need re-rendered size width control, should not add "width" attribute key in below array!
+			return excludedAttributeKeys;
+		},
+		10
+	);
+
+	addFilter(
 		'publisherCore.blockEdit.attributes',
 		'publisherCore.blockEdit.sizeExtension.bootstrap',
-		(attributes) => {
+		(attributes: Object): Object => {
 			// TODO: implements filters for initialized features of size extension values.
 
 			return attributes;
