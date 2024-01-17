@@ -18,6 +18,7 @@ import { useBlockContext } from '@publisher/extensions/src/hooks';
 import { STORE_NAME } from '../store';
 import { registerControl } from '../api';
 import type { ControlContextProviderProps } from './types';
+import { isEquals } from '@publisher/utils';
 
 export const ControlContext: Object = createContext({
 	controlInfo: {
@@ -81,6 +82,15 @@ export const ControlContextProvider = ({
 			value: controlInfo?.hasSideEffect ? value : controlInfo.value,
 		});
 	}, [currentTab]);
+
+	useEffect(() => {
+		if (!isEquals(value, controlInfo.value)) {
+			modifyControlValue({
+				controlId: controlInfo.name,
+				value: controlInfo.value,
+			});
+		}
+	}, [controlInfo.value]);
 
 	//You can to enable||disable current control with status column!
 	if (!status) {
