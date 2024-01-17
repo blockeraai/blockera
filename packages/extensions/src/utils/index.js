@@ -45,7 +45,9 @@ export function toSimpleStyleWPCompatible({
 		(isObject(newValue) && !isValid(newValue)) ||
 		(isString(newValue) && newValue.endsWith('func'))
 	) {
-		return {};
+		return {
+			[wpAttribute]: undefined,
+		};
 	}
 
 	if (typeof getAttributes === 'function') {

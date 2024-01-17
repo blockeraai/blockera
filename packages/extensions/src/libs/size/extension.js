@@ -67,11 +67,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(block, 'width'),
-								//FIXME: please compute initial value,
-								// initial value maybe difference between per block!
-								value: isNormalState()
-									? values.width || inheritValue.width
-									: values.width,
+								value: values?.width,
 								attribute: 'publisherWidth',
 								blockName: block.blockName,
 							}}
@@ -268,9 +264,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(block, 'height'),
-								value: isNormalState()
-									? values.height || inheritValue.height
-									: values.height,
+								value: values.height,
 								attribute: 'publisherHeight',
 								blockName: block.blockName,
 							}}

@@ -64,6 +64,15 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		className,
 		...props
 	}: BlockBaseProps): Element<any> | null => {
+		const { __experimentalGetPreviewDeviceType: getDeviceType } = window?.wp
+			?.editPost
+			? select('core/edit-post')
+			: select('core/edit-site');
+
+		const isNormalState = () =>
+			'normal' === attributes?.publisherCurrentState &&
+			/desktop/i.test(getDeviceType());
+
 		/**
 		 * Filterable attributes before initializing block edit component.
 		 *
@@ -77,6 +86,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			{
 				blockId: name,
 				blockClientId: clientId,
+				isNormalState,
 			}
 		);
 
@@ -97,11 +107,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 			return getBlockType(name);
 		});
-
-		const { __experimentalGetPreviewDeviceType: getDeviceType } = window?.wp
-			?.editPost
-			? select('core/edit-post')
-			: select('core/edit-site');
 
 		const blockEditRef = useRef(null);
 
@@ -165,10 +170,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			};
 			// eslint-disable-next-line
 		}, []);
-
-		const isNormalState = () =>
-			'normal' === attributes?.publisherCurrentState &&
-			/desktop/i.test(getDeviceType());
 
 		const blockStates = attributes?.publisherBlockStates.map(
 			(state: StateTypes) => state.type

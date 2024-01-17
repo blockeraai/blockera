@@ -4,34 +4,49 @@
  * External dependencies
  */
 import { addFilter } from '@wordpress/hooks';
+
+/**
+ * Publisher dependencies
+ */
 import type { ControlContextRef } from '@publisher/controls/src/context/types';
-import { toSimpleStyleWPCompatible } from '../../utils';
+
+/**
+ * Internal dependencies
+ */
 import {
 	aspectRatioToWPCompatible,
 	fitToWPCompatible,
 	minHeightToWPCompatible,
 } from './utils';
+import {
+	widthFromWPCompatibility,
+	widthToWPCompatibility,
+} from './compatibility/width';
+import {
+	heightFromWPCompatibility,
+	heightToWPCompatibility,
+} from './compatibility/height';
 
 export const bootstrap = (): void => {
 	addFilter(
-		`publisherCore.blockEdit.core.image.memoization.excludedAttributeKeys`,
-		`publisherCore.blockEdit.core.image.memoization.excludedAttributeKeys.sizeExtension`,
-		(excludedAttributeKeys: Array<string>): Array<string> => {
-			//FIXME: In case a mandatory update of control values is required upon a change in the
-			// high-level block state, it is essential not to omit the associated attribute key. When
-			// adding an attribute key to the "excludedAttributeKeys" stack, any changes to this attribute
-			// key are disregarded in the re-rendering process.
-			// For Example: I need re-rendered size width control, should not add "width" attribute key in below array!
-			return excludedAttributeKeys;
-		},
-		10
-	);
-
-	addFilter(
 		'publisherCore.blockEdit.attributes',
 		'publisherCore.blockEdit.sizeExtension.bootstrap',
-		(attributes: Object): Object => {
-			// TODO: implements filters for initialized features of size extension values.
+		(attributes, blockDetail) => {
+			const { blockId, isNormalState } = blockDetail;
+
+			if (!isNormalState()) {
+				return attributes;
+			}
+
+			attributes = widthFromWPCompatibility({
+				attributes,
+				blockId,
+			});
+
+			attributes = heightFromWPCompatibility({
+				attributes,
+				blockId,
+			});
 
 			return attributes;
 		}
@@ -50,6 +65,8 @@ export const bootstrap = (): void => {
 		 * @param {*} newValue The newValue sets to feature.
 		 * @param {ControlContextRef} ref The reference of control context action occurred.
 		 * @param {getAttributes} getAttributes The getter block attributes.
+		 * @param {isNormalState} isNormalState To check current state is normal or not
+		 * @param {string} blockId Target block ID
 		 *
 		 * @return {Object|{}} The retrieve updated block attributes with all of wp compatibilities.
 		 */
@@ -58,29 +75,35 @@ export const bootstrap = (): void => {
 			featureId: string,
 			newValue: any,
 			ref: ControlContextRef,
-			getAttributes: () => Object
+			getAttributes: () => Object,
+			isNormalState: () => boolean,
+			blockId: string
 		): Object => {
+			if (!isNormalState()) {
+				return nextState;
+			}
+
 			switch (featureId) {
 				case 'publisherWidth':
 					return {
 						...nextState,
-						...toSimpleStyleWPCompatible({
-							ref,
+						...widthToWPCompatibility({
 							newValue,
-							getAttributes,
-							wpAttribute: 'width',
+							ref,
+							blockId,
 						}),
 					};
+
 				case 'publisherHeight':
 					return {
 						...nextState,
-						...toSimpleStyleWPCompatible({
-							ref,
+						...heightToWPCompatibility({
 							newValue,
-							getAttributes,
-							wpAttribute: 'height',
+							ref,
+							blockId,
 						}),
 					};
+
 				case 'publisherMinHeight':
 					return {
 						...nextState,
@@ -89,6 +112,7 @@ export const bootstrap = (): void => {
 							newValue,
 						}),
 					};
+
 				case 'publisherRatio':
 					return {
 						...nextState,
@@ -97,6 +121,7 @@ export const bootstrap = (): void => {
 							newValue,
 						}),
 					};
+
 				case 'publisherFit':
 					return {
 						...nextState,
