@@ -8,15 +8,20 @@ import { isSpecialUnit } from '@publisher/controls';
 
 export function heightFromWPCompatibility({
 	attributes,
+	blockId,
 }: {
 	attributes: Object,
 	blockId?: string,
 }): Object {
-	if (
-		attributes?.publisherHeight === undefined &&
-		attributes.publisherHeight !== attributes?.height
-	) {
-		attributes.publisherHeight = attributes?.height;
+	switch (blockId) {
+		case 'core/image':
+		case 'core/post-featured-image':
+			if (
+				attributes?.publisherHeight === undefined &&
+				attributes.publisherHeight !== attributes?.height
+			) {
+				attributes.publisherHeight = attributes?.height;
+			}
 	}
 
 	return attributes;
@@ -58,7 +63,7 @@ export function heightToWPCompatibility({
 			};
 
 		// A string attribute for width with unit
-		default:
+		case 'core/post-featured-image':
 			if ('reset' === ref?.current?.action) {
 				return {
 					height: undefined,

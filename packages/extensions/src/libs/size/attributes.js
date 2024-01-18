@@ -1,19 +1,21 @@
 export const attributes = {
 	publisherWidth: {
 		type: 'string',
-	},
-	publisherHeight: {
-		type: 'string',
+		default: '',
 	},
 	publisherMinWidth: {
 		type: 'string',
 		default: '',
 	},
-	publisherMinHeight: {
+	publisherMaxWidth: {
 		type: 'string',
 		default: '',
 	},
-	publisherMaxWidth: {
+	publisherHeight: {
+		type: 'string',
+		default: '',
+	},
+	publisherMinHeight: {
 		type: 'string',
 		default: '',
 	},

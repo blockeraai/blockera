@@ -306,17 +306,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									size,
 									'publisher'
 								),
-								inheritValue: {
-									width: currentStateAttributes?.width,
-									height: currentStateAttributes?.height,
-									minHeight:
-										currentStateAttributes?.minHeight,
-									minHeightUnit:
-										currentStateAttributes?.minHeightUnit,
-									aspectRatio:
-										currentStateAttributes?.aspectRatio,
-									scale: currentStateAttributes?.scale,
-								},
 								extensionProps: {
 									publisherWidth: {},
 									publisherHeight: {},

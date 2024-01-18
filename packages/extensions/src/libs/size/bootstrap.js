@@ -14,11 +14,6 @@ import type { ControlContextRef } from '@publisher/controls/src/context/types';
  * Internal dependencies
  */
 import {
-	aspectRatioToWPCompatible,
-	fitToWPCompatible,
-	minHeightToWPCompatible,
-} from './utils';
-import {
 	widthFromWPCompatibility,
 	widthToWPCompatibility,
 } from './compatibility/width';
@@ -26,6 +21,18 @@ import {
 	heightFromWPCompatibility,
 	heightToWPCompatibility,
 } from './compatibility/height';
+import {
+	minHeightFromWPCompatibility,
+	minHeightToWPCompatibility,
+} from './compatibility/min-height';
+import {
+	ratioFromWPCompatibility,
+	ratioToWPCompatibility,
+} from './compatibility/aspect-ratio';
+import {
+	fitFromWPCompatibility,
+	fitToWPCompatibility,
+} from './compatibility/fit';
 
 export const bootstrap = (): void => {
 	addFilter(
@@ -44,6 +51,21 @@ export const bootstrap = (): void => {
 			});
 
 			attributes = heightFromWPCompatibility({
+				attributes,
+				blockId,
+			});
+
+			attributes = minHeightFromWPCompatibility({
+				attributes,
+				blockId,
+			});
+
+			attributes = ratioFromWPCompatibility({
+				attributes,
+				blockId,
+			});
+
+			attributes = fitFromWPCompatibility({
 				attributes,
 				blockId,
 			});
@@ -107,27 +129,30 @@ export const bootstrap = (): void => {
 				case 'publisherMinHeight':
 					return {
 						...nextState,
-						...minHeightToWPCompatible({
-							ref,
+						...minHeightToWPCompatibility({
 							newValue,
+							ref,
+							blockId,
 						}),
 					};
 
 				case 'publisherRatio':
 					return {
 						...nextState,
-						...aspectRatioToWPCompatible({
-							ref,
+						...ratioToWPCompatibility({
 							newValue,
+							ref,
+							blockId,
 						}),
 					};
 
 				case 'publisherFit':
 					return {
 						...nextState,
-						...fitToWPCompatible({
-							ref,
+						...fitToWPCompatibility({
 							newValue,
+							ref,
+							blockId,
 						}),
 					};
 			}

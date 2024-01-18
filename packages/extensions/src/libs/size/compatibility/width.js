@@ -10,30 +10,45 @@ export function widthFromWPCompatibility({
 	attributes: Object,
 	blockId?: string,
 }): Object {
-	if (
-		// attributes?.publisherWidth === undefined &&
-		attributes?.width !== undefined &&
-		attributes?.publisherWidth !== attributes?.width
-	) {
-		switch (blockId) {
-			case 'core/search':
+	switch (blockId) {
+		case 'core/search':
+			if (
+				attributes?.width !== undefined &&
+				attributes?.publisherWidth !== attributes?.width
+			) {
 				attributes.publisherWidth =
 					attributes?.width + attributes?.widthUnit;
-				return attributes;
+			}
+			return attributes;
 
-			case 'core/button':
+		case 'core/button':
+			if (
+				attributes?.width !== undefined &&
+				attributes?.publisherWidth !== attributes?.width + '%'
+			) {
 				attributes.publisherWidth = attributes?.width + '%';
-				return attributes;
+			}
+			return attributes;
 
-			case 'core/site-logo':
+		case 'core/site-logo':
+			if (
+				attributes?.width !== undefined &&
+				attributes?.publisherWidth !== attributes?.width + 'px'
+			) {
 				attributes.publisherWidth = attributes?.width + 'px';
-				return attributes;
+			}
+			return attributes;
 
-			case 'core/post-featured-image':
-			case 'core/column':
-			case 'core/image': // unit is px always
+		case 'core/post-featured-image':
+		case 'core/column':
+		case 'core/image': // unit is px always
+			if (
+				attributes?.width !== undefined &&
+				attributes?.publisherWidth !== attributes?.width
+			) {
 				attributes.publisherWidth = attributes?.width;
-		}
+			}
+			return attributes;
 	}
 
 	return attributes;
@@ -66,6 +81,7 @@ export function widthToWPCompatibility({
 			) {
 				return {
 					width: undefined,
+					widthUnit: undefined,
 				};
 			}
 
@@ -145,15 +161,13 @@ export function widthToWPCompatibility({
 				};
 			}
 
-			console.log('to wp', {
-				width: newValue,
-			});
 			return {
 				width: newValue,
 			};
 
 		// A string attribute for width with unit
-		default:
+		case 'core/post-featured-image':
+		case 'core/column':
 			if ('reset' === ref?.current?.action) {
 				return {
 					width: undefined,
