@@ -312,13 +312,15 @@ export function SideItem({
 					isOpen={openPopover === sideId}
 					unit={sideSpace?.unit}
 					onChange={(newValue) => {
-						setValue({
-							...value,
-							position: {
-								...value.position,
-								[(side: string)]: newValue,
-							},
-						});
+						if (newValue?.position !== undefined) {
+							setValue({
+								...value,
+								position: {
+									...value.position,
+									[(side: string)]: newValue.position[side],
+								},
+							});
+						}
 					}}
 					defaultValue={defaultValue}
 				/>
