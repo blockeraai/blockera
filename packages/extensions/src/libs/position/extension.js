@@ -23,8 +23,6 @@ import { componentClassNames } from '@publisher/classnames';
  */
 import { PositionExtensionIcon } from './index';
 import { isActiveField } from '../../api/utils';
-import { useBlockContext } from '../../hooks';
-import { positionToWPCompatible } from './utils';
 import { generateExtensionId, hasSameProps } from '../utils';
 import type { TPositionExtensionProps } from './types/position-extension-props';
 
@@ -33,12 +31,9 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 		block,
 		positionConfig: { publisherPosition, publisherZIndex },
 		values,
-		inheritValues,
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TPositionExtensionProps): MixedElement => {
-		const { isNormalState, getAttributes } = useBlockContext();
-
 		return (
 			<PanelBodyControl
 				title={__('Position', 'publisher-core')}
@@ -53,15 +48,7 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'position'),
-							value: (() => {
-								if (isNormalState()) {
-									return values.position?.type
-										? values.position
-										: inheritValues.position;
-								}
-
-								return values.position;
-							})(),
+							value: values?.position || {},
 							attribute: 'publisherPosition',
 							blockName: block.blockName,
 						}}
@@ -79,16 +66,7 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 									handleOnChangeAttributes(
 										'publisherPosition',
 										newValue,
-										{
-											ref,
-											addOrModifyRootItems:
-												positionToWPCompatible({
-													newValue,
-													ref,
-													isNormalState,
-													getAttributes,
-												}),
-										}
+										{ ref }
 									)
 								}
 								{...extensionProps.publisherPosition}
