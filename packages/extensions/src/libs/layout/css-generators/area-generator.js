@@ -9,28 +9,27 @@ import { createCssRule } from '@publisher/style-engine';
  */
 import { calcGridTemplateAreas } from '../utils';
 
-export function GridAreaGenerator(id, props, styleEngine) {
-	const {
-		attributes,
-		cssGeneratorEntity: { id: _id, property },
-	} = props;
+export function GridAreaGenerator(id, props, { media, selector }) {
+	const { attributes } = props;
 
-	if (isUndefined(attributes[_id]) || !attributes[_id]?.length) {
+	if (
+		isUndefined(attributes.publisherGridAreas) ||
+		!attributes.publisherGridAreas?.length
+	) {
 		return '';
 	}
 
 	const gridTemplateAreas = calcGridTemplateAreas({
 		gridRows: attributes.publisherGridRows,
 		gridColumns: attributes.publisherGridColumns,
-		gridAreas: attributes[_id],
+		gridAreas: attributes.publisherGridAreas,
 	});
 
 	return createCssRule({
-		selector: `#block-${props.clientId}${
-			styleEngine.selector ? ' ' + styleEngine.selector : ''
-		}`,
+		media,
+		selector,
 		properties: {
-			[property]: gridTemplateAreas
+			'grid-template-areas': gridTemplateAreas
 				?.map((item) => `"${item.join(' ')}"`)
 				.join(` `),
 		},

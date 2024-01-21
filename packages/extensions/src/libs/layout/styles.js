@@ -275,22 +275,17 @@ export function LayoutStyles({
 			generators.push(
 				computedCssRules(
 					{
-						cssGenerators: {
-							publisherGridAreas: [
-								{
-									type: 'function',
-									function: GridAreaGenerator,
-								},
-							],
-						},
+						publisherGridAreas: [
+							{
+								media,
+								selector,
+								type: 'function',
+								function: GridAreaGenerator,
+							},
+						],
 					},
-					{
-						...blockProps,
-						cssGeneratorEntity: {
-							property: 'grid-template-areas',
-							id: 'publisherGridAreas',
-						},
-					}
+
+					blockProps
 				)
 			);
 		}
