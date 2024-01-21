@@ -17,6 +17,7 @@ import {
 	sharedBlockExtensionAttributes,
 	blockStatesAttributes,
 } from '../index';
+import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs';
 
 /**
  * Upper Case first character of word
@@ -56,7 +57,7 @@ export const enhance: Object = compose(
 export const sanitizedBlockAttributes = (attributes: Object): Object => {
 	const omittedWPAttributes = omitWithPattern(
 		attributes,
-		/^(?!publisher\w+).*/i
+		ignoreDefaultBlockAttributeKeysRegExp()
 	);
 
 	const availableAttributes = {
