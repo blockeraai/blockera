@@ -260,41 +260,18 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 						/>
 
 						<PositionExtension
-							{...{
-								block,
-								positionConfig,
-								inheritValues: {
-									position: currentStateAttributes?.style
-										?.position?.type
-										? {
-												type: currentStateAttributes
-													?.style?.position?.type,
-												position: {
-													top: currentStateAttributes
-														?.style?.position?.top,
-													right: currentStateAttributes
-														?.style?.position
-														?.right,
-													bottom: currentStateAttributes
-														?.style?.position
-														?.bottom,
-													left: currentStateAttributes
-														?.style?.position?.left,
-												},
-										  }
-										: undefined,
-								},
-								values: {
-									position:
-										currentStateAttributes.publisherPosition,
-									zIndex: currentStateAttributes.publisherZIndex,
-								},
-								extensionProps: {
-									publisherPosition: {},
-									publisherZIndex: {},
-								},
-								handleOnChangeAttributes,
+							block={block}
+							positionConfig={positionConfig}
+							values={{
+								position:
+									currentStateAttributes.publisherPosition,
+								zIndex: currentStateAttributes.publisherZIndex,
 							}}
+							extensionProps={{
+								publisherPosition: {},
+								publisherZIndex: {},
+							}}
+							handleOnChangeAttributes={handleOnChangeAttributes}
 						/>
 
 						<SizeExtension
