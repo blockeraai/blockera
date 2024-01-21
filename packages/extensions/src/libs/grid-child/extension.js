@@ -60,7 +60,7 @@ export const GridChildExtension: TGridChildProps = memo<TGridChildProps>(
 					>
 						<LayoutMatrixControl
 							columns="80px 160px"
-							label={__('Grid Layout', 'publisher-core')}
+							label={__('Self Layout', 'publisher-core')}
 							defaultValue={{
 								direction: 'row',
 								alignItems: '',
