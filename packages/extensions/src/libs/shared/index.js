@@ -203,6 +203,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			backgroundConfig,
 			typographyConfig,
 			borderAndShadowConfig,
+			gridChildConfig,
 		} = extensionConfig[currentBlock] || config;
 
 		const block = {
@@ -407,31 +408,25 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							directParentBlock?.attributes.publisherDisplay ===
 								'grid' && (
 								<GridChildExtension
-									{...props}
-									initialOpen={true}
-									extensionId={'GridChild'}
-									extensionProps={{
-										publisherGridChildPosition: {},
-										publisherGridChildAlign: {},
-										publisherGridChildJustify: {},
-										publisherGridChildOrder: {},
-										publisherGridChildOrderCustom: {},
+									{...{
+										block,
+										gridChildConfig,
+										extensionProps: {
+											publisherGridChildLayout: {},
+											publisherGridChildOrder: {},
+										},
+										values: {
+											...include(
+												currentStateAttributes,
+												gridChild,
+												'publisher'
+											),
+											gridAreas:
+												directParentBlock?.attributes
+													.publisherGridAreas,
+										},
+										handleOnChangeAttributes,
 									}}
-									title={__('Grid Child', 'publisher-core')}
-									values={{
-										...include(
-											currentStateAttributes,
-											gridChild,
-											'publisher'
-										),
-										gridAreas:
-											directParentBlock
-												?.currentStateAttributes
-												.publisherGridAreas,
-									}}
-									handleOnChangeAttributes={
-										handleOnChangeAttributes
-									}
 								/>
 							)}
 

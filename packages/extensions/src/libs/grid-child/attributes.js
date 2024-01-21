@@ -1,31 +1,10 @@
 export const attributes = {
-	publisherGridChildPosition: {
+	publisherGridChildLayout: {
 		type: 'object',
-		default: {
-			'position-type': 'auto',
-			'column-span': '',
-			'row-span': '',
-			area: '',
-			'column-start': '',
-			'column-end': '',
-			'row-start': '',
-			'row-end': '',
-		},
-	},
-	publisherGridChildAlign: {
-		type: 'string',
-		default: '',
-	},
-	publisherGridChildJustify: {
-		type: 'string',
-		default: '',
+		default: { alignItems: '', justifyContent: '' },
 	},
 	publisherGridChildOrder: {
-		type: 'string',
-		default: '',
-	},
-	publisherGridChildOrderCustom: {
-		type: 'string',
-		default: '',
+		type: 'object',
+		default: { value: '', area: '' },
 	},
 };

@@ -10,8 +10,6 @@ import type { MixedElement } from 'react';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 
 export type TCssProps = {
-	'grid-column'?: string,
-	'grid-row'?: string,
 	'grid-area'?: string,
 	'align-self'?: string,
 	'justify-self'?: string,
@@ -20,24 +18,16 @@ export type TCssProps = {
 
 export type TGridChildProps = {
 	values: {
-		gridChildPosition: {
-			'position-type': string,
-			'column-span': string,
-			'row-span': string,
-			area: string,
-			'column-start': string,
-			'column-end': string,
-			'row-start': string,
-			'row-end': string,
-		},
-		gridChildAlign: string,
-		gridChildJustify: string,
-		gridChildOrder: string,
-		gridChildOrderCustom: string,
+		gridChildLayout: { alignItems: string, justifyContent: string },
+		gridChildOrder: { value: string, area: string },
 		gridAreas: Array<Object>,
 	},
 	block: TBlockProps,
-	config: Object,
+	gridChildConfig: Object,
 	children?: MixedElement,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
+	extensionProps: {
+		publisherGridChildOrder: Object,
+		publisherGridChildLayout: Object,
+	},
 };

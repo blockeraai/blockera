@@ -99,11 +99,5 @@
 		"publisherPointerEvents"
 	],
 	"advanced": ["publisherAttributes", "publisherCSSProperties"],
-	"gridChild": [
-		"publisherGridChildPosition",
-		"publisherGridChildAlign",
-		"publisherGridChidJustify",
-		"publisherGridChildOrder",
-		"publisherGridChildOrderCustom"
-	]
+	"gridChild": ["publisherGridChildLayout", "publisherGridChildOrder"]
 }
