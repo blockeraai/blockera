@@ -13,6 +13,7 @@ import { AdvancedStyles } from '../advanced';
 import { TypographyStyles } from '../typography';
 import { BackgroundStyles } from '../background';
 import { BorderAndShadowStyles } from '../border-and-shadow';
+import { GridChildStyles } from '../grid-child';
 
 export default {
 	publisherSize: {
@@ -51,5 +52,8 @@ export default {
 	},
 	publisherBorderAndShadow: {
 		callback: BorderAndShadowStyles,
+	},
+	publisherGridChild: {
+		callback: GridChildStyles,
 	},
 };

@@ -66,14 +66,13 @@ export const GridChildExtension: TGridChildProps = memo<TGridChildProps>(
 								alignItems: '',
 								justifyContent: '',
 							}}
-							onChange={(newValue, ref) => {
-								console.log(newValue);
+							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
 									'publisherGridChildLayout',
 									newValue,
 									{ ref }
-								);
-							}}
+								)
+							}
 							isDirectionActive={false}
 							{...extensionProps.publisherGridChildLayout}
 						/>
@@ -130,7 +129,8 @@ export const GridChildExtension: TGridChildProps = memo<TGridChildProps>(
 									<SelectControl
 										columns="columns-2"
 										label={__('Cell', 'publisher-core')}
-										id="area"
+										id={"['area']"}
+										singularId={"['area']"}
 										options={createAreasOptions(gridAreas)}
 										defaultValue={
 											gridChildOrder?.area || ''
@@ -138,8 +138,7 @@ export const GridChildExtension: TGridChildProps = memo<TGridChildProps>(
 										onChange={(
 											area: string,
 											ref?: Object
-										): void => {
-											console.log(area);
+										): void =>
 											handleOnChangeAttributes(
 												'publisherGridChildOrder',
 												{
@@ -147,8 +146,8 @@ export const GridChildExtension: TGridChildProps = memo<TGridChildProps>(
 													area,
 												},
 												{ ref }
-											);
-										}}
+											)
+										}
 										{...extensionProps.publisherGridChildOrder}
 									/>
 								)}
