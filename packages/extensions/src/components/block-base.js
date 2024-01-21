@@ -21,7 +21,12 @@ import {
  */
 import { useCssGenerator } from '@publisher/style-engine';
 import { extensionClassNames } from '@publisher/classnames';
-import { indexOf, isUndefined, omitWithPattern } from '@publisher/utils';
+import {
+	indexOf,
+	isEquals,
+	isUndefined,
+	omitWithPattern,
+} from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -41,7 +46,10 @@ import styleGenerators from '../libs/shared/style-generators';
 import StatesManager from '../libs/block-states/components/states-manager';
 import { propsAreEqual } from './utils';
 import type { InnerBlockType } from '../libs/inner-blocks/types';
-import { definitionTypes } from '../libs';
+import {
+	definitionTypes,
+	ignoreDefaultBlockAttributeKeysRegExp,
+} from '../libs';
 
 export type BlockBaseProps = {
 	additional: Object,
@@ -90,6 +98,9 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			}
 		);
 
+		// Declare backup attributes state to clonedAttributes to manage re-rendering process order by self policies.
+		const [clonedAttributes, setClonedAttributes] = useState(attributes);
+
 		const [currentTab, setCurrentTab] = useState(
 			additional?.activeTab || 'style'
 		);
@@ -129,7 +140,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		useEffect(() => {
 			const publisherAttributes = omitWithPattern(
 				sanitizedBlockAttributes(attributes),
-				/^(?!publisher\w+).*/i
+				ignoreDefaultBlockAttributeKeysRegExp()
 			);
 
 			if (
@@ -195,9 +206,23 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			return attributes;
 		};
 
+		// Updating attributes just when changes clonedAttributes.
+		useEffect(() => {
+			if (!isEquals(attributes, clonedAttributes)) {
+				setAttributes({
+					...attributes,
+					...omitWithPattern(
+						clonedAttributes,
+						ignoreDefaultBlockAttributeKeysRegExp()
+					),
+				});
+			}
+			// eslint-disable-next-line
+		}, [clonedAttributes]);
+
 		const { handleOnChangeAttributes } = useAttributes(
-			attributes,
-			setAttributes,
+			clonedAttributes,
+			setClonedAttributes,
 			{
 				currentBlock,
 				blockStateId,
