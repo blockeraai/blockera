@@ -37,7 +37,11 @@ export const useAdvancedLabelProps = ({
 	//TODO: Please commented after complete debug!
 	// const debugKey = 'publisherBorder';
 
-	if ('publisherBlockStates' === attribute) {
+	if (
+		['', 'publisherBlockStates'].includes(attribute) ||
+		!blockAttributes ||
+		!Object.values(blockAttributes).length
+	) {
 		return {
 			isChanged: false,
 			isChangedOnNormal: false,
