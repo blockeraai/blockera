@@ -89,6 +89,7 @@ import { InnerBlocksExtension } from '../inner-blocks';
 import { SettingsIcon } from './icons/settings';
 import { StylesIcon } from './icons/styles';
 import { AnimationsIcon } from './icons/animations';
+import { EntranceAnimationExtension } from '../entrance-animation';
 
 export const attributes = {
 	...typographyAttributes,
@@ -423,12 +424,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								borderAndShadow,
 								'publisher'
 							)}
-							// defaultValue={{
-							// 	borderColor:
-							// 		currentStateAttributes?.borderColor || '',
-							// 	border:
-							// 		currentStateAttributes.style?.border || {},
-							// }}
+							defaultValue={{
+								borderColor:
+									currentStateAttributes?.borderColor || '',
+								border:
+									currentStateAttributes.style?.border || {},
+							}}
 							handleOnChangeAttributes={handleOnChangeAttributes}
 						/>
 
@@ -484,6 +485,14 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								'interactions' === tab.name ? 'block' : 'none',
 						}}
 					>
+						<EntranceAnimationExtension
+							block={block}
+							mouseConfig={mouseConfig}
+							extensionProps={{}}
+							values={{}}
+							handleOnChangeAttributes={handleOnChangeAttributes}
+						/>
+
 						<MouseExtension
 							{...{
 								block,
