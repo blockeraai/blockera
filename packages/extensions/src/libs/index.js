@@ -91,6 +91,12 @@ export {
 	attributes as innerBlocksExtensionsAttributes,
 } from './inner-blocks';
 export {
+	EntranceAnimationExtensionIcon,
+	EntranceAnimationExtension,
+	attributes as entranceAnimationExtensionAttributes,
+	supports as entranceAnimationExtensionSupports,
+} from './entrance-animation';
+export {
 	SharedBlockExtension,
 	attributes as sharedBlockExtensionAttributes,
 	supports as sharedBlockExtensionSupports,

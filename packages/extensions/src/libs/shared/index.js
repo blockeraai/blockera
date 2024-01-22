@@ -89,6 +89,7 @@ import { InnerBlocksExtension } from '../inner-blocks';
 import { SettingsIcon } from './icons/settings';
 import { StylesIcon } from './icons/styles';
 import { AnimationsIcon } from './icons/animations';
+import { EntranceAnimationExtension } from '../entrance-animation';
 
 export const attributes = {
 	...typographyAttributes,
