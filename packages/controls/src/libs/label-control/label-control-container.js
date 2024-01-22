@@ -1,5 +1,10 @@
 // @flow
 /**
+ * External Dependencies
+ */
+import type { MixedElement } from 'react';
+
+/**
  * Publisher Dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
@@ -14,7 +19,7 @@ export default function LabelControlContainer({
 	className?: string,
 	style?: Object,
 	children?: string | MixedElement,
-}) {
+}): MixedElement {
 	return (
 		<span
 			className={controlClassNames('label-container', className)}
