@@ -15,7 +15,7 @@ import { Button } from '@publisher/components';
  * Internal dependencies
  */
 import type { GridBuilderProps } from './types';
-import { useBlockContext, useStoreSelectors } from '../../hooks';
+import { useBlockContext } from '../../hooks';
 import { VirtualGrid } from './components';
 import EditGridIcon from './icons/edit-grid';
 
@@ -26,25 +26,21 @@ export const GridBuilder = ({
 	const { isOpenGridBuilder, getAttributes, setOpenGridBuilder } =
 		useBlockContext();
 
-	const {
-		blockEditor: { getSelectedBlock },
-	} = useStoreSelectors();
-
-	const { clientId } = getSelectedBlock() || {};
-
 	const selectedBlock = document
 		.querySelector('iframe[name="editor-canvas"]')
 		// $FlowFixMe
-		?.contentDocument?.body?.querySelector(`#block-${clientId}`);
+		?.contentDocument?.body?.querySelector(`#block-${block.clientId}`);
 
 	useEffect(() => {
-		if (!isOpenGridBuilder) {
-			selectedBlock.style.visibility = 'visible';
-		} else {
-			selectedBlock.style.visibility = 'hidden';
-		}
+		if (selectedBlock) {
+			if (!isOpenGridBuilder) {
+				selectedBlock.style.visibility = 'visible';
+			} else {
+				selectedBlock.style.visibility = 'hidden';
+			}
 
-		return () => (selectedBlock.style.visibility = 'visible');
+			return () => (selectedBlock.style.visibility = 'visible');
+		}
 	}, [isOpenGridBuilder]);
 
 	const { publisherWidth, publisherHeight } = getAttributes();
@@ -83,7 +79,7 @@ export const GridBuilder = ({
 			.querySelector('iframe[name="editor-canvas"]')
 			//$FlowFixMe
 			?.contentDocument?.body?.querySelector(
-				`div:has(#block-${clientId})`
+				`div:has(#block-${block.clientId})`
 			)
 	);
 };
