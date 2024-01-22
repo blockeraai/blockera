@@ -9,22 +9,33 @@ import type { MixedElement, ComponentType } from 'react';
 /**
  * Publisher dependencies
  */
-import { PanelBodyControl } from '@publisher/controls';
+import {
+	ControlContextProvider,
+	PanelBodyControl,
+	RepeaterControl,
+} from '@publisher/controls';
 import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
-import { hasSameProps } from '../utils';
+import { generateExtensionId, hasSameProps } from '../utils';
 import type { EntranceExtensionProps } from './types/props';
 import { EntranceAnimationExtensionIcon } from './index';
+import EntranceAnimationIcon from './icons/entrance-animation-icon';
+import { isActiveField } from '../../api/utils';
 
 export const EntranceAnimationExtension: ComponentType<EntranceExtensionProps> =
 	memo(
 		({
 			values: {},
-			mouseConfig: {},
+			block,
+			extensionConfig,
 		}: EntranceExtensionProps): MixedElement => {
+			if (!isActiveField(extensionConfig.publisherEntranceAnimation)) {
+				return <></>;
+			}
+
 			return (
 				<PanelBodyControl
 					title={__('On Entrance', 'publisher-core')}
@@ -32,10 +43,37 @@ export const EntranceAnimationExtension: ComponentType<EntranceExtensionProps> =
 					icon={<EntranceAnimationExtensionIcon />}
 					className={componentClassNames(
 						'extension',
-						'extension-mouse'
+						'extension-entrance-animation'
 					)}
 				>
-					On entrance coming soon...
+					<ControlContextProvider
+						value={{
+							name: generateExtensionId(
+								block,
+								'entranceAnimation'
+							),
+							value: {},
+							attribute: 'publisherEntranceAnimation',
+							blockName: block.blockName,
+						}}
+						storeName={'publisher-core/controls/repeater'}
+					>
+						<RepeaterControl
+							label=""
+							defaultValue={{}}
+							design="large"
+							icon={<EntranceAnimationIcon />}
+							description={__(
+								'Block will animate when it enters into view.',
+								'publisher-core'
+							)}
+							actionButtonAdd={false}
+							injectHeaderButtonsStart={__(
+								'Coming soon…',
+								'publisher-core'
+							)}
+						/>
+					</ControlContextProvider>
 				</PanelBodyControl>
 			);
 		},

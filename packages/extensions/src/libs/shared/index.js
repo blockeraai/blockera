@@ -77,6 +77,8 @@ import {
 	supports as mouseSupports,
 	MouseExtension,
 } from '../mouse';
+import { EntranceAnimationExtension } from '../entrance-animation';
+
 import { propsAreEqual } from '../../components';
 import extensions from './extensions.json';
 import type { TStates } from '../block-states/types';
@@ -89,7 +91,6 @@ import { InnerBlocksExtension } from '../inner-blocks';
 import { SettingsIcon } from './icons/settings';
 import { StylesIcon } from './icons/styles';
 import { AnimationsIcon } from './icons/animations';
-import { EntranceAnimationExtension } from '../entrance-animation';
 
 export const attributes = {
 	...typographyAttributes,
@@ -199,6 +200,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			backgroundConfig,
 			typographyConfig,
 			borderAndShadowConfig,
+			entranceAnimationConfig,
 		} = extensionConfig[currentBlock] || config;
 
 		const block = {
@@ -487,7 +489,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 					>
 						<EntranceAnimationExtension
 							block={block}
-							mouseConfig={mouseConfig}
+							extensionConfig={entranceAnimationConfig}
 							extensionProps={{}}
 							values={{}}
 							handleOnChangeAttributes={handleOnChangeAttributes}

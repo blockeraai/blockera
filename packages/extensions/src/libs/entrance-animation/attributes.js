@@ -1,1 +1,6 @@
-export const attributes = {};
+export const attributes = {
+	publisherEntranceAnimation: {
+		type: 'object',
+		default: {},
+	},
+};

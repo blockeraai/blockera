@@ -89,5 +89,6 @@
 		"publisherUserSelect",
 		"publisherPointerEvents"
 	],
+	"entranceAnimation": ["publisherEntranceAnimation"],
 	"advanced": ["publisherAttributes", "publisherCSSProperties"]
 }

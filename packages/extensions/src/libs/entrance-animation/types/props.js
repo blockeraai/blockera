@@ -11,7 +11,9 @@ import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 
 export type EntranceExtensionProps = {
 	block: TBlockProps,
-	mouseConfig: Object,
+	extensionConfig: {
+		publisherEntranceAnimation: Object,
+	},
 	children?: MixedElement,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	values: {},
