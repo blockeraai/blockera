@@ -701,12 +701,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 				)}
 
 				{'grid' === display && (
-					<GridBuilder
-						type={block.blockName}
-						id={block.clientId}
-						position={{ top: 0, left: 0 }}
-						dimension={{ width: 320, height: 200 }}
-					>
+					<GridBuilder block={block}>
 						<BlockComponent />
 					</GridBuilder>
 				)}

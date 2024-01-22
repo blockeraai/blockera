@@ -19,6 +19,7 @@ export const AddButton = ({
 }) => {
 	return (
 		<Button
+			size="extra-small"
 			style={{
 				gridRow:
 					type === 'column'
@@ -38,7 +39,7 @@ export const AddButton = ({
 				left: type === 'row' && '0px',
 				top: type === 'column' && '0px',
 				marginLeft: type === 'row' && columnGap && '-10px',
-				marginTop: type === 'column' && !rowGap && '-10px',
+				marginTop: type === 'column' && rowGap && '-10px',
 			}}
 			onClick={onClick}
 			className="add-btn"

@@ -54,7 +54,7 @@ export default function ({
 	gridGap,
 	//gridDirection,
 	gridColumns,
-	//gridAreas,
+	gridAreas,
 	gridRows,
 }: {
 	config: Object,
@@ -134,19 +134,60 @@ export default function ({
 								): void => {
 									if (gridRows.value.length < length) {
 										const value = [...gridRows.value];
+										const newAreas = [];
+										const cellCounts = gridAreas?.map(
+											(area) =>
+												Number(
+													area.name.replace(
+														/[^-\.0-9]/g,
+														''
+													)
+												)
+										);
+
 										let i = gridRows.value.length;
+										let count = Math.max(...cellCounts);
+
 										while (i < length) {
 											value.push({
-												...defaultGridItemValue,
+												...{
+													...defaultGridItemValue,
+													size: 'auto',
+												},
 												id: nanoid(),
 											});
+											for (
+												let index = 1;
+												index <= gridColumns.length;
+												index++
+											) {
+												count++;
+
+												newAreas.push({
+													id: nanoid(),
+													name: `cell${count}`,
+													'column-start': index,
+													'column-end': index + 1,
+													'row-start': i + 1,
+													'row-end': i + 2,
+												});
+											}
+
 											i++;
 										}
 
 										handleOnChangeAttributes(
 											'publisherGridRows',
 											{ length, value },
-											{ ref }
+											{
+												addOrModifyRootItems: {
+													publisherGridAreas: [
+														...gridAreas,
+														...newAreas,
+													],
+												},
+												ref,
+											}
 										);
 									}
 
@@ -157,10 +198,43 @@ export default function ({
 											gridRows.value.length - length
 										);
 
+										const deletedAreas = gridAreas
+											.filter(
+												(item) =>
+													item['row-end'] > length + 1
+											)
+											.map(({ id }) => id);
+
+										const mergedItems = gridAreas.filter(
+											(item) =>
+												item.mergedArea &&
+												item['row-end'] > length + 1 &&
+												item['row-start'] < length + 1
+										);
+
+										const filteredAreas = gridAreas.filter(
+											(item) =>
+												!deletedAreas.includes(item.id)
+										);
+
+										const mutedMergedItems =
+											mergedItems.map((item) => ({
+												...item,
+												'row-end': length + 1,
+											}));
+
 										handleOnChangeAttributes(
 											'publisherGridRows',
 											{ length, value },
-											{ ref }
+											{
+												addOrModifyRootItems: {
+													publisherGridAreas: [
+														...filteredAreas,
+														...mutedMergedItems,
+													],
+												},
+												ref,
+											}
 										);
 									}
 								}}
@@ -196,19 +270,56 @@ export default function ({
 								): void => {
 									if (gridColumns.value.length < length) {
 										const value = [...gridColumns.value];
+										const newAreas = [];
+										const cellCounts = gridAreas?.map(
+											(area) =>
+												Number(
+													area.name.replace(
+														/[^-\.0-9]/g,
+														''
+													)
+												)
+										);
+
 										let i = gridColumns.value.length;
+										let count = Math.max(...cellCounts);
+
 										while (i < length) {
 											value.push({
 												...defaultGridItemValue,
 												id: nanoid(),
 											});
+											for (
+												let index = 1;
+												index <= gridRows.length;
+												index++
+											) {
+												count++;
+
+												newAreas.push({
+													id: nanoid(),
+													name: `cell${count}`,
+													'column-start': i + 1,
+													'column-end': i + 2,
+													'row-start': index,
+													'row-end': index + 1,
+												});
+											}
 											i++;
 										}
 
 										handleOnChangeAttributes(
 											'publisherGridColumns',
 											{ length, value },
-											{ ref }
+											{
+												addOrModifyRootItems: {
+													publisherGridAreas: [
+														...gridAreas,
+														...newAreas,
+													],
+												},
+												ref,
+											}
 										);
 									}
 
@@ -219,10 +330,46 @@ export default function ({
 											gridColumns.value.length - length
 										);
 
+										const deletedAreas = gridAreas
+											.filter(
+												(item) =>
+													item['column-end'] >
+													length + 1
+											)
+											.map(({ id }) => id);
+
+										const mergedItems = gridAreas.filter(
+											(item) =>
+												item.mergedArea &&
+												item['column-end'] >
+													length + 1 &&
+												item['column-start'] <
+													length + 1
+										);
+
+										const filteredAreas = gridAreas.filter(
+											(item) =>
+												!deletedAreas.includes(item.id)
+										);
+
+										const mutedMergedItems =
+											mergedItems.map((item) => ({
+												...item,
+												'column-end': length + 1,
+											}));
+
 										handleOnChangeAttributes(
 											'publisherGridColumns',
 											{ length, value },
-											{ ref }
+											{
+												addOrModifyRootItems: {
+													publisherGridAreas: [
+														...filteredAreas,
+														...mutedMergedItems,
+													],
+												},
+												ref,
+											}
 										);
 									}
 								}}
