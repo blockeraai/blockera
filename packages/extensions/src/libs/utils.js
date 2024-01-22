@@ -1,4 +1,10 @@
 // @flow
+
+/**
+ * Publisher dependencies
+ */
+import { isEquals } from '@publisher/utils';
+
 /**
  * Internal dependencies
  */
@@ -43,7 +49,7 @@ export function hasSameProps(
 	// eslint-disable-next-line no-undef
 	nextProps: $ReadOnly<Object> | Array<any>
 ): boolean {
-	return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+	return isEquals(prevProps, nextProps);
 }
 
 /**

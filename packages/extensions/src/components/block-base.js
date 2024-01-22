@@ -21,12 +21,7 @@ import {
  */
 import { useCssGenerator } from '@publisher/style-engine';
 import { extensionClassNames } from '@publisher/classnames';
-import {
-	indexOf,
-	isEquals,
-	isUndefined,
-	omitWithPattern,
-} from '@publisher/utils';
+import { indexOf, isUndefined, omitWithPattern } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -97,9 +92,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				isNormalState,
 			}
 		);
-
-		// Declare backup attributes state to clonedAttributes to manage re-rendering process order by self policies.
-		const [clonedAttributes, setClonedAttributes] = useState(attributes);
 
 		const [currentTab, setCurrentTab] = useState(
 			additional?.activeTab || 'style'
@@ -206,23 +198,9 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			return attributes;
 		};
 
-		// Updating attributes just when changes clonedAttributes.
-		useEffect(() => {
-			if (!isEquals(attributes, clonedAttributes)) {
-				setAttributes({
-					...attributes,
-					...omitWithPattern(
-						clonedAttributes,
-						ignoreDefaultBlockAttributeKeysRegExp()
-					),
-				});
-			}
-			// eslint-disable-next-line
-		}, [clonedAttributes]);
-
 		const { handleOnChangeAttributes } = useAttributes(
-			clonedAttributes,
-			setClonedAttributes,
+			attributes,
+			setAttributes,
 			{
 				currentBlock,
 				blockStateId,
