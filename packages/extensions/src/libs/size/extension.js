@@ -28,10 +28,8 @@ import type { TSizeProps } from './types/size-props';
 import { default as OverflowHiddenIcon } from './icons/overflow-hidden';
 import { default as OverflowVisibleIcon } from './icons/overflow-visible';
 import { default as OverflowScrollIcon } from './icons/overflow-scroll';
-import { useBlockContext } from '../../hooks';
 import { ObjectFit } from './components';
 import AspectRatio from './components/aspect-ratio';
-import { coreWPAspectRatioValues, coreWPFitValues } from './utils';
 import { SizeExtensionIcon } from './index';
 
 export const SizeExtension: ComponentType<TSizeProps> = memo(
@@ -50,11 +48,8 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 		},
 		handleOnChangeAttributes,
 		values,
-		inheritValue,
 		extensionProps,
 	}: TSizeProps): MixedElement => {
-		const { isNormalState } = useBlockContext();
-
 		return (
 			<PanelBodyControl
 				title={__('Size', 'publisher-core')}
@@ -67,9 +62,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(block, 'width'),
-								value: isNormalState()
-									? values.width || inheritValue.width
-									: values.width,
+								value: values?.width,
 								attribute: 'publisherWidth',
 								blockName: block.blockName,
 							}}
@@ -94,7 +87,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 									</>
 								}
 								columns="columns-2"
-								placeholder="0"
+								placeholder="Auto"
 								unitType="width"
 								min={0}
 								defaultValue=""
@@ -169,7 +162,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												) &&
 												'control-first label-center small-gap'
 											}
-											placeholder="0"
+											placeholder="-"
 											unitType="min-width"
 											min={0}
 											size="small"
@@ -239,7 +232,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												) &&
 												'control-first label-center small-gap'
 											}
-											placeholder="0"
+											placeholder="-"
 											unitType="max-width"
 											min={0}
 											size="small"
@@ -266,9 +259,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(block, 'height'),
-								value: isNormalState()
-									? values.height || inheritValue.height
-									: values.height,
+								value: values.height,
 								attribute: 'publisherHeight',
 								blockName: block.blockName,
 							}}
@@ -293,7 +284,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 									</>
 								}
 								columns="columns-2"
-								placeholder="0"
+								placeholder="Auto"
 								unitType="height"
 								min={0}
 								defaultValue=""
@@ -309,6 +300,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 								{...extensionProps.publisherHeight}
 							/>
 						</ControlContextProvider>
+
 						{(isActiveField(publisherMinHeight) ||
 							isActiveField(publisherMaxHeight)) && (
 							<Flex
@@ -324,22 +316,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												block,
 												'minHeight'
 											),
-											value: (() => {
-												if (isNormalState()) {
-													if (values.minHeight)
-														return values.minHeight;
-													else if (
-														inheritValue.minHeight
-													) {
-														return inheritValue.minHeightUnit
-															? inheritValue.minHeight +
-																	inheritValue.minHeightUnit
-															: inheritValue.minHeight;
-													}
-												}
-
-												return values.minHeight;
-											})(),
+											value: values.minHeight,
 											attribute: 'publisherMinHeight',
 											blockName: block.blockName,
 										}}
@@ -384,7 +361,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												) &&
 												'control-first label-center small-gap'
 											}
-											placeholder="0"
+											placeholder="-"
 											unitType="min-height"
 											min={0}
 											size="small"
@@ -454,7 +431,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												) &&
 												'control-first label-center small-gap'
 											}
-											placeholder="0"
+											placeholder="-"
 											unitType="max-height"
 											min={0}
 											size="small"
@@ -574,26 +551,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'ratio'),
-							value: (() => {
-								if (isNormalState()) {
-									if (values.ratio?.value) {
-										return values.ratio;
-									} else if (
-										inheritValue.aspectRatio &&
-										coreWPAspectRatioValues.indexOf(
-											inheritValue.aspectRatio
-										) !== -1
-									) {
-										return {
-											value: inheritValue.aspectRatio,
-											width: '',
-											height: '',
-										};
-									}
-								}
-
-								return values.ratio;
-							})(),
+							value: values.ratio,
 							type: 'nested',
 							attribute: 'publisherRatio',
 							blockName: block.blockName,
@@ -612,22 +570,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'fit'),
-							value: (() => {
-								if (isNormalState()) {
-									if (values.fit) {
-										return values.fit;
-									} else if (
-										inheritValue.scale &&
-										coreWPFitValues.indexOf(
-											inheritValue.scale
-										) !== -1
-									) {
-										return inheritValue.scale;
-									}
-								}
-
-								return values.fit;
-							})(),
+							value: values.fit,
 							attribute: 'publisherFit',
 							blockName: block.blockName,
 						}}

@@ -5,6 +5,11 @@
 import type { MixedElement } from 'react';
 
 /**
+ * Publisher dependencies
+ */
+import type { BorderControlBorderStyle } from '@publisher/controls/src/libs/border-control/types';
+
+/**
  * Internal dependencies
  */
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
@@ -27,7 +32,7 @@ export type TTypographyProps = {
 			gap: string,
 			divider: {
 				width: string,
-				style: string,
+				style: BorderControlBorderStyle,
 				color: string,
 			},
 		},
@@ -37,30 +42,15 @@ export type TTypographyProps = {
 		textOrientation: string,
 		textStroke: {
 			width: string,
-			style: string,
+			style: BorderControlBorderStyle,
 			color: string,
 		},
-		textColumnsDividerWidth: string,
-		textColumnsDividerStyle: string,
-		textColumnsDividerColor: string,
 	},
+	display?: string,
 	backgroundClip?: string,
 	block: TBlockProps,
 	typographyConfig: Object,
 	children?: MixedElement,
-	defaultValue: {
-		fontSize?: string,
-		fontStyle?: string,
-		typography: {
-			fontSize?: string,
-			fontStyle?: string,
-			fontWeight?: string,
-			textTransform?: string,
-			lineHeight?: string,
-			letterSpacing?: string,
-			textDecoration?: string,
-		},
-	},
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	extensionProps: {
 		publisherFontColor: Object,

@@ -48,8 +48,8 @@ export const attributes = {
 		default: '',
 	},
 	publisherTextOrientation: {
-		type: 'object',
-		default: { 'writing-mode': '', 'text-orientation': '' },
+		type: 'string',
+		default: '',
 	},
 	publisherTextColumns: {
 		type: 'object',

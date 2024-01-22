@@ -14,25 +14,9 @@ import type { ControlContextRef } from '@publisher/controls/src/context/types';
  * Internal dependencies
  */
 import {
-	widthFromWPCompatibility,
-	widthToWPCompatibility,
-} from './compatibility/width';
-import {
-	heightFromWPCompatibility,
-	heightToWPCompatibility,
-} from './compatibility/height';
-import {
-	minHeightFromWPCompatibility,
-	minHeightToWPCompatibility,
-} from './compatibility/min-height';
-import {
-	ratioFromWPCompatibility,
-	ratioToWPCompatibility,
-} from './compatibility/aspect-ratio';
-import {
-	fitFromWPCompatibility,
-	fitToWPCompatibility,
-} from './compatibility/fit';
+	positionFromWPCompatibility,
+	positionToWPCompatibility,
+} from './compatibility/position';
 
 export const bootstrap = (): void => {
 	addFilter(
@@ -45,27 +29,7 @@ export const bootstrap = (): void => {
 				return attributes;
 			}
 
-			attributes = widthFromWPCompatibility({
-				attributes,
-				blockId,
-			});
-
-			attributes = heightFromWPCompatibility({
-				attributes,
-				blockId,
-			});
-
-			attributes = minHeightFromWPCompatibility({
-				attributes,
-				blockId,
-			});
-
-			attributes = ratioFromWPCompatibility({
-				attributes,
-				blockId,
-			});
-
-			attributes = fitFromWPCompatibility({
+			attributes = positionFromWPCompatibility({
 				attributes,
 				blockId,
 			});
@@ -106,54 +70,20 @@ export const bootstrap = (): void => {
 			}
 
 			switch (featureId) {
-				case 'publisherWidth':
-					return {
-						...nextState,
-						...widthToWPCompatibility({
-							newValue,
-							ref,
-							blockId,
-						}),
-					};
+				case 'publisherPosition':
+					const compValue = positionToWPCompatibility({
+						newValue,
+						ref,
+						blockId,
+					});
 
-				case 'publisherHeight':
 					return {
 						...nextState,
-						...heightToWPCompatibility({
-							newValue,
-							ref,
-							blockId,
-						}),
-					};
-
-				case 'publisherMinHeight':
-					return {
-						...nextState,
-						...minHeightToWPCompatibility({
-							newValue,
-							ref,
-							blockId,
-						}),
-					};
-
-				case 'publisherRatio':
-					return {
-						...nextState,
-						...ratioToWPCompatibility({
-							newValue,
-							ref,
-							blockId,
-						}),
-					};
-
-				case 'publisherFit':
-					return {
-						...nextState,
-						...fitToWPCompatibility({
-							newValue,
-							ref,
-							blockId,
-						}),
+						...(compValue ?? {}),
+						style: {
+							...(nextState?.style ?? {}),
+							...(compValue?.style ?? {}),
+						},
 					};
 			}
 

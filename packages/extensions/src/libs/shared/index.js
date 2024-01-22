@@ -269,77 +269,41 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 						/>
 
 						<PositionExtension
-							{...{
-								block,
-								positionConfig,
-								inheritValues: {
-									position: currentStateAttributes?.style
-										?.position?.type
-										? {
-												type: currentStateAttributes
-													?.style?.position?.type,
-												position: {
-													top: currentStateAttributes
-														?.style?.position?.top,
-													right: currentStateAttributes
-														?.style?.position
-														?.right,
-													bottom: currentStateAttributes
-														?.style?.position
-														?.bottom,
-													left: currentStateAttributes
-														?.style?.position?.left,
-												},
-										  }
-										: undefined,
-								},
-								values: {
-									position:
-										currentStateAttributes.publisherPosition,
-									zIndex: currentStateAttributes.publisherZIndex,
-								},
-								extensionProps: {
-									publisherPosition: {},
-									publisherZIndex: {},
-								},
-								handleOnChangeAttributes,
+							block={block}
+							positionConfig={positionConfig}
+							values={{
+								position:
+									currentStateAttributes.publisherPosition,
+								zIndex: currentStateAttributes.publisherZIndex,
 							}}
+							extensionProps={{
+								publisherPosition: {},
+								publisherZIndex: {},
+							}}
+							handleOnChangeAttributes={handleOnChangeAttributes}
 						/>
 
 						<SizeExtension
-							{...{
-								block,
-								sizeConfig,
-								values: include(
-									currentStateAttributes,
-									size,
-									'publisher'
-								),
-								inheritValue: {
-									width: currentStateAttributes?.width,
-									height: currentStateAttributes?.height,
-									minHeight:
-										currentStateAttributes?.minHeight,
-									minHeightUnit:
-										currentStateAttributes?.minHeightUnit,
-									aspectRatio:
-										currentStateAttributes?.aspectRatio,
-									scale: currentStateAttributes?.scale,
-								},
-								extensionProps: {
-									publisherWidth: {},
-									publisherHeight: {},
-									publisherMinWidth: {},
-									publisherMinHeight: {},
-									publisherMaxWidth: {},
-									publisherMaxHeight: {},
-									publisherOverflow: {},
-									publisherRatio: {},
-									publisherFit: {},
-									publisherFitPosition: {},
-								},
-								handleOnChangeAttributes,
+							block={block}
+							sizeConfig={sizeConfig}
+							values={include(
+								currentStateAttributes,
+								size,
+								'publisher'
+							)}
+							extensionProps={{
+								publisherWidth: {},
+								publisherHeight: {},
+								publisherMinWidth: {},
+								publisherMinHeight: {},
+								publisherMaxWidth: {},
+								publisherMaxHeight: {},
+								publisherOverflow: {},
+								publisherRatio: {},
+								publisherFit: {},
+								publisherFitPosition: {},
 							}}
+							handleOnChangeAttributes={handleOnChangeAttributes}
 						/>
 
 						<LayoutExtension
@@ -431,50 +395,36 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							)}
 
 						<TypographyExtension
-							{...{
-								block,
-								typographyConfig,
-								extensionProps: {
-									publisherFontColor: {},
-									publisherFontSize: {},
-									publisherLineHeight: {},
-									publisherTextAlign: {},
-									publisherTextDecoration: {},
-									publisherFontStyle: {},
-									publisherTextTransform: {},
-									publisherDirection: {},
-									publisherTextShadow: {},
-									publisherLetterSpacing: {},
-									publisherWordSpacing: {},
-									publisherTextIndent: {},
-									publisherTextOrientation: {},
-									publisherTextColumns: {},
-									publisherTextStroke: {},
-									publisherWordBreak: {},
-								},
-								values: {
-									...include(
-										currentStateAttributes,
-										typography,
-										'publisher'
-									),
-									display:
-										currentStateAttributes.publisherDisplay,
-								},
-								backgroundClip:
-									currentStateAttributes?.publisherBackgroundClip,
-								defaultValue: {
-									fontSize:
-										currentStateAttributes.fontSize || '',
-									fontStyle:
-										currentStateAttributes.fontStyle ||
-										'normal',
-									typography:
-										currentStateAttributes.style
-											?.typography || {},
-								},
-								handleOnChangeAttributes,
+							block={block}
+							typographyConfig={typographyConfig}
+							extensionProps={{
+								publisherFontColor: {},
+								publisherFontSize: {},
+								publisherLineHeight: {},
+								publisherTextAlign: {},
+								publisherTextDecoration: {},
+								publisherFontStyle: {},
+								publisherTextTransform: {},
+								publisherDirection: {},
+								publisherTextShadow: {},
+								publisherLetterSpacing: {},
+								publisherWordSpacing: {},
+								publisherTextIndent: {},
+								publisherTextOrientation: {},
+								publisherTextColumns: {},
+								publisherTextStroke: {},
+								publisherWordBreak: {},
 							}}
+							values={include(
+								currentStateAttributes,
+								typography,
+								'publisher'
+							)}
+							display={currentStateAttributes?.publisherDisplay}
+							backgroundClip={
+								currentStateAttributes?.publisherBackgroundClip
+							}
+							handleOnChangeAttributes={handleOnChangeAttributes}
 						/>
 
 						<BackgroundExtension

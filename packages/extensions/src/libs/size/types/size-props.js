@@ -38,14 +38,6 @@ export type TSizeProps = {
 		fit: string,
 		fitPosition: { top: string, left: string },
 	},
-	inheritValue: {
-		width?: string,
-		height?: string,
-		minHeight?: string,
-		minHeightUnit?: string,
-		aspectRatio?: string,
-		scale: string,
-	},
 	extensionProps: {
 		publisherWidth: Object,
 		publisherHeight: Object,

@@ -41,6 +41,14 @@ export default function AspectRatio({
 		onChange: (newValue, ref) =>
 			handleOnChangeAttributes('publisherRatio', newValue, { ref }),
 		defaultValue,
+		mergeInitialAndDefault: true,
+		valueCleanup: (newValue) => {
+			if (newValue?.value === undefined || newValue?.value === '') {
+				return {};
+			}
+
+			return newValue;
+		},
 	});
 
 	const labelProps = {
@@ -132,15 +140,9 @@ export default function AspectRatio({
 				defaultValue={defaultValue.value}
 				onChange={(newValue, ref) => {
 					if (newValue === '') {
-						handleOnChangeAttributes(
-							'publisherRatio',
-							{
-								value: '',
-								width: '',
-								height: '',
-							},
-							{ ref }
-						);
+						handleOnChangeAttributes('publisherRatio', undefined, {
+							ref,
+						});
 					} else {
 						handleOnChangeAttributes(
 							'publisherRatio',
@@ -154,7 +156,7 @@ export default function AspectRatio({
 				}}
 				{...props}
 			/>
-			{ratio.value === 'custom' && (
+			{ratio?.value === 'custom' && (
 				<Flex alignItems="flex-start">
 					<InputControl
 						id="width"

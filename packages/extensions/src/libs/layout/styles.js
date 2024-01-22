@@ -77,7 +77,6 @@ export function LayoutStyles({
 	}
 
 	if (_attributes.publisherDisplay === 'flex') {
-		console.log('publisherFlexLayout', _attributes?.publisherFlexLayout);
 		if (_attributes?.publisherFlexLayout !== undefined) {
 			if (_attributes?.publisherFlexLayout.direction) {
 				properties['flex-direction'] =

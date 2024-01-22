@@ -4,6 +4,7 @@
  * Internal dependencies
  */
 import { getCamelCase } from '../string';
+import { isObject } from '../is';
 
 /**
  * Return a new object with the specified keys omitted.
@@ -81,3 +82,30 @@ export const deletePropertyByPath = (obj: Object, path: string): Object => {
 
 	return obj;
 };
+
+/**
+ * Deep merge two objects.
+ *
+ * @copyright https://stackoverflow.com/a/34749873
+ *
+ * @param {Object} target
+ * @param {Object} sources
+ */
+export function mergeObject(target: Object, ...sources: Object): Object {
+	if (!sources.length) return target;
+
+	const source = sources.shift();
+
+	if (isObject(target) && isObject(source)) {
+		for (const key in source) {
+			if (isObject(source[key])) {
+				if (!target[key]) Object.assign(target, { [key]: {} });
+				mergeObject(target[key], source[key]);
+			} else {
+				Object.assign(target, { [key]: source[key] });
+			}
+		}
+	}
+
+	return mergeObject(target, ...sources);
+}

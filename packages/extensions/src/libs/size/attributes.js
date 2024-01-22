@@ -3,19 +3,19 @@ export const attributes = {
 		type: 'string',
 		default: '',
 	},
-	publisherHeight: {
-		type: 'string',
-		default: '',
-	},
 	publisherMinWidth: {
 		type: 'string',
 		default: '',
 	},
-	publisherMinHeight: {
+	publisherMaxWidth: {
 		type: 'string',
 		default: '',
 	},
-	publisherMaxWidth: {
+	publisherHeight: {
+		type: 'string',
+		default: '',
+	},
+	publisherMinHeight: {
 		type: 'string',
 		default: '',
 	},

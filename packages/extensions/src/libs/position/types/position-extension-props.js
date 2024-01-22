@@ -27,17 +27,6 @@ export type TPositionExtensionProps = {
 		},
 		zIndex: string,
 	},
-	inheritValues: {
-		position?: {
-			type: string,
-			position: {
-				top: string,
-				right: string,
-				bottom: string,
-				left: string,
-			},
-		},
-	},
 	extensionProps: {
 		publisherPosition: Object,
 		publisherZIndex: Object,

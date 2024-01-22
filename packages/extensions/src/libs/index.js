@@ -27,6 +27,7 @@ export {
 	PositionExtension,
 	attributes as positionAttributes,
 	supports as positionSupports,
+	bootstrap as bootstrapPositionExtension,
 } from './position';
 export {
 	SpacingExtensionIcon,

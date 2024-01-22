@@ -17,6 +17,7 @@ import {
 	useControlContext,
 } from '@publisher/controls';
 import { isEmpty, isUndefined } from '@publisher/utils';
+import type { BorderControlBorderStyle } from '@publisher/controls/src/libs/border-control/types';
 
 /**
  * Internal dependencies
@@ -30,6 +31,7 @@ import Columns5Icon from '../icons/columns-5';
 
 export const TextColumns = ({
 	value,
+	defaultValue,
 	display,
 	handleOnChangeAttributes,
 	...props
@@ -43,6 +45,15 @@ export const TextColumns = ({
 			color: string,
 		},
 	},
+	defaultValue: {
+		columns: string,
+		gap: string,
+		divider: {
+			width: string,
+			style: BorderControlBorderStyle,
+			color: string,
+		},
+	},
 	display: string,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 }): MixedElement => {
@@ -53,15 +64,8 @@ export const TextColumns = ({
 		resetToDefault,
 	} = useControlContext({
 		onChange: (newValue) => handleOnChangeAttributes(newValue),
-		defaultValue: {
-			columns: '',
-			gap: '',
-			divider: {
-				width: '',
-				color: '',
-				style: 'solid',
-			},
-		},
+		defaultValue,
+		mergeInitialAndDefault: true,
 	});
 
 	const labelProps = {
@@ -71,13 +75,14 @@ export const TextColumns = ({
 		resetToDefault,
 		mode: 'advanced',
 		path: attribute,
+		defaultValue,
 	};
 
 	return (
 		<BaseControl columns="columns-1">
 			<BaseControl
 				controlName="toggle-select"
-				label={__('Columns', 'publisher-core')}
+				label={__('Text Columns', 'publisher-core')}
 				labelDescription={
 					<>
 						<p>
@@ -124,31 +129,33 @@ export const TextColumns = ({
 						},
 					]}
 					isDeselectable={true}
-					//
-					defaultValue=""
-					onChange={(newValue) => {
-						if (newValue === '') {
-							handleOnChangeAttributes('publisherTextColumns', {
-								columns: '',
-								gap: '',
-								divider: {
-									width: '',
-									color: '',
-									style: 'solid',
-								},
-							});
+					defaultValue={defaultValue?.columns}
+					onChange={(newValue, ref) => {
+						if (
+							'reset' === ref?.current?.action ||
+							newValue === ''
+						) {
+							handleOnChangeAttributes(
+								'publisherTextColumns',
+								defaultValue,
+								{ ref }
+							);
 						} else {
-							handleOnChangeAttributes('publisherTextColumns', {
-								...value,
-								columns: newValue,
-							});
+							handleOnChangeAttributes(
+								'publisherTextColumns',
+								{
+									...value,
+									columns: newValue,
+								},
+								{ ref }
+							);
 						}
 					}}
 					{...props}
 				/>
-				{!isEmpty(value?.columns) &&
-					value?.columns !== 'none' &&
-					!isUndefined(value?.columns) && (
+				{!isEmpty(_value?.columns) &&
+					_value?.columns !== 'none' &&
+					!isUndefined(_value?.columns) && (
 						<>
 							<InputControl
 								id={'gap'}
@@ -174,16 +181,28 @@ export const TextColumns = ({
 								arrows={true}
 								min={0}
 								max={200}
-								defaultValue=""
-								onChange={(newValue) =>
-									handleOnChangeAttributes(
-										'publisherTextColumns',
-										{
-											...value,
-											gap: newValue,
-										}
-									)
-								}
+								defaultValue={defaultValue?.gap}
+								onChange={(newValue, ref) => {
+									if ('reset' === ref?.current?.action) {
+										handleOnChangeAttributes(
+											'publisherTextColumns',
+											{
+												..._value,
+												gap: defaultValue.gap,
+											},
+											{ ref }
+										);
+									} else {
+										handleOnChangeAttributes(
+											'publisherTextColumns',
+											{
+												..._value,
+												gap: newValue,
+											},
+											{ ref }
+										);
+									}
+								}}
 							/>
 
 							<BorderControl
@@ -208,19 +227,28 @@ export const TextColumns = ({
 								className="control-first label-center small-gap"
 								linesDirection="vertical"
 								customMenuPosition="top"
-								defaultValue={{
-									width: '',
-									color: '',
-									style: 'solid',
-								}}
-								onChange={(newValue) => {
-									handleOnChangeAttributes(
-										'publisherTextColumns',
-										{
-											...value,
-											divider: newValue,
-										}
-									);
+								defaultValue={defaultValue?.divider}
+								onChange={(newValue, ref) => {
+									console.log(newValue, ref);
+									if ('reset' === ref?.current?.action) {
+										handleOnChangeAttributes(
+											'publisherTextColumns',
+											{
+												..._value,
+												divider: defaultValue.divider,
+											},
+											{ ref }
+										);
+									} else {
+										handleOnChangeAttributes(
+											'publisherTextColumns',
+											{
+												..._value,
+												divider: newValue,
+											},
+											{ ref }
+										);
+									}
 								}}
 							/>
 						</>

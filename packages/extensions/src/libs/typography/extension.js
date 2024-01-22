@@ -82,38 +82,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 			publisherTextStroke,
 			publisherWordBreak,
 		},
-		values: {
-			display,
-			fontSize,
-			textAlign,
-			fontStyle,
-			direction,
-			fontColor,
-			wordBreak,
-			textIndent,
-			textShadow,
-			lineHeight,
-			wordSpacing,
-			textColumns,
-			textTransform,
-			letterSpacing,
-			textDecoration,
-			textOrientation,
-			textStroke,
-		},
+		values,
+		display,
 		backgroundClip,
-		defaultValue: {
-			fontSize: defaultFontSize,
-			fontStyle: defaultFontStyle,
-			typography: {
-				//FIXME: Add fontWeight option into extension!
-				// fontWeight: _fontWeight,
-				textTransform: _textTransform,
-				lineHeight: _lineHeight,
-				letterSpacing: _letterSpacing,
-				textDecoration: _textDecoration,
-			},
-		},
 		extensionProps,
 		handleOnChangeAttributes,
 	}: TTypographyProps): MixedElement => {
@@ -167,8 +138,8 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								<FontSize
 									block={block}
 									onChange={handleOnChangeAttributes}
-									value={fontSize || defaultFontSize}
-									defaultValue={''}
+									value={values.fontSize}
+									defaultValue=""
 									{...extensionProps.publisherFontSize}
 								/>
 							)}
@@ -176,9 +147,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 							{isActiveField(publisherLineHeight) && (
 								<LineHeight
 									block={block}
-									value={lineHeight || _lineHeight}
+									value={values.lineHeight}
 									onChange={handleOnChangeAttributes}
-									defaultValue={_lineHeight || ''}
+									defaultValue=""
 									{...extensionProps.publisherLineHeight}
 								/>
 							)}
@@ -194,7 +165,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												block,
 												'text-align'
 											),
-											value: textAlign,
+											value: values.textAlign,
 											attribute: 'publisherTextAlign',
 											blockName: block.blockName,
 										}}
@@ -265,12 +236,12 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												},
 											]}
 											isDeselectable={true}
-											//
 											defaultValue=""
-											onChange={(newValue) =>
+											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
 													'publisherTextAlign',
-													newValue
+													newValue,
+													{ ref }
 												)
 											}
 											{...extensionProps.publisherTextAlign}
@@ -285,8 +256,8 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										) && (
 											<TextDecoration
 												block={block}
-												value={textDecoration}
-												defaultValue={_textDecoration}
+												value={values.textDecoration}
+												defaultValue=""
 												onChange={
 													handleOnChangeAttributes
 												}
@@ -294,18 +265,16 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											/>
 										)}
 									</div>
+
 									<div style={{ width: '40%' }}>
 										{isActiveField(publisherFontStyle) && (
 											<FontStyle
 												block={block}
-												value={
-													fontStyle ||
-													defaultFontStyle
-												}
+												value={values.fontStyle}
 												onChange={
 													handleOnChangeAttributes
 												}
-												defaultValue={defaultFontStyle}
+												defaultValue=""
 												{...extensionProps.publisherFontStyle}
 											/>
 										)}
@@ -319,10 +288,8 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										) && (
 											<TextTransform
 												block={block}
-												value={
-													textTransform ||
-													_textTransform
-												}
+												value={values.textTransform}
+												defaultValue=""
 												onChange={
 													handleOnChangeAttributes
 												}
@@ -330,6 +297,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											/>
 										)}
 									</div>
+
 									<div style={{ width: '40%' }}>
 										{isActiveField(publisherDirection) && (
 											<ControlContextProvider
@@ -338,7 +306,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 														block,
 														'direction'
 													),
-													value: direction,
+													value: values.direction,
 													attribute:
 														'publisherDirection',
 													blockName: block.blockName,
@@ -416,10 +384,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 													isDeselectable={true}
 													//
 													defaultValue=""
-													onChange={(newValue) =>
+													onChange={(newValue, ref) =>
 														handleOnChangeAttributes(
 															'publisherDirection',
-															newValue
+															newValue,
+															{ ref }
 														)
 													}
 													{...extensionProps.publisherDirection}
@@ -438,8 +407,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								{isActiveField(publisherLetterSpacing) && (
 									<LetterSpacing
 										block={block}
-										value={letterSpacing || _letterSpacing}
+										value={values.letterSpacing}
 										onChange={handleOnChangeAttributes}
+										defaultValue=""
 										{...extensionProps.publisherLetterSpacing}
 									/>
 								)}
@@ -451,7 +421,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												block,
 												'word-spacing'
 											),
-											value: wordSpacing,
+											value: values.wordSpacing,
 											attribute: 'publisherWordSpacing',
 											blockName: block.blockName,
 										}}
@@ -479,10 +449,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											arrows={true}
 											unitType="letter-spacing"
 											defaultValue=""
-											onChange={(newValue) =>
+											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
 													'publisherWordSpacing',
-													newValue
+													newValue,
+													{ ref }
 												)
 											}
 											{...extensionProps.publisherWordSpacing}
@@ -497,7 +468,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												block,
 												'text-indent'
 											),
-											value: textIndent,
+											value: values.textIndent,
 											attribute: 'publisherTextIndent',
 											blockName: block.blockName,
 										}}
@@ -521,10 +492,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											arrows={true}
 											unitType="text-indent"
 											defaultValue=""
-											onChange={(newValue) =>
+											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
 													'publisherTextIndent',
-													newValue
+													newValue,
+													{ ref }
 												)
 											}
 											{...extensionProps.publisherTextIndent}
@@ -540,7 +512,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											block,
 											'text-orientation'
 										),
-										value: textOrientation,
+										value: values.textOrientation,
 										attribute: 'publisherTextOrientation',
 										blockName: block.blockName,
 									}}
@@ -709,55 +681,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										isDeselectable={true}
 										//
 										defaultValue=""
-										onChange={(newValue) => {
-											if (!newValue) return;
-
-											let textOriented;
-											switch (newValue) {
-												case 'style-1':
-													textOriented = {
-														'writing-mode':
-															'vertical-lr',
-														'text-orientation':
-															'mixed',
-													};
-													break;
-												case 'style-2':
-													textOriented = {
-														'writing-mode':
-															'vertical-rl',
-														'text-orientation':
-															'mixed',
-													};
-													break;
-												case 'style-3':
-													textOriented = {
-														'writing-mode':
-															'vertical-lr',
-														'text-orientation':
-															'upright',
-													};
-													break;
-												case 'style-4':
-													textOriented = {
-														'writing-mode':
-															'vertical-rl',
-														'text-orientation':
-															'upright',
-													};
-													break;
-												case 'initial':
-													textOriented = {
-														'writing-mode':
-															'horizontal-tb',
-														'text-orientation':
-															'mixed',
-													};
-											}
-
+										onChange={(newValue, ref) => {
 											handleOnChangeAttributes(
 												'publisherTextOrientation',
-												textOriented
+												newValue,
+												{ ref }
 											);
 										}}
 										{...extensionProps.publisherTextOrientation}
@@ -772,18 +700,27 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											block,
 											'text-columns'
 										),
-										value: textColumns,
+										value: values.textColumns,
 										type: 'nested',
 										attribute: 'publisherTextColumns',
 										blockName: block.blockName,
 									}}
 								>
 									<TextColumns
-										value={textColumns}
+										value={values.textColumns}
 										display={display}
 										handleOnChangeAttributes={
 											handleOnChangeAttributes
 										}
+										defaultValue={{
+											columns: '',
+											gap: '2.5rem',
+											divider: {
+												width: '',
+												color: '',
+												style: 'solid',
+											},
+										}}
 										{...extensionProps.publisherTextColumns}
 									/>
 								</ControlContextProvider>
@@ -796,14 +733,14 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											block,
 											'text-stroke'
 										),
-										value: textStroke,
+										value: values.textStroke,
 										type: 'nested',
 										attribute: 'publisherTextStroke',
 										blockName: block.blockName,
 									}}
 								>
 									<TextStroke
-										value={textStroke}
+										value={values.textStroke}
 										handleOnChangeAttributes={
 											handleOnChangeAttributes
 										}
@@ -819,7 +756,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											block,
 											'word-break'
 										),
-										value: wordBreak,
+										value: values.wordBreak,
 										attribute: 'publisherWordBreak',
 										blockName: block.blockName,
 									}}
@@ -959,10 +896,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										customMenuPosition="top"
 										//
 										defaultValue="normal"
-										onChange={(newValue) =>
+										onChange={(newValue, ref) =>
 											handleOnChangeAttributes(
 												'publisherWordBreak',
-												newValue
+												newValue,
+												{ ref }
 											)
 										}
 										{...extensionProps.publisherWordBreak}
@@ -977,7 +915,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'font-color'),
-							value: fontColor,
+							value: values.fontColor,
 							attribute: 'publisherFontColor',
 							blockName: block.blockName,
 						}}
@@ -998,10 +936,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								}
 								columns="columns-2"
 								defaultValue=""
-								onChange={(newValue) =>
+								onChange={(newValue, ref) =>
 									handleOnChangeAttributes(
 										'publisherFontColor',
-										newValue
+										newValue,
+										{ ref }
 									)
 								}
 								controlAddonTypes={['variable']}
@@ -1012,6 +951,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								}
 								{...extensionProps.publisherFontColor}
 							/>
+
 							{backgroundClip === 'text' && (
 								<NoticeControl type="information">
 									{__(
@@ -1028,7 +968,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'text-shadow'),
-							value: textShadow,
+							value: values.textShadow,
 							attribute: 'publisherTextShadow',
 							blockName: block.blockName,
 						}}

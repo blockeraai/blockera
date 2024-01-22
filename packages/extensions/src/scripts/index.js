@@ -1,6 +1,10 @@
 // @flow
 
-import { bootstrapSizeExtension, bootstrapTypographyExtension } from '../libs';
+import {
+	bootstrapSizeExtension,
+	bootstrapTypographyExtension,
+	bootstrapPositionExtension,
+} from '../libs';
 
 /**
  * Internal dependencies
@@ -16,6 +20,7 @@ export default function (wp: Object) {
 		},
 	});
 
+	bootstrapPositionExtension();
 	bootstrapSizeExtension();
 	bootstrapTypographyExtension();
 
