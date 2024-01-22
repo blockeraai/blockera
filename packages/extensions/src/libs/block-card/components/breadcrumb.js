@@ -20,7 +20,7 @@ export function Breadcrumb({
 	states,
 	children,
 	innerBlock,
-	innerBlocks,
+	innerBlocks = [],
 }: {
 	states: Object,
 	children?: MixedElement,
@@ -32,9 +32,11 @@ export function Breadcrumb({
 		return <></>;
 	}
 
-	const innerBlockName = innerBlocks.find(
-		(_innerBlock: InnerBlockModel) => _innerBlock.type === innerBlock
-	);
+	const innerBlockName =
+		innerBlocks.length &&
+		innerBlocks.find(
+			(_innerBlock: InnerBlockModel) => _innerBlock.type === innerBlock
+		);
 
 	return (
 		<>
@@ -51,6 +53,7 @@ export function Breadcrumb({
 					</span>
 				</>
 			)}
+
 			{states
 				.filter(
 					(value) => value?.isSelected && value?.type !== 'normal'
