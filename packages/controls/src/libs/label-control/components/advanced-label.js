@@ -35,8 +35,8 @@ export const AdvancedLabelControl = ({
 	value,
 	className,
 	ariaLabel,
-	attribute,
-	blockName,
+	attribute = '',
+	blockName = '',
 	isRepeater,
 	singularId,
 	labelDescription,
@@ -50,9 +50,9 @@ export const AdvancedLabelControl = ({
 	const [isOpenModal, setOpenModal] = useState(false);
 
 	const {
-		getAttributes,
-		getCurrentState,
-		isNormalState,
+		getAttributes = () => {},
+		getCurrentState = () => 'normal',
+		isNormalState = () => true,
 		blockStateId,
 		breakpointId,
 		switchBlockState,
