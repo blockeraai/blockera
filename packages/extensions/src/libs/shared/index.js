@@ -351,50 +351,36 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							)}
 
 						<TypographyExtension
-							{...{
-								block,
-								typographyConfig,
-								extensionProps: {
-									publisherFontColor: {},
-									publisherFontSize: {},
-									publisherLineHeight: {},
-									publisherTextAlign: {},
-									publisherTextDecoration: {},
-									publisherFontStyle: {},
-									publisherTextTransform: {},
-									publisherDirection: {},
-									publisherTextShadow: {},
-									publisherLetterSpacing: {},
-									publisherWordSpacing: {},
-									publisherTextIndent: {},
-									publisherTextOrientation: {},
-									publisherTextColumns: {},
-									publisherTextStroke: {},
-									publisherWordBreak: {},
-								},
-								values: {
-									...include(
-										currentStateAttributes,
-										typography,
-										'publisher'
-									),
-									display:
-										currentStateAttributes.publisherDisplay,
-								},
-								backgroundClip:
-									currentStateAttributes?.publisherBackgroundClip,
-								defaultValue: {
-									fontSize:
-										currentStateAttributes.fontSize || '',
-									fontStyle:
-										currentStateAttributes.fontStyle ||
-										'normal',
-									typography:
-										currentStateAttributes.style
-											?.typography || {},
-								},
-								handleOnChangeAttributes,
+							block={block}
+							typographyConfig={typographyConfig}
+							extensionProps={{
+								publisherFontColor: {},
+								publisherFontSize: {},
+								publisherLineHeight: {},
+								publisherTextAlign: {},
+								publisherTextDecoration: {},
+								publisherFontStyle: {},
+								publisherTextTransform: {},
+								publisherDirection: {},
+								publisherTextShadow: {},
+								publisherLetterSpacing: {},
+								publisherWordSpacing: {},
+								publisherTextIndent: {},
+								publisherTextOrientation: {},
+								publisherTextColumns: {},
+								publisherTextStroke: {},
+								publisherWordBreak: {},
 							}}
+							values={include(
+								currentStateAttributes,
+								typography,
+								'publisher'
+							)}
+							display={currentStateAttributes?.publisherDisplay}
+							backgroundClip={
+								currentStateAttributes?.publisherBackgroundClip
+							}
+							handleOnChangeAttributes={handleOnChangeAttributes}
 						/>
 
 						<BackgroundExtension

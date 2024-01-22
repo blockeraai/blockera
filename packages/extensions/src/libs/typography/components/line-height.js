@@ -59,7 +59,7 @@ export const LineHeight = ({
 				unitType="line-height"
 				range={true}
 				min={0}
-				defaultValue={defaultValue || ''}
+				defaultValue={defaultValue}
 				onChange={(newValue, ref) =>
 					onChange('publisherLineHeight', newValue, { ref })
 				}

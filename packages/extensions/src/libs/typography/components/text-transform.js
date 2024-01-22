@@ -27,10 +27,12 @@ export const TextTransform = ({
 	block,
 	value,
 	onChange,
+	defaultValue,
 	...props
 }: {
 	block: TBlockProps,
 	value: string | void,
+	defaultValue: string | void,
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
 	return (
@@ -120,7 +122,7 @@ export const TextTransform = ({
 				]}
 				isDeselectable={true}
 				//
-				defaultValue=""
+				defaultValue={defaultValue}
 				onChange={(newValue, ref) =>
 					onChange('publisherTextTransform', newValue, {
 						ref,

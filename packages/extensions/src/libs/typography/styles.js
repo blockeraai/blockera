@@ -143,10 +143,27 @@ export function TypographyStyles({
 		currBlockAttributes.publisherTextOrientation !==
 			attributes.publisherTextOrientation.default
 	) {
-		properties['writing-mode'] =
-			currBlockAttributes.publisherTextOrientation['writing-mode'];
-		properties['text-orientation'] =
-			currBlockAttributes.publisherTextOrientation['text-orientation'];
+		switch (currBlockAttributes.publisherTextOrientation) {
+			case 'style-1':
+				properties['writing-mode'] = 'vertical-lr' + ' !important';
+				properties['text-orientation'] = 'mixed' + ' !important';
+				break;
+			case 'style-2':
+				properties['writing-mode'] = 'vertical-rl' + ' !important';
+				properties['text-orientation'] = 'mixed' + ' !important';
+				break;
+			case 'style-3':
+				properties['writing-mode'] = 'vertical-lr' + ' !important';
+				properties['text-orientation'] = 'upright' + ' !important';
+				break;
+			case 'style-4':
+				properties['writing-mode'] = 'vertical-rl' + ' !important';
+				properties['text-orientation'] = 'upright' + ' !important';
+				break;
+			case 'initial':
+				properties['writing-mode'] = 'horizontal-tb' + ' !important';
+				properties['text-orientation'] = 'mixed' + ' !important';
+		}
 	}
 
 	if (
@@ -169,7 +186,11 @@ export function TypographyStyles({
 				properties['column-gap'] = gap;
 			}
 
-			if (currBlockAttributes.publisherTextColumns.divider.width !== '') {
+			if (
+				currBlockAttributes.publisherTextColumns?.divider?.width !==
+					undefined &&
+				currBlockAttributes.publisherTextColumns?.divider?.width !== ''
+			) {
 				const color = getValueAddonRealValue(
 					currBlockAttributes.publisherTextColumns?.divider?.color
 				);
