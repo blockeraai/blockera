@@ -21,6 +21,7 @@ import { InputControl, RepeaterControl } from '../../index';
 import { RepeaterContext } from '../context';
 import { STORE_NAME } from '../store';
 import { default as InheritIcon } from './icons/inherit';
+import CloneIcon from '../icons/clone';
 
 const { WithInspectorStyles, WithPopoverDataProvider, SharedDecorators } =
 	Decorators;
@@ -599,6 +600,153 @@ export const AccordionOpenItem = {
 	},
 };
 AccordionOpenItem.storyName = 'Accordion → Filled';
+
+export const DesignLarge = {
+	args: PopoverFilled.args,
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<Flex
+				direction="column"
+				gap="50px"
+				style={{ marginBottom: '100px' }}
+			>
+				<Flex
+					direction="column"
+					gap="20px"
+					style={{ marginBottom: '100px' }}
+				>
+					<h2 className="story-heading">
+						Large Design <span>Empty</span>
+					</h2>
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [],
+						}}
+					>
+						<RepeaterControl
+							{...args}
+							design="large"
+							label="Repeater Title"
+							icon={<CloneIcon />}
+							description={
+								'Block will animate when it enters into view.'
+							}
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex
+					direction="column"
+					gap="20px"
+					style={{ marginBottom: '100px' }}
+				>
+					<h2 className="story-heading">
+						Large Design <span>Empty, No Label</span>
+					</h2>
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [],
+						}}
+					>
+						<RepeaterControl
+							{...args}
+							design="large"
+							label=""
+							icon={<CloneIcon />}
+							description={
+								'Block will animate when it enters into view.'
+							}
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex
+					direction="column"
+					gap="20px"
+					style={{ marginBottom: '100px' }}
+				>
+					<h2 className="story-heading">
+						Large Design <span>Empty</span>
+					</h2>
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [],
+						}}
+					>
+						<RepeaterControl
+							{...args}
+							design="large"
+							label="Repeater"
+							icon={<CloneIcon />}
+							description={
+								'Block will animate when it enters into view.'
+							}
+							actionButtonAdd={false}
+							injectHeaderButtonsStart={'Coming soon...'}
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex
+					direction="column"
+					gap="20px"
+					style={{ marginBottom: '100px' }}
+				>
+					<h2 className="story-heading">
+						Large Design <span>Empty, No Icon</span>
+					</h2>
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [],
+						}}
+					>
+						<RepeaterControl
+							{...args}
+							design="large"
+							label="Repeater"
+							description={
+								'Block will animate when it enters into view.'
+							}
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex
+					direction="column"
+					gap="20px"
+					style={{ marginBottom: '100px' }}
+				>
+					<h2 className="story-heading">
+						Large Design <span>Empty, No Icon & Desc</span>
+					</h2>
+					<ControlContextProvider
+						storeName={STORE_NAME}
+						value={{
+							name: nanoid(),
+							value: [],
+						}}
+					>
+						<RepeaterControl
+							{...args}
+							design="large"
+							label="Repeater"
+						/>
+					</ControlContextProvider>
+				</Flex>
+			</Flex>
+		);
+	},
+};
+DesignLarge.storyName = 'Design → Large';
 
 export const All = {
 	args: {},
