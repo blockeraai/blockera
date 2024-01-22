@@ -86,6 +86,9 @@ import StateContainer from '../../components/state-container';
 import type { TTabProps } from '@publisher/components/src/tabs/types';
 import * as config from '../base/config';
 import { InnerBlocksExtension } from '../inner-blocks';
+import { SettingsIcon } from './icons/settings';
+import { StylesIcon } from './icons/styles';
+import { AnimationsIcon } from './icons/animations';
 
 export const attributes = {
 	...typographyAttributes,
@@ -461,24 +464,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							}}
 						/>
 
-						<MouseExtension
-							{...{
-								block,
-								mouseConfig,
-								extensionProps: {
-									publisherCursor: {},
-									publisherUserSelect: {},
-									publisherPointerEvents: {},
-								},
-								values: include(
-									currentStateAttributes,
-									mouse,
-									'publisher'
-								),
-								handleOnChangeAttributes,
-							}}
-						/>
-
 						<AdvancedExtension
 							{...{
 								block,
@@ -496,6 +481,31 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							}}
 						/>
 					</div>
+
+					<div
+						style={{
+							display:
+								'interactions' === tab.name ? 'block' : 'none',
+						}}
+					>
+						<MouseExtension
+							{...{
+								block,
+								mouseConfig,
+								extensionProps: {
+									publisherCursor: {},
+									publisherUserSelect: {},
+									publisherPointerEvents: {},
+								},
+								values: include(
+									currentStateAttributes,
+									mouse,
+									'publisher'
+								),
+								handleOnChangeAttributes,
+							}}
+						/>
+					</div>
 				</>
 			);
 		};
@@ -505,19 +515,19 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				name: 'settings',
 				title: __('Settings', 'publisher-core'),
 				className: 'settings-tab',
-				icon: {
-					library: 'publisher',
-					name: 'publisherSettings',
-				},
+				icon: <SettingsIcon />,
 			},
 			{
 				name: 'style',
-				title: __('Style', 'publisher-core'),
+				title: __('Styles', 'publisher-core'),
 				className: 'style-tab',
-				icon: {
-					library: 'wp',
-					name: 'styles',
-				},
+				icon: <StylesIcon />,
+			},
+			{
+				name: 'interactions',
+				title: __('Animations', 'publisher-core'),
+				className: 'style-tab',
+				icon: <AnimationsIcon />,
 			},
 		];
 
