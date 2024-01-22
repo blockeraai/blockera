@@ -67,10 +67,12 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		className,
 		...props
 	}: BlockBaseProps): Element<any> | null => {
-		const { __experimentalGetPreviewDeviceType: getDeviceType } = window?.wp
-			?.editPost
-			? select('core/edit-post')
-			: select('core/edit-site');
+		const {
+			__experimentalGetPreviewDeviceType: getDeviceType = () => 'desktop',
+		} =
+			(window?.wp?.editPost
+				? select('core/edit-post')
+				: select('core/edit-site')) || {};
 
 		const isNormalState = () =>
 			'normal' === attributes?.publisherCurrentState &&
