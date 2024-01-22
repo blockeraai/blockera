@@ -410,30 +410,26 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 						/>
 
 						<BorderAndShadowExtension
-							{...{
-								block,
-								borderAndShadowConfig,
-								extensionProps: {
-									publisherBoxShadow: {},
-									publisherOutline: {},
-									publisherBorder: {},
-									publisherBorderRadius: {},
-								},
-								values: include(
-									currentStateAttributes,
-									borderAndShadow,
-									'publisher'
-								),
-								defaultValue: {
-									borderColor:
-										currentStateAttributes?.borderColor ||
-										'',
-									border:
-										currentStateAttributes.style?.border ||
-										{},
-								},
-								handleOnChangeAttributes,
+							block={block}
+							borderAndShadowConfig={borderAndShadowConfig}
+							extensionProps={{
+								publisherBoxShadow: {},
+								publisherOutline: {},
+								publisherBorder: {},
+								publisherBorderRadius: {},
 							}}
+							values={include(
+								currentStateAttributes,
+								borderAndShadow,
+								'publisher'
+							)}
+							// defaultValue={{
+							// 	borderColor:
+							// 		currentStateAttributes?.borderColor || '',
+							// 	border:
+							// 		currentStateAttributes.style?.border || {},
+							// }}
+							handleOnChangeAttributes={handleOnChangeAttributes}
 						/>
 
 						<EffectsExtension
@@ -514,18 +510,24 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			{
 				name: 'settings',
 				title: __('Settings', 'publisher-core'),
+				tooltip: __('Block Settings', 'publisher-core'),
 				className: 'settings-tab',
 				icon: <SettingsIcon />,
 			},
 			{
 				name: 'style',
 				title: __('Styles', 'publisher-core'),
+				tooltip: __('Block Design & Style Settings', 'publisher-core'),
 				className: 'style-tab',
 				icon: <StylesIcon />,
 			},
 			{
 				name: 'interactions',
 				title: __('Animations', 'publisher-core'),
+				tooltip: __(
+					'Block Interactions and Animations',
+					'publisher-core'
+				),
 				className: 'style-tab',
 				icon: <AnimationsIcon />,
 			},

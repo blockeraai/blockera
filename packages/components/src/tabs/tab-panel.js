@@ -15,6 +15,8 @@ import { NavigableMenu, Button } from '@wordpress/components';
  */
 import Flex from '../flex';
 import type { TTabPanelProps } from './types';
+import { ConditionalWrapper } from '../index';
+import { Tooltip } from '../tooltip';
 
 const noop = () => {};
 
@@ -56,30 +58,42 @@ export default function TabPanel({
 			className="components-tab-panel__tabs"
 		>
 			{tabs.map((tab) => (
-				<Button
-					className={classnames(
-						'components-tab-panel__tabs-item publisher-tab-button',
-						tab.className,
-						{
-							[activeClass]: tab.name === selected,
-						}
+				// eslint-disable-next-line react/jsx-key
+				<ConditionalWrapper
+					wrapper={(children) => (
+						<Tooltip text={tab.tooltip} key={tab.name}>
+							{children}
+						</Tooltip>
 					)}
-					tabId={`${instanceId}-${tab.name}`}
-					aria-controls={`${instanceId}-${tab.name}-view`}
-					selected={tab.name === selected}
-					key={tab.name}
-					onClick={partial(handleClick, tab.name)}
-					data-test={`${tab.name}-tab`}
+					condition={tab.tooltip !== undefined}
 				>
-					<Flex
-						direction={'column'}
-						alignItems={'center'}
-						gap={'5px'}
+					<Button
+						className={classnames(
+							'components-tab-panel__tabs-item publisher-tab-button',
+							tab.className,
+							{
+								[activeClass]: tab.name === selected,
+							}
+						)}
+						tabId={`${instanceId}-${tab.name}`}
+						aria-controls={`${instanceId}-${tab.name}-view`}
+						selected={tab.name === selected}
+						key={tab.name}
+						onClick={partial(handleClick, tab.name)}
+						data-test={`${tab.name}-tab`}
 					>
-						<div data-test={'publisher-tab-icon'}>{tab.icon}</div>
-						{tab.title}
-					</Flex>
-				</Button>
+						<Flex
+							direction={'column'}
+							alignItems={'center'}
+							gap={'5px'}
+						>
+							<div data-test={'publisher-tab-icon'}>
+								{tab.icon}
+							</div>
+							{tab.title}
+						</Flex>
+					</Button>
+				</ConditionalWrapper>
 			))}
 		</NavigableMenu>
 	);
