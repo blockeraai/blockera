@@ -19,6 +19,7 @@ import { BaseControl, PanelBodyControl } from '@publisher/controls';
  */
 import { hasSameProps } from '../utils';
 import { useBlockContext } from '../../hooks';
+import { isInnerBlock } from '../../components';
 import { InnerBlocksExtensionIcon } from './icons';
 import type { InnerBlockModel, InnerBlocksProps } from './types';
 
@@ -56,7 +57,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 				}
 			);
 
-		if (!innerBlocks.length || 'master' !== currentBlock) {
+		if (!innerBlocks.length || isInnerBlock(currentBlock)) {
 			return <></>;
 		}
 
