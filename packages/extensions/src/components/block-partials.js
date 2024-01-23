@@ -27,7 +27,7 @@ export const BlockPartials = memo(
 					<>
 						<div className="publisher-block-card-wrapper">
 							<Slot
-								name={`publisher-block-card-content-${clientId}`}
+								name={`publisher-${currentBlock}-block-${currentState}-card-content-${clientId}`}
 							/>
 						</div>
 						<div className="publisher-block-edit-wrapper">

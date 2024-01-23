@@ -39,8 +39,11 @@ import { BlockPartials } from './block-partials';
 import * as config from '../libs/base/config';
 import styleGenerators from '../libs/shared/style-generators';
 import StatesManager from '../libs/block-states/components/states-manager';
-import { propsAreEqual } from './utils';
-import type { InnerBlockType } from '../libs/inner-blocks/types';
+import { isInnerBlock, propsAreEqual } from './utils';
+import type {
+	InnerBlockModel,
+	InnerBlockType,
+} from '../libs/inner-blocks/types';
 import {
 	definitionTypes,
 	ignoreDefaultBlockAttributeKeysRegExp,
@@ -67,12 +70,40 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		className,
 		...props
 	}: BlockBaseProps): Element<any> | null => {
+		const [currentTab, setCurrentTab] = useState(
+			additional?.activeTab || 'style'
+		);
+		const [currentBlock, setCurrentBlock] = useState('master');
+		const [isOpenGridBuilder, setOpenGridBuilder] = useState(false);
+
 		const {
 			__experimentalGetPreviewDeviceType: getDeviceType = () => 'desktop',
 		} =
 			(window?.wp?.editPost
 				? select('core/edit-post')
 				: select('core/edit-site')) || {};
+
+		// Get chosen inner block type but when not selected anything value will be "undefined".
+		const innerBlockType: InnerBlockModel | void =
+			'master' === currentBlock
+				? undefined
+				: attributes.publisherInnerBlocks.find(
+						(innerBlock: InnerBlockModel): boolean =>
+							innerBlock.type === currentBlock
+				  );
+
+		// Get chosen inner block type identifier but when not selected anything value will be "-1".
+		const innerBlockId =
+			'undefined' === typeof innerBlockType
+				? -1
+				: attributes.publisherInnerBlocks.indexOf(innerBlockType);
+
+		// Get chosen inner block type identifier of between other inner blocks but when not selected anything value will be "NULL".
+		const currentInnerBlock =
+			attributes?.publisherInnerBlocks &&
+			attributes?.publisherInnerBlocks[innerBlockId]
+				? attributes?.publisherInnerBlocks[innerBlockId]
+				: null;
 
 		const isNormalState = () =>
 			'normal' === attributes?.publisherCurrentState &&
@@ -94,12 +125,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				isNormalState,
 			}
 		);
-
-		const [currentTab, setCurrentTab] = useState(
-			additional?.activeTab || 'style'
-		);
-		const [currentBlock, setCurrentBlock] = useState('master');
-		const [isOpenGridBuilder, setOpenGridBuilder] = useState(false);
 
 		const handleOnSwitchBlockSettings = (
 			_currentBlock: 'master' | InnerBlockType
@@ -210,6 +235,8 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				isNormalState,
 				getAttributes,
 				blockId: name,
+				innerBlockId,
+				currentInnerBlock,
 			}
 		);
 
@@ -241,7 +268,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				)
 		);
 
-		const currentStateAttributes = isNormalState()
+		let currentStateAttributes = isNormalState()
 			? attributes
 			: {
 					...attributes,
@@ -252,10 +279,39 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						: {}),
 			  };
 
+		let innerBlockAttributes: Object = {};
+
+		// Get attributes of customization inner block when switch to one of inner block types.
+		if (isInnerBlock(currentBlock)) {
+			currentStateAttributes = isNormalState()
+				? currentInnerBlock?.attributes
+				: {
+						...currentInnerBlock?.attributes,
+						...(currentInnerBlock?.attributes?.publisherBlockStates[
+							blockStateId
+						]?.breakpoints[breakpointId]
+							? currentInnerBlock?.attributes
+									?.publisherBlockStates[blockStateId]
+									?.breakpoints[breakpointId]?.attributes
+							: {}),
+				  };
+
+			innerBlockAttributes = {
+				...currentStateAttributes,
+				publisherInnerBlocks: attributes.publisherInnerBlocks,
+			};
+		}
+
+		const blockAttributes = Object.values(innerBlockAttributes).length
+			? innerBlockAttributes
+			: attributes;
+
 		const FillComponents = (): MixedElement => {
 			return (
 				<>
-					<Fill name={`publisher-block-card-content-${clientId}`}>
+					<Fill
+						name={`publisher-${currentBlock}-block-${blockAttributes.publisherCurrentState}-card-content-${clientId}`}
+					>
 						<BlockCard
 							clientId={clientId}
 							selectedInnerBlock={
@@ -264,23 +320,32 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 									: currentBlock
 							}
 							handleOnClick={handleOnSwitchBlockSettings}
-							states={attributes.publisherBlockStates}
-							innerBlocks={attributes.publisherInnerBlocks}
+							states={blockAttributes.publisherBlockStates}
+							innerBlocks={blockAttributes.publisherInnerBlocks}
 						>
 							<StatesManager
-								states={attributes.publisherBlockStates}
+								states={blockAttributes.publisherBlockStates}
+								currentStateType={
+									blockAttributes.publisherCurrentState
+								}
+								currentBlock={currentBlock}
+								currentInnerBlock={currentInnerBlock}
+								onChange={handleOnChangeAttributes}
+								currentStateId={blockStateId}
+								breakpointId={breakpointId}
+								innerBlockId={innerBlockId}
 								block={{
 									clientId,
 									supports,
-									attributes,
 									setAttributes,
 									blockName: name,
+									attributes: blockAttributes,
 								}}
 							/>
 						</BlockCard>
 					</Fill>
 					<Fill
-						name={`publisher-${currentBlock}-block-${attributes.publisherCurrentState}-edit-content-${clientId}`}
+						name={`publisher-${currentBlock}-block-${blockAttributes.publisherCurrentState}-edit-content-${clientId}`}
 					>
 						<BlockEditComponent
 							{...{
@@ -290,9 +355,9 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 								clientId,
 								supports,
 								className,
-								attributes,
 								setAttributes,
 								currentStateAttributes,
+								attributes: blockAttributes,
 								...props,
 							}}
 						/>
@@ -308,7 +373,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						blockName: name,
 						clientId,
 						handleOnChangeAttributes,
-						attributes,
+						attributes: blockAttributes,
 						storeName: 'publisher-core/controls',
 					},
 					currentTab,
@@ -319,6 +384,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					isNormalState,
 					setAttributes,
 					getAttributes,
+					currentInnerBlock,
 					isOpenGridBuilder,
 					setOpenGridBuilder,
 					attributes: _attributes,
@@ -336,13 +402,14 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						<SideEffect
 							{...{
 								currentTab,
-								currentState: attributes.publisherCurrentState,
+								currentState:
+									blockAttributes.publisherCurrentState,
 							}}
 						/>
 						<BlockPartials
 							clientId={clientId}
 							currentBlock={currentBlock}
-							currentState={attributes.publisherCurrentState}
+							currentState={blockAttributes.publisherCurrentState}
 						/>
 					</InspectorControls>
 					<div ref={blockEditRef} />

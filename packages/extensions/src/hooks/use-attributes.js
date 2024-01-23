@@ -15,20 +15,26 @@ import { deletePropertyByPath, isEquals } from '@publisher/utils';
  * Internal dependencies
  */
 import type { THandleOnChangeAttributes } from '../libs/types';
+import type { InnerBlockType } from '../libs/inner-blocks/types';
+import { isInnerBlock } from '../components';
 
 export const useAttributes = (
 	attributes: Object,
 	setAttributes: (attributes: Object) => void,
 	{
+		currentBlock,
 		breakpointId,
 		blockStateId,
 		isNormalState,
+		innerBlockId,
 		getAttributes,
 		blockId,
 	}: {
 		blockStateId: number,
 		breakpointId: number,
+		innerBlockId: number,
 		isNormalState: () => boolean,
+		currentBlock: 'master' | InnerBlockType,
 		getAttributes: (key: string) => any,
 		blockId: string,
 	}
@@ -80,12 +86,18 @@ export const useAttributes = (
 			newValue: any,
 			fallbackAttributes: Object = _attributes
 		): boolean => {
-			if (!stateAttributes[key]) {
+			if (!stateAttributes || !stateAttributes[key]) {
 				return !isEquals(fallbackAttributes[key], newValue);
 			}
 
 			return !isEquals(stateAttributes[key], newValue);
 		};
+
+		const publisherInnerBlocks = _attributes.publisherInnerBlocks;
+
+		const currentBlockAttributes = isInnerBlock(currentBlock)
+			? _attributes.publisherInnerBlocks[innerBlockId].attributes
+			: _attributes;
 
 		// Assume attribute id is string, and activated state is normal, or attribute ["publisherCurrentState" or "publisherBlockStates"] will change!
 		if (
@@ -108,8 +120,28 @@ export const useAttributes = (
 				deleteExtraItems(deleteItemsOnResetAction, _attributes);
 			}
 
-			if (!isChanged(_attributes, attributeId, newValue)) {
+			if (!isChanged(currentBlockAttributes, attributeId, newValue)) {
 				return;
+			}
+
+			// Handle inner block changes.
+			if (isInnerBlock(currentBlock)) {
+				publisherInnerBlocks[innerBlockId].attributes = {
+					...currentBlockAttributes,
+					[attributeId]: newValue,
+				};
+
+				if ('publisherCurrentState' === attributeId) {
+					_attributes = {
+						..._attributes,
+						[attributeId]: newValue,
+					};
+				}
+
+				return setAttributes({
+					..._attributes,
+					publisherInnerBlocks,
+				});
 			}
 
 			setAttributes(
@@ -125,7 +157,6 @@ export const useAttributes = (
 					'publisherCore.blockEdit.setAttributes',
 					{
 						..._attributes,
-						// $FlowFixMe
 						[attributeId]: newValue,
 					},
 					attributeId,
@@ -141,8 +172,8 @@ export const useAttributes = (
 		}
 
 		// Memoized "publisherBlockStates" data remapping process to fastest.
-		const memoizedBlockStates = memoize(() =>
-			_attributes.publisherBlockStates.map((state, id) => {
+		const memoizedBlockStates = memoize((currentBlockAttributes: Object) =>
+			currentBlockAttributes.publisherBlockStates.map((state, id) => {
 				if (blockStateId !== id) {
 					return state;
 				}
@@ -200,7 +231,7 @@ export const useAttributes = (
 								breakpoint.attributes,
 								attributeId,
 								newValue,
-								_attributes
+								currentBlockAttributes
 							)
 						) {
 							return breakpoint;
@@ -218,10 +249,21 @@ export const useAttributes = (
 			})
 		);
 
-		// This paradigm to handle update attributes in activated state and breakpoint!
+		// handle update attributes in activated state and breakpoint!
+		if (isInnerBlock(currentBlock)) {
+			publisherInnerBlocks[innerBlockId].attributes.publisherBlockStates =
+				memoizedBlockStates(currentBlockAttributes);
+
+			return setAttributes({
+				..._attributes,
+				publisherInnerBlocks,
+			});
+		}
+
+		// handle update attributes in activated state and breakpoint!
 		setAttributes({
 			..._attributes,
-			publisherBlockStates: memoizedBlockStates(),
+			publisherBlockStates: memoizedBlockStates(_attributes),
 		});
 	};
 

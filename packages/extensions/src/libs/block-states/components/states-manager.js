@@ -26,21 +26,28 @@ import { generateExtensionId } from '../../utils';
 import getBreakpoints from '../default-breakpoints';
 import { attributes as StateSettings } from '../attributes';
 import type { BreakpointTypes, StateTypes, TStates } from '../types';
-import type { TBlockProps } from '../../types';
+import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 import { PopoverTitleButtons } from './popover-title-buttons';
 import { LabelDescription } from './label-description';
-import { useBlockContext } from '../../../hooks';
 import StateContainer from '../../../components/state-container';
+import type { InnerBlockType } from '../../inner-blocks/types';
+import { isInnerBlock } from '../../../components';
 
 export default function StatesManager({
 	block,
 	states,
+	onChange,
+	currentBlock,
+	innerBlockId,
+	currentStateType,
 }: {
-	states: Array<Object>,
 	block: TBlockProps,
+	innerBlockId: number,
+	states: Array<Object>,
+	currentStateType: TStates,
+	onChange: THandleOnChangeAttributes,
+	currentBlock: 'master' | InnerBlockType,
 }): Element<any> {
-	const { handleOnChangeAttributes } = useBlockContext();
-
 	const contextValue = {
 		block,
 		value: !states.length
@@ -85,7 +92,7 @@ export default function StatesManager({
 		});
 	};
 
-	const currentState = getStateInfo(block.attributes.publisherCurrentState);
+	const currentState = getStateInfo(currentStateType);
 
 	return (
 		<ControlContextProvider storeName={STORE_NAME} value={contextValue}>
@@ -135,7 +142,7 @@ export default function StatesManager({
 							}
 
 							const isEqualsWithCurrentState = (type: TStates) =>
-								type === block.attributes.publisherCurrentState;
+								type === currentStateType;
 
 							if (
 								isEqualsWithCurrentState(selectedState.type) &&
@@ -145,18 +152,14 @@ export default function StatesManager({
 							}
 
 							if (newValue.length !== states.length) {
-								const addOrModifyRootItems =
-									isEqualsWithCurrentState(selectedState.type)
-										? {}
-										: {
-												publisherCurrentState:
-													selectedState.type ||
-													'normal',
-										  };
+								const addOrModifyRootItems = {
+									publisherCurrentState: selectedState.type,
+								};
+
 								const blockStates =
 									block.attributes.publisherBlockStates;
 
-								handleOnChangeAttributes(
+								onChange(
 									'publisherBlockStates',
 									newValue.map((state, index) => {
 										if (
@@ -187,49 +190,62 @@ export default function StatesManager({
 							}
 
 							if (
-								!isEquals(
-									selectedState.type,
-									block.attributes.publisherCurrentState
-								)
+								!isEquals(selectedState.type, currentStateType)
 							) {
-								handleOnChangeAttributes(
+								const publisherBlockStates =
+									block.attributes.publisherBlockStates.map(
+										(
+											state: Object,
+											stateId: number
+										): Object => {
+											if (
+												stateId ===
+												newValue.indexOf(selectedState)
+											) {
+												return {
+													...state,
+													isOpen: false,
+													isSelected: true,
+													type: selectedState.type,
+													label: selectedState.label,
+												};
+											}
+
+											return {
+												...state,
+												isOpen: false,
+												isSelected: false,
+											};
+										}
+									);
+
+								const publisherInnerBlocks =
+									block.attributes.publisherInnerBlocks;
+
+								if (-1 !== innerBlockId) {
+									publisherInnerBlocks[
+										innerBlockId
+									].attributes.publisherBlockStates =
+										publisherBlockStates;
+								}
+
+								onChange(
 									'publisherCurrentState',
 									selectedState.type,
 									{
 										addOrModifyRootItems: {
-											publisherBlockStates:
-												block.attributes.publisherBlockStates.map(
-													(
-														state: Object,
-														stateId: number
-													): Object => {
-														if (
-															stateId ===
-															newValue.indexOf(
-																selectedState
-															)
-														) {
-															return {
-																...state,
-																isOpen: false,
-																isSelected: true,
-																type: selectedState.type,
-																label: selectedState.label,
-															};
-														}
-
-														return {
-															...state,
-															isOpen: false,
-															isSelected: false,
-														};
-													}
-												),
+											...(isInnerBlock(currentBlock)
+												? {
+														publisherInnerBlocks,
+												  }
+												: {
+														publisherBlockStates,
+												  }),
 										},
 									}
 								);
 							} else {
-								handleOnChangeAttributes(
+								onChange(
 									'publisherCurrentState',
 									selectedState.type || 'normal'
 								);
