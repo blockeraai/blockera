@@ -24,12 +24,12 @@ export function modifyControlValue({
 	value,
 	propId,
 	controlId,
-	valueCleanup = null,
+	valueCleanup = (value: any) => value,
 }: {
 	value: any,
 	propId?: string,
 	controlId: string,
-	valueCleanup?: (value: any) => void,
+	valueCleanup?: (value: any) => any,
 }): {
 	value: any,
 	propId?: string,
