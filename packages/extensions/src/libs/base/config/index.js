@@ -12,3 +12,4 @@ export { flexChildConfig } from './flex-child';
 export { mouseConfig } from './mouse';
 export { entranceAnimationConfig } from './entrance-animation';
 export { scrollAnimationConfig } from './scroll-animation';
+export { clickAnimationConfig } from './click-animation';
