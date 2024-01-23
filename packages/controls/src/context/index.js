@@ -10,6 +10,7 @@ import { createContext, useEffect, useState } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
+import { isEquals } from '@publisher/utils';
 import { useBlockContext } from '@publisher/extensions/src/hooks';
 
 /**
@@ -18,7 +19,6 @@ import { useBlockContext } from '@publisher/extensions/src/hooks';
 import { STORE_NAME } from '../store';
 import { registerControl } from '../api';
 import type { ControlContextProviderProps } from './types';
-import { isEquals } from '@publisher/utils';
 
 export const ControlContext: Object = createContext({
 	controlInfo: {
@@ -77,14 +77,17 @@ export const ControlContextProvider = ({
 	}, [blockStateId]);
 
 	useEffect(() => {
-		modifyControlValue({
-			controlId: controlInfo.name,
-			value: controlInfo?.hasSideEffect ? value : controlInfo.value,
-		});
+		if (!isEquals(value, controlInfo.value)) {
+			modifyControlValue({
+				controlId: controlInfo.name,
+				value: controlInfo?.hasSideEffect ? value : controlInfo.value,
+			});
+		}
+		// eslint-disable-next-line
 	}, [currentTab]);
 
 	useEffect(() => {
-		if (!isEquals(value, controlInfo.value)) {
+		if (!isEquals(value, controlInfo.value) && !controlInfo.hasSideEffect) {
 			modifyControlValue({
 				controlId: controlInfo.name,
 				value: controlInfo.value,
