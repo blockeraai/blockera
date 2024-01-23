@@ -80,6 +80,7 @@ import {
 import { EntranceAnimationExtension } from '../entrance-animation';
 import { ScrollAnimationExtension } from '../scroll-animation';
 import { ClickAnimationExtension } from '../click-animation';
+import { ConditionsExtension } from '../conditions';
 
 import { propsAreEqual } from '../../components';
 import extensions from './extensions.json';
@@ -205,6 +206,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			entranceAnimationConfig,
 			scrollAnimationConfig,
 			clickAnimationConfig,
+			conditionsConfig,
 		} = extensionConfig[currentBlock] || config;
 
 		const block = {
@@ -239,6 +241,14 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								},
 								handleOnChangeAttributes,
 							}}
+						/>
+
+						<ConditionsExtension
+							block={block}
+							extensionConfig={conditionsConfig}
+							extensionProps={{}}
+							values={{}}
+							handleOnChangeAttributes={handleOnChangeAttributes}
 						/>
 					</div>
 					<div

@@ -91,5 +91,7 @@
 	],
 	"entranceAnimation": ["publisherEntranceAnimation"],
 	"scrollAnimation": ["publisherScrollAnimation"],
+	"clickAnimation": ["publisherClickAnimation"],
+	"conditions": ["publisherConditions"],
 	"advanced": ["publisherAttributes", "publisherCSSProperties"]
 }
