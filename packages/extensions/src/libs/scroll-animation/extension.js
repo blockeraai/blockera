@@ -61,7 +61,7 @@ export const ScrollAnimationExtension: ComponentType<ScrollExtensionProps> =
 							design="large"
 							icon={<AnimationIcon />}
 							description={__(
-								'Scrolling will trigger an animation.',
+								'Scrolling will trigger the animation.',
 								'publisher-core'
 							)}
 							actionButtonAdd={false}
