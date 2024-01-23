@@ -22,7 +22,7 @@ import { componentClassNames } from '@publisher/classnames';
 import { generateExtensionId, hasSameProps } from '../utils';
 import type { EntranceExtensionProps } from './types/props';
 import { EntranceAnimationExtensionIcon } from './index';
-import EntranceAnimationIcon from './icons/entrance-animation-icon';
+import AnimationIcon from './icons/animation-icon';
 import { isActiveField } from '../../api/utils';
 
 export const EntranceAnimationExtension: ComponentType<EntranceExtensionProps> =
@@ -62,16 +62,22 @@ export const EntranceAnimationExtension: ComponentType<EntranceExtensionProps> =
 							label=""
 							defaultValue={{}}
 							design="large"
-							icon={<EntranceAnimationIcon />}
+							icon={<AnimationIcon />}
 							description={__(
 								'Block will animate when it enters into view.',
 								'publisher-core'
 							)}
 							actionButtonAdd={false}
-							injectHeaderButtonsStart={__(
-								'Coming soon…',
-								'publisher-core'
-							)}
+							injectHeaderButtonsStart={
+								<span
+									style={{
+										color: 'var(--publisher-controls-primary-color)',
+										fontStyle: 'italic',
+									}}
+								>
+									{__('Coming soon…', 'publisher-core')}
+								</span>
+							}
 						/>
 					</ControlContextProvider>
 				</PanelBodyControl>

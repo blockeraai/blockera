@@ -1,4 +1,4 @@
-export default function EntranceAnimationIcon({}) {
+export default function AnimationIcon({}) {
 	return (
 		<svg
 			width="26"
