@@ -1,5 +1,5 @@
 export const attributes = {
-	publisherCSSProperties: {
+	publisherAttributes: {
 		type: 'array',
 		default: [],
 	},

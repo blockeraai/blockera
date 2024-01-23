@@ -81,6 +81,10 @@ import { EntranceAnimationExtension } from '../entrance-animation';
 import { ScrollAnimationExtension } from '../scroll-animation';
 import { ClickAnimationExtension } from '../click-animation';
 import { ConditionsExtension } from '../conditions';
+import {
+	attributes as advancedSettingsAttributes,
+	AdvancedSettingsExtension,
+} from '../advanced-settings';
 
 import { propsAreEqual } from '../../components';
 import extensions from './extensions.json';
@@ -107,6 +111,7 @@ export const attributes = {
 	...flexChildAttributes,
 	...iconAttributes,
 	...advancedAttributes,
+	...advancedSettingsAttributes,
 	...mouseAttributes,
 };
 export const supports = {
@@ -207,6 +212,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			scrollAnimationConfig,
 			clickAnimationConfig,
 			conditionsConfig,
+			advancedSettingsConfig,
 		} = extensionConfig[currentBlock] || config;
 
 		const block = {
@@ -248,6 +254,19 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							extensionConfig={conditionsConfig}
 							extensionProps={{}}
 							values={{}}
+							handleOnChangeAttributes={handleOnChangeAttributes}
+						/>
+
+						<AdvancedSettingsExtension
+							block={block}
+							advancedConfig={advancedSettingsConfig}
+							values={{
+								attributes:
+									currentStateAttributes.publisherAttributes,
+							}}
+							extensionProps={{
+								publisherAttributes: {},
+							}}
 							handleOnChangeAttributes={handleOnChangeAttributes}
 						/>
 					</div>

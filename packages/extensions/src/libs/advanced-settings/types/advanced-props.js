@@ -9,20 +9,15 @@ import type { MixedElement } from 'react';
  */
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 
-export type TAdvancedProps = {
+export type TAdvancedSettingsProps = {
 	values: {
-		cSSProperties: Array<Object>,
+		attributes: Array<Object>,
 	},
 	block: TBlockProps,
 	advancedConfig: Object,
 	children?: MixedElement,
-	defaultValue: {
-		width?: string,
-		height?: string,
-		overflow?: string,
-	},
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	extensionProps: {
-		publisherCSSProperties: Object,
+		publisherAttributes: Object,
 	},
 };

@@ -10,7 +10,6 @@ import type { MixedElement, ComponentType } from 'react';
  * Publisher dependencies
  */
 import {
-	AttributesControl,
 	CustomPropertyControl,
 	BaseControl,
 	PanelBodyControl,
@@ -29,11 +28,8 @@ import { AdvancedExtensionIcon } from './index';
 export const AdvancedExtension: ComponentType<TAdvancedProps> = memo(
 	({
 		block,
-		advancedConfig: {
-			publisherAttributes: publisherAttributesConfig,
-			publisherCSSProperties,
-		},
-		values: { attributes, cSSProperties: properties },
+		advancedConfig: { publisherCSSProperties },
+		values: { cSSProperties: properties },
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TAdvancedProps): MixedElement => {
@@ -47,38 +43,6 @@ export const AdvancedExtension: ComponentType<TAdvancedProps> = memo(
 					'extension-advanced'
 				)}
 			>
-				{isActiveField(publisherAttributesConfig) && (
-					<ControlContextProvider
-						value={{
-							name: generateExtensionId(block, 'attributes'),
-							value: attributes,
-							attribute: 'publisherAttributes',
-							blockName: block.blockName,
-						}}
-						storeName={'publisher-core/controls/repeater'}
-					>
-						<BaseControl
-							controlName="attributes"
-							columns="columns-1"
-						>
-							<AttributesControl
-								label={__(
-									'Custom HTML Attributes',
-									'publisher-core'
-								)}
-								onChange={(newValue) =>
-									handleOnChangeAttributes(
-										'publisherAttributes',
-										newValue
-									)
-								}
-								attributeElement={'a'}
-								{...extensionProps.publisherAttributes}
-							/>
-						</BaseControl>
-					</ControlContextProvider>
-				)}
-
 				{isActiveField(publisherCSSProperties) && (
 					<ControlContextProvider
 						value={{

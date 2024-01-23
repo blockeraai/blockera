@@ -93,5 +93,6 @@
 	"scrollAnimation": ["publisherScrollAnimation"],
 	"clickAnimation": ["publisherClickAnimation"],
 	"conditions": ["publisherConditions"],
-	"advanced": ["publisherAttributes", "publisherCSSProperties"]
+	"advanced": ["publisherCSSProperties"],
+	"advancedSettings": ["publisherAttributes"]
 }

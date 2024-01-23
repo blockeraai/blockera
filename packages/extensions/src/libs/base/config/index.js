@@ -14,3 +14,4 @@ export { entranceAnimationConfig } from './entrance-animation';
 export { scrollAnimationConfig } from './scroll-animation';
 export { clickAnimationConfig } from './click-animation';
 export { conditionsConfig } from './conditions';
+export { advancedSettingsConfig } from './advanced-settings';

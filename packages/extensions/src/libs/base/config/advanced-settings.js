@@ -10,13 +10,13 @@ import { __ } from '@wordpress/i18n';
  */
 import type { ConfigModel } from '../types';
 
-const publisherCSSProperties: ConfigModel = {
+const publisherAttributes: ConfigModel = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('CSS Properties', 'publisher-core'),
+	label: __('HTML Attributes', 'publisher-core'),
 };
 
-export const advancedConfig = {
-	publisherCSSProperties,
+export const advancedSettingsConfig = {
+	publisherAttributes,
 };
