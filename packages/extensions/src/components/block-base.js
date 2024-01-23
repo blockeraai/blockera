@@ -329,10 +329,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 									blockAttributes.publisherCurrentState
 								}
 								currentBlock={currentBlock}
-								currentInnerBlock={currentInnerBlock}
 								onChange={handleOnChangeAttributes}
-								currentStateId={blockStateId}
-								breakpointId={breakpointId}
 								innerBlockId={innerBlockId}
 								block={{
 									clientId,
