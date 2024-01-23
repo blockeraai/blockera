@@ -47,6 +47,18 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TBackgroundProps): MixedElement => {
+		const isActiveBackground = isActiveField(publisherBackground);
+		const isActiveBackgroundClip = isActiveField(publisherBackgroundClip);
+		const isActiveBackgroundColor = isActiveField(publisherBackgroundColor);
+
+		if (
+			!isActiveBackground &&
+			!isActiveBackgroundColor &&
+			!isActiveBackgroundClip
+		) {
+			return <></>;
+		}
+
 		const visibleBackgroundLength = checkVisibleItemLength(background);
 
 		return (
@@ -59,7 +71,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 					'extension-background'
 				)}
 			>
-				{isActiveField(publisherBackground) && (
+				{isActiveBackground && (
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'background'), //
@@ -128,7 +140,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 					</ControlContextProvider>
 				)}
 
-				{isActiveField(publisherBackgroundColor) && (
+				{isActiveBackgroundColor && (
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(
@@ -177,7 +189,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 					</ControlContextProvider>
 				)}
 
-				{isActiveField(publisherBackgroundClip) && (
+				{isActiveBackgroundClip && (
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'background-clip'),
