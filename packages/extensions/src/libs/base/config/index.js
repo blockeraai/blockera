@@ -11,3 +11,4 @@ export { advancedConfig } from './advanced';
 export { flexChildConfig } from './flex-child';
 export { mouseConfig } from './mouse';
 export { entranceAnimationConfig } from './entrance-animation';
+export { scrollAnimationConfig } from './scroll-animation';

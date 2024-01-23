@@ -90,5 +90,6 @@
 		"publisherPointerEvents"
 	],
 	"entranceAnimation": ["publisherEntranceAnimation"],
+	"scrollAnimation": ["publisherScrollAnimation"],
 	"advanced": ["publisherAttributes", "publisherCSSProperties"]
 }

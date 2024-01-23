@@ -78,6 +78,7 @@ import {
 	MouseExtension,
 } from '../mouse';
 import { EntranceAnimationExtension } from '../entrance-animation';
+import { ScrollAnimationExtension } from '../scroll-animation';
 
 import { propsAreEqual } from '../../components';
 import extensions from './extensions.json';
@@ -201,6 +202,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			typographyConfig,
 			borderAndShadowConfig,
 			entranceAnimationConfig,
+			scrollAnimationConfig,
 		} = extensionConfig[currentBlock] || config;
 
 		const block = {
@@ -490,6 +492,14 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 						<EntranceAnimationExtension
 							block={block}
 							extensionConfig={entranceAnimationConfig}
+							extensionProps={{}}
+							values={{}}
+							handleOnChangeAttributes={handleOnChangeAttributes}
+						/>
+
+						<ScrollAnimationExtension
+							block={block}
+							extensionConfig={scrollAnimationConfig}
 							extensionProps={{}}
 							values={{}}
 							handleOnChangeAttributes={handleOnChangeAttributes}
