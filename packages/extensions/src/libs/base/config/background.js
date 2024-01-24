@@ -12,21 +12,21 @@ import type { ConfigModel } from '../types';
 
 const publisherBackground: ConfigModel = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Background', 'publisher-core'),
 };
 
 const publisherBackgroundColor: ConfigModel = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Background Color', 'publisher-core'),
 };
 
 const publisherBackgroundClip: ConfigModel = {
-	show: true,
-	force: false,
+	show: false,
+	force: true,
 	status: true,
 	label: __('Background Clip', 'publisher-core'),
 };

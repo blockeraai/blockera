@@ -12,7 +12,7 @@ import type { ConfigModel } from '../types';
 
 const publisherBoxShadow: ConfigModel = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	cssGenerators: {},
 	label: __('Box Shadow', 'publisher-core'),
@@ -20,7 +20,7 @@ const publisherBoxShadow: ConfigModel = {
 
 const publisherOutline: ConfigModel = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	cssGenerators: {},
 	label: __('Outline', 'publisher-core'),
@@ -28,7 +28,7 @@ const publisherOutline: ConfigModel = {
 
 const publisherBorder: ConfigModel = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	cssGenerators: {},
 	label: __('Border', 'publisher-core'),
@@ -36,7 +36,7 @@ const publisherBorder: ConfigModel = {
 
 const publisherBorderRadius: ConfigModel = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	cssGenerators: {},
 	label: __('Border Radius', 'publisher-core'),

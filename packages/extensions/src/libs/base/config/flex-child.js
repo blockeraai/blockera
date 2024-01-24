@@ -12,21 +12,21 @@ import type { ConfigModel } from '../types';
 
 const publisherFlexChildSizing: ConfigModel = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Sizing', 'publisher-core'),
 };
 
 const publisherFlexChildAlign: ConfigModel = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Align', 'publisher-core'),
 };
 
 const publisherFlexChildOrder: ConfigModel = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Order', 'publisher-core'),
 };

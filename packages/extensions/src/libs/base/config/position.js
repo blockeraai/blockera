@@ -12,14 +12,14 @@ import type { ConfigModel } from '../types';
 
 const publisherPosition: ConfigModel = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Position', 'publisher-core'),
 };
 
 const publisherZIndex: ConfigModel = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Z-Index', 'publisher-core'),
 };

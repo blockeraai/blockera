@@ -12,7 +12,7 @@ import type { ConfigModel } from '../types';
 
 const publisherCSSProperties: ConfigModel = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('CSS Properties', 'publisher-core'),
 };
