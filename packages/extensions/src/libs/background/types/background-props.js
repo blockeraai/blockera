@@ -16,6 +16,7 @@ export type IsEnableBackground = ({
 
 export type TBackgroundProps = {
 	block: TBlockProps,
+	setSettings: (settings: Object, key: string) => void,
 	backgroundConfig: Object,
 	children?: MixedElement,
 	values: {
