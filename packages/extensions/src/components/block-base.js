@@ -44,10 +44,7 @@ import type {
 	InnerBlockModel,
 	InnerBlockType,
 } from '../libs/inner-blocks/types';
-import {
-	definitionTypes,
-	ignoreDefaultBlockAttributeKeysRegExp,
-} from '../libs';
+import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs';
 
 export type BlockBaseProps = {
 	additional: Object,
@@ -387,7 +384,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					attributes: _attributes,
 					handleOnChangeAttributes,
 					handleOnSwitchBlockSettings,
-					extensionConfig: definitionTypes,
 					BlockComponent: () => children,
 					activeDeviceType: getDeviceType(),
 					getBlockType: () =>
