@@ -1,5 +1,10 @@
 // @flow
 
+/**
+ * Internal dependencies
+ */
+import type { TStates, TBreakpoint } from '../../block-states/types';
+
 export type ConfigModel = {
 	/**
 	 * if true is active, false is deactivated.
@@ -21,4 +26,12 @@ export type ConfigModel = {
 	 * The css generator configuration for current feature.
 	 */
 	cssGenerators?: Object | {},
+	/**
+	 * The active on states settings, by default all or array of state types.
+	 */
+	isActiveOnStates?: 'all' | Array<TStates>,
+	/**
+	 * The active on breakpoints settings, by default all or array of breakpoint types.
+	 */
+	isActiveOnBreakpoints?: 'all' | Array<TBreakpoint>,
 };
