@@ -3,8 +3,8 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { select } from '@wordpress/data';
-import { memo } from '@wordpress/element';
+import { select, useDispatch } from '@wordpress/data';
+import { memo, useState } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
@@ -86,18 +86,18 @@ import {
 	AdvancedSettingsExtension,
 } from '../advanced-settings';
 
-import { propsAreEqual } from '../../components';
+import { isInnerBlock, propsAreEqual } from '../../components';
 import extensions from './extensions.json';
 import type { TStates } from '../block-states/types';
 import { useBlockContext, useDisplayBlockControls } from '../../hooks';
 import { getStateInfo } from '../block-states/helpers';
 import StateContainer from '../../components/state-container';
 import type { TTabProps } from '@publisher/components/src/tabs/types';
-import * as config from '../base/config';
 import { InnerBlocksExtension } from '../inner-blocks';
 import { SettingsIcon } from './icons/settings';
 import { StylesIcon } from './icons/styles';
 import { AnimationsIcon } from './icons/animations';
+import { STORE_NAME } from '../base/store/constants';
 
 export const attributes = {
 	...typographyAttributes,
@@ -162,7 +162,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			currentBlock,
 			blockStateId,
 			breakpointId,
-			extensionConfig,
 			handleOnChangeAttributes,
 		} = useBlockContext();
 
@@ -195,6 +194,38 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			parentClientIds[parentClientIds.length - 1]
 		);
 
+		const { updateExtension, updateDefinitionExtensionSupport } =
+			useDispatch(STORE_NAME);
+		const { getExtensions, getDefinition } = select(STORE_NAME);
+
+		const supports = getDefinition(currentBlock) || getExtensions();
+		const [settings, setSettings] = useState(supports);
+
+		const handleOnChangeSettings = (
+			newSettings: Object,
+			key: string
+		): void => {
+			setSettings({
+				...settings,
+				[key]: {
+					...settings[key],
+					...newSettings,
+				},
+			});
+
+			if (isInnerBlock(currentBlock)) {
+				updateDefinitionExtensionSupport(
+					key,
+					newSettings,
+					currentBlock
+				);
+
+				return;
+			}
+
+			updateExtension(key, newSettings);
+		};
+
 		const {
 			iconConfig,
 			mouseConfig,
@@ -213,7 +244,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			clickAnimationConfig,
 			conditionsConfig,
 			advancedSettingsConfig,
-		} = extensionConfig[currentBlock] || config;
+		} = settings;
 
 		const block = {
 			blockName: props.name,
@@ -425,6 +456,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 						<BackgroundExtension
 							{...{
 								block,
+								setSettings: handleOnChangeSettings,
 								backgroundConfig,
 								extensionProps: {
 									publisherBackground: {},

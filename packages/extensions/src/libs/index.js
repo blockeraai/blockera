@@ -1,3 +1,21 @@
+// @flow
+
+/**
+ * Publisher dependencies
+ */
+import { registerThirdPartyExtensionDefinitions } from '@publisher/blocks';
+
+/**
+ * Internal dependencies
+ */
+import { __experimentalExtensionsSupportRegistration } from './base';
+import { __experimentalRegistrationInnerBlockExtensionCustomConfigDefinition } from './inner-blocks';
+
+registerThirdPartyExtensionDefinitions();
+
+__experimentalExtensionsSupportRegistration();
+__experimentalRegistrationInnerBlockExtensionCustomConfigDefinition();
+
 export * from './utils';
 export {
 	LayoutExtensionIcon,

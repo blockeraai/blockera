@@ -5,4 +5,8 @@
 @import "./layout/style";
 @import "./flex-child/style";
 @import "./size/style";
+@import "./settings/style";
 
+.publisher-component-extension {
+	position: relative;
+}
