@@ -14,6 +14,7 @@
 	border-top: solid 1px var(--publisher-tab-panel-context-color);
 	flex: 1;
 	position: relative;
+	z-index: 1;
 
 	&:last-child {
 		border-right: none;
