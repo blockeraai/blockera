@@ -4,6 +4,11 @@
 import { addFilter } from '@wordpress/hooks';
 
 /**
+ * Publisher dependencies
+ */
+import { reregistrationBlocks } from '@publisher/blocks';
+
+/**
  * Internal dependencies
  */
 import withBlockSettings from './block-settings';
@@ -15,6 +20,8 @@ export {
 } from './context';
 
 export default function applyHooks() {
+	reregistrationBlocks();
+
 	addFilter(
 		'blocks.registerBlockType',
 		'publisher/core/extensions/withAdvancedControlsAttributes',
