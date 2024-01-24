@@ -1,0 +1,67 @@
+.publisher-extension-settings.toggle {
+	text-align: center;
+	display: inline-block;
+	line-height: 27px;
+	height: 24px;
+	width: 24px;
+	position: absolute;
+	top: 13px;
+	right: 40px;
+	cursor: pointer;
+	transition: all 0.5s;
+	border-radius: 2px;
+
+	svg {
+		fill: var(--publisher-controls-primary-color);
+		color: var(--publisher-controls-primary-color);
+	}
+}
+
+.publisher-component-support-item {
+	margin-bottom: 15px;
+	display: flex;
+	justify-content: space-between;
+	cursor: pointer;
+	line-height: 25px;
+
+	:last-child {
+		margin-bottom: 0;
+	}
+}
+
+.publisher-component-support-item.not-available {
+	pointer-events: none;
+	cursor: not-allowed;
+	opacity: 0.5;
+}
+
+.publisher-component-support-item.deactivated {
+	opacity: 0.5;
+}
+
+.extension-settings {
+
+	.extension-settings-wrapper {
+		padding: 25px 18px 0 18px;
+
+		.settings-supports-cat {
+			border-bottom: solid 1px var(--publisher-controls-border-color);
+			margin-bottom: 10px;
+
+			&:last-child {
+				border-bottom: none;
+			}
+
+			.title {
+				opacity: 0.5;
+				display: block;
+				margin-bottom: 20px;
+				text-transform: uppercase;
+			}
+		}
+	}
+
+	.publisher-component-popover-body {
+		padding: 0 !important;
+	}
+}
