@@ -28,29 +28,36 @@ export const SupportItem = ({
 		return <></>;
 	}
 
+	const onClick = () => {
+		if (force) {
+			return;
+		}
+
+		update({
+			...supports,
+			[name]: {
+				...supports[name],
+				show: !show,
+			},
+		});
+	};
+
 	return (
 		<div
-			key={`${name}`}
-			onClick={() => {
-				if (!force) {
-					return;
+			onClick={onClick}
+			onKeyDown={(event) => {
+				if (event.key === 'Enter') {
+					onClick();
 				}
-
-				update({
-					...supports,
-					[name]: {
-						...supports[name],
-						show: !show,
-					},
-				});
 			}}
 			className={componentClassNames('support-item', {
-				'not-available': !force,
-				deactivated: !show,
+				'force-item': force,
+				'active-item': show,
 			})}
+			{...(!force ? { tabIndex: 1 } : {})}
 		>
 			{label}
-			{force && show && <Icon library={'wp'} icon={'check'} />}
+			{(force || show) && <Icon library={'wp'} icon={'check'} />}
 		</div>
 	);
 };

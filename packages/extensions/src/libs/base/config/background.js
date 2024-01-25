@@ -14,7 +14,7 @@ const publisherBackground: ConfigModel = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Background', 'publisher-core'),
+	label: __('Image & Gradient', 'publisher-core'),
 };
 
 const publisherBackgroundColor: ConfigModel = {
@@ -25,10 +25,10 @@ const publisherBackgroundColor: ConfigModel = {
 };
 
 const publisherBackgroundClip: ConfigModel = {
-	show: false,
-	force: true,
+	show: true,
+	force: false,
 	status: true,
-	label: __('Background Clip', 'publisher-core'),
+	label: __('Background Clipping', 'publisher-core'),
 };
 
 export const backgroundConfig = {

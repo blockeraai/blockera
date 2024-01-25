@@ -52,19 +52,6 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 			publisherBackgroundClip,
 		} = backgroundConfig;
 
-		const defaults: { [key: string]: Object } = {};
-		const tools: { [key: string]: Object } = {};
-
-		Object.keys(backgroundConfig).forEach((support: string): void => {
-			if (!backgroundConfig[support].show) {
-				tools[support] = backgroundConfig[support];
-
-				return;
-			}
-
-			defaults[support] = backgroundConfig[support];
-		});
-
 		const isActiveBackground = isActiveField(publisherBackground);
 		const isActiveBackgroundClip = isActiveField(publisherBackgroundClip);
 		const isActiveBackgroundColor = isActiveField(publisherBackgroundColor);
@@ -90,18 +77,16 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 				)}
 			>
 				<ExtensionSettings
+					features={backgroundConfig}
 					update={(newSettings) => {
 						setSettings(newSettings, 'backgroundConfig');
 					}}
-					defaults={defaults}
-					tools={tools}
-					title={__('Background Settings', 'publisher-core')}
 				/>
 
 				{isActiveBackground && isShowField(publisherBackground) && (
 					<ControlContextProvider
 						value={{
-							name: generateExtensionId(block, 'background'), //
+							name: generateExtensionId(block, 'background'),
 							value: background || [
 								{
 									type: 'image',

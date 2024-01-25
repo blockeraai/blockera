@@ -19,55 +19,71 @@ import { More } from './icons';
 import { Supports } from './components';
 
 export const ExtensionSettings = ({
-	defaults,
-	tools,
-	update = () => {},
 	title = __('Settings', 'publisher-core'),
+	features,
+	update = () => {},
 }: {
-	title: string,
-	defaults: Object,
-	tools: Object,
+	title?: string | MixedElement,
+	features: Object,
 	update: (settings: Object) => void,
 }): MixedElement => {
 	const [isOpen, setIsOpen] = useState(false);
 
-	if (!isOpen) {
-		return <More onClick={(): void => setIsOpen(true)} isOpen={isOpen} />;
-	}
+	const defaults: { [key: string]: Object } = {};
+	const tools: { [key: string]: Object } = {};
+
+	Object.keys(features).forEach((featureId: string): void => {
+		if (features[featureId].force) {
+			defaults[featureId] = features[featureId];
+			return;
+		}
+
+		tools[featureId] = features[featureId];
+	});
 
 	const hasItems = (stack: Object): boolean =>
 		0 !== Object.values(stack).length;
 
 	return (
 		<>
-			<More onClick={(): void => setIsOpen(false)} isOpen={isOpen} />
-			<Popover
-				offset={20}
-				title={title}
-				placement={'left-start'}
-				closeButton={false}
-				className={'extension-settings'}
-				onClose={() => setIsOpen(false)}
-			>
-				<div className={'extension-settings-wrapper'}>
+			<More onClick={(): void => setIsOpen(!isOpen)} isOpen={isOpen} />
+
+			{isOpen && (
+				<Popover
+					offset={20}
+					title={title}
+					placement={'left-start'}
+					closeButton={true}
+					className={'extension-settings'}
+					onClose={() => setIsOpen(false)}
+					focusOnMount={true}
+				>
 					{hasItems(defaults) && (
-						<div className={'settings-supports-cat'}>
-							<span className={'title'}>
-								{__('Default', 'publisher-core')}
+						<div className={'settings-category'}>
+							<span className={'settings-category__title'}>
+								{__('Essential Features', 'publisher-core')}
 							</span>
+
 							<Supports update={update} supports={defaults} />
 						</div>
 					)}
+
 					{hasItems(tools) && (
-						<div className={'settings-supports-cat'}>
-							<span className={'title'}>
-								{__('Tools', 'publisher-core')}
+						<div className={'settings-category'}>
+							<span className={'settings-category__title'}>
+								{hasItems(defaults)
+									? __(
+											'Additional Features',
+											'publisher-core'
+									  )
+									: __('Features', 'publisher-core')}
 							</span>
+
 							<Supports update={update} supports={tools} />
 						</div>
 					)}
-				</div>
-			</Popover>
+				</Popover>
+			)}
 		</>
 	);
 };
