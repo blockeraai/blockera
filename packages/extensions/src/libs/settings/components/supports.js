@@ -13,9 +13,11 @@ import { SupportItem } from './support-item';
 export const Supports = ({
 	update,
 	supports,
+	allFeatures,
 }: {
-	supports: Object,
 	update: (setting: Object) => void,
+	supports: Object,
+	allFeatures: Object,
 }): Array<MixedElement> =>
 	Object.values(supports).map((support: Object, index: number) => {
 		const supportKeys = Object.keys(supports);
@@ -26,7 +28,7 @@ export const Supports = ({
 				name={name}
 				update={update}
 				setting={support}
-				supports={supports}
+				supports={allFeatures}
 				key={`${name}-${index}`}
 			/>
 		);

@@ -64,7 +64,11 @@ export const ExtensionSettings = ({
 								{__('Essential Features', 'publisher-core')}
 							</span>
 
-							<Supports update={update} supports={defaults} />
+							<Supports
+								update={update}
+								supports={defaults}
+								allFeatures={features}
+							/>
 						</div>
 					)}
 
@@ -79,7 +83,11 @@ export const ExtensionSettings = ({
 									: __('Features', 'publisher-core')}
 							</span>
 
-							<Supports update={update} supports={tools} />
+							<Supports
+								update={update}
+								supports={tools}
+								allFeatures={features}
+							/>
 						</div>
 					)}
 				</Popover>
