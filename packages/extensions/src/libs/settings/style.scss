@@ -19,7 +19,7 @@
 }
 
 .publisher-component-popover.extension-settings {
-	--popover-width: 250px;
+	--popover-width: 270px;
 
 	.publisher-component-popover-body {
 		display: flex;
@@ -55,8 +55,8 @@
 			padding: 5px 5px 5px 10px;
 			border-radius: 2px;
 			align-items: center;
-			font-size: 13px;
-			height: 34px;
+			font-size: 12px;
+			height: 30px;
 			transition: var(--publisher-controls-transition);
 			user-select: none;
 
