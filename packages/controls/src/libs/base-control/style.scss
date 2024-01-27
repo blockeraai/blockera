@@ -71,6 +71,7 @@
 		grid-template-columns: 2fr 5fr;
 	}
 
+	& + .publisher-component-feature-wrapper,
 	& + & {
 		border-top: 1px solid var(--publisher-controls-sep-color);
 		padding-top: 10px;

@@ -23,3 +23,4 @@ export type { PopoverPlacement } from './popover/types';
 export { default as MediaUploader } from './media-uploader';
 export { Tooltip } from './tooltip';
 export { default as ConditionalWrapper } from './conditional-wrapper';
+export { default as FeatureWrapper } from './feature-wrapper';
