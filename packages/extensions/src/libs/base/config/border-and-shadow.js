@@ -8,9 +8,9 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import type { ConfigModel } from '../types';
+import type { FeatureConfig } from '../types';
 
-const publisherBoxShadow: ConfigModel = {
+const publisherBoxShadow: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
@@ -18,7 +18,7 @@ const publisherBoxShadow: ConfigModel = {
 	label: __('Box Shadow', 'publisher-core'),
 };
 
-const publisherOutline: ConfigModel = {
+const publisherOutline: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
@@ -26,7 +26,7 @@ const publisherOutline: ConfigModel = {
 	label: __('Outline', 'publisher-core'),
 };
 
-const publisherBorder: ConfigModel = {
+const publisherBorder: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
@@ -34,7 +34,7 @@ const publisherBorder: ConfigModel = {
 	label: __('Border', 'publisher-core'),
 };
 
-const publisherBorderRadius: ConfigModel = {
+const publisherBorderRadius: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,

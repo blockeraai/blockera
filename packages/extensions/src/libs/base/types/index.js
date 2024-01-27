@@ -1,3 +1,3 @@
 // @flow
 
-export * from './config-model';
+export * from './feature-config';

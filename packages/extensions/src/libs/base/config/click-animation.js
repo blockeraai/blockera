@@ -8,9 +8,9 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import type { ConfigModel } from '../types';
+import type { FeatureConfig } from '../types';
 
-const publisherClickAnimation: ConfigModel = {
+const publisherClickAnimation: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,

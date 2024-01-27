@@ -3,7 +3,7 @@
 /**
  * Internal dependencies
  */
-import type { ConfigModel } from '../types';
+import type { FeatureConfig } from '../types';
 import type { CoreDefinitionModel } from './types';
 
 export const addExtension = ({
@@ -26,7 +26,7 @@ export const addExtensionSupport = ({
 	extensionName,
 }: {
 	name: string,
-	support: ConfigModel,
+	support: FeatureConfig,
 	extensionName: string,
 }): Object => {
 	return {
@@ -68,7 +68,7 @@ export const addDefinitionExtensionSupport = ({
 	definitionName,
 }: {
 	name: string,
-	support: ConfigModel,
+	support: FeatureConfig,
 	definitionName: string,
 }): Object => {
 	return {

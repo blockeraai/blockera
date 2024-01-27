@@ -8,9 +8,9 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import type { ConfigModel } from '../types';
+import type { FeatureConfig } from '../types';
 
-const publisherCSSProperties: ConfigModel = {
+const publisherCSSProperties: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,

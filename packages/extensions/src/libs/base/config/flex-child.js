@@ -8,23 +8,23 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import type { ConfigModel } from '../types';
+import type { FeatureConfig } from '../types';
 
-const publisherFlexChildSizing: ConfigModel = {
+const publisherFlexChildSizing: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Sizing', 'publisher-core'),
 };
 
-const publisherFlexChildAlign: ConfigModel = {
+const publisherFlexChildAlign: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Align', 'publisher-core'),
 };
 
-const publisherFlexChildOrder: ConfigModel = {
+const publisherFlexChildOrder: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,

@@ -8,65 +8,65 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import type { ConfigModel } from '../types';
+import type { FeatureConfig } from '../types';
 
-const publisherWidth: ConfigModel = {
+const publisherWidth: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Width', 'publisher-core'),
 };
 
-const publisherHeight: ConfigModel = {
+const publisherHeight: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Height', 'publisher-core'),
 };
 
-const publisherMinWidth: ConfigModel = {
+const publisherMinWidth: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Min Width', 'publisher-core'),
 };
 
-const publisherMinHeight: ConfigModel = {
+const publisherMinHeight: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Min Height', 'publisher-core'),
 };
 
-const publisherMaxWidth: ConfigModel = {
+const publisherMaxWidth: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Max Width', 'publisher-core'),
 };
 
-const publisherMaxHeight: ConfigModel = {
+const publisherMaxHeight: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Max Height', 'publisher-core'),
 };
 
-const publisherOverflow: ConfigModel = {
+const publisherOverflow: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Overflow', 'publisher-core'),
 };
 
-const publisherRatio: ConfigModel = {
+const publisherRatio: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Ratio', 'publisher-core'),
 };
 
-const publisherFit: ConfigModel = {
+const publisherFit: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,

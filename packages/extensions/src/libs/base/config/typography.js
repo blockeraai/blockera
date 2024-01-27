@@ -8,114 +8,114 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import type { ConfigModel } from '../types';
+import type { FeatureConfig } from '../types';
 
-const publisherFontSize: ConfigModel = {
+const publisherFontSize: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Font Size', 'publisher-core'),
 };
 
-const publisherLineHeight: ConfigModel = {
+const publisherLineHeight: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Line Height', 'publisher-core'),
 };
 
-const publisherFontColor: ConfigModel = {
+const publisherFontColor: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Font Color', 'publisher-core'),
 };
 
-const publisherTextShadow: ConfigModel = {
+const publisherTextShadow: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Text Shadow', 'publisher-core'),
 };
 
-const publisherTextAlign: ConfigModel = {
+const publisherTextAlign: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Text Align', 'publisher-core'),
 };
 
-const publisherTextDecoration: ConfigModel = {
+const publisherTextDecoration: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Text Decoration', 'publisher-core'),
 };
 
-const publisherFontStyle: ConfigModel = {
+const publisherFontStyle: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Font Style', 'publisher-core'),
 };
 
-const publisherTextTransform: ConfigModel = {
+const publisherTextTransform: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Text Transform', 'publisher-core'),
 };
 
-const publisherDirection: ConfigModel = {
+const publisherDirection: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Direction', 'publisher-core'),
 };
 
-const publisherLetterSpacing: ConfigModel = {
+const publisherLetterSpacing: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Letter Spacing', 'publisher-core'),
 };
 
-const publisherWordSpacing: ConfigModel = {
+const publisherWordSpacing: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Word Spacing', 'publisher-core'),
 };
 
-const publisherTextIndent: ConfigModel = {
+const publisherTextIndent: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Text Indent', 'publisher-core'),
 };
 
-const publisherTextOrientation: ConfigModel = {
+const publisherTextOrientation: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Text Orientation', 'publisher-core'),
 };
 
-const publisherTextColumns: ConfigModel = {
+const publisherTextColumns: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Text Columns', 'publisher-core'),
 };
 
-const publisherTextStroke: ConfigModel = {
+const publisherTextStroke: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Text Stroke', 'publisher-core'),
 };
 
-const publisherWordBreak: ConfigModel = {
+const publisherWordBreak: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,

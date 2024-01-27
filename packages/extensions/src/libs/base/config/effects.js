@@ -8,58 +8,58 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import type { ConfigModel } from '../types';
+import type { FeatureConfig } from '../types';
 
-const publisherOpacity: ConfigModel = {
+const publisherOpacity: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Opacity', 'publisher-core'),
 };
 
-const publisherTransform: ConfigModel = {
+const publisherTransform: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Transform', 'publisher-core'),
 };
 
-const publisherTransition: ConfigModel = {
+const publisherTransition: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Transition', 'publisher-core'),
 };
 
-const publisherFilter: ConfigModel = {
+const publisherFilter: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Filter', 'publisher-core'),
 };
 
-const publisherBackdropFilter: ConfigModel = {
+const publisherBackdropFilter: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Backdrop Filter', 'publisher-core'),
 };
 
-const publisherBlendMode: ConfigModel = {
+const publisherBlendMode: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Blending Mode', 'publisher-core'),
 };
 
-const publisherDivider: ConfigModel = {
+const publisherDivider: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Divider', 'publisher-core'),
 };
 
-const publisherMask: ConfigModel = {
+const publisherMask: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,

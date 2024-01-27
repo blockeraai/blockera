@@ -8,37 +8,37 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import type { ConfigModel } from '../types';
+import type { FeatureConfig } from '../types';
 
-const publisherDisplay: ConfigModel = {
+const publisherDisplay: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Display', 'publisher-core'),
 };
 
-const publisherFlexLayout: ConfigModel = {
+const publisherFlexLayout: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Flex Layout', 'publisher-core'),
 };
 
-const publisherGap: ConfigModel = {
+const publisherGap: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Gap', 'publisher-core'),
 };
 
-const publisherFlexWrap: ConfigModel = {
+const publisherFlexWrap: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	label: __('Flex Wrap', 'publisher-core'),
 };
 
-const publisherAlignContent: ConfigModel = {
+const publisherAlignContent: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,

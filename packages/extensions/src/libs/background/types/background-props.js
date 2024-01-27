@@ -8,16 +8,20 @@ import type { MixedElement } from 'react';
  * Internal dependencies
  */
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
-import type { ConfigModel } from '../../base/types';
+import type { FeatureConfig } from '../../base';
 
 export type IsEnableBackground = ({
-	backgroundConfig: { publisherBackground: ConfigModel },
+	backgroundConfig: { publisherBackground: FeatureConfig },
 }) => boolean;
 
 export type TBackgroundProps = {
 	block: TBlockProps,
 	setSettings: (settings: Object, key: string) => void,
-	backgroundConfig: Object,
+	backgroundConfig: {
+		publisherBackground: FeatureConfig,
+		publisherBackgroundColor: FeatureConfig,
+		publisherBackgroundClip: FeatureConfig,
+	},
 	children?: MixedElement,
 	values: {
 		background: Object,

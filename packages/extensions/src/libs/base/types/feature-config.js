@@ -5,7 +5,7 @@
  */
 import type { TStates, TBreakpoint } from '../../block-states/types';
 
-export type ConfigModel = {
+export type FeatureConfig = {
 	/**
 	 * if true is active, false is deactivated.
 	 */
