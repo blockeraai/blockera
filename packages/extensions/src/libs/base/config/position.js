@@ -19,7 +19,7 @@ const publisherPosition: FeatureConfig = {
 
 const publisherZIndex: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	label: __('Z-Index', 'publisher-core'),
 };

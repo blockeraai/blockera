@@ -17,6 +17,7 @@ import {
 	InputControl,
 } from '@publisher/controls';
 import { componentClassNames } from '@publisher/classnames';
+import { FeatureWrapper } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -29,11 +30,21 @@ import type { TPositionExtensionProps } from './types/position-extension-props';
 export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 	({
 		block,
-		positionConfig: { publisherPosition, publisherZIndex },
+		positionConfig,
 		values,
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TPositionExtensionProps): MixedElement => {
+		const isActivePosition = isActiveField(
+			positionConfig.publisherPosition
+		);
+
+		if (!isActivePosition) {
+			return <></>;
+		}
+
+		const isActiveZIndex = isActiveField(positionConfig.publisherZIndex);
+
 		return (
 			<PanelBodyControl
 				title={__('Position', 'publisher-core')}
@@ -44,85 +55,106 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 					'extension-position'
 				)}
 			>
-				{isActiveField(publisherPosition) && (
-					<ControlContextProvider
-						value={{
-							name: generateExtensionId(block, 'position'),
-							value: values?.position || {},
-							attribute: 'publisherPosition',
-							blockName: block.blockName,
-						}}
+				{isActivePosition && (
+					<FeatureWrapper
+						isActive={isActivePosition}
+						isActiveOnStates={
+							positionConfig.publisherPosition.isActiveOnStates
+						}
+						isActiveOnBreakpoints={
+							positionConfig.publisherPosition
+								.isActiveOnBreakpoints
+						}
 					>
-						<BaseControl
-							controlName="box-position"
-							columns="columns-1"
-							label=""
-						>
-							<BoxPositionControl
-								onChange={(
-									newValue: Object,
-									ref?: Object
-								): void =>
-									handleOnChangeAttributes(
-										'publisherPosition',
-										newValue,
-										{ ref }
-									)
-								}
-								{...extensionProps.publisherPosition}
-							/>
-						</BaseControl>
-					</ControlContextProvider>
-				)}
-
-				{isActiveField(publisherZIndex) &&
-					values.position?.type !== '' &&
-					values.position?.type !== undefined &&
-					values.position?.type !== 'static' && (
 						<ControlContextProvider
 							value={{
-								name: generateExtensionId(block, 'z-index'),
-								value: values.zIndex,
-								attribute: 'publisherZIndex',
+								name: generateExtensionId(block, 'position'),
+								value: values?.position || {},
+								attribute: 'publisherPosition',
 								blockName: block.blockName,
 							}}
 						>
-							<InputControl
-								controlName="input"
-								columns="columns-2"
-								label={__('z-index', 'publisher-core')}
-								labelDescription={
-									<>
-										<p>
-											{__(
-												'Control the stacking order of blocks with z-index, a CSS property that manages the layering and overlap of components on your website.',
-												'publisher-core'
-											)}
-										</p>
-										<p>
-											{__(
-												'z-index is crucial for creating visually appealing layouts, especially in complex designs, allowing you to prioritize content visibility and interaction.',
-												'publisher-core'
-											)}
-										</p>
-									</>
-								}
-								type="number"
-								unitType="z-index"
-								arrows={true}
-								defaultValue=""
-								onChange={(newValue, ref) =>
-									handleOnChangeAttributes(
-										'publisherZIndex',
-										newValue,
-										{
-											ref,
-										}
-									)
-								}
-								{...extensionProps.publisherZIndex}
-							/>
+							<BaseControl
+								controlName="box-position"
+								columns="columns-1"
+								label=""
+							>
+								<BoxPositionControl
+									onChange={(
+										newValue: Object,
+										ref?: Object
+									): void =>
+										handleOnChangeAttributes(
+											'publisherPosition',
+											newValue,
+											{ ref }
+										)
+									}
+									{...extensionProps.publisherPosition}
+								/>
+							</BaseControl>
 						</ControlContextProvider>
+					</FeatureWrapper>
+				)}
+
+				{isActivePosition &&
+					isActiveZIndex &&
+					values.position?.type !== '' &&
+					values.position?.type !== undefined &&
+					values.position?.type !== 'static' && (
+						<FeatureWrapper
+							isActive={isActiveZIndex}
+							isActiveOnStates={
+								positionConfig.publisherZIndex.isActiveOnStates
+							}
+							isActiveOnBreakpoints={
+								positionConfig.publisherZIndex
+									.isActiveOnBreakpoints
+							}
+						>
+							<ControlContextProvider
+								value={{
+									name: generateExtensionId(block, 'z-index'),
+									value: values.zIndex,
+									attribute: 'publisherZIndex',
+									blockName: block.blockName,
+								}}
+							>
+								<InputControl
+									controlName="input"
+									columns="columns-2"
+									label={__('z-index', 'publisher-core')}
+									labelDescription={
+										<>
+											<p>
+												{__(
+													'Control the stacking order of blocks with z-index, a CSS property that manages the layering and overlap of components on your website.',
+													'publisher-core'
+												)}
+											</p>
+											<p>
+												{__(
+													'z-index is crucial for creating visually appealing layouts, especially in complex designs, allowing you to prioritize content visibility and interaction.',
+													'publisher-core'
+												)}
+											</p>
+										</>
+									}
+									type="number"
+									unitType="z-index"
+									arrows={true}
+									defaultValue=""
+									onChange={(newValue, ref) =>
+										handleOnChangeAttributes(
+											'publisherZIndex',
+											newValue,
+											{ ref }
+										)
+									}
+									{...extensionProps.publisherZIndex}
+								/>
+							</ControlContextProvider>
+						</FeatureWrapper>
 					)}
 			</PanelBodyControl>
 		);

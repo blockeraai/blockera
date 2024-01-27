@@ -9,10 +9,14 @@ import type { MixedElement } from 'react';
  * Internal dependencies
  */
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { FeatureConfig } from '../../base';
 
 export type TPositionExtensionProps = {
 	block: TBlockProps,
-	positionConfig: Object,
+	positionConfig: {
+		publisherPosition: FeatureConfig,
+		publisherZIndex: FeatureConfig,
+	},
 	children?: MixedElement,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	values: {
