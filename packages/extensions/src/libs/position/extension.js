@@ -23,7 +23,7 @@ import { FeatureWrapper } from '@publisher/components';
  * Internal dependencies
  */
 import { PositionExtensionIcon } from './index';
-import { isActiveField } from '../../api/utils';
+import { isShowField } from '../../api/utils';
 import { generateExtensionId, hasSameProps } from '../utils';
 import type { TPositionExtensionProps } from './types/position-extension-props';
 
@@ -32,18 +32,25 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 		block,
 		positionConfig,
 		values,
+		attributes,
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TPositionExtensionProps): MixedElement => {
-		const isActivePosition = isActiveField(
-			positionConfig.publisherPosition
+		const isShownPosition = isShowField(
+			positionConfig.publisherPosition,
+			values?.position,
+			attributes.position.default
 		);
 
-		if (!isActivePosition) {
+		if (!isShownPosition) {
 			return <></>;
 		}
 
-		const isActiveZIndex = isActiveField(positionConfig.publisherZIndex);
+		const isShownZIndex = isShowField(
+			positionConfig.publisherZIndex,
+			values?.zIndex,
+			attributes.zIndex.default
+		);
 
 		return (
 			<PanelBodyControl
@@ -55,55 +62,50 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 					'extension-position'
 				)}
 			>
-				{isActivePosition && (
-					<FeatureWrapper
-						isActive={isActivePosition}
-						isActiveOnStates={
-							positionConfig.publisherPosition.isActiveOnStates
-						}
-						isActiveOnBreakpoints={
-							positionConfig.publisherPosition
-								.isActiveOnBreakpoints
-						}
+				<FeatureWrapper
+					isActive={isShownPosition}
+					isActiveOnStates={
+						positionConfig.publisherPosition.isActiveOnStates
+					}
+					isActiveOnBreakpoints={
+						positionConfig.publisherPosition.isActiveOnBreakpoints
+					}
+				>
+					<ControlContextProvider
+						value={{
+							name: generateExtensionId(block, 'position'),
+							value: values?.position || {},
+							attribute: 'publisherPosition',
+							blockName: block.blockName,
+						}}
 					>
-						<ControlContextProvider
-							value={{
-								name: generateExtensionId(block, 'position'),
-								value: values?.position || {},
-								attribute: 'publisherPosition',
-								blockName: block.blockName,
-							}}
+						<BaseControl
+							controlName="box-position"
+							columns="columns-1"
+							label=""
 						>
-							<BaseControl
-								controlName="box-position"
-								columns="columns-1"
-								label=""
-							>
-								<BoxPositionControl
-									onChange={(
-										newValue: Object,
-										ref?: Object
-									): void =>
-										handleOnChangeAttributes(
-											'publisherPosition',
-											newValue,
-											{ ref }
-										)
-									}
-									{...extensionProps.publisherPosition}
-								/>
-							</BaseControl>
-						</ControlContextProvider>
-					</FeatureWrapper>
-				)}
+							<BoxPositionControl
+								onChange={(
+									newValue: Object,
+									ref?: Object
+								): void =>
+									handleOnChangeAttributes(
+										'publisherPosition',
+										newValue,
+										{ ref }
+									)
+								}
+								{...extensionProps.publisherPosition}
+							/>
+						</BaseControl>
+					</ControlContextProvider>
+				</FeatureWrapper>
 
-				{isActivePosition &&
-					isActiveZIndex &&
-					values.position?.type !== '' &&
+				{values.position?.type !== '' &&
 					values.position?.type !== undefined &&
 					values.position?.type !== 'static' && (
 						<FeatureWrapper
-							isActive={isActiveZIndex}
+							isActive={isShownZIndex}
 							isActiveOnStates={
 								positionConfig.publisherZIndex.isActiveOnStates
 							}

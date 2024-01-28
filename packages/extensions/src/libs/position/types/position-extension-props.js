@@ -1,24 +1,17 @@
 // @flow
 
 /**
- * External dependencies
- */
-import type { MixedElement } from 'react';
-
-/**
  * Internal dependencies
  */
-import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { BaseExtensionProps } from '../../types';
 import type { FeatureConfig } from '../../base';
 
 export type TPositionExtensionProps = {
-	block: TBlockProps,
+	...BaseExtensionProps,
 	positionConfig: {
 		publisherPosition: FeatureConfig,
 		publisherZIndex: FeatureConfig,
 	},
-	children?: MixedElement,
-	handleOnChangeAttributes: THandleOnChangeAttributes,
 	values: {
 		position?: {
 			type: string,

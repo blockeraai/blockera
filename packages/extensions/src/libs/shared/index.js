@@ -337,6 +337,10 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									currentStateAttributes.publisherPosition,
 								zIndex: currentStateAttributes.publisherZIndex,
 							}}
+							attributes={{
+								position: attributes.publisherPosition,
+								zIndex: attributes.publisherZIndex,
+							}}
 							extensionProps={{
 								publisherPosition: {},
 								publisherZIndex: {},
