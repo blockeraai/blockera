@@ -1,13 +1,10 @@
 // @flow
-/**
- * External dependencies
- */
-import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
  */
-import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { BaseExtensionProps } from '../../types';
+import type { FeatureConfig } from '../../base';
 
 export type TSizeCssProps = {
 	width?: string,
@@ -23,9 +20,19 @@ export type TSizeCssProps = {
 };
 
 export type TSizeProps = {
-	block: TBlockProps,
-	sizeConfig: Object,
-	handleOnChangeAttributes: THandleOnChangeAttributes,
+	...BaseExtensionProps,
+	sizeConfig: {
+		publisherWidth: FeatureConfig,
+		publisherMinWidth: FeatureConfig,
+		publisherMaxWidth: FeatureConfig,
+		publisherHeight: FeatureConfig,
+		publisherMinHeight: FeatureConfig,
+		publisherMaxHeight: FeatureConfig,
+		publisherOverflow: FeatureConfig,
+		publisherRatio: FeatureConfig,
+		publisherFit: FeatureConfig,
+		publisherFitPosition: FeatureConfig,
+	},
 	values: {
 		width: string,
 		height: string,
@@ -50,5 +57,4 @@ export type TSizeProps = {
 		publisherFit: Object,
 		publisherFitPosition: Object,
 	},
-	children?: MixedElement,
 };

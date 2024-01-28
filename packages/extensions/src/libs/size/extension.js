@@ -16,13 +16,17 @@ import {
 	ToggleSelectControl,
 	BaseControl,
 } from '@publisher/controls';
-import { Flex } from '@publisher/components';
+import {
+	ConditionalWrapper,
+	FeatureWrapper,
+	Flex,
+} from '@publisher/components';
 import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
-import { isActiveField } from '../../api/utils';
+import { isShowField } from '../../api/utils';
 import { generateExtensionId, hasSameProps } from '../utils';
 import type { TSizeProps } from './types/size-props';
 import { default as OverflowHiddenIcon } from './icons/overflow-hidden';
@@ -31,25 +35,79 @@ import { default as OverflowScrollIcon } from './icons/overflow-scroll';
 import { ObjectFit } from './components';
 import AspectRatio from './components/aspect-ratio';
 import { SizeExtensionIcon } from './index';
+import { ExtensionSettings } from '../settings';
 
 export const SizeExtension: ComponentType<TSizeProps> = memo(
 	({
 		block,
-		sizeConfig: {
-			publisherWidth,
-			publisherHeight,
-			publisherOverflow,
-			publisherRatio,
-			publisherFit,
-			publisherMinWidth,
-			publisherMinHeight,
-			publisherMaxWidth,
-			publisherMaxHeight,
-		},
+		sizeConfig,
 		handleOnChangeAttributes,
 		values,
+		attributes,
 		extensionProps,
+		setSettings,
 	}: TSizeProps): MixedElement => {
+		const isShownWidth = isShowField(
+			sizeConfig.publisherWidth,
+			values?.width,
+			attributes.width.default
+		);
+		const isShownMinWidth = isShowField(
+			sizeConfig.publisherMinWidth,
+			values?.minWidth,
+			attributes?.minWidth?.default
+		);
+		const isShownMaxWidth = isShowField(
+			sizeConfig.publisherMaxWidth,
+			values?.maxWidth,
+			attributes?.maxWidth?.default
+		);
+		const isShownHeight = isShowField(
+			sizeConfig.publisherHeight,
+			values?.height,
+			attributes?.height?.default
+		);
+		const isShownMinHeight = isShowField(
+			sizeConfig.publisherMinHeight,
+			values?.minHeight,
+			attributes?.minHeight?.default
+		);
+		const isShownMaxHeight = isShowField(
+			sizeConfig.publisherMaxHeight,
+			values?.maxHeight,
+			attributes?.maxHeight?.default
+		);
+		const isShownOverflow = isShowField(
+			sizeConfig.publisherOverflow,
+			values?.overflow,
+			attributes?.overflow?.default
+		);
+		const isShownRatio = isShowField(
+			sizeConfig.publisherRatio,
+			values?.ratio,
+			attributes?.ratio?.default
+		);
+		const isShownFit = isShowField(
+			sizeConfig.publisherFit,
+			values?.fit,
+			attributes?.fit?.default
+		);
+
+		// Extension is not active
+		if (
+			!isShownWidth &&
+			!isShownMinWidth &&
+			!isShownMaxWidth &&
+			!isShownHeight &&
+			!isShownMinHeight &&
+			!isShownMaxHeight &&
+			!isShownOverflow &&
+			!isShownRatio &&
+			!isShownFit
+		) {
+			return <></>;
+		}
+
 		return (
 			<PanelBodyControl
 				title={__('Size', 'publisher-core')}
@@ -57,62 +115,110 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 				icon={<SizeExtensionIcon />}
 				className={componentClassNames('extension', 'extension-size')}
 			>
-				{isActiveField(publisherWidth) && (
-					<BaseControl columns="columns-1">
-						<ControlContextProvider
-							value={{
-								name: generateExtensionId(block, 'width'),
-								value: values?.width,
-								attribute: 'publisherWidth',
-								blockName: block.blockName,
-							}}
-						>
-							<InputControl
-								controlName="input"
-								label={__('Width', 'publisher-core')}
-								labelDescription={
-									<>
-										<p>
-											{__(
-												'Provides the ability to define the horizontal space of the block, crucial for layout precision and design consistency.',
-												'publisher-core'
-											)}
-										</p>
-										<p>
-											{__(
-												'Ideal for responsive design, it ensures block adapt smoothly to different screen sizes, enhancing user experience and interface scalability.',
-												'publisher-core'
-											)}
-										</p>
-									</>
-								}
-								columns="columns-2"
-								placeholder="Auto"
-								unitType="width"
-								min={0}
-								defaultValue=""
-								onChange={(newValue, ref) => {
-									handleOnChangeAttributes(
-										'publisherWidth',
-										newValue,
-										{ ref }
-									);
-								}}
-								controlAddonTypes={['variable']}
-								variableTypes={['width-size']}
-								{...extensionProps.publisherWidth}
-							/>
-						</ControlContextProvider>
+				<ExtensionSettings
+					features={sizeConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'sizeConfig');
+					}}
+				/>
 
-						{(isActiveField(publisherMinWidth) ||
-							isActiveField(publisherMaxWidth)) && (
-							<Flex
-								style={{
-									width: '160px',
-									alignSelf: 'flex-end',
+				{(isShownWidth || isShownMinWidth || isShownMaxWidth) && (
+					<BaseControl columns="columns-1">
+						<FeatureWrapper
+							isActive={isShownWidth}
+							isActiveOnStates={
+								sizeConfig.publisherWidth.isActiveOnStates
+							}
+							isActiveOnBreakpoints={
+								sizeConfig.publisherWidth.isActiveOnBreakpoints
+							}
+						>
+							<ControlContextProvider
+								value={{
+									name: generateExtensionId(block, 'width'),
+									value: values?.width,
+									attribute: 'publisherWidth',
+									blockName: block.blockName,
 								}}
 							>
-								{isActiveField(publisherMinWidth) && (
+								<InputControl
+									controlName="input"
+									label={__('Width', 'publisher-core')}
+									labelDescription={
+										<>
+											<p>
+												{__(
+													'Provides the ability to define the horizontal space of the block, crucial for layout precision and design consistency.',
+													'publisher-core'
+												)}
+											</p>
+											<p>
+												{__(
+													'Ideal for responsive design, it ensures block adapt smoothly to different screen sizes, enhancing user experience and interface scalability.',
+													'publisher-core'
+												)}
+											</p>
+										</>
+									}
+									columns="columns-2"
+									placeholder="Auto"
+									unitType="width"
+									min={0}
+									defaultValue=""
+									onChange={(newValue, ref) => {
+										handleOnChangeAttributes(
+											'publisherWidth',
+											newValue,
+											{ ref }
+										);
+									}}
+									controlAddonTypes={['variable']}
+									variableTypes={['width-size']}
+									{...extensionProps.publisherWidth}
+								/>
+							</ControlContextProvider>
+						</FeatureWrapper>
+
+						{(isShownMinWidth || isShownMaxWidth) && (
+							<ConditionalWrapper
+								wrapper={(children) => (
+									<Flex
+										style={{
+											width: '160px',
+											alignSelf: 'flex-end',
+										}}
+									>
+										{children}
+									</Flex>
+								)}
+								elseWrapper={(children) => (
+									<BaseControl
+										columns="columns-2"
+										label={__('Width', 'publisher-core')}
+									>
+										<Flex
+											style={{
+												width: '160px',
+												alignSelf: 'flex-end',
+											}}
+										>
+											{children}
+										</Flex>
+									</BaseControl>
+								)}
+								condition={isShownWidth}
+							>
+								<FeatureWrapper
+									isActive={isShownMinWidth}
+									isActiveOnStates={
+										sizeConfig.publisherMinWidth
+											.isActiveOnStates
+									}
+									isActiveOnBreakpoints={
+										sizeConfig.publisherMinWidth
+											.isActiveOnBreakpoints
+									}
+								>
 									<ControlContextProvider
 										value={{
 											name: generateExtensionId(
@@ -152,14 +258,12 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												'publisher-core'
 											)}
 											columns={
-												isActiveField(publisherMaxWidth)
+												isShownMaxWidth
 													? 'columns-1'
 													: 'columns-2'
 											}
 											className={
-												isActiveField(
-													publisherMaxWidth
-												) &&
+												isShownMaxWidth &&
 												'control-first label-center small-gap'
 											}
 											placeholder="-"
@@ -170,9 +274,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												handleOnChangeAttributes(
 													'publisherMinWidth',
 													newValue,
-													{
-														ref,
-													}
+													{ ref }
 												)
 											}
 											controlAddonTypes={['variable']}
@@ -180,9 +282,19 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 											{...extensionProps.publisherMinWidth}
 										/>
 									</ControlContextProvider>
-								)}
+								</FeatureWrapper>
 
-								{isActiveField(publisherMaxWidth) && (
+								<FeatureWrapper
+									isActive={isShownMaxWidth}
+									isActiveOnStates={
+										sizeConfig.publisherMaxWidth
+											.isActiveOnStates
+									}
+									isActiveOnBreakpoints={
+										sizeConfig.publisherMaxWidth
+											.isActiveOnBreakpoints
+									}
+								>
 									<ControlContextProvider
 										value={{
 											name: generateExtensionId(
@@ -222,14 +334,12 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												'publisher-core'
 											)}
 											columns={
-												isActiveField(publisherMinWidth)
+												isShownMinWidth
 													? 'columns-1'
 													: 'columns-2'
 											}
 											className={
-												isActiveField(
-													publisherMinWidth
-												) &&
+												isShownMinWidth &&
 												'control-first label-center small-gap'
 											}
 											placeholder="-"
@@ -248,68 +358,109 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 											{...extensionProps.publisherMaxWidth}
 										/>
 									</ControlContextProvider>
-								)}
-							</Flex>
+								</FeatureWrapper>
+							</ConditionalWrapper>
 						)}
 					</BaseControl>
 				)}
 
-				{isActiveField(publisherHeight) && (
+				{(isShownHeight || isShownMinHeight || isShownMaxHeight) && (
 					<BaseControl columns="columns-1">
-						<ControlContextProvider
-							value={{
-								name: generateExtensionId(block, 'height'),
-								value: values.height,
-								attribute: 'publisherHeight',
-								blockName: block.blockName,
-							}}
+						<FeatureWrapper
+							isActive={isShownHeight}
+							isActiveOnStates={
+								sizeConfig.publisherHeight.isActiveOnStates
+							}
+							isActiveOnBreakpoints={
+								sizeConfig.publisherHeight.isActiveOnBreakpoints
+							}
 						>
-							<InputControl
-								controlName="input"
-								label={__('Height', 'publisher-core')}
-								labelDescription={
-									<>
-										<p>
-											{__(
-												'Provides the ability to define the vertical space of the block, crucial for layout precision and design consistency.',
-												'publisher-core'
-											)}
-										</p>
-										<p>
-											{__(
-												'This feature is key for achieving uniformity and balance in your layout, especially useful for aligning blocks vertically and creating cohesive visual structures.',
-												'publisher-core'
-											)}
-										</p>
-									</>
-								}
-								columns="columns-2"
-								placeholder="Auto"
-								unitType="height"
-								min={0}
-								defaultValue=""
-								onChange={(newValue, ref) => {
-									handleOnChangeAttributes(
-										'publisherHeight',
-										newValue,
-										{ ref }
-									);
-								}}
-								controlAddonTypes={['variable']}
-								variableTypes={['width-size']}
-								{...extensionProps.publisherHeight}
-							/>
-						</ControlContextProvider>
-
-						{(isActiveField(publisherMinHeight) ||
-							isActiveField(publisherMaxHeight)) && (
-							<Flex
-								style={{
-									width: '160px',
-									alignSelf: 'flex-end',
+							<ControlContextProvider
+								value={{
+									name: generateExtensionId(block, 'height'),
+									value: values.height,
+									attribute: 'publisherHeight',
+									blockName: block.blockName,
 								}}
 							>
-								{isActiveField(publisherMinHeight) && (
+								<InputControl
+									controlName="input"
+									label={__('Height', 'publisher-core')}
+									labelDescription={
+										<>
+											<p>
+												{__(
+													'Provides the ability to define the vertical space of the block, crucial for layout precision and design consistency.',
+													'publisher-core'
+												)}
+											</p>
+											<p>
+												{__(
+													'This feature is key for achieving uniformity and balance in your layout, especially useful for aligning blocks vertically and creating cohesive visual structures.',
+													'publisher-core'
+												)}
+											</p>
+										</>
+									}
+									columns="columns-2"
+									placeholder="Auto"
+									unitType="height"
+									min={0}
+									defaultValue=""
+									onChange={(newValue, ref) => {
+										handleOnChangeAttributes(
+											'publisherHeight',
+											newValue,
+											{ ref }
+										);
+									}}
+									controlAddonTypes={['variable']}
+									variableTypes={['width-size']}
+									{...extensionProps.publisherHeight}
+								/>
+							</ControlContextProvider>
+						</FeatureWrapper>
+
+						{(isShownMinHeight || isShownMaxHeight) && (
+							<ConditionalWrapper
+								wrapper={(children) => (
+									<Flex
+										style={{
+											width: '160px',
+											alignSelf: 'flex-end',
+										}}
+									>
+										{children}
+									</Flex>
+								)}
+								elseWrapper={(children) => (
+									<BaseControl
+										columns="columns-2"
+										label={__('Height', 'publisher-core')}
+									>
+										<Flex
+											style={{
+												width: '160px',
+												alignSelf: 'flex-end',
+											}}
+										>
+											{children}
+										</Flex>
+									</BaseControl>
+								)}
+								condition={isShownHeight}
+							>
+								<FeatureWrapper
+									isActive={isShownMinHeight}
+									isActiveOnStates={
+										sizeConfig.publisherMinHeight
+											.isActiveOnStates
+									}
+									isActiveOnBreakpoints={
+										sizeConfig.publisherMinHeight
+											.isActiveOnBreakpoints
+									}
+								>
 									<ControlContextProvider
 										value={{
 											name: generateExtensionId(
@@ -349,16 +500,12 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												'publisher-core'
 											)}
 											columns={
-												isActiveField(
-													publisherMaxHeight
-												)
+												isShownMaxHeight
 													? 'columns-1'
 													: 'columns-2'
 											}
 											className={
-												isActiveField(
-													publisherMaxHeight
-												) &&
+												isShownMaxHeight &&
 												'control-first label-center small-gap'
 											}
 											placeholder="-"
@@ -377,9 +524,19 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 											{...extensionProps.publisherMinHeight}
 										/>
 									</ControlContextProvider>
-								)}
+								</FeatureWrapper>
 
-								{isActiveField(publisherMaxHeight) && (
+								<FeatureWrapper
+									isActive={isShownMaxHeight}
+									isActiveOnStates={
+										sizeConfig.publisherMaxHeight
+											.isActiveOnStates
+									}
+									isActiveOnBreakpoints={
+										sizeConfig.publisherMaxHeight
+											.isActiveOnBreakpoints
+									}
+								>
 									<ControlContextProvider
 										value={{
 											name: generateExtensionId(
@@ -419,16 +576,12 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												'publisher-core'
 											)}
 											columns={
-												isActiveField(
-													publisherMinHeight
-												)
+												isShownMinHeight
 													? 'columns-1'
 													: 'columns-2'
 											}
 											className={
-												isActiveField(
-													publisherMinHeight
-												) &&
+												isShownMinHeight &&
 												'control-first label-center small-gap'
 											}
 											placeholder="-"
@@ -447,13 +600,21 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 											{...extensionProps.publisherMaxHeight}
 										/>
 									</ControlContextProvider>
-								)}
-							</Flex>
+								</FeatureWrapper>
+							</ConditionalWrapper>
 						)}
 					</BaseControl>
 				)}
 
-				{isActiveField(publisherOverflow) && (
+				<FeatureWrapper
+					isActive={isShownOverflow}
+					isActiveOnStates={
+						sizeConfig.publisherOverflow.isActiveOnStates
+					}
+					isActiveOnBreakpoints={
+						sizeConfig.publisherOverflow.isActiveOnBreakpoints
+					}
+				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'overflow'),
@@ -545,9 +706,17 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 							{...extensionProps.publisherOverflow}
 						/>
 					</ControlContextProvider>
-				)}
+				</FeatureWrapper>
 
-				{isActiveField(publisherRatio) && (
+				<FeatureWrapper
+					isActive={isShownRatio}
+					isActiveOnStates={
+						sizeConfig.publisherRatio.isActiveOnStates
+					}
+					isActiveOnBreakpoints={
+						sizeConfig.publisherRatio.isActiveOnBreakpoints
+					}
+				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'ratio'),
@@ -564,9 +733,15 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 							{...extensionProps.publisherRatio}
 						/>
 					</ControlContextProvider>
-				)}
+				</FeatureWrapper>
 
-				{isActiveField(publisherFit) && (
+				<FeatureWrapper
+					isActive={isShownFit}
+					isActiveOnStates={sizeConfig.publisherFit.isActiveOnStates}
+					isActiveOnBreakpoints={
+						sizeConfig.publisherFit.isActiveOnBreakpoints
+					}
+				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'fit'),
@@ -582,7 +757,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 							{...extensionProps.publisherFit}
 						/>
 					</ControlContextProvider>
-				)}
+				</FeatureWrapper>
 			</PanelBodyControl>
 		);
 	},

@@ -17,6 +17,20 @@ const publisherWidth: FeatureConfig = {
 	label: __('Width', 'publisher-core'),
 };
 
+const publisherMinWidth: FeatureConfig = {
+	show: false,
+	force: false,
+	status: true,
+	label: __('Min Width', 'publisher-core'),
+};
+
+const publisherMaxWidth: FeatureConfig = {
+	show: false,
+	force: false,
+	status: true,
+	label: __('Max Width', 'publisher-core'),
+};
+
 const publisherHeight: FeatureConfig = {
 	show: true,
 	force: true,
@@ -24,61 +38,47 @@ const publisherHeight: FeatureConfig = {
 	label: __('Height', 'publisher-core'),
 };
 
-const publisherMinWidth: FeatureConfig = {
-	show: true,
-	force: true,
-	status: true,
-	label: __('Min Width', 'publisher-core'),
-};
-
 const publisherMinHeight: FeatureConfig = {
-	show: true,
-	force: true,
+	show: false,
+	force: false,
 	status: true,
 	label: __('Min Height', 'publisher-core'),
 };
 
-const publisherMaxWidth: FeatureConfig = {
-	show: true,
-	force: true,
-	status: true,
-	label: __('Max Width', 'publisher-core'),
-};
-
 const publisherMaxHeight: FeatureConfig = {
-	show: true,
-	force: true,
+	show: false,
+	force: false,
 	status: true,
 	label: __('Max Height', 'publisher-core'),
 };
 
 const publisherOverflow: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	label: __('Overflow', 'publisher-core'),
 };
 
 const publisherRatio: FeatureConfig = {
-	show: true,
-	force: true,
+	show: false,
+	force: false,
 	status: true,
-	label: __('Ratio', 'publisher-core'),
+	label: __('Aspect Ratio', 'publisher-core'),
 };
 
 const publisherFit: FeatureConfig = {
-	show: true,
-	force: true,
+	show: false,
+	force: false,
 	status: true,
-	label: __('Fit', 'publisher-core'),
+	label: __('Media Fit', 'publisher-core'),
 };
 
 export const sizeConfig = {
 	publisherWidth,
-	publisherHeight,
 	publisherMinWidth,
-	publisherMinHeight,
 	publisherMaxWidth,
+	publisherHeight,
+	publisherMinHeight,
 	publisherMaxHeight,
 	publisherOverflow,
 	publisherRatio,

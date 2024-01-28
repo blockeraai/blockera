@@ -352,6 +352,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								size,
 								'publisher'
 							)}
+							attributes={include(attributes, size, 'publisher')}
 							extensionProps={{
 								publisherWidth: {},
 								publisherHeight: {},
@@ -365,6 +366,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								publisherFitPosition: {},
 							}}
 							handleOnChangeAttributes={handleOnChangeAttributes}
+							setSettings={handleOnChangeSettings}
 						/>
 
 						<LayoutExtension
