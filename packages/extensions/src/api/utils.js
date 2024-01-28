@@ -25,12 +25,29 @@ export const isActiveField = (fieldConfig: Object): boolean =>
 
 /**
  * is show extension?
- *
- * @param {Object} fieldConfig the field config
- * @return {boolean} true on success, false when otherwise!
  */
-export const isShowField = (fieldConfig: Object): boolean =>
-	isObject(fieldConfig) ? fieldConfig?.show : true === fieldConfig;
+export const isShowField = (
+	fieldConfig: Object,
+	value: any,
+	defaultValue: any
+): boolean => {
+	if (!isObject(fieldConfig)) {
+		return false;
+	}
+
+	// Is active and has value
+	if (
+		fieldConfig?.status &&
+		value !== undefined &&
+		defaultValue !== undefined &&
+		value !== defaultValue
+	) {
+		return true;
+	}
+
+	// Is active and selected to be shown
+	return fieldConfig?.status && fieldConfig?.show;
+};
 
 /**
  * is enabled extension?
