@@ -2,12 +2,11 @@
  * Publisher dependencies
  */
 import { createCssRule } from '@publisher/style-engine';
-import { getValueAddonRealValue } from '@publisher/hooks';
 
 export function backgroundClipGenerator(id, props, { media, selector }) {
 	const { attributes } = props;
 
-	const value = getValueAddonRealValue(attributes.publisherBackgroundClip);
+	const value = attributes.publisherBackgroundClip;
 
 	if (value === 'none') {
 		return '';
@@ -15,13 +14,12 @@ export function backgroundClipGenerator(id, props, { media, selector }) {
 
 	if (value === 'text') {
 		return createCssRule({
-			selector: `#block-${props.clientId}${
-				styleEngine.selector ? ' ' + styleEngine.selector : ''
-			}`,
+			media,
+			selector,
 			properties: {
-				'background-clip': 'text',
-				'-webkit-background-clip': 'text',
-				'-webkit-text-fill-color': 'transparent',
+				'background-clip': 'text !important',
+				'-webkit-background-clip': 'text !important',
+				'-webkit-text-fill-color': 'transparent !important',
 			},
 		});
 	}

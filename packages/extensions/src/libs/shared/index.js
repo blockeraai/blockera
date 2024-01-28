@@ -171,7 +171,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			effects,
 			flexChild,
 			typography,
-			background,
 			borderAndShadow,
 			icon,
 			mouse,
@@ -460,26 +459,29 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 						/>
 
 						<BackgroundExtension
-							{...{
-								block,
-								setSettings: handleOnChangeSettings,
-								backgroundConfig,
-								extensionProps: {
-									publisherBackground: {},
-									publisherBackgroundColor: {},
-									publisherBackgroundClip: {},
-								},
-								values: include(
-									currentStateAttributes,
-									background,
-									'publisher'
-								),
+							block={block}
+							setSettings={handleOnChangeSettings}
+							backgroundConfig={backgroundConfig}
+							extensionProps={{
+								publisherBackground: {},
+								publisherBackgroundColor: {},
+								publisherBackgroundClip: {},
+							}}
+							values={{
+								background:
+									currentStateAttributes?.publisherBackground,
+								backgroundColor:
+									currentStateAttributes?.publisherBackgroundColor,
 								backgroundClip:
 									currentStateAttributes?.publisherBackgroundClip,
-								defaultValue:
-									currentStateAttributes.style?.background ||
-									{},
-								handleOnChangeAttributes,
+							}}
+							handleOnChangeAttributes={handleOnChangeAttributes}
+							attributes={{
+								background: attributes.publisherBackground,
+								backgroundColor:
+									attributes.publisherBackgroundColor,
+								backgroundClip:
+									attributes.publisherBackgroundClip,
 							}}
 						/>
 
