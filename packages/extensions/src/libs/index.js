@@ -60,6 +60,7 @@ export {
 	BackgroundExtension,
 	attributes as backgroundAttributes,
 	supports as backgroundSupports,
+	bootstrap as bootstrapBackgroundExtension,
 } from './background';
 export {
 	BorderAndShadowExtensionIcon,
