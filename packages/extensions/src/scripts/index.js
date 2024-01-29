@@ -5,6 +5,7 @@ import {
 	bootstrapTypographyExtension,
 	bootstrapPositionExtension,
 	bootstrapBackgroundExtension,
+	bootstrapBorderAndShadowExtension,
 } from '../libs';
 
 /**
@@ -25,6 +26,7 @@ export default function (wp: Object) {
 	bootstrapSizeExtension();
 	bootstrapTypographyExtension();
 	bootstrapBackgroundExtension();
+	bootstrapBorderAndShadowExtension();
 
 	// TODO: implements other bootstrap functionalities here ...
 }

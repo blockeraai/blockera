@@ -68,6 +68,7 @@ export {
 	BorderAndShadowExtension,
 	attributes as borderAndShadowExtensionAttributes,
 	supports as borderAndShadowExtensionSupports,
+	bootstrap as bootstrapBorderAndShadowExtension,
 } from './border-and-shadow';
 export {
 	EffectsExtensionIcon,

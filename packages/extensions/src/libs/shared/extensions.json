@@ -57,12 +57,6 @@
 		"publisherFontColor",
 		"publisherTextShadow"
 	],
-	"borderAndShadow": [
-		"publisherBorder",
-		"publisherOutline",
-		"publisherBoxShadow",
-		"publisherBorderRadius"
-	],
 	"effects": [
 		"publisherFilter",
 		"publisherCursor",

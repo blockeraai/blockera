@@ -1,13 +1,9 @@
 // @flow
-/**
- * External dependencies
- */
-import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
  */
-import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { BaseExtensionProps } from '../../types';
 import type { BorderRadiusValue } from '@publisher/controls';
 
 export type TBorderAndShadowDefaultProp = {
@@ -25,17 +21,23 @@ export type TBorderAndShadowDefaultProp = {
 };
 
 export type TBorderAndShadowProps = {
-	block: TBlockProps,
+	...BaseExtensionProps,
 	borderAndShadowConfig: Object,
-	children?: MixedElement,
 	values: {
-		border: Object,
+		border: {
+			color?: string,
+			style?: string,
+			width?: string,
+			top?: Object,
+			left?: Object,
+			right?: Object,
+			bottom?: Object,
+			radius?: BorderRadiusValue,
+		},
 		outline: Object,
 		boxShadow: Object,
 		borderRadius: Object,
 	},
-	defaultValue: TBorderAndShadowDefaultProp,
-	handleOnChangeAttributes: THandleOnChangeAttributes,
 	extensionProps: {
 		publisherBoxShadow: Object,
 		publisherOutline: Object,

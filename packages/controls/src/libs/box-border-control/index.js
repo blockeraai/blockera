@@ -13,6 +13,7 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { Button } from '@publisher/components';
+import { isValid } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -217,18 +218,26 @@ export default function BoxBorderControl({
 							style={{
 								'--pb-top-width': value.top.width,
 								'--pb-top-style': value.top.style || 'solid',
-								'--pb-top-color': value.top.color,
+								'--pb-top-color': isValid(value.top.color)
+									? value.top.color?.settings?.value
+									: value.top.color,
 								'--pb-right-width': value.right.width,
 								'--pb-right-style':
 									value.right.style || 'solid',
-								'--pb-right-color': value.right.color,
+								'--pb-right-color': isValid(value.right.color)
+									? value.right.color?.settings?.value
+									: value.right.color,
 								'--pb-bottom-width': value.bottom.width,
 								'--pb-bottom-style':
 									value.bottom.style || 'solid',
-								'--pb-bottom-color': value.bottom.color,
+								'--pb-bottom-color': isValid(value.bottom.color)
+									? value.bottom.color?.settings?.value
+									: value.bottom.color,
 								'--pb-left-width': value.left.width,
 								'--pb-left-style': value.left.style || 'solid',
-								'--pb-left-color': value.left.color,
+								'--pb-left-color': isValid(value.left.color)
+									? value.left.color?.settings?.value
+									: value.left.color,
 							}}
 						>
 							<BorderControl

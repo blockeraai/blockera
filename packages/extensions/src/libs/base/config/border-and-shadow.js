@@ -12,15 +12,15 @@ import type { FeatureConfig } from '../types';
 
 const publisherBoxShadow: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	cssGenerators: {},
 	label: __('Box Shadow', 'publisher-core'),
 };
 
 const publisherOutline: FeatureConfig = {
-	show: true,
-	force: true,
+	show: false,
+	force: false,
 	status: true,
 	cssGenerators: {},
 	label: __('Outline', 'publisher-core'),
@@ -36,15 +36,15 @@ const publisherBorder: FeatureConfig = {
 
 const publisherBorderRadius: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	cssGenerators: {},
 	label: __('Border Radius', 'publisher-core'),
 };
 
 export const borderAndShadowConfig = {
-	publisherBoxShadow,
-	publisherOutline,
 	publisherBorder,
 	publisherBorderRadius,
+	publisherBoxShadow,
+	publisherOutline,
 };

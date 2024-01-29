@@ -171,7 +171,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			effects,
 			flexChild,
 			typography,
-			borderAndShadow,
 			icon,
 			mouse,
 			advanced,
@@ -494,18 +493,23 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								publisherBorder: {},
 								publisherBorderRadius: {},
 							}}
-							values={include(
-								currentStateAttributes,
-								borderAndShadow,
-								'publisher'
-							)}
-							defaultValue={{
-								borderColor:
-									currentStateAttributes?.borderColor || '',
-								border:
-									currentStateAttributes.style?.border || {},
+							values={{
+								border: currentStateAttributes.publisherBorder,
+								borderRadius:
+									currentStateAttributes.publisherBorderRadius,
+								outline:
+									currentStateAttributes.publisherOutline,
+								boxShadow:
+									currentStateAttributes.publisherBoxShadow,
+							}}
+							attributes={{
+								border: attributes.publisherBorder,
+								borderRadius: attributes.publisherBorderRadius,
+								outline: attributes.publisherOutline,
+								boxShadow: attributes.publisherBoxShadow,
 							}}
 							handleOnChangeAttributes={handleOnChangeAttributes}
+							setSettings={handleOnChangeSettings}
 						/>
 
 						<EffectsExtension

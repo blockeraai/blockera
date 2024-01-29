@@ -17,31 +17,67 @@ import {
 	ControlContextProvider,
 } from '@publisher/controls';
 import { componentClassNames } from '@publisher/classnames';
+import { FeatureWrapper } from '@publisher/components';
 
 /**
  * Internal dependencies
  */
-import { isActiveField } from '../../api/utils';
+import { isShowField } from '../../api/utils';
 import { Border, BorderRadius } from './components';
 import { BorderAndShadowExtensionIcon } from './index';
 import { generateExtensionId, hasSameProps } from '../utils';
 import type { TBorderAndShadowProps } from './types/border-and-shadow-props';
+import { ExtensionSettings } from '../settings';
 
 export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 	memo(
 		({
 			block,
-			borderAndShadowConfig: {
+			borderAndShadowConfig,
+			attributes,
+			handleOnChangeAttributes,
+			values,
+			extensionProps,
+			setSettings,
+		}: TBorderAndShadowProps): MixedElement => {
+			const {
 				publisherBoxShadow,
 				publisherOutline,
 				publisherBorder,
 				publisherBorderRadius,
-			},
-			defaultValue,
-			handleOnChangeAttributes,
-			values: { border, outline, boxShadow, borderRadius },
-			extensionProps,
-		}: TBorderAndShadowProps): MixedElement => {
+			} = borderAndShadowConfig;
+
+			const isShownBorder = isShowField(
+				publisherBorder,
+				values?.border,
+				attributes.border.default
+			);
+			const isShownBorderRadius = isShowField(
+				publisherBorderRadius,
+				values?.borderRadius,
+				attributes.borderRadius.default
+			);
+			const isShownBoxShadow = isShowField(
+				publisherBoxShadow,
+				values?.boxShadow,
+				attributes.boxShadow.default
+			);
+			const isShownOutline = isShowField(
+				publisherOutline,
+				values?.outline,
+				attributes.outline.default
+			);
+
+			// extension is not active
+			if (
+				!isShownBorder &&
+				!isShownBorderRadius &&
+				!isShownBoxShadow &&
+				!isShownOutline
+			) {
+				return <></>;
+			}
+
 			return (
 				<PanelBodyControl
 					title={__('Border And Shadow', 'publisher-core')}
@@ -52,31 +88,58 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 						'extension-border-and-shadow'
 					)}
 				>
-					{isActiveField(publisherBorder) && (
+					<ExtensionSettings
+						features={borderAndShadowConfig}
+						update={(newSettings) => {
+							setSettings(newSettings, 'borderAndShadowConfig');
+						}}
+					/>
+
+					<FeatureWrapper
+						isActive={isShownBorder}
+						isActiveOnStates={publisherBorder.isActiveOnStates}
+						isActiveOnBreakpoints={
+							publisherBorder.isActiveOnBreakpoints
+						}
+					>
 						<Border
 							block={block}
-							border={border}
-							defaultValue={defaultValue}
+							border={values.border}
+							defaultValue={attributes.border.default}
 							onChange={handleOnChangeAttributes}
 							{...extensionProps.publisherBorder}
 						/>
-					)}
+					</FeatureWrapper>
 
-					{isActiveField(publisherBorderRadius) && (
+					<FeatureWrapper
+						isActive={isShownBorderRadius}
+						isActiveOnStates={
+							publisherBorderRadius.isActiveOnStates
+						}
+						isActiveOnBreakpoints={
+							publisherBorderRadius.isActiveOnBreakpoints
+						}
+					>
 						<BorderRadius
 							block={block}
-							borderRadius={borderRadius}
-							defaultValue={defaultValue}
+							borderRadius={values.borderRadius}
+							defaultValue={attributes.borderRadius.default}
 							onChange={handleOnChangeAttributes}
 							{...extensionProps.publisherBorderRadius}
 						/>
-					)}
+					</FeatureWrapper>
 
-					{isActiveField(publisherBoxShadow) && (
+					<FeatureWrapper
+						isActive={isShownBoxShadow}
+						isActiveOnStates={publisherBoxShadow.isActiveOnStates}
+						isActiveOnBreakpoints={
+							publisherBoxShadow.isActiveOnBreakpoints
+						}
+					>
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(block, 'box-shadow'),
-								value: boxShadow,
+								value: values.boxShadow,
 								attribute: 'publisherBoxShadow',
 								blockName: block.blockName,
 							}}
@@ -114,17 +177,24 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 											{ ref }
 										)
 									}
+									defaultValue={attributes.boxShadow.default}
 									{...extensionProps.publisherBoxShadow}
 								/>
 							</BaseControl>
 						</ControlContextProvider>
-					)}
+					</FeatureWrapper>
 
-					{isActiveField(publisherOutline) && (
+					<FeatureWrapper
+						isActive={isShownOutline}
+						isActiveOnStates={publisherOutline.isActiveOnStates}
+						isActiveOnBreakpoints={
+							publisherOutline.isActiveOnBreakpoints
+						}
+					>
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(block, 'outline'),
-								value: outline,
+								value: values.outline,
 								attribute: 'publisherOutline',
 								blockName: block.blockName,
 							}}
@@ -159,11 +229,12 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 											{ ref }
 										)
 									}
+									defaultValue={attributes.outline.default}
 									{...extensionProps.publisherOutline}
 								/>
 							</BaseControl>
 						</ControlContextProvider>
-					)}
+					</FeatureWrapper>
 				</PanelBodyControl>
 			);
 		},
