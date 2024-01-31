@@ -74,15 +74,13 @@
 
 	& + .publisher-component-feature-wrapper,
 	& + & {
-		border-top: 1px solid var(--publisher-controls-sep-color);
-		padding-top: 10px;
-		margin-top: 10px;
+		padding-top: 8px;
+		margin-top: 7px;
 	}
 
 	// remove for stacked
 
 	& & + & {
-		border-top: none;
 		padding-top: 0;
 		margin-top: 0;
 	}
