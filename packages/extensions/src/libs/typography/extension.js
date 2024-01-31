@@ -224,42 +224,102 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 					}}
 				/>
 
-				<FeatureWrapper
-					isActive={isShowFontSize}
-					isActiveOnStates={
-						typographyConfig.publisherFontSize.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						typographyConfig.publisherFontSize.isActiveOnBreakpoints
-					}
-				>
-					<FontSize
-						block={block}
-						onChange={handleOnChangeAttributes}
-						value={values.fontSize}
-						defaultValue={attributes.fontSize.default}
-						{...extensionProps.publisherFontSize}
-					/>
-				</FeatureWrapper>
+				{isShowFontSize && isShowLineHeight ? (
+					<BaseControl
+						columns="columns-2"
+						label={__('Size', 'publisher-core')}
+					>
+						<Flex alignItems="flex-start">
+							<FeatureWrapper
+								isActive={isShowFontSize}
+								isActiveOnStates={
+									typographyConfig.publisherFontSize
+										.isActiveOnStates
+								}
+								isActiveOnBreakpoints={
+									typographyConfig.publisherFontSize
+										.isActiveOnBreakpoints
+								}
+							>
+								<FontSize
+									block={block}
+									onChange={handleOnChangeAttributes}
+									value={values.fontSize}
+									defaultValue={attributes.fontSize.default}
+									columns="columns-1"
+									className="control-first label-center small-gap"
+									style={{ margin: '0px' }}
+									{...extensionProps.publisherFontSize}
+								/>
+							</FeatureWrapper>
 
-				<FeatureWrapper
-					isActive={isShowLineHeight}
-					isActiveOnStates={
-						typographyConfig.publisherLineHeight.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						typographyConfig.publisherLineHeight
-							.isActiveOnBreakpoints
-					}
-				>
-					<LineHeight
-						block={block}
-						value={values.lineHeight}
-						onChange={handleOnChangeAttributes}
-						defaultValue={attributes.lineHeight.default}
-						{...extensionProps.publisherLineHeight}
-					/>
-				</FeatureWrapper>
+							<FeatureWrapper
+								isActive={isShowLineHeight}
+								isActiveOnStates={
+									typographyConfig.publisherLineHeight
+										.isActiveOnStates
+								}
+								isActiveOnBreakpoints={
+									typographyConfig.publisherLineHeight
+										.isActiveOnBreakpoints
+								}
+							>
+								<LineHeight
+									block={block}
+									value={values.lineHeight}
+									onChange={handleOnChangeAttributes}
+									defaultValue={attributes.lineHeight.default}
+									columns="columns-1"
+									className="control-first label-center small-gap"
+									style={{ margin: '0px' }}
+									{...extensionProps.publisherLineHeight}
+								/>
+							</FeatureWrapper>
+						</Flex>
+					</BaseControl>
+				) : (
+					<>
+						<FeatureWrapper
+							isActive={isShowFontSize}
+							isActiveOnStates={
+								typographyConfig.publisherFontSize
+									.isActiveOnStates
+							}
+							isActiveOnBreakpoints={
+								typographyConfig.publisherFontSize
+									.isActiveOnBreakpoints
+							}
+						>
+							<FontSize
+								block={block}
+								onChange={handleOnChangeAttributes}
+								value={values.fontSize}
+								defaultValue={attributes.fontSize.default}
+								{...extensionProps.publisherFontSize}
+							/>
+						</FeatureWrapper>
+
+						<FeatureWrapper
+							isActive={isShowLineHeight}
+							isActiveOnStates={
+								typographyConfig.publisherLineHeight
+									.isActiveOnStates
+							}
+							isActiveOnBreakpoints={
+								typographyConfig.publisherLineHeight
+									.isActiveOnBreakpoints
+							}
+						>
+							<LineHeight
+								block={block}
+								value={values.lineHeight}
+								onChange={handleOnChangeAttributes}
+								defaultValue={attributes.lineHeight.default}
+								{...extensionProps.publisherLineHeight}
+							/>
+						</FeatureWrapper>
+					</>
+				)}
 
 				<FeatureWrapper
 					isActive={isShowFontColor}
