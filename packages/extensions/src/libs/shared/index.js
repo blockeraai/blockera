@@ -165,7 +165,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			handleOnChangeAttributes,
 		} = useBlockContext();
 
-		const { layout, flexChild, typography, icon, advanced } = extensions;
+		const { layout, flexChild, icon, advanced } = extensions;
 
 		props = {
 			...props,
@@ -460,11 +460,40 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								publisherTextStroke: {},
 								publisherWordBreak: {},
 							}}
-							values={include(
-								currentStateAttributes,
-								typography,
-								'publisher'
-							)}
+							values={{
+								fontColor:
+									currentStateAttributes?.publisherFontColor,
+								fontSize:
+									currentStateAttributes?.publisherFontSize,
+								lineHeight:
+									currentStateAttributes?.publisherLineHeight,
+								textAlign:
+									currentStateAttributes?.publisherTextAlign,
+								textDecoration:
+									currentStateAttributes?.publisherTextDecoration,
+								fontStyle:
+									currentStateAttributes?.publisherFontStyle,
+								textTransform:
+									currentStateAttributes?.publisherTextTransform,
+								direction:
+									currentStateAttributes?.publisherDirection,
+								textShadow:
+									currentStateAttributes?.publisherTextShadow,
+								letterSpacing:
+									currentStateAttributes?.publisherLetterSpacing,
+								wordSpacing:
+									currentStateAttributes?.wordSpacing,
+								textIndent:
+									currentStateAttributes?.publisherTextIndent,
+								textOrientation:
+									currentStateAttributes?.publisherTextOrientation,
+								textColumns:
+									currentStateAttributes?.publisherTextColumns,
+								textStroke:
+									currentStateAttributes?.publisherTextStroke,
+								wordBreak:
+									currentStateAttributes?.publisherWordBreak,
+							}}
 							display={currentStateAttributes?.publisherDisplay}
 							backgroundClip={
 								currentStateAttributes?.publisherBackgroundClip

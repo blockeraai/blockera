@@ -25,7 +25,6 @@ import {
 	componentClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
-import { TypographyExtensionIcon } from './index';
 
 /**
  * Internal dependencies
@@ -43,6 +42,8 @@ import {
 	TextColumns,
 	TextStroke,
 } from './components';
+import { TypographyExtensionIcon } from './index';
+
 // icons
 import NoneIcon from './icons/none';
 import InheritIcon from '../../icons/inherit';
