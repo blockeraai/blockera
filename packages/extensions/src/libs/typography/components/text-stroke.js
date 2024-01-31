@@ -56,7 +56,7 @@ export const TextStroke = ({
 
 	return (
 		<BaseControl
-			label={__('Stroke', 'publisher-core')}
+			label={__('Text Stroke', 'publisher-core')}
 			labelPopoverTitle={__('Text Stroke', 'publisher-core')}
 			labelDescription={
 				<>
