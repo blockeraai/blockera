@@ -41,12 +41,30 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		dispatch,
 	} = useContext(ControlContext);
 
+	const getControlPath = function (
+		controlID: string,
+		childControlId: string
+	): string {
+		// Assume childControlId is undefined, then hint to context provider main value.
+		if (isUndefined(childControlId)) {
+			return controlID;
+		}
+		// Assume childControlId started with open bracket char as an example: "[0].toggleOption", then concat controlID and childControlId with no separator.
+		if ('[' === childControlId[0]) {
+			return `${controlID}${childControlId}`;
+		}
+
+		// Assume childControlId started with property word name as an example: "toggleOption", then concatenate "controlID" and "childControlId" with "dot | ." separator.
+		return `${controlID}.${childControlId}`;
+	};
+
 	if ('undefined' === typeof args) {
 		return {
 			value: savedValue,
 			dispatch,
 			controlInfo,
 			blockName: controlInfo.blockName,
+			getControlPath,
 		};
 	}
 
@@ -235,19 +253,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		blockName: controlInfo.blockName,
 		attribute: controlInfo.attribute,
 		controlInfo: getControl(controlInfo.name),
-		getControlPath(controlID: string, childControlId: string): string {
-			// Assume childControlId is undefined, then hint to context provider main value.
-			if (isUndefined(childControlId)) {
-				return controlID;
-			}
-			// Assume childControlId started with open bracket char as an example: "[0].toggleOption", then concat controlID and childControlId with no separator.
-			if ('[' === childControlId[0]) {
-				return `${controlID}${childControlId}`;
-			}
-
-			// Assume childControlId started with property word name as an example: "toggleOption", then concatenate "controlID" and "childControlId" with "dot | ." separator.
-			return `${controlID}.${childControlId}`;
-		},
+		getControlPath,
 		/**
 		 * Reset control value to default value.
 		 */
