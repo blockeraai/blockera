@@ -19,14 +19,14 @@ const publisherCursor: FeatureConfig = {
 
 const publisherUserSelect: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	label: __('User Select', 'publisher-core'),
 };
 
 const publisherPointerEvents: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	label: __('Pointer Events', 'publisher-core'),
 };

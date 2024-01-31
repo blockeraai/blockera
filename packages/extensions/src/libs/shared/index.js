@@ -165,7 +165,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			handleOnChangeAttributes,
 		} = useBlockContext();
 
-		const { size, layout, flexChild, typography, icon, mouse, advanced } =
+		const { size, layout, flexChild, typography, icon, advanced } =
 			extensions;
 
 		props = {
@@ -622,21 +622,29 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 						/>
 
 						<MouseExtension
-							{...{
-								block,
-								mouseConfig,
-								extensionProps: {
-									publisherCursor: {},
-									publisherUserSelect: {},
-									publisherPointerEvents: {},
-								},
-								values: include(
-									currentStateAttributes,
-									mouse,
-									'publisher'
-								),
-								handleOnChangeAttributes,
+							block={block}
+							mouseConfig={mouseConfig}
+							extensionProps={{
+								publisherCursor: {},
+								publisherUserSelect: {},
+								publisherPointerEvents: {},
 							}}
+							values={{
+								cursor: currentStateAttributes.publisherCursor,
+								userSelect:
+									currentStateAttributes.publisherUserSelect,
+								pointerEvents:
+									currentStateAttributes.publisherPointerEvents,
+							}}
+							attributes={{
+								publisherCursor: attributes.publisherCursor,
+								publisherUserSelect:
+									attributes.publisherUserSelect,
+								publisherPointerEvents:
+									attributes.publisherPointerEvents,
+							}}
+							handleOnChangeAttributes={handleOnChangeAttributes}
+							setSettings={handleOnChangeSettings}
 						/>
 					</div>
 				</>
