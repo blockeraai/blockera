@@ -47,47 +47,47 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 		extensionProps,
 		setSettings,
 	}: TSizeProps): MixedElement => {
-		const isShownWidth = isShowField(
+		const isShowWidth = isShowField(
 			sizeConfig.publisherWidth,
 			values?.width,
 			attributes.width.default
 		);
-		const isShownMinWidth = isShowField(
+		const isShowMinWidth = isShowField(
 			sizeConfig.publisherMinWidth,
 			values?.minWidth,
 			attributes?.minWidth?.default
 		);
-		const isShownMaxWidth = isShowField(
+		const isShowMaxWidth = isShowField(
 			sizeConfig.publisherMaxWidth,
 			values?.maxWidth,
 			attributes?.maxWidth?.default
 		);
-		const isShownHeight = isShowField(
+		const isShowHeight = isShowField(
 			sizeConfig.publisherHeight,
 			values?.height,
 			attributes?.height?.default
 		);
-		const isShownMinHeight = isShowField(
+		const isShowMinHeight = isShowField(
 			sizeConfig.publisherMinHeight,
 			values?.minHeight,
 			attributes?.minHeight?.default
 		);
-		const isShownMaxHeight = isShowField(
+		const isShowMaxHeight = isShowField(
 			sizeConfig.publisherMaxHeight,
 			values?.maxHeight,
 			attributes?.maxHeight?.default
 		);
-		const isShownOverflow = isShowField(
+		const isShowOverflow = isShowField(
 			sizeConfig.publisherOverflow,
 			values?.overflow,
 			attributes?.overflow?.default
 		);
-		const isShownRatio = isShowField(
+		const isShowRatio = isShowField(
 			sizeConfig.publisherRatio,
 			values?.ratio,
 			attributes?.ratio?.default
 		);
-		const isShownFit = isShowField(
+		const isShowFit = isShowField(
 			sizeConfig.publisherFit,
 			values?.fit,
 			attributes?.fit?.default
@@ -95,15 +95,15 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 
 		// Extension is not active
 		if (
-			!isShownWidth &&
-			!isShownMinWidth &&
-			!isShownMaxWidth &&
-			!isShownHeight &&
-			!isShownMinHeight &&
-			!isShownMaxHeight &&
-			!isShownOverflow &&
-			!isShownRatio &&
-			!isShownFit
+			!isShowWidth &&
+			!isShowMinWidth &&
+			!isShowMaxWidth &&
+			!isShowHeight &&
+			!isShowMinHeight &&
+			!isShowMaxHeight &&
+			!isShowOverflow &&
+			!isShowRatio &&
+			!isShowFit
 		) {
 			return <></>;
 		}
@@ -122,10 +122,10 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 					}}
 				/>
 
-				{(isShownWidth || isShownMinWidth || isShownMaxWidth) && (
+				{(isShowWidth || isShowMinWidth || isShowMaxWidth) && (
 					<BaseControl columns="columns-1">
 						<FeatureWrapper
-							isActive={isShownWidth}
+							isActive={isShowWidth}
 							isActiveOnStates={
 								sizeConfig.publisherWidth.isActiveOnStates
 							}
@@ -179,7 +179,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 							</ControlContextProvider>
 						</FeatureWrapper>
 
-						{(isShownMinWidth || isShownMaxWidth) && (
+						{(isShowMinWidth || isShowMaxWidth) && (
 							<ConditionalWrapper
 								wrapper={(children) => (
 									<Flex
@@ -206,10 +206,10 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 										</Flex>
 									</BaseControl>
 								)}
-								condition={isShownWidth}
+								condition={isShowWidth}
 							>
 								<FeatureWrapper
-									isActive={isShownMinWidth}
+									isActive={isShowMinWidth}
 									isActiveOnStates={
 										sizeConfig.publisherMinWidth
 											.isActiveOnStates
@@ -258,12 +258,12 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												'publisher-core'
 											)}
 											columns={
-												isShownMaxWidth
+												isShowMaxWidth
 													? 'columns-1'
 													: 'columns-2'
 											}
 											className={
-												isShownMaxWidth &&
+												isShowMaxWidth &&
 												'control-first label-center small-gap'
 											}
 											placeholder="-"
@@ -285,7 +285,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 								</FeatureWrapper>
 
 								<FeatureWrapper
-									isActive={isShownMaxWidth}
+									isActive={isShowMaxWidth}
 									isActiveOnStates={
 										sizeConfig.publisherMaxWidth
 											.isActiveOnStates
@@ -334,12 +334,12 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												'publisher-core'
 											)}
 											columns={
-												isShownMinWidth
+												isShowMinWidth
 													? 'columns-1'
 													: 'columns-2'
 											}
 											className={
-												isShownMinWidth &&
+												isShowMinWidth &&
 												'control-first label-center small-gap'
 											}
 											placeholder="-"
@@ -364,10 +364,10 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 					</BaseControl>
 				)}
 
-				{(isShownHeight || isShownMinHeight || isShownMaxHeight) && (
+				{(isShowHeight || isShowMinHeight || isShowMaxHeight) && (
 					<BaseControl columns="columns-1">
 						<FeatureWrapper
-							isActive={isShownHeight}
+							isActive={isShowHeight}
 							isActiveOnStates={
 								sizeConfig.publisherHeight.isActiveOnStates
 							}
@@ -421,7 +421,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 							</ControlContextProvider>
 						</FeatureWrapper>
 
-						{(isShownMinHeight || isShownMaxHeight) && (
+						{(isShowMinHeight || isShowMaxHeight) && (
 							<ConditionalWrapper
 								wrapper={(children) => (
 									<Flex
@@ -448,10 +448,10 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 										</Flex>
 									</BaseControl>
 								)}
-								condition={isShownHeight}
+								condition={isShowHeight}
 							>
 								<FeatureWrapper
-									isActive={isShownMinHeight}
+									isActive={isShowMinHeight}
 									isActiveOnStates={
 										sizeConfig.publisherMinHeight
 											.isActiveOnStates
@@ -500,12 +500,12 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												'publisher-core'
 											)}
 											columns={
-												isShownMaxHeight
+												isShowMaxHeight
 													? 'columns-1'
 													: 'columns-2'
 											}
 											className={
-												isShownMaxHeight &&
+												isShowMaxHeight &&
 												'control-first label-center small-gap'
 											}
 											placeholder="-"
@@ -527,7 +527,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 								</FeatureWrapper>
 
 								<FeatureWrapper
-									isActive={isShownMaxHeight}
+									isActive={isShowMaxHeight}
 									isActiveOnStates={
 										sizeConfig.publisherMaxHeight
 											.isActiveOnStates
@@ -576,12 +576,12 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												'publisher-core'
 											)}
 											columns={
-												isShownMinHeight
+												isShowMinHeight
 													? 'columns-1'
 													: 'columns-2'
 											}
 											className={
-												isShownMinHeight &&
+												isShowMinHeight &&
 												'control-first label-center small-gap'
 											}
 											placeholder="-"
@@ -607,7 +607,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 				)}
 
 				<FeatureWrapper
-					isActive={isShownOverflow}
+					isActive={isShowOverflow}
 					isActiveOnStates={
 						sizeConfig.publisherOverflow.isActiveOnStates
 					}
@@ -709,7 +709,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 				</FeatureWrapper>
 
 				<FeatureWrapper
-					isActive={isShownRatio}
+					isActive={isShowRatio}
 					isActiveOnStates={
 						sizeConfig.publisherRatio.isActiveOnStates
 					}
@@ -736,7 +736,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 				</FeatureWrapper>
 
 				<FeatureWrapper
-					isActive={isShownFit}
+					isActive={isShowFit}
 					isActiveOnStates={sizeConfig.publisherFit.isActiveOnStates}
 					isActiveOnBreakpoints={
 						sizeConfig.publisherFit.isActiveOnBreakpoints

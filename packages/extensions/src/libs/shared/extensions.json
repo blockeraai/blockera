@@ -7,19 +7,6 @@
 		"publisherIconColor",
 		"publisherIconPosition"
 	],
-	"size": [
-		"publisherWidth",
-		"publisherHeight",
-		"publisherOverflow",
-		"publisherRatio",
-		"publisherFit",
-		"publisherFitPosition",
-		"publisherMinWidth",
-		"publisherMinHeight",
-		"publisherMaxWidth",
-		"publisherMaxHeight",
-		"publisherOverflow"
-	],
 	"flexChild": [
 		"publisherFlexChildGrow",
 		"publisherFlexDirection",

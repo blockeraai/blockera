@@ -165,8 +165,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			handleOnChangeAttributes,
 		} = useBlockContext();
 
-		const { size, layout, flexChild, typography, icon, advanced } =
-			extensions;
+		const { layout, flexChild, typography, icon, advanced } = extensions;
 
 		props = {
 			...props,
@@ -341,12 +340,36 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 						<SizeExtension
 							block={block}
 							sizeConfig={sizeConfig}
-							values={include(
-								currentStateAttributes,
-								size,
-								'publisher'
-							)}
-							attributes={include(attributes, size, 'publisher')}
+							values={{
+								width: currentStateAttributes.publisherWidth,
+								minWidth:
+									currentStateAttributes.publisherMinWidth,
+								maxWidth:
+									currentStateAttributes.publisherMaxWidth,
+								height: currentStateAttributes.publisherHeight,
+								minHeight:
+									currentStateAttributes.publisherMinHeight,
+								maxHeight:
+									currentStateAttributes.publisherMaxHeight,
+								overflow:
+									currentStateAttributes.publisherOverflow,
+								ratio: currentStateAttributes.publisherRatio,
+								fit: currentStateAttributes.publisherFit,
+								fitPosition:
+									currentStateAttributes.publisherFitPosition,
+							}}
+							attributes={{
+								width: attributes.publisherWidth,
+								minWidth: attributes.publisherMinWidth,
+								maxWidth: attributes.publisherMaxWidth,
+								height: attributes.publisherHeight,
+								minHeight: attributes.publisherMinHeight,
+								maxHeight: attributes.publisherMaxHeight,
+								overflow: attributes.publisherOverflow,
+								ratio: attributes.publisherRatio,
+								fit: attributes.publisherFit,
+								fitPosition: attributes.publisherFitPosition,
+							}}
 							extensionProps={{
 								publisherWidth: {},
 								publisherHeight: {},
