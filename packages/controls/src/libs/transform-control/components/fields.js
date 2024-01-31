@@ -36,12 +36,15 @@ const Fields = ({
 		dispatch: { changeRepeaterItem },
 	} = useControlContext();
 
-	const { repeaterId, getControlId } = useContext(RepeaterContext);
+	const { repeaterId, getControlId, defaultRepeaterItemValue } =
+		useContext(RepeaterContext);
 
 	return (
 		<div id={`repeater-item-${itemId}`}>
 			<ToggleSelectControl
+				repeaterItem={itemId}
 				id={getControlId(itemId, 'type')}
+				singularId={'type'}
 				label={__('Type', 'publisher-core')}
 				labelPopoverTitle={__('Transform Type', 'publisher-core')}
 				labelDescription={<LabelDescription />}
@@ -76,12 +79,15 @@ const Fields = ({
 						value: { ...item, type },
 					})
 				}
+				defaultValue={defaultRepeaterItemValue.type}
 			/>
 
 			{item.type === 'move' && (
 				<>
 					<InputControl
-						controlName="input"
+						repeaterItem={itemId}
+						id={getControlId(itemId, 'move-x')}
+						singularId={'move-x'}
 						label={<XCoordinateIcon />}
 						labelPopoverTitle={__(
 							'Move Horizontally',
@@ -99,7 +105,6 @@ const Fields = ({
 						}
 						aria-label={__('Move-X', 'publisher-core')}
 						columns="columns-2"
-						id={getControlId(itemId, 'move-x')}
 						unitType="essential"
 						range={true}
 						min={-300}
@@ -112,10 +117,13 @@ const Fields = ({
 								value: { ...item, 'move-x': newValue },
 							})
 						}
+						defaultValue={defaultRepeaterItemValue['move-x']}
 					/>
 
 					<InputControl
-						controlName="input"
+						repeaterItem={itemId}
+						id={getControlId(itemId, 'move-y')}
+						singularId={'move-y'}
 						label={<YCoordinateIcon />}
 						labelPopoverTitle={__(
 							'Move Vertically',
@@ -133,7 +141,6 @@ const Fields = ({
 						}
 						aria-label={__('Move-Y', 'publisher-core')}
 						columns="columns-2"
-						id={getControlId(itemId, 'move-y')}
 						unitType="essential"
 						range={true}
 						min={-300}
@@ -146,10 +153,13 @@ const Fields = ({
 								value: { ...item, 'move-y': newValue },
 							})
 						}
+						defaultValue={defaultRepeaterItemValue['move-y']}
 					/>
 
 					<InputControl
-						controlName="input"
+						repeaterItem={itemId}
+						id={getControlId(itemId, 'move-z')}
+						singularId={'move-z'}
 						label={<ZCoordinateIcon />}
 						labelPopoverTitle={__(
 							'Move Depth Axis',
@@ -179,7 +189,6 @@ const Fields = ({
 						}
 						aria-label={__('Move-Z', 'publisher-core')}
 						columns="columns-2"
-						id={getControlId(itemId, 'move-z')}
 						unitType="essential"
 						range={true}
 						min={-300}
@@ -192,6 +201,7 @@ const Fields = ({
 								value: { ...item, 'move-z': newValue },
 							})
 						}
+						defaultValue={defaultRepeaterItemValue['move-z']}
 					/>
 				</>
 			)}
@@ -199,7 +209,9 @@ const Fields = ({
 			{item.type === 'scale' && (
 				<>
 					<InputControl
-						controlName="input"
+						repeaterItem={itemId}
+						id={getControlId(itemId, 'scale')}
+						singularId={'scale'}
 						label={__('Scale', 'publisher-core')}
 						labelDescription={
 							<>
@@ -218,7 +230,6 @@ const Fields = ({
 							</>
 						}
 						columns="columns-2"
-						id={getControlId(itemId, 'scale')}
 						unitType="percent"
 						range={true}
 						min={0}
@@ -231,6 +242,7 @@ const Fields = ({
 								value: { ...item, scale: newValue },
 							})
 						}
+						defaultValue={defaultRepeaterItemValue.scale}
 					/>
 				</>
 			)}
@@ -238,7 +250,9 @@ const Fields = ({
 			{item.type === 'rotate' && (
 				<>
 					<InputControl
-						controlName="input"
+						repeaterItem={itemId}
+						id={getControlId(itemId, 'rotate-x')}
+						singularId={'rotate-x'}
 						label={<RotateXCoordinateIcon />}
 						labelPopoverTitle={__(
 							'Rotate Horizontally',
@@ -256,7 +270,6 @@ const Fields = ({
 						}
 						aria-label={__('Rotate-X', 'publisher-core')}
 						columns="columns-2"
-						id={getControlId(itemId, 'rotate-x')}
 						unitType="angle"
 						range={true}
 						min={-180}
@@ -269,9 +282,13 @@ const Fields = ({
 								value: { ...item, 'rotate-x': newValue },
 							})
 						}
+						defaultValue={defaultRepeaterItemValue['rotate-x']}
 					/>
 
 					<InputControl
+						repeaterItem={itemId}
+						id={getControlId(itemId, 'rotate-y')}
+						singularId={'rotate-y'}
 						controlName="input"
 						label={<RotateYCoordinateIcon />}
 						labelPopoverTitle={__(
@@ -290,7 +307,6 @@ const Fields = ({
 						}
 						aria-label={__('Rotate-Y', 'publisher-core')}
 						columns="columns-2"
-						id={getControlId(itemId, 'rotate-y')}
 						unitType="angle"
 						range={true}
 						min={-180}
@@ -303,10 +319,13 @@ const Fields = ({
 								value: { ...item, 'rotate-y': newValue },
 							})
 						}
+						defaultValue={defaultRepeaterItemValue['rotate-y']}
 					/>
 
 					<InputControl
-						controlName="input"
+						repeaterItem={itemId}
+						id={getControlId(itemId, 'rotate-z')}
+						singularId={'rotate-z'}
 						label={<RotateZCoordinateIcon />}
 						labelPopoverTitle={__(
 							'Rotate Depth Axis',
@@ -336,7 +355,6 @@ const Fields = ({
 						}
 						aria-label={__('Rotate-Z', 'publisher-core')}
 						columns="columns-2"
-						id={getControlId(itemId, 'rotate-z')}
 						unitType="angle"
 						range={true}
 						min={-180}
@@ -349,6 +367,7 @@ const Fields = ({
 								value: { ...item, 'rotate-z': newValue },
 							})
 						}
+						defaultValue={defaultRepeaterItemValue['rotate-z']}
 					/>
 				</>
 			)}
@@ -356,8 +375,9 @@ const Fields = ({
 			{item.type === 'skew' && (
 				<>
 					<InputControl
+						repeaterItem={itemId}
 						id={getControlId(itemId, 'skew-x')}
-						controlName="input"
+						singularId={'skew-x'}
 						label={<XCoordinateIcon />}
 						labelPopoverTitle={__(
 							'Skew Horizontally',
@@ -393,10 +413,13 @@ const Fields = ({
 								value: { ...item, 'skew-x': newValue },
 							})
 						}
+						defaultValue={defaultRepeaterItemValue['skew-x']}
 					/>
 
 					<InputControl
-						controlName="input"
+						repeaterItem={itemId}
+						id={getControlId(itemId, 'skew-y')}
+						singularId={'skew-y'}
 						label={<YCoordinateIcon />}
 						labelPopoverTitle={__(
 							'Skew Vertically',
@@ -420,7 +443,6 @@ const Fields = ({
 						}
 						aria-label={__('Skew-Y', 'publisher-core')}
 						columns="columns-2"
-						id={getControlId(itemId, 'skew-y')}
 						unitType="angle"
 						range={true}
 						min={-60}
@@ -433,6 +455,7 @@ const Fields = ({
 								value: { ...item, 'skew-y': newValue },
 							})
 						}
+						defaultValue={defaultRepeaterItemValue['skew-y']}
 					/>
 				</>
 			)}
