@@ -1,8 +1,4 @@
 // @flow
-/**
- * External dependencies
- */
-import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -12,21 +8,27 @@ import type { BorderControlBorderStyle } from '@publisher/controls/src/libs/bord
 /**
  * Internal dependencies
  */
-import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { BaseExtensionProps } from '../../types';
 
 export type TTypographyProps = {
+	...BaseExtensionProps,
 	values: {
-		display: string,
 		fontSize: string,
-		textAlign: string,
-		fontStyle: string,
-		direction: string,
-		fontColor: string,
-		wordBreak: string,
-		textIndent: string,
-		textShadow: string,
 		lineHeight: string,
+		textAlign: string,
+		textDecoration: string,
+		fontStyle: string,
+		textTransform: string,
+		direction: string,
+		letterSpacing: string,
 		wordSpacing: string,
+		textIndent: string,
+		textOrientation: string,
+		textStroke: {
+			width: string,
+			style: BorderControlBorderStyle,
+			color: string,
+		},
 		textColumns: {
 			columns: string,
 			gap: string,
@@ -36,22 +38,13 @@ export type TTypographyProps = {
 				color: string,
 			},
 		},
-		textTransform: string,
-		letterSpacing: string,
-		textDecoration: string,
-		textOrientation: string,
-		textStroke: {
-			width: string,
-			style: BorderControlBorderStyle,
-			color: string,
-		},
+		wordBreak: string,
+		fontColor: string,
+		textShadow: string,
 	},
 	display?: string,
 	backgroundClip?: string,
-	block: TBlockProps,
 	typographyConfig: Object,
-	children?: MixedElement,
-	handleOnChangeAttributes: THandleOnChangeAttributes,
 	extensionProps: {
 		publisherFontColor: Object,
 		publisherFontSize: Object,

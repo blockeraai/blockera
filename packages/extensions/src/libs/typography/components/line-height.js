@@ -57,7 +57,6 @@ export const LineHeight = ({
 				}
 				columns="columns-2"
 				unitType="line-height"
-				range={true}
 				min={0}
 				defaultValue={defaultValue}
 				onChange={(newValue, ref) =>

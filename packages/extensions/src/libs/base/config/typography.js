@@ -18,106 +18,106 @@ const publisherFontSize: FeatureConfig = {
 };
 
 const publisherLineHeight: FeatureConfig = {
-	show: true,
-	force: true,
+	show: false,
+	force: false,
 	status: true,
 	label: __('Line Height', 'publisher-core'),
 };
 
 const publisherFontColor: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	label: __('Font Color', 'publisher-core'),
 };
 
 const publisherTextShadow: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	label: __('Text Shadow', 'publisher-core'),
 };
 
 const publisherTextAlign: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	label: __('Text Align', 'publisher-core'),
 };
 
 const publisherTextDecoration: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	label: __('Text Decoration', 'publisher-core'),
 };
 
 const publisherFontStyle: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	label: __('Font Style', 'publisher-core'),
 };
 
 const publisherTextTransform: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	label: __('Text Transform', 'publisher-core'),
 };
 
 const publisherDirection: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	label: __('Direction', 'publisher-core'),
 };
 
 const publisherLetterSpacing: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	label: __('Letter Spacing', 'publisher-core'),
 };
 
 const publisherWordSpacing: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	label: __('Word Spacing', 'publisher-core'),
 };
 
 const publisherTextIndent: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	label: __('Text Indent', 'publisher-core'),
 };
 
 const publisherTextOrientation: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	label: __('Text Orientation', 'publisher-core'),
 };
 
 const publisherTextColumns: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	label: __('Text Columns', 'publisher-core'),
 };
 
 const publisherTextStroke: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	label: __('Text Stroke', 'publisher-core'),
 };
 
 const publisherWordBreak: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	label: __('Word Break', 'publisher-core'),
 };

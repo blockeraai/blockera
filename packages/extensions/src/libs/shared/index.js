@@ -482,7 +482,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								letterSpacing:
 									currentStateAttributes?.publisherLetterSpacing,
 								wordSpacing:
-									currentStateAttributes?.wordSpacing,
+									currentStateAttributes?.publisherWordSpacing,
 								textIndent:
 									currentStateAttributes?.publisherTextIndent,
 								textOrientation:
@@ -494,11 +494,34 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								wordBreak:
 									currentStateAttributes?.publisherWordBreak,
 							}}
+							attributes={{
+								fontColor: attributes?.publisherFontColor,
+								fontSize: attributes?.publisherFontSize,
+								lineHeight: attributes?.publisherLineHeight,
+								textAlign: attributes?.publisherTextAlign,
+								textDecoration:
+									attributes?.publisherTextDecoration,
+								fontStyle: attributes?.publisherFontStyle,
+								textTransform:
+									attributes?.publisherTextTransform,
+								direction: attributes?.publisherDirection,
+								textShadow: attributes?.publisherTextShadow,
+								letterSpacing:
+									attributes?.publisherLetterSpacing,
+								wordSpacing: attributes?.publisherWordSpacing,
+								textIndent: attributes?.publisherTextIndent,
+								textOrientation:
+									attributes?.publisherTextOrientation,
+								textColumns: attributes?.publisherTextColumns,
+								textStroke: attributes?.publisherTextStroke,
+								wordBreak: attributes?.publisherWordBreak,
+							}}
 							display={currentStateAttributes?.publisherDisplay}
 							backgroundClip={
 								currentStateAttributes?.publisherBackgroundClip
 							}
 							handleOnChangeAttributes={handleOnChangeAttributes}
+							setSettings={handleOnChangeSettings}
 						/>
 
 						<BackgroundExtension

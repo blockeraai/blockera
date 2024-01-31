@@ -55,7 +55,7 @@ export const attributes = {
 		type: 'object',
 		default: {
 			columns: '',
-			gap: '',
+			gap: '2.5rem',
 			divider: {
 				width: '',
 				color: '',

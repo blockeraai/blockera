@@ -23,6 +23,7 @@ import type { THandleOnChangeAttributes } from '../../types';
 export const TextStroke = ({
 	value,
 	handleOnChangeAttributes,
+	defaultValue,
 	...props
 }: {
 	value: {
@@ -30,6 +31,7 @@ export const TextStroke = ({
 		style: string,
 		color: string,
 	},
+	defaultValue: Object,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 }): MixedElement => {
 	const {
@@ -39,13 +41,7 @@ export const TextStroke = ({
 		resetToDefault,
 	} = useControlContext({
 		onChange: (newValue) => handleOnChangeAttributes(newValue),
-		defaultValue: {
-			type: 'object',
-			default: {
-				color: '',
-				width: '',
-			},
-		},
+		defaultValue,
 	});
 
 	const labelProps = {
@@ -55,6 +51,7 @@ export const TextStroke = ({
 		resetToDefault,
 		mode: 'advanced',
 		path: attribute,
+		defaultValue,
 	};
 
 	return (
@@ -95,7 +92,7 @@ export const TextStroke = ({
 					</>
 				}
 				columns="columns-2"
-				defaultValue=""
+				defaultValue={defaultValue.color}
 				onChange={(newValue) => {
 					if (newValue === '') {
 						handleOnChangeAttributes('publisherTextStroke', {
@@ -132,7 +129,7 @@ export const TextStroke = ({
 					}
 					columns="columns-2"
 					unitType="essential"
-					defaultValue="1px"
+					defaultValue={defaultValue.width}
 					onChange={(newValue) =>
 						handleOnChangeAttributes('publisherTextStroke', {
 							...value,

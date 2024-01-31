@@ -229,7 +229,6 @@ export const TextColumns = ({
 								customMenuPosition="top"
 								defaultValue={defaultValue?.divider}
 								onChange={(newValue, ref) => {
-									console.log(newValue, ref);
 									if ('reset' === ref?.current?.action) {
 										handleOnChangeAttributes(
 											'publisherTextColumns',
