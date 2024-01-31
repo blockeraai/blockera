@@ -31,6 +31,12 @@ type OptionItem = IconOption | TextOption;
 
 export type ToggleSelectControlProps = {
 	...ControlGeneralTypes,
+	/**
+	 * Specifies than user can deselect active item in select or not
+	 */
 	isDeselectable?: boolean,
+	/**
+	 * list of toggle select options
+	 */
 	options: Array<OptionItem>,
 };
