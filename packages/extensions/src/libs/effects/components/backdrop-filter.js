@@ -3,7 +3,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-
 import type { MixedElement } from 'react';
 
 /**
@@ -26,11 +25,13 @@ export const BackdropFilter = ({
 	backdropFilter,
 	block,
 	handleOnChangeAttributes,
+	defaultValue,
 	...props
 }: {
 	backdropFilter: Array<Object> | void,
 	block: TBlockProps,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
+	defaultValue: Array<Object>,
 }): MixedElement => {
 	return (
 		<ControlContextProvider
@@ -73,16 +74,18 @@ export const BackdropFilter = ({
 							}
 						/>
 					}
-					onChange={(newValue) =>
+					onChange={(newValue, ref) =>
 						handleOnChangeAttributes(
 							'publisherBackdropFilter',
-							newValue
+							newValue,
+							{ ref }
 						)
 					}
 					addNewButtonLabel={__(
 						'Add New Backdrop Filter',
 						'publisher-core'
 					)}
+					defaultValue={defaultValue}
 					{...props}
 				/>
 			</BaseControl>

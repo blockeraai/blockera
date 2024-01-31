@@ -19,51 +19,51 @@ const publisherOpacity: FeatureConfig = {
 
 const publisherTransform: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
-	label: __('Transform', 'publisher-core'),
+	label: __('2D & 3D Transforms', 'publisher-core'),
 };
 
 const publisherTransition: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
-	label: __('Transition', 'publisher-core'),
+	label: __('Transitions', 'publisher-core'),
 };
 
 const publisherFilter: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
-	label: __('Filter', 'publisher-core'),
+	label: __('Filters', 'publisher-core'),
 };
 
 const publisherBackdropFilter: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
-	label: __('Backdrop Filter', 'publisher-core'),
-};
-
-const publisherBlendMode: FeatureConfig = {
-	show: true,
-	force: true,
-	status: true,
-	label: __('Blending Mode', 'publisher-core'),
+	label: __('Backdrop Filters', 'publisher-core'),
 };
 
 const publisherDivider: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
-	label: __('Divider', 'publisher-core'),
+	label: __('Shape Dividers', 'publisher-core'),
 };
 
 const publisherMask: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
-	label: __('Mask', 'publisher-core'),
+	label: __('Image Mask', 'publisher-core'),
+};
+
+const publisherBlendMode: FeatureConfig = {
+	show: false,
+	force: false,
+	status: true,
+	label: __('Blending Mode', 'publisher-core'),
 };
 
 export const effectsConfig = {
@@ -72,7 +72,7 @@ export const effectsConfig = {
 	publisherTransition,
 	publisherFilter,
 	publisherBackdropFilter,
-	publisherBlendMode,
 	publisherDivider,
 	publisherMask,
+	publisherBlendMode,
 };

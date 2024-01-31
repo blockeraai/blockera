@@ -3,6 +3,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Publisher dependencies
@@ -10,12 +11,10 @@ import type { MixedElement } from 'react';
 import {
 	BaseControl,
 	ControlContextProvider,
-	convertAlignmentMatrixCoordinates,
 	InputControl,
 	PositionButtonControl,
 	useControlContext,
 } from '@publisher/controls';
-import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -27,17 +26,22 @@ export function ChildPerspective({
 	block,
 	handleOnChangeAttributes,
 	transformChildOrigin,
+	transformChildPerspectiveDefaultValue,
+	transformChildOriginDefaultValue,
 }: {
 	block: TBlockProps,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	transformChildOrigin: Object,
+	transformChildPerspectiveDefaultValue: string,
+	transformChildOriginDefaultValue: Object,
 }): MixedElement {
 	const { value, attribute, blockName, resetToDefault } = useControlContext({
-		defaultValue: '',
-		onChange: (newValue) =>
+		defaultValue: transformChildPerspectiveDefaultValue,
+		onChange: (newValue, ref) =>
 			handleOnChangeAttributes(
-				'publisherTransformSelfPerspective',
-				newValue
+				'publisherTransformChildPerspective',
+				newValue,
+				{ ref }
 			),
 	});
 
@@ -45,7 +49,7 @@ export function ChildPerspective({
 		value,
 		attribute,
 		blockName,
-		defaultValue: '',
+		defaultValue: transformChildPerspectiveDefaultValue,
 		resetToDefault,
 		mode: 'advanced',
 		path: attribute,
@@ -80,36 +84,30 @@ export function ChildPerspective({
 						</p>
 					</>
 				}
-				columns="columns-2"
+				columns="1fr 130px"
 				className={'publisher-transform-child-perspective'}
 				{...labelProps}
 			>
 				<InputControl
 					controlName="input"
-					{...{
-						unitType: 'essential',
-						range: true,
-						min: 0,
-						max: 2000,
-						defaultValue: '0px',
-						onChange: (newValue) =>
-							handleOnChangeAttributes(
-								'publisherTransformChildPerspective',
-								newValue
-							),
-					}}
+					unitType={'essential'}
+					min={0}
+					max={2000}
+					defaultValue={transformChildPerspectiveDefaultValue}
+					onChange={(newValue, ref) =>
+						handleOnChangeAttributes(
+							'publisherTransformChildPerspective',
+							newValue,
+							{ ref }
+						)
+					}
 					size="small"
 				/>
+
 				<ControlContextProvider
 					value={{
 						name: generateExtensionId(block, 'child-origin'),
-						value: {
-							...transformChildOrigin,
-							coordinates:
-								convertAlignmentMatrixCoordinates(
-									transformChildOrigin
-								)?.compact,
-						},
+						value: transformChildOrigin,
 						attribute: 'publisherTransformChildOrigin',
 						blockName: block.blockName,
 					}}
@@ -120,7 +118,7 @@ export function ChildPerspective({
 							'publisher-core'
 						)}
 						popoverTitle={__(
-							'Perspective Position',
+							'Child Perspective Position',
 							'publisher-core'
 						)}
 						alignmentMatrixLabel={__(
@@ -128,15 +126,15 @@ export function ChildPerspective({
 							'publisher-core'
 						)}
 						size="small"
-						defaultValue={{ top: '', left: '' }}
-						onChange={({ top, left }) => {
+						defaultValue={transformChildOriginDefaultValue}
+						onChange={({ top, left }, ref) => {
 							handleOnChangeAttributes(
 								'publisherTransformChildOrigin',
 								{
-									...transformChildOrigin,
 									top,
 									left,
-								}
+								},
+								{ ref }
 							);
 						}}
 					/>

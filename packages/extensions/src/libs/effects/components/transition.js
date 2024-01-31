@@ -23,11 +23,13 @@ export const Transition = ({
 	transition,
 	block,
 	handleOnChangeAttributes,
+	defaultValue,
 	...props
 }: {
 	transition: Array<Object> | void,
 	block: TBlockProps,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
+	defaultValue: Array<Object>,
 }): MixedElement => {
 	return (
 		<ControlContextProvider
@@ -41,12 +43,14 @@ export const Transition = ({
 		>
 			<BaseControl controlName="transition" columns="columns-1">
 				<TransitionControl
-					onChange={(newValue) =>
+					onChange={(newValue, ref) =>
 						handleOnChangeAttributes(
 							'publisherTransition',
-							newValue
+							newValue,
+							{ ref }
 						)
 					}
+					defaultValue={defaultValue}
 					{...props}
 				/>
 			</BaseControl>

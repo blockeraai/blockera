@@ -24,11 +24,13 @@ export const Filter = ({
 	filter,
 	handleOnChangeAttributes,
 	block,
+	defaultValue,
 	...props
 }: {
 	filter: Array<Object> | void,
 	block: TBlockProps,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
+	defaultValue: Array<Object>,
 }): MixedElement => {
 	return (
 		<ControlContextProvider
@@ -43,13 +45,16 @@ export const Filter = ({
 			<BaseControl controlName="filter" columns="columns-1">
 				<FilterControl
 					label={__('Filters', 'publisher-core')}
-					onChange={(newValue) =>
-						handleOnChangeAttributes('publisherFilter', newValue)
+					onChange={(newValue, ref) =>
+						handleOnChangeAttributes('publisherFilter', newValue, {
+							ref,
+						})
 					}
 					addNewButtonLabel={__(
 						'Add New Filter Effect',
 						'publisher-core'
 					)}
+					defaultValue={defaultValue}
 					{...props}
 				/>
 			</BaseControl>

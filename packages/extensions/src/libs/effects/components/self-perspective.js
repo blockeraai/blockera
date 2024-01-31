@@ -3,6 +3,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Publisher dependencies
@@ -10,13 +11,11 @@ import type { MixedElement } from 'react';
 import {
 	BaseControl,
 	ControlContextProvider,
-	convertAlignmentMatrixCoordinates,
 	InputControl,
 	NoticeControl,
 	PositionButtonControl,
 	useControlContext,
 } from '@publisher/controls';
-import { __ } from '@wordpress/i18n';
 import { checkVisibleItemLength } from '@publisher/utils';
 
 /**
@@ -30,20 +29,25 @@ export function SelfPerspective({
 	handleOnChangeAttributes,
 	transform,
 	transformSelfOrigin,
+	transformSelfPerspectiveDefaultValue,
+	transformSelfOriginDefaultValue,
 }: {
 	block: TBlockProps,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	transform: Array<Object>,
 	transformSelfOrigin: Object,
+	transformSelfPerspectiveDefaultValue: string,
+	transformSelfOriginDefaultValue: Object,
 }): MixedElement {
 	const visibleTransformLength = checkVisibleItemLength(transform);
 
 	const { value, attribute, blockName, resetToDefault } = useControlContext({
-		defaultValue: '',
-		onChange: (newValue) =>
+		defaultValue: transformSelfPerspectiveDefaultValue,
+		onChange: (newValue, ref) =>
 			handleOnChangeAttributes(
 				'publisherTransformSelfPerspective',
-				newValue
+				newValue,
+				{ ref }
 			),
 	});
 
@@ -51,7 +55,7 @@ export function SelfPerspective({
 		value,
 		attribute,
 		blockName,
-		defaultValue: '',
+		defaultValue: transformSelfPerspectiveDefaultValue,
 		resetToDefault,
 		mode: 'advanced',
 		path: attribute,
@@ -87,7 +91,7 @@ export function SelfPerspective({
 							</p>
 						</>
 					}
-					columns="columns-2"
+					columns="1fr 130px"
 					className={`publisher-transform-self-perspective ${
 						!visibleTransformLength
 							? 'publisher-control-is-not-active'
@@ -97,31 +101,24 @@ export function SelfPerspective({
 				>
 					<InputControl
 						controlName="input"
-						{...{
-							unitType: 'essential',
-							range: true,
-							min: 0,
-							max: 2000,
-							// initialPosition: 100,
-							defaultValue: '0px',
-							onChange: (newValue) =>
-								handleOnChangeAttributes(
-									'publisherTransformSelfPerspective',
-									newValue
-								),
-						}}
+						unitType={'essential'}
+						min={0}
+						max={2000}
+						defaultValue={transformSelfPerspectiveDefaultValue}
+						onChange={(newValue, ref) =>
+							handleOnChangeAttributes(
+								'publisherTransformSelfPerspective',
+								newValue,
+								{ ref }
+							)
+						}
 						size="small"
 					/>
+
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'self-origin'),
-							value: {
-								...transformSelfOrigin,
-								coordinates:
-									convertAlignmentMatrixCoordinates(
-										transformSelfOrigin
-									)?.compact,
-							},
+							value: transformSelfOrigin,
 							attribute: 'publisherTransformSelfOrigin',
 							blockName: block.blockName,
 						}}
@@ -132,7 +129,7 @@ export function SelfPerspective({
 								'publisher-core'
 							)}
 							popoverTitle={__(
-								'Perspective Position',
+								'Self Perspective Position',
 								'publisher-core'
 							)}
 							alignmentMatrixLabel={__(
@@ -140,24 +137,25 @@ export function SelfPerspective({
 								'publisher-core'
 							)}
 							size="small"
-							defaultValue={{ top: '', left: '' }}
-							onChange={({ top, left }) => {
+							defaultValue={transformSelfOriginDefaultValue}
+							onChange={({ top, left }, ref) => {
 								handleOnChangeAttributes(
 									'publisherTransformSelfOrigin',
 									{
-										...transformSelfOrigin,
 										top,
 										left,
-									}
+									},
+									{ ref }
 								);
 							}}
 						/>
 					</ControlContextProvider>
 				</BaseControl>
+
 				{!visibleTransformLength && (
 					<NoticeControl type="warning">
 						{__(
-							`For using Self Perspective your block should have at least one transform.`,
+							`For using Self Perspective the block should have at least one transformation.`,
 							'publisher-core'
 						)}
 					</NoticeControl>

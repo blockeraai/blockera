@@ -1,13 +1,10 @@
 // @flow
-/**
- * External dependencies
- */
-import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
  */
-import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { BaseExtensionProps } from '../../types';
+import type { FeatureConfig } from '../../base';
 
 export type TTransformCssProps = {
 	transform?: string,
@@ -18,6 +15,7 @@ export type TTransformCssProps = {
 };
 
 export type TEffectsProps = {
+	...BaseExtensionProps,
 	values: {
 		opacity: string,
 		transform: Array<Object>,
@@ -25,24 +23,35 @@ export type TEffectsProps = {
 		filter: Array<Object>,
 		blendMode: string,
 		backdropFilter: Array<Object>,
-		backfaceVisibility: string,
+		transformSelfPerspective: string,
 		transformSelfOrigin: {
 			top: string,
 			left: string,
 		},
+		backfaceVisibility: string,
+		transformChildPerspective: string,
 		transformChildOrigin: {
 			top: string,
 			left: string,
 		},
-		transformSelfPerspective: string,
-		transformChildPerspective: string,
 		divider: Array<Object>,
 		mask: Array<Object>,
 	},
-	block: TBlockProps,
-	effectsConfig: Object,
-	children?: MixedElement,
-	handleOnChangeAttributes: THandleOnChangeAttributes,
+	effectsConfig: {
+		publisherOpacity: FeatureConfig,
+		publisherTransform: FeatureConfig,
+		publisherTransformSelfPerspective: FeatureConfig,
+		publisherTransformSelfOrigin: FeatureConfig,
+		publisherBackfaceVisibility: FeatureConfig,
+		publisherTransformChildPerspective: FeatureConfig,
+		publisherTransformChildOrigin: FeatureConfig,
+		publisherTransition: FeatureConfig,
+		publisherFilter: FeatureConfig,
+		publisherBackdropFilter: FeatureConfig,
+		publisherDivider: FeatureConfig,
+		publisherMask: FeatureConfig,
+		publisherBlendMode: FeatureConfig,
+	},
 	extensionProps: {
 		publisherOpacity: Object,
 		publisherTransform: Object,

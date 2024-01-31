@@ -57,22 +57,6 @@
 		"publisherFontColor",
 		"publisherTextShadow"
 	],
-	"effects": [
-		"publisherFilter",
-		"publisherCursor",
-		"publisherOpacity",
-		"publisherTransform",
-		"publisherBlendMode",
-		"publisherTransition",
-		"publisherBackdropFilter",
-		"publisherBackfaceVisibility",
-		"publisherTransformSelfOrigin",
-		"publisherTransformChildOrigin",
-		"publisherTransformSelfPerspective",
-		"publisherTransformChildPerspective",
-		"publisherDivider",
-		"publisherMask"
-	],
 	"mouse": [
 		"publisherCursor",
 		"publisherUserSelect",

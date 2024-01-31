@@ -165,16 +165,8 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			handleOnChangeAttributes,
 		} = useBlockContext();
 
-		const {
-			size,
-			layout,
-			effects,
-			flexChild,
-			typography,
-			icon,
-			mouse,
-			advanced,
-		} = extensions;
+		const { size, layout, flexChild, typography, icon, mouse, advanced } =
+			extensions;
 
 		props = {
 			...props,
@@ -513,31 +505,72 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 						/>
 
 						<EffectsExtension
-							{...{
-								block,
-								effectsConfig,
-								extensionProps: {
-									publisherOpacity: {},
-									publisherTransform: {},
-									publisherTransformSelfPerspective: {},
-									publisherTransformSelfOrigin: {},
-									publisherBackfaceVisibility: {},
-									publisherTransformChildPerspective: {},
-									publisherTransformChildOrigin: {},
-									publisherTransition: {},
-									publisherFilter: {},
-									publisherBackdropFilter: {},
-									publisherDivider: {},
-									publisherBlendMode: {},
-									publisherMask: {},
-								},
-								values: include(
-									currentStateAttributes,
-									effects,
-									'publisher'
-								),
-								handleOnChangeAttributes,
+							block={block}
+							effectsConfig={effectsConfig}
+							extensionProps={{
+								publisherOpacity: {},
+								publisherTransform: {},
+								publisherTransformSelfPerspective: {},
+								publisherTransformSelfOrigin: {},
+								publisherBackfaceVisibility: {},
+								publisherTransformChildPerspective: {},
+								publisherTransformChildOrigin: {},
+								publisherTransition: {},
+								publisherFilter: {},
+								publisherBackdropFilter: {},
+								publisherDivider: {},
+								publisherBlendMode: {},
+								publisherMask: {},
 							}}
+							values={{
+								opacity:
+									currentStateAttributes.publisherOpacity,
+								transform:
+									currentStateAttributes.publisherTransform,
+								backfaceVisibility:
+									currentStateAttributes.publisherBackfaceVisibility,
+								transformSelfPerspective:
+									currentStateAttributes.publisherTransformSelfPerspective,
+								transformSelfOrigin:
+									currentStateAttributes.publisherTransformSelfOrigin,
+								transformChildOrigin:
+									currentStateAttributes.publisherTransformChildOrigin,
+								transformChildPerspective:
+									currentStateAttributes.publisherTransformChildPerspective,
+								transition:
+									currentStateAttributes.publisherTransition,
+								filter: currentStateAttributes.publisherFilter,
+								backdropFilter:
+									currentStateAttributes.publisherBackdropFilter,
+								divider:
+									currentStateAttributes.publisherDivider,
+								mask: currentStateAttributes.publisherMask,
+								blendMode:
+									currentStateAttributes.publisherBlendMode,
+							}}
+							attributes={{
+								opacity: attributes.publisherOpacity,
+								transform: attributes.publisherTransform,
+								backfaceVisibility:
+									attributes.publisherBackfaceVisibility,
+								transformSelfPerspective:
+									attributes.publisherTransformSelfPerspective,
+								transformSelfOrigin:
+									attributes.publisherTransformSelfOrigin,
+								transformChildOrigin:
+									attributes.publisherTransformChildOrigin,
+								transformChildPerspective:
+									attributes.publisherTransformChildPerspective,
+								transition: attributes.publisherTransition,
+								filter: attributes.publisherFilter,
+								backdropFilter:
+									attributes.publisherBackdropFilter,
+								divider: attributes.publisherDivider,
+								mask: attributes.publisherMask,
+								blendMode: attributes.publisherBlendMode,
+							}}
+							handleOnChangeAttributes={handleOnChangeAttributes}
+							setSettings={handleOnChangeSettings}
 						/>
 
 						<AdvancedExtension
