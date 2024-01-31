@@ -298,10 +298,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 				value: any
 			): Object => {
 				if (itemId === args?.repeaterItem) {
-					return {
-						...item,
-						[args?.propId]: value,
-					};
+					return update(item, args?.propId, value);
 				}
 
 				return item;
