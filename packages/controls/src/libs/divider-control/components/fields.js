@@ -38,15 +38,17 @@ import type { TFieldItem } from '../types';
 const Fields: TFieldItem = memo<TFieldItem>(
 	({ itemId, item }: TFieldItem): Element<any> => {
 		const {
-			controlInfo: { name: controlId },
+			controlInfo: { name: controlId, attribute },
 			dispatch: { changeRepeaterItem },
 			blockName,
+			getControlPath,
 		} = useControlContext();
 
 		const {
 			repeaterId,
 			getControlId,
 			repeaterItems: items,
+			defaultRepeaterItemValue,
 		} = useContext(RepeaterContext);
 
 		const [isSelectShapeOpen, setIsSelectShapeOpen] = useState(false);
@@ -68,7 +70,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 				className={controlInnerClassNames('divider-popover')}
 			>
 				<ToggleSelectControl
+					repeaterItem={itemId}
 					id={getControlId(itemId, 'position')}
+					singularId={'position'}
 					label={__('Position', 'publisher-core')}
 					labelPopoverTitle={__('Divider Position', 'publisher-core')}
 					labelDescription={
@@ -82,7 +86,6 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						</>
 					}
 					columns="columns-2"
-					defaultValue={item.position}
 					options={[
 						{
 							label: __('Top', 'publisher-core'),
@@ -129,9 +132,13 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							value: { ...item, position },
 						})
 					}
+					defaultValue={defaultRepeaterItemValue.position}
 				/>
 
 				<BaseControl
+					repeaterItem={itemId}
+					id={getControlId(itemId, 'shape')}
+					singularId={'shape'}
 					columns="columns-2"
 					label={__('Shape', 'publisher-core')}
 					labelPopoverTitle={__('Divider Shape', 'publisher-core')}
@@ -151,15 +158,15 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							</p>
 						</>
 					}
-					id={getControlId(itemId, 'shape')}
-					attribute={'shape'}
-					singularId={'shape'}
 					mode="advanced"
-					path={'shape'}
+					path={getControlPath(
+						attribute + '[' + itemId + ']',
+						'shape'
+					)}
+					attribute={attribute}
 					blockName={blockName}
 					value={item.shape}
-					defaultValue={item.shape}
-					repeaterItem={itemId}
+					defaultValue={defaultRepeaterItemValue.shape}
 				>
 					<Button
 						size="input"
@@ -195,96 +202,50 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							onClose={() => setIsSelectShapeOpen(false)}
 							data-test="divider-shape-popover"
 						>
-							<ToggleSelectControl
-								id={getControlId(itemId, 'shape.type')}
-								label={__('Type', 'publisher-core')}
-								labelPopoverTitle={__(
-									'Divider Shape Type',
-									'publisher-core'
-								)}
-								labelDescription={
-									<>
-										<p>
-											{__(
-												"It's collection of pre-designed divider shapes that can be easily inserted into web pages.",
-												'publisher-core'
-											)}
-										</p>
-										<p>
-											{__(
-												'Additionally, an option to upload custom divider shapes allows for personalized and brand-specific designs.',
-												'publisher-core'
-											)}
-										</p>
-									</>
-								}
-								columns="columns-2"
-								defaultValue={item.position}
-								options={[
-									{
-										label: __('Library', 'publisher-core'),
-										value: 'shape',
-									},
-									{
-										label: __('Custom', 'publisher-core'),
-										value: 'custom',
-										disabled: true,
-										showTooltip: true,
-										'aria-label': __(
-											'Coming soon …',
-											'publisher-core'
-										),
-									},
-								]}
-								onChange={(type) =>
-									changeRepeaterItem({
-										controlId,
-										repeaterId,
-										itemId,
-										value: {
-											...item,
-											shape: { ...item.shape, type },
-										},
-									})
-								}
-							/>
-
 							<BaseControl
 								columns={'columns-1'}
 								label={__('Shapes', 'publisher-core')}
 								className="shapes"
 							>
-								{shapeIcons.map((shape) => (
-									<Shape
-										id={shape.id}
-										key={shape.id}
-										icon={shape.icon}
-										isBottom={item.position === 'bottom'}
-										selected={shape.id === item.shape.id}
-										onClick={(id) => {
-											changeRepeaterItem({
-												controlId,
-												repeaterId,
-												itemId,
-												value: {
-													...item,
-													shape: {
-														...item.shape,
-														id,
+								<Flex direction={'column'} gap={'12px'}>
+									{shapeIcons.map((shape) => (
+										<Shape
+											id={shape.id}
+											key={shape.id}
+											icon={shape.icon}
+											isBottom={
+												item.position === 'bottom'
+											}
+											selected={
+												shape.id === item.shape.id
+											}
+											onClick={(id) => {
+												changeRepeaterItem({
+													controlId,
+													repeaterId,
+													itemId,
+													value: {
+														...item,
+														shape: {
+															...item.shape,
+															id,
+														},
 													},
-												},
-											});
-											setIsSelectShapeOpen(false);
-										}}
-									/>
-								))}
+												});
+												setIsSelectShapeOpen(false);
+											}}
+										/>
+									))}
+								</Flex>
 							</BaseControl>
 						</Popover>
 					)}
 				</BaseControl>
 
 				<ColorControl
+					repeaterItem={itemId}
 					id={getControlId(itemId, 'color')}
+					singularId={'color'}
 					columns="columns-2"
 					label={__('Color', 'publisher-core')}
 					labelPopoverTitle={__('Divider Color', 'publisher-core')}
@@ -298,7 +259,6 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							</p>
 						</>
 					}
-					defaultValue={item.color}
 					onChange={(color) =>
 						changeRepeaterItem({
 							controlId,
@@ -307,6 +267,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							value: { ...item, color },
 						})
 					}
+					defaultValue={defaultRepeaterItemValue.color}
 				/>
 
 				<BaseControl columns="columns-1">
@@ -316,7 +277,10 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					>
 						<Flex alignItems="flex-start">
 							<InputControl
+								repeaterItem={itemId}
 								id={getControlId(itemId, 'size.width')}
+								singularId={'size.width'}
+								isRepeater={true}
 								columns="columns-1"
 								label={__('Width', 'publisher-core')}
 								labelPopoverTitle={__(
@@ -344,7 +308,6 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								placeholder="0"
 								type="number"
 								min={0}
-								defaultValue={item.size.width}
 								unitType="width"
 								size={'small'}
 								data-test="divider-width-input"
@@ -359,10 +322,15 @@ const Fields: TFieldItem = memo<TFieldItem>(
 										},
 									})
 								}
+								defaultValue={
+									defaultRepeaterItemValue.size.width
+								}
 							/>
 
 							<InputControl
+								repeaterItem={itemId}
 								id={getControlId(itemId, 'size.height')}
+								singularId={'size.height'}
 								columns="columns-1"
 								label={__('Height', 'publisher-core')}
 								labelPopoverTitle={__(
@@ -390,7 +358,6 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								placeholder="0"
 								type="number"
 								min={0}
-								defaultValue={item.size.height}
 								unitType="height"
 								size={'small'}
 								data-test="divider-height-input"
@@ -405,9 +372,13 @@ const Fields: TFieldItem = memo<TFieldItem>(
 										},
 									})
 								}
+								defaultValue={
+									defaultRepeaterItemValue.size.height
+								}
 							/>
 						</Flex>
 					</BaseControl>
+
 					{(!item.size.width || !item.size.height) && (
 						<NoticeControl type="error">
 							{item.size.height &&
@@ -433,8 +404,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 				</BaseControl>
 
 				<ToggleControl
+					repeaterItem={itemId}
 					id={getControlId(itemId, 'animate')}
-					defaultValue={item.animate}
+					singularId={'animate'}
 					columns="columns-2"
 					label={__('Animation', 'publisher-core')}
 					labelPopoverTitle={__(
@@ -463,10 +435,13 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							},
 						})
 					}
+					defaultValue={defaultRepeaterItemValue.animate}
 				>
 					{item.animate && (
 						<InputControl
+							repeaterItem={itemId}
 							id={getControlId(itemId, 'duration')}
+							singularId={'duration'}
 							label={__('Duration', 'publisher-core')}
 							labelPopoverTitle={__(
 								'Divider Animation Duration',
@@ -489,10 +464,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								</>
 							}
 							columns="1fr 1.4fr"
-							placeholder="0"
+							placeholder={__('Auto', 'publisher-core')}
 							type="number"
 							min={0}
-							defaultValue={item.duration}
 							unitType="duration"
 							size="small"
 							data-test="divider-duration-input"
@@ -507,11 +481,15 @@ const Fields: TFieldItem = memo<TFieldItem>(
 									},
 								})
 							}
+							defaultValue={defaultRepeaterItemValue.duration}
 						/>
 					)}
 				</ToggleControl>
 
 				<ToggleControl
+					repeaterItem={itemId}
+					id={getControlId(itemId, 'flip')}
+					singularId={'flip'}
 					columns="columns-2"
 					label={__('Flip', 'publisher-core')}
 					labelPopoverTitle={__('Horizontal Flip', 'publisher-core')}
@@ -532,8 +510,6 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						</>
 					}
 					className={controlInnerClassNames('toggle-field')}
-					id={getControlId(itemId, 'flip')}
-					defaultValue={item.flip}
 					onChange={(flip) =>
 						changeRepeaterItem({
 							controlId,
@@ -545,10 +521,13 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							},
 						})
 					}
+					defaultValue={defaultRepeaterItemValue.flip}
 				/>
 
 				<ToggleControl
+					repeaterItem={itemId}
 					id={getControlId(itemId, 'onFront')}
+					singularId={'onFront'}
 					columns="columns-2"
 					label={__('On Front', 'publisher-core')}
 					labelPopoverTitle={__('Bring On Front', 'publisher-core')}
@@ -563,7 +542,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						</>
 					}
 					className={controlInnerClassNames('toggle-field')}
-					defaultValue={item.onFront}
+					defaultValue={defaultRepeaterItemValue.onFront}
 					onChange={(onFront) =>
 						changeRepeaterItem({
 							controlId,
