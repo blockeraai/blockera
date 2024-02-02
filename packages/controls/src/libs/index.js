@@ -52,3 +52,4 @@ export { default as DividerControl } from './divider-control';
 export { default as MaskControl } from './mask-control';
 export { default as LayoutMatrixControl } from './layout-matrix-control';
 export { RendererControl } from './renderer-control';
+export { default as CodeControl } from './code-control';
