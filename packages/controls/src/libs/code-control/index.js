@@ -77,7 +77,7 @@ const CodeControl = ({
 	labelDescription,
 	repeaterItem,
 	singularId,
-	columns,
+	columns = 'columns-1',
 	defaultValue = '',
 	onChange,
 	field = 'code',

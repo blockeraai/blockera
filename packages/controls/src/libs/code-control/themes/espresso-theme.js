@@ -14,7 +14,7 @@ export const espressoLightTheme: Object = createTheme({
 	settings: {
 		fontSize: '13px',
 		fontFamily: 'Menlo, Consolas, DejaVu Sans Mono, monospace',
-		background: '#c0d7e524',
+		background: '#f6f6f6',
 		foreground: '#000000',
 		caret: '#000000',
 		selection: '#c2e8ff',
