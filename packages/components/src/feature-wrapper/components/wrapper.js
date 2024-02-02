@@ -70,6 +70,9 @@ export function Wrapper({
 				className={componentInnerClassNames(
 					'feature-wrapper__children'
 				)}
+				onClick={(e) => {
+					e.preventDefault();
+				}}
 			>
 				{children}
 			</div>

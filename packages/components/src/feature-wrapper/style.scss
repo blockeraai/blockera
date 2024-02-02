@@ -24,27 +24,30 @@
 			font-weight: 500;
 			line-height: 1.2;
 			transition: var(--publisher-controls-transition);
-			opacity: 0;
-			padding: 5px 0 5px 5px;
+			opacity: 1;
+			padding: 4px 0 4px 7px;
 			background-color: #ffffff;
+			-webkit-user-select: none;
 			user-select: none;
 			font-style: italic;
-		}
-	}
-
-	&:hover {
-
-		.publisher-component-feature-wrapper__notice {
-
-			.publisher-component-feature-wrapper__notice__text {
-				opacity: 1;
-			}
+			width: 120px;
 		}
 	}
 
 	.publisher-component-feature-wrapper__children {
 		opacity: 0.4;
 		pointer-events: none;
+		user-select: none;
+		z-index: 1;
+		position: relative;
+
+		& > * {
+			pointer-events: none;
+			z-index: 0;
+			-webkit-user-select: none;
+			user-select: none;
+			position: relative;
+		}
 	}
 }
 
