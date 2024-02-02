@@ -10,13 +10,15 @@ import { __ } from '@wordpress/i18n';
  */
 import type { FeatureConfig } from '../types';
 
-const publisherCSSProperties: FeatureConfig = {
+const publisherCustomCSS: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('CSS Properties', 'publisher-core'),
+	label: __('Custom CSS Code', 'publisher-core'),
+	isActiveOnStates: ['normal'],
+	isActiveOnBreakpoints: ['laptop'],
 };
 
 export const advancedConfig = {
-	publisherCSSProperties,
+	publisherCustomCSS,
 };

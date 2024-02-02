@@ -165,7 +165,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			handleOnChangeAttributes,
 		} = useBlockContext();
 
-		const { layout, flexChild, icon, advanced } = extensions;
+		const { layout, flexChild, icon } = extensions;
 
 		props = {
 			...props,
@@ -649,20 +649,20 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 						/>
 
 						<AdvancedExtension
-							{...{
-								block,
-								advancedConfig,
-								extensionProps: {
-									publisherAttributes: {},
-									publisherCSSProperties: {},
-								},
-								values: include(
-									currentStateAttributes,
-									advanced,
-									'publisher'
-								),
-								handleOnChangeAttributes,
+							block={block}
+							advancedConfig={advancedConfig}
+							extensionProps={{
+								publisherCustomCSS: {},
 							}}
+							values={{
+								publisherCustomCSS:
+									currentStateAttributes.publisherCustomCSS,
+							}}
+							attributes={{
+								publisherCustomCSS:
+									attributes.publisherCustomCSS,
+							}}
+							handleOnChangeAttributes={handleOnChangeAttributes}
 						/>
 					</div>
 

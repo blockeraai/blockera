@@ -1,28 +1,17 @@
 // @flow
-/**
- * External dependencies
- */
-import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
  */
-import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { BaseExtensionProps } from '../../types';
 
 export type TAdvancedProps = {
+	...BaseExtensionProps,
 	values: {
-		cSSProperties: Array<Object>,
+		publisherCustomCSS: string,
 	},
-	block: TBlockProps,
 	advancedConfig: Object,
-	children?: MixedElement,
-	defaultValue: {
-		width?: string,
-		height?: string,
-		overflow?: string,
-	},
-	handleOnChangeAttributes: THandleOnChangeAttributes,
 	extensionProps: {
-		publisherCSSProperties: Object,
+		publisherCustomCSS: Object,
 	},
 };

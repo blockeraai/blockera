@@ -10,17 +10,17 @@ import type { MixedElement, ComponentType } from 'react';
  * Publisher dependencies
  */
 import {
-	CustomPropertyControl,
-	BaseControl,
 	PanelBodyControl,
 	ControlContextProvider,
+	CodeControl,
 } from '@publisher/controls';
 import { componentClassNames } from '@publisher/classnames';
+import { FeatureWrapper } from '@publisher/components';
 
 /**
  * Internal dependencies
  */
-import { isActiveField } from '../../api/utils';
+import { isShowField } from '../../api/utils';
 import { hasSameProps, generateExtensionId } from '../utils';
 import type { TAdvancedProps } from './types/advanced-props';
 import { AdvancedExtensionIcon } from './index';
@@ -28,51 +28,63 @@ import { AdvancedExtensionIcon } from './index';
 export const AdvancedExtension: ComponentType<TAdvancedProps> = memo(
 	({
 		block,
-		advancedConfig: { publisherCSSProperties },
-		values: { cSSProperties: properties },
-		handleOnChangeAttributes,
+		advancedConfig,
+		values,
 		extensionProps,
+		attributes,
+		handleOnChangeAttributes,
 	}: TAdvancedProps): MixedElement => {
+		const isShowCustomCSS = isShowField(
+			advancedConfig.publisherCustomCSS,
+			values.publisherCustomCSS,
+			attributes.publisherCustomCSS.default
+		);
+
+		if (!isShowCustomCSS) {
+			return <></>;
+		}
+
 		return (
 			<PanelBodyControl
-				title={__('Advanced', 'publisher-core')}
-				initialOpen={true}
+				title={__('Custom CSS', 'publisher-core')}
+				initialOpen={false}
 				icon={<AdvancedExtensionIcon />}
 				className={componentClassNames(
 					'extension',
 					'extension-advanced'
 				)}
 			>
-				{isActiveField(publisherCSSProperties) && (
+				<FeatureWrapper
+					isActive={isShowCustomCSS}
+					isActiveOnStates={
+						advancedConfig.publisherCustomCSS.isActiveOnStates
+					}
+					isActiveOnBreakpoints={
+						advancedConfig.publisherCustomCSS.isActiveOnBreakpoints
+					}
+				>
 					<ControlContextProvider
 						value={{
-							name: generateExtensionId(block, 'properties'),
-							value: properties,
-							attribute: 'publisherCSSProperties',
+							name: generateExtensionId(block, 'custom-css'),
+							value: values.publisherCustomCSS,
+							attribute: 'publisherCustomCSS',
 							blockName: block.blockName,
 						}}
-						storeName={'publisher-core/controls/repeater'}
 					>
-						<BaseControl
-							controlName="properties"
-							columns="columns-1"
-						>
-							<CustomPropertyControl
-								label={__(
-									'Custom CSS Properties',
-									'publisher-core'
-								)}
-								onChange={(newValue) =>
-									handleOnChangeAttributes(
-										'publisherCSSProperties',
-										newValue
-									)
-								}
-								{...extensionProps.publisherCSSProperties}
-							/>
-						</BaseControl>
+						<CodeControl
+							label={__('Custom CSS Code', 'publisher-core')}
+							onChange={(newValue, ref) =>
+								handleOnChangeAttributes(
+									'publisherCustomCSS',
+									newValue,
+									{ ref }
+								)
+							}
+							defaultValue={attributes.publisherCustomCSS.default}
+							{...extensionProps.publisherCustomCSS}
+						/>
 					</ControlContextProvider>
-				)}
+				</FeatureWrapper>
 			</PanelBodyControl>
 		);
 	},

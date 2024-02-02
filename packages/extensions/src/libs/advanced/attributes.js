@@ -3,4 +3,8 @@ export const attributes = {
 		type: 'array',
 		default: [],
 	},
+	publisherCustomCSS: {
+		type: 'string',
+		default: '',
+	},
 };

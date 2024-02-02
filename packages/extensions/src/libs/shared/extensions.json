@@ -30,6 +30,5 @@
 	"scrollAnimation": ["publisherScrollAnimation"],
 	"clickAnimation": ["publisherClickAnimation"],
 	"conditions": ["publisherConditions"],
-	"advanced": ["publisherCSSProperties"],
 	"advancedSettings": ["publisherAttributes"]
 }
