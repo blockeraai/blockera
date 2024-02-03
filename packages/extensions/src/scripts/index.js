@@ -9,9 +9,9 @@ import {
 } from '../libs';
 
 /**
- * Internal dependencies
+ * Publisher dependencies
  */
-import { CanvasEditor } from '../components';
+import { CanvasEditor } from '@publisher/editor';
 
 export default function (wp: Object) {
 	const registerPlugin = wp.plugins.registerPlugin;

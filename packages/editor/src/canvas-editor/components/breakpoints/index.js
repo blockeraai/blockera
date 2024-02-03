@@ -11,9 +11,14 @@ import { select, useDispatch } from '@wordpress/data';
 /**
  * Publisher dependencies
  */
+import {
+	useStoreDispatchers,
+	useStoreSelectors,
+} from '@publisher/extensions/src/hooks';
 import { isFunction } from '@publisher/utils';
 import { Flex, Popover } from '@publisher/components';
 import { ControlContextProvider, InputControl } from '@publisher/controls';
+import defaultBreakpoints from '@publisher/extensions/src/libs/block-states/default-breakpoints';
 
 /**
  * Internal dependencies
@@ -23,9 +28,7 @@ import Circles from '../../icons/circles';
 import PickedBreakpoints from './picked-breakpoints';
 import BreakpointSettings from './breakpoint-settings';
 import type { BreakpointsComponentProps } from './types';
-import defaultBreakpoints from '../../../../libs/block-states/default-breakpoints';
 import { controlInnerClassNames } from '@publisher/classnames';
-import { useStoreDispatchers, useStoreSelectors } from '../../../../hooks';
 
 export const Breakpoints = ({
 	refId,

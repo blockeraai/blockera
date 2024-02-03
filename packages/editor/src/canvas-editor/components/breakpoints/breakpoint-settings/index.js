@@ -13,13 +13,13 @@ import { RepeaterControl, ControlContextProvider } from '@publisher/controls';
 import { defaultItemValue } from '@publisher/controls/src/libs/repeater-control';
 import { STORE_NAME as REPEATER_STORE_NAME } from '@publisher/controls/src/libs/repeater-control/store';
 import { controlInnerClassNames } from '@publisher/classnames';
+import defaultBreakpoints from '@publisher/extensions/src/libs/block-states/default-breakpoints';
 
 /**
  * Internal dependencies
  */
 import Header from './header';
 import Fields from './fields';
-import defaultBreakpoints from '../../../../../libs/block-states/default-breakpoints';
 import type { BreakpointSettingsComponentProps } from '../types';
 
 export default function ({
