@@ -14,33 +14,50 @@ import { extensionInnerClassNames } from '@publisher/classnames';
  * Internal dependencies
  */
 import { CaretIcon } from '../icons';
-import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
+import type { InnerBlockModel } from '../../inner-blocks/types';
+import type { StateTypes } from '../../block-states/types';
 
 export function Breadcrumb({
 	states,
 	children,
-	innerBlock,
-	innerBlocks = [],
+	currentInnerBlock,
 }: {
-	states: Object,
+	states: Array<{ ...StateTypes, isSelected: boolean }>,
 	children?: MixedElement,
-	innerBlock?: InnerBlockType,
-	innerBlocks: Array<InnerBlockModel>,
+	currentInnerBlock: InnerBlockModel,
 }): MixedElement {
 	// do not show normal state and inner block was not selected
-	if (states.length <= 1 && !innerBlock) {
+	if (states.length <= 1 && !currentInnerBlock) {
 		return <></>;
 	}
 
-	const innerBlockName =
-		innerBlocks.length &&
-		innerBlocks.find(
-			(_innerBlock: InnerBlockModel) => _innerBlock.type === innerBlock
-		);
+	const States = ({
+		_states,
+	}: {
+		_states: Array<{ ...StateTypes, isSelected: boolean }>,
+	}) =>
+		_states
+			.filter((value) => value?.isSelected && value?.type !== 'normal')
+			.map((value) => (
+				<>
+					<CaretIcon />
+					<span
+						className={extensionInnerClassNames(
+							'block-card__title__item',
+							'item-state',
+							'item-state-' + value.type
+						)}
+					>
+						{value.label}
+					</span>
+				</>
+			));
 
 	return (
 		<>
-			{innerBlock && innerBlockName && (
+			<States _states={states} />
+
+			{!Array.isArray(currentInnerBlock) && (
 				<>
 					<CaretIcon />
 					<span
@@ -49,29 +66,17 @@ export function Breadcrumb({
 							'inner-block'
 						)}
 					>
-						{innerBlockName.label}
+						{currentInnerBlock.label}
 					</span>
+					<States
+						_states={
+							currentInnerBlock?.attributes
+								?.publisherBlockStates || []
+						}
+					/>
 				</>
 			)}
 
-			{states
-				.filter(
-					(value) => value?.isSelected && value?.type !== 'normal'
-				)
-				.map((value) => (
-					<>
-						<CaretIcon />
-						<span
-							className={extensionInnerClassNames(
-								'block-card__title__item',
-								'item-state',
-								'item-state-' + value.type
-							)}
-						>
-							{value.label}
-						</span>
-					</>
-				))}
 			{children}
 		</>
 	);

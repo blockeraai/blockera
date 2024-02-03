@@ -8,6 +8,7 @@ import {
 	useBlockDisplayInformation,
 	__experimentalBlockVariationTransforms as BlockVariationTransforms,
 } from '@wordpress/block-editor';
+import { Slot } from '@wordpress/components';
 
 /**
  * Publisher dependencies
@@ -28,15 +29,13 @@ export function BlockCard({
 	states,
 	clientId,
 	children,
-	innerBlocks,
 	handleOnClick,
-	selectedInnerBlock,
+	currentInnerBlock,
 }: {
 	states: Object,
 	clientId: string,
 	children?: MixedElement,
-	innerBlocks: Array<InnerBlockModel>,
-	selectedInnerBlock?: InnerBlockType,
+	currentInnerBlock: InnerBlockModel,
 	handleOnClick: (blockType: 'master' | InnerBlockType) => void,
 }): MixedElement {
 	const blockInformation = useBlockDisplayInformation(clientId);
@@ -59,8 +58,7 @@ export function BlockCard({
 						{blockInformation.title}
 						<Breadcrumb
 							states={states}
-							innerBlocks={innerBlocks}
-							innerBlock={selectedInnerBlock}
+							currentInnerBlock={currentInnerBlock}
 						/>
 					</h2>
 
@@ -78,6 +76,7 @@ export function BlockCard({
 				</div>
 			</div>
 
+			<Slot name={'publisher-core-block-card-children'} />
 			{children}
 		</div>
 	);
