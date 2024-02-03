@@ -124,7 +124,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 				),
 			};
 
-		case 'UPDATE_INNER_BLOCKS':
+		case 'UPDATE_INNER_BLOCK_STATES':
 			publisherInnerBlocks[innerBlockId].attributes.publisherBlockStates =
 				getBlockStates(
 					{

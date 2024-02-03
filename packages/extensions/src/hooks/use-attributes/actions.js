@@ -29,7 +29,7 @@ const actions = (params: Object): UseAttributesActions => {
 			breakpointType,
 		}): Object {
 			return {
-				type: 'UPDATE_INNER_BLOCKS',
+				type: 'UPDATE_INNER_BLOCK_STATES',
 				...params,
 				stateType,
 				breakpointId,
