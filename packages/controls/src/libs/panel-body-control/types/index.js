@@ -21,6 +21,10 @@ export type PanelBodyControlProps = {
 	 * Function that will be fired while opening or closing of panel body
 	 */
 	onToggle?: () => void,
+	/**
+	 * Is panel content edited to show edited indicator
+	 */
+	isEdited?: boolean,
 	children: Node,
 	className?: string,
 };

@@ -79,6 +79,37 @@ export const Icon = {
 	},
 };
 
+export const Edited = {
+	args: {
+		title: 'Panel Title',
+		children: <p>Body content is here...</p>,
+	},
+	decorators: [WithPopoverDataProvider, ...SharedDecorators],
+	render: (args) => {
+		return (
+			<SlotFillProvider>
+				<div className="playground__sidebar playground__sidebar-standalone">
+					<div className={'block-editor-block-inspector'}>
+						<div className="block-editor-block-inspector__tabs">
+							<div
+								className="components-tab-panel__tab-content"
+								style={{ padding: '20px 0' }}
+							>
+								<PanelBodyControl
+									{...args}
+									icon={<InheritIcon />}
+									isEdited={true}
+								/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<Popover.Slot />
+			</SlotFillProvider>
+		);
+	},
+};
+
 export const Multiple = {
 	args: {
 		title: 'Multiple Panel Bodies',
@@ -138,6 +169,8 @@ export const All = {
 			<Default.render {...Default.args} />
 
 			<Icon.render {...Icon.args} />
+
+			<Edited.render {...Edited.args} />
 
 			<Multiple.render {...Multiple.args} />
 		</>
