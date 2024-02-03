@@ -17,7 +17,6 @@ import { STORE_NAME } from '../store/constants';
 import {
 	blockStatesAttributes,
 	innerBlocksExtensionsAttributes,
-	ignoreDefaultBlockAttributeKeysRegExp,
 } from '../index';
 import { sanitizedBlockAttributes } from './utils';
 import { BlockBase, BlockPortals } from '../components';
@@ -57,68 +56,6 @@ export default function withBlockSettings(
 }
 
 /**
- * Preparing inner blocks.
- *
- * @param {Object} registeredInnerBlocks The register inner blocks on outside of core.
- * @param {Object} rootAttributes The block root attributes.
- * @return {{}|{default}} the merge-able object include "default" key when registered inner blocks has valid blocks, empty object when has not valid items.
- */
-function prepareInnerBlockTypes(
-	registeredInnerBlocks: Object,
-	rootAttributes: Object
-): Object {
-	const values = Object.values(registeredInnerBlocks);
-
-	if (!values.length) {
-		return {};
-	}
-
-	// Extracting default prop of items and assigning to a new object
-	const newRootAttributes: { [key: string]: any } = {};
-
-	for (const key in rootAttributes) {
-		if (ignoreDefaultBlockAttributeKeysRegExp().test(key)) {
-			continue;
-		}
-
-		if (rootAttributes[key].default !== undefined) {
-			newRootAttributes[key] = rootAttributes[key].default;
-
-			continue;
-		}
-
-		switch (rootAttributes[key]?.type) {
-			case 'string':
-				newRootAttributes[key] = '';
-				break;
-			case 'object':
-				newRootAttributes[key] = {};
-				break;
-			case 'array':
-				newRootAttributes[key] = [];
-				break;
-			case 'boolean':
-				newRootAttributes[key] = false;
-				break;
-			case 'number':
-			case 'integer':
-				newRootAttributes[key] = 0;
-				break;
-			case 'null':
-				newRootAttributes[key] = null;
-				break;
-		}
-	}
-
-	const types = values.map((innerBlock) => ({
-		...innerBlock,
-		attributes: newRootAttributes,
-	}));
-
-	return { default: types };
-}
-
-/**
  * Merge settings of block type.
  *
  * @param {Object} settings The default WordPress block type settings
@@ -130,7 +67,7 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 		return settings;
 	}
 
-	const overridedAttributes = {
+	const overrideAttribute = {
 		...settings.attributes,
 		...additional.attributes,
 		...blockStatesAttributes,
@@ -139,16 +76,14 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 	return {
 		...settings,
 		attributes: {
-			...overridedAttributes,
+			...overrideAttribute,
 			publisherInnerBlocks: {
 				...innerBlocksExtensionsAttributes.publisherInnerBlocks,
-				...prepareInnerBlockTypes(
-					additional?.publisherInnerBlocks || {},
-					overridedAttributes
-				),
+				default: [],
 			},
 			publisherPropsId: {
 				type: 'string',
+				default: '',
 			},
 		},
 		supports: {
@@ -163,13 +98,13 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 			if (isFunction(additional?.edit)) {
 				return (
 					<>
-						<SlotFillProvider>
-							<BlockBase
-								{...{
-									...props,
-									additional,
-								}}
-							>
+						<BlockBase
+							{...{
+								...props,
+								additional,
+							}}
+						>
+							<SlotFillProvider>
 								<Slot name={'publisher-core-block-before'} />
 
 								<BlockPortals
@@ -183,8 +118,8 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 								/>
 
 								<Slot name={'publisher-core-block-after'} />
-							</BlockBase>
-						</SlotFillProvider>
+							</SlotFillProvider>
+						</BlockBase>
 						{settings.edit(props)}
 					</>
 				);
@@ -216,17 +151,5 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 			},
 			...(settings?.deprecated || []),
 		].filter(isObject),
-		publisherEditorProps: {
-			...(settings.publisherEditorProps || {}),
-			...additional.editorProps,
-		},
-		publisherSaveProps: {
-			...(settings.publisherSaveProps || {}),
-			...additional.saveProps,
-		},
-		publisherCssGenerators: {
-			...additional.cssGenerators,
-			...(settings?.publisherCssGenerators || {}),
-		},
 	};
 }
