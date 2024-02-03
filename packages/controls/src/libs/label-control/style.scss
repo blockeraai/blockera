@@ -100,9 +100,10 @@
 }
 
 .publisher-control-label.changed-in-other-state {
-	background: #96969633;
-	border-color: var(--publisher-block-other-state-color);
-	color: var(--publisher-block-other-state-color);
+	background: #f6f6f6;
+	box-shadow: 0 0 0 1px #d3d3d3;
+	color: var(--publisher-controls-color);
+	--publisher-controls-primary-color: #147eb8;
 }
 
 .publisher-control-label.changed-in-normal-state {
