@@ -3,9 +3,10 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { select, useDispatch } from '@wordpress/data';
+import { select, useDispatch, useSelect } from '@wordpress/data';
 import { memo, useState } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
+import { Fill } from '@wordpress/components';
 
 /**
  * Publisher dependencies
@@ -98,6 +99,9 @@ import { SettingsIcon } from './icons/settings';
 import { StylesIcon } from './icons/styles';
 import { AnimationsIcon } from './icons/animations';
 import { STORE_NAME } from '../base/store/constants';
+import StatesManager from '../block-states/components/states-manager';
+import type { InnerBlockType } from '../inner-blocks/types';
+import type { THandleOnChangeAttributes } from '../types';
 
 export const attributes = {
 	...typographyAttributes,
@@ -133,6 +137,7 @@ type Props = {
 	name: string,
 	clientId: string,
 	supports: Object,
+	attributes: Object,
 	children?: ComponentType<any>,
 	currentStateAttributes: Object,
 	publisherInnerBlocks: Array<Object>,
@@ -142,6 +147,7 @@ type Props = {
 export const SharedBlockExtension: ComponentType<Props> = memo(
 	({
 		children,
+		attributes,
 		setAttributes,
 		currentStateAttributes,
 		...props
@@ -157,13 +163,30 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		// 	...props,
 		// });
 
+		type BlockContextual = {
+			currentTab: string,
+			blockStateId: number,
+			breakpointId: number,
+			currentBlock: 'master' | InnerBlockType,
+			handleOnChangeAttributes: THandleOnChangeAttributes,
+		};
+
 		const {
 			currentTab,
-			currentBlock,
 			blockStateId,
 			breakpointId,
 			handleOnChangeAttributes,
-		} = useBlockContext();
+		}: BlockContextual = useBlockContext();
+
+		const { currentBlock = 'master' } = useSelect((select) => {
+			const { getExtensionCurrentBlock } = select(
+				'publisher-core/extensions'
+			);
+
+			return {
+				currentBlock: getExtensionCurrentBlock(),
+			};
+		});
 
 		const { layout, flexChild, icon } = extensions;
 
@@ -243,6 +266,22 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		const MappedExtensions = (tab: TTabProps): MixedElement => {
 			return (
 				<>
+					<Fill name={'publisher-core-block-card-children'}>
+						<StatesManager
+							states={currentStateAttributes.publisherBlockStates}
+							currentStateType={
+								currentStateAttributes.publisherCurrentState
+							}
+							onChange={handleOnChangeAttributes}
+							block={{
+								clientId: props.clientId,
+								supports,
+								setAttributes,
+								blockName: props.name,
+							}}
+							rootStates={attributes?.publisherBlockStates}
+						/>
+					</Fill>
 					<div
 						style={{
 							display: 'settings' === tab.name ? 'block' : 'none',
@@ -296,7 +335,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 						}}
 					>
 						<InnerBlocksExtension
-							currentBlock={currentBlock}
 							innerBlocks={
 								currentStateAttributes?.publisherInnerBlocks ||
 								[]

@@ -2,10 +2,10 @@
 /**
  * External dependencies
  */
-import { Fill } from '@wordpress/components';
+import { Fill, SlotFillProvider } from '@wordpress/components';
 import { applyFilters } from '@wordpress/hooks';
 import type { Element, MixedElement, ComponentType } from 'react';
-import { select, useSelect } from '@wordpress/data';
+import { select, useSelect, dispatch } from '@wordpress/data';
 import { InspectorControls } from '@wordpress/block-editor';
 import {
 	memo,
@@ -21,7 +21,7 @@ import {
  */
 import { useCssGenerator } from '@publisher/style-engine';
 import { extensionClassNames } from '@publisher/classnames';
-import { indexOf, isUndefined, omitWithPattern } from '@publisher/utils';
+import { isUndefined, omitWithPattern } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -29,21 +29,19 @@ import { indexOf, isUndefined, omitWithPattern } from '@publisher/utils';
 import {
 	useIconEffect,
 	useAttributes,
+	useBlockStateInfo,
+	useInnerBlocksInfo,
 	BlockEditContextProvider,
+	useCalculateCurrentAttributes,
 } from '../hooks';
 import { sanitizedBlockAttributes } from '../hooks/utils';
-import { SideEffect } from '../libs/base/components/side-effect';
-import type { BreakpointTypes, StateTypes } from '../libs/block-states/types';
+import { SideEffect } from '../libs/base';
 import { BlockCard } from '../libs/block-card';
 import { BlockPartials } from './block-partials';
 import * as config from '../libs/base/config';
 import styleGenerators from '../libs/shared/style-generators';
-import StatesManager from '../libs/block-states/components/states-manager';
 import { isInnerBlock, propsAreEqual } from './utils';
-import type {
-	InnerBlockModel,
-	InnerBlockType,
-} from '../libs/inner-blocks/types';
+import type { InnerBlockType } from '../libs/inner-blocks/types';
 import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs';
 
 export type BlockBaseProps = {
@@ -70,8 +68,19 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		const [currentTab, setCurrentTab] = useState(
 			additional?.activeTab || 'style'
 		);
-		const [currentBlock, setCurrentBlock] = useState('master');
 		const [isOpenGridBuilder, setOpenGridBuilder] = useState(false);
+
+		const { currentBlock = 'master' } = useSelect((select) => {
+			const { getExtensionCurrentBlock } = select(
+				'publisher-core/extensions'
+			);
+
+			return {
+				currentBlock: getExtensionCurrentBlock(),
+			};
+		});
+		const { changeExtensionCurrentBlock: setCurrentBlock } =
+			dispatch('publisher-core/extensions') || {};
 
 		const {
 			__experimentalGetPreviewDeviceType: getDeviceType = () => 'desktop',
@@ -80,31 +89,24 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				? select('core/edit-post')
 				: select('core/edit-site')) || {};
 
-		// Get chosen inner block type but when not selected anything value will be "undefined".
-		const innerBlockType: InnerBlockModel | void =
-			'master' === currentBlock
-				? undefined
-				: attributes.publisherInnerBlocks.find(
-						(innerBlock: InnerBlockModel): boolean =>
-							innerBlock.type === currentBlock
-				  );
+		const { innerBlockId, currentInnerBlock, publisherInnerBlocks } =
+			useInnerBlocksInfo({ name, additional, attributes });
 
-		// Get chosen inner block type identifier but when not selected anything value will be "-1".
-		const innerBlockId =
-			'undefined' === typeof innerBlockType
-				? -1
-				: attributes.publisherInnerBlocks.indexOf(innerBlockType);
-
-		// Get chosen inner block type identifier of between other inner blocks but when not selected anything value will be "NULL".
-		const currentInnerBlock =
-			attributes?.publisherInnerBlocks &&
-			attributes?.publisherInnerBlocks[innerBlockId]
-				? attributes?.publisherInnerBlocks[innerBlockId]
-				: null;
-
-		const isNormalState = () =>
+		const masterIsNormalState = (): boolean =>
 			'normal' === attributes?.publisherCurrentState &&
 			/desktop/i.test(getDeviceType());
+
+		const isNormalState = (): boolean => {
+			if (isInnerBlock(currentBlock)) {
+				return (
+					'normal' ===
+						currentInnerBlock?.attributes?.publisherCurrentState &&
+					/desktop/i.test(getDeviceType())
+				);
+			}
+
+			return masterIsNormalState();
+		};
 
 		/**
 		 * Filterable attributes before initializing block edit component.
@@ -136,19 +138,34 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		});
 
 		const blockEditRef = useRef(null);
+		const { blockStateId, breakpointId } = useBlockStateInfo({
+			attributes,
+			currentBlock,
+			getDeviceType,
+			currentInnerBlock,
+		});
+		const currentAttributes = useCalculateCurrentAttributes({
+			attributes,
+			currentBlock,
+			blockStateId,
+			breakpointId,
+			isNormalState,
+			currentInnerBlock,
+			publisherInnerBlocks,
+		});
 
 		useIconEffect(
 			{
 				name,
 				clientId,
 				blockRefId: blockEditRef,
-				publisherIcon: attributes?.publisherIcon,
-				publisherIconGap: attributes?.publisherIconGap,
-				publisherIconSize: attributes?.publisherIconSize,
-				publisherIconColor: attributes?.publisherIconColor,
-				publisherIconPosition: attributes?.publisherIconPosition,
+				publisherIcon: currentAttributes?.publisherIcon,
+				publisherIconGap: currentAttributes?.publisherIconGap,
+				publisherIconSize: currentAttributes?.publisherIconSize,
+				publisherIconColor: currentAttributes?.publisherIconColor,
+				publisherIconPosition: currentAttributes?.publisherIconPosition,
 			},
-			[attributes]
+			[currentAttributes]
 		);
 
 		const { edit: BlockEditComponent } = additional;
@@ -198,22 +215,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			// eslint-disable-next-line
 		}, []);
 
-		const blockStates = attributes?.publisherBlockStates.map(
-			(state: StateTypes) => state.type
-		);
-
-		const currentStateIndex = blockStates?.indexOf(
-			attributes?.publisherCurrentState
-		);
-		const blockStateId = -1 === currentStateIndex ? 0 : currentStateIndex;
-
-		const breakpointId = indexOf(
-			attributes?.publisherBlockStates[blockStateId]?.breakpoints.map(
-				(breakpoint: BreakpointTypes) => breakpoint.label
-			),
-			getDeviceType()
-		);
-
 		const getAttributes = (key: string = ''): any => {
 			if (key && attributes[key]) {
 				return attributes[key];
@@ -222,20 +223,16 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			return attributes;
 		};
 
-		const { handleOnChangeAttributes } = useAttributes(
-			attributes,
-			setAttributes,
-			{
-				currentBlock,
-				blockStateId,
-				breakpointId,
-				isNormalState,
-				getAttributes,
-				blockId: name,
-				innerBlockId,
-				currentInnerBlock,
-			}
-		);
+		const { handleOnChangeAttributes } = useAttributes(setAttributes, {
+			innerBlockId,
+			blockStateId,
+			breakpointId,
+			isNormalState,
+			getAttributes,
+			blockId: name,
+			masterIsNormalState,
+			publisherInnerBlocks,
+		});
 
 		const styles = [];
 		const generatorSharedProps = {
@@ -265,82 +262,18 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				)
 		);
 
-		let currentStateAttributes = isNormalState()
-			? attributes
-			: {
-					...attributes,
-					...(attributes.publisherBlockStates[blockStateId]
-						.breakpoints[breakpointId]
-						? attributes.publisherBlockStates[blockStateId]
-								.breakpoints[breakpointId].attributes
-						: {}),
-			  };
-
-		let innerBlockAttributes: Object = {};
-
-		// Get attributes of customization inner block when switch to one of inner block types.
-		if (isInnerBlock(currentBlock)) {
-			currentStateAttributes = isNormalState()
-				? currentInnerBlock?.attributes
-				: {
-						...currentInnerBlock?.attributes,
-						...(currentInnerBlock?.attributes?.publisherBlockStates[
-							blockStateId
-						]?.breakpoints[breakpointId]
-							? currentInnerBlock?.attributes
-									?.publisherBlockStates[blockStateId]
-									?.breakpoints[breakpointId]?.attributes
-							: {}),
-				  };
-
-			innerBlockAttributes = {
-				...currentStateAttributes,
-				publisherInnerBlocks: attributes.publisherInnerBlocks,
-			};
-		}
-
-		const blockAttributes = Object.values(innerBlockAttributes).length
-			? innerBlockAttributes
-			: attributes;
-
 		const FillComponents = (): MixedElement => {
 			return (
 				<>
-					<Fill
-						name={`publisher-${currentBlock}-block-${blockAttributes.publisherCurrentState}-card-content-${clientId}`}
-					>
+					<Fill name={`publisher-block-card-content-${clientId}`}>
 						<BlockCard
 							clientId={clientId}
-							selectedInnerBlock={
-								'master' === currentBlock
-									? undefined
-									: currentBlock
-							}
 							handleOnClick={handleOnSwitchBlockSettings}
-							states={blockAttributes.publisherBlockStates}
-							innerBlocks={blockAttributes.publisherInnerBlocks}
-						>
-							<StatesManager
-								states={blockAttributes.publisherBlockStates}
-								currentStateType={
-									blockAttributes.publisherCurrentState
-								}
-								currentBlock={currentBlock}
-								onChange={handleOnChangeAttributes}
-								innerBlockId={innerBlockId}
-								block={{
-									clientId,
-									supports,
-									setAttributes,
-									blockName: name,
-									attributes: blockAttributes,
-								}}
-							/>
-						</BlockCard>
+							states={attributes.publisherBlockStates}
+							currentInnerBlock={currentInnerBlock}
+						/>
 					</Fill>
-					<Fill
-						name={`publisher-${currentBlock}-block-${blockAttributes.publisherCurrentState}-edit-content-${clientId}`}
-					>
+					<Fill name={`publisher-block-edit-content-${clientId}`}>
 						<BlockEditComponent
 							{...{
 								// Sending props like exactly "edit" function props of WordPress Block.
@@ -350,8 +283,8 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 								supports,
 								className,
 								setAttributes,
-								currentStateAttributes,
-								attributes: blockAttributes,
+								currentStateAttributes: currentAttributes,
+								attributes: currentAttributes,
 								...props,
 							}}
 						/>
@@ -367,13 +300,12 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						blockName: name,
 						clientId,
 						handleOnChangeAttributes,
-						attributes: blockAttributes,
+						attributes: currentAttributes,
 						storeName: 'publisher-core/controls',
 					},
 					currentTab,
 					blockStateId,
 					breakpointId,
-					currentBlock,
 					setCurrentTab,
 					isNormalState,
 					setAttributes,
@@ -396,18 +328,15 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							{...{
 								currentTab,
 								currentState:
-									blockAttributes.publisherCurrentState,
+									currentAttributes.publisherCurrentState,
 							}}
 						/>
-						<BlockPartials
-							clientId={clientId}
-							currentBlock={currentBlock}
-							currentState={blockAttributes.publisherCurrentState}
-						/>
+						<SlotFillProvider>
+							<BlockPartials clientId={clientId} />
+							<FillComponents />
+						</SlotFillProvider>
 					</InspectorControls>
 					<div ref={blockEditRef} />
-
-					<FillComponents />
 
 					<style
 						data-block-type={name}
