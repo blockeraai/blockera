@@ -5,6 +5,6 @@ export const attributes = {
 	},
 	publisherCustomCSS: {
 		type: 'string',
-		default: '',
+		default: '.block {\n  \n}\n',
 	},
 };
