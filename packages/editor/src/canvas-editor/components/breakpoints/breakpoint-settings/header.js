@@ -10,11 +10,7 @@ import { __, sprintf } from '@wordpress/i18n';
  * Publisher dependencies
  */
 import { controlInnerClassNames } from '@publisher/classnames';
-
-/**
- * Internal dependencies
- */
-import { BreakpointIcon } from '../../../../../libs/block-states/helpers';
+import { BreakpointIcon } from '@publisher/extensions/src/libs/block-states/helpers';
 
 export default function ({
 	item,

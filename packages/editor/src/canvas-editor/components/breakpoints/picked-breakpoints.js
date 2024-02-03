@@ -9,12 +9,12 @@ import type { MixedElement } from 'react';
  */
 import { Flex } from '@publisher/components';
 import { controlInnerClassNames } from '@publisher/classnames';
+import { BreakpointIcon } from '@publisher/extensions/src/libs/block-states/helpers';
 
 /**
  * Internal dependencies
  */
 import type { PickedBreakpointsComponentProps } from './types';
-import { BreakpointIcon } from '../../../../libs/block-states/helpers';
 
 export default function ({
 	onClick,
