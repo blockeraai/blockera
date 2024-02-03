@@ -5,10 +5,22 @@
 import type { Node } from 'react';
 
 export type PanelBodyControlProps = {
+	/**
+	 * Title of Inspect Element
+	 */
 	title: string,
+	/**
+	 * Default open or close status for panel body
+	 */
 	initialOpen?: boolean,
-	className?: string,
+	/**
+	 * Icon for panel body
+	 */
 	icon?: Node,
+	/**
+	 * Function that will be fired while opening or closing of panel body
+	 */
 	onToggle?: () => void,
 	children: Node,
+	className?: string,
 };
