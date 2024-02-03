@@ -24,6 +24,7 @@ import { isShowField } from '../../api/utils';
 import { hasSameProps, generateExtensionId } from '../utils';
 import type { TAdvancedProps } from './types/advanced-props';
 import { AdvancedExtensionIcon } from './index';
+import { useBlockContext } from '../../hooks';
 
 export const AdvancedExtension: ComponentType<TAdvancedProps> = memo(
 	({
@@ -34,6 +35,8 @@ export const AdvancedExtension: ComponentType<TAdvancedProps> = memo(
 		attributes,
 		handleOnChangeAttributes,
 	}: TAdvancedProps): MixedElement => {
+		const { getCurrentState, getBreakpoint } = useBlockContext();
+
 		const isShowCustomCSS = isShowField(
 			advancedConfig.publisherCustomCSS,
 			values.publisherCustomCSS,
@@ -43,6 +46,17 @@ export const AdvancedExtension: ComponentType<TAdvancedProps> = memo(
 		if (!isShowCustomCSS) {
 			return <></>;
 		}
+
+		const isActiveOnStates =
+			advancedConfig.publisherCustomCSS.isActiveOnStates;
+		const isActiveOnBreakpoints =
+			advancedConfig.publisherCustomCSS.isActiveOnBreakpoints;
+
+		const isEditable =
+			(isActiveOnStates !== 'all' &&
+				!isActiveOnStates.includes(getCurrentState())) ||
+			(isActiveOnBreakpoints !== 'all' &&
+				!isActiveOnBreakpoints.includes(getBreakpoint()?.type));
 
 		return (
 			<PanelBodyControl
@@ -56,12 +70,8 @@ export const AdvancedExtension: ComponentType<TAdvancedProps> = memo(
 			>
 				<FeatureWrapper
 					isActive={isShowCustomCSS}
-					isActiveOnStates={
-						advancedConfig.publisherCustomCSS.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						advancedConfig.publisherCustomCSS.isActiveOnBreakpoints
-					}
+					isActiveOnStates={isActiveOnStates}
+					isActiveOnBreakpoints={isActiveOnBreakpoints}
 				>
 					<ControlContextProvider
 						value={{
@@ -80,6 +90,7 @@ export const AdvancedExtension: ComponentType<TAdvancedProps> = memo(
 									{ ref }
 								)
 							}
+							editable={!isEditable}
 							defaultValue={attributes.publisherCustomCSS.default}
 							{...extensionProps.publisherCustomCSS}
 						/>
