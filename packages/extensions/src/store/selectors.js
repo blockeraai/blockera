@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * External dependencies
  */
@@ -7,6 +9,8 @@ import createSelector from 'rememo';
  * Publisher dependencies
  */
 import { get, isString } from '@publisher/utils';
+import type { TStates } from '../libs/block-states/types';
+import type { InnerBlockType } from '../libs/inner-blocks/types';
 
 /**
  * Returns a block extension by name.
@@ -43,9 +47,9 @@ import { get, isString } from '@publisher/utils';
  * };
  * ```
  *
- * @return {Object?} Block Extension.
+ * @return {Object} Block Extension.
  */
-export function getBlockExtension(state, name) {
+export function getBlockExtension(state: Object, name: string): Object {
 	return state.blockExtensions[name];
 }
 
@@ -85,9 +89,13 @@ export function getBlockExtension(state, name) {
  * };
  * ```
  *
- * @return {Object?} Block Extension.
+ * @return {Object} Block Extension.
  */
-export function getBlockExtensionBy(state, field, name) {
+export function getBlockExtensionBy(
+	state: Object,
+	field: string,
+	name: string
+): Object {
 	return Object.entries(state.blockExtensions)
 		.map((item) => (item[1][field] === name ? item[1] : null))
 		.filter((item) => null !== item)[0];
@@ -121,10 +129,10 @@ export function getBlockExtensionBy(state, field, name) {
  *
  * @return {Array} Block Extensions.
  */
-export const getBlockExtensions = createSelector(
+export const getBlockExtensions = (createSelector(
 	(state) => Object.values(state.blockExtensions),
 	(state) => [state.blockExtensions]
-);
+): Array<Object>);
 
 /**
  * Returns the block extension support value, if defined.
@@ -161,11 +169,11 @@ export const getBlockExtensions = createSelector(
  * @return {?*} Block Extension value
  */
 export const getBlockExtensionSupport = (
-	state,
-	nameOrExtension,
-	feature,
-	defaultExtensions
-) => {
+	state: Object,
+	nameOrExtension: string | Object,
+	feature: Array<string> | string,
+	defaultExtensions: any
+): Object | null => {
 	const blockExtension = getNormalizedBlockExtension(state, nameOrExtension);
 	if (!blockExtension?.supports) {
 		return defaultExtensions;
@@ -183,7 +191,10 @@ export const getBlockExtensionSupport = (
  *
  * @return {Object} Block extension object.
  */
-const getNormalizedBlockExtension = (state, nameOrExtension) =>
+const getNormalizedBlockExtension = (
+	state: Object,
+	nameOrExtension: string | Object
+): Object =>
 	isString(nameOrExtension)
 		? getBlockExtension(state, nameOrExtension)
 		: nameOrExtension;
@@ -223,15 +234,41 @@ const getNormalizedBlockExtension = (state, nameOrExtension) =>
  * @return {boolean} Whether block Fields feature.
  */
 export function hasBlockExtensionSupport(
-	state,
-	nameOrExtension,
-	feature,
-	defaultExtensions
-) {
+	state: Object,
+	nameOrExtension: string | Object,
+	feature: string,
+	defaultExtensions: any
+): boolean {
 	return !!getBlockExtensionSupport(
 		state,
 		nameOrExtension,
 		feature,
 		defaultExtensions
 	);
+}
+
+/**
+ * Get current block value of block extension.
+ *
+ * @param {Object} blockExtensions the block extension details.
+ *
+ * @return {"master"|"heading"|"paragraph"|"icon"|"button"|*|string} The inner block type or master.
+ */
+export function getExtensionCurrentBlock({
+	blockExtensions,
+}: Object): 'master' | InnerBlockType {
+	return blockExtensions?.currentBlock || 'master';
+}
+
+/**
+ * Get current block state type of block extension.
+ *
+ * @param {Object} blockExtensions the block extension details.
+ *
+ * @return {"master"|"heading"|"paragraph"|"icon"|"button"|*|string} The inner block type or master.
+ */
+export function getExtensionCurrentBlockState({
+	blockExtensions,
+}: Object): TStates {
+	return blockExtensions?.currentStateType || 'normal';
 }
