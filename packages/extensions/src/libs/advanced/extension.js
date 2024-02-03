@@ -67,6 +67,10 @@ export const AdvancedExtension: ComponentType<TAdvancedProps> = memo(
 					'extension',
 					'extension-advanced'
 				)}
+				isEdited={
+					values.publisherCustomCSS !==
+					attributes.publisherCustomCSS.default
+				}
 			>
 				<FeatureWrapper
 					isActive={isShowCustomCSS}
