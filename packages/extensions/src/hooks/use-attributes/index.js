@@ -119,8 +119,8 @@ export const useAttributes = (
 
 		const {
 			updateNormalState,
-			updateInnerBlocks,
 			updateBlockStates,
+			updateInnerBlockStates,
 			updateInnerBlockInsideParentState,
 		}: UseAttributesActions = actions({
 			ref,
@@ -176,7 +176,7 @@ export const useAttributes = (
 			return setAttributes(
 				reducer(
 					_attributes,
-					updateInnerBlocks({
+					updateInnerBlockStates({
 						breakpointId: _blockState
 							? _blockState.breakpoints.indexOf(_breakpoint)
 							: -1,

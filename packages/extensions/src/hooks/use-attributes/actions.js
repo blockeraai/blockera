@@ -2,9 +2,9 @@
 
 export type UseAttributesActions = {
 	updateNormalState: () => Object,
-	updateInnerBlocks: (params: Object) => Object,
 	updateBlockStates: () => Object,
 	updateInnerBlockInsideParentState: () => Object,
+	updateInnerBlockStates: (params: Object) => Object,
 };
 
 const actions = (params: Object): UseAttributesActions => {
@@ -22,7 +22,7 @@ const actions = (params: Object): UseAttributesActions => {
 				...params,
 			};
 		},
-		updateInnerBlocks({
+		updateInnerBlockStates({
 			stateType,
 			breakpointId,
 			blockStateId,
