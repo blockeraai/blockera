@@ -29,7 +29,7 @@
 				outline: none !important;
 			}
 
-			&:hover:not([aria-pressed="true"]) {
+			&:hover:not([aria-pressed="true"]):not([aria-checked="true"]) {
 				color: var(--publisher-controls-primary-color);
 			}
 		}
