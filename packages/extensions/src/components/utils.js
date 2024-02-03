@@ -41,9 +41,9 @@ export const propsAreEqual = (
 /**
  * is current block is inner block?
  *
- * @param {'master' | InnerBlockType} currentBlock The current block type.
+ * @param {'master' | InnerBlockType | string} currentBlock The current block type.
  * @return {boolean} true on success, false on otherwise.
  */
 export const isInnerBlock = (
-	currentBlock: 'master' | InnerBlockType
+	currentBlock: 'master' | InnerBlockType | string
 ): boolean => 'master' !== currentBlock;

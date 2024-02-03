@@ -7,3 +7,4 @@ export {
 	definitionTypes,
 	__experimentalRegistrationInnerBlockExtensionCustomConfigDefinition,
 } from './definitions';
+export * from './helpers';

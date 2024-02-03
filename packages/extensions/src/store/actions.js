@@ -1,5 +1,10 @@
+// @flow
+
 // eslint-disable-next-line jsdoc/valid-types
 /** @typedef {import('../api/registration').publisherBlockExtensionType} publisherBlockExtensionType */
+
+import type { InnerBlockType } from '../libs/inner-blocks/types';
+import type { TStates } from '../libs/block-states/types';
 
 /**
  * Returns an action object used in signalling that block types have been added.
@@ -12,7 +17,9 @@
  *
  * @return {Object} Action object.
  */
-export function addBlockExtensions(blockExtension) {
+export function addBlockExtensions(
+	blockExtension: Array<Object> | Object
+): Object {
 	return {
 		type: 'ADD_BLOCK_EXTENSIONS',
 		blockExtensions: Array.isArray(blockExtension)
@@ -27,7 +34,7 @@ export function addBlockExtensions(blockExtension) {
  * @param {publisherBlockExtensionType} blockExtension Unprocessed block extension settings.
  */
 export const __experimentalRegisterBlockExtension =
-	(blockExtension) =>
+	(blockExtension: Array<Object>): Object =>
 	({ dispatch }) => {
 		dispatch({
 			type: 'ADD_UNPROCESSED_BLOCK_EXTENSION',
@@ -52,9 +59,27 @@ export const __experimentalRegisterBlockExtension =
  *
  * @return {Object} Action object.
  */
-export function removeBlockExtensions(names) {
+export function removeBlockExtensions(names: string | Array<string>): Object {
 	return {
 		type: 'REMOVE_BLOCK_EXTENSIONS',
 		names: Array.isArray(names) ? names : [names],
+	};
+}
+
+export function changeExtensionCurrentBlock(
+	currentBlock: 'master' | InnerBlockType
+): Object {
+	return {
+		currentBlock,
+		type: 'CHANGE_CURRENT_BLOCK',
+	};
+}
+
+export function changeExtensionCurrentBlockState(
+	currentStateType: TStates
+): Object {
+	return {
+		currentStateType,
+		type: 'CHANGE_CURRENT_BLOCK_STATE',
 	};
 }
