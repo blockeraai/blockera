@@ -22,5 +22,5 @@ export const __experimentalExtensionsSupportRegistration = (): void => {
 
 export * from './config';
 export * from './types';
-export * from './components/side-effect';
+export { SideEffect } from './components/side-effect';
 export { store as ExtensionsSupportStore } from './store';
