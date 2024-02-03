@@ -147,7 +147,7 @@ type Props = {
 export const SharedBlockExtension: ComponentType<Props> = memo(
 	({
 		children,
-		attributes,
+		attributes: currentBlockAttributes,
 		setAttributes,
 		currentStateAttributes,
 		...props
@@ -157,7 +157,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		// dev-mode codes 👇 : to debug re-rendering
 		// useTraceUpdate({
 		// 	children,
-		// 	attributes,
+		// 	currentBlockAttributes,
 		// 	currentState,
 		// 	setAttributes,
 		// 	...props,
@@ -279,7 +279,9 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								setAttributes,
 								blockName: props.name,
 							}}
-							rootStates={attributes?.publisherBlockStates}
+							rootStates={
+								currentBlockAttributes?.publisherBlockStates
+							}
 						/>
 					</Fill>
 					<div
