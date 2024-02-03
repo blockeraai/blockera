@@ -50,6 +50,7 @@ const publisherDivider: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Shape Dividers', 'publisher-core'),
+	isActiveOnStates: ['normal'],
 };
 
 const publisherMask: FeatureConfig = {
@@ -57,6 +58,7 @@ const publisherMask: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Image Mask', 'publisher-core'),
+	isActiveOnStates: ['normal'],
 };
 
 const publisherBlendMode: FeatureConfig = {
