@@ -2,13 +2,13 @@
 /**
  * External dependencies
  */
-import type { Element } from 'react';
 import { __ } from '@wordpress/i18n';
+import { useSelect } from '@wordpress/data';
+import type { Element, ComponentType } from 'react';
 
 /**
  * Publisher dependencies
  */
-import { isEquals } from '@publisher/utils';
 import { controlInnerClassNames } from '@publisher/classnames';
 import { ControlContextProvider, RepeaterControl } from '@publisher/controls';
 import { STORE_NAME } from '@publisher/controls/src/libs/repeater-control/store';
@@ -21,7 +21,7 @@ import ItemBody from './item-body';
 import defaultStates from '../states';
 import ItemHeader from './item-header';
 import ItemOpener from './item-opener';
-import { getStateInfo } from '../helpers';
+import { getStateInfo, onChangeBlockStates } from '../helpers';
 import { generateExtensionId } from '../../utils';
 import getBreakpoints from '../default-breakpoints';
 import { attributes as StateSettings } from '../attributes';
@@ -30,24 +30,26 @@ import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 import { PopoverTitleButtons } from './popover-title-buttons';
 import { LabelDescription } from './label-description';
 import StateContainer from '../../../components/state-container';
-import type { InnerBlockType } from '../../inner-blocks/types';
 import { isInnerBlock } from '../../../components';
+import { useBlockContext } from '../../../hooks';
 
-export default function StatesManager({
+const StatesManager: ComponentType<any> = ({
 	block,
 	states,
 	onChange,
-	currentBlock,
-	innerBlockId,
+	rootStates,
 	currentStateType,
 }: {
-	block: TBlockProps,
-	innerBlockId: number,
+	block: {
+		...TBlockProps,
+		attributes?: Object,
+	},
 	states: Array<Object>,
+	rootStates: Array<Object>,
 	currentStateType: TStates,
 	onChange: THandleOnChangeAttributes,
-	currentBlock: 'master' | InnerBlockType,
-}): Element<any> {
+}): Element<any> => {
+	const { isNormalState } = useBlockContext();
 	const contextValue = {
 		block,
 		value: !states.length
@@ -68,8 +70,18 @@ export default function StatesManager({
 		hasSideEffect: true,
 		attribute: 'publisherBlockStates',
 		blockName: block.blockName,
-		name: generateExtensionId(block, 'block-states'),
+		name: generateExtensionId(block, 'block-states', false),
 	};
+
+	const { currentBlock = 'master' } = useSelect((select) => {
+		const { getExtensionCurrentBlock } = select(
+			'publisher-core/extensions'
+		);
+
+		return {
+			currentBlock: getExtensionCurrentBlock(),
+		};
+	});
 
 	const valueCleanup = (value: Array<StateTypes>): Array<Object> => {
 		return value?.map((item: Object): Array<Object> => {
@@ -132,125 +144,14 @@ export default function StatesManager({
 							selectable: true,
 							visibilitySupport: true,
 						},
-						onChange: (newValue) => {
-							const selectedState = newValue.find(
-								(item) => item.isSelected
-							);
-
-							if (!selectedState) {
-								return;
-							}
-
-							const isEqualsWithCurrentState = (type: TStates) =>
-								type === currentStateType;
-
-							if (
-								isEqualsWithCurrentState(selectedState.type) &&
-								states.length
-							) {
-								return;
-							}
-
-							if (newValue.length !== states.length) {
-								const addOrModifyRootItems = {
-									publisherCurrentState: selectedState.type,
-								};
-
-								const blockStates =
-									block.attributes.publisherBlockStates;
-
-								onChange(
-									'publisherBlockStates',
-									newValue.map((state, index) => {
-										if (
-											blockStates[index] &&
-											blockStates[index].isSelected
-										) {
-											return {
-												...blockStates[index],
-												isOpen: false,
-												isSelected: false,
-											};
-										}
-										if (blockStates[index]) {
-											return {
-												...blockStates[index],
-												isOpen: false,
-											};
-										}
-
-										return state;
-									}),
-									{
-										addOrModifyRootItems,
-									}
-								);
-
-								return;
-							}
-
-							if (
-								!isEquals(selectedState.type, currentStateType)
-							) {
-								const publisherBlockStates =
-									block.attributes.publisherBlockStates.map(
-										(
-											state: Object,
-											stateId: number
-										): Object => {
-											if (
-												stateId ===
-												newValue.indexOf(selectedState)
-											) {
-												return {
-													...state,
-													isOpen: false,
-													isSelected: true,
-													type: selectedState.type,
-													label: selectedState.label,
-												};
-											}
-
-											return {
-												...state,
-												isOpen: false,
-												isSelected: false,
-											};
-										}
-									);
-
-								const publisherInnerBlocks =
-									block.attributes.publisherInnerBlocks;
-
-								if (-1 !== innerBlockId) {
-									publisherInnerBlocks[
-										innerBlockId
-									].attributes.publisherBlockStates =
-										publisherBlockStates;
-								}
-
-								onChange(
-									'publisherCurrentState',
-									selectedState.type,
-									{
-										addOrModifyRootItems: {
-											...(isInnerBlock(currentBlock)
-												? {
-														publisherInnerBlocks,
-												  }
-												: {
-														publisherBlockStates,
-												  }),
-										},
-									}
-								);
-							} else {
-								onChange(
-									'publisherCurrentState',
-									selectedState.type || 'normal'
-								);
-							}
-						},
+						onChange: (newValue) =>
+							onChangeBlockStates(newValue, {
+								states,
+								onChange,
+								rootStates,
+								isNormalState,
+								currentStateType,
+							}),
 						//Override item when occurred clone action!
 						overrideItem: (item) => {
 							if ('normal' === item.type) {
@@ -282,7 +183,12 @@ export default function StatesManager({
 					}}
 					defaultValue={states}
 					addNewButtonLabel={__('Add New State', 'publisher-core')}
-					label={__('Block States', 'publisher-core')}
+					label={
+						'undefined' !== typeof currentBlock &&
+						isInnerBlock(currentBlock)
+							? __('Inner Block States', 'publisher-core')
+							: __('Block States', 'publisher-core')
+					}
 					labelDescription={<LabelDescription />}
 					popoverTitle={__('Block State', 'publisher-core')}
 					className={controlInnerClassNames('block-states-repeater')}
@@ -294,4 +200,6 @@ export default function StatesManager({
 			</StateContainer>
 		</ControlContextProvider>
 	);
-}
+};
+
+export default StatesManager;
