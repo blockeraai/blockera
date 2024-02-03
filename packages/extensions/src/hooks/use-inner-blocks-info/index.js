@@ -8,9 +8,11 @@ import { select } from '@wordpress/data';
 /**
  * Internal dependencies
  */
-import { getInnerBlockId } from '../utils';
+import {
+	prepareInnerBlockTypes,
+	getInnerBlockId,
+} from '../../libs/inner-blocks';
 import { useStoreSelectors } from '../use-store-selectors';
-import { prepareInnerBlockTypes } from '../../libs/inner-blocks';
 import type { InnerBlocksInfoProps, InnerBlocksInfo } from './types';
 
 export const useInnerBlocksInfo = ({
