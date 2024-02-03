@@ -5,13 +5,7 @@
  */
 import type { MixedElement } from 'react';
 import { useDispatch, useSelect } from '@wordpress/data';
-import { createContext, useEffect, useState } from '@wordpress/element';
-
-/**
- * Publisher dependencies
- */
-import { isEquals } from '@publisher/utils';
-import { useBlockContext } from '@publisher/extensions/src/hooks';
+import { createContext } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -45,10 +39,6 @@ export const ControlContextProvider = ({
 		type: storeName,
 	});
 
-	const { blockStateId, currentTab } = useBlockContext();
-
-	const [forceUpdate, setForceUpdate] = useState(blockStateId);
-
 	//Prepare control status and value!
 	const { status, value } = useSelect(
 		(select) => {
@@ -61,39 +51,6 @@ export const ControlContextProvider = ({
 	);
 	//control dispatch for available actions
 	const dispatch = useDispatch(storeName);
-	const { modifyControlValue } = dispatch;
-
-	// Assume switch between block states, then needs to re-render all controls.
-	useEffect(() => {
-		if (forceUpdate !== blockStateId) {
-			setForceUpdate(blockStateId);
-
-			modifyControlValue({
-				controlId: controlInfo.name,
-				value: controlInfo?.hasSideEffect ? value : controlInfo.value,
-			});
-		}
-		return undefined;
-	}, [blockStateId]);
-
-	useEffect(() => {
-		if (!isEquals(value, controlInfo.value)) {
-			modifyControlValue({
-				controlId: controlInfo.name,
-				value: controlInfo?.hasSideEffect ? value : controlInfo.value,
-			});
-		}
-		// eslint-disable-next-line
-	}, [currentTab]);
-
-	useEffect(() => {
-		if (!isEquals(value, controlInfo.value) && !controlInfo.hasSideEffect) {
-			modifyControlValue({
-				controlId: controlInfo.name,
-				value: controlInfo.value,
-			});
-		}
-	}, [controlInfo.value]);
 
 	//You can to enable||disable current control with status column!
 	if (!status) {

@@ -2,6 +2,7 @@
 /**
  * External dependencies
  */
+import memoize from 'fast-memoize';
 import { select } from '@wordpress/data';
 import { useContext, useRef } from '@wordpress/element';
 
@@ -101,7 +102,8 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		mergeInitialAndDefault,
 	} = args;
 
-	const calculatedValue = getCalculatedInitValue();
+	const _getCalculatedValue = memoize(() => getCalculatedInitValue());
+	const calculatedValue = _getCalculatedValue();
 
 	/**
 	 * @see ../../store/actions.js file to check available actions of dispatcher!
