@@ -88,6 +88,28 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 						>
 							<CodeControl
 								label={__('Custom CSS Code', 'publisher-core')}
+								labelDescription={
+									<>
+										<p>
+											{__(
+												'With this feature, you have the capability to apply custom CSS codes directly to this block, enabling you to tailor its style effortlessly.',
+												'publisher-core'
+											)}
+										</p>
+										<p>
+											{__(
+												'Once you input your CSS, the customization is automatically applied to the block.',
+												'publisher-core'
+											)}
+										</p>
+										<p>
+											{__(
+												'Simply use ".block" to target this specific block, and it will seamlessly convert to the correct selector for precise styling.',
+												'publisher-core'
+											)}
+										</p>
+									</>
+								}
 								onChange={(newValue, ref) =>
 									handleOnChangeAttributes(
 										'publisherCustomCSS',

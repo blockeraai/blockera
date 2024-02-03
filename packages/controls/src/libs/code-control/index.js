@@ -125,7 +125,7 @@ const CodeControl = ({
 						</p>
 						<p>
 							{__(
-								'By typing the smart autocomplete will help you to write style code easily.',
+								'While you type, the smart autocomplete functionality substantially streamlines CSS coding by suggesting CSS properties and their corresponding values.',
 								'publisher-core'
 							)}
 						</p>
