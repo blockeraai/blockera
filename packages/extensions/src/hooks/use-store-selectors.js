@@ -12,7 +12,8 @@ export const useStoreSelectors = (): {
 } => {
 	const { getBlockType } = select('core/blocks');
 	const { getSelectedBlock } = select('core/block-editor');
-	const { __experimentalGetPreviewDeviceType } = select('core/edit-post');
+	const { __experimentalGetPreviewDeviceType } =
+		select('core/edit-post') || {};
 
 	return {
 		editPost: {
