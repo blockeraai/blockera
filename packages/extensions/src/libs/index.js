@@ -85,12 +85,12 @@ export {
 	supports as mouseExtensionSupports,
 } from './mouse';
 export {
-	AdvancedExtensionIcon,
-	AdvancedStyles,
-	AdvancedExtension,
-	attributes as advancedExtensionAttributes,
-	supports as advancedExtensionSupports,
-} from './advanced';
+	CustomStyleExtensionIcon,
+	CustomStyleStyles,
+	CustomStyleExtension,
+	attributes as customStyleAttributes,
+	supports as customStyleSupports,
+} from './custom-style';
 export {
 	TypographyStyles,
 	TypographyExtension,

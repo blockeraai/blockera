@@ -10,8 +10,7 @@ import type { GeneratorReturnType } from '@publisher/style-engine/src/types';
 import type { TBlockProps } from '../types';
 
 interface IConfigs {
-	advancedConfig: {
-		cssGenerators: Object,
+	extensionConfig: {
 		publisherCSSProperties: boolean,
 	};
 	blockProps: TBlockProps;
@@ -19,7 +18,7 @@ interface IConfigs {
 	media: string;
 }
 
-export function AdvancedStyles({}: IConfigs): Array<GeneratorReturnType> {
+export function CustomStyleStyles({}: IConfigs): Array<GeneratorReturnType> {
 	// const { attributes } = blockProps;
 	//
 	const generators: Array<Object> = [];

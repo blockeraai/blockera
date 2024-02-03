@@ -7,7 +7,7 @@ export { positionConfig } from './position';
 export { sizeConfig } from './size';
 export { layoutConfig } from './layout';
 export { iconConfig } from './icon';
-export { advancedConfig } from './advanced';
+export { customStyleConfig } from './custom-style';
 export { flexChildConfig } from './flex-child';
 export { mouseConfig } from './mouse';
 export { entranceAnimationConfig } from './entrance-animation';

@@ -68,10 +68,10 @@ import {
 	FlexChildExtension,
 } from '../flex-child';
 import {
-	AdvancedExtension,
-	attributes as advancedAttributes,
-	supports as advancedSupports,
-} from '../advanced';
+	CustomStyleExtension,
+	attributes as customStyleAttributes,
+	supports as customStyleSupports,
+} from '../custom-style';
 import {
 	attributes as mouseAttributes,
 	supports as mouseSupports,
@@ -110,7 +110,7 @@ export const attributes = {
 	...layoutAttributes,
 	...flexChildAttributes,
 	...iconAttributes,
-	...advancedAttributes,
+	...customStyleAttributes,
 	...advancedSettingsAttributes,
 	...mouseAttributes,
 };
@@ -125,7 +125,7 @@ export const supports = {
 	...layoutSupports,
 	...flexChildSupports,
 	...iconSupports,
-	...advancedSupports,
+	...customStyleSupports,
 	...mouseSupports,
 };
 
@@ -223,7 +223,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			spacingConfig,
 			effectsConfig,
 			positionConfig,
-			advancedConfig,
+			customStyleConfig,
 			flexChildConfig,
 			backgroundConfig,
 			typographyConfig,
@@ -648,9 +648,9 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							setSettings={handleOnChangeSettings}
 						/>
 
-						<AdvancedExtension
+						<CustomStyleExtension
 							block={block}
-							advancedConfig={advancedConfig}
+							extensionConfig={customStyleConfig}
 							extensionProps={{
 								publisherCustomCSS: {},
 							}}

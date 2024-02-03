@@ -19,6 +19,6 @@ const publisherCustomCSS: FeatureConfig = {
 	isActiveOnBreakpoints: ['laptop'],
 };
 
-export const advancedConfig = {
+export const customStyleConfig = {
 	publisherCustomCSS,
 };

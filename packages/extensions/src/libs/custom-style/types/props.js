@@ -5,12 +5,12 @@
  */
 import type { BaseExtensionProps } from '../../types';
 
-export type TAdvancedProps = {
+export type CustomStyleExtensionProps = {
 	...BaseExtensionProps,
 	values: {
 		publisherCustomCSS: string,
 	},
-	advancedConfig: Object,
+	extensionConfig: Object,
 	extensionProps: {
 		publisherCustomCSS: Object,
 	},

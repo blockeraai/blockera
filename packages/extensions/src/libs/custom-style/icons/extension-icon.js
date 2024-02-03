@@ -1,4 +1,4 @@
-export default function AdvanceExtensionIcon({}) {
+export default function CustomStyleExtensionIcon({}) {
 	return (
 		<svg
 			width="24"
