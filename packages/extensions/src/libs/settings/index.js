@@ -33,6 +33,14 @@ export const ExtensionSettings = ({
 	const tools: { [key: string]: Object } = {};
 
 	Object.keys(features).forEach((featureId: string): void => {
+		// hide items
+		if (
+			features[featureId]?.showInSettings !== undefined &&
+			!features[featureId]?.showInSettings
+		) {
+			return;
+		}
+
 		if (features[featureId].force) {
 			defaults[featureId] = features[featureId];
 			return;

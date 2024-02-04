@@ -23,6 +23,10 @@ export type FeatureConfig = {
 	 */
 	force: boolean,
 	/**
+	 * Show item in settings popover. Can be used to hide items from settings.
+	 */
+	showInSettings?: boolean,
+	/**
 	 * The css generator configuration for current feature.
 	 */
 	cssGenerators?: Object | {},
