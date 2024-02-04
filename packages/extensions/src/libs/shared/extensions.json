@@ -17,15 +17,6 @@
 		"publisherFlexChildShrink",
 		"publisherFlexChildOrderCustom"
 	],
-	"layout": [
-		"publisherGap",
-		"publisherDisplay",
-		"publisherFlexWrap",
-		"publisherAlignItems",
-		"publisherAlignContent",
-		"publisherFlexDirection",
-		"publisherJustifyContent"
-	],
 	"entranceAnimation": ["publisherEntranceAnimation"],
 	"scrollAnimation": ["publisherScrollAnimation"],
 	"clickAnimation": ["publisherClickAnimation"],

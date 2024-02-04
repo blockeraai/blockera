@@ -1,13 +1,10 @@
 // @flow
-/**
- * External dependencies
- */
-import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
  */
-import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { BaseExtensionProps } from '../../types';
+import type { FeatureConfig } from '../../base';
 
 export type TCssProps = {
 	display?: string,
@@ -21,34 +18,42 @@ export type TCssProps = {
 	'align-content'?: string,
 };
 
+export type DisplayType =
+	| 'none'
+	| 'flex'
+	| 'block'
+	| 'inline'
+	| 'inline-block'
+	| 'grid';
+
 export type TLayoutProps = {
+	...BaseExtensionProps,
 	values: {
-		gap: { lock: boolean, gap: string, columns: string, rows: string },
-		display: string,
-		flexLayout: {
-			direction: string,
+		publisherDisplay: DisplayType,
+		publisherFlexLayout: {
+			direction: 'row' | 'column',
 			alignItems: string,
 			justifyContent: string,
 		},
-		flexWrap: { value: string, reverse: boolean },
-		alignContent: string,
+		publisherGap: {
+			lock: boolean,
+			gap: string,
+			columns: string,
+			rows: string,
+		},
+		publisherFlexWrap: { value: string, reverse: boolean },
+		publisherAlignContent: string,
 	},
-	// defaultValue: {
-	// 	type?: string,
-	// 	wideSize?: string,
-	// 	contentSize?: string,
-	// 	justifyContent?: string,
-	// },
-	block: TBlockProps,
-	layoutConfig: Object,
-	children?: MixedElement,
-	handleOnChangeAttributes: THandleOnChangeAttributes,
+	extensionConfig: {
+		publisherDisplay: FeatureConfig,
+		publisherFlexLayout: FeatureConfig,
+		publisherGap: FeatureConfig,
+		publisherFlexWrap: FeatureConfig,
+		publisherAlignContent: FeatureConfig,
+	},
 	extensionProps: {
 		publisherDisplay: Object,
 		publisherFlexLayout: Object,
-		publisherFlexDirection: Object,
-		publisherAlignItems: Object,
-		publisherJustifyContent: Object,
 		publisherGap: Object,
 		publisherFlexWrap: Object,
 		publisherAlignContent: Object,

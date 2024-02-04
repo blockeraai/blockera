@@ -32,17 +32,18 @@ const publisherGap: FeatureConfig = {
 };
 
 const publisherFlexWrap: FeatureConfig = {
-	show: true,
-	force: true,
+	show: false,
+	force: false,
 	status: true,
-	label: __('Flex Wrap', 'publisher-core'),
+	label: __('Flex Children Wrap', 'publisher-core'),
 };
 
 const publisherAlignContent: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
-	label: __('Align Content', 'publisher-core'),
+	showInSettings: false,
+	label: __('Children Align Content', 'publisher-core'),
 };
 
 export const layoutConfig = {

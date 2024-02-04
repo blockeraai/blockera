@@ -188,7 +188,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			};
 		});
 
-		const { layout, flexChild, icon } = extensions;
+		const { flexChild, icon } = extensions;
 
 		props = {
 			...props,
@@ -427,25 +427,38 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 						/>
 
 						<LayoutExtension
-							{...{
-								block,
-								layoutConfig,
-								extensionProps: {
-									publisherDisplay: {},
-									publisherFlexLayout: {},
-									publisherGap: {},
-									publisherFlexWrap: {},
-									publisherAlignContent: {},
-								},
-								values: include(
-									currentStateAttributes,
-									layout,
-									'publisher'
-								),
-								defaultValue:
-									currentStateAttributes.layout || {},
-								handleOnChangeAttributes,
+							block={block}
+							extensionConfig={layoutConfig}
+							extensionProps={{
+								publisherDisplay: {},
+								publisherFlexLayout: {},
+								publisherGap: {},
+								publisherFlexWrap: {},
+								publisherAlignContent: {},
 							}}
+							values={{
+								publisherDisplay:
+									currentStateAttributes.publisherDisplay,
+								publisherFlexLayout:
+									currentStateAttributes.publisherFlexLayout,
+								publisherGap:
+									currentStateAttributes.publisherGap,
+								publisherFlexWrap:
+									currentStateAttributes.publisherFlexWrap,
+								publisherAlignContent:
+									currentStateAttributes.publisherAlignContent,
+							}}
+							attributes={{
+								publisherDisplay: attributes.publisherDisplay,
+								publisherFlexLayout:
+									attributes.publisherFlexLayout,
+								publisherGap: attributes.publisherGap,
+								publisherFlexWrap: attributes.publisherFlexWrap,
+								publisherAlignContent:
+									attributes.publisherAlignContent,
+							}}
+							handleOnChangeAttributes={handleOnChangeAttributes}
+							setSettings={handleOnChangeSettings}
 						/>
 
 						{directParentBlock?.innerBlocks.length &&

@@ -17,7 +17,7 @@ import {
 	NoticeControl,
 	LayoutMatrixControl,
 } from '@publisher/controls';
-import { Flex, Button } from '@publisher/components';
+import { Flex, Button, FeatureWrapper } from '@publisher/components';
 import { componentClassNames } from '@publisher/classnames';
 
 /**
@@ -25,7 +25,7 @@ import { componentClassNames } from '@publisher/classnames';
  */
 import { Gap } from './components';
 import { useBlockContext } from '../../hooks';
-import { isActiveField } from '../../api/utils';
+import { isShowField } from '../../api/utils';
 import DisplayGridIcon from './icons/display-grid';
 import { default as ReverseIcon } from './icons/reverse';
 import type { TLayoutProps } from './types/layout-props';
@@ -45,33 +45,50 @@ import { default as AlignContentFlexStartIcon } from './icons/align-content-flex
 import { default as AlignContentSpaceAroundIcon } from './icons/align-content-space-around';
 import { default as AlignContentSpaceBetweenIcon } from './icons/align-content-space-between';
 import { LayoutExtensionIcon } from './index';
+import { ExtensionSettings } from '../settings';
 
 export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 	({
 		block,
-		values: { gap, display, flexLayout, flexWrap, alignContent },
-		// defaultValue: {
-		// 	type,
-		// 	wideSize,
-		// 	contentSize,
-		// 	justifyContent: defaultJustifyContent,
-		// },
+		values,
 		handleOnChangeAttributes,
 		extensionProps,
-		layoutConfig: {
-			publisherDisplay,
-			publisherFlexLayout,
-			publisherGap,
-			publisherFlexWrap,
-			publisherAlignContent,
-		},
+		extensionConfig,
+		attributes,
+		setSettings,
 	}: TLayoutProps): MixedElement => {
+		const isShowDisplay = isShowField(
+			extensionConfig.publisherDisplay,
+			values?.publisherDisplay,
+			attributes.publisherDisplay.default
+		);
+		const isShowFlexLayout = isShowField(
+			extensionConfig.publisherFlexLayout,
+			values?.publisherFlexLayout,
+			attributes.publisherFlexLayout.default
+		);
+		const isShowGap = isShowField(
+			extensionConfig.publisherGap,
+			values?.publisherGap,
+			attributes.publisherGap.default
+		);
+		const isShowFlexWrap = isShowField(
+			extensionConfig.publisherFlexWrap,
+			values?.publisherFlexWrap,
+			attributes.publisherFlexWrap.default
+		);
+		const isShowAlignContent = isShowField(
+			extensionConfig.publisherAlignContent,
+			values?.publisherAlignContent,
+			attributes.publisherAlignContent.default
+		);
+
 		const { setOpenGridBuilder, BlockComponent } = useBlockContext();
 
 		useEffect(() => {
 			//FIXME: please implements handler for "setOpenGridBuilder"!
 			// that handler must be order by display grid value and should have flag for open or not open grid builder!
-			if ('grid' === display) {
+			if ('grid' === values.publisherDisplay) {
 				// FIXME: replace "true" with implemented internal flag to open Grid Builder.
 				setOpenGridBuilder(true);
 			} else {
@@ -79,7 +96,17 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 				setOpenGridBuilder(false);
 			}
 			// eslint-disable-next-line
-		}, [display]);
+		}, [values.publisherDisplay]);
+
+		if (
+			!isShowDisplay ||
+			(!isShowFlexLayout &&
+				!isShowGap &&
+				!isShowFlexWrap &&
+				!isShowAlignContent)
+		) {
+			return <></>;
+		}
 
 		return (
 			<PanelBodyControl
@@ -88,11 +115,26 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 				icon={<LayoutExtensionIcon />}
 				className={componentClassNames('extension', 'extension-layout')}
 			>
-				{isActiveField(publisherDisplay) && (
+				<ExtensionSettings
+					features={extensionConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'layoutConfig');
+					}}
+				/>
+
+				<FeatureWrapper
+					isActive={isShowDisplay}
+					isActiveOnStates={
+						extensionConfig.publisherDisplay.isActiveOnStates
+					}
+					isActiveOnBreakpoints={
+						extensionConfig.publisherDisplay.isActiveOnBreakpoints
+					}
+				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'display'),
-							value: display,
+							value: values.publisherDisplay,
 							attribute: 'publisherDisplay',
 							blockName: block.blockName,
 						}}
@@ -210,7 +252,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 							]}
 							isDeselectable={true}
 							//
-							defaultValue=""
+							defaultValue={attributes.publisherDisplay}
 							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
 									'publisherDisplay',
@@ -220,7 +262,8 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 							}
 							{...extensionProps.publisherDisplay}
 						/>
-						{display === 'none' && (
+
+						{values.publisherDisplay === 'none' && (
 							<NoticeControl
 								type="information"
 								style={{ marginTop: '20px' }}
@@ -232,18 +275,28 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 							</NoticeControl>
 						)}
 					</ControlContextProvider>
-				)}
+				</FeatureWrapper>
 
-				{display === 'flex' && (
+				{values.publisherDisplay === 'flex' && (
 					<>
-						{isActiveField(publisherFlexLayout) && (
+						<FeatureWrapper
+							isActive={isShowFlexLayout}
+							isActiveOnStates={
+								extensionConfig.publisherFlexLayout
+									.isActiveOnStates
+							}
+							isActiveOnBreakpoints={
+								extensionConfig.publisherFlexLayout
+									.isActiveOnBreakpoints
+							}
+						>
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(
 										block,
 										'flex-layout'
 									),
-									value: flexLayout,
+									value: values.publisherFlexLayout,
 									attribute: 'publisherFlexLayout',
 									blockName: block.blockName,
 								}}
@@ -267,11 +320,9 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 											</p>
 										</>
 									}
-									defaultValue={{
-										direction: 'row',
-										alignItems: '',
-										justifyContent: '',
-									}}
+									defaultValue={
+										attributes.publisherFlexLayout.default
+									}
 									onChange={(newValue, ref) =>
 										handleOnChangeAttributes(
 											'publisherFlexLayout',
@@ -282,13 +333,22 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 									{...extensionProps.publisherFlexLayout}
 								/>
 							</ControlContextProvider>
-						)}
+						</FeatureWrapper>
 
-						{isActiveField(publisherGap) && (
+						<FeatureWrapper
+							isActive={isShowGap}
+							isActiveOnStates={
+								extensionConfig.publisherGap.isActiveOnStates
+							}
+							isActiveOnBreakpoints={
+								extensionConfig.publisherGap
+									.isActiveOnBreakpoints
+							}
+						>
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(block, 'gap'),
-									value: gap,
+									value: values.publisherGap,
 									attribute: 'publisherGap',
 									blockName: block.blockName,
 									type: 'nested',
@@ -296,382 +356,416 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 							>
 								<Gap
 									block={block}
-									gap={gap}
-									field={publisherGap}
+									gap={values.publisherGap}
+									field={extensionConfig.publisherGap}
 									attributeId="publisherGap"
 									handleOnChangeAttributes={
 										handleOnChangeAttributes
 									}
+									defaultValue={
+										attributes.publisherGap.default
+									}
 									{...extensionProps.publisherGap}
 								/>
 							</ControlContextProvider>
-						)}
+						</FeatureWrapper>
 
-						{isActiveField(publisherFlexWrap) && (
-							<>
-								<ControlContextProvider
-									value={{
-										name: generateExtensionId(
-											block,
-											'flexWrap'
-										),
-										value: flexWrap.value,
-										attribute: 'publisherFlexWrap',
-										blockName: block.blockName,
-										type: 'nested',
-									}}
-								>
-									<BaseControl columns="columns-1">
-										<Flex>
-											<ToggleSelectControl
-												columns="80px 120px"
-												label={__(
-													'Children',
-													'publisher-core'
-												)}
-												labelPopoverTitle={__(
-													'Children Wrap',
-													'publisher-core'
-												)}
-												labelDescription={
-													<>
-														<p>
-															{__(
-																'It controls whether flex items are forced into a single line or can be wrapped onto multiple lines, adjusting layout flexibility and responsiveness.',
-																'publisher-core'
-															)}
-														</p>
-														<p>
-															{__(
-																'It is crucial for managing the layout of flex items, especially when the container cannot accommodate all items in one row, ensuring content adaptability and orderliness.',
-																'publisher-core'
-															)}
-														</p>
+						<FeatureWrapper
+							isActive={isShowFlexWrap}
+							isActiveOnStates={
+								extensionConfig.publisherFlexWrap
+									.isActiveOnStates
+							}
+							isActiveOnBreakpoints={
+								extensionConfig.publisherFlexWrap
+									.isActiveOnBreakpoints
+							}
+						>
+							<ControlContextProvider
+								value={{
+									name: generateExtensionId(
+										block,
+										'flexWrap'
+									),
+									value: values.publisherFlexWrap,
+									attribute: 'publisherFlexWrap',
+									blockName: block.blockName,
+									type: 'nested',
+								}}
+							>
+								<BaseControl columns="columns-1">
+									<Flex>
+										<ToggleSelectControl
+											id={'value'}
+											columns="80px 120px"
+											label={__(
+												'Children Wrap',
+												'publisher-core'
+											)}
+											labelDescription={
+												<>
+													<p>
+														{__(
+															'It controls whether flex items are forced into a single line or can be wrapped onto multiple lines, adjusting layout flexibility and responsiveness.',
+															'publisher-core'
+														)}
+													</p>
+													<p>
+														{__(
+															'It is crucial for managing the layout of flex items, especially when the container cannot accommodate all items in one row, ensuring content adaptability and orderliness.',
+															'publisher-core'
+														)}
+													</p>
 
-														<h3>
-															<WrapNoWrapIcon />
-															{__(
-																'No Wrap',
-																'publisher-core'
-															)}
-														</h3>
-														<p>
-															{__(
-																'All flex items will be on one line regardless of their size.',
-																'publisher-core'
-															)}
-														</p>
-														<h3>
-															<WrapWrapIcon />
-															{__(
-																'Wrap',
-																'publisher-core'
-															)}
-														</h3>
-														<p>
-															{__(
-																'Flex items will wrap onto multiple lines, from top to bottom.',
-																'publisher-core'
-															)}
-														</p>
-														<p>
-															<span
-																style={{
-																	fontWeight:
-																		'600',
-																	color: '#ffffff',
-																}}
-															>
-																{__(
-																	'Note:',
-																	'publisher-core'
-																)}
-															</span>{' '}
-															{__(
-																'Using the reverse function flex items will wrap onto multiple lines in reverse order.',
-																'publisher-core'
-															)}
-														</p>
-													</>
-												}
-												options={[
-													{
-														label: __(
+													<h3>
+														<WrapNoWrapIcon />
+														{__(
 															'No Wrap',
 															'publisher-core'
-														),
-														value: 'nowrap',
-														icon: (
-															<WrapNoWrapIcon />
-														),
-													},
-													{
-														label: __(
+														)}
+													</h3>
+													<p>
+														{__(
+															'All flex items will be on one line regardless of their size.',
+															'publisher-core'
+														)}
+													</p>
+													<h3>
+														<WrapWrapIcon />
+														{__(
 															'Wrap',
 															'publisher-core'
-														),
-														value: 'wrap',
-														icon: <WrapWrapIcon />,
-													},
-												]}
-												//
-												defaultValue={'nowrap'}
-												onChange={(newValue, ref) => {
-													if (newValue === 'nowrap') {
-														handleOnChangeAttributes(
-															'publisherFlexWrap',
-															{
-																value: newValue,
-																reverse: false,
-															},
-															{ ref }
-														);
-													} else {
-														handleOnChangeAttributes(
-															'publisherFlexWrap',
-															{
-																...flexWrap,
-																value: 'wrap',
-															},
-															{ ref }
-														);
-													}
-												}}
-												{...extensionProps.publisherFlexWrap}
-											/>
-											<Button
-												showTooltip={true}
-												tooltipPosition="top"
-												label={__(
-													'Reverse Children Wrapping',
-													'publisher-core'
-												)}
-												size="small"
-												style={{
-													color: flexWrap?.reverse
-														? 'var(--publisher-controls-primary-color)'
-														: 'var(--publisher-controls-color)',
-													padding: '6px',
-												}}
-												disabled={
-													flexWrap.value ===
-														'nowrap' || ''
-												}
-												onClick={() => {
+														)}
+													</h3>
+													<p>
+														{__(
+															'Flex items will wrap onto multiple lines, from top to bottom.',
+															'publisher-core'
+														)}
+													</p>
+													<p>
+														<span
+															style={{
+																fontWeight:
+																	'600',
+																color: '#ffffff',
+															}}
+														>
+															{__(
+																'Note:',
+																'publisher-core'
+															)}
+														</span>{' '}
+														{__(
+															'Using the reverse function flex items will wrap onto multiple lines in reverse order.',
+															'publisher-core'
+														)}
+													</p>
+												</>
+											}
+											options={[
+												{
+													label: __(
+														'No Wrap',
+														'publisher-core'
+													),
+													value: 'nowrap',
+													icon: <WrapNoWrapIcon />,
+												},
+												{
+													label: __(
+														'Wrap',
+														'publisher-core'
+													),
+													value: 'wrap',
+													icon: <WrapWrapIcon />,
+												},
+											]}
+											//
+											defaultValue={
+												attributes.publisherFlexWrap
+													.default.value
+											}
+											onChange={(newValue, ref) => {
+												if (newValue === '') {
+													handleOnChangeAttributes(
+														'publisherFlexWrap',
+														attributes
+															.publisherFlexWrap
+															.default,
+														{ ref }
+													);
+												} else if (
+													newValue === 'nowrap'
+												) {
 													handleOnChangeAttributes(
 														'publisherFlexWrap',
 														{
-															...flexWrap,
-															reverse:
-																!flexWrap.reverse,
-														}
+															value: newValue,
+															reverse: false,
+														},
+														{ ref }
 													);
-												}}
-											>
-												<ReverseIcon />
-											</Button>
-										</Flex>
-									</BaseControl>
-								</ControlContextProvider>
+												} else {
+													handleOnChangeAttributes(
+														'publisherFlexWrap',
+														{
+															...values.publisherFlexWrap,
+															value: 'wrap',
+														},
+														{ ref }
+													);
+												}
+											}}
+											{...extensionProps.publisherFlexWrap}
+										/>
 
-								{isActiveField(publisherAlignContent) &&
-									flexWrap?.value !== '' &&
-									flexWrap?.value !== undefined &&
-									flexWrap?.value !== 'nowrap' && (
-										<ControlContextProvider
-											value={{
-												name: generateExtensionId(
-													block,
-													'align-content'
-												),
-												value: alignContent,
-												attribute:
-													'publisherAlignContent',
-												blockName: block.blockName,
+										<Button
+											showTooltip={true}
+											tooltipPosition="top"
+											label={__(
+												'Reverse Children Wrapping',
+												'publisher-core'
+											)}
+											size="small"
+											style={{
+												color: values.publisherFlexWrap
+													?.reverse
+													? 'var(--publisher-controls-primary-color)'
+													: 'var(--publisher-controls-color)',
+												padding: '6px',
+											}}
+											disabled={
+												values.publisherFlexWrap
+													.value === 'nowrap' || ''
+											}
+											onClick={() => {
+												handleOnChangeAttributes(
+													'publisherFlexWrap',
+													{
+														...values.publisherFlexWrap,
+														reverse:
+															!values
+																.publisherFlexWrap
+																.reverse,
+													}
+												);
 											}}
 										>
-											<ToggleSelectControl
-												label={__(
-													'Align Content',
-													'publisher-core'
-												)}
-												labelDescription={
-													<>
-														<p>
-															{__(
-																'Align-Content controls the alignment and distribution of lines within a flex container when there is extra space along the cross-axis, offering various alignment options.',
-																'publisher-core'
-															)}
-														</p>
-														<p>
-															{__(
-																'This property is vital in multi-line flex containers, especially when the height of the container is greater than that of the flex items, ensuring a balanced, visually appealing layout.',
-																'publisher-core'
-															)}
-														</p>
-														<h3>
-															<AlignContentFlexStartIcon />
-															{__(
-																'Flex Start',
-																'publisher-core'
-															)}
-														</h3>
-														<p>
-															{__(
-																'Packs lines toward the start of the container.',
-																'publisher-core'
-															)}
-														</p>
-														<h3>
-															<AlignContentCenterIcon />
-															{__(
-																'Center',
-																'publisher-core'
-															)}
-														</h3>
-														<p>
-															{__(
-																'Centers lines within the container.',
-																'publisher-core'
-															)}
-														</p>
-														<h3>
-															<AlignContentFlexEndIcon />
-															{__(
-																'Flex End',
-																'publisher-core'
-															)}
-														</h3>
-														<p>
-															{__(
-																'Packs lines toward the end of the container.',
-																'publisher-core'
-															)}
-														</p>
-														<h3>
-															<AlignContentSpaceAroundIcon />
-															{__(
-																'Space Around',
-																'publisher-core'
-															)}
-														</h3>
-														<p>
-															{__(
-																'Distributes lines evenly, with equal space around each line.',
-																'publisher-core'
-															)}
-														</p>
-														<h3>
-															<AlignContentSpaceBetweenIcon />
-															{__(
-																'Space Between',
-																'publisher-core'
-															)}
-														</h3>
-														<p>
-															{__(
-																'Distributes lines evenly, with the first line at the start and the last at the end.',
-																'publisher-core'
-															)}
-														</p>
-														<h3>
-															<AlignContentStretchIcon />
-															{__(
-																'Stretch',
-																'publisher-core'
-															)}
-														</h3>
-														<p>
-															{__(
-																'Stretches lines to fill the container (default behavior).',
-																'publisher-core'
-															)}
-														</p>
-													</>
-												}
-												columns="80px 160px"
-												options={[
-													{
-														label: __(
+											<ReverseIcon />
+										</Button>
+									</Flex>
+								</BaseControl>
+							</ControlContextProvider>
+
+							{values.publisherFlexWrap?.value === 'wrap' && (
+								<FeatureWrapper
+									isActive={isShowAlignContent}
+									isActiveOnStates={
+										extensionConfig.publisherAlignContent
+											.isActiveOnStates
+									}
+									isActiveOnBreakpoints={
+										extensionConfig.publisherAlignContent
+											.isActiveOnBreakpoints
+									}
+								>
+									<ControlContextProvider
+										value={{
+											name: generateExtensionId(
+												block,
+												'align-content'
+											),
+											value: values.publisherAlignContent,
+											attribute: 'publisherAlignContent',
+											blockName: block.blockName,
+										}}
+									>
+										<ToggleSelectControl
+											label={__(
+												'Align Content',
+												'publisher-core'
+											)}
+											labelDescription={
+												<>
+													<p>
+														{__(
+															'Align-Content controls the alignment and distribution of lines within a flex container when there is extra space along the cross-axis, offering various alignment options.',
+															'publisher-core'
+														)}
+													</p>
+													<p>
+														{__(
+															'This property is vital in multi-line flex containers, especially when the height of the container is greater than that of the flex items, ensuring a balanced, visually appealing layout.',
+															'publisher-core'
+														)}
+													</p>
+													<h3>
+														<AlignContentFlexStartIcon />
+														{__(
 															'Flex Start',
 															'publisher-core'
-														),
-														value: 'flex-start',
-														icon: (
-															<AlignContentFlexStartIcon />
-														),
-													},
-													{
-														label: __(
+														)}
+													</h3>
+													<p>
+														{__(
+															'Packs lines toward the start of the container.',
+															'publisher-core'
+														)}
+													</p>
+													<h3>
+														<AlignContentCenterIcon />
+														{__(
 															'Center',
 															'publisher-core'
-														),
-														value: 'center',
-														icon: (
-															<AlignContentCenterIcon />
-														),
-													},
-													{
-														label: __(
+														)}
+													</h3>
+													<p>
+														{__(
+															'Centers lines within the container.',
+															'publisher-core'
+														)}
+													</p>
+													<h3>
+														<AlignContentFlexEndIcon />
+														{__(
 															'Flex End',
 															'publisher-core'
-														),
-														value: 'flex-end',
-														icon: (
-															<AlignContentFlexEndIcon />
-														),
-													},
-													{
-														label: __(
+														)}
+													</h3>
+													<p>
+														{__(
+															'Packs lines toward the end of the container.',
+															'publisher-core'
+														)}
+													</p>
+													<h3>
+														<AlignContentSpaceAroundIcon />
+														{__(
 															'Space Around',
 															'publisher-core'
-														),
-														value: 'space-around',
-														icon: (
-															<AlignContentSpaceAroundIcon />
-														),
-													},
-													{
-														label: __(
+														)}
+													</h3>
+													<p>
+														{__(
+															'Distributes lines evenly, with equal space around each line.',
+															'publisher-core'
+														)}
+													</p>
+													<h3>
+														<AlignContentSpaceBetweenIcon />
+														{__(
 															'Space Between',
 															'publisher-core'
-														),
-														value: 'space-between',
-														icon: (
-															<AlignContentSpaceBetweenIcon />
-														),
-													},
-													{
-														label: __(
+														)}
+													</h3>
+													<p>
+														{__(
+															'Distributes lines evenly, with the first line at the start and the last at the end.',
+															'publisher-core'
+														)}
+													</p>
+													<h3>
+														<AlignContentStretchIcon />
+														{__(
 															'Stretch',
 															'publisher-core'
-														),
-														value: 'stretch',
-														icon: (
-															<AlignContentStretchIcon />
-														),
-													},
-												]}
-												isDeselectable={true}
-												//
-												defaultValue=""
-												onChange={(newValue, ref) =>
-													handleOnChangeAttributes(
-														'publisherAlignContent',
-														newValue,
-														{ ref }
-													)
-												}
-												{...extensionProps.publisherAlignContent}
-											/>
-										</ControlContextProvider>
-									)}
-							</>
-						)}
+														)}
+													</h3>
+													<p>
+														{__(
+															'Stretches lines to fill the container (default behavior).',
+															'publisher-core'
+														)}
+													</p>
+												</>
+											}
+											columns="80px 160px"
+											options={[
+												{
+													label: __(
+														'Flex Start',
+														'publisher-core'
+													),
+													value: 'flex-start',
+													icon: (
+														<AlignContentFlexStartIcon />
+													),
+												},
+												{
+													label: __(
+														'Center',
+														'publisher-core'
+													),
+													value: 'center',
+													icon: (
+														<AlignContentCenterIcon />
+													),
+												},
+												{
+													label: __(
+														'Flex End',
+														'publisher-core'
+													),
+													value: 'flex-end',
+													icon: (
+														<AlignContentFlexEndIcon />
+													),
+												},
+												{
+													label: __(
+														'Space Around',
+														'publisher-core'
+													),
+													value: 'space-around',
+													icon: (
+														<AlignContentSpaceAroundIcon />
+													),
+												},
+												{
+													label: __(
+														'Space Between',
+														'publisher-core'
+													),
+													value: 'space-between',
+													icon: (
+														<AlignContentSpaceBetweenIcon />
+													),
+												},
+												{
+													label: __(
+														'Stretch',
+														'publisher-core'
+													),
+													value: 'stretch',
+													icon: (
+														<AlignContentStretchIcon />
+													),
+												},
+											]}
+											isDeselectable={true}
+											//
+											defaultValue={
+												attributes.publisherAlignContent
+													.default
+											}
+											onChange={(newValue, ref) =>
+												handleOnChangeAttributes(
+													'publisherAlignContent',
+													newValue,
+													{ ref }
+												)
+											}
+											{...extensionProps.publisherAlignContent}
+										/>
+									</ControlContextProvider>
+								</FeatureWrapper>
+							)}
+						</FeatureWrapper>
 					</>
 				)}
 
-				{'grid' === display && (
+				{'grid' === values.publisherDisplay && (
 					<GridBuilder
 						type={block.blockName}
 						id={block.clientId}
