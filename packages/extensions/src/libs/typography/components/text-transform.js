@@ -121,7 +121,6 @@ export const TextTransform = ({
 					},
 				]}
 				isDeselectable={true}
-				//
 				defaultValue={defaultValue}
 				onChange={(newValue, ref) =>
 					onChange('publisherTextTransform', newValue, {

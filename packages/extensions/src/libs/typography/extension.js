@@ -66,7 +66,7 @@ import { ExtensionSettings } from '../settings';
 export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 	({
 		block,
-		typographyConfig,
+		extensionConfig,
 		values,
 		display,
 		backgroundClip,
@@ -76,84 +76,84 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 		attributes,
 	}: TTypographyProps): MixedElement => {
 		const isShowFontSize = isShowField(
-			typographyConfig.publisherFontSize,
-			values?.fontSize,
-			attributes.fontSize.default
+			extensionConfig.publisherFontSize,
+			values?.publisherFontSize,
+			attributes.publisherFontSize.default
 		);
 		const isShowLineHeight = isShowField(
-			typographyConfig.publisherLineHeight,
-			values?.lineHeight,
-			attributes.lineHeight.default
+			extensionConfig.publisherLineHeight,
+			values?.publisherLineHeight,
+			attributes.publisherLineHeight.default
 		);
 		const isShowTextAlign = isShowField(
-			typographyConfig.publisherTextAlign,
-			values?.textAlign,
-			attributes.textAlign.default
+			extensionConfig.publisherTextAlign,
+			values?.publisherTextAlign,
+			attributes.publisherTextAlign.default
 		);
 		const isShowTextDecoration = isShowField(
-			typographyConfig.publisherTextDecoration,
-			values?.textDecoration,
-			attributes.textDecoration.default
+			extensionConfig.publisherTextDecoration,
+			values?.publisherTextDecoration,
+			attributes.publisherTextDecoration.default
 		);
 		const isShowFontStyle = isShowField(
-			typographyConfig.publisherFontStyle,
-			values?.fontStyle,
-			attributes.fontStyle.default
+			extensionConfig.publisherFontStyle,
+			values?.publisherFontStyle,
+			attributes.publisherFontStyle.default
 		);
 		const isShowTextTransform = isShowField(
-			typographyConfig.publisherTextTransform,
-			values?.textTransform,
-			attributes.textTransform.default
+			extensionConfig.publisherTextTransform,
+			values?.publisherTextTransform,
+			attributes.publisherTextTransform.default
 		);
 		const isShowDirection = isShowField(
-			typographyConfig.publisherDirection,
-			values?.direction,
-			attributes.direction.default
+			extensionConfig.publisherDirection,
+			values?.publisherDirection,
+			attributes.publisherDirection.default
 		);
 		const isShowLetterSpacing = isShowField(
-			typographyConfig.publisherLetterSpacing,
-			values?.letterSpacing,
-			attributes.letterSpacing.default
+			extensionConfig.publisherLetterSpacing,
+			values?.publisherLetterSpacing,
+			attributes.publisherLetterSpacing.default
 		);
 		const isShowWordSpacing = isShowField(
-			typographyConfig.publisherWordSpacing,
-			values?.wordSpacing,
-			attributes.wordSpacing.default
+			extensionConfig.publisherWordSpacing,
+			values?.publisherWordSpacing,
+			attributes.publisherWordSpacing.default
 		);
 		const isShowTextIndent = isShowField(
-			typographyConfig.publisherTextIndent,
-			values?.textIndent,
-			attributes.textIndent.default
+			extensionConfig.publisherTextIndent,
+			values?.publisherTextIndent,
+			attributes.publisherTextIndent.default
 		);
 		const isShowTextOrientation = isShowField(
-			typographyConfig.publisherTextOrientation,
-			values?.textOrientation,
-			attributes.textOrientation.default
+			extensionConfig.publisherTextOrientation,
+			values?.publisherTextOrientation,
+			attributes.publisherTextOrientation.default
 		);
 		const isShowTextStroke = isShowField(
-			typographyConfig.publisherTextStroke,
-			values?.textStroke,
-			attributes.textStroke.default
+			extensionConfig.publisherTextStroke,
+			values?.publisherTextStroke,
+			attributes.publisherTextStroke.default
 		);
 		const isShowTextColumns = isShowField(
-			typographyConfig.publisherTextColumns,
-			values?.textColumns,
-			attributes.textColumns.default
+			extensionConfig.publisherTextColumns,
+			values?.publisherTextColumns,
+			attributes.publisherTextColumns.default
 		);
 		const isShowWordBreak = isShowField(
-			typographyConfig.publisherWordBreak,
-			values?.wordBreak,
-			attributes.wordBreak.default
+			extensionConfig.publisherWordBreak,
+			values?.publisherWordBreak,
+			attributes.publisherWordBreak.default
 		);
 		const isShowFontColor = isShowField(
-			typographyConfig.publisherFontColor,
-			values?.fontColor,
-			attributes.fontColor.default
+			extensionConfig.publisherFontColor,
+			values?.publisherFontColor,
+			attributes.publisherFontColor.default
 		);
 		const isShowTextShadow = isShowField(
-			typographyConfig.publisherTextShadow,
-			values?.textShadow,
-			attributes.textShadow.default
+			extensionConfig.publisherTextShadow,
+			values?.publisherTextShadow,
+			attributes.publisherTextShadow.default
 		);
 
 		if (
@@ -194,17 +194,28 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 		let isAdvancedEdited = false;
 		if (isShowAdvanced) {
 			isAdvancedEdited =
-				values?.textAlign !== attributes.textAlign.default ||
-				values?.textDecoration !== attributes.textDecoration.default ||
-				values?.fontStyle !== attributes.fontStyle.default ||
-				values?.textTransform !== attributes.textTransform.default ||
-				values?.direction !== attributes.direction.default ||
-				values?.letterSpacing !== attributes.letterSpacing.default ||
-				values?.wordSpacing !== attributes.wordSpacing.default ||
-				values?.textIndent !== attributes.textIndent.default ||
-				values?.textColumns !== attributes.textColumns.default ||
-				values?.textStroke !== attributes.textStroke.default ||
-				values?.wordBreak !== attributes.wordBreak.default;
+				values?.publisherTextAlign !==
+					attributes.publisherTextAlign.default ||
+				values?.publisherTextDecoration !==
+					attributes.publisherTextDecoration.default ||
+				values?.publisherFontStyle !==
+					attributes.publisherFontStyle.default ||
+				values?.publisherTextTransform !==
+					attributes.publisherTextTransform.default ||
+				values?.publisherDirection !==
+					attributes.publisherDirection.default ||
+				values?.publisherLetterSpacing !==
+					attributes.publisherLetterSpacing.default ||
+				values?.publisherWordSpacing !==
+					attributes.publisherWordSpacing.default ||
+				values?.publisherTextIndent !==
+					attributes.publisherTextIndent.default ||
+				values?.publisherTextColumns !==
+					attributes.publisherTextColumns.default ||
+				values?.publisherTextStroke !==
+					attributes.publisherTextStroke.default ||
+				values?.publisherWordBreak !==
+					attributes.publisherWordBreak.default;
 		}
 
 		return (
@@ -218,7 +229,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 				)}
 			>
 				<ExtensionSettings
-					features={typographyConfig}
+					features={extensionConfig}
 					update={(newSettings) => {
 						setSettings(newSettings, 'typographyConfig');
 					}}
@@ -233,19 +244,21 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 							<FeatureWrapper
 								isActive={isShowFontSize}
 								isActiveOnStates={
-									typographyConfig.publisherFontSize
+									extensionConfig.publisherFontSize
 										.isActiveOnStates
 								}
 								isActiveOnBreakpoints={
-									typographyConfig.publisherFontSize
+									extensionConfig.publisherFontSize
 										.isActiveOnBreakpoints
 								}
 							>
 								<FontSize
 									block={block}
 									onChange={handleOnChangeAttributes}
-									value={values.fontSize}
-									defaultValue={attributes.fontSize.default}
+									value={values.publisherFontSize}
+									defaultValue={
+										attributes.publisherFontSize.default
+									}
 									columns="columns-1"
 									className="control-first label-center small-gap"
 									style={{ margin: '0px' }}
@@ -256,19 +269,21 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 							<FeatureWrapper
 								isActive={isShowLineHeight}
 								isActiveOnStates={
-									typographyConfig.publisherLineHeight
+									extensionConfig.publisherLineHeight
 										.isActiveOnStates
 								}
 								isActiveOnBreakpoints={
-									typographyConfig.publisherLineHeight
+									extensionConfig.publisherLineHeight
 										.isActiveOnBreakpoints
 								}
 							>
 								<LineHeight
 									block={block}
-									value={values.lineHeight}
+									value={values.publisherLineHeight}
 									onChange={handleOnChangeAttributes}
-									defaultValue={attributes.lineHeight.default}
+									defaultValue={
+										attributes.publisherLineHeight.default
+									}
 									columns="columns-1"
 									className="control-first label-center small-gap"
 									style={{ margin: '0px' }}
@@ -282,19 +297,21 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 						<FeatureWrapper
 							isActive={isShowFontSize}
 							isActiveOnStates={
-								typographyConfig.publisherFontSize
+								extensionConfig.publisherFontSize
 									.isActiveOnStates
 							}
 							isActiveOnBreakpoints={
-								typographyConfig.publisherFontSize
+								extensionConfig.publisherFontSize
 									.isActiveOnBreakpoints
 							}
 						>
 							<FontSize
 								block={block}
 								onChange={handleOnChangeAttributes}
-								value={values.fontSize}
-								defaultValue={attributes.fontSize.default}
+								value={values.publisherFontSize}
+								defaultValue={
+									attributes.publisherFontSize.default
+								}
 								{...extensionProps.publisherFontSize}
 							/>
 						</FeatureWrapper>
@@ -302,19 +319,21 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 						<FeatureWrapper
 							isActive={isShowLineHeight}
 							isActiveOnStates={
-								typographyConfig.publisherLineHeight
+								extensionConfig.publisherLineHeight
 									.isActiveOnStates
 							}
 							isActiveOnBreakpoints={
-								typographyConfig.publisherLineHeight
+								extensionConfig.publisherLineHeight
 									.isActiveOnBreakpoints
 							}
 						>
 							<LineHeight
 								block={block}
-								value={values.lineHeight}
+								value={values.publisherLineHeight}
 								onChange={handleOnChangeAttributes}
-								defaultValue={attributes.lineHeight.default}
+								defaultValue={
+									attributes.publisherLineHeight.default
+								}
 								{...extensionProps.publisherLineHeight}
 							/>
 						</FeatureWrapper>
@@ -324,24 +343,22 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 				<FeatureWrapper
 					isActive={isShowFontColor}
 					isActiveOnStates={
-						typographyConfig.publisherFontColor.isActiveOnStates
+						extensionConfig.publisherFontColor.isActiveOnStates
 					}
 					isActiveOnBreakpoints={
-						typographyConfig.publisherFontColor
-							.isActiveOnBreakpoints
+						extensionConfig.publisherFontColor.isActiveOnBreakpoints
 					}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'font-color'),
-							value: values.fontColor,
+							value: values.publisherFontColor,
 							attribute: 'publisherFontColor',
 							blockName: block.blockName,
 						}}
 					>
 						<BaseControl columns="columns-1">
 							<ColorControl
-								controlName="color"
 								label={__('Text Color', 'publisher-core')}
 								labelDescription={
 									<>
@@ -354,7 +371,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 									</>
 								}
 								columns="columns-2"
-								defaultValue={attributes.fontColor.default}
+								defaultValue={
+									attributes.publisherFontColor.default
+								}
 								onChange={(newValue, ref) =>
 									handleOnChangeAttributes(
 										'publisherFontColor',
@@ -386,17 +405,17 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 				<FeatureWrapper
 					isActive={isShowTextShadow}
 					isActiveOnStates={
-						typographyConfig.publisherTextShadow.isActiveOnStates
+						extensionConfig.publisherTextShadow.isActiveOnStates
 					}
 					isActiveOnBreakpoints={
-						typographyConfig.publisherTextShadow
+						extensionConfig.publisherTextShadow
 							.isActiveOnBreakpoints
 					}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'text-shadow'),
-							value: values.textShadow,
+							value: values.publisherTextShadow,
 							attribute: 'publisherTextShadow',
 							blockName: block.blockName,
 						}}
@@ -414,7 +433,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										newValue
 									)
 								}
-								defaultValue={attributes.textShadow.default}
+								defaultValue={
+									attributes.publisherTextShadow.default
+								}
 								{...extensionProps.publisherTextShadow}
 							/>
 						</BaseControl>
@@ -435,11 +456,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								<FeatureWrapper
 									isActive={isShowTextAlign}
 									isActiveOnStates={
-										typographyConfig.publisherTextAlign
+										extensionConfig.publisherTextAlign
 											.isActiveOnStates
 									}
 									isActiveOnBreakpoints={
-										typographyConfig.publisherTextAlign
+										extensionConfig.publisherTextAlign
 											.isActiveOnBreakpoints
 									}
 								>
@@ -449,7 +470,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												block,
 												'text-align'
 											),
-											value: values.textAlign,
+											value: values.publisherTextAlign,
 											attribute: 'publisherTextAlign',
 											blockName: block.blockName,
 										}}
@@ -521,7 +542,8 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											]}
 											isDeselectable={true}
 											defaultValue={
-												attributes.textAlign.default
+												attributes.publisherTextAlign
+													.default
 											}
 											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
@@ -541,12 +563,12 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											<FeatureWrapper
 												isActive={isShowTextDecoration}
 												isActiveOnStates={
-													typographyConfig
+													extensionConfig
 														.publisherTextDecoration
 														.isActiveOnStates
 												}
 												isActiveOnBreakpoints={
-													typographyConfig
+													extensionConfig
 														.publisherTextDecoration
 														.isActiveOnBreakpoints
 												}
@@ -554,11 +576,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												<TextDecoration
 													block={block}
 													value={
-														values.textDecoration
+														values.publisherTextDecoration
 													}
 													defaultValue={
 														attributes
-															.textDecoration
+															.publisherTextDecoration
 															.default
 													}
 													onChange={
@@ -573,24 +595,27 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											<FeatureWrapper
 												isActive={isShowFontStyle}
 												isActiveOnStates={
-													typographyConfig
+													extensionConfig
 														.publisherFontStyle
 														.isActiveOnStates
 												}
 												isActiveOnBreakpoints={
-													typographyConfig
+													extensionConfig
 														.publisherFontStyle
 														.isActiveOnBreakpoints
 												}
 											>
 												<FontStyle
 													block={block}
-													value={values.fontStyle}
+													value={
+														values.publisherFontStyle
+													}
 													onChange={
 														handleOnChangeAttributes
 													}
 													defaultValue={
-														attributes.fontStyle
+														attributes
+															.publisherFontStyle
 															.default
 													}
 													{...extensionProps.publisherFontStyle}
@@ -606,21 +631,24 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											<FeatureWrapper
 												isActive={isShowTextTransform}
 												isActiveOnStates={
-													typographyConfig
+													extensionConfig
 														.publisherTextTransform
 														.isActiveOnStates
 												}
 												isActiveOnBreakpoints={
-													typographyConfig
+													extensionConfig
 														.publisherTextTransform
 														.isActiveOnBreakpoints
 												}
 											>
 												<TextTransform
 													block={block}
-													value={values.textTransform}
+													value={
+														values.publisherTextTransform
+													}
 													defaultValue={
-														attributes.textTransform
+														attributes
+															.publisherTextTransform
 															.default
 													}
 													onChange={
@@ -635,12 +663,12 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											<FeatureWrapper
 												isActive={isShowDirection}
 												isActiveOnStates={
-													typographyConfig
+													extensionConfig
 														.publisherDirection
 														.isActiveOnStates
 												}
 												isActiveOnBreakpoints={
-													typographyConfig
+													extensionConfig
 														.publisherDirection
 														.isActiveOnBreakpoints
 												}
@@ -651,7 +679,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 															block,
 															'direction'
 														),
-														value: values.direction,
+														value: values.publisherDirection,
 														attribute:
 															'publisherDirection',
 														blockName:
@@ -728,9 +756,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 															},
 														]}
 														isDeselectable={true}
-														//
 														defaultValue={
-															attributes.direction
+															attributes
+																.publisherDirection
 																.default
 														}
 														onChange={(
@@ -764,19 +792,22 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								<FeatureWrapper
 									isActive={isShowLetterSpacing}
 									isActiveOnStates={
-										typographyConfig.publisherLetterSpacing
+										extensionConfig.publisherLetterSpacing
 											.isActiveOnStates
 									}
 									isActiveOnBreakpoints={
-										typographyConfig.publisherLetterSpacing
+										extensionConfig.publisherLetterSpacing
 											.isActiveOnBreakpoints
 									}
 								>
 									<LetterSpacing
 										block={block}
-										value={values.letterSpacing}
+										value={values.publisherLetterSpacing}
 										onChange={handleOnChangeAttributes}
-										defaultValue=""
+										defaultValue={
+											attributes.publisherLetterSpacing
+												.default
+										}
 										{...extensionProps.publisherLetterSpacing}
 									/>
 								</FeatureWrapper>
@@ -784,11 +815,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								<FeatureWrapper
 									isActive={isShowWordSpacing}
 									isActiveOnStates={
-										typographyConfig.publisherWordSpacing
+										extensionConfig.publisherWordSpacing
 											.isActiveOnStates
 									}
 									isActiveOnBreakpoints={
-										typographyConfig.publisherWordSpacing
+										extensionConfig.publisherWordSpacing
 											.isActiveOnBreakpoints
 									}
 								>
@@ -798,7 +829,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												block,
 												'word-spacing'
 											),
-											value: values.wordSpacing,
+											value: values.publisherWordSpacing,
 											attribute: 'publisherWordSpacing',
 											blockName: block.blockName,
 										}}
@@ -825,7 +856,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											}
 											arrows={true}
 											unitType="letter-spacing"
-											defaultValue=""
+											defaultValue={
+												attributes.publisherWordSpacing
+													.default
+											}
 											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
 													'publisherWordSpacing',
@@ -841,11 +875,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								<FeatureWrapper
 									isActive={isShowTextIndent}
 									isActiveOnStates={
-										typographyConfig.publisherTextIndent
+										extensionConfig.publisherTextIndent
 											.isActiveOnStates
 									}
 									isActiveOnBreakpoints={
-										typographyConfig.publisherTextIndent
+										extensionConfig.publisherTextIndent
 											.isActiveOnBreakpoints
 									}
 								>
@@ -855,7 +889,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												block,
 												'text-indent'
 											),
-											value: values.textIndent,
+											value: values.publisherTextIndent,
 											attribute: 'publisherTextIndent',
 											blockName: block.blockName,
 										}}
@@ -878,7 +912,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											}
 											arrows={true}
 											unitType="text-indent"
-											defaultValue=""
+											defaultValue={
+												attributes.publisherTextIndent
+													.default
+											}
 											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
 													'publisherTextIndent',
@@ -896,11 +933,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 						<FeatureWrapper
 							isActive={isShowTextOrientation}
 							isActiveOnStates={
-								typographyConfig.publisherTextOrientation
+								extensionConfig.publisherTextOrientation
 									.isActiveOnStates
 							}
 							isActiveOnBreakpoints={
-								typographyConfig.publisherTextOrientation
+								extensionConfig.publisherTextOrientation
 									.isActiveOnBreakpoints
 							}
 						>
@@ -910,13 +947,12 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										block,
 										'text-orientation'
 									),
-									value: values.textOrientation,
+									value: values.publisherTextOrientation,
 									attribute: 'publisherTextOrientation',
 									blockName: block.blockName,
 								}}
 							>
 								<ToggleSelectControl
-									controlName="toggle-select"
 									label={__('Orientation', 'publisher-core')}
 									labelDescription={
 										<>
@@ -1066,9 +1102,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										},
 									]}
 									isDeselectable={true}
-									//
 									defaultValue={
-										attributes.textOrientation.default
+										attributes.publisherTextOrientation
+											.default
 									}
 									onChange={(newValue, ref) => {
 										handleOnChangeAttributes(
@@ -1085,11 +1121,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 						<FeatureWrapper
 							isActive={isShowTextColumns}
 							isActiveOnStates={
-								typographyConfig.publisherTextColumns
+								extensionConfig.publisherTextColumns
 									.isActiveOnStates
 							}
 							isActiveOnBreakpoints={
-								typographyConfig.publisherTextColumns
+								extensionConfig.publisherTextColumns
 									.isActiveOnBreakpoints
 							}
 						>
@@ -1099,20 +1135,20 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										block,
 										'text-columns'
 									),
-									value: values.textColumns,
+									value: values.publisherTextColumns,
 									type: 'nested',
 									attribute: 'publisherTextColumns',
 									blockName: block.blockName,
 								}}
 							>
 								<TextColumns
-									value={values.textColumns}
+									value={values.publisherTextColumns}
 									display={display}
 									handleOnChangeAttributes={
 										handleOnChangeAttributes
 									}
 									defaultValue={
-										attributes.textColumns.default
+										attributes.publisherTextColumns.default
 									}
 									{...extensionProps.publisherTextColumns}
 								/>
@@ -1122,11 +1158,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 						<FeatureWrapper
 							isActive={isShowTextStroke}
 							isActiveOnStates={
-								typographyConfig.publisherTextStroke
+								extensionConfig.publisherTextStroke
 									.isActiveOnStates
 							}
 							isActiveOnBreakpoints={
-								typographyConfig.publisherTextStroke
+								extensionConfig.publisherTextStroke
 									.isActiveOnBreakpoints
 							}
 						>
@@ -1136,18 +1172,20 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										block,
 										'text-stroke'
 									),
-									value: values.textStroke,
+									value: values.publisherTextStroke,
 									type: 'nested',
 									attribute: 'publisherTextStroke',
 									blockName: block.blockName,
 								}}
 							>
 								<TextStroke
-									value={values.textStroke}
+									value={values.publisherTextStroke}
 									handleOnChangeAttributes={
 										handleOnChangeAttributes
 									}
-									defaultValue={attributes.textStroke.default}
+									defaultValue={
+										attributes.publisherTextStroke.default
+									}
 									{...extensionProps.publisherTextStroke}
 								/>
 							</ControlContextProvider>
@@ -1156,11 +1194,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 						<FeatureWrapper
 							isActive={isShowWordBreak}
 							isActiveOnStates={
-								typographyConfig.publisherWordBreak
+								extensionConfig.publisherWordBreak
 									.isActiveOnStates
 							}
 							isActiveOnBreakpoints={
-								typographyConfig.publisherWordBreak
+								extensionConfig.publisherWordBreak
 									.isActiveOnBreakpoints
 							}
 						>
@@ -1170,13 +1208,12 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										block,
 										'word-break'
 									),
-									value: values.wordBreak,
+									value: values.publisherWordBreak,
 									attribute: 'publisherWordBreak',
 									blockName: block.blockName,
 								}}
 							>
 								<SelectControl
-									controlName="select"
 									label={__('Breaking', 'publisher-core')}
 									labelPopoverTitle={__(
 										'Word Breaking',
@@ -1306,7 +1343,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 									type="custom"
 									customMenuPosition="top"
 									//
-									defaultValue={attributes.wordBreak.default}
+									defaultValue={
+										attributes.publisherWordBreak.default
+									}
 									onChange={(newValue, ref) =>
 										handleOnChangeAttributes(
 											'publisherWordBreak',

@@ -9,27 +9,48 @@ import type { BorderControlBorderStyle } from '@publisher/controls/src/libs/bord
  * Internal dependencies
  */
 import type { BaseExtensionProps } from '../../types';
+import type { FeatureConfig } from '../../base';
 
 export type TTypographyProps = {
 	...BaseExtensionProps,
+	extensionConfig: {
+		publisherFontSize: FeatureConfig,
+		publisherLineHeight: FeatureConfig,
+		publisherFontColor: FeatureConfig,
+		publisherTextShadow: FeatureConfig,
+		publisherTextAlign: FeatureConfig,
+		publisherTextDecoration: FeatureConfig,
+		publisherFontStyle: FeatureConfig,
+		publisherTextTransform: FeatureConfig,
+		publisherDirection: FeatureConfig,
+		publisherLetterSpacing: FeatureConfig,
+		publisherWordSpacing: FeatureConfig,
+		publisherTextIndent: FeatureConfig,
+		publisherTextOrientation: FeatureConfig,
+		publisherTextColumns: FeatureConfig,
+		publisherTextStroke: FeatureConfig,
+		publisherWordBreak: FeatureConfig,
+	},
 	values: {
-		fontSize: string,
-		lineHeight: string,
-		textAlign: string,
-		textDecoration: string,
-		fontStyle: string,
-		textTransform: string,
-		direction: string,
-		letterSpacing: string,
-		wordSpacing: string,
-		textIndent: string,
-		textOrientation: string,
-		textStroke: {
+		publisherFontSize: string,
+		publisherLineHeight: string,
+		publisherFontColor: string,
+		publisherTextShadow: [],
+		publisherTextAlign: string,
+		publisherTextDecoration: string,
+		publisherFontStyle: string,
+		publisherTextTransform: string,
+		publisherDirection: string,
+		publisherLetterSpacing: string,
+		publisherWordSpacing: string,
+		publisherTextIndent: string,
+		publisherTextOrientation: string,
+		publisherTextStroke: {
 			width: string,
 			style: BorderControlBorderStyle,
 			color: string,
 		},
-		textColumns: {
+		publisherTextColumns: {
 			columns: string,
 			gap: string,
 			divider: {
@@ -38,13 +59,10 @@ export type TTypographyProps = {
 				color: string,
 			},
 		},
-		wordBreak: string,
-		fontColor: string,
-		textShadow: string,
+		publisherWordBreak: string,
 	},
 	display?: string,
 	backgroundClip?: string,
-	typographyConfig: Object,
 	extensionProps: {
 		publisherFontColor: Object,
 		publisherFontSize: Object,

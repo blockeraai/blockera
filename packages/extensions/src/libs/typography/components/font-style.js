@@ -90,7 +90,6 @@ export const FontStyle = ({
 					},
 				]}
 				isDeselectable={true}
-				//
 				defaultValue={defaultValue}
 				onChange={(newValue, ref) =>
 					onChange('publisherFontStyle', newValue, { ref })

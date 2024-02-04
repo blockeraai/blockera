@@ -28,7 +28,6 @@ export const TextStroke = ({
 }: {
 	value: {
 		width: string,
-		style: string,
 		color: string,
 	},
 	defaultValue: Object,
@@ -40,7 +39,17 @@ export const TextStroke = ({
 		blockName,
 		resetToDefault,
 	} = useControlContext({
-		onChange: (newValue) => handleOnChangeAttributes(newValue),
+		onChange: (newValue, ref) => {
+			if ('reset' === ref?.current?.action) {
+				handleOnChangeAttributes('publisherTextStroke', defaultValue, {
+					ref,
+				});
+			} else {
+				handleOnChangeAttributes('publisherTextStroke', newValue, {
+					ref,
+				});
+			}
+		},
 		defaultValue,
 	});
 
@@ -79,6 +88,7 @@ export const TextStroke = ({
 		>
 			<ColorControl
 				id={'color'}
+				singularId={'color'}
 				label={__('Color', 'publisher-core')}
 				labelPopoverTitle={__('Text Stroke Color', 'publisher-core')}
 				labelDescription={
@@ -93,17 +103,22 @@ export const TextStroke = ({
 				}
 				columns="columns-2"
 				defaultValue={defaultValue.color}
-				onChange={(newValue) => {
-					if (newValue === '') {
-						handleOnChangeAttributes('publisherTextStroke', {
-							color: '',
-							width: '',
-						});
+				onChange={(newValue, ref) => {
+					if ('reset' === ref?.current?.action || newValue === '') {
+						handleOnChangeAttributes(
+							'publisherTextStroke',
+							defaultValue,
+							{ ref }
+						);
 					} else {
-						handleOnChangeAttributes('publisherTextStroke', {
-							...value,
-							color: newValue,
-						});
+						handleOnChangeAttributes(
+							'publisherTextStroke',
+							{
+								...value,
+								color: newValue,
+							},
+							{ ref }
+						);
 					}
 				}}
 				{...props}
@@ -112,6 +127,7 @@ export const TextStroke = ({
 			{value.color && (
 				<InputControl
 					id={'width'}
+					singularId={'width'}
 					label={__('Width', 'publisher-core')}
 					labelPopoverTitle={__(
 						'Text Stroke Width',
@@ -130,12 +146,27 @@ export const TextStroke = ({
 					columns="columns-2"
 					unitType="essential"
 					defaultValue={defaultValue.width}
-					onChange={(newValue) =>
-						handleOnChangeAttributes('publisherTextStroke', {
-							...value,
-							width: newValue,
-						})
-					}
+					onChange={(newValue, ref) => {
+						if ('reset' === ref?.current?.action) {
+							handleOnChangeAttributes(
+								'publisherTextStroke',
+								{
+									...value,
+									width: defaultValue.width,
+								},
+								{ ref }
+							);
+						} else {
+							handleOnChangeAttributes(
+								'publisherTextStroke',
+								{
+									...value,
+									width: newValue,
+								},
+								{ ref }
+							);
+						}
+					}}
 				/>
 			)}
 		</BaseControl>

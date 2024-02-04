@@ -37,7 +37,6 @@ export const FontSize = ({
 			}}
 		>
 			<InputControl
-				controlName="input"
 				label={__('Font Size', 'publisher-core')}
 				labelDescription={
 					<>

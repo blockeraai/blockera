@@ -527,7 +527,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 						<TypographyExtension
 							block={block}
-							typographyConfig={typographyConfig}
+							extensionConfig={typographyConfig}
 							extensionProps={{
 								publisherFontColor: {},
 								publisherFontSize: {},
@@ -547,60 +547,72 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								publisherWordBreak: {},
 							}}
 							values={{
-								fontColor:
+								publisherFontColor:
 									currentStateAttributes?.publisherFontColor,
-								fontSize:
+								publisherFontSize:
 									currentStateAttributes?.publisherFontSize,
-								lineHeight:
+								publisherLineHeight:
 									currentStateAttributes?.publisherLineHeight,
-								textAlign:
+								publisherTextAlign:
 									currentStateAttributes?.publisherTextAlign,
-								textDecoration:
+								publisherTextDecoration:
 									currentStateAttributes?.publisherTextDecoration,
-								fontStyle:
+								publisherFontStyle:
 									currentStateAttributes?.publisherFontStyle,
-								textTransform:
+								publisherTextTransform:
 									currentStateAttributes?.publisherTextTransform,
-								direction:
+								publisherDirection:
 									currentStateAttributes?.publisherDirection,
-								textShadow:
+								publisherTextShadow:
 									currentStateAttributes?.publisherTextShadow,
-								letterSpacing:
+								publisherLetterSpacing:
 									currentStateAttributes?.publisherLetterSpacing,
-								wordSpacing:
+								publisherWordSpacing:
 									currentStateAttributes?.publisherWordSpacing,
-								textIndent:
+								publisherTextIndent:
 									currentStateAttributes?.publisherTextIndent,
-								textOrientation:
+								publisherTextOrientation:
 									currentStateAttributes?.publisherTextOrientation,
-								textColumns:
+								publisherTextColumns:
 									currentStateAttributes?.publisherTextColumns,
-								textStroke:
+								publisherTextStroke:
 									currentStateAttributes?.publisherTextStroke,
-								wordBreak:
+								publisherWordBreak:
 									currentStateAttributes?.publisherWordBreak,
 							}}
 							attributes={{
-								fontColor: attributes?.publisherFontColor,
-								fontSize: attributes?.publisherFontSize,
-								lineHeight: attributes?.publisherLineHeight,
-								textAlign: attributes?.publisherTextAlign,
-								textDecoration:
+								publisherFontColor:
+									attributes?.publisherFontColor,
+								publisherFontSize:
+									attributes?.publisherFontSize,
+								publisherLineHeight:
+									attributes?.publisherLineHeight,
+								publisherTextAlign:
+									attributes?.publisherTextAlign,
+								publisherTextDecoration:
 									attributes?.publisherTextDecoration,
-								fontStyle: attributes?.publisherFontStyle,
-								textTransform:
+								publisherFontStyle:
+									attributes?.publisherFontStyle,
+								publisherTextTransform:
 									attributes?.publisherTextTransform,
-								direction: attributes?.publisherDirection,
-								textShadow: attributes?.publisherTextShadow,
-								letterSpacing:
+								publisherDirection:
+									attributes?.publisherDirection,
+								publisherTextShadow:
+									attributes?.publisherTextShadow,
+								publisherLetterSpacing:
 									attributes?.publisherLetterSpacing,
-								wordSpacing: attributes?.publisherWordSpacing,
-								textIndent: attributes?.publisherTextIndent,
-								textOrientation:
+								publisherWordSpacing:
+									attributes?.publisherWordSpacing,
+								publisherTextIndent:
+									attributes?.publisherTextIndent,
+								publisherTextOrientation:
 									attributes?.publisherTextOrientation,
-								textColumns: attributes?.publisherTextColumns,
-								textStroke: attributes?.publisherTextStroke,
-								wordBreak: attributes?.publisherWordBreak,
+								publisherTextColumns:
+									attributes?.publisherTextColumns,
+								publisherTextStroke:
+									attributes?.publisherTextStroke,
+								publisherWordBreak:
+									attributes?.publisherWordBreak,
 							}}
 							display={currentStateAttributes?.publisherDisplay}
 							backgroundClip={
