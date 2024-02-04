@@ -41,7 +41,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 		block,
 		values,
 		attributes,
-		backgroundConfig,
+		extensionConfig,
 		handleOnChangeAttributes,
 		extensionProps,
 		setSettings,
@@ -50,22 +50,22 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 			publisherBackground,
 			publisherBackgroundColor,
 			publisherBackgroundClip,
-		} = backgroundConfig;
+		} = extensionConfig;
 
 		const isShowBackground = isShowField(
-			backgroundConfig.publisherBackground,
-			values.background,
-			attributes.background.default
+			extensionConfig.publisherBackground,
+			values.publisherBackground,
+			attributes.publisherBackground.default
 		);
 		const isShowBackgroundColor = isShowField(
-			backgroundConfig.publisherBackgroundColor,
-			values.backgroundColor,
-			attributes.backgroundColor.default
+			extensionConfig.publisherBackgroundColor,
+			values.publisherBackgroundColor,
+			attributes.publisherBackgroundColor.default
 		);
 		const isShowBackgroundClip = isShowField(
-			backgroundConfig.publisherBackgroundClip,
-			values.backgroundClip,
-			attributes.backgroundClip.default
+			extensionConfig.publisherBackgroundClip,
+			values.publisherBackgroundClip,
+			attributes.publisherBackgroundClip.default
 		);
 
 		if (
@@ -87,7 +87,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 				)}
 			>
 				<ExtensionSettings
-					features={backgroundConfig}
+					features={extensionConfig}
 					update={(newSettings) => {
 						setSettings(newSettings, 'backgroundConfig');
 					}}
@@ -103,7 +103,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'background'),
-							value: values.background,
+							value: values.publisherBackground,
 							attribute: 'publisherBackground',
 							blockName: block.blockName,
 						}}
@@ -122,7 +122,9 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 										{ ref }
 									);
 								}}
-								defaultValue={attributes.background.default}
+								defaultValue={
+									attributes.publisherBackground.default
+								}
 								{...extensionProps.publisherBackground}
 							/>
 						</BaseControl>
@@ -142,13 +144,12 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 								block,
 								'background-color'
 							),
-							value: values.backgroundColor,
+							value: values.publisherBackgroundColor,
 							attribute: 'publisherBackgroundColor',
 							blockName: block.blockName,
 						}}
 					>
 						<ColorControl
-							controlName="color"
 							label={__('BG Color', 'publisher-core')}
 							labelPopoverTitle={__(
 								'Background Color',
@@ -178,7 +179,9 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 									{ ref }
 								)
 							}
-							defaultValue={attributes.backgroundColor.default}
+							defaultValue={
+								attributes.publisherBackgroundColor.default
+							}
 							controlAddonTypes={['variable']}
 							variableTypes={['color']}
 							{...extensionProps.publisherBackgroundColor}
@@ -196,13 +199,12 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'background-clip'),
-							value: values.backgroundClip,
+							value: values.publisherBackgroundClip,
 							attribute: 'publisherBackgroundClip',
 							blockName: block.blockName,
 						}}
 					>
 						<SelectControl
-							controlName="select"
 							label={__('Clipping', 'publisher-core')}
 							labelPopoverTitle={__(
 								'Background Clipping',
@@ -318,13 +320,15 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 									{ ref }
 								)
 							}
-							defaultValue={attributes.backgroundClip.default}
+							defaultValue={
+								attributes.publisherBackgroundClip.default
+							}
 							{...extensionProps.publisherBackgroundClip}
 						/>
 
-						{!checkVisibleItemLength(values.background) &&
-							!values.backgroundColor &&
-							values.backgroundClip === 'text' && (
+						{!checkVisibleItemLength(values.publisherBackground) &&
+							!values.publisherBackgroundColor &&
+							values.publisherBackgroundClip === 'text' && (
 								<NoticeControl
 									type="error"
 									style={{ marginTop: '10px' }}

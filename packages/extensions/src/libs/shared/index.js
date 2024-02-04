@@ -625,26 +625,27 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 						<BackgroundExtension
 							block={block}
 							setSettings={handleOnChangeSettings}
-							backgroundConfig={backgroundConfig}
+							extensionConfig={backgroundConfig}
 							extensionProps={{
 								publisherBackground: {},
 								publisherBackgroundColor: {},
 								publisherBackgroundClip: {},
 							}}
 							values={{
-								background:
+								publisherBackground:
 									currentStateAttributes?.publisherBackground,
-								backgroundColor:
+								publisherBackgroundColor:
 									currentStateAttributes?.publisherBackgroundColor,
-								backgroundClip:
+								publisherBackgroundClip:
 									currentStateAttributes?.publisherBackgroundClip,
 							}}
 							handleOnChangeAttributes={handleOnChangeAttributes}
 							attributes={{
-								background: attributes.publisherBackground,
-								backgroundColor:
+								publisherBackground:
+									attributes.publisherBackground,
+								publisherBackgroundColor:
 									attributes.publisherBackgroundColor,
-								backgroundClip:
+								publisherBackgroundClip:
 									attributes.publisherBackgroundClip,
 							}}
 						/>
