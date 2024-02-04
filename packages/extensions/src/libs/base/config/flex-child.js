@@ -19,14 +19,14 @@ const publisherFlexChildSizing: FeatureConfig = {
 
 const publisherFlexChildAlign: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	label: __('Align', 'publisher-core'),
 };
 
 const publisherFlexChildOrder: FeatureConfig = {
 	show: true,
-	force: true,
+	force: false,
 	status: true,
 	label: __('Order', 'publisher-core'),
 };

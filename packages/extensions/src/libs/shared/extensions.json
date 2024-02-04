@@ -6,20 +6,5 @@
 		"publisherIconLink",
 		"publisherIconColor",
 		"publisherIconPosition"
-	],
-	"flexChild": [
-		"publisherFlexChildGrow",
-		"publisherFlexDirection",
-		"publisherFlexChildAlign",
-		"publisherFlexChildBasis",
-		"publisherFlexChildOrder",
-		"publisherFlexChildSizing",
-		"publisherFlexChildShrink",
-		"publisherFlexChildOrderCustom"
-	],
-	"entranceAnimation": ["publisherEntranceAnimation"],
-	"scrollAnimation": ["publisherScrollAnimation"],
-	"clickAnimation": ["publisherClickAnimation"],
-	"conditions": ["publisherConditions"],
-	"advancedSettings": ["publisherAttributes"]
+	]
 }

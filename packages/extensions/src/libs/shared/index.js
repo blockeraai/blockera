@@ -188,7 +188,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			};
 		});
 
-		const { flexChild, icon } = extensions;
+		const { icon } = extensions;
 
 		props = {
 			...props,
@@ -465,30 +465,55 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							directParentBlock?.attributes.publisherDisplay ===
 								'flex' && (
 								<FlexChildExtension
-									{...{
-										block,
-										flexChildConfig,
-										extensionProps: {
-											publisherFlexChildSizing: {},
-											publisherFlexChildGrow: {},
-											publisherFlexChildShrink: {},
-											publisherFlexChildBasis: {},
-											publisherFlexChildAlign: {},
-											publisherFlexChildOrder: {},
-											publisherFlexChildOrderCustom: {},
-										},
-										values: {
-											...include(
-												currentStateAttributes,
-												flexChild,
-												'publisher'
-											),
-											flexDirection:
-												directParentBlock?.attributes
-													.publisherFlexDirection,
-										},
-										handleOnChangeAttributes,
+									block={block}
+									extensionConfig={flexChildConfig}
+									values={{
+										publisherFlexChildSizing:
+											currentStateAttributes.publisherFlexChildSizing,
+										publisherFlexChildGrow:
+											currentStateAttributes.publisherFlexChildGrow,
+										publisherFlexChildShrink:
+											currentStateAttributes.publisherFlexChildShrink,
+										publisherFlexChildBasis:
+											currentStateAttributes.publisherFlexChildBasis,
+										publisherFlexChildOrder:
+											currentStateAttributes.publisherFlexChildOrder,
+										publisherFlexChildOrderCustom:
+											currentStateAttributes.publisherFlexChildOrderCustom,
+										publisherFlexDirection:
+											directParentBlock?.attributes
+												?.publisherFlexLayout
+												?.direction,
 									}}
+									attributes={{
+										publisherFlexChildSizing:
+											attributes.publisherFlexChildSizing,
+										publisherFlexChildGrow:
+											attributes.publisherFlexChildGrow,
+										publisherFlexChildShrink:
+											attributes.publisherFlexChildShrink,
+										publisherFlexChildBasis:
+											attributes.publisherFlexChildBasis,
+										publisherFlexChildAlign:
+											attributes.publisherFlexChildAlign,
+										publisherFlexChildOrder:
+											attributes.publisherFlexChildOrder,
+										publisherFlexChildOrderCustom:
+											attributes.publisherFlexChildOrderCustom,
+									}}
+									extensionProps={{
+										publisherFlexChildSizing: {},
+										publisherFlexChildGrow: {},
+										publisherFlexChildShrink: {},
+										publisherFlexChildBasis: {},
+										publisherFlexChildAlign: {},
+										publisherFlexChildOrder: {},
+										publisherFlexChildOrderCustom: {},
+									}}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+									setSettings={handleOnChangeSettings}
 								/>
 							)}
 

@@ -10,18 +10,18 @@ import type { MixedElement, ComponentType } from 'react';
  * Publisher dependencies
  */
 import {
-	BaseControl,
 	PanelBodyControl,
 	ControlContextProvider,
 	InputControl,
 	ToggleSelectControl,
 } from '@publisher/controls';
 import { componentClassNames } from '@publisher/classnames';
+import { FeatureWrapper } from '@publisher/components';
 
 /**
  * Internal dependencies
  */
-import { isActiveField } from '../../api/utils';
+import { isShowField } from '../../api/utils';
 import { default as GearIcon } from './icons/gear';
 import { default as SizingNotIcon } from './icons/sizing-not';
 import { generateExtensionId, hasSameProps } from '../utils';
@@ -36,28 +36,42 @@ import { default as OrderFirst } from './icons/order-first';
 import { default as OrderLast } from './icons/order-last';
 import type { TFlexChildProps } from './types/flex-child-props';
 import { FlexChildExtensionIcon } from './index';
+import { ExtensionSettings } from '../settings';
 
 export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 	({
 		block,
-		flexChildConfig: {
-			publisherFlexChildSizing,
-			publisherFlexChildAlign,
-			publisherFlexChildOrder,
-		},
-		values: {
-			flexChildGrow,
-			flexDirection,
-			flexChildAlign,
-			flexChildBasis,
-			flexChildOrder,
-			flexChildSizing,
-			flexChildShrink,
-			flexChildOrderCustom,
-		},
+		extensionConfig,
+		values,
 		handleOnChangeAttributes,
 		extensionProps,
+		setSettings,
+		attributes,
 	}: TFlexChildProps): MixedElement => {
+		const isShowFlexChildSizing = isShowField(
+			extensionConfig.publisherFlexChildSizing,
+			values?.publisherFlexChildSizing,
+			attributes.publisherFlexChildSizing.default
+		);
+		const isShowFlexChildAlign = isShowField(
+			extensionConfig.publisherFlexChildAlign,
+			values?.publisherFlexChildAlign,
+			attributes.publisherFlexChildAlign.default
+		);
+		const isShowFlexChildOrder = isShowField(
+			extensionConfig.publisherFlexChildOrder,
+			values?.publisherFlexChildOrder,
+			attributes.publisherFlexChildOrder.default
+		);
+
+		if (
+			!isShowFlexChildSizing &&
+			!isShowFlexChildAlign &&
+			!isShowFlexChildOrder
+		) {
+			return <></>;
+		}
+
 		return (
 			<PanelBodyControl
 				title={__('Flex Child', 'publisher-core')}
@@ -68,59 +82,77 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 					'extension-flex-child'
 				)}
 			>
-				{isActiveField(publisherFlexChildSizing) && (
+				<ExtensionSettings
+					features={extensionConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'flexChildConfig');
+					}}
+				/>
+
+				<FeatureWrapper
+					isActive={isShowFlexChildSizing}
+					isActiveOnStates={
+						extensionConfig.publisherFlexChildSizing
+							.isActiveOnStates
+					}
+					isActiveOnBreakpoints={
+						extensionConfig.publisherFlexChildSizing
+							.isActiveOnBreakpoints
+					}
+				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'sizing'),
-							value: flexChildSizing,
+							value: values.publisherFlexChildSizing,
 							attribute: 'publisherFlexChildSizing',
 							blockName: block.blockName,
 						}}
 					>
-						<BaseControl
+						<ToggleSelectControl
 							columns="1fr 2.65fr"
 							controlName="toggle-select"
 							label={__('Self Size', 'publisher-core')}
-							className={'items-flex-direction-' + flexDirection}
+							className={
+								'items-flex-direction-' +
+								values.publisherFlexDirection
+							}
+							options={[
+								{
+									label: __('Shrink', 'publisher-core'),
+									value: 'shrink',
+									icon: <SizingShrinkIcon />,
+								},
+								{
+									label: __('Grow', 'publisher-core'),
+									value: 'grow',
+									icon: <SizingGrowIcon />,
+								},
+								{
+									label: __(
+										'No Grow or Shrink',
+										'publisher-core'
+									),
+									value: 'no',
+									icon: <SizingNotIcon />,
+								},
+								{
+									label: __('Custom', 'publisher-core'),
+									value: 'custom',
+									icon: <GearIcon />,
+								},
+							]}
+							isDeselectable={true}
+							defaultValue={attributes.publisherFlexChildSizing}
+							onChange={(newValue, ref) =>
+								handleOnChangeAttributes(
+									'publisherFlexChildSizing',
+									newValue,
+									{ ref }
+								)
+							}
+							{...extensionProps.publisherFlexChildSizing}
 						>
-							<ToggleSelectControl
-								options={[
-									{
-										label: __('Shrink', 'publisher-core'),
-										value: 'shrink',
-										icon: <SizingShrinkIcon />,
-									},
-									{
-										label: __('Grow', 'publisher-core'),
-										value: 'grow',
-										icon: <SizingGrowIcon />,
-									},
-									{
-										label: __(
-											'No Grow or Shrink',
-											'publisher-core'
-										),
-										value: 'no',
-										icon: <SizingNotIcon />,
-									},
-									{
-										label: __('Custom', 'publisher-core'),
-										value: 'custom',
-										icon: <GearIcon />,
-									},
-								]}
-								isDeselectable={true}
-								//
-								defaultValue=""
-								onChange={(newValue) =>
-									handleOnChangeAttributes(
-										'publisherFlexChildSizing',
-										newValue
-									)
-								}
-								{...extensionProps.publisherFlexChildSizing}
-							/>
-							{flexChildSizing === 'custom' && (
+							{values.publisherFlexChildSizing === 'custom' && (
 								<>
 									<ControlContextProvider
 										value={{
@@ -128,7 +160,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 												block,
 												'grow'
 											),
-											value: flexChildGrow,
+											value: values.publisherFlexChildGrow,
 											attribute: 'publisherFlexChildGrow',
 											blockName: block.blockName,
 										}}
@@ -146,23 +178,28 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 											float={true}
 											arrows={true}
 											min={0}
-											onChange={(newValue) =>
+											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
 													'publisherFlexChildGrow',
-													newValue
+													newValue,
+													{ ref }
 												)
 											}
 											size="small"
+											defaultValue={
+												attributes.publisherFlexChildGrow
+											}
 											{...extensionProps.publisherFlexChildGrow}
 										/>
 									</ControlContextProvider>
+
 									<ControlContextProvider
 										value={{
 											name: generateExtensionId(
 												block,
 												'shrink'
 											),
-											value: flexChildShrink,
+											value: values.publisherFlexChildShrink,
 											attribute:
 												'publisherFlexChildShrink',
 											blockName: block.blockName,
@@ -184,23 +221,28 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 											float={true}
 											arrows={true}
 											min={0}
-											onChange={(newValue) =>
+											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
 													'publisherFlexChildShrink',
-													newValue
+													newValue,
+													{ ref }
 												)
 											}
 											size="small"
+											defaultValue={
+												attributes.publisherFlexChildShrink
+											}
 											{...extensionProps.publisherFlexChildShrink}
 										/>
 									</ControlContextProvider>
+
 									<ControlContextProvider
 										value={{
 											name: generateExtensionId(
 												block,
 												'basis'
 											),
-											value: flexChildBasis,
+											value: values.publisherFlexChildBasis,
 											attribute:
 												'publisherFlexChildBasis',
 											blockName: block.blockName,
@@ -220,11 +262,14 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 											arrows={true}
 											unitType="flex-basis"
 											min={0}
-											defaultValue="auto"
-											onChange={(newValue) =>
+											defaultValue={
+												attributes.publisherFlexChildBasis
+											}
+											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
 													'publisherFlexChildBasis',
-													newValue
+													newValue,
+													{ ref }
 												)
 											}
 											size="small"
@@ -233,157 +278,170 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 									</ControlContextProvider>
 								</>
 							)}
-						</BaseControl>
+						</ToggleSelectControl>
 					</ControlContextProvider>
-				)}
+				</FeatureWrapper>
 
-				{isActiveField(publisherFlexChildAlign) && (
+				<FeatureWrapper
+					isActive={isShowFlexChildAlign}
+					isActiveOnStates={
+						extensionConfig.publisherFlexChildAlign.isActiveOnStates
+					}
+					isActiveOnBreakpoints={
+						extensionConfig.publisherFlexChildAlign
+							.isActiveOnBreakpoints
+					}
+				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'align'),
-							value: flexChildAlign,
+							value: values.publisherFlexChildAlign,
 							attribute: 'publisherFlexChildAlign',
 							blockName: block.blockName,
 						}}
 					>
-						<BaseControl
+						<ToggleSelectControl
 							columns="1fr 2.65fr"
 							controlName="toggle-select"
 							label={__('Self Align', 'publisher-core')}
-							className={'items-flex-direction-' + flexDirection}
-						>
-							<ToggleSelectControl
-								options={[
-									{
-										label: __(
-											'Flex Start',
-											'publisher-core'
-										),
-										value: 'flex-start',
-										icon: <AlignFlexStartIcon />,
-									},
-									{
-										label: __('Center', 'publisher-core'),
-										value: 'center',
-										icon: <AlignFlexCenterIcon />,
-									},
-									{
-										label: __('Flex End', 'publisher-core'),
-										value: 'flex-end',
-										icon: <AlignFlexEndIcon />,
-									},
-									{
-										label: __('Stretch', 'publisher-core'),
-										value: 'stretch',
-										icon: <AlignStretchIcon />,
-									},
-									{
-										label: __('Baseline', 'publisher-core'),
-										value: 'baseline',
-										icon: <AlignBaselineIcon />,
-									},
-								]}
-								isDeselectable={true}
-								//
-								defaultValue=""
-								onChange={(newValue) =>
-									handleOnChangeAttributes(
-										'publisherFlexChildAlign',
-										newValue
-									)
-								}
-								{...extensionProps.publisherFlexChildAlign}
-							/>
-						</BaseControl>
+							className={
+								'items-flex-direction-' +
+								values.publisherFlexDirection
+							}
+							options={[
+								{
+									label: __('Flex Start', 'publisher-core'),
+									value: 'flex-start',
+									icon: <AlignFlexStartIcon />,
+								},
+								{
+									label: __('Center', 'publisher-core'),
+									value: 'center',
+									icon: <AlignFlexCenterIcon />,
+								},
+								{
+									label: __('Flex End', 'publisher-core'),
+									value: 'flex-end',
+									icon: <AlignFlexEndIcon />,
+								},
+								{
+									label: __('Stretch', 'publisher-core'),
+									value: 'stretch',
+									icon: <AlignStretchIcon />,
+								},
+								{
+									label: __('Baseline', 'publisher-core'),
+									value: 'baseline',
+									icon: <AlignBaselineIcon />,
+								},
+							]}
+							isDeselectable={true}
+							//
+							defaultValue={attributes.publisherFlexChildAlign}
+							onChange={(newValue, ref) =>
+								handleOnChangeAttributes(
+									'publisherFlexChildAlign',
+									newValue,
+									{ ref }
+								)
+							}
+							{...extensionProps.publisherFlexChildAlign}
+						/>
 					</ControlContextProvider>
-				)}
+				</FeatureWrapper>
 
-				{isActiveField(publisherFlexChildOrder) && (
+				<FeatureWrapper
+					isActive={isShowFlexChildOrder}
+					isActiveOnStates={
+						extensionConfig.publisherFlexChildOrder.isActiveOnStates
+					}
+					isActiveOnBreakpoints={
+						extensionConfig.publisherFlexChildOrder
+							.isActiveOnBreakpoints
+					}
+				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'order'),
-							value: flexChildOrder,
+							value: values.publisherFlexChildOrder,
 							attribute: 'publisherFlexChildOrder',
 							blockName: block.blockName,
 						}}
 					>
-						<BaseControl
+						<ToggleSelectControl
 							columns="1fr 2.65fr"
-							controlName="toggle-select"
 							label={__('Self Order', 'publisher-core')}
-							className={'items-flex-direction-' + flexDirection}
+							className={
+								'items-flex-direction-' +
+								values.publisherFlexDirection
+							}
+							options={[
+								{
+									label: __('First', 'publisher-core'),
+									value: 'first',
+									icon: <OrderFirst />,
+								},
+								{
+									label: __('Last', 'publisher-core'),
+									value: 'last',
+									icon: <OrderLast />,
+								},
+								{
+									label: __('Custom Order', 'publisher-core'),
+									value: 'custom',
+									icon: <GearIcon />,
+								},
+							]}
+							isDeselectable={true}
+							//
+							defaultValue={attributes.publisherFlexChildOrder}
+							onChange={(newValue, ref) =>
+								handleOnChangeAttributes(
+									'publisherFlexChildOrder',
+									newValue,
+									{ ref }
+								)
+							}
+							{...extensionProps.publisherFlexChildOrder}
 						>
-							<ToggleSelectControl
-								options={[
-									{
-										label: __('First', 'publisher-core'),
-										value: 'first',
-										icon: <OrderFirst />,
-									},
-									{
-										label: __('Last', 'publisher-core'),
-										value: 'last',
-										icon: <OrderLast />,
-									},
-									{
-										label: __(
-											'Custom Order',
-											'publisher-core'
+							{values.publisherFlexChildOrder === 'custom' && (
+								<ControlContextProvider
+									value={{
+										name: generateExtensionId(
+											block,
+											'order-custom'
 										),
-										value: 'custom',
-										icon: <GearIcon />,
-									},
-								]}
-								isDeselectable={true}
-								//
-								defaultValue=""
-								onChange={(newValue) =>
-									handleOnChangeAttributes(
-										'publisherFlexChildOrder',
-										newValue
-									)
-								}
-								{...extensionProps.publisherFlexChildOrder}
-							/>
-							<>
-								{flexChildOrder === 'custom' && (
-									<ControlContextProvider
-										value={{
-											name: generateExtensionId(
-												block,
-												'order-custom'
-											),
-											value: flexChildOrderCustom,
-											attribute:
+										value: values.publisherFlexChildOrderCustom,
+										attribute:
+											'publisherFlexChildOrderCustom',
+										blockName: block.blockName,
+									}}
+								>
+									<InputControl
+										controlName="input"
+										label={__('Custom', 'publisher-core')}
+										columns="2fr 3fr"
+										unitType="order"
+										arrows={true}
+										min={-1}
+										onChange={(newValue, ref) =>
+											handleOnChangeAttributes(
 												'publisherFlexChildOrderCustom',
-											blockName: block.blockName,
-										}}
-									>
-										<InputControl
-											controlName="input"
-											label={__(
-												'Custom',
-												'publisher-core'
-											)}
-											columns="2fr 3fr"
-											unitType="order"
-											arrows={true}
-											min={-1}
-											onChange={(newValue) =>
-												handleOnChangeAttributes(
-													'publisherFlexChildOrderCustom',
-													newValue
-												)
-											}
-											size="small"
-											{...extensionProps.publisherFlexChildOrderCustom}
-										/>
-									</ControlContextProvider>
-								)}
-							</>
-						</BaseControl>
+												newValue,
+												{ ref }
+											)
+										}
+										size="small"
+										defaultValue={
+											attributes.publisherFlexChildOrderCustom
+										}
+										{...extensionProps.publisherFlexChildOrderCustom}
+									/>
+								</ControlContextProvider>
+							)}
+						</ToggleSelectControl>
 					</ControlContextProvider>
-				)}
+				</FeatureWrapper>
 			</PanelBodyControl>
 		);
 	},
