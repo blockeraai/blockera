@@ -17,27 +17,27 @@ export type TTransformCssProps = {
 export type TEffectsProps = {
 	...BaseExtensionProps,
 	values: {
-		opacity: string,
-		transform: Array<Object>,
-		transition: Array<Object>,
-		filter: Array<Object>,
-		blendMode: string,
-		backdropFilter: Array<Object>,
-		transformSelfPerspective: string,
-		transformSelfOrigin: {
+		publisherOpacity: string,
+		publisherTransform: Array<Object>,
+		publisherTransition: Array<Object>,
+		publisherFilter: Array<Object>,
+		publisherBlendMode: string,
+		publisherBackdropFilter: Array<Object>,
+		publisherTransformSelfPerspective: string,
+		publisherTransformSelfOrigin: {
 			top: string,
 			left: string,
 		},
-		backfaceVisibility: string,
-		transformChildPerspective: string,
-		transformChildOrigin: {
+		publisherBackfaceVisibility: string,
+		publisherTransformChildPerspective: string,
+		publisherTransformChildOrigin: {
 			top: string,
 			left: string,
 		},
-		divider: Array<Object>,
-		mask: Array<Object>,
+		publisherDivider: Array<Object>,
+		publisherMask: Array<Object>,
 	},
-	effectsConfig: {
+	extensionConfig: {
 		publisherOpacity: FeatureConfig,
 		publisherTransform: FeatureConfig,
 		publisherTransformSelfPerspective: FeatureConfig,

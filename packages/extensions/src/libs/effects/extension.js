@@ -44,7 +44,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 	({
 		values,
 		block,
-		effectsConfig,
+		extensionConfig,
 		handleOnChangeAttributes,
 		extensionProps,
 		setSettings,
@@ -54,44 +54,44 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 			useState(false);
 
 		const isShowOpacity = isShowField(
-			effectsConfig.publisherOpacity,
-			values?.opacity,
-			attributes.opacity.default
+			extensionConfig.publisherOpacity,
+			values?.publisherOpacity,
+			attributes.publisherOpacity.default
 		);
 		const isShowTransform = isShowField(
-			effectsConfig.publisherTransform,
-			values?.transform,
-			attributes.transform.default
+			extensionConfig.publisherTransform,
+			values?.publisherTransform,
+			attributes.publisherTransform.default
 		);
 		const isShowTransition = isShowField(
-			effectsConfig.publisherTransition,
-			values?.transition,
-			attributes.transition.default
+			extensionConfig.publisherTransition,
+			values?.publisherTransition,
+			attributes.publisherTransition.default
 		);
 		const isShowFilter = isShowField(
-			effectsConfig.publisherFilter,
-			values?.filter,
-			attributes.filter.default
+			extensionConfig.publisherFilter,
+			values?.publisherFilter,
+			attributes.publisherFilter.default
 		);
 		const isShowBackdropFilter = isShowField(
-			effectsConfig.publisherBackdropFilter,
-			values?.backdropFilter,
-			attributes.backdropFilter.default
+			extensionConfig.publisherBackdropFilter,
+			values?.publisherBackdropFilter,
+			attributes.publisherBackdropFilter.default
 		);
 		const isShowDivider = isShowField(
-			effectsConfig.publisherDivider,
-			values?.divider,
-			attributes.divider.default
+			extensionConfig.publisherDivider,
+			values?.publisherDivider,
+			attributes.publisherDivider.default
 		);
 		const isShowMask = isShowField(
-			effectsConfig.publisherMask,
-			values?.mask,
-			attributes.mask.default
+			extensionConfig.publisherMask,
+			values?.publisherMask,
+			attributes.publisherMask.default
 		);
 		const isShowBlendMode = isShowField(
-			effectsConfig.publisherBlendMode,
-			values?.blendMode,
-			attributes.blendMode.default
+			extensionConfig.publisherBlendMode,
+			values?.publisherBlendMode,
+			attributes.publisherBlendMode.default
 		);
 
 		// Extension is not active
@@ -119,7 +119,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 				)}
 			>
 				<ExtensionSettings
-					features={effectsConfig}
+					features={extensionConfig}
 					update={(newSettings) => {
 						setSettings(newSettings, 'effectsConfig');
 					}}
@@ -128,17 +128,17 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 				<FeatureWrapper
 					isActive={isShowOpacity}
 					isActiveOnStates={
-						effectsConfig.publisherOpacity.isActiveOnStates
+						extensionConfig.publisherOpacity.isActiveOnStates
 					}
 					isActiveOnBreakpoints={
-						effectsConfig.publisherOpacity.isActiveOnBreakpoints
+						extensionConfig.publisherOpacity.isActiveOnBreakpoints
 					}
 				>
 					<Opacity
 						block={block}
-						opacity={values.opacity}
+						opacity={values.publisherOpacity}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.opacity.default}
+						defaultValue={attributes.publisherOpacity.default}
 						{...extensionProps.publisherOpacity}
 					/>
 				</FeatureWrapper>
@@ -146,16 +146,16 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 				<FeatureWrapper
 					isActive={isShowTransform}
 					isActiveOnStates={
-						effectsConfig.publisherTransform.isActiveOnStates
+						extensionConfig.publisherTransform.isActiveOnStates
 					}
 					isActiveOnBreakpoints={
-						effectsConfig.publisherTransform.isActiveOnBreakpoints
+						extensionConfig.publisherTransform.isActiveOnBreakpoints
 					}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'transform-2d-3d'),
-							value: values.transform,
+							value: values.publisherTransform,
 							attribute: 'publisherTransform',
 							blockName: block.blockName,
 						}}
@@ -199,7 +199,9 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 										</Button>
 									</>
 								}
-								defaultValue={attributes.transform.default}
+								defaultValue={
+									attributes.publisherTransform.default
+								}
 								{...extensionProps.publisherTransform}
 							/>
 
@@ -213,17 +215,17 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 										handleOnChangeAttributes
 									}
 									values={{
-										transform: values.transform,
+										transform: values.publisherTransform,
 										transformSelfPerspective:
-											values.transformSelfPerspective,
+											values.publisherTransformSelfPerspective,
 										transformSelfOrigin:
-											values.transformSelfOrigin,
+											values.publisherTransformSelfOrigin,
 										backfaceVisibility:
-											values.backfaceVisibility,
+											values.publisherBackfaceVisibility,
 										transformChildPerspective:
-											values.transformChildPerspective,
+											values.publisherTransformChildPerspective,
 										transformChildOrigin:
-											values.transformChildOrigin,
+											values.publisherTransformChildOrigin,
 									}}
 									attributes={attributes}
 								/>
@@ -235,17 +237,18 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 				<FeatureWrapper
 					isActive={isShowTransition}
 					isActiveOnStates={
-						effectsConfig.publisherTransition.isActiveOnStates
+						extensionConfig.publisherTransition.isActiveOnStates
 					}
 					isActiveOnBreakpoints={
-						effectsConfig.publisherTransition.isActiveOnBreakpoints
+						extensionConfig.publisherTransition
+							.isActiveOnBreakpoints
 					}
 				>
 					<Transition
-						transition={values.transition}
+						transition={values.publisherTransition}
 						block={block}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.transition.default}
+						defaultValue={attributes.publisherTransition.default}
 						{...extensionProps.publisherTransition}
 					/>
 				</FeatureWrapper>
@@ -253,17 +256,17 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 				<FeatureWrapper
 					isActive={isShowFilter}
 					isActiveOnStates={
-						effectsConfig.publisherFilter.isActiveOnStates
+						extensionConfig.publisherFilter.isActiveOnStates
 					}
 					isActiveOnBreakpoints={
-						effectsConfig.publisherFilter.isActiveOnBreakpoints
+						extensionConfig.publisherFilter.isActiveOnBreakpoints
 					}
 				>
 					<Filter
-						filter={values.filter}
+						filter={values.publisherFilter}
 						block={block}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.filter.default}
+						defaultValue={attributes.publisherFilter.default}
 						{...extensionProps.publisherFilter}
 					/>
 				</FeatureWrapper>
@@ -271,18 +274,20 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 				<FeatureWrapper
 					isActive={isShowBackdropFilter}
 					isActiveOnStates={
-						effectsConfig.publisherBackdropFilter.isActiveOnStates
+						extensionConfig.publisherBackdropFilter.isActiveOnStates
 					}
 					isActiveOnBreakpoints={
-						effectsConfig.publisherBackdropFilter
+						extensionConfig.publisherBackdropFilter
 							.isActiveOnBreakpoints
 					}
 				>
 					<BackdropFilter
-						backdropFilter={values.backdropFilter}
+						backdropFilter={values.publisherBackdropFilter}
 						block={block}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.backdropFilter.default}
+						defaultValue={
+							attributes.publisherBackdropFilter.default
+						}
 						{...extensionProps.publisherBackdropFilter}
 					/>
 				</FeatureWrapper>
@@ -290,17 +295,17 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 				<FeatureWrapper
 					isActive={isShowDivider}
 					isActiveOnStates={
-						effectsConfig.publisherDivider.isActiveOnStates
+						extensionConfig.publisherDivider.isActiveOnStates
 					}
 					isActiveOnBreakpoints={
-						effectsConfig.publisherDivider.isActiveOnBreakpoints
+						extensionConfig.publisherDivider.isActiveOnBreakpoints
 					}
 				>
 					<Divider
-						divider={values.divider}
+						divider={values.publisherDivider}
 						block={block}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.divider.default}
+						defaultValue={attributes.publisherDivider.default}
 						{...extensionProps.publisherDivider}
 					/>
 				</FeatureWrapper>
@@ -308,17 +313,17 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 				<FeatureWrapper
 					isActive={isShowMask}
 					isActiveOnStates={
-						effectsConfig.publisherMask.isActiveOnStates
+						extensionConfig.publisherMask.isActiveOnStates
 					}
 					isActiveOnBreakpoints={
-						effectsConfig.publisherMask.isActiveOnBreakpoints
+						extensionConfig.publisherMask.isActiveOnBreakpoints
 					}
 				>
 					<Mask
-						mask={values.mask}
+						mask={values.publisherMask}
 						block={block}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.mask.default}
+						defaultValue={attributes.publisherMask.default}
 						{...extensionProps.publisherMask}
 					/>
 				</FeatureWrapper>
@@ -326,17 +331,17 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 				<FeatureWrapper
 					isActive={isShowBlendMode}
 					isActiveOnStates={
-						effectsConfig.publisherBlendMode.isActiveOnStates
+						extensionConfig.publisherBlendMode.isActiveOnStates
 					}
 					isActiveOnBreakpoints={
-						effectsConfig.publisherBlendMode.isActiveOnBreakpoints
+						extensionConfig.publisherBlendMode.isActiveOnBreakpoints
 					}
 				>
 					<Blending
-						blendMode={values.blendMode}
+						blendMode={values.publisherBlendMode}
 						block={block}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.blendMode.default}
+						defaultValue={attributes.publisherBlendMode.default}
 						{...extensionProps.publisherBlendMode}
 					/>
 				</FeatureWrapper>
