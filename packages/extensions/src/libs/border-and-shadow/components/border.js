@@ -34,10 +34,26 @@ export const Border = ({
 		color?: string,
 		style?: string,
 		width?: string,
-		top?: Object,
-		left?: Object,
-		right?: Object,
-		bottom?: Object,
+		top?: {
+			width: string,
+			style: string,
+			color: string,
+		},
+		left?: {
+			width: string,
+			style: string,
+			color: string,
+		},
+		right?: {
+			width: string,
+			style: string,
+			color: string,
+		},
+		bottom?: {
+			width: string,
+			style: string,
+			color: string,
+		},
 		radius?: BorderRadiusValue,
 	},
 }): MixedElement => {

@@ -5,6 +5,7 @@
  */
 import type { BaseExtensionProps } from '../../types';
 import type { BorderRadiusValue } from '@publisher/controls';
+import type { FeatureConfig } from '../../base';
 
 export type TBorderAndShadowDefaultProp = {
 	borderColor?: string,
@@ -22,9 +23,14 @@ export type TBorderAndShadowDefaultProp = {
 
 export type TBorderAndShadowProps = {
 	...BaseExtensionProps,
-	borderAndShadowConfig: Object,
+	extensionConfig: {
+		publisherBorder: FeatureConfig,
+		publisherBorderRadius: FeatureConfig,
+		publisherBoxShadow: FeatureConfig,
+		publisherOutline: FeatureConfig,
+	},
 	values: {
-		border: {
+		publisherBorder: {
 			color?: string,
 			style?: string,
 			width?: string,
@@ -34,9 +40,9 @@ export type TBorderAndShadowProps = {
 			bottom?: Object,
 			radius?: BorderRadiusValue,
 		},
-		outline: Object,
-		boxShadow: Object,
-		borderRadius: Object,
+		publisherBorderRadius: Object,
+		publisherBoxShadow: Array<Object>,
+		publisherOutline: Array<Object>,
 	},
 	extensionProps: {
 		publisherBoxShadow: Object,

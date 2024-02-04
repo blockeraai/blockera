@@ -652,27 +652,30 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 						<BorderAndShadowExtension
 							block={block}
-							borderAndShadowConfig={borderAndShadowConfig}
+							extensionConfig={borderAndShadowConfig}
 							extensionProps={{
-								publisherBoxShadow: {},
-								publisherOutline: {},
 								publisherBorder: {},
 								publisherBorderRadius: {},
+								publisherBoxShadow: {},
+								publisherOutline: {},
 							}}
 							values={{
-								border: currentStateAttributes.publisherBorder,
-								borderRadius:
+								publisherBorder:
+									currentStateAttributes.publisherBorder,
+								publisherBorderRadius:
 									currentStateAttributes.publisherBorderRadius,
-								outline:
+								publisherOutline:
 									currentStateAttributes.publisherOutline,
-								boxShadow:
+								publisherBoxShadow:
 									currentStateAttributes.publisherBoxShadow,
 							}}
 							attributes={{
-								border: attributes.publisherBorder,
-								borderRadius: attributes.publisherBorderRadius,
-								outline: attributes.publisherOutline,
-								boxShadow: attributes.publisherBoxShadow,
+								publisherBorder: attributes.publisherBorder,
+								publisherBorderRadius:
+									attributes.publisherBorderRadius,
+								publisherOutline: attributes.publisherOutline,
+								publisherBoxShadow:
+									attributes.publisherBoxShadow,
 							}}
 							handleOnChangeAttributes={handleOnChangeAttributes}
 							setSettings={handleOnChangeSettings}
