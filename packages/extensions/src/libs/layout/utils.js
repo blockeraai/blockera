@@ -21,14 +21,10 @@ export const calcGridTemplateAreas = ({
 	});
 
 	gridAreas?.forEach((item) => {
-		for (
-			let row: any = [item['row-start']];
-			row < [item['row-end']];
-			row++
-		) {
+		for (let row: any = item['row-start']; row < item['row-end']; row++) {
 			for (
-				let col: any = [item['column-start']];
-				col < [item['column-end']];
+				let col: any = item['column-start'];
+				col < item['column-end'];
 				col++
 			) {
 				gridTemplateAreas[row - 1]?.splice(col - 1, 1, item.name);

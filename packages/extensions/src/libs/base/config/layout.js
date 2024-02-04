@@ -81,4 +81,5 @@ export const layoutConfig = {
 	//publisherGridDirection: true,
 	publisherGridColumns,
 	publisherGridRows,
+	publisherGridAreas: true,
 };
