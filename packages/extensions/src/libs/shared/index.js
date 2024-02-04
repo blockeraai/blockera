@@ -380,36 +380,43 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 						<SizeExtension
 							block={block}
-							sizeConfig={sizeConfig}
+							extensionConfig={sizeConfig}
 							values={{
-								width: currentStateAttributes.publisherWidth,
-								minWidth:
+								publisherWidth:
+									currentStateAttributes.publisherWidth,
+								publisherMinWidth:
 									currentStateAttributes.publisherMinWidth,
-								maxWidth:
+								publisherMaxWidth:
 									currentStateAttributes.publisherMaxWidth,
-								height: currentStateAttributes.publisherHeight,
-								minHeight:
+								publisherHeight:
+									currentStateAttributes.publisherHeight,
+								publisherMinHeight:
 									currentStateAttributes.publisherMinHeight,
-								maxHeight:
+								publisherMaxHeight:
 									currentStateAttributes.publisherMaxHeight,
-								overflow:
+								publisherOverflow:
 									currentStateAttributes.publisherOverflow,
-								ratio: currentStateAttributes.publisherRatio,
-								fit: currentStateAttributes.publisherFit,
-								fitPosition:
+								publisherRatio:
+									currentStateAttributes.publisherRatio,
+								publisherFit:
+									currentStateAttributes.publisherFit,
+								publisherFitPosition:
 									currentStateAttributes.publisherFitPosition,
 							}}
 							attributes={{
-								width: attributes.publisherWidth,
-								minWidth: attributes.publisherMinWidth,
-								maxWidth: attributes.publisherMaxWidth,
-								height: attributes.publisherHeight,
-								minHeight: attributes.publisherMinHeight,
-								maxHeight: attributes.publisherMaxHeight,
-								overflow: attributes.publisherOverflow,
-								ratio: attributes.publisherRatio,
-								fit: attributes.publisherFit,
-								fitPosition: attributes.publisherFitPosition,
+								publisherWidth: attributes.publisherWidth,
+								publisherMinWidth: attributes.publisherMinWidth,
+								publisherMaxWidth: attributes.publisherMaxWidth,
+								publisherHeight: attributes.publisherHeight,
+								publisherMinHeight:
+									attributes.publisherMinHeight,
+								publisherMaxHeight:
+									attributes.publisherMaxHeight,
+								publisherOverflow: attributes.publisherOverflow,
+								publisherRatio: attributes.publisherRatio,
+								publisherFit: attributes.publisherFit,
+								publisherFitPosition:
+									attributes.publisherFitPosition,
 							}}
 							extensionProps={{
 								publisherWidth: {},

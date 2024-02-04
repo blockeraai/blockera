@@ -21,7 +21,7 @@ export type TSizeCssProps = {
 
 export type TSizeProps = {
 	...BaseExtensionProps,
-	sizeConfig: {
+	extensionConfig: {
 		publisherWidth: FeatureConfig,
 		publisherMinWidth: FeatureConfig,
 		publisherMaxWidth: FeatureConfig,
@@ -34,16 +34,16 @@ export type TSizeProps = {
 		publisherFitPosition: FeatureConfig,
 	},
 	values: {
-		width: string,
-		height: string,
-		minWidth: string,
-		minHeight: string,
-		maxWidth: string,
-		maxHeight: string,
-		overflow: string,
-		ratio: { value: string, width: string, height: string },
-		fit: string,
-		fitPosition: { top: string, left: string },
+		publisherWidth: string,
+		publisherHeight: string,
+		publisherMinWidth: string,
+		publisherMinHeight: string,
+		publisherMaxWidth: string,
+		publisherMaxHeight: string,
+		publisherOverflow: string,
+		publisherRatio: { value: string, width: string, height: string },
+		publisherFit: string,
+		publisherFitPosition: { top: string, left: string },
 	},
 	extensionProps: {
 		publisherWidth: Object,

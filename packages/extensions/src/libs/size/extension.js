@@ -40,7 +40,7 @@ import { ExtensionSettings } from '../settings';
 export const SizeExtension: ComponentType<TSizeProps> = memo(
 	({
 		block,
-		sizeConfig,
+		extensionConfig,
 		handleOnChangeAttributes,
 		values,
 		attributes,
@@ -48,49 +48,49 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 		setSettings,
 	}: TSizeProps): MixedElement => {
 		const isShowWidth = isShowField(
-			sizeConfig.publisherWidth,
-			values?.width,
-			attributes.width.default
+			extensionConfig.publisherWidth,
+			values?.publisherWidth,
+			attributes.publisherWidth.default
 		);
 		const isShowMinWidth = isShowField(
-			sizeConfig.publisherMinWidth,
-			values?.minWidth,
-			attributes?.minWidth?.default
+			extensionConfig.publisherMinWidth,
+			values?.publisherMinWidth,
+			attributes?.publisherMinWidth?.default
 		);
 		const isShowMaxWidth = isShowField(
-			sizeConfig.publisherMaxWidth,
-			values?.maxWidth,
-			attributes?.maxWidth?.default
+			extensionConfig.publisherMaxWidth,
+			values?.publisherMaxWidth,
+			attributes?.publisherMaxWidth?.default
 		);
 		const isShowHeight = isShowField(
-			sizeConfig.publisherHeight,
-			values?.height,
-			attributes?.height?.default
+			extensionConfig.publisherHeight,
+			values?.publisherHeight,
+			attributes?.publisherHeight?.default
 		);
 		const isShowMinHeight = isShowField(
-			sizeConfig.publisherMinHeight,
-			values?.minHeight,
-			attributes?.minHeight?.default
+			extensionConfig.publisherMinHeight,
+			values?.publisherMinHeight,
+			attributes?.publisherMinHeight?.default
 		);
 		const isShowMaxHeight = isShowField(
-			sizeConfig.publisherMaxHeight,
-			values?.maxHeight,
-			attributes?.maxHeight?.default
+			extensionConfig.publisherMaxHeight,
+			values?.publisherMaxHeight,
+			attributes?.publisherMaxHeight?.default
 		);
 		const isShowOverflow = isShowField(
-			sizeConfig.publisherOverflow,
-			values?.overflow,
-			attributes?.overflow?.default
+			extensionConfig.publisherOverflow,
+			values?.publisherOverflow,
+			attributes?.publisherOverflow?.default
 		);
 		const isShowRatio = isShowField(
-			sizeConfig.publisherRatio,
-			values?.ratio,
-			attributes?.ratio?.default
+			extensionConfig.publisherRatio,
+			values?.publisherRatio,
+			attributes?.publisherRatio?.default
 		);
 		const isShowFit = isShowField(
-			sizeConfig.publisherFit,
-			values?.fit,
-			attributes?.fit?.default
+			extensionConfig.publisherFit,
+			values?.publisherFit,
+			attributes?.publisherFit?.default
 		);
 
 		// Extension is not active
@@ -116,7 +116,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 				className={componentClassNames('extension', 'extension-size')}
 			>
 				<ExtensionSettings
-					features={sizeConfig}
+					features={extensionConfig}
 					update={(newSettings) => {
 						setSettings(newSettings, 'sizeConfig');
 					}}
@@ -127,22 +127,22 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 						<FeatureWrapper
 							isActive={isShowWidth}
 							isActiveOnStates={
-								sizeConfig.publisherWidth.isActiveOnStates
+								extensionConfig.publisherWidth.isActiveOnStates
 							}
 							isActiveOnBreakpoints={
-								sizeConfig.publisherWidth.isActiveOnBreakpoints
+								extensionConfig.publisherWidth
+									.isActiveOnBreakpoints
 							}
 						>
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(block, 'width'),
-									value: values?.width,
+									value: values?.publisherWidth,
 									attribute: 'publisherWidth',
 									blockName: block.blockName,
 								}}
 							>
 								<InputControl
-									controlName="input"
 									label={__('Width', 'publisher-core')}
 									labelDescription={
 										<>
@@ -164,7 +164,9 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 									placeholder="Auto"
 									unitType="width"
 									min={0}
-									defaultValue=""
+									defaultValue={
+										attributes.publisherWidth.default
+									}
 									onChange={(newValue, ref) => {
 										handleOnChangeAttributes(
 											'publisherWidth',
@@ -211,11 +213,11 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 								<FeatureWrapper
 									isActive={isShowMinWidth}
 									isActiveOnStates={
-										sizeConfig.publisherMinWidth
+										extensionConfig.publisherMinWidth
 											.isActiveOnStates
 									}
 									isActiveOnBreakpoints={
-										sizeConfig.publisherMinWidth
+										extensionConfig.publisherMinWidth
 											.isActiveOnBreakpoints
 									}
 								>
@@ -225,13 +227,12 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												block,
 												'minWidth'
 											),
-											value: values.minWidth,
+											value: values.publisherMinWidth,
 											attribute: 'publisherMinWidth',
 											blockName: block.blockName,
 										}}
 									>
 										<InputControl
-											controlName="input"
 											label={__('Min', 'publisher-core')}
 											labelPopoverTitle={__(
 												'Min Width',
@@ -266,10 +267,14 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												isShowMaxWidth &&
 												'control-first label-center small-gap'
 											}
-											placeholder="-"
+											placeholder="Auto"
 											unitType="min-width"
 											min={0}
 											size="small"
+											defaultValue={
+												attributes.publisherMinWidth
+													.default
+											}
 											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
 													'publisherMinWidth',
@@ -287,11 +292,11 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 								<FeatureWrapper
 									isActive={isShowMaxWidth}
 									isActiveOnStates={
-										sizeConfig.publisherMaxWidth
+										extensionConfig.publisherMaxWidth
 											.isActiveOnStates
 									}
 									isActiveOnBreakpoints={
-										sizeConfig.publisherMaxWidth
+										extensionConfig.publisherMaxWidth
 											.isActiveOnBreakpoints
 									}
 								>
@@ -301,13 +306,12 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												block,
 												'maxWidth'
 											),
-											value: values.maxWidth,
+											value: values.publisherMaxWidth,
 											attribute: 'publisherMaxWidth',
 											blockName: block.blockName,
 										}}
 									>
 										<InputControl
-											controlName="input"
 											label={__('Max', 'publisher-core')}
 											labelPopoverTitle={__(
 												'Max Width',
@@ -342,10 +346,14 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												isShowMinWidth &&
 												'control-first label-center small-gap'
 											}
-											placeholder="-"
+											placeholder="Auto"
 											unitType="max-width"
 											min={0}
 											size="small"
+											defaultValue={
+												attributes.publisherMaxWidth
+													.default
+											}
 											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
 													'publisherMaxWidth',
@@ -369,22 +377,22 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 						<FeatureWrapper
 							isActive={isShowHeight}
 							isActiveOnStates={
-								sizeConfig.publisherHeight.isActiveOnStates
+								extensionConfig.publisherHeight.isActiveOnStates
 							}
 							isActiveOnBreakpoints={
-								sizeConfig.publisherHeight.isActiveOnBreakpoints
+								extensionConfig.publisherHeight
+									.isActiveOnBreakpoints
 							}
 						>
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(block, 'height'),
-									value: values.height,
+									value: values.publisherHeight,
 									attribute: 'publisherHeight',
 									blockName: block.blockName,
 								}}
 							>
 								<InputControl
-									controlName="input"
 									label={__('Height', 'publisher-core')}
 									labelDescription={
 										<>
@@ -406,7 +414,9 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 									placeholder="Auto"
 									unitType="height"
 									min={0}
-									defaultValue=""
+									defaultValue={
+										attributes.publisherHeight.default
+									}
 									onChange={(newValue, ref) => {
 										handleOnChangeAttributes(
 											'publisherHeight',
@@ -453,11 +463,11 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 								<FeatureWrapper
 									isActive={isShowMinHeight}
 									isActiveOnStates={
-										sizeConfig.publisherMinHeight
+										extensionConfig.publisherMinHeight
 											.isActiveOnStates
 									}
 									isActiveOnBreakpoints={
-										sizeConfig.publisherMinHeight
+										extensionConfig.publisherMinHeight
 											.isActiveOnBreakpoints
 									}
 								>
@@ -467,13 +477,16 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												block,
 												'minHeight'
 											),
-											value: values.minHeight,
+											value: values.publisherMinHeight,
 											attribute: 'publisherMinHeight',
 											blockName: block.blockName,
 										}}
 									>
 										<InputControl
-											defaultValue=""
+											defaultValue={
+												attributes.publisherMinHeight
+													.default
+											}
 											label={__('Min', 'publisher-core')}
 											labelPopoverTitle={__(
 												'Min Height',
@@ -508,7 +521,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												isShowMaxHeight &&
 												'control-first label-center small-gap'
 											}
-											placeholder="-"
+											placeholder="Auto"
 											unitType="min-height"
 											min={0}
 											size="small"
@@ -529,11 +542,11 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 								<FeatureWrapper
 									isActive={isShowMaxHeight}
 									isActiveOnStates={
-										sizeConfig.publisherMaxHeight
+										extensionConfig.publisherMaxHeight
 											.isActiveOnStates
 									}
 									isActiveOnBreakpoints={
-										sizeConfig.publisherMaxHeight
+										extensionConfig.publisherMaxHeight
 											.isActiveOnBreakpoints
 									}
 								>
@@ -543,13 +556,12 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												block,
 												'maxHeight'
 											),
-											value: values.maxHeight,
+											value: values.publisherMaxHeight,
 											attribute: 'publisherMaxHeight',
 											blockName: block.blockName,
 										}}
 									>
 										<InputControl
-											controlName="input"
 											label={__('Max', 'publisher-core')}
 											labelPopoverTitle={__(
 												'Max Height',
@@ -584,10 +596,14 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												isShowMinHeight &&
 												'control-first label-center small-gap'
 											}
-											placeholder="-"
+											placeholder="Auto"
 											unitType="max-height"
 											min={0}
 											size="small"
+											defaultValue={
+												attributes.publisherMaxHeight
+													.default
+											}
 											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
 													'publisherMaxHeight',
@@ -609,22 +625,21 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 				<FeatureWrapper
 					isActive={isShowOverflow}
 					isActiveOnStates={
-						sizeConfig.publisherOverflow.isActiveOnStates
+						extensionConfig.publisherOverflow.isActiveOnStates
 					}
 					isActiveOnBreakpoints={
-						sizeConfig.publisherOverflow.isActiveOnBreakpoints
+						extensionConfig.publisherOverflow.isActiveOnBreakpoints
 					}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'overflow'),
-							value: values.overflow,
+							value: values.publisherOverflow,
 							attribute: 'publisherOverflow',
 							blockName: block.blockName,
 						}}
 					>
 						<ToggleSelectControl
-							controlName="toggle-select"
 							label={__('Overflow', 'publisher-core')}
 							labelDescription={
 								<>
@@ -694,8 +709,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 									icon: <OverflowScrollIcon />,
 								},
 							]}
-							//
-							defaultValue=""
+							defaultValue={attributes.publisherOverflow.default}
 							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
 									'publisherOverflow',
@@ -711,16 +725,16 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 				<FeatureWrapper
 					isActive={isShowRatio}
 					isActiveOnStates={
-						sizeConfig.publisherRatio.isActiveOnStates
+						extensionConfig.publisherRatio.isActiveOnStates
 					}
 					isActiveOnBreakpoints={
-						sizeConfig.publisherRatio.isActiveOnBreakpoints
+						extensionConfig.publisherRatio.isActiveOnBreakpoints
 					}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'ratio'),
-							value: values.ratio,
+							value: values.publisherRatio,
 							type: 'nested',
 							attribute: 'publisherRatio',
 							blockName: block.blockName,
@@ -728,7 +742,8 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 					>
 						<AspectRatio
 							block={block}
-							ratio={values.ratio}
+							ratio={values.publisherRatio}
+							defaultValue={attributes.publisherRatio.default}
 							handleOnChangeAttributes={handleOnChangeAttributes}
 							{...extensionProps.publisherRatio}
 						/>
@@ -737,22 +752,31 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowFit}
-					isActiveOnStates={sizeConfig.publisherFit.isActiveOnStates}
+					isActiveOnStates={
+						extensionConfig.publisherFit.isActiveOnStates
+					}
 					isActiveOnBreakpoints={
-						sizeConfig.publisherFit.isActiveOnBreakpoints
+						extensionConfig.publisherFit.isActiveOnBreakpoints
 					}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'fit'),
-							value: values.fit,
+							value: values.publisherFit,
 							attribute: 'publisherFit',
 							blockName: block.blockName,
 						}}
 					>
 						<ObjectFit
 							block={block}
-							fitPosition={values.fitPosition}
+							defaultValue={attributes.publisherFit.default}
+							fitPosition={values.publisherFitPosition}
+							fitPositionDefaultValue={
+								attributes.publisherFitPosition.default
+							}
+							fitPositionProps={
+								extensionProps.publisherFitPosition
+							}
 							handleOnChangeAttributes={handleOnChangeAttributes}
 							{...extensionProps.publisherFit}
 						/>
