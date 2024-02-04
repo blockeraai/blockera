@@ -142,7 +142,9 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 								},
 							]}
 							isDeselectable={true}
-							defaultValue={attributes.publisherFlexChildSizing}
+							defaultValue={
+								attributes.publisherFlexChildSizing.default
+							}
 							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
 									'publisherFlexChildSizing',
@@ -337,7 +339,9 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 							]}
 							isDeselectable={true}
 							//
-							defaultValue={attributes.publisherFlexChildAlign}
+							defaultValue={
+								attributes.publisherFlexChildAlign.default
+							}
 							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
 									'publisherFlexChildAlign',
@@ -394,7 +398,9 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 							]}
 							isDeselectable={true}
 							//
-							defaultValue={attributes.publisherFlexChildOrder}
+							defaultValue={
+								attributes.publisherFlexChildOrder.default
+							}
 							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
 									'publisherFlexChildOrder',

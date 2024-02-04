@@ -252,7 +252,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 							]}
 							isDeselectable={true}
 							//
-							defaultValue={attributes.publisherDisplay}
+							defaultValue={attributes.publisherDisplay.default}
 							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
 									'publisherDisplay',
