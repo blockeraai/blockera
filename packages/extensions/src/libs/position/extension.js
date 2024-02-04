@@ -30,16 +30,16 @@ import type { TPositionExtensionProps } from './types/position-extension-props';
 export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 	({
 		block,
-		positionConfig,
+		extensionConfig,
 		values,
 		attributes,
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TPositionExtensionProps): MixedElement => {
 		const isShownPosition = isShowField(
-			positionConfig.publisherPosition,
-			values?.position,
-			attributes.position.default
+			extensionConfig.publisherPosition,
+			values?.publisherPosition,
+			attributes.publisherPosition.default
 		);
 
 		if (!isShownPosition) {
@@ -47,9 +47,9 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 		}
 
 		const isShownZIndex = isShowField(
-			positionConfig.publisherZIndex,
-			values?.zIndex,
-			attributes.zIndex.default
+			extensionConfig.publisherZIndex,
+			values?.publisherZIndex,
+			attributes.publisherZIndex.default
 		);
 
 		return (
@@ -65,16 +65,16 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 				<FeatureWrapper
 					isActive={isShownPosition}
 					isActiveOnStates={
-						positionConfig.publisherPosition.isActiveOnStates
+						extensionConfig.publisherPosition.isActiveOnStates
 					}
 					isActiveOnBreakpoints={
-						positionConfig.publisherPosition.isActiveOnBreakpoints
+						extensionConfig.publisherPosition.isActiveOnBreakpoints
 					}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'position'),
-							value: values?.position || {},
+							value: values?.publisherPosition,
 							attribute: 'publisherPosition',
 							blockName: block.blockName,
 						}}
@@ -95,35 +95,37 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 										{ ref }
 									)
 								}
+								defaultValue={
+									attributes.publisherPosition.default
+								}
 								{...extensionProps.publisherPosition}
 							/>
 						</BaseControl>
 					</ControlContextProvider>
 				</FeatureWrapper>
 
-				{values.position?.type !== '' &&
-					values.position?.type !== undefined &&
-					values.position?.type !== 'static' && (
+				{values?.publisherPosition?.type !== '' &&
+					values?.publisherPosition?.type !== undefined &&
+					values?.publisherPosition?.type !== 'static' && (
 						<FeatureWrapper
 							isActive={isShownZIndex}
 							isActiveOnStates={
-								positionConfig.publisherZIndex.isActiveOnStates
+								extensionConfig.publisherZIndex.isActiveOnStates
 							}
 							isActiveOnBreakpoints={
-								positionConfig.publisherZIndex
+								extensionConfig.publisherZIndex
 									.isActiveOnBreakpoints
 							}
 						>
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(block, 'z-index'),
-									value: values.zIndex,
+									value: values.publisherZIndex,
 									attribute: 'publisherZIndex',
 									blockName: block.blockName,
 								}}
 							>
 								<InputControl
-									controlName="input"
 									columns="columns-2"
 									label={__('z-index', 'publisher-core')}
 									labelDescription={
@@ -145,7 +147,9 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 									type="number"
 									unitType="z-index"
 									arrows={true}
-									defaultValue=""
+									defaultValue={
+										attributes.publisherZIndex.default
+									}
 									onChange={(newValue, ref) =>
 										handleOnChangeAttributes(
 											'publisherZIndex',

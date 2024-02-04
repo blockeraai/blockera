@@ -8,12 +8,12 @@ import type { FeatureConfig } from '../../base';
 
 export type TPositionExtensionProps = {
 	...BaseExtensionProps,
-	positionConfig: {
+	extensionConfig: {
 		publisherPosition: FeatureConfig,
 		publisherZIndex: FeatureConfig,
 	},
 	values: {
-		position?: {
+		publisherPosition?: {
 			type: string,
 			position: {
 				top: string,
@@ -22,7 +22,7 @@ export type TPositionExtensionProps = {
 				left: string,
 			},
 		},
-		zIndex: string,
+		publisherZIndex: string,
 	},
 	extensionProps: {
 		publisherPosition: Object,
