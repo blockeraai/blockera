@@ -33,12 +33,15 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			getControlId,
 			labelPopoverTitle,
 			labelDescription,
+			defaultRepeaterItemValue,
 		} = useContext(RepeaterContext);
 
 		return (
 			<div id={`repeater-item-${itemId}`}>
 				<SelectControl
+					repeaterItem={itemId}
 					id={getControlId(itemId, 'type')}
+					singularId={'type'}
 					label={__('Type', 'publisher-core')}
 					labelPopoverTitle={labelPopoverTitle}
 					labelDescription={labelDescription}
@@ -52,12 +55,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							value: { ...item, type },
 						})
 					}
-					defaultValue={item.type}
+					defaultValue={defaultRepeaterItemValue.type}
 				/>
 
 				{item.type === 'blur' && (
 					<InputControl
+						repeaterItem={itemId}
 						id={getControlId(itemId, 'blur')}
+						singularId={'blur'}
 						label={__('Blur', 'publisher-core')}
 						labelPopoverTitle={__('Blur Filter', 'publisher-core')}
 						labelDescription={
@@ -89,7 +94,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								value: { ...item, blur },
 							})
 						}
-						defaultValue={item.blur}
+						defaultValue={defaultRepeaterItemValue.blur}
 						data-test="filter-blur-input"
 					/>
 				)}
@@ -97,7 +102,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 				{item.type === 'drop-shadow' && (
 					<>
 						<InputControl
+							repeaterItem={itemId}
 							id={getControlId(itemId, 'drop-shadow-x')}
+							singularId={'drop-shadow-x'}
 							label={<XCoordinateIcon />}
 							labelPopoverTitle={__(
 								'Shadow Horizontal Offset',
@@ -129,12 +136,16 @@ const Fields: TFieldItem = memo<TFieldItem>(
 									},
 								})
 							}
-							defaultValue={item['drop-shadow-x']}
+							defaultValue={
+								defaultRepeaterItemValue['drop-shadow-x']
+							}
 							data-test="filter-drop-shadow-x-input"
 						/>
 
 						<InputControl
+							repeaterItem={itemId}
 							id={getControlId(itemId, 'drop-shadow-y')}
+							singularId={'drop-shadow-y'}
 							label={<YCoordinateIcon />}
 							labelPopoverTitle={__(
 								'Shadow Vertical Offset',
@@ -166,12 +177,16 @@ const Fields: TFieldItem = memo<TFieldItem>(
 									},
 								})
 							}
-							defaultValue={item['drop-shadow-y']}
+							defaultValue={
+								defaultRepeaterItemValue['drop-shadow-y']
+							}
 							data-test="filter-drop-shadow-y-input"
 						/>
 
 						<InputControl
+							repeaterItem={itemId}
 							id={getControlId(itemId, 'drop-shadow-blur')}
+							singularId={'drop-shadow-blur'}
 							label={__('Blur', 'publisher-core')}
 							labelPopoverTitle={__(
 								'Shadow Blur',
@@ -203,12 +218,16 @@ const Fields: TFieldItem = memo<TFieldItem>(
 									},
 								})
 							}
-							defaultValue={item['drop-shadow-blur']}
+							defaultValue={
+								defaultRepeaterItemValue['drop-shadow-blur']
+							}
 							data-test="filter-drop-shadow-blur-input"
 						/>
 
 						<ColorControl
+							repeaterItem={itemId}
 							id={getControlId(itemId, 'drop-shadow-color')}
+							singularId={'drop-shadow-color'}
 							label={__('Color', 'publisher-core')}
 							labelPopoverTitle={__(
 								'Shadow Color',
@@ -236,7 +255,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 									},
 								})
 							}
-							defaultValue={item['drop-shadow-color']}
+							defaultValue={
+								defaultRepeaterItemValue['drop-shadow-color']
+							}
 							data-test="filter-drop-shadow-color"
 						/>
 					</>
@@ -244,7 +265,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 
 				{item.type === 'brightness' && (
 					<InputControl
+						repeaterItem={itemId}
 						id={getControlId(itemId, 'brightness')}
+						singularId={'brightness'}
 						label={__('Brightness', 'publisher-core')}
 						labelPopoverTitle={__(
 							'Brightness Filter',
@@ -288,14 +311,16 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								},
 							})
 						}
-						defaultValue={item.brightness}
+						defaultValue={defaultRepeaterItemValue.brightness}
 						data-test="filter-brightness-input"
 					/>
 				)}
 
 				{item.type === 'contrast' && (
 					<InputControl
+						repeaterItem={itemId}
 						id={getControlId(itemId, 'contrast')}
+						singularId={'contrast'}
 						label={__('Contrast', 'publisher-core')}
 						labelPopoverTitle={__(
 							'Contrast Filter',
@@ -333,14 +358,16 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								},
 							})
 						}
-						defaultValue={item.contrast}
+						defaultValue={defaultRepeaterItemValue.contrast}
 						data-test="filter-contrast-input"
 					/>
 				)}
 
 				{item.type === 'hue-rotate' && (
 					<InputControl
+						repeaterItem={itemId}
 						id={getControlId(itemId, 'hue-rotate')}
+						singularId={'hue-rotate'}
 						label={__('Hue Rotate', 'publisher-core')}
 						labelPopoverTitle={__(
 							'Contrast Filter',
@@ -378,14 +405,16 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								},
 							})
 						}
-						defaultValue={item['hue-rotate']}
+						defaultValue={defaultRepeaterItemValue['hue-rotate']}
 						data-test="filter-hue-rotate-input"
 					/>
 				)}
 
 				{item.type === 'saturate' && (
 					<InputControl
+						repeaterItem={itemId}
 						id={getControlId(itemId, 'saturate')}
+						singularId={'saturate'}
 						label={__('Saturation', 'publisher-core')}
 						labelPopoverTitle={__(
 							'Saturation Filter',
@@ -423,14 +452,16 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								},
 							})
 						}
-						defaultValue={item.saturate}
+						defaultValue={defaultRepeaterItemValue.saturate}
 						data-test="filter-saturate-input"
 					/>
 				)}
 
 				{item.type === 'grayscale' && (
 					<InputControl
+						repeaterItem={itemId}
 						id={getControlId(itemId, 'grayscale')}
+						singularId={'grayscale'}
 						label={__('Grayscale', 'publisher-core')}
 						labelPopoverTitle={__(
 							'Grayscale Filter',
@@ -468,14 +499,16 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								},
 							})
 						}
-						defaultValue={item.grayscale}
+						defaultValue={defaultRepeaterItemValue.grayscale}
 						data-test="filter-grayscale-input"
 					/>
 				)}
 
 				{item.type === 'invert' && (
 					<InputControl
+						repeaterItem={itemId}
 						id={getControlId(itemId, 'invert')}
+						singularId={'invert'}
 						label={__('Invert', 'publisher-core')}
 						labelPopoverTitle={__(
 							'Invert Filter',
@@ -513,14 +546,16 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								},
 							})
 						}
-						defaultValue={item.invert}
+						defaultValue={defaultRepeaterItemValue.invert}
 						data-test="filter-invert-input"
 					/>
 				)}
 
 				{item.type === 'sepia' && (
 					<InputControl
+						repeaterItem={itemId}
 						id={getControlId(itemId, 'sepia')}
+						singularId={'sepia'}
 						label={__('Sepia', 'publisher-core')}
 						labelPopoverTitle={__('Sepia Filter', 'publisher-core')}
 						labelDescription={
@@ -549,7 +584,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								},
 							})
 						}
-						defaultValue={item.sepia}
+						defaultValue={defaultRepeaterItemValue.sepia}
 						data-test="filter-sepia-input"
 					/>
 				)}

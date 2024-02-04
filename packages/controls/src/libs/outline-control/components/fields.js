@@ -78,7 +78,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 				/>
 
 				<InputControl
-					singularId={'color'}
+					id={getControlId(itemId, 'offset')}
+					singularId={'offset'}
 					repeaterItem={itemId}
 					controlName="input"
 					label={__('Offset', 'publisher-core')}
@@ -98,7 +99,6 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					max={40}
 					range={true}
 					unitType="outline"
-					id={getControlId(itemId, 'offset')}
 					onChange={(offset) =>
 						changeRepeaterItem({
 							controlId,

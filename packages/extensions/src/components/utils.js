@@ -11,6 +11,7 @@ import { omitWithPattern } from '@publisher/utils';
  * Internal dependencies
  */
 import { hasSameProps } from '../libs';
+import type { InnerBlockType } from '../libs/inner-blocks/types';
 
 export const propsAreEqual = (
 	prev: { attributes: Object, name: string },
@@ -36,3 +37,13 @@ export const propsAreEqual = (
 		omitWithPattern(next.attributes, regexp)
 	);
 };
+
+/**
+ * is current block is inner block?
+ *
+ * @param {'master' | InnerBlockType | string} currentBlock The current block type.
+ * @return {boolean} true on success, false on otherwise.
+ */
+export const isInnerBlock = (
+	currentBlock: 'master' | InnerBlockType | string
+): boolean => 'master' !== currentBlock;

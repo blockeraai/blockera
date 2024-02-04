@@ -25,12 +25,14 @@ export const Opacity = ({
 	block,
 	opacity,
 	props,
+	defaultValue,
 	handleOnChangeAttributes,
 }: {
 	opacity: string | void,
 	block: TBlockProps,
 	props: Object,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
+	defaultValue: string,
 }): MixedElement => {
 	return (
 		<ControlContextProvider
@@ -68,11 +70,14 @@ export const Opacity = ({
 					min={0}
 					max={100}
 					initialPosition={100}
-					defaultValue="100%"
-					onChange={(newValue) =>
-						handleOnChangeAttributes('publisherOpacity', newValue)
+					defaultValue={defaultValue}
+					onChange={(newValue, ref) =>
+						handleOnChangeAttributes('publisherOpacity', newValue, {
+							ref,
+						})
 					}
 				/>
+
 				{opacity === '0%' && (
 					<NoticeControl type="warning">
 						{__(

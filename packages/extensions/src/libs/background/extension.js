@@ -18,8 +18,9 @@ import {
 	ControlContextProvider,
 	NoticeControl,
 } from '@publisher/controls';
-import { isArray, isEmpty, checkVisibleItemLength } from '@publisher/utils';
+import { checkVisibleItemLength } from '@publisher/utils';
 import { componentClassNames } from '@publisher/classnames';
+import { FeatureWrapper } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -27,27 +28,53 @@ import { componentClassNames } from '@publisher/classnames';
 import ClipTextIcon from './icons/clip-text';
 import ClipNoneIcon from './icons/clip-none';
 import InheritIcon from '../../icons/inherit';
-import { isActiveField } from '../../api/utils';
+import { isShowField } from '../../api/utils';
 import ClipPaddingIcon from './icons/clip-padding';
 import ClipContentIcon from './icons/clip-content';
 import { generateExtensionId, hasSameProps } from '../utils';
 import type { TBackgroundProps } from './types/background-props';
 import { default as BackgroundExtensionIcon } from './icons/extension-icon';
+import { ExtensionSettings } from '../settings';
 
 export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 	({
 		block,
-		backgroundConfig: {
+		values,
+		attributes,
+		extensionConfig,
+		handleOnChangeAttributes,
+		extensionProps,
+		setSettings,
+	}: TBackgroundProps): MixedElement => {
+		const {
 			publisherBackground,
 			publisherBackgroundColor,
 			publisherBackgroundClip,
-		},
-		values: { background, backgroundClip, backgroundColor },
-		defaultValue,
-		handleOnChangeAttributes,
-		extensionProps,
-	}: TBackgroundProps): MixedElement => {
-		const visibleBackgroundLength = checkVisibleItemLength(background);
+		} = extensionConfig;
+
+		const isShowBackground = isShowField(
+			extensionConfig.publisherBackground,
+			values.publisherBackground,
+			attributes.publisherBackground.default
+		);
+		const isShowBackgroundColor = isShowField(
+			extensionConfig.publisherBackgroundColor,
+			values.publisherBackgroundColor,
+			attributes.publisherBackgroundColor.default
+		);
+		const isShowBackgroundClip = isShowField(
+			extensionConfig.publisherBackgroundClip,
+			values.publisherBackgroundClip,
+			attributes.publisherBackgroundClip.default
+		);
+
+		if (
+			!isShowBackground &&
+			!isShowBackgroundColor &&
+			!isShowBackgroundClip
+		) {
+			return <></>;
+		}
 
 		return (
 			<PanelBodyControl
@@ -59,26 +86,24 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 					'extension-background'
 				)}
 			>
-				{isActiveField(publisherBackground) && (
+				<ExtensionSettings
+					features={extensionConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'backgroundConfig');
+					}}
+				/>
+
+				<FeatureWrapper
+					isActive={isShowBackground}
+					isActiveOnStates={publisherBackground.isActiveOnStates}
+					isActiveOnBreakpoints={
+						publisherBackground.isActiveOnBreakpoints
+					}
+				>
 					<ControlContextProvider
 						value={{
-							name: generateExtensionId(block, 'background'), //
-							value: background || [
-								{
-									type: 'image',
-									image: defaultValue?.backgroundImage || '',
-									'image-size': 'custom',
-									'image-size-width': 'auto',
-									'image-size-height': 'auto',
-									'image-position': {
-										top: '50%',
-										left: '50%',
-									},
-									'image-repeat': 'repeat',
-									'image-attachment': 'scroll',
-									isVisible: true,
-								},
-							],
+							name: generateExtensionId(block, 'background'),
+							value: values.publisherBackground,
 							attribute: 'publisherBackground',
 							blockName: block.blockName,
 						}}
@@ -90,58 +115,41 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 						>
 							<BackgroundControl
 								label={__('Image & Gradient', 'publisher-core')}
-								onChange={(newValue) => {
-									const toWPCompatibleValue =
-										isArray(newValue) &&
-										!isEmpty(newValue) &&
-										newValue[0]?.image
-											? {
-													style: {
-														...(block?.attributes
-															?.style ?? {}),
-														background: {
-															...(block
-																?.attributes
-																?.style
-																?.background ??
-																{}),
-															backgroundImage:
-																newValue[0]
-																	.image,
-														},
-													},
-											  }
-											: {};
-
+								onChange={(newValue, ref) => {
 									handleOnChangeAttributes(
 										'publisherBackground',
 										newValue,
-										{
-											addOrModifyRootItems:
-												toWPCompatibleValue,
-										}
+										{ ref }
 									);
 								}}
+								defaultValue={
+									attributes.publisherBackground.default
+								}
 								{...extensionProps.publisherBackground}
 							/>
 						</BaseControl>
 					</ControlContextProvider>
-				)}
+				</FeatureWrapper>
 
-				{isActiveField(publisherBackgroundColor) && (
+				<FeatureWrapper
+					isActive={isShowBackgroundColor}
+					isActiveOnStates={publisherBackgroundColor.isActiveOnStates}
+					isActiveOnBreakpoints={
+						publisherBackgroundColor.isActiveOnBreakpoints
+					}
+				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(
 								block,
 								'background-color'
 							),
-							value: backgroundColor,
+							value: values.publisherBackgroundColor,
 							attribute: 'publisherBackgroundColor',
 							blockName: block.blockName,
 						}}
 					>
 						<ColorControl
-							controlName="color"
 							label={__('BG Color', 'publisher-core')}
 							labelPopoverTitle={__(
 								'Background Color',
@@ -164,30 +172,39 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 								</>
 							}
 							columns="columns-2"
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
 									'publisherBackgroundColor',
-									newValue
+									newValue,
+									{ ref }
 								)
+							}
+							defaultValue={
+								attributes.publisherBackgroundColor.default
 							}
 							controlAddonTypes={['variable']}
 							variableTypes={['color']}
 							{...extensionProps.publisherBackgroundColor}
 						/>
 					</ControlContextProvider>
-				)}
+				</FeatureWrapper>
 
-				{isActiveField(publisherBackgroundClip) && (
+				<FeatureWrapper
+					isActive={isShowBackgroundClip}
+					isActiveOnStates={publisherBackgroundClip.isActiveOnStates}
+					isActiveOnBreakpoints={
+						publisherBackgroundClip.isActiveOnBreakpoints
+					}
+				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'background-clip'),
-							value: backgroundClip,
+							value: values.publisherBackgroundClip,
 							attribute: 'publisherBackgroundClip',
 							blockName: block.blockName,
 						}}
 					>
 						<SelectControl
-							controlName="select"
 							label={__('Clipping', 'publisher-core')}
 							labelPopoverTitle={__(
 								'Background Clipping',
@@ -296,18 +313,22 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 								},
 							]}
 							type="custom"
-							defaultValue="none"
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
 									'publisherBackgroundClip',
-									newValue
+									newValue,
+									{ ref }
 								)
+							}
+							defaultValue={
+								attributes.publisherBackgroundClip.default
 							}
 							{...extensionProps.publisherBackgroundClip}
 						/>
-						{!visibleBackgroundLength &&
-							!backgroundColor &&
-							backgroundClip === 'text' && (
+
+						{!checkVisibleItemLength(values.publisherBackground) &&
+							!values.publisherBackgroundColor &&
+							values.publisherBackgroundClip === 'text' && (
 								<NoticeControl
 									type="error"
 									style={{ marginTop: '10px' }}
@@ -319,7 +340,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 								</NoticeControl>
 							)}
 					</ControlContextProvider>
-				)}
+				</FeatureWrapper>
 			</PanelBodyControl>
 		);
 	},

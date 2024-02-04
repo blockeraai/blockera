@@ -63,7 +63,17 @@ export const TextColumns = ({
 		blockName,
 		resetToDefault,
 	} = useControlContext({
-		onChange: (newValue) => handleOnChangeAttributes(newValue),
+		onChange: (newValue, ref) => {
+			if ('reset' === ref?.current?.action) {
+				handleOnChangeAttributes('publisherTextColumns', defaultValue, {
+					ref,
+				});
+			} else {
+				handleOnChangeAttributes('publisherTextColumns', newValue, {
+					ref,
+				});
+			}
+		},
 		defaultValue,
 		mergeInitialAndDefault: true,
 	});
@@ -101,6 +111,7 @@ export const TextColumns = ({
 			>
 				<ToggleSelectControl
 					id={'columns'}
+					singularId={'columns'}
 					options={[
 						{
 							label: __('2 Columns Text', 'publisher-core'),
@@ -153,13 +164,14 @@ export const TextColumns = ({
 					}}
 					{...props}
 				/>
+
 				{!isEmpty(_value?.columns) &&
 					_value?.columns !== 'none' &&
 					!isUndefined(_value?.columns) && (
 						<>
 							<InputControl
 								id={'gap'}
-								controlName="input"
+								singularId={'gap'}
 								label={__('Gap', 'publisher-core')}
 								labelPopoverTitle={__(
 									'Text Columns Gap',
@@ -207,7 +219,7 @@ export const TextColumns = ({
 
 							<BorderControl
 								id={'divider'}
-								controlName="border"
+								singularId={'divider'}
 								label={__('Divider', 'publisher-core')}
 								labelPopoverTitle={__(
 									'Text Columns Divider',
@@ -229,7 +241,6 @@ export const TextColumns = ({
 								customMenuPosition="top"
 								defaultValue={defaultValue?.divider}
 								onChange={(newValue, ref) => {
-									console.log(newValue, ref);
 									if ('reset' === ref?.current?.action) {
 										handleOnChangeAttributes(
 											'publisherTextColumns',

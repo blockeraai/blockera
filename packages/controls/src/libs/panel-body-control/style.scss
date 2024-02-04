@@ -19,15 +19,34 @@
 					fill: currentcolor;
 				}
 			}
+
+			.publisher-control-panel-content-edited-indicator {
+				display: inline-block;
+				width: 20px;
+				height: 20px;
+				position: relative;
+
+				&::before {
+					content: "";
+					position: absolute;
+					width: 6px;
+					height: 6px;
+					background: var(--publisher-controls-primary-color);
+					border-radius: 50%;
+					transform: translate(-50%, -50%);
+					top: 50%;
+					left: 50%;
+				}
+			}
 		}
 	}
 
 	&.is-opened {
-		padding: 16px 16px 16px;
+		padding: 16px 16px 10px;
 		margin-bottom: 10px;
 	}
 
 	&.is-opened > .components-panel__body-title {
-		margin-bottom: 10px;
+		margin-bottom: 5px;
 	}
 }

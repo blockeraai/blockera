@@ -15,6 +15,10 @@ import breakpoints from '@publisher/extensions/src/libs/block-states/default-bre
  */
 import type { CssGeneratorProps, GeneratorReturnType } from '../types';
 import { useCssSelectors } from './use-css-selectors';
+import type {
+	InnerBlockModel,
+	InnerBlockType,
+} from '@publisher/extensions/src/libs/inner-blocks/types';
 
 export const useCssGenerator = ({
 	callback,
@@ -30,6 +34,7 @@ export const useCssGenerator = ({
 		blockName,
 		supportId,
 		fallbackSupportId,
+		innerBlocks: attributes.publisherInnerBlocks,
 		currentState: attributes.publisherCurrentState,
 	});
 
@@ -48,71 +53,129 @@ export const useCssGenerator = ({
 	};
 
 	Object.entries(selectors).forEach(([state]): void => {
-		const currentState = attributes.publisherBlockStates.find(
-			({ type }: { type: TStates }): boolean => type === state
-		);
+		const calculatedStyleDependencies = (
+			blockAttributes: Object
+		): {
+			stateAttributes: Object,
+			media: string,
+		} => {
+			const currentState = blockAttributes.publisherBlockStates.find(
+				({ type }: { type: TStates }): boolean => type === state
+			);
 
-		if (!currentState) {
-			return;
-		}
-
-		const currentBreakpoint = currentState.breakpoints.find(
-			({ type }: { type: TBreakpoint }): boolean =>
-				type === activeDeviceType.toLowerCase()
-		);
-
-		let { attributes: stateAttributes = {} } = currentBreakpoint;
-
-		if ('normal' === state && 'desktop' === currentBreakpoint.type) {
-			stateAttributes = attributes;
-		} else if (!Object.values(stateAttributes).length) {
-			return;
-		}
-
-		let media = '';
-
-		const _currentBreakpoint = breakpoints().find(
-			({ type }: BreakpointTypes): boolean =>
-				type === activeDeviceType.toLowerCase()
-		);
-
-		if (_currentBreakpoint) {
-			const { min, max } = _currentBreakpoint.settings;
-
-			if (min && max) {
-				media = `@media screen and (max-width: ${max}) and (min-width: ${min})`;
-			} else if (min) {
-				media = `@media screen and (min-width: ${min})`;
-			} else if (max) {
-				media = `@media screen and (max-width: ${max})`;
+			if (!currentState) {
+				return {
+					media: '',
+					stateAttributes: {},
+				};
 			}
-		}
 
-		if ('desktop' === activeDeviceType.toLowerCase()) {
-			media = '';
-		}
+			const currentBreakpoint = currentState.breakpoints.find(
+				({ type }: { type: TBreakpoint }): boolean =>
+					type === activeDeviceType.toLowerCase()
+			);
 
-		const stylesheet: GeneratorReturnType | Array<GeneratorReturnType> =
-			callback({
-				...callbackProps,
-				selector: selectors[state],
+			let { attributes: stateAttributes = {} } = currentBreakpoint;
+
+			if ('normal' === state && 'desktop' === currentBreakpoint.type) {
+				stateAttributes = blockAttributes;
+			} else if (!Object.values(stateAttributes).length) {
+				return {
+					media: '',
+					stateAttributes: {},
+				};
+			}
+
+			let media = '';
+
+			const _currentBreakpoint = breakpoints().find(
+				({ type }: BreakpointTypes): boolean =>
+					type === activeDeviceType.toLowerCase()
+			);
+
+			if (_currentBreakpoint) {
+				const { min, max } = _currentBreakpoint.settings;
+
+				if (min && max) {
+					media = `@media screen and (max-width: ${max}) and (min-width: ${min})`;
+				} else if (min) {
+					media = `@media screen and (min-width: ${min})`;
+				} else if (max) {
+					media = `@media screen and (max-width: ${max})`;
+				}
+			}
+
+			if ('desktop' === activeDeviceType.toLowerCase()) {
+				media = '';
+			}
+
+			return {
 				media,
+				stateAttributes,
+			};
+		};
+
+		const register = (
+			media: string,
+			blockType: 'master' | InnerBlockType,
+			blockTypeAttributes: Object
+		): void => {
+			type StylesheetType =
+				| GeneratorReturnType
+				| Array<GeneratorReturnType>;
+
+			const stylesheet: StylesheetType = callback({
+				...callbackProps,
+				selector: selectors[state][blockType],
+				media,
+				currentBlock: blockType,
 				blockProps: {
 					...callbackProps.blockProps,
 					blockName,
-					attributes: stateAttributes,
+					attributes: blockTypeAttributes,
 				},
 			});
 
-		if (Array.isArray(stylesheet)) {
-			stylesheet?.forEach((_stylesheet) =>
-				registerStylesheet(_stylesheet)
-			);
+			if (Array.isArray(stylesheet)) {
+				stylesheet?.forEach((_stylesheet) =>
+					registerStylesheet(_stylesheet)
+				);
 
+				return;
+			}
+
+			registerStylesheet(stylesheet);
+		};
+
+		const isValidStateAttributes = (stateAttributes: Object): boolean =>
+			0 !== Object.values(stateAttributes).length;
+
+		attributes?.publisherInnerBlocks?.forEach(
+			(innerBlock: InnerBlockModel): void => {
+				if (!selectors[state][innerBlock.type]) {
+					return;
+				}
+
+				const { media, stateAttributes } = calculatedStyleDependencies(
+					innerBlock.attributes
+				);
+
+				if (!isValidStateAttributes(stateAttributes)) {
+					return;
+				}
+
+				register(media, innerBlock.type, stateAttributes);
+			}
+		);
+
+		const { media, stateAttributes } =
+			calculatedStyleDependencies(attributes);
+
+		if (!isValidStateAttributes(stateAttributes)) {
 			return;
 		}
 
-		registerStylesheet(stylesheet);
+		register(media, 'master', stateAttributes);
 	});
 
 	return stylesheets.map((style) => {

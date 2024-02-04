@@ -14,21 +14,21 @@ export function BoxBorderGenerator(id, props, { media, selector }) {
 	const properties = {};
 
 	if (attributes?.publisherBorder?.type === 'all') {
-		const borderAllWidth = attributes.publisherBorder.all.width;
+		const borderAllWidth = attributes.publisherBorder?.all?.width;
 		if (borderAllWidth) {
 			properties.border = `${borderAllWidth} ${
 				attributes.publisherBorder.all.style || 'solid'
 			} ${getValueAddonRealValue(attributes.publisherBorder.all.color)}`;
 		}
 	} else {
-		const borderTopWidth = attributes.publisherBorder.top.width;
+		const borderTopWidth = attributes.publisherBorder?.top?.width;
 		if (borderTopWidth) {
 			properties['border-top'] = `${borderTopWidth} ${
 				attributes.publisherBorder.top.style || 'solid'
 			} ${getValueAddonRealValue(attributes.publisherBorder.top.color)}`;
 		}
 
-		const borderRightWidth = attributes.publisherBorder.right.width;
+		const borderRightWidth = attributes.publisherBorder?.right?.width;
 		if (borderRightWidth) {
 			properties['border-right'] = `${borderRightWidth} ${
 				attributes.publisherBorder.right.style || 'solid'
@@ -37,7 +37,7 @@ export function BoxBorderGenerator(id, props, { media, selector }) {
 			)}`;
 		}
 
-		const borderBottomWidth = attributes.publisherBorder.bottom.width;
+		const borderBottomWidth = attributes.publisherBorder?.bottom?.width;
 		if (borderBottomWidth) {
 			properties['border-bottom'] = `${borderBottomWidth} ${
 				attributes.publisherBorder.bottom.style || 'solid'
@@ -46,7 +46,7 @@ export function BoxBorderGenerator(id, props, { media, selector }) {
 			)}`;
 		}
 
-		const borderLeftWidth = attributes.publisherBorder.left.width;
+		const borderLeftWidth = attributes.publisherBorder?.left?.width;
 		if (borderLeftWidth) {
 			properties['border-left'] = `${borderLeftWidth} ${
 				attributes.publisherBorder.left.style || 'solid'

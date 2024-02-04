@@ -8,77 +8,77 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import type { ConfigModel } from '../types';
+import type { FeatureConfig } from '../types';
 
-const publisherWidth: ConfigModel = {
+const publisherWidth: FeatureConfig = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Width', 'publisher-core'),
 };
 
-const publisherHeight: ConfigModel = {
-	show: true,
-	force: false,
-	status: true,
-	label: __('Height', 'publisher-core'),
-};
-
-const publisherMinWidth: ConfigModel = {
-	show: true,
+const publisherMinWidth: FeatureConfig = {
+	show: false,
 	force: false,
 	status: true,
 	label: __('Min Width', 'publisher-core'),
 };
 
-const publisherMinHeight: ConfigModel = {
-	show: true,
-	force: false,
-	status: true,
-	label: __('Min Height', 'publisher-core'),
-};
-
-const publisherMaxWidth: ConfigModel = {
-	show: true,
+const publisherMaxWidth: FeatureConfig = {
+	show: false,
 	force: false,
 	status: true,
 	label: __('Max Width', 'publisher-core'),
 };
 
-const publisherMaxHeight: ConfigModel = {
+const publisherHeight: FeatureConfig = {
 	show: true,
+	force: true,
+	status: true,
+	label: __('Height', 'publisher-core'),
+};
+
+const publisherMinHeight: FeatureConfig = {
+	show: false,
+	force: false,
+	status: true,
+	label: __('Min Height', 'publisher-core'),
+};
+
+const publisherMaxHeight: FeatureConfig = {
+	show: false,
 	force: false,
 	status: true,
 	label: __('Max Height', 'publisher-core'),
 };
 
-const publisherOverflow: ConfigModel = {
+const publisherOverflow: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
 	label: __('Overflow', 'publisher-core'),
 };
 
-const publisherRatio: ConfigModel = {
-	show: true,
+const publisherRatio: FeatureConfig = {
+	show: false,
 	force: false,
 	status: true,
-	label: __('Ratio', 'publisher-core'),
+	label: __('Aspect Ratio', 'publisher-core'),
 };
 
-const publisherFit: ConfigModel = {
-	show: true,
+const publisherFit: FeatureConfig = {
+	show: false,
 	force: false,
 	status: true,
-	label: __('Fit', 'publisher-core'),
+	label: __('Media Fit', 'publisher-core'),
 };
 
 export const sizeConfig = {
 	publisherWidth,
-	publisherHeight,
 	publisherMinWidth,
-	publisherMinHeight,
 	publisherMaxWidth,
+	publisherHeight,
+	publisherMinHeight,
 	publisherMaxHeight,
 	publisherOverflow,
 	publisherRatio,

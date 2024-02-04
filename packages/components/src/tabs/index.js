@@ -2,7 +2,6 @@
 /**
  * External dependencies
  */
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import type { Element } from 'react';
 import { useRef } from '@wordpress/element';
@@ -15,7 +14,6 @@ import { useBlockContext } from '@publisher/extensions/src/hooks/context';
 /**
  * Internal dependencies
  */
-import { Icon } from '../icons';
 import TabPanel from './tab-panel';
 import type { TTabsProps, TTabProps } from './types';
 
@@ -37,24 +35,7 @@ export function Tabs(props: TTabsProps): Element<any> {
 			...TTabProps,
 			icon: Element<any>,
 		}>,
-	} = useRef(
-		tabs.map((tab: TTabProps, index: number): Object => {
-			if (!tab.icon) {
-				return tab;
-			}
-
-			return {
-				...tab,
-				icon: (
-					<Icon
-						icon={tab.icon.name}
-						library={tab.icon.library}
-						key={`${tab.title}-${index}`}
-					/>
-				),
-			};
-		})
-	);
+	} = useRef(tabs);
 	const ref = useRef();
 	const { setCurrentTab } = useBlockContext();
 	const classes = classnames('publisher-tab-panel');
@@ -75,23 +56,5 @@ export function Tabs(props: TTabsProps): Element<any> {
 		</div>
 	);
 }
-
-Tabs.propTypes = {
-	// $FlowFixMe
-	props: PropTypes.shape({
-		tabs: PropTypes.arrayOf(
-			PropTypes.shape({
-				name: PropTypes.string,
-				title: PropTypes.string,
-				icon: {
-					name: PropTypes.string,
-					library: PropTypes.string,
-				},
-			})
-		).isRequired,
-		getPanel: PropTypes.func,
-	}),
-	ref: PropTypes.object,
-};
 
 export default Tabs;

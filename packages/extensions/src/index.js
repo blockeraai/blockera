@@ -29,11 +29,13 @@ export {
 } from './hooks';
 
 domReady(() => {
-	window.publisher.coreData = {
-		select: select(store?.name),
-		unstableBootstrapServerSideVariableDefinitions,
-		unstableBootstrapServerSideDynamicValueDefinitions,
-	};
+	if (window?.wp) {
+		window.publisher.coreData = {
+			select: select(store?.name),
+			unstableBootstrapServerSideVariableDefinitions,
+			unstableBootstrapServerSideDynamicValueDefinitions,
+		};
 
-	bootstrapScripts(window.wp, window.React);
+		bootstrapScripts(window.wp, window.React);
+	}
 });

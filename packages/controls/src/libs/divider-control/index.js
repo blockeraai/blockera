@@ -21,6 +21,7 @@ import RepeaterControl from '../repeater-control';
 import type { TDividerControlProps } from './types';
 import { useControlContext } from '../../context';
 import { RepeaterContext } from '../repeater-control/context';
+
 export default function DividerControl({
 	id,
 	defaultValue = [],
@@ -73,17 +74,20 @@ export default function DividerControl({
 		<RepeaterControl
 			id={id}
 			className={controlClassNames('divider', className)}
-			popoverTitle={popoverTitle || __('Block Divider', 'publisher-core')}
-			label={label || __('Dividers', 'publisher-core')}
+			popoverTitle={
+				popoverTitle || __('Block Shape Divider', 'publisher-core')
+			}
+			label={label || __('Shape Dividers', 'publisher-core')}
 			labelPopoverTitle={
-				labelPopoverTitle || __('Block Dividers', 'publisher-core')
+				labelPopoverTitle ||
+				__('Block Shape Dividers', 'publisher-core')
 			}
 			labelDescription={
 				labelDescription || (
 					<>
 						<p>
 							{__(
-								'Block Dividers are design elements used to visually separate different sections or blocks of content on a webpage.',
+								'Block Shape Dividers are design elements used to visually separate different sections or blocks of content on a webpage.',
 								'publisher-core'
 							)}
 						</p>

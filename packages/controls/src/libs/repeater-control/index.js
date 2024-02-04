@@ -28,6 +28,7 @@ import MappedItems from './components/mapped-items';
  * Types
  */
 import type { RepeaterControlProps, TRepeaterDefaultStateProps } from './types';
+import LabelControlContainer from '../label-control/label-control-container';
 
 export const defaultItemValue = {
 	isOpen: true,
@@ -43,6 +44,8 @@ export const defaultItemValue = {
 };
 
 export default function RepeaterControl({
+	icon,
+	description = '',
 	design = 'minimal',
 	mode = 'popover',
 	popoverTitle,
@@ -138,6 +141,95 @@ export default function RepeaterControl({
 		customProps: { ...props },
 	};
 
+	const addNewButtonOnClick = () => {
+		const callback = (value?: Object): void => {
+			if (!defaultRepeaterItemValue?.selectable) {
+				return;
+			}
+
+			modifyControlValue({
+				controlId,
+				value: [
+					...repeaterItems.map((item) => {
+						if (item.display) {
+							return {
+								...item,
+								isSelected: false,
+							};
+						}
+
+						return {
+							...item,
+							display: true,
+							isSelected: false,
+						};
+					}),
+					value
+						? value
+						: {
+								...defaultRepeaterItemValue,
+								isSelected: true,
+						  },
+				],
+			});
+		};
+
+		if (maxItems === -1 || repeaterItems?.length < maxItems) {
+			if ('function' === typeof getDynamicDefaultRepeaterItem) {
+				const value = getDynamicDefaultRepeaterItem(
+					repeaterItems?.length,
+					defaultRepeaterItemValue
+				);
+
+				if (value?.selectable) {
+					return callback({
+						...value,
+						isSelected: true,
+					});
+				}
+
+				addRepeaterItem({
+					controlId,
+					repeaterId,
+					value: getDynamicDefaultRepeaterItem(
+						repeaterItems?.length,
+						defaultRepeaterItemValue
+					),
+				});
+
+				return;
+			}
+
+			if (defaultRepeaterItemValue?.selectable) {
+				return callback();
+			}
+
+			addRepeaterItem({
+				controlId,
+				repeaterId,
+				value: defaultRepeaterItemValue,
+			});
+		}
+	};
+
+	const items = repeaterItems.length > 0 && (
+		<>
+			{itemColumns > 1 ? (
+				<Grid
+					className={controlInnerClassNames(
+						'repeater-items-container'
+					)}
+					gridTemplateColumns={`repeat(${itemColumns}, 1fr)`}
+					gap="10px"
+				>
+					<MappedItems />
+				</Grid>
+			) : (
+				<MappedItems />
+			)}
+		</>
+	);
+
 	return (
 		<RepeaterContextProvider {...defaultRepeaterState}>
 			<div
@@ -148,154 +240,149 @@ export default function RepeaterControl({
 				)}
 				data-cy="publisher-repeater-control"
 			>
-				<div className={controlInnerClassNames('header')}>
-					{!withoutAdvancedLabel ? (
-						<LabelControl
-							label={label}
-							labelPopoverTitle={labelPopoverTitle}
-							labelDescription={labelDescription}
-							value={value}
-							mode={'advanced'}
-							isRepeater={true}
-							blockName={blockName}
-							attribute={attribute}
-							resetToDefault={resetToDefault}
-							defaultValue={
-								isFunction(valueCleanup)
-									? valueCleanup(defaultValue)
-									: defaultValue
-							}
-						/>
-					) : (
-						<LabelControl label={label} mode={'simple'} />
-					)}
-
-					<div
-						className={controlInnerClassNames(
-							'repeater-header-action-buttons'
-						)}
-					>
-						{injectHeaderButtonsStart}
-
-						{actionButtonAdd && (
-							<Button
-								size="extra-small"
-								className={controlInnerClassNames('btn-add')}
-								{...(maxItems !== -1 &&
-								repeaterItems?.length >= maxItems
-									? { disabled: true }
-									: {})}
-								showTooltip={true}
-								tooltipPosition="top"
-								label={
-									addNewButtonLabel ||
-									__('Add New', 'publisher-core')
-								}
-								onClick={() => {
-									const callback = (value?: Object): void => {
-										if (
-											!defaultRepeaterItemValue?.selectable
-										) {
-											return;
-										}
-
-										modifyControlValue({
-											controlId,
-											value: [
-												...repeaterItems.map((item) => {
-													if (item.display) {
-														return {
-															...item,
-															isSelected: false,
-														};
-													}
-
-													return {
-														...item,
-														display: true,
-														isSelected: false,
-													};
-												}),
-												value
-													? value
-													: {
-															...defaultRepeaterItemValue,
-															isSelected: true,
-													  },
-											],
-										});
-									};
-
-									if (
-										maxItems === -1 ||
-										repeaterItems?.length < maxItems
-									) {
-										if (
-											'function' ===
-											typeof getDynamicDefaultRepeaterItem
-										) {
-											const value =
-												getDynamicDefaultRepeaterItem(
-													repeaterItems?.length,
-													defaultRepeaterItemValue
-												);
-
-											if (value?.selectable) {
-												return callback({
-													...value,
-													isSelected: true,
-												});
-											}
-
-											addRepeaterItem({
-												controlId,
-												repeaterId,
-												value: getDynamicDefaultRepeaterItem(
-													repeaterItems?.length,
-													defaultRepeaterItemValue
-												),
-											});
-
-											return;
-										}
-
-										if (
-											defaultRepeaterItemValue?.selectable
-										) {
-											return callback();
-										}
-
-										addRepeaterItem({
-											controlId,
-											repeaterId,
-											value: defaultRepeaterItemValue,
-										});
-									}
-								}}
-							>
-								<PlusIcon />
-							</Button>
-						)}
-
-						{injectHeaderButtonsEnd}
-					</div>
-				</div>
-
-				{repeaterItems.length > 0 && (
+				{design === 'large' && (
 					<>
-						{itemColumns > 1 ? (
-							<Grid
-								className={controlInnerClassNames(
-									'repeater-items-container'
+						{icon}
+
+						{label && (
+							<LabelControlContainer height="26px">
+								{!withoutAdvancedLabel ? (
+									<LabelControl
+										label={label}
+										labelPopoverTitle={labelPopoverTitle}
+										labelDescription={labelDescription}
+										value={value}
+										mode={'advanced'}
+										isRepeater={true}
+										blockName={blockName}
+										attribute={attribute}
+										resetToDefault={resetToDefault}
+										defaultValue={
+											isFunction(valueCleanup)
+												? valueCleanup(defaultValue)
+												: defaultValue
+										}
+									/>
+								) : (
+									<LabelControl
+										label={label}
+										mode={'simple'}
+									/>
 								)}
-								gridTemplateColumns={`repeat(${itemColumns}, 1fr)`}
-								gap="10px"
-							>
-								<MappedItems />
-							</Grid>
-						) : (
-							<MappedItems />
+							</LabelControlContainer>
 						)}
+
+						{items}
+
+						{description && (
+							<div
+								className={controlInnerClassNames(
+									'repeater__desc'
+								)}
+							>
+								{description}
+							</div>
+						)}
+
+						<div className={controlInnerClassNames('header')}>
+							<div
+								className={controlInnerClassNames(
+									'repeater-header-action-buttons'
+								)}
+							>
+								{injectHeaderButtonsStart}
+
+								{actionButtonAdd && (
+									<Button
+										size="extra-small"
+										className={controlInnerClassNames(
+											'btn-add'
+										)}
+										{...(maxItems !== -1 &&
+										repeaterItems?.length >= maxItems
+											? { disabled: true }
+											: {})}
+										onClick={addNewButtonOnClick}
+									>
+										<PlusIcon />
+										{addNewButtonLabel ||
+											__('Add New', 'publisher-core')}
+									</Button>
+								)}
+
+								{injectHeaderButtonsEnd}
+							</div>
+						</div>
+					</>
+				)}
+
+				{design === 'minimal' && (
+					<>
+						<div className={controlInnerClassNames('header')}>
+							{label && (
+								<>
+									{!withoutAdvancedLabel ? (
+										<LabelControl
+											label={label}
+											labelPopoverTitle={
+												labelPopoverTitle
+											}
+											labelDescription={labelDescription}
+											value={value}
+											mode={'advanced'}
+											isRepeater={true}
+											blockName={blockName}
+											attribute={attribute}
+											resetToDefault={resetToDefault}
+											defaultValue={
+												isFunction(valueCleanup)
+													? valueCleanup(defaultValue)
+													: defaultValue
+											}
+										/>
+									) : (
+										<LabelControl
+											label={label}
+											mode={'simple'}
+										/>
+									)}
+								</>
+							)}
+
+							<div
+								className={controlInnerClassNames(
+									'repeater-header-action-buttons'
+								)}
+							>
+								{injectHeaderButtonsStart}
+
+								{actionButtonAdd && (
+									<Button
+										size="extra-small"
+										className={controlInnerClassNames(
+											'btn-add'
+										)}
+										{...(maxItems !== -1 &&
+										repeaterItems?.length >= maxItems
+											? { disabled: true }
+											: {})}
+										showTooltip={true}
+										tooltipPosition="top"
+										label={
+											addNewButtonLabel ||
+											__('Add New', 'publisher-core')
+										}
+										onClick={addNewButtonOnClick}
+									>
+										<PlusIcon />
+									</Button>
+								)}
+
+								{injectHeaderButtonsEnd}
+							</div>
+						</div>
+
+						{items}
 					</>
 				)}
 			</div>

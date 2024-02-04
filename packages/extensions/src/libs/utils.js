@@ -1,8 +1,20 @@
 // @flow
+
+/**
+ * External dependencies
+ */
+import { select } from '@wordpress/data';
+
+/**
+ * Publisher dependencies
+ */
+import { isEquals, omit } from '@publisher/utils';
+
 /**
  * Internal dependencies
  */
 import type { TBlockProps } from './types';
+// import { detailedDiff } from 'deep-object-diff';
 
 /**
  * Retrieve reply to question "is array equals?".
@@ -18,16 +30,28 @@ export function arrayEquals(a: Array<any>, b: Array<any>): boolean {
 /**
  * Creation extension id with block name.
  *
- * @param {string} blockName
- * @param {string} clientId
- * @param {string} id
+ * @param {string} blockName the blockName of selected block of block-editor.
+ * @param {string} clientId the client id of selected block of block-editor.
+ * @param {string} currentBlockType the current block type, by default master.
+ * @param {string} id the base identifier.
+ * @param {boolean} flag the flag for delete state type of generating id.
+ *
  * @return {string} retrieved extension standard identifier.
  */
 export function generateExtensionId(
 	{ blockName, clientId }: TBlockProps,
-	id: string
+	id: string,
+	flag: boolean = true
 ): string {
-	return `${blockName}/${id}/${clientId}`;
+	const {
+		getExtensionCurrentBlock = () => 'master',
+		getExtensionCurrentBlockState = () => 'normal',
+	} = select('publisher-core/extensions') || {};
+
+	const currentBlock = getExtensionCurrentBlock();
+	const currentStateType = flag ? '-' + getExtensionCurrentBlockState() : '';
+
+	return `${blockName}/${id}/${clientId}-${currentBlock}${currentStateType}`;
 }
 
 /**
@@ -43,7 +67,19 @@ export function hasSameProps(
 	// eslint-disable-next-line no-undef
 	nextProps: $ReadOnly<Object> | Array<any>
 ): boolean {
-	return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+	if (prevProps?.hasOwnProperty('setSettings')) {
+		const keys = ['setSettings', 'handleOnChangeAttributes'];
+
+		// Debug code!
+		// 	console.log(
+		// 		detailedDiff(omit(prevProps, keys), omit(nextProps, keys)),
+		// 		isEquals(omit(prevProps, keys), omit(nextProps, keys))
+		// 	);
+
+		return isEquals(omit(prevProps, keys), omit(nextProps, keys));
+	}
+
+	return isEquals(prevProps, nextProps);
 }
 
 /**

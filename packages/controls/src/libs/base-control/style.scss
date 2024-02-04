@@ -16,7 +16,7 @@
 		align-items: center;
 		height: 30px;
 		position: relative;
-		z-index: 1;
+		z-index: 10;
 	}
 
 	&.small-gap .publisher-field-label .publisher-control-label {
@@ -28,6 +28,7 @@
 		margin-right: auto;
 		justify-content: center;
 		min-height: auto;
+		height: 22px;
 	}
 
 	.publisher-field-control {
@@ -71,17 +72,15 @@
 		grid-template-columns: 2fr 5fr;
 	}
 
+	& + .publisher-component-feature-wrapper + .publisher-component-feature-wrapper,
+	& + .publisher-component-feature-wrapper,
 	& + & {
-		border-top: 1px solid var(--publisher-controls-sep-color);
-		padding-top: 10px;
-		margin-top: 10px;
+		margin-top: 15px;
 	}
 
 	// remove for stacked
 
 	& & + & {
-		border-top: none;
-		padding-top: 0;
 		margin-top: 0;
 	}
 

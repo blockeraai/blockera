@@ -19,11 +19,16 @@ const Fields = ({ itemId, item }) => {
 		dispatch: { changeRepeaterItem },
 	} = useControlContext();
 
-	const { repeaterId, getControlId } = useContext(RepeaterContext);
+	const { repeaterId, getControlId, defaultRepeaterItemValue } =
+		useContext(RepeaterContext);
 
 	return (
 		<div id={`repeater-item-${itemId}`}>
 			<InputControl
+				repeaterItem={itemId}
+				singularId={'x'}
+				id={getControlId(itemId, 'x')}
+				defaultValue={defaultRepeaterItemValue.x}
 				controlName="input"
 				label={<XCoordinateIcon />}
 				labelPopoverTitle={__(
@@ -47,7 +52,6 @@ const Fields = ({ itemId, item }) => {
 					</>
 				}
 				columns="columns-2"
-				id={getControlId(itemId, 'x')}
 				unitType="text-shadow"
 				range={true}
 				min={-100}
@@ -64,6 +68,10 @@ const Fields = ({ itemId, item }) => {
 			/>
 
 			<InputControl
+				repeaterItem={itemId}
+				singularId={'y'}
+				id={getControlId(itemId, 'y')}
+				defaultValue={defaultRepeaterItemValue.y}
 				controlName="input"
 				label={<YCoordinateIcon />}
 				labelPopoverTitle={__('Vertical Offset (Y)', 'publisher-core')}
@@ -84,7 +92,6 @@ const Fields = ({ itemId, item }) => {
 					</>
 				}
 				columns="columns-2"
-				id={getControlId(itemId, 'y')}
 				unitType="text-shadow"
 				range={true}
 				min={-100}
@@ -101,6 +108,10 @@ const Fields = ({ itemId, item }) => {
 			/>
 
 			<InputControl
+				repeaterItem={itemId}
+				singularId={'blur'}
+				id={getControlId(itemId, 'blur')}
+				defaultValue={defaultRepeaterItemValue.blur}
 				controlName="input"
 				label={__('Blur', 'publisher-core')}
 				labelPopoverTitle={__('Blur Effect', 'publisher-core')}
@@ -121,7 +132,6 @@ const Fields = ({ itemId, item }) => {
 					</>
 				}
 				columns="columns-2"
-				id={getControlId(itemId, 'blur')}
 				unitType="text-shadow"
 				range={true}
 				min={0}
@@ -138,7 +148,10 @@ const Fields = ({ itemId, item }) => {
 			/>
 
 			<ColorControl
-				controlName="color"
+				repeaterItem={itemId}
+				singularId={'color'}
+				id={getControlId(itemId, 'color')}
+				defaultValue={defaultRepeaterItemValue.color}
 				label={__('Color', 'publisher-core')}
 				labelPopoverTitle={__('Shadow Color', 'publisher-core')}
 				labelDescription={
@@ -152,7 +165,6 @@ const Fields = ({ itemId, item }) => {
 					</>
 				}
 				columns="columns-2"
-				id={getControlId(itemId, 'color')}
 				onChange={(color) =>
 					changeRepeaterItem({
 						controlId,

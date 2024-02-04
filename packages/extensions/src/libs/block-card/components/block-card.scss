@@ -33,6 +33,7 @@
 			min-height: 24px;
 			gap: 2px;
 			cursor: pointer;
+			flex-wrap: wrap;
 
 			svg {
 				fill: currentColor;
@@ -45,6 +46,10 @@
 				border-radius: 2px;
 				padding: 2px 5px;
 				font-size: 12px;
+
+				&:not(:last-child) {
+					cursor: pointer;
+				}
 			}
 
 			.publisher-extension-block-card__title__item.item-state:not(.item-state-normal) {

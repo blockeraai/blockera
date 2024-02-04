@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * WordPress dependencies
  */
@@ -14,7 +16,7 @@ import { omit } from '@publisher/utils';
  * @param {*} types
  * @return {Object} extensions
  */
-function keyBlockExtensionsByName(types) {
+function keyBlockExtensionsByName(types: Array<Object>): Object {
 	return types.reduce(
 		(newBlockExtensions, block) => ({
 			...newBlockExtensions,
@@ -34,7 +36,10 @@ function keyBlockExtensionsByName(types) {
  *
  * @return {Object} Updated state.
  */
-export function unprocessedBlockExtensions(state = {}, action) {
+export function unprocessedBlockExtensions(
+	state: Object = {},
+	action: Object
+): Object {
 	switch (action.type) {
 		case 'ADD_UNPROCESSED_BLOCK_EXTENSION':
 			return {
@@ -57,7 +62,7 @@ export function unprocessedBlockExtensions(state = {}, action) {
  *
  * @return {Object} Updated state.
  */
-export function blockExtensions(state = {}, action) {
+export function blockExtensions(state: Object = {}, action: Object): Object {
 	switch (action.type) {
 		case 'ADD_BLOCK_EXTENSIONS':
 			return {
@@ -66,12 +71,22 @@ export function blockExtensions(state = {}, action) {
 			};
 		case 'REMOVE_BLOCK_EXTENSIONS':
 			return omit(state, action.names);
+		case 'CHANGE_CURRENT_BLOCK':
+			return {
+				...state,
+				currentBlock: action.currentBlock,
+			};
+		case 'CHANGE_CURRENT_BLOCK_STATE':
+			return {
+				...state,
+				currentStateType: action.currentStateType,
+			};
 	}
 
 	return state;
 }
 
-export default combineReducers({
-	unprocessedBlockExtensions,
+export default (combineReducers({
 	blockExtensions,
-});
+	unprocessedBlockExtensions,
+}): Object);

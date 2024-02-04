@@ -8,53 +8,53 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import type { ConfigModel } from '../types';
+import type { FeatureConfig } from '../types';
 
-const publisherIcon: ConfigModel = {
+const publisherIcon: FeatureConfig = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Icon', 'publisher-core'),
 };
 
-const publisherIconOptions: ConfigModel = {
+const publisherIconOptions: FeatureConfig = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Icon Options', 'publisher-core'),
 };
 
-const publisherIconPosition: ConfigModel = {
+const publisherIconPosition: FeatureConfig = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Icon Position', 'publisher-core'),
 };
 
-const publisherIconGap: ConfigModel = {
+const publisherIconGap: FeatureConfig = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Icon Gap', 'publisher-core'),
 };
 
-const publisherIconSize: ConfigModel = {
+const publisherIconSize: FeatureConfig = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Icon Size', 'publisher-core'),
 };
 
-const publisherIconColor: ConfigModel = {
+const publisherIconColor: FeatureConfig = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Icon Color', 'publisher-core'),
 };
 
-const publisherIconLink: ConfigModel = {
+const publisherIconLink: FeatureConfig = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Icon Link', 'publisher-core'),
 };

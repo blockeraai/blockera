@@ -38,7 +38,6 @@ export const LetterSpacing = ({
 			}}
 		>
 			<InputControl
-				controlName="input"
 				columns="2fr 2.6fr"
 				label={__('Letters', 'publisher-core')}
 				labelPopoverTitle={__('Letters Spacing', 'publisher-core')}

@@ -5,6 +5,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
@@ -19,13 +20,24 @@ import { BaseControl, PanelBodyControl } from '@publisher/controls';
  */
 import { hasSameProps } from '../utils';
 import { useBlockContext } from '../../hooks';
+import { isInnerBlock } from '../../components';
 import { InnerBlocksExtensionIcon } from './icons';
 import type { InnerBlockModel, InnerBlocksProps } from './types';
 
 export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
-	({ innerBlocks, currentBlock }: InnerBlocksProps): MixedElement => {
+	({ innerBlocks }: InnerBlocksProps): MixedElement => {
 		const { handleOnSwitchBlockSettings: switchBlockSettings } =
 			useBlockContext();
+
+		const { currentBlock = 'master' } = useSelect((select) => {
+			const { getExtensionCurrentBlock } = select(
+				'publisher-core/extensions'
+			);
+
+			return {
+				currentBlock: getExtensionCurrentBlock(),
+			};
+		});
 
 		const MappedInnerBlocks = () =>
 			innerBlocks.map(
@@ -56,7 +68,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 				}
 			);
 
-		if (!innerBlocks.length || 'master' !== currentBlock) {
+		if (!innerBlocks.length || isInnerBlock(currentBlock)) {
 			return <></>;
 		}
 

@@ -44,7 +44,7 @@ export default function AspectRatio({
 		mergeInitialAndDefault: true,
 		valueCleanup: (newValue) => {
 			if (newValue?.value === undefined || newValue?.value === '') {
-				return {};
+				return defaultValue;
 			}
 
 			return newValue;
@@ -97,6 +97,7 @@ export default function AspectRatio({
 		>
 			<SelectControl
 				id="value"
+				singularId={'value'}
 				aria-label={__('Ratio', 'publisher-core')}
 				options={[
 					{
@@ -140,9 +141,13 @@ export default function AspectRatio({
 				defaultValue={defaultValue.value}
 				onChange={(newValue, ref) => {
 					if (newValue === '') {
-						handleOnChangeAttributes('publisherRatio', undefined, {
-							ref,
-						});
+						handleOnChangeAttributes(
+							'publisherRatio',
+							defaultValue,
+							{
+								ref,
+							}
+						);
 					} else {
 						handleOnChangeAttributes(
 							'publisherRatio',
@@ -156,10 +161,12 @@ export default function AspectRatio({
 				}}
 				{...props}
 			/>
+
 			{ratio?.value === 'custom' && (
 				<Flex alignItems="flex-start">
 					<InputControl
 						id="width"
+						singularId={'width'}
 						columns="columns-1"
 						className="control-first label-center small-gap"
 						label={__('Width', 'publisher-core')}
@@ -183,22 +190,24 @@ export default function AspectRatio({
 						type="number"
 						min={0}
 						defaultValue={defaultValue.width}
-						onChange={(newValue, ref) =>
+						onChange={(newValue, ref) => {
 							handleOnChangeAttributes(
 								'publisherRatio',
 								{
 									...ratio,
-									width: newValue,
+									width:
+										newValue === undefined ? '' : newValue,
 								},
 								{ ref }
-							)
-						}
+							);
+						}}
 					/>
 
 					<p className="publisher-colon">/</p>
 
 					<InputControl
 						id="height"
+						singularId={'height'}
 						columns="columns-1"
 						className="control-first label-center small-gap"
 						label={__('Height', 'publisher-core')}

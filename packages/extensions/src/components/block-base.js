@@ -2,10 +2,10 @@
 /**
  * External dependencies
  */
-import { Fill } from '@wordpress/components';
+import { Fill, SlotFillProvider } from '@wordpress/components';
 import { applyFilters } from '@wordpress/hooks';
 import type { Element, MixedElement, ComponentType } from 'react';
-import { select, useSelect } from '@wordpress/data';
+import { select, useSelect, dispatch } from '@wordpress/data';
 import { InspectorControls } from '@wordpress/block-editor';
 import {
 	memo,
@@ -21,12 +21,7 @@ import {
  */
 import { useCssGenerator } from '@publisher/style-engine';
 import { extensionClassNames } from '@publisher/classnames';
-import {
-	indexOf,
-	isEquals,
-	isUndefined,
-	omitWithPattern,
-} from '@publisher/utils';
+import { isUndefined, omitWithPattern } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -34,22 +29,20 @@ import {
 import {
 	useIconEffect,
 	useAttributes,
+	useBlockStateInfo,
+	useInnerBlocksInfo,
 	BlockEditContextProvider,
+	useCalculateCurrentAttributes,
 } from '../hooks';
 import { sanitizedBlockAttributes } from '../hooks/utils';
-import { SideEffect } from '../libs/base/components/side-effect';
-import type { BreakpointTypes, StateTypes } from '../libs/block-states/types';
+import { SideEffect } from '../libs/base';
 import { BlockCard } from '../libs/block-card';
 import { BlockPartials } from './block-partials';
 import * as config from '../libs/base/config';
 import styleGenerators from '../libs/shared/style-generators';
-import StatesManager from '../libs/block-states/components/states-manager';
-import { propsAreEqual } from './utils';
+import { isInnerBlock, propsAreEqual } from './utils';
 import type { InnerBlockType } from '../libs/inner-blocks/types';
-import {
-	definitionTypes,
-	ignoreDefaultBlockAttributeKeysRegExp,
-} from '../libs';
+import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs';
 
 export type BlockBaseProps = {
 	additional: Object,
@@ -72,14 +65,48 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		className,
 		...props
 	}: BlockBaseProps): Element<any> | null => {
-		const { __experimentalGetPreviewDeviceType: getDeviceType } = window?.wp
-			?.editPost
-			? select('core/edit-post')
-			: select('core/edit-site');
+		const [currentTab, setCurrentTab] = useState(
+			additional?.activeTab || 'style'
+		);
+		const [isOpenGridBuilder, setOpenGridBuilder] = useState(false);
 
-		const isNormalState = () =>
+		const { currentBlock = 'master' } = useSelect((select) => {
+			const { getExtensionCurrentBlock } = select(
+				'publisher-core/extensions'
+			);
+
+			return {
+				currentBlock: getExtensionCurrentBlock(),
+			};
+		});
+		const { changeExtensionCurrentBlock: setCurrentBlock } =
+			dispatch('publisher-core/extensions') || {};
+
+		const {
+			__experimentalGetPreviewDeviceType: getDeviceType = () => 'desktop',
+		} =
+			(window?.wp?.editPost
+				? select('core/edit-post')
+				: select('core/edit-site')) || {};
+
+		const { innerBlockId, currentInnerBlock, publisherInnerBlocks } =
+			useInnerBlocksInfo({ name, additional, attributes });
+
+		const masterIsNormalState = (): boolean =>
 			'normal' === attributes?.publisherCurrentState &&
 			/desktop/i.test(getDeviceType());
+
+		const isNormalState = (): boolean => {
+			if (isInnerBlock(currentBlock)) {
+				return (
+					'normal' ===
+						currentInnerBlock?.attributes?.publisherCurrentState &&
+					/desktop/i.test(getDeviceType())
+				);
+			}
+
+			return masterIsNormalState();
+		};
 
 		/**
 		 * Filterable attributes before initializing block edit component.
@@ -98,15 +125,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			}
 		);
 
-		// Declare backup attributes state to clonedAttributes to manage re-rendering process order by self policies.
-		const [clonedAttributes, setClonedAttributes] = useState(attributes);
-
-		const [currentTab, setCurrentTab] = useState(
-			additional?.activeTab || 'style'
-		);
-		const [currentBlock, setCurrentBlock] = useState('master');
-		const [isOpenGridBuilder, setOpenGridBuilder] = useState(false);
-
 		const handleOnSwitchBlockSettings = (
 			_currentBlock: 'master' | InnerBlockType
 		): void => {
@@ -120,19 +138,34 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		});
 
 		const blockEditRef = useRef(null);
+		const { blockStateId, breakpointId } = useBlockStateInfo({
+			attributes,
+			currentBlock,
+			getDeviceType,
+			currentInnerBlock,
+		});
+		const currentAttributes = useCalculateCurrentAttributes({
+			attributes,
+			currentBlock,
+			blockStateId,
+			breakpointId,
+			isNormalState,
+			currentInnerBlock,
+			publisherInnerBlocks,
+		});
 
 		useIconEffect(
 			{
 				name,
 				clientId,
 				blockRefId: blockEditRef,
-				publisherIcon: attributes?.publisherIcon,
-				publisherIconGap: attributes?.publisherIconGap,
-				publisherIconSize: attributes?.publisherIconSize,
-				publisherIconColor: attributes?.publisherIconColor,
-				publisherIconPosition: attributes?.publisherIconPosition,
+				publisherIcon: currentAttributes?.publisherIcon,
+				publisherIconGap: currentAttributes?.publisherIconGap,
+				publisherIconSize: currentAttributes?.publisherIconSize,
+				publisherIconColor: currentAttributes?.publisherIconColor,
+				publisherIconPosition: currentAttributes?.publisherIconPosition,
 			},
-			[attributes]
+			[currentAttributes]
 		);
 
 		const { edit: BlockEditComponent } = additional;
@@ -182,22 +215,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			// eslint-disable-next-line
 		}, []);
 
-		const blockStates = attributes?.publisherBlockStates.map(
-			(state: StateTypes) => state.type
-		);
-
-		const currentStateIndex = blockStates?.indexOf(
-			attributes?.publisherCurrentState
-		);
-		const blockStateId = -1 === currentStateIndex ? 0 : currentStateIndex;
-
-		const breakpointId = indexOf(
-			attributes?.publisherBlockStates[blockStateId]?.breakpoints.map(
-				(breakpoint: BreakpointTypes) => breakpoint.label
-			),
-			getDeviceType()
-		);
-
 		const getAttributes = (key: string = ''): any => {
 			if (key && attributes[key]) {
 				return attributes[key];
@@ -206,32 +223,16 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			return attributes;
 		};
 
-		// Updating attributes just when changes clonedAttributes.
-		useEffect(() => {
-			if (!isEquals(attributes, clonedAttributes)) {
-				setAttributes({
-					...attributes,
-					...omitWithPattern(
-						clonedAttributes,
-						ignoreDefaultBlockAttributeKeysRegExp()
-					),
-				});
-			}
-			// eslint-disable-next-line
-		}, [clonedAttributes]);
-
-		const { handleOnChangeAttributes } = useAttributes(
-			clonedAttributes,
-			setClonedAttributes,
-			{
-				currentBlock,
-				blockStateId,
-				breakpointId,
-				isNormalState,
-				getAttributes,
-				blockId: name,
-			}
-		);
+		const { handleOnChangeAttributes } = useAttributes(setAttributes, {
+			innerBlockId,
+			blockStateId,
+			breakpointId,
+			isNormalState,
+			getAttributes,
+			blockId: name,
+			masterIsNormalState,
+			publisherInnerBlocks,
+		});
 
 		const styles = [];
 		const generatorSharedProps = {
@@ -261,47 +262,18 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				)
 		);
 
-		const currentStateAttributes = isNormalState()
-			? attributes
-			: {
-					...attributes,
-					...(attributes.publisherBlockStates[blockStateId]
-						.breakpoints[breakpointId]
-						? attributes.publisherBlockStates[blockStateId]
-								.breakpoints[breakpointId].attributes
-						: {}),
-			  };
-
 		const FillComponents = (): MixedElement => {
 			return (
 				<>
 					<Fill name={`publisher-block-card-content-${clientId}`}>
 						<BlockCard
 							clientId={clientId}
-							selectedInnerBlock={
-								'master' === currentBlock
-									? undefined
-									: currentBlock
-							}
 							handleOnClick={handleOnSwitchBlockSettings}
 							states={attributes.publisherBlockStates}
-							innerBlocks={attributes.publisherInnerBlocks}
-						>
-							<StatesManager
-								states={attributes.publisherBlockStates}
-								block={{
-									clientId,
-									supports,
-									attributes,
-									setAttributes,
-									blockName: name,
-								}}
-							/>
-						</BlockCard>
+							currentInnerBlock={currentInnerBlock}
+						/>
 					</Fill>
-					<Fill
-						name={`publisher-${currentBlock}-block-${attributes.publisherCurrentState}-edit-content-${clientId}`}
-					>
+					<Fill name={`publisher-block-edit-content-${clientId}`}>
 						<BlockEditComponent
 							{...{
 								// Sending props like exactly "edit" function props of WordPress Block.
@@ -310,9 +282,9 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 								clientId,
 								supports,
 								className,
-								attributes,
 								setAttributes,
-								currentStateAttributes,
+								currentStateAttributes: currentAttributes,
+								attributes: currentAttributes,
 								...props,
 							}}
 						/>
@@ -328,23 +300,22 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						blockName: name,
 						clientId,
 						handleOnChangeAttributes,
-						attributes,
+						attributes: currentAttributes,
 						storeName: 'publisher-core/controls',
 					},
 					currentTab,
 					blockStateId,
 					breakpointId,
-					currentBlock,
 					setCurrentTab,
 					isNormalState,
 					setAttributes,
 					getAttributes,
+					currentInnerBlock,
 					isOpenGridBuilder,
 					setOpenGridBuilder,
 					attributes: _attributes,
 					handleOnChangeAttributes,
 					handleOnSwitchBlockSettings,
-					extensionConfig: definitionTypes,
 					BlockComponent: () => children,
 					activeDeviceType: getDeviceType(),
 					getBlockType: () =>
@@ -356,18 +327,16 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						<SideEffect
 							{...{
 								currentTab,
-								currentState: attributes.publisherCurrentState,
+								currentState:
+									currentAttributes.publisherCurrentState,
 							}}
 						/>
-						<BlockPartials
-							clientId={clientId}
-							currentBlock={currentBlock}
-							currentState={attributes.publisherCurrentState}
-						/>
+						<SlotFillProvider>
+							<BlockPartials clientId={clientId} />
+							<FillComponents />
+						</SlotFillProvider>
 					</InspectorControls>
 					<div ref={blockEditRef} />
-
-					<FillComponents />
 
 					<style
 						data-block-type={name}

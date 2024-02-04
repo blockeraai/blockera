@@ -29,9 +29,11 @@ export default function ({
 	attributeId,
 	block,
 	handleOnChangeAttributes,
+	defaultValue,
 	...props
 }: {
 	gap: { lock: boolean, gap: string, columns: string, rows: string },
+	defaultValue: { lock: boolean, gap: string, columns: string, rows: string },
 	field: Object,
 	attributeId: string,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
@@ -39,7 +41,7 @@ export default function ({
 }): MixedElement {
 	const { value, attribute, blockName, resetToDefault, getControlPath } =
 		useControlContext({
-			defaultValue: '',
+			defaultValue,
 			onChange: (newValue) =>
 				handleOnChangeAttributes(attributeId, {
 					...gap,
@@ -51,7 +53,7 @@ export default function ({
 		value,
 		attribute,
 		blockName,
-		defaultValue: { lock: true, gap: '', columns: '', rows: '' },
+		defaultValue,
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, 'gap'),
@@ -89,7 +91,7 @@ export default function ({
 							unitType="essential"
 							min={0}
 							max={200}
-							defaultValue=""
+							defaultValue={defaultValue.gap}
 							id={'gap'}
 							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
@@ -127,7 +129,7 @@ export default function ({
 							unitType="essential"
 							min={0}
 							max={200}
-							defaultValue=""
+							defaultValue={defaultValue.rows}
 							id={'rows'}
 							singularId={'rows'}
 							onChange={(newValue, ref) =>
@@ -168,7 +170,7 @@ export default function ({
 							unitType="essential"
 							min={0}
 							max={200}
-							defaultValue=""
+							defaultValue={defaultValue.columns}
 							id={'columns'}
 							singularId={'columns'}
 							onChange={(newValue, ref) =>

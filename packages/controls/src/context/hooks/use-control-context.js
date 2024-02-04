@@ -2,6 +2,7 @@
 /**
  * External dependencies
  */
+import memoize from 'fast-memoize';
 import { select } from '@wordpress/data';
 import { useContext, useRef } from '@wordpress/element';
 
@@ -41,12 +42,30 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		dispatch,
 	} = useContext(ControlContext);
 
+	const getControlPath = function (
+		controlID: string,
+		childControlId: string
+	): string {
+		// Assume childControlId is undefined, then hint to context provider main value.
+		if (isUndefined(childControlId)) {
+			return controlID;
+		}
+		// Assume childControlId started with open bracket char as an example: "[0].toggleOption", then concat controlID and childControlId with no separator.
+		if ('[' === childControlId[0]) {
+			return `${controlID}${childControlId}`;
+		}
+
+		// Assume childControlId started with property word name as an example: "toggleOption", then concatenate "controlID" and "childControlId" with "dot | ." separator.
+		return `${controlID}.${childControlId}`;
+	};
+
 	if ('undefined' === typeof args) {
 		return {
 			value: savedValue,
 			dispatch,
 			controlInfo,
 			blockName: controlInfo.blockName,
+			getControlPath,
 		};
 	}
 
@@ -83,7 +102,8 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		mergeInitialAndDefault,
 	} = args;
 
-	const calculatedValue = getCalculatedInitValue();
+	const _getCalculatedValue = memoize(() => getCalculatedInitValue());
+	const calculatedValue = _getCalculatedValue();
 
 	/**
 	 * @see ../../store/actions.js file to check available actions of dispatcher!
@@ -235,19 +255,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		blockName: controlInfo.blockName,
 		attribute: controlInfo.attribute,
 		controlInfo: getControl(controlInfo.name),
-		getControlPath(controlID: string, childControlId: string): string {
-			// Assume childControlId is undefined, then hint to context provider main value.
-			if (isUndefined(childControlId)) {
-				return controlID;
-			}
-			// Assume childControlId started with open bracket char as an example: "[0].toggleOption", then concat controlID and childControlId with no separator.
-			if ('[' === childControlId[0]) {
-				return `${controlID}${childControlId}`;
-			}
-
-			// Assume childControlId started with property word name as an example: "toggleOption", then concatenate "controlID" and "childControlId" with "dot | ." separator.
-			return `${controlID}.${childControlId}`;
-		},
+		getControlPath,
 		/**
 		 * Reset control value to default value.
 		 */
@@ -298,10 +306,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 				value: any
 			): Object => {
 				if (itemId === args?.repeaterItem) {
-					return {
-						...item,
-						[args?.propId]: value,
-					};
+					return update(item, args?.propId, value);
 				}
 
 				return item;

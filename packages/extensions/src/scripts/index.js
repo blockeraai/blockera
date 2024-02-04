@@ -4,12 +4,14 @@ import {
 	bootstrapSizeExtension,
 	bootstrapTypographyExtension,
 	bootstrapPositionExtension,
+	bootstrapBackgroundExtension,
+	bootstrapBorderAndShadowExtension,
 } from '../libs';
 
 /**
- * Internal dependencies
+ * Publisher dependencies
  */
-import { CanvasEditor } from '../components';
+import { CanvasEditor } from '@publisher/editor';
 
 export default function (wp: Object) {
 	const registerPlugin = wp.plugins.registerPlugin;
@@ -23,6 +25,8 @@ export default function (wp: Object) {
 	bootstrapPositionExtension();
 	bootstrapSizeExtension();
 	bootstrapTypographyExtension();
+	bootstrapBackgroundExtension();
+	bootstrapBorderAndShadowExtension();
 
 	// TODO: implements other bootstrap functionalities here ...
 }

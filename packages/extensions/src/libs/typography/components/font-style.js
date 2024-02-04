@@ -43,7 +43,7 @@ export const FontStyle = ({
 			}}
 		>
 			<ToggleSelectControl
-				label={__('Style', 'publisher-core')}
+				label={__('Font Style', 'publisher-core')}
 				labelPopoverTitle={__('Font Style', 'publisher-core')}
 				labelDescription={
 					<>
@@ -90,7 +90,6 @@ export const FontStyle = ({
 					},
 				]}
 				isDeselectable={true}
-				//
 				defaultValue={defaultValue}
 				onChange={(newValue, ref) =>
 					onChange('publisherFontStyle', newValue, { ref })

@@ -56,27 +56,6 @@ export default function withBlockSettings(
 }
 
 /**
- * Preparing inner blocks.
- *
- * @param {Object} registeredInnerBlocks The register inner blocks on outside of core.
- * @return {{}|{default}} the merge-able object include "default" key when registered inner blocks has valid blocks, empty object when has not valid items.
- */
-function prepareInnerBlockTypes(registeredInnerBlocks: Object): Object {
-	const values = Object.values(registeredInnerBlocks);
-
-	if (!values.length) {
-		return {};
-	}
-
-	const types = values.map((innerBlock) => ({
-		...innerBlock,
-		attributes: {},
-	}));
-
-	return { default: types };
-}
-
-/**
  * Merge settings of block type.
  *
  * @param {Object} settings The default WordPress block type settings
@@ -88,20 +67,23 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 		return settings;
 	}
 
+	const overrideAttribute = {
+		...settings.attributes,
+		...additional.attributes,
+		...blockStatesAttributes,
+	};
+
 	return {
 		...settings,
 		attributes: {
-			...settings.attributes,
-			...additional.attributes,
-			...blockStatesAttributes,
+			...overrideAttribute,
 			publisherInnerBlocks: {
 				...innerBlocksExtensionsAttributes.publisherInnerBlocks,
-				...prepareInnerBlockTypes(
-					additional?.publisherInnerBlocks || {}
-				),
+				default: [],
 			},
 			publisherPropsId: {
 				type: 'string',
+				default: '',
 			},
 		},
 		supports: {
@@ -116,13 +98,13 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 			if (isFunction(additional?.edit)) {
 				return (
 					<>
-						<SlotFillProvider>
-							<BlockBase
-								{...{
-									...props,
-									additional,
-								}}
-							>
+						<BlockBase
+							{...{
+								...props,
+								additional,
+							}}
+						>
+							<SlotFillProvider>
 								<Slot name={'publisher-core-block-before'} />
 
 								<BlockPortals
@@ -136,8 +118,8 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 								/>
 
 								<Slot name={'publisher-core-block-after'} />
-							</BlockBase>
-						</SlotFillProvider>
+							</SlotFillProvider>
+						</BlockBase>
 						{settings.edit(props)}
 					</>
 				);
@@ -169,17 +151,5 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 			},
 			...(settings?.deprecated || []),
 		].filter(isObject),
-		publisherEditorProps: {
-			...(settings.publisherEditorProps || {}),
-			...additional.editorProps,
-		},
-		publisherSaveProps: {
-			...(settings.publisherSaveProps || {}),
-			...additional.saveProps,
-		},
-		publisherCssGenerators: {
-			...additional.cssGenerators,
-			...(settings?.publisherCssGenerators || {}),
-		},
 	};
 }

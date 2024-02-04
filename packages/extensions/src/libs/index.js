@@ -1,3 +1,21 @@
+// @flow
+
+/**
+ * Publisher dependencies
+ */
+import { registerThirdPartyExtensionDefinitions } from '@publisher/blocks';
+
+/**
+ * Internal dependencies
+ */
+import { __experimentalExtensionsSupportRegistration } from './base';
+import { __experimentalRegistrationInnerBlockExtensionCustomConfigDefinition } from './inner-blocks';
+
+registerThirdPartyExtensionDefinitions();
+
+__experimentalExtensionsSupportRegistration();
+__experimentalRegistrationInnerBlockExtensionCustomConfigDefinition();
+
 export * from './utils';
 export {
 	LayoutExtensionIcon,
@@ -42,6 +60,7 @@ export {
 	BackgroundExtension,
 	attributes as backgroundAttributes,
 	supports as backgroundSupports,
+	bootstrap as bootstrapBackgroundExtension,
 } from './background';
 export {
 	BorderAndShadowExtensionIcon,
@@ -49,6 +68,7 @@ export {
 	BorderAndShadowExtension,
 	attributes as borderAndShadowExtensionAttributes,
 	supports as borderAndShadowExtensionSupports,
+	bootstrap as bootstrapBorderAndShadowExtension,
 } from './border-and-shadow';
 export {
 	EffectsExtensionIcon,
@@ -65,12 +85,12 @@ export {
 	supports as mouseExtensionSupports,
 } from './mouse';
 export {
-	AdvancedExtensionIcon,
-	AdvancedStyles,
-	AdvancedExtension,
-	attributes as advancedExtensionAttributes,
-	supports as advancedExtensionSupports,
-} from './advanced';
+	CustomStyleExtensionIcon,
+	CustomStyleStyles,
+	CustomStyleExtension,
+	attributes as customStyleAttributes,
+	supports as customStyleSupports,
+} from './custom-style';
 export {
 	TypographyStyles,
 	TypographyExtension,
@@ -90,6 +110,12 @@ export {
 	InnerBlocksExtensionIcon,
 	attributes as innerBlocksExtensionsAttributes,
 } from './inner-blocks';
+export {
+	EntranceAnimationExtensionIcon,
+	EntranceAnimationExtension,
+	attributes as entranceAnimationExtensionAttributes,
+	supports as entranceAnimationExtensionSupports,
+} from './entrance-animation';
 export {
 	SharedBlockExtension,
 	attributes as sharedBlockExtensionAttributes,

@@ -1,7 +1,11 @@
 export const attributes = {
 	publisherIcon: {
 		type: 'object',
-		default: {},
+		default: {
+			icon: '',
+			library: '',
+			uploadSVG: '',
+		},
 	},
 	publisherIconPosition: {
 		type: 'string',

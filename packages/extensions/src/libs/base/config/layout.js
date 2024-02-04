@@ -8,41 +8,42 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import type { ConfigModel } from '../types';
+import type { FeatureConfig } from '../types';
 
-const publisherDisplay: ConfigModel = {
+const publisherDisplay: FeatureConfig = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Display', 'publisher-core'),
 };
 
-const publisherFlexLayout: ConfigModel = {
+const publisherFlexLayout: FeatureConfig = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Flex Layout', 'publisher-core'),
 };
 
-const publisherGap: ConfigModel = {
+const publisherGap: FeatureConfig = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Gap', 'publisher-core'),
 };
 
-const publisherFlexWrap: ConfigModel = {
-	show: true,
+const publisherFlexWrap: FeatureConfig = {
+	show: false,
 	force: false,
 	status: true,
-	label: __('Flex Wrap', 'publisher-core'),
+	label: __('Flex Children Wrap', 'publisher-core'),
 };
 
-const publisherAlignContent: ConfigModel = {
+const publisherAlignContent: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Align Content', 'publisher-core'),
+	showInSettings: false,
+	label: __('Children Align Content', 'publisher-core'),
 };
 
 export const layoutConfig = {

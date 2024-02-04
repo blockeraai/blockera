@@ -1,10 +1,14 @@
 /**
  * External dependencies
  */
-import { useEffect } from '@wordpress/element';
+import { useEffect, memo } from '@wordpress/element';
+
+/**
+ * Internal dependencies
+ */
 import { useBlockSideEffects } from '../../../hooks';
 
-export function SideEffect({ currentTab, currentState }) {
+export const SideEffect = memo(({ currentTab, currentState }) => {
 	useEffect(() => {
 		const tabs = document.querySelector(
 			'.block-editor-block-inspector .block-editor-block-inspector__tabs .components-tab-panel__tabs'
@@ -21,4 +25,4 @@ export function SideEffect({ currentTab, currentState }) {
 	});
 
 	return null;
-}
+});

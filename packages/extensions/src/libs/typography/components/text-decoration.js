@@ -122,7 +122,6 @@ export const TextDecoration = ({
 					},
 				]}
 				isDeselectable={true}
-				//
 				defaultValue={defaultValue}
 				onChange={(newValue, ref) =>
 					onChange('publisherTextDecoration', newValue, { ref })

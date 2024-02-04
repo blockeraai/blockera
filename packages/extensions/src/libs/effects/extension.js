@@ -16,7 +16,7 @@ import {
 	ControlContextProvider,
 } from '@publisher/controls';
 import { isInteger } from '@publisher/utils';
-import { Button } from '@publisher/components';
+import { Button, FeatureWrapper } from '@publisher/components';
 import {
 	componentClassNames,
 	controlInnerClassNames,
@@ -25,7 +25,7 @@ import {
 /**
  * Internal dependencies
  */
-import { isActiveField } from '../../api/utils';
+import { isShowField } from '../../api/utils';
 import { default as GearIcon } from './icons/gear';
 import type { TEffectsProps } from './types/effects-props';
 import { generateExtensionId, hasSameProps } from '../utils';
@@ -38,40 +38,75 @@ import { Blending } from './components/blending';
 import { Divider } from './components/divider';
 import { Mask } from './components/mask';
 import { EffectsExtensionIcon } from './index';
+import { ExtensionSettings } from '../settings';
 
 export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 	({
-		values: {
-			opacity,
-			transform,
-			transition,
-			filter,
-			blendMode,
-			backdropFilter,
-			backfaceVisibility,
-			transformSelfOrigin,
-			transformChildOrigin,
-			transformSelfPerspective,
-			transformChildPerspective,
-			divider,
-			mask,
-		},
+		values,
 		block,
-		effectsConfig: {
-			publisherOpacity,
-			publisherTransform,
-			publisherTransition,
-			publisherFilter,
-			publisherBlendMode,
-			publisherBackdropFilter,
-			publisherDivider,
-			publisherMask,
-		},
+		extensionConfig,
 		handleOnChangeAttributes,
 		extensionProps,
+		setSettings,
+		attributes,
 	}: TEffectsProps): MixedElement => {
 		const [isTransformSettingsVisible, setIsTransformSettingsVisible] =
 			useState(false);
+
+		const isShowOpacity = isShowField(
+			extensionConfig.publisherOpacity,
+			values?.publisherOpacity,
+			attributes.publisherOpacity.default
+		);
+		const isShowTransform = isShowField(
+			extensionConfig.publisherTransform,
+			values?.publisherTransform,
+			attributes.publisherTransform.default
+		);
+		const isShowTransition = isShowField(
+			extensionConfig.publisherTransition,
+			values?.publisherTransition,
+			attributes.publisherTransition.default
+		);
+		const isShowFilter = isShowField(
+			extensionConfig.publisherFilter,
+			values?.publisherFilter,
+			attributes.publisherFilter.default
+		);
+		const isShowBackdropFilter = isShowField(
+			extensionConfig.publisherBackdropFilter,
+			values?.publisherBackdropFilter,
+			attributes.publisherBackdropFilter.default
+		);
+		const isShowDivider = isShowField(
+			extensionConfig.publisherDivider,
+			values?.publisherDivider,
+			attributes.publisherDivider.default
+		);
+		const isShowMask = isShowField(
+			extensionConfig.publisherMask,
+			values?.publisherMask,
+			attributes.publisherMask.default
+		);
+		const isShowBlendMode = isShowField(
+			extensionConfig.publisherBlendMode,
+			values?.publisherBlendMode,
+			attributes.publisherBlendMode.default
+		);
+
+		// Extension is not active
+		if (
+			!isShowOpacity &&
+			!isShowTransform &&
+			!isShowTransition &&
+			!isShowFilter &&
+			!isShowBackdropFilter &&
+			!isShowDivider &&
+			!isShowMask &&
+			!isShowBlendMode
+		) {
+			return <></>;
+		}
 
 		return (
 			<PanelBodyControl
@@ -83,153 +118,233 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 					'extension-effects'
 				)}
 			>
-				{isActiveField(publisherOpacity) && (
+				<ExtensionSettings
+					features={extensionConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'effectsConfig');
+					}}
+				/>
+
+				<FeatureWrapper
+					isActive={isShowOpacity}
+					isActiveOnStates={
+						extensionConfig.publisherOpacity.isActiveOnStates
+					}
+					isActiveOnBreakpoints={
+						extensionConfig.publisherOpacity.isActiveOnBreakpoints
+					}
+				>
 					<Opacity
 						block={block}
-						opacity={opacity}
+						opacity={values.publisherOpacity}
 						handleOnChangeAttributes={handleOnChangeAttributes}
+						defaultValue={attributes.publisherOpacity.default}
 						{...extensionProps.publisherOpacity}
 					/>
-				)}
+				</FeatureWrapper>
 
-				{isActiveField(publisherTransform) && (
-					<>
-						<ControlContextProvider
-							value={{
-								name: generateExtensionId(
-									block,
-									'transform-2d-3d'
-								),
-								value: transform,
-								attribute: 'publisherTransform',
-								blockName: block.blockName,
-							}}
-							storeName={'publisher-core/controls/repeater'}
+				<FeatureWrapper
+					isActive={isShowTransform}
+					isActiveOnStates={
+						extensionConfig.publisherTransform.isActiveOnStates
+					}
+					isActiveOnBreakpoints={
+						extensionConfig.publisherTransform.isActiveOnBreakpoints
+					}
+				>
+					<ControlContextProvider
+						value={{
+							name: generateExtensionId(block, 'transform-2d-3d'),
+							value: values.publisherTransform,
+							attribute: 'publisherTransform',
+							blockName: block.blockName,
+						}}
+						storeName={'publisher-core/controls/repeater'}
+					>
+						<BaseControl
+							columns="columns-1"
+							controlName="transform"
 						>
-							<BaseControl
-								columns="columns-1"
-								controlName="transform"
-							>
-								<TransformControl
-									onChange={(newValue) =>
-										handleOnChangeAttributes(
-											'publisherTransform',
-											isInteger(newValue)
-												? `${newValue}%`
-												: newValue
-										)
+							<TransformControl
+								onChange={(newValue, ref) =>
+									handleOnChangeAttributes(
+										'publisherTransform',
+										isInteger(newValue)
+											? `${newValue}%`
+											: newValue,
+										{ ref }
+									)
+								}
+								injectHeaderButtonsStart={
+									<>
+										<Button
+											showTooltip={true}
+											tooltipPosition="top"
+											label={__(
+												'Transformation Settings',
+												'publisher-core'
+											)}
+											size="extra-small"
+											className={controlInnerClassNames(
+												'btn-add'
+											)}
+											isFocus={isTransformSettingsVisible}
+											onClick={() =>
+												setIsTransformSettingsVisible(
+													!isTransformSettingsVisible
+												)
+											}
+										>
+											<GearIcon />
+										</Button>
+									</>
+								}
+								defaultValue={
+									attributes.publisherTransform.default
+								}
+								{...extensionProps.publisherTransform}
+							/>
+
+							{isTransformSettingsVisible && (
+								<TransformSettings
+									setIsTransformSettingsVisible={
+										setIsTransformSettingsVisible
 									}
-									injectHeaderButtonsStart={
-										<>
-											<Button
-												showTooltip={true}
-												tooltipPosition="top"
-												label={__(
-													'Transformation Settings',
-													'publisher-core'
-												)}
-												size="extra-small"
-												className={controlInnerClassNames(
-													'btn-add'
-												)}
-												isFocus={
-													isTransformSettingsVisible
-												}
-												onClick={() =>
-													setIsTransformSettingsVisible(
-														!isTransformSettingsVisible
-													)
-												}
-											>
-												<GearIcon />
-											</Button>
-										</>
+									block={block}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
 									}
-									{...extensionProps.publisherTransform}
+									values={{
+										transform: values.publisherTransform,
+										transformSelfPerspective:
+											values.publisherTransformSelfPerspective,
+										transformSelfOrigin:
+											values.publisherTransformSelfOrigin,
+										backfaceVisibility:
+											values.publisherBackfaceVisibility,
+										transformChildPerspective:
+											values.publisherTransformChildPerspective,
+										transformChildOrigin:
+											values.publisherTransformChildOrigin,
+									}}
+									attributes={attributes}
 								/>
+							)}
+						</BaseControl>
+					</ControlContextProvider>
+				</FeatureWrapper>
 
-								{isTransformSettingsVisible && (
-									<TransformSettings
-										setIsTransformSettingsVisible={
-											setIsTransformSettingsVisible
-										}
-										transformSelfPerspective={
-											transformSelfPerspective
-										}
-										block={block}
-										handleOnChangeAttributes={
-											handleOnChangeAttributes
-										}
-										backfaceVisibility={backfaceVisibility}
-										transformChildPerspective={
-											transformChildPerspective
-										}
-										transformChildOrigin={
-											transformChildOrigin
-										}
-										transformSelfOrigin={
-											transformSelfOrigin
-										}
-										transform={transform}
-									/>
-								)}
-							</BaseControl>
-						</ControlContextProvider>
-					</>
-				)}
-
-				{isActiveField(publisherTransition) && (
+				<FeatureWrapper
+					isActive={isShowTransition}
+					isActiveOnStates={
+						extensionConfig.publisherTransition.isActiveOnStates
+					}
+					isActiveOnBreakpoints={
+						extensionConfig.publisherTransition
+							.isActiveOnBreakpoints
+					}
+				>
 					<Transition
-						transition={transition}
+						transition={values.publisherTransition}
 						block={block}
 						handleOnChangeAttributes={handleOnChangeAttributes}
+						defaultValue={attributes.publisherTransition.default}
 						{...extensionProps.publisherTransition}
 					/>
-				)}
+				</FeatureWrapper>
 
-				{isActiveField(publisherFilter) && (
+				<FeatureWrapper
+					isActive={isShowFilter}
+					isActiveOnStates={
+						extensionConfig.publisherFilter.isActiveOnStates
+					}
+					isActiveOnBreakpoints={
+						extensionConfig.publisherFilter.isActiveOnBreakpoints
+					}
+				>
 					<Filter
-						filter={filter}
+						filter={values.publisherFilter}
 						block={block}
 						handleOnChangeAttributes={handleOnChangeAttributes}
+						defaultValue={attributes.publisherFilter.default}
 						{...extensionProps.publisherFilter}
 					/>
-				)}
+				</FeatureWrapper>
 
-				{isActiveField(publisherBackdropFilter) && (
+				<FeatureWrapper
+					isActive={isShowBackdropFilter}
+					isActiveOnStates={
+						extensionConfig.publisherBackdropFilter.isActiveOnStates
+					}
+					isActiveOnBreakpoints={
+						extensionConfig.publisherBackdropFilter
+							.isActiveOnBreakpoints
+					}
+				>
 					<BackdropFilter
-						backdropFilter={backdropFilter}
+						backdropFilter={values.publisherBackdropFilter}
 						block={block}
 						handleOnChangeAttributes={handleOnChangeAttributes}
+						defaultValue={
+							attributes.publisherBackdropFilter.default
+						}
 						{...extensionProps.publisherBackdropFilter}
 					/>
-				)}
+				</FeatureWrapper>
 
-				{isActiveField(publisherDivider) && (
+				<FeatureWrapper
+					isActive={isShowDivider}
+					isActiveOnStates={
+						extensionConfig.publisherDivider.isActiveOnStates
+					}
+					isActiveOnBreakpoints={
+						extensionConfig.publisherDivider.isActiveOnBreakpoints
+					}
+				>
 					<Divider
-						divider={divider}
+						divider={values.publisherDivider}
 						block={block}
 						handleOnChangeAttributes={handleOnChangeAttributes}
+						defaultValue={attributes.publisherDivider.default}
 						{...extensionProps.publisherDivider}
 					/>
-				)}
+				</FeatureWrapper>
 
-				{isActiveField(publisherMask) && (
+				<FeatureWrapper
+					isActive={isShowMask}
+					isActiveOnStates={
+						extensionConfig.publisherMask.isActiveOnStates
+					}
+					isActiveOnBreakpoints={
+						extensionConfig.publisherMask.isActiveOnBreakpoints
+					}
+				>
 					<Mask
-						mask={mask}
+						mask={values.publisherMask}
 						block={block}
 						handleOnChangeAttributes={handleOnChangeAttributes}
+						defaultValue={attributes.publisherMask.default}
 						{...extensionProps.publisherMask}
 					/>
-				)}
-				{isActiveField(publisherBlendMode) && (
+				</FeatureWrapper>
+
+				<FeatureWrapper
+					isActive={isShowBlendMode}
+					isActiveOnStates={
+						extensionConfig.publisherBlendMode.isActiveOnStates
+					}
+					isActiveOnBreakpoints={
+						extensionConfig.publisherBlendMode.isActiveOnBreakpoints
+					}
+				>
 					<Blending
-						blendMode={blendMode}
+						blendMode={values.publisherBlendMode}
 						block={block}
 						handleOnChangeAttributes={handleOnChangeAttributes}
+						defaultValue={attributes.publisherBlendMode.default}
 						{...extensionProps.publisherBlendMode}
 					/>
-				)}
+				</FeatureWrapper>
 			</PanelBodyControl>
 		);
 	},

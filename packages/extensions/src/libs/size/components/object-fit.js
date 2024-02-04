@@ -11,7 +11,6 @@ import type { MixedElement } from 'react';
 import {
 	BaseControl,
 	ControlContextProvider,
-	convertAlignmentMatrixCoordinates,
 	PositionButtonControl,
 	SelectControl,
 	useControlContext,
@@ -33,23 +32,29 @@ export default function ObjectFit({
 	block,
 	fitPosition,
 	handleOnChangeAttributes,
+	defaultValue,
+	fitPositionDefaultValue,
+	fitPositionProps,
 	...props
 }: {
 	block: TBlockProps,
+	defaultValue: string,
 	fitPosition: { top: string, left: string },
+	fitPositionDefaultValue: { top: string, left: string },
+	fitPositionProps: Object,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 }): MixedElement {
 	const { value, attribute, blockName, resetToDefault } = useControlContext({
 		onChange: (newValue, ref) =>
 			handleOnChangeAttributes('publisherFit', newValue, { ref }),
-		defaultValue: '',
+		defaultValue,
 	});
 
 	const labelProps = {
 		value,
 		attribute: 'publisherRatio',
 		blockName,
-		defaultValue: '',
+		defaultValue,
 		resetToDefault,
 		mode: 'advanced',
 		path: attribute,
@@ -164,21 +169,17 @@ export default function ObjectFit({
 					},
 				]}
 				type="custom"
-				defaultValue=""
+				defaultValue={defaultValue}
 				onChange={(newValue, ref) =>
 					handleOnChangeAttributes('publisherFit', newValue, { ref })
 				}
 				{...props}
 			/>
+
 			<ControlContextProvider
 				value={{
 					name: generateExtensionId(block, 'fit-position'),
-					value: {
-						...fitPosition,
-						coordinates:
-							convertAlignmentMatrixCoordinates(fitPosition)
-								?.compact,
-					},
+					value: fitPosition,
 					attribute: 'publisherFitPosition',
 					blockName: block.blockName,
 				}}
@@ -187,7 +188,7 @@ export default function ObjectFit({
 					buttonLabel={__('Fit Position', 'publisher-core')}
 					alignmentMatrixLabel={__('Position', 'publisher-core')}
 					size="small"
-					defaultValue={{ top: '', left: '' }}
+					defaultValue={fitPositionDefaultValue}
 					onChange={({ top, left }, ref) => {
 						handleOnChangeAttributes(
 							'publisherFitPosition',
@@ -199,6 +200,7 @@ export default function ObjectFit({
 							{ ref }
 						);
 					}}
+					{...fitPositionProps}
 				/>
 			</ControlContextProvider>
 		</BaseControl>

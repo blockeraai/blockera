@@ -95,7 +95,8 @@ const Fields: FieldItem = memo<FieldItem>(
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
 
-		const { repeaterId, getControlId } = useContext(RepeaterContext);
+		const { repeaterId, getControlId, defaultRepeaterItemValue } =
+			useContext(RepeaterContext);
 
 		// fill new random mesh gradient with provider if it's empty
 		if (!item['mesh-gradient']) {
@@ -105,6 +106,10 @@ const Fields: FieldItem = memo<FieldItem>(
 		return (
 			<div id={`repeater-item-${itemId}`}>
 				<ToggleSelectControl
+					repeaterItem={itemId}
+					singularId={'type'}
+					id={getControlId(itemId, 'type')}
+					defaultValue={defaultRepeaterItemValue.type}
 					label={__('Type', 'publisher-core')}
 					labelPopoverTitle={__('Background Type', 'publisher-core')}
 					labelDescription={<LabelDescription />}
@@ -131,7 +136,6 @@ const Fields: FieldItem = memo<FieldItem>(
 							icon: <TypeMeshGradientIcon />,
 						},
 					]}
-					id={getControlId(itemId, 'type')}
 					onChange={(type) =>
 						changeRepeaterItem({
 							controlId,
@@ -148,6 +152,10 @@ const Fields: FieldItem = memo<FieldItem>(
 				{item.type === 'image' && (
 					<>
 						<MediaImageControl
+							repeaterItem={itemId}
+							singularId={'image'}
+							id={getControlId(itemId, 'image')}
+							defaultValue={defaultRepeaterItemValue.image}
 							label={__('Image', 'publisher-core')}
 							labelPopoverTitle={__(
 								'Background Image',
@@ -165,7 +173,6 @@ const Fields: FieldItem = memo<FieldItem>(
 							}
 							field="empty"
 							columns="columns-1"
-							id={getControlId(itemId, 'image')}
 							onChange={(image) => {
 								changeRepeaterItem({
 									controlId,
@@ -180,6 +187,12 @@ const Fields: FieldItem = memo<FieldItem>(
 						/>
 
 						<ToggleSelectControl
+							repeaterItem={itemId}
+							singularId={'image-size'}
+							id={getControlId(itemId, 'image-size')}
+							defaultValue={
+								defaultRepeaterItemValue['image-size']
+							}
 							label={__('Size', 'publisher-core')}
 							labelPopoverTitle={__(
 								'Background Size',
@@ -225,7 +238,6 @@ const Fields: FieldItem = memo<FieldItem>(
 									icon: <FitContainIcon />,
 								},
 							]}
-							id={getControlId(itemId, 'image-size')}
 							onChange={(size) =>
 								changeRepeaterItem({
 									controlId,
@@ -245,6 +257,17 @@ const Fields: FieldItem = memo<FieldItem>(
 									justifyContent="space-around"
 								>
 									<InputControl
+										repeaterItem={itemId}
+										singularId={'image-size-width'}
+										id={getControlId(
+											itemId,
+											'image-size-width'
+										)}
+										defaultValue={
+											defaultRepeaterItemValue[
+												'image-size-width'
+											]
+										}
 										label={__('Width', 'publisher-core')}
 										labelPopoverTitle={__(
 											'Background Width Size',
@@ -263,10 +286,6 @@ const Fields: FieldItem = memo<FieldItem>(
 										columns="columns-1"
 										className="control-first label-center small-gap"
 										unitType="background-size"
-										id={getControlId(
-											itemId,
-											'image-size-width'
-										)}
 										onChange={(width) =>
 											changeRepeaterItem({
 												controlId,
@@ -284,6 +303,17 @@ const Fields: FieldItem = memo<FieldItem>(
 									/>
 
 									<InputControl
+										repeaterItem={itemId}
+										singularId={'image-size-height'}
+										id={getControlId(
+											itemId,
+											'image-size-height'
+										)}
+										defaultValue={
+											defaultRepeaterItemValue[
+												'image-size-height'
+											]
+										}
 										label={__('Height', 'publisher-core')}
 										labelPopoverTitle={__(
 											'Background Height Size',
@@ -302,10 +332,6 @@ const Fields: FieldItem = memo<FieldItem>(
 										columns="columns-1"
 										className="control-first label-center small-gap"
 										unitType="background-size"
-										id={getControlId(
-											itemId,
-											'image-size-height'
-										)}
 										onChange={(height) =>
 											changeRepeaterItem({
 												controlId,
@@ -326,6 +352,12 @@ const Fields: FieldItem = memo<FieldItem>(
 						</ToggleSelectControl>
 
 						<AlignmentMatrixControl
+							repeaterItem={itemId}
+							singularId={'image-position'}
+							id={getControlId(itemId, '[image-position]')}
+							defaultValue={
+								defaultRepeaterItemValue['image-position']
+							}
 							inputFields={true}
 							label={__('Position', 'publisher-core')}
 							labelPopoverTitle={__(
@@ -349,9 +381,6 @@ const Fields: FieldItem = memo<FieldItem>(
 								</>
 							}
 							columns="columns-2"
-							repeaterItem={itemId}
-							id={getControlId(itemId, '[image-position]')}
-							singularId={'image-position'}
 							onChange={(newValue) => {
 								changeRepeaterItem({
 									controlId,
@@ -366,6 +395,12 @@ const Fields: FieldItem = memo<FieldItem>(
 						/>
 
 						<ToggleSelectControl
+							repeaterItem={itemId}
+							singularId={'image-repeat'}
+							id={getControlId(itemId, 'image-repeat')}
+							defaultValue={
+								defaultRepeaterItemValue['image-repeat']
+							}
 							label={__('Repeat', 'publisher-core')}
 							labelPopoverTitle={__(
 								'Background Repeat',
@@ -417,7 +452,6 @@ const Fields: FieldItem = memo<FieldItem>(
 								},
 							]}
 							//
-							id={getControlId(itemId, '[image-repeat]')}
 							onChange={(newValue) =>
 								changeRepeaterItem({
 									controlId,
@@ -432,6 +466,12 @@ const Fields: FieldItem = memo<FieldItem>(
 						/>
 
 						<ToggleSelectControl
+							repeaterItem={itemId}
+							singularId={'image-attachment'}
+							id={getControlId(itemId, 'image-attachment')}
+							defaultValue={
+								defaultRepeaterItemValue['image-attachment']
+							}
 							label={__('Effect', 'publisher-core')}
 							labelPopoverTitle={__(
 								'Background Effect',
@@ -472,7 +512,6 @@ const Fields: FieldItem = memo<FieldItem>(
 									value: 'fixed',
 								},
 							]}
-							id={getControlId(itemId, '[image-attachment]')}
 							onChange={(newValue) =>
 								changeRepeaterItem({
 									controlId,
@@ -491,6 +530,12 @@ const Fields: FieldItem = memo<FieldItem>(
 				{item.type === 'linear-gradient' && (
 					<>
 						<GradientBarControl
+							repeaterItem={itemId}
+							singularId={'linear-gradient'}
+							id={getControlId(itemId, 'linear-gradient')}
+							defaultValue={
+								defaultRepeaterItemValue['linear-gradient']
+							}
 							label={__('Linear Gradient', 'publisher-core')}
 							labelDescription={
 								<>
@@ -509,7 +554,6 @@ const Fields: FieldItem = memo<FieldItem>(
 								</>
 							}
 							field="empty"
-							id={getControlId(itemId, '[linear-gradient]')}
 							onChange={(newValue: string) => {
 								changeRepeaterItem({
 									controlId,
@@ -527,6 +571,14 @@ const Fields: FieldItem = memo<FieldItem>(
 						/>
 
 						<AnglePickerControl
+							repeaterItem={itemId}
+							singularId={'linear-gradient-angel'}
+							id={getControlId(itemId, 'linear-gradient-angel')}
+							defaultValue={
+								defaultRepeaterItemValue[
+									'linear-gradient-angel'
+								]
+							}
 							label={__('Angel', 'publisher-core')}
 							labelPopoverTitle={__(
 								'Linear Gradient Angel',
@@ -549,7 +601,6 @@ const Fields: FieldItem = memo<FieldItem>(
 								</>
 							}
 							columns="columns-2"
-							id={getControlId(itemId, '[linear-gradient-angel]')}
 							className={
 								isValidVariable(item['linear-gradient']) &&
 								'publisher-control-is-not-active'
@@ -570,6 +621,17 @@ const Fields: FieldItem = memo<FieldItem>(
 
 						<BaseControl columns="columns-1">
 							<ToggleSelectControl
+								repeaterItem={itemId}
+								singularId={'linear-gradient-repeat'}
+								id={getControlId(
+									itemId,
+									'linear-gradient-repeat'
+								)}
+								defaultValue={
+									defaultRepeaterItemValue[
+										'linear-gradient-repeat'
+									]
+								}
 								label={__('Repeat', 'publisher-core')}
 								labelPopoverTitle={__(
 									'Repeating Linear Gradient',
@@ -607,11 +669,6 @@ const Fields: FieldItem = memo<FieldItem>(
 										icon: <LinearGradientRepeatIcon />,
 									},
 								]}
-								//
-								id={getControlId(
-									itemId,
-									'[linear-gradient-repeat]'
-								)}
 								onChange={(newValue) =>
 									changeRepeaterItem({
 										controlId,
@@ -640,6 +697,17 @@ const Fields: FieldItem = memo<FieldItem>(
 						</BaseControl>
 
 						<ToggleSelectControl
+							repeaterItem={itemId}
+							singularId={'linear-gradient-attachment'}
+							id={getControlId(
+								itemId,
+								'linear-gradient-attachment'
+							)}
+							defaultValue={
+								defaultRepeaterItemValue[
+									'linear-gradient-attachment'
+								]
+							}
 							label={__('Effect', 'publisher-core')}
 							labelPopoverTitle={__(
 								'Background Effect',
@@ -680,10 +748,6 @@ const Fields: FieldItem = memo<FieldItem>(
 									value: 'fixed',
 								},
 							]}
-							id={getControlId(
-								itemId,
-								'[linear-gradient-attachment]'
-							)}
 							onChange={(newValue) =>
 								changeRepeaterItem({
 									controlId,
@@ -702,6 +766,12 @@ const Fields: FieldItem = memo<FieldItem>(
 				{item.type === 'radial-gradient' && (
 					<>
 						<GradientBarControl
+							repeaterItem={itemId}
+							singularId={'radial-gradient'}
+							id={getControlId(itemId, 'radial-gradient')}
+							defaultValue={
+								defaultRepeaterItemValue['radial-gradient']
+							}
 							label={__('Radial Gradient', 'publisher-core')}
 							labelDescription={
 								<>
@@ -720,7 +790,6 @@ const Fields: FieldItem = memo<FieldItem>(
 								</>
 							}
 							field="empty"
-							id={getControlId(itemId, '[radial-gradient]')}
 							onChange={(newValue) =>
 								changeRepeaterItem({
 									controlId,
@@ -738,6 +807,17 @@ const Fields: FieldItem = memo<FieldItem>(
 						/>
 
 						<AlignmentMatrixControl
+							repeaterItem={itemId}
+							singularId={'radial-gradient-position'}
+							id={getControlId(
+								itemId,
+								'radial-gradient-position'
+							)}
+							defaultValue={
+								defaultRepeaterItemValue[
+									'radial-gradient-position'
+								]
+							}
 							inputFields={true}
 							label={__('Position', 'publisher-core')}
 							labelPopoverTitle={__(
@@ -761,10 +841,6 @@ const Fields: FieldItem = memo<FieldItem>(
 								</>
 							}
 							columns="columns-2"
-							id={getControlId(
-								itemId,
-								'[radial-gradient-position]'
-							)}
 							onChange={(newValue) => {
 								changeRepeaterItem({
 									controlId,
@@ -783,6 +859,12 @@ const Fields: FieldItem = memo<FieldItem>(
 						/>
 
 						<ToggleSelectControl
+							repeaterItem={itemId}
+							singularId={'radial-gradient-size'}
+							id={getControlId(itemId, 'radial-gradient-size')}
+							defaultValue={
+								defaultRepeaterItemValue['radial-gradient-size']
+							}
 							label={__('Size', 'publisher-core')}
 							labelPopoverTitle={__(
 								'Background Position',
@@ -882,7 +964,6 @@ const Fields: FieldItem = memo<FieldItem>(
 									icon: <RadialGradientClosestSideIcon />,
 								},
 							]}
-							id={getControlId(itemId, '[radial-gradient-size]')}
 							onChange={(newValue) =>
 								changeRepeaterItem({
 									controlId,
@@ -902,6 +983,17 @@ const Fields: FieldItem = memo<FieldItem>(
 
 						<BaseControl columns="columns-1">
 							<ToggleSelectControl
+								repeaterItem={itemId}
+								singularId={'radial-gradient-repeat'}
+								id={getControlId(
+									itemId,
+									'radial-gradient-repeat'
+								)}
+								defaultValue={
+									defaultRepeaterItemValue[
+										'radial-gradient-repeat'
+									]
+								}
 								label={__('Repeat', 'publisher-core')}
 								labelPopoverTitle={__(
 									'Repeating Radial Gradient',
@@ -939,10 +1031,6 @@ const Fields: FieldItem = memo<FieldItem>(
 										icon: <RadialGradientRepeatIcon />,
 									},
 								]}
-								id={getControlId(
-									itemId,
-									'[radial-gradient-repeat]'
-								)}
 								onChange={(newValue) =>
 									changeRepeaterItem({
 										controlId,
@@ -971,6 +1059,17 @@ const Fields: FieldItem = memo<FieldItem>(
 						</BaseControl>
 
 						<ToggleSelectControl
+							repeaterItem={itemId}
+							singularId={'radial-gradient-attachment'}
+							id={getControlId(
+								itemId,
+								'radial-gradient-attachment'
+							)}
+							defaultValue={
+								defaultRepeaterItemValue[
+									'radial-gradient-attachment'
+								]
+							}
 							label={__('Effect', 'publisher-core')}
 							labelPopoverTitle={__(
 								'Background Effect',
@@ -1011,10 +1110,6 @@ const Fields: FieldItem = memo<FieldItem>(
 									value: 'fixed',
 								},
 							]}
-							id={getControlId(
-								itemId,
-								'[radial-gradient-attachment]'
-							)}
 							onChange={(newValue) =>
 								changeRepeaterItem({
 									controlId,
@@ -1085,10 +1180,17 @@ const Fields: FieldItem = memo<FieldItem>(
 							controlName="empty"
 						>
 							<RepeaterControl
+								repeaterItem={itemId}
+								singularId={'mesh-gradient-colors'}
 								id={getControlId(
 									itemId,
 									'[mesh-gradient-colors]'
 								)}
+								defaultValue={
+									defaultRepeaterItemValue[
+										'mesh-gradient-colors'
+									]
+								}
 								label={__('Colors', 'publisher-core')}
 								labelPopoverTitle={__(
 									'Mesh Gradient Colors',
@@ -1145,6 +1247,17 @@ const Fields: FieldItem = memo<FieldItem>(
 						</BaseControl>
 
 						<ToggleSelectControl
+							repeaterItem={itemId}
+							singularId={'mesh-gradient-attachment'}
+							id={getControlId(
+								itemId,
+								'[mesh-gradient-attachment]'
+							)}
+							defaultValue={
+								defaultRepeaterItemValue[
+									'mesh-gradient-attachment'
+								]
+							}
 							label={__('Effect', 'publisher-core')}
 							labelPopoverTitle={__(
 								'Background Effect',
@@ -1185,10 +1298,6 @@ const Fields: FieldItem = memo<FieldItem>(
 									value: 'fixed',
 								},
 							]}
-							id={getControlId(
-								itemId,
-								'[mesh-gradient-attachment]'
-							)}
 							onChange={(newValue) =>
 								changeRepeaterItem({
 									controlId,

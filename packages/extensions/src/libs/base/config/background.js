@@ -8,27 +8,27 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import type { ConfigModel } from '../types';
+import type { FeatureConfig } from '../types';
 
-const publisherBackground: ConfigModel = {
+const publisherBackground: FeatureConfig = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
-	label: __('Background', 'publisher-core'),
+	label: __('Image & Gradient', 'publisher-core'),
 };
 
-const publisherBackgroundColor: ConfigModel = {
+const publisherBackgroundColor: FeatureConfig = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Background Color', 'publisher-core'),
 };
 
-const publisherBackgroundClip: ConfigModel = {
+const publisherBackgroundClip: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Background Clip', 'publisher-core'),
+	label: __('Background Clipping', 'publisher-core'),
 };
 
 export const backgroundConfig = {

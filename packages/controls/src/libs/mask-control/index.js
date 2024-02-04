@@ -40,10 +40,12 @@ export default function MaskControl({
 	return (
 		<RepeaterControl
 			className={controlClassNames('mask', className)}
-			popoverTitle={popoverTitle || __('Block Mask', 'publisher-core')}
-			label={label || __('Mask', 'publisher-core')}
+			popoverTitle={
+				popoverTitle || __('Block Image Mask', 'publisher-core')
+			}
+			label={label || __('Image Mask', 'publisher-core')}
 			labelPopoverTitle={
-				labelPopoverTitle || __('Block Mask', 'publisher-core')
+				labelPopoverTitle || __('Block Image Mask', 'publisher-core')
 			}
 			labelDescription={
 				labelDescription || (

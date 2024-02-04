@@ -8,23 +8,23 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import type { ConfigModel } from '../types';
+import type { FeatureConfig } from '../types';
 
-const publisherCursor: ConfigModel = {
+const publisherCursor: FeatureConfig = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Cursor', 'publisher-core'),
 };
 
-const publisherUserSelect: ConfigModel = {
+const publisherUserSelect: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
 	label: __('User Select', 'publisher-core'),
 };
 
-const publisherPointerEvents: ConfigModel = {
+const publisherPointerEvents: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,

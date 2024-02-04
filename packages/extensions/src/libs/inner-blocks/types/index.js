@@ -10,10 +10,13 @@ export type InnerBlockModel = {
 		name: string,
 		lib: string,
 	},
+	selectors?: {
+		root: string,
+		[key: string]: string,
+	},
 	attributes: Object,
 };
 
 export type InnerBlocksProps = {
 	innerBlocks: Array<Object>,
-	currentBlock: 'master' | InnerBlockType,
 };

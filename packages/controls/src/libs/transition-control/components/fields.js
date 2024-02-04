@@ -23,7 +23,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
 
-		const { repeaterId, getControlId } = useContext(RepeaterContext);
+		const { repeaterId, getControlId, defaultRepeaterItemValue } =
+			useContext(RepeaterContext);
 
 		return (
 			<div
@@ -31,7 +32,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 				data-test="transition-control-popover"
 			>
 				<SelectControl
-					controlName="select"
+					repeaterItem={itemId}
+					id={getControlId(itemId, 'type')}
+					singularId={'type'}
 					label={__('Property', 'publisher-core')}
 					labelPopoverTitle={__(
 						'Transition Property',
@@ -39,7 +42,6 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					)}
 					labelDescription={<LabelDescription />}
 					columns="columns-2"
-					id={getControlId(itemId, 'type')}
 					options={getTypeOptions()}
 					onChange={(type) =>
 						changeRepeaterItem({
@@ -49,11 +51,13 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							value: { ...item, type },
 						})
 					}
-					defaultValue={item.type}
+					defaultValue={defaultRepeaterItemValue.type}
 				/>
 
 				<InputControl
-					controlName="input"
+					repeaterItem={itemId}
+					id={getControlId(itemId, 'duration')}
+					singularId={'duration'}
 					label={__('Duration', 'publisher-core')}
 					labelPopoverTitle={__(
 						'Transition Duration',
@@ -80,7 +84,6 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					range={true}
 					min={0}
 					max={5000}
-					id={getControlId(itemId, 'duration')}
 					onChange={(duration) =>
 						changeRepeaterItem({
 							controlId,
@@ -90,11 +93,13 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						})
 					}
 					data-test="transition-input-duration"
-					defaultValue={item.duration}
+					defaultValue={defaultRepeaterItemValue.duration}
 				/>
 
 				<SelectControl
-					controlName="select"
+					repeaterItem={itemId}
+					id={getControlId(itemId, 'timing')}
+					singularId={'timing'}
 					label={__('Timing', 'publisher-core')}
 					labelPopoverTitle={__(
 						'Transition Timing Function',
@@ -117,7 +122,6 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						</>
 					}
 					columns="columns-2"
-					id={getControlId(itemId, 'timing')}
 					options={getTimingOptions()}
 					onChange={(timing) =>
 						changeRepeaterItem({
@@ -127,11 +131,13 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							value: { ...item, timing },
 						})
 					}
-					defaultValue={item.timing}
+					defaultValue={defaultRepeaterItemValue.timing}
 				/>
 
 				<InputControl
-					controlName="input"
+					repeaterItem={itemId}
+					id={getControlId(itemId, 'delay')}
+					singularId={'delay'}
 					label={__('Delay', 'publisher-core')}
 					labelPopoverTitle={__('Transition Delay', 'publisher-core')}
 					labelDescription={
@@ -161,7 +167,6 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					range={true}
 					min={0}
 					max={5000}
-					id={getControlId(itemId, 'delay')}
 					onChange={(delay) =>
 						changeRepeaterItem({
 							controlId,
@@ -171,7 +176,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						})
 					}
 					data-test="transition-input-delay"
-					defaultValue={item.delay}
+					defaultValue={defaultRepeaterItemValue.delay}
 				/>
 			</div>
 		);

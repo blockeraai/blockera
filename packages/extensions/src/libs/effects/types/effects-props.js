@@ -1,13 +1,10 @@
 // @flow
-/**
- * External dependencies
- */
-import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
  */
-import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { BaseExtensionProps } from '../../types';
+import type { FeatureConfig } from '../../base';
 
 export type TTransformCssProps = {
 	transform?: string,
@@ -18,31 +15,43 @@ export type TTransformCssProps = {
 };
 
 export type TEffectsProps = {
+	...BaseExtensionProps,
 	values: {
-		opacity: string,
-		transform: Array<Object>,
-		transition: Array<Object>,
-		filter: Array<Object>,
-		blendMode: string,
-		backdropFilter: Array<Object>,
-		backfaceVisibility: string,
-		transformSelfOrigin: {
+		publisherOpacity: string,
+		publisherTransform: Array<Object>,
+		publisherTransition: Array<Object>,
+		publisherFilter: Array<Object>,
+		publisherBlendMode: string,
+		publisherBackdropFilter: Array<Object>,
+		publisherTransformSelfPerspective: string,
+		publisherTransformSelfOrigin: {
 			top: string,
 			left: string,
 		},
-		transformChildOrigin: {
+		publisherBackfaceVisibility: string,
+		publisherTransformChildPerspective: string,
+		publisherTransformChildOrigin: {
 			top: string,
 			left: string,
 		},
-		transformSelfPerspective: string,
-		transformChildPerspective: string,
-		divider: Array<Object>,
-		mask: Array<Object>,
+		publisherDivider: Array<Object>,
+		publisherMask: Array<Object>,
 	},
-	block: TBlockProps,
-	effectsConfig: Object,
-	children?: MixedElement,
-	handleOnChangeAttributes: THandleOnChangeAttributes,
+	extensionConfig: {
+		publisherOpacity: FeatureConfig,
+		publisherTransform: FeatureConfig,
+		publisherTransformSelfPerspective: FeatureConfig,
+		publisherTransformSelfOrigin: FeatureConfig,
+		publisherBackfaceVisibility: FeatureConfig,
+		publisherTransformChildPerspective: FeatureConfig,
+		publisherTransformChildOrigin: FeatureConfig,
+		publisherTransition: FeatureConfig,
+		publisherFilter: FeatureConfig,
+		publisherBackdropFilter: FeatureConfig,
+		publisherDivider: FeatureConfig,
+		publisherMask: FeatureConfig,
+		publisherBlendMode: FeatureConfig,
+	},
 	extensionProps: {
 		publisherOpacity: Object,
 		publisherTransform: Object,

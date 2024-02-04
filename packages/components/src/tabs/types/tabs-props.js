@@ -1,11 +1,11 @@
 // @flow
+import type { MixedElement } from 'react';
+
 export type TTabProps = {
 	name: string,
 	title: string,
-	icon: {
-		name: string,
-		library: string,
-	},
+	tooltip?: string,
+	icon: MixedElement,
 	className: string,
 };
 

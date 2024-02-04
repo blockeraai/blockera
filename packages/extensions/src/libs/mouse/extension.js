@@ -15,11 +15,12 @@ import {
 	ControlContextProvider,
 } from '@publisher/controls';
 import { componentClassNames } from '@publisher/classnames';
+import { FeatureWrapper } from '@publisher/components';
 
 /**
  * Internal dependencies
  */
-import { isActiveField } from '../../api/utils';
+import { isShowField } from '../../api/utils';
 import { generateExtensionId, hasSameProps } from '../utils';
 import {
 	cursorFieldOptions,
@@ -28,19 +29,39 @@ import {
 } from './utils';
 import type { TMouseProps } from './types/mouse-props';
 import { MouseExtensionIcon } from './index';
+import { ExtensionSettings } from '../settings';
 
 export const MouseExtension: ComponentType<TMouseProps> = memo(
 	({
 		block,
-		values: { cursor, userSelect, pointerEvents },
-		mouseConfig: {
-			publisherCursor,
-			publisherUserSelect,
-			publisherPointerEvents,
-		},
+		values,
+		mouseConfig,
+		attributes,
 		handleOnChangeAttributes,
 		extensionProps,
+		setSettings,
 	}: TMouseProps): MixedElement => {
+		const isShowCursor = isShowField(
+			mouseConfig.publisherCursor,
+			values?.cursor,
+			attributes.publisherCursor.default
+		);
+		const isShowUserSelect = isShowField(
+			mouseConfig.publisherUserSelect,
+			values?.userSelect,
+			attributes.publisherUserSelect.default
+		);
+		const isShowPointerEvents = isShowField(
+			mouseConfig.publisherPointerEvents,
+			values?.pointerEvents,
+			attributes.publisherPointerEvents.default
+		);
+
+		// If none of the fields are shown, then don't render extension
+		if (!isShowCursor && !isShowUserSelect && !isShowPointerEvents) {
+			return <></>;
+		}
+
 		return (
 			<PanelBodyControl
 				title={__('Mouse', 'publisher-core')}
@@ -48,11 +69,26 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 				icon={<MouseExtensionIcon />}
 				className={componentClassNames('extension', 'extension-mouse')}
 			>
-				{isActiveField(publisherCursor) && (
+				<ExtensionSettings
+					features={mouseConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'mouseConfig');
+					}}
+				/>
+
+				<FeatureWrapper
+					isActive={isShowCursor}
+					isActiveOnStates={
+						mouseConfig.publisherCursor.isActiveOnStates
+					}
+					isActiveOnBreakpoints={
+						mouseConfig.publisherCursor.isActiveOnBreakpoints
+					}
+				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'cursor'),
-							value: cursor,
+							value: values.cursor,
 							attribute: 'publisherCursor',
 							blockName: block.blockName,
 						}}
@@ -79,23 +115,32 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 							options={cursorFieldOptions()}
 							type="custom"
 							customMenuPosition="top"
-							defaultValue="default"
-							onChange={(newValue) =>
+							defaultValue={attributes.publisherCursor.default}
+							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
 									'publisherCursor',
-									newValue
+									newValue,
+									{ ref }
 								)
 							}
 							{...extensionProps.publisherCursor}
 						/>
 					</ControlContextProvider>
-				)}
+				</FeatureWrapper>
 
-				{isActiveField(publisherUserSelect) && (
+				<FeatureWrapper
+					isActive={isShowUserSelect}
+					isActiveOnStates={
+						mouseConfig.publisherUserSelect.isActiveOnStates
+					}
+					isActiveOnBreakpoints={
+						mouseConfig.publisherUserSelect.isActiveOnBreakpoints
+					}
+				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'user-select'),
-							value: userSelect,
+							value: values.userSelect,
 							attribute: 'publisherUserSelect',
 							blockName: block.blockName,
 						}}
@@ -127,23 +172,34 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 							columns="columns-2"
 							options={userSelectOptions()}
 							type="native"
-							defaultValue="auto"
-							onChange={(newValue) =>
+							defaultValue={
+								attributes.publisherUserSelect.default
+							}
+							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
 									'publisherUserSelect',
-									newValue
+									newValue,
+									{ ref }
 								)
 							}
 							{...extensionProps.publisherUserSelect}
 						/>
 					</ControlContextProvider>
-				)}
+				</FeatureWrapper>
 
-				{isActiveField(publisherPointerEvents) && (
+				<FeatureWrapper
+					isActive={isShowPointerEvents}
+					isActiveOnStates={
+						mouseConfig.publisherPointerEvents.isActiveOnStates
+					}
+					isActiveOnBreakpoints={
+						mouseConfig.publisherPointerEvents.isActiveOnBreakpoints
+					}
+				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'pointer-events'),
-							value: pointerEvents,
+							value: values.pointerEvents,
 							attribute: 'publisherPointerEvents',
 							blockName: block.blockName,
 						}}
@@ -175,17 +231,20 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 							columns="columns-2"
 							options={pointerEventsOptions()}
 							type="native"
-							defaultValue="auto"
-							onChange={(newValue) =>
+							defaultValue={
+								attributes.publisherPointerEvents.default
+							}
+							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
 									'publisherPointerEvents',
-									newValue
+									newValue,
+									{ ref }
 								)
 							}
 							{...extensionProps.publisherPointerEvents}
 						/>
 					</ControlContextProvider>
-				)}
+				</FeatureWrapper>
 			</PanelBodyControl>
 		);
 	},

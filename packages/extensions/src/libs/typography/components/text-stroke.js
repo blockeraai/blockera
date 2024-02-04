@@ -23,13 +23,14 @@ import type { THandleOnChangeAttributes } from '../../types';
 export const TextStroke = ({
 	value,
 	handleOnChangeAttributes,
+	defaultValue,
 	...props
 }: {
 	value: {
 		width: string,
-		style: string,
 		color: string,
 	},
+	defaultValue: Object,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 }): MixedElement => {
 	const {
@@ -38,14 +39,18 @@ export const TextStroke = ({
 		blockName,
 		resetToDefault,
 	} = useControlContext({
-		onChange: (newValue) => handleOnChangeAttributes(newValue),
-		defaultValue: {
-			type: 'object',
-			default: {
-				color: '',
-				width: '',
-			},
+		onChange: (newValue, ref) => {
+			if ('reset' === ref?.current?.action) {
+				handleOnChangeAttributes('publisherTextStroke', defaultValue, {
+					ref,
+				});
+			} else {
+				handleOnChangeAttributes('publisherTextStroke', newValue, {
+					ref,
+				});
+			}
 		},
+		defaultValue,
 	});
 
 	const labelProps = {
@@ -55,11 +60,12 @@ export const TextStroke = ({
 		resetToDefault,
 		mode: 'advanced',
 		path: attribute,
+		defaultValue,
 	};
 
 	return (
 		<BaseControl
-			label={__('Stroke', 'publisher-core')}
+			label={__('Text Stroke', 'publisher-core')}
 			labelPopoverTitle={__('Text Stroke', 'publisher-core')}
 			labelDescription={
 				<>
@@ -82,6 +88,7 @@ export const TextStroke = ({
 		>
 			<ColorControl
 				id={'color'}
+				singularId={'color'}
 				label={__('Color', 'publisher-core')}
 				labelPopoverTitle={__('Text Stroke Color', 'publisher-core')}
 				labelDescription={
@@ -95,18 +102,23 @@ export const TextStroke = ({
 					</>
 				}
 				columns="columns-2"
-				defaultValue=""
-				onChange={(newValue) => {
-					if (newValue === '') {
-						handleOnChangeAttributes('publisherTextStroke', {
-							color: '',
-							width: '',
-						});
+				defaultValue={defaultValue.color}
+				onChange={(newValue, ref) => {
+					if ('reset' === ref?.current?.action || newValue === '') {
+						handleOnChangeAttributes(
+							'publisherTextStroke',
+							defaultValue,
+							{ ref }
+						);
 					} else {
-						handleOnChangeAttributes('publisherTextStroke', {
-							...value,
-							color: newValue,
-						});
+						handleOnChangeAttributes(
+							'publisherTextStroke',
+							{
+								...value,
+								color: newValue,
+							},
+							{ ref }
+						);
 					}
 				}}
 				{...props}
@@ -115,6 +127,7 @@ export const TextStroke = ({
 			{value.color && (
 				<InputControl
 					id={'width'}
+					singularId={'width'}
 					label={__('Width', 'publisher-core')}
 					labelPopoverTitle={__(
 						'Text Stroke Width',
@@ -132,13 +145,28 @@ export const TextStroke = ({
 					}
 					columns="columns-2"
 					unitType="essential"
-					defaultValue="1px"
-					onChange={(newValue) =>
-						handleOnChangeAttributes('publisherTextStroke', {
-							...value,
-							width: newValue,
-						})
-					}
+					defaultValue={defaultValue.width}
+					onChange={(newValue, ref) => {
+						if ('reset' === ref?.current?.action) {
+							handleOnChangeAttributes(
+								'publisherTextStroke',
+								{
+									...value,
+									width: defaultValue.width,
+								},
+								{ ref }
+							);
+						} else {
+							handleOnChangeAttributes(
+								'publisherTextStroke',
+								{
+									...value,
+									width: newValue,
+								},
+								{ ref }
+							);
+						}
+					}}
 				/>
 			)}
 		</BaseControl>

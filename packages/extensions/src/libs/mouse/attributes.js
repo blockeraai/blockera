@@ -1,14 +1,14 @@
 export const attributes = {
 	publisherCursor: {
 		type: 'string',
-		default: '',
+		default: 'default',
 	},
 	publisherUserSelect: {
 		type: 'string',
-		default: '',
+		default: 'auto',
 	},
 	publisherPointerEvents: {
 		type: 'string',
-		default: '',
+		default: 'auto',
 	},
 };

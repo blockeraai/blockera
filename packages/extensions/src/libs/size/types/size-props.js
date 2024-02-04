@@ -1,13 +1,10 @@
 // @flow
-/**
- * External dependencies
- */
-import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
  */
-import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { BaseExtensionProps } from '../../types';
+import type { FeatureConfig } from '../../base';
 
 export type TSizeCssProps = {
 	width?: string,
@@ -23,20 +20,30 @@ export type TSizeCssProps = {
 };
 
 export type TSizeProps = {
-	block: TBlockProps,
-	sizeConfig: Object,
-	handleOnChangeAttributes: THandleOnChangeAttributes,
+	...BaseExtensionProps,
+	extensionConfig: {
+		publisherWidth: FeatureConfig,
+		publisherMinWidth: FeatureConfig,
+		publisherMaxWidth: FeatureConfig,
+		publisherHeight: FeatureConfig,
+		publisherMinHeight: FeatureConfig,
+		publisherMaxHeight: FeatureConfig,
+		publisherOverflow: FeatureConfig,
+		publisherRatio: FeatureConfig,
+		publisherFit: FeatureConfig,
+		publisherFitPosition: FeatureConfig,
+	},
 	values: {
-		width: string,
-		height: string,
-		minWidth: string,
-		minHeight: string,
-		maxWidth: string,
-		maxHeight: string,
-		overflow: string,
-		ratio: { value: string, width: string, height: string },
-		fit: string,
-		fitPosition: { top: string, left: string },
+		publisherWidth: string,
+		publisherHeight: string,
+		publisherMinWidth: string,
+		publisherMinHeight: string,
+		publisherMaxWidth: string,
+		publisherMaxHeight: string,
+		publisherOverflow: string,
+		publisherRatio: { value: string, width: string, height: string },
+		publisherFit: string,
+		publisherFitPosition: { top: string, left: string },
 	},
 	extensionProps: {
 		publisherWidth: Object,
@@ -50,5 +57,4 @@ export type TSizeProps = {
 		publisherFit: Object,
 		publisherFitPosition: Object,
 	},
-	children?: MixedElement,
 };

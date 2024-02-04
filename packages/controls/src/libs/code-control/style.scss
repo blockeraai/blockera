@@ -1,0 +1,21 @@
+.publisher-control.publisher-control-code {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+
+	.publisher-control-code-control__description {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		font-size: 13px;
+		line-height: 1.4;
+		color: #929292;
+
+		p {
+			margin: 0;
+			line-height: 1.4;
+			font-size: 13px;
+			color: #929292;
+		}
+	}
+}

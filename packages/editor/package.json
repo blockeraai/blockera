@@ -1,0 +1,23 @@
+{
+	"name": "@publisher/editor",
+	"version": "1.0.0",
+	"description": "A editor package to includes high level components inside WordPress Block Editor.",
+	"author": "The Publisher Contributors",
+	"license": "ISC",
+	"keywords": [
+		"publisher"
+	],
+	"homepage": "https://gitlab.com/better-projects/publisher-fse/publisher-core/packages/utils/-/blob/main/README.md",
+	"repository": {
+		"type": "git",
+		"url": "https://gitlab.com/better-projects/publisher-fse/publisher-core",
+		"directory": "packages/editor"
+	},
+	"bugs": {
+		"url": "https://gitlab.com/better-projects/publisher-fse/publisher-core/-/issues"
+	},
+	"engines": {
+		"node": ">=12"
+	},
+	"main": "src/index.js"
+}

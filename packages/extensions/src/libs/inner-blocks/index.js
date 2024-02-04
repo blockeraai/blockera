@@ -2,5 +2,9 @@
 
 export * from './icons';
 export * from './extension';
-export * from './attributes';
-export { default as definitionTypes } from './definitions';
+export { attributes } from './attributes';
+export {
+	definitionTypes,
+	__experimentalRegistrationInnerBlockExtensionCustomConfigDefinition,
+} from './definitions';
+export * from './helpers';

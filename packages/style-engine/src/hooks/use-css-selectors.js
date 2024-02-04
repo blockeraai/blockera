@@ -2,20 +2,25 @@
 /**
  * Publisher dependencies
  */
-import { isFunction, isString, isUndefined } from '@publisher/utils';
 import { prepare } from '@publisher/data-extractor';
+import { useBlocksStore } from '@publisher/extensions/src/hooks';
+import { isFunction, isString, isUndefined } from '@publisher/utils';
+import type {
+	InnerBlockModel,
+	InnerBlockType,
+} from '@publisher/extensions/src/libs/inner-blocks/types';
+import { default as blockStates } from '@publisher/extensions/src/libs/block-states/states';
 
 /**
  * Internal dependencies
  */
 import type { TUseCssSelectorProps } from '../types';
-import { useBlocksStore } from '@publisher/extensions/src/hooks';
-import { default as blockStates } from '@publisher/extensions/src/libs/block-states/states';
 
 export function useCssSelectors({
 	query,
 	blockName,
 	supportId,
+	innerBlocks,
 	currentState,
 	fallbackSupportId,
 }: TUseCssSelectorProps): Object {
@@ -26,28 +31,85 @@ export function useCssSelectors({
 		const selectors: Object = {};
 
 		states.forEach((state: string): Object => {
-			if ('normal' === state) {
-				selectors[state] = rootSelector;
-				return;
-			}
+			selectors[state] = {
+				master: '',
+			};
 
-			const cssCustomStates = [
-				'parent-class',
-				'custom-class',
-				'parent-hover',
-			];
+			const registerSelectors = (
+				blockType: 'master' | InnerBlockType,
+				childSelectors: string = ''
+			): void => {
+				let concatenatedSelector = rootSelector;
 
-			// FIXME: please implements css custom states support!
-			// this are needs to use infrastructure api to handle.
-			if (cssCustomStates.includes(state)) {
-				return;
-			}
+				if (childSelectors) {
+					concatenatedSelector = `${rootSelector} ${childSelectors}`;
+				}
 
-			if ('normal' === currentState || state !== currentState) {
-				selectors[state] = `${rootSelector}:${state}`;
-			} else {
-				selectors[state] = `${rootSelector},${rootSelector}:${state}`;
-			}
+				if ('normal' === state) {
+					selectors[state][blockType] = concatenatedSelector;
+					return;
+				}
+
+				const cssCustomStates = [
+					'parent-class',
+					'custom-class',
+					'parent-hover',
+				];
+
+				// FIXME: please implements css custom states support!
+				// this are needs to use infrastructure api to handle.
+				if (cssCustomStates.includes(state)) {
+					return;
+				}
+
+				if ('normal' === currentState || state !== currentState) {
+					selectors[state][
+						blockType
+					] = `${concatenatedSelector}:${state}`;
+				} else {
+					selectors[state][
+						blockType
+					] = `${concatenatedSelector},${concatenatedSelector}:${state}`;
+				}
+			};
+
+			innerBlocks?.forEach((innerBlock: InnerBlockModel): void => {
+				if (
+					!innerBlock?.selectors ||
+					!Object.values(innerBlock?.selectors).length
+				) {
+					return;
+				}
+
+				const recursiveRegistration = (_selectors: Object): void => {
+					Object.keys(_selectors).forEach(
+						(selectorKey: string): void => {
+							if ('undefined' === typeof _selectors) {
+								return;
+							}
+
+							type SelectorType = string | Object | void;
+
+							const rootOrFeatureSelector: SelectorType =
+								_selectors[selectorKey];
+
+							if ('object' === rootOrFeatureSelector) {
+								recursiveRegistration(rootOrFeatureSelector);
+								return;
+							}
+
+							registerSelectors(
+								innerBlock.type,
+								rootOrFeatureSelector
+							);
+						}
+					);
+				};
+
+				recursiveRegistration(innerBlock?.selectors);
+			});
+
+			registerSelectors('master');
 		});
 
 		return selectors;

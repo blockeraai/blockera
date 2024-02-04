@@ -1,13 +1,10 @@
 // @flow
-/**
- * External dependencies
- */
-import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
  */
-import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { BaseExtensionProps } from '../../types';
+import type { FeatureConfig } from '../../base';
 
 export type TCssProps = {
 	flex?: string,
@@ -16,20 +13,22 @@ export type TCssProps = {
 };
 
 export type TFlexChildProps = {
+	...BaseExtensionProps,
 	values: {
-		flexChildGrow?: string,
-		flexChildAlign?: string,
-		flexChildBasis?: string,
-		flexChildOrder?: string,
-		flexChildSizing?: string,
-		flexChildShrink?: string,
-		flexChildOrderCustom?: string,
-		flexDirection: string,
+		publisherFlexChildSizing?: string,
+		publisherFlexChildGrow?: string,
+		publisherFlexChildShrink?: string,
+		publisherFlexChildBasis?: string,
+		publisherFlexChildAlign?: string,
+		publisherFlexChildOrder?: string,
+		publisherFlexChildOrderCustom?: string,
+		publisherFlexDirection: string,
 	},
-	block: TBlockProps,
-	flexChildConfig: Object,
-	children?: MixedElement,
-	handleOnChangeAttributes: THandleOnChangeAttributes,
+	extensionConfig: {
+		publisherFlexChildSizing: FeatureConfig,
+		publisherFlexChildAlign: FeatureConfig,
+		publisherFlexChildOrder: FeatureConfig,
+	},
 	extensionProps: {
 		publisherFlexChildSizing: Object,
 		publisherFlexChildGrow: Object,

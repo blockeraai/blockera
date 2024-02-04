@@ -8,62 +8,64 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import type { ConfigModel } from '../types';
+import type { FeatureConfig } from '../types';
 
-const publisherOpacity: ConfigModel = {
+const publisherOpacity: FeatureConfig = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	label: __('Opacity', 'publisher-core'),
 };
 
-const publisherTransform: ConfigModel = {
+const publisherTransform: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Transform', 'publisher-core'),
+	label: __('2D & 3D Transforms', 'publisher-core'),
 };
 
-const publisherTransition: ConfigModel = {
+const publisherTransition: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Transition', 'publisher-core'),
+	label: __('Transitions', 'publisher-core'),
 };
 
-const publisherFilter: ConfigModel = {
+const publisherFilter: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Filter', 'publisher-core'),
+	label: __('Filters', 'publisher-core'),
 };
 
-const publisherBackdropFilter: ConfigModel = {
+const publisherBackdropFilter: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Backdrop Filter', 'publisher-core'),
+	label: __('Backdrop Filters', 'publisher-core'),
 };
 
-const publisherBlendMode: ConfigModel = {
+const publisherDivider: FeatureConfig = {
 	show: true,
+	force: false,
+	status: true,
+	label: __('Shape Dividers', 'publisher-core'),
+	isActiveOnStates: ['normal'],
+};
+
+const publisherMask: FeatureConfig = {
+	show: true,
+	force: false,
+	status: true,
+	label: __('Image Mask', 'publisher-core'),
+	isActiveOnStates: ['normal'],
+};
+
+const publisherBlendMode: FeatureConfig = {
+	show: false,
 	force: false,
 	status: true,
 	label: __('Blending Mode', 'publisher-core'),
-};
-
-const publisherDivider: ConfigModel = {
-	show: true,
-	force: false,
-	status: true,
-	label: __('Divider', 'publisher-core'),
-};
-
-const publisherMask: ConfigModel = {
-	show: true,
-	force: false,
-	status: true,
-	label: __('Mask', 'publisher-core'),
 };
 
 export const effectsConfig = {
@@ -72,7 +74,7 @@ export const effectsConfig = {
 	publisherTransition,
 	publisherFilter,
 	publisherBackdropFilter,
-	publisherBlendMode,
 	publisherDivider,
 	publisherMask,
+	publisherBlendMode,
 };

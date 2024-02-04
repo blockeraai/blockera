@@ -17,7 +17,7 @@ export const attributes = {
 	},
 	publisherBackfaceVisibility: {
 		type: 'string',
-		default: '',
+		default: 'visible',
 	},
 	publisherTransformChildPerspective: {
 		type: 'string',
@@ -43,12 +43,12 @@ export const attributes = {
 		type: 'array',
 		default: [],
 	},
-	publisherBlendMode: {
-		type: 'string',
-		default: 'normal',
-	},
 	publisherMask: {
 		type: 'array',
 		default: [],
+	},
+	publisherBlendMode: {
+		type: 'string',
+		default: 'normal',
 	},
 };

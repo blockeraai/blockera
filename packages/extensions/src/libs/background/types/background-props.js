@@ -1,33 +1,23 @@
 // @flow
-/**
- * External dependencies
- */
-import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
  */
-import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
-import type { ConfigModel } from '../../base/types';
-
-export type IsEnableBackground = ({
-	backgroundConfig: { publisherBackground: ConfigModel },
-}) => boolean;
+import type { BaseExtensionProps } from '../../types';
+import type { FeatureConfig } from '../../base';
 
 export type TBackgroundProps = {
-	block: TBlockProps,
-	backgroundConfig: Object,
-	children?: MixedElement,
+	...BaseExtensionProps,
+	extensionConfig: {
+		publisherBackground: FeatureConfig,
+		publisherBackgroundColor: FeatureConfig,
+		publisherBackgroundClip: FeatureConfig,
+	},
 	values: {
-		background: Object,
-		backgroundClip: string,
-		backgroundColor: string,
+		publisherBackground: Object,
+		publisherBackgroundColor: string,
+		publisherBackgroundClip: string,
 	},
-	defaultValue: {
-		backgroundSize?: string,
-		backgroundImage?: string,
-	},
-	handleOnChangeAttributes: THandleOnChangeAttributes,
 	extensionProps: {
 		publisherBackground: Object,
 		publisherBackgroundColor: Object,

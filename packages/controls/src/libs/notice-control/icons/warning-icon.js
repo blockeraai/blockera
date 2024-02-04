@@ -5,8 +5,13 @@ export default function WarningIcon() {
 			height="18"
 			viewBox="0 0 18 18"
 			xmlns="http://www.w3.org/2000/svg"
-			data-test="notice-control-icon-warning"
 		>
+			<path
+				fillRule="evenodd"
+				clipRule="evenodd"
+				d="M9 14C11.7614 14 14 11.7614 14 9C14 6.23858 11.7614 4 9 4C6.23858 4 4 6.23858 4 9C4 11.7614 6.23858 14 9 14Z"
+				fill="white"
+			/>
 			<path
 				fillRule="evenodd"
 				clipRule="evenodd"

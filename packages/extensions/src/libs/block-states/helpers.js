@@ -2,7 +2,14 @@
 /**
  * External dependencies
  */
+import memoize from 'fast-memoize';
 import type { MixedElement } from 'react';
+import { dispatch } from '@wordpress/data';
+
+/**
+ * Publisher dependencies
+ */
+import { isEquals } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -72,5 +79,95 @@ export function BreakpointIcon({
 
 		default:
 			return <></>;
+	}
+}
+
+export function onChangeBlockStates(
+	newValue: Array<Object>,
+	params: Object
+): Object {
+	const { changeExtensionCurrentBlockState: switchBlockState } =
+		dispatch('publisher-core/extensions') || {};
+	const { states, rootStates, onChange, currentStateType } = params;
+	const prepareSelectedState = memoize(() =>
+		newValue.find((item) => item.isSelected)
+	);
+	const selectedState = prepareSelectedState();
+
+	if (!selectedState) {
+		return;
+	}
+
+	const isEqualsWithCurrentState = (type: TStates) =>
+		type === currentStateType;
+
+	if (isEqualsWithCurrentState(selectedState.type) && states.length) {
+		return;
+	}
+
+	switchBlockState(selectedState.type);
+
+	if (newValue.length !== states.length) {
+		const addOrModifyRootItems = {
+			publisherCurrentState: selectedState.type,
+		};
+
+		const blockStates = rootStates;
+
+		onChange(
+			'publisherBlockStates',
+			newValue.map((state, index) => {
+				if (blockStates[index] && blockStates[index].isSelected) {
+					return {
+						...blockStates[index],
+						isOpen: false,
+						isSelected: false,
+					};
+				}
+				if (blockStates[index]) {
+					return {
+						...blockStates[index],
+						isOpen: false,
+					};
+				}
+
+				return state;
+			}),
+			{
+				addOrModifyRootItems,
+			}
+		);
+
+		return;
+	}
+
+	if (!isEquals(selectedState.type, currentStateType)) {
+		const publisherBlockStates = rootStates.map(
+			(state: Object, stateId: number): Object => {
+				if (stateId === newValue.indexOf(selectedState)) {
+					return {
+						...state,
+						isOpen: false,
+						isSelected: true,
+						type: selectedState.type,
+						label: selectedState.label,
+					};
+				}
+
+				return {
+					...state,
+					isOpen: false,
+					isSelected: false,
+				};
+			}
+		);
+
+		onChange('publisherCurrentState', selectedState.type, {
+			addOrModifyRootItems: {
+				publisherBlockStates,
+			},
+		});
+	} else {
+		onChange('publisherCurrentState', selectedState.type || 'normal');
 	}
 }

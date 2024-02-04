@@ -24,25 +24,35 @@ import { SelfPerspective } from './self-perspective';
 import { ChildPerspective } from './child-perspective';
 
 export const TransformSettings = ({
-	setIsTransformSettingsVisible,
-	transformSelfPerspective,
 	block,
 	handleOnChangeAttributes,
-	backfaceVisibility,
-	transformChildPerspective,
-	transformChildOrigin,
-	transformSelfOrigin,
-	transform,
+	values,
+	attributes,
+	setIsTransformSettingsVisible,
 }: {
-	setIsTransformSettingsVisible: (arg: boolean) => any,
-	transformSelfPerspective: string | void,
 	block: TBlockProps,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
-	backfaceVisibility: string | void,
-	transformChildPerspective: string | void,
-	transformChildOrigin: Object,
-	transformSelfOrigin: Object,
-	transform: Array<Object>,
+	values: {
+		transform: Array<Object>,
+		transformSelfPerspective: string,
+		transformSelfOrigin: {
+			top: string,
+			left: string,
+		},
+		backfaceVisibility: string,
+		transformChildPerspective: string,
+		transformChildOrigin: {
+			top: string,
+			left: string,
+		},
+	},
+	attributes: {
+		[key: string]: {
+			type: string,
+			default: any,
+		},
+	},
+	setIsTransformSettingsVisible: (arg: boolean) => any,
 }): MixedElement => {
 	return (
 		<Popover
@@ -58,7 +68,7 @@ export const TransformSettings = ({
 			<ControlContextProvider
 				value={{
 					name: generateExtensionId(block, 'self-perspective'),
-					value: transformSelfPerspective,
+					value: values.transformSelfPerspective,
 					attribute: 'publisherTransformSelfPerspective',
 					blockName: block.blockName,
 				}}
@@ -66,15 +76,21 @@ export const TransformSettings = ({
 				<SelfPerspective
 					block={block}
 					handleOnChangeAttributes={handleOnChangeAttributes}
-					transform={transform}
-					transformSelfOrigin={transformSelfOrigin}
+					transform={values.transform}
+					transformSelfOrigin={values.transformSelfOrigin}
+					transformSelfPerspectiveDefaultValue={
+						attributes.transformSelfPerspective.default
+					}
+					transformSelfOriginDefaultValue={
+						attributes.transformSelfOrigin.default
+					}
 				/>
 			</ControlContextProvider>
 
 			<ControlContextProvider
 				value={{
 					name: generateExtensionId(block, 'backface-visibility'),
-					value: backfaceVisibility,
+					value: values.backfaceVisibility,
 					attribute: 'publisherBackfaceVisibility',
 					blockName: block.blockName,
 				}}
@@ -98,7 +114,7 @@ export const TransformSettings = ({
 							</p>
 						</>
 					}
-					columns="columns-2"
+					columns="1fr 130px"
 					options={[
 						{
 							label: __('Visible', 'publisher-core'),
@@ -109,11 +125,12 @@ export const TransformSettings = ({
 							value: 'hidden',
 						},
 					]}
-					defaultValue="visible"
-					onChange={(newValue) =>
+					defaultValue={attributes.backfaceVisibility.default}
+					onChange={(newValue, ref) =>
 						handleOnChangeAttributes(
 							'publisherBackfaceVisibility',
-							newValue
+							newValue,
+							{ ref }
 						)
 					}
 				/>
@@ -122,17 +139,21 @@ export const TransformSettings = ({
 			<ControlContextProvider
 				value={{
 					name: generateExtensionId(block, 'child-perspective'),
-					value: transformChildPerspective
-						? transformChildPerspective
-						: '0px',
+					value: values.transformChildPerspective,
 					attribute: 'publisherTransformChildPerspective',
 					blockName: block.blockName,
 				}}
 			>
 				<ChildPerspective
 					block={block}
-					transformChildOrigin={transformChildOrigin}
 					handleOnChangeAttributes={handleOnChangeAttributes}
+					transformChildPerspectiveDefaultValue={
+						attributes.transformChildPerspective.default
+					}
+					transformChildOrigin={values.transformChildOrigin}
+					transformChildOriginDefaultValue={
+						attributes.transformChildOrigin.default
+					}
 				/>
 			</ControlContextProvider>
 		</Popover>

@@ -25,7 +25,15 @@ export type RepeaterControlProps = {
 	/**
 	 * It specifies the design of repeater control.
 	 */
-	design?: 'minimal',
+	design?: 'minimal' | 'large',
+	/**
+	 * Icon that used in "large" design
+	 */
+	icon?: MixedElement,
+	/**
+	 * Description that used in "large" design
+	 */
+	description?: string | MixedElement,
 	/**
 	 * Specifies that repeater item should use popover or accordion
 	 *

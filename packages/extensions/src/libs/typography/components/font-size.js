@@ -37,7 +37,6 @@ export const FontSize = ({
 			}}
 		>
 			<InputControl
-				controlName="input"
 				label={__('Font Size', 'publisher-core')}
 				labelDescription={
 					<>
@@ -57,9 +56,7 @@ export const FontSize = ({
 				}
 				columns="columns-2"
 				unitType="essential"
-				range={true}
 				min={0}
-				max={200}
 				defaultValue={defaultValue}
 				onChange={(newValue, ref) =>
 					onChange('publisherFontSize', newValue, { ref })

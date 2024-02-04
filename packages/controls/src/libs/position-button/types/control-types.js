@@ -6,7 +6,7 @@ import type { ControlGeneralTypes, ControlSize } from '../../../types';
 
 export type TPositionButtonProps = {
 	...ControlGeneralTypes,
-	size: ControlSize,
+	size?: ControlSize,
 	defaultValue?: { top: string, left: string },
 	/**
 	 * Label for popover

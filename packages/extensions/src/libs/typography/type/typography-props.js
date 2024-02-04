@@ -1,8 +1,4 @@
 // @flow
-/**
- * External dependencies
- */
-import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
@@ -12,22 +8,49 @@ import type { BorderControlBorderStyle } from '@publisher/controls/src/libs/bord
 /**
  * Internal dependencies
  */
-import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { BaseExtensionProps } from '../../types';
+import type { FeatureConfig } from '../../base';
 
 export type TTypographyProps = {
+	...BaseExtensionProps,
+	extensionConfig: {
+		publisherFontSize: FeatureConfig,
+		publisherLineHeight: FeatureConfig,
+		publisherFontColor: FeatureConfig,
+		publisherTextShadow: FeatureConfig,
+		publisherTextAlign: FeatureConfig,
+		publisherTextDecoration: FeatureConfig,
+		publisherFontStyle: FeatureConfig,
+		publisherTextTransform: FeatureConfig,
+		publisherDirection: FeatureConfig,
+		publisherLetterSpacing: FeatureConfig,
+		publisherWordSpacing: FeatureConfig,
+		publisherTextIndent: FeatureConfig,
+		publisherTextOrientation: FeatureConfig,
+		publisherTextColumns: FeatureConfig,
+		publisherTextStroke: FeatureConfig,
+		publisherWordBreak: FeatureConfig,
+	},
 	values: {
-		display: string,
-		fontSize: string,
-		textAlign: string,
-		fontStyle: string,
-		direction: string,
-		fontColor: string,
-		wordBreak: string,
-		textIndent: string,
-		textShadow: string,
-		lineHeight: string,
-		wordSpacing: string,
-		textColumns: {
+		publisherFontSize: string,
+		publisherLineHeight: string,
+		publisherFontColor: string,
+		publisherTextShadow: [],
+		publisherTextAlign: string,
+		publisherTextDecoration: string,
+		publisherFontStyle: string,
+		publisherTextTransform: string,
+		publisherDirection: string,
+		publisherLetterSpacing: string,
+		publisherWordSpacing: string,
+		publisherTextIndent: string,
+		publisherTextOrientation: string,
+		publisherTextStroke: {
+			width: string,
+			style: BorderControlBorderStyle,
+			color: string,
+		},
+		publisherTextColumns: {
 			columns: string,
 			gap: string,
 			divider: {
@@ -36,22 +59,10 @@ export type TTypographyProps = {
 				color: string,
 			},
 		},
-		textTransform: string,
-		letterSpacing: string,
-		textDecoration: string,
-		textOrientation: string,
-		textStroke: {
-			width: string,
-			style: BorderControlBorderStyle,
-			color: string,
-		},
+		publisherWordBreak: string,
 	},
 	display?: string,
 	backgroundClip?: string,
-	block: TBlockProps,
-	typographyConfig: Object,
-	children?: MixedElement,
-	handleOnChangeAttributes: THandleOnChangeAttributes,
 	extensionProps: {
 		publisherFontColor: Object,
 		publisherFontSize: Object,

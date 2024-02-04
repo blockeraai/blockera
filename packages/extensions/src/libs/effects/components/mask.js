@@ -24,11 +24,13 @@ export const Mask = ({
 	mask,
 	handleOnChangeAttributes,
 	block,
+	defaultValue,
 	...props
 }: {
 	mask: Array<Object> | void,
 	block: TBlockProps,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
+	defaultValue: Array<Object>,
 }): MixedElement => {
 	return (
 		<ControlContextProvider
@@ -42,11 +44,13 @@ export const Mask = ({
 		>
 			<BaseControl controlName="Mask" columns="columns-1">
 				<MaskControl
-					label={__('Mask', 'publisher-core')}
-					onChange={(newValue) =>
-						handleOnChangeAttributes('publisherMask', newValue)
+					onChange={(newValue, ref) =>
+						handleOnChangeAttributes('publisherMask', newValue, {
+							ref,
+						})
 					}
 					addNewButtonLabel={__('Add New Mask', 'publisher-core')}
+					defaultValue={defaultValue}
 					{...props}
 				/>
 			</BaseControl>

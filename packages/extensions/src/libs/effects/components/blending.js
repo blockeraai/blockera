@@ -21,11 +21,13 @@ export const Blending = ({
 	blendMode,
 	block,
 	handleOnChangeAttributes,
+	defaultValue,
 	...props
 }: {
 	blendMode: string | void,
 	block: TBlockProps,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
+	defaultValue: string,
 }): MixedElement => {
 	return (
 		<ControlContextProvider
@@ -177,12 +179,14 @@ export const Blending = ({
 				}
 				columns="columns-2"
 				options={blendModeFieldOptions()}
-				onChange={(newValue) =>
-					handleOnChangeAttributes('publisherBlendMode', newValue)
+				onChange={(newValue, ref) =>
+					handleOnChangeAttributes('publisherBlendMode', newValue, {
+						ref,
+					})
 				}
 				type="custom"
 				customMenuPosition="top"
-				defaultValue="normal"
+				defaultValue={defaultValue}
 				{...props}
 			/>
 		</ControlContextProvider>
