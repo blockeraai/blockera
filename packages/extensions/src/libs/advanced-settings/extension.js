@@ -16,24 +16,38 @@ import {
 	ControlContextProvider,
 } from '@publisher/controls';
 import { componentClassNames } from '@publisher/classnames';
+import { FeatureWrapper } from '@publisher/components';
 
 /**
  * Internal dependencies
  */
-import { isActiveField } from '../../api/utils';
+import { isShowField } from '../../api/utils';
 import { hasSameProps, generateExtensionId } from '../utils';
 import type { TAdvancedSettingsProps } from './types/advanced-props';
 import { AdvancedSettingsExtensionIcon } from './index';
+import { ExtensionSettings } from '../settings';
 
 export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 	memo(
 		({
 			block,
-			advancedConfig,
-			values: { attributes },
+			extensionConfig,
+			values,
+			attributes,
 			handleOnChangeAttributes,
 			extensionProps,
+			setSettings,
 		}: TAdvancedSettingsProps): MixedElement => {
+			const isShowAttributes = isShowField(
+				extensionConfig.publisherAttributes,
+				values?.publisherAttributes,
+				attributes.publisherAttributes.default
+			);
+
+			if (!isShowAttributes) {
+				return <></>;
+			}
+
 			return (
 				<PanelBodyControl
 					title={__('Advanced', 'publisher-core')}
@@ -44,11 +58,27 @@ export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 						'extension-advanced-settings'
 					)}
 				>
-					{isActiveField(advancedConfig.publisherAttributes) && (
+					<ExtensionSettings
+						features={extensionConfig}
+						update={(newSettings) => {
+							setSettings(newSettings, 'advancedSettingsConfig');
+						}}
+					/>
+
+					<FeatureWrapper
+						isActive={isShowAttributes}
+						isActiveOnStates={
+							extensionConfig.publisherAttributes.isActiveOnStates
+						}
+						isActiveOnBreakpoints={
+							extensionConfig.publisherAttributes
+								.isActiveOnBreakpoints
+						}
+					>
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(block, 'attributes'),
-								value: attributes,
+								value: values.publisherAttributes,
 								attribute: 'publisherAttributes',
 								blockName: block.blockName,
 							}}
@@ -60,7 +90,7 @@ export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 							>
 								<AttributesControl
 									label={__(
-										'HTML Attributes',
+										'Custom HTML Attributes',
 										'publisher-core'
 									)}
 									onChange={(newValue, ref) =>
@@ -70,12 +100,14 @@ export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 											{ ref }
 										)
 									}
-									attributeElement={'a'}
+									defaultValue={
+										attributes.publisherAttributes.default
+									}
 									{...extensionProps.publisherAttributes}
 								/>
 							</BaseControl>
 						</ControlContextProvider>
-					)}
+					</FeatureWrapper>
 				</PanelBodyControl>
 			);
 		},

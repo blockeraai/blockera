@@ -284,6 +284,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							}
 						/>
 					</Fill>
+
 					<div
 						style={{
 							display: 'settings' === tab.name ? 'block' : 'none',
@@ -320,17 +321,25 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 						<AdvancedSettingsExtension
 							block={block}
-							advancedConfig={advancedSettingsConfig}
+							extensionConfig={advancedSettingsConfig}
 							values={{
-								attributes:
+								publisherAttributes:
 									currentStateAttributes.publisherAttributes,
 							}}
-							extensionProps={{
-								publisherAttributes: {},
+							attributes={{
+								publisherAttributes:
+									attributes.publisherAttributes,
 							}}
+							extensionProps={{
+								publisherAttributes: {
+									attributeElement: '',
+								},
+							}}
+							setSettings={handleOnChangeSettings}
 							handleOnChangeAttributes={handleOnChangeAttributes}
 						/>
 					</div>
+
 					<div
 						style={{
 							display: 'style' === tab.name ? 'block' : 'none',

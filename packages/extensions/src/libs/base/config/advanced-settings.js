@@ -14,7 +14,9 @@ const publisherAttributes: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('HTML Attributes', 'publisher-core'),
+	label: __('Custom HTML Attributes', 'publisher-core'),
+	isActiveOnStates: ['normal'],
+	isActiveOnBreakpoints: ['laptop'],
 };
 
 export const advancedSettingsConfig = {

@@ -169,6 +169,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							columns="columns-2"
 							options={keyFieldOptions}
 							id={getControlId(itemId, '__key')}
+							repeaterItem={itemId}
+							singularId={'__key'}
 							defaultValue=""
 							onChange={(newValue: string) => {
 								handleOnChange(newValue);
@@ -197,6 +199,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 										columns="columns-2"
 										options={valueFieldOptions}
 										id={getControlId(itemId, 'value')}
+										repeaterItem={itemId}
+										singularId={'value'}
 										defaultValue=""
 										onChange={(newValue) => {
 											changeRepeaterItem({
@@ -238,6 +242,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 													itemId,
 													'value'
 												)}
+												repeaterItem={itemId}
+												singularId={'value'}
 												defaultValue=""
 												onChange={(newValue) => {
 													changeRepeaterItem({
@@ -280,6 +286,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							columns="columns-2"
 							type="text"
 							id={getControlId(itemId, 'key')}
+							repeaterItem={itemId}
+							singularId={'key'}
 							defaultValue=""
 							onChange={(newValue) => {
 								changeRepeaterItem({
@@ -321,6 +329,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							}
 							columns="columns-2"
 							id={getControlId(itemId, 'value')}
+							repeaterItem={itemId}
+							singularId={'value'}
 							type="text"
 							defaultValue=""
 							onChange={(newValue) => {

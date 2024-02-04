@@ -2,21 +2,21 @@
 /**
  * External dependencies
  */
-import type { MixedElement } from 'react';
+import type { FeatureConfig } from '../../base';
 
 /**
  * Internal dependencies
  */
-import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { BaseExtensionProps } from '../../types';
 
 export type TAdvancedSettingsProps = {
+	...BaseExtensionProps,
 	values: {
-		attributes: Array<Object>,
+		publisherAttributes: Array<Object>,
 	},
-	block: TBlockProps,
-	advancedConfig: Object,
-	children?: MixedElement,
-	handleOnChangeAttributes: THandleOnChangeAttributes,
+	extensionConfig: {
+		publisherAttributes: FeatureConfig,
+	},
 	extensionProps: {
 		publisherAttributes: Object,
 	},
