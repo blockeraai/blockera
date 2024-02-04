@@ -481,6 +481,24 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									currentStateAttributes.publisherFlexWrap,
 								publisherAlignContent:
 									currentStateAttributes.publisherAlignContent,
+								publisherGridAlignItems:
+									currentStateAttributes.publisherGridAlignItems,
+								publisherGridJustifyItems:
+									currentStateAttributes.publisherGridJustifyItems,
+								publisherGridAlignContent:
+									currentStateAttributes.publisherGridAlignContent,
+								publisherGridJustifyContent:
+									currentStateAttributes.publisherGridJustifyContent,
+								publisherGridGap:
+									currentStateAttributes.publisherGridGap,
+								publisherGridDirection:
+									currentStateAttributes.publisherGridDirection,
+								publisherGridColumns:
+									currentStateAttributes.publisherGridColumns,
+								publisherGridRows:
+									currentStateAttributes.publisherGridRows,
+								publisherGridAreas:
+									currentStateAttributes.publisherGridAreas,
 							}}
 							attributes={{
 								publisherDisplay: attributes.publisherDisplay,
@@ -490,6 +508,22 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								publisherFlexWrap: attributes.publisherFlexWrap,
 								publisherAlignContent:
 									attributes.publisherAlignContent,
+								publisherGridAlignItems:
+									attributes.publisherGridAlignItems,
+								publisherGridJustifyItems:
+									attributes.publisherGridJustifyItems,
+								publisherGridAlignContent:
+									attributes.publisherGridAlignContent,
+								publisherGridJustifyContent:
+									attributes.publisherGridJustifyContent,
+								publisherGridGap: attributes.publisherGridGap,
+								publisherGridDirection:
+									attributes.publisherGridDirection,
+								publisherGridColumns:
+									attributes.publisherGridColumns,
+								publisherGridRows: attributes.publisherGridRows,
+								publisherGridAreas:
+									attributes.publisherGridAreas,
 							}}
 							handleOnChangeAttributes={handleOnChangeAttributes}
 							setSettings={handleOnChangeSettings}
@@ -555,25 +589,31 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							directParentBlock?.attributes.publisherDisplay ===
 								'grid' && (
 								<GridChildExtension
-									{...{
-										block,
-										gridChildConfig,
-										extensionProps: {
-											publisherGridChildLayout: {},
-											publisherGridChildOrder: {},
-										},
-										values: {
-											...include(
-												currentStateAttributes,
-												gridChild,
-												'publisher'
-											),
-											gridAreas:
-												directParentBlock?.attributes
-													.publisherGridAreas,
-										},
-										handleOnChangeAttributes,
+									block={block}
+									extensionConfig={gridChildConfig}
+									extensionProps={{
+										publisherGridChildLayout: {},
+										publisherGridChildOrder: {},
 									}}
+									values={{
+										publisherGridChildLayout:
+											currentStateAttributes.publisherGridChildLayout,
+										publisherGridChildOrder:
+											currentStateAttributes.publisherGridChildOrder,
+										gridAreas:
+											directParentBlock?.attributes
+												.publisherGridAreas,
+									}}
+									attributes={{
+										publisherGridChildLayout:
+											attributes.publisherGridChildLayout,
+										publisherGridChildOrder:
+											attributes.publisherGridChildOrder,
+									}}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+									setSettings={handleOnChangeSettings}
 								/>
 							)}
 

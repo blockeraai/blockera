@@ -46,19 +46,39 @@ const publisherAlignContent: FeatureConfig = {
 	label: __('Children Align Content', 'publisher-core'),
 };
 
+const publisherGridColumns: FeatureConfig = {
+	show: true,
+	force: true,
+	status: true,
+	label: __('Grid Columns', 'publisher-core'),
+};
+
+const publisherGridRows: FeatureConfig = {
+	show: true,
+	force: true,
+	status: true,
+	label: __('Grid Rows', 'publisher-core'),
+};
+
+const publisherGridGap: FeatureConfig = {
+	show: true,
+	force: true,
+	status: true,
+	label: __('Grid Gap', 'publisher-core'),
+};
+
 export const layoutConfig = {
 	publisherDisplay,
 	publisherFlexLayout,
 	publisherGap,
 	publisherFlexWrap,
 	publisherAlignContent,
-	publisherGridAlignItems: true,
-	publisherGridJustifyItems: true,
-	publisherGridAlignContent: true,
-	publisherGridJustifyContent: true,
-	publisherGridGap: true,
-	publisherGridDirection: true,
-	publisherGridColumns: true,
-	publisherGridRows: true,
-	publisherGridAreas: true,
+	//publisherGridAlignItems: true,
+	//publisherGridJustifyItems: true,
+	//publisherGridAlignContent: true,
+	//publisherGridJustifyContent: true,
+	publisherGridGap,
+	//publisherGridDirection: true,
+	publisherGridColumns,
+	publisherGridRows,
 };

@@ -1,13 +1,9 @@
 // @flow
 /**
- * External dependencies
- */
-import type { MixedElement } from 'react';
-
-/**
  * Internal dependencies
  */
-import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { BaseExtensionProps } from '../../types';
+import type { FeatureConfig } from '../../base';
 
 export type TCssProps = {
 	'grid-area'?: string,
@@ -17,17 +13,21 @@ export type TCssProps = {
 };
 
 export type TGridChildProps = {
+	...BaseExtensionProps,
 	values: {
-		gridChildLayout: { alignItems: string, justifyContent: string },
-		gridChildOrder: { value: string, area: string },
+		publisherGridChildLayout: {
+			alignItems: string,
+			justifyContent: string,
+		},
+		publisherGridChildOrder: { value: string, area: string },
 		gridAreas: Array<Object>,
 	},
-	block: TBlockProps,
-	gridChildConfig: Object,
-	children?: MixedElement,
-	handleOnChangeAttributes: THandleOnChangeAttributes,
+	extensionConfig: {
+		publisherGridChildLayout: FeatureConfig,
+		publisherGridChildOrder: FeatureConfig,
+	},
 	extensionProps: {
-		publisherGridChildOrder: Object,
 		publisherGridChildLayout: Object,
+		publisherGridChildOrder: Object,
 	},
 };

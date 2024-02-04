@@ -771,40 +771,18 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 				)}
 
 				{'grid' === values.publisherDisplay && (
-					<GridBuilder
-						type={block.blockName}
-						id={block.clientId}
-						position={{ top: 0, left: 0 }}
-						dimension={{ width: 320, height: 200 }}
-					>
+					<GridBuilder block={block}>
 						<BlockComponent />
 					</GridBuilder>
 				)}
 
-				{display === 'grid' && (
+				{'grid' === values.publisherDisplay && (
 					<GridLayout
-						config={{
-							publisherGridAlignItems,
-							publisherGridJustifyItems,
-							publisherGridAlignContent,
-							publisherGridJustifyContent,
-							publisherGridGap,
-							publisherGridDirection,
-							publisherGridColumns,
-							publisherGridRows,
-							publisherGridAreas,
-						}}
+						extensionConfig={extensionConfig}
 						block={block}
-						gridAlignItems={gridAlignItems}
-						gridJustifyItems={gridJustifyItems}
-						gridAlignContent={gridAlignContent}
-						gridJustifyContent={gridJustifyContent}
+						values={values}
+						attributes={attributes}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						gridGap={gridGap}
-						gridDirection={gridDirection}
-						gridColumns={gridColumns}
-						gridRows={gridRows}
-						gridAreas={gridAreas}
 					/>
 				)}
 			</PanelBodyControl>

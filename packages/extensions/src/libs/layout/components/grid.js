@@ -9,10 +9,9 @@ import { nanoid } from 'nanoid';
 /**
  * Publisher dependencies
  */
-import { Button, Flex } from '@publisher/components';
+import { Button, Flex, FeatureWrapper } from '@publisher/components';
 import {
 	BaseControl,
-	ToggleSelectControl,
 	ControlContextProvider,
 	InputControl,
 } from '@publisher/controls';
@@ -21,66 +20,56 @@ import { useBlockContext } from '../../../hooks';
 /**
  * Internal dependencies
  */
-import { isActiveField } from '../../../api/utils';
 import { generateExtensionId } from '../../utils';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
-import { default as JustifyCenterIcon } from '../icons/justify-center';
-import { default as JustifyFlexEndIcon } from '../icons/justify-flex-end';
-import { default as JustifyFlexStartIcon } from '../icons/justify-flex-start';
-import { default as AlignContentCenterIcon } from '../icons/align-content-center';
-import { default as JustifySpaceBetweenIcon } from '../icons/justify-space-between';
-import { default as AlignItemsCenterBlockIcon } from '../icons/align-items-center';
-import { default as AlignContentStretchIcon } from '../icons/align-content-stretch';
-import { default as AlignContentFlexEndIcon } from '../icons/align-content-flex-end';
-import { default as AlignItemsStretchBlockIcon } from '../icons/align-items-stretch';
-import { default as AlignItemsFlexEndBlockIcon } from '../icons/align-items-flex-end';
-import { default as AlignItemsBaselineBlockIcon } from '../icons/align-items-baseline';
-import { default as AlignContentFlexStartIcon } from '../icons/align-content-flex-start';
-import { default as AlignItemsFlexStartBlockIcon } from '../icons/align-items-flex-start';
-import { default as AlignContentSpaceAroundIcon } from '../icons/align-content-space-around';
-import { default as AlignContentSpaceBetweenIcon } from '../icons/align-content-space-between';
+// import { default as JustifyCenterIcon } from '../icons/justify-center';
+// import { default as JustifyFlexEndIcon } from '../icons/justify-flex-end';
+// import { default as JustifyFlexStartIcon } from '../icons/justify-flex-start';
+// import { default as AlignContentCenterIcon } from '../icons/align-content-center';
+// import { default as JustifySpaceBetweenIcon } from '../icons/justify-space-between';
+// import { default as AlignItemsCenterBlockIcon } from '../icons/align-items-center';
+// import { default as AlignContentStretchIcon } from '../icons/align-content-stretch';
+// import { default as AlignContentFlexEndIcon } from '../icons/align-content-flex-end';
+// import { default as AlignItemsStretchBlockIcon } from '../icons/align-items-stretch';
+// import { default as AlignItemsFlexEndBlockIcon } from '../icons/align-items-flex-end';
+// import { default as AlignItemsBaselineBlockIcon } from '../icons/align-items-baseline';
+// import { default as AlignContentFlexStartIcon } from '../icons/align-content-flex-start';
+// import { default as AlignItemsFlexStartBlockIcon } from '../icons/align-items-flex-start';
+// import { default as AlignContentSpaceAroundIcon } from '../icons/align-content-space-around';
+// import { default as AlignContentSpaceBetweenIcon } from '../icons/align-content-space-between';
+import { isShowField } from '../../../api/utils';
 import { default as EditIcon } from '../icons/edit';
 
 import { Gap } from '.';
 
 export default function ({
-	config,
+	extensionConfig,
 	block,
 	handleOnChangeAttributes,
-	gridAlignItems,
-	gridJustifyItems,
-	gridAlignContent,
-	gridJustifyContent,
-	gridGap,
-	//gridDirection,
-	gridColumns,
-	gridAreas,
-	gridRows,
+	values,
+	attributes,
 }: {
-	config: Object,
+	extensionConfig: Object,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	block: TBlockProps,
-	gridAlignItems: string,
-	gridJustifyItems: string,
-	gridAlignContent: string,
-	gridJustifyContent: string,
-	gridGap: Object,
-	gridDirection: Object,
-	gridColumns: Array<Object>,
-	gridRows: Array<Object>,
-	gridAreas: Array<Object>,
+	values: Object,
+	attributes: Object,
 }): MixedElement {
-	const {
-		publisherGridAlignItems,
-		publisherGridJustifyItems,
-		publisherGridAlignContent,
-		publisherGridJustifyContent,
-		publisherGridGap,
-		// publisherGridDirection,
-		publisherGridColumns,
-		publisherGridRows,
-		//publisherGridAreas,
-	} = config;
+	const isShowRows = isShowField(
+		extensionConfig.publisherGridRows,
+		values?.publisherGridRows,
+		attributes.publisherGridRows.default
+	);
+	const isShowColumns = isShowField(
+		extensionConfig.publisherGridColumns,
+		values?.publisherGridColumns,
+		attributes.publisherGridColumns.default
+	);
+	const isShowGap = isShowField(
+		extensionConfig.publisherGridGap,
+		values?.publisherGridGap,
+		attributes.publisherGridGap.default
+	);
 
 	const defaultGridItemValue = {
 		'sizing-mode': 'normal',
@@ -108,21 +97,28 @@ export default function ({
 				</Button>
 
 				<Flex>
-					{isActiveField(publisherGridRows) && (
+					<FeatureWrapper
+						isActive={isShowRows}
+						isActiveOnStates={
+							extensionConfig.publisherGridRows.isActiveOnStates
+						}
+						isActiveOnBreakpoints={
+							extensionConfig.publisherGridRows
+								.isActiveOnBreakpoints
+						}
+					>
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(
 									block,
 									'grid-rows-length'
 								),
-								value: gridRows,
+								value: values.publisherGridRows.length,
 								attribute: 'publisherGridRows',
 								blockName: block.blockName,
 							}}
 						>
 							<InputControl
-								id={"['length']"}
-								singularId={"['length']"}
 								label={__('Rows', 'publisher-core')}
 								columns="columns-1"
 								size="small"
@@ -132,20 +128,28 @@ export default function ({
 									length: number,
 									ref?: Object
 								): void => {
-									if (gridRows.value.length < length) {
-										const value = [...gridRows.value];
+									if (
+										values.publisherGridRows.value.length <
+										length
+									) {
+										const value = [
+											...values.publisherGridRows.value,
+										];
 										const newAreas = [];
-										const cellCounts = gridAreas?.map(
-											(area) =>
-												Number(
-													area.name.replace(
-														/[^-\.0-9]/g,
-														''
+										const cellCounts =
+											values.publisherGridAreas?.map(
+												(area) =>
+													Number(
+														area.name.replace(
+															/[^-\.0-9]/g,
+															''
+														)
 													)
-												)
-										);
+											);
 
-										let i = gridRows.value.length;
+										let i =
+											values.publisherGridRows.value
+												.length;
 										let count = Math.max(...cellCounts);
 
 										while (i < length) {
@@ -158,7 +162,9 @@ export default function ({
 											});
 											for (
 												let index = 1;
-												index <= gridColumns.length;
+												index <=
+												values.publisherGridColumns
+													.length;
 												index++
 											) {
 												count++;
@@ -182,7 +188,7 @@ export default function ({
 											{
 												addOrModifyRootItems: {
 													publisherGridAreas: [
-														...gridAreas,
+														...values.publisherGridAreas,
 														...newAreas,
 													],
 												},
@@ -191,31 +197,45 @@ export default function ({
 										);
 									}
 
-									if (gridRows.value.length > length) {
-										const value = [...gridRows.value];
+									if (
+										values.publisherGridRows.value.length >
+										length
+									) {
+										const value = [
+											...values.publisherGridRows.value,
+										];
 										value.splice(
 											length,
-											gridRows.value.length - length
+											values.publisherGridRows.value
+												.length - length
 										);
 
-										const deletedAreas = gridAreas
-											.filter(
+										const deletedAreas =
+											values.publisherGridAreas
+												.filter(
+													(item) =>
+														item['row-end'] >
+														length + 1
+												)
+												.map(({ id }) => id);
+
+										const mergedItems =
+											values.publisherGridAreas.filter(
 												(item) =>
-													item['row-end'] > length + 1
-											)
-											.map(({ id }) => id);
+													item.mergedArea &&
+													item['row-end'] >
+														length + 1 &&
+													item['row-start'] <
+														length + 1
+											);
 
-										const mergedItems = gridAreas.filter(
-											(item) =>
-												item.mergedArea &&
-												item['row-end'] > length + 1 &&
-												item['row-start'] < length + 1
-										);
-
-										const filteredAreas = gridAreas.filter(
-											(item) =>
-												!deletedAreas.includes(item.id)
-										);
+										const filteredAreas =
+											values.publisherGridAreas.filter(
+												(item) =>
+													!deletedAreas.includes(
+														item.id
+													)
+											);
 
 										const mutedMergedItems =
 											mergedItems.map((item) => ({
@@ -238,27 +258,37 @@ export default function ({
 										);
 									}
 								}}
-								defaultValue={gridRows.length || 1}
+								defaultValue={
+									attributes.publisherGridRows.default.length
+								}
 								min={1}
 							/>
 						</ControlContextProvider>
-					)}
+					</FeatureWrapper>
 
-					{isActiveField(publisherGridColumns) && (
+					<FeatureWrapper
+						isActive={isShowColumns}
+						isActiveOnStates={
+							extensionConfig.publisherGridColumns
+								.isActiveOnStates
+						}
+						isActiveOnBreakpoints={
+							extensionConfig.publisherGridColumns
+								.isActiveOnBreakpoints
+						}
+					>
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(
 									block,
 									'grid-columns-length'
 								),
-								value: gridColumns,
+								value: values.publisherGridColumns.length,
 								attribute: 'publisherGridColumns',
 								blockName: block.blockName,
 							}}
 						>
 							<InputControl
-								id={"['length']"}
-								singularId={"['length']"}
 								label={__('Columns', 'publisher-core')}
 								columns="columns-1"
 								size="small"
@@ -268,20 +298,29 @@ export default function ({
 									length: number,
 									ref?: Object
 								): void => {
-									if (gridColumns.value.length < length) {
-										const value = [...gridColumns.value];
+									if (
+										values.publisherGridColumns.value
+											.length < length
+									) {
+										const value = [
+											...values.publisherGridColumns
+												.value,
+										];
 										const newAreas = [];
-										const cellCounts = gridAreas?.map(
-											(area) =>
-												Number(
-													area.name.replace(
-														/[^-\.0-9]/g,
-														''
+										const cellCounts =
+											values.publisherGridAreas?.map(
+												(area) =>
+													Number(
+														area.name.replace(
+															/[^-\.0-9]/g,
+															''
+														)
 													)
-												)
-										);
+											);
 
-										let i = gridColumns.value.length;
+										let i =
+											values.publisherGridColumns.value
+												.length;
 										let count = Math.max(...cellCounts);
 
 										while (i < length) {
@@ -291,7 +330,8 @@ export default function ({
 											});
 											for (
 												let index = 1;
-												index <= gridRows.length;
+												index <=
+												values.publisherGridRows.length;
 												index++
 											) {
 												count++;
@@ -314,7 +354,7 @@ export default function ({
 											{
 												addOrModifyRootItems: {
 													publisherGridAreas: [
-														...gridAreas,
+														...values.publisherGridAreas,
 														...newAreas,
 													],
 												},
@@ -323,34 +363,46 @@ export default function ({
 										);
 									}
 
-									if (gridColumns.value.length > length) {
-										const value = [...gridColumns.value];
+									if (
+										values.publisherGridColumns.value
+											.length > length
+									) {
+										const value = [
+											...values.publisherGridColumns
+												.value,
+										];
 										value.splice(
 											length,
-											gridColumns.value.length - length
+											values.publisherGridColumns.value
+												.length - length
 										);
 
-										const deletedAreas = gridAreas
-											.filter(
+										const deletedAreas =
+											values.publisherGridAreas
+												.filter(
+													(item) =>
+														item['column-end'] >
+														length + 1
+												)
+												.map(({ id }) => id);
+
+										const mergedItems =
+											values.publisherGridAreas.filter(
 												(item) =>
+													item.mergedArea &&
 													item['column-end'] >
-													length + 1
-											)
-											.map(({ id }) => id);
+														length + 1 &&
+													item['column-start'] <
+														length + 1
+											);
 
-										const mergedItems = gridAreas.filter(
-											(item) =>
-												item.mergedArea &&
-												item['column-end'] >
-													length + 1 &&
-												item['column-start'] <
-													length + 1
-										);
-
-										const filteredAreas = gridAreas.filter(
-											(item) =>
-												!deletedAreas.includes(item.id)
-										);
+										const filteredAreas =
+											values.publisherGridAreas.filter(
+												(item) =>
+													!deletedAreas.includes(
+														item.id
+													)
+											);
 
 										const mutedMergedItems =
 											mergedItems.map((item) => ({
@@ -373,15 +425,18 @@ export default function ({
 										);
 									}
 								}}
-								defaultValue={gridColumns.length || 1}
+								defaultValue={
+									attributes.publisherGridColumns.default
+										.length
+								}
 								min={1}
 							/>
 						</ControlContextProvider>
-					)}
+					</FeatureWrapper>
 				</Flex>
 			</BaseControl>
 
-			{isActiveField(publisherGridAlignItems) && (
+			{/* {/* {isActiveField(publisherGridAlignItems) && (
 				<ControlContextProvider
 					value={{
 						name: generateExtensionId(block, 'grid-align-items'),
@@ -433,7 +488,7 @@ export default function ({
 						]}
 					/>
 				</ControlContextProvider>
-			)}
+			)} 
 
 			{isActiveField(publisherGridJustifyItems) && (
 				<ControlContextProvider
@@ -602,26 +657,34 @@ export default function ({
 						}
 					/>
 				</ControlContextProvider>
-			)}
-
-			{isActiveField(publisherGridGap) && (
+			)} */}
+			<FeatureWrapper
+				isActive={isShowGap}
+				isActiveOnStates={
+					extensionConfig.publisherGridGap.isActiveOnStates
+				}
+				isActiveOnBreakpoints={
+					extensionConfig.publisherGridGap.isActiveOnBreakpoints
+				}
+			>
 				<ControlContextProvider
 					value={{
 						name: generateExtensionId(block, 'grid-gap'),
-						value: gridGap,
+						value: values.publisherGridGap,
 						attribute: 'publisherGridGap',
 						blockName: block.blockName,
 					}}
 				>
 					<Gap
 						block={block}
-						gap={gridGap}
-						field={publisherGridGap}
+						gap={values.publisherGridGap}
+						field={extensionConfig.publisherGridGap}
 						attributeId="publisherGridGap"
 						handleOnChangeAttributes={handleOnChangeAttributes}
+						defaultValue={attributes.publisherGridGap.default}
 					/>
 				</ControlContextProvider>
-			)}
+			</FeatureWrapper>
 		</>
 	);
 }
