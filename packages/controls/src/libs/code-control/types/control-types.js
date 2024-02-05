@@ -41,45 +41,18 @@ export type CodeControlProps = {
 	 */
 	lang?: 'css' | 'javascript',
 	defaultValue?: string,
-	height?: string,
-	minHeight?: string,
-	maxHeight?: string,
 	width?: string,
-	minWidth?: string,
-	maxWidth?: string,
+	height?: string,
 	/**
 	 * Enables a placeholder—a piece of example content to show when the editor is empty.
 	 */
-	placeholder?: string | HTMLElement,
-	/**
-	 * `light` / `dark`
-	 *
-	 * @default light
-	 */
-	theme?: 'light' | 'dark',
-	/**
-	 * basicSetup by default
-	 */
-	basicSetup?: CodeControlOptionsTypes,
+	placeholder?: any,
 	/**
 	 * This disables editing of the editor content by the user.
 	 *
 	 * @default true
 	 */
 	editable?: boolean,
-	/**
-	 * This disables editing of the editor content by the user.
-	 *
-	 * @default false
-	 */
-	readOnly?: boolean,
-	/**
-	 * Controls whether pressing the `Tab` key inserts a tab character and indents the text (`true`)
-	 * or behaves according to the browser's default behavior (`false`).
-	 *
-	 * @default true
-	 */
-	indentWithTab?: boolean,
 	/**
 	 * Description to show after code control
 	 */

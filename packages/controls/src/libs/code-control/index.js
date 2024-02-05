@@ -3,12 +3,10 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import CodeMirror from '@uiw/react-codemirror';
-import { javascript } from '@codemirror/lang-javascript';
-import { css, cssCompletionSource } from '@codemirror/lang-css';
-import { autocompletion } from '@codemirror/autocomplete';
+import { useState, useRef } from '@wordpress/element';
+import Editor from '@monaco-editor/react';
 
 /**
  * Publisher dependencies
@@ -17,58 +15,22 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
+import { DynamicHtmlFormatter } from '@publisher/components';
+import { useLateEffect } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
 import BaseControl from '../base-control';
 import { useControlContext } from '../../context';
-import { cssPropertyCompletions } from './completions/css-properties';
-import { cssSelectorCompletions } from './completions/css-selectors';
-import type { CodeControlProps, CodeControlOptionsTypes } from './types';
-import { espressoLightTheme } from './themes/espresso-theme';
-
-export const CodeControlOptions: CodeControlOptionsTypes = {
-	lineNumbers: true,
-	highlightActiveLineGutter: true,
-	highlightSpecialChars: true,
-	history: true,
-	foldGutter: false,
-	drawSelection: true,
-	dropCursor: true,
-	allowMultipleSelections: false,
-	indentOnInput: true,
-	syntaxHighlighting: true,
-	bracketMatching: true,
-	closeBrackets: true,
-	autocompletion: true,
-	rectangularSelection: false,
-	crosshairCursor: false,
-	highlightActiveLine: true,
-	highlightSelectionMatches: true,
-	closeBracketsKeymap: true,
-	defaultKeymap: true,
-	searchKeymap: false,
-	historyKeymap: true,
-	foldKeymap: true,
-	completionKeymap: true,
-	lintKeymap: true,
-};
+import type { CodeControlProps } from './types';
 
 const CodeControl = ({
 	lang = 'css',
+	width = '',
 	height = '',
-	minHeight = '300px',
-	maxHeight = '500px',
-	width,
-	minWidth,
-	maxWidth,
 	placeholder = '',
-	theme = 'light',
-	basicSetup = {},
 	editable = true,
-	readOnly = false,
-	indentWithTab = true,
 	description = '',
 	//
 	id,
@@ -97,6 +59,18 @@ const CodeControl = ({
 		defaultValue,
 	});
 
+	const [showPlaceholder, setShowPlaceholder] = useState(false);
+
+	const editorRef = useRef(null);
+
+	// update value if changed from outside
+	// force editor to update inside state
+	useLateEffect(() => {
+		if (editorRef?.current && editorRef?.current?.getValue() !== value) {
+			editorRef.current.setValue(value);
+		}
+	}, [value]);
+
 	const labelProps = {
 		value,
 		singularId,
@@ -118,23 +92,36 @@ const CodeControl = ({
 				description = (
 					<>
 						<p>
-							{__(
-								'Use ".block" to target the block.',
-								'publisher-core'
-							)}
-						</p>
-						<p>
-							{__(
-								'While you type, the smart autocomplete functionality substantially streamlines CSS coding by suggesting CSS properties and their corresponding values.',
-								'publisher-core'
-							)}
+							<DynamicHtmlFormatter
+								text={sprintf(
+									/* translators: $1%s is a CSS selector, $2%s is ID. */
+									__(
+										'Use %1$s or %2$s to target current block.',
+										'publisher-core'
+									),
+									'{.block}',
+									'{#block}'
+								)}
+								replacements={{
+									'.block': <code>.block</code>,
+									'#block': <code>#block</code>,
+								}}
+							/>
 						</p>
 					</>
 				);
 			}
 
 			if (!placeholder) {
-				placeholder = `.block {\n  /* Your CSS here */\n}\n`;
+				placeholder = (
+					<>
+						.block {'{'}
+						<br />
+						&nbsp;&nbsp;&nbsp;{'/* Your CSS here */'}
+						<br />
+						{'}'}
+					</>
+				);
 			}
 
 			break;
@@ -143,40 +130,59 @@ const CodeControl = ({
 	return (
 		<BaseControl columns={columns} controlName={field} {...labelProps}>
 			<div className={controlClassNames('code', className)}>
-				<CodeMirror
-					value={value}
-					height={height}
-					minHeight={minHeight}
-					maxHeight={maxHeight}
-					width={width}
-					minWidth={minWidth}
-					maxWidth={maxWidth}
-					placeholder={placeholder}
-					theme={theme}
-					basicSetup={{
-						...CodeControlOptions,
-						...basicSetup,
+				<Editor
+					width={width || 250}
+					height={height || 200}
+					defaultLanguage={lang}
+					defaultValue={value}
+					onChange={(newValue) => {
+						setShowPlaceholder(newValue === '');
+						setValue(newValue);
 					}}
-					editable={editable}
-					readOnly={readOnly}
-					indentWithTab={indentWithTab}
-					extensions={
-						lang === 'css'
-							? [
-									css(),
-									autocompletion({
-										override: [
-											cssSelectorCompletions,
-											cssPropertyCompletions,
-											cssCompletionSource,
-										],
-									}),
-									espressoLightTheme,
-							  ]
-							: [javascript({ jsx: false }), espressoLightTheme]
-					}
-					onChange={setValue}
+					theme={'publisher'}
+					options={{
+						glyphMargin: false,
+						folding: false,
+						showFoldingControls: false,
+						minimap: { enabled: false },
+						fontSize: '13px',
+						lineNumbersMinChars: 2,
+						readOnly: !editable,
+						allowEditorOverflow: false,
+					}}
+					beforeMount={(monaco: any) => {
+						if (monaco?.publisherInitialised === undefined) {
+							monaco.editor.defineTheme('publisher', {
+								base: 'vs',
+								inherit: true,
+								rules: [],
+								colors: {
+									'editor.foreground': '#111111',
+									'editor.background': '#f6f6f6',
+									'editor.selectionBackground': '#c2e8ff',
+									'editor.lineHighlightBackground':
+										'#c2e8ff75',
+									'editorLineNumber.foreground': '#7d7d7d75',
+								},
+							});
+							setShowPlaceholder(value === '');
+							monaco.publisherInitialised = true;
+						}
+					}}
+					onMount={(editor: any) => {
+						editorRef.current = editor;
+					}}
 				/>
+
+				{showPlaceholder && (
+					<div
+						className={controlInnerClassNames(
+							'code-control__placeholder'
+						)}
+					>
+						{placeholder}
+					</div>
+				)}
 
 				{description && (
 					<div

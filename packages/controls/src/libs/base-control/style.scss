@@ -87,4 +87,14 @@
 	&.publisher-field-general {
 		align-items: start;
 	}
+
+	code,
+	kbd {
+		padding: 2px 4px;
+		margin: 0 1px;
+		background: #def0fb;
+		color: var(--publisher-controls-color);
+		border-radius: 2px;
+		font-size: 90%;
+	}
 }
