@@ -45,7 +45,7 @@ export const GridBuilder = ({
 
 	const { publisherWidth, publisherHeight } = getAttributes();
 
-	if (!isOpenGridBuilder) {
+	if (!isOpenGridBuilder && !selectedBlock) {
 		return null;
 	}
 
