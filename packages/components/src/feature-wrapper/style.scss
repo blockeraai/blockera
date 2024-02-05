@@ -2,6 +2,10 @@
 	position: relative;
 	user-select: none;
 
+	&:not(:last-child) {
+		margin-bottom: 15px;
+	}
+
 	.publisher-component-feature-wrapper__notice {
 		position: absolute;
 		right: 0;
@@ -32,8 +36,8 @@
 			padding: 5px;
 			text-align: right;
 			opacity: 0;
-			background: rgba(255, 255, 255, 0.86);
 			border-radius: 2px;
+			text-shadow: 1.41px 1.41px #ffffff, 2px 0 #ffffff, 1.41px -1.41px #ffffff, 0 -2px #ffffff, -1.41px -1.41px #ffffff, -2px 0 #ffffff, -1.41px 1.41px #ffffff, 0 2px #ffffff;
 		}
 	}
 

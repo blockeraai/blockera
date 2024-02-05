@@ -48,7 +48,14 @@ export default function FeatureWrapper({
 		!isActiveOnStates.includes(getCurrentState())
 	) {
 		return (
-			<Wrapper type="state" text={isActiveOnStatesText} {...props}>
+			<Wrapper
+				type="state"
+				typeName={
+					isActiveOnStates.length === 1 ? isActiveOnStates[0] : ''
+				}
+				text={isActiveOnStatesText}
+				{...props}
+			>
 				{children}
 			</Wrapper>
 		);
@@ -61,6 +68,11 @@ export default function FeatureWrapper({
 		return (
 			<Wrapper
 				type="breakpoint"
+				typeName={
+					isActiveOnBreakpoints.length === 1
+						? isActiveOnBreakpoints[0]
+						: ''
+				}
 				text={isActiveOnBreakpointsText}
 				{...props}
 			>

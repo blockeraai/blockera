@@ -31,6 +31,10 @@ export type FeatureConfig = {
 	 */
 	cssGenerators?: Object | {},
 	/**
+	 * The active on free settings.
+	 */
+	isActiveOnFree?: boolean,
+	/**
 	 * The active on states settings, by default all or array of state types.
 	 */
 	isActiveOnStates?: 'all' | Array<TStates>,
