@@ -33,18 +33,25 @@ export const TransformSettings = ({
 	block: TBlockProps,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	values: {
-		transform: Array<Object>,
-		transformSelfPerspective: string,
-		transformSelfOrigin: {
+		publisherOpacity: string,
+		publisherTransform: Array<Object>,
+		publisherTransition: Array<Object>,
+		publisherFilter: Array<Object>,
+		publisherBlendMode: string,
+		publisherBackdropFilter: Array<Object>,
+		publisherTransformSelfPerspective: string,
+		publisherTransformSelfOrigin: {
 			top: string,
 			left: string,
 		},
-		backfaceVisibility: string,
-		transformChildPerspective: string,
-		transformChildOrigin: {
+		publisherBackfaceVisibility: string,
+		publisherTransformChildPerspective: string,
+		publisherTransformChildOrigin: {
 			top: string,
 			left: string,
 		},
+		publisherDivider: Array<Object>,
+		publisherMask: Array<Object>,
 	},
 	attributes: {
 		[key: string]: {
@@ -68,7 +75,7 @@ export const TransformSettings = ({
 			<ControlContextProvider
 				value={{
 					name: generateExtensionId(block, 'self-perspective'),
-					value: values.transformSelfPerspective,
+					value: values.publisherTransformSelfPerspective,
 					attribute: 'publisherTransformSelfPerspective',
 					blockName: block.blockName,
 				}}
@@ -76,13 +83,13 @@ export const TransformSettings = ({
 				<SelfPerspective
 					block={block}
 					handleOnChangeAttributes={handleOnChangeAttributes}
-					transform={values.transform}
-					transformSelfOrigin={values.transformSelfOrigin}
+					transform={values.publisherTransform}
+					transformSelfOrigin={values.publisherTransformSelfOrigin}
 					transformSelfPerspectiveDefaultValue={
-						attributes.transformSelfPerspective.default
+						attributes.publisherTransformSelfPerspective.default
 					}
 					transformSelfOriginDefaultValue={
-						attributes.transformSelfOrigin.default
+						attributes.publisherTransformSelfOrigin.default
 					}
 				/>
 			</ControlContextProvider>
@@ -90,7 +97,7 @@ export const TransformSettings = ({
 			<ControlContextProvider
 				value={{
 					name: generateExtensionId(block, 'backface-visibility'),
-					value: values.backfaceVisibility,
+					value: values.publisherBackfaceVisibility,
 					attribute: 'publisherBackfaceVisibility',
 					blockName: block.blockName,
 				}}
@@ -125,7 +132,9 @@ export const TransformSettings = ({
 							value: 'hidden',
 						},
 					]}
-					defaultValue={attributes.backfaceVisibility.default}
+					defaultValue={
+						attributes.publisherBackfaceVisibility.default
+					}
 					onChange={(newValue, ref) =>
 						handleOnChangeAttributes(
 							'publisherBackfaceVisibility',
@@ -139,7 +148,7 @@ export const TransformSettings = ({
 			<ControlContextProvider
 				value={{
 					name: generateExtensionId(block, 'child-perspective'),
-					value: values.transformChildPerspective,
+					value: values.publisherTransformChildPerspective,
 					attribute: 'publisherTransformChildPerspective',
 					blockName: block.blockName,
 				}}
@@ -148,11 +157,11 @@ export const TransformSettings = ({
 					block={block}
 					handleOnChangeAttributes={handleOnChangeAttributes}
 					transformChildPerspectiveDefaultValue={
-						attributes.transformChildPerspective.default
+						attributes.publisherTransformChildPerspective.default
 					}
-					transformChildOrigin={values.transformChildOrigin}
+					transformChildOrigin={values.publisherTransformChildOrigin}
 					transformChildOriginDefaultValue={
-						attributes.transformChildOrigin.default
+						attributes.publisherTransformChildOrigin.default
 					}
 				/>
 			</ControlContextProvider>

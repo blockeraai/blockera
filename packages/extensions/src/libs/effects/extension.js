@@ -204,19 +204,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 									handleOnChangeAttributes={
 										handleOnChangeAttributes
 									}
-									values={{
-										transform: values.publisherTransform,
-										transformSelfPerspective:
-											values.publisherTransformSelfPerspective,
-										transformSelfOrigin:
-											values.publisherTransformSelfOrigin,
-										backfaceVisibility:
-											values.publisherBackfaceVisibility,
-										transformChildPerspective:
-											values.publisherTransformChildPerspective,
-										transformChildOrigin:
-											values.publisherTransformChildOrigin,
-									}}
+									values={values}
 									attributes={attributes}
 								/>
 							)}
