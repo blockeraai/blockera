@@ -18,6 +18,10 @@ __experimentalRegistrationInnerBlockExtensionCustomConfigDefinition();
 
 export * from './utils';
 export {
+	StyleVariationsExtension,
+	attributes as styleVariationsExtensionAttributes,
+} from './style-variations';
+export {
 	LayoutExtensionIcon,
 	LayoutStyles,
 	LayoutExtension,
