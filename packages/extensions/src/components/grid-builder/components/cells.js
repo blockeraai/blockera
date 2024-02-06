@@ -16,8 +16,9 @@ import { calcGridTemplateAreas } from '../../../libs/layout/utils';
  */
 import { useBlockContext } from '../../../hooks';
 import { AreaMergeHandler } from './index';
+import { generateAreas } from '../utils';
 
-export const Cells = ({ hoveredColumn, hoveredRow, generateArea }) => {
+export const Cells = ({ hoveredColumn, hoveredRow }) => {
 	const { getAttributes, handleOnChangeAttributes } = useBlockContext();
 
 	const { publisherGridColumns, publisherGridRows, publisherGridAreas } =
@@ -122,7 +123,11 @@ export const Cells = ({ hoveredColumn, hoveredRow, generateArea }) => {
 
 		handleOnChangeAttributes(
 			'publisherGridAreas',
-			generateArea({ prevGridAreas: [...filteredAreas] }),
+			generateAreas({
+				gridRows: publisherGridRows.value,
+				gridColumns: publisherGridColumns.value,
+				prevGridAreas: [...filteredAreas],
+			}),
 			{
 				path: '',
 				reset: false,

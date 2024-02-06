@@ -16,7 +16,7 @@ import { useCssGenerator } from '@publisher/style-engine';
 /**
  * Internal dependencies
  */
-import { extractCssValue } from '../utils';
+import { extractCssValue, generateAreas } from '../utils';
 import { useBlockContext, useStoreSelectors } from '../../../hooks';
 import { AddButton, GridSizeHandler, Cells, GapHandler } from './index';
 
@@ -66,91 +66,21 @@ export const VirtualGrid = ({ block }) => {
 		),
 	};
 
-	const generateArea = ({
-		gridRows = publisherGridRows.value,
-		gridColumns = publisherGridColumns.value,
-		prevGridAreas = publisherGridAreas,
-	}) => {
-		const newGridAreas = ([]: any);
-		for (let i = 0; i < gridRows.length; i++) {
-			newGridAreas.push([]);
-		}
-
-		let count = 1;
-		newGridAreas?.forEach((row, i) => {
-			gridColumns.forEach((item, index) => {
-				row.push({
-					id: nanoid(),
-					name: `cell${count}`,
-					'column-start': index + 1,
-					'column-end': index + 2,
-					'row-start': i + 1,
-					'row-end': i + 2,
-				});
-				count++;
-			});
-		});
-
-		const mergedAreas = prevGridAreas.filter((item) => item.mergedArea);
-		if (!mergedAreas) return newGridAreas.flat();
-
-		const redundantAreas = [];
-		mergedAreas.forEach((item) => {
-			for (let row = item['row-start']; row < item['row-end']; row++) {
-				for (
-					let col = item['column-start'];
-					col < item['column-end'];
-					col++
-				) {
-					redundantAreas.push(
-						newGridAreas
-							.flat()
-							.find(
-								(item) =>
-									item['column-start'] === col &&
-									item['column-end'] === col + 1 &&
-									item['row-start'] === row &&
-									item['row-end'] === row + 1
-							)
-					);
-				}
-			}
-		});
-
-		const prevAreasTemplate = [];
-		publisherGridRows.value.forEach(() => prevAreasTemplate.push([]));
-		prevGridAreas.forEach((item) => {
-			prevAreasTemplate[item['row-start'] - 1].push(item);
-		});
-
-		const mergedAreasIndexes = [];
-		prevAreasTemplate.forEach((row, i) => {
-			row.forEach((col, index) => {
-				if (col.mergedArea) mergedAreasIndexes.push([i, index]);
-			});
-		});
-
-		const redundantAreaIds = redundantAreas.map((item) => item.id);
-		const filteredGridAreas = newGridAreas.map((row) =>
-			row.filter((col) => !redundantAreaIds.includes(col.id))
-		);
-
-		mergedAreasIndexes.forEach((item, index) => {
-			filteredGridAreas[item[0]]?.splice(item[1], 0, mergedAreas[index]);
-		});
-
-		return filteredGridAreas.flat().map((item, i) => {
-			return { ...item, name: `cell${i + 1}` };
-		});
-	};
-
 	useEffect(() => {
 		if (!publisherGridAreas.length) {
-			handleOnChangeAttributes('publisherGridAreas', generateArea({}), {
-				path: '',
-				reset: false,
-				action: 'normal',
-			});
+			handleOnChangeAttributes(
+				'publisherGridAreas',
+				generateAreas({
+					gridRows: publisherGridRows.value,
+					gridColumns: publisherGridColumns.value,
+					prevGridAreas: publisherGridAreas,
+				}),
+				{
+					path: '',
+					reset: false,
+					action: 'normal',
+				}
+			);
 		}
 	}, []);
 
@@ -281,7 +211,7 @@ export const VirtualGrid = ({ block }) => {
 						},
 						{
 							addOrModifyRootItems: {
-								publisherGridAreas: generateArea({
+								publisherGridAreas: generateAreas({
 									gridRows: [
 										...publisherGridRows.value,
 										{
@@ -293,6 +223,8 @@ export const VirtualGrid = ({ block }) => {
 											id: nanoid(),
 										},
 									],
+									gridColumns: publisherGridColumns.value,
+									prevGridAreas: publisherGridAreas,
 								}),
 							},
 							ref: {
@@ -340,7 +272,7 @@ export const VirtualGrid = ({ block }) => {
 						},
 						{
 							addOrModifyRootItems: {
-								publisherGridAreas: generateArea({
+								publisherGridAreas: generateAreas({
 									gridColumns: [
 										...publisherGridColumns.value,
 										{
@@ -352,6 +284,8 @@ export const VirtualGrid = ({ block }) => {
 											id: nanoid(),
 										},
 									],
+									gridRows: publisherGridRows.value,
+									prevGridAreas: publisherGridAreas,
 								}),
 							},
 							ref: {
@@ -427,11 +361,7 @@ export const VirtualGrid = ({ block }) => {
 					})}
 				</div>
 
-				<Cells
-					hoveredColumn={hoveredColumn}
-					hoveredRow={hoveredRow}
-					generateArea={generateArea}
-				/>
+				<Cells hoveredColumn={hoveredColumn} hoveredRow={hoveredRow} />
 			</div>
 		</div>
 	);
