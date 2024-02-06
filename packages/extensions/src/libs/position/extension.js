@@ -64,12 +64,7 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 			>
 				<FeatureWrapper
 					isActive={isShownPosition}
-					isActiveOnStates={
-						extensionConfig.publisherPosition.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						extensionConfig.publisherPosition.isActiveOnBreakpoints
-					}
+					config={extensionConfig.publisherPosition}
 				>
 					<ControlContextProvider
 						value={{
@@ -109,13 +104,7 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 					values?.publisherPosition?.type !== 'static' && (
 						<FeatureWrapper
 							isActive={isShownZIndex}
-							isActiveOnStates={
-								extensionConfig.publisherZIndex.isActiveOnStates
-							}
-							isActiveOnBreakpoints={
-								extensionConfig.publisherZIndex
-									.isActiveOnBreakpoints
-							}
+							config={extensionConfig.publisherZIndex}
 						>
 							<ControlContextProvider
 								value={{

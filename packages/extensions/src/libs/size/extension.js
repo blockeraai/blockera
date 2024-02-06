@@ -126,13 +126,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 					<BaseControl columns="columns-1">
 						<FeatureWrapper
 							isActive={isShowWidth}
-							isActiveOnStates={
-								extensionConfig.publisherWidth.isActiveOnStates
-							}
-							isActiveOnBreakpoints={
-								extensionConfig.publisherWidth
-									.isActiveOnBreakpoints
-							}
+							config={extensionConfig.publisherWidth}
 						>
 							<ControlContextProvider
 								value={{
@@ -212,14 +206,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 							>
 								<FeatureWrapper
 									isActive={isShowMinWidth}
-									isActiveOnStates={
-										extensionConfig.publisherMinWidth
-											.isActiveOnStates
-									}
-									isActiveOnBreakpoints={
-										extensionConfig.publisherMinWidth
-											.isActiveOnBreakpoints
-									}
+									config={extensionConfig.publisherMinWidth}
 								>
 									<ControlContextProvider
 										value={{
@@ -291,14 +278,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 
 								<FeatureWrapper
 									isActive={isShowMaxWidth}
-									isActiveOnStates={
-										extensionConfig.publisherMaxWidth
-											.isActiveOnStates
-									}
-									isActiveOnBreakpoints={
-										extensionConfig.publisherMaxWidth
-											.isActiveOnBreakpoints
-									}
+									config={extensionConfig.publisherMaxWidth}
 								>
 									<ControlContextProvider
 										value={{
@@ -376,13 +356,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 					<BaseControl columns="columns-1">
 						<FeatureWrapper
 							isActive={isShowHeight}
-							isActiveOnStates={
-								extensionConfig.publisherHeight.isActiveOnStates
-							}
-							isActiveOnBreakpoints={
-								extensionConfig.publisherHeight
-									.isActiveOnBreakpoints
-							}
+							config={extensionConfig.publisherHeight}
 						>
 							<ControlContextProvider
 								value={{
@@ -462,14 +436,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 							>
 								<FeatureWrapper
 									isActive={isShowMinHeight}
-									isActiveOnStates={
-										extensionConfig.publisherMinHeight
-											.isActiveOnStates
-									}
-									isActiveOnBreakpoints={
-										extensionConfig.publisherMinHeight
-											.isActiveOnBreakpoints
-									}
+									config={extensionConfig.publisherMinHeight}
 								>
 									<ControlContextProvider
 										value={{
@@ -541,14 +508,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 
 								<FeatureWrapper
 									isActive={isShowMaxHeight}
-									isActiveOnStates={
-										extensionConfig.publisherMaxHeight
-											.isActiveOnStates
-									}
-									isActiveOnBreakpoints={
-										extensionConfig.publisherMaxHeight
-											.isActiveOnBreakpoints
-									}
+									config={extensionConfig.publisherMaxHeight}
 								>
 									<ControlContextProvider
 										value={{
@@ -624,12 +584,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowOverflow}
-					isActiveOnStates={
-						extensionConfig.publisherOverflow.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						extensionConfig.publisherOverflow.isActiveOnBreakpoints
-					}
+					config={extensionConfig.publisherOverflow}
 				>
 					<ControlContextProvider
 						value={{
@@ -724,12 +679,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowRatio}
-					isActiveOnStates={
-						extensionConfig.publisherRatio.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						extensionConfig.publisherRatio.isActiveOnBreakpoints
-					}
+					config={extensionConfig.publisherRatio}
 				>
 					<ControlContextProvider
 						value={{
@@ -752,12 +702,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowFit}
-					isActiveOnStates={
-						extensionConfig.publisherFit.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						extensionConfig.publisherFit.isActiveOnBreakpoints
-					}
+					config={extensionConfig.publisherFit}
 				>
 					<ControlContextProvider
 						value={{

@@ -80,14 +80,7 @@ export const StyleVariationsExtension: ComponentType<StyleVariationsExtensionPro
 				>
 					<FeatureWrapper
 						isActive={isActiveStyleVariation}
-						isActiveOnStates={
-							extensionConfig.publisherStyleVariation
-								.isActiveOnStates
-						}
-						isActiveOnBreakpoints={
-							extensionConfig.publisherStyleVariation
-								.isActiveOnBreakpoints
-						}
+						config={extensionConfig.publisherStyleVariation}
 					>
 						<BlockStyles
 							styles={{

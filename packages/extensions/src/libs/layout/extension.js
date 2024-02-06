@@ -124,12 +124,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowDisplay}
-					isActiveOnStates={
-						extensionConfig.publisherDisplay.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						extensionConfig.publisherDisplay.isActiveOnBreakpoints
-					}
+					config={extensionConfig.publisherDisplay}
 				>
 					<ControlContextProvider
 						value={{
@@ -281,14 +276,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 					<>
 						<FeatureWrapper
 							isActive={isShowFlexLayout}
-							isActiveOnStates={
-								extensionConfig.publisherFlexLayout
-									.isActiveOnStates
-							}
-							isActiveOnBreakpoints={
-								extensionConfig.publisherFlexLayout
-									.isActiveOnBreakpoints
-							}
+							config={extensionConfig.publisherFlexLayout}
 						>
 							<ControlContextProvider
 								value={{
@@ -337,13 +325,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 
 						<FeatureWrapper
 							isActive={isShowGap}
-							isActiveOnStates={
-								extensionConfig.publisherGap.isActiveOnStates
-							}
-							isActiveOnBreakpoints={
-								extensionConfig.publisherGap
-									.isActiveOnBreakpoints
-							}
+							config={extensionConfig.publisherGap}
 						>
 							<ControlContextProvider
 								value={{
@@ -372,14 +354,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 
 						<FeatureWrapper
 							isActive={isShowFlexWrap}
-							isActiveOnStates={
-								extensionConfig.publisherFlexWrap
-									.isActiveOnStates
-							}
-							isActiveOnBreakpoints={
-								extensionConfig.publisherFlexWrap
-									.isActiveOnBreakpoints
-							}
+							config={extensionConfig.publisherFlexWrap}
 						>
 							<ControlContextProvider
 								value={{
@@ -561,13 +536,8 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 							{values.publisherFlexWrap?.value === 'wrap' && (
 								<FeatureWrapper
 									isActive={isShowAlignContent}
-									isActiveOnStates={
+									config={
 										extensionConfig.publisherAlignContent
-											.isActiveOnStates
-									}
-									isActiveOnBreakpoints={
-										extensionConfig.publisherAlignContent
-											.isActiveOnBreakpoints
 									}
 								>
 									<ControlContextProvider

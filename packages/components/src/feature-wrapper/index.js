@@ -16,17 +16,21 @@ import type { FeatureWrapperProps } from './types';
 import { Wrapper } from './components/wrapper';
 
 export default function FeatureWrapper({
+	config,
 	isActive = true,
-	isActiveOnFree = true,
-	isActiveOnFreeText = '',
-	isActiveOnStates = 'all',
-	isActiveOnStatesText = '',
-	isActiveOnBreakpoints = 'all',
-	isActiveOnBreakpointsText = '',
 	children,
 	...props
 }: FeatureWrapperProps): Node {
 	const { getCurrentState, getBreakpoint } = useBlockContext();
+
+	const feature = {
+		isActiveOnFree: true,
+		isActiveOnStates: 'all',
+		isActiveOnBreakpoints: 'all',
+		isActiveOnInnerBlocks: true,
+		isActiveOnInnerBlockOnFree: true,
+		...config,
+	};
 
 	if (!isActive) {
 		return <></>;
@@ -35,25 +39,26 @@ export default function FeatureWrapper({
 	// todo add free version detection
 	const isFree = true;
 
-	if (isFree && !isActiveOnFree) {
+	if (isFree && !feature.isActiveOnFree) {
 		return (
-			<Wrapper type="free" text={isActiveOnFreeText} {...props}>
+			<Wrapper type="free" {...props}>
 				{children}
 			</Wrapper>
 		);
 	}
 
 	if (
-		isActiveOnStates !== 'all' &&
-		!isActiveOnStates.includes(getCurrentState())
+		feature.isActiveOnStates !== 'all' &&
+		!feature.isActiveOnStates.includes(getCurrentState())
 	) {
 		return (
 			<Wrapper
 				type="state"
 				typeName={
-					isActiveOnStates.length === 1 ? isActiveOnStates[0] : ''
+					feature.isActiveOnStates.length === 1
+						? feature.isActiveOnStates[0]
+						: ''
 				}
-				text={isActiveOnStatesText}
 				{...props}
 			>
 				{children}
@@ -62,18 +67,17 @@ export default function FeatureWrapper({
 	}
 
 	if (
-		isActiveOnBreakpoints !== 'all' &&
-		!isActiveOnBreakpoints.includes(getBreakpoint()?.type)
+		feature.isActiveOnBreakpoints !== 'all' &&
+		!feature.isActiveOnBreakpoints.includes(getBreakpoint()?.type)
 	) {
 		return (
 			<Wrapper
 				type="breakpoint"
 				typeName={
-					isActiveOnBreakpoints.length === 1
-						? isActiveOnBreakpoints[0]
+					feature.isActiveOnBreakpoints.length === 1
+						? feature.isActiveOnBreakpoints[0]
 						: ''
 				}
-				text={isActiveOnBreakpointsText}
 				{...props}
 			>
 				{children}

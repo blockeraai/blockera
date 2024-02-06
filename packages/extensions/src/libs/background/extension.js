@@ -95,10 +95,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowBackground}
-					isActiveOnStates={publisherBackground.isActiveOnStates}
-					isActiveOnBreakpoints={
-						publisherBackground.isActiveOnBreakpoints
-					}
+					config={publisherBackground}
 				>
 					<ControlContextProvider
 						value={{
@@ -133,10 +130,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowBackgroundColor}
-					isActiveOnStates={publisherBackgroundColor.isActiveOnStates}
-					isActiveOnBreakpoints={
-						publisherBackgroundColor.isActiveOnBreakpoints
-					}
+					config={publisherBackgroundColor}
 				>
 					<ControlContextProvider
 						value={{
@@ -191,10 +185,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowBackgroundClip}
-					isActiveOnStates={publisherBackgroundClip.isActiveOnStates}
-					isActiveOnBreakpoints={
-						publisherBackgroundClip.isActiveOnBreakpoints
-					}
+					config={publisherBackgroundClip}
 				>
 					<ControlContextProvider
 						value={{

@@ -91,14 +91,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowFlexChildSizing}
-					isActiveOnStates={
-						extensionConfig.publisherFlexChildSizing
-							.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						extensionConfig.publisherFlexChildSizing
-							.isActiveOnBreakpoints
-					}
+					config={extensionConfig.publisherFlexChildSizing}
 				>
 					<ControlContextProvider
 						value={{
@@ -286,13 +279,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowFlexChildAlign}
-					isActiveOnStates={
-						extensionConfig.publisherFlexChildAlign.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						extensionConfig.publisherFlexChildAlign
-							.isActiveOnBreakpoints
-					}
+					config={extensionConfig.publisherFlexChildAlign}
 				>
 					<ControlContextProvider
 						value={{
@@ -356,13 +343,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowFlexChildOrder}
-					isActiveOnStates={
-						extensionConfig.publisherFlexChildOrder.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						extensionConfig.publisherFlexChildOrder
-							.isActiveOnBreakpoints
-					}
+					config={extensionConfig.publisherFlexChildOrder}
 				>
 					<ControlContextProvider
 						value={{

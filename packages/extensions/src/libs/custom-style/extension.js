@@ -75,8 +75,7 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 				>
 					<FeatureWrapper
 						isActive={isShowCustomCSS}
-						isActiveOnStates={isActiveOnStates}
-						isActiveOnBreakpoints={isActiveOnBreakpoints}
+						config={extensionConfig.publisherCustomCSS}
 					>
 						<ControlContextProvider
 							value={{

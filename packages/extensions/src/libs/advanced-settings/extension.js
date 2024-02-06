@@ -67,13 +67,7 @@ export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 
 					<FeatureWrapper
 						isActive={isShowAttributes}
-						isActiveOnStates={
-							extensionConfig.publisherAttributes.isActiveOnStates
-						}
-						isActiveOnBreakpoints={
-							extensionConfig.publisherAttributes
-								.isActiveOnBreakpoints
-						}
+						config={extensionConfig.publisherAttributes}
 					>
 						<ControlContextProvider
 							value={{
