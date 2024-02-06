@@ -73,14 +73,7 @@ export const GridChildExtension: TGridChildProps = memo<TGridChildProps>(
 
 				<FeatureWrapper
 					isActive={isShowGridChildLayout}
-					isActiveOnStates={
-						extensionConfig.publisherGridChildLayout
-							.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						extensionConfig.publisherGridChildLayout
-							.isActiveOnBreakpoints
-					}
+					config={extensionConfig.publisherGridChildLayout}
 				>
 					<ControlContextProvider
 						value={{
@@ -114,13 +107,7 @@ export const GridChildExtension: TGridChildProps = memo<TGridChildProps>(
 
 				<FeatureWrapper
 					isActive={isShowGridChildOrder}
-					isActiveOnStates={
-						extensionConfig.publisherGridChildOrder.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						extensionConfig.publisherGridChildOrder
-							.isActiveOnBreakpoints
-					}
+					config={extensionConfig.publisherGridChildOrder}
 				>
 					<ControlContextProvider
 						value={{

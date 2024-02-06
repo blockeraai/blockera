@@ -99,13 +99,7 @@ export default function ({
 				<Flex>
 					<FeatureWrapper
 						isActive={isShowRows}
-						isActiveOnStates={
-							extensionConfig.publisherGridRows.isActiveOnStates
-						}
-						isActiveOnBreakpoints={
-							extensionConfig.publisherGridRows
-								.isActiveOnBreakpoints
-						}
+						config={extensionConfig.publisherGridRows}
 					>
 						<ControlContextProvider
 							value={{
@@ -268,14 +262,7 @@ export default function ({
 
 					<FeatureWrapper
 						isActive={isShowColumns}
-						isActiveOnStates={
-							extensionConfig.publisherGridColumns
-								.isActiveOnStates
-						}
-						isActiveOnBreakpoints={
-							extensionConfig.publisherGridColumns
-								.isActiveOnBreakpoints
-						}
+						config={extensionConfig.publisherGridColumns}
 					>
 						<ControlContextProvider
 							value={{
@@ -660,12 +647,7 @@ export default function ({
 			)} */}
 			<FeatureWrapper
 				isActive={isShowGap}
-				isActiveOnStates={
-					extensionConfig.publisherGridGap.isActiveOnStates
-				}
-				isActiveOnBreakpoints={
-					extensionConfig.publisherGridGap.isActiveOnBreakpoints
-				}
+				config={extensionConfig.publisherGridGap}
 			>
 				<ControlContextProvider
 					value={{
