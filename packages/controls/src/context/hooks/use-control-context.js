@@ -330,15 +330,15 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 					};
 				}
 
-				setValue(value, ref);
+				setValue(value || '', ref);
 
 				modifyControlValue({
-					value,
+					value: value || '',
 					valueCleanup,
 					controlId: controlInfo.name,
 				});
 
-				return value;
+				return value || '';
 			}
 
 			if (isArray(savedValue)) {

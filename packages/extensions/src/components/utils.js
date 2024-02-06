@@ -12,6 +12,7 @@ import { omitWithPattern } from '@publisher/utils';
  */
 import { hasSameProps } from '../libs';
 import type { InnerBlockType } from '../libs/inner-blocks/types';
+// import { detailedDiff } from 'deep-object-diff';
 
 export const propsAreEqual = (
 	prev: { attributes: Object, name: string },
@@ -21,16 +22,28 @@ export const propsAreEqual = (
 
 	const excludedAttributeKeys = applyFilters(
 		`publisherCore.blockEdit.${normalizedBlockName}.memoization.excludedAttributeKeys`,
-		[]
+		['content']
 	).map((attributeId: string): string => `\b${attributeId}\b`);
 
 	//FIXME: we needs to declaration excludedAttributeKeys for WP Compatibilities and prevent of redundant re-rendering process,
 	// please double check all extensions bootstrap files to define these!
 	if (!excludedAttributeKeys.length) {
+		// Debug Code:
+		// console.log('No Excluded Keys of Props:',detailedDiff(prev.attributes, next.attributes));
+
 		return hasSameProps(prev.attributes, next.attributes);
 	}
 
 	const regexp = new RegExp(excludedAttributeKeys.join('|'));
+
+	// Debug Code:
+	// console.log(
+	//	'With Excluded Keys of Props:'
+	// 	detailedDiff(
+	// 		omitWithPattern(prev.attributes, regexp),
+	// 		omitWithPattern(next.attributes, regexp)
+	// 	)
+	// );
 
 	return hasSameProps(
 		omitWithPattern(prev.attributes, regexp),

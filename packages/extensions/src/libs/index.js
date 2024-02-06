@@ -104,6 +104,7 @@ export {
 	attributes as typographyExtensionAttributes,
 } from './typography';
 export {
+	IconStyles,
 	IconExtension,
 	attributes as IconExtensionAttributes,
 	supports as IconExtensionSupports,

@@ -19,9 +19,9 @@ import {
 /**
  * Publisher dependencies
  */
+import { omitWithPattern } from '@publisher/utils';
 import { useCssGenerator } from '@publisher/style-engine';
 import { extensionClassNames } from '@publisher/classnames';
-import { isUndefined, omitWithPattern } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -177,8 +177,8 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			);
 
 			if (
-				isUndefined(attributes.publisherPropsId) &&
-				0 < Object.keys(publisherAttributes)?.length
+				'' === attributes.publisherPropsId &&
+				2 < Object.keys(publisherAttributes)?.length
 			) {
 				const d = new Date();
 				setAttributes({
@@ -192,11 +192,20 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						d.getSeconds() +
 						d.getMilliseconds(),
 				});
+			} else if (
+				'' !== attributes.publisherPropsId &&
+				2 === Object.keys(publisherAttributes)?.length &&
+				!attributes.publisherInnerBlocks.length
+			) {
+				setAttributes({
+					...attributes,
+					publisherPropsId: '',
+				});
 			}
 
 			return undefined;
 			// eslint-disable-next-line
-		}, []);
+		}, [attributes]);
 
 		const _attributes: Object = useMemo(() => {
 			const _className = extensionClassNames(
