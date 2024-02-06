@@ -4,6 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { Element } from 'react';
+import { useSelect } from '@wordpress/data';
 
 /**
  * Publisher dependencies
@@ -13,13 +14,29 @@ import { getClassNames } from '@publisher/classnames';
 /**
  * Internal dependencies
  */
+import { isInnerBlock, isNormalState } from './utils';
 import { settings } from '../libs/block-states/config';
 
 export default function StateContainer({
 	children,
 	currentState,
 }: Object): Element<any> {
-	const activeColor = settings[currentState.type].color;
+	const { currentBlock = 'master', selectedState = 'normal' } = useSelect(
+		(select) => {
+			const { getExtensionCurrentBlock, getExtensionCurrentBlockState } =
+				select('publisher-core/extensions');
+
+			return {
+				currentBlock: getExtensionCurrentBlock(),
+				selectedState: getExtensionCurrentBlockState(),
+			};
+		}
+	);
+
+	const activeColor =
+		isInnerBlock(currentBlock) && isNormalState(selectedState)
+			? '#05a0f7'
+			: settings[currentState.type].color;
 
 	return (
 		<div

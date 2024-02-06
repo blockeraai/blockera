@@ -11,6 +11,7 @@ import { omitWithPattern } from '@publisher/utils';
  * Internal dependencies
  */
 import { hasSameProps } from '../libs';
+import type { TStates } from '../libs/block-states/types';
 import type { InnerBlockType } from '../libs/inner-blocks/types';
 // import { detailedDiff } from 'deep-object-diff';
 
@@ -60,3 +61,12 @@ export const propsAreEqual = (
 export const isInnerBlock = (
 	currentBlock: 'master' | InnerBlockType | string
 ): boolean => 'master' !== currentBlock;
+
+/**
+ * is current block on normal state?
+ *
+ * @param {TStates} selectedState The current selected state.
+ * @return {boolean} true on success, false on otherwise.
+ */
+export const isNormalState = (selectedState: TStates): boolean =>
+	'normal' === selectedState;
