@@ -11,7 +11,7 @@ import type { MixedElement, ComponentType } from 'react';
 /**
  * Publisher dependencies
  */
-import { Button, Icon } from '@publisher/components';
+import { Button } from '@publisher/components';
 import { componentClassNames } from '@publisher/classnames';
 import { BaseControl, PanelBodyControl } from '@publisher/controls';
 
@@ -23,6 +23,7 @@ import { useBlockContext } from '../../hooks';
 import { isInnerBlock } from '../../components';
 import { InnerBlocksExtensionIcon } from './icons';
 import type { InnerBlockModel, InnerBlocksProps } from './types';
+import { ArrowIcon } from './icons/arrow';
 
 export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 	({ innerBlocks }: InnerBlocksProps): MixedElement => {
@@ -57,15 +58,11 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 								contentAlign="left"
 								onClick={() => switchBlockSettings(type)}
 							>
-								{icon && icon?.name ? (
-									<Icon icon={icon.name} library={icon.lib} />
-								) : (
-									icon || <></>
-								)}
+								{icon}
 
 								{__('Customize', 'publisher-core')}
 
-								<Icon icon={'arrowRight'} library={'wp'} />
+								<ArrowIcon />
 							</Button>
 						</BaseControl>
 					);
