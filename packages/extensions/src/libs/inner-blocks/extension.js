@@ -57,8 +57,10 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 								contentAlign="left"
 								onClick={() => switchBlockSettings(type)}
 							>
-								{icon && (
+								{icon && icon?.name ? (
 									<Icon icon={icon.name} library={icon.lib} />
+								) : (
+									icon || <></>
 								)}
 
 								{__('Customize', 'publisher-core')}
