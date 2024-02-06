@@ -60,7 +60,9 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 								{icon && (
 									<Icon icon={icon.name} library={icon.lib} />
 								)}
+
 								{__('Customize', 'publisher-core')}
+
 								<Icon icon={'arrowRight'} library={'wp'} />
 							</Button>
 						</BaseControl>
@@ -76,7 +78,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 			<>
 				<PanelBodyControl
 					title={__('Inner Blocks', 'publisher-core')}
-					initialOpen={true}
+					initialOpen={false}
 					icon={<InnerBlocksExtensionIcon />}
 					className={componentClassNames(
 						'extension',
