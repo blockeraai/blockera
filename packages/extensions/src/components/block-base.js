@@ -175,7 +175,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				sanitizedBlockAttributes(attributes),
 				ignoreDefaultBlockAttributeKeysRegExp()
 			);
-			console.log(publisherAttributes, attributes.publisherInnerBlocks);
+
 			if (
 				'' === attributes.publisherPropsId &&
 				2 < Object.keys(publisherAttributes)?.length
