@@ -1,0 +1,9 @@
+.publisher-component-button.publisher-control-inner-block__button {
+	--publisher-controls-primary-color: #00ac74;
+	transition: var(--publisher-controls-transition);
+
+	&:hover {
+		color: var(--publisher-controls-primary-color) !important;
+		--publisher-controls-border-color: var(--publisher-controls-primary-color) !important;
+	}
+}
