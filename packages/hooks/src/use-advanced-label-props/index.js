@@ -87,7 +87,8 @@ export const useAdvancedLabelProps = ({
 					state.breakpoints.filter((breakpoint) => {
 						let stateValue =
 							'normal' === state.type &&
-							'desktop' === breakpoint.type
+							// FIXME: when implements canvas editor store api please remove "desktop" exception.
+							['desktop', 'laptop'].includes(breakpoint.type)
 								? blockAttributes
 								: breakpoint?.attributes;
 

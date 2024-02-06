@@ -94,14 +94,16 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 		const masterIsNormalState = (): boolean =>
 			'normal' === attributes?.publisherCurrentState &&
-			/desktop/i.test(getDeviceType());
+			// FIXME: when implements canvas editor store api please remove "desktop" exception.
+			/desktop|laptop/i.test(getDeviceType());
 
 		const isNormalState = (): boolean => {
 			if (isInnerBlock(currentBlock)) {
 				return (
 					'normal' ===
 						currentInnerBlock?.attributes?.publisherCurrentState &&
-					/desktop/i.test(getDeviceType())
+					// FIXME: when implements canvas editor store api please remove "desktop" exception.
+					/desktop|laptop/i.test(getDeviceType())
 				);
 			}
 
