@@ -17,7 +17,7 @@ import { calcGridTemplateAreas } from '../../../libs/layout/utils';
 import { useBlockContext } from '../../../hooks';
 import { AreaMergeHandler } from './index';
 
-export const Cells = ({ hoveredColumn, hoveredRow }) => {
+export const Cells = ({ hoveredColumn, hoveredRow, generateArea }) => {
 	const { getAttributes, handleOnChangeAttributes } = useBlockContext();
 
 	const { publisherGridColumns, publisherGridRows, publisherGridAreas } =
@@ -108,16 +108,27 @@ export const Cells = ({ hoveredColumn, hoveredRow }) => {
 				: deletedAreasNames.join(' & ')
 		}`;
 
-		filteredAreas.push({
+		const deletedAreaIndex = publisherGridAreas.findIndex(
+			(item) =>
+				deletedAreasIds.includes(item.id) ||
+				item.id === startElement.id ||
+				item.id === resizeTo.id
+		);
+
+		filteredAreas.splice(deletedAreaIndex, 0, {
 			...newArea,
 			subText: `Merged ${MergedSubText}`,
 		});
 
-		handleOnChangeAttributes('publisherGridAreas', [...filteredAreas], {
-			path: '',
-			reset: false,
-			action: 'normal',
-		});
+		handleOnChangeAttributes(
+			'publisherGridAreas',
+			generateArea({ prevGridAreas: [...filteredAreas] }),
+			{
+				path: '',
+				reset: false,
+				action: 'normal',
+			}
+		);
 	};
 	const gridTemplateArea = calcGridTemplateAreas({
 		gridColumns: publisherGridColumns,
@@ -148,7 +159,7 @@ export const Cells = ({ hoveredColumn, hoveredRow }) => {
 					<p style={{ pointerEvents: 'none' }}>
 						{item.name?.replace(/[^-\.0-9]/g, '')}
 					</p>
-					<span style={{ fontSize: '15px' }}>{item?.subText}</span>
+					{/* <span style={{ fontSize: '15px' }}>{item?.subText}</span> */}
 					{activeAreaId === item.id && (
 						<AreaMergeHandler
 							setResizeToElementId={setResizeToElementId}
