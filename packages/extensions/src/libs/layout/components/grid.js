@@ -16,6 +16,7 @@ import {
 	InputControl,
 } from '@publisher/controls';
 import { useBlockContext } from '../../../hooks';
+import { generateAreas } from '../../../components/grid-builder/utils';
 
 /**
  * Internal dependencies
@@ -181,10 +182,18 @@ export default function ({
 											{ length, value },
 											{
 												addOrModifyRootItems: {
-													publisherGridAreas: [
-														...values.publisherGridAreas,
-														...newAreas,
-													],
+													publisherGridAreas:
+														generateAreas({
+															gridRows: value,
+															gridColumns:
+																values
+																	.publisherGridColumns
+																	.value,
+															prevGridAreas: [
+																...values.publisherGridAreas,
+																...newAreas,
+															],
+														}),
 												},
 												ref,
 											}
@@ -242,10 +251,18 @@ export default function ({
 											{ length, value },
 											{
 												addOrModifyRootItems: {
-													publisherGridAreas: [
-														...filteredAreas,
-														...mutedMergedItems,
-													],
+													publisherGridAreas:
+														generateAreas({
+															gridRows: value,
+															gridColumns:
+																values
+																	.publisherGridColumns
+																	.value,
+															prevGridAreas: [
+																...filteredAreas,
+																...mutedMergedItems,
+															],
+														}),
 												},
 												ref,
 											}
@@ -340,10 +357,18 @@ export default function ({
 											{ length, value },
 											{
 												addOrModifyRootItems: {
-													publisherGridAreas: [
-														...values.publisherGridAreas,
-														...newAreas,
-													],
+													publisherGridAreas:
+														generateAreas({
+															gridRows:
+																values
+																	.publisherGridRows
+																	.value,
+															gridColumns: value,
+															prevGridAreas: [
+																...values.publisherGridAreas,
+																...newAreas,
+															],
+														}),
 												},
 												ref,
 											}
@@ -402,10 +427,18 @@ export default function ({
 											{ length, value },
 											{
 												addOrModifyRootItems: {
-													publisherGridAreas: [
-														...filteredAreas,
-														...mutedMergedItems,
-													],
+													publisherGridAreas:
+														generateAreas({
+															gridRows:
+																values
+																	.publisherGridRows
+																	.value,
+															gridColumns: value,
+															prevGridAreas: [
+																...filteredAreas,
+																...mutedMergedItems,
+															],
+														}),
 												},
 												ref,
 											}
