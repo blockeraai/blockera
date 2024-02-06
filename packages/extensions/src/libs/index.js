@@ -111,9 +111,9 @@ export {
 export {
 	definitionTypes,
 	InnerBlocksExtension,
-	InnerBlocksExtensionIcon,
 	attributes as innerBlocksExtensionsAttributes,
 } from './inner-blocks';
+export * from './inner-blocks/icons';
 export {
 	EntranceAnimationExtensionIcon,
 	EntranceAnimationExtension,
