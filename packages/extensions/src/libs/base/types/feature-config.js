@@ -31,11 +31,23 @@ export type FeatureConfig = {
 	 */
 	cssGenerators?: Object | {},
 	/**
-	 * The active on states settings, by default all or array of state types.
+	 * Is active on free settings.
+	 */
+	isActiveOnFree?: boolean,
+	/**
+	 * Is active on block states? by default all or array of state types.
 	 */
 	isActiveOnStates?: 'all' | Array<TStates>,
 	/**
-	 * The active on breakpoints settings, by default all or array of breakpoint types.
+	 * Is active on breakpoints? by default all or array of breakpoint types.
 	 */
 	isActiveOnBreakpoints?: 'all' | Array<TBreakpoint>,
+	/**
+	 * Is active on inner blocks?
+	 */
+	isActiveOnInnerBlocks?: boolean,
+	/**
+	 * Is active on inner block in free?
+	 */
+	isActiveOnInnerBlockOnFree?: boolean,
 };

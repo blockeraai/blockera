@@ -83,6 +83,10 @@ import {
 	attributes as gridChildAttributes,
 	supports as gridChildSupports,
 } from '../grid-child';
+import {
+	attributes as styleVariationsAttributes,
+	StyleVariationsExtension,
+} from '../style-variations';
 import { EntranceAnimationExtension } from '../entrance-animation';
 import { ScrollAnimationExtension } from '../scroll-animation';
 import { ClickAnimationExtension } from '../click-animation';
@@ -123,6 +127,7 @@ export const attributes = {
 	...advancedSettingsAttributes,
 	...mouseAttributes,
 	...gridChildAttributes,
+	...styleVariationsAttributes,
 };
 export const supports = {
 	...typographySupports,
@@ -264,6 +269,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			clickAnimationConfig,
 			conditionsConfig,
 			advancedSettingsConfig,
+			styleVariationsConfig,
 		} = settings;
 
 		const block = {
@@ -353,6 +359,11 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							display: 'style' === tab.name ? 'block' : 'none',
 						}}
 					>
+						<StyleVariationsExtension
+							block={block}
+							extensionConfig={styleVariationsConfig}
+						/>
+
 						<InnerBlocksExtension
 							innerBlocks={
 								currentStateAttributes?.publisherInnerBlocks ||

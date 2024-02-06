@@ -18,6 +18,10 @@ __experimentalRegistrationInnerBlockExtensionCustomConfigDefinition();
 
 export * from './utils';
 export {
+	StyleVariationsExtension,
+	attributes as styleVariationsExtensionAttributes,
+} from './style-variations';
+export {
 	LayoutExtensionIcon,
 	LayoutStyles,
 	LayoutExtension,
@@ -100,6 +104,7 @@ export {
 	attributes as typographyExtensionAttributes,
 } from './typography';
 export {
+	IconStyles,
 	IconExtension,
 	attributes as IconExtensionAttributes,
 	supports as IconExtensionSupports,
@@ -107,9 +112,9 @@ export {
 export {
 	definitionTypes,
 	InnerBlocksExtension,
-	InnerBlocksExtensionIcon,
 	attributes as innerBlocksExtensionsAttributes,
 } from './inner-blocks';
+export * from './inner-blocks/icons';
 export {
 	EntranceAnimationExtensionIcon,
 	EntranceAnimationExtension,

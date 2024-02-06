@@ -3,6 +3,7 @@
 /**
  * External dependencies
  */
+import memoize from 'fast-memoize';
 import { select } from '@wordpress/data';
 
 /**
@@ -14,6 +15,7 @@ import {
 } from '../../libs/inner-blocks';
 import { useStoreSelectors } from '../use-store-selectors';
 import type { InnerBlocksInfoProps, InnerBlocksInfo } from './types';
+import type { InnerBlockModel } from '../../libs/inner-blocks/types';
 
 export const useInnerBlocksInfo = ({
 	name,
@@ -48,9 +50,26 @@ export const useInnerBlocksInfo = ({
 			? savedInnerBlocks[innerBlockId]
 			: attributes.publisherInnerBlocks;
 
+	const memoizedOverridingInnerBlocks = memoize(
+		(innerBlocks: Array<InnerBlockModel>): Array<InnerBlockModel> =>
+			innerBlocks.map(
+				(
+					innerBlock: InnerBlockModel,
+					index: number
+				): InnerBlockModel => {
+					return {
+						...innerBlock,
+						...additional.publisherInnerBlocks[index],
+						attributes: innerBlock.attributes,
+					};
+				}
+			)
+	);
+
 	return {
 		innerBlockId,
 		currentInnerBlock,
-		publisherInnerBlocks,
+		publisherInnerBlocks:
+			memoizedOverridingInnerBlocks(publisherInnerBlocks),
 	};
 };

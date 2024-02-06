@@ -78,12 +78,7 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowCursor}
-					isActiveOnStates={
-						mouseConfig.publisherCursor.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						mouseConfig.publisherCursor.isActiveOnBreakpoints
-					}
+					config={mouseConfig.publisherCursor}
 				>
 					<ControlContextProvider
 						value={{
@@ -130,12 +125,7 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowUserSelect}
-					isActiveOnStates={
-						mouseConfig.publisherUserSelect.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						mouseConfig.publisherUserSelect.isActiveOnBreakpoints
-					}
+					config={mouseConfig.publisherUserSelect}
 				>
 					<ControlContextProvider
 						value={{
@@ -189,12 +179,7 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowPointerEvents}
-					isActiveOnStates={
-						mouseConfig.publisherPointerEvents.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						mouseConfig.publisherPointerEvents.isActiveOnBreakpoints
-					}
+					config={mouseConfig.publisherPointerEvents}
 				>
 					<ControlContextProvider
 						value={{

@@ -127,12 +127,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowOpacity}
-					isActiveOnStates={
-						extensionConfig.publisherOpacity.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						extensionConfig.publisherOpacity.isActiveOnBreakpoints
-					}
+					config={extensionConfig.publisherOpacity}
 				>
 					<Opacity
 						block={block}
@@ -145,12 +140,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowTransform}
-					isActiveOnStates={
-						extensionConfig.publisherTransform.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						extensionConfig.publisherTransform.isActiveOnBreakpoints
-					}
+					config={extensionConfig.publisherTransform}
 				>
 					<ControlContextProvider
 						value={{
@@ -236,13 +226,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowTransition}
-					isActiveOnStates={
-						extensionConfig.publisherTransition.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						extensionConfig.publisherTransition
-							.isActiveOnBreakpoints
-					}
+					config={extensionConfig.publisherTransition}
 				>
 					<Transition
 						transition={values.publisherTransition}
@@ -255,12 +239,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowFilter}
-					isActiveOnStates={
-						extensionConfig.publisherFilter.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						extensionConfig.publisherFilter.isActiveOnBreakpoints
-					}
+					config={extensionConfig.publisherFilter}
 				>
 					<Filter
 						filter={values.publisherFilter}
@@ -273,13 +252,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowBackdropFilter}
-					isActiveOnStates={
-						extensionConfig.publisherBackdropFilter.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						extensionConfig.publisherBackdropFilter
-							.isActiveOnBreakpoints
-					}
+					config={extensionConfig.publisherBackdropFilter}
 				>
 					<BackdropFilter
 						backdropFilter={values.publisherBackdropFilter}
@@ -294,12 +267,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowDivider}
-					isActiveOnStates={
-						extensionConfig.publisherDivider.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						extensionConfig.publisherDivider.isActiveOnBreakpoints
-					}
+					config={extensionConfig.publisherDivider}
 				>
 					<Divider
 						divider={values.publisherDivider}
@@ -312,12 +280,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowMask}
-					isActiveOnStates={
-						extensionConfig.publisherMask.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						extensionConfig.publisherMask.isActiveOnBreakpoints
-					}
+					config={extensionConfig.publisherMask}
 				>
 					<Mask
 						mask={values.publisherMask}
@@ -330,12 +293,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowBlendMode}
-					isActiveOnStates={
-						extensionConfig.publisherBlendMode.isActiveOnStates
-					}
-					isActiveOnBreakpoints={
-						extensionConfig.publisherBlendMode.isActiveOnBreakpoints
-					}
+					config={extensionConfig.publisherBlendMode}
 				>
 					<Blending
 						blendMode={values.publisherBlendMode}

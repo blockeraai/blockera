@@ -138,6 +138,7 @@ export const useAttributes = (
 			addOrModifyRootItems,
 			currentBlockAttributes,
 			deleteItemsOnResetAction,
+			attributeIsRelatedStatesAttributes,
 			stateType: _attributes.publisherCurrentState,
 			breakpointType: _attributes.publisherCurrentDevice,
 		});

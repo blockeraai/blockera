@@ -38,6 +38,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		addOrModifyRootItems,
 		currentBlockAttributes,
 		deleteItemsOnResetAction,
+		attributeIsRelatedStatesAttributes,
 	} = action;
 
 	switch (type) {
@@ -64,8 +65,11 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			if (isInnerBlock(currentBlock)) {
 				const memoizedNewInnerBlocks = memoize(
 					(blocks: Array<InnerBlockModel>) => {
-						return blocks.map(
-							(block: InnerBlockModel): InnerBlockModel => {
+						const memoizedBlock = memoize(
+							(
+								block: InnerBlockModel,
+								index: number
+							): InnerBlockModel => {
 								if (block.type !== currentBlock) {
 									return block;
 								}
@@ -73,14 +77,18 @@ const reducer = (state: Object = {}, action: Object): Object => {
 								return {
 									...block,
 									attributes: {
-										...block.attributes,
-										...currentBlockAttributes,
-										...addOrModifyRootItems,
+										...(state.publisherInnerBlocks[index]
+											?.attributes || {}),
+										...(attributeIsRelatedStatesAttributes
+											? addOrModifyRootItems
+											: {}),
 										[attributeId]: newValue,
 									},
 								};
 							}
 						);
+
+						return blocks.map(memoizedBlock);
 					}
 				);
 

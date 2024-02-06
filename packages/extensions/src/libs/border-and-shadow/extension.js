@@ -90,13 +90,7 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 
 					<FeatureWrapper
 						isActive={isShownBorder}
-						isActiveOnStates={
-							extensionConfig.publisherBorder.isActiveOnStates
-						}
-						isActiveOnBreakpoints={
-							extensionConfig.publisherBorder
-								.isActiveOnBreakpoints
-						}
+						config={extensionConfig.publisherBorder}
 					>
 						<Border
 							block={block}
@@ -109,14 +103,7 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 
 					<FeatureWrapper
 						isActive={isShownBorderRadius}
-						isActiveOnStates={
-							extensionConfig.publisherBorderRadius
-								.isActiveOnStates
-						}
-						isActiveOnBreakpoints={
-							extensionConfig.publisherBorderRadius
-								.isActiveOnBreakpoints
-						}
+						config={extensionConfig.publisherBorderRadius}
 					>
 						<BorderRadius
 							block={block}
@@ -131,13 +118,7 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 
 					<FeatureWrapper
 						isActive={isShownBoxShadow}
-						isActiveOnStates={
-							extensionConfig.publisherBoxShadow.isActiveOnStates
-						}
-						isActiveOnBreakpoints={
-							extensionConfig.publisherBoxShadow
-								.isActiveOnBreakpoints
-						}
+						config={extensionConfig.publisherBoxShadow}
 					>
 						<ControlContextProvider
 							value={{
@@ -191,13 +172,7 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 
 					<FeatureWrapper
 						isActive={isShownOutline}
-						isActiveOnStates={
-							extensionConfig.publisherOutline.isActiveOnStates
-						}
-						isActiveOnBreakpoints={
-							extensionConfig.publisherOutline
-								.isActiveOnBreakpoints
-						}
+						config={extensionConfig.publisherOutline}
 					>
 						<ControlContextProvider
 							value={{
