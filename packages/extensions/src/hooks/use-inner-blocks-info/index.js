@@ -60,7 +60,10 @@ export const useInnerBlocksInfo = ({
 					return {
 						...innerBlock,
 						...additional.publisherInnerBlocks[index],
-						attributes: innerBlock.attributes,
+						attributes: {
+							...attributes,
+							...innerBlock.attributes,
+						},
 					};
 				}
 			)

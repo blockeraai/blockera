@@ -11,6 +11,7 @@ export const useCalculateCurrentAttributes = ({
 	attributes,
 	currentBlock,
 	breakpointId,
+	innerBlockId,
 	blockStateId,
 	isNormalState,
 	currentInnerBlock,
@@ -25,6 +26,10 @@ export const useCalculateCurrentAttributes = ({
 			currentAttributes = attributes;
 		}
 	} else if (isInnerBlock(currentBlock)) {
+		if (publisherInnerBlocks[innerBlockId]) {
+			currentInnerBlock = publisherInnerBlocks[innerBlockId];
+		}
+
 		currentAttributes = {
 			...currentInnerBlock?.attributes,
 			...(currentInnerBlock?.attributes?.publisherBlockStates[
