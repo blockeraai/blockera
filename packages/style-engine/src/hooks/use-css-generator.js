@@ -59,7 +59,7 @@ export const useCssGenerator = ({
 			stateAttributes: Object,
 			media: string,
 		} => {
-			const currentState = blockAttributes.publisherBlockStates.find(
+			const currentState = blockAttributes?.publisherBlockStates?.find(
 				({ type }: { type: TStates }): boolean => type === state
 			);
 
