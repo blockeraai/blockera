@@ -83,10 +83,6 @@ export const Cells = ({ hoveredColumn, hoveredRow }) => {
 			.filter((item) => item)
 			.map(({ id }) => id);
 
-		const deletedAreasNames = deletedAreas
-			.filter((item) => item)
-			.map(({ name }) => name.replace(/[^-\.0-9]/g, ''));
-
 		const filteredAreas = publisherGridAreas.filter(
 			(area) =>
 				!deletedAreasIds.includes(area.id) &&
@@ -94,20 +90,16 @@ export const Cells = ({ hoveredColumn, hoveredRow }) => {
 				area.id !== resizeTo.id
 		);
 
-		const MergedSubText = `${
-			startElement.subText
-				? startElement?.subText?.replace('Merged', '') + ' & '
-				: ''
-		} ${
-			resizeTo.subText && deletedAreasNames
-				? resizeTo?.subText?.replace('Merged', '')
-				: ''
-		} ${
-			deletedAreasNames.length &&
-			(startElement.subText || resizeTo.subText)
-				? ' & ' + deletedAreasNames.join(' & ')
-				: deletedAreasNames.join(' & ')
-		}`;
+		const mergedAreasCoordinates = [
+			...deletedAreas,
+			startElement,
+			resizeTo,
+		].map((item) => {
+			return {
+				column: `${item['column-start']}/${item['column-end']}`,
+				row: `${item['row-start']}/${item['row-end']}`,
+			};
+		});
 
 		const deletedAreaIndex = publisherGridAreas.findIndex(
 			(item) =>
@@ -118,7 +110,7 @@ export const Cells = ({ hoveredColumn, hoveredRow }) => {
 
 		filteredAreas.splice(deletedAreaIndex, 0, {
 			...newArea,
-			subText: `Merged ${MergedSubText}`,
+			coordinates: mergedAreasCoordinates,
 		});
 
 		handleOnChangeAttributes(
