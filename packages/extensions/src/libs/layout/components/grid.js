@@ -82,6 +82,12 @@ export default function ({
 
 	const { setOpenGridBuilder, isOpenGridBuilder } = useBlockContext();
 
+	const mergedAreas = values.publisherGridAreas.filter(
+		(item) => item.mergedArea
+	);
+	const mergedAreasColumnEnd = mergedAreas.map((item) => item['column-end']);
+	const mergedAreasRowEnd = mergedAreas.map((item) => item['row-end']);
+
 	return (
 		<>
 			<BaseControl
@@ -222,16 +228,6 @@ export default function ({
 												)
 												.map(({ id }) => id);
 
-										const mergedItems =
-											values.publisherGridAreas.filter(
-												(item) =>
-													item.mergedArea &&
-													item['row-end'] >
-														length + 1 &&
-													item['row-start'] <
-														length + 1
-											);
-
 										const filteredAreas =
 											values.publisherGridAreas.filter(
 												(item) =>
@@ -239,12 +235,6 @@ export default function ({
 														item.id
 													)
 											);
-
-										const mutedMergedItems =
-											mergedItems.map((item) => ({
-												...item,
-												'row-end': length + 1,
-											}));
 
 										handleOnChangeAttributes(
 											'publisherGridRows',
@@ -258,10 +248,8 @@ export default function ({
 																values
 																	.publisherGridColumns
 																	.value,
-															prevGridAreas: [
-																...filteredAreas,
-																...mutedMergedItems,
-															],
+															prevGridAreas:
+																filteredAreas,
 														}),
 												},
 												ref,
@@ -272,7 +260,11 @@ export default function ({
 								defaultValue={
 									attributes.publisherGridRows.default.length
 								}
-								min={1}
+								min={
+									mergedAreas.length
+										? Math.max(...mergedAreasRowEnd) - 1
+										: 1
+								}
 							/>
 						</ControlContextProvider>
 					</FeatureWrapper>
@@ -398,16 +390,6 @@ export default function ({
 												)
 												.map(({ id }) => id);
 
-										const mergedItems =
-											values.publisherGridAreas.filter(
-												(item) =>
-													item.mergedArea &&
-													item['column-end'] >
-														length + 1 &&
-													item['column-start'] <
-														length + 1
-											);
-
 										const filteredAreas =
 											values.publisherGridAreas.filter(
 												(item) =>
@@ -415,12 +397,6 @@ export default function ({
 														item.id
 													)
 											);
-
-										const mutedMergedItems =
-											mergedItems.map((item) => ({
-												...item,
-												'column-end': length + 1,
-											}));
 
 										handleOnChangeAttributes(
 											'publisherGridColumns',
@@ -434,10 +410,8 @@ export default function ({
 																	.publisherGridRows
 																	.value,
 															gridColumns: value,
-															prevGridAreas: [
-																...filteredAreas,
-																...mutedMergedItems,
-															],
+															prevGridAreas:
+																filteredAreas,
 														}),
 												},
 												ref,
@@ -449,7 +423,11 @@ export default function ({
 									attributes.publisherGridColumns.default
 										.length
 								}
-								min={1}
+								min={
+									mergedAreas.length
+										? Math.max(...mergedAreasColumnEnd) - 1
+										: 1
+								}
 							/>
 						</ControlContextProvider>
 					</FeatureWrapper>
