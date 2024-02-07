@@ -35,7 +35,7 @@ export default function StateContainer({
 
 	const activeColor =
 		isInnerBlock(currentBlock) && isNormalState(selectedState)
-			? '#00ac74'
+			? '#cc0000'
 			: settings[currentState.type].color;
 
 	return (
