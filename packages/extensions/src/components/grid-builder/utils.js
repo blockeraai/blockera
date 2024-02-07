@@ -70,11 +70,11 @@ export const generateAreas = ({ gridRows, gridColumns, prevGridAreas }) => {
 					newGridAreas
 						.flat()
 						.find(
-							(item) =>
-								item['column-start'] === col &&
-								item['column-end'] === col + 1 &&
-								item['row-start'] === row &&
-								item['row-end'] === row + 1
+							(_item) =>
+								_item['column-start'] === col &&
+								_item['column-end'] === col + 1 &&
+								_item['row-start'] === row &&
+								_item['row-end'] === row + 1
 						)
 				);
 			}

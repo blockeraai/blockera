@@ -8,7 +8,7 @@ import { __, sprintf } from '@wordpress/i18n';
 /**
  * publisher dependencies
  */
-import { Popover } from '@publisher/components';
+import { Popover, Button } from '@publisher/components';
 import {
 	ToggleSelectControl,
 	InputControl,
@@ -23,6 +23,7 @@ import { generateExtensionId } from '../../../libs/utils';
  * Internal dependencies
  */
 import { default as GridIcon } from '../icons/grid-column';
+import { generateAreas } from '../utils';
 
 export const SizeSetting = ({
 	item,
@@ -31,12 +32,31 @@ export const SizeSetting = ({
 	items,
 	attributeId,
 }) => {
-	const { handleOnChangeAttributes } = useBlockContext();
+	const { handleOnChangeAttributes, getAttributes } = useBlockContext();
+
+	const { publisherGridColumns, publisherGridRows, publisherGridAreas } =
+		getAttributes();
 
 	const filteredItems = items.value.filter((_item) => _item.id !== item.id);
 	const currentItemIndex = items.value.findIndex(
 		(_item) => _item.id === item.id
 	);
+
+	const hasMergedArea = publisherGridAreas.find((_item) => {
+		if (attributeId === 'publisherGridColumns') {
+			const colCoordinates = _item?.coordinates?.map(
+				(item) => item.column
+			);
+			return colCoordinates?.includes(
+				`${currentItemIndex + 1}/${currentItemIndex + 2}`
+			);
+		}
+
+		const rowCoordinates = _item?.coordinates?.map((item) => item.row);
+		return rowCoordinates?.includes(
+			`${currentItemIndex + 1}/${currentItemIndex + 2}`
+		);
+	});
 
 	const isAutoFitEnabled =
 		item['auto-fit'] ||
@@ -311,71 +331,88 @@ export const SizeSetting = ({
 					)}
 				</>
 
-				{/* <Button
+				<Button
 					onClick={() => {
-						const itemIndex = items.value.findIndex(
-							(_item) => _item.id === item.id
-						);
-
-						const deletedAreas = publisherGridAreas
-							.filter(
-								(_item) =>
-									_item['column-start'] === itemIndex + 1 &&
-									_item['column-end'] === itemIndex + 2
-							)
-							.map(({ id }) => id);
-
-						const mergedItems = publisherGridAreas.filter(
-							(_item) =>
-								_item.mergedArea &&
-								(_item['column-start'] === itemIndex + 1 ||
-									_item['column-end'] === itemIndex + 2)
-						);
+						if (hasMergedArea) return null;
 
 						const filteredAreas = publisherGridAreas.filter(
-							(item) => !deletedAreas.includes(item.id)
+							(_item) => {
+								if (attributeId === 'publisherGridColumns') {
+									return (
+										_item['column-start'] !==
+											currentItemIndex + 1 &&
+										_item['column-end'] !==
+											currentItemIndex + 2
+									);
+								}
+								return (
+									_item['row-start'] !==
+										currentItemIndex + 1 &&
+									_item['row-end'] !== currentItemIndex + 2
+								);
+							}
 						);
 
-						const mutedMergedItems = mergedItems
-							.map((_item) => {
-								if (
-									_item['column-start'] === itemIndex + 1 &&
-									_item['column-end'] === itemIndex + 2
-								) {
-									return null;
-								}
-								if (_item['column-start'] === itemIndex + 1) {
+						const mutedAreas = filteredAreas.map((_item) => {
+							if (
+								_item.mergedArea &&
+								_item['column-start'] > currentItemIndex + 1 &&
+								attributeId === 'publisherGridColumns'
+							) {
+								const updatedCoordinates =
+									_item.coordinates?.map((coord) => {
+										return {
+											...coord,
+											column: `${
+												coord.column.split('/')[0] - 1
+											}/${
+												coord.column.split('/')[1] - 1
+											}`,
+										};
+									});
+
+								return {
+									..._item,
+									'column-start': _item['column-start'] - 1,
+									'column-end': _item['column-end'] - 1,
+									coordinates: updatedCoordinates,
+								};
+							}
+
+							if (
+								attributeId === 'publisherGridRows' &&
+								_item['row-start'] > currentItemIndex + 1
+							) {
+								if (_item.mergedArea) {
+									const updatedCoordinates =
+										_item.coordinates?.map((coord) => {
+											return {
+												...coord,
+												row: `${
+													coord.row.split('/')[0] - 1
+												}/${
+													coord.row.split('/')[1] - 1
+												}`,
+											};
+										});
+
 									return {
 										..._item,
-										'column-end': itemIndex + 2,
+										'row-start': _item['row-start'] - 1,
+										'row-end': _item['row-end'] - 1,
+										coordinates: updatedCoordinates,
 									};
 								}
-								if (_item['column-end'] === itemIndex + 2) {
-									return {
-										..._item,
-										'column-end': itemIndex + 1,
-									};
-								}
-							})
-							.filter((item) => item);
 
-						const nextItems = publisherGridAreas
-							.filter(
-								(_item) =>
-									_item['column-start'] > itemIndex + 1 &&
-									_item['column-end'] > itemIndex + 2
-							)
-							.map((_item) => ({
-								..._item,
-								'column-start': _item['column-start'] - 1,
-								'column-end': _item['column-end'] - 1,
-							}));
+								return {
+									..._item,
+									'row-start': _item['row-start'] - 1,
+									'row-end': _item['row-end'] - 1,
+								};
+							}
 
-						const prevItems = publisherGridAreas.filter(
-							(_item) =>
-								_item['column-start'] < itemIndex + 1 &&
-								_item['column-end'] < itemIndex + 2
-						);
+							return _item;
+						});
 
 						handleOnChangeAttributes(
 							attributeId,
@@ -385,18 +422,25 @@ export const SizeSetting = ({
 							},
 							{
 								addOrModifyRootItems: {
-									publisherGridAreas: [
-										...prevItems,
-										...mutedMergedItems,
-										...nextItems,
-									],
+									publisherGridAreas: generateAreas({
+										gridRows:
+											attributeId === 'publisherGridRows'
+												? filteredItems
+												: publisherGridRows.value,
+										gridColumns:
+											attributeId ===
+											'publisherGridColumns'
+												? filteredItems
+												: publisherGridColumns.value,
+										prevGridAreas: mutedAreas,
+									}),
 								},
 							}
 						);
 					}}
 				>
-					remove
-				</Button> */}
+					delete
+				</Button>
 			</ControlContextProvider>
 		</Popover>
 	);
