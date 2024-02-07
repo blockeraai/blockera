@@ -280,7 +280,13 @@ export const getBreakPoints: (
 			};
 		}
 
-		const publisherInnerBlocks = state.publisherInnerBlocks
+		let oldInnerBlocks = state.publisherInnerBlocks;
+
+		if (!oldInnerBlocks?.length) {
+			oldInnerBlocks = action.publisherInnerBlocks;
+		}
+
+		const publisherInnerBlocks = oldInnerBlocks
 			.map((innerBlock: InnerBlockModel) =>
 				getInnerBlocks(innerBlock, breakpoint, action)
 			)

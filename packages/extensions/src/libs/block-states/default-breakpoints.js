@@ -48,7 +48,7 @@ export default function (
 				min: '1441px',
 				max: '1920px',
 			},
-			...attributes,
+			attributes: {},
 		},
 		{
 			type: 'laptop',
@@ -58,7 +58,7 @@ export default function (
 				min: '1025px',
 				max: '1440px',
 			},
-			attributes: {},
+			...attributes,
 		},
 		{
 			type: 'tablet',

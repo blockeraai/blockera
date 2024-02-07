@@ -93,7 +93,7 @@ export function useCssSelectors({
 							const rootOrFeatureSelector: SelectorType =
 								_selectors[selectorKey];
 
-							if ('object' === rootOrFeatureSelector) {
+							if ('object' === typeof rootOrFeatureSelector) {
 								recursiveRegistration(rootOrFeatureSelector);
 								return;
 							}

@@ -28,7 +28,7 @@ export const useBlockStateInfo = ({
 			typeof currentInnerBlock?.attributes?.publisherBlockStates
 	) {
 		return {
-			blockStateId: 0,
+			blockStateId: 0, // normal
 			breakpointId: 3, // laptop
 			currentStateIndex: 0,
 		};

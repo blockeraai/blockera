@@ -12,7 +12,10 @@ import type { MixedElement, ComponentType } from 'react';
  * Publisher dependencies
  */
 import { Button } from '@publisher/components';
-import { componentClassNames } from '@publisher/classnames';
+import {
+	controlInnerClassNames,
+	extensionClassNames,
+} from '@publisher/classnames';
 import { BaseControl, PanelBodyControl } from '@publisher/controls';
 
 /**
@@ -57,6 +60,10 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 								size="input"
 								contentAlign="left"
 								onClick={() => switchBlockSettings(type)}
+								className={controlInnerClassNames(
+									'inner-block__button',
+									'extension-inner-blocks'
+								)}
 							>
 								{icon}
 
@@ -79,10 +86,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 					title={__('Inner Blocks', 'publisher-core')}
 					initialOpen={false}
 					icon={<InnerBlocksExtensionIcon />}
-					className={componentClassNames(
-						'extension',
-						'extension-inner-blocks'
-					)}
+					className={extensionClassNames('inner-blocks')}
 				>
 					<MappedInnerBlocks />
 				</PanelBodyControl>

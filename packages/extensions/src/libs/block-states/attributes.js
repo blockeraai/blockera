@@ -32,6 +32,6 @@ export const attributes = {
 	},
 	publisherCurrentDevice: {
 		type: 'string',
-		default: 'desktop',
+		default: 'laptop',
 	},
 };
