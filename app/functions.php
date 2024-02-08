@@ -1,6 +1,8 @@
 <?php
 
-use Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Publisher\Framework\Illuminate\Foundation\Application;
+use Publisher\Framework\Illuminate\StyleEngine\StyleEngine;
 use Publisher\Framework\Illuminate\Support\Env;
 
 if ( ! function_exists( 'pb_core_config' ) ) {
@@ -21,8 +23,9 @@ if ( ! function_exists( 'pb_core_config' ) ) {
 
 		$key_parts       = explode( '.', $key );
 		$config_includes = array(
-			'app'        => PB_CORE_PATH . '/config/app.php',
-			'valueAddon' => PB_CORE_PATH . '/config/value-addon.php',
+			'app'         => PB_CORE_PATH . '/config/app.php',
+			'breakpoints' => PB_CORE_PATH . '/config/breakpoints.php',
+			'valueAddon'  => PB_CORE_PATH . '/config/value-addon.php',
 		);
 
 		if ( ! $config_includes[ $key_parts[0] ] ) {
@@ -32,7 +35,7 @@ if ( ! function_exists( 'pb_core_config' ) ) {
 
 		$app_config = require $config_includes[ $key_parts[0] ];
 
-		if ( ! $key_parts[1] ) {
+		if ( empty( $key_parts[1] ) ) {
 
 			return $app_config;
 		}
@@ -89,7 +92,7 @@ if ( ! function_exists( 'pb_get_value_addon_real_value' ) ) {
 	/**
 	 * Gets the real value that can be used (Final Value)
 	 *
-	 * @param string $value value
+	 * @param mixed $value value
 	 *
 	 * @return mixed
 	 */
@@ -143,5 +146,40 @@ if ( ! function_exists( 'pb_get_value_addon_real_value' ) ) {
 		}
 
 		return $value;
+	}
+}
+
+if ( ! function_exists( 'pb_get_filter_empty_array_item' ) ) {
+
+	/**
+	 * Get filter empty array item.
+	 *
+	 * @param mixed $item The any array item.
+	 *
+	 * @return bool true on success, false otherwise.
+	 */
+	function pb_get_filter_empty_array_item( $item ): bool {
+
+		if ( is_string( $item ) ) {
+
+			return ! empty( trim( $item ) );
+		}
+
+		return ! empty( $item );
+	}
+}
+
+if ( ! function_exists( 'pb_array_flat' ) ) {
+
+	/**
+	 * Convert nested array (in two-level dimensions) to flat array.
+	 *
+	 * @param array $nestedArray
+	 *
+	 * @return array
+	 */
+	function pb_array_flat( array $nestedArray ): array {
+
+		return array_merge( ...$nestedArray );
 	}
 }
