@@ -19,7 +19,6 @@ import type { BlockStateInfo, BlockStateInfoProps } from './types';
 export const useBlockStateInfo = ({
 	attributes,
 	currentBlock,
-	getDeviceType,
 	currentInnerBlock,
 }: BlockStateInfoProps): BlockStateInfo => {
 	if (
@@ -68,7 +67,7 @@ export const useBlockStateInfo = ({
 					blockStateId
 				)
 			),
-			getDeviceType()
+			'laptop'
 		);
 	} else {
 		blockStateTypes = getMemoizedBlockStateTypes(
@@ -87,7 +86,7 @@ export const useBlockStateInfo = ({
 					blockStateId
 				)
 			),
-			getDeviceType()
+			'laptop'
 		);
 	}
 

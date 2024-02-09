@@ -3,7 +3,6 @@
 /**
  * Internal dependencies
  */
-import type { TBreakpoint } from '../../libs/block-states/types';
 import type {
 	InnerBlockModel,
 	InnerBlockType,
@@ -17,7 +16,6 @@ export type BlockStateInfo = {
 
 export type BlockStateInfoProps = {
 	attributes: Object,
-	getDeviceType: () => TBreakpoint,
 	currentInnerBlock: InnerBlockModel,
 	currentBlock: 'master' | InnerBlockType,
 };
