@@ -5,35 +5,50 @@ namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
 class Outline extends BaseStyleDefinition {
 
 	/**
+	 * @inheritDoc
+	 *
+	 * @param array $setting
+	 *
 	 * @return array
 	 */
-	public function getProperties(): array {
+	protected function collectProps( array $setting ): array {
 
-		$css = [];
+		$props       = [];
+		$cssProperty = $setting['type'];
 
-		foreach ( $this->settings as $setting ) {
+		foreach ( $setting[ $cssProperty ] as $item ) {
 
-			if ( empty( $setting['isVisible'] ) ) {
+			if ( empty( $item['isVisible'] ) ) {
 
 				continue;
 			}
 
-			$css['outlines'][] = sprintf(
+			$props['outline'] = sprintf(
 				'%s %s %s',
-				$setting['border']['width'],
-				$setting['border']['style'],
-				! empty( $setting['border']['color'] ) ? pb_get_value_addon_real_value( $setting['border']['color'] ) : '',
+				$item['border']['width'],
+				$item['border']['style'],
+				! empty( $item['border']['color'] ) ? pb_get_value_addon_real_value( $item['border']['color'] ) : '',
 			);
 
-			$css['offset'][] = ! empty( $setting['offset'] ) ? pb_get_value_addon_real_value( $setting['offset'] ) : '';
+			$props['outline-offset'] = ! empty( $item['offset'] ) ? pb_get_value_addon_real_value( $item['offset'] ) : '';
 		}
 
-		return $css;
+		$this->setProperties( $props );
+
+		return $this->properties;
 	}
 
 	protected function getCacheKey( string $suffix = '' ): string {
 
-		return getClassname( __NAMESPACE__, __CLASS__ ) . parent::getCacheKey( $suffix );
+		return pb_get_classname( __NAMESPACE__, __CLASS__ ) . parent::getCacheKey( $suffix );
+	}
+
+	public function getAllowedProperties(): array {
+
+		return [
+			'publisherOutline' => 'outline',
+			'publisherOffset'  => 'outline-offset',
+		];
 	}
 
 }

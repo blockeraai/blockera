@@ -2,7 +2,7 @@
 
 use Publisher\Framework\Illuminate\StyleEngine\StyleEngine;
 
-if ( ! function_exists( 'getStyles' ) ) {
+if ( ! function_exists( 'pb_get_styles' ) ) {
 	/**
 	 * Retrieve styles as array with css and declarations.
 	 *
@@ -15,7 +15,7 @@ if ( ! function_exists( 'getStyles' ) ) {
 	 *                                  e.g. `array( "$property" => "$value", "$property" => "$value" )`.
 	 * }
 	 */
-	function getStyles( array $styles, array $options = [] ): array {
+	function pb_get_styles( array $styles, array $options = [] ): array {
 
 		$options = wp_parse_args(
 			$options,
@@ -51,7 +51,7 @@ if ( ! function_exists( 'getStyles' ) ) {
 	}
 }
 
-if ( ! function_exists( 'getUniqueClassname' ) ) {
+if ( ! function_exists( 'pb_get_unique_classname' ) ) {
 	/**
 	 * Retrieve css classname with suffix string.
 	 *
@@ -59,28 +59,181 @@ if ( ! function_exists( 'getUniqueClassname' ) ) {
 	 *
 	 * @return string the unique css classname
 	 */
-	function getUniqueClassname( string $suffix ): string {
+	function pb_get_unique_classname( string $suffix ): string {
 
 		return str_replace( '/', '-', $suffix ) . '-' . uniqid( 'publisher-' );
 	}
 }
 
-
-if (!function_exists('getClassname')){
+if ( ! function_exists( 'pb_get_classname' ) ) {
 	/**
 	 * Retrieve classname string.
 	 *
 	 * @param string $namespace the namespace of class
-	 * @param string $class the class full name
+	 * @param string $class     the class full name
 	 *
 	 * @return string retrieve just specific name of class.
 	 */
-	function getClassname(string $namespace , string $class):string{
+	function pb_get_classname( string $namespace, string $class ): string {
 
 		return str_replace(
 			$namespace . '\\',
 			'',
 			$class
 		);
+	}
+}
+
+if ( ! function_exists( 'pb_get_css_media_queries' ) ) {
+
+	/**
+	 * Get css media queries from configured breakpoints.
+	 *
+	 * @return array
+	 */
+	function pb_get_css_media_queries(): array {
+
+		$queries = [];
+
+		foreach ( pb_core_config( 'breakpoints' ) as $breakpoint ) {
+
+			// skip invalid breakpoint.
+			if ( empty( $breakpoint['type'] ) ) {
+
+				continue;
+			}
+
+			[ 'min' => $min, 'max' => $max ] = $breakpoint['settings'];
+
+			$media = '';
+
+			if ( $min && $max ) {
+
+				$media = "@media screen and (max-width: $max) and (min-width: $min)";
+
+			} elseif ( $min ) {
+
+				$media = "@media screen and (min-width: $min)";
+
+			} elseif ( $max ) {
+
+				$media = "@media screen and (max-width: $max)";
+			}
+
+			$queries[ $breakpoint['type'] ] = $media;
+		}
+
+		return $queries;
+	}
+}
+
+if ( ! function_exists( 'pb_get_block_state' ) ) {
+
+	/**
+	 * Get block state from block states with state name.
+	 *
+	 * @param array  $states The block states.
+	 * @param string $state  The state name.
+	 *
+	 * @return array The block state.
+	 */
+	function pb_get_block_state( array $states, string $state ): array {
+
+		if ( ! $state ) {
+
+			return [];
+		}
+
+		if ( empty( $states ) ) {
+
+			return [];
+		}
+
+		$searchIndex = array_search( $state, array_column( $states, 'type' ), true );
+
+		// no state found.
+		if ( ! $searchIndex ) {
+
+			return [];
+		}
+
+		return $states[ $searchIndex ];
+	}
+}
+
+if ( ! function_exists( 'pb_get_state_breakpoint' ) ) {
+
+	/**
+	 * Get state breakpoint with breakpoint name.
+	 *
+	 * @param array  $breakpoints The breakpoints cluster.
+	 * @param string $breakpoint  The breakpoint name.
+	 *
+	 * @return array The breakpoint founded in state cluster on success, empty array when no breakpoint found.
+	 */
+	function pb_get_state_breakpoint( array $breakpoints, string $breakpoint ): array {
+
+		// no has breakpoints.
+		if ( empty( $breakpoints ) ) {
+
+			return [];
+		}
+
+		$breakpointIndex = array_search( $breakpoint, array_column( $breakpoints, 'type' ), true );
+
+		// no breakpoint found.
+		if ( ! $breakpointIndex ) {
+
+			return [];
+		}
+
+		return $breakpoints[ $breakpointIndex ];
+	}
+}
+
+if ( ! function_exists( 'pb_get_inner_blocks_css' ) ) {
+
+	/**
+	 * Get inner blocks css.
+	 *
+	 * @param array       $innerBlocks The innerBlocks.
+	 * @param StyleEngine $instance    The instance of StyleEngine.
+	 * @param array       $args        The scope arguments.
+	 *                                 array(
+	 *
+	 * @type string       $selector    The parent selector.
+	 * @type string       $pseudoClass The current pseudo class (current block state).
+	 * @type string       $breakpoint  The current breakpoint (device type).
+	 * )
+	 *
+	 * @return array The css styles generated of inner blocks.
+	 */
+	function pb_get_inner_blocks_css( array $innerBlocks, StyleEngine $instance, array $args ): array {
+
+		$styles    = [];
+		$_settings = [];
+		[
+			'breakpoint'      => $breakpoint,
+			'pseudo-class'    => $pseudoClass,
+			'parent-selector' => $selector,
+		] = $args;
+
+		foreach ( $innerBlocks as $key => $innerBlock ) {
+
+			if ( empty( $innerBlock['attributes'] ) ) {
+
+				continue;
+			}
+
+			$settings = $innerBlock['attributes'];
+
+			$_selector = $selector . ' ' . ( $innerBlock['selectors']['root'] ?? '' );
+
+			$instance->setSettings( $settings );
+			$instance->setSelector( $_selector );
+			$_settings[] = $instance->getRequestSettings( $pseudoClass, $breakpoint );
+		}
+
+		return $_settings;
 	}
 }

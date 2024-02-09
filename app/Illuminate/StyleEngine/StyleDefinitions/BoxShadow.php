@@ -7,11 +7,17 @@ use Publisher\Framework\Exceptions\BaseException;
 class BoxShadow extends BaseStyleDefinition {
 
 	/**
+	 * @inheritdoc
+	 *
+	 * @param array $setting
+	 *
 	 * @return array
 	 */
-	public function getProperties(): array {
+	protected function collectProps( array $setting ): array {
 
-		return array_map( static function ( array $prop ) {
+		$cssProperty = $setting['type'];
+
+		$boxShadows = array_map( static function ( array $prop ) {
 
 			if ( ! isset( $prop['isVisible'] ) || ! $prop['isVisible'] ) {
 				return null;
@@ -26,12 +32,28 @@ class BoxShadow extends BaseStyleDefinition {
 				! empty( $prop['spread'] ) ? pb_get_value_addon_real_value( $prop['spread'] ) : '',
 				! empty( $prop['color'] ) ? pb_get_value_addon_real_value( $prop['color'] ) : ''
 			);
-		}, $this->settings );
+		}, $setting[ $cssProperty ] );
+
+		$this->setProperties( array_merge( $this->properties, [ $cssProperty => implode( ',', $boxShadows ) ] ) );
+
+		return $this->properties;
 	}
 
 	protected function getCacheKey( string $suffix = '' ): string {
 
-		return getClassname( __NAMESPACE__, __CLASS__ ) . parent::getCacheKey( $suffix );
+		return pb_get_classname( __NAMESPACE__, __CLASS__ ) . parent::getCacheKey( $suffix );
+	}
+
+	/**
+	 * @inheritDoc
+	 *
+	 * @return string[]
+	 */
+	public function getAllowedProperties(): array {
+
+		return [
+			'publisherBoxShadow' => 'box-shadow',
+		];
 	}
 
 }

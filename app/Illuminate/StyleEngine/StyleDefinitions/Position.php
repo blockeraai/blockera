@@ -4,24 +4,32 @@ namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
 class Position extends BaseStyleDefinition {
 
-	public function getProperties(): array {
+	/**
+	 * @inheritDoc
+	 *
+	 * @param array $setting
+	 *
+	 * @return array
+	 */
+	protected function collectProps( array $setting ): array {
 
-		if ( empty( $this->settings['type'] ) ) {
+		if ( empty( $setting['type'] ) ) {
 
 			return $this->properties;
 		}
 
-		$props = [];
+		$props       = [];
+		$cssProperty = $setting['type'];
 
-		switch ( $this->settings['type'] ) {
+		switch ( $cssProperty ) {
 
 			case 'position':
 				[
 					'type'     => $position,
 					'position' => $value,
-				] = $this->settings['position'];
+				] = $setting[$cssProperty];
 
-				$props['position'] = $position;
+				$props[$cssProperty] = $position;
 
 				$props = array_merge( $props,
 					array_merge(
@@ -38,13 +46,26 @@ class Position extends BaseStyleDefinition {
 
 				break;
 			case 'z-index':
-				$props['z-index'] = pb_get_value_addon_real_value( $this->settings['z-index'] );
+				$props[$cssProperty] = pb_get_value_addon_real_value( $setting['z-index'] );
 				break;
 		}
 
 		$this->setProperties( $props );
 
 		return $this->properties;
+	}
+
+	/**
+	 * @inheritDoc
+	 *
+	 * @return string[]
+	 */
+	public function getAllowedProperties(): array {
+
+		return [
+			'publisherPosition' => 'position',
+			'publisherZIndex'   => 'z-index',
+		];
 	}
 
 }

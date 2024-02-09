@@ -2,9 +2,11 @@
 
 namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
-use Publisher\Framework\Exceptions\BaseException;
-
 class Background extends BaseStyleDefinition {
+
+	protected array $options = [
+		'is-important' => true,
+	];
 
 	/**
 	 * hold default props for background stack properties
@@ -13,23 +15,25 @@ class Background extends BaseStyleDefinition {
 	 */
 	protected array $defaultProps = [
 		// Background Size
-		'size'     => 'auto',
+		'background-size'     => 'auto',
 		// Background Position
-		'position' => '0 0',
+		'background-position' => '0 0',
 		// Background Repeat
-		'repeat'   => 'repeat',
+		'background-repeat'   => 'repeat',
 	];
 
 	/**
-	 * Retrieve css properties.
+	 * Get the allowed available properties.
 	 *
-	 * @return array the css properties.
+	 * @return string[]
 	 */
-	public function getProperties(): array {
+	public function getAllowedProperties(): array {
 
-		array_map( [ $this, 'collectProps' ], $this->settings );
-
-		return $this->properties;
+		return [
+			'publisherBackgroundClip'  => 'background-clip',
+			'publisherBackgroundColor' => 'background-color',
+			'publisherBackground'      => 'background-image',
+		];
 	}
 
 	/**
@@ -56,40 +60,65 @@ class Background extends BaseStyleDefinition {
 	 *
 	 * @param array $setting the background settings
 	 *
-	 * @return void
+	 * @return array
 	 */
-	protected function collectProps( array $setting ): void {
+	protected function collectProps( array $setting ): array {
+
+		if ( empty( $setting['type'] ) ) {
+
+			return $this->properties;
+		}
+
+		$type = $setting['type'];
 
 		if ( ! $this->isValidSetting( $setting ) ) {
 
-			return;
+			return $this->properties;
 		}
 
-		// Image Background
-		switch ( $setting['type'] ) {
+		$properties = [];
+
+		switch ( $type ) {
+
 			case 'clip':
-
-				if ( 'text' === $setting[ $setting['type'] ] ) {
-					$this->setProperties( [
-						'-webkit-text-fill-color' => 'transparent',
-					] );
-				}
-
-				$this->setProperties( array_merge(
-					$this->properties,
+				$properties = array_merge(
 					[
-						$setting['type']          => $setting[ $setting['type'] ],
-						'-webkit-background-clip' => $setting[ $setting['type'] ],
-					]
-				) );
+						$type                     => $setting[ $type ],
+						'-webkit-background-clip' => $setting[ $type ],
+					],
+					'text' === $setting[ $type ] ? [ '-webkit-text-fill-color' => 'transparent' ] : []
+				);
 				break;
 
-			case 'color':
-
-				$this->setProperties( [
-					$setting['type'] => $setting[ $setting['type'] ] . $this->getImportant(),
-				] );
+			case 'background-color':
+				$properties = [
+					$type => $setting[ $type ] . $this->getImportant(),
+				];
 				break;
+
+			case 'background-image':
+			case 'linear-gradient':
+			case 'radial-gradient':
+			case 'mesh-gradient':
+				array_map( [ $this, 'setActiveBackgroundType' ], array_filter( $setting[ $type ], [ $this, 'isValidSetting' ] ) );
+				break;
+		}
+
+		$this->setProperties( array_merge( $this->properties, $properties ) );
+
+		return $this->properties;
+	}
+
+	/**
+	 * Set css properties of active background type.
+	 *
+	 * @param array $setting
+	 *
+	 * @return void
+	 */
+	protected function setActiveBackgroundType( array $setting ): void {
+
+		switch ( $setting['type'] ) {
 
 			case 'image':
 				$this->setBackground( $setting );
@@ -105,14 +134,8 @@ class Background extends BaseStyleDefinition {
 
 			case 'mesh-gradient':
 				$this->setMeshGradient( $setting );
-
 				break;
 		}
-	}
-
-	protected function getCacheKey( string $suffix = '' ): string {
-
-		return getClassname( __NAMESPACE__, __CLASS__ ) . parent::getCacheKey( $suffix );
 	}
 
 	/**
@@ -139,15 +162,15 @@ class Background extends BaseStyleDefinition {
 
 		$props = [
 			//Background Image
-			'image'      => "url('{$setting['image']}'){$this->getImportant()}",
+			'background-image'      => "url('{$setting['image']}'){$this->getImportant()}",
 			// Background Size
-			'size'       => $size . $this->getImportant(),
+			'background-size'       => $size . $this->getImportant(),
 			// Background Position
-			'position'   => ( $left . ' ' . $top ) . $this->getImportant(),
+			'background-position'   => ( $left . ' ' . $top ) . $this->getImportant(),
 			// Background Repeat
-			'repeat'     => ( $setting['image-repeat'] ?? '' ) . $this->getImportant(),
+			'background-repeat'     => ( $setting['image-repeat'] ?? '' ) . $this->getImportant(),
 			// Background Attachment
-			'attachment' => ( $setting['image-attachment'] ?? '' ) . $this->getImportant(),
+			'background-attachment' => ( $setting['image-attachment'] ?? '' ) . $this->getImportant(),
 		];
 
 		$this->setProperties( $this->modifyProperties( $props ) );
@@ -188,9 +211,9 @@ class Background extends BaseStyleDefinition {
 			$this->defaultProps,
 			[
 				//Background Image
-				'image'      => $gradient . $this->getImportant(),
+				'background-image'      => $gradient . $this->getImportant(),
 				// Background Attachment
-				'attachment' => ( $setting['linear-gradient-attachment'] ?? 'scroll' ) . $this->getImportant(),
+				'background-attachment' => ( $setting['linear-gradient-attachment'] ?? 'scroll' ) . $this->getImportant(),
 			]
 		);
 
@@ -217,9 +240,9 @@ class Background extends BaseStyleDefinition {
 				$this->defaultProps,
 				[
 					//Background Image
-					'image'      => $gradient . $this->getImportant(),
+					'background-image'      => $gradient . $this->getImportant(),
 					// Background Attachment
-					'attachment' => ( $setting['radial-gradient-attachment'] ?? 'scroll' ) . $this->getImportant(),
+					'background-attachment' => ( $setting['radial-gradient-attachment'] ?? 'scroll' ) . $this->getImportant(),
 				]
 			);
 		} else {
@@ -260,11 +283,11 @@ class Background extends BaseStyleDefinition {
 				$this->defaultProps,
 				[
 					//Background Image
-					'image'      => $gradient . $this->getImportant(),
+					'background-image'      => $gradient . $this->getImportant(),
 					//Background Repeat
-					'repeat'     => ( $setting['radial-gradient-repeat'] ?? $this->defaultProps['repeat'] ) . $this->getImportant(),
+					'background-repeat'     => ( $setting['radial-gradient-repeat'] ?? $this->defaultProps['repeat'] ) . $this->getImportant(),
 					// Background Attachment
-					'attachment' => ( $setting['radial-gradient-attachment'] ?? 'scroll' ) . $this->getImportant(),
+					'background-attachment' => ( $setting['radial-gradient-attachment'] ?? 'scroll' ) . $this->getImportant(),
 				]
 			);
 		}
@@ -305,11 +328,11 @@ class Background extends BaseStyleDefinition {
 			$this->defaultProps,
 			[
 				// override bg color
-				'color'      => ( $setting['mesh-gradient-colors'][0]['color'] ? pb_get_value_addon_real_value( $setting['mesh-gradient-colors'][0]['color'] ) : '' ) . $this->getImportant(),
+				'background-color'      => ( $setting['mesh-gradient-colors'][0]['color'] ? pb_get_value_addon_real_value( $setting['mesh-gradient-colors'][0]['color'] ) : '' ) . $this->getImportant(),
 				// Image
-				'image'      => $gradient . $this->getImportant(),
+				'background-image'      => $gradient . $this->getImportant(),
 				// Background Attachment
-				'attachment' => $setting['mesh-gradient-attachment'] . $this->getImportant(),
+				'background-attachment' => $setting['mesh-gradient-attachment'] . $this->getImportant(),
 			]
 		);
 
