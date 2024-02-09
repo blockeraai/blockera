@@ -71,7 +71,6 @@ export const computedCssRules = (
 	styleDefinitions: Object,
 	blockProps: TBlockProps
 ): Array<GeneratorReturnType> => {
-	let css = '';
 	const output = [];
 
 	for (const styleKey in styleDefinitions) {
@@ -101,12 +100,7 @@ export const computedCssRules = (
 					return;
 				}
 
-				css += rules.properties + '\n';
-				output.push({
-					properties: css,
-					media: cssGenerator.media,
-					selector: cssGenerator.selector,
-				});
+				output.push(rules.properties);
 			}
 		);
 	}
