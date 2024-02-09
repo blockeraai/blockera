@@ -29,7 +29,7 @@ export default function ({
 				onClick={(event) => {
 					event.stopPropagation();
 
-					onClick('desktop');
+					onClick('laptop');
 				}}
 			/>
 
@@ -38,7 +38,7 @@ export default function ({
 				onClick={(event) => {
 					event.stopPropagation();
 
-					onClick('Tablet');
+					onClick('tablet');
 				}}
 			/>
 
@@ -47,7 +47,7 @@ export default function ({
 				onClick={(event) => {
 					event.stopPropagation();
 
-					onClick('Mobile');
+					onClick('mobile');
 				}}
 			/>
 		</Flex>

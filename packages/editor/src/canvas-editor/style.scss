@@ -32,3 +32,25 @@
 		}
 	}
 }
+
+.publisher-core-canvas {
+	border: 1px solid rgb(221, 221, 221);
+
+	&.is-tablet-preview,
+	&.is-mobile-preview,
+	&.is-large-preview,
+	&.is-extra-large-preview,
+	&.is-mobile-landscape-preview {
+		overflow-y: auto;
+		border-radius: 2px;
+		background: #ffffff;
+		transition: min-width 0.5s ease;
+		-o-transition: min-width 0.5s ease;
+		-moz-transition: min-width 0.5s ease;
+		-webkit-transition: min-width 0.5s ease;
+	}
+
+	&.preview-margin {
+		margin: 72px auto;
+	}
+}

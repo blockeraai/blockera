@@ -23,6 +23,7 @@ import Fields from './fields';
 import type { BreakpointSettingsComponentProps } from '../types';
 
 export default function ({
+	onClick,
 	onChange,
 	breakpoints,
 }: BreakpointSettingsComponentProps): MixedElement {
@@ -49,7 +50,9 @@ export default function ({
 					label: '',
 					attributes: {},
 				}}
-				repeaterItemHeader={Header}
+				repeaterItemHeader={(props) => (
+					<Header {...{ ...props, onClick }} />
+				)}
 				repeaterItemChildren={Fields}
 				onChange={(newValue) => onChange('breakpoints', newValue)}
 				defaultValue={defaultBreakpoints()}

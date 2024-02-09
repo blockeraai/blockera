@@ -5,7 +5,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useEffect, useState } from '@wordpress/element';
+import { useEffect, useState, createPortal } from '@wordpress/element';
 import { select, useDispatch } from '@wordpress/data';
 
 /**
@@ -15,10 +15,10 @@ import {
 	useStoreDispatchers,
 	useStoreSelectors,
 } from '@publisher/extensions/src/hooks';
-import { isFunction } from '@publisher/utils';
+import { isEquals } from '@publisher/utils';
 import { Flex, Popover } from '@publisher/components';
+import { controlInnerClassNames } from '@publisher/classnames';
 import { ControlContextProvider, InputControl } from '@publisher/controls';
-import defaultBreakpoints from '@publisher/extensions/src/libs/block-states/default-breakpoints';
 
 /**
  * Internal dependencies
@@ -28,59 +28,90 @@ import Circles from '../../icons/circles';
 import PickedBreakpoints from './picked-breakpoints';
 import BreakpointSettings from './breakpoint-settings';
 import type { BreakpointsComponentProps } from './types';
-import { controlInnerClassNames } from '@publisher/classnames';
+import { isLaptopBreakpoint } from './helpers';
 
 export const Breakpoints = ({
 	refId,
 	className,
 }: BreakpointsComponentProps): MixedElement => {
-	const [canvasSettings, setCanvasSettings] = useState({
-		zoom: '100%',
-		width: '100%',
-		height: '100%',
-		isOpenSettings: false,
-		isOpenOtherBreakpoints: false,
-		breakpoints: defaultBreakpoints(),
-	});
-	const getDeviceType =
-		select('core/edit-post').__experimentalGetPreviewDeviceType();
-
+	const { getDeviceType, getBreakpoints, getBreakpoint, getCanvasSettings } =
+		select('publisher-core/editor');
+	const { setDeviceType, setCanvasSettings, updateBreakpoints } = useDispatch(
+		'publisher-core/editor'
+	);
+	const [canvasSettings, updateCanvasSettings] = useState(
+		getCanvasSettings()
+	);
+	const [deviceType, updateDeviceType] = useState(getDeviceType());
 	const {
-		__experimentalSetPreviewDeviceType: setDeviceType, // __experimentalGetPreviewDeviceType: getDeviceType,
-		// eslint-disable-next-line react-hooks/rules-of-hooks
-	} = useDispatch('core/edit-post');
-
-	const {
-		editPost: { __experimentalGetPreviewDeviceType },
 		blockEditor: { getSelectedBlock },
 	} = useStoreSelectors();
 	const {
 		blockEditor: { updateBlockAttributes },
 	} = useStoreDispatchers();
 
-	const initializeDeviceTypeValue =
-		__experimentalGetPreviewDeviceType().toLowerCase();
-
-	const [activeDeviceType, setActiveDeviceType] = useState(
-		initializeDeviceTypeValue
-	);
+	const breakpoints = getBreakpoints();
 
 	useEffect(() => {
-		if (activeDeviceType === initializeDeviceTypeValue) {
+		const editorWrapper = document.querySelector('.editor-styles-wrapper');
+
+		if (!editorWrapper) {
 			return;
 		}
 
-		setActiveDeviceType(initializeDeviceTypeValue);
+		const classes = Array.from(editorWrapper.classList);
+		const selectedBreakpoint = getBreakpoint(deviceType);
+
+		// remove all active preview related css class.
+		classes?.forEach((className: string, index: number) => {
+			if (isLaptopBreakpoint(deviceType)) {
+				editorWrapper.style.minWidth = '100%';
+				editorWrapper.style.maxWidth = '100%';
+				editorWrapper.classList.remove('preview-margin');
+
+				return;
+			}
+
+			if (-1 !== className.indexOf('-preview')) {
+				editorWrapper.classList.remove(className);
+			}
+
+			if (classes.length - 1 === index) {
+				editorWrapper.classList.add('publisher-core-canvas');
+				editorWrapper.classList.add('preview-margin');
+				editorWrapper.classList.add(`is-${deviceType}-preview`);
+
+				editorWrapper.style.minWidth =
+					selectedBreakpoint?.settings?.min;
+				editorWrapper.style.maxWidth =
+					selectedBreakpoint?.settings?.max;
+
+				if (editorWrapper.parentElement) {
+					// $FlowFixMe
+					editorWrapper.parentElement.style.background = '#222222';
+				}
+			}
+		});
+
+		createPortal(
+			<iframe srcDoc={editorWrapper} title={'canvas-editor'} />,
+			editorWrapper.parentElement
+		);
+
+		setDeviceType(deviceType);
 		// eslint-disable-next-line
-	}, [initializeDeviceTypeValue]);
+	}, [deviceType]);
+
+	useEffect(() => {
+		if (!isEquals(canvasSettings, getCanvasSettings())) {
+			setCanvasSettings(canvasSettings);
+		}
+		// eslint-disable-next-line
+	}, [canvasSettings]);
 
 	const selectedBlock = getSelectedBlock();
 
 	const handleOnClick = (device: string): void => {
-		if (!isFunction(setDeviceType)) {
-			return;
-		}
-
 		const updateSelectedBlock = () => {
 			// Check if a block is selected
 			if (selectedBlock) {
@@ -97,21 +128,27 @@ export const Breakpoints = ({
 			}
 		};
 
-		if (device === getDeviceType) {
-			setDeviceType('Desktop');
+		if (device === getDeviceType()) {
+			updateDeviceType('laptop');
 
 			updateSelectedBlock();
 
 			return;
 		}
 
-		setDeviceType(device);
+		updateDeviceType(device);
 
 		updateSelectedBlock();
 	};
 
 	const handleOnChange = (key: string, value: any): void => {
-		setCanvasSettings({
+		if ('breakpoints' === key) {
+			updateBreakpoints(value);
+
+			return;
+		}
+
+		updateCanvasSettings({
 			...canvasSettings,
 			[key]: value,
 		});
@@ -169,8 +206,9 @@ export const Breakpoints = ({
 						onClose={() => handleOnChange('isOpenSettings', false)}
 					>
 						<BreakpointSettings
+							onClick={handleOnClick}
 							onChange={handleOnChange}
-							breakpoints={canvasSettings.breakpoints}
+							breakpoints={breakpoints}
 						/>
 					</Popover>
 				)}
@@ -223,3 +261,5 @@ export const Breakpoints = ({
 		</>
 	);
 };
+
+export * from './helpers';
