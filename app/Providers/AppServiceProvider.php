@@ -13,19 +13,27 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  */
 
 use Publisher\Framework\Exceptions\BaseException;
-use Publisher\Framework\Illuminate\{
-	Foundation\Application,
+use Publisher\Framework\Illuminate\{Foundation\Application,
+	StyleEngine\StyleDefinitions\Size,
+	StyleEngine\StyleDefinitions\Mouse,
+	StyleEngine\StyleDefinitions\Layout,
+	StyleEngine\StyleDefinitions\Border,
+	StyleEngine\StyleDefinitions\Effects,
+	StyleEngine\StyleDefinitions\Outline,
+	StyleEngine\StyleDefinitions\Spacing,
+	StyleEngine\StyleDefinitions\Position,
+	StyleEngine\StyleDefinitions\BoxShadow,
+	StyleEngine\StyleDefinitions\TextShadow,
+	StyleEngine\StyleDefinitions\Background,
+	StyleEngine\StyleDefinitions\Typography,
 	Support\ServiceProvider,
 	StyleEngine\StyleEngine,
 	Support\Adapters\DomParser,
-	Foundation\ValueAddon\Variable\VariableType,
+	Foundation\ValueAddon\Variable\VariableType
 };
 use Publisher\Framework\Illuminate\Foundation\ValueAddon\ValueAddonRegistry;
 use Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType;
-use Publisher\Framework\Services\Render\{
-	Render,
-	Parser,
-};
+use Publisher\Framework\Services\Render\{Render, Parser, SavePost};
 
 class AppServiceProvider extends ServiceProvider {
 
@@ -37,6 +45,11 @@ class AppServiceProvider extends ServiceProvider {
 		parent::register();
 
 		try {
+
+			$this->app->singleton( SavePost::class, function ( Application $app ) {
+
+				return new SavePost( $app, new Render( $app ) );
+			} );
 
 			$this->app->singleton( VariableType::class, static function ( Application $app ): VariableType {
 
@@ -53,9 +66,26 @@ class AppServiceProvider extends ServiceProvider {
 				return new ValueAddonRegistry( $app, ...$params );
 			} );
 
-			$this->app->bind( StyleEngine::class, static function () {
+			$this->app->bind( StyleEngine::class, static function ( Application $app, array $params ) {
 
-				return new StyleEngine();
+				$dependencies = [
+					$app->make( Size::class ),
+					$app->make( Mouse::class ),
+					$app->make( Layout::class ),
+					$app->make( Border::class ),
+					$app->make( Effects::class ),
+					$app->make( Outline::class ),
+					$app->make( Spacing::class ),
+					$app->make( Position::class ),
+					$app->make( BoxShadow::class ),
+					$app->make( TextShadow::class ),
+					$app->make( Background::class ),
+					$app->make( Typography::class ),
+				];
+
+				$params = array_merge( $params, compact( 'dependencies' ) );
+
+				return new StyleEngine( ...$params );
 			} );
 
 			$this->app->singleton( DomParser::class, static function () {
@@ -68,9 +98,9 @@ class AppServiceProvider extends ServiceProvider {
 				return new Parser( $app );
 			} );
 
-			$this->app->bind( Render::class, static function ( Application $app, array $params ): Render {
+			$this->app->bind( Render::class, static function ( Application $app ): Render {
 
-				return new Render( $app, $params['blockName'] );
+				return new Render( $app );
 			} );
 
 		} catch ( BaseException $handler ) {
@@ -101,7 +131,7 @@ class AppServiceProvider extends ServiceProvider {
 			'dynamic-value' => $dynamicValueRegistry->getRegistered(),
 		] );
 
-		$this->app->make( StyleEngine::class );
+		$this->app->make( SavePost::class );
 
 		foreach ( pb_core_config( 'app.blocks' ) as $block ) {
 
@@ -110,7 +140,10 @@ class AppServiceProvider extends ServiceProvider {
 				continue;
 			}
 
-			$this->app->make( Render::class, [ 'blockName' => $block ] );
+			$render = $this->app->make( Render::class );
+
+			$render->setName( $block );
+			$render->applyHooks();
 		}
 	}
 
