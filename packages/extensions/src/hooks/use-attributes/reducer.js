@@ -65,6 +65,20 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			if (isInnerBlock(currentBlock)) {
 				const memoizedNewInnerBlocks = memoize(
 					(blocks: Array<InnerBlockModel>) => {
+						if (!blocks?.length) {
+							return [
+								{
+									type: currentBlock,
+									attributes: {
+										[attributeId]: newValue,
+										...(attributeIsRelatedStatesAttributes
+											? addOrModifyRootItems
+											: {}),
+									},
+								},
+							];
+						}
+
 						const memoizedBlock = memoize(
 							(
 								block: InnerBlockModel,
@@ -94,8 +108,9 @@ const reducer = (state: Object = {}, action: Object): Object => {
 
 				return {
 					...state,
-					publisherInnerBlocks:
-						memoizedNewInnerBlocks(publisherInnerBlocks),
+					publisherInnerBlocks: memoizedNewInnerBlocks(
+						state.publisherInnerBlocks
+					),
 				};
 			}
 
