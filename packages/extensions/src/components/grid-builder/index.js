@@ -23,42 +23,57 @@ export const GridBuilder = ({
 	children,
 	block,
 }: GridBuilderProps): MixedElement | null => {
-	const { isOpenGridBuilder, getAttributes, setOpenGridBuilder } =
-		useBlockContext();
+	const { isOpenGridBuilder, setOpenGridBuilder } = useBlockContext();
 
 	const selectedBlock = document
 		.querySelector('iframe[name="editor-canvas"]')
 		// $FlowFixMe
 		?.contentDocument?.body?.querySelector(`#block-${block.clientId}`);
 
+	const selectedBlockChildren = document
+		.querySelector('iframe[name="editor-canvas"]')
+		// $FlowFixMe
+		?.contentDocument?.body?.querySelectorAll(`#block-${block.clientId} *`);
+
 	useEffect(() => {
 		if (selectedBlock) {
 			if (!isOpenGridBuilder) {
-				selectedBlock.style.visibility = 'visible';
+				selectedBlockChildren.forEach(
+					(child) => (child.style.visibility = 'initial')
+				);
+				selectedBlock.style.position = 'initial';
+				selectedBlock.setAttribute('contenteditable', 'true');
 			} else {
-				selectedBlock.style.visibility = 'hidden';
+				selectedBlockChildren.forEach(
+					(child) => (child.style.visibility = 'hidden')
+				);
+				selectedBlock.style.position = 'relative';
+				selectedBlock.setAttribute('contenteditable', 'false');
 			}
-
-			return () => (selectedBlock.style.visibility = 'visible');
 		}
 	}, [isOpenGridBuilder]);
 
-	const { publisherWidth, publisherHeight } = getAttributes();
+	useEffect(() => {
+		return () => {
+			selectedBlockChildren.forEach(
+				(child) => (child.style.visibility = 'initial')
+			);
+			selectedBlock.setAttribute('contenteditable', 'true');
+			selectedBlock.style.position = 'initial';
+		};
+	}, []);
 
-	if (!isOpenGridBuilder && !selectedBlock) {
+	if (!isOpenGridBuilder || !selectedBlock) {
 		return null;
 	}
-
-	const elementStyles = getComputedStyle(selectedBlock);
 
 	return createPortal(
 		<div
 			style={{
-				width: publisherWidth || elementStyles.width,
-				height: publisherHeight || elementStyles.height,
 				position: 'absolute',
-				top: elementStyles.marginTop,
-				left: elementStyles.marginLeft,
+				width: '100%',
+				height: '100%',
+				visibility: 'visible',
 			}}
 		>
 			<VirtualGrid block={block} />
@@ -78,8 +93,6 @@ export const GridBuilder = ({
 		document
 			.querySelector('iframe[name="editor-canvas"]')
 			//$FlowFixMe
-			?.contentDocument?.body?.querySelector(
-				`div:has(#block-${block.clientId})`
-			)
+			?.contentDocument?.body?.querySelector(`#block-${block.clientId}`)
 	);
 };

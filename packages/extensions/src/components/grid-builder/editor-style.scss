@@ -66,6 +66,7 @@
 	gap: 8px;
 	padding: 4px;
 	box-sizing: border-box;
+	user-select: none;
 
 	.size-handler-content {
 		flex-grow: 1;
@@ -131,9 +132,10 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	 color: #147eb8;
-	 flex-direction: column;
-	//overflow: hidden;
+    color: #147eb8;
+    flex-direction: column;
+	user-select: none;
+	font-size: 17px !important;
 
 	 &.hovered {
 		border: 1px dashed #147eb8;
@@ -189,6 +191,7 @@
 	fill: #ffffff;
 	padding: 7px;
 	box-sizing: border-box;
+	user-select: none;
 
 	.text {
 		flex-grow: 1;
@@ -199,6 +202,7 @@
 	    background-color: #147eb8;
 		color: #ffffff;
 		height: 22px;
+		user-select: none;
 	}
 }
 
