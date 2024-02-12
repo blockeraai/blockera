@@ -4,31 +4,37 @@ namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
 class Typography extends BaseStyleDefinition {
 
-	public function getProperties(): array {
+	protected array $options = [
+		'is-important' => true,
+	];
 
-		if ( empty( $this->settings['type'] ) ) {
+	/**
+	 * @inheritDoc
+	 *
+	 * @param array $setting
+	 *
+	 * @return array
+	 */
+	protected function collectProps( array $setting ): array {
+
+		if ( empty( $setting['type'] ) ) {
 
 			return $this->properties;
 		}
 
-		$cssProperty   = $this->settings['type'];
-		$propertyValue = $this->settings[ $cssProperty ];
+		$props         = [];
+		$cssProperty   = $setting['type'];
+		$propertyValue = $setting[ $cssProperty ];
 
 		switch ( $cssProperty ) {
 
 			case 'text-orientation':
-
-				$this->setProperties(
-					[
-						'writing-mode' => $propertyValue['writing-mode'] . $this->getImportant(),
-						$cssProperty   => $propertyValue['text-orientation'] . $this->getImportant(),
-					]
-				);
-
-				return $this->properties;
+				//FIXME: text-orientation bad saved!
+//				$props['writing-mode'] = $propertyValue['writing-mode'] . $this->getImportant();
+//				$props[ $cssProperty ] = $propertyValue['text-orientation'] . $this->getImportant();
+				break;
 
 			case '-webkit-text-stroke-color':
-				$props = [];
 				$color = pb_get_value_addon_real_value( $propertyValue['color'] );
 
 				if ( ! empty( $color ) ) {
@@ -38,14 +44,11 @@ class Typography extends BaseStyleDefinition {
 					if ( ! empty( $propertyValue['width'] ) ) {
 						$props['-webkit-text-stroke-width'] = $propertyValue['width'];
 					}
-
-					$this->setProperties( $props );
 				}
-
-				return $this->properties;
+				
+				break;
 
 			case 'column-count':
-				$props = [];
 
 				if ( ! empty( $propertyValue['columns'] ) ) {
 					$props['column-count'] = 'none' === $propertyValue['columns'] ? 'initial' : preg_replace( '/\b-columns\b/i', '', $propertyValue['columns'] );
@@ -67,11 +70,9 @@ class Typography extends BaseStyleDefinition {
 							$props['column-rule-width'] = $propertyValue['divider']['width'];
 						}
 					}
-
-					$this->setProperties( $props );
 				}
 
-				return $this->properties;
+				break;
 
 			case 'color':
 			case '-webkit-text-stroke-width':
@@ -80,20 +81,40 @@ class Typography extends BaseStyleDefinition {
 			case 'line-height':
 			case 'text-indent':
 			case 'font-size':
-				$propertyValue = $propertyValue ? pb_get_value_addon_real_value( $propertyValue ) : '';
+				$props[ $cssProperty ] = $propertyValue ? pb_get_value_addon_real_value( $propertyValue ) : '';
 				break;
 
 		}
 
-		if ( $propertyValue ) {
-			$this->setProperties(
-				[
-					$cssProperty => $propertyValue . $this->getImportant(),
-				]
-			);
-		}
+		$this->setProperties( array_merge( $this->properties, $props ) );
 
 		return $this->properties;
+	}
+
+	/**
+	 * @inheritDoc
+	 *
+	 * @return string[]
+	 */
+	public function getAllowedProperties(): array {
+
+		return [
+			'publisherFontColor'       => 'color',
+			'publisherFontSize'        => 'font-size',
+			'publisherDirection'       => 'direction',
+			'publisherTextAlign'       => 'text-align',
+			'publisherFontStyle'       => 'font-style',
+			'publisherWordBreak'       => 'word-break',
+			'publisherTextIndent'      => 'text-indent',
+			'publisherLineHeight'      => 'line-height',
+			'publisherWordSpacing'     => 'word-spacing',
+			'publisherTextColumns'     => 'column-count',
+			'publisherTextTransform'   => 'text-transform',
+			'publisherLetterSpacing'   => 'letter-spacing',
+			'publisherTextDecoration'  => 'text-decoration',
+			'publisherTextOrientation' => 'text-orientation',
+			'publisherTextStroke'      => '-webkit-text-stroke-color',
+		];
 	}
 
 }

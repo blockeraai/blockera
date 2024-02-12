@@ -3,7 +3,7 @@
 /**
  * Internal dependencies
  */
-import type { BreakpointTypes } from '../../../../../libs/block-states/types';
+import type { BreakpointTypes } from '@publisher/extensions/src/libs/block-states/types';
 
 export type BreakpointsComponentProps = {
 	refId: Object,
@@ -15,6 +15,7 @@ export type HandleOnChangeBreakpoints = (key: string, value: any) => void;
 
 export type BreakpointSettingsComponentProps = {
 	breakpoints: BreakpointTypes,
+	onClick: (device: string) => void,
 	onChange: HandleOnChangeBreakpoints,
 };
 

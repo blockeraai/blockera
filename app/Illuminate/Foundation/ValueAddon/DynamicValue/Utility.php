@@ -199,7 +199,7 @@ class Utility {
 			case 'singular':
 
 				$post_type_object = get_post_type_object( get_post_type() );
-				dd( $post_type_object );
+
 				$original_title = sprintf( __( '%1$s: %2$s', 'publisher-core' ), $post_type_object->labels->singular_name, $original_title );
 
 				break;

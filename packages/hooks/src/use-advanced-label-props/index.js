@@ -1,7 +1,7 @@
 // @flow
 
 /**
- * External dependencies
+ * Publisher dependencies
  */
 import {
 	isEquals,
@@ -87,8 +87,7 @@ export const useAdvancedLabelProps = ({
 					state.breakpoints.filter((breakpoint) => {
 						let stateValue =
 							'normal' === state.type &&
-							// FIXME: when implements canvas editor store api please remove "desktop" exception.
-							['desktop', 'laptop'].includes(breakpoint.type)
+							'laptop' === breakpoint.type
 								? blockAttributes
 								: breakpoint?.attributes;
 

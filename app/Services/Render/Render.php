@@ -33,16 +33,19 @@ class Render {
 	protected Application $app;
 
 	/**
-	 * @param Application $app  the app instance
-	 * @param string      $name the block name
+	 * @param Application $app the app instance
 	 */
-	public function __construct( Application $app, string $name ) {
+	public function __construct( Application $app ) {
 
-		$this->app  = $app;
+		$this->app = $app;
+	}
+
+	/**
+	 * @param string $name
+	 */
+	public function setName( string $name ): void {
+
 		$this->name = $name;
-
-		//fire-up WordPress hooks
-		$this->applyHooks();
 	}
 
 	/**
@@ -51,7 +54,7 @@ class Render {
 	 *
 	 * @return void
 	 */
-	protected function applyHooks(): void {
+	public function applyHooks(): void {
 
 		add_filter( 'render_block_' . $this->name, [ $this, 'parser' ], 10, 2 );
 
@@ -82,7 +85,7 @@ class Render {
 	 * @throws BindingResolutionException|BaseException
 	 * @return string block HTML
 	 */
-	public function parser( string $html, array $block ): string {
+	public function parser( string $html, array $block, int $postId = -1 ): string {
 
 		//Just running for publisher extensions settings!
 		if ( empty( $block['attrs']['publisherPropsId'] ) || is_admin() ) {
@@ -97,21 +100,79 @@ class Render {
 		$dom = $this->app->make( DomParser::class )::str_get_html( $html );
 
 		//generate unique css classname for block element
-		$uniqueClassname = getUniqueClassname( $block['blockName'] );
+		$uniqueClassname = pb_get_unique_classname( $block['blockName'] );
 
 		/**
 		 * @var Parser $parser
 		 */
 		$parser = $this->app->make( Parser::class );
 
-		//apply css styles
-		$parser->getCss( compact( 'block', 'uniqueClassname' ) );
+		$selector = $this->getSelector( $block, $uniqueClassname );
 
+		// TODO: add into cache mechanism.
 		//manipulation HTML of block content
-		$parser->customizeHTML( compact( 'dom', 'block', 'uniqueClassname' ) );
-
+		$parser->htmlManipulate( compact( 'dom', 'block', 'uniqueClassname' ) );
 		//retrieve final html of block content
-		return preg_replace( [ '/(<[^>]+) style=".*?"/i', '/wp-block-\w+__(\w+|\w+-\w+)-\d+(\w+|%)/i' ], [ '$1', '' ], $dom->html() );
+		$html = preg_replace( [ '/(<[^>]+) style=".*?"/i', '/wp-block-\w+__(\w+|\w+-\w+)-\d+(\w+|%)/i' ], [ '$1', '' ], $dom->html() );
+
+		// Assume miss post id.
+		if ( -1 === $postId ) {
+
+			global $post;
+
+			$postId = $post->ID;
+		}
+
+		$cacheKey = 'publisher-inline-css-post-' . $postId;
+
+		// Get cache data.
+		$cache = get_option( $cacheKey, false );
+
+		// TODO: after implements cache mechanism for manipulating html, please add "html" key into array intersection.
+		// TODO: after implements support dynamic selectors for bloc, we allow to use cache mechanism,
+		// because now selector of block crated with "uniqid" and when refresh request selectors will changed!
+//		if ( ! empty( $cache ) && array_intersect( [ 'css' ], array_keys( $cache ) ) ) {
+//
+//			// Print css into inline style of document.
+//			$this->addInlineCss( $cache['css'] );
+//
+//			return $html;
+//		}
+
+		$css = $parser->getCss( compact( 'block', 'selector' ) );
+
+		// Print css into inline style of document.
+		$this->addInlineCss( $css );
+
+		// set cache data with merge exists data.
+		update_option( $cacheKey, [
+			'css' => $css,
+			// TODO: after implements cache mechanism for manipulating html, please add "html" key into array intersection.
+			//'html' => '',
+		] );
+
+		return $html;
+	}
+
+	/**
+	 * Adding computed css rules into inline css handle.
+	 *
+	 * @param string $computedCssRules The computed css rules from StyleEngine output.
+	 *
+	 * @return void
+	 */
+	protected function addInlineCss( string $computedCssRules ): void {
+
+		add_filter(
+			'publisher-core/services/register-block-editor-assets/add-inline-css-styles',
+			/**
+			 * @param string $prevStylesheet The previous css stylesheet.
+			 */
+			function ( string $prevStylesheet ) use ( $computedCssRules ): string {
+
+				return $prevStylesheet . $computedCssRules;
+			}
+		);
 	}
 
 	/**

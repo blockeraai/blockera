@@ -20,7 +20,7 @@ import {
  * Publisher dependencies
  */
 import { omitWithPattern } from '@publisher/utils';
-import { useCssGenerator } from '@publisher/style-engine';
+import { isLaptopBreakpoint } from '@publisher/editor';
 import { extensionClassNames } from '@publisher/classnames';
 
 /**
@@ -34,13 +34,12 @@ import {
 	BlockEditContextProvider,
 	useCalculateCurrentAttributes,
 } from '../hooks';
-import { sanitizedBlockAttributes } from '../hooks/utils';
 import { SideEffect } from '../libs/base';
+import { BlockStyle } from './block-style';
 import { BlockCard } from '../libs/block-card';
 import { BlockPartials } from './block-partials';
-import * as config from '../libs/base/config';
-import styleGenerators from '../libs/shared/style-generators';
 import { isInnerBlock, propsAreEqual } from './utils';
+import { sanitizedBlockAttributes } from '../hooks/utils';
 import type { InnerBlockType } from '../libs/inner-blocks/types';
 import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs';
 
@@ -82,28 +81,21 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		const { changeExtensionCurrentBlock: setCurrentBlock } =
 			dispatch('publisher-core/extensions') || {};
 
-		const {
-			__experimentalGetPreviewDeviceType: getDeviceType = () => 'desktop',
-		} =
-			(window?.wp?.editPost
-				? select('core/edit-post')
-				: select('core/edit-site')) || {};
+		const { getDeviceType } = select('publisher-core/editor');
 
 		const { innerBlockId, currentInnerBlock, publisherInnerBlocks } =
 			useInnerBlocksInfo({ name, additional, attributes });
 
 		const masterIsNormalState = (): boolean =>
 			'normal' === attributes?.publisherCurrentState &&
-			// FIXME: when implements canvas editor store api please remove "desktop" exception.
-			/desktop|laptop/i.test(getDeviceType());
+			isLaptopBreakpoint(getDeviceType());
 
 		const isNormalState = (): boolean => {
 			if (isInnerBlock(currentBlock)) {
 				return (
 					'normal' ===
 						currentInnerBlock?.attributes?.publisherCurrentState &&
-					// FIXME: when implements canvas editor store api please remove "desktop" exception.
-					/desktop|laptop/i.test(getDeviceType())
+					isLaptopBreakpoint(getDeviceType())
 				);
 			}
 
@@ -246,34 +238,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			publisherInnerBlocks,
 		});
 
-		const styles = [];
-		const generatorSharedProps = {
-			attributes,
-			activeDeviceType: getDeviceType(),
-			blockName: name,
-			callbackProps: {
-				...config,
-				blockProps: {
-					clientId,
-					supports,
-					setAttributes,
-				},
-			},
-		};
-
-		Object.entries(styleGenerators).forEach(
-			([supportId, { callback, fallbackSupportId }]) =>
-				styles.push(
-					// eslint-disable-next-line react-hooks/rules-of-hooks
-					useCssGenerator({
-						callback,
-						supportId,
-						fallbackSupportId,
-						...generatorSharedProps,
-					}).join('\n')
-				)
-		);
-
 		const FillComponents = (): MixedElement => {
 			return (
 				<>
@@ -350,13 +314,15 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					</InspectorControls>
 					<div ref={blockEditRef} />
 
-					<style
-						data-block-type={name}
-						dangerouslySetInnerHTML={{
-							__html: styles
-								.filter((style: string) => style)
-								.join('\n')
-								.trim(),
+					<BlockStyle
+						{...{
+							clientId,
+							supports,
+							attributes,
+							// currentBlock,
+							setAttributes,
+							blockName: name,
+							activeDeviceType: getDeviceType(),
 						}}
 					/>
 				</StrictMode>

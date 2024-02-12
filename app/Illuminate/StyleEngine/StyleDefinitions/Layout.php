@@ -4,23 +4,50 @@ namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
 class Layout extends BaseStyleDefinition {
 
-	public function getProperties(): array {
+	/**
+	 * @inheritdoc
+	 *
+	 * @return string[]
+	 */
+	public function getAllowedProperties(): array {
 
-		if ( empty( $this->settings['type'] ) ) {
+		return [
+			'publisherGap'             => 'gap',
+			'publisherFlexChildSizing' => 'flex',
+			'publisherFlexChildOrder'  => 'order',
+			'publisherDisplay'         => 'display',
+			'publisherFlexWrap'        => 'flex-wrap',
+			'publisherFlexChildAlign'  => 'align-self',
+			'publisherAlignContent'    => 'align-content',
+			'publisherFlexLayout'      => 'flex-direction',
+		];
+	}
+
+	/**
+	 * @inheritdoc
+	 *
+	 * @param array $setting
+	 *
+	 * @return array
+	 */
+	protected function collectProps( array $setting ): array {
+
+		if ( empty( $setting['type'] ) ) {
 
 			return $this->properties;
 		}
 
-		$props = [];
+		$props       = [];
+		$cssProperty = $setting['type'];
 
-		if ( empty( $this->settings[ $this->settings['type'] ] ) ) {
+		if ( empty( $setting[ $cssProperty ] ) ) {
 
 			return $this->properties;
 		}
 
-		switch ( $this->settings['type'] ) {
+		switch ( $cssProperty ) {
 			case 'flex':
-				$flexType = $this->settings['flex'];
+				$flexType = $setting['flex'];
 
 				switch ( $flexType ) {
 					case 'shrink':
@@ -35,9 +62,9 @@ class Layout extends BaseStyleDefinition {
 					case 'custom':
 						$props['flex'] = sprintf(
 							'%s %s %s',
-							$this->settings['flex-child']['publisherFlexChildGrow'] ? pb_get_value_addon_real_value( $this->settings['flex-child']['publisherFlexChildGrow'] ) : 0,
-							$this->settings['flex-child']['publisherFlexChildShrink'] ? pb_get_value_addon_real_value( $this->settings['flex-child']['publisherFlexChildShrink'] ) : 0,
-							$this->settings['flex-child']['publisherFlexChildBasis'] ? pb_get_value_addon_real_value( $this->settings['flex-child']['publisherFlexChildBasis'] ) : 'auto'
+							$setting['flex-child']['publisherFlexChildGrow'] ? pb_get_value_addon_real_value( $setting['flex-child']['publisherFlexChildGrow'] ) : 0,
+							$setting['flex-child']['publisherFlexChildShrink'] ? pb_get_value_addon_real_value( $setting['flex-child']['publisherFlexChildShrink'] ) : 0,
+							$setting['flex-child']['publisherFlexChildBasis'] ? pb_get_value_addon_real_value( $setting['flex-child']['publisherFlexChildBasis'] ) : 'auto'
 						);
 						break;
 				}
@@ -45,7 +72,7 @@ class Layout extends BaseStyleDefinition {
 				break;
 
 			case 'order':
-				$orderType = $this->settings['order'];
+				$orderType = $setting['order'];
 
 				switch ( $orderType ) {
 					case 'first':
@@ -55,7 +82,7 @@ class Layout extends BaseStyleDefinition {
 						$props['order'] = '100';
 						break;
 					case 'custom':
-						$props['order'] = $this->settings['custom'] ? pb_get_value_addon_real_value( $this->settings['custom'] ) : '100';
+						$props['order'] = $setting['custom'] ? pb_get_value_addon_real_value( $setting['custom'] ) : '100';
 						break;
 				}
 
@@ -63,32 +90,32 @@ class Layout extends BaseStyleDefinition {
 
 			case 'flex-direction':
 
-				$item = $this->settings['flex-direction'];
+				$item = $setting['flex-direction'];
 
-				if( $item['direction'] ){
+				if ( $item['direction'] ) {
 					$props['flex-direction'] = $item['direction'];
 				}
 
-				if( $item['alignItems'] ){
+				if ( $item['alignItems'] ) {
 					$props['align-items'] = $item['alignItems'];
 				}
 
-				if( $item['justifyContent'] ){
+				if ( $item['justifyContent'] ) {
 					$props['justify-content'] = $item['justifyContent'];
 				}
 
 				break;
 
 			case 'flex-wrap':
-				$flexDirection = $this->settings['flex-wrap'];
+				$flexDirection = $setting['flex-wrap'];
 
-				$props['flex-wrap'] = $flexDirection['value'] . ($flexDirection['reverse'] && $flexDirection['value'] === 'wrap' ? '-reverse' : '');
+				$props['flex-wrap'] = $flexDirection['value'] . ( $flexDirection['reverse'] && $flexDirection['value'] === 'wrap' ? '-reverse' : '' );
 
 				break;
 
 			case 'gap':
 
-				$gap = $this->settings['gap'];
+				$gap = $setting['gap'];
 
 				if ( $gap['lock'] ) {
 
@@ -108,12 +135,12 @@ class Layout extends BaseStyleDefinition {
 
 				break;
 			default:
-				$props[ $this->settings['type'] ] = $this->settings[ $this->settings['type'] ];
+				$props[ $cssProperty ] = $setting[ $cssProperty ];
 				break;
 		}
 
 
-		$this->setProperties( $props );
+		$this->setProperties( array_merge( $this->properties, $props ) );
 
 		return $this->properties;
 	}

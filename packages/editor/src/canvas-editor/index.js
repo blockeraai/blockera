@@ -48,3 +48,5 @@ export const CanvasEditor = ({
 		entry.target
 	);
 };
+
+export * from './components';

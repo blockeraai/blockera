@@ -4,49 +4,69 @@ namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
 class Size extends BaseStyleDefinition {
 
-	public function getProperties(): array {
+	/**
+	 * collect all css properties.
+	 *
+	 * @param array $setting the background settings.
+	 *
+	 * @return array
+	 */
+	protected function collectProps( array $setting ): array {
 
-		if ( empty( $this->settings['type'] ) ) {
+		$cssProperty = $setting['type'];
 
-			return $this->properties;
-		};
+		switch ( $cssProperty ) {
 
-		$cssProperty   = $this->settings['type'];
-		$propertyValue = $this->settings[ $cssProperty ];
+			case 'aspect-ratio':
+				if ( 'custom' === $setting[ $cssProperty ]['value'] ) {
 
-		if ( 'aspect-ratio' === $cssProperty ) {
-			$props = [];
+					$props[ $cssProperty ] = sprintf( '%1$s%2$s%3$s%4$s',
+						$setting[ $cssProperty ]['width'],
+						! empty( $setting[ $cssProperty ]['width'] ) && ! empty( $setting[ $cssProperty ]['height'] ) ? ' / ' : '',
+						$setting[ $cssProperty ]['height'],
+						$this->getImportant()
+					);
 
-			switch ( $propertyValue['value'] ) {
-				case 'custom':
-					$props['aspect-ratio'] = $propertyValue['width'] . ( ! empty( $propertyValue['width'] ) && ! empty( $propertyValue['height'] ) ? ' / ' : '' ) . $propertyValue['height'] . $this->getImportant();
-					break;
-				default:
-					$props[ $cssProperty ] = $propertyValue['value'] . $this->getImportant();
-			}
+				} else {
 
-			$this->setProperties( $props );
+					$props[ $cssProperty ] = $setting[ $cssProperty ]['value'] . $this->getImportant();
+				}
 
-			return $this->properties;
+				break;
+
+			case 'object-position':
+				$props[ $cssProperty ] = sprintf( '%1$s %2$s%3$s',
+					$setting[ $cssProperty ]['top'],
+					$setting[ $cssProperty ]['left'],
+					$this->getImportant()
+				);
+				break;
+
+			default:
+				$props[ $cssProperty ] = pb_get_value_addon_real_value( $setting[ $cssProperty ] ) . $this->getImportant();
+				break;
 		}
 
-		if ( 'object-position' === $cssProperty ) {
-			$this->setProperties(
-				[
-					$cssProperty => $propertyValue['top'] . ' ' . $propertyValue['left'] . $this->getImportant(),
-				]
-			);
-
-			return $this->properties;
-		}
-
-		$this->setProperties(
-			[
-				$cssProperty => pb_get_value_addon_real_value( $propertyValue ) . $this->getImportant(),
-			]
-		);
+		$this->setProperties( array_merge( $this->properties, $props ) );
 
 		return $this->properties;
+	}
+
+	/**
+	 * @inheritdoc
+	 *
+	 * @return string[]
+	 */
+	public function getAllowedProperties(): array {
+
+		return [
+			'publisherWidth'       => 'width',
+			'publisherHeight'      => 'height',
+			'publisherOverflow'    => 'overflow',
+			'publisherFit'         => 'object-fit',
+			'publisherRatio'       => 'aspect-ratio',
+			'publisherFitPosition' => 'object-position',
+		];
 	}
 
 }

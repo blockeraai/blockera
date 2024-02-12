@@ -9,8 +9,8 @@ import createSelector from 'rememo';
  * Publisher dependencies
  */
 import { get, isString } from '@publisher/utils';
-import type { TStates } from '../libs/block-states/types';
 import type { InnerBlockType } from '../libs/inner-blocks/types';
+import type { TBreakpoint, TStates } from '../libs/block-states/types';
 
 /**
  * Returns a block extension by name.
@@ -271,4 +271,17 @@ export function getExtensionCurrentBlockState({
 	blockExtensions,
 }: Object): TStates {
 	return blockExtensions?.currentStateType || 'normal';
+}
+
+/**
+ * Get current block state type of block extension.
+ *
+ * @param {Object} blockExtensions the block extension details.
+ *
+ * @return {"master"|"heading"|"paragraph"|"icon"|"button"|*|string} The inner block type or master.
+ */
+export function getExtensionCurrentBlockStateBreakpoint({
+	blockExtensions,
+}: Object): TBreakpoint {
+	return blockExtensions?.currentBreakpoint || 'laptop';
 }

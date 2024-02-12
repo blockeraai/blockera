@@ -10,24 +10,25 @@ namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
 class Border extends BaseStyleDefinition {
 
 	/**
-	 * Retrieve css props.
+	 * @inheritdoc
 	 *
-	 * @inheritDoc
+	 * @param array $setting
 	 *
-	 * @return array the css properties as array
+	 * @return array
 	 */
-	public function getProperties(): array {
+	protected function collectProps( array $setting ): array {
 
-		if ( empty( $this->settings['type'] ) ) {
+		if ( empty( $setting['type'] ) ) {
 
 			return $this->properties;
 		}
 
-		$props = [];
+		$props       = [];
+		$cssProperty = $setting['type'];
 
-		switch ( $this->settings['type'] ) {
+		switch ( $cssProperty ) {
 			case 'border':
-				$value = $this->settings[ $this->settings['type'] ];
+				$value = $setting[ $cssProperty ];
 
 				if ( count( $value ) < 3 ) {
 
@@ -90,7 +91,7 @@ class Border extends BaseStyleDefinition {
 				}
 				break;
 			case 'border-radius':
-				$value = $this->settings[ $this->settings['type'] ];
+				$value = $setting[ $cssProperty ];
 
 				if ( ! empty( $value['type'] ) && 'all' === $value['type'] ) {
 
@@ -106,9 +107,22 @@ class Border extends BaseStyleDefinition {
 				break;
 		}
 
-		$this->setProperties( $props );
+		$this->setProperties( array_merge( $this->properties, $props ) );
 
 		return $this->properties;
+	}
+
+	/**
+	 * @inheritdoc
+	 *
+	 * @return string[]
+	 */
+	public function getAllowedProperties(): array {
+
+		return [
+			'publisherBorder'       => 'border',
+			'publisherBorderRadius' => 'border-radius',
+		];
 	}
 
 }

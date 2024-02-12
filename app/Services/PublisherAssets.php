@@ -82,7 +82,7 @@ class PublisherAssets {
 
 		$asset = $this->assetInfo( 'editor-styles' );
 
-		if (empty($asset['style'])){
+		if ( empty( $asset['style'] ) ) {
 
 			return;
 		}
@@ -169,10 +169,36 @@ class PublisherAssets {
 	/**
 	 * Register all assets in WordPress.
 	 *
-	 * @throws BindingResolutionException
 	 * @return void
 	 */
 	public function register_assets() {
+
+		// Register empty css file to load from consumer plugin of that,
+		// use-case: when enqueue style-engine inline stylesheet for all blocks on the document.
+		// Accessibility: on front-end.
+		$file = pb_core_config( 'app.rootPath' ) . "assets/style-engine-styles.css";
+
+		if ( file_exists( $file ) && ! is_admin() ) {
+
+			wp_enqueue_style(
+				$handle = 'publisher-core-inline-css',
+				pb_core_config( 'app.rootURL' ) . "assets/style-engine-styles.css",
+				[],
+				filemtime( $file )
+			);
+
+			wp_add_inline_style( $handle,
+				/**
+				 * Apply filter for add inline css into empty file.
+				 *
+				 * @since 1.0.0
+				 */
+				apply_filters(
+					'publisher-core/services/register-block-editor-assets/add-inline-css-styles',
+					''
+				)
+			);
+		}
 
 		// FIXME: remove temp font-awesome icon library!
 		wp_enqueue_style( 'fs', pb_core_config( 'app.rootURL' ) . '/assets/all.min.css' );

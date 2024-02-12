@@ -15,9 +15,11 @@ import { BreakpointIcon } from '@publisher/extensions/src/libs/block-states/help
 export default function ({
 	item,
 	itemId,
+	onClick,
 }: {
 	item: Object,
 	itemId: number,
+	onClick: (device: string) => void,
 }): MixedElement {
 	return (
 		<div
@@ -29,7 +31,14 @@ export default function ({
 			)}
 		>
 			<span className={controlInnerClassNames('header-icon')}>
-				<BreakpointIcon name={item.type} />
+				<BreakpointIcon
+					name={item.type}
+					onClick={(event) => {
+						event.stopPropagation();
+
+						onClick(item.type);
+					}}
+				/>
 			</span>
 
 			<span className={controlInnerClassNames('header-label')}>

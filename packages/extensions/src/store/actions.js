@@ -4,7 +4,7 @@
 /** @typedef {import('../api/registration').publisherBlockExtensionType} publisherBlockExtensionType */
 
 import type { InnerBlockType } from '../libs/inner-blocks/types';
-import type { TStates } from '../libs/block-states/types';
+import type { TBreakpoint, TStates } from '../libs/block-states/types';
 
 /**
  * Returns an action object used in signalling that block types have been added.
@@ -81,5 +81,14 @@ export function changeExtensionCurrentBlockState(
 	return {
 		currentStateType,
 		type: 'CHANGE_CURRENT_BLOCK_STATE',
+	};
+}
+
+export function changeExtensionCurrentBlockStateBreakpoint(
+	currentBreakpoint: TBreakpoint
+): Object {
+	return {
+		currentBreakpoint,
+		type: 'CHANGE_CURRENT_BLOCK_STATE_BREAKPOINT',
 	};
 }
