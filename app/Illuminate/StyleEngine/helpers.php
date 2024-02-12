@@ -149,15 +149,13 @@ if ( ! function_exists( 'pb_get_block_state' ) ) {
 			return [];
 		}
 
-		$searchIndex = array_search( $state, array_column( $states, 'type' ), true );
-
-		// no state found.
-		if ( ! $searchIndex ) {
+//		// no state found.
+		if ( empty( $states[ $state ] ) ) {
 
 			return [];
 		}
 
-		return $states[ $searchIndex ];
+		return $states[ $state ];
 	}
 }
 
@@ -179,15 +177,13 @@ if ( ! function_exists( 'pb_get_state_breakpoint' ) ) {
 			return [];
 		}
 
-		$breakpointIndex = array_search( $breakpoint, array_column( $breakpoints, 'type' ), true );
-
 		// no breakpoint found.
-		if ( ! $breakpointIndex ) {
+		if ( empty( $breakpoints[ $breakpoint ] ) ) {
 
 			return [];
 		}
 
-		return $breakpoints[ $breakpointIndex ];
+		return $breakpoints[ $breakpoint ];
 	}
 }
 
