@@ -23,8 +23,8 @@ const attributes = {
 	...sharedBlockExtensionAttributes,
 };
 
-const publisherInnerBlocks: Array<Object> = [
-	{
+const publisherInnerBlocks: Object = {
+	link: {
 		name: 'core/link',
 		type: 'link',
 		label: __('Link', 'publisher-core'),
@@ -34,7 +34,7 @@ const publisherInnerBlocks: Array<Object> = [
 		},
 		attributes,
 	},
-];
+};
 
 export const Paragraph = {
 	name: 'publisherParagraph',

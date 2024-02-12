@@ -31,8 +31,8 @@ const attributes = {
 	...sharedBlockExtensionAttributes,
 };
 
-const publisherInnerBlocks: Array<Object> = [
-	{
+const publisherInnerBlocks: Object = {
+	citation: {
 		name: 'citation',
 		type: 'citation',
 		label: 'Citation',
@@ -52,7 +52,7 @@ const publisherInnerBlocks: Array<Object> = [
 			},
 		},
 	},
-	{
+	paragraph: {
 		name: 'core/paragraph',
 		type: 'paragraph',
 		label: __('Paragraphs', 'publisher-core'),
@@ -62,7 +62,7 @@ const publisherInnerBlocks: Array<Object> = [
 		},
 		attributes,
 	},
-	{
+	heading: {
 		name: 'core/heading',
 		type: 'heading',
 		label: __('All Headings', 'publisher-core'),
@@ -72,7 +72,7 @@ const publisherInnerBlocks: Array<Object> = [
 		},
 		attributes,
 	},
-	{
+	heading1: {
 		name: 'core/heading1',
 		type: 'heading1',
 		label: __('Heading 1', 'publisher-core'),
@@ -82,7 +82,7 @@ const publisherInnerBlocks: Array<Object> = [
 		},
 		attributes,
 	},
-	{
+	heading2: {
 		name: 'core/heading2',
 		type: 'heading2',
 		label: __('Heading 2', 'publisher-core'),
@@ -92,7 +92,7 @@ const publisherInnerBlocks: Array<Object> = [
 		},
 		attributes,
 	},
-	{
+	heading3: {
 		name: 'core/heading3',
 		type: 'heading3',
 		label: __('Heading 3', 'publisher-core'),
@@ -102,7 +102,7 @@ const publisherInnerBlocks: Array<Object> = [
 		},
 		attributes,
 	},
-	{
+	heading4: {
 		name: 'core/heading4',
 		type: 'heading4',
 		label: __('Heading 4', 'publisher-core'),
@@ -112,7 +112,7 @@ const publisherInnerBlocks: Array<Object> = [
 		},
 		attributes,
 	},
-	{
+	heading5: {
 		name: 'core/heading5',
 		type: 'heading5',
 		label: __('Heading 5', 'publisher-core'),
@@ -122,7 +122,7 @@ const publisherInnerBlocks: Array<Object> = [
 		},
 		attributes,
 	},
-	{
+	heading6: {
 		name: 'core/heading6',
 		type: 'heading6',
 		label: __('Heading 6', 'publisher-core'),
@@ -132,7 +132,7 @@ const publisherInnerBlocks: Array<Object> = [
 		},
 		attributes,
 	},
-];
+};
 
 export const Quote = {
 	name: 'publisherQuote',
