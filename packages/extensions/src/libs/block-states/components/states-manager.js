@@ -25,7 +25,7 @@ import { getStateInfo, onChangeBlockStates } from '../helpers';
 import { generateExtensionId } from '../../utils';
 import getBreakpoints from '../default-breakpoints';
 import { attributes as StateSettings } from '../attributes';
-import type { BreakpointTypes, StateTypes, TStates } from '../types';
+import type { BreakpointTypes, TStates } from '../types';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 import { PopoverTitleButtons } from './popover-title-buttons';
 import { LabelDescription } from './label-description';
@@ -38,6 +38,7 @@ const StatesManager: ComponentType<any> = ({
 	states,
 	onChange,
 	rootStates,
+	innerBlockState,
 	currentStateType,
 }: {
 	block: {
@@ -45,8 +46,9 @@ const StatesManager: ComponentType<any> = ({
 		attributes?: Object,
 	},
 	states: Array<Object>,
-	rootStates: Array<Object>,
+	innerBlockState: TStates,
 	currentStateType: TStates,
+	rootStates: Array<Object>,
 	onChange: THandleOnChangeAttributes,
 }): Element<any> => {
 	const { isNormalState } = useBlockContext();
@@ -83,35 +85,35 @@ const StatesManager: ComponentType<any> = ({
 		};
 	});
 
-	const valueCleanup = (value: Array<StateTypes>): Array<Object> => {
-		return value?.map((item: Object): Array<Object> => {
-			delete item.force;
-			// delete item.callback;
-			delete item.getBreakpoints;
-
-			if (value.length > 1) {
-				item.display = true;
-			}
-
-			item?.breakpoints?.map((breakpoint) => {
-				delete breakpoint.force;
-				delete breakpoint.settings;
-
-				return breakpoint;
-			});
-
-			return item;
-		});
-	};
-
-	const currentState = getStateInfo(currentStateType);
+	// const valueCleanup = (value: {
+	// 	[key: TStates]: StateTypes,
+	// }): Array<Object> => {
+	// 	return Object.values(value)?.map((item: Object): Array<Object> => {
+	// 		delete item.force;
+	// 		// delete item.callback;
+	// 		delete item.getBreakpoints;
+	//
+	// 		if (Object.values(value).length > 1) {
+	// 			item.display = true;
+	// 		}
+	//
+	// 		item?.breakpoints?.map((breakpoint) => {
+	// 			delete breakpoint.force;
+	// 			delete breakpoint.settings;
+	//
+	// 			return breakpoint;
+	// 		});
+	//
+	// 		return item;
+	// 	});
+	// };
 
 	return (
 		<ControlContextProvider storeName={STORE_NAME} value={contextValue}>
-			<StateContainer currentState={currentState}>
+			<StateContainer>
 				<RepeaterControl
 					{...{
-						valueCleanup,
+						// valueCleanup,
 						/**
 						 * Retrieve dynamic default value for repeater items.
 						 *
@@ -149,7 +151,9 @@ const StatesManager: ComponentType<any> = ({
 								states,
 								onChange,
 								rootStates,
+								currentBlock,
 								isNormalState,
+								innerBlockState,
 								currentStateType,
 							}),
 						//Override item when occurred clone action!

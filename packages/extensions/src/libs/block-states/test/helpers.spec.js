@@ -27,7 +27,7 @@ describe('Block States Helpers', () => {
 	it('should retrieve breakpoint with getBreakpointInfo(breakpointId, parentState)', () => {
 		const parentState = 'hover';
 
-		expect(getBreakpointInfo(2, parentState)).toEqual({
+		expect(getBreakpointInfo('mobile', parentState)).toEqual({
 			type: 'mobile',
 			force: false,
 			label: 'Mobile',

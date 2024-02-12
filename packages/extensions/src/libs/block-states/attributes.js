@@ -11,9 +11,9 @@ import getBreakpoints from './default-breakpoints';
 
 export const attributes = {
 	publisherBlockStates: {
-		type: 'array',
-		default: [
-			{
+		type: 'object',
+		default: {
+			normal: {
 				...defaultStates.normal,
 				...defaultItemValue,
 				isOpen: false,
@@ -24,14 +24,6 @@ export const attributes = {
 				visibilitySupport: false,
 				breakpoints: getBreakpoints('normal'),
 			},
-		],
-	},
-	publisherCurrentState: {
-		type: 'string',
-		default: 'normal',
-	},
-	publisherCurrentDevice: {
-		type: 'string',
-		default: 'laptop',
+		},
 	},
 };

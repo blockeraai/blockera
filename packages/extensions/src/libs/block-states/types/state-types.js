@@ -1,6 +1,6 @@
 // @flow
 
-import type { BreakpointTypes } from './breakpoint-types';
+import type { BreakpointTypes, TBreakpoint } from './breakpoint-types';
 
 export type TStates =
 	| 'normal'
@@ -36,5 +36,5 @@ export type StateTypes = {
 		color: string,
 		cssSelector?: string,
 	},
-	breakpoints: Array<BreakpointTypes>,
+	breakpoints: { [key: TBreakpoint]: BreakpointTypes },
 };

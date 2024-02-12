@@ -274,6 +274,19 @@ export function getExtensionCurrentBlockState({
 }
 
 /**
+ * Get inner block state type of block extension.
+ *
+ * @param {Object} blockExtensions the block extension details.
+ *
+ * @return {"master"|"heading"|"paragraph"|"icon"|"button"|*|string} The inner block type or master.
+ */
+export function getExtensionInnerBlockState({
+	blockExtensions,
+}: Object): TStates {
+	return blockExtensions?.currentInnerBlockState || 'normal';
+}
+
+/**
  * Get current block state type of block extension.
  *
  * @param {Object} blockExtensions the block extension details.

@@ -73,41 +73,47 @@ export function useCssSelectors({
 				}
 			};
 
-			innerBlocks?.forEach((innerBlock: InnerBlockModel): void => {
-				if (
-					!innerBlock?.selectors ||
-					!Object.values(innerBlock?.selectors).length
-				) {
-					return;
+			Object.values(innerBlocks)?.forEach(
+				(innerBlock: InnerBlockModel): void => {
+					if (
+						!innerBlock?.selectors ||
+						!Object.values(innerBlock?.selectors).length
+					) {
+						return;
+					}
+
+					const recursiveRegistration = (
+						_selectors: Object
+					): void => {
+						Object.keys(_selectors).forEach(
+							(selectorKey: string): void => {
+								if ('undefined' === typeof _selectors) {
+									return;
+								}
+
+								type SelectorType = string | Object | void;
+
+								const rootOrFeatureSelector: SelectorType =
+									_selectors[selectorKey];
+
+								if ('object' === typeof rootOrFeatureSelector) {
+									recursiveRegistration(
+										rootOrFeatureSelector
+									);
+									return;
+								}
+
+								registerSelectors(
+									innerBlock.type,
+									rootOrFeatureSelector
+								);
+							}
+						);
+					};
+
+					recursiveRegistration(innerBlock?.selectors);
 				}
-
-				const recursiveRegistration = (_selectors: Object): void => {
-					Object.keys(_selectors).forEach(
-						(selectorKey: string): void => {
-							if ('undefined' === typeof _selectors) {
-								return;
-							}
-
-							type SelectorType = string | Object | void;
-
-							const rootOrFeatureSelector: SelectorType =
-								_selectors[selectorKey];
-
-							if ('object' === typeof rootOrFeatureSelector) {
-								recursiveRegistration(rootOrFeatureSelector);
-								return;
-							}
-
-							registerSelectors(
-								innerBlock.type,
-								rootOrFeatureSelector
-							);
-						}
-					);
-				};
-
-				recursiveRegistration(innerBlock?.selectors);
-			});
+			);
 
 			registerSelectors('master');
 		});

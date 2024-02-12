@@ -12,7 +12,6 @@ export type InnerBlocksInfoProps = {
 };
 
 export type InnerBlocksInfo = {
-	innerBlockId: number,
-	currentInnerBlock: InnerBlockModel,
+	currentInnerBlock: InnerBlockModel | null,
 	publisherInnerBlocks: Array<InnerBlockModel>,
 };

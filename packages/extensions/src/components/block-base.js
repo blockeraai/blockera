@@ -29,7 +29,6 @@ import { extensionClassNames } from '@publisher/classnames';
 import {
 	useIconEffect,
 	useAttributes,
-	useBlockStateInfo,
 	useInnerBlocksInfo,
 	BlockEditContextProvider,
 	useCalculateCurrentAttributes,
@@ -40,7 +39,7 @@ import { BlockCard } from '../libs/block-card';
 import { BlockPartials } from './block-partials';
 import { isInnerBlock, propsAreEqual } from './utils';
 import { sanitizedBlockAttributes } from '../hooks/utils';
-import type { InnerBlockType } from '../libs/inner-blocks/types';
+import type { UpdateBlockEditorSettings } from '../libs/types';
 import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs';
 
 export type BlockBaseProps = {
@@ -69,32 +68,47 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		);
 		const [isOpenGridBuilder, setOpenGridBuilder] = useState(false);
 
-		const { currentBlock = 'master' } = useSelect((select) => {
-			const { getExtensionCurrentBlock } = select(
-				'publisher-core/extensions'
-			);
+		const {
+			currentBlock,
+			currentState,
+			innerBlockState,
+			currentBreakpoint,
+		} = useSelect((select) => {
+			const {
+				getExtensionCurrentBlock,
+				getExtensionInnerBlockState,
+				getExtensionCurrentBlockState,
+				getExtensionCurrentBlockStateBreakpoint,
+			} = select('publisher-core/extensions');
 
 			return {
 				currentBlock: getExtensionCurrentBlock(),
+				currentState: getExtensionCurrentBlockState(),
+				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
+				innerBlockState: getExtensionInnerBlockState(),
 			};
 		});
-		const { changeExtensionCurrentBlock: setCurrentBlock } =
-			dispatch('publisher-core/extensions') || {};
+		const {
+			changeExtensionCurrentBlock: setCurrentBlock,
+			changeExtensionCurrentBlockState: setCurrentState,
+			changeExtensionInnerBlockState: setInnerBlockState,
+		} = dispatch('publisher-core/extensions') || {};
 
 		const { getDeviceType } = select('publisher-core/editor');
 
-		const { innerBlockId, currentInnerBlock, publisherInnerBlocks } =
-			useInnerBlocksInfo({ name, additional, attributes });
+		const { currentInnerBlock, publisherInnerBlocks } = useInnerBlocksInfo({
+			name,
+			additional,
+			attributes,
+		});
 
 		const masterIsNormalState = (): boolean =>
-			'normal' === attributes?.publisherCurrentState &&
-			isLaptopBreakpoint(getDeviceType());
+			'normal' === currentState && isLaptopBreakpoint(getDeviceType());
 
 		const isNormalState = (): boolean => {
 			if (isInnerBlock(currentBlock)) {
 				return (
-					'normal' ===
-						currentInnerBlock?.attributes?.publisherCurrentState &&
+					'normal' === innerBlockState &&
 					isLaptopBreakpoint(getDeviceType())
 				);
 			}
@@ -119,10 +133,22 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			}
 		);
 
-		const handleOnSwitchBlockSettings = (
-			_currentBlock: 'master' | InnerBlockType
+		const updateBlockEditorSettings: UpdateBlockEditorSettings = (
+			key: string,
+			value: any
 		): void => {
-			setCurrentBlock(_currentBlock);
+			switch (key) {
+				case 'current-block':
+					setCurrentBlock(value);
+					break;
+				case 'current-state':
+					if (isInnerBlock(currentBlock)) {
+						return setInnerBlockState(value);
+					}
+
+					setCurrentState(value);
+					break;
+			}
 		};
 
 		const { supports } = useSelect((select) => {
@@ -132,19 +158,13 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		});
 
 		const blockEditRef = useRef(null);
-		const { blockStateId, breakpointId } = useBlockStateInfo({
-			attributes,
-			currentBlock,
-			getDeviceType,
-			currentInnerBlock,
-		});
 		const currentAttributes = useCalculateCurrentAttributes({
 			attributes,
 			currentBlock,
-			blockStateId,
-			breakpointId,
-			innerBlockId,
+			currentState,
 			isNormalState,
+			innerBlockState,
+			currentBreakpoint,
 			currentInnerBlock,
 			publisherInnerBlocks,
 		});
@@ -190,7 +210,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			} else if (
 				'' !== attributes.publisherPropsId &&
 				2 === Object.keys(publisherAttributes)?.length &&
-				!attributes.publisherInnerBlocks.length
+				!Object.keys(attributes.publisherInnerBlocks).length
 			) {
 				setAttributes({
 					...attributes,
@@ -228,12 +248,12 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		};
 
 		const { handleOnChangeAttributes } = useAttributes(setAttributes, {
-			innerBlockId,
-			blockStateId,
-			breakpointId,
+			currentBlock,
+			currentState,
 			isNormalState,
 			getAttributes,
 			blockId: name,
+			currentBreakpoint,
 			masterIsNormalState,
 			publisherInnerBlocks,
 		});
@@ -244,9 +264,13 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					<Fill name={`publisher-block-card-content-${clientId}`}>
 						<BlockCard
 							clientId={clientId}
-							handleOnClick={handleOnSwitchBlockSettings}
-							states={attributes.publisherBlockStates}
+							activeState={currentState}
+							activeBlock={currentBlock}
+							innerBlocks={publisherInnerBlocks}
 							currentInnerBlock={currentInnerBlock}
+							activeInnerBlockState={innerBlockState}
+							states={attributes.publisherBlockStates}
+							handleOnClick={updateBlockEditorSettings}
 						/>
 					</Fill>
 					<Fill name={`publisher-block-edit-content-${clientId}`}>
@@ -280,18 +304,19 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						storeName: 'publisher-core/controls',
 					},
 					currentTab,
-					blockStateId,
-					breakpointId,
+					currentState,
 					setCurrentTab,
 					isNormalState,
 					setAttributes,
 					getAttributes,
+					currentBreakpoint,
 					currentInnerBlock,
 					isOpenGridBuilder,
 					setOpenGridBuilder,
+					publisherInnerBlocks,
 					attributes: _attributes,
 					handleOnChangeAttributes,
-					handleOnSwitchBlockSettings,
+					updateBlockEditorSettings,
 					BlockComponent: () => children,
 					activeDeviceType: getDeviceType(),
 					getBlockType: () =>
@@ -303,8 +328,9 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						<SideEffect
 							{...{
 								currentTab,
-								currentState:
-									currentAttributes.publisherCurrentState,
+								currentState: isInnerBlock(currentBlock)
+									? innerBlockState
+									: currentState,
 							}}
 						/>
 						<SlotFillProvider>

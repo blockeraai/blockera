@@ -11,10 +11,14 @@ import memoize from 'fast-memoize';
 import { isInnerBlock } from '../../components';
 import { deletePropertyByPath, isEquals } from '@publisher/utils';
 import type {
+	TStates,
 	StateTypes,
 	BreakpointTypes,
 } from '../../libs/block-states/types';
-import type { InnerBlockModel } from '../../libs/inner-blocks/types';
+import type {
+	InnerBlocks,
+	InnerBlockModel,
+} from '../../libs/inner-blocks/types';
 
 export const deleteExtraItems = (items: Array<string>, from: Object): void => {
 	if (items?.length) {
@@ -68,32 +72,21 @@ export const resetAttribute = (
 
 export const memoizedRootBreakpoints: (
 	breakpoint: BreakpointTypes,
-	id: number,
 	action: Object
 ) => BreakpointTypes = memoize(
 	(
 		breakpoint,
-		id,
 		{
 			ref,
 			state,
 			newValue,
-			stateType,
 			updateItems,
 			attributeId,
 			currentBlock,
-			breakpointId,
-			breakpointType,
+			currentState,
+			currentBreakpoint,
 		}
 	) => {
-		if (breakpointType && breakpointType !== breakpoint.type) {
-			return breakpoint;
-		}
-
-		if (breakpointId !== id) {
-			return breakpoint;
-		}
-
 		if (ref?.current?.reset) {
 			return {
 				...breakpoint,
@@ -122,26 +115,22 @@ export const memoizedRootBreakpoints: (
 			return breakpoint;
 		}
 
-		if (stateType && breakpointType && isInnerBlock(currentBlock)) {
+		if (currentState && currentBreakpoint && isInnerBlock(currentBlock)) {
+			if (state.publisherInnerBlocks[currentBlock]) {
+				state.publisherInnerBlocks[currentBlock] = {
+					...state.publisherInnerBlocks[currentBlock],
+					attributes: {
+						...state.publisherInnerBlocks[currentBlock].attributes,
+						[attributeId]: newValue,
+					},
+				};
+			}
+
 			return {
 				...breakpoint,
 				attributes: {
 					...breakpoint.attributes,
-					publisherInnerBlocks: state.publisherInnerBlocks.map(
-						(innerBlock) => {
-							if (innerBlock.type !== currentBlock) {
-								return innerBlock;
-							}
-
-							return {
-								...innerBlock,
-								attributes: {
-									...innerBlock.attributes,
-									[attributeId]: newValue,
-								},
-							};
-						}
-					),
+					publisherInnerBlocks: state.publisherInnerBlocks,
 				},
 			};
 		}
@@ -161,24 +150,24 @@ export const memoizedBlockStates: (
 	action: Object
 ) => Array<StateTypes> = memoize(
 	(currentBlockAttributes: Object, action: Object) => {
-		const { blockStateId, stateType } = action;
+		const { currentState, currentBreakpoint } = action;
+		const breakpoints =
+			currentBlockAttributes?.publisherBlockStates[currentState]
+				?.breakpoints;
 
-		return currentBlockAttributes.publisherBlockStates.map((state, id) => {
-			if (stateType && stateType !== state.type) {
-				return state;
-			}
-
-			if (blockStateId !== id) {
-				return state;
-			}
-
-			return {
-				...state,
-				breakpoints: state.breakpoints.map((breakpoint, id) =>
-					memoizedRootBreakpoints(breakpoint, id, action)
-				),
-			};
-		});
+		return {
+			...currentBlockAttributes?.publisherBlockStates,
+			[currentState]: {
+				...currentBlockAttributes?.publisherBlockStates[currentState],
+				breakpoints: {
+					...breakpoints,
+					[currentBreakpoint]: memoizedRootBreakpoints(
+						breakpoints[currentBreakpoint],
+						action
+					),
+				},
+			},
+		};
 	}
 );
 
@@ -186,7 +175,7 @@ export const getInnerBlocks: (
 	innerBlock: InnerBlockModel,
 	root: Object,
 	action: Object
-) => false | Object = memoize(
+) => InnerBlocks = memoize(
 	(
 		innerBlock: InnerBlockModel,
 		root: Object,
@@ -200,10 +189,6 @@ export const getInnerBlocks: (
 			currentBlock,
 			addOrModifyRootItems,
 		} = action;
-
-		if (innerBlock.type !== currentBlock) {
-			return false;
-		}
 
 		if (ref?.current?.reset) {
 			return {
@@ -227,11 +212,10 @@ export const getInnerBlocks: (
 
 		const oldInnerBlockAttributes =
 			'undefined' !== typeof root?.attributes &&
-			root?.attributes.hasOwnProperty('publisherInnerBlocks')
-				? root?.attributes?.publisherInnerBlocks.find(
-						(block: InnerBlockModel): boolean =>
-							block.type === innerBlock.type
-				  )?.attributes || {}
+			root?.attributes.hasOwnProperty('publisherInnerBlocks') &&
+			root?.attributes?.publisherInnerBlocks[currentBlock]
+				? root?.attributes?.publisherInnerBlocks[currentBlock]
+						?.attributes || {}
 				: null;
 
 		if (
@@ -264,11 +248,7 @@ export const getBreakPoints: (
 		action: Object,
 		state: Object
 	): BreakpointTypes => {
-		const { breakpointType, type, attributeId, newValue } = action;
-
-		if (breakpoint.type !== breakpointType) {
-			return breakpoint;
-		}
+		const { type, attributeId, newValue } = action;
 
 		if ('UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE' !== type) {
 			return {
@@ -280,17 +260,17 @@ export const getBreakPoints: (
 			};
 		}
 
-		let oldInnerBlocks = state.publisherInnerBlocks;
+		let publisherInnerBlocks = state.publisherInnerBlocks;
 
-		if (!oldInnerBlocks?.length) {
-			oldInnerBlocks = action.publisherInnerBlocks;
+		if (!Object.keys(publisherInnerBlocks)?.length) {
+			publisherInnerBlocks = action.publisherInnerBlocks;
 		}
 
-		const publisherInnerBlocks = oldInnerBlocks
-			.map((innerBlock: InnerBlockModel) =>
-				getInnerBlocks(innerBlock, breakpoint, action)
-			)
-			.filter((innerBlock): boolean => innerBlock);
+		publisherInnerBlocks[action.currentBlock] = getInnerBlocks(
+			publisherInnerBlocks[action.currentBlock],
+			breakpoint,
+			action
+		);
 
 		return {
 			...breakpoint,
@@ -303,31 +283,32 @@ export const getBreakPoints: (
 );
 
 export const getBlockStates: (
-	params: { blockStates: Array<StateTypes> },
+	params: { blockStates: { [key: TStates]: StateTypes } },
 	action: Object,
 	state: Object
-) => Array<StateTypes> = memoize(
+) => { [key: TStates]: StateTypes } = memoize(
 	(
-		{ blockStates }: { blockStates: Array<StateTypes> },
+		{ blockStates }: { blockStates: { [key: TStates]: StateTypes } },
 		action: Object,
 		state: Object
 	) => {
-		const { stateType } = action;
+		const { currentState, currentBreakpoint } = action;
 
-		return blockStates.map((blockState: StateTypes): StateTypes => {
-			if (blockState.type !== stateType) {
-				return blockState;
-			}
-
-			const breakpoints = blockState.breakpoints.map(
-				(breakpoint: BreakpointTypes): BreakpointTypes =>
-					getBreakPoints(breakpoint, action, state)
-			);
-
-			return {
-				...blockState,
-				breakpoints,
-			};
-		});
+		return {
+			...blockStates,
+			[currentState]: {
+				...blockStates[currentState],
+				breakpoints: {
+					...blockStates[currentState].breakpoints,
+					[currentBreakpoint]: getBreakPoints(
+						blockStates[currentState].breakpoints[
+							currentBreakpoint
+						],
+						action,
+						state
+					),
+				},
+			},
+		};
 	}
 );

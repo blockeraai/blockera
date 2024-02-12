@@ -5,6 +5,11 @@
 import { select } from '@wordpress/data';
 
 /**
+ * Publisher dependencies
+ */
+import { isEmpty, isEquals, omit } from '@publisher/utils';
+
+/**
  * Internal dependencies
  */
 import type {
@@ -16,7 +21,6 @@ import type {
 	TStatesLabel,
 } from '../types';
 import getBreakpoints from '../default-breakpoints';
-import { isEmpty, isEquals, omit } from '@publisher/utils';
 
 export type State = {
 	type: TStates,
@@ -51,20 +55,23 @@ export const getBlockStates = (): Array<StateGraph> => {
 		return [];
 	}
 
+	const { getExtensionCurrentBlockStateBreakpoint } = select(
+		'publisher-core/extensions'
+	);
 	const breakpoints = getBreakpoints();
 
 	const normals = [];
 
-	return breakpoints
+	return Object.values(breakpoints)
 		.map((breakpoint: BreakpointTypes): StateGraph => {
 			let states: StateGraphStates = [];
 
-			states = block.attributes.publisherBlockStates
+			states = Object.values(block.attributes.publisherBlockStates)
 				.map((state: StateTypes): State => {
 					if (
 						'normal' === state.type &&
 						breakpoint.type ===
-							block.attributes.publisherCurrentDevice
+							getExtensionCurrentBlockStateBreakpoint()
 					) {
 						return {
 							type: state.type,
@@ -78,13 +85,11 @@ export const getBlockStates = (): Array<StateGraph> => {
 					return {
 						type: state.type,
 						label: state.label,
-						attributes: state.breakpoints.find(
-							(b: BreakpointTypes): boolean => {
-								return b.type === breakpoint.type;
-							}
-						)?.attributes,
+						attributes:
+							state.breakpoints[breakpoint.type]?.attributes,
 					};
 				})
+				// $FlowFixMe
 				.filter((state: State): boolean => !isEmpty(state.attributes));
 
 			return {

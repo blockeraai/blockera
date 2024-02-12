@@ -15,6 +15,7 @@ import { isFunction } from '@publisher/utils';
 /**
  * Internal dependencies
  */
+import { isInnerBlock } from '../components';
 import { generateExtensionId } from '../libs';
 import type { THandleOnChangeAttributes } from '../libs/types';
 import type { BreakpointTypes, TStates } from '../libs/block-states/types';
@@ -49,8 +50,12 @@ const BlockEditContextProvider = ({
 			getAttributes,
 			setCurrentTab,
 			isNormalState,
+			currentBlock,
+			currentState,
+			innerBlockState,
 			isOpenGridBuilder,
 			setOpenGridBuilder,
+			publisherInnerBlocks,
 			handleOnChangeAttributes,
 		} = props;
 
@@ -61,6 +66,7 @@ const BlockEditContextProvider = ({
 			breakpointId,
 			getAttributes,
 			isNormalState,
+			publisherInnerBlocks,
 			handleOnChangeAttributes,
 			switchBlockState: (state: string) => {
 				const newValue = getAttributes().publisherBlockStates.map(
@@ -79,11 +85,7 @@ const BlockEditContextProvider = ({
 					}
 				);
 
-				handleOnChangeAttributes('publisherBlockStates', newValue, {
-					addOrModifyRootItems: {
-						publisherCurrentState: state,
-					},
-				});
+				handleOnChangeAttributes('publisherBlockStates', newValue);
 
 				const { modifyControlValue } = dispatch(
 					'publisher-core/controls/repeater'
@@ -112,7 +114,11 @@ const BlockEditContextProvider = ({
 					?.breakpoints[breakpointId];
 			},
 			getCurrentState(): TStates {
-				return getAttributes()?.publisherCurrentState;
+				if (isInnerBlock(currentBlock)) {
+					return innerBlockState;
+				}
+
+				return currentState;
 			},
 			isOpenGridBuilder,
 			setOpenGridBuilder,

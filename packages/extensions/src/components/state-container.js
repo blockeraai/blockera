@@ -17,26 +17,32 @@ import { getClassNames } from '@publisher/classnames';
 import { isInnerBlock, isNormalState } from './utils';
 import { settings } from '../libs/block-states/config';
 
-export default function StateContainer({
-	children,
-	currentState,
-}: Object): Element<any> {
-	const { currentBlock = 'master', selectedState = 'normal' } = useSelect(
-		(select) => {
-			const { getExtensionCurrentBlock, getExtensionCurrentBlockState } =
-				select('publisher-core/extensions');
+export default function StateContainer({ children }: Object): Element<any> {
+	const {
+		currentBlock = 'master',
+		innerBlockState = 'normal',
+		masterBlockState = 'normal',
+	} = useSelect((select) => {
+		const {
+			getExtensionCurrentBlock,
+			getExtensionInnerBlockState,
+			getExtensionCurrentBlockState,
+		} = select('publisher-core/extensions');
 
-			return {
-				currentBlock: getExtensionCurrentBlock(),
-				selectedState: getExtensionCurrentBlockState(),
-			};
-		}
-	);
+		return {
+			currentBlock: getExtensionCurrentBlock(),
+			innerBlockState: getExtensionInnerBlockState(),
+			masterBlockState: getExtensionCurrentBlockState(),
+		};
+	});
 
-	const activeColor =
-		isInnerBlock(currentBlock) && isNormalState(selectedState)
-			? '#cc0000'
-			: settings[currentState.type].color;
+	let activeColor = settings[masterBlockState].color;
+
+	if (isInnerBlock(currentBlock) && isNormalState(innerBlockState)) {
+		activeColor = '#cc0000';
+	} else if (isInnerBlock(currentBlock)) {
+		activeColor = settings[innerBlockState].color;
+	}
 
 	return (
 		<div

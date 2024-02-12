@@ -34,7 +34,6 @@ export { useAttributes } from './use-attributes';
 export { useIconEffect } from './use-icon-effect';
 export { useBlocksStore } from './use-blocks-store';
 export { useStoreSelectors } from './use-store-selectors';
-export { useBlockStateInfo } from './use-block-state-info';
 export { useBlockExtensions } from './use-block-extensions';
 export { useInnerBlocksInfo } from './use-inner-blocks-info';
 export { useStoreDispatchers } from './use-store-dispatchers';

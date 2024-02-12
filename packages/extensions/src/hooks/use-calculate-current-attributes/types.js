@@ -4,17 +4,19 @@
  * Internal dependencies
  */
 import type {
-	InnerBlockModel,
+	InnerBlocks,
 	InnerBlockType,
+	InnerBlockModel,
 } from '../../libs/inner-blocks/types';
+import type { TStates, TBreakpoint } from '../../libs/block-states/types';
 
 export type CalculateCurrentAttributesProps = {
 	attributes: Object,
-	blockStateId: number,
-	breakpointId: number,
 	innerBlockId: number,
+	currentState: TStates,
 	isNormalState: () => boolean,
+	currentBreakpoint: TBreakpoint,
+	publisherInnerBlocks: InnerBlocks,
 	currentInnerBlock: InnerBlockModel,
 	currentBlock: 'master' | InnerBlockType,
-	publisherInnerBlocks: Array<InnerBlockModel>,
 };

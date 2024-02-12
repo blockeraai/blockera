@@ -21,7 +21,10 @@ import * as config from '../../libs/base/config';
 import type { InnerBlockType } from '../../libs/inner-blocks/types';
 import type { TStates } from '../../libs/block-states/types';
 
-export const convertToStylesheet = (media, cssRules) => {
+export const convertToStylesheet = (
+	media: string,
+	cssRules: string
+): string => {
 	return `${media}{${cssRules}}`;
 };
 
@@ -40,10 +43,14 @@ export const getSelector = ({
 	selectors,
 	currentBlock,
 }: {
-	state: TStates,
+	state: TStates | string,
 	clientId: string,
 	className: string,
-	selectors: Array<Object>,
+	selectors: {
+		[key: 'root' | TStates | string]: {
+			[key: 'master' | InnerBlockType]: string,
+		},
+	},
 	currentBlock: 'master' | InnerBlockType,
 }): string => {
 	if (!state) {

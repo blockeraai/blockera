@@ -12,6 +12,7 @@ import type { THandleOnChangeAttributes } from './handle-onchange-attributes';
 
 export type { TBlockProps } from './block-props';
 export type { ExtensionProps } from './extension-prop-types';
+export type { UpdateBlockEditorSettings } from './block-editor-settings';
 export type { THandleOnChangeWithPath } from './handle-onchange-with-path';
 export type { THandleOnChangeAttributes } from './handle-onchange-attributes';
 

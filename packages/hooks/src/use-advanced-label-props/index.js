@@ -80,65 +80,57 @@ export const useAdvancedLabelProps = ({
 		_blockAttributes = prepare(path, blockAttributes);
 	}
 
-	const isChangedOnOtherStates =
-		blockAttributes?.publisherBlockStates?.filter(
-			(state: Object): boolean => {
-				return (
-					state.breakpoints.filter((breakpoint) => {
-						let stateValue =
-							'normal' === state.type &&
-							'laptop' === breakpoint.type
-								? blockAttributes
-								: breakpoint?.attributes;
+	const isChangedOnOtherStates = Object.values(
+		blockAttributes?.publisherBlockStates
+	)?.filter((state: Object): boolean => {
+		return (
+			Object.values(state.breakpoints).filter((breakpoint) => {
+				let stateValue =
+					'normal' === state.type && 'laptop' === breakpoint.type
+						? blockAttributes
+						: breakpoint?.attributes;
 
-						if (isEmpty(stateValue)) {
-							return false;
-						}
+				if (isEmpty(stateValue)) {
+					return false;
+				}
 
-						// Assume control is repeater.
-						if (isRepeater) {
-							if (!isNormalState && 'normal' === state.type) {
-								return (
-									!isEmpty(stateValue[attribute]) &&
-									!isUndefined(stateValue[attribute]) &&
-									!isEquals(
-										stateValue[attribute],
-										defaultValue
-									)
-								);
-							}
-
-							return (
-								!isEmpty(stateValue[attribute]) &&
-								!isUndefined(stateValue[attribute]) &&
-								!isEquals(stateValue[attribute], defaultValue)
-							);
-						}
-
-						if (
-							(path && isObject(stateValue)) ||
-							isArray(stateValue)
-						) {
-							stateValue = prepare(path, stateValue);
-						}
-
-						if (!isNormalState && 'normal' === state.type) {
-							return (
-								!isEmpty(stateValue) &&
-								!isUndefined(stateValue) &&
-								!isEquals(stateValue, defaultValue)
-							);
-						}
-
+				// Assume control is repeater.
+				if (isRepeater) {
+					if (!isNormalState && 'normal' === state.type) {
 						return (
-							!isEmpty(stateValue) &&
-							!isUndefined(stateValue) &&
-							!isEquals(stateValue, defaultValue)
+							!isEmpty(stateValue[attribute]) &&
+							!isUndefined(stateValue[attribute]) &&
+							!isEquals(stateValue[attribute], defaultValue)
 						);
-					}).length > 0
+					}
+
+					return (
+						!isEmpty(stateValue[attribute]) &&
+						!isUndefined(stateValue[attribute]) &&
+						!isEquals(stateValue[attribute], defaultValue)
+					);
+				}
+
+				if ((path && isObject(stateValue)) || isArray(stateValue)) {
+					stateValue = prepare(path, stateValue);
+				}
+
+				if (!isNormalState && 'normal' === state.type) {
+					return (
+						!isEmpty(stateValue) &&
+						!isUndefined(stateValue) &&
+						!isEquals(stateValue, defaultValue)
+					);
+				}
+
+				return (
+					!isEmpty(stateValue) &&
+					!isUndefined(stateValue) &&
+					!isEquals(stateValue, defaultValue)
 				);
-			}
+			}).length > 0
 		);
+	});
 
 	let isChanged = !isEquals(defaultValue, value);
 

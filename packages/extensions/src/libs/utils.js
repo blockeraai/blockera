@@ -14,6 +14,7 @@ import { isEquals, omit } from '@publisher/utils';
  * Internal dependencies
  */
 import type { TBlockProps } from './types';
+import { isInnerBlock } from '../components';
 // import { detailedDiff } from 'deep-object-diff';
 
 /**
@@ -45,11 +46,16 @@ export function generateExtensionId(
 ): string {
 	const {
 		getExtensionCurrentBlock = () => 'master',
+		getExtensionInnerBlockState = () => 'master',
 		getExtensionCurrentBlockState = () => 'normal',
 	} = select('publisher-core/extensions') || {};
 
 	const currentBlock = getExtensionCurrentBlock();
-	const currentStateType = flag ? '-' + getExtensionCurrentBlockState() : '';
+	let currentStateType = flag ? '-' + getExtensionCurrentBlockState() : '';
+
+	if (isInnerBlock(currentBlock)) {
+		currentStateType = flag ? '-' + getExtensionInnerBlockState() : '';
+	}
 
 	return `${blockName}/${id}/${clientId}-${currentBlock}${currentStateType}`;
 }

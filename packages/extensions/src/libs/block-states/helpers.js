@@ -29,6 +29,7 @@ import MobileLandscapeIcon from './icons/mobile-landscape';
 import LaptopIcon from './icons/laptop';
 import ExtraLargeIcon from './icons/extra-large';
 import LargeIcon from './icons/large';
+import { isInnerBlock } from '../../components';
 
 export const getStateInfo = (state: TStates | number): StateTypes => {
 	return 'number' === typeof state
@@ -37,14 +38,10 @@ export const getStateInfo = (state: TStates | number): StateTypes => {
 };
 
 export const getBreakpointInfo = (
-	breakpoint: TBreakpoint | number,
+	breakpoint: TBreakpoint,
 	parentState: TStates = 'normal'
 ): BreakpointTypes | void => {
-	return 'number' === typeof breakpoint
-		? breakpoints()[breakpoint]
-		: breakpoints(parentState).find((b: BreakpointTypes): boolean => {
-				return [b.type, b.label].includes(breakpoint);
-		  });
+	return breakpoints(parentState)[breakpoint];
 };
 
 export function BreakpointIcon({
@@ -83,12 +80,21 @@ export function BreakpointIcon({
 }
 
 export function onChangeBlockStates(
-	newValue: Array<Object>,
+	newValue: Array<{ ...StateTypes, isSelected: boolean }>,
 	params: Object
 ): Object {
-	const { changeExtensionCurrentBlockState: switchBlockState } =
-		dispatch('publisher-core/extensions') || {};
-	const { states, rootStates, onChange, currentStateType } = params;
+	const {
+		changeExtensionCurrentBlockState: setCurrentState,
+		changeExtensionInnerBlockState: setInnerBlockState,
+	} = dispatch('publisher-core/extensions') || {};
+	const {
+		states,
+		rootStates,
+		onChange,
+		currentBlock,
+		innerBlockState,
+		currentStateType,
+	} = params;
 	const prepareSelectedState = memoize(() =>
 		newValue.find((item) => item.isSelected)
 	);
@@ -98,63 +104,83 @@ export function onChangeBlockStates(
 		return;
 	}
 
-	const isEqualsWithCurrentState = (type: TStates) =>
-		type === currentStateType;
+	const isEqualsWithCurrentState = (type: TStates) => {
+		if (isInnerBlock(currentBlock)) {
+			return type === innerBlockState;
+		}
+
+		return type === currentStateType;
+	};
 
 	if (isEqualsWithCurrentState(selectedState.type) && states.length) {
 		return;
 	}
 
-	switchBlockState(selectedState.type);
+	if (isInnerBlock(currentBlock)) {
+		setInnerBlockState(selectedState.type);
+	} else {
+		setCurrentState(selectedState.type);
+	}
 
-	if (newValue.length !== states.length) {
-		const addOrModifyRootItems = {
-			publisherCurrentState: selectedState.type,
-		};
-
+	if (newValue.length !== Object.keys(states).length) {
 		const blockStates = rootStates;
 
-		onChange(
-			'publisherBlockStates',
-			newValue.map((state, index) => {
-				if (blockStates[index] && blockStates[index].isSelected) {
-					return {
-						...blockStates[index],
-						isOpen: false,
-						isSelected: false,
-					};
-				}
-				if (blockStates[index]) {
-					return {
-						...blockStates[index],
-						isOpen: false,
-					};
-				}
+		const _newValue: {
+			[key: TStates]: { ...StateTypes, isSelected: boolean },
+		} = {};
 
-				return state;
-			}),
-			{
-				addOrModifyRootItems,
+		newValue.forEach((state) => {
+			if (blockStates[state.type] && blockStates[state.type].isSelected) {
+				_newValue[state.type] = {
+					...blockStates[state.type],
+					isOpen: false,
+					isSelected: false,
+				};
+
+				return;
 			}
-		);
+
+			if (blockStates[state.type]) {
+				_newValue[state.type] = {
+					...blockStates[state.type],
+					isOpen: false,
+				};
+
+				return;
+			}
+
+			if (blockStates[state.type]) {
+				_newValue[state.type] = blockStates[state.type];
+			} else {
+				_newValue[state.type] = state;
+			}
+		});
+
+		onChange('publisherBlockStates', _newValue);
 
 		return;
 	}
 
 	if (!isEquals(selectedState.type, currentStateType)) {
-		const publisherBlockStates = rootStates.map(
-			(state: Object, stateId: number): Object => {
+		const publisherBlockStates: {
+			[key: TStates]: { ...StateTypes, isSelected: boolean },
+		} = {};
+
+		Object.values(rootStates).forEach(
+			(state: Object, stateId: number): void => {
 				if (stateId === newValue.indexOf(selectedState)) {
-					return {
+					publisherBlockStates[state.type] = {
 						...state,
 						isOpen: false,
 						isSelected: true,
 						type: selectedState.type,
 						label: selectedState.label,
 					};
+
+					return;
 				}
 
-				return {
+				publisherBlockStates[state.type] = {
 					...state,
 					isOpen: false,
 					isSelected: false,
@@ -162,12 +188,6 @@ export function onChangeBlockStates(
 			}
 		);
 
-		onChange('publisherCurrentState', selectedState.type, {
-			addOrModifyRootItems: {
-				publisherBlockStates,
-			},
-		});
-	} else {
-		onChange('publisherCurrentState', selectedState.type || 'normal');
+		onChange('publisherInnerBlockStates', publisherBlockStates);
 	}
 }

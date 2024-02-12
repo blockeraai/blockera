@@ -21,6 +21,8 @@ import {
 	getCssRules,
 	getSelector,
 } from './helpers';
+import { useBlockContext } from '../../hooks';
+import type { InnerBlockModel } from '../../libs/inner-blocks/types';
 import { default as blockStates } from '../../libs/block-states/states';
 import type { TBreakpoint, TStates } from '../../libs/block-states/types';
 import { usePrepareStylesheetDeps } from './use-prepare-stylesheet-deps';
@@ -36,15 +38,16 @@ export const BlockStyle = ({
 	...TBlockProps,
 	activeDeviceType: TBreakpoint,
 }): MixedElement => {
+	const { getCurrentState } = useBlockContext();
 	const states: Array<TStates | string> = Object.keys(blockStates);
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const selectors = useCssSelectors({
 		blockName,
-		supportId: 'publisherSize',
 		fallbackSupportId: '',
+		supportId: 'publisherSize',
+		currentState: getCurrentState(),
 		innerBlocks: attributes.publisherInnerBlocks,
-		currentState: attributes.publisherCurrentState,
 	});
 
 	// const { getBlockType } = useBlocksStore();
@@ -53,7 +56,7 @@ export const BlockStyle = ({
 
 	const medias = useMedia();
 
-	const styles = states.map((state: TStates | string): Array<string> => {
+	const styles = states.map((state: TStates | string): string => {
 		const blockProps = {
 			clientId,
 			supports,
@@ -85,7 +88,7 @@ export const BlockStyle = ({
 		(state: TStates | string): Array<string> => {
 			const styles = [];
 
-			attributes.publisherInnerBlocks.forEach(
+			Object.values(attributes.publisherInnerBlocks).forEach(
 				(innerBlock: InnerBlockModel): void => {
 					if (!selectors[state][innerBlock.type]) {
 						return;

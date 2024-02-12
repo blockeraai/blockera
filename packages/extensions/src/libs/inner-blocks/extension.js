@@ -22,16 +22,15 @@ import { BaseControl, PanelBodyControl } from '@publisher/controls';
  * Internal dependencies
  */
 import { hasSameProps } from '../utils';
+import { ArrowIcon } from './icons/arrow';
 import { useBlockContext } from '../../hooks';
 import { isInnerBlock } from '../../components';
 import { InnerBlocksExtensionIcon } from './icons';
-import type { InnerBlockModel, InnerBlocksProps } from './types';
-import { ArrowIcon } from './icons/arrow';
+import type { InnerBlockType, InnerBlocksProps } from './types';
 
 export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 	({ innerBlocks }: InnerBlocksProps): MixedElement => {
-		const { handleOnSwitchBlockSettings: switchBlockSettings } =
-			useBlockContext();
+		const { updateBlockEditorSettings } = useBlockContext();
 
 		const { currentBlock = 'master' } = useSelect((select) => {
 			const { getExtensionCurrentBlock } = select(
@@ -44,22 +43,26 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 		});
 
 		const MappedInnerBlocks = () =>
-			innerBlocks.map(
-				(
-					{ name, label, type, icon }: InnerBlockModel,
-					index: number
-				) => {
+			Object.keys(innerBlocks).map(
+				(innerBlockType: InnerBlockType | string, index: number) => {
+					const { name, label, icon } = innerBlocks[innerBlockType];
+
 					return (
 						<BaseControl
 							label={label}
 							controlName="icon"
 							columns="columns-2"
-							key={`${name}-${type}-${index}`}
+							key={`${name}-${innerBlockType}-${index}`}
 						>
 							<Button
 								size="input"
 								contentAlign="left"
-								onClick={() => switchBlockSettings(type)}
+								onClick={() =>
+									updateBlockEditorSettings(
+										'current-block',
+										innerBlockType
+									)
+								}
 								className={controlInnerClassNames(
 									'inner-block__button',
 									'extension-inner-blocks'
@@ -76,7 +79,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 				}
 			);
 
-		if (!innerBlocks.length || isInnerBlock(currentBlock)) {
+		if (!Object.values(innerBlocks).length || isInnerBlock(currentBlock)) {
 			return <></>;
 		}
 

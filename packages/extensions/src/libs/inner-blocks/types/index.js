@@ -18,6 +18,8 @@ export type InnerBlockModel = {
 	attributes: Object,
 };
 
+export type InnerBlocks = { [key: InnerBlockType | string]: InnerBlockModel };
+
 export type InnerBlocksProps = {
-	innerBlocks: Array<Object>,
+	innerBlocks: InnerBlocks,
 };

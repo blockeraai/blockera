@@ -22,18 +22,12 @@ export const useAttributes = (
 	setAttributes: (attributes: Object) => void,
 	{
 		blockId,
-		breakpointId,
-		blockStateId,
-		innerBlockId,
 		isNormalState,
 		getAttributes,
 		masterIsNormalState,
 		publisherInnerBlocks,
 	}: {
 		blockId: string,
-		blockStateId: number,
-		breakpointId: number,
-		innerBlockId: number,
 		isNormalState: () => boolean,
 		publisherInnerBlocks: Object,
 		masterIsNormalState: () => boolean,
@@ -47,11 +41,6 @@ export const useAttributes = (
 		newValue,
 		options = {}
 	): void => {
-		const { getExtensionCurrentBlock } = select(
-			'publisher-core/extensions'
-		);
-		const currentBlock = getExtensionCurrentBlock();
-
 		const {
 			ref,
 			updateItems = {},
@@ -61,6 +50,13 @@ export const useAttributes = (
 		} = options;
 		const { getSelectedBlock } = select('core/block-editor');
 		const { attributes = {} } = getSelectedBlock() || {};
+		const {
+			getExtensionCurrentBlock,
+			getExtensionInnerBlockState,
+			getExtensionCurrentBlockState,
+			getExtensionCurrentBlockStateBreakpoint,
+		} = select('publisher-core/extensions');
+		const currentBlock = getExtensionCurrentBlock();
 
 		// check - is really changed attribute from root?
 		if (
@@ -70,6 +66,9 @@ export const useAttributes = (
 		) {
 			return;
 		}
+
+		const currentState = getExtensionCurrentBlockState();
+		const currentBreakpoint = getExtensionCurrentBlockStateBreakpoint();
 
 		let _attributes = {
 			...attributes,
@@ -96,13 +95,12 @@ export const useAttributes = (
 
 		// inner blocks by default array empty!
 		// when value is empty or innerBlockId has "-1" value needs to use root attributes to prevent undefined error!
-		if (!publisherInnerBlocks.length || -1 === innerBlockId) {
+		if (!publisherInnerBlocks.length || !isInnerBlock(currentBlock)) {
 			innerBlockAttributes = attributes;
 		} else {
-			innerBlockAttributes =
-				-1 === innerBlockId
-					? {}
-					: publisherInnerBlocks[innerBlockId].attributes;
+			innerBlockAttributes = !isInnerBlock(currentBlock)
+				? {}
+				: publisherInnerBlocks[currentBlock]?.attributes || {};
 		}
 
 		let currentBlockAttributes = _attributes;
@@ -112,10 +110,8 @@ export const useAttributes = (
 			currentBlockAttributes = innerBlockAttributes;
 		}
 
-		const attributeIsRelatedStatesAttributes = [
-			'publisherCurrentState',
-			'publisherBlockStates',
-		].includes(attributeId);
+		const attributeIsRelatedStatesAttributes =
+			'publisherBlockStates' === attributeId;
 
 		const {
 			updateNormalState,
@@ -128,19 +124,16 @@ export const useAttributes = (
 			newValue,
 			attributeId,
 			updateItems,
-			blockStateId,
-			breakpointId,
+			currentState,
 			currentBlock,
-			innerBlockId,
 			getAttributes,
 			isNormalState,
+			currentBreakpoint,
 			publisherInnerBlocks,
 			addOrModifyRootItems,
 			currentBlockAttributes,
 			deleteItemsOnResetAction,
 			attributeIsRelatedStatesAttributes,
-			stateType: _attributes.publisherCurrentState,
-			breakpointType: _attributes.publisherCurrentDevice,
 		});
 
 		// Assume attribute id is string, and activated state is normal, or attribute ["publisherCurrentState" or "publisherBlockStates"] will change!
@@ -158,19 +151,19 @@ export const useAttributes = (
 			);
 		}
 
+		const innerBlockState = getExtensionInnerBlockState();
+
 		// handle update attributes in activated state and breakpoint!
 		if (isInnerBlock(currentBlock) && !isNormalState()) {
 			const _blockState =
 				currentBlockAttributes?.publisherBlockStates?.find(
 					(state: StateTypes): boolean =>
-						state.type ===
-						currentBlockAttributes.publisherCurrentState
+						state.type === innerBlockState
 				);
 			const _breakpoint = _blockState
 				? _blockState.breakpoints.find(
 						(breakpoint: BreakpointTypes): boolean =>
-							breakpoint.type ===
-							currentBlockAttributes.publisherCurrentDevice
+							breakpoint.type === currentBreakpoint
 				  )
 				: {};
 
@@ -186,9 +179,8 @@ export const useAttributes = (
 									_blockState
 							  )
 							: -1,
-						breakpointType:
-							currentBlockAttributes.publisherCurrentDevice,
-						stateType: currentBlockAttributes.publisherCurrentState,
+						stateType: innerBlockState,
+						breakpointType: currentBreakpoint,
 					})
 				)
 			);
@@ -196,12 +188,9 @@ export const useAttributes = (
 			return setAttributes(reducer(_attributes, updateNormalState()));
 		}
 
-		// Assume block state is normal and attributeId is once of "publisherBlockStates", "publisherCurrentState".
+		// Assume block state is normal and attributeId is equals with "publisherBlockStates".
 		if (attributeIsRelatedStatesAttributes || isNormalState()) {
-			return setAttributes({
-				..._attributes,
-				[attributeId]: newValue,
-			});
+			return setAttributes(reducer(_attributes, updateNormalState()));
 		}
 
 		// handle update attributes in activated state and breakpoint!

@@ -3,27 +3,25 @@
 /**
  * Internal dependencies
  */
-import type {
-	BreakpointTypes,
-	TBreakpoint,
-	TStates,
-} from '../../libs/block-states/types';
+import type { BreakpointTypes, TStates } from '../../libs/block-states/types';
 import type { TBlockProps } from '../../libs/types';
-import type { InnerBlockModel } from '../../libs/inner-blocks/types';
+import type {
+	InnerBlockModel,
+	InnerBlockType,
+} from '../../libs/inner-blocks/types';
 import { getCssRules, getSelector, convertToStringStyleRule } from './helpers';
 
 export const usePrepareStylesheetDeps = (
 	state: TStates | string,
-	selectors: Array<Object>,
-	blockProps: {
-		...TBlockProps,
-		activeDeviceType: TBreakpoint,
-	}
+	selectors: {
+		[key: 'root' | TStates | string]: {
+			[key: 'master' | InnerBlockType]: string,
+		},
+	},
+	blockProps: TBlockProps
 ): Array<string> => {
 	const { attributes, clientId } = blockProps;
-	const currentState = attributes?.publisherBlockStates?.find(
-		({ type }: { type: TStates }): boolean => type === state
-	);
+	const currentState = attributes?.publisherBlockStates[state];
 
 	if (!currentState) {
 		return [];
@@ -39,22 +37,30 @@ export const usePrepareStylesheetDeps = (
 		className: attributes?.className,
 	});
 
-	currentState.breakpoints.forEach((breakpoint: BreakpointTypes): void => {
-		if (!breakpoint?.attributes) {
-			return;
-		}
+	Object.values(currentState.breakpoints).forEach(
+		(breakpoint: BreakpointTypes): void => {
+			if (!breakpoint?.attributes) {
+				return;
+			}
 
-		stack.push(
-			convertToStringStyleRule({
-				cssRules: getCssRules(breakpoint?.attributes, blockProps).join(
-					'\n'
-				),
-				selector,
-			})
-		);
+			stack.push(
+				convertToStringStyleRule({
+					cssRules: getCssRules(
+						breakpoint?.attributes,
+						blockProps
+					).join('\n'),
+					selector,
+				})
+			);
 
-		breakpoint?.attributes?.publisherInnerBlocks?.forEach(
-			(innerBlock: InnerBlockModel): void => {
+			if (!breakpoint?.attributes?.publisherInnerBlocks) {
+				// $FlowFixMe
+				return stack.filter((item: string): boolean => !!item);
+			}
+
+			Object.values(
+				breakpoint?.attributes?.publisherInnerBlocks
+			)?.forEach((innerBlock: InnerBlockModel): void => {
 				if (!innerBlock?.attributes) {
 					return;
 				}
@@ -68,9 +74,10 @@ export const usePrepareStylesheetDeps = (
 						selector: selector + ' cite',
 					})
 				);
-			}
-		);
-	});
+			});
+		}
+	);
 
+	// $FlowFixMe
 	return stack.filter((item: string): boolean => item);
 };

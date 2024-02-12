@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import memoize from 'fast-memoize';
 import { applyFilters } from '@wordpress/hooks';
 
 /**
@@ -21,7 +20,6 @@ import {
 	deleteExtraItems,
 	memoizedBlockStates,
 } from './helpers';
-import type { InnerBlockModel } from '../../libs/inner-blocks/types';
 
 const reducer = (state: Object = {}, action: Object): Object => {
 	const {
@@ -31,7 +29,6 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		newValue,
 		attributeId,
 		currentBlock,
-		innerBlockId,
 		isNormalState,
 		getAttributes,
 		publisherInnerBlocks,
@@ -40,7 +37,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		deleteItemsOnResetAction,
 		attributeIsRelatedStatesAttributes,
 	} = action;
-
+	console.log(type);
 	switch (type) {
 		case 'UPDATE_NORMAL_STATE':
 			if (ref?.current?.reset) {
@@ -63,54 +60,22 @@ const reducer = (state: Object = {}, action: Object): Object => {
 
 			// Handle inner block changes.
 			if (isInnerBlock(currentBlock)) {
-				const memoizedNewInnerBlocks = memoize(
-					(blocks: Array<InnerBlockModel>) => {
-						if (!blocks?.length) {
-							return [
-								{
-									type: currentBlock,
-									attributes: {
-										[attributeId]: newValue,
-										...(attributeIsRelatedStatesAttributes
-											? addOrModifyRootItems
-											: {}),
-									},
-								},
-							];
-						}
-
-						const memoizedBlock = memoize(
-							(
-								block: InnerBlockModel,
-								index: number
-							): InnerBlockModel => {
-								if (block.type !== currentBlock) {
-									return block;
-								}
-
-								return {
-									...block,
-									attributes: {
-										...(state.publisherInnerBlocks[index]
-											?.attributes || {}),
-										...(attributeIsRelatedStatesAttributes
-											? addOrModifyRootItems
-											: {}),
-										[attributeId]: newValue,
-									},
-								};
-							}
-						);
-
-						return blocks.map(memoizedBlock);
-					}
-				);
-
 				return {
 					...state,
-					publisherInnerBlocks: memoizedNewInnerBlocks(
-						state.publisherInnerBlocks
-					),
+					publisherInnerBlocks: {
+						...state.publisherInnerBlocks,
+						[currentBlock]: {
+							...(state.publisherInnerBlocks[currentBlock] ?? {}),
+							attributes: {
+								...(state.publisherInnerBlocks[currentBlock]
+									?.attributes || {}),
+								...(attributeIsRelatedStatesAttributes
+									? addOrModifyRootItems
+									: {}),
+								[attributeId]: newValue,
+							},
+						},
+					},
 				};
 			}
 
@@ -148,11 +113,15 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			};
 
 		case 'UPDATE_INNER_BLOCK_STATES':
-			publisherInnerBlocks[innerBlockId].attributes.publisherBlockStates =
+			if (!publisherInnerBlocks[currentBlock]) {
+				return state;
+			}
+
+			publisherInnerBlocks[currentBlock].attributes.publisherBlockStates =
 				getBlockStates(
 					{
 						blockStates:
-							publisherInnerBlocks[innerBlockId].attributes
+							publisherInnerBlocks[currentBlock].attributes
 								.publisherBlockStates,
 					},
 					action,

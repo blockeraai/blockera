@@ -9,21 +9,23 @@ import breakpoints from '@publisher/extensions/src/libs/block-states/default-bre
 export const useMedia = (): { [key: string]: string } => {
 	const medias: { [key: string]: string } = {};
 
-	breakpoints().forEach(({ type, settings }: BreakpointTypes): void => {
-		const { min, max } = settings;
+	Object.values(breakpoints()).forEach(
+		({ type, settings }: BreakpointTypes): void => {
+			const { min, max } = settings;
 
-		let media = '';
+			let media = '';
 
-		if (min && max) {
-			media = `@media screen and (max-width: ${max}) and (min-width: ${min})`;
-		} else if (min) {
-			media = `@media screen and (min-width: ${min})`;
-		} else if (max) {
-			media = `@media screen and (max-width: ${max})`;
+			if (min && max) {
+				media = `@media screen and (max-width: ${max}) and (min-width: ${min})`;
+			} else if (min) {
+				media = `@media screen and (min-width: ${min})`;
+			} else if (max) {
+				media = `@media screen and (max-width: ${max})`;
+			}
+
+			medias[type] = media;
 		}
-
-		medias[type] = media;
-	});
+	);
 
 	return medias;
 };

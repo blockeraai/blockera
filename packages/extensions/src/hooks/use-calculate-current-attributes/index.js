@@ -5,15 +5,13 @@
  */
 import { isInnerBlock } from '../../components';
 import type { CalculateCurrentAttributesProps } from './types';
-import type { InnerBlockModel } from '../../libs/inner-blocks/types';
 
 export const useCalculateCurrentAttributes = ({
 	attributes,
 	currentBlock,
-	breakpointId,
-	innerBlockId,
-	blockStateId,
+	currentState,
 	isNormalState,
+	currentBreakpoint,
 	currentInnerBlock,
 	publisherInnerBlocks,
 }: CalculateCurrentAttributesProps): Object => {
@@ -26,28 +24,37 @@ export const useCalculateCurrentAttributes = ({
 			currentAttributes = attributes;
 		}
 	} else if (isInnerBlock(currentBlock)) {
-		if (publisherInnerBlocks[innerBlockId]) {
-			currentInnerBlock = publisherInnerBlocks[innerBlockId];
+		if (publisherInnerBlocks[currentBlock]) {
+			currentInnerBlock = publisherInnerBlocks[currentBlock];
+		}
+		if (
+			!currentInnerBlock?.attributes?.publisherBlockStates[currentState]
+		) {
+			currentState = 'normal';
 		}
 
 		currentAttributes = {
 			...currentInnerBlock?.attributes,
 			...(currentInnerBlock?.attributes?.publisherBlockStates[
-				blockStateId
-			]?.breakpoints[breakpointId]
+				currentState
+			]?.breakpoints[currentBreakpoint]
 				? currentInnerBlock?.attributes?.publisherBlockStates[
-						blockStateId
-				  ]?.breakpoints[breakpointId]?.attributes
+						currentState
+				  ]?.breakpoints[currentBreakpoint]?.attributes
 				: {}),
 		};
 	} else {
+		if (!attributes.publisherBlockStates[currentState]) {
+			currentState = 'normal';
+		}
+
 		currentAttributes = {
 			...attributes,
-			...(attributes.publisherBlockStates[blockStateId].breakpoints[
-				breakpointId
+			...(attributes.publisherBlockStates[currentState].breakpoints[
+				currentBreakpoint
 			]
-				? attributes.publisherBlockStates[blockStateId].breakpoints[
-						breakpointId
+				? attributes.publisherBlockStates[currentState].breakpoints[
+						currentBreakpoint
 				  ].attributes
 				: {}),
 		};
@@ -63,12 +70,7 @@ export const useCalculateCurrentAttributes = ({
 		currentAttributes = {
 			...attributes,
 			...currentAttributes,
-			...((
-				publisherInnerBlocks.find(
-					(innerBlock: InnerBlockModel): boolean =>
-						innerBlock.type === currentBlock
-				) || {}
-			)?.attributes || {}),
+			...((publisherInnerBlocks[currentBlock] || {})?.attributes || {}),
 		};
 	}
 
