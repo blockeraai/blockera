@@ -38,7 +38,7 @@ export const BlockStyle = ({
 	...TBlockProps,
 	activeDeviceType: TBreakpoint,
 }): MixedElement => {
-	const { getCurrentState } = useBlockContext();
+	const { getCurrentState, publisherInnerBlocks } = useBlockContext();
 	const states: Array<TStates | string> = Object.keys(blockStates);
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
@@ -47,7 +47,7 @@ export const BlockStyle = ({
 		fallbackSupportId: '',
 		supportId: 'publisherSize',
 		currentState: getCurrentState(),
-		innerBlocks: attributes.publisherInnerBlocks,
+		innerBlocks: publisherInnerBlocks,
 	});
 
 	// const { getBlockType } = useBlocksStore();
@@ -88,22 +88,33 @@ export const BlockStyle = ({
 		(state: TStates | string): Array<string> => {
 			const styles = [];
 
-			Object.values(attributes.publisherInnerBlocks).forEach(
+			Object.values(publisherInnerBlocks).forEach(
 				(innerBlock: InnerBlockModel): void => {
-					if (!selectors[state][innerBlock.type]) {
+					if (
+						!selectors[state][innerBlock.type] ||
+						!attributes.publisherInnerBlocks[innerBlock.type]
+							?.attributes
+					) {
 						return;
 					}
 
 					styles.push(
 						// eslint-disable-next-line react-hooks/rules-of-hooks
 						convertToStringStyleRule({
-							cssRules: getCssRules(innerBlock?.attributes, {
-								clientId,
-								supports,
-								blockName,
-								attributes: innerBlock?.attributes,
-								setAttributes,
-							}).join('\n'),
+							cssRules: getCssRules(
+								attributes.publisherInnerBlocks[innerBlock.type]
+									?.attributes,
+								{
+									clientId,
+									supports,
+									blockName,
+									attributes:
+										attributes.publisherInnerBlocks[
+											innerBlock.type
+										]?.attributes,
+									setAttributes,
+								}
+							).join('\n'),
 							selector: getSelector({
 								state,
 								clientId,
