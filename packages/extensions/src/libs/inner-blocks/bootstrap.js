@@ -76,8 +76,6 @@ export const bootstrap = (): void => {
 				currentBlock,
 			} = blockDetail;
 
-			console.log('it should be fired if inner block change');
-
 			if (!isBaseBreakpoint || isMasterBlock) {
 				return nextState;
 			}

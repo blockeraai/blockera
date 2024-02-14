@@ -1,6 +1,11 @@
 // @flow
 
 /**
+ * External dependencies
+ */
+import { useSelect } from '@wordpress/data';
+
+/**
  * Publisher dependencies
  */
 import {
@@ -19,6 +24,49 @@ import type {
 	CalculatedAdvancedLabelProps,
 	AdvancedLabelHookProps,
 } from './types';
+import { isInnerBlock } from '@publisher/extensions/src/components';
+
+export const useCurrentBlockAdvancedLabelProps = (
+	params: AdvancedLabelHookProps
+): CalculatedAdvancedLabelProps => {
+	const {
+		currentBlock,
+		currentState,
+		currentBreakpoint,
+		currentInnerBlockState,
+	} = useSelect((select) => {
+		const {
+			getExtensionCurrentBlock,
+			getExtensionInnerBlockState,
+			getExtensionCurrentBlockState,
+			getExtensionCurrentBlockStateBreakpoint,
+		} = select('publisher-core/extensions');
+
+		return {
+			currentBlock: getExtensionCurrentBlock(),
+			currentState: getExtensionCurrentBlockState(),
+			currentInnerBlockState: getExtensionInnerBlockState(),
+			currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
+		};
+	});
+
+	const blockAttributes = isInnerBlock(currentBlock)
+		? params.blockAttributes.publisherInnerBlocks[currentBlock].attributes
+		: params.blockAttributes;
+
+	return useAdvancedLabelProps({
+		...params,
+		blockAttributes,
+		currentBreakpoint,
+		currentInnerBlockState,
+		currentState: isInnerBlock(currentBlock)
+			? currentInnerBlockState
+			: currentState,
+		currentBlockState: isInnerBlock(currentBlock)
+			? blockAttributes?.publisherBlockStates[currentInnerBlockState]
+			: blockAttributes?.publisherBlockStates[currentState],
+	});
+};
 
 export const useAdvancedLabelProps = ({
 	path,
@@ -28,11 +76,11 @@ export const useAdvancedLabelProps = ({
 	attribute,
 	isRepeater,
 	defaultValue,
-	blockStateId,
 	currentState,
-	breakpointId,
 	isNormalState,
 	blockAttributes,
+	currentBreakpoint,
+	currentBlockState,
 }: AdvancedLabelHookProps): CalculatedAdvancedLabelProps => {
 	//TODO: Please commented after complete debug!
 	// const debugKey = 'publisherBorder';
@@ -52,11 +100,10 @@ export const useAdvancedLabelProps = ({
 
 	let _blockAttributes = blockAttributes[attribute];
 
-	const currentBlockState =
-		blockAttributes?.publisherBlockStates[blockStateId];
-	const currentBreakpoint = currentBlockState?.breakpoints[breakpointId];
+	const currentBreakpointType =
+		currentBlockState?.breakpoints[currentBreakpoint];
 
-	const stateAttributes = currentBreakpoint?.attributes;
+	const stateAttributes = currentBreakpointType?.attributes;
 
 	let stateValue = stateAttributes ? stateAttributes[attribute] : {};
 

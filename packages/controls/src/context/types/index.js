@@ -22,6 +22,11 @@ export type ControlContextProviderProps = {
 		hasSideEffect?: boolean,
 		description?: string | MixedElement | any,
 		type?: 'simple' | 'nested',
+		callback?: (
+			controlId: string,
+			value: any,
+			modifyControlValue: (params: Object) => void
+		) => void,
 	},
 	storeName?: string,
 	children: MixedElement | any,

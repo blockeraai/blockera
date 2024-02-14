@@ -2,7 +2,7 @@
 /**
  * External dependencies
  */
-import { select } from '@wordpress/data';
+import { select, useSelect } from '@wordpress/data';
 
 /**
  * Publisher dependencies
@@ -21,6 +21,7 @@ import type {
 	TStatesLabel,
 } from '../types';
 import getBreakpoints from '../default-breakpoints';
+import { isInnerBlock } from '../../../components';
 
 export type State = {
 	type: TStates,
@@ -55,18 +56,37 @@ export const getBlockStates = (): Array<StateGraph> => {
 		return [];
 	}
 
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	const { currentBlock } = useSelect((select) => {
+		const { getExtensionCurrentBlock } = select(
+			'publisher-core/extensions'
+		);
+
+		return {
+			currentBlock: getExtensionCurrentBlock(),
+		};
+	});
+
 	const { getExtensionCurrentBlockStateBreakpoint } = select(
 		'publisher-core/extensions'
 	);
 	const breakpoints = getBreakpoints();
 
 	const normals = [];
+	let blockAttributes = block.attributes;
+	let publisherBlockStates = blockAttributes.publisherBlockStates;
+
+	if (isInnerBlock(currentBlock)) {
+		blockAttributes =
+			blockAttributes.publisherInnerBlocks[currentBlock].attributes;
+		publisherBlockStates = blockAttributes.publisherBlockStates;
+	}
 
 	return Object.values(breakpoints)
 		.map((breakpoint: BreakpointTypes): StateGraph => {
 			let states: StateGraphStates = [];
 
-			states = Object.values(block.attributes.publisherBlockStates)
+			states = Object.values(publisherBlockStates)
 				.map((state: StateTypes): State => {
 					if (
 						'normal' === state.type &&

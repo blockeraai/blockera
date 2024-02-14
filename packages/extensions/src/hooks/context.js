@@ -8,15 +8,9 @@ import { dispatch } from '@wordpress/data';
 import { createContext, useContext, useMemo } from '@wordpress/element';
 
 /**
- * Publisher dependencies
- */
-import { isFunction } from '@publisher/utils';
-
-/**
  * Internal dependencies
  */
 import { isInnerBlock } from '../components';
-import { generateExtensionId } from '../libs';
 import type { THandleOnChangeAttributes } from '../libs/types';
 import type { BreakpointTypes, TStates } from '../libs/block-states/types';
 
@@ -26,6 +20,11 @@ const BlockEditContextProvider = ({
 	children,
 	...props
 }: Object): MixedElement => {
+	const {
+		changeExtensionCurrentBlockState: setCurrentState,
+		changeExtensionInnerBlockState: setCurrentInnerBlockState,
+	} = dispatch('publisher-core/extensions') || {};
+
 	const memoizedValue: {
 		currentTab: string,
 		getBlockType: string,
@@ -42,7 +41,6 @@ const BlockEditContextProvider = ({
 		handleOnChangeAttributes: THandleOnChangeAttributes,
 	} = useMemo(() => {
 		const {
-			block,
 			currentTab,
 			getBlockType,
 			blockStateId,
@@ -68,39 +66,12 @@ const BlockEditContextProvider = ({
 			isNormalState,
 			publisherInnerBlocks,
 			handleOnChangeAttributes,
-			switchBlockState: (state: string) => {
-				const newValue = getAttributes().publisherBlockStates.map(
-					(s: Object) => {
-						if (state === s?.type) {
-							return {
-								...s,
-								isSelected: true,
-							};
-						}
-
-						return {
-							...s,
-							isSelected: false,
-						};
-					}
-				);
-
-				handleOnChangeAttributes('publisherBlockStates', newValue);
-
-				const { modifyControlValue } = dispatch(
-					'publisher-core/controls/repeater'
-				);
-
-				if (!isFunction(modifyControlValue)) {
-					return;
+			switchBlockState: (state: TStates): void => {
+				if (isInnerBlock(currentBlock)) {
+					return setCurrentInnerBlockState(state);
 				}
 
-				const controlId = generateExtensionId(block, 'block-states');
-
-				modifyControlValue({
-					controlId,
-					value: newValue,
-				});
+				setCurrentState(state);
 			},
 			setCurrentTab: (tabName: string): void => {
 				if (tabName === currentTab) {
