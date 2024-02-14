@@ -113,6 +113,7 @@ export {
 	definitionTypes,
 	InnerBlocksExtension,
 	attributes as innerBlocksExtensionsAttributes,
+	bootstrap as bootstrapInnerBlocksExtension,
 } from './inner-blocks';
 export * from './inner-blocks/icons';
 export {
