@@ -92,7 +92,19 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			changeExtensionCurrentBlock: setCurrentBlock,
 			changeExtensionCurrentBlockState: setCurrentState,
 			changeExtensionInnerBlockState: setInnerBlockState,
+			changeExtensionCurrentBlockStateBreakpoint: setCurrentBreakpoint,
 		} = dispatch('publisher-core/extensions') || {};
+
+		useEffect(() => {
+			// When component unmount!
+			return () => {
+				setCurrentBlock('master');
+				setCurrentState('normal');
+				setInnerBlockState('normal');
+				setCurrentBreakpoint('laptop');
+			};
+			// eslint-disable-next-line
+		}, []);
 
 		const { getDeviceType } = select('publisher-core/editor');
 
@@ -253,12 +265,9 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		};
 
 		const { handleOnChangeAttributes } = useAttributes(setAttributes, {
-			currentBlock,
-			currentState,
 			isNormalState,
 			getAttributes,
 			blockId: name,
-			currentBreakpoint,
 			masterIsNormalState,
 			publisherInnerBlocks,
 		});

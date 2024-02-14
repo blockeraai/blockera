@@ -13,10 +13,6 @@ import { isInnerBlock } from '../../components';
 import { deleteExtraItems, isChanged } from './helpers';
 import actions, { type UseAttributesActions } from './actions';
 import type { THandleOnChangeAttributes } from '../../libs/types';
-import type {
-	BreakpointTypes,
-	StateTypes,
-} from '../../libs/block-states/types';
 
 export const useAttributes = (
 	setAttributes: (attributes: Object) => void,
@@ -45,11 +41,10 @@ export const useAttributes = (
 			ref,
 			updateItems = {},
 			deleteItems = [],
-			addOrModifyRootItems = {},
 			deleteItemsOnResetAction = [],
 		} = options;
 		const { getSelectedBlock } = select('core/block-editor');
-		const { attributes = {} } = getSelectedBlock() || {};
+		let { attributes = {} } = getSelectedBlock() || {};
 		const {
 			getExtensionCurrentBlock,
 			getExtensionInnerBlockState,
@@ -68,16 +63,11 @@ export const useAttributes = (
 		}
 
 		const currentState = getExtensionCurrentBlockState();
+		const currentInnerBlockState = getExtensionInnerBlockState();
 		const currentBreakpoint = getExtensionCurrentBlockStateBreakpoint();
 
-		let _attributes = {
-			...attributes,
-			// FIXME: important!
-			...(isInnerBlock(currentBlock) ? {} : addOrModifyRootItems),
-		};
-
 		// if handler has any delete items!
-		deleteExtraItems(deleteItems, _attributes);
+		deleteExtraItems(deleteItems, attributes);
 
 		// Assume activated state is normal and existed "updateItems" has items!
 		if (
@@ -85,8 +75,8 @@ export const useAttributes = (
 			Object.values(updateItems)?.length &&
 			isNormalState()
 		) {
-			_attributes = {
-				..._attributes,
+			attributes = {
+				...attributes,
 				...updateItems,
 			};
 		}
@@ -103,7 +93,7 @@ export const useAttributes = (
 				: publisherInnerBlocks[currentBlock]?.attributes || {};
 		}
 
-		let currentBlockAttributes = _attributes;
+		let currentBlockAttributes = attributes;
 
 		// when current block is one of inner block types, must be use of inner block attributes!
 		if (isInnerBlock(currentBlock)) {
@@ -130,8 +120,8 @@ export const useAttributes = (
 			isNormalState,
 			currentBreakpoint,
 			publisherInnerBlocks,
-			addOrModifyRootItems,
 			currentBlockAttributes,
+			currentInnerBlockState,
 			deleteItemsOnResetAction,
 			attributeIsRelatedStatesAttributes,
 		});
@@ -142,55 +132,29 @@ export const useAttributes = (
 			isNormalState() &&
 			attributeIsRelatedStatesAttributes
 		) {
-			return setAttributes(reducer(_attributes, updateNormalState()));
+			return setAttributes(reducer(attributes, updateNormalState()));
 		}
 
 		if (isInnerBlock(currentBlock) && !masterIsNormalState()) {
 			return setAttributes(
-				reducer(_attributes, updateInnerBlockInsideParentState())
+				reducer(attributes, updateInnerBlockInsideParentState())
 			);
 		}
 
-		const currentInnerBlockState = getExtensionInnerBlockState();
-
 		// handle update attributes in activated state and breakpoint!
-		if (isInnerBlock(currentBlock) && !isNormalState()) {
-			const _blockState =
-				currentBlockAttributes?.publisherBlockStates?.find(
-					(state: StateTypes): boolean =>
-						state.type === currentInnerBlockState
-				);
-			const _breakpoint = _blockState
-				? _blockState.breakpoints.find(
-						(breakpoint: BreakpointTypes): boolean =>
-							breakpoint.type === currentBreakpoint
-				  )
-				: {};
-
-			return setAttributes(
-				reducer(
-					_attributes,
-					updateInnerBlockStates({
-						breakpointId: _blockState
-							? _blockState.breakpoints.indexOf(_breakpoint)
-							: -1,
-						blockStateId: _blockState
-							? currentBlockAttributes?.publisherBlockStates?.indexOf(
-									_blockState
-							  )
-							: -1,
-						stateType: currentInnerBlockState,
-						breakpointType: currentBreakpoint,
-					})
-				)
-			);
+		if (
+			isInnerBlock(currentBlock) &&
+			!isNormalState() &&
+			!attributeIsRelatedStatesAttributes
+		) {
+			return setAttributes(reducer(attributes, updateInnerBlockStates()));
 		} else if (isInnerBlock(currentBlock)) {
-			return setAttributes(reducer(_attributes, updateNormalState()));
+			return setAttributes(reducer(attributes, updateNormalState()));
 		}
 
 		// Assume block state is normal and attributeId is equals with "publisherBlockStates".
 		if (attributeIsRelatedStatesAttributes || isNormalState()) {
-			return setAttributes(reducer(_attributes, updateNormalState()));
+			return setAttributes(reducer(attributes, updateNormalState()));
 		}
 
 		// handle update attributes in activated state and breakpoint!

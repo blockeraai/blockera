@@ -16,7 +16,7 @@ import { deletePropertyByPath } from '@publisher/utils';
 import { isBaseBreakpoint, isInnerBlock } from '../../components';
 import {
 	isChanged,
-	getBlockStates,
+	getUpdatedBlockStates,
 	deleteExtraItems,
 	memoizedBlockStates,
 } from './helpers';
@@ -34,10 +34,8 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		isNormalState,
 		getAttributes,
 		publisherInnerBlocks,
-		addOrModifyRootItems,
 		currentBlockAttributes,
 		deleteItemsOnResetAction,
-		attributeIsRelatedStatesAttributes,
 	} = action;
 	console.log(type);
 	switch (type) {
@@ -62,23 +60,20 @@ const reducer = (state: Object = {}, action: Object): Object => {
 
 			// Handle inner block changes.
 			if (isInnerBlock(currentBlock)) {
-				return {
-					...state,
-					publisherInnerBlocks: {
-						...state.publisherInnerBlocks,
-						[currentBlock]: {
-							...(state.publisherInnerBlocks[currentBlock] ?? {}),
-							attributes: {
-								...(state.publisherInnerBlocks[currentBlock]
-									?.attributes || {}),
-								...(attributeIsRelatedStatesAttributes
-									? addOrModifyRootItems
-									: {}),
-								[attributeId]: newValue,
-							},
-						},
-					},
-				};
+				const newPublisherInnerBlocks = state.publisherInnerBlocks;
+
+				if (!newPublisherInnerBlocks[currentBlock]) {
+					newPublisherInnerBlocks[currentBlock] = {
+						attributes: {},
+					};
+				}
+
+				newPublisherInnerBlocks[currentBlock].attributes[attributeId] =
+					newValue;
+
+				state.publisherInnerBlocks = newPublisherInnerBlocks;
+
+				return state;
 			}
 
 			/**
@@ -111,37 +106,46 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			);
 
 		case 'UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE':
-			return {
-				...state,
-				publisherBlockStates: getBlockStates(
-					{
-						blockStates: state.publisherBlockStates,
-					},
-					action,
-					state
-				),
-			};
+			const states = getUpdatedBlockStates(
+				{
+					states: state.publisherBlockStates,
+				},
+				action,
+				state
+			);
+
+			state.publisherBlockStates = states;
+
+			return state;
 
 		case 'UPDATE_INNER_BLOCK_STATES':
 			if (!publisherInnerBlocks[currentBlock]) {
 				return state;
 			}
 
-			publisherInnerBlocks[currentBlock].attributes.publisherBlockStates =
-				getBlockStates(
-					{
-						blockStates:
-							publisherInnerBlocks[currentBlock].attributes
-								.publisherBlockStates,
-					},
-					action,
-					state
-				);
+			const newPublisherInnerBlocks = state.publisherInnerBlocks;
 
-			return {
-				...state,
-				publisherInnerBlocks,
-			};
+			if (!newPublisherInnerBlocks[currentBlock]) {
+				newPublisherInnerBlocks[currentBlock] = {
+					attributes: {},
+				};
+			}
+
+			newPublisherInnerBlocks[
+				currentBlock
+			].attributes.publisherBlockStates = getUpdatedBlockStates(
+				{
+					states: state.publisherInnerBlocks[currentBlock].attributes
+						.publisherBlockStates,
+					inInnerBlock: true,
+				},
+				action,
+				state
+			);
+
+			state.publisherInnerBlocks = newPublisherInnerBlocks;
+
+			return state;
 
 		case 'UPDATE_BLOCK_STATES':
 			return {

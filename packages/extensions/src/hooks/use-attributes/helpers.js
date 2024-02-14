@@ -8,7 +8,7 @@ import memoize from 'fast-memoize';
 /**
  * Publisher dependencies
  */
-import { isInnerBlock } from '../../components';
+import { isInnerBlock, isNormalState } from '../../components';
 import { deletePropertyByPath, isEquals } from '@publisher/utils';
 import type {
 	TStates,
@@ -19,6 +19,7 @@ import type {
 	InnerBlocks,
 	InnerBlockModel,
 } from '../../libs/inner-blocks/types';
+import type { GetBlockStatesParams } from './types';
 
 export const deleteExtraItems = (items: Array<string>, from: Object): void => {
 	if (items?.length) {
@@ -171,7 +172,7 @@ export const memoizedBlockStates: (
 	}
 );
 
-export const getInnerBlocks: (
+export const getUpdatedInnerBlock: (
 	innerBlock: InnerBlockModel,
 	root: Object,
 	action: Object
@@ -187,14 +188,15 @@ export const getInnerBlocks: (
 			attributeId,
 			updateItems,
 			currentBlock,
-			addOrModifyRootItems,
+			currentBreakpoint,
+			currentInnerBlockState,
+			attributeIsRelatedStatesAttributes,
 		} = action;
 
 		if (ref?.current?.reset) {
-			return {
-				...innerBlock,
-				attributes: resetAttribute(innerBlock.attributes),
-			};
+			innerBlock.attributes = resetAttribute(innerBlock.attributes);
+
+			return innerBlock;
 		}
 
 		if (
@@ -210,35 +212,58 @@ export const getInnerBlocks: (
 			};
 		}
 
-		const oldInnerBlockAttributes =
-			'undefined' !== typeof root?.attributes &&
-			root?.attributes.hasOwnProperty('publisherInnerBlocks') &&
-			root?.attributes?.publisherInnerBlocks[currentBlock]
-				? root?.attributes?.publisherInnerBlocks[currentBlock]
-						?.attributes || {}
-				: null;
-
 		if (
-			oldInnerBlockAttributes &&
-			!isChanged(oldInnerBlockAttributes, attributeId, newValue, {
-				attributeId: null,
-			})
+			!isChanged(
+				root?.attributes?.publisherInnerBlocks
+					? root?.attributes?.publisherInnerBlocks[currentBlock]
+							?.attributes
+					: undefined,
+				attributeId,
+				newValue,
+				{
+					attributeId: null,
+				}
+			)
 		) {
-			return root;
+			return innerBlock;
 		}
 
-		return {
-			...innerBlock,
-			attributes: {
-				...(oldInnerBlockAttributes || {}),
-				...addOrModifyRootItems,
-				[attributeId]: newValue,
-			},
-		};
+		if (!innerBlock.attributes) {
+			innerBlock.attributes = {};
+		}
+
+		if (
+			isNormalState(currentInnerBlockState) ||
+			attributeIsRelatedStatesAttributes
+		) {
+			innerBlock.attributes[attributeId] = newValue;
+		} else {
+			if (
+				!innerBlock.attributes.publisherBlockStates[
+					currentInnerBlockState
+				]
+			) {
+				innerBlock.attributes.publisherBlockStates[
+					currentInnerBlockState
+				] = {
+					breakpoints: {
+						[currentBreakpoint]: {
+							attributes: {},
+						},
+					},
+				};
+			}
+
+			innerBlock.attributes.publisherBlockStates[
+				currentInnerBlockState
+			].breakpoints[currentBreakpoint].attributes[attributeId] = newValue;
+		}
+
+		return innerBlock;
 	}
 );
 
-export const getBreakPoints: (
+export const getUpdatedBreakPoint: (
 	breakpoint: BreakpointTypes,
 	action: Object,
 	state: Object
@@ -248,67 +273,73 @@ export const getBreakPoints: (
 		action: Object,
 		state: Object
 	): BreakpointTypes => {
-		const { type, attributeId, newValue } = action;
+		const { type, attributeId, newValue, currentBlock } = action;
 
 		if ('UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE' !== type) {
-			return {
-				...breakpoint,
-				attributes: {
-					...breakpoint.attributes,
-					[attributeId]: newValue,
-				},
+			if (!breakpoint.attributes) {
+				breakpoint.attributes = {};
+			}
+
+			breakpoint.attributes[attributeId] = newValue;
+
+			return breakpoint;
+		}
+
+		if (
+			!breakpoint.attributes ||
+			!breakpoint.attributes.publisherInnerBlocks
+		) {
+			breakpoint.attributes = {
+				publisherInnerBlocks: {},
 			};
 		}
 
-		let publisherInnerBlocks = state.publisherInnerBlocks;
+		breakpoint.attributes.publisherInnerBlocks[currentBlock] =
+			getUpdatedInnerBlock(
+				breakpoint.attributes.publisherInnerBlocks[currentBlock] ||
+					state.publisherInnerBlocks[currentBlock] ||
+					{},
+				breakpoint,
+				action
+			);
 
-		if (!Object.keys(publisherInnerBlocks)?.length) {
-			publisherInnerBlocks = action.publisherInnerBlocks;
-		}
-
-		publisherInnerBlocks[action.currentBlock] = getInnerBlocks(
-			publisherInnerBlocks[action.currentBlock],
-			breakpoint,
-			action
-		);
-
-		return {
-			...breakpoint,
-			attributes: {
-				...breakpoint.attributes,
-				publisherInnerBlocks,
-			},
-		};
+		return breakpoint;
 	}
 );
 
-export const getBlockStates: (
-	params: { blockStates: { [key: TStates]: StateTypes } },
+export const getUpdatedBlockStates: (
+	params: GetBlockStatesParams,
 	action: Object,
 	state: Object
 ) => { [key: TStates]: StateTypes } = memoize(
 	(
-		{ blockStates }: { blockStates: { [key: TStates]: StateTypes } },
+		{ states, inInnerBlock = false }: GetBlockStatesParams,
 		action: Object,
 		state: Object
 	) => {
-		const { currentState, currentBreakpoint } = action;
+		const { currentState, currentBreakpoint, currentInnerBlockState } =
+			action;
 
-		return {
-			...blockStates,
-			[currentState]: {
-				...blockStates[currentState],
-				breakpoints: {
-					...blockStates[currentState].breakpoints,
-					[currentBreakpoint]: getBreakPoints(
-						blockStates[currentState].breakpoints[
-							currentBreakpoint
-						],
-						action,
-						state
-					),
-				},
+		const getUpdatedBlockStates = (
+			states: {
+				[key: TStates]: StateTypes,
 			},
+			stateType: TStates
+		): { [key: TStates]: StateTypes } => {
+			states[stateType].breakpoints[currentBreakpoint] =
+				getUpdatedBreakPoint(
+					states[stateType].breakpoints[currentBreakpoint],
+					action,
+					state
+				);
+
+			return states;
 		};
+
+		if (inInnerBlock) {
+			return getUpdatedBlockStates(states, currentInnerBlockState);
+		}
+
+		return getUpdatedBlockStates(states, currentState);
 	}
 );
