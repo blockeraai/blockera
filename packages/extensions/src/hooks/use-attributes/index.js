@@ -151,14 +151,14 @@ export const useAttributes = (
 			);
 		}
 
-		const innerBlockState = getExtensionInnerBlockState();
+		const currentInnerBlockState = getExtensionInnerBlockState();
 
 		// handle update attributes in activated state and breakpoint!
 		if (isInnerBlock(currentBlock) && !isNormalState()) {
 			const _blockState =
 				currentBlockAttributes?.publisherBlockStates?.find(
 					(state: StateTypes): boolean =>
-						state.type === innerBlockState
+						state.type === currentInnerBlockState
 				);
 			const _breakpoint = _blockState
 				? _blockState.breakpoints.find(
@@ -179,7 +179,7 @@ export const useAttributes = (
 									_blockState
 							  )
 							: -1,
-						stateType: innerBlockState,
+						stateType: currentInnerBlockState,
 						breakpointType: currentBreakpoint,
 					})
 				)

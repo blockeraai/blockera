@@ -38,7 +38,7 @@ const StatesManager: ComponentType<any> = ({
 	states,
 	onChange,
 	rootStates,
-	innerBlockState,
+	currentInnerBlockState,
 	currentStateType,
 }: {
 	block: {
@@ -46,7 +46,7 @@ const StatesManager: ComponentType<any> = ({
 		attributes?: Object,
 	},
 	states: Array<Object>,
-	innerBlockState: TStates,
+	currentInnerBlockState: TStates,
 	currentStateType: TStates,
 	rootStates: Array<Object>,
 	onChange: THandleOnChangeAttributes,
@@ -153,7 +153,7 @@ const StatesManager: ComponentType<any> = ({
 								rootStates,
 								currentBlock,
 								isNormalState,
-								innerBlockState,
+								currentInnerBlockState,
 								currentStateType,
 							}),
 						//Override item when occurred clone action!

@@ -85,10 +85,10 @@ export function changeExtensionCurrentBlockState(
 }
 
 export function changeExtensionInnerBlockState(
-	innerBlockState: TStates
+	currentInnerBlockState: TStates
 ): Object {
 	return {
-		innerBlockState,
+		currentInnerBlockState,
 		type: 'CHANGE_INNER_BLOCK_STATE',
 	};
 }

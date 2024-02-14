@@ -84,7 +84,7 @@ export function blockExtensions(state: Object = {}, action: Object): Object {
 		case 'CHANGE_INNER_BLOCK_STATE':
 			return {
 				...state,
-				currentInnerBlockState: action.innerBlockState,
+				currentInnerBlockState: action.currentInnerBlockState,
 			};
 		case 'CHANGE_CURRENT_BLOCK_STATE_BREAKPOINT':
 			return {

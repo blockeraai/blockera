@@ -92,7 +92,7 @@ export function onChangeBlockStates(
 		rootStates,
 		onChange,
 		currentBlock,
-		innerBlockState,
+		currentInnerBlockState,
 		currentStateType,
 	} = params;
 	const prepareSelectedState = memoize(() =>
@@ -106,7 +106,7 @@ export function onChangeBlockStates(
 
 	const isEqualsWithCurrentState = (type: TStates) => {
 		if (isInnerBlock(currentBlock)) {
-			return type === innerBlockState;
+			return type === currentInnerBlockState;
 		}
 
 		return type === currentStateType;

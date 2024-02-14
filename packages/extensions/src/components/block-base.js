@@ -71,7 +71,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		const {
 			currentBlock,
 			currentState,
-			innerBlockState,
+			currentInnerBlockState,
 			currentBreakpoint,
 		} = useSelect((select) => {
 			const {
@@ -85,7 +85,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				currentBlock: getExtensionCurrentBlock(),
 				currentState: getExtensionCurrentBlockState(),
 				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
-				innerBlockState: getExtensionInnerBlockState(),
+				currentInnerBlockState: getExtensionInnerBlockState(),
 			};
 		});
 		const {
@@ -108,7 +108,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		const isNormalState = (): boolean => {
 			if (isInnerBlock(currentBlock)) {
 				return (
-					'normal' === innerBlockState &&
+					'normal' === currentInnerBlockState &&
 					isLaptopBreakpoint(getDeviceType())
 				);
 			}
@@ -168,7 +168,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			currentBlock,
 			currentState,
 			isNormalState,
-			innerBlockState,
+			currentInnerBlockState,
 			currentBreakpoint,
 			currentInnerBlock,
 			publisherInnerBlocks,
@@ -273,7 +273,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							activeBlock={currentBlock}
 							innerBlocks={publisherInnerBlocks}
 							currentInnerBlock={currentInnerBlock}
-							activeInnerBlockState={innerBlockState}
+							activeInnerBlockState={currentInnerBlockState}
 							states={attributes.publisherBlockStates}
 							handleOnClick={updateBlockEditorSettings}
 						/>
@@ -334,7 +334,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							{...{
 								currentTab,
 								currentState: isInnerBlock(currentBlock)
-									? innerBlockState
+									? currentInnerBlockState
 									: currentState,
 							}}
 						/>

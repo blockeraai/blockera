@@ -52,7 +52,7 @@ const BlockEditContextProvider = ({
 			isNormalState,
 			currentBlock,
 			currentState,
-			innerBlockState,
+			currentInnerBlockState,
 			isOpenGridBuilder,
 			setOpenGridBuilder,
 			publisherInnerBlocks,
@@ -115,7 +115,7 @@ const BlockEditContextProvider = ({
 			},
 			getCurrentState(): TStates {
 				if (isInnerBlock(currentBlock)) {
-					return innerBlockState;
+					return currentInnerBlockState;
 				}
 
 				return currentState;

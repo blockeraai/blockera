@@ -180,7 +180,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		const {
 			currentBlock,
 			currentState,
-			innerBlockState,
+			currentInnerBlockState,
 			currentBreakpoint,
 		} = useSelect((select) => {
 			const {
@@ -193,7 +193,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			return {
 				currentBlock: getExtensionCurrentBlock(),
 				currentState: getExtensionCurrentBlockState(),
-				innerBlockState: getExtensionInnerBlockState(),
+				currentInnerBlockState: getExtensionInnerBlockState(),
 				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
 			};
 		});
@@ -278,7 +278,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			// because needs re-rendering extensions when switch between master or inner blocks and as well as switch between block states!
 			currentBlock,
 			currentState,
-			innerBlockState,
+			currentInnerBlockState,
 			currentBreakpoint,
 		};
 

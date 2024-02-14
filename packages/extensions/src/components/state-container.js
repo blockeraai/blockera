@@ -20,7 +20,7 @@ import { settings } from '../libs/block-states/config';
 export default function StateContainer({ children }: Object): Element<any> {
 	const {
 		currentBlock = 'master',
-		innerBlockState = 'normal',
+		currentInnerBlockState = 'normal',
 		masterBlockState = 'normal',
 	} = useSelect((select) => {
 		const {
@@ -31,17 +31,17 @@ export default function StateContainer({ children }: Object): Element<any> {
 
 		return {
 			currentBlock: getExtensionCurrentBlock(),
-			innerBlockState: getExtensionInnerBlockState(),
+			currentInnerBlockState: getExtensionInnerBlockState(),
 			masterBlockState: getExtensionCurrentBlockState(),
 		};
 	});
 
 	let activeColor = settings[masterBlockState].color;
 
-	if (isInnerBlock(currentBlock) && isNormalState(innerBlockState)) {
+	if (isInnerBlock(currentBlock) && isNormalState(currentInnerBlockState)) {
 		activeColor = '#cc0000';
 	} else if (isInnerBlock(currentBlock)) {
-		activeColor = settings[innerBlockState].color;
+		activeColor = settings[currentInnerBlockState].color;
 	}
 
 	return (
