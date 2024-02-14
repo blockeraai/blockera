@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { select, useDispatch, useSelect } from '@wordpress/data';
-import { memo, useState } from '@wordpress/element';
+import { memo, useEffect, useState } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 import { Fill } from '@wordpress/components';
 
@@ -104,6 +104,7 @@ import { STORE_NAME } from '../base/store/constants';
 import StatesManager from '../block-states/components/states-manager';
 import type { InnerBlocks, InnerBlockType } from '../inner-blocks/types';
 import type { THandleOnChangeAttributes } from '../types';
+import { resetExtensionSettings } from '../../utils';
 
 export const attributes = {
 	...typographyAttributes,
@@ -197,6 +198,14 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
 			};
 		});
+
+		useEffect(() => {
+			// When component unmount!
+			return () => {
+				resetExtensionSettings();
+			};
+			// eslint-disable-next-line
+		}, []);
 
 		const { icon } = extensions;
 

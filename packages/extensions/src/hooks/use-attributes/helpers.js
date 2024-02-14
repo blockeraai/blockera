@@ -20,7 +20,6 @@ import type {
 	InnerBlockModel,
 } from '../../libs/inner-blocks/types';
 import type { GetBlockStatesParams } from './types';
-import { resetExtensionSettings } from '../../utils';
 
 export const deleteExtraItems = (items: Array<string>, from: Object): void => {
 	if (items?.length) {
@@ -156,12 +155,6 @@ export const memoizedBlockStates: (
 		const breakpoints =
 			currentBlockAttributes?.publisherBlockStates[currentState]
 				?.breakpoints;
-
-		if (!breakpoints) {
-			resetExtensionSettings();
-
-			return currentBlockAttributes?.publisherBlockStates;
-		}
 
 		return {
 			...currentBlockAttributes?.publisherBlockStates,
@@ -333,12 +326,6 @@ export const getUpdatedBlockStates: (
 			},
 			stateType: TStates
 		): { [key: TStates]: StateTypes } => {
-			if (!states[stateType]) {
-				resetExtensionSettings();
-
-				return states;
-			}
-
 			states[stateType].breakpoints[currentBreakpoint] =
 				getUpdatedBreakPoint(
 					states[stateType].breakpoints[currentBreakpoint],

@@ -41,7 +41,6 @@ import { isBaseBreakpoint, isInnerBlock, propsAreEqual } from './utils';
 import { sanitizedBlockAttributes } from '../hooks/utils';
 import type { UpdateBlockEditorSettings } from '../libs/types';
 import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs';
-import { resetExtensionSettings } from '../utils';
 
 export type BlockBaseProps = {
 	additional: Object,
@@ -94,14 +93,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			changeExtensionCurrentBlockState: setCurrentState,
 			changeExtensionInnerBlockState: setInnerBlockState,
 		} = dispatch('publisher-core/extensions') || {};
-
-		useEffect(() => {
-			// When component unmount!
-			return () => {
-				resetExtensionSettings();
-			};
-			// eslint-disable-next-line
-		}, []);
 
 		const { getDeviceType } = select('publisher-core/editor');
 
