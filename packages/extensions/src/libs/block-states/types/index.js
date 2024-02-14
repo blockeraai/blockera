@@ -16,4 +16,5 @@ export type BlockDetail = {
 	currentBlock: 'master' | string,
 	currentState: TStates,
 	currentBreakpoint: TBreakpoint,
+	currentInnerBlockState: TStates,
 };
