@@ -37,7 +37,7 @@ import { SideEffect } from '../libs/base';
 import { BlockStyle } from './block-style';
 import { BlockCard } from '../libs/block-card';
 import { BlockPartials } from './block-partials';
-import { isInnerBlock, propsAreEqual } from './utils';
+import { isBaseBreakpoint, isInnerBlock, propsAreEqual } from './utils';
 import { sanitizedBlockAttributes } from '../hooks/utils';
 import type { UpdateBlockEditorSettings } from '../libs/types';
 import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs';
@@ -129,7 +129,12 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			{
 				blockId: name,
 				blockClientId: clientId,
-				isNormalState,
+				isNormalState: isNormalState(),
+				isMasterBlock: !isInnerBlock(currentBlock),
+				isBaseBreakpoint: isBaseBreakpoint(currentBreakpoint),
+				currentBreakpoint,
+				currentBlock,
+				currentState,
 			}
 		);
 

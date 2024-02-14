@@ -13,7 +13,7 @@ import { deletePropertyByPath } from '@publisher/utils';
 /**
  * Internal dependencies
  */
-import { isInnerBlock } from '../../components';
+import { isBaseBreakpoint, isInnerBlock } from '../../components';
 import {
 	isChanged,
 	getBlockStates,
@@ -29,6 +29,8 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		newValue,
 		attributeId,
 		currentBlock,
+		currentState,
+		currentBreakpoint,
 		isNormalState,
 		getAttributes,
 		publisherInnerBlocks,
@@ -97,9 +99,17 @@ const reducer = (state: Object = {}, action: Object): Object => {
 				newValue,
 				ref,
 				getAttributes,
-				isNormalState,
-				blockId
+				{
+					blockId,
+					isNormalState: isNormalState(),
+					isMasterBlock: isInnerBlock(currentBlock),
+					isBaseBreakpoint: isBaseBreakpoint(currentBreakpoint),
+					currentBlock,
+					currentState,
+					currentBreakpoint,
+				}
 			);
+
 		case 'UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE':
 			return {
 				...state,
