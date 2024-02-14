@@ -306,6 +306,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						storeName: 'publisher-core/controls',
 					},
 					currentTab,
+					currentBlock,
 					currentState,
 					setCurrentTab,
 					isNormalState,

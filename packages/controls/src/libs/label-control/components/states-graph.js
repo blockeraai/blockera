@@ -9,6 +9,7 @@ import type { MixedElement } from 'react';
  */
 import { isEmpty } from '@publisher/utils';
 import { controlInnerClassNames } from '@publisher/classnames';
+import type { TStates } from '@publisher/extensions/src/libs/block-states/types';
 import { BreakpointIcon } from '@publisher/extensions/src/libs/block-states/helpers';
 
 /**
@@ -27,7 +28,7 @@ export const StatesGraph = ({
 	controlId: string,
 	blockName: string,
 	defaultValue: any,
-	onClick: (state: string) => void,
+	onClick: (state: TStates) => void,
 }): null | MixedElement => {
 	if (!controlId) {
 		return null;

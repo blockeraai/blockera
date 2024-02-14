@@ -25,7 +25,7 @@ import { getStateInfo, onChangeBlockStates } from '../helpers';
 import { generateExtensionId } from '../../utils';
 import getBreakpoints from '../default-breakpoints';
 import { attributes as StateSettings } from '../attributes';
-import type { BreakpointTypes, TStates } from '../types';
+import type { BreakpointTypes, StateTypes, TStates } from '../types';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 import { PopoverTitleButtons } from './popover-title-buttons';
 import { LabelDescription } from './label-description';
@@ -38,7 +38,6 @@ const StatesManager: ComponentType<any> = ({
 	states,
 	onChange,
 	rootStates,
-	currentInnerBlockState,
 	currentStateType,
 }: {
 	block: {
@@ -46,12 +45,27 @@ const StatesManager: ComponentType<any> = ({
 		attributes?: Object,
 	},
 	states: Array<Object>,
-	currentInnerBlockState: TStates,
 	currentStateType: TStates,
 	rootStates: Array<Object>,
 	onChange: THandleOnChangeAttributes,
 }): Element<any> => {
 	const { isNormalState } = useBlockContext();
+	const { currentBlock, currentState, currentInnerBlockState } = useSelect(
+		(select) => {
+			const {
+				getExtensionCurrentBlock,
+				getExtensionInnerBlockState,
+				getExtensionCurrentBlockState,
+			} = select('publisher-core/extensions');
+
+			return {
+				currentBlock: getExtensionCurrentBlock(),
+				currentState: getExtensionCurrentBlockState(),
+				currentInnerBlockState: getExtensionInnerBlockState(),
+			};
+		}
+	);
+
 	const contextValue = {
 		block,
 		value: !states.length
@@ -70,20 +84,61 @@ const StatesManager: ComponentType<any> = ({
 			  ]
 			: states,
 		hasSideEffect: true,
-		attribute: 'publisherBlockStates',
+		callback: (
+			controlId: string,
+			value: { [key: TStates]: { ...StateTypes, isSelected: boolean } },
+			modifyControlValue: (params: Object) => void
+		): void => {
+			const selectedState = Object.values(value).find(
+				(state: { ...StateTypes, isSelected: boolean }): boolean =>
+					state.isSelected
+			);
+
+			if (
+				!selectedState ||
+				currentState === selectedState.type ||
+				(isInnerBlock(currentBlock) &&
+					currentInnerBlockState === selectedState.type)
+			) {
+				return;
+			}
+
+			const selectedIndex = value.indexOf(selectedState);
+
+			const _value = value.map((v, i) => {
+				if (i === selectedIndex) {
+					return {
+						...v,
+						isSelected: false,
+					};
+				}
+
+				if (isInnerBlock(currentBlock)) {
+					if (currentInnerBlockState === v.type) {
+						return {
+							...v,
+							isSelected: true,
+						};
+					}
+				} else if (currentState === v.type) {
+					return {
+						...v,
+						isSelected: true,
+					};
+				}
+
+				return v;
+			});
+
+			modifyControlValue({
+				controlId,
+				value: _value,
+			});
+		},
 		blockName: block.blockName,
+		attribute: 'publisherBlockStates',
 		name: generateExtensionId(block, 'block-states', false),
 	};
-
-	const { currentBlock = 'master' } = useSelect((select) => {
-		const { getExtensionCurrentBlock } = select(
-			'publisher-core/extensions'
-		);
-
-		return {
-			currentBlock: getExtensionCurrentBlock(),
-		};
-	});
 
 	// const valueCleanup = (value: {
 	// 	[key: TStates]: StateTypes,

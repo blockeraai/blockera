@@ -5,7 +5,8 @@
  */
 import type { MixedElement } from 'react';
 import { useDispatch, useSelect } from '@wordpress/data';
-import { createContext } from '@wordpress/element';
+import { createContext, useEffect } from '@wordpress/element';
+import { resetExtensionSettings } from '@publisher/extensions/src/utils';
 
 /**
  * Internal dependencies
@@ -51,6 +52,37 @@ export const ControlContextProvider = ({
 	);
 	//control dispatch for available actions
 	const dispatch = useDispatch(storeName);
+
+	const { modifyControlValue } = dispatch;
+
+	const { currentBlock, currentState, currentInnerBlockState } = useSelect(
+		(select) => {
+			const {
+				getExtensionCurrentBlock,
+				getExtensionInnerBlockState,
+				getExtensionCurrentBlockState,
+			} = select('publisher-core/extensions');
+
+			return {
+				currentBlock: getExtensionCurrentBlock(),
+				currentState: getExtensionCurrentBlockState(),
+				currentInnerBlockState: getExtensionInnerBlockState(),
+			};
+		}
+	);
+
+	useEffect(() => {
+		if (controlInfo.hasSideEffect) {
+			controlInfo.callback(controlInfo.name, value, modifyControlValue);
+		}
+
+		return () => {
+			if (controlInfo.hasSideEFfect) {
+				resetExtensionSettings();
+			}
+		};
+		// eslint-disable-next-line
+	}, [currentBlock, currentState, currentInnerBlockState]);
 
 	//You can to enable||disable current control with status column!
 	if (!status) {
