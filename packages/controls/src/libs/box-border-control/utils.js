@@ -1,5 +1,5 @@
 // @flow
-export function isBorderEmpty(border: object | undefined): boolean {
+export function isBorderEmpty(border: Object | void): boolean {
 	if (border === undefined) {
 		return false;
 	}

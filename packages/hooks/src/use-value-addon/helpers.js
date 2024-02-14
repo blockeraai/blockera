@@ -4,6 +4,7 @@
  */
 import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
+import { default as memoize } from 'fast-memoize';
 
 /**
  * Publisher dependencies
@@ -12,6 +13,7 @@ import {
 	type DynamicValueCategory,
 	type DynamicValueTypes,
 	getArchiveDynamicValueItemsBy,
+	getColor,
 	getColors,
 	getFeaturedImageDynamicValueItemsBy,
 	getFontSizes,
@@ -631,3 +633,60 @@ export function getDeletedItemInfo(item: ValueAddon): {
 
 	return result;
 }
+
+const _getColorValueAddonFromIdString = function (
+	value: string
+): ValueAddon | string {
+	const colorVar = getColor(value);
+
+	if (colorVar) {
+		return {
+			settings: {
+				...colorVar,
+				type: 'color',
+				var: generateVariableString({
+					reference: colorVar?.reference || {
+						type: '',
+					},
+					type: 'color',
+					id: colorVar?.id || '',
+				}),
+			},
+			name: colorVar?.name,
+			isValueAddon: true,
+			valueType: 'variable',
+		};
+	}
+
+	return value;
+};
+
+const _getColorValueAddonFromIdStringMemoized = memoize(
+	_getColorValueAddonFromIdString
+);
+
+export const getColorValueAddonFromIdString = (
+	value: string
+): ValueAddon | string => {
+	return _getColorValueAddonFromIdStringMemoized(value);
+};
+
+const _getColorValueAddonFromVarString = function (
+	value: string
+): ValueAddon | string {
+	if (value.startsWith('var:')) {
+		return getColorValueAddonFromIdString(value.split('|')[2]);
+	}
+
+	return value;
+};
+
+const _getColorValueAddonFromVarStringMemoized = memoize(
+	_getColorValueAddonFromVarString
+);
+
+export const getColorValueAddonFromVarString = (
+	value: string
+): ValueAddon | string => {
+	return _getColorValueAddonFromVarStringMemoized(value);
+};

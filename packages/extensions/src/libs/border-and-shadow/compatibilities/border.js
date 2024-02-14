@@ -3,9 +3,9 @@
 /**
  * Publisher dependencies
  */
-import { getColor } from '@publisher/core-data';
 import {
-	generateVariableString,
+	getColorValueAddonFromIdString,
+	getColorValueAddonFromVarString,
 	isValid,
 } from '@publisher/hooks/src/use-value-addon/helpers';
 import { isBorderEmpty } from '@publisher/controls';
@@ -19,29 +19,16 @@ export function borderFromWPCompatibility({
 		// borderColor in root always is variable and means border type is all
 		// it should be changed to a Value Addon (variable)
 		if (attributes?.borderColor !== undefined) {
-			const colorVar = getColor(attributes?.borderColor);
+			const colorVar = getColorValueAddonFromIdString(
+				attributes?.borderColor
+			);
 
 			if (colorVar) {
 				attributes.publisherBorder = {
 					type: 'all',
 					all: {
 						width: attributes?.style?.border?.width ?? '',
-						color: {
-							settings: {
-								...colorVar,
-								type: 'color',
-								var: generateVariableString({
-									reference: colorVar?.reference || {
-										type: '',
-									},
-									type: 'color',
-									id: colorVar?.id || '',
-								}),
-							},
-							name: colorVar?.name,
-							isValueAddon: true,
-							valueType: 'variable',
-						},
+						color: colorVar,
 						style: attributes?.style?.border?.style ?? 'solid',
 					},
 				};
@@ -74,101 +61,18 @@ export function borderFromWPCompatibility({
 			};
 
 			// convert to var
-			if (border.top.color.startsWith('var:')) {
-				const colorVar = getColor(border.top.color.split('|')[2]);
-
-				console.log(colorVar, border.top.color.split('|'));
-				if (colorVar) {
-					border.top.color = {
-						settings: {
-							...colorVar,
-							type: 'color',
-							var: generateVariableString({
-								reference: colorVar?.reference || {
-									type: '',
-								},
-								type: 'color',
-								id: colorVar?.id || '',
-							}),
-						},
-						name: colorVar?.name,
-						isValueAddon: true,
-						valueType: 'variable',
-					};
-				}
-			}
-
-			// convert to var
-			if (border.right.color.startsWith('var:')) {
-				const colorVar = getColor(border.right.color.split('|')[2]);
-
-				if (colorVar) {
-					border.right.color = {
-						settings: {
-							...colorVar,
-							type: 'color',
-							var: generateVariableString({
-								reference: colorVar?.reference || {
-									type: '',
-								},
-								type: 'color',
-								id: colorVar?.id || '',
-							}),
-						},
-						name: colorVar?.name,
-						isValueAddon: true,
-						valueType: 'variable',
-					};
-				}
-			}
-
-			// convert to var
-			if (border.bottom.color.startsWith('var:')) {
-				const colorVar = getColor(border.bottom.color.split('|')[2]);
-
-				if (colorVar) {
-					border.bottom.color = {
-						settings: {
-							...colorVar,
-							type: 'color',
-							var: generateVariableString({
-								reference: colorVar?.reference || {
-									type: '',
-								},
-								type: 'color',
-								id: colorVar?.id || '',
-							}),
-						},
-						name: colorVar?.name,
-						isValueAddon: true,
-						valueType: 'variable',
-					};
-				}
-			}
-
-			// convert to var
-			if (border.left.color.startsWith('var:')) {
-				const colorVar = getColor(border.left.color.split('|')[2]);
-
-				if (colorVar) {
-					border.left.color = {
-						settings: {
-							...colorVar,
-							type: 'color',
-							var: generateVariableString({
-								reference: colorVar?.reference || {
-									type: '',
-								},
-								type: 'color',
-								id: colorVar?.id || '',
-							}),
-						},
-						name: colorVar?.name,
-						isValueAddon: true,
-						valueType: 'variable',
-					};
-				}
-			}
+			border.top.color = getColorValueAddonFromVarString(
+				border.top.color
+			);
+			border.right.color = getColorValueAddonFromVarString(
+				border.right.color
+			);
+			border.bottom.color = getColorValueAddonFromVarString(
+				border.bottom.color
+			);
+			border.left.color = getColorValueAddonFromVarString(
+				border.left.color
+			);
 
 			attributes.publisherBorder = border;
 		} else if (
