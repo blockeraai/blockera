@@ -37,7 +37,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		currentBlockAttributes,
 		deleteItemsOnResetAction,
 	} = action;
-	console.log(type);
+
 	switch (type) {
 		case 'UPDATE_NORMAL_STATE':
 			if (ref?.current?.reset) {
