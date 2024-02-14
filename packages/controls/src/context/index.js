@@ -71,6 +71,10 @@ export const ControlContextProvider = ({
 		}
 	);
 
+	// Assume ControlContextProvider has side effect.
+	// side effect: when changes currentBlock, currentState, and currentInnerBlockState it should fire useEffect callback
+	// use cases for example: on StatesManager component when changed one of (currentBlock, currentState, and currentInnerBlockState),
+	// because needs to update selected state to show that on UI.
 	useEffect(() => {
 		if (controlInfo.hasSideEffect) {
 			controlInfo.callback(controlInfo.name, value, modifyControlValue);
