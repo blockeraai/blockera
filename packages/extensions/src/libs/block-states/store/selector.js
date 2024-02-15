@@ -79,7 +79,9 @@ export const getBlockStates = (): Array<StateGraph> => {
 	if (isInnerBlock(currentBlock)) {
 		blockAttributes =
 			blockAttributes.publisherInnerBlocks[currentBlock].attributes;
-		publisherBlockStates = blockAttributes.publisherBlockStates;
+		publisherBlockStates =
+			blockAttributes.publisherBlockStates ||
+			block.attributes.publisherBlockStates;
 	}
 
 	return Object.values(breakpoints)
@@ -96,7 +98,7 @@ export const getBlockStates = (): Array<StateGraph> => {
 						return {
 							type: state.type,
 							label: state.label,
-							attributes: omit(block.attributes, [
+							attributes: omit(blockAttributes, [
 								'publisherBlockStates',
 							]),
 						};

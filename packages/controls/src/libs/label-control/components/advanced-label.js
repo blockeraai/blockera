@@ -14,8 +14,8 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
+import { useAdvancedLabelProps } from '@publisher/hooks';
 import { Button, Flex, Popover } from '@publisher/components';
-import { useCurrentBlockAdvancedLabelProps } from '@publisher/hooks';
 import { useBlockContext } from '@publisher/extensions/src/hooks/context';
 import { isEmpty, isFunction, isNull, isUndefined } from '@publisher/utils';
 
@@ -60,7 +60,7 @@ export const AdvancedLabelControl = ({
 		isChangedOnNormal,
 		isChangedOnOtherStates,
 		isChangedOnCurrentState,
-	} = useCurrentBlockAdvancedLabelProps({
+	} = useAdvancedLabelProps({
 		path,
 		value,
 		singularId,
