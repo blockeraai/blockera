@@ -126,18 +126,22 @@ export const useAttributes = (
 			attributeIsRelatedStatesAttributes,
 		});
 
+		// attributes => immutable - mean just read-only!
+		// _attributes => mutable - mean readable and writable constant!
+		const _attributes = { ...attributes };
+
 		// Assume attribute id is string, and activated state is normal, or attribute ["publisherCurrentState" or "publisherBlockStates"] will change!
 		if (
 			masterIsNormalState() &&
 			isNormalState() &&
 			attributeIsRelatedStatesAttributes
 		) {
-			return setAttributes(reducer(attributes, updateNormalState()));
+			return setAttributes(reducer(_attributes, updateNormalState()));
 		}
 
 		if (isInnerBlock(currentBlock) && !masterIsNormalState()) {
 			return setAttributes(
-				reducer(attributes, updateInnerBlockInsideParentState())
+				reducer(_attributes, updateInnerBlockInsideParentState())
 			);
 		}
 
@@ -147,18 +151,20 @@ export const useAttributes = (
 			!isNormalState() &&
 			!attributeIsRelatedStatesAttributes
 		) {
-			return setAttributes(reducer(attributes, updateInnerBlockStates()));
+			return setAttributes(
+				reducer(_attributes, updateInnerBlockStates())
+			);
 		} else if (isInnerBlock(currentBlock)) {
-			return setAttributes(reducer(attributes, updateNormalState()));
+			return setAttributes(reducer(_attributes, updateNormalState()));
 		}
 
 		// Assume block state is normal and attributeId is equals with "publisherBlockStates".
 		if (attributeIsRelatedStatesAttributes || isNormalState()) {
-			return setAttributes(reducer(attributes, updateNormalState()));
+			return setAttributes(reducer(_attributes, updateNormalState()));
 		}
 
 		// handle update attributes in activated state and breakpoint!
-		setAttributes(reducer(attributes, updateBlockStates()));
+		setAttributes(reducer(_attributes, updateBlockStates()));
 	};
 
 	return {
