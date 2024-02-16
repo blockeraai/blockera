@@ -13,6 +13,7 @@ import { isChanged } from './helpers';
 import { isInnerBlock } from '../../components';
 import actions, { type UseAttributesActions } from './actions';
 import type { THandleOnChangeAttributes } from '../../libs/types';
+import { isUndefined } from '@publisher/utils';
 
 export const useAttributes = (
 	setAttributes: (attributes: Object) => void,
@@ -54,6 +55,9 @@ export const useAttributes = (
 
 		const attributeIsPublisherBlockStates =
 			'publisherBlockStates' === attributeId;
+		let hasRootAttributes = !isUndefined(
+			_attributes.publisherInnerBlocks[currentBlock]
+		);
 
 		// check - is really changed attribute of any block type (master or one of inner blocks)?
 		if (isNormalState()) {
@@ -62,8 +66,10 @@ export const useAttributes = (
 				!isChanged(
 					{
 						..._attributes,
-						..._attributes.publisherInnerBlocks[currentBlock]
-							.attributes,
+						...(hasRootAttributes
+							? _attributes.publisherInnerBlocks[currentBlock]
+									.attributes
+							: {}),
 					},
 					attributeId,
 					newValue
@@ -121,19 +127,23 @@ export const useAttributes = (
 
 				if (
 					currentBlockAttributes?.publisherInnerBlocks &&
-					currentBlockAttributes?.publisherInnerBlocks[
-						currentBlock
-					] &&
 					currentBlockAttributes?.publisherInnerBlocks[currentBlock]
-						?.attributes &&
+				) {
+					hasRootAttributes = true;
+				}
+
+				if (
+					hasRootAttributes &&
 					!isChanged(
 						{
 							..._attributes,
 							..._attributes.publisherBlockStates[currentState]
 								.breakpoints[currentBreakpoint].attributes,
-							...currentBlockAttributes?.publisherInnerBlocks[
-								currentBlock
-							]?.attributes,
+							...(hasRootAttributes
+								? currentBlockAttributes?.publisherInnerBlocks[
+										currentBlock
+								  ]?.attributes
+								: {}),
 						},
 						attributeId,
 						newValue
@@ -153,12 +163,16 @@ export const useAttributes = (
 					!isChanged(
 						{
 							..._attributes,
-							..._attributes.publisherInnerBlocks[currentBlock]
-								.attributes,
-							..._attributes.publisherInnerBlocks[currentBlock]
-								.attributes.publisherBlockStates[
-								currentInnerBlockState
-							].breakpoints[currentBreakpoint].attributes,
+							...(hasRootAttributes
+								? _attributes.publisherInnerBlocks[currentBlock]
+										.attributes
+								: {}),
+							...(hasRootAttributes
+								? _attributes.publisherInnerBlocks[currentBlock]
+										.attributes.publisherBlockStates[
+										currentInnerBlockState
+								  ].breakpoints[currentBreakpoint].attributes
+								: {}),
 						},
 						attributeId,
 						newValue
