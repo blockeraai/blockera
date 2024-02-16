@@ -6,20 +6,10 @@
 import { applyFilters } from '@wordpress/hooks';
 
 /**
- * Publisher dependencies
- */
-import { deletePropertyByPath } from '@publisher/utils';
-
-/**
  * Internal dependencies
  */
+import { memoizedBlockStates } from './helpers';
 import { isBaseBreakpoint, isInnerBlock } from '../../components';
-import {
-	isChanged,
-	getUpdatedBlockStates,
-	deleteExtraItems,
-	memoizedBlockStates,
-} from './helpers';
 
 const reducer = (state: Object = {}, action: Object): Object => {
 	const {
@@ -33,10 +23,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		isNormalState,
 		getAttributes,
 		currentBreakpoint,
-		publisherInnerBlocks,
 		currentInnerBlockState,
-		currentBlockAttributes,
-		deleteItemsOnResetAction,
 	} = action;
 
 	const hookParams = [
@@ -58,150 +45,107 @@ const reducer = (state: Object = {}, action: Object): Object => {
 
 	switch (type) {
 		case 'UPDATE_NORMAL_STATE':
-			if (ref?.current?.reset) {
-				const newAttributes = {
-					...state,
-				};
-
-				deletePropertyByPath(
-					newAttributes,
-					ref.current.path.replace(/\[/g, '.').replace(/]/g, '')
-				);
-
-				// if handler has deleteItemsOnResetAction.
-				deleteExtraItems(deleteItemsOnResetAction, state);
-			}
-
-			if (!isChanged(currentBlockAttributes, attributeId, newValue)) {
-				return;
-			}
-
 			// Handle inner block changes.
 			if (isInnerBlock(currentBlock)) {
-				const newPublisherInnerBlocks = state.publisherInnerBlocks;
-
-				if (!newPublisherInnerBlocks[currentBlock]) {
-					newPublisherInnerBlocks[currentBlock] = {
-						attributes: {},
-					};
-				}
-
-				newPublisherInnerBlocks[currentBlock].attributes[attributeId] =
-					newValue;
-
-				state.publisherInnerBlocks = newPublisherInnerBlocks;
-
 				/**
 				 * Filterable attributes before set next state.
 				 * usefully in add WordPress compatibility and any other filters.
 				 *
-				 * hook: 'publisher-core/block/extensions/set-attributes'
+				 * hook: 'publisherCore.blockEdit.setAttributes'
 				 *
 				 * @since 1.0.0
 				 */
 				return applyFilters(
 					'publisherCore.blockEdit.setAttributes',
-					state,
+					{
+						...state,
+						publisherInnerBlocks: {
+							...state.publisherInnerBlocks,
+							[currentBlock]: {
+								...(state.publisherInnerBlocks[currentBlock] ||
+									{}),
+								attributes: {
+									...(state.publisherInnerBlocks[
+										currentBlock
+									] &&
+									state.publisherInnerBlocks[currentBlock]
+										?.attributes
+										? state.publisherInnerBlocks[
+												currentBlock
+										  ]?.attributes
+										: {}),
+									[attributeId]: newValue,
+								},
+							},
+						},
+					},
 					...hookParams
 				);
 			}
 
-			state[attributeId] = newValue;
-
 			/**
 			 * Filterable attributes before set next state.
 			 * usefully in add WordPress compatibility and any other filters.
 			 *
-			 * hook: 'publisher-core/block/extensions/set-attributes'
+			 * hook: 'publisherCore.blockEdit.setAttributes'
 			 *
 			 * @since 1.0.0
 			 */
 			return applyFilters(
 				'publisherCore.blockEdit.setAttributes',
-				state,
-				...hookParams
-			);
-
-		case 'UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE':
-			const states = getUpdatedBlockStates(
-				{
-					states: state.publisherBlockStates,
-				},
-				action,
-				state
-			);
-
-			state.publisherBlockStates = states;
-
-			/**
-			 * Filterable attributes before set next state.
-			 * usefully in add WordPress compatibility and any other filters.
-			 *
-			 * hook: 'publisher-core/block/extensions/set-attributes'
-			 *
-			 * @since 1.0.0
-			 */
-			return applyFilters(
-				'publisherCore.blockEdit.setAttributes',
-				state,
-				...hookParams
-			);
-
-		case 'UPDATE_INNER_BLOCK_STATES':
-			if (!publisherInnerBlocks[currentBlock]) {
-				return state;
-			}
-
-			const newPublisherInnerBlocks = state.publisherInnerBlocks;
-
-			if (!newPublisherInnerBlocks[currentBlock]) {
-				newPublisherInnerBlocks[currentBlock] = {
-					attributes: {},
-				};
-			}
-
-			newPublisherInnerBlocks[
-				currentBlock
-			].attributes.publisherBlockStates = getUpdatedBlockStates(
-				{
-					states: state.publisherInnerBlocks[currentBlock].attributes
-						.publisherBlockStates,
-					inInnerBlock: true,
-				},
-				action,
-				state
-			);
-
-			state.publisherInnerBlocks = newPublisherInnerBlocks;
-
-			/**
-			 * Filterable attributes before set next state.
-			 * usefully in add WordPress compatibility and any other filters.
-			 *
-			 * hook: 'publisher-core/block/extensions/set-attributes'
-			 *
-			 * @since 1.0.0
-			 */
-			return applyFilters(
-				'publisherCore.blockEdit.setAttributes',
-				state,
+				{ ...state, [attributeId]: newValue },
 				...hookParams
 			);
 
 		case 'UPDATE_BLOCK_STATES':
-			state.publisherBlockStates = memoizedBlockStates(state, action);
-
+		case 'UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE':
 			/**
 			 * Filterable attributes before set next state.
 			 * usefully in add WordPress compatibility and any other filters.
 			 *
-			 * hook: 'publisher-core/block/extensions/set-attributes'
+			 * hook: 'publisherCore.blockEdit.setAttributes'
 			 *
 			 * @since 1.0.0
 			 */
 			return applyFilters(
 				'publisherCore.blockEdit.setAttributes',
-				state,
+				{
+					...state,
+					publisherBlockStates: memoizedBlockStates(state, action),
+				},
+				...hookParams
+			);
+
+		case 'UPDATE_INNER_BLOCK_STATES':
+			/**
+			 * Filterable attributes before set next state.
+			 * usefully in add WordPress compatibility and any other filters.
+			 *
+			 * hook: 'publisherCore.blockEdit.setAttributes'
+			 *
+			 * @since 1.0.0
+			 */
+			return applyFilters(
+				'publisherCore.blockEdit.setAttributes',
+				{
+					...state,
+					publisherInnerBlocks: {
+						...state.publisherInnerBlocks,
+						[currentBlock]: {
+							...state.publisherInnerBlocks[currentBlock],
+							attributes: {
+								...state.publisherInnerBlocks[currentBlock]
+									.attributes,
+								publisherBlockStates: memoizedBlockStates(
+									state.publisherInnerBlocks[currentBlock]
+										.attributes,
+									action,
+									true
+								),
+							},
+						},
+					},
+				},
 				...hookParams
 			);
 	}
@@ -210,7 +154,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 	 * Filterable attributes before set next state.
 	 * usefully in add WordPress compatibility and any other filters.
 	 *
-	 * hook: 'publisher-core/block/extensions/set-attributes'
+	 * hook: 'publisherCore.blockEdit.setAttributes'
 	 *
 	 * @since 1.0.0
 	 */
