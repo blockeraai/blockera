@@ -30,7 +30,12 @@ import {
 	type VariableCategory,
 } from '@publisher/core-data';
 import { ColorIndicator } from '@publisher/components';
-import { isBlockTheme, isObject, isUndefined } from '@publisher/utils';
+import {
+	isBlockTheme,
+	isObject,
+	isUndefined,
+	isString,
+} from '@publisher/utils';
 import { NoticeControl } from '@publisher/controls';
 
 /**
@@ -674,7 +679,7 @@ export const getColorValueAddonFromIdString = (
 const _getColorValueAddonFromVarString = function (
 	value: string
 ): ValueAddon | string {
-	if (value.startsWith('var:')) {
+	if (isString(value) && value.startsWith('var:')) {
 		return getColorValueAddonFromIdString(value.split('|')[2]);
 	}
 
