@@ -25,10 +25,22 @@ import type {
 	AdvancedLabelHookProps,
 } from './types';
 import { isInnerBlock } from '@publisher/extensions/src/components';
+import { useBlockContext } from '@publisher/extensions/src/hooks/context';
 
-export const useCurrentBlockAdvancedLabelProps = (
-	params: AdvancedLabelHookProps
-): CalculatedAdvancedLabelProps => {
+export const useAdvancedLabelProps = ({
+	path,
+	value,
+	//TODO: Please commented after complete debug!
+	// singularId,
+	attribute,
+	isRepeater,
+	defaultValue,
+	isNormalState,
+	blockAttributes,
+}: AdvancedLabelHookProps): CalculatedAdvancedLabelProps => {
+	//TODO: Please commented after complete debug!
+	// const debugKey = 'publisherBorder';
+
 	const {
 		currentBlock,
 		currentState,
@@ -50,40 +62,7 @@ export const useCurrentBlockAdvancedLabelProps = (
 		};
 	});
 
-	const blockAttributes = isInnerBlock(currentBlock)
-		? params.blockAttributes.publisherInnerBlocks[currentBlock].attributes
-		: params.blockAttributes;
-
-	return useAdvancedLabelProps({
-		...params,
-		blockAttributes,
-		currentBreakpoint,
-		currentInnerBlockState,
-		currentState: isInnerBlock(currentBlock)
-			? currentInnerBlockState
-			: currentState,
-		currentBlockState: isInnerBlock(currentBlock)
-			? blockAttributes?.publisherBlockStates[currentInnerBlockState]
-			: blockAttributes?.publisherBlockStates[currentState],
-	});
-};
-
-export const useAdvancedLabelProps = ({
-	path,
-	value,
-	//TODO: Please commented after complete debug!
-	// singularId,
-	attribute,
-	isRepeater,
-	defaultValue,
-	currentState,
-	isNormalState,
-	blockAttributes,
-	currentBreakpoint,
-	currentBlockState,
-}: AdvancedLabelHookProps): CalculatedAdvancedLabelProps => {
-	//TODO: Please commented after complete debug!
-	// const debugKey = 'publisherBorder';
+	const { publisherInnerBlocks } = useBlockContext();
 
 	if (
 		['', 'publisherBlockStates'].includes(attribute) ||
@@ -98,11 +77,33 @@ export const useAdvancedLabelProps = ({
 		};
 	}
 
+	if (isInnerBlock(currentBlock)) {
+		blockAttributes =
+			blockAttributes?.publisherInnerBlocks[currentBlock] ||
+			publisherInnerBlocks[currentBlock].attributes;
+	}
+
 	let _blockAttributes = blockAttributes[attribute];
 
+	if (!blockAttributes?.publisherBlockStates) {
+		const isChanged = !isEquals(defaultValue, value);
+		const isChangedOnNormal = isChanged;
+		const isChangedOnCurrentState = isChanged;
+
+		return {
+			isChanged,
+			isChangedOnNormal,
+			isChangedOnCurrentState,
+			isChangedOnOtherStates: false,
+		};
+	}
+
+	const currentBlockState =
+		blockAttributes?.publisherBlockStates[
+			!isInnerBlock(currentBlock) ? currentState : currentInnerBlockState
+		];
 	const currentBreakpointType =
 		currentBlockState?.breakpoints[currentBreakpoint];
-
 	const stateAttributes = currentBreakpointType?.attributes;
 
 	let stateValue = stateAttributes ? stateAttributes[attribute] : {};
