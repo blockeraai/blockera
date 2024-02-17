@@ -188,6 +188,6 @@ export function onChangeBlockStates(
 			}
 		);
 
-		onChange('publisherInnerBlockStates', publisherBlockStates);
+		onChange('publisherBlockStates', publisherBlockStates);
 	}
 }
