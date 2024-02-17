@@ -25,6 +25,7 @@ import bootstrapScripts from './scripts';
 //TODO: replace with unstable server side breakpoints.
 import defaultBreakpoints from './libs/block-states/default-breakpoints';
 
+export { isInnerBlock } from './components';
 export { store } from './store';
 export * from './api';
 export * from './libs';
