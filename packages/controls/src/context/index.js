@@ -9,6 +9,11 @@ import { createContext, useEffect } from '@wordpress/element';
 import { resetExtensionSettings } from '@publisher/extensions/src/utils';
 
 /**
+ * Publisher dependencies
+ */
+import { isEquals } from '@publisher/utils';
+
+/**
  * Internal dependencies
  */
 import { STORE_NAME } from '../store';
@@ -71,17 +76,33 @@ export const ControlContextProvider = ({
 		}
 	);
 
+	const { value: currentValue, name: controlId } = controlInfo;
+
+	// Assume recieved control value from outside isn't equals with current value.
+	useEffect(() => {
+		if (!isEquals(currentValue, value)) {
+			modifyControlValue({
+				controlId,
+				value: currentValue,
+			});
+		}
+		// eslint-disable-next-line
+	}, [currentValue]);
+
 	// Assume ControlContextProvider has side effect.
 	// side effect: when changes currentBlock, currentState, and currentInnerBlockState it should fire useEffect callback
 	// use cases for example: on StatesManager component when changed one of (currentBlock, currentState, and currentInnerBlockState),
 	// because needs to update selected state to show that on UI.
 	useEffect(() => {
-		if (controlInfo.hasSideEffect) {
+		if (
+			controlInfo.hasSideEffect &&
+			'undefined' !== typeof controlInfo?.callback
+		) {
 			controlInfo.callback(controlInfo.name, value, modifyControlValue);
 		}
 
 		return () => {
-			if (controlInfo.hasSideEFfect) {
+			if (controlInfo.hasSideEffect) {
 				resetExtensionSettings();
 			}
 		};
