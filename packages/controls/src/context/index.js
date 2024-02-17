@@ -78,8 +78,9 @@ export const ControlContextProvider = ({
 	const { value: currentValue, name: controlId } = controlInfo;
 
 	// Assume recieved control value from outside isn't equals with current value.
+	// exclude control with has side effect because modified control value inside callback of that. so prevent re-rendering with this way!
 	useEffect(() => {
-		if (!isEquals(currentValue, value)) {
+		if (!isEquals(currentValue, value) && !controlInfo.hasSideEffect) {
 			modifyControlValue({
 				controlId,
 				value: currentValue,

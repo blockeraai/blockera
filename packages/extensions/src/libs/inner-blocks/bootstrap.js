@@ -66,7 +66,6 @@ export const bootstrap = (): void => {
 				}
 			}
 
-			console.log('attributes', attributes);
 			return attributes;
 		}
 	);

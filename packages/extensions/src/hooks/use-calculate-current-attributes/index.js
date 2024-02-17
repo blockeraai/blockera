@@ -69,8 +69,8 @@ export const useCalculateCurrentAttributes = ({
 	} else {
 		currentAttributes = {
 			...attributes,
-			...currentAttributes,
 			...((publisherInnerBlocks[currentBlock] || {})?.attributes || {}),
+			...currentAttributes,
 		};
 	}
 
