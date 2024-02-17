@@ -15,9 +15,11 @@ import type { ControlContextRef } from '@publisher/controls/src/context/types';
  */
 import type { BlockDetail } from '../block-states/types';
 import {
-	linkFromWPCompatibility,
 	linkInnerBlockSupportedBlocks,
-	linkToWPCompatibility,
+	linkNormalFromWPCompatibility,
+	linkNormalToWPCompatibility,
+	linkHoverFromWPCompatibility,
+	linkHoverToWPCompatibility,
 } from './compatibility/link';
 import { mergeObject } from '@publisher/utils';
 
@@ -34,11 +36,37 @@ export const bootstrap = (): void => {
 			}
 
 			if (linkInnerBlockSupportedBlocks.includes(blockId)) {
-				attributes = linkFromWPCompatibility({
-					attributes,
-				});
+				// Link normal font color
+				if (
+					!attributes?.publisherInnerBlocks?.link?.attributes
+						?.publisherFontColor
+				) {
+					const newAttributes = linkNormalFromWPCompatibility({
+						attributes,
+					});
+
+					if (newAttributes) {
+						attributes = mergeObject(attributes, newAttributes);
+					}
+				}
+
+				// Link hover font color
+				if (
+					!attributes?.publisherInnerBlocks?.link?.attributes
+						?.publisherBlockStates?.breakpoints?.laptop?.attributes
+						?.publisherFontColor
+				) {
+					const newAttributes = linkHoverFromWPCompatibility({
+						attributes,
+					});
+
+					if (newAttributes) {
+						attributes = mergeObject(attributes, newAttributes);
+					}
+				}
 			}
 
+			console.log('attributes', attributes);
 			return attributes;
 		}
 	);
@@ -81,16 +109,16 @@ export const bootstrap = (): void => {
 			}
 
 			// Handle "link" inner block changes.
-			if (currentBlock === 'link') {
-				if (
-					currentState === 'normal' &&
-					linkInnerBlockSupportedBlocks.includes(blockId)
-				) {
+			if (
+				currentBlock === 'link' &&
+				linkInnerBlockSupportedBlocks.includes(blockId)
+			) {
+				if (currentState === 'normal') {
 					switch (featureId) {
 						case 'publisherFontColor':
 							return mergeObject(
 								nextState,
-								linkToWPCompatibility({
+								linkNormalToWPCompatibility({
 									newValue,
 									ref,
 								})
@@ -98,7 +126,18 @@ export const bootstrap = (): void => {
 					}
 				}
 
-				// todo add hover color
+				if (currentState === 'hover') {
+					switch (featureId) {
+						case 'publisherFontColor':
+							return mergeObject(
+								nextState,
+								linkHoverToWPCompatibility({
+									newValue,
+									ref,
+								})
+							);
+					}
+				}
 			}
 
 			return nextState;

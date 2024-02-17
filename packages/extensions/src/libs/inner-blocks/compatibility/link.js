@@ -11,7 +11,7 @@ import {
 
 export const linkInnerBlockSupportedBlocks = ['core/paragraph'];
 
-export function linkFromWPCompatibility({
+export function linkNormalFromWPCompatibility({
 	attributes,
 }: {
 	attributes: Object,
@@ -19,31 +19,65 @@ export function linkFromWPCompatibility({
 	//
 	// Normal color
 	//
-	if (attributes?.style?.elements?.link?.color?.text !== undefined) {
+	if (attributes?.style?.elements?.link?.color?.text) {
 		const color = getColorValueAddonFromVarString(
 			attributes?.style?.elements?.link?.color?.text
 		);
 
-		if (attributes.publisherInnerBlocks?.link !== undefined) {
-			attributes.publisherInnerBlocks.link.attributes.publisherFontColor =
-				color;
-		} else {
-			attributes.publisherInnerBlocks = {
-				link: {
-					attributes: {
-						publisherFontColor: color,
+		if (color) {
+			return {
+				publisherInnerBlocks: {
+					link: {
+						attributes: {
+							publisherFontColor: color,
+						},
 					},
 				},
 			};
 		}
 	}
 
-	// todo add support for hover
-
-	return attributes;
+	return false;
 }
 
-export function linkToWPCompatibility({
+export function linkHoverFromWPCompatibility({
+	attributes,
+}: {
+	attributes: Object,
+}): Object {
+	//
+	// Hover color
+	//
+	if (attributes?.style?.elements?.link[':hover']?.color?.text) {
+		const color = getColorValueAddonFromVarString(
+			attributes?.style?.elements?.link[':hover']?.color?.text
+		);
+
+		if (color) {
+			return {
+				publisherInnerBlocks: {
+					link: {
+						attributes: {
+							publisherBlockStates: {
+								breakpoints: {
+									laptop: {
+										attributes: {
+											publisherFontColor: color,
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			};
+		}
+	}
+
+	return false;
+}
+
+export function linkNormalToWPCompatibility({
 	newValue,
 	ref,
 }: {
@@ -58,7 +92,9 @@ export function linkToWPCompatibility({
 		return {
 			style: {
 				elements: {
-					color: undefined,
+					link: {
+						color: undefined,
+					},
 				},
 			},
 		};
@@ -69,8 +105,10 @@ export function linkToWPCompatibility({
 		return {
 			style: {
 				elements: {
-					color: {
-						text: 'var:preset|color|' + newValue?.settings?.id,
+					link: {
+						color: {
+							text: 'var:preset|color|' + newValue?.settings?.id,
+						},
 					},
 				},
 			},
@@ -80,8 +118,69 @@ export function linkToWPCompatibility({
 	return {
 		style: {
 			elements: {
-				color: {
-					text: newValue,
+				link: {
+					color: {
+						text: newValue,
+					},
+				},
+			},
+		},
+	};
+}
+
+export function linkHoverToWPCompatibility({
+	newValue,
+	ref,
+}: {
+	newValue: Object,
+	ref?: Object,
+}): Object {
+	if (
+		'reset' === ref?.current?.action ||
+		isEmpty(newValue) ||
+		isUndefined(newValue)
+	) {
+		return {
+			style: {
+				elements: {
+					link: {
+						':hover': {
+							color: undefined,
+						},
+					},
+				},
+			},
+		};
+	}
+
+	// is valid font-size variable
+	if (isValid(newValue)) {
+		return {
+			style: {
+				elements: {
+					link: {
+						':hover': {
+							color: {
+								text:
+									'var:preset|color|' +
+									newValue?.settings?.id,
+							},
+						},
+					},
+				},
+			},
+		};
+	}
+
+	return {
+		style: {
+			elements: {
+				link: {
+					':hover': {
+						color: {
+							text: newValue,
+						},
+					},
 				},
 			},
 		},
