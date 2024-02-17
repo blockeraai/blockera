@@ -42,6 +42,10 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 			};
 		});
 
+		if (!Object.values(innerBlocks).length || isInnerBlock(currentBlock)) {
+			return <></>;
+		}
+
 		const MappedInnerBlocks = () =>
 			Object.keys(innerBlocks).map(
 				(innerBlockType: InnerBlockType | string, index: number) => {
@@ -78,10 +82,6 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 					);
 				}
 			);
-
-		if (!Object.values(innerBlocks).length || isInnerBlock(currentBlock)) {
-			return <></>;
-		}
 
 		return (
 			<>
