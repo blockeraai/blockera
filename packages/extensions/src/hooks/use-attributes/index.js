@@ -126,10 +126,10 @@ export const useAttributes = (
 					].attributes;
 
 				if (
-					currentBlockAttributes?.publisherInnerBlocks &&
-					currentBlockAttributes?.publisherInnerBlocks[currentBlock]
+					!currentBlockAttributes?.publisherInnerBlocks ||
+					!currentBlockAttributes?.publisherInnerBlocks[currentBlock]
 				) {
-					hasRootAttributes = true;
+					hasRootAttributes = false;
 				}
 
 				if (
