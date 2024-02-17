@@ -12,18 +12,22 @@ export type ControlContextRef = {
 	},
 };
 
+export type ControlInfo = {
+	block?: Object,
+	value: any,
+	name: string,
+	attribute?: string,
+	blockName?: string,
+	hasSideEffect?: boolean,
+	description?: string | MixedElement | any,
+	type?: 'simple' | 'nested',
+};
+
 export type ControlContextProviderProps = {
 	value: {
-		block?: Object,
-		value: any,
-		name: string,
-		attribute?: string,
-		blockName?: string,
-		hasSideEffect?: boolean,
-		description?: string | MixedElement | any,
-		type?: 'simple' | 'nested',
+		...ControlInfo,
 		callback?: (
-			controlId: string,
+			controlInfo: Object,
 			value: any,
 			modifyControlValue: (params: Object) => void
 		) => void,

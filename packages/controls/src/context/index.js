@@ -98,10 +98,10 @@ export const ControlContextProvider = ({
 			controlInfo.hasSideEffect &&
 			'undefined' !== typeof controlInfo?.callback
 		) {
-			controlInfo.callback(controlInfo.name, value, modifyControlValue);
+			controlInfo.callback(controlInfo, value, modifyControlValue);
 		}
 		// eslint-disable-next-line
-	}, [currentBlock, currentState, currentInnerBlockState]);
+	}, [currentBlock, currentState, currentInnerBlockState, currentValue]);
 
 	//You can to enable||disable current control with status column!
 	if (!status) {
