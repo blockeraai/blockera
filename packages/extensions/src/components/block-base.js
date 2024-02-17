@@ -20,6 +20,7 @@ import {
  * Publisher dependencies
  */
 import { omitWithPattern } from '@publisher/utils';
+import { BlockStyle } from '@publisher/style-engine';
 import { isLaptopBreakpoint } from '@publisher/editor';
 import { extensionClassNames } from '@publisher/classnames';
 
@@ -34,7 +35,6 @@ import {
 	useCalculateCurrentAttributes,
 } from '../hooks';
 import { SideEffect } from '../libs/base';
-import { BlockStyle } from './block-style';
 import { BlockCard } from '../libs/block-card';
 import { BlockPartials } from './block-partials';
 import { isBaseBreakpoint, isInnerBlock, propsAreEqual } from './utils';
@@ -348,8 +348,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							clientId,
 							supports,
 							attributes,
-							// currentBlock,
-							setAttributes,
 							blockName: name,
 							activeDeviceType: getDeviceType(),
 						}}
