@@ -100,7 +100,7 @@ export const memoizedRootBreakpoints: (
 export const memoizedBlockStates: (
 	currentBlockAttributes: Object,
 	action: Object,
-	insideInnerBlock: boolean
+	insideInnerBlock?: boolean
 ) => Array<StateTypes> = memoize(
 	(
 		currentBlockAttributes: Object,
@@ -118,6 +118,7 @@ export const memoizedBlockStates: (
 
 		return {
 			...currentBlockAttributes?.publisherBlockStates,
+			//$FlowFixMe
 			[stateType]: {
 				...currentBlockAttributes?.publisherBlockStates[stateType],
 				breakpoints: {
