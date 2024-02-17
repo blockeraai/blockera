@@ -92,7 +92,7 @@ export function getCssSelectors({
 				fallbackSupportId,
 				selectors: blockSelectors,
 				query,
-			})
+			}) || root
 		);
 
 		return selectors;
@@ -103,7 +103,7 @@ export function getCssSelectors({
 			support: fallbackSupportId,
 			selectors: blockSelectors,
 			query,
-		})
+		}) || root
 	);
 
 	return selectors;
