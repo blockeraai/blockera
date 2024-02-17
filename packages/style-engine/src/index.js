@@ -6,9 +6,11 @@ export {
 	injectHelpersToCssGenerators,
 } from './utils';
 
-export { useCssGenerator, useCssSelectors, useMedia } from './hooks';
+export { getCssSelectors, useMedia } from './hooks';
 
 export { default as CssGenerator } from './css-generator';
+
+export * from './components';
 
 /**
  * Export @wordpress/style-engine

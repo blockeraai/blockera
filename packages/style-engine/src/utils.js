@@ -5,7 +5,8 @@
  */
 import { isString } from '@publisher/utils';
 import { prepare } from '@publisher/data-extractor';
-import type { TBlockProps } from '@publisher/extensions/src/libs/types';
+import type { TStates } from '@publisher/extensions/src/libs/block-states/types';
+import type { InnerBlockType } from '@publisher/extensions/src/libs/inner-blocks/types';
 
 /**
  * Internal dependencies
@@ -15,7 +16,7 @@ import type {
 	StaticStyle,
 	DynamicStyle,
 	CssGeneratorModel,
-	GeneratorReturnType,
+	TUseCssSelectors,
 } from './types';
 
 /**
@@ -69,8 +70,12 @@ export const injectHelpersToCssGenerators = (
  */
 export const computedCssRules = (
 	styleDefinitions: Object,
-	blockProps: TBlockProps
-): Array<GeneratorReturnType> => {
+	blockProps: {
+		clientId: string,
+		attributes: Object,
+		blockName: string,
+	}
+): Array<string> => {
 	const output = [];
 
 	for (const styleKey in styleDefinitions) {
@@ -96,11 +101,11 @@ export const computedCssRules = (
 
 				const rules = cssGenerator.rules();
 
-				if ('undefined' === typeof rules.properties) {
+				if (!rules) {
 					return;
 				}
 
-				output.push(rules.properties);
+				output.push(rules);
 			}
 		);
 	}
@@ -123,25 +128,17 @@ export const isValidStyleDefinition = (styleDefinition: Object): boolean =>
  * @param {Object} style The style object
  * @return {string} The created CSS Rule!
  */
-export const createCssRule = (
-	style: CssGeneratorModel
-): GeneratorReturnType => {
-	if (!hasAllProperties(style, ['selector', 'properties'])) {
+export const createCssRule = (style: CssGeneratorModel): string => {
+	if (!hasAllProperties(style, ['properties'])) {
 		console.warn(
 			`Style rule: ${JSON.stringify(style)} avoid css rule validation!`
 		);
-		return {
-			media: '',
-			selector: '',
-			properties: '',
-		};
+		return '';
 	}
 
 	const {
-		media,
 		properties: _props,
 		options = { important: false },
-		selector = '',
 		// $FlowFixMe
 		blockProps = {},
 	} = style;
@@ -152,14 +149,10 @@ export const createCssRule = (
 	}).join('\n');
 
 	if (!blockProps?.attributes) {
-		return {
-			media,
-			selector,
-			properties,
-		};
+		return properties;
 	}
 
-	getVars(properties).forEach((query) => {
+	getVars(properties).forEach((query): void => {
 		const replacement = prepare(query, blockProps?.attributes);
 
 		if (!replacement) {
@@ -171,11 +164,7 @@ export const createCssRule = (
 			.replace(/[{}]/g, '');
 	});
 
-	return {
-		media,
-		selector,
-		properties,
-	};
+	return properties;
 };
 
 /**
@@ -243,3 +232,36 @@ export function getVars(queries: string): Array<string> {
 
 	return replacements;
 }
+
+export const getSelector = ({
+	state,
+	clientId,
+	className,
+	selectors,
+	currentBlock,
+}: {
+	state: TStates,
+	clientId: string,
+	className: string,
+	selectors: TUseCssSelectors,
+	currentBlock: 'master' | InnerBlockType | string,
+}): string => {
+	if (!state) {
+		return '';
+	}
+
+	let selector = selectors[state] ? selectors[state][currentBlock] : '';
+
+	if (!selector) {
+		return '';
+	}
+
+	if (className) {
+		selector = selector.replace(/\.{{className}}/g, `.${className}`);
+	}
+	if (clientId) {
+		selector = selector.replace(/\.{{BLOCK_ID}}/g, `#block-${clientId}`);
+	}
+
+	return selector;
+};
