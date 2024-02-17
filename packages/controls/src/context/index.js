@@ -6,7 +6,6 @@
 import type { MixedElement } from 'react';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { createContext, useEffect } from '@wordpress/element';
-import { resetExtensionSettings } from '@publisher/extensions/src/utils';
 
 /**
  * Publisher dependencies
@@ -100,12 +99,6 @@ export const ControlContextProvider = ({
 		) {
 			controlInfo.callback(controlInfo.name, value, modifyControlValue);
 		}
-
-		return () => {
-			if (controlInfo.hasSideEffect) {
-				resetExtensionSettings();
-			}
-		};
 		// eslint-disable-next-line
 	}, [currentBlock, currentState, currentInnerBlockState]);
 
