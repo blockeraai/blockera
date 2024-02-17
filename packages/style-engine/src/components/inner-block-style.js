@@ -31,7 +31,7 @@ export const InnerBlockStyle = (
 	return Object.values(props.attributes.publisherInnerBlocks).map(
 		(innerBlock: InnerBlockModel, index): MixedElement => {
 			const type: 'master' | InnerBlockType | string = keys[index];
-			const { selectors = {} } = publisherInnerBlocks[type];
+			const { selectors = {} } = publisherInnerBlocks[type] || {};
 
 			return (
 				<StateStyle
