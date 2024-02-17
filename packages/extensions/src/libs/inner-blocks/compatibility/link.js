@@ -59,10 +59,13 @@ export function linkHoverFromWPCompatibility({
 					link: {
 						attributes: {
 							publisherBlockStates: {
-								breakpoints: {
-									laptop: {
-										attributes: {
-											publisherFontColor: color,
+								normal: { breakpoints: {} },
+								hover: {
+									breakpoints: {
+										laptop: {
+											attributes: {
+												publisherFontColor: color,
+											},
 										},
 									},
 								},
