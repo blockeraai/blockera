@@ -297,7 +297,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 					<Fill name={'publisher-core-block-card-children'}>
 						<StatesManager
 							states={currentStateAttributes.publisherBlockStates}
-							currentStateType={currentState}
 							onChange={handleOnChangeAttributes}
 							block={{
 								clientId: props.clientId,
@@ -305,9 +304,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								setAttributes,
 								blockName: props.name,
 							}}
-							rootStates={
-								currentBlockAttributes?.publisherBlockStates
-							}
 						/>
 					</Fill>
 

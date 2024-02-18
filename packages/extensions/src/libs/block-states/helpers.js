@@ -9,7 +9,7 @@ import { dispatch } from '@wordpress/data';
 /**
  * Publisher dependencies
  */
-import { isEquals } from '@publisher/utils';
+import { isEquals, mergeObject } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -30,6 +30,7 @@ import LaptopIcon from './icons/laptop';
 import ExtraLargeIcon from './icons/extra-large';
 import LargeIcon from './icons/large';
 import { isInnerBlock } from '../../components';
+import { defaultItemValue } from '@publisher/controls/src/libs/repeater-control';
 
 export const getStateInfo = (state: TStates | number): StateTypes => {
 	return 'number' === typeof state
@@ -88,8 +89,7 @@ export function onChangeBlockStates(
 		changeExtensionInnerBlockState: setInnerBlockState,
 	} = dispatch('publisher-core/extensions') || {};
 	const {
-		states,
-		rootStates,
+		states: _states,
 		onChange,
 		currentBlock,
 		currentInnerBlockState,
@@ -112,7 +112,7 @@ export function onChangeBlockStates(
 		return type === currentStateType;
 	};
 
-	if (isEqualsWithCurrentState(selectedState.type) && states.length) {
+	if (isEqualsWithCurrentState(selectedState.type) && _states.length) {
 		return;
 	}
 
@@ -122,37 +122,47 @@ export function onChangeBlockStates(
 		setCurrentState(selectedState.type);
 	}
 
-	if (newValue.length !== Object.keys(states).length) {
-		const blockStates = rootStates;
-
+	if (newValue.length !== Object.keys(_states).length) {
 		const _newValue: {
-			[key: TStates]: { ...StateTypes, isSelected: boolean },
+			[key: TStates]: {
+				...StateTypes,
+				display: boolean,
+				isSelected: boolean,
+			},
 		} = {};
 
 		newValue.forEach((state) => {
-			if (blockStates[state.type] && blockStates[state.type].isSelected) {
+			if (_states[state.type] && _states[state.type].isSelected) {
 				_newValue[state.type] = {
-					...blockStates[state.type],
+					..._states[state.type],
 					isOpen: false,
 					isSelected: false,
+					display: newValue.length > 1,
 				};
 
 				return;
 			}
 
-			if (blockStates[state.type]) {
+			if (_states[state.type]) {
 				_newValue[state.type] = {
-					...blockStates[state.type],
+					..._states[state.type],
 					isOpen: false,
+					display: newValue.length > 1,
 				};
 
 				return;
 			}
 
-			if (blockStates[state.type]) {
-				_newValue[state.type] = blockStates[state.type];
+			if (_states[state.type]) {
+				_newValue[state.type] = {
+					..._states[state.type],
+					display: newValue.length > 1,
+				};
 			} else {
-				_newValue[state.type] = state;
+				_newValue[state.type] = {
+					...state,
+					display: newValue.length > 1,
+				};
 			}
 		});
 
@@ -166,22 +176,38 @@ export function onChangeBlockStates(
 			[key: TStates]: { ...StateTypes, isSelected: boolean },
 		} = {};
 
-		Object.values(rootStates).forEach(
+		const keys = Object.keys(_states);
+
+		Object.values(_states).forEach(
 			(state: Object, stateId: number): void => {
+				const type = state.type || keys[stateId];
+				const defaultItemMerged = {
+					...states[type],
+					...defaultItemValue,
+					deletable: false,
+					selectable: true,
+					visibilitySupport: false,
+					display: keys.length > 1,
+					breakpoints: mergeObject(
+						breakpoints(type),
+						state.breakpoints
+					),
+				};
+
 				if (stateId === newValue.indexOf(selectedState)) {
-					publisherBlockStates[state.type] = {
+					publisherBlockStates[type] = {
 						...state,
+						...defaultItemMerged,
 						isOpen: false,
 						isSelected: true,
-						type: selectedState.type,
-						label: selectedState.label,
 					};
 
 					return;
 				}
 
-				publisherBlockStates[state.type] = {
+				publisherBlockStates[type] = {
 					...state,
+					...defaultItemMerged,
 					isOpen: false,
 					isSelected: false,
 				};

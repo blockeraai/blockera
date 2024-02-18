@@ -1,7 +1,8 @@
 // @flow
 
 import type { TBreakpoint } from './breakpoint-types';
-import type { TStates } from './state-types';
+import type { BlockStates, TStates } from './state-types';
+import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 
 export * from './prop-types';
 export * from './state-types';
@@ -17,4 +18,13 @@ export type BlockDetail = {
 	currentState: TStates,
 	currentBreakpoint: TBreakpoint,
 	currentInnerBlockState: TStates,
+};
+
+export type StatesManagerProps = {
+	block: {
+		...TBlockProps,
+		attributes?: Object,
+	},
+	states: BlockStates,
+	onChange: THandleOnChangeAttributes,
 };

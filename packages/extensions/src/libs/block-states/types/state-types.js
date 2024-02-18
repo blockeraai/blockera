@@ -38,3 +38,7 @@ export type StateTypes = {
 	},
 	breakpoints: { [key: TBreakpoint]: BreakpointTypes },
 };
+
+export type BlockStates = {
+	[key: TStates]: { ...StateTypes, isSelected: boolean },
+};
