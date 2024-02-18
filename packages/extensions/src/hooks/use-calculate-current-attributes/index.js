@@ -14,6 +14,7 @@ export const useCalculateCurrentAttributes = ({
 	currentBreakpoint,
 	currentInnerBlock,
 	publisherInnerBlocks,
+	currentInnerBlockState,
 }: CalculateCurrentAttributesProps): Object => {
 	let currentAttributes: Object = {};
 
@@ -24,22 +25,24 @@ export const useCalculateCurrentAttributes = ({
 			currentAttributes = attributes;
 		}
 	} else if (isInnerBlock(currentBlock)) {
-		if (publisherInnerBlocks[currentBlock]) {
+		if (publisherInnerBlocks[currentBlock] && !currentInnerBlock) {
 			currentInnerBlock = publisherInnerBlocks[currentBlock];
 		}
 		if (
-			!currentInnerBlock?.attributes?.publisherBlockStates[currentState]
+			!currentInnerBlock?.attributes?.publisherBlockStates[
+				currentInnerBlockState
+			]
 		) {
-			currentState = 'normal';
+			currentInnerBlockState = 'normal';
 		}
 
 		currentAttributes = {
 			...currentInnerBlock?.attributes,
 			...(currentInnerBlock?.attributes?.publisherBlockStates[
-				currentState
+				currentInnerBlockState
 			]?.breakpoints[currentBreakpoint]
 				? currentInnerBlock?.attributes?.publisherBlockStates[
-						currentState
+						currentInnerBlockState
 				  ]?.breakpoints[currentBreakpoint]?.attributes
 				: {}),
 		};

@@ -16,6 +16,7 @@ export type CalculateCurrentAttributesProps = {
 	currentState: TStates,
 	isNormalState: () => boolean,
 	currentBreakpoint: TBreakpoint,
+	currentInnerBlockState: TStates,
 	publisherInnerBlocks: InnerBlocks,
 	currentInnerBlock: InnerBlockModel,
 	currentBlock: 'master' | InnerBlockType,
