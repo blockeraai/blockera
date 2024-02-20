@@ -16,73 +16,59 @@ import type { VariableItem } from './types';
 import { isBlockTheme, isUndefined } from '@publisher/utils';
 import { getCurrentTheme } from '../index';
 
-const _getSpacings = function (): Array<VariableItem> {
-	let reference = {
-		type: 'preset',
-	};
-
-	if (isBlockTheme()) {
-		const {
-			name: { rendered: themeName },
-		} = getCurrentTheme();
-
-		reference = {
-			type: 'theme',
-			theme: themeName,
+export const getSpacings: () => Array<VariableItem> = memoize(
+	function (): Array<VariableItem> {
+		let reference = {
+			type: 'preset',
 		};
 
-		return getBlockEditorSettings()?.__experimentalFeatures?.spacing?.spacingSizes?.theme.map(
-			(item) => {
-				return {
-					name: item.name,
-					id: item.slug,
-					value: item.size,
-					reference,
-				};
-			}
-		);
+		if (isBlockTheme()) {
+			const {
+				name: { rendered: themeName },
+			} = getCurrentTheme();
+
+			reference = {
+				type: 'theme',
+				theme: themeName,
+			};
+
+			return getBlockEditorSettings()?.__experimentalFeatures?.spacing?.spacingSizes?.theme.map(
+				(item) => {
+					return {
+						name: item.name,
+						id: item.slug,
+						value: item.size,
+						reference,
+					};
+				}
+			);
+		}
+
+		const spaces =
+			getBlockEditorSettings()?.__experimentalFeatures?.spacing
+				?.spacingSizes?.default;
+
+		if (isUndefined(spaces)) {
+			return [];
+		}
+
+		return spaces.map((item) => {
+			return {
+				name: item.name,
+				id: item.slug,
+				value: item.size,
+			};
+		});
 	}
+);
 
-	const spaces =
-		getBlockEditorSettings()?.__experimentalFeatures?.spacing?.spacingSizes
-			?.default;
-
-	if (isUndefined(spaces)) {
-		return [];
-	}
-
-	return spaces.map((item) => {
-		return {
-			name: item.name,
-			id: item.slug,
-			value: item.size,
-		};
-	});
-};
-
-// eslint-disable-next-line no-unused-vars
-const _getSpacingsMemoized = memoize(_getSpacings);
-
-export const getSpacings = (): Array<VariableItem> => {
-	return _getSpacingsMemoized();
-};
-
-const _getSpacing = function (id: string): ?VariableItem {
+export const getSpacing: (id: string) => ?VariableItem = memoize(function (
+	id: string
+): ?VariableItem {
 	return getSpacings().find((item) => item.id === id);
-};
+});
 
-const _getSpacingMemoized = memoize(_getSpacing);
-
-export const getSpacing = (id: string): ?VariableItem => {
-	return _getSpacingMemoized(id);
-};
-
-const _getSpacingBy = function (field: string, value: any): ?VariableItem {
-	return getSpacings().find((item) => item[field] === value);
-};
-
-const _getSpacingByMemoized = memoize(_getSpacingBy);
-
-export const getSpacingBy = (field: string, value: any): ?VariableItem => {
-	return _getSpacingByMemoized(field, value);
-};
+export const getSpacingBy: (field: string, value: any) => ?VariableItem =
+	memoize(function (field: string, value: any): ?VariableItem {
+		return getSpacings().find((item) => item[field] === value);
+	});
