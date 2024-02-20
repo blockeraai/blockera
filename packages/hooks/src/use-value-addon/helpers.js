@@ -77,7 +77,7 @@ export function getValueAddonRealValue(value: ValueAddon | string): string {
 	}
 
 	if (isObject(value)) {
-		if (!isUndefined(value?.isValueAddon)) {
+		if (value?.isValueAddon) {
 			const variable = getVariable(
 				value?.settings?.type,
 				value?.settings?.id
@@ -657,7 +657,7 @@ const _getColorValueAddonFromIdString = function (
 					id: colorVar?.id || '',
 				}),
 			},
-			name: colorVar?.name,
+			name: colorVar?.name || '',
 			isValueAddon: true,
 			valueType: 'variable',
 		};
