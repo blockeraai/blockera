@@ -64,7 +64,7 @@ import DVTypeEmailIcon from './icons/dv-email';
 import DVTypeCommentIcon from './icons/dv-comment';
 
 export function isValid(value: ValueAddon): boolean {
-	return !isUndefined(value?.isValueAddon) && value?.isValueAddon;
+	return value?.isValueAddon;
 }
 
 export function getValueAddonRealValue(value: ValueAddon | string): string {
