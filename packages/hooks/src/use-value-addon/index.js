@@ -231,7 +231,7 @@ export const useValueAddon = ({
 
 	return {
 		valueAddonClassNames,
-		isSetValueAddon: () => isValid(value) || isOpen,
+		isSetValueAddon: () => isValid(value) || isOpen !== '',
 		ValueAddonPointer: () => (
 			<ValueAddonPointer
 				controlProps={controlProps}
