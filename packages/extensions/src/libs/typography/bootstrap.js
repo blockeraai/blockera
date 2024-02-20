@@ -96,9 +96,15 @@ export const bootstrap = (): void => {
 				attributes,
 			});
 
-			attributes = fontColorFromWPCompatibility({
+			//
+			// Text Color
+			//
+			const newColorAttrs = fontColorFromWPCompatibility({
 				attributes,
 			});
+			if (newColorAttrs) {
+				attributes = mergeObject(attributes, newColorAttrs);
+			}
 
 			return attributes;
 		}
