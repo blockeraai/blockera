@@ -28,10 +28,6 @@ export const bootstrap = (): void => {
 		'publisherCore.blockEdit.attributes',
 		'publisherCore.blockEdit.sizeExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			console.log('Start bootstrap attrs ' + Date.now(), {
-				...attributes.publisherInnerBlocks,
-			});
-
 			const { blockId, isNormalState, isBaseBreakpoint, isMasterBlock } =
 				blockDetail;
 
@@ -69,10 +65,6 @@ export const bootstrap = (): void => {
 					}
 				}
 			}
-
-			console.log('End bootstrap attrs ' + Date.now(), {
-				...attributes.publisherInnerBlocks,
-			});
 
 			return attributes;
 		}
