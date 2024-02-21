@@ -13,7 +13,6 @@ import { isChanged } from './helpers';
 import { isInnerBlock } from '../../components';
 import actions, { type UseAttributesActions } from './actions';
 import type { THandleOnChangeAttributes } from '../../libs/types';
-import { isUndefined } from '@publisher/utils';
 
 export const useAttributes = (
 	setAttributes: (attributes: Object) => void,
@@ -30,9 +29,29 @@ export const useAttributes = (
 		masterIsNormalState: () => boolean,
 		getAttributes: (key: string) => any,
 	}
-): {
+): ({
+	getAttributesWithPropsId: (state: Object) => Object,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
-} => {
+}) => {
+	const getAttributesWithPropsId = (state: Object): Object => {
+		const d = new Date();
+
+		if (state?.publisherPropsId) {
+			return state;
+		}
+
+		return {
+			...state,
+			publisherPropsId:
+				'' +
+				d.getMonth() +
+				d.getDate() +
+				d.getHours() +
+				d.getMinutes() +
+				d.getSeconds() +
+				d.getMilliseconds(),
+		};
+	};
 	const handleOnChangeAttributes: THandleOnChangeAttributes = (
 		attributeId,
 		newValue,
@@ -40,24 +59,29 @@ export const useAttributes = (
 	): void => {
 		const { ref } = options;
 		const { getSelectedBlock } = select('core/block-editor');
-		const { attributes = {} } = getSelectedBlock() || {};
+		const { attributes = getAttributes() } = getSelectedBlock() || {};
 		const {
 			getExtensionCurrentBlock,
 			getExtensionInnerBlockState,
 			getExtensionCurrentBlockState,
 			getExtensionCurrentBlockStateBreakpoint,
 		} = select('publisher-core/extensions');
-		const currentBlock = getExtensionCurrentBlock();
 
 		// attributes => immutable - mean just read-only!
 		// _attributes => mutable - mean readable and writable constant!
-		const _attributes = { ...attributes };
+		let _attributes = { ...attributes };
+
+		if (!_attributes?.publisherPropsId) {
+			_attributes = getAttributesWithPropsId(_attributes);
+		}
+
+		const currentBlock = getExtensionCurrentBlock();
 
 		const attributeIsPublisherBlockStates =
 			'publisherBlockStates' === attributeId;
-		let hasRootAttributes = !isUndefined(
-			_attributes.publisherInnerBlocks[currentBlock]
-		);
+		let hasRootAttributes =
+			_attributes.publisherInnerBlocks &&
+			_attributes.publisherInnerBlocks[currentBlock];
 
 		// check - is really changed attribute of any block type (master or one of inner blocks)?
 		if (isNormalState()) {
@@ -138,7 +162,7 @@ export const useAttributes = (
 						{
 							..._attributes,
 							..._attributes.publisherBlockStates[currentState]
-								.breakpoints[currentBreakpoint].attributes,
+								.breakpoints[currentBreakpoint]?.attributes,
 							...(hasRootAttributes
 								? currentBlockAttributes?.publisherInnerBlocks[
 										currentBlock
@@ -216,6 +240,7 @@ export const useAttributes = (
 	};
 
 	return {
+		getAttributesWithPropsId,
 		handleOnChangeAttributes,
 	};
 };
