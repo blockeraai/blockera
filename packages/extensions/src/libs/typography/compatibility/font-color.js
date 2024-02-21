@@ -3,10 +3,8 @@
 /**
  * Publisher dependencies
  */
-import {
-	getColorValueAddonFromIdString,
-	isValid,
-} from '@publisher/hooks/src/use-value-addon/helpers';
+import { getColorVAFromIdString } from '@publisher/core-data';
+import { isValid } from '@publisher/hooks/src/use-value-addon/helpers';
 
 export function fontColorFromWPCompatibility({
 	attributes,
@@ -17,7 +15,7 @@ export function fontColorFromWPCompatibility({
 		// textColor attribute in root always is variable
 		// it should be changed to a Value Addon (variable)
 		if (attributes?.textColor !== undefined) {
-			const color = getColorValueAddonFromIdString(attributes?.textColor);
+			const color = getColorVAFromIdString(attributes?.textColor);
 
 			if (color) {
 				return {

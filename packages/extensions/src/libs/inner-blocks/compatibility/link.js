@@ -4,10 +4,8 @@
  * Publisher dependencies
  */
 import { isEmpty, isUndefined } from '@publisher/utils';
-import {
-	getColorValueAddonFromVarString,
-	isValid,
-} from '@publisher/hooks/src/use-value-addon/helpers';
+import { isValid } from '@publisher/hooks/src/use-value-addon/helpers';
+import { getColorVAFromVarString } from '@publisher/core-data';
 
 export const linkInnerBlockSupportedBlocks = ['core/paragraph'];
 
@@ -20,7 +18,7 @@ export function linkNormalFromWPCompatibility({
 	// Normal color
 	//
 	if (attributes?.style?.elements?.link?.color?.text) {
-		const color = getColorValueAddonFromVarString(
+		const color = getColorVAFromVarString(
 			attributes?.style?.elements?.link?.color?.text
 		);
 
@@ -49,7 +47,7 @@ export function linkHoverFromWPCompatibility({
 	// Hover color
 	//
 	if (attributes?.style?.elements?.link[':hover']?.color?.text) {
-		const color = getColorValueAddonFromVarString(
+		const color = getColorVAFromVarString(
 			attributes?.style?.elements?.link[':hover']?.color?.text
 		);
 

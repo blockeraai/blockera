@@ -4,10 +4,10 @@
  * Publisher dependencies
  */
 import {
-	getColorValueAddonFromIdString,
-	getColorValueAddonFromVarString,
-	isValid,
-} from '@publisher/hooks/src/use-value-addon/helpers';
+	getColorVAFromIdString,
+	getColorVAFromVarString,
+} from '@publisher/core-data';
+import { isValid } from '@publisher/hooks/src/use-value-addon/helpers';
 import { isBorderEmpty } from '@publisher/controls';
 
 export function borderFromWPCompatibility({
@@ -19,9 +19,7 @@ export function borderFromWPCompatibility({
 		// borderColor in root always is variable and means border type is all
 		// it should be changed to a Value Addon (variable)
 		if (attributes?.borderColor !== undefined) {
-			const colorVar = getColorValueAddonFromIdString(
-				attributes?.borderColor
-			);
+			const colorVar = getColorVAFromIdString(attributes?.borderColor);
 
 			if (colorVar) {
 				attributes.publisherBorder = {
@@ -61,18 +59,10 @@ export function borderFromWPCompatibility({
 			};
 
 			// convert to var
-			border.top.color = getColorValueAddonFromVarString(
-				border.top.color
-			);
-			border.right.color = getColorValueAddonFromVarString(
-				border.right.color
-			);
-			border.bottom.color = getColorValueAddonFromVarString(
-				border.bottom.color
-			);
-			border.left.color = getColorValueAddonFromVarString(
-				border.left.color
-			);
+			border.top.color = getColorVAFromVarString(border.top.color);
+			border.right.color = getColorVAFromVarString(border.right.color);
+			border.bottom.color = getColorVAFromVarString(border.bottom.color);
+			border.left.color = getColorVAFromVarString(border.left.color);
 
 			attributes.publisherBorder = border;
 		} else if (

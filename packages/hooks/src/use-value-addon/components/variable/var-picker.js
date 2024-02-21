@@ -16,7 +16,7 @@ import {
 	Popover,
 	ConditionalWrapper,
 } from '@publisher/components';
-import { STORE_NAME } from '@publisher/core-data';
+import { STORE_NAME, generateVariableString } from '@publisher/core-data';
 import { controlInnerClassNames } from '@publisher/classnames';
 import type { DynamicVariableGroup } from '@publisher/core-data/src/variables/store/types';
 
@@ -26,7 +26,6 @@ import type { DynamicVariableGroup } from '@publisher/core-data/src/variables/st
 import {
 	getVariableCategory,
 	getVariableIcon,
-	generateVariableString,
 	canUnlinkVariable,
 	isValid,
 } from '../../helpers';

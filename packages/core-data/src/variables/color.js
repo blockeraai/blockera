@@ -7,12 +7,13 @@ import { default as memoize } from 'fast-memoize';
 /**
  * Publisher dependencies
  */
-import { isBlockTheme, isUndefined } from '@publisher/utils';
+import { isBlockTheme, isString, isUndefined } from '@publisher/utils';
+import type { ValueAddon } from '@publisher/hooks/src/use-value-addon/types';
 
 /**
  * Internal dependencies
  */
-import { getBlockEditorSettings } from './index';
+import { generateVariableString, getBlockEditorSettings } from './index';
 import type { VariableItem } from './types';
 import { getCurrentTheme } from '../index';
 
@@ -77,3 +78,38 @@ export const getColorBy: (field: string, value: any) => ?VariableItem = memoize(
 		return getColors().find((item) => item[field] === value);
 	}
 );
+
+export const getColorVAFromIdString: (value: string) => ValueAddon | string =
+	memoize(function (value: string): ValueAddon | string {
+		const colorVar = getColor(value);
+
+		if (colorVar) {
+			return {
+				settings: {
+					...colorVar,
+					type: 'color',
+					var: generateVariableString({
+						reference: colorVar?.reference || {
+							type: '',
+						},
+						type: 'color',
+						id: colorVar?.id || '',
+					}),
+				},
+				name: colorVar?.name || '',
+				isValueAddon: true,
+				valueType: 'variable',
+			};
+		}
+
+		return value;
+	});
+
+export const getColorVAFromVarString: (value: string) => ValueAddon | string =
+	memoize(function (value: string): ValueAddon | string {
+		if (isString(value) && value.startsWith('var:')) {
+			return getColorVAFromIdString(value.split('|')[2]);
+		}
+
+		return value;
+	});

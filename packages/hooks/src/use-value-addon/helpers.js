@@ -4,7 +4,6 @@
  */
 import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
-import { default as memoize } from 'fast-memoize';
 
 /**
  * Publisher dependencies
@@ -13,7 +12,6 @@ import {
 	type DynamicValueCategory,
 	type DynamicValueTypes,
 	getArchiveDynamicValueItemsBy,
-	getColor,
 	getColors,
 	getFeaturedImageDynamicValueItemsBy,
 	getFontSizes,
@@ -26,16 +24,10 @@ import {
 	getUserDynamicValueItemsBy,
 	getVariable,
 	getWidthSizes,
-	type ValueAddonReference,
 	type VariableCategory,
 } from '@publisher/core-data';
 import { ColorIndicator } from '@publisher/components';
-import {
-	isBlockTheme,
-	isObject,
-	isUndefined,
-	isString,
-} from '@publisher/utils';
+import { isBlockTheme, isObject, isUndefined } from '@publisher/utils';
 import { NoticeControl } from '@publisher/controls';
 
 /**
@@ -296,48 +288,6 @@ export function getDynamicValueCategory(
 		items: [],
 		notFound: true,
 	};
-}
-
-export function generateVariableString({
-	reference,
-	type,
-	id,
-}: {
-	reference: ValueAddonReference,
-	type: VariableCategory,
-	id: string,
-}): string {
-	let _type: string = type;
-	let _reference: string = reference?.type;
-
-	if (type === 'width-size') {
-		if (id === 'contentSize') {
-			id = 'content-size';
-			_type = 'global';
-			_reference = 'style';
-		} else if (id === 'wideSize') {
-			id = 'wide-size';
-			_type = 'global';
-			_reference = 'style';
-		}
-	} else {
-		_type = type.replace(/^linear-|^radial-/i, '');
-	}
-
-	switch (_reference) {
-		case 'custom':
-			_reference = 'publisher';
-			break;
-
-		case 'theme':
-		case 'plugin':
-		case 'core':
-		case 'core-pro':
-			_reference = 'preset';
-			break;
-	}
-
-	return `--wp--${_reference}--${_type}--${id}`;
 }
 
 export function canUnlinkVariable(value: ValueAddon): boolean {
@@ -638,44 +588,3 @@ export function getDeletedItemInfo(item: ValueAddon): {
 
 	return result;
 }
-
-export const getColorValueAddonFromIdString: (
-	value: string
-) => ValueAddon | string = memoize(function (
-	value: string
-): ValueAddon | string {
-	const colorVar = getColor(value);
-
-	if (colorVar) {
-		return {
-			settings: {
-				...colorVar,
-				type: 'color',
-				var: generateVariableString({
-					reference: colorVar?.reference || {
-						type: '',
-					},
-					type: 'color',
-					id: colorVar?.id || '',
-				}),
-			},
-			name: colorVar?.name || '',
-			isValueAddon: true,
-			valueType: 'variable',
-		};
-	}
-
-	return value;
-});
-
-export const getColorValueAddonFromVarString: (
-	value: string
-) => ValueAddon | string = memoize(function (
-	value: string
-): ValueAddon | string {
-	if (isString(value) && value.startsWith('var:')) {
-		return getColorValueAddonFromIdString(value.split('|')[2]);
-	}
-
-	return value;
-});
