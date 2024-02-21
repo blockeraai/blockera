@@ -21,7 +21,7 @@ import { BaseControl, PanelBodyControl } from '@publisher/controls';
 /**
  * Internal dependencies
  */
-import { hasSameProps } from '../utils';
+import { hasSameProps } from '@publisher/utils';
 import { ArrowIcon } from './icons/arrow';
 import { useBlockContext } from '../../hooks';
 import { isInnerBlock } from '../../components';

@@ -15,7 +15,7 @@ import {
 	BoxSpacingControl,
 	ControlContextProvider,
 } from '@publisher/controls';
-import { isUndefined } from '@publisher/utils';
+import { isUndefined, hasSameProps } from '@publisher/utils';
 import { componentClassNames } from '@publisher/classnames';
 
 /**
@@ -24,7 +24,7 @@ import { componentClassNames } from '@publisher/classnames';
 import { SpacingExtensionIcon } from './index';
 import { isActiveField } from '../../api/utils';
 import { getSpacingValue } from './utils/get-spacing-value';
-import { generateExtensionId, hasSameProps } from '../utils';
+import { generateExtensionId } from '../utils';
 import type { TSpacingProps } from './types/spacing-props';
 
 const fallbackValue = {

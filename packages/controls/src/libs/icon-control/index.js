@@ -15,12 +15,12 @@ import {
 	controlInnerClassNames,
 } from '@publisher/classnames';
 import { Button, Icon, MediaUploader } from '@publisher/components';
-import { hasSameProps } from '@publisher/extensions';
 import {
 	isEmpty,
 	isObject,
 	isEquals,
 	isUndefined,
+	hasSameProps,
 	useLateEffect,
 } from '@publisher/utils';
 

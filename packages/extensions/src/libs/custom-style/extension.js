@@ -14,6 +14,7 @@ import {
 	ControlContextProvider,
 	CodeControl,
 } from '@publisher/controls';
+import { hasSameProps } from '@publisher/utils';
 import { componentClassNames } from '@publisher/classnames';
 import { FeatureWrapper } from '@publisher/components';
 
@@ -21,7 +22,7 @@ import { FeatureWrapper } from '@publisher/components';
  * Internal dependencies
  */
 import { isShowField } from '../../api/utils';
-import { hasSameProps, generateExtensionId } from '../utils';
+import { generateExtensionId } from '../utils';
 import type { CustomStyleExtensionProps } from './types/props';
 import { CustomStyleExtensionIcon } from './index';
 import { useBlockContext } from '../../hooks';

@@ -13,7 +13,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
-import { hasSameProps } from '@publisher/extensions';
+import { hasSameProps } from '@publisher/utils';
 import { Button, Flex, Grid } from '@publisher/components';
 
 /**

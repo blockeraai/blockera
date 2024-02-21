@@ -15,7 +15,7 @@ import {
 	PanelBodyControl,
 	ControlContextProvider,
 } from '@publisher/controls';
-import { isInteger } from '@publisher/utils';
+import { isInteger, hasSameProps } from '@publisher/utils';
 import { Button, FeatureWrapper } from '@publisher/components';
 import {
 	componentClassNames,
@@ -28,7 +28,7 @@ import {
 import { isShowField } from '../../api/utils';
 import { default as GearIcon } from './icons/gear';
 import type { TEffectsProps } from './types/effects-props';
-import { generateExtensionId, hasSameProps } from '../utils';
+import { generateExtensionId } from '../utils';
 import { TransformSettings } from './components/transform-setting';
 import { Opacity } from './components/opacity';
 import { Transition } from './components/transition';

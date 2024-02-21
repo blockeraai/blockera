@@ -14,7 +14,7 @@ import {
 	Style,
 	getCssSelectors,
 } from '@publisher/style-engine';
-import { isUndefined, isEmpty } from '@publisher/utils';
+import { isUndefined, isEmpty, hasSameProps } from '@publisher/utils';
 import { getValueAddonRealValue } from '@publisher/hooks';
 import { getSelector } from '@publisher/style-engine/src/utils';
 
@@ -25,7 +25,7 @@ import * as config from '../base/config';
 import { attributes } from './attributes';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
-import { arrayEquals, hasSameProps } from '../utils';
+import { arrayEquals } from '../utils';
 import type { TSizeCssProps } from './types/size-props';
 
 export const SizeStyles: Element<any> = memo(
