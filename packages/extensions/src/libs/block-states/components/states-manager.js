@@ -4,14 +4,16 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import type { Element, ComponentType } from 'react';
+import { memo, useMemo, useCallback } from '@wordpress/element';
 
 /**
  * Publisher dependencies
  */
+import { isEquals, omit } from '@publisher/utils';
 import { controlInnerClassNames } from '@publisher/classnames';
+import type { ControlInfo } from '@publisher/controls/src/context/types';
 import { ControlContextProvider, RepeaterControl } from '@publisher/controls';
 import { STORE_NAME } from '@publisher/controls/src/libs/repeater-control/store';
 import { defaultItemValue } from '@publisher/controls/src/libs/repeater-control';
@@ -33,35 +35,17 @@ import type {
 	StateTypes,
 	TStates,
 } from '../types';
-import { PopoverTitleButtons } from './popover-title-buttons';
-import { LabelDescription } from './label-description';
-import StateContainer from '../../../components/state-container';
-import { isInnerBlock } from '../../../components';
 import { useBlockContext } from '../../../hooks';
-import type { ControlInfo } from '@publisher/controls/src/context/types';
-import { isEquals, omit } from '@publisher/utils';
+import { isInnerBlock } from '../../../components';
+import { LabelDescription } from './label-description';
+import { PopoverTitleButtons } from './popover-title-buttons';
+import StateContainer from '../../../components/state-container';
 
 const StatesManager: ComponentType<any> = memo(
 	({ block, states, onChange }: StatesManagerProps): Element<any> => {
-		const { isNormalState } = useBlockContext();
-		const { currentBlock, currentState, currentInnerBlockState } =
-			useSelect((select) => {
-				const {
-					getExtensionCurrentBlock,
-					getExtensionInnerBlockState,
-					getExtensionCurrentBlockState,
-				} = select('publisher-core/extensions');
-
-				return {
-					currentBlock: getExtensionCurrentBlock(),
-					currentState: getExtensionCurrentBlockState(),
-					currentInnerBlockState: getExtensionInnerBlockState(),
-				};
-			});
-		const keys = Object.keys(states);
-		const contextValue = {
-			block,
-			value: !Object.values(states).length
+		const calculatedValue = useMemo(() => {
+			const keys = Object.keys(states);
+			return Object.values(states).length < 2
 				? [
 						{
 							...defaultStates.normal,
@@ -81,105 +65,132 @@ const StatesManager: ComponentType<any> = memo(
 							...defaultStates[keys[id]],
 							...defaultItemValue,
 							isOpen: false,
-							deletable: false,
 							selectable: true,
 							display: keys.length > 1,
 							visibilitySupport: false,
-							isSelected: 'normal' === keys[id],
+							isSelected:
+								'undefined' !== typeof state?.isSelected
+									? state?.isSelected
+									: 'normal' === keys[id],
+							deletable: 'normal' !== keys[id],
 							breakpoints: {
 								...getBreakpoints(keys[id]),
 								...(state?.breakpoints ?? {}),
 							},
 						};
-				  }),
+				  });
+		}, [states]);
+
+		const valueCleanup = useCallback(
+			(
+				value: {
+					[key: TStates]: StateTypes,
+				},
+				finalizeFlag: boolean = false
+			): Array<Object> => {
+				return Object.values(Object.assign({}, value))
+					?.map((item: Object): Object | false => {
+						const breakpoints = {};
+
+						Object.values(item?.breakpoints)?.forEach(
+							(breakpoint) => {
+								if (
+									!Object.keys(breakpoint?.attributes || {})
+										.length &&
+									'laptop' !== breakpoint?.type
+								) {
+									return;
+								}
+
+								const { attributes = {} } = breakpoint;
+
+								if (
+									finalizeFlag &&
+									!Object.keys(attributes).length &&
+									'normal' !== item?.type
+								) {
+									return;
+								}
+
+								breakpoints[breakpoint.type] = { attributes };
+							}
+						);
+
+						if (!Object.values(breakpoints).length) {
+							return false;
+						}
+
+						return {
+							breakpoints,
+							isVisible: item?.isVisible,
+						};
+					})
+					.filter((item) => 'object' === typeof item);
+			},
+			[]
+		);
+
+		const { isNormalState } = useBlockContext();
+		const { currentBlock, currentState, currentInnerBlockState } =
+			useSelect((select) => {
+				const {
+					getExtensionCurrentBlock,
+					getExtensionInnerBlockState,
+					getExtensionCurrentBlockState,
+				} = select('publisher-core/extensions');
+
+				return {
+					currentBlock: getExtensionCurrentBlock(),
+					currentState: getExtensionCurrentBlockState(),
+					currentInnerBlockState: getExtensionInnerBlockState(),
+				};
+			});
+		const contextValue = {
+			block,
+			value: calculatedValue,
 			hasSideEffect: true,
+			onChange: (newValue) =>
+				onChangeBlockStates(newValue, {
+					states,
+					onChange,
+					currentState,
+					currentBlock,
+					isNormalState,
+					calculatedValue,
+					currentInnerBlockState,
+				}),
+			valueCleanup,
 			callback: (
 				{ name: controlId, value: recievedValue }: ControlInfo,
 				value: Array<{ ...StateTypes, isSelected: boolean }>,
 				modifyControlValue: (params: Object) => void
 			): void => {
-				let target = value;
+				if (isEquals(value, recievedValue)) {
+					return;
+				}
 
-				const selectedState = Object.values(target).find(
-					(state: { ...StateTypes, isSelected: boolean }): boolean =>
-						state.isSelected
-				);
-
-				if (
-					(!selectedState ||
-						currentState === selectedState.type ||
-						(isInnerBlock(currentBlock) &&
-							currentInnerBlockState === selectedState.type)) &&
-					recievedValue.length !== value.length &&
-					'normal' === selectedState?.type
-				) {
-					target = recievedValue;
-
-					const _value = target.map((item) => {
+				modifyControlValue({
+					controlId,
+					value: recievedValue.map((v) => {
 						if (isInnerBlock(currentBlock)) {
-							if (currentInnerBlockState === item.type) {
+							if (currentInnerBlockState === v.type) {
 								return {
-									...item,
+									...v,
 									isSelected: true,
 								};
 							}
-						} else if (currentState === item.type) {
-							return {
-								...item,
-								isSelected: true,
-							};
-						}
-
-						return item;
-					});
-
-					modifyControlValue({
-						controlId,
-						value: _value,
-					});
-
-					return;
-				}
-
-				if (
-					!selectedState ||
-					currentState === selectedState.type ||
-					(isInnerBlock(currentBlock) &&
-						currentInnerBlockState === selectedState.type)
-				) {
-					return;
-				}
-
-				const selectedIndex = target.indexOf(selectedState);
-
-				const _value = target.map((v, i) => {
-					if (i === selectedIndex) {
-						return {
-							...v,
-							isSelected: false,
-						};
-					}
-
-					if (isInnerBlock(currentBlock)) {
-						if (currentInnerBlockState === v.type) {
+						} else if (currentState === v.type) {
 							return {
 								...v,
 								isSelected: true,
 							};
 						}
-					} else if (currentState === v.type) {
+
 						return {
 							...v,
-							isSelected: true,
+							isSelected: false,
 						};
-					}
-
-					return v;
-				});
-
-				modifyControlValue({
-					controlId,
-					value: _value,
+					}),
 				});
 			},
 			blockName: block.blockName,
@@ -192,6 +203,7 @@ const StatesManager: ComponentType<any> = memo(
 				<StateContainer>
 					<RepeaterControl
 						{...{
+							valueCleanup,
 							/**
 							 * Retrieve dynamic default value for repeater items.
 							 *
@@ -225,15 +237,7 @@ const StatesManager: ComponentType<any> = memo(
 								selectable: true,
 								visibilitySupport: true,
 							},
-							onChange: (newValue) =>
-								onChangeBlockStates(newValue, {
-									states,
-									onChange,
-									currentState,
-									currentBlock,
-									isNormalState,
-									currentInnerBlockState,
-								}),
+							onChange: contextValue.onChange,
 							//Override item when occurred clone action!
 							overrideItem: (item) => {
 								if ('normal' === item.type) {

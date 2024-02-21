@@ -2,14 +2,13 @@
 /**
  * External dependencies
  */
-import memoize from 'fast-memoize';
 import type { MixedElement } from 'react';
 import { dispatch } from '@wordpress/data';
 
 /**
  * Publisher dependencies
  */
-import { isEquals, mergeObject } from '@publisher/utils';
+import { isEquals } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -30,7 +29,6 @@ import LaptopIcon from './icons/laptop';
 import ExtraLargeIcon from './icons/extra-large';
 import LargeIcon from './icons/large';
 import { isInnerBlock } from '../../components';
-import { defaultItemValue } from '@publisher/controls/src/libs/repeater-control';
 
 export const getStateInfo = (state: TStates | number): StateTypes => {
 	return 'number' === typeof state
@@ -84,136 +82,34 @@ export function onChangeBlockStates(
 	newValue: Array<{ ...StateTypes, isSelected: boolean }>,
 	params: Object
 ): Object {
+	const { states: _states, onChange, currentBlock, calculatedValue } = params;
 	const {
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setInnerBlockState,
 	} = dispatch('publisher-core/extensions') || {};
-	const {
-		states: _states,
-		onChange,
-		currentBlock,
-		currentInnerBlockState,
-		currentStateType,
-	} = params;
-	const prepareSelectedState = memoize(() =>
-		newValue.find((item) => item.isSelected)
-	);
-	const selectedState = prepareSelectedState();
+	const _newValue: {
+		[key: TStates]: {
+			...StateTypes,
+			isSelected: boolean,
+		},
+	} = {};
 
-	if (!selectedState) {
-		return;
-	}
-
-	const isEqualsWithCurrentState = (type: TStates) => {
-		if (isInnerBlock(currentBlock)) {
-			return type === currentInnerBlockState;
+	newValue.forEach((state, id) => {
+		if (isInnerBlock(currentBlock) && state?.isSelected) {
+			setInnerBlockState(state?.type || calculatedValue[id]?.type);
+		} else if (state?.isSelected) {
+			setCurrentState(state?.type || calculatedValue[id]?.type);
 		}
 
-		return type === currentStateType;
-	};
+		_newValue[state?.type || calculatedValue[id]?.type] = {
+			...(calculatedValue[id] || {}),
+			...state,
+		};
+	});
 
-	if (isEqualsWithCurrentState(selectedState.type) && _states.length) {
+	if (isEquals(_states, _newValue)) {
 		return;
 	}
 
-	if (isInnerBlock(currentBlock)) {
-		setInnerBlockState(selectedState.type);
-	} else {
-		setCurrentState(selectedState.type);
-	}
-
-	if (newValue.length !== Object.keys(_states).length) {
-		const _newValue: {
-			[key: TStates]: {
-				...StateTypes,
-				display: boolean,
-				isSelected: boolean,
-			},
-		} = {};
-
-		newValue.forEach((state) => {
-			if (_states[state.type] && _states[state.type].isSelected) {
-				_newValue[state.type] = {
-					..._states[state.type],
-					isOpen: false,
-					isSelected: false,
-					display: newValue.length > 1,
-				};
-
-				return;
-			}
-
-			if (_states[state.type]) {
-				_newValue[state.type] = {
-					..._states[state.type],
-					isOpen: false,
-					display: newValue.length > 1,
-				};
-
-				return;
-			}
-
-			if (_states[state.type]) {
-				_newValue[state.type] = {
-					..._states[state.type],
-					display: newValue.length > 1,
-				};
-			} else {
-				_newValue[state.type] = {
-					...state,
-					display: newValue.length > 1,
-				};
-			}
-		});
-
-		onChange('publisherBlockStates', _newValue);
-
-		return;
-	}
-
-	if (!isEquals(selectedState.type, currentStateType)) {
-		const publisherBlockStates: {
-			[key: TStates]: { ...StateTypes, isSelected: boolean },
-		} = {};
-
-		const keys = Object.keys(_states);
-
-		Object.values(_states).forEach(
-			(state: Object, stateId: number): void => {
-				const type = state.type || keys[stateId];
-				const defaultItemMerged = {
-					...states[type],
-					...defaultItemValue,
-					deletable: false,
-					selectable: true,
-					visibilitySupport: false,
-					display: keys.length > 1,
-					breakpoints: mergeObject(
-						breakpoints(type),
-						state.breakpoints
-					),
-				};
-
-				if (stateId === newValue.indexOf(selectedState)) {
-					publisherBlockStates[type] = {
-						...state,
-						...defaultItemMerged,
-						isOpen: false,
-						isSelected: true,
-					};
-
-					return;
-				}
-
-				publisherBlockStates[type] = {
-					...state,
-					...defaultItemMerged,
-					isOpen: false,
-					isSelected: false,
-				};
-			}
-		);
-
-		onChange('publisherBlockStates', publisherBlockStates);
-	}
+	onChange('publisherBlockStates', _newValue);
 }
