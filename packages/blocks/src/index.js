@@ -9,7 +9,7 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Publisher dependencies
  */
-import { mergeObject } from '@publisher/utils';
+import { mergeObjects } from '@publisher/utils';
 import { registerBlockExtension } from '@publisher/extensions';
 
 /**
@@ -66,7 +66,7 @@ export const registerThirdPartyExtensionDefinitions = (): void => {
 						}
 
 						newDefinitionTypes[additionalDefinitionType?.type] =
-							mergeObject(
+							mergeObjects(
 								{},
 								getExtensions(),
 								additionalDefinitionType?.settings
@@ -75,7 +75,7 @@ export const registerThirdPartyExtensionDefinitions = (): void => {
 				);
 			});
 
-			return mergeObject({}, definitionTypes, newDefinitionTypes);
+			return mergeObjects({}, definitionTypes, newDefinitionTypes);
 		}
 	);
 };

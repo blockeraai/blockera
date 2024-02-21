@@ -130,7 +130,7 @@ export function mergeObjects(
 				if (isObject(_source[key])) {
 					if (!result[key] || !isObject(result[key]))
 						result[key] = {};
-					result[key] = mergeObject(result[key], _source[key]); // Merge recursively
+					result[key] = mergeObjects(result[key], _source[key]); // Merge recursively
 				} else {
 					result[key] = _source[key];
 				}
