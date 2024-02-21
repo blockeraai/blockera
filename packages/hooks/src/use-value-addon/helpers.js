@@ -639,7 +639,9 @@ export function getDeletedItemInfo(item: ValueAddon): {
 	return result;
 }
 
-const _getColorValueAddonFromIdString = function (
+export const getColorValueAddonFromIdString: (
+	value: string
+) => ValueAddon | string = memoize(function (
 	value: string
 ): ValueAddon | string {
 	const colorVar = getColor(value);
@@ -664,19 +666,11 @@ const _getColorValueAddonFromIdString = function (
 	}
 
 	return value;
-};
+});
 
-const _getColorValueAddonFromIdStringMemoized = memoize(
-	_getColorValueAddonFromIdString
-);
-
-export const getColorValueAddonFromIdString = (
+export const getColorValueAddonFromVarString: (
 	value: string
-): ValueAddon | string => {
-	return _getColorValueAddonFromIdStringMemoized(value);
-};
-
-const _getColorValueAddonFromVarString = function (
+) => ValueAddon | string = memoize(function (
 	value: string
 ): ValueAddon | string {
 	if (isString(value) && value.startsWith('var:')) {
@@ -684,14 +678,4 @@ const _getColorValueAddonFromVarString = function (
 	}
 
 	return value;
-};
-
-const _getColorValueAddonFromVarStringMemoized = memoize(
-	_getColorValueAddonFromVarString
-);
-
-export const getColorValueAddonFromVarString = (
-	value: string
-): ValueAddon | string => {
-	return _getColorValueAddonFromVarStringMemoized(value);
-};
+});
