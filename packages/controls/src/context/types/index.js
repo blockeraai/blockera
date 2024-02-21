@@ -31,6 +31,9 @@ export type ControlContextProviderProps = {
 			value: any,
 			modifyControlValue: (params: Object) => void
 		) => void,
+		hasSideEffect?: boolean,
+		onChange?: (newValue: any) => void,
+		valueCleanup?: (newValue: any) => void,
 	},
 	storeName?: string,
 	children: MixedElement | any,

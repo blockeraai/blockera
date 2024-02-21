@@ -137,6 +137,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			resetRef,
 			sideEffect,
 			modifyValue,
+			controlInfo,
 			valueCleanup,
 			value: calculatedValue,
 			resetToNormal: controlInfo.resetToNormal,

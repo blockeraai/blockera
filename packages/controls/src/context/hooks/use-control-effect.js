@@ -20,6 +20,7 @@ export default function useControlEffect(
 		onChange,
 		resetRef,
 		sideEffect,
+		controlInfo,
 		valueCleanup,
 		value: controlValue,
 	}: Object,
@@ -34,7 +35,7 @@ export default function useControlEffect(
 
 		if (isFunction(onChange)) {
 			// eslint-disable-next-line no-unused-expressions
-			isFunction(valueCleanup)
+			isFunction(valueCleanup) && !controlInfo.hasSideEffect
 				? onChange(valueCleanup(value), _ref)
 				: onChange(value, _ref);
 		}
