@@ -59,6 +59,12 @@ export default function GradientBarControl({
 	} = useValueAddon({
 		types: controlAddonTypes,
 		value,
+		setValue: (newValue: any): void => {
+			setValue({
+				value,
+				valueAddon: newValue,
+			});
+		},
 		variableTypes,
 		dynamicValueTypes,
 		onChange: setValue,

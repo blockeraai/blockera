@@ -3,7 +3,7 @@
  * External dependencies
  */
 import { select } from '@wordpress/data';
-import { useState } from '@wordpress/element';
+import { useState, useMemo } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -28,7 +28,8 @@ export type { ValueAddonControlProps } from './components/control/types';
 
 export const useValueAddon = ({
 	types,
-	value: _value,
+	value,
+	setValue,
 	variableTypes,
 	dynamicValueTypes,
 	onChange,
@@ -36,6 +37,24 @@ export const useValueAddon = ({
 	pointerProps = {},
 	pickerProps = {},
 }: UseValueAddonProps): {} | ValueAddonProps => {
+	const [isOpen, setOpen] = useState('');
+	const { getDynamicValue, getVariableType } = select(STORE_NAME);
+	value = useMemo(() => {
+		return isObject(value)
+			? {
+					isValueAddon: value?.isValueAddon || false,
+					valueType: value?.valueType || '',
+					id: value?.id || '',
+					settings: value.settings || {},
+			  }
+			: {
+					isValueAddon: false,
+					valueType: null,
+					id: '',
+					settings: {},
+			  };
+	}, [value]);
+
 	// type is empty
 	if (isUndefined(types) || !types.length) {
 		return {
@@ -44,12 +63,8 @@ export const useValueAddon = ({
 			ValueAddonPointer: () => <></>,
 			ValueAddonControl: () => <></>,
 			valueAddonControlProps: {
-				value: {
-					isValueAddon: false,
-					id: '',
-					settings: {},
-				},
-				setValue: () => {},
+				value,
+				setValue,
 				onChange,
 				types,
 				variableTypes:
@@ -77,27 +92,6 @@ export const useValueAddon = ({
 			handleOnUnlinkVar: () => {},
 		};
 	}
-
-	const { getDynamicValue, getVariableType } = select(STORE_NAME);
-
-	const initialState = isObject(_value)
-		? {
-				isValueAddon: _value?.isValueAddon || false,
-				valueType: _value?.valueType || '',
-				id: _value?.id || '',
-				settings: _value.settings || {},
-		  }
-		: {
-				isValueAddon: false,
-				valueType: null,
-				id: '',
-				settings: {},
-		  };
-
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const [value, setValue] = useState(initialState);
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const [isOpen, setOpen] = useState('');
 
 	const valueAddonClassNames = types
 		.map((type) => `publisher-value-addon-support-${type}`)
@@ -204,7 +198,7 @@ export const useValueAddon = ({
 	 */
 	if (isValid(controlProps.value)) {
 		if (controlProps.value.valueType === 'variable') {
-			let item: VariableItem = getVariable(
+			let item: VariableItem | null | void = getVariable(
 				controlProps.value?.settings?.type,
 				controlProps.value?.settings?.id
 			);

@@ -55,6 +55,12 @@ export function PaddingLeft({
 		useValueAddon({
 			types: ['variable'],
 			value: value.padding.left,
+			setValue: (newValue: any): void => {
+				setValue({
+					value,
+					valueAddon: newValue,
+				});
+			},
 			variableTypes: ['spacing'],
 			onChange: (newValue) => {
 				setOpenPopover('');

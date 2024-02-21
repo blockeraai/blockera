@@ -55,6 +55,12 @@ export function PaddingHorizontal({
 		useValueAddon({
 			types: ['variable'],
 			value: value.padding.right,
+			setValue: (newValue: any): void => {
+				setValue({
+					value,
+					valueAddon: newValue,
+				});
+			},
 			variableTypes: ['spacing'],
 			onChange: (newValue) => {
 				setOpenPopover('');

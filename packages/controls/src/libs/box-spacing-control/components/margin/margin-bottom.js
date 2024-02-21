@@ -55,6 +55,12 @@ export function MarginBottom({
 		useValueAddon({
 			types: ['variable'],
 			value: value.margin.bottom,
+			setValue: (newValue: any): void => {
+				setValue({
+					value,
+					valueAddon: newValue,
+				});
+			},
 			variableTypes: ['spacing'],
 			onChange: (newValue) => {
 				setOpenPopover('');

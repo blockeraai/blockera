@@ -53,6 +53,12 @@ export function MarginAll({
 		useValueAddon({
 			types: ['variable'],
 			value: value.margin.top,
+			setValue: (newValue: any): void => {
+				setValue({
+					value,
+					valueAddon: newValue,
+				});
+			},
 			variableTypes: ['spacing'],
 			onChange: (newValue) => {
 				setOpenPopover('');

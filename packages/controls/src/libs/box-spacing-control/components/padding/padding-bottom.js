@@ -55,6 +55,12 @@ export function PaddingBottom({
 		useValueAddon({
 			types: ['variable'],
 			value: value.padding.bottom,
+			setValue: (newValue: any): void => {
+				setValue({
+					value,
+					valueAddon: newValue,
+				});
+			},
 			variableTypes: ['spacing'],
 			onChange: (newValue) => {
 				setOpenPopover('');

@@ -3,8 +3,8 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
 import type { MixedElement } from 'react';
+import { useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -69,6 +69,12 @@ export default function ColorControl({
 	} = useValueAddon({
 		types: controlAddonTypes,
 		value,
+		setValue: (newValue: any): void => {
+			setValue({
+				value,
+				valueAddon: newValue,
+			});
+		},
 		variableTypes,
 		dynamicValueTypes,
 		onChange: setValue,
