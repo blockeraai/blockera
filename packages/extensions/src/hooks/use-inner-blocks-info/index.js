@@ -29,6 +29,11 @@ export const useInnerBlocksInfo = ({
 	const { getExtensionCurrentBlock } = select('publisher-core/extensions');
 	const currentBlock = getExtensionCurrentBlock();
 
+	console.log(
+		'useInnerBlocksInfo → additional',
+		additional?.publisherInnerBlocks?.default
+	);
+
 	const publisherInnerBlocks: InnerBlocks = prepareInnerBlockTypes(
 		additional?.publisherInnerBlocks || {},
 		getBlockType(name)?.attributes || {}

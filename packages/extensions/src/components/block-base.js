@@ -96,6 +96,11 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 		const { getDeviceType } = select('publisher-core/editor');
 
+		console.log(
+			'block base → additional',
+			additional?.publisherInnerBlocks?.default
+		);
+
 		const { currentInnerBlock, publisherInnerBlocks } = useInnerBlocksInfo({
 			name,
 			additional,
