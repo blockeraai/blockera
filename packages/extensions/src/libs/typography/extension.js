@@ -389,10 +389,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 						>
 							<TextShadowControl
 								label={__('Text Shadows', 'publisher-core')}
-								onChange={(newValue) =>
+								onChange={(newValue, ref) =>
 									handleOnChangeAttributes(
 										'publisherTextShadow',
-										newValue
+										newValue,
+										{ ref }
 									)
 								}
 								defaultValue={
