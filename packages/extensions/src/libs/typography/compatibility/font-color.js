@@ -4,7 +4,7 @@
  * Publisher dependencies
  */
 import {
-	getColorValueAddonFromVarString,
+	getColorValueAddonFromIdString,
 	isValid,
 } from '@publisher/hooks/src/use-value-addon/helpers';
 
@@ -17,9 +17,7 @@ export function fontColorFromWPCompatibility({
 		// textColor attribute in root always is variable
 		// it should be changed to a Value Addon (variable)
 		if (attributes?.textColor !== undefined) {
-			const color = getColorValueAddonFromVarString(
-				attributes?.textColor
-			);
+			const color = getColorValueAddonFromIdString(attributes?.textColor);
 
 			if (color) {
 				return {
