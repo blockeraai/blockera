@@ -7,7 +7,7 @@ import { isEmpty, isUndefined } from '@publisher/utils';
 import { isValid } from '@publisher/hooks/src/use-value-addon/helpers';
 import { getColorVAFromVarString } from '@publisher/core-data';
 
-export const linkInnerBlockSupportedBlocks = ['core/paragraph'];
+export const linkInnerBlockSupportedBlocks = ['core/paragraph', 'core/heading'];
 
 export function linkNormalFromWPCompatibility({
 	attributes,
