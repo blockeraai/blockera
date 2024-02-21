@@ -14,12 +14,13 @@ import {
 	PanelBodyControl,
 	RepeaterControl,
 } from '@publisher/controls';
+import { hasSameProps } from '@publisher/utils';
 import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
-import { generateExtensionId, hasSameProps } from '../utils';
+import { generateExtensionId } from '../utils';
 import type { ConditionsExtensionProps } from './types/props';
 import { ConditionsExtensionIcon } from './index';
 import ConditionIcon from './icons/condition-icon';

@@ -26,13 +26,14 @@ import {
 	Grid,
 	MoreFeatures,
 } from '@publisher/components';
+import { hasSameProps } from '@publisher/utils';
 import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
 import { isShowField } from '../../api/utils';
-import { generateExtensionId, hasSameProps } from '../utils';
+import { generateExtensionId } from '../utils';
 import type { TTypographyProps } from './type/typography-props';
 import {
 	FontSize,

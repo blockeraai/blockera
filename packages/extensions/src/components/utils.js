@@ -5,12 +5,11 @@ import { applyFilters } from '@wordpress/hooks';
 /**
  * Publisher dependencies
  */
-import { omitWithPattern } from '@publisher/utils';
+import { omitWithPattern, hasSameProps } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
-import { hasSameProps } from '../libs';
 import type { TStates, TBreakpoint } from '../libs/block-states/types';
 import type { InnerBlockType } from '../libs/inner-blocks/types';
 // import { detailedDiff } from 'deep-object-diff';

@@ -14,12 +14,13 @@ import {
 	PanelBodyControl,
 	RepeaterControl,
 } from '@publisher/controls';
+import { hasSameProps } from '@publisher/utils';
 import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
-import { generateExtensionId, hasSameProps } from '../utils';
+import { generateExtensionId } from '../utils';
 import type { ScrollExtensionProps } from './types/props';
 import { ScrollAnimationExtensionIcon } from './index';
 import AnimationIcon from './icons/animation-icon';

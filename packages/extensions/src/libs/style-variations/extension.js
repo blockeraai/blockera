@@ -18,7 +18,7 @@ import { PanelBodyControl } from '@publisher/controls';
  * Internal dependencies
  */
 import { isActiveField } from '../../api/utils';
-import { hasSameProps } from '../utils';
+import { hasSameProps } from '@publisher/utils';
 import type { StyleVariationsExtensionProps } from './types';
 import BlockStyles from './components/block-styles';
 import { useStylesForBlocks } from './utils';

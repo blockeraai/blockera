@@ -21,13 +21,14 @@ import {
 	FeatureWrapper,
 	Flex,
 } from '@publisher/components';
+import { hasSameProps } from '@publisher/utils';
 import { componentClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
  */
 import { isShowField } from '../../api/utils';
-import { generateExtensionId, hasSameProps } from '../utils';
+import { generateExtensionId } from '../utils';
 import type { TSizeProps } from './types/size-props';
 import { default as OverflowHiddenIcon } from './icons/overflow-hidden';
 import { default as OverflowVisibleIcon } from './icons/overflow-visible';

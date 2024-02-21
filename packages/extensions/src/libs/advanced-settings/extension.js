@@ -17,12 +17,13 @@ import {
 } from '@publisher/controls';
 import { componentClassNames } from '@publisher/classnames';
 import { FeatureWrapper } from '@publisher/components';
+import { hasSameProps } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
 import { isShowField } from '../../api/utils';
-import { hasSameProps, generateExtensionId } from '../utils';
+import { generateExtensionId } from '../utils';
 import type { TAdvancedSettingsProps } from './types/advanced-props';
 import { AdvancedSettingsExtensionIcon } from './index';
 import { ExtensionSettings } from '../settings';

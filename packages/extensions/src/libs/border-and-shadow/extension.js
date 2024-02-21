@@ -16,6 +16,7 @@ import {
 	BoxShadowControl,
 	ControlContextProvider,
 } from '@publisher/controls';
+import { hasSameProps } from '@publisher/utils';
 import { componentClassNames } from '@publisher/classnames';
 import { FeatureWrapper } from '@publisher/components';
 
@@ -25,7 +26,7 @@ import { FeatureWrapper } from '@publisher/components';
 import { isShowField } from '../../api/utils';
 import { Border, BorderRadius } from './components';
 import { BorderAndShadowExtensionIcon } from './index';
-import { generateExtensionId, hasSameProps } from '../utils';
+import { generateExtensionId } from '../utils';
 import type { TBorderAndShadowProps } from './types/border-and-shadow-props';
 import { ExtensionSettings } from '../settings';
 
