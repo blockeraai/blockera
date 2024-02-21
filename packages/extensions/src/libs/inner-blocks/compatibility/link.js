@@ -59,8 +59,12 @@ export function linkHoverFromWPCompatibility({
 					link: {
 						attributes: {
 							publisherBlockStates: {
-								normal: { breakpoints: {} },
+								normal: {
+									breakpoints: { laptop: {} },
+									isVisible: true,
+								},
 								hover: {
+									isVisible: true,
 									breakpoints: {
 										laptop: {
 											attributes: {
