@@ -106,13 +106,7 @@ export function isJSON(value: any): boolean {
  * @return {boolean} boolean
  */
 export function isObject(value: any): boolean {
-	return (
-		Object(value) === value &&
-		// $FlowFixMe
-		Object.prototype.toString.call(value) !== '[object Array]' &&
-		// $FlowFixMe
-		Object.prototype.toString.call(value) !== '[object Function]'
-	);
+	return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
 /**
