@@ -92,7 +92,7 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 			...(settings.selectors || {}),
 			...(additional.selectors || {}),
 		},
-		edit(props) {
+		edit({ isSelected, ...props }) {
 			if (isFunction(additional?.edit)) {
 				return (
 					<>
