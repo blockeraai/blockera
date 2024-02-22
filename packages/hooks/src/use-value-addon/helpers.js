@@ -34,9 +34,10 @@ import { NoticeControl } from '@publisher/controls';
  * Internal dependencies
  */
 import type {
-	DynamicValueCategoryDetail,
 	ValueAddon,
+	ValueAddonProps,
 	VariableCategoryDetail,
+	DynamicValueCategoryDetail,
 } from './types';
 import VarTypeFontSizeIcon from './icons/var-font-size';
 import VarTypeSpacingIcon from './icons/var-spacing';
@@ -54,6 +55,28 @@ import DVTypeTermIcon from './icons/dv-terms';
 import DVTypeShortcodeIcon from './icons/dv-shortcode';
 import DVTypeEmailIcon from './icons/dv-email';
 import DVTypeCommentIcon from './icons/dv-comment';
+
+/**
+ * Sets value addon.
+ *
+ * @param {ValueAddonProps} newValue The new value addon.
+ * @param {Function} setState The setState of target control component.
+ * @param {*} defaultValue The target control default value.
+ * @return {void}
+ */
+export function setValueAddon(
+	newValue: ValueAddonProps,
+	setState: (newValue: any) => void,
+	defaultValue: any
+): void {
+	if (!newValue?.isValueAddon) {
+		setState(defaultValue);
+
+		return;
+	}
+
+	setState(newValue);
+}
 
 export function isValid(value: ValueAddon): boolean {
 	return value?.isValueAddon;
