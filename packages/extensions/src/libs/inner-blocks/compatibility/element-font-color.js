@@ -95,7 +95,9 @@ export function elementNormalFontColorToWPCompatibility({
 			style: {
 				elements: {
 					[element]: {
-						color: undefined,
+						color: {
+							text: undefined,
+						},
 					},
 				},
 			},
@@ -149,7 +151,9 @@ export function elementHoverFontColorToWPCompatibility({
 				elements: {
 					[element]: {
 						':hover': {
-							color: undefined,
+							color: {
+								text: undefined,
+							},
 						},
 					},
 				},
