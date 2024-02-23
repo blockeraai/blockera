@@ -1,53 +1,66 @@
 // @flow
+
 /**
  * Publisher dependencies
  */
-import { computedCssRules } from '@publisher/style-engine';
+import {
+	getCssSelector,
+	computedCssDeclarations,
+} from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
-import type { GeneratorReturnType } from '@publisher/style-engine/src/types';
 
 /**
  * Internal dependencies
  */
+import * as config from '../base/config';
 import { attributes } from './attributes';
+import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
-import type { TBlockProps } from '../types';
-import type { TCssProps } from './types/flex-child-props';
+import type { CssRule } from '@publisher/style-engine/src/types';
 
-interface IConfigs {
-	flexChildConfig: {
-		cssGenerators: Object,
-		publisherFlexChildSizing?: string,
-		publisherFlexChildAlign?: string,
-		publisherFlexChildOrder?: string,
-	};
-	blockProps: TBlockProps;
-	selector: string;
-	media: string;
-}
-
-export function FlexChildStyles({
-	flexChildConfig: {
-		cssGenerators,
+export const FlexChildStyles = ({
+	state,
+	clientId,
+	blockName,
+	currentBlock,
+	// supports,
+	// activeDeviceType,
+	selectors: blockSelectors,
+	attributes: currentBlockAttributes,
+}: StylesProps): Array<CssRule> => {
+	const {
 		publisherFlexChildSizing,
 		publisherFlexChildAlign,
 		publisherFlexChildOrder,
-	},
-	blockProps,
-	selector,
-	media,
-}: IConfigs): Array<GeneratorReturnType> {
+	} = config.flexChildConfig;
+	const blockProps = {
+		clientId,
+		blockName,
+		attributes: currentBlockAttributes,
+	};
 	const { attributes: _attributes } = blockProps;
-
-	const generators = [];
-
-	const properties: TCssProps = {};
+	const sharedParams = {
+		state,
+		clientId,
+		currentBlock,
+		blockSelectors,
+		className: currentBlockAttributes?.className,
+	};
+	const staticDefinitionParams = {
+		type: 'static',
+		options: {
+			important: true,
+		},
+	};
+	const styleGroup: Array<CssRule> = [];
 
 	if (
 		isActiveField(publisherFlexChildSizing) &&
 		_attributes.publisherFlexChildSizing !==
 			attributes.publisherFlexChildSizing.default
 	) {
+		const properties: { [key: string]: string } = {};
+
 		switch (_attributes.publisherFlexChildSizing) {
 			case 'shrink':
 				properties.flex = '0 1 auto';
@@ -79,6 +92,28 @@ export function FlexChildStyles({
 				}`;
 				break;
 		}
+
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherFlexChildSizing',
+			support: 'publisherFlexChildSizing',
+			fallbackSupportId: undefined,
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					publisherFlexChildSizing: [
+						{
+							...staticDefinitionParams,
+							properties,
+						},
+					],
+				},
+				blockProps
+			),
+		});
 	}
 
 	if (
@@ -86,7 +121,30 @@ export function FlexChildStyles({
 		_attributes.publisherFlexChildAlign !==
 			attributes.publisherFlexChildAlign.default
 	) {
-		properties['align-self'] = _attributes.publisherFlexChildAlign;
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherFlexChildAlign',
+			support: 'publisherFlexChildAlign',
+			fallbackSupportId: undefined,
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					publisherFlexChildAlign: [
+						{
+							...staticDefinitionParams,
+							properties: {
+								'align-self':
+									_attributes.publisherFlexChildAlign,
+							},
+						},
+					],
+				},
+				blockProps
+			),
+		});
 	}
 
 	if (
@@ -94,6 +152,8 @@ export function FlexChildStyles({
 		_attributes.publisherFlexChildOrder !==
 			attributes.publisherFlexChildOrder.default
 	) {
+		const properties: { [key: string]: string } = {};
+
 		switch (_attributes.publisherFlexChildOrder) {
 			case 'first':
 				properties.order = '-1';
@@ -112,34 +172,29 @@ export function FlexChildStyles({
 
 				break;
 		}
-	}
 
-	if (Object.keys(properties).length > 0) {
-		generators.push(
-			computedCssRules(
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherFlexChildOrder',
+			support: 'publisherFlexChildOrder',
+			fallbackSupportId: undefined,
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
 				{
-					publisherFlexChild: [
+					publisherFlexChildOrder: [
 						{
-							type: 'static',
-							selector,
-							media,
+							...staticDefinitionParams,
 							properties,
 						},
 					],
 				},
-				{ attributes: _attributes, ...blockProps }
-			)
-		);
+				blockProps
+			),
+		});
 	}
 
-	generators.push(
-		computedCssRules(
-			{
-				...(cssGenerators || {}),
-			},
-			{ attributes: _attributes, ...blockProps }
-		)
-	);
-
-	return generators.flat();
-}
+	return styleGroup;
+};
