@@ -20,6 +20,12 @@ export {
 	getRadialGradientBy,
 	getRadialGradient,
 } from './radial-gradient';
+export {
+	getLinearGradientVAFromIdString,
+	getRadialGradientVAFromIdString,
+	getGradientVAFromVarString,
+	getGradientType,
+} from './gradient';
 export { getFontSizes, getFontSizeBy, getFontSize } from './font-size';
 export { getSpacings, getSpacingBy, getSpacing } from './spacing';
 export { getWidthSizes, getWidthSizeBy, getWidthSize } from './width-size';
