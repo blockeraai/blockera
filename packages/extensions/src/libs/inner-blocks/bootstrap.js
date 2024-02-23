@@ -9,19 +9,19 @@ import { addFilter } from '@wordpress/hooks';
  * Publisher dependencies
  */
 import type { ControlContextRef } from '@publisher/controls/src/context/types';
+import { mergeObject } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
 import type { BlockDetail } from '../block-states/types';
-import { linkElementSupportedBlocks } from './compatibility/link';
-import { mergeObject } from '@publisher/utils';
 import {
 	elementNormalFontColorFromWPCompatibility,
 	elementHoverFontColorFromWPCompatibility,
 	elementNormalFontColorToWPCompatibility,
 	elementHoverFontColorToWPCompatibility,
 } from './compatibility/element-font-color';
+import { elementsSupportedBlocks } from './compatibility/elements';
 
 export const bootstrap = (): void => {
 	addFilter(
@@ -35,43 +35,64 @@ export const bootstrap = (): void => {
 				return attributes;
 			}
 
-			if (
-				attributes?.style?.elements?.link &&
-				linkElementSupportedBlocks.includes(blockId)
-			) {
-				// Link normal font color
-				if (
-					!attributes?.publisherInnerBlocks?.link?.attributes
-						?.publisherFontColor
-				) {
-					const newAttributes =
-						elementNormalFontColorFromWPCompatibility({
-							element: 'link',
-							attributes,
-						});
+			elementsSupportedBlocks.keys().forEach((element) => {
+				switch (element) {
+					//
+					// Link element
+					//
+					case 'link':
+						if (
+							!attributes?.style?.elements[element] ||
+							!elementsSupportedBlocks[element].includes(blockId)
+						) {
+							return; // Skip this element
+						}
 
-					if (newAttributes) {
-						attributes = mergeObject(attributes, newAttributes);
-					}
+						//
+						// Normal font color
+						//
+						if (
+							!attributes?.publisherInnerBlocks?.link?.attributes
+								?.publisherFontColor
+						) {
+							const newAttributes =
+								elementNormalFontColorFromWPCompatibility({
+									element,
+									attributes,
+								});
+
+							if (newAttributes) {
+								attributes = mergeObject(
+									attributes,
+									newAttributes
+								);
+							}
+						}
+
+						//
+						// Hover font color
+						//
+						if (
+							!attributes?.publisherInnerBlocks?.link?.attributes
+								?.publisherBlockStates?.breakpoints?.laptop
+								?.attributes?.publisherFontColor
+						) {
+							const newAttributes =
+								elementHoverFontColorFromWPCompatibility({
+									element,
+									attributes,
+								});
+
+							if (newAttributes) {
+								attributes = mergeObject(
+									attributes,
+									newAttributes
+								);
+							}
+						}
+						break;
 				}
-
-				// Link hover font color
-				if (
-					!attributes?.publisherInnerBlocks?.link?.attributes
-						?.publisherBlockStates?.breakpoints?.laptop?.attributes
-						?.publisherFontColor
-				) {
-					const newAttributes =
-						elementHoverFontColorFromWPCompatibility({
-							element: 'link',
-							attributes,
-						});
-
-					if (newAttributes) {
-						attributes = mergeObject(attributes, newAttributes);
-					}
-				}
-			}
+			});
 
 			return attributes;
 		}
@@ -114,38 +135,57 @@ export const bootstrap = (): void => {
 				return nextState;
 			}
 
-			// Handle "link" inner block changes.
-			if (
-				currentBlock === 'link' &&
-				linkElementSupportedBlocks.includes(blockId)
-			) {
-				if (currentState === 'normal') {
-					switch (featureId) {
-						case 'publisherFontColor':
-							return mergeObject(
-								nextState,
-								elementNormalFontColorToWPCompatibility({
-									element: 'link',
-									newValue,
-									ref,
-								})
-							);
+			switch (currentBlock) {
+				//
+				// Link element
+				//
+				case 'link':
+					if (
+						!elementsSupportedBlocks[currentBlock].includes(blockId)
+					) {
+						return nextState;
 					}
-				}
 
-				if (currentState === 'hover') {
-					switch (featureId) {
-						case 'publisherFontColor':
-							return mergeObject(
-								nextState,
-								elementHoverFontColorToWPCompatibility({
-									element: 'link',
-									newValue,
-									ref,
-								})
-							);
+					//
+					// Normal state
+					//
+					if (currentState === 'normal') {
+						switch (featureId) {
+							//
+							// Font color
+							//
+							case 'publisherFontColor':
+								return mergeObject(
+									nextState,
+									elementNormalFontColorToWPCompatibility({
+										element: 'link',
+										newValue,
+										ref,
+									})
+								);
+						}
 					}
-				}
+
+					//
+					// Hover state
+					//
+					else if (currentState === 'hover') {
+						switch (featureId) {
+							//
+							// Font color
+							//
+							case 'publisherFontColor':
+								return mergeObject(
+									nextState,
+									elementHoverFontColorToWPCompatibility({
+										element: 'link',
+										newValue,
+										ref,
+									})
+								);
+						}
+					}
+					break;
 			}
 
 			return nextState;
