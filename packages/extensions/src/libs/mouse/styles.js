@@ -1,51 +1,83 @@
 // @flow
+
 /**
  * Publisher dependencies
  */
-import { computedCssRules } from '@publisher/style-engine';
-import type { GeneratorReturnType } from '@publisher/style-engine/src/types';
+import {
+	getCssSelector,
+	computedCssDeclarations,
+} from '@publisher/style-engine';
+import type { CssRule } from '@publisher/style-engine/src/types';
 
 /**
  * Internal dependencies
  */
+import * as config from '../base/config';
 import { attributes } from './attributes';
-import type { TBlockProps } from '../types';
+import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
-import type { TCssProps } from './types/mouse-props';
 
-interface IConfigs {
-	mouseConfig: {
-		cssGenerators: Object,
-		publisherCursor: string,
-		publisherUserSelect: string,
-		publisherPointerEvents: string,
+export const MouseStyles = ({
+	state,
+	clientId,
+	blockName,
+	currentBlock,
+	// supports,
+	// activeDeviceType,
+	selectors: blockSelectors,
+	attributes: currentBlockAttributes,
+}: StylesProps): Array<CssRule> => {
+	const { publisherCursor, publisherUserSelect, publisherPointerEvents } =
+		config.mouseConfig;
+	const blockProps = {
+		attributes: currentBlockAttributes,
+		clientId,
+		blockName,
 	};
-	blockProps: TBlockProps;
-	selector: string;
-	media: string;
-}
-
-export function MouseStyles({
-	mouseConfig: {
-		cssGenerators,
-		publisherCursor,
-		publisherUserSelect,
-		publisherPointerEvents,
-	},
-	blockProps,
-	selector,
-	media,
-}: IConfigs): Array<GeneratorReturnType> {
 	const { attributes: currBlockAttributes } = blockProps;
-	const generators = [];
-	const properties: TCssProps = {};
+	const sharedParams = {
+		state,
+		clientId,
+		currentBlock,
+		blockSelectors,
+		className: currentBlockAttributes?.className,
+	};
+	const staticDefinitionParams = {
+		type: 'static',
+		options: {
+			important: true,
+		},
+	};
+	const styleGroup: Array<CssRule> = [];
 
 	if (
 		isActiveField(publisherCursor) &&
 		currBlockAttributes.publisherCursor !==
 			attributes.publisherCursor.default
 	) {
-		properties.cursor = currBlockAttributes.publisherCursor;
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherCursor',
+			support: 'publisherCursor',
+			fallbackSupportId: 'cursor',
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					publisherCursor: [
+						{
+							...staticDefinitionParams,
+							properties: {
+								cursor: currBlockAttributes.publisherCursor,
+							},
+						},
+					],
+				},
+				blockProps
+			),
+		});
 	}
 
 	if (
@@ -53,7 +85,30 @@ export function MouseStyles({
 		currBlockAttributes.publisherUserSelect !==
 			attributes.publisherUserSelect.default
 	) {
-		properties['user-select'] = currBlockAttributes.publisherUserSelect;
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherUserSelect',
+			support: 'publisherUserSelect',
+			fallbackSupportId: 'userSelect',
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					publisherUserSelect: [
+						{
+							...staticDefinitionParams,
+							properties: {
+								'user-select':
+									currBlockAttributes.publisherUserSelect,
+							},
+						},
+					],
+				},
+				blockProps
+			),
+		});
 	}
 
 	if (
@@ -61,39 +116,31 @@ export function MouseStyles({
 		currBlockAttributes.publisherPointerEvents !==
 			attributes.publisherPointerEvents.default
 	) {
-		properties['pointer-events'] =
-			currBlockAttributes.publisherPointerEvents;
-	}
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherPointerEvents',
+			support: 'publisherPointerEvents',
+			fallbackSupportId: 'pointerEvent',
+		});
 
-	if (Object.keys(properties).length > 0) {
-		generators.push(
-			computedCssRules(
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
 				{
-					publisherMouse: [
+					publisherPointerEvents: [
 						{
-							type: 'static',
-							media,
-							selector,
-							properties,
-							options: {
-								important: true,
+							...staticDefinitionParams,
+							properties: {
+								'pointer-events':
+									currBlockAttributes.publisherPointerEvents,
 							},
 						},
 					],
 				},
 				blockProps
-			)
-		);
+			),
+		});
 	}
 
-	generators.push(
-		computedCssRules(
-			{
-				...(cssGenerators || {}),
-			},
-			blockProps
-		)
-	);
-
-	return generators.flat();
-}
+	return styleGroup;
+};
