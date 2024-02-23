@@ -14,14 +14,14 @@ import type { ControlContextRef } from '@publisher/controls/src/context/types';
  * Internal dependencies
  */
 import type { BlockDetail } from '../block-states/types';
-import {
-	linkInnerBlockSupportedBlocks,
-	linkNormalFromWPCompatibility,
-	linkNormalToWPCompatibility,
-	linkHoverFromWPCompatibility,
-	linkHoverToWPCompatibility,
-} from './compatibility/link';
+import { linkElementSupportedBlocks } from './compatibility/link';
 import { mergeObject } from '@publisher/utils';
+import {
+	elementNormalFontColorFromWPCompatibility,
+	elementHoverFontColorFromWPCompatibility,
+	elementNormalFontColorToWPCompatibility,
+	elementHoverFontColorToWPCompatibility,
+} from './compatibility/element-font-color';
 
 export const bootstrap = (): void => {
 	addFilter(
@@ -35,15 +35,20 @@ export const bootstrap = (): void => {
 				return attributes;
 			}
 
-			if (linkInnerBlockSupportedBlocks.includes(blockId)) {
+			if (
+				attributes?.style?.elements?.link &&
+				linkElementSupportedBlocks.includes(blockId)
+			) {
 				// Link normal font color
 				if (
 					!attributes?.publisherInnerBlocks?.link?.attributes
 						?.publisherFontColor
 				) {
-					const newAttributes = linkNormalFromWPCompatibility({
-						attributes,
-					});
+					const newAttributes =
+						elementNormalFontColorFromWPCompatibility({
+							element: 'link',
+							attributes,
+						});
 
 					if (newAttributes) {
 						attributes = mergeObject(attributes, newAttributes);
@@ -56,9 +61,11 @@ export const bootstrap = (): void => {
 						?.publisherBlockStates?.breakpoints?.laptop?.attributes
 						?.publisherFontColor
 				) {
-					const newAttributes = linkHoverFromWPCompatibility({
-						attributes,
-					});
+					const newAttributes =
+						elementHoverFontColorFromWPCompatibility({
+							element: 'link',
+							attributes,
+						});
 
 					if (newAttributes) {
 						attributes = mergeObject(attributes, newAttributes);
@@ -110,14 +117,15 @@ export const bootstrap = (): void => {
 			// Handle "link" inner block changes.
 			if (
 				currentBlock === 'link' &&
-				linkInnerBlockSupportedBlocks.includes(blockId)
+				linkElementSupportedBlocks.includes(blockId)
 			) {
 				if (currentState === 'normal') {
 					switch (featureId) {
 						case 'publisherFontColor':
 							return mergeObject(
 								nextState,
-								linkNormalToWPCompatibility({
+								elementNormalFontColorToWPCompatibility({
+									element: 'link',
 									newValue,
 									ref,
 								})
@@ -130,7 +138,8 @@ export const bootstrap = (): void => {
 						case 'publisherFontColor':
 							return mergeObject(
 								nextState,
-								linkHoverToWPCompatibility({
+								elementHoverFontColorToWPCompatibility({
+									element: 'link',
 									newValue,
 									ref,
 								})
