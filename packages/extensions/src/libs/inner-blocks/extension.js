@@ -101,26 +101,24 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 		);
 
 		return (
-			<>
-				<PanelBodyControl
-					title={__('Inner Blocks', 'publisher-core')}
-					initialOpen={false}
-					icon={<InnerBlocksExtensionIcon />}
-					className={extensionClassNames('inner-blocks')}
-				>
-					{forceInnerBlocks}
+			<PanelBodyControl
+				title={__('Inner Blocks', 'publisher-core')}
+				initialOpen={false}
+				icon={<InnerBlocksExtensionIcon />}
+				className={extensionClassNames('inner-blocks')}
+			>
+				{forceInnerBlocks}
 
-					{moreInnerBlocks.length > 0 && (
-						<MoreFeatures
-							label={__('More Inner Blocks', 'publisher-core')}
-							isOpen={false}
-							isChanged={moreInnerBlocksChanged}
-						>
-							{moreInnerBlocks}
-						</MoreFeatures>
-					)}
-				</PanelBodyControl>
-			</>
+				{moreInnerBlocks.length > 0 && (
+					<MoreFeatures
+						label={__('More Inner Blocks', 'publisher-core')}
+						isOpen={false}
+						isChanged={moreInnerBlocksChanged}
+					>
+						{moreInnerBlocks}
+					</MoreFeatures>
+				)}
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps
