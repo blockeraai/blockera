@@ -85,7 +85,7 @@ const publisherInnerBlocks: Object = {
 	heading1: {
 		name: 'core/heading1',
 		type: 'heading1',
-		label: __('Heading 1', 'publisher-core'),
+		label: __('H1', 'publisher-core'),
 		icon: <InnerBlockHeading1Icon />,
 		selectors: {
 			root: 'h1',
@@ -95,7 +95,7 @@ const publisherInnerBlocks: Object = {
 	heading2: {
 		name: 'core/heading2',
 		type: 'heading2',
-		label: __('Heading 2', 'publisher-core'),
+		label: __('H2', 'publisher-core'),
 		icon: <InnerBlockHeading2Icon />,
 		selectors: {
 			root: 'h2',
@@ -105,7 +105,7 @@ const publisherInnerBlocks: Object = {
 	heading3: {
 		name: 'core/heading3',
 		type: 'heading3',
-		label: __('Heading 3', 'publisher-core'),
+		label: __('H3', 'publisher-core'),
 		icon: <InnerBlockHeading3Icon />,
 		selectors: {
 			root: 'h3',
@@ -115,7 +115,7 @@ const publisherInnerBlocks: Object = {
 	heading4: {
 		name: 'core/heading4',
 		type: 'heading4',
-		label: __('Heading 4', 'publisher-core'),
+		label: __('H4', 'publisher-core'),
 		icon: <InnerBlockHeading4Icon />,
 		selectors: {
 			root: 'h4',
@@ -125,7 +125,7 @@ const publisherInnerBlocks: Object = {
 	heading5: {
 		name: 'core/heading5',
 		type: 'heading5',
-		label: __('Heading 5', 'publisher-core'),
+		label: __('H5', 'publisher-core'),
 		icon: <InnerBlockHeading5Icon />,
 		selectors: {
 			root: 'h5',
@@ -135,7 +135,7 @@ const publisherInnerBlocks: Object = {
 	heading6: {
 		name: 'core/heading6',
 		type: 'heading6',
-		label: __('Heading 6', 'publisher-core'),
+		label: __('H6', 'publisher-core'),
 		icon: <InnerBlockHeading6Icon />,
 		selectors: {
 			root: 'h6',
