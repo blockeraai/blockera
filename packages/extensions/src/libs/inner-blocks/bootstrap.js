@@ -39,6 +39,10 @@ export const bootstrap = (): void => {
 				return attributes;
 			}
 
+			if (attributes?.style?.elements === undefined) {
+				return attributes;
+			}
+
 			Object.keys(elementsSupportedBlocks).forEach((element) => {
 				switch (element) {
 					//
@@ -46,7 +50,7 @@ export const bootstrap = (): void => {
 					//
 					case 'link':
 						if (
-							!attributes?.style?.elements[element] ||
+							!attributes.style.elements[element] ||
 							!elementsSupportedBlocks[element].includes(blockId)
 						) {
 							return; // Skip this element
