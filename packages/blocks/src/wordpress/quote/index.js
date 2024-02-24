@@ -37,7 +37,6 @@ const publisherInnerBlocks: Object = {
 		name: 'citation',
 		type: 'citation',
 		label: 'Citation',
-		// $FlowFixMe
 		icon: <InnerBlockCitationIcon />,
 		selectors: {
 			root: 'cite',
