@@ -11,7 +11,7 @@ import type { MixedElement, ComponentType } from 'react';
 /**
  * Publisher dependencies
  */
-import { Button } from '@publisher/components';
+import { Button, MoreFeatures } from '@publisher/components';
 import {
 	controlInnerClassNames,
 	extensionClassNames,
@@ -26,7 +26,11 @@ import { ArrowIcon } from './icons/arrow';
 import { useBlockContext } from '../../hooks';
 import { isInnerBlock } from '../../components';
 import { InnerBlocksExtensionIcon } from './icons';
-import type { InnerBlockType, InnerBlocksProps } from './types';
+import type {
+	InnerBlockModel,
+	InnerBlockType,
+	InnerBlocksProps,
+} from './types';
 
 export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 	({ innerBlocks }: InnerBlocksProps): MixedElement => {
@@ -46,42 +50,55 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 			return <></>;
 		}
 
-		const MappedInnerBlocks = () =>
-			Object.keys(innerBlocks).map(
-				(innerBlockType: InnerBlockType | string, index: number) => {
-					const { name, label, icon } = innerBlocks[innerBlockType];
+		const forceInnerBlocks = [];
 
-					return (
-						<BaseControl
-							label={label}
-							controlName="icon"
-							columns="columns-2"
-							key={`${name}-${innerBlockType}-${index}`}
+		const moreInnerBlocks = [];
+
+		const moreInnerBlocksChanged = false; // todo implement detection for this
+
+		Object.keys(innerBlocks).forEach(
+			(innerBlockType: InnerBlockType | string) => {
+				const innerBlock: InnerBlockModel = innerBlocks[innerBlockType];
+
+				const { name, label, icon, innerBlockSettings } = innerBlock;
+
+				const item = (
+					<BaseControl
+						label={label}
+						controlName="icon"
+						columns="columns-2"
+						key={`${name}-${innerBlockType}-${innerBlockType}`}
+					>
+						<Button
+							size="input"
+							contentAlign="left"
+							onClick={() =>
+								updateBlockEditorSettings(
+									'current-block',
+									innerBlockType
+								)
+							}
+							className={controlInnerClassNames(
+								'inner-block__button',
+								'extension-inner-blocks'
+							)}
 						>
-							<Button
-								size="input"
-								contentAlign="left"
-								onClick={() =>
-									updateBlockEditorSettings(
-										'current-block',
-										innerBlockType
-									)
-								}
-								className={controlInnerClassNames(
-									'inner-block__button',
-									'extension-inner-blocks'
-								)}
-							>
-								{icon}
+							{icon}
 
-								{__('Customize', 'publisher-core')}
+							{__('Customize', 'publisher-core')}
 
-								<ArrowIcon />
-							</Button>
-						</BaseControl>
-					);
+							<ArrowIcon />
+						</Button>
+					</BaseControl>
+				);
+
+				if (innerBlockSettings?.force) {
+					forceInnerBlocks.push(item);
+				} else {
+					moreInnerBlocks.push(item);
 				}
-			);
+			}
+		);
 
 		return (
 			<>
@@ -91,7 +108,17 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 					icon={<InnerBlocksExtensionIcon />}
 					className={extensionClassNames('inner-blocks')}
 				>
-					<MappedInnerBlocks />
+					{forceInnerBlocks}
+
+					{moreInnerBlocks.length && (
+						<MoreFeatures
+							label={__('More Inner Blocks', 'publisher-core')}
+							isOpen={false}
+							isChanged={moreInnerBlocksChanged}
+						>
+							{moreInnerBlocks}
+						</MoreFeatures>
+					)}
 				</PanelBodyControl>
 			</>
 		);

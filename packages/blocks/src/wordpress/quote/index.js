@@ -26,13 +26,14 @@ import {
 	InnerBlockHeading6Icon,
 	InnerBlockLinkIcon,
 } from '@publisher/extensions';
+import type { InnerBlocks } from '@publisher/extensions/src/libs/inner-blocks/types';
 
 const attributes = {
 	...IconExtensionAttributes,
 	...sharedBlockExtensionAttributes,
 };
 
-const publisherInnerBlocks: Object = {
+const publisherInnerBlocks: InnerBlocks = {
 	citation: {
 		name: 'citation',
 		type: 'citation',
@@ -43,6 +44,9 @@ const publisherInnerBlocks: Object = {
 			publisherBackground: {},
 		},
 		attributes,
+		innerBlockSettings: {
+			force: true,
+		},
 		settings: {
 			backgroundConfig: {
 				publisherBackground: {
@@ -61,6 +65,9 @@ const publisherInnerBlocks: Object = {
 			root: 'a',
 		},
 		attributes,
+		innerBlockSettings: {
+			force: true,
+		},
 	},
 	paragraph: {
 		name: 'core/paragraph',
@@ -71,6 +78,9 @@ const publisherInnerBlocks: Object = {
 			root: 'p',
 		},
 		attributes,
+		innerBlockSettings: {
+			force: true,
+		},
 	},
 	heading: {
 		name: 'core/heading',
@@ -81,6 +91,9 @@ const publisherInnerBlocks: Object = {
 			root: 'h1, h2, h3, h4, h5, h6',
 		},
 		attributes,
+		innerBlockSettings: {
+			force: false,
+		},
 	},
 	heading1: {
 		name: 'core/heading1',
@@ -91,6 +104,9 @@ const publisherInnerBlocks: Object = {
 			root: 'h1',
 		},
 		attributes,
+		innerBlockSettings: {
+			force: false,
+		},
 	},
 	heading2: {
 		name: 'core/heading2',
@@ -101,6 +117,9 @@ const publisherInnerBlocks: Object = {
 			root: 'h2',
 		},
 		attributes,
+		innerBlockSettings: {
+			force: false,
+		},
 	},
 	heading3: {
 		name: 'core/heading3',
@@ -111,6 +130,9 @@ const publisherInnerBlocks: Object = {
 			root: 'h3',
 		},
 		attributes,
+		innerBlockSettings: {
+			force: false,
+		},
 	},
 	heading4: {
 		name: 'core/heading4',
@@ -121,6 +143,9 @@ const publisherInnerBlocks: Object = {
 			root: 'h4',
 		},
 		attributes,
+		innerBlockSettings: {
+			force: false,
+		},
 	},
 	heading5: {
 		name: 'core/heading5',
@@ -131,6 +156,9 @@ const publisherInnerBlocks: Object = {
 			root: 'h5',
 		},
 		attributes,
+		innerBlockSettings: {
+			force: false,
+		},
 	},
 	heading6: {
 		name: 'core/heading6',
@@ -141,6 +169,9 @@ const publisherInnerBlocks: Object = {
 			root: 'h6',
 		},
 		attributes,
+		innerBlockSettings: {
+			force: false,
+		},
 	},
 };
 

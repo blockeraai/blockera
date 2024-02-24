@@ -17,13 +17,14 @@ import {
 	IconExtensionAttributes,
 	InnerBlockLinkIcon,
 } from '@publisher/extensions';
+import type { InnerBlocks } from '@publisher/extensions/src/libs/inner-blocks/types';
 
 const attributes = {
 	...IconExtensionAttributes,
 	...sharedBlockExtensionAttributes,
 };
 
-const publisherInnerBlocks: Object = {
+const publisherInnerBlocks: InnerBlocks = {
 	link: {
 		name: 'core/link',
 		type: 'link',
@@ -33,6 +34,9 @@ const publisherInnerBlocks: Object = {
 			root: 'a',
 		},
 		attributes,
+		innerBlockSettings: {
+			force: true,
+		},
 	},
 };
 
