@@ -16,7 +16,7 @@ import type {
 	StaticStyle,
 	DynamicStyle,
 	CssGeneratorModel,
-	TUseCssSelectors,
+	CssRule,
 } from './types';
 
 /**
@@ -68,7 +68,7 @@ export const injectHelpersToCssGenerators = (
  * @param {Object} blockProps The current block properties.
  * @return {string} The generated stylesheet with style definition and block properties.
  */
-export const computedCssRules = (
+export const computedCssDeclarations = (
 	styleDefinitions: Object,
 	blockProps: {
 		clientId: string,
@@ -243,7 +243,11 @@ export const getSelector = ({
 	state: TStates,
 	clientId: string,
 	className: string,
-	selectors: TUseCssSelectors,
+	selectors: {
+		[key: TStates]: {
+			[key: 'master' | InnerBlockType | string]: string,
+		},
+	},
 	currentBlock: 'master' | InnerBlockType | string,
 }): string => {
 	if (!state) {
@@ -257,11 +261,38 @@ export const getSelector = ({
 	}
 
 	if (className) {
-		selector = selector.replace(/\.{{className}}/g, `.${className}`);
+		selector = selector.replace(/{{className}}/g, `.${className}`);
 	}
 	if (clientId) {
-		selector = selector.replace(/\.{{BLOCK_ID}}/g, `#block-${clientId}`);
+		selector = selector.replace(/{{BLOCK_ID}}/g, `#block-${clientId}`);
 	}
 
 	return selector;
+};
+
+/**
+ * Combine css declaration for same selectors.
+ *
+ * @param {Array<CssRule>} cssRules the css rules.
+ * @return {Array<CssRule>} the combined css declarations linked with same css selector.
+ */
+export const combineDeclarations = (
+	cssRules: Array<CssRule>
+): Array<CssRule> => {
+	const combinedObjects: { [key: string]: CssRule } = {};
+
+	cssRules.forEach((item) => {
+		const { selector, declarations } = item;
+
+		if (combinedObjects[selector]) {
+			combinedObjects[selector].declarations = [
+				...(combinedObjects[selector].declarations || []),
+				...declarations,
+			];
+		} else {
+			combinedObjects[selector] = { selector, declarations };
+		}
+	});
+
+	return Object.values(combinedObjects);
 };

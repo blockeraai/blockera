@@ -15,6 +15,7 @@ import { isEquals } from '@publisher/utils';
  */
 import { isInnerBlock } from '../../components';
 import type {
+	TStates,
 	StateTypes,
 	BreakpointTypes,
 } from '../../libs/block-states/types';
@@ -105,11 +106,11 @@ export const memoizedBlockStates: (
 	(
 		currentBlockAttributes: Object,
 		action: Object,
-		insideInnerBlock: boolean = false
-	) => {
+		insideInnerBlock?: boolean = false
+	): Object => {
 		const { currentState, currentBreakpoint, currentInnerBlockState } =
 			action;
-		const stateType = insideInnerBlock
+		const stateType: TStates = insideInnerBlock
 			? currentInnerBlockState
 			: currentState;
 		const breakpoints =

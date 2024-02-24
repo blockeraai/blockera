@@ -10,7 +10,7 @@ import { useState } from '@wordpress/element';
  */
 import { controlInnerClassNames } from '@publisher/classnames';
 import { useDragValue } from '@publisher/utils';
-import { useValueAddon } from '@publisher/hooks';
+import { setValueAddon, useValueAddon } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -55,12 +55,8 @@ export function MarginRight({
 		useValueAddon({
 			types: ['variable'],
 			value: value.margin.right,
-			setValue: (newValue: any): void => {
-				setValue({
-					value,
-					valueAddon: newValue,
-				});
-			},
+			setValue: (newValue: any): void =>
+				setValueAddon(newValue, setValue, defaultValue),
 			variableTypes: ['spacing'],
 			onChange: (newValue) => {
 				setOpenPopover('');

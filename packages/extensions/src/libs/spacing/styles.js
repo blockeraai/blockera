@@ -1,30 +1,25 @@
 // @flow
+
 /**
  * Publisher dependencies
  */
-import { computedCssRules } from '@publisher/style-engine';
+import {
+	getCssSelector,
+	computedCssDeclarations,
+} from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
-import type { GeneratorReturnType } from '@publisher/style-engine/src/types';
+import type { CssRule } from '@publisher/style-engine/src/types';
 
 /**
  * Internal dependencies
  */
+import * as config from '../base/config';
 import { attributes } from './attributes';
-import type { TBlockProps } from '../types';
+import type { StylesProps } from '../types';
 import { useBlocksStore } from '../../hooks';
 import { isUndefined } from '@publisher/utils';
 import { isActiveField } from '../../api/utils';
 import type { TSpacingDefaultProps, TCssProps } from './types/spacing-props';
-
-interface IConfigs {
-	spacingConfig: {
-		cssGenerators: Object,
-		publisherSpacing: TSpacingDefaultProps,
-	};
-	blockProps: TBlockProps;
-	selector: string;
-	media: string;
-}
 
 function updateCssProps(spacingProps: TSpacingDefaultProps): TCssProps {
 	const properties: TCssProps = {};
@@ -82,15 +77,39 @@ function updateCssProps(spacingProps: TSpacingDefaultProps): TCssProps {
 	return properties;
 }
 
-export function SpacingStyles({
-	spacingConfig: { cssGenerators, publisherSpacing },
-	blockProps,
-	selector,
-	media,
-}: IConfigs): Array<GeneratorReturnType> {
-	const { attributes: _attributes, blockName } = blockProps;
+export const SpacingStyles = ({
+	state,
+	clientId,
+	blockName,
+	currentBlock,
+	// supports,
+	// activeDeviceType,
+	selectors: blockSelectors,
+	attributes: currentBlockAttributes,
+}: StylesProps): Array<CssRule> => {
+	const { publisherSpacing } = config.spacingConfig;
+	const blockProps = {
+		clientId,
+		blockName,
+		attributes: currentBlockAttributes,
+	};
+	const { attributes: _attributes } = blockProps;
+	const sharedParams = {
+		state,
+		clientId,
+		currentBlock,
+		blockSelectors,
+		className: currentBlockAttributes?.className,
+	};
+	const staticDefinitionParams = {
+		type: 'static',
+		options: {
+			important: true,
+		},
+	};
+
 	const { hasBlockSupport } = useBlocksStore();
-	const generators = [];
+
 	const fallbackProps = !hasBlockSupport(blockName, 'spacing')
 		? {}
 		: updateCssProps(_attributes?.style?.spacing);
@@ -100,35 +119,27 @@ export function SpacingStyles({
 			? updateCssProps(_attributes.publisherSpacing)
 			: fallbackProps;
 
-	if (Object.keys(properties).length > 0) {
-		generators.push(
-			computedCssRules(
+	const pickedSelector = getCssSelector({
+		...sharedParams,
+		query: 'publisherSpacing',
+		support: 'publisherSpacing',
+		fallbackSupportId: 'spacing',
+	});
+
+	return [
+		{
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
 				{
 					publisherSpacing: [
 						{
-							type: 'static',
-							media,
-							selector,
+							...staticDefinitionParams,
 							properties,
-							options: {
-								important: true,
-							},
 						},
 					],
 				},
 				blockProps
-			)
-		);
-	}
-
-	generators.push(
-		computedCssRules(
-			{
-				...(cssGenerators || {}),
-			},
-			blockProps
-		)
-	);
-
-	return generators.flat();
-}
+			),
+		},
+	];
+};

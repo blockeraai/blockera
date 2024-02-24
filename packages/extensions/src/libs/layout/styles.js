@@ -1,72 +1,170 @@
 // @flow
+
 /**
  * Publisher dependencies
  */
-import { computedCssRules } from '@publisher/style-engine';
+import {
+	getCssSelector,
+	computedCssDeclarations,
+} from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
-import type { GeneratorReturnType } from '@publisher/style-engine/src/types';
 
 /**
  * Internal dependencies
  */
+import * as config from '../base/config';
 import { attributes } from './attributes';
+import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
-import type { TBlockProps } from '../types';
-import type { TCssProps } from './types/layout-props';
+import type { CssRule } from '@publisher/style-engine/src/types';
 
-interface IConfigs {
-	layoutConfig: {
-		cssGenerators: Object,
-		publisherDisplay: string,
-		publisherGap: string,
-		publisherFlexWrap: string,
-		publisherAlignContent: string,
-	};
-	blockProps: TBlockProps;
-	selector: string;
-	media: string;
-}
-
-export function LayoutStyles({
-	layoutConfig: {
-		cssGenerators,
+export const LayoutStyles = ({
+	state,
+	clientId,
+	blockName,
+	currentBlock,
+	// supports,
+	// activeDeviceType,
+	selectors: blockSelectors,
+	attributes: currentBlockAttributes,
+}: StylesProps): Array<CssRule> => {
+	const {
 		publisherDisplay,
 		publisherGap,
 		publisherFlexWrap,
 		publisherAlignContent,
-	},
-	blockProps,
-	selector,
-	media,
-}: IConfigs): Array<GeneratorReturnType> {
+	} = config.layoutConfig;
+	const blockProps = {
+		clientId,
+		blockName,
+		attributes: currentBlockAttributes,
+	};
 	const { attributes: _attributes } = blockProps;
-
-	const generators = [];
-
-	const properties: TCssProps = {};
+	const sharedParams = {
+		state,
+		clientId,
+		currentBlock,
+		blockSelectors,
+		className: currentBlockAttributes?.className,
+	};
+	const staticDefinitionParams = {
+		type: 'static',
+		options: {
+			important: true,
+		},
+	};
+	const styleGroup: Array<CssRule> = [];
 
 	if (
 		isActiveField(publisherDisplay) &&
 		_attributes.publisherDisplay !== attributes.publisherDisplay.default
 	) {
-		properties.display = _attributes.publisherDisplay;
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherDisplay',
+			support: 'publisherDisplay',
+			fallbackSupportId: 'display',
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					publisherDisplay: [
+						{
+							...staticDefinitionParams,
+							properties: {
+								display: _attributes.publisherDisplay,
+							},
+						},
+					],
+				},
+				blockProps
+			),
+		});
 	}
 
 	if (_attributes.publisherDisplay === 'flex') {
 		if (_attributes?.publisherFlexLayout !== undefined) {
-			if (_attributes?.publisherFlexLayout.direction) {
-				properties['flex-direction'] =
-					_attributes.publisherFlexLayout.direction;
+			if (_attributes?.publisherFlexLayout?.direction) {
+				const pickedSelector = getCssSelector({
+					...sharedParams,
+					query: 'publisherFlexLayout.direction',
+					fallbackSupportId: 'flexDirection',
+				});
+
+				styleGroup.push({
+					selector: pickedSelector,
+					declarations: computedCssDeclarations(
+						{
+							publisherFlexLayout: [
+								{
+									...staticDefinitionParams,
+									properties: {
+										'flex-direction':
+											_attributes.publisherFlexLayout
+												.direction,
+									},
+								},
+							],
+						},
+						blockProps
+					),
+				});
 			}
 
-			if (_attributes?.publisherFlexLayout.alignItems) {
-				properties['align-items'] =
-					_attributes.publisherFlexLayout.alignItems;
+			if (_attributes?.publisherFlexLayout?.alignItems) {
+				const pickedSelector = getCssSelector({
+					...sharedParams,
+					query: 'publisherFlexLayout.alignItems',
+					fallbackSupportId: 'alignItems',
+				});
+
+				styleGroup.push({
+					selector: pickedSelector,
+					declarations: computedCssDeclarations(
+						{
+							publisherFlexLayout: [
+								{
+									...staticDefinitionParams,
+									properties: {
+										'align-items':
+											_attributes.publisherFlexLayout
+												.alignItems,
+									},
+								},
+							],
+						},
+						blockProps
+					),
+				});
 			}
 
-			if (_attributes?.publisherFlexLayout.justifyContent) {
-				properties['justify-content'] =
-					_attributes.publisherFlexLayout.justifyContent;
+			if (_attributes?.publisherFlexLayout?.justifyContent) {
+				const pickedSelector = getCssSelector({
+					...sharedParams,
+					query: 'publisherFlexLayout.justifyContent',
+					fallbackSupportId: 'justifyContent',
+				});
+
+				styleGroup.push({
+					selector: pickedSelector,
+					declarations: computedCssDeclarations(
+						{
+							publisherFlexLayout: [
+								{
+									...staticDefinitionParams,
+									properties: {
+										'justify-content':
+											_attributes.publisherFlexLayout
+												.justifyContent,
+									},
+								},
+							],
+						},
+						blockProps
+					),
+				});
 			}
 		}
 
@@ -78,20 +176,86 @@ export function LayoutStyles({
 				const gap = getValueAddonRealValue(
 					_attributes.publisherGap?.gap
 				);
-				if (gap) properties.gap = gap;
+				if (gap) {
+					const pickedSelector = getCssSelector({
+						...sharedParams,
+						query: 'publisherGap',
+						support: 'publisherGap',
+						fallbackSupportId: 'gap',
+					});
+
+					styleGroup.push({
+						selector: pickedSelector,
+						declarations: computedCssDeclarations(
+							{
+								publisherGap: [
+									{
+										...staticDefinitionParams,
+										properties: {
+											gap: _attributes.publisherGap.gap,
+										},
+									},
+								],
+							},
+							blockProps
+						),
+					});
+				}
 			} else {
 				const rows = getValueAddonRealValue(
 					_attributes.publisherGap?.rows
 				);
 				if (rows) {
-					properties['row-gap'] = rows;
+					const pickedSelector = getCssSelector({
+						...sharedParams,
+						query: 'publisherGap.rows',
+						fallbackSupportId: 'rowGap',
+					});
+
+					styleGroup.push({
+						selector: pickedSelector,
+						declarations: computedCssDeclarations(
+							{
+								publisherGap: [
+									{
+										...staticDefinitionParams,
+										properties: {
+											'row-gap': rows,
+										},
+									},
+								],
+							},
+							blockProps
+						),
+					});
 				}
 
 				const columns = getValueAddonRealValue(
 					_attributes.publisherGap?.columns
 				);
 				if (columns) {
-					properties['column-gap'] = columns;
+					const pickedSelector = getCssSelector({
+						...sharedParams,
+						query: 'publisherGap.columns',
+						fallbackSupportId: 'columnGap',
+					});
+
+					styleGroup.push({
+						selector: pickedSelector,
+						declarations: computedCssDeclarations(
+							{
+								publisherGap: [
+									{
+										...staticDefinitionParams,
+										properties: {
+											'column-gap': columns,
+										},
+									},
+								],
+							},
+							blockProps
+						),
+					});
 				}
 			}
 		}
@@ -101,14 +265,38 @@ export function LayoutStyles({
 			_attributes.publisherFlexWrap !==
 				attributes.publisherFlexWrap.default
 		) {
-			properties['flex-wrap'] = _attributes.publisherFlexWrap.value;
+			let value = _attributes.publisherFlexWrap?.value;
 
 			if (
-				_attributes.publisherFlexWrap.value === 'wrap' &&
-				_attributes.publisherFlexWrap.reverse
+				_attributes.publisherFlexWrap?.value === 'wrap' &&
+				_attributes.publisherFlexWrap?.reverse
 			) {
-				properties['flex-wrap'] += '-reverse';
+				value += '-reverse';
 			}
+
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherFlexWrap',
+				support: 'publisherFlexWrap',
+				fallbackSupportId: 'flexWrap',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherFlexWrap: [
+							{
+								...staticDefinitionParams,
+								properties: {
+									'flex-wrap': value,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
 		}
 
 		if (
@@ -116,36 +304,32 @@ export function LayoutStyles({
 			_attributes.publisherAlignContent !==
 				attributes.publisherAlignContent.default
 		) {
-			properties['align-content'] = _attributes.publisherAlignContent;
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherAlignContent',
+				support: 'publisherAlignContent',
+				fallbackSupportId: 'alignContent',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherAlignContent: [
+							{
+								...staticDefinitionParams,
+								properties: {
+									'align-content':
+										_attributes.publisherAlignContent,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
 		}
 	}
 
-	if (Object.keys(properties).length > 0) {
-		generators.push(
-			computedCssRules(
-				{
-					publisherWidth: [
-						{
-							type: 'static',
-							media,
-							selector,
-							properties,
-						},
-					],
-				},
-				{ attributes: _attributes, ...blockProps }
-			)
-		);
-	}
-
-	generators.push(
-		computedCssRules(
-			{
-				...(cssGenerators || {}),
-			},
-			{ attributes: _attributes, ...blockProps }
-		)
-	);
-
-	return generators.flat();
-}
+	return styleGroup;
+};

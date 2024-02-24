@@ -11,7 +11,7 @@ import { useState } from '@wordpress/element';
  */
 import { controlClassNames } from '@publisher/classnames';
 import { ColorIndicator, Button } from '@publisher/components';
-import { useValueAddon } from '@publisher/hooks';
+import { setValueAddon, useValueAddon } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -69,12 +69,8 @@ export default function ColorControl({
 	} = useValueAddon({
 		types: controlAddonTypes,
 		value,
-		setValue: (newValue: any): void => {
-			setValue({
-				value,
-				valueAddon: newValue,
-			});
-		},
+		setValue: (newValue: any): void =>
+			setValueAddon(newValue, setValue, defaultValue),
 		variableTypes,
 		dynamicValueTypes,
 		onChange: setValue,

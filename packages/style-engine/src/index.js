@@ -2,11 +2,11 @@
 
 export {
 	createCssRule,
-	computedCssRules,
+	computedCssDeclarations,
 	injectHelpersToCssGenerators,
 } from './utils';
 
-export { getCssSelectors, useMedia } from './hooks';
+export { getCssSelector, useMedia } from './hooks';
 
 export { default as CssGenerator } from './css-generator';
 

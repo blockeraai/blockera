@@ -242,3 +242,5 @@ export const useValueAddon = ({
 		handleOnClickDV,
 	};
 };
+
+export * from './helpers';
