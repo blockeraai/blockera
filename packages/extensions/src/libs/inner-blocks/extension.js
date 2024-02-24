@@ -66,7 +66,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 					<BaseControl
 						label={label}
 						controlName="icon"
-						columns="columns-2"
+						columns="1.2fr 2fr"
 						key={`${name}-${innerBlockType}-${innerBlockType}`}
 					>
 						<Button
