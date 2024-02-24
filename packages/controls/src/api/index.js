@@ -63,7 +63,7 @@ export function registerControl({
 	return getControl(name);
 }
 
-export function unregisterControl(names, store) {
+export function unregisterControl(names: Array<string>, store: string): void {
 	//get `addControl` of `publisher-core/controls` || `publisher-core/controls/repeater` store dispatchers
 	const { removeControl } =
 		repeaterControlStoreName === store
