@@ -24,6 +24,7 @@ import {
 	InnerBlockHeading4Icon,
 	InnerBlockHeading5Icon,
 	InnerBlockHeading6Icon,
+	InnerBlockLinkIcon,
 } from '@publisher/extensions';
 
 const attributes = {
@@ -51,6 +52,16 @@ const publisherInnerBlocks: Object = {
 				},
 			},
 		},
+	},
+	link: {
+		name: 'core/link',
+		type: 'link',
+		label: __('Link', 'publisher-core'),
+		icon: <InnerBlockLinkIcon />,
+		selectors: {
+			root: 'a',
+		},
+		attributes,
 	},
 	paragraph: {
 		name: 'core/paragraph',
