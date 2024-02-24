@@ -110,7 +110,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 				>
 					{forceInnerBlocks}
 
-					{moreInnerBlocks.length && (
+					{moreInnerBlocks.length > 0 && (
 						<MoreFeatures
 							label={__('More Inner Blocks', 'publisher-core')}
 							isOpen={false}
