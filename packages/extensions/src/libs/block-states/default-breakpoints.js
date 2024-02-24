@@ -4,23 +4,19 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import type { BreakpointTypes, TStates } from './types';
-
-/**
- * Publisher dependencies
- */
 
 /**
  * Internal dependencies
  */
+import type { BreakpointTypes, TStates, TBreakpoint } from './types';
 
-export default function (
-	parentState: TStates = 'normal'
-): Array<BreakpointTypes> {
+export default function (parentState: TStates = 'normal'): {
+	[key: TBreakpoint]: BreakpointTypes,
+} {
 	const attributes = 'normal' === parentState ? {} : { attributes: {} };
 
-	return [
-		{
+	return {
+		'extra-large': {
 			type: 'extra-large',
 			force: false,
 			label: __('Extra Large Screen', 'publisher-core'),
@@ -30,7 +26,7 @@ export default function (
 			},
 			attributes: {},
 		},
-		{
+		large: {
 			type: 'large',
 			force: false,
 			label: __('Large Screen', 'publisher-core'),
@@ -40,7 +36,7 @@ export default function (
 			},
 			attributes: {},
 		},
-		{
+		desktop: {
 			type: 'desktop',
 			force: false,
 			label: __('Desktop', 'publisher-core'),
@@ -50,7 +46,7 @@ export default function (
 			},
 			attributes: {},
 		},
-		{
+		laptop: {
 			type: 'laptop',
 			force: true,
 			label: __('Laptop', 'publisher-core'),
@@ -60,7 +56,7 @@ export default function (
 			},
 			...attributes,
 		},
-		{
+		tablet: {
 			type: 'tablet',
 			force: false,
 			label: __('Tablet', 'publisher-core'),
@@ -70,7 +66,7 @@ export default function (
 			},
 			attributes: {},
 		},
-		{
+		'mobile-landscape': {
 			type: 'mobile-landscape',
 			force: false,
 			label: __('Mobile Landscape', 'publisher-core'),
@@ -80,7 +76,7 @@ export default function (
 			},
 			attributes: {},
 		},
-		{
+		mobile: {
 			type: 'mobile',
 			force: false,
 			label: __('Mobile', 'publisher-core'),
@@ -90,5 +86,5 @@ export default function (
 			},
 			attributes: {},
 		},
-	];
+	};
 }

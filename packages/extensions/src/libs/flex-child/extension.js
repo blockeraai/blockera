@@ -15,6 +15,7 @@ import {
 	InputControl,
 	ToggleSelectControl,
 } from '@publisher/controls';
+import { hasSameProps } from '@publisher/utils';
 import { componentClassNames } from '@publisher/classnames';
 import { FeatureWrapper } from '@publisher/components';
 
@@ -24,7 +25,7 @@ import { FeatureWrapper } from '@publisher/components';
 import { isShowField } from '../../api/utils';
 import { default as GearIcon } from './icons/gear';
 import { default as SizingNotIcon } from './icons/sizing-not';
-import { generateExtensionId, hasSameProps } from '../utils';
+import { generateExtensionId } from '../utils';
 import { default as SizingGrowIcon } from './icons/sizing-grow';
 import { default as AlignStretchIcon } from './icons/align-stretch';
 import { default as SizingShrinkIcon } from './icons/sizing-shrink';

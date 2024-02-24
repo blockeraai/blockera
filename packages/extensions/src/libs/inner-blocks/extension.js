@@ -11,7 +11,7 @@ import type { MixedElement, ComponentType } from 'react';
 /**
  * Publisher dependencies
  */
-import { Button } from '@publisher/components';
+import { Button, MoreFeatures } from '@publisher/components';
 import {
 	controlInnerClassNames,
 	extensionClassNames,
@@ -21,17 +21,20 @@ import { BaseControl, PanelBodyControl } from '@publisher/controls';
 /**
  * Internal dependencies
  */
-import { hasSameProps } from '../utils';
+import { hasSameProps } from '@publisher/utils';
+import { ArrowIcon } from './icons/arrow';
 import { useBlockContext } from '../../hooks';
 import { isInnerBlock } from '../../components';
 import { InnerBlocksExtensionIcon } from './icons';
-import type { InnerBlockModel, InnerBlocksProps } from './types';
-import { ArrowIcon } from './icons/arrow';
+import type {
+	InnerBlockModel,
+	InnerBlockType,
+	InnerBlocksProps,
+} from './types';
 
 export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 	({ innerBlocks }: InnerBlocksProps): MixedElement => {
-		const { handleOnSwitchBlockSettings: switchBlockSettings } =
-			useBlockContext();
+		const { updateBlockEditorSettings } = useBlockContext();
 
 		const { currentBlock = 'master' } = useSelect((select) => {
 			const { getExtensionCurrentBlock } = select(
@@ -43,54 +46,79 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 			};
 		});
 
-		const MappedInnerBlocks = () =>
-			innerBlocks.map(
-				(
-					{ name, label, type, icon }: InnerBlockModel,
-					index: number
-				) => {
-					return (
-						<BaseControl
-							label={label}
-							controlName="icon"
-							columns="columns-2"
-							key={`${name}-${type}-${index}`}
-						>
-							<Button
-								size="input"
-								contentAlign="left"
-								onClick={() => switchBlockSettings(type)}
-								className={controlInnerClassNames(
-									'inner-block__button',
-									'extension-inner-blocks'
-								)}
-							>
-								{icon}
-
-								{__('Customize', 'publisher-core')}
-
-								<ArrowIcon />
-							</Button>
-						</BaseControl>
-					);
-				}
-			);
-
-		if (!innerBlocks.length || isInnerBlock(currentBlock)) {
+		if (!Object.values(innerBlocks).length || isInnerBlock(currentBlock)) {
 			return <></>;
 		}
 
+		const forceInnerBlocks = [];
+
+		const moreInnerBlocks = [];
+
+		const moreInnerBlocksChanged = false; // todo implement detection for this
+
+		Object.keys(innerBlocks).forEach(
+			(innerBlockType: InnerBlockType | string) => {
+				const innerBlock: InnerBlockModel = innerBlocks[innerBlockType];
+
+				const { name, label, icon, innerBlockSettings } = innerBlock;
+
+				const item = (
+					<BaseControl
+						label={label}
+						controlName="icon"
+						columns="1.2fr 2fr"
+						key={`${name}-${innerBlockType}-${innerBlockType}`}
+					>
+						<Button
+							size="input"
+							contentAlign="left"
+							onClick={() =>
+								updateBlockEditorSettings(
+									'current-block',
+									innerBlockType
+								)
+							}
+							className={controlInnerClassNames(
+								'inner-block__button',
+								'extension-inner-blocks'
+							)}
+						>
+							{icon}
+
+							{__('Customize', 'publisher-core')}
+
+							<ArrowIcon />
+						</Button>
+					</BaseControl>
+				);
+
+				if (innerBlockSettings?.force) {
+					forceInnerBlocks.push(item);
+				} else {
+					moreInnerBlocks.push(item);
+				}
+			}
+		);
+
 		return (
-			<>
-				<PanelBodyControl
-					title={__('Inner Blocks', 'publisher-core')}
-					initialOpen={false}
-					icon={<InnerBlocksExtensionIcon />}
-					className={extensionClassNames('inner-blocks')}
-				>
-					<MappedInnerBlocks />
-				</PanelBodyControl>
-			</>
+			<PanelBodyControl
+				title={__('Inner Blocks', 'publisher-core')}
+				initialOpen={false}
+				icon={<InnerBlocksExtensionIcon />}
+				className={extensionClassNames('inner-blocks')}
+			>
+				{forceInnerBlocks}
+
+				{moreInnerBlocks.length > 0 && (
+					<MoreFeatures
+						label={__('More Inner Blocks', 'publisher-core')}
+						isOpen={false}
+						isChanged={moreInnerBlocksChanged}
+					>
+						{moreInnerBlocks}
+					</MoreFeatures>
+				)}
+			</PanelBodyControl>
 		);
 	},
 	hasSameProps

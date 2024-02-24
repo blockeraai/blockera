@@ -77,10 +77,8 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 		...settings,
 		attributes: {
 			...overrideAttribute,
-			publisherInnerBlocks: {
-				...innerBlocksExtensionsAttributes.publisherInnerBlocks,
-				default: [],
-			},
+			publisherInnerBlocks:
+				innerBlocksExtensionsAttributes.publisherInnerBlocks,
 			publisherPropsId: {
 				type: 'string',
 				default: '',
@@ -94,7 +92,7 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 			...(settings.selectors || {}),
 			...(additional.selectors || {}),
 		},
-		edit(props) {
+		edit({ isSelected, ...props }) {
 			if (isFunction(additional?.edit)) {
 				return (
 					<>

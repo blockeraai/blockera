@@ -2,7 +2,12 @@
 /**
  * External dependencies
  */
-import { select } from '@wordpress/data';
+import { select, useSelect } from '@wordpress/data';
+
+/**
+ * Publisher dependencies
+ */
+import { isEmpty, isEquals, omit } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -16,7 +21,7 @@ import type {
 	TStatesLabel,
 } from '../types';
 import getBreakpoints from '../default-breakpoints';
-import { isEmpty, isEquals, omit } from '@publisher/utils';
+import { isInnerBlock } from '../../../components';
 
 export type State = {
 	type: TStates,
@@ -51,25 +56,49 @@ export const getBlockStates = (): Array<StateGraph> => {
 		return [];
 	}
 
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	const { currentBlock } = useSelect((select) => {
+		const { getExtensionCurrentBlock } = select(
+			'publisher-core/extensions'
+		);
+
+		return {
+			currentBlock: getExtensionCurrentBlock(),
+		};
+	});
+
+	const { getExtensionCurrentBlockStateBreakpoint } = select(
+		'publisher-core/extensions'
+	);
 	const breakpoints = getBreakpoints();
 
 	const normals = [];
+	let blockAttributes = block.attributes;
+	let publisherBlockStates = blockAttributes.publisherBlockStates;
 
-	return breakpoints
+	if (isInnerBlock(currentBlock)) {
+		blockAttributes =
+			blockAttributes.publisherInnerBlocks[currentBlock].attributes;
+		publisherBlockStates =
+			blockAttributes.publisherBlockStates ||
+			block.attributes.publisherBlockStates;
+	}
+
+	return Object.values(breakpoints)
 		.map((breakpoint: BreakpointTypes): StateGraph => {
 			let states: StateGraphStates = [];
 
-			states = block.attributes.publisherBlockStates
+			states = Object.values(publisherBlockStates)
 				.map((state: StateTypes): State => {
 					if (
 						'normal' === state.type &&
 						breakpoint.type ===
-							block.attributes.publisherCurrentDevice
+							getExtensionCurrentBlockStateBreakpoint()
 					) {
 						return {
 							type: state.type,
 							label: state.label,
-							attributes: omit(block.attributes, [
+							attributes: omit(blockAttributes, [
 								'publisherBlockStates',
 							]),
 						};
@@ -78,13 +107,11 @@ export const getBlockStates = (): Array<StateGraph> => {
 					return {
 						type: state.type,
 						label: state.label,
-						attributes: state.breakpoints.find(
-							(b: BreakpointTypes): boolean => {
-								return b.type === breakpoint.type;
-							}
-						)?.attributes,
+						attributes:
+							state.breakpoints[breakpoint.type]?.attributes,
 					};
 				})
+				// $FlowFixMe
 				.filter((state: State): boolean => !isEmpty(state.attributes));
 
 			return {

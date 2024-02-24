@@ -5,17 +5,16 @@
  */
 import { isInnerBlock } from '../../components';
 import type { CalculateCurrentAttributesProps } from './types';
-import type { InnerBlockModel } from '../../libs/inner-blocks/types';
 
 export const useCalculateCurrentAttributes = ({
 	attributes,
 	currentBlock,
-	breakpointId,
-	innerBlockId,
-	blockStateId,
+	currentState,
 	isNormalState,
+	currentBreakpoint,
 	currentInnerBlock,
 	publisherInnerBlocks,
+	currentInnerBlockState,
 }: CalculateCurrentAttributesProps): Object => {
 	let currentAttributes: Object = {};
 
@@ -26,28 +25,39 @@ export const useCalculateCurrentAttributes = ({
 			currentAttributes = attributes;
 		}
 	} else if (isInnerBlock(currentBlock)) {
-		if (publisherInnerBlocks[innerBlockId]) {
-			currentInnerBlock = publisherInnerBlocks[innerBlockId];
+		if (publisherInnerBlocks[currentBlock] && !currentInnerBlock) {
+			currentInnerBlock = publisherInnerBlocks[currentBlock];
+		}
+		if (
+			!currentInnerBlock?.attributes?.publisherBlockStates[
+				currentInnerBlockState
+			]
+		) {
+			currentInnerBlockState = 'normal';
 		}
 
 		currentAttributes = {
 			...currentInnerBlock?.attributes,
 			...(currentInnerBlock?.attributes?.publisherBlockStates[
-				blockStateId
-			]?.breakpoints[breakpointId]
+				currentInnerBlockState
+			]?.breakpoints[currentBreakpoint]
 				? currentInnerBlock?.attributes?.publisherBlockStates[
-						blockStateId
-				  ]?.breakpoints[breakpointId]?.attributes
+						currentInnerBlockState
+				  ]?.breakpoints[currentBreakpoint]?.attributes
 				: {}),
 		};
 	} else {
+		if (!attributes.publisherBlockStates[currentState]) {
+			currentState = 'normal';
+		}
+
 		currentAttributes = {
 			...attributes,
-			...(attributes.publisherBlockStates[blockStateId].breakpoints[
-				breakpointId
+			...(attributes.publisherBlockStates[currentState].breakpoints[
+				currentBreakpoint
 			]
-				? attributes.publisherBlockStates[blockStateId].breakpoints[
-						breakpointId
+				? attributes.publisherBlockStates[currentState].breakpoints[
+						currentBreakpoint
 				  ].attributes
 				: {}),
 		};
@@ -62,13 +72,8 @@ export const useCalculateCurrentAttributes = ({
 	} else {
 		currentAttributes = {
 			...attributes,
+			...((publisherInnerBlocks[currentBlock] || {})?.attributes || {}),
 			...currentAttributes,
-			...((
-				publisherInnerBlocks.find(
-					(innerBlock: InnerBlockModel): boolean =>
-						innerBlock.type === currentBlock
-				) || {}
-			)?.attributes || {}),
 		};
 	}
 

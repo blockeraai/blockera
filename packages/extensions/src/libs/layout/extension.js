@@ -17,6 +17,7 @@ import {
 	NoticeControl,
 	LayoutMatrixControl,
 } from '@publisher/controls';
+import { hasSameProps } from '@publisher/utils';
 import { Flex, Button, FeatureWrapper } from '@publisher/components';
 import { componentClassNames } from '@publisher/classnames';
 
@@ -31,7 +32,7 @@ import { default as ReverseIcon } from './icons/reverse';
 import type { TLayoutProps } from './types/layout-props';
 import { GridBuilder } from '../../components/grid-builder';
 import { default as WrapWrapIcon } from './icons/wrap-wrap';
-import { generateExtensionId, hasSameProps } from '../utils';
+import { generateExtensionId } from '../utils';
 import { default as WrapNoWrapIcon } from './icons/wrap-nowrap';
 import { default as DisplayNoneIcon } from './icons/display-none';
 import { default as DisplayFlexIcon } from './icons/display-flex';

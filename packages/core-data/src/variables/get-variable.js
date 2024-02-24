@@ -15,32 +15,28 @@ import { getColor } from './color';
 import { getSpacing } from './spacing';
 import type { VariableItem } from './types';
 
-const _getVariable = function (type: string, id: string): ?VariableItem {
-	switch (type) {
-		case 'width-size':
-			return getWidthSize(id);
+export const getVariable: (type: string, id: string) => ?VariableItem = memoize(
+	function (type: string, id: string): ?VariableItem {
+		switch (type) {
+			case 'width-size':
+				return getWidthSize(id);
 
-		case 'font-size':
-			return getFontSize(id);
+			case 'font-size':
+				return getFontSize(id);
 
-		case 'linear-gradient':
-			return getLinearGradient(id);
+			case 'linear-gradient':
+				return getLinearGradient(id);
 
-		case 'radial-gradient':
-			return getRadialGradient(id);
+			case 'radial-gradient':
+				return getRadialGradient(id);
 
-		case 'spacing':
-			return getSpacing(id);
+			case 'spacing':
+				return getSpacing(id);
 
-		case 'color':
-			return getColor(id);
+			case 'color':
+				return getColor(id);
+		}
+
+		return null;
 	}
-
-	return null;
-};
-
-const _getVariableMemoized = memoize(_getVariable);
-
-export const getVariable = (type: string, id: string): ?VariableItem => {
-	return _getVariableMemoized(type, id);
-};
+);

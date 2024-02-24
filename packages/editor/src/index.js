@@ -8,19 +8,22 @@ import { dispatch } from '@wordpress/data';
 /**
  * Publisher dependencies
  */
-import type { BreakpointTypes } from '@publisher/extensions/src/libs/block-states/types';
+import type {
+	TBreakpoint,
+	BreakpointTypes,
+} from '@publisher/extensions/src/libs/block-states/types';
 
 /**
  * Internal dependencies
  */
 import { STORE_NAME } from './store';
 
-export function unstableBootstrapServerSideBreakpointDefinitions(
-	definitions: Array<BreakpointTypes>
-) {
+export function unstableBootstrapServerSideBreakpointDefinitions(definitions: {
+	[key: TBreakpoint]: BreakpointTypes,
+}) {
 	const { addBreakpoint } = dispatch(STORE_NAME);
 
-	definitions.forEach((definition: BreakpointTypes): void =>
+	Object.values(definitions).forEach((definition: BreakpointTypes): void =>
 		addBreakpoint(definition)
 	);
 }

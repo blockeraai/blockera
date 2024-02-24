@@ -16,13 +16,16 @@ export function isUndefined(value: any): boolean {
  * @return {boolean} boolean
  */
 export function isEmpty(value: any): boolean {
-	if (isArray(value)) {
+	if (value === null) {
+		// Checks for null and undefined
+		return true;
+	} else if (isArray(value) || isString(value)) {
 		return value.length === 0;
 	} else if (isObject(value)) {
 		return Object.keys(value).length === 0;
 	}
 
-	return value === '';
+	return false; // If it's not a recognized type, it's not empty by this function's logic
 }
 
 /**
@@ -52,11 +55,7 @@ export function isNumber(value: any): boolean {
  * @return {boolean} boolean
  */
 export function isArray(value: any): boolean {
-	return (
-		Array.isArray(value) ||
-		// $FlowFixMe
-		Object.prototype.toString.call(value) === '[object Array]'
-	);
+	return Array.isArray(value);
 }
 
 /**
@@ -66,12 +65,7 @@ export function isArray(value: any): boolean {
  * @return {boolean} boolean
  */
 export function isBoolean(value: any): boolean {
-	return (
-		value === true ||
-		value === false ||
-		// $FlowFixMe
-		Object.prototype.toString.call(value) === '[object Boolean]'
-	);
+	return typeof value === 'boolean';
 }
 
 /**
@@ -81,11 +75,7 @@ export function isBoolean(value: any): boolean {
  * @return {boolean} boolean
  */
 export function isFunction(value: any): boolean {
-	return (
-		// $FlowFixMe
-		Object.prototype.toString.call(value) === '[object Function]' ||
-		typeof value === 'function'
-	);
+	return typeof value === 'function';
 }
 
 /**
@@ -106,13 +96,7 @@ export function isJSON(value: any): boolean {
  * @return {boolean} boolean
  */
 export function isObject(value: any): boolean {
-	return (
-		Object(value) === value &&
-		// $FlowFixMe
-		Object.prototype.toString.call(value) !== '[object Array]' &&
-		// $FlowFixMe
-		Object.prototype.toString.call(value) !== '[object Function]'
-	);
+	return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
 /**
@@ -122,8 +106,7 @@ export function isObject(value: any): boolean {
  * @return {boolean} boolean
  */
 export function isString(value: any): boolean {
-	// $FlowFixMe
-	return Object.prototype.toString.call(value) === '[object String]';
+	return typeof value === 'string';
 }
 
 /**

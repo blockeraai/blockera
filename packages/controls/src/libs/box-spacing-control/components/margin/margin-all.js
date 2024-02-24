@@ -10,7 +10,7 @@ import { useState } from '@wordpress/element';
  */
 import { useDragValue } from '@publisher/utils';
 import { controlInnerClassNames } from '@publisher/classnames';
-import { useValueAddon } from '@publisher/hooks';
+import { setValueAddon, useValueAddon } from '@publisher/hooks';
 /**
  * Internal dependencies
  */
@@ -53,6 +53,8 @@ export function MarginAll({
 		useValueAddon({
 			types: ['variable'],
 			value: value.margin.top,
+			setValue: (newValue: any): void =>
+				setValueAddon(newValue, setValue, defaultValue),
 			variableTypes: ['spacing'],
 			onChange: (newValue) => {
 				setOpenPopover('');

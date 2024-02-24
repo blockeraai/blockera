@@ -1,5 +1,6 @@
 export const attributes = {
 	publisherInnerBlocks: {
-		type: 'array',
+		type: 'object',
+		default: {},
 	},
 };

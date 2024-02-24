@@ -1,11 +1,16 @@
 // @flow
 
 /**
+ * External dependencies
+ */
+import { dispatch } from '@wordpress/data';
+
+/**
  * Publisher Dependencies
  */
-import { isObject, isString, isUndefined } from '@publisher/utils';
 import { isValid } from '@publisher/hooks';
 import { isSpecialUnit } from '@publisher/controls';
+import { isObject, isString, isUndefined } from '@publisher/utils';
 
 export function toSimpleStyleWPCompatible({
 	wpAttribute,
@@ -132,3 +137,17 @@ export function toSimpleStyleTypographyWPCompatible({
 		[wpAttribute]: newValue,
 	};
 }
+
+export const resetExtensionSettings = () => {
+	const {
+		changeExtensionCurrentBlock: setCurrentBlock,
+		changeExtensionCurrentBlockState: setCurrentState,
+		changeExtensionInnerBlockState: setInnerBlockState,
+		changeExtensionCurrentBlockStateBreakpoint: setCurrentBreakpoint,
+	} = dispatch('publisher-core/extensions') || {};
+
+	setCurrentBlock('master');
+	setCurrentState('normal');
+	setInnerBlockState('normal');
+	setCurrentBreakpoint('laptop');
+};

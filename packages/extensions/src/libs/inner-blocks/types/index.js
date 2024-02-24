@@ -4,7 +4,18 @@
  */
 import type { MixedElement } from 'react';
 
-export type InnerBlockType = 'heading' | 'paragraph' | 'icon' | 'button';
+export type InnerBlockType =
+	| 'heading'
+	| 'h1'
+	| 'h2'
+	| 'h3'
+	| 'h4'
+	| 'h5'
+	| 'h6'
+	| 'paragraph'
+	| 'icon'
+	| 'citation'
+	| 'button';
 
 export type InnerBlockModel = {
 	name: string,
@@ -16,8 +27,14 @@ export type InnerBlockModel = {
 		[key: string]: string,
 	},
 	attributes: Object,
+	innerBlockSettings: {
+		force?: boolean,
+	},
+	...Object,
 };
 
+export type InnerBlocks = { [key: InnerBlockType | string]: InnerBlockModel };
+
 export type InnerBlocksProps = {
-	innerBlocks: Array<Object>,
+	innerBlocks: InnerBlocks,
 };

@@ -17,4 +17,8 @@ export type MoreFeaturesProps = {
 	 * The features are changed or not indicator.
 	 */
 	isChanged?: boolean,
+	/**
+	 * The button label.
+	 */
+	label?: string,
 };

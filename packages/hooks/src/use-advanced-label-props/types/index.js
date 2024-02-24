@@ -3,6 +3,11 @@
 /**
  * Publisher dependencies
  */
+import type {
+	StateTypes,
+	TBreakpoint,
+	TStates,
+} from '@publisher/extensions/src/libs/block-states/types';
 import type { AdvancedLabelControlProps } from '@publisher/controls/src/libs/label-control/types';
 
 export type CalculatedAdvancedLabelProps = {
@@ -16,9 +21,10 @@ export type AdvancedLabelHookProps = {
 	...AdvancedLabelControlProps,
 	value: any,
 	defaultValue: any,
-	currentState: string,
+	currentState: TStates,
 	isNormalState: boolean,
 	blockAttributes: Object,
-	blockStateId: number,
-	breakpointId: number,
+	currentBlockState: StateTypes,
+	currentBreakpoint: TBreakpoint,
+	currentInnerBlockState: TStates,
 };

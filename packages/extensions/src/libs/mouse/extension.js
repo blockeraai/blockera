@@ -14,6 +14,7 @@ import {
 	PanelBodyControl,
 	ControlContextProvider,
 } from '@publisher/controls';
+import { hasSameProps } from '@publisher/utils';
 import { componentClassNames } from '@publisher/classnames';
 import { FeatureWrapper } from '@publisher/components';
 
@@ -21,7 +22,7 @@ import { FeatureWrapper } from '@publisher/components';
  * Internal dependencies
  */
 import { isShowField } from '../../api/utils';
-import { generateExtensionId, hasSameProps } from '../utils';
+import { generateExtensionId } from '../utils';
 import {
 	cursorFieldOptions,
 	userSelectOptions,

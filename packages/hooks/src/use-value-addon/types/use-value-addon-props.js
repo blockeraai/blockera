@@ -17,6 +17,7 @@ export type AddonTypes = Array<AddonTypesItem>;
 export type UseValueAddonProps = {
 	types: AddonTypes,
 	value: any,
+	setValue: (newValue: any) => void,
 	onChange: (value: string | ValueAddon) => void,
 	variableTypes: Array<VariableCategory>,
 	dynamicValueTypes: Array<DynamicValueTypes>,

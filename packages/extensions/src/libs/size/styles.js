@@ -1,43 +1,36 @@
 // @flow
+
 /**
  * Publisher dependencies
  */
+import {
+	getCssSelector,
+	computedCssDeclarations,
+} from '@publisher/style-engine';
 import { isUndefined, isEmpty } from '@publisher/utils';
-import { computedCssRules } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
-import type { GeneratorReturnType } from '@publisher/style-engine/src/types';
 
 /**
  * Internal dependencies
  */
+import * as config from '../base/config';
 import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
-import type { TBlockProps } from '../types';
+import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
-import type { TSizeCssProps } from './types/size-props';
+import type { CssRule } from '@publisher/style-engine/src/types';
 
-interface IConfigs {
-	sizeConfig: {
-		cssGenerators: Object,
-		publisherWidth: string,
-		publisherHeight: string,
-		publisherOverflow: string,
-		publisherRatio: Object,
-		publisherFit: string,
-		publisherFitPosition: Object,
-		publisherMinWidth: string,
-		publisherMinHeight: string,
-		publisherMaxWidth: string,
-		publisherMaxHeight: string,
-	};
-	blockProps: TBlockProps;
-	selector: string;
-	media: string;
-}
-
-export function SizeStyles({
-	sizeConfig: {
-		cssGenerators,
+export const SizeStyles = ({
+	state,
+	clientId,
+	blockName,
+	currentBlock,
+	// supports,
+	// activeDeviceType,
+	selectors: blockSelectors,
+	attributes: currentBlockAttributes,
+}: StylesProps): Array<CssRule> => {
+	const {
 		publisherWidth,
 		publisherHeight,
 		publisherMinWidth,
@@ -47,182 +40,413 @@ export function SizeStyles({
 		publisherOverflow,
 		publisherRatio,
 		publisherFit,
-	},
-	blockProps,
-	selector,
-	media,
-}: IConfigs): Array<GeneratorReturnType> {
-	const { attributes: currBlockAttributes } = blockProps;
-	const generators = [];
-	const properties: TSizeCssProps = {};
+	} = config.sizeConfig;
+	const blockProps = {
+		clientId,
+		blockName,
+		attributes: currentBlockAttributes,
+	};
+	const sharedParams = {
+		state,
+		clientId,
+		currentBlock,
+		blockSelectors,
+		className: currentBlockAttributes?.className,
+	};
+	const staticDefinitionParams = {
+		type: 'static',
+		options: {
+			important: true,
+		},
+	};
+	const styleGroup: Array<CssRule> = [];
 
-	if (isActiveField(publisherWidth) && currBlockAttributes?.publisherWidth) {
+	if (
+		isActiveField(publisherWidth) &&
+		currentBlockAttributes?.publisherWidth
+	) {
 		const width = getValueAddonRealValue(
-			currBlockAttributes.publisherWidth
+			currentBlockAttributes.publisherWidth
 		);
+		let value = '';
 
-		if (width !== attributes.publisherWidth.default)
-			properties.width = width;
-		else if (
-			!isUndefined(currBlockAttributes.width) &&
-			!isEmpty(currBlockAttributes.width)
+		if (width !== attributes.publisherWidth.default) {
+			value = width;
+		} else if (
+			!isUndefined(currentBlockAttributes.width) &&
+			!isEmpty(currentBlockAttributes.width)
 		) {
-			properties.width = currBlockAttributes.width;
+			value = currentBlockAttributes.width;
 		}
-	}
 
-	if (
-		isActiveField(publisherMinWidth) &&
-		currBlockAttributes?.publisherMinWidth
-	) {
-		const minWidth = getValueAddonRealValue(
-			currBlockAttributes.publisherMinWidth
-		);
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherWidth',
+			support: 'publisherWidth',
+			fallbackSupportId: 'width',
+		});
 
-		if (minWidth !== attributes.publisherMinWidth.default)
-			properties['min-width'] = minWidth;
-	}
-
-	if (
-		isActiveField(publisherMaxWidth) &&
-		currBlockAttributes?.publisherMaxWidth
-	) {
-		const maxWidth = getValueAddonRealValue(
-			currBlockAttributes.publisherMaxWidth
-		);
-
-		if (maxWidth !== attributes.publisherMaxWidth.default)
-			properties['max-width'] = maxWidth;
-	}
-
-	if (
-		isActiveField(publisherHeight) &&
-		currBlockAttributes?.publisherHeight
-	) {
-		const height = getValueAddonRealValue(
-			currBlockAttributes.publisherHeight
-		);
-
-		if (height !== attributes.publisherHeight.default)
-			properties.height = height;
-		else if (
-			!isUndefined(currBlockAttributes.height) &&
-			!isEmpty(currBlockAttributes.height)
-		) {
-			properties.height = currBlockAttributes.height;
-		}
-	}
-
-	if (
-		isActiveField(publisherMinHeight) &&
-		currBlockAttributes?.publisherMinHeight
-	) {
-		const minHeight = getValueAddonRealValue(
-			currBlockAttributes.publisherMinHeight
-		);
-
-		if (minHeight !== attributes.publisherMinHeight.default)
-			properties['min-height'] = minHeight;
-	}
-
-	if (
-		isActiveField(publisherMaxHeight) &&
-		currBlockAttributes?.publisherMaxHeight
-	) {
-		const maxHeight = getValueAddonRealValue(
-			currBlockAttributes.publisherMaxHeight
-		);
-
-		if (maxHeight !== attributes.publisherMaxHeight.default)
-			properties['max-height'] = maxHeight;
-	}
-
-	if (
-		isActiveField(publisherOverflow) &&
-		currBlockAttributes?.publisherOverflow
-	) {
-		if (
-			currBlockAttributes.publisherOverflow !==
-			attributes.publisherOverflow.default
-		)
-			properties.overflow = currBlockAttributes.publisherOverflow;
-	}
-
-	if (isActiveField(publisherRatio) && currBlockAttributes?.publisherRatio) {
-		const ratio = currBlockAttributes.publisherRatio.value;
-
-		if (ratio !== attributes.publisherRatio.default.value)
-			switch (ratio) {
-				case 'custom':
-					{
-						const width = getValueAddonRealValue(
-							currBlockAttributes.publisherRatio.width
-						);
-						const height = getValueAddonRealValue(
-							currBlockAttributes.publisherRatio.height
-						);
-
-						properties['aspect-ratio'] = `${width} ${
-							width && height && ' / '
-						} ${height}`;
-					}
-					break;
-				default:
-					properties['aspect-ratio'] = ratio;
-			}
-	}
-
-	if (
-		isActiveField(publisherFit) &&
-		currBlockAttributes?.publisherFit &&
-		currBlockAttributes.publisherFit !== attributes.publisherFit.default
-	) {
-		properties['object-fit'] = currBlockAttributes.publisherFit;
-	}
-
-	if (
-		currBlockAttributes?.publisherFitPosition &&
-		!arrayEquals(
-			currBlockAttributes.publisherFitPosition,
-			attributes.publisherFitPosition.default
-		)
-	) {
-		properties['object-position'] = `${getValueAddonRealValue(
-			currBlockAttributes.publisherFitPosition.top
-		)} ${getValueAddonRealValue(
-			currBlockAttributes.publisherFitPosition.left
-		)}`;
-	}
-
-	if (Object.keys(properties).length > 0) {
-		generators.push(
-			computedCssRules(
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
 				{
 					publisherWidth: [
 						{
-							type: 'static',
-							media,
-							selector,
-							properties,
-							options: {
-								important: true,
+							...staticDefinitionParams,
+							properties: {
+								width: value,
 							},
 						},
 					],
 				},
 				blockProps
-			)
-		);
+			),
+		});
 	}
 
-	generators.push(
-		computedCssRules(
-			{
-				...(cssGenerators || {}),
-			},
-			blockProps
-		)
-	);
+	if (
+		isActiveField(publisherMinWidth) &&
+		currentBlockAttributes?.publisherMinWidth
+	) {
+		const minWidth = getValueAddonRealValue(
+			currentBlockAttributes.publisherMinWidth
+		);
 
-	return generators.flat();
-}
+		if (minWidth !== attributes.publisherMinWidth.default) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherMinWidth',
+				support: 'publisherMinWidth',
+				fallbackSupportId: 'minWidth',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherMinWidth: [
+							{
+								properties: {
+									'min-width': minWidth,
+								},
+								...staticDefinitionParams,
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+	}
+
+	if (
+		isActiveField(publisherMaxWidth) &&
+		currentBlockAttributes?.publisherMaxWidth
+	) {
+		const maxWidth = getValueAddonRealValue(
+			currentBlockAttributes.publisherMaxWidth
+		);
+
+		if (maxWidth !== attributes.publisherMaxWidth.default) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherMaxWidth',
+				support: 'publisherMaxWidth',
+				fallbackSupportId: 'maxWidth',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherMaxWidth: [
+							{
+								properties: {
+									'max-width': maxWidth,
+								},
+								...staticDefinitionParams,
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+	}
+
+	if (
+		isActiveField(publisherHeight) &&
+		currentBlockAttributes?.publisherHeight
+	) {
+		const height = getValueAddonRealValue(
+			currentBlockAttributes.publisherHeight
+		);
+
+		let value = '';
+
+		if (height !== attributes.publisherHeight.default) {
+			value = height;
+		} else if (
+			!isUndefined(currentBlockAttributes.height) &&
+			!isEmpty(currentBlockAttributes.height)
+		) {
+			value = currentBlockAttributes.height;
+		}
+
+		if (value.trim()) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherHeight',
+				support: 'publisherHeight',
+				fallbackSupportId: 'height',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherHeight: [
+							{
+								properties: {
+									height: value,
+								},
+								...staticDefinitionParams,
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+	}
+
+	if (
+		isActiveField(publisherMinHeight) &&
+		currentBlockAttributes?.publisherMinHeight
+	) {
+		const minHeight = getValueAddonRealValue(
+			currentBlockAttributes.publisherMinHeight
+		);
+
+		if (minHeight !== attributes.publisherMinHeight.default) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherMinHeight',
+				support: 'publisherMinHeight',
+				fallbackSupportId: 'minHeight',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherHeight: [
+							{
+								properties: {
+									'min-height': minHeight,
+								},
+								...staticDefinitionParams,
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+	}
+
+	if (
+		isActiveField(publisherMaxHeight) &&
+		currentBlockAttributes?.publisherMaxHeight
+	) {
+		const maxHeight = getValueAddonRealValue(
+			currentBlockAttributes.publisherMaxHeight
+		);
+
+		if (maxHeight !== attributes.publisherMaxHeight.default) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherMaxHeight',
+				support: 'publisherMaxHeight',
+				fallbackSupportId: 'maxHeight',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherMaxHeight: [
+							{
+								properties: {
+									'max-height': maxHeight,
+								},
+								...staticDefinitionParams,
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+	}
+
+	if (
+		isActiveField(publisherOverflow) &&
+		currentBlockAttributes?.publisherOverflow
+	) {
+		if (
+			currentBlockAttributes.publisherOverflow !==
+			attributes.publisherOverflow.default
+		) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherOverflow',
+				support: 'publisherOverflow',
+				fallbackSupportId: 'overflow',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherOverflow: [
+							{
+								properties: {
+									overflow:
+										currentBlockAttributes.publisherOverflow,
+								},
+								...staticDefinitionParams,
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+	}
+
+	if (
+		isActiveField(publisherRatio) &&
+		currentBlockAttributes?.publisherRatio
+	) {
+		const ratio = currentBlockAttributes.publisherRatio.value;
+
+		if (ratio !== attributes.publisherRatio.default.value) {
+			let value = '';
+
+			switch (ratio) {
+				case 'custom':
+					{
+						const width = getValueAddonRealValue(
+							currentBlockAttributes.publisherRatio.width
+						);
+						const height = getValueAddonRealValue(
+							currentBlockAttributes.publisherRatio.height
+						);
+
+						value = `${width} ${
+							width && height && ' / '
+						} ${height}`;
+					}
+					break;
+				default:
+					value = ratio;
+			}
+
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherRatio',
+				support: 'publisherRatio',
+				fallbackSupportId: 'aspectRatio',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherRatio: [
+							{
+								properties: {
+									'aspect-ratio': value,
+								},
+								...staticDefinitionParams,
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+	}
+
+	if (
+		isActiveField(publisherFit) &&
+		currentBlockAttributes?.publisherFit &&
+		currentBlockAttributes.publisherFit !== attributes.publisherFit.default
+	) {
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherFit',
+			support: 'publisherFit',
+			fallbackSupportId: 'fit',
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					publisherFit: [
+						{
+							properties: {
+								'object-fit':
+									currentBlockAttributes.publisherFit,
+							},
+							...staticDefinitionParams,
+						},
+					],
+				},
+				blockProps
+			),
+		});
+	}
+
+	if (
+		currentBlockAttributes?.publisherFitPosition &&
+		!arrayEquals(
+			currentBlockAttributes.publisherFitPosition,
+			attributes.publisherFitPosition.default
+		)
+	) {
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherFitPosition',
+			support: 'publisherFitPosition',
+			fallbackSupportId: 'fitPosition',
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					publisherFitPosition: [
+						{
+							properties: {
+								'object-position': `${getValueAddonRealValue(
+									currentBlockAttributes.publisherFitPosition
+										.top
+								)} ${getValueAddonRealValue(
+									currentBlockAttributes.publisherFitPosition
+										.left
+								)}`,
+							},
+							...staticDefinitionParams,
+						},
+					],
+				},
+				blockProps
+			),
+		});
+	}
+
+	return styleGroup;
+};

@@ -14,50 +14,61 @@ import { extensionInnerClassNames } from '@publisher/classnames';
  * Internal dependencies
  */
 import { CaretIcon } from '../icons';
-import type { InnerBlockModel } from '../../inner-blocks/types';
-import type { StateTypes } from '../../block-states/types';
+import type { StateTypes, TStates } from '../../block-states/types';
+import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
 
 export function Breadcrumb({
 	states,
 	children,
+	activeState,
+	activeBlock,
+	innerBlocks,
 	currentInnerBlock,
+	activeInnerBlockState,
 }: {
-	states: Array<{ ...StateTypes, isSelected: boolean }>,
+	activeState: TStates,
 	children?: MixedElement,
-	currentInnerBlock: InnerBlockModel,
+	activeInnerBlockState: TStates,
+	activeBlock: 'master' | InnerBlockType,
+	currentInnerBlock: InnerBlockModel | null,
+	states: { [key: TStates]: { ...StateTypes, isSelected: boolean } },
+	innerBlocks: { [key: 'master' | InnerBlockType | string]: InnerBlockModel },
 }): MixedElement {
 	// do not show normal state and inner block was not selected
-	if (states.length <= 1 && !currentInnerBlock) {
+	if (Object.keys(states).length <= 1 && !currentInnerBlock) {
 		return <></>;
 	}
 
-	const States = ({
-		_states,
+	const CurrentState = ({
+		current,
 	}: {
-		_states: Array<{ ...StateTypes, isSelected: boolean }>,
-	}) =>
-		_states
-			.filter((value) => value?.isSelected && value?.type !== 'normal')
-			.map((value) => (
-				<>
-					<CaretIcon />
-					<span
-						className={extensionInnerClassNames(
-							'block-card__title__item',
-							'item-state',
-							'item-state-' + value.type
-						)}
-					>
-						{value.label}
-					</span>
-				</>
-			));
+		current: { ...StateTypes, isSelected: boolean },
+	}): MixedElement => {
+		if (!current || !current?.isSelected || 'normal' === current?.type) {
+			return <></>;
+		}
+
+		return (
+			<>
+				<CaretIcon />
+				<span
+					className={extensionInnerClassNames(
+						'block-card__title__item',
+						'item-state',
+						'item-state-' + current.type
+					)}
+				>
+					{current.label}
+				</span>
+			</>
+		);
+	};
 
 	return (
 		<>
-			<States _states={states} />
+			<CurrentState current={states[activeState]} />
 
-			{!Array.isArray(currentInnerBlock) && (
+			{null !== currentInnerBlock && (
 				<>
 					<CaretIcon />
 					<span
@@ -66,14 +77,26 @@ export function Breadcrumb({
 							'inner-block'
 						)}
 					>
-						{currentInnerBlock.label}
+						{innerBlocks[activeBlock].label}
 					</span>
-					<States
-						_states={
+					{0 !==
+						Object.keys(
 							currentInnerBlock?.attributes
-								?.publisherBlockStates || []
-						}
-					/>
+								?.publisherBlockStates || {}
+						).length &&
+						currentInnerBlock?.attributes?.publisherBlockStates[
+							activeInnerBlockState
+						] &&
+						'normal' !== activeInnerBlockState && (
+							<CurrentState
+								current={
+									currentInnerBlock?.attributes
+										?.publisherBlockStates[
+										activeInnerBlockState
+									]
+								}
+							/>
+						)}
 				</>
 			)}
 

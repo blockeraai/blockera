@@ -17,15 +17,17 @@ import {
 	positionFromWPCompatibility,
 	positionToWPCompatibility,
 } from './compatibility/position';
+import type { BlockDetail } from '../block-states/types';
 
 export const bootstrap = (): void => {
 	addFilter(
 		'publisherCore.blockEdit.attributes',
 		'publisherCore.blockEdit.sizeExtension.bootstrap',
-		(attributes, blockDetail) => {
-			const { blockId, isNormalState } = blockDetail;
+		(attributes: Object, blockDetail: BlockDetail) => {
+			const { blockId, isNormalState, isBaseBreakpoint, isMasterBlock } =
+				blockDetail;
 
-			if (!isNormalState()) {
+			if (!isNormalState || !isBaseBreakpoint || !isMasterBlock) {
 				return attributes;
 			}
 
@@ -51,8 +53,7 @@ export const bootstrap = (): void => {
 		 * @param {*} newValue The newValue sets to feature.
 		 * @param {ControlContextRef} ref The reference of control context action occurred.
 		 * @param {getAttributes} getAttributes The getter block attributes.
-		 * @param {isNormalState} isNormalState To check current state is normal or not
-		 * @param {string} blockId Target block ID
+		 * @param {blockDetail} blockDetail detail of current block
 		 *
 		 * @return {Object|{}} The retrieve updated block attributes with all of wp compatibilities.
 		 */
@@ -62,10 +63,12 @@ export const bootstrap = (): void => {
 			newValue: any,
 			ref: ControlContextRef,
 			getAttributes: () => Object,
-			isNormalState: () => boolean,
-			blockId: string
+			blockDetail: BlockDetail
 		): Object => {
-			if (!isNormalState()) {
+			const { blockId, isNormalState, isBaseBreakpoint, isMasterBlock } =
+				blockDetail;
+
+			if (!isNormalState || !isBaseBreakpoint || !isMasterBlock) {
 				return nextState;
 			}
 

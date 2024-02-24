@@ -8,6 +8,11 @@
 			font-size: 13px;
 			padding: 0 16px;
 			height: 48px;
+			position: relative;
+
+			&:focus {
+				z-index: 1;
+			}
 
 			.components-panel__icon {
 				order: -1;

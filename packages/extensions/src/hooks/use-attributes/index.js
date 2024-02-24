@@ -9,113 +9,107 @@ import { select } from '@wordpress/data';
  * Internal dependencies
  */
 import reducer from './reducer';
+import { isChanged } from './helpers';
 import { isInnerBlock } from '../../components';
-import { deleteExtraItems, isChanged } from './helpers';
 import actions, { type UseAttributesActions } from './actions';
 import type { THandleOnChangeAttributes } from '../../libs/types';
-import type {
-	BreakpointTypes,
-	StateTypes,
-} from '../../libs/block-states/types';
 
 export const useAttributes = (
 	setAttributes: (attributes: Object) => void,
 	{
 		blockId,
-		breakpointId,
-		blockStateId,
-		innerBlockId,
 		isNormalState,
 		getAttributes,
 		masterIsNormalState,
 		publisherInnerBlocks,
 	}: {
 		blockId: string,
-		blockStateId: number,
-		breakpointId: number,
-		innerBlockId: number,
 		isNormalState: () => boolean,
 		publisherInnerBlocks: Object,
 		masterIsNormalState: () => boolean,
 		getAttributes: (key: string) => any,
 	}
-): {
+): ({
+	getAttributesWithPropsId: (state: Object) => Object,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
-} => {
+}) => {
+	const getAttributesWithPropsId = (state: Object): Object => {
+		const d = new Date();
+
+		if (state?.publisherPropsId) {
+			return state;
+		}
+
+		return {
+			...state,
+			publisherPropsId:
+				'' +
+				d.getMonth() +
+				d.getDate() +
+				d.getHours() +
+				d.getMinutes() +
+				d.getSeconds() +
+				d.getMilliseconds(),
+		};
+	};
 	const handleOnChangeAttributes: THandleOnChangeAttributes = (
 		attributeId,
 		newValue,
 		options = {}
 	): void => {
-		const { getExtensionCurrentBlock } = select(
-			'publisher-core/extensions'
-		);
+		const { ref } = options;
+		const { getSelectedBlock } = select('core/block-editor');
+		const { attributes = getAttributes() } = getSelectedBlock() || {};
+		const {
+			getExtensionCurrentBlock,
+			getExtensionInnerBlockState,
+			getExtensionCurrentBlockState,
+			getExtensionCurrentBlockStateBreakpoint,
+		} = select('publisher-core/extensions');
+
+		// attributes => immutable - mean just read-only!
+		// _attributes => mutable - mean readable and writable constant!
+		let _attributes = { ...attributes };
+
+		if (!_attributes?.publisherPropsId) {
+			_attributes = getAttributesWithPropsId(_attributes);
+		}
+
 		const currentBlock = getExtensionCurrentBlock();
 
-		const {
-			ref,
-			updateItems = {},
-			deleteItems = [],
-			addOrModifyRootItems = {},
-			deleteItemsOnResetAction = [],
-		} = options;
-		const { getSelectedBlock } = select('core/block-editor');
-		const { attributes = {} } = getSelectedBlock() || {};
+		const attributeIsPublisherBlockStates =
+			'publisherBlockStates' === attributeId;
+		let hasRootAttributes =
+			_attributes.publisherInnerBlocks &&
+			_attributes.publisherInnerBlocks[currentBlock];
 
-		// check - is really changed attribute from root?
-		if (
-			isNormalState() &&
-			!isInnerBlock(currentBlock) &&
-			!isChanged(attributes, attributeId, newValue)
-		) {
-			return;
+		// check - is really changed attribute of any block type (master or one of inner blocks)?
+		if (isNormalState()) {
+			if (
+				isInnerBlock(currentBlock) &&
+				!isChanged(
+					{
+						..._attributes,
+						...(hasRootAttributes
+							? _attributes.publisherInnerBlocks[currentBlock]
+									.attributes
+							: {}),
+					},
+					attributeId,
+					newValue
+				)
+			) {
+				return;
+			}
+
+			if (!isChanged(attributes, attributeId, newValue)) {
+				return;
+			}
 		}
 
-		let _attributes = {
-			...attributes,
-			// FIXME: important!
-			...(isInnerBlock(currentBlock) ? {} : addOrModifyRootItems),
-		};
-
-		// if handler has any delete items!
-		deleteExtraItems(deleteItems, _attributes);
-
-		// Assume activated state is normal and existed "updateItems" has items!
-		if (
-			'object' === typeof updateItems &&
-			Object.values(updateItems)?.length &&
-			isNormalState()
-		) {
-			_attributes = {
-				..._attributes,
-				...updateItems,
-			};
-		}
-
-		let innerBlockAttributes = {};
-
-		// inner blocks by default array empty!
-		// when value is empty or innerBlockId has "-1" value needs to use root attributes to prevent undefined error!
-		if (!publisherInnerBlocks.length || -1 === innerBlockId) {
-			innerBlockAttributes = attributes;
-		} else {
-			innerBlockAttributes =
-				-1 === innerBlockId
-					? {}
-					: publisherInnerBlocks[innerBlockId].attributes;
-		}
-
-		let currentBlockAttributes = _attributes;
-
-		// when current block is one of inner block types, must be use of inner block attributes!
-		if (isInnerBlock(currentBlock)) {
-			currentBlockAttributes = innerBlockAttributes;
-		}
-
-		const attributeIsRelatedStatesAttributes = [
-			'publisherCurrentState',
-			'publisherBlockStates',
-		].includes(attributeId);
+		const currentState = getExtensionCurrentBlockState();
+		const currentInnerBlockState = getExtensionInnerBlockState();
+		const currentBreakpoint = getExtensionCurrentBlockStateBreakpoint();
 
 		const {
 			updateNormalState,
@@ -127,88 +121,126 @@ export const useAttributes = (
 			blockId,
 			newValue,
 			attributeId,
-			updateItems,
-			blockStateId,
-			breakpointId,
+			currentState,
 			currentBlock,
-			innerBlockId,
 			getAttributes,
 			isNormalState,
+			currentBreakpoint,
 			publisherInnerBlocks,
-			addOrModifyRootItems,
-			currentBlockAttributes,
-			deleteItemsOnResetAction,
-			attributeIsRelatedStatesAttributes,
-			stateType: _attributes.publisherCurrentState,
-			breakpointType: _attributes.publisherCurrentDevice,
+			currentInnerBlockState,
+			attributeIsPublisherBlockStates,
 		});
 
-		// Assume attribute id is string, and activated state is normal, or attribute ["publisherCurrentState" or "publisherBlockStates"] will change!
-		if (
-			masterIsNormalState() &&
-			isNormalState() &&
-			attributeIsRelatedStatesAttributes
-		) {
+		// Current block (maybe 'master' or any inner blocks) in normal state!
+		// or
+		// attribute is "publisherBlockStates"
+		// action = UPDATE_NORMAL_STATE
+		if (masterIsNormalState() && isNormalState()) {
 			return setAttributes(reducer(_attributes, updateNormalState()));
 		}
 
-		if (isInnerBlock(currentBlock) && !masterIsNormalState()) {
-			return setAttributes(
-				reducer(_attributes, updateInnerBlockInsideParentState())
-			);
-		}
+		// Assume current block is one of inner blocks.
+		if (isInnerBlock(currentBlock)) {
+			// Assume master block isn't in normal state!
+			// action = UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE
+			if (!masterIsNormalState()) {
+				const currentBlockAttributes =
+					_attributes.publisherBlockStates[currentState].breakpoints[
+						currentBreakpoint
+					].attributes;
 
-		// handle update attributes in activated state and breakpoint!
-		if (isInnerBlock(currentBlock) && !isNormalState()) {
-			const _blockState =
-				currentBlockAttributes?.publisherBlockStates?.find(
-					(state: StateTypes): boolean =>
-						state.type ===
-						currentBlockAttributes.publisherCurrentState
+				if (
+					!currentBlockAttributes?.publisherInnerBlocks ||
+					!currentBlockAttributes?.publisherInnerBlocks[currentBlock]
+				) {
+					hasRootAttributes = false;
+				}
+
+				if (
+					hasRootAttributes &&
+					!isChanged(
+						{
+							..._attributes,
+							..._attributes.publisherBlockStates[currentState]
+								.breakpoints[currentBreakpoint]?.attributes,
+							...(hasRootAttributes
+								? currentBlockAttributes?.publisherInnerBlocks[
+										currentBlock
+								  ]?.attributes
+								: {}),
+						},
+						attributeId,
+						newValue
+					)
+				) {
+					return;
+				}
+
+				return setAttributes(
+					reducer(attributes, updateInnerBlockInsideParentState())
 				);
-			const _breakpoint = _blockState
-				? _blockState.breakpoints.find(
-						(breakpoint: BreakpointTypes): boolean =>
-							breakpoint.type ===
-							currentBlockAttributes.publisherCurrentDevice
-				  )
-				: {};
+			}
+			// Assume current block isn't in normal state and attributeId isn't "publisherBlockStates" for prevent cyclic object error!
+			// action = UPDATE_INNER_BLOCK_STATES
+			if (!isNormalState() && !attributeIsPublisherBlockStates) {
+				if (
+					!isChanged(
+						{
+							..._attributes,
+							...(hasRootAttributes
+								? _attributes.publisherInnerBlocks[currentBlock]
+										.attributes
+								: {}),
+							...(hasRootAttributes
+								? _attributes.publisherInnerBlocks[currentBlock]
+										.attributes.publisherBlockStates[
+										currentInnerBlockState
+								  ].breakpoints[currentBreakpoint].attributes
+								: {}),
+						},
+						attributeId,
+						newValue
+					)
+				) {
+					return;
+				}
 
-			return setAttributes(
-				reducer(
-					_attributes,
-					updateInnerBlockStates({
-						breakpointId: _blockState
-							? _blockState.breakpoints.indexOf(_breakpoint)
-							: -1,
-						blockStateId: _blockState
-							? currentBlockAttributes?.publisherBlockStates?.indexOf(
-									_blockState
-							  )
-							: -1,
-						breakpointType:
-							currentBlockAttributes.publisherCurrentDevice,
-						stateType: currentBlockAttributes.publisherCurrentState,
-					})
-				)
-			);
-		} else if (isInnerBlock(currentBlock)) {
+				return setAttributes(
+					reducer(_attributes, updateInnerBlockStates())
+				);
+			}
+		}
+
+		// Assume block state is normal and attributeId is equals with "publisherBlockStates".
+		// action = UPDATE_NORMAL_STATE
+		if (attributeIsPublisherBlockStates || isNormalState()) {
 			return setAttributes(reducer(_attributes, updateNormalState()));
 		}
 
-		// Assume block state is normal and attributeId is once of "publisherBlockStates", "publisherCurrentState".
-		if (attributeIsRelatedStatesAttributes || isNormalState()) {
-			return setAttributes({
-				..._attributes,
-				[attributeId]: newValue,
-			});
+		if (
+			!isChanged(
+				{
+					..._attributes,
+					..._attributes.publisherBlockStates[currentState]
+						.breakpoints[currentBreakpoint].attributes,
+				},
+				attributeId,
+				newValue,
+				{
+					[attributeId]: null,
+				}
+			)
+		) {
+			return;
 		}
 
-		// handle update attributes in activated state and breakpoint!
-		setAttributes(reducer(attributes, updateBlockStates()));
+		// handle update attributes in activated state and breakpoint for master block.
+		// action = UPDATE_BLOCK_STATES
+		setAttributes(reducer(_attributes, updateBlockStates()));
 	};
 
 	return {
+		getAttributesWithPropsId,
 		handleOnChangeAttributes,
 	};
 };

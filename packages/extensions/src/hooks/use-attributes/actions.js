@@ -22,19 +22,10 @@ const actions = (params: Object): UseAttributesActions => {
 				...params,
 			};
 		},
-		updateInnerBlockStates({
-			stateType,
-			breakpointId,
-			blockStateId,
-			breakpointType,
-		}): Object {
+		updateInnerBlockStates(): Object {
 			return {
 				type: 'UPDATE_INNER_BLOCK_STATES',
 				...params,
-				stateType,
-				breakpointId,
-				blockStateId,
-				breakpointType,
 			};
 		},
 		updateBlockStates(): Object {

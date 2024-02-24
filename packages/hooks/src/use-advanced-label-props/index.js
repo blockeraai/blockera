@@ -1,6 +1,11 @@
 // @flow
 
 /**
+ * External dependencies
+ */
+import { useSelect } from '@wordpress/data';
+
+/**
  * Publisher dependencies
  */
 import {
@@ -19,6 +24,8 @@ import type {
 	CalculatedAdvancedLabelProps,
 	AdvancedLabelHookProps,
 } from './types';
+import { isInnerBlock } from '@publisher/extensions/src/components';
+import { useBlockContext } from '@publisher/extensions/src/hooks/context';
 
 export const useAdvancedLabelProps = ({
 	path,
@@ -28,14 +35,34 @@ export const useAdvancedLabelProps = ({
 	attribute,
 	isRepeater,
 	defaultValue,
-	blockStateId,
-	currentState,
-	breakpointId,
 	isNormalState,
 	blockAttributes,
 }: AdvancedLabelHookProps): CalculatedAdvancedLabelProps => {
 	//TODO: Please commented after complete debug!
 	// const debugKey = 'publisherBorder';
+
+	const {
+		currentBlock,
+		currentState,
+		currentBreakpoint,
+		currentInnerBlockState,
+	} = useSelect((select) => {
+		const {
+			getExtensionCurrentBlock,
+			getExtensionInnerBlockState,
+			getExtensionCurrentBlockState,
+			getExtensionCurrentBlockStateBreakpoint,
+		} = select('publisher-core/extensions');
+
+		return {
+			currentBlock: getExtensionCurrentBlock(),
+			currentState: getExtensionCurrentBlockState(),
+			currentInnerBlockState: getExtensionInnerBlockState(),
+			currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
+		};
+	});
+
+	const { publisherInnerBlocks } = useBlockContext();
 
 	if (
 		['', 'publisherBlockStates'].includes(attribute) ||
@@ -50,13 +77,34 @@ export const useAdvancedLabelProps = ({
 		};
 	}
 
+	if (isInnerBlock(currentBlock)) {
+		blockAttributes =
+			blockAttributes?.publisherInnerBlocks[currentBlock] ||
+			publisherInnerBlocks[currentBlock].attributes;
+	}
+
 	let _blockAttributes = blockAttributes[attribute];
 
-	const currentBlockState =
-		blockAttributes?.publisherBlockStates[blockStateId];
-	const currentBreakpoint = currentBlockState?.breakpoints[breakpointId];
+	if (!blockAttributes?.publisherBlockStates) {
+		const isChanged = !isEquals(defaultValue, value);
+		const isChangedOnNormal = isChanged;
+		const isChangedOnCurrentState = isChanged;
 
-	const stateAttributes = currentBreakpoint?.attributes;
+		return {
+			isChanged,
+			isChangedOnNormal,
+			isChangedOnCurrentState,
+			isChangedOnOtherStates: false,
+		};
+	}
+
+	const currentBlockState =
+		blockAttributes?.publisherBlockStates[
+			!isInnerBlock(currentBlock) ? currentState : currentInnerBlockState
+		];
+	const currentBreakpointType =
+		currentBlockState?.breakpoints[currentBreakpoint];
+	const stateAttributes = currentBreakpointType?.attributes;
 
 	let stateValue = stateAttributes ? stateAttributes[attribute] : {};
 
@@ -80,65 +128,57 @@ export const useAdvancedLabelProps = ({
 		_blockAttributes = prepare(path, blockAttributes);
 	}
 
-	const isChangedOnOtherStates =
-		blockAttributes?.publisherBlockStates?.filter(
-			(state: Object): boolean => {
-				return (
-					state.breakpoints.filter((breakpoint) => {
-						let stateValue =
-							'normal' === state.type &&
-							'laptop' === breakpoint.type
-								? blockAttributes
-								: breakpoint?.attributes;
+	const isChangedOnOtherStates = Object.values(
+		blockAttributes?.publisherBlockStates
+	)?.filter((state: Object): boolean => {
+		return (
+			Object.values(state.breakpoints).filter((breakpoint) => {
+				let stateValue =
+					'normal' === state.type && 'laptop' === breakpoint.type
+						? blockAttributes
+						: breakpoint?.attributes;
 
-						if (isEmpty(stateValue)) {
-							return false;
-						}
+				if (isEmpty(stateValue)) {
+					return false;
+				}
 
-						// Assume control is repeater.
-						if (isRepeater) {
-							if (!isNormalState && 'normal' === state.type) {
-								return (
-									!isEmpty(stateValue[attribute]) &&
-									!isUndefined(stateValue[attribute]) &&
-									!isEquals(
-										stateValue[attribute],
-										defaultValue
-									)
-								);
-							}
-
-							return (
-								!isEmpty(stateValue[attribute]) &&
-								!isUndefined(stateValue[attribute]) &&
-								!isEquals(stateValue[attribute], defaultValue)
-							);
-						}
-
-						if (
-							(path && isObject(stateValue)) ||
-							isArray(stateValue)
-						) {
-							stateValue = prepare(path, stateValue);
-						}
-
-						if (!isNormalState && 'normal' === state.type) {
-							return (
-								!isEmpty(stateValue) &&
-								!isUndefined(stateValue) &&
-								!isEquals(stateValue, defaultValue)
-							);
-						}
-
+				// Assume control is repeater.
+				if (isRepeater) {
+					if (!isNormalState && 'normal' === state.type) {
 						return (
-							!isEmpty(stateValue) &&
-							!isUndefined(stateValue) &&
-							!isEquals(stateValue, defaultValue)
+							!isEmpty(stateValue[attribute]) &&
+							!isUndefined(stateValue[attribute]) &&
+							!isEquals(stateValue[attribute], defaultValue)
 						);
-					}).length > 0
+					}
+
+					return (
+						!isEmpty(stateValue[attribute]) &&
+						!isUndefined(stateValue[attribute]) &&
+						!isEquals(stateValue[attribute], defaultValue)
+					);
+				}
+
+				if ((path && isObject(stateValue)) || isArray(stateValue)) {
+					stateValue = prepare(path, stateValue);
+				}
+
+				if (!isNormalState && 'normal' === state.type) {
+					return (
+						!isEmpty(stateValue) &&
+						!isUndefined(stateValue) &&
+						!isEquals(stateValue, defaultValue)
+					);
+				}
+
+				return (
+					!isEmpty(stateValue) &&
+					!isUndefined(stateValue) &&
+					!isEquals(stateValue, defaultValue)
 				);
-			}
+			}).length > 0
 		);
+	});
 
 	let isChanged = !isEquals(defaultValue, value);
 

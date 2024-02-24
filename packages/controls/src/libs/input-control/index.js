@@ -10,7 +10,7 @@ import type { MixedElement } from 'react';
  */
 import { isEmpty, isUndefined } from '@publisher/utils';
 import { controlClassNames } from '@publisher/classnames';
-import { useValueAddon } from '@publisher/hooks';
+import { setValueAddon, useValueAddon } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -77,6 +77,8 @@ export default function InputControl({
 	} = useValueAddon({
 		types: controlAddonTypes,
 		value,
+		setValue: (newValue: any): void =>
+			setValueAddon(newValue, setValue, defaultValue),
 		variableTypes,
 		dynamicValueTypes,
 		onChange: setValue,

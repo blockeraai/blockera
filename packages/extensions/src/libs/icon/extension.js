@@ -19,6 +19,7 @@ import {
 	ToggleSelectControl,
 	ControlContextProvider,
 } from '@publisher/controls';
+import { hasSameProps } from '@publisher/utils';
 import { componentClassNames } from '@publisher/classnames';
 
 /**
@@ -27,7 +28,7 @@ import { componentClassNames } from '@publisher/classnames';
 import { IconExtensionIcon } from './index';
 import { isActiveField } from '../../api/utils';
 import { default as PositionLeftIcon } from './icons/position-left';
-import { generateExtensionId, hasSameProps } from '../utils';
+import { generateExtensionId } from '../utils';
 import { default as PositionRightIcon } from './icons/position-right';
 import type { TIconProps } from './types/icon-extension-props';
 

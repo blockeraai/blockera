@@ -9,13 +9,14 @@ import { select } from '@wordpress/data';
 /**
  * Internal dependencies
  */
-import {
-	prepareInnerBlockTypes,
-	getInnerBlockId,
-} from '../../libs/inner-blocks';
+import { prepareInnerBlockTypes } from '../../libs/inner-blocks';
 import { useStoreSelectors } from '../use-store-selectors';
 import type { InnerBlocksInfoProps, InnerBlocksInfo } from './types';
-import type { InnerBlockModel } from '../../libs/inner-blocks/types';
+import type {
+	InnerBlocks,
+	InnerBlockType,
+	InnerBlockModel,
+} from '../../libs/inner-blocks/types';
 
 export const useInnerBlocksInfo = ({
 	name,
@@ -28,50 +29,49 @@ export const useInnerBlocksInfo = ({
 	const { getExtensionCurrentBlock } = select('publisher-core/extensions');
 	const currentBlock = getExtensionCurrentBlock();
 
-	const publisherInnerBlocks = !attributes.publisherInnerBlocks.length
-		? prepareInnerBlockTypes(
-				additional?.publisherInnerBlocks || [],
-				getBlockType(name)?.attributes || {}
-		  )
-		: attributes.publisherInnerBlocks;
+	const publisherInnerBlocks: InnerBlocks = prepareInnerBlockTypes(
+		additional?.publisherInnerBlocks || {},
+		getBlockType(name)?.attributes || {}
+	);
 
-	let savedInnerBlocks = attributes.publisherInnerBlocks;
+	let savedInnerBlocks: InnerBlocks = attributes.publisherInnerBlocks;
 
-	if (!savedInnerBlocks.length) {
+	if (!Object.values(savedInnerBlocks).length) {
 		savedInnerBlocks = publisherInnerBlocks;
 	}
 
-	// Get chosen inner block type identifier but when not selected anything value will be "-1".
-	const innerBlockId = getInnerBlockId(savedInnerBlocks, currentBlock);
-
-	// Get chosen inner block type identifier of between other inner blocks but when not selected anything value will be "NULL".
-	const currentInnerBlock: Object =
-		savedInnerBlocks && savedInnerBlocks[innerBlockId]
-			? savedInnerBlocks[innerBlockId]
-			: attributes.publisherInnerBlocks;
+	/**
+	 * Get current selected inner block.
+	 *
+	 * @return {InnerBlockModel|null} The selected current inner block on selected one of types ,Not selected is null.
+	 */
+	const getCurrentInnerBlock = (): InnerBlockModel | null => {
+		return savedInnerBlocks && savedInnerBlocks[currentBlock]
+			? savedInnerBlocks[currentBlock]
+			: null;
+	};
 
 	const memoizedOverridingInnerBlocks = memoize(
-		(innerBlocks: Array<InnerBlockModel>): Array<InnerBlockModel> =>
-			innerBlocks.map(
-				(
-					innerBlock: InnerBlockModel,
-					index: number
-				): InnerBlockModel => {
+		(innerBlocks: InnerBlocks): InnerBlocks => {
+			Object.keys(innerBlocks).forEach(
+				(innerBlock: InnerBlockType | string): InnerBlockModel => {
 					return {
 						...innerBlock,
-						...additional.publisherInnerBlocks[index],
+						...(additional.publisherInnerBlocks[innerBlock] ?? {}),
 						attributes: {
 							...attributes,
-							...innerBlock.attributes,
+							...innerBlocks[innerBlock].attributes,
 						},
 					};
 				}
-			)
+			);
+
+			return innerBlocks;
+		}
 	);
 
 	return {
-		innerBlockId,
-		currentInnerBlock,
+		currentInnerBlock: getCurrentInnerBlock(),
 		publisherInnerBlocks:
 			memoizedOverridingInnerBlocks(publisherInnerBlocks),
 	};

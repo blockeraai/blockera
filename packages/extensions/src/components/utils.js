@@ -5,13 +5,12 @@ import { applyFilters } from '@wordpress/hooks';
 /**
  * Publisher dependencies
  */
-import { omitWithPattern } from '@publisher/utils';
+import { omitWithPattern, hasSameProps } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
-import { hasSameProps } from '../libs';
-import type { TStates } from '../libs/block-states/types';
+import type { TStates, TBreakpoint } from '../libs/block-states/types';
 import type { InnerBlockType } from '../libs/inner-blocks/types';
 // import { detailedDiff } from 'deep-object-diff';
 
@@ -70,3 +69,12 @@ export const isInnerBlock = (
  */
 export const isNormalState = (selectedState: TStates): boolean =>
 	'normal' === selectedState;
+
+/**
+ * is current breakpoint is base breakpoint?
+ *
+ * @param {TBreakpoint} currentBreakPoint The current breakpoint.
+ * @return {boolean} true on success, false on otherwise.
+ */
+export const isBaseBreakpoint = (currentBreakPoint: TBreakpoint): boolean =>
+	'laptop' === currentBreakPoint;

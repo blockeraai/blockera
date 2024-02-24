@@ -18,13 +18,14 @@ import {
 } from '@publisher/controls';
 import { componentClassNames } from '@publisher/classnames';
 import { FeatureWrapper } from '@publisher/components';
+import { hasSameProps } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
 import { PositionExtensionIcon } from './index';
 import { isShowField } from '../../api/utils';
-import { generateExtensionId, hasSameProps } from '../utils';
+import { generateExtensionId } from '../utils';
 import type { TPositionExtensionProps } from './types/position-extension-props';
 
 export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(

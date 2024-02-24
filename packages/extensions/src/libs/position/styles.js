@@ -1,49 +1,54 @@
 // @flow
+
 /**
  * Publisher dependencies
  */
-import { computedCssRules } from '@publisher/style-engine';
+import {
+	getCssSelector,
+	computedCssDeclarations,
+} from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
-import type { GeneratorReturnType } from '@publisher/style-engine/src/types';
+import type { CssRule } from '@publisher/style-engine/src/types';
 
 /**
  * Internal dependencies
  */
+import * as config from '../base/config';
 import { attributes } from './attributes';
+import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
-import type { TBlockProps } from '../types';
 
-type cssProps = {
-	position?: string,
-	top?: string,
-	right?: string,
-	bottom?: string,
-	left?: string,
-	'z-index'?: string,
-};
-
-interface IConfigs {
-	positionConfig: {
-		cssGenerators: Object,
-		publisherPosition: cssProps,
-		publisherZIndex: string,
+export const PositionStyles = ({
+	state,
+	clientId,
+	blockName,
+	currentBlock,
+	// supports,
+	// activeDeviceType,
+	selectors: blockSelectors,
+	attributes: currentBlockAttributes,
+}: StylesProps): Array<CssRule> => {
+	const { publisherPosition, publisherZIndex } = config.positionConfig;
+	const blockProps = {
+		clientId,
+		blockName,
+		attributes: currentBlockAttributes,
 	};
-	blockProps: TBlockProps;
-	selector: string;
-	media: string;
-}
-
-export function PositionStyles({
-	positionConfig: { cssGenerators, publisherPosition, publisherZIndex },
-	blockProps,
-	selector,
-	media,
-}: IConfigs): Array<GeneratorReturnType> {
 	const { attributes: _attributes } = blockProps;
-
-	const generators = [];
-
-	const properties: cssProps = {};
+	const sharedParams = {
+		state,
+		clientId,
+		currentBlock,
+		blockSelectors,
+		className: currentBlockAttributes?.className,
+	};
+	const staticDefinitionParams = {
+		type: 'static',
+		options: {
+			important: true,
+		},
+	};
+	const styleGroup: Array<CssRule> = [];
 
 	if (
 		isActiveField(publisherPosition) &&
@@ -52,70 +57,171 @@ export function PositionStyles({
 			attributes.publisherPosition.default &&
 		_attributes.publisherPosition.type !== 'static'
 	) {
-		properties.position = _attributes.publisherPosition.type;
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherPosition.type',
+			fallbackSupportId: 'position',
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					publisherPosition: [
+						{
+							...staticDefinitionParams,
+							properties: {
+								position: _attributes.publisherPosition.type,
+							},
+						},
+					],
+				},
+				blockProps
+			),
+		});
 
 		const positionTop = getValueAddonRealValue(
 			_attributes.publisherPosition.position?.top
 		);
 		if (positionTop !== '') {
-			properties.top = positionTop;
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherPosition.position.top',
+				fallbackSupportId: 'positionTop',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherPositionTop: [
+							{
+								...staticDefinitionParams,
+								properties: {
+									top: positionTop,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
 		}
 
 		const positionRight = getValueAddonRealValue(
 			_attributes.publisherPosition.position?.right
 		);
 		if (positionRight !== '') {
-			properties.right = positionRight;
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherPosition.position.right',
+				fallbackSupportId: 'positionRight',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherPositionRight: [
+							{
+								...staticDefinitionParams,
+								properties: {
+									right: positionRight,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
 		}
 
 		const positionBottom = getValueAddonRealValue(
 			_attributes.publisherPosition.position?.bottom
 		);
 		if (positionBottom !== '') {
-			properties.bottom = positionBottom;
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherPosition.position.bottom',
+				fallbackSupportId: 'positionBottom',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherPositionBottom: [
+							{
+								...staticDefinitionParams,
+								properties: {
+									bottom: positionBottom,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
 		}
 
 		const positionLeft = getValueAddonRealValue(
 			_attributes.publisherPosition.position?.left
 		);
 		if (positionLeft !== '') {
-			properties.left = positionLeft;
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherPosition.position.left',
+				fallbackSupportId: 'positionLeft',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherPositionLeft: [
+							{
+								...staticDefinitionParams,
+								properties: {
+									left: positionLeft,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
 		}
 
 		if (isActiveField(publisherZIndex)) {
 			const zIndex = getValueAddonRealValue(_attributes.publisherZIndex);
 
-			if (zIndex !== attributes.publisherZIndex.default)
-				properties['z-index'] = zIndex;
+			if (zIndex !== attributes.publisherZIndex.default) {
+				const pickedSelector = getCssSelector({
+					...sharedParams,
+					query: 'publisherZIndex',
+					support: 'publisherZIndex',
+					fallbackSupportId: 'zIndex',
+				});
+
+				styleGroup.push({
+					selector: pickedSelector,
+					declarations: computedCssDeclarations(
+						{
+							publisherZIndex: [
+								{
+									...staticDefinitionParams,
+									properties: {
+										'z-index': zIndex,
+									},
+								},
+							],
+						},
+						blockProps
+					),
+				});
+			}
 		}
 	}
 
-	if (Object.keys(properties).length > 0) {
-		generators.push(
-			computedCssRules(
-				{
-					publisherPosition: [
-						{
-							type: 'static',
-							media,
-							selector,
-							properties,
-						},
-					],
-				},
-				blockProps
-			)
-		);
-	}
-
-	generators.push(
-		computedCssRules(
-			{
-				...(cssGenerators || {}),
-			},
-			blockProps
-		)
-	);
-
-	return generators.flat();
-}
+	return styleGroup;
+};

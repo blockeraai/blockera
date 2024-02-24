@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { select, useDispatch, useSelect } from '@wordpress/data';
-import { memo, useState } from '@wordpress/element';
+import { memo, useEffect, useState } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 import { Fill } from '@wordpress/components';
 
@@ -98,9 +98,7 @@ import {
 
 import { isInnerBlock, propsAreEqual } from '../../components';
 import extensions from './extensions.json';
-import type { TStates } from '../block-states/types';
 import { useBlockContext, useDisplayBlockControls } from '../../hooks';
-import { getStateInfo } from '../block-states/helpers';
 import StateContainer from '../../components/state-container';
 import type { TTabProps } from '@publisher/components/src/tabs/types';
 import { InnerBlocksExtension } from '../inner-blocks';
@@ -109,8 +107,9 @@ import { StylesIcon } from './icons/styles';
 import { AnimationsIcon } from './icons/animations';
 import { STORE_NAME } from '../base/store/constants';
 import StatesManager from '../block-states/components/states-manager';
-import type { InnerBlockType } from '../inner-blocks/types';
+import type { InnerBlocks, InnerBlockType } from '../inner-blocks/types';
 import type { THandleOnChangeAttributes } from '../types';
+import { resetExtensionSettings } from '../../utils';
 
 export const attributes = {
 	...typographyAttributes,
@@ -152,7 +151,7 @@ type Props = {
 	attributes: Object,
 	children?: ComponentType<any>,
 	currentStateAttributes: Object,
-	publisherInnerBlocks: Array<Object>,
+	publisherInnerBlocks: InnerBlocks,
 	setAttributes: (attributes: Object) => void,
 };
 
@@ -164,8 +163,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		currentStateAttributes,
 		...props
 	}: Props): MixedElement => {
-		const currentState: TStates =
-			currentStateAttributes.publisherCurrentState;
 		// dev-mode codes 👇 : to debug re-rendering
 		// useTraceUpdate({
 		// 	children,
@@ -177,36 +174,53 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 		type BlockContextual = {
 			currentTab: string,
-			blockStateId: number,
-			breakpointId: number,
+			publisherInnerBlocks: InnerBlocks,
 			currentBlock: 'master' | InnerBlockType,
 			handleOnChangeAttributes: THandleOnChangeAttributes,
 		};
 
 		const {
 			currentTab,
-			blockStateId,
-			breakpointId,
+			publisherInnerBlocks,
 			handleOnChangeAttributes,
 		}: BlockContextual = useBlockContext();
 
-		const { currentBlock = 'master' } = useSelect((select) => {
-			const { getExtensionCurrentBlock } = select(
-				'publisher-core/extensions'
-			);
+		const {
+			currentBlock,
+			currentState,
+			currentInnerBlockState,
+			currentBreakpoint,
+		} = useSelect((select) => {
+			const {
+				getExtensionCurrentBlock,
+				getExtensionInnerBlockState,
+				getExtensionCurrentBlockState,
+				getExtensionCurrentBlockStateBreakpoint,
+			} = select('publisher-core/extensions');
 
 			return {
 				currentBlock: getExtensionCurrentBlock(),
+				currentState: getExtensionCurrentBlockState(),
+				currentInnerBlockState: getExtensionInnerBlockState(),
+				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
 			};
 		});
+
+		useEffect(() => {
+			// When component unmount!
+			return () => {
+				resetExtensionSettings();
+			};
+			// eslint-disable-next-line
+		}, []);
 
 		const { icon } = extensions;
 
 		props = {
 			...props,
-			blockStateId,
-			breakpointId,
+			currentState,
 			setAttributes,
+			currentBreakpoint,
 			handleOnChangeAttributes,
 		};
 
@@ -275,6 +289,14 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		const block = {
 			blockName: props.name,
 			clientId: props.clientId,
+			// FIXME: important!
+			// 1- create new constant with "forceUpdateProps" name and assign below constants into that.
+			// 2- we should pass below constants to all extensions,
+			// because needs re-rendering extensions when switch between master or inner blocks and as well as switch between block states!
+			currentBlock,
+			currentState,
+			currentInnerBlockState,
+			currentBreakpoint,
 		};
 
 		const MappedExtensions = (tab: TTabProps): MixedElement => {
@@ -283,9 +305,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 					<Fill name={'publisher-core-block-card-children'}>
 						<StatesManager
 							states={currentStateAttributes.publisherBlockStates}
-							currentStateType={
-								currentStateAttributes.publisherCurrentState
-							}
 							onChange={handleOnChangeAttributes}
 							block={{
 								clientId: props.clientId,
@@ -293,9 +312,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								setAttributes,
 								blockName: props.name,
 							}}
-							rootStates={
-								currentBlockAttributes?.publisherBlockStates
-							}
 						/>
 					</Fill>
 
@@ -365,10 +381,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 						/>
 
 						<InnerBlocksExtension
-							innerBlocks={
-								currentStateAttributes?.publisherInnerBlocks ||
-								[]
-							}
+							innerBlocks={publisherInnerBlocks}
 						/>
 
 						<SpacingExtension
@@ -964,7 +977,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		];
 
 		return (
-			<StateContainer currentState={getStateInfo(currentState)}>
+			<StateContainer>
 				{useDisplayBlockControls() && (
 					<Tabs
 						tabs={tabs}

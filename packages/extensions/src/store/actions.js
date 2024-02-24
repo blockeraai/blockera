@@ -84,6 +84,15 @@ export function changeExtensionCurrentBlockState(
 	};
 }
 
+export function changeExtensionInnerBlockState(
+	currentInnerBlockState: TStates
+): Object {
+	return {
+		currentInnerBlockState,
+		type: 'CHANGE_INNER_BLOCK_STATE',
+	};
+}
+
 export function changeExtensionCurrentBlockStateBreakpoint(
 	currentBreakpoint: TBreakpoint
 ): Object {

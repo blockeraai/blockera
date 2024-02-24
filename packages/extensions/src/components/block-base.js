@@ -1,8 +1,9 @@
 // @flow
+
 /**
  * External dependencies
  */
-import { Fill, SlotFillProvider } from '@wordpress/components';
+import { SlotFillProvider } from '@wordpress/components';
 import { applyFilters } from '@wordpress/hooks';
 import type { Element, MixedElement, ComponentType } from 'react';
 import { select, useSelect, dispatch } from '@wordpress/data';
@@ -19,7 +20,8 @@ import {
 /**
  * Publisher dependencies
  */
-import { omitWithPattern } from '@publisher/utils';
+import { isEquals } from '@publisher/utils';
+import { BlockStyle } from '@publisher/style-engine';
 import { isLaptopBreakpoint } from '@publisher/editor';
 import { extensionClassNames } from '@publisher/classnames';
 
@@ -29,19 +31,15 @@ import { extensionClassNames } from '@publisher/classnames';
 import {
 	useIconEffect,
 	useAttributes,
-	useBlockStateInfo,
 	useInnerBlocksInfo,
 	BlockEditContextProvider,
 	useCalculateCurrentAttributes,
 } from '../hooks';
 import { SideEffect } from '../libs/base';
-import { BlockStyle } from './block-style';
-import { BlockCard } from '../libs/block-card';
 import { BlockPartials } from './block-partials';
-import { isInnerBlock, propsAreEqual } from './utils';
-import { sanitizedBlockAttributes } from '../hooks/utils';
-import type { InnerBlockType } from '../libs/inner-blocks/types';
-import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs';
+import { BlockFillPartials } from './block-fill-partials';
+import type { UpdateBlockEditorSettings } from '../libs/types';
+import { isBaseBreakpoint, isInnerBlock, propsAreEqual } from './utils';
 
 export type BlockBaseProps = {
 	additional: Object,
@@ -69,32 +67,47 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		);
 		const [isOpenGridBuilder, setOpenGridBuilder] = useState(false);
 
-		const { currentBlock = 'master' } = useSelect((select) => {
-			const { getExtensionCurrentBlock } = select(
-				'publisher-core/extensions'
-			);
+		const {
+			currentBlock,
+			currentState,
+			currentInnerBlockState,
+			currentBreakpoint,
+		} = useSelect((select) => {
+			const {
+				getExtensionCurrentBlock,
+				getExtensionInnerBlockState,
+				getExtensionCurrentBlockState,
+				getExtensionCurrentBlockStateBreakpoint,
+			} = select('publisher-core/extensions');
 
 			return {
 				currentBlock: getExtensionCurrentBlock(),
+				currentState: getExtensionCurrentBlockState(),
+				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
+				currentInnerBlockState: getExtensionInnerBlockState(),
 			};
 		});
-		const { changeExtensionCurrentBlock: setCurrentBlock } =
-			dispatch('publisher-core/extensions') || {};
+		const {
+			changeExtensionCurrentBlock: setCurrentBlock,
+			changeExtensionCurrentBlockState: setCurrentState,
+			changeExtensionInnerBlockState: setInnerBlockState,
+		} = dispatch('publisher-core/extensions') || {};
 
 		const { getDeviceType } = select('publisher-core/editor');
 
-		const { innerBlockId, currentInnerBlock, publisherInnerBlocks } =
-			useInnerBlocksInfo({ name, additional, attributes });
+		const { currentInnerBlock, publisherInnerBlocks } = useInnerBlocksInfo({
+			name,
+			additional,
+			attributes,
+		});
 
 		const masterIsNormalState = (): boolean =>
-			'normal' === attributes?.publisherCurrentState &&
-			isLaptopBreakpoint(getDeviceType());
+			'normal' === currentState && isLaptopBreakpoint(getDeviceType());
 
 		const isNormalState = (): boolean => {
 			if (isInnerBlock(currentBlock)) {
 				return (
-					'normal' ===
-						currentInnerBlock?.attributes?.publisherCurrentState &&
+					'normal' === currentInnerBlockState &&
 					isLaptopBreakpoint(getDeviceType())
 				);
 			}
@@ -102,27 +115,39 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			return masterIsNormalState();
 		};
 
-		/**
-		 * Filterable attributes before initializing block edit component.
-		 *
-		 * hook: 'publisherCore.blockEdit.attributes'
-		 *
-		 * @since 1.0.0
-		 */
-		attributes = applyFilters(
-			'publisherCore.blockEdit.attributes',
-			attributes,
-			{
-				blockId: name,
-				blockClientId: clientId,
-				isNormalState,
+		const getAttributes = (key: string = ''): any => {
+			if (key && attributes[key]) {
+				return attributes[key];
 			}
-		);
 
-		const handleOnSwitchBlockSettings = (
-			_currentBlock: 'master' | InnerBlockType
+			return attributes;
+		};
+
+		const { getAttributesWithPropsId, handleOnChangeAttributes } =
+			useAttributes(setAttributes, {
+				isNormalState,
+				getAttributes,
+				blockId: name,
+				masterIsNormalState,
+				publisherInnerBlocks,
+			});
+
+		const updateBlockEditorSettings: UpdateBlockEditorSettings = (
+			key: string,
+			value: any
 		): void => {
-			setCurrentBlock(_currentBlock);
+			switch (key) {
+				case 'current-block':
+					setCurrentBlock(value);
+					break;
+				case 'current-state':
+					if (isInnerBlock(currentBlock)) {
+						return setInnerBlockState(value);
+					}
+
+					setCurrentState(value);
+					break;
+			}
 		};
 
 		const { supports } = useSelect((select) => {
@@ -132,19 +157,13 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		});
 
 		const blockEditRef = useRef(null);
-		const { blockStateId, breakpointId } = useBlockStateInfo({
-			attributes,
-			currentBlock,
-			getDeviceType,
-			currentInnerBlock,
-		});
 		const currentAttributes = useCalculateCurrentAttributes({
 			attributes,
 			currentBlock,
-			blockStateId,
-			breakpointId,
-			innerBlockId,
+			currentState,
 			isNormalState,
+			currentInnerBlockState,
+			currentBreakpoint,
 			currentInnerBlock,
 			publisherInnerBlocks,
 		});
@@ -165,43 +184,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 		const { edit: BlockEditComponent } = additional;
 
-		useEffect(() => {
-			const publisherAttributes = omitWithPattern(
-				sanitizedBlockAttributes(attributes),
-				ignoreDefaultBlockAttributeKeysRegExp()
-			);
-
-			if (
-				'' === attributes.publisherPropsId &&
-				2 < Object.keys(publisherAttributes)?.length
-			) {
-				const d = new Date();
-				setAttributes({
-					...attributes,
-					publisherPropsId:
-						'' +
-						d.getMonth() +
-						d.getDate() +
-						d.getHours() +
-						d.getMinutes() +
-						d.getSeconds() +
-						d.getMilliseconds(),
-				});
-			} else if (
-				'' !== attributes.publisherPropsId &&
-				2 === Object.keys(publisherAttributes)?.length &&
-				!attributes.publisherInnerBlocks.length
-			) {
-				setAttributes({
-					...attributes,
-					publisherPropsId: '',
-				});
-			}
-
-			return undefined;
-			// eslint-disable-next-line
-		}, [attributes]);
-
 		const _attributes: Object = useMemo(() => {
 			const _className = extensionClassNames(
 				{
@@ -219,54 +201,45 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			// eslint-disable-next-line
 		}, []);
 
-		const getAttributes = (key: string = ''): any => {
-			if (key && attributes[key]) {
-				return attributes[key];
-			}
+		const FilterAttributes = (): MixedElement => {
+			/**
+			 * Filterable attributes before initializing block edit component.
+			 *
+			 * hook: 'publisherCore.blockEdit.attributes'
+			 *
+			 * @since 1.0.0
+			 */
+			useEffect(
+				() => {
+					// Creat mutable constant to prevent directly change to immutable state constant.
+					const clonedAttributes = { ...attributes };
+					const filteredAttributes = applyFilters(
+						'publisherCore.blockEdit.attributes',
+						getAttributesWithPropsId(clonedAttributes),
+						{
+							blockId: name,
+							blockClientId: clientId,
+							isNormalState: isNormalState(),
+							isMasterBlock: !isInnerBlock(currentBlock),
+							isBaseBreakpoint:
+								isBaseBreakpoint(currentBreakpoint),
+							currentBreakpoint,
+							currentBlock,
+							currentState,
+						}
+					);
 
-			return attributes;
-		};
+					if (isEquals(attributes, filteredAttributes)) {
+						return;
+					}
 
-		const { handleOnChangeAttributes } = useAttributes(setAttributes, {
-			innerBlockId,
-			blockStateId,
-			breakpointId,
-			isNormalState,
-			getAttributes,
-			blockId: name,
-			masterIsNormalState,
-			publisherInnerBlocks,
-		});
-
-		const FillComponents = (): MixedElement => {
-			return (
-				<>
-					<Fill name={`publisher-block-card-content-${clientId}`}>
-						<BlockCard
-							clientId={clientId}
-							handleOnClick={handleOnSwitchBlockSettings}
-							states={attributes.publisherBlockStates}
-							currentInnerBlock={currentInnerBlock}
-						/>
-					</Fill>
-					<Fill name={`publisher-block-edit-content-${clientId}`}>
-						<BlockEditComponent
-							{...{
-								// Sending props like exactly "edit" function props of WordPress Block.
-								// Because needs total block props in outside overriding component like "publisher-blocks" in overriding process.
-								name,
-								clientId,
-								supports,
-								className,
-								setAttributes,
-								currentStateAttributes: currentAttributes,
-								attributes: currentAttributes,
-								...props,
-							}}
-						/>
-					</Fill>
-				</>
+					setAttributes(filteredAttributes);
+				},
+				// eslint-disable-next-line
+				[]
 			);
+
+			return <></>;
 		};
 
 		return (
@@ -280,18 +253,20 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						storeName: 'publisher-core/controls',
 					},
 					currentTab,
-					blockStateId,
-					breakpointId,
+					currentBlock,
+					currentState,
 					setCurrentTab,
 					isNormalState,
 					setAttributes,
 					getAttributes,
+					currentBreakpoint,
 					currentInnerBlock,
 					isOpenGridBuilder,
 					setOpenGridBuilder,
+					publisherInnerBlocks,
 					attributes: _attributes,
 					handleOnChangeAttributes,
-					handleOnSwitchBlockSettings,
+					updateBlockEditorSettings,
 					BlockComponent: () => children,
 					activeDeviceType: getDeviceType(),
 					getBlockType: () =>
@@ -303,13 +278,40 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						<SideEffect
 							{...{
 								currentTab,
-								currentState:
-									currentAttributes.publisherCurrentState,
+								currentState: isInnerBlock(currentBlock)
+									? currentInnerBlockState
+									: currentState,
 							}}
 						/>
+						<FilterAttributes />
 						<SlotFillProvider>
 							<BlockPartials clientId={clientId} />
-							<FillComponents />
+							<BlockFillPartials
+								{...{
+									clientId,
+									currentState,
+									currentBlock,
+									currentInnerBlock,
+									BlockEditComponent,
+									publisherInnerBlocks,
+									currentInnerBlockState,
+									updateBlockEditorSettings,
+									states: attributes.publisherBlockStates,
+									blockProps: {
+										// Sending props like exactly "edit" function props of WordPress Block.
+										// Because needs total block props in outside overriding component like "publisher-blocks" in overriding process.
+										name,
+										clientId,
+										supports,
+										className,
+										setAttributes,
+										attributes: currentAttributes,
+										currentStateAttributes:
+											currentAttributes,
+										...props,
+									},
+								}}
+							/>
 						</SlotFillProvider>
 					</InspectorControls>
 					<div ref={blockEditRef} />
@@ -319,8 +321,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							clientId,
 							supports,
 							attributes,
-							// currentBlock,
-							setAttributes,
 							blockName: name,
 							activeDeviceType: getDeviceType(),
 						}}

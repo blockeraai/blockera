@@ -11,7 +11,7 @@ import type { MixedElement } from 'react';
  */
 import { controlInnerClassNames } from '@publisher/classnames';
 import { useDragValue } from '@publisher/utils';
-import { isValid, useValueAddon } from '@publisher/hooks';
+import { isValid, setValueAddon, useValueAddon } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -91,6 +91,8 @@ export function SideItem({
 		useValueAddon({
 			types: ['variable'],
 			value: value.position[side],
+			setValue: (newValue: any): void =>
+				setValueAddon(newValue, setValue, defaultValue),
 			variableTypes: ['spacing'],
 			onChange: (newValue) => {
 				setOpenPopover('');

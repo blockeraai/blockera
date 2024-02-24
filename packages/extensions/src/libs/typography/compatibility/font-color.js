@@ -3,11 +3,8 @@
 /**
  * Publisher dependencies
  */
-import { getColor } from '@publisher/core-data';
-import {
-	generateVariableString,
-	isValid,
-} from '@publisher/hooks/src/use-value-addon/helpers';
+import { getColorVAFromIdString } from '@publisher/core-data';
+import { isValid } from '@publisher/hooks/src/use-value-addon/helpers';
 
 export function fontColorFromWPCompatibility({
 	attributes,
@@ -18,32 +15,23 @@ export function fontColorFromWPCompatibility({
 		// textColor attribute in root always is variable
 		// it should be changed to a Value Addon (variable)
 		if (attributes?.textColor !== undefined) {
-			const fontColorVar = getColor(attributes?.textColor);
+			const color = getColorVAFromIdString(attributes?.textColor);
 
-			if (fontColorVar) {
-				attributes.publisherFontColor = {
-					settings: {
-						...fontColorVar,
-						type: 'color',
-						var: generateVariableString({
-							reference: fontColorVar?.reference || { type: '' },
-							type: 'color',
-							id: fontColorVar?.id || '',
-						}),
-					},
-					name: fontColorVar?.name,
-					isValueAddon: true,
-					valueType: 'variable',
+			if (color) {
+				return {
+					publisherFontColor: color,
 				};
 			}
 		}
 		// font size is not variable
 		else if (attributes?.style?.color?.text !== undefined) {
-			attributes.publisherFontColor = attributes?.style?.color?.text;
+			return {
+				publisherFontColor: attributes?.style?.color?.text,
+			};
 		}
 	}
 
-	return attributes;
+	return false;
 }
 
 export function fontColorToWPCompatibility({

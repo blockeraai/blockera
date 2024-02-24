@@ -3,11 +3,8 @@
 /**
  * Publisher dependencies
  */
-import { getFontSizeBy } from '@publisher/core-data';
-import {
-	generateVariableString,
-	isValid,
-} from '@publisher/hooks/src/use-value-addon/helpers';
+import { getFontSizeBy, generateVariableString } from '@publisher/core-data';
+import { isValid } from '@publisher/hooks/src/use-value-addon/helpers';
 
 export function fontSizeFromWPCompatibility({
 	attributes,

@@ -86,26 +86,57 @@ export const deletePropertyByPath = (obj: Object, path: string): Object => {
 /**
  * Deep merge two objects.
  *
- * @copyright https://stackoverflow.com/a/34749873
+ * @param {Object} target
+ * @param {Object} source
+ */
+export function mergeObject(target: Object, source: Object): Object {
+	if (!isObject(source)) {
+		return target;
+	}
+
+	const result = { ...target }; // Create a clone of the target object
+
+	Object.keys(source).forEach((key) => {
+		if (isObject(source[key])) {
+			if (!result[key] || !isObject(result[key])) result[key] = {};
+			result[key] = mergeObject(result[key], source[key]); // Merge recursively
+		} else {
+			result[key] = source[key];
+		}
+	});
+
+	return result;
+}
+
+/**
+ * Deep merge multiple objects
  *
  * @param {Object} target
  * @param {Object} sources
  */
-export function mergeObject(target: Object, ...sources: Object): Object {
-	if (!sources.length) return target;
-
-	const source = sources.shift();
-
-	if (isObject(target) && isObject(source)) {
-		for (const key in source) {
-			if (isObject(source[key])) {
-				if (!target[key]) Object.assign(target, { [key]: {} });
-				mergeObject(target[key], source[key]);
-			} else {
-				Object.assign(target, { [key]: source[key] });
-			}
-		}
+export function mergeObjects(
+	target: Object,
+	...sources: Array<Object>
+): Object {
+	if (!isObject(target)) {
+		return target;
 	}
 
-	return mergeObject(target, ...sources);
+	const result = { ...target }; // Create a clone of the target object
+
+	sources.forEach((_source) => {
+		if (isObject(_source)) {
+			Object.keys(_source).forEach((key) => {
+				if (isObject(_source[key])) {
+					if (!result[key] || !isObject(result[key]))
+						result[key] = {};
+					result[key] = mergeObjects(result[key], _source[key]); // Merge recursively
+				} else {
+					result[key] = _source[key];
+				}
+			});
+		}
+	});
+
+	return result;
 }

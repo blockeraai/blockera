@@ -17,7 +17,10 @@ import {
 	getUserDynamicValueItem,
 } from './index';
 
-const _getDynamicValue = function (
+export const getDynamicValue: (
+	category: string,
+	id: string
+) => ?DynamicValueItem = memoize(function (
 	category: string,
 	id: string
 ): ?DynamicValueItem {
@@ -37,13 +40,4 @@ const _getDynamicValue = function (
 	}
 
 	return null;
-};
-
-const _getDynamicValueMemoized = memoize(_getDynamicValue);
-
-export const getDynamicValue = (
-	category: string,
-	id: string
-): ?DynamicValueItem => {
-	return _getDynamicValueMemoized(category, id);
-};
+});

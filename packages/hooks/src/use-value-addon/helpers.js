@@ -24,7 +24,6 @@ import {
 	getUserDynamicValueItemsBy,
 	getVariable,
 	getWidthSizes,
-	type ValueAddonReference,
 	type VariableCategory,
 } from '@publisher/core-data';
 import { ColorIndicator } from '@publisher/components';
@@ -35,9 +34,10 @@ import { NoticeControl } from '@publisher/controls';
  * Internal dependencies
  */
 import type {
-	DynamicValueCategoryDetail,
 	ValueAddon,
+	ValueAddonProps,
 	VariableCategoryDetail,
+	DynamicValueCategoryDetail,
 } from './types';
 import VarTypeFontSizeIcon from './icons/var-font-size';
 import VarTypeSpacingIcon from './icons/var-spacing';
@@ -56,8 +56,30 @@ import DVTypeShortcodeIcon from './icons/dv-shortcode';
 import DVTypeEmailIcon from './icons/dv-email';
 import DVTypeCommentIcon from './icons/dv-comment';
 
+/**
+ * Sets value addon.
+ *
+ * @param {ValueAddonProps} newValue The new value addon.
+ * @param {Function} setState The setState of target control component.
+ * @param {*} defaultValue The target control default value.
+ * @return {void}
+ */
+export function setValueAddon(
+	newValue: ValueAddonProps,
+	setState: (newValue: any) => void,
+	defaultValue: any
+): void {
+	if (!newValue?.isValueAddon) {
+		setState(defaultValue);
+
+		return;
+	}
+
+	setState(newValue);
+}
+
 export function isValid(value: ValueAddon): boolean {
-	return !isUndefined(value?.isValueAddon) && value?.isValueAddon;
+	return value?.isValueAddon;
 }
 
 export function getValueAddonRealValue(value: ValueAddon | string): string {
@@ -70,7 +92,7 @@ export function getValueAddonRealValue(value: ValueAddon | string): string {
 	}
 
 	if (isObject(value)) {
-		if (!isUndefined(value?.isValueAddon)) {
+		if (value?.isValueAddon) {
 			const variable = getVariable(
 				value?.settings?.type,
 				value?.settings?.id
@@ -289,48 +311,6 @@ export function getDynamicValueCategory(
 		items: [],
 		notFound: true,
 	};
-}
-
-export function generateVariableString({
-	reference,
-	type,
-	id,
-}: {
-	reference: ValueAddonReference,
-	type: VariableCategory,
-	id: string,
-}): string {
-	let _type: string = type;
-	let _reference: string = reference?.type;
-
-	if (type === 'width-size') {
-		if (id === 'contentSize') {
-			id = 'content-size';
-			_type = 'global';
-			_reference = 'style';
-		} else if (id === 'wideSize') {
-			id = 'wide-size';
-			_type = 'global';
-			_reference = 'style';
-		}
-	} else {
-		_type = type.replace(/^linear-|^radial-/i, '');
-	}
-
-	switch (_reference) {
-		case 'custom':
-			_reference = 'publisher';
-			break;
-
-		case 'theme':
-		case 'plugin':
-		case 'core':
-		case 'core-pro':
-			_reference = 'preset';
-			break;
-	}
-
-	return `--wp--${_reference}--${_type}--${id}`;
 }
 
 export function canUnlinkVariable(value: ValueAddon): boolean {

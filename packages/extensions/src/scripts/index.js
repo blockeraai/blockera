@@ -16,6 +16,7 @@ import {
 	bootstrapPositionExtension,
 	bootstrapBackgroundExtension,
 	bootstrapBorderAndShadowExtension,
+	bootstrapInnerBlocksExtension,
 } from '../libs';
 
 export default function (wp: Object) {
@@ -97,6 +98,7 @@ export default function (wp: Object) {
 		},
 	});
 
+	bootstrapInnerBlocksExtension();
 	bootstrapPositionExtension();
 	bootstrapSizeExtension();
 	bootstrapTypographyExtension();

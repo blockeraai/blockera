@@ -2,7 +2,6 @@
 /**
  * External dependencies
  */
-import memoize from 'fast-memoize';
 import type { MixedElement } from 'react';
 import { dispatch } from '@wordpress/data';
 
@@ -29,6 +28,7 @@ import MobileLandscapeIcon from './icons/mobile-landscape';
 import LaptopIcon from './icons/laptop';
 import ExtraLargeIcon from './icons/extra-large';
 import LargeIcon from './icons/large';
+import { isInnerBlock } from '../../components';
 
 export const getStateInfo = (state: TStates | number): StateTypes => {
 	return 'number' === typeof state
@@ -37,14 +37,10 @@ export const getStateInfo = (state: TStates | number): StateTypes => {
 };
 
 export const getBreakpointInfo = (
-	breakpoint: TBreakpoint | number,
+	breakpoint: TBreakpoint,
 	parentState: TStates = 'normal'
 ): BreakpointTypes | void => {
-	return 'number' === typeof breakpoint
-		? breakpoints()[breakpoint]
-		: breakpoints(parentState).find((b: BreakpointTypes): boolean => {
-				return [b.type, b.label].includes(breakpoint);
-		  });
+	return breakpoints(parentState)[breakpoint];
 };
 
 export function BreakpointIcon({
@@ -83,91 +79,37 @@ export function BreakpointIcon({
 }
 
 export function onChangeBlockStates(
-	newValue: Array<Object>,
+	newValue: Array<{ ...StateTypes, isSelected: boolean }>,
 	params: Object
 ): Object {
-	const { changeExtensionCurrentBlockState: switchBlockState } =
-		dispatch('publisher-core/extensions') || {};
-	const { states, rootStates, onChange, currentStateType } = params;
-	const prepareSelectedState = memoize(() =>
-		newValue.find((item) => item.isSelected)
-	);
-	const selectedState = prepareSelectedState();
+	const { states: _states, onChange, currentBlock, calculatedValue } = params;
+	const {
+		changeExtensionCurrentBlockState: setCurrentState,
+		changeExtensionInnerBlockState: setInnerBlockState,
+	} = dispatch('publisher-core/extensions') || {};
+	const _newValue: {
+		[key: TStates]: {
+			...StateTypes,
+			isSelected: boolean,
+		},
+	} = {};
 
-	if (!selectedState) {
-		return;
-	}
+	newValue.forEach((state, id) => {
+		if (isInnerBlock(currentBlock) && state?.isSelected) {
+			setInnerBlockState(state?.type || calculatedValue[id]?.type);
+		} else if (state?.isSelected) {
+			setCurrentState(state?.type || calculatedValue[id]?.type);
+		}
 
-	const isEqualsWithCurrentState = (type: TStates) =>
-		type === currentStateType;
-
-	if (isEqualsWithCurrentState(selectedState.type) && states.length) {
-		return;
-	}
-
-	switchBlockState(selectedState.type);
-
-	if (newValue.length !== states.length) {
-		const addOrModifyRootItems = {
-			publisherCurrentState: selectedState.type,
+		_newValue[state?.type || calculatedValue[id]?.type] = {
+			...(calculatedValue[id] || {}),
+			...state,
 		};
+	});
 
-		const blockStates = rootStates;
-
-		onChange(
-			'publisherBlockStates',
-			newValue.map((state, index) => {
-				if (blockStates[index] && blockStates[index].isSelected) {
-					return {
-						...blockStates[index],
-						isOpen: false,
-						isSelected: false,
-					};
-				}
-				if (blockStates[index]) {
-					return {
-						...blockStates[index],
-						isOpen: false,
-					};
-				}
-
-				return state;
-			}),
-			{
-				addOrModifyRootItems,
-			}
-		);
-
+	if (isEquals(_states, _newValue)) {
 		return;
 	}
 
-	if (!isEquals(selectedState.type, currentStateType)) {
-		const publisherBlockStates = rootStates.map(
-			(state: Object, stateId: number): Object => {
-				if (stateId === newValue.indexOf(selectedState)) {
-					return {
-						...state,
-						isOpen: false,
-						isSelected: true,
-						type: selectedState.type,
-						label: selectedState.label,
-					};
-				}
-
-				return {
-					...state,
-					isOpen: false,
-					isSelected: false,
-				};
-			}
-		);
-
-		onChange('publisherCurrentState', selectedState.type, {
-			addOrModifyRootItems: {
-				publisherBlockStates,
-			},
-		});
-	} else {
-		onChange('publisherCurrentState', selectedState.type || 'normal');
-	}
+	onChange('publisherBlockStates', _newValue);
 }

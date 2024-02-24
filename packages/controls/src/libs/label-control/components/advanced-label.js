@@ -3,20 +3,20 @@
 /**
  * External Dependencies
  */
+import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { useState } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
 
 /**
  * Publisher Dependencies
  */
-import { useBlockContext } from '@publisher/extensions/src/hooks/context';
-import { useAdvancedLabelProps } from '@publisher/hooks';
 import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
+import { useAdvancedLabelProps } from '@publisher/hooks';
 import { Button, Flex, Popover } from '@publisher/components';
+import { useBlockContext } from '@publisher/extensions/src/hooks/context';
 import { isEmpty, isFunction, isNull, isUndefined } from '@publisher/utils';
 
 /**
@@ -51,10 +51,7 @@ export const AdvancedLabelControl = ({
 
 	const {
 		getAttributes = () => {},
-		getCurrentState = () => 'normal',
 		isNormalState = () => true,
-		blockStateId,
-		breakpointId,
 		switchBlockState,
 	} = useBlockContext();
 
@@ -70,10 +67,7 @@ export const AdvancedLabelControl = ({
 		attribute,
 		isRepeater,
 		defaultValue,
-		blockStateId,
-		breakpointId,
 		isNormalState: isNormalState(),
-		currentState: getCurrentState(),
 		blockAttributes: getAttributes(),
 	});
 

@@ -18,7 +18,7 @@ import {
 	ControlContextProvider,
 	NoticeControl,
 } from '@publisher/controls';
-import { checkVisibleItemLength } from '@publisher/utils';
+import { checkVisibleItemLength, hasSameProps } from '@publisher/utils';
 import { componentClassNames } from '@publisher/classnames';
 import { FeatureWrapper } from '@publisher/components';
 
@@ -29,9 +29,9 @@ import ClipTextIcon from './icons/clip-text';
 import ClipNoneIcon from './icons/clip-none';
 import InheritIcon from '../../icons/inherit';
 import { isShowField } from '../../api/utils';
+import { generateExtensionId } from '../utils';
 import ClipPaddingIcon from './icons/clip-padding';
 import ClipContentIcon from './icons/clip-content';
-import { generateExtensionId, hasSameProps } from '../utils';
 import type { TBackgroundProps } from './types/background-props';
 import { default as BackgroundExtensionIcon } from './icons/extension-icon';
 import { ExtensionSettings } from '../settings';

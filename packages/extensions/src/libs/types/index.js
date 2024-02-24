@@ -10,8 +10,10 @@ import type { MixedElement } from 'react';
 import type { TBlockProps } from './block-props';
 import type { THandleOnChangeAttributes } from './handle-onchange-attributes';
 
+export type * from './StylesProps';
 export type { TBlockProps } from './block-props';
 export type { ExtensionProps } from './extension-prop-types';
+export type { UpdateBlockEditorSettings } from './block-editor-settings';
 export type { THandleOnChangeWithPath } from './handle-onchange-with-path';
 export type { THandleOnChangeAttributes } from './handle-onchange-attributes';
 
