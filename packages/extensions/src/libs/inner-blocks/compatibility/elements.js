@@ -1,6 +1,6 @@
 // @flow
 
-const link = ['core/paragraph', 'core/heading', 'core/list'];
+const link = ['core/paragraph', 'core/heading', 'core/list', 'core/post-terms'];
 
 const heading = ['core/quote'];
 
