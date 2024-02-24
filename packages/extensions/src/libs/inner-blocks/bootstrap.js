@@ -35,7 +35,7 @@ export const bootstrap = (): void => {
 				return attributes;
 			}
 
-			elementsSupportedBlocks.keys().forEach((element) => {
+			Object.keys(elementsSupportedBlocks).forEach((element) => {
 				switch (element) {
 					//
 					// Link element
