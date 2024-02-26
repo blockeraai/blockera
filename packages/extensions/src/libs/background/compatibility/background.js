@@ -54,7 +54,12 @@ export function backgroundToWPCompatibility({
 	let result = {};
 
 	Object.entries(newValue).forEach(([, item]: [string, Object]): void => {
-		if (item?.type === 'image' && item?.image !== 'image') {
+		// only 1 image
+		if (result) {
+			return;
+		}
+
+		if (item?.type === 'image' && item?.image !== '') {
 			result = {
 				style: {
 					background: {
