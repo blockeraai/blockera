@@ -79,37 +79,32 @@ export function BreakpointIcon({
 }
 
 export function onChangeBlockStates(
-	newValue: Array<{ ...StateTypes, isSelected: boolean }>,
+	newValue: { [key: TStates]: { ...StateTypes, isSelected: boolean } },
 	params: Object
-): Object {
+): void {
 	const { states: _states, onChange, currentBlock, calculatedValue } = params;
 	const {
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setInnerBlockState,
 	} = dispatch('publisher-core/extensions') || {};
-	const _newValue: {
-		[key: TStates]: {
-			...StateTypes,
-			isSelected: boolean,
-		},
-	} = {};
 
-	newValue.forEach((state, id) => {
-		if (isInnerBlock(currentBlock) && state?.isSelected) {
-			setInnerBlockState(state?.type || calculatedValue[id]?.type);
-		} else if (state?.isSelected) {
-			setCurrentState(state?.type || calculatedValue[id]?.type);
+	Object.entries(newValue).forEach(
+		([id, state]: [
+			TStates,
+			{ ...StateTypes, isSelected: boolean }
+		]): void => {
+			if (isInnerBlock(currentBlock) && state?.isSelected) {
+				console.log('inner', state);
+				setInnerBlockState(state?.type || calculatedValue[id]?.type);
+			} else if (state?.isSelected) {
+				setCurrentState(state?.type || calculatedValue[id]?.type);
+			}
 		}
+	);
 
-		_newValue[state?.type || calculatedValue[id]?.type] = {
-			...(calculatedValue[id] || {}),
-			...state,
-		};
-	});
-
-	if (isEquals(_states, _newValue)) {
+	if (isEquals(_states, newValue)) {
 		return;
 	}
 
-	onChange('publisherBlockStates', _newValue);
+	onChange('publisherBlockStates', newValue);
 }

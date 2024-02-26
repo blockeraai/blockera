@@ -13,23 +13,22 @@ import { Icon } from '@publisher/components';
 /**
  * Internal dependencies
  */
-import type { StateTypes } from '../types';
+import type { StateTypes, TStates } from '../types';
 
 const ItemOpener = ({
-	item,
 	itemId,
 }: {
 	item: StateTypes,
-	itemId: number,
+	itemId: TStates,
 }): boolean | MixedElement => {
-	if ('normal' === item.type && 0 === itemId) {
+	if ('normal' === itemId) {
 		return false;
 	}
 
 	return <Icon library={'publisher'} icon={'publisherSettings'} />;
 };
 
-ItemOpener.hasButton = (item: StateTypes, itemId: number): boolean =>
-	'normal' !== item.type || 0 !== itemId;
+ItemOpener.hasButton = (item: StateTypes, itemId: TStates): boolean =>
+	'normal' !== itemId;
 
 export default ItemOpener;

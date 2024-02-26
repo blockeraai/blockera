@@ -8,7 +8,11 @@ import { __ } from '@wordpress/i18n';
 /**
  * Publisher dependencies
  */
-import { SelectControl, useControlContext } from '@publisher/controls';
+import {
+	InputControl,
+	SelectControl,
+	useControlContext,
+} from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -35,24 +39,24 @@ const ItemBody = ({
 	} = useControlContext();
 
 	return (
-		<SelectControl
-			id={`[${itemId}].type`}
-			defaultValue={item.type}
-			label={__('State', 'publisher-core')}
-			labelPopoverTitle={__('Block States', 'publisher-core')}
-			labelDescription={<LabelDescription />}
-			columns="columns-2"
-			options={Object.values(states)?.map((state) => ({
-				value: state.type,
-				label: state.label,
-			}))}
-			onChange={(newValue) => {
-				const dynamicValue = item.callback(newValue);
+		<>
+			<SelectControl
+				id={`[${itemId}].type`}
+				defaultValue={item.type}
+				label={__('State', 'publisher-core')}
+				labelPopoverTitle={__('Block States', 'publisher-core')}
+				labelDescription={<LabelDescription />}
+				columns="columns-2"
+				options={Object.values(states)
+					.filter((state: Object): boolean => 'normal' !== state.type)
+					.map((state: Object): Object => ({
+						value: state.type,
+						label: state.label,
+					}))}
+				onChange={(newValue: TStates): void => {
+					const dynamicValue = item.callback(newValue);
 
-				changeRepeaterItem({
-					controlId,
-					itemId,
-					value: {
+					let value = {
 						...item,
 						...dynamicValue,
 						breakpoints:
@@ -62,10 +66,44 @@ const ItemBody = ({
 										newValue,
 										block.attributes
 								  ),
-					},
-				});
-			}}
-		/>
+						isSelected: true,
+					};
+
+					if (['custom-class', 'parent-class'].includes(newValue)) {
+						value = {
+							...value,
+							'css-class': '',
+						};
+					}
+
+					changeRepeaterItem({
+						controlId,
+						itemId,
+						value,
+						getId: (): TStates => newValue,
+					});
+				}}
+			/>
+			{['custom-class', 'parent-class'].includes(item.type) && (
+				<InputControl
+					id={`[${itemId}].css-class`}
+					type={'text'}
+					columns={'columns-2'}
+					defaultValue={''}
+					onChange={(newValue: string): void =>
+						changeRepeaterItem({
+							itemId,
+							controlId,
+							value: {
+								...item,
+								'css-class': newValue,
+							},
+						})
+					}
+					label={__('CSS Class', 'publisher-core')}
+				/>
+			)}
+		</>
 	);
 };
 
