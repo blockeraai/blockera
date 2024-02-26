@@ -6,7 +6,8 @@ export {
 	injectHelpersToCssGenerators,
 } from './utils';
 
-export { getCssSelector, useMedia } from './hooks';
+export { useMedia } from './hooks';
+export { getCssSelector } from './get-css-selector';
 
 export { default as CssGenerator } from './css-generator';
 

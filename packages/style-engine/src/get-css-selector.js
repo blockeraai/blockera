@@ -1,4 +1,10 @@
 // @flow
+
+/**
+ * External dependencies
+ */
+import { select } from '@wordpress/data';
+
 /**
  * Publisher dependencies
  */
@@ -11,8 +17,8 @@ import type { InnerBlockType } from '@publisher/extensions/src/libs/inner-blocks
 /**
  * Internal dependencies
  */
-import { getSelector } from '../utils';
-import type { NormalizedSelectorProps } from '../types';
+import { getSelector } from './utils';
+import type { NormalizedSelectorProps } from './types';
 
 export function getCssSelector({
 	state,
@@ -30,16 +36,19 @@ export function getCssSelector({
 			[key: 'master' | InnerBlockType | string]: string,
 		},
 	} = {};
+	const excludedPseudoClasses = [
+		'normal',
+		'parent-class',
+		'custom-class',
+		'parent-hover',
+	];
+	const { getSelectedBlock } = select('core/block-editor');
 
-	// FIXME: implements below infrastructure!
-	if (['parent-class', 'parent-hover', 'custom-class'].includes(state)) {
-		return getSelector({
-			state,
-			clientId,
-			selectors,
-			className,
-			currentBlock,
-		});
+	// primitive block value.
+	let block: Object = {};
+
+	if ('function' === typeof getSelectedBlock) {
+		block = getSelectedBlock();
 	}
 
 	const register = (_selector: string): void => {
@@ -47,6 +56,28 @@ export function getCssSelector({
 
 		// Assume selector is invalid.
 		if (!_selector) {
+			// we try to use parent or custom css class if exists!
+			if (
+				['parent-class', 'custom-class'].includes(state) &&
+				block?.attributes?.publisherBlockStates[state]
+			) {
+				_selector =
+					block?.attributes?.publisherBlockStates[state]['css-class'];
+
+				if (_selector.trim()) {
+					if ('parent-class' === state) {
+						_selector = `${_selector} ${rootSelector}`;
+					}
+
+					selectors[state] = {
+						// $FlowFixMe
+						[currentBlock]: _selector,
+					};
+
+					return;
+				}
+			}
+
 			selectors[state] = {
 				// $FlowFixMe
 				[currentBlock]: rootSelector,
@@ -61,18 +92,41 @@ export function getCssSelector({
 			_selector = `${rootSelector} ${_selector}`;
 		}
 
-		const prevSelector = selectors[state]
+		const registeredSelector = selectors[state]
 			? selectors[state][currentBlock] || ''
 			: '';
 
-		if ('normal' !== state) {
+		// if state not equals with any one of excluded pseudo-class
+		if (!excludedPseudoClasses.includes(state)) {
 			_selector = `${_selector}:${state}`;
+		}
+
+		switch (state) {
+			case 'parent-class':
+				if (block?.attributes?.publisherBlockStates[state]) {
+					_selector = `${block?.attributes?.publisherBlockStates[state]['css-class']} ${_selector}`;
+				}
+				break;
+			case 'custom-class':
+				if (block?.attributes?.publisherBlockStates[state]) {
+					_selector =
+						block?.attributes?.publisherBlockStates[state][
+							'css-class'
+						] +
+						',' +
+						_selector;
+				}
+				break;
+
+			case 'parent-hover':
+				// FIXME: implements parent-hover pseudo-class for parent selector.
+				break;
 		}
 
 		selectors[state] = {
 			// $FlowFixMe
-			[currentBlock]: prevSelector
-				? `${prevSelector}, ${_selector}`
+			[currentBlock]: registeredSelector
+				? `${registeredSelector}, ${_selector}`
 				: _selector,
 		};
 	};
@@ -84,7 +138,10 @@ export function getCssSelector({
 		selectors: blockSelectors,
 	});
 
-	if (!selector) {
+	// FIXME: after implements parent-hover infrastructure please remove exclude this pseudo-class!
+	if (!selector || ['parent-hover'].includes(state)) {
+		register(rootSelector);
+
 		return getSelector({
 			state,
 			clientId,
