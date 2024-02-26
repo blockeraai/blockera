@@ -1,11 +1,12 @@
 // @flow
+
 /**
  * External dependencies
  */
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
-import type { Element, MixedElement } from 'react';
-import { useState } from '@wordpress/element';
+import type { ComponentType, MixedElement } from 'react';
+import { memo, useState } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -25,173 +26,177 @@ import { default as PopoverOpenIcon } from './icons/popover-open';
 import { default as AccordionOpenIcon } from './icons/accordion-open';
 import { default as AccordionCloseIcon } from './icons/accordion-close';
 
-export default function GroupControl({
-	design = 'minimal',
-	toggleOpenBorder = false,
-	isOpen: _isOpen = false,
-	//
-	mode = 'popover',
-	popoverTitle,
-	popoverTitleButtonsRight,
-	popoverClassName,
-	//
-	header = 'Title...',
-	headerOpenButton = true,
-	headerOpenIcon,
-	headerCloseIcon,
-	injectHeaderButtonsStart,
-	injectHeaderButtonsEnd,
-	//
-	children = 'Content...',
-	//
-	className,
-	onClose: fnOnClose = () => {},
-	onOpen: fnOnOpen = () => {},
-	onClick = () => {},
-}: GroupControlProps): MixedElement {
-	const [isOpen, setOpen] = useState(_isOpen);
-	const [isOpenPopover, setOpenPopover] = useState(_isOpen);
-	const { ref } = useOutsideClick({
-		onOutsideClick: () => setOpen(false),
-	});
+const GroupControl: ComponentType<any> = memo(
+	({
+		design = 'minimal',
+		toggleOpenBorder = false,
+		isOpen: _isOpen = false,
+		//
+		mode = 'popover',
+		popoverTitle,
+		popoverTitleButtonsRight,
+		popoverClassName,
+		//
+		header = 'Title...',
+		headerOpenButton = true,
+		headerOpenIcon,
+		headerCloseIcon,
+		injectHeaderButtonsStart,
+		injectHeaderButtonsEnd,
+		//
+		children = 'Content...',
+		//
+		className,
+		onClose: fnOnClose = () => {},
+		onOpen: fnOnOpen = () => {},
+		onClick = () => {},
+	}: GroupControlProps): MixedElement => {
+		const [isOpen, setOpen] = useState(_isOpen);
+		const [isOpenPopover, setOpenPopover] = useState(_isOpen);
+		const { ref } = useOutsideClick({
+			onOutsideClick: () => setOpen(false),
+		});
 
-	const getHeaderOpenIcon = (): Element<any> | string => {
-		if (headerOpenIcon) {
-			return headerOpenIcon;
-		}
+		const getHeaderOpenIcon = (): MixedElement | string => {
+			if (headerOpenIcon) {
+				return headerOpenIcon;
+			}
 
-		if (mode === 'accordion') return <AccordionOpenIcon />;
-		else if (mode === 'popover') return <PopoverOpenIcon />;
+			if (mode === 'accordion') return <AccordionOpenIcon />;
+			else if (mode === 'popover') return <PopoverOpenIcon />;
 
-		return '';
-	};
+			return '';
+		};
 
-	const getHeaderCloseIcon = () => {
-		if (headerCloseIcon) {
-			return headerCloseIcon;
-		}
+		const getHeaderCloseIcon = () => {
+			if (headerCloseIcon) {
+				return headerCloseIcon;
+			}
 
-		if (mode === 'accordion') return <AccordionCloseIcon />;
-		else if (mode === 'popover') return <PopoverOpenIcon />;
+			if (mode === 'accordion') return <AccordionCloseIcon />;
+			else if (mode === 'popover') return <PopoverOpenIcon />;
 
-		return '';
-	};
+			return '';
+		};
 
-	const onOpen = () => {
-		if (isFunction(fnOnOpen)) {
-			fnOnOpen();
-		}
-	};
+		const onOpen = () => {
+			if (isFunction(fnOnOpen)) {
+				fnOnOpen();
+			}
+		};
 
-	const onClose = () => {
-		if (isFunction(fnOnClose)) {
-			fnOnClose();
-		}
-	};
+		const onClose = () => {
+			if (isFunction(fnOnClose)) {
+				fnOnClose();
+			}
+		};
 
-	const onClickCallback = () => {
-		if (isOpen) {
-			onClose();
-		} else {
-			onOpen();
-		}
+		const onClickCallback = () => {
+			if (isOpen) {
+				onClose();
+			} else {
+				onOpen();
+			}
 
-		setOpen(!isOpen);
-		setOpenPopover(!isOpenPopover);
-	};
+			setOpen(!isOpen);
+			setOpenPopover(!isOpenPopover);
+		};
 
-	const isCallbackEligible = (event: MouseEvent) => {
-		return isFunction(onClick) && onClick && onClick(event);
-	};
+		const isCallbackEligible = (event: MouseEvent) => {
+			return isFunction(onClick) && onClick && onClick(event);
+		};
 
-	const handleOnClick = (event: MouseEvent): void => {
-		event.stopPropagation();
+		const handleOnClick = (event: MouseEvent): void => {
+			event.stopPropagation();
 
-		if (!isCallbackEligible(event)) {
-			return;
-		}
+			if (!isCallbackEligible(event)) {
+				return;
+			}
 
-		onClickCallback();
-	};
+			onClickCallback();
+		};
 
-	return (
-		<div
-			className={controlClassNames(
-				'group',
-				'design-' + design,
-				'mode-' + mode,
-
-				isOpen || (isOpenPopover && !isOpen) ? 'is-open' : 'is-close',
-				toggleOpenBorder ? 'toggle-open-border' : '',
-				className
-			)}
-			data-cy="control-group"
-			aria-label={'group-control'}
-		>
+		return (
 			<div
-				ref={ref}
-				className={controlInnerClassNames('group-header')}
-				data-cy="group-control-header"
-				onClick={handleOnClick}
+				className={controlClassNames(
+					'group',
+					'design-' + design,
+					'mode-' + mode,
+
+					isOpen || (isOpenPopover && !isOpen)
+						? 'is-open'
+						: 'is-close',
+					toggleOpenBorder ? 'toggle-open-border' : '',
+					className
+				)}
+				data-cy="control-group"
+				aria-label={'group-control'}
 			>
-				{header}
-
-				<div className={controlInnerClassNames('action-buttons')}>
-					{injectHeaderButtonsStart}
-
-					{headerOpenButton && (
-						<Button
-							className={controlInnerClassNames('btn-toggle')}
-							icon={
-								isOpen
-									? getHeaderOpenIcon()
-									: getHeaderCloseIcon()
-							}
-							label={
-								isOpen
-									? __('Close Settings', 'publisher')
-									: __('Open Settings', 'publisher')
-							}
-							onClick={onClickCallback}
-							noBorder={true}
-						/>
-					)}
-
-					{injectHeaderButtonsEnd}
-				</div>
-			</div>
-
-			{mode === 'popover' && isOpenPopover && (
-				<Popover
-					offset={35}
-					placement="left-start"
-					className={controlInnerClassNames(
-						'group-popover',
-						popoverClassName
-					)}
-					title={popoverTitle || header}
-					titleButtonsRight={popoverTitleButtonsRight}
-					onClose={() => {
-						onClose();
-
-						setOpenPopover(false);
-					}}
-				>
-					{children}
-				</Popover>
-			)}
-
-			{mode === 'accordion' && isOpen && (
 				<div
-					data-cy="group-control-content"
-					className={controlInnerClassNames('group-content')}
+					ref={ref}
+					className={controlInnerClassNames('group-header')}
+					data-cy="group-control-header"
+					onClick={handleOnClick}
 				>
-					{children}
+					{header}
+
+					<div className={controlInnerClassNames('action-buttons')}>
+						{injectHeaderButtonsStart}
+
+						{headerOpenButton && (
+							<Button
+								className={controlInnerClassNames('btn-toggle')}
+								icon={
+									isOpen
+										? getHeaderOpenIcon()
+										: getHeaderCloseIcon()
+								}
+								label={
+									isOpen
+										? __('Close Settings', 'publisher')
+										: __('Open Settings', 'publisher')
+								}
+								onClick={onClickCallback}
+								noBorder={true}
+							/>
+						)}
+
+						{injectHeaderButtonsEnd}
+					</div>
 				</div>
-			)}
-		</div>
-	);
-}
+
+				{mode === 'popover' && isOpenPopover && (
+					<Popover
+						offset={35}
+						placement="left-start"
+						className={controlInnerClassNames(
+							'group-popover',
+							popoverClassName
+						)}
+						title={popoverTitle || header}
+						titleButtonsRight={popoverTitleButtonsRight}
+						onClose={() => {
+							onClose();
+
+							setOpenPopover(false);
+						}}
+					>
+						{children}
+					</Popover>
+				)}
+
+				{mode === 'accordion' && isOpen && (
+					<div
+						data-cy="group-control-content"
+						className={controlInnerClassNames('group-content')}
+					>
+						{children}
+					</div>
+				)}
+			</div>
+		);
+	}
+);
 
 GroupControl.propTypes = {
 	// $FlowFixMe
@@ -268,3 +273,5 @@ GroupControl.propTypes = {
 	 */
 	onOpen: PropTypes.func,
 };
+
+export default GroupControl;
