@@ -66,6 +66,7 @@ export function cloneRepeaterItem({
 	item,
 	itemId,
 	controlId,
+	itemIdGenerator,
 	maxItems = -1,
 	repeaterId = null,
 	overrideItem = null,
@@ -77,6 +78,7 @@ export function cloneRepeaterItem({
 		maxItems,
 		repeaterId,
 		overrideItem,
+		itemIdGenerator,
 		type: 'CLONE_REPEATER_ITEM',
 	};
 }

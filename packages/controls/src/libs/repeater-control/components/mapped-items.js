@@ -2,8 +2,8 @@
 /**
  * External dependencies
  */
-import { useContext, useCallback } from '@wordpress/element';
 import type { MixedElement } from 'react';
+import { useContext, useCallback, useMemo } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -15,16 +15,26 @@ import { isUndefined } from '@publisher/utils';
 const MappedItems = (): MixedElement => {
 	const { repeaterItems: items, repeaterId } = useContext(RepeaterContext);
 
+	// Sorting repeater items based on "order" property value of each item.
+	const sortedRepeaterItems = useMemo(() => {
+		const dataArray = Object.entries(items);
+
+		dataArray.sort(([, a], [, b]) => (a.order || 0) - (b.order || 0));
+
+		return dataArray;
+	}, [items]);
+
 	const render = useCallback(() => {
-		const getUniqueId = (itemId: number) =>
+		const getUniqueId = (itemId: string | number) =>
 			!isUndefined(repeaterId)
 				? `${repeaterId}-repeater-item-${itemId}`
 				: `repeater-item-${itemId}`;
 
-		return items.map((item, itemId) => (
+		// Convert the sorted array back to an object
+		return sortedRepeaterItems.map(([itemId, item]) => (
 			<RepeaterItem {...{ item, itemId }} key={getUniqueId(itemId)} />
 		));
-	}, [items, repeaterId]);
+	}, [sortedRepeaterItems, repeaterId]);
 
 	return render();
 };
