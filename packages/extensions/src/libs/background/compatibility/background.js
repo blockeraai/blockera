@@ -1,4 +1,8 @@
 // @flow
+/**
+ * Publisher dependencies
+ */
+import { isEmpty } from '@publisher/utils';
 
 export function backgroundFromWPCompatibility({
 	attributes,
@@ -7,11 +11,11 @@ export function backgroundFromWPCompatibility({
 	blockId?: string,
 }): Object {
 	if (
-		attributes?.publisherBackground.length === 0 &&
+		attributes?.publisherBackground['image-0'] === undefined &&
 		attributes?.style?.background?.backgroundImage?.url !== undefined
 	) {
 		attributes.publisherBackground = {
-			// naming repeater item based on item type.
+			...attributes.publisherBackground,
 			'image-0': {
 				type: 'image',
 				image: attributes?.style?.background?.backgroundImage?.url,
@@ -25,7 +29,6 @@ export function backgroundFromWPCompatibility({
 				'image-repeat': 'repeat',
 				'image-attachment': 'scroll',
 				isOpen: false,
-				// The "order" property to use for sorting repeater items.
 				order: 0,
 			},
 		};
