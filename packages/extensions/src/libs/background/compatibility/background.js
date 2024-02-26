@@ -41,7 +41,7 @@ export function backgroundToWPCompatibility({
 	newValue: Object,
 	ref?: Object,
 }): Object {
-	if ('reset' === ref?.current?.action) {
+	if ('reset' === ref?.current?.action || isEmpty(newValue)) {
 		return {
 			style: {
 				background: {
