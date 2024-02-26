@@ -22,7 +22,7 @@ import { sanitizedBlockAttributes } from './utils';
 import { BlockBase, BlockPortals } from '../components';
 import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
 
-const { getBlockExtension, getBlockExtensionBy } = select(STORE_NAME);
+const { getBlockExtension, getBlockExtensionBy } = select(STORE_NAME) || {};
 
 /**
  * Filters registered WordPress block type settings, extending block settings with settings and block name.
