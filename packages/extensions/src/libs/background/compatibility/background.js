@@ -10,8 +10,9 @@ export function backgroundFromWPCompatibility({
 		attributes?.publisherBackground.length === 0 &&
 		attributes?.style?.background?.backgroundImage?.url !== undefined
 	) {
-		attributes.publisherBackground = [
-			{
+		attributes.publisherBackground = {
+			// naming repeater item based on item type.
+			'image-0': {
 				type: 'image',
 				image: attributes?.style?.background?.backgroundImage?.url,
 				'image-size': 'custom',
@@ -24,8 +25,10 @@ export function backgroundFromWPCompatibility({
 				'image-repeat': 'repeat',
 				'image-attachment': 'scroll',
 				isOpen: false,
+				// The "order" property to use for sorting repeater items.
+				order: 0,
 			},
-		];
+		};
 	}
 
 	return attributes;
@@ -50,7 +53,7 @@ export function backgroundToWPCompatibility({
 
 	let result = {};
 
-	newValue.forEach((item) => {
+	Object.entries(newValue).forEach(([, item]: [string, Object]): void => {
 		if (item?.type === 'image' && item?.image !== 'image') {
 			result = {
 				style: {
