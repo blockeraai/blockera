@@ -4,8 +4,8 @@ export const attributes = {
 		default: '100%',
 	},
 	publisherTransform: {
-		type: 'array',
-		default: [],
+		type: 'object',
+		default: {},
 	},
 	publisherTransformSelfPerspective: {
 		type: 'string',
@@ -28,24 +28,24 @@ export const attributes = {
 		default: { top: '', left: '' },
 	},
 	publisherTransition: {
-		type: 'array',
-		default: [],
+		type: 'object',
+		default: {},
 	},
 	publisherFilter: {
-		type: 'array',
-		default: [],
+		type: 'object',
+		default: {},
 	},
 	publisherBackdropFilter: {
-		type: 'array',
-		default: [],
+		type: 'object',
+		default: {},
 	},
 	publisherDivider: {
-		type: 'array',
-		default: [],
+		type: 'object',
+		default: {},
 	},
 	publisherMask: {
-		type: 'array',
-		default: [],
+		type: 'object',
+		default: {},
 	},
 	publisherBlendMode: {
 		type: 'string',

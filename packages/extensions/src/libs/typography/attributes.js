@@ -32,8 +32,8 @@ export const attributes = {
 		default: '',
 	},
 	publisherTextShadow: {
-		type: 'array',
-		default: [],
+		type: 'object',
+		default: {},
 	},
 	publisherLetterSpacing: {
 		type: 'string',

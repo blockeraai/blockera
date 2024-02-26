@@ -1,6 +1,6 @@
 export const attributes = {
 	publisherAttributes: {
-		type: 'array',
-		default: [],
+		type: 'object',
+		default: {},
 	},
 };

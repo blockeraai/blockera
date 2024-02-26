@@ -18,11 +18,11 @@ export const attributes = {
 		},
 	},
 	publisherBoxShadow: {
-		type: 'array',
-		default: [],
+		type: 'object',
+		default: {},
 	},
 	publisherOutline: {
-		type: 'array',
-		default: [],
+		type: 'object',
+		default: {},
 	},
 };

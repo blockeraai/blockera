@@ -1,7 +1,7 @@
 export const attributes = {
 	publisherBackground: {
-		type: 'array',
-		default: [],
+		type: 'object',
+		default: {},
 	},
 	publisherBackgroundColor: {
 		type: 'string',
