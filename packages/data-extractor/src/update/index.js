@@ -15,16 +15,10 @@ import { regexMatch } from '../utils';
  * @param {Object} object the target object
  * @param {string} query the query of object props
  * @param {any} value the new value of object query
- * @param {string} type the type of update process
  */
-export function update(
-	object: Object,
-	query: string,
-	value: any,
-	type: string = 'replace'
-): null {
+export function update(object: Object, query: string, value: any): null {
 	const keys = [];
-	let currentObj = object;
+	let currentObj = { ...object };
 
 	regexMatch(/[\w-]+/g, query, (match) => keys.push(match));
 
@@ -32,12 +26,6 @@ export function update(
 
 	for (const key of keys) {
 		currentObj = currentObj[key];
-	}
-
-	if ('mute' === type) {
-		currentObj[lastKey] = value;
-
-		return isObject(object) ? { ...object } : [...object];
 	}
 
 	switch (true) {
