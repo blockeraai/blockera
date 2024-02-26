@@ -7,49 +7,26 @@ import { prepare, update } from '@publisher/data-extractor';
 /**
  * Internal dependencies
  */
-import { getControlInfo, hasLimitation, hasRepeaterId, isQuery } from './utils';
+import {
+	generatedDetailsId,
+	getControlInfo,
+	hasLimitation,
+	hasRepeaterId,
+} from './utils';
 
 function handleActionIncludeRepeaterId(controlValue, action) {
-	//mean: repeaterId of action should like this pattern /\w+\.\w+|\[.*]/gi
-	if (isQuery(action)) {
-		const targetRepeater = prepare(action.repeaterId, controlValue);
-
-		//To limit the number of control items, it is enough to set the maxItems number and this value is less than the current number of state items.
-		if (hasLimitation(action) && targetRepeater.length >= action.maxItems) {
-			return controlValue;
-		}
-
-		let clonedItem = targetRepeater[action.itemId];
-
-		if (0 === action.itemId && action?.overrideItem) {
-			clonedItem = {
-				...clonedItem,
-				...action.overrideItem,
-			};
-		}
-
-		if (clonedItem?.selectable) {
-			targetRepeater[action.itemId].isSelected = false;
-		}
-
-		return update(controlValue, action.repeaterId, [
-			...targetRepeater.slice(0, action.itemId + 1),
-			clonedItem?.selectable
-				? { ...clonedItem, isSelected: true }
-				: clonedItem,
-			...targetRepeater.slice(action.itemId + 1),
-		]);
-	}
+	const targetRepeater = prepare(action.repeaterId, controlValue);
+	const itemsCount = Object.values(targetRepeater || {}).length;
 
 	//To limit the number of control items, it is enough to set the maxItems number and this value is less than the current number of state items.
 	if (
-		hasLimitation(action) &&
-		controlValue[action.repeaterId]?.length >= action.maxItems
+		(hasLimitation(action) && itemsCount >= action.maxItems) ||
+		!targetRepeater
 	) {
 		return controlValue;
 	}
 
-	let clonedItem = controlValue[action.repeaterId][action.itemId];
+	let clonedItem = targetRepeater[action.itemId];
 
 	if (0 === action.itemId && action?.overrideItem) {
 		clonedItem = {
@@ -59,19 +36,21 @@ function handleActionIncludeRepeaterId(controlValue, action) {
 	}
 
 	if (clonedItem?.selectable) {
-		controlValue[action.repeaterId][action.itemId].isSelected = false;
+		targetRepeater[action.itemId].isSelected = false;
 	}
 
-	return {
-		...controlValue,
-		[action.repeaterId]: [
-			...controlValue[action.repeaterId].slice(0, action.itemId + 1),
-			clonedItem?.selectable
-				? { ...clonedItem, isSelected: true }
-				: clonedItem,
-			...controlValue[action.repeaterId].slice(action.itemId + 1),
-		],
-	};
+	let itemId = itemsCount + '';
+
+	if ('function' === typeof action.itemIdGenerator) {
+		itemId = action.itemIdGenerator(itemsCount);
+	}
+
+	return update(controlValue, action.repeaterId, {
+		[itemId]: {
+			...clonedItem,
+			order: itemsCount,
+		},
+	});
 }
 
 export function cloneItem(state = {}, action) {
@@ -92,17 +71,16 @@ export function cloneItem(state = {}, action) {
 		};
 	}
 
+	const { itemsCount, uniqueId } = generatedDetailsId(state, action);
+
 	//To limit the number of control items, it is enough to set the maxItems number and this value is less than the current number of state items.
-	if (
-		hasLimitation(action) &&
-		controlInfo?.value?.length >= action.maxItems
-	) {
+	if (hasLimitation(action) && itemsCount >= action.maxItems) {
 		return state;
 	}
 	//when clone of last item!
-	if (action.itemId >= controlInfo?.value.length) {
-		return state;
-	}
+	// if (action.itemId >= controlInfo?.value.length) {
+	// 	return state;
+	// }
 
 	let clonedItem = controlInfo.value[action.itemId];
 
@@ -124,13 +102,13 @@ export function cloneItem(state = {}, action) {
 		...state,
 		[action.controlId]: {
 			...controlInfo,
-			value: [
-				...controlInfo.value.slice(0, action.itemId + 1),
-				clonedItem?.selectable
-					? { ...clonedItem, isSelected: true }
-					: clonedItem,
-				...controlInfo.value.slice(action.itemId + 1),
-			],
+			value: {
+				...controlInfo.value,
+				[uniqueId]: {
+					...clonedItem,
+					order: Object.keys(controlInfo.value).length,
+				},
+			},
 		},
 	};
 }
