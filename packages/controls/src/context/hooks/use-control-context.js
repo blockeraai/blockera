@@ -180,46 +180,44 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 
 		if (mergeInitialAndDefault) {
 			if (isObject(currentValue) && isObject(defaultValue)) {
+				// merge default value to object elements inside initialValue
+				// used for repeaters
+				if (isRepeaterControl()) {
+					const mappedRepeaterValue = (items: Object): Object => {
+						if (isEmpty(items)) {
+							return [];
+						}
+
+						Object.entries(items).forEach(([itemId, item]) => {
+							if (isObject(item)) {
+								items[itemId] = {
+									...defaultRepeaterItemValue,
+									...item,
+								};
+							}
+						});
+
+						return items;
+					};
+
+					const repeaterValue = prepare(repeaterId, currentValue);
+
+					if (isUndefined(repeaterId) || isUndefined(repeaterValue)) {
+						return !isObject(currentValue)
+							? mappedRepeaterValue(defaultValue)
+							: mappedRepeaterValue(currentValue);
+					}
+
+					return !isObject(repeaterValue)
+						? mappedRepeaterValue(defaultValue)
+						: mappedRepeaterValue(repeaterValue);
+				}
+
 				if (!isUndefined(id)) {
 					return { ...defaultValue, ...prepare(id, currentValue) };
 				}
 
 				return { ...defaultValue, ...currentValue };
-			}
-
-			// merge default value to object elements inside initialValue
-			// used for repeaters
-			if (isRepeaterControl()) {
-				const mappedRepeaterValue = (
-					items: Array<Object>
-				): Array<Object> => {
-					if (isEmpty(items)) {
-						return [];
-					}
-
-					items.forEach((item, itemId) => {
-						if (isObject(item)) {
-							items[itemId] = {
-								...defaultRepeaterItemValue,
-								...item,
-							};
-						}
-					});
-
-					return items;
-				};
-
-				const repeaterValue = prepare(repeaterId, currentValue);
-
-				if (isUndefined(repeaterId) || isUndefined(repeaterValue)) {
-					return !isArray(currentValue)
-						? mappedRepeaterValue(defaultValue)
-						: mappedRepeaterValue(currentValue);
-				}
-
-				return !isArray(repeaterValue)
-					? mappedRepeaterValue(defaultValue)
-					: mappedRepeaterValue(repeaterValue);
 			}
 		}
 
