@@ -15,7 +15,6 @@ export function backgroundFromWPCompatibility({
 		attributes?.style?.background?.backgroundImage?.url !== undefined
 	) {
 		attributes.publisherBackground = {
-			...attributes.publisherBackground,
 			'image-0': {
 				type: 'image',
 				image: attributes?.style?.background?.backgroundImage?.url,
@@ -31,6 +30,7 @@ export function backgroundFromWPCompatibility({
 				isOpen: false,
 				order: 0,
 			},
+			...attributes.publisherBackground,
 		};
 	}
 
