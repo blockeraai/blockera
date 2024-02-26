@@ -45,7 +45,9 @@ const hslToHex = (h: number, s: number, l: number): string => {
 };
 
 const generateColors = (length: number, baseColor: number): Object => {
-	return Array.from({ length }, (_: void, i: number): string => {
+	const colors: { [key: string]: Object } = {};
+
+	Array.from({ length }, (_: void, i: number): string => {
 		if (i === 0) {
 			return hslToHex(baseColor, 100, 65);
 		}
@@ -63,10 +65,26 @@ const generateColors = (length: number, baseColor: number): Object => {
 			100,
 			66 - i * (1 - 2 * (i % 2)) * 1.3
 		);
+	}).forEach((color: string, index: number): void => {
+		colors['--c' + index] = {
+			color,
+		};
 	});
+
+	return colors;
 };
 
-export const generateGradient = (length: number): Object => {
+export const generateGradient = (length: number): Array<string> => {
+	// const gradients: { [key: string]: string } = {};
+	//
+	// Array.from({ length }, (_: void, i: number): string => {
+	// 	return `radial-gradient(at ${getPercent(i)}% ${getPercent(
+	// 		i * 10
+	// 	)}%, var(--c${i}) 0px, transparent ${getRandomNumber(40, 70)}%)`;
+	// }).forEach((gradient: string, index: number): void => {
+	// 	gradients[index + ''] = gradient;
+	// });
+
 	return Array.from({ length }, (_: void, i: number): string => {
 		return `radial-gradient(at ${getPercent(i)}% ${getPercent(
 			i * 10
@@ -86,7 +104,7 @@ export const getRandomHexColor = (): string => {
 export default function generateMeshGradient(length: number): Object {
 	const colors = generateColors(length, generateColor());
 
-	const proprieties = generateGradient(length);
+	const properties = generateGradient(length);
 
-	return { colors, gradient: proprieties.join(',') };
+	return { colors, gradient: properties.join(',') };
 }

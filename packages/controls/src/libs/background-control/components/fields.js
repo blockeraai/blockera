@@ -1,6 +1,7 @@
 // @flow
+
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import type { Element } from 'react';
@@ -14,6 +15,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
+import { isEquals } from '@publisher/utils';
 import { isValid as isValidVariable } from '@publisher/hooks';
 
 /**
@@ -35,6 +37,7 @@ import { RepeaterContext } from '../../repeater-control/context';
 
 // Icons
 import RepeatIcon from '../icons/repeat';
+import type { FieldItem } from '../types';
 import RepeatXIcon from '../icons/repeat-x';
 import RepeatYIcon from '../icons/repeat-y';
 import RepeatNoIcon from '../icons/repeat-no';
@@ -42,7 +45,6 @@ import TypeImageIcon from '../icons/type-image';
 import { default as RegenerateIcon } from '../icons/regenerate';
 import TypeLinearGradientIcon from '../icons/type-linear-gradient';
 import TypeRadialGradientIcon from '../icons/type-radial-gradient';
-import type { TDefaultRepeaterItemValue, FieldItem } from '../types';
 import { default as MeshGradientFields } from './mesh-gradient/fields';
 import { default as MeshGradientHeader } from './mesh-gradient/header';
 import LinearGradientRepeatIcon from '../icons/linear-gradient-repeat';
@@ -51,7 +53,6 @@ import LinearGradientNoRepeatIcon from '../icons/linear-gradient-no-repeat';
 import RadialGradientNoRepeatIcon from '../icons/radial-gradient-no-repeat';
 import { default as TypeMeshGradientIcon } from '../icons/type-mesh-gradient';
 import {
-	default as generateMeshGradient,
 	generateGradient,
 	getRandomHexColor,
 } from './mesh-gradient/mesh-generator';
@@ -63,30 +64,7 @@ import { LabelDescription } from './label-description';
 import FitNormalIcon from '../icons/fit-normal';
 import FitCoverIcon from '../icons/fit-cover';
 import FitContainIcon from '../icons/fit-contain';
-
-/**
- * Providing mesh gradient colors details.
- *
- * @param {Object} object the data holder
- * @return {{}} retrieved object includes mesh gradient details
- */
-function meshGradientProvider(
-	object: TDefaultRepeaterItemValue
-): TDefaultRepeaterItemValue {
-	const meshGradient = generateMeshGradient(
-		object['mesh-gradient-colors']?.length
-			? object['mesh-gradient-colors'].length
-			: 4
-	);
-
-	return {
-		...object,
-		'mesh-gradient': meshGradient.gradient,
-		'mesh-gradient-colors': meshGradient.colors.map((value) => {
-			return { color: value };
-		}),
-	};
-}
+import { meshGradientProvider } from '../';
 
 const Fields: FieldItem = memo<FieldItem>(
 	({ itemId, item }: FieldItem): Element<any> => {
@@ -97,11 +75,6 @@ const Fields: FieldItem = memo<FieldItem>(
 
 		const { repeaterId, getControlId, defaultRepeaterItemValue } =
 			useContext(RepeaterContext);
-
-		// fill new random mesh gradient with provider if it's empty
-		if (!item['mesh-gradient']) {
-			item = { ...item, ...meshGradientProvider(item) };
-		}
 
 		return (
 			<div id={`repeater-item-${itemId}`}>
@@ -1136,25 +1109,26 @@ const Fields: FieldItem = memo<FieldItem>(
 								className={controlInnerClassNames(
 									'mesh-generator-preview'
 								)}
-								style={{
-									backgroundColor:
-										item['mesh-gradient-colors'][0].color,
-									backgroundImage: item['mesh-gradient'],
-									...Object.assign(
-										// $FlowFixMe
-										...item['mesh-gradient-colors'].map(
-											(
-												value: { color: string },
-												index: number
-											): Object => {
-												const newVar = '--c' + index;
-												const obj: any = {};
-												obj[newVar] = value.color;
-												return obj;
-											}
-										)
-									),
-								}}
+								style={((): Object => {
+									const meshColorKeys = Object.keys(
+										item['mesh-gradient-colors']
+									);
+									return {
+										backgroundColor:
+											item['mesh-gradient-colors']['--c0']
+												.color,
+										backgroundImage: item['mesh-gradient'],
+										...Object.assign(
+											// $FlowFixMe
+											...Object.values(
+												item['mesh-gradient-colors']
+											).map((color, index): Object => ({
+												[meshColorKeys[index]]:
+													color.color,
+											}))
+										),
+									};
+								})()}
 								onClick={() => {
 									changeRepeaterItem({
 										controlId,
@@ -1186,6 +1160,11 @@ const Fields: FieldItem = memo<FieldItem>(
 									itemId,
 									'[mesh-gradient-colors]'
 								)}
+								itemIdGenerator={(
+									itemsCount: number
+								): string => {
+									return '--c' + itemsCount;
+								}}
 								defaultValue={
 									defaultRepeaterItemValue[
 										'mesh-gradient-colors'
@@ -1229,16 +1208,27 @@ const Fields: FieldItem = memo<FieldItem>(
 								actionButtonVisibility={false}
 								defaultRepeaterItemValue={{
 									color: getRandomHexColor(),
+									isOpen: false,
 								}}
 								onChange={(newValue) => {
+									if (
+										isEquals(
+											newValue,
+											item['mesh-gradient-colors']
+										)
+									) {
+										return;
+									}
+
 									changeRepeaterItem({
 										controlId,
 										repeaterId,
 										itemId,
 										value: {
 											...item,
+											'mesh-gradient-colors': newValue,
 											'mesh-gradient': generateGradient(
-												newValue.length
+												Object.values(newValue).length
 											),
 										},
 									});

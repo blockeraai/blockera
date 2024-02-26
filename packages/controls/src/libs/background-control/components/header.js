@@ -64,9 +64,11 @@ const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 				label = __('Mesh Gradient', 'publisher-core');
 				preview = (
 					<ColorIndicatorStack
-						value={item['mesh-gradient-colors'].map((value) => {
-							return { value: value.color };
-						})}
+						value={Object.values(item['mesh-gradient-colors']).map(
+							(value: Object): Object => {
+								return { value: value.color };
+							}
+						)}
 					/>
 				);
 				icon = <TypeMeshGradientIcon />;

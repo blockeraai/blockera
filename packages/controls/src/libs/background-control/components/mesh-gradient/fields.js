@@ -42,7 +42,8 @@ const Fields: TFieldsProps = memo<TFieldsProps>(
 								...item,
 								color: newValue,
 							},
-							repeaterId: `${repeaterId}[${itemId}]`,
+							repeaterId,
+							itemId,
 						});
 					}}
 				/>
