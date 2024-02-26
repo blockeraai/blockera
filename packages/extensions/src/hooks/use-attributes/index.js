@@ -27,7 +27,7 @@ export const useAttributes = (
 		isNormalState: () => boolean,
 		publisherInnerBlocks: Object,
 		masterIsNormalState: () => boolean,
-		getAttributes: (key: string) => any,
+		getAttributes: (key?: string) => any,
 	}
 ): ({
 	getAttributesWithPropsId: (state: Object) => Object,
