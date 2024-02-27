@@ -94,7 +94,6 @@ export function onChangeBlockStates(
 			{ ...StateTypes, isSelected: boolean }
 		]): void => {
 			if (isInnerBlock(currentBlock) && state?.isSelected) {
-				console.log('inner', state);
 				setInnerBlockState(state?.type || calculatedValue[id]?.type);
 			} else if (state?.isSelected) {
 				setCurrentState(state?.type || calculatedValue[id]?.type);
