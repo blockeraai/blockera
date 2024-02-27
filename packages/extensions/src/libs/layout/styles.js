@@ -514,6 +514,6 @@ export const LayoutStyles = ({
 			});
 		}
 	}
-	console.log(styleGroup);
+
 	return styleGroup;
 };

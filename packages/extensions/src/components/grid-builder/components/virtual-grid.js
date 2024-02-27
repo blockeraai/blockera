@@ -9,9 +9,7 @@ import { nanoid } from 'nanoid';
 /**
  * Publisher dependencies
  */
-import * as config from '../../../libs/base/config';
 import { LayoutStyles } from '../../../libs/layout';
-import { useCssGenerator } from '@publisher/style-engine';
 
 /**
  * Internal dependencies
@@ -21,8 +19,12 @@ import { useBlockContext, useStoreSelectors } from '../../../hooks';
 import { AddButton, GridSizeHandler, Cells, GapHandler } from './index';
 
 export const VirtualGrid = ({ block }) => {
-	const { handleOnChangeAttributes, getAttributes, activeDeviceType } =
-		useBlockContext();
+	const {
+		handleOnChangeAttributes,
+		getAttributes,
+		currentBlock,
+		getCurrentState,
+	} = useBlockContext();
 	const attributes = getAttributes();
 	const {
 		publisherGridColumns,
@@ -36,33 +38,34 @@ export const VirtualGrid = ({ block }) => {
 	} = useStoreSelectors();
 	const { clientId } = getSelectedBlock() || {};
 
-	const generatedStyle = useCssGenerator({
-		callback: LayoutStyles,
-		attributes,
-		activeDeviceType,
+	const generatedStyles = LayoutStyles({
+		state: getCurrentState(),
+		clientId,
 		blockName: block.blockName,
-		callbackProps: {
-			...config,
-			blockProps: {
-				clientId,
-			},
-		},
-	}).join('\n');
+		currentBlock,
+		selectors: {},
+		attributes,
+	})
+		?.map((item) => item.declarations)
+		.join(' ');
 
 	const styles = {
-		gridTemplateRows: extractCssValue('grid-template-rows', generatedStyle),
+		gridTemplateRows: extractCssValue(
+			'grid-template-rows',
+			generatedStyles
+		),
 		gridTemplateColumns: extractCssValue(
 			'grid-template-columns',
-			generatedStyle
+			generatedStyles
 		),
-		display: extractCssValue('display', generatedStyle),
+		display: extractCssValue('display', generatedStyles),
 		gap: publisherGridGap.gap,
 		columnGap: publisherGridGap.columns,
 		rowGap: publisherGridGap.rows,
-		gridDirection: extractCssValue('grid-auto-flow', generatedStyle),
+		gridDirection: extractCssValue('grid-auto-flow', generatedStyles),
 		gridTemplateAreas: extractCssValue(
 			'grid-template-areas',
-			generatedStyle
+			generatedStyles
 		),
 	};
 
