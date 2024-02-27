@@ -19,6 +19,7 @@ export type BlockStyleProps = {
 	supports: Object,
 	blockName: string,
 	attributes: Object,
+	currentAttributes: Object,
 	activeDeviceType: TStates,
 };
 

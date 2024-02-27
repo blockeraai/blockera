@@ -320,8 +320,9 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						{...{
 							clientId,
 							supports,
-							attributes,
 							blockName: name,
+							attributes,
+							currentAttributes,
 							activeDeviceType: getDeviceType(),
 						}}
 					/>

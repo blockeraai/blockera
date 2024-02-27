@@ -58,9 +58,11 @@ const Stylesheet = ({
 
 		calculatedProps = {
 			...calculatedProps,
-			attributes:
-				calculatedProps.attributes.publisherBlockStates[state]
+			attributes: {
+				...calculatedProps.currentAttributes,
+				...calculatedProps.attributes.publisherBlockStates[state]
 					.breakpoints[currentBreakpoint].attributes,
+			},
 		};
 	} else if ('normal' !== state && isInnerBlock(currentBlock)) {
 		if (
@@ -72,9 +74,11 @@ const Stylesheet = ({
 
 		calculatedProps = {
 			...calculatedProps,
-			attributes:
-				calculatedProps.attributes?.publisherBlockStates[state]
+			attributes: {
+				...calculatedProps.currentAttributes,
+				...calculatedProps.attributes?.publisherBlockStates[state]
 					.breakpoints[currentBreakpoint].attributes,
+			},
 		};
 	}
 
