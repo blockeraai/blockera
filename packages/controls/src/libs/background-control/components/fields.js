@@ -80,15 +80,22 @@ const Fields: FieldItem = memo<FieldItem>(
 				return;
 			}
 
+			const length = Object.values(item['mesh-gradient-colors']).length;
+
+			if (
+				item['mesh-gradient'] &&
+				new RegExp(`--c${length - 1}`, 'g').test(item['mesh-gradient'])
+			) {
+				return;
+			}
+
 			changeRepeaterItem({
 				controlId,
 				repeaterId,
 				itemId,
 				value: {
 					...item,
-					'mesh-gradient': generateGradient(
-						Object.values(item['mesh-gradient-colors']).length
-					),
+					'mesh-gradient': generateGradient(length),
 				},
 			});
 		}, [item['mesh-gradient-colors']]);

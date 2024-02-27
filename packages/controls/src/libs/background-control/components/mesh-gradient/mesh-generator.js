@@ -68,13 +68,14 @@ const generateColors = (length: number, baseColor: number): Object => {
 	}).forEach((color: string, index: number): void => {
 		colors['--c' + index] = {
 			color,
+			order: index,
 		};
 	});
 
 	return colors;
 };
 
-export const generateGradient = (length: number): Array<string> => {
+export const generateGradient = (length: number): string => {
 	// const gradients: { [key: string]: string } = {};
 	//
 	// Array.from({ length }, (_: void, i: number): string => {
@@ -89,7 +90,7 @@ export const generateGradient = (length: number): Array<string> => {
 		return `radial-gradient(at ${getPercent(i)}% ${getPercent(
 			i * 10
 		)}%, var(--c${i}) 0px, transparent ${getRandomNumber(40, 70)}%)`;
-	});
+	}).join(',');
 };
 
 export const getRandomHexColor = (): string => {
@@ -106,5 +107,5 @@ export default function generateMeshGradient(length: number): Object {
 
 	const properties = generateGradient(length);
 
-	return { colors, gradient: properties.join(',') };
+	return { colors, gradient: properties };
 }
