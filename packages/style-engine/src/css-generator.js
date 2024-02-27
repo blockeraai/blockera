@@ -3,7 +3,7 @@
 /**
  * Internal dependencies
  */
-import { createCssRule } from './utils';
+import { createCssDeclarations } from './utils';
 import type { DynamicStyleFunction } from './types';
 
 export default class CssGenerator {
@@ -59,7 +59,10 @@ export default class CssGenerator {
 
 	addStaticRule(): string {
 		// $FlowFixMe
-		return createCssRule(this);
+		return createCssDeclarations({
+			options: this.options,
+			properties: this.properties,
+		});
 	}
 
 	addFunctionRule(): string | void {

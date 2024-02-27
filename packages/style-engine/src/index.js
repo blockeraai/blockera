@@ -1,7 +1,7 @@
 // @flow
 
 export {
-	createCssRule,
+	createCssDeclarations,
 	computedCssDeclarations,
 	injectHelpersToCssGenerators,
 } from './utils';
