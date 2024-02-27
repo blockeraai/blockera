@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * Publisher dependencies
  */
@@ -15,17 +17,23 @@ import { regexMatch } from '../utils';
  * @param {Object} dataset the origin object
  * @return {*} value of dataset queried props
  */
-export function prepare(query: string, dataset: Object): Array<string> {
+export function prepare(query: string, dataset: Object): any {
 	if (isUndefined(query) || isEmpty(query)) {
 		return undefined;
 	}
 
 	const parsedQuery = query.split('.');
-	const itemValue = (...values) => values.reduce(accumulator, dataset);
+	const itemValue = (...values: Array<string>) =>
+		values.reduce(accumulator, dataset);
 
-	let props = [];
+	return itemValue(...getPropPath([], parsedQuery));
+}
 
-	parsedQuery.forEach((item, index) => {
+export function getPropPath(
+	props: Array<string>,
+	parsedQuery: Array<string>
+): Array<string> {
+	parsedQuery.forEach((item: any): void => {
 		//TODO: refactor this block!
 		if (0 === item.indexOf('[')) {
 			regexMatch(/\[(.*?)]/g, item, (match, groupIndex) => {
@@ -39,10 +47,10 @@ export function prepare(query: string, dataset: Object): Array<string> {
 			return;
 		}
 
-		props = toArray(item, props, index);
+		props = toArray(item, props);
 	});
 
-	return itemValue(...props);
+	return props;
 }
 
 /**
@@ -52,7 +60,7 @@ export function prepare(query: string, dataset: Object): Array<string> {
  * @param {string} x the item of reducer
  * @return {*} return any value
  */
-export function accumulator(a, x) {
+export function accumulator(a: Object, x: string): any {
 	const aIsInValid = isUndefined(a) || isEmpty(a);
 	const xIsInValid = isUndefined(x) || isEmpty(x);
 

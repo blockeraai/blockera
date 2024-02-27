@@ -4,12 +4,11 @@
  */
 import type { MixedElement } from 'react';
 import { __ } from '@wordpress/i18n';
-import PropTypes from 'prop-types';
 
 /**
  * Publisher dependencies
  */
-import { isArray } from '@publisher/utils';
+import { isObject } from '@publisher/utils';
 import { controlClassNames } from '@publisher/classnames';
 
 /**
@@ -18,12 +17,38 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
-import type { TBackgroundControlProps } from './types';
+import type {
+	TBackgroundControlProps,
+	TDefaultRepeaterItemValue,
+} from './types';
 import { LabelDescription } from './components/label-description';
+import { default as generateMeshGradient } from './components/mesh-gradient/mesh-generator';
+
+/**
+ * Providing mesh gradient colors details.
+ *
+ * @param {Object} object the data holder
+ * @return {{}} retrieved object includes mesh gradient details
+ */
+export function meshGradientProvider(
+	object: TDefaultRepeaterItemValue
+): TDefaultRepeaterItemValue {
+	const meshGradient = generateMeshGradient(
+		Object.values(object['mesh-gradient-colors'])?.length
+			? Object.values(object['mesh-gradient-colors']).length
+			: 4
+	);
+
+	return {
+		...object,
+		'mesh-gradient': meshGradient.gradient,
+		'mesh-gradient-colors': meshGradient.colors,
+	};
+}
 
 export default function BackgroundControl({
 	defaultValue = [],
-	defaultRepeaterItemValue = {
+	defaultRepeaterItemValue = meshGradientProvider({
 		type: 'image',
 		image: '',
 		'image-size': 'custom',
@@ -50,10 +75,10 @@ export default function BackgroundControl({
 		'radial-gradient-attachment': 'scroll',
 		'mesh-gradient': '',
 		// $FlowFixMe
-		'mesh-gradient-colors': [],
+		'mesh-gradient-colors': {},
 		'mesh-gradient-attachment': 'scroll',
 		isVisible: true,
-	},
+	}),
 	popoverTitle = __('Background', 'publisher-core'),
 	label,
 	labelPopoverTitle,
@@ -62,12 +87,12 @@ export default function BackgroundControl({
 	...props
 }: TBackgroundControlProps): MixedElement {
 	// it's commented because we wait for field context provider to use it.
-	function valueCleanup(value: any | Array<Object>) {
-		if (!isArray(value)) {
+	function valueCleanup(value: any | Object) {
+		if (!isObject(value)) {
 			return value;
 		}
 
-		return value.map((item) => {
+		Object.values(value).forEach((item) => {
 			if (item?.type !== 'image') {
 				delete item.image;
 				delete item['image-size'];
@@ -101,9 +126,9 @@ export default function BackgroundControl({
 
 			// internal usage
 			delete item.isOpen;
-
-			return item;
 		});
+
+		return value;
 	}
 
 	return (
@@ -128,60 +153,3 @@ export default function BackgroundControl({
 }
 
 export { getBackgroundItemBGProperty } from './utils';
-
-BackgroundControl.propTypes = {
-	/**
-	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
-	 */
-	defaultValue: PropTypes.array,
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
-	/**
-	 * className that will be use in repeater control wrapper and popover class name.
-	 */
-	className: PropTypes.string,
-	/**
-	 * Default value of each repeater item
-	 */
-	//$FlowFixMe
-	defaultRepeaterItemValue: PropTypes.shape({
-		type: PropTypes.oneOf([
-			'image',
-			'linear-gradient',
-			'radial-gradient',
-			'mesh-gradient',
-		]),
-		image: PropTypes.string,
-		'image-size': PropTypes.string,
-		'image-size-width': PropTypes.string,
-		'image-size-height': PropTypes.string,
-		'image-position': PropTypes.shape({
-			top: PropTypes.string,
-			left: PropTypes.string,
-		}),
-		'image-repeat': PropTypes.string,
-		'image-attachment': PropTypes.string,
-		'linear-gradient': PropTypes.string,
-		'linear-gradient-angel': PropTypes.string,
-		'linear-gradient-repeat': PropTypes.string,
-		'linear-gradient-attachment': PropTypes.string,
-		'radial-gradient': PropTypes.string,
-		'radial-gradient-position': PropTypes.shape({
-			top: PropTypes.string,
-			left: PropTypes.string,
-		}),
-		'radial-gradient-size': PropTypes.string,
-		'radial-gradient-repeat': PropTypes.string,
-		'radial-gradient-attachment': PropTypes.string,
-		'mesh-gradient': PropTypes.string,
-		'mesh-gradient-colors': PropTypes.array,
-		'mesh-gradient-attachment': PropTypes.string,
-		isVisible: PropTypes.bool,
-	}),
-	/**
-	 * Label for popover
-	 */
-	popoverTitle: PropTypes.string,
-};

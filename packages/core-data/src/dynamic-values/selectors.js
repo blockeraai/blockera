@@ -35,4 +35,4 @@ export {
 	getOtherDynamicValueItemsBy,
 } from './other';
 
-export { getDynamicValue } from './get-dynamic-value';
+// export { getDynamicValue } from './get-dynamic-value';

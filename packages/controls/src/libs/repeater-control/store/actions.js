@@ -1,6 +1,7 @@
 export function addRepeaterItem({
 	value,
 	controlId,
+	itemIdGenerator,
 	maxItems = -1,
 	repeaterId = null,
 }) {
@@ -9,26 +10,27 @@ export function addRepeaterItem({
 		maxItems,
 		controlId,
 		repeaterId,
+		itemIdGenerator,
 		type: 'ADD_REPEATER_ITEM',
 	};
 }
 
 export function changeRepeaterItem({
 	value,
+	getId,
 	itemId,
 	controlId,
 	defaultItemValue,
 	maxItems = -1,
 	repeaterId = null,
-	valueCleanup = null,
 }) {
 	return {
 		value,
+		getId,
 		itemId,
 		controlId,
 		maxItems,
 		repeaterId,
-		valueCleanup,
 		type: 'CHANGE_REPEATER_ITEM',
 		defaultItemValue: defaultItemValue ?? {},
 	};
@@ -64,6 +66,7 @@ export function cloneRepeaterItem({
 	item,
 	itemId,
 	controlId,
+	itemIdGenerator,
 	maxItems = -1,
 	repeaterId = null,
 	overrideItem = null,
@@ -75,6 +78,7 @@ export function cloneRepeaterItem({
 		maxItems,
 		repeaterId,
 		overrideItem,
+		itemIdGenerator,
 		type: 'CLONE_REPEATER_ITEM',
 	};
 }

@@ -4,7 +4,6 @@
  * Publisher dependencies
  */
 import { isString } from '@publisher/utils';
-import { prepare } from '@publisher/data-extractor';
 import type { TStates } from '@publisher/extensions/src/libs/block-states/types';
 import type { InnerBlockType } from '@publisher/extensions/src/libs/inner-blocks/types';
 
@@ -13,10 +12,10 @@ import type { InnerBlockType } from '@publisher/extensions/src/libs/inner-blocks
  */
 import CssGenerators from './css-generator';
 import type {
+	CssRule,
 	StaticStyle,
 	DynamicStyle,
-	CssGeneratorModel,
-	CssRule,
+	CssDeclarationProps,
 } from './types';
 
 /**
@@ -123,48 +122,29 @@ export const isValidStyleDefinition = (styleDefinition: Object): boolean =>
 	['function', 'static'].includes(styleDefinition?.type);
 
 /**
- * Creating CSS Rule!
+ * Creating CSS Declarations.
  *
- * @param {Object} style The style object
- * @return {string} The created CSS Rule!
+ * @param {Object} declaration The declaration object.
+ * @return {string} The normalized css declarations.
  */
-export const createCssRule = (style: CssGeneratorModel): string => {
-	if (!hasAllProperties(style, ['properties'])) {
+export const createCssDeclarations = (
+	declaration: CssDeclarationProps
+): string => {
+	if (!declaration.hasOwnProperty('properties')) {
 		console.warn(
-			`Style rule: ${JSON.stringify(style)} avoid css rule validation!`
+			`Create Css Declarations API: ${JSON.stringify(
+				declaration
+			)} avoid CssDeclarationProps Type!`
 		);
 		return '';
 	}
 
-	const {
-		properties: _props,
-		options = { important: false },
-		// $FlowFixMe
-		blockProps = {},
-	} = style;
+	const { properties: _props, options = { important: false } } = declaration;
 
-	let properties = getProperties({
+	return getProperties({
 		options,
 		properties: _props,
 	}).join('\n');
-
-	if (!blockProps?.attributes) {
-		return properties;
-	}
-
-	getVars(properties).forEach((query): void => {
-		const replacement = prepare(query, blockProps?.attributes);
-
-		if (!replacement) {
-			return;
-		}
-
-		properties = properties
-			.replace(query, replacement)
-			.replace(/[{}]/g, '');
-	});
-
-	return properties;
 };
 
 /**

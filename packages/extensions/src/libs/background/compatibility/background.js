@@ -1,4 +1,8 @@
 // @flow
+/**
+ * Publisher dependencies
+ */
+import { isEmpty } from '@publisher/utils';
 
 export function backgroundFromWPCompatibility({
 	attributes,
@@ -7,11 +11,11 @@ export function backgroundFromWPCompatibility({
 	blockId?: string,
 }): Object {
 	if (
-		attributes?.publisherBackground.length === 0 &&
+		attributes?.publisherBackground['image-0'] === undefined &&
 		attributes?.style?.background?.backgroundImage?.url !== undefined
 	) {
-		attributes.publisherBackground = [
-			{
+		attributes.publisherBackground = {
+			'image-0': {
 				type: 'image',
 				image: attributes?.style?.background?.backgroundImage?.url,
 				'image-size': 'custom',
@@ -24,8 +28,10 @@ export function backgroundFromWPCompatibility({
 				'image-repeat': 'repeat',
 				'image-attachment': 'scroll',
 				isOpen: false,
+				order: 0,
 			},
-		];
+			...attributes.publisherBackground,
+		};
 	}
 
 	return attributes;
@@ -38,7 +44,7 @@ export function backgroundToWPCompatibility({
 	newValue: Object,
 	ref?: Object,
 }): Object {
-	if ('reset' === ref?.current?.action) {
+	if ('reset' === ref?.current?.action || isEmpty(newValue)) {
 		return {
 			style: {
 				background: {
@@ -50,8 +56,13 @@ export function backgroundToWPCompatibility({
 
 	let result = {};
 
-	newValue.forEach((item) => {
-		if (item?.type === 'image' && item?.image !== 'image') {
+	Object.entries(newValue).forEach(([, item]: [string, Object]): void => {
+		// only 1 image
+		if (result) {
+			return;
+		}
+
+		if (item?.type === 'image' && item?.image !== '') {
 			result = {
 				style: {
 					background: {

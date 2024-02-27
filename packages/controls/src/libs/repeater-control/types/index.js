@@ -127,6 +127,10 @@ export type RepeaterControlProps = {
 		defaultRepeaterItemValue: Object
 	) => Object,
 	/**
+	 * The handle on delete recieved from outside.
+	 */
+	onDelete?: (itemId: string, items: Object) => Object,
+	/**
 	 * The handle on select repeater item.
 	 */
 	onSelect?: (event: MouseEvent, item: Object) => boolean,
@@ -146,6 +150,10 @@ export type RepeaterControlProps = {
 	 * The callback to retrieve dynamic default repeater item.
 	 */
 	itemColumns?: number,
+	/**
+	 * The callback to generate id for items with custom pattern.
+	 */
+	itemIdGenerator?: (itemsCount: number) => string,
 };
 
 export type TRepeaterDefaultStateProps = {

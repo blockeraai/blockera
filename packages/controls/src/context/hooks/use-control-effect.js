@@ -7,7 +7,7 @@ import { useEffect } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import { isFunction } from '@publisher/utils';
+import { isFunction, isEquals } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -48,6 +48,10 @@ export default function useControlEffect(
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	useEffect(
 		() => {
+			if (isEquals(controlValue, controlInfo.value)) {
+				return;
+			}
+
 			setValue(controlValue);
 
 			resetRef();

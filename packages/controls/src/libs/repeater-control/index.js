@@ -76,8 +76,10 @@ export default function RepeaterControl({
 	defaultRepeaterItemValue = { isVisible: true },
 	onChange,
 	onSelect,
+	onDelete,
 	overrideItem,
 	valueCleanup,
+	itemIdGenerator,
 	//
 	className,
 	emptyItemPlaceholder,
@@ -89,7 +91,7 @@ export default function RepeaterControl({
 	};
 
 	const {
-		value,
+		value: repeaterItems,
 		dispatch: { addRepeaterItem, modifyControlValue },
 		controlInfo: { name: controlId, attribute, blockName },
 		getControlPath,
@@ -105,8 +107,6 @@ export default function RepeaterControl({
 		valueCleanup,
 		mergeInitialAndDefault: true,
 	});
-
-	const repeaterItems = value;
 
 	const defaultRepeaterState: TRepeaterDefaultStateProps = {
 		design,
@@ -126,10 +126,12 @@ export default function RepeaterControl({
 		actionButtonClone,
 		//
 		onSelect,
+		onDelete,
 		controlId,
 		repeaterId,
 		overrideItem,
 		getControlPath,
+		itemIdGenerator,
 		repeaterItemOpener,
 		repeaterItemHeader,
 		repeaterItemChildren,
@@ -142,77 +144,91 @@ export default function RepeaterControl({
 	};
 
 	const addNewButtonOnClick = () => {
+		const itemsCount = Object.keys(repeaterItems || {}).length;
+
 		const callback = (value?: Object): void => {
 			if (!defaultRepeaterItemValue?.selectable) {
 				return;
 			}
 
+			const clonedRepeaterItems: { [key: string]: any } = {};
+
+			Object.entries(repeaterItems).forEach(([itemId, item]): void => {
+				if (item.display) {
+					clonedRepeaterItems[itemId] = {
+						...item,
+						isSelected: false,
+					};
+
+					return;
+				}
+
+				clonedRepeaterItems[itemId] = {
+					...item,
+					display: true,
+					isSelected: false,
+				};
+			});
+
+			const newItemId: string =
+				value?.type ||
+				defaultRepeaterItemValue?.type ||
+				itemsCount + '';
+
 			modifyControlValue({
 				controlId,
-				value: [
-					...repeaterItems.map((item) => {
-						if (item.display) {
-							return {
-								...item,
-								isSelected: false,
-							};
-						}
-
-						return {
-							...item,
-							display: true,
-							isSelected: false,
-						};
-					}),
-					value
-						? value
-						: {
-								...defaultRepeaterItemValue,
-								isSelected: true,
-						  },
-				],
+				value: {
+					...clonedRepeaterItems,
+					[newItemId]: value || {
+						...defaultRepeaterItemValue,
+						isSelected: true,
+					},
+				},
 			});
 		};
 
-		if (maxItems === -1 || repeaterItems?.length < maxItems) {
-			if ('function' === typeof getDynamicDefaultRepeaterItem) {
-				const value = getDynamicDefaultRepeaterItem(
-					repeaterItems?.length,
-					defaultRepeaterItemValue
-				);
+		if (maxItems !== -1 && itemsCount >= maxItems) {
+			return;
+		}
 
-				if (value?.selectable) {
-					return callback({
-						...value,
-						isSelected: true,
-					});
-				}
+		if ('function' === typeof getDynamicDefaultRepeaterItem) {
+			const value = getDynamicDefaultRepeaterItem(
+				itemsCount,
+				defaultRepeaterItemValue
+			);
 
-				addRepeaterItem({
-					controlId,
-					repeaterId,
-					value: getDynamicDefaultRepeaterItem(
-						repeaterItems?.length,
-						defaultRepeaterItemValue
-					),
+			if (value?.selectable) {
+				return callback({
+					...value,
+					isSelected: true,
 				});
-
-				return;
-			}
-
-			if (defaultRepeaterItemValue?.selectable) {
-				return callback();
 			}
 
 			addRepeaterItem({
 				controlId,
 				repeaterId,
-				value: defaultRepeaterItemValue,
+				value: getDynamicDefaultRepeaterItem(
+					repeaterItems?.length,
+					defaultRepeaterItemValue
+				),
 			});
+
+			return;
 		}
+
+		if (defaultRepeaterItemValue?.selectable) {
+			return callback();
+		}
+
+		addRepeaterItem({
+			controlId,
+			repeaterId,
+			itemIdGenerator,
+			value: defaultRepeaterItemValue,
+		});
 	};
 
-	const items = repeaterItems.length > 0 && (
+	const items = Object.keys(repeaterItems).length > 0 && (
 		<>
 			{itemColumns > 1 ? (
 				<Grid
@@ -251,7 +267,7 @@ export default function RepeaterControl({
 										label={label}
 										labelPopoverTitle={labelPopoverTitle}
 										labelDescription={labelDescription}
-										value={value}
+										value={repeaterItems}
 										mode={'advanced'}
 										isRepeater={true}
 										blockName={blockName}
@@ -328,7 +344,7 @@ export default function RepeaterControl({
 												labelPopoverTitle
 											}
 											labelDescription={labelDescription}
-											value={value}
+											value={repeaterItems}
 											mode={'advanced'}
 											isRepeater={true}
 											blockName={blockName}

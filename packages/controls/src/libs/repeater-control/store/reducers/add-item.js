@@ -1,52 +1,57 @@
+// @flow
+
 /**
  * Publisher dependencies
  */
 import { prepare, update } from '@publisher/data-extractor';
-import { isObject } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
-import { isQuery, hasLimitation, getControlInfo, hasRepeaterId } from './utils';
+import { hasLimitation, hasRepeaterId, generatedDetailsId } from './utils';
 
-function handleActionIncludeRepeaterId(controlValue, action) {
-	//mean: repeaterId of action should like this pattern /\w+\.\w+|\[.*]/gi
-	if (isQuery(action)) {
-		const targetRepeater = prepare(action.repeaterId, controlValue);
-
-		//To limit the number of control items, it is enough to set the maxItems number and this value is less than the current number of state items.
-		if (hasLimitation(action) && targetRepeater.length >= action.maxItems) {
-			return controlValue;
-		}
-
-		return update(controlValue, action.repeaterId, [action.value], 'merge');
-	}
+/**
+ * Handle action with has repeaterId prop.
+ *
+ * @param {Object} controlValue The parent control value.
+ * @param {Object} action The action for dispatcher.
+ * @return {Object} the updated controlValue.
+ */
+function handleActionIncludeRepeaterId(
+	controlValue: Object,
+	action: Object
+): Object {
+	const targetRepeater = prepare(action.repeaterId, controlValue);
+	const itemsCount = Object.values(targetRepeater || {}).length;
 
 	//To limit the number of control items, it is enough to set the maxItems number and this value is less than the current number of state items.
 	if (
-		hasLimitation(action) &&
-		prepare(action.repeaterId, controlValue)?.length >= action.maxItems
+		(hasLimitation(action) && itemsCount >= action.maxItems) ||
+		!targetRepeater
 	) {
 		return controlValue;
 	}
 
-	return {
-		...controlValue,
-		[action.repeaterId]: [
-			...controlValue[action.repeaterId],
-			...[action.value],
-		],
+	const newValue = {
+		...action.value,
+		order: itemsCount,
 	};
+
+	return update(
+		controlValue,
+		action.repeaterId,
+		'function' === typeof action.itemIdGenerator
+			? {
+					[action.itemIdGenerator(itemsCount)]: newValue,
+			  }
+			: { [itemsCount + '']: newValue }
+	);
 }
 
-export function addItem(state = {}, action) {
-	const controlInfo = getControlInfo(state, action);
+export function addItem(state: Object = {}, action: Object): Object {
+	const controlInfo = state[action.controlId];
 
-	if (!isObject(controlInfo)) {
-		return state;
-	}
-
-	// state management by action include repeaterId
+	// Assume action includes repeaterId prop.
 	if (hasRepeaterId(controlInfo.value, action)) {
 		return {
 			...state,
@@ -57,11 +62,10 @@ export function addItem(state = {}, action) {
 		};
 	}
 
+	const { itemsCount, uniqueId } = generatedDetailsId(state, action);
+
 	//To limit the number of control items, it is enough to set the maxItems number and this value is less than the current number of state items.
-	if (
-		hasLimitation(action) &&
-		controlInfo?.value?.length >= action.maxItems
-	) {
+	if (hasLimitation(action) && itemsCount >= action.maxItems) {
 		return state;
 	}
 
@@ -89,7 +93,13 @@ export function addItem(state = {}, action) {
 		...state,
 		[action.controlId]: {
 			...controlInfo,
-			value: [...(controlInfo?.value ?? []), ...[action.value]],
+			value: {
+				...controlInfo.value,
+				[uniqueId]: {
+					...action.value,
+					order: Object.keys(controlInfo.value).length,
+				},
+			},
 		},
 	};
 }

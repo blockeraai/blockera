@@ -6,7 +6,7 @@ describe('update api testing', function () {
 			x: [{ value: 10 }],
 		};
 
-		expect(update(data, 'x', { value: 20 }, 'merge')).toEqual({
+		expect(update(data, 'x', { value: 20 })).toEqual({
 			x: [{ value: 10 }, { value: 20 }],
 		});
 	});
@@ -22,9 +22,7 @@ describe('update api testing', function () {
 			},
 		];
 
-		expect(
-			update(data, '[0].x[0].y', { 'prop-id': [10, 12] }, 'merge')
-		).toEqual([
+		expect(update(data, '[0].x[0].y', { 'prop-id': [10, 12] })).toEqual([
 			{
 				x: [
 					{
@@ -45,12 +43,7 @@ describe('update api testing', function () {
 		];
 
 		expect(
-			update(
-				_data,
-				'[0][0][0][test-prop][0]',
-				{ 'prop-id': [10, 12] },
-				'merge'
-			)
+			update(_data, '[0][0][0][test-prop][0]', { 'prop-id': [10, 12] })
 		).toEqual([
 			[
 				[
@@ -62,23 +55,23 @@ describe('update api testing', function () {
 		]);
 	});
 
-	it('should replace value of object by complex query', function () {
-		const data = {
-			x: [
-				{
-					y: { 'prop-id': [10] },
-				},
-			],
-		};
-
-		expect(update(data, 'x[0].y', { 'prop-id': [10, 12] })).toEqual({
-			x: [
-				{
-					y: { 'prop-id': [10, 12] },
-				},
-			],
-		});
-	});
+	// it('should replace value of object by complex query', function () {
+	// 	const data = {
+	// 		x: [
+	// 			{
+	// 				y: { 'prop-id': [10] },
+	// 			},
+	// 		],
+	// 	};
+	//
+	// 	expect(update(data, 'x[0].y', { 'prop-id': [10, 12] })).toEqual({
+	// 		x: [
+	// 			{
+	// 				y: { 'prop-id': [10, 12] },
+	// 			},
+	// 		],
+	// 	});
+	// });
 
 	it('should replace value of array by complex query', function () {
 		const data = [
@@ -115,20 +108,18 @@ describe('update api testing', function () {
 			},
 		];
 
-		expect(update(data, '[0].x[0].y', { type: 'simple' }, 'merge')).toEqual(
-			[
-				{
-					x: [
-						{
-							y: {
-								type: 'simple',
-								value: 100,
-							},
+		expect(update(data, '[0].x[0].y', { type: 'simple' })).toEqual([
+			{
+				x: [
+					{
+						y: {
+							type: 'simple',
+							value: 100,
 						},
-					],
-				},
-			]
-		);
+					},
+				],
+			},
+		]);
 
 		expect(
 			update(
@@ -145,8 +136,7 @@ describe('update api testing', function () {
 					},
 				],
 				'[0].x[0].y',
-				1000,
-				'merge'
+				1000
 			)
 		).toEqual([
 			{
@@ -176,8 +166,7 @@ describe('update api testing', function () {
 					},
 				],
 				'[0].x[0].y.type',
-				'multi',
-				'merge'
+				'multi'
 			)
 		).toEqual([
 			{

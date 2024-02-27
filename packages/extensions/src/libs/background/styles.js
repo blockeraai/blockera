@@ -2,43 +2,51 @@
 /**
  * Publisher dependencies
  */
-import { computedCssRules } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
-import type { GeneratorReturnType } from '@publisher/style-engine/src/types';
+import type { CssRule } from '@publisher/style-engine/src/types';
 
 /**
  * Internal dependencies
  */
 import { arrayEquals } from '../utils';
+import * as config from '../base/config';
 import { attributes } from './attributes';
-import type { TBlockProps } from '../types';
+import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
 import { backgroundGenerator, backgroundClipGenerator } from './css-generators';
+import {
+	computedCssDeclarations,
+	getCssSelector,
+} from '@publisher/style-engine';
 
-interface IConfigs {
-	backgroundConfig: {
-		cssGenerators: Object,
-		publisherBackground?: Object,
-		publisherBackgroundColor?: Object,
-		publisherBackgroundClip?: Object,
-	};
-	blockProps: TBlockProps;
-	selector: string;
-	media: string;
-}
-
-export function BackgroundStyles({
-	backgroundConfig: {
-		cssGenerators,
+export const BackgroundStyles = ({
+	state,
+	clientId,
+	blockName,
+	currentBlock,
+	// supports,
+	// activeDeviceType,
+	selectors: blockSelectors,
+	attributes: currentBlockAttributes,
+}: StylesProps): Array<CssRule> => {
+	const {
 		publisherBackground,
 		publisherBackgroundColor,
 		publisherBackgroundClip,
-	},
-	blockProps,
-	selector,
-	media,
-}: IConfigs): Array<GeneratorReturnType> {
-	const generators = [];
+	} = config.backgroundConfig;
+	const blockProps = {
+		clientId,
+		blockName,
+		attributes: currentBlockAttributes,
+	};
+	const sharedParams = {
+		state,
+		clientId,
+		currentBlock,
+		blockSelectors,
+		className: currentBlockAttributes?.className,
+	};
+	const styleGroup: Array<CssRule> = [];
 
 	if (
 		isActiveField(publisherBackground) &&
@@ -47,22 +55,27 @@ export function BackgroundStyles({
 			blockProps.attributes.publisherBackground
 		)
 	) {
-		generators.push(
-			computedCssRules(
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherBackground',
+			support: 'publisherBackground',
+			fallbackSupportId: 'background',
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
 				{
 					publisherBackground: [
 						{
-							media,
-							selector: `${selector}, ${selector} .publisher-extension-ref, ${selector} .publisher-icon-element div[contentEditable="true"], .publisher-icon-element div`,
 							type: 'function',
 							function: backgroundGenerator,
 						},
 					],
-					...(publisherBackground?.cssGenerators || {}),
 				},
 				blockProps
-			)
-		);
+			),
+		});
 	}
 
 	if (isActiveField(publisherBackgroundColor)) {
@@ -74,14 +87,20 @@ export function BackgroundStyles({
 			publisherBackgroundColor !==
 			attributes.publisherBackgroundColor.default
 		) {
-			generators.push(
-				computedCssRules(
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherBackgroundColor',
+				support: 'publisherBackgroundColor',
+				fallbackSupportId: 'backgroundColor',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
 					{
 						publisherBackgroundColor: [
 							{
 								type: 'static',
-								media,
-								selector,
 								properties: {
 									'background-color':
 										publisherBackgroundColor,
@@ -90,8 +109,8 @@ export function BackgroundStyles({
 						],
 					},
 					blockProps
-				)
-			);
+				),
+			});
 		}
 	}
 
@@ -100,31 +119,28 @@ export function BackgroundStyles({
 		blockProps.attributes.publisherBackgroundClip !==
 			attributes.publisherBackgroundClip.default
 	) {
-		generators.push(
-			computedCssRules(
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherBackgroundClip',
+			support: 'publisherBackgroundClip',
+			fallbackSupportId: 'backgroundClip',
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
 				{
 					publisherBackgroundClip: [
 						{
-							media,
-							selector,
 							type: 'function',
 							function: backgroundClipGenerator,
 						},
 					],
 				},
 				blockProps
-			)
-		);
+			),
+		});
 	}
 
-	generators.push(
-		computedCssRules(
-			{
-				...(cssGenerators || {}),
-			},
-			blockProps
-		)
-	);
-
-	return generators.flat();
-}
+	return styleGroup;
+};

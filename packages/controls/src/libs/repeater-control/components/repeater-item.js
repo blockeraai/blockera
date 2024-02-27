@@ -236,19 +236,25 @@ const RepeaterItem = ({
 				}}
 				onClick={(event): void | boolean => {
 					if (item.selectable) {
-						const newItems = items.map((_item, _itemId) => {
-							if (_itemId === itemId) {
-								return {
+						const newItems: { [key: string]: any } = {};
+
+						Object.entries(items).forEach(
+							([_itemId, _item]: [string, any]): void => {
+								if (_itemId === itemId) {
+									newItems[_itemId] = {
+										..._item,
+										isSelected: true,
+									};
+
+									return;
+								}
+
+								newItems[_itemId] = {
 									..._item,
-									isSelected: true,
+									isSelected: false,
 								};
 							}
-
-							return {
-								..._item,
-								isSelected: false,
-							};
-						});
+						);
 
 						modifyControlValue({
 							controlId,

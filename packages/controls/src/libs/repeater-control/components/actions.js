@@ -33,13 +33,17 @@ export default function RepeaterItemActions({
 		controlId,
 		maxItems,
 		minItems,
+		onDelete,
 		repeaterId,
 		overrideItem,
+		itemIdGenerator,
 		actionButtonVisibility,
 		actionButtonDelete,
 		actionButtonClone,
 		repeaterItems,
 	} = useContext(RepeaterContext);
+
+	const itemsCount = Object.keys(repeaterItems).length;
 
 	const {
 		dispatch: {
@@ -103,7 +107,7 @@ export default function RepeaterItemActions({
 
 			{actionButtonClone &&
 				item?.cloneable &&
-				(maxItems === -1 || repeaterItems?.length < maxItems) && (
+				(maxItems === -1 || itemsCount < maxItems) && (
 					<Button
 						className={controlInnerClassNames('btn-clone')}
 						noBorder={true}
@@ -120,6 +124,7 @@ export default function RepeaterItemActions({
 								controlId,
 								repeaterId,
 								overrideItem,
+								itemIdGenerator,
 							});
 						}}
 						aria-label={sprintf(
@@ -132,7 +137,7 @@ export default function RepeaterItemActions({
 
 			{actionButtonDelete &&
 				item?.deletable &&
-				(minItems === 0 || repeaterItems?.length > minItems) && (
+				(minItems === 0 || itemsCount > minItems) && (
 					<Button
 						className={controlInnerClassNames('btn-delete')}
 						noBorder={true}
@@ -142,7 +147,10 @@ export default function RepeaterItemActions({
 						onClick={(event) => {
 							event.stopPropagation();
 
-							if (!item.selectable) {
+							if (
+								!item.selectable ||
+								'function' !== typeof onDelete
+							) {
 								removeRepeaterItem({
 									itemId,
 									controlId,
@@ -152,30 +160,9 @@ export default function RepeaterItemActions({
 								return;
 							}
 
-							const filteredItems = repeaterItems.filter(
-								(_item, _itemId) => itemId !== _itemId
-							);
-
 							modifyControlValue({
 								controlId,
-								value: filteredItems.map((_item, _itemId) => {
-									if (filteredItems.length < 2) {
-										return {
-											..._item,
-											display: false,
-											isSelected: true,
-										};
-									}
-
-									if (itemId - 1 === _itemId) {
-										return {
-											..._item,
-											isSelected: true,
-										};
-									}
-
-									return _item;
-								}),
+								value: onDelete(itemId, repeaterItems),
 							});
 						}}
 						label={__('Delete', 'publisher')}

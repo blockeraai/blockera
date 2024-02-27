@@ -10,7 +10,7 @@ import { useId } from '@wordpress/element';
  * Publisher dependencies
  */
 import {
-	// BackgroundStyles,
+	BackgroundStyles,
 	// BorderAndShadowStyles,
 	FlexChildStyles,
 	isInnerBlock,
@@ -86,7 +86,7 @@ const Stylesheet = ({
 		...PositionStyles(calculatedProps),
 		...FlexChildStyles(calculatedProps),
 		// ...TypographyStyles(calculatedProps),
-		// ...BackgroundStyles(calculatedProps),
+		...BackgroundStyles(calculatedProps),
 		// ...EffectsStyles(calculatedProps),
 		// ...CustomStyleStyles(calculatedProps),
 		// ...BorderAndShadowStyles(calculatedProps),

@@ -3,8 +3,9 @@
 /**
  * External dependencies
  */
+import memoize from 'fast-memoize';
 import { __ } from '@wordpress/i18n';
-import { useSelect } from '@wordpress/data';
+import { dispatch, useSelect } from '@wordpress/data';
 import type { Element, ComponentType } from 'react';
 import { memo, useMemo, useCallback } from '@wordpress/element';
 
@@ -34,6 +35,7 @@ import type {
 	StatesManagerProps,
 	StateTypes,
 	TStates,
+	TBreakpoint,
 } from '../types';
 import { useBlockContext } from '../../../hooks';
 import { isInnerBlock } from '../../../components';
@@ -43,94 +45,13 @@ import StateContainer from '../../../components/state-container';
 
 const StatesManager: ComponentType<any> = memo(
 	({ block, states, onChange }: StatesManagerProps): Element<any> => {
-		const calculatedValue = useMemo(() => {
-			const keys = Object.keys(states);
-			return Object.values(states).length < 2
-				? [
-						{
-							...defaultStates.normal,
-							...defaultItemValue,
-							isOpen: false,
-							display: false,
-							deletable: false,
-							selectable: true,
-							isSelected: true,
-							visibilitySupport: false,
-							breakpoints: getBreakpoints('normal'),
-						},
-				  ]
-				: Object.values(states).map((state: Object, id: number) => {
-						return {
-							...state,
-							...defaultStates[keys[id]],
-							...defaultItemValue,
-							isOpen: false,
-							selectable: true,
-							display: keys.length > 1,
-							visibilitySupport: false,
-							isSelected:
-								'undefined' !== typeof state?.isSelected
-									? state?.isSelected
-									: 'normal' === keys[id],
-							deletable: 'normal' !== keys[id],
-							breakpoints: {
-								...getBreakpoints(keys[id]),
-								...(state?.breakpoints ?? {}),
-							},
-						};
-				  });
-		}, [states]);
-
-		const valueCleanup = useCallback(
-			(
-				value: {
-					[key: TStates]: StateTypes,
-				},
-				finalizeFlag: boolean = false
-			): Array<Object> => {
-				return Object.values(Object.assign({}, value))
-					?.map((item: Object): Object | false => {
-						const breakpoints = {};
-
-						Object.values(item?.breakpoints)?.forEach(
-							(breakpoint) => {
-								if (
-									!Object.keys(breakpoint?.attributes || {})
-										.length &&
-									'laptop' !== breakpoint?.type
-								) {
-									return;
-								}
-
-								const { attributes = {} } = breakpoint;
-
-								if (
-									finalizeFlag &&
-									!Object.keys(attributes).length &&
-									'normal' !== item?.type
-								) {
-									return;
-								}
-
-								breakpoints[breakpoint.type] = { attributes };
-							}
-						);
-
-						if (!Object.values(breakpoints).length) {
-							return false;
-						}
-
-						return {
-							breakpoints,
-							isVisible: item?.isVisible,
-						};
-					})
-					.filter((item) => 'object' === typeof item);
-			},
-			[]
-		);
+		const {
+			changeExtensionCurrentBlockState: setCurrentState,
+			changeExtensionInnerBlockState: setInnerBlockState,
+		} = dispatch('publisher-core/extensions') || {};
 
 		const { isNormalState } = useBlockContext();
+
 		const { currentBlock, currentState, currentInnerBlockState } =
 			useSelect((select) => {
 				const {
@@ -145,11 +66,254 @@ const StatesManager: ComponentType<any> = memo(
 					currentInnerBlockState: getExtensionInnerBlockState(),
 				};
 			});
+
+		const calculatedValue = useMemo(() => {
+			const itemsCount = Object.values(states).length;
+			if (itemsCount >= 2) {
+				const initialValue: { [key: TStates | string]: StateTypes } =
+					{};
+
+				const memoizedInitialValue = memoize(
+					([itemId, state]: [
+						TStates,
+						{ ...StateTypes, isSelected: boolean }
+					]): void => {
+						if (state?.isSelected) {
+							if (isInnerBlock(currentBlock)) {
+								setInnerBlockState(state.type);
+							} else {
+								setCurrentState(state.type);
+							}
+						}
+
+						initialValue[itemId] = {
+							...state,
+							...defaultStates[itemId],
+							...defaultItemValue,
+							isOpen: false,
+							selectable: true,
+							display: itemsCount > 1,
+							visibilitySupport: false,
+							isSelected:
+								'undefined' !== typeof state?.isSelected
+									? state?.isSelected
+									: 'normal' === itemId,
+							deletable: 'normal' !== itemId,
+							breakpoints: {
+								...getBreakpoints(itemId),
+								...(state?.breakpoints ?? {}),
+							},
+						};
+					}
+				);
+
+				Object.entries(states).forEach(memoizedInitialValue);
+
+				return initialValue;
+			}
+
+			return {
+				normal: {
+					...defaultStates.normal,
+					...defaultItemValue,
+					isOpen: false,
+					display: false,
+					deletable: false,
+					selectable: true,
+					isSelected: true,
+					visibilitySupport: false,
+					breakpoints: getBreakpoints('normal'),
+				},
+			};
+			// eslint-disable-next-line
+		}, [currentBlock, states]);
+
+		const memoizedCallback = useCallback(
+			(
+				{ name: controlId, value: recievedValue }: ControlInfo,
+				value: Array<{ ...StateTypes, isSelected: boolean }>,
+				modifyControlValue: (params: Object) => void
+			): void => {
+				if (isEquals(value, recievedValue)) {
+					return;
+				}
+
+				const clonedRecievedValue: {
+					[key: TStates | string]: {
+						...StateTypes,
+						isSelected: boolean,
+					},
+				} = {};
+
+				Object.entries(recievedValue).forEach(
+					([itemId, state]: [
+						TStates | string,
+						{ ...StateTypes, isSelected: boolean }
+					]): void => {
+						if (isInnerBlock(currentBlock)) {
+							if (currentInnerBlockState === state.type) {
+								clonedRecievedValue[itemId] = {
+									...state,
+									isSelected: true,
+								};
+
+								return;
+							}
+						} else if (currentState === state.type) {
+							clonedRecievedValue[itemId] = {
+								...state,
+								isSelected: true,
+							};
+
+							return;
+						}
+
+						clonedRecievedValue[itemId] = {
+							...state,
+							isSelected: false,
+						};
+					}
+				);
+
+				modifyControlValue({
+					controlId,
+					value: clonedRecievedValue,
+				});
+			},
+			[states]
+		);
+
+		const valueCleanup = useCallback(
+			(
+				value: {
+					[key: TStates]: { ...StateTypes, isVisible: boolean },
+				},
+				finalizeFlag: boolean = false
+			): Object => {
+				const clonedValue: {
+					[key: TStates | string]: {
+						breakpoints: {
+							[key: TBreakpoint]: {
+								attributes: Object,
+							},
+						},
+						isVisible: boolean,
+						'css-class'?: string,
+					},
+				} = {};
+
+				Object.entries(value).forEach(
+					([itemId, item]: [string | TStates, Object]): void => {
+						const breakpoints: {
+							[key: TBreakpoint]: {
+								attributes: Object,
+							},
+						} = {};
+
+						Object.values(item?.breakpoints)?.forEach(
+							(breakpoint) => {
+								if (
+									!Object.keys(breakpoint?.attributes || {})
+										.length &&
+									'laptop' !== breakpoint?.type
+								) {
+									return;
+								}
+
+								const { attributes = {} } = breakpoint;
+
+								// TODO: remove finalizeFlag!
+								if (
+									finalizeFlag &&
+									!Object.keys(attributes).length &&
+									'normal' !== item?.type
+								) {
+									return;
+								}
+
+								breakpoints[breakpoint.type] = {
+									attributes,
+								};
+							}
+						);
+
+						if (!Object.values(breakpoints).length) {
+							return;
+						}
+
+						if (['custom-class', 'parent-class'].includes(itemId)) {
+							clonedValue[itemId] = {
+								breakpoints,
+								'css-class': item['css-class'] || '',
+								isVisible: item?.isVisible,
+							};
+
+							return;
+						}
+
+						clonedValue[itemId] = {
+							breakpoints,
+							isVisible: item?.isVisible,
+						};
+					}
+				);
+
+				return clonedValue;
+			},
+			[]
+		);
+
+		const onDelete = (
+			itemId: TStates,
+			items: {
+				[key: TStates]: Object,
+			}
+		): Object => {
+			const filteredStates: {
+				[key: TStates]: Object,
+			} = {};
+			const itemsCount = Object.keys(items).length;
+
+			Object.entries(items).forEach(
+				([_itemId, _item]: [
+					TStates,
+					{ ...StateTypes, isSelected: boolean }
+				]): void => {
+					if (_itemId === itemId) {
+						return;
+					}
+
+					if ('normal' === _itemId) {
+						filteredStates[_itemId] = {
+							..._item,
+							isSelected: true,
+						};
+
+						return;
+					}
+
+					if (itemsCount < 2) {
+						filteredStates[_itemId] = {
+							..._item,
+							display: false,
+							isSelected: true,
+						};
+
+						return;
+					}
+
+					filteredStates[_itemId] = _item;
+				}
+			);
+
+			return filteredStates;
+		};
+
 		const contextValue = {
 			block,
 			value: calculatedValue,
 			hasSideEffect: true,
-			onChange: (newValue) =>
+			onChange: (newValue: Object) =>
 				onChangeBlockStates(newValue, {
 					states,
 					onChange,
@@ -160,39 +324,7 @@ const StatesManager: ComponentType<any> = memo(
 					currentInnerBlockState,
 				}),
 			valueCleanup,
-			callback: (
-				{ name: controlId, value: recievedValue }: ControlInfo,
-				value: Array<{ ...StateTypes, isSelected: boolean }>,
-				modifyControlValue: (params: Object) => void
-			): void => {
-				if (isEquals(value, recievedValue)) {
-					return;
-				}
-
-				modifyControlValue({
-					controlId,
-					value: recievedValue.map((v) => {
-						if (isInnerBlock(currentBlock)) {
-							if (currentInnerBlockState === v.type) {
-								return {
-									...v,
-									isSelected: true,
-								};
-							}
-						} else if (currentState === v.type) {
-							return {
-								...v,
-								isSelected: true,
-							};
-						}
-
-						return {
-							...v,
-							isSelected: false,
-						};
-					}),
-				});
-			},
+			callback: memoizedCallback,
 			blockName: block.blockName,
 			attribute: 'publisherBlockStates',
 			name: generateExtensionId(block, 'block-states', false),
@@ -203,6 +335,8 @@ const StatesManager: ComponentType<any> = memo(
 				<StateContainer>
 					<RepeaterControl
 						{...{
+							onDelete,
+							maxItems: 10,
 							valueCleanup,
 							/**
 							 * Retrieve dynamic default value for repeater items.
@@ -221,6 +355,14 @@ const StatesManager: ComponentType<any> = memo(
 									...getStateInfo(statesCount),
 									display: true,
 								};
+
+								if (
+									['custom-class', 'parent-class'].includes(
+										defaultItem.type
+									)
+								) {
+									defaultItem['css-class'] = '';
+								}
 
 								defaultItem.breakpoints = getBreakpoints(
 									defaultItem.type

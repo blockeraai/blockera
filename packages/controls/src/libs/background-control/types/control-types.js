@@ -41,7 +41,7 @@ export type TMeshGradientColors = {
 
 export type TMeshGradientProps = {
 	'mesh-gradient': string,
-	'mesh-gradient-colors': Array<TMeshGradientColors>,
+	'mesh-gradient-colors': { [key: string]: TMeshGradientColors },
 	'mesh-gradient-attachment': string,
 };
 

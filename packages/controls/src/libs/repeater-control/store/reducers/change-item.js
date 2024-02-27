@@ -2,33 +2,17 @@
  * Publisher dependencies
  */
 import { update } from '@publisher/data-extractor';
-import { isFunction, isObject } from '@publisher/utils';
+import { isObject, isEquals } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
-import { isQuery, getControlInfo, hasRepeaterId } from './utils';
-
-function getNewValue({ valueCleanup, value }) {
-	//handle valueCleanup when is set!
-	return isFunction(valueCleanup) ? valueCleanup(value) : value;
-}
+import { getControlInfo, hasRepeaterId, generatedDetailsId } from './utils';
 
 function handleActionIncludeRepeaterId(controlValue, action) {
-	if (isQuery(action)) {
-		return update(controlValue, action.repeaterId, getNewValue(action));
-	}
-
-	return {
-		...controlValue,
-		[action.repeaterId]: controlValue[action.repeaterId].map((item, id) => {
-			if (id === action.itemId) {
-				return getNewValue(action);
-			}
-
-			return item;
-		}),
-	};
+	return update(controlValue, action.repeaterId, {
+		[action.itemId]: action.value,
+	});
 }
 
 export function changeItem(state = {}, action) {
@@ -49,18 +33,52 @@ export function changeItem(state = {}, action) {
 		};
 	}
 
+	const clonedPrevValue = { ...controlInfo.value };
+
+	if (
+		action.value?.type &&
+		!new RegExp(`^${action.value?.type}`, 'i').test(action.itemId)
+	) {
+		delete clonedPrevValue[action.itemId];
+
+		let { uniqueId } = generatedDetailsId(state, action);
+
+		if ('function' === typeof action.getId) {
+			uniqueId = action.getId();
+		}
+
+		if (
+			clonedPrevValue[uniqueId] &&
+			isEquals(action.value, clonedPrevValue[uniqueId])
+		) {
+			return state;
+		}
+
+		return {
+			...state,
+			[action.controlId]: {
+				...controlInfo,
+				value: {
+					...clonedPrevValue,
+					[uniqueId]: action.value,
+				},
+			},
+		};
+	}
+
+	if (isEquals(action.value, clonedPrevValue[action.itemId])) {
+		return state;
+	}
+
 	//by default behavior of "changeRepeaterItem" action
 	return {
 		...state,
 		[action.controlId]: {
 			...controlInfo,
-			value: controlInfo.value.map((i, id) => {
-				if (id === action.itemId) {
-					return getNewValue(action);
-				}
-
-				return i;
-			}),
+			value: {
+				...clonedPrevValue,
+				[action.itemId]: action.value,
+			},
 		},
 	};
 }
