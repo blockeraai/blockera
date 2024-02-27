@@ -1,9 +1,9 @@
 /**
  * Publisher dependencies
  */
-import { createCssRule } from '@publisher/style-engine';
+import { createCssDeclarations } from '@publisher/style-engine';
 
-export function backgroundClipGenerator(id, props, { media, selector }) {
+export function backgroundClipGenerator(id, props) {
 	const { attributes } = props;
 
 	const value = attributes.publisherBackgroundClip;
@@ -13,9 +13,7 @@ export function backgroundClipGenerator(id, props, { media, selector }) {
 	}
 
 	if (value === 'text') {
-		return createCssRule({
-			media,
-			selector,
+		return createCssDeclarations({
 			properties: {
 				'background-clip': 'text !important',
 				'-webkit-background-clip': 'text !important',
@@ -24,9 +22,7 @@ export function backgroundClipGenerator(id, props, { media, selector }) {
 		});
 	}
 
-	return createCssRule({
-		media,
-		selector,
+	return createCssDeclarations({
 		properties: {
 			'background-clip': value,
 			'-webkit-background-clip': value,

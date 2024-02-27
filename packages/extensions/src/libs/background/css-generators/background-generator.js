@@ -1,14 +1,14 @@
 /**
  * Publisher dependencies
  */
-import { createCssRule } from '@publisher/style-engine';
+import { createCssDeclarations } from '@publisher/style-engine';
 import { getBackgroundItemBGProperty } from '@publisher/controls';
 import { getValueAddonRealValue } from '@publisher/hooks';
 
-export function backgroundGenerator(id, props, { media, selector }) {
+export function backgroundGenerator(id, props) {
 	const { attributes } = props;
 
-	if (!attributes?.publisherBackground?.length) {
+	if (!Object.values(attributes?.publisherBackground)?.length) {
 		return '';
 	}
 
@@ -22,7 +22,7 @@ export function backgroundGenerator(id, props, { media, selector }) {
 	};
 
 	// Collect all properties
-	attributes?.publisherBackground?.map((item) => {
+	Object.entries(attributes?.publisherBackground)?.map(([, item]) => {
 		if (!item.isVisible) {
 			return undefined;
 		}
@@ -119,30 +119,32 @@ export function backgroundGenerator(id, props, { media, selector }) {
 				let gradient = item['mesh-gradient'];
 
 				if ('string' === typeof gradient) {
-					item['mesh-gradient-colors'].map((value, index) => {
-						gradient = gradient.replace(
-							`var(--c${index})`,
-							getValueAddonRealValue(
-								item['mesh-gradient-colors'][index].color
-							)
-						);
-						return null;
-					});
+					Object.entries(item['mesh-gradient-colors']).map(
+						([cssVariableName, value]) => {
+							gradient = gradient.replace(
+								`var(${cssVariableName})`,
+								getValueAddonRealValue(value.color)
+							);
+							return null;
+						}
+					);
 				} else {
 					gradient = gradient.join(', ');
 				}
 
-				item['mesh-gradient-colors'].map((value, index) => {
-					const newVar = '--c' + index;
+				Object.entries(item['mesh-gradient-colors']).map(
+					([cssVariableName, value]) => {
+						properties[cssVariableName] = getValueAddonRealValue(
+							value.color
+						);
 
-					properties[newVar] = getValueAddonRealValue(value.color);
-
-					return properties;
-				});
+						return properties;
+					}
+				);
 
 				// override bg color
 				properties['background-color'] =
-					item['mesh-gradient-colors'][0].color;
+					item['mesh-gradient-colors']['--c0'].color;
 
 				// Image
 				properties.image.push(gradient ? gradient + ' !important' : '');
@@ -182,9 +184,7 @@ export function backgroundGenerator(id, props, { media, selector }) {
 			getValueAddonRealValue(properties['background-color']) +
 			' !important';
 
-	return createCssRule({
-		media,
-		selector,
+	return createCssDeclarations({
 		properties: toReturnProperties,
 	});
 }
