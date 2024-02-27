@@ -14,9 +14,15 @@ import { useBlockContext } from '../../../hooks';
 
 export const AreaMergeHandler = ({
 	id,
-	setResizeToElementId,
+	setTargetAreaId,
 	activeAreaId,
 	mergeArea,
+	setVirtualMergedAreas,
+	setVirtualTargetAreaId,
+	createVirtualAreas,
+	virtualTargetAreas,
+
+	highlightHandler,
 }) => {
 	const { isOpenGridBuilder } = useBlockContext();
 
@@ -26,19 +32,9 @@ export const AreaMergeHandler = ({
 		height: '100%',
 	});
 
-	const [showGrids, setShowGrids] = useState(false);
-	const [isReadOnly, setIsReadOnly] = useState(true);
-
 	const isDragged = useRef(false);
 
 	const handleClass = 'showHandles';
-
-	const style: Object = {
-		outline: 'none',
-		border: `2px solid ${
-			showGrids || isDragged.current ? '#21dee5' : 'transparent'
-		}`,
-	};
 
 	const getEnableResize = () => {
 		return {
@@ -57,25 +53,40 @@ export const AreaMergeHandler = ({
 
 	// flow-typed for event param 👉🏻 FocusEvent<HTMLDivElement>
 	// in this case missing event param.
-	const onBlur = (e) => {
-		if (e.target.getAttribute('dataid') === activeAreaId) {
-			setIsReadOnly(true);
-			setShowGrids(true);
+	const onMouseLeave = () => {
+		setVirtualMergedAreas([]);
+	};
+
+	const onResize = (e, direction, ref, delta, _position) => {
+		createVirtualAreas();
+		highlightHandler(direction);
+		if (e.toElement.getAttribute('data-id')) {
+			setTargetAreaId(Number(e.toElement.getAttribute('data-id')));
+		}
+
+		if (e.toElement.dataset.virtualId) {
+			setVirtualTargetAreaId(Number(e.toElement.dataset.virtualId));
+		}
+
+		if (activeAreaId === id) {
+			setDimension({
+				width: ref.style.width,
+				height: ref.style.height,
+			});
+
+			setPosition({ top: _position.y, left: _position.x });
 		}
 	};
-	const onMouseEnter = (e) => {
-		if (e.target.getAttribute('dataid') === activeAreaId)
-			setShowGrids(true);
-		setShowGrids(false);
-	};
 
-	const onMouseLeave = () => {
-		setShowGrids(false);
-	};
-
-	const onDoubleClick = () => {
-		if (!isReadOnly) return;
-		setIsReadOnly(false);
+	const onResizeStop = (e, direction) => {
+		mergeArea(direction);
+		if (virtualTargetAreas) {
+			setDimension({
+				width: '100%',
+				height: '100%',
+			});
+			setPosition({ top: 0, left: 0 });
+		}
 	};
 
 	if (!isOpenGridBuilder) {
@@ -84,8 +95,7 @@ export const AreaMergeHandler = ({
 
 	return (
 		<Rnd
-			className="cell"
-			style={style}
+			className="cell merge-handler"
 			size={{
 				width: dimension?.width || 0,
 				height: dimension?.height || 0,
@@ -104,29 +114,13 @@ export const AreaMergeHandler = ({
 			}}
 			resizeHandleWrapperClass={handleClass}
 			resizeHandleClasses={resizeHandleClasses}
-			onResize={(e, direction, ref, delta, _position) => {
-				if (e.toElement.getAttribute('data-id'))
-					setResizeToElementId(e.toElement.getAttribute('data-id'));
-
-				if (activeAreaId === id) {
-					setDimension({
-						width: ref.style.width,
-						height: ref.style.height,
-					});
-
-					setPosition({ top: _position.y, left: _position.x });
-				}
-			}}
-			onResizeStop={mergeArea}
+			onResize={(e, direction, ref, delta, _position) =>
+				onResize(e, direction, ref, delta, _position)
+			}
+			onResizeStop={(e, direction) => onResizeStop(e, direction)}
 			enableResizing={getEnableResize()}
-			//minWidth={100}
-			//minHeight={50}
-			disableDragging={isReadOnly}
-			onMouseEnter={onMouseEnter}
+			disableDragging={true}
 			onMouseLeave={onMouseLeave}
-			onDoubleClick={onDoubleClick}
-			// onFocus={onfocus}
-			onBlur={onBlur}
 			tabIndex={0}
 			lockAspectRatio={false}
 			dataId={id}

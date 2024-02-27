@@ -4,7 +4,6 @@
  * External dependencies
  */
 import { useState, useEffect } from '@wordpress/element';
-import { nanoid } from 'nanoid';
 
 /**
  * Publisher dependencies
@@ -14,7 +13,14 @@ import { LayoutStyles } from '../../../libs/layout';
 /**
  * Internal dependencies
  */
-import { extractCssValue, generateAreas } from '../utils';
+import {
+	extractCssValue,
+	generateAreas,
+	calcOverlapAreas,
+	calcCoordinates,
+	getUniqueArrayOfObjects,
+	uId,
+} from '../utils';
 import { useBlockContext, useStoreSelectors } from '../../../hooks';
 import { AddButton, GridSizeHandler, Cells, GapHandler } from './index';
 
@@ -50,10 +56,12 @@ export const VirtualGrid = ({ block }) => {
 		.join(' ');
 
 	const styles = {
-		gridTemplateRows: extractCssValue(
-			'grid-template-rows',
-			generatedStyles
-		),
+		// to have clean rows in grid builder : auto => 1fr
+		gridTemplateRows: extractCssValue('grid-template-rows', generatedStyles)
+			.split(' ')
+			.map((item) => (item === 'auto' ? '1fr' : item))
+			.join(' '),
+
 		gridTemplateColumns: extractCssValue(
 			'grid-template-columns',
 			generatedStyles
@@ -123,12 +131,38 @@ export const VirtualGrid = ({ block }) => {
 	};
 
 	const gapHandlers = calcGapLayerTemplate();
+	const [virtualMergedAreas, setVirtualMergedAreas] = useState([]);
+	const [activeAreaId, setActiveAreaId] = useState(null);
+	const [targetAreaId, setTargetAreaId] = useState(null);
+	const [virtualTargetAreaId, setVirtualTargetAreaId] = useState(null);
+	const [newMergedArea, setNewMergedArea] = useState(null);
+
+	const highlightedAreas = calcCoordinates(newMergedArea);
+
+	const createVirtualAreas = () => {
+		const virtualMergedAreas = [];
+		publisherGridAreas.forEach((item) => {
+			if (item.mergedArea) {
+				virtualMergedAreas.push(...item.coordinates);
+			}
+		});
+
+		setVirtualMergedAreas(getUniqueArrayOfObjects(virtualMergedAreas));
+	};
+
+	const overlapAreas = calcOverlapAreas({
+		newArea: {
+			...newMergedArea,
+			coordinates: calcCoordinates(newMergedArea),
+		},
+		publisherGridAreas,
+		targetAreaId,
+	});
 
 	return (
 		<div
 			style={{
 				width: '100%',
-				height: '100%',
 				display: 'grid',
 				gridTemplateRows: `26px ${styles.gridTemplateRows}`,
 				gridTemplateColumns: `26px ${styles.gridTemplateColumns}`,
@@ -188,7 +222,7 @@ export const VirtualGrid = ({ block }) => {
 					const newAreas = [];
 					for (let i = 1; i <= publisherGridColumns.length; i++) {
 						newAreas.push({
-							id: nanoid(),
+							id: uId(),
 							'column-start': i,
 							'column-end': i + 1,
 							'row-start': publisherGridRows.length + 1,
@@ -208,7 +242,7 @@ export const VirtualGrid = ({ block }) => {
 									'min-size': '',
 									'max-size': '',
 									'auto-fit': false,
-									id: nanoid(),
+									id: uId(),
 								},
 							],
 						},
@@ -223,7 +257,7 @@ export const VirtualGrid = ({ block }) => {
 											'min-size': '',
 											'max-size': '',
 											'auto-fit': false,
-											id: nanoid(),
+											id: uId(),
 										},
 									],
 									gridColumns: publisherGridColumns.value,
@@ -249,7 +283,7 @@ export const VirtualGrid = ({ block }) => {
 					const newAreas = [];
 					for (let i = 1; i <= publisherGridRows.length; i++) {
 						newAreas.push({
-							id: nanoid(),
+							id: uId(),
 							'column-start': publisherGridColumns.length + 1,
 							'column-end': publisherGridColumns.length + 2,
 							'row-start': i,
@@ -269,7 +303,7 @@ export const VirtualGrid = ({ block }) => {
 									'min-size': '',
 									'max-size': '',
 									'auto-fit': false,
-									id: nanoid(),
+									id: uId(),
 								},
 							],
 						},
@@ -284,7 +318,7 @@ export const VirtualGrid = ({ block }) => {
 											'min-size': '',
 											'max-size': '',
 											'auto-fit': false,
-											id: nanoid(),
+											id: uId(),
 										},
 									],
 									gridRows: publisherGridRows.value,
@@ -364,7 +398,73 @@ export const VirtualGrid = ({ block }) => {
 					})}
 				</div>
 
-				<Cells hoveredColumn={hoveredColumn} hoveredRow={hoveredRow} />
+				<Cells
+					hoveredColumn={hoveredColumn}
+					hoveredRow={hoveredRow}
+					setVirtualMergedAreas={setVirtualMergedAreas}
+					virtualMergedAreas={virtualMergedAreas}
+					virtualTargetAreaId={virtualTargetAreaId}
+					setVirtualTargetAreaId={setVirtualTargetAreaId}
+					activeAreaId={activeAreaId}
+					setActiveAreaId={setActiveAreaId}
+					targetAreaId={targetAreaId}
+					setTargetAreaId={setTargetAreaId}
+					newMergedArea={newMergedArea}
+					setNewMergedArea={setNewMergedArea}
+					createVirtualAreas={createVirtualAreas}
+				/>
+
+				{virtualMergedAreas.map((_item) => {
+					if (
+						_item.parentId === activeAreaId ||
+						_item.parentId === targetAreaId ||
+						overlapAreas.find(
+							(overlapItem) => _item.parentId === overlapItem.id
+						)
+					) {
+						const isHighlighted =
+							highlightedAreas.find(
+								(item) =>
+									item['column-start'] ===
+										_item['column-start'] &&
+									item['column-end'] ===
+										_item['column-end'] &&
+									item['row-start'] === _item['row-start'] &&
+									item['row-end'] === _item['row-end']
+							) ||
+							overlapAreas?.find(
+								(item) =>
+									item['column-start'] ===
+										_item['column-start'] &&
+									item['column-end'] ===
+										_item['column-end'] &&
+									item['row-start'] === _item['row-start'] &&
+									item['row-end'] === _item['row-end']
+							);
+
+						return (
+							<div
+								key={_item.id}
+								data-virtual-id={_item.id}
+								style={{
+									gridColumn: `${_item['column-start']}/${_item['column-end']}`,
+									gridRow: `${_item['row-start']}/${_item['row-end']}`,
+									backgroundColor: isHighlighted
+										? 'rgba(20, 126, 184, 0.7)'
+										: 'rgba(20, 126, 184, 0.25)',
+									width: '97%',
+									height: '97%',
+									display: 'inline-block',
+									zIndex: '1999',
+									justifySelf: 'end',
+									alignSelf: 'end',
+								}}
+							></div>
+						);
+					}
+
+					return <></>;
+				})}
 			</div>
 		</div>
 	);

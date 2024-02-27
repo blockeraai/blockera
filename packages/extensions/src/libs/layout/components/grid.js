@@ -4,7 +4,6 @@
  */
 import type { MixedElement } from 'react';
 import { __ } from '@wordpress/i18n';
-import { nanoid } from 'nanoid';
 
 /**
  * Publisher dependencies
@@ -16,7 +15,7 @@ import {
 	InputControl,
 } from '@publisher/controls';
 import { useBlockContext } from '../../../hooks';
-import { generateAreas } from '../../../components/grid-builder/utils';
+import { generateAreas, uId } from '../../../components/grid-builder/utils';
 
 /**
  * Internal dependencies
@@ -159,7 +158,7 @@ export default function ({
 													...defaultGridItemValue,
 													size: 'auto',
 												},
-												id: nanoid(),
+												id: uId(),
 											});
 											for (
 												let index = 1;
@@ -171,7 +170,7 @@ export default function ({
 												count++;
 
 												newAreas.push({
-													id: nanoid(),
+													id: uId(),
 													name: `cell${count}`,
 													'column-start': index,
 													'column-end': index + 1,
@@ -322,7 +321,7 @@ export default function ({
 										while (i < length) {
 											value.push({
 												...defaultGridItemValue,
-												id: nanoid(),
+												id: uId(),
 											});
 											for (
 												let index = 1;
@@ -333,7 +332,7 @@ export default function ({
 												count++;
 
 												newAreas.push({
-													id: nanoid(),
+													id: uId(),
 													name: `cell${count}`,
 													'column-start': i + 1,
 													'column-end': i + 2,

@@ -1,12 +1,6 @@
 // @flow
 
 /**
- * External dependencies
- */
-import { useState } from '@wordpress/element';
-import { nanoid } from 'nanoid';
-
-/**
  * Publisher dependencies
  */
 import { calcGridTemplateAreas } from '../../../libs/layout/utils';
@@ -16,109 +10,411 @@ import { calcGridTemplateAreas } from '../../../libs/layout/utils';
  */
 import { useBlockContext } from '../../../hooks';
 import { AreaMergeHandler } from './index';
-import { generateAreas } from '../utils';
+import {
+	generateAreas,
+	calcCoordinates,
+	calcOverlapAreas,
+	updateArrayCoordinates,
+	calcReMergedAreas,
+	uId,
+} from '../utils';
 
-export const Cells = ({ hoveredColumn, hoveredRow }) => {
+export const Cells = ({
+	hoveredColumn,
+	hoveredRow,
+	virtualMergedAreas,
+	setVirtualMergedAreas,
+	setVirtualTargetAreaId,
+	virtualTargetAreaId,
+	activeAreaId,
+	setActiveAreaId,
+	targetAreaId,
+	setTargetAreaId,
+	createVirtualAreas,
+	newMergedArea,
+	setNewMergedArea,
+}) => {
 	const { getAttributes, handleOnChangeAttributes } = useBlockContext();
 
 	const { publisherGridColumns, publisherGridRows, publisherGridAreas } =
 		getAttributes();
 
-	const [activeAreaId, setActiveAreaId] = useState(null);
-	const [resizeToElementId, setResizeToElementId] = useState(null);
+	const activeArea = publisherGridAreas.find(
+		(item) => item.id === activeAreaId
+	);
 
-	const mergeArea = () => {
-		const startElement = publisherGridAreas.find(
-			(item) => item.id === activeAreaId
-		);
+	const targetArea = publisherGridAreas.find(
+		(item) => item.id === targetAreaId
+	);
 
-		const resizeTo = publisherGridAreas.find(
-			(item) => item.id === resizeToElementId
-		);
+	const virtualTargetArea = virtualMergedAreas.find(
+		(item) => item.id === virtualTargetAreaId
+	);
+	const highlightHandler = (direction) => {
+		if (!virtualTargetArea && (!targetArea || !activeArea)) return null;
 
-		if (!resizeTo || !startElement || resizeTo.id === startElement.id)
+		switch (direction) {
+			case 'bottomRight':
+				{
+					const updatedArea = {
+						...activeArea,
+						'row-end': virtualTargetArea
+							? virtualTargetArea['row-end']
+							: targetArea['row-end'],
+						'column-end': virtualTargetArea
+							? virtualTargetArea['column-end']
+							: targetArea['column-end'],
+					};
+
+					setNewMergedArea(updatedArea);
+				}
+				break;
+			case 'bottomLeft':
+				{
+					const updatedArea = {
+						...activeArea,
+						'row-end': virtualTargetArea
+							? virtualTargetArea['row-end']
+							: targetArea['row-end'],
+						'column-start': virtualTargetArea
+							? virtualTargetArea['column-start']
+							: targetArea['column-start'],
+					};
+
+					setNewMergedArea(updatedArea);
+				}
+				break;
+			case 'topRight':
+				{
+					const updatedArea = {
+						...activeArea,
+						'row-start': virtualTargetArea
+							? virtualTargetArea['row-start']
+							: targetArea['row-start'],
+						'column-end': virtualTargetArea
+							? virtualTargetArea['column-end']
+							: targetArea['column-end'],
+					};
+
+					setNewMergedArea(updatedArea);
+				}
+				break;
+			case 'topLeft': {
+				console.log('virtualTargetArea', virtualTargetArea);
+				console.log('targetArea', targetArea);
+				const updatedArea = {
+					...activeArea,
+					'row-start': virtualTargetArea
+						? virtualTargetArea['row-start']
+						: targetArea['row-start'],
+					'column-start': virtualTargetArea
+						? virtualTargetArea['column-start']
+						: targetArea['column-start'],
+				};
+
+				setNewMergedArea(updatedArea);
+			}
+		}
+	};
+
+	const mergeArea = (direction) => {
+		if (
+			activeAreaId !== virtualTargetArea?.parentId &&
+			!newMergedArea &&
+			(!targetArea || !activeArea || targetArea.id === activeArea.id)
+		) {
+			setVirtualMergedAreas([]);
+			setActiveAreaId(null);
+			setTargetAreaId(null);
+			setNewMergedArea(null);
 			return null;
+		}
 
-		const newArea = {
-			id: nanoid(),
-			name: startElement.name,
-			'column-start': Math.min(
-				startElement['column-start'],
-				resizeTo['column-start']
-			),
-			'column-end': Math.max(
-				startElement['column-end'],
-				resizeTo['column-end']
-			),
-			'row-start': Math.min(
-				startElement['row-start'],
-				resizeTo['row-start']
-			),
-			'row-end': Math.max(startElement['row-end'], resizeTo['row-end']),
-			mergedArea: true,
-		};
+		if (virtualTargetArea && activeAreaId === virtualTargetArea.parentId) {
+			switch (direction) {
+				case 'bottomRight': {
+					// unMerge itself
 
-		const deletedAreas = [];
-		for (let row = newArea['row-start']; row < newArea['row-end']; row++) {
-			for (
-				let col = newArea['column-start'];
-				col < newArea['column-end'];
-				col++
-			) {
-				deletedAreas.push(
-					publisherGridAreas.find(
-						(item) =>
-							item['column-start'] === col &&
-							item['column-end'] === col + 1 &&
-							item['row-start'] === row &&
-							item['row-end'] === row + 1
+					if (
+						activeArea['row-end'] === newMergedArea['row-end'] &&
+						activeArea['column-end'] === newMergedArea['column-end']
 					)
-				);
+						return;
+
+					const filteredAreas = publisherGridAreas.filter(
+						(item) => item.id !== activeAreaId
+					);
+
+					handleOnChangeAttributes(
+						'publisherGridAreas',
+						generateAreas({
+							gridRows: publisherGridRows.value,
+							gridColumns: publisherGridColumns.value,
+							prevGridAreas: [
+								...filteredAreas,
+								{
+									...newMergedArea,
+									coordinates: calcCoordinates(newMergedArea),
+								},
+							],
+						}),
+						{
+							path: '',
+							reset: false,
+							action: 'normal',
+						}
+					);
+
+					setVirtualMergedAreas([]);
+					setActiveAreaId(null);
+					setTargetAreaId(null);
+					setNewMergedArea(null);
+					return;
+				}
+
+				case 'bottomLeft': {
+					// unMerge itself
+
+					if (
+						activeArea['row-end'] === newMergedArea['row-end'] &&
+						activeArea['column-start'] ===
+							newMergedArea['column-start']
+					)
+						return;
+
+					const filteredAreas = publisherGridAreas.filter(
+						(item) => item.id !== activeAreaId
+					);
+
+					handleOnChangeAttributes(
+						'publisherGridAreas',
+						generateAreas({
+							gridRows: publisherGridRows.value,
+							gridColumns: publisherGridColumns.value,
+							prevGridAreas: [
+								...filteredAreas,
+								{
+									...newMergedArea,
+									coordinates: calcCoordinates(newMergedArea),
+								},
+							],
+						}),
+						{
+							path: '',
+							reset: false,
+							action: 'normal',
+						}
+					);
+
+					setVirtualMergedAreas([]);
+					setActiveAreaId(null);
+					setTargetAreaId(null);
+					setNewMergedArea(null);
+					return;
+				}
+
+				case 'topRight': {
+					// unMerge itself
+
+					if (
+						activeArea['row-start'] ===
+							newMergedArea['row-start'] &&
+						activeArea['column-end'] === newMergedArea['column-end']
+					)
+						return;
+
+					const filteredAreas = publisherGridAreas.filter(
+						(item) => item.id !== activeAreaId
+					);
+
+					handleOnChangeAttributes(
+						'publisherGridAreas',
+						generateAreas({
+							gridRows: publisherGridRows.value,
+							gridColumns: publisherGridColumns.value,
+							prevGridAreas: [
+								...filteredAreas,
+								{
+									...newMergedArea,
+									coordinates: calcCoordinates(newMergedArea),
+								},
+							],
+						}),
+						{
+							path: '',
+							reset: false,
+							action: 'normal',
+						}
+					);
+
+					setVirtualMergedAreas([]);
+					setActiveAreaId(null);
+					setTargetAreaId(null);
+					setNewMergedArea(null);
+					return;
+				}
+
+				case 'topLeft': {
+					// unMerge itself
+
+					if (
+						activeArea['row-start'] ===
+							newMergedArea['row-start'] &&
+						activeArea['column-start'] ===
+							newMergedArea['column-start']
+					)
+						return;
+
+					const filteredAreas = publisherGridAreas.filter(
+						(item) => item.id !== activeAreaId
+					);
+
+					handleOnChangeAttributes(
+						'publisherGridAreas',
+						generateAreas({
+							gridRows: publisherGridRows.value,
+							gridColumns: publisherGridColumns.value,
+							prevGridAreas: [
+								...filteredAreas,
+								{
+									...newMergedArea,
+									coordinates: calcCoordinates(newMergedArea),
+								},
+							],
+						}),
+						{
+							path: '',
+							reset: false,
+							action: 'normal',
+						}
+					);
+
+					setVirtualMergedAreas([]);
+					setActiveAreaId(null);
+					setTargetAreaId(null);
+					setNewMergedArea(null);
+					return;
+				}
 			}
 		}
 
-		if (deletedAreas.some((item) => item?.mergedArea)) return null;
-
-		const deletedAreasIds = deletedAreas
-			.filter((item) => item)
-			.map(({ id }) => id);
-
-		const filteredAreas = publisherGridAreas.filter(
-			(area) =>
-				!deletedAreasIds.includes(area.id) &&
-				area.id !== startElement.id &&
-				area.id !== resizeTo.id
-		);
-
-		const mergedAreasCoordinates = [
-			...deletedAreas,
-			startElement,
-			resizeTo,
-		].map((item) => {
-			return {
-				column: `${item['column-start']}/${item['column-end']}`,
-				row: `${item['row-start']}/${item['row-end']}`,
+		if (
+			newMergedArea &&
+			(virtualTargetArea ||
+				activeArea.mergedArea ||
+				targetArea.mergedArea)
+		) {
+			const updatedNewMergedArea = {
+				...newMergedArea,
+				coordinates: calcCoordinates(newMergedArea),
 			};
+
+			const overlapAreas = calcOverlapAreas({
+				newArea: updatedNewMergedArea,
+				publisherGridAreas,
+				targetAreaId,
+			});
+
+			if (!virtualTargetArea) {
+				overlapAreas.push(targetArea);
+			}
+
+			console.log('overlapAreas', overlapAreas);
+			//////////
+
+			const newMergedAreas = overlapAreas.map((item) => {
+				return calcReMergedAreas(item, updatedNewMergedArea);
+			});
+
+			const overlapAreasIds = overlapAreas.map((item) => item?.id);
+			console.log('newMergedAreas', newMergedAreas);
+			const filteredAreas = publisherGridAreas.filter(
+				(item) =>
+					!overlapAreasIds.includes(item.id) &&
+					item.id !== activeArea.id &&
+					(item.id !== virtualTargetArea?.parentId ||
+						item.id !== targetAreaId)
+			);
+
+			handleOnChangeAttributes(
+				'publisherGridAreas',
+				generateAreas({
+					gridRows: publisherGridRows.value,
+					gridColumns: publisherGridColumns.value,
+					prevGridAreas: [
+						...filteredAreas,
+						{
+							...updatedNewMergedArea,
+							mergedArea:
+								updatedNewMergedArea?.coordinates?.length <= 1
+									? false
+									: true,
+						},
+						...updateArrayCoordinates(newMergedAreas.flat()),
+					],
+				}),
+				{
+					path: '',
+					reset: false,
+					action: 'normal',
+				}
+			);
+
+			setVirtualMergedAreas([]);
+			setActiveAreaId(null);
+			setTargetAreaId(null);
+			setNewMergedArea(null);
+
+			return;
+		}
+
+		const newArea = {
+			id: uId(),
+			name: activeArea.name,
+			'column-start': Math.min(
+				activeArea['column-start'],
+				targetArea['column-start']
+			),
+			'column-end': Math.max(
+				activeArea['column-end'],
+				targetArea['column-end']
+			),
+			'row-start': Math.min(
+				activeArea['row-start'],
+				targetArea['row-start']
+			),
+			'row-end': Math.max(activeArea['row-end'], targetArea['row-end']),
+			mergedArea: true,
+			coordinates: [],
+		};
+
+		newArea.coordinates = calcCoordinates(newArea);
+
+		const overlapAreas = calcOverlapAreas({
+			newArea,
+			publisherGridAreas,
+			targetAreaId,
 		});
 
-		const deletedAreaIndex = publisherGridAreas.findIndex(
-			(item) =>
-				deletedAreasIds.includes(item.id) ||
-				item.id === startElement.id ||
-				item.id === resizeTo.id
+		const updatedOverlapAreas = overlapAreas?.map((item) => {
+			return calcReMergedAreas(item, newMergedArea);
+		});
+
+		const overlapAreasIds = updatedOverlapAreas.map((item) => item?.id);
+		const filteredAreas = publisherGridAreas.filter(
+			(item) => !overlapAreasIds.includes(item.id)
 		);
-
-		filteredAreas.splice(deletedAreaIndex, 0, {
-			...newArea,
-			coordinates: mergedAreasCoordinates,
-		});
 
 		handleOnChangeAttributes(
 			'publisherGridAreas',
 			generateAreas({
 				gridRows: publisherGridRows.value,
 				gridColumns: publisherGridColumns.value,
-				prevGridAreas: [...filteredAreas],
+				prevGridAreas: [
+					...filteredAreas,
+					newArea,
+					...updateArrayCoordinates(updatedOverlapAreas.flat()),
+				],
 			}),
 			{
 				path: '',
@@ -126,15 +422,28 @@ export const Cells = ({ hoveredColumn, hoveredRow }) => {
 				action: 'normal',
 			}
 		);
+
+		setActiveAreaId(null);
+		setTargetAreaId(null);
+		setVirtualMergedAreas([]);
+		setNewMergedArea(null);
 	};
+
 	const gridTemplateArea = calcGridTemplateAreas({
 		gridColumns: publisherGridColumns,
 		gridRows: publisherGridRows,
 		gridAreas: publisherGridAreas,
 	});
 
-	return publisherGridAreas?.map(
-		(item) =>
+	return publisherGridAreas?.map((item) => {
+		const isHighlighted = calcCoordinates(newMergedArea)?.find(
+			(coord) =>
+				coord['column-start'] === item['column-start'] &&
+				coord['column-end'] === item['column-end'] &&
+				coord['row-start'] === item['row-start'] &&
+				coord['row-end'] === item['row-end']
+		);
+		return (
 			gridTemplateArea.flat().includes(item.name) && (
 				<div
 					className={`cell ${
@@ -149,24 +458,35 @@ export const Cells = ({ hoveredColumn, hoveredRow }) => {
 					style={{
 						gridColumn: `${item['column-start']}/${item['column-end']}`,
 						gridRow: `${item['row-start']}/${item['row-end']}`,
-						gridArea: item.name,
+						//gridArea: item.name,
+						position: 'relative',
+						backgroundColor: isHighlighted
+							? 'rgba(20, 126, 184, 0.7)'
+							: 'rgba(20, 126, 184, 0.1)',
+						minHeight: '50px',
 					}}
 					data-id={item.id}
 				>
-					<p style={{ pointerEvents: 'none' }}>
-						{item.name?.replace(/[^-\.0-9]/g, '')}
-					</p>
-					{/* <span style={{ fontSize: '15px' }}>{item?.subText}</span> */}
+					<p style={{ pointerEvents: 'none' }}>{item.name}</p>
+
 					{activeAreaId === item.id && (
 						<AreaMergeHandler
-							setResizeToElementId={setResizeToElementId}
+							setTargetAreaId={setTargetAreaId}
 							activeAreaId={activeAreaId}
 							id={item.id}
 							mergeArea={mergeArea}
-							resizeToElementId={resizeToElementId}
+							targetAreaId={targetAreaId}
+							setVirtualMergedAreas={setVirtualMergedAreas}
+							setVirtualTargetAreaId={setVirtualTargetAreaId}
+							createVirtualAreas={createVirtualAreas}
+							virtualTargetAreaId={virtualTargetAreaId}
+							item={item}
+							highlightHandler={highlightHandler}
+							setNewMergedArea={setNewMergedArea}
 						/>
 					)}
 				</div>
 			)
-	);
+		);
+	});
 };

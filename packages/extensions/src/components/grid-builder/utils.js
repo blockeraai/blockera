@@ -1,9 +1,9 @@
 // @flow
 
 /**
- * External Dependencies
+ * Publisher Dependencies
  */
-import { nanoid } from 'nanoid';
+import { calcGridTemplateAreas } from '../../libs/layout/utils';
 
 export const resizeHandleClasses: {
 	top: string,
@@ -44,8 +44,8 @@ export const generateAreas = ({ gridRows, gridColumns, prevGridAreas }) => {
 	newGridAreas?.forEach((row, i) => {
 		gridColumns.forEach((item, index) => {
 			row.push({
-				id: nanoid(),
-				name: `cell${count}`,
+				id: uId(),
+				name: `${count}`,
 				'column-start': index + 1,
 				'column-end': index + 2,
 				'row-start': i + 1,
@@ -60,50 +60,213 @@ export const generateAreas = ({ gridRows, gridColumns, prevGridAreas }) => {
 
 	const redundantAreas = [];
 	mergedAreas.forEach((item) => {
-		for (let row = item['row-start']; row < item['row-end']; row++) {
-			for (
-				let col = item['column-start'];
-				col < item['column-end'];
-				col++
-			) {
-				redundantAreas.push(
-					newGridAreas
-						.flat()
-						.find(
-							(_item) =>
-								_item['column-start'] === col &&
-								_item['column-end'] === col + 1 &&
-								_item['row-start'] === row &&
-								_item['row-end'] === row + 1
-						)
-				);
-			}
-		}
-	});
-
-	const prevAreasTemplate = [];
-	gridRows.forEach(() => prevAreasTemplate.push([]));
-	prevGridAreas.forEach((item) => {
-		prevAreasTemplate[item['row-start'] - 1].push(item);
-	});
-
-	const mergedAreasIndexes = [];
-	prevAreasTemplate.forEach((row, i) => {
-		row.forEach((col, index) => {
-			if (col.mergedArea) mergedAreasIndexes.push([i, index]);
+		item.coordinates.forEach((coord) => {
+			redundantAreas.push(
+				newGridAreas
+					.flat()
+					.find(
+						(_item) =>
+							_item['column-start'] === coord['column-start'] &&
+							_item['column-end'] === coord['column-end'] &&
+							_item['row-start'] === coord['row-start'] &&
+							_item['row-end'] === coord['row-end']
+					)
+			);
 		});
 	});
 
-	const redundantAreaIds = redundantAreas.map((item) => item.id);
-	const filteredGridAreas = newGridAreas.map((row) =>
-		row.filter((col) => !redundantAreaIds.includes(col.id))
-	);
+	console.log('redundantAreas', redundantAreas);
 
-	mergedAreasIndexes.forEach((item, index) => {
-		filteredGridAreas[item[0]]?.splice(item[1], 0, mergedAreas[index]);
+	const redundantAreaIds = redundantAreas.map((item) => item.id);
+	const filteredGridAreas = newGridAreas
+		.flat()
+		.filter((item) => !redundantAreaIds.includes(item.id));
+
+	filteredGridAreas.push(mergedAreas);
+
+	// re order
+	const gridTemplateAreas = calcGridTemplateAreas({
+		gridRows: { value: gridRows },
+		gridColumns: { value: gridColumns },
+		gridAreas: filteredGridAreas.flat().map((item, i) => {
+			return { ...item, name: `${i + 1}` };
+		}),
 	});
 
-	return filteredGridAreas.flat().map((item, i) => {
-		return { ...item, name: `cell${i + 1}` };
+	const reOrderedAreaArray = [];
+
+	console.log('gridTemplateAreas', gridTemplateAreas);
+
+	gridTemplateAreas.flat().forEach((item) => {
+		// find area and push to array based on real place
+		const matchedArea = filteredGridAreas
+			.flat()
+			.map((_item, i) => {
+				return {
+					..._item,
+					name: `${i + 1}`,
+					mergedArea: _item?.coordinates?.length > 1 ? true : false,
+				};
+			})
+			.find((_item) => _item.name === item);
+
+		reOrderedAreaArray.push(matchedArea);
+	});
+
+	return getUniqueArrayOfObjects(reOrderedAreaArray).map((item, i) => {
+		return { ...item, name: `${i + 1}` };
 	});
 };
+
+export const getUniqueArrayOfObjects = (arr) => {
+	const uniqueIds = [...new Set(arr.map((item) => item?.id))];
+
+	const uniqueArr = [];
+	for (let i = 0; i <= uniqueIds.length; i++) {
+		uniqueArr.push(arr.find((item) => item?.id === uniqueIds[i]));
+	}
+
+	return uniqueArr.filter((item) => item);
+};
+
+export const calcCoordinates = (area) => {
+	if (!area) return [];
+	const coordinates = [];
+
+	for (let col = area['column-start']; col < area['column-end']; col++) {
+		for (let row = area['row-start']; row < area['row-end']; row++) {
+			coordinates.push({
+				id: uId(),
+				parentId: area.id,
+				'column-start': col,
+				'column-end': col + 1,
+				'row-start': row,
+				'row-end': row + 1,
+			});
+		}
+	}
+
+	return coordinates;
+};
+
+export const calcOverlapAreas = ({
+	newArea,
+	publisherGridAreas,
+	resizeToElementId,
+}) => {
+	if (!newArea) return [];
+
+	// make string to compare easily
+	const newAreaCoordinates = newArea?.coordinates?.map(
+		(coord) =>
+			`${coord['column-start']}/${coord['column-end']}/${coord['row-start']}/${coord['row-end']}`
+	);
+
+	if (!newAreaCoordinates.length) return [];
+
+	const overlapAreas = publisherGridAreas.filter((item) => {
+		if (item.id === resizeToElementId || item.id === newArea.id)
+			return null;
+		return (
+			item.mergedArea &&
+			item.coordinates.find((_item) =>
+				newAreaCoordinates.includes(
+					`${_item['column-start']}/${_item['column-end']}/${_item['row-start']}/${_item['row-end']}`
+				)
+			)
+		);
+	});
+
+	return overlapAreas;
+};
+
+export const updateArrayCoordinates = (array) => {
+	return array
+		.map((item) => {
+			if (!item) return null;
+			return {
+				...item,
+				coordinates: calcCoordinates(item),
+				mergedArea: calcCoordinates(item).length <= 1 ? false : true,
+			};
+		})
+		.filter((item) => item);
+};
+
+export const calcReMergedAreas = (item, updatedArea) => {
+	//calculate affected merged areas based on new merged area
+
+	if (
+		item['column-start'] >= updatedArea['column-start'] &&
+		item['column-end'] > updatedArea['column-end']
+	) {
+		item['column-start'] = updatedArea['column-end'];
+	} else if (
+		item['column-start'] < updatedArea['column-start'] &&
+		item['column-end'] <= updatedArea['column-end']
+	) {
+		item['column-end'] = updatedArea['column-start'];
+	} else if (
+		item['row-start'] >= updatedArea['row-start'] &&
+		item['row-end'] > updatedArea['row-end']
+	) {
+		item['row-start'] = updatedArea['row-end'];
+	} else if (
+		item['row-start'] < updatedArea['row-start'] &&
+		item['row-end'] <= updatedArea['row-end']
+	) {
+		item['row-end'] = updatedArea['row-start'];
+	} else if (
+		item['column-start'] < updatedArea['column-start'] &&
+		item['column-end'] > updatedArea['column-end']
+	) {
+		return [
+			{
+				...item,
+				'column-start': item['column-start'],
+				'column-end': updatedArea['column-start'],
+				id: uId(),
+			},
+			{
+				...item,
+				'column-start': updatedArea['column-end'],
+				'column-end': item['column-end'],
+				id: uId(),
+			},
+		];
+	} else if (
+		item['row-start'] < updatedArea['row-start'] &&
+		item['row-end'] > updatedArea['row-end']
+	) {
+		return [
+			{
+				...item,
+				'row-start': item['row-start'],
+				'row-end': updatedArea['row-start'],
+				id: uId(),
+			},
+			{
+				...item,
+				'row-start': updatedArea['row-end'],
+				'row-end': item['row-end'],
+				id: uId(),
+			},
+		];
+	} else if (
+		item['row-start'] >= updatedArea['row-start'] &&
+		item['row-end'] <= updatedArea['row-end'] &&
+		item['column-start'] >= updatedArea['column-start'] &&
+		item['column-end'] <= updatedArea['column-end']
+	) {
+		return null;
+	} else if (
+		item['row-end'] === updatedArea['row-end'] &&
+		item['column-end'] === updatedArea['column-end']
+	) {
+		return null;
+	}
+	return item;
+};
+
+export const uId = () =>
+	new Date().getMilliseconds() + Number(Math.random().toFixed(5));

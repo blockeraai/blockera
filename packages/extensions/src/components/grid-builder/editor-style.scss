@@ -139,7 +139,14 @@
 
 	 &.hovered {
 		border: 1px dashed #147eb8;
-		background: rgba(20, 126, 184, 0.25);
+		background: rgba(20, 126, 184, 0.25) !important;
+	 }
+
+	 &.merge-handler {
+	   z-index: 2000;
+	   outline: none;
+	   border: none !important;
+	   cursor: auto !important;
 	 }
 
 }
