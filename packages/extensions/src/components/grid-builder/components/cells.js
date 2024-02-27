@@ -100,8 +100,6 @@ export const Cells = ({
 				}
 				break;
 			case 'topLeft': {
-				console.log('virtualTargetArea', virtualTargetArea);
-				console.log('targetArea', targetArea);
 				const updatedArea = {
 					...activeArea,
 					'row-start': virtualTargetArea
@@ -120,8 +118,10 @@ export const Cells = ({
 	const mergeArea = (direction) => {
 		if (
 			activeAreaId !== virtualTargetArea?.parentId &&
-			!newMergedArea &&
-			(!targetArea || !activeArea || targetArea.id === activeArea.id)
+			(!newMergedArea ||
+				!targetArea ||
+				!activeArea ||
+				targetArea.id === activeArea.id)
 		) {
 			setVirtualMergedAreas([]);
 			setActiveAreaId(null);
@@ -319,7 +319,6 @@ export const Cells = ({
 				overlapAreas.push(targetArea);
 			}
 
-			console.log('overlapAreas', overlapAreas);
 			//////////
 
 			const newMergedAreas = overlapAreas.map((item) => {
@@ -327,7 +326,7 @@ export const Cells = ({
 			});
 
 			const overlapAreasIds = overlapAreas.map((item) => item?.id);
-			console.log('newMergedAreas', newMergedAreas);
+
 			const filteredAreas = publisherGridAreas.filter(
 				(item) =>
 					!overlapAreasIds.includes(item.id) &&
@@ -475,14 +474,10 @@ export const Cells = ({
 							activeAreaId={activeAreaId}
 							id={item.id}
 							mergeArea={mergeArea}
-							targetAreaId={targetAreaId}
 							setVirtualMergedAreas={setVirtualMergedAreas}
 							setVirtualTargetAreaId={setVirtualTargetAreaId}
 							createVirtualAreas={createVirtualAreas}
-							virtualTargetAreaId={virtualTargetAreaId}
-							item={item}
 							highlightHandler={highlightHandler}
-							setNewMergedArea={setNewMergedArea}
 						/>
 					)}
 				</div>

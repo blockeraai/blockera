@@ -75,7 +75,7 @@ export const generateAreas = ({ gridRows, gridColumns, prevGridAreas }) => {
 		});
 	});
 
-	console.log('redundantAreas', redundantAreas);
+	//console.log('redundantAreas', redundantAreas);
 
 	const redundantAreaIds = redundantAreas.map((item) => item.id);
 	const filteredGridAreas = newGridAreas
@@ -94,8 +94,6 @@ export const generateAreas = ({ gridRows, gridColumns, prevGridAreas }) => {
 	});
 
 	const reOrderedAreaArray = [];
-
-	console.log('gridTemplateAreas', gridTemplateAreas);
 
 	gridTemplateAreas.flat().forEach((item) => {
 		// find area and push to array based on real place
@@ -195,7 +193,6 @@ export const updateArrayCoordinates = (array) => {
 
 export const calcReMergedAreas = (item, updatedArea) => {
 	//calculate affected merged areas based on new merged area
-
 	if (
 		item['column-start'] >= updatedArea['column-start'] &&
 		item['column-end'] > updatedArea['column-end']
