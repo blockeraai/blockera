@@ -25,15 +25,21 @@ export const GridBuilder = ({
 }: GridBuilderProps): MixedElement | null => {
 	const { isOpenGridBuilder, setOpenGridBuilder } = useBlockContext();
 
-	const selectedBlock = document
-		.querySelector('iframe[name="editor-canvas"]')
-		// $FlowFixMe
-		?.contentDocument?.body?.querySelector(`#block-${block.clientId}`);
+	const selectedBlock: HTMLElement | null =
+		document
+			.querySelector('iframe[name="editor-canvas"]')
+			// $FlowFixMe
+			?.contentDocument?.body?.querySelector(
+				`#block-${block.clientId}`
+			) || document.querySelector(`#block-${block.clientId}`);
 
-	const selectedBlockChildren = document
-		.querySelector('iframe[name="editor-canvas"]')
-		// $FlowFixMe
-		?.contentDocument?.body?.querySelectorAll(`#block-${block.clientId} *`);
+	const selectedBlockChildren =
+		document
+			.querySelector('iframe[name="editor-canvas"]')
+			// $FlowFixMe
+			?.contentDocument?.body?.querySelectorAll(
+				`#block-${block.clientId} *`
+			) || document.querySelectorAll(`#block-${block.clientId} *`);
 
 	useEffect(() => {
 		if (selectedBlock) {
@@ -93,6 +99,8 @@ export const GridBuilder = ({
 		document
 			.querySelector('iframe[name="editor-canvas"]')
 			//$FlowFixMe
-			?.contentDocument?.body?.querySelector(`#block-${block.clientId}`)
+			?.contentDocument?.body?.querySelector(
+				`#block-${block.clientId}`
+			) || document.querySelector(`#block-${block.clientId}`)
 	);
 };
