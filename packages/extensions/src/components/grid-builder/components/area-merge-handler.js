@@ -20,8 +20,6 @@ export const AreaMergeHandler = ({
 	setVirtualMergedAreas,
 	setVirtualTargetAreaId,
 	createVirtualAreas,
-	virtualTargetAreas,
-
 	highlightHandler,
 }) => {
 	const { isOpenGridBuilder } = useBlockContext();
@@ -60,12 +58,31 @@ export const AreaMergeHandler = ({
 	const onResize = (e, direction, ref, delta, _position) => {
 		createVirtualAreas();
 		highlightHandler(direction);
-		if (e.toElement.getAttribute('data-id')) {
-			setTargetAreaId(Number(e.toElement.getAttribute('data-id')));
+		const iframe = document.querySelector('iframe[name="editor-canvas"]');
+		let targetElement;
+		if (iframe) {
+			targetElement = iframe.contentWindow.document.elementFromPoint(
+				e.pageX,
+				e.pageY
+			);
+		} else {
+			targetElement = document.elementFromPoint(e.pageX, e.pageY);
+		}
+
+		if (targetElement?.dataset?.virtualId) {
+			setVirtualTargetAreaId(Number(targetElement.dataset.virtualId));
+		}
+
+		if (targetElement?.getAttribute('data-id')) {
+			setTargetAreaId(Number(targetElement.getAttribute('data-id')));
 		}
 
 		if (e.toElement.dataset.virtualId) {
 			setVirtualTargetAreaId(Number(e.toElement.dataset.virtualId));
+		}
+
+		if (e.toElement.getAttribute('data-id')) {
+			setTargetAreaId(Number(e.toElement.getAttribute('data-id')));
 		}
 
 		if (activeAreaId === id) {
@@ -80,13 +97,12 @@ export const AreaMergeHandler = ({
 
 	const onResizeStop = (e, direction) => {
 		mergeArea(direction);
-		if (virtualTargetAreas) {
-			setDimension({
-				width: '100%',
-				height: '100%',
-			});
-			setPosition({ top: 0, left: 0 });
-		}
+
+		setDimension({
+			width: '100%',
+			height: '100%',
+		});
+		setPosition({ top: 0, left: 0 });
 	};
 
 	if (!isOpenGridBuilder) {
