@@ -2,15 +2,15 @@
  * Publisher dependencies
  */
 import { isUndefined } from '@publisher/utils';
-import { createCssRule } from '@publisher/style-engine';
+import { createCssDeclarations } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
 
-export function GridColumnGenerator(id, props, { media, selector }) {
+export function GridColumnGenerator(id, props) {
 	const { attributes } = props;
 
 	if (
 		isUndefined(attributes.publisherGridColumns) ||
-		!attributes.publisherGridColumns.value?.length
+		!Object.values(attributes?.publisherGridColumns)?.length
 	) {
 		return '';
 	}
@@ -18,25 +18,6 @@ export function GridColumnGenerator(id, props, { media, selector }) {
 
 	const value = attributes.publisherGridColumns.value
 		?.map((item) => {
-			// if (item['auto-generated']) {
-			// 	switch (item['sizing-mode']) {
-			// 		case 'min/max':
-			// 			properties[
-			// 				'grid-auto-columns'
-			// 			] = `minmax(${getValueAddonRealValue(
-			// 				item['min-size']
-			// 			)}, ${getValueAddonRealValue(item['max-size'])})`;
-			// 			break;
-			// 		default:
-			// 			properties[
-			// 				'grid-auto-columns'
-			// 			] = `${getValueAddonRealValue(item.size)}`;
-			// 			break;
-			// 	}
-
-			// 	return null;
-			// }
-
 			if (item['auto-fit']) {
 				switch (item['sizing-mode']) {
 					case 'min/max':
@@ -65,9 +46,7 @@ export function GridColumnGenerator(id, props, { media, selector }) {
 
 	properties['grid-template-columns'] = value?.join(' ');
 
-	return createCssRule({
-		media,
-		selector,
+	return createCssDeclarations({
 		properties,
 	});
 }

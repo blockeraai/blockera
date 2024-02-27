@@ -2,41 +2,21 @@
  * Publisher dependencies
  */
 import { isUndefined } from '@publisher/utils';
-import { createCssRule } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
+import { createCssDeclarations } from '@publisher/style-engine';
 
-export function GridRowGenerator(id, props, { media, selector }) {
+export function GridRowGenerator(id, props) {
 	const { attributes } = props;
 
 	if (
 		isUndefined(attributes.publisherGridRows) ||
-		!attributes.publisherGridRows.value?.length
+		!Object.values(attributes?.publisherGridRows)?.length
 	) {
 		return '';
 	}
 	const properties = {};
-
 	const value = attributes.publisherGridRows.value
 		?.map((item) => {
-			// if (item['auto-generated']) {
-			// 	switch (item['sizing-mode']) {
-			// 		case 'min/max':
-			// 			properties[
-			// 				'grid-auto-columns'
-			// 			] = `minmax(${getValueAddonRealValue(
-			// 				item['min-size']
-			// 			)}, ${getValueAddonRealValue(item['max-size'])})`;
-			// 			break;
-			// 		default:
-			// 			properties[
-			// 				'grid-auto-rows'
-			// 			] = `${getValueAddonRealValue(item.size)}`;
-			// 			break;
-			// 	}
-
-			// 	return null;
-			// }
-
 			if (item['auto-fit']) {
 				switch (item['sizing-mode']) {
 					case 'min/max':
@@ -65,9 +45,7 @@ export function GridRowGenerator(id, props, { media, selector }) {
 
 	properties['grid-template-rows'] = value?.join(' ');
 
-	return createCssRule({
-		media,
-		selector,
+	return createCssDeclarations({
 		properties,
 	});
 }

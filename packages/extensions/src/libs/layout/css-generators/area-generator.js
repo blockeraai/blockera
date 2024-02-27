@@ -2,14 +2,14 @@
  * Publisher dependencies
  */
 import { isUndefined } from '@publisher/utils';
-import { createCssRule } from '@publisher/style-engine';
+import { createCssDeclarations } from '@publisher/style-engine';
 
 /**
  * Internal dependencies
  */
 import { calcGridTemplateAreas } from '../utils';
 
-export function GridAreaGenerator(id, props, { media, selector }) {
+export function GridAreaGenerator(id, props) {
 	const { attributes } = props;
 
 	if (
@@ -25,9 +25,7 @@ export function GridAreaGenerator(id, props, { media, selector }) {
 		gridAreas: attributes.publisherGridAreas,
 	});
 
-	return createCssRule({
-		media,
-		selector,
+	return createCssDeclarations({
 		properties: {
 			'grid-template-areas': gridTemplateAreas
 				?.map((item) => `"${item.join(' ')}"`)

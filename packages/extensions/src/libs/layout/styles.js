@@ -12,11 +12,17 @@ import { getValueAddonRealValue } from '@publisher/hooks';
 /**
  * Internal dependencies
  */
+import { arrayEquals } from '../utils';
 import * as config from '../base/config';
 import { attributes } from './attributes';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
 import type { CssRule } from '@publisher/style-engine/src/types';
+import {
+	GridColumnGenerator,
+	GridRowGenerator,
+	GridAreaGenerator,
+} from './css-generators';
 
 export const LayoutStyles = ({
 	state,
@@ -33,12 +39,17 @@ export const LayoutStyles = ({
 		publisherGap,
 		publisherFlexWrap,
 		publisherAlignContent,
+		publisherGridColumns,
+		publisherGridRows,
+		publisherGridAreas,
+		publisherGridGap,
 	} = config.layoutConfig;
 	const blockProps = {
 		clientId,
 		blockName,
 		attributes: currentBlockAttributes,
 	};
+
 	const { attributes: _attributes } = blockProps;
 	const sharedParams = {
 		state,
@@ -331,5 +342,178 @@ export const LayoutStyles = ({
 		}
 	}
 
+	if (_attributes.publisherDisplay === 'grid') {
+		if (
+			isActiveField(publisherGridGap) &&
+			_attributes.publisherGridGap !== attributes.publisherGridGap.default
+		) {
+			if (_attributes.publisherGridGap?.lock) {
+				const gap = getValueAddonRealValue(
+					_attributes.publisherGridGap?.gap
+				);
+				if (gap) {
+					const pickedSelector = getCssSelector({
+						...sharedParams,
+						query: 'publisherGridGap',
+						support: 'publisherGridGap',
+						fallbackSupportId: 'gap',
+					});
+
+					styleGroup.push({
+						selector: pickedSelector,
+						declarations: computedCssDeclarations(
+							{
+								publisherGridGap: [
+									{
+										...staticDefinitionParams,
+										properties: {
+											gap: _attributes.publisherGridGap
+												.gap,
+										},
+									},
+								],
+							},
+							blockProps
+						),
+					});
+				}
+			} else {
+				const rows = getValueAddonRealValue(
+					_attributes.publisherGridGap?.rows
+				);
+				if (rows) {
+					const pickedSelector = getCssSelector({
+						...sharedParams,
+						query: 'publisherGridGap.rows',
+						fallbackSupportId: 'rowGap',
+					});
+
+					styleGroup.push({
+						selector: pickedSelector,
+						declarations: computedCssDeclarations(
+							{
+								publisherGridGap: [
+									{
+										...staticDefinitionParams,
+										properties: {
+											'row-gap': rows,
+										},
+									},
+								],
+							},
+							blockProps
+						),
+					});
+				}
+
+				const columns = getValueAddonRealValue(
+					_attributes.publisherGridGap?.columns
+				);
+				if (columns) {
+					const pickedSelector = getCssSelector({
+						...sharedParams,
+						query: 'publisherGridGap.columns',
+						fallbackSupportId: 'columnGap',
+					});
+
+					styleGroup.push({
+						selector: pickedSelector,
+						declarations: computedCssDeclarations(
+							{
+								publisherGridGap: [
+									{
+										...staticDefinitionParams,
+										properties: {
+											'column-gap': columns,
+										},
+									},
+								],
+							},
+							blockProps
+						),
+					});
+				}
+			}
+		}
+
+		if (isActiveField(publisherGridColumns)) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherGridColumns',
+				support: 'publisherGridColumns',
+				fallbackSupportId: 'gridColumns',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherGridColumns: [
+							{
+								type: 'function',
+								function: GridColumnGenerator,
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+
+		if (isActiveField(publisherGridRows)) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherGridRows',
+				support: 'publisherGridRows',
+				fallbackSupportId: 'gridRows',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherGridRows: [
+							{
+								type: 'function',
+								function: GridRowGenerator,
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+
+		if (
+			isActiveField(publisherGridAreas) &&
+			!arrayEquals(
+				attributes.publisherGridAreas.default,
+				_attributes.publisherGridAreas
+			)
+		) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherGridAreas',
+				support: 'publisherGridAreas',
+				fallbackSupportId: 'gridAreas',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherGridAreas: [
+							{
+								type: 'function',
+								function: GridAreaGenerator,
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+	}
+	console.log(styleGroup);
 	return styleGroup;
 };
