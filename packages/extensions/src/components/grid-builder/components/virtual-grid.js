@@ -219,47 +219,28 @@ export const VirtualGrid = ({ block }) => {
 				type="row"
 				gridTemplate={gridRows}
 				onClick={() => {
-					const newAreas = [];
-					for (let i = 1; i <= publisherGridColumns.length; i++) {
-						newAreas.push({
+					const newValue = [
+						...publisherGridRows.value,
+						{
+							'sizing-mode': 'normal',
+							size: 'auto',
+							'min-size': '',
+							'max-size': '',
+							'auto-fit': false,
 							id: uId(),
-							'column-start': i,
-							'column-end': i + 1,
-							'row-start': publisherGridRows.length + 1,
-							'row-end': publisherGridRows.length + 2,
-						});
-					}
+						},
+					];
 
 					handleOnChangeAttributes(
 						'publisherGridRows',
 						{
 							length: publisherGridRows.length + 1,
-							value: [
-								...publisherGridRows.value,
-								{
-									'sizing-mode': 'normal',
-									size: 'auto',
-									'min-size': '',
-									'max-size': '',
-									'auto-fit': false,
-									id: uId(),
-								},
-							],
+							value: newValue,
 						},
 						{
 							effectiveItems: {
 								publisherGridAreas: generateAreas({
-									gridRows: [
-										...publisherGridRows.value,
-										{
-											'sizing-mode': 'normal',
-											size: 'auto',
-											'min-size': '',
-											'max-size': '',
-											'auto-fit': false,
-											id: uId(),
-										},
-									],
+									gridRows: newValue,
 									gridColumns: publisherGridColumns.value,
 									prevGridAreas: publisherGridAreas,
 								}),
@@ -280,47 +261,27 @@ export const VirtualGrid = ({ block }) => {
 				type="column"
 				gridTemplate={gridColumns}
 				onClick={() => {
-					const newAreas = [];
-					for (let i = 1; i <= publisherGridRows.length; i++) {
-						newAreas.push({
+					const newValue = [
+						...publisherGridColumns.value,
+						{
+							'sizing-mode': 'normal',
+							size: '1fr',
+							'min-size': '',
+							'max-size': '',
+							'auto-fit': false,
 							id: uId(),
-							'column-start': publisherGridColumns.length + 1,
-							'column-end': publisherGridColumns.length + 2,
-							'row-start': i,
-							'row-end': i + 1,
-						});
-					}
-
+						},
+					];
 					handleOnChangeAttributes(
 						'publisherGridColumns',
 						{
 							length: publisherGridColumns.length + 1,
-							value: [
-								...publisherGridColumns.value,
-								{
-									'sizing-mode': 'normal',
-									size: '1fr',
-									'min-size': '',
-									'max-size': '',
-									'auto-fit': false,
-									id: uId(),
-								},
-							],
+							value: newValue,
 						},
 						{
 							effectiveItems: {
 								publisherGridAreas: generateAreas({
-									gridColumns: [
-										...publisherGridColumns.value,
-										{
-											'sizing-mode': 'normal',
-											size: '1fr',
-											'min-size': '',
-											'max-size': '',
-											'auto-fit': false,
-											id: uId(),
-										},
-									],
+									gridColumns: newValue,
 									gridRows: publisherGridRows.value,
 									prevGridAreas: publisherGridAreas,
 								}),

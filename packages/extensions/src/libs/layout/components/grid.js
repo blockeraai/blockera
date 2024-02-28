@@ -135,22 +135,10 @@ export default function ({
 										const value = [
 											...values.publisherGridRows.value,
 										];
-										const newAreas = [];
-										const cellCounts =
-											values.publisherGridAreas?.map(
-												(area) =>
-													Number(
-														area.name.replace(
-															/[^-\.0-9]/g,
-															''
-														)
-													)
-											);
 
 										let i =
 											values.publisherGridRows.value
 												.length;
-										let count = Math.max(...cellCounts);
 
 										while (i < length) {
 											value.push({
@@ -160,24 +148,6 @@ export default function ({
 												},
 												id: uId(),
 											});
-											for (
-												let index = 1;
-												index <=
-												values.publisherGridColumns
-													.length;
-												index++
-											) {
-												count++;
-
-												newAreas.push({
-													id: uId(),
-													name: `cell${count}`,
-													'column-start': index,
-													'column-end': index + 1,
-													'row-start': i + 1,
-													'row-end': i + 2,
-												});
-											}
 
 											i++;
 										}
@@ -194,10 +164,8 @@ export default function ({
 																values
 																	.publisherGridColumns
 																	.value,
-															prevGridAreas: [
-																...values.publisherGridAreas,
-																...newAreas,
-															],
+															prevGridAreas:
+																values.publisherGridAreas,
 														}),
 												},
 												ref,
@@ -218,23 +186,6 @@ export default function ({
 												.length - length
 										);
 
-										const deletedAreas =
-											values.publisherGridAreas
-												.filter(
-													(item) =>
-														item['row-end'] >
-														length + 1
-												)
-												.map(({ id }) => id);
-
-										const filteredAreas =
-											values.publisherGridAreas.filter(
-												(item) =>
-													!deletedAreas.includes(
-														item.id
-													)
-											);
-
 										handleOnChangeAttributes(
 											'publisherGridRows',
 											{ length, value },
@@ -248,7 +199,7 @@ export default function ({
 																	.publisherGridColumns
 																	.value,
 															prevGridAreas:
-																filteredAreas,
+																values.publisherGridAreas,
 														}),
 												},
 												ref,
@@ -301,45 +252,17 @@ export default function ({
 											...values.publisherGridColumns
 												.value,
 										];
-										const newAreas = [];
-										const cellCounts =
-											values.publisherGridAreas?.map(
-												(area) =>
-													Number(
-														area.name.replace(
-															/[^-\.0-9]/g,
-															''
-														)
-													)
-											);
 
 										let i =
 											values.publisherGridColumns.value
 												.length;
-										let count = Math.max(...cellCounts);
 
 										while (i < length) {
 											value.push({
 												...defaultGridItemValue,
 												id: uId(),
 											});
-											for (
-												let index = 1;
-												index <=
-												values.publisherGridRows.length;
-												index++
-											) {
-												count++;
 
-												newAreas.push({
-													id: uId(),
-													name: `cell${count}`,
-													'column-start': i + 1,
-													'column-end': i + 2,
-													'row-start': index,
-													'row-end': index + 1,
-												});
-											}
 											i++;
 										}
 
@@ -355,10 +278,8 @@ export default function ({
 																	.publisherGridRows
 																	.value,
 															gridColumns: value,
-															prevGridAreas: [
-																...values.publisherGridAreas,
-																...newAreas,
-															],
+															prevGridAreas:
+																values.publisherGridAreas,
 														}),
 												},
 												ref,
@@ -380,23 +301,6 @@ export default function ({
 												.length - length
 										);
 
-										const deletedAreas =
-											values.publisherGridAreas
-												.filter(
-													(item) =>
-														item['column-end'] >
-														length + 1
-												)
-												.map(({ id }) => id);
-
-										const filteredAreas =
-											values.publisherGridAreas.filter(
-												(item) =>
-													!deletedAreas.includes(
-														item.id
-													)
-											);
-
 										handleOnChangeAttributes(
 											'publisherGridColumns',
 											{ length, value },
@@ -410,7 +314,7 @@ export default function ({
 																	.value,
 															gridColumns: value,
 															prevGridAreas:
-																filteredAreas,
+																values.publisherGridAreas,
 														}),
 												},
 												ref,
