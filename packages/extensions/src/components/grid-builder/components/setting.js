@@ -45,14 +45,16 @@ export const SizeSetting = ({
 	const hasMergedArea = publisherGridAreas.find((_item) => {
 		if (attributeId === 'publisherGridColumns') {
 			const colCoordinates = _item?.coordinates?.map(
-				(item) => item.column
+				(coord) => `${coord['column-start']}/${coord['column-end']}`
 			);
 			return colCoordinates?.includes(
 				`${currentItemIndex + 1}/${currentItemIndex + 2}`
 			);
 		}
 
-		const rowCoordinates = _item?.coordinates?.map((item) => item.row);
+		const rowCoordinates = _item?.coordinates?.map(
+			(coord) => `${coord['row-start']}/${coord['row-end']}`
+		);
 		return rowCoordinates?.includes(
 			`${currentItemIndex + 1}/${currentItemIndex + 2}`
 		);
@@ -100,7 +102,7 @@ export const SizeSetting = ({
 					</span>
 
 					{sprintf(
-						// translators: %s is a shape name.
+						// translators: %s is popover icon.
 						__('%s ', 'publisher-core'),
 						popoverTitle
 					)}
@@ -363,11 +365,10 @@ export const SizeSetting = ({
 									_item.coordinates?.map((coord) => {
 										return {
 											...coord,
-											column: `${
-												coord.column.split('/')[0] - 1
-											}/${
-												coord.column.split('/')[1] - 1
-											}`,
+											'column-start':
+												coord['column-start'] - 1,
+											'column-end':
+												coord['column-end'] - 1,
 										};
 									});
 
@@ -388,11 +389,9 @@ export const SizeSetting = ({
 										_item.coordinates?.map((coord) => {
 											return {
 												...coord,
-												row: `${
-													coord.row.split('/')[0] - 1
-												}/${
-													coord.row.split('/')[1] - 1
-												}`,
+												'row-start':
+													coord['row-start'] - 1,
+												'row-end': coord['row-end'] - 1,
 											};
 										});
 
