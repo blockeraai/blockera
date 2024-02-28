@@ -22,21 +22,6 @@ export const hasLimitation = (action: Object): boolean => {
 };
 
 /**
- * Retrieve the control information
- *
- * @param {Object} state the state object
- * @param {Object} action the action of dispatcher
- * @return {null|*} the control information
- */
-export const getControlInfo = (state: Object, action: Object): null | any => {
-	if (!isString(action.controlId) || !action.controlId.length) {
-		return null;
-	}
-
-	return state[action.controlId];
-};
-
-/**
  * has repeaterId prop exists in action and check is valid?
  *
  * @param {Object} controlValue the control value.
@@ -54,16 +39,6 @@ export const hasRepeaterId = (
 				action.repeaterId.length &&
 				isObject(prepare(action.repeaterId, controlValue))
 		: isString(action.repeaterId) && action.repeaterId.length;
-};
-
-/**
- * Check repeaterId is Query?
- *
- * @param {repeaterId} repeaterId the repeater control identifier
- * @return {boolean|boolean} true on success, false when otherwise!
- */
-export const isQuery = (repeaterId: string): boolean => {
-	return repeaterId.split('.').length > 1 || /\[.*]/gi.test(repeaterId);
 };
 
 /**
@@ -102,23 +77,28 @@ export const generatedDetailsId = (
 	state: Object,
 	action: Object
 ): { itemsCount: number, uniqueId: string } => {
+	let suffix = '';
 	let itemsCount = 0;
 	const controlInfo = state[action.controlId];
 	const actionValue = action.value || action.item;
+
+	if ('CLONE_REPEATER_ITEM' === action.type) {
+		suffix = '-clone';
+	}
 
 	if (!action.id && !actionValue?.type) {
 		itemsCount = Object.keys(controlInfo.value).length;
 
 		return {
 			itemsCount,
-			uniqueId: itemsCount + '',
+			uniqueId: itemsCount + suffix,
 		};
 	}
 
 	if (!state[action.controlId]) {
 		return {
 			itemsCount,
-			uniqueId: `${action.id}-${itemsCount}`,
+			uniqueId: `${action.id}-${itemsCount}${suffix}`,
 		};
 	}
 
@@ -129,6 +109,6 @@ export const generatedDetailsId = (
 
 	return {
 		itemsCount,
-		uniqueId: `${action.id || actionValue.type}-${itemsCount}`,
+		uniqueId: `${action.id || actionValue.type}-${itemsCount}${suffix}`,
 	};
 };

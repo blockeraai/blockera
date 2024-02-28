@@ -79,7 +79,11 @@ const RepeaterItem = ({
 
 	const handleDragStart = (e: DragEvent, index: number) => {
 		if (e.dataTransfer) {
-			e.dataTransfer.setData('text/plain', index.toString());
+			e.dataTransfer.setData(
+				'text/plain',
+				// $FlowFixMe
+				e.target.closest('.draggable').getAttribute('data-id')
+			);
 			setDraggingIndex(index);
 		}
 	};
@@ -103,10 +107,7 @@ const RepeaterItem = ({
 			setDraggingIndex(index);
 
 			const toIndex = index;
-			const fromIndex = parseInt(
-				e.dataTransfer?.getData('text/plain'),
-				10
-			);
+			const fromIndex = e.dataTransfer?.getData('text/plain');
 
 			sortRepeaterItem({
 				controlId,
@@ -137,6 +138,7 @@ const RepeaterItem = ({
 			onDragStart={(e) => handleDragStart(e, itemId)}
 			data-cy="repeater-item"
 			style={styleRef.current}
+			data-id={itemId}
 		>
 			<GroupControl
 				mode={
