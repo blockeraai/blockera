@@ -1134,9 +1134,6 @@ const Fields: FieldItem = memo<FieldItem>(
 									'mesh-generator-preview'
 								)}
 								style={((): Object => {
-									const meshColorKeys = Object.keys(
-										item['mesh-gradient-colors']
-									);
 									return {
 										backgroundColor:
 											item['mesh-gradient-colors']['--c0']
@@ -1147,8 +1144,7 @@ const Fields: FieldItem = memo<FieldItem>(
 											...Object.values(
 												item['mesh-gradient-colors']
 											).map((color, index): Object => ({
-												[meshColorKeys[index]]:
-													color.color,
+												['--c' + index]: color.color,
 											}))
 										),
 									};
