@@ -45,7 +45,7 @@ export const generateAreas = ({ gridRows, gridColumns, prevGridAreas }) => {
 		gridColumns.forEach((item, index) => {
 			row.push({
 				id: uId(),
-				name: `${count}`,
+				name: `area${count}`,
 				'column-start': index + 1,
 				'column-end': index + 2,
 				'row-start': i + 1,
@@ -86,7 +86,7 @@ export const generateAreas = ({ gridRows, gridColumns, prevGridAreas }) => {
 
 	// re order
 	const renamedFilteredAreas = filteredGridAreas.flat().map((item, i) => {
-		return { ...item, name: `${i + 1}` };
+		return { ...item, name: `area${i + 1}` };
 	});
 
 	const gridTemplateAreas = calcGridTemplateAreas({
@@ -104,7 +104,7 @@ export const generateAreas = ({ gridRows, gridColumns, prevGridAreas }) => {
 			.map((_item, i) => {
 				return {
 					..._item,
-					name: `${i + 1}`,
+					name: `area${i + 1}`,
 					mergedArea: _item?.coordinates?.length > 1 ? true : false,
 				};
 			})
@@ -114,7 +114,7 @@ export const generateAreas = ({ gridRows, gridColumns, prevGridAreas }) => {
 	});
 
 	return getUniqueArrayOfObjects(reOrderedAreaArray).map((item, i) => {
-		return { ...item, name: `${i + 1}` };
+		return { ...item, name: `area${i + 1}` };
 	});
 };
 
@@ -184,10 +184,11 @@ export const updateArrayCoordinates = (array) => {
 	return array
 		.map((item) => {
 			if (!item) return null;
+			const coordinates = calcCoordinates(item);
 			return {
 				...item,
-				coordinates: calcCoordinates(item),
-				mergedArea: calcCoordinates(item).length <= 1 ? false : true,
+				coordinates,
+				mergedArea: coordinates.length <= 1 ? false : true,
 			};
 		})
 		.filter((item) => item);
@@ -195,6 +196,8 @@ export const updateArrayCoordinates = (array) => {
 
 export const calcReMergedAreas = (item, updatedArea) => {
 	//calculate affected merged areas based on new merged area
+	if (!updatedArea) return null;
+
 	if (
 		item['column-start'] >= updatedArea['column-start'] &&
 		item['column-end'] > updatedArea['column-end']
@@ -268,4 +271,4 @@ export const calcReMergedAreas = (item, updatedArea) => {
 };
 
 export const uId = () =>
-	new Date().getMilliseconds() + Number(Math.random().toFixed(5));
+	new Date().getMilliseconds() + Number(Math.random().toFixed(6));

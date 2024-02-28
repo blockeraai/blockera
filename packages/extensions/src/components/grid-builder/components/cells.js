@@ -119,6 +119,8 @@ export const Cells = ({
 		if (
 			activeAreaId !== virtualTargetArea?.parentId &&
 			(!newMergedArea ||
+				newMergedArea['column-start'] === newMergedArea['column-end'] ||
+				newMergedArea['row-start'] === newMergedArea['row-end'] ||
 				!targetArea ||
 				!activeArea ||
 				targetArea.id === activeArea.id)
@@ -457,7 +459,7 @@ export const Cells = ({
 					style={{
 						gridColumn: `${item['column-start']}/${item['column-end']}`,
 						gridRow: `${item['row-start']}/${item['row-end']}`,
-						//gridArea: item.name,
+						gridArea: item.name,
 						position: 'relative',
 						backgroundColor: isHighlighted
 							? 'rgba(20, 126, 184, 0.7)'
@@ -466,7 +468,9 @@ export const Cells = ({
 					}}
 					data-id={item.id}
 				>
-					<p style={{ pointerEvents: 'none' }}>{item.name}</p>
+					<p style={{ pointerEvents: 'none' }}>
+						{item.name?.replace(/[^-\.0-9]/g, '')}
+					</p>
 
 					{activeAreaId === item.id && (
 						<AreaMergeHandler
