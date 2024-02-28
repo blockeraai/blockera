@@ -36,11 +36,17 @@ export function changeRepeaterItem({
 	};
 }
 
-export function removeRepeaterItem({ controlId, itemId, repeaterId = null }) {
+export function removeRepeaterItem({
+	itemId,
+	controlId,
+	itemIdGenerator,
+	repeaterId = null,
+}) {
 	return {
 		itemId,
 		controlId,
 		repeaterId,
+		itemIdGenerator,
 		type: 'REMOVE_REPEATER_ITEM',
 	};
 }

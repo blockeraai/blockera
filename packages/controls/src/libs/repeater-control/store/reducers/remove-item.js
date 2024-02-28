@@ -6,6 +6,36 @@
 import { hasRepeaterId } from './utils';
 import { prepare, update } from '@publisher/data-extractor';
 
+// function remappedControlValue(
+// 	value: Object,
+// 	{
+// 		itemIdGenerator,
+// 	}: {
+// 		itemIdGenerator?: (itemsCount: number) => string,
+// 	}
+// ): Object {
+// 	const mappedNewValue = Object.entries(value)
+// 		.sort(([, a], [, b]) => (a.order || 0) - (b.order || 0))
+// 		.map(([, item]: [string, any], index: number): [string, any] => {
+// 			item = {
+// 				...item,
+// 				order: index,
+// 			};
+//
+// 			if (!item?.type) {
+// 				if ('function' === typeof itemIdGenerator) {
+// 					return [itemIdGenerator(index + 1), item];
+// 				}
+//
+// 				return [index + '', item];
+// 			}
+//
+// 			return [`${item.type}-${index}`, item];
+// 		});
+//
+// 	return Object.fromEntries(mappedNewValue);
+// }
+
 function handleActionIncludeRepeaterId(
 	controlValue: Object,
 	action: Object
