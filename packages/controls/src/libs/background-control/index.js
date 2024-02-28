@@ -33,6 +33,13 @@ import { default as generateMeshGradient } from './components/mesh-gradient/mesh
 export function meshGradientProvider(
 	object: TDefaultRepeaterItemValue
 ): TDefaultRepeaterItemValue {
+	if (
+		object['mesh-gradient'] &&
+		Object.values(object['mesh-gradient-colors']).length
+	) {
+		return object;
+	}
+
 	const meshGradient = generateMeshGradient(
 		Object.values(object['mesh-gradient-colors'])?.length
 			? Object.values(object['mesh-gradient-colors']).length

@@ -48,7 +48,7 @@ export const memoizedRootBreakpoints: (
 ) => BreakpointTypes = memoize(
 	(
 		breakpoint,
-		{ newValue, attributeId, currentBlock },
+		{ newValue, attributeId, currentBlock, effectiveItems },
 		insideInnerBlock: boolean = false
 	) => {
 		if (isInnerBlock(currentBlock) && !insideInnerBlock) {
@@ -80,6 +80,7 @@ export const memoizedRootBreakpoints: (
 											?.publisherInnerBlocks[currentBlock]
 											?.attributes
 									: {}),
+								...effectiveItems,
 								[attributeId]: newValue,
 							},
 						},
@@ -92,6 +93,7 @@ export const memoizedRootBreakpoints: (
 			...breakpoint,
 			attributes: {
 				...breakpoint.attributes,
+				...effectiveItems,
 				[attributeId]: newValue,
 			},
 		};

@@ -5,7 +5,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { Element } from 'react';
-import { memo, useContext } from '@wordpress/element';
+import { memo, useEffect, useContext } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -15,7 +15,6 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@publisher/classnames';
-import { isEquals } from '@publisher/utils';
 import { isValid as isValidVariable } from '@publisher/hooks';
 
 /**
@@ -75,6 +74,31 @@ const Fields: FieldItem = memo<FieldItem>(
 
 		const { repeaterId, getControlId, defaultRepeaterItemValue } =
 			useContext(RepeaterContext);
+
+		useEffect(() => {
+			if (undefined === item['mesh-gradient-colors']) {
+				return;
+			}
+
+			const length = Object.values(item['mesh-gradient-colors']).length;
+
+			if (
+				item['mesh-gradient'] &&
+				new RegExp(`--c${length - 1}`, 'g').test(item['mesh-gradient'])
+			) {
+				return;
+			}
+
+			changeRepeaterItem({
+				controlId,
+				repeaterId,
+				itemId,
+				value: {
+					...item,
+					'mesh-gradient': generateGradient(length),
+				},
+			});
+		}, [item['mesh-gradient-colors']]);
 
 		return (
 			<div id={`repeater-item-${itemId}`}>
@@ -1210,29 +1234,9 @@ const Fields: FieldItem = memo<FieldItem>(
 									color: getRandomHexColor(),
 									isOpen: false,
 								}}
-								onChange={(newValue) => {
-									if (
-										isEquals(
-											newValue,
-											item['mesh-gradient-colors']
-										)
-									) {
-										return;
-									}
-
-									changeRepeaterItem({
-										controlId,
-										repeaterId,
-										itemId,
-										value: {
-											...item,
-											'mesh-gradient-colors': newValue,
-											'mesh-gradient': generateGradient(
-												Object.values(newValue).length
-											),
-										},
-									});
-								}}
+								isItemDeletable={(_itemId: string): boolean =>
+									'--c0' !== _itemId
+								}
 							/>
 						</BaseControl>
 

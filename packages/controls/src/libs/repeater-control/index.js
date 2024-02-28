@@ -79,6 +79,7 @@ export default function RepeaterControl({
 	onDelete,
 	overrideItem,
 	valueCleanup,
+	isItemDeletable,
 	itemIdGenerator,
 	//
 	className,
@@ -132,6 +133,7 @@ export default function RepeaterControl({
 		overrideItem,
 		getControlPath,
 		itemIdGenerator,
+		isItemDeletable,
 		repeaterItemOpener,
 		repeaterItemHeader,
 		repeaterItemChildren,

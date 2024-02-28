@@ -261,6 +261,10 @@ export const combineDeclarations = (
 ): Array<CssRule> => {
 	const combinedObjects: { [key: string]: CssRule } = {};
 
+	if (!Array.isArray(cssRules)) {
+		return Object.values(combinedObjects);
+	}
+
 	cssRules.forEach((item) => {
 		const { selector, declarations } = item;
 

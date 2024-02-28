@@ -19,6 +19,7 @@ import type { InnerBlockType } from '@publisher/extensions/src/libs/inner-blocks
  */
 import { getSelector } from './utils';
 import type { NormalizedSelectorProps } from './types';
+import { isNormalState } from '@publisher/extensions/src/components';
 
 export function getCssSelector({
 	state,
@@ -43,6 +44,8 @@ export function getCssSelector({
 		'parent-hover',
 	];
 	const { getSelectedBlock } = select('core/block-editor');
+	const { getExtensionInnerBlockState, getExtensionCurrentBlockState } =
+		select('publisher-core/extensions');
 
 	// primitive block value.
 	let block: Object = {};
@@ -98,7 +101,15 @@ export function getCssSelector({
 
 		// if state not equals with any one of excluded pseudo-class
 		if (!excludedPseudoClasses.includes(state)) {
-			_selector = `${_selector}:${state}`;
+			if (
+				(isInnerBlock(currentBlock) &&
+					!isNormalState(getExtensionInnerBlockState())) ||
+				!isNormalState(getExtensionCurrentBlockState())
+			) {
+				_selector = `${_selector}:${state}, ${_selector}`;
+			} else {
+				_selector = `${_selector}:${state}`;
+			}
 		}
 
 		switch (state) {

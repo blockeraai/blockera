@@ -57,7 +57,7 @@ export const useAttributes = (
 		newValue,
 		options = {}
 	): void => {
-		const { ref } = options;
+		const { ref, effectiveItems = {} } = options;
 		const { getSelectedBlock } = select('core/block-editor');
 		const { attributes = getAttributes() } = getSelectedBlock() || {};
 		const {
@@ -123,6 +123,7 @@ export const useAttributes = (
 			attributeId,
 			currentState,
 			currentBlock,
+			effectiveItems,
 			getAttributes,
 			isNormalState,
 			currentBreakpoint,
