@@ -2,7 +2,7 @@
 /**
  * Publisher dependencies
  */
-import { isFunction, isUndefined, omit } from '@publisher/utils';
+import { isFunction, isEquals, isUndefined, omit } from '@publisher/utils';
 
 /**
  * The global state management control context provider!
@@ -32,6 +32,10 @@ export function controlReducer(state: Object = {}, action: Object): Object {
 
 			//When you need to modify total columns of value up to date!
 			if (isUndefined(action.propId)) {
+				if (isEquals(state[action.controlId].value, value)) {
+					return state;
+				}
+
 				return {
 					...state,
 					[action.controlId]: {
@@ -39,6 +43,10 @@ export function controlReducer(state: Object = {}, action: Object): Object {
 						value,
 					},
 				};
+			}
+
+			if (isEquals(state[action.controlId].value[action.propId], value)) {
+				return state;
 			}
 
 			return {
@@ -53,7 +61,11 @@ export function controlReducer(state: Object = {}, action: Object): Object {
 			};
 
 		case 'MODIFY_CONTROL_INFO':
-			if (action.info.name || !action.controlId) {
+			if (
+				action.info.name ||
+				!action.controlId ||
+				isEquals(state[action.controlId], action.info)
+			) {
 				return state;
 			}
 
