@@ -421,7 +421,7 @@ export const SizeSetting = ({
 								value: [...filteredItems],
 							},
 							{
-								addOrModifyRootItems: {
+								effectiveItems: {
 									publisherGridAreas: generateAreas({
 										gridRows:
 											attributeId === 'publisherGridRows'

@@ -186,7 +186,7 @@ export default function ({
 											'publisherGridRows',
 											{ length, value },
 											{
-												addOrModifyRootItems: {
+												effectiveItems: {
 													publisherGridAreas:
 														generateAreas({
 															gridRows: value,
@@ -239,7 +239,7 @@ export default function ({
 											'publisherGridRows',
 											{ length, value },
 											{
-												addOrModifyRootItems: {
+												effectiveItems: {
 													publisherGridAreas:
 														generateAreas({
 															gridRows: value,
@@ -347,7 +347,7 @@ export default function ({
 											'publisherGridColumns',
 											{ length, value },
 											{
-												addOrModifyRootItems: {
+												effectiveItems: {
 													publisherGridAreas:
 														generateAreas({
 															gridRows:
@@ -401,7 +401,7 @@ export default function ({
 											'publisherGridColumns',
 											{ length, value },
 											{
-												addOrModifyRootItems: {
+												effectiveItems: {
 													publisherGridAreas:
 														generateAreas({
 															gridRows:

@@ -247,7 +247,7 @@ export const VirtualGrid = ({ block }) => {
 							],
 						},
 						{
-							addOrModifyRootItems: {
+							effectiveItems: {
 								publisherGridAreas: generateAreas({
 									gridRows: [
 										...publisherGridRows.value,
@@ -308,7 +308,7 @@ export const VirtualGrid = ({ block }) => {
 							],
 						},
 						{
-							addOrModifyRootItems: {
+							effectiveItems: {
 								publisherGridAreas: generateAreas({
 									gridColumns: [
 										...publisherGridColumns.value,
