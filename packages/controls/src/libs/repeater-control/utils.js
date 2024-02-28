@@ -1,11 +1,21 @@
+// @flow
+
+/**
+ * External dependencies
+ */
+import type { MixedElement } from 'react';
+
+/**
+ * Internal dependencies
+ */
 import { extractNumberAndUnit } from '../input-control/utils';
 
-export const isOpenPopoverEvent = (event) =>
+export const isOpenPopoverEvent = (event: Object): boolean =>
 	!['svg', 'button', 'path'].includes(event?.target?.tagName);
 
 import { convertDegToCharacter } from '@publisher/utils';
 
-export function prepValueForHeader(value) {
+export function prepValueForHeader(value: any): MixedElement | string {
 	if (value === '') {
 		return '';
 	}
@@ -32,4 +42,12 @@ export function prepValueForHeader(value) {
 		default:
 			return <span className="unit-value">{value}</span>;
 	}
+}
+
+export function getSortedRepeater(items: Object): Array<Object> {
+	const dataArray = Object.entries(items);
+
+	dataArray.sort(([, a], [, b]) => (a.order || 0) - (b.order || 0));
+
+	return dataArray;
 }
