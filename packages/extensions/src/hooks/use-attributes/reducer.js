@@ -22,6 +22,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		currentState,
 		isNormalState,
 		getAttributes,
+		effectiveItems,
 		currentBreakpoint,
 		currentInnerBlockState,
 	} = action;
@@ -74,6 +75,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 												currentBlock
 										  ]?.attributes
 										: {}),
+									...effectiveItems,
 									[attributeId]: newValue,
 								},
 							},
@@ -93,7 +95,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			 */
 			return applyFilters(
 				'publisherCore.blockEdit.setAttributes',
-				{ ...state, [attributeId]: newValue },
+				{ ...state, ...effectiveItems, [attributeId]: newValue },
 				...hookParams
 			);
 

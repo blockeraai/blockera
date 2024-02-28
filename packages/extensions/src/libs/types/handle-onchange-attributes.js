@@ -11,5 +11,6 @@ export type THandleOnChangeAttributes = (
 	// eslint-disable-next-line
 	options: {
 		ref?: ControlContextRef,
+		effectiveItems?: Object,
 	}
 ) => void;
