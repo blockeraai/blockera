@@ -163,6 +163,7 @@ export default function RepeaterItemActions({
 									itemId,
 									controlId,
 									repeaterId,
+									itemIdGenerator,
 								});
 
 								return;
