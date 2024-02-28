@@ -85,12 +85,14 @@ export const generateAreas = ({ gridRows, gridColumns, prevGridAreas }) => {
 	filteredGridAreas.push(mergedAreas);
 
 	// re order
+	const renamedFilteredAreas = filteredGridAreas.flat().map((item, i) => {
+		return { ...item, name: `${i + 1}` };
+	});
+
 	const gridTemplateAreas = calcGridTemplateAreas({
 		gridRows: { value: gridRows },
 		gridColumns: { value: gridColumns },
-		gridAreas: filteredGridAreas.flat().map((item, i) => {
-			return { ...item, name: `${i + 1}` };
-		}),
+		gridAreas: renamedFilteredAreas,
 	});
 
 	const reOrderedAreaArray = [];
