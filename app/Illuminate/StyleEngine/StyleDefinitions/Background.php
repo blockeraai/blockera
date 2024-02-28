@@ -311,15 +311,21 @@ class Background extends BaseStyleDefinition {
 			$gradient = implode( ', ', $gradient );
 		}
 
-		foreach ( $setting['mesh-gradient-colors'] as $index => $color ) {
+		$colors = $setting['mesh-gradient-colors'];
 
-			if ( ! isset( $setting['mesh-gradient-colors'][ $index ]['color'] ) ) {
+		usort($colors, function ($a, $b) {
+			return $a['order'] - $b['order'];
+		});
+
+		foreach ( $colors as $index => $color ) {
+
+			if ( ! isset( $color['color'] ) ) {
 				continue;
 			}
 
 			$gradient = str_replace(
 				"var(--c{$index})",
-				pb_get_value_addon_real_value( $setting['mesh-gradient-colors'][ $index ]['color'] ),
+				pb_get_value_addon_real_value( $color['color'] ),
 				$gradient
 			);
 		}
@@ -328,7 +334,7 @@ class Background extends BaseStyleDefinition {
 			$this->defaultProps,
 			[
 				// override bg color
-				'background-color'      => ( $setting['mesh-gradient-colors'][0]['color'] ? pb_get_value_addon_real_value( $setting['mesh-gradient-colors'][0]['color'] ) : '' ) . $this->getImportant(),
+				'background-color'      => ( array_values( $colors )[0]['color'] ? pb_get_value_addon_real_value( array_values( $colors )[0]['color'] ) : '' ) . $this->getImportant(),
 				// Image
 				'background-image'      => $gradient . $this->getImportant(),
 				// Background Attachment
