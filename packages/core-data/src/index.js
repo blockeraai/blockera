@@ -10,7 +10,7 @@ import { dispatch } from '@wordpress/data';
 import { STORE_NAME } from './store';
 
 export function unstableBootstrapServerSideDynamicValueDefinitions(
-	definitions
+	definitions: Object
 ) {
 	const { addBootstrappedDynamicValueGroup } = dispatch(STORE_NAME);
 
@@ -19,7 +19,9 @@ export function unstableBootstrapServerSideDynamicValueDefinitions(
 	}
 }
 
-export function unstableBootstrapServerSideVariableDefinitions(definitions) {
+export function unstableBootstrapServerSideVariableDefinitions(
+	definitions: Object
+) {
 	const { addBootstrappedVariableGroup } = dispatch(STORE_NAME);
 
 	for (const [name, variableGroup] of Object.entries(definitions)) {
