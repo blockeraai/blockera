@@ -46,8 +46,9 @@ export function generateExtensionId(
 ): string {
 	const {
 		getExtensionCurrentBlock = () => 'master',
-		getExtensionInnerBlockState = () => 'master',
+		getExtensionInnerBlockState = () => 'normal',
 		getExtensionCurrentBlockState = () => 'normal',
+		getExtensionCurrentBlockStateBreakpoint = () => 'laptop',
 	} = select('publisher-core/extensions') || {};
 
 	const currentBlock = getExtensionCurrentBlock();
@@ -57,7 +58,7 @@ export function generateExtensionId(
 		currentStateType = flag ? '-' + getExtensionInnerBlockState() : '';
 	}
 
-	return `${blockName}/${id}/${clientId}-${currentBlock}${currentStateType}`;
+	return `${blockName}/${id}/${clientId}-${currentBlock}${currentStateType}-${getExtensionCurrentBlockStateBreakpoint()}`;
 }
 
 /**

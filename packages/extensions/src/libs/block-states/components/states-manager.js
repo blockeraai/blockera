@@ -112,6 +112,12 @@ const StatesManager: ComponentType<any> = memo(
 				return initialValue;
 			}
 
+			if (!isInnerBlock(currentBlock)) {
+				setCurrentState('normal');
+			} else {
+				setInnerBlockState('normal');
+			}
+
 			return {
 				normal: {
 					...defaultStates.normal,
@@ -180,6 +186,7 @@ const StatesManager: ComponentType<any> = memo(
 					value: clonedRecievedValue,
 				});
 			},
+			// eslint-disable-next-line
 			[states]
 		);
 
