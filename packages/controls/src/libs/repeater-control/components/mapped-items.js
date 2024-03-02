@@ -6,11 +6,16 @@ import type { MixedElement } from 'react';
 import { useContext, useCallback, useMemo } from '@wordpress/element';
 
 /**
+ * Publisher dependencies
+ */
+import { isUndefined } from '@publisher/utils';
+
+/**
  * Internal dependencies
  */
 import RepeaterItem from './repeater-item';
 import { RepeaterContext } from '../context';
-import { isUndefined } from '@publisher/utils';
+import { getSortedRepeater } from '../utils';
 import { Button } from '@publisher/components';
 
 const MappedItems = (): MixedElement => {
@@ -21,13 +26,10 @@ const MappedItems = (): MixedElement => {
 	} = useContext(RepeaterContext);
 
 	// Sorting repeater items based on "order" property value of each item.
-	const sortedRepeaterItems = useMemo(() => {
-		const dataArray = Object.entries(items);
-
-		dataArray.sort(([, a], [, b]) => (a.order || 0) - (b.order || 0));
-
-		return dataArray;
-	}, [items]);
+	const sortedRepeaterItems = useMemo(
+		() => getSortedRepeater(items),
+		[items]
+	);
 
 	const render = useCallback(() => {
 		const getUniqueId = (itemId: string | number) =>

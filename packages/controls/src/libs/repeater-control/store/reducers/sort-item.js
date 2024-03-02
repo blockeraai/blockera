@@ -1,44 +1,57 @@
+// @flow
+
 /**
  * Publisher dependencies
  */
 import { update } from '@publisher/data-extractor';
-import { arraySortItems, isObject } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
-import { isQuery, getControlInfo, hasRepeaterId } from './utils';
+import { hasRepeaterId } from './utils';
 
-function handleActionIncludeRepeaterId(controlValue, action) {
-	//mean: repeaterId of action should like this pattern /\w+\.\w+|\[.*]/gi
-	if (isQuery(action)) {
-		return update(
-			controlValue,
-			action.repeaterId,
-			arraySortItems({
-				args: action.items,
-				toIndex: action.toIndex,
-				fromIndex: action.fromIndex,
-			})
-		);
+function sortingRepeater(
+	[itemId, item]: [string, Object],
+	action: Object
+): [string, Object] {
+	const fromOrder = action.items[action.toIndex].order;
+	const toOrder = action.items[action.fromIndex].order;
+
+	if (action.fromIndex === itemId) {
+		return [
+			itemId,
+			{
+				...item,
+				order: fromOrder,
+			},
+		];
+	}
+	if (action.toIndex === itemId) {
+		return [
+			itemId,
+			{
+				...item,
+				order: toOrder,
+			},
+		];
 	}
 
-	return {
-		...controlValue,
-		[action.repeaterId]: arraySortItems({
-			args: action.items,
-			toIndex: action.toIndex,
-			fromIndex: action.fromIndex,
-		}),
-	};
+	return [itemId, item];
 }
 
-export function sortItem(state = {}, action) {
-	const controlInfo = getControlInfo(state, action);
+function handleActionIncludeRepeaterId(
+	controlValue: Object,
+	action: Object
+): Object {
+	const value = Object.entries(action.items).map((arr) =>
+		sortingRepeater(arr, action)
+	);
 
-	if (!isObject(controlInfo)) {
-		return state;
-	}
+	return update(controlValue, action.repeaterId, Object.fromEntries(value));
+}
+
+export function sortItem(state: Object = {}, action: Object): Object {
+	const controlInfo = state[action.controlId];
 
 	// state management by action include repeaterId
 	if (hasRepeaterId(controlInfo.value, action)) {
@@ -51,16 +64,16 @@ export function sortItem(state = {}, action) {
 		};
 	}
 
+	const value = Object.entries(action.items).map((arr) =>
+		sortingRepeater(arr, action)
+	);
+
 	//by default behavior of "sortRepeaterItem" action
 	return {
 		...state,
 		[action.controlId]: {
 			...state[action.controlId],
-			value: arraySortItems({
-				args: action.items,
-				toIndex: action.toIndex,
-				fromIndex: action.fromIndex,
-			}),
+			value: Object.fromEntries(value),
 		},
 	};
 }

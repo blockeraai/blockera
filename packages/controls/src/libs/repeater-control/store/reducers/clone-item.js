@@ -1,18 +1,13 @@
 /**
  * Publisher dependencies
  */
-import { isFunction, isObject } from '@publisher/utils';
+import { isFunction } from '@publisher/utils';
 import { prepare, update } from '@publisher/data-extractor';
 
 /**
  * Internal dependencies
  */
-import {
-	generatedDetailsId,
-	getControlInfo,
-	hasLimitation,
-	hasRepeaterId,
-} from './utils';
+import { generatedDetailsId, hasLimitation, hasRepeaterId } from './utils';
 
 function handleActionIncludeRepeaterId(controlValue, action) {
 	const targetRepeater = prepare(action.repeaterId, controlValue);
@@ -39,7 +34,7 @@ function handleActionIncludeRepeaterId(controlValue, action) {
 		targetRepeater[action.itemId].isSelected = false;
 	}
 
-	let itemId = itemsCount + '';
+	let itemId = itemsCount + '-clone';
 
 	if ('function' === typeof action.itemIdGenerator) {
 		itemId = action.itemIdGenerator(itemsCount);
@@ -54,11 +49,7 @@ function handleActionIncludeRepeaterId(controlValue, action) {
 }
 
 export function cloneItem(state = {}, action) {
-	const controlInfo = getControlInfo(state, action);
-
-	if (!isObject(controlInfo)) {
-		return state;
-	}
+	const controlInfo = state[action.controlId];
 
 	// state management by action include repeaterId
 	if (hasRepeaterId(controlInfo.value, action)) {

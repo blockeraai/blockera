@@ -8,11 +8,6 @@ import { useDispatch, useSelect } from '@wordpress/data';
 import { createContext, useEffect } from '@wordpress/element';
 
 /**
- * Publisher dependencies
- */
-import { isEquals } from '@publisher/utils';
-
-/**
  * Internal dependencies
  */
 import { STORE_NAME } from '../store';
@@ -83,21 +78,8 @@ export const ControlContextProvider = ({
 		// onChange,
 		// valueCleanup,
 		hasSideEffect,
-		name: controlId,
 		value: currentValue,
 	} = controlInfo;
-
-	// Assume recieved control value from outside isn't equals with current value.
-	// exclude control with has side effect because modified control value inside callback of that. so prevent re-rendering with this way!
-	useEffect(() => {
-		if (!isEquals(currentValue, value) && !hasSideEffect) {
-			modifyControlValue({
-				controlId,
-				value: currentValue,
-			});
-		}
-		// eslint-disable-next-line
-	}, [currentValue]);
 
 	// Assume ControlContextProvider has side effect.
 	// side effect: when changes currentBlock, currentState, and currentInnerBlockState it should fire useEffect callback

@@ -50,6 +50,6 @@ export function repeaterReducer(state: Object = {}, action: Object): Object {
 	}
 }
 
-export default combineReducers({
+export default (combineReducers({
 	repeaterReducer,
-});
+}): Object);

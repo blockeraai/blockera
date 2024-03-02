@@ -1,26 +1,31 @@
 /**
  * Publisher dependencies
  */
-import { update } from '@publisher/data-extractor';
-import { isObject, isEquals } from '@publisher/utils';
+import { isEquals } from '@publisher/utils';
+import { update, prepare } from '@publisher/data-extractor';
 
 /**
  * Internal dependencies
  */
-import { getControlInfo, hasRepeaterId, generatedDetailsId } from './utils';
+import { hasRepeaterId, generatedDetailsId } from './utils';
 
 function handleActionIncludeRepeaterId(controlValue, action) {
+	const targetRepeater = prepare(action.repeaterId, controlValue);
+
+	if (
+		targetRepeater &&
+		isEquals(targetRepeater[action.itemId], action.value)
+	) {
+		return state;
+	}
+
 	return update(controlValue, action.repeaterId, {
 		[action.itemId]: action.value,
 	});
 }
 
 export function changeItem(state = {}, action) {
-	const controlInfo = getControlInfo(state, action);
-
-	if (!isObject(controlInfo)) {
-		return state;
-	}
+	const controlInfo = state[action.controlId];
 
 	// state management by action include repeaterId
 	if (hasRepeaterId(controlInfo.value, action, false)) {
@@ -31,6 +36,10 @@ export function changeItem(state = {}, action) {
 				value: handleActionIncludeRepeaterId(controlInfo.value, action),
 			},
 		};
+	}
+
+	if (isEquals(controlInfo.value[action.itemId], action.value)) {
+		return state;
 	}
 
 	const clonedPrevValue = { ...controlInfo.value };
