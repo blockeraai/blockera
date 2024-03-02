@@ -435,12 +435,6 @@ export const Cells = ({
 		setNewMergedArea(null);
 	};
 
-	const gridTemplateArea = calcGridTemplateAreas({
-		gridColumns: publisherGridColumns,
-		gridRows: publisherGridRows,
-		gridAreas: publisherGridAreas,
-	});
-
 	return publisherGridAreas?.map((item) => {
 		const isHighlighted = calcCoordinates(newMergedArea)?.find(
 			(coord) =>
@@ -450,47 +444,45 @@ export const Cells = ({
 				coord['row-end'] === item['row-end']
 		);
 		return (
-			gridTemplateArea.flat().includes(item.name) && (
-				<div
-					className={`cell ${
-						(`${item['column-start']}/${item['column-end']}` ===
-							hoveredColumn ||
-							`${item['row-start']}/${item['row-end']}` ===
-								hoveredRow) &&
-						'hovered'
-					}`}
-					key={item.id}
-					onClick={() => setActiveAreaId(item.id)}
-					style={{
-						gridColumn: `${item['column-start']}/${item['column-end']}`,
-						gridRow: `${item['row-start']}/${item['row-end']}`,
-						gridArea: item.name,
-						position: 'relative',
-						backgroundColor: isHighlighted
-							? 'rgba(20, 126, 184, 0.7)'
-							: 'rgba(20, 126, 184, 0.1)',
-						minHeight: '50px',
-					}}
-					data-id={item.id}
-				>
-					<p style={{ pointerEvents: 'none' }}>
-						{item.name?.replace(/[^-\.0-9]/g, '')}
-					</p>
+			<div
+				className={`cell ${
+					`${item['column-start']}/${item['column-end']}` ===
+						hoveredColumn ||
+					`${item['row-start']}/${item['row-end']}` === hoveredRow
+						? 'hovered'
+						: ''
+				}`}
+				key={item.id}
+				onClick={() => setActiveAreaId(item.id)}
+				style={{
+					gridColumn: `${item['column-start']}/${item['column-end']}`,
+					gridRow: `${item['row-start']}/${item['row-end']}`,
+					gridArea: item.name,
+					position: 'relative',
+					backgroundColor: isHighlighted
+						? 'rgba(20, 126, 184, 0.7)'
+						: 'rgba(20, 126, 184, 0.1)',
+					//	minHeight: '50px',
+				}}
+				data-id={item.id}
+			>
+				<p style={{ pointerEvents: 'none' }}>
+					{item.name?.replace(/[^-\.0-9]/g, '')}
+				</p>
 
-					{activeAreaId === item.id && (
-						<AreaMergeHandler
-							setTargetAreaId={setTargetAreaId}
-							activeAreaId={activeAreaId}
-							id={item.id}
-							mergeArea={mergeArea}
-							setVirtualMergedAreas={setVirtualMergedAreas}
-							setVirtualTargetAreaId={setVirtualTargetAreaId}
-							createVirtualAreas={createVirtualAreas}
-							highlightHandler={highlightHandler}
-						/>
-					)}
-				</div>
-			)
+				{activeAreaId === item.id && (
+					<AreaMergeHandler
+						setTargetAreaId={setTargetAreaId}
+						activeAreaId={activeAreaId}
+						id={item.id}
+						mergeArea={mergeArea}
+						setVirtualMergedAreas={setVirtualMergedAreas}
+						setVirtualTargetAreaId={setVirtualTargetAreaId}
+						createVirtualAreas={createVirtualAreas}
+						highlightHandler={highlightHandler}
+					/>
+				)}
+			</div>
 		);
 	});
 };
