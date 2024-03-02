@@ -52,7 +52,8 @@ export const GapHandler = ({
 						...publisherGridGap,
 						lock: false,
 						rows: `${newValue}${rowGapUnit || 'px'}`,
-						columns: publisherGridGap.gap,
+						columns:
+							publisherGridGap.columns || publisherGridGap.gap,
 					},
 					{
 						ref,
@@ -66,7 +67,7 @@ export const GapHandler = ({
 						...publisherGridGap,
 						lock: false,
 						columns: `${newValue}${colGapUnit || 'px'}`,
-						rows: publisherGridGap.gap,
+						rows: publisherGridGap.rows || publisherGridGap.gap,
 					},
 					{
 						ref,
