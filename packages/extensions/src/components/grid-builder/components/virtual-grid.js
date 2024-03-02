@@ -418,12 +418,12 @@ export const VirtualGrid = ({
 									backgroundColor: isHighlighted
 										? 'rgba(20, 126, 184, 0.7)'
 										: 'rgba(20, 126, 184, 0.25)',
-									width: '97%',
-									height: '97%',
+									width: '96%',
+									height: '90%',
 									display: 'inline-block',
 									zIndex: '1999',
-									justifySelf: 'end',
-									alignSelf: 'end',
+									justifySelf: 'center',
+									alignSelf: 'center',
 								}}
 							></div>
 						);

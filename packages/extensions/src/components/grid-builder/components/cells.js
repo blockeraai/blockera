@@ -451,7 +451,7 @@ export const Cells = ({
 					`${item['row-start']}/${item['row-end']}` === hoveredRow
 						? 'hovered'
 						: ''
-				}`}
+				} ${isHighlighted ? 'highlighted' : ''}`}
 				key={item.id}
 				onClick={() => setActiveAreaId(item.id)}
 				style={{
@@ -459,10 +459,6 @@ export const Cells = ({
 					gridRow: `${item['row-start']}/${item['row-end']}`,
 					gridArea: item.name,
 					position: 'relative',
-					backgroundColor: isHighlighted
-						? 'rgba(20, 126, 184, 0.7)'
-						: 'rgba(20, 126, 184, 0.1)',
-					//	minHeight: '50px',
 				}}
 				data-id={item.id}
 			>
