@@ -14,7 +14,7 @@ import { hasSameProps } from '@publisher/utils';
  * Internal dependencies
  */
 import type { TBlockProps } from './types';
-import { isInnerBlock } from '../components';
+import { isInnerBlock } from '../components/utils';
 // import { detailedDiff } from 'deep-object-diff';
 
 /**

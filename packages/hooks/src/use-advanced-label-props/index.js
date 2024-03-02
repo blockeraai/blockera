@@ -24,7 +24,7 @@ import type {
 	CalculatedAdvancedLabelProps,
 	AdvancedLabelHookProps,
 } from './types';
-import { isInnerBlock } from '@publisher/extensions/src/components';
+import { isInnerBlock } from '@publisher/extensions/src/components/utils';
 import { useBlockContext } from '@publisher/extensions/src/hooks/context';
 
 export const useAdvancedLabelProps = ({
@@ -48,11 +48,11 @@ export const useAdvancedLabelProps = ({
 		currentInnerBlockState,
 	} = useSelect((select) => {
 		const {
-			getExtensionCurrentBlock,
-			getExtensionInnerBlockState,
-			getExtensionCurrentBlockState,
-			getExtensionCurrentBlockStateBreakpoint,
-		} = select('publisher-core/extensions');
+			getExtensionCurrentBlock = () => 'master',
+			getExtensionInnerBlockState = () => 'normal',
+			getExtensionCurrentBlockState = () => 'normal',
+			getExtensionCurrentBlockStateBreakpoint = () => 'laptop',
+		} = select('publisher-core/extensions') || {};
 
 		return {
 			currentBlock: getExtensionCurrentBlock(),

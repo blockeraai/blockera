@@ -28,7 +28,7 @@ import MobileLandscapeIcon from './icons/mobile-landscape';
 import LaptopIcon from './icons/laptop';
 import ExtraLargeIcon from './icons/extra-large';
 import LargeIcon from './icons/large';
-import { isInnerBlock } from '../../components';
+import { isInnerBlock } from '../../components/utils';
 
 export const getStateInfo = (state: TStates | number): StateTypes => {
 	return 'number' === typeof state

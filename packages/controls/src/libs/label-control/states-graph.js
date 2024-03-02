@@ -9,12 +9,11 @@ import { select } from '@wordpress/data';
  * Publisher dependencies
  */
 import { isEmpty, isEquals, isNull, isUndefined } from '@publisher/utils';
-import {
-	getBlockStates,
-	type StateGraph,
-	type StateGraphItem,
-} from '@publisher/extensions/src/libs/block-states';
-
+import { getBlockStates } from '@publisher/extensions/src/libs/block-states/store/selector';
+import type {
+	StateGraph,
+	StateGraphItem,
+} from '@publisher/extensions/src/libs/block-states/types';
 /**
  * Internal dependencies
  */
