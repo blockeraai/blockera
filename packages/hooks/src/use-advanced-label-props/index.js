@@ -48,11 +48,11 @@ export const useAdvancedLabelProps = ({
 		currentInnerBlockState,
 	} = useSelect((select) => {
 		const {
-			getExtensionCurrentBlock,
-			getExtensionInnerBlockState,
-			getExtensionCurrentBlockState,
-			getExtensionCurrentBlockStateBreakpoint,
-		} = select('publisher-core/extensions');
+			getExtensionCurrentBlock = () => 'master',
+			getExtensionInnerBlockState = () => 'normal',
+			getExtensionCurrentBlockState = () => 'normal',
+			getExtensionCurrentBlockStateBreakpoint = () => 'laptop',
+		} = select('publisher-core/extensions') || {};
 
 		return {
 			currentBlock: getExtensionCurrentBlock(),
