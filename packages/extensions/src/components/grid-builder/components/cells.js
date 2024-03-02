@@ -1,9 +1,9 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * External Dependencies
  */
-import { calcGridTemplateAreas } from '../../../libs/layout/utils';
+import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
@@ -18,6 +18,7 @@ import {
 	calcReMergedAreas,
 	uId,
 } from '../utils';
+import type { TCellsProps } from '../types';
 
 export const Cells = ({
 	hoveredColumn,
@@ -33,7 +34,7 @@ export const Cells = ({
 	createVirtualAreas,
 	newMergedArea,
 	setNewMergedArea,
-}) => {
+}: TCellsProps): MixedElement => {
 	const { getAttributes, handleOnChangeAttributes } = useBlockContext();
 
 	const { publisherGridColumns, publisherGridRows, publisherGridAreas } =
@@ -50,7 +51,7 @@ export const Cells = ({
 	const virtualTargetArea = virtualMergedAreas.find(
 		(item) => item.id === virtualTargetAreaId
 	);
-	const highlightHandler = (direction) => {
+	const highlightHandler = (direction: string) => {
 		if (!virtualTargetArea && (!targetArea || !activeArea)) return null;
 
 		switch (direction) {
@@ -115,7 +116,7 @@ export const Cells = ({
 		}
 	};
 
-	const mergeArea = (direction) => {
+	const mergeArea = (direction: string) => {
 		if (
 			activeAreaId !== virtualTargetArea?.parentId &&
 			(!newMergedArea ||
@@ -323,9 +324,11 @@ export const Cells = ({
 
 			//////////
 
-			const newMergedAreas = overlapAreas.map((item) => {
-				return calcReMergedAreas(item, updatedNewMergedArea);
-			});
+			const newMergedAreas = overlapAreas
+				.map((item) => {
+					return calcReMergedAreas(item, updatedNewMergedArea);
+				})
+				.flat();
 
 			const overlapAreasIds = overlapAreas.map((item) => item?.id);
 
@@ -396,10 +399,12 @@ export const Cells = ({
 			publisherGridAreas,
 			targetAreaId,
 		});
-
-		const updatedOverlapAreas = overlapAreas?.map((item) => {
-			return calcReMergedAreas(item, newMergedArea);
-		});
+		//	console.log(overlapAreas);
+		const updatedOverlapAreas = overlapAreas
+			?.map((item) => {
+				return calcReMergedAreas(item, newMergedArea);
+			})
+			.flat();
 
 		const overlapAreasIds = updatedOverlapAreas.map((item) => item?.id);
 		const filteredAreas = publisherGridAreas.filter(

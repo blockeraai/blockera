@@ -1,12 +1,26 @@
 // @flow
 
 /**
+ * External Dependencies
+ */
+import type { MixedElement } from 'react';
+
+/**
  * Publisher dependencies
  */
 import { useDragValue } from '@publisher/utils';
 import { useBlockContext } from '../../../hooks';
 
-export const GapHandler = ({ type, style, styles }) => {
+/**
+ * Internal Dependencies
+ */
+import type { TGapHandlerProps } from '../types';
+
+export const GapHandler = ({
+	type,
+	style,
+	styles,
+}: TGapHandlerProps): MixedElement => {
 	const { handleOnChangeAttributes, getAttributes } = useBlockContext();
 	const { publisherGridGap } = getAttributes();
 

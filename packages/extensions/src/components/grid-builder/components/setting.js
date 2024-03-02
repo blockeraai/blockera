@@ -4,6 +4,7 @@
  * External dependencies
  */
 import { __, sprintf } from '@wordpress/i18n';
+import type { MixedElement } from 'react';
 
 /**
  * publisher dependencies
@@ -24,6 +25,7 @@ import { generateExtensionId } from '../../../libs/utils';
  */
 import { default as GridIcon } from '../icons/grid-column';
 import { generateAreas } from '../utils';
+import type { TSizeSettingProps } from '../types';
 
 export const SizeSetting = ({
 	item,
@@ -31,7 +33,7 @@ export const SizeSetting = ({
 	popoverTitle,
 	items,
 	attributeId,
-}) => {
+}: TSizeSettingProps): MixedElement => {
 	const { handleOnChangeAttributes, getAttributes } = useBlockContext();
 
 	const { publisherGridColumns, publisherGridRows, publisherGridAreas } =
@@ -113,7 +115,7 @@ export const SizeSetting = ({
 				value={{
 					name: generateExtensionId(block, 'grid-sizing-mode'),
 					value: item,
-					attributeId,
+					attribute: attributeId,
 					blockName: block.blockName,
 				}}
 			>

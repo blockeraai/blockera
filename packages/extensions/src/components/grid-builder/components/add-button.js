@@ -1,6 +1,11 @@
 // @flow
 
 /**
+ * External dependencies
+ */
+import type { MixedElement } from 'react';
+
+/**
  * Publisher dependencies
  */
 import { Button } from '@publisher/components';
@@ -9,6 +14,7 @@ import { Button } from '@publisher/components';
  * Internal dependencies
  */
 import AddIcon from '../icons/add';
+import type { TAddButtonProps } from '../types';
 
 export const AddButton = ({
 	type,
@@ -16,7 +22,7 @@ export const AddButton = ({
 	onClick,
 	columnGap,
 	rowGap,
-}) => {
+}: TAddButtonProps): MixedElement => {
 	return (
 		<Button
 			size="extra-small"

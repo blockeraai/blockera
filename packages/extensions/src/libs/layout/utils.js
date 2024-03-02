@@ -5,8 +5,8 @@ export const calcGridTemplateAreas = ({
 	gridRows,
 	gridAreas,
 }: {
-	gridColumns: Array<Object>,
-	gridRows: Array<Object>,
+	gridColumns: Object,
+	gridRows: Object,
 	gridAreas: Array<Object>,
 }): Array<Array> => {
 	const gridTemplateAreas = ([]: any);

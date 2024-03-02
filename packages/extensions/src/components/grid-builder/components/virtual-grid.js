@@ -4,11 +4,12 @@
  * External dependencies
  */
 import { useState, useEffect } from '@wordpress/element';
-
+import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
 import { LayoutStyles } from '../../../libs/layout';
+import type { TBlockProps } from '../../../libs/types';
 
 /**
  * Internal dependencies
@@ -24,7 +25,11 @@ import {
 import { useBlockContext, useStoreSelectors } from '../../../hooks';
 import { AddButton, GridSizeHandler, Cells, GapHandler } from './index';
 
-export const VirtualGrid = ({ block }) => {
+export const VirtualGrid = ({
+	block,
+}: {
+	block: TBlockProps,
+}): MixedElement => {
 	const {
 		handleOnChangeAttributes,
 		getAttributes,
@@ -140,7 +145,7 @@ export const VirtualGrid = ({ block }) => {
 	const highlightedAreas = calcCoordinates(newMergedArea);
 
 	const createVirtualAreas = () => {
-		const virtualMergedAreas = [];
+		const virtualMergedAreas = ([]: any);
 		publisherGridAreas.forEach((item) => {
 			if (item.mergedArea) {
 				virtualMergedAreas.push(...item.coordinates);

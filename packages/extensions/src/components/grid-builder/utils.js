@@ -25,7 +25,10 @@ export const resizeHandleClasses: {
 	topRight: 'handle right-handle top-handle',
 };
 
-export const extractCssValue = (property, generatedStyles) => {
+export const extractCssValue = (
+	property: string,
+	generatedStyles: string
+): string => {
 	const propertyIndex = generatedStyles.search(property);
 	const slicedProperty = generatedStyles.slice(propertyIndex);
 	const colonIndex = slicedProperty.search(': ');
@@ -34,7 +37,15 @@ export const extractCssValue = (property, generatedStyles) => {
 	return cssValue;
 };
 
-export const generateAreas = ({ gridRows, gridColumns, prevGridAreas }) => {
+export const generateAreas = ({
+	gridRows,
+	gridColumns,
+	prevGridAreas,
+}: {
+	gridRows: Array<Object>,
+	gridColumns: Array<Object>,
+	prevGridAreas: Array<Object>,
+}): Array<Object> => {
 	const newGridAreas = ([]: any);
 	for (let i = 0; i < gridRows.length; i++) {
 		newGridAreas.push([]);
@@ -118,7 +129,7 @@ export const generateAreas = ({ gridRows, gridColumns, prevGridAreas }) => {
 	});
 };
 
-export const getUniqueArrayOfObjects = (arr) => {
+export const getUniqueArrayOfObjects = (arr: Array<Object>): Array<Object> => {
 	const uniqueIds = [...new Set(arr.map((item) => item?.id))];
 
 	const uniqueArr = [];
@@ -129,7 +140,7 @@ export const getUniqueArrayOfObjects = (arr) => {
 	return uniqueArr.filter((item) => item);
 };
 
-export const calcCoordinates = (area) => {
+export const calcCoordinates = (area: Object | null): Array<Object> => {
 	if (!area) return [];
 	const coordinates = [];
 
@@ -180,7 +191,7 @@ export const calcOverlapAreas = ({
 	return overlapAreas;
 };
 
-export const updateArrayCoordinates = (array) => {
+export const updateArrayCoordinates = (array: Array<Object>): Array<Object> => {
 	return array
 		.map((item) => {
 			if (!item) return null;
@@ -194,7 +205,7 @@ export const updateArrayCoordinates = (array) => {
 		.filter((item) => item);
 };
 
-export const calcReMergedAreas = (item, updatedArea) => {
+export const calcReMergedAreas = (item: Object, updatedArea: Object): any => {
 	//calculate affected merged areas based on new merged area
 	if (!updatedArea) return null;
 
@@ -270,5 +281,5 @@ export const calcReMergedAreas = (item, updatedArea) => {
 	return item;
 };
 
-export const uId = () =>
+export const uId = (): number =>
 	new Date().getMilliseconds() + Number(Math.random().toFixed(6));

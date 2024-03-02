@@ -14,7 +14,7 @@ import { Button } from '@publisher/components';
 /**
  * Internal dependencies
  */
-import type { GridBuilderProps } from './types';
+import type { TGridBuilderProps } from './types';
 import { useBlockContext } from '../../hooks';
 import { VirtualGrid } from './components';
 import EditGridIcon from './icons/edit-grid';
@@ -22,10 +22,10 @@ import EditGridIcon from './icons/edit-grid';
 export const GridBuilder = ({
 	children,
 	block,
-}: GridBuilderProps): MixedElement | null => {
+}: TGridBuilderProps): MixedElement | null => {
 	const { isOpenGridBuilder, setOpenGridBuilder } = useBlockContext();
 
-	const selectedBlock: HTMLElement | null =
+	const selectedBlock: HTMLElement | any =
 		document
 			.querySelector('iframe[name="editor-canvas"]')
 			// $FlowFixMe

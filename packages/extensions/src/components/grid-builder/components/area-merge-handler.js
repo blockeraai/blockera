@@ -5,12 +5,14 @@
  */
 import { Rnd } from 'react-rnd';
 import { useState, useRef } from '@wordpress/element';
+//import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
  */
 import { resizeHandleClasses } from '../utils';
 import { useBlockContext } from '../../../hooks';
+import type { TAreaMergeHandlerProps } from '../types';
 
 export const AreaMergeHandler = ({
 	id,
@@ -21,7 +23,7 @@ export const AreaMergeHandler = ({
 	setVirtualTargetAreaId,
 	createVirtualAreas,
 	highlightHandler,
-}) => {
+}: TAreaMergeHandlerProps): any => {
 	const { isOpenGridBuilder } = useBlockContext();
 
 	const [position, setPosition] = useState({ left: 0, top: 0 });
@@ -55,7 +57,13 @@ export const AreaMergeHandler = ({
 		setVirtualMergedAreas([]);
 	};
 
-	const onResize = (e, direction, ref, delta, _position) => {
+	const onResize = (
+		e: Object,
+		direction: string,
+		ref: HTMLElement,
+		delta: Object,
+		_position: Object
+	) => {
 		createVirtualAreas();
 		highlightHandler(direction);
 		const iframe = document.querySelector('iframe[name="editor-canvas"]');
@@ -73,7 +81,7 @@ export const AreaMergeHandler = ({
 			setVirtualTargetAreaId(Number(targetElement.dataset.virtualId));
 		}
 
-		if (targetElement?.getAttribute('data-id')) {
+		if (targetElement !== null && targetElement?.getAttribute('data-id')) {
 			setTargetAreaId(Number(targetElement.getAttribute('data-id')));
 		}
 
@@ -95,7 +103,7 @@ export const AreaMergeHandler = ({
 		}
 	};
 
-	const onResizeStop = (e, direction) => {
+	const onResizeStop = (e: Object, direction: string) => {
 		mergeArea(direction);
 
 		setDimension({

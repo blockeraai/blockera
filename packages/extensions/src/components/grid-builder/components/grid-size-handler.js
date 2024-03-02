@@ -4,6 +4,7 @@
  * External dependencies
  */
 import { useState } from '@wordpress/element';
+//import type { MixedElement } from 'react';
 
 /**
  * Publisher Dependencies
@@ -17,6 +18,8 @@ import { useBlockContext } from '../../../hooks';
 import SizeHandler from '../icons/size-handler';
 import { SizeSetting } from './setting';
 import EditIcon from '../icons/edit';
+import type { TGridSizeHandlerProps } from '../types';
+
 export const GridSizeHandler = ({
 	type,
 	attribute,
@@ -24,7 +27,7 @@ export const GridSizeHandler = ({
 	block,
 	attributeId,
 	hovered,
-}) => {
+}: TGridSizeHandlerProps): any => {
 	const { handleOnChangeAttributes } = useBlockContext();
 
 	const [isSettingOpen, setIsSettingOpen] = useState(false);
@@ -40,11 +43,15 @@ export const GridSizeHandler = ({
 
 	const { onDragStart } = useDragValue({
 		value:
-			changedItem && changedItem['sizing-mode'] === 'min/max'
+			changedItem !== undefined &&
+			changedItem['sizing-mode'] === 'min/max'
 				? Number(changedItem['max-size']?.replace(/[^-\.0-9]/g, ''))
 				: Number(changedItem?.size?.replace(/[^-\.0-9]/g, '')) || 0,
 		setValue: (newValue, ref) => {
-			if (changedItem['sizing-mode'] === 'min/max') {
+			if (
+				changedItem !== undefined &&
+				changedItem['sizing-mode'] === 'min/max'
+			) {
 				handleOnChangeAttributes(
 					attributeId,
 					{
@@ -66,7 +73,7 @@ export const GridSizeHandler = ({
 						ref,
 					}
 				);
-			} else {
+			} else if (changedItem !== undefined) {
 				handleOnChangeAttributes(
 					attributeId,
 					{
@@ -199,13 +206,11 @@ export const GridSizeHandler = ({
 				</div>
 				{isSettingOpen && currentItemId === item.id && (
 					<SizeSetting
-						id={item.id}
 						item={item}
 						block={block}
 						popoverTitle={type}
 						items={attribute}
 						attributeId={attributeId}
-						itemIndex={i}
 					/>
 				)}
 			</>
