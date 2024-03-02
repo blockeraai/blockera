@@ -82,6 +82,63 @@ describe('repeater control component testing', () => {
 				).to.have.length(7);
 			});
 		});
+		it('should add new item into repeater selectable', () => {
+			const name = nanoid();
+
+			cy.withDataProvider({
+				component: (
+					<RepeaterControl
+						addNewButtonLabel="Add New Items"
+						repeaterItemChildren={() => <RepeaterItemChildren />}
+						defaultRepeaterItemValue={{
+							selectable: true,
+							isOpen: true,
+						}}
+					/>
+				),
+				value: {},
+				store: STORE_NAME,
+				name,
+			});
+			cy.multiClick(`[aria-label="Add New Items"]`, 7);
+
+			cy.getByDataCy('publisher-repeater-control')
+				.find('[data-cy="repeater-item"]')
+				.should('have.length', 7);
+
+			// Check data provider value!
+			cy.then(() => {
+				expect(
+					Object.values(getControlValue(name, STORE_NAME))
+				).to.have.length(7);
+			});
+		});
+		it('should selected repeater first item', () => {
+			const name = nanoid();
+
+			cy.withDataProvider({
+				component: (
+					<RepeaterControl
+						addNewButtonLabel="Add New Items"
+						repeaterItemChildren={() => <RepeaterItemChildren />}
+						defaultRepeaterItemValue={{
+							selectable: true,
+							isOpen: false,
+						}}
+					/>
+				),
+				value: {
+					0: {
+						isSelected: true,
+					},
+				},
+				store: STORE_NAME,
+				name,
+			});
+			cy.getByDataCy('control-group')
+				.first()
+				.should('have.class', 'is-selected-item');
+		});
 		it('should render delete item', () => {
 			const name = nanoid();
 			cy.withDataProvider({
