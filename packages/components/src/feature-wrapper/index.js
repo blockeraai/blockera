@@ -7,7 +7,7 @@ import type { Node } from 'react';
 /**
  * Publisher dependencies
  */
-import { useBlockContext } from '@publisher/extensions/src/hooks';
+import { useBlockContext } from '@publisher/extensions/src/hooks/context';
 
 /**
  * Internal dependencies

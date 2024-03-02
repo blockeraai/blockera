@@ -21,7 +21,7 @@ import type {
 	TStatesLabel,
 } from '../types';
 import getBreakpoints from '../default-breakpoints';
-import { isInnerBlock } from '../../../components';
+import { isInnerBlock } from '../../../components/utils';
 
 export type State = {
 	type: TStates,

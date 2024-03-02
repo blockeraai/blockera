@@ -24,7 +24,7 @@ import type {
 	CalculatedAdvancedLabelProps,
 	AdvancedLabelHookProps,
 } from './types';
-import { isInnerBlock } from '@publisher/extensions/src/components';
+import { isInnerBlock } from '@publisher/extensions/src/components/utils';
 import { useBlockContext } from '@publisher/extensions/src/hooks/context';
 
 export const useAdvancedLabelProps = ({

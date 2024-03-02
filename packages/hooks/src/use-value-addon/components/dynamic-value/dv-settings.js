@@ -16,8 +16,8 @@ import {
 	ControlContextProvider,
 	RendererControl,
 } from '@publisher/controls';
-import { generateExtensionId } from '@publisher/extensions';
-import { useBlockContext } from '@publisher/extensions/src/hooks';
+import { generateExtensionId } from '@publisher/extensions/src/libs/utils';
+import { useBlockContext } from '@publisher/extensions/src/hooks/context';
 import { STORE_NAME } from '@publisher/core-data';
 import { isUndefined } from '@publisher/utils';
 
