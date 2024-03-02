@@ -185,7 +185,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 				if (isRepeaterControl()) {
 					const mappedRepeaterValue = (items: Object): Object => {
 						if (isEmpty(items)) {
-							return [];
+							return {};
 						}
 
 						Object.entries(items).forEach(([itemId, item]) => {

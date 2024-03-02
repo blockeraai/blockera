@@ -60,10 +60,10 @@ export const ControlContextProvider = ({
 	const { currentBlock, currentState, currentInnerBlockState } = useSelect(
 		(select) => {
 			const {
-				getExtensionCurrentBlock,
-				getExtensionInnerBlockState,
-				getExtensionCurrentBlockState,
-			} = select('publisher-core/extensions');
+				getExtensionCurrentBlock = () => 'master',
+				getExtensionInnerBlockState = () => 'normal',
+				getExtensionCurrentBlockState = () => 'normal',
+			} = select('publisher-core/extensions') || {};
 
 			return {
 				currentBlock: getExtensionCurrentBlock(),
