@@ -247,7 +247,7 @@ describe('repeater control component testing', () => {
 				},
 				store: STORE_NAME,
 			});
-			cy.getByDataCy('repeater-item').click();
+
 			cy.get('input[type="text"]').should('have.value', 'john doe');
 		});
 		it('should display custom header icons', () => {
@@ -354,7 +354,6 @@ describe('repeater control component testing', () => {
 				},
 				store: STORE_NAME,
 			});
-			cy.getByDataCy('repeater-item').first().click();
 			cy.get('.publisher-control-group-popover').should(
 				'have.class',
 				'custom-class'
@@ -379,7 +378,7 @@ describe('repeater control component testing', () => {
 				},
 				store: STORE_NAME,
 			});
-			cy.getByDataCy('repeater-item').click();
+
 			cy.get('input[type="text"]').should('have.value', 'john doe');
 		});
 		it('should display more className', () => {
@@ -554,7 +553,7 @@ describe('repeater control component testing', () => {
 			cy.then(() => {
 				const value = {
 					0: {
-						isOpen: false,
+						isOpen: true,
 						display: true,
 						cloneable: true,
 						isVisible: true,
@@ -565,7 +564,7 @@ describe('repeater control component testing', () => {
 						order: 0,
 					},
 					1: {
-						isOpen: false,
+						isOpen: true,
 						display: true,
 						cloneable: true,
 						isVisible: true,

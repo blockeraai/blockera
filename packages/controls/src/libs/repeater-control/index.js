@@ -31,7 +31,7 @@ import type { RepeaterControlProps, TRepeaterDefaultStateProps } from './types';
 import LabelControlContainer from '../label-control/label-control-container';
 
 export const defaultItemValue = {
-	isOpen: false,
+	isOpen: true,
 	display: true,
 	cloneable: true,
 	isVisible: true,
