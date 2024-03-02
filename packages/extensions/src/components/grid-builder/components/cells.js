@@ -59,12 +59,14 @@ export const Cells = ({
 				{
 					const updatedArea = {
 						...activeArea,
-						'row-end': virtualTargetArea
-							? virtualTargetArea['row-end']
-							: targetArea['row-end'],
-						'column-end': virtualTargetArea
-							? virtualTargetArea['column-end']
-							: targetArea['column-end'],
+						'row-end':
+							!targetAreaId && virtualTargetArea
+								? virtualTargetArea['row-end']
+								: targetArea['row-end'],
+						'column-end':
+							!targetAreaId && virtualTargetArea
+								? virtualTargetArea['column-end']
+								: targetArea['column-end'],
 					};
 
 					setNewMergedArea(updatedArea);
@@ -74,12 +76,14 @@ export const Cells = ({
 				{
 					const updatedArea = {
 						...activeArea,
-						'row-end': virtualTargetArea
-							? virtualTargetArea['row-end']
-							: targetArea['row-end'],
-						'column-start': virtualTargetArea
-							? virtualTargetArea['column-start']
-							: targetArea['column-start'],
+						'row-end':
+							!targetAreaId && virtualTargetArea
+								? virtualTargetArea['row-end']
+								: targetArea['row-end'],
+						'column-start':
+							!targetAreaId && virtualTargetArea
+								? virtualTargetArea['column-start']
+								: targetArea['column-start'],
 					};
 
 					setNewMergedArea(updatedArea);
@@ -89,12 +93,14 @@ export const Cells = ({
 				{
 					const updatedArea = {
 						...activeArea,
-						'row-start': virtualTargetArea
-							? virtualTargetArea['row-start']
-							: targetArea['row-start'],
-						'column-end': virtualTargetArea
-							? virtualTargetArea['column-end']
-							: targetArea['column-end'],
+						'row-start':
+							!targetAreaId && virtualTargetArea
+								? virtualTargetArea['row-start']
+								: targetArea['row-start'],
+						'column-end':
+							!targetAreaId && virtualTargetArea
+								? virtualTargetArea['column-end']
+								: targetArea['column-end'],
 					};
 
 					setNewMergedArea(updatedArea);
@@ -103,12 +109,14 @@ export const Cells = ({
 			case 'topLeft': {
 				const updatedArea = {
 					...activeArea,
-					'row-start': virtualTargetArea
-						? virtualTargetArea['row-start']
-						: targetArea['row-start'],
-					'column-start': virtualTargetArea
-						? virtualTargetArea['column-start']
-						: targetArea['column-start'],
+					'row-start':
+						!targetAreaId && virtualTargetArea
+							? virtualTargetArea['row-start']
+							: targetArea['row-start'],
+					'column-start':
+						!targetAreaId && virtualTargetArea
+							? virtualTargetArea['column-start']
+							: targetArea['column-start'],
 				};
 
 				setNewMergedArea(updatedArea);
@@ -119,12 +127,12 @@ export const Cells = ({
 	const mergeArea = (direction: string) => {
 		if (
 			activeAreaId !== virtualTargetArea?.parentId &&
+			!targetArea &&
 			(!newMergedArea ||
 				newMergedArea['column-start'] === newMergedArea['column-end'] ||
 				newMergedArea['row-start'] === newMergedArea['row-end'] ||
-				!targetArea ||
 				!activeArea ||
-				targetArea.id === activeArea.id)
+				targetArea?.id === activeArea.id)
 		) {
 			setVirtualMergedAreas([]);
 			setActiveAreaId(null);

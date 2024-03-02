@@ -57,6 +57,74 @@ export const AreaMergeHandler = ({
 		setVirtualMergedAreas([]);
 	};
 
+	const findElement = (e, direction) => {
+		const iframe = document.querySelector('iframe[name="editor-canvas"]');
+		let targetElement;
+
+		switch (direction) {
+			case 'topRight':
+			case 'topLeft':
+				{
+					for (let i = 5; i < 30; i += 2) {
+						if (iframe) {
+							targetElement =
+								iframe.contentWindow.document.elementFromPoint(
+									e.pageX,
+									e.pageY - i
+								);
+							if (
+								targetElement.getAttribute('data-id') ||
+								targetElement.dataset.virtualId
+							) {
+								break;
+							}
+						} else {
+							targetElement = document.elementFromPoint(
+								e.pageX,
+								e.pageY - i
+							);
+							if (
+								targetElement.getAttribute('data-id') ||
+								targetElement.dataset.virtualId
+							)
+								break;
+						}
+					}
+				}
+				break;
+			case 'bottomRight':
+			case 'bottomLeft': {
+				for (let i = 5; i < 30; i += 2) {
+					if (iframe) {
+						targetElement =
+							iframe.contentWindow.document.elementFromPoint(
+								e.pageX,
+								e.pageY + i
+							);
+						if (
+							targetElement.getAttribute('data-id') ||
+							targetElement.dataset.virtualId
+						) {
+							break;
+						}
+					} else {
+						targetElement = document.elementFromPoint(
+							e.pageX,
+							e.pageY + i
+						);
+						if (
+							targetElement.getAttribute('data-id') ||
+							targetElement.dataset.virtualId
+						)
+							break;
+					}
+				}
+			}
+		}
+
+		return targetElement;
+	};
+
 	const onResize = (
 		e: Object,
 		direction: string,
@@ -66,31 +134,16 @@ export const AreaMergeHandler = ({
 	) => {
 		createVirtualAreas();
 		highlightHandler(direction);
-		const iframe = document.querySelector('iframe[name="editor-canvas"]');
-		let targetElement;
-		if (iframe) {
-			targetElement = iframe.contentWindow.document.elementFromPoint(
-				e.pageX,
-				e.pageY
-			);
-		} else {
-			targetElement = document.elementFromPoint(e.pageX, e.pageY);
-		}
 
-		if (targetElement?.dataset?.virtualId) {
-			setVirtualTargetAreaId(Number(targetElement.dataset.virtualId));
-		}
+		const targetElement = findElement(e, direction);
 
 		if (targetElement !== null && targetElement?.getAttribute('data-id')) {
 			setTargetAreaId(Number(targetElement.getAttribute('data-id')));
 		}
 
-		if (e.toElement.dataset.virtualId) {
-			setVirtualTargetAreaId(Number(e.toElement.dataset.virtualId));
-		}
-
-		if (e.toElement.getAttribute('data-id')) {
-			setTargetAreaId(Number(e.toElement.getAttribute('data-id')));
+		if (targetElement?.dataset?.virtualId) {
+			setVirtualTargetAreaId(Number(targetElement.dataset.virtualId));
+			setTargetAreaId(null);
 		}
 
 		if (activeAreaId === id) {
