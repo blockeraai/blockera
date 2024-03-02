@@ -20,6 +20,7 @@ import DeleteIcon from '../icons/delete';
 import EnableIcon from '../icons/enable';
 import DisableIcon from '../icons/disable';
 import CloneIcon from '../icons/clone';
+import { getArialLabelSuffix } from '../utils';
 import { useControlContext } from '../../../context';
 import type { RepeaterItemActionsProps } from '../types';
 
@@ -95,12 +96,12 @@ export default function RepeaterItemActions({
 							? sprintf(
 									// translators: %d is the repeater item id. It's aria label for disabling repeater item
 									__('Disable %d', 'publisher'),
-									itemId + 1
+									getArialLabelSuffix(itemId)
 							  )
 							: sprintf(
 									// translators: %d is the repeater item id. It's aria label for enabling repeater item
 									__('Enable %d', 'publisher'),
-									itemId + 1
+									getArialLabelSuffix(itemId)
 							  )
 					}
 				/>
@@ -131,7 +132,7 @@ export default function RepeaterItemActions({
 						aria-label={sprintf(
 							// translators: %d is the repeater item id. It's aria label for cloning repeater item
 							__('Clone %d', 'publisher'),
-							itemId + 1
+							getArialLabelSuffix(itemId)
 						)}
 					/>
 				)}
@@ -178,7 +179,7 @@ export default function RepeaterItemActions({
 						aria-label={sprintf(
 							// translators: %d is the repeater item id. It's aria label for deleting repeater item
 							__('Delete %d', 'publisher'),
-							itemId + 1
+							getArialLabelSuffix(itemId)
 						)}
 					/>
 				)}

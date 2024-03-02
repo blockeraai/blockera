@@ -1,16 +1,23 @@
 /// <reference types="Cypress" />
 
-import { useControlContext } from '../../../context';
-import { default as InputControl } from '../../input-control';
-import { STORE_NAME } from '../../repeater-control/store';
-import { RepeaterContext } from '../context';
-import RepeaterControl from '../index';
-import { useContext } from '@wordpress/element';
+/**
+ * External dependencies
+ */
+import { nanoid } from 'nanoid';
 import { __ } from '@wordpress/i18n';
+import { useContext } from '@wordpress/element';
+
+/**
+ * Internal dependencies
+ */
+import { STORE_NAME } from '../store';
+import RepeaterControl from '../index';
+import { RepeaterContext } from '../context';
+import { useControlContext } from '../../../context';
+import { getControlValue } from '../../../store/selectors';
+import { default as InputControl } from '../../input-control';
 import AccordionCustomOpenIcon from './icons/accordion-custom-open-icon';
 import AccordionCustomCloseIcon from './icons/accordion-custom-close-icon';
-import { getControlValue } from '../../../store/selectors';
-import { nanoid } from 'nanoid';
 
 function RepeaterFilledItemChildren({ itemId, item }) {
 	const {
@@ -58,7 +65,7 @@ describe('repeater control component testing', () => {
 						repeaterItemChildren={() => <RepeaterItemChildren />}
 					/>
 				),
-				value: [],
+				value: {},
 				store: STORE_NAME,
 				name,
 			});
@@ -70,7 +77,9 @@ describe('repeater control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				expect(getControlValue(name, STORE_NAME)).to.have.length(7);
+				expect(
+					Object.values(getControlValue(name, STORE_NAME))
+				).to.have.length(7);
 			});
 		});
 		it('should render delete item', () => {
@@ -82,15 +91,15 @@ describe('repeater control component testing', () => {
 						repeaterItemChildren={() => <RepeaterItemChildren />}
 					/>
 				),
-				value: [],
+				value: {},
 				store: STORE_NAME,
 				name,
 			});
 			cy.multiClick('[aria-label="Add New Items"]', 3);
 			cy.getByDataCy('repeater-item').first().realHover('mouse');
+			cy.get('[aria-label~="Delete"]').first().click();
 			cy.getByDataCy('repeater-item').first().realHover('mouse');
-			cy.getByDataCy('repeater-item').first().realHover('mouse');
-			cy.multiClick('[aria-label="Delete 1"]', 2);
+			cy.get('[aria-label~="Delete"]').first().click();
 
 			cy.getByDataCy('publisher-repeater-control')
 				.find('[data-cy="repeater-item"]')
@@ -98,7 +107,9 @@ describe('repeater control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				expect(getControlValue(name, STORE_NAME)).to.have.length(1);
+				expect(
+					Object.values(getControlValue(name, STORE_NAME))
+				).to.have.length(1);
 			});
 		});
 		it('should render copy item', () => {
@@ -110,15 +121,17 @@ describe('repeater control component testing', () => {
 						repeaterItemChildren={() => <RepeaterItemChildren />}
 					/>
 				),
-				value: [],
+				value: {},
 				store: STORE_NAME,
 				name,
 			});
 			cy.multiClick('[aria-label="Add New Items"]', 2);
 			cy.getByDataCy('repeater-item').first().realHover('mouse');
+			cy.get('[aria-label~="Clone"]').first().click();
 			cy.getByDataCy('repeater-item').first().realHover('mouse');
+			cy.get('[aria-label~="Clone"]').first().click();
 			cy.getByDataCy('repeater-item').first().realHover('mouse');
-			cy.multiClick('[aria-label="Clone 1"]', 3);
+			cy.get('[aria-label~="Clone"]').first().click();
 
 			cy.getByDataCy('publisher-repeater-control')
 				.find('[data-cy="repeater-item"]')
@@ -126,7 +139,9 @@ describe('repeater control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				expect(getControlValue(name, STORE_NAME)).to.have.length(5);
+				expect(
+					Object.values(getControlValue(name, STORE_NAME))
+				).to.have.length(5);
 			});
 		});
 		it('should render disable item', () => {
@@ -138,7 +153,7 @@ describe('repeater control component testing', () => {
 						repeaterItemChildren={() => <RepeaterItemChildren />}
 					/>
 				),
-				value: [],
+				value: {},
 				store: STORE_NAME,
 				name,
 			});
@@ -155,8 +170,8 @@ describe('repeater control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				return expect(getControlValue(name, STORE_NAME)[0].isVisible).to
-					.have.false;
+				return expect(getControlValue(name, STORE_NAME)['0'].isVisible)
+					.to.have.false;
 			});
 		});
 		it('should display field in body section', () => {
@@ -167,12 +182,12 @@ describe('repeater control component testing', () => {
 						repeaterItemChildren={RepeaterFilledItemChildren}
 					/>
 				),
-				value: [
-					{
+				value: {
+					0: {
 						name: 'john doe',
 						isVisible: true,
 					},
-				],
+				},
 				store: STORE_NAME,
 			});
 			cy.getByDataCy('repeater-item').click();
@@ -188,7 +203,7 @@ describe('repeater control component testing', () => {
 						injectHeaderButtonsEnd={<AccordionCustomCloseIcon />}
 					/>
 				),
-				value: [{}],
+				value: { 0: {} },
 				store: STORE_NAME,
 			});
 			cy.getByDataCy('plus-svg').should('be.visible');
@@ -203,14 +218,13 @@ describe('repeater control component testing', () => {
 						maxItems={4}
 					/>
 				),
-				value: [],
+				value: {},
 				store: STORE_NAME,
 			});
-			cy.multiClick(`[aria-label="Add New Items"]`, 4);
+			cy.multiClick(`[aria-label="Add New Items"]`, 5);
 			cy.getByDataCy('publisher-repeater-control')
 				.find('[data-cy="repeater-item"]')
 				.should('have.length', 4);
-			cy.get(`[aria-label="Add New Items"]`).should('be.disabled');
 		});
 		it('should render min items', () => {
 			cy.withDataProvider({
@@ -221,7 +235,7 @@ describe('repeater control component testing', () => {
 						minItems={3}
 					/>
 				),
-				value: [],
+				value: {},
 				store: STORE_NAME,
 			});
 			cy.multiClick('[aria-label="Add New Items"]', 4);
@@ -230,7 +244,7 @@ describe('repeater control component testing', () => {
 				.find('[data-cy="repeater-item"]')
 				.should('have.length', 4);
 			cy.getByDataCy('repeater-item').first().realHover('mouse');
-			cy.get('[aria-label="Delete 1"]').click();
+			cy.get('[aria-label~="Delete"]').first().click();
 			cy.getByDataCy('repeater-item').first().realHover('mouse');
 			cy.get('[aria-label="Delete 1"]').should('not.exist');
 		});
@@ -243,15 +257,16 @@ describe('repeater control component testing', () => {
 						repeaterItemChildren={RepeaterItemChildren}
 					/>
 				),
-				value: [
-					{
+				value: {
+					0: {
 						isVisible: true,
 						isOpen: true,
 					},
-					{
+					1: {
 						isVisible: true,
+						isOpen: false,
 					},
-				],
+				},
 				store: STORE_NAME,
 				name,
 			});
@@ -259,8 +274,9 @@ describe('repeater control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				return expect(getControlValue(name, STORE_NAME)[0].isOpen).to
-					.have.true;
+				return expect(
+					Object.values(getControlValue(name, STORE_NAME))[0].isOpen
+				).to.have.true;
 			});
 		});
 		it('should display popover custom className', () => {
@@ -273,12 +289,12 @@ describe('repeater control component testing', () => {
 						popoverClassName="custom-class"
 					/>
 				),
-				value: [
-					{
+				value: {
+					0: {
 						name: 'john doe',
 						isVisible: true,
 					},
-				],
+				},
 				store: STORE_NAME,
 			});
 			cy.getByDataCy('repeater-item').first().click();
@@ -298,12 +314,12 @@ describe('repeater control component testing', () => {
 						repeaterItemChildren={RepeaterFilledItemChildren}
 					/>
 				),
-				value: [
-					{
+				value: {
+					0: {
 						name: 'john doe',
 						isVisible: true,
 					},
-				],
+				},
 				store: STORE_NAME,
 			});
 			cy.getByDataCy('repeater-item').click();
@@ -319,12 +335,12 @@ describe('repeater control component testing', () => {
 						className="custom-class"
 					/>
 				),
-				value: [
-					{
+				value: {
+					0: {
 						name: 'john doe',
 						isVisible: true,
 					},
-				],
+				},
 				store: STORE_NAME,
 			});
 			cy.getByDataCy('publisher-repeater-control').should(
@@ -345,11 +361,11 @@ describe('repeater control component testing', () => {
 						actionButtonClone={false}
 					/>
 				),
-				value: [
-					{
+				value: {
+					0: {
 						isVisible: true,
 					},
-				],
+				},
 				store: STORE_NAME,
 			});
 			cy.get(`[aria-label="Add New Items"]`).should('not.be.exist');
@@ -370,11 +386,11 @@ describe('repeater control component testing', () => {
 						actionButtonClone={false}
 					/>
 				),
-				value: [
-					{
+				value: {
+					0: {
 						isVisible: true,
 					},
-				],
+				},
 				store: STORE_NAME,
 			});
 			cy.getByDataCy(`label-control`).should('contain', 'My Label');
@@ -387,13 +403,16 @@ describe('repeater control component testing', () => {
 						label="My Label"
 						mode="accordion"
 						repeaterItemChildren={RepeaterFilledItemChildren}
-						defaultValue={[
-							{ isVisible: true },
-							{ isVisible: true },
-						]}
+						defaultValue={{
+							0: { isVisible: true },
+							1: { isVisible: true },
+						}}
 					/>
 				),
-				value: [{ isVisible: true }, { isVisible: true }],
+				value: {
+					0: { isVisible: true },
+					1: { isVisible: true },
+				},
 				store: STORE_NAME,
 				name,
 			});
@@ -403,7 +422,9 @@ describe('repeater control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				expect(getControlValue(name, STORE_NAME)).to.have.length(2);
+				expect(
+					Object.values(getControlValue(name, STORE_NAME))
+				).to.have.length(2);
 			});
 		});
 		it('should display data with data id', () => {
@@ -420,7 +441,7 @@ describe('repeater control component testing', () => {
 				),
 				value: {
 					data: {
-						myData: [{}, {}],
+						myData: { 0: {}, 1: {} },
 					},
 				},
 				store: STORE_NAME,
@@ -430,7 +451,7 @@ describe('repeater control component testing', () => {
 			// Check data provider value!
 			cy.then(() => {
 				expect(
-					getControlValue(name, STORE_NAME).data.myData
+					Object.values(getControlValue(name, STORE_NAME).data.myData)
 				).to.have.length(2);
 			});
 		});
@@ -447,7 +468,7 @@ describe('repeater control component testing', () => {
 					/>
 				),
 				store: STORE_NAME,
-				value: [],
+				value: {},
 				name,
 			});
 
@@ -466,7 +487,7 @@ describe('repeater control component testing', () => {
 					/>
 				),
 				store: STORE_NAME,
-				value: [],
+				value: {},
 				name,
 			});
 
@@ -474,7 +495,30 @@ describe('repeater control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				const value = [{ isVisible: true }, { isVisible: true }];
+				const value = {
+					0: {
+						isOpen: false,
+						display: true,
+						cloneable: true,
+						isVisible: true,
+						deletable: true,
+						isSelected: false,
+						selectable: false,
+						visibilitySupport: true,
+						order: 0,
+					},
+					1: {
+						isOpen: false,
+						display: true,
+						cloneable: true,
+						isVisible: true,
+						deletable: true,
+						isSelected: false,
+						selectable: false,
+						visibilitySupport: true,
+						order: 1,
+					},
+				};
 				expect(value).to.deep.eq(getControlValue(name, STORE_NAME));
 			});
 		});

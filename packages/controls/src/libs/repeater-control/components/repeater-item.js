@@ -23,7 +23,7 @@ import { controlInnerClassNames } from '@publisher/classnames';
  */
 import RepeaterItemActions from './actions';
 import { RepeaterContext } from '../context';
-import { isOpenPopoverEvent } from '../utils';
+import { getArialLabelSuffix, isOpenPopoverEvent } from '../utils';
 import GroupControl from '../../group-control';
 import { useControlContext } from '../../../context';
 import type { RepeaterItemProps } from '../types';
@@ -185,15 +185,15 @@ const RepeaterItem = ({
 								});
 							}}
 							aria-label={sprintf(
-								// translators: %d is the repeater item id. It's the aria label for repeater item
-								__('Item %d', 'publisher-core'),
-								itemId + 1
+								// translators: %s is the repeater item id. It's the aria label for repeater item
+								__('Item %s', 'publisher-core'),
+								getArialLabelSuffix(itemId)
 							)}
 						>
 							{sprintf(
-								// translators: %d is the repeater item id. It's the repeater item name
-								__('Item %d', 'publisher-core'),
-								itemId + 1
+								// translators: %s is the repeater item id. It's the repeater item name
+								__('Item %s', 'publisher-core'),
+								getArialLabelSuffix(itemId)
 							)}
 						</div>
 					) : (

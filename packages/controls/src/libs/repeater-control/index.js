@@ -31,7 +31,7 @@ import type { RepeaterControlProps, TRepeaterDefaultStateProps } from './types';
 import LabelControlContainer from '../label-control/label-control-container';
 
 export const defaultItemValue = {
-	isOpen: true,
+	isOpen: false,
 	display: true,
 	cloneable: true,
 	isVisible: true,
@@ -70,7 +70,7 @@ export default function RepeaterControl({
 	getDynamicDefaultRepeaterItem,
 	itemColumns = 1,
 	//
-	defaultValue = [],
+	defaultValue = {},
 	defaultRepeaterItemValue = { isVisible: true },
 	onChange,
 	onSelect,
@@ -313,7 +313,8 @@ export default function RepeaterControl({
 											'btn-add'
 										)}
 										{...(maxItems !== -1 &&
-										repeaterItems?.length >= maxItems
+										Object.values(repeaterItems)?.length >=
+											maxItems
 											? { disabled: true }
 											: {})}
 										onClick={addNewButtonOnClick}

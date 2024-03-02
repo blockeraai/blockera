@@ -13,7 +13,7 @@ import { extractNumberAndUnit } from '../input-control/utils';
 export const isOpenPopoverEvent = (event: Object): boolean =>
 	!['svg', 'button', 'path'].includes(event?.target?.tagName);
 
-import { convertDegToCharacter } from '@publisher/utils';
+import { convertDegToCharacter, isNumber } from '@publisher/utils';
 
 export function prepValueForHeader(value: any): MixedElement | string {
 	if (value === '') {
@@ -50,4 +50,8 @@ export function getSortedRepeater(items: Object): Array<Object> {
 	dataArray.sort(([, a], [, b]) => (a.order || 0) - (b.order || 0));
 
 	return dataArray;
+}
+
+export function getArialLabelSuffix(itemId: string): string {
+	return isNumber(Number(itemId)) ? Number(itemId) + 1 : itemId;
 }
