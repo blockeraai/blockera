@@ -38,7 +38,7 @@ export const attributes = {
 	},
 	publisherGridGap: {
 		type: 'object',
-		default: { lock: true, gap: '20px', columns: '20px', rows: '20px' },
+		default: { lock: true, gap: '20px', columns: '', rows: '' },
 	},
 	publisherGridDirection: {
 		type: 'object',
