@@ -163,8 +163,10 @@ export const calcCoordinates = (area: Object | null): Array<Object> => {
 export const calcOverlapAreas = ({
 	newArea,
 	publisherGridAreas,
-	resizeToElementId,
-}) => {
+}: {
+	newArea: Object | null,
+	publisherGridAreas: Array<Object>,
+}): Array<Object> => {
 	if (!newArea) return [];
 
 	// make string to compare easily
@@ -176,8 +178,8 @@ export const calcOverlapAreas = ({
 	if (!newAreaCoordinates.length) return [];
 
 	const overlapAreas = publisherGridAreas.filter((item) => {
-		if (item.id === resizeToElementId || item.id === newArea.id)
-			return null;
+		if (item.id === newArea.id) return null;
+
 		return (
 			item.mergedArea &&
 			item.coordinates.find((_item) =>

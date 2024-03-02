@@ -315,7 +315,6 @@ export const Cells = ({
 			const overlapAreas = calcOverlapAreas({
 				newArea: updatedNewMergedArea,
 				publisherGridAreas,
-				targetAreaId,
 			});
 
 			if (!virtualTargetArea) {
@@ -330,11 +329,11 @@ export const Cells = ({
 				})
 				.flat();
 
-			const overlapAreasIds = overlapAreas.map((item) => item?.id);
+			const overlapAreaIds = overlapAreas.map((item) => item?.id);
 
 			const filteredAreas = publisherGridAreas.filter(
 				(item) =>
-					!overlapAreasIds.includes(item.id) &&
+					!overlapAreaIds.includes(item.id) &&
 					item.id !== activeArea.id &&
 					(item.id !== virtualTargetArea?.parentId ||
 						item.id !== targetAreaId)
@@ -397,7 +396,6 @@ export const Cells = ({
 		const overlapAreas = calcOverlapAreas({
 			newArea,
 			publisherGridAreas,
-			targetAreaId,
 		});
 		//	console.log(overlapAreas);
 		const updatedOverlapAreas = overlapAreas
@@ -406,9 +404,9 @@ export const Cells = ({
 			})
 			.flat();
 
-		const overlapAreasIds = updatedOverlapAreas.map((item) => item?.id);
+		const overlapAreaIds = overlapAreas.map((item) => item?.id);
 		const filteredAreas = publisherGridAreas.filter(
-			(item) => !overlapAreasIds.includes(item.id)
+			(item) => !overlapAreaIds.includes(item.id)
 		);
 
 		handleOnChangeAttributes(

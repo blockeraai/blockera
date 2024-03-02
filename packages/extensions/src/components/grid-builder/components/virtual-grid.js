@@ -161,7 +161,6 @@ export const VirtualGrid = ({
 			coordinates: calcCoordinates(newMergedArea),
 		},
 		publisherGridAreas,
-		targetAreaId,
 	});
 
 	return (
