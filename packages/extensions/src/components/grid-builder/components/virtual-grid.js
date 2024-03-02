@@ -258,8 +258,8 @@ export const VirtualGrid = ({
 						}
 					);
 				}}
-				columnGap={styles.columnGap || styles.gap}
-				rowGap={styles.rowGap || styles.gap}
+				columnGap={styles.columnGap}
+				rowGap={styles.rowGap}
 			/>
 
 			<AddButton
@@ -299,8 +299,8 @@ export const VirtualGrid = ({
 						}
 					);
 				}}
-				columnGap={styles.columnGap || styles.gap}
-				rowGap={styles.rowGap || styles.gap}
+				columnGap={styles.columnGap}
+				rowGap={styles.rowGap}
 			/>
 
 			<div
