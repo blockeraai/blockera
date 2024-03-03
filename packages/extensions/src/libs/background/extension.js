@@ -18,10 +18,9 @@ import {
 	ControlContextProvider,
 	NoticeControl,
 } from '@publisher/controls';
-import { FeatureWrapper } from '@publisher/components';
-import { componentClassNames } from '@publisher/classnames';
 import { checkVisibleItemLength, hasSameProps } from '@publisher/utils';
-import { normalizeRepeaterItems } from '@publisher/controls/src/libs/repeater-control/utils';
+import { componentClassNames } from '@publisher/classnames';
+import { FeatureWrapper } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -101,9 +100,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'background'),
-							value: normalizeRepeaterItems(
-								values.publisherBackground
-							),
+							value: values.publisherBackground,
 							attribute: 'publisherBackground',
 							blockName: block.blockName,
 						}}
