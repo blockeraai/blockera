@@ -122,7 +122,6 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			modifyControlValue({
 				value,
 				propId: id,
-				valueCleanup,
 				controlId: controlInfo.name,
 			});
 		}
@@ -278,7 +277,6 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 
 				modifyControlValue({
 					value,
-					valueCleanup,
 					controlId: controlInfo.name,
 				});
 
@@ -289,7 +287,6 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 				setValue(defaultValue, ref);
 
 				modifyControlValue({
-					valueCleanup,
 					value: defaultValue,
 					controlId: controlInfo.name,
 				});
@@ -333,7 +330,6 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 
 				modifyControlValue({
 					value: value || '',
-					valueCleanup,
 					controlId: controlInfo.name,
 				});
 
@@ -357,7 +353,6 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 
 			modifyControlValue({
 				value,
-				valueCleanup,
 				controlId: controlInfo.name,
 			});
 
