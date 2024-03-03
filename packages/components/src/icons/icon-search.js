@@ -1,7 +1,10 @@
+// @flow
+
 /**
  * External dependencies
  */
 import Fuse from 'fuse.js';
+import memoize from 'fast-memoize';
 
 /**
  * Internal dependencies
@@ -14,54 +17,72 @@ import {
 } from './icon-library';
 import { isValidIcon } from './icon';
 
-export function iconSearch({ query, library = 'all', limit }) {
+export function iconSearch({
+	query,
+	library = 'all',
+	limit,
+}: {
+	query: string,
+	library: string,
+	limit: number,
+}): Object {
 	if (!query) {
 		return {};
 	}
 
-	const fuse = new Fuse(
-		getIconLibrarySearchData(library),
-		{
-			shouldSort: true,
-			includeScore: false,
-			keys: [
-				{
-					name: 'title',
-					weight: 0.2,
-				},
-				{
-					name: 'tags',
-					weight: 0.5,
-				},
-			],
-			minMatchCharLength: 3,
-			useExtendedSearch: false,
-			threshold: 0.15,
-		},
-		getIconLibrariesSearchIndex()
-	);
+	const getMemoizedResult = memoize(() => {
+		const fuse = new Fuse(
+			getIconLibrarySearchData(library),
+			{
+				shouldSort: true,
+				includeScore: false,
+				keys: [
+					{
+						name: 'title',
+						weight: 0.2,
+					},
+					{
+						name: 'tags',
+						weight: 0.5,
+					},
+				],
+				minMatchCharLength: 3,
+				useExtendedSearch: false,
+				threshold: 0.15,
+			},
+			getIconLibrariesSearchIndex()
+		);
 
-	let result = fuse.search(query);
+		let result = fuse.search(query);
 
-	if (!result?.length) {
-		return [];
-	}
+		if (!result?.length) {
+			return [];
+		}
 
-	if (limit) {
-		result = result.slice(0, limit);
-	}
+		if (limit) {
+			result = result.slice(0, limit);
+		}
 
-	const finalResult = {};
+		const finalResult = {};
 
-	result.forEach((foundItem) => {
-		if (foundItem?.item?.iconName)
-			finalResult[foundItem.item.iconName] = foundItem.item;
+		const memoizedRegistration = memoize((foundItem) => {
+			if (foundItem?.item?.iconName)
+				finalResult[foundItem.item.iconName] = foundItem.item;
+		});
+
+		result.forEach(memoizedRegistration);
+
+		return finalResult;
 	});
 
-	return finalResult;
+	return getMemoizedResult();
 }
 
-export function createIconsBaseSearchData({ library }) {
+export function createIconsBaseSearchData({
+	library,
+}: {
+	library: string,
+}): Array<any> {
 	if (!isValidIconLibrary(library)) {
 		return [];
 	}
