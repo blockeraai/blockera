@@ -119,7 +119,7 @@ const RepeaterItem = ({
 		}
 	};
 
-	if (!item?.display) {
+	if (!item?.display && item.selectable) {
 		return null;
 	}
 
