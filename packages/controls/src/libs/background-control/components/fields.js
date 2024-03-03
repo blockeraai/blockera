@@ -1154,7 +1154,7 @@ const Fields: FieldItem = memo<FieldItem>(
 										controlId,
 										repeaterId,
 										itemId,
-										value: meshGradientProvider(item),
+										value: meshGradientProvider(item, true),
 									});
 								}}
 							>

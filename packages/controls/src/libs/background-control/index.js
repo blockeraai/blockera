@@ -21,6 +21,7 @@ import type {
 	TBackgroundControlProps,
 	TDefaultRepeaterItemValue,
 } from './types';
+import { cleanupRepeaterItem } from '../repeater-control/utils';
 import { LabelDescription } from './components/label-description';
 import { default as generateMeshGradient } from './components/mesh-gradient/mesh-generator';
 
@@ -28,14 +29,17 @@ import { default as generateMeshGradient } from './components/mesh-gradient/mesh
  * Providing mesh gradient colors details.
  *
  * @param {Object} object the data holder
+ * @param {boolean} forceUpdate the force update flag.
  * @return {{}} retrieved object includes mesh gradient details
  */
 export function meshGradientProvider(
-	object: TDefaultRepeaterItemValue
+	object: TDefaultRepeaterItemValue,
+	forceUpdate: boolean = false
 ): TDefaultRepeaterItemValue {
 	if (
 		object['mesh-gradient'] &&
-		Object.values(object['mesh-gradient-colors']).length
+		Object.values(object['mesh-gradient-colors']).length &&
+		!forceUpdate
 	) {
 		return object;
 	}
@@ -54,7 +58,7 @@ export function meshGradientProvider(
 }
 
 export default function BackgroundControl({
-	defaultValue = [],
+	defaultValue = {},
 	defaultRepeaterItemValue = meshGradientProvider({
 		type: 'image',
 		image: '',
@@ -93,49 +97,59 @@ export default function BackgroundControl({
 	className = '',
 	...props
 }: TBackgroundControlProps): MixedElement {
-	// it's commented because we wait for field context provider to use it.
-	function valueCleanup(value: any | Object) {
+	function valueCleanup(value: any | Object): any | Object {
 		if (!isObject(value)) {
 			return value;
 		}
 
-		Object.values(value).forEach((item) => {
-			if (item?.type !== 'image') {
-				delete item.image;
-				delete item['image-size'];
-				delete item['image-size-width'];
-				delete item['image-size-height'];
-				delete item['image-position'];
-				delete item['image-repeat'];
-				delete item['image-attachment'];
-			}
+		let clonedValue = { ...value };
 
-			if (item?.type !== 'mesh-gradient') {
-				delete item['mesh-gradient'];
-				delete item['mesh-gradient-colors'];
-				delete item['mesh-gradient-attachment'];
-			}
+		clonedValue = Object.fromEntries(
+			Object.entries(clonedValue).map(([itemId, item]): Object => {
+				if (item?.type !== 'image') {
+					delete item.image;
+					delete item['image-size'];
+					delete item['image-size-width'];
+					delete item['image-size-height'];
+					delete item['image-position'];
+					delete item['image-repeat'];
+					delete item['image-attachment'];
+				}
 
-			if (item?.type !== 'linear-gradient') {
-				delete item['linear-gradient'];
-				delete item['linear-gradient-angel'];
-				delete item['linear-gradient-repeat'];
-				delete item['linear-gradient-attachment'];
-			}
+				if (item?.type !== 'mesh-gradient') {
+					delete item['mesh-gradient'];
+					delete item['mesh-gradient-colors'];
+					delete item['mesh-gradient-attachment'];
+				} else {
+					item['mesh-gradient-colors'] = Object.fromEntries(
+						Object.entries(item['mesh-gradient-colors']).map(
+							([colorId, color]) => {
+								return [colorId, cleanupRepeaterItem(color)];
+							}
+						)
+					);
+				}
 
-			if (item?.type !== 'radial-gradient') {
-				delete item['radial-gradient'];
-				delete item['radial-gradient-position'];
-				delete item['radial-gradient-size'];
-				delete item['radial-gradient-repeat'];
-				delete item['radial-gradient-attachment'];
-			}
+				if (item?.type !== 'linear-gradient') {
+					delete item['linear-gradient'];
+					delete item['linear-gradient-angel'];
+					delete item['linear-gradient-repeat'];
+					delete item['linear-gradient-attachment'];
+				}
 
-			// internal usage
-			delete item.isOpen;
-		});
+				if (item?.type !== 'radial-gradient') {
+					delete item['radial-gradient'];
+					delete item['radial-gradient-position'];
+					delete item['radial-gradient-size'];
+					delete item['radial-gradient-repeat'];
+					delete item['radial-gradient-attachment'];
+				}
 
-		return value;
+				return [itemId, cleanupRepeaterItem(item)];
+			})
+		);
+
+		return clonedValue;
 	}
 
 	return (
