@@ -4,7 +4,7 @@
  */
 import memoize from 'fast-memoize';
 import { select } from '@wordpress/data';
-import { useContext, useRef } from '@wordpress/element';
+import { useContext, useCallback, useRef } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -102,6 +102,33 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		mergeInitialAndDefault,
 	} = args;
 
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	const normalizeRepeaterItems = useCallback((items: Object): Object => {
+		if (isEmpty(items)) {
+			return {};
+		}
+
+		const newRepeaterItems = Object.entries(items).map(([itemId, item]) => {
+			if (isObject(item)) {
+				return [
+					itemId,
+					{
+						...defaultRepeaterItemValue,
+						...item,
+						...('undefined' === typeof item.isOpen
+							? { isOpen: false }
+							: {}),
+					},
+				];
+			}
+
+			return [itemId, item];
+		});
+
+		return Object.fromEntries(newRepeaterItems);
+		// eslint-disable-next-line
+	}, []);
+
 	const _getCalculatedValue = memoize(() => getCalculatedInitValue());
 	const calculatedValue = _getCalculatedValue();
 
@@ -182,34 +209,17 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 				// merge default value to object elements inside initialValue
 				// used for repeaters
 				if (isRepeaterControl()) {
-					const mappedRepeaterValue = (items: Object): Object => {
-						if (isEmpty(items)) {
-							return {};
-						}
-
-						Object.entries(items).forEach(([itemId, item]) => {
-							if (isObject(item)) {
-								items[itemId] = {
-									...defaultRepeaterItemValue,
-									...item,
-								};
-							}
-						});
-
-						return items;
-					};
-
 					const repeaterValue = prepare(repeaterId, currentValue);
 
 					if (isUndefined(repeaterId) || isUndefined(repeaterValue)) {
 						return !isObject(currentValue)
-							? mappedRepeaterValue(defaultValue)
-							: mappedRepeaterValue(currentValue);
+							? normalizeRepeaterItems(defaultValue)
+							: normalizeRepeaterItems(currentValue);
 					}
 
 					return !isObject(repeaterValue)
-						? mappedRepeaterValue(defaultValue)
-						: mappedRepeaterValue(repeaterValue);
+						? normalizeRepeaterItems(defaultValue)
+						: normalizeRepeaterItems(repeaterValue);
 				}
 
 				if (!isUndefined(id)) {
