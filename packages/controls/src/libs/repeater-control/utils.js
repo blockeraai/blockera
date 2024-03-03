@@ -52,6 +52,6 @@ export function getSortedRepeater(items: Object): Array<Object> {
 	return dataArray;
 }
 
-export function getArialLabelSuffix(itemId: string): string {
-	return isNumber(Number(itemId)) ? Number(itemId) + 1 : itemId;
+export function getArialLabelSuffix(itemId: string): string | number {
+	return isNumber(Number(itemId.trim())) ? Number(itemId) + 1 : itemId;
 }

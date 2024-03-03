@@ -77,7 +77,7 @@ const RepeaterItem = ({
 		};
 	}, [draggingIndex, itemId]);
 
-	const handleDragStart = (e: DragEvent, index: number) => {
+	const handleDragStart = (e: DragEvent, index: string) => {
 		if (e.dataTransfer) {
 			e.dataTransfer.setData(
 				'text/plain',
@@ -100,7 +100,7 @@ const RepeaterItem = ({
 		e.preventDefault();
 	};
 
-	const handleDrop = (e: DragEvent, index: number) => {
+	const handleDrop = (e: DragEvent, index: string) => {
 		e.preventDefault();
 
 		if (e.dataTransfer) {

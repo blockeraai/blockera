@@ -12,7 +12,7 @@ import type { GroupControlMode } from '../../group-control/types';
 
 export type RepeaterItemActionsProps = {
 	item: Object,
-	itemId: number,
+	itemId: string,
 	isVisible: boolean,
 	setVisibility: (state: boolean) => void,
 };
@@ -175,5 +175,5 @@ export type TRepeaterDefaultStateProps = {
 
 export type RepeaterItemProps = {
 	item: Object,
-	itemId: number,
+	itemId: string,
 };
