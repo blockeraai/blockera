@@ -3,6 +3,7 @@
 /**
  * External dependencies
  */
+import memoize from 'fast-memoize';
 import type { MixedElement } from 'react';
 
 /**
@@ -54,4 +55,32 @@ export function getSortedRepeater(items: Object): Array<Object> {
 
 export function getArialLabelSuffix(itemId: string): string | number {
 	return isNumber(Number(itemId.trim())) ? Number(itemId) + 1 : itemId;
+}
+
+export function cleanupRepeaterItem(item: Object): Object {
+	delete item.isOpen;
+	delete item.display;
+	delete item.cloneable;
+	delete item.deletable;
+	delete item.isSelected;
+	delete item.selectable;
+	delete item.visibilitySupport;
+
+	return item;
+}
+
+export function normalizeRepeaterItems(items: Object): Object {
+	const memoized = memoize((_items) => {
+		return Object.fromEntries(
+			Object.entries(_items).map(([itemId, item]) => {
+				if (!item.isOpen && !item.display) {
+					return [itemId, { ...item, isOpen: false, display: true }];
+				}
+
+				return [itemId, item];
+			})
+		);
+	});
+
+	return memoized(items);
 }
