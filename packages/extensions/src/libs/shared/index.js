@@ -3,7 +3,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { select, useDispatch, useSelect } from '@wordpress/data';
+import { select, useDispatch } from '@wordpress/data';
 import { memo, useEffect, useState } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 import { Fill } from '@wordpress/components';
@@ -93,7 +93,7 @@ import {
 
 import { isInnerBlock, propsAreEqual } from '../../components';
 import extensions from './extensions.json';
-import { useBlockContext, useDisplayBlockControls } from '../../hooks';
+import { useDisplayBlockControls } from '../../hooks';
 import StateContainer from '../../components/state-container';
 import type { TTabProps } from '@publisher/components/src/tabs/types';
 import { InnerBlocksExtension } from '../inner-blocks';
@@ -105,6 +105,7 @@ import StatesManager from '../block-states/components/states-manager';
 import type { InnerBlocks, InnerBlockType } from '../inner-blocks/types';
 import type { THandleOnChangeAttributes } from '../types';
 import { resetExtensionSettings } from '../../utils';
+import type { TBreakpoint, TStates } from '../block-states/types';
 
 export const attributes = {
 	...typographyAttributes,
@@ -142,6 +143,15 @@ type Props = {
 	clientId: string,
 	supports: Object,
 	attributes: Object,
+	controllerProps: {
+		currentTab: string,
+		currentState: TStates,
+		publisherInnerBlocks: Object,
+		currentBreakpoint: TBreakpoint,
+		currentInnerBlockState: TStates,
+		currentBlock: 'master' | InnerBlockType,
+		handleOnChangeAttributes: THandleOnChangeAttributes,
+	},
 	children?: ComponentType<any>,
 	currentStateAttributes: Object,
 	publisherInnerBlocks: InnerBlocks,
@@ -154,51 +164,17 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		attributes: currentBlockAttributes,
 		setAttributes,
 		currentStateAttributes,
-		...props
-	}: Props): MixedElement => {
-		// dev-mode codes 👇 : to debug re-rendering
-		// useTraceUpdate({
-		// 	children,
-		// 	currentBlockAttributes,
-		// 	currentState,
-		// 	setAttributes,
-		// 	...props,
-		// });
-
-		type BlockContextual = {
-			currentTab: string,
-			publisherInnerBlocks: InnerBlocks,
-			currentBlock: 'master' | InnerBlockType,
-			handleOnChangeAttributes: THandleOnChangeAttributes,
-		};
-
-		const {
+		controllerProps: {
 			currentTab,
-			publisherInnerBlocks,
-			handleOnChangeAttributes,
-		}: BlockContextual = useBlockContext();
-
-		const {
 			currentBlock,
 			currentState,
-			currentInnerBlockState,
 			currentBreakpoint,
-		} = useSelect((select) => {
-			const {
-				getExtensionCurrentBlock,
-				getExtensionInnerBlockState,
-				getExtensionCurrentBlockState,
-				getExtensionCurrentBlockStateBreakpoint,
-			} = select('publisher-core/extensions');
-
-			return {
-				currentBlock: getExtensionCurrentBlock(),
-				currentState: getExtensionCurrentBlockState(),
-				currentInnerBlockState: getExtensionInnerBlockState(),
-				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
-			};
-		});
-
+			publisherInnerBlocks,
+			currentInnerBlockState,
+			handleOnChangeAttributes,
+		},
+		...props
+	}: Props): MixedElement => {
 		useEffect(() => {
 			// When component unmount!
 			return () => {

@@ -306,6 +306,15 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 										className,
 										setAttributes,
 										attributes: currentAttributes,
+										controllerProps: {
+											currentTab,
+											currentBlock,
+											currentState,
+											currentBreakpoint,
+											publisherInnerBlocks,
+											currentInnerBlockState,
+											handleOnChangeAttributes,
+										},
 										currentStateAttributes:
 											currentAttributes,
 										...props,
