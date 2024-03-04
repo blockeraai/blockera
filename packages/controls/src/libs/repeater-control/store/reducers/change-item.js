@@ -69,7 +69,7 @@ export function changeItem(state = {}, action) {
 				...controlInfo,
 				value: {
 					...clonedPrevValue,
-					[uniqueId]: action.value,
+					[uniqueId]: { ...action.value, isOpen: true },
 				},
 			},
 		};
