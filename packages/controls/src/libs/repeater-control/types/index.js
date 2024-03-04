@@ -131,10 +131,6 @@ export type RepeaterControlProps = {
 	 */
 	onDelete?: (itemId: string, items: Object) => Object,
 	/**
-	 * Is item deletable?
-	 */
-	isItemDeletable?: (itemId: string) => boolean,
-	/**
 	 * The handle on select repeater item.
 	 */
 	onSelect?: (event: MouseEvent, item: Object) => boolean,

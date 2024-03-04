@@ -38,7 +38,6 @@ export default function RepeaterItemActions({
 		repeaterId,
 		overrideItem,
 		itemIdGenerator,
-		isItemDeletable,
 		actionButtonVisibility,
 		actionButtonDelete,
 		actionButtonClone,
@@ -148,13 +147,6 @@ export default function RepeaterItemActions({
 						tooltipPosition="top"
 						onClick={(event) => {
 							event.stopPropagation();
-
-							if (
-								'function' === typeof isItemDeletable &&
-								!isItemDeletable(itemId)
-							) {
-								return;
-							}
 
 							if (
 								!item.selectable ||
