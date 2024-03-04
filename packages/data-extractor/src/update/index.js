@@ -15,8 +15,14 @@ import { regexMatch } from '../utils';
  * @param {Object} object the target object
  * @param {string} query the query of object props
  * @param {any} value the new value of object query
+ * @param {boolean} forceReplace the flag to force replace value.
  */
-export function update(object: Object, query: string, value: any): null {
+export function update(
+	object: Object,
+	query: string,
+	value: any,
+	forceReplace: boolean = false
+): Object {
 	const keys = [];
 	let currentObj = { ...object };
 
@@ -29,6 +35,12 @@ export function update(object: Object, query: string, value: any): null {
 	}
 
 	switch (true) {
+		default:
+		case forceReplace:
+		case isString(currentObj[lastKey]):
+			currentObj[lastKey] = value;
+
+			return isObject(object) ? { ...object } : [...object];
 		case isObject(currentObj[lastKey]):
 			if (isObject(value)) {
 				currentObj[lastKey] = {
@@ -50,12 +62,6 @@ export function update(object: Object, query: string, value: any): null {
 			} else {
 				currentObj[lastKey].push(value);
 			}
-
-			return isObject(object) ? { ...object } : [...object];
-
-		case isString(currentObj[lastKey]):
-		default:
-			currentObj[lastKey] = value;
 
 			return isObject(object) ? { ...object } : [...object];
 	}
