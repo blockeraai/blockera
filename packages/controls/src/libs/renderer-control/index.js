@@ -19,8 +19,8 @@ import {
 /**
  * Internal dependencies
  */
-import { RendererControlProps } from './types';
 import { useControlContext } from '../../context';
+import type { RendererControlProps } from './types';
 import { isEnableRenderer, normalizedSelectOptions } from './helpers';
 
 export const RendererControl = ({
