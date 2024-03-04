@@ -1,11 +1,6 @@
 // @flow
 
 /**
- * External dependencies
- */
-import memoize from 'fast-memoize';
-
-/**
  * Publisher dependencies
  */
 import { prepare } from '@publisher/data-extractor';
@@ -51,7 +46,7 @@ export const hasRepeaterId = (
 export const countPropertiesWithPattern: (
 	obj: Object,
 	pattern: Object
-) => number = memoize((obj: Object, pattern: Object): number => {
+) => number = (obj: Object, pattern: Object): number => {
 	let count = 0;
 
 	for (const key in obj) {
@@ -64,7 +59,7 @@ export const countPropertiesWithPattern: (
 	}
 
 	return count;
-});
+};
 
 /**
  * Generate id for repeater item with state and action params.
@@ -77,28 +72,23 @@ export const generatedDetailsId = (
 	state: Object,
 	action: Object
 ): { itemsCount: number, uniqueId: string } => {
-	let suffix = '';
 	let itemsCount = 0;
 	const controlInfo = state[action.controlId];
 	const actionValue = action.value || action.item;
-
-	if ('CLONE_REPEATER_ITEM' === action.type) {
-		suffix = '-clone';
-	}
 
 	if (!action.id && !actionValue?.type) {
 		itemsCount = Object.keys(controlInfo.value).length;
 
 		return {
 			itemsCount,
-			uniqueId: itemsCount + suffix,
+			uniqueId: itemsCount + '',
 		};
 	}
 
 	if (!state[action.controlId]) {
 		return {
 			itemsCount,
-			uniqueId: `${action.id}-${itemsCount}${suffix}`,
+			uniqueId: `${action.id}-${itemsCount}`,
 		};
 	}
 
@@ -109,6 +99,6 @@ export const generatedDetailsId = (
 
 	return {
 		itemsCount,
-		uniqueId: `${action.id || actionValue.type}-${itemsCount}${suffix}`,
+		uniqueId: `${action.id || actionValue.type}-${itemsCount}`,
 	};
 };
