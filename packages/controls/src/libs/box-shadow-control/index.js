@@ -16,7 +16,6 @@ import RepeaterItemHeader from './components/header';
 import Fields from './components/fields';
 import RepeaterControl from '../repeater-control';
 import type { BoxShadowControlProps } from './types';
-import { cleanupRepeaterItem } from '../repeater-control/utils';
 
 export default function BoxShadowControl({
 	id,
@@ -34,19 +33,6 @@ export default function BoxShadowControl({
 	},
 	...props
 }: BoxShadowControlProps): MixedElement {
-	const valueCleanup = (value: Object): Object => {
-		let clonedValue = { ...value };
-
-		clonedValue = Object.fromEntries(
-			Object.entries(clonedValue).map(([itemId, item]): Object => [
-				itemId,
-				cleanupRepeaterItem(item),
-			])
-		);
-
-		return clonedValue;
-	};
-
 	return (
 		<RepeaterControl
 			id={id}
@@ -57,7 +43,6 @@ export default function BoxShadowControl({
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			defaultValue={defaultValue}
-			valueCleanup={valueCleanup}
 			{...props}
 		/>
 	);

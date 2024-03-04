@@ -19,6 +19,7 @@ import { Button, Grid } from '@publisher/components';
  * Internal dependencies.
  */
 import PlusIcon from './icons/plus';
+import { cleanupRepeater } from './utils';
 import { LabelControl } from '../label-control';
 import { useControlContext } from '../../context';
 import { RepeaterContextProvider } from './context';
@@ -76,7 +77,7 @@ export default function RepeaterControl({
 	onSelect,
 	onDelete,
 	overrideItem,
-	valueCleanup,
+	valueCleanup = cleanupRepeater,
 	itemIdGenerator,
 	//
 	className,

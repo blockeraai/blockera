@@ -173,3 +173,7 @@ export type RepeaterItemProps = {
 	item: Object,
 	itemId: string,
 };
+
+export type CleanupRepeaterArgs = {
+	callback?: (item: Object) => Object,
+};
