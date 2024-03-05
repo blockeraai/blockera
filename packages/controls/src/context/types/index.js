@@ -18,23 +18,12 @@ export type ControlInfo = {
 	name: string,
 	attribute?: string,
 	blockName?: string,
-	hasSideEffect?: boolean,
 	description?: string | MixedElement | any,
 	type?: 'simple' | 'nested',
 };
 
 export type ControlContextProviderProps = {
-	value: {
-		...ControlInfo,
-		callback?: (
-			controlInfo: Object,
-			value: any,
-			modifyControlValue: (params: Object) => void
-		) => void,
-		hasSideEffect?: boolean,
-		onChange?: (newValue: any) => void,
-		valueCleanup?: (newValue: any) => void,
-	},
+	value: ControlInfo,
 	storeName?: string,
 	children: MixedElement | any,
 };

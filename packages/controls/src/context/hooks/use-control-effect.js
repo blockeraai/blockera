@@ -35,7 +35,7 @@ export default function useControlEffect(
 
 		if (isFunction(onChange)) {
 			// eslint-disable-next-line no-unused-expressions
-			isFunction(valueCleanup) && !controlInfo.hasSideEffect
+			isFunction(valueCleanup)
 				? onChange(valueCleanup(value), _ref)
 				: onChange(value, _ref);
 		}
