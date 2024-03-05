@@ -10,13 +10,13 @@ module.exports = defineConfig({
 
 			return config;
 		},
-		specPattern: 'packages/**/*.cypress.js',
+		specPattern: ['packages/**/*.cypress.js', 'packages/**/*.cy.compat.js'],
 		supportFile: 'cypress/support/e2e.js',
 	},
 	env: {
 		wpUsername: 'admin',
-		wpPassword: 'password',
-		testURL: 'http://localhost:8889',
+		wpPassword: 'pass',
+		testURL: 'http://publisher.test',
 	},
 	fixturesFolder: 'cypress/fixtures',
 	pageLoadTimeout: 120000,
