@@ -180,6 +180,8 @@ export default function ({
 																	.value,
 															prevGridAreas:
 																values.publisherGridAreas,
+															publisherGridDirection:
+																values.publisherGridDirection,
 														}),
 												},
 												ref,
@@ -214,6 +216,8 @@ export default function ({
 																	.value,
 															prevGridAreas:
 																values.publisherGridAreas,
+															publisherGridDirection:
+																values.publisherGridDirection,
 														}),
 												},
 												ref,
@@ -295,6 +299,8 @@ export default function ({
 															gridColumns: value,
 															prevGridAreas:
 																values.publisherGridAreas,
+															publisherGridDirection:
+																values.publisherGridDirection,
 														}),
 												},
 												ref,
@@ -330,6 +336,8 @@ export default function ({
 															gridColumns: value,
 															prevGridAreas:
 																values.publisherGridAreas,
+															publisherGridDirection:
+																values.publisherGridDirection,
 														}),
 												},
 												ref,
@@ -378,7 +386,24 @@ export default function ({
 							handleOnChangeAttributes(
 								'publisherGridDirection',
 								{ ...values.publisherGridDirection, value },
-								{ ref }
+								{
+									effectiveItems: {
+										publisherGridAreas: generateAreas({
+											gridRows:
+												values.publisherGridRows.value,
+											gridColumns:
+												values.publisherGridColumns
+													.value,
+											prevGridAreas:
+												values.publisherGridAreas,
+											publisherGridDirection: {
+												...values.publisherGridDirection,
+												value,
+											},
+										}),
+									},
+									ref,
+								}
 							)
 						}
 						options={[

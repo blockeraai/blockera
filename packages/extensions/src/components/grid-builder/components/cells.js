@@ -37,8 +37,12 @@ export const Cells = ({
 }: TCellsProps): MixedElement => {
 	const { getAttributes, handleOnChangeAttributes } = useBlockContext();
 
-	const { publisherGridColumns, publisherGridRows, publisherGridAreas } =
-		getAttributes();
+	const {
+		publisherGridColumns,
+		publisherGridRows,
+		publisherGridAreas,
+		publisherGridDirection,
+	} = getAttributes();
 
 	const activeArea = publisherGridAreas.find(
 		(item) => item.id === activeAreaId
@@ -161,6 +165,7 @@ export const Cells = ({
 						generateAreas({
 							gridRows: publisherGridRows.value,
 							gridColumns: publisherGridColumns.value,
+							publisherGridDirection,
 							prevGridAreas: [
 								...filteredAreas,
 								{
@@ -202,6 +207,7 @@ export const Cells = ({
 						generateAreas({
 							gridRows: publisherGridRows.value,
 							gridColumns: publisherGridColumns.value,
+							publisherGridDirection,
 							prevGridAreas: [
 								...filteredAreas,
 								{
@@ -243,6 +249,7 @@ export const Cells = ({
 						generateAreas({
 							gridRows: publisherGridRows.value,
 							gridColumns: publisherGridColumns.value,
+							publisherGridDirection,
 							prevGridAreas: [
 								...filteredAreas,
 								{
@@ -285,6 +292,7 @@ export const Cells = ({
 						generateAreas({
 							gridRows: publisherGridRows.value,
 							gridColumns: publisherGridColumns.value,
+							publisherGridDirection,
 							prevGridAreas: [
 								...filteredAreas,
 								{
@@ -352,6 +360,7 @@ export const Cells = ({
 				generateAreas({
 					gridRows: publisherGridRows.value,
 					gridColumns: publisherGridColumns.value,
+					publisherGridDirection,
 					prevGridAreas: [
 						...filteredAreas,
 						{
@@ -422,6 +431,7 @@ export const Cells = ({
 			generateAreas({
 				gridRows: publisherGridRows.value,
 				gridColumns: publisherGridColumns.value,
+				publisherGridDirection,
 				prevGridAreas: [
 					...filteredAreas,
 					newArea,

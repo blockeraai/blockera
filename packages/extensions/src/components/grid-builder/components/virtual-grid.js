@@ -42,6 +42,7 @@ export const VirtualGrid = ({
 		publisherGridRows,
 		publisherGridGap,
 		publisherGridAreas,
+		publisherGridDirection,
 	} = attributes;
 
 	const {
@@ -90,6 +91,7 @@ export const VirtualGrid = ({
 					gridRows: publisherGridRows.value,
 					gridColumns: publisherGridColumns.value,
 					prevGridAreas: publisherGridAreas,
+					publisherGridDirection,
 				}),
 				{
 					path: '',
@@ -247,6 +249,7 @@ export const VirtualGrid = ({
 									gridRows: newValue,
 									gridColumns: publisherGridColumns.value,
 									prevGridAreas: publisherGridAreas,
+									publisherGridDirection,
 								}),
 							},
 							ref: {
@@ -288,6 +291,7 @@ export const VirtualGrid = ({
 									gridColumns: newValue,
 									gridRows: publisherGridRows.value,
 									prevGridAreas: publisherGridAreas,
+									publisherGridDirection,
 								}),
 							},
 							ref: {

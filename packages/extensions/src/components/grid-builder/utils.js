@@ -41,6 +41,7 @@ export const generateAreas = ({
 	gridRows,
 	gridColumns,
 	prevGridAreas,
+	publisherGridDirection,
 }: {
 	gridRows: Array<Object>,
 	gridColumns: Array<Object>,
@@ -86,8 +87,6 @@ export const generateAreas = ({
 		});
 	});
 
-	//console.log('redundantAreas', redundantAreas);
-
 	const redundantAreaIds = redundantAreas.map((item) => item.id);
 	const filteredGridAreas = newGridAreas
 		.flat()
@@ -123,6 +122,38 @@ export const generateAreas = ({
 
 		reOrderedAreaArray.push(matchedArea);
 	});
+
+	if (publisherGridDirection.value === 'column') {
+		const reOrderedAreaArray = [];
+		const gridVerticalTemplate = [];
+
+		for (let i = 0; i <= gridColumns.length; i++) {
+			gridTemplateAreas.forEach((item) =>
+				gridVerticalTemplate.push(item[i])
+			);
+		}
+
+		gridVerticalTemplate.forEach((item) => {
+			// find area and push to array based on real place
+
+			const matchedArea = filteredGridAreas
+				.flat()
+				.map((_item, i) => {
+					return {
+						..._item,
+						name: `area${i + 1}`,
+						mergedArea:
+							_item?.coordinates?.length > 1 ? true : false,
+					};
+				})
+				.find((_item) => _item.name === item);
+			reOrderedAreaArray.push(matchedArea);
+		});
+
+		return getUniqueArrayOfObjects(reOrderedAreaArray).map((item, i) => {
+			return { ...item, name: `area${i + 1}` };
+		});
+	}
 
 	return getUniqueArrayOfObjects(reOrderedAreaArray).map((item, i) => {
 		return { ...item, name: `area${i + 1}` };

@@ -36,8 +36,12 @@ export const SizeSetting = ({
 }: TSizeSettingProps): MixedElement => {
 	const { handleOnChangeAttributes, getAttributes } = useBlockContext();
 
-	const { publisherGridColumns, publisherGridRows, publisherGridAreas } =
-		getAttributes();
+	const {
+		publisherGridColumns,
+		publisherGridRows,
+		publisherGridAreas,
+		publisherGridDirection,
+	} = getAttributes();
 
 	const filteredItems = items.value.filter((_item) => _item.id !== item.id);
 	const currentItemIndex = items.value.findIndex(
@@ -434,6 +438,7 @@ export const SizeSetting = ({
 												? filteredItems
 												: publisherGridColumns.value,
 										prevGridAreas: mutedAreas,
+										publisherGridDirection,
 									}),
 								},
 							}
