@@ -99,6 +99,9 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			name,
 			additional,
 			attributes,
+			currentBlock,
+			currentState,
+			currentBreakpoint,
 		});
 
 		const masterIsNormalState = (): boolean =>

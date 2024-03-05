@@ -4,7 +4,6 @@
  * External dependencies
  */
 import memoize from 'fast-memoize';
-import { select } from '@wordpress/data';
 
 /**
  * Internal dependencies
@@ -17,17 +16,19 @@ import type {
 	InnerBlockType,
 	InnerBlockModel,
 } from '../../libs/inner-blocks/types';
+import { isInnerBlock } from '../../components';
 
 export const useInnerBlocksInfo = ({
 	name,
 	additional,
 	attributes,
+	currentBlock,
+	currentState,
+	currentBreakpoint,
 }: InnerBlocksInfoProps): InnerBlocksInfo => {
 	const {
 		blocks: { getBlockType },
 	} = useStoreSelectors();
-	const { getExtensionCurrentBlock } = select('publisher-core/extensions');
-	const currentBlock = getExtensionCurrentBlock();
 
 	const publisherInnerBlocks: InnerBlocks = prepareInnerBlockTypes(
 		additional?.publisherInnerBlocks || {},
@@ -37,7 +38,24 @@ export const useInnerBlocksInfo = ({
 	let savedInnerBlocks: InnerBlocks = attributes.publisherInnerBlocks;
 
 	if (!Object.values(savedInnerBlocks).length) {
-		savedInnerBlocks = publisherInnerBlocks;
+		if (isInnerBlock(currentBlock)) {
+			if (
+				!Object.keys(
+					attributes.publisherBlockStates[currentState].breakpoints[
+						currentBreakpoint
+					].attributes
+				).length
+			) {
+				savedInnerBlocks = publisherInnerBlocks;
+			} else {
+				savedInnerBlocks =
+					attributes.publisherBlockStates[currentState].breakpoints[
+						currentBreakpoint
+					].attributes.publisherInnerBlocks;
+			}
+		} else {
+			savedInnerBlocks = publisherInnerBlocks;
+		}
 	}
 
 	/**
