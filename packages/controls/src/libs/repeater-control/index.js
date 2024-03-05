@@ -53,6 +53,7 @@ export default function RepeaterControl({
 	popoverClassName,
 	maxItems = -1,
 	minItems = 0,
+	selectable = false,
 	actionButtonAdd = true,
 	actionButtonVisibility = true,
 	actionButtonDelete = true,
@@ -86,6 +87,7 @@ export default function RepeaterControl({
 	defaultRepeaterItemValue = {
 		...defaultItemValue,
 		...defaultRepeaterItemValue,
+		selectable,
 	};
 
 	const {
@@ -118,6 +120,7 @@ export default function RepeaterControl({
 		popoverClassName,
 		maxItems,
 		minItems,
+		selectable,
 		actionButtonAdd,
 		actionButtonVisibility,
 		actionButtonDelete,

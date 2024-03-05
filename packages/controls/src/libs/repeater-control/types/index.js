@@ -40,6 +40,13 @@ export type RepeaterControlProps = {
 	 * @default true
 	 */
 	mode?: GroupControlMode,
+	/**
+	 * Flag for support selectable repeater items or not.
+	 */
+	selectable?: boolean,
+	/**
+	 * Flag for support advanced label or not.
+	 */
 	withoutAdvancedLabel?: boolean,
 	/**
 	 * Specifies the popover title if `mode` was `popover`. by default the repeater label will be shown as popover title.
