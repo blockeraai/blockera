@@ -24,6 +24,7 @@ if ( ! function_exists( 'pb_core_config' ) ) {
 		$key_parts       = explode( '.', $key );
 		$config_includes = array(
 			'app'         => PB_CORE_PATH . '/config/app.php',
+			'entities'    => PB_CORE_PATH . '/config/entities.php',
 			'breakpoints' => PB_CORE_PATH . '/config/breakpoints.php',
 			'valueAddon'  => PB_CORE_PATH . '/config/value-addon.php',
 		);
