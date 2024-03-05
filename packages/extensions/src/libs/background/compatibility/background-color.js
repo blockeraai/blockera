@@ -11,34 +11,36 @@ export function backgroundColorFromWPCompatibility({
 }: {
 	attributes: Object,
 }): Object {
-	if (attributes?.publisherBackgroundColor === '') {
-		// backgroundColor attribute in root always is variable
-		// it should be changed to a Value Addon (variable)
-		if (attributes?.backgroundColor !== undefined) {
-			const colorVar = getColor(attributes?.backgroundColor);
+	if (attributes?.publisherBackgroundColor !== '') {
+		return attributes;
+	}
 
-			if (colorVar) {
-				attributes.publisherBackgroundColor = {
-					settings: {
-						...colorVar,
+	// backgroundColor attribute in root always is variable
+	// it should be changed to a Value Addon (variable)
+	if (attributes?.backgroundColor !== undefined) {
+		const colorVar = getColor(attributes?.backgroundColor);
+
+		if (colorVar) {
+			attributes.publisherBackgroundColor = {
+				settings: {
+					...colorVar,
+					type: 'color',
+					var: generateVariableString({
+						reference: colorVar?.reference || { type: '' },
 						type: 'color',
-						var: generateVariableString({
-							reference: colorVar?.reference || { type: '' },
-							type: 'color',
-							id: colorVar?.id || '',
-						}),
-					},
-					name: colorVar?.name,
-					isValueAddon: true,
-					valueType: 'variable',
-				};
-			}
+						id: colorVar?.id || '',
+					}),
+				},
+				name: colorVar?.name,
+				isValueAddon: true,
+				valueType: 'variable',
+			};
 		}
-		// style.color.background is not variable
-		else if (attributes?.style?.color?.background !== undefined) {
-			attributes.publisherBackgroundColor =
-				attributes?.style?.color?.background;
-		}
+	}
+	// style.color.background is not variable
+	else if (attributes?.style?.color?.background !== undefined) {
+		attributes.publisherBackgroundColor =
+			attributes?.style?.color?.background;
 	}
 
 	return attributes;

@@ -113,7 +113,11 @@ const reducer = (state: Object = {}, action: Object): Object => {
 				'publisherCore.blockEdit.setAttributes',
 				{
 					...state,
-					publisherBlockStates: memoizedBlockStates(state, action),
+					publisherBlockStates: memoizedBlockStates(
+						state,
+						action,
+						'UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE' === type
+					),
 				},
 				...hookParams
 			);

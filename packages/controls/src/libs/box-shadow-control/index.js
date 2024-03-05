@@ -16,6 +16,7 @@ import RepeaterItemHeader from './components/header';
 import Fields from './components/fields';
 import RepeaterControl from '../repeater-control';
 import type { BoxShadowControlProps } from './types';
+
 export default function BoxShadowControl({
 	id,
 	popoverTitle = __('Box Shadow', 'publisher-core'),

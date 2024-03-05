@@ -2,11 +2,7 @@
 
 namespace Publisher\Framework\Services;
 
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Publisher\Framework\Illuminate\Foundation\Application;
-use Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType;
-use Publisher\Framework\Illuminate\Foundation\ValueAddon\ValueAddonRegistry;
-use Publisher\Framework\Illuminate\Foundation\ValueAddon\Variable\VariableType;
 
 /**
  * PackagesService developed to register all publisher core assets into WordPress CMS.
@@ -243,6 +239,7 @@ class PublisherAssets {
 			'@publisher/extensions',
 			'
 			window.onload = () => {
+				publisher.coreData.unstableBootstrapServerSideEntities(' . wp_json_encode( $this->application->getEntities() ) . ');
 				publisher.coreData.unstableBootstrapServerSideDynamicValueDefinitions(' . wp_json_encode( $this->application->getRegisteredValueAddons( 'dynamic-value', false ) ) . ');
 				publisher.coreData.unstableBootstrapServerSideVariableDefinitions(' . wp_json_encode( $this->application->getRegisteredValueAddons( 'variable', false ) ) . ');
 			};

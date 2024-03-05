@@ -12,7 +12,7 @@ import type { GroupControlMode } from '../../group-control/types';
 
 export type RepeaterItemActionsProps = {
 	item: Object,
-	itemId: number,
+	itemId: string,
 	isVisible: boolean,
 	setVisibility: (state: boolean) => void,
 };
@@ -40,6 +40,13 @@ export type RepeaterControlProps = {
 	 * @default true
 	 */
 	mode?: GroupControlMode,
+	/**
+	 * Flag for support selectable repeater items or not.
+	 */
+	selectable?: boolean,
+	/**
+	 * Flag for support advanced label or not.
+	 */
 	withoutAdvancedLabel?: boolean,
 	/**
 	 * Specifies the popover title if `mode` was `popover`. by default the repeater label will be shown as popover title.
@@ -131,10 +138,6 @@ export type RepeaterControlProps = {
 	 */
 	onDelete?: (itemId: string, items: Object) => Object,
 	/**
-	 * Is item deletable?
-	 */
-	isItemDeletable?: (itemId: string) => boolean,
-	/**
 	 * The handle on select repeater item.
 	 */
 	onSelect?: (event: MouseEvent, item: Object) => boolean,
@@ -175,5 +178,9 @@ export type TRepeaterDefaultStateProps = {
 
 export type RepeaterItemProps = {
 	item: Object,
-	itemId: number,
+	itemId: string,
+};
+
+export type CleanupRepeaterArgs = {
+	callback?: (item: Object) => Object,
 };

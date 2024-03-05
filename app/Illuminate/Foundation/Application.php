@@ -29,9 +29,20 @@ class Application extends Container {
 	protected array $registeredValueAddons = [];
 
 	/**
+	 * Store all entities of WordPress core and Publisher core api.
+	 *
+	 * @var array $entities the entities list
+	 */
+	protected array $entities = [];
+
+	/**
 	 * Application instantiate.
 	 */
 	public function __construct() {
+
+		if ( is_admin() ) {
+			$this->registerConfiguredEntities();
+		}
 
 		$this->registerConfiguredProviders();
 	}
@@ -118,6 +129,32 @@ class Application extends Container {
 	public function setRegisteredValueAddons( array $registeredValueAddons ): void {
 
 		$this->registeredValueAddons = $registeredValueAddons;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getEntities(): array {
+
+		return $this->entities;
+	}
+
+	/**
+	 * @param array $entities
+	 */
+	public function setEntities( array $entities ): void {
+
+		$this->entities = $entities;
+	}
+
+	/**
+	 * Registration configured entities into app container.
+	 *
+	 * @return void
+	 */
+	protected function registerConfiguredEntities(): void {
+
+		$this->setEntities( pb_core_config( 'entities' ) );
 	}
 
 }

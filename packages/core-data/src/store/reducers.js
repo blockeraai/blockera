@@ -18,6 +18,14 @@ export const reducer = (state: Object = {}, action: Object): Object => {
 					[action.name]: action.dynamicValueGroup,
 				},
 			};
+		case 'ADD_BOOTSTRAPPED_ENTITIES':
+			return {
+				...state,
+				entities: {
+					...(state?.entities || {}),
+					[action.name]: action.entity,
+				},
+			};
 	}
 };
 

@@ -13,7 +13,8 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  */
 
 use Publisher\Framework\Exceptions\BaseException;
-use Publisher\Framework\Illuminate\{Foundation\Application,
+use Publisher\Framework\Illuminate\{EntityRegistry,
+	Foundation\Application,
 	StyleEngine\StyleDefinitions\Size,
 	StyleEngine\StyleDefinitions\Mouse,
 	StyleEngine\StyleDefinitions\Layout,
@@ -64,6 +65,11 @@ class AppServiceProvider extends ServiceProvider {
 			$this->app->singleton( ValueAddonRegistry::class, static function ( Application $app, array $params = [] ): ValueAddonRegistry {
 
 				return new ValueAddonRegistry( $app, ...$params );
+			} );
+
+			$this->app->singleton( EntityRegistry::class, static function ( Application $app ) {
+
+				return new EntityRegistry( $app );
 			} );
 
 			$this->app->bind( StyleEngine::class, static function ( Application $app, array $params ) {
@@ -132,6 +138,7 @@ class AppServiceProvider extends ServiceProvider {
 		] );
 
 		$this->app->make( SavePost::class );
+		$this->app->make( EntityRegistry::class );
 
 		foreach ( pb_core_config( 'app.blocks' ) as $block ) {
 

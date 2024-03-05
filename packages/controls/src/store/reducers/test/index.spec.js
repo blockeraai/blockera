@@ -56,27 +56,6 @@ describe('Control reducer', function () {
 		});
 	});
 
-	it('should modified total columns of value up to date with value clean up!', function () {
-		expect(
-			controlReducer(
-				state,
-				modifyControlValue({
-					value: { isTest: true, extraProp: [] },
-					controlId: 'TestControl',
-					valueCleanup: ({ isTest }) => {
-						return { isTest: !isTest };
-					},
-				})
-			)
-		).toEqual({
-			...state,
-			TestControl: {
-				...state.TestControl,
-				value: { isTest: false },
-			},
-		});
-	});
-
 	it('should remove control', function () {
 		state = controlReducer(
 			state,

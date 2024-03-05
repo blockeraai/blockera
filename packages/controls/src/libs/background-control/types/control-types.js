@@ -56,6 +56,6 @@ export type TDefaultRepeaterItemValue = {
 
 export type TBackgroundControlProps = {
 	...RepeaterControlProps,
-	defaultValue: [] | Array<TDefaultRepeaterItemValue>,
+	defaultValue: {} | Object<TDefaultRepeaterItemValue>,
 	defaultRepeaterItemValue: TDefaultRepeaterItemValue,
 };

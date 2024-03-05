@@ -8,14 +8,13 @@ import memoize from 'fast-memoize';
 /**
  * Publisher dependencies
  */
-import { isEquals } from '@publisher/utils';
+import { isEquals, mergeObject } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
-import { isInnerBlock } from '../../components';
+import { isInnerBlock, isNormalState } from '../../components';
 import type {
-	TStates,
 	StateTypes,
 	BreakpointTypes,
 } from '../../libs/block-states/types';
@@ -48,55 +47,77 @@ export const memoizedRootBreakpoints: (
 ) => BreakpointTypes = memoize(
 	(
 		breakpoint,
-		{ newValue, attributeId, currentBlock, effectiveItems },
+		{
+			newValue,
+			attributeId,
+			currentBlock,
+			effectiveItems,
+			currentBreakpoint,
+			currentInnerBlockState,
+		},
 		insideInnerBlock: boolean = false
 	) => {
-		if (isInnerBlock(currentBlock) && !insideInnerBlock) {
-			return {
-				...breakpoint,
+		if (isInnerBlock(currentBlock) && insideInnerBlock) {
+			if (!isNormalState(currentInnerBlockState)) {
+				if ('publisherBlockStates' === attributeId) {
+					return mergeObject(breakpoint, {
+						attributes: {
+							publisherInnerBlocks: {
+								[currentBlock]: {
+									attributes: {
+										...effectiveItems,
+										[attributeId]: newValue,
+									},
+								},
+							},
+						},
+					});
+				}
+
+				return mergeObject(breakpoint, {
+					attributes: {
+						publisherInnerBlocks: {
+							[currentBlock]: {
+								attributes: {
+									publisherBlockStates: {
+										[currentInnerBlockState]: {
+											breakpoints: {
+												[currentBreakpoint]: {
+													attributes: {
+														...effectiveItems,
+														[attributeId]: newValue,
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				});
+			}
+
+			return mergeObject(breakpoint, {
 				attributes: {
-					...breakpoint.attributes,
 					publisherInnerBlocks: {
-						...(breakpoint.attributes?.publisherInnerBlocks || {}),
 						[currentBlock]: {
-							...(breakpoint.attributes?.publisherInnerBlocks &&
-							breakpoint.attributes?.publisherInnerBlocks[
-								currentBlock
-							]
-								? breakpoint.attributes?.publisherInnerBlocks[
-										currentBlock
-								  ]
-								: {}),
 							attributes: {
-								...(breakpoint.attributes
-									?.publisherInnerBlocks &&
-								breakpoint.attributes?.publisherInnerBlocks[
-									currentBlock
-								] &&
-								breakpoint.attributes?.publisherInnerBlocks[
-									currentBlock
-								]?.attributes
-									? breakpoint.attributes
-											?.publisherInnerBlocks[currentBlock]
-											?.attributes
-									: {}),
 								...effectiveItems,
 								[attributeId]: newValue,
 							},
 						},
 					},
 				},
-			};
+			});
 		}
 
-		return {
-			...breakpoint,
+		return mergeObject(breakpoint, {
 			attributes: {
-				...breakpoint.attributes,
 				...effectiveItems,
 				[attributeId]: newValue,
 			},
-		};
+		});
 	}
 );
 
@@ -110,22 +131,14 @@ export const memoizedBlockStates: (
 		action: Object,
 		insideInnerBlock?: boolean = false
 	): Object => {
-		const { currentState, currentBreakpoint, currentInnerBlockState } =
-			action;
-		const stateType: TStates = insideInnerBlock
-			? currentInnerBlockState
-			: currentState;
+		const { currentState, currentBreakpoint } = action;
 		const breakpoints =
-			currentBlockAttributes?.publisherBlockStates[stateType]
+			currentBlockAttributes?.publisherBlockStates[currentState]
 				?.breakpoints;
 
-		return {
-			...currentBlockAttributes?.publisherBlockStates,
-			//$FlowFixMe
-			[stateType]: {
-				...currentBlockAttributes?.publisherBlockStates[stateType],
+		return mergeObject(currentBlockAttributes?.publisherBlockStates, {
+			[currentState]: {
 				breakpoints: {
-					...breakpoints,
 					[currentBreakpoint]: memoizedRootBreakpoints(
 						breakpoints[currentBreakpoint],
 						action,
@@ -133,6 +146,6 @@ export const memoizedBlockStates: (
 					),
 				},
 			},
-		};
+		});
 	}
 );

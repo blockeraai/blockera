@@ -77,7 +77,7 @@ const RepeaterItem = ({
 		};
 	}, [draggingIndex, itemId]);
 
-	const handleDragStart = (e: DragEvent, index: number) => {
+	const handleDragStart = (e: DragEvent, index: string) => {
 		if (!item.sortable) {
 			return;
 		}
@@ -104,7 +104,7 @@ const RepeaterItem = ({
 		e.preventDefault();
 	};
 
-	const handleDrop = (e: DragEvent, index: number) => {
+	const handleDrop = (e: DragEvent, index: string) => {
 		e.preventDefault();
 
 		if (e.dataTransfer) {
@@ -123,7 +123,7 @@ const RepeaterItem = ({
 		}
 	};
 
-	if (!item?.display) {
+	if (!item?.display && item.selectable) {
 		return null;
 	}
 

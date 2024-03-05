@@ -2,7 +2,13 @@
 /**
  * Publisher dependencies
  */
-import { isEmpty } from '@publisher/utils';
+import { isEmpty, isString, isEmptyObject } from '@publisher/utils';
+import {
+	getGradientType,
+	getGradientVAFromVarString,
+} from '@publisher/core-data';
+import { isValid } from '@publisher/hooks/src/use-value-addon/helpers';
+import type { ValueAddon } from '@publisher/hooks/src/use-value-addon/types';
 
 export function backgroundFromWPCompatibility({
 	attributes,
@@ -10,10 +16,14 @@ export function backgroundFromWPCompatibility({
 	attributes: Object,
 	blockId?: string,
 }): Object {
-	if (
-		attributes?.publisherBackground['image-0'] === undefined &&
-		attributes?.style?.background?.backgroundImage?.url !== undefined
-	) {
+	if (!isEmptyObject(attributes?.publisherBackground)) {
+		return attributes;
+	}
+
+	//
+	// Background Image
+	//
+	if (attributes?.style?.background?.backgroundImage?.url !== undefined) {
 		attributes.publisherBackground = {
 			'image-0': {
 				type: 'image',
@@ -32,6 +42,70 @@ export function backgroundFromWPCompatibility({
 			},
 			...attributes.publisherBackground,
 		};
+	}
+
+	//
+	// Gradient Background
+	//
+	let gradient: ValueAddon | boolean | string = false;
+	let gradientType: string = '';
+
+	// gradient attribute in root always is variable
+	// it should be changed to a Value Addon (variable)
+	if (attributes?.gradient !== undefined) {
+		gradient = getGradientVAFromVarString(attributes?.gradient);
+
+		if (isValid(gradient)) {
+			gradientType = getGradientType(gradient);
+		}
+	}
+	// style.color.background is not variable
+	else if (attributes?.style?.color?.gradient !== undefined) {
+		gradient = attributes?.style?.color?.gradient;
+		gradientType = getGradientType(attributes?.style?.color?.gradient);
+	}
+
+	if (gradient !== false && gradientType !== '') {
+		if (gradientType === 'linear-gradient') {
+			let angel = '0';
+
+			if (isString(gradient)) {
+				//$FlowFixMe
+				const _angel = gradient.match(
+					/linear-gradient\(\s*(.*?)deg,/im
+				);
+
+				if (_angel && _angel[1] !== undefined) {
+					angel = _angel[1];
+				}
+			}
+
+			attributes.publisherBackground = {
+				'linear-gradient-0': {
+					type: gradientType,
+					'linear-gradient': gradient,
+					'linear-gradient-angel': angel,
+					'linear-gradient-repeat': 'no-repeat',
+					'linear-gradient-attachment': 'scroll',
+					isOpen: false,
+					order: 1,
+				},
+				...attributes.publisherBackground,
+			};
+		} else {
+			attributes.publisherBackground = {
+				'radial-gradient-0': {
+					type: gradientType,
+					'radial-gradient': gradient,
+					position: { top: '50%', left: '50%' },
+					'radial-gradient-size': 'farthest-corner',
+					'linear-gradient-attachment': 'scroll',
+					isOpen: false,
+					order: 1,
+				},
+				...attributes.publisherBackground,
+			};
+		}
 	}
 
 	return attributes;

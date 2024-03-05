@@ -36,5 +36,3 @@ export type FilterControlProps = {
 	...RepeaterControlProps,
 	defaultRepeaterItemValue?: TItem,
 };
-
-export type TValueCleanUp = Array<Object> | any;

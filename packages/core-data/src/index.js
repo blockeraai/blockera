@@ -9,6 +9,14 @@ import { dispatch } from '@wordpress/data';
  */
 import { STORE_NAME } from './store';
 
+export function unstableBootstrapServerSideEntities(definitions: Object) {
+	const { addBootstrappedEntity } = dispatch(STORE_NAME);
+
+	for (const [name, entity] of Object.entries(definitions)) {
+		addBootstrappedEntity(name, entity);
+	}
+}
+
 export function unstableBootstrapServerSideDynamicValueDefinitions(
 	definitions: Object
 ) {

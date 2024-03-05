@@ -19,6 +19,7 @@ import { Button, Grid } from '@publisher/components';
  * Internal dependencies.
  */
 import PlusIcon from './icons/plus';
+import { cleanupRepeater } from './utils';
 import { LabelControl } from '../label-control';
 import { useControlContext } from '../../context';
 import { RepeaterContextProvider } from './context';
@@ -54,6 +55,7 @@ export default function RepeaterControl({
 	popoverClassName,
 	maxItems = -1,
 	minItems = 0,
+	selectable = false,
 	actionButtonAdd = true,
 	actionButtonVisibility = true,
 	actionButtonDelete = true,
@@ -78,8 +80,7 @@ export default function RepeaterControl({
 	onSelect,
 	onDelete,
 	overrideItem,
-	valueCleanup,
-	isItemDeletable,
+	valueCleanup = cleanupRepeater,
 	itemIdGenerator,
 	//
 	className,
@@ -89,6 +90,7 @@ export default function RepeaterControl({
 	defaultRepeaterItemValue = {
 		...defaultItemValue,
 		...defaultRepeaterItemValue,
+		selectable,
 	};
 
 	const {
@@ -121,6 +123,7 @@ export default function RepeaterControl({
 		popoverClassName,
 		maxItems,
 		minItems,
+		selectable,
 		actionButtonAdd,
 		actionButtonVisibility,
 		actionButtonDelete,
@@ -133,7 +136,6 @@ export default function RepeaterControl({
 		overrideItem,
 		getControlPath,
 		itemIdGenerator,
-		isItemDeletable,
 		repeaterItemOpener,
 		repeaterItemHeader,
 		repeaterItemChildren,

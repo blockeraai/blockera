@@ -2,7 +2,7 @@
 /**
  * Publisher dependencies
  */
-import { isFunction, isEquals, isUndefined, omit } from '@publisher/utils';
+import { isEquals, isUndefined, omit } from '@publisher/utils';
 
 /**
  * The global state management control context provider!
@@ -25,10 +25,7 @@ export function controlReducer(state: Object = {}, action: Object): Object {
 			return omit(state, action.names);
 
 		case 'MODIFY_CONTROL_VALUE':
-			const { valueCleanup } = action;
-			const value = isFunction(valueCleanup)
-				? valueCleanup(action.value)
-				: action.value;
+			const value = action.value;
 
 			//When you need to modify total columns of value up to date!
 			if (isUndefined(action.propId)) {

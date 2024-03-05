@@ -82,7 +82,7 @@ export function onChangeBlockStates(
 	newValue: { [key: TStates]: { ...StateTypes, isSelected: boolean } },
 	params: Object
 ): void {
-	const { states: _states, onChange, currentBlock, calculatedValue } = params;
+	const { states: _states, onChange, currentBlock } = params;
 	const {
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setInnerBlockState,
@@ -94,9 +94,9 @@ export function onChangeBlockStates(
 			{ ...StateTypes, isSelected: boolean }
 		]): void => {
 			if (isInnerBlock(currentBlock) && state?.isSelected) {
-				setInnerBlockState(state?.type || calculatedValue[id]?.type);
+				setInnerBlockState(id);
 			} else if (state?.isSelected) {
-				setCurrentState(state?.type || calculatedValue[id]?.type);
+				setCurrentState(id);
 			}
 		}
 	);

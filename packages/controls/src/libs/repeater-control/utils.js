@@ -6,14 +6,18 @@
 import type { MixedElement } from 'react';
 
 /**
+ * Publisher dependencies
+ */
+import { convertDegToCharacter, isNumber } from '@publisher/utils';
+
+/**
  * Internal dependencies
  */
+import type { CleanupRepeaterArgs } from './types';
 import { extractNumberAndUnit } from '../input-control/utils';
 
 export const isOpenPopoverEvent = (event: Object): boolean =>
 	!['svg', 'button', 'path'].includes(event?.target?.tagName);
-
-import { convertDegToCharacter, isNumber } from '@publisher/utils';
 
 export function prepValueForHeader(value: any): MixedElement | string {
 	if (value === '') {
@@ -52,6 +56,38 @@ export function getSortedRepeater(items: Object): Array<Object> {
 	return dataArray;
 }
 
-export function getArialLabelSuffix(itemId: string): string {
-	return isNumber(Number(itemId)) ? Number(itemId) + 1 : itemId;
+export function getArialLabelSuffix(itemId: string): string | number {
+	return isNumber(Number(itemId.trim())) ? Number(itemId) + 1 : itemId;
+}
+
+export function cleanupRepeaterItem(item: Object): Object {
+	delete item.isOpen;
+	delete item.display;
+	delete item.cloneable;
+	delete item.deletable;
+	delete item.isSelected;
+	delete item.selectable;
+	delete item.visibilitySupport;
+
+	return item;
+}
+
+export function cleanupRepeater(
+	items: Object,
+	args: CleanupRepeaterArgs = {}
+): Object {
+	const { callback } = args;
+	let clonedItems = { ...items };
+
+	clonedItems = Object.fromEntries(
+		Object.entries(clonedItems).map(([itemId, item]): Object => {
+			if ('function' === typeof callback) {
+				return [itemId, callback(cleanupRepeaterItem(item))];
+			}
+
+			return [itemId, cleanupRepeaterItem(item)];
+		})
+	);
+
+	return clonedItems;
 }

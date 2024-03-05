@@ -29,6 +29,16 @@ export function isEmpty(value: any): boolean {
 }
 
 /**
+ * Is empty passed object?
+ *
+ * @param {Object} object any object
+ * @return {boolean} true on success, false when otherwise!
+ */
+export function isEmptyObject(object: Object): boolean {
+	return !object || !Object.keys(object).length;
+}
+
+/**
  * is a given value null?
  *
  * @param {*} [value]

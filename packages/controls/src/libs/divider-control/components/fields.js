@@ -280,7 +280,6 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								repeaterItem={itemId}
 								id={getControlId(itemId, 'size.width')}
 								singularId={'size.width'}
-								isRepeater={true}
 								columns="columns-1"
 								label={__('Width', 'publisher-core')}
 								labelPopoverTitle={__(

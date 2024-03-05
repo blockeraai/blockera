@@ -9,7 +9,6 @@ import type { MixedElement } from 'react';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { isArray } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -17,7 +16,8 @@ import { isArray } from '@publisher/utils';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
-import type { FilterControlProps, TValueCleanUp } from './types';
+import type { FilterControlProps } from './types';
+import { cleanupRepeater } from '../repeater-control/utils';
 import { FilterLabelDescription } from './components/filter-label-description';
 
 export default function FilterControl({
@@ -46,56 +46,50 @@ export default function FilterControl({
 	defaultValue = [],
 	...props
 }: FilterControlProps): MixedElement {
-	function valueCleanup(value: TValueCleanUp) {
-		if (!isArray(value)) {
-			return value;
+	function valueCleanup(item: Object) {
+		if (item?.type !== 'blur') {
+			delete item.blur;
 		}
 
-		return value.map((item) => {
-			if (item?.type !== 'blur') {
-				delete item.blur;
-			}
+		if (item?.type !== 'brightness') {
+			delete item.brightness;
+		}
 
-			if (item?.type !== 'brightness') {
-				delete item.brightness;
-			}
+		if (item?.type !== 'contrast') {
+			delete item.contrast;
+		}
 
-			if (item?.type !== 'contrast') {
-				delete item.contrast;
-			}
+		if (item?.type !== 'hue-rotate') {
+			delete item['hue-rotate'];
+		}
 
-			if (item?.type !== 'hue-rotate') {
-				delete item['hue-rotate'];
-			}
+		if (item?.type !== 'saturate') {
+			delete item.saturate;
+		}
 
-			if (item?.type !== 'saturate') {
-				delete item.saturate;
-			}
+		if (item?.type !== 'grayscale') {
+			delete item.grayscale;
+		}
 
-			if (item?.type !== 'grayscale') {
-				delete item.grayscale;
-			}
+		if (item?.type !== 'invert') {
+			delete item.invert;
+		}
 
-			if (item?.type !== 'invert') {
-				delete item.invert;
-			}
+		if (item?.type !== 'sepia') {
+			delete item.sepia;
+		}
 
-			if (item?.type !== 'sepia') {
-				delete item.sepia;
-			}
+		if (item?.type !== 'drop-shadow') {
+			delete item['drop-shadow-x'];
+			delete item['drop-shadow-y'];
+			delete item['drop-shadow-blur'];
+			delete item['drop-shadow-color'];
+		}
 
-			if (item?.type !== 'drop-shadow') {
-				delete item['drop-shadow-x'];
-				delete item['drop-shadow-y'];
-				delete item['drop-shadow-blur'];
-				delete item['drop-shadow-color'];
-			}
+		// internal usage
+		delete item.isOpen;
 
-			// internal usage
-			delete item.isOpen;
-
-			return item;
-		});
+		return item;
 	}
 
 	return (
@@ -136,7 +130,9 @@ export default function FilterControl({
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			defaultValue={defaultValue}
 			{...props}
-			valueCleanup={valueCleanup}
+			valueCleanup={(value: Object): Object =>
+				cleanupRepeater(value, { callback: valueCleanup })
+			}
 		/>
 	);
 }

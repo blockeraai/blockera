@@ -1154,7 +1154,7 @@ const Fields: FieldItem = memo<FieldItem>(
 										controlId,
 										repeaterId,
 										itemId,
-										value: meshGradientProvider(item),
+										value: meshGradientProvider(item, true),
 									});
 								}}
 							>
@@ -1230,9 +1230,6 @@ const Fields: FieldItem = memo<FieldItem>(
 									color: getRandomHexColor(),
 									isOpen: false,
 								}}
-								isItemDeletable={(_itemId: string): boolean =>
-									'--c0' !== _itemId
-								}
 							/>
 						</BaseControl>
 

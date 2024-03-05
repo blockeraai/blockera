@@ -1,13 +1,24 @@
+// @flow
+
+/**
+ * External dependencies
+ */
+import { memo, useContext } from '@wordpress/element';
+import type { MixedElement } from 'react';
+
 /**
  * Publisher dependencies
  */
 import { controlInnerClassNames } from '@publisher/classnames';
-import { getLibraryIcons } from '../utils';
-import { useContext } from '@wordpress/element';
-import { IconContext } from '../context';
-import { isEmpty, isUndefined } from '@publisher/utils';
+import { hasSameProps, isEmpty, isUndefined } from '@publisher/utils';
 
-export default function Suggestions({ limit = 6 }) {
+/**
+ * Internal dependencies
+ */
+import { getLibraryIcons } from '../utils';
+import { IconContext } from '../context';
+
+const Suggestions = ({ limit = 6 }: { limit: number }): MixedElement => {
 	const { handleIconSelect, suggestionsQuery, isCurrentIcon } =
 		useContext(IconContext);
 
@@ -32,4 +43,6 @@ export default function Suggestions({ limit = 6 }) {
 			)}
 		</>
 	);
-}
+};
+
+export default (memo(Suggestions, hasSameProps): Object);

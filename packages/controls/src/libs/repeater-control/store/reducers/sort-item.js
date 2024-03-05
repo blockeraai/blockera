@@ -10,6 +10,23 @@ import { update } from '@publisher/data-extractor';
  */
 import { hasRepeaterId } from './utils';
 
+function getItemId(
+	newItemId: string,
+	{ itemId, item }: { itemId: string, item: any }
+): string {
+	if (!item?.type) {
+		return newItemId;
+	}
+
+	const regexp = new RegExp(`^${item.type}`, 'i');
+
+	if (!regexp.test(newItemId)) {
+		return itemId;
+	}
+
+	return newItemId;
+}
+
 function sortingRepeater(
 	[itemId, item]: [string, Object],
 	action: Object
@@ -19,7 +36,7 @@ function sortingRepeater(
 
 	if (action.fromIndex === itemId) {
 		return [
-			itemId,
+			getItemId(action.toIndex, { item, itemId }),
 			{
 				...item,
 				order: fromOrder,
@@ -28,7 +45,7 @@ function sortingRepeater(
 	}
 	if (action.toIndex === itemId) {
 		return [
-			itemId,
+			getItemId(action.fromIndex, { item, itemId }),
 			{
 				...item,
 				order: toOrder,
