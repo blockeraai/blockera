@@ -155,6 +155,10 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 											</p>
 										</>
 									}
+									aria-label={__(
+										'Input Width',
+										'publisher-core'
+									)}
 									columns="columns-2"
 									placeholder="Auto"
 									unitType="width"
