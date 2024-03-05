@@ -43,6 +43,9 @@ export const LayoutStyles = ({
 		publisherGridRows,
 		publisherGridAreas,
 		publisherGridGap,
+		publisherGridAlignItems,
+		publisherGridJustifyItems,
+		publisherGridDirection,
 	} = config.layoutConfig;
 	const blockProps = {
 		clientId,
@@ -506,6 +509,103 @@ export const LayoutStyles = ({
 							{
 								type: 'function',
 								function: GridAreaGenerator,
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+
+		if (
+			isActiveField(publisherGridAlignItems) &&
+			_attributes.publisherGridAlignItems !==
+				attributes.publisherGridAlignItems.default
+		) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherGridAlignItems',
+				fallbackSupportId: 'gridAlignItems',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherGridAlignItems: [
+							{
+								...staticDefinitionParams,
+								properties: {
+									'align-items':
+										_attributes.publisherGridAlignItems,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+
+		if (
+			isActiveField(publisherGridJustifyItems) &&
+			_attributes.publisherGridJustifyItems !==
+				attributes.publisherGridJustifyItems.default
+		) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherGridJustifyItems',
+				fallbackSupportId: 'gridJustifyItems',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherGridJustifyItems: [
+							{
+								...staticDefinitionParams,
+								properties: {
+									'justify-items':
+										_attributes.publisherGridJustifyItems,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+
+		if (
+			isActiveField(publisherGridDirection) &&
+			!arrayEquals(
+				_attributes.publisherGridDirection !==
+					attributes.publisherGridDirection.default
+			)
+		) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherGridDirection',
+				fallbackSupportId: 'gridDirection',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherGridDirection: [
+							{
+								...staticDefinitionParams,
+								properties: {
+									'grid-auto-flow': `${
+										_attributes.publisherGridDirection.value
+									} ${
+										_attributes.publisherGridDirection.dense
+											? 'dense'
+											: ''
+									}`,
+								},
 							},
 						],
 					},

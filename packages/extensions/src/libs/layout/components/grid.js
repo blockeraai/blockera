@@ -13,6 +13,8 @@ import {
 	BaseControl,
 	ControlContextProvider,
 	InputControl,
+	ToggleControl,
+	ToggleSelectControl,
 } from '@publisher/controls';
 import { useBlockContext } from '../../../hooks';
 import { generateAreas, uId } from '../../../components/grid-builder/utils';
@@ -22,21 +24,16 @@ import { generateAreas, uId } from '../../../components/grid-builder/utils';
  */
 import { generateExtensionId } from '../../utils';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
-// import { default as JustifyCenterIcon } from '../icons/justify-center';
-// import { default as JustifyFlexEndIcon } from '../icons/justify-flex-end';
-// import { default as JustifyFlexStartIcon } from '../icons/justify-flex-start';
-// import { default as AlignContentCenterIcon } from '../icons/align-content-center';
-// import { default as JustifySpaceBetweenIcon } from '../icons/justify-space-between';
-// import { default as AlignItemsCenterBlockIcon } from '../icons/align-items-center';
-// import { default as AlignContentStretchIcon } from '../icons/align-content-stretch';
-// import { default as AlignContentFlexEndIcon } from '../icons/align-content-flex-end';
-// import { default as AlignItemsStretchBlockIcon } from '../icons/align-items-stretch';
-// import { default as AlignItemsFlexEndBlockIcon } from '../icons/align-items-flex-end';
-// import { default as AlignItemsBaselineBlockIcon } from '../icons/align-items-baseline';
-// import { default as AlignContentFlexStartIcon } from '../icons/align-content-flex-start';
-// import { default as AlignItemsFlexStartBlockIcon } from '../icons/align-items-flex-start';
-// import { default as AlignContentSpaceAroundIcon } from '../icons/align-content-space-around';
-// import { default as AlignContentSpaceBetweenIcon } from '../icons/align-content-space-between';
+import { default as JustifyCenterIcon } from '../icons/justify-center';
+import { default as JustifyFlexEndIcon } from '../icons/justify-flex-end';
+import { default as JustifyFlexStartIcon } from '../icons/justify-flex-start';
+import { default as JustifySpaceBetweenIcon } from '../icons/justify-space-between';
+import { default as AlignItemsCenterBlockIcon } from '../icons/align-items-center';
+import { default as AlignItemsStretchBlockIcon } from '../icons/align-items-stretch';
+import { default as AlignItemsFlexEndBlockIcon } from '../icons/align-items-flex-end';
+import { default as AlignItemsBaselineBlockIcon } from '../icons/align-items-baseline';
+import { default as AlignItemsFlexStartBlockIcon } from '../icons/align-items-flex-start';
+
 import { isShowField } from '../../../api/utils';
 import { default as EditIcon } from '../icons/edit';
 
@@ -48,12 +45,14 @@ export default function ({
 	handleOnChangeAttributes,
 	values,
 	attributes,
+	extensionProps,
 }: {
 	extensionConfig: Object,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	block: TBlockProps,
 	values: Object,
 	attributes: Object,
+	extensionProps: Object,
 }): MixedElement {
 	const isShowRows = isShowField(
 		extensionConfig.publisherGridRows,
@@ -69,6 +68,21 @@ export default function ({
 		extensionConfig.publisherGridGap,
 		values?.publisherGridGap,
 		attributes.publisherGridGap.default
+	);
+	const isShowGridAlignItems = isShowField(
+		extensionConfig.publisherGridAlignItems,
+		values?.publisherGridAlignItems,
+		attributes.publisherGridAlignItems.default
+	);
+	const isShowGridJustifyItems = isShowField(
+		extensionConfig.publisherGridJustifyItems,
+		values?.publisherGridJustifyItems,
+		attributes.publisherGridJustifyItems.default
+	);
+	const isShowGridDirection = isShowField(
+		extensionConfig.publisherGridDirection,
+		values?.publisherGridDirection,
+		attributes.publisherGridDirection.default
 	);
 
 	const defaultGridItemValue = {
@@ -215,6 +229,7 @@ export default function ({
 										? Math.max(...mergedAreasRowEnd) - 1
 										: 1
 								}
+								{...extensionProps.publisherGridRows}
 							/>
 						</ControlContextProvider>
 					</FeatureWrapper>
@@ -331,17 +346,78 @@ export default function ({
 										? Math.max(...mergedAreasColumnEnd) - 1
 										: 1
 								}
+								{...extensionProps.publisherGridColumns}
 							/>
 						</ControlContextProvider>
 					</FeatureWrapper>
 				</Flex>
 			</BaseControl>
 
-			{/* {/* {isActiveField(publisherGridAlignItems) && (
+			<FeatureWrapper
+				isActive={isShowGridDirection}
+				config={extensionConfig.publisherGridDirection}
+			>
+				<ControlContextProvider
+					value={{
+						name: generateExtensionId(block, 'grid-direction'),
+						value: values.publisherGridDirection,
+						attribute: 'publisherGridDirection',
+						blockName: block.blockName,
+					}}
+				>
+					<ToggleSelectControl
+						id="value"
+						columns="80px 160px"
+						label={__('Direction', 'publisher-core')}
+						isDeselectable={true}
+						controlName="toggle-select"
+						defaultValue={
+							attributes.publisherGridDirection.default.value
+						}
+						onChange={(value: string, ref?: Object): void =>
+							handleOnChangeAttributes(
+								'publisherGridDirection',
+								{ ...values.publisherGridDirection, value },
+								{ ref }
+							)
+						}
+						options={[
+							{
+								label: __('Row', 'publisher-core'),
+								value: 'row',
+							},
+							{
+								label: __('Column', 'publisher-core'),
+								value: 'column',
+							},
+						]}
+					/>
+					<ToggleControl
+						id="dense"
+						columns="columns-2"
+						label={__('Dense', 'publisher-core')}
+						onChange={(dense: string, ref?: Object): void =>
+							handleOnChangeAttributes(
+								'publisherGridDirection',
+								{ ...values.publisherGridDirection, dense },
+								{ ref }
+							)
+						}
+						defaultValue={
+							attributes.publisherGridDirection.default.dense
+						}
+					/>
+				</ControlContextProvider>
+			</FeatureWrapper>
+
+			<FeatureWrapper
+				isActive={isShowGridAlignItems}
+				config={extensionConfig.publisherGridAlignItems}
+			>
 				<ControlContextProvider
 					value={{
 						name: generateExtensionId(block, 'grid-align-items'),
-						value: gridAlignItems,
+						value: values.publisherGidAlignItems,
 						attribute: 'publisherGridAlignItems',
 						blockName: block.blockName,
 					}}
@@ -351,7 +427,9 @@ export default function ({
 						label={__('Align Items', 'publisher-core')}
 						isDeselectable={true}
 						controlName="toggle-select"
-						defaultValue={gridAlignItems || ''}
+						defaultValue={
+							attributes.publisherGridAlignItems.default
+						}
 						onChange={(newValue: string, ref?: Object): void =>
 							handleOnChangeAttributes(
 								'publisherGridAlignItems',
@@ -388,14 +466,17 @@ export default function ({
 							},
 						]}
 					/>
-				</ControlContextProvider>
-			)} 
+				</ControlContextProvider>{' '}
+			</FeatureWrapper>
 
-			{isActiveField(publisherGridJustifyItems) && (
+			<FeatureWrapper
+				isActive={isShowGridJustifyItems}
+				config={extensionConfig.publisherGridJustifyItems}
+			>
 				<ControlContextProvider
 					value={{
 						name: generateExtensionId(block, 'grid-justify-items'),
-						value: gridJustifyItems,
+						value: values.publisherGridJustifyItems,
 						attribute: 'publisherGridJustifyItems',
 						blockName: block.blockName,
 					}}
@@ -427,7 +508,9 @@ export default function ({
 							},
 						]}
 						isDeselectable={true}
-						defaultValue={gridJustifyItems || ''}
+						defaultValue={
+							attributes.publisherGridJustifyItems.default
+						}
 						onChange={(newValue: string, ref?: Object): void =>
 							handleOnChangeAttributes(
 								'publisherGridJustifyItems',
@@ -437,128 +520,8 @@ export default function ({
 						}
 					/>
 				</ControlContextProvider>
-			)}
+			</FeatureWrapper>
 
-			{isActiveField(publisherGridAlignContent) && (
-				<ControlContextProvider
-					value={{
-						name: generateExtensionId(block, 'grid-align-content'),
-						value: gridAlignContent,
-						attribute: 'publisherGridAlignContent',
-						blockName: block.blockName,
-					}}
-				>
-					<ToggleSelectControl
-						label={__('Align Content', 'publisher-core')}
-						columns="80px 160px"
-						controlName="toggle-select"
-						options={[
-							{
-								label: __('Start', 'publisher-core'),
-								value: 'start',
-								icon: <AlignContentFlexStartIcon />,
-							},
-							{
-								label: __('Center', 'publisher-core'),
-								value: 'center',
-								icon: <AlignContentCenterIcon />,
-							},
-							{
-								label: __('End', 'publisher-core'),
-								value: 'end',
-								icon: <AlignContentFlexEndIcon />,
-							},
-							{
-								label: __('Space Around', 'publisher-core'),
-								value: 'space-around',
-								icon: <AlignContentSpaceAroundIcon />,
-							},
-							{
-								label: __('Space Between', 'publisher-core'),
-								value: 'space-between',
-								icon: <AlignContentSpaceBetweenIcon />,
-							},
-							{
-								label: __('Stretch', 'publisher-core'),
-								value: 'stretch',
-								icon: <AlignContentStretchIcon />,
-							},
-						]}
-						isDeselectable={true}
-						//
-						defaultValue={gridAlignContent || ''}
-						onChange={(newValue: string, ref?: Object): void =>
-							handleOnChangeAttributes(
-								'publisherGridAlignContent',
-								newValue,
-								{ ref }
-							)
-						}
-					/>
-				</ControlContextProvider>
-			)}
-
-			{isActiveField(publisherGridJustifyContent) && (
-				<ControlContextProvider
-					value={{
-						name: generateExtensionId(
-							block,
-							'grid-justify-content'
-						),
-						value: gridJustifyContent,
-						attribute: 'publisherGridJustifyContent',
-						blockName: block.blockName,
-					}}
-				>
-					<ToggleSelectControl
-						label={__('Justify Content', 'publisher-core')}
-						columns="80px 160px"
-						controlName="toggle-select"
-						options={[
-							{
-								label: __('Start', 'publisher-core'),
-								value: 'start',
-								icon: <AlignContentFlexStartIcon />,
-							},
-							{
-								label: __('Center', 'publisher-core'),
-								value: 'center',
-								icon: <AlignContentCenterIcon />,
-							},
-							{
-								label: __('End', 'publisher-core'),
-								value: 'end',
-								icon: <AlignContentFlexEndIcon />,
-							},
-							{
-								label: __('Space Around', 'publisher-core'),
-								value: 'space-around',
-								icon: <AlignContentSpaceAroundIcon />,
-							},
-							{
-								label: __('Space Between', 'publisher-core'),
-								value: 'space-between',
-								icon: <AlignContentSpaceBetweenIcon />,
-							},
-							{
-								label: __('Stretch', 'publisher-core'),
-								value: 'stretch',
-								icon: <AlignContentStretchIcon />,
-							},
-						]}
-						isDeselectable={true}
-						//
-						defaultValue={gridJustifyContent || ''}
-						onChange={(newValue: string, ref?: Object): void =>
-							handleOnChangeAttributes(
-								'publisherGridJustifyContent',
-								newValue,
-								{ ref }
-							)
-						}
-					/>
-				</ControlContextProvider>
-			)} */}
 			<FeatureWrapper
 				isActive={isShowGap}
 				config={extensionConfig.publisherGridGap}
@@ -578,6 +541,7 @@ export default function ({
 						attributeId="publisherGridGap"
 						handleOnChangeAttributes={handleOnChangeAttributes}
 						defaultValue={attributes.publisherGridGap.default}
+						{...extensionProps.publisherGridGap}
 					/>
 				</ControlContextProvider>
 			</FeatureWrapper>

@@ -486,8 +486,8 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								publisherAlignContent: {},
 								publisherGridAlignItems: {},
 								publisherGridJustifyItems: {},
-								publisherGridAlignContent: {},
-								publisherGridJustifyContent: {},
+								//publisherGridAlignContent: {},
+								//publisherGridJustifyContent: {},
 								publisherGridGap: {},
 								publisherGridDirection: {},
 								publisherGridColumns: {},
@@ -509,10 +509,10 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									currentStateAttributes.publisherGridAlignItems,
 								publisherGridJustifyItems:
 									currentStateAttributes.publisherGridJustifyItems,
-								publisherGridAlignContent:
-									currentStateAttributes.publisherGridAlignContent,
-								publisherGridJustifyContent:
-									currentStateAttributes.publisherGridJustifyContent,
+								// publisherGridAlignContent:
+								// 	currentStateAttributes.publisherGridAlignContent,
+								// publisherGridJustifyContent:
+								// 	currentStateAttributes.publisherGridJustifyContent,
 								publisherGridGap:
 									currentStateAttributes.publisherGridGap,
 								publisherGridDirection:
@@ -536,10 +536,10 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									attributes.publisherGridAlignItems,
 								publisherGridJustifyItems:
 									attributes.publisherGridJustifyItems,
-								publisherGridAlignContent:
-									attributes.publisherGridAlignContent,
-								publisherGridJustifyContent:
-									attributes.publisherGridJustifyContent,
+								// publisherGridAlignContent:
+								// 	attributes.publisherGridAlignContent,
+								// publisherGridJustifyContent:
+								// 	attributes.publisherGridJustifyContent,
 								publisherGridGap: attributes.publisherGridGap,
 								publisherGridDirection:
 									attributes.publisherGridDirection,

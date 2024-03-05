@@ -27,22 +27,13 @@ export const attributes = {
 		type: 'string',
 		default: '',
 	},
-
-	publisherGridAlignContent: {
-		type: 'string',
-		default: '',
-	},
-	publisherGridJustifyContent: {
-		type: 'string',
-		default: '',
-	},
 	publisherGridGap: {
 		type: 'object',
 		default: { lock: true, gap: '20px', columns: '', rows: '' },
 	},
 	publisherGridDirection: {
 		type: 'object',
-		default: { value: '', dense: false },
+		default: { value: 'row', dense: false },
 	},
 	publisherGridColumns: {
 		type: 'object',

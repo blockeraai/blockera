@@ -754,6 +754,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 						values={values}
 						attributes={attributes}
 						handleOnChangeAttributes={handleOnChangeAttributes}
+						extensionProps={extensionProps}
 					/>
 				)}
 			</PanelBodyControl>
