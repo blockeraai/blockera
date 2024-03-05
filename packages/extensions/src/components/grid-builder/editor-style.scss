@@ -59,17 +59,18 @@
 	background: #147eb8;
 	display: flex;
 	overflow: hidden;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
-	//color: rgba(255, 255, 255, 0.60);
-	//fill: rgba(255, 255, 255, 0.60);
 	gap: 8px;
 	padding: 4px;
 	box-sizing: border-box;
 	user-select: none;
 
+	&.not-resizable {
+		justify-content: center;
+	}
+
 	.size-handler-content {
-		flex-grow: 1;
 		text-align: center;
 		display: flex;
 		align-items: center;
@@ -82,6 +83,8 @@
 		outline: none;
 		color: rgba(255, 255, 255, 0.6);
 		fill: rgba(255, 255, 255, 0.6);
+		width: fit-content;
+		position: relative;
 
 		.amount {
 			color: #ffffff;
@@ -89,6 +92,7 @@
 
 		.unit {
 			text-transform: uppercase;
+			margin: 1px;
 		}
 
 		.edit-icon {
@@ -99,6 +103,8 @@
 
 			&.show {
 		    	display: inline-block;
+				position: absolute;
+				right: -5px;
 			}
 		}
 	}
@@ -116,6 +122,16 @@
         transform: rotate(-90deg);
 	   }
 
+	   .edit-icon {
+
+		&.show {
+				display: inline-block;
+				position: absolute;
+				top: -15px;
+				left: 0;
+			}
+
+	   }
 	}
 
 	&.column-handler {

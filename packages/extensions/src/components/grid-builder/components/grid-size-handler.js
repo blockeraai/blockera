@@ -53,6 +53,10 @@ export const GridSizeHandler = ({
 				changedItem !== undefined &&
 				changedItem['sizing-mode'] === 'min/max'
 			) {
+				const unit = changedItem['max-size']
+					.match(/[^-\.0-9]/g)
+					.join('');
+
 				handleOnChangeAttributes(
 					attributeId,
 					{
@@ -61,11 +65,11 @@ export const GridSizeHandler = ({
 							...attribute.value.slice(0, changedItemIndex),
 							{
 								...changedItem,
-								'max-size': `${newValue}${changedItem[
-									'max-size'
-								]
-									.match(/[^-\.0-9]/g)
-									.join('')}`,
+								'max-size': `${
+									unit === 'fr'
+										? (newValue / 10).toFixed(2)
+										: newValue
+								}${unit}`,
 							},
 							...attribute.value.slice(changedItemIndex + 1),
 						],
@@ -75,6 +79,8 @@ export const GridSizeHandler = ({
 					}
 				);
 			} else if (changedItem !== undefined) {
+				const unit = changedItem.size.match(/[^-\.0-9]/g).join('');
+
 				handleOnChangeAttributes(
 					attributeId,
 					{
@@ -83,9 +89,11 @@ export const GridSizeHandler = ({
 							...attribute.value.slice(0, changedItemIndex),
 							{
 								...changedItem,
-								size: `${newValue}${changedItem?.size
-									.match(/[^-\.0-9]/g)
-									.join('')}`,
+								size: `${
+									unit === 'fr'
+										? (newValue / 10).toFixed(2)
+										: newValue
+								}${unit}`,
 							},
 							...attribute.value.slice(changedItemIndex + 1),
 						],
@@ -145,7 +153,9 @@ export const GridSizeHandler = ({
 						width: type === 'column' && '100%',
 					}}
 					key={item.id}
-					className={`size-handler ${type}-handler`}
+					className={`size-handler ${type}-handler ${
+						!isResizable && 'not-resizable'
+					}`}
 				>
 					{isResizable && (
 						<span
@@ -179,7 +189,8 @@ export const GridSizeHandler = ({
 						) : (
 							<>
 								<span className="amount">{minAmount}</span>
-								<span className="unit">{minUnit}</span> /
+								<span className="unit">{minUnit}</span>
+								<span> / </span>
 								<span className="amount">{maxAmount}</span>
 								<span className="unit">{maxUnit}</span>
 							</>
