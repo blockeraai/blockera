@@ -46,6 +46,7 @@ export const generateAreas = ({
 	gridRows: Array<Object>,
 	gridColumns: Array<Object>,
 	prevGridAreas: Array<Object>,
+	publisherGridDirection: Object,
 }): Array<Object> => {
 	const newGridAreas = ([]: any);
 	for (let i = 0; i < gridRows.length; i++) {
