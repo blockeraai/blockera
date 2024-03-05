@@ -27,6 +27,7 @@ export const GridSizeHandler = ({
 	block,
 	attributeId,
 	hovered,
+	createVirtualAreas,
 }: TGridSizeHandlerProps): any => {
 	const { handleOnChangeAttributes } = useBlockContext();
 
@@ -159,7 +160,10 @@ export const GridSizeHandler = ({
 					)}
 					<button
 						// eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
-						onMouseOver={() => setHovered(`${i + 1}/${i + 2}`)}
+						onMouseOver={() => {
+							createVirtualAreas();
+							setHovered(`${i + 1}/${i + 2}`);
+						}}
 						onMouseLeave={() => setHovered(null)}
 						onClick={() => {
 							setCurrentItemId(item.id);

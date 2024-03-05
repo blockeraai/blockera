@@ -197,6 +197,7 @@ export const VirtualGrid = ({
 					block={block}
 					attributeId="publisherGridColumns"
 					hovered={hoveredColumn}
+					createVirtualAreas={createVirtualAreas}
 				/>
 			</div>
 
@@ -218,6 +219,7 @@ export const VirtualGrid = ({
 					block={block}
 					attributeId="publisherGridRows"
 					hovered={hoveredRow}
+					createVirtualAreas={createVirtualAreas}
 				/>
 			</div>
 
@@ -387,6 +389,10 @@ export const VirtualGrid = ({
 					if (
 						_item.parentId === activeAreaId ||
 						_item.parentId === targetAreaId ||
+						hoveredColumn ===
+							`${_item['column-start']}/${_item['column-end']}` ||
+						hoveredRow ===
+							`${_item['row-start']}/${_item['row-end']}` ||
 						overlapAreas.find(
 							(overlapItem) => _item.parentId === overlapItem.id
 						)

@@ -43,6 +43,7 @@ export type TGridSizeHandlerProps = {
 	block: TBlockProps,
 	attributeId: 'publisherGridColumns' | 'publisherGridRows',
 	hovered: string | null,
+	createVirtualAreas: () => {},
 };
 
 export type TSizeSettingProps = {
