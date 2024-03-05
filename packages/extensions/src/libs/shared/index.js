@@ -280,6 +280,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								setAttributes,
 								blockName: props.name,
 							}}
+							{...{
+								currentBlock,
+								currentState,
+								currentBreakpoint,
+								currentInnerBlockState,
+							}}
 						/>
 					</Fill>
 

@@ -14,6 +14,7 @@ import { extensionInnerClassNames } from '@publisher/classnames';
  * Internal dependencies
  */
 import { CaretIcon } from '../icons';
+import statesDefinition from '../../../libs/block-states/states';
 import type { StateTypes, TStates } from '../../block-states/types';
 import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
 
@@ -41,10 +42,14 @@ export function Breadcrumb({
 
 	const CurrentState = ({
 		current,
+		definition,
 	}: {
 		current: { ...StateTypes, isSelected: boolean },
+		definition: { label: string, type: string },
 	}): MixedElement => {
-		if (!current || !current?.isSelected || 'normal' === current?.type) {
+		const { label, type } = definition;
+
+		if (!current || !current?.isSelected || 'normal' === type) {
 			return <></>;
 		}
 
@@ -55,10 +60,10 @@ export function Breadcrumb({
 					className={extensionInnerClassNames(
 						'block-card__title__item',
 						'item-state',
-						'item-state-' + current.type
+						'item-state-' + type
 					)}
 				>
-					{current.label}
+					{label}
 				</span>
 			</>
 		);
@@ -66,7 +71,10 @@ export function Breadcrumb({
 
 	return (
 		<>
-			<CurrentState current={states[activeState]} />
+			<CurrentState
+				current={states[activeState]}
+				definition={statesDefinition[activeState]}
+			/>
 
 			{null !== currentInnerBlock && (
 				<>
@@ -94,6 +102,9 @@ export function Breadcrumb({
 										?.publisherBlockStates[
 										activeInnerBlockState
 									]
+								}
+								definition={
+									statesDefinition[activeInnerBlockState]
 								}
 							/>
 						)}

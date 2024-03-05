@@ -3,6 +3,7 @@
 import type { TBreakpoint } from './breakpoint-types';
 import type { BlockStates, TStates } from './state-types';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { InnerBlockType } from '../../inner-blocks/types';
 
 export * from './prop-types';
 export * from './state-types';
@@ -27,4 +28,8 @@ export type StatesManagerProps = {
 	},
 	states: BlockStates,
 	onChange: THandleOnChangeAttributes,
+	currentBlock: 'master' | InnerBlockType,
+	currentState: TStates,
+	currentBreakpoint: TBreakpoint,
+	currentInnerBlockState: TStates,
 };

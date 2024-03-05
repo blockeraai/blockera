@@ -5,7 +5,7 @@
  */
 import memoize from 'fast-memoize';
 import { __ } from '@wordpress/i18n';
-import { dispatch, useSelect } from '@wordpress/data';
+import { dispatch } from '@wordpress/data';
 import type { Element, ComponentType } from 'react';
 import { memo, useMemo, useCallback } from '@wordpress/element';
 
@@ -14,7 +14,6 @@ import { memo, useMemo, useCallback } from '@wordpress/element';
  */
 import { isEquals, omit } from '@publisher/utils';
 import { controlInnerClassNames } from '@publisher/classnames';
-import type { ControlInfo } from '@publisher/controls/src/context/types';
 import { ControlContextProvider, RepeaterControl } from '@publisher/controls';
 import { STORE_NAME } from '@publisher/controls/src/libs/repeater-control/store';
 import { defaultItemValue } from '@publisher/controls/src/libs/repeater-control';
@@ -37,35 +36,25 @@ import type {
 	TStates,
 	TBreakpoint,
 } from '../types';
-import { useBlockContext } from '../../../hooks';
 import { isInnerBlock } from '../../../components';
 import { LabelDescription } from './label-description';
 import { PopoverTitleButtons } from './popover-title-buttons';
 import StateContainer from '../../../components/state-container';
 
 const StatesManager: ComponentType<any> = memo(
-	({ block, states, onChange }: StatesManagerProps): Element<any> => {
+	({
+		block,
+		states,
+		onChange,
+		currentBlock,
+		currentState,
+		currentBreakpoint,
+		currentInnerBlockState,
+	}: StatesManagerProps): Element<any> => {
 		const {
 			changeExtensionCurrentBlockState: setCurrentState,
 			changeExtensionInnerBlockState: setInnerBlockState,
 		} = dispatch('publisher-core/extensions') || {};
-
-		const { isNormalState } = useBlockContext();
-
-		const { currentBlock, currentState, currentInnerBlockState } =
-			useSelect((select) => {
-				const {
-					getExtensionCurrentBlock,
-					getExtensionInnerBlockState,
-					getExtensionCurrentBlockState,
-				} = select('publisher-core/extensions');
-
-				return {
-					currentBlock: getExtensionCurrentBlock(),
-					currentState: getExtensionCurrentBlockState(),
-					currentInnerBlockState: getExtensionInnerBlockState(),
-				};
-			});
 
 		const calculatedValue = useMemo(() => {
 			const itemsCount = Object.values(states).length;
@@ -80,9 +69,9 @@ const StatesManager: ComponentType<any> = memo(
 					]): void => {
 						if (state?.isSelected) {
 							if (isInnerBlock(currentBlock)) {
-								setInnerBlockState(state.type);
+								setInnerBlockState(itemId);
 							} else {
-								setCurrentState(state.type);
+								setCurrentState(itemId);
 							}
 						}
 
@@ -134,125 +123,87 @@ const StatesManager: ComponentType<any> = memo(
 			// eslint-disable-next-line
 		}, [currentBlock, states]);
 
-		const memoizedCallback = useCallback(
-			(
-				{ name: controlId, value: recievedValue }: ControlInfo,
-				value: Array<{ ...StateTypes, isSelected: boolean }>,
-				modifyControlValue: (params: Object) => void
-			): void => {
-				if (isEquals(value, recievedValue)) {
-					return;
-				}
-
-				const clonedRecievedValue: {
-					[key: TStates | string]: {
-						...StateTypes,
-						isSelected: boolean,
-					},
-				} = {};
-
-				Object.entries(recievedValue).forEach(
-					([itemId, state]: [
-						TStates | string,
-						{ ...StateTypes, isSelected: boolean }
-					]): void => {
-						if (isInnerBlock(currentBlock)) {
-							if (currentInnerBlockState === state.type) {
-								clonedRecievedValue[itemId] = {
-									...state,
-									isSelected: true,
-								};
-
-								return;
-							}
-						} else if (currentState === state.type) {
-							clonedRecievedValue[itemId] = {
-								...state,
-								isSelected: true,
-							};
-
-							return;
-						}
-
-						clonedRecievedValue[itemId] = {
-							...state,
-							isSelected: false,
-						};
-					}
-				);
-
-				modifyControlValue({
-					controlId,
-					value: clonedRecievedValue,
-				});
-			},
-			// eslint-disable-next-line
-			[states]
-		);
-
 		const valueCleanup = useCallback(
-			(
-				value: {
-					[key: TStates]: { ...StateTypes, isVisible: boolean },
+			(value: {
+				[key: TStates]: {
+					...StateTypes,
+					isVisible: boolean,
+					'css-class'?: string,
+					isSelected: boolean,
 				},
-				finalizeFlag: boolean = false
-			): Object => {
+			}): Object => {
 				const clonedValue: {
-					[key: TStates | string]: {
+					[key: TStates]: {
 						breakpoints: {
 							[key: TBreakpoint]: {
 								attributes: Object,
 							},
 						},
 						isVisible: boolean,
+						isSelected: boolean,
 						'css-class'?: string,
 					},
 				} = {};
 
 				Object.entries(value).forEach(
-					([itemId, item]: [string | TStates, Object]): void => {
+					([itemId, item]: [
+						TStates,
+						{
+							...StateTypes,
+							isSelected: boolean,
+							isVisible: boolean,
+							'css-class'?: string,
+						}
+					]): void => {
 						const breakpoints: {
 							[key: TBreakpoint]: {
 								attributes: Object,
 							},
 						} = {};
 
-						Object.values(item?.breakpoints)?.forEach(
-							(breakpoint) => {
+						Object.entries(item?.breakpoints)?.forEach(
+							([breakpointType, breakpoint]: [
+								TBreakpoint,
+								Object
+							]) => {
 								if (
 									!Object.keys(breakpoint?.attributes || {})
 										.length &&
-									'laptop' !== breakpoint?.type
+									'laptop' !== breakpointType
 								) {
 									return;
 								}
 
 								const { attributes = {} } = breakpoint;
 
-								// TODO: remove finalizeFlag!
 								if (
-									finalizeFlag &&
 									!Object.keys(attributes).length &&
-									'normal' !== item?.type
+									'normal' !== itemId
 								) {
 									return;
 								}
 
-								breakpoints[breakpoint.type] = {
+								breakpoints[breakpointType] = {
 									attributes,
 								};
 							}
 						);
 
-						if (!Object.values(breakpoints).length) {
-							return;
+						if (
+							!Object.values(breakpoints).length &&
+							'normal' !== itemId
+						) {
+							breakpoints[currentBreakpoint] = {
+								attributes: {},
+							};
 						}
 
 						if (['custom-class', 'parent-class'].includes(itemId)) {
 							clonedValue[itemId] = {
 								breakpoints,
-								'css-class': item['css-class'] || '',
 								isVisible: item?.isVisible,
+								isSelected: item?.isSelected,
+								'css-class': item['css-class'] || '',
 							};
 
 							return;
@@ -261,12 +212,14 @@ const StatesManager: ComponentType<any> = memo(
 						clonedValue[itemId] = {
 							breakpoints,
 							isVisible: item?.isVisible,
+							isSelected: item?.isSelected,
 						};
 					}
 				);
 
 				return clonedValue;
 			},
+			// eslint-disable-next-line
 			[]
 		);
 
@@ -319,19 +272,6 @@ const StatesManager: ComponentType<any> = memo(
 		const contextValue = {
 			block,
 			value: calculatedValue,
-			hasSideEffect: true,
-			onChange: (newValue: Object) =>
-				onChangeBlockStates(newValue, {
-					states,
-					onChange,
-					currentState,
-					currentBlock,
-					isNormalState,
-					calculatedValue,
-					currentInnerBlockState,
-				}),
-			valueCleanup,
-			callback: memoizedCallback,
 			blockName: block.blockName,
 			attribute: 'publisherBlockStates',
 			name: generateExtensionId(block, 'block-states', false),
@@ -345,6 +285,7 @@ const StatesManager: ComponentType<any> = memo(
 							onDelete,
 							maxItems: 10,
 							valueCleanup,
+							selectable: true,
 							/**
 							 * Retrieve dynamic default value for repeater items.
 							 *
@@ -386,7 +327,14 @@ const StatesManager: ComponentType<any> = memo(
 								selectable: true,
 								visibilitySupport: true,
 							},
-							onChange: contextValue.onChange,
+							onChange: (newValue: Object) =>
+								onChangeBlockStates(newValue, {
+									states,
+									onChange,
+									currentState,
+									currentBlock,
+									currentInnerBlockState,
+								}),
 							//Override item when occurred clone action!
 							overrideItem: (item) => {
 								if ('normal' === item.type) {
