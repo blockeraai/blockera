@@ -9,6 +9,7 @@ import domReady from '@wordpress/dom-ready';
  */
 import {
 	store,
+	unstableBootstrapServerSideEntities,
 	unstableBootstrapServerSideVariableDefinitions,
 	unstableBootstrapServerSideDynamicValueDefinitions,
 } from '@publisher/core-data';
@@ -40,6 +41,7 @@ domReady(() => {
 	if (window?.wp) {
 		window.publisher.coreData = {
 			select: select(store?.name),
+			unstableBootstrapServerSideEntities,
 			unstableBootstrapServerSideVariableDefinitions,
 			unstableBootstrapServerSideDynamicValueDefinitions,
 		};
