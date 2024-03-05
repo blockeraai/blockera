@@ -1,14 +1,8 @@
 // @flow
-
 /**
- * Is empty passed object?
- *
- * @param {Object} object any object
- * @return {boolean} true on success, false when otherwise!
+ * Publisher dependencies
  */
-function isEmptyObject(object: Object): boolean {
-	return !object || !Object.keys(object).length;
-}
+import { isEmptyObject } from '@publisher/utils';
 
 /**
  * Merge registered block supports, extending attributes to include
