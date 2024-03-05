@@ -48,11 +48,18 @@ export const SizeSetting = ({
 		(_item) => _item.id === item.id
 	);
 
-	const hasMergedArea = publisherGridAreas.find((_item) => {
+	const notDeletable = publisherGridAreas.find((_item) => {
 		if (attributeId === 'publisherGridColumns') {
 			const colCoordinates = _item?.coordinates?.map(
 				(coord) => `${coord['column-start']}/${coord['column-end']}`
 			);
+
+			if (
+				_item['column-start'] === currentItemIndex + 1 &&
+				_item['column-end'] === currentItemIndex + 2
+			)
+				return null;
+
 			return colCoordinates?.includes(
 				`${currentItemIndex + 1}/${currentItemIndex + 2}`
 			);
@@ -61,6 +68,13 @@ export const SizeSetting = ({
 		const rowCoordinates = _item?.coordinates?.map(
 			(coord) => `${coord['row-start']}/${coord['row-end']}`
 		);
+
+		if (
+			_item['row-start'] === currentItemIndex + 1 &&
+			_item['row-end'] === currentItemIndex + 2
+		)
+			return null;
+
 		return rowCoordinates?.includes(
 			`${currentItemIndex + 1}/${currentItemIndex + 2}`
 		);
@@ -338,11 +352,9 @@ export const SizeSetting = ({
 						</NoticeControl>
 					)}
 				</>
-
 				<Button
+					disabled={notDeletable || items.length <= 2 ? true : false}
 					onClick={() => {
-						if (hasMergedArea) return null;
-
 						const filteredAreas = publisherGridAreas.filter(
 							(_item) => {
 								if (attributeId === 'publisherGridColumns') {
@@ -447,6 +459,19 @@ export const SizeSetting = ({
 				>
 					delete
 				</Button>
+
+				{notDeletable && (
+					<NoticeControl
+						type="information"
+						style={{ marginTop: '10px', marginBottom: '10px' }}
+					>
+						{notDeletable &&
+							__(
+								`It cannot be deleted because of mergedArea`,
+								'publisher-core'
+							)}
+					</NoticeControl>
+				)}
 			</ControlContextProvider>
 		</Popover>
 	);
