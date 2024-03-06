@@ -130,6 +130,7 @@ export default function ({
 								value: values.publisherGridRows.length,
 								attribute: 'publisherGridRows',
 								blockName: block.blockName,
+								hasSideEffect: true,
 							}}
 						>
 							<InputControl
@@ -251,6 +252,7 @@ export default function ({
 								value: values.publisherGridColumns.length,
 								attribute: 'publisherGridColumns',
 								blockName: block.blockName,
+								hasSideEffect: true,
 							}}
 						>
 							<InputControl
@@ -557,6 +559,7 @@ export default function ({
 						value: values.publisherGridGap,
 						attribute: 'publisherGridGap',
 						blockName: block.blockName,
+						hasSideEffect: true,
 					}}
 				>
 					<Gap
