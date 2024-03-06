@@ -353,7 +353,7 @@ export const SizeSetting = ({
 					)}
 				</>
 				<Button
-					disabled={notDeletable || items.length <= 2 ? true : false}
+					disabled={notDeletable || items.length <= 1 ? true : false}
 					onClick={() => {
 						const filteredAreas = publisherGridAreas.filter(
 							(_item) => {
