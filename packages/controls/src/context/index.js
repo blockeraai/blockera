@@ -4,8 +4,13 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { createContext } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
+import { createContext, useEffect } from '@wordpress/element';
+
+/**
+ * Publisher dependencies
+ */
+import { isEquals } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -50,6 +55,17 @@ export const ControlContextProvider = ({
 	);
 	//control dispatch for available actions
 	const dispatch = useDispatch(storeName);
+
+	// Assume control has side effect from parent components ...
+	useEffect(() => {
+		if (!isEquals(controlInfo.value, value) && controlInfo?.hasSideEffect) {
+			dispatch.modifyControlValue({
+				controlId: controlInfo.name,
+				value: controlInfo.value,
+			});
+		}
+		// eslint-disable-next-line
+	}, [controlInfo.value]);
 
 	//You can to enable||disable current control with status column!
 	if (!status) {
