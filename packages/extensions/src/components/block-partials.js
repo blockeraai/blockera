@@ -9,7 +9,12 @@ import { useEffect, memo } from '@wordpress/element';
  */
 import { prependPortal } from '@publisher/utils';
 
-export const BlockPartials = memo(({ clientId }) => {
+/**
+ * Internal dependencies
+ */
+import { BlockDropdownAllMenu } from './block-dropdown-all-menu';
+
+export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
 	useEffect(() => {
 		document.querySelector('.block-editor-block-card')?.remove();
 
@@ -25,6 +30,15 @@ export const BlockPartials = memo(({ clientId }) => {
 			{prependPortal(
 				<>
 					<div className="publisher-block-card-wrapper">
+						<div className={'publisher-dropdown-menu'}>
+							<BlockDropdownAllMenu
+								{...{
+									isActive,
+									setActive,
+								}}
+							/>
+						</div>
+
 						<Slot
 							name={`publisher-block-card-content-${clientId}`}
 						/>

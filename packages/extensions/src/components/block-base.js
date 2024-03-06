@@ -20,7 +20,7 @@ import {
 /**
  * Publisher dependencies
  */
-import { isEquals } from '@publisher/utils';
+import { isEquals, omitWithPattern } from '@publisher/utils';
 import { BlockStyle } from '@publisher/style-engine';
 import { isLaptopBreakpoint } from '@publisher/editor';
 import { extensionClassNames } from '@publisher/classnames';
@@ -39,7 +39,13 @@ import { SideEffect } from '../libs/base';
 import { BlockPartials } from './block-partials';
 import { BlockFillPartials } from './block-fill-partials';
 import type { UpdateBlockEditorSettings } from '../libs/types';
-import { isBaseBreakpoint, isInnerBlock, propsAreEqual } from './utils';
+import {
+	isBaseBreakpoint,
+	isInnerBlock,
+	prepareAttributesDefaultValues,
+	propsAreEqual,
+} from './utils';
+import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs';
 
 export type BlockBaseProps = {
 	additional: Object,
@@ -49,6 +55,7 @@ export type BlockBaseProps = {
 	attributes: Object,
 	setAttributes: (attributes: Object) => void,
 	className: string,
+	defaultAttributes: Object,
 };
 
 export const BlockBase: ComponentType<BlockBaseProps> = memo(
@@ -60,6 +67,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		attributes,
 		setAttributes,
 		className,
+		defaultAttributes,
 		...props
 	}: BlockBaseProps): Element<any> | null => {
 		const [currentTab, setCurrentTab] = useState(
@@ -70,10 +78,12 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		const {
 			currentBlock,
 			currentState,
-			currentInnerBlockState,
 			currentBreakpoint,
+			currentInnerBlockState,
+			isActiveBlockExtensions,
 		} = useSelect((select) => {
 			const {
+				isActiveBlockExtensions,
 				getExtensionCurrentBlock,
 				getExtensionInnerBlockState,
 				getExtensionCurrentBlockState,
@@ -83,10 +93,14 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			return {
 				currentBlock: getExtensionCurrentBlock(),
 				currentState: getExtensionCurrentBlockState(),
-				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
+				isActiveBlockExtensions: isActiveBlockExtensions(),
 				currentInnerBlockState: getExtensionInnerBlockState(),
+				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
 			};
 		});
+
+		const [isActive, setActive] = useState(isActiveBlockExtensions);
+
 		const {
 			changeExtensionCurrentBlock: setCurrentBlock,
 			changeExtensionCurrentBlockState: setCurrentState,
@@ -126,7 +140,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			return attributes;
 		};
 
-		const { getAttributesWithPropsId, handleOnChangeAttributes } =
+		const { getAttributesWithIds, handleOnChangeAttributes } =
 			useAttributes(setAttributes, {
 				isNormalState,
 				getAttributes,
@@ -214,23 +228,45 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			 */
 			useEffect(
 				() => {
+					const args = {
+						blockId: name,
+						blockClientId: clientId,
+						isNormalState: isNormalState(),
+						isMasterBlock: !isInnerBlock(currentBlock),
+						isBaseBreakpoint: isBaseBreakpoint(currentBreakpoint),
+						currentBreakpoint,
+						currentBlock,
+						currentState,
+					};
 					// Creat mutable constant to prevent directly change to immutable state constant.
 					const clonedAttributes = { ...attributes };
-					const filteredAttributes = applyFilters(
+					let filteredAttributes = applyFilters(
 						'publisherCore.blockEdit.attributes',
-						getAttributesWithPropsId(clonedAttributes),
-						{
-							blockId: name,
-							blockClientId: clientId,
-							isNormalState: isNormalState(),
-							isMasterBlock: !isInnerBlock(currentBlock),
-							isBaseBreakpoint:
-								isBaseBreakpoint(currentBreakpoint),
-							currentBreakpoint,
-							currentBlock,
-							currentState,
-						}
+						applyFilters(
+							'publisherCore.blockEdit.compatibility.attributes',
+							getAttributesWithIds(
+								getAttributesWithIds(
+									clonedAttributes,
+									'publisherPropsId'
+								),
+								'publisherCompatId'
+							),
+							args
+						),
+						args
 					);
+
+					if (!isActive) {
+						filteredAttributes = {
+							...attributes,
+							...omitWithPattern(
+								prepareAttributesDefaultValues(
+									defaultAttributes
+								),
+								ignoreDefaultBlockAttributeKeysRegExp()
+							),
+						};
+					}
 
 					if (isEquals(attributes, filteredAttributes)) {
 						return;
@@ -284,11 +320,16 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 								currentState: isInnerBlock(currentBlock)
 									? currentInnerBlockState
 									: currentState,
+								isActive,
 							}}
 						/>
 						<FilterAttributes />
 						<SlotFillProvider>
-							<BlockPartials clientId={clientId} />
+							<BlockPartials
+								clientId={clientId}
+								isActive={isActive}
+								setActive={setActive}
+							/>
 							<BlockFillPartials
 								{...{
 									clientId,

@@ -13,19 +13,27 @@ import { Button } from '@publisher/components';
 export const More = ({
 	isOpen,
 	onClick,
+	className = '',
 }: {
-	isOpen: boolean,
-	onClick: () => void,
+	isOpen?: boolean,
+	onClick?: () => void,
+	className?: string,
 }): MixedElement => {
 	return (
 		<Button
-			className={'publisher-extension-settings-button'}
-			isFocus={isOpen}
+			className={className || 'publisher-extension-settings-button'}
+			isFocus={isOpen || false}
 			noBorder={true}
-			onClick={(event: MouseEvent) => {
-				event.stopPropagation();
+			{...{
+				...('function' !== typeof onClick
+					? {}
+					: {
+							onClick: (event: MouseEvent) => {
+								event.stopPropagation();
 
-				onClick();
+								onClick();
+							},
+					  }),
 			}}
 		>
 			<svg

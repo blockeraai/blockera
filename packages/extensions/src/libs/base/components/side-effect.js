@@ -8,7 +8,7 @@ import { useEffect, memo } from '@wordpress/element';
  */
 import { useBlockSideEffects } from '../../../hooks';
 
-export const SideEffect = memo(({ currentTab, currentState }) => {
+export const SideEffect = memo(({ currentTab, currentState, isActive }) => {
 	useEffect(() => {
 		const tabs = document.querySelector(
 			'.block-editor-block-inspector .block-editor-block-inspector__tabs .components-tab-panel__tabs'
@@ -20,6 +20,7 @@ export const SideEffect = memo(({ currentTab, currentState }) => {
 	}, []);
 
 	useBlockSideEffects({
+		isActive,
 		currentTab,
 		currentState,
 	});

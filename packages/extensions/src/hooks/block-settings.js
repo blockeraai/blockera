@@ -73,17 +73,23 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 		...blockStatesAttributes,
 	};
 
+	const defaultAttributes = {
+		...overrideAttribute,
+		publisherInnerBlocks:
+			innerBlocksExtensionsAttributes.publisherInnerBlocks,
+		publisherPropsId: {
+			type: 'string',
+			default: '',
+		},
+		publisherCompatId: {
+			type: 'string',
+			default: '',
+		},
+	};
+
 	return {
 		...settings,
-		attributes: {
-			...overrideAttribute,
-			publisherInnerBlocks:
-				innerBlocksExtensionsAttributes.publisherInnerBlocks,
-			publisherPropsId: {
-				type: 'string',
-				default: '',
-			},
-		},
+		attributes: defaultAttributes,
 		supports: {
 			...settings.supports,
 			...additional.supports,
@@ -100,6 +106,7 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 							{...{
 								...props,
 								additional,
+								defaultAttributes,
 							}}
 						>
 							<SlotFillProvider>

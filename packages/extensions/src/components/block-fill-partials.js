@@ -32,6 +32,8 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		currentInnerBlockState,
 		updateBlockEditorSettings,
 	}): Element<any> => {
+		const { isActiveBlockExtensions } = select('publisher-core/extensions');
+
 		// prevent memory leak, componentDidUnmount.
 		useEffect(() => {
 			return () => {
@@ -70,9 +72,11 @@ export const BlockFillPartials: ComponentType<any> = memo(
 						activeInnerBlockState={currentInnerBlockState}
 					/>
 				</Fill>
-				<Fill name={`publisher-block-edit-content-${clientId}`}>
-					<BlockEditComponent {...blockProps} />
-				</Fill>
+				{isActiveBlockExtensions() && (
+					<Fill name={`publisher-block-edit-content-${clientId}`}>
+						<BlockEditComponent {...blockProps} />
+					</Fill>
+				)}
 			</>
 		);
 	}

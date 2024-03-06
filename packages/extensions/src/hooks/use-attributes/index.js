@@ -30,19 +30,22 @@ export const useAttributes = (
 		getAttributes: (key?: string) => any,
 	}
 ): ({
-	getAttributesWithPropsId: (state: Object) => Object,
+	getAttributesWithIds: (state: Object, identifier: string) => Object,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 }) => {
-	const getAttributesWithPropsId = (state: Object): Object => {
+	const getAttributesWithIds = (
+		state: Object,
+		identifier: string
+	): Object => {
 		const d = new Date();
 
-		if (state?.publisherPropsId) {
+		if (state[identifier]) {
 			return state;
 		}
 
 		return {
 			...state,
-			publisherPropsId:
+			[identifier]:
 				'' +
 				d.getMonth() +
 				d.getDate() +
@@ -241,7 +244,7 @@ export const useAttributes = (
 	};
 
 	return {
-		getAttributesWithPropsId,
+		getAttributesWithIds,
 		handleOnChangeAttributes,
 	};
 };

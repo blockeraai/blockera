@@ -3,7 +3,7 @@
  */
 import { useEffect } from '@wordpress/element';
 
-export const useBlockSideEffects = ({ currentTab, currentState }) => {
+export const useBlockSideEffects = ({ currentTab, currentState, isActive }) => {
 	useEffect(() => {
 		const inspectorTabs = document.querySelector(
 			'.block-editor-block-inspector__tabs'
@@ -25,6 +25,11 @@ export const useBlockSideEffects = ({ currentTab, currentState }) => {
 			return;
 		}
 
+		if (!isActive) {
+			inspectorTabs.style.display = 'block';
+			return;
+		}
+
 		inspectorTabs.style.display = 'none';
-	}, [currentTab, currentState]);
+	}, [currentTab, currentState, isActive]);
 };

@@ -298,3 +298,18 @@ export function getExtensionCurrentBlockStateBreakpoint({
 }: Object): TBreakpoint {
 	return blockExtensions?.currentBreakpoint || 'laptop';
 }
+
+/**
+ * Get current block is active extensions?
+ *
+ * @param {Object} blockExtensions the block extension details.
+ *
+ * @return {boolean} true on success,false on otherwise!
+ */
+export function isActiveBlockExtensions({
+	blockExtensions,
+}: Object): TBreakpoint {
+	return 'undefined' === typeof blockExtensions?.isActiveExtensions
+		? true
+		: blockExtensions?.isActiveExtensions;
+}
