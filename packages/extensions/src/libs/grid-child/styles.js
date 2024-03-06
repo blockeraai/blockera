@@ -2,52 +2,87 @@
 /**
  * Publisher dependencies
  */
-import { computedCssRules } from '@publisher/style-engine';
+import {
+	getCssSelector,
+	computedCssDeclarations,
+} from '@publisher/style-engine';
 
 /**
  * Internal dependencies
  */
 import { attributes } from './attributes';
 import { isActiveField } from '../../api/utils';
-import type { TBlockProps } from '../types';
-import type { TCssProps } from './types/grid-child-props';
-
-interface IConfigs {
-	gridChildConfig: {
-		cssGenerators: Object,
-		publisherGridChildLayout?: Object,
-		publisherGridChildOrder?: Object,
-	};
-	blockProps: TBlockProps;
-	selector: string;
-	media: string;
-}
+import * as config from '../base/config';
+import type { StylesProps } from '../types';
+import type { CssRule } from '@publisher/style-engine/src/types';
 
 export function GridChildStyles({
-	gridChildConfig: {
-		cssGenerators,
-		publisherGridChildLayout,
-		publisherGridChildOrder,
-	},
-	blockProps,
-	selector,
-	media,
-}: IConfigs): string {
+	state,
+	clientId,
+	blockName,
+	currentBlock,
+	// supports,
+	// activeDeviceType,
+	selectors: blockSelectors,
+	attributes: currentBlockAttributes,
+}: StylesProps): Array<CssRule> {
+	const { publisherGridChildOrder, publisherGridChildLayout } =
+		config.gridChildConfig;
+	const blockProps = {
+		clientId,
+		blockName,
+		attributes: currentBlockAttributes,
+	};
 	const { attributes: _attributes } = blockProps;
-
-	const generators = [];
-
-	const properties: TCssProps = {};
+	const sharedParams = {
+		state,
+		clientId,
+		currentBlock,
+		blockSelectors,
+		className: currentBlockAttributes?.className,
+	};
+	const staticDefinitionParams = {
+		type: 'static',
+		options: {
+			important: true,
+		},
+	};
+	const styleGroup: Array<CssRule> = [];
 
 	if (
 		isActiveField(publisherGridChildLayout) &&
 		_attributes.publisherGridChildLayout !==
 			attributes.publisherGridChildLayout.default
 	) {
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherGridChildLayout',
+			support: 'publisherGridChildLayout',
+			////????
+			fallbackSupportId: undefined,
+		});
+
+		const properties: { [key: string]: string } = {};
+
 		properties['align-self'] =
 			_attributes.publisherGridChildLayout.alignItems;
 		properties['justify-self'] =
 			_attributes.publisherGridChildLayout.justifyContent;
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					publisherGridChildLayout: [
+						{
+							...staticDefinitionParams,
+							properties,
+						},
+					],
+				},
+				blockProps
+			),
+		});
 	}
 
 	if (
@@ -55,6 +90,16 @@ export function GridChildStyles({
 		_attributes.publisherGridChildOrder !==
 			attributes.publisherGridChildOrder.default
 	) {
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherGridChildOrder',
+			support: 'publisherGridChildOrder',
+			////????
+			fallbackSupportId: undefined,
+		});
+
+		const properties: { [key: string]: string } = {};
+
 		switch (_attributes.publisherGridChildOrder.value) {
 			case 'first':
 				properties.order = '-1';
@@ -67,31 +112,22 @@ export function GridChildStyles({
 					_attributes.publisherGridChildOrder.area;
 				break;
 		}
-	}
-	if (Object.keys(properties).length > 0) {
-		generators.push(
-			computedCssRules(
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
 				{
-					publisherGridChild: [
+					publisherGridChildOrder: [
 						{
-							type: 'static',
-							selector,
-							media,
+							...staticDefinitionParams,
 							properties,
 						},
 					],
 				},
-				{ attributes: _attributes, ...blockProps }
-			)
-		);
+				blockProps
+			),
+		});
 	}
-	generators.push(
-		computedCssRules(
-			{
-				...(cssGenerators || {}),
-			},
-			{ attributes: _attributes, ...blockProps }
-		)
-	);
-	return generators.flat();
+
+	return styleGroup;
 }

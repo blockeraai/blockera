@@ -21,6 +21,7 @@ import {
 	SpacingStyles,
 	// TypographyStyles,
 	// EffectsStyles
+	//GridChildStyles,
 } from '@publisher/extensions';
 import { isNormalState } from '@publisher/extensions/src/components';
 import type { TStates } from '@publisher/extensions/src/libs/block-states/types';
@@ -105,6 +106,7 @@ const Stylesheet = ({
 			// ...EffectsStyles(calculatedProps),
 			// ...CustomStyleStyles(calculatedProps),
 			// ...BorderAndShadowStyles(calculatedProps),
+			//GridChildStyles(calculatedProps),
 		].flat();
 	}, [props, state, selectors, currentBlock, currentBreakpoint]);
 

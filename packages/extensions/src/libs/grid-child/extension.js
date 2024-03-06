@@ -18,12 +18,13 @@ import {
 } from '@publisher/controls';
 import { componentClassNames } from '@publisher/classnames';
 import { FeatureWrapper } from '@publisher/components';
+import { hasSameProps } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
 import { isShowField } from '../../api/utils';
-import { generateExtensionId, hasSameProps } from '../utils';
+import { generateExtensionId } from '../utils';
 import type { TGridChildProps } from './types/grid-child-props';
 import { createAreasOptions } from './utils';
 import GridChildExtensionIcon from './icons/extension-icon';
