@@ -11,19 +11,19 @@ export const getEntities = ({
 /**
  * Retrieve the entity by name of core-data.
  *
- * @param {Object} state the state of core-data.
+ * @param {Object} arg the state of core-data.
  * @param {string} name the entity name.
  * @return {Object} the entity object.
  */
 export const getEntity = (
-	{
-		entities,
-	}: {
-		entities: { [key: string]: Object },
-	},
+	arg: {
+		entities?: { [key: string]: Object },
+	} = {},
 	name: string
 ): Object => {
-	return entities[name];
+	const { entities = {} } = arg;
+
+	return entities[name] !== undefined ? entities[name] : '';
 };
 
 /**
