@@ -1,7 +1,16 @@
 <?php
 
+
+$theme = wp_get_theme();
+
 return [
 	'theme' => [
-		'isBlockTheme' => wp_get_theme()->is_block_theme(),
+		'name' => [
+			'raw' => $theme->template,
+			'rendered' => $theme->get( 'Name' )
+		],
+		'version' => $theme->get( 'Version' ),
+		'block_theme' => $theme->is_block_theme(),
+		'parent' => $theme->get( 'parent' ),
 	],
 ];
