@@ -17,6 +17,8 @@
 	border: 1px solid var(--va-border-color);
 	background-color: var(--va-bg-color);
 	user-select: none;
+	width: 100%;
+	text-align: inherit;
 
 	&.value-addon-with-icon {
 		grid-template-columns: 20px auto;
