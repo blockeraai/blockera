@@ -53,7 +53,7 @@ export function backgroundColorToWPCompatibility({
 	newValue: Object,
 	ref?: Object,
 }): Object {
-	if ('reset' === ref?.current?.action) {
+	if ('reset' === ref?.current?.action || newValue === '') {
 		return {
 			backgroundColor: undefined,
 			style: {
