@@ -75,7 +75,6 @@ export default function RepeaterControl({
 	defaultValue = {},
 	defaultRepeaterItemValue = { isVisible: true },
 	onChange,
-	onSelect,
 	onDelete,
 	overrideItem,
 	valueCleanup = cleanupRepeater,
@@ -126,7 +125,7 @@ export default function RepeaterControl({
 		actionButtonDelete,
 		actionButtonClone,
 		//
-		onSelect,
+		onChange,
 		onDelete,
 		controlId,
 		repeaterId,
