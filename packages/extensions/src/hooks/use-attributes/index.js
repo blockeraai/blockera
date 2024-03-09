@@ -75,7 +75,7 @@ export const useAttributes = (
 		let _attributes = { ...attributes };
 
 		if (!_attributes?.publisherPropsId) {
-			_attributes = getAttributesWithPropsId(_attributes);
+			_attributes = getAttributesWithIds(_attributes, 'publisherPropsId');
 		}
 
 		const currentBlock = getExtensionCurrentBlock();
