@@ -71,13 +71,24 @@ export const useAdvancedLabelProps = ({
 	if (isInnerBlock(currentBlock)) {
 		// Assume current inner block inside master secondary state!
 		if (!masterIsNormalState()) {
-			currentBlockAttributes =
-				(blockAttributes.publisherBlockStates[currentState]
-					?.publisherInnerBlocks[currentBlock] &&
+			if (
+				!blockAttributes.publisherBlockStates[currentState].breakpoints[
+					currentBreakpoint
+				].attributes?.publisherInnerBlocks ||
+				!blockAttributes.publisherBlockStates[currentState].breakpoints[
+					currentBreakpoint
+				].attributes?.publisherInnerBlocks[currentBlock]
+			) {
+				currentBlockAttributes =
+					publisherInnerBlocks[currentBlock].attributes || {};
+			} else {
+				currentBlockAttributes =
 					blockAttributes.publisherBlockStates[currentState]
-						?.publisherInnerBlocks[currentBlock].attributes) ||
-				publisherInnerBlocks[currentBlock].attributes ||
-				{};
+						.breakpoints[currentBreakpoint].attributes
+						?.publisherInnerBlocks[currentBlock].attributes ||
+					publisherInnerBlocks[currentBlock].attributes ||
+					{};
+			}
 		} else {
 			currentBlockAttributes =
 				(blockAttributes.publisherInnerBlocks[currentBlock] &&
