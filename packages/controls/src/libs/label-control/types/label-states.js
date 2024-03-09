@@ -6,7 +6,7 @@
 import type {
 	StateGraph,
 	StateGraphItem,
-} from '@publisher/extensions/src/libs/block-states/types';
+} from '@publisher/extensions/src/libs/block-states/store/selector';
 
 export type LabelChangedStates = Array<{
 	id: number,
