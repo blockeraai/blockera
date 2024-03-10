@@ -9,3 +9,34 @@
 		margin: 0 auto;
 	}
 }
+
+.publisher-block-card-wrapper {
+
+	.publisher-dropdown-menu {
+		position: relative;
+
+		.components-dropdown-menu {
+			position: absolute;
+			right: 0;
+			padding: 0;
+			margin: 0;
+		}
+	}
+}
+
+.publisher-block-menu-item {
+
+	span.components-menu-item__item {
+		display: block;
+	}
+}
+
+.publisher-block-menu-item-selected {
+	opacity: 0.5;
+	cursor: none;
+	pointer-events: none;
+
+	&:hover {
+		color: inherit !important;
+	}
+}

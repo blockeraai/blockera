@@ -102,7 +102,7 @@ export default function ({
 				</Tooltip>
 			)}
 		>
-			<div
+			<button
 				className={controlClassNames(
 					'value-addon-popover-item',
 					'item-status-' + status,
@@ -113,6 +113,7 @@ export default function ({
 				onClick={() => {
 					if (status === 'active') onClick(data);
 				}}
+				data-cy={'va-item-' + data.id}
 				{...props}
 			>
 				{icon && (
@@ -129,7 +130,7 @@ export default function ({
 						{itemValue}
 					</span>
 				)}
-			</div>
+			</button>
 		</ConditionalWrapper>
 	);
 }

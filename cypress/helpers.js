@@ -210,8 +210,14 @@ export function appendBlocks(blocksCode) {
 	cy.get('[aria-label="Options"]').click();
 	cy.get('span').contains('Code editor').click();
 
-	cy.get('.editor-post-text-editor').type(blocksCode, {
+	cy.get('.editor-post-text-editor')
+		.invoke('val', blocksCode)
+		.trigger('change');
+
+	// type a space to make sure the value is updated in the editor
+	cy.get('.editor-post-text-editor').type(' ', {
 		parseSpecialCharSequences: false,
+		keystrokeDelay: 0,
 	});
 
 	cy.get('button').contains('Exit code editor').click();

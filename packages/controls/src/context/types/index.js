@@ -18,6 +18,7 @@ export type ControlInfo = {
 	name: string,
 	attribute?: string,
 	blockName?: string,
+	hasSideEffect?: boolean,
 	description?: string | MixedElement | any,
 	type?: 'simple' | 'nested',
 };

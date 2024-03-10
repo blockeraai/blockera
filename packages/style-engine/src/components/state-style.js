@@ -64,8 +64,13 @@ const Stylesheet = ({
 				...calculatedProps,
 				attributes: {
 					...calculatedProps.currentAttributes,
-					...calculatedProps.attributes.publisherBlockStates[state]
-						.breakpoints[currentBreakpoint].attributes,
+					...(calculatedProps.attributes.publisherBlockStates[state]
+						.breakpoints[currentBreakpoint] &&
+					calculatedProps.attributes.publisherBlockStates[state]
+						.breakpoints[currentBreakpoint].attributes
+						? calculatedProps.attributes.publisherBlockStates[state]
+								.breakpoints[currentBreakpoint].attributes
+						: {}),
 				},
 			};
 		} else if (!isNormalState(state) && isInnerBlock(currentBlock)) {
@@ -80,8 +85,13 @@ const Stylesheet = ({
 				...calculatedProps,
 				attributes: {
 					...calculatedProps.currentAttributes,
-					...calculatedProps.attributes?.publisherBlockStates[state]
-						.breakpoints[currentBreakpoint].attributes,
+					...(calculatedProps.attributes.publisherBlockStates[state]
+						.breakpoints[currentBreakpoint] &&
+					calculatedProps.attributes.publisherBlockStates[state]
+						.breakpoints[currentBreakpoint].attributes
+						? calculatedProps.attributes.publisherBlockStates[state]
+								.breakpoints[currentBreakpoint].attributes
+						: {}),
 				},
 			};
 		} else if (isNormalState(state) && isInnerBlock(currentBlock)) {

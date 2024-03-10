@@ -91,6 +91,11 @@ export function blockExtensions(state: Object = {}, action: Object): Object {
 				...state,
 				currentBreakpoint: action.currentBreakpoint,
 			};
+		case 'SET_EXTENSIONS_STATUS':
+			return {
+				...state,
+				isActiveExtensions: action.isActive,
+			};
 	}
 
 	return state;

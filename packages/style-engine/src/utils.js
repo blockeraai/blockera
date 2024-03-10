@@ -19,23 +19,6 @@ import type {
 } from './types';
 
 /**
- * Has objected all passed properties?
- *
- * @param {Object} obj the any object
- * @param {Array<string>} props the props of any object
- * @return {boolean} true on success, false when otherwise!
- */
-export function hasAllProperties(obj: Object, props: Array<string>): boolean {
-	for (let i = 0; i < props.length; i++) {
-		if (!obj.hasOwnProperty(props[i])) {
-			return false;
-		}
-	}
-
-	return true;
-}
-
-/**
  * Injection helpers into generators.
  *
  * @param {Object} helpers The helper function to injected current css generator.

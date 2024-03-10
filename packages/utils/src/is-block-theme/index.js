@@ -7,7 +7,8 @@ import { select } from '@wordpress/data';
 
 export function isBlockTheme(): boolean {
 	const { getCurrentTheme } = select('publisher-core/data');
-	const { isBlockTheme = false } = getCurrentTheme() || {};
+
+	const { block_theme: isBlockTheme = false } = getCurrentTheme() || {};
 
 	return isBlockTheme;
 }

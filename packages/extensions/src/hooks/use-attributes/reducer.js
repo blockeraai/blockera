@@ -6,6 +6,11 @@
 import { applyFilters } from '@wordpress/hooks';
 
 /**
+ * Publisher dependencies
+ */
+import { mergeObject } from '@publisher/utils';
+
+/**
  * Internal dependencies
  */
 import { memoizedBlockStates } from './helpers';
@@ -113,11 +118,11 @@ const reducer = (state: Object = {}, action: Object): Object => {
 				'publisherCore.blockEdit.setAttributes',
 				{
 					...state,
-					publisherBlockStates: memoizedBlockStates(
-						state,
-						action,
-						'UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE' === type
-					),
+					publisherBlockStates: memoizedBlockStates(state, action, {
+						currentState,
+						insideInnerBlock:
+							'UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE' === type,
+					}),
 				},
 				...hookParams
 			);
@@ -133,25 +138,23 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			 */
 			return applyFilters(
 				'publisherCore.blockEdit.setAttributes',
-				{
-					...state,
+				mergeObject(state, {
 					publisherInnerBlocks: {
-						...state.publisherInnerBlocks,
 						[currentBlock]: {
-							...state.publisherInnerBlocks[currentBlock],
 							attributes: {
-								...state.publisherInnerBlocks[currentBlock]
-									.attributes,
 								publisherBlockStates: memoizedBlockStates(
 									state.publisherInnerBlocks[currentBlock]
 										.attributes,
 									action,
-									true
+									{
+										currentState: currentInnerBlockState,
+										insideInnerBlock: false,
+									}
 								),
 							},
 						},
 					},
-				},
+				}),
 				...hookParams
 			);
 	}

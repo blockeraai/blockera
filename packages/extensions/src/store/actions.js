@@ -101,3 +101,10 @@ export function changeExtensionCurrentBlockStateBreakpoint(
 		type: 'CHANGE_CURRENT_BLOCK_STATE_BREAKPOINT',
 	};
 }
+
+export function setBlockExtensionsStatus(isActive: boolean): Object {
+	return {
+		isActive,
+		type: 'SET_EXTENSIONS_STATUS',
+	};
+}

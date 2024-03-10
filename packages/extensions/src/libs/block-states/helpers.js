@@ -8,7 +8,7 @@ import { dispatch } from '@wordpress/data';
 /**
  * Publisher dependencies
  */
-import { isEquals } from '@publisher/utils';
+import { isEquals, mergeObject } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -83,6 +83,7 @@ export function onChangeBlockStates(
 	params: Object
 ): void {
 	const { states: _states, onChange, currentBlock } = params;
+
 	const {
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setInnerBlockState,
@@ -105,5 +106,5 @@ export function onChangeBlockStates(
 		return;
 	}
 
-	onChange('publisherBlockStates', newValue);
+	onChange('publisherBlockStates', mergeObject(_states, newValue));
 }

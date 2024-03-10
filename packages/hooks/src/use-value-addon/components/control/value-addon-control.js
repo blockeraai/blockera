@@ -93,7 +93,7 @@ export default function ({
 						: __('Change Dynamic Value', 'publisher-core')
 				}
 			>
-				<div
+				<button
 					className={controlClassNames(
 						'value-addon',
 						'type-' + (controlProps.value?.valueType || 'unknown'),
@@ -122,6 +122,7 @@ export default function ({
 								break;
 						}
 					}}
+					data-cy="value-addon-btn"
 					{...props}
 				>
 					{isIconActive && (
@@ -133,7 +134,7 @@ export default function ({
 					<span className={controlClassNames('item-name')}>
 						{label}
 					</span>
-				</div>
+				</button>
 			</Tooltip>
 			<ValueAddonPointer controlProps={controlProps} />
 		</>

@@ -3,6 +3,7 @@
  * External dependencies
  */
 import { default as memoize } from 'fast-memoize';
+import { select } from '@wordpress/data';
 
 /**
  * Publisher dependencies
@@ -15,7 +16,6 @@ import type { ValueAddon } from '@publisher/hooks/src/use-value-addon/types';
  */
 import { generateVariableString, getBlockEditorSettings } from './index';
 import type { VariableItem } from './types';
-import { getCurrentTheme } from '../index';
 
 export const getColors: () => Array<VariableItem> = memoize(
 	function (): Array<VariableItem> {
@@ -24,6 +24,8 @@ export const getColors: () => Array<VariableItem> = memoize(
 		};
 
 		if (isBlockTheme()) {
+			const { getCurrentTheme } = select('publisher-core/data');
+
 			const {
 				name: { rendered: themeName },
 			} = getCurrentTheme();

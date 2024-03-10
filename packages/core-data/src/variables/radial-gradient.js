@@ -3,6 +3,7 @@
  * External dependencies
  */
 import { default as memoize } from 'fast-memoize';
+import { select } from '@wordpress/data';
 
 /**
  * Publisher dependencies
@@ -14,7 +15,6 @@ import { isBlockTheme, isUndefined } from '@publisher/utils';
  */
 import { getBlockEditorSettings } from './index';
 import type { VariableItem } from './types';
-import { getCurrentTheme } from '../index';
 
 // eslint-disable-next-line no-unused-vars
 export const getRadialGradients: () => Array<VariableItem> = memoize(
@@ -24,6 +24,8 @@ export const getRadialGradients: () => Array<VariableItem> = memoize(
 		};
 
 		if (isBlockTheme()) {
+			const { getCurrentTheme } = select('publisher-core/data');
+
 			const {
 				name: { rendered: themeName },
 			} = getCurrentTheme();

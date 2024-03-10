@@ -124,20 +124,25 @@ export const memoizedRootBreakpoints: (
 export const memoizedBlockStates: (
 	currentBlockAttributes: Object,
 	action: Object,
-	insideInnerBlock?: boolean
+	args: Object
 ) => Array<StateTypes> = memoize(
 	(
 		currentBlockAttributes: Object,
 		action: Object,
-		insideInnerBlock?: boolean = false
+		args: Object = {
+			currentState: 'normal',
+			insideInnerBlock: false,
+		}
 	): Object => {
+		const { currentState: recievedState, insideInnerBlock } = args;
 		const { currentState, currentBreakpoint } = action;
 		const breakpoints =
-			currentBlockAttributes?.publisherBlockStates[currentState]
-				?.breakpoints;
+			currentBlockAttributes?.publisherBlockStates[
+				recievedState || currentState
+			]?.breakpoints;
 
 		return mergeObject(currentBlockAttributes?.publisherBlockStates, {
-			[currentState]: {
+			[recievedState || currentState]: {
 				breakpoints: {
 					[currentBreakpoint]: memoizedRootBreakpoints(
 						breakpoints[currentBreakpoint],

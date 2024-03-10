@@ -30,19 +30,22 @@ export const useAttributes = (
 		getAttributes: (key?: string) => any,
 	}
 ): ({
-	getAttributesWithPropsId: (state: Object) => Object,
+	getAttributesWithIds: (state: Object, identifier: string) => Object,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 }) => {
-	const getAttributesWithPropsId = (state: Object): Object => {
+	const getAttributesWithIds = (
+		state: Object,
+		identifier: string
+	): Object => {
 		const d = new Date();
 
-		if (state?.publisherPropsId) {
+		if (state[identifier]) {
 			return state;
 		}
 
 		return {
 			...state,
-			publisherPropsId:
+			[identifier]:
 				'' +
 				d.getMonth() +
 				d.getDate() +
@@ -72,7 +75,7 @@ export const useAttributes = (
 		let _attributes = { ...attributes };
 
 		if (!_attributes?.publisherPropsId) {
-			_attributes = getAttributesWithPropsId(_attributes);
+			_attributes = getAttributesWithIds(_attributes, 'publisherPropsId');
 		}
 
 		const currentBlock = getExtensionCurrentBlock();
@@ -145,10 +148,17 @@ export const useAttributes = (
 			// Assume master block isn't in normal state!
 			// action = UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE
 			if (!masterIsNormalState()) {
-				const currentBlockAttributes =
+				let currentBlockAttributes: Object = {};
+
+				if (
 					_attributes.publisherBlockStates[currentState].breakpoints[
 						currentBreakpoint
-					].attributes;
+					]
+				) {
+					currentBlockAttributes =
+						_attributes.publisherBlockStates[currentState]
+							.breakpoints[currentBreakpoint].attributes;
+				}
 
 				if (
 					!currentBlockAttributes?.publisherInnerBlocks ||
@@ -184,6 +194,26 @@ export const useAttributes = (
 			// Assume current block isn't in normal state and attributeId isn't "publisherBlockStates" for prevent cyclic object error!
 			// action = UPDATE_INNER_BLOCK_STATES
 			if (!isNormalState() && !attributeIsPublisherBlockStates) {
+				let currentBlockAttributes: Object = {};
+
+				if (
+					_attributes.publisherInnerBlocks[currentBlock].attributes
+						.publisherBlockStates[currentInnerBlockState]
+						.breakpoints[currentBreakpoint]
+				) {
+					currentBlockAttributes =
+						_attributes.publisherInnerBlocks[currentBlock]
+							.attributes.publisherBlockStates[
+							currentInnerBlockState
+						].breakpoints[currentBreakpoint].attributes;
+				}
+
+				if (
+					!currentBlockAttributes?.publisherInnerBlocks ||
+					!currentBlockAttributes?.publisherInnerBlocks[currentBlock]
+				) {
+					hasRootAttributes = false;
+				}
 				if (
 					!isChanged(
 						{
@@ -219,6 +249,9 @@ export const useAttributes = (
 		}
 
 		if (
+			_attributes.publisherBlockStates[currentState].breakpoints[
+				currentBreakpoint
+			] &&
 			!isChanged(
 				{
 					..._attributes,
@@ -241,7 +274,7 @@ export const useAttributes = (
 	};
 
 	return {
-		getAttributesWithPropsId,
+		getAttributesWithIds,
 		handleOnChangeAttributes,
 	};
 };

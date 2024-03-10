@@ -10,7 +10,10 @@ module.exports = defineConfig({
 
 			return config;
 		},
-		specPattern: ['packages/**/*.cypress.js', 'packages/**/*.cy.compat.js'],
+		specPattern: [
+			'packages/**/*.cypress.js',
+			'packages/**/*.cy.compatibility.js',
+		],
 		supportFile: 'cypress/support/e2e.js',
 	},
 	env: {

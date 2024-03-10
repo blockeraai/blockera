@@ -47,7 +47,7 @@ const RepeaterItem = ({
 	const {
 		mode,
 		design,
-		onSelect,
+		onChange,
 		repeaterId,
 		popoverTitle,
 		popoverClassName,
@@ -236,7 +236,7 @@ const RepeaterItem = ({
 						repeaterId,
 					});
 				}}
-				onClick={(event): void | boolean => {
+				onClick={(): void | boolean => {
 					if (item.selectable) {
 						const newItems: { [key: string]: any } = {};
 
@@ -263,9 +263,7 @@ const RepeaterItem = ({
 							value: newItems,
 						});
 
-						return isFunction(onSelect)
-							? onSelect(event, item)
-							: false;
+						return onChange(newItems);
 					}
 
 					return true;
