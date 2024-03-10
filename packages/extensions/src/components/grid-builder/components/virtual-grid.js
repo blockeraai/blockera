@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { useState, useEffect } from '@wordpress/element';
+import { useState, useEffect, useCallback } from '@wordpress/element';
 import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
@@ -146,7 +146,7 @@ export const VirtualGrid = ({
 
 	const highlightedAreas = calcCoordinates(newMergedArea);
 
-	const createVirtualAreas = () => {
+	const createVirtualAreas = useCallback(() => {
 		const virtualMergedAreas = ([]: any);
 		publisherGridAreas.forEach((item) => {
 			if (item.mergedArea) {
@@ -155,7 +155,11 @@ export const VirtualGrid = ({
 		});
 
 		setVirtualMergedAreas(getUniqueArrayOfObjects(virtualMergedAreas));
-	};
+	}, [publisherGridAreas]);
+
+	useEffect(() => {
+		createVirtualAreas();
+	}, [hoveredColumn, hoveredRow]);
 
 	const overlapAreas = calcOverlapAreas({
 		newArea: {
