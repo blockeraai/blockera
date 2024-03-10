@@ -1,4 +1,10 @@
 // @flow
+
+/**
+ * External dependencies
+ */
+import { select } from '@wordpress/data';
+
 /**
  * Publisher dependencies
  */
@@ -48,6 +54,13 @@ export function GridChildStyles({
 		},
 	};
 	const styleGroup: Array<CssRule> = [];
+
+	const parentClientIds =
+		select('core/block-editor').getBlockParents(clientId);
+
+	const directParentBlock = select('core/block-editor').getBlock(
+		parentClientIds[parentClientIds.length - 1]
+	);
 
 	if (
 		isActiveField(publisherGridChildLayout) &&
@@ -108,8 +121,15 @@ export function GridChildStyles({
 				properties.order = '100';
 				break;
 			case 'manual':
-				properties['grid-area'] =
-					_attributes.publisherGridChildOrder.area;
+				const area = _attributes.publisherGridChildOrder.area;
+				const selectedArea =
+					directParentBlock.attributes.publisherGridAreas.find(
+						(item) =>
+							`${item['column-start']}/${item['column-end']}/${item['row-start']}/${item['row-end']}` ===
+							area
+					);
+
+				if (selectedArea) properties['grid-area'] = selectedArea.name;
 				break;
 		}
 
