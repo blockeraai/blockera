@@ -58,9 +58,9 @@ export const deletePropertyByPath = (obj: Object, path: string): Object => {
 	let current = obj;
 
 	for (let i = 0; i < keys.length - 1; i++) {
-		let key = keys[i];
+		let key: string | number = keys[i];
 
-		if (/\d+/.test(key)) {
+		if ('string' === typeof key && /\d+/.test(key)) {
 			key = Number(key);
 			// console.log(key);
 		}
@@ -72,9 +72,9 @@ export const deletePropertyByPath = (obj: Object, path: string): Object => {
 		current = current[key];
 	}
 
-	let key = keys[keys.length - 1];
+	let key: string | number = keys[keys.length - 1];
 
-	if (/\d+/.test(key)) {
+	if ('string' === typeof key && /\d+/.test(key)) {
 		key = Number(key);
 	}
 
@@ -139,4 +139,30 @@ export function mergeObjects(
 	});
 
 	return result;
+}
+
+/**
+ * Has objected some passed properties?
+ *
+ * @param {Object} obj the any object
+ * @param {Array<string>} props the props of any object
+ * @return {boolean} true on success, false when otherwise!
+ */
+export function hasInvolvesSomeItems(
+	obj: Object,
+	props: Array<string>
+): boolean {
+	const statuses: { [key: string]: boolean } = {};
+
+	for (let i = 0; i < props.length; i++) {
+		if (!obj.hasOwnProperty(props[i])) {
+			statuses[props[i]] = false;
+
+			continue;
+		}
+
+		statuses[props[i]] = true;
+	}
+
+	return Object.values(statuses).includes(true);
 }

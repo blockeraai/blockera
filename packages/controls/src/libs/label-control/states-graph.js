@@ -9,11 +9,11 @@ import { select } from '@wordpress/data';
  * Publisher dependencies
  */
 import { isEmpty, isEquals, isNull, isUndefined } from '@publisher/utils';
-import { getBlockStates } from '@publisher/extensions/src/libs/block-states/store/selector';
-import type {
-	StateGraph,
-	StateGraphItem,
-} from '@publisher/extensions/src/libs/block-states/types';
+import {
+	getStatesGraphNodes,
+	type StateGraph,
+	type StateGraphItem,
+} from '@publisher/extensions/src/libs/block-states/store/selector';
 /**
  * Internal dependencies
  */
@@ -28,7 +28,7 @@ export const getStatesGraph = ({
 	blockName: string,
 	defaultValue: any,
 }): Array<LabelStates> => {
-	const blockStates = controlId ? getBlockStates() : [];
+	const blockStates = controlId ? getStatesGraphNodes() : [];
 
 	const { getBlockType } = select('core/blocks');
 

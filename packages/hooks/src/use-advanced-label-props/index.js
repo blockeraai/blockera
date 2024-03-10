@@ -16,6 +16,8 @@ import {
 	isUndefined,
 } from '@publisher/utils';
 import { prepare } from '@publisher/data-extractor';
+import { isInnerBlock } from '@publisher/extensions/src/components/utils';
+import { useBlockContext } from '@publisher/extensions/src/hooks/context';
 
 /**
  * Internal dependencies
@@ -24,8 +26,8 @@ import type {
 	CalculatedAdvancedLabelProps,
 	AdvancedLabelHookProps,
 } from './types';
-import { isInnerBlock } from '@publisher/extensions/src/components/utils';
-import { useBlockContext } from '@publisher/extensions/src/hooks/context';
+import { blockHasStates } from './helpers';
+import type { TStates } from '@publisher/extensions/src/libs/block-states/types';
 
 export const useAdvancedLabelProps = ({
 	path,
@@ -39,7 +41,7 @@ export const useAdvancedLabelProps = ({
 	blockAttributes,
 }: AdvancedLabelHookProps): CalculatedAdvancedLabelProps => {
 	//TODO: Please commented after complete debug!
-	// const debugKey = 'publisherBorder';
+	// const debugKey = 'publisherFontSize';
 
 	const {
 		currentBlock,
@@ -62,12 +64,49 @@ export const useAdvancedLabelProps = ({
 		};
 	});
 
-	const { publisherInnerBlocks } = useBlockContext();
+	// Get static publisherInnerBlocks value to use as fallback.
+	const { publisherInnerBlocks, masterIsNormalState } = useBlockContext();
+	let currentBlockAttributes = blockAttributes;
 
+	if (isInnerBlock(currentBlock)) {
+		// Assume current inner block inside master secondary state!
+		if (!masterIsNormalState()) {
+			if (
+				!blockAttributes.publisherBlockStates[currentState].breakpoints[
+					currentBreakpoint
+				].attributes?.publisherInnerBlocks ||
+				!blockAttributes.publisherBlockStates[currentState].breakpoints[
+					currentBreakpoint
+				].attributes?.publisherInnerBlocks[currentBlock]
+			) {
+				currentBlockAttributes =
+					publisherInnerBlocks[currentBlock].attributes || {};
+			} else {
+				currentBlockAttributes =
+					blockAttributes.publisherBlockStates[currentState]
+						.breakpoints[currentBreakpoint].attributes
+						?.publisherInnerBlocks[currentBlock].attributes ||
+					publisherInnerBlocks[currentBlock].attributes ||
+					{};
+			}
+		} else {
+			currentBlockAttributes =
+				(blockAttributes.publisherInnerBlocks[currentBlock] &&
+					blockAttributes.publisherInnerBlocks[currentBlock]
+						.attributes) ||
+				publisherInnerBlocks[currentBlock].attributes ||
+				{};
+		}
+	}
+
+	// Excluding advanced label for specified rule.
+	// Rule:
+	// - If current block not has any changed attributes!
+	// - Recieved attribute is equals with "publisherBlockStates".
 	if (
 		['', 'publisherBlockStates'].includes(attribute) ||
-		!blockAttributes ||
-		!Object.values(blockAttributes).length
+		!currentBlockAttributes ||
+		!Object.values(currentBlockAttributes).length
 	) {
 		return {
 			isChanged: false,
@@ -77,15 +116,8 @@ export const useAdvancedLabelProps = ({
 		};
 	}
 
-	if (isInnerBlock(currentBlock)) {
-		blockAttributes =
-			blockAttributes?.publisherInnerBlocks[currentBlock] ||
-			publisherInnerBlocks[currentBlock].attributes;
-	}
-
-	let _blockAttributes = blockAttributes[attribute];
-
-	if (!blockAttributes?.publisherBlockStates) {
+	// Assume block has not any states!
+	if (!blockHasStates(currentBlockAttributes)) {
 		const isChanged = !isEquals(defaultValue, value);
 		const isChangedOnNormal = isChanged;
 		const isChangedOnCurrentState = isChanged;
@@ -99,7 +131,7 @@ export const useAdvancedLabelProps = ({
 	}
 
 	const currentBlockState =
-		blockAttributes?.publisherBlockStates[
+		currentBlockAttributes?.publisherBlockStates[
 			!isInnerBlock(currentBlock) ? currentState : currentInnerBlockState
 		];
 	const currentBreakpointType =
@@ -124,61 +156,79 @@ export const useAdvancedLabelProps = ({
 		if (stateValue) {
 			stateValue = prepare(path, stateValue);
 		}
-
-		_blockAttributes = prepare(path, blockAttributes);
 	}
 
-	const isChangedOnOtherStates = Object.values(
-		blockAttributes?.publisherBlockStates
-	)?.filter((state: Object): boolean => {
-		return (
-			Object.values(state.breakpoints).filter((breakpoint) => {
-				let stateValue =
-					'normal' === state.type && 'laptop' === breakpoint.type
-						? blockAttributes
-						: breakpoint?.attributes;
-
-				if (isEmpty(stateValue)) {
-					return false;
-				}
-
-				// Assume control is repeater.
-				if (isRepeater) {
-					if (!isNormalState && 'normal' === state.type) {
-						return (
-							!isEmpty(stateValue[attribute]) &&
-							!isUndefined(stateValue[attribute]) &&
-							!isEquals(stateValue[attribute], defaultValue)
-						);
-					}
-
-					return (
-						!isEmpty(stateValue[attribute]) &&
-						!isUndefined(stateValue[attribute]) &&
-						!isEquals(stateValue[attribute], defaultValue)
-					);
-				}
-
-				if ((path && isObject(stateValue)) || isArray(stateValue)) {
-					stateValue = prepare(path, stateValue);
-				}
-
-				if (!isNormalState && 'normal' === state.type) {
-					return (
-						!isEmpty(stateValue) &&
-						!isUndefined(stateValue) &&
-						!isEquals(stateValue, defaultValue)
-					);
-				}
+	const isChangedOnOtherStates = Object.fromEntries(
+		// $FlowFixMe
+		Object.entries(currentBlockAttributes?.publisherBlockStates)?.filter(
+			([stateType, state]: [TStates, Object]): boolean => {
+				const breakpointTypes = Object.keys(state.breakpoints);
 
 				return (
-					!isEmpty(stateValue) &&
-					!isUndefined(stateValue) &&
-					!isEquals(stateValue, defaultValue)
+					Object.values(state.breakpoints).filter(
+						(
+							breakpoint: Object,
+							breakpointIndex: number
+						): boolean => {
+							let stateValue =
+								'normal' === stateType &&
+								'laptop' === breakpointTypes[breakpointIndex]
+									? currentBlockAttributes
+									: breakpoint?.attributes;
+
+							if (isEmpty(stateValue)) {
+								return false;
+							}
+
+							// Assume control is repeater.
+							if (isRepeater) {
+								if (!isNormalState && 'normal' === stateType) {
+									return (
+										!isEmpty(stateValue[attribute]) &&
+										!isUndefined(stateValue[attribute]) &&
+										!isEquals(
+											stateValue[attribute],
+											defaultValue
+										)
+									);
+								}
+
+								return (
+									!isEmpty(stateValue[attribute]) &&
+									!isUndefined(stateValue[attribute]) &&
+									!isEquals(
+										stateValue[attribute],
+										defaultValue
+									)
+								);
+							}
+
+							if (
+								(path && isObject(stateValue)) ||
+								isArray(stateValue)
+							) {
+								stateValue = prepare(path, stateValue);
+							}
+
+							if (!isNormalState && 'normal' === stateType) {
+								return (
+									!isEmpty(stateValue) &&
+									!isUndefined(stateValue) &&
+									!isEquals(stateValue, defaultValue)
+								);
+							}
+
+							return (
+								!isEmpty(stateValue) &&
+								!isUndefined(stateValue) &&
+								!isEquals(stateValue, defaultValue)
+							);
+						}
+					).length > 0
 				);
-			}).length > 0
-		);
-	});
+			}
+		)
+	);
 
 	let isChanged = !isEquals(defaultValue, value);
 
@@ -192,29 +242,20 @@ export const useAdvancedLabelProps = ({
 		}
 	}
 
-	let isChangedOnNormal =
-		isChangedOnOtherStates?.find(
-			(state: Object): boolean => 'normal' === state.type
-		) || false;
+	let isChangedOnNormal = isChangedOnOtherStates?.normal || false;
 
 	if (isObject(isChangedOnNormal)) {
 		isChangedOnNormal = true;
 	}
 
-	if (isEmpty(isChangedOnOtherStates) && !isChanged && _blockAttributes) {
-		//FIXME: please double check all attributes default values and check controls valueCleanup()!!
-		// FIXME: The below statement is very important because "isChangedOnNormal" var should not false when defaultValue of control and attribute of block is not equals!
-		// isChangedOnNormal = !isEquals(_blockAttributes, defaultValue);
-	}
-
 	const isChangedOnCurrentState =
-		isChangedOnOtherStates.filter(
-			(item: Object): boolean => currentState === item.type
-		).length > 0;
+		isChangedOnOtherStates[
+			isInnerBlock(currentBlock) ? currentInnerBlockState : currentState
+		] || false;
 
 	//TODO: Please commented after complete debug!
 	// if (debugKey === attribute && !singularId) {
-	// 	console.table({
+	// 	console.log({
 	// 		isChanged,
 	// 		stateValue,
 	// 		value,
@@ -230,9 +271,6 @@ export const useAdvancedLabelProps = ({
 		isChanged,
 		isChangedOnNormal,
 		isChangedOnCurrentState,
-		isChangedOnOtherStates:
-			isChangedOnOtherStates.filter(
-				(item: Object): boolean => 'normal' !== item.type
-			).length > 0,
+		isChangedOnOtherStates: Object.keys(isChangedOnOtherStates).length > 0,
 	};
 };

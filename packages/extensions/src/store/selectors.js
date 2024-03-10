@@ -306,9 +306,7 @@ export function getExtensionCurrentBlockStateBreakpoint({
  *
  * @return {boolean} true on success,false on otherwise!
  */
-export function isActiveBlockExtensions({
-	blockExtensions,
-}: Object): TBreakpoint {
+export function isActiveBlockExtensions({ blockExtensions }: Object): boolean {
 	return 'undefined' === typeof blockExtensions?.isActiveExtensions
 		? true
 		: blockExtensions?.isActiveExtensions;

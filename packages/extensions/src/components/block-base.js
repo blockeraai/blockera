@@ -302,6 +302,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					currentInnerBlock,
 					isOpenGridBuilder,
 					setOpenGridBuilder,
+					masterIsNormalState,
 					publisherInnerBlocks,
 					attributes: _attributes,
 					handleOnChangeAttributes,

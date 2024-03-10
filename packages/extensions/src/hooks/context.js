@@ -34,6 +34,7 @@ const BlockEditContextProvider = ({
 		getAttributes: () => Object,
 		isNormalState: () => boolean,
 		getCurrentState: () => TStates,
+		masterIsNormalState: () => boolean,
 		getBreakpoint: () => BreakpointTypes,
 		setCurrentTab: (tabName: string) => void,
 		switchBlockState: (state: string) => void,
@@ -53,6 +54,7 @@ const BlockEditContextProvider = ({
 			currentInnerBlockState,
 			isOpenGridBuilder,
 			setOpenGridBuilder,
+			masterIsNormalState,
 			publisherInnerBlocks,
 			handleOnChangeAttributes,
 		} = props;
@@ -64,6 +66,7 @@ const BlockEditContextProvider = ({
 			breakpointId,
 			getAttributes,
 			isNormalState,
+			masterIsNormalState,
 			publisherInnerBlocks,
 			handleOnChangeAttributes,
 			switchBlockState: (state: TStates): void => {

@@ -88,9 +88,10 @@ const StatesManager: ComponentType<any> = memo(
 									? state?.isSelected
 									: 'normal' === itemId,
 							deletable: 'normal' !== itemId,
-							breakpoints: {
-								...getBreakpoints(itemId),
-								...(state?.breakpoints ?? {}),
+							breakpoints: state?.breakpoints ?? {
+								laptop: {
+									attributes: {},
+								},
 							},
 						};
 					}
@@ -117,11 +118,11 @@ const StatesManager: ComponentType<any> = memo(
 					selectable: true,
 					isSelected: true,
 					visibilitySupport: false,
-					breakpoints: getBreakpoints('normal'),
+					breakpoints: states.normal.breakpoints,
 				},
 			};
 			// eslint-disable-next-line
-		}, [currentBlock, states]);
+		}, [currentBlock, states, currentBreakpoint]);
 
 		const valueCleanup = useCallback(
 			(value: {

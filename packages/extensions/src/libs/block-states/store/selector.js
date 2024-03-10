@@ -20,6 +20,7 @@ import type {
 	TStates,
 	TStatesLabel,
 } from '../types';
+import staticStates from '../states';
 import getBreakpoints from '../default-breakpoints';
 import { isInnerBlock } from '../../../components/utils';
 
@@ -47,7 +48,7 @@ export type StateGraph = {
 	states: StateGraphStates,
 };
 
-export const getBlockStates = (): Array<StateGraph> => {
+export const getStatesGraphNodes = (): Array<StateGraph> => {
 	const { getSelectedBlock } = select('core/block-editor');
 
 	const block = getSelectedBlock();
@@ -74,7 +75,8 @@ export const getBlockStates = (): Array<StateGraph> => {
 
 	const normals = [];
 	let blockAttributes = block.attributes;
-	let publisherBlockStates = blockAttributes.publisherBlockStates;
+	let publisherBlockStates: { [key: TStates]: StateTypes } =
+		blockAttributes.publisherBlockStates;
 
 	if (isInnerBlock(currentBlock)) {
 		blockAttributes =
@@ -88,16 +90,16 @@ export const getBlockStates = (): Array<StateGraph> => {
 		.map((breakpoint: BreakpointTypes): StateGraph => {
 			let states: StateGraphStates = [];
 
-			states = Object.values(publisherBlockStates)
-				.map((state: StateTypes): State => {
+			states = Object.entries(publisherBlockStates)
+				.map(([stateType, state]: [TStates, StateTypes]): State => {
 					if (
-						'normal' === state.type &&
+						'normal' === stateType &&
 						breakpoint.type ===
 							getExtensionCurrentBlockStateBreakpoint()
 					) {
 						return {
-							type: state.type,
-							label: state.label,
+							type: stateType,
+							label: staticStates[stateType].label,
 							attributes: omit(blockAttributes, [
 								'publisherBlockStates',
 							]),
@@ -105,8 +107,8 @@ export const getBlockStates = (): Array<StateGraph> => {
 					}
 
 					return {
-						type: state.type,
-						label: state.label,
+						type: stateType,
+						label: staticStates[stateType].label,
 						attributes:
 							state.breakpoints[breakpoint.type]?.attributes,
 					};

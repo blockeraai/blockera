@@ -5,8 +5,8 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+import { select, dispatch, useDispatch } from '@wordpress/data';
 import { useEffect, useState, createPortal } from '@wordpress/element';
-import { select, useDispatch } from '@wordpress/data';
 
 /**
  * Publisher dependencies
@@ -38,6 +38,9 @@ export const Breakpoints = ({
 		select('publisher-core/editor');
 	const { setDeviceType, setCanvasSettings, updateBreakpoints } = useDispatch(
 		'publisher-core/editor'
+	);
+	const { changeExtensionCurrentBlockStateBreakpoint } = dispatch(
+		'publisher-core/extensions'
 	);
 	const [canvasSettings, updateCanvasSettings] = useState(
 		getCanvasSettings()
@@ -130,6 +133,7 @@ export const Breakpoints = ({
 
 		if (device === getDeviceType()) {
 			updateDeviceType('laptop');
+			changeExtensionCurrentBlockStateBreakpoint('laptop');
 
 			updateSelectedBlock();
 
@@ -137,6 +141,7 @@ export const Breakpoints = ({
 		}
 
 		updateDeviceType(device);
+		changeExtensionCurrentBlockStateBreakpoint(device);
 
 		updateSelectedBlock();
 	};

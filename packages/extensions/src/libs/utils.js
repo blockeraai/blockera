@@ -14,7 +14,8 @@ import { hasSameProps } from '@publisher/utils';
  * Internal dependencies
  */
 import type { TBlockProps } from './types';
-import { isInnerBlock } from '../components/utils';
+import { isInnerBlock, isNormalState } from '../components/utils';
+
 // import { detailedDiff } from 'deep-object-diff';
 
 /**
@@ -56,6 +57,14 @@ export function generateExtensionId(
 
 	if (isInnerBlock(currentBlock)) {
 		currentStateType = flag ? '-' + getExtensionInnerBlockState() : '';
+	}
+
+	// Assume control inside innerBlock and current innerBlock inside master block!
+	if (
+		!isNormalState(getExtensionCurrentBlockState()) &&
+		isInnerBlock(currentBlock)
+	) {
+		return `${blockName}/${id}/${clientId}-master-${currentBlock}${currentStateType}-${getExtensionCurrentBlockStateBreakpoint()}`;
 	}
 
 	return `${blockName}/${id}/${clientId}-${currentBlock}${currentStateType}-${getExtensionCurrentBlockStateBreakpoint()}`;
