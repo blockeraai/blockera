@@ -54,7 +54,7 @@ export default function GradientBarControl({
 	const {
 		valueAddonClassNames,
 		isSetValueAddon,
-		ValueAddonUI,
+		ValueAddonControl,
 		ValueAddonPointer,
 	} = useValueAddon({
 		types: controlAddonTypes,
@@ -100,7 +100,7 @@ export default function GradientBarControl({
 						valueAddonClassNames
 					)}
 				>
-					<ValueAddonUI
+					<ValueAddonControl
 						style={{
 							height: height + 'px',
 							padding: '0 max(min(' + height + 'px, 15px), 15px)',
