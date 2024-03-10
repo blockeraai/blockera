@@ -4,7 +4,6 @@
  * External dependencies
  */
 import { useState, useCallback, memo } from '@wordpress/element';
-//import type { MixedElement } from 'react';
 
 /**
  * Publisher Dependencies

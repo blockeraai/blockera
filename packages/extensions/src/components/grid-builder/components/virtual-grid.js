@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { useState, useEffect, useCallback } from '@wordpress/element';
+import { useState, useEffect, useCallback, useMemo } from '@wordpress/element';
 import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
@@ -50,38 +50,52 @@ export const VirtualGrid = ({
 	} = useStoreSelectors();
 	const { clientId } = getSelectedBlock() || {};
 
-	const generatedStyles = LayoutStyles({
-		state: getCurrentState(),
-		clientId,
-		blockName: block.blockName,
-		currentBlock,
-		selectors: {},
-		attributes,
-	})
-		?.map((item) => item.declarations)
-		.join(' ');
-
-	const styles = {
-		// to have clean rows in grid builder : auto => 1fr
-		gridTemplateRows: extractCssValue('grid-template-rows', generatedStyles)
-			.split(' ')
-			.map((item) => (item === 'auto' ? '1fr' : item))
+	const generatedStyles = useCallback(
+		LayoutStyles({
+			state: getCurrentState(),
+			clientId,
+			blockName: block.blockName,
+			currentBlock,
+			selectors: {},
+			attributes,
+		})
+			?.map((item) => item.declarations)
 			.join(' '),
+		[
+			publisherGridColumns,
+			publisherGridRows,
+			publisherGridGap,
+			publisherGridAreas,
+			publisherGridDirection,
+		]
+	);
 
-		gridTemplateColumns: extractCssValue(
-			'grid-template-columns',
-			generatedStyles
-		),
-		display: extractCssValue('display', generatedStyles),
-		gap: publisherGridGap.gap,
-		columnGap: publisherGridGap.columns,
-		rowGap: publisherGridGap.rows,
-		gridDirection: extractCssValue('grid-auto-flow', generatedStyles),
-		gridTemplateAreas: extractCssValue(
-			'grid-template-areas',
-			generatedStyles
-		),
-	};
+	const styles = useMemo(() => {
+		return {
+			// to have clean rows in grid builder : auto => 1fr
+			gridTemplateRows: extractCssValue(
+				'grid-template-rows',
+				generatedStyles
+			)
+				.split(' ')
+				.map((item) => (item === 'auto' ? '1fr' : item))
+				.join(' '),
+
+			gridTemplateColumns: extractCssValue(
+				'grid-template-columns',
+				generatedStyles
+			),
+			display: extractCssValue('display', generatedStyles),
+			gap: publisherGridGap.gap,
+			columnGap: publisherGridGap.columns,
+			rowGap: publisherGridGap.rows,
+			gridDirection: extractCssValue('grid-auto-flow', generatedStyles),
+			gridTemplateAreas: extractCssValue(
+				'grid-template-areas',
+				generatedStyles
+			),
+		};
+	}, [generatedStyles]);
 
 	useEffect(() => {
 		if (!publisherGridAreas.length) {
