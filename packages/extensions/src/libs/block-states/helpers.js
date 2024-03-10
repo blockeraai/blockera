@@ -8,7 +8,7 @@ import { dispatch } from '@wordpress/data';
 /**
  * Publisher dependencies
  */
-import { isEquals } from '@publisher/utils';
+import { isEquals, mergeObject } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -84,22 +84,6 @@ export function onChangeBlockStates(
 ): void {
 	const { states: _states, onChange, currentBlock } = params;
 
-	let prevSelectedItem = 'normal';
-
-	Object.entries(_states).forEach(([type, state]): void => {
-		if (state?.isSelected) {
-			prevSelectedItem = type;
-		}
-	});
-
-	let nextSelectedItem = 'normal';
-
-	Object.entries(newValue).forEach(([type, state]): void => {
-		if (state?.isSelected) {
-			nextSelectedItem = type;
-		}
-	});
-
 	const {
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setInnerBlockState,
@@ -122,22 +106,5 @@ export function onChangeBlockStates(
 		return;
 	}
 
-	if (
-		prevSelectedItem !== nextSelectedItem &&
-		Object.keys(newValue).length === Object.keys(_states).length
-	) {
-		onChange('publisherBlockStates', {
-			..._states,
-			[prevSelectedItem]: {
-				..._states[prevSelectedItem],
-				isSelected: false,
-			},
-			[nextSelectedItem]: {
-				..._states[nextSelectedItem],
-				isSelected: true,
-			},
-		});
-	} else {
-		onChange('publisherBlockStates', newValue);
-	}
+	onChange('publisherBlockStates', mergeObject(_states, newValue));
 }
