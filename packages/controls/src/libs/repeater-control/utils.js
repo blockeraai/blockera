@@ -51,7 +51,7 @@ export function prepValueForHeader(value: any): MixedElement | string {
 export function getSortedRepeater(items: Object): Array<Object> {
 	const dataArray = Object.entries(items);
 
-	dataArray.sort(([, a], [, b]) => (a.order || 0) - (b.order || 0));
+	dataArray.sort(([, a], [, b]) => (a?.order || 0) - (b?.order || 0));
 
 	return dataArray;
 }
