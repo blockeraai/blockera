@@ -8,7 +8,7 @@ import type { MixedElement } from 'react';
 /**
  * Publisher dependencies
  */
-import { convertDegToCharacter, isNumber } from '@publisher/utils';
+import { convertDegToCharacter } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -57,7 +57,7 @@ export function getSortedRepeater(items: Object): Array<Object> {
 }
 
 export function getArialLabelSuffix(itemId: string): string | number {
-	return isNumber(Number(itemId.trim())) ? Number(itemId) + 1 : itemId;
+	return itemId.replaceAll('-', ' ');
 }
 
 export function cleanupRepeaterItem(item: Object): Object {
