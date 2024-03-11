@@ -124,6 +124,9 @@ export function backgroundToWPCompatibility({
 				background: {
 					backgroundImage: undefined,
 				},
+				color: {
+					gradient: undefined,
+				},
 			},
 		};
 	}
