@@ -82,7 +82,7 @@ export function onChangeBlockStates(
 	newValue: { [key: TStates]: { ...StateTypes, isSelected: boolean } },
 	params: Object
 ): void {
-	const { states: _states, onChange, currentBlock } = params;
+	const { states: _states, onChange, currentBlock, valueCleanup } = params;
 
 	const {
 		changeExtensionCurrentBlockState: setCurrentState,
@@ -106,5 +106,8 @@ export function onChangeBlockStates(
 		return;
 	}
 
-	onChange('publisherBlockStates', mergeObject(_states, newValue));
+	onChange(
+		'publisherBlockStates',
+		mergeObject(valueCleanup(_states), newValue)
+	);
 }
