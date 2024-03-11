@@ -48,12 +48,14 @@ export const GridBuilder = ({
 					(child) => (child.style.visibility = 'initial')
 				);
 				selectedBlock.style.position = 'initial';
+				selectedBlock.style.visibility = 'initial';
 				selectedBlock.setAttribute('contenteditable', 'true');
 			} else {
 				selectedBlockChildren.forEach(
 					(child) => (child.style.visibility = 'hidden')
 				);
 				selectedBlock.style.position = 'relative';
+				selectedBlock.style.visibility = 'hidden';
 				selectedBlock.setAttribute('contenteditable', 'false');
 			}
 		}
@@ -66,6 +68,7 @@ export const GridBuilder = ({
 			);
 			selectedBlock.setAttribute('contenteditable', 'true');
 			selectedBlock.style.position = 'initial';
+			selectedBlock.style.visibility = 'initial';
 		};
 	}, []);
 
