@@ -12,11 +12,10 @@ import { useContext, useCallback, useRef } from '@wordpress/element';
 import { prepare, update } from '@publisher/data-extractor';
 import {
 	isNull,
+	isEmpty,
 	isObject,
 	isBoolean,
 	isUndefined,
-	isArray,
-	isEmpty,
 } from '@publisher/utils';
 
 /**
@@ -152,13 +151,14 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 				controlId: controlInfo.name,
 			});
 		}
+
+		return value;
 	};
 
 	//Call onChange function if is set valueCleanup as function to clean value else set all value details into parent state!
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const setValue = useControlEffect(
 		{
-			ref,
 			onChange,
 			resetRef,
 			sideEffect,
@@ -166,6 +166,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			controlInfo,
 			valueCleanup,
 			value: calculatedValue,
+			actionRefId: { ...ref },
 			resetToNormal: controlInfo.resetToNormal,
 		},
 		[savedValue]
@@ -250,6 +251,117 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		return defaultValue;
 	}
 
+	/**
+	 * Calculating value based on saved control value type ...
+	 *
+	 * @param {*} value the calculated vase based on recieved args.
+	 * @param {Object} args The reset action arguments.
+	 *
+	 * @return {*} the calculated value base on control previous saved value.
+	 */
+	const calculatedValueBasedOnSavedValue = (
+		value: any,
+		args: Object
+	): any => {
+		if (isObject(savedValue) && args?.propId) {
+			if (args?.singularId) {
+				// Like inside control parent repeater item.
+				value = resetRepeaterItemField(value || defaultValue, args);
+			} else if (isUndefined(value)) {
+				value = {
+					...savedValue,
+					[args?.propId]: defaultValue[args?.propId],
+				};
+			} else {
+				value = update(savedValue, args.path, value);
+			}
+		} else if (isObject(savedValue) && isObject(defaultValue)) {
+			value = {
+				...savedValue,
+				...(value || defaultValue),
+			};
+		}
+
+		return value || '';
+	};
+	/**
+	 * Resetting control value to default.
+	 * use cases: all controls apart from repeater.
+	 *
+	 * @param {*} toValue the reset value.
+	 *
+	 * @return {*} the control default value.
+	 */
+	const reset = (toValue: any): any => {
+		setValue(toValue, ref);
+
+		return modifyValue(toValue);
+	};
+	/**
+	 * Resetting repeater control ...
+	 *
+	 * @param {Object} args The reset action arguments.
+	 * @param {Object} dataset The dataset object.
+	 * @return {Object} the reset value.
+	 */
+	const resetRepeaterControl = (args: Object, dataset: Object): any => {
+		const value = prepare(args?.path, dataset);
+
+		if (isUndefined(args?.path) || isUndefined(value)) {
+			return modifyValue(defaultValue);
+		}
+
+		return modifyValue(value);
+	};
+	/**
+	 * Resetting field value of repeater item ...
+	 *
+	 * @param {*} value The resetting value.
+	 * @param {Object} args The reset action arguments.
+	 * @return {Object} The repeater control value.
+	 */
+	const resetRepeaterItemField = (value: any, args: Object): Object => {
+		return Object.fromEntries(
+			Object.entries(savedValue).map(
+				([itemId, item]: [string, Object]): [string, Object] => [
+					itemId,
+					{
+						...item,
+						[args.singularId]: value,
+					},
+				]
+			)
+		);
+	};
+	/**
+	 * Updating ref based on argument action ...
+	 *
+	 * @param {Object} args The reset action arguments.
+	 */
+	const updateRef = (args: Object): void => {
+		if (['RESET_TO_NORMAL', 'RESET_TO_DEFAULT'].includes(args?.action)) {
+			ref.current = {
+				reset: true,
+				action: 'reset',
+				path: args?.path,
+			};
+
+			return;
+		}
+
+		if ('RESET_ALL' === args?.action) {
+			ref.current = {
+				reset: true,
+				path: args?.path,
+				action: 'reset_all_states',
+			};
+
+			return;
+		}
+
+		resetRef();
+	};
+
 	return {
 		dispatch,
 		setValue: (value, _ref = undefined) => {
@@ -270,103 +382,25 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		resetToDefault: (args: Object): any => {
 			const dataset = args?.attributes || defaultValue;
 
-			if (
-				['RESET_TO_NORMAL', 'RESET_TO_DEFAULT'].includes(args?.action)
-			) {
-				ref.current = {
-					reset: true,
-					action: 'reset',
-					path: args?.path,
-				};
-			} else {
-				resetRef();
-			}
+			// Reference updating ...
+			updateRef(args);
 
+			// Assume resetting repeater ...
 			if (args?.isRepeater) {
-				const value = prepare(args?.path, dataset);
-
-				modifyControlValue({
-					value,
-					controlId: controlInfo.name,
-				});
-
-				return value;
+				return resetRepeaterControl(args, dataset);
 			}
 
+			// Assume not sets path argument, then resetting to defaultValue ...
 			if (isUndefined(args?.path)) {
-				setValue(defaultValue, ref);
-
-				modifyControlValue({
-					value: defaultValue,
-					controlId: controlInfo.name,
-				});
-
-				return defaultValue;
+				return reset(defaultValue);
 			}
 
-			let value = prepare(args?.path, dataset);
-
-			const callback = (
-				item: Object,
-				itemId: number,
-				value: any
-			): Object => {
-				if (itemId === args?.repeaterItem) {
-					return update(item, args?.propId, value);
-				}
-
-				return item;
-			};
-
-			if (isUndefined(value)) {
-				if (isArray(savedValue)) {
-					value = savedValue.map(
-						(item: Object, itemId: number): Object =>
-							callback(item, itemId, defaultValue)
-					);
-				} else if (isObject(savedValue) && args?.propId) {
-					value = {
-						...savedValue,
-						[args?.propId]: defaultValue[args?.propId],
-					};
-				} else if (isObject(savedValue) && isObject(defaultValue)) {
-					value = {
-						...savedValue,
-						...defaultValue,
-					};
-				}
-
-				setValue(value || '', ref);
-
-				modifyControlValue({
-					value: value || '',
-					controlId: controlInfo.name,
-				});
-
-				return value || '';
-			}
-
-			if (isArray(savedValue)) {
-				value = savedValue.map((item: Object, itemId: number): Object =>
-					callback(item, itemId, value)
-				);
-			} else if (isObject(savedValue) && args?.propId) {
-				value = update(savedValue, args.path, value);
-			} else if (isObject(savedValue) && isObject(value)) {
-				value = {
-					...savedValue,
-					...value,
-				};
-			}
-
-			setValue(value, ref);
-
-			modifyControlValue({
-				value,
-				controlId: controlInfo.name,
-			});
-
-			return value;
+			return reset(
+				calculatedValueBasedOnSavedValue(
+					prepare(args?.path, dataset),
+					args
+				)
+			);
 		},
 		// eslint-disable-next-line
 		/**

@@ -25,6 +25,7 @@ export type LabelControlProps = {
 		path?: null | string,
 		propId?: string | null,
 		action?: string,
+		attribute?: string,
 	}) => any,
 };
 

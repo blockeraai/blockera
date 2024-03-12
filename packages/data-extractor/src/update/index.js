@@ -24,7 +24,7 @@ export function update(
 	forceReplace: boolean = false
 ): Object {
 	const keys = [];
-	let currentObj = { ...object };
+	let currentObj = object;
 
 	regexMatch(/[\w-]+/g, query, (match) => keys.push(match));
 

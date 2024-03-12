@@ -205,10 +205,11 @@ export const AdvancedLabelControl = ({
 												//FIXME: please implements reset_all action!
 												resetToDefault({
 													path,
+													attribute,
 													isRepeater,
 													repeaterItem,
 													propId: singularId,
-													action: 'RESET_All',
+													action: 'RESET_ALL',
 												});
 											}}
 										/>

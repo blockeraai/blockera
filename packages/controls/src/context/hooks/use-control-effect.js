@@ -16,17 +16,18 @@ import type { ControlEffectType } from '../types';
 
 export default function useControlEffect(
 	{
-		ref,
 		onChange,
 		resetRef,
 		sideEffect,
+		actionRefId,
 		controlInfo,
 		valueCleanup,
 		value: controlValue,
 	}: Object,
 	dependencies: Array<any> = []
 ): ControlEffectType {
-	const refId = ref && ref?.current?.reset ? ref : undefined;
+	const refId =
+		actionRefId && actionRefId?.current?.reset ? actionRefId : undefined;
 
 	const setValue = (value: any, _ref?: Object): any => {
 		if (refId) {

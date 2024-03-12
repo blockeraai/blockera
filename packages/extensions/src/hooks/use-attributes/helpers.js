@@ -8,6 +8,7 @@ import memoize from 'fast-memoize';
 /**
  * Publisher dependencies
  */
+import { update } from '@publisher/data-extractor';
 import { isEquals, mergeObject } from '@publisher/utils';
 
 /**
@@ -154,3 +155,40 @@ export const memoizedBlockStates: (
 		});
 	}
 );
+
+export const resetAllStates = (state: Object, action: Object): Object => {
+	const { attributeId, newValue } = action;
+
+	return mergeObject(update(state, attributeId, newValue, true), {
+		[attributeId]: newValue,
+		publisherBlockStates: Object.fromEntries(
+			Object.entries(state.publisherBlockStates).map(
+				([stateType, _state]: [string, Object]): [string, Object] => {
+					return [
+						stateType,
+						mergeObject(_state, {
+							breakpoints: Object.fromEntries(
+								Object.entries(_state.breakpoints).map(
+									([breakpointType, breakpoint]: [
+										string,
+										Object
+									]): [string, Object] => {
+										return [
+											breakpointType,
+											update(
+												breakpoint,
+												`attributes.${attributeId}`,
+												newValue,
+												true
+											),
+										];
+									}
+								)
+							),
+						}),
+					];
+				}
+			)
+		),
+	});
+};
