@@ -27,6 +27,7 @@ import { AddButton, GridSizeHandler, Cells, GapHandler } from './index';
 
 export const VirtualGrid = ({
 	block,
+	extensionProps,
 }: {
 	block: TBlockProps,
 }): MixedElement => {

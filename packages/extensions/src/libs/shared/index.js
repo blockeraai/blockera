@@ -502,53 +502,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										currentStateAttributes.publisherFlexWrap,
 									publisherAlignContent:
 										currentStateAttributes.publisherAlignContent,
-								}}
-								attributes={{
-									publisherDisplay:
-										attributes.publisherDisplay,
-									publisherFlexLayout:
-										attributes.publisherFlexLayout,
-									publisherGap: attributes.publisherGap,
-									publisherFlexWrap:
-										attributes.publisherFlexWrap,
-									publisherAlignContent:
-										attributes.publisherAlignContent,
-								}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								setSettings={handleOnChangeSettings}
-							/>
-							<LayoutExtension
-								block={block}
-								extensionConfig={layoutConfig}
-								extensionProps={{
-									publisherDisplay: {},
-									publisherFlexLayout: {},
-									publisherGap: {},
-									publisherFlexWrap: {},
-									publisherAlignContent: {},
-									publisherGridAlignItems: {},
-									publisherGridJustifyItems: {},
-									//publisherGridAlignContent: {},
-									//publisherGridJustifyContent: {},
-									publisherGridGap: {},
-									publisherGridDirection: {},
-									publisherGridColumns: {},
-									publisherGridRows: {},
-									publisherGridAreas: {},
-								}}
-								values={{
-									publisherDisplay:
-										currentStateAttributes.publisherDisplay,
-									publisherFlexLayout:
-										currentStateAttributes.publisherFlexLayout,
-									publisherGap:
-										currentStateAttributes.publisherGap,
-									publisherFlexWrap:
-										currentStateAttributes.publisherFlexWrap,
-									publisherAlignContent:
-										currentStateAttributes.publisherAlignContent,
 									publisherGridAlignItems:
 										currentStateAttributes.publisherGridAlignItems,
 									publisherGridJustifyItems:
