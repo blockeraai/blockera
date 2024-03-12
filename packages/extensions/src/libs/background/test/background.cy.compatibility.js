@@ -9,7 +9,7 @@ import {
 
 describe('Background → WP Compatibility', () => {
 	describe('Paragraph Block', () => {
-		describe('Linear Gradient', () => {
+		describe('Linear Gradient Background', () => {
 			it('Simple Value', () => {
 				appendBlocks(
 					'<!-- wp:paragraph {"style":{"color":{"gradient":"linear-gradient(135deg,rgb(135,254,56) 1%,rgb(255,147,147) 97%)"}}} -->\n' +
@@ -203,7 +203,7 @@ describe('Background → WP Compatibility', () => {
 			});
 		});
 
-		describe('Radial Gradient', () => {
+		describe('Radial Gradient Background', () => {
 			it('Simple Value', () => {
 				appendBlocks(
 					'<!-- wp:paragraph {"style":{"color":{"gradient":"radial-gradient(rgb(194,169,144) 27%,rgb(254,95,95) 92%)"}}} -->\n' +
@@ -284,6 +284,105 @@ describe('Background → WP Compatibility', () => {
 				getWPDataObject().then((data) => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.color?.gradient
+					);
+				});
+			});
+		});
+	});
+
+	describe('Group Block', () => {
+		describe('Background Image', () => {
+			it('Simple Value', () => {
+				appendBlocks(
+					'<!-- wp:group {"style":{"background":{"backgroundImage":{"url":"https://placehold.co/600x400","id":87,"source":"file","title":"about-sofia"}}},"layout":{"type":"constrained"}} -->\n' +
+						'<div class="wp-block-group"><!-- wp:paragraph -->\n' +
+						'<p>Paragraph inisde group block</p>\n' +
+						'<!-- /wp:paragraph --></div>\n' +
+						'<!-- /wp:group -->'
+				);
+
+				// Select target block
+				cy.get('[data-type="core/paragraph"]').click();
+
+				// Switch to parent block
+				cy.get('[aria-label="Select Group"]').click();
+
+				// add alias to the feature container
+				cy.get('[aria-label="Image & Gradient"]')
+					.parents('[data-cy="base-control"]')
+					.as('bgContainer');
+
+				//
+				// Test 1: WP data to Blockera
+				//
+
+				// WP data should come to Blockera
+				getWPDataObject().then((data) => {
+					expect({
+						'image-0': {
+							isVisible: true,
+							type: 'image',
+							image: 'https://placehold.co/600x400',
+							'image-size': 'custom',
+							'image-size-width': 'auto',
+							'image-size-height': 'auto',
+							'image-position': {
+								top: '50%',
+								left: '50%',
+							},
+							'image-repeat': 'repeat',
+							'image-attachment': 'scroll',
+							order: 0,
+						},
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'publisherBackground')
+					);
+				});
+
+				//
+				// Test 2: Blockera value to WP data
+				//
+
+				// open color popover
+				cy.get('@bgContainer').within(() => {
+					cy.get('[data-id="image-0"]').as('repeaterBtn');
+					cy.get('@repeaterBtn').click();
+				});
+
+				// change an inner item of background image
+				cy.get('.components-popover').within(() => {
+					cy.get('[data-value="cover"]').click();
+				});
+
+				// Blockera value should be moved to WP data
+				getWPDataObject().then((data) => {
+					expect({
+						url: 'https://placehold.co/600x400',
+						id: 0,
+						source: 'file',
+						title: 'background image',
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'style')?.background
+							?.backgroundImage
+					);
+				});
+
+				//
+				// Test 3: Clear Blockera value and check WP data
+				//
+
+				// clear bg color
+				cy.get('@bgContainer').within(() => {
+					cy.get('[aria-label="Delete image 0"]').click({
+						force: true,
+					});
+				});
+
+				// WP data should be removed too
+				getWPDataObject().then((data) => {
+					expect(undefined).to.be.equal(
+						getSelectedBlock(data, 'style')?.background
+							?.backgroundImage
 					);
 				});
 			});
