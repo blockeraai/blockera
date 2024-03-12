@@ -100,6 +100,26 @@ export const getGradientVAFromVarString: (
 	return value;
 });
 
+export const getGradientVAFromIdString: (value: string) => ValueAddon | string =
+	memoize(function (value: string): ValueAddon | string {
+		if (isString(value)) {
+			const id = value;
+			let variable = getLinearGradientVAFromIdString(id);
+
+			if (isObject(variable)) {
+				return variable;
+			}
+
+			variable = getRadialGradientVAFromIdString(id);
+
+			if (isObject(variable)) {
+				return variable;
+			}
+		}
+
+		return value;
+	});
+
 export const getGradientType: (value: string | ValueAddon) => string = memoize(
 	function (value: string | ValueAddon): string {
 		//$FlowFixMe
