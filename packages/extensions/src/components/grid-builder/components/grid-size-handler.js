@@ -202,7 +202,7 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 							}}
 							key={item.id}
 							className={`size-handler ${type}-handler ${
-								!isResizable && 'not-resizable'
+								!isResizable ? 'not-resizable' : ''
 							}`}
 							// eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
 							onMouseOver={() => {

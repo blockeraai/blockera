@@ -5,7 +5,6 @@
  */
 import { Rnd } from 'react-rnd';
 import { useState, useRef, memo } from '@wordpress/element';
-//import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
@@ -60,7 +59,7 @@ export const AreaMergeHandler: TAreaMergeHandlerProps =
 				setVirtualMergedAreas([]);
 			};
 
-			const findElement = (e, direction) => {
+			const findElement = (e: Object, direction: string) => {
 				const iframe = document.querySelector(
 					'iframe[name="editor-canvas"]'
 				);
