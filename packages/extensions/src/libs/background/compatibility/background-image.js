@@ -186,6 +186,8 @@ export function backgroundToWPCompatibility({
 						result = mergeObject(result, {
 							gradient,
 						});
+					} else {
+						break;
 					}
 				}
 				// simple value gradient
