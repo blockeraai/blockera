@@ -11,7 +11,6 @@ describe('background control', () => {
 		cy.viewport(1280, 720);
 	});
 
-	context('Rendering', () => {});
 	context('Functional', () => {
 		context('image type', () => {
 			context('size', () => {
