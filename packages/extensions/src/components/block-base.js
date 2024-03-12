@@ -239,23 +239,45 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						currentState,
 					};
 					// Creat mutable constant to prevent directly change to immutable state constant.
-					const clonedAttributes = { ...attributes };
-					let filteredAttributes = applyFilters(
-						'publisherCore.blockEdit.attributes',
-						applyFilters(
+					let filteredAttributes = { ...attributes };
+
+					/**
+					 * Filtering block attributes based on "publisherPropsId" attribute.
+					 *
+					 * hook: 'publisherCore.blockEdit.attributes'
+					 *
+					 * @since 1.0.0
+					 */
+					if (!attributes?.publisherPropsId) {
+						filteredAttributes = applyFilters(
+							'publisherCore.blockEdit.attributes',
+							getAttributesWithIds(
+								filteredAttributes,
+								'publisherPropsId'
+							),
+							args
+						);
+					}
+
+					/**
+					 * Filtering block attributes based on "publisherCompatId" attribute value to running WordPress compatibilities.
+					 *
+					 * hook: 'publisherCore.blockEdit.compatibility.attributes'
+					 *
+					 * @since 1.0.0
+					 */
+					if (!attributes?.publisherCompatId) {
+						filteredAttributes = applyFilters(
 							'publisherCore.blockEdit.compatibility.attributes',
 							getAttributesWithIds(
-								getAttributesWithIds(
-									clonedAttributes,
-									'publisherPropsId'
-								),
+								filteredAttributes,
 								'publisherCompatId'
 							),
 							args
-						),
-						args
-					);
+						);
+					}
 
+					// Assume disabled publisher panel, so filtering attributes to clean up all publisher attributes.
 					if (!isActive) {
 						filteredAttributes = {
 							...attributes,
@@ -268,6 +290,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						};
 					}
 
+					// Prevent redundant set state!
 					if (isEquals(attributes, filteredAttributes)) {
 						return;
 					}
