@@ -16,7 +16,7 @@ import type { ControlContextRef } from '@publisher/controls/src/context/types';
 import {
 	backgroundFromWPCompatibility,
 	backgroundToWPCompatibility,
-} from './compatibility/background';
+} from './compatibility/background-image';
 import { mergeObject } from '@publisher/utils';
 import {
 	backgroundColorFromWPCompatibility,
