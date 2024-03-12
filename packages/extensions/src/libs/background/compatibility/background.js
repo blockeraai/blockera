@@ -128,6 +128,7 @@ export function backgroundToWPCompatibility({
 					gradient: undefined,
 				},
 			},
+			gradient: undefined,
 		};
 	}
 
