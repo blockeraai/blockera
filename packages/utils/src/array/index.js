@@ -100,3 +100,7 @@ export const indexOf = (arr: Array<any>, q: string): number => {
 
 	return arr.findIndex((item) => q.toLowerCase() === item.toLowerCase());
 };
+
+export const arrayDiff = (arr1: Array<any>, arr2: Array<any>): Array<any> => {
+	return arr1.filter((element) => !arr2.includes(element));
+};

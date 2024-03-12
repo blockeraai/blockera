@@ -338,6 +338,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 									currentBlock,
 									currentInnerBlock,
 									BlockEditComponent,
+									currentBreakpoint,
 									publisherInnerBlocks,
 									currentInnerBlockState,
 									updateBlockEditorSettings,

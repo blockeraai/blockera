@@ -334,6 +334,7 @@ const StatesManager: ComponentType<any> = memo(
 									onChange,
 									currentState,
 									currentBlock,
+									valueCleanup,
 									currentInnerBlockState,
 								}),
 							//Override item when occurred clone action!

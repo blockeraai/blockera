@@ -26,6 +26,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		blockProps,
 		currentState,
 		currentBlock,
+		currentBreakpoint,
 		currentInnerBlock,
 		BlockEditComponent,
 		publisherInnerBlocks,
@@ -34,29 +35,31 @@ export const BlockFillPartials: ComponentType<any> = memo(
 	}): Element<any> => {
 		const { isActiveBlockExtensions } = select('publisher-core/extensions');
 
-		// prevent memory leak, componentDidUnmount.
+		// prevent memory leak, componentDidMount.
 		useEffect(() => {
-			return () => {
-				const others = select('publisher-core/controls').getControls();
-				const repeaters = select(
-					'publisher-core/controls/repeater'
-				).getControls();
+			const others = select('publisher-core/controls').getControls();
+			const repeaters = select(
+				'publisher-core/controls/repeater'
+			).getControls();
 
-				const getMemoizedControlNames = memoize((controls) =>
-					controls.map((c) => c?.name)
-				);
+			const getMemoizedControlNames = memoize((controls) =>
+				controls.map((c) => c?.name)
+			);
 
-				unregisterControl(
-					getMemoizedControlNames(others),
-					'publisher-core/controls'
-				);
-				unregisterControl(
-					getMemoizedControlNames(repeaters),
-					'publisher-core/controls/repeater'
-				);
-			};
-			// eslint-disable-next-line
-		}, []);
+			unregisterControl(
+				getMemoizedControlNames(others),
+				'publisher-core/controls'
+			);
+			unregisterControl(
+				getMemoizedControlNames(repeaters),
+				'publisher-core/controls/repeater'
+			);
+		}, [
+			currentBlock,
+			currentState,
+			currentBreakpoint,
+			currentInnerBlockState,
+		]);
 
 		return (
 			<>

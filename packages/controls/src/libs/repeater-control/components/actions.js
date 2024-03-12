@@ -93,13 +93,13 @@ export default function RepeaterItemActions({
 					aria-label={
 						isVisible
 							? sprintf(
-									// translators: %d is the repeater item id. It's aria label for disabling repeater item
-									__('Disable %d', 'publisher'),
+									// translators: %s is the repeater item id. It's aria label for disabling repeater item
+									__('Disable %s', 'publisher'),
 									getArialLabelSuffix(itemId)
 							  )
 							: sprintf(
-									// translators: %d is the repeater item id. It's aria label for enabling repeater item
-									__('Enable %d', 'publisher'),
+									// translators: %s is the repeater item id. It's aria label for enabling repeater item
+									__('Enable %s', 'publisher'),
 									getArialLabelSuffix(itemId)
 							  )
 					}
@@ -129,8 +129,8 @@ export default function RepeaterItemActions({
 							});
 						}}
 						aria-label={sprintf(
-							// translators: %d is the repeater item id. It's aria label for cloning repeater item
-							__('Clone %d', 'publisher'),
+							// translators: %s is the repeater item id. It's aria label for cloning repeater item
+							__('Clone %s', 'publisher'),
 							getArialLabelSuffix(itemId)
 						)}
 					/>
@@ -169,8 +169,8 @@ export default function RepeaterItemActions({
 						}}
 						label={__('Delete', 'publisher')}
 						aria-label={sprintf(
-							// translators: %d is the repeater item id. It's aria label for deleting repeater item
-							__('Delete %d', 'publisher'),
+							// translators: %s is the repeater item id. It's aria label for deleting repeater item
+							__('Delete %s', 'publisher'),
 							getArialLabelSuffix(itemId)
 						)}
 					/>

@@ -36,7 +36,7 @@ export function getBackgroundItemBGProperty(
 			gradient = item['linear-gradient'];
 			isValueAddon = false;
 
-			if (isObject(gradient) && isValidVariable(gradient)) {
+			if (isValidVariable(gradient)) {
 				gradient = getValueAddonRealValue(gradient);
 				isValueAddon = true;
 			}

@@ -8,7 +8,7 @@ import { dispatch } from '@wordpress/data';
 /**
  * Publisher dependencies
  */
-import { isEquals, mergeObject } from '@publisher/utils';
+import { isEquals, mergeObject, arrayDiff } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -82,7 +82,7 @@ export function onChangeBlockStates(
 	newValue: { [key: TStates]: { ...StateTypes, isSelected: boolean } },
 	params: Object
 ): void {
-	const { states: _states, onChange, currentBlock } = params;
+	const { states: _states, onChange, currentBlock, valueCleanup } = params;
 
 	const {
 		changeExtensionCurrentBlockState: setCurrentState,
@@ -106,5 +106,32 @@ export function onChangeBlockStates(
 		return;
 	}
 
-	onChange('publisherBlockStates', mergeObject(_states, newValue));
+	if (Object.keys(newValue).length < Object.keys(_states).length) {
+		const newStates: { [key: TStates]: StateTypes } = {};
+
+		Object.entries(_states).forEach(
+			([stateType, state]: [TStates, StateTypes]): void => {
+				if (
+					arrayDiff(
+						Object.keys(_states),
+						Object.keys(newValue)
+					).includes(stateType)
+				) {
+					return;
+				}
+
+				newStates[stateType] = state;
+			}
+		);
+
+		return onChange(
+			'publisherBlockStates',
+			mergeObject(valueCleanup(newStates))
+		);
+	}
+
+	onChange(
+		'publisherBlockStates',
+		mergeObject(valueCleanup(_states), newValue)
+	);
 }

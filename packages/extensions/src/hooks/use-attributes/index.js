@@ -115,6 +115,7 @@ export const useAttributes = (
 		const currentBreakpoint = getExtensionCurrentBlockStateBreakpoint();
 
 		const {
+			resetAll,
 			updateNormalState,
 			updateBlockStates,
 			updateInnerBlockStates,
@@ -134,6 +135,11 @@ export const useAttributes = (
 			currentInnerBlockState,
 			attributeIsPublisherBlockStates,
 		});
+
+		// Assume reference current action is 'reset_all_states'
+		if ('reset_all_states' === ref?.current?.action) {
+			return setAttributes(reducer(_attributes, resetAll()));
+		}
 
 		// Current block (maybe 'master' or any inner blocks) in normal state!
 		// or

@@ -13,7 +13,7 @@ import { mergeObject } from '@publisher/utils';
 /**
  * Internal dependencies
  */
-import { memoizedBlockStates } from './helpers';
+import { memoizedBlockStates, resetAllStates } from './helpers';
 import { isBaseBreakpoint, isInnerBlock } from '../../components';
 
 const reducer = (state: Object = {}, action: Object): Object => {
@@ -63,29 +63,17 @@ const reducer = (state: Object = {}, action: Object): Object => {
 				 */
 				return applyFilters(
 					'publisherCore.blockEdit.setAttributes',
-					{
+					mergeObject(state, {
 						...state,
 						publisherInnerBlocks: {
-							...state.publisherInnerBlocks,
 							[currentBlock]: {
-								...(state.publisherInnerBlocks[currentBlock] ||
-									{}),
 								attributes: {
-									...(state.publisherInnerBlocks[
-										currentBlock
-									] &&
-									state.publisherInnerBlocks[currentBlock]
-										?.attributes
-										? state.publisherInnerBlocks[
-												currentBlock
-										  ]?.attributes
-										: {}),
 									...effectiveItems,
 									[attributeId]: newValue,
 								},
 							},
 						},
-					},
+					}),
 					...hookParams
 				);
 			}
@@ -155,6 +143,21 @@ const reducer = (state: Object = {}, action: Object): Object => {
 						},
 					},
 				}),
+				...hookParams
+			);
+
+		case 'RESET_ALL':
+			/**
+			 * Filterable attributes before set next state.
+			 * usefully in add WordPress compatibility and any other filters.
+			 *
+			 * hook: 'publisherCore.blockEdit.setAttributes'
+			 *
+			 * @since 1.0.0
+			 */
+			return applyFilters(
+				'publisherCore.blockEdit.setAttributes',
+				resetAllStates(state, action),
 				...hookParams
 			);
 	}

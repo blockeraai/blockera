@@ -276,659 +276,852 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		};
 
 		const MappedExtensions = (tab: TTabProps): MixedElement => {
-			return (
-				<>
-					<Fill name={'publisher-core-block-card-children'}>
-						<StatesManager
-							states={currentStateAttributes.publisherBlockStates}
-							onChange={handleOnChangeAttributes}
-							block={{
-								clientId: props.clientId,
-								supports,
-								setAttributes,
-								blockName: props.name,
-							}}
-							{...{
-								currentBlock,
-								currentState,
-								currentBreakpoint,
-								currentInnerBlockState,
-							}}
-						/>
-					</Fill>
-
-					<div
-						style={{
-							display: 'settings' === tab.name ? 'block' : 'none',
+			const activePanel = [
+				<Fill
+					key={`'publisher-core-block-${currentBlock}-card-children'`}
+					name={'publisher-core-block-card-children'}
+				>
+					<StatesManager
+						states={currentStateAttributes.publisherBlockStates}
+						onChange={handleOnChangeAttributes}
+						block={{
+							clientId: props.clientId,
+							supports,
+							setAttributes,
+							blockName: props.name,
 						}}
-					>
-						<IconExtension
-							{...{
-								iconConfig,
-								block,
-								values: include(
-									currentStateAttributes,
-									icon,
-									'publisher'
-								),
-								extensionProps: {
-									publisherIcon: {},
-									publisherIconPosition: {},
-									publisherIconGap: {},
-									publisherIconSize: {},
-									publisherIconColor: {},
-									publisherIconLink: {},
-								},
-								handleOnChangeAttributes,
-							}}
-						/>
-
-						<ConditionsExtension
-							block={block}
-							extensionConfig={conditionsConfig}
-							extensionProps={{}}
-							values={{}}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-						/>
-
-						<AdvancedSettingsExtension
-							block={block}
-							extensionConfig={advancedSettingsConfig}
-							values={{
-								publisherAttributes:
-									currentStateAttributes.publisherAttributes,
-							}}
-							attributes={{
-								publisherAttributes:
-									attributes.publisherAttributes,
-							}}
-							extensionProps={{
-								publisherAttributes: {
-									attributeElement: '',
-								},
-							}}
-							setSettings={handleOnChangeSettings}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-						/>
-					</div>
-
-					<div
-						style={{
-							display: 'style' === tab.name ? 'block' : 'none',
+						{...{
+							currentBlock,
+							currentState,
+							currentBreakpoint,
+							currentInnerBlockState,
 						}}
-					>
-						<StyleVariationsExtension
-							block={block}
-							extensionConfig={styleVariationsConfig}
-						/>
+					/>
+				</Fill>,
+			];
 
-						<InnerBlocksExtension
-							innerBlocks={publisherInnerBlocks}
-						/>
+			switch (tab.name) {
+				case 'settings':
+					activePanel.push(
+						<>
+							<IconExtension
+								{...{
+									iconConfig,
+									block,
+									values: include(
+										currentStateAttributes,
+										icon,
+										'publisher'
+									),
+									extensionProps: {
+										publisherIcon: {},
+										publisherIconPosition: {},
+										publisherIconGap: {},
+										publisherIconSize: {},
+										publisherIconColor: {},
+										publisherIconLink: {},
+									},
+									handleOnChangeAttributes,
+								}}
+							/>
 
-						<SpacingExtension
-							{...{
-								block,
-								spacingConfig,
-								extensionProps: {
-									publisherSpacing: {},
-								},
-								handleOnChangeAttributes,
-								spacingValue:
-									currentStateAttributes.publisherSpacing,
-								defaultValue:
-									currentStateAttributes.style?.spacing || {},
-							}}
-						/>
+							<ConditionsExtension
+								block={block}
+								extensionConfig={conditionsConfig}
+								extensionProps={{}}
+								values={{}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+							/>
 
-						<PositionExtension
-							block={block}
-							extensionConfig={positionConfig}
-							values={{
-								publisherPosition:
-									currentStateAttributes.publisherPosition,
-								publisherZIndex:
-									currentStateAttributes.publisherZIndex,
-							}}
-							attributes={{
-								publisherPosition: attributes.publisherPosition,
-								publisherZIndex: attributes.publisherZIndex,
-							}}
-							extensionProps={{
-								publisherPosition: {},
-								publisherZIndex: {},
-							}}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-						/>
+							<AdvancedSettingsExtension
+								block={block}
+								extensionConfig={advancedSettingsConfig}
+								values={{
+									publisherAttributes:
+										currentStateAttributes.publisherAttributes,
+								}}
+								attributes={{
+									publisherAttributes:
+										attributes.publisherAttributes,
+								}}
+								extensionProps={{
+									publisherAttributes: {
+										attributeElement: '',
+									},
+								}}
+								setSettings={handleOnChangeSettings}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+							/>
+						</>
+					);
+					break;
 
-						<SizeExtension
-							block={block}
-							extensionConfig={sizeConfig}
-							values={{
-								publisherWidth:
-									currentStateAttributes.publisherWidth,
-								publisherMinWidth:
-									currentStateAttributes.publisherMinWidth,
-								publisherMaxWidth:
-									currentStateAttributes.publisherMaxWidth,
-								publisherHeight:
-									currentStateAttributes.publisherHeight,
-								publisherMinHeight:
-									currentStateAttributes.publisherMinHeight,
-								publisherMaxHeight:
-									currentStateAttributes.publisherMaxHeight,
-								publisherOverflow:
-									currentStateAttributes.publisherOverflow,
-								publisherRatio:
-									currentStateAttributes.publisherRatio,
-								publisherFit:
-									currentStateAttributes.publisherFit,
-								publisherFitPosition:
-									currentStateAttributes.publisherFitPosition,
-							}}
-							attributes={{
-								publisherWidth: attributes.publisherWidth,
-								publisherMinWidth: attributes.publisherMinWidth,
-								publisherMaxWidth: attributes.publisherMaxWidth,
-								publisherHeight: attributes.publisherHeight,
-								publisherMinHeight:
-									attributes.publisherMinHeight,
-								publisherMaxHeight:
-									attributes.publisherMaxHeight,
-								publisherOverflow: attributes.publisherOverflow,
-								publisherRatio: attributes.publisherRatio,
-								publisherFit: attributes.publisherFit,
-								publisherFitPosition:
-									attributes.publisherFitPosition,
-							}}
-							extensionProps={{
-								publisherWidth: {},
-								publisherHeight: {},
-								publisherMinWidth: {},
-								publisherMinHeight: {},
-								publisherMaxWidth: {},
-								publisherMaxHeight: {},
-								publisherOverflow: {},
-								publisherRatio: {},
-								publisherFit: {},
-								publisherFitPosition: {},
-							}}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-							setSettings={handleOnChangeSettings}
-						/>
+				case 'style':
+					activePanel.push(
+						<>
+							<StyleVariationsExtension
+								block={block}
+								extensionConfig={styleVariationsConfig}
+							/>
 
-						<LayoutExtension
-							block={block}
-							extensionConfig={layoutConfig}
-							extensionProps={{
-								publisherDisplay: {},
-								publisherFlexLayout: {},
-								publisherGap: {},
-								publisherFlexWrap: {},
-								publisherAlignContent: {},
-								publisherGridAlignItems: {},
-								publisherGridJustifyItems: {},
-								//publisherGridAlignContent: {},
-								//publisherGridJustifyContent: {},
-								publisherGridGap: {},
-								publisherGridDirection: {},
-								publisherGridColumns: {},
-								publisherGridRows: {},
-								publisherGridAreas: {},
-							}}
-							values={{
-								publisherDisplay:
-									currentStateAttributes.publisherDisplay,
-								publisherFlexLayout:
-									currentStateAttributes.publisherFlexLayout,
-								publisherGap:
-									currentStateAttributes.publisherGap,
-								publisherFlexWrap:
-									currentStateAttributes.publisherFlexWrap,
-								publisherAlignContent:
-									currentStateAttributes.publisherAlignContent,
-								publisherGridAlignItems:
-									currentStateAttributes.publisherGridAlignItems,
-								publisherGridJustifyItems:
-									currentStateAttributes.publisherGridJustifyItems,
-								// publisherGridAlignContent:
-								// 	currentStateAttributes.publisherGridAlignContent,
-								// publisherGridJustifyContent:
-								// 	currentStateAttributes.publisherGridJustifyContent,
-								publisherGridGap:
-									currentStateAttributes.publisherGridGap,
-								publisherGridDirection:
-									currentStateAttributes.publisherGridDirection,
-								publisherGridColumns:
-									currentStateAttributes.publisherGridColumns,
-								publisherGridRows:
-									currentStateAttributes.publisherGridRows,
-								publisherGridAreas:
-									currentStateAttributes.publisherGridAreas,
-							}}
-							attributes={{
-								publisherDisplay: attributes.publisherDisplay,
-								publisherFlexLayout:
-									attributes.publisherFlexLayout,
-								publisherGap: attributes.publisherGap,
-								publisherFlexWrap: attributes.publisherFlexWrap,
-								publisherAlignContent:
-									attributes.publisherAlignContent,
-								publisherGridAlignItems:
-									attributes.publisherGridAlignItems,
-								publisherGridJustifyItems:
-									attributes.publisherGridJustifyItems,
-								// publisherGridAlignContent:
-								// 	attributes.publisherGridAlignContent,
-								// publisherGridJustifyContent:
-								// 	attributes.publisherGridJustifyContent,
-								publisherGridGap: attributes.publisherGridGap,
-								publisherGridDirection:
-									attributes.publisherGridDirection,
-								publisherGridColumns:
-									attributes.publisherGridColumns,
-								publisherGridRows: attributes.publisherGridRows,
-								publisherGridAreas:
-									attributes.publisherGridAreas,
-							}}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-							setSettings={handleOnChangeSettings}
-						/>
+							<InnerBlocksExtension
+								innerBlocks={publisherInnerBlocks}
+							/>
 
-						{directParentBlock?.innerBlocks.length &&
-							directParentBlock?.attributes.publisherDisplay ===
-								'flex' && (
-								<FlexChildExtension
-									block={block}
-									extensionConfig={flexChildConfig}
-									values={{
-										publisherFlexChildSizing:
-											currentStateAttributes.publisherFlexChildSizing,
-										publisherFlexChildGrow:
-											currentStateAttributes.publisherFlexChildGrow,
-										publisherFlexChildShrink:
-											currentStateAttributes.publisherFlexChildShrink,
-										publisherFlexChildBasis:
-											currentStateAttributes.publisherFlexChildBasis,
-										publisherFlexChildOrder:
-											currentStateAttributes.publisherFlexChildOrder,
-										publisherFlexChildOrderCustom:
-											currentStateAttributes.publisherFlexChildOrderCustom,
-										publisherFlexDirection:
-											directParentBlock?.attributes
-												?.publisherFlexLayout
-												?.direction,
-									}}
-									attributes={{
-										publisherFlexChildSizing:
-											attributes.publisherFlexChildSizing,
-										publisherFlexChildGrow:
-											attributes.publisherFlexChildGrow,
-										publisherFlexChildShrink:
-											attributes.publisherFlexChildShrink,
-										publisherFlexChildBasis:
-											attributes.publisherFlexChildBasis,
-										publisherFlexChildAlign:
-											attributes.publisherFlexChildAlign,
-										publisherFlexChildOrder:
-											attributes.publisherFlexChildOrder,
-										publisherFlexChildOrderCustom:
-											attributes.publisherFlexChildOrderCustom,
-									}}
-									extensionProps={{
-										publisherFlexChildSizing: {},
-										publisherFlexChildGrow: {},
-										publisherFlexChildShrink: {},
-										publisherFlexChildBasis: {},
-										publisherFlexChildAlign: {},
-										publisherFlexChildOrder: {},
-										publisherFlexChildOrderCustom: {},
-									}}
-									handleOnChangeAttributes={
-										handleOnChangeAttributes
-									}
-									setSettings={handleOnChangeSettings}
-								/>
-							)}
+							<SpacingExtension
+								{...{
+									block,
+									spacingConfig,
+									extensionProps: {
+										publisherSpacing: {},
+									},
+									handleOnChangeAttributes,
+									spacingValue:
+										currentStateAttributes.publisherSpacing,
+									defaultValue:
+										currentStateAttributes.style?.spacing ||
+										{},
+								}}
+							/>
 
-						{directParentBlock?.innerBlocks.length &&
-							directParentBlock?.attributes.publisherDisplay ===
-								'grid' && (
-								<GridChildExtension
-									block={block}
-									extensionConfig={gridChildConfig}
-									extensionProps={{
-										publisherGridChildLayout: {},
-										publisherGridChildOrder: {},
-									}}
-									values={{
-										publisherGridChildLayout:
-											currentStateAttributes.publisherGridChildLayout,
-										publisherGridChildOrder:
-											currentStateAttributes.publisherGridChildOrder,
-										gridAreas:
-											directParentBlock?.attributes
-												.publisherGridAreas,
-									}}
-									attributes={{
-										publisherGridChildLayout:
-											attributes.publisherGridChildLayout,
-										publisherGridChildOrder:
-											attributes.publisherGridChildOrder,
-									}}
-									handleOnChangeAttributes={
-										handleOnChangeAttributes
-									}
-									setSettings={handleOnChangeSettings}
-								/>
-							)}
+							<PositionExtension
+								block={block}
+								extensionConfig={positionConfig}
+								values={{
+									publisherPosition:
+										currentStateAttributes.publisherPosition,
+									publisherZIndex:
+										currentStateAttributes.publisherZIndex,
+								}}
+								attributes={{
+									publisherPosition:
+										attributes.publisherPosition,
+									publisherZIndex: attributes.publisherZIndex,
+								}}
+								extensionProps={{
+									publisherPosition: {},
+									publisherZIndex: {},
+								}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+							/>
 
-						<TypographyExtension
-							block={block}
-							extensionConfig={typographyConfig}
-							extensionProps={{
-								publisherFontColor: {},
-								publisherFontSize: {},
-								publisherLineHeight: {},
-								publisherTextAlign: {},
-								publisherTextDecoration: {},
-								publisherFontStyle: {},
-								publisherTextTransform: {},
-								publisherDirection: {},
-								publisherTextShadow: {},
-								publisherLetterSpacing: {},
-								publisherWordSpacing: {},
-								publisherTextIndent: {},
-								publisherTextOrientation: {},
-								publisherTextColumns: {},
-								publisherTextStroke: {},
-								publisherWordBreak: {},
-							}}
-							values={{
-								publisherFontColor:
-									currentStateAttributes?.publisherFontColor,
-								publisherFontSize:
-									currentStateAttributes?.publisherFontSize,
-								publisherLineHeight:
-									currentStateAttributes?.publisherLineHeight,
-								publisherTextAlign:
-									currentStateAttributes?.publisherTextAlign,
-								publisherTextDecoration:
-									currentStateAttributes?.publisherTextDecoration,
-								publisherFontStyle:
-									currentStateAttributes?.publisherFontStyle,
-								publisherTextTransform:
-									currentStateAttributes?.publisherTextTransform,
-								publisherDirection:
-									currentStateAttributes?.publisherDirection,
-								publisherTextShadow:
-									currentStateAttributes?.publisherTextShadow,
-								publisherLetterSpacing:
-									currentStateAttributes?.publisherLetterSpacing,
-								publisherWordSpacing:
-									currentStateAttributes?.publisherWordSpacing,
-								publisherTextIndent:
-									currentStateAttributes?.publisherTextIndent,
-								publisherTextOrientation:
-									currentStateAttributes?.publisherTextOrientation,
-								publisherTextColumns:
-									currentStateAttributes?.publisherTextColumns,
-								publisherTextStroke:
-									currentStateAttributes?.publisherTextStroke,
-								publisherWordBreak:
-									currentStateAttributes?.publisherWordBreak,
-							}}
-							attributes={{
-								publisherFontColor:
-									attributes?.publisherFontColor,
-								publisherFontSize:
-									attributes?.publisherFontSize,
-								publisherLineHeight:
-									attributes?.publisherLineHeight,
-								publisherTextAlign:
-									attributes?.publisherTextAlign,
-								publisherTextDecoration:
-									attributes?.publisherTextDecoration,
-								publisherFontStyle:
-									attributes?.publisherFontStyle,
-								publisherTextTransform:
-									attributes?.publisherTextTransform,
-								publisherDirection:
-									attributes?.publisherDirection,
-								publisherTextShadow:
-									attributes?.publisherTextShadow,
-								publisherLetterSpacing:
-									attributes?.publisherLetterSpacing,
-								publisherWordSpacing:
-									attributes?.publisherWordSpacing,
-								publisherTextIndent:
-									attributes?.publisherTextIndent,
-								publisherTextOrientation:
-									attributes?.publisherTextOrientation,
-								publisherTextColumns:
-									attributes?.publisherTextColumns,
-								publisherTextStroke:
-									attributes?.publisherTextStroke,
-								publisherWordBreak:
-									attributes?.publisherWordBreak,
-							}}
-							display={currentStateAttributes?.publisherDisplay}
-							backgroundClip={
-								currentStateAttributes?.publisherBackgroundClip
-							}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-							setSettings={handleOnChangeSettings}
-						/>
+							<SizeExtension
+								block={block}
+								extensionConfig={sizeConfig}
+								values={{
+									publisherWidth:
+										currentStateAttributes.publisherWidth,
+									publisherMinWidth:
+										currentStateAttributes.publisherMinWidth,
+									publisherMaxWidth:
+										currentStateAttributes.publisherMaxWidth,
+									publisherHeight:
+										currentStateAttributes.publisherHeight,
+									publisherMinHeight:
+										currentStateAttributes.publisherMinHeight,
+									publisherMaxHeight:
+										currentStateAttributes.publisherMaxHeight,
+									publisherOverflow:
+										currentStateAttributes.publisherOverflow,
+									publisherRatio:
+										currentStateAttributes.publisherRatio,
+									publisherFit:
+										currentStateAttributes.publisherFit,
+									publisherFitPosition:
+										currentStateAttributes.publisherFitPosition,
+								}}
+								attributes={{
+									publisherWidth: attributes.publisherWidth,
+									publisherMinWidth:
+										attributes.publisherMinWidth,
+									publisherMaxWidth:
+										attributes.publisherMaxWidth,
+									publisherHeight: attributes.publisherHeight,
+									publisherMinHeight:
+										attributes.publisherMinHeight,
+									publisherMaxHeight:
+										attributes.publisherMaxHeight,
+									publisherOverflow:
+										attributes.publisherOverflow,
+									publisherRatio: attributes.publisherRatio,
+									publisherFit: attributes.publisherFit,
+									publisherFitPosition:
+										attributes.publisherFitPosition,
+								}}
+								extensionProps={{
+									publisherWidth: {},
+									publisherHeight: {},
+									publisherMinWidth: {},
+									publisherMinHeight: {},
+									publisherMaxWidth: {},
+									publisherMaxHeight: {},
+									publisherOverflow: {},
+									publisherRatio: {},
+									publisherFit: {},
+									publisherFitPosition: {},
+								}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+								setSettings={handleOnChangeSettings}
+							/>
 
-						<BackgroundExtension
-							block={block}
-							setSettings={handleOnChangeSettings}
-							extensionConfig={backgroundConfig}
-							extensionProps={{
-								publisherBackground: {},
-								publisherBackgroundColor: {},
-								publisherBackgroundClip: {},
-							}}
-							values={{
-								publisherBackground:
-									currentStateAttributes?.publisherBackground,
-								publisherBackgroundColor:
-									currentStateAttributes?.publisherBackgroundColor,
-								publisherBackgroundClip:
-									currentStateAttributes?.publisherBackgroundClip,
-							}}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-							attributes={{
-								publisherBackground:
-									attributes.publisherBackground,
-								publisherBackgroundColor:
-									attributes.publisherBackgroundColor,
-								publisherBackgroundClip:
-									attributes.publisherBackgroundClip,
-							}}
-						/>
+							<LayoutExtension
+								block={block}
+								extensionConfig={layoutConfig}
+								extensionProps={{
+									publisherDisplay: {},
+									publisherFlexLayout: {},
+									publisherGap: {},
+									publisherFlexWrap: {},
+									publisherAlignContent: {},
+									publisherGridAlignItems: {},
+									publisherGridJustifyItems: {},
+									//publisherGridAlignContent: {},
+									//publisherGridJustifyContent: {},
+									publisherGridGap: {},
+									publisherGridDirection: {},
+									publisherGridColumns: {},
+									publisherGridRows: {},
+									publisherGridAreas: {},
+								}}
+								values={{
+									publisherDisplay:
+										currentStateAttributes.publisherDisplay,
+									publisherFlexLayout:
+										currentStateAttributes.publisherFlexLayout,
+									publisherGap:
+										currentStateAttributes.publisherGap,
+									publisherFlexWrap:
+										currentStateAttributes.publisherFlexWrap,
+									publisherAlignContent:
+										currentStateAttributes.publisherAlignContent,
+								}}
+								attributes={{
+									publisherDisplay:
+										attributes.publisherDisplay,
+									publisherFlexLayout:
+										attributes.publisherFlexLayout,
+									publisherGap: attributes.publisherGap,
+									publisherFlexWrap:
+										attributes.publisherFlexWrap,
+									publisherAlignContent:
+										attributes.publisherAlignContent,
+								}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+								setSettings={handleOnChangeSettings}
+							/>
+							<LayoutExtension
+								block={block}
+								extensionConfig={layoutConfig}
+								extensionProps={{
+									publisherDisplay: {},
+									publisherFlexLayout: {},
+									publisherGap: {},
+									publisherFlexWrap: {},
+									publisherAlignContent: {},
+									publisherGridAlignItems: {},
+									publisherGridJustifyItems: {},
+									//publisherGridAlignContent: {},
+									//publisherGridJustifyContent: {},
+									publisherGridGap: {},
+									publisherGridDirection: {},
+									publisherGridColumns: {},
+									publisherGridRows: {},
+									publisherGridAreas: {},
+								}}
+								values={{
+									publisherDisplay:
+										currentStateAttributes.publisherDisplay,
+									publisherFlexLayout:
+										currentStateAttributes.publisherFlexLayout,
+									publisherGap:
+										currentStateAttributes.publisherGap,
+									publisherFlexWrap:
+										currentStateAttributes.publisherFlexWrap,
+									publisherAlignContent:
+										currentStateAttributes.publisherAlignContent,
+									publisherGridAlignItems:
+										currentStateAttributes.publisherGridAlignItems,
+									publisherGridJustifyItems:
+										currentStateAttributes.publisherGridJustifyItems,
+									// publisherGridAlignContent:
+									// 	currentStateAttributes.publisherGridAlignContent,
+									// publisherGridJustifyContent:
+									// 	currentStateAttributes.publisherGridJustifyContent,
+									publisherGridGap:
+										currentStateAttributes.publisherGridGap,
+									publisherGridDirection:
+										currentStateAttributes.publisherGridDirection,
+									publisherGridColumns:
+										currentStateAttributes.publisherGridColumns,
+									publisherGridRows:
+										currentStateAttributes.publisherGridRows,
+									publisherGridAreas:
+										currentStateAttributes.publisherGridAreas,
+								}}
+								attributes={{
+									publisherDisplay:
+										attributes.publisherDisplay,
+									publisherFlexLayout:
+										attributes.publisherFlexLayout,
+									publisherGap: attributes.publisherGap,
+									publisherFlexWrap:
+										attributes.publisherFlexWrap,
+									publisherAlignContent:
+										attributes.publisherAlignContent,
+									publisherGridAlignItems:
+										attributes.publisherGridAlignItems,
+									publisherGridJustifyItems:
+										attributes.publisherGridJustifyItems,
+									// publisherGridAlignContent:
+									// 	attributes.publisherGridAlignContent,
+									// publisherGridJustifyContent:
+									// 	attributes.publisherGridJustifyContent,
+									publisherGridGap:
+										attributes.publisherGridGap,
+									publisherGridDirection:
+										attributes.publisherGridDirection,
+									publisherGridColumns:
+										attributes.publisherGridColumns,
+									publisherGridRows:
+										attributes.publisherGridRows,
+									publisherGridAreas:
+										attributes.publisherGridAreas,
+								}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+								setSettings={handleOnChangeSettings}
+							/>
 
-						<BorderAndShadowExtension
-							block={block}
-							extensionConfig={borderAndShadowConfig}
-							extensionProps={{
-								publisherBorder: {},
-								publisherBorderRadius: {},
-								publisherBoxShadow: {},
-								publisherOutline: {},
-							}}
-							values={{
-								publisherBorder:
-									currentStateAttributes.publisherBorder,
-								publisherBorderRadius:
-									currentStateAttributes.publisherBorderRadius,
-								publisherOutline:
-									currentStateAttributes.publisherOutline,
-								publisherBoxShadow:
-									currentStateAttributes.publisherBoxShadow,
-							}}
-							attributes={{
-								publisherBorder: attributes.publisherBorder,
-								publisherBorderRadius:
-									attributes.publisherBorderRadius,
-								publisherOutline: attributes.publisherOutline,
-								publisherBoxShadow:
-									attributes.publisherBoxShadow,
-							}}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-							setSettings={handleOnChangeSettings}
-						/>
+							{directParentBlock?.innerBlocks.length &&
+								directParentBlock?.attributes
+									.publisherDisplay === 'flex' && (
+									<FlexChildExtension
+										block={block}
+										extensionConfig={flexChildConfig}
+										values={{
+											publisherFlexChildSizing:
+												currentStateAttributes.publisherFlexChildSizing,
+											publisherFlexChildGrow:
+												currentStateAttributes.publisherFlexChildGrow,
+											publisherFlexChildShrink:
+												currentStateAttributes.publisherFlexChildShrink,
+											publisherFlexChildBasis:
+												currentStateAttributes.publisherFlexChildBasis,
+											publisherFlexChildOrder:
+												currentStateAttributes.publisherFlexChildOrder,
+											publisherFlexChildOrderCustom:
+												currentStateAttributes.publisherFlexChildOrderCustom,
+											publisherFlexDirection:
+												directParentBlock?.attributes
+													?.publisherFlexLayout
+													?.direction,
+										}}
+										attributes={{
+											publisherFlexChildSizing:
+												attributes.publisherFlexChildSizing,
+											publisherFlexChildGrow:
+												attributes.publisherFlexChildGrow,
+											publisherFlexChildShrink:
+												attributes.publisherFlexChildShrink,
+											publisherFlexChildBasis:
+												attributes.publisherFlexChildBasis,
+											publisherFlexChildAlign:
+												attributes.publisherFlexChildAlign,
+											publisherFlexChildOrder:
+												attributes.publisherFlexChildOrder,
+											publisherFlexChildOrderCustom:
+												attributes.publisherFlexChildOrderCustom,
+										}}
+										extensionProps={{
+											publisherFlexChildSizing: {},
+											publisherFlexChildGrow: {},
+											publisherFlexChildShrink: {},
+											publisherFlexChildBasis: {},
+											publisherFlexChildAlign: {},
+											publisherFlexChildOrder: {},
+											publisherFlexChildOrderCustom: {},
+										}}
+										handleOnChangeAttributes={
+											handleOnChangeAttributes
+										}
+										setSettings={handleOnChangeSettings}
+									/>
+								)}
 
-						<EffectsExtension
-							block={block}
-							extensionConfig={effectsConfig}
-							extensionProps={{
-								publisherOpacity: {},
-								publisherTransform: {},
-								publisherTransformSelfPerspective: {},
-								publisherTransformSelfOrigin: {},
-								publisherBackfaceVisibility: {},
-								publisherTransformChildPerspective: {},
-								publisherTransformChildOrigin: {},
-								publisherTransition: {},
-								publisherFilter: {},
-								publisherBackdropFilter: {},
-								publisherDivider: {},
-								publisherBlendMode: {},
-								publisherMask: {},
-							}}
-							values={{
-								publisherOpacity:
-									currentStateAttributes.publisherOpacity,
-								publisherTransform:
-									currentStateAttributes.publisherTransform,
-								publisherBackfaceVisibility:
-									currentStateAttributes.publisherBackfaceVisibility,
-								publisherTransformSelfPerspective:
-									currentStateAttributes.publisherTransformSelfPerspective,
-								publisherTransformSelfOrigin:
-									currentStateAttributes.publisherTransformSelfOrigin,
-								publisherTransformChildOrigin:
-									currentStateAttributes.publisherTransformChildOrigin,
-								publisherTransformChildPerspective:
-									currentStateAttributes.publisherTransformChildPerspective,
-								publisherTransition:
-									currentStateAttributes.publisherTransition,
-								publisherFilter:
-									currentStateAttributes.publisherFilter,
-								publisherBackdropFilter:
-									currentStateAttributes.publisherBackdropFilter,
-								publisherDivider:
-									currentStateAttributes.publisherDivider,
-								publisherMask:
-									currentStateAttributes.publisherMask,
-								publisherBlendMode:
-									currentStateAttributes.publisherBlendMode,
-							}}
-							attributes={{
-								publisherOpacity: attributes.publisherOpacity,
-								publisherTransform:
-									attributes.publisherTransform,
-								publisherBackfaceVisibility:
-									attributes.publisherBackfaceVisibility,
-								publisherTransformSelfPerspective:
-									attributes.publisherTransformSelfPerspective,
-								publisherTransformSelfOrigin:
-									attributes.publisherTransformSelfOrigin,
-								publisherTransformChildOrigin:
-									attributes.publisherTransformChildOrigin,
-								publisherTransformChildPerspective:
-									attributes.publisherTransformChildPerspective,
-								publisherTransition:
-									attributes.publisherTransition,
-								publisherFilter: attributes.publisherFilter,
-								publisherBackdropFilter:
-									attributes.publisherBackdropFilter,
-								publisherDivider: attributes.publisherDivider,
-								publisherMask: attributes.publisherMask,
-								publisherBlendMode:
-									attributes.publisherBlendMode,
-							}}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-							setSettings={handleOnChangeSettings}
-						/>
+							<TypographyExtension
+								block={block}
+								extensionConfig={typographyConfig}
+								extensionProps={{
+									publisherFontColor: {},
+									publisherFontSize: {},
+									publisherLineHeight: {},
+									publisherTextAlign: {},
+									publisherTextDecoration: {},
+									publisherFontStyle: {},
+									publisherTextTransform: {},
+									publisherDirection: {},
+									publisherTextShadow: {},
+									publisherLetterSpacing: {},
+									publisherWordSpacing: {},
+									publisherTextIndent: {},
+									publisherTextOrientation: {},
+									publisherTextColumns: {},
+									publisherTextStroke: {},
+									publisherWordBreak: {},
+								}}
+								values={{
+									publisherFontColor:
+										currentStateAttributes?.publisherFontColor,
+									publisherFontSize:
+										currentStateAttributes?.publisherFontSize,
+									publisherLineHeight:
+										currentStateAttributes?.publisherLineHeight,
+									publisherTextAlign:
+										currentStateAttributes?.publisherTextAlign,
+									publisherTextDecoration:
+										currentStateAttributes?.publisherTextDecoration,
+									publisherFontStyle:
+										currentStateAttributes?.publisherFontStyle,
+									publisherTextTransform:
+										currentStateAttributes?.publisherTextTransform,
+									publisherDirection:
+										currentStateAttributes?.publisherDirection,
+									publisherTextShadow:
+										currentStateAttributes?.publisherTextShadow,
+									publisherLetterSpacing:
+										currentStateAttributes?.publisherLetterSpacing,
+									publisherWordSpacing:
+										currentStateAttributes?.publisherWordSpacing,
+									publisherTextIndent:
+										currentStateAttributes?.publisherTextIndent,
+									publisherTextOrientation:
+										currentStateAttributes?.publisherTextOrientation,
+									publisherTextColumns:
+										currentStateAttributes?.publisherTextColumns,
+									publisherTextStroke:
+										currentStateAttributes?.publisherTextStroke,
+									publisherWordBreak:
+										currentStateAttributes?.publisherWordBreak,
+								}}
+								attributes={{
+									publisherFontColor:
+										attributes?.publisherFontColor,
+									publisherFontSize:
+										attributes?.publisherFontSize,
+									publisherLineHeight:
+										attributes?.publisherLineHeight,
+									publisherTextAlign:
+										attributes?.publisherTextAlign,
+									publisherTextDecoration:
+										attributes?.publisherTextDecoration,
+									publisherFontStyle:
+										attributes?.publisherFontStyle,
+									publisherTextTransform:
+										attributes?.publisherTextTransform,
+									publisherDirection:
+										attributes?.publisherDirection,
+									publisherTextShadow:
+										attributes?.publisherTextShadow,
+									publisherLetterSpacing:
+										attributes?.publisherLetterSpacing,
+									publisherWordSpacing:
+										attributes?.publisherWordSpacing,
+									publisherTextIndent:
+										attributes?.publisherTextIndent,
+									publisherTextOrientation:
+										attributes?.publisherTextOrientation,
+									publisherTextColumns:
+										attributes?.publisherTextColumns,
+									publisherTextStroke:
+										attributes?.publisherTextStroke,
+									publisherWordBreak:
+										attributes?.publisherWordBreak,
+								}}
+								display={
+									currentStateAttributes?.publisherDisplay
+								}
+								backgroundClip={
+									currentStateAttributes?.publisherBackgroundClip
+								}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+								setSettings={handleOnChangeSettings}
+							/>
+							{directParentBlock?.innerBlocks.length &&
+								directParentBlock?.attributes
+									.publisherDisplay === 'grid' && (
+									<GridChildExtension
+										block={block}
+										extensionConfig={gridChildConfig}
+										extensionProps={{
+											publisherGridChildLayout: {},
+											publisherGridChildOrder: {},
+										}}
+										values={{
+											publisherGridChildLayout:
+												currentStateAttributes.publisherGridChildLayout,
+											publisherGridChildOrder:
+												currentStateAttributes.publisherGridChildOrder,
+											gridAreas:
+												directParentBlock?.attributes
+													.publisherGridAreas,
+										}}
+										attributes={{
+											publisherGridChildLayout:
+												attributes.publisherGridChildLayout,
+											publisherGridChildOrder:
+												attributes.publisherGridChildOrder,
+										}}
+										handleOnChangeAttributes={
+											handleOnChangeAttributes
+										}
+										setSettings={handleOnChangeSettings}
+									/>
+								)}
 
-						<CustomStyleExtension
-							block={block}
-							extensionConfig={customStyleConfig}
-							extensionProps={{
-								publisherCustomCSS: {},
-							}}
-							values={{
-								publisherCustomCSS:
-									currentStateAttributes.publisherCustomCSS,
-							}}
-							attributes={{
-								publisherCustomCSS:
-									attributes.publisherCustomCSS,
-							}}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-						/>
-					</div>
+							<TypographyExtension
+								block={block}
+								extensionConfig={typographyConfig}
+								extensionProps={{
+									publisherFontColor: {},
+									publisherFontSize: {},
+									publisherLineHeight: {},
+									publisherTextAlign: {},
+									publisherTextDecoration: {},
+									publisherFontStyle: {},
+									publisherTextTransform: {},
+									publisherDirection: {},
+									publisherTextShadow: {},
+									publisherLetterSpacing: {},
+									publisherWordSpacing: {},
+									publisherTextIndent: {},
+									publisherTextOrientation: {},
+									publisherTextColumns: {},
+									publisherTextStroke: {},
+									publisherWordBreak: {},
+								}}
+								values={{
+									publisherFontColor:
+										currentStateAttributes?.publisherFontColor,
+									publisherFontSize:
+										currentStateAttributes?.publisherFontSize,
+									publisherLineHeight:
+										currentStateAttributes?.publisherLineHeight,
+									publisherTextAlign:
+										currentStateAttributes?.publisherTextAlign,
+									publisherTextDecoration:
+										currentStateAttributes?.publisherTextDecoration,
+									publisherFontStyle:
+										currentStateAttributes?.publisherFontStyle,
+									publisherTextTransform:
+										currentStateAttributes?.publisherTextTransform,
+									publisherDirection:
+										currentStateAttributes?.publisherDirection,
+									publisherTextShadow:
+										currentStateAttributes?.publisherTextShadow,
+									publisherLetterSpacing:
+										currentStateAttributes?.publisherLetterSpacing,
+									publisherWordSpacing:
+										currentStateAttributes?.publisherWordSpacing,
+									publisherTextIndent:
+										currentStateAttributes?.publisherTextIndent,
+									publisherTextOrientation:
+										currentStateAttributes?.publisherTextOrientation,
+									publisherTextColumns:
+										currentStateAttributes?.publisherTextColumns,
+									publisherTextStroke:
+										currentStateAttributes?.publisherTextStroke,
+									publisherWordBreak:
+										currentStateAttributes?.publisherWordBreak,
+								}}
+								attributes={{
+									publisherFontColor:
+										attributes?.publisherFontColor,
+									publisherFontSize:
+										attributes?.publisherFontSize,
+									publisherLineHeight:
+										attributes?.publisherLineHeight,
+									publisherTextAlign:
+										attributes?.publisherTextAlign,
+									publisherTextDecoration:
+										attributes?.publisherTextDecoration,
+									publisherFontStyle:
+										attributes?.publisherFontStyle,
+									publisherTextTransform:
+										attributes?.publisherTextTransform,
+									publisherDirection:
+										attributes?.publisherDirection,
+									publisherTextShadow:
+										attributes?.publisherTextShadow,
+									publisherLetterSpacing:
+										attributes?.publisherLetterSpacing,
+									publisherWordSpacing:
+										attributes?.publisherWordSpacing,
+									publisherTextIndent:
+										attributes?.publisherTextIndent,
+									publisherTextOrientation:
+										attributes?.publisherTextOrientation,
+									publisherTextColumns:
+										attributes?.publisherTextColumns,
+									publisherTextStroke:
+										attributes?.publisherTextStroke,
+									publisherWordBreak:
+										attributes?.publisherWordBreak,
+								}}
+								display={
+									currentStateAttributes?.publisherDisplay
+								}
+								backgroundClip={
+									currentStateAttributes?.publisherBackgroundClip
+								}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+								setSettings={handleOnChangeSettings}
+							/>
 
-					<div
-						style={{
-							display:
-								'interactions' === tab.name ? 'block' : 'none',
-						}}
-					>
-						<EntranceAnimationExtension
-							block={block}
-							extensionConfig={entranceAnimationConfig}
-							extensionProps={{}}
-							values={{}}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-						/>
+							<BackgroundExtension
+								block={block}
+								setSettings={handleOnChangeSettings}
+								extensionConfig={backgroundConfig}
+								extensionProps={{
+									publisherBackground: {},
+									publisherBackgroundColor: {},
+									publisherBackgroundClip: {},
+								}}
+								values={{
+									publisherBackground:
+										currentStateAttributes?.publisherBackground,
+									publisherBackgroundColor:
+										currentStateAttributes?.publisherBackgroundColor,
+									publisherBackgroundClip:
+										currentStateAttributes?.publisherBackgroundClip,
+								}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+								attributes={{
+									publisherBackground:
+										attributes.publisherBackground,
+									publisherBackgroundColor:
+										attributes.publisherBackgroundColor,
+									publisherBackgroundClip:
+										attributes.publisherBackgroundClip,
+								}}
+							/>
 
-						<ScrollAnimationExtension
-							block={block}
-							extensionConfig={scrollAnimationConfig}
-							extensionProps={{}}
-							values={{}}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-						/>
+							<BorderAndShadowExtension
+								block={block}
+								extensionConfig={borderAndShadowConfig}
+								extensionProps={{
+									publisherBorder: {},
+									publisherBorderRadius: {},
+									publisherBoxShadow: {},
+									publisherOutline: {},
+								}}
+								values={{
+									publisherBorder:
+										currentStateAttributes.publisherBorder,
+									publisherBorderRadius:
+										currentStateAttributes.publisherBorderRadius,
+									publisherOutline:
+										currentStateAttributes.publisherOutline,
+									publisherBoxShadow:
+										currentStateAttributes.publisherBoxShadow,
+								}}
+								attributes={{
+									publisherBorder: attributes.publisherBorder,
+									publisherBorderRadius:
+										attributes.publisherBorderRadius,
+									publisherOutline:
+										attributes.publisherOutline,
+									publisherBoxShadow:
+										attributes.publisherBoxShadow,
+								}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+								setSettings={handleOnChangeSettings}
+							/>
 
-						<ClickAnimationExtension
-							block={block}
-							extensionConfig={clickAnimationConfig}
-							extensionProps={{}}
-							values={{}}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-						/>
+							<EffectsExtension
+								block={block}
+								extensionConfig={effectsConfig}
+								extensionProps={{
+									publisherOpacity: {},
+									publisherTransform: {},
+									publisherTransformSelfPerspective: {},
+									publisherTransformSelfOrigin: {},
+									publisherBackfaceVisibility: {},
+									publisherTransformChildPerspective: {},
+									publisherTransformChildOrigin: {},
+									publisherTransition: {},
+									publisherFilter: {},
+									publisherBackdropFilter: {},
+									publisherDivider: {},
+									publisherBlendMode: {},
+									publisherMask: {},
+								}}
+								values={{
+									publisherOpacity:
+										currentStateAttributes.publisherOpacity,
+									publisherTransform:
+										currentStateAttributes.publisherTransform,
+									publisherBackfaceVisibility:
+										currentStateAttributes.publisherBackfaceVisibility,
+									publisherTransformSelfPerspective:
+										currentStateAttributes.publisherTransformSelfPerspective,
+									publisherTransformSelfOrigin:
+										currentStateAttributes.publisherTransformSelfOrigin,
+									publisherTransformChildOrigin:
+										currentStateAttributes.publisherTransformChildOrigin,
+									publisherTransformChildPerspective:
+										currentStateAttributes.publisherTransformChildPerspective,
+									publisherTransition:
+										currentStateAttributes.publisherTransition,
+									publisherFilter:
+										currentStateAttributes.publisherFilter,
+									publisherBackdropFilter:
+										currentStateAttributes.publisherBackdropFilter,
+									publisherDivider:
+										currentStateAttributes.publisherDivider,
+									publisherMask:
+										currentStateAttributes.publisherMask,
+									publisherBlendMode:
+										currentStateAttributes.publisherBlendMode,
+								}}
+								attributes={{
+									publisherOpacity:
+										attributes.publisherOpacity,
+									publisherTransform:
+										attributes.publisherTransform,
+									publisherBackfaceVisibility:
+										attributes.publisherBackfaceVisibility,
+									publisherTransformSelfPerspective:
+										attributes.publisherTransformSelfPerspective,
+									publisherTransformSelfOrigin:
+										attributes.publisherTransformSelfOrigin,
+									publisherTransformChildOrigin:
+										attributes.publisherTransformChildOrigin,
+									publisherTransformChildPerspective:
+										attributes.publisherTransformChildPerspective,
+									publisherTransition:
+										attributes.publisherTransition,
+									publisherFilter: attributes.publisherFilter,
+									publisherBackdropFilter:
+										attributes.publisherBackdropFilter,
+									publisherDivider:
+										attributes.publisherDivider,
+									publisherMask: attributes.publisherMask,
+									publisherBlendMode:
+										attributes.publisherBlendMode,
+								}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+								setSettings={handleOnChangeSettings}
+							/>
 
-						<MouseExtension
-							block={block}
-							mouseConfig={mouseConfig}
-							extensionProps={{
-								publisherCursor: {},
-								publisherUserSelect: {},
-								publisherPointerEvents: {},
-							}}
-							values={{
-								cursor: currentStateAttributes.publisherCursor,
-								userSelect:
-									currentStateAttributes.publisherUserSelect,
-								pointerEvents:
-									currentStateAttributes.publisherPointerEvents,
-							}}
-							attributes={{
-								publisherCursor: attributes.publisherCursor,
-								publisherUserSelect:
-									attributes.publisherUserSelect,
-								publisherPointerEvents:
-									attributes.publisherPointerEvents,
-							}}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-							setSettings={handleOnChangeSettings}
-						/>
-					</div>
-				</>
-			);
+							<CustomStyleExtension
+								block={block}
+								extensionConfig={customStyleConfig}
+								extensionProps={{
+									publisherCustomCSS: {},
+								}}
+								values={{
+									publisherCustomCSS:
+										currentStateAttributes.publisherCustomCSS,
+								}}
+								attributes={{
+									publisherCustomCSS:
+										attributes.publisherCustomCSS,
+								}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+							/>
+						</>
+					);
+					break;
+
+				case 'interactions':
+					activePanel.push(
+						<>
+							<EntranceAnimationExtension
+								block={block}
+								extensionConfig={entranceAnimationConfig}
+								extensionProps={{}}
+								values={{}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+							/>
+
+							<ScrollAnimationExtension
+								block={block}
+								extensionConfig={scrollAnimationConfig}
+								extensionProps={{}}
+								values={{}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+							/>
+
+							<ClickAnimationExtension
+								block={block}
+								extensionConfig={clickAnimationConfig}
+								extensionProps={{}}
+								values={{}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+							/>
+
+							<MouseExtension
+								block={block}
+								mouseConfig={mouseConfig}
+								extensionProps={{
+									publisherCursor: {},
+									publisherUserSelect: {},
+									publisherPointerEvents: {},
+								}}
+								values={{
+									cursor: currentStateAttributes.publisherCursor,
+									userSelect:
+										currentStateAttributes.publisherUserSelect,
+									pointerEvents:
+										currentStateAttributes.publisherPointerEvents,
+								}}
+								attributes={{
+									publisherCursor: attributes.publisherCursor,
+									publisherUserSelect:
+										attributes.publisherUserSelect,
+									publisherPointerEvents:
+										attributes.publisherPointerEvents,
+								}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+								setSettings={handleOnChangeSettings}
+							/>
+						</>
+					);
+					break;
+			}
+
+			return activePanel;
 		};
 
 		const tabs = [

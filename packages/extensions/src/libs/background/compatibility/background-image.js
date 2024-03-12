@@ -2,13 +2,16 @@
 /**
  * Publisher dependencies
  */
-import { isEmpty, isString, isEmptyObject } from '@publisher/utils';
 import {
-	getGradientType,
-	getGradientVAFromVarString,
-} from '@publisher/core-data';
+	isEmpty,
+	isString,
+	isEmptyObject,
+	mergeObject,
+} from '@publisher/utils';
+import { getGradientType } from '@publisher/core-data';
 import { isValid } from '@publisher/hooks/src/use-value-addon/helpers';
 import type { ValueAddon } from '@publisher/hooks/src/use-value-addon/types';
+import { getGradientVAFromIdString } from '@publisher/core-data/src/variables/gradient';
 
 export function backgroundFromWPCompatibility({
 	attributes,
@@ -25,6 +28,7 @@ export function backgroundFromWPCompatibility({
 	//
 	if (attributes?.style?.background?.backgroundImage?.url !== undefined) {
 		attributes.publisherBackground = {
+			...attributes.publisherBackground,
 			'image-0': {
 				type: 'image',
 				image: attributes?.style?.background?.backgroundImage?.url,
@@ -40,7 +44,6 @@ export function backgroundFromWPCompatibility({
 				isOpen: false,
 				order: 0,
 			},
-			...attributes.publisherBackground,
 		};
 	}
 
@@ -53,7 +56,7 @@ export function backgroundFromWPCompatibility({
 	// gradient attribute in root always is variable
 	// it should be changed to a Value Addon (variable)
 	if (attributes?.gradient !== undefined) {
-		gradient = getGradientVAFromVarString(attributes?.gradient);
+		gradient = getGradientVAFromIdString(attributes?.gradient);
 
 		if (isValid(gradient)) {
 			gradientType = getGradientType(gradient);
@@ -67,7 +70,7 @@ export function backgroundFromWPCompatibility({
 
 	if (gradient !== false && gradientType !== '') {
 		if (gradientType === 'linear-gradient') {
-			let angel = '0';
+			let angel = '';
 
 			if (isString(gradient)) {
 				//$FlowFixMe
@@ -81,6 +84,7 @@ export function backgroundFromWPCompatibility({
 			}
 
 			attributes.publisherBackground = {
+				...attributes.publisherBackground,
 				'linear-gradient-0': {
 					type: gradientType,
 					'linear-gradient': gradient,
@@ -90,20 +94,19 @@ export function backgroundFromWPCompatibility({
 					isOpen: false,
 					order: 1,
 				},
-				...attributes.publisherBackground,
 			};
 		} else {
 			attributes.publisherBackground = {
+				...attributes.publisherBackground,
 				'radial-gradient-0': {
 					type: gradientType,
 					'radial-gradient': gradient,
-					position: { top: '50%', left: '50%' },
+					'radial-gradient-position': { top: '50%', left: '50%' },
 					'radial-gradient-size': 'farthest-corner',
 					'linear-gradient-attachment': 'scroll',
 					isOpen: false,
 					order: 1,
 				},
-				...attributes.publisherBackground,
 			};
 		}
 	}
@@ -124,31 +127,93 @@ export function backgroundToWPCompatibility({
 				background: {
 					backgroundImage: undefined,
 				},
+				color: {
+					gradient: undefined,
+				},
 			},
+			gradient: undefined,
 		};
 	}
 
+	const processedItems = [];
 	let result = {};
 
 	Object.entries(newValue).forEach(([, item]: [string, Object]): void => {
-		// only 1 image
-		if (result) {
+		// already processed
+		if (processedItems.includes(item?.type)) {
 			return;
 		}
 
-		if (item?.type === 'image' && item?.image !== '') {
-			result = {
-				style: {
-					background: {
-						backgroundImage: {
-							url: item?.image,
-							source: 'file',
-							id: 0,
-							title: 'background image',
+		//
+		// Gradient Background
+		//
+		let gradient: ValueAddon | boolean | string = false;
+
+		switch (item?.type) {
+			case 'image':
+				if (item?.image === '') {
+					break;
+				}
+
+				result = mergeObject(result, {
+					style: {
+						background: {
+							backgroundImage: {
+								url: item?.image,
+								source: 'file',
+								id: 0,
+								title: 'background image',
+							},
 						},
 					},
-				},
-			};
+				});
+
+				processedItems.push(item?.type);
+
+				break;
+
+			case 'radial-gradient':
+			case 'linear-gradient':
+				if (item[item?.type] === '') {
+					break;
+				}
+
+				// gradient value is a variable
+				if (isValid(item[item?.type])) {
+					gradient = item[item?.type]?.settings?.id;
+
+					if (gradient !== undefined) {
+						result = mergeObject(result, {
+							gradient,
+						});
+					} else {
+						break;
+					}
+				}
+				// simple value gradient
+				else if (isString(item[item?.type])) {
+					gradient = item[item?.type];
+
+					if (item['linear-gradient-angel'] !== undefined) {
+						//$FlowFixMe
+						gradient = gradient.replace(
+							/gradient\(\s*(.*?)deg,/im,
+							'gradient(' + item['linear-gradient-angel'] + 'deg,'
+						);
+					}
+
+					result = mergeObject(result, {
+						style: {
+							color: {
+								gradient,
+							},
+						},
+					});
+				}
+
+				processedItems.push('linear-gradient');
+				processedItems.push('radial-gradient');
+				break;
 		}
 	});
 

@@ -8,7 +8,7 @@ export type ControlContextRef = {
 	current: {
 		path: string,
 		reset: boolean,
-		action: 'reset' | 'normal',
+		action: 'reset' | 'normal' | 'reset_all_states',
 	},
 };
 
