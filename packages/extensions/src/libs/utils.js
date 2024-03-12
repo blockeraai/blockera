@@ -53,10 +53,9 @@ export function generateExtensionId(
 	} = select('publisher-core/extensions') || {};
 
 	const currentBlock = getExtensionCurrentBlock();
-	let currentStateType = flag ? '-' + getExtensionCurrentBlockState() : '';
 
-	if (isInnerBlock(currentBlock)) {
-		currentStateType = flag ? '-' + getExtensionInnerBlockState() : '';
+	if (!flag) {
+		return `${blockName}/${id}/${clientId}-${currentBlock}`;
 	}
 
 	// Assume control inside innerBlock and current innerBlock inside master block!
@@ -64,10 +63,10 @@ export function generateExtensionId(
 		!isNormalState(getExtensionCurrentBlockState()) &&
 		isInnerBlock(currentBlock)
 	) {
-		return `${blockName}/${id}/${clientId}-master-${currentBlock}${currentStateType}-${getExtensionCurrentBlockStateBreakpoint()}`;
+		return `${blockName}/${id}/${clientId}-master-${currentBlock}${getExtensionInnerBlockState()}-${getExtensionCurrentBlockStateBreakpoint()}`;
 	}
 
-	return `${blockName}/${id}/${clientId}-${currentBlock}${currentStateType}-${getExtensionCurrentBlockStateBreakpoint()}`;
+	return `${blockName}/${id}/${clientId}-${currentBlock}${getExtensionCurrentBlockState()}-${getExtensionCurrentBlockStateBreakpoint()}`;
 }
 
 /**
