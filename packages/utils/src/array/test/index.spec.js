@@ -1,4 +1,10 @@
-import { arraySortItems, indexOf, isEquals, toObject } from '../index';
+import {
+	arraySortItems,
+	indexOf,
+	isEquals,
+	toObject,
+	arrayDiff,
+} from '../index';
 
 describe('Array Utils', function () {
 	it('should sort zero item to first', function () {
@@ -44,5 +50,9 @@ describe('Array Utils', function () {
 		const arary = ['Block', 'wordpress', 'theMe'];
 
 		expect(indexOf(arary, 'theme'));
+	});
+
+	it('should retrieve differences between two recieved array', () => {
+		expect(arrayDiff(['normal', 'hover'], ['normal'])).toEqual(['hover']);
 	});
 });
