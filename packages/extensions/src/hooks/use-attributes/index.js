@@ -136,6 +136,7 @@ export const useAttributes = (
 			attributeIsPublisherBlockStates,
 		});
 
+		// Assume reference current action is 'reset_all_states'
 		if ('reset_all_states' === ref?.current?.action) {
 			return setAttributes(reducer(_attributes, resetAll()));
 		}

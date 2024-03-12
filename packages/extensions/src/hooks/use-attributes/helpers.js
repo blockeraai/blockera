@@ -157,7 +157,65 @@ export const memoizedBlockStates: (
 );
 
 export const resetAllStates = (state: Object, action: Object): Object => {
-	const { attributeId, newValue } = action;
+	const { attributeId, newValue, currentBlock } = action;
+
+	if (isInnerBlock(currentBlock)) {
+		const newState = update(
+			state,
+			`publisherInnerBlocks.${currentBlock}.attributes.${attributeId}`,
+			newValue,
+			true
+		);
+
+		return mergeObject(newState, {
+			publisherInnerBlocks: mergeObject(newState.publisherInnerBlocks, {
+				[currentBlock]: {
+					attributes: {
+						publisherBlockStates: Object.fromEntries(
+							Object.entries(
+								newState.publisherInnerBlocks[currentBlock]
+									.attributes?.publisherBlockStates || {}
+							).map(
+								([stateType, _state]: [string, Object]): [
+									string,
+									Object
+								] => {
+									return [
+										stateType,
+										mergeObject(_state, {
+											breakpoints: Object.fromEntries(
+												Object.entries(
+													_state.breakpoints
+												).map(
+													([
+														breakpointType,
+														breakpoint,
+													]: [string, Object]): [
+														string,
+														Object
+													] => {
+														return [
+															breakpointType,
+															update(
+																breakpoint,
+																`attributes.${attributeId}`,
+																newValue,
+																true
+															),
+														];
+													}
+												)
+											),
+										}),
+									];
+								}
+							)
+						),
+					},
+				},
+			}),
+		});
+	}
 
 	return mergeObject(update(state, attributeId, newValue, true), {
 		[attributeId]: newValue,
