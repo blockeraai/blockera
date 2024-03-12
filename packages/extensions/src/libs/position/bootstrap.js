@@ -9,6 +9,7 @@ import { addFilter } from '@wordpress/hooks';
  * Publisher dependencies
  */
 import type { ControlContextRef } from '@publisher/controls/src/context/types';
+import { mergeObject } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -31,10 +32,11 @@ export const bootstrap = (): void => {
 				return attributes;
 			}
 
-			attributes = positionFromWPCompatibility({
-				attributes,
-				blockId,
-			});
+			if (blockId === 'core/group') {
+				attributes = positionFromWPCompatibility({
+					attributes,
+				});
+			}
 
 			return attributes;
 		}
@@ -72,22 +74,14 @@ export const bootstrap = (): void => {
 				return nextState;
 			}
 
-			switch (featureId) {
-				case 'publisherPosition':
-					const compValue = positionToWPCompatibility({
+			if (featureId === 'publisherPosition' && blockId === 'core/group') {
+				return mergeObject(
+					nextState,
+					positionToWPCompatibility({
 						newValue,
 						ref,
-						blockId,
-					});
-
-					return {
-						...nextState,
-						...(compValue ?? {}),
-						style: {
-							...(nextState?.style ?? {}),
-							...(compValue?.style ?? {}),
-						},
-					};
+					})
+				);
 			}
 
 			return nextState;
