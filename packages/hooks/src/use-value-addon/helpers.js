@@ -78,7 +78,8 @@ export function setValueAddon(
 	setState(newValue);
 }
 
-export function isValid(value: ValueAddon): boolean {
+export function isValid(value: ValueAddon | string): boolean {
+	//$FlowFixMe
 	return value?.isValueAddon;
 }
 
