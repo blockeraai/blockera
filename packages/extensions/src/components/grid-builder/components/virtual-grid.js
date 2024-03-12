@@ -215,7 +215,7 @@ export const VirtualGrid = ({
 					block={block}
 					attributeId="publisherGridColumns"
 					hovered={hoveredColumn}
-					createVirtualAreas={createVirtualAreas}
+					extensionProps={extensionProps}
 				/>
 			</div>
 
@@ -237,7 +237,7 @@ export const VirtualGrid = ({
 					block={block}
 					attributeId="publisherGridRows"
 					hovered={hoveredRow}
-					createVirtualAreas={createVirtualAreas}
+					extensionProps={extensionProps}
 				/>
 			</div>
 

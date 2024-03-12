@@ -742,7 +742,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 				)}
 
 				{'grid' === values.publisherDisplay && (
-					<GridBuilder block={block}>
+					<GridBuilder block={block} extensionProps={extensionProps}>
 						<BlockComponent />
 					</GridBuilder>
 				)}

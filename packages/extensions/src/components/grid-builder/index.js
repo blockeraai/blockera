@@ -22,6 +22,7 @@ import EditGridIcon from './icons/edit-grid';
 export const GridBuilder = ({
 	children,
 	block,
+	extensionProps,
 }: TGridBuilderProps): MixedElement | null => {
 	const { isOpenGridBuilder, setOpenGridBuilder } = useBlockContext();
 
@@ -84,8 +85,9 @@ export const GridBuilder = ({
 				height: '100%',
 				visibility: 'visible',
 			}}
+			data-test="grid-builder"
 		>
-			<VirtualGrid block={block} />
+			<VirtualGrid block={block} extensionProps={extensionProps} />
 			{children}
 			<div className="close-builder">
 				<EditGridIcon />

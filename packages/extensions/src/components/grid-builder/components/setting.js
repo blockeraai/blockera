@@ -33,6 +33,7 @@ export const SizeSetting = ({
 	popoverTitle,
 	items,
 	attributeId,
+	extensionProps,
 }: TSizeSettingProps): MixedElement => {
 	const { handleOnChangeAttributes, getAttributes } = useBlockContext();
 
@@ -84,7 +85,6 @@ export const SizeSetting = ({
 		item['auto-fit'] ||
 		items.value
 			.map((item) => {
-				if (item['auto-generated']) return item;
 				if (item['auto-fit']) return null;
 				if (
 					item['sizing-mode'] === 'normal' &&
@@ -128,18 +128,22 @@ export const SizeSetting = ({
 					)}
 				</>
 			}
+			offset={20}
 		>
 			<ControlContextProvider
 				value={{
-					name: generateExtensionId(block, 'grid-sizing-mode'),
+					name: generateExtensionId(
+						block,
+						`grid-sizing-mode-${item.id}`
+					),
 					value: item,
 					attribute: attributeId,
 					blockName: block.blockName,
 				}}
 			>
 				<ToggleSelectControl
-					id={"['sizing-mode']"}
-					singularId={"['sizing-mode']"}
+					id={'sizing-mode'}
+					singularId={'sizing-mode'}
 					label={__('Sizing Mode', 'publisher-core')}
 					columns="columns-2"
 					options={[
@@ -188,7 +192,10 @@ export const SizeSetting = ({
 											0,
 											currentItemIndex
 										),
-										{ ...item, 'sizing-mode': newValue },
+										{
+											...item,
+											'sizing-mode': newValue,
+										},
 										...filteredItems.slice(
 											currentItemIndex
 										),
@@ -200,18 +207,20 @@ export const SizeSetting = ({
 							);
 						}
 					}}
-					defaultValue={item['sizing-mode'] || ''}
+					defaultValue={'normal'}
+					{...extensionProps}
 				/>
 
 				{item['sizing-mode'] === 'normal' ? (
 					<InputControl
 						id={'size'}
+						singularId={'size'}
 						label={__('Size', 'publisher-core')}
 						columns="columns-2"
 						unitType={item['auto-fit'] ? 'essential' : 'grid-size'}
 						range={true}
 						min={0}
-						onChange={(size: string, ref: Object): void =>
+						onChange={(size: string, ref: Object): void => {
 							handleOnChangeAttributes(
 								attributeId,
 								{
@@ -230,17 +239,20 @@ export const SizeSetting = ({
 								{
 									ref,
 								}
-							)
+							);
+						}}
+						defaultValue={
+							popoverTitle === 'column' ? '1fr' : 'auto'
 						}
-						defaultValue={item.size || ''}
 						controlAddonTypes={['variable']}
 						variableTypes={['width-size']}
+						{...extensionProps}
 					/>
 				) : (
 					<>
 						<InputControl
-							id={"['min-size']"}
-							singularId={"['min-size']"}
+							id={'min-size'}
+							singularId={'min-size'}
 							label={__('Min', 'publisher-core')}
 							columns="columns-2"
 							unitType={item['auto-fit'] ? 'essential' : 'width'}
@@ -256,7 +268,10 @@ export const SizeSetting = ({
 												0,
 												currentItemIndex
 											),
-											{ ...item, 'min-size': newValue },
+											{
+												...item,
+												'min-size': newValue,
+											},
 											...filteredItems.slice(
 												currentItemIndex
 											),
@@ -267,14 +282,15 @@ export const SizeSetting = ({
 									}
 								)
 							}
-							defaultValue={item['min-size'] || ''}
+							defaultValue={'150px'}
 							controlAddonTypes={['variable']}
 							variableTypes={['width-size']}
+							{...extensionProps}
 						/>
 
 						<InputControl
-							id={"['max-size']"}
-							singularId={"['max-size']"}
+							id={'max-size'}
+							singularId={'max-size'}
 							label={__('Max', 'publisher-core')}
 							columns="columns-2"
 							unitType="grid-size"
@@ -290,7 +306,10 @@ export const SizeSetting = ({
 												0,
 												currentItemIndex
 											),
-											{ ...item, 'max-size': newValue },
+											{
+												...item,
+												'max-size': newValue,
+											},
 											...filteredItems.slice(
 												currentItemIndex
 											),
@@ -301,17 +320,18 @@ export const SizeSetting = ({
 									}
 								)
 							}
-							defaultValue={item['max-size'] || ''}
+							defaultValue={item.size}
 							controlAddonTypes={['variable']}
 							variableTypes={['width-size']}
+							{...extensionProps}
 						/>
 					</>
 				)}
 
 				<>
 					<CheckboxControl
-						id={"['auto-fit']"}
-						singularId={"['auto-fit']"}
+						id={'auto-fit'}
+						singularId={'auto-fit'}
 						columns="columns-2"
 						className="publisher-grid-auto-fit"
 						checkboxLabel={__('', 'publisher-core')}
@@ -338,8 +358,10 @@ export const SizeSetting = ({
 								}
 							)
 						}
-						defaultValue={item['auto-fit'] || false}
+						defaultValue={false}
+						{...extensionProps}
 					/>
+
 					{!isAutoFitEnabled && (
 						<NoticeControl
 							type="information"

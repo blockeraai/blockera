@@ -28,11 +28,14 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 			block,
 			attributeId,
 			hovered,
+			extensionProps,
 		}: TGridSizeHandlerProps): any => {
 			const { handleOnChangeAttributes } = useBlockContext();
 
 			const [isSettingOpen, setIsSettingOpen] = useState(false);
 			const [currentItemId, setCurrentItemId] = useState(null);
+			const [currentItemIdSetting, setCurrentItemIdSetting] =
+				useState(null);
 
 			const changedItem = attribute.value.find(
 				(item) => item.id === currentItemId
@@ -222,7 +225,7 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 							)}
 							<button
 								onClick={() => {
-									setCurrentItemId(item.id);
+									setCurrentItemIdSetting(item.id);
 									setIsSettingOpen(!isSettingOpen);
 								}}
 								className="size-handler-content"
@@ -277,13 +280,19 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 								</span>
 							)}
 						</div>
-						{isSettingOpen && currentItemId === item.id && (
+
+						{isSettingOpen && currentItemIdSetting === item.id && (
 							<SizeSetting
 								item={item}
 								block={block}
 								popoverTitle={type}
 								items={attribute}
 								attributeId={attributeId}
+								extensionProps={
+									type === 'column'
+										? extensionProps.publisherGridColumns
+										: extensionProps.publisherGridRows
+								}
 							/>
 						)}
 					</>
