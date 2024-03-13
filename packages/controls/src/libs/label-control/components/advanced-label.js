@@ -60,16 +60,19 @@ export const AdvancedLabelControl = ({
 		isChangedOnNormal,
 		isChangedOnOtherStates,
 		isChangedOnCurrentState,
-	} = useAdvancedLabelProps({
-		path,
-		value,
-		singularId,
-		attribute,
-		isRepeater,
-		defaultValue,
-		isNormalState: isNormalState(),
-		blockAttributes: getAttributes(),
-	});
+	} = useAdvancedLabelProps(
+		{
+			path,
+			value,
+			singularId,
+			attribute,
+			isRepeater,
+			defaultValue,
+			isNormalState: isNormalState(),
+			blockAttributes: getAttributes(),
+		},
+		200
+	);
 
 	// Assume singularId is set and path include attribute so,
 	// attribute is object has nested props therefore we can exclude attribute from recieved path,
