@@ -608,4 +608,100 @@ describe('Width → WP Compatibility', () => {
 			});
 		});
 	});
+
+	describe('core/post-featured-image Block', () => {
+		it('Simple Value', () => {
+			appendBlocks(
+				'<!-- wp:post-featured-image {"aspectRatio":"auto","width":"200px"} /-->'
+			);
+
+			// Select target block
+			cy.get('[data-type="core/post-featured-image"]').click();
+
+			// add alias to the feature container
+			cy.get('[aria-label="Width"]')
+				.closest('[data-cy="base-control"]')
+				.as('widthContainer');
+
+			//
+			// Test 1: WP data to Blockera
+			//
+
+			// WP data should come to Blockera
+			getWPDataObject().then((data) => {
+				expect('200px').to.be.equal(
+					getSelectedBlock(data, 'publisherWidth')
+				);
+			});
+
+			//
+			// Test 2: Blockera value to WP data
+			//
+
+			// change value
+			cy.get('@widthContainer').within(() => {
+				cy.get('input').as('widthInput');
+				cy.get('@widthInput').clear();
+				cy.get('@widthInput').type('300', { force: true });
+			});
+
+			// Blockera value should be moved to WP data
+			getWPDataObject().then((data) => {
+				expect('300px').to.be.equal(getSelectedBlock(data, 'width'));
+			});
+
+			//
+			// Test 3: Clear Blockera value and check WP data
+			//
+
+			// clear
+			cy.get('@widthContainer').within(() => {
+				cy.get('input').clear({ force: true });
+			});
+
+			// WP data should be removed too
+			getWPDataObject().then((data) => {
+				expect(undefined).to.be.equal(getSelectedBlock(data, 'width'));
+			});
+		});
+
+		it('Use WP not supported value', () => {
+			appendBlocks(
+				'<!-- wp:post-featured-image {"aspectRatio":"auto","width":"30%"} /-->'
+			);
+
+			// Select target block
+			cy.get('[data-type="core/post-featured-image"]').click();
+
+			// add alias to the feature container
+			cy.get('[aria-label="Width"]')
+				.closest('[data-cy="base-control"]')
+				.as('widthContainer');
+
+			//
+			// Test 1: Blockera dat to WP
+			//
+
+			// WP data should come to Blockera
+			getWPDataObject().then((data) => {
+				expect('30%').to.be.equal(
+					getSelectedBlock(data, 'publisherWidth')
+				);
+			});
+
+			//
+			// Test 2: Blockera value to WP data
+			//
+
+			// change value
+			cy.get('@widthContainer').within(() => {
+				cy.get('[aria-label="Select Unit"]').select('auto');
+			});
+
+			// Blockera value should be moved to WP data
+			getWPDataObject().then((data) => {
+				expect(undefined).to.be.equal(getSelectedBlock(data, 'width'));
+			});
+		});
+	});
 });
