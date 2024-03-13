@@ -10,26 +10,34 @@ export function widthFromWPCompatibility({
 	attributes: Object,
 	blockId?: string,
 }): Object {
+	if (attributes?.publisherWidth !== '') {
+		return attributes;
+	}
+
 	switch (blockId) {
+		// extra attr for unit
 		case 'core/search':
 			if (
 				attributes?.width !== undefined &&
-				attributes?.publisherWidth !== attributes?.width
+				attributes?.widthUnit !== undefined
 			) {
 				attributes.publisherWidth =
 					attributes?.width + attributes?.widthUnit;
 			}
+
 			return attributes;
 
+		// no unit in value
+		// unit is %
 		case 'core/button':
-			if (
-				attributes?.width !== undefined &&
-				attributes?.publisherWidth !== attributes?.width + '%'
-			) {
+			if (attributes?.width !== undefined) {
 				attributes.publisherWidth = attributes?.width + '%';
 			}
+
 			return attributes;
 
+		// not unit in value
+		// unit is px always
 		case 'core/site-logo':
 			if (
 				attributes?.width !== undefined &&
@@ -37,17 +45,16 @@ export function widthFromWPCompatibility({
 			) {
 				attributes.publisherWidth = attributes?.width + 'px';
 			}
+
 			return attributes;
 
 		case 'core/post-featured-image':
 		case 'core/column':
-		case 'core/image': // unit is px always
-			if (
-				attributes?.width !== undefined &&
-				attributes?.publisherWidth !== attributes?.width
-			) {
+		case 'core/image':
+			if (attributes?.width !== undefined) {
 				attributes.publisherWidth = attributes?.width;
 			}
+
 			return attributes;
 	}
 
