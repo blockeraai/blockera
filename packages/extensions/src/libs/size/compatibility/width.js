@@ -158,8 +158,7 @@ export function widthToWPCompatibility({
 			if (
 				newValue === '' ||
 				isUndefined(newValue) ||
-				// 👉 auto is valid
-				(newValue !== 'auto' && isSpecialUnit(newValue)) ||
+				isSpecialUnit(newValue) ||
 				!isString(newValue) ||
 				!newValue.endsWith('px') // only px units
 			) {
