@@ -139,6 +139,7 @@ export const SizeSetting = ({
 					value: item,
 					attribute: attributeId,
 					blockName: block.blockName,
+					type: 'nested',
 				}}
 			>
 				<ToggleSelectControl
