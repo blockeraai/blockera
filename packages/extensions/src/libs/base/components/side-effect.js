@@ -11,13 +11,16 @@ import { useBlockSideEffects } from '../../../hooks';
 export const SideEffect = memo(({ currentTab, currentState, isActive }) => {
 	useEffect(() => {
 		const tabs = document.querySelector(
-			'.block-editor-block-inspector .block-editor-block-inspector__tabs .components-tab-panel__tabs'
+			'.block-editor-block-inspector .block-editor-block-inspector__tabs div:first-child'
 		);
 
-		if (tabs) {
+		if (tabs && isActive) {
 			tabs.style.display = 'none';
+		} else if (tabs) {
+			tabs.style = {};
 		}
-	}, []);
+		// eslint-disable-next-line
+	}, [isActive]);
 
 	useBlockSideEffects({
 		isActive,

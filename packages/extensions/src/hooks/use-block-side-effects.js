@@ -20,13 +20,13 @@ export const useBlockSideEffects = ({ currentTab, currentState, isActive }) => {
 		}
 
 		if ('settings' === currentTab) {
-			inspectorTabs.style.display = 'block';
+			inspectorTabs.style = {};
 
 			return;
 		}
 
 		if (!isActive) {
-			inspectorTabs.style.display = 'block';
+			inspectorTabs.style = {};
 			return;
 		}
 
