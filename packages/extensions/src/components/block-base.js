@@ -3,6 +3,7 @@
 /**
  * External dependencies
  */
+import classnames from 'classnames';
 import { SlotFillProvider } from '@wordpress/components';
 import { applyFilters } from '@wordpress/hooks';
 import type { Element, MixedElement, ComponentType } from 'react';
@@ -11,7 +12,6 @@ import { InspectorControls } from '@wordpress/block-editor';
 import {
 	memo,
 	useRef,
-	useMemo,
 	useState,
 	useEffect,
 	StrictMode,
@@ -23,7 +23,6 @@ import {
 import { isEquals, omitWithPattern } from '@publisher/utils';
 import { BlockStyle } from '@publisher/style-engine';
 import { isLaptopBreakpoint } from '@publisher/editor';
-import { extensionClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -201,23 +200,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 		const { edit: BlockEditComponent } = additional;
 
-		const _attributes: Object = useMemo(() => {
-			const _className = extensionClassNames(
-				{
-					[className]: true,
-					'publisher-extension-ref': true,
-					[`client-id-${clientId}`]: true,
-				},
-				additional.editorProps.className
-			);
-
-			return {
-				...attributes,
-				_className,
-			};
-			// eslint-disable-next-line
-		}, []);
-
 		const FilterAttributes = (): MixedElement => {
 			/**
 			 * Filterable attributes before initializing block edit component.
@@ -239,23 +221,71 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						currentState,
 					};
 					// Creat mutable constant to prevent directly change to immutable state constant.
-					const clonedAttributes = { ...attributes };
-					let filteredAttributes = applyFilters(
-						'publisherCore.blockEdit.attributes',
-						applyFilters(
+					let filteredAttributes = { ...attributes };
+
+					/**
+					 * Filtering block attributes based on "publisherPropsId" attribute.
+					 *
+					 * hook: 'publisherCore.blockEdit.attributes'
+					 *
+					 * @since 1.0.0
+					 */
+					if (!attributes?.publisherPropsId) {
+						filteredAttributes = applyFilters(
+							'publisherCore.blockEdit.attributes',
+							getAttributesWithIds(
+								filteredAttributes,
+								'publisherPropsId'
+							),
+							args
+						);
+					}
+
+					/**
+					 * Filtering block attributes based on "publisherCompatId" attribute value to running WordPress compatibilities.
+					 *
+					 * hook: 'publisherCore.blockEdit.compatibility.attributes'
+					 *
+					 * @since 1.0.0
+					 */
+					if (!attributes?.publisherCompatId) {
+						filteredAttributes = applyFilters(
 							'publisherCore.blockEdit.compatibility.attributes',
 							getAttributesWithIds(
-								getAttributesWithIds(
-									clonedAttributes,
-									'publisherPropsId'
-								),
+								filteredAttributes,
 								'publisherCompatId'
 							),
 							args
-						),
-						args
-					);
+						);
+					}
 
+					// Merging block classnames ...
+					if (!attributes?.className) {
+						filteredAttributes = {
+							...filteredAttributes,
+							className: classnames(
+								{
+									'publisher-core-block': true,
+									[`publisher-core-block-${clientId}`]: true,
+								},
+								additional.editorProps.className || ''
+							),
+						};
+					} else if ('undefined' !== typeof className) {
+						filteredAttributes = {
+							...filteredAttributes,
+							className: classnames(
+								{
+									[className]: true,
+									'publisher-core-block': true,
+									[`publisher-core-block-${clientId}`]: true,
+								},
+								additional.editorProps.className || ''
+							),
+						};
+					}
+
+					// Assume disabled publisher panel, so filtering attributes to clean up all publisher attributes.
 					if (!isActive) {
 						filteredAttributes = {
 							...attributes,
@@ -268,6 +298,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						};
 					}
 
+					// Prevent redundant set state!
 					if (isEquals(attributes, filteredAttributes)) {
 						return;
 					}
@@ -291,6 +322,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						attributes: currentAttributes,
 						storeName: 'publisher-core/controls',
 					},
+					attributes,
 					currentTab,
 					currentBlock,
 					currentState,
@@ -304,7 +336,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					setOpenGridBuilder,
 					masterIsNormalState,
 					publisherInnerBlocks,
-					attributes: _attributes,
 					handleOnChangeAttributes,
 					updateBlockEditorSettings,
 					BlockComponent: () => children,
