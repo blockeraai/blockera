@@ -118,9 +118,28 @@ export const useDragValue = ({
 
 		document.addEventListener('mousemove', onUpdate);
 		document.addEventListener('mouseup', onEnd);
+
+		//
+		const iframe = document.querySelector('iframe[name="editor-canvas"]');
+		if (iframe) {
+			iframe.contentDocument.body.addEventListener('mousemove', onUpdate);
+			iframe.contentDocument.body.addEventListener('mouseup', onEnd);
+		}
 		return () => {
 			document.removeEventListener('mousemove', onUpdate);
 			document.removeEventListener('mouseup', onEnd);
+
+			//
+			if (iframe) {
+				iframe.contentDocument.body.removeEventListener(
+					'mousemove',
+					onUpdate
+				);
+				iframe.contentDocument.body.removeEventListener(
+					'mouseup',
+					onEnd
+				);
+			}
 		};
 	}, [snapshot, movement, dragStarted, value]); // eslint-disable-line
 
