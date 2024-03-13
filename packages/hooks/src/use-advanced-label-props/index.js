@@ -9,13 +9,7 @@ import { useState, useEffect, useMemo } from '@wordpress/element';
 /**
  * Publisher dependencies
  */
-import {
-	isEquals,
-	isObject,
-	isArray,
-	isEmpty,
-	isUndefined,
-} from '@publisher/utils';
+import { isEquals, isObject, isEmpty, isUndefined } from '@publisher/utils';
 import { prepare } from '@publisher/data-extractor';
 import { isInnerBlock } from '@publisher/extensions/src/components/utils';
 import { useBlockContext } from '@publisher/extensions/src/hooks/context';
@@ -185,7 +179,7 @@ export const useAdvancedLabelProps = (
 								breakpoint: Object,
 								breakpointIndex: number
 							): boolean => {
-								let stateValue =
+								const stateValue =
 									'normal' === stateType &&
 									'laptop' ===
 										breakpointTypes[breakpointIndex]
@@ -222,13 +216,6 @@ export const useAdvancedLabelProps = (
 											clonedDefaultValue
 										)
 									);
-								}
-
-								if (
-									(path && isObject(stateValue)) ||
-									isArray(stateValue)
-								) {
-									stateValue = prepare(path, stateValue);
 								}
 
 								if (!isNormalState && 'normal' === stateType) {
