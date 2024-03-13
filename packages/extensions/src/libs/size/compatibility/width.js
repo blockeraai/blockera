@@ -171,6 +171,7 @@ export function widthToWPCompatibility({
 				width: newValue,
 			};
 
+		// all unit types are valid except special ones
 		// A string attribute for width with unit
 		case 'core/post-featured-image':
 		case 'core/column':
