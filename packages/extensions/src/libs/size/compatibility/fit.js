@@ -1,6 +1,6 @@
 // @flow
 
-export const coreWPFitValues = ['cover', 'contain'];
+const coreWPFitValues = ['cover', 'contain'];
 
 export function fitFromWPCompatibility({
 	attributes,
@@ -9,16 +9,18 @@ export function fitFromWPCompatibility({
 	attributes: Object,
 	blockId?: string,
 }): Object {
+	if (attributes?.publisherFit !== '') {
+		return attributes;
+	}
+
 	switch (blockId) {
-		case 'core/post-featured-image':
 		case 'core/image':
+		case 'core/post-featured-image':
 			if (
 				attributes?.scale !== undefined &&
-				attributes?.publisherFit !== attributes?.scale
+				coreWPFitValues.includes(attributes.scale)
 			) {
-				if (coreWPFitValues.indexOf(attributes.scale) > 0) {
-					attributes.publisherFit = attributes.scale;
-				}
+				attributes.publisherFit = attributes.scale;
 			}
 
 			return attributes;
@@ -37,8 +39,8 @@ export function fitToWPCompatibility({
 	blockId: string,
 }): Object {
 	switch (blockId) {
-		case 'core/post-featured-image':
 		case 'core/image':
+		case 'core/post-featured-image':
 			if ('reset' === ref?.current?.action) {
 				return {
 					scale: undefined,
@@ -48,7 +50,7 @@ export function fitToWPCompatibility({
 			if (
 				newValue === undefined ||
 				newValue === '' ||
-				coreWPFitValues.indexOf(newValue) < 0
+				!coreWPFitValues.includes(newValue)
 			) {
 				return {
 					scale: undefined,
