@@ -13,18 +13,17 @@ export function minHeightFromWPCompatibility({
 	attributes: Object,
 	blockId?: string,
 }): Object {
-	switch (blockId) {
-		case 'core/cover':
-			if (
-				attributes?.publisherMinHeight === undefined ||
-				(attributes?.minHeight !== undefined &&
-					attributes.publisherMinHeight !==
-						attributes?.minHeight + attributes.minHeightUnit)
-			) {
-				attributes.publisherMinHeight =
-					attributes?.minHeight + attributes.minHeightUnit;
-			}
-			break;
+	if (
+		attributes?.publisherMinHeight !== '' ||
+		attributes?.minHeight === undefined ||
+		attributes?.minHeightUnit === undefined
+	) {
+		return attributes;
+	}
+
+	if (blockId === 'core/cover') {
+		attributes.publisherMinHeight =
+			attributes?.minHeight + attributes.minHeightUnit;
 	}
 
 	return attributes;
@@ -44,8 +43,8 @@ export function minHeightToWPCompatibility({
 		case 'core/cover':
 			if ('reset' === ref?.current?.action) {
 				return {
-					minHeight: '',
-					minHeightUnit: '',
+					minHeight: undefined,
+					minHeightUnit: undefined,
 				};
 			}
 
@@ -57,8 +56,8 @@ export function minHeightToWPCompatibility({
 				newValue.endsWith('func')
 			) {
 				return {
-					minHeight: '',
-					minHeightUnit: '',
+					minHeight: undefined,
+					minHeightUnit: undefined,
 				};
 			}
 
