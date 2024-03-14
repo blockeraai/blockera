@@ -71,6 +71,7 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 				className={componentClassNames('extension', 'extension-mouse')}
 			>
 				<ExtensionSettings
+					buttonLabel={__('More Mouse Settings', 'publisher-core')}
 					features={mouseConfig}
 					update={(newSettings) => {
 						setSettings(newSettings, 'mouseConfig');

@@ -117,6 +117,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 				className={componentClassNames('extension', 'extension-size')}
 			>
 				<ExtensionSettings
+					buttonLabel={__('More Size Settings', 'publisher-core')}
 					features={extensionConfig}
 					update={(newSettings) => {
 						setSettings(newSettings, 'sizeConfig');

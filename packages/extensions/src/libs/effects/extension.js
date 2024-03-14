@@ -119,6 +119,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 				)}
 			>
 				<ExtensionSettings
+					buttonLabel={__('More Effect Settings', 'publisher-core')}
 					features={extensionConfig}
 					update={(newSettings) => {
 						setSettings(newSettings, 'effectsConfig');

@@ -83,6 +83,10 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 					)}
 				>
 					<ExtensionSettings
+						buttonLabel={__(
+							'More Border Settings',
+							'publisher-core'
+						)}
 						features={extensionConfig}
 						update={(newSettings) => {
 							setSettings(newSettings, 'borderAndShadowConfig');

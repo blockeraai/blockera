@@ -4,11 +4,12 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Publisher dependencies
  */
-import { Icon } from '@publisher/components';
+import { Icon, Button } from '@publisher/components';
 import { componentClassNames } from '@publisher/classnames';
 
 export const SupportItem = ({
@@ -42,8 +43,23 @@ export const SupportItem = ({
 		});
 	};
 
+	let ariaLabel = '';
+
+	if (force) {
+		ariaLabel = // translators: %s is the feature name in advanced settings panel in extensions
+			sprintf(__('%s is a required feature', 'publisher-core'), label);
+	} else {
+		ariaLabel = show
+			? // translators: %s is the feature name in advanced settings panel in extensions
+			  sprintf(__('Deactivate %s', 'publisher-core'), label)
+			: // translators: %s is the feature name in advanced settings panel in extensions
+			  sprintf(__('Activate %s', 'publisher-core'), label);
+	}
+
 	return (
-		<div
+		<Button
+			showTooltip={true}
+			label={ariaLabel}
 			onClick={onClick}
 			onKeyDown={(event) => {
 				if (event.key === 'Enter') {
@@ -58,6 +74,6 @@ export const SupportItem = ({
 		>
 			{label}
 			{(force || show) && <Icon library={'wp'} icon={'check'} />}
-		</div>
+		</Button>
 	);
 };

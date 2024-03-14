@@ -19,11 +19,13 @@ import { More } from './icons';
 import { Supports } from './components';
 
 export const ExtensionSettings = ({
+	buttonLabel = __('More Settings', 'publisher-core'),
 	title = __('Settings', 'publisher-core'),
 	features,
 	update = () => {},
 }: {
 	title?: string | MixedElement,
+	buttonLabel?: string | MixedElement,
 	features: Object,
 	update: (settings: Object) => void,
 }): MixedElement => {
@@ -54,7 +56,11 @@ export const ExtensionSettings = ({
 
 	return (
 		<>
-			<More onClick={(): void => setIsOpen(!isOpen)} isOpen={isOpen} />
+			<More
+				label={buttonLabel}
+				onClick={(): void => setIsOpen(!isOpen)}
+				isOpen={isOpen}
+			/>
 
 			{isOpen && (
 				<Popover
