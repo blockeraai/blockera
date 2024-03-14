@@ -69,4 +69,6 @@ export function minHeightToWPCompatibility({
 				minHeightUnit: extractedValue.unit,
 			};
 	}
+
+	return null;
 }

@@ -86,4 +86,6 @@ export function heightToWPCompatibility({
 				height: newValue,
 			};
 	}
+
+	return null;
 }

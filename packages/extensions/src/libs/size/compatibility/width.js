@@ -198,4 +198,6 @@ export function widthToWPCompatibility({
 				width: newValue,
 			};
 	}
+
+	return null;
 }

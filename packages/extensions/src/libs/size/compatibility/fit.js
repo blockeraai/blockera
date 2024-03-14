@@ -59,4 +59,6 @@ export function fitToWPCompatibility({
 				scale: newValue,
 			};
 	}
+
+	return null;
 }
