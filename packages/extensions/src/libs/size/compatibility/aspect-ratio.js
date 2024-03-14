@@ -17,22 +17,22 @@ export function ratioFromWPCompatibility({
 	attributes: Object,
 	blockId?: string,
 }): Object {
+	if (
+		attributes?.publisherRatio?.value !== '' ||
+		attributes?.aspectRatio === undefined
+	) {
+		return attributes;
+	}
+
 	switch (blockId) {
 		case 'core/post-featured-image':
 		case 'core/image':
-			if (
-				attributes?.aspectRatio !== undefined &&
-				attributes?.publisherRatio?.value !== attributes?.aspectRatio
-			) {
-				if (
-					coreWPAspectRatioValues.indexOf(attributes.aspectRatio) > -1
-				) {
-					attributes.publisherRatio = {
-						value: attributes.aspectRatio,
-						width: '',
-						height: '',
-					};
-				}
+			if (coreWPAspectRatioValues.includes(attributes.aspectRatio)) {
+				attributes.publisherRatio = {
+					value: attributes.aspectRatio,
+					width: '',
+					height: '',
+				};
 			}
 
 			return attributes;
