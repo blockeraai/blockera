@@ -4,7 +4,7 @@
  * External Dependencies
  */
 import type { MixedElement } from 'react';
-import { memo } from '@wordpress/element';
+import { memo, useEffect } from '@wordpress/element';
 
 /**
  * Publisher dependencies
@@ -29,7 +29,7 @@ export const GapHandler: TGapHandlerProps = memo<TGapHandlerProps>(
 			? styles.rowGap.match(/[^-\.0-9]/g).join('')
 			: styles.gap?.match(/[^-\.0-9]/g)?.join('');
 
-		const { onDragStart } = useDragValue({
+		const { onDragStart, onDragEnd } = useDragValue({
 			value:
 				type === 'row'
 					? Number(
@@ -77,6 +77,10 @@ export const GapHandler: TGapHandlerProps = memo<TGapHandlerProps>(
 			movement: type === 'row' ? 'vertical' : 'horizontal',
 			min: 0,
 		});
+
+		useEffect(() => {
+			return onDragEnd;
+		}, []);
 
 		return (
 			<div
