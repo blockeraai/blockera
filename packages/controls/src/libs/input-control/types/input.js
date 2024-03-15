@@ -42,7 +42,8 @@ export type InputUnitTypes =
 	| 'line-height'
 	| 'min-width'
 	| 'z-index'
-	| 'grid-size';
+	| 'grid-size'
+	| 'grid-min-size';
 
 export type InputControlProps = {
 	...ControlGeneralTypes,

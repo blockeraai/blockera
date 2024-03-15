@@ -256,7 +256,9 @@ export const SizeSetting = ({
 							singularId={'min-size'}
 							label={__('Min', 'publisher-core')}
 							columns="columns-2"
-							unitType={item['auto-fit'] ? 'essential' : 'width'}
+							unitType={
+								item['auto-fit'] ? 'essential' : 'grid-min-size'
+							}
 							range={true}
 							min={0}
 							onChange={(newValue: string, ref: Object): void =>

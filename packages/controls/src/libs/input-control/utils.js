@@ -1428,10 +1428,95 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 					label: 'Special Values',
 					options: [
 						{
-							value: 'fit-content',
-							label: 'Fit Content',
+							value: 'max-content',
+							label: 'Max Content',
 							format: 'number',
 						},
+						{
+							value: 'min-content',
+							label: 'Min Content',
+							format: 'number',
+						},
+						{
+							value: 'auto',
+							label: 'Auto',
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Advanced',
+					options: [
+						{
+							value: 'func',
+							label: 'CSS Functions and Variables',
+							format: 'text',
+						},
+					],
+				},
+			];
+			break;
+
+		case 'grid-min-size':
+			cssUnits = [
+				{
+					label: 'Common Values',
+					options: [
+						{
+							value: 'px',
+							label: 'PX',
+							format: 'number',
+						},
+						{
+							value: '%',
+							label: '%',
+							format: 'number',
+						},
+						{
+							value: 'em',
+							label: 'EM',
+							format: 'number',
+						},
+						{
+							value: 'rem',
+							label: 'REM',
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Other Values',
+					options: [
+						{
+							value: 'ch',
+							label: 'CH',
+							format: 'number',
+						},
+						{
+							value: 'vw',
+							label: 'VW',
+							format: 'number',
+						},
+						{
+							value: 'vh',
+							label: 'VH',
+							format: 'number',
+						},
+						{
+							value: 'dvw',
+							label: 'DVW',
+							format: 'number',
+						},
+						{
+							value: 'dvh',
+							label: 'DVH',
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Special Values',
+					options: [
 						{
 							value: 'max-content',
 							label: 'Max Content',
