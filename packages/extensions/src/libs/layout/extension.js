@@ -226,11 +226,6 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 									value: 'flex',
 									icon: <DisplayFlexIcon />,
 								},
-								// {
-								// 	label: __('Grid', 'publisher-core'),
-								// 	value: 'grid',
-								// 	icon: <DisplayGridIcon />,
-								// },
 								{
 									label: __('Grid', 'publisher-core'),
 									value: 'grid',
