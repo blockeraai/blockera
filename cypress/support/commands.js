@@ -69,6 +69,11 @@ Cypress.Commands.add('getParentContainer', (ariaLabel, parentsDataCy) => {
 		.get(`[aria-label="${ariaLabel}"]`)
 		.closest(`[data-cy=${parentsDataCy}]`);
 });
+
+// get block by name for testing
+Cypress.Commands.add('getBlock', (blockName) => {
+	return cy.get(`[data-type="${blockName}"]`);
+});
 // for testing
 Cypress.Commands.add('test gite', (selector, ...args) => {
 	return cy.get(`[data-test=${selector}]`, ...args);
