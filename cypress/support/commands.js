@@ -74,6 +74,21 @@ Cypress.Commands.add('getParentContainer', (ariaLabel, parentsDataCy) => {
 Cypress.Commands.add('getBlock', (blockName) => {
 	return cy.get(`[data-type="${blockName}"]`);
 });
+
+// Open Value Addon Popover
+Cypress.Commands.add('openValueAddon', () => {
+	cy.getByDataCy('value-addon-btn-open').click({
+		force: true,
+	});
+});
+
+// Select Value Addon Popover
+Cypress.Commands.add('selectValueAddonItem', (itemID) => {
+	cy.getByDataCy('va-item-' + itemID).click({
+		force: true,
+	});
+});
+
 // for testing
 Cypress.Commands.add('test gite', (selector, ...args) => {
 	return cy.get(`[data-test=${selector}]`, ...args);
