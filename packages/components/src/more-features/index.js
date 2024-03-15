@@ -13,6 +13,7 @@ import {
 	componentClassNames,
 	componentInnerClassNames,
 } from '@publisher/classnames';
+import { Button } from '@publisher/components';
 
 /**
  * Internal dependencies
@@ -24,6 +25,7 @@ export default function MoreFeatures({
 	isOpen: _isOpen = false,
 	isChanged = false,
 	label = __('More features', 'publisher'),
+	ariaLabel = __('More features', 'publisher'),
 	className,
 	children,
 	...props
@@ -39,9 +41,9 @@ export default function MoreFeatures({
 			)}
 			{...props}
 		>
-			<div
+			<Button
 				className={componentInnerClassNames(
-					'more-features__header',
+					'more-features__button',
 					className
 				)}
 				onClick={() => setIsOpen(!isOpen)}
@@ -51,6 +53,8 @@ export default function MoreFeatures({
 						setIsOpen(!isOpen);
 					}
 				}}
+				label={ariaLabel}
+				showTooltip={!isOpen && label !== ariaLabel}
 			>
 				<CaretIcon isOpen={isOpen} />
 
@@ -59,11 +63,11 @@ export default function MoreFeatures({
 				{isChanged && (
 					<span
 						className={componentInnerClassNames(
-							'more-features__header__changed'
+							'more-features__button__changed'
 						)}
 					/>
 				)}
-			</div>
+			</Button>
 
 			{isOpen && (
 				<div

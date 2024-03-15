@@ -21,4 +21,8 @@ export type MoreFeaturesProps = {
 	 * The button label.
 	 */
 	label?: string,
+	/**
+	 * The button aria label.
+	 */
+	ariaLabel?: string,
 };
