@@ -160,3 +160,12 @@ Cypress.Commands.add(
 			.trigger('paste', { force: true });
 	}
 );
+
+// Open More Settings Panel and Activate Item
+Cypress.Commands.add('activateMoreSettingsItem', (settingsLabel, itemName) => {
+	// open settings
+	cy.get(`[aria-label="${settingsLabel}"]`).click();
+
+	// activate item
+	cy.get(`[aria-label="Activate ${itemName}"]`).click();
+});

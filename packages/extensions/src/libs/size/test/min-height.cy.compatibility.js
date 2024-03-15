@@ -97,11 +97,8 @@ describe('Min Height → WP Compatibility', () => {
 			// Test 1: Blockera data to WP
 			//
 
-			// open settings
-			cy.get('[aria-label="More Size Settings"]').click();
-
 			// activate min height
-			cy.get('[aria-label="Activate Min Height"]').click();
+			cy.activateMoreSettingsItem('More Size Settings', 'Min Height');
 
 			// add alias to the feature container
 			cy.get('[aria-label="Min"]')
