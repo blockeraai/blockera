@@ -15,7 +15,7 @@ import {
 	ControlContextProvider,
 } from '@publisher/controls';
 import { hasSameProps } from '@publisher/utils';
-import { componentClassNames } from '@publisher/classnames';
+import { extensionClassNames } from '@publisher/classnames';
 import { FeatureWrapper } from '@publisher/components';
 
 /**
@@ -68,7 +68,7 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 				title={__('Mouse', 'publisher-core')}
 				initialOpen={true}
 				icon={<MouseExtensionIcon />}
-				className={componentClassNames('extension', 'extension-mouse')}
+				className={extensionClassNames('mouse')}
 			>
 				<ExtensionSettings
 					buttonLabel={__('More Mouse Settings', 'publisher-core')}

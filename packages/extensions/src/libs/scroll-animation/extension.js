@@ -15,7 +15,7 @@ import {
 	RepeaterControl,
 } from '@publisher/controls';
 import { hasSameProps } from '@publisher/utils';
-import { componentClassNames } from '@publisher/classnames';
+import { extensionClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -42,10 +42,7 @@ export const ScrollAnimationExtension: ComponentType<ScrollExtensionProps> =
 					title={__('On Scroll', 'publisher-core')}
 					initialOpen={true}
 					icon={<ScrollAnimationExtensionIcon />}
-					className={componentClassNames(
-						'extension',
-						'extension-scroll-animation'
-					)}
+					className={extensionClassNames('scroll-animation')}
 				>
 					<ControlContextProvider
 						value={{

@@ -15,7 +15,7 @@ import {
 	PanelBodyControl,
 	ControlContextProvider,
 } from '@publisher/controls';
-import { componentClassNames } from '@publisher/classnames';
+import { extensionClassNames } from '@publisher/classnames';
 import { FeatureWrapper } from '@publisher/components';
 import { hasSameProps } from '@publisher/utils';
 
@@ -54,10 +54,7 @@ export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 					title={__('Advanced', 'publisher-core')}
 					initialOpen={true}
 					icon={<AdvancedSettingsExtensionIcon />}
-					className={componentClassNames(
-						'extension',
-						'extension-advanced-settings'
-					)}
+					className={extensionClassNames('advanced-settings')}
 				>
 					<ExtensionSettings
 						buttonLabel={__(

@@ -9,7 +9,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Publisher dependencies
  */
-import { componentClassNames } from '@publisher/classnames';
+import { extensionClassNames } from '@publisher/classnames';
 import { FeatureWrapper } from '@publisher/components';
 import { useSelect } from '@wordpress/data';
 import { PanelBodyControl } from '@publisher/controls';
@@ -73,10 +73,7 @@ export const StyleVariationsExtension: ComponentType<StyleVariationsExtensionPro
 					title={__('Style Variations', 'publisher-core')}
 					initialOpen={true}
 					icon={<StyleVariationsExtensionIcon />}
-					className={componentClassNames(
-						'extension',
-						'extension-style-variations'
-					)}
+					className={extensionClassNames('style-variations')}
 				>
 					<FeatureWrapper
 						isActive={isActiveStyleVariation}

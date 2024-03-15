@@ -15,7 +15,7 @@ import {
 	RepeaterControl,
 } from '@publisher/controls';
 import { hasSameProps } from '@publisher/utils';
-import { componentClassNames } from '@publisher/classnames';
+import { extensionClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -42,10 +42,7 @@ export const ClickAnimationExtension: ComponentType<ClickAnimationExtensionProps
 					title={__('On Click', 'publisher-core')}
 					initialOpen={true}
 					icon={<ClickAnimationExtensionIcon />}
-					className={componentClassNames(
-						'extension',
-						'extension-click-animation'
-					)}
+					className={extensionClassNames('click-animation')}
 				>
 					<ControlContextProvider
 						value={{

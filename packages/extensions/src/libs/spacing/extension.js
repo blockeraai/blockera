@@ -16,7 +16,7 @@ import {
 	ControlContextProvider,
 } from '@publisher/controls';
 import { isUndefined, hasSameProps } from '@publisher/utils';
-import { componentClassNames } from '@publisher/classnames';
+import { extensionClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -48,10 +48,7 @@ export const SpacingExtension: ComponentType<TSpacingProps> = memo(
 				title={__('Spacing', 'publisher-core')}
 				initialOpen={true}
 				icon={<SpacingExtensionIcon />}
-				className={componentClassNames(
-					'extension',
-					'extension-spacing'
-				)}
+				className={extensionClassNames('spacing')}
 			>
 				{isActiveField(publisherSpacing) && (
 					<ControlContextProvider

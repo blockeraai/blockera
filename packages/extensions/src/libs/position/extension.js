@@ -16,7 +16,7 @@ import {
 	ControlContextProvider,
 	InputControl,
 } from '@publisher/controls';
-import { componentClassNames } from '@publisher/classnames';
+import { extensionClassNames } from '@publisher/classnames';
 import { FeatureWrapper } from '@publisher/components';
 import { hasSameProps } from '@publisher/utils';
 
@@ -58,10 +58,7 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 				title={__('Position', 'publisher-core')}
 				initialOpen={true}
 				icon={<PositionExtensionIcon />}
-				className={componentClassNames(
-					'extension',
-					'extension-position'
-				)}
+				className={extensionClassNames('position')}
 			>
 				<FeatureWrapper
 					isActive={isShownPosition}

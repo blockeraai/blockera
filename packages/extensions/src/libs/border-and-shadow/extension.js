@@ -17,7 +17,7 @@ import {
 	ControlContextProvider,
 } from '@publisher/controls';
 import { hasSameProps } from '@publisher/utils';
-import { componentClassNames } from '@publisher/classnames';
+import { extensionClassNames } from '@publisher/classnames';
 import { FeatureWrapper } from '@publisher/components';
 
 /**
@@ -77,10 +77,7 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 					title={__('Border And Shadow', 'publisher-core')}
 					initialOpen={true}
 					icon={<BorderAndShadowExtensionIcon />}
-					className={componentClassNames(
-						'extension',
-						'extension-border-and-shadow'
-					)}
+					className={extensionClassNames('border-and-shadow')}
 				>
 					<ExtensionSettings
 						buttonLabel={__(

@@ -20,7 +20,7 @@ import {
 	ControlContextProvider,
 } from '@publisher/controls';
 import { hasSameProps } from '@publisher/utils';
-import { componentClassNames } from '@publisher/classnames';
+import { extensionClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -53,7 +53,7 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 				title={__('Icon', 'publisher-core')}
 				initialOpen={true}
 				icon={<IconExtensionIcon />}
-				className={componentClassNames('extension', 'extension-icon')}
+				className={extensionClassNames('icon')}
 			>
 				{isActiveField(publisherIcon) && (
 					<ControlContextProvider
