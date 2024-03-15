@@ -373,6 +373,7 @@ export default function ({
 						value: values.publisherGridDirection,
 						attribute: 'publisherGridDirection',
 						blockName: block.blockName,
+						type: 'nested',
 					}}
 				>
 					<ToggleSelectControl
