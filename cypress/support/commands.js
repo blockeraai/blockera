@@ -36,12 +36,15 @@ Cypress.on('uncaught:exception', () => {
 Cypress.Commands.add('getByDataCy', (selector, ...args) => {
 	return cy.get(`[data-cy=${selector}]`, ...args);
 });
+
 Cypress.Commands.add('getByDataTest', (selector, ...args) => {
 	return cy.get(`[data-test=${selector}]`, ...args);
 });
+
 Cypress.Commands.add('getByAriaLabel', (selector, ...args) => {
 	return cy.get(`[aria-label="${selector}"]`, ...args);
 });
+
 Cypress.Commands.add('cssVar', (cssVarName, selector) => {
 	if (selector) {
 		return cy.document().then((doc) => {
@@ -59,11 +62,12 @@ Cypress.Commands.add('cssVar', (cssVarName, selector) => {
 			.trim();
 	});
 });
+
 // get parent container to have isolate aria for testing
 Cypress.Commands.add('getParentContainer', (ariaLabel, parentsDataCy) => {
 	return cy
 		.get(`[aria-label="${ariaLabel}"]`)
-		.parents(`[data-cy=${parentsDataCy}]`);
+		.closest(`[data-cy=${parentsDataCy}]`);
 });
 // for testing
 Cypress.Commands.add('test gite', (selector, ...args) => {
@@ -76,9 +80,11 @@ Cypress.Commands.add('multiClick', (selector, count, ...args) => {
 		counter += 1;
 	}
 });
+
 Cypress.Commands.add('clickOutside', () => {
 	return cy.get('body').click(0, 0);
 });
+
 Cypress.Commands.add(
 	'setSliderValue',
 	{ prevSubject: 'element' },
@@ -94,6 +100,7 @@ Cypress.Commands.add(
 		element.dispatchEvent(new Event('input', { bubbles: true }));
 	}
 );
+
 // simulate paste event
 Cypress.Commands.add(
 	'pasteText',
