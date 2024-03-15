@@ -137,7 +137,7 @@ export function addBlockToPost(blockName, clearEditor = false, className = '') {
 	cy.get('.interface-pinned-items [aria-label="Settings"]').click();
 
 	// Click on added new block item.
-	cy.getIframeBody().find(`[data-type="${blockName}"]`).click();
+	cy.getBlock(blockName).click();
 
 	cy.window()
 		.its('wp.hooks')
