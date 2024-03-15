@@ -49,9 +49,8 @@
 
 		.publisher-component-support-item {
 			display: flex;
-			justify-content: space-between;
+			justify-content: space-between !important;
 			cursor: pointer;
-			border: 1px solid var(--publisher-controls-border-color-soft);
 			padding: 5px 5px 5px 10px;
 			border-radius: 2px;
 			align-items: center;

@@ -87,6 +87,10 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 				)}
 			>
 				<ExtensionSettings
+					buttonLabel={__(
+						'More Background Settings',
+						'publisher-core'
+					)}
 					features={extensionConfig}
 					update={(newSettings) => {
 						setSettings(newSettings, 'backgroundConfig');

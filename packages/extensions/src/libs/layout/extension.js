@@ -117,6 +117,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 				className={componentClassNames('extension', 'extension-layout')}
 			>
 				<ExtensionSettings
+					buttonLabel={__('More Layout Settings', 'publisher-core')}
 					features={extensionConfig}
 					update={(newSettings) => {
 						setSettings(newSettings, 'layoutConfig');

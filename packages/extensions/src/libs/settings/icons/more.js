@@ -11,16 +11,20 @@ import type { MixedElement } from 'react';
 import { Button } from '@publisher/components';
 
 export const More = ({
+	label,
 	isOpen,
 	onClick,
 	className = '',
 }: {
+	label?: string | MixedElement,
 	isOpen?: boolean,
 	onClick?: () => void,
 	className?: string,
 }): MixedElement => {
 	return (
 		<Button
+			label={label}
+			showTooltip={true}
 			className={className || 'publisher-extension-settings-button'}
 			isFocus={isOpen || false}
 			noBorder={true}

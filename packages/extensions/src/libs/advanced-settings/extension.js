@@ -60,6 +60,10 @@ export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 					)}
 				>
 					<ExtensionSettings
+						buttonLabel={__(
+							'More Advanced Settings',
+							'publisher-core'
+						)}
 						features={extensionConfig}
 						update={(newSettings) => {
 							setSettings(newSettings, 'advancedSettingsConfig');

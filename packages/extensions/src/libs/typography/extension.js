@@ -230,6 +230,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 				)}
 			>
 				<ExtensionSettings
+					buttonLabel={__(
+						'More Typography Settings',
+						'publisher-core'
+					)}
 					features={extensionConfig}
 					update={(newSettings) => {
 						setSettings(newSettings, 'typographyConfig');
