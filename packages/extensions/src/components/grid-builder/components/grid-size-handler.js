@@ -82,7 +82,7 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 						item['max-size'].match(/[^-\.0-9]/g)?.join('');
 
 					value =
-						unit === 'fr'
+						maxUnit === 'fr'
 							? Number(
 									item['max-size']?.replace(/[^-\.0-9]/g, '')
 							  ) * 10
@@ -99,7 +99,7 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 						item['sizing-mode'] === 'min/max'
 					) {
 						let _newValue;
-						if (unit === 'fr') {
+						if (maxUnit === 'fr') {
 							_newValue =
 								(newValue / 10) % 1 === 0
 									? newValue / 10
@@ -116,7 +116,7 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 									...attribute.value.slice(0, index),
 									{
 										...item,
-										'max-size': `${_newValue}${unit}`,
+										'max-size': `${_newValue}${maxUnit}`,
 									},
 									...attribute.value.slice(index + 1),
 								],
