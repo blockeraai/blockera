@@ -34,6 +34,7 @@ export const SizeSetting = ({
 	items,
 	attributeId,
 	extensionProps,
+	onClose,
 }: TSizeSettingProps): MixedElement => {
 	const { handleOnChangeAttributes, getAttributes } = useBlockContext();
 
@@ -129,12 +130,13 @@ export const SizeSetting = ({
 				</>
 			}
 			offset={20}
+			onClose={onClose}
 		>
 			<ControlContextProvider
 				value={{
 					name: generateExtensionId(
 						block,
-						`grid-sizing-mode-${item.id}`
+						`grid-sizing-${popoverTitle}-${item.id}`
 					),
 					value: item,
 					attribute: attributeId,

@@ -32,36 +32,42 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 		}: TGridSizeHandlerProps): any => {
 			const { handleOnChangeAttributes } = useBlockContext();
 
-			const [isSettingOpen, setIsSettingOpen] = useState(false);
+			// to handle size value at first render
 			const [currentItemId, setCurrentItemId] = useState(null);
+			// to open setting
 			const [currentItemIdSetting, setCurrentItemIdSetting] =
 				useState(null);
+			// to handle resize
+			const [currentResizeItem, setCurrentResizeItem] = useState(null);
 
-			const changedItem = attribute.value.find(
-				(item) => item.id === currentItemId
+			const updatedItem = attribute.value.find(
+				(item) =>
+					item.id === currentResizeItem || item.id === currentItemId
 			);
 
-			const changedItemIndex = attribute.value.findIndex(
-				(item) => item.id === currentItemId
+			const updatedItemIndex = attribute.value.findIndex(
+				(item) =>
+					item.id === currentResizeItem || item.id === currentItemId
 			);
 
 			const { onDragStart } = useDragValue({
 				value:
-					changedItem !== undefined &&
-					changedItem['sizing-mode'] === 'min/max'
+					updatedItem !== undefined &&
+					updatedItem['sizing-mode'] === 'min/max'
 						? Number(
-								changedItem['max-size']?.replace(
+								updatedItem['max-size']?.replace(
 									/[^-\.0-9]/g,
 									''
 								)
 						  )
-						: Number(changedItem?.size?.replace(/[^-\.0-9]/g, '')),
+						: Number(updatedItem?.size?.replace(/[^-\.0-9]/g, '')),
 				setValue: (newValue, ref) => {
+					console.log(newValue);
 					if (
-						changedItem !== undefined &&
-						changedItem['sizing-mode'] === 'min/max'
+						updatedItem !== undefined &&
+						updatedItem['sizing-mode'] === 'min/max'
 					) {
-						const unit = changedItem['max-size']
+						const unit = updatedItem['max-size']
 							.match(/[^-\.0-9]/g)
 							.join('');
 						let _newValue;
@@ -81,14 +87,14 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 								value: [
 									...attribute.value.slice(
 										0,
-										changedItemIndex
+										updatedItemIndex
 									),
 									{
-										...changedItem,
+										...updatedItem,
 										'max-size': `${_newValue}${unit}`,
 									},
 									...attribute.value.slice(
-										changedItemIndex + 1
+										updatedItemIndex + 1
 									),
 								],
 							},
@@ -96,8 +102,8 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 								ref,
 							}
 						);
-					} else if (changedItem !== undefined) {
-						const unit = changedItem.size
+					} else if (updatedItem !== undefined) {
+						const unit = updatedItem.size
 							.match(/[^-\.0-9]/g)
 							.join('');
 						let _newValue;
@@ -117,14 +123,14 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 								value: [
 									...attribute.value.slice(
 										0,
-										changedItemIndex
+										updatedItemIndex
 									),
 									{
-										...changedItem,
+										...updatedItem,
 										size: `${_newValue}${unit}`,
 									},
 									...attribute.value.slice(
-										changedItemIndex + 1
+										updatedItemIndex + 1
 									),
 								],
 							},
@@ -217,17 +223,17 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 						>
 							{isResizable && (
 								<span
-									onMouseDown={(e) => onDragStart(e)}
+									onMouseDown={(e) => {
+										setCurrentResizeItem(item.id);
+										onDragStart(e);
+									}}
 									data-test="resize-handler-left"
 								>
 									<SizeHandler />
 								</span>
 							)}
 							<button
-								onClick={() => {
-									setCurrentItemIdSetting(item.id);
-									setIsSettingOpen(!isSettingOpen);
-								}}
+								onClick={() => setCurrentItemIdSetting(item.id)}
 								className="size-handler-content"
 							>
 								{item['sizing-mode'] === 'normal' ? (
@@ -273,7 +279,10 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 
 							{isResizable && (
 								<span
-									onMouseDown={(e) => onDragStart(e)}
+									onMouseDown={(e) => {
+										setCurrentResizeItem(item.id);
+										onDragStart(e);
+									}}
 									data-test="resize-handler-right"
 								>
 									<SizeHandler />
@@ -281,7 +290,7 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 							)}
 						</div>
 
-						{isSettingOpen && currentItemIdSetting === item.id && (
+						{currentItemIdSetting === item.id && (
 							<SizeSetting
 								item={item}
 								block={block}
@@ -293,6 +302,7 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 										? extensionProps.publisherGridColumns
 										: extensionProps.publisherGridRows
 								}
+								onClose={() => setCurrentItemIdSetting(null)}
 							/>
 						)}
 					</>
