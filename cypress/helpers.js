@@ -19,7 +19,20 @@ export function loginToSite() {
  * @param {boolean} login If this is a login page.
  */
 export function goTo(path = '/wp-admin', login = false) {
-	return cy.visit(Cypress.env('testURL') + path).then(() => {
+	const testURL = Cypress.env('testURL');
+
+	if (
+		(testURL.endsWith('/') && !path.startsWith('/')) ||
+		(!testURL.endsWith('/') && path.startsWith('/'))
+	) {
+		path = `${testURL}${path}`;
+	} else if (!testURL.endsWith('/') && !path.startsWith('/')) {
+		path = `${testURL}/${path}`;
+	} else if (testURL.endsWith('/') && path.startsWith('/')) {
+		path = `${testURL.slice(0, -1)}${path}`;
+	}
+
+	return cy.visit(path).then(() => {
 		return login
 			? cy.window().then((win) => {
 					return win;
