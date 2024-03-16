@@ -143,13 +143,15 @@ export default function ({
 									length: number,
 									ref?: Object
 								): void => {
+									const value = [];
+									// + & -
 									if (
 										values.publisherGridRows.value.length <
 										length
 									) {
-										const value = [
-											...values.publisherGridRows.value,
-										];
+										value.push(
+											...values.publisherGridRows.value
+										);
 
 										let i =
 											values.publisherGridRows.value
@@ -166,65 +168,46 @@ export default function ({
 
 											i++;
 										}
-
-										handleOnChangeAttributes(
-											'publisherGridRows',
-											{ length, value },
-											{
-												effectiveItems: {
-													publisherGridAreas:
-														generateAreas({
-															gridRows: value,
-															gridColumns:
-																values
-																	.publisherGridColumns
-																	.value,
-															prevGridAreas:
-																values.publisherGridAreas,
-															publisherGridDirection:
-																values.publisherGridDirection,
-														}),
-												},
-												ref,
-											}
-										);
-									}
-
-									if (
+									} else if (
 										values.publisherGridRows.value.length >
 										length
 									) {
-										const value = [
-											...values.publisherGridRows.value,
-										];
+										value.push(
+											...values.publisherGridRows.value
+										);
+
 										value.splice(
 											length,
 											values.publisherGridRows.value
 												.length - length
 										);
+									} else if (
+										values.publisherGridRows.value
+											.length === length
+									)
+										return;
 
-										handleOnChangeAttributes(
-											'publisherGridRows',
-											{ length, value },
-											{
-												effectiveItems: {
-													publisherGridAreas:
-														generateAreas({
-															gridRows: value,
-															gridColumns:
-																values
-																	.publisherGridColumns
-																	.value,
-															prevGridAreas:
-																values.publisherGridAreas,
-															publisherGridDirection:
-																values.publisherGridDirection,
-														}),
-												},
-												ref,
-											}
-										);
-									}
+									handleOnChangeAttributes(
+										'publisherGridRows',
+										{ length, value },
+										{
+											effectiveItems: {
+												publisherGridAreas:
+													generateAreas({
+														gridRows: value,
+														gridColumns:
+															values
+																.publisherGridColumns
+																.value,
+														prevGridAreas:
+															values.publisherGridAreas,
+														publisherGridDirection:
+															values.publisherGridDirection,
+													}),
+											},
+											ref,
+										}
+									);
 								}}
 								defaultValue={
 									attributes.publisherGridRows.default.length
@@ -265,14 +248,15 @@ export default function ({
 									length: number,
 									ref?: Object
 								): void => {
+									const value = [];
+									// + & -
 									if (
 										values.publisherGridColumns.value
 											.length < length
 									) {
-										const value = [
-											...values.publisherGridColumns
-												.value,
-										];
+										value.push(
+											...values.publisherGridColumns.value
+										);
 
 										let i =
 											values.publisherGridColumns.value
@@ -286,66 +270,46 @@ export default function ({
 
 											i++;
 										}
-
-										handleOnChangeAttributes(
-											'publisherGridColumns',
-											{ length, value },
-											{
-												effectiveItems: {
-													publisherGridAreas:
-														generateAreas({
-															gridRows:
-																values
-																	.publisherGridRows
-																	.value,
-															gridColumns: value,
-															prevGridAreas:
-																values.publisherGridAreas,
-															publisherGridDirection:
-																values.publisherGridDirection,
-														}),
-												},
-												ref,
-											}
-										);
-									}
-
-									if (
+									} else if (
 										values.publisherGridColumns.value
 											.length > length
 									) {
-										const value = [
-											...values.publisherGridColumns
-												.value,
-										];
+										value.push(
+											...values.publisherGridColumns.value
+										);
+
 										value.splice(
 											length,
 											values.publisherGridColumns.value
 												.length - length
 										);
+									} else if (
+										values.publisherGridColumns.value
+											.length === length
+									)
+										return;
 
-										handleOnChangeAttributes(
-											'publisherGridColumns',
-											{ length, value },
-											{
-												effectiveItems: {
-													publisherGridAreas:
-														generateAreas({
-															gridRows:
-																values
-																	.publisherGridRows
-																	.value,
-															gridColumns: value,
-															prevGridAreas:
-																values.publisherGridAreas,
-															publisherGridDirection:
-																values.publisherGridDirection,
-														}),
-												},
-												ref,
-											}
-										);
-									}
+									handleOnChangeAttributes(
+										'publisherGridColumns',
+										{ length, value },
+										{
+											effectiveItems: {
+												publisherGridAreas:
+													generateAreas({
+														gridRows:
+															values
+																.publisherGridRows
+																.value,
+														gridColumns: value,
+														prevGridAreas:
+															values.publisherGridAreas,
+														publisherGridDirection:
+															values.publisherGridDirection,
+													}),
+											},
+											ref,
+										}
+									);
 								}}
 								defaultValue={
 									attributes.publisherGridColumns.default
