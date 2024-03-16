@@ -38,57 +38,54 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 			const [currentItemIdSetting, setCurrentItemIdSetting] =
 				useState(null);
 
-			let isResizable;
-
-			if (item['sizing-mode'] === 'min/max') {
-				isResizable = [...item['max-size']].find((item) =>
-					Number(item)
-				);
-			} else {
-				isResizable = [...item.size].find((item) => Number(item));
-			}
-
-			let amount, unit, minAmount, minUnit, maxAmount, maxUnit, value;
+			let isResizable,
+				amount,
+				unit,
+				minAmount,
+				minUnit,
+				maxAmount,
+				maxUnit,
+				value;
 
 			switch (item['sizing-mode']) {
 				case 'normal':
+					isResizable = Boolean(item.size.replace(/[^\.0-9]/g, ''));
+
 					amount = isResizable
-						? item.size.replace(/[^-\.0-9]/g, '')
+						? item.size.replace(/[^\.0-9]/g, '')
 						: item.size;
 					unit =
-						isResizable && item.size.match(/[^-\.0-9]/g)?.join('');
+						isResizable && item.size.match(/[^\.0-9]/g)?.join('');
 
 					value =
 						unit === 'fr'
-							? Number(item?.size?.replace(/[^-\.0-9]/g, '')) * 10
-							: Number(item?.size?.replace(/[^-\.0-9]/g, ''));
+							? +item?.size?.replace(/[^\.0-9]/g, '') * 10
+							: +item?.size?.replace(/[^\.0-9]/g, '');
 
 					break;
 				case 'min/max':
-					minAmount = [...item['min-size']].find((item) =>
-						Number(item)
-					)
-						? item['min-size'].replace(/[^-\.0-9]/g, '')
-						: item['min-size'];
+					isResizable = Boolean(
+						item['max-size'].replace(/[^\.0-9]/g, '')
+					);
+
+					minAmount =
+						item['min-size'].replace(/[^\.0-9]/g, '') ||
+						item['min-size'];
 					minUnit =
-						[...item['min-size']].find((item) => Number(item)) &&
-						item['min-size'].match(/[^-\.0-9]/g)?.join('');
+						Boolean(item['min-size'].replace(/[^\.0-9]/g, '')) &&
+						item['min-size'].match(/[^\.0-9]/g)?.join('');
 
 					maxAmount = isResizable
 						? item['max-size'].replace(/[^-\.0-9]/g, '')
 						: item['max-size'];
 					maxUnit =
 						isResizable &&
-						item['max-size'].match(/[^-\.0-9]/g)?.join('');
+						item['max-size'].match(/[^\.0-9]/g)?.join('');
 
 					value =
 						maxUnit === 'fr'
-							? Number(
-									item['max-size']?.replace(/[^-\.0-9]/g, '')
-							  ) * 10
-							: Number(
-									item['max-size']?.replace(/[^-\.0-9]/g, '')
-							  );
+							? +item['max-size']?.replace(/[^\.0-9]/g, '') * 10
+							: +item['max-size']?.replace(/[^\.0-9]/g, '');
 			}
 
 			const { onDragStart } = useDragValue({
