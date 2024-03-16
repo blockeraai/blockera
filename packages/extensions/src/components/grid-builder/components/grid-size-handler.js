@@ -22,6 +22,8 @@ import type { TGridSizeHandlerProps } from '../types';
 export const GridSizeHandler: TGridSizeHandlerProps =
 	memo<TGridSizeHandlerProps>(
 		({
+			item,
+			index,
 			type,
 			attribute,
 			setHovered,
@@ -32,44 +34,70 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 		}: TGridSizeHandlerProps): any => {
 			const { handleOnChangeAttributes } = useBlockContext();
 
-			// to handle size value at first render
-			const [currentItemId, setCurrentItemId] = useState(null);
 			// to open setting
 			const [currentItemIdSetting, setCurrentItemIdSetting] =
 				useState(null);
-			// to handle resize
-			const [currentResizeItem, setCurrentResizeItem] = useState(null);
 
-			const updatedItem = attribute.value.find(
-				(item) =>
-					item.id === currentResizeItem || item.id === currentItemId
-			);
+			let isResizable;
 
-			const updatedItemIndex = attribute.value.findIndex(
-				(item) =>
-					item.id === currentResizeItem || item.id === currentItemId
-			);
+			if (item['sizing-mode'] === 'min/max') {
+				isResizable = [...item['max-size']].find((item) =>
+					Number(item)
+				);
+			} else {
+				isResizable = [...item.size].find((item) => Number(item));
+			}
+
+			let amount, unit, minAmount, minUnit, maxAmount, maxUnit, value;
+
+			switch (item['sizing-mode']) {
+				case 'normal':
+					amount = isResizable
+						? item.size.replace(/[^-\.0-9]/g, '')
+						: item.size;
+					unit =
+						isResizable && item.size.match(/[^-\.0-9]/g)?.join('');
+
+					value =
+						unit === 'fr'
+							? Number(item?.size?.replace(/[^-\.0-9]/g, '')) * 10
+							: Number(item?.size?.replace(/[^-\.0-9]/g, ''));
+
+					break;
+				case 'min/max':
+					minAmount = [...item['min-size']].find((item) =>
+						Number(item)
+					)
+						? item['min-size'].replace(/[^-\.0-9]/g, '')
+						: item['min-size'];
+					minUnit =
+						[...item['min-size']].find((item) => Number(item)) &&
+						item['min-size'].match(/[^-\.0-9]/g)?.join('');
+
+					maxAmount = isResizable
+						? item['max-size'].replace(/[^-\.0-9]/g, '')
+						: item['max-size'];
+					maxUnit =
+						isResizable &&
+						item['max-size'].match(/[^-\.0-9]/g)?.join('');
+
+					value =
+						unit === 'fr'
+							? Number(
+									item['max-size']?.replace(/[^-\.0-9]/g, '')
+							  ) * 10
+							: Number(
+									item['max-size']?.replace(/[^-\.0-9]/g, '')
+							  );
+			}
 
 			const { onDragStart } = useDragValue({
-				value:
-					updatedItem !== undefined &&
-					updatedItem['sizing-mode'] === 'min/max'
-						? Number(
-								updatedItem['max-size']?.replace(
-									/[^-\.0-9]/g,
-									''
-								)
-						  )
-						: Number(updatedItem?.size?.replace(/[^-\.0-9]/g, '')),
+				value,
 				setValue: (newValue, ref) => {
-					console.log(newValue);
 					if (
-						updatedItem !== undefined &&
-						updatedItem['sizing-mode'] === 'min/max'
+						item !== undefined &&
+						item['sizing-mode'] === 'min/max'
 					) {
-						const unit = updatedItem['max-size']
-							.match(/[^-\.0-9]/g)
-							.join('');
 						let _newValue;
 						if (unit === 'fr') {
 							_newValue =
@@ -85,27 +113,19 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 							{
 								...attribute,
 								value: [
-									...attribute.value.slice(
-										0,
-										updatedItemIndex
-									),
+									...attribute.value.slice(0, index),
 									{
-										...updatedItem,
+										...item,
 										'max-size': `${_newValue}${unit}`,
 									},
-									...attribute.value.slice(
-										updatedItemIndex + 1
-									),
+									...attribute.value.slice(index + 1),
 								],
 							},
 							{
 								ref,
 							}
 						);
-					} else if (updatedItem !== undefined) {
-						const unit = updatedItem.size
-							.match(/[^-\.0-9]/g)
-							.join('');
+					} else if (item !== undefined) {
 						let _newValue;
 						if (unit === 'fr') {
 							_newValue =
@@ -121,17 +141,12 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 							{
 								...attribute,
 								value: [
-									...attribute.value.slice(
-										0,
-										updatedItemIndex
-									),
+									...attribute.value.slice(0, index),
 									{
-										...updatedItem,
+										...item,
 										size: `${_newValue}${unit}`,
 									},
-									...attribute.value.slice(
-										updatedItemIndex + 1
-									),
+									...attribute.value.slice(index + 1),
 								],
 							},
 							{
@@ -144,169 +159,114 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 				movement: type === 'row' ? 'vertical' : 'horizontal',
 			});
 
-			const handleSetActiveItem = useCallback(
-				(id) => setCurrentItemId(id),
-				[currentItemId]
-			);
-
 			const handleSetHoveredItem = useCallback(
 				(i) => setHovered(`${i + 1}/${i + 2}`),
 				[hovered]
 			);
 
-			return attribute.value.map((item, i) => {
-				let isResizable;
-				if (item['sizing-mode'] === 'min/max') {
-					isResizable = [...item['max-size']].find((item) =>
-						Number(item)
-					);
-				} else {
-					isResizable = [...item.size].find((item) => Number(item));
-				}
-
-				let amount, unit, minAmount, minUnit, maxAmount, maxUnit;
-
-				switch (item['sizing-mode']) {
-					case 'normal':
-						amount = isResizable
-							? item.size.replace(/[^-\.0-9]/g, '')
-							: item.size;
-						unit =
-							isResizable &&
-							item.size.match(/[^-\.0-9]/g)?.join('');
-						break;
-					case 'min/max':
-						minAmount = [...item['min-size']].find((item) =>
-							Number(item)
-						)
-							? item['min-size'].replace(/[^-\.0-9]/g, '')
-							: item['min-size'];
-						minUnit =
-							[...item['min-size']].find((item) =>
-								Number(item)
-							) && item['min-size'].match(/[^-\.0-9]/g)?.join('');
-
-						maxAmount = isResizable
-							? item['max-size'].replace(/[^-\.0-9]/g, '')
-							: item['max-size'];
-						maxUnit =
-							isResizable &&
-							item['max-size'].match(/[^-\.0-9]/g)?.join('');
-				}
-
-				return (
-					<>
-						<div
-							style={{
-								gridColumn:
-									type === 'column'
-										? `${i + 1}/${i + 2}`
-										: '1/2',
-								gridRow:
-									type === 'column'
-										? '1/2'
-										: `${i + 1}/${i + 2}`,
-								height: type === 'row' && '100%',
-								width: type === 'column' && '100%',
-							}}
-							key={item.id}
-							className={`size-handler ${type}-handler ${
-								!isResizable ? 'not-resizable' : ''
-							}`}
-							// eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
-							onMouseOver={() => {
-								handleSetActiveItem(item.id);
-								handleSetHoveredItem(i);
-							}}
-							data-test={`size-handler-${type}`}
-							onMouseLeave={() => setHovered(null)}
-						>
-							{isResizable && (
-								<span
-									onMouseDown={(e) => {
-										setCurrentResizeItem(item.id);
-										onDragStart(e);
-									}}
-									data-test="resize-handler-left"
-								>
-									<SizeHandler />
-								</span>
-							)}
-							<button
-								onClick={() => setCurrentItemIdSetting(item.id)}
-								className="size-handler-content"
+			return (
+				<>
+					<div
+						style={{
+							gridColumn:
+								type === 'column'
+									? `${index + 1}/${index + 2}`
+									: '1/2',
+							gridRow:
+								type === 'column'
+									? '1/2'
+									: `${index + 1}/${index + 2}`,
+							height: type === 'row' && '100%',
+							width: type === 'column' && '100%',
+						}}
+						key={item.id}
+						className={`size-handler ${type}-handler ${
+							!isResizable ? 'not-resizable' : ''
+						}`}
+						// eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
+						onMouseOver={() => handleSetHoveredItem(index)}
+						data-test={`size-handler-${type}`}
+						onMouseLeave={() => setHovered(null)}
+					>
+						{isResizable && (
+							<span
+								onMouseDown={(e) => onDragStart(e)}
+								data-test="resize-handler-left"
 							>
-								{item['sizing-mode'] === 'normal' ? (
-									<>
-										<span
-											className="amount"
-											data-test="amount-normal"
-										>
-											{amount}
-										</span>
-										<span className="unit">{unit}</span>
-									</>
-								) : (
-									<>
-										<span
-											className="amount"
-											data-test="amount-min"
-										>
-											{minAmount}
-										</span>
-										<span className="unit">{minUnit}</span>
-										<span> / </span>
-										<span
-											className="amount"
-											data-test="amount-max"
-										>
-											{maxAmount}
-										</span>
-										<span className="unit">{maxUnit}</span>
-									</>
-								)}
-
-								<span
-									className={`edit-icon ${
-										hovered === `${i + 1}/${i + 2}`
-											? 'show'
-											: 'hide'
-									}`}
-								>
-									<EditIcon />
-								</span>
-							</button>
-
-							{isResizable && (
-								<span
-									onMouseDown={(e) => {
-										setCurrentResizeItem(item.id);
-										onDragStart(e);
-									}}
-									data-test="resize-handler-right"
-								>
-									<SizeHandler />
-								</span>
-							)}
-						</div>
-
-						{currentItemIdSetting === item.id && (
-							<SizeSetting
-								item={item}
-								block={block}
-								popoverTitle={type}
-								items={attribute}
-								attributeId={attributeId}
-								extensionProps={
-									type === 'column'
-										? extensionProps.publisherGridColumns
-										: extensionProps.publisherGridRows
-								}
-								onClose={() => setCurrentItemIdSetting(null)}
-							/>
+								<SizeHandler />
+							</span>
 						)}
-					</>
-				);
-			});
+						<button
+							onClick={() => setCurrentItemIdSetting(item.id)}
+							className="size-handler-content"
+						>
+							{item['sizing-mode'] === 'normal' ? (
+								<>
+									<span
+										className="amount"
+										data-test="amount-normal"
+									>
+										{amount}
+									</span>
+									<span className="unit">{unit}</span>
+								</>
+							) : (
+								<>
+									<span
+										className="amount"
+										data-test="amount-min"
+									>
+										{minAmount}
+									</span>
+									<span className="unit">{minUnit}</span>
+									<span> / </span>
+									<span
+										className="amount"
+										data-test="amount-max"
+									>
+										{maxAmount}
+									</span>
+									<span className="unit">{maxUnit}</span>
+								</>
+							)}
+
+							<span
+								className={`edit-icon ${
+									hovered === `${index + 1}/${index + 2}`
+										? 'show'
+										: 'hide'
+								}`}
+							>
+								<EditIcon />
+							</span>
+						</button>
+
+						{isResizable && (
+							<span
+								onMouseDown={(e) => onDragStart(e)}
+								data-test="resize-handler-right"
+							>
+								<SizeHandler />
+							</span>
+						)}
+					</div>
+
+					{currentItemIdSetting === item.id && (
+						<SizeSetting
+							item={item}
+							block={block}
+							popoverTitle={type}
+							items={attribute}
+							attributeId={attributeId}
+							extensionProps={
+								type === 'column'
+									? extensionProps.publisherGridColumns
+									: extensionProps.publisherGridRows
+							}
+							onClose={() => setCurrentItemIdSetting(null)}
+						/>
+					)}
+				</>
+			);
 		}
 	);

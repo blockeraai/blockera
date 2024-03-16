@@ -209,15 +209,20 @@ export const VirtualGrid = ({
 					marginTop: !styles.rowGap || !styles.gap || '-10px',
 				}}
 			>
-				<GridSizeHandler
-					type="column"
-					attribute={publisherGridColumns}
-					setHovered={setHoveredColumn}
-					block={block}
-					attributeId="publisherGridColumns"
-					hovered={hoveredColumn}
-					extensionProps={extensionProps}
-				/>
+				{publisherGridColumns.value.map((item, index) => (
+					<GridSizeHandler
+						key={item.id}
+						item={item}
+						type="column"
+						index={index}
+						attribute={publisherGridColumns}
+						setHovered={setHoveredColumn}
+						block={block}
+						attributeId="publisherGridColumns"
+						hovered={hoveredColumn}
+						extensionProps={extensionProps}
+					/>
+				))}
 			</div>
 
 			<div
@@ -231,15 +236,20 @@ export const VirtualGrid = ({
 					marginLeft: !styles.columnGap || !styles.gap || '-10px',
 				}}
 			>
-				<GridSizeHandler
-					type="row"
-					attribute={publisherGridRows}
-					setHovered={setHoveredRow}
-					block={block}
-					attributeId="publisherGridRows"
-					hovered={hoveredRow}
-					extensionProps={extensionProps}
-				/>
+				{publisherGridRows.value.map((item, index) => (
+					<GridSizeHandler
+						key={item.id}
+						type="row"
+						item={item}
+						index={index}
+						attribute={publisherGridRows}
+						setHovered={setHoveredRow}
+						block={block}
+						attributeId="publisherGridRows"
+						hovered={hoveredRow}
+						extensionProps={extensionProps}
+					/>
+				))}
 			</div>
 
 			<AddButton
