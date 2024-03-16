@@ -124,8 +124,14 @@ export const VirtualGrid = ({
 	const [hoveredRow, setHoveredRow] = useState(null);
 
 	const calcGapLayerTemplate = () => {
-		const gapRowHandler = styles.gridTemplateRows
-			.split(' ')
+		const rowsArray = styles.gridTemplateRows.split(' ');
+		rowsArray.forEach((item, i) => {
+			if (item.includes('minmax')) {
+				rowsArray.splice(i, 2, `${rowsArray[i]} ${rowsArray[i + 1]}`);
+			}
+		});
+
+		const gapRowHandler = rowsArray
 			.map((item, i, arr) => {
 				if (i + 1 < arr.length)
 					return `${item} ${styles.rowGap || styles.gap || '20px'}`;
@@ -134,8 +140,18 @@ export const VirtualGrid = ({
 			})
 			.join(' ');
 
-		const gapColumnHandler = styles.gridTemplateColumns
-			.split(' ')
+		const columnsArray = styles.gridTemplateColumns.split(' ');
+		columnsArray.forEach((item, i) => {
+			if (item.includes('minmax')) {
+				columnsArray.splice(
+					i,
+					2,
+					`${columnsArray[i]} ${columnsArray[i + 1]}`
+				);
+			}
+		});
+
+		const gapColumnHandler = columnsArray
 			.map((item, i, arr) => {
 				if (i + 1 < arr.length)
 					return `${item} ${
