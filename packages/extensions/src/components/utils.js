@@ -12,7 +12,7 @@ import { omitWithPattern, hasSameProps } from '@publisher/utils';
  */
 import type { TStates, TBreakpoint } from '../libs/block-states/types';
 import type { InnerBlockType } from '../libs/inner-blocks/types';
-import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs';
+import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs/utils';
 // import { detailedDiff } from 'deep-object-diff';
 
 export const propsAreEqual = (

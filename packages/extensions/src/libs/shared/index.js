@@ -91,7 +91,7 @@ import {
 	AdvancedSettingsExtension,
 } from '../advanced-settings';
 
-import { isInnerBlock, propsAreEqual } from '../../components';
+import { isInnerBlock, propsAreEqual } from '../../components/utils';
 import extensions from './extensions.json';
 import { useDisplayBlockControls } from '../../hooks';
 import StateContainer from '../../components/state-container';
