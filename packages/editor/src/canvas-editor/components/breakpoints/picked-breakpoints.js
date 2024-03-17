@@ -1,7 +1,9 @@
 // @flow
+
 /**
  * External dependencies
  */
+import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
@@ -23,6 +25,7 @@ export default function ({
 		<Flex
 			className={controlInnerClassNames('publisher-core-breakpoints')}
 			justifyContent={'space-between'}
+			aria-label={__('Breakpoints', 'publisher-core')}
 		>
 			<BreakpointIcon
 				name={'laptop'}
