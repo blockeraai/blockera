@@ -32,16 +32,10 @@ export const GapHandler: TGapHandlerProps = memo<TGapHandlerProps>(
 		const { onDragStart, onDragEnd } = useDragValue({
 			value:
 				type === 'row'
-					? Number(
-							styles.rowGap
-								? styles.rowGap.replace(/[^-\.0-9]/g, '')
-								: styles.gap.replace(/[^-\.0-9]/g, '')
-					  ) || 0
-					: Number(
-							styles.columnGap
-								? styles.columnGap.replace(/[^-\.0-9]/g, '')
-								: styles.gap.replace(/[^-\.0-9]/g, '')
-					  ) || 0,
+					? Number(styles.rowGap.replace(/[^-\.0-9]/g, '')) ||
+					  Number(styles.gap.replace(/[^-\.0-9]/g, ''))
+					: Number(styles.columnGap.replace(/[^-\.0-9]/g, '')) ||
+					  Number(styles.gap.replace(/[^-\.0-9]/g, '')),
 			setValue: (newValue, ref) => {
 				if (type === 'row') {
 					handleOnChangeAttributes(

@@ -51,17 +51,38 @@ export const VirtualGrid = ({
 	} = useStoreSelectors();
 	const { clientId } = getSelectedBlock() || {};
 
-	const generatedStyles = useCallback(
-		LayoutStyles({
-			state: getCurrentState(),
-			clientId,
-			blockName: block.blockName,
-			currentBlock,
-			selectors: {},
-			attributes,
-		})
-			?.map((item) => item.declarations)
-			.join(' '),
+	useEffect(() => {
+		if (!publisherGridAreas.length) {
+			handleOnChangeAttributes(
+				'publisherGridAreas',
+				generateAreas({
+					gridRows: publisherGridRows.value,
+					gridColumns: publisherGridColumns.value,
+					prevGridAreas: publisherGridAreas,
+					publisherGridDirection,
+				}),
+				{
+					path: '',
+					reset: false,
+					action: 'normal',
+				}
+			);
+		}
+	}, []);
+
+	const generatedStyles = useMemo(
+		() =>
+			LayoutStyles({
+				state: getCurrentState(),
+				clientId,
+				blockName: block.blockName,
+				currentBlock,
+				selectors: {},
+				attributes,
+			})
+				?.map((item) => item.declarations)
+				.join(' '),
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[
 			publisherGridColumns,
 			publisherGridRows,
@@ -98,32 +119,13 @@ export const VirtualGrid = ({
 		};
 	}, [generatedStyles]);
 
-	useEffect(() => {
-		if (!publisherGridAreas.length) {
-			handleOnChangeAttributes(
-				'publisherGridAreas',
-				generateAreas({
-					gridRows: publisherGridRows.value,
-					gridColumns: publisherGridColumns.value,
-					prevGridAreas: publisherGridAreas,
-					publisherGridDirection,
-				}),
-				{
-					path: '',
-					reset: false,
-					action: 'normal',
-				}
-			);
-		}
-	}, []);
-
 	const gridColumns = publisherGridColumns.value;
 	const gridRows = publisherGridRows.value;
 
 	const [hoveredColumn, setHoveredColumn] = useState(null);
 	const [hoveredRow, setHoveredRow] = useState(null);
 
-	const calcGapLayerTemplate = () => {
+	const gapHandlers = useMemo(() => {
 		const rowsArray = styles.gridTemplateRows.split(' ');
 		rowsArray.forEach((item, i) => {
 			if (item.includes('minmax')) {
@@ -166,9 +168,8 @@ export const VirtualGrid = ({
 			gapRowHandler,
 			gapColumnHandler,
 		};
-	};
+	}, [styles.gridTemplateRows, styles.gridTemplateColumns]);
 
-	const gapHandlers = calcGapLayerTemplate();
 	const [virtualMergedAreas, setVirtualMergedAreas] = useState([]);
 	const [activeAreaId, setActiveAreaId] = useState(null);
 	const [targetAreaId, setTargetAreaId] = useState(null);

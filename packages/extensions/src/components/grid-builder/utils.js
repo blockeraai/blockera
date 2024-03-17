@@ -116,7 +116,7 @@ export const generateAreas = ({
 				return {
 					..._item,
 					name: `area${i + 1}`,
-					mergedArea: _item?.coordinates?.length > 1 ? true : false,
+					mergedArea: _item?.coordinates?.length > 1,
 				};
 			})
 			.find((_item) => _item.name === item);
@@ -143,8 +143,7 @@ export const generateAreas = ({
 					return {
 						..._item,
 						name: `area${i + 1}`,
-						mergedArea:
-							_item?.coordinates?.length > 1 ? true : false,
+						mergedArea: _item?.coordinates?.length > 1,
 					};
 				})
 				.find((_item) => _item.name === item);
@@ -233,7 +232,7 @@ export const updateArrayCoordinates = (array: Array<Object>): Array<Object> => {
 			return {
 				...item,
 				coordinates,
-				mergedArea: coordinates.length <= 1 ? false : true,
+				mergedArea: coordinates.length > 1,
 			};
 		})
 		.filter((item) => item);

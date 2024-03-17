@@ -146,135 +146,44 @@ export const Cells = ({
 		}
 
 		if (virtualTargetArea && activeAreaId === virtualTargetArea.parentId) {
+			const filteredAreas = publisherGridAreas.filter(
+				(item) => item.id !== activeAreaId
+			);
 			switch (direction) {
-				case 'bottomRight': {
-					// unMerge itself
-
-					if (
-						activeArea['row-end'] === newMergedArea['row-end'] &&
-						activeArea['column-end'] === newMergedArea['column-end']
-					)
-						return;
-
-					const filteredAreas = publisherGridAreas.filter(
-						(item) => item.id !== activeAreaId
-					);
-
-					handleOnChangeAttributes(
-						'publisherGridAreas',
-						generateAreas({
-							gridRows: publisherGridRows.value,
-							gridColumns: publisherGridColumns.value,
-							publisherGridDirection,
-							prevGridAreas: [
-								...filteredAreas,
-								{
-									...newMergedArea,
-									coordinates: calcCoordinates(newMergedArea),
-								},
-							],
-						}),
-						{
-							path: '',
-							reset: false,
-							action: 'normal',
-						}
-					);
-
-					setVirtualMergedAreas([]);
-					setActiveAreaId(null);
-					setTargetAreaId(null);
-					setNewMergedArea(null);
-					return;
-				}
-
-				case 'bottomLeft': {
-					// unMerge itself
-
-					if (
-						activeArea['row-end'] === newMergedArea['row-end'] &&
-						activeArea['column-start'] ===
-							newMergedArea['column-start']
-					)
-						return;
-
-					const filteredAreas = publisherGridAreas.filter(
-						(item) => item.id !== activeAreaId
-					);
-
-					handleOnChangeAttributes(
-						'publisherGridAreas',
-						generateAreas({
-							gridRows: publisherGridRows.value,
-							gridColumns: publisherGridColumns.value,
-							publisherGridDirection,
-							prevGridAreas: [
-								...filteredAreas,
-								{
-									...newMergedArea,
-									coordinates: calcCoordinates(newMergedArea),
-								},
-							],
-						}),
-						{
-							path: '',
-							reset: false,
-							action: 'normal',
-						}
-					);
-
-					setVirtualMergedAreas([]);
-					setActiveAreaId(null);
-					setTargetAreaId(null);
-					setNewMergedArea(null);
-					return;
-				}
-
-				case 'topRight': {
-					// unMerge itself
-
-					if (
-						activeArea['row-start'] ===
-							newMergedArea['row-start'] &&
-						activeArea['column-end'] === newMergedArea['column-end']
-					)
-						return;
-
-					const filteredAreas = publisherGridAreas.filter(
-						(item) => item.id !== activeAreaId
-					);
-
-					handleOnChangeAttributes(
-						'publisherGridAreas',
-						generateAreas({
-							gridRows: publisherGridRows.value,
-							gridColumns: publisherGridColumns.value,
-							publisherGridDirection,
-							prevGridAreas: [
-								...filteredAreas,
-								{
-									...newMergedArea,
-									coordinates: calcCoordinates(newMergedArea),
-								},
-							],
-						}),
-						{
-							path: '',
-							reset: false,
-							action: 'normal',
-						}
-					);
-
-					setVirtualMergedAreas([]);
-					setActiveAreaId(null);
-					setTargetAreaId(null);
-					setNewMergedArea(null);
-					return;
-				}
-
+				case 'bottomRight':
+					{
+						if (
+							activeArea['row-end'] ===
+								newMergedArea['row-end'] &&
+							activeArea['column-end'] ===
+								newMergedArea['column-end']
+						)
+							return;
+					}
+					break;
+				case 'bottomLeft':
+					{
+						if (
+							activeArea['row-end'] ===
+								newMergedArea['row-end'] &&
+							activeArea['column-start'] ===
+								newMergedArea['column-start']
+						)
+							return;
+					}
+					break;
+				case 'topRight':
+					{
+						if (
+							activeArea['row-start'] ===
+								newMergedArea['row-start'] &&
+							activeArea['column-end'] ===
+								newMergedArea['column-end']
+						)
+							return;
+					}
+					break;
 				case 'topLeft': {
-					// unMerge itself
-
 					if (
 						activeArea['row-start'] ===
 							newMergedArea['row-start'] &&
@@ -282,39 +191,36 @@ export const Cells = ({
 							newMergedArea['column-start']
 					)
 						return;
-
-					const filteredAreas = publisherGridAreas.filter(
-						(item) => item.id !== activeAreaId
-					);
-
-					handleOnChangeAttributes(
-						'publisherGridAreas',
-						generateAreas({
-							gridRows: publisherGridRows.value,
-							gridColumns: publisherGridColumns.value,
-							publisherGridDirection,
-							prevGridAreas: [
-								...filteredAreas,
-								{
-									...newMergedArea,
-									coordinates: calcCoordinates(newMergedArea),
-								},
-							],
-						}),
-						{
-							path: '',
-							reset: false,
-							action: 'normal',
-						}
-					);
-
-					setVirtualMergedAreas([]);
-					setActiveAreaId(null);
-					setTargetAreaId(null);
-					setNewMergedArea(null);
-					return;
 				}
 			}
+
+			// unMerge itself
+			handleOnChangeAttributes(
+				'publisherGridAreas',
+				generateAreas({
+					gridRows: publisherGridRows.value,
+					gridColumns: publisherGridColumns.value,
+					publisherGridDirection,
+					prevGridAreas: [
+						...filteredAreas,
+						{
+							...newMergedArea,
+							coordinates: calcCoordinates(newMergedArea),
+						},
+					],
+				}),
+				{
+					path: '',
+					reset: false,
+					action: 'normal',
+				}
+			);
+
+			setVirtualMergedAreas([]);
+			setActiveAreaId(null);
+			setTargetAreaId(null);
+			setNewMergedArea(null);
+			return;
 		}
 
 		if (
@@ -366,9 +272,7 @@ export const Cells = ({
 						{
 							...updatedNewMergedArea,
 							mergedArea:
-								updatedNewMergedArea?.coordinates?.length <= 1
-									? false
-									: true,
+								updatedNewMergedArea?.coordinates?.length > 1,
 						},
 						...updateArrayCoordinates(newMergedAreas.flat()),
 					],
@@ -414,7 +318,7 @@ export const Cells = ({
 			newArea,
 			publisherGridAreas,
 		});
-		//	console.log(overlapAreas);
+
 		const updatedOverlapAreas = overlapAreas
 			?.map((item) => {
 				return calcReMergedAreas(item, newMergedArea);
