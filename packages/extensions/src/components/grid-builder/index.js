@@ -99,7 +99,7 @@ export const GridBuilder = ({
 					onClick={() => setOpenGridBuilder(false)}
 					aria-label={__('Close Grid Builder', 'publisher-core')}
 				>
-					Done
+					{__('Done', 'publisher-core')}
 				</Button>
 			</div>
 		</div>,

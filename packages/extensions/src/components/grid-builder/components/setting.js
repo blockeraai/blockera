@@ -486,7 +486,7 @@ export const SizeSetting = ({
 					}}
 					data-test="delete"
 				>
-					delete
+					{__('Delete', 'publisher-core')}
 				</Button>
 
 				{notDeletable && (
