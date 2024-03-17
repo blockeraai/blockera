@@ -12,6 +12,10 @@ import type { ValueAddonControlProps } from '../components/control/types';
 
 export type ValueAddonProps = {
 	/**
+	 * The flag for shows value is type of addon value?
+	 */
+	isValueAddon: boolean,
+	/**
 	 * The css class names.
 	 */
 	valueAddonClassNames: string,
