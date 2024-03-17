@@ -30,6 +30,7 @@ export const VirtualGrid = ({
 	extensionProps,
 }: {
 	block: TBlockProps,
+	extensionProps: Object,
 }): MixedElement => {
 	const {
 		handleOnChangeAttributes,

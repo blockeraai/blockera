@@ -4,12 +4,24 @@ import type { MixedElement } from 'react';
 import type { TBlockProps } from '../../../libs/types';
 
 export type TGridBuilderProps = {
-	type: string,
-	id: string,
 	children: MixedElement,
-	position: { top: number, left: number },
-	dimension: { width: number, height: number },
 	block: TBlockProps,
+	extensionProps: {
+		publisherDisplay: Object,
+		publisherFlexLayout: Object,
+		publisherGap: Object,
+		publisherFlexWrap: Object,
+		publisherAlignContent: Object,
+		publisherGridAlignItems: Object,
+		publisherGridJustifyItems: Object,
+		publisherGridAlignContent: Object,
+		publisherGridJustifyContent: Object,
+		publisherGridGap: Object,
+		publisherGridDirection: Object,
+		publisherGridColumns: Object,
+		publisherGridRows: Object,
+		publisherGridAreas: Object,
+	},
 };
 
 export type TCellsProps = {
@@ -37,6 +49,8 @@ export type TGapHandlerProps = {
 type TAttribute = { length: number, value: Array<Object> };
 
 export type TGridSizeHandlerProps = {
+	item: TItem,
+	index: number,
 	type: 'column' | 'row',
 	attribute: TAttribute,
 	setHovered: (string | null) => {},
@@ -44,14 +58,27 @@ export type TGridSizeHandlerProps = {
 	attributeId: 'publisherGridColumns' | 'publisherGridRows',
 	hovered: string | null,
 	createVirtualAreas: () => {},
+	extensionProps: Object,
+};
+
+export type TItem = {
+	'sizing-mode': string,
+	size: string,
+	'min-size': string,
+	'max-size': string,
+	'auto-fit': boolean,
+	isVisible: boolean,
+	id: number,
 };
 
 export type TSizeSettingProps = {
-	item: Object,
+	item: TItem,
 	block: TBlockProps,
 	popoverTitle: 'column' | 'row',
 	items: TAttribute,
 	attributeId: 'publisherGridColumns' | 'publisherGridRows',
+	extensionProps: Object,
+	onClose: () => void,
 };
 
 export type TAreaMergeHandlerProps = {

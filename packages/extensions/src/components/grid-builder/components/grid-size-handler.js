@@ -54,8 +54,9 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 					amount = isResizable
 						? item.size.replace(/[^\.0-9]/g, '')
 						: item.size;
-					unit =
-						isResizable && item.size.match(/[^\.0-9]/g)?.join('');
+					unit = isResizable
+						? item.size.match(/[^\.0-9]/g)?.join('')
+						: '';
 
 					value =
 						unit === 'fr'
@@ -78,9 +79,9 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 					maxAmount = isResizable
 						? item['max-size'].replace(/[^-\.0-9]/g, '')
 						: item['max-size'];
-					maxUnit =
-						isResizable &&
-						item['max-size'].match(/[^\.0-9]/g)?.join('');
+					maxUnit = isResizable
+						? item['max-size'].match(/[^\.0-9]/g)?.join('')
+						: '';
 
 					value =
 						maxUnit === 'fr'
@@ -91,10 +92,7 @@ export const GridSizeHandler: TGridSizeHandlerProps =
 			const { onDragStart } = useDragValue({
 				value,
 				setValue: (newValue, ref) => {
-					if (
-						item !== undefined &&
-						item['sizing-mode'] === 'min/max'
-					) {
+					if (item && item['sizing-mode'] === 'min/max') {
 						let _newValue;
 						if (maxUnit === 'fr') {
 							_newValue =

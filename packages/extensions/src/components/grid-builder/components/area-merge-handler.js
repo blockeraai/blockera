@@ -142,10 +142,7 @@ export const AreaMergeHandler: TAreaMergeHandlerProps =
 
 				const targetElement = findElement(e, direction);
 
-				if (
-					targetElement !== null &&
-					targetElement?.getAttribute('data-id')
-				) {
+				if (targetElement && targetElement?.getAttribute('data-id')) {
 					setTargetAreaId(
 						Number(targetElement.getAttribute('data-id'))
 					);

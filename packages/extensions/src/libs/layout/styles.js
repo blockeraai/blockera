@@ -580,8 +580,8 @@ export const LayoutStyles = ({
 		if (
 			isActiveField(publisherGridDirection) &&
 			!arrayEquals(
-				_attributes.publisherGridDirection !==
-					attributes.publisherGridDirection.default
+				_attributes.publisherGridDirection,
+				attributes.publisherGridDirection.default
 			)
 		) {
 			const pickedSelector = getCssSelector({
