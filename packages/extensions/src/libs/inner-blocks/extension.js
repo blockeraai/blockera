@@ -82,6 +82,9 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 								'inner-block__button',
 								'extension-inner-blocks'
 							)}
+							aria-label={
+								label + __(' Customize', 'publisher-core')
+							}
 						>
 							{icon}
 
