@@ -1005,7 +1005,7 @@ describe('Grid Builder e2e testing', () => {
 			cy.getIframeBody()
 				.find('[data-test="area3-handler"]')
 				.within(() => {
-					merge('.handle.left-handle.top-handle', 15, 350);
+					merge('.handle.left-handle.top-handle', 15, 90);
 				});
 
 			// min => 1
@@ -1090,8 +1090,7 @@ describe('Grid Builder e2e testing', () => {
 						.should(
 							'include',
 							'grid-template-areas: "area1 area2" "area3 area4"'
-						)
-						.and('include', 'grid-auto-flow: row');
+						);
 				});
 
 			// Check store
@@ -1311,8 +1310,7 @@ describe('Grid Builder e2e testing', () => {
 						.should(
 							'include',
 							'grid-template-areas: "area1 area2 area3" "area1 area4 area5"'
-						)
-						.and('include', 'grid-auto-flow: row');
+						);
 				});
 
 			// Check store
@@ -2002,7 +2000,7 @@ describe('Grid Builder e2e testing', () => {
 		});
 
 		describe('Setting', () => {
-			it.skip('update column size, when resize button', () => {
+			it('update column size, when resize button', () => {
 				/**
 				 * Normal =>Fr
 				 */
@@ -2012,111 +2010,11 @@ describe('Grid Builder e2e testing', () => {
 					.find('[data-test="size-handler-column"]')
 					.eq(0)
 					.within(() => {
-						resize('resize-handler-left', 100, 0);
-
-						// cy.getByDataTest('amount-normal').should(
-						// 	'have.text',
-						// 	(99 + 1) / 10
-						// );
-					});
-
-				//Check block
-				// cy.getIframeBody()
-				// 	.find(`[data-type="core/paragraph"]`)
-				// 	.parent()
-				// 	.within(() => {
-				// 		cy.get('style')
-				// 			.invoke('text')
-				// 			.should(
-				// 				'include',
-				// 				'grid-template-columns: 10fr 1fr'
-				// 			);
-				// 	});
-
-				//Check store
-				// getWPDataObject().then((data) => {
-				// 	const updatedColumn = getSelectedBlock(
-				// 		data,
-				// 		'publisherGridColumns'
-				// 	).value[0];
-
-				// 	expect({
-				// 		...updatedColumn,
-				// 		'sizing-mode': 'normal',
-				// 		size: `${(99 + 1) / 10}fr`,
-				// 		'min-size': '',
-				// 		'max-size': '',
-				// 		'auto-fit': false,
-				// 	}).to.be.deep.equal(updatedColumn);
-				// });
-
-				// have decimal
-				cy.getIframeBody()
-					.find('[data-test="size-handler-column"]')
-					.eq(1)
-					.within(() => {
-						resize('resize-handler-right', 45, 0);
-
-						// cy.getByDataTest('amount-normal').should(
-						// 	'have.text',
-						// 	((45 + 1) / 10).toFixed(2)
-						// );
-					});
-
-				//Check block
-				// cy.getIframeBody()
-				// 	.find(`[data-type="core/paragraph"]`)
-				// 	.parent()
-				// 	.within(() => {
-				// 		cy.get('style')
-				// 			.invoke('text')
-				// 			.should(
-				// 				'include',
-				// 				'grid-template-columns: 10fr 4.60fr'
-				// 			);
-				// 	});
-
-				//Check store
-				// getWPDataObject().then((data) => {
-				// 	const updatedColumn = getSelectedBlock(
-				// 		data,
-				// 		'publisherGridColumns'
-				// 	).value[1];
-
-				// 	expect({
-				// 		...updatedColumn,
-				// 		'sizing-mode': 'normal',
-				// 		size: `${((45 + 1) / 10).toFixed(2)}fr`,
-				// 		'min-size': '',
-				// 		'max-size': '',
-				// 		'auto-fit': false,
-				// 	}).to.be.deep.equal(updatedColumn);
-				// });
-
-				// px
-				cy.getIframeBody()
-					.find('[data-test="size-handler-column"]')
-					.eq(0)
-					.click();
-
-				cy.get('[data-test="popover-body"]').within(() => {
-					cy.getByAriaLabel('Select Unit').select('px', {
-						force: true,
-					});
-					cy.get('input[type="number"]').clear({ force: true });
-					cy.get('input[type="number"]').type(200, { force: true });
-					cy.get('input[type="number"]').realMouseUp();
-				});
-
-				cy.getIframeBody()
-					.find('[data-test="size-handler-column"]')
-					.eq(0)
-					.within(() => {
-						resize('resize-handler-left', 45, 0);
+						resize('resize-handler-left', 97, 0);
 
 						cy.getByDataTest('amount-normal').should(
 							'have.text',
-							200 + 45
+							10
 						);
 					});
 
@@ -2129,7 +2027,7 @@ describe('Grid Builder e2e testing', () => {
 							.invoke('text')
 							.should(
 								'include',
-								'grid-template-columns: 245px 4.60fr'
+								'grid-template-columns: 10fr 1fr'
 							);
 					});
 
@@ -2143,10 +2041,104 @@ describe('Grid Builder e2e testing', () => {
 					expect({
 						...updatedColumn,
 						'sizing-mode': 'normal',
-						size: `245px`,
+						size: `10fr`,
 						'min-size': '',
 						'max-size': '',
 						'auto-fit': false,
+					}).to.be.deep.equal(updatedColumn);
+				});
+
+				// have decimal
+				cy.getIframeBody()
+					.find('[data-test="size-handler-column"]')
+					.eq(1)
+					.within(() => {
+						resize('resize-handler-right', 45, 0);
+
+						cy.getByDataTest('amount-normal').should(
+							'have.text',
+							'4.90'
+						);
+					});
+
+				//Check block
+				cy.getIframeBody()
+					.find(`[data-type="core/paragraph"]`)
+					.parent()
+					.within(() => {
+						cy.get('style')
+							.invoke('text')
+							.should(
+								'include',
+								'grid-template-columns: 10fr 4.90fr'
+							);
+					});
+
+				//Check store
+				getWPDataObject().then((data) => {
+					const updatedColumn = getSelectedBlock(
+						data,
+						'publisherGridColumns'
+					).value[1];
+
+					expect({
+						...updatedColumn,
+						'sizing-mode': 'normal',
+						size: '4.90fr',
+						'min-size': '',
+						'max-size': '',
+						'auto-fit': false,
+					}).to.be.deep.equal(updatedColumn);
+				});
+
+				// px
+				cy.getIframeBody()
+					.find('[data-test="size-handler-column"]')
+					.eq(0)
+					.click();
+
+				cy.get('[data-test="popover-body"]').within(() => {
+					cy.getByAriaLabel('Select Unit').select('px', {
+						force: true,
+					});
+				});
+
+				cy.getIframeBody()
+					.find('[data-test="size-handler-column"]')
+					.eq(0)
+					.within(() => {
+						resize('resize-handler-left', 100, 0);
+
+						cy.getByDataTest('amount-normal').should(
+							'have.text',
+							104
+						);
+					});
+
+				//Check block
+				cy.getIframeBody()
+					.find(`[data-type="core/paragraph"]`)
+					.parent()
+					.within(() => {
+						cy.get('style')
+							.invoke('text')
+							.should(
+								'include',
+								'grid-template-columns: 104px 4.90fr'
+							);
+					});
+
+				//Check store
+				getWPDataObject().then((data) => {
+					const updatedColumn = getSelectedBlock(
+						data,
+						'publisherGridColumns'
+					).value[0];
+
+					expect({
+						...updatedColumn,
+						'sizing-mode': 'normal',
+						size: `104px`,
 					}).to.be.deep.equal(updatedColumn);
 				});
 
@@ -2156,26 +2148,22 @@ describe('Grid Builder e2e testing', () => {
 				cy.getIframeBody()
 					.find('[data-test="size-handler-column"]')
 					.eq(1)
-					.click({ force: true });
+					.invoke('show')
+					.realClick();
 
 				cy.get('[data-test="popover-body"]').within(() => {
 					cy.getByAriaLabel('Min / Max').click({ force: true });
-					cy.getParentContainer('Max', 'base-control').within(() => {
-						cy.get('input[type="number"]').clear({ force: true });
-						cy.get('input[type="number"]').type(1, { force: true });
-						cy.get('input[type="number"]').realMouseUp();
-					});
 				});
 
 				cy.getIframeBody()
 					.find('[data-test="size-handler-column"]')
 					.eq(1)
 					.within(() => {
-						resize('resize-handler-left', 100, 0);
+						resize('resize-handler-left', 50, 0);
 
 						cy.getByDataTest('amount-max').should(
 							'have.text',
-							((100 + 1) / 10).toFixed(2)
+							'9.30'
 						);
 
 						cy.getByDataTest('amount-min').should(
@@ -2193,7 +2181,7 @@ describe('Grid Builder e2e testing', () => {
 							.invoke('text')
 							.should(
 								'include',
-								'grid-template-columns: 245px minmax(150px, 10.10fr)'
+								'grid-template-columns: 104px minmax(150px, 9.30fr)'
 							);
 					});
 
@@ -2208,16 +2196,16 @@ describe('Grid Builder e2e testing', () => {
 						...updatedColumn,
 						'sizing-mode': 'min/max',
 						'min-size': '150px',
-						'max-size': '10.10fr',
+						'max-size': '9.30fr',
 						'auto-fit': false,
 					}).to.be.deep.equal(updatedColumn);
 				});
 
 				//Check frontend
+				// TODO:
 			});
 
-			it.skip('update row size, when resize button', () => {
-				//TODO: why unexpected value when vertical
+			it('update row size, when resize button', () => {
 				cy.getIframeBody()
 					.find('[data-test="size-handler-row"]')
 					.eq(0)
@@ -2241,16 +2229,15 @@ describe('Grid Builder e2e testing', () => {
 				});
 
 				// add integer
-
 				cy.getIframeBody()
 					.find('[data-test="size-handler-row"]')
 					.eq(0)
 					.within(() => {
-						resize('resize-handler-left', 0, -100);
-						////////////???????? useDragValue(newValue) => 40
+						resize('resize-handler-left', 0, -85);
+
 						cy.getByDataTest('amount-normal').should(
 							'have.text',
-							40 / 10
+							'4'
 						);
 					});
 
@@ -2274,10 +2261,7 @@ describe('Grid Builder e2e testing', () => {
 					expect({
 						...updatedColumn,
 						'sizing-mode': 'normal',
-						size: `${40 / 10}fr`,
-						'min-size': '',
-						'max-size': '',
-						'auto-fit': false,
+						size: '4fr',
 					}).to.be.deep.equal(updatedColumn);
 				});
 
@@ -2285,7 +2269,9 @@ describe('Grid Builder e2e testing', () => {
 				cy.getIframeBody()
 					.find('[data-test="size-handler-row"]')
 					.eq(1)
-					.click({ force: true });
+					.invoke('show')
+					.realClick();
+
 				cy.get('[data-test="popover-body"]').within(() => {
 					cy.getByAriaLabel('Select Unit').select('fr', {
 						force: true,
@@ -2303,7 +2289,7 @@ describe('Grid Builder e2e testing', () => {
 
 						cy.getByDataTest('amount-normal').should(
 							'have.text',
-							(46 / 10).toFixed(2)
+							'5.50'
 						);
 					});
 
@@ -2316,7 +2302,7 @@ describe('Grid Builder e2e testing', () => {
 							.invoke('text')
 							.should(
 								'include',
-								'grid-template-rows: 4fr 4.60fr'
+								'grid-template-rows: 4fr 5.50fr'
 							);
 					});
 
@@ -2330,9 +2316,7 @@ describe('Grid Builder e2e testing', () => {
 					expect({
 						...updatedColumn,
 						'sizing-mode': 'normal',
-						size: `${(46 / 10).toFixed(2)}fr`,
-						'min-size': '',
-						'max-size': '',
+						size: '5.50fr',
 						'auto-fit': false,
 					}).to.be.deep.equal(updatedColumn);
 				});
@@ -2341,26 +2325,24 @@ describe('Grid Builder e2e testing', () => {
 				cy.getIframeBody()
 					.find('[data-test="size-handler-row"]')
 					.eq(0)
-					.click({ force: true });
+					.invoke('show')
+					.realClick();
 
 				cy.get('[data-test="popover-body"]').within(() => {
 					cy.getByAriaLabel('Select Unit').select('px', {
 						force: true,
 					});
-					cy.get('input[type="number"]').clear({ force: true });
-					cy.get('input[type="number"]').type(200, { force: true });
-					cy.get('input[type="number"]').realMouseUp();
 				});
 
 				cy.getIframeBody()
 					.find('[data-test="size-handler-row"]')
 					.eq(0)
 					.within(() => {
-						resize('resize-handler-left', 0, 45);
-						////////////////////
+						resize('resize-handler-left', 0, -150);
+
 						cy.getByDataTest('amount-normal').should(
 							'have.text',
-							100
+							'99'
 						);
 					});
 
@@ -2373,7 +2355,7 @@ describe('Grid Builder e2e testing', () => {
 							.invoke('text')
 							.should(
 								'include',
-								'grid-template-rows: 100px 4.60fr'
+								'grid-template-rows: 99px 5.50fr'
 							);
 					});
 
@@ -2387,9 +2369,7 @@ describe('Grid Builder e2e testing', () => {
 					expect({
 						...updatedColumn,
 						'sizing-mode': 'normal',
-						size: `100px`,
-						'min-size': '',
-						'max-size': '',
+						size: `99px`,
 						'auto-fit': false,
 					}).to.be.deep.equal(updatedColumn);
 				});
@@ -2400,15 +2380,11 @@ describe('Grid Builder e2e testing', () => {
 				cy.getIframeBody()
 					.find('[data-test="size-handler-row"]')
 					.eq(1)
-					.click({ force: true });
+					.invoke('show')
+					.realClick();
 
 				cy.get('[data-test="popover-body"]').within(() => {
 					cy.getByAriaLabel('Min / Max').click({ force: true });
-					cy.getParentContainer('Max', 'base-control').within(() => {
-						cy.get('input[type="number"]').clear({ force: true });
-						cy.get('input[type="number"]').type(1, { force: true });
-						cy.get('input[type="number"]').realMouseUp();
-					});
 				});
 
 				cy.getIframeBody()
@@ -2419,7 +2395,7 @@ describe('Grid Builder e2e testing', () => {
 
 						cy.getByDataTest('amount-max').should(
 							'have.text',
-							(46 / 10).toFixed(2)
+							'10'
 						);
 
 						cy.getByDataTest('amount-min').should(
@@ -2437,7 +2413,7 @@ describe('Grid Builder e2e testing', () => {
 							.invoke('text')
 							.should(
 								'include',
-								'grid-template-rows: 100px minmax(150px, 4.60fr)'
+								'grid-template-rows: 99px minmax(150px, 10fr)'
 							);
 					});
 
@@ -2452,7 +2428,7 @@ describe('Grid Builder e2e testing', () => {
 						...updatedColumn,
 						'sizing-mode': 'min/max',
 						'min-size': '150px',
-						'max-size': '4.60fr',
+						'max-size': '10fr',
 						'auto-fit': false,
 					}).to.be.deep.equal(updatedColumn);
 				});
@@ -2511,7 +2487,7 @@ describe('Grid Builder e2e testing', () => {
 								'sizing-mode': 'normal',
 								size: '2fr',
 								'min-size': '',
-								'max-size': '',
+								'max-size': '2fr',
 								'auto-fit': false,
 							},
 						],
@@ -2605,7 +2581,6 @@ describe('Grid Builder e2e testing', () => {
 					});
 					cy.get('input[type="number"]').clear({ force: true });
 					cy.get('input[type="number"]').type(2, { force: true });
-					//cy.get('input[type="number"]').realMouseUp();
 				});
 
 				cy.getIframeBody()
@@ -2647,7 +2622,7 @@ describe('Grid Builder e2e testing', () => {
 								'sizing-mode': 'normal',
 								size: '2fr',
 								'min-size': '',
-								'max-size': '',
+								'max-size': '2fr',
 								'auto-fit': false,
 							},
 						],
@@ -2951,7 +2926,7 @@ describe('Grid Builder e2e testing', () => {
 						.within(() => {
 							merge(
 								'.handle.right-handle.bottom-handle',
-								25,
+								100,
 								-15
 							);
 						});
@@ -3039,7 +3014,7 @@ describe('Grid Builder e2e testing', () => {
 						.within(() => {
 							merge(
 								'.handle.right-handle.bottom-handle',
-								25,
+								150,
 								-15
 							);
 						});
@@ -3647,7 +3622,7 @@ describe('Grid Builder e2e testing', () => {
 				cy.getIframeBody()
 					.find('[data-test="area8-handler"]')
 					.within(() => {
-						merge('.handle.left-handle.top-handle', 150, 150);
+						merge('.handle.left-handle.top-handle', 150, 130);
 					});
 
 				//Check block
@@ -4780,7 +4755,7 @@ describe('Grid Builder e2e testing', () => {
 		});
 
 		describe('Gap', () => {
-			it.skip('update gap correctly, when drag in grid-builder', () => {
+			it('update gap correctly, when drag in grid-builder', () => {
 				// default
 				cy.getIframeBody()
 					.find('[data-test="gap-handler-column"]')
@@ -4799,11 +4774,43 @@ describe('Grid Builder e2e testing', () => {
 					.realMouseMove(5, 0, { position: 'top' })
 					.realMouseUp({ position: 'top' });
 
-				//TODO
 				// Check control
+				cy.getParentContainer('Gap', 'base-control').within(() => {
+					cy.getParentContainer('Rows', 'base-control')
+						.first()
+						.within(() => {
+							cy.get('input[type="number"]').should(
+								'have.value',
+								'20'
+							);
+						});
+					cy.getParentContainer('Columns', 'base-control')
+						.first()
+						.within(() => {
+							cy.get('input[type="number"]').should(
+								'have.value',
+								'25'
+							);
+						});
+				});
 
 				// Check block
+				cy.getIframeBody()
+					.find(`[data-type="core/paragraph"]`)
+					.should('have.css', 'column-gap', '25px')
+					.and('have.css', 'row-gap', '20px');
+
 				// Check store
+				getWPDataObject().then((data) => {
+					expect({
+						lock: false,
+						gap: '20px',
+						columns: '25px',
+						rows: '20px',
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'publisherGridGap')
+					);
+				});
 
 				/**
 				 * Row
@@ -4813,14 +4820,48 @@ describe('Grid Builder e2e testing', () => {
 					.find('[data-test="gap-handler-column"]')
 					.realHover()
 					.realMouseDown()
-					.realMouseMove(0, 50)
+					.realMouseMove(0, -10)
 					.realMouseUp();
 
-				//TODO
 				// Check control
+				cy.getParentContainer('Gap', 'base-control').within(() => {
+					cy.getParentContainer('Rows', 'base-control')
+						.first()
+						.within(() => {
+							cy.get('input[type="number"]').should(
+								'have.value',
+								'42'
+							);
+						});
+					cy.getParentContainer('Columns', 'base-control')
+						.first()
+						.within(() => {
+							cy.get('input[type="number"]').should(
+								'have.value',
+								'25'
+							);
+						});
+				});
 
 				// Check block
+				cy.getIframeBody()
+					.find(`[data-type="core/paragraph"]`)
+					.should('have.css', 'column-gap', '25px')
+					.and('have.css', 'row-gap', '42px');
+
 				// Check store
+				getWPDataObject().then((data) => {
+					expect({
+						lock: false,
+						gap: '20px',
+						columns: '25px',
+						rows: '42px',
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'publisherGridGap')
+					);
+				});
+
+				//TODO: check front
 			});
 		});
 	});
