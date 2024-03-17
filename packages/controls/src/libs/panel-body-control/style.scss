@@ -49,6 +49,7 @@
 	&.is-opened {
 		padding: 16px 16px 10px;
 		margin-bottom: 10px;
+		position: relative;
 	}
 
 	&.is-opened > .components-panel__body-title {
