@@ -582,3 +582,22 @@ export function hexStringToByte(str) {
 
 	return new Uint8Array(a);
 }
+
+export function setBlockType(blockType, suffix = ' Customize') {
+	// Alias
+	cy.get('h2').contains('Inner Blocks').as('inners');
+
+	cy.get('@inners').click();
+
+	// Open "link" inner block panel.
+	cy.get('@inners').parent().parent().as('innersBox');
+	cy.get('@innersBox').within(() => {
+		cy.get(`[aria-label="${blockType}${suffix}"]`).click();
+	});
+}
+
+export function setDeviceType(deviceType) {
+	cy.getByAriaLabel('Breakpoints').within(() => {
+		cy.getByAriaLabel(deviceType).click();
+	});
+}
