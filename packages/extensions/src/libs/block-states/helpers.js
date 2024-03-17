@@ -150,10 +150,10 @@ export function onChangeBlockStates(
 	}
 
 	if (Object.keys(newValue).length < Object.keys(_states).length) {
-		const newStates: { [key: TStates]: StateTypes } = {};
+		const newStates: { [key: TStates | string]: StateTypes } = {};
 
 		Object.entries(_states).forEach(
-			([stateType, state]: [TStates, StateTypes]): void => {
+			([stateType, state]: [TStates | string, StateTypes]): void => {
 				if (
 					arrayDiff(
 						Object.keys(_states),
