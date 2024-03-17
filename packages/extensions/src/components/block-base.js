@@ -175,11 +175,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		const blockEditRef = useRef(null);
 		const currentAttributes = useCalculateCurrentAttributes({
 			attributes,
-			currentBlock,
-			currentState,
-			isNormalState,
-			currentInnerBlockState,
-			currentBreakpoint,
 			currentInnerBlock,
 			publisherInnerBlocks,
 		});
