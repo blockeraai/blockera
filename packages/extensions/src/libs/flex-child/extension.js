@@ -16,7 +16,7 @@ import {
 	ToggleSelectControl,
 } from '@publisher/controls';
 import { hasSameProps } from '@publisher/utils';
-import { componentClassNames } from '@publisher/classnames';
+import { extensionClassNames } from '@publisher/classnames';
 import { FeatureWrapper } from '@publisher/components';
 
 /**
@@ -78,10 +78,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 				title={__('Flex Child', 'publisher-core')}
 				initialOpen={true}
 				icon={<FlexChildExtensionIcon />}
-				className={componentClassNames(
-					'extension',
-					'extension-flex-child'
-				)}
+				className={extensionClassNames('flex-child')}
 			>
 				<ExtensionSettings
 					features={extensionConfig}

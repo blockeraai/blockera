@@ -15,7 +15,7 @@ import {
 	RepeaterControl,
 } from '@publisher/controls';
 import { hasSameProps } from '@publisher/utils';
-import { componentClassNames } from '@publisher/classnames';
+import { extensionClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -42,10 +42,7 @@ export const EntranceAnimationExtension: ComponentType<EntranceExtensionProps> =
 					title={__('On Entrance', 'publisher-core')}
 					initialOpen={true}
 					icon={<EntranceAnimationExtensionIcon />}
-					className={componentClassNames(
-						'extension',
-						'extension-entrance-animation'
-					)}
+					className={extensionClassNames('entrance-animation')}
 				>
 					<ControlContextProvider
 						value={{

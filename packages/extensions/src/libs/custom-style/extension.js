@@ -15,7 +15,7 @@ import {
 	CodeControl,
 } from '@publisher/controls';
 import { hasSameProps } from '@publisher/utils';
-import { componentClassNames } from '@publisher/classnames';
+import { extensionClassNames } from '@publisher/classnames';
 import { FeatureWrapper } from '@publisher/components';
 
 /**
@@ -65,10 +65,7 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 					title={__('Custom CSS', 'publisher-core')}
 					initialOpen={false}
 					icon={<CustomStyleExtensionIcon />}
-					className={componentClassNames(
-						'extension',
-						'extension-custom-style'
-					)}
+					className={extensionClassNames('custom-style')}
 					isEdited={
 						values.publisherCustomCSS !==
 						attributes.publisherCustomCSS.default

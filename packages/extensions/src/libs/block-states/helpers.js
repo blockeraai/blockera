@@ -2,6 +2,7 @@
 /**
  * External dependencies
  */
+import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { dispatch } from '@wordpress/data';
 
@@ -53,25 +54,67 @@ export function BreakpointIcon({
 }): MixedElement {
 	switch (name) {
 		case 'laptop':
-			return <LaptopIcon onClick={onClick} {...props} />;
+			return (
+				<LaptopIcon
+					aria-label={__('Laptop', 'publisher-core')}
+					onClick={onClick}
+					{...props}
+				/>
+			);
 
 		case 'desktop':
-			return <DesktopIcon onClick={onClick} {...props} />;
+			return (
+				<DesktopIcon
+					aria-label={__('Desktop', 'publisher-core')}
+					onClick={onClick}
+					{...props}
+				/>
+			);
 
 		case 'tablet':
-			return <TabletIcon onClick={onClick} {...props} />;
+			return (
+				<TabletIcon
+					aria-label={__('Tablet', 'publisher-core')}
+					onClick={onClick}
+					{...props}
+				/>
+			);
 
 		case 'mobile':
-			return <MobileIcon onClick={onClick} {...props} />;
+			return (
+				<MobileIcon
+					aria-label={__('Mobile', 'publisher-core')}
+					onClick={onClick}
+					{...props}
+				/>
+			);
 
 		case 'mobile-landscape':
-			return <MobileLandscapeIcon onClick={onClick} {...props} />;
+			return (
+				<MobileLandscapeIcon
+					aria-label={__('Mobile Landscape', 'publisher-core')}
+					onClick={onClick}
+					{...props}
+				/>
+			);
 
 		case 'large':
-			return <LargeIcon onClick={onClick} {...props} />;
+			return (
+				<LargeIcon
+					aria-label={__('Large Screen', 'publisher-core')}
+					onClick={onClick}
+					{...props}
+				/>
+			);
 
 		case 'extra-large':
-			return <ExtraLargeIcon onClick={onClick} {...props} />;
+			return (
+				<ExtraLargeIcon
+					aria-label={__('Extra Large Screen', 'publisher-core')}
+					onClick={onClick}
+					{...props}
+				/>
+			);
 
 		default:
 			return <></>;
@@ -107,10 +150,10 @@ export function onChangeBlockStates(
 	}
 
 	if (Object.keys(newValue).length < Object.keys(_states).length) {
-		const newStates: { [key: TStates]: StateTypes } = {};
+		const newStates: { [key: TStates | string]: StateTypes } = {};
 
 		Object.entries(_states).forEach(
-			([stateType, state]: [TStates, StateTypes]): void => {
+			([stateType, state]: [TStates | string, StateTypes]): void => {
 				if (
 					arrayDiff(
 						Object.keys(_states),

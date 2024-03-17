@@ -18,8 +18,8 @@ import {
 import { isInteger, hasSameProps } from '@publisher/utils';
 import { Button, FeatureWrapper } from '@publisher/components';
 import {
-	componentClassNames,
 	controlInnerClassNames,
+	extensionClassNames,
 } from '@publisher/classnames';
 
 /**
@@ -113,10 +113,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 				title={__('Effects', 'publisher-core')}
 				initialOpen={true}
 				icon={<EffectsExtensionIcon />}
-				className={componentClassNames(
-					'extension',
-					'extension-effects'
-				)}
+				className={extensionClassNames('effects')}
 			>
 				<ExtensionSettings
 					buttonLabel={__('More Effect Settings', 'publisher-core')}

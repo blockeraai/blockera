@@ -36,12 +36,15 @@ Cypress.on('uncaught:exception', () => {
 Cypress.Commands.add('getByDataCy', (selector, ...args) => {
 	return cy.get(`[data-cy=${selector}]`, ...args);
 });
+
 Cypress.Commands.add('getByDataTest', (selector, ...args) => {
 	return cy.get(`[data-test=${selector}]`, ...args);
 });
+
 Cypress.Commands.add('getByAriaLabel', (selector, ...args) => {
 	return cy.get(`[aria-label="${selector}"]`, ...args);
 });
+
 Cypress.Commands.add('cssVar', (cssVarName, selector) => {
 	if (selector) {
 		return cy.document().then((doc) => {
@@ -59,16 +62,65 @@ Cypress.Commands.add('cssVar', (cssVarName, selector) => {
 			.trim();
 	});
 });
+
 // get parent container to have isolate aria for testing
 Cypress.Commands.add('getParentContainer', (ariaLabel, parentsDataCy) => {
 	return cy
 		.get(`[aria-label="${ariaLabel}"]`)
-		.parents(`[data-cy=${parentsDataCy}]`);
+		.closest(`[data-cy=${parentsDataCy}]`);
 });
+
+// get block by name for testing
+Cypress.Commands.add('getBlock', (blockName) => {
+	return cy.get(`[data-type="${blockName}"]`);
+});
+
+// Open Value Addon Popover
+Cypress.Commands.add('openValueAddon', () => {
+	cy.getByDataCy('value-addon-btn-open').click({
+		force: true,
+	});
+});
+
+// Select Value Addon Popover
+Cypress.Commands.add('selectValueAddonItem', (itemID) => {
+	cy.getByDataCy('va-item-' + itemID).click({
+		force: true,
+	});
+});
+
 // for testing
 Cypress.Commands.add('test gite', (selector, ...args) => {
 	return cy.get(`[data-test=${selector}]`, ...args);
 });
+
+Cypress.Commands.add(
+	'hasCssVar',
+	{ prevSubject: true },
+	(subject, styleName, cssVarName) => {
+		cy.document().then((doc) => {
+			const dummy = doc.createElement('span');
+			dummy.style.setProperty(styleName, `var(${cssVarName})`);
+			doc.body.appendChild(dummy);
+
+			const evaluatedStyle = window
+				.getComputedStyle(dummy)
+				.getPropertyValue(styleName)
+				.trim();
+			dummy.remove();
+
+			cy.wrap(subject)
+				.then(($el) =>
+					window
+						.getComputedStyle($el[0])
+						.getPropertyValue(styleName)
+						.trim()
+				)
+				.should('eq', evaluatedStyle);
+		});
+	}
+);
+
 Cypress.Commands.add('multiClick', (selector, count, ...args) => {
 	let counter = 0;
 	while (counter !== count) {
@@ -76,9 +128,11 @@ Cypress.Commands.add('multiClick', (selector, count, ...args) => {
 		counter += 1;
 	}
 });
+
 Cypress.Commands.add('clickOutside', () => {
 	return cy.get('body').click(0, 0);
 });
+
 Cypress.Commands.add(
 	'setSliderValue',
 	{ prevSubject: 'element' },
@@ -94,6 +148,7 @@ Cypress.Commands.add(
 		element.dispatchEvent(new Event('input', { bubbles: true }));
 	}
 );
+
 // simulate paste event
 Cypress.Commands.add(
 	'pasteText',
@@ -105,3 +160,12 @@ Cypress.Commands.add(
 			.trigger('paste', { force: true });
 	}
 );
+
+// Open More Settings Panel and Activate Item
+Cypress.Commands.add('activateMoreSettingsItem', (settingsLabel, itemName) => {
+	// open settings
+	cy.get(`[aria-label="${settingsLabel}"]`).click();
+
+	// activate item
+	cy.get(`[aria-label="Activate ${itemName}"]`).click();
+});

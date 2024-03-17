@@ -1,26 +1,55 @@
 // @flow
 
 /**
+ * External dependencies
+ */
+import { useSelect } from '@wordpress/data';
+
+/**
  * Internal dependencies
  */
-import { isInnerBlock } from '../../components';
 import type { CalculateCurrentAttributesProps } from './types';
+import { isInnerBlock, isNormalState } from '../../components/utils';
 
 export const useCalculateCurrentAttributes = ({
 	attributes,
-	currentBlock,
-	currentState,
-	isNormalState,
-	currentBreakpoint,
 	currentInnerBlock,
 	publisherInnerBlocks,
-	currentInnerBlockState,
 }: CalculateCurrentAttributesProps): Object => {
 	let currentAttributes: Object = {};
+	let {
+		currentBlock,
+		currentState,
+		currentBreakpoint,
+		currentInnerBlockState,
+	} = useSelect((select) => {
+		const {
+			getExtensionCurrentBlock = () => 'master',
+			getExtensionInnerBlockState = () => 'normal',
+			getExtensionCurrentBlockState = () => 'normal',
+			getExtensionCurrentBlockStateBreakpoint = () => 'laptop',
+		} = select('publisher-core/extensions') || {};
 
-	if (isNormalState()) {
+		return {
+			currentBlock: getExtensionCurrentBlock(),
+			currentState: getExtensionCurrentBlockState(),
+			currentInnerBlockState: getExtensionInnerBlockState(),
+			currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
+		};
+	});
+
+	if (isNormalState(currentState) && 'laptop' === currentBreakpoint) {
 		if (isInnerBlock(currentBlock)) {
-			currentAttributes = currentInnerBlock?.attributes;
+			currentAttributes = {
+				...attributes,
+				...currentInnerBlock?.attributes,
+				...((
+					((
+						(currentInnerBlock?.attributes?.publisherBlockStates ||
+							{})[currentInnerBlockState] || {}
+					)?.breakpoints || {})?.[currentBreakpoint] || {}
+				)?.attributes || {}),
+			};
 		} else {
 			currentAttributes = attributes;
 		}
@@ -29,23 +58,24 @@ export const useCalculateCurrentAttributes = ({
 			currentInnerBlock = publisherInnerBlocks[currentBlock];
 		}
 		if (
+			!currentInnerBlock?.attributes?.publisherBlockStates ||
 			!currentInnerBlock?.attributes?.publisherBlockStates[
 				currentInnerBlockState
 			]
 		) {
-			currentInnerBlockState = 'normal';
+			currentAttributes = currentInnerBlock?.attributes;
+		} else {
+			currentAttributes = {
+				...currentInnerBlock?.attributes,
+				...(currentInnerBlock?.attributes?.publisherBlockStates[
+					currentInnerBlockState
+				]?.breakpoints[currentBreakpoint]
+					? currentInnerBlock?.attributes?.publisherBlockStates[
+							currentInnerBlockState
+					  ]?.breakpoints[currentBreakpoint]?.attributes
+					: {}),
+			};
 		}
-
-		currentAttributes = {
-			...currentInnerBlock?.attributes,
-			...(currentInnerBlock?.attributes?.publisherBlockStates[
-				currentInnerBlockState
-			]?.breakpoints[currentBreakpoint]
-				? currentInnerBlock?.attributes?.publisherBlockStates[
-						currentInnerBlockState
-				  ]?.breakpoints[currentBreakpoint]?.attributes
-				: {}),
-		};
 	} else {
 		if (!attributes.publisherBlockStates[currentState]) {
 			currentState = 'normal';

@@ -11,7 +11,10 @@ import { useState, useEffect, useMemo } from '@wordpress/element';
  */
 import { isEquals, isObject, isEmpty, isUndefined } from '@publisher/utils';
 import { prepare } from '@publisher/data-extractor';
-import { isInnerBlock } from '@publisher/extensions/src/components/utils';
+import {
+	isInnerBlock,
+	isNormalState as _isNormalBlockState,
+} from '@publisher/extensions/src/components/utils';
 import { useBlockContext } from '@publisher/extensions/src/hooks/context';
 
 /**
@@ -65,13 +68,13 @@ export const useAdvancedLabelProps = (
 		};
 	});
 	// Get static publisherInnerBlocks value to use as fallback.
-	const { publisherInnerBlocks, masterIsNormalState } = useBlockContext();
+	const { publisherInnerBlocks } = useBlockContext();
 	const currentBlockAttributes = useMemo(() => {
 		let calculatedAttributes = blockAttributes;
 
 		if (isInnerBlock(currentBlock)) {
 			// Assume current inner block inside master secondary state!
-			if (!masterIsNormalState()) {
+			if (!_isNormalBlockState(currentState)) {
 				if (
 					!blockAttributes.publisherBlockStates[currentState]
 						.breakpoints[currentBreakpoint].attributes
@@ -170,32 +173,50 @@ export const useAdvancedLabelProps = (
 				// $FlowFixMe
 				Object.entries(
 					currentBlockAttributes?.publisherBlockStates
-				)?.filter(([stateType, state]: [TStates, Object]): boolean => {
-					const breakpointTypes = Object.keys(state.breakpoints);
+				)?.filter(
+					([stateType, state]: [
+						TStates | string,
+						Object
+					]): boolean => {
+						const breakpointTypes = Object.keys(state.breakpoints);
 
-					return (
-						Object.values(state.breakpoints).filter(
-							(
-								breakpoint: Object,
-								breakpointIndex: number
-							): boolean => {
-								const stateValue =
-									'normal' === stateType &&
-									'laptop' ===
-										breakpointTypes[breakpointIndex]
-										? currentBlockAttributes
-										: breakpoint?.attributes;
+						return (
+							Object.values(state.breakpoints).filter(
+								(
+									breakpoint: Object,
+									breakpointIndex: number
+								): boolean => {
+									const stateValue =
+										'normal' === stateType &&
+										'laptop' ===
+											breakpointTypes[breakpointIndex]
+											? currentBlockAttributes
+											: breakpoint?.attributes;
 
-								if (isEmpty(stateValue)) {
-									return false;
-								}
+									if (isEmpty(stateValue)) {
+										return false;
+									}
 
-								// Assume control is repeater.
-								if (isRepeater) {
-									if (
-										!isNormalState &&
-										'normal' === stateType
-									) {
+									// Assume control is repeater.
+									if (isRepeater) {
+										if (
+											!isNormalState &&
+											'normal' === stateType
+										) {
+											return (
+												!isEmpty(
+													stateValue[attribute]
+												) &&
+												!isUndefined(
+													stateValue[attribute]
+												) &&
+												!isEquals(
+													stateValue[attribute],
+													clonedDefaultValue
+												)
+											);
+										}
+
 										return (
 											!isEmpty(stateValue[attribute]) &&
 											!isUndefined(
@@ -208,17 +229,20 @@ export const useAdvancedLabelProps = (
 										);
 									}
 
-									return (
-										!isEmpty(stateValue[attribute]) &&
-										!isUndefined(stateValue[attribute]) &&
-										!isEquals(
-											stateValue[attribute],
-											clonedDefaultValue
-										)
-									);
-								}
+									if (
+										!isNormalState &&
+										'normal' === stateType
+									) {
+										return (
+											!isEmpty(stateValue) &&
+											!isUndefined(stateValue) &&
+											!isEquals(
+												stateValue,
+												clonedDefaultValue
+											)
+										);
+									}
 
-								if (!isNormalState && 'normal' === stateType) {
 									return (
 										!isEmpty(stateValue) &&
 										!isUndefined(stateValue) &&
@@ -228,16 +252,10 @@ export const useAdvancedLabelProps = (
 										)
 									);
 								}
-
-								return (
-									!isEmpty(stateValue) &&
-									!isUndefined(stateValue) &&
-									!isEquals(stateValue, clonedDefaultValue)
-								);
-							}
-						).length > 0
-					);
-				})
+							).length > 0
+						);
+					}
+				)
 			);
 
 			let isChanged = !isEquals(clonedDefaultValue, clonedValue);

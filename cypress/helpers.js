@@ -19,7 +19,20 @@ export function loginToSite() {
  * @param {boolean} login If this is a login page.
  */
 export function goTo(path = '/wp-admin', login = false) {
-	return cy.visit(Cypress.env('testURL') + path).then(() => {
+	const testURL = Cypress.env('testURL');
+
+	if (
+		(testURL.endsWith('/') && !path.startsWith('/')) ||
+		(!testURL.endsWith('/') && path.startsWith('/'))
+	) {
+		path = `${testURL}${path}`;
+	} else if (!testURL.endsWith('/') && !path.startsWith('/')) {
+		path = `${testURL}/${path}`;
+	} else if (testURL.endsWith('/') && path.startsWith('/')) {
+		path = `${testURL.slice(0, -1)}${path}`;
+	}
+
+	return cy.visit(path).then(() => {
 		return login
 			? cy.window().then((win) => {
 					return win;
@@ -137,7 +150,7 @@ export function addBlockToPost(blockName, clearEditor = false, className = '') {
 	cy.get('.interface-pinned-items [aria-label="Settings"]').click();
 
 	// Click on added new block item.
-	cy.getIframeBody().find(`[data-type="${blockName}"]`).click();
+	cy.getBlock(blockName).click();
 
 	cy.window()
 		.its('wp.hooks')
@@ -568,4 +581,23 @@ export function hexStringToByte(str) {
 	}
 
 	return new Uint8Array(a);
+}
+
+export function setBlockType(blockType, suffix = ' Customize') {
+	// Alias
+	cy.get('h2').contains('Inner Blocks').as('inners');
+
+	cy.get('@inners').click();
+
+	// Open "link" inner block panel.
+	cy.get('@inners').parent().parent().as('innersBox');
+	cy.get('@innersBox').within(() => {
+		cy.get(`[aria-label="${blockType}${suffix}"]`).click();
+	});
+}
+
+export function setDeviceType(deviceType) {
+	cy.getByAriaLabel('Breakpoints').within(() => {
+		cy.getByAriaLabel(deviceType).click();
+	});
 }

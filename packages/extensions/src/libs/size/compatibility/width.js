@@ -84,7 +84,8 @@ export function widthToWPCompatibility({
 				newValue === '' ||
 				isUndefined(newValue) ||
 				isSpecialUnit(newValue) ||
-				!isString(newValue)
+				!isString(newValue) ||
+				newValue.endsWith('func')
 			) {
 				return {
 					width: undefined,
@@ -185,7 +186,8 @@ export function widthToWPCompatibility({
 				newValue === '' ||
 				isUndefined(newValue) ||
 				isSpecialUnit(newValue) ||
-				!isString(newValue)
+				!isString(newValue) ||
+				newValue.endsWith('func')
 			) {
 				return {
 					width: undefined,
@@ -196,4 +198,6 @@ export function widthToWPCompatibility({
 				width: newValue,
 			};
 	}
+
+	return null;
 }

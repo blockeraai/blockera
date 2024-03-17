@@ -41,9 +41,10 @@ export const useInnerBlocksInfo = ({
 		if (isInnerBlock(currentBlock)) {
 			if (
 				!Object.keys(
-					attributes.publisherBlockStates[currentState].breakpoints[
-						currentBreakpoint
-					].attributes
+					(
+						attributes.publisherBlockStates[currentState]
+							.breakpoints[currentBreakpoint] || {}
+					)?.attributes || {}
 				).length
 			) {
 				savedInnerBlocks = publisherInnerBlocks;

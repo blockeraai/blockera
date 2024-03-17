@@ -2,7 +2,7 @@
 	position: relative;
 	margin-top: 14px;
 
-	.publisher-component-more-features__header {
+	.publisher-component-more-features__button {
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -15,13 +15,13 @@
 		cursor: pointer;
 		-webkit-user-select: none;
 		user-select: none;
-		border: 1px solid #d3d3d3;
+		width: 100%;
 
 		svg {
 			fill: currentColor;
 		}
 
-		.publisher-component-more-features__header__changed {
+		.publisher-component-more-features__button__changed {
 			display: none;
 			width: 6px;
 			height: 6px;
@@ -30,7 +30,7 @@
 		}
 
 		&:hover {
-			color: var(--publisher-controls-primary-color);
+			color: var(--publisher-controls-primary-color) !important;
 		}
 
 		&:focus {
@@ -49,11 +49,11 @@
 
 	&.is-open {
 
-		.publisher-component-more-features__header {
-			color: var(--publisher-controls-primary-color);
+		.publisher-component-more-features__button {
+			color: var(--publisher-controls-primary-color) !important;
 			margin-bottom: 10px;
 
-			.publisher-component-more-features__header__changed {
+			.publisher-component-more-features__button__changed {
 				display: inline-block;
 			}
 		}
@@ -69,9 +69,9 @@
 
 	&.is-changed {
 
-		.publisher-component-more-features__header {
+		.publisher-component-more-features__button {
 
-			.publisher-component-more-features__header__changed {
+			.publisher-component-more-features__button__changed {
 				display: inline-block;
 			}
 		}

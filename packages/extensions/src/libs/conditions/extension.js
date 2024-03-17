@@ -15,7 +15,7 @@ import {
 	RepeaterControl,
 } from '@publisher/controls';
 import { hasSameProps } from '@publisher/utils';
-import { componentClassNames } from '@publisher/classnames';
+import { extensionClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -42,10 +42,7 @@ export const ConditionsExtension: ComponentType<ConditionsExtensionProps> =
 					title={__('Conditions', 'publisher-core')}
 					initialOpen={true}
 					icon={<ConditionsExtensionIcon />}
-					className={componentClassNames(
-						'extension',
-						'extension-conditions'
-					)}
+					className={extensionClassNames('conditions')}
 				>
 					<ControlContextProvider
 						value={{

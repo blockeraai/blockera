@@ -9,6 +9,7 @@ import { addFilter } from '@wordpress/hooks';
  * Publisher dependencies
  */
 import type { ControlContextRef } from '@publisher/controls/src/context/types';
+import { mergeObject } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -110,54 +111,54 @@ export const bootstrap = (): void => {
 
 			switch (featureId) {
 				case 'publisherWidth':
-					return {
-						...nextState,
-						...widthToWPCompatibility({
+					return mergeObject(
+						nextState,
+						widthToWPCompatibility({
 							newValue,
 							ref,
 							blockId,
-						}),
-					};
+						})
+					);
 
 				case 'publisherHeight':
-					return {
-						...nextState,
-						...heightToWPCompatibility({
+					return mergeObject(
+						nextState,
+						heightToWPCompatibility({
 							newValue,
 							ref,
 							blockId,
-						}),
-					};
+						})
+					);
 
 				case 'publisherMinHeight':
-					return {
-						...nextState,
-						...minHeightToWPCompatibility({
+					return mergeObject(
+						nextState,
+						minHeightToWPCompatibility({
 							newValue,
 							ref,
 							blockId,
-						}),
-					};
+						})
+					);
 
 				case 'publisherRatio':
-					return {
-						...nextState,
-						...ratioToWPCompatibility({
+					return mergeObject(
+						nextState,
+						ratioToWPCompatibility({
 							newValue,
 							ref,
 							blockId,
-						}),
-					};
+						})
+					);
 
 				case 'publisherFit':
-					return {
-						...nextState,
-						...fitToWPCompatibility({
+					return mergeObject(
+						nextState,
+						fitToWPCompatibility({
 							newValue,
 							ref,
 							blockId,
-						}),
-					};
+						})
+					);
 			}
 
 			return nextState;

@@ -19,7 +19,7 @@ import {
 	NoticeControl,
 } from '@publisher/controls';
 import { checkVisibleItemLength, hasSameProps } from '@publisher/utils';
-import { componentClassNames } from '@publisher/classnames';
+import { extensionClassNames } from '@publisher/classnames';
 import { FeatureWrapper } from '@publisher/components';
 
 /**
@@ -81,10 +81,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 				title={__('Background', 'publisher-core')}
 				initialOpen={true}
 				icon={<BackgroundExtensionIcon />}
-				className={componentClassNames(
-					'extension',
-					'extension-background'
-				)}
+				className={extensionClassNames('background')}
 			>
 				<ExtensionSettings
 					buttonLabel={__(

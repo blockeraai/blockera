@@ -27,7 +27,7 @@ import {
 	MoreFeatures,
 } from '@publisher/components';
 import { hasSameProps } from '@publisher/utils';
-import { componentClassNames } from '@publisher/classnames';
+import { extensionClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -224,10 +224,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 				title={__('Typography', 'publisher-core')}
 				initialOpen={true}
 				icon={<TypographyExtensionIcon />}
-				className={componentClassNames(
-					'extension',
-					'extension-typography'
-				)}
+				className={extensionClassNames('typography')}
 			>
 				<ExtensionSettings
 					buttonLabel={__(

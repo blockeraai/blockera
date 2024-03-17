@@ -19,7 +19,7 @@ import {
 } from '@publisher/controls';
 import { hasSameProps } from '@publisher/utils';
 import { Flex, Button, FeatureWrapper } from '@publisher/components';
-import { componentClassNames } from '@publisher/classnames';
+import { extensionClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -114,7 +114,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 				title={__('Layout', 'publisher-core')}
 				initialOpen={true}
 				icon={<LayoutExtensionIcon />}
-				className={componentClassNames('extension', 'extension-layout')}
+				className={extensionClassNames('layout')}
 			>
 				<ExtensionSettings
 					buttonLabel={__('More Layout Settings', 'publisher-core')}

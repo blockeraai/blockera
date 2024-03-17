@@ -22,7 +22,7 @@ import {
 	Flex,
 } from '@publisher/components';
 import { hasSameProps } from '@publisher/utils';
-import { componentClassNames } from '@publisher/classnames';
+import { extensionClassNames } from '@publisher/classnames';
 
 /**
  * Internal dependencies
@@ -114,7 +114,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 				title={__('Size', 'publisher-core')}
 				initialOpen={true}
 				icon={<SizeExtensionIcon />}
-				className={componentClassNames('extension', 'extension-size')}
+				className={extensionClassNames('size')}
 			>
 				<ExtensionSettings
 					buttonLabel={__('More Size Settings', 'publisher-core')}

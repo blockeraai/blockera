@@ -74,4 +74,6 @@ export function ratioToWPCompatibility({
 				aspectRatio: newValue.value,
 			};
 	}
+
+	return null;
 }

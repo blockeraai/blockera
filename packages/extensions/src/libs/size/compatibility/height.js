@@ -13,13 +13,14 @@ export function heightFromWPCompatibility({
 	attributes: Object,
 	blockId?: string,
 }): Object {
+	if (attributes?.publisherHeight !== '') {
+		return attributes;
+	}
+
 	switch (blockId) {
 		case 'core/image':
 		case 'core/post-featured-image':
-			if (
-				attributes?.publisherHeight === undefined &&
-				attributes.publisherHeight !== attributes?.height
-			) {
+			if (attributes?.height !== undefined) {
 				attributes.publisherHeight = attributes?.height;
 			}
 	}
@@ -48,8 +49,7 @@ export function heightToWPCompatibility({
 			if (
 				newValue === '' ||
 				isUndefined(newValue) ||
-				// 👉 auto is valid
-				(newValue !== 'auto' && isSpecialUnit(newValue)) ||
+				isSpecialUnit(newValue) ||
 				!isString(newValue) ||
 				!newValue.endsWith('px') // only px units
 			) {
@@ -74,7 +74,8 @@ export function heightToWPCompatibility({
 				newValue === '' ||
 				isUndefined(newValue) ||
 				isSpecialUnit(newValue) ||
-				!isString(newValue)
+				!isString(newValue) ||
+				newValue.endsWith('func')
 			) {
 				return {
 					height: undefined,
@@ -85,4 +86,6 @@ export function heightToWPCompatibility({
 				height: newValue,
 			};
 	}
+
+	return null;
 }

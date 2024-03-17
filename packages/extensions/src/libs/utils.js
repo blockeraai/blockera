@@ -63,10 +63,10 @@ export function generateExtensionId(
 		!isNormalState(getExtensionCurrentBlockState()) &&
 		isInnerBlock(currentBlock)
 	) {
-		return `${blockName}/${id}/${clientId}-master-${currentBlock}${getExtensionInnerBlockState()}-${getExtensionCurrentBlockStateBreakpoint()}`;
+		return `${blockName}/${id}/${clientId}-master-${currentBlock}-${getExtensionInnerBlockState()}-${getExtensionCurrentBlockStateBreakpoint()}`;
 	}
 
-	return `${blockName}/${id}/${clientId}-${currentBlock}${getExtensionCurrentBlockState()}-${getExtensionCurrentBlockStateBreakpoint()}`;
+	return `${blockName}/${id}/${clientId}-${currentBlock}-${getExtensionCurrentBlockState()}-${getExtensionCurrentBlockStateBreakpoint()}`;
 }
 
 /**
