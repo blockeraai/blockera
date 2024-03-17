@@ -4,7 +4,7 @@
  * External dependencies
  */
 import { Rnd } from 'react-rnd';
-import { useState, useRef, memo } from '@wordpress/element';
+import { useState, memo } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -33,8 +33,6 @@ export const AreaMergeHandler: TAreaMergeHandlerProps =
 				width: '100%',
 				height: '100%',
 			});
-
-			const isDragged = useRef(false);
 
 			const handleClass = 'showHandles';
 
@@ -70,16 +68,17 @@ export const AreaMergeHandler: TAreaMergeHandlerProps =
 					case 'topRight':
 					case 'topLeft':
 						{
-							for (let i = 5; i < 30; i += 2) {
+							for (let i = 5; i < 20; i += 2) {
 								if (iframe) {
 									targetElement =
+										// $FlowFixMe
 										iframe.contentWindow.document.elementFromPoint(
 											e.pageX,
 											e.pageY - i
 										);
 									if (
-										targetElement.getAttribute('data-id') ||
-										targetElement.dataset.virtualId
+										targetElement?.dataset?.dataId ||
+										targetElement?.dataset?.virtualId
 									) {
 										break;
 									}
@@ -89,8 +88,8 @@ export const AreaMergeHandler: TAreaMergeHandlerProps =
 										e.pageY - i
 									);
 									if (
-										targetElement.getAttribute('data-id') ||
-										targetElement.dataset.virtualId
+										targetElement?.dataset?.dataId ||
+										targetElement?.dataset?.virtualId
 									)
 										break;
 								}
@@ -99,16 +98,17 @@ export const AreaMergeHandler: TAreaMergeHandlerProps =
 						break;
 					case 'bottomRight':
 					case 'bottomLeft': {
-						for (let i = 5; i < 30; i += 2) {
+						for (let i = 5; i < 20; i += 2) {
 							if (iframe) {
 								targetElement =
+									// $FlowFixMe
 									iframe.contentWindow.document.elementFromPoint(
 										e.pageX,
 										e.pageY + i
 									);
 								if (
-									targetElement.getAttribute('data-id') ||
-									targetElement.dataset.virtualId
+									targetElement?.dataset?.dataId ||
+									targetElement?.dataset?.virtualId
 								) {
 									break;
 								}
@@ -118,8 +118,8 @@ export const AreaMergeHandler: TAreaMergeHandlerProps =
 									e.pageY + i
 								);
 								if (
-									targetElement.getAttribute('data-id') ||
-									targetElement.dataset.virtualId
+									targetElement?.dataset?.dataId ||
+									targetElement?.dataset?.virtualId
 								)
 									break;
 							}
@@ -192,16 +192,6 @@ export const AreaMergeHandler: TAreaMergeHandlerProps =
 					position={{
 						x: position?.left || 0,
 						y: position?.top || 0,
-					}}
-					onDragStart={(e, d) => {
-						isDragged.current = true;
-						if (activeAreaId === id)
-							setPosition({ top: d.y, left: d.x });
-					}}
-					onDragStop={(e, d) => {
-						isDragged.current = false;
-						if (activeAreaId === id)
-							setPosition({ top: d.y, left: d.x });
 					}}
 					resizeHandleWrapperClass={handleClass}
 					resizeHandleClasses={resizeHandleClasses}

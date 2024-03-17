@@ -130,22 +130,20 @@ export const Cells = ({
 
 	const mergeArea = (direction: string) => {
 		if (
-			activeAreaId !== virtualTargetArea?.parentId &&
-			!targetArea &&
-			(!newMergedArea ||
-				newMergedArea['column-start'] === newMergedArea['column-end'] ||
-				newMergedArea['row-start'] === newMergedArea['row-end'] ||
-				!activeArea ||
-				targetArea?.id === activeArea.id)
+			!newMergedArea ||
+			newMergedArea['column-start'] >= newMergedArea['column-end'] ||
+			newMergedArea['row-start'] >= newMergedArea['row-end'] ||
+			targetAreaId === activeAreaId
 		) {
 			setVirtualMergedAreas([]);
 			setActiveAreaId(null);
 			setTargetAreaId(null);
 			setNewMergedArea(null);
 			return null;
-		}
-
-		if (virtualTargetArea && activeAreaId === virtualTargetArea.parentId) {
+		} else if (
+			virtualTargetArea &&
+			activeAreaId === virtualTargetArea.parentId
+		) {
 			const filteredAreas = publisherGridAreas.filter(
 				(item) => item.id !== activeAreaId
 			);
@@ -220,10 +218,7 @@ export const Cells = ({
 			setActiveAreaId(null);
 			setTargetAreaId(null);
 			setNewMergedArea(null);
-			return;
-		}
-
-		if (
+		} else if (
 			newMergedArea &&
 			(virtualTargetArea ||
 				activeArea.mergedArea ||
@@ -288,71 +283,72 @@ export const Cells = ({
 			setActiveAreaId(null);
 			setTargetAreaId(null);
 			setNewMergedArea(null);
+		} else {
+			const newArea = {
+				id: uId(),
+				name: activeArea.name,
+				'column-start': Math.min(
+					activeArea['column-start'],
+					targetArea['column-start']
+				),
+				'column-end': Math.max(
+					activeArea['column-end'],
+					targetArea['column-end']
+				),
+				'row-start': Math.min(
+					activeArea['row-start'],
+					targetArea['row-start']
+				),
+				'row-end': Math.max(
+					activeArea['row-end'],
+					targetArea['row-end']
+				),
+				mergedArea: true,
+				coordinates: [],
+			};
 
-			return;
+			newArea.coordinates = calcCoordinates(newArea);
+
+			const overlapAreas = calcOverlapAreas({
+				newArea,
+				publisherGridAreas,
+			});
+
+			const updatedOverlapAreas = overlapAreas
+				?.map((item) => {
+					return calcReMergedAreas(item, newMergedArea);
+				})
+				.flat();
+
+			const overlapAreaIds = overlapAreas.map((item) => item?.id);
+			const filteredAreas = publisherGridAreas.filter(
+				(item) => !overlapAreaIds.includes(item.id)
+			);
+
+			handleOnChangeAttributes(
+				'publisherGridAreas',
+				generateAreas({
+					gridRows: publisherGridRows.value,
+					gridColumns: publisherGridColumns.value,
+					publisherGridDirection,
+					prevGridAreas: [
+						...filteredAreas,
+						newArea,
+						...updateArrayCoordinates(updatedOverlapAreas.flat()),
+					],
+				}),
+				{
+					path: '',
+					reset: false,
+					action: 'normal',
+				}
+			);
+
+			setActiveAreaId(null);
+			setTargetAreaId(null);
+			setVirtualMergedAreas([]);
+			setNewMergedArea(null);
 		}
-
-		const newArea = {
-			id: uId(),
-			name: activeArea.name,
-			'column-start': Math.min(
-				activeArea['column-start'],
-				targetArea['column-start']
-			),
-			'column-end': Math.max(
-				activeArea['column-end'],
-				targetArea['column-end']
-			),
-			'row-start': Math.min(
-				activeArea['row-start'],
-				targetArea['row-start']
-			),
-			'row-end': Math.max(activeArea['row-end'], targetArea['row-end']),
-			mergedArea: true,
-			coordinates: [],
-		};
-
-		newArea.coordinates = calcCoordinates(newArea);
-
-		const overlapAreas = calcOverlapAreas({
-			newArea,
-			publisherGridAreas,
-		});
-
-		const updatedOverlapAreas = overlapAreas
-			?.map((item) => {
-				return calcReMergedAreas(item, newMergedArea);
-			})
-			.flat();
-
-		const overlapAreaIds = overlapAreas.map((item) => item?.id);
-		const filteredAreas = publisherGridAreas.filter(
-			(item) => !overlapAreaIds.includes(item.id)
-		);
-
-		handleOnChangeAttributes(
-			'publisherGridAreas',
-			generateAreas({
-				gridRows: publisherGridRows.value,
-				gridColumns: publisherGridColumns.value,
-				publisherGridDirection,
-				prevGridAreas: [
-					...filteredAreas,
-					newArea,
-					...updateArrayCoordinates(updatedOverlapAreas.flat()),
-				],
-			}),
-			{
-				path: '',
-				reset: false,
-				action: 'normal',
-			}
-		);
-
-		setActiveAreaId(null);
-		setTargetAreaId(null);
-		setVirtualMergedAreas([]);
-		setNewMergedArea(null);
 	};
 
 	return publisherGridAreas?.map((item) => {
