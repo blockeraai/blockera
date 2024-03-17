@@ -267,7 +267,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			currentBreakpoint,
 		};
 
-		const MappedExtensions = (tab: TTabProps): MixedElement => {
+		const MappedExtensions = (tab: TTabProps): Array<MixedElement> => {
 			const activePanel = [
 				<Fill
 					key={`'publisher-core-block-${currentBlock}-card-children'`}
