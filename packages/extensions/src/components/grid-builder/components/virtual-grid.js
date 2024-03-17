@@ -479,7 +479,8 @@ export const VirtualGrid = ({
 									justifySelf: 'center',
 									alignSelf: 'center',
 								}}
-							></div>
+								data-test="virtual-area"
+							/>
 						);
 					}
 

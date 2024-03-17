@@ -5,6 +5,7 @@
  */
 import type { MixedElement } from 'react';
 import { createPortal, useEffect } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Publisher dependencies
@@ -96,6 +97,7 @@ export const GridBuilder = ({
 					size="extra-small"
 					className="btn"
 					onClick={() => setOpenGridBuilder(false)}
+					aria-label={__('Close Grid Builder', 'publisher-core')}
 				>
 					Done
 				</Button>

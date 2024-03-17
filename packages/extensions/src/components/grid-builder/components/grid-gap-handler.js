@@ -85,6 +85,7 @@ export const GapHandler: TGapHandlerProps = memo<TGapHandlerProps>(
 		return (
 			<div
 				className={`grid-builder-${type}-gap-handler`}
+				data-test={`gap-handler-${type}`}
 				style={style}
 				onMouseDown={(e) => onDragStart(e)}
 			/>

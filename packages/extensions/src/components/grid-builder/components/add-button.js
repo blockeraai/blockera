@@ -49,6 +49,7 @@ export const AddButton = ({
 			}}
 			onClick={onClick}
 			className="add-btn"
+			data-test={`add-${type}`}
 		>
 			<AddIcon />
 		</Button>

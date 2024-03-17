@@ -60,6 +60,7 @@ export const AreaMergeHandler: TAreaMergeHandlerProps =
 			};
 
 			const findElement = (e: Object, direction: string) => {
+				// to increase the speed of finding element when resizing
 				const iframe = document.querySelector(
 					'iframe[name="editor-canvas"]'
 				);

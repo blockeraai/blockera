@@ -477,6 +477,7 @@ export const Cells = ({
 					position: 'relative',
 				}}
 				data-id={item.id}
+				data-test={item.name}
 			>
 				<p style={{ pointerEvents: 'none' }}>
 					{item.name?.replace(/[^-\.0-9]/g, '')}
@@ -492,6 +493,7 @@ export const Cells = ({
 						setVirtualTargetAreaId={setVirtualTargetAreaId}
 						createVirtualAreas={createVirtualAreas}
 						highlightHandler={highlightHandler}
+						data-test={`${item.name}-handler`}
 					/>
 				)}
 			</div>

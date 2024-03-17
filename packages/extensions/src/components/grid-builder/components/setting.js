@@ -234,7 +234,7 @@ export const SizeSetting = ({
 											0,
 											currentItemIndex
 										),
-										{ ...item, size },
+										{ ...item, size, 'max-size': size },
 										...filteredItems.slice(
 											currentItemIndex
 										),
@@ -484,6 +484,7 @@ export const SizeSetting = ({
 							}
 						);
 					}}
+					data-test="delete"
 				>
 					delete
 				</Button>
