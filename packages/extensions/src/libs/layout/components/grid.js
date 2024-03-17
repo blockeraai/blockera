@@ -111,9 +111,10 @@ export default function ({
 					size="input"
 					contentAlign="left"
 					onClick={() => setOpenGridBuilder(!isOpenGridBuilder)}
+					aria-label={__('Open Grid Builder', 'publisher-core')}
 				>
 					<EditIcon />
-					Open Grid Builder
+					{__('Open Grid Builder', 'publisher-core')}
 				</Button>
 
 				<Flex>
@@ -144,11 +145,12 @@ export default function ({
 									ref?: Object
 								): void => {
 									const value = [];
-									// + & -
+
 									if (
 										values.publisherGridRows.value.length <
 										length
 									) {
+										// +
 										value.push(
 											...values.publisherGridRows.value
 										);
@@ -172,6 +174,7 @@ export default function ({
 										values.publisherGridRows.value.length >
 										length
 									) {
+										// -
 										value.push(
 											...values.publisherGridRows.value
 										);
@@ -249,11 +252,12 @@ export default function ({
 									ref?: Object
 								): void => {
 									const value = [];
-									// + & -
+
 									if (
 										values.publisherGridColumns.value
 											.length < length
 									) {
+										// +
 										value.push(
 											...values.publisherGridColumns.value
 										);
@@ -274,6 +278,7 @@ export default function ({
 										values.publisherGridColumns.value
 											.length > length
 									) {
+										// -
 										value.push(
 											...values.publisherGridColumns.value
 										);
@@ -383,9 +388,11 @@ export default function ({
 								value: 'column',
 							},
 						]}
+						{...extensionProps.publisherGridDirection}
 					/>
 					<ToggleControl
 						id="dense"
+						singularId="dense"
 						columns="columns-2"
 						label={__('Dense', 'publisher-core')}
 						onChange={(dense: string, ref?: Object): void =>
@@ -398,6 +405,7 @@ export default function ({
 						defaultValue={
 							attributes.publisherGridDirection.default.dense
 						}
+						{...extensionProps.publisherGridDirection}
 					/>
 				</ControlContextProvider>
 			</FeatureWrapper>
