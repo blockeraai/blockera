@@ -1,4 +1,4 @@
-export default function MobileIcon({ onClick }) {
+export default function MobileIcon({ onClick, ...props }) {
 	return (
 		<svg
 			width="24"
@@ -6,6 +6,7 @@ export default function MobileIcon({ onClick }) {
 			viewBox="0 0 24 24"
 			xmlns="http://www.w3.org/2000/svg"
 			onClick={onClick}
+			{...props}
 		>
 			<path
 				fillRule="evenodd"
