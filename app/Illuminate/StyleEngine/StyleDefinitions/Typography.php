@@ -29,9 +29,28 @@ class Typography extends BaseStyleDefinition {
 		switch ( $cssProperty ) {
 
 			case 'text-orientation':
-				//FIXME: text-orientation bad saved!
-//				$props['writing-mode'] = $propertyValue['writing-mode'] . $this->getImportant();
-//				$props[ $cssProperty ] = $propertyValue['text-orientation'] . $this->getImportant();
+				switch ($propertyValue) {
+					case 'style-1':
+						$props['writing-mode'] = 'vertical-lr' . $this->getImportant();
+						$props['text-orientation'] = 'mixed' . $this->getImportant();
+						break;
+					case 'style-2':
+						$props['writing-mode'] = 'vertical-rl' . $this->getImportant();
+						$props['text-orientation'] = 'mixed' . $this->getImportant();
+						break;
+					case 'style-3':
+						$props['writing-mode'] = 'vertical-lr' . $this->getImportant();
+						$props['text-orientation'] = 'upright' . $this->getImportant();
+						break;
+					case 'style-4':
+						$props['writing-mode'] = 'vertical-rl' . $this->getImportant();
+						$props['text-orientation'] = 'upright' . $this->getImportant();
+						break;
+					case 'initial':
+						$props['writing-mode'] =
+							'horizontal-tb' . $this->getImportant();
+						$props['text-orientation'] = 'mixed' . $this->getImportant();
+				}
 				break;
 
 			case '-webkit-text-stroke-color':
@@ -74,6 +93,11 @@ class Typography extends BaseStyleDefinition {
 
 				break;
 
+			case 'word-break':
+			case 'direction':
+			case 'text-transform':
+			case 'font-style':
+			case 'text-decoration':
 			case 'color':
 			case '-webkit-text-stroke-width':
 			case 'letter-spacing':
