@@ -67,7 +67,7 @@ export const attributes = {
 		type: 'object',
 		default: {
 			color: '',
-			width: '',
+			width: '1px',
 		},
 	},
 	publisherWordBreak: {
