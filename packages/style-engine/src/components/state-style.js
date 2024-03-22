@@ -19,7 +19,7 @@ import {
 	PositionStyles,
 	SizeStyles,
 	SpacingStyles,
-	// TypographyStyles,
+	TypographyStyles,
 	// EffectsStyles
 } from '@publisher/extensions';
 import { isNormalState } from '@publisher/extensions/src/components';
@@ -110,7 +110,7 @@ const Stylesheet = ({
 			...SpacingStyles(calculatedProps),
 			...PositionStyles(calculatedProps),
 			...FlexChildStyles(calculatedProps),
-			// ...TypographyStyles(calculatedProps),
+			...TypographyStyles(calculatedProps),
 			...BackgroundStyles(calculatedProps),
 			// ...EffectsStyles(calculatedProps),
 			// ...CustomStyleStyles(calculatedProps),

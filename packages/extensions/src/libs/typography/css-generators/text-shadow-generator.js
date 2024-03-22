@@ -1,35 +1,35 @@
 /**
  * Publisher dependencies
  */
-import { createCssRule } from '@publisher/style-engine';
+import { createCssDeclarations } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
 
-export function TextShadowGenerator(id, props, { media, selector }) {
+export function TextShadowGenerator(id, props) {
 	const { attributes } = props;
 
-	if (!attributes?.publisherTextShadow?.length) {
+	if (!Object.values(attributes?.publisherTextShadow)?.length) {
 		return '';
 	}
 
-	const value = attributes?.publisherTextShadow
-		?.map((item) => {
-			if (!item.isVisible) {
-				return null;
-			}
+	const shadows = [];
 
-			return `${getValueAddonRealValue(item.x)} ${getValueAddonRealValue(
+	Object.entries(attributes?.publisherTextShadow)?.map(([, item]) => {
+		if (!item.isVisible) {
+			return null;
+		}
+
+		shadows.push(
+			`${getValueAddonRealValue(item.x)} ${getValueAddonRealValue(
 				item.y
 			)} ${getValueAddonRealValue(item.blur)} ${getValueAddonRealValue(
 				item.color
-			)}`;
-		})
-		?.filter((item) => null !== item);
+			)}`
+		);
 
-	return createCssRule({
-		media,
-		selector,
-		properties: {
-			'text-shadow': value?.join(', '),
-		},
+		return undefined;
+	});
+
+	return createCssDeclarations({
+		properties: { 'text-shadow': shadows.join(',') },
 	});
 }

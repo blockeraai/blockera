@@ -1,8 +1,15 @@
+// @flow
+
 /**
  * Publisher dependencies
  */
-import { computedCssRules } from '@publisher/style-engine';
+import {
+	computedCssDeclarations,
+	getCssSelector,
+} from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
+import type { CssRule } from '@publisher/style-engine/src/types';
+import { isEmptyObject } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -11,10 +18,18 @@ import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
 import { isActiveField } from '../../api/utils';
 import { TextShadowGenerator } from './css-generators';
+import * as config from '../base/config';
+import type { StylesProps } from '../types';
 
 export function TypographyStyles({
-	typographyConfig: {
-		cssGenerators,
+	state,
+	clientId,
+	blockName,
+	currentBlock,
+	selectors: blockSelectors,
+	attributes: currentBlockAttributes,
+}: StylesProps): Array<CssRule> {
+	const {
 		publisherFontSize,
 		publisherLineHeight,
 		publisherTextAlign,
@@ -31,263 +46,602 @@ export function TypographyStyles({
 		publisherTextColumns,
 		publisherTextStroke,
 		publisherWordBreak,
-	},
-	blockProps,
-	selector,
-	media,
-}) {
-	const { attributes: currBlockAttributes } = blockProps;
+	} = config.typographyConfig;
 
-	const properties = {};
-	const generators = [];
+	const blockProps = {
+		clientId,
+		blockName,
+		attributes: currentBlockAttributes,
+	};
 
-	if (isActiveField(publisherFontColor)) {
-		const color = getValueAddonRealValue(
-			currBlockAttributes.publisherFontColor
-		);
+	const sharedParams = {
+		state,
+		clientId,
+		currentBlock,
+		blockSelectors,
+		className: currentBlockAttributes?.className,
+	};
 
-		if (color !== attributes.publisherFontColor.default)
-			properties.color = color;
-	}
+	const styleGroup: Array<CssRule> = [];
 
 	if (isActiveField(publisherFontSize)) {
-		const fontSize = getValueAddonRealValue(
-			currBlockAttributes.publisherFontSize
+		const publisherFontSize = getValueAddonRealValue(
+			blockProps.attributes.publisherFontSize
 		);
 
-		if (fontSize !== attributes.publisherFontSize.default)
-			properties['font-size'] = fontSize;
+		if (publisherFontSize !== attributes.publisherFontSize.default) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherFontSize',
+				support: 'publisherFontSize',
+				fallbackSupportId: 'font-size',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherFontSize: [
+							{
+								type: 'static',
+								properties: {
+									'font-size':
+										publisherFontSize + ' !important',
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
 	}
 
 	if (isActiveField(publisherLineHeight)) {
-		const lineHeight = getValueAddonRealValue(
-			currBlockAttributes.publisherLineHeight
+		const publisherLineHeight = getValueAddonRealValue(
+			blockProps.attributes.publisherLineHeight
 		);
 
-		if (lineHeight !== attributes.publisherLineHeight.default)
-			properties['line-height'] = lineHeight;
+		if (publisherLineHeight !== attributes.publisherLineHeight.default) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherLineHeight',
+				support: 'publisherLineHeight',
+				fallbackSupportId: 'line-height',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherLineHeight: [
+							{
+								type: 'static',
+								properties: {
+									'line-height':
+										publisherLineHeight + ' !important',
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
 	}
 
-	if (
-		isActiveField(publisherTextAlign) &&
-		currBlockAttributes.publisherTextAlign !==
-			attributes.publisherTextAlign.default
-	) {
-		properties['text-align'] = currBlockAttributes.publisherTextAlign;
+	if (isActiveField(publisherFontColor)) {
+		const publisherFontColor = getValueAddonRealValue(
+			blockProps.attributes.publisherFontColor
+		);
+
+		if (publisherFontColor !== attributes.publisherFontColor.default) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherFontColor',
+				support: 'publisherFontColor',
+				fallbackSupportId: 'color',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherBackgroundColor: [
+							{
+								type: 'static',
+								properties: {
+									color: publisherFontColor,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
 	}
 
-	if (
-		isActiveField(publisherTextDecoration) &&
-		currBlockAttributes.publisherTextDecoration !==
+	if (isActiveField(publisherTextAlign)) {
+		const publisherTextAlign = blockProps.attributes.publisherTextAlign;
+
+		if (publisherTextAlign !== attributes.publisherTextAlign.default) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherTextAlign',
+				support: 'publisherTextAlign',
+				fallbackSupportId: 'text-align;',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherTextAlign: [
+							{
+								type: 'static',
+								properties: {
+									'text-align': publisherTextAlign,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+	}
+
+	if (isActiveField(publisherTextDecoration)) {
+		const publisherTextDecoration =
+			blockProps.attributes.publisherTextDecoration;
+
+		if (
+			publisherTextDecoration !==
 			attributes.publisherTextDecoration.default
-	) {
-		properties['text-decoration'] =
-			currBlockAttributes.publisherTextDecoration;
+		) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherTextDecoration',
+				support: 'publisherTextDecoration',
+				fallbackSupportId: 'text-decoration',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherTextDecoration: [
+							{
+								type: 'static',
+								properties: {
+									'text-decoration': publisherTextDecoration,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
 	}
 
-	if (
-		isActiveField(publisherFontStyle) &&
-		currBlockAttributes.publisherFontStyle !==
-			attributes.publisherFontStyle.default
-	) {
-		properties['font-style'] = currBlockAttributes.publisherFontStyle;
+	if (isActiveField(publisherFontStyle)) {
+		const publisherFontStyle = blockProps.attributes.publisherFontStyle;
+
+		if (publisherFontStyle !== attributes.publisherFontStyle.default) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherFontStyle',
+				support: 'publisherFontStyle',
+				fallbackSupportId: 'font-style',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherFontStyle: [
+							{
+								type: 'static',
+								properties: {
+									'font-style': publisherFontStyle,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
 	}
 
-	if (
-		isActiveField(publisherTextTransform) &&
-		currBlockAttributes.publisherTextTransform !==
-			attributes.publisherTextTransform.default
-	) {
-		properties['text-transform'] =
-			currBlockAttributes.publisherTextTransform;
+	if (isActiveField(publisherTextTransform)) {
+		const publisherTextTransform =
+			blockProps.attributes.publisherTextTransform;
+
+		if (
+			publisherTextTransform !== attributes.publisherTextTransform.default
+		) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherTextTransform',
+				support: 'publisherTextTransform',
+				fallbackSupportId: 'text-transform',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherTextTransform: [
+							{
+								type: 'static',
+								properties: {
+									'text-transform': publisherTextTransform,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
 	}
 
-	if (
-		isActiveField(publisherDirection) &&
-		currBlockAttributes.publisherDirection !==
-			attributes.publisherDirection.default
-	) {
-		properties.direction = currBlockAttributes.publisherDirection;
+	if (isActiveField(publisherDirection)) {
+		const publisherDirection = blockProps.attributes.publisherDirection;
+
+		if (publisherDirection !== attributes.publisherDirection.default) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherDirection',
+				support: 'publisherDirection',
+				fallbackSupportId: 'direction',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherDirection: [
+							{
+								type: 'static',
+								properties: {
+									direction: publisherDirection,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
 	}
 
 	if (isActiveField(publisherLetterSpacing)) {
-		const letterSpacing = getValueAddonRealValue(
-			currBlockAttributes.publisherLetterSpacing
-		);
+		const publisherLetterSpacing =
+			blockProps.attributes.publisherLetterSpacing;
 
-		if (letterSpacing !== attributes.publisherLetterSpacing.default)
-			properties['letter-spacing'] = letterSpacing;
+		if (
+			publisherLetterSpacing !== attributes.publisherLetterSpacing.default
+		) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherLetterSpacing',
+				support: 'publisherLetterSpacing',
+				fallbackSupportId: 'letter-spacing',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherLetterSpacing: [
+							{
+								type: 'static',
+								properties: {
+									'letter-spacing': publisherLetterSpacing,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
 	}
 
 	if (isActiveField(publisherWordSpacing)) {
-		const wordSpacing = getValueAddonRealValue(
-			currBlockAttributes.publisherWordSpacing
-		);
+		const publisherWordSpacing = blockProps.attributes.publisherWordSpacing;
 
-		if (wordSpacing !== attributes.publisherWordSpacing.default)
-			properties['word-spacing'] = wordSpacing;
+		if (publisherWordSpacing !== attributes.publisherWordSpacing.default) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherWordSpacing',
+				support: 'publisherWordSpacing',
+				fallbackSupportId: 'word-spacing',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherWordSpacing: [
+							{
+								type: 'static',
+								properties: {
+									'word-spacing': publisherWordSpacing,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
 	}
 
 	if (isActiveField(publisherTextIndent)) {
-		const textIndent = getValueAddonRealValue(
-			currBlockAttributes.publisherTextIndent
-		);
+		const publisherTextIndent = blockProps.attributes.publisherTextIndent;
 
-		if (textIndent !== attributes.publisherTextIndent.default)
-			properties['text-indent'] = textIndent;
-	}
+		if (publisherTextIndent !== attributes.publisherTextIndent.default) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherTextIndent',
+				support: 'publisherTextIndent',
+				fallbackSupportId: 'text-indent',
+			});
 
-	if (
-		isActiveField(publisherTextOrientation) &&
-		currBlockAttributes.publisherTextOrientation &&
-		currBlockAttributes.publisherTextOrientation !==
-			attributes.publisherTextOrientation.default
-	) {
-		switch (currBlockAttributes.publisherTextOrientation) {
-			case 'style-1':
-				properties['writing-mode'] = 'vertical-lr' + ' !important';
-				properties['text-orientation'] = 'mixed' + ' !important';
-				break;
-			case 'style-2':
-				properties['writing-mode'] = 'vertical-rl' + ' !important';
-				properties['text-orientation'] = 'mixed' + ' !important';
-				break;
-			case 'style-3':
-				properties['writing-mode'] = 'vertical-lr' + ' !important';
-				properties['text-orientation'] = 'upright' + ' !important';
-				break;
-			case 'style-4':
-				properties['writing-mode'] = 'vertical-rl' + ' !important';
-				properties['text-orientation'] = 'upright' + ' !important';
-				break;
-			case 'initial':
-				properties['writing-mode'] = 'horizontal-tb' + ' !important';
-				properties['text-orientation'] = 'mixed' + ' !important';
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherTextIndent: [
+							{
+								type: 'static',
+								properties: {
+									'text-indent': publisherTextIndent,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
 		}
 	}
 
-	if (
-		isActiveField(publisherTextColumns) &&
-		currBlockAttributes.publisherTextColumns &&
-		currBlockAttributes.publisherTextColumns !==
-			attributes.publisherTextColumns.default
-	) {
-		properties['column-count'] =
-			currBlockAttributes.publisherTextColumns.columns
+	if (isActiveField(publisherTextOrientation)) {
+		const publisherTextOrientation =
+			blockProps.attributes.publisherTextOrientation;
+
+		if (
+			publisherTextOrientation !==
+			attributes.publisherTextOrientation.default
+		) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherTextOrientation',
+				support: 'publisherTextOrientation',
+				fallbackSupportId: 'text-orientation',
+			});
+
+			const properties: {
+				'writing-mode'?: string,
+				'text-orientation'?: string,
+			} = {};
+
+			switch (publisherTextOrientation) {
+				case 'style-1':
+					properties['writing-mode'] = 'vertical-lr' + ' !important';
+					properties['text-orientation'] = 'mixed' + ' !important';
+					break;
+				case 'style-2':
+					properties['writing-mode'] = 'vertical-rl' + ' !important';
+					properties['text-orientation'] = 'mixed' + ' !important';
+					break;
+				case 'style-3':
+					properties['writing-mode'] = 'vertical-lr' + ' !important';
+					properties['text-orientation'] = 'upright' + ' !important';
+					break;
+				case 'style-4':
+					properties['writing-mode'] = 'vertical-rl' + ' !important';
+					properties['text-orientation'] = 'upright' + ' !important';
+					break;
+				case 'initial':
+					properties['writing-mode'] =
+						'horizontal-tb' + ' !important';
+					properties['text-orientation'] = 'mixed' + ' !important';
+			}
+
+			if (!isEmptyObject(properties))
+				styleGroup.push({
+					selector: pickedSelector,
+					declarations: computedCssDeclarations(
+						{
+							publisherTextOrientation: [
+								{
+									type: 'static',
+									properties,
+								},
+							],
+						},
+						blockProps
+					),
+				});
+		}
+	}
+
+	if (isActiveField(publisherTextColumns)) {
+		const publisherTextColumns = blockProps.attributes.publisherTextColumns;
+
+		if (publisherTextColumns !== attributes.publisherTextColumns.default) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherTextColumns',
+				support: 'publisherTextColumns',
+				fallbackSupportId: 'text-columns',
+			});
+
+			const properties: {
+				'column-count'?: string,
+				'column-gap'?: string,
+				'column-rule-color'?: string,
+				'column-rule-width'?: string,
+				'column-rule-style'?: string,
+			} = {};
+
+			properties['column-count'] = publisherTextColumns.columns
 				.replace('-columns', '')
 				.replace('none', 'initial');
 
-		if (properties['column-count'] !== 'initial') {
-			const gap = getValueAddonRealValue(
-				currBlockAttributes.publisherTextColumns.gap
-			);
+			if (properties['column-count'] !== 'initial') {
+				const gap = getValueAddonRealValue(publisherTextColumns.gap);
 
-			if (gap !== '') {
-				properties['column-gap'] = gap;
-			}
-
-			if (
-				currBlockAttributes.publisherTextColumns?.divider?.width !==
-					undefined &&
-				currBlockAttributes.publisherTextColumns?.divider?.width !== ''
-			) {
-				const color = getValueAddonRealValue(
-					currBlockAttributes.publisherTextColumns?.divider?.color
-				);
-
-				if (color !== '') {
-					properties['column-rule-color'] = color;
+				if (gap !== '') {
+					properties['column-gap'] = gap;
 				}
 
-				properties['column-rule-width'] =
-					currBlockAttributes.publisherTextColumns.divider.width;
+				if (
+					publisherTextColumns?.divider?.width !== undefined &&
+					publisherTextColumns?.divider?.width !== ''
+				) {
+					const color = getValueAddonRealValue(
+						publisherTextColumns?.divider?.color
+					);
 
-				properties['column-rule-style'] =
-					currBlockAttributes.publisherTextColumns.divider.style ||
-					'solid';
+					if (color !== '') {
+						properties['column-rule-color'] = color;
+					}
+
+					properties['column-rule-width'] =
+						publisherTextColumns.divider.width;
+
+					properties['column-rule-style'] =
+						publisherTextColumns.divider.style || 'solid';
+				}
+			}
+
+			if (!isEmptyObject(properties))
+				styleGroup.push({
+					selector: pickedSelector,
+					declarations: computedCssDeclarations(
+						{
+							publisherTextColumns: [
+								{
+									type: 'static',
+									properties,
+								},
+							],
+						},
+						blockProps
+					),
+				});
+		}
+	}
+
+	if (isActiveField(publisherTextStroke)) {
+		const publisherTextStroke = blockProps.attributes.publisherTextStroke;
+
+		if (publisherTextStroke !== attributes.publisherTextStroke.default) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherTextStroke',
+				support: 'publisherTextStroke',
+				fallbackSupportId: 'text-stroke',
+			});
+
+			const textStrokeColor = getValueAddonRealValue(
+				publisherTextStroke?.color
+			);
+
+			if (textStrokeColor !== '') {
+				styleGroup.push({
+					selector: pickedSelector,
+					declarations: computedCssDeclarations(
+						{
+							publisherTextStroke: [
+								{
+									type: 'static',
+									properties: {
+										'-webkit-text-stroke':
+											publisherTextStroke?.width +
+											' ' +
+											textStrokeColor,
+									},
+								},
+							],
+						},
+						blockProps
+					),
+				});
 			}
 		}
 	}
 
-	if (
-		isActiveField(publisherTextStroke) &&
-		currBlockAttributes.publisherTextStroke &&
-		currBlockAttributes.publisherTextStroke !==
-			attributes.publisherTextStroke.default
-	) {
-		const textStrokeColor = getValueAddonRealValue(
-			currBlockAttributes.publisherTextStroke?.color
-		);
+	if (isActiveField(publisherWordBreak)) {
+		const publisherWordBreak = blockProps.attributes.publisherWordBreak;
 
-		if (textStrokeColor !== '') {
-			properties['-webkit-text-stroke'] =
-				currBlockAttributes.publisherTextStroke?.width +
-				' ' +
-				textStrokeColor;
+		if (
+			publisherWordBreak !== attributes.publisherWordBreak.default &&
+			publisherWordBreak !== 'normal'
+		) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherWordBreak',
+				support: 'publisherWordBreak',
+				fallbackSupportId: 'word-break',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherWordBreak: [
+							{
+								type: 'static',
+								properties: {
+									'word-break': publisherWordBreak,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
 		}
-	}
-
-	if (
-		isActiveField(publisherWordBreak) &&
-		currBlockAttributes.publisherWordBreak !==
-			attributes.publisherWordBreak.default &&
-		currBlockAttributes.publisherWordBreak !== 'normal'
-	) {
-		properties['word-break'] = currBlockAttributes.publisherWordBreak;
-	}
-
-	//
-	if (properties) {
-		generators.push(
-			computedCssRules(
-				{
-					publisherTypography: [
-						{
-							type: 'static',
-							media,
-							selector,
-							properties: { ...properties },
-						},
-					],
-				},
-				{ attributes: currBlockAttributes, ...blockProps }
-			)
-		);
 	}
 
 	if (
 		isActiveField(publisherTextShadow) &&
 		!arrayEquals(
 			attributes.publisherTextShadow.default,
-			currBlockAttributes.publisherTextShadow
+			blockProps.attributes.publisherTextShadow
 		)
 	) {
-		generators.push(
-			computedCssRules(
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherTextShadow',
+			support: 'publisherTextShadow',
+			fallbackSupportId: 'text-shadow',
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
 				{
 					publisherTextShadow: [
 						{
-							media,
-							selector,
 							type: 'function',
 							function: TextShadowGenerator,
 						},
 					],
-					...(publisherTextShadow?.cssGenerators || {}),
 				},
-				{ attributes: currBlockAttributes, ...blockProps }
-			)
-		);
+				blockProps
+			),
+		});
 	}
 
-	generators.push(
-		computedCssRules(
-			{
-				...(cssGenerators || {}),
-			},
-			{ attributes: currBlockAttributes, ...blockProps }
-		)
-	);
-
-	return generators.flat();
+	return styleGroup;
 }
