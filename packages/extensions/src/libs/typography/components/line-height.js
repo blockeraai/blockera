@@ -62,8 +62,6 @@ export const LineHeight = ({
 				onChange={(newValue, ref) =>
 					onChange('publisherLineHeight', newValue, { ref })
 				}
-				controlAddonTypes={['variable']}
-				variableTypes={['font-size']}
 				{...props}
 			/>
 		</ControlContextProvider>

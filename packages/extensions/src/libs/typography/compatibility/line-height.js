@@ -1,10 +1,5 @@
 // @flow
 
-/**
- * Publisher dependencies
- */
-import { isValid } from '@publisher/hooks/src/use-value-addon/helpers';
-
 export function lineHeightFromWPCompatibility({
 	attributes,
 }: {
@@ -29,17 +24,6 @@ export function lineHeightToWPCompatibility({
 	ref?: Object,
 }): Object {
 	if ('reset' === ref?.current?.action) {
-		return {
-			style: {
-				typography: {
-					lineHeight: undefined,
-				},
-			},
-		};
-	}
-
-	// is valid font-size variable
-	if (isValid(newValue)) {
 		return {
 			style: {
 				typography: {
