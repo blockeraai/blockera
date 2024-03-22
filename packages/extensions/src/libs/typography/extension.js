@@ -407,7 +407,14 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 				</FeatureWrapper>
 
 				{isShowAdvanced && (
-					<MoreFeatures isOpen={false} isChanged={isAdvancedEdited}>
+					<MoreFeatures
+						ariaLabel={__(
+							'More typography settings',
+							'publisher-core'
+						)}
+						isOpen={false}
+						isChanged={isAdvancedEdited}
+					>
 						{(isShowTextAlign ||
 							isShowTextDecoration ||
 							isShowFontStyle ||
