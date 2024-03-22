@@ -6,7 +6,7 @@ import {
 	redirectToFrontPage,
 } from '../../../../../../cypress/helpers';
 
-describe('Font Size → WP Compatibility', () => {
+describe('Font Size → Functionality', () => {
 	beforeEach(() => {
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
