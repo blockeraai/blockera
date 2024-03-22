@@ -169,3 +169,8 @@ Cypress.Commands.add('activateMoreSettingsItem', (settingsLabel, itemName) => {
 	// activate item
 	cy.get(`[aria-label="Activate ${itemName}"]`).click();
 });
+
+// Open More Settings Panel and Activate Item
+Cypress.Commands.add('openMoreFeatures', (label) => {
+	cy.get(`[aria-label="${label}"]`).click();
+});
