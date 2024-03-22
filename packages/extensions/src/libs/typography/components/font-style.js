@@ -79,12 +79,12 @@ export const FontStyle = ({
 				className="control-first label-center small-gap"
 				options={[
 					{
-						label: __('Normal', 'publisher-core'),
+						label: __('Normal style', 'publisher-core'),
 						value: 'normal',
 						icon: <FontStyleNormalIcon />,
 					},
 					{
-						label: __('Italic', 'publisher-core'),
+						label: __('Italic style', 'publisher-core'),
 						value: 'italic',
 						icon: <FontStyleItalicIcon />,
 					},
