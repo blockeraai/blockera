@@ -10,7 +10,7 @@ import type { MixedElement } from 'react';
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
-import { useValueAddon } from '@publisher/hooks';
+import { setValueAddon, useValueAddon } from '@publisher/hooks';
 
 /**
  * Internal dependencies
@@ -59,12 +59,8 @@ export default function GradientBarControl({
 	} = useValueAddon({
 		types: controlAddonTypes,
 		value,
-		setValue: (newValue: any): void => {
-			setValue({
-				value,
-				valueAddon: newValue,
-			});
-		},
+		setValue: (newValue: any): void =>
+			setValueAddon(newValue, setValue, defaultValue),
 		variableTypes,
 		dynamicValueTypes,
 		onChange: setValue,
