@@ -171,11 +171,11 @@ export function backgroundGenerator(id, props) {
 		properties;
 
 	const toReturnProperties = {
-		'background-image': image.join(', '),
+		'background-image': image.join(', ') + ' !important',
 		'background-size': size.join(', ') + ' !important',
-		'background-position': position.join(', '),
-		'background-repeat': repeat.join(', '),
-		'background-attachment': attachment.join(', '),
+		'background-position': position.join(', ') + ' !important',
+		'background-repeat': repeat.join(', ') + ' !important',
+		'background-attachment': attachment.join(', ') + ' !important',
 		..._properties,
 	};
 
