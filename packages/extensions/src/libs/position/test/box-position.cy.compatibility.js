@@ -7,7 +7,7 @@ import {
 	getWPDataObject,
 } from '../../../../../../cypress/helpers';
 
-describe('Position → WP Compatibility', () => {
+describe('Box Position → WP Compatibility', () => {
 	describe('Group Block', () => {
 		it('Simple Position', () => {
 			appendBlocks(
