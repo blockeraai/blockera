@@ -10,7 +10,9 @@ describe('Text Spacing → Functionality', () => {
 	beforeEach(() => {
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
-		cy.getBlock(`core/paragraph`).type('This is test text.');
+		cy.getBlock('core/paragraph').type('This is test text.', {
+			delay: 0,
+		});
 
 		cy.getByDataTest('style-tab').click();
 	});
@@ -18,15 +20,15 @@ describe('Text Spacing → Functionality', () => {
 	it('All together', () => {
 		cy.openMoreFeatures('More typography settings');
 
-		cy.getParentContainer('Letters', 'base-control').within(() => {
+		cy.getParentContainer('Letters').within(() => {
 			cy.get('input').type(5, { force: true });
 		});
 
-		cy.getParentContainer('Words', 'base-control').within(() => {
+		cy.getParentContainer('Words').within(() => {
 			cy.get('input').type(5, { force: true });
 		});
 
-		cy.getParentContainer('Text Indent', 'base-control').within(() => {
+		cy.getParentContainer('Text Indent').within(() => {
 			cy.get('input').type(5, { force: true });
 		});
 

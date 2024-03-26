@@ -10,13 +10,15 @@ describe('Font Color → Functionality', () => {
 	beforeEach(() => {
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
-		cy.getBlock(`core/paragraph`).type('This is test text.');
+		cy.getBlock('core/paragraph').type('This is test text.', {
+			delay: 0,
+		});
 
 		cy.getByDataTest('style-tab').click();
 	});
 
 	it('simple value', () => {
-		cy.getParentContainer('Text Color', 'base-control').within(() => {
+		cy.getParentContainer('Text Color').within(() => {
 			cy.getByDataCy('color-btn').click();
 		});
 
@@ -26,7 +28,7 @@ describe('Font Color → Functionality', () => {
 		});
 
 		//Check block
-		cy.getBlock(`core/paragraph`).should(
+		cy.getBlock('core/paragraph').should(
 			'have.css',
 			'color',
 			'rgb(112, 202, 158)'
@@ -52,14 +54,14 @@ describe('Font Color → Functionality', () => {
 	});
 
 	it('Variable value', () => {
-		cy.getParentContainer('Text Color', 'base-control').within(() => {
+		cy.getParentContainer('Text Color').within(() => {
 			cy.openValueAddon();
 		});
 
 		// select variable
 		cy.selectValueAddonItem('contrast');
 
-		cy.getBlock(`core/paragraph`).hasCssVar(
+		cy.getBlock('core/paragraph').hasCssVar(
 			'color',
 			'--wp--preset--color--contrast'
 		);

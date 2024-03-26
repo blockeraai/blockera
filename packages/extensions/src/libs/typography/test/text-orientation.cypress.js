@@ -10,7 +10,9 @@ describe('Text Orientation → Functionality', () => {
 	beforeEach(() => {
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
-		cy.getBlock(`core/paragraph`).type('This is test text.');
+		cy.getBlock('core/paragraph').type('This is test text.', {
+			delay: 0,
+		});
 
 		cy.getByDataTest('style-tab').click();
 
@@ -21,8 +23,8 @@ describe('Text Orientation → Functionality', () => {
 		//
 		// Style 1
 		//
-		cy.get(
-			'[aria-label="Text will display vertically from left to right with a mixed orientation"]'
+		cy.getByAriaLabel(
+			'Text will display vertically from left to right with a mixed orientation'
 		).click();
 
 		//Check block
@@ -40,8 +42,8 @@ describe('Text Orientation → Functionality', () => {
 		//
 		// Style 2
 		//
-		cy.get(
-			'[aria-label="Text will display vertically from right to left with a mixed orientation"]'
+		cy.getByAriaLabel(
+			'Text will display vertically from right to left with a mixed orientation'
 		).click();
 
 		//Check block
@@ -59,8 +61,8 @@ describe('Text Orientation → Functionality', () => {
 		//
 		// Style 3
 		//
-		cy.get(
-			'[aria-label="Text will appear vertically from left to right with an upright orientation"]'
+		cy.getByAriaLabel(
+			'Text will appear vertically from left to right with an upright orientation'
 		).click();
 
 		//Check block
@@ -78,8 +80,8 @@ describe('Text Orientation → Functionality', () => {
 		//
 		// Style 4
 		//
-		cy.get(
-			'[aria-label="Text will appear vertically from right to left with an upright orientation"]'
+		cy.getByAriaLabel(
+			'Text will appear vertically from right to left with an upright orientation'
 		).click();
 
 		//Check block
@@ -97,7 +99,7 @@ describe('Text Orientation → Functionality', () => {
 		//
 		// Style None
 		//
-		cy.get('[aria-label="No text orientation"]').click();
+		cy.getByAriaLabel('No text orientation').click();
 
 		//Check block
 		cy.getBlock('core/paragraph')
@@ -112,8 +114,8 @@ describe('Text Orientation → Functionality', () => {
 		});
 
 		// Switch to style 1
-		cy.get(
-			'[aria-label="Text will display vertically from left to right with a mixed orientation"]'
+		cy.getByAriaLabel(
+			'Text will display vertically from left to right with a mixed orientation'
 		).click();
 
 		//Check frontend

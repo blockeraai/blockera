@@ -10,7 +10,9 @@ describe('Text Columns → Functionality', () => {
 	beforeEach(() => {
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
-		cy.getBlock(`core/paragraph`).type('This is test text.');
+		cy.getBlock('core/paragraph').type('This is test text.', {
+			delay: 0,
+		});
 
 		cy.getByDataTest('style-tab').click();
 
@@ -18,8 +20,8 @@ describe('Text Columns → Functionality', () => {
 	});
 
 	it('should not render column-gap and column-rule components,when value is initial', () => {
-		cy.getParentContainer('Text Columns', 'base-control').within(() => {
-			cy.get('[aria-label="None"]').click();
+		cy.getParentContainer('Text Columns').within(() => {
+			cy.getByAriaLabel('None').click();
 		});
 
 		//Check block
@@ -60,11 +62,11 @@ describe('Text Columns → Functionality', () => {
 	});
 
 	it('should update column-count & column-gap, when add column2 + gap', () => {
-		cy.getParentContainer('Text Columns', 'base-control').within(() => {
-			cy.get('[aria-label="2 Columns Text"]').click();
+		cy.getParentContainer('Text Columns').within(() => {
+			cy.getByAriaLabel('2 Columns Text').click();
 		});
 
-		cy.getParentContainer('Gap', 'base-control').within(() => {
+		cy.getParentContainer('Gap').within(() => {
 			cy.get('input[type=number]').clear({ force: true });
 			cy.get('input[type=number]').type(5, { force: true });
 			cy.get('select').select('px', { force: true });
@@ -95,11 +97,11 @@ describe('Text Columns → Functionality', () => {
 	});
 
 	it('should update column-count & column-rule, when add column2 + rule', () => {
-		cy.getParentContainer('Text Columns', 'base-control').within(() => {
-			cy.get('[aria-label="2 Columns Text"]').click();
+		cy.getParentContainer('Text Columns').within(() => {
+			cy.getByAriaLabel('2 Columns Text').click();
 		});
 
-		cy.getParentContainer('Divider', 'base-control').within(() => {
+		cy.getParentContainer('Divider').within(() => {
 			cy.getByDataTest('border-control-width').clear();
 			cy.getByDataTest('border-control-width').type(1, {
 				force: true,

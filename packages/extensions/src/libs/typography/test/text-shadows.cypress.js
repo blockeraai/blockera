@@ -10,32 +10,34 @@ describe('Text Shadows → Functionality', () => {
 	beforeEach(() => {
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
-		cy.getBlock('core/paragraph').type('This is test text.');
+		cy.getBlock('core/paragraph').type('This is test text.', {
+			delay: 0,
+		});
 
 		cy.getByDataTest('style-tab').click();
 	});
 
 	it('should update text-shadow, when add data', () => {
 		/* One Text Shadow */
-		cy.getParentContainer('Text Shadows', 'base-control').within(() => {
+		cy.getParentContainer('Text Shadows').within(() => {
 			cy.getByAriaLabel('Add New Text Shadow').click();
 		});
 
 		cy.getByDataTest('popover-body').within(() => {
 			/* eslint-disable cypress/unsafe-to-chain-command */
-			cy.get('[aria-label="Vertical Distance"]')
+			cy.getByAriaLabel('Vertical Distance')
 				.clear()
 				.type(2)
 				.should('have.value', '2');
 
 			/* eslint-disable cypress/unsafe-to-chain-command */
-			cy.get('[aria-label="Horizontal Distance"]')
+			cy.getByAriaLabel('Horizontal Distance')
 				.clear()
 				.type(3)
 				.should('have.value', '3');
 
 			/* eslint-disable cypress/unsafe-to-chain-command */
-			cy.get('[aria-label="Blur Effect"]')
+			cy.getByAriaLabel('Blur Effect')
 				.clear()
 				.type(4)
 				.should('have.value', '4');
@@ -75,31 +77,33 @@ describe('Text Shadows → Functionality', () => {
 		});
 
 		/* Multiple Text Shadow */
-		cy.getParentContainer('Text Shadows', 'base-control').within(() => {
+		cy.getParentContainer('Text Shadows').within(() => {
 			cy.getByAriaLabel('Add New Text Shadow').click();
 		});
 
-		cy.getByDataTest('popover-body').within(() => {
-			/* eslint-disable cypress/unsafe-to-chain-command */
-			cy.get('[aria-label="Vertical Distance"]')
-				.clear()
-				.type(5)
-				.should('have.value', '5');
+		cy.getByDataTest('popover-body')
+			.last()
+			.within(() => {
+				/* eslint-disable cypress/unsafe-to-chain-command */
+				cy.getByAriaLabel('Vertical Distance')
+					.clear()
+					.type(5)
+					.should('have.value', '5');
 
-			/* eslint-disable cypress/unsafe-to-chain-command */
-			cy.get('[aria-label="Horizontal Distance"]')
-				.clear()
-				.type(6)
-				.should('have.value', '6');
+				/* eslint-disable cypress/unsafe-to-chain-command */
+				cy.getByAriaLabel('Horizontal Distance')
+					.clear()
+					.type(6)
+					.should('have.value', '6');
 
-			/* eslint-disable cypress/unsafe-to-chain-command */
-			cy.get('[aria-label="Blur Effect"]')
-				.clear()
-				.type(7)
-				.should('have.value', '7');
+				/* eslint-disable cypress/unsafe-to-chain-command */
+				cy.getByAriaLabel('Blur Effect')
+					.clear()
+					.type(7)
+					.should('have.value', '7');
 
-			cy.getByDataCy('color-btn').click();
-		});
+				cy.getByDataCy('color-btn').click();
+			});
 
 		cy.getByDataTest('popover-body')
 			.last()

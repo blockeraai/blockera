@@ -10,7 +10,9 @@ describe('Font Style → Functionality', () => {
 	beforeEach(() => {
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
-		cy.getBlock(`core/paragraph`).type('This is test text.');
+		cy.getBlock('core/paragraph').type('This is test text.', {
+			delay: 0,
+		});
 
 		cy.getByDataTest('style-tab').click();
 	});
@@ -21,7 +23,7 @@ describe('Font Style → Functionality', () => {
 		cy.getByAriaLabel('Italic style').click();
 
 		//Check block
-		cy.getBlock(`core/paragraph`).should(
+		cy.getBlock('core/paragraph').should(
 			'have.css',
 			'font-style',
 			'italic'

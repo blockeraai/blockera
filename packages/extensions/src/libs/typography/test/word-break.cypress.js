@@ -10,7 +10,9 @@ describe('Word Break → Functionality', () => {
 	beforeEach(() => {
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
-		cy.getBlock(`core/paragraph`).type('This is test text.');
+		cy.getBlock('core/paragraph').type('This is test text.', {
+			delay: 0,
+		});
 
 		cy.getByDataTest('style-tab').click();
 
@@ -18,7 +20,7 @@ describe('Word Break → Functionality', () => {
 	});
 
 	it('should update word-break, when add data', () => {
-		cy.getParentContainer('Breaking', 'base-control').within(() => {
+		cy.getParentContainer('Breaking').within(() => {
 			cy.get('[aria-haspopup="listbox"]').click();
 
 			cy.get('li').eq(2).trigger('click');

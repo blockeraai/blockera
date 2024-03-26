@@ -10,7 +10,9 @@ describe('Line Height → Functionality', () => {
 	beforeEach(() => {
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
-		cy.getBlock(`core/paragraph`).type('This is test text.');
+		cy.getBlock('core/paragraph').type('This is test text.', {
+			delay: 0,
+		});
 
 		cy.getByDataTest('style-tab').click();
 	});
@@ -19,7 +21,7 @@ describe('Line Height → Functionality', () => {
 		// activate line height
 		cy.activateMoreSettingsItem('More Typography Settings', 'Line Height');
 
-		cy.getParentContainer('Line Height', 'base-control').within(() => {
+		cy.getParentContainer('Line Height').within(() => {
 			cy.get('input[type="number"]').focus();
 			cy.get('input[type="number"]').type(10, {
 				force: true,
@@ -48,16 +50,16 @@ describe('Line Height → Functionality', () => {
 		// activate line height
 		cy.activateMoreSettingsItem('More Typography Settings', 'Line Height');
 
-		cy.getParentContainer('Line Height', 'base-control').within(() => {
+		cy.getParentContainer('Line Height').within(() => {
 			cy.get('input[type="number"]').focus();
 			cy.get('input[type="number"]').type(10, {
 				force: true,
 			});
-			cy.get('[aria-label="Select Unit"]').select('px');
+			cy.get('select').select('px');
 		});
 
 		//Check block
-		cy.getBlock(`core/paragraph`).should('have.css', 'line-height', '10px');
+		cy.getBlock('core/paragraph').should('have.css', 'line-height', '10px');
 
 		//Check store
 		getWPDataObject().then((data) => {

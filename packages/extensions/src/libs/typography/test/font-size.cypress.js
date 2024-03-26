@@ -10,13 +10,15 @@ describe('Font Size → Functionality', () => {
 	beforeEach(() => {
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
-		cy.getBlock(`core/paragraph`).type('This is test text.');
+		cy.getBlock('core/paragraph').type('This is test text.', {
+			delay: 0,
+		});
 
 		cy.getByDataTest('style-tab').click();
 	});
 
 	it('Simple value font size', () => {
-		cy.getParentContainer('Font Size', 'base-control').within(() => {
+		cy.getParentContainer('Font Size').within(() => {
 			cy.get('input[type="number"]').clear();
 			cy.get('input[type="number"]').type(10, {
 				force: true,
@@ -24,7 +26,7 @@ describe('Font Size → Functionality', () => {
 		});
 
 		//Check block
-		cy.getBlock(`core/paragraph`).should('have.css', 'font-size', '10px');
+		cy.getBlock('core/paragraph').should('have.css', 'font-size', '10px');
 
 		//Check store
 		getWPDataObject().then((data) => {
@@ -42,14 +44,14 @@ describe('Font Size → Functionality', () => {
 	});
 
 	it('Variable value', () => {
-		cy.getParentContainer('Font Size', 'base-control').within(() => {
+		cy.getParentContainer('Font Size').within(() => {
 			cy.openValueAddon();
 		});
 
 		// select variable
 		cy.selectValueAddonItem('small');
 
-		cy.getBlock(`core/paragraph`).hasCssVar(
+		cy.getBlock('core/paragraph').hasCssVar(
 			'font-size',
 			'--wp--preset--font-size--small'
 		);

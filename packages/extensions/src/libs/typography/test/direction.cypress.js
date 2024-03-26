@@ -10,7 +10,9 @@ describe('Direction → Functionality', () => {
 	beforeEach(() => {
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
-		cy.getBlock(`core/paragraph`).type('This is test text.');
+		cy.getBlock('core/paragraph').type('This is test text.', {
+			delay: 0,
+		});
 
 		cy.getByDataTest('style-tab').click();
 	});
@@ -21,7 +23,7 @@ describe('Direction → Functionality', () => {
 		cy.getByAriaLabel('Right to Left').click();
 
 		//Check block
-		cy.getBlock(`core/paragraph`).should('have.css', 'direction', 'rtl');
+		cy.getBlock('core/paragraph').should('have.css', 'direction', 'rtl');
 
 		//Check store
 		getWPDataObject().then((data) => {

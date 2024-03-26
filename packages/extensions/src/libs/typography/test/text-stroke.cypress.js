@@ -10,7 +10,9 @@ describe('Text Stroke → Functionality', () => {
 	beforeEach(() => {
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
-		cy.getBlock(`core/paragraph`).type('This is test text.');
+		cy.getBlock('core/paragraph').type('This is test text.', {
+			delay: 0,
+		});
 
 		cy.getByDataTest('style-tab').click();
 
@@ -19,7 +21,7 @@ describe('Text Stroke → Functionality', () => {
 
 	it('should update text-stroke, when add data', () => {
 		/* Color */
-		cy.getParentContainer('Text Stroke', 'base-control').within(() => {
+		cy.getParentContainer('Text Stroke').within(() => {
 			cy.getByDataCy('color-btn').click();
 		});
 
@@ -44,7 +46,7 @@ describe('Text Stroke → Functionality', () => {
 		});
 
 		/* Width */
-		cy.getParentContainer('Text Stroke', 'base-control').within(() => {
+		cy.getParentContainer('Text Stroke').within(() => {
 			cy.get('input[type="number"]').clear();
 			cy.get('input[type="number"]').type(10, { force: true });
 		});
