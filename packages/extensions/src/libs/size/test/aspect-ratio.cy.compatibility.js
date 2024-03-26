@@ -18,12 +18,12 @@ describe('Aspect Ratio → WP Compatibility', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/image"]').click();
+			cy.getBlock('core/image').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Aspect Ratio"]')
-				.closest('[data-cy="base-control"]')
-				.as('aspectContainer');
+			cy.getParentContainer('Aspect Ratio', 'base-control').as(
+				'aspectContainer'
+			);
 
 			//
 			// Test 1: WP data to Blockera
@@ -78,12 +78,12 @@ describe('Aspect Ratio → WP Compatibility', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/image"]').click();
+			cy.getBlock('core/image').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Aspect Ratio"]')
-				.closest('[data-cy="base-control"]')
-				.as('aspectContainer');
+			cy.getParentContainer('Aspect Ratio', 'base-control').as(
+				'aspectContainer'
+			);
 
 			//
 			// Test 1: Blockera data to WP

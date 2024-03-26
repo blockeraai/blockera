@@ -19,15 +19,13 @@ describe('Min Height → WP Compatibility', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/cover"]').click();
+			cy.getBlock('core/cover').click();
 
 			// switch to cover block
 			cy.get('[aria-label="Select Cover"]').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Min"]')
-				.closest('[data-cy="base-control"]')
-				.as('container');
+			cy.getParentContainer('Min').as('container');
 
 			//
 			// Test 1: WP data to Blockera
@@ -88,7 +86,7 @@ describe('Min Height → WP Compatibility', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/cover"]').click();
+			cy.getBlock('core/cover').click();
 
 			// switch to cover block
 			cy.get('[aria-label="Select Cover"]').click();
@@ -109,7 +107,7 @@ describe('Min Height → WP Compatibility', () => {
 			cy.get('@container').within(() => {
 				cy.get('input').as('containerInput');
 				cy.get('@containerInput').type('300', { force: true });
-				cy.get('[aria-label="Select Unit"]').select('px');
+				cy.get('select').select('px');
 			});
 
 			// WP data should come to Blockera
@@ -135,7 +133,7 @@ describe('Min Height → WP Compatibility', () => {
 				cy.get('input').as('containerInput');
 				cy.get('@containerInput').clear();
 				cy.get('@containerInput').type('200', { force: true });
-				cy.get('[aria-label="Select Unit"]').select('%');
+				cy.get('select').select('%');
 			});
 
 			// Blockera value should be moved to WP data

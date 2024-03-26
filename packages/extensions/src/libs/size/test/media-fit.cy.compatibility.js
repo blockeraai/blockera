@@ -18,12 +18,10 @@ describe('Media Fit → WP Compatibility', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/image"]').click();
+			cy.getBlock('core/image').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Media Fit"]')
-				.closest('[data-cy="base-control"]')
-				.as('container');
+			cy.getParentContainer('Media Fit').as('container');
 
 			//
 			// Test 1: WP data to Blockera
@@ -74,12 +72,10 @@ describe('Media Fit → WP Compatibility', () => {
 					'<!-- /wp:image -->'
 			);
 			// Select target block
-			cy.get('[data-type="core/image"]').click();
+			cy.getBlock('core/image').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Media Fit"]')
-				.closest('[data-cy="base-control"]')
-				.as('container');
+			cy.getParentContainer('Media Fit').as('container');
 
 			//
 			// Test 1: WP data to Blockera

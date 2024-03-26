@@ -15,12 +15,10 @@ describe('Width → WP Compatibility', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/search"]').click();
+			cy.getBlock('core/search').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Width"]')
-				.closest('[data-cy="base-control"]')
-				.as('widthContainer');
+			cy.getParentContainer('Width').as('widthContainer');
 
 			//
 			// Test 1: WP data to Blockera
@@ -76,12 +74,10 @@ describe('Width → WP Compatibility', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/search"]').click();
+			cy.getBlock('core/search').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Width"]')
-				.closest('[data-cy="base-control"]')
-				.as('widthContainer');
+			cy.getParentContainer('Width').as('widthContainer');
 
 			//
 			// Test 1: WP data to Blockera
@@ -99,7 +95,7 @@ describe('Width → WP Compatibility', () => {
 			//
 
 			cy.get('@widthContainer').within(() => {
-				cy.get('[aria-label="Select Unit"]').select('auto', {
+				cy.get('select').select('auto', {
 					force: true,
 				});
 			});
@@ -118,7 +114,7 @@ describe('Width → WP Compatibility', () => {
 			//
 
 			cy.get('@widthContainer').within(() => {
-				cy.get('[aria-label="Select Unit"]').select('%');
+				cy.get('select').select('%');
 
 				cy.get('input').as('widthInput');
 				cy.get('@widthInput').clear();
@@ -141,12 +137,10 @@ describe('Width → WP Compatibility', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/site-logo"]').click();
+			cy.getBlock('core/site-logo').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Width"]')
-				.closest('[data-cy="base-control"]')
-				.as('widthContainer');
+			cy.getParentContainer('Width').as('widthContainer');
 
 			//
 			// Test 1: WP data to Blockera
@@ -196,12 +190,10 @@ describe('Width → WP Compatibility', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/site-logo"]').click();
+			cy.getBlock('core/site-logo').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Width"]')
-				.closest('[data-cy="base-control"]')
-				.as('widthContainer');
+			cy.getParentContainer('Width').as('widthContainer');
 
 			//
 			// Test 1: WP data to Blockera
@@ -223,7 +215,7 @@ describe('Width → WP Compatibility', () => {
 				cy.get('input').as('widthInput');
 				cy.get('@widthInput').clear();
 				cy.get('@widthInput').type('200', { force: true });
-				cy.get('[aria-label="Select Unit"]').select('%');
+				cy.get('select').select('%');
 			});
 
 			// Blockera value should be moved to WP data
@@ -258,12 +250,10 @@ describe('Width → WP Compatibility', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/button"]').click();
+			cy.getBlock('core/button').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Width"]')
-				.closest('[data-cy="base-control"]')
-				.as('widthContainer');
+			cy.getParentContainer('Width').as('widthContainer');
 
 			//
 			// Test 1: WP data to Blockera
@@ -317,12 +307,10 @@ describe('Width → WP Compatibility', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/button"]').click();
+			cy.getBlock('core/button').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Width"]')
-				.closest('[data-cy="base-control"]')
-				.as('widthContainer');
+			cy.getParentContainer('Width').as('widthContainer');
 
 			//
 			// Test 1: WP data to Blockera
@@ -345,7 +333,7 @@ describe('Width → WP Compatibility', () => {
 				cy.get('input').as('widthInput');
 				cy.get('@widthInput').clear();
 				cy.get('@widthInput').type('50', { force: true });
-				cy.get('[aria-label="Select Unit"]').select('px');
+				cy.get('select').select('px');
 			});
 
 			// Blockera value should be moved to WP data
@@ -374,16 +362,14 @@ describe('Width → WP Compatibility', () => {
 			appendBlocks(
 				'<!-- wp:image {"id":60,"width":"500px","sizeSlug":"full","linkDestination":"none"} -->\n' +
 					'<figure class="wp-block-image size-full is-resized"><img src="https://placehold.co/600x400" alt="" class="wp-image-60" style="width:500px"/></figure>\n' +
-					'<!-- /wp:image -->'
+					'<!-- /wp:image --> '
 			);
 
 			// Select target block
-			cy.get('[data-type="core/image"]').click();
+			cy.getBlock('core/image').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Width"]')
-				.closest('[data-cy="base-control"]')
-				.as('widthContainer');
+			cy.getParentContainer('Width').as('widthContainer');
 
 			//
 			// Test 1: WP data to Blockera
@@ -431,16 +417,14 @@ describe('Width → WP Compatibility', () => {
 			appendBlocks(
 				'<!-- wp:image {"id":60,"sizeSlug":"full","linkDestination":"none","className":"is-resized"} -->\n' +
 					'<figure class="wp-block-image size-full is-resized"><img src="https://placehold.co/600x400" alt="" class="wp-image-60"/></figure>\n' +
-					'<!-- /wp:image -->'
+					'<!-- /wp:image --> '
 			);
 
 			// Select target block
-			cy.get('[data-type="core/image"]').click();
+			cy.getBlock('core/image').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Width"]')
-				.closest('[data-cy="base-control"]')
-				.as('widthContainer');
+			cy.getParentContainer('Width').as('widthContainer');
 
 			//
 			// Test 1: Blockera dat to WP
@@ -451,7 +435,7 @@ describe('Width → WP Compatibility', () => {
 			cy.get('@widthContainer').within(() => {
 				cy.get('input').as('widthInput');
 				cy.get('@widthInput').type('300', { force: true });
-				cy.get('[aria-label="Select Unit"]').select('px');
+				cy.get('select').select('px');
 			});
 
 			// WP data should come to Blockera
@@ -471,7 +455,7 @@ describe('Width → WP Compatibility', () => {
 				cy.get('input').as('widthInput');
 				cy.get('@widthInput').clear();
 				cy.get('@widthInput').type('200', { force: true });
-				cy.get('[aria-label="Select Unit"]').select('%');
+				cy.get('select').select('%');
 			});
 
 			// Blockera value should be moved to WP data
@@ -508,15 +492,13 @@ describe('Width → WP Compatibility', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/column"]').click();
+			cy.getBlock('core/column').click();
 
 			// switch to column block
 			cy.get('[aria-label="Select Column"]').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Width"]')
-				.closest('[data-cy="base-control"]')
-				.as('widthContainer');
+			cy.getParentContainer('Width').as('widthContainer');
 
 			//
 			// Test 1: WP data to Blockera
@@ -572,15 +554,13 @@ describe('Width → WP Compatibility', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/column"]').click();
+			cy.getBlock('core/column').click();
 
 			// switch to column block
 			cy.get('[aria-label="Select Column"]').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Width"]')
-				.closest('[data-cy="base-control"]')
-				.as('widthContainer');
+			cy.getParentContainer('Width').as('widthContainer');
 
 			//
 			// Test 1: Blockera dat to WP
@@ -599,7 +579,7 @@ describe('Width → WP Compatibility', () => {
 
 			// change value
 			cy.get('@widthContainer').within(() => {
-				cy.get('[aria-label="Select Unit"]').select('auto');
+				cy.get('select').select('auto');
 			});
 
 			// Blockera value should be moved to WP data
@@ -612,16 +592,14 @@ describe('Width → WP Compatibility', () => {
 	describe('core/post-featured-image Block', () => {
 		it('Simple Value', () => {
 			appendBlocks(
-				'<!-- wp:post-featured-image {"aspectRatio":"auto","width":"200px"} /-->'
+				'<!-- wp:post-featured-image {"aspectRatio":"auto","width":"200px"} /--> '
 			);
 
 			// Select target block
-			cy.get('[data-type="core/post-featured-image"]').click();
+			cy.getBlock('core/post-featured-image').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Width"]')
-				.closest('[data-cy="base-control"]')
-				.as('widthContainer');
+			cy.getParentContainer('Width').as('widthContainer');
 
 			//
 			// Test 1: WP data to Blockera
@@ -667,16 +645,14 @@ describe('Width → WP Compatibility', () => {
 
 		it('Use WP not supported value', () => {
 			appendBlocks(
-				'<!-- wp:post-featured-image {"aspectRatio":"auto","width":"30%"} /-->'
+				'<!-- wp:post-featured-image {"aspectRatio":"auto","width":"30%"} /--> '
 			);
 
 			// Select target block
-			cy.get('[data-type="core/post-featured-image"]').click();
+			cy.getBlock('core/post-featured-image').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Width"]')
-				.closest('[data-cy="base-control"]')
-				.as('widthContainer');
+			cy.getParentContainer('Width').as('widthContainer');
 
 			//
 			// Test 1: Blockera dat to WP
@@ -695,7 +671,7 @@ describe('Width → WP Compatibility', () => {
 
 			// change value
 			cy.get('@widthContainer').within(() => {
-				cy.get('[aria-label="Select Unit"]').select('auto');
+				cy.get('select').select('auto');
 			});
 
 			// Blockera value should be moved to WP data

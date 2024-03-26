@@ -17,12 +17,10 @@ describe('Height → WP Compatibility', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/image"]').click();
+			cy.getBlock('core/image').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Height"]')
-				.closest('[data-cy="base-control"]')
-				.as('container');
+			cy.getParentContainer('Height').as('container');
 
 			//
 			// Test 1: WP data to Blockera
@@ -74,12 +72,10 @@ describe('Height → WP Compatibility', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/image"]').click();
+			cy.getBlock('core/image').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Height"]')
-				.closest('[data-cy="base-control"]')
-				.as('container');
+			cy.getParentContainer('Height').as('container');
 
 			//
 			// Test 1: Blockera dat to WP
@@ -89,7 +85,7 @@ describe('Height → WP Compatibility', () => {
 			cy.get('@container').within(() => {
 				cy.get('input').as('containerInput');
 				cy.get('@containerInput').type('300', { force: true });
-				cy.get('[aria-label="Select Unit"]').select('px');
+				cy.get('select').select('px');
 			});
 
 			// WP data should come to Blockera
@@ -109,7 +105,7 @@ describe('Height → WP Compatibility', () => {
 				cy.get('input').as('containerInput');
 				cy.get('@containerInput').clear();
 				cy.get('@containerInput').type('200', { force: true });
-				cy.get('[aria-label="Select Unit"]').select('%');
+				cy.get('select').select('%');
 			});
 
 			// Blockera value should be moved to WP data
@@ -140,12 +136,10 @@ describe('Height → WP Compatibility', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/post-featured-image"]').click();
+			cy.getBlock('core/post-featured-image').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Height"]')
-				.closest('[data-cy="base-control"]')
-				.as('container');
+			cy.getParentContainer('Height').as('container');
 
 			//
 			// Test 1: WP data to Blockera
@@ -195,12 +189,10 @@ describe('Height → WP Compatibility', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/post-featured-image"]').click();
+			cy.getBlock('core/post-featured-image').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="Height"]')
-				.closest('[data-cy="base-control"]')
-				.as('container');
+			cy.getParentContainer('Height').as('container');
 
 			//
 			// Test 1: Blockera dat to WP
@@ -219,7 +211,7 @@ describe('Height → WP Compatibility', () => {
 
 			// change value
 			cy.get('@container').within(() => {
-				cy.get('[aria-label="Select Unit"]').select('auto');
+				cy.get('select').select('auto');
 			});
 
 			// Blockera value should be moved to WP data
