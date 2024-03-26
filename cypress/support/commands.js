@@ -171,6 +171,13 @@ Cypress.Commands.add('activateMoreSettingsItem', (settingsLabel, itemName) => {
 
 	// activate item
 	cy.get(`[aria-label="Activate ${itemName}"]`).click();
+
+	cy.get('.components-popover.extension-settings')
+		.last()
+		.within(() => {
+			// close popover
+			cy.get('button[aria-label="Close"]').click();
+		});
 });
 
 // Open More Settings Panel and Activate Item
