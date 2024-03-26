@@ -119,7 +119,7 @@ export function addBlockToPost(blockName, clearEditor = false, className = '') {
 		'.block-editor-inserter__search-input,input.block-editor-inserter__search, .components-search-control__input'
 	)
 		.click()
-		.type(blockName);
+		.type(blockName, { delay: 0 });
 
 	/**
 	 * The network request to block-directory may be cached and is not consistently fired with each test.
