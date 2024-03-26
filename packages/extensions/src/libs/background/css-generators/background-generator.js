@@ -147,7 +147,7 @@ export function backgroundGenerator(id, props) {
 					item['mesh-gradient-colors']['--c0'].color;
 
 				// Image
-				properties.image.push(gradient ? gradient + ' !important' : '');
+				properties.image.push(gradient);
 
 				// Background Size
 				properties.size.push('auto');
