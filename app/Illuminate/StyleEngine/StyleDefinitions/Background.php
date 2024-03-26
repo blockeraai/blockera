@@ -92,7 +92,7 @@ class Background extends BaseStyleDefinition {
 
 			case 'background-color':
 				$properties = [
-					$type => $setting[ $type ] . $this->getImportant(),
+					$type => pb_get_value_addon_real_value($setting[ $type ]) . $this->getImportant(),
 				];
 				break;
 
