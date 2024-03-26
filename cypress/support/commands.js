@@ -64,11 +64,14 @@ Cypress.Commands.add('cssVar', (cssVarName, selector) => {
 });
 
 // get parent container to have isolate aria for testing
-Cypress.Commands.add('getParentContainer', (ariaLabel, parentsDataCy) => {
-	return cy
-		.get(`[aria-label="${ariaLabel}"]`)
-		.closest(`[data-cy=${parentsDataCy}]`);
-});
+Cypress.Commands.add(
+	'getParentContainer',
+	(ariaLabel, parentsDataCy = 'base-control') => {
+		return cy
+			.get(`[aria-label="${ariaLabel}"]`)
+			.closest(`[data-cy=${parentsDataCy}]`);
+	}
+);
 
 // get block by name for testing
 Cypress.Commands.add('getBlock', (blockName) => {
