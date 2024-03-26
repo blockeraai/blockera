@@ -6,7 +6,6 @@ import {
 	getValueAddonRealValue,
 	isValid as isValidVariable,
 } from '@publisher/hooks';
-import { isObject } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -16,9 +15,6 @@ import type { TDefaultRepeaterItemValue } from './types';
 export function getBackgroundItemBGProperty(
 	item: TDefaultRepeaterItemValue
 ): string {
-	let gradient = '';
-	let isValueAddon = false;
-
 	switch (item.type) {
 		case 'image':
 			if (!item.image) {
@@ -33,46 +29,38 @@ export function getBackgroundItemBGProperty(
 				return '';
 			}
 
-			gradient = item['linear-gradient'];
-			isValueAddon = false;
+			let lGradient = item['linear-gradient'];
 
-			if (isValidVariable(gradient)) {
-				gradient = getValueAddonRealValue(gradient);
-				isValueAddon = true;
-			}
-
-			if (!isValueAddon) {
-				gradient = gradient.replace(
+			if (isValidVariable(lGradient)) {
+				lGradient = getValueAddonRealValue(lGradient);
+			} else {
+				lGradient = lGradient.replace(
 					/linear-gradient\(\s*(.*?),/im,
 					'linear-gradient(' + item['linear-gradient-angel'] + 'deg,'
 				);
 
 				if (item['linear-gradient-repeat'] === 'repeat') {
-					gradient = gradient.replace(
+					lGradient = lGradient.replace(
 						'linear-gradient(',
 						'repeating-linear-gradient('
 					);
 				}
 			}
 
-			return gradient;
+			return lGradient;
 
 		case 'radial-gradient':
 			if (!item['radial-gradient']) {
 				return '';
 			}
 
-			gradient = item['radial-gradient'];
-			isValueAddon = false;
+			let rGradient = item['radial-gradient'];
 
-			if (isObject(gradient) && isValidVariable(gradient)) {
-				gradient = getValueAddonRealValue(gradient);
-				isValueAddon = true;
-			}
-
-			if (!isValueAddon) {
+			if (isValidVariable(rGradient)) {
+				rGradient = getValueAddonRealValue(rGradient);
+			} else {
 				if (item['radial-gradient-repeat'] === 'repeat') {
-					gradient = gradient.replace(
+					rGradient = rGradient.replace(
 						'radial-gradient(',
 						'repeating-radial-gradient('
 					);
@@ -83,7 +71,7 @@ export function getBackgroundItemBGProperty(
 					item['radial-gradient-position']?.left &&
 					item['radial-gradient-position']?.top
 				) {
-					gradient = gradient.replace(
+					rGradient = rGradient.replace(
 						'gradient(',
 						`gradient( circle at ${getValueAddonRealValue(
 							item['radial-gradient-position'].left
@@ -95,14 +83,14 @@ export function getBackgroundItemBGProperty(
 
 				// Gradient Size
 				if (item['radial-gradient-size']) {
-					gradient = gradient.replace(
+					rGradient = rGradient.replace(
 						'circle at ',
 						`circle ${item['radial-gradient-size']} at `
 					);
 				}
 			}
 
-			return gradient;
+			return rGradient;
 	}
 
 	return '';
