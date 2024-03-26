@@ -6,17 +6,19 @@ import {
 	redirectToFrontPage,
 } from '../../../../../../cypress/helpers';
 
-describe('Position -> Functionality', () => {
+describe('Box Position → Functionality', () => {
 	beforeEach(() => {
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
-		cy.getBlock('core/paragraph').type('This is test text.');
+		cy.getBlock('core/paragraph').type('This is test text.', {
+			delay: 0,
+		});
 
 		cy.getByDataTest('style-tab').click();
 	});
 
 	it('relative position - using shortcuts in popover', () => {
-		cy.getParentContainer('Position', 'base-control').within(() => {
+		cy.getParentContainer('Position').within(() => {
 			cy.get('button[aria-haspopup="listbox"]').click();
 
 			// select relative
@@ -63,35 +65,21 @@ describe('Position -> Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block')
-			.then(($el) => {
-				return window.getComputedStyle($el[0]);
-			})
-			.as('element-style');
+		cy.get('.publisher-core-block').as('element-style');
 
-		cy.get('@element-style')
-			.invoke('getPropertyValue', 'position')
-			.should('eq', 'relative');
+		cy.get('@element-style').should('have.css', 'position', 'relative');
 
-		cy.get('@element-style')
-			.invoke('getPropertyValue', 'top')
-			.should('eq', '10px');
+		cy.get('@element-style').should('have.css', 'top', '10px');
 
-		cy.get('@element-style')
-			.invoke('getPropertyValue', 'right')
-			.should('eq', '60px');
+		cy.get('@element-style').should('have.css', 'right', '60px');
 
-		cy.get('@element-style')
-			.invoke('getPropertyValue', 'bottom')
-			.should('eq', '30px');
+		cy.get('@element-style').should('have.css', 'bottom', '30px');
 
-		cy.get('@element-style')
-			.invoke('getPropertyValue', 'left')
-			.should('eq', '80px');
+		cy.get('@element-style').should('have.css', 'left', '80px');
 	});
 
 	it('Absolute position - using shortcuts after control', () => {
-		cy.getParentContainer('Position', 'base-control').within(() => {
+		cy.getParentContainer('Position').within(() => {
 			cy.get('button[aria-haspopup="listbox"]').click();
 
 			// select relative

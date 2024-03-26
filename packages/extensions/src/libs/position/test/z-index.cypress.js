@@ -6,17 +6,19 @@ import {
 	savePage,
 } from '../../../../../../cypress/helpers';
 
-describe('z-index -> Functionality', () => {
+describe('z-index → Functionality', () => {
 	beforeEach(() => {
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
-		cy.getBlock('core/paragraph').type('This is test text.');
+		cy.getBlock('core/paragraph').type('This is test text.', {
+			delay: 0,
+		});
 
 		cy.getByDataTest('style-tab').click();
 	});
 
 	it('z-index rendering + css generators', () => {
-		cy.getParentContainer('Position', 'base-control').within(() => {
+		cy.getParentContainer('Position').within(() => {
 			cy.get('button[aria-haspopup="listbox"]').click();
 
 			// select relative to activate z-index
@@ -26,10 +28,10 @@ describe('z-index -> Functionality', () => {
 		});
 
 		// check z-index and position render
-		cy.get('[aria-label="Top Position"]').should('exist');
-		cy.get('[aria-label="z-index"]').should('exist');
+		cy.getByAriaLabel('Top Position').should('exist');
+		cy.getByAriaLabel('z-index').should('exist');
 
-		cy.getParentContainer('z-index', 'base-control').within(() => {
+		cy.getParentContainer('z-index').within(() => {
 			cy.get('input').type(100, { force: true });
 		});
 

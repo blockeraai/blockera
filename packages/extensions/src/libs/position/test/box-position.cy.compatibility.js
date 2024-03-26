@@ -19,15 +19,13 @@ describe('Box Position → WP Compatibility', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/paragraph"]').click();
+			cy.getBlock('core/paragraph').click();
 
 			// Switch to parent group block
 			cy.get('[aria-label="Select Group"]').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="BG Color"]')
-				.parents('[data-cy="base-control"]')
-				.as('bgColorContainer');
+			cy.getParentContainer('Position').as('container');
 
 			//
 			// Test 1: WP data to Blockera
@@ -53,14 +51,12 @@ describe('Box Position → WP Compatibility', () => {
 			//
 
 			// change position
-			cy.get('[aria-label="Position"]')
-				.parents('[data-cy="base-control"]')
-				.within(() => {
-					cy.get('button[aria-haspopup="listbox"]').click();
-					cy.get('ul').within(() => {
-						cy.contains('Absolute').trigger('click');
-					});
+			cy.get('@container').within(() => {
+				cy.get('button[aria-haspopup="listbox"]').click();
+				cy.get('ul').within(() => {
+					cy.contains('Absolute').trigger('click');
 				});
+			});
 
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
@@ -78,14 +74,12 @@ describe('Box Position → WP Compatibility', () => {
 			//
 
 			// change position
-			cy.get('[aria-label="Position"]')
-				.parents('[data-cy="base-control"]')
-				.within(() => {
-					cy.get('button[aria-haspopup="listbox"]').click();
-					cy.get('ul').within(() => {
-						cy.contains('Default').trigger('click');
-					});
+			cy.get('@container').within(() => {
+				cy.get('button[aria-haspopup="listbox"]').click();
+				cy.get('ul').within(() => {
+					cy.contains('Default').trigger('click');
 				});
+			});
 
 			// WP data should be removed too
 			getWPDataObject().then((data) => {
