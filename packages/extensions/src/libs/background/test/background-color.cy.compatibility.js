@@ -11,19 +11,18 @@ describe('Background Color → WP Compatibility', () => {
 	describe('Paragraph Block', () => {
 		it('Simple Value', () => {
 			appendBlocks(
-				'\n' +
-					'<!-- wp:paragraph {"style":{"color":{"background":"#ffdfdf"}}} -->\n' +
+				'<!-- wp:paragraph {"style":{"color":{"background":"#ffdfdf"}}} -->\n' +
 					'<p class="has-background" style="background-color:#ffdfdf">Test Paragraph</p>\n' +
 					'<!-- /wp:paragraph -->'
 			);
 
 			// Select target block
-			cy.get('[data-type="core/paragraph"]').click();
+			cy.getBlock('core/paragraph').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="BG Color"]')
-				.parents('[data-cy="base-control"]')
-				.as('bgColorContainer');
+			cy.getParentContainer('BG Color', 'base-control').as(
+				'bgColorContainer'
+			);
 
 			//
 			// Test 1: WP data to Blockera
@@ -85,12 +84,12 @@ describe('Background Color → WP Compatibility', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/paragraph"]').click();
+			cy.getBlock('core/paragraph').click();
 
 			// add alias to the feature container
-			cy.get('[aria-label="BG Color"]')
-				.parents('[data-cy="base-control"]')
-				.as('bgColorContainer');
+			cy.getParentContainer('BG Color', 'base-control').as(
+				'bgColorContainer'
+			);
 
 			//
 			// Test 1: WP data to Blockera

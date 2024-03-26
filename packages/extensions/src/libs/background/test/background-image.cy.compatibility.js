@@ -18,12 +18,12 @@ describe('Background → WP Compatibility', () => {
 				);
 
 				// Select target block
-				cy.get('[data-type="core/paragraph"]').click();
+				cy.getBlock('core/paragraph').click();
 
 				// add alias to the feature container
-				cy.get('[aria-label="Image & Gradient"]')
-					.parents('[data-cy="base-control"]')
-					.as('bgContainer');
+				cy.getParentContainer('Image & Gradient', 'base-control').as(
+					'bgContainer'
+				);
 
 				//
 				// Test 1: WP data to Blockera
@@ -59,14 +59,13 @@ describe('Background → WP Compatibility', () => {
 
 				// change color to #666 (#666666)
 				cy.get('.components-popover').within(() => {
-					cy.get('[aria-label="Angel"]')
-						.parent()
-						.siblings()
-						.find('input[type="number"]')
-						.as('angelInput');
-
-					cy.get('@angelInput').clear();
-					cy.get('@angelInput').type('45');
+					cy.getParentContainer('Angel', 'base-control').within(
+						() => {
+							cy.get('input[type="number"]').as('angelInput');
+							cy.get('@angelInput').clear();
+							cy.get('@angelInput').type('45');
+						}
+					);
 				});
 
 				// Blockera value should be moved to WP data
@@ -84,7 +83,7 @@ describe('Background → WP Compatibility', () => {
 
 				// clear bg color
 				cy.get('@bgContainer').within(() => {
-					cy.get('[aria-label="Delete linear gradient 0"]').click({
+					cy.getByAriaLabel('Delete linear gradient 0').click({
 						force: true,
 					});
 				});
@@ -105,12 +104,12 @@ describe('Background → WP Compatibility', () => {
 				);
 
 				// Select target block
-				cy.get('[data-type="core/paragraph"]').click();
+				cy.getBlock('core/paragraph').click();
 
 				// add alias to the feature container
-				cy.get('[aria-label="Image & Gradient"]')
-					.parents('[data-cy="base-control"]')
-					.as('bgContainer');
+				cy.getParentContainer('Image & Gradient', 'base-control').as(
+					'bgContainer'
+				);
 
 				//
 				// Test 1: WP data to Blockera
@@ -162,7 +161,9 @@ describe('Background → WP Compatibility', () => {
 				cy.get(
 					'.components-popover.publisher-control-background-popover'
 				).within(() => {
-					cy.get('[data-cy="value-addon-btn"]').click();
+					cy.get('[data-cy="value-addon-btn"]').click({
+						force: true,
+					});
 				});
 
 				cy.wait(500);
@@ -171,9 +172,7 @@ describe('Background → WP Compatibility', () => {
 				cy.get(
 					'.components-popover.publisher-control-popover-variables'
 				).within(() => {
-					// cy.wait(500);
-
-					cy.get('[data-cy="va-item-gradient-2"]').click();
+					cy.selectValueAddonItem('gradient-2');
 				});
 
 				// Blockera value should be moved to WP data
@@ -189,7 +188,7 @@ describe('Background → WP Compatibility', () => {
 
 				// clear bg color
 				cy.get('@bgContainer').within(() => {
-					cy.get('[aria-label="Delete linear gradient 0"]').click({
+					cy.getByAriaLabel('Delete linear gradient 0').click({
 						force: true,
 					});
 				});
@@ -212,12 +211,12 @@ describe('Background → WP Compatibility', () => {
 				);
 
 				// Select target block
-				cy.get('[data-type="core/paragraph"]').click();
+				cy.getBlock('core/paragraph').click();
 
 				// add alias to the feature container
-				cy.get('[aria-label="Image & Gradient"]')
-					.parents('[data-cy="base-control"]')
-					.as('bgContainer');
+				cy.getParentContainer('Image & Gradient', 'base-control').as(
+					'bgContainer'
+				);
 
 				//
 				// Test 1: WP data to Blockera
@@ -255,7 +254,6 @@ describe('Background → WP Compatibility', () => {
 					cy.get('@repeaterBtn').click();
 				});
 
-				// change color to #666 (#666666)
 				cy.get('.components-popover').within(() => {
 					cy.get('[data-value="farthest-side"]').click();
 				});
@@ -275,7 +273,7 @@ describe('Background → WP Compatibility', () => {
 
 				// clear bg color
 				cy.get('@bgContainer').within(() => {
-					cy.get('[aria-label="Delete radial gradient 0"]').click({
+					cy.getByAriaLabel('Delete radial gradient 0').click({
 						force: true,
 					});
 				});
@@ -302,15 +300,15 @@ describe('Background → WP Compatibility', () => {
 				);
 
 				// Select target block
-				cy.get('[data-type="core/paragraph"]').click();
+				cy.getBlock('core/paragraph').click();
 
 				// Switch to parent block
-				cy.get('[aria-label="Select Group"]').click();
+				cy.getByAriaLabel('Select Group').click();
 
 				// add alias to the feature container
-				cy.get('[aria-label="Image & Gradient"]')
-					.parents('[data-cy="base-control"]')
-					.as('bgContainer');
+				cy.getParentContainer('Image & Gradient', 'base-control').as(
+					'bgContainer'
+				);
 
 				//
 				// Test 1: WP data to Blockera
@@ -373,7 +371,7 @@ describe('Background → WP Compatibility', () => {
 
 				// clear bg color
 				cy.get('@bgContainer').within(() => {
-					cy.get('[aria-label="Delete image 0"]').click({
+					cy.getByAriaLabel('Delete image 0').click({
 						force: true,
 					});
 				});
