@@ -80,7 +80,7 @@ class Background extends BaseStyleDefinition {
 
 		switch ( $type ) {
 
-			case 'clip':
+			case 'background-clip':
 				$properties = array_merge(
 					[
 						$type                     => $setting[ $type ],
