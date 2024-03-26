@@ -15,9 +15,7 @@ describe('Background Clip → Functionality', () => {
 		cy.getByDataTest('style-tab').click();
 
 		// add alias to the feature container
-		cy.getParentContainer('Clipping', 'base-control').as(
-			'clippingContainer'
-		);
+		cy.getParentContainer('Clipping').as('clippingContainer');
 	});
 
 	it(`simple padding box clipping`, () => {
@@ -57,13 +55,11 @@ describe('Background Clip → Functionality', () => {
 
 	it('should set text clipping when block has text and background-mage', () => {
 		// type to block
-		cy.getBlock('core/paragraph').type('smile =)');
+		cy.getBlock('core/paragraph').type('smile =)', { delay: 0 });
 
 		cy.getByDataTest('style-tab').click();
 
-		cy.getParentContainer('Image & Gradient', 'base-control').as(
-			'image-and-gradient'
-		);
+		cy.getParentContainer('Image & Gradient').as('image-and-gradient');
 
 		cy.get('@image-and-gradient').within(() => {
 			// add bg repeater item

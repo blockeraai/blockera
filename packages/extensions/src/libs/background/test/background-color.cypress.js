@@ -17,9 +17,7 @@ describe('Background Color → Functionality', () => {
 		cy.getByDataTest('style-tab').click();
 
 		// add alias to the feature container
-		cy.getParentContainer('BG Color', 'base-control').as(
-			'bgColorContainer'
-		);
+		cy.getParentContainer('BG Color').as('bgColorContainer');
 	});
 
 	it('simple value background color', () => {

@@ -12,7 +12,9 @@ describe('Background Image → Functionality', () => {
 		// add block, select it, open style tab
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
-		cy.getBlock('core/paragraph').type("life is too short. isn't it?");
+		cy.getBlock('core/paragraph').type("life is too short. isn't it?", {
+			delay: 0,
+		});
 
 		cy.getByAriaLabel('Settings').eq(1).click({ force: true });
 
@@ -22,9 +24,7 @@ describe('Background Image → Functionality', () => {
 	describe('Image', () => {
 		beforeEach(() => {
 			// add bg repeater, open it
-			cy.getParentContainer('Image & Gradient', 'base-control').as(
-				'image-and-gradient'
-			);
+			cy.getParentContainer('Image & Gradient').as('image-and-gradient');
 
 			cy.get('@image-and-gradient').within(() => {
 				cy.getByAriaLabel('Add New Background').as('bgRepeaterAddBtn');
@@ -76,7 +76,7 @@ describe('Background Image → Functionality', () => {
 
 		it('should be able to set background size to contain', () => {
 			cy.get('.publisher-component-popover').within(() => {
-				cy.getParentContainer('Size', 'base-control').within(() => {
+				cy.getParentContainer('Size').within(() => {
 					cy.get('button[data-value="contain"]').click();
 				});
 
@@ -109,7 +109,7 @@ describe('Background Image → Functionality', () => {
 
 		it("should apply 'auto auto' by default for bg-size on custom ", () => {
 			cy.get('.publisher-component-popover').within(() => {
-				cy.getParentContainer('Size', 'base-control').within(() => {
+				cy.getParentContainer('Size').within(() => {
 					cy.get('button[data-value="custom"]').click();
 				});
 
@@ -151,18 +151,18 @@ describe('Background Image → Functionality', () => {
 
 		it('should be able to set background position, Repeat, Effect', () => {
 			cy.get('.publisher-component-popover').within(() => {
-				cy.getParentContainer('Position', 'base-control').within(() => {
+				cy.getParentContainer('Position').within(() => {
 					cy.get('input').each(($input) => {
 						cy.wrap($input).clear();
 						cy.wrap($input).type('20');
 					});
 				});
 
-				cy.getParentContainer('Repeat', 'base-control').within(() => {
+				cy.getParentContainer('Repeat').within(() => {
 					cy.get('button[data-value="no-repeat"]').click();
 				});
 
-				cy.getParentContainer('Effect', 'base-control').within(() => {
+				cy.getParentContainer('Effect').within(() => {
 					cy.get('button')
 						.contains('button', /parallax/i)
 						.click();
@@ -215,9 +215,7 @@ describe('Background Image → Functionality', () => {
 		// linear-gradient(90deg,#009efa 10%,#e52e00 90%)
 		beforeEach(() => {
 			// add bg repeater, open it
-			cy.getParentContainer('Image & Gradient', 'base-control').as(
-				'image-and-gradient'
-			);
+			cy.getParentContainer('Image & Gradient').as('image-and-gradient');
 
 			cy.get('@image-and-gradient').within(() => {
 				cy.getByAriaLabel('Add New Background').as('bgRepeaterAddBtn');
@@ -231,18 +229,18 @@ describe('Background Image → Functionality', () => {
 		it('simple value linear gradient', () => {
 			cy.get('.publisher-component-popover').within(() => {
 				// set angle
-				cy.getParentContainer('Angel', 'base-control').within(() => {
+				cy.getParentContainer('Angel').within(() => {
 					cy.get('input').clear();
 					cy.get('input').type('7');
 				});
 
 				// set repeat
-				cy.getParentContainer('Repeat', 'base-control').within(() => {
+				cy.getParentContainer('Repeat').within(() => {
 					cy.get('button').last().click();
 				});
 
 				// set effect
-				cy.getParentContainer('Effect', 'base-control').within(() => {
+				cy.getParentContainer('Effect').within(() => {
 					cy.get('button')
 						.contains('button', /parallax/i)
 						.click();
@@ -310,7 +308,7 @@ describe('Background Image → Functionality', () => {
 
 		it('variable linear gradient', () => {
 			cy.get('.publisher-component-popover').within(() => {
-				cy.getParentContainer('Linear Gradient', 'base-control')
+				cy.getParentContainer('Linear Gradient')
 					.last()
 					.within(() => {
 						cy.openValueAddon();
@@ -365,9 +363,7 @@ describe('Background Image → Functionality', () => {
 	describe('Radial Gradient', () => {
 		beforeEach(() => {
 			// add bg repeater, open it
-			cy.getParentContainer('Image & Gradient', 'base-control').as(
-				'image-and-gradient'
-			);
+			cy.getParentContainer('Image & Gradient').as('image-and-gradient');
 
 			cy.get('@image-and-gradient').within(() => {
 				cy.getByAriaLabel('Add New Background').as('bgRepeaterAddBtn');
@@ -381,7 +377,7 @@ describe('Background Image → Functionality', () => {
 		it('simple value radial gradient', () => {
 			cy.get('.publisher-component-popover').within(() => {
 				// set position
-				cy.getParentContainer('Position', 'base-control').within(() => {
+				cy.getParentContainer('Position').within(() => {
 					cy.get('input').each(($input) => {
 						cy.wrap($input).clear();
 						cy.wrap($input).type('20');
@@ -389,17 +385,17 @@ describe('Background Image → Functionality', () => {
 				});
 
 				//  set size
-				cy.getParentContainer('Size', 'base-control').within(() => {
+				cy.getParentContainer('Size').within(() => {
 					cy.get('button[data-value="closest-side"]').click();
 				});
 
 				// set repeat
-				cy.getParentContainer('Repeat', 'base-control').within(() => {
+				cy.getParentContainer('Repeat').within(() => {
 					cy.get('button').last().click();
 				});
 
 				// set effect
-				cy.getParentContainer('Effect', 'base-control').within(() => {
+				cy.getParentContainer('Effect').within(() => {
 					cy.get('button')
 						.contains('button', /parallax/i)
 						.click();
@@ -482,9 +478,7 @@ describe('Background Image → Functionality', () => {
 	describe('Mesh Gradient', () => {
 		beforeEach(() => {
 			// add bg repeater, open it
-			cy.getParentContainer('Image & Gradient', 'base-control').as(
-				'image-and-gradient'
-			);
+			cy.getParentContainer('Image & Gradient').as('image-and-gradient');
 
 			cy.get('@image-and-gradient').within(() => {
 				cy.getByAriaLabel('Add New Background').as('bgRepeaterAddBtn');
@@ -507,7 +501,7 @@ describe('Background Image → Functionality', () => {
 				});
 
 				// set effect
-				cy.getParentContainer('Effect', 'base-control').within(() => {
+				cy.getParentContainer('Effect').within(() => {
 					cy.get('button')
 						.contains('button', /parallax/i)
 						.click();

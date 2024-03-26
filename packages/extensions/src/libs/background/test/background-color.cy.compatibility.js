@@ -20,9 +20,7 @@ describe('Background Color → WP Compatibility', () => {
 			cy.getBlock('core/paragraph').click();
 
 			// add alias to the feature container
-			cy.getParentContainer('BG Color', 'base-control').as(
-				'bgColorContainer'
-			);
+			cy.getParentContainer('BG Color').as('bgColorContainer');
 
 			//
 			// Test 1: WP data to Blockera
@@ -87,9 +85,7 @@ describe('Background Color → WP Compatibility', () => {
 			cy.getBlock('core/paragraph').click();
 
 			// add alias to the feature container
-			cy.getParentContainer('BG Color', 'base-control').as(
-				'bgColorContainer'
-			);
+			cy.getParentContainer('BG Color').as('bgColorContainer');
 
 			//
 			// Test 1: WP data to Blockera
