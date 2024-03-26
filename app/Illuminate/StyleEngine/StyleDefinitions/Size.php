@@ -61,7 +61,11 @@ class Size extends BaseStyleDefinition {
 
 		return [
 			'publisherWidth'       => 'width',
+			'publisherMinWidth'    => 'min-width',
+			'publisherMaxWidth'    => 'max-width',
 			'publisherHeight'      => 'height',
+			'publisherMinHeight'   => 'min-height',
+			'publisherMaxHeight'   => 'max-height',
 			'publisherOverflow'    => 'overflow',
 			'publisherFit'         => 'object-fit',
 			'publisherRatio'       => 'aspect-ratio',
