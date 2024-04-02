@@ -16,3 +16,5 @@ wordpress*
 # lint top level dot files
 !.*
 /node_modules/.*
+
+/cypress/.*
