@@ -78,9 +78,23 @@ Cypress.Commands.add('getBlock', (blockName) => {
 	return cy.get(`[data-type="${blockName}"]`);
 });
 
+// Click Value Addon Button to Open Popover
+Cypress.Commands.add('clickValueAddonButton', () => {
+	cy.getByDataCy('value-addon-btn').click({
+		force: true,
+	});
+});
+
 // Open Value Addon Popover
 Cypress.Commands.add('openValueAddon', () => {
 	cy.getByDataCy('value-addon-btn-open').click({
+		force: true,
+	});
+});
+
+// Remove Value Addon Popover
+Cypress.Commands.add('removeValueAddon', () => {
+	cy.getByDataCy('value-addon-btn-remove').click({
 		force: true,
 	});
 });
