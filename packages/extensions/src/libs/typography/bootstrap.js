@@ -102,6 +102,7 @@ export const bootstrap = (): void => {
 			const newColorAttrs = fontColorFromWPCompatibility({
 				attributes,
 			});
+
 			if (newColorAttrs) {
 				attributes = mergeObject(attributes, newColorAttrs);
 			}
