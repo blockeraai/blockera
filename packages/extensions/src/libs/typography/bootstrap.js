@@ -86,9 +86,16 @@ export const bootstrap = (): void => {
 				attributes,
 			});
 
-			attributes = fontStyleFromWPCompatibility({
+			//
+			// Font Style
+			//
+			const newFontStyleAttrs = fontStyleFromWPCompatibility({
 				attributes,
 			});
+
+			if (newFontStyleAttrs) {
+				attributes = mergeObject(attributes, newFontStyleAttrs);
+			}
 
 			attributes = textTransformFromWPCompatibility({
 				attributes,

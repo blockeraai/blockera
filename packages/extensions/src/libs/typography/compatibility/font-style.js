@@ -9,11 +9,10 @@ export function fontStyleFromWPCompatibility({
 		attributes?.publisherFontStyle === '' &&
 		attributes?.style?.typography?.fontStyle !== undefined
 	) {
-		attributes.publisherFontStyle =
-			attributes?.style?.typography?.fontStyle;
+		return { publisherFontStyle: attributes?.style?.typography?.fontStyle };
 	}
 
-	return attributes;
+	return false;
 }
 
 export function fontStyleToWPCompatibility({
@@ -24,6 +23,7 @@ export function fontStyleToWPCompatibility({
 	ref?: Object,
 }): Object {
 	if (
+		newValue === '' ||
 		'reset' === ref?.current?.action ||
 		['normal', 'italic'].indexOf(newValue) === -1
 	) {
