@@ -31,7 +31,13 @@ export function getCssSelector({
 	className = '',
 	fallbackSupportId,
 }: NormalizedSelectorProps): string {
-	const rootSelector = '{{BLOCK_ID}}';
+	const { getDeviceType } = select('publisher-core/editor');
+	const deviceType = getDeviceType();
+	const rootSelector =
+		'laptop' === deviceType
+			? '{{BLOCK_ID}}'
+			: `.is-${deviceType}-preview {{BLOCK_ID}}`;
+
 	const selectors: {
 		[key: TStates]: {
 			[key: 'master' | InnerBlockType | string]: string,

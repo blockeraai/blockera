@@ -4,25 +4,11 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { useId, useMemo } from '@wordpress/element';
+import { useId } from '@wordpress/element';
 
 /**
  * Publisher dependencies
  */
-import {
-	BackgroundStyles,
-	// BorderAndShadowStyles,
-	FlexChildStyles,
-	isInnerBlock,
-	LayoutStyles,
-	MouseStyles,
-	PositionStyles,
-	SizeStyles,
-	SpacingStyles,
-	TypographyStyles,
-	// EffectsStyles
-} from '@publisher/extensions';
-import { isNormalState } from '@publisher/extensions/src/components';
 import type { TStates } from '@publisher/extensions/src/libs/block-states/types';
 import { default as blockStates } from '@publisher/extensions/src/libs/block-states/states';
 
@@ -32,6 +18,7 @@ import { default as blockStates } from '@publisher/extensions/src/libs/block-sta
 import { Style } from './style';
 import type { StateStyleProps } from './types';
 import { combineDeclarations } from '../utils';
+import { useComputedCssProps } from '../hooks';
 
 const Stylesheet = ({
 	state,
@@ -45,78 +32,13 @@ const Stylesheet = ({
 	state: TStates,
 }): MixedElement => {
 	const id = useId();
-
-	const styles = useMemo(() => {
-		let calculatedProps = {
-			...props,
-			state,
-			selectors,
-			currentBlock,
-		};
-
-		if (!isNormalState(state) && !isInnerBlock(currentBlock)) {
-			if (!calculatedProps.attributes.publisherBlockStates[state]) {
-				return <></>;
-			}
-
-			calculatedProps = {
-				...calculatedProps,
-				attributes: {
-					...calculatedProps.currentAttributes,
-					...(calculatedProps.attributes.publisherBlockStates[state]
-						.breakpoints[currentBreakpoint] &&
-					calculatedProps.attributes.publisherBlockStates[state]
-						.breakpoints[currentBreakpoint].attributes
-						? calculatedProps.attributes.publisherBlockStates[state]
-								.breakpoints[currentBreakpoint].attributes
-						: {}),
-				},
-			};
-		} else if (!isNormalState(state) && isInnerBlock(currentBlock)) {
-			if (
-				!calculatedProps.attributes?.publisherBlockStates ||
-				!calculatedProps.attributes?.publisherBlockStates[state]
-			) {
-				return <></>;
-			}
-
-			calculatedProps = {
-				...calculatedProps,
-				attributes: {
-					...calculatedProps.currentAttributes,
-					...(calculatedProps.attributes.publisherBlockStates[state]
-						.breakpoints[currentBreakpoint] &&
-					calculatedProps.attributes.publisherBlockStates[state]
-						.breakpoints[currentBreakpoint].attributes
-						? calculatedProps.attributes.publisherBlockStates[state]
-								.breakpoints[currentBreakpoint].attributes
-						: {}),
-				},
-			};
-		} else if (isNormalState(state) && isInnerBlock(currentBlock)) {
-			calculatedProps = {
-				...calculatedProps,
-				attributes: {
-					...calculatedProps.currentAttributes,
-					...calculatedProps.attributes,
-				},
-			};
-		}
-
-		return [
-			...SizeStyles(calculatedProps),
-			...MouseStyles(calculatedProps),
-			...LayoutStyles(calculatedProps),
-			...SpacingStyles(calculatedProps),
-			...PositionStyles(calculatedProps),
-			...FlexChildStyles(calculatedProps),
-			...TypographyStyles(calculatedProps),
-			...BackgroundStyles(calculatedProps),
-			// ...EffectsStyles(calculatedProps),
-			// ...CustomStyleStyles(calculatedProps),
-			// ...BorderAndShadowStyles(calculatedProps),
-		].flat();
-	}, [props, state, selectors, currentBlock, currentBreakpoint]);
+	const styles = useComputedCssProps({
+		...props,
+		state,
+		selectors,
+		currentBlock,
+		currentBreakpoint,
+	});
 
 	const MappedStyleGroups = () =>
 		combineDeclarations(styles).map(

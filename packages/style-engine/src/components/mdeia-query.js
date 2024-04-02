@@ -23,6 +23,7 @@ export const MediaQuery = ({
 
 	return (
 		<>
+			{'laptop' === breakpoint && children}
 			{media}
 			{'{'}
 			{children}

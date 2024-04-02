@@ -16,7 +16,11 @@ import { useBlocksStore } from '@publisher/extensions/src/hooks';
  * Internal dependencies
  */
 import type { BlockStyleProps } from './types';
-import { MediaQuery, InnerBlockStyle, StateStyle } from '../';
+import {
+	// MediaQuery,
+	InnerBlockStyle,
+	StateStyle,
+} from '../';
 
 export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 	const {
@@ -50,24 +54,24 @@ export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 
 	return (
 		<style>
-			<MediaQuery breakpoint={currentBreakpoint}>
-				<StateStyle
-					{...{
-						...props,
-						selectors,
-						currentState,
-						currentBreakpoint,
-						currentBlock: 'master',
-					}}
-				/>
-				<InnerBlockStyle
-					{...{
-						...props,
-						currentState,
-						currentBreakpoint,
-					}}
-				/>
-			</MediaQuery>
+			{/*<MediaQuery breakpoint={currentBreakpoint}>*/}
+			<StateStyle
+				{...{
+					...props,
+					selectors,
+					currentState,
+					currentBreakpoint,
+					currentBlock: 'master',
+				}}
+			/>
+			<InnerBlockStyle
+				{...{
+					...props,
+					currentState,
+					currentBreakpoint,
+				}}
+			/>
+			{/*</MediaQuery>*/}
 		</style>
 	);
 };
