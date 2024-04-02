@@ -220,6 +220,7 @@ export const bootstrap = (): void => {
 						fontColorToWPCompatibility({
 							newValue,
 							ref,
+							getAttributes,
 						})
 					);
 			}
