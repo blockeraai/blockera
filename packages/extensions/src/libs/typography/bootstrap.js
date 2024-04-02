@@ -64,10 +64,16 @@ export const bootstrap = (): void => {
 				return attributes;
 			}
 
-			attributes = fontSizeFromWPCompatibility({
+			//
+			// Font Size
+			//
+			const newFontSizeAttrs = fontSizeFromWPCompatibility({
 				attributes,
 			});
 
+			if (newFontSizeAttrs) {
+				attributes = mergeObject(attributes, newFontSizeAttrs);
+			}
 			attributes = lineHeightFromWPCompatibility({
 				attributes,
 			});

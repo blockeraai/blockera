@@ -19,30 +19,36 @@ export function fontSizeFromWPCompatibility({
 			const fontSizeVar = getFontSizeBy('id', attributes?.fontSize);
 
 			if (fontSizeVar) {
-				attributes.publisherFontSize = {
-					settings: {
-						...fontSizeVar,
-						type: 'font-size',
-						var: generateVariableString({
-							reference: fontSizeVar?.reference || { type: '' },
+				return {
+					publisherFontSize: {
+						settings: {
+							...fontSizeVar,
 							type: 'font-size',
-							id: fontSizeVar?.id || '',
-						}),
+							var: generateVariableString({
+								reference: fontSizeVar?.reference || {
+									type: '',
+								},
+								type: 'font-size',
+								id: fontSizeVar?.id || '',
+							}),
+						},
+						name: fontSizeVar?.name,
+						isValueAddon: true,
+						valueType: 'variable',
 					},
-					name: fontSizeVar?.name,
-					isValueAddon: true,
-					valueType: 'variable',
 				};
 			}
 		}
+
 		// font size is not variable
-		else if (attributes?.style?.typography?.fontSize !== undefined) {
-			attributes.publisherFontSize =
-				attributes?.style?.typography?.fontSize;
+		if (attributes?.style?.typography?.fontSize !== undefined) {
+			return {
+				publisherFontSize: attributes?.style?.typography?.fontSize,
+			};
 		}
 	}
 
-	return attributes;
+	return false;
 }
 
 export function fontSizeToWPCompatibility({
@@ -52,7 +58,7 @@ export function fontSizeToWPCompatibility({
 	newValue: Object,
 	ref?: Object,
 }): Object {
-	if ('reset' === ref?.current?.action) {
+	if ('reset' === ref?.current?.action || newValue === '') {
 		return {
 			fontSize: undefined,
 			style: {
@@ -67,10 +73,16 @@ export function fontSizeToWPCompatibility({
 	if (isValid(newValue)) {
 		return {
 			fontSize: newValue?.settings?.id,
+			style: {
+				typography: {
+					fontSize: undefined,
+				},
+			},
 		};
 	}
 
 	return {
+		fontSize: undefined,
 		style: {
 			typography: {
 				fontSize: newValue,
