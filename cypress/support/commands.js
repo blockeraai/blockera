@@ -184,3 +184,18 @@ Cypress.Commands.add('activateMoreSettingsItem', (settingsLabel, itemName) => {
 Cypress.Commands.add('openMoreFeatures', (label) => {
 	cy.get(`[aria-label="${label}"]`).click();
 });
+
+Cypress.Commands.add('setInputFieldValue', (fieldLabel, groupLabel, value) => {
+	// Alias
+	cy.get('h2').contains(groupLabel).parent().parent().as('groupId');
+
+	// Assertion for master block attributes.
+	cy.get('@groupId').within(() => {
+		cy.get(`[aria-label="${fieldLabel}"]`)
+			.parent()
+			.next()
+			.within(() => {
+				cy.get('input').type(value);
+			});
+	});
+});
