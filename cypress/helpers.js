@@ -66,6 +66,10 @@ export function getSelectedBlock(data, field) {
 	];
 }
 
+export function getBlockClientId(data) {
+	return data.select('core/block-editor').getSelectedBlock().clientId;
+}
+
 /**
  * Disable Gutenberg Tips
  */
