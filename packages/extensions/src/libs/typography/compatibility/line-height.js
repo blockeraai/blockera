@@ -4,16 +4,17 @@ export function lineHeightFromWPCompatibility({
 	attributes,
 }: {
 	attributes: Object,
-}): Object {
+}): Object | false {
 	if (
 		attributes?.publisherLineHeight === '' &&
 		attributes?.style?.typography?.lineHeight !== undefined
 	) {
-		attributes.publisherLineHeight =
-			attributes?.style?.typography?.lineHeight;
+		return {
+			publisherLineHeight: attributes?.style?.typography?.lineHeight,
+		};
 	}
 
-	return attributes;
+	return false;
 }
 
 export function lineHeightToWPCompatibility({
@@ -23,7 +24,7 @@ export function lineHeightToWPCompatibility({
 	newValue: Object,
 	ref?: Object,
 }): Object {
-	if ('reset' === ref?.current?.action) {
+	if ('reset' === ref?.current?.action || newValue === '') {
 		return {
 			style: {
 				typography: {

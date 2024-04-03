@@ -74,9 +74,17 @@ export const bootstrap = (): void => {
 			if (newFontSizeAttrs) {
 				attributes = mergeObject(attributes, newFontSizeAttrs);
 			}
-			attributes = lineHeightFromWPCompatibility({
+
+			//
+			// Line Height
+			//
+			const lineHeightAttrs = lineHeightFromWPCompatibility({
 				attributes,
 			});
+
+			if (lineHeightAttrs) {
+				attributes = mergeObject(attributes, lineHeightAttrs);
+			}
 
 			attributes = textAlignFromWPCompatibility({
 				attributes,
