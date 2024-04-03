@@ -1,12 +1,12 @@
 /**
  * Publisher dependencies
  */
-import { createCssRule } from '@publisher/style-engine';
+import { createCssDeclarations } from '@publisher/style-engine';
 
-export function MaskGenerator(id, props, { media, selector }) {
+export function MaskGenerator(id, props) {
 	const { attributes } = props;
 
-	if (!attributes?.publisherMask?.length) {
+	if (!Object.keys(attributes?.publisherMask)?.length) {
 		return '';
 	}
 
@@ -32,9 +32,7 @@ export function MaskGenerator(id, props, { media, selector }) {
 		} ${item['vertically-flip'] ? 'scaleY(-1)' : ''}`;
 	}
 
-	return createCssRule({
-		media,
-		selector,
+	return createCssDeclarations({
 		properties,
 	});
 }

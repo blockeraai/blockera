@@ -15,6 +15,7 @@ export const DevicePreview = ({
 	children,
 }: {
 	breakpoint: TBreakpoint,
+	children: MixedElement,
 }): MixedElement => {
 	return (
 		<>

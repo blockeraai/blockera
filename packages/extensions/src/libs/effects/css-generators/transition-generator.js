@@ -2,18 +2,18 @@
  * Publisher dependencies
  */
 import { isUndefined } from '@publisher/utils';
-import { createCssRule } from '@publisher/style-engine';
+import { createCssDeclarations } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
 
-export function TransitionGenerator(id, props, { media, selector }) {
+export function TransitionGenerator(id, props) {
 	const { attributes } = props;
 
-	if (!attributes?.publisherTransition?.length) {
+	if (!Object.keys(attributes?.publisherTransition)?.length) {
 		return '';
 	}
 
-	const value = attributes?.publisherTransition
-		?.map((item) => {
+	const value = Object.entries(attributes?.publisherTransition)
+		?.map(([, item]) => {
 			if (!item.isVisible) {
 				return null;
 			}
@@ -26,9 +26,7 @@ export function TransitionGenerator(id, props, { media, selector }) {
 		})
 		?.filter((item) => null !== item);
 
-	return createCssRule({
-		media,
-		selector,
+	return createCssDeclarations({
 		properties: {
 			transition: value?.join(', '),
 		},

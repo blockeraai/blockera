@@ -1,26 +1,24 @@
 /**
  * Publisher dependencies
  */
-import { createCssRule } from '@publisher/style-engine';
+import { createCssDeclarations } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
 
-export function BeforeDividerGenerator(id, props, { media, selector }) {
+export function BeforeDividerGenerator(id, props) {
 	const { attributes } = props;
 
-	if (!attributes?.publisherDivider?.length) {
+	if (!Object.keys(attributes?.publisherDivider)?.length) {
 		return '';
 	}
 
 	const value = DividerGenerator(attributes);
 
-	return createCssRule({
-		media,
-		selector: `${selector}:before`,
+	return createCssDeclarations({
 		properties: value[0],
 	});
 }
 
-export function AfterDividerGenerator(id, props, { media, selector }) {
+export function AfterDividerGenerator(id, props) {
 	const { attributes } = props;
 
 	if (!attributes?.publisherDivider?.length) {
@@ -29,15 +27,13 @@ export function AfterDividerGenerator(id, props, { media, selector }) {
 
 	const value = DividerGenerator(attributes);
 
-	return createCssRule({
-		media,
-		selector: `${selector}:after`,
+	return createCssDeclarations({
 		properties: value[1],
 	});
 }
 
 function DividerGenerator(attributes) {
-	const value = attributes?.publisherDivider?.map((item) => {
+	return Object.entries(attributes?.publisherDivider)?.map(([, item]) => {
 		const properties = {};
 		if (!item.isVisible) {
 			return {};
@@ -79,14 +75,12 @@ function DividerGenerator(attributes) {
 
 		return properties;
 	});
-
-	return value;
 }
 
 function getSelectedShape(id, color = '#000000') {
 	const formattedColor = `%23${color.split('#')[1]}`;
 
-	const selectedShape = [
+	return [
 		{
 			id: 'wave-opacity',
 			encodedSvg: `data:image/svg+xml,%3Csvg width='230' height='16' viewBox='0 0 230 16' fill='${formattedColor}' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 3.88727C20.0142 8.16327 60.4337 0.621963 105.221 3.88727C150.074 6.99709 194.861 8.31876 230 3.03207V0H0V3.88727Z' fill='${formattedColor}'/%3E%3Cpath opacity='0.5' d='M0 7.77454C20.6661 13.9942 47.5255 4.82021 65.4535 3.49854C83.3815 2.17687 125.757 14.9271 148.053 13.6054C170.414 12.2838 178.367 7.07483 194.014 6.84159C209.66 6.6861 230 13.6832 230 13.6832V0H0V7.77454Z' fill='${formattedColor}'/%3E%3Cpath opacity='0.5' d='M0 13.5105C16.6893 7.10265 50.068 11.1944 76.8623 10.268C103.591 9.34153 121.584 5.5586 139.317 8.10629C157.115 10.654 175.89 17.139 195.448 15.8266C215.006 14.3597 226.284 9.49594 230 9.34153V0H0V13.5105Z' fill='${formattedColor}'/%3E%3C/svg%3E%0A`,
@@ -176,6 +170,4 @@ function getSelectedShape(id, color = '#000000') {
 			encodedSvg: `data:image/svg+xml,%3Csvg width='1200' height='70' viewBox='0 0 1200 70' fill='${formattedColor}' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1200 0H0L910.03 15L959.91 69.12L1009.97 15L1200 0Z' fill='${formattedColor}'/%3E%3C/svg%3E%0A`,
 		},
 	].find((icon) => icon.id === id).encodedSvg;
-
-	return selectedShape;
 }

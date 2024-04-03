@@ -18,7 +18,7 @@ import {
 	SizeStyles,
 	SpacingStyles,
 	TypographyStyles,
-	// EffectsStyles
+	EffectsStyles,
 } from '@publisher/extensions';
 import {
 	isInnerBlock,
@@ -98,7 +98,7 @@ export const useComputedCssProps = ({
 			...FlexChildStyles(calculatedProps),
 			...TypographyStyles(calculatedProps),
 			...BackgroundStyles(calculatedProps),
-			// ...EffectsStyles(calculatedProps),
+			...EffectsStyles(calculatedProps),
 			// ...CustomStyleStyles(calculatedProps),
 			// ...BorderAndShadowStyles(calculatedProps),
 		].flat();
