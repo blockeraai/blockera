@@ -116,9 +116,16 @@ export const bootstrap = (): void => {
 				attributes,
 			});
 
-			attributes = letterSpacingFromWPCompatibility({
+			//
+			// Letter Spacing
+			//
+			const letterSpacingAttrs = letterSpacingFromWPCompatibility({
 				attributes,
 			});
+
+			if (letterSpacingAttrs) {
+				attributes = mergeObject(attributes, letterSpacingAttrs);
+			}
 
 			attributes = textOrientationFromWPCompatibility({
 				attributes,

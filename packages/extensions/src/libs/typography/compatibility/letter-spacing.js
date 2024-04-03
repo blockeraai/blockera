@@ -9,11 +9,13 @@ export function letterSpacingFromWPCompatibility({
 		attributes?.publisherLetterSpacing === '' &&
 		attributes?.style?.typography?.letterSpacing !== undefined
 	) {
-		attributes.publisherLetterSpacing =
-			attributes?.style?.typography?.letterSpacing;
+		return {
+			publisherLetterSpacing:
+				attributes?.style?.typography?.letterSpacing,
+		};
 	}
 
-	return attributes;
+	return false;
 }
 
 export function letterSpacingToWPCompatibility({
@@ -23,7 +25,7 @@ export function letterSpacingToWPCompatibility({
 	newValue: Object,
 	ref?: Object,
 }): Object {
-	if ('reset' === ref?.current?.action) {
+	if ('reset' === ref?.current?.action || newValue === '') {
 		return {
 			style: {
 				typography: {
