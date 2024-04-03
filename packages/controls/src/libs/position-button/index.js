@@ -114,6 +114,7 @@ export default function PositionButtonControl({
 					}}
 				>
 					<AlignmentMatrixControl
+						id={id}
 						label={alignmentMatrixLabel}
 						columns={
 							alignmentMatrixLabel ? 'columns-2' : 'columns-1'
