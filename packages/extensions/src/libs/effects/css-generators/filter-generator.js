@@ -2,21 +2,24 @@
  * Publisher dependencies
  */
 import { isUndefined } from '@publisher/utils';
-import { createCssRule } from '@publisher/style-engine';
+import { createCssDeclarations } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
 
-export function FilterGenerator(id, props, { media, selector }) {
+export function FilterGenerator(id, props) {
 	const isBackdrop = 'publisherBackdropFilter' === id;
 	const property = isBackdrop ? 'backdrop-filter' : 'filter';
 	const { attributes } = props;
 	const _id = isBackdrop ? id : 'publisherFilter';
 
-	if (isUndefined(attributes[_id]) || !attributes[_id]?.length) {
+	if (
+		isUndefined(attributes[_id]) ||
+		!Object.values(attributes[_id])?.length
+	) {
 		return '';
 	}
 
-	const value = attributes[_id]
-		?.map((item) => {
+	const value = Object.entries(attributes[_id])
+		?.map(([, item]) => {
 			if (!item.isVisible) {
 				return null;
 			}
@@ -35,9 +38,7 @@ export function FilterGenerator(id, props, { media, selector }) {
 		})
 		?.filter((item) => null !== item);
 
-	return createCssRule({
-		media,
-		selector,
+	return createCssDeclarations({
 		properties: {
 			[property]: value?.join(' '),
 		},

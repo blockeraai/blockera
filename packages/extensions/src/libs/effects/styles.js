@@ -2,9 +2,12 @@
 /**
  * Publisher dependencies
  */
-import { computedCssRules } from '@publisher/style-engine';
+import {
+	getCssSelector,
+	computedCssDeclarations,
+} from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
-import type { GeneratorReturnType } from '@publisher/style-engine/src/types';
+import type { CssRule } from '@publisher/style-engine/src/types';
 
 /**
  * Internal dependencies
@@ -15,35 +18,27 @@ import {
 	MaskGenerator,
 } from './css-generators';
 import { arrayEquals } from '../utils';
+import * as config from '../base/config';
 import { attributes } from './attributes';
 import { isActiveField } from '../../api/utils';
-import type { TBlockProps } from '../types';
+import type { StylesProps } from '../types';
 import type { TTransformCssProps } from './types/effects-props';
 import {
 	AfterDividerGenerator,
 	BeforeDividerGenerator,
 } from './css-generators/divider-generator';
 
-interface IConfigs {
-	effectsConfig: {
-		cssGenerators: Object,
-		publisherOpacity?: string,
-		publisherBlendMode?: string,
-		publisherFilter?: Array<Object>,
-		publisherTransform?: Array<Object>,
-		publisherTransition?: Array<Object>,
-		publisherBackdropFilter?: Array<Object>,
-		publisherDivider?: Array<Object>,
-		publisherMask?: Array<Object>,
-	};
-	blockProps: TBlockProps;
-	selector: string;
-	media: string;
-}
-
-export function EffectsStyles({
-	effectsConfig: {
-		cssGenerators,
+export const EffectsStyles = ({
+	state,
+	clientId,
+	blockName,
+	currentBlock,
+	// supports,
+	// activeDeviceType,
+	selectors: blockSelectors,
+	attributes: currentBlockAttributes,
+}: StylesProps): Array<CssRule> => {
+	const {
 		publisherFilter,
 		publisherOpacity,
 		publisherTransform,
@@ -52,26 +47,40 @@ export function EffectsStyles({
 		publisherBackdropFilter,
 		publisherDivider,
 		publisherMask,
-	},
-	blockProps,
-	selector,
-	media,
-}: IConfigs): Array<GeneratorReturnType> {
-	const generators = [];
+	} = config.effectsConfig;
+	const blockProps = {
+		clientId,
+		blockName,
+		attributes: currentBlockAttributes,
+	};
+	const sharedParams = {
+		state,
+		clientId,
+		currentBlock,
+		blockSelectors,
+		className: currentBlockAttributes?.className,
+	};
+	const styleGroup: Array<CssRule> = [];
 
 	if (
 		isActiveField(publisherOpacity) &&
 		blockProps.attributes.publisherOpacity !==
 			attributes.publisherOpacity.default
 	) {
-		generators.push(
-			computedCssRules(
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherOpacity',
+			support: 'publisherOpacity',
+			fallbackSupportId: 'opacity',
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
 				{
 					publisherOpacity: [
 						{
 							type: 'static',
-							media,
-							selector,
 							properties: {
 								opacity: getValueAddonRealValue(
 									blockProps.attributes.publisherOpacity
@@ -80,9 +89,9 @@ export function EffectsStyles({
 						},
 					],
 				},
-				{ attributes: blockProps.attributes, ...blockProps }
-			)
-		);
+				blockProps
+			),
+		});
 	}
 
 	if (isActiveField(publisherTransform)) {
@@ -189,21 +198,26 @@ export function EffectsStyles({
 		}
 
 		if (transformProperties) {
-			generators.push(
-				computedCssRules(
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherTransform',
+				support: 'publisherTransform',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
 					{
 						publisherTransform: [
 							{
 								type: 'static',
-								media,
-								selector,
 								properties: { ...transformProperties },
 							},
 						],
 					},
-					{ attributes: blockProps.attributes, ...blockProps }
-				)
-			);
+					blockProps
+				),
+			});
 		}
 	}
 
@@ -214,21 +228,26 @@ export function EffectsStyles({
 			blockProps.attributes.publisherTransition
 		)
 	) {
-		generators.push(
-			computedCssRules(
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherTransition',
+			support: 'publisherTransition',
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
 				{
 					publisherTransition: [
 						{
-							media,
-							selector,
 							type: 'function',
 							function: TransitionGenerator,
 						},
 					],
 				},
 				blockProps
-			)
-		);
+			),
+		});
 	}
 
 	if (
@@ -238,21 +257,26 @@ export function EffectsStyles({
 			blockProps.attributes.publisherFilter
 		)
 	) {
-		generators.push(
-			computedCssRules(
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherFilter',
+			support: 'publisherFilter',
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
 				{
 					publisherFilter: [
 						{
-							media,
-							selector,
 							type: 'function',
 							function: FilterGenerator,
 						},
 					],
 				},
 				blockProps
-			)
-		);
+			),
+		});
 	}
 
 	if (
@@ -262,21 +286,26 @@ export function EffectsStyles({
 			blockProps.attributes.publisherBackdropFilter
 		)
 	) {
-		generators.push(
-			computedCssRules(
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherBackdropFilter',
+			support: 'publisherBackdropFilter',
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
 				{
 					publisherBackdropFilter: [
 						{
-							media,
-							selector,
 							type: 'function',
 							function: FilterGenerator,
 						},
 					],
 				},
 				blockProps
-			)
-		);
+			),
+		});
 	}
 
 	if (
@@ -286,14 +315,19 @@ export function EffectsStyles({
 			blockProps.attributes.publisherDivider
 		)
 	) {
-		generators.push(
-			computedCssRules(
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherDivider',
+			support: 'publisherDivider',
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
 				{
 					publisherDivider: [
 						{
 							type: 'static',
-							media,
-							selector,
 							properties: {
 								position: 'relative',
 								overflow: 'hidden',
@@ -301,42 +335,50 @@ export function EffectsStyles({
 						},
 					],
 				},
-				{ attributes: blockProps.attributes, ...blockProps }
-			)
-		);
+				blockProps
+			),
+		});
 
-		generators.push(
-			computedCssRules(
+		styleGroup.push({
+			selector: getCssSelector({
+				...sharedParams,
+				query: 'publisherDivider',
+				support: 'publisherDivider',
+				suffixClass: ':before',
+			}),
+			declarations: computedCssDeclarations(
 				{
 					publisherDivider: [
 						{
-							media,
-							selector,
 							type: 'function',
 							function: BeforeDividerGenerator,
 						},
 					],
 				},
 				blockProps
-			)
-		);
+			),
+		});
 
 		if (blockProps.attributes?.publisherDivider?.length === 2) {
-			generators.push(
-				computedCssRules(
+			styleGroup.push({
+				selector: getCssSelector({
+					...sharedParams,
+					query: 'publisherDivider',
+					support: 'publisherDivider',
+					suffixClass: ':after',
+				}),
+				declarations: computedCssDeclarations(
 					{
 						publisherDivider: [
 							{
-								media,
-								selector,
 								type: 'function',
 								function: AfterDividerGenerator,
 							},
 						],
 					},
 					blockProps
-				)
-			);
+				),
+			});
 		}
 	}
 
@@ -347,21 +389,26 @@ export function EffectsStyles({
 			blockProps.attributes.publisherMask
 		)
 	) {
-		generators.push(
-			computedCssRules(
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherMask',
+			support: 'publisherMask',
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
 				{
 					publisherMask: [
 						{
-							media,
-							selector,
 							type: 'function',
 							function: MaskGenerator,
 						},
 					],
 				},
 				blockProps
-			)
-		);
+			),
+		});
 	}
 
 	if (
@@ -369,33 +416,29 @@ export function EffectsStyles({
 		blockProps.attributes.publisherBlendMode !==
 			attributes.publisherBlendMode.default
 	) {
-		generators.push(
-			computedCssRules(
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherBlendMode',
+			support: 'publisherBlendMode',
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
 				{
 					publisherBlendMode: [
 						{
 							type: 'static',
-							media,
-							selector,
 							properties: {
 								'mix-blend-mode': '{{publisherBlendMode}}',
 							},
 						},
 					],
 				},
-				{ attributes: blockProps.attributes, ...blockProps }
-			)
-		);
+				blockProps
+			),
+		});
 	}
 
-	generators.push(
-		computedCssRules(
-			{
-				...(cssGenerators || {}),
-			},
-			{ attributes: blockProps.attributes, ...blockProps }
-		)
-	);
-
-	return generators.flat();
-}
+	return styleGroup;
+};
