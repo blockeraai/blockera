@@ -67,12 +67,12 @@ export const bootstrap = (): void => {
 			//
 			// Font Size
 			//
-			const newFontSizeAttrs = fontSizeFromWPCompatibility({
+			const fontSizeAttrs = fontSizeFromWPCompatibility({
 				attributes,
 			});
 
-			if (newFontSizeAttrs) {
-				attributes = mergeObject(attributes, newFontSizeAttrs);
+			if (fontSizeAttrs) {
+				attributes = mergeObject(attributes, fontSizeAttrs);
 			}
 
 			//
@@ -104,12 +104,12 @@ export const bootstrap = (): void => {
 			//
 			// Font Style
 			//
-			const newFontStyleAttrs = fontStyleFromWPCompatibility({
+			const fontStyleAttrs = fontStyleFromWPCompatibility({
 				attributes,
 			});
 
-			if (newFontStyleAttrs) {
-				attributes = mergeObject(attributes, newFontStyleAttrs);
+			if (fontStyleAttrs) {
+				attributes = mergeObject(attributes, fontStyleAttrs);
 			}
 
 			attributes = textTransformFromWPCompatibility({
@@ -127,12 +127,12 @@ export const bootstrap = (): void => {
 			//
 			// Text Color
 			//
-			const newColorAttrs = fontColorFromWPCompatibility({
+			const fontColorAttrs = fontColorFromWPCompatibility({
 				attributes,
 			});
 
-			if (newColorAttrs) {
-				attributes = mergeObject(attributes, newColorAttrs);
+			if (fontColorAttrs) {
+				attributes = mergeObject(attributes, fontColorAttrs);
 			}
 
 			return attributes;
