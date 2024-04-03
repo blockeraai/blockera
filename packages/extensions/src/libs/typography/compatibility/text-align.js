@@ -9,10 +9,10 @@ export function textAlignFromWPCompatibility({
 		attributes?.publisherTextAlign === '' &&
 		attributes?.align !== undefined
 	) {
-		attributes.publisherTextAlign = attributes?.align;
+		return { publisherTextAlign: attributes?.align };
 	}
 
-	return attributes;
+	return false;
 }
 
 export function textAlignToWPCompatibility({
@@ -23,6 +23,7 @@ export function textAlignToWPCompatibility({
 	ref?: Object,
 }): Object {
 	if (
+		newValue === '' ||
 		'reset' === ref?.current?.action ||
 		['left', 'center', 'right'].indexOf(newValue) === -1
 	) {

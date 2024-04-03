@@ -86,9 +86,16 @@ export const bootstrap = (): void => {
 				attributes = mergeObject(attributes, lineHeightAttrs);
 			}
 
-			attributes = textAlignFromWPCompatibility({
+			//
+			// Text Align
+			//
+			const textAlignAttrs = textAlignFromWPCompatibility({
 				attributes,
 			});
+
+			if (textAlignAttrs) {
+				attributes = mergeObject(attributes, textAlignAttrs);
+			}
 
 			attributes = textDecorationFromWPCompatibility({
 				attributes,
