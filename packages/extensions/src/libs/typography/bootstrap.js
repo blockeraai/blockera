@@ -97,9 +97,16 @@ export const bootstrap = (): void => {
 				attributes = mergeObject(attributes, textAlignAttrs);
 			}
 
-			attributes = textDecorationFromWPCompatibility({
+			//
+			// Text Decoration
+			//
+			const textDecorationAttrs = textDecorationFromWPCompatibility({
 				attributes,
 			});
+
+			if (textDecorationAttrs) {
+				attributes = mergeObject(attributes, textDecorationAttrs);
+			}
 
 			//
 			// Font Style

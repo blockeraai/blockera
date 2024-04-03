@@ -9,11 +9,13 @@ export function textDecorationFromWPCompatibility({
 		attributes?.publisherTextDecoration === '' &&
 		attributes?.style?.typography?.textDecoration !== undefined
 	) {
-		attributes.publisherTextDecoration =
-			attributes?.style?.typography?.textDecoration;
+		return {
+			publisherTextDecoration:
+				attributes?.style?.typography?.textDecoration,
+		};
 	}
 
-	return attributes;
+	return false;
 }
 
 export function textDecorationToWPCompatibility({
@@ -24,6 +26,7 @@ export function textDecorationToWPCompatibility({
 	ref?: Object,
 }): Object {
 	if (
+		newValue === '' ||
 		'reset' === ref?.current?.action ||
 		['underline', 'line-through', 'overline'].indexOf(newValue) === -1
 	) {
