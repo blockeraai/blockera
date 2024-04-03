@@ -36,47 +36,47 @@ describe('Line Height → WP Compatibility', () => {
 				);
 			});
 
-			// //
-			// // Test 2: Blockera value to WP data
-			// //
+			//
+			// Test 2: Blockera value to WP data
+			//
 
-			// cy.get('@container').within(() => {
-			// 	cy.get('input[type="number"]').focus();
-			// 	cy.get('input[type="number"]').type(5, {
-			// 		force: true,
-			// 	});
-			// });
+			cy.get('@container').within(() => {
+				cy.get('input[type="number"]').focus();
+				cy.get('input[type="number"]').type(5, {
+					force: true,
+				});
+			});
 
-			// // Blockera value should be moved to WP data
-			// getWPDataObject().then((data) => {
-			// 	expect('1.25').to.be.equal(
-			// 		getSelectedBlock(data, 'publisherLineHeight')
-			// 	);
+			// Blockera value should be moved to WP data
+			getWPDataObject().then((data) => {
+				expect('1.25').to.be.equal(
+					getSelectedBlock(data, 'publisherLineHeight')
+				);
 
-			// 	expect('1.25').to.be.equal(
-			// 		getSelectedBlock(data, 'style')?.typography?.lineHeight
-			// 	);
-			// });
+				expect('1.25').to.be.equal(
+					getSelectedBlock(data, 'style')?.typography?.lineHeight
+				);
+			});
 
-			// //
-			// // Test 3: Clear Blockera value and check WP data
-			// //
+			//
+			// Test 3: Clear Blockera value and check WP data
+			//
 
-			// // clear value
-			// cy.get('@container').within(() => {
-			// 	cy.get('input[type="number"]').clear({ force: true });
-			// });
+			// clear value
+			cy.get('@container').within(() => {
+				cy.get('input[type="number"]').clear({ force: true });
+			});
 
-			// // Blockera value should be moved to WP data
-			// getWPDataObject().then((data) => {
-			// 	expect('').to.be.equal(
-			// 		getSelectedBlock(data, 'publisherLineHeight')
-			// 	);
+			// Blockera value should be moved to WP data
+			getWPDataObject().then((data) => {
+				expect('').to.be.equal(
+					getSelectedBlock(data, 'publisherLineHeight')
+				);
 
-			// 	expect(undefined).to.be.equal(
-			// 		getSelectedBlock(data, 'style')?.typography?.lineHeight
-			// 	);
-			// });
+				expect(undefined).to.be.equal(
+					getSelectedBlock(data, 'style')?.typography?.lineHeight
+				);
+			});
 		});
 	});
 });
