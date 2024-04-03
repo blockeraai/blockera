@@ -119,9 +119,16 @@ export const bootstrap = (): void => {
 				attributes = mergeObject(attributes, fontStyleAttrs);
 			}
 
-			attributes = textTransformFromWPCompatibility({
+			//
+			// Text Transform
+			//
+			const textTransformAttrs = textTransformFromWPCompatibility({
 				attributes,
 			});
+
+			if (textTransformAttrs) {
+				attributes = mergeObject(attributes, textTransformAttrs);
+			}
 
 			//
 			// Letter Spacing

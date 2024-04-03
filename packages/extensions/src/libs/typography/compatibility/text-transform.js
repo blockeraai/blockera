@@ -9,11 +9,13 @@ export function textTransformFromWPCompatibility({
 		attributes?.publisherTextTransform === '' &&
 		attributes?.style?.typography?.textTransform !== undefined
 	) {
-		attributes.publisherTextTransform =
-			attributes?.style?.typography?.textTransform;
+		return {
+			publisherTextTransform:
+				attributes?.style?.typography?.textTransform,
+		};
 	}
 
-	return attributes;
+	return false;
 }
 
 export function textTransformToWPCompatibility({
@@ -23,7 +25,7 @@ export function textTransformToWPCompatibility({
 	newValue: Object,
 	ref?: Object,
 }): Object {
-	if ('reset' === ref?.current?.action) {
+	if ('reset' === ref?.current?.action || newValue === '') {
 		return {
 			style: {
 				typography: {
