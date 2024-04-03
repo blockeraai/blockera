@@ -23,7 +23,9 @@ import {
 import {
 	isInnerBlock,
 	isNormalState,
+	prepareAttributesDefaultValues,
 } from '@publisher/extensions/src/components';
+import { useStoreSelectors } from '@publisher/extensions/src/hooks/use-store-selectors';
 
 export const useComputedCssProps = ({
 	state,
@@ -32,14 +34,25 @@ export const useComputedCssProps = ({
 	currentBreakpoint,
 	...params
 }: Object): Object => {
+	const {
+		blocks: { getBlockType },
+		blockEditor: { getSelectedBlock },
+	} = useStoreSelectors();
+
 	return useMemo(() => {
+		// Assume master -> normal state
 		let calculatedProps = {
 			...params,
 			state,
 			selectors,
 			currentBlock,
 		};
+		// eslint-disable-next-line @wordpress/no-unused-vars-before-return,react-hooks/exhaustive-deps
+		const defaultAttributes = prepareAttributesDefaultValues(
+			getBlockType(getSelectedBlock()?.name)?.attributes || {}
+		);
 
+		// Assume master -> secondary state
 		if (!isNormalState(state) && !isInnerBlock(currentBlock)) {
 			if (!calculatedProps.attributes.publisherBlockStates[state]) {
 				return <></>;
@@ -48,7 +61,7 @@ export const useComputedCssProps = ({
 			calculatedProps = {
 				...calculatedProps,
 				attributes: {
-					...calculatedProps.currentAttributes,
+					...defaultAttributes,
 					...(calculatedProps.attributes.publisherBlockStates[state]
 						.breakpoints[currentBreakpoint] &&
 					calculatedProps.attributes.publisherBlockStates[state]
@@ -58,7 +71,9 @@ export const useComputedCssProps = ({
 						: {}),
 				},
 			};
-		} else if (!isNormalState(state) && isInnerBlock(currentBlock)) {
+		}
+		// Assume master -> secondary state -> inner
+		else if (!isNormalState(state) && isInnerBlock(currentBlock)) {
 			if (
 				!calculatedProps.attributes?.publisherBlockStates ||
 				!calculatedProps.attributes?.publisherBlockStates[state]
@@ -69,7 +84,7 @@ export const useComputedCssProps = ({
 			calculatedProps = {
 				...calculatedProps,
 				attributes: {
-					...calculatedProps.currentAttributes,
+					...defaultAttributes,
 					...(calculatedProps.attributes.publisherBlockStates[state]
 						.breakpoints[currentBreakpoint] &&
 					calculatedProps.attributes.publisherBlockStates[state]
@@ -79,11 +94,13 @@ export const useComputedCssProps = ({
 						: {}),
 				},
 			};
-		} else if (isNormalState(state) && isInnerBlock(currentBlock)) {
+		}
+		// Assume master -> normal state -> inner
+		else if (isNormalState(state) && isInnerBlock(currentBlock)) {
 			calculatedProps = {
 				...calculatedProps,
 				attributes: {
-					...calculatedProps.currentAttributes,
+					...defaultAttributes,
 					...calculatedProps.attributes,
 				},
 			};

@@ -12,6 +12,7 @@ export type NormalizedSelectorProps = {
 	clientId: string,
 	support?: string,
 	className?: string,
+	suffixClass?: string,
 	blockSelectors: Object,
 	fallbackSupportId?: string,
 	currentBlock: 'master' | InnerBlockType | string,

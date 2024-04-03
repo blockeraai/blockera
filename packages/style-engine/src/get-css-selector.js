@@ -29,6 +29,7 @@ export function getCssSelector({
 	currentBlock,
 	blockSelectors,
 	className = '',
+	suffixClass = '',
 	fallbackSupportId,
 }: NormalizedSelectorProps): string {
 	const { getDeviceType } = select('publisher-core/editor');
@@ -75,7 +76,7 @@ export function getCssSelector({
 
 				if (_selector.trim()) {
 					if ('parent-class' === state) {
-						_selector = `${_selector} ${rootSelector}`;
+						_selector = `${_selector} ${rootSelector}${suffixClass}`;
 					}
 
 					selectors[state] = {
@@ -89,7 +90,7 @@ export function getCssSelector({
 
 			selectors[state] = {
 				// $FlowFixMe
-				[currentBlock]: rootSelector,
+				[currentBlock]: rootSelector + suffixClass,
 			};
 
 			return;
@@ -101,10 +102,6 @@ export function getCssSelector({
 			_selector = `${rootSelector} ${_selector}`;
 		}
 
-		const registeredSelector = selectors[state]
-			? selectors[state][currentBlock] || ''
-			: '';
-
 		// if state not equals with any one of excluded pseudo-class
 		if (!excludedPseudoClasses.includes(state)) {
 			if (
@@ -112,9 +109,9 @@ export function getCssSelector({
 					!isNormalState(getExtensionInnerBlockState())) ||
 				!isNormalState(getExtensionCurrentBlockState())
 			) {
-				_selector = `${_selector}:${state}, ${_selector}`;
+				_selector = `${_selector}:${state}${suffixClass}, ${_selector}${suffixClass}`;
 			} else {
-				_selector = `${_selector}:${state}`;
+				_selector = `${_selector}:${state}${suffixClass}`;
 			}
 		}
 
@@ -130,6 +127,7 @@ export function getCssSelector({
 						block?.attributes?.publisherBlockStates[state][
 							'css-class'
 						] +
+						suffixClass +
 						',' +
 						_selector;
 				}
@@ -142,9 +140,7 @@ export function getCssSelector({
 
 		selectors[state] = {
 			// $FlowFixMe
-			[currentBlock]: registeredSelector
-				? `${registeredSelector}, ${_selector}`
-				: _selector,
+			[currentBlock]: _selector,
 		};
 	};
 
@@ -159,36 +155,42 @@ export function getCssSelector({
 	if (!selector || ['parent-hover'].includes(state)) {
 		register(rootSelector);
 
-		return getSelector({
-			state,
-			clientId,
-			selectors,
-			className,
-			currentBlock,
-		});
+		return (
+			getSelector({
+				state,
+				clientId,
+				selectors,
+				className,
+				currentBlock,
+			}) + suffixClass
+		);
 	}
 
 	const explodedSelectors = selector.split(',');
 
 	if (!explodedSelectors.length) {
-		return getSelector({
+		return (
+			getSelector({
+				state,
+				clientId,
+				selectors,
+				className,
+				currentBlock,
+			}) + suffixClass
+		);
+	}
+
+	explodedSelectors.forEach(register);
+
+	return (
+		getSelector({
 			state,
 			clientId,
 			selectors,
 			className,
 			currentBlock,
-		});
-	}
-
-	explodedSelectors.forEach(register);
-
-	return getSelector({
-		state,
-		clientId,
-		selectors,
-		className,
-		currentBlock,
-	});
+		}) + suffixClass
+	);
 }
 
 /**
