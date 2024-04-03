@@ -10,15 +10,15 @@ export function textOrientationFromWPCompatibility({
 		attributes?.style?.typography?.writingMode !== undefined
 	) {
 		if (attributes?.style?.typography?.writingMode === 'horizontal-tb') {
-			attributes.publisherTextOrientation = 'initial';
+			return { publisherTextOrientation: 'initial' };
 		} else if (
 			attributes?.style?.typography?.writingMode === 'vertical-rl'
 		) {
-			attributes.publisherTextOrientation = 'style-1';
+			return { publisherTextOrientation: 'style-1' };
 		}
 	}
 
-	return attributes;
+	return false;
 }
 
 export function textOrientationToWPCompatibility({
@@ -28,7 +28,7 @@ export function textOrientationToWPCompatibility({
 	newValue: Object,
 	ref?: Object,
 }): Object {
-	if ('reset' === ref?.current?.action) {
+	if ('reset' === ref?.current?.action || newValue === '') {
 		return {
 			style: {
 				typography: {
@@ -58,5 +58,11 @@ export function textOrientationToWPCompatibility({
 		};
 	}
 
-	return {};
+	return {
+		style: {
+			typography: {
+				writingMode: undefined,
+			},
+		},
+	};
 }

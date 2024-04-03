@@ -134,9 +134,16 @@ export const bootstrap = (): void => {
 				attributes = mergeObject(attributes, letterSpacingAttrs);
 			}
 
-			attributes = textOrientationFromWPCompatibility({
+			//
+			// Text Orientation
+			//
+			const textOrientationAttrs = textOrientationFromWPCompatibility({
 				attributes,
 			});
+
+			if (textOrientationAttrs) {
+				attributes = mergeObject(attributes, textOrientationAttrs);
+			}
 
 			//
 			// Text Color
