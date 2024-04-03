@@ -140,7 +140,10 @@ export function getCssSelector({
 
 		selectors[state] = {
 			// $FlowFixMe
-			[currentBlock]: _selector,
+			[currentBlock]:
+				-1 !== _selector.indexOf(suffixClass)
+					? _selector
+					: `${_selector}${suffixClass}`,
 		};
 	};
 
@@ -155,42 +158,36 @@ export function getCssSelector({
 	if (!selector || ['parent-hover'].includes(state)) {
 		register(rootSelector);
 
-		return (
-			getSelector({
-				state,
-				clientId,
-				selectors,
-				className,
-				currentBlock,
-			}) + suffixClass
-		);
-	}
-
-	const explodedSelectors = selector.split(',');
-
-	if (!explodedSelectors.length) {
-		return (
-			getSelector({
-				state,
-				clientId,
-				selectors,
-				className,
-				currentBlock,
-			}) + suffixClass
-		);
-	}
-
-	explodedSelectors.forEach(register);
-
-	return (
-		getSelector({
+		return getSelector({
 			state,
 			clientId,
 			selectors,
 			className,
 			currentBlock,
-		}) + suffixClass
-	);
+		});
+	}
+
+	const explodedSelectors = selector.split(',');
+
+	if (!explodedSelectors.length) {
+		return getSelector({
+			state,
+			clientId,
+			selectors,
+			className,
+			currentBlock,
+		});
+	}
+
+	explodedSelectors.forEach(register);
+
+	return getSelector({
+		state,
+		clientId,
+		selectors,
+		className,
+		currentBlock,
+	});
 }
 
 /**
