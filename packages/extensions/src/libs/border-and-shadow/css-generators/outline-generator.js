@@ -1,13 +1,13 @@
 /**
  * Publisher dependencies
  */
-import { createCssRule } from '@publisher/style-engine';
+import { createCssDeclarations } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
 
-export function OutlineGenerator(id, props, { media, selector }) {
+export function OutlineGenerator(id, props) {
 	const { attributes } = props;
 
-	if (!attributes?.publisherOutline?.length) {
+	if (!Object.values(attributes?.publisherOutline)?.length) {
 		return '';
 	}
 
@@ -16,7 +16,7 @@ export function OutlineGenerator(id, props, { media, selector }) {
 		offset: [],
 	};
 
-	attributes?.publisherOutline?.map((item) => {
+	Object.entries(attributes?.publisherOutline)?.map(([, item]) => {
 		if (!item.isVisible) {
 			return null;
 		}
@@ -31,9 +31,7 @@ export function OutlineGenerator(id, props, { media, selector }) {
 		return undefined;
 	});
 
-	return createCssRule({
-		media,
-		selector,
+	return createCssDeclarations({
 		properties: {
 			outline: properties.outlines?.join(', '),
 			'outline-offset': properties.offset?.join(', '),

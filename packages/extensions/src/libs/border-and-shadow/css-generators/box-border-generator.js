@@ -1,10 +1,10 @@
 /**
  * Publisher dependencies
  */
-import { createCssRule } from '@publisher/style-engine';
+import { createCssDeclarations } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
 
-export function BoxBorderGenerator(id, props, { media, selector }) {
+export function BoxBorderGenerator(id, props) {
 	const { attributes } = props;
 
 	if (!attributes?.publisherBorder) {
@@ -58,9 +58,7 @@ export function BoxBorderGenerator(id, props, { media, selector }) {
 		return '';
 	}
 
-	return createCssRule({
-		media,
-		selector,
+	return createCssDeclarations({
 		properties,
 	});
 }

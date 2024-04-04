@@ -2,12 +2,16 @@
 /**
  * Publisher dependencies
  */
-import { computedCssRules } from '@publisher/style-engine';
-import type { GeneratorReturnType } from '@publisher/style-engine/src/types';
+import {
+	computedCssDeclarations,
+	getCssSelector,
+} from '@publisher/style-engine';
+import type { CssRule } from '@publisher/style-engine/src/types';
 
 /**
  * Internal dependencies
  */
+import * as config from '../base/config';
 import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
 import { isActiveField } from '../../api/utils';
@@ -17,35 +21,40 @@ import {
 	BoxBorderGenerator,
 	BorderRadiusGenerator,
 } from './css-generators';
-import type { TBlockProps } from '../types';
-import { isSupportBorder } from '../../wordpress';
+import type { StylesProps } from '../types';
 
-interface IConfigs {
-	borderAndShadowConfig: {
-		cssGenerators: Object,
-		publisherBorder?: Object,
-		publisherOutline?: Object,
-		publisherBoxShadow?: Object,
-		publisherBorderRadius?: Object,
-	};
-	blockProps: TBlockProps;
-	selector: string;
-	media: string;
-}
-
-export function BorderAndShadowStyles({
-	borderAndShadowConfig: {
+export const BorderAndShadowStyles = ({
+	state,
+	clientId,
+	blockName,
+	currentBlock,
+	// supports,
+	// activeDeviceType,
+	selectors: blockSelectors,
+	attributes: currentBlockAttributes,
+}: StylesProps): Array<CssRule> => {
+	const {
 		publisherBorder,
 		publisherOutline,
 		publisherBoxShadow,
 		publisherBorderRadius,
-	},
-	blockProps,
-	selector,
-	media,
-}: IConfigs): Array<GeneratorReturnType> {
-	const generators = [];
-	const { blockName } = blockProps;
+	} = config.borderAndShadowConfig;
+
+	const blockProps = {
+		clientId,
+		blockName,
+		attributes: currentBlockAttributes,
+	};
+
+	const sharedParams = {
+		state,
+		clientId,
+		currentBlock,
+		blockSelectors,
+		className: currentBlockAttributes?.className,
+	};
+
+	const styleGroup: Array<CssRule> = [];
 
 	if (
 		isActiveField(publisherBoxShadow) &&
@@ -54,100 +63,115 @@ export function BorderAndShadowStyles({
 			blockProps.attributes.publisherBoxShadow
 		)
 	) {
-		generators.push(
-			computedCssRules(
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'publisherBoxShadow',
+			support: 'publisherBoxShadow',
+			fallbackSupportId: 'box-shadow',
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
 				{
 					publisherBoxShadow: [
 						{
-							media,
-							selector,
 							type: 'function',
 							function: BoxShadowGenerator,
 						},
 					],
-					...(publisherBoxShadow?.cssGenerators || {}),
 				},
 				blockProps
-			)
-		);
+			),
+		});
 	}
 
-	if (
-		isActiveField(publisherOutline) &&
-		!arrayEquals(
-			attributes.publisherOutline.default,
-			blockProps.attributes.publisherOutline
-		)
-	) {
-		generators.push(
-			computedCssRules(
-				{
-					publisherOutline: [
-						{
-							media,
-							selector,
-							type: 'function',
-							function: OutlineGenerator,
-						},
-					],
-					...(publisherOutline?.cssGenerators || {}),
-				},
-				blockProps
-			)
-		);
+	if (isActiveField(publisherOutline)) {
+		const publisherOutline = blockProps.attributes.publisherOutline;
+
+		if (publisherOutline !== attributes.publisherOutline.default) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherOutline',
+				support: 'publisherOutline',
+				fallbackSupportId: 'outline',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherOutline: [
+							{
+								type: 'function',
+								function: OutlineGenerator,
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
 	}
 
-	if (
-		isActiveField(publisherBorder) &&
-		!arrayEquals(
-			attributes.publisherBorder.default,
-			blockProps.attributes.publisherBorder
-		) &&
-		!isSupportBorder(blockName)
-	) {
-		generators.push(
-			computedCssRules(
-				{
-					publisherBorder: [
-						{
-							media,
-							selector,
-							type: 'function',
-							function: BoxBorderGenerator,
-						},
-					],
-					...(publisherBorder?.cssGenerators || {}),
-				},
-				blockProps
-			)
-		);
+	if (isActiveField(publisherBorder)) {
+		const publisherBorder = blockProps.attributes.publisherBorder;
+
+		if (publisherBorder !== attributes.publisherBorder.default) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherBorder',
+				support: 'publisherBorder',
+				fallbackSupportId: 'border',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherBorder: [
+							{
+								type: 'function',
+								function: BoxBorderGenerator,
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
 	}
 
-	if (
-		isActiveField(publisherBorderRadius) &&
-		!arrayEquals(
-			attributes.publisherBorderRadius.default,
-			blockProps.attributes.publisherBorderRadius
-		) &&
-		!isSupportBorder(blockName, true)
-	) {
-		generators.push(
-			computedCssRules(
-				{
-					publisherBorder: [
-						{
-							media,
-							selector,
-							type: 'function',
-							function: BorderRadiusGenerator,
-						},
-					],
-					...(publisherBorderRadius?.cssGenerators || {}),
-				},
-				blockProps
-			)
-		);
+	if (isActiveField(publisherBorderRadius)) {
+		const publisherBorderRadius =
+			blockProps.attributes.publisherBorderRadius;
+
+		if (
+			publisherBorderRadius !== attributes.publisherBorderRadius.default
+		) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'publisherBorderRadius',
+				support: 'publisherBorderRadius',
+				fallbackSupportId: 'border-radius',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						publisherBorderRadius: [
+							{
+								type: 'function',
+								function: BorderRadiusGenerator,
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
 	}
 
-	return generators.flat();
-}
+	return styleGroup;
+};

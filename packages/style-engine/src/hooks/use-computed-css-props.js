@@ -10,7 +10,7 @@ import { useMemo } from '@wordpress/element';
  */
 import {
 	BackgroundStyles,
-	// BorderAndShadowStyles,
+	BorderAndShadowStyles,
 	FlexChildStyles,
 	LayoutStyles,
 	MouseStyles,
@@ -117,7 +117,7 @@ export const useComputedCssProps = ({
 			...BackgroundStyles(calculatedProps),
 			...EffectsStyles(calculatedProps),
 			// ...CustomStyleStyles(calculatedProps),
-			// ...BorderAndShadowStyles(calculatedProps),
+			...BorderAndShadowStyles(calculatedProps),
 		].flat();
 	}, [params, state, selectors, currentBlock, currentBreakpoint]);
 };

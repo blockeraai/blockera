@@ -1,37 +1,48 @@
 /**
  * Publisher dependencies
  */
-import { createCssRule } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
+import { createCssDeclarations } from '@publisher/style-engine';
 
-export function BoxShadowGenerator(id, props, { media, selector }) {
+export function BoxShadowGenerator(id, props) {
 	const { attributes } = props;
 
-	if (!attributes?.publisherBoxShadow?.length) {
+	if (!Object.values(attributes?.publisherBoxShadow)?.length) {
 		return '';
 	}
 
-	const value = attributes?.publisherBoxShadow
-		?.map((item) => {
-			if (!item.isVisible) {
-				return null;
-			}
+	const properties = {
+		'box-shadow': [],
+	};
 
-			return `${
-				item.type === 'inner' ? 'inset' : ''
-			} ${getValueAddonRealValue(item.x)} ${getValueAddonRealValue(
-				item.y
-			)} ${getValueAddonRealValue(item.blur)} ${getValueAddonRealValue(
-				item.spread
-			)} ${getValueAddonRealValue(item.color)}`;
-		})
-		?.filter((item) => null !== item);
+	// Collect all properties
+	Object.entries(attributes?.publisherBoxShadow)?.map(([, item]) => {
+		if (!item.isVisible) {
+			return undefined;
+		}
 
-	return createCssRule({
-		media,
-		selector,
-		properties: {
-			'box-shadow': value?.join(', '),
-		},
+		properties['box-shadow'].push(
+			`${item.type === 'inner' ? 'inset' : ''} ${getValueAddonRealValue(
+				item.x
+			)} ${getValueAddonRealValue(item.y)} ${getValueAddonRealValue(
+				item.blur
+			)} ${getValueAddonRealValue(item.spread)} ${getValueAddonRealValue(
+				item.color
+			)}`
+		);
+
+		return undefined;
+	});
+
+	const toReturnProperties =
+		properties['box-shadow'].length > 0
+			? {
+					'box-shadow':
+						properties['box-shadow'].join(', ') + ' !important',
+			  }
+			: {};
+
+	return createCssDeclarations({
+		properties: toReturnProperties,
 	});
 }
