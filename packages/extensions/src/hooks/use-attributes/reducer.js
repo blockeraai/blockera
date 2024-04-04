@@ -64,7 +64,6 @@ const reducer = (state: Object = {}, action: Object): Object => {
 				return applyFilters(
 					'publisherCore.blockEdit.setAttributes',
 					mergeObject(state, {
-						...state,
 						publisherInnerBlocks: {
 							[currentBlock]: {
 								attributes: {
