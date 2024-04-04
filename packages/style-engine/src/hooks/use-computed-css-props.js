@@ -30,13 +30,13 @@ import { useStoreSelectors } from '@publisher/extensions/src/hooks/use-store-sel
 export const useComputedCssProps = ({
 	state,
 	selectors,
+	blockName,
 	currentBlock,
 	currentBreakpoint,
 	...params
 }: Object): Object => {
 	const {
 		blocks: { getBlockType },
-		blockEditor: { getSelectedBlock },
 	} = useStoreSelectors();
 
 	return useMemo(() => {
@@ -49,7 +49,7 @@ export const useComputedCssProps = ({
 		};
 		// eslint-disable-next-line @wordpress/no-unused-vars-before-return,react-hooks/exhaustive-deps
 		const defaultAttributes = prepareAttributesDefaultValues(
-			getBlockType(getSelectedBlock()?.name)?.attributes || {}
+			getBlockType(blockName)?.attributes || {}
 		);
 
 		// Assume master -> secondary state
