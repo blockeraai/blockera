@@ -39,27 +39,27 @@ export default function BoxBorderControl({
 		type: 'all',
 		all: {
 			width: '',
-			style: 'solid',
+			style: '',
 			color: '',
 		},
 		left: {
 			width: '',
-			style: 'solid',
+			style: '',
 			color: '',
 		},
 		right: {
 			width: '',
-			style: 'solid',
+			style: '',
 			color: '',
 		},
 		top: {
 			width: '',
-			style: 'solid',
+			style: '',
 			color: '',
 		},
 		bottom: {
 			width: '',
-			style: 'solid',
+			style: '',
 			color: '',
 		},
 	},
