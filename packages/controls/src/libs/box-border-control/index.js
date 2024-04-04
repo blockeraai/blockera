@@ -103,6 +103,16 @@ export default function BoxBorderControl({
 			) {
 				return {};
 			}
+		} else {
+			['top', 'right', 'bottom', 'left'].forEach((key) => {
+				if (
+					value[key]?.color === '' &&
+					value[key]?.width === '' &&
+					value[key]?.style === 'solid'
+				) {
+					value[key].style = '';
+				}
+			});
 		}
 
 		return value;
