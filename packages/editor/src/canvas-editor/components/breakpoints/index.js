@@ -31,7 +31,6 @@ import type { BreakpointsComponentProps } from './types';
 import { isLaptopBreakpoint } from './helpers';
 
 export const Breakpoints = ({
-	refId,
 	className,
 }: BreakpointsComponentProps): MixedElement => {
 	const { getDeviceType, getBreakpoints, getBreakpoint, getCanvasSettings } =
@@ -261,7 +260,7 @@ export const Breakpoints = ({
 					</Popover>
 				)}
 
-				<Preview refId={refId} />
+				<Preview />
 			</ControlContextProvider>
 		</>
 	);
