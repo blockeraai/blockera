@@ -6,7 +6,6 @@
 import type { BreakpointTypes } from '@publisher/extensions/src/libs/block-states/types';
 
 export type BreakpointsComponentProps = {
-	refId: Object,
 	className: string,
 };
 

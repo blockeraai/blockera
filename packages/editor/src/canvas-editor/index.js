@@ -43,10 +43,7 @@ export const CanvasEditor = ({
 		return <></>;
 	}
 
-	return createPortal(
-		<Breakpoints className={className} refId={ref} />,
-		entry.target
-	);
+	return createPortal(<Breakpoints className={className} />, entry.target);
 };
 
 export * from './components';

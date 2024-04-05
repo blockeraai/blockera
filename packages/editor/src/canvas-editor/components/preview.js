@@ -3,6 +3,7 @@
 /**
  * External dependencies
  */
+import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 
 /**
@@ -10,11 +11,19 @@ import type { MixedElement } from 'react';
  */
 import { Icon } from '@publisher/components';
 
-export const Preview = ({ refId }: { refId: Object }): MixedElement => {
-	//FIXME: preview link in site editor and edit new post page!
+export const Preview = (): MixedElement => {
+	const previewElement: HTMLElement | null = document.querySelector(
+		'a[aria-label="View Post"]'
+	);
+	const { getEntity } = select('publisher-core/data');
+	const { url: siteURL } = getEntity('site');
+
 	return (
 		<a
-			href={refId.current.previewElement?.href || ''}
+			href={
+				(previewElement && previewElement.getAttribute('href')) ||
+				siteURL
+			}
 			target={'_blank'}
 			rel="noreferrer"
 		>
