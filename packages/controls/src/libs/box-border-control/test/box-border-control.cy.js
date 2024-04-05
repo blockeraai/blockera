@@ -46,7 +46,7 @@ describe('box-border-control component testing', () => {
 			name,
 		});
 
-		cy.get('input[type="number"]').should('have.value', '0');
+		cy.get('input[type="number"]').should('have.value', '');
 
 		cy.getByAriaLabel('Custom Box Border')
 			.should('have.attr', 'style')
@@ -60,7 +60,7 @@ describe('box-border-control component testing', () => {
 			name,
 		});
 
-		cy.get('input[type="number"]').should('have.value', '0');
+		cy.get('input[type="number"]').should('have.value', '');
 
 		cy.getByAriaLabel('Custom Box Border')
 			.should('have.attr', 'style')
