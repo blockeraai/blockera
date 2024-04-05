@@ -38,7 +38,7 @@ describe('border-radius-control component testing', () => {
 			value: {},
 		});
 
-		cy.get('input').should('have.value', '0');
+		cy.get('input').should('have.value', '');
 	});
 
 	it('render correctly with no value and no default value', () => {
@@ -46,7 +46,7 @@ describe('border-radius-control component testing', () => {
 			component: <BorderRadiusControl />,
 		});
 
-		cy.get('input').should('have.value', '0');
+		cy.get('input').should('have.value', '');
 	});
 
 	describe('all', () => {
