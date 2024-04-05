@@ -11,8 +11,8 @@ describe('box-shadow-control component testing', () => {
 		cy.withDataProvider({
 			component: <BoxShadowControl />,
 			store: STORE_NAME,
-			value: [
-				{
+			value: {
+				'outer-0': {
 					type: 'outer',
 					x: '10px',
 					y: '10px',
@@ -21,7 +21,7 @@ describe('box-shadow-control component testing', () => {
 					color: '#cccccc',
 					isVisible: true,
 				},
-			],
+			},
 		});
 
 		cy.getByDataCy('group-control-header').should('exist');
@@ -50,8 +50,8 @@ describe('box-shadow-control component testing', () => {
 		cy.withDataProvider({
 			component: (
 				<BoxShadowControl
-					defaultValue={[
-						{
+					defaultValue={{
+						inner: {
 							type: 'inner',
 							x: '5px',
 							y: '5px',
@@ -60,7 +60,7 @@ describe('box-shadow-control component testing', () => {
 							color: '#cccccc',
 							isVisible: true,
 						},
-					]}
+					}}
 				/>
 			),
 			store: STORE_NAME,
@@ -73,8 +73,8 @@ describe('box-shadow-control component testing', () => {
 		cy.withDataProvider({
 			component: <BoxShadowControl label={'Box Shadow'} />,
 			store: STORE_NAME,
-			value: [
-				{
+			value: {
+				'outer-0': {
 					type: 'outer',
 					x: '10px',
 					y: '10px',
@@ -83,7 +83,7 @@ describe('box-shadow-control component testing', () => {
 					color: '#cccccc',
 					isVisible: true,
 				},
-			],
+			},
 		});
 
 		cy.contains('Box Shadow');
@@ -112,8 +112,8 @@ describe('box-shadow-control component testing', () => {
 						{...defaultProps}
 					/>
 				),
-				value: [
-					{
+				value: {
+					'outer-0': {
 						type: 'outer',
 						x: '0px',
 						y: '0px',
@@ -122,7 +122,7 @@ describe('box-shadow-control component testing', () => {
 						color: '#000000ab',
 						isVisible: true,
 					},
-				],
+				},
 				store: STORE_NAME,
 				name,
 			});
@@ -139,8 +139,8 @@ describe('box-shadow-control component testing', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <BoxShadowControl label={'Box Shadow'} />,
-				value: [
-					{
+				value: {
+					'outer-0': {
 						type: 'outer',
 						x: '10px',
 						y: '10px',
@@ -149,7 +149,7 @@ describe('box-shadow-control component testing', () => {
 						color: '#cccccc',
 						isVisible: true,
 					},
-				],
+				},
 				store: STORE_NAME,
 				name,
 			});
@@ -160,7 +160,9 @@ describe('box-shadow-control component testing', () => {
 
 			//Check data provider value
 			cy.get('body').then(() => {
-				expect(2).to.be.equal(getControlValue(name, STORE_NAME).length);
+				expect(2).to.be.equal(
+					Object.keys(getControlValue(name, STORE_NAME)).length
+				);
 			});
 		});
 
@@ -168,8 +170,8 @@ describe('box-shadow-control component testing', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <BoxShadowControl popoverTitle={'Box Shadow'} />,
-				value: [
-					{
+				value: {
+					'outer-0': {
 						type: 'outer',
 						x: '10px',
 						y: '10px',
@@ -178,7 +180,7 @@ describe('box-shadow-control component testing', () => {
 						color: '#cccccc',
 						isVisible: true,
 					},
-				],
+				},
 				store: STORE_NAME,
 				name,
 			});
@@ -186,6 +188,7 @@ describe('box-shadow-control component testing', () => {
 			cy.getByDataCy('group-control-header').eq(0).as('repeater-item');
 			cy.get('@repeater-item').click();
 			cy.contains('Box Shadow').parent().as('popover');
+
 			//change x
 			cy.get('@popover').getByDataTest('box-shadow-x-input').clear();
 			cy.get('@popover').getByDataTest('box-shadow-x-input').type(20);
@@ -237,8 +240,8 @@ describe('box-shadow-control component testing', () => {
 
 			//Check data provider value
 			cy.get('body').then(() => {
-				expect([
-					{
+				expect({
+					'outer-0': {
 						type: 'outer',
 						x: '20px',
 						y: '40px',
@@ -247,7 +250,7 @@ describe('box-shadow-control component testing', () => {
 						color: '#2cf1dd',
 						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 			});
 		});
 
@@ -255,8 +258,8 @@ describe('box-shadow-control component testing', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <BoxShadowControl popoverTitle={'Box Shadow'} />,
-				value: [
-					{
+				value: {
+					'outer-0': {
 						type: 'outer',
 						x: '10px',
 						y: '10px',
@@ -265,7 +268,7 @@ describe('box-shadow-control component testing', () => {
 						color: '#cccccc',
 						isVisible: true,
 					},
-				],
+				},
 				store: STORE_NAME,
 				name,
 			});
@@ -327,8 +330,8 @@ describe('box-shadow-control component testing', () => {
 
 			//Check data provider value
 			cy.get('body').then(() => {
-				expect([
-					{
+				expect({
+					'inner-0': {
 						type: 'inner',
 						x: '40px',
 						y: '60px',
@@ -337,7 +340,7 @@ describe('box-shadow-control component testing', () => {
 						color: '#2cf1dd',
 						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 			});
 		});
 	});
@@ -347,8 +350,8 @@ describe('box-shadow-control component testing', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <BoxShadowControl popoverTitle="Box Shadow" />,
-				value: [
-					{
+				value: {
+					'outer-0': {
 						type: 'outer',
 						x: '0px',
 						y: '0px',
@@ -358,7 +361,7 @@ describe('box-shadow-control component testing', () => {
 						isVisible: true,
 						isOpen: false,
 					},
-				],
+				},
 				store: STORE_NAME,
 				name,
 			});
@@ -370,8 +373,8 @@ describe('box-shadow-control component testing', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <BoxShadowControl popoverTitle="Box Shadow" />,
-				value: [
-					{
+				value: {
+					'outer-0': {
 						type: 'outer',
 						x: '0px',
 						y: '0px',
@@ -381,7 +384,7 @@ describe('box-shadow-control component testing', () => {
 						isVisible: true,
 						isOpen: true,
 					},
-				],
+				},
 				store: STORE_NAME,
 				name,
 			});
@@ -395,8 +398,8 @@ describe('box-shadow-control component testing', () => {
 			cy.withDataProvider({
 				component: <BoxShadowControl />,
 				store: STORE_NAME,
-				value: [
-					{
+				value: {
+					'outer-0': {
 						type: 'outer',
 						x: '10px',
 						y: '10px',
@@ -405,7 +408,7 @@ describe('box-shadow-control component testing', () => {
 						color: '#cccccc',
 						isVisible: true,
 					},
-				],
+				},
 			});
 
 			cy.getByDataCy('group-control-header')
@@ -418,8 +421,8 @@ describe('box-shadow-control component testing', () => {
 			cy.withDataProvider({
 				component: <BoxShadowControl />,
 				store: STORE_NAME,
-				value: [
-					{
+				value: {
+					'outer-0': {
 						type: 'outer',
 						x: '10px',
 						y: '10px',
@@ -428,7 +431,7 @@ describe('box-shadow-control component testing', () => {
 						color: '#cccccc',
 						isVisible: false,
 					},
-				],
+				},
 			});
 
 			cy.getByDataCy('group-control-header')
