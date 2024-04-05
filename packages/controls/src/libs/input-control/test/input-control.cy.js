@@ -309,6 +309,25 @@ describe('input control component testing', () => {
 				});
 			});
 
+			it('have min max (using clear)', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: (
+						<InputControl type="number" min={-100} max={100} />
+					),
+					name,
+					value: 10,
+				});
+
+				cy.get('input[type="number"]').clear();
+				cy.get('input[type="number"]').type(25);
+
+				cy.get('input[type="number"]').should('have.value', 25);
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq(25);
+				});
+			});
+
 			it('type smaller value than min value', () => {
 				const name = nanoid();
 				cy.withDataProvider({
