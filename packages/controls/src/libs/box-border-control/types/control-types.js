@@ -12,7 +12,7 @@ export type BoxBorderControlProps = {
 
 export type TValueTypes = {
 	type: 'all' | 'custom',
-	all: {
+	all?: {
 		width: string,
 		style: string,
 		color: string,
