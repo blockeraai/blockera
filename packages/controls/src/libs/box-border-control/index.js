@@ -14,6 +14,7 @@ import {
 } from '@publisher/classnames';
 import { Button } from '@publisher/components';
 import { isValid } from '@publisher/hooks';
+import { isEquals } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -101,10 +102,10 @@ export default function BoxBorderControl({
 				value?.all?.width === '' &&
 				(value?.all?.style === 'solid' || value?.all?.style === '')
 			) {
-				return {};
+				return '';
 			}
 		} else {
-			['top', 'right', 'bottom', 'left'].forEach((key) => {
+			['all', 'top', 'right', 'bottom', 'left'].forEach((key) => {
 				if (
 					value[key]?.color === '' &&
 					value[key]?.width === '' &&
@@ -113,6 +114,40 @@ export default function BoxBorderControl({
 					value[key].style = '';
 				}
 			});
+
+			// return empty object if all values are empty
+			if (
+				isEquals(value, {
+					type: 'custom',
+					all: {
+						width: '',
+						style: '',
+						color: '',
+					},
+					top: {
+						width: '',
+						color: '',
+						style: '',
+					},
+					right: {
+						width: '',
+						color: '',
+						style: '',
+					},
+					bottom: {
+						width: '',
+						color: '',
+						style: '',
+					},
+					left: {
+						width: '',
+						color: '',
+						style: '',
+					},
+				})
+			) {
+				return '';
+			}
 		}
 
 		return value;
