@@ -32,10 +32,15 @@ export function borderFromWPCompatibility({
 				};
 			}
 		}
-		// does not use var color and not all type
+		// does not use var color and is custom border
 		else if (attributes?.style?.border?.top !== undefined) {
 			const border = {
 				type: 'custom',
+				all: {
+					width: '',
+					style: '',
+					color: '',
+				},
 				top: {
 					width: attributes?.style?.border?.top?.width ?? '',
 					color: attributes?.style?.border?.top?.color ?? '',
@@ -65,7 +70,9 @@ export function borderFromWPCompatibility({
 			border.left.color = getColorVAFromVarString(border.left.color);
 
 			attributes.publisherBorder = border;
-		} else if (
+		}
+		// is all and does not use var color
+		else if (
 			attributes?.style?.border?.width !== undefined ||
 			attributes?.style?.border?.style !== undefined ||
 			attributes?.style?.border?.color !== undefined
@@ -91,11 +98,12 @@ export function borderToWPCompatibility({
 	newValue: Object,
 	ref?: Object,
 }): Object {
-	if ('reset' === ref?.current?.action) {
+	if ('reset' === ref?.current?.action || newValue === '') {
 		return {
 			borderColor: undefined,
 			style: {
 				border: {
+					color: undefined,
 					width: undefined,
 					style: undefined,
 					top: undefined,
@@ -116,6 +124,10 @@ export function borderToWPCompatibility({
 						color: undefined,
 						width: newValue?.all?.width,
 						style: newValue?.all?.style ? newValue?.all?.style : '',
+						top: undefined,
+						right: undefined,
+						bottom: undefined,
+						left: undefined,
 					},
 				},
 			};
@@ -128,6 +140,10 @@ export function borderToWPCompatibility({
 					color: newValue?.all?.color,
 					width: newValue?.all?.width,
 					style: newValue?.all?.style ? newValue?.all?.style : '',
+					top: undefined,
+					right: undefined,
+					bottom: undefined,
+					left: undefined,
 				},
 			},
 		};
@@ -135,6 +151,9 @@ export function borderToWPCompatibility({
 		const border = {
 			style: {
 				border: {
+					color: undefined,
+					width: undefined,
+					style: undefined,
 					top: {
 						width: newValue?.top?.width,
 						style: newValue?.top?.style ? newValue?.top?.style : '',
