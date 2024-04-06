@@ -127,7 +127,7 @@ export function UnitInput({
 			}
 		}
 
-		if (extractedValue?.value !== inputValue) {
+		if (extractedValue?.value !== inputValue && '' !== inputValue) {
 			setInputValue(extractedValue.value);
 		}
 
