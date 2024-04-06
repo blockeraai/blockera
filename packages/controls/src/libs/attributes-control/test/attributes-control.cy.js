@@ -134,15 +134,25 @@ describe('attributes-control component testing', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: <AttributesControl {...defaultProps} />,
-					value: [{ key: '', __key: '', value: '', isVisible: true }],
+					value: {
+						0: {
+							key: '',
+							__key: '',
+							value: '',
+							isVisible: true,
+						},
+					},
 					store: STORE_NAME,
 					name,
 				});
 
 				cy.getByDataCy('group-control-header').click();
-				cy.contains('Popover').as('popover');
-				cy.get('@popover').get('input').first().type('data-test');
-				cy.get('@popover').get('input').last().type('test value');
+
+				cy.getByDataTest('popover-body').within(() => {
+					cy.get('select').select('custom');
+					cy.get('select').get('input').first().type('data-test');
+					cy.get('select').get('input').last().type('test value');
+				});
 
 				cy.getByDataCy('group-control-header').should(
 					'include.text',
@@ -155,37 +165,24 @@ describe('attributes-control component testing', () => {
 
 				//Check data provide value
 				cy.getByDataCy('group-control-header').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							key: 'data-test',
-							__key: '',
+							__key: 'custom',
 							value: 'test value',
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
 			it('should context value have length of 2, when adding one more item', () => {
 				const name = nanoid();
 				cy.withDataProvider({
-					component: (
-						<AttributesControl
-							{...defaultProps}
-							onChange={(value) => {
-								controlReducer(
-									select(
-										'publisher-core/controls'
-									).getControl(name),
-									modifyControlValue({
-										value,
-										controlId: name,
-									})
-								);
-							}}
-						/>
-					),
-					value: [{ key: '', __key: '', value: '', isVisible: true }],
+					component: <AttributesControl {...defaultProps} />,
+					value: {
+						0: { key: '', __key: '', value: '', isVisible: true },
+					},
 					store: STORE_NAME,
 					name,
 				});
@@ -198,8 +195,8 @@ describe('attributes-control component testing', () => {
 
 				//Check data provide value
 				cy.getByDataCy('group-control-header').then(() => {
-					expect(2).to.be.deep.equal(
-						getControlValue(name, STORE_NAME).length
+					expect(['0', '1']).to.be.deep.equal(
+						Object.keys(getControlValue(name, STORE_NAME))
 					);
 				});
 			});
@@ -222,14 +219,18 @@ describe('attributes-control component testing', () => {
 				cy.stub(propsToPass, 'onChange').as('onChange');
 				cy.withDataProvider({
 					component: <AttributesControl {...propsToPass} />,
-					value: [{ key: '', __key: '', value: '', isVisible: true }],
+					value: {
+						0: {
+							key: '',
+							__key: '',
+							value: '',
+							isVisible: true,
+						},
+					},
 					store: STORE_NAME,
 					name,
 				});
-
-				cy.getByDataCy('group-control-header').click();
-
-				cy.get('input').focused().type('dummy text');
+				cy.getByAriaLabel('Add New HTML Attribute').click();
 
 				cy.get('@onChange').should('have.been.called');
 			});
@@ -246,14 +247,14 @@ describe('attributes-control component testing', () => {
 		it('should render correctly value ,(default attribute:none)', () => {
 			cy.withDataProvider({
 				component: <AttributesControl {...defaultProps} />,
-				value: [
-					{
+				value: {
+					0: {
 						key: '',
 						__key: '',
 						value: '',
 						isVisible: true,
 					},
-				],
+				},
 				store: STORE_NAME,
 			});
 
@@ -273,7 +274,14 @@ describe('attributes-control component testing', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: <AttributesControl {...defaultProps} />,
-					value: [{ key: '', __key: '', value: '', isVisible: true }],
+					value: {
+						0: {
+							key: '',
+							__key: '',
+							value: '',
+							isVisible: true,
+						},
+					},
 					store: STORE_NAME,
 					name,
 				});
@@ -296,14 +304,14 @@ describe('attributes-control component testing', () => {
 
 				//Check data provide value
 				cy.getByDataCy('group-control-header').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							key: 'custom key',
 							__key: 'custom',
 							value: 'custom value',
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -311,7 +319,14 @@ describe('attributes-control component testing', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: <AttributesControl {...defaultProps} />,
-					value: [{ key: '', __key: '', value: '', isVisible: true }],
+					value: {
+						0: {
+							key: '',
+							__key: '',
+							value: '',
+							isVisible: true,
+						},
+					},
 					store: STORE_NAME,
 					name,
 				});
@@ -333,14 +348,14 @@ describe('attributes-control component testing', () => {
 
 				//	Check data provide value
 				cy.getByDataCy('group-control-header').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							key: 'rel',
 							__key: 'rel',
 							value: 'sponsored',
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -348,7 +363,14 @@ describe('attributes-control component testing', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: <AttributesControl {...defaultProps} />,
-					value: [{ key: '', __key: '', value: '', isVisible: true }],
+					value: {
+						0: {
+							key: '',
+							__key: '',
+							value: '',
+							isVisible: true,
+						},
+					},
 					store: STORE_NAME,
 					name,
 				});
@@ -370,14 +392,14 @@ describe('attributes-control component testing', () => {
 
 				//Check data provide value
 				cy.getByDataCy('group-control-header').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							key: 'target',
 							__key: 'target',
 							value: '_self',
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -385,7 +407,14 @@ describe('attributes-control component testing', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: <AttributesControl {...defaultProps} />,
-					value: [{ key: '', __key: '', value: '', isVisible: true }],
+					value: {
+						0: {
+							key: '',
+							__key: '',
+							value: '',
+							isVisible: true,
+						},
+					},
 					store: STORE_NAME,
 					name,
 				});
@@ -405,14 +434,14 @@ describe('attributes-control component testing', () => {
 
 				//Check data provider value
 				cy.getByDataCy('group-control-header').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							key: 'hreflang',
 							__key: 'hreflang',
 							value: 'hreflang value',
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -420,7 +449,14 @@ describe('attributes-control component testing', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: <AttributesControl {...defaultProps} />,
-					value: [{ key: '', __key: '', value: '', isVisible: true }],
+					value: {
+						0: {
+							key: '',
+							__key: '',
+							value: '',
+							isVisible: true,
+						},
+					},
 					store: STORE_NAME,
 					name,
 				});
@@ -442,14 +478,14 @@ describe('attributes-control component testing', () => {
 
 				//Check data provide value
 				cy.getByDataCy('group-control-header').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							key: 'referrerpolicy',
 							__key: 'referrerpolicy',
 							value: 'origin',
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 		});
@@ -465,7 +501,14 @@ describe('attributes-control component testing', () => {
 		it('should render correctly with value ,(default attribute:none)', () => {
 			cy.withDataProvider({
 				component: <AttributesControl {...defaultProps} />,
-				value: [{ key: '', __key: '', value: '', isVisible: true }],
+				value: {
+					0: {
+						key: '',
+						__key: '',
+						value: '',
+						isVisible: true,
+					},
+				},
 				store: STORE_NAME,
 			});
 
@@ -484,7 +527,14 @@ describe('attributes-control component testing', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: <AttributesControl {...defaultProps} />,
-					value: [{ key: '', __key: '', value: '', isVisible: true }],
+					value: {
+						0: {
+							key: '',
+							__key: '',
+							value: '',
+							isVisible: true,
+						},
+					},
 					store: STORE_NAME,
 					name,
 				});
@@ -507,14 +557,14 @@ describe('attributes-control component testing', () => {
 
 				//Check data provide value
 				cy.getByDataCy('group-control-header').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							key: 'custom key',
 							__key: 'custom',
 							value: 'custom value',
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -522,7 +572,14 @@ describe('attributes-control component testing', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: <AttributesControl {...defaultProps} />,
-					value: [{ key: '', __key: '', value: '', isVisible: true }],
+					value: {
+						0: {
+							key: '',
+							__key: '',
+							value: '',
+							isVisible: true,
+						},
+					},
 					store: STORE_NAME,
 					name,
 				});
@@ -544,14 +601,14 @@ describe('attributes-control component testing', () => {
 
 				//Check data provide value
 				cy.getByDataCy('group-control-header').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							key: 'type',
 							__key: 'type',
 							value: 'reset',
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 		});
@@ -567,7 +624,14 @@ describe('attributes-control component testing', () => {
 		it('should render correctly with value ,(default attribute:none)', () => {
 			cy.withDataProvider({
 				component: <AttributesControl {...defaultProps} />,
-				value: [{ key: '', __key: '', value: '', isVisible: true }],
+				value: {
+					0: {
+						key: '',
+						__key: '',
+						value: '',
+						isVisible: true,
+					},
+				},
 				store: STORE_NAME,
 			});
 
@@ -586,7 +650,14 @@ describe('attributes-control component testing', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: <AttributesControl {...defaultProps} />,
-					value: [{ key: '', __key: '', value: '', isVisible: true }],
+					value: {
+						0: {
+							key: '',
+							__key: '',
+							value: '',
+							isVisible: true,
+						},
+					},
 					store: STORE_NAME,
 					name,
 				});
@@ -609,14 +680,14 @@ describe('attributes-control component testing', () => {
 
 				//Check data provider value
 				cy.getByDataCy('group-control-header').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							key: 'custom key',
 							__key: 'custom',
 							value: 'custom value',
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -624,7 +695,14 @@ describe('attributes-control component testing', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: <AttributesControl {...defaultProps} />,
-					value: [{ key: '', __key: '', value: '', isVisible: true }],
+					value: {
+						0: {
+							key: '',
+							__key: '',
+							value: '',
+							isVisible: true,
+						},
+					},
 					store: STORE_NAME,
 					name,
 				});
@@ -646,14 +724,14 @@ describe('attributes-control component testing', () => {
 
 				//Check data provider value
 				cy.getByDataCy('group-control-header').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							key: 'type',
 							__key: 'type',
 							value: 'A',
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -661,7 +739,14 @@ describe('attributes-control component testing', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: <AttributesControl {...defaultProps} />,
-					value: [{ key: '', __key: '', value: '', isVisible: true }],
+					value: {
+						0: {
+							key: '',
+							__key: '',
+							value: '',
+							isVisible: true,
+						},
+					},
 					store: STORE_NAME,
 					name,
 				});
@@ -683,14 +768,14 @@ describe('attributes-control component testing', () => {
 
 				//Check data provider value
 				cy.getByDataCy('group-control-header').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							key: 'start',
 							__key: 'start',
 							value: 'start value',
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -698,7 +783,14 @@ describe('attributes-control component testing', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: <AttributesControl {...defaultProps} />,
-					value: [{ key: '', __key: '', value: '', isVisible: true }],
+					value: {
+						0: {
+							key: '',
+							__key: '',
+							value: '',
+							isVisible: true,
+						},
+					},
 					store: STORE_NAME,
 					name,
 				});
@@ -721,14 +813,14 @@ describe('attributes-control component testing', () => {
 
 				//Check data provider value
 				cy.getByDataCy('group-control-header').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							key: 'reversed',
 							__key: 'reversed',
 							value: 'reversed value',
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 		});
