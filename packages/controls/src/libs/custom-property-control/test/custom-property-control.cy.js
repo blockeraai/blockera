@@ -13,7 +13,7 @@ describe('custom-property-control component testing', () => {
 				component: (
 					<CustomPropertyControl label="Custom CSS Property" />
 				),
-				value: [{ name: '', value: '', isVisible: true }],
+				value: { 0: { name: '', value: '', isVisible: true } },
 				store: STORE_NAME,
 			});
 
@@ -43,7 +43,7 @@ describe('custom-property-control component testing', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <CustomPropertyControl />,
-				value: [{ name: '', value: '', isVisible: true }],
+				value: { 0: { name: '', value: '', isVisible: true } },
 				store: STORE_NAME,
 				name,
 			});
@@ -54,13 +54,13 @@ describe('custom-property-control component testing', () => {
 			cy.withDataProvider({
 				component: (
 					<CustomPropertyControl
-						defaultValue={[
-							{
+						defaultValue={{
+							0: {
 								name: 'padding',
 								value: '10px',
 								isVisible: true,
 							},
-						]}
+						}}
 					/>
 				),
 				store: STORE_NAME,
@@ -78,7 +78,7 @@ describe('custom-property-control component testing', () => {
 					<CustomPropertyControl popoverTitle="Custom CSS Property Popover" />
 				),
 				store: STORE_NAME,
-				value: [{ name: '', value: '', isOpen: false }],
+				value: { 0: { name: '', value: '', isOpen: false } },
 			});
 
 			cy.contains('Custom CSS Property Popover').should('not.exist');
@@ -90,7 +90,9 @@ describe('custom-property-control component testing', () => {
 					<CustomPropertyControl popoverTitle="Custom CSS Property Popover" />
 				),
 				store: STORE_NAME,
-				value: [{ name: '', value: '', isOpen: true }],
+				value: {
+					0: { name: '', value: '', isOpen: true },
+				},
 			});
 
 			cy.contains('Custom CSS Property Popover').should('exist');
@@ -100,7 +102,7 @@ describe('custom-property-control component testing', () => {
 			cy.withDataProvider({
 				component: <CustomPropertyControl />,
 				store: STORE_NAME,
-				value: [{ name: '', value: '', isVisible: true }],
+				value: { 0: { name: '', value: '', isVisible: true } },
 			});
 
 			cy.getByDataCy('group-control-header')
@@ -113,7 +115,7 @@ describe('custom-property-control component testing', () => {
 			cy.withDataProvider({
 				component: <CustomPropertyControl />,
 				store: STORE_NAME,
-				value: [{ name: '', value: '', isVisible: false }],
+				value: { 0: { name: '', value: '', isVisible: false } },
 			});
 
 			cy.getByDataCy('group-control-header')
@@ -128,7 +130,7 @@ describe('custom-property-control component testing', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <CustomPropertyControl />,
-				value: [{ name: '', value: '', isVisible: true }],
+				value: { 0: { name: '', value: '', isVisible: true } },
 				store: STORE_NAME,
 				name,
 			});
@@ -151,13 +153,13 @@ describe('custom-property-control component testing', () => {
 
 			//Check data provide value
 			cy.getByDataCy('group-control-header').then(() => {
-				expect([
-					{
+				expect({
+					0: {
 						name: 'opacity',
 						value: '0.5',
 						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 			});
 		});
 
@@ -178,7 +180,7 @@ describe('custom-property-control component testing', () => {
 			cy.stub(propsToPass, 'onChange').as('onChange');
 			cy.withDataProvider({
 				component: <CustomPropertyControl {...propsToPass} />,
-				value: [{ name: '', value: '', isVisible: true }],
+				value: { 0: { name: '', value: '', isVisible: true } },
 				store: STORE_NAME,
 				name,
 			});
