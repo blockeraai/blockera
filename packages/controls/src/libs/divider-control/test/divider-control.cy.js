@@ -6,8 +6,8 @@ import { modifyControlValue } from '../../../store/actions';
 import { controlReducer } from '../../../store/reducers/control-reducer';
 import { getControlValue } from '../../../store/selectors';
 describe('divider-control component testing', () => {
-	const defaultValue = [
-		{
+	const defaultValue = {
+		0: {
 			position: 'top',
 			shape: {
 				type: 'shape',
@@ -21,7 +21,7 @@ describe('divider-control component testing', () => {
 			onFront: false,
 			isVisible: true,
 		},
-	];
+	};
 
 	beforeEach(() => {
 		cy.viewport(1280, 720);
@@ -32,7 +32,7 @@ describe('divider-control component testing', () => {
 			cy.withDataProvider({
 				component: <DividerControl />,
 				store: STORE_NAME,
-				value: [],
+				value: {},
 			});
 
 			cy.getByDataCy('group-control-header').should('not.exist');
@@ -42,8 +42,8 @@ describe('divider-control component testing', () => {
 			cy.withDataProvider({
 				component: <DividerControl />,
 				store: STORE_NAME,
-				value: [
-					{
+				value: {
+					0: {
 						position: 'top',
 						shape: {
 							type: 'shape',
@@ -57,7 +57,7 @@ describe('divider-control component testing', () => {
 						onFront: false,
 						isVisible: true,
 					},
-				],
+				},
 			});
 
 			cy.getByDataCy('group-control-header').should('exist');
@@ -76,8 +76,8 @@ describe('divider-control component testing', () => {
 			cy.withDataProvider({
 				component: (
 					<DividerControl
-						defaultValue={[
-							{
+						defaultValue={{
+							0: {
 								position: 'top',
 								shape: {
 									type: 'shape',
@@ -91,7 +91,7 @@ describe('divider-control component testing', () => {
 								onFront: false,
 								isVisible: true,
 							},
-						]}
+						}}
 					/>
 				),
 				store: STORE_NAME,
@@ -104,8 +104,8 @@ describe('divider-control component testing', () => {
 			cy.withDataProvider({
 				component: (
 					<DividerControl
-						defaultValue={[
-							{
+						defaultValue={{
+							0: {
 								position: 'top',
 								shape: {
 									type: 'shape',
@@ -119,7 +119,7 @@ describe('divider-control component testing', () => {
 								onFront: false,
 								isVisible: true,
 							},
-						]}
+						}}
 					/>
 				),
 				store: STORE_NAME,
@@ -150,8 +150,8 @@ describe('divider-control component testing', () => {
 
 			cy.withDataProvider({
 				component: <DividerControl {...defaultProps} />,
-				value: [
-					{
+				value: {
+					0: {
 						position: 'top',
 						shape: {
 							type: 'shape',
@@ -165,7 +165,7 @@ describe('divider-control component testing', () => {
 						onFront: false,
 						isVisible: true,
 					},
-				],
+				},
 				store: STORE_NAME,
 				name,
 			});
@@ -220,8 +220,8 @@ describe('divider-control component testing', () => {
 
 			//Check data provider
 			cy.get('body').then(() => {
-				expect([
-					{
+				expect({
+					0: {
 						position: 'bottom',
 						shape: {
 							type: 'shape',
@@ -235,7 +235,7 @@ describe('divider-control component testing', () => {
 						onFront: false,
 						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 			});
 		});
 
@@ -278,8 +278,8 @@ describe('divider-control component testing', () => {
 
 			//Check data provider
 			cy.get('body').then(() => {
-				expect([
-					{
+				expect({
+					0: {
 						position: 'top',
 						shape: {
 							type: 'shape',
@@ -293,7 +293,7 @@ describe('divider-control component testing', () => {
 						onFront: false,
 						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 			});
 		});
 
@@ -320,26 +320,26 @@ describe('divider-control component testing', () => {
 
 			//Check data provider
 			cy.get('body').then(() => {
-				expect([
-					{
+				expect({
+					0: {
 						position: 'top',
 						shape: {
 							type: 'shape',
 							id: 'wave-opacity',
 						},
 						color: '',
-						size: { width: '100px', height: '50px' },
+						size: { width: '100%', height: '50px' },
 						animate: false,
 						duration: '',
 						flip: false,
 						onFront: false,
 						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 			});
 		});
 
-		it('should update data correctly, when active animate', () => {
+		it('should update data correctly, when active animation', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <DividerControl />,
@@ -349,7 +349,7 @@ describe('divider-control component testing', () => {
 			});
 
 			cy.getByDataCy('group-control-header').click();
-			cy.getParentContainer('Animate', 'base-control').within(() => {
+			cy.getParentContainer('Animation', 'base-control').within(() => {
 				cy.get('input[type="checkbox"]').click();
 			});
 
@@ -358,8 +358,8 @@ describe('divider-control component testing', () => {
 
 			//Check data provider
 			cy.get('body').then(() => {
-				expect([
-					{
+				expect({
+					0: {
 						position: 'top',
 						shape: {
 							type: 'shape',
@@ -373,7 +373,7 @@ describe('divider-control component testing', () => {
 						onFront: false,
 						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 			});
 		});
 
@@ -387,7 +387,7 @@ describe('divider-control component testing', () => {
 			});
 
 			cy.getByDataCy('group-control-header').click();
-			cy.getParentContainer('Animate', 'base-control').within(() => {
+			cy.getParentContainer('Animation', 'base-control').within(() => {
 				cy.get('input[type="checkbox"]').click();
 				cy.get('input[type="number"]').type(10);
 
@@ -397,8 +397,8 @@ describe('divider-control component testing', () => {
 
 			//Check data provider
 			cy.get('body').then(() => {
-				expect([
-					{
+				expect({
+					0: {
 						position: 'top',
 						shape: {
 							type: 'shape',
@@ -412,7 +412,7 @@ describe('divider-control component testing', () => {
 						onFront: false,
 						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 			});
 		});
 
@@ -432,8 +432,8 @@ describe('divider-control component testing', () => {
 
 			//Check data provider
 			cy.get('body').then(() => {
-				expect([
-					{
+				expect({
+					0: {
 						position: 'top',
 						shape: {
 							type: 'shape',
@@ -447,7 +447,7 @@ describe('divider-control component testing', () => {
 						onFront: false,
 						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 			});
 		});
 
@@ -467,8 +467,8 @@ describe('divider-control component testing', () => {
 
 			//Check data provider
 			cy.get('body').then(() => {
-				expect([
-					{
+				expect({
+					0: {
 						position: 'top',
 						shape: {
 							type: 'shape',
@@ -482,7 +482,7 @@ describe('divider-control component testing', () => {
 						onFront: true,
 						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 			});
 		});
 
@@ -515,8 +515,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -530,7 +530,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -562,8 +562,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -577,7 +577,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -609,8 +609,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -624,7 +624,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -656,8 +656,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -671,7 +671,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -703,8 +703,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -718,7 +718,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -750,8 +750,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -765,7 +765,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -797,8 +797,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -812,7 +812,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -844,8 +844,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -859,7 +859,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -891,8 +891,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -906,7 +906,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -938,8 +938,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -953,7 +953,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -985,8 +985,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -1000,7 +1000,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -1032,8 +1032,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -1047,7 +1047,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -1079,8 +1079,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -1094,7 +1094,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -1126,8 +1126,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -1141,7 +1141,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -1173,8 +1173,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -1188,7 +1188,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -1220,8 +1220,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -1235,7 +1235,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -1267,8 +1267,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -1282,7 +1282,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -1314,8 +1314,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -1329,7 +1329,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -1361,8 +1361,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -1376,7 +1376,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -1408,8 +1408,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -1423,7 +1423,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 
@@ -1455,8 +1455,8 @@ describe('divider-control component testing', () => {
 
 				//Check data provider
 				cy.get('body').then(() => {
-					expect([
-						{
+					expect({
+						0: {
 							position: 'top',
 							shape: {
 								type: 'shape',
@@ -1470,7 +1470,7 @@ describe('divider-control component testing', () => {
 							onFront: false,
 							isVisible: true,
 						},
-					]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+					}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 				});
 			});
 		});
