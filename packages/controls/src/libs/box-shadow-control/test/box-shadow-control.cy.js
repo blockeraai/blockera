@@ -339,6 +339,7 @@ describe('box-shadow-control component testing', () => {
 						spread: '55px',
 						color: '#2cf1dd',
 						isVisible: true,
+						isOpen: true,
 					},
 				}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 			});
