@@ -338,6 +338,7 @@ describe('box-shadow-control component testing', () => {
 						blur: '15px',
 						spread: '55px',
 						color: '#2cf1dd',
+						isOpen: true,
 						isVisible: true,
 						isOpen: true,
 					},
