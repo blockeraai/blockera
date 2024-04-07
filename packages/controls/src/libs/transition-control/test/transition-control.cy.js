@@ -7,18 +7,19 @@ import { modifyControlValue } from '../../../store/actions';
 import { select } from '@wordpress/data';
 
 describe('transition control component testing', () => {
+	const value = {
+		'all-0': {
+			type: 'all',
+			duration: '0ms',
+			timing: 'ease',
+			delay: '0ms',
+			isVisible: true,
+		},
+	};
 	it('should render correctly', () => {
 		cy.withDataProvider({
 			component: <TransitionControl />,
-			value: [
-				{
-					type: 'all',
-					duration: '0ms',
-					timing: 'ease',
-					delay: '0ms',
-					isVisible: true,
-				},
-			],
+			value,
 			store: STORE_NAME,
 		});
 
@@ -28,15 +29,7 @@ describe('transition control component testing', () => {
 	it('should render correctly with label', () => {
 		cy.withDataProvider({
 			component: <TransitionControl label="Transition" />,
-			value: [
-				{
-					type: 'all',
-					duration: '0ms',
-					timing: 'ease',
-					delay: '0ms',
-					isVisible: true,
-				},
-			],
+			value,
 			store: STORE_NAME,
 		});
 
@@ -46,7 +39,7 @@ describe('transition control component testing', () => {
 	it('should render correctly with empty value', () => {
 		cy.withDataProvider({
 			component: <TransitionControl label="Transition" />,
-			value: [],
+			value: {},
 			store: STORE_NAME,
 		});
 
@@ -67,15 +60,15 @@ describe('transition control component testing', () => {
 			component: (
 				<TransitionControl
 					label="Transition"
-					defaultValue={[
-						{
+					defaultValue={{
+						'all-0': {
 							type: 'all',
 							duration: '10ms',
 							timing: 'ease',
 							delay: '10ms',
 							isVisible: true,
 						},
-					]}
+					}}
 				/>
 			),
 			store: STORE_NAME,
@@ -103,7 +96,7 @@ describe('transition control component testing', () => {
 
 			cy.withDataProvider({
 				component: <TransitionControl {...defaultValue} />,
-				value: [],
+				value: {},
 				store: STORE_NAME,
 				name,
 			});
@@ -117,15 +110,7 @@ describe('transition control component testing', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <TransitionControl label="Transition" />,
-				value: [
-					{
-						type: 'all',
-						duration: '0ms',
-						timing: 'ease',
-						delay: '0ms',
-						isVisible: true,
-					},
-				],
+				value,
 				store: STORE_NAME,
 				name,
 			});
@@ -136,7 +121,9 @@ describe('transition control component testing', () => {
 
 			//Check data provider value
 			cy.get('body').then(() => {
-				expect(2).to.be.equal(getControlValue(name, STORE_NAME).length);
+				expect(2).to.be.equal(
+					Object.keys(getControlValue(name, STORE_NAME)).length
+				);
 			});
 		});
 
@@ -144,15 +131,7 @@ describe('transition control component testing', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <TransitionControl label="Transition" />,
-				value: [
-					{
-						type: 'all',
-						duration: '0ms',
-						timing: 'ease',
-						delay: '0ms',
-						isVisible: true,
-					},
-				],
+				value,
 				store: STORE_NAME,
 				name,
 			});
@@ -170,7 +149,7 @@ describe('transition control component testing', () => {
 			// Check data provider value
 			cy.get('@popover').then(() => {
 				expect('filter').to.be.equal(
-					getControlValue(name, STORE_NAME)[0].type
+					getControlValue(name, STORE_NAME)['filter-0'].type
 				);
 			});
 		});
@@ -179,15 +158,7 @@ describe('transition control component testing', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <TransitionControl label="Transition" />,
-				value: [
-					{
-						type: 'all',
-						duration: '0ms',
-						timing: 'ease',
-						delay: '0ms',
-						isVisible: true,
-					},
-				],
+				value,
 				store: STORE_NAME,
 				name,
 			});
@@ -207,7 +178,7 @@ describe('transition control component testing', () => {
 			// Check data provider value
 			cy.get('@popover').then(() => {
 				expect('4000ms').to.be.equal(
-					getControlValue(name, STORE_NAME)[0].duration
+					getControlValue(name, STORE_NAME)['all-0'].duration
 				);
 			});
 		});
@@ -216,15 +187,7 @@ describe('transition control component testing', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <TransitionControl label="Transition" />,
-				value: [
-					{
-						type: 'all',
-						duration: '0ms',
-						timing: 'ease',
-						delay: '0ms',
-						isVisible: true,
-					},
-				],
+				value,
 				store: STORE_NAME,
 				name,
 			});
@@ -242,7 +205,7 @@ describe('transition control component testing', () => {
 			// Check data provider value
 			cy.get('@popover').then(() => {
 				expect('ease-in-out').to.be.equal(
-					getControlValue(name, STORE_NAME)[0].timing
+					getControlValue(name, STORE_NAME)['all-0'].timing
 				);
 			});
 		});
@@ -251,15 +214,7 @@ describe('transition control component testing', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <TransitionControl label="Transition" />,
-				value: [
-					{
-						type: 'all',
-						duration: '0ms',
-						timing: 'ease',
-						delay: '0ms',
-						isVisible: true,
-					},
-				],
+				value,
 				store: STORE_NAME,
 				name,
 			});
@@ -279,7 +234,7 @@ describe('transition control component testing', () => {
 			// Check data provider value
 			cy.get('@popover').then(() => {
 				expect('3000ms').to.be.equal(
-					getControlValue(name, STORE_NAME)[0].delay
+					getControlValue(name, STORE_NAME)['all-0'].delay
 				);
 			});
 		});
@@ -288,15 +243,7 @@ describe('transition control component testing', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <TransitionControl label="Transition" />,
-				value: [
-					{
-						type: 'all',
-						duration: '0ms',
-						timing: 'ease',
-						delay: '0ms',
-						isVisible: true,
-					},
-				],
+				value,
 				store: STORE_NAME,
 				name,
 			});
@@ -347,15 +294,17 @@ describe('transition control component testing', () => {
 
 			//Check data provider value
 			cy.get('@popover').then(() => {
-				expect([
-					{
+				const controlValue = getControlValue(name, STORE_NAME);
+				expect({
+					'opacity-0': {
+						...controlValue['opacity-0'],
 						type: 'opacity',
 						duration: '100ms',
 						timing: 'ease-out',
 						delay: '3ms',
 						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(controlValue);
 			});
 		});
 	});
@@ -367,15 +316,15 @@ describe('transition control component testing', () => {
 				component: (
 					<TransitionControl popoverTitle="Transition Control" />
 				),
-				value: [
-					{
+				value: {
+					'all-0': {
 						type: 'all',
 						duration: '0ms',
 						timing: 'ease',
 						delay: '0ms',
 						isOpen: false,
 					},
-				],
+				},
 				store: STORE_NAME,
 				name,
 			});
@@ -389,15 +338,15 @@ describe('transition control component testing', () => {
 				component: (
 					<TransitionControl popoverTitle="Transition Control" />
 				),
-				value: [
-					{
+				value: {
+					'all-0': {
 						type: 'all',
 						duration: '0ms',
 						timing: 'ease',
 						delay: '0ms',
 						isOpen: true,
 					},
-				],
+				},
 				store: STORE_NAME,
 				name,
 			});
@@ -411,15 +360,15 @@ describe('transition control component testing', () => {
 			cy.withDataProvider({
 				component: <TransitionControl />,
 				store: STORE_NAME,
-				value: [
-					{
+				value: {
+					'all-0': {
 						type: 'all',
 						duration: '0ms',
 						timing: 'ease',
 						delay: '0ms',
 						isVisible: true,
 					},
-				],
+				},
 			});
 
 			cy.getByDataCy('group-control-header')
@@ -432,15 +381,15 @@ describe('transition control component testing', () => {
 			cy.withDataProvider({
 				component: <TransitionControl />,
 				store: STORE_NAME,
-				value: [
-					{
+				value: {
+					'all-0': {
 						type: 'all',
 						duration: '0ms',
 						timing: 'ease',
 						delay: '0ms',
 						isVisible: false,
 					},
-				],
+				},
 			});
 
 			cy.getByDataCy('group-control-header')
