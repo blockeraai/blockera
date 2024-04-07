@@ -11,7 +11,7 @@ describe('search-replace-control component testing', () => {
 		it('should render correctly with label', () => {
 			cy.withDataProvider({
 				component: <SearchReplaceControl label="Search and Replace" />,
-				value: [{ search: '', replace: '', isVisible: true }],
+				value: { 0: { search: '', replace: '', isVisible: true } },
 				store: STORE_NAME,
 			});
 
@@ -21,7 +21,7 @@ describe('search-replace-control component testing', () => {
 		it('should render correctly with empty value', () => {
 			cy.withDataProvider({
 				component: <SearchReplaceControl />,
-				value: [],
+				value: {},
 				store: STORE_NAME,
 			});
 
@@ -41,7 +41,7 @@ describe('search-replace-control component testing', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <SearchReplaceControl />,
-				value: [{ search: '', replace: '', isVisible: true }],
+				value: { 0: { search: '', replace: '', isVisible: true } },
 				store: STORE_NAME,
 				name,
 			});
@@ -52,13 +52,13 @@ describe('search-replace-control component testing', () => {
 			cy.withDataProvider({
 				component: (
 					<SearchReplaceControl
-						defaultValue={[
-							{
+						defaultValue={{
+							0: {
 								search: 'Jon',
 								value: 'Doe',
 								isVisible: true,
 							},
-						]}
+						}}
 					/>
 				),
 				store: STORE_NAME,
@@ -76,7 +76,7 @@ describe('search-replace-control component testing', () => {
 					<SearchReplaceControl popoverTitle="Search and Replace Popover" />
 				),
 				store: STORE_NAME,
-				value: [{ search: '', replace: '', isOpen: false }],
+				value: { 0: { search: '', replace: '', isOpen: false } },
 			});
 
 			cy.contains('Search and Replace Popover').should('not.exist');
@@ -88,7 +88,7 @@ describe('search-replace-control component testing', () => {
 					<SearchReplaceControl popoverTitle="Search and Replace Popover" />
 				),
 				store: STORE_NAME,
-				value: [{ search: '', replace: '', isOpen: true }],
+				value: { 0: { search: '', replace: '', isOpen: true } },
 			});
 
 			cy.contains('Search and Replace Popover').should('exist');
@@ -98,7 +98,7 @@ describe('search-replace-control component testing', () => {
 			cy.withDataProvider({
 				component: <SearchReplaceControl />,
 				store: STORE_NAME,
-				value: [{ search: '', replace: '', isVisible: true }],
+				value: { 0: { search: '', replace: '', isVisible: true } },
 			});
 
 			cy.getByDataCy('group-control-header')
@@ -111,7 +111,7 @@ describe('search-replace-control component testing', () => {
 			cy.withDataProvider({
 				component: <SearchReplaceControl />,
 				store: STORE_NAME,
-				value: [{ search: '', replace: '', isVisible: false }],
+				value: { 0: { search: '', replace: '', isVisible: false } },
 			});
 
 			cy.getByDataCy('group-control-header')
@@ -126,7 +126,7 @@ describe('search-replace-control component testing', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <SearchReplaceControl />,
-				value: [{ search: '', replace: '', isVisible: true }],
+				value: { 0: { search: '', replace: '', isVisible: true } },
 				store: STORE_NAME,
 				name,
 			});
@@ -149,13 +149,13 @@ describe('search-replace-control component testing', () => {
 
 			//Check data provide value
 			cy.getByDataCy('group-control-header').then(() => {
-				expect([
-					{
+				expect({
+					0: {
 						search: 'Jon',
 						replace: 'Doe',
 						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 			});
 		});
 
@@ -176,7 +176,7 @@ describe('search-replace-control component testing', () => {
 			cy.stub(propsToPass, 'onChange').as('onChange');
 			cy.withDataProvider({
 				component: <SearchReplaceControl {...propsToPass} />,
-				value: [{ search: '', replace: '', isVisible: true }],
+				value: { 0: { search: '', replace: '', isVisible: true } },
 				store: STORE_NAME,
 				name,
 			});
