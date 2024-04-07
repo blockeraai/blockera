@@ -20,22 +20,22 @@ describe('ext shadow control component testing', () => {
 	describe('empty', () => {
 		it('should display default value', () => {
 			const name = nanoid();
-			const defaultValue = [
-				{
+			const defaultValue = {
+				0: {
 					x: '10px',
 					y: '10px',
 					blur: '4px',
 					color: '#0747eb',
 					isVisible: true,
 				},
-				{
+				1: {
 					x: '2px',
 					y: '3px',
 					blur: '4px',
 					color: '#0947eb',
 					isVisible: true,
 				},
-			];
+			};
 			cy.withDataProvider({
 				component: <TextShadowControl label="text shadow" />,
 
@@ -62,15 +62,15 @@ describe('ext shadow control component testing', () => {
 			cy.withDataProvider({
 				component: <TextShadowControl label="text shadow" />,
 
-				value: [
-					{
+				value: {
+					0: {
 						x: '10px',
 						y: '10px',
 						blur: '4px',
 						color: '#0747eb',
 						isVisible: true,
 					},
-				],
+				},
 				store: STORE_NAME,
 			});
 
@@ -91,15 +91,15 @@ describe('ext shadow control component testing', () => {
 					/>
 				),
 
-				value: [
-					{
+				value: {
+					0: {
 						x: '10px',
 						y: '10px',
 						blur: '4px',
 						color: '#0747eb',
 						isVisible: true,
 					},
-				],
+				},
 				store: STORE_NAME,
 			});
 
@@ -117,7 +117,7 @@ describe('ext shadow control component testing', () => {
 					/>
 				),
 
-				value: [],
+				value: {},
 				store: STORE_NAME,
 			});
 
@@ -138,13 +138,12 @@ describe('ext shadow control component testing', () => {
 					/>
 				),
 
-				value: [],
+				value: {},
 				store: STORE_NAME,
 				name,
 			});
 
 			cy.get('[aria-label="Add New Text Shadow"]').click();
-			cy.getByDataCy('repeater-item').click();
 
 			/* eslint-disable cypress/unsafe-to-chain-command */
 			cy.get('[aria-label="Vertical Distance"]')
@@ -169,16 +168,17 @@ describe('ext shadow control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
+				const controlValue = getControlValue(name, STORE_NAME);
 				const data = {
-					x: '50px',
-					y: '50px',
-					blur: '50px',
-					color: '',
-					isVisible: true,
+					0: {
+						...controlValue[0],
+						x: '50px',
+						y: '50px',
+						blur: '50px',
+						isVisible: true,
+					},
 				};
-				return expect(getControlValue(name, STORE_NAME)[0]).to.deep.eq(
-					data
-				);
+				return expect(controlValue).to.deep.eq(data);
 			});
 		});
 	});
