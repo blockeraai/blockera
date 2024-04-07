@@ -12,8 +12,8 @@ describe('outline control component testing', () => {
 			cy.withDataProvider({
 				component: <OutlineControl />,
 				store: STORE_NAME,
-				value: [
-					{
+				value: {
+					0: {
 						border: {
 							width: '5px',
 							style: 'solid',
@@ -22,7 +22,7 @@ describe('outline control component testing', () => {
 						offset: '2px',
 						isVisible: true,
 					},
-				],
+				},
 			});
 
 			cy.getByDataCy('publisher-repeater-control').should('exist');
@@ -32,8 +32,8 @@ describe('outline control component testing', () => {
 			cy.withDataProvider({
 				component: <OutlineControl label="Outline Control" />,
 				store: STORE_NAME,
-				value: [
-					{
+				value: {
+					0: {
 						border: {
 							width: '5px',
 							style: 'solid',
@@ -42,7 +42,7 @@ describe('outline control component testing', () => {
 						offset: '2px',
 						isVisible: true,
 					},
-				],
+				},
 			});
 
 			cy.contains('Outline Control');
@@ -52,7 +52,7 @@ describe('outline control component testing', () => {
 			cy.withDataProvider({
 				component: <OutlineControl />,
 				store: STORE_NAME,
-				value: [],
+				value: {},
 			});
 
 			cy.getByDataCy('group-control-header').should('not.exist');
@@ -71,8 +71,8 @@ describe('outline control component testing', () => {
 			cy.withDataProvider({
 				component: (
 					<OutlineControl
-						defaultValue={[
-							{
+						defaultValue={{
+							0: {
 								border: {
 									width: '10px',
 									style: 'solid',
@@ -81,7 +81,7 @@ describe('outline control component testing', () => {
 								offset: '2px',
 								isVisible: true,
 							},
-						]}
+						}}
 					/>
 				),
 				store: STORE_NAME,
@@ -94,8 +94,8 @@ describe('outline control component testing', () => {
 			cy.withDataProvider({
 				component: <OutlineControl popoverTitle="Outline Popover" />,
 				store: STORE_NAME,
-				value: [
-					{
+				value: {
+					0: {
 						border: {
 							width: '5px',
 							style: 'solid',
@@ -105,7 +105,7 @@ describe('outline control component testing', () => {
 						isVisible: true,
 						isOpen: false,
 					},
-				],
+				},
 			});
 
 			cy.contains('Outline Popover').should('not.exist');
@@ -115,8 +115,8 @@ describe('outline control component testing', () => {
 			cy.withDataProvider({
 				component: <OutlineControl popoverTitle="Outline Popover" />,
 				store: STORE_NAME,
-				value: [
-					{
+				value: {
+					0: {
 						border: {
 							width: '5px',
 							style: 'solid',
@@ -126,7 +126,7 @@ describe('outline control component testing', () => {
 						isVisible: true,
 						isOpen: true,
 					},
-				],
+				},
 			});
 
 			cy.contains('Outline Popover').should('exist');
@@ -136,8 +136,8 @@ describe('outline control component testing', () => {
 			cy.withDataProvider({
 				component: <OutlineControl />,
 				store: STORE_NAME,
-				value: [
-					{
+				value: {
+					0: {
 						border: {
 							width: '5px',
 							style: 'solid',
@@ -146,7 +146,7 @@ describe('outline control component testing', () => {
 						offset: '2px',
 						isVisible: true,
 					},
-				],
+				},
 			});
 
 			cy.getByDataCy('group-control-header')
@@ -158,8 +158,8 @@ describe('outline control component testing', () => {
 			cy.withDataProvider({
 				component: <OutlineControl />,
 				store: STORE_NAME,
-				value: [
-					{
+				value: {
+					0: {
 						border: {
 							width: '5px',
 							style: 'solid',
@@ -168,7 +168,7 @@ describe('outline control component testing', () => {
 						offset: '2px',
 						isVisible: false,
 					},
-				],
+				},
 			});
 
 			cy.getByDataCy('group-control-header')
@@ -197,8 +197,8 @@ describe('outline control component testing', () => {
 			cy.withDataProvider({
 				component: <OutlineControl {...defaultProps} />,
 				store: STORE_NAME,
-				value: [
-					{
+				value: {
+					0: {
 						border: {
 							width: '5px',
 							style: 'solid',
@@ -207,7 +207,7 @@ describe('outline control component testing', () => {
 						offset: '2px',
 						isVisible: true,
 					},
-				],
+				},
 				name,
 			});
 
@@ -223,8 +223,8 @@ describe('outline control component testing', () => {
 			cy.withDataProvider({
 				component: <OutlineControl />,
 				store: STORE_NAME,
-				value: [
-					{
+				value: {
+					0: {
 						border: {
 							width: '5px',
 							style: 'solid',
@@ -233,7 +233,7 @@ describe('outline control component testing', () => {
 						offset: '2px',
 						isVisible: true,
 					},
-				],
+				},
 				name,
 			});
 
@@ -286,8 +286,10 @@ describe('outline control component testing', () => {
 
 			//Check data provider value
 			cy.get('body').then(() => {
-				expect([
-					{
+				const controlValue = getControlValue(name, STORE_NAME);
+				expect({
+					0: {
+						...controlValue['0'],
 						border: {
 							width: '10px',
 							style: 'dotted',
@@ -296,7 +298,7 @@ describe('outline control component testing', () => {
 						offset: '5px',
 						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(controlValue);
 			});
 		});
 	});
