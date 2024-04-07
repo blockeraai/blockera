@@ -11,12 +11,12 @@ describe('filter-control component testing', () => {
 		cy.withDataProvider({
 			component: <FilterControl />,
 			store: STORE_NAME,
-			value: [
-				{
+			value: {
+				'blur-0': {
 					type: 'blur',
 					blur: '0px',
 				},
-			],
+			},
 		});
 
 		cy.getByDataCy('group-control-header').should('exist');
@@ -26,7 +26,7 @@ describe('filter-control component testing', () => {
 		cy.withDataProvider({
 			component: <FilterControl />,
 			store: STORE_NAME,
-			value: [],
+			value: {},
 		});
 
 		cy.getByDataCy('group-control-header').should('not.exist');
@@ -45,15 +45,15 @@ describe('filter-control component testing', () => {
 		cy.withDataProvider({
 			component: (
 				<FilterControl
-					defaultValue={[
-						{
+					defaultValue={{
+						'drop-shadow-0': {
 							type: 'drop-shadow',
 							'drop-shadow-x': '10px',
 							'drop-shadow-y': '10px',
 							'drop-shadow-blur': '10px',
 							'drop-shadow-color': '',
 						},
-					]}
+					}}
 				/>
 			),
 			store: STORE_NAME,
@@ -89,12 +89,12 @@ describe('filter-control component testing', () => {
 
 			cy.withDataProvider({
 				component: <FilterControl {...defaultProps} />,
-				value: [
-					{
+				value: {
+					'blur-0': {
 						type: 'blur',
 						blur: '0px',
 					},
-				],
+				},
 				store: STORE_NAME,
 				name,
 			});
@@ -112,15 +112,15 @@ describe('filter-control component testing', () => {
 				component: <FilterControl />,
 				store: STORE_NAME,
 				name,
-				value: [
-					{
+				value: {
+					'drop-shadow-0': {
 						type: 'drop-shadow',
 						'drop-shadow-x': '10px',
 						'drop-shadow-y': '10px',
 						'drop-shadow-blur': '10px',
 						'drop-shadow-color': '',
 					},
-				],
+				},
 			});
 
 			cy.getByDataCy('group-control-header').click();
@@ -139,24 +139,14 @@ describe('filter-control component testing', () => {
 
 			//Check data provider value
 			cy.get('body').then(() => {
-				expect([
-					{
+				const controlValue = getControlValue(name, STORE_NAME);
+				expect({
+					'blur-0': {
+						...controlValue['blur-0'],
 						type: 'blur',
 						blur: '25px',
-						brightness: '200%',
-						contrast: '200%',
-						'hue-rotate': '45deg',
-						saturate: '200%',
-						grayscale: '100%',
-						invert: '100%',
-						sepia: '100%',
-						'drop-shadow-x': '10px',
-						'drop-shadow-y': '10px',
-						'drop-shadow-blur': '10px',
-						'drop-shadow-color': '',
-						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(controlValue);
 			});
 		});
 
@@ -166,12 +156,12 @@ describe('filter-control component testing', () => {
 				component: <FilterControl />,
 				store: STORE_NAME,
 				name,
-				value: [
-					{
+				value: {
+					'blur-0': {
 						type: 'blur',
 						blur: '20px',
 					},
-				],
+				},
 			});
 
 			cy.getByDataCy('group-control-header').click();
@@ -210,28 +200,24 @@ describe('filter-control component testing', () => {
 
 			//Check repeater item
 			cy.getByDataCy('group-control-header').contains('Drop Shadow');
-			cy.getByDataCy('group-control-header').contains('100px 55px 15px');
+			cy.getByDataCy('group-control-header').contains('100');
+			cy.getByDataCy('group-control-header').contains('55');
+			cy.getByDataCy('group-control-header').contains('15');
 
 			//Check data provider value
 			cy.get('body').then(() => {
-				expect([
-					{
+				const controlValue = getControlValue(name, STORE_NAME);
+
+				expect({
+					'drop-shadow-0': {
+						...controlValue['drop-shadow-0'],
 						type: 'drop-shadow',
-						blur: '20px',
-						brightness: '200%',
-						contrast: '200%',
-						'hue-rotate': '45deg',
-						saturate: '200%',
-						grayscale: '100%',
-						invert: '100%',
-						sepia: '100%',
 						'drop-shadow-x': '100px',
 						'drop-shadow-y': '55px',
 						'drop-shadow-blur': '15px',
 						'drop-shadow-color': '#2cf1dd',
-						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(controlValue);
 			});
 		});
 
@@ -241,12 +227,12 @@ describe('filter-control component testing', () => {
 				component: <FilterControl />,
 				store: STORE_NAME,
 				name,
-				value: [
-					{
+				value: {
+					'blur-0': {
 						type: 'blur',
 						blur: '20px',
 					},
-				],
+				},
 			});
 
 			cy.getByDataCy('group-control-header').click();
@@ -268,24 +254,14 @@ describe('filter-control component testing', () => {
 
 			//Check data provider value
 			cy.get('body').then(() => {
-				expect([
-					{
+				const controlValue = getControlValue(name, STORE_NAME);
+				expect({
+					'brightness-0': {
+						...controlValue['brightness-0'],
 						type: 'brightness',
-						blur: '20px',
 						brightness: '100%',
-						contrast: '200%',
-						'hue-rotate': '45deg',
-						saturate: '200%',
-						grayscale: '100%',
-						invert: '100%',
-						sepia: '100%',
-						'drop-shadow-x': '10px',
-						'drop-shadow-y': '10px',
-						'drop-shadow-blur': '10px',
-						'drop-shadow-color': '',
-						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(controlValue);
 			});
 		});
 
@@ -295,12 +271,12 @@ describe('filter-control component testing', () => {
 				component: <FilterControl />,
 				store: STORE_NAME,
 				name,
-				value: [
-					{
+				value: {
+					'blur-0': {
 						type: 'blur',
 						blur: '20px',
 					},
-				],
+				},
 			});
 
 			cy.getByDataCy('group-control-header').click();
@@ -322,24 +298,15 @@ describe('filter-control component testing', () => {
 
 			//Check data provider value
 			cy.get('body').then(() => {
-				expect([
-					{
+				const controlValue = getControlValue(name, STORE_NAME);
+
+				expect({
+					'contrast-0': {
+						...controlValue['contrast-0'],
 						type: 'contrast',
-						blur: '20px',
-						brightness: '200%',
 						contrast: '80%',
-						'hue-rotate': '45deg',
-						saturate: '200%',
-						grayscale: '100%',
-						invert: '100%',
-						sepia: '100%',
-						'drop-shadow-x': '10px',
-						'drop-shadow-y': '10px',
-						'drop-shadow-blur': '10px',
-						'drop-shadow-color': '',
-						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(controlValue);
 			});
 		});
 
@@ -349,12 +316,12 @@ describe('filter-control component testing', () => {
 				component: <FilterControl />,
 				store: STORE_NAME,
 				name,
-				value: [
-					{
+				value: {
+					'blur-0': {
 						type: 'blur',
 						blur: '20px',
 					},
-				],
+				},
 			});
 
 			cy.getByDataCy('group-control-header').click();
@@ -376,24 +343,15 @@ describe('filter-control component testing', () => {
 
 			//Check data provider value
 			cy.get('body').then(() => {
-				expect([
-					{
+				const controlValue = getControlValue(name, STORE_NAME);
+
+				expect({
+					'hue-rotate-0': {
+						...controlValue['hue-rotate-0'],
 						type: 'hue-rotate',
-						blur: '20px',
-						brightness: '200%',
-						contrast: '200%',
 						'hue-rotate': '30deg',
-						saturate: '200%',
-						grayscale: '100%',
-						invert: '100%',
-						sepia: '100%',
-						'drop-shadow-x': '10px',
-						'drop-shadow-y': '10px',
-						'drop-shadow-blur': '10px',
-						'drop-shadow-color': '',
-						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(controlValue);
 			});
 		});
 
@@ -403,12 +361,12 @@ describe('filter-control component testing', () => {
 				component: <FilterControl />,
 				store: STORE_NAME,
 				name,
-				value: [
-					{
+				value: {
+					'blur-0': {
 						type: 'blur',
 						blur: '20px',
 					},
-				],
+				},
 			});
 
 			cy.getByDataCy('group-control-header').click();
@@ -430,24 +388,15 @@ describe('filter-control component testing', () => {
 
 			//Check data provider value
 			cy.get('body').then(() => {
-				expect([
-					{
+				const controlValue = getControlValue(name, STORE_NAME);
+
+				expect({
+					'saturate-0': {
+						...controlValue['saturate-0'],
 						type: 'saturate',
-						blur: '20px',
-						brightness: '200%',
-						contrast: '200%',
-						'hue-rotate': '45deg',
 						saturate: '150%',
-						grayscale: '100%',
-						invert: '100%',
-						sepia: '100%',
-						'drop-shadow-x': '10px',
-						'drop-shadow-y': '10px',
-						'drop-shadow-blur': '10px',
-						'drop-shadow-color': '',
-						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(controlValue);
 			});
 		});
 
@@ -457,12 +406,12 @@ describe('filter-control component testing', () => {
 				component: <FilterControl />,
 				store: STORE_NAME,
 				name,
-				value: [
-					{
+				value: {
+					'blur-0': {
 						type: 'blur',
 						blur: '20px',
 					},
-				],
+				},
 			});
 
 			cy.getByDataCy('group-control-header').click();
@@ -484,24 +433,15 @@ describe('filter-control component testing', () => {
 
 			//Check data provider value
 			cy.get('body').then(() => {
-				expect([
-					{
+				const controlValue = getControlValue(name, STORE_NAME);
+
+				expect({
+					'grayscale-0': {
+						...controlValue['grayscale-0'],
 						type: 'grayscale',
-						blur: '20px',
-						brightness: '200%',
-						contrast: '200%',
-						'hue-rotate': '45deg',
-						saturate: '200%',
 						grayscale: '50%',
-						invert: '100%',
-						sepia: '100%',
-						'drop-shadow-x': '10px',
-						'drop-shadow-y': '10px',
-						'drop-shadow-blur': '10px',
-						'drop-shadow-color': '',
-						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(controlValue);
 			});
 		});
 
@@ -511,12 +451,12 @@ describe('filter-control component testing', () => {
 				component: <FilterControl />,
 				store: STORE_NAME,
 				name,
-				value: [
-					{
+				value: {
+					'blur-0': {
 						type: 'blur',
 						blur: '20px',
 					},
-				],
+				},
 			});
 
 			cy.getByDataCy('group-control-header').click();
@@ -535,24 +475,15 @@ describe('filter-control component testing', () => {
 
 			//Check data provider value
 			cy.get('body').then(() => {
-				expect([
-					{
+				const controlValue = getControlValue(name, STORE_NAME);
+
+				expect({
+					'invert-0': {
+						...controlValue['invert-0'],
 						type: 'invert',
-						blur: '20px',
-						brightness: '200%',
-						contrast: '200%',
-						'hue-rotate': '45deg',
-						saturate: '200%',
-						grayscale: '100%',
 						invert: '70%',
-						sepia: '100%',
-						'drop-shadow-x': '10px',
-						'drop-shadow-y': '10px',
-						'drop-shadow-blur': '10px',
-						'drop-shadow-color': '',
-						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(controlValue);
 			});
 		});
 
@@ -562,12 +493,12 @@ describe('filter-control component testing', () => {
 				component: <FilterControl />,
 				store: STORE_NAME,
 				name,
-				value: [
-					{
+				value: {
+					'blur-0': {
 						type: 'blur',
 						blur: '20px',
 					},
-				],
+				},
 			});
 
 			cy.getByDataCy('group-control-header').click();
@@ -586,24 +517,15 @@ describe('filter-control component testing', () => {
 
 			//Check data provider value
 			cy.get('body').then(() => {
-				expect([
-					{
+				const controlValue = getControlValue(name, STORE_NAME);
+
+				expect({
+					'sepia-0': {
+						...controlValue['sepia-0'],
 						type: 'sepia',
-						blur: '20px',
-						brightness: '200%',
-						contrast: '200%',
-						'hue-rotate': '45deg',
-						saturate: '200%',
-						grayscale: '100%',
-						invert: '100%',
 						sepia: '40%',
-						'drop-shadow-x': '10px',
-						'drop-shadow-y': '10px',
-						'drop-shadow-blur': '10px',
-						'drop-shadow-color': '',
-						isVisible: true,
 					},
-				]).to.be.deep.equal(getControlValue(name, STORE_NAME));
+				}).to.be.deep.equal(controlValue);
 			});
 		});
 	});
@@ -613,13 +535,13 @@ describe('filter-control component testing', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <FilterControl popoverTitle="Filter Control" />,
-				value: [
-					{
+				value: {
+					'blur-0': {
 						type: 'blur',
 						blur: '0px',
 						isOpen: false,
 					},
-				],
+				},
 				store: STORE_NAME,
 				name,
 			});
@@ -631,13 +553,13 @@ describe('filter-control component testing', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <FilterControl popoverTitle="Filter Control" />,
-				value: [
-					{
+				value: {
+					'blur-0': {
 						type: 'blur',
 						blur: '0px',
 						isOpen: true,
 					},
-				],
+				},
 				store: STORE_NAME,
 				name,
 			});
@@ -651,13 +573,13 @@ describe('filter-control component testing', () => {
 			cy.withDataProvider({
 				component: <FilterControl />,
 				store: STORE_NAME,
-				value: [
-					{
+				value: {
+					'blur-0': {
 						type: 'blur',
 						blur: '0px',
 						isVisible: true,
 					},
-				],
+				},
 			});
 
 			cy.getByDataCy('group-control-header')
@@ -670,13 +592,13 @@ describe('filter-control component testing', () => {
 			cy.withDataProvider({
 				component: <FilterControl />,
 				store: STORE_NAME,
-				value: [
-					{
+				value: {
+					'blur-0': {
 						type: 'blur',
 						blur: '0px',
 						isVisible: false,
 					},
-				],
+				},
 			});
 
 			cy.getByDataCy('group-control-header')
