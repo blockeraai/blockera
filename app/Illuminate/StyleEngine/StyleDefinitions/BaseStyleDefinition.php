@@ -239,4 +239,14 @@ abstract class BaseStyleDefinition implements Style {
 	 */
 	abstract protected function collectProps( array $setting ): array;
 
+	/**
+	 * Flush all properties.
+	 *
+	 * @return void
+	 */
+	public function flushProperties(): void {
+
+		$this->properties = [];
+	}
+
 }

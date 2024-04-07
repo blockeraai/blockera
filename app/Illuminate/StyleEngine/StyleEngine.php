@@ -235,6 +235,7 @@ final class StyleEngine {
 				continue;
 			}
 
+			$dependency->flushProperties();
 			$dependency->setSettings( $settings );
 
 			$cssProperties[] = $dependency->getProperties();
