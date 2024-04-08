@@ -6,21 +6,6 @@ import {
 	setDeviceType,
 } from '../../../../../../cypress/helpers';
 
-function setFontSize(value) {
-	// Alias
-	cy.get('h2').contains('Typography').parent().parent().as('typo');
-
-	// Assertion for master block attributes.
-	cy.get('@typo').within(() => {
-		cy.get('[aria-label="Font Size"]')
-			.parent()
-			.next()
-			.within(() => {
-				cy.get('input').type(value);
-			});
-	});
-}
-
 describe('useAttributes Hook Testing ...', () => {
 	describe('handleOnChangeAttributes callback', () => {
 		it('should sets value when state is paragraph -> normal -> laptop', () => {
@@ -33,7 +18,7 @@ describe('useAttributes Hook Testing ...', () => {
 			// Select target block
 			cy.get('[data-type="core/paragraph"]').click();
 
-			setFontSize(27);
+			cy.setInputFieldValue('Font Size', 'Typography', 27);
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
@@ -54,7 +39,7 @@ describe('useAttributes Hook Testing ...', () => {
 
 			setDeviceType('Tablet');
 
-			setFontSize(27);
+			cy.setInputFieldValue('Font Size', 'Typography', 27);
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
@@ -80,7 +65,7 @@ describe('useAttributes Hook Testing ...', () => {
 
 			cy.getByAriaLabel('Add New State').click();
 
-			setFontSize(27);
+			cy.setInputFieldValue('Font Size', 'Typography', 27);
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
@@ -106,7 +91,7 @@ describe('useAttributes Hook Testing ...', () => {
 			// set hover state
 			cy.getByAriaLabel('Add New State').click();
 
-			setFontSize(27);
+			cy.setInputFieldValue('Font Size', 'Typography', 27);
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
@@ -131,7 +116,7 @@ describe('useAttributes Hook Testing ...', () => {
 			// set hover state
 			cy.getByAriaLabel('Add New State').click();
 
-			setFontSize(27);
+			cy.setInputFieldValue('Font Size', 'Typography', 27);
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
@@ -157,7 +142,7 @@ describe('useAttributes Hook Testing ...', () => {
 
 			setBlockType('Link');
 
-			setFontSize(27);
+			cy.setInputFieldValue('Font Size', 'Typography', 27);
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
@@ -185,7 +170,7 @@ describe('useAttributes Hook Testing ...', () => {
 
 			setBlockType('Link');
 
-			setFontSize(27);
+			cy.setInputFieldValue('Font Size', 'Typography', 27);
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
@@ -214,7 +199,7 @@ describe('useAttributes Hook Testing ...', () => {
 
 			cy.getByAriaLabel('Add New State').click();
 
-			setFontSize(27);
+			cy.setInputFieldValue('Font Size', 'Typography', 27);
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
@@ -243,7 +228,7 @@ describe('useAttributes Hook Testing ...', () => {
 
 			cy.getByAriaLabel('Add New State').click();
 
-			setFontSize(27);
+			cy.setInputFieldValue('Font Size', 'Typography', 27);
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
@@ -253,6 +238,214 @@ describe('useAttributes Hook Testing ...', () => {
 						.attributes.publisherBlockStates.hover.breakpoints
 						.mobile.attributes.publisherFontSize
 				);
+			});
+		});
+
+		describe('in paragraph -> normal -> laptop state has publisherFontSize with 27px value', () => {
+			beforeEach(() => {
+				appendBlocks(
+					'<!-- wp:paragraph -->\n' +
+						'<p>Test</p>\n' +
+						'<!-- /wp:paragraph -->'
+				);
+
+				// Select target block
+				cy.get('[data-type="core/paragraph"]').click();
+
+				cy.setInputFieldValue('Font Size', 'Typography', 27);
+			});
+
+			describe('adding hover -> laptop state', () => {
+				beforeEach(() => {
+					// Set hover as current state.
+					cy.getByAriaLabel('Add New State').click();
+				});
+
+				it('should add "active" block-state into block with empty attributes', () => {
+					// Add active state with empty attributes.
+					cy.getByAriaLabel('Add New State').click();
+
+					// assertion for block attributes.
+					getWPDataObject().then((data) => {
+						expect({
+							normal: {
+								breakpoints: {
+									laptop: {
+										attributes: {},
+									},
+								},
+								isVisible: true,
+								isSelected: false,
+							},
+							hover: {
+								breakpoints: {
+									laptop: {
+										attributes: {},
+									},
+								},
+								isVisible: true,
+								isSelected: false,
+							},
+							active: {
+								breakpoints: {
+									laptop: {
+										attributes: {},
+									},
+								},
+								isVisible: true,
+								isSelected: true,
+							},
+						}).to.be.deep.equal(
+							getSelectedBlock(data, 'publisherBlockStates')
+						);
+					});
+				});
+			});
+		});
+		describe('in paragraph -> normal -> laptop state has publisherTextShadow with one default item value', () => {
+			beforeEach(() => {
+				appendBlocks(
+					'<!-- wp:paragraph -->\n' +
+						'<p>Test</p>\n' +
+						'<!-- /wp:paragraph -->'
+				);
+
+				// Select target block
+				cy.get('[data-type="core/paragraph"]').click();
+
+				// Add default text shadow item
+				cy.getByAriaLabel('Add New Text Shadow').click();
+			});
+
+			describe('adding hover -> laptop state', () => {
+				beforeEach(() => {
+					// Set hover as current state.
+					cy.getByAriaLabel('Add New State').click();
+				});
+
+				it('should add "active" block-state into block with empty attributes', () => {
+					// Add active state with empty attributes.
+					cy.getByAriaLabel('Add New State').click();
+
+					// assertion for block attributes.
+					getWPDataObject().then((data) => {
+						expect({
+							normal: {
+								breakpoints: {
+									laptop: {
+										attributes: {},
+									},
+								},
+								isVisible: true,
+								isSelected: false,
+							},
+							hover: {
+								breakpoints: {
+									laptop: {
+										attributes: {},
+									},
+								},
+								isVisible: true,
+								isSelected: false,
+							},
+							active: {
+								breakpoints: {
+									laptop: {
+										attributes: {},
+									},
+								},
+								isVisible: true,
+								isSelected: true,
+							},
+						}).to.be.deep.equal(
+							getSelectedBlock(data, 'publisherBlockStates')
+						);
+					});
+				});
+			});
+		});
+		describe('in paragraph -> normal -> laptop state has publisherTextShadow with one default item value', () => {
+			beforeEach(() => {
+				appendBlocks(
+					'<!-- wp:paragraph -->\n' +
+						'<p>Test</p>\n' +
+						'<!-- /wp:paragraph -->'
+				);
+
+				// Select target block
+				cy.get('[data-type="core/paragraph"]').click();
+
+				// Add default text shadow item
+				cy.getByAriaLabel('Add New Text Shadow').click();
+			});
+
+			describe('adding hover -> laptop state and add new text-shadow item', () => {
+				beforeEach(() => {
+					// Set hover as current state.
+					cy.getByAriaLabel('Add New State').click();
+
+					// Add default text shadow item
+					cy.getByAriaLabel('Add New Text Shadow').click();
+				});
+
+				it.only('should add "active" block-state into block with publisherTextShadow attribute with one text-shadow item', () => {
+					// Add active state with empty attributes.
+					cy.getByAriaLabel('Add New State').click();
+
+					// assertion for block attributes.
+					getWPDataObject().then((data) => {
+						expect({
+							normal: {
+								breakpoints: {
+									laptop: {
+										attributes: {},
+									},
+								},
+								isVisible: true,
+								isSelected: false,
+							},
+							hover: {
+								breakpoints: {
+									laptop: {
+										attributes: {
+											publisherTextShadow: {
+												0: {
+													isVisible: true,
+													x: '1px',
+													y: '1px',
+													blur: '1px',
+													color: '#000000ab',
+													order: 0,
+												},
+												1: {
+													isVisible: true,
+													x: '1px',
+													y: '1px',
+													blur: '1px',
+													color: '#000000ab',
+													order: 1,
+												},
+											},
+										},
+									},
+								},
+								isVisible: true,
+								isSelected: false,
+							},
+							active: {
+								breakpoints: {
+									laptop: {
+										attributes: {},
+									},
+								},
+								isVisible: true,
+								isSelected: true,
+							},
+						}).to.be.deep.equal(
+							getSelectedBlock(data, 'publisherBlockStates')
+						);
+					});
+				});
 			});
 		});
 	});
