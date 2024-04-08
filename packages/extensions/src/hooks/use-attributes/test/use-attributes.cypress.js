@@ -388,7 +388,7 @@ describe('useAttributes Hook Testing ...', () => {
 					cy.getByAriaLabel('Add New Text Shadow').click();
 				});
 
-				it.only('should add "active" block-state into block with publisherTextShadow attribute with one text-shadow item', () => {
+				it('should add "active" block-state into block with publisherTextShadow attribute with empty attributes', () => {
 					// Add active state with empty attributes.
 					cy.getByAriaLabel('Add New State').click();
 
