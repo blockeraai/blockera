@@ -60,6 +60,7 @@ export const AdvancedLabelControl = ({
 		isChangedOnNormal,
 		isChangedOnOtherStates,
 		isChangedOnCurrentState,
+		isInnerBlock,
 	} = useAdvancedLabelProps(
 		{
 			path,
@@ -95,6 +96,15 @@ export const AdvancedLabelControl = ({
 					labelDescription={labelDescription}
 					advancedIsOpen={isOpenModal}
 					className={controlClassNames('label', className, {
+						'changed-in-inner-normal-state':
+							(isInnerBlock &&
+								isNormalState() &&
+								isChanged &&
+								isChangedOnCurrentState) ||
+							(isInnerBlock &&
+								!isNormalState() &&
+								isChangedOnNormal &&
+								!isChangedOnCurrentState),
 						'changed-in-other-state':
 							!isChangedOnCurrentState && isChangedOnOtherStates,
 						'changed-in-normal-state':

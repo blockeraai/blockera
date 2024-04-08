@@ -46,6 +46,7 @@ export const useAdvancedLabelProps = (
 		isChangedOnNormal: false,
 		isChangedOnOtherStates: false,
 		isChangedOnCurrentState: false,
+		isInnerBlock: false,
 	});
 	const {
 		currentBlock,
@@ -105,7 +106,7 @@ export const useAdvancedLabelProps = (
 
 		return calculatedAttributes;
 		// eslint-disable-next-line
-	}, [blockAttributes]);
+	}, [blockAttributes, currentBlock]);
 
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
@@ -123,6 +124,7 @@ export const useAdvancedLabelProps = (
 					isChangedOnNormal: false,
 					isChangedOnOtherStates: false,
 					isChangedOnCurrentState: false,
+					isInnerBlock: isInnerBlock(currentBlock),
 				});
 			}
 
@@ -135,6 +137,7 @@ export const useAdvancedLabelProps = (
 					isChangedOnNormal: isChanged,
 					isChangedOnOtherStates: false,
 					isChangedOnCurrentState: isChanged,
+					isInnerBlock: isInnerBlock(currentBlock),
 				});
 			}
 			const currentBlockState =
@@ -229,15 +232,38 @@ export const useAdvancedLabelProps = (
 										);
 									}
 
+									// to handle repeater properties
+									if (
+										isObject(stateValue[attribute]) &&
+										!isObject(clonedDefaultValue) &&
+										path
+									) {
+										const _stateValue = prepare(
+											path,
+											stateValue
+										);
+
+										return (
+											!isEmpty(stateValue[attribute]) &&
+											!isUndefined(_stateValue) &&
+											!isEquals(
+												_stateValue,
+												clonedDefaultValue
+											)
+										);
+									}
+
 									if (
 										!isNormalState &&
 										'normal' === stateType
 									) {
 										return (
 											!isEmpty(stateValue) &&
-											!isUndefined(stateValue) &&
+											!isUndefined(
+												stateValue[attribute]
+											) &&
 											!isEquals(
-												stateValue,
+												stateValue[attribute],
 												clonedDefaultValue
 											)
 										);
@@ -245,9 +271,9 @@ export const useAdvancedLabelProps = (
 
 									return (
 										!isEmpty(stateValue) &&
-										!isUndefined(stateValue) &&
+										!isUndefined(stateValue[attribute]) &&
 										!isEquals(
-											stateValue,
+											stateValue[attribute],
 											clonedDefaultValue
 										)
 									);
@@ -270,18 +296,18 @@ export const useAdvancedLabelProps = (
 				}
 			}
 
-			let isChangedOnNormal = isChangedOnOtherStates?.normal || false;
+			let isChangedOnNormal = !!isChangedOnOtherStates?.normal;
 
 			if (isObject(isChangedOnNormal)) {
 				isChangedOnNormal = true;
 			}
 
 			const isChangedOnCurrentState =
-				isChangedOnOtherStates[
+				!!isChangedOnOtherStates[
 					isInnerBlock(currentBlock)
 						? currentInnerBlockState
 						: currentState
-				] || false;
+				];
 
 			setLabelStatus({
 				isChanged,
@@ -289,6 +315,7 @@ export const useAdvancedLabelProps = (
 				isChangedOnCurrentState,
 				isChangedOnOtherStates:
 					Object.keys(isChangedOnOtherStates).length > 0,
+				isInnerBlock: isInnerBlock(currentBlock),
 			});
 		}, delay);
 
