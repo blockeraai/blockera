@@ -3,16 +3,19 @@
 /**
  * External dependencies
  */
-import memoize from 'fast-memoize';
+// import memoize from 'fast-memoize';
 import { select } from '@wordpress/data';
 import type { ComponentType, Element } from 'react';
 import { Fill } from '@wordpress/components';
-import { useEffect, memo } from '@wordpress/element';
+import {
+	// useEffect,
+	memo,
+} from '@wordpress/element';
 
 /**
  * Publisher dependencies
  */
-import { unregisterControl } from '@publisher/controls';
+// import { unregisterControl } from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -26,7 +29,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		blockProps,
 		currentState,
 		currentBlock,
-		currentBreakpoint,
+		// currentBreakpoint,
 		currentInnerBlock,
 		BlockEditComponent,
 		publisherInnerBlocks,
@@ -36,30 +39,30 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		const { isActiveBlockExtensions } = select('publisher-core/extensions');
 
 		// prevent memory leak, componentDidMount.
-		useEffect(() => {
-			const others = select('publisher-core/controls').getControls();
-			const repeaters = select(
-				'publisher-core/controls/repeater'
-			).getControls();
-
-			const getMemoizedControlNames = memoize((controls) =>
-				controls.map((c) => c?.name)
-			);
-
-			unregisterControl(
-				getMemoizedControlNames(others),
-				'publisher-core/controls'
-			);
-			unregisterControl(
-				getMemoizedControlNames(repeaters),
-				'publisher-core/controls/repeater'
-			);
-		}, [
-			currentBlock,
-			currentState,
-			currentBreakpoint,
-			currentInnerBlockState,
-		]);
+		// useEffect(() => {
+		// 	const others = select('publisher-core/controls').getControls();
+		// 	const repeaters = select(
+		// 		'publisher-core/controls/repeater'
+		// 	).getControls();
+		//
+		// 	const getMemoizedControlNames = memoize((controls) =>
+		// 		controls.map((c) => c?.name)
+		// 	);
+		//
+		// 	unregisterControl(
+		// 		getMemoizedControlNames(others),
+		// 		'publisher-core/controls'
+		// 	);
+		// 	unregisterControl(
+		// 		getMemoizedControlNames(repeaters),
+		// 		'publisher-core/controls/repeater'
+		// 	);
+		// }, [
+		// 	currentBlock,
+		// 	currentState,
+		// 	currentBreakpoint,
+		// 	currentInnerBlockState,
+		// ]);
 
 		return (
 			<>
