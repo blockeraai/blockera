@@ -35,7 +35,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'type')}
 					singularId={'type'}
-					label={__('Property', 'publisher-core')}
+					label={__('Type', 'publisher-core')}
 					labelPopoverTitle={__(
 						'Transition Property',
 						'publisher-core'
