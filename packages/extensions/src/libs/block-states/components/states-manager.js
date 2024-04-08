@@ -320,8 +320,6 @@ const StatesManager: ComponentType<any> = memo(
 								return defaultItem;
 							},
 							defaultRepeaterItemValue: {
-								getBreakpoints,
-								callback: getStateInfo,
 								...StateSettings.publisherBlockStates
 									.default[0],
 								deletable: true,

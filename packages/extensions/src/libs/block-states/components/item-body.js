@@ -19,6 +19,8 @@ import {
  */
 import states from '../states';
 import type { TStates } from '../types';
+import { getStateInfo } from '../helpers';
+import getBreakpoints from '../default-breakpoints';
 import { LabelDescription } from './label-description';
 
 const ItemBody = ({
@@ -33,7 +35,7 @@ const ItemBody = ({
 	}
 
 	const {
-		controlInfo: { name: controlId, block },
+		controlInfo: { name: controlId },
 		dispatch: { changeRepeaterItem },
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 	} = useControlContext();
@@ -54,7 +56,7 @@ const ItemBody = ({
 						label: state.label,
 					}))}
 				onChange={(newValue: TStates): void => {
-					const dynamicValue = item.callback(newValue);
+					const dynamicValue = getStateInfo(newValue);
 
 					let value = {
 						...item,
@@ -62,10 +64,7 @@ const ItemBody = ({
 						breakpoints:
 							item?.breakpoints?.length > 1
 								? item.breakpoints
-								: item.getBreakpoints(
-										newValue,
-										block.attributes
-								  ),
+								: getBreakpoints(newValue),
 						isSelected: true,
 					};
 

@@ -2,51 +2,51 @@ export default {
 	normal: {
 		type: 'normal',
 		label: 'Normal',
-		breakpoints: [],
+		breakpoints: {},
 	},
 	hover: {
 		type: 'hover',
 		label: 'Hover',
-		breakpoints: [],
+		breakpoints: {},
 	},
 	active: {
 		type: 'active',
 		label: 'Active',
-		breakpoints: [],
+		breakpoints: {},
 	},
 	focus: {
 		type: 'focus',
 		label: 'Focus',
-		breakpoints: [],
+		breakpoints: {},
 	},
 	visited: {
 		type: 'visited',
 		label: 'Visited',
-		breakpoints: [],
+		breakpoints: {},
 	},
 	before: {
 		type: 'before',
 		label: 'Before',
-		breakpoints: [],
+		breakpoints: {},
 	},
 	after: {
 		type: 'after',
 		label: 'After',
-		breakpoints: [],
+		breakpoints: {},
 	},
 	'custom-class': {
 		type: 'custom-class',
 		label: 'Custom Class',
-		breakpoints: [],
+		breakpoints: {},
 	},
 	'parent-class': {
 		type: 'parent-class',
 		label: 'Parent Class',
-		breakpoints: [],
+		breakpoints: {},
 	},
 	'parent-hover': {
 		type: 'parent-hover',
 		label: 'Parent Hover',
-		breakpoints: [],
+		breakpoints: {},
 	},
 };
