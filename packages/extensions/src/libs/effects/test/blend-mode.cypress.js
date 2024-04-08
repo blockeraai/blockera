@@ -1,0 +1,58 @@
+import {
+	savePage,
+	addBlockToPost,
+	getWPDataObject,
+	getSelectedBlock,
+	redirectToFrontPage,
+} from '../../../../../../cypress/helpers';
+
+describe('Blend Mode → Functionality', () => {
+	beforeEach(() => {
+		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+
+		cy.getBlock('core/paragraph').type('this is test text.', {
+			delay: 0,
+		});
+
+		cy.getByDataTest('style-tab').click();
+
+		cy.activateMoreSettingsItem('More Effect Settings', 'Blending Mode');
+
+		cy.getParentContainer('Blending').as('container');
+	});
+
+	it('should update blend-mode correctly, when add multiply', () => {
+		cy.get('@container').within(() => {
+			cy.get('button[aria-haspopup="listbox"]').click();
+
+			cy.get('ul').within(() => {
+				cy.contains('Multiply').click();
+			});
+		});
+
+		// Check block
+		cy.getBlock('core/paragraph').should(
+			'have.css',
+			'mix-blend-mode',
+			'multiply'
+		);
+
+		// Check store
+		getWPDataObject().then((data) => {
+			expect('multiply').to.be.equal(
+				getSelectedBlock(data, 'publisherBlendMode')
+			);
+		});
+
+		// Check frontend
+		savePage();
+
+		redirectToFrontPage();
+
+		cy.get('.publisher-core-block').should(
+			'have.css',
+			'mix-blend-mode',
+			'multiply'
+		);
+	});
+});
