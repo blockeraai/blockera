@@ -32,7 +32,7 @@ class BoxShadow extends BaseStyleDefinition {
 				! empty( $prop['spread'] ) ? pb_get_value_addon_real_value( $prop['spread'] ) : '',
 				! empty( $prop['color'] ) ? pb_get_value_addon_real_value( $prop['color'] ) : ''
 			);
-		}, $setting[ $cssProperty ] );
+		}, pb_get_sorted_repeater( $setting[ $cssProperty ] ) );
 
 		$this->setProperties( array_merge( $this->properties, [ $cssProperty => implode( ',', $boxShadows ) ] ) );
 

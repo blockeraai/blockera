@@ -108,7 +108,7 @@ class Effects extends BaseStyleDefinition {
 		// add all transform items
 		if ( 'transform' === $cssProperty && ! empty( $settings[ $cssProperty ] ) ) {
 
-			array_map( [ $this, 'setTransformItem' ], array_filter( $settings[ $cssProperty ], [ $this, 'isVisibleSetting' ] ) );
+			array_map( [ $this, 'setTransformItem' ], array_filter( pb_get_sorted_repeater( $settings[ $cssProperty ] ), [ $this, 'isVisibleSetting' ] ) );
 		}
 
 		if ( 'self-perspective' === $cssProperty && ! empty( $this->properties['transform'] ) && ! empty( $settings[ $cssProperty ] ) ) {

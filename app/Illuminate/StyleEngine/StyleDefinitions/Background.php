@@ -100,7 +100,7 @@ class Background extends BaseStyleDefinition {
 			case 'linear-gradient':
 			case 'radial-gradient':
 			case 'mesh-gradient':
-				array_map( [ $this, 'setActiveBackgroundType' ], array_filter( $setting[ $type ], [ $this, 'isValidSetting' ] ) );
+				array_map( [ $this, 'setActiveBackgroundType' ], array_filter( pb_get_sorted_repeater( $setting[ $type ] ), [ $this, 'isValidSetting' ] ) );
 				break;
 		}
 

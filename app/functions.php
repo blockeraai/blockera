@@ -184,3 +184,17 @@ if ( ! function_exists( 'pb_array_flat' ) ) {
 		return array_merge( ...$nestedArray );
 	}
 }
+
+function pb_get_sorted_repeater($items) {
+    $dataArray = [];
+
+    foreach ($items as $key => $value) {
+        $dataArray[] = $value;
+    }
+
+    usort($dataArray, function($a, $b) {
+        return ($a['order'] ?? 0) - ($b['order'] ?? 0);
+    });
+
+    return $dataArray;
+}

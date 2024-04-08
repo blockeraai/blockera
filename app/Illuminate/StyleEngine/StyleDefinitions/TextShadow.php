@@ -28,7 +28,7 @@ class TextShadow extends BaseStyleDefinition {
 				! empty( $prop['blur'] ) ? pb_get_value_addon_real_value( $prop['blur'] ) : '',
 				! empty( $prop['color'] ) ? pb_get_value_addon_real_value( $prop['color'] ) : '',
 			);
-		}, $setting[ $cssProperty ] );
+		}, pb_get_sorted_repeater( $setting[ $cssProperty ] ) );
 
 		$this->setProperties( array_merge( $this->properties, [ $cssProperty => implode( ', ', $textShadows ) ] ) );
 
