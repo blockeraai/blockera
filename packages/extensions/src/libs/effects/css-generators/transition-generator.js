@@ -1,6 +1,7 @@
 /**
  * Publisher dependencies
  */
+import { getSortedRepeater } from '@publisher/controls';
 import { isUndefined } from '@publisher/utils';
 import { createCssDeclarations } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
@@ -12,7 +13,7 @@ export function TransitionGenerator(id, props) {
 		return '';
 	}
 
-	const value = Object.entries(attributes?.publisherTransition)
+	const value = getSortedRepeater(attributes?.publisherTransition)
 		?.map(([, item]) => {
 			if (!item.isVisible) {
 				return null;
