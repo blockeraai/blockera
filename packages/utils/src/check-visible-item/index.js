@@ -1,6 +1,17 @@
 // @flow
 
-export const checkVisibleItemLength = (array: Array<Object>): number => {
-	if (!array.length) return 0;
-	return array.filter((item) => item.isVisible).length;
+export const checkVisibleItemLength = (items: Object): number => {
+	let length = 0;
+
+	Object.entries(items)?.map(([, item]) => {
+		if (!item.isVisible) {
+			return null;
+		}
+
+		length++;
+
+		return null;
+	});
+
+	return length;
 };
