@@ -3,13 +3,13 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 
 /**
  * Publisher dependencies
  */
 import { controlClassNames } from '@publisher/classnames';
+import { isObject } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -17,11 +17,9 @@ import { controlClassNames } from '@publisher/classnames';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
-import type {
-	TransformControlProps,
-	TransformControlRepeaterItemValue,
-} from './types';
+import type { TransformControlProps } from './types';
 import { LabelDescription } from './components/label-description';
+import { cleanupRepeaterItem } from '../repeater-control/utils';
 
 export default function TransformControl({
 	defaultRepeaterItemValue = {
@@ -43,6 +41,43 @@ export default function TransformControl({
 	className,
 	...props
 }: TransformControlProps): MixedElement {
+	function valueCleanup(value: any | Object): any | Object {
+		if (!isObject(value)) {
+			return value;
+		}
+
+		let clonedValue = { ...value };
+
+		clonedValue = Object.fromEntries(
+			Object.entries(clonedValue).map(([itemId, item]): Object => {
+				if (item?.type !== 'move') {
+					delete item['move-x'];
+					delete item['move-y'];
+					delete item['move-z'];
+				}
+
+				if (item?.type !== 'scale') {
+					delete item.scale;
+				}
+
+				if (item?.type !== 'rotate') {
+					delete item['rotate-x'];
+					delete item['rotate-y'];
+					delete item['rotate-z'];
+				}
+
+				if (item?.type !== 'skew') {
+					delete item['skew-x'];
+					delete item['skew-y'];
+				}
+
+				return [itemId, cleanupRepeaterItem(item)];
+			})
+		);
+
+		return clonedValue;
+	}
+
 	return (
 		<RepeaterControl
 			className={controlClassNames('transform', className)}
@@ -55,38 +90,8 @@ export default function TransformControl({
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
+			valueCleanup={valueCleanup}
 			{...props}
 		/>
 	);
 }
-
-TransformControl.propTypes = {
-	/**
-	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
-	 */
-	defaultValue: PropTypes.array,
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
-	/**
-	 * Default value of each repeater item
-	 */
-	defaultRepeaterItemValue: (PropTypes.shape({
-		type: PropTypes.oneOf(['move', 'scale', 'rotate', 'skew']),
-		'move-x': PropTypes.string,
-		'move-y': PropTypes.string,
-		'move-z': PropTypes.string,
-		scale: PropTypes.string,
-		'rotate-x': PropTypes.string,
-		'rotate-y': PropTypes.string,
-		'rotate-z': PropTypes.string,
-		'skew-x': PropTypes.string,
-		'skew-y': PropTypes.string,
-		isVisible: PropTypes.bool,
-	}): TransformControlRepeaterItemValue),
-	/**
-	 * Label for popover
-	 */
-	popoverTitle: PropTypes.string,
-};
