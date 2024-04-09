@@ -77,10 +77,10 @@ export const useAdvancedLabelProps = (
 			if (!_isNormalBlockState(currentState)) {
 				if (
 					!blockAttributes.publisherBlockStates[currentState]
-						.breakpoints[currentBreakpoint].attributes
+						?.breakpoints[currentBreakpoint]?.attributes
 						?.publisherInnerBlocks ||
 					!blockAttributes.publisherBlockStates[currentState]
-						.breakpoints[currentBreakpoint].attributes
+						?.breakpoints[currentBreakpoint]?.attributes
 						?.publisherInnerBlocks[currentBlock]
 				) {
 					calculatedAttributes =

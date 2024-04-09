@@ -69,7 +69,6 @@ describe('useAttributes Hook Testing ...', () => {
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
-				console.log(getSelectedBlock(data, 'publisherInnerBlocks'));
 				expect('27px').to.be.equal(
 					getSelectedBlock(data, 'publisherInnerBlocks').link
 						.attributes.publisherBlockStates.hover.breakpoints

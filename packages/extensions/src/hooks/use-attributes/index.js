@@ -91,15 +91,15 @@ export const useAttributes = (
 
 		// check - is really changed attribute of any block type (master or one of inner blocks)?
 		if (isNormalState()) {
+			// Assume block is inner block and has attributes in normal state.
 			if (
 				isInnerBlock(currentBlock) &&
+				hasRootAttributes &&
 				!isChanged(
 					{
 						..._attributes,
-						...(hasRootAttributes
-							? _attributes.publisherInnerBlocks[currentBlock]
-									.attributes
-							: {}),
+						..._attributes.publisherInnerBlocks[currentBlock]
+							.attributes,
 					},
 					attributeId,
 					newValue
@@ -108,7 +108,11 @@ export const useAttributes = (
 				return;
 			}
 
-			if (!isChanged(attributes, attributeId, newValue)) {
+			// Assume block is master.
+			if (
+				!isInnerBlock(currentBlock) &&
+				!isChanged(attributes, attributeId, newValue)
+			) {
 				return;
 			}
 		}
