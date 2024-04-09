@@ -7,6 +7,7 @@ import { disableGutenbergFeatures, goTo, loginToSite } from '../helpers';
 /**
  * External dependencies
  */
+import 'cypress-real-events';
 import '@cypress/code-coverage/support';
 
 beforeEach(function () {

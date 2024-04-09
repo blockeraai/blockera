@@ -222,3 +222,7 @@ Cypress.Commands.add('customSelect', (item) => {
 		cy.contains(item).click();
 	});
 });
+
+Cypress.Commands.add('openAccordion', (accordionHeading) =>
+	cy.get('h2').contains(accordionHeading).parent().parent().click()
+);
