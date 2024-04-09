@@ -914,7 +914,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 					'Block Interactions and Animations',
 					'publisher-core'
 				),
-				className: 'style-tab',
+				className: 'interactions-tab',
 				icon: <AnimationsIcon />,
 			},
 		];
