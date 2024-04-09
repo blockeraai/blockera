@@ -43,7 +43,7 @@ export const useInnerBlocksInfo = ({
 				!Object.keys(
 					(
 						attributes.publisherBlockStates[currentState]
-							.breakpoints[currentBreakpoint] || {}
+							?.breakpoints[currentBreakpoint] || {}
 					)?.attributes || {}
 				).length
 			) {
