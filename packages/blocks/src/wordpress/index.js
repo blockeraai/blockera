@@ -1,5 +1,6 @@
 // @flow
 
+export * from './group';
 export * from './quote';
 export * from './paragraph';
 export * from './heading';
