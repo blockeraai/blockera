@@ -213,3 +213,12 @@ Cypress.Commands.add('setInputFieldValue', (fieldLabel, groupLabel, value) => {
 			});
 	});
 });
+
+// select custom select item
+Cypress.Commands.add('customSelect', (item) => {
+	cy.get('button[aria-haspopup="listbox"]').click();
+
+	cy.get('ul').within(() => {
+		cy.contains(item).click();
+	});
+});

@@ -23,11 +23,7 @@ describe('Blend Mode → Functionality', () => {
 
 	it('should update blend-mode correctly, when add multiply', () => {
 		cy.get('@container').within(() => {
-			cy.get('button[aria-haspopup="listbox"]').click();
-
-			cy.get('ul').within(() => {
-				cy.contains('Multiply').click();
-			});
+			cy.customSelect('Multiply');
 		});
 
 		// Check block
