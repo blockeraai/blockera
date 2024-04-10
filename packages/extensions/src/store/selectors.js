@@ -317,10 +317,10 @@ export function isActiveBlockExtensions({ blockExtensions }: Object): boolean {
  *
  * @param {Object} blockExtensions the block extension details.
  *
- * @return {Object | false} Object on success,false on otherwise!
+ * @return {Object | void} Object on success,false on otherwise!
  */
-export function getActiveBlockVariation({ blockExtensions }: Object): boolean {
-	return 'undefined' === typeof blockExtensions?.activeBlockVariation
-		? false
-		: blockExtensions?.activeBlockVariation;
+export function getActiveBlockVariation({
+	blockExtensions,
+}: Object): Object | void {
+	return blockExtensions?.activeBlockVariation;
 }
