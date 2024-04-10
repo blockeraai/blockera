@@ -53,7 +53,28 @@ describe('group control component testing', () => {
 			});
 			cy.getByDataCy('control-group').should('have.class', 'is-close');
 		});
-		it('should open body section after click on header', () => {
+		it('should open body section after click on header, when pass onClick', () => {
+			cy.withDataProvider({
+				component: (
+					<GroupControl
+						mode="accordion"
+						header="Header Text"
+						children="Body Text"
+						onClick={() => true}
+					/>
+				),
+			});
+
+			cy.getByDataCy('group-control-header').click({ force: true });
+			cy.getByDataCy('control-group').should('have.class', 'is-open');
+			cy.getByAriaLabel('Close Settings').should('be.visible');
+			cy.getByDataCy('group-control-content').should('be.visible');
+			cy.getByDataCy('group-control-content').should(
+				'contain',
+				'Body Text'
+			);
+		});
+		it('should not open body section after click on header, without onClick', () => {
 			cy.withDataProvider({
 				component: (
 					<GroupControl
@@ -63,11 +84,28 @@ describe('group control component testing', () => {
 					/>
 				),
 			});
-			/* eslint-disable cypress/unsafe-to-chain-command */
-			cy.getByDataCy('control-group')
-				.click()
-				.should('have.class', 'is-open');
-			cy.get('[aria-label="Close Settings"]').should('be.visible');
+
+			cy.getByDataCy('group-control-header').click({ force: true });
+			cy.getByDataCy('control-group').should('not.have.class', 'is-open');
+			cy.getByAriaLabel('Close Settings').should('not.exist');
+			cy.getByDataCy('group-control-content').should('not.exist');
+		});
+		it('should open body section after click on open button', () => {
+			cy.withDataProvider({
+				component: (
+					<GroupControl
+						mode="accordion"
+						header="Header Text"
+						children="Body Text"
+					/>
+				),
+			});
+
+			cy.getByDataCy('group-control-header').within(() => {
+				cy.getByAriaLabel('Open Settings').click();
+			});
+			cy.getByDataCy('control-group').should('have.class', 'is-open');
+			cy.getByAriaLabel('Close Settings').should('be.visible');
 			cy.getByDataCy('group-control-content').should('be.visible');
 			cy.getByDataCy('group-control-content').should(
 				'contain',
@@ -157,7 +195,25 @@ describe('group control component testing', () => {
 		});
 	});
 	describe('popover', () => {
-		it('should display popover modal', () => {
+		it('should display popover modal by clicking group-control-header, when pass onClick', () => {
+			cy.withDataProvider({
+				component: (
+					<GroupControl
+						mode="popover"
+						header="Header Text"
+						children="Body Text"
+						toggleOpenBorder
+						onClick={() => true}
+					/>
+				),
+			});
+			cy.getByDataCy('control-group').and('have.class', 'is-close');
+			cy.getByDataCy('group-control-header').click();
+			cy.getByDataCy('control-group')
+				.should('have.class', 'toggle-open-border')
+				.and('have.class', 'is-open');
+		});
+		it('should not display popover modal by clicking group-control-header, without onClick', () => {
 			cy.withDataProvider({
 				component: (
 					<GroupControl
@@ -170,6 +226,21 @@ describe('group control component testing', () => {
 			});
 			cy.getByDataCy('control-group').and('have.class', 'is-close');
 			cy.getByDataCy('group-control-header').click();
+			cy.getByDataCy('control-group').should('not.have.class', 'is-open');
+		});
+		it('should display popover modal by clicking setting button', () => {
+			cy.withDataProvider({
+				component: (
+					<GroupControl
+						mode="popover"
+						header="Header Text"
+						children="Body Text"
+						toggleOpenBorder
+					/>
+				),
+			});
+			cy.getByDataCy('control-group').and('have.class', 'is-close');
+			cy.getByAriaLabel('Open Settings').click();
 			cy.getByDataCy('control-group')
 				.should('have.class', 'toggle-open-border')
 				.and('have.class', 'is-open');
@@ -279,9 +350,8 @@ describe('group control component testing', () => {
 				.and('have.class', 'is-close');
 			cy.get('[data-cy="plus-svg"]').should('be.visible');
 			cy.get('[data-cy="minus-svg"]').should('be.visible');
-			cy.get('[data-cy="minus-svg"]').click();
+			cy.get('[aria-label="Open Settings"]').click();
 			cy.get('[aria-label="Close"]').should('be.visible');
-			cy.get('[aria-label="Close"]').click();
 		});
 		it('should render custom popover label', () => {
 			cy.withDataProvider({
