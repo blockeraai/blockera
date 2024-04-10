@@ -96,6 +96,11 @@ export function blockExtensions(state: Object = {}, action: Object): Object {
 				...state,
 				isActiveExtensions: action.isActive,
 			};
+		case 'SET_EXTENSIONS_ACTIVE_VARIATION':
+			return {
+				...state,
+				activeBlockVariation: action.variation,
+			};
 	}
 
 	return state;

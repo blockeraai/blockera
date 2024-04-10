@@ -108,3 +108,10 @@ export function setBlockExtensionsStatus(isActive: boolean): Object {
 		type: 'SET_EXTENSIONS_STATUS',
 	};
 }
+
+export function setExtensionsActiveBlockVariation(variation: Object): Object {
+	return {
+		variation,
+		type: 'SET_EXTENSIONS_ACTIVE_VARIATION',
+	};
+}
