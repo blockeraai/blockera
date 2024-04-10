@@ -1,63 +1,969 @@
 /**
  * Internal dependencies
  */
-import { addBlockToPost, createPost } from '../../../../../../cypress/helpers';
+import {
+	getWPDataObject,
+	getSelectedBlock,
+	appendBlocks,
+	setDeviceType,
+} from '../../../../../../cypress/helpers';
+import 'cypress-real-events';
 
-describe('Border and Shadow extension', () => {
+describe('Block State E2E Test', () => {
 	beforeEach(() => {
-		createPost();
+		cy.viewport(1440, 1025);
+	});
 
-		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
-
+	//TODO: refactor switch states with helper function
+	//TODO: check strange behave of cypress beforeEach
+	const initialSetting = () => {
+		appendBlocks(
+			'<!-- wp:paragraph -->\n' +
+				'<p>Test</p>\n' +
+				'<!-- /wp:paragraph -->'
+		);
 		cy.getIframeBody()
 			.find(`[data-type="core/paragraph"]`)
-			.type('Hello World!');
-	});
+			.click({ force: true });
+	};
+
+	const checkCurrentState = (id) => {
+		cy.get(`[data-id="${id}"]`).within(() => {
+			cy.getByDataCy('control-group').should(
+				'have.class',
+				'is-selected-item'
+			);
+		});
+	};
 
 	describe('state-container', () => {
 		it('Set the "Normal" state color on the root of the container using CSS variables.', () => {
+			initialSetting();
+
 			cy.cssVar(
-				'--blockera-tab-panel-active-color',
-				'[aria-label=" Block State Container"]:first-child'
+				'--publisher-tab-panel-active-color',
+				'[aria-label="Publisher Block State Container"]:first-child'
 			).should('eq', '#147EB8');
 		});
 		it('Set the "third-party" state (Like: hover, active, etc) color on the root of the container using CSS variables.', () => {
-			cy.getByAriaLabel('Add New Block States').click();
+			initialSetting();
+
+			cy.getByAriaLabel('Add New State').click();
 
 			cy.cssVar(
-				'--blockera-tab-panel-active-color',
-				'[aria-label=" Block State Container"]:first-child'
+				'--publisher-tab-panel-active-color',
+				'[aria-label="Publisher Block State Container"]:first-child'
 			).should('eq', '#D47C14');
 		});
 	});
 
 	describe('current-state', () => {
 		it('Set the hidden style for WordPress block origin features when choose state (apart from normal state)', () => {
-			cy.getByAriaLabel('Add New Block States').click();
+			initialSetting();
+			cy.getByAriaLabel('Add New State').click();
 
 			//In this assertion not available data attribute for this selector، Please don't be sensitive.
 			cy.get('button')
 				.contains('Advanced')
 				.parent()
 				.parent()
-				.should('have.class', 'blockera-not-allowed');
+				.parent()
+				.parent()
+				.parent()
+				.should('have.class', 'publisher-not-allowed');
 		});
 
 		it('Set the current state when add new block states', () => {
-			cy.getByAriaLabel('Block Current State').contains('Normal');
+			initialSetting();
 
-			cy.getByAriaLabel('Add New Block States').click();
+			cy.getByAriaLabel('Add New State').click();
 
-			cy.getByAriaLabel('Block Current State').contains('Hover');
+			checkCurrentState('hover');
 
-			cy.getByAriaLabel('Add New Block States').click();
+			cy.getByAriaLabel('Add New State').click();
 
-			cy.getByAriaLabel('Block Current State').contains('Active');
+			checkCurrentState('active');
 
-			cy.getByAriaLabel('Add New Block States').click();
+			cy.getByAriaLabel('Add New State').click();
 
-			cy.getByAriaLabel('Block Current State').contains('Focus');
+			checkCurrentState('focus');
+		});
+	});
+
+	describe('add new state', () => {
+		it('should not display normal when delete hover state ', () => {
+			initialSetting();
+			// do not render normal when adding new state
+			cy.contains('Normal').should('not.exist');
+
+			cy.getByAriaLabel('Add New State').click();
+			// render normal when adding new state
+			cy.contains('Hover').should('exist');
+
+			//
+			cy.getByAriaLabel('Delete hover').click({ force: true });
+
+			//
+			cy.contains('Normal').should('not.exist');
+			cy.contains('Hover').should('not.exist');
+		});
+
+		it('should add correct item, when once delete', () => {
+			initialSetting();
+			cy.multiClick('[aria-label="Add New State"]', 5);
+
+			// remove active
+			cy.getByAriaLabel('Delete active').click({ force: true });
+
+			// add new state
+			cy.getByAriaLabel('Add New State').click();
+			checkCurrentState('active');
+
+			// add new state
+			cy.getByAriaLabel('Add New State').click();
+			checkCurrentState('after');
+		});
+
+		it('should create correct id for repeater item when update states', () => {
+			initialSetting();
+			// add
+			cy.getByAriaLabel('Add New State').click();
+
+			// Check store
+			getWPDataObject().then((data) => {
+				expect(['normal', 'hover']).to.be.deep.equal(
+					Object.keys(getSelectedBlock(data, 'publisherBlockStates'))
+				);
+			});
+
+			// update
+			cy.getByDataTest('popover-body').within(() => {
+				cy.get('select').select('focus');
+			});
+
+			// Check store
+			getWPDataObject().then((data) => {
+				expect(['normal', 'focus']).to.be.deep.equal(
+					Object.keys(getSelectedBlock(data, 'publisherBlockStates'))
+				);
+			});
+		});
+	});
+
+	describe('Normal', () => {
+		it('should set attr in root when default breakPoint', () => {
+			initialSetting();
+			cy.getByAriaLabel('Input Width').type(100, { force: true });
+
+			//Check block
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.should('have.css', 'width', '100px');
+
+			//Check store
+			getWPDataObject().then((data) => {
+				expect('100px').to.be.equal(
+					getSelectedBlock(data, 'publisherWidth')
+				);
+				expect(undefined).to.be.deep.equal(
+					getSelectedBlock(data, 'publisherBlockStates').normal
+						.breakpoints.laptop.attributes
+				);
+			});
+		});
+
+		it('should set attribute correctly when breakpoint : Tablet', () => {
+			initialSetting();
+			setDeviceType('Tablet');
+			cy.getByAriaLabel('Input Width').type(100, { force: true });
+
+			// Check block
+			// TODO: fail
+			// cy.getIframeBody()
+			// 	.find(`[data-type="core/paragraph"]`)
+			// 	.should('have.css', 'width', '100px');
+
+			// Change device to laptop : check block
+			setDeviceType('Laptop');
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.should('not.have.css', 'width', '100px');
+
+			// Check store
+			getWPDataObject().then((data) => {
+				expect({ publisherWidth: '100px' }).to.be.deep.equal(
+					getSelectedBlock(data, 'publisherBlockStates').normal
+						.breakpoints.tablet.attributes
+				);
+			});
+		});
+	});
+
+	describe('Hover', () => {
+		it('should set attribute correctly when : Normal -> Hover (default breakPoint)', () => {
+			initialSetting();
+			cy.getByAriaLabel('Add New State').click();
+			cy.getByAriaLabel('Input Width').type(100, { force: true });
+
+			//Check block
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.then(($el) => {
+					return window.getComputedStyle($el[0], ':hover');
+				})
+				.invoke('getPropertyValue', 'width')
+				.should('eq', '100px');
+
+			// Change state to normal : check block
+			cy.contains('Normal').click();
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.should('not.have.css', 'width', '100px');
+
+			//Check store
+			getWPDataObject().then((data) => {
+				expect({
+					laptop: { attributes: { publisherWidth: '100px' } },
+				}).to.be.deep.equal(
+					getSelectedBlock(data, 'publisherBlockStates').hover
+						.breakpoints
+				);
+			});
+		});
+
+		it('should set attribute correctly when : Normal -> Hover -> Tablet', () => {
+			initialSetting();
+			cy.getByAriaLabel('Add New State').click();
+			setDeviceType('Tablet');
+			cy.getByAriaLabel('Input Width').type(100, { force: true });
+
+			//Check block
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.then(($el) => {
+					return window.getComputedStyle($el[0], ':hover');
+				})
+				.as('block');
+			cy.get('@block')
+				.invoke('getPropertyValue', 'width')
+				.should('eq', '100px');
+
+			// Change device to laptop : check block
+			setDeviceType('Laptop');
+			cy.get('@block')
+				.invoke('getPropertyValue', 'width')
+				.should('not.eq', '100px');
+
+			//Check block
+			// cy.getIframeBody()
+			// 	.find(`[data-type="core/paragraph"]`)
+			// 	.then(($el) => {
+			// 		return window.getComputedStyle($el[0], ':hover');
+			// 	})
+			// 	.invoke('getPropertyValue', 'width')
+			// 	.should('eq', '100px');
+
+			// Check store
+			getWPDataObject().then((data) => {
+				expect({ publisherWidth: '100px' }).to.be.deep.equal(
+					getSelectedBlock(data, 'publisherBlockStates').hover
+						.breakpoints.tablet.attributes
+				);
+			});
+		});
+
+		it('should set attribute correctly when : Normal -> Tablet -> Hover', () => {
+			initialSetting();
+			setDeviceType('Tablet');
+			cy.getByAriaLabel('Add New State').click();
+			cy.getByAriaLabel('Input Width').type(100, { force: true });
+
+			// Check store
+			getWPDataObject().then((data) => {
+				expect({ publisherWidth: '100px' }).to.be.deep.equal(
+					getSelectedBlock(data, 'publisherBlockStates').hover
+						.breakpoints.tablet.attributes
+				);
+			});
+		});
+	});
+
+	describe('Custom Class & Parent Class', () => {
+		it('should set attribute correctly when : Normal -> Custom Class / Parent Class', () => {
+			initialSetting();
+			cy.getByAriaLabel('Add New State').click();
+
+			/**
+			 * Custom Class
+			 */
+			cy.getByDataTest('popover-body').within(() => {
+				cy.get('select').select('custom-class');
+				cy.get('input[type="text"]').type('.test');
+			});
+			cy.getByAriaLabel('Input Width').type(100, { force: true });
+
+			//Check block
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.parent()
+				.within(() => {
+					cy.get('style').as('style-tag');
+				});
+
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.invoke('attr', 'id')
+				.then((id) => {
+					cy.get('@style-tag')
+						.invoke('text')
+						.should('include', `.test,#${id}{width: 100px`);
+				});
+
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.should('have.class', 'test');
+
+			// Change state to normal : check block
+			cy.contains('Normal').click();
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.should('have.css', 'width', '100px');
+
+			//Check store
+			getWPDataObject().then((data) => {
+				expect({ publisherWidth: '100px' }).to.be.deep.equal(
+					getSelectedBlock(data, 'publisherBlockStates')[
+						'custom-class'
+					].breakpoints.laptop.attributes
+				);
+				expect('.test').to.be.deep.equal(
+					getSelectedBlock(data, 'publisherBlockStates')[
+						'custom-class'
+					]['css-class']
+				);
+			});
+
+			/**
+			 * Parent Class
+			 */
+			cy.getByAriaLabel('Add New State').click();
+			cy.getByDataTest('popover-body').within(() => {
+				cy.get('select').select('parent-class');
+				cy.get('input[type="text"]').type('.parent-class');
+			});
+
+			cy.getByAriaLabel('Input Width').type(300, { force: true });
+
+			//Check block
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.invoke('attr', 'id')
+				.then((id) => {
+					cy.get('@style-tag')
+						.invoke('text')
+						.should('include', `.parent-class #${id}{width: 300px`);
+				});
+
+			//Check store
+			getWPDataObject().then((data) => {
+				expect({
+					laptop: { attributes: { publisherWidth: '300px' } },
+				}).to.be.deep.equal(
+					getSelectedBlock(data, 'publisherBlockStates')[
+						'parent-class'
+					].breakpoints
+				);
+				expect('.parent-class').to.be.deep.equal(
+					getSelectedBlock(data, 'publisherBlockStates')[
+						'parent-class'
+					]['css-class']
+				);
+			});
+		});
+
+		it('should set attribute correctly when : Normal -> Tablet -> Custom Class', () => {
+			initialSetting();
+			setDeviceType('Tablet');
+			cy.getByAriaLabel('Add New State').click();
+
+			//
+			cy.getByDataTest('popover-body').within(() => {
+				cy.get('select').select('custom-class');
+				cy.get('input[type="text"]').type('.test');
+			});
+			cy.getByAriaLabel('Input Width').type(100, { force: true });
+
+			//Check block
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.parent()
+				.within(() => {
+					cy.get('style').as('style-tag');
+				});
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.invoke('attr', 'id')
+				.then((id) => {
+					cy.get('@style-tag')
+						.invoke('text')
+						.should(
+							'include',
+							`.test,.is-tablet-preview #${id}{width: 100px`
+						);
+				});
+
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.should('have.class', 'test')
+				.and('have.css', 'width', '100px');
+
+			// Change device to laptop : check block
+			setDeviceType('Laptop');
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.should('not.have.css', 'width', '100px');
+
+			//Check store
+			getWPDataObject().then((data) => {
+				expect({ publisherWidth: '100px' }).to.be.deep.equal(
+					getSelectedBlock(data, 'publisherBlockStates')[
+						'custom-class'
+					].breakpoints.tablet.attributes
+				);
+				expect('.test').to.be.deep.equal(
+					getSelectedBlock(data, 'publisherBlockStates')[
+						'custom-class'
+					]['css-class']
+				);
+			});
+		});
+
+		it('should set attribute correctly when : Normal -> Tablet -> Parent Class', () => {
+			initialSetting();
+			setDeviceType('Tablet');
+			cy.getByAriaLabel('Add New State').click();
+			//
+			cy.getByDataTest('popover-body').within(() => {
+				cy.get('select').select('parent-class');
+				cy.get('input[type="text"]').type('.test');
+			});
+			cy.getByAriaLabel('Input Width').type(100, { force: true });
+
+			//Check block
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.parent()
+				.within(() => {
+					cy.get('style').as('style-tag');
+				});
+
+			cy.getIframeBody()
+				.find(`[data-type="core/paragraph"]`)
+				.invoke('attr', 'id')
+				.then((id) => {
+					cy.get('@style-tag')
+						.invoke('text')
+						.should(
+							'include',
+							`.test .is-tablet-preview #${id}{width: 100px`
+						);
+				});
+
+			//Check store
+			getWPDataObject().then((data) => {
+				expect({ publisherWidth: '100px' }).to.be.deep.equal(
+					getSelectedBlock(data, 'publisherBlockStates')[
+						'parent-class'
+					].breakpoints.tablet.attributes
+				);
+				expect('.test').to.be.deep.equal(
+					getSelectedBlock(data, 'publisherBlockStates')[
+						'parent-class'
+					]['css-class']
+				);
+			});
+		});
+	});
+
+	describe('ValueCleanup', () => {
+		it('should not have extra breakpoints and attributes in saved data', () => {
+			initialSetting();
+			cy.getByAriaLabel('Add New State').click();
+			cy.getByAriaLabel('Input Width').type(100, { force: true });
+
+			//Check store
+			getWPDataObject().then((data) => {
+				expect(undefined).to.be.equal(
+					getSelectedBlock(data, 'publisherBlockStates').hover
+						.breakpoints.tablet
+				);
+
+				expect(undefined).to.be.equal(
+					getSelectedBlock(data, 'publisherBlockStates').hover
+						.breakpoints.laptop.attributes.publisherHeight
+				);
+
+				expect({
+					normal: {
+						breakpoints: {
+							laptop: { attributes: {} },
+						},
+						isVisible: true,
+						isSelected: false,
+					},
+					hover: {
+						breakpoints: {
+							laptop: { attributes: { publisherWidth: '100px' } },
+						},
+						isVisible: true,
+						isSelected: true,
+					},
+				}).to.be.deep.equal(
+					getSelectedBlock(data, 'publisherBlockStates')
+				);
+			});
+		});
+	});
+
+	describe('update attributes in multiple states and devices', () => {
+		context('Normal -> set border-width', () => {
+			beforeEach(() => {
+				initialSetting();
+
+				cy.getByDataTest('border-control-width').type(5);
+			});
+
+			context('Hover -> set border-color', () => {
+				beforeEach(() => {
+					cy.getByAriaLabel('Add New State').click();
+
+					cy.getByDataTest('border-control-color').click();
+					cy.getByDataTest('popover-body')
+						.last()
+						.within(() => {
+							cy.get('input[maxlength="9"]').clear();
+							cy.get('input[maxlength="9"]').type('ccc');
+						});
+
+					// normal state updates should visible
+					cy.getByDataTest('border-control-width').should(
+						'have.value',
+						'5'
+					);
+				});
+
+				context('Active -> set border-style', () => {
+					beforeEach(() => {
+						cy.getByAriaLabel('Add New State').click();
+
+						cy.getByDataTest('border-control-component').within(
+							() => {
+								cy.getByDataTest('border-control-color')
+									.next()
+									.click();
+
+								// dotted
+								cy.get('ul').within(() =>
+									cy.get('li').eq(2).click({ force: true })
+								);
+							}
+						);
+
+						// normal state updates should visible
+						cy.getByDataTest('border-control-width').should(
+							'have.value',
+							'5'
+						);
+
+						// hover state updates should not visible
+						cy.getByDataTest('border-control-color').should(
+							'have.class',
+							'is-empty'
+						);
+					});
+
+					context(
+						'Active -> Mobile -> set custom border-width',
+						() => {
+							beforeEach(() => {
+								setDeviceType('Mobile');
+								cy.getByAriaLabel('Custom Box Border').click();
+								// top border
+								cy.getByDataTest('border-control-width')
+									.eq(0)
+									.clear();
+								cy.getByDataTest('border-control-width')
+									.eq(0)
+									.type(3);
+							});
+
+							it('should control value and attributes be correct, when navigate between states and devices', () => {
+								// check block : active / mobile
+								//TODO
+								// cy.getIframeBody()
+								// 	.find(`[data-type="core/paragraph"]`)
+								// 	.should(
+								// 		'have.css',
+								// 		'border-top',
+								// 		'3px solid rgb(0, 0, 0)'
+								// 	)
+								// 	.and(
+								// 		'have.css',
+								// 		'border-right',
+								// 		'5px solid rgb(0, 0, 0)'
+								// 	)
+								// 	.and(
+								// 		'have.css',
+								// 		'border-bottom',
+								// 		'5px solid rgb(0, 0, 0)'
+								// 	)
+								// 	.and(
+								// 		'have.css',
+								// 		'border-left',
+								// 		'5px solid rgb(0, 0, 0)'
+								// 	);
+
+								// check block : normal / laptop
+								setDeviceType('Laptop');
+								cy.contains('Normal').click();
+								cy.getIframeBody()
+									.find(`[data-type="core/paragraph"]`)
+									.should(
+										'have.css',
+										'border',
+										'5px solid rgb(0, 0, 0)'
+									);
+
+								// check block : active / laptop
+								//TODO:
+								cy.contains('Active').click();
+								// cy.getIframeBody()
+								// 	.find(`[data-type="core/paragraph"]`)
+								// 	.should(
+								// 		'have.css',
+								// 		'border',
+								// 		'5px dotted rgb(0, 0, 0)'
+								// 	);
+
+								// check block : hover / laptop
+								//TODO:
+								cy.contains('Hover').click();
+								// cy.getIframeBody()
+								// 	.find(`[data-type="core/paragraph"]`)
+								// 	.should(
+								// 		'have.css',
+								// 		'border',
+								// 		'5px solid rgb(204, 204, 204)'
+								// 	);
+
+								// check store
+								getWPDataObject().then((data) => {
+									expect({
+										type: 'all',
+										all: {
+											width: '5px',
+											style: 'solid',
+											color: '',
+										},
+									}).to.be.deep.equal(
+										getSelectedBlock(
+											data,
+											'publisherBorder'
+										)
+									);
+
+									expect({
+										normal: {
+											breakpoints: {
+												laptop: { attributes: {} },
+											},
+											isVisible: true,
+											isSelected: false,
+										},
+										hover: {
+											breakpoints: {
+												laptop: {
+													attributes: {
+														publisherBorder: {
+															type: 'all',
+															all: {
+																width: '5px',
+																style: 'solid',
+																color: '#cccccc',
+															},
+														},
+													},
+												},
+											},
+											isVisible: true,
+											isSelected: true,
+										},
+										active: {
+											breakpoints: {
+												laptop: {
+													attributes: {
+														publisherBorder: {
+															type: 'all',
+															all: {
+																width: '5px',
+																style: 'dotted',
+																color: '',
+															},
+														},
+													},
+												},
+												mobile: {
+													attributes: {
+														publisherBorder: {
+															type: 'custom',
+															all: {
+																width: '5px',
+																style: 'solid',
+																color: '',
+															},
+															right: {
+																width: '5px',
+																style: 'solid',
+																color: '',
+															},
+															bottom: {
+																width: '5px',
+																style: 'solid',
+																color: '',
+															},
+															left: {
+																width: '5px',
+																style: 'solid',
+																color: '',
+															},
+															top: {
+																width: '3px',
+																style: '',
+																color: '',
+															},
+														},
+													},
+												},
+											},
+											isVisible: true,
+											isSelected: false,
+										},
+									}).to.be.deep.equal(
+										getSelectedBlock(
+											data,
+											'publisherBlockStates'
+										)
+									);
+								});
+							});
+						}
+					);
+				});
+			});
 		});
 	});
 });
 
+describe.skip('Inner Blocks', () => {
+	//cleanup test for inner
+	beforeEach(() => {
+		cy.viewport(1440, 1025);
+
+		appendBlocks(
+			`<!-- wp:paragraph {"className":"publisher-core-block publisher-core-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74","publisherBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"publisherPropsId":"224185412280","publisherCompatId":"224185412280"} -->
+			<p class="publisher-core-block publisher-core-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74"><a href="http://localhost/wordpress/2023/12/16/5746/" data-type="post" data-id="5746">link</a></p>
+			<!-- /wp:paragraph -->`
+		);
+		cy.getIframeBody().find('[data-type="core/paragraph"]').click();
+		cy.get('.interface-pinned-items [aria-label="Settings"]').click({
+			force: true,
+		});
+	});
+
+	///check title too
+	it('Set the "Inner Blocks" color on the root of the container using CSS variables.', () => {
+		cy.contains('Inner Blocks').click();
+		cy.getByAriaLabel('Link Customize').click();
+
+		cy.cssVar(
+			'--publisher-tab-panel-active-color',
+			'[aria-label="Publisher Block State Container"]:first-child'
+		).should('eq', '#147EB8');
+	});
+	it('normal => inner', () => {
+		cy.contains('Inner Blocks').click();
+		cy.getByAriaLabel('Link Customize').click();
+		cy.getByAriaLabel('Input Width').type(100, { force: true });
+
+		//Check block
+		cy.getIframeBody()
+			.find(`[data-type="post"]`)
+			.then(($el) => {
+				console.log(window.getComputedStyle($el[0]));
+				return window.getComputedStyle($el[0]);
+			})
+			.as('inner-block');
+		cy.get('@inner-block')
+			.invoke('getPropertyValue', 'width')
+			.should('eq', '100px');
+
+		// check store
+		getWPDataObject().then((data) => {
+			expect({
+				link: {
+					attributes: {
+						publisherWidth: '100px',
+					},
+				},
+			}).to.be.deep.equal(getSelectedBlock(data, 'publisherInnerBlocks'));
+		});
+
+		cy.getByAriaLabel('Add New State').click();
+		// clean control value when change state???????
+		cy.getByAriaLabel('Input Width').clear({ force: true });
+		cy.getByAriaLabel('Input Width').type(200, { force: true });
+
+		//Check block
+		cy.getIframeBody()
+			.find(`[data-type="post"]`)
+			.then(($el) => {
+				console.log(window.getComputedStyle($el[0]));
+				return window.getComputedStyle($el[0]);
+			})
+			.as('inner-block-hover');
+		cy.get('@inner-block-hover')
+			.invoke('getPropertyValue', 'width')
+			.should('eq', '200px');
+
+		// check store
+		getWPDataObject().then((data) => {
+			expect({
+				link: {
+					attributes: {
+						publisherBlockStates: {
+							normal: {
+								isSelected: false,
+								isVisible: true,
+								breakpoints: {
+									laptop: {
+										attributes: {},
+									},
+								},
+							},
+							hover: {
+								isSelected: true,
+								isVisible: true,
+								breakpoints: {
+									laptop: {
+										attributes: {
+											publisherWidth: '200px',
+										},
+									},
+								},
+							},
+						},
+						publisherWidth: '100px',
+					},
+				},
+			}).to.be.deep.equal(getSelectedBlock(data, 'publisherInnerBlocks'));
+		});
+	});
+	it('hover => inner', () => {
+		cy.getByAriaLabel('Add New State').click();
+		cy.contains('Inner Blocks').click();
+		cy.getByAriaLabel('Link Customize').click();
+		cy.getByAriaLabel('Input Width').type(100, { force: true });
+
+		// Check block TODO:recheck
+		cy.getIframeBody().find(`[data-type="core/paragraph"]`).realHover();
+		cy.getIframeBody()
+			.find(`[data-type="post"]`)
+			.then(($el) => {
+				console.log('style', window.getComputedStyle($el[0]));
+				return window.getComputedStyle($el[0]);
+			})
+			.invoke('getPropertyValue', 'width')
+			.should('eq', '100px');
+
+		// Check store
+		getWPDataObject().then((data) => {
+			expect({}).to.be.deep.equal(
+				getSelectedBlock(data, 'publisherInnerBlocks')
+			);
+
+			expect({
+				attributes: {
+					publisherInnerBlocks: {
+						link: {
+							attributes: {
+								publisherWidth: '100px',
+								publisherBlockStates: {
+									normal: {
+										breakpoints: {
+											laptop: { attributes: {} },
+										},
+										isVisible: true,
+										isSelected: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			}).to.be.deep.equal(
+				getSelectedBlock(data, 'publisherBlockStates').hover.breakpoints
+					.laptop
+			);
+		});
+	});
+	it('hover => inner => hover', () => {
+		cy.getByAriaLabel('Add New State').click();
+		cy.contains('Inner Blocks').click();
+		cy.getByAriaLabel('Link Customize').click();
+		cy.getByAriaLabel('Add New State').click();
+		cy.getByAriaLabel('Input Width').type(100, { force: true });
+		// Check block TODO:style generator bug
+
+		// Check store
+		getWPDataObject().then((data) => {
+			expect({}).to.be.deep.equal(
+				getSelectedBlock(data, 'publisherInnerBlocks')
+			);
+
+			expect({
+				attributes: {
+					publisherInnerBlocks: {
+						link: {
+							attributes: {
+								publisherBlockStates: {
+									normal: {
+										breakpoints: {
+											laptop: { attributes: {} },
+										},
+										isVisible: true,
+										isSelected: false,
+									},
+									hover: {
+										breakpoints: {
+											laptop: {
+												attributes: {
+													publisherWidth: '100px',
+												},
+											},
+										},
+										isVisible: true,
+										isSelected: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			}).to.be.deep.equal(
+				getSelectedBlock(data, 'publisherBlockStates').hover.breakpoints
+					.laptop
+			);
+		});
+	});
+	it('tablet => inner', () => {});
+});
