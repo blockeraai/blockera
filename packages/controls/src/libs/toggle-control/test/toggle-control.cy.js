@@ -55,7 +55,7 @@ describe('toggle control component testing', () => {
 	});
 	it('should render default value', () => {
 		cy.withDataProvider({
-			component: <ToggleControl value={true} label="my toggle" />,
+			component: <ToggleControl defaultValue={true} label="my toggle" />,
 		});
 		cy.get('.components-form-toggle').should('have.class', 'is-checked');
 	});
