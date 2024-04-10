@@ -171,19 +171,19 @@ const StatesManager: ComponentType<any> = memo(
 						return;
 					}
 
-					if ('normal' === _itemId) {
+					if (itemsCount < 3) {
 						filteredStates[_itemId] = {
 							..._item,
+							display: false,
 							isSelected: true,
 						};
 
 						return;
 					}
 
-					if (itemsCount < 2) {
+					if ('normal' === _itemId) {
 						filteredStates[_itemId] = {
 							..._item,
-							display: false,
 							isSelected: true,
 						};
 
