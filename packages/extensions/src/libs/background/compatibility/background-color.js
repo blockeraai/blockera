@@ -8,10 +8,15 @@ import { isValid } from '@publisher/hooks/src/use-value-addon/helpers';
 
 export function backgroundColorFromWPCompatibility({
 	attributes,
+	blockAttributes,
 }: {
 	attributes: Object,
+	blockAttributes: Object,
 }): Object {
-	if (attributes?.publisherBackgroundColor !== '') {
+	if (
+		attributes?.publisherBackgroundColor !==
+		blockAttributes.publisherBackgroundColor.default
+	) {
 		return attributes;
 	}
 
