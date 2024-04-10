@@ -44,7 +44,10 @@ import {
 	prepareAttributesDefaultValues,
 	propsAreEqual,
 } from './utils';
-import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs';
+import {
+	sharedBlockExtensionAttributes,
+	ignoreDefaultBlockAttributeKeysRegExp,
+} from '../libs';
 
 export type BlockBaseProps = {
 	additional: Object,
@@ -200,24 +203,20 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		const { edit: BlockEditComponent } = additional;
 
 		const FilterAttributes = (): MixedElement => {
-			const { activeBlockVariation, variations } = useSelect(
-				(select) => {
-					const { getActiveBlockVariation, getBlockVariations } =
-						select('core/blocks');
-					const { getBlockName, getBlockAttributes } =
-						select('core/block-editor');
-					const name = clientId && getBlockName(clientId);
-					return {
-						activeBlockVariation: getActiveBlockVariation(
-							name,
-							getBlockAttributes(clientId)
-						),
-						variations:
-							name && getBlockVariations(name, 'transform'),
-					};
-				},
-				[clientId]
-			);
+			const { activeBlockVariation, variations } = useSelect((select) => {
+				const { getActiveBlockVariation, getBlockVariations } =
+					select('core/blocks');
+				const { getBlockName, getBlockAttributes } =
+					select('core/block-editor');
+				const name = clientId && getBlockName(clientId);
+				return {
+					activeBlockVariation: getActiveBlockVariation(
+						name,
+						getBlockAttributes(clientId)
+					),
+					variations: name && getBlockVariations(name, 'transform'),
+				};
+			});
 			const args = {
 				blockId: name,
 				blockClientId: clientId,
@@ -229,6 +228,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				currentState,
 				variations,
 				activeBlockVariation,
+				blockAttributes: sharedBlockExtensionAttributes,
 			};
 
 			/**
@@ -406,6 +406,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							<BlockFillPartials
 								{...{
 									clientId,
+									isActive,
 									currentState,
 									currentBlock,
 									currentInnerBlock,
