@@ -615,6 +615,15 @@ export function addBlockState(state) {
 			});
 		});
 }
+
+export function setBlockState(state) {
+	cy.getByAriaLabel('Publisher Block State Container')
+		.first()
+		.within(() => {
+			cy.getByDataCy('group-control-header').contains(state).click();
+		});
+}
+
 export function setDeviceType(deviceType) {
 	cy.getByAriaLabel('Breakpoints').within(() => {
 		cy.getByAriaLabel(deviceType).click();
