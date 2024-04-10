@@ -59,6 +59,18 @@ export const memoizedRootBreakpoints: (
 		},
 		insideInnerBlock: boolean = false
 	) => {
+		let _effectiveItems = { ...effectiveItems };
+
+		if (newValue['custom-class'] && attributeId === 'blockeraBlockStates') {
+			const mergedCssClasses = prepCustomCssClasses(
+				newValue['custom-class']
+			);
+			_effectiveItems = {
+				...effectiveItems,
+				className: mergedCssClasses,
+			};
+		}
+
 		if (isInnerBlock(currentBlock) && insideInnerBlock) {
 			if (!isNormalState(currentInnerBlockState)) {
 				if ('blockeraBlockStates' === attributeId) {
@@ -99,7 +111,7 @@ export const memoizedRootBreakpoints: (
 												breakpoints: {
 													[currentBreakpoint]: {
 														attributes: {
-															...effectiveItems,
+															..._effectiveItems,
 															[attributeId]:
 																isEqualsWithDefault
 																	? undefined
@@ -129,7 +141,7 @@ export const memoizedRootBreakpoints: (
 					blockeraInnerBlocks: {
 						[currentBlock]: {
 							attributes: {
-								...effectiveItems,
+								..._effectiveItems,
 								[attributeId]: newValue,
 							},
 						},
@@ -297,4 +309,41 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 			)
 		),
 	});
+};
+
+export const prepCustomCssClasses = (
+	newValue: Object,
+	prevValue?: Object,
+	classNames: string = ''
+): string => {
+	let _classNames = classNames || '';
+	const newCustomClasses = newValue['css-class'].split(' ');
+	const prevCustomClasses = prevValue
+		? prevValue['css-class'].split(' ')
+		: [];
+
+	const preparedNewCssClasses = newCustomClasses.map((customClass) =>
+		[...customClass][0] === '.'
+			? [...customClass].splice(1).join('').trim()
+			: customClass.trim()
+	);
+
+	const preparedPrevCssClasses = prevCustomClasses.map((customClass) =>
+		[...customClass][0] === '.'
+			? [...customClass].splice(1).join('').trim()
+			: customClass.trim()
+	);
+
+	if (preparedPrevCssClasses.length) {
+		_classNames = classNames
+			.split(' ')
+			.filter((className) => !preparedPrevCssClasses.includes(className))
+			.join(' ');
+	}
+
+	if (preparedNewCssClasses.length) {
+		_classNames = `${_classNames} ${preparedNewCssClasses.join(' ')}`;
+	}
+
+	return _classNames.trim();
 };

@@ -13,7 +13,11 @@ import { isEquals, isObject, mergeObject } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { memoizedBlockStates, resetAllStates } from './helpers';
+import {
+	resetAllStates,
+	memoizedBlockStates,
+	prepCustomCssClasses,
+} from './helpers';
 import { isBaseBreakpoint, isInnerBlock } from '../../components';
 import { sharedBlockExtensionAttributes as defaultAttributes } from '../../libs';
 
@@ -56,6 +60,9 @@ const reducer = (state: Object = {}, action: Object): Object => {
 
 	switch (type) {
 		case 'UPDATE_NORMAL_STATE':
+			// By default is undefined.
+			let mergedCssClasses;
+
 			// Handle inner block changes.
 			if (isInnerBlock(currentBlock)) {
 				const isEqualsWithDefault = isEquals(
@@ -63,14 +70,20 @@ const reducer = (state: Object = {}, action: Object): Object => {
 					newValue
 				);
 
-				/**
-				 * Filterable attributes before set next state.
-				 * usefully in add WordPress compatibility and any other filters.
-				 *
-				 * hook: 'blockeraCore.blockEdit.setAttributes'
-				 *
-				 * @since 1.0.0
-				 */
+				if (
+					attributeId === 'blockeraBlockStates' &&
+					newValue['custom-class']
+				) {
+					mergedCssClasses = prepCustomCssClasses(
+						newValue['custom-class'],
+						state.blockeraInnerBlocks[currentBlock].attributes[
+							attributeId
+						]['custom-class'],
+						state.blockeraInnerBlocks[currentBlock].attributes
+							.className
+					);
+				}
+
 				return applyFilters(
 					'blockeraCore.blockEdit.setAttributes',
 					mergeObject(
@@ -80,6 +93,9 @@ const reducer = (state: Object = {}, action: Object): Object => {
 								[currentBlock]: {
 									attributes: {
 										...effectiveItems,
+										...(mergedCssClasses
+											? { className: mergedCssClasses }
+											: {}),
 										[attributeId]: isEqualsWithDefault
 											? undefined
 											: newValue,
@@ -99,6 +115,17 @@ const reducer = (state: Object = {}, action: Object): Object => {
 				);
 			}
 
+			if (
+				attributeId === 'blockeraBlockStates' &&
+				newValue['custom-class']
+			) {
+				mergedCssClasses = prepCustomCssClasses(
+					newValue['custom-class'],
+					state[attributeId]['custom-class'],
+					state.className
+				);
+			}
+
 			/**
 			 * Filterable attributes before set next state.
 			 * usefully in add WordPress compatibility and any other filters.
@@ -109,7 +136,14 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			 */
 			return applyFilters(
 				'blockeraCore.blockEdit.setAttributes',
-				{ ...state, ...effectiveItems, [attributeId]: newValue },
+				{
+					...state,
+					...effectiveItems,
+					...(mergedCssClasses
+						? { className: mergedCssClasses }
+						: {}),
+					[attributeId]: newValue,
+				},
 				...hookParams
 			);
 
