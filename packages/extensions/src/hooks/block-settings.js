@@ -3,12 +3,13 @@
  * External dependencies
  */
 import { select } from '@wordpress/data';
+import type { MixedElement } from 'react';
 import { SlotFillProvider, Slot } from '@wordpress/components';
 
 /**
  * Publisher dependencies
  */
-import { isObject, isFunction } from '@publisher/utils';
+import { isObject, isFunction, mergeObject } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -39,17 +40,10 @@ export default function withBlockSettings(
 	const blockExtension = getBlockExtensionBy('targetBlock', name);
 
 	if (blockExtension && isBlockTypeExtension(blockExtension)) {
-		return mergeBlockSettings(settings, {
-			...blockExtension,
-			attributes: {
-				...(sharedExtension?.attributes ?? {}),
-				...blockExtension.attributes,
-			},
-			supports: {
-				...(sharedExtension?.supports ?? {}),
-				...blockExtension.supports,
-			},
-		});
+		return mergeBlockSettings(
+			settings,
+			mergeObject(sharedExtension, blockExtension)
+		);
 	}
 
 	return mergeBlockSettings(settings, sharedExtension);
@@ -67,14 +61,12 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 		return settings;
 	}
 
-	const overrideAttribute = {
-		...settings.attributes,
-		...additional.attributes,
-		...blockStatesAttributes,
-	};
+	const overrideAttributes = mergeObject(
+		settings.attributes,
+		mergeObject(additional.attributes, blockStatesAttributes)
+	);
 
-	const defaultAttributes = {
-		...overrideAttribute,
+	const defaultAttributes = mergeObject(overrideAttributes, {
 		publisherInnerBlocks:
 			innerBlocksExtensionsAttributes.publisherInnerBlocks,
 		publisherPropsId: {
@@ -85,20 +77,22 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 			type: 'string',
 			default: '',
 		},
-	};
+	});
 
 	return {
 		...settings,
 		attributes: defaultAttributes,
-		supports: {
-			...settings.supports,
-			...additional.supports,
+		supports: mergeObject(settings.supports, additional.supports),
+		selectors: mergeObject(settings.selectors, additional.selectors),
+		transforms: {
+			...(settings?.transforms || {}),
+			...(additional?.transforms || {}),
 		},
-		selectors: {
-			...(settings.selectors || {}),
-			...(additional.selectors || {}),
-		},
-		edit({ isSelected, ...props }) {
+		variations: [
+			...(settings?.variations || []),
+			...(additional.variations || []),
+		],
+		edit(props: Object): MixedElement {
 			if (isFunction(additional?.edit)) {
 				return (
 					<>
@@ -132,7 +126,7 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 
 			return settings.edit(props);
 		},
-		save(props) {
+		save(props: Object): MixedElement {
 			props = {
 				...props,
 				attributes: sanitizedBlockAttributes(props.attributes),
@@ -144,13 +138,13 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 			{
 				attributes: settings.attributes,
 				supports: settings.supports,
-				migrate(attributes: Object) {
+				migrate(attributes: Object): Object {
 					return additional.migrate(attributes);
 				},
-				edit(blockProps: Object) {
+				edit(blockProps: Object): MixedElement {
 					return settings.edit(blockProps);
 				},
-				save(blockProps: Object) {
+				save(blockProps: Object): MixedElement {
 					return settings.save(blockProps);
 				},
 			},
