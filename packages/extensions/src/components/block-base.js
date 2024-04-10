@@ -77,12 +77,14 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		const {
 			currentBlock,
 			currentState,
+			activeVariation,
 			currentBreakpoint,
 			currentInnerBlockState,
 			isActiveBlockExtensions,
 		} = useSelect((select) => {
 			const {
 				isActiveBlockExtensions,
+				getActiveBlockVariation,
 				getExtensionCurrentBlock,
 				getExtensionInnerBlockState,
 				getExtensionCurrentBlockState,
@@ -94,6 +96,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				currentState: getExtensionCurrentBlockState(),
 				isActiveBlockExtensions: isActiveBlockExtensions(),
 				currentInnerBlockState: getExtensionInnerBlockState(),
+				activeVariation: getActiveBlockVariation(),
 				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
 			};
 		});
@@ -104,6 +107,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			changeExtensionCurrentBlock: setCurrentBlock,
 			changeExtensionCurrentBlockState: setCurrentState,
 			changeExtensionInnerBlockState: setInnerBlockState,
+			setExtensionsActiveBlockVariation: setActiveBlockVariation,
 		} = dispatch('publisher-core/extensions') || {};
 
 		const { getDeviceType } = select('publisher-core/editor');
@@ -196,6 +200,37 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		const { edit: BlockEditComponent } = additional;
 
 		const FilterAttributes = (): MixedElement => {
+			const { activeBlockVariation, variations } = useSelect(
+				(select) => {
+					const { getActiveBlockVariation, getBlockVariations } =
+						select('core/blocks');
+					const { getBlockName, getBlockAttributes } =
+						select('core/block-editor');
+					const name = clientId && getBlockName(clientId);
+					return {
+						activeBlockVariation: getActiveBlockVariation(
+							name,
+							getBlockAttributes(clientId)
+						),
+						variations:
+							name && getBlockVariations(name, 'transform'),
+					};
+				},
+				[clientId]
+			);
+			const args = {
+				blockId: name,
+				blockClientId: clientId,
+				isNormalState: isNormalState(),
+				isMasterBlock: !isInnerBlock(currentBlock),
+				isBaseBreakpoint: isBaseBreakpoint(currentBreakpoint),
+				currentBreakpoint,
+				currentBlock,
+				currentState,
+				variations,
+				activeBlockVariation,
+			};
+
 			/**
 			 * Filterable attributes before initializing block edit component.
 			 *
@@ -205,16 +240,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			 */
 			useEffect(
 				() => {
-					const args = {
-						blockId: name,
-						blockClientId: clientId,
-						isNormalState: isNormalState(),
-						isMasterBlock: !isInnerBlock(currentBlock),
-						isBaseBreakpoint: isBaseBreakpoint(currentBreakpoint),
-						currentBreakpoint,
-						currentBlock,
-						currentState,
-					};
 					// Creat mutable constant to prevent directly change to immutable state constant.
 					let filteredAttributes = { ...attributes };
 
@@ -303,6 +328,27 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				// eslint-disable-next-line
 				[]
 			);
+
+			useEffect(() => {
+				// Creat mutable constant to prevent directly change to immutable state constant.
+				let filteredAttributes = { ...attributes };
+
+				if (!isEquals(activeVariation, activeBlockVariation)) {
+					setActiveBlockVariation(activeBlockVariation);
+
+					filteredAttributes = {
+						...attributes,
+						publisherCompatId: '',
+					};
+
+					// Prevent redundant set state!
+					if (isEquals(attributes, filteredAttributes)) {
+						return;
+					}
+
+					setAttributes(filteredAttributes);
+				}
+			}, [activeBlockVariation]);
 
 			return <></>;
 		};
