@@ -115,3 +115,29 @@ export function setExtensionsActiveBlockVariation(variation: Object): Object {
 		type: 'SET_EXTENSIONS_ACTIVE_VARIATION',
 	};
 }
+
+export function setBlockClientMasterState({
+	name,
+	clientId,
+	currentState,
+}: Object): Object {
+	return {
+		name,
+		clientId,
+		currentState,
+		type: 'SET_BLOCK_CLIENT_MASTER_STATE',
+	};
+}
+
+export function setBlockClientInnerState({
+	clientId,
+	currentState,
+	innerBlockType,
+}: Object): Object {
+	return {
+		clientId,
+		currentState,
+		innerBlockType,
+		type: 'SET_BLOCK_CLIENT_INNER_STATE',
+	};
+}
