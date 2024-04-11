@@ -34,13 +34,19 @@ export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
 	const handleStyleTabOnClick = () => setPortalVisible(!isPortalVisible);
 
 	useEffect(() => {
-		document.querySelector('.block-editor-block-card')?.remove();
+		const blockCard = document.querySelector('.block-editor-block-card');
 
-		document
-			.querySelector(
-				'.block-editor-block-inspector > .block-editor-block-variation-transforms'
-			)
-			?.remove();
+		if (blockCard) {
+			blockCard.style.display = 'none';
+		}
+
+		const blockVariations = document.querySelector(
+			'.block-editor-block-inspector > .block-editor-block-variation-transforms'
+		);
+
+		if (blockVariations) {
+			blockVariations.style.display = 'none';
+		}
 
 		const styleTab = document.querySelector(
 			'.block-editor-block-inspector .block-editor-block-inspector__tabs div:first-child button:last-child'
