@@ -296,7 +296,7 @@ const StatesManager: ComponentType<any> = memo(
 						{...{
 							onDelete,
 							maxItems: 10,
-							// valueCleanup,
+							valueCleanup: (value) => value,
 							selectable: true,
 							/**
 							 * Retrieve dynamic default value for repeater items.
