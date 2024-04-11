@@ -339,7 +339,7 @@ export function getActiveMasterState(
 	name: string
 ): TStates {
 	return blockExtensions[clientId]
-		? blockExtensions[clientId][name] || 'normal'
+		? blockExtensions[clientId][name + '-active-state'] || 'normal'
 		: 'normal';
 }
 
