@@ -131,6 +131,10 @@ export function UnitInput({
 			setInputValue(extractedValue.value);
 		}
 
+		if (extractedValue?.value && '' === inputValue) {
+			setInputValue(extractedValue.value);
+		}
+
 		return undefined;
 	}, [value]); // eslint-disable-line
 
