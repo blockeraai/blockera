@@ -5,7 +5,7 @@
  */
 import memoize from 'fast-memoize';
 import { __ } from '@wordpress/i18n';
-import { dispatch } from '@wordpress/data';
+import { select, dispatch } from '@wordpress/data';
 import type { Element, ComponentType } from 'react';
 import { memo, useMemo, useCallback } from '@wordpress/element';
 
@@ -55,6 +55,9 @@ const StatesManager: ComponentType<any> = memo(
 			changeExtensionCurrentBlockState: setCurrentState,
 			changeExtensionInnerBlockState: setInnerBlockState,
 		} = dispatch('publisher-core/extensions') || {};
+		const { getActiveMasterState, getActiveInnerState } = select(
+			'publisher-core/extensions'
+		);
 
 		const calculatedValue = useMemo(() => {
 			const itemsCount = Object.values(states).length;
@@ -67,12 +70,28 @@ const StatesManager: ComponentType<any> = memo(
 						TStates,
 						{ ...StateTypes, isSelected: boolean }
 					]): void => {
-						if (state?.isSelected) {
-							if (isInnerBlock(currentBlock)) {
-								setInnerBlockState(itemId);
-							} else {
-								setCurrentState(itemId);
-							}
+						const activeInnerBlockState = getActiveInnerState(
+							block.clientId,
+							currentBlock
+						);
+						const activeMasterBlockState = getActiveMasterState(
+							block.clientId,
+							block.blockName
+						);
+						const isSelected = isInnerBlock(currentBlock)
+							? itemId === activeInnerBlockState
+							: itemId === activeMasterBlockState;
+
+						// Assume block-state for inner blocks and itemId equals with store active state.
+						if (
+							isInnerBlock(currentBlock) &&
+							itemId === activeInnerBlockState
+						) {
+							setInnerBlockState(itemId);
+						}
+						// Assume block-state for master block and itemId equals with store active state.
+						else if (itemId === activeMasterBlockState) {
+							setCurrentState(itemId);
 						}
 
 						initialValue[itemId] = {
@@ -83,10 +102,7 @@ const StatesManager: ComponentType<any> = memo(
 							selectable: true,
 							display: itemsCount > 1,
 							visibilitySupport: false,
-							isSelected:
-								'undefined' !== typeof state?.isSelected
-									? state?.isSelected
-									: 'normal' === itemId,
+							isSelected,
 							deletable: 'normal' !== itemId,
 							breakpoints: state?.breakpoints ?? {
 								laptop: {
@@ -285,7 +301,7 @@ const StatesManager: ComponentType<any> = memo(
 						{...{
 							onDelete,
 							maxItems: 10,
-							valueCleanup,
+							// valueCleanup,
 							selectable: true,
 							/**
 							 * Retrieve dynamic default value for repeater items.

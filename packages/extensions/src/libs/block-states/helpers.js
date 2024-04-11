@@ -4,12 +4,12 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { dispatch } from '@wordpress/data';
+import { select, dispatch } from '@wordpress/data';
 
 /**
  * Publisher dependencies
  */
-import { isEquals, mergeObject, arrayDiff } from '@publisher/utils';
+import { isEquals, mergeObject } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -126,8 +126,11 @@ export function onChangeBlockStates(
 	params: Object
 ): void {
 	const { states: _states, onChange, currentBlock, valueCleanup } = params;
+	const { getSelectedBlock } = select('core/block-editor');
 
 	const {
+		setBlockClientInnerState,
+		setBlockClientMasterState,
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setInnerBlockState,
 	} = dispatch('publisher-core/extensions') || {};
@@ -139,38 +142,24 @@ export function onChangeBlockStates(
 		]): void => {
 			if (isInnerBlock(currentBlock) && state?.isSelected) {
 				setInnerBlockState(id);
+				setBlockClientInnerState({
+					currentState: id,
+					innerBlockType: currentBlock,
+					clientId: getSelectedBlock()?.clientId,
+				});
 			} else if (state?.isSelected) {
 				setCurrentState(id);
+				setBlockClientMasterState({
+					currentState: id,
+					name: getSelectedBlock()?.name,
+					clientId: getSelectedBlock()?.clientId,
+				});
 			}
 		}
 	);
 
 	if (isEquals(_states, newValue)) {
 		return;
-	}
-
-	if (Object.keys(newValue).length < Object.keys(_states).length) {
-		const newStates: { [key: TStates | string]: StateTypes } = {};
-
-		Object.entries(_states).forEach(
-			([stateType, state]: [TStates | string, StateTypes]): void => {
-				if (
-					arrayDiff(
-						Object.keys(_states),
-						Object.keys(newValue)
-					).includes(stateType)
-				) {
-					return;
-				}
-
-				newStates[stateType] = state;
-			}
-		);
-
-		return onChange(
-			'publisherBlockStates',
-			mergeObject(valueCleanup(newStates))
-		);
 	}
 
 	onChange(

@@ -25,12 +25,10 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		clientId,
 		isActive,
 		blockProps,
-		currentState,
 		currentBlock,
 		currentInnerBlock,
 		BlockEditComponent,
 		publisherInnerBlocks,
-		currentInnerBlockState,
 		updateBlockEditorSettings,
 	}): Element<any> => {
 		const { isActiveBlockExtensions } = select('publisher-core/extensions');
@@ -62,12 +60,11 @@ export const BlockFillPartials: ComponentType<any> = memo(
 					<BlockCard
 						states={states}
 						clientId={clientId}
-						activeState={currentState}
 						activeBlock={currentBlock}
+						blockName={blockProps.name}
 						innerBlocks={publisherInnerBlocks}
 						currentInnerBlock={currentInnerBlock}
 						handleOnClick={updateBlockEditorSettings}
-						activeInnerBlockState={currentInnerBlockState}
 					/>
 				</Fill>
 				{isActiveBlockExtensions() && (
