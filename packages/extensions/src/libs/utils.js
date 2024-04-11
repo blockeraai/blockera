@@ -65,6 +65,10 @@ export function generateExtensionId(
 	) {
 		return `${blockName}/${id}/${clientId}-master-${currentBlock}-${getExtensionInnerBlockState()}-${getExtensionCurrentBlockStateBreakpoint()}`;
 	}
+	// Assume master block in normal state and current control inside inner block.
+	if (isInnerBlock(currentBlock)) {
+		return `${blockName}/${id}/${clientId}-${currentBlock}-${getExtensionInnerBlockState()}-${getExtensionCurrentBlockStateBreakpoint()}`;
+	}
 
 	return `${blockName}/${id}/${clientId}-${currentBlock}-${getExtensionCurrentBlockState()}-${getExtensionCurrentBlockStateBreakpoint()}`;
 }
