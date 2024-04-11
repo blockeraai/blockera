@@ -184,6 +184,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			attributes,
 			currentInnerBlock,
 			publisherInnerBlocks,
+			blockAttributes: sharedBlockExtensionAttributes,
 		});
 
 		useIconEffect(

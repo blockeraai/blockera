@@ -9,10 +9,15 @@ import { useSelect } from '@wordpress/data';
  * Internal dependencies
  */
 import type { CalculateCurrentAttributesProps } from './types';
-import { isInnerBlock, isNormalState } from '../../components/utils';
+import {
+	isInnerBlock,
+	isNormalState,
+	prepareAttributesDefaultValues,
+} from '../../components/utils';
 
 export const useCalculateCurrentAttributes = ({
 	attributes,
+	blockAttributes,
 	currentInnerBlock,
 	publisherInnerBlocks,
 }: CalculateCurrentAttributesProps): Object => {
@@ -37,11 +42,13 @@ export const useCalculateCurrentAttributes = ({
 			currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
 		};
 	});
+	const blockAttributesDefaults =
+		prepareAttributesDefaultValues(blockAttributes);
 
 	if (isNormalState(currentState) && 'laptop' === currentBreakpoint) {
 		if (isInnerBlock(currentBlock)) {
 			currentAttributes = {
-				...attributes,
+				...blockAttributesDefaults,
 				...currentInnerBlock?.attributes,
 				...((
 					((
@@ -101,7 +108,7 @@ export const useCalculateCurrentAttributes = ({
 		};
 	} else {
 		currentAttributes = {
-			...attributes,
+			...blockAttributesDefaults,
 			...((publisherInnerBlocks[currentBlock] || {})?.attributes || {}),
 			...currentAttributes,
 		};
