@@ -109,6 +109,7 @@ export default function LinkControl({
 						onChange={(newValue) => {
 							setValue({ ...value, link: newValue });
 						}}
+						defaultValue={defaultValue.link}
 					/>
 					<Button
 						onClick={() => setIsAdvancedMode(!isAdvancedMode)}
@@ -147,6 +148,7 @@ export default function LinkControl({
 									target: newValue,
 								});
 							}}
+							defaultValue={defaultValue.target}
 						/>
 
 						<CheckboxControl
@@ -160,6 +162,7 @@ export default function LinkControl({
 									nofollow: newValue,
 								});
 							}}
+							defaultValue={defaultValue.nofollow}
 						/>
 
 						<InputControl
@@ -174,6 +177,7 @@ export default function LinkControl({
 								});
 							}}
 							aria-label={__('Link Label', 'publisher-core')}
+							defaultValue={defaultValue.label}
 						/>
 
 						<ControlContextProvider
