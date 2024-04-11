@@ -175,6 +175,6 @@ export function onChangeBlockStates(
 
 	onChange(
 		'publisherBlockStates',
-		mergeObject(valueCleanup(_states), valueCleanup(newValue))
+		mergeObject(valueCleanup(_states), newValue)
 	);
 }
