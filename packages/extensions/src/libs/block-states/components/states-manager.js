@@ -146,7 +146,6 @@ const StatesManager: ComponentType<any> = memo(
 					...StateTypes,
 					isVisible: boolean,
 					'css-class'?: string,
-					isSelected: boolean,
 				},
 			}): Object => {
 				const clonedValue: {
@@ -157,7 +156,6 @@ const StatesManager: ComponentType<any> = memo(
 							},
 						},
 						isVisible: boolean,
-						isSelected: boolean,
 						'css-class'?: string,
 					},
 				} = {};
@@ -167,7 +165,6 @@ const StatesManager: ComponentType<any> = memo(
 						TStates,
 						{
 							...StateTypes,
-							isSelected: boolean,
 							isVisible: boolean,
 							'css-class'?: string,
 						}
@@ -219,7 +216,6 @@ const StatesManager: ComponentType<any> = memo(
 							clonedValue[itemId] = {
 								breakpoints,
 								isVisible: item?.isVisible,
-								isSelected: item?.isSelected,
 								'css-class': item['css-class'] || '',
 							};
 
@@ -229,7 +225,6 @@ const StatesManager: ComponentType<any> = memo(
 						clonedValue[itemId] = {
 							breakpoints,
 							isVisible: item?.isVisible,
-							isSelected: item?.isSelected,
 						};
 					}
 				);
