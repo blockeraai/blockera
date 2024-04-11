@@ -8,6 +8,7 @@ export default function MatrixSpaceBetweenCenterFillIcon({
 				height="20"
 				viewBox="0 0 66 20"
 				xmlns="http://www.w3.org/2000/svg"
+				data-test="matrix-space-between-center-fill-row"
 			>
 				<path d="M32 16C31.4477 16 31 15.5523 31 15L31 5C31 4.44772 31.4477 4 32 4L34 4C34.5523 4 35 4.44772 35 5L35 15C35 15.5523 34.5523 16 34 16H32Z" />
 				<path d="M8 14C7.44771 14 7 13.5523 7 13L7 7C7 6.44772 7.44772 6 8 6L10 6C10.5523 6 11 6.44772 11 7L11 13C11 13.5523 10.5523 14 10 14H8Z" />
@@ -22,6 +23,7 @@ export default function MatrixSpaceBetweenCenterFillIcon({
 			height="66"
 			viewBox="0 0 20 66"
 			xmlns="http://www.w3.org/2000/svg"
+			data-test="matrix-space-between-center-fill-column"
 		>
 			<path d="M3 32C3 31.4477 3.44772 31 4 31L16 31C16.5523 31 17 31.4477 17 32V34C17 34.5523 16.5523 35 16 35L4 35C3.44772 35 3 34.5523 3 34L3 32Z" />
 			<path d="M6 8C6 7.44771 6.44772 7 7 7L13 7C13.5523 7 14 7.44772 14 8V10C14 10.5523 13.5523 11 13 11L7 11C6.44772 11 6 10.5523 6 10V8Z" />

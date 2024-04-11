@@ -187,6 +187,7 @@ export default function LayoutMatrixControl({
 							'layout-matrix__grid',
 							'layout-matrix__grid-type-' + matrixType
 						)}
+						data-test="layout-matrix"
 					>
 						{matrixType === 'normal' && (
 							<>

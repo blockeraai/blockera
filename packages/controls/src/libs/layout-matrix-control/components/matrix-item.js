@@ -35,6 +35,7 @@ export function MatrixItem({
 			onClick={onClick}
 			onMouseDown={onMouseDown}
 			tabIndex="0"
+			data-test={`matrix-${id}-${selected ? 'selected' : 'normal'}`}
 		>
 			<span
 				className={controlInnerClassNames(

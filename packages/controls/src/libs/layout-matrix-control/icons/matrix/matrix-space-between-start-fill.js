@@ -6,6 +6,7 @@ export default function MatrixSpaceBetweenStartFillIcon({ direction = 'row' }) {
 				height="20"
 				viewBox="0 0 66 20"
 				xmlns="http://www.w3.org/2000/svg"
+				data-test="matrix-space-between-start-fill-row"
 			>
 				<path d="M32 19C31.4477 19 31 18.5523 31 18L31 7C31 6.44772 31.4477 6 32 6L34 6C34.5523 6 35 6.44772 35 7L35 18C35 18.5523 34.5523 19 34 19H32Z" />
 				<path d="M8 14C7.44772 14 7 13.5523 7 13L7 7C7 6.44772 7.44772 6 8 6L10 6C10.5523 6 11 6.44772 11 7L11 13C11 13.5523 10.5523 14 10 14H8Z" />
@@ -20,6 +21,7 @@ export default function MatrixSpaceBetweenStartFillIcon({ direction = 'row' }) {
 			height="66"
 			viewBox="0 0 20 66"
 			xmlns="http://www.w3.org/2000/svg"
+			data-test="matrix-space-between-start-fill-column"
 		>
 			<path d="M19 34C19 34.5523 18.5523 35 18 35L7 35C6.44772 35 6 34.5523 6 34L6 32C6 31.4477 6.44772 31 7 31L18 31C18.5523 31 19 31.4477 19 32L19 34Z" />
 			<path d="M14 58C14 58.5523 13.5523 59 13 59H7C6.44772 59 6 58.5523 6 58L6 56C6 55.4477 6.44772 55 7 55H13C13.5523 55 14 55.4477 14 56V58Z" />
