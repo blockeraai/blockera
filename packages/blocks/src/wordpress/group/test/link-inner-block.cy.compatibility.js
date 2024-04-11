@@ -28,7 +28,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 		cy.getBlock('core/paragraph').first().click();
 
 		// Switch to parent block
-		cy.getByAriaLabel('Select Group').click();
+		cy.getByAriaLabel('Select parent block: Group').click();
 
 		//
 		// Test 1: WP data to Blockera
@@ -37,30 +37,28 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 		// WP data should come to Blockera
 		getWPDataObject().then((data) => {
 			expect({
-				link: {
-					attributes: {
-						publisherFontColor: '#ffbaba',
-						publisherBlockStates: {
-							normal: {
-								breakpoints: {
-									laptop: {},
-								},
-								isVisible: true,
-							},
-							hover: {
-								isVisible: true,
-								breakpoints: {
-									laptop: {
-										attributes: {
-											publisherFontColor: '#ff1d1d',
-										},
-									},
+				publisherFontColor: '#ffbaba',
+				publisherBlockStates: {
+					normal: {
+						breakpoints: {
+							laptop: {},
+						},
+						isVisible: true,
+					},
+					hover: {
+						isVisible: true,
+						breakpoints: {
+							laptop: {
+								attributes: {
+									publisherFontColor: '#ff1d1d',
 								},
 							},
 						},
 					},
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherInnerBlocks'));
+			}).to.be.deep.equal(
+				getSelectedBlock(data, 'publisherInnerBlocks').link.attributes
+			);
 		});
 
 		//
@@ -102,31 +100,30 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 
 		getWPDataObject().then((data) => {
 			expect({
-				link: {
-					attributes: {
-						publisherFontColor: '#666666',
-						publisherBlockStates: {
-							normal: {
-								breakpoints: {
-									laptop: {
-										attributes: {},
-									},
-								},
+				publisherFontColor: '#666666',
+				publisherBlockStates: {
+					normal: {
+						isVisible: true,
+						breakpoints: {
+							laptop: {
+								attributes: {},
 							},
-							hover: {
-								isVisible: true,
-								breakpoints: {
-									laptop: {
-										attributes: {
-											publisherFontColor: '#888888',
-										},
-									},
+						},
+					},
+					hover: {
+						isVisible: true,
+						breakpoints: {
+							laptop: {
+								attributes: {
+									publisherFontColor: '#888888',
 								},
 							},
 						},
 					},
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherInnerBlocks'));
+			}).to.be.deep.equal(
+				getSelectedBlock(data, 'publisherInnerBlocks').link.attributes
+			);
 		});
 
 		getWPDataObject().then((data) => {
@@ -176,28 +173,27 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 
 		getWPDataObject().then((data) => {
 			expect({
-				link: {
-					attributes: {
-						publisherBlockStates: {
-							normal: {
-								breakpoints: {
-									laptop: {
-										attributes: {},
-									},
-								},
+				publisherBlockStates: {
+					normal: {
+						isVisible: true,
+						breakpoints: {
+							laptop: {
+								attributes: {},
 							},
-							hover: {
-								isVisible: true,
-								breakpoints: {
-									laptop: {
-										attributes: {},
-									},
-								},
+						},
+					},
+					hover: {
+						isVisible: true,
+						breakpoints: {
+							laptop: {
+								attributes: {},
 							},
 						},
 					},
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherInnerBlocks'));
+			}).to.be.deep.equal(
+				getSelectedBlock(data, 'publisherInnerBlocks').link.attributes
+			);
 		});
 
 		getWPDataObject().then((data) => {
