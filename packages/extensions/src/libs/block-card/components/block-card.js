@@ -3,6 +3,7 @@
 /**
  * External dependencies
  */
+import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import {
 	useBlockDisplayInformation,
@@ -61,6 +62,7 @@ export function BlockCard({
 							'block-card__title'
 						)}
 						onClick={() => handleOnClick('current-block', 'master')}
+						aria-label={__('Selected Block', 'publisher-core')}
 					>
 						{blockInformation.title}
 						<Breadcrumb
