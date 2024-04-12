@@ -28,6 +28,7 @@ export function TypographyStyles({
 	currentBlock,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
+	...props
 }: StylesProps): Array<CssRule> {
 	const {
 		publisherFontSize,
@@ -55,6 +56,7 @@ export function TypographyStyles({
 	};
 
 	const sharedParams = {
+		...props,
 		state,
 		clientId,
 		currentBlock,

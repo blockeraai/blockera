@@ -27,6 +27,7 @@ export const LayoutStyles = ({
 	// activeDeviceType,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
+	...props
 }: StylesProps): Array<CssRule> => {
 	const {
 		publisherDisplay,
@@ -41,6 +42,7 @@ export const LayoutStyles = ({
 	};
 	const { attributes: _attributes } = blockProps;
 	const sharedParams = {
+		...props,
 		state,
 		clientId,
 		currentBlock,

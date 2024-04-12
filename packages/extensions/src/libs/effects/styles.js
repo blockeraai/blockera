@@ -38,6 +38,7 @@ export const EffectsStyles = ({
 	// activeDeviceType,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
+	...props
 }: StylesProps): Array<CssRule> => {
 	const {
 		publisherFilter,
@@ -57,6 +58,7 @@ export const EffectsStyles = ({
 	};
 
 	const sharedParams = {
+		...props,
 		state,
 		clientId,
 		currentBlock,

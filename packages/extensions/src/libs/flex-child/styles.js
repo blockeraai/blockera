@@ -27,6 +27,7 @@ export const FlexChildStyles = ({
 	// activeDeviceType,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
+	...props
 }: StylesProps): Array<CssRule> => {
 	const {
 		publisherFlexChildSizing,
@@ -40,6 +41,7 @@ export const FlexChildStyles = ({
 	};
 	const { attributes: _attributes } = blockProps;
 	const sharedParams = {
+		...props,
 		state,
 		clientId,
 		currentBlock,
