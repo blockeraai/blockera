@@ -40,7 +40,9 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		{
 			blockId,
 			currentBlock,
-			currentState,
+			currentState: isInnerBlock(currentBlock)
+				? currentInnerBlockState
+				: currentState,
 			currentBreakpoint,
 			currentInnerBlockState,
 			isNormalState: isNormalState(),

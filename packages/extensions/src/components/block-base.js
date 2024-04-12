@@ -226,7 +226,9 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				isBaseBreakpoint: isBaseBreakpoint(currentBreakpoint),
 				currentBreakpoint,
 				currentBlock,
-				currentState,
+				currentState: isInnerBlock(currentBlock)
+					? currentInnerBlockState
+					: currentState,
 				variations,
 				activeBlockVariation,
 				blockAttributes: sharedBlockExtensionAttributes,
