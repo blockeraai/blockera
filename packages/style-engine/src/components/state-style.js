@@ -26,10 +26,11 @@ const Stylesheet = ({
 	currentBlock,
 	currentState,
 	currentBreakpoint,
+	currentInnerBlockState,
 	...props
 }: {
 	...StateStyleProps,
-	state: TStates,
+	state: TStates | string,
 }): MixedElement => {
 	const id = useId();
 	const styles = useComputedCssProps({
@@ -37,7 +38,9 @@ const Stylesheet = ({
 		state,
 		selectors,
 		currentBlock,
+		currentState,
 		currentBreakpoint,
+		currentInnerBlockState,
 	});
 
 	const MappedStyleGroups = () =>
@@ -71,7 +74,6 @@ export const StateStyle = (
 
 	return states.map(
 		(state: TStates | string, index: number): MixedElement => (
-			// $FlowFixMe
 			<Stylesheet key={state + index + id} {...{ ...props, state }} />
 		)
 	);

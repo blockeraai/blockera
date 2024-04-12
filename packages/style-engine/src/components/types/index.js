@@ -28,6 +28,7 @@ export type StateStyleProps = {
 	selectors?: Object,
 	currentState: TStates,
 	currentBreakpoint: TBreakpoint,
+	currentInnerBlockState: TStates,
 	currentBlock?: 'master' | InnerBlockType | string,
 };
 
