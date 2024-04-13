@@ -72,6 +72,12 @@ describe('Background Color → WP Compatibility', () => {
 					getSelectedBlock(data, 'style')?.color?.background
 				);
 			});
+
+			getWPDataObject().then((data) => {
+				expect('').to.be.equal(
+					getSelectedBlock(data, 'publisherBackgroundColor')
+				);
+			});
 		});
 
 		it('Variable Value', () => {
@@ -150,6 +156,12 @@ describe('Background Color → WP Compatibility', () => {
 			getWPDataObject().then((data) => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'backgroundColor')
+				);
+			});
+
+			getWPDataObject().then((data) => {
+				expect('').to.be.equal(
+					getSelectedBlock(data, 'publisherBackgroundColor')
 				);
 			});
 		});
