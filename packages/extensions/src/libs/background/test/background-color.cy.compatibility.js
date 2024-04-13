@@ -125,14 +125,11 @@ describe('Background Color → WP Compatibility', () => {
 
 			// open color popover
 			cy.get('@bgColorContainer').within(() => {
-				cy.get('button').as('value-addon-btn');
-				cy.get('@value-addon-btn').click();
+				cy.clickValueAddonButton();
 			});
 
 			// change variable
-			cy.get('.components-popover').within(() => {
-				cy.get('[data-cy="va-item-contrast"]').click();
-			});
+			cy.selectValueAddonItem('contrast');
 
 			// Check WP data
 			getWPDataObject().then((data) => {
@@ -147,9 +144,7 @@ describe('Background Color → WP Compatibility', () => {
 
 			// open color popover
 			cy.get('@bgColorContainer').within(() => {
-				cy.get('[data-cy="value-addon-btn-remove"]').click({
-					force: true,
-				});
+				cy.removeValueAddon();
 			});
 
 			// Check WP data

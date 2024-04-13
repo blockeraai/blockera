@@ -155,9 +155,7 @@ describe('Background → WP Compatibility', () => {
 				cy.get(
 					'.components-popover.publisher-control-background-popover'
 				).within(() => {
-					cy.get('[data-cy="value-addon-btn"]').click({
-						force: true,
-					});
+					cy.clickValueAddonButton();
 				});
 
 				cy.wait(500);
