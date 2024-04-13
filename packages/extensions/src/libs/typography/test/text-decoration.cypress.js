@@ -4,6 +4,7 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
+	openMoreFeaturesControl,
 } from '../../../../../../cypress/helpers';
 
 describe('Text Decoration → Functionality', () => {
@@ -18,7 +19,7 @@ describe('Text Decoration → Functionality', () => {
 	});
 
 	it('simple value', () => {
-		cy.openMoreFeatures('More typography settings');
+		openMoreFeaturesControl('More typography settings');
 
 		cy.getByAriaLabel('Overline').click();
 

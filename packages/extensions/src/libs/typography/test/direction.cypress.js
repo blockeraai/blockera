@@ -4,6 +4,7 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
+	openMoreFeaturesControl,
 } from '../../../../../../cypress/helpers';
 
 describe('Direction → Functionality', () => {
@@ -18,7 +19,7 @@ describe('Direction → Functionality', () => {
 	});
 
 	it('Simple value', () => {
-		cy.openMoreFeatures('More typography settings');
+		openMoreFeaturesControl('More typography settings');
 
 		cy.getByAriaLabel('Right to Left').click();
 

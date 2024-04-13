@@ -4,6 +4,7 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
+	openMoreFeaturesControl,
 } from '../../../../../../cypress/helpers';
 
 describe('Word Break → Functionality', () => {
@@ -16,7 +17,7 @@ describe('Word Break → Functionality', () => {
 
 		cy.getByDataTest('style-tab').click();
 
-		cy.openMoreFeatures('More typography settings');
+		openMoreFeaturesControl('More typography settings');
 	});
 
 	it('should update word-break, when add data', () => {

@@ -4,6 +4,7 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
+	openMoreFeaturesControl,
 } from '../../../../../../cypress/helpers';
 
 describe('Word Spacing → Functionality', () => {
@@ -18,7 +19,7 @@ describe('Word Spacing → Functionality', () => {
 	});
 
 	it('Simple value', () => {
-		cy.openMoreFeatures('More typography settings');
+		openMoreFeaturesControl('More typography settings');
 
 		cy.getParentContainer('Words').within(() => {
 			cy.get('input').type(5, { force: true });

@@ -4,6 +4,7 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
+	openMoreFeaturesControl,
 } from '../../../../../../cypress/helpers';
 
 describe('Text Indent → Functionality', () => {
@@ -18,7 +19,7 @@ describe('Text Indent → Functionality', () => {
 	});
 
 	it('Simple value', () => {
-		cy.openMoreFeatures('More typography settings');
+		openMoreFeaturesControl('More typography settings');
 
 		cy.getParentContainer('Text Indent').within(() => {
 			cy.get('input').type(5, { force: true });

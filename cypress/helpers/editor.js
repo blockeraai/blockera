@@ -406,3 +406,16 @@ export function openHeadingToolbarAndSelect(headingLevel) {
 		.focus()
 		.click();
 }
+
+// Open More Settings Panel and Activate Item
+export function openMoreFeaturesControl(label) {
+	cy.get(`.publisher-component-more-features > button[aria-label="${label}"]`)
+		.parent()
+		.then((element) => {
+			if (!element.hasClass('is-open')) {
+				cy.get(
+					`.publisher-component-more-features > button[aria-label="${label}"]`
+				).click();
+			}
+		});
+}

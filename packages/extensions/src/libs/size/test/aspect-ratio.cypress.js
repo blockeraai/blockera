@@ -20,7 +20,6 @@ describe('Aspect Ratio → Functionality', () => {
 
 	it('should update aspect-ratio correctly, when add value', () => {
 		// activate ratio
-		// cy.openMoreFeatures('More Size Settings');
 		cy.activateMoreSettingsItem('More Size Settings', 'Aspect Ratio');
 
 		// Standard 1:1

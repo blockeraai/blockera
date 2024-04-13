@@ -5,6 +5,7 @@ import {
 	appendBlocks,
 	getSelectedBlock,
 	getWPDataObject,
+	openMoreFeaturesControl,
 } from '../../../../../../cypress/helpers';
 
 describe('Font Style → WP Compatibility', () => {
@@ -20,7 +21,7 @@ describe('Font Style → WP Compatibility', () => {
 			cy.getBlock('core/paragraph').click();
 
 			// Open more settings
-			cy.openMoreFeatures('More typography settings');
+			openMoreFeaturesControl('More typography settings');
 
 			//
 			// Test 1: WP data to Blockera

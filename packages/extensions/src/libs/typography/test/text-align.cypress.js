@@ -4,6 +4,7 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
+	openMoreFeaturesControl,
 } from '../../../../../../cypress/helpers';
 
 describe('Text Align → Functionality', () => {
@@ -18,7 +19,7 @@ describe('Text Align → Functionality', () => {
 	});
 
 	it('simple value', () => {
-		cy.openMoreFeatures('More typography settings');
+		openMoreFeaturesControl('More typography settings');
 
 		// center align
 		cy.getByAriaLabel('Center').click();

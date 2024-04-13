@@ -5,6 +5,7 @@ import {
 	appendBlocks,
 	getSelectedBlock,
 	getWPDataObject,
+	openMoreFeaturesControl,
 } from '../../../../../../cypress/helpers';
 
 describe('Letter Spacing → WP Compatibility', () => {
@@ -20,7 +21,7 @@ describe('Letter Spacing → WP Compatibility', () => {
 			cy.getBlock('core/paragraph').click();
 
 			// Open more settings
-			cy.openMoreFeatures('More typography settings');
+			openMoreFeaturesControl('More typography settings');
 
 			cy.getParentContainer('Letters').as('container');
 

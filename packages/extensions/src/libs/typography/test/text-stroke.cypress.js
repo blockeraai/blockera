@@ -4,6 +4,7 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
+	openMoreFeaturesControl,
 } from '../../../../../../cypress/helpers';
 
 describe('Text Stroke → Functionality', () => {
@@ -16,7 +17,7 @@ describe('Text Stroke → Functionality', () => {
 
 		cy.getByDataTest('style-tab').click();
 
-		cy.openMoreFeatures('More typography settings');
+		openMoreFeaturesControl('More typography settings');
 	});
 
 	it('should update text-stroke, when add data', () => {

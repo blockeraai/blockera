@@ -4,6 +4,7 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
+	openMoreFeaturesControl,
 } from '../../../../../../cypress/helpers';
 
 describe('Font Style → Functionality', () => {
@@ -18,7 +19,7 @@ describe('Font Style → Functionality', () => {
 	});
 
 	it('simple value', () => {
-		cy.openMoreFeatures('More typography settings');
+		openMoreFeaturesControl('More typography settings');
 
 		cy.getByAriaLabel('Italic style').click();
 
