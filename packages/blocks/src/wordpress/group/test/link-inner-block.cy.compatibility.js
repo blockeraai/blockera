@@ -65,7 +65,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 		// Test 2: Blockera value to WP data
 		//
 
-		setInnerBlock('Link');
+		setInnerBlock('Links');
 
 		//
 		// Normal → Text Color
@@ -294,7 +294,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 		// Test 2: Blockera value to WP data
 		//
 
-		setInnerBlock('Link');
+		setInnerBlock('Links');
 
 		//
 		// Normal → Text Color

@@ -36,7 +36,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	link: {
 		name: 'core/link',
 		type: 'link',
-		label: __('Link', 'publisher-core'),
+		label: __('Links', 'publisher-core'),
 		icon: <InnerBlockLinkIcon />,
 		selectors: {
 			root: 'a',
@@ -49,7 +49,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	button: {
 		name: 'core/button',
 		type: 'button',
-		label: __('Button', 'publisher-core'),
+		label: __('Buttons', 'publisher-core'),
 		icon: <InnerBlockButtonIcon />,
 		selectors: {
 			root: 'button',
@@ -62,7 +62,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	heading: {
 		name: 'core/heading',
 		type: 'heading',
-		label: __('All Headings', 'publisher-core'),
+		label: __('Headings', 'publisher-core'),
 		icon: <InnerBlockHeadingsIcon />,
 		selectors: {
 			root: 'h1, h2, h3, h4, h5, h6',
@@ -75,7 +75,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	heading1: {
 		name: 'core/heading1',
 		type: 'heading1',
-		label: __('H1', 'publisher-core'),
+		label: __('H1s', 'publisher-core'),
 		icon: <InnerBlockHeading1Icon />,
 		selectors: {
 			root: 'h1',
@@ -88,7 +88,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	heading2: {
 		name: 'core/heading2',
 		type: 'heading2',
-		label: __('H2', 'publisher-core'),
+		label: __('H2s', 'publisher-core'),
 		icon: <InnerBlockHeading2Icon />,
 		selectors: {
 			root: 'h2',
@@ -101,7 +101,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	heading3: {
 		name: 'core/heading3',
 		type: 'heading3',
-		label: __('H3', 'publisher-core'),
+		label: __('H3s', 'publisher-core'),
 		icon: <InnerBlockHeading3Icon />,
 		selectors: {
 			root: 'h3',
@@ -114,7 +114,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	heading4: {
 		name: 'core/heading4',
 		type: 'heading4',
-		label: __('H4', 'publisher-core'),
+		label: __('H4s', 'publisher-core'),
 		icon: <InnerBlockHeading4Icon />,
 		selectors: {
 			root: 'h4',
@@ -127,7 +127,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	heading5: {
 		name: 'core/heading5',
 		type: 'heading5',
-		label: __('H5', 'publisher-core'),
+		label: __('H5s', 'publisher-core'),
 		icon: <InnerBlockHeading5Icon />,
 		selectors: {
 			root: 'h5',
@@ -140,7 +140,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	heading6: {
 		name: 'core/heading6',
 		type: 'heading6',
-		label: __('H6', 'publisher-core'),
+		label: __('H6s', 'publisher-core'),
 		icon: <InnerBlockHeading6Icon />,
 		selectors: {
 			root: 'h6',
