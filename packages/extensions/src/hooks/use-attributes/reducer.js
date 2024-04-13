@@ -24,6 +24,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		blockId,
 		newValue,
 		attributeId,
+		innerBlocks,
 		currentBlock,
 		currentState,
 		isNormalState,
@@ -40,6 +41,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		getAttributes,
 		{
 			blockId,
+			innerBlocks,
 			currentBlock,
 			currentState: isInnerBlock(currentBlock)
 				? currentInnerBlockState

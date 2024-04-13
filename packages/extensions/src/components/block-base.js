@@ -153,6 +153,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				blockId: name,
 				masterIsNormalState,
 				publisherInnerBlocks,
+				innerBlocks: additional?.publisherInnerBlocks,
 			});
 
 		const updateBlockEditorSettings: UpdateBlockEditorSettings = (
@@ -231,6 +232,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					: currentState,
 				variations,
 				activeBlockVariation,
+				innerBlocks: additional?.publisherInnerBlocks,
 				blockAttributes: sharedBlockExtensionAttributes,
 			};
 
