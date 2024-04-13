@@ -39,7 +39,7 @@ const publisherInnerBlocks: InnerBlocks = {
 		label: __('Links', 'publisher-core'),
 		icon: <InnerBlockLinkIcon />,
 		selectors: {
-			root: 'a',
+			root: 'a:not(.wp-element-button)',
 		},
 		attributes,
 		innerBlockSettings: {
@@ -52,7 +52,7 @@ const publisherInnerBlocks: InnerBlocks = {
 		label: __('Buttons', 'publisher-core'),
 		icon: <InnerBlockButtonIcon />,
 		selectors: {
-			root: 'button',
+			root: '.wp-block-button > .wp-element-button',
 		},
 		attributes,
 		innerBlockSettings: {
@@ -65,7 +65,7 @@ const publisherInnerBlocks: InnerBlocks = {
 		label: __('Headings', 'publisher-core'),
 		icon: <InnerBlockHeadingsIcon />,
 		selectors: {
-			root: 'h1, h2, h3, h4, h5, h6',
+			root: 'h1.wp-block-heading, h2.wp-block-heading, h3.wp-block-heading, h4.wp-block-heading, h5.wp-block-heading, h6.wp-block-heading',
 		},
 		attributes,
 		innerBlockSettings: {
@@ -78,7 +78,7 @@ const publisherInnerBlocks: InnerBlocks = {
 		label: __('H1s', 'publisher-core'),
 		icon: <InnerBlockHeading1Icon />,
 		selectors: {
-			root: 'h1',
+			root: 'h1.wp-block-heading',
 		},
 		attributes,
 		innerBlockSettings: {
@@ -91,7 +91,7 @@ const publisherInnerBlocks: InnerBlocks = {
 		label: __('H2s', 'publisher-core'),
 		icon: <InnerBlockHeading2Icon />,
 		selectors: {
-			root: 'h2',
+			root: 'h2.wp-block-heading',
 		},
 		attributes,
 		innerBlockSettings: {
@@ -104,7 +104,7 @@ const publisherInnerBlocks: InnerBlocks = {
 		label: __('H3s', 'publisher-core'),
 		icon: <InnerBlockHeading3Icon />,
 		selectors: {
-			root: 'h3',
+			root: 'h3.wp-block-heading',
 		},
 		attributes,
 		innerBlockSettings: {
@@ -117,7 +117,7 @@ const publisherInnerBlocks: InnerBlocks = {
 		label: __('H4s', 'publisher-core'),
 		icon: <InnerBlockHeading4Icon />,
 		selectors: {
-			root: 'h4',
+			root: 'h4.wp-block-heading',
 		},
 		attributes,
 		innerBlockSettings: {
@@ -130,7 +130,7 @@ const publisherInnerBlocks: InnerBlocks = {
 		label: __('H5s', 'publisher-core'),
 		icon: <InnerBlockHeading5Icon />,
 		selectors: {
-			root: 'h5',
+			root: 'h5.wp-block-heading',
 		},
 		attributes,
 		innerBlockSettings: {
@@ -143,7 +143,7 @@ const publisherInnerBlocks: InnerBlocks = {
 		label: __('H6s', 'publisher-core'),
 		icon: <InnerBlockHeading6Icon />,
 		selectors: {
-			root: 'h6',
+			root: 'h6.wp-block-heading',
 		},
 		attributes,
 		innerBlockSettings: {
