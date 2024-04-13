@@ -21,7 +21,6 @@ import {
 	elementNormalFontColorToWPCompatibility,
 	elementHoverFontColorToWPCompatibility,
 } from './compatibility/element-font-color';
-import { elementsSupportedBlocks } from './compatibility/elements';
 import {
 	elementNormalBackgroundColorFromWPCompatibility,
 	elementNormalBackgroundColorToWPCompatibility,
@@ -32,8 +31,12 @@ export const bootstrap = (): void => {
 		'publisherCore.blockEdit.attributes',
 		'publisherCore.blockEdit.sizeExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const { blockId, isNormalState, isBaseBreakpoint, isMasterBlock } =
-				blockDetail;
+			const {
+				isNormalState,
+				isBaseBreakpoint,
+				isMasterBlock,
+				innerBlocks,
+			} = blockDetail;
 
 			if (!isNormalState || !isBaseBreakpoint || !isMasterBlock) {
 				return attributes;
@@ -43,127 +46,94 @@ export const bootstrap = (): void => {
 				return attributes;
 			}
 
-			Object.keys(elementsSupportedBlocks).forEach((element) => {
-				switch (element) {
-					//
-					// Link element
-					//
-					case 'link':
-						if (
-							!attributes.style.elements[element] ||
-							!elementsSupportedBlocks[element].includes(blockId)
-						) {
-							return; // Skip this element
+			Object.keys(innerBlocks).forEach((element) => {
+				if (
+					!attributes?.style?.elements[element] ||
+					innerBlocks[element]?.innerBlockSettings
+						?.dataCompatibility === undefined ||
+					innerBlocks[element]?.innerBlockSettings?.dataCompatibility
+						?.length === 0
+				) {
+					return;
+				}
+
+				//
+				// Normal font color
+				//
+				if (
+					innerBlocks[
+						element
+					]?.innerBlockSettings?.dataCompatibility.includes(
+						'font-color'
+					)
+				) {
+					if (
+						!attributes?.publisherInnerBlocks?.link?.attributes
+							?.publisherFontColor
+					) {
+						const newAttributes =
+							elementNormalFontColorFromWPCompatibility({
+								element,
+								attributes,
+							});
+
+						if (newAttributes) {
+							attributes = mergeObject(attributes, newAttributes);
 						}
+					}
+				}
 
-						//
-						// Normal font color
-						//
-						if (
-							!attributes?.publisherInnerBlocks?.link?.attributes
-								?.publisherFontColor
-						) {
-							const newAttributes =
-								elementNormalFontColorFromWPCompatibility({
-									element,
-									attributes,
-								});
+				//
+				// Hover font color
+				//
+				if (
+					innerBlocks[
+						element
+					]?.innerBlockSettings?.dataCompatibility.includes(
+						'font-color-hover'
+					)
+				) {
+					if (
+						!attributes?.publisherInnerBlocks?.link?.attributes
+							?.publisherBlockStates?.breakpoints?.laptop
+							?.attributes?.publisherFontColor
+					) {
+						const newAttributes =
+							elementHoverFontColorFromWPCompatibility({
+								element,
+								attributes,
+							});
 
-							if (newAttributes) {
-								attributes = mergeObject(
-									attributes,
-									newAttributes
-								);
-							}
+						if (newAttributes) {
+							attributes = mergeObject(attributes, newAttributes);
 						}
+					}
+				}
 
-						//
-						// Hover font color
-						//
-						if (
-							!attributes?.publisherInnerBlocks?.link?.attributes
-								?.publisherBlockStates?.breakpoints?.laptop
-								?.attributes?.publisherFontColor
-						) {
-							const newAttributes =
-								elementHoverFontColorFromWPCompatibility({
-									element,
-									attributes,
-								});
-
-							if (newAttributes) {
-								attributes = mergeObject(
-									attributes,
-									newAttributes
-								);
-							}
+				//
+				// Normal background
+				//
+				if (
+					innerBlocks[
+						element
+					]?.innerBlockSettings?.dataCompatibility.includes(
+						'background-color'
+					)
+				) {
+					if (
+						!attributes.publisherInnerBlocks[element] ||
+						!attributes.publisherInnerBlocks[element]?.attributes
+							?.publisherBackgroundColor
+					) {
+						const newAttributes =
+							elementNormalBackgroundColorFromWPCompatibility({
+								element,
+								attributes,
+							});
+						if (newAttributes) {
+							attributes = mergeObject(attributes, newAttributes);
 						}
-						break;
-
-					//
-					// Heading elements
-					//
-					case 'h6':
-					case 'h5':
-					case 'h4':
-					case 'h3':
-					case 'h2':
-					case 'h1':
-					case 'heading':
-						if (
-							!attributes?.style?.elements[element] ||
-							!elementsSupportedBlocks[element].includes(blockId)
-						) {
-							return; // Skip this element
-						}
-
-						//
-						// Normal font color
-						//
-						if (
-							!attributes.publisherInnerBlocks[element] ||
-							!attributes.publisherInnerBlocks[element]
-								?.attributes?.publisherFontColor
-						) {
-							const newAttributes =
-								elementNormalFontColorFromWPCompatibility({
-									element,
-									attributes,
-								});
-
-							if (newAttributes) {
-								attributes = mergeObject(
-									attributes,
-									newAttributes
-								);
-							}
-						}
-
-						//
-						// Normal background color
-						//
-						if (
-							!attributes.publisherInnerBlocks[element] ||
-							!attributes.publisherInnerBlocks[element]
-								?.attributes?.publisherBackgroundColor
-						) {
-							const newAttributes =
-								elementNormalBackgroundColorFromWPCompatibility(
-									{
-										element,
-										attributes,
-									}
-								);
-
-							if (newAttributes) {
-								attributes = mergeObject(
-									attributes,
-									newAttributes
-								);
-							}
-						}
-
-						break;
+					}
 				}
 			});
 
@@ -197,121 +167,89 @@ export const bootstrap = (): void => {
 			blockDetail: BlockDetail
 		): Object => {
 			const {
-				blockId,
 				isBaseBreakpoint,
 				isMasterBlock,
 				currentState,
 				currentBlock,
+				innerBlocks,
 			} = blockDetail;
 
 			if (!isBaseBreakpoint || isMasterBlock) {
 				return nextState;
 			}
 
-			switch (currentBlock) {
-				//
-				// Link element
-				//
-				case 'link':
-					if (
-						!elementsSupportedBlocks[currentBlock].includes(blockId)
-					) {
-						return nextState;
-					}
+			if (
+				innerBlocks[currentBlock] === undefined ||
+				innerBlocks[currentBlock]?.innerBlockSettings
+					?.dataCompatibility === undefined ||
+				innerBlocks[currentBlock]?.innerBlockSettings?.dataCompatibility
+					?.length === 0
+			) {
+				return nextState;
+			}
 
-					//
-					// Normal state
-					//
-					if (currentState === 'normal') {
-						switch (featureId) {
-							//
-							// Font color
-							//
-							case 'publisherFontColor':
-								return mergeObject(
-									nextState,
-									elementNormalFontColorToWPCompatibility({
-										element: currentBlock,
-										newValue,
-										ref,
-									})
-								);
-						}
-					}
+			//
+			// Normal font color
+			//
+			if (
+				currentState === 'normal' &&
+				featureId === 'publisherFontColor' &&
+				innerBlocks[
+					currentBlock
+				]?.innerBlockSettings?.dataCompatibility.includes('font-color')
+			) {
+				return mergeObject(
+					nextState,
+					elementNormalFontColorToWPCompatibility({
+						element: currentBlock,
+						newValue,
+						ref,
+					})
+				);
+			}
 
-					//
-					// Hover state
-					//
-					else if (currentState === 'hover') {
-						switch (featureId) {
-							//
-							// Font color
-							//
-							case 'publisherFontColor':
-								return mergeObject(
-									nextState,
-									elementHoverFontColorToWPCompatibility({
-										element: currentBlock,
-										newValue,
-										ref,
-									})
-								);
-						}
-					}
-					break;
+			//
+			// Hover font color
+			//
+			if (
+				currentState === 'hover' &&
+				featureId === 'publisherFontColor' &&
+				innerBlocks[
+					currentBlock
+				]?.innerBlockSettings?.dataCompatibility.includes(
+					'font-color-hover'
+				)
+			) {
+				return mergeObject(
+					nextState,
+					elementHoverFontColorToWPCompatibility({
+						element: currentBlock,
+						newValue,
+						ref,
+					})
+				);
+			}
 
-				//
-				// Heading elements
-				//
-				case 'h6':
-				case 'h5':
-				case 'h4':
-				case 'h3':
-				case 'h2':
-				case 'h1':
-				case 'heading':
-					if (
-						!elementsSupportedBlocks[currentBlock].includes(blockId)
-					) {
-						return nextState;
-					}
-
-					//
-					// Normal state
-					//
-					if (currentState === 'normal') {
-						switch (featureId) {
-							//
-							// Font color
-							//
-							case 'publisherFontColor':
-								return mergeObject(
-									nextState,
-									elementNormalFontColorToWPCompatibility({
-										element: currentBlock,
-										newValue,
-										ref,
-									})
-								);
-
-							//
-							// Background color
-							//
-							case 'publisherBackgroundColor':
-								return mergeObject(
-									nextState,
-									elementNormalBackgroundColorToWPCompatibility(
-										{
-											element: currentBlock,
-											newValue,
-											ref,
-										}
-									)
-								);
-						}
-					}
-
-					break;
+			//
+			// Normal background
+			//
+			if (
+				currentState === 'normal' &&
+				featureId === 'publisherBackgroundColor' &&
+				innerBlocks[
+					currentBlock
+				]?.innerBlockSettings?.dataCompatibility.includes(
+					'background-color'
+				)
+			) {
+				return mergeObject(
+					nextState,
+					elementNormalBackgroundColorToWPCompatibility({
+						element: currentBlock,
+						newValue,
+						ref,
+					})
+				);
 			}
 
 			return nextState;

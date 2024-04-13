@@ -44,7 +44,7 @@ const publisherInnerBlocks: InnerBlocks = {
 		attributes,
 		innerBlockSettings: {
 			force: true,
-			dataCompatibility: true,
+			dataCompatibility: ['font-color', 'font-color-hover'],
 		},
 	},
 	button: {
@@ -58,6 +58,11 @@ const publisherInnerBlocks: InnerBlocks = {
 		attributes,
 		innerBlockSettings: {
 			force: true,
+			dataCompatibility: [
+				'font-color',
+				'background-color',
+				'background-image',
+			],
 		},
 	},
 	heading: {
@@ -71,6 +76,11 @@ const publisherInnerBlocks: InnerBlocks = {
 		attributes,
 		innerBlockSettings: {
 			force: true,
+			dataCompatibility: [
+				'font-color',
+				'background-color',
+				'background-image',
+			],
 		},
 	},
 	heading1: {
@@ -84,6 +94,11 @@ const publisherInnerBlocks: InnerBlocks = {
 		attributes,
 		innerBlockSettings: {
 			force: false,
+			dataCompatibility: [
+				'font-color',
+				'background-color',
+				'background-image',
+			],
 		},
 	},
 	heading2: {
@@ -97,6 +112,11 @@ const publisherInnerBlocks: InnerBlocks = {
 		attributes,
 		innerBlockSettings: {
 			force: false,
+			dataCompatibility: [
+				'font-color',
+				'background-color',
+				'background-image',
+			],
 		},
 	},
 	heading3: {
@@ -110,6 +130,11 @@ const publisherInnerBlocks: InnerBlocks = {
 		attributes,
 		innerBlockSettings: {
 			force: false,
+			dataCompatibility: [
+				'font-color',
+				'background-color',
+				'background-image',
+			],
 		},
 	},
 	heading4: {
@@ -123,6 +148,11 @@ const publisherInnerBlocks: InnerBlocks = {
 		attributes,
 		innerBlockSettings: {
 			force: false,
+			dataCompatibility: [
+				'font-color',
+				'background-color',
+				'background-image',
+			],
 		},
 	},
 	heading5: {
@@ -136,6 +166,11 @@ const publisherInnerBlocks: InnerBlocks = {
 		attributes,
 		innerBlockSettings: {
 			force: false,
+			dataCompatibility: [
+				'font-color',
+				'background-color',
+				'background-image',
+			],
 		},
 	},
 	heading6: {
@@ -149,6 +184,11 @@ const publisherInnerBlocks: InnerBlocks = {
 		attributes,
 		innerBlockSettings: {
 			force: false,
+			dataCompatibility: [
+				'font-color',
+				'background-color',
+				'background-image',
+			],
 		},
 	},
 };
