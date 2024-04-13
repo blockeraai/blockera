@@ -22,6 +22,7 @@ export type BlockDetail = {
 	activeBlockVariation: Object,
 	currentBreakpoint: TBreakpoint,
 	currentInnerBlockState: TStates,
+	innerBlocks: Object,
 };
 
 export type StatesManagerProps = {
