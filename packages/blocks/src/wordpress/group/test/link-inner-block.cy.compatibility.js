@@ -57,7 +57,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					},
 				},
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'publisherInnerBlocks').link.attributes
+				getSelectedBlock(data, 'publisherInnerBlocks')?.link?.attributes
 			);
 		});
 
@@ -122,7 +122,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					},
 				},
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'publisherInnerBlocks').link.attributes
+				getSelectedBlock(data, 'publisherInnerBlocks')?.link?.attributes
 			);
 		});
 
@@ -192,7 +192,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					},
 				},
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'publisherInnerBlocks').link.attributes
+				getSelectedBlock(data, 'publisherInnerBlocks')?.link?.attributes
 			);
 		});
 
@@ -286,7 +286,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					},
 				},
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'publisherInnerBlocks').link.attributes
+				getSelectedBlock(data, 'publisherInnerBlocks')?.link?.attributes
 			);
 		});
 
@@ -373,7 +373,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					},
 				},
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'publisherInnerBlocks').link.attributes
+				getSelectedBlock(data, 'publisherInnerBlocks')?.link?.attributes
 			);
 		});
 
@@ -435,7 +435,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					},
 				},
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'publisherInnerBlocks').link.attributes
+				getSelectedBlock(data, 'publisherInnerBlocks')?.link?.attributes
 			);
 		});
 
