@@ -44,6 +44,7 @@ const publisherInnerBlocks: InnerBlocks = {
 		attributes,
 		innerBlockSettings: {
 			force: true,
+			dataCompatibility: true,
 		},
 	},
 	button: {
