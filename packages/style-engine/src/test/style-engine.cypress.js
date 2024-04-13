@@ -89,7 +89,7 @@ describe('Style Engine Testing ...', () => {
 			cy.getByAriaLabel('Add New State').click();
 		});
 
-		it.only('should generate css for hover pseudo-class of master block', () => {
+		it('should generate css for hover pseudo-class of master block', () => {
 			// ********************* Manipulating attributes of master block in hover state ************************ //
 
 			// 1- Set width for master block.
