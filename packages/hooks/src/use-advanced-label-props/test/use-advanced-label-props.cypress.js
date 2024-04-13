@@ -1,6 +1,6 @@
 import {
 	appendBlocks,
-	// setBlockType,
+	// setInnerBlock,
 	// setDeviceType,
 } from '../../../../../cypress/helpers';
 

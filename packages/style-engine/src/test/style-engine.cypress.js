@@ -3,7 +3,7 @@ import {
 	getBlockClientId,
 	getWPDataObject,
 	setBlockState,
-	setBlockType,
+	setInnerBlock,
 	// setDeviceType,
 } from '../../../../cypress/helpers';
 
@@ -39,7 +39,7 @@ describe('Style Engine Testing ...', () => {
 			// ********************* After Passed Master Block Assertions ************************ //
 
 			// 3- Go to customize link inner block panel.
-			setBlockType('Link');
+			setInnerBlock('Link');
 
 			// 4- Set width for link inner block.
 			cy.setInputFieldValue('Width', 'Size', 50);
@@ -139,7 +139,7 @@ describe('Style Engine Testing ...', () => {
 			setBlockState('Hover');
 
 			// 6- Go to customize link inner block panel.
-			setBlockType('Link');
+			setInnerBlock('Link');
 
 			// 7- Set width for link inner block.
 			cy.setInputFieldValue('Width', 'Size', 50);

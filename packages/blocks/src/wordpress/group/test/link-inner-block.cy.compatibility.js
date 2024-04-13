@@ -5,7 +5,7 @@ import {
 	appendBlocks,
 	getSelectedBlock,
 	getWPDataObject,
-	setBlockType,
+	setInnerBlock,
 	setBlockState,
 	addBlockState,
 } from '../../../../../../cypress/helpers';
@@ -65,7 +65,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 		// Test 2: Blockera value to WP data
 		//
 
-		setBlockType('Link');
+		setInnerBlock('Link');
 
 		//
 		// Normal → Text Color
@@ -297,7 +297,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 		// Test 2: Blockera value to WP data
 		//
 
-		setBlockType('Link');
+		setInnerBlock('Link');
 
 		//
 		// Normal → Text Color

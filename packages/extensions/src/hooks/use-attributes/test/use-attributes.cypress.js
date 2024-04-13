@@ -2,7 +2,7 @@ import {
 	appendBlocks,
 	getWPDataObject,
 	getSelectedBlock,
-	setBlockType,
+	setInnerBlock,
 	setDeviceType,
 } from '../../../../../../cypress/helpers';
 
@@ -61,7 +61,7 @@ describe('useAttributes Hook Testing ...', () => {
 			cy.get('[data-type="core/paragraph"]').click();
 
 			setDeviceType('Tablet');
-			setBlockType('Link');
+			setInnerBlock('Link');
 
 			cy.getByAriaLabel('Add New State').click();
 
@@ -139,7 +139,7 @@ describe('useAttributes Hook Testing ...', () => {
 			// set hover state
 			cy.getByAriaLabel('Add New State').click();
 
-			setBlockType('Link');
+			setInnerBlock('Link');
 
 			cy.setInputFieldValue('Font Size', 'Typography', 27);
 
@@ -167,7 +167,7 @@ describe('useAttributes Hook Testing ...', () => {
 			// set hover state
 			cy.getByAriaLabel('Add New State').click();
 
-			setBlockType('Link');
+			setInnerBlock('Link');
 
 			cy.setInputFieldValue('Font Size', 'Typography', 27);
 
@@ -194,7 +194,7 @@ describe('useAttributes Hook Testing ...', () => {
 
 			cy.getByAriaLabel('Add New State').click();
 
-			setBlockType('Link');
+			setInnerBlock('Link');
 
 			cy.getByAriaLabel('Add New State').click();
 
@@ -223,7 +223,7 @@ describe('useAttributes Hook Testing ...', () => {
 			cy.getByAriaLabel('Add New State').click();
 
 			setDeviceType('Mobile');
-			setBlockType('Link');
+			setInnerBlock('Link');
 
 			cy.getByAriaLabel('Add New State').click();
 

@@ -1,6 +1,6 @@
 import {
 	appendBlocks,
-	setBlockType,
+	setInnerBlock,
 	setDeviceType,
 } from '../../../../../../cypress/helpers';
 
@@ -61,7 +61,7 @@ describe('Should calculate current attributes correctly:', () => {
 		assertFontSize(22);
 
 		// paragraph -> link -> normal -> laptop
-		setBlockType('Link');
+		setInnerBlock('Link');
 
 		assertFontSize(27);
 	});
@@ -78,7 +78,7 @@ describe('Should calculate current attributes correctly:', () => {
 		setDeviceType('Tablet');
 
 		// paragraph -> link -> normal -> laptop
-		setBlockType('Link');
+		setInnerBlock('Link');
 
 		assertFontSize(27);
 	});
@@ -93,7 +93,7 @@ describe('Should calculate current attributes correctly:', () => {
 		cy.get('[data-type="core/paragraph"]').click();
 
 		// paragraph -> link -> normal -> laptop
-		setBlockType('Link');
+		setInnerBlock('Link');
 
 		assertFontSize(27);
 	});
@@ -108,7 +108,7 @@ describe('Should calculate current attributes correctly:', () => {
 		cy.get('[data-type="core/paragraph"]').click();
 
 		// paragraph -> link -> normal -> laptop
-		setBlockType('Link');
+		setInnerBlock('Link');
 
 		assertFontSize(27);
 	});
@@ -124,7 +124,7 @@ describe('Should calculate current attributes correctly:', () => {
 		cy.get('[data-type="core/paragraph"]').click();
 
 		// paragraph -> link -> normal -> laptop
-		setBlockType('Link');
+		setInnerBlock('Link');
 
 		assertFontSize(27);
 	});
@@ -141,7 +141,7 @@ describe('Should calculate current attributes correctly:', () => {
 		setDeviceType('Tablet');
 
 		// paragraph -> link -> normal -> laptop
-		setBlockType('Link');
+		setInnerBlock('Link');
 
 		assertFontSize(27);
 	});
@@ -156,7 +156,7 @@ describe('Should calculate current attributes correctly:', () => {
 		// Select target block
 		cy.get('[data-type="core/paragraph"]').click();
 
-		setBlockType('Link');
+		setInnerBlock('Link');
 
 		assertFontSize(27);
 	});
@@ -171,7 +171,7 @@ describe('Should calculate current attributes correctly:', () => {
 		cy.get('[data-type="core/paragraph"]').click();
 
 		setDeviceType('Mobile');
-		setBlockType('Link');
+		setInnerBlock('Link');
 
 		assertFontSize(27);
 	});

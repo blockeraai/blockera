@@ -587,7 +587,7 @@ export function hexStringToByte(str) {
 	return new Uint8Array(a);
 }
 
-export function setBlockType(blockType, suffix = ' Customize') {
+export function setInnerBlock(blockType, suffix = ' Customize') {
 	// Alias
 	cy.get('h2').contains('Inner Blocks').as('inners');
 
