@@ -173,7 +173,6 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 
 		getWPDataObject().then((data) => {
 			expect({
-				publisherFontColor: '', // !! should be removed
 				publisherBlockStates: {
 					normal: {
 						isVisible: true,
@@ -187,9 +186,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 						isVisible: true,
 						breakpoints: {
 							laptop: {
-								attributes: {
-									publisherFontColor: '', // !! should be removed
-								},
+								attributes: {},
 							},
 						},
 					},
@@ -419,7 +416,6 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 
 		getWPDataObject().then((data) => {
 			expect({
-				publisherFontColor: '', // !! should be removed
 				publisherBlockStates: {
 					normal: {
 						isVisible: true,
@@ -433,9 +429,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 						isVisible: true,
 						breakpoints: {
 							laptop: {
-								attributes: {
-									publisherFontColor: '', // !! should be removed
-								},
+								attributes: {},
 							},
 						},
 					},

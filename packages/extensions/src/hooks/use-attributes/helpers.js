@@ -14,6 +14,7 @@ import { isEquals, mergeObject } from '@publisher/utils';
 /**
  * Internal dependencies
  */
+import { sharedBlockExtensionAttributes as defaultAttributes } from '../../libs';
 import { isInnerBlock, isNormalState } from '../../components';
 import type {
 	StateTypes,
@@ -75,6 +76,12 @@ export const memoizedRootBreakpoints: (
 					});
 				}
 
+				if (defaultAttributes[attributeId]?.default === newValue) {
+					delete breakpoint.publisherInnerBlocks[currentBlock]
+						.attributes.publisherBlockStates[currentInnerBlockState]
+						.breakpoints[currentBreakpoint].attributes[attributeId];
+				}
+
 				return mergeObject(breakpoint, {
 					attributes: {
 						publisherInnerBlocks: {
@@ -86,7 +93,14 @@ export const memoizedRootBreakpoints: (
 												[currentBreakpoint]: {
 													attributes: {
 														...effectiveItems,
-														[attributeId]: newValue,
+														...(defaultAttributes[
+															attributeId
+														]?.default === newValue
+															? {}
+															: {
+																	[attributeId]:
+																		newValue,
+															  }),
 													},
 												},
 											},
@@ -113,10 +127,16 @@ export const memoizedRootBreakpoints: (
 			});
 		}
 
+		if (defaultAttributes[attributeId]?.default === newValue) {
+			delete breakpoint.attributes[attributeId];
+		}
+
 		return mergeObject(breakpoint, {
 			attributes: {
 				...effectiveItems,
-				[attributeId]: newValue,
+				...(defaultAttributes[attributeId]?.default === newValue
+					? {}
+					: { [attributeId]: newValue }),
 			},
 		});
 	}

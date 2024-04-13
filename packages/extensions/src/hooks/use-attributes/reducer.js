@@ -15,6 +15,7 @@ import { mergeObject } from '@publisher/utils';
  */
 import { memoizedBlockStates, resetAllStates } from './helpers';
 import { isBaseBreakpoint, isInnerBlock } from '../../components';
+import { sharedBlockExtensionAttributes as defaultAttributes } from '../../libs';
 
 const reducer = (state: Object = {}, action: Object): Object => {
 	const {
@@ -50,11 +51,17 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			isBaseBreakpoint: isBaseBreakpoint(currentBreakpoint),
 		},
 	];
-
+	// console.log(type, attributeId, newValue)
 	switch (type) {
 		case 'UPDATE_NORMAL_STATE':
 			// Handle inner block changes.
 			if (isInnerBlock(currentBlock)) {
+				if (defaultAttributes[attributeId]?.default === newValue) {
+					delete state.publisherInnerBlocks[currentBlock].attributes[
+						attributeId
+					];
+				}
+
 				/**
 				 * Filterable attributes before set next state.
 				 * usefully in add WordPress compatibility and any other filters.
@@ -70,7 +77,10 @@ const reducer = (state: Object = {}, action: Object): Object => {
 							[currentBlock]: {
 								attributes: {
 									...effectiveItems,
-									[attributeId]: newValue,
+									...(defaultAttributes[attributeId]
+										?.default === newValue
+										? {}
+										: { [attributeId]: newValue }),
 								},
 							},
 						},
