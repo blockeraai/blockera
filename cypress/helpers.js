@@ -587,17 +587,28 @@ export function hexStringToByte(str) {
 	return new Uint8Array(a);
 }
 
+export function openInnerBlocksExtension(blockType, suffix = ' Customize') {
+	if (
+		Cypress.$(
+			'.publisher-extension.publisher-extension-inner-blocks.is-opened'
+		)
+	) {
+		cy.get('.publisher-extension.publisher-extension-inner-blocks').within(
+			() => {
+				cy.get('h2').contains('Inner Blocks').click();
+			}
+		);
+	}
+}
+
 export function setInnerBlock(blockType, suffix = ' Customize') {
-	// Alias
-	cy.get('h2').contains('Inner Blocks').as('inners');
+	openInnerBlocksExtension();
 
-	cy.get('@inners').click();
-
-	// Open "link" inner block panel.
-	cy.get('@inners').parent().parent().as('innersBox');
-	cy.get('@innersBox').within(() => {
-		cy.get(`[aria-label="${blockType}${suffix}"]`).click();
-	});
+	cy.get('.publisher-extension.publisher-extension-inner-blocks').within(
+		() => {
+			cy.get(`[aria-label="${blockType}${suffix}"]`).click();
+		}
+	);
 }
 
 export function addBlockState(state) {
