@@ -25,6 +25,10 @@ import {
 	elementNormalBackgroundColorFromWPCompatibility,
 	elementNormalBackgroundColorToWPCompatibility,
 } from './compatibility/element-bg-color';
+import {
+	elementNormalBackgroundFromWPCompatibility,
+	elementNormalBackgroundToWPCompatibility,
+} from './compatibility/element-bg';
 
 export const bootstrap = (): void => {
 	addFilter(
@@ -113,6 +117,11 @@ export const bootstrap = (): void => {
 				//
 				// Normal background
 				//
+				let bgAttributes;
+
+				//
+				// Background Color
+				//
 				if (
 					innerBlocks[
 						element
@@ -125,13 +134,42 @@ export const bootstrap = (): void => {
 						!attributes.publisherInnerBlocks[element]?.attributes
 							?.publisherBackgroundColor
 					) {
-						const newAttributes =
+						bgAttributes =
 							elementNormalBackgroundColorFromWPCompatibility({
 								element,
 								attributes,
 							});
-						if (newAttributes) {
-							attributes = mergeObject(attributes, newAttributes);
+
+						if (bgAttributes) {
+							attributes = mergeObject(attributes, bgAttributes);
+						}
+					}
+				}
+
+				//
+				// Background Gradient
+				//
+				if (
+					!bgAttributes &&
+					innerBlocks[
+						element
+					]?.innerBlockSettings?.dataCompatibility.includes(
+						'background-image'
+					)
+				) {
+					if (
+						!attributes.publisherInnerBlocks[element] ||
+						!attributes.publisherInnerBlocks[element]?.attributes
+							?.publisherBackground
+					) {
+						bgAttributes =
+							elementNormalBackgroundFromWPCompatibility({
+								element,
+								attributes,
+							});
+
+						if (bgAttributes) {
+							attributes = mergeObject(attributes, bgAttributes);
 						}
 					}
 				}
@@ -231,7 +269,7 @@ export const bootstrap = (): void => {
 			}
 
 			//
-			// Normal background
+			// Normal background color
 			//
 			if (
 				currentState === 'normal' &&
@@ -245,6 +283,39 @@ export const bootstrap = (): void => {
 				return mergeObject(
 					nextState,
 					elementNormalBackgroundColorToWPCompatibility({
+						element: currentBlock,
+						newValue,
+						ref,
+						getAttributes,
+					})
+				);
+			}
+			//
+			// Normal background image
+			//
+			else if (
+				currentState === 'normal' &&
+				featureId === 'publisherBackground' &&
+				innerBlocks[
+					currentBlock
+				]?.innerBlockSettings?.dataCompatibility.includes(
+					'background-image'
+				)
+			) {
+				const attrs = getAttributes();
+
+				// Item has BG color
+				if (
+					attrs.publisherInnerBlocks[currentBlock] !== undefined &&
+					attrs.publisherInnerBlocks[currentBlock]?.attributes
+						?.publisherBackgroundColor
+				) {
+					return nextState;
+				}
+
+				return mergeObject(
+					nextState,
+					elementNormalBackgroundToWPCompatibility({
 						element: currentBlock,
 						newValue,
 						ref,
