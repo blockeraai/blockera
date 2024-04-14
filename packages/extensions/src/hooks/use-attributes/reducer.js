@@ -8,7 +8,7 @@ import { applyFilters } from '@wordpress/hooks';
 /**
  * Publisher dependencies
  */
-import { mergeObject } from '@publisher/utils';
+import { isEquals, isObject, mergeObject } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -53,16 +53,15 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			isBaseBreakpoint: isBaseBreakpoint(currentBreakpoint),
 		},
 	];
-	// console.log(type, attributeId, newValue)
+
 	switch (type) {
 		case 'UPDATE_NORMAL_STATE':
 			// Handle inner block changes.
 			if (isInnerBlock(currentBlock)) {
-				if (defaultAttributes[attributeId]?.default === newValue) {
-					delete state.publisherInnerBlocks[currentBlock].attributes[
-						attributeId
-					];
-				}
+				const isEqualsWithDefault = isEquals(
+					defaultAttributes[attributeId]?.default,
+					newValue
+				);
 
 				/**
 				 * Filterable attributes before set next state.
@@ -74,19 +73,28 @@ const reducer = (state: Object = {}, action: Object): Object => {
 				 */
 				return applyFilters(
 					'publisherCore.blockEdit.setAttributes',
-					mergeObject(state, {
-						publisherInnerBlocks: {
-							[currentBlock]: {
-								attributes: {
-									...effectiveItems,
-									...(defaultAttributes[attributeId]
-										?.default === newValue
-										? {}
-										: { [attributeId]: newValue }),
+					mergeObject(
+						state,
+						{
+							publisherInnerBlocks: {
+								[currentBlock]: {
+									attributes: {
+										...effectiveItems,
+										[attributeId]: isEqualsWithDefault
+											? undefined
+											: newValue,
+									},
 								},
 							},
 						},
-					}),
+						{
+							deletedProps: [attributeId],
+							forceUpdated:
+								!isEqualsWithDefault && isObject(newValue)
+									? [attributeId]
+									: [],
+						}
+					),
 					...hookParams
 				);
 			}
