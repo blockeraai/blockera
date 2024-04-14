@@ -9,4 +9,5 @@ export * from './post-terms';
 export * from './categories';
 export * from './columns';
 export * from './column';
+export * from './cover';
 export * from './shared';
