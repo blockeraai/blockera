@@ -11,4 +11,5 @@ export * from './columns';
 export * from './column';
 export * from './cover';
 export * from './details';
+export * from './file';
 export * from './shared';
