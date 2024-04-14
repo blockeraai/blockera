@@ -34,6 +34,19 @@ const attributes = {
 };
 
 const publisherInnerBlocks: InnerBlocks = {
+	paragraph: {
+		name: 'core/paragraph',
+		type: 'paragraph',
+		label: __('Paragraphs', 'publisher-core'),
+		icon: <InnerBlockParagraphIcon />,
+		selectors: {
+			root: 'p',
+		},
+		attributes,
+		innerBlockSettings: {
+			force: true,
+		},
+	},
 	link: {
 		name: 'core/link',
 		type: 'link',
@@ -46,19 +59,6 @@ const publisherInnerBlocks: InnerBlocks = {
 		innerBlockSettings: {
 			force: true,
 			dataCompatibility: ['font-color', 'font-color-hover'],
-		},
-	},
-	paragraph: {
-		name: 'core/paragraph',
-		type: 'paragraph',
-		label: __('Paragraphs', 'publisher-core'),
-		icon: <InnerBlockParagraphIcon />,
-		selectors: {
-			root: 'p',
-		},
-		attributes,
-		innerBlockSettings: {
-			force: true,
 		},
 	},
 	button: {
