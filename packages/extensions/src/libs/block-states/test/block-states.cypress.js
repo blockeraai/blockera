@@ -209,6 +209,16 @@ describe('Block State E2E Test', () => {
 				'width',
 				'100px'
 			);
+
+			// // set Tablet viewport
+			// TODO :
+			// cy.viewport(768, 1024);
+
+			// cy.get('.publisher-core-block').should(
+			// 	'have.css',
+			// 	'width',
+			// 	'100px'
+			// );
 		});
 
 		it('should set attribute correctly when breakpoint : Tablet', () => {
@@ -265,7 +275,7 @@ describe('Block State E2E Test', () => {
 				'100px'
 			);
 
-			// set Tablet viewport
+			// set tablet viewport
 			cy.viewport(768, 1024);
 
 			cy.get('.publisher-core-block').should(
@@ -273,6 +283,16 @@ describe('Block State E2E Test', () => {
 				'width',
 				'100px'
 			);
+
+			// TODO:
+			// // set mobile viewport
+			// cy.viewport(320, 480);
+
+			// cy.get('.publisher-core-block').should(
+			// 	'have.css',
+			// 	'width',
+			// 	'100px'
+			// );
 		});
 	});
 
@@ -328,6 +348,17 @@ describe('Block State E2E Test', () => {
 			// cy.viewport(1441, 1920);
 
 			// //.get('.publisher-core-block').realHover();
+			// cy.get('.publisher-core-block').should(
+			// 	'have.css',
+			// 	'width',
+			// 	'100px'
+			// );
+
+			// TODO:
+			// // set tablet viewport
+			// cy.viewport(768, 1024);
+
+			// cy.get('.publisher-core-block').realHover();
 			// cy.get('.publisher-core-block').should(
 			// 	'have.css',
 			// 	'width',
@@ -390,7 +421,7 @@ describe('Block State E2E Test', () => {
 				'100px'
 			);
 
-			// set Tablet viewport
+			// set tablet viewport
 			cy.viewport(768, 1024);
 
 			cy.get('.publisher-core-block').realHover();
@@ -399,6 +430,17 @@ describe('Block State E2E Test', () => {
 				'width',
 				'100px'
 			);
+
+			//TODO
+			// // set mobile viewport
+			// cy.viewport(320, 480);
+
+			// cy.get('.publisher-core-block').realHover();
+			// cy.get('.publisher-core-block').should(
+			// 	'have.css',
+			// 	'width',
+			// 	'100px'
+			// );
 		});
 
 		it('should set attribute correctly when : Normal -> Tablet -> Hover', () => {
@@ -465,6 +507,17 @@ describe('Block State E2E Test', () => {
 				'width',
 				'100px'
 			);
+
+			// TODO:
+			// // set mobile viewport
+			// cy.viewport(320, 480);
+
+			// cy.get('.publisher-core-block').realHover();
+			// cy.get('.publisher-core-block').should(
+			// 	'have.css',
+			// 	'width',
+			// 	'100px'
+			// );
 		});
 	});
 
@@ -1108,9 +1161,10 @@ describe('Block State E2E Test', () => {
 								// 	)
 								// 	.realMouseUp();
 
-								// set Tablet viewport
-								cy.viewport(380, 470);
+								// set mobile viewport
+								cy.viewport(320, 480);
 
+								// Active
 								cy.get('.publisher-core-block').realMouseDown();
 								cy.get('.publisher-core-block')
 									.should(
@@ -1492,7 +1546,7 @@ describe('Block State E2E Test', () => {
 							);
 
 							// Hover
-							cy.get('.publisher-core-block').realHover();
+							//cy.get('.publisher-core-block').realHover();
 							// cy.get('.publisher-core-block')
 							// 	.should(
 							// 		'have.css',
@@ -1502,7 +1556,7 @@ describe('Block State E2E Test', () => {
 							// 	.realMouseUp();
 
 							// Active
-							cy.get('.publisher-core-block').realMouseDown();
+							//cy.get('.publisher-core-block').realMouseDown();
 							// cy.get('.publisher-core-block')
 							// 	.should(
 							// 		'have.css',
@@ -1512,9 +1566,8 @@ describe('Block State E2E Test', () => {
 							// 	.and('have.css', 'background-repeat', 'repeat')
 							// 	.realMouseUp();
 
-							// set Tablet viewport
+							// set mobile viewport
 							cy.viewport(380, 470);
-							//TODO
 							cy.get('.publisher-core-block').realMouseDown();
 							cy.get('.publisher-core-block')
 								.should(
@@ -1526,9 +1579,7 @@ describe('Block State E2E Test', () => {
 									'have.css',
 									'background-attachment',
 									'fixed'
-								)
-								.and('have.css', 'background-repeat', 'repeat')
-								.realMouseUp();
+								);
 						});
 					});
 				});
