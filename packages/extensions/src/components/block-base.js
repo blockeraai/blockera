@@ -14,7 +14,7 @@ import {
 	useRef,
 	useState,
 	useEffect,
-	StrictMode,
+	// StrictMode,
 } from '@wordpress/element';
 
 /**
@@ -390,76 +390,75 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						select('core/blocks').getBlockType(name),
 				}}
 			>
-				<StrictMode>
-					<InspectorControls>
-						<SideEffect
-							{...{
-								currentTab,
-								currentState: isInnerBlock(currentBlock)
-									? currentInnerBlockState
-									: currentState,
-								isActive,
-							}}
-						/>
-						<FilterAttributes />
-						<SlotFillProvider>
-							<BlockPartials
-								clientId={clientId}
-								isActive={isActive}
-								setActive={setActive}
-							/>
-							<BlockFillPartials
-								{...{
-									clientId,
-									isActive,
-									currentState,
-									currentBlock,
-									currentInnerBlock,
-									BlockEditComponent,
-									currentBreakpoint,
-									publisherInnerBlocks,
-									currentInnerBlockState,
-									updateBlockEditorSettings,
-									states: attributes.publisherBlockStates,
-									blockProps: {
-										// Sending props like exactly "edit" function props of WordPress Block.
-										// Because needs total block props in outside overriding component like "publisher-blocks" in overriding process.
-										name,
-										clientId,
-										supports,
-										className,
-										setAttributes,
-										attributes: currentAttributes,
-										controllerProps: {
-											currentTab,
-											currentBlock,
-											currentState,
-											currentBreakpoint,
-											publisherInnerBlocks,
-											currentInnerBlockState,
-											handleOnChangeAttributes,
-										},
-										currentStateAttributes:
-											currentAttributes,
-										...props,
-									},
-								}}
-							/>
-						</SlotFillProvider>
-					</InspectorControls>
-					<div ref={blockEditRef} />
-
-					<BlockStyle
+				{/*<StrictMode>*/}
+				<InspectorControls>
+					<SideEffect
 						{...{
-							clientId,
-							supports,
-							blockName: name,
-							attributes,
-							currentAttributes,
-							activeDeviceType: getDeviceType(),
+							currentTab,
+							currentState: isInnerBlock(currentBlock)
+								? currentInnerBlockState
+								: currentState,
+							isActive,
 						}}
 					/>
-				</StrictMode>
+					<FilterAttributes />
+					<SlotFillProvider>
+						<BlockPartials
+							clientId={clientId}
+							isActive={isActive}
+							setActive={setActive}
+						/>
+						<BlockFillPartials
+							{...{
+								clientId,
+								isActive,
+								currentState,
+								currentBlock,
+								currentInnerBlock,
+								BlockEditComponent,
+								currentBreakpoint,
+								publisherInnerBlocks,
+								currentInnerBlockState,
+								updateBlockEditorSettings,
+								states: attributes.publisherBlockStates,
+								blockProps: {
+									// Sending props like exactly "edit" function props of WordPress Block.
+									// Because needs total block props in outside overriding component like "publisher-blocks" in overriding process.
+									name,
+									clientId,
+									supports,
+									className,
+									setAttributes,
+									attributes: currentAttributes,
+									controllerProps: {
+										currentTab,
+										currentBlock,
+										currentState,
+										currentBreakpoint,
+										publisherInnerBlocks,
+										currentInnerBlockState,
+										handleOnChangeAttributes,
+									},
+									currentStateAttributes: currentAttributes,
+									...props,
+								},
+							}}
+						/>
+					</SlotFillProvider>
+				</InspectorControls>
+				<div ref={blockEditRef} />
+
+				<BlockStyle
+					{...{
+						clientId,
+						supports,
+						blockName: name,
+						attributes,
+						currentAttributes,
+						activeDeviceType: getDeviceType(),
+					}}
+				/>
+				{/*</StrictMode>*/}
 
 				{children}
 			</BlockEditContextProvider>
