@@ -549,13 +549,12 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 						);
 					});
 
-					// ! uncomment here
-					// getWPDataObject().then((data) => {
-					// 	expect({}).to.be.deep.equal(
-					// 		getSelectedBlock(data, 'publisherInnerBlocks')
-					// 			?.heading?.attributes
-					// 	);
-					// });
+					getWPDataObject().then((data) => {
+						expect({}).to.be.deep.equal(
+							getSelectedBlock(data, 'publisherInnerBlocks')
+								?.heading?.attributes
+						);
+					});
 				});
 
 				it('Variable', () => {
@@ -710,13 +709,12 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 						);
 					});
 
-					// ! uncomment here
-					// getWPDataObject().then((data) => {
-					// 	expect({}).to.be.deep.equal(
-					// 		getSelectedBlock(data, 'publisherInnerBlocks')
-					// 			?.heading?.attributes
-					// 	);
-					// });
+					getWPDataObject().then((data) => {
+						expect({}).to.be.deep.equal(
+							getSelectedBlock(data, 'publisherInnerBlocks')
+								?.heading?.attributes
+						);
+					});
 				});
 			});
 
@@ -848,13 +846,12 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 						);
 					});
 
-					// ! uncomment here
-					// getWPDataObject().then((data) => {
-					// 	expect({}).to.be.deep.equal(
-					// 		getSelectedBlock(data, 'publisherInnerBlocks')
-					// 			?.heading?.attributes
-					// 	);
-					// });
+					getWPDataObject().then((data) => {
+						expect({}).to.be.deep.equal(
+							getSelectedBlock(data, 'publisherInnerBlocks')
+								?.heading?.attributes
+						);
+					});
 				});
 			});
 		});
@@ -926,21 +923,6 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 					expect({
 						publisherBackgroundColor: '#ffcaca',
 						publisherBackground: {
-							'image-0': {
-								isVisible: true,
-								type: 'image',
-								image: '',
-								'image-size': 'custom',
-								'image-size-width': 'auto',
-								'image-size-height': 'auto',
-								'image-position': {
-									top: '50%',
-									left: '50%',
-								},
-								'image-repeat': 'repeat',
-								'image-attachment': 'scroll',
-								order: 0,
-							},
 							'radial-gradient-0': {
 								isVisible: true,
 								type: 'radial-gradient',
@@ -996,21 +978,6 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 					expect({
 						publisherBackgroundColor: '#666666',
 						publisherBackground: {
-							'image-0': {
-								isVisible: true,
-								type: 'image',
-								image: '',
-								'image-size': 'custom',
-								'image-size-width': 'auto',
-								'image-size-height': 'auto',
-								'image-position': {
-									top: '50%',
-									left: '50%',
-								},
-								'image-repeat': 'repeat',
-								'image-attachment': 'scroll',
-								order: 0,
-							},
 							'radial-gradient-0': {
 								isVisible: true,
 								type: 'radial-gradient',
@@ -1059,21 +1026,6 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 				getWPDataObject().then((data) => {
 					expect({
 						publisherBackground: {
-							'image-0': {
-								isVisible: true,
-								type: 'image',
-								image: '',
-								'image-size': 'custom',
-								'image-size-width': 'auto',
-								'image-size-height': 'auto',
-								'image-position': {
-									top: '50%',
-									left: '50%',
-								},
-								'image-repeat': 'repeat',
-								'image-attachment': 'scroll',
-								order: 0,
-							},
 							'radial-gradient-0': {
 								isVisible: true,
 								type: 'radial-gradient',
@@ -1122,11 +1074,10 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 				// WP data should be removed too
 				getWPDataObject().then((data) => {
-					// ! uncomment here
-					// expect({}).to.be.deep.equal(
-					// 	getSelectedBlock(data, 'publisherInnerBlocks')?.heading
-					// 		?.attributes
-					// );
+					expect({}).to.be.deep.equal(
+						getSelectedBlock(data, 'publisherInnerBlocks')?.heading
+							?.attributes
+					);
 
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.elements?.heading
