@@ -17,4 +17,5 @@ export * from './media-text';
 export * from './pullquote';
 export * from './search';
 export * from './verse';
+export * from './footnotes';
 export * from './shared';
