@@ -218,14 +218,6 @@ export const Quote = {
 		// $FlowFixMe
 		disabledSelectors: [],
 	},
-	getSelectors: (selectors: Object): Object => {
-		const { root, backgroundColor } = selectors;
-
-		return {
-			...selectors,
-			publisherBackgroundColor: backgroundColor || root,
-		};
-	},
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},
