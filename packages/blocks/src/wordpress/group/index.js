@@ -24,6 +24,7 @@ import {
 	InnerBlockHeading6Icon,
 	InnerBlockLinkIcon,
 	InnerBlockButtonIcon,
+	InnerBlockParagraphIcon,
 } from '@publisher/extensions';
 import type { InnerBlocks } from '@publisher/extensions/src/libs/inner-blocks/types';
 
@@ -45,6 +46,19 @@ const publisherInnerBlocks: InnerBlocks = {
 		innerBlockSettings: {
 			force: true,
 			dataCompatibility: ['font-color', 'font-color-hover'],
+		},
+	},
+	paragraph: {
+		name: 'core/paragraph',
+		type: 'paragraph',
+		label: __('Paragraphs', 'publisher-core'),
+		icon: <InnerBlockParagraphIcon />,
+		selectors: {
+			root: 'p',
+		},
+		attributes,
+		innerBlockSettings: {
+			force: true,
 		},
 	},
 	button: {

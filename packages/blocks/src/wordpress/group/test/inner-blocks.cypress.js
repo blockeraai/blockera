@@ -29,6 +29,7 @@ describe('Group Block → Inner Blocks', () => {
 		cy.get('.publisher-extension.publisher-extension-inner-blocks').within(
 			() => {
 				cy.getByAriaLabel('Links Customize').should('exist');
+				cy.getByAriaLabel('Paragraphs Customize').should('exist');
 				cy.getByAriaLabel('Buttons Customize').should('exist');
 				cy.getByAriaLabel('Headings Customize').should('exist');
 
