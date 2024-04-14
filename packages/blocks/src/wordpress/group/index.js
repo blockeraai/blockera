@@ -84,8 +84,8 @@ const publisherInnerBlocks: InnerBlocks = {
 		},
 	},
 	heading1: {
-		name: 'core/heading1',
-		type: 'heading1',
+		name: 'core/h1',
+		type: 'h1',
 		label: __('H1s', 'publisher-core'),
 		icon: <InnerBlockHeading1Icon />,
 		selectors: {
@@ -102,8 +102,8 @@ const publisherInnerBlocks: InnerBlocks = {
 		},
 	},
 	heading2: {
-		name: 'core/heading2',
-		type: 'heading2',
+		name: 'core/h2',
+		type: 'h2',
 		label: __('H2s', 'publisher-core'),
 		icon: <InnerBlockHeading2Icon />,
 		selectors: {
@@ -120,8 +120,8 @@ const publisherInnerBlocks: InnerBlocks = {
 		},
 	},
 	heading3: {
-		name: 'core/heading3',
-		type: 'heading3',
+		name: 'core/h3',
+		type: 'h3',
 		label: __('H3s', 'publisher-core'),
 		icon: <InnerBlockHeading3Icon />,
 		selectors: {
@@ -138,8 +138,8 @@ const publisherInnerBlocks: InnerBlocks = {
 		},
 	},
 	heading4: {
-		name: 'core/heading4',
-		type: 'heading4',
+		name: 'core/h4',
+		type: 'h4',
 		label: __('H4s', 'publisher-core'),
 		icon: <InnerBlockHeading4Icon />,
 		selectors: {
@@ -156,8 +156,8 @@ const publisherInnerBlocks: InnerBlocks = {
 		},
 	},
 	heading5: {
-		name: 'core/heading5',
-		type: 'heading5',
+		name: 'core/h5',
+		type: 'h5',
 		label: __('H5s', 'publisher-core'),
 		icon: <InnerBlockHeading5Icon />,
 		selectors: {
@@ -174,8 +174,8 @@ const publisherInnerBlocks: InnerBlocks = {
 		},
 	},
 	heading6: {
-		name: 'core/heading6',
-		type: 'heading6',
+		name: 'core/h6',
+		type: 'h6',
 		label: __('H6s', 'publisher-core'),
 		icon: <InnerBlockHeading6Icon />,
 		selectors: {
