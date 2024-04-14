@@ -213,13 +213,11 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 					const repeaterValue = prepare(repeaterId, currentValue);
 
 					if (isUndefined(repeaterId) || isUndefined(repeaterValue)) {
-						return !isObject(currentValue)
-							? normalizeRepeaterItems(defaultValue)
-							: normalizeRepeaterItems(currentValue);
+						return normalizeRepeaterItems(currentValue);
 					}
 
 					return !isObject(repeaterValue)
-						? normalizeRepeaterItems(defaultValue)
+						? normalizeRepeaterItems(currentValue)
 						: normalizeRepeaterItems(repeaterValue);
 				}
 
