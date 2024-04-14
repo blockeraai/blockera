@@ -158,12 +158,26 @@ export function onChangeBlockStates(
 		}
 	);
 
-	if (isEquals(_states, newValue)) {
+	if (isEquals(valueCleanup(_states), valueCleanup(newValue))) {
 		return;
 	}
 
+	const deletedProps = [];
+
+	Object.entries(_states).forEach(([name]: [string, any]): void => {
+		if (!newValue.hasOwnProperty(name)) {
+			deletedProps.push(name);
+			newValue = {
+				...newValue,
+				[name]: undefined,
+			};
+		}
+	});
+
 	onChange(
 		'publisherBlockStates',
-		mergeObject(valueCleanup(_states), valueCleanup(newValue))
+		mergeObject(valueCleanup(_states), valueCleanup(newValue), {
+			deletedProps,
+		})
 	);
 }

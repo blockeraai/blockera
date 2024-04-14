@@ -169,6 +169,17 @@ const StatesManager: ComponentType<any> = memo(
 							'css-class'?: string,
 						}
 					]): void => {
+						/**
+						 * To compatible with deleted props of mergeObject api.
+						 *
+						 * @see ../helpers.js on line 179
+						 */
+						if (undefined === item) {
+							clonedValue[itemId] = item;
+
+							return;
+						}
+
 						const breakpoints: {
 							[key: TBreakpoint]: {
 								attributes: Object,
