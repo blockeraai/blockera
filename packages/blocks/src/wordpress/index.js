@@ -12,4 +12,5 @@ export * from './column';
 export * from './cover';
 export * from './details';
 export * from './file';
+export * from './latest-posts';
 export * from './shared';
