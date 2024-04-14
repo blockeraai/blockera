@@ -15,4 +15,5 @@ export * from './file';
 export * from './latest-posts';
 export * from './media-text';
 export * from './pullquote';
+export * from './search';
 export * from './shared';
