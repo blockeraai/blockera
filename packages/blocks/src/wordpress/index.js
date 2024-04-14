@@ -14,4 +14,5 @@ export * from './details';
 export * from './file';
 export * from './latest-posts';
 export * from './media-text';
+export * from './pullquote';
 export * from './shared';
