@@ -10,10 +10,7 @@ import { select } from '@wordpress/data';
  */
 import reducer from './reducer';
 import { isChanged } from './helpers';
-import {
-	isInnerBlock,
-	isNormalState as _isNormalBlockState,
-} from '../../components/utils';
+import { isInnerBlock } from '../../components/utils';
 import actions, { type UseAttributesActions } from './actions';
 import type { THandleOnChangeAttributes } from '../../libs/types';
 
@@ -163,7 +160,7 @@ export const useAttributes = (
 		if (isInnerBlock(currentBlock)) {
 			// Assume master block isn't in normal state!
 			// action = UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE
-			if (!_isNormalBlockState(getExtensionCurrentBlockState())) {
+			if (!masterIsNormalState()) {
 				let currentBlockAttributes: Object = {};
 
 				if (
