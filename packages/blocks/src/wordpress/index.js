@@ -19,6 +19,7 @@ export * from './search';
 export * from './verse';
 export * from './footnotes';
 export * from './site-title';
+export * from './post-template';
 export * from './post-title';
 export * from './post-excerpt';
 export * from './post-content';
