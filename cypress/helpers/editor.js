@@ -413,3 +413,11 @@ export function openMoreFeaturesControl(label) {
 			}
 		});
 }
+
+export const reSelectBlock = () => {
+	// unfocus block
+	cy.getIframeBody().find('h1').click();
+
+	// reselect block
+	cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
+};
