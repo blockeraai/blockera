@@ -26,4 +26,5 @@ export * from './post-author';
 export * from './post-author-name';
 export * from './post-date';
 export * from './query-pagination';
+export * from './query-pagination-numbers';
 export * from './shared';
