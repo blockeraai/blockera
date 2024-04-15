@@ -63,7 +63,6 @@ export const useCalculateCurrentAttributes = ({
 					...blockAttributesDefaults,
 					...((publisherInnerBlocks[currentBlock] || {})
 						?.attributes || {}),
-					...attributes,
 					...currentInnerBlock?.attributes,
 				};
 			}
@@ -76,7 +75,6 @@ export const useCalculateCurrentAttributes = ({
 					...blockAttributesDefaults,
 					...((publisherInnerBlocks[currentBlock] || {})
 						?.attributes || {}),
-					...attributes,
 					...currentInnerBlock?.attributes,
 					...currentInnerBlock?.attributes?.publisherBlockStates[
 						currentInnerBlockState
@@ -98,7 +96,6 @@ export const useCalculateCurrentAttributes = ({
 					...blockAttributesDefaults,
 					...((publisherInnerBlocks[currentBlock] || {})
 						?.attributes || {}),
-					...attributes,
 					...currentInnerBlock?.attributes,
 					...(prepare(
 						`publisherBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.publisherInnerBlocks[${currentBlock}].attributes`,
@@ -115,7 +112,6 @@ export const useCalculateCurrentAttributes = ({
 					...blockAttributesDefaults,
 					...((publisherInnerBlocks[currentBlock] || {})
 						?.attributes || {}),
-					...attributes,
 					...currentInnerBlock?.attributes,
 					...(prepare(
 						`publisherBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.publisherInnerBlocks[${currentBlock}].attributes.publisherBlockStates[${currentInnerBlockState}].breakpoints[${currentBreakpoint}].attributes`,
