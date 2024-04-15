@@ -181,3 +181,101 @@ export function onChangeBlockStates(
 		})
 	);
 }
+
+export const blockStatesValueCleanup = (value: {
+	[key: TStates]: {
+		...StateTypes,
+		isVisible: boolean,
+		'css-class'?: string,
+	},
+}): Object => {
+	const clonedValue: {
+		[key: TStates]: {
+			breakpoints: {
+				[key: TBreakpoint]: {
+					attributes: Object,
+				},
+			},
+			isVisible: boolean,
+			'css-class'?: string,
+		},
+	} = {};
+	const currentBreakpoint = select(
+		'publisher-core/extensions'
+	).getExtensionCurrentBlockStateBreakpoint();
+
+	Object.entries(value).forEach(
+		([itemId, item]: [
+			TStates,
+			{
+				...StateTypes,
+				isVisible: boolean,
+				'css-class'?: string,
+			}
+		]): void => {
+			/**
+			 * To compatible with deleted props of mergeObject api.
+			 *
+			 * @see ../helpers.js on line 179
+			 */
+			if (undefined === item) {
+				clonedValue[itemId] = item;
+
+				return;
+			}
+
+			const breakpoints: {
+				[key: TBreakpoint]: {
+					attributes: Object,
+				},
+			} = {};
+
+			Object.entries(item?.breakpoints)?.forEach(
+				([breakpointType, breakpoint]: [TBreakpoint, Object]) => {
+					if (
+						!Object.keys(breakpoint?.attributes || {}).length &&
+						'laptop' !== breakpointType
+					) {
+						return;
+					}
+
+					const { attributes = {} } = breakpoint;
+
+					if (
+						!Object.keys(attributes).length &&
+						'normal' !== itemId
+					) {
+						return;
+					}
+
+					breakpoints[breakpointType] = {
+						attributes,
+					};
+				}
+			);
+
+			if (!Object.values(breakpoints).length && 'normal' !== itemId) {
+				breakpoints[currentBreakpoint] = {
+					attributes: {},
+				};
+			}
+
+			if (['custom-class', 'parent-class'].includes(itemId)) {
+				clonedValue[itemId] = {
+					breakpoints,
+					isVisible: item?.isVisible,
+					'css-class': item['css-class'] || '',
+				};
+
+				return;
+			}
+
+			clonedValue[itemId] = {
+				breakpoints,
+				isVisible: item?.isVisible,
+			};
+		}
+	);
+
+	return clonedValue;
+};

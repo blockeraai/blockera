@@ -8,11 +8,12 @@ import { defaultItemValue } from '@publisher/controls/src/libs/repeater-control'
  */
 import defaultStates from './states';
 import getBreakpoints from './default-breakpoints';
+import { blockStatesValueCleanup } from './helpers';
 
 export const attributes = {
 	publisherBlockStates: {
 		type: 'object',
-		default: {
+		default: blockStatesValueCleanup({
 			normal: {
 				...defaultStates.normal,
 				...defaultItemValue,
@@ -24,6 +25,6 @@ export const attributes = {
 				visibilitySupport: false,
 				breakpoints: getBreakpoints('normal'),
 			},
-		},
+		}),
 	},
 };
