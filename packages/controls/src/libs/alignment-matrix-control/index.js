@@ -2,7 +2,6 @@
 /**
  * External dependencies
  */
-import { __experimentalAlignmentMatrixControl as WPAlignmentMatrixControl } from '@wordpress/components';
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 
@@ -21,6 +20,7 @@ import { useControlContext } from '../../context';
 import { convertAlignmentMatrixCoordinates } from './utils';
 import type { Props } from './types';
 import type { MixedElement } from 'react';
+import AlignmentMatrixBox from './components/alignment-matrix';
 
 export default function AlignmentMatrixControl({
 	inputFields = false,
@@ -79,7 +79,7 @@ export default function AlignmentMatrixControl({
 				{...labelProps}
 			>
 				<div className={controlClassNames('alignment-matrix')}>
-					<WPAlignmentMatrixControl
+					<AlignmentMatrixBox
 						className={controlClassNames('alignment-matrix-box')}
 						value={
 							convertAlignmentMatrixCoordinates(value)?.compact
@@ -114,7 +114,7 @@ export default function AlignmentMatrixControl({
 				className={controlClassNames('alignment-matrix')}
 			>
 				<div style={{ width: '72px' }}>
-					<WPAlignmentMatrixControl
+					<AlignmentMatrixBox
 						className={controlClassNames('alignment-matrix-box')}
 						value={
 							convertAlignmentMatrixCoordinates(value)?.compact
@@ -141,7 +141,7 @@ export default function AlignmentMatrixControl({
 							min={0}
 							max={100}
 							unitType="background-position"
-							defaultValue={value.top}
+							defaultValue={defaultValue.top}
 							onChange={(newValue: Object) => {
 								setValue({
 									...value,
@@ -160,7 +160,7 @@ export default function AlignmentMatrixControl({
 							min={0}
 							max={100}
 							unitType="background-position"
-							defaultValue={value.left}
+							defaultValue={defaultValue.left}
 							onChange={(newValue) => {
 								setValue({
 									...value,
