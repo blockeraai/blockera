@@ -22,4 +22,5 @@ export * from './site-title';
 export * from './post-title';
 export * from './post-excerpt';
 export * from './post-content';
+export * from './post-author';
 export * from './shared';
