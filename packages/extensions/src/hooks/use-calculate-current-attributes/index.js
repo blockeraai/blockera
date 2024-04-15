@@ -63,6 +63,7 @@ export const useCalculateCurrentAttributes = ({
 					...blockAttributesDefaults,
 					...((publisherInnerBlocks[currentBlock] || {})
 						?.attributes || {}),
+					...attributes,
 					...currentInnerBlock?.attributes,
 				};
 			}
@@ -75,8 +76,8 @@ export const useCalculateCurrentAttributes = ({
 					...blockAttributesDefaults,
 					...((publisherInnerBlocks[currentBlock] || {})
 						?.attributes || {}),
-					publisherBlockStates:
-						currentInnerBlock?.attributes?.publisherBlockStates,
+					...attributes,
+					...currentInnerBlock?.attributes,
 					...currentInnerBlock?.attributes?.publisherBlockStates[
 						currentInnerBlockState
 					]?.breakpoints[currentBreakpoint]?.attributes,
@@ -97,6 +98,8 @@ export const useCalculateCurrentAttributes = ({
 					...blockAttributesDefaults,
 					...((publisherInnerBlocks[currentBlock] || {})
 						?.attributes || {}),
+					...attributes,
+					...currentInnerBlock?.attributes,
 					...(prepare(
 						`publisherBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.publisherInnerBlocks[${currentBlock}].attributes`,
 						attributes
@@ -112,6 +115,8 @@ export const useCalculateCurrentAttributes = ({
 					...blockAttributesDefaults,
 					...((publisherInnerBlocks[currentBlock] || {})
 						?.attributes || {}),
+					...attributes,
+					...currentInnerBlock?.attributes,
 					...(prepare(
 						`publisherBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.publisherInnerBlocks[${currentBlock}].attributes.publisherBlockStates[${currentInnerBlockState}].breakpoints[${currentBreakpoint}].attributes`,
 						attributes
@@ -131,7 +136,7 @@ export const useCalculateCurrentAttributes = ({
 	else if (!isNormalState(currentState) || 'laptop' !== currentBreakpoint) {
 		currentAttributes = {
 			...blockAttributesDefaults,
-			publisherBlockStates: attributes?.publisherBlockStates,
+			...attributes,
 			...(prepare(
 				`publisherBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes`,
 				attributes
