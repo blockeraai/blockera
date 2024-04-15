@@ -39,7 +39,7 @@ export default function AlignmentMatrixBox({
 		<div
 			className={className}
 			style={{ width }}
-			aria-label={_('Alignment Matrix Control')}
+			aria-label={__('Alignment Matrix Control', 'publisher-core')}
 		>
 			{matrixValidValues.map((_value) => (
 				<span
