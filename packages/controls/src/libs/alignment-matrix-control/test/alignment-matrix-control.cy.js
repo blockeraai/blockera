@@ -45,20 +45,24 @@ describe('alignment-matrix control', () => {
 			cy.get('input[type="number"]').eq(1).as('inputLeft');
 
 			specialPoints.forEach((top, rowIdx) => {
-				cy.get('@inputTop').clear();
-				cy.get('@inputTop').type(top);
+				// select all then type instead of clear to prevent input catch value from default
+				cy.get('@inputTop').type(`{selectall}${top}`);
 
 				specialPoints.forEach((left, colIdx) => {
 					// 1. should select correct point on matrix when entering corresponding values in inputs
-					cy.get('@inputLeft').clear();
-					cy.get('@inputLeft').type(left);
+					cy.get('@inputLeft').type(`{selectall}${left}`);
 
 					// visual & data assertion
-					cy.get('[role="row"]')
-						.eq(rowIdx)
-						.children()
-						.eq(colIdx)
-						.should('have.attr', 'tabindex', '0')
+					cy.getByDataTest('matrix-item')
+						.eq(
+							// eslint-disable-next-line no-nested-ternary
+							rowIdx === 0
+								? colIdx
+								: rowIdx === 1
+								? rowIdx * 2 + 1 + colIdx
+								: rowIdx * 2 + 2 + colIdx
+						)
+						.should('have.class', 'selected')
 						.then(() => {
 							expect(getControlValue(name)).to.be.deep.equal({
 								top: `${top}%`,
@@ -67,22 +71,26 @@ describe('alignment-matrix control', () => {
 						});
 
 					// 2. should de-select active point by adding 1 to current value of inputs
-					cy.get('@inputLeft').clear();
 
 					if (left === 100) {
-						cy.get('@inputLeft').type(left - 1);
+						cy.get('@inputLeft').type(`{selectall}${left - 1}`);
 					} else {
 						cy.get('@inputLeft').type(
-							left === 0 ? left + 1 : left - 1
+							`{selectall}${left === 0 ? left + 1 : left - 1}`
 						);
 					}
 
 					// visual assertion is enough
-					cy.get('[role="row"]')
-						.eq(rowIdx)
-						.children()
-						.eq(colIdx)
-						.should('have.attr', 'tabindex', '-1');
+					cy.getByDataTest('matrix-item')
+						.eq(
+							// eslint-disable-next-line no-nested-ternary
+							rowIdx === 0
+								? colIdx
+								: rowIdx === 1
+								? rowIdx * 2 + 1 + colIdx
+								: rowIdx * 2 + 2 + colIdx
+						)
+						.should('not.have.class', 'selected');
 				});
 			});
 		});
@@ -100,10 +108,15 @@ describe('alignment-matrix control', () => {
 
 			specialPoints.forEach((row, rowIdx) => {
 				specialPoints.forEach((col, colIdx) => {
-					cy.get('[role="row"]')
-						.eq(rowIdx)
-						.children()
-						.eq(colIdx)
+					cy.getByDataTest('matrix-item')
+						.eq(
+							// eslint-disable-next-line no-nested-ternary
+							rowIdx === 0
+								? colIdx
+								: rowIdx === 1
+								? rowIdx * 2 + 1 + colIdx
+								: rowIdx * 2 + 2 + colIdx
+						)
 						.click();
 
 					// visual assertion
@@ -122,7 +135,7 @@ describe('alignment-matrix control', () => {
 		});
 	});
 	context('Initial Value Tests', () => {
-		const defaultValue = { top: ' 20%', left: '10%' };
+		const defaultValue = { top: '20%', left: '10%' };
 		// 1.
 		it('calculated data must be defaultValue, when defaultValue(ok) && id(!ok) value(undefined)', () => {
 			cy.withDataProvider({

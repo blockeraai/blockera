@@ -30,3 +30,10 @@ export type Coordinates = {
 		text: string,
 	},
 };
+
+export type TAlignmentMatrixBox = {
+	value: string,
+	onChange: (data: any) => void,
+	width?: string,
+	className?: string,
+};
