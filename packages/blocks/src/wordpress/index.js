@@ -21,4 +21,5 @@ export * from './footnotes';
 export * from './site-title';
 export * from './post-title';
 export * from './post-excerpt';
+export * from './post-content';
 export * from './shared';
