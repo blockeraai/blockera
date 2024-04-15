@@ -18,4 +18,5 @@ export * from './pullquote';
 export * from './search';
 export * from './verse';
 export * from './footnotes';
+export * from './site-title';
 export * from './shared';
