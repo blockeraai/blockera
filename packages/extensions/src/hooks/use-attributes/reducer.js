@@ -147,23 +147,30 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			 */
 			return applyFilters(
 				'publisherCore.blockEdit.setAttributes',
-				mergeObject(state, {
-					publisherInnerBlocks: {
-						[currentBlock]: {
-							attributes: {
-								publisherBlockStates: memoizedBlockStates(
-									state.publisherInnerBlocks[currentBlock]
-										.attributes,
-									action,
-									{
-										currentState: currentInnerBlockState,
-										insideInnerBlock: false,
-									}
-								),
+				mergeObject(
+					state,
+					{
+						publisherInnerBlocks: {
+							[currentBlock]: {
+								attributes: {
+									publisherBlockStates: memoizedBlockStates(
+										state.publisherInnerBlocks[currentBlock]
+											.attributes,
+										action,
+										{
+											currentState:
+												currentInnerBlockState,
+											insideInnerBlock: false,
+										}
+									),
+								},
 							},
 						},
 					},
-				}),
+					{
+						forceUpdated: isObject(newValue) ? [attributeId] : [],
+					}
+				),
 				...hookParams
 			);
 

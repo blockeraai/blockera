@@ -182,17 +182,25 @@ export const memoizedBlockStates: (
 				recievedState || currentState
 			]?.breakpoints;
 
-		return mergeObject(currentBlockAttributes?.publisherBlockStates, {
-			[recievedState || currentState]: {
-				breakpoints: {
-					[currentBreakpoint]: memoizedRootBreakpoints(
-						breakpoints[currentBreakpoint],
-						action,
-						insideInnerBlock
-					),
+		return mergeObject(
+			currentBlockAttributes?.publisherBlockStates,
+			{
+				[recievedState || currentState]: {
+					breakpoints: {
+						[currentBreakpoint]: memoizedRootBreakpoints(
+							breakpoints[currentBreakpoint],
+							action,
+							insideInnerBlock
+						),
+					},
 				},
 			},
-		});
+			{
+				forceUpdated: isObject(action.newValue)
+					? [action.attributeId]
+					: [],
+			}
+		);
 	}
 );
 
