@@ -34,4 +34,5 @@ export * from './query-no-results';
 export * from './comments';
 export * from './comment-author-name';
 export * from './comment-content';
+export * from './comment-date';
 export * from './shared';
