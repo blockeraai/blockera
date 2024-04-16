@@ -36,4 +36,5 @@ export * from './comment-author-name';
 export * from './comment-content';
 export * from './comment-date';
 export * from './comment-edit-link';
+export * from './comment-reply-link';
 export * from './shared';
