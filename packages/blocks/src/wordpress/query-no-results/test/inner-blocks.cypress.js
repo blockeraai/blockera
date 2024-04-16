@@ -3,8 +3,8 @@
  */
 import {
 	appendBlocks,
+	createPost,
 	openInnerBlocksExtension,
-	openMoreFeaturesControl,
 } from '../../../../../../cypress/helpers';
 
 /**
@@ -13,6 +13,10 @@ import {
 import { testContent } from './test-content';
 
 describe('Query Pagination Block → Inner Blocks', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	it('Should add all inner blocks to block settings', () => {
 		appendBlocks(testContent);
 

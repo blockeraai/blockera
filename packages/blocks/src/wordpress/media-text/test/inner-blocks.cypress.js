@@ -3,11 +3,16 @@
  */
 import {
 	appendBlocks,
+	createPost,
 	openInnerBlocksExtension,
 	openMoreFeaturesControl,
 } from '../../../../../../cypress/helpers';
 
 describe('Media Text Block → Inner Blocks', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	it('Should add all inner blocks to block settings', () => {
 		appendBlocks(
 			'<!-- wp:media-text {"mediaId":60,"mediaLink":"https://site-themes-clean.test/?attachment_id=60","mediaType":"image","mediaWidth":38} -->\n' +

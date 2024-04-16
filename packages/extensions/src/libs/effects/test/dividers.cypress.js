@@ -2,10 +2,13 @@ import {
 	addBlockToPost,
 	getWPDataObject,
 	getSelectedBlock,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Dividers → Functionality', () => {
 	beforeEach(() => {
+		createPost();
+
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
 		cy.getBlock('core/paragraph').type('this is test text.', { delay: 0 });

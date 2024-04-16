@@ -5,9 +5,14 @@ import {
 	appendBlocks,
 	openInnerBlocksExtension,
 	openMoreFeaturesControl,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Column Block → Inner Blocks', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	it('Should add all inner blocks to block settings', () => {
 		appendBlocks(
 			'<!-- wp:columns -->\n' +

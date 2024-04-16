@@ -1,5 +1,6 @@
 import {
 	appendBlocks,
+	createPost,
 	getBlockClientId,
 	getWPDataObject,
 	setBlockState,
@@ -12,6 +13,8 @@ import {
 
 describe('Style Engine Testing ...', () => {
 	beforeEach(() => {
+		createPost();
+
 		appendBlocks(
 			'<!-- wp:paragraph -->\n' +
 				'<p>Test <a href="#">Link</a></p>\n' +

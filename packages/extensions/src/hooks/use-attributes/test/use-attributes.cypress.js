@@ -4,9 +4,14 @@ import {
 	getSelectedBlock,
 	setInnerBlock,
 	setDeviceType,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('useAttributes Hook Testing ...', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	describe('handleOnChangeAttributes callback', () => {
 		it('should sets value when state is paragraph -> normal -> laptop', () => {
 			appendBlocks(

@@ -5,10 +5,13 @@ import {
 	getSelectedBlock,
 	redirectToFrontPage,
 	hexToRGB,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Background Image → Functionality', () => {
 	beforeEach(() => {
+		createPost();
+
 		// add block, select it, open style tab
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 

@@ -7,10 +7,13 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Media Fit Position → Functionality', () => {
 	beforeEach(() => {
+		createPost();
+
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is a test text.', {

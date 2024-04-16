@@ -1,5 +1,6 @@
 import {
 	addBlockToPost,
+	createPost,
 	getSelectedBlock,
 	getWPDataObject,
 	redirectToFrontPage,
@@ -8,6 +9,8 @@ import {
 
 describe('z-index → Functionality', () => {
 	beforeEach(() => {
+		createPost();
+
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {

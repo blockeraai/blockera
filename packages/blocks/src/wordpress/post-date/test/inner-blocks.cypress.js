@@ -3,11 +3,15 @@
  */
 import {
 	appendBlocks,
+	createPost,
 	openInnerBlocksExtension,
-	openMoreFeaturesControl,
 } from '../../../../../../cypress/helpers';
 
 describe('Post Date Block → Inner Blocks', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	it('Should add all inner blocks to block settings', () => {
 		appendBlocks('<!-- wp:post-date /--> ');
 

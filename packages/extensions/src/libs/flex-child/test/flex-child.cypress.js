@@ -4,10 +4,14 @@ import {
 	getSelectedBlock,
 	redirectToFrontPage,
 	appendBlocks,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Flex Child', () => {
-	//describe('Extension Initializing', () => {...});
+	beforeEach(() => {
+		createPost();
+	});
+
 	describe('', () => {
 		beforeEach(() => {
 			const code = `<!-- wp:paragraph {"publisherPropsId":"1025142054679"} -->

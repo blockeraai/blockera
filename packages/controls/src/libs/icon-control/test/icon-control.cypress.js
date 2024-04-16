@@ -5,11 +5,13 @@ import {
 	addBlockToPost,
 	getWPDataObject,
 	getSelectedBlock,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('icon-control', () => {
-	// TODO we will add these tests when adding visual tests
-	// context('Rendering', () => {});
+	beforeEach(() => {
+		createPost();
+	});
 
 	context('Functional', () => {
 		beforeEach(() => {

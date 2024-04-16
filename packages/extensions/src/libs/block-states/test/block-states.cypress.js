@@ -1,10 +1,12 @@
 /**
  * Internal dependencies
  */
-import { addBlockToPost } from '../../../../../../cypress/helpers';
+import { addBlockToPost, createPost } from '../../../../../../cypress/helpers';
 
 describe('Border and Shadow extension', () => {
 	beforeEach(() => {
+		createPost();
+
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
 		cy.getIframeBody()

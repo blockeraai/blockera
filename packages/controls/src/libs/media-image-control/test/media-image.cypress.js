@@ -6,9 +6,14 @@ import {
 	addBlockToPost,
 	getWPDataObject,
 	getSelectedBlock,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('media-image', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	// TODO we will add these tests when adding visual tests
 	// context('Rendering', () => {});
 

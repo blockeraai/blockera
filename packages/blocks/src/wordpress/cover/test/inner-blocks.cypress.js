@@ -3,11 +3,16 @@
  */
 import {
 	appendBlocks,
+	createPost,
 	openInnerBlocksExtension,
 	openMoreFeaturesControl,
 } from '../../../../../../cypress/helpers';
 
 describe('Column Block → Inner Blocks', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	it('Should add all inner blocks to block settings', () => {
 		appendBlocks(
 			'<!-- wp:cover {"url":"https://placehold.co/600x400","id":60,"dimRatio":50,"customOverlayColor":"#4658a9","layout":{"type":"constrained"}} -->\n' +

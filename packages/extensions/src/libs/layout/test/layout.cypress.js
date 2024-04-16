@@ -4,10 +4,13 @@ import {
 	getSelectedBlock,
 	redirectToFrontPage,
 	addBlockToPost,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Layout Extension', () => {
-	//describe('Extension Initializing', () => {...});
+	beforeEach(() => {
+		createPost();
+	});
 
 	describe('Display', () => {
 		beforeEach(() => {

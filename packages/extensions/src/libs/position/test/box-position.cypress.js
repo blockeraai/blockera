@@ -3,11 +3,13 @@ import {
 	addBlockToPost,
 	getWPDataObject,
 	getSelectedBlock,
-	redirectToFrontPage,
+	redirectToFrontPage, createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Box Position → Functionality', () => {
 	beforeEach(() => {
+		createPost();
+
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {

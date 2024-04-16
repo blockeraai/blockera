@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import './commands';
-import { disableGutenbergFeatures, goTo, loginToSite } from '../helpers';
+import { loginToSite, createPost } from '../helpers';
 
 /**
  * External dependencies
@@ -16,12 +16,6 @@ beforeEach(function () {
 	cy.viewport(1280, 720);
 
 	cy.login();
-
-	goTo('/wp-admin/post-new.php?post_type=post').then(() => {
-		// eslint-disable-next-line
-		cy.wait(2000);
-		disableGutenbergFeatures();
-	});
 });
 
 Cypress.Commands.add('login', () => {
@@ -37,3 +31,4 @@ Cypress.Commands.add('getIframeBody', () => {
 	// chaining more Cypress commands, like ".find(...)
 	return cy.get('iframe[name="editor-canvas"]').its('0.contentDocument.body');
 });
+

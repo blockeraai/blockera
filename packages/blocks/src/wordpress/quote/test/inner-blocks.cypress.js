@@ -3,11 +3,16 @@
  */
 import {
 	appendBlocks,
+	createPost,
 	openInnerBlocksExtension,
 	openMoreFeaturesControl,
 } from '../../../../../../cypress/helpers';
 
 describe('Quote Block → Inner Blocks', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	it('Should add all inner blocks to block settings', () => {
 		appendBlocks(
 			'<!-- wp:quote -->\n' +
