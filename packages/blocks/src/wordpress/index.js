@@ -32,6 +32,7 @@ export * from './query-pagination-next';
 export * from './query-pagination-previous';
 export * from './query-no-results';
 export * from './comments';
+export * from './comments-pagination';
 export * from './comment-author-name';
 export * from './comment-content';
 export * from './comment-date';
