@@ -1,4 +1,4 @@
-import { getWPDataObject } from './editor';
+import { getWPDataObject, disableGutenbergFeatures } from './editor';
 
 /**
  * Login to our test WordPress site
@@ -42,3 +42,17 @@ export function goTo(path = '/wp-admin', login = false) {
 			: getWPDataObject();
 	});
 }
+
+/**
+ * Creates new post
+ *
+ * @param {postType} string WP post type slug
+ */
+export function createPost({ postType = 'post' } = {}) {
+	goTo('/wp-admin/post-new.php?post_type=' + postType).then(() => {
+		// eslint-disable-next-line
+		cy.wait(2000);
+		disableGutenbergFeatures();
+	});
+}
+
