@@ -56,3 +56,15 @@ export function createPost({ postType = 'post' } = {}) {
 	});
 }
 
+/**
+ * Go to edit page of post
+ *
+ * @param {postType} string WP post type slug
+ */
+export function editPost({ postID = '' } = {}) {
+	goTo(`/wp-admin/post.php?post=${postID}&action=edit`).then(() => {
+		// eslint-disable-next-line
+		cy.wait(2000);
+		disableGutenbergFeatures();
+	});
+}
