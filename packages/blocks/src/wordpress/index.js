@@ -42,4 +42,5 @@ export * from './comment-date';
 export * from './comment-edit-link';
 export * from './comment-reply-link';
 export * from './post-comments-form';
+export * from './loginout';
 export * from './shared';
