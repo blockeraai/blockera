@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import './commands';
-import { loginToSite, createPost } from '../helpers';
+import { loginToSite } from '../helpers';
 
 /**
  * External dependencies
@@ -31,4 +31,3 @@ Cypress.Commands.add('getIframeBody', () => {
 	// chaining more Cypress commands, like ".find(...)
 	return cy.get('iframe[name="editor-canvas"]').its('0.contentDocument.body');
 });
-
