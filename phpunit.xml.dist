@@ -23,12 +23,6 @@
         </testsuite>
     </testsuites>
 
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./publisher-core</directory>
-        </whitelist>
-    </filter>
-
     <php>
         <const name="PHPUNIT_PLUGIN_TEST" value="true"/>
         <env name="WP_PHPUNIT__TESTS_CONFIG" value="./.dev/tests/phpunit/config.php" />
