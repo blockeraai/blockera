@@ -21,27 +21,35 @@ if ( ! function_exists( 'pb_core_config' ) ) {
 			return false;
 		}
 
-		$key_parts       = explode( '.', $key );
-		$config_includes = array(
+		$keyNodes = explode( '.', $key );
+
+		$configIncludes = array(
 			'app'         => PB_CORE_PATH . '/config/app.php',
 			'entities'    => PB_CORE_PATH . '/config/entities.php',
 			'breakpoints' => PB_CORE_PATH . '/config/breakpoints.php',
 			'valueAddon'  => PB_CORE_PATH . '/config/value-addon.php',
 		);
 
-		if ( ! $config_includes[ $key_parts[0] ] ) {
+		$firstNode = array_shift( $keyNodes );
+
+		if ( ! $configIncludes[ $firstNode ] ) {
 
 			return false;
 		}
 
-		$app_config = require $config_includes[ $key_parts[0] ];
+		$config = require $configIncludes[ $firstNode ];
 
-		if ( empty( $key_parts[1] ) ) {
+		foreach ( $keyNodes as $node ) {
 
-			return $app_config;
+			if ( ! isset( $config[ $node ] ) ) {
+
+				return $config;
+			}
+
+			$config = $config[$node];
 		}
 
-		return $app_config[ $key_parts[1] ];
+		return $config;
 	}
 }
 
