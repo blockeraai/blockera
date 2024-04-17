@@ -212,55 +212,6 @@ abstract class BaseStyleDefinition implements Style {
 	}
 
 	/**
-	 * Setup css cache.
-	 *
-	 * @param mixed|array $cacheValue the cache value as array {$css}
-	 * @param string      $cacheKey   the cache key to read and write in database.
-	 *
-	 * @throws BaseException
-	 * @return bool true on success updated cache value in database, false when otherwise!
-	 */
-	protected function setCache( $cacheValue, string $cacheKey = '' ): bool {
-
-		if ( empty( $cacheKey ) ) {
-
-			$cacheKey = $this->getCacheKey();
-		}
-
-		$updated = update_option( $cacheKey, $cacheValue );
-
-		if ( ! $updated ) {
-
-			throw new BaseException( __( "Please check invalid css property name in " . __CLASS__ . ", There was an in StyleEngine::filter_safe_style_css() , Error!", 'publisher-core' ) );
-		}
-
-		return $updated;
-	}
-
-	/**
-	 * Setup css cache.
-	 *
-	 * @param string $cacheKey the cache key to read and write in database.
-	 *
-	 * @return mixed|false css older generated if is exists in database!
-	 *                     when return false means {$cacheKey} was not exists!
-	 */
-	protected function getCache( string $cacheKey = '' ) {
-
-		if ( empty( $cacheKey ) ) {
-
-			$cacheKey = $this->getCacheKey();
-		}
-
-		return get_option( $cacheKey );
-	}
-
-	protected function getCacheKey( string $suffix = '' ): string {
-
-		return 'CssData' . $suffix;
-	}
-
-	/**
 	 * Get allowed reserved properties.
 	 *
 	 * @return array

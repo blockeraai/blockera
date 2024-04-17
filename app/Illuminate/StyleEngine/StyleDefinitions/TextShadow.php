@@ -42,11 +42,6 @@ class TextShadow extends BaseStyleDefinition {
 		return $this->css;
 	}
 
-	protected function getCacheKey( string $suffix = '' ): string {
-
-		return pb_get_classname( __NAMESPACE__, __CLASS__ ) . parent::getCacheKey( $suffix );
-	}
-
 	/**
 	 * @inheritDoc
 	 *
