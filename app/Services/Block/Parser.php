@@ -3,7 +3,7 @@
 namespace Publisher\Framework\Services\Block;
 
 use Publisher\Framework\Exceptions\BaseException;
-use Publisher\Framework\Services\Block\Blocks\Icon;
+use Publisher\Framework\Services\Block\HTML\Icon;
 use Publisher\Framework\Illuminate\Foundation\Application;
 use Publisher\Framework\Illuminate\StyleEngine\StyleEngine;
 use Illuminate\Contracts\Container\BindingResolutionException;
