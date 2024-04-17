@@ -83,19 +83,13 @@ export function addBlockToPost(blockName, clearEditor = false, className = '') {
 		clearBlocks();
 	}
 
-	if (
-		Cypress.$(
-			'.edit-post-header-toolbar__inserter-toggle[aria-pressed="false"]'
-		)
-	) {
-		cy.get(
-			'.edit-post-header [aria-label="Add block"], .edit-site-header [aria-label="Add block"], .edit-post-header-toolbar__inserter-toggle[aria-pressed="false"]'
-		).click();
-	}
+	cy.get(
+		'.edit-post-header [aria-label="Toggle block inserter"], .edit-site-header [aria-label="Toggle block inserter"], .edit-post-header-toolbar__inserter-toggle[aria-pressed="false"], .editor-document-tools__inserter-toggle is-primary[aria-pressed="false"]'
+	).click();
 
 	// eslint-disable-next-line
 	cy.get(
-		'.block-editor-inserter__search-input,input.block-editor-inserter__search, .components-search-control__input'
+		'.block-editor-inserter__search-input,input.block-editor-inserter__search, .components-search-control__input, input[placeholder="Search"]'
 	)
 		.click()
 		.type(blockName, { delay: 0 });
