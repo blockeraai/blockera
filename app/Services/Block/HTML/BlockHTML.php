@@ -1,9 +1,9 @@
 <?php
 
-namespace Publisher\Framework\Services\Render\Blocks;
+namespace Publisher\Framework\Services\Block\HTML;
 
 use Publisher\Framework\Illuminate\Foundation\Application;
-use Publisher\Framework\Services\Render\Blocks\Contracts\BlockHandler;
+use Publisher\Framework\Services\Block\HTML\Contracts\BlockHandler;
 
 /**
  * The default chaining behavior can be implemented inside a base BlockHTML class.

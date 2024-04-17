@@ -2,6 +2,11 @@
 
 namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
+/**
+ * Class Background definition to generate css rules.
+ *
+ * @package Background
+ */
 class Background extends BaseStyleDefinition {
 
 	protected array $options = [
@@ -37,6 +42,20 @@ class Background extends BaseStyleDefinition {
 	}
 
 	/**
+	 * Compatibility
+	 *
+	 * @inheritDoc
+	 */
+	protected function calculateFallbackFeatureId( string $cssProperty ): string {
+
+		$paths = [
+			'background-color' => 'color.background',
+		];
+
+		return $paths[ $cssProperty ] ?? '';
+	}
+
+	/**
 	 * Check is valid setting for style?
 	 *
 	 * @param array $setting array of style setting.
@@ -62,37 +81,40 @@ class Background extends BaseStyleDefinition {
 	 *
 	 * @return array
 	 */
-	protected function collectProps( array $setting ): array {
+	protected function css( array $setting ): array {
 
-		if ( empty( $setting['type'] ) ) {
+		$declaration = [];
+		$cssProperty = $setting['type'];
 
-			return $this->properties;
+		if ( empty( $cssProperty ) ) {
+
+			return $declaration;
 		}
-
-		$type = $setting['type'];
 
 		if ( ! $this->isValidSetting( $setting ) ) {
 
-			return $this->properties;
+			return $this->declarations;
 		}
 
-		$properties = [];
+		$this->setSelector( $cssProperty );
 
-		switch ( $type ) {
+		switch ( $cssProperty ) {
 
 			case 'background-clip':
-				$properties = array_merge(
+
+				$declaration = array_merge(
 					[
-						$type                     => $setting[ $type ],
-						'-webkit-background-clip' => $setting[ $type ],
+						$cssProperty              => $setting[ $cssProperty ],
+						'-webkit-background-clip' => $setting[ $cssProperty ],
 					],
-					'text' === $setting[ $type ] ? [ '-webkit-text-fill-color' => 'transparent' ] : []
+					'text' === $setting[ $cssProperty ] ? [ '-webkit-text-fill-color' => 'transparent' ] : []
 				);
 				break;
 
 			case 'background-color':
-				$properties = [
-					$type => pb_get_value_addon_real_value($setting[ $type ]) . $this->getImportant(),
+
+				$declaration = [
+					$cssProperty => pb_get_value_addon_real_value( $setting[ $cssProperty ] ) . $this->getImportant(),
 				];
 				break;
 
@@ -100,13 +122,16 @@ class Background extends BaseStyleDefinition {
 			case 'linear-gradient':
 			case 'radial-gradient':
 			case 'mesh-gradient':
-				array_map( [ $this, 'setActiveBackgroundType' ], array_filter( pb_get_sorted_repeater( $setting[ $type ] ), [ $this, 'isValidSetting' ] ) );
+				array_map( [ $this, 'setActiveBackgroundType' ], array_filter( pb_get_sorted_repeater( $setting[ $cssProperty ] ), [
+					$this,
+					'isValidSetting'
+				] ) );
 				break;
 		}
 
-		$this->setProperties( array_merge( $this->properties, $properties ) );
+		$this->setCss( array_merge( $declaration, $this->declarations ) );
 
-		return $this->properties;
+		return $this->css;
 	}
 
 	/**
@@ -173,7 +198,7 @@ class Background extends BaseStyleDefinition {
 			'background-attachment' => ( $setting['image-attachment'] ?? '' ) . $this->getImportant(),
 		];
 
-		$this->setProperties( $this->modifyProperties( $props ) );
+		$this->setDeclarations( $this->modifyProperties( $props ) );
 	}
 
 	/**
@@ -217,7 +242,7 @@ class Background extends BaseStyleDefinition {
 			]
 		);
 
-		$this->setProperties( $this->modifyProperties( $props ) );
+		$this->setDeclarations( $this->modifyProperties( $props ) );
 	}
 
 	/**
@@ -292,7 +317,7 @@ class Background extends BaseStyleDefinition {
 			);
 		}
 
-		$this->setProperties( $this->modifyProperties( $props ) );
+		$this->setDeclarations( $this->modifyProperties( $props ) );
 	}
 
 	/**
@@ -313,9 +338,10 @@ class Background extends BaseStyleDefinition {
 
 		$colors = $setting['mesh-gradient-colors'];
 
-		usort($colors, function ($a, $b) {
+		usort( $colors, function ( $a, $b ) {
+
 			return $a['order'] - $b['order'];
-		});
+		} );
 
 		foreach ( $colors as $index => $color ) {
 
@@ -342,7 +368,7 @@ class Background extends BaseStyleDefinition {
 			]
 		);
 
-		$this->setProperties( $this->modifyProperties( $props ) );
+		$this->setDeclarations( $this->modifyProperties( $props ) );
 	}
 
 	/**
@@ -354,21 +380,21 @@ class Background extends BaseStyleDefinition {
 	 */
 	protected function modifyProperties( array $props ): array {
 
-		if ( empty( $this->properties['image'] ) ) {
+		if ( empty( $this->declarations['image'] ) ) {
 
 			return $props;
 		}
 
 		foreach ( $props as $prop => $propValue ) {
 
-			if ( empty( $this->properties[ $prop ] ) ) {
+			if ( empty( $this->declarations[ $prop ] ) ) {
 
 				continue;
 			}
 
 			$props[ $prop ] = sprintf(
 				'%s, %s',
-				str_replace( '!important', '', $this->properties[ $prop ] ),
+				str_replace( '!important', '', $this->declarations[ $prop ] ),
 				$propValue
 			);
 		}

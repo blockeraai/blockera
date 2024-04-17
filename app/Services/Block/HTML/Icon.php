@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Services\Render\Blocks;
+namespace Publisher\Framework\Services\Block\HTML;
 
 class Icon extends BlockHTML {
 

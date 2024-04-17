@@ -11,15 +11,17 @@ class Position extends BaseStyleDefinition {
 	 *
 	 * @return array
 	 */
-	protected function collectProps( array $setting ): array {
+	protected function css( array $setting ): array {
 
-		if ( empty( $setting['type'] ) ) {
+		$declaration = [];
+		$cssProperty = $setting['type'];
 
-			return $this->properties;
+		if ( empty( $cssProperty ) ) {
+
+			return $declaration;
 		}
 
-		$props       = [];
-		$cssProperty = $setting['type'];
+		$this->setSelector( $cssProperty );
 
 		switch ( $cssProperty ) {
 
@@ -29,30 +31,31 @@ class Position extends BaseStyleDefinition {
 					'position' => $value,
 				] = $setting[$cssProperty];
 
-				$props[$cssProperty] = $position;
+				$declaration[$cssProperty] = $position;
 
-				$props = array_merge( $props,
+				$filteredValues = array_filter($value);
+				$declaration = array_merge( $declaration,
 					array_merge(
 						...array_map(
 							static function ( string $item, string $property ): array {
 
 								return [ $property => pb_get_value_addon_real_value( $item ) ];
 							},
-							$value,
-							array_keys( $value )
+							$filteredValues,
+							array_keys( $filteredValues )
 						)
 					)
 				);
 
 				break;
 			case 'z-index':
-				$props[$cssProperty] = pb_get_value_addon_real_value( $setting['z-index'] );
+				$declaration[$cssProperty] = pb_get_value_addon_real_value( $setting['z-index'] );
 				break;
 		}
 
-		$this->setProperties( $props );
+		$this->setCss( $declaration );
 
-		return $this->properties;
+		return $this->css;
 	}
 
 	/**

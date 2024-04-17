@@ -2,55 +2,6 @@
 
 use Publisher\Framework\Illuminate\StyleEngine\StyleEngine;
 
-if ( ! function_exists( 'pb_get_styles' ) ) {
-	/**
-	 * Retrieve styles as array with css and declarations.
-	 *
-	 * @param array   $styles
-	 * @param array   $options
-	 *
-	 * @return array {
-	 * @type string[] $classnames   Array of class names.
-	 * @type string[] $declarations An associative array of CSS definitions,
-	 *                                  e.g. `array( "$property" => "$value", "$property" => "$value" )`.
-	 * }
-	 */
-	function pb_get_styles( array $styles, array $options = [] ): array {
-
-		$options = wp_parse_args(
-			$options,
-			array(
-				'selector'                   => null,
-				'context'                    => null,
-				'convert_vars_to_classnames' => false,
-			)
-		);
-
-		$parsed_styles = StyleEngine::parseBlockStyles( $styles, $options );
-
-		// Output.
-		$styles_output = [];
-
-		if ( ! empty( $parsed_styles['declarations'] ) ) {
-
-			$styles_output['css']          = StyleEngine::compileCss( $parsed_styles['declarations'], $options['selector'] );
-			$styles_output['declarations'] = $parsed_styles['declarations'];
-
-			if ( ! empty( $options['context'] ) ) {
-
-				StyleEngine::storeCssRule( $options['context'], $options['selector'], $parsed_styles['declarations'] );
-			}
-		}
-
-		if ( ! empty( $parsed_styles['classnames'] ) ) {
-
-			$styles_output['classnames'] = implode( ' ', array_unique( $parsed_styles['classnames'] ) );
-		}
-
-		return array_filter( $styles_output );
-	}
-}
-
 if ( ! function_exists( 'pb_get_unique_classname' ) ) {
 	/**
 	 * Retrieve css classname with suffix string.
@@ -61,7 +12,9 @@ if ( ! function_exists( 'pb_get_unique_classname' ) ) {
 	 */
 	function pb_get_unique_classname( string $suffix ): string {
 
-		return str_replace( '/', '-', $suffix ) . '-' . uniqid( 'publisher-' );
+		$suffix = str_replace( '/', '-', $suffix );
+
+		return $suffix . uniqid( '-' );
 	}
 }
 
@@ -69,10 +22,14 @@ if ( ! function_exists( 'pb_get_classname' ) ) {
 	/**
 	 * Retrieve classname string.
 	 *
+	 * FIXME: please remove this.
+	 *
 	 * @param string $namespace the namespace of class
 	 * @param string $class     the class full name
 	 *
 	 * @return string retrieve just specific name of class.
+	 * @deprecated
+	 *
 	 */
 	function pb_get_classname( string $namespace, string $class ): string {
 
@@ -127,17 +84,17 @@ if ( ! function_exists( 'pb_get_css_media_queries' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pb_get_block_state' ) ) {
+if ( ! function_exists( 'pb_block_state_validate' ) ) {
 
 	/**
-	 * Get block state from block states with state name.
+	 * Is block state validate?
 	 *
 	 * @param array  $states The block states.
 	 * @param string $state  The state name.
 	 *
 	 * @return array The block state.
 	 */
-	function pb_get_block_state( array $states, string $state ): array {
+	function pb_block_state_validate( array $states, string $state ): array {
 
 		if ( ! $state ) {
 
@@ -149,7 +106,7 @@ if ( ! function_exists( 'pb_get_block_state' ) ) {
 			return [];
 		}
 
-//		// no state found.
+//		no state found.
 		if ( empty( $states[ $state ] ) ) {
 
 			return [];
@@ -187,49 +144,384 @@ if ( ! function_exists( 'pb_get_state_breakpoint' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pb_get_inner_blocks_css' ) ) {
+if ( ! function_exists( 'pb_get_block_type_selectors' ) ) {
 
 	/**
-	 * Get inner blocks css.
+	 * Retrieve block type mapped selectors array.
 	 *
-	 * @param array       $innerBlocks The innerBlocks.
-	 * @param StyleEngine $instance    The instance of StyleEngine.
-	 * @param array       $args        The scope arguments.
-	 *                                 array(
+	 * @param string $name the block name.
+	 * @param array  $args the args to use customization.
 	 *
-	 * @type string       $selector    The parent selector.
-	 * @type string       $pseudoClass The current pseudo class (current block state).
-	 * @type string       $breakpoint  The current breakpoint (device type).
-	 * )
-	 *
-	 * @return array The css styles generated of inner blocks.
+	 * @return array the css mapped to array css selectors.
 	 */
-	function pb_get_inner_blocks_css( array $innerBlocks, StyleEngine $instance, array $args ): array {
+	function pb_get_block_type_selectors( string $name, array $args ): array {
 
-		$styles    = [];
-		$_settings = [];
+		$registered = WP_Block_Type_Registry::get_instance()->get_registered( $name );
+
+		if ( null === $registered ) {
+
+			return [];
+		}
+
+		$selectors = WP_Block_Type_Registry::get_instance()->get_registered( $name )->selectors;
+
+		// Provide fallback css selector to use this when $selectors is empty.
+		if ( empty( $selectors['fallback'] ) && ! empty( $args['fallback'] ) ) {
+
+			$selectors['fallback'] = $args['fallback'];
+
+			unset( $args['fallback'] );
+		}
+
+		return pb_convert_unique_selectors( $selectors, $args );
+	}
+}
+
+if ( ! function_exists( 'pb_convert_unique_selectors' ) ) {
+	/**
+	 * Retrieve converted selectors to unique selectors.
+	 *
+	 * @param array $selectors the recieved selectors list.
+	 * @param array $args      the extra arguments to generate unique css selectors.
+	 *
+	 * @return array the unique selectors list.
+	 */
+	function pb_convert_unique_selectors( array $selectors, array $args = [] ): array {
+
 		[
-			'breakpoint'      => $breakpoint,
-			'pseudo-class'    => $pseudoClass,
-			'parent-selector' => $selector,
+			'block-type'         => $blockType,
+			'pseudo-class'       => $pseudoClass,
+			'is-inner-block'     => $isInnerBlock,
+			'block-settings'     => $blockSettings,
+			'master-block-state' => $masterBlockState,
 		] = $args;
 
-		foreach ( $innerBlocks as $key => $innerBlock ) {
+		$customClassname = $blockSettings['publisherBlockStates'][ $pseudoClass ]['css-class'] ?? null;
 
-			if ( empty( $innerBlock['attributes'] ) ) {
+		foreach ( $selectors as $key => $value ) {
+
+			// Overriding inner blocks selectors with generate unique css class.
+			if ( 'innerBlocks' === $key && ! empty( $value[ $blockType ] ) ) {
+
+				foreach ( $value[ $blockType ] as $_key => $_value ) {
+
+					// Overriding selectors based on supported pseudo-class in css. Supported pseudo-classes with css: hover, active, visited, before, after.
+					if ( $pseudoClass && 'normal' !== $pseudoClass ) {
+
+						if ( ! is_string( $_value ) ) {
+
+							// FIXME: implements for array type selectors.
+
+							continue;
+						}
+
+						// Add pseudo custom css class as suffix into selectors value for current key.
+						$selectors[ $key ][ $blockType ][ $_key ] = sprintf(
+							'%1$s:%2$s %3$s',
+							trim( $selectors['root'] ?? $selectors['fallback'] ?? '' ),
+							$pseudoClass,
+							trim( $_value )
+						);
+
+						if ( ! $isInnerBlock ) {
+
+							continue;
+						}
+
+						$parentPseudoClass = in_array( $masterBlockState, [
+							'normal',
+							'parent-class',
+							'custom-class'
+						], true ) ? '' : $masterBlockState;
+
+						// Add pseudo custom css class as suffix into selectors value for current key.
+						$selectors[ $key ][ $blockType ][ $_key ] = sprintf(
+							'%1$s%2$s%3$s:%4$s',
+							trim( $selectors['root'] ?? $selectors['fallback'] ?? '' ),
+							empty( $parentPseudoClass ) ? ' ' : ':' . $parentPseudoClass . ' ',
+							trim( $_value ),
+							$pseudoClass
+						);
+
+						// TODO: double check to we needs to customized supports selectors or not for inner blocks?
+
+						continue;
+					}
+
+					if ( is_string( $_value ) ) {
+
+						if ( $masterBlockState ) {
+
+							$parentPseudoClass = in_array( $masterBlockState, [
+								'normal',
+								'parent-class',
+								'custom-class'
+							], true ) ? '' : $masterBlockState;
+
+							// Add pseudo custom css class as suffix into selectors value for current key.
+							$selectors[ $key ][ $blockType ][ $_key ] = sprintf(
+								'%1$s%2$s%3$s',
+								trim( $selectors['root'] ?? $selectors['fallback'] ?? '' ),
+								empty( $parentPseudoClass ) ? ' ' : ':' . $parentPseudoClass . ' ',
+								trim( $_value )
+							);
+
+							continue;
+						}
+
+						$selectors[ $key ][ $blockType ][ $_key ] = trim(
+							sprintf( '%s %s', trim( $selectors['root'] ?? $selectors['fallback'] ?? '' ), $_value )
+						);
+					}
+				}
 
 				continue;
 			}
 
-			$settings = $innerBlock['attributes'];
+			// Overriding master block selectors with provided custom-class.
+			// Included all selectors without inner blocks selectors.
+			if ( in_array( $pseudoClass, [
+					'custom-class',
+					'parent-class'
+				], true ) && ! empty( $customClassname ) && is_string( $value ) ) {
 
-			$_selector = $selector . ' ' . ( $innerBlock['selectors']['root'] ?? '' );
+				$normalizedParent = pb_get_normalized_selector( $customClassname );
+				$normalizedParent = str_ends_with( $normalizedParent, ' ' ) ? $normalizedParent : $normalizedParent . ' ';
 
-			$instance->setSettings( $settings );
-			$instance->setSelector( $_selector );
-			$_settings[] = $instance->getRequestSettings( $pseudoClass, $breakpoint );
+				// Add pseudo custom css class as suffix into selectors value for current key.
+				$selectors[ $key ] = sprintf( '%s%s', $normalizedParent, $value );
+				// TODO: double check to we needs to customized supports selectors or not?
+				continue;
+			}
+
+			// Overriding selectors based on supported pseudo-class in css. Supported pseudo-classes with css: hover, active, visited, before, after.
+			// Included all selectors without inner blocks selectors.
+			if ( $pseudoClass && 'normal' !== $pseudoClass && is_string( $value ) ) {
+
+				// Add pseudo custom css class as suffix into selectors value for current key.
+				$selectors[ $key ] = sprintf( '%s:%s', trim( $value ), $pseudoClass );
+
+				continue;
+			}
+
+			// Overriding master block selectors,
+			// Excluded root and fallback.
+			if ( is_string( $value ) && ! in_array( $key, [ 'root', 'fallback' ], true ) ) {
+
+				$selectors[ $key ] = trim(
+					sprintf( '%s %s', $selectors['root'] ?? $selectors['fallback'] ?? '', $value )
+				);
+			}
 		}
 
-		return $_settings;
+		return $selectors;
+	}
+}
+
+if ( ! function_exists( 'pb_calculate_feature_css_selector' ) ) {
+
+	/**
+	 * Calculation suitable css selector for related property.
+	 *
+	 * @param array         $selectors  The mapped css selectors block related.
+	 * @param string        $featureId  The feature identifier.
+	 * @param string | null $fallbackId The feature fallback identifier.
+	 *
+	 * @return string the css selector.
+	 */
+	function pb_calculate_feature_css_selector( array $selectors, string $featureId, string $fallbackId = null ): string {
+
+		// 1- TODO: Handle custom-class state
+
+		// Calculation with arguments
+		if ( ! empty( $fallbackId ) ) {
+
+			$parsedFallback = explode( '.', $fallbackId );
+
+			$selector = $selectors[ array_shift( $parsedFallback ) ] ?? $selectors['root'] ?? '';
+
+			foreach ( $parsedFallback as $id ) {
+
+				if ( ! is_array( $selector ) ) {
+
+					continue;
+				}
+
+				$selector = $selector[ $id ] ?? $selector['root'] ?? '';
+			}
+
+			return $selector ? $selector : $selectors['root'] ?? $selectors['fallback'] ?? '';
+		}
+
+		// Use of root when recieved invalid arguments.
+		return $selectors['root'] ?? $selectors['fallback'] ?? '';
+	}
+}
+
+if ( ! function_exists( 'pb_get_shorthand_css' ) ) {
+
+	/**
+	 * Retrieve the converted long css to shorthand css string.
+	 *
+	 * @param string $longCss The long css string.
+	 *
+	 * @return string The shorthanded css.
+	 */
+	function pb_get_shorthand_css( string $longCss = '' ): string {
+
+		$supportedProperty = [ 'margin', 'padding' ];
+		$properties        = [];
+		$shorthandCss      = '';
+		$cssRules          = explode( ';', $longCss );
+
+		foreach ( $cssRules as $cssRule ) {
+
+			$cleanupCssRule = trim( $cssRule );
+
+			if ( empty( $cleanupCssRule ) ) {
+
+				continue;
+			}
+
+			$parsedCssRule = explode( ':', $cleanupCssRule );
+
+			if ( count( $parsedCssRule ) < 2 ) {
+
+				continue;
+			}
+
+			list( $property, $value ) = $parsedCssRule;
+
+			list( $support, $subProperty ) = explode( '-', $property );
+
+			if ( ! in_array( $support, $supportedProperty, true ) ) {
+
+				continue;
+			}
+
+			if ( str_contains( $value, '!important' ) ) {
+
+				$properties[ $support ]['important'] = true;
+				$value                               = str_replace( '!important', '', $value );
+			}
+
+			if ( ! empty( $properties[ $support ] ) ) {
+
+				$properties[ $support ] = array_merge(
+					$properties[ $support ],
+					[
+						$subProperty => $value,
+					]
+				);
+
+				continue;
+			}
+
+			$properties[ $support ] = [
+				$subProperty => $value,
+			];
+		}
+
+		$lastItem = array_key_last( $properties );
+
+		foreach ( $properties as $property => $value ) {
+
+			$whiteSpace = $lastItem === $property ? '' : ' ';
+
+			$shorthandCss = sprintf(
+				'%1$s%2$s: %3$s %4$s %5$s %6$s%7$s;%8$s',
+				$shorthandCss,
+				trim( $property ),
+				trim( $value['top'] ?? '0' ),
+				trim( $value['right'] ?? '0' ),
+				trim( $value['bottom'] ?? '0' ),
+				trim( $value['left'] ?? '0' ),
+				empty( $value['important'] ) ? '' : ' !important',
+				$whiteSpace,
+			);
+		}
+
+		return $shorthandCss;
+	}
+}
+
+if ( ! function_exists( 'pb_combine_css' ) ) {
+
+	/**
+	 * Get combined css with receive complex css.
+	 *
+	 * @param array $css the complex css.
+	 *
+	 * @return array the flat css array to combined of css selectors and declarations.
+	 */
+	function pb_combine_css( array $css ): array {
+
+		$combinedCss = [];
+
+		foreach ( $css as $generatedCss ) {
+
+			foreach ( $generatedCss as $selector => $declarations ) {
+
+				if ( ! empty( $combinedCss[ $selector ] ) ) {
+
+					$combinedCss[ $selector ] = array_merge( $combinedCss[ $selector ], $declarations );
+
+					continue;
+				}
+
+				$combinedCss[ $selector ] = $declarations;
+			}
+		}
+
+		return $combinedCss;
+	}
+}
+
+if (!function_exists('pb_convert_to_valid_css_rules')){
+
+	/**
+	 * Convert array css rules to valid css rules list.
+	 *
+	 * @param array $css
+	 *
+	 * @return array the converted css rules.
+	 */
+	function pb_convert_to_valid_css_rules( array $css ): array {
+
+		$validCssRules = [];
+
+		foreach ( $css as $selector => $declaration ) {
+
+			// Imagine empty declaration, skip that.
+			if ( is_array( $declaration ) && empty( $declaration ) ) {
+
+				continue;
+			}
+
+			foreach ( $declaration as $property => $value ) {
+
+				if ( is_array( $value ) && empty( $value ) ) {
+
+					continue;
+				}
+
+				if ( empty( $validCssRules[ $selector ] ) ) {
+
+					$validCssRules[ $selector ] = sprintf( '%s: %s;', $property, $value );
+
+					continue;
+				}
+
+				// value validating ...
+				if ( is_array( $validCssRules[ $selector ] ) || is_array( $property ) || is_array( $value ) ) {
+
+					continue;
+				}
+
+				$validCssRules[ $selector ] = sprintf( '%1$s%2$s:%3$s;', $validCssRules[ $selector ], $property, $value );
+			}
+		}
+
+		return $validCssRules;
 	}
 }

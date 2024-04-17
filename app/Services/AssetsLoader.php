@@ -5,9 +5,11 @@ namespace Publisher\Framework\Services;
 use Publisher\Framework\Illuminate\Foundation\Application;
 
 /**
- * PackagesService developed to register all publisher core assets into WordPress CMS.
+ * Class AssetsLoader registering all publisher core assets into WordPress CMS.
+ *
+ * @package AssetsLoader
  */
-class PublisherAssets {
+class AssetsLoader {
 
 	/**
 	 * Holds assets or packages name.

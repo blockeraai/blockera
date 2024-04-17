@@ -185,16 +185,112 @@ if ( ! function_exists( 'pb_array_flat' ) ) {
 	}
 }
 
-function pb_get_sorted_repeater($items) {
-    $dataArray = [];
+if ( ! function_exists( 'pb_get_sorted_repeater' ) ) {
 
-    foreach ($items as $key => $value) {
-        $dataArray[] = $value;
-    }
+	/**
+	 * Sorting repeater items.
+	 *
+	 * @param array $items the repeater items.
+	 *
+	 * @return array
+	 */
+	function pb_get_sorted_repeater( array $items ): array {
 
-    usort($dataArray, function($a, $b) {
-        return ($a['order'] ?? 0) - ($b['order'] ?? 0);
-    });
+		$dataArray = [];
 
-    return $dataArray;
+		foreach ( $items as $key => $value ) {
+			$dataArray[] = $value;
+		}
+
+		usort( $dataArray, function ( $a, $b ) {
+
+			return ( $a['order'] ?? 0 ) - ( $b['order'] ?? 0 );
+		} );
+
+		return $dataArray;
+	}
+}
+
+if ( ! function_exists( 'pb_camel_case_join' ) ) {
+
+	/**
+	 * Joining text items in camelCase format.
+	 *
+	 * @param string $string the target string.
+	 *
+	 * @return string The camelCase string.
+	 */
+	function pb_camel_case_join( string $string ): string {
+
+		$items = explode( '-', $string );
+
+		if ( 1 === count( $items ) ) {
+
+			return strtolower( $items[0] );
+		}
+
+		$firstPart     = strtolower( array_shift( $items ) );
+		$secondaryPart = '';
+
+		foreach ( $items as $item ) {
+
+			$secondaryPart .= ucfirst( $item );
+		}
+
+		return $firstPart . $secondaryPart;
+	}
+}
+
+if ( ! function_exists( 'pb_get_normalized_selector' ) ) {
+
+	/**
+	 * Get normalized selector.
+	 *
+	 * @param string $selector the target css selector.
+	 *
+	 * @return string the normalized css selector.
+	 */
+	function pb_get_normalized_selector( string $selector ): string {
+
+		$selectors = explode( ' ', $selector );
+
+		return trim(
+			implode(
+				'',
+				array_map( function ( string $_selector ): string {
+
+					return '.' . trim( $_selector );
+				}, $selectors )
+			)
+		);
+	}
+}
+
+if ( ! function_exists( 'pb_prepare_array_path' ) ) {
+
+	/**
+	 * Get prepared value of array path.
+	 *
+	 * @param array  $array
+	 * @param string $path
+	 *
+	 * @return mixed
+	 */
+	function pb_prepare_array_path( array $array, string $path ): mixed {
+
+		$value = null;
+		$paths = explode( '.', $path );
+
+		foreach ( $paths as $_path ) {
+
+			if ( ! isset( $array[ $_path ] ) ) {
+
+				continue;
+			}
+
+			$value = $paths[ $_path ];
+		}
+
+		return $value;
+	}
 }

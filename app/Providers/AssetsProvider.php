@@ -2,23 +2,13 @@
 
 namespace Publisher\Framework\Providers;
 
-/**
- * External
- */
-
+use Publisher\Framework\Services\AssetsLoader;
+use Publisher\Framework\Illuminate\Foundation\Application;
+use Publisher\Framework\Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
- * Internal
- */
-
-use Publisher\Framework\Exceptions\BaseException;
-use Publisher\Framework\Services\PublisherAssets;
-use Publisher\Framework\Illuminate\Foundation\Application;
-use Publisher\Framework\Illuminate\Support\ServiceProvider;
-
-/**
- * AssetsProvider is registering all assets of publisher app.
+ * Class AssetsProvider providing all assets.
  *
  * @since 1.0.0
  */
@@ -27,7 +17,7 @@ class AssetsProvider extends ServiceProvider {
 	/**
 	 * Hold instance of PublisherAssets object
 	 *
-	 * @var null|PublisherAssets
+	 * @var null|AssetsLoader
 	 */
 	protected $handler = null;
 
@@ -39,10 +29,10 @@ class AssetsProvider extends ServiceProvider {
 	public function register(): void {
 
 		$this->app->singleton(
-			PublisherAssets::class,
+			AssetsLoader::class,
 			function ( Application $app ) {
 
-				return new PublisherAssets( $app );
+				return new AssetsLoader( $app );
 			}
 		);
 	}
@@ -55,7 +45,7 @@ class AssetsProvider extends ServiceProvider {
 	 */
 	public function boot(): void {
 
-		$this->handler = $this->app->make( PublisherAssets::class );
+		$this->handler = $this->app->make( AssetsLoader::class );
 
 		// Handle loading assets in wp-env to use in CI.
 		if ( defined( 'PB_ENV' ) && 'wp-env' === PB_ENV ) {
@@ -67,9 +57,9 @@ class AssetsProvider extends ServiceProvider {
 	/**
 	 * Retrieve handler object.
 	 *
-	 * @return PublisherAssets|null
+	 * @return AssetsLoader|null
 	 */
-	public function getHandler(): ?PublisherAssets {
+	public function getHandler(): ?AssetsLoader {
 
 		return $this->handler;
 	}

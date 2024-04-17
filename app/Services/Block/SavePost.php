@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Services\Render;
+namespace Publisher\Framework\Services\Block;
 
 use Publisher\Framework\Illuminate\Foundation\Application;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -38,7 +38,7 @@ class SavePost {
 		$this->app    = $app;
 		$this->render = $render;
 
-		add_action( 'save_post', [ $this, 'save' ], 9e2, 3 );
+		add_action( 'save_post', [ $this, 'save' ], 9e8, 3 );
 	}
 
 	/**
@@ -53,7 +53,14 @@ class SavePost {
 	 */
 	public function save( int $postId, \WP_Post $post, bool $update ): void {
 
-		$this->post = $post;
+		$this->post   = $post;
+		$parsedBlocks = parse_blocks( $post->post_content );
+
+		// Excluding empty post content.
+		if ( empty( $parsedBlocks ) ) {
+
+			return;
+		}
 
 		array_map( [ $this, 'parser' ], parse_blocks( $post->post_content ) );
 
@@ -76,7 +83,16 @@ class SavePost {
 			return;
 		}
 
-		$selector = $this->render->getSelector( $block, pb_get_unique_classname( $block['blockName'] ) );
+		$attributes = $block['attrs'];
+
+		if ( $attributes['className'] ) {
+			// Usage of saved class names for block element.
+			$selector = pb_get_normalized_selector( $attributes['className'] );
+
+		} else {
+			// Fallback way to providing unique css selector for block element.
+			$selector = $this->render->getSelector( $block, pb_get_unique_classname( $block['blockName'] ) );
+		}
 
 		/**
 		 * @var Parser $parser

@@ -3,9 +3,9 @@
 namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
 /**
- * The Effect style definition
+ * Class Effects definition to generate css rules.
  *
- * @package Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions\Effects
+ * @package Effects
  */
 class Effects extends BaseStyleDefinition {
 
@@ -16,9 +16,16 @@ class Effects extends BaseStyleDefinition {
 	 *
 	 * @return array
 	 */
-	protected function collectProps( array $setting ): array {
+	protected function css( array $setting ): array {
 
 		$cssProperty = $setting['type'];
+
+		if ( empty( $cssProperty ) ) {
+
+			return [];
+		}
+
+		$this->setSelector( $cssProperty );
 
 		switch ( $cssProperty ) {
 
@@ -47,16 +54,18 @@ class Effects extends BaseStyleDefinition {
 				break;
 
 			case 'opacity':
-				$this->setProperty( 'opacity', pb_get_value_addon_real_value( $setting[ $cssProperty ] ) );
+				$this->setDeclaration( 'opacity', pb_get_value_addon_real_value( $setting[ $cssProperty ] ) );
 				break;
 
 			case 'mix-blend-mode':
 			default:
-				$this->setProperty( $cssProperty, $setting[ $cssProperty ] );
+				$this->setDeclaration( $cssProperty, $setting[ $cssProperty ] );
 				break;
 		}
 
-		return $this->properties;
+		$this->setCss( $this->declarations );
+
+		return $this->css;
 	}
 
 	/**
@@ -84,18 +93,6 @@ class Effects extends BaseStyleDefinition {
 	}
 
 	/**
-	 * Retrieve cache key.
-	 *
-	 * @param string $suffix the cache key suffix.
-	 *
-	 * @return string
-	 */
-	protected function getCacheKey( string $suffix = '' ): string {
-
-		return pb_get_classname( __NAMESPACE__, __CLASS__ ) . parent::getCacheKey( $suffix );
-	}
-
-	/**
 	 * Setup transform style properties into stack properties.
 	 *
 	 * @param array  $settings    The settings for css property.
@@ -111,17 +108,17 @@ class Effects extends BaseStyleDefinition {
 			array_map( [ $this, 'setTransformItem' ], array_filter( pb_get_sorted_repeater( $settings[ $cssProperty ] ), [ $this, 'isVisibleSetting' ] ) );
 		}
 
-		if ( 'self-perspective' === $cssProperty && ! empty( $this->properties['transform'] ) && ! empty( $settings[ $cssProperty ] ) ) {
+		if ( 'self-perspective' === $cssProperty && ! empty( $this->declarations['transform'] ) && ! empty( $settings[ $cssProperty ] ) ) {
 
 			$perspective = pb_get_value_addon_real_value( $settings[ $cssProperty ] );
 
 			if ( ! empty( $perspective ) ) {
-				$this->setProperty(
+				$this->setDeclaration(
 					'transform',
 					sprintf(
 						'perspective(%s) %s',
 						$perspective,
-						$this->properties['transform']
+						$this->declarations['transform']
 					)
 				);
 			}
@@ -134,13 +131,13 @@ class Effects extends BaseStyleDefinition {
 
 			if ( ! empty( $top ) && ! empty( $left ) ) {
 
-				$this->setProperty( 'transform-origin', "{$top} {$left}" );
+				$this->setDeclaration( 'transform-origin', "{$top} {$left}" );
 			}
 		}
 
 		if ( 'backface-visibility' === $cssProperty && ! empty( $settings[ $cssProperty ] ) ) {
 
-			$this->setProperty( 'backface-visibility', $settings[ $cssProperty ] );
+			$this->setDeclaration( 'backface-visibility', $settings[ $cssProperty ] );
 		}
 
 		if ( 'child-perspective' === $cssProperty && ! empty( $settings[ $cssProperty ] ) ) {
@@ -148,7 +145,7 @@ class Effects extends BaseStyleDefinition {
 			$childPerspective = pb_get_value_addon_real_value( $settings[ $cssProperty ] );
 
 			if ( ! empty( $childPerspective ) ) {
-				$this->setProperty(
+				$this->setDeclaration(
 					'perspective',
 					'0px' !== $childPerspective ? $childPerspective : 'none'
 				);
@@ -161,7 +158,7 @@ class Effects extends BaseStyleDefinition {
 			$left = $settings[ $cssProperty ]['left'] ?? '';
 
 			if ( ! empty( $top ) && ! empty( $left ) ) {
-				$this->setProperty( 'perspective-origin', "{$top} {$left}" );
+				$this->setDeclaration( 'perspective-origin', "{$top} {$left}" );
 			}
 		}
 	}
@@ -222,17 +219,17 @@ class Effects extends BaseStyleDefinition {
 		}
 
 		if ( $transform ) {
-			if ( ! empty( $this->properties['transform'] ) ) {
-				$this->setProperty(
+			if ( ! empty( $this->declarations['transform'] ) ) {
+				$this->setDeclaration(
 					'transform',
 					sprintf(
 						'%s %s',
-						$this->properties['transform'],
+						$this->declarations['transform'],
 						$transform
 					)
 				);
 			} else {
-				$this->setProperty( 'transform', $transform );
+				$this->setDeclaration( 'transform', $transform );
 			}
 		}
 	}
@@ -293,17 +290,17 @@ class Effects extends BaseStyleDefinition {
 		);
 
 		if ( $transition ) {
-			if ( ! empty( $this->properties['transition'] ) ) {
-				$this->setProperty(
+			if ( ! empty( $this->declarations['transition'] ) ) {
+				$this->setDeclaration(
 					'transition',
 					sprintf(
 						'%s, %s',
-						$this->properties['transition'],
+						$this->declarations['transition'],
 						$transition
 					)
 				);
 			} else {
-				$this->setProperty( 'transition', $transition );
+				$this->setDeclaration( 'transition', $transition );
 			}
 		}
 	}
@@ -342,17 +339,17 @@ class Effects extends BaseStyleDefinition {
 
 
 		if ( $filter ) {
-			if ( ! empty( $this->properties['filter'] ) ) {
-				$this->setProperty(
+			if ( ! empty( $this->declarations['filter'] ) ) {
+				$this->setDeclaration(
 					'filter',
 					sprintf(
 						'%s %s',
-						$this->properties['filter'],
+						$this->declarations['filter'],
 						$filter
 					)
 				);
 			} else {
-				$this->setProperty( 'filter', $filter );
+				$this->setDeclaration( 'filter', $filter );
 			}
 		}
 	}
@@ -392,17 +389,17 @@ class Effects extends BaseStyleDefinition {
 
 
 		if ( $filter ) {
-			if ( ! empty( $this->properties['backdrop-filter'] ) ) {
-				$this->setProperty(
+			if ( ! empty( $this->declarations['backdrop-filter'] ) ) {
+				$this->setDeclaration(
 					'backdrop-filter',
 					sprintf(
 						'%s %s',
-						$this->properties['backdrop-filter'],
+						$this->declarations['backdrop-filter'],
 						$filter
 					)
 				);
 			} else {
-				$this->setProperty( 'backdrop-filter', $filter );
+				$this->setDeclaration( 'backdrop-filter', $filter );
 			}
 		}
 	}
@@ -583,7 +580,7 @@ class Effects extends BaseStyleDefinition {
 
 		$size = "custom" === $setting['size'] ? $widthSize . ' ' . $heightSize : $setting['size'];
 
-		$this->setProperty( 'mask', $selectedShape . ' ' . $setting['position']['left'] . ' ' . $setting['position']['top'] . '/' . $size . ' ' . $setting['repeat'] );
+		$this->setDeclaration( 'mask', $selectedShape . ' ' . $setting['position']['left'] . ' ' . $setting['position']['top'] . '/' . $size . ' ' . $setting['repeat'] );
 	}
 
 	/**

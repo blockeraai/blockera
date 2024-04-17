@@ -11,10 +11,17 @@ class Outline extends BaseStyleDefinition {
 	 *
 	 * @return array
 	 */
-	protected function collectProps( array $setting ): array {
+	protected function css( array $setting ): array {
 
-		$props       = [];
+		$declaration = [];
 		$cssProperty = $setting['type'];
+
+		if ( empty( $cssProperty ) ) {
+
+			return $declaration;
+		}
+
+		$this->setSelector( $cssProperty );
 
 		foreach ( $setting[ $cssProperty ] as $item ) {
 
@@ -23,19 +30,19 @@ class Outline extends BaseStyleDefinition {
 				continue;
 			}
 
-			$props['outline'] = sprintf(
+			$declaration['outline'] = sprintf(
 				'%s %s %s',
 				$item['border']['width'],
 				$item['border']['style'],
 				! empty( $item['border']['color'] ) ? pb_get_value_addon_real_value( $item['border']['color'] ) : '',
 			);
 
-			$props['outline-offset'] = ! empty( $item['offset'] ) ? pb_get_value_addon_real_value( $item['offset'] ) : '';
+			$declaration['outline-offset'] = ! empty( $item['offset'] ) ? pb_get_value_addon_real_value( $item['offset'] ) : '';
 		}
 
-		$this->setProperties( $props );
+		$this->setCss( $declaration );
 
-		return $this->properties;
+		return $this->css;
 	}
 
 	protected function getCacheKey( string $suffix = '' ): string {

@@ -1,22 +1,18 @@
 <?php
 
-namespace Publisher\Framework\Services\Render;
+namespace Publisher\Framework\Services\Block;
 
-/**
- * External
- */
-
+use Publisher\Framework\Exceptions\BaseException;
+use Publisher\Framework\Services\Block\Blocks\Icon;
+use Publisher\Framework\Illuminate\Foundation\Application;
+use Publisher\Framework\Illuminate\StyleEngine\StyleEngine;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
- * Internal
+ * Class Parser after parsing block details manipulating html and css on WordPress core blocks.
+ *
+ * @package Parser
  */
-
-use Publisher\Framework\Exceptions\BaseException;
-use Publisher\Framework\Services\Render\Blocks\Icon;
-use Publisher\Framework\Illuminate\Foundation\Application;
-use Publisher\Framework\Illuminate\StyleEngine\StyleEngine;
-
 class Parser {
 
 	/**
@@ -47,18 +43,13 @@ class Parser {
 
 		[
 			'block'    => $block,
-			// FIXME: refactor to support dynamic selector
-			'selector' => $selector,
+			'selector' => $fallbackSelector,
 		] = $params;
-
-		[
-			'attrs' => $settings,
-		] = $block;
 
 		/**
 		 * @var StyleEngine $styleEngine
 		 */
-		$styleEngine = $this->app->make( StyleEngine::class, compact( 'settings', 'selector' ) );
+		$styleEngine = $this->app->make( StyleEngine::class, compact( 'block', 'fallbackSelector' ) );
 
 		return $styleEngine->getStylesheet();
 	}
