@@ -174,13 +174,13 @@ class AssetsLoader {
 		// Register empty css file to load from consumer plugin of that,
 		// use-case: when enqueue style-engine inline stylesheet for all blocks on the document.
 		// Accessibility: on front-end.
-		$file = pb_core_config( 'app.rootPath' ) . "assets/style-engine-styles.css";
+		$file = pb_core_config( 'app.root_path' ) . "assets/style-engine-styles.css";
 
 		if ( file_exists( $file ) && ! is_admin() ) {
 
 			wp_enqueue_style(
 				$handle = 'publisher-core-inline-css',
-				pb_core_config( 'app.rootURL' ) . "assets/style-engine-styles.css",
+				pb_core_config( 'app.root_url' ) . "assets/style-engine-styles.css",
 				[],
 				filemtime( $file )
 			);
@@ -199,8 +199,8 @@ class AssetsLoader {
 		}
 
 		// FIXME: remove temp font-awesome icon library!
-		wp_enqueue_style( 'fs', pb_core_config( 'app.rootURL' ) . '/assets/all.min.css' );
-		wp_enqueue_script( 'fs', pb_core_config( 'app.rootURL' ) . '/assets/all.min.js' );
+		wp_enqueue_style( 'fs', pb_core_config( 'app.root_url' ) . '/assets/all.min.css' );
+		wp_enqueue_script( 'fs', pb_core_config( 'app.root_url' ) . '/assets/all.min.js' );
 
 		// Registering assets ...
 		foreach ( $this->prepare_assets() as $asset ) {

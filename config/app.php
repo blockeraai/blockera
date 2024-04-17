@@ -1,8 +1,8 @@
 <?php
 
 return [
-	'rootURL'   => PB_CORE_URI,
-	'rootPath'  => PB_CORE_PATH,
+	'root_url'   => PB_CORE_URI,
+	'root_path'  => PB_CORE_PATH,
 	'url'       => PB_CORE_URI . '/app/',
 	'path'      => PB_CORE_PATH . '/app/',
 	'name'      => 'publisher-core',

@@ -397,7 +397,7 @@ class Utility {
 	 */
 	public static function getPlaceholderImage(): string {
 
-		$placeholder_image = pb_core_config( 'app.rootPath' ) . 'images/placeholder.png';
+		$placeholder_image = pb_core_config( 'app.root_path' ) . 'images/placeholder.png';
 
 		/**
 		 * Get placeholder image source.
