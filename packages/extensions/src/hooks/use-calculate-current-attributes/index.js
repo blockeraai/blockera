@@ -8,6 +8,7 @@ import { useSelect } from '@wordpress/data';
 /**
  * Publisher dependencies
  */
+import { mergeObject } from '@publisher/utils';
 import { prepare } from '@publisher/data-extractor';
 
 /**
@@ -96,11 +97,13 @@ export const useCalculateCurrentAttributes = ({
 					...blockAttributesDefaults,
 					...((publisherInnerBlocks[currentBlock] || {})
 						?.attributes || {}),
-					...currentInnerBlock?.attributes,
-					...(prepare(
-						`publisherBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.publisherInnerBlocks[${currentBlock}].attributes`,
-						attributes
-					) || {}),
+					...mergeObject(
+						currentInnerBlock?.attributes,
+						prepare(
+							`publisherBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.publisherInnerBlocks[${currentBlock}].attributes`,
+							attributes
+						) || {}
+					),
 				};
 			}
 			// Assume inner block and master block in pseudo-class.

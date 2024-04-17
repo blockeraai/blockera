@@ -137,7 +137,9 @@ const StatesManager: ComponentType<any> = memo(
 					selectable: true,
 					isSelected: true,
 					visibilitySupport: false,
-					breakpoints: states.normal.breakpoints,
+					breakpoints:
+						StateSettings.publisherBlockStates.default.normal
+							.breakpoints,
 				},
 			};
 			// eslint-disable-next-line
