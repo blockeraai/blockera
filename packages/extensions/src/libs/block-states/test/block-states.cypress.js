@@ -813,7 +813,7 @@ describe('Block State E2E Test', () => {
 							cy.get('input[maxlength="9"]').type('ccc');
 						});
 
-					// normal state updates should visible
+					// normal state updates should display
 					cy.getByDataTest('border-control-width').should(
 						'have.value',
 						'5'
@@ -851,13 +851,13 @@ describe('Block State E2E Test', () => {
 							}
 						);
 
-						// normal state updates should visible
+						// normal state updates should display
 						cy.getByDataTest('border-control-width').should(
 							'have.value',
 							'5'
 						);
 
-						// hover state updates should not visible
+						// hover state updates should not display
 						cy.getByDataTest('border-control-color').should(
 							'have.class',
 							'is-empty'
@@ -1204,7 +1204,7 @@ describe('Block State E2E Test', () => {
 						cy.getByAriaLabel('Rotate Left').click();
 					});
 
-					// normal state updates should visible
+					// normal state updates should display
 					cy.getParentContainer('Image & Gradient').within(() => {
 						cy.getByDataCy('group-control-header').should(
 							'have.length',
@@ -1235,14 +1235,14 @@ describe('Block State E2E Test', () => {
 						cy.getByDataTest('popover-body').within(() => {
 							cy.get('button[aria-label="Repeat"]').click();
 
-							// normal state updates should visible
+							// normal state updates should display
 							cy.getByAriaLabel('Linear Gradient').should(
 								'have.attr',
 								'aria-checked',
 								'true'
 							);
 
-							// hover state updates should not visible
+							// hover state updates should not display
 							cy.getParentContainer('Angel').within(() => {
 								cy.get('input[inputmode="numeric"]').should(
 									'have.value',
@@ -1280,14 +1280,14 @@ describe('Block State E2E Test', () => {
 							cy.getByDataTest('popover-body').within(() => {
 								cy.getByAriaLabel('Parallax').click();
 								//TODO:fix
-								// active state updates should visible
+								// active state updates should display
 								// cy.getByAriaLabel('Repeat').should(
 								// 	'have.attr',
 								// 	'aria-checked',
 								// 	'true'
 								// );
 
-								// hover state updates should not visible
+								// hover state updates should not display
 								cy.getParentContainer('Angel').within(() => {
 									cy.get('input[inputmode="numeric"]').should(
 										'have.value',
