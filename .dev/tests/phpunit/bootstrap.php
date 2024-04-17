@@ -7,6 +7,8 @@
 
 $root_dir = dirname( __DIR__, 3 );
 
+require 'config.php';
+
 // Require dependencies.
 require_once $root_dir . '/vendor/wp-phpunit/wp-phpunit/__loaded.php';
 require_once $root_dir . '/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
@@ -16,13 +18,9 @@ if ( 'build' === getenv( 'LOCAL_DIR' ) ) {
 	define( 'WP_RUN_CORE_TESTS', true );
 }
 
-define( 'PB_CORE_URI', '' );
-define( 'PB_CORE_PATH', $root_dir );
-define( 'PB_CORE_VERSION', '' );
-
 // Determine the tests directory (from a WP dev checkout).
 // Try the WP_TESTS_DIR environment variable first.
-$_tests_dir = getenv( 'WP_TESTS_DIR' );
+$_tests_dir = pb_core_env( 'WP_TESTS_DIR' ) ?? getenv( 'WP_TESTS_DIR' );
 
 // Next, try the WP_PHPUNIT composer package if we're inside wp-env.
 if ( ! $_tests_dir && 'tests-mysql' === getenv( 'WORDPRESS_DB_HOST' ) ) {
@@ -42,13 +40,13 @@ if ( ! file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 // Give access to tests_add_filter() function.
 require_once $_tests_dir . '/includes/functions.php';
 
-/**
- * Manually load the plugin being tested.
- */
-// function _manually_load_plugin() {
-
-// }
-// tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
+tests_add_filter( 'muplugins_loaded', function () use ( $root_dir ) {
+	
+	define( 'PB_CORE_PATH', $root_dir );
+	define( '__PB_TEST_DIR__', __DIR__ );
+	define( 'PB_CORE_VERSION', pb_core_env( 'PB_CORE_VERSION' ) ?? getenv( 'PB_CORE_VERSION' ) );
+	define( 'PB_CORE_URI', plugins_url( pb_core_env( 'PUBLISHER_DIR' ) ?? getenv( '__PUBLISHER_DIR__' ) ) );
+} );
 
 // Start up the WP testing environment.
 require $_tests_dir . '/includes/bootstrap.php';
