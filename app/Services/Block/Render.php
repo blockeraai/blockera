@@ -145,7 +145,7 @@ class Render {
 
 			$cache = get_transient( $cacheKey );
 		}
-		
+
 		// Adding inline generated css rules with server side StyleEngine instance.
 		if ( ! empty( $cache ) && array_intersect( [ 'css' ], array_keys( $cache ) ) ) {
 
@@ -204,12 +204,9 @@ class Render {
 
 		add_filter(
 			'publisher-core/services/register-block-editor-assets/add-inline-css-styles',
-			/**
-			 * @param string $prevStylesheet The previous css stylesheet.
-			 */
-			function ( string $prevStylesheet ) use ( $computedCssRules ): string {
+			function () use ( $computedCssRules ): string {
 
-				return $prevStylesheet . $computedCssRules;
+				return $computedCssRules;
 			}
 		);
 	}
