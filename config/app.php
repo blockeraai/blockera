@@ -9,6 +9,8 @@ return [
 	'version'   => PB_CORE_VERSION,
 	'dist_url'  => PB_CORE_URI . '/dist/',
 	'dist_path' => PB_CORE_PATH . '/dist/',
+	'packages_url' => PB_CORE_URI . '/packages/',
+	'packages_path' => PB_CORE_PATH . '/packages/',
 	'namespaces'    => [
 		'controllers' => '\Publisher\Framework\Http\Controllers\\',
 	],
