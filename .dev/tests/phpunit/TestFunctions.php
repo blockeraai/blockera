@@ -95,9 +95,10 @@ class TestFunctions extends AppTestCase {
 
 	public function coreConfigDataProvider(): array {
 
-		$rootDir = dirname( __PB_TEST_DIR__, 3 );
-		$blocks  = ( require $rootDir . '/config/app.php' )['blocks'];
-		$theme = wp_get_theme();
+		$rootDir           = dirname( __PB_TEST_DIR__, 3 );
+		$blocks            = ( require $rootDir . '/config/app.php' )['blocks'];
+		$postDynamicValues = require $rootDir . '/config/dynamic-values/post.php';
+		$theme             = wp_get_theme();
 
 		return [
 			[
@@ -138,12 +139,12 @@ class TestFunctions extends AppTestCase {
 				'expected' => true,
 			],
 			[
-				'path' => 'breakpoints.0',
+				'path'     => 'breakpoints.0',
 				'expected' => [
-					'type' => 'extra-large',
-					'force' => false,
-					'label' => __('Extra Large Screen', 'publisher-core'),
-					'settings' => [
+					'type'       => 'extra-large',
+					'force'      => false,
+					'label'      => __( 'Extra Large Screen', 'publisher-core' ),
+					'settings'   => [
 						'min' => '2561px',
 						'max' => '',
 					],
@@ -151,30 +152,97 @@ class TestFunctions extends AppTestCase {
 				],
 			],
 			[
-				'path' => 'entities.theme.name',
+				'path'     => 'entities.theme.name',
 				'expected' => [
 					'raw'      => $theme->template,
 					'rendered' => $theme->get( 'Name' )
 				],
 			],
 			[
-				'path' => 'entities.theme.version',
+				'path'     => 'entities.theme.version',
 				'expected' => $theme->get( 'Version' ),
 			],
 			[
-				'path' => 'entities.theme.block_theme',
+				'path'     => 'entities.theme.block_theme',
 				'expected' => $theme->is_block_theme(),
 			],
 			[
-				'path' => 'entities.theme.parent',
+				'path'     => 'entities.theme.parent',
 				'expected' => $theme->get( 'parent' ),
 			],
 			[
-				'path' => 'entities.site.url',
+				'path'     => 'entities.site.url',
 				'expected' => home_url(),
+			],
+			// Integration tests for pb_core_config() and pb_load() functions.
+			[
+				'path'     => 'valueAddon.dynamic-value-groups.post.items',
+				'expected' => $postDynamicValues,
 			],
 		];
 	}
 
+	public function testItShouldRetrieveEnvVariableEqualsWithExpectedValue() {
+
+		$this->assertSame(
+			[
+				'version'    => '1.0-alpha',
+				'mode'       => 'development',
+				'dir'        => 'publisher-core',
+				'everything' => 'publisher-core',
+			],
+			[
+				'version'    => pb_core_env( 'PB_CORE_VERSION' ),
+				'mode'       => pb_core_env( 'APP_MODE' ),
+				'dir'        => pb_core_env( 'PUBLISHER_DIR' ),
+				'everything' => pb_core_env( 'EVERYTHING', 'publisher-core' ),
+			]
+		);
+	}
+
+	public function testItShouldRetrieveRealValueOfRecievedValueAddon(): void {
+
+		// TODO: add tests for dynamic value try to access real dynamic value.
+
+		$this->assertSame(
+			'var(--wp--preset--color--contrast-2)',
+			pb_get_value_addon_real_value(
+				[
+					'settings'     => [
+						'name'      => 'Contrast / Two',
+						'id'        => 'contrast-2',
+						'value'     => '#636363',
+						'reference' => [ 'type' => 'theme', 'theme' => 'Twenty Twenty-Four', ],
+						'type'      => 'color',
+						'var'       => '--wp--preset--color--contrast-2',
+					],
+					'name'         => 'Contrast / Two',
+					'isValueAddon' => true,
+					'valueType'    => 'variable',
+				]
+			)
+		);
+	}
+
+	/**
+	 * @dataProvider sortingRepeaterDataProviders
+	 *
+	 * @param array $items
+	 * @param array $expected
+	 *
+	 * @return void
+	 */
+	public function testItShouldRetrieveSortedRepeaterItemsEqualsWithExpectedValue( array $items, array $expected ): void {
+
+		$this->assertSame(
+			$expected,
+			pb_get_sorted_repeater( $items ),
+		);
+	}
+
+	public function sortingRepeaterDataProviders() {
+
+		return require __PB_TEST_DIR__ . '/Fixtures/Functions/sorted-repeater-items.php';
+	}
 
 }

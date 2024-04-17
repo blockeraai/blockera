@@ -525,3 +525,28 @@ if (!function_exists('pb_convert_to_valid_css_rules')){
 		return $validCssRules;
 	}
 }
+
+if ( ! function_exists( 'pb_get_normalized_selector' ) ) {
+
+	/**
+	 * Get normalized selector.
+	 *
+	 * @param string $selector the target css selector.
+	 *
+	 * @return string the normalized css selector.
+	 */
+	function pb_get_normalized_selector( string $selector ): string {
+
+		$selectors = explode( ' ', $selector );
+
+		return trim(
+			implode(
+				'',
+				array_map( function ( string $_selector ): string {
+
+					return '.' . trim( $_selector );
+				}, $selectors )
+			)
+		);
+	}
+}
