@@ -46,4 +46,5 @@ export * from './post-comments-form';
 export * from './loginout';
 export * from './term-description';
 export * from './query-title';
+export * from './social-links';
 export * from './shared';
