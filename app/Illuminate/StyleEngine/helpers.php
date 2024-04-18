@@ -477,7 +477,7 @@ if ( ! function_exists( 'pb_combine_css' ) ) {
 	}
 }
 
-if (!function_exists('pb_convert_to_valid_css_rules')){
+if (!function_exists( 'pb_convert_css_declarations_to_css_valid_rules' )){
 
 	/**
 	 * Convert array css rules to valid css rules list.
@@ -486,7 +486,7 @@ if (!function_exists('pb_convert_to_valid_css_rules')){
 	 *
 	 * @return array the converted css rules.
 	 */
-	function pb_convert_to_valid_css_rules( array $css ): array {
+	function pb_convert_css_declarations_to_css_valid_rules( array $css ): array {
 
 		$validCssRules = [];
 
@@ -518,7 +518,7 @@ if (!function_exists('pb_convert_to_valid_css_rules')){
 					continue;
 				}
 
-				$validCssRules[ $selector ] = sprintf( '%1$s%2$s:%3$s;', $validCssRules[ $selector ], $property, $value );
+				$validCssRules[ $selector ] = sprintf( '%1$s%2$s: %3$s;', $validCssRules[ $selector ], $property, $value );
 			}
 		}
 

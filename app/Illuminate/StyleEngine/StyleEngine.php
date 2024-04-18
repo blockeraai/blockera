@@ -193,7 +193,7 @@ final class StyleEngine {
 		$this->pseudoState = $pseudoClass;
 
 		return $this->normalizeCssRules(
-			pb_convert_to_valid_css_rules(
+			pb_convert_css_declarations_to_css_valid_rules(
 				pb_combine_css(
 					array_map( [ $this, 'generateBlockCss' ], $this->definitions )
 				)
