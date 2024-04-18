@@ -6,6 +6,7 @@ import { select } from '@wordpress/data';
  * Publisher dependencies
  */
 import { Observer, CanvasEditor } from '@publisher/editor';
+import { blockeraBootstrapBlocks } from '@publisher/blocks';
 
 /**
  * Internal dependencies
@@ -104,6 +105,9 @@ export default function (wp: Object) {
 	bootstrapTypographyExtension();
 	bootstrapBackgroundExtension();
 	bootstrapBorderAndShadowExtension();
+
+	// blocks bootstraps
+	blockeraBootstrapBlocks();
 
 	// TODO: implements other bootstrap functionalities here ...
 }
