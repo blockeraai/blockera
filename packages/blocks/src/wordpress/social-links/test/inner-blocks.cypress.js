@@ -7,18 +7,19 @@ import {
 	openInnerBlocksExtension,
 } from '../../../../../../cypress/helpers';
 
-/**
- * Internal dependencies
- */
-import { testContent } from './test-content';
-
 describe('Social Links Block → Inner Blocks', () => {
 	beforeEach(() => {
 		createPost();
 	});
 
 	it('Should add all inner blocks to block settings', () => {
-		appendBlocks(testContent);
+		appendBlocks(`<!-- wp:social-links {"showLabels":true,"size":"has-normal-icon-size","className":"is-style-default","layout":{"type":"flex","justifyContent":"left","flexWrap":"nowrap"}} -->
+<ul class="wp-block-social-links has-normal-icon-size has-visible-labels is-style-default"><!-- wp:social-link {"url":"#test","service":"wordpress"} /-->
+
+<!-- wp:social-link {"url":"#test","service":"dribbble"} /-->
+
+<!-- wp:social-link {"url":"#test","service":"behance"} /--></ul>
+<!-- /wp:social-links -->`);
 
 		// Select target block
 		cy.getBlock('core/social-links').click();
