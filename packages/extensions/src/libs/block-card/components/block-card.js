@@ -61,10 +61,19 @@ export function BlockCard({
 						className={extensionInnerClassNames(
 							'block-card__title'
 						)}
-						onClick={() => handleOnClick('current-block', 'master')}
-						aria-label={__('Selected Block', 'publisher-core')}
 					>
-						{blockInformation.title}
+						<span
+							className={extensionInnerClassNames(
+								'block-card__title__block'
+							)}
+							onClick={() =>
+								handleOnClick('current-block', 'master')
+							}
+							aria-label={__('Selected Block', 'publisher-core')}
+						>
+							{blockInformation.title}
+						</span>
+
 						<Breadcrumb
 							states={states}
 							clientId={clientId}

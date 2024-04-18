@@ -32,12 +32,15 @@
 			align-items: center;
 			min-height: 24px;
 			gap: 2px;
-			cursor: pointer;
 			flex-wrap: wrap;
 
 			svg {
 				fill: currentColor;
 				opacity: 0.3;
+			}
+
+			.publisher-extension-block-card__title__block:not(:last-child) {
+				cursor: pointer;
 			}
 
 			.publisher-extension-block-card__title__item {
