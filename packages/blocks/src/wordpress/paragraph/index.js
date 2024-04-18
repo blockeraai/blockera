@@ -31,11 +31,12 @@ const publisherInnerBlocks: InnerBlocks = {
 		label: __('Link', 'publisher-core'),
 		icon: <InnerBlockLinkIcon />,
 		selectors: {
-			root: 'a',
+			root: 'a:not(.wp-element-button)',
 		},
 		attributes,
 		innerBlockSettings: {
 			force: true,
+			dataCompatibility: ['font-color', 'font-color-hover'],
 		},
 	},
 };
