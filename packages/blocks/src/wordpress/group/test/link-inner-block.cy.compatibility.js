@@ -8,9 +8,14 @@ import {
 	setInnerBlock,
 	setBlockState,
 	addBlockState,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	it('Simple color for inner block (normal + hover)', () => {
 		appendBlocks(
 			'<!-- wp:group {"style":{"elements":{"link":{"color":{"text":"#ffbaba"},":hover":{"color":{"text":"#ff1d1d"}}}}},"layout":{"type":"constrained"}} -->\n' +

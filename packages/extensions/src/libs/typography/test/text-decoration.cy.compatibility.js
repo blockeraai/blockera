@@ -6,9 +6,14 @@ import {
 	getSelectedBlock,
 	getWPDataObject,
 	openMoreFeaturesControl,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Text Decoration → WP Compatibility', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	describe('Paragraph Block', () => {
 		it('Simple value', () => {
 			appendBlocks(

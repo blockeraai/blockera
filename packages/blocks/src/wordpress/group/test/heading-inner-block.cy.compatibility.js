@@ -8,9 +8,14 @@ import {
 	setInnerBlock,
 	setBlockState,
 	addBlockState,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Group Block → Heading Inner Block → WP Data Compatibility', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	describe('Text Color', () => {
 		it('Simple value text color', () => {
 			appendBlocks(

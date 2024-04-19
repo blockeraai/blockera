@@ -5,9 +5,14 @@ import {
 	appendBlocks,
 	getSelectedBlock,
 	getWPDataObject,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Box Position → WP Compatibility', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	describe('Group Block', () => {
 		it('Simple Position', () => {
 			appendBlocks(

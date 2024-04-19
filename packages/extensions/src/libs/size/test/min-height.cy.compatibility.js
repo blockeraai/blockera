@@ -5,9 +5,14 @@ import {
 	appendBlocks,
 	getSelectedBlock,
 	getWPDataObject,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Min Height → WP Compatibility', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	describe('core/image Block', () => {
 		it('Simple Value', () => {
 			appendBlocks(

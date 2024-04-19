@@ -6,9 +6,14 @@ import {
 	getSelectedBlock,
 	getWPDataObject,
 	openMoreFeaturesControl,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Text Orientation → WP Compatibility', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	describe('Paragraph Block', () => {
 		it('Horizontal value + all Blockera values', () => {
 			appendBlocks(

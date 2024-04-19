@@ -5,9 +5,14 @@ import {
 	appendBlocks,
 	getSelectedBlock,
 	getWPDataObject,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Width → WP Compatibility', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	describe('core/search Block', () => {
 		it('Simple Value', () => {
 			appendBlocks(
