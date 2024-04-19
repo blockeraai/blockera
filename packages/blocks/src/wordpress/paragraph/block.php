@@ -9,7 +9,7 @@ return array_merge(
 		'selectors' => [
 			'innerBlocks' => [
 				'link' => [
-					'root' => 'a',
+					'root' => 'a:not(.wp-element-button)',
 				]
 			]
 		]
