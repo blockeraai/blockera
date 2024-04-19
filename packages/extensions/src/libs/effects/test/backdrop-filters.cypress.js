@@ -87,7 +87,7 @@ describe('Backdrop Filters → Functionality', () => {
 			.invoke('text')
 			.should(
 				'include',
-				'backdrop-filter:drop-shadow(50px 30px 40px #cccccc);'
+				'backdrop-filter: drop-shadow(50px 30px 40px #cccccc);'
 			);
 	});
 
@@ -157,6 +157,9 @@ describe('Backdrop Filters → Functionality', () => {
 
 		cy.get('style#publisher-core-inline-css-inline-css')
 			.invoke('text')
-			.should('include', 'backdrop-filter:brightness(100%) invert(50%);');
+			.should(
+				'include',
+				'backdrop-filter: brightness(100%) invert(50%);'
+			);
 	});
 });

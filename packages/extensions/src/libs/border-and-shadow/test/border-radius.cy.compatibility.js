@@ -3,6 +3,7 @@
  */
 import {
 	appendBlocks,
+	createPost,
 	getSelectedBlock,
 	getWPDataObject,
 	createPost,
@@ -12,7 +13,6 @@ describe('Border Radius → WP Compatibility', () => {
 	beforeEach(() => {
 		createPost();
 	});
-
 	describe('Button Block', () => {
 		it('Compacted corners border radius', () => {
 			appendBlocks(

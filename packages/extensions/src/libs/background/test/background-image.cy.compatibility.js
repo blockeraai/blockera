@@ -3,6 +3,7 @@
  */
 import {
 	appendBlocks,
+	createPost,
 	getSelectedBlock,
 	getWPDataObject,
 	createPost,
@@ -12,7 +13,6 @@ describe('Background → WP Compatibility', () => {
 	beforeEach(() => {
 		createPost();
 	});
-
 	describe('Paragraph Block', () => {
 		describe('Linear Gradient Background', () => {
 			it('Simple Value', () => {
@@ -298,7 +298,10 @@ describe('Background → WP Compatibility', () => {
 				cy.getBlock('core/paragraph').click();
 
 				// Switch to parent block
-				cy.getByAriaLabel('Select Group').click();
+				cy.getByAriaLabel(
+					'Select Group',
+					'Select parent block: Group'
+				).click();
 
 				// add alias to the feature container
 				cy.getParentContainer('Image & Gradient').as('bgContainer');

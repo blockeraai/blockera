@@ -32,7 +32,9 @@ describe('Media Fit Position → Functionality', () => {
 		});
 
 		cy.getByDataTest('popover-body').within(() => {
-			cy.contains('top center').click({ force: true });
+			cy.get('span[aria-label="top center"]').click({
+				force: true,
+			});
 		});
 
 		//Check block
@@ -51,9 +53,9 @@ describe('Media Fit Position → Functionality', () => {
 
 		/* Custom */
 		cy.getByDataTest('popover-body').within(() => {
-			cy.get('input').eq(0).clear();
+			cy.get('input').eq(0).clear({ force: true });
 			cy.get('input').eq(0).type(10);
-			cy.get('input').eq(1).clear();
+			cy.get('input').eq(1).clear({ force: true });
 			cy.get('input').eq(1).type(30);
 		});
 

@@ -78,7 +78,7 @@ describe('Transforms → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'transform:translate3d(150px, 200px, 100px);'
+					'transform: translate3d(150px, 200px, 100px);'
 				);
 		});
 
@@ -132,7 +132,7 @@ describe('Transforms → Functionality', () => {
 
 			cy.get('style#publisher-core-inline-css-inline-css')
 				.invoke('text')
-				.should('include', 'transform:scale3d(130%, 130%, 50%);');
+				.should('include', 'transform: scale3d(130%, 130%, 50%);');
 		});
 
 		it('should update transform, when add value to rotate', () => {
@@ -186,7 +186,7 @@ describe('Transforms → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'transform:rotateX(10deg) rotateY(20deg) rotateZ(30deg);'
+					'transform: rotateX(10deg) rotateY(20deg) rotateZ(30deg);'
 				);
 		});
 
@@ -235,7 +235,7 @@ describe('Transforms → Functionality', () => {
 
 			cy.get('style#publisher-core-inline-css-inline-css')
 				.invoke('text')
-				.should('include', 'transform:skew(10deg, 20deg);');
+				.should('include', 'transform: skew(10deg, 20deg);');
 		});
 
 		it('should update transform, when add multiple', () => {
@@ -253,14 +253,16 @@ describe('Transforms → Functionality', () => {
 				cy.getByAriaLabel('Add New Transform').click();
 			});
 
-			cy.get('.components-popover').within(() => {
-				cy.get('[aria-label="Move"]').click();
-				cy.get('[aria-label="Move-X"]').clear();
-				cy.get('[aria-label="Move-X"]').type(150);
-				cy.get('[aria-label="Move-Y"]').clear();
-				cy.get('[aria-label="Move-Y"]').type(200);
-				cy.get('[aria-label="Move-Z"]').clear();
-				cy.get('[aria-label="Move-Z"]').type(100);
+			cy.get('.components-popover').each(($div) => {
+				cy.get($div).within(() => {
+					cy.get('[aria-label="Move"]').click();
+					cy.get('[aria-label="Move-X"]').clear();
+					cy.get('[aria-label="Move-X"]').type(150);
+					cy.get('[aria-label="Move-Y"]').clear();
+					cy.get('[aria-label="Move-Y"]').type(200);
+					cy.get('[aria-label="Move-Z"]').clear();
+					cy.get('[aria-label="Move-Z"]').type(100);
+				});
 			});
 
 			//Check block
@@ -307,7 +309,7 @@ describe('Transforms → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'transform:skew(10deg, 20deg) translate3d(150px, 200px, 100px)'
+					'transform: skew(10deg, 20deg) translate3d(150px, 200px, 100px)'
 				);
 		});
 	});
@@ -353,7 +355,7 @@ describe('Transforms → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'transform:perspective(150px) translate3d(0px, 0px, 0px)'
+					'transform: perspective(150px) translate3d(0px, 0px, 0px)'
 				);
 		});
 
@@ -366,9 +368,9 @@ describe('Transforms → Functionality', () => {
 			cy.get('.components-popover')
 				.last()
 				.within(() => {
-					cy.get('span')
-						.contains('center center')
-						.click({ force: true });
+					cy.get('span[aria-label="center center"]').click({
+						force: true,
+					});
 				});
 
 			//Check block
@@ -394,7 +396,7 @@ describe('Transforms → Functionality', () => {
 
 			cy.get('style#publisher-core-inline-css-inline-css')
 				.invoke('text')
-				.should('include', 'transform-origin:50% 50%;');
+				.should('include', 'transform-origin: 50% 50%;');
 		});
 
 		it('should update backface-visibility, when add value to backface-visibility', () => {
@@ -428,7 +430,7 @@ describe('Transforms → Functionality', () => {
 
 			cy.get('style#publisher-core-inline-css-inline-css')
 				.invoke('text')
-				.should('include', 'backface-visibility:hidden;');
+				.should('include', 'backface-visibility: hidden;');
 		});
 
 		it('should update perspective, when add value to child perspective', () => {
@@ -478,9 +480,9 @@ describe('Transforms → Functionality', () => {
 			cy.get('.components-popover')
 				.last()
 				.within(() => {
-					cy.get('span')
-						.contains('center center')
-						.click({ force: true });
+					cy.get('span[aria-label="center center"]').click({
+						force: true,
+					});
 				});
 
 			//Check block
@@ -506,7 +508,7 @@ describe('Transforms → Functionality', () => {
 
 			cy.get('style#publisher-core-inline-css-inline-css')
 				.invoke('text')
-				.should('include', 'perspective-origin:50% 50%;');
+				.should('include', 'perspective-origin: 50% 50%;');
 		});
 	});
 });

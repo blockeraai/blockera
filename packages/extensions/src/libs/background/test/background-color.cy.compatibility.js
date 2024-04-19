@@ -3,6 +3,7 @@
  */
 import {
 	appendBlocks,
+	createPost,
 	getSelectedBlock,
 	getWPDataObject,
 	createPost,

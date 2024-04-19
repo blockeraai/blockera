@@ -500,7 +500,9 @@ describe('Width → WP Compatibility', () => {
 			cy.getBlock('core/column').click();
 
 			// switch to column block
-			cy.get('[aria-label="Select Column"]').click();
+			cy.get(
+				'[aria-label="Select Column"], [aria-label="Select parent block: Column"]'
+			).click();
 
 			// add alias to the feature container
 			cy.getParentContainer('Width').as('widthContainer');
@@ -562,7 +564,9 @@ describe('Width → WP Compatibility', () => {
 			cy.getBlock('core/column').click();
 
 			// switch to column block
-			cy.get('[aria-label="Select Column"]').click();
+			cy.get(
+				'[aria-label="Select Column"], [aria-label="Select parent block: Column"]'
+			).click();
 
 			// add alias to the feature container
 			cy.getParentContainer('Width').as('widthContainer');

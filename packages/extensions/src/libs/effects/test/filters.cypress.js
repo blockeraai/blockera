@@ -83,7 +83,7 @@ describe('Filters → Functionality', () => {
 
 		cy.get('style#publisher-core-inline-css-inline-css')
 			.invoke('text')
-			.should('include', 'filter:drop-shadow(50px 30px 40px #cccccc);');
+			.should('include', 'filter: drop-shadow(50px 30px 40px #cccccc);');
 	});
 
 	it('Should update filter correctly, when add multiple filter', () => {
@@ -147,6 +147,6 @@ describe('Filters → Functionality', () => {
 
 		cy.get('style#publisher-core-inline-css-inline-css')
 			.invoke('text')
-			.should('include', 'filter:brightness(100%) invert(50%);');
+			.should('include', 'filter: brightness(100%) invert(50%);');
 	});
 });

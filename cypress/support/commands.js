@@ -42,6 +42,17 @@ Cypress.Commands.add('getByDataTest', (selector, ...args) => {
 });
 
 Cypress.Commands.add('getByAriaLabel', (selector, ...args) => {
+	const fallbackLabel = args[0];
+
+	if (fallbackLabel) {
+		delete args[0];
+
+		return cy.get(
+			`[aria-label="${selector}"], [aria-label="${fallbackLabel}"]`,
+			...args
+		);
+	}
+
 	return cy.get(`[aria-label="${selector}"]`, ...args);
 });
 

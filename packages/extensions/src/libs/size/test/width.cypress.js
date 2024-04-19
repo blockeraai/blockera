@@ -56,7 +56,7 @@ describe('Width → Functionality', () => {
 		cy.selectValueAddonItem('contentSize');
 
 		// Check block
-		cy.getBlock('core/paragraph').should('have.css', 'width', '800px');
+		cy.getBlock('core/paragraph').should('have.css', 'width', '620px');
 
 		// Check store
 		getWPDataObject().then((data) => {
@@ -64,7 +64,7 @@ describe('Width → Functionality', () => {
 				settings: {
 					name: 'Content Width',
 					id: 'contentSize',
-					value: '800px',
+					value: '620px',
 					reference: {
 						type: 'preset',
 					},
@@ -82,7 +82,7 @@ describe('Width → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should('have.css', 'width', '800px');
+		cy.get('.publisher-core-block').should('have.css', 'width', '620px');
 		cy.get('.publisher-core-block').hasCssVar(
 			'width',
 			'--wp--style--global--content-size'

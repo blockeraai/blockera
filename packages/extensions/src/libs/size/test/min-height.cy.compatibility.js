@@ -27,7 +27,9 @@ describe('Min Height → WP Compatibility', () => {
 			cy.getBlock('core/cover').click();
 
 			// switch to cover block
-			cy.get('[aria-label="Select Cover"]').click();
+			cy.get(
+				'[aria-label="Select Cover"], [aria-label="Select parent block: Cover"]'
+			).click();
 
 			// add alias to the feature container
 			cy.getParentContainer('Min').as('container');
@@ -94,7 +96,9 @@ describe('Min Height → WP Compatibility', () => {
 			cy.getBlock('core/cover').click();
 
 			// switch to cover block
-			cy.get('[aria-label="Select Cover"]').click();
+			cy.get(
+				'[aria-label="Select Cover"], [aria-label="Select parent block: Cover"]'
+			).click();
 
 			//
 			// Test 1: Blockera data to WP

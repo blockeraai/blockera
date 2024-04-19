@@ -66,7 +66,7 @@ describe('Max Width → Functionality', () => {
 		cy.selectValueAddonItem('contentSize');
 
 		// Check block
-		cy.getBlock('core/paragraph').should('have.css', 'max-width', '800px');
+		cy.getBlock('core/paragraph').should('have.css', 'max-width', '620px');
 
 		// Check store
 		getWPDataObject().then((data) => {
@@ -74,7 +74,7 @@ describe('Max Width → Functionality', () => {
 				settings: {
 					name: 'Content Width',
 					id: 'contentSize',
-					value: '800px',
+					value: '620px',
 					reference: {
 						type: 'preset',
 					},
@@ -95,7 +95,7 @@ describe('Max Width → Functionality', () => {
 		cy.get('.publisher-core-block').should(
 			'have.css',
 			'max-width',
-			'800px'
+			'620px'
 		);
 		cy.get('.publisher-core-block').hasCssVar(
 			'max-width',

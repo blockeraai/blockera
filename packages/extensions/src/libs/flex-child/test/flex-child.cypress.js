@@ -20,7 +20,7 @@ describe('Flex Child', () => {
 
 			appendBlocks(code);
 
-			cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
+			cy.getBlock('core/paragraph').click();
 			cy.getByDataTest('style-tab').click();
 		});
 
@@ -29,7 +29,7 @@ describe('Flex Child', () => {
 		});
 	});
 
-	describe('Sizing', () => {
+	describe('Self Size', () => {
 		beforeEach(() => {
 			const code = `<!-- wp:group {"className":"publisher-group","layout":{"type":"constrained"},"publisherDisplay":"flex","publisherPropsId":"1025111558103"} -->
 <div class="wp-block-group publisher-group"><!-- wp:paragraph {"className":"publisher-paragraph","publisherAttributes":[],"publisherPropsId":"102511163356"} -->
@@ -38,7 +38,7 @@ describe('Flex Child', () => {
 <!-- /wp:group -->`;
 			appendBlocks(code);
 
-			cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
+			cy.getBlock('core/paragraph').click();
 			cy.getByDataTest('style-tab').click();
 		});
 
@@ -49,14 +49,18 @@ describe('Flex Child', () => {
 				//
 				// Shrink
 				//
-				cy.getParentContainer('Sizing', 'base-control').within(() => {
-					cy.getByAriaLabel('Shrink').click();
-				});
+				cy.getParentContainer('Self Size', 'base-control').within(
+					() => {
+						cy.getByAriaLabel('Shrink').click();
+					}
+				);
 
 				//Check block
-				cy.getIframeBody()
-					.find(`[data-type="core/paragraph"]`)
-					.should('have.css', 'flex', '0 1 auto');
+				cy.getBlock('core/paragraph').should(
+					'have.css',
+					'flex',
+					'0 1 auto'
+				);
 
 				//Check store
 				getWPDataObject().then((data) => {
@@ -68,14 +72,18 @@ describe('Flex Child', () => {
 				//
 				// Grow
 				//
-				cy.getParentContainer('Sizing', 'base-control').within(() => {
-					cy.getByAriaLabel('Grow').click();
-				});
+				cy.getParentContainer('Self Size', 'base-control').within(
+					() => {
+						cy.getByAriaLabel('Grow').click();
+					}
+				);
 
 				//Check block
-				cy.getIframeBody()
-					.find(`[data-type="core/paragraph"]`)
-					.should('have.css', 'flex', '1 1 0%');
+				cy.getBlock('core/paragraph').should(
+					'have.css',
+					'flex',
+					'1 1 0%'
+				);
 
 				//Check store
 				getWPDataObject().then((data) => {
@@ -87,14 +95,18 @@ describe('Flex Child', () => {
 				//
 				// No Grow or Shrink
 				//
-				cy.getParentContainer('Sizing', 'base-control').within(() => {
-					cy.getByAriaLabel('No Grow or Shrink').click();
-				});
+				cy.getParentContainer('Self Size', 'base-control').within(
+					() => {
+						cy.getByAriaLabel('No Grow or Shrink').click();
+					}
+				);
 
 				//Check block
-				cy.getIframeBody()
-					.find(`[data-type="core/paragraph"]`)
-					.should('have.css', 'flex', '0 0 auto');
+				cy.getBlock('core/paragraph').should(
+					'have.css',
+					'flex',
+					'0 0 auto'
+				);
 
 				//Check store
 				getWPDataObject().then((data) => {
@@ -116,18 +128,28 @@ describe('Flex Child', () => {
 			});
 
 			it('should update correctly, when adding custom data', () => {
-				cy.getParentContainer('Sizing', 'base-control').within(() => {
-					cy.getByAriaLabel('Custom').click();
-					cy.getByAriaLabel('Custom Grow').type(1);
-					cy.getByAriaLabel('Custom Shrink').type(2);
-					cy.get('select').select('%');
-					cy.getByAriaLabel('Custom Basis').type(10);
-				});
+				cy.getParentContainer('Self Size', 'base-control').within(
+					() => {
+						cy.getByAriaLabel('Custom').click();
+						cy.getByAriaLabel('Custom Grow').type(1, {
+							force: true,
+						});
+						cy.getByAriaLabel('Custom Shrink').type(2, {
+							force: true,
+						});
+						cy.getByAriaLabel('Select Unit').last().select('%');
+						cy.getByAriaLabel('Custom Basis').type(10, {
+							force: true,
+						});
+					}
+				);
 
 				//Check block
-				cy.getIframeBody()
-					.find(`[data-type="core/paragraph"]`)
-					.should('have.css', 'flex', '1 2 10%');
+				cy.getBlock('core/paragraph').should(
+					'have.css',
+					'flex',
+					'1 2 10%'
+				);
 
 				//Check store
 				getWPDataObject().then((data) => {
@@ -174,20 +196,22 @@ describe('Flex Child', () => {
 <!-- /wp:group -->`;
 			appendBlocks(code);
 
-			cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
+			cy.getBlock('core/paragraph').click();
 			cy.getByDataTest('style-tab').click();
 
 			//
 			// Flex Start
 			//
-			cy.getParentContainer('Align', 'base-control').within(() => {
+			cy.getParentContainer('Self Align', 'base-control').within(() => {
 				cy.getByAriaLabel('Flex Start').click();
 			});
 
 			//Check block
-			cy.getIframeBody()
-				.find(`[data-type="core/paragraph"]`)
-				.should('have.css', 'align-self', 'flex-start');
+			cy.getBlock('core/paragraph').should(
+				'have.css',
+				'align-self',
+				'flex-start'
+			);
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -199,14 +223,16 @@ describe('Flex Child', () => {
 			//
 			// Center
 			//
-			cy.getParentContainer('Align', 'base-control').within(() => {
+			cy.getParentContainer('Self Align', 'base-control').within(() => {
 				cy.getByAriaLabel('Center').click();
 			});
 
 			//Check block
-			cy.getIframeBody()
-				.find(`[data-type="core/paragraph"]`)
-				.should('have.css', 'align-self', 'center');
+			cy.getBlock('core/paragraph').should(
+				'have.css',
+				'align-self',
+				'center'
+			);
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -218,14 +244,16 @@ describe('Flex Child', () => {
 			//
 			// Flex End
 			//
-			cy.getParentContainer('Align', 'base-control').within(() => {
+			cy.getParentContainer('Self Align', 'base-control').within(() => {
 				cy.getByAriaLabel('Flex End').click();
 			});
 
 			//Check block
-			cy.getIframeBody()
-				.find(`[data-type="core/paragraph"]`)
-				.should('have.css', 'align-self', 'flex-end');
+			cy.getBlock('core/paragraph').should(
+				'have.css',
+				'align-self',
+				'flex-end'
+			);
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -237,14 +265,16 @@ describe('Flex Child', () => {
 			//
 			// Stretch
 			//
-			cy.getParentContainer('Align', 'base-control').within(() => {
+			cy.getParentContainer('Self Align', 'base-control').within(() => {
 				cy.getByAriaLabel('Stretch').click();
 			});
 
 			//Check block
-			cy.getIframeBody()
-				.find(`[data-type="core/paragraph"]`)
-				.should('have.css', 'align-self', 'stretch');
+			cy.getBlock('core/paragraph').should(
+				'have.css',
+				'align-self',
+				'stretch'
+			);
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -256,14 +286,16 @@ describe('Flex Child', () => {
 			//
 			// Baseline
 			//
-			cy.getParentContainer('Align', 'base-control').within(() => {
+			cy.getParentContainer('Self Align', 'base-control').within(() => {
 				cy.getByAriaLabel('Baseline').click();
 			});
 
 			//Check block
-			cy.getIframeBody()
-				.find(`[data-type="core/paragraph"]`)
-				.should('have.css', 'align-self', 'baseline');
+			cy.getBlock('core/paragraph').should(
+				'have.css',
+				'align-self',
+				'baseline'
+			);
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -295,7 +327,7 @@ describe('Flex Child', () => {
 <!-- /wp:group -->`;
 				appendBlocks(code);
 
-				cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
+				cy.getBlock('core/paragraph').click();
 				cy.getByDataTest('style-tab').click();
 			});
 
@@ -303,14 +335,14 @@ describe('Flex Child', () => {
 				//
 				// First
 				//
-				cy.getParentContainer('Order', 'base-control').within(() => {
-					cy.getByAriaLabel('First').click();
-				});
+				cy.getParentContainer('Self Order', 'base-control').within(
+					() => {
+						cy.getByAriaLabel('First').click();
+					}
+				);
 
 				//Check block
-				cy.getIframeBody()
-					.find(`[data-type="core/paragraph"]`)
-					.should('have.css', 'order', '-1');
+				cy.getBlock('core/paragraph').should('have.css', 'order', '-1');
 
 				//Check store
 				getWPDataObject().then((data) => {
@@ -322,14 +354,18 @@ describe('Flex Child', () => {
 				//
 				// Last
 				//
-				cy.getParentContainer('Order', 'base-control').within(() => {
-					cy.getByAriaLabel('Last').click();
-				});
+				cy.getParentContainer('Self Order', 'base-control').within(
+					() => {
+						cy.getByAriaLabel('Last').click();
+					}
+				);
 
 				//Check block
-				cy.getIframeBody()
-					.find(`[data-type="core/paragraph"]`)
-					.should('have.css', 'order', '100');
+				cy.getBlock('core/paragraph').should(
+					'have.css',
+					'order',
+					'100'
+				);
 
 				//Check store
 				getWPDataObject().then((data) => {
@@ -351,15 +387,15 @@ describe('Flex Child', () => {
 			});
 
 			it('should update correctly, when adding custom order', () => {
-				cy.getParentContainer('Order', 'base-control').within(() => {
-					cy.getByAriaLabel('Custom Order').click();
-					cy.get('input').type(10, { force: true });
-				});
+				cy.getParentContainer('Self Order', 'base-control').within(
+					() => {
+						cy.getByAriaLabel('Custom Order').click();
+						cy.get('input').type(10, { force: true });
+					}
+				);
 
 				//Check block
-				cy.getIframeBody()
-					.find(`[data-type="core/paragraph"]`)
-					.should('have.css', 'order', '10');
+				cy.getBlock('core/paragraph').should('have.css', 'order', '10');
 
 				//Check store
 				getWPDataObject().then((data) => {

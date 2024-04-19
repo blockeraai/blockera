@@ -27,7 +27,10 @@ describe('Box Position → WP Compatibility', () => {
 			cy.getBlock('core/paragraph').click();
 
 			// Switch to parent group block
-			cy.getByAriaLabel('Select Group').click();
+			cy.getByAriaLabel(
+				'Select Group',
+				'Select parent block: Group'
+			).click();
 
 			// add alias to the feature container
 			cy.getParentContainer('Position').as('container');
