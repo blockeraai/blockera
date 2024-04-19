@@ -2,10 +2,9 @@
 
 namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
-use Publisher\Framework\Exceptions\BaseException;
-use Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions\Contracts\Style;
+use Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions\Contracts\HaveCustomSettings;
 
-abstract class BaseStyleDefinition implements Style {
+abstract class BaseStyleDefinition {
 
 	/**
 	 * hold style definition settings from consumer request.
@@ -105,7 +104,7 @@ abstract class BaseStyleDefinition implements Style {
 	 */
 	public function getCssRules(): array {
 
-		$this->filterSettings();
+//		$this->filterSettings();
 
 		array_map( [ $this, 'generateCssRules' ], $this->settings, array_keys( $this->settings ) );
 
@@ -115,27 +114,34 @@ abstract class BaseStyleDefinition implements Style {
 	/**
 	 * Generating css rules.
 	 *
-	 * @param mixed  $setting the prepared setting from context.
-	 * @param string $name    the name of setting.
+	 * @param mixed  $value the prepared setting from context.
+	 * @param string $name  the name of setting.
 	 *
 	 * @return void
 	 */
-	protected function generateCssRules( $setting, string $name ): void {
+	protected function generateCssRules( $value, string $name ): void {
 
-		$type = $this->getValidCssProp( $name );
+		$cssProperty = $this->getValidCssProp( $name );
 
-		if ( ! $type ) {
+		if ( ! $cssProperty ) {
 
 			return;
 		}
 
-		$setting = [
-			[
-				'isVisible' => true,
-				'type'      => $type,
-				$type       => $setting,
-			]
-		];
+		if ( $this instanceof HaveCustomSettings ) {
+
+			$setting = $this->getCustomSettings( $this->settings, $name, $cssProperty );
+
+		} else {
+
+			$setting = [
+				[
+					'isVisible' => true,
+					'type'      => $cssProperty,
+					$cssProperty       => $value,
+				]
+			];
+		}
 
 		array_map( [ $this, 'css' ], $setting );
 	}

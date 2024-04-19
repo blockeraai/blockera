@@ -2,7 +2,9 @@
 
 namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
-class Layout extends BaseStyleDefinition {
+use Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions\Contracts\HaveCustomSettings;
+
+class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 
 	/**
 	 * @inheritdoc
@@ -12,14 +14,14 @@ class Layout extends BaseStyleDefinition {
 	public function getAllowedProperties(): array {
 
 		return [
-			'publisherGap'             => 'gap',
-			'publisherFlexChildSizing' => 'flex',
-			'publisherFlexChildOrder'  => 'order',
-			'publisherDisplay'         => 'display',
-			'publisherFlexWrap'        => 'flex-wrap',
-			'publisherFlexChildAlign'  => 'align-self',
-			'publisherAlignContent'    => 'align-content',
-			'publisherFlexLayout'      => 'flex-direction',
+			'publisherGap'                  => 'gap',
+			'publisherFlexChildSizing'      => 'flex',
+			'publisherFlexChildOrder'       => 'order',
+			'publisherDisplay'              => 'display',
+			'publisherFlexWrap'             => 'flex-wrap',
+			'publisherFlexChildAlign'       => 'align-self',
+			'publisherAlignContent'         => 'align-content',
+			'publisherFlexLayout'           => 'flex-direction',
 		];
 	}
 
@@ -59,9 +61,9 @@ class Layout extends BaseStyleDefinition {
 					case 'custom':
 						$declaration['flex'] = sprintf(
 							'%s %s %s',
-							$setting['flex-child']['publisherFlexChildGrow'] ? pb_get_value_addon_real_value( $setting['flex-child']['publisherFlexChildGrow'] ) : 0,
-							$setting['flex-child']['publisherFlexChildShrink'] ? pb_get_value_addon_real_value( $setting['flex-child']['publisherFlexChildShrink'] ) : 0,
-							$setting['flex-child']['publisherFlexChildBasis'] ? pb_get_value_addon_real_value( $setting['flex-child']['publisherFlexChildBasis'] ) : 'auto'
+							$setting['custom']['publisherFlexChildGrow'] ? pb_get_value_addon_real_value( $setting['custom']['publisherFlexChildGrow'] ) : 0,
+							$setting['custom']['publisherFlexChildShrink'] ? pb_get_value_addon_real_value( $setting['custom']['publisherFlexChildShrink'] ) : 0,
+							$setting['custom']['publisherFlexChildBasis'] ? pb_get_value_addon_real_value( $setting['custom']['publisherFlexChildBasis'] ) : 'auto'
 						);
 						break;
 				}
@@ -139,6 +141,57 @@ class Layout extends BaseStyleDefinition {
 		$this->setCss( $declaration );
 
 		return $this->css;
+	}
+
+	/**
+	 * @inheritDoc
+	 *
+	 * @param array  $settings
+	 * @param string $settingName
+	 * @param string $cssProperty
+	 *
+	 * @return array
+	 */
+	public function getCustomSettings( array $settings, string $settingName, string $cssProperty ): array {
+
+		if ( 'custom' === $settings[ $settingName ] && 'flex' === $cssProperty ) {
+
+			$setting = [
+				[
+					'isVisible'  => true,
+					'type'       => $cssProperty,
+					$cssProperty => $settings['publisherFlexChildSizing'] ?? 'custom',
+					'custom'     => [
+						'publisherFlexChildGrow'   => $settings['publisherFlexChildGrow'] ?? 0,
+						'publisherFlexChildShrink' => $settings['publisherFlexChildShrink'] ?? 0,
+						'publisherFlexChildBasis'  => $settings['publisherFlexChildBasis'] ?? 'auto',
+					],
+				]
+			];
+
+		} elseif ( 'custom' === $settings[ $settingName ] && 'order' === $cssProperty ) {
+
+			$setting = [
+				[
+					'isVisible'  => true,
+					'type'       => $cssProperty,
+					$cssProperty => $settings['publisherFlexChildOrder'] ?? 'custom',
+					'custom'     => $settings['publisherFlexChildOrderCustom'] ?? '',
+				]
+			];
+
+		} else {
+
+			$setting = [
+				[
+					'isVisible'  => true,
+					'type'       => $cssProperty,
+					$cssProperty => $settings[ $settingName ],
+				]
+			];
+		}
+
+		return $setting;
 	}
 
 }
