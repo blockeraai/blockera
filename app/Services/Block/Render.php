@@ -91,7 +91,7 @@ class Render {
 	public function render( string $html, array $block, int $postId = -1 ): string {
 
 		//Just running for publisher extensions settings!
-		if ( empty( $block['attrs']['publisherPropsId'] ) || is_admin() ) {
+		if ( empty( $block['attrs']['publisherPropsId'] ) || is_admin() || defined( 'REST_REQUEST' ) && REST_REQUEST ) {
 
 			return $html;
 		}
@@ -104,7 +104,7 @@ class Render {
 
 		$attributes = $block['attrs'];
 
-		if ( $attributes['className'] ) {
+		if ( ! empty( $attributes['className'] ) ) {
 			// Usage of saved class names for block element.
 			$uniqueClassname = pb_get_normalized_selector( $attributes['className'] );
 
@@ -222,21 +222,21 @@ class Render {
 	 */
 	public function getSelector( array $block, string $uniqueClassname = '' ): string {
 
-		$selector = ! empty( $uniqueClassname ) ? ( '.' !== $uniqueClassname[0] ? ".{$uniqueClassname}" : $uniqueClassname ) : '';
-
-		switch ( $block['blockName'] ) {
-			case 'core/button':
-			case 'core/buttons':
-				return ".wp-block-button .wp-block-button__link{$selector}";
-
-			case 'core/site-title':
-				return ".wp-block-site-title a{$selector}";
-
-			case 'core/paragraph':
-				return "p{$selector}";
-		}
-
-		return $selector;
+		return ! empty( $uniqueClassname ) ? ( '.' !== $uniqueClassname[0] ? ".{$uniqueClassname}" : $uniqueClassname ) : '';
+		// TODO: normalizing css classnames based on block type.
+//		switch ( $block['blockName'] ) {
+//			case 'core/button':
+//			case 'core/buttons':
+//				return ".wp-block-button .wp-block-button__link{$selector}";
+//
+//			case 'core/site-title':
+//				return ".wp-block-site-title a{$selector}";
+//
+//			case 'core/paragraph':
+//				return "p{$selector}";
+//		}
+//
+//		return $selector;
 	}
 
 	/**
