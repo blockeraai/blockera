@@ -18,29 +18,6 @@ if ( ! function_exists( 'pb_get_unique_classname' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pb_get_classname' ) ) {
-	/**
-	 * Retrieve classname string.
-	 *
-	 * FIXME: please remove this.
-	 *
-	 * @param string $namespace the namespace of class
-	 * @param string $class     the class full name
-	 *
-	 * @return string retrieve just specific name of class.
-	 * @deprecated
-	 *
-	 */
-	function pb_get_classname( string $namespace, string $class ): string {
-
-		return str_replace(
-			$namespace . '\\',
-			'',
-			$class
-		);
-	}
-}
-
 if ( ! function_exists( 'pb_get_css_media_queries' ) ) {
 
 	/**
@@ -116,45 +93,16 @@ if ( ! function_exists( 'pb_block_state_validate' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pb_get_state_breakpoint' ) ) {
-
-	/**
-	 * Get state breakpoint with breakpoint name.
-	 *
-	 * @param array  $breakpoints The breakpoints cluster.
-	 * @param string $breakpoint  The breakpoint name.
-	 *
-	 * @return array The breakpoint founded in state cluster on success, empty array when no breakpoint found.
-	 */
-	function pb_get_state_breakpoint( array $breakpoints, string $breakpoint ): array {
-
-		// no has breakpoints.
-		if ( empty( $breakpoints ) ) {
-
-			return [];
-		}
-
-		// no breakpoint found.
-		if ( empty( $breakpoints[ $breakpoint ] ) ) {
-
-			return [];
-		}
-
-		return $breakpoints[ $breakpoint ];
-	}
-}
-
 if ( ! function_exists( 'pb_get_block_type_selectors' ) ) {
 
 	/**
 	 * Retrieve block type mapped selectors array.
 	 *
 	 * @param string $name the block name.
-	 * @param array  $args the args to use customization.
 	 *
 	 * @return array the css mapped to array css selectors.
 	 */
-	function pb_get_block_type_selectors( string $name, array $args ): array {
+	function pb_get_block_type_selectors( string $name ): array {
 
 		$registered = WP_Block_Type_Registry::get_instance()->get_registered( $name );
 
@@ -163,23 +111,15 @@ if ( ! function_exists( 'pb_get_block_type_selectors' ) ) {
 			return [];
 		}
 
-		$selectors = WP_Block_Type_Registry::get_instance()->get_registered( $name )->selectors;
-
-		// Provide fallback css selector to use this when $selectors is empty.
-		if ( empty( $selectors['fallback'] ) && ! empty( $args['fallback'] ) ) {
-
-			$selectors['fallback'] = $args['fallback'];
-
-			unset( $args['fallback'] );
-		}
-
-		return pb_convert_unique_selectors( $selectors, $args );
+		return WP_Block_Type_Registry::get_instance()->get_registered( $name )->selectors;
 	}
 }
 
 if ( ! function_exists( 'pb_convert_unique_selectors' ) ) {
 	/**
 	 * Retrieve converted selectors to unique selectors.
+	 *
+	 * TODO: write phpunit tests for this function.
 	 *
 	 * @param array $selectors the recieved selectors list.
 	 * @param array $args      the extra arguments to generate unique css selectors.
@@ -195,6 +135,14 @@ if ( ! function_exists( 'pb_convert_unique_selectors' ) ) {
 			'block-settings'     => $blockSettings,
 			'master-block-state' => $masterBlockState,
 		] = $args;
+
+		// Provide fallback css selector to use this when $selectors is empty.
+		if ( empty( $selectors['fallback'] ) && ! empty( $args['fallback'] ) ) {
+
+			$selectors['fallback'] = $args['fallback'];
+
+			unset( $args['fallback'] );
+		}
 
 		$customClassname = $blockSettings['publisherBlockStates'][ $pseudoClass ]['css-class'] ?? null;
 
