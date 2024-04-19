@@ -41,7 +41,6 @@ export {
 	SizeExtensionIcon,
 	supports as sizeSupports,
 	attributes as sizeAttributes,
-	bootstrap as bootstrapSizeExtension,
 } from './size';
 export {
 	PositionExtensionIcon,
@@ -49,7 +48,6 @@ export {
 	PositionExtension,
 	attributes as positionAttributes,
 	supports as positionSupports,
-	bootstrap as bootstrapPositionExtension,
 } from './position';
 export {
 	SpacingExtensionIcon,
@@ -64,7 +62,6 @@ export {
 	BackgroundExtension,
 	attributes as backgroundAttributes,
 	supports as backgroundSupports,
-	bootstrap as bootstrapBackgroundExtension,
 } from './background';
 export {
 	BorderAndShadowExtensionIcon,
@@ -72,7 +69,6 @@ export {
 	BorderAndShadowExtension,
 	attributes as borderAndShadowExtensionAttributes,
 	supports as borderAndShadowExtensionSupports,
-	bootstrap as bootstrapBorderAndShadowExtension,
 } from './border-and-shadow';
 export {
 	EffectsExtensionIcon,
@@ -100,7 +96,6 @@ export {
 	TypographyExtension,
 	TypographyExtensionIcon,
 	supports as typographyExtensionSupports,
-	bootstrap as bootstrapTypographyExtension,
 	attributes as typographyExtensionAttributes,
 } from './typography';
 export {
@@ -113,7 +108,6 @@ export {
 	definitionTypes,
 	InnerBlocksExtension,
 	attributes as innerBlocksExtensionsAttributes,
-	bootstrap as bootstrapInnerBlocksExtension,
 } from './inner-blocks';
 export * from './inner-blocks/icons';
 export {
