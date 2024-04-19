@@ -296,12 +296,11 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 								additional.editorProps.className || ''
 							),
 						};
-					} else if ('undefined' !== typeof className) {
+					} else if ('' === className) {
 						filteredAttributes = {
 							...filteredAttributes,
 							className: classnames(
 								{
-									[className]: true,
 									'publisher-core-block': true,
 									[`publisher-core-block-${clientId}`]: true,
 								},
