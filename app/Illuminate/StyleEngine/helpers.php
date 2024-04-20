@@ -115,18 +115,16 @@ if ( ! function_exists( 'pb_get_block_type_selectors' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pb_convert_unique_selectors' ) ) {
+if ( ! function_exists( 'pb_get_block_state_selectors' ) ) {
 	/**
-	 * Retrieve converted selectors to unique selectors.
-	 *
-	 * TODO: write phpunit tests for this function.
+	 * Retrieve block state selectors.
 	 *
 	 * @param array $selectors the recieved selectors list.
 	 * @param array $args      the extra arguments to generate unique css selectors.
 	 *
 	 * @return array the unique selectors list.
 	 */
-	function pb_convert_unique_selectors( array $selectors, array $args = [] ): array {
+	function pb_get_block_state_selectors( array $selectors, array $args = [] ): array {
 
 		[
 			'block-type'         => $blockType,
@@ -144,84 +142,40 @@ if ( ! function_exists( 'pb_convert_unique_selectors' ) ) {
 			unset( $args['fallback'] );
 		}
 
+		// Handle inner blocks selectors based on recieved state.
+		if ( $isInnerBlock ) {
+
+			// Validate inner block type.
+			if ( empty( $selectors['innerBlocks'][ $blockType ] ) ) {
+
+				return $selectors;
+			}
+
+			$innerBlockSelectors = array_merge(
+				[
+					'fallback'   => $selectors['fallback'] ?? '',
+					'parentRoot' => $selectors['root'] ?? $selectors['fallback'] ?? '',
+				],
+				$selectors['innerBlocks'][ $blockType ],
+			);
+
+			$selectors['innerBlocks'][ $blockType ] = pb_get_inner_block_state_selectors( $innerBlockSelectors, $args );
+
+			// Delete custom fallback and parentRoot selector of inner block list.
+			unset(
+				$selectors['innerBlocks'][ $blockType ]['fallback'],
+				$selectors['innerBlocks'][ $blockType ]['parentRoot']
+			);
+
+			return $selectors;
+		}
+
 		$customClassname = $blockSettings['publisherBlockStates'][ $pseudoClass ]['css-class'] ?? null;
 
 		foreach ( $selectors as $key => $value ) {
 
-			// Overriding inner blocks selectors with generate unique css class.
-			if ( 'innerBlocks' === $key && ! empty( $value[ $blockType ] ) ) {
-
-				foreach ( $value[ $blockType ] as $_key => $_value ) {
-
-					// Overriding selectors based on supported pseudo-class in css. Supported pseudo-classes with css: hover, active, visited, before, after.
-					if ( $pseudoClass && 'normal' !== $pseudoClass ) {
-
-						if ( ! is_string( $_value ) ) {
-
-							// FIXME: implements for array type selectors.
-
-							continue;
-						}
-
-						// Add pseudo custom css class as suffix into selectors value for current key.
-						$selectors[ $key ][ $blockType ][ $_key ] = sprintf(
-							'%1$s:%2$s %3$s',
-							trim( $selectors['root'] ?? $selectors['fallback'] ?? '' ),
-							$pseudoClass,
-							trim( $_value )
-						);
-
-						if ( ! $isInnerBlock ) {
-
-							continue;
-						}
-
-						$parentPseudoClass = in_array( $masterBlockState, [
-							'normal',
-							'parent-class',
-							'custom-class'
-						], true ) ? '' : $masterBlockState;
-
-						// Add pseudo custom css class as suffix into selectors value for current key.
-						$selectors[ $key ][ $blockType ][ $_key ] = sprintf(
-							'%1$s%2$s%3$s:%4$s',
-							trim( $selectors['root'] ?? $selectors['fallback'] ?? '' ),
-							empty( $parentPseudoClass ) ? ' ' : ':' . $parentPseudoClass . ' ',
-							trim( $_value ),
-							$pseudoClass
-						);
-
-						// TODO: double check to we needs to customized supports selectors or not for inner blocks?
-
-						continue;
-					}
-
-					if ( is_string( $_value ) ) {
-
-						if ( $masterBlockState ) {
-
-							$parentPseudoClass = in_array( $masterBlockState, [
-								'normal',
-								'parent-class',
-								'custom-class'
-							], true ) ? '' : $masterBlockState;
-
-							// Add pseudo custom css class as suffix into selectors value for current key.
-							$selectors[ $key ][ $blockType ][ $_key ] = sprintf(
-								'%1$s%2$s%3$s',
-								trim( $selectors['root'] ?? $selectors['fallback'] ?? '' ),
-								empty( $parentPseudoClass ) ? ' ' : ':' . $parentPseudoClass . ' ',
-								trim( $_value )
-							);
-
-							continue;
-						}
-
-						$selectors[ $key ][ $blockType ][ $_key ] = trim(
-							sprintf( '%s %s', trim( $selectors['root'] ?? $selectors['fallback'] ?? '' ), $_value )
-						);
-					}
-				}
+			// Excluding inner blocks.
+			if ( 'innerBlocks' === $key ) {
 
 				continue;
 			}
@@ -244,20 +198,155 @@ if ( ! function_exists( 'pb_convert_unique_selectors' ) ) {
 
 			// Overriding selectors based on supported pseudo-class in css. Supported pseudo-classes with css: hover, active, visited, before, after.
 			// Included all selectors without inner blocks selectors.
-			if ( $pseudoClass && 'normal' !== $pseudoClass && is_string( $value ) ) {
+			if ( $pseudoClass && 'normal' !== $pseudoClass ) {
 
-				// Add pseudo custom css class as suffix into selectors value for current key.
-				$selectors[ $key ] = sprintf( '%s:%s', trim( $value ), $pseudoClass );
+				if ( is_string( $value ) ) {
+
+					$parsed = explode( ',', $value );
+
+					if ( count( $parsed ) > 1 ) {
+
+						// Add pseudo custom css class as suffix into selectors value for current key.
+						$selectors[ $key ] = implode( ', ', array_map( static function ( string $item ) use ( $pseudoClass ): string {
+
+							return sprintf( '%s:%s', trim( $item ), $pseudoClass );
+						}, $parsed ) );
+
+					} else {
+
+						// Add pseudo custom css class as suffix into selectors value for current key.
+						$selectors[ $key ] = sprintf( '%s:%s', trim( $value ), $pseudoClass );
+					}
+
+					continue;
+				}
+
+				if ( is_array( $value ) ) {
+
+					$selectors[ $key ] = pb_get_block_state_selectors( $value, $args );
+				}
+			}
+		}
+
+		return $selectors;
+	}
+}
+
+if ( ! function_exists( 'pb_get_inner_block_state_selectors' ) ) {
+
+	/**
+	 * Retrieve inner block state selectors.
+	 *
+	 * @param array $selectors the recieved selectors list.
+	 * @param array $args      the extra arguments to generate unique css selectors.
+	 *
+	 * @return array the unique selectors list.
+	 */
+	function pb_get_inner_block_state_selectors( array $selectors, array $args ): array {
+
+		[
+			'pseudo-class'       => $pseudoClass,
+			'block-settings'     => $blockSettings,
+			'master-block-state' => $masterBlockState,
+		] = $args;
+
+		$customClassname = $blockSettings['publisherBlockStates'][ $pseudoClass ]['css-class'] ?? null;
+
+		foreach ( $selectors as $key => $value ) {
+
+			// Excluding fallback and parentRoot in overriding process.
+			if ( in_array( $key, [ 'fallback', 'parentRoot' ], true ) ) {
 
 				continue;
 			}
 
-			// Overriding master block selectors,
-			// Excluded root and fallback.
-			if ( is_string( $value ) && ! in_array( $key, [ 'root', 'fallback' ], true ) ) {
+			// Overriding selectors based on supported pseudo-class in css. Supported pseudo-classes with css: hover, active, visited, before, after.
+			if ( $pseudoClass && 'normal' !== $pseudoClass ) {
+
+				if ( is_array( $value ) ) {
+
+					$selectors[ $key ] = pb_get_inner_block_state_selectors( array_merge(
+						[
+							'fallback'   => $selectors['fallback'] ?? '',
+							'parentRoot' => $selectors['parentRoot'] ?? $selectors['fallback'] ?? '',
+						],
+						$value,
+					), $args );
+
+					unset( $selectors[ $key ]['fallback'], $selectors[ $key ]['parentRoot'] );
+
+					continue;
+				}
+
+				$parentPseudoClass = in_array( $masterBlockState, [
+					'normal',
+					'parent-class',
+					'custom-class'
+				], true ) ? '' : $masterBlockState;
+
+				$parsedValue = explode( ',', trim( $value ) );
+
+				if ( count( $parsedValue ) > 1 ) {
+
+					// Add pseudo custom css class as suffix into selectors value for current key.
+					$selectors[ $key ] = implode(
+						', ',
+						array_map(
+							static function ( string $item ) use ( $selectors, $parentPseudoClass, $pseudoClass ): string {
+								
+								return sprintf(
+									'%1$s%2$s%3$s:%4$s',
+									trim( $selectors['parentRoot'] ?? $selectors['fallback'] ?? '' ),
+									empty( $parentPseudoClass ) ? ' ' : ':' . $parentPseudoClass . ' ',
+									trim( $item ),
+									$pseudoClass
+								);
+							}
+							, $parsedValue
+						)
+					);
+
+				} else {
+
+					// Add pseudo custom css class as suffix into selectors value for current key.
+					$selectors[ $key ] = sprintf(
+						'%1$s%2$s%3$s:%4$s',
+						trim( $selectors['parentRoot'] ?? $selectors['fallback'] ?? '' ),
+						empty( $parentPseudoClass ) ? ' ' : ':' . $parentPseudoClass . ' ',
+						trim( $value ),
+						$pseudoClass
+					);
+				}
+
+				// TODO: double check to we needs to customized supports selectors or not for inner blocks?
+
+				continue;
+			}
+
+			// inner block in normal state.
+			if ( is_string( $value ) ) {
+
+				if ( $masterBlockState ) {
+
+					$parentPseudoClass = in_array( $masterBlockState, [
+						'normal',
+						'parent-class',
+						'custom-class'
+					], true ) ? '' : $masterBlockState;
+
+					// Add pseudo custom css class as suffix into selectors value for current key.
+					$selectors[ $key ] = sprintf(
+						'%1$s%2$s%3$s',
+						trim( $selectors['parentRoot'] ?? $selectors['fallback'] ?? '' ),
+						empty( $parentPseudoClass ) ? ' ' : ':' . $parentPseudoClass . ' ',
+						trim( $value )
+					);
+
+					continue;
+				}
 
 				$selectors[ $key ] = trim(
-					sprintf( '%s %s', $selectors['root'] ?? $selectors['fallback'] ?? '', $value )
+					sprintf( '%s %s', trim( $selectors['parentRoot'] ?? $selectors['fallback'] ?? '' ), $value )
 				);
 			}
 		}
@@ -425,7 +514,7 @@ if ( ! function_exists( 'pb_combine_css' ) ) {
 	}
 }
 
-if (!function_exists( 'pb_convert_css_declarations_to_css_valid_rules' )){
+if ( ! function_exists( 'pb_convert_css_declarations_to_css_valid_rules' ) ) {
 
 	/**
 	 * Convert array css rules to valid css rules list.

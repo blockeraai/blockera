@@ -155,4 +155,27 @@ class TestHelpers extends \WP_UnitTestCase {
 		return require __PB_TEST_DIR__ . '/Fixtures/Illuminate/StyleEngine/helpers/long-css.php';
 	}
 
+	/**
+	 * @group        blockStateSelectors
+	 * @dataProvider getBlockStateSelectorsDataProvider
+	 *
+	 * @param array $args
+	 * @param array $selectors
+	 * @param array $blockStateSelectors
+	 *
+	 * @return void
+	 */
+	public function testItShouldRetrieveBlockStateSelectors( array $args, array $selectors, array $blockStateSelectors = [] ): void {
+
+		$this->assertSame(
+			$blockStateSelectors,
+			pb_get_block_state_selectors( $selectors, $args )
+		);
+	}
+
+	public function getBlockStateSelectorsDataProvider(): array {
+
+		return require __PB_TEST_DIR__ . '/Fixtures/Illuminate/StyleEngine/block-state-selectors.php';
+	}
+
 }

@@ -219,7 +219,7 @@ final class StyleEngine {
 			return [];
 		}
 
-		$selectors = pb_convert_unique_selectors( pb_get_block_type_selectors( $this->block['blockName'] ), [
+		$selectors = pb_get_block_state_selectors( pb_get_block_type_selectors( $this->block['blockName'] ), [
 			'is-inner-block'     => false,
 			'block-type'         => 'master',
 			'block-settings'     => $settings,
@@ -267,7 +267,7 @@ final class StyleEngine {
 		}
 
 		// Inner block status set TRUE.
-		$selectors = pb_convert_unique_selectors( pb_get_block_type_selectors( $this->block['blockName'] ), [
+		$selectors = pb_get_block_state_selectors( pb_get_block_type_selectors( $this->block['blockName'] ), [
 			'is-inner-block'     => true,
 			'block-type'         => $blockType,
 			'fallback'           => $this->selector,
