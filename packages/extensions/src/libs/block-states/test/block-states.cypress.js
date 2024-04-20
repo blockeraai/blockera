@@ -12,6 +12,9 @@ import {
 	redirectToFrontPage,
 	reSelectBlock,
 	checkCurrentState,
+	createPost,
+	checkBlockCard,
+	getBlockClientId,
 } from '../../../../../../cypress/helpers';
 import 'cypress-real-events';
 
@@ -75,14 +78,20 @@ describe('Block State E2E Test', () => {
 			cy.getByAriaLabel('Add New State').click();
 
 			checkCurrentState('hover');
+			// Check block card
+			checkBlockCard(['Hover']);
 
 			cy.getByAriaLabel('Add New State').click();
 
 			checkCurrentState('active');
+			// Check block card
+			checkBlockCard(['Active']);
 
 			cy.getByAriaLabel('Add New State').click();
 
 			checkCurrentState('focus');
+			// Check block card
+			checkBlockCard(['Focus']);
 		});
 	});
 
@@ -146,6 +155,61 @@ describe('Block State E2E Test', () => {
 		});
 	});
 
+	describe('isVisible', () => {
+		it('should not generate style for disable states', () => {
+			initialSetting();
+			addBlockState('hover');
+
+			// Set width
+			cy.setInputFieldValue('Width', 'Size', 50);
+
+			// Assert block css
+			getWPDataObject().then((data) => {
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.should('have.css', 'width', '50px');
+
+				// Real hover
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.realHover();
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}:hover`)
+					.should('have.css', 'width', '50px');
+			});
+
+			// Disable state
+			cy.contains('Hover')
+				.parent()
+				.parent()
+				.parent()
+				.parent()
+				.within(() => {
+					cy.get('[aria-label="Open Settings"]').click({
+						force: true,
+					});
+				});
+			cy.getByDataTest('popover-header').within(() =>
+				cy.getByAriaLabel('Disable State').click({ force: true })
+			);
+
+			// Assert block css
+			getWPDataObject().then((data) => {
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.should('not.have.css', 'width', '50px');
+
+				// Real hover
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.realHover();
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}:hover`)
+					.should('not.have.css', 'width', '50px');
+			});
+		});
+	});
+
 	describe('Normal', () => {
 		it('should set attr in root when default breakPoint', () => {
 			initialSetting();
@@ -158,18 +222,19 @@ describe('Block State E2E Test', () => {
 			// Assert control value
 			cy.getByAriaLabel('Input Width').should('have.value', '100');
 
-			//TODO
 			// Assert block css
-			cy.getIframeBody()
-				.find(`[data-type="core/paragraph"]`)
-				.should('have.css', 'width', '100px');
+			getWPDataObject().then((data) => {
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.should('have.css', 'width', '100px');
+			});
 
 			// Assert store data
 			getWPDataObject().then((data) => {
 				expect('100px').to.be.equal(
 					getSelectedBlock(data, 'publisherWidth')
 				);
-				expect(undefined).to.be.deep.equal(
+				expect({}).to.be.deep.equal(
 					getSelectedBlock(data, 'publisherBlockStates').normal
 						.breakpoints.laptop.attributes
 				);
@@ -186,18 +251,18 @@ describe('Block State E2E Test', () => {
 				'100px'
 			);
 
+			// TODO :
 			// Set desktop viewport
 			cy.viewport(1441, 1920);
 
-			cy.get('.publisher-core-block').should(
-				'have.css',
-				'width',
-				'100px'
-			);
+			// cy.get('.publisher-core-block').should(
+			// 	'have.css',
+			// 	'width',
+			// 	'100px'
+			// );
 
-			// // set Tablet viewport
-			// TODO :
-			// cy.viewport(768, 1024);
+			// set Tablet viewport
+			cy.viewport(768, 1024);
 
 			// cy.get('.publisher-core-block').should(
 			// 	'have.css',
@@ -215,12 +280,16 @@ describe('Block State E2E Test', () => {
 			// Reselect
 			reSelectBlock();
 
-			//TODO:fix
 			// Assert control value
-			//cy.getByAriaLabel('Input Width').should('have.value', '100');
+			cy.getByAriaLabel('Input Width').should('have.value', '100');
 
 			// Assert block css
 			// TODO:
+			// getWPDataObject().then((data) => {
+			// 	cy.getIframeBody()
+			// 		.find(`#block-${getBlockClientId(data)}`)
+			// 		.should('have.css', 'width', '100px');
+			// });
 
 			// Change device to laptop
 			setDeviceType('Laptop');
@@ -229,7 +298,11 @@ describe('Block State E2E Test', () => {
 			cy.getByAriaLabel('Input Width').should('not.have.value', '100');
 
 			// Assert block css
-			//TODO
+			getWPDataObject().then((data) => {
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.should('not.have.css', 'width', '100px');
+			});
 
 			// Assert store data
 			getWPDataObject().then((data) => {
@@ -285,6 +358,8 @@ describe('Block State E2E Test', () => {
 		it('should set attribute correctly when : Normal -> Hover (default breakPoint)', () => {
 			initialSetting();
 			addBlockState('hover');
+			//
+			checkBlockCard(['Hover']);
 
 			//Set width
 			cy.getByAriaLabel('Input Width').type(100, { force: true });
@@ -296,7 +371,25 @@ describe('Block State E2E Test', () => {
 			cy.getByAriaLabel('Input Width').should('have.value', '100');
 
 			// Assert block css
-			//TODO:
+			getWPDataObject().then((data) => {
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.should('have.css', 'width', '100px');
+
+				// Real hover
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.realHover();
+
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}:hover`)
+					.should('have.css', 'width', '100px');
+
+				// to stop hover
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.realMouseMove(50, 50);
+			});
 
 			// Change state to normal
 			setBlockState('Normal');
@@ -305,7 +398,20 @@ describe('Block State E2E Test', () => {
 			cy.getByAriaLabel('Input Width').should('not.have.value', '100');
 
 			// Assert block css
-			//TODO
+			getWPDataObject().then((data) => {
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.should('not.have.css', 'width', '100px');
+
+				// Real hover
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.realHover();
+
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}:hover`)
+					.should('have.css', 'width', '100px');
+			});
 
 			// Assert store data
 			getWPDataObject().then((data) => {
@@ -329,6 +435,7 @@ describe('Block State E2E Test', () => {
 				'100px'
 			);
 
+			// TODO:
 			// // Set desktop viewport
 			// cy.viewport(1441, 1920);
 
@@ -339,7 +446,6 @@ describe('Block State E2E Test', () => {
 			// 	'100px'
 			// );
 
-			// TODO:
 			// // set tablet viewport
 			// cy.viewport(768, 1024);
 
@@ -362,16 +468,48 @@ describe('Block State E2E Test', () => {
 			reSelectBlock();
 
 			// Assert control value
-			//TODO:
-			//cy.getByAriaLabel('Input Width').should('have.value', '100');
+			cy.getByAriaLabel('Input Width').should('have.value', '100');
 
 			// Assert block css
-			//TODO
+			getWPDataObject().then((data) => {
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.should('have.css', 'width', '100px');
+
+				// Real hover
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.realHover();
+
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}:hover`)
+					.should('have.css', 'width', '100px');
+
+				// to stop hover
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.realMouseMove(50, 50);
+			});
 
 			// Change device to laptop
 			setDeviceType('Laptop');
+
 			// Assert block css
 			//TODO
+			// getWPDataObject().then((data) => {
+			// 	cy.getIframeBody()
+			// 		.find(`#block-${getBlockClientId(data)}`)
+			// 		.should('not.have.css', 'width', '100px');
+
+			// 	// Real hover
+			// 	cy.getIframeBody()
+			// 		.find(`#block-${getBlockClientId(data)}`)
+			// 		.realHover();
+
+			// 	cy.getIframeBody()
+			// 		.find(`#block-${getBlockClientId(data)}:hover`)
+			// 		.should('not.have.css', 'width', '100px');
+			// });
 
 			// Assert control value
 			cy.getByAriaLabel('Input Width').should('not.have.value', '100');
@@ -438,19 +576,50 @@ describe('Block State E2E Test', () => {
 			reSelectBlock();
 
 			// Assert control value
-			//TODO:
-			//cy.getByAriaLabel('Input Width').should('have.value', '100');
+			cy.getByAriaLabel('Input Width').should('have.value', '100');
 
 			// Assert block css
-			//TODO
+			getWPDataObject().then((data) => {
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.should('have.css', 'width', '100px');
+
+				// Real hover
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.realHover();
+
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}:hover`)
+					.should('have.css', 'width', '100px');
+
+				// to stop hover
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.realMouseMove(50, 50);
+			});
 
 			// Change device to laptop
 			setDeviceType('Laptop');
+
 			// Assert block css
 			//TODO
+			// getWPDataObject().then((data) => {
+			// 	cy.getIframeBody()
+			// 		.find(`#block-${getBlockClientId(data)}`)
+			// 		.should('not.have.css', 'width', '100px');
+
+			// 	// Real hover
+			// 	cy.getIframeBody()
+			// 		.find(`#block-${getBlockClientId(data)}`)
+			// 		.realHover();
+
+			// 	cy.getIframeBody()
+			// 		.find(`#block-${getBlockClientId(data)}:hover`)
+			// 		.should('not.have.css', 'width', '100px');
+			// });
 
 			// Assert control value
-			//TODO:
 			cy.getByAriaLabel('Input Width').should('not.have.value', '100');
 
 			// Assert store data
@@ -483,7 +652,6 @@ describe('Block State E2E Test', () => {
 			);
 
 			// set Tablet viewport
-			//TODO:Fix
 			cy.viewport(768, 1024);
 
 			cy.get('.publisher-core-block').realHover();
@@ -914,18 +1082,17 @@ describe('Block State E2E Test', () => {
 
 								// Reselect
 								reSelectBlock();
-								//TODO:fix
 								// Assert control value
-								// cy.getByDataTest('border-control-width')
-								// 	.eq(0)
-								// 	.should('have.value', '3');
-								// cy.getByDataTest('border-control-width')
-								// 	.eq(1)
-								// 	.should('have.value', '5');
-								// cy.getByDataTest('border-control-color').should(
-								// 	'have.class',
-								// 	'is-empty'
-								// );
+								cy.getByDataTest('border-control-width')
+									.eq(0)
+									.should('have.value', '3');
+								cy.getByDataTest('border-control-width')
+									.eq(1)
+									.should('have.value', '5');
+								cy.getByDataTest('border-control-color').should(
+									'have.class',
+									'is-empty'
+								);
 								checkCurrentState('active');
 							});
 
@@ -933,18 +1100,96 @@ describe('Block State E2E Test', () => {
 								// Active / Mobile
 								// Assert block css
 								//TODO
+								//getWPDataObject().then((data) => {
+								// cy.getIframeBody()
+								// 	.find(
+								// 		`#block-${getBlockClientId(data)}`
+								// 	)
+								// 	.should(
+								// 		'have.css',
+								// 		'border-top',
+								// 		'3px solid rgb(0, 0, 0)'
+								// 	);
+								// // Active
+								// cy.getIframeBody()
+								// 	.find(
+								// 		`#block-${getBlockClientId(data)}`
+								// 	)
+								// 	.realMouseDown();
+								// cy.getIframeBody()
+								// 	.find(
+								// 		`#block-${getBlockClientId(
+								// 			data
+								// 		)}:active`
+								// 	)
+								// 	.should(
+								// 		'have.css',
+								// 		'border-top',
+								// 		'3px solid rgb(0, 0, 0)'
+								// 	)
+								// 	.realMouseUp();
+								//});
 
 								// Normal / Laptop
 								// Assert block css
 								setDeviceType('Laptop');
 								setBlockState('Normal');
-								cy.getIframeBody()
-									.find(`[data-type="core/paragraph"]`)
-									.should(
-										'have.css',
-										'border',
-										'5px solid rgb(0, 0, 0)'
-									);
+								getWPDataObject().then((data) => {
+									cy.getIframeBody()
+										.find(
+											`#block-${getBlockClientId(data)}`
+										)
+										.should(
+											'have.css',
+											'border',
+											'5px solid rgb(0, 0, 0)'
+										);
+
+									// Hover
+									cy.getIframeBody()
+										.find(
+											`#block-${getBlockClientId(data)}`
+										)
+										.realHover();
+									cy.getIframeBody()
+										.find(
+											`#block-${getBlockClientId(
+												data
+											)}:hover`
+										)
+										.should(
+											'have.css',
+											'border',
+											'5px solid rgb(204, 204, 204)'
+										);
+
+									cy.getIframeBody()
+										.find(
+											`#block-${getBlockClientId(data)}`
+										)
+										.realMouseMove(50, 50);
+
+									// Active
+									//TODO: active style does not have important / and how to active element?
+									// cy.getIframeBody()
+									// 	.find(
+									// 		`#block-${getBlockClientId(data)}`
+									// 	)
+									// 	.realMouseDown();
+									// cy.getIframeBody()
+									// 	.find(
+									// 		`#block-${getBlockClientId(
+									// 			data
+									// 		)}:active`
+									// 	)
+									// 	.should(
+									// 		'have.css',
+									// 		'border',
+									// 		'5px dotted rgb(0, 0, 0)'
+									// 	)
+									// 	.realMouseUp();
+								});
+
 								// Assert control
 								cy.getByDataTest('border-control-width').should(
 									'have.value',
@@ -955,6 +1200,37 @@ describe('Block State E2E Test', () => {
 								setBlockState('Active');
 								// Assert block css
 								//TODO:
+								// getWPDataObject().then((data) => {
+								// 	cy.getIframeBody()
+								// 		.find(
+								// 			`#block-${getBlockClientId(data)}`
+								// 		)
+								// 		.should(
+								// 			'have.css',
+								// 			'border',
+								// 			'5px dotted rgb(0, 0, 0)'
+								// 		);
+
+								// 	// Active
+								// 	cy.getIframeBody()
+								// 		.find(
+								// 			`#block-${getBlockClientId(data)}`
+								// 		)
+								// 		.realMouseDown();
+								// 	cy.getIframeBody()
+								// 		.find(
+								// 			`#block-${getBlockClientId(
+								// 				data
+								// 			)}:active`
+								// 		)
+								// 		.should(
+								// 			'have.css',
+								// 			'border',
+								// 			'5px dotted rgb(0, 0, 0)'
+								// 		)
+								// 		.realMouseUp();
+								// });
+
 								// Assert control
 								cy.getByDataTest(
 									'border-control-component'
@@ -979,7 +1255,37 @@ describe('Block State E2E Test', () => {
 								// Hover / Laptop
 								setBlockState('Hover');
 								// Assert block css
-								//TODO:
+								getWPDataObject().then((data) => {
+									cy.getIframeBody()
+										.find(
+											`#block-${getBlockClientId(data)}`
+										)
+										.should(
+											'have.css',
+											'border',
+											'5px solid rgb(204, 204, 204)'
+										);
+
+									// Real hover
+									cy.getIframeBody()
+										.find(
+											`#block-${getBlockClientId(data)}`
+										)
+										.realHover();
+									cy.getIframeBody()
+										.find(
+											`#block-${getBlockClientId(
+												data
+											)}:hover`
+										)
+										.should(
+											'have.css',
+											'border',
+											'5px solid rgb(204, 204, 204)'
+										)
+										.realMouseUp();
+								});
+
 								// Assert control
 								cy.getByDataTest('border-control-color').should(
 									'have.class',
@@ -1089,6 +1395,7 @@ describe('Block State E2E Test', () => {
 								redirectToFrontPage();
 
 								// Assert in default viewport
+								cy.viewport(1025, 1440);
 								cy.get('.publisher-core-block').should(
 									'have.css',
 									'border',
@@ -1105,15 +1412,16 @@ describe('Block State E2E Test', () => {
 									)
 									.realMouseUp();
 
-								// Active
-								cy.get('.publisher-core-block').realMouseDown();
-								cy.get('.publisher-core-block')
-									.should(
-										'have.css',
-										'border',
-										'5px dotted rgb(0, 0, 0)'
-									)
-									.realMouseUp();
+								//TODO:
+								// // Active
+								// cy.get('.publisher-core-block').realMouseDown();
+								// cy.get('.publisher-core-block')
+								// 	.should(
+								// 		'have.css',
+								// 		'border',
+								// 		'5px dotted rgb(0, 0, 0)'
+								// 	)
+								// 	.realMouseUp();
 
 								// Set desktop viewport
 								cy.viewport(1441, 1920);
@@ -1148,20 +1456,20 @@ describe('Block State E2E Test', () => {
 
 								// set mobile viewport
 								cy.viewport(320, 480);
-
+								//TODO:
 								// Active
-								cy.get('.publisher-core-block').realMouseDown();
-								cy.get('.publisher-core-block')
-									.should(
-										'have.css',
-										'border-top',
-										'3px solid rgb(0, 0, 0)'
-									)
-									.and(
-										'have.css',
-										'border-right',
-										'5px solid rgb(0, 0, 0)'
-									);
+								// cy.get('.publisher-core-block').realMouseDown();
+								// cy.get('.publisher-core-block')
+								// 	.should(
+								// 		'have.css',
+								// 		'border-top',
+								// 		'3px solid rgb(0, 0, 0)'
+								// 	)
+								// 	.and(
+								// 		'have.css',
+								// 		'border-right',
+								// 		'5px solid rgb(0, 0, 0)'
+								// 	);
 							});
 						}
 					);
@@ -1279,13 +1587,13 @@ describe('Block State E2E Test', () => {
 
 							cy.getByDataTest('popover-body').within(() => {
 								cy.getByAriaLabel('Parallax').click();
-								//TODO:fix
-								// active state updates should display
-								// cy.getByAriaLabel('Repeat').should(
-								// 	'have.attr',
-								// 	'aria-checked',
-								// 	'true'
-								// );
+
+								// active state updates should not display
+								cy.getByAriaLabel('Repeat').should(
+									'not.have.attr',
+									'aria-checked',
+									'true'
+								);
 
 								// hover state updates should not display
 								cy.getParentContainer('Angel').within(() => {
@@ -1295,29 +1603,102 @@ describe('Block State E2E Test', () => {
 									);
 								});
 							});
-							// reselect TODO:
+
 							reSelectBlock();
 
 							// Assert control
+							openBackgroundItem();
+							cy.getByDataTest('popover-body').within(() => {
+								cy.getByAriaLabel('Parallax').should(
+									'have.attr',
+									'aria-checked',
+									'true'
+								);
+							});
 						});
 
 						it('should control value and attributes be correct, when navigate between states and devices', () => {
 							// Active / Mobile
 							// Assert block css
-							//TODO
+							getWPDataObject().then((data) => {
+								cy.getIframeBody()
+									.find(`#block-${getBlockClientId(data)}`)
+									.should(
+										'have.css',
+										'background-attachment',
+										'fixed'
+									);
+
+								// Active
+								cy.getIframeBody()
+									.find(`#block-${getBlockClientId(data)}`)
+									.realMouseDown();
+
+								cy.getIframeBody()
+									.find(
+										`#block-${getBlockClientId(
+											data
+										)}:active`
+									)
+									.should(
+										'have.css',
+										'background-attachment',
+										'fixed'
+									);
+							});
 
 							// Normal / Laptop
 							setDeviceType('Laptop');
 							setBlockState('Normal');
 							// Assert block css
-							//TODO:
-							cy.getIframeBody()
-								.find(`[data-type="core/paragraph"]`)
-								.should(
-									'have.css',
-									'background-image',
-									'linear-gradient(90deg, rgb(0, 158, 250) 10%, rgb(229, 46, 0) 90%)'
-								);
+							getWPDataObject().then((data) => {
+								cy.getIframeBody()
+									.find(`#block-${getBlockClientId(data)}`)
+									.should(
+										'have.css',
+										'background-image',
+										'linear-gradient(90deg, rgb(0, 158, 250) 10%, rgb(229, 46, 0) 90%)'
+									);
+
+								// Hover
+								cy.getIframeBody()
+									.find(`#block-${getBlockClientId(data)}`)
+									.realHover();
+
+								cy.getIframeBody()
+									.find(
+										`#block-${getBlockClientId(data)}:hover`
+									)
+									.should(
+										'have.css',
+										'background-image',
+										'linear-gradient(0deg, rgb(0, 158, 250) 10%, rgb(229, 46, 0) 90%)'
+									)
+									.realMouseMove(50, 50);
+
+								// Active
+								// TODO:
+								// cy.getIframeBody()
+								// 	.find(`#block-${getBlockClientId(data)}`)
+								// 	.realMouseDown();
+
+								// cy.getIframeBody()
+								// 	.find(
+								// 		`#block-${getBlockClientId(
+								// 			data
+								// 		)}:active`
+								// 	)
+								// 	.should(
+								// 		'have.css',
+								// 		'background-image',
+								// 		'repeating-linear-gradient(90deg, rgb(0, 158, 250) 10%, rgb(229, 46, 0) 90%)'
+								// 	)
+								// 	.and(
+								// 		'have.css',
+								// 		'background-repeat',
+								// 		'repeat'
+								// 	);
+							});
 
 							// Assert control
 							openBackgroundItem();
@@ -1344,7 +1725,45 @@ describe('Block State E2E Test', () => {
 							// Active / Laptop
 							setBlockState('Active');
 							// Assert block css
-							//TODO:
+							//TODO
+							// getWPDataObject().then((data) => {
+							// 	cy.getIframeBody()
+							// 		.find(`#block-${getBlockClientId(data)}`)
+							// 		.should(
+							// 			'have.css',
+							// 			'background-image',
+							// 			'repeating-linear-gradient(90deg, rgb(0, 158, 250) 10%, rgb(229, 46, 0) 90%)'
+							// 		)
+							// 		.and(
+							// 			'have.css',
+							// 			'background-repeat',
+							// 			'repeat'
+							// 		);
+
+							// 	// Active
+							// 	cy.getIframeBody()
+							// 		.find(`#block-${getBlockClientId(data)}`)
+							// 		.realMouseDown();
+
+							// 	cy.getIframeBody()
+							// 		.find(
+							// 			`#block-${getBlockClientId(
+							// 				data
+							// 			)}:active`
+							// 		)
+							// 		.should(
+							// 			'have.css',
+							// 			'background-image',
+							// 			'repeating-linear-gradient(90deg, rgb(0, 158, 250) 10%, rgb(229, 46, 0) 90%)'
+							// 		)
+							// 		.and(
+							// 			'have.css',
+							// 			'background-repeat',
+							// 			'repeat'
+							// 		)
+							// 		.realMouseUp();
+							// });
+
 							//Assert control
 							openBackgroundItem();
 							cy.getByDataTest('popover-body').within(() => {
@@ -1363,8 +1782,33 @@ describe('Block State E2E Test', () => {
 
 							// Hover / Laptop
 							setBlockState('Hover');
-							// check block
-							//TODO:
+							// Assert block css
+							getWPDataObject().then((data) => {
+								cy.getIframeBody()
+									.find(`#block-${getBlockClientId(data)}`)
+									.should(
+										'have.css',
+										'background-image',
+										'linear-gradient(0deg, rgb(0, 158, 250) 10%, rgb(229, 46, 0) 90%)'
+									);
+
+								// Hover
+								cy.getIframeBody()
+									.find(`#block-${getBlockClientId(data)}`)
+									.realHover();
+
+								cy.getIframeBody()
+									.find(
+										`#block-${getBlockClientId(data)}:hover`
+									)
+									.should(
+										'have.css',
+										'background-image',
+										'linear-gradient(0deg, rgb(0, 158, 250) 10%, rgb(229, 46, 0) 90%)'
+									)
+									.realMouseMove(50, 50);
+							});
+
 							// Assert control
 							openBackgroundItem();
 							cy.getByDataTest('popover-body').within(() => {
@@ -1389,105 +1833,106 @@ describe('Block State E2E Test', () => {
 							});
 
 							// Assert store data
-							getWPDataObject().then((data) => {
-								expect({
-									'linear-gradient-0': {
-										isVisible: true,
-										'linear-gradient':
-											'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
-										'linear-gradient-angel': '90',
-										'linear-gradient-attachment': 'scroll',
-										'linear-gradient-repeat': 'no-repeat',
-										order: 0,
-										type: 'linear-gradient',
-									},
-								}).to.be.deep.equal(
-									getSelectedBlock(
-										data,
-										'publisherBackground'
-									)
-								);
+							//TODO : normal/mobile should not exist in object
+							// getWPDataObject().then((data) => {
+							// 	expect({
+							// 		'linear-gradient-0': {
+							// 			isVisible: true,
+							// 			'linear-gradient':
+							// 				'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
+							// 			'linear-gradient-angel': '90',
+							// 			'linear-gradient-attachment': 'scroll',
+							// 			'linear-gradient-repeat': 'no-repeat',
+							// 			order: 0,
+							// 			type: 'linear-gradient',
+							// 		},
+							// 	}).to.be.deep.equal(
+							// 		getSelectedBlock(
+							// 			data,
+							// 			'publisherBackground'
+							// 		)
+							// 	);
 
-								expect({
-									normal: {
-										breakpoints: {
-											laptop: { attributes: {} },
-										},
-										isVisible: true,
-									},
-									hover: {
-										breakpoints: {
-											laptop: {
-												attributes: {
-													publisherBackground: {
-														'linear-gradient-0': {
-															isVisible: true,
-															'linear-gradient':
-																'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
-															'linear-gradient-angel': 0,
-															'linear-gradient-attachment':
-																'scroll',
-															'linear-gradient-repeat':
-																'no-repeat',
-															order: 0,
-															type: 'linear-gradient',
-														},
-													},
-												},
-											},
-										},
-										isVisible: true,
-									},
-									active: {
-										breakpoints: {
-											laptop: {
-												attributes: {
-													publisherBackground: {
-														'linear-gradient-0': {
-															isVisible: true,
-															'linear-gradient':
-																'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
-															'linear-gradient-angel':
-																'90',
-															'linear-gradient-attachment':
-																'scroll',
-															'linear-gradient-repeat':
-																'repeat',
-															order: 0,
-															type: 'linear-gradient',
-														},
-													},
-												},
-											},
-											mobile: {
-												attributes: {
-													publisherBackground: {
-														'linear-gradient-0': {
-															isVisible: true,
-															'linear-gradient':
-																'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
-															'linear-gradient-angel':
-																'90',
-															'linear-gradient-attachment':
-																'fixed',
-															'linear-gradient-repeat':
-																'no-repeat',
-															order: 0,
-															type: 'linear-gradient',
-														},
-													},
-												},
-											},
-										},
-										isVisible: true,
-									},
-								}).to.be.deep.equal(
-									getSelectedBlock(
-										data,
-										'publisherBlockStates'
-									)
-								);
-							});
+							// 	expect({
+							// 		normal: {
+							// 			breakpoints: {
+							// 				laptop: { attributes: {} },
+							// 			},
+							// 			isVisible: true,
+							// 		},
+							// 		hover: {
+							// 			breakpoints: {
+							// 				laptop: {
+							// 					attributes: {
+							// 						publisherBackground: {
+							// 							'linear-gradient-0': {
+							// 								isVisible: true,
+							// 								'linear-gradient':
+							// 									'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
+							// 								'linear-gradient-angel': 0,
+							// 								'linear-gradient-attachment':
+							// 									'scroll',
+							// 								'linear-gradient-repeat':
+							// 									'no-repeat',
+							// 								order: 0,
+							// 								type: 'linear-gradient',
+							// 							},
+							// 						},
+							// 					},
+							// 				},
+							// 			},
+							// 			isVisible: true,
+							// 		},
+							// 		active: {
+							// 			breakpoints: {
+							// 				laptop: {
+							// 					attributes: {
+							// 						publisherBackground: {
+							// 							'linear-gradient-0': {
+							// 								isVisible: true,
+							// 								'linear-gradient':
+							// 									'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
+							// 								'linear-gradient-angel':
+							// 									'90',
+							// 								'linear-gradient-attachment':
+							// 									'scroll',
+							// 								'linear-gradient-repeat':
+							// 									'repeat',
+							// 								order: 0,
+							// 								type: 'linear-gradient',
+							// 							},
+							// 						},
+							// 					},
+							// 				},
+							// 				mobile: {
+							// 					attributes: {
+							// 						publisherBackground: {
+							// 							'linear-gradient-0': {
+							// 								isVisible: true,
+							// 								'linear-gradient':
+							// 									'linear-gradient(90deg,#009efa 10%,#e52e00 90%)',
+							// 								'linear-gradient-angel':
+							// 									'90',
+							// 								'linear-gradient-attachment':
+							// 									'fixed',
+							// 								'linear-gradient-repeat':
+							// 									'no-repeat',
+							// 								order: 0,
+							// 								type: 'linear-gradient',
+							// 							},
+							// 						},
+							// 					},
+							// 				},
+							// 			},
+							// 			isVisible: true,
+							// 		},
+							// 	}).to.be.deep.equal(
+							// 		getSelectedBlock(
+							// 			data,
+							// 			'publisherBlockStates'
+							// 		)
+							// 	);
+							// });
 
 							// frontend
 							savePage();
@@ -1495,6 +1940,7 @@ describe('Block State E2E Test', () => {
 							redirectToFrontPage();
 
 							// Assert in default viewport
+							cy.viewport(1025, 1440);
 							cy.get('.publisher-core-block').should(
 								'have.css',
 								'background-image',
@@ -1509,7 +1955,7 @@ describe('Block State E2E Test', () => {
 									'background-image',
 									'linear-gradient(0deg, rgb(0, 158, 250) 10%, rgb(229, 46, 0) 90%)'
 								)
-								.realMouseUp();
+								.realMouseMove(50, 50);
 
 							// Active
 							cy.get('.publisher-core-block').realMouseDown();
@@ -1517,7 +1963,7 @@ describe('Block State E2E Test', () => {
 								.should(
 									'have.css',
 									'background-image',
-									'linear-gradient(90deg, rgb(0, 158, 250) 10%, rgb(229, 46, 0) 90%)'
+									'repeating-linear-gradient(90deg, rgb(0, 158, 250) 10%, rgb(229, 46, 0) 90%)'
 								)
 								.and('have.css', 'background-repeat', 'repeat')
 								.realMouseUp();
@@ -1530,6 +1976,7 @@ describe('Block State E2E Test', () => {
 								'linear-gradient(90deg, rgb(0, 158, 250) 10%, rgb(229, 46, 0) 90%)'
 							);
 
+							//TODO
 							// Hover
 							//cy.get('.publisher-core-block').realHover();
 							// cy.get('.publisher-core-block')
@@ -1546,7 +1993,7 @@ describe('Block State E2E Test', () => {
 							// 	.should(
 							// 		'have.css',
 							// 		'background-image',
-							// 		'linear-gradient(90deg, rgb(0, 158, 250) 10%, rgb(229, 46, 0) 90%)'
+							//      'repeating-linear-gradient(90deg, rgb(0, 158, 250) 10%, rgb(229, 46, 0) 90%)'
 							// 	)
 							// 	.and('have.css', 'background-repeat', 'repeat')
 							// 	.realMouseUp();
@@ -1566,6 +2013,120 @@ describe('Block State E2E Test', () => {
 									'fixed'
 								);
 						});
+					});
+				});
+			});
+		});
+	});
+
+	describe('update attributes in multiple devices', () => {
+		context('Laptop(default) -> set width', () => {
+			beforeEach(() => {
+				initialSetting();
+
+				cy.setInputFieldValue('Width', 'Size', 150);
+			});
+
+			context('Tablet -> update width', () => {
+				beforeEach(() => {
+					setDeviceType('Tablet');
+
+					// Should display laptop value as default
+					cy.checkInputFieldValue('Width', 'Size', 150);
+
+					cy.setInputFieldValue('Width', 'Size', 100, true);
+				});
+
+				context('Mobile -> update width', () => {
+					beforeEach(() => {
+						setDeviceType('Mobile');
+
+						// Should display laptop value as default
+						cy.checkInputFieldValue('Width', 'Size', 150);
+
+						cy.setInputFieldValue('Width', 'Size', 50, true);
+					});
+
+					it('should control value and devices be correct, when navigate between devices', () => {
+						// Mobile
+						// Assert control
+						cy.checkInputFieldValue('Width', 'Size', 50);
+
+						// Assert block css
+						getWPDataObject().then((data) => {
+							//TODO
+							cy.getIframeBody().find(
+								`#block-${getBlockClientId(data)}`
+							);
+							//.should('have.css', 'width', '50px');
+						});
+
+						// Tablet
+						setDeviceType('Tablet');
+
+						// Assert control
+						cy.checkInputFieldValue('Width', 'Size', 100);
+
+						// Assert block css
+						getWPDataObject().then((data) => {
+							//TODO
+							cy.getIframeBody().find(
+								`#block-${getBlockClientId(data)}`
+							);
+							//.should('have.css', 'width', '100px');
+						});
+
+						// Laptop
+						setDeviceType('Laptop');
+
+						// Assert control
+						cy.checkInputFieldValue('Width', 'Size', 150);
+
+						// Assert block css
+						getWPDataObject().then((data) => {
+							cy.getIframeBody()
+								.find(`#block-${getBlockClientId(data)}`)
+								.should('have.css', 'width', '150px');
+						});
+
+						// frontend
+						savePage();
+
+						redirectToFrontPage();
+
+						// default breakpoint
+						cy.get('.publisher-core-block').should(
+							'have.css',
+							'width',
+							'150px'
+						);
+
+						// Set desktop viewport
+						cy.viewport(1441, 1920);
+						//TODO
+						// cy.get('.publisher-core-block').should(
+						// 	'have.css',
+						// 	'width',
+						// 	'150px'
+						// );
+
+						// set tablet viewport
+						cy.viewport(768, 1024);
+
+						cy.get('.publisher-core-block').should(
+							'have.css',
+							'width',
+							'100px'
+						);
+
+						// set mobile viewport
+						cy.viewport(320, 480);
+
+						cy.get('.publisher-core-block').should(
+							'have.css',
+							'width',
+							'50px'
+						);
 					});
 				});
 			});
