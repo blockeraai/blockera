@@ -19,6 +19,10 @@ import {
 	displayFromWPCompatibility,
 	displayToWPCompatibility,
 } from './compatibility/display';
+import {
+	flexWrapFromWPCompatibility,
+	flexWrapToWPCompatibility,
+} from './compatibility/flex-wrap';
 
 import type { BlockDetail } from '../block-states/types';
 
@@ -42,6 +46,10 @@ export const bootstrap = (): void => {
 			attributes = displayFromWPCompatibility({
 				attributes,
 				blockId,
+			});
+
+			attributes = flexWrapFromWPCompatibility({
+				attributes,
 			});
 
 			return attributes;
@@ -88,6 +96,15 @@ export const bootstrap = (): void => {
 							newValue,
 							ref,
 							blockId,
+						})
+					);
+
+				case 'publisherFlexWrap':
+					return mergeObject(
+						nextState,
+						flexWrapToWPCompatibility({
+							newValue,
+							ref,
 						})
 					);
 			}
