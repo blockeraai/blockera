@@ -7,7 +7,7 @@ import {
 	createPost,
 } from '../../../../../../cypress/helpers';
 
-describe('Flex Align Items and Justify Content → Functionality', () => {
+describe('Flex Layout → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
@@ -23,6 +23,55 @@ describe('Flex Align Items and Justify Content → Functionality', () => {
 		cy.getParentContainer('Display').within(() => {
 			cy.getByAriaLabel('Flex').click();
 		});
+	});
+
+	it('should update flex direction correctly', () => {
+		cy.getParentContainer('Flex Layout')
+			.first()
+			.within(() => {
+				cy.getByAriaLabel('Row').click();
+			});
+
+		cy.getBlock('core/paragraph').should(
+			'have.css',
+			'flex-direction',
+			'row'
+		);
+
+		getWPDataObject().then((data) => {
+			expect('row').to.be.deep.equal(
+				getSelectedBlock(data, 'publisherFlexLayout')?.direction
+			);
+		});
+
+		cy.getParentContainer('Flex Layout')
+			.first()
+			.within(() => {
+				cy.getByAriaLabel('Column').click();
+			});
+
+		cy.getBlock('core/paragraph').should(
+			'have.css',
+			'flex-direction',
+			'column'
+		);
+
+		getWPDataObject().then((data) => {
+			expect('column').to.be.deep.equal(
+				getSelectedBlock(data, 'publisherFlexLayout')?.direction
+			);
+		});
+
+		//Check frontend
+		savePage();
+
+		redirectToFrontPage();
+
+		cy.get('.publisher-core-block').should(
+			'have.css',
+			'flex-direction',
+			'column'
+		);
 	});
 
 	it('should flex align items and justify content correctly works', () => {
