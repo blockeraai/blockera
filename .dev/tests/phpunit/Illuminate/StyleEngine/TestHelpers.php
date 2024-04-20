@@ -201,4 +201,51 @@ class TestHelpers extends \WP_UnitTestCase {
 		return require __PB_TEST_DIR__ . '/Fixtures/Illuminate/StyleEngine/combine-css.php';
 	}
 
+	/**
+	 * @dataProvider getValidCssRulesDataProvider
+	 *
+	 * @group        validCssRules
+	 *
+	 * @param array $css
+	 * @param array $expected
+	 *
+	 * @return void
+	 */
+	public function testItShouldRetrieveValidCssRules( array $css, array $expected ): void {
+
+		$this->assertSame(
+			$expected,
+			pb_convert_css_declarations_to_css_valid_rules( $css )
+		);
+	}
+
+	public function getValidCssRulesDataProvider(): array {
+
+		return require __PB_TEST_DIR__ . '/Fixtures/Illuminate/StyleEngine/valid-css-rules.php';
+	}
+
+	/**
+	 *
+	 * @group        normalizingSelectors
+	 *
+	 * @return void
+	 */
+	public function testItShouldRetrieveNormalizedCssSelectors(): void {
+
+		$this->assertSame(
+			'.test.publisher.block',
+			pb_get_normalized_selector( 'test publisher block' )
+		);
+
+		$this->assertSame(
+			'.test.publisher.block',
+			pb_get_normalized_selector( '.test publisher block' )
+		);
+
+		$this->assertSame(
+			'.test.publisher.block',
+			pb_get_normalized_selector( '.test .publisher .block' )
+		);
+	}
+
 }

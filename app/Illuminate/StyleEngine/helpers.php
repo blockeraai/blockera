@@ -586,7 +586,14 @@ if ( ! function_exists( 'pb_get_normalized_selector' ) ) {
 				'',
 				array_map( function ( string $_selector ): string {
 
-					return '.' . trim( $_selector );
+					$_selector = trim( $_selector );
+
+					if ( ! empty( $_selector ) && '.' === $_selector[0] ) {
+
+						return $_selector;
+					}
+
+					return '.' . $_selector;
 				}, $selectors )
 			)
 		);
