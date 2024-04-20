@@ -192,10 +192,12 @@ final class StyleEngine {
 
 		$this->pseudoState = $pseudoClass;
 
+		$blockCss = array_map( [ $this, 'generateBlockCss' ], $this->definitions );
+
 		return $this->normalizeCssRules(
 			pb_convert_css_declarations_to_css_valid_rules(
 				pb_combine_css(
-					array_map( [ $this, 'generateBlockCss' ], $this->definitions )
+					array_values( array_filter( $blockCss, 'pb_get_filter_empty_array_item' ) )
 				)
 			)
 		);

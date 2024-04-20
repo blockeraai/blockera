@@ -178,4 +178,27 @@ class TestHelpers extends \WP_UnitTestCase {
 		return require __PB_TEST_DIR__ . '/Fixtures/Illuminate/StyleEngine/block-state-selectors.php';
 	}
 
+	/**
+	 * @dataProvider getCombineCssDataProvider
+	 *
+	 * @group        combineCss
+	 *
+	 * @param array $separatelyCss
+	 * @param array $expected
+	 *
+	 * @return void
+	 */
+	public function testItShouldCombineCssRules( array $separatelyCss, array $expected ): void {
+
+		$this->assertSame(
+			$expected,
+			pb_combine_css( $separatelyCss )
+		);
+	}
+
+	public function getCombineCssDataProvider(): array {
+
+		return require __PB_TEST_DIR__ . '/Fixtures/Illuminate/StyleEngine/combine-css.php';
+	}
+
 }

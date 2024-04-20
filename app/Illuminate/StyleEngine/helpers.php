@@ -293,7 +293,7 @@ if ( ! function_exists( 'pb_get_inner_block_state_selectors' ) ) {
 						', ',
 						array_map(
 							static function ( string $item ) use ( $selectors, $parentPseudoClass, $pseudoClass ): string {
-								
+
 								return sprintf(
 									'%1$s%2$s%3$s:%4$s',
 									trim( $selectors['parentRoot'] ?? $selectors['fallback'] ?? '' ),
@@ -494,6 +494,11 @@ if ( ! function_exists( 'pb_combine_css' ) ) {
 	function pb_combine_css( array $css ): array {
 
 		$combinedCss = [];
+
+		if ( empty( $css ) ) {
+
+			return $combinedCss;
+		}
 
 		foreach ( $css as $generatedCss ) {
 
