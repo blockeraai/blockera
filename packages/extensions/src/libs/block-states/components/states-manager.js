@@ -175,16 +175,24 @@ const StatesManager: ComponentType<any> = memo(
 						filteredStates[_itemId] = {
 							..._item,
 							display: false,
-							isSelected: true,
 						};
 
 						return;
 					}
 
 					if ('normal' === _itemId) {
+						if (items[itemId].isSelected) {
+							// Assume deleted item was selected item
+							filteredStates[_itemId] = {
+								..._item,
+								isSelected: true,
+							};
+
+							return;
+						}
+
 						filteredStates[_itemId] = {
 							..._item,
-							isSelected: true,
 						};
 
 						return;
