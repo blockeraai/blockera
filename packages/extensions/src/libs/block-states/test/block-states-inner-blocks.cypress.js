@@ -15,6 +15,7 @@ import {
 	checkCurrentState,
 	createPost,
 	getBlockClientId,
+	checkBlockCard,
 } from '../../../../../../cypress/helpers';
 import 'cypress-real-events';
 
@@ -31,16 +32,6 @@ describe('Inner Blocks E2E Test', () => {
 			<!-- /wp:paragraph -->`
 		);
 		cy.getIframeBody().find('[data-type="core/paragraph"]').click();
-	};
-
-	const checkBlockCard = (labels) => {
-		labels.forEach((label, i) => {
-			// block card
-			cy.getByAriaLabel('Selected Block').within(() => {
-				// should exist and have correct order
-				cy.get('span').eq(i).should('have.text', label);
-			});
-		});
 	};
 
 	describe('state-container', () => {
@@ -185,6 +176,37 @@ describe('Inner Blocks E2E Test', () => {
 					)
 				);
 			});
+		});
+	});
+
+	describe('master block updates should not display in inner blocks', () => {
+		it('Master -> set width -> Inner', () => {
+			initialSetting();
+
+			// Set width
+			cy.setInputFieldValue('Width', 'Size', 50);
+
+			// Inner
+			setInnerBlock('Link');
+
+			// Assert control
+			cy.checkInputFieldValue('Width', 'Size', '');
+		});
+
+		it('Master -> Hover-> set width -> Inner', () => {
+			initialSetting();
+			addBlockState('hover');
+
+			// Set width
+			cy.setInputFieldValue('Width', 'Size', 50);
+
+			// Inner
+			setInnerBlock('Link');
+
+			// Assert control
+			cy.checkInputFieldValue('Width', 'Size', '');
+			addBlockState('hover');
+			cy.checkInputFieldValue('Width', 'Size', '');
 		});
 	});
 
@@ -633,7 +655,7 @@ describe('Inner Blocks E2E Test', () => {
 						beforeEach(() => {
 							addBlockState('active');
 
-							// normal state updates should displa
+							// normal state updates should display
 							cy.getByAriaLabel('Flex').should(
 								'have.attr',
 								'aria-pressed',
@@ -716,7 +738,7 @@ describe('Inner Blocks E2E Test', () => {
 									// });
 								});
 
-								it('should control value and attributes be correct, when navigate between states and devices', () => {
+								it('should control value and styles be correct, when navigate between states and devices', () => {
 									// Assert block css (active/tablet)
 									//TODO:
 									// getWPDataObject().then((data) => {
@@ -2327,7 +2349,7 @@ describe('Inner Blocks E2E Test', () => {
 			// 	.should('have.css', 'font-size', '25px');
 		});
 
-		it.only('Hover -> mobile breakpoint', () => {
+		it('Hover -> mobile breakpoint', () => {
 			addBlockState('hover');
 			setDeviceType('Mobile');
 
@@ -2429,8 +2451,1109 @@ describe('Inner Blocks E2E Test', () => {
 			// 	.realHover()
 			// 	.should('have.css', 'font-size', '25px');
 		});
-		// 	describe('multiple', () => {});
-		// 	describe('multiple repeater', () => {});
+
+		describe('update attributes in multiple states and devices', () => {
+			context('Normal -> set border radius', () => {
+				beforeEach(() => {
+					cy.setInputFieldValue('Radius', 'Border And Shadow', 5);
+
+					// Reselect
+					reSelectBlock();
+					setInnerBlock('Link');
+
+					// Assert Control
+					cy.checkInputFieldValue('Radius', 'Border And Shadow', 5);
+				});
+
+				context('Hover -> set custom radius', () => {
+					beforeEach(() => {
+						addBlockState('hover');
+						//
+						checkBlockCard(['Hover', 'Link', 'Hover']);
+
+						// Normal state updates should display
+						cy.checkInputFieldValue(
+							'Radius',
+							'Border And Shadow',
+							5
+						);
+
+						// Set
+						cy.getByAriaLabel('Custom Border Radius').click();
+						cy.getParentContainer('Radius').within(() => {
+							// Top Left
+							cy.get('input[type="number"]')
+								.eq(0)
+								.type('{selectall}10');
+						});
+
+						// Reselect
+						reSelectBlock();
+						setInnerBlock('Link');
+
+						// Assert Control
+						checkCurrentState('hover');
+						cy.getParentContainer('Radius').as('radius-container');
+						cy.get('@radius-container').within(() => {
+							// Top Left
+							cy.get('input[type="number"]')
+								.eq(0)
+								.should('have.value', 10);
+							cy.get('input[type="number"]')
+								.eq(1)
+								.should('have.value', 5);
+							cy.get('input[type="number"]')
+								.eq(2)
+								.should('have.value', 5);
+							cy.get('input[type="number"]')
+								.eq(3)
+								.should('have.value', 5);
+						});
+					});
+
+					context('Focus -> update border radius', () => {
+						beforeEach(() => {
+							addBlockState('Focus');
+							//
+							checkBlockCard(['Hover', 'Link', 'Focus']);
+
+							// Normal state updates should display
+							cy.checkInputFieldValue(
+								'Radius',
+								'Border And Shadow',
+								5
+							);
+
+							// Hover state updates should not display
+							cy.get('@radius-container').within(() => {
+								cy.get('input[type="number"]').should(
+									'have.length',
+									1
+								);
+							});
+
+							// Set
+							cy.setInputFieldValue(
+								'Radius',
+								'Border And Shadow',
+								15,
+								true
+							);
+
+							// Reselect
+							reSelectBlock();
+							setInnerBlock('Link');
+
+							// Assert control
+							checkCurrentState('focus');
+							cy.checkInputFieldValue(
+								'Radius',
+								'Border And Shadow',
+								15
+							);
+						});
+
+						context(
+							'Hover -> mobile -> update border radius ',
+							() => {
+								beforeEach(() => {
+									setBlockState('Hover');
+									setDeviceType('Mobile');
+									// TODO : remove next line after fix related bug: master -> hover -> inner -> hover -> change device -> current state ?????
+									setBlockState('Hover');
+									//
+									checkBlockCard(['Hover', 'Link', 'Hover']);
+
+									// should not display any value
+									cy.checkInputFieldValue(
+										'Radius',
+										'Border And Shadow',
+										''
+									);
+
+									// Hover state updates should not display
+									cy.get('@radius-container').within(() => {
+										cy.get('input[type="number"]').should(
+											'have.length',
+											1
+										);
+									});
+
+									// Set
+									cy.setInputFieldValue(
+										'Radius',
+										'Border And Shadow',
+										20
+									);
+
+									// Reselect
+									reSelectBlock();
+									setInnerBlock('Link');
+
+									// Assert control
+									checkCurrentState('hover');
+									cy.checkInputFieldValue(
+										'Radius',
+										'Border And Shadow',
+										20
+									);
+								});
+
+								context(
+									'Mobile -> Normal -> set custom radius',
+									() => {
+										beforeEach(() => {
+											setBlockState('Normal');
+											//
+											checkBlockCard(['Hover', 'Link']);
+
+											// Should not display any value
+											cy.checkInputFieldValue(
+												'Radius',
+												'Border And Shadow',
+												''
+											);
+
+											// Hover state updates should not display
+											cy.get('@radius-container').within(
+												() => {
+													cy.get(
+														'input[type="number"]'
+													).should('have.length', 1);
+												}
+											);
+
+											// Set
+											cy.getByAriaLabel(
+												'Custom Border Radius'
+											).click();
+											cy.getParentContainer(
+												'Radius'
+											).within(() => {
+												// Bottom Right
+												cy.get('input[type="number"]')
+													.eq(3)
+													.type('{selectall}30');
+											});
+
+											// Reselect
+											reSelectBlock();
+											setInnerBlock('Link');
+
+											// Assert Control
+											checkCurrentState('normal');
+
+											cy.get('@radius-container').within(
+												() => {
+													cy.get(
+														'input[type="number"]'
+													)
+														.eq(0)
+														.should(
+															'have.value',
+															''
+														);
+													cy.get(
+														'input[type="number"]'
+													)
+														.eq(1)
+														.should(
+															'have.value',
+															''
+														);
+													cy.get(
+														'input[type="number"]'
+													)
+														.eq(2)
+														.should(
+															'have.value',
+															''
+														);
+													cy.get(
+														'input[type="number"]'
+													)
+														.eq(3)
+														.should(
+															'have.value',
+															30
+														);
+												}
+											);
+										});
+
+										it('should control value and styles be correct, when navigate between states and devices', () => {
+											// (normal/mobile)
+											// // Assert block css
+											//	getWPDataObject().then((data) => {
+											//TODO
+											// cy.getIframeBody()
+											// 	.find(
+											// 		`#block-${getBlockClientId(
+											// 			data
+											// 		)} a`
+											// 	)
+											// 	.should(
+											// 		'have.css',
+											// 		'border-bottom-right-radius',
+											// 		'30px'
+											// 	);
+											//Real hover
+											// cy.getIframeBody()
+											// 	.find(
+											// 		`#block-${getBlockClientId(
+											// 			data
+											// 		)}`
+											// 	)
+											// 	.realHover();
+											// cy.getIframeBody()
+											// 	.find(
+											// 		`#block-${getBlockClientId(
+											// 			data
+											// 		)}:hover a`
+											// 	)
+											// 	.should(
+											// 		'have.css',
+											// 		'border-bottom-right-radius',
+											// 		'30px'
+											// 	);
+											//	});
+
+											// Change to focus state
+											setBlockState('Focus');
+
+											// (focus/mobile)
+											// Assert control value (display normal/mobile value)
+											cy.get('@radius-container').within(
+												() => {
+													cy.get(
+														'input[type="number"]'
+													)
+														.eq(0)
+														.should(
+															'have.value',
+															''
+														);
+													cy.get(
+														'input[type="number"]'
+													)
+														.eq(1)
+														.should(
+															'have.value',
+															''
+														);
+													cy.get(
+														'input[type="number"]'
+													)
+														.eq(2)
+														.should(
+															'have.value',
+															''
+														);
+													cy.get(
+														'input[type="number"]'
+													)
+														.eq(3)
+														.should(
+															'have.value',
+															30
+														);
+												}
+											);
+
+											// No need to assert block css, no attribute updated
+
+											// Change to hover state
+											setBlockState('Hover');
+
+											// (hover/mobile)
+											// Assert control value
+											cy.checkInputFieldValue(
+												'Radius',
+												'Border And Shadow',
+												20
+											);
+
+											// Assert block css
+											getWPDataObject().then((data) => {
+												cy.getIframeBody()
+													.find(
+														`#block-${getBlockClientId(
+															data
+														)} a`
+													)
+													.should(
+														'have.css',
+														'border-radius',
+														'20px'
+													);
+
+												//Real hover
+												cy.getIframeBody()
+													.find(
+														`#block-${getBlockClientId(
+															data
+														)}`
+													)
+													.realHover();
+												cy.getIframeBody()
+													.find(
+														`#block-${getBlockClientId(
+															data
+														)} a`
+													)
+													.realHover();
+												cy.getIframeBody()
+													.find(
+														`#block-${getBlockClientId(
+															data
+														)}:hover a:hover`
+													)
+													.should(
+														'have.css',
+														'border-radius',
+														'20px'
+													);
+											});
+
+											// Set device to default(laptop)
+											setDeviceType('Laptop');
+											// (hover/laptop)
+
+											// Assert control
+											cy.get('@radius-container').within(
+												() => {
+													cy.get(
+														'input[type="number"]'
+													)
+														.eq(0)
+														.should(
+															'have.value',
+															10
+														);
+													cy.get(
+														'input[type="number"]'
+													)
+														.eq(1)
+														.should(
+															'have.value',
+															5
+														);
+													cy.get(
+														'input[type="number"]'
+													)
+														.eq(2)
+														.should(
+															'have.value',
+															5
+														);
+													cy.get(
+														'input[type="number"]'
+													)
+														.eq(3)
+														.should(
+															'have.value',
+															5
+														);
+												}
+											);
+
+											// Assert block css
+											//getWPDataObject().then((data) => {
+											//TODO
+											// cy.getIframeBody()
+											// 	.find(
+											// 		`#block-${getBlockClientId(
+											// 			data
+											// 		)} a`
+											// 	)
+											// 	.should(
+											// 		'have.css',
+											// 		'border-radius',
+											// 		'10px 5px 5px 5px'
+											// 	);
+											//Real hover
+											// cy.getIframeBody()
+											// 	.find(
+											// 		`#block-${getBlockClientId(
+											// 			data
+											// 		)}`
+											// 	)
+											// 	.realHover();
+											// cy.getIframeBody()
+											// 	.find(
+											// 		`#block-${getBlockClientId(
+											// 			data
+											// 		)} a`
+											// 	)
+											// 	.realHover();
+											// cy.getIframeBody()
+											// 	.find(
+											// 		`#block-${getBlockClientId(
+											// 			data
+											// 		)}:hover a:hover`
+											// 	)
+											// 	.should(
+											// 		'have.css',
+											// 		'border-radius',
+											// 		'10px 5px 5px 5px'
+											// 	);
+											//});
+
+											// Change state to normal
+											// (normal/laptop)
+											setBlockState('Normal');
+
+											// Assert control
+											cy.checkInputFieldValue(
+												'Radius',
+												'Border And Shadow',
+												5
+											);
+
+											// Assert block css
+											//getWPDataObject().then((data) => {
+											//TODO
+											// cy.getIframeBody()
+											// 	.find(
+											// 		`#block-${getBlockClientId(
+											// 			data
+											// 		)} a`
+											// 	)
+											// 	.should(
+											// 		'have.css',
+											// 		'border-radius',
+											// 		'5px'
+											// 	);
+											// //Real hover
+											// cy.getIframeBody()
+											// 	.find(
+											// 		`#block-${getBlockClientId(
+											// 			data
+											// 		)}`
+											// 	)
+											// 	.realHover();
+											// cy.getIframeBody()
+											// 	.find(
+											// 		`#block-${getBlockClientId(
+											// 			data
+											// 		)}:hover a`
+											// 	)
+											// 	.should(
+											// 		'have.css',
+											// 		'border-radius',
+											// 		'5px'
+											// 	);
+											//});
+
+											// Change state to focus
+											// (focus/laptop)
+											setBlockState('Focus');
+
+											// Assert control
+											cy.checkInputFieldValue(
+												'Radius',
+												'Border And Shadow',
+												15
+											);
+
+											// Assert block css
+											//getWPDataObject().then((data) => {
+											//TODO
+											// cy.getIframeBody()
+											// 	.find(
+											// 		`#block-${getBlockClientId(
+											// 			data
+											// 		)} a`
+											// 	)
+											// 	.should(
+											// 		'have.css',
+											// 		'border-radius',
+											// 		'15px'
+											// 	);
+											//Real hover
+											// cy.getIframeBody()
+											// 	.find(
+											// 		`#block-${getBlockClientId(
+											// 			data
+											// 		)}`
+											// 	)
+											// 	.realHover();
+											// // Focus
+											// cy.getIframeBody()
+											// 	.find(
+											// 		`#block-${getBlockClientId(
+											// 			data
+											// 		)} a`
+											// 	)
+											// 	.focus();
+											// cy.getIframeBody()
+											// 	.find(
+											// 		`#block-${getBlockClientId(
+											// 			data
+											// 		)}:hover a:focus`
+											// 	)
+											// 	.should(
+											// 		'have.css',
+											// 		'border-radius',
+											// 		'15px'
+											// 	);
+											//});
+
+											// Assert store data
+											getWPDataObject().then((data) => {
+												expect({
+													laptop: {
+														attributes: {
+															publisherInnerBlocks:
+																{
+																	link: {
+																		attributes:
+																			{
+																				publisherBorderRadius:
+																					{
+																						type: 'all',
+																						all: '5px',
+																					},
+																				publisherBlockStates:
+																					{
+																						focus: {
+																							isVisible: true,
+																							breakpoints:
+																								{
+																									laptop: {
+																										attributes:
+																											{
+																												publisherBorderRadius:
+																													{
+																														type: 'all',
+																														all: '15px',
+																													},
+																											},
+																									},
+																								},
+																						},
+																						hover: {
+																							isVisible: true,
+																							breakpoints:
+																								{
+																									laptop: {
+																										attributes:
+																											{
+																												publisherBorderRadius:
+																													{
+																														type: 'custom',
+																														all: '5px',
+																														topLeft:
+																															'10px',
+																														topRight:
+																															'5px',
+																														bottomLeft:
+																															'5px',
+																														bottomRight:
+																															'5px',
+																													},
+																											},
+																									},
+																									mobile: {
+																										attributes:
+																											{
+																												publisherBorderRadius:
+																													{
+																														type: 'all',
+																														all: '20px',
+																													},
+																											},
+																									},
+																								},
+																						},
+																						normal: {
+																							isVisible: true,
+																							breakpoints:
+																								{
+																									laptop: {
+																										attributes:
+																											{},
+																									},
+																								},
+																						},
+																					},
+																			},
+																	},
+																},
+														},
+													},
+													mobile: {
+														attributes: {
+															publisherInnerBlocks:
+																{
+																	link: {
+																		attributes:
+																			{
+																				publisherBorderRadius:
+																					{
+																						type: 'custom',
+																						all: '',
+																						topLeft:
+																							'',
+																						topRight:
+																							'',
+																						bottomLeft:
+																							'',
+																						bottomRight:
+																							'30px',
+																					},
+																				publisherBlockStates:
+																					{
+																						focus: {
+																							breakpoints:
+																								{
+																									laptop: {
+																										attributes:
+																											{
+																												publisherBorderRadius:
+																													{
+																														type: 'all',
+																														all: '15px',
+																													},
+																											},
+																									},
+																								},
+																							isVisible: true,
+																						},
+																						hover: {
+																							breakpoints:
+																								{
+																									laptop: {
+																										attributes:
+																											{
+																												publisherBorderRadius:
+																													{
+																														type: 'custom',
+																														all: '5px',
+																														topLeft:
+																															'10px',
+																														topRight:
+																															'5px',
+																														bottomLeft:
+																															'5px',
+																														bottomRight:
+																															'5px',
+																													},
+																											},
+																									},
+																									mobile: {
+																										attributes:
+																											{
+																												publisherBorderRadius:
+																													{
+																														type: 'all',
+																														all: '20px',
+																													},
+																											},
+																									},
+																								},
+																							isVisible: true,
+																						},
+																						normal: {
+																							breakpoints:
+																								{
+																									laptop: {
+																										attributes:
+																											{},
+																									},
+																								},
+																							isVisible: true,
+																						},
+																					},
+																			},
+																	},
+																},
+														},
+													},
+												}).to.be.deep.equal(
+													getSelectedBlock(
+														data,
+														'publisherBlockStates'
+													).hover.breakpoints
+												);
+											});
+
+											// frontend
+											//TODO
+											savePage();
+
+											redirectToFrontPage();
+
+											// Assert in default viewport
+											cy.viewport(1025, 1440);
+											cy.get(
+												'.publisher-core-block'
+											).realHover();
+
+											cy.get('.my-link').should(
+												'have.css',
+												'border-radius',
+												'5px'
+											);
+
+											// // Hover
+											// cy.get('.my-link').realHover();
+											// cy.get('.my-link')
+											// 	.should(
+											// 		'have.css',
+											// 		'border-radius',
+											// 		'10px 5px 5px 5px'
+											// 	)
+											// 	.realMouseUp();
+
+											// // Focus
+											// cy.get('.my-link').focus();
+											// cy.get('.my-link')
+											// 	.should(
+											// 		'have.css',
+											// 		'border-radius',
+											// 		'15px'
+											// 	)
+											// 	.realMouseUp();
+
+											// Set desktop viewport
+											cy.viewport(1441, 1920);
+											cy.get(
+												'.publisher-core-block'
+											).realHover();
+
+											// cy.get('.my-link').should(
+											// 	'have.css',
+											// 	'border-radius',
+											// 	'5px'
+											// );
+
+											// Hover
+											// cy.get('.my-link').realHover();
+											// cy.get('.my-link')
+											// 	.should(
+											// 		'have.css',
+											// 		'border-radius',
+											// 		'10px 5px 5px 5px'
+											// 	)
+											// 	.realMouseUp();
+
+											// // Focus
+											// cy.get('.my-link').focus();
+											// cy.get('.my-link')
+											// 	.should(
+											// 		'have.css',
+											// 		'border-radius',
+											// 		'15px'
+											// 	)
+											// 	.realMouseUp();
+
+											// Set mobile viewport
+											cy.viewport(380, 470);
+											cy.get(
+												'.publisher-core-block'
+											).realHover();
+
+											// cy.get('.my-link').should(
+											// 	'have.css',
+											// 		'border-bottom-right-radius',
+											// 		'30px'
+											// );
+
+											// Hover
+											// cy.get('.my-link').realHover();
+											// cy.get('.my-link')
+											// 	.should(
+											// 		'have.css',
+											// 		'border-radius',
+											// 		'2px'
+											// 	)
+											// 	.realMouseUp();
+										});
+									}
+								);
+							}
+						);
+					});
+				});
+			});
+		});
+
+		describe('update repeater attributes in multiple states and devices', () => {
+			// TODO: complete test after fixing related bug
+			// bug : repeater wrong item and value
+
+			context(
+				'Normal -> add filter item -> set drop-shadow-x = 20',
+				() => {
+					beforeEach(() => {
+						//
+						checkBlockCard(['Hover', 'Link']);
+
+						// Add item
+						cy.getByAriaLabel('Add New Filter Effect').click();
+
+						// Alias
+						cy.getParentContainer('Filters')
+							.as('filter-container')
+							.within(() =>
+								cy
+									.getByDataCy('group-control-header')
+									.as('filter-items')
+							);
+						cy.getByDataTest('popover-body')
+							.as('filter-popover')
+							.within(() => {
+								cy.getParentContainer('Type').within(() => {
+									cy.get('select').as('type-select');
+								});
+							});
+
+						// Set drop-shadow-x
+						cy.get('@filter-popover').within(() => {
+							cy.get('@type-select').select('drop-shadow');
+
+							cy.getByDataTest('filter-drop-shadow-x-input').type(
+								'{selectall}20'
+							);
+						});
+
+						// Reselect
+						reSelectBlock();
+						setInnerBlock('Link');
+
+						// Assert control value
+						cy.openRepeaterItem('Filters', 'Drop Shadow');
+						cy.get('@filter-popover').within(() => {
+							cy.getByDataTest(
+								'filter-drop-shadow-x-input'
+							).should('have.value', 20);
+						});
+					});
+
+					context('After -> set drop-shadow-y = 15', () => {
+						beforeEach(() => {
+							addBlockState('after');
+							//
+							checkBlockCard(['Hover', 'Link', 'After']);
+
+							// Normal state updates should display
+							cy.get('@filter-items').should('have.length', '1');
+							cy.openRepeaterItem('Filters', 'Drop Shadow');
+							cy.get('@filter-popover').within(() => {
+								cy.getByDataTest(
+									'filter-drop-shadow-x-input'
+								).should('have.value', 20);
+
+								// Set drop-shadow-y
+								cy.getByDataTest(
+									'filter-drop-shadow-y-input'
+								).type('{selectall}15');
+							});
+
+							// Reselect
+							reSelectBlock();
+							setInnerBlock('Link');
+
+							// Assert control
+							cy.openRepeaterItem('Filters', 'Drop Shadow');
+							cy.get('@filter-popover').within(() => {
+								cy.getByDataTest(
+									'filter-drop-shadow-x-input'
+								).should('have.value', 20);
+
+								cy.getByDataTest(
+									'filter-drop-shadow-y-input'
+								).should('have.value', 15);
+							});
+						});
+
+						context('Focus -> add new item -> set blur = 5', () => {
+							beforeEach(() => {
+								addBlockState('focus');
+								//
+								checkBlockCard(['Hover', 'Link', 'Focus']);
+
+								// Normal state updates should display
+								cy.get('@filter-items').should(
+									'have.length',
+									'1'
+								);
+								cy.openRepeaterItem('Filters', 'Drop Shadow');
+								cy.get('@filter-popover').within(() => {
+									cy.getByDataTest(
+										'filter-drop-shadow-x-input'
+									).should('have.value', 20);
+
+									//  After state updates should not display
+									cy.getByDataTest(
+										'filter-drop-shadow-y-input'
+									).should('not.have.value', 15);
+								});
+
+								// Add new item
+								cy.getByAriaLabel('Add New Filter Effect');
+								cy.get('@filter-popover').within(() => {
+									// Set blur
+									cy.getByDataTest('filter-blur-input').type(
+										'{selectall}5'
+									);
+								});
+
+								// Reselect
+								reSelectBlock();
+								setInnerBlock('Link');
+
+								// Assert control
+								cy.get('@filter-items').should(
+									'have.length',
+									'2'
+								);
+
+								cy.openRepeaterItem('Filters', 'Blur');
+								cy.get('@filter-popover').within(() => {
+									cy.getByDataTest(
+										'filter-blur-input'
+									).should('have.value', 5);
+								});
+							});
+
+							context(
+								'Normal -> Mobile -> set drop-shadow-blur = 30 & update drop-shadow-x = 5',
+								() => {
+									beforeEach(() => {
+										setBlockState('Normal');
+										setDeviceType('Mobile');
+										//
+										checkBlockCard(['Hover', 'Link']);
+
+										// laptop/normal updates should display
+										cy.get('@filter-items').should(
+											'have.length',
+											1
+										);
+										cy.openRepeaterItem(
+											'Filters',
+											'Drop Shadow'
+										);
+										cy.get('@filter-popover').within(() => {
+											cy.getByDataTest(
+												'filter-drop-shadow-x-input'
+											).should('have.value', 20);
+
+											cy.getByDataTest(
+												'filter-drop-shadow-y-input'
+											).should('have.value', 15);
+
+											// Set blur
+											cy.getByDataTest(
+												'filter-drop-shadow-blur-input'
+											).type('{selectall}30');
+
+											// Update x
+											cy.getByDataTest(
+												'filter-drop-shadow-x-input'
+											).type('{selectall}5');
+										});
+
+										// Reselect
+										reSelectBlock();
+										setInnerBlock('Link');
+
+										// Assert control
+										cy.openRepeaterItem(
+											'Filters',
+											'Drop Shadow'
+										);
+										cy.get('@filter-popover').within(() => {
+											cy.getByDataTest(
+												'filter-drop-shadow-x-input'
+											).should('have.value', 5);
+
+											cy.getByDataTest(
+												'filter-drop-shadow-y-input'
+											).should('have.value', 15);
+
+											cy.getByDataTest(
+												'filter-drop-shadow-blur-input'
+											).should('have.value', 30);
+										});
+									});
+
+									context(
+										'Mobile -> Focus -> update drp-shadow-y = 35',
+										() => {
+											beforeEach(() => {
+												setBlockState('Focus');
+												//
+												checkBlockCard([
+													'Hover',
+													'Link',
+													'Focus',
+												]);
+
+												// mobile/normal updates should display
+												cy.openRepeaterItem(
+													'Filters',
+													'Drop Shadow'
+												);
+												cy.get(
+													'@filter-popover'
+												).within(() => {
+													cy.getByDataTest(
+														'filter-drop-shadow-x-input'
+													).should('have.value', 5);
+
+													cy.getByDataTest(
+														'filter-drop-shadow-y-input'
+													).should('have.value', 15);
+
+													cy.getByDataTest(
+														'filter-drop-shadow-blur-input'
+													).should('have.value', 30);
+
+													// Update y
+													cy.getByDataTest(
+														'filter-drop-shadow-y-input'
+													).type('{selectall}35');
+												});
+
+												// Reselect
+												reSelectBlock();
+												setInnerBlock('Link');
+
+												// Assert control
+												cy.openRepeaterItem(
+													'Filters',
+													'Drop Shadow'
+												);
+												cy.get(
+													'@filter-popover'
+												).within(() => {
+													cy.getByDataTest(
+														'filter-drop-shadow-x-input'
+													).should('have.value', 5);
+
+													cy.getByDataTest(
+														'filter-drop-shadow-y-input'
+													).should('have.value', 35);
+
+													cy.getByDataTest(
+														'filter-drop-shadow-blur-input'
+													).should('have.value', 30);
+												});
+											});
+
+											it('should control value and styles be correct, when navigate between states and devices', () => {});
+										}
+									);
+								}
+							);
+						});
+					});
+				}
+			);
+		});
 	});
 
 	describe('ValueCleanup', () => {
@@ -2535,7 +3658,3 @@ describe('Inner Blocks E2E Test', () => {
 		});
 	});
 });
-
-// test cases:
-// master update should not show in inner
-// invisible should not create style
