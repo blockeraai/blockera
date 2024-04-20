@@ -1,4 +1,3 @@
-export * from './bootstrap';
 export { supports } from './supports';
 export { TypographyStyles } from './styles';
 export { attributes } from './attributes';
