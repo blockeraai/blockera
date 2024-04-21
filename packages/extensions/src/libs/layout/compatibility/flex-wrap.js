@@ -9,15 +9,15 @@ export function flexWrapFromWPCompatibility({
 		attributes?.publisherFlexWrap?.value !== '' ||
 		attributes?.layout?.flexWrap === ''
 	) {
-		return attributes;
+		return false;
 	}
 
-	attributes.publisherFlexWrap = {
-		value: attributes?.layout?.flexWrap,
-		reverse: false,
+	return {
+		publisherFlexWrap: {
+			value: attributes?.layout?.flexWrap,
+			reverse: false,
+		},
 	};
-
-	return attributes;
 }
 
 export function flexWrapToWPCompatibility({

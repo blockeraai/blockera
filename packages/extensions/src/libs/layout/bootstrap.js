@@ -43,14 +43,28 @@ export const bootstrap = (): void => {
 				return attributes;
 			}
 
-			attributes = displayFromWPCompatibility({
+			//
+			// Display compatibility
+			//
+			const displayAttrs = displayFromWPCompatibility({
 				attributes,
 				blockId,
 			});
 
-			attributes = flexWrapFromWPCompatibility({
+			if (displayAttrs) {
+				attributes = mergeObject(attributes, displayAttrs);
+			}
+
+			//
+			// Flex wrap compatibility
+			//
+			const flexWrapAttrs = flexWrapFromWPCompatibility({
 				attributes,
 			});
+
+			if (flexWrapAttrs) {
+				attributes = mergeObject(attributes, flexWrapAttrs);
+			}
 
 			return attributes;
 		}
